@@ -124,6 +124,7 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_UPDATE_CREATE_RUN"))
 			{
 				autoconfManager.manageProject(project, status);
+				project.refresh(false);
 				//parseAmFile(project); 
 			}
 		/*	else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
@@ -134,32 +135,39 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.updateAutoconfFiles(project, status,false);
+				project.refresh(false);
 				//parseAmFile(project); 
 			}
 			else if (name.equals("C_UPDATE_CONFIGURE_IN"))
 			{
 				autoconfManager.configureInManager.updateConfigureIn(project,false);
+				project.refresh(false);
 				//parseAmFile(project); 
 			}		
 			else if (name.equals("C_CREATE_CONFIGURE"))
 			{
 				autoconfManager.runSupportScript(project, status);
+				project.refresh(false);
 			}
 			else if (name.equals("C_RUN_CONFIGURE"))
 			{
 				autoconfManager.runConfigureScript(project, status);
+				project.refresh(false);
 			}
 			else if (name.equals("C_DIST_CLEAN"))
 			{
 				autoconfManager.distClean(project,status);
+				project.refresh(false);
 			}
 			else if (name.equals("C_INSTALL"))
 			{
 				autoconfManager.install(project,status);
+				project.refresh(false);
 			}
 			else if (name.equals("C_MAINTAINER_CLEAN"))
 			{
 				autoconfManager.maintainerClean(project,status);
+				project.refresh(false);
 			}
 
 		}
@@ -170,6 +178,7 @@ public class ManagedProjectMiner extends Miner
 		 	if (name.equals("C_UPDATE_MAKEFILE_AM"))
 			{
 				autoconfManager.makefileAmManager.updateMakefileAm(subject,false);
+				subject.refresh(false);
 				//parseAmFile(subject); 
 			}
 			else if (name.equals("C_REFRESH"))
@@ -190,22 +199,27 @@ public class ManagedProjectMiner extends Miner
 			if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status);
+				subject.refresh(false);
 			}
 			else if (name.equals("C_STATICLIB_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status);
+				subject.refresh(false);
 			}
 			else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status);
+				subject.refresh(false);
 			}
 			else if (name.equals("C_SHAREDLIB_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status);
+				subject.refresh(false);
 			}
 			else if (name.equals("C_INSERT_CONFIGURE_IN"))
 			{
 				autoconfManager.configureInManager.generateConfigureIn(subject);
+				subject.refresh(false);
 			}
 		/*	else if (name.equals("C_COMPILER_FLAGS"))
 			{
@@ -218,10 +232,12 @@ public class ManagedProjectMiner extends Miner
 			if (name.equals("C_BUILD_TARGET"))
 			{
 				targetManager.buildTarget(subject,status,autoconfManager);
+				subject.refresh(false);
 			}
 			else if (name.equals("C_EXECUTE_TARGET"))
 			{
 				targetManager.executeTarget(subject,status,_workspace.getSource());
+				subject.refresh(false);
 			}
 		}
 		
