@@ -340,7 +340,7 @@ public class DataElementTableViewer extends TableViewer
     }
     private void internalRefresh(DataElement parent)
     {
-     super.internalRefresh(parent, false);
+	super.internalRefresh(parent, false);
     }
 
     /*
@@ -570,7 +570,7 @@ public class DataElementTableViewer extends TableViewer
 				computeLayout();
 			    }
 
-			internalRefresh(_currentInput);
+			internalRefresh(_currentInput, true);
 			_isShowing = true;
 		    }
 	    }
@@ -621,7 +621,7 @@ public class DataElementTableViewer extends TableViewer
 			    {
 				try
 				    {
-					internalRefresh(parent);
+					internalRefresh(parent, true);
 					
 					DataElement selected = getSelected();
 					select(selected);
@@ -648,7 +648,7 @@ public class DataElementTableViewer extends TableViewer
 			{
 			    try
 				{
-				    internalRefresh(_currentInput);
+				    internalRefresh(_currentInput, true);
 				    DataElement selected = getSelected();
 				    select(selected);
 				    
@@ -792,7 +792,7 @@ public class DataElementTableViewer extends TableViewer
 	setFilter(filter);
 	setProperty(relation);
 	computeLayout();
-	internalRefresh(_currentInput);
+	internalRefresh(_currentInput, true);
     }
 
 
