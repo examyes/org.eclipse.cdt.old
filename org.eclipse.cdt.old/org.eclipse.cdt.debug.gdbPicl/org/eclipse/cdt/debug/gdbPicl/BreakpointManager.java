@@ -23,6 +23,28 @@ public class BreakpointManager extends ComponentManager
       _breakpoints  = new Vector();
       _changedBreakpoints = new Vector();
    }
+   
+   	/**
+	 * Get address of the breakpoint
+	 * @return address of the breakpoint if successful
+	 * @return null if unsuccessful
+	 * 
+	 */
+	protected String getBreakpointAddress(int gdbBkpId)
+	{
+		((GdbDebugSession)_debugSession).executeGdbCommand("info breakpoint " + gdbBkpId);
+		String[] str = ((GdbDebugSession)_debugSession).getTextResponseLines();        
+
+		int start = str[1].indexOf(" 0x");
+		String address=null;
+		if (start > 0)
+		{
+			int end = str[1].indexOf(" in");
+			if (end > 0 && end>start)
+				address = str[1].substring(start, end);
+		}   
+		return address; 
+	}
 
    /**
     * Add a line breakpoint
@@ -57,6 +79,8 @@ public class BreakpointManager extends ComponentManager
       int bkpID = _debugSession.setLineBreakpoint(partID, lineNum);
       if (bkpID < 0)
          return -1;
+         
+   	  String address = getBreakpointAddress(bkpID);
 
       //int bkpID = _breakpoints.size()+1;
 
@@ -73,6 +97,7 @@ public class BreakpointManager extends ComponentManager
       LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, bkpID, 0, partID, srcFileIndex,
                                                   viewNum, lineNum, conditionalExpr);
 
+	  lineBkp.setBkpAddress(address);
       _breakpoints.addElement(lineBkp);
 
       // if breakpoint should be disabled, then disable it.
@@ -100,6 +125,8 @@ public class BreakpointManager extends ComponentManager
 
       //int bkpID = _breakpoints.size()+1;
       
+   	  String address = getBreakpointAddress(bkpID);
+      
       // added breakpoint successfully, add part to first module
       ModuleManager cm = _debugSession.getModuleManager();
       cm.checkPart(1, filename);     
@@ -121,8 +148,10 @@ public class BreakpointManager extends ComponentManager
 /*
       String placeHolder = "";                                              
       while (_breakpoints.size() < bkpID)
-         _breakpoints.addElement(placeHolder);
+         _breakpoints.addElement(placeHolder);         
 */         
+
+	  lineBkp.setBkpAddress(address);
       _breakpoints.addElement(lineBkp);
 
       // if breakpoint should be disabled, then disable it.

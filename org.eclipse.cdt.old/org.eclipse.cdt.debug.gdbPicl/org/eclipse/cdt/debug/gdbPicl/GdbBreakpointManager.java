@@ -140,10 +140,16 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 				continue;
 	
 			LineBreakpoint bkp = (LineBreakpoint) obj;
-			if ((bkp != null) && (bkp.getBkpAddress().equals(address))) {
-				if (Gdb.traceLogger.DBG)
-					Gdb.traceLogger.dbg(1, "Duplicate breakpoint");
-				return bkp.bkpID();
+			if (bkp != null) {
+				if (bkp.getBkpAddress() != null)
+				{
+					if (bkp.getBkpAddress().equals(address))
+					{
+						if (Gdb.traceLogger.DBG)
+							Gdb.traceLogger.dbg(1, "Duplicate breakpoint");
+							return bkp.bkpID();
+					}
+				}
 			}
 		}
 			
