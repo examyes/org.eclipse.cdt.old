@@ -50,7 +50,7 @@ public abstract class UpdateHandler extends Handler
 					synchronized(object)
 					    {
 						object.removeNestedData(child);
-						//child.clear();
+						child.clear();
 					    }
 				    }						
 			    }
