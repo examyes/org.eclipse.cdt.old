@@ -44,6 +44,12 @@ public class InvocationAction extends CustomAction
 	super(subject, invocation, null, subject.getDataStore());
 	_invocation = invocation;
     }
+
+    public InvocationAction(DataElement subject, String label, String invocation)
+    {	
+	super(subject, label, null, subject.getDataStore());
+	_invocation = invocation;
+    }
     
     public void run()
     {	    

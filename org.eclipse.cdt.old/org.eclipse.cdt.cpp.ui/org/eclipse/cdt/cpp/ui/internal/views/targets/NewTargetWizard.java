@@ -147,7 +147,8 @@ public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements 
 				    java.util.List list = new ArrayList();
 				    list.add((RootElement)targetsPage.targetStore.projectList.elementAt(index));
 				    viewer.setInput(list.toArray());
-			}});
+
+				}});
 		}
 		// enabling/disabling relevant actions
 		targetsPage.newAction.setEnabled(true);

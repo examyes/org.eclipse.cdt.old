@@ -37,6 +37,7 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 	private CppPlugin pluginInstance = CppPlugin.getPlugin();
 	private String BUTTON_TITLE = "TargetsViewer.CellEditor.ButtonTitle.Browse";
 	private String DIALOG_TITLE = "TargetsViewer.CellEditor.DialogBox.Title";
+
 	private class BrowseCellLayout extends Layout 
 	{
 		public Point computeSize(
@@ -72,23 +73,20 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 	
 	private TargetSelectionDialog dialog ;
 
-/**
- * BrowseCellEditor constructor comment.
- */
-	protected BrowseCellEditor(Composite parent, String buttonTitle) 
-	{
+    protected BrowseCellEditor(Composite parent, String buttonTitle) 
+    {
 		super(parent);
 		title = new String(buttonTitle);
 	}
-/**
- * 
- */
+
 	protected Button createButton(Composite parent) 
 	{
 		Button result = new Button(parent, SWT.PUSH);
-		result.setText(pluginInstance.getLocalizedString(BUTTON_TITLE));
+		//result.setText(pluginInstance.getLocalizedString(BUTTON_TITLE));
+		result.setText("...");
 		return result;
 	}
+
 	protected Control createContents(Composite cell) 
 	{
 		if(directoryEditor==null)
@@ -97,7 +95,7 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 			directoryEditor = new Composite(cell, SWT.NONE);
 			directoryEditor.setBackground(bg);
 			directoryEditor.setLayout(new BrowseCellLayout());
-				fIcon = new Label(directoryEditor, SWT.LEFT);
+			fIcon = new Label(directoryEditor, SWT.LEFT);
 			fIcon.setBackground(bg);
 			fText = new Label(directoryEditor, SWT.LEFT);
 			fText.setBackground(bg);
@@ -107,35 +105,12 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 		return directoryEditor;		
 
 	}
-/**
- * .
- */
-	protected Object openDialogBox(Control cellEditorWindow) 
+
+    protected Object openDialogBox(Control cellEditorWindow) 
 	{
 		 // to  initialize target container root
 		IContainer containerRoot = (IContainer)NavigatorSelection.selection;
 
-		/****	
-		dialog = new TargetSelectionDialog(cellEditorWindow.getShell(),containerRoot,true,pluginInstance.getLocalizedString(DIALOG_TITLE));
-		dialog.open();
-	
-		if(dialog.getResult()!=null)
-			if(dialog.getResult()[0]!=null) // this is to check if the user has not selected a container while pressing the OK button
-			{
-				String selFromDialog = dialog.getResult()[0].toString();
-				int b = selFromDialog.indexOf('/',1);
-				int e = selFromDialog.length();
-				String endPath = new String("");
-				if( b < 1 ) // means no '/'
-					endPath = new String("");
-				else
-					endPath = selFromDialog.substring(b,e);
-				
-				String path = new String(containerRoot.getLocation().toString()+endPath);
-				return path;
-			}
-		return fText.getText(); // return existing working directory value
-		***/
 		CppPlugin plugin = CppPlugin.getDefault();
 		ModelInterface api = plugin.getModelInterface();
 		DataElement input = api.findWorkspaceElement();
@@ -152,8 +127,11 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 		return null;
 	}
 
-	protected void updateContents(Object value) {
-		if(value!=null)
-			fText.setText(value.toString());
-	}
+    protected void updateContents(Object value) 
+    {		
+	if(value!=null)
+	    {		
+		fText.setText(value.toString());
+	    }
+    }
 }

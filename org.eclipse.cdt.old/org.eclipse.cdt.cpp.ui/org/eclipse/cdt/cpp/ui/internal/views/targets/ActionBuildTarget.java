@@ -39,9 +39,8 @@ public class ActionBuildTarget extends ActionTarget
 	setEnabled(false);
 	page = targetsPage;
   }          
-/**
- * 
- */
+
+
 public  void run(){
 	
 	Vector vec = new Vector();

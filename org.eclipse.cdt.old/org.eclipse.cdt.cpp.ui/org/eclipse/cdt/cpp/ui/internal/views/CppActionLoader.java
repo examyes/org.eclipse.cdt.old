@@ -2,6 +2,7 @@ package com.ibm.cpp.ui.internal.views;
 
 import com.ibm.cpp.ui.internal.actions.*;
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.views.targets.*;
 import com.ibm.cpp.ui.internal.*;
 
 import com.ibm.dstore.ui.*;
@@ -143,25 +144,68 @@ public class CppActionLoader extends GenericActionLoader
 	String type = input.getType();
 	if (type.equals("directory") || type.equals("Project"))
 	    {
-		// inherit actions from abstract object descriptors
-		menu.add(new Separator("Custom Actions"));
-	
-		MenuManager cascade = new MenuManager("Commands", "Commands");
-
+		// add command history
 		CppPlugin plugin = CppPlugin.getDefault();
 		ModelInterface api = plugin.getModelInterface();
 		IResource res = api.findResource(input);
 		if (res != null)
 		    {
+			menu.add(new Separator("Command History"));
+			MenuManager historyCascade = new MenuManager("Command History", "Command History");
+
 			ArrayList cmds = plugin.readProperty(res, "Command History");
 			for (int i = 0; i < cmds.size(); i++)
 			    {
 				String str = (String)cmds.get(i);
-				cascade.add(new InvocationAction(input, str));				
+				historyCascade.add(new InvocationAction(input, str));				
 			    }
+
+			menu.add(historyCascade);
 		    }
 
-		menu.add(cascade);
+		// add targets
+		if (res != null)
+		    {
+			IProject project = res.getProject();
+			if (project != null)
+			    {
+				menu.add(new Separator("Targets"));
+				MenuManager targetsCascade = new MenuManager("Command Specifications", 
+									     "Command Specifications");
+				
+				TargetsStore targetsStore = TargetsStore.getInstance();
+				
+				Vector projectList = targetsStore.getProjectList();
+				for(int i = 0; i < projectList.size(); i++)
+				    {
+					RootElement root = (RootElement)projectList.elementAt(i);
+					IProject rProject = root.getRoot();
+					
+					if(project.getName().equals(rProject.getName()))
+					    {
+						// we found matching root for this project
+						Vector targets = root.getTargets();
+						for (int t = 0; t < targets.size(); t++)
+						    {
+							TargetElement target = (TargetElement)targets.get(t);
+							String name       = (String)target.getTargetName();
+							String workingDir = (String)target.getWorkingDirectory();
+							String invocation = (String)target.getMakeInvocation();
+					
+							if (workingDir.equals(input.getSource()))
+							    {
+								targetsCascade.add(new InvocationAction(input, name, invocation));
+							    }		
+
+						    }
+
+					    }
+				    }
+
+				menu.add(targetsCascade);
+			    }
+		    }
+		
 	    }
     }
  
