@@ -517,22 +517,30 @@ System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber stackEntry ="
         // convert to correct disassembly line number
 		ModuleManager moduleManager = _debugSession.getModuleManager();            
 		GdbPart part = (GdbPart)moduleManager.getPart(_partID);
-		String partName = part.getName();           
-		GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
-		String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(partName,String.valueOf(line));
-		String disLineNum = null;
 		int disNum;
+
+		if (part != null)
+		{			
+			String partName = part.getName();           
+			GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
+			String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(partName,String.valueOf(line));
+			String disLineNum = null;
 			
-		if (address != null)
-			disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
+			if (address != null)
+				disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
 			
-		if (disLineNum != null)
-		{
-			disNum = Integer.parseInt(disLineNum);
+			if (disLineNum != null)
+			{
+				disNum = Integer.parseInt(disLineNum);
+			}
+			else
+			{
+				disNum = line;
+			}
 		}
 		else
 		{
-			disNum = line;
+			disNum = 0;
 		}
 		
 		return disNum;
