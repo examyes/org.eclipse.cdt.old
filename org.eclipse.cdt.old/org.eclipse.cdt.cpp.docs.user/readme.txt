@@ -24,6 +24,9 @@ Debugger issues
     the correct location.
 5.  There are some problems with the "New Configuration" shortcuts: 1) The 
     working directory is not initialized and 2) the Browse button doesn't work.
+6.  A problem has been reported (15566) when trying to debug an newly created
+    executable in a remote project.  If a "Launch Configuration Error" Dialog Box 
+    appears, try restarting Eclipse.
 
 
 Project Issues (Local and Remote)
@@ -115,6 +118,7 @@ Searching
 1.  Search results only appear for objects contained in the files of local projects.
     Objects contained in included files or remote projects do not show up in the 
     search results view. For remote projects use the Output view to see the results.
+2.  When searching for "Type" objects, the search will not terminate. 
 
 
 General View Issues
