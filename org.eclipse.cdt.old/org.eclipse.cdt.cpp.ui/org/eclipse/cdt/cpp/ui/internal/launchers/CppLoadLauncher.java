@@ -73,7 +73,8 @@ public class CppLoadLauncher implements ILauncherDelegate {
         loadInfo.setLauncher(launcher);
         String name = ((IResource)element).getName();
         System.out.println("CppLoadLauncher.launch() program name = " + name);
-        loadInfo.setProgramParms("");
+        loadInfo.setProgramName(name);
+        loadInfo.setProgramParms("3");
         int startupBehaviour = loadInfo.RUN_TO_MAIN;
         loadInfo.setStartupBehaviour(startupBehaviour);
 
@@ -111,16 +112,25 @@ public class CppLoadLauncher implements ILauncherDelegate {
     protected void launchEngine(PICLDaemonInfo daemonInfo) {
 
 
+
 //        String command = "irmtdbgc -qhost=localhost -quiport=" +
-        String command = "irmtdbgg -qhost=localhost -quiport=" +
+//        String command = "irmtdbgg -qhost=localhost -quiport=" +
+/*
+        String command = "java com.ibm.debug.gdb.Gdb -qhost=localhost -quiport=" +
                          (new Integer(daemonInfo.getPort())).toString() +
-                           " -startUpKey=" +
+                           " -startupKey=" +
                          (new Integer(daemonInfo.getKey())).toString();
 
         ModelInterface api = ModelInterface.getInstance();
         String path = _directory;
 
         api.command(path, command, false);
+*/
+
+	ModelInterface api = ModelInterface.getInstance();
+	String port = new Integer(daemonInfo.getPort()).toString();
+	String key  = new Integer(daemonInfo.getKey()).toString();
+	api.debug(_directory, port, key);
 
         /*
         try {

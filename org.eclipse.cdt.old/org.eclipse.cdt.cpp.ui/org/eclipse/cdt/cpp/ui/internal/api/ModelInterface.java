@@ -337,8 +337,26 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		_statuses.remove(status);
 	    }
     }
+    
+    public void debug(String pathStr, String port, String key)
+    {
+	DataStore dataStore = _plugin.getCurrentDataStore();
+	DataElement dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);
+	DataElement portObj = dataStore.createObject(null, "port", port);
+	DataElement keyObj  = dataStore.createObject(null, "key", key);
+	DataElement debugDescriptor = dataStore.localDescriptorQuery(dirObject, "C_DEBUG");
+	if (debugDescriptor != null)
+	    {
+		ArrayList args = new ArrayList();
+		args.add(portObj);
+		args.add(keyObj);
 
-  public DataElement command(IResource resource, String invocation, boolean showProgress)
+		dataStore.command(debugDescriptor, args, dirObject);
+	    }
+    }  
+    
+    
+    public DataElement command(IResource resource, String invocation, boolean showProgress)
       {
 	if (resource instanceof ResourceElement)
 	  {
@@ -1298,30 +1316,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void extendSchema(DataElement schemaRoot)
     {
 	DataStore   dataStore = schemaRoot.getDataStore();
+	DataElement fsD   = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement dirD = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement rootD = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
 
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
-
-	/*
-	  // example of adding an action to a element
-	DataElement statementBreakpoint  = dataStore.createObject(statement, DE.T_UI_COMMAND_DESCRIPTOR, 
-								  _plugin.getLocalizedString("model.Add_Breakpoint"), 
-								  "com.ibm.cpp.ui.interanl.actions.AddStatementBreakpoint");	 
-	statementBreakpoint.setAttribute(DE.A_VALUE, "C_ADD_STATEMENT_BREAKPOINT");	
-	
-	DataElement functionBreakpoint  = dataStore.createObject(function, DE.T_UI_COMMAND_DESCRIPTOR, 
-								 _plugin.getLocalizedString("model.Add_Breakpoint"), 
-								 "com.ibm.cpp.ui.internal.actions.AddFunctionBreakpoint");	 
-	functionBreakpoint.setAttribute(DE.A_VALUE, "C_ADD_FUNCTION_BREAKPOINT");	
-	
-	DataElement classBreakpoint  = dataStore.createObject(classD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							      _plugin.getLocalizedString("model.Add_Breakpoint"), 
-							      "com.ibm.cpp.ui.internal.actions.AddClassBreakpoint");	 
-	classBreakpoint.setAttribute(DE.A_VALUE, "C_ADD_CLASS_BREAKPOINT");		
-	*/
 	
 	
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
@@ -1345,9 +1346,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");
 
 	
+	/***
+	// replicated project actions
+	DataElement replicateFrom = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR, 
+							   "Replicate from...",
+							   "com.ibm.cpp.ui.internal.actions.ReplicateFromAction");
+	replicateFrom.
+	***/					   
+
     }
-
-
+    
+    
     // methods for debugger team
     public static ArrayList getFunctions(IFile resource)
     {

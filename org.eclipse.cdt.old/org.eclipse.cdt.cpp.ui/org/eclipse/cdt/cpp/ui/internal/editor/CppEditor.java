@@ -145,6 +145,7 @@ public class CppEditor extends LpexTextEditor
          _isParsed = true;
          ModelInterface api = ModelInterface.getInstance();
          IFile file = ((IFileEditorInput)input).getFile();
+
          api.parse(file, false);
       }
    }
