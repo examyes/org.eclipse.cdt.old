@@ -211,10 +211,26 @@ T1,T2.T3</font></td>
         context menu</font></td>
       <td width="95" height="16"><font face="Arial" size="1">T3</font></td>
     </tr>
-    <tr>
+  <tr>
       <td width="408" height="16"><font face="Arial" size="1">Load Symbols For All option should not affect
         the modules whose symbols are already loaded</font></td>
       <td width="95" height="16"><font face="Arial" size="1">T3</font></td>
+  </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">Automatically
+        refresh modules option should be provided in preference&nbsp;</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T2</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">Automatically
+        refresh modules option should be provided in context menu of debugging
+        target and it should override the setting preference</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T2</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">Toggle breakpoints
+        option should be provided in context menu</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T4</font></td>
     </tr>
   </tbody>
 </table>
@@ -392,7 +408,7 @@ module’s properties.</font></span></td>
     <table class="tb" width="655" border="1">
       <tbody>
         <tr>
-          <td width="62"><b>Tests</b></td>
+          <td width="62"><b>Test Groups</b></td>
           <td width="270"><b>Description</b></td>
           <td align="middle" width="140"><b>Estimated # TCs</b></td>
         </tr>
@@ -409,7 +425,7 @@ module’s properties.</font></span></td>
 <font face="arial" size="1">
 
 Display modules</font></td>
-          <td align="middle" width="140"><font face="arial" size="1">1</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">2</font></td>
         </tr>
         <tr>
           <td width="62"><font face="arial" size="1">T3</font></td>
@@ -418,6 +434,12 @@ Display modules</font></td>
         </tr>
         <tr>
           <td width="62"><font face="arial" size="1">T4</font></td>
+          <td width="270"><font face="arial" size="1">Toggle breakpoints</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">1</font></td>
+        </tr>
+
+        <tr>
+          <td width="62"><font face="arial" size="1">T5</font></td>
           <td width="270"><font face="arial" size="1">Working with multiple debug sessions</font></td>
           <td align="middle" width="140"><font face="arial" size="1">1</font></td>
         </tr>
@@ -430,14 +452,14 @@ Display modules</font></td>
           <td width="270">
             <p align="right"><font face="arial" size="1">TOTAL =&nbsp;&nbsp;</font>
           </td>
-          <td align="middle" width="140"><font face="arial" size="1">4</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">6</font></td>
         </tr>
       </tbody>
     </table>
 
 <font face="arial" size="2">
 
-    <p>There are&nbsp; 4 Test Cases identified.</p>
+    <p>There are&nbsp; 5 Test Cases identified.</p>
 <div class="subsubsection">2.4.2 Specific Platform Execution</div>
     <p>Testing for Basic Workflows will be executed on all supported platforms.&nbsp;
     T3 loading symbols has to be tested in Linux or QNX platform.</p>
@@ -519,6 +541,32 @@ Display modules</font></td>
 </tr>
 <tr>
   <td width="5%" height="48"><font size="1" face="Arial">T2.1</font></td>
+  <td width="17%" height="48">
+  <span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Auto
+  Refreshing&nbsp;</font></span></td>
+  <td width="81%" height="48">
+  <ol>
+    <li><span lang="EN-US"><font size="1" face="Arial">In
+      Preference-&gt;C/C++-&gt;Debug-&gt;GDB UI, uncheck the option &quot;
+      automatically refresh modules&quot;</font></span></li>
+    <li><span lang="EN-US"><font size="1" face="Arial">Launch the debug session,
+      verify no shared libs loaded in module view.</font></span></li>
+    <li><span lang="EN-US"><font size="1" face="Arial">Select a target, such as
+      &quot;Cygwin GDB Debugger...&quot;, choose &quot;properties&quot; from
+      context menu</font></span></li>
+    <li><span lang="EN-US"><font size="1" face="Arial">Check the
+      &quot;automatically refresh modules&quot; option from GDB/MI options</font></span></li>
+    <li><span lang="EN-US"><font size="1" face="Arial">Verify all shared libs
+      are loaded into module view</font></span></li>
+    <li><font size="1" face="Arial">Select a module from modules tree, verify
+      more information displayed in the detail pane</font></li>
+    <li><font size="1" face="Arial">Expanding a module, verify the module's
+      internal structure is displayed: functions. global variables, etc..</font></li>
+  </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="48"><font size="1" face="Arial">T2.2</font></td>
   <td width="17%" height="48"><font size="1" face="Arial">Display modules for a
     shared lib project</font></td>
   <td width="81%" height="48">
@@ -635,6 +683,35 @@ Display modules</font></td>
 </tr>
 <tr>
   <td width="5%" height="42"><font size="1" face="Arial">T4.1</font></td>
+  <td width="17%" height="42"><font face="Arial" size="1">Toggle breakpoint</font></td>
+  <td width="81%" height="42">
+  <ol>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Start
+      a debug session by using </font></span><font face="Arial" size="1"><span style="mso-ansi-language: EN-US"> main.c and
+      display.c</span></font>
+    </li>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><font face="Arial" size="1"><span lang="EN-US" style="mso-ansi-language: EN-US">When
+      the session is suspended switch to the Modules view, expand main.exe and
+      select &quot;calling_lib&quot;</span></font></li>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><font face="Arial" size="1"><span style="mso-ansi-language: EN-US" lang="EN-US">Right
+      click and from the context menu, select &quot;toggle breakpoint&quot;</span></font></li>
+    <li><font face="Arial" size="1">Verify a&nbsp; new function breakpoint&nbsp;
+      is created in Breakpoint view: [function: calling_lib]</font></li>
+    <li><font face="Arial" size="1">Resume the debug session and verify it stops
+      at first statement of function calling_lib</font></li>
+    <li><font face="Arial" size="1">Terminate the session and repeat step 1 to 3</font></li>
+    <li><font face="Arial" size="1">Verify the breakpoint entry in breakpoint
+      view is cleared</font></li>
+    <li><font face="Arial" size="1">Resume the debug session and verify it will
+      not stop at function calling_lib</font></li>
+  </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="42"><font size="1" face="Arial">T5.1</font></td>
   <td width="17%" height="42"><font size="1" face="Arial">Working with multiple
     debug sessions</font></td>
   <td width="81%" height="42">
