@@ -465,7 +465,13 @@ public class FileSystemMiner extends Miner
 			 }
 		     
 		     String objName = newName.getName();
-		     DataElement newObject = _dataStore.createObject(subject, _fileDescriptor,
+		     DataElement type = _fileDescriptor;
+		     if (objName.charAt(0) == '.')
+		     {
+		     	type = _hiddenDirectoryDescriptor;	
+		     }
+		     
+		     DataElement newObject = _dataStore.createObject(subject, type,
 								     objName, newFileName.toString());
 		     
 		     newObject.setDepth(1);// the new file has no children
@@ -498,7 +504,13 @@ public class FileSystemMiner extends Miner
 			 }
 
 		     String objName = newName.getName();
-		     DataElement newObject=_dataStore.createObject(subject, _directoryDescriptor,
+		     DataElement type = _directoryDescriptor;
+		     if (objName.charAt(0) == '.')
+		     {
+		     	type = _hiddenDirectoryDescriptor;	
+		     }
+		     
+		     DataElement newObject=_dataStore.createObject(subject, type,
 								   objName, newDirName.toString());
 		     newObject.setDepth(1);//new directory is empty so it does not have any children(i.e.depth=1)
 		     subject.setDepth(2);// the parent directory now has the new directory as its child.
