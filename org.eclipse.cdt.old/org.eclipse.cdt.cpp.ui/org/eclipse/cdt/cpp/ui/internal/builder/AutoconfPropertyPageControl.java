@@ -93,7 +93,7 @@ public class AutoconfPropertyPageControl extends Composite
 		new Label(this,SWT.LEFT);
 		new Label(this,SWT.LEFT);
 		globalSettingsButton = new Button(this, SWT.CHECK);
-		globalSettingsButton.setText("Use autoconf preferences page settings instead");
+		globalSettingsButton.setText("Apply preference's page settings");
 		
 
 		setLayout(new GridLayout());
@@ -176,7 +176,7 @@ public class AutoconfPropertyPageControl extends Composite
     {
     	this.advancedSetup.setEnabled(flg);
     	this.configureDialogSetup.setEnabled(flg);
-    	
+    	//////////////
     	this._showConfigureDialogtButton.setEnabled(flg);
     	this._showCreateDialogtButton.setEnabled(flg);
      	this._showRunDialogtButton.setEnabled(flg);
