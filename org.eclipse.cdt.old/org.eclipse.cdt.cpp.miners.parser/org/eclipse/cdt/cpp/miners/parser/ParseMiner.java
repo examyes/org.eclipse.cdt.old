@@ -370,7 +370,7 @@ public class ParseMiner extends Miner
    return null;
   }
    
-  String fullFileName = fileLocation + File.separator + _dataStore.getMinersLocation() + File.separator + PARSE_EXTENSIONS;
+  String fullFileName = fileLocation + File.separator + "com.ibm.cpp.miners.parser" + File.separator + PARSE_EXTENSIONS;
   
   File extFile = new File (fullFileName);
   if (!extFile.exists())
