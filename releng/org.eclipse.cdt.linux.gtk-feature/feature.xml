@@ -14,7 +14,7 @@
       %description
    </description>
 
-   <license>
+   <license url="%licenseURL">
       %license
    </license>
 
@@ -30,8 +30,8 @@
 
    <requires>
       <import plugin="org.eclipse.platform" version="2.0.0" match="compatible"/>
-      <import plugin="org.eclipse.cdt" version="1.0.1" match="perfect"/>
-   </requires>
+      <import plugin="org.eclipse.cdt" version="1.0.1" match="equivalent"/>
+   </requires>>
 
    <plugin
          id="org.eclipse.cdt.core.linux"
