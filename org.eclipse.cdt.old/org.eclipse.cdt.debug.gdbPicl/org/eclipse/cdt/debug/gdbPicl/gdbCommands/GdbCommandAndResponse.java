@@ -182,6 +182,7 @@ public class GdbCommandAndResponse
            		{           			      			           			
 		           if (Gdb.traceLogger.DBG)
 		               Gdb.traceLogger.dbg(1, " ...... GdbDebugSession.getGdbResponseLines - Stopped by Shared Library Event" );               
+                    _debugSession.addCmdResponsesToUiMessages(true);
 		   		    _debugSession.cmdResponses.removeAllElements();
 		   		    ((GdbDebugSession)_debugSession).updateSharedLibraries();
 		   		    _debugSession.enableDeferredBreakpoints();

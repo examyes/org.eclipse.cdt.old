@@ -51,6 +51,7 @@ public abstract class Command
       _debugSession.getVariableMonitorManager().addChangesToReply(_rep);
       _debugSession.getRegisterManager().addChangesToReply(_rep);
       _debugSession.getStorageManager().addChangesToReply(_rep);
+      ((GdbDebugSession)_debugSession).addChangesToReply(_rep);
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(3,"Command.addChangePackets DONE" );
    }

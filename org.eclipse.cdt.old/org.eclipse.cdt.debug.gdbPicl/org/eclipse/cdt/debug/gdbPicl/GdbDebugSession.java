@@ -13,6 +13,7 @@ import java.net.*;
 import java.io.*;
 import java.text.*;
 
+import com.ibm.debug.epdc.*;
 import com.ibm.debug.epdc.ECPLog;
 import com.ibm.debug.epdc.EPDC;
 import com.ibm.debug.epdc.ERepCommandLog;
@@ -251,12 +252,30 @@ public class GdbDebugSession extends DebugSession {
 			}
 		}
 	}
+	
+	public void addCmdResponsesToUiMessages(boolean force) {
+		if (!echoInternalCommands && !force)
+			return;
+
+		if (cmdResponses.size() > 0) {
+			int length = cmdResponses.size();
+			for (int i = 0; i < length; i++) {
+				String str = (String) cmdResponses.elementAt(i);
+				addLineToUiMessages(str, force);
+			}
+		}
+	}
+	
 	public void checkResponseForException() {
 		if (cmdResponses.size() > 0) {
 			_whyExceptionMsg = null;
 			int length = cmdResponses.size();
 			for (int i = 0; i < length; i++) {
 				String str = (String) cmdResponses.elementAt(i);
+				
+				// produce output in GDB Console or Console 
+				// all the messages are added here
+				this.addLineToUiMessages(str, true);
 
 				if (str.startsWith("Program received signal")) {
 					if (_terminatePending)
@@ -324,6 +343,14 @@ public class GdbDebugSession extends DebugSession {
 
 		uiMessages.addElement(line);
 	}
+	
+	public void addLineToUiMessages(String line, boolean force) {
+		if (!echoInternalCommands && !force)
+			return;
+
+		uiMessages.addElement(line);
+	}
+
 
 	public void addChangesToUiMessages() {
 		if (!echoInternalCommands)
@@ -1168,6 +1195,7 @@ public class GdbDebugSession extends DebugSession {
 			return _whyStop;
 
 		_whyStop = WS_BkptHit;
+
 		checkResponseForException();
 		//      addChangesToUiMessages();
 		updateMonitors();
@@ -1656,5 +1684,26 @@ public class GdbDebugSession extends DebugSession {
 	public GdbDebugEngine getGdbDebugEngine() {
 		return (GdbDebugEngine) _debugEngine;
 	}
+	
+	   /** Adds the breakpoint change packets to the reply packet */
+    public void addChangesToReply(EPDC_Reply rep) {
+		ECPLog cp = new ECPLog();
+
+		if (uiMessages.size() > 0) {
+			int length = uiMessages.size();
+			
+			for (int i = 0; i < length; i++) {
+				String str = (String) uiMessages.elementAt(i);
+				if (str == null || str.equals("")) {
+					str = " ";
+				}
+				cp.addCmdLogLine(str);
+//				cp.addPgmOutputLine(str);
+			}
+			uiMessages.removeAllElements();
+		}
+
+		rep.addLogChangePacket(cp);
+    }
 
 }
