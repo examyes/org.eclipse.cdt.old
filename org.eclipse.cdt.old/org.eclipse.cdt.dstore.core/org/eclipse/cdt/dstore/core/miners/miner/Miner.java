@@ -36,7 +36,7 @@ public abstract class Miner
      * Creates a new Miner
      *
      */
-    public Miner()
+    protected Miner()
     {
 	_initialized = false;
     }
@@ -72,7 +72,7 @@ public abstract class Miner
      * Default method that gets called on a Miner when it is loaded.
      * Override this function to perform some initialization at miner loading time.
      */
-    public void load()
+    protected void load()
     {
     }
 
@@ -83,7 +83,7 @@ public abstract class Miner
      *
      * @param status the status of the initialize miner command
      */
-    public void load(DataElement status)
+    protected void load(DataElement status)
     {
 	load();
     }
@@ -93,7 +93,7 @@ public abstract class Miner
      * If you need to update element information at that time, override this method.
      *
      */
-    public void updateMinerInfo()
+    protected void updateMinerInfo()
     {
     }
 

@@ -44,12 +44,12 @@ public final class DataElement implements Serializable, IDataElement
     // convenience
     private DataElement         _abstracts = null;
 
-  /**
+    /**
      * Creates a new DataElement without initializing it.
      *
      */
 	public DataElement()
-	{
+	{ 
 		_dataStore = null;
 		_parent = null;
 	}
@@ -59,7 +59,7 @@ public final class DataElement implements Serializable, IDataElement
      *
      * @param dataStore the owner DataStore for this element
      */
-    public DataElement(DataStore dataStore)
+    protected DataElement(DataStore dataStore)
     {
 	_dataStore   = dataStore;
 	_parent      = null;
@@ -311,7 +311,7 @@ public final class DataElement implements Serializable, IDataElement
      * Removes all the attributes of a DataElement. 
      * This method should only be called from the UpdateHandlers.
      */
-    public synchronized void clear()
+    protected synchronized void clear()
     {
 	if (_attributes != null)
 	    {
@@ -342,7 +342,7 @@ public final class DataElement implements Serializable, IDataElement
      * Marks a DataElement as deleted.
      * This method should only be called from the DataStore
      */
-    public synchronized void delete()
+    protected synchronized void delete()
     {
 	// set delete attribute
 	setAttribute(DE.A_SOURCE, "deleted");
@@ -1552,13 +1552,7 @@ public final class DataElement implements Serializable, IDataElement
       } 
     
 	
-    public void fireDomainChanged()
-    {
-	_dataStore.fireDomainChanged(new DomainEvent(DomainEvent.INSERT,
-						     this,
-						     DE.P_NESTED));						
-    }
-  
+   
     /**
      * Gets the adapter specified by key for this element
      *

@@ -581,7 +581,7 @@ public final class DataStore
      *
      * @param the number of elements to preallocate
      */
-    public void initElements(int size)
+    private void initElements(int size)
     {
 	for (int i = 0; i < size; i++)
 	    {
@@ -595,7 +595,7 @@ public final class DataStore
      *
      * @return the new DataElement
      */
-    public DataElement createElement()  
+    private DataElement createElement()  
     {
 	DataElement newObject = null;
 	int numRecycled = _recycled.size();
@@ -1416,7 +1416,7 @@ public final class DataStore
     /**
      * Replaces a deleted object
      */
-    public DataElement replaceDeleted(DataElement deletedObject)
+    private DataElement replaceDeleted(DataElement deletedObject)
     {
 	if (deletedObject != null)
 	    {
@@ -1482,7 +1482,7 @@ public final class DataStore
      *
      * @return the new id  
      */
-    public String generateId()
+    protected String generateId()
     {
 	String newId = String.valueOf(_random.nextInt());
 	while (_hashMap.containsKey(newId))
@@ -1507,7 +1507,7 @@ public final class DataStore
     /**
      * Fire a domain changed event
      */
-    public void fireDomainChanged(DomainEvent e)
+    private void fireDomainChanged(DomainEvent e)
     {
         _domainNotifier.fireDomainChanged(e);
     }
@@ -2516,7 +2516,7 @@ public final class DataStore
     }
 
 
-    public ArrayList fuzzyResolveName(DataElement object, String pattern)
+    private ArrayList fuzzyResolveName(DataElement object, String pattern)
     {
 	ArrayList results = new ArrayList();
 	if (object != null)
@@ -2668,7 +2668,7 @@ public final class DataStore
         return null;
       }
 
-    public DataElement resolveName(DataElement object, String keyName)
+    private DataElement resolveName(DataElement object, String keyName)
     {
 	if (object != null)
 	    {	
