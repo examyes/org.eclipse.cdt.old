@@ -25,16 +25,11 @@
   </runtime>
 
   <extension
-	point="org.eclipse.ui.views">
-	<category
-		id="com.ibm.linux.help"
-		name="%View.Category.HelpSearch">
-	</category>
-	
+	point="org.eclipse.ui.views">		
 	<view
 		id="com.ibm.linux.help.views.ResultsViewPart"
 		name="%View.Title.HelpResults"
-		category="com.ibm.linux.help"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/results.gif"
 		class="com.ibm.linux.help.views.ResultsViewPart">
 	</view>	
