@@ -128,7 +128,7 @@ abstract class DisassemblyView extends View
       // put up a source not available message.  We tell the user we are
       // verified.
       _fakeNoSource = false;
-      if (sourceFileName == null || sourceFileName.length() == 0)
+      if (sourceFileName == null || sourceFileName.length() == 0 || sourceFileName.equals("dummy"))
       {
          _parentPart.setPartChanged(true);
          _fakeNoSource = true;
@@ -137,13 +137,35 @@ abstract class DisassemblyView extends View
 
       file = new File(sourceFileName);
       if (!file.exists() || file.isDirectory())
-      { 	
+      { 
+      	 _parentPart.setPartChanged(true);
+      	 _fakeNoSource = true;	
          return false;
       }
 
       GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
       String startAddress = ((GdbPart)_parentPart).getStartAddress();
       String endAddress = ((GdbPart)_parentPart).getEndAddress();
+      
+      try
+      {
+	      long startAddInt = Long.parseLong(startAddress.substring(2), 16);
+	      long endAddInt = Long.parseLong(endAddress.substring(2), 16);
+      
+	      if (startAddInt > endAddInt || startAddress == null || endAddress == null)
+	      {
+	      	_parentPart.setPartChanged(true);
+	      	_fakeNoSource = true;
+	      	return true;
+	      }
+      }
+      catch(NumberFormatException e)
+      {
+      	  _parentPart.setPartChanged(true);
+		  _fakeNoSource = true;
+		  return true;
+      }
+      
       String[] lines = gdbDebugSession._getGdbFile.getDisassemblyLines(startAddress, endAddress);
 
       int lineNum   = 0;
@@ -151,6 +173,7 @@ abstract class DisassemblyView extends View
       _viewLines.removeAllElements();
       String srcLine = null;
       String address = null;
+      
       while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
       {
       	 address = srcLine.substring(0,9);
