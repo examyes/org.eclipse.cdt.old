@@ -184,12 +184,14 @@ public class XMLparser
 					  try
 					      {
 						  DataElement result = parseTag(xmlTag, parent);
-						  parent = result;
-						  if (_rootDataElement == null)
+						  if (parent == null && _rootDataElement == null)
 						      {
-							  _rootDataElement = parent;
+							  _rootDataElement = result;
 							  _rootDataElement.setParent(null);
 						      }
+
+						  parent = result;
+
 						  if (_isFile && (result != null))
 						      {
 							  int size = result.depth();
@@ -332,7 +334,7 @@ public class XMLparser
 				      }
 				  else
 				      {
-					  // new object
+					  // new object					  
 					  result = _dataStore.createObject(parent, attributes);
 				      }
 				  

@@ -41,6 +41,8 @@ public class LogViewPart extends DataStoreViewPart
 	_viewer.selectFilter("all");
 	setTitle("Log on " + dataStore.getName());
     } 
+
+
 }
 
 

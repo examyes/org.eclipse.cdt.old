@@ -980,6 +980,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	return null;
     }
+
+    public DataElement findResourceElement(IResource resource)
+    {
+	if (resource instanceof IProject)
+	    {
+		return findProjectElement((IProject)resource);
+	    }
+
+	DataStore dataStore = _plugin.getCurrentDataStore();
+	DataElement workspace = findWorkspaceElement(dataStore);
+	if (workspace != null)
+	    {
+		String resString = resource.getLocation().toString().replace('\\', '/');
+		return dataStore.find(workspace, DE.A_SOURCE, resString);
+	    }
+
+	return null;
+    }  
     
   public DataElement findProjectElement(IProject project)
   {
@@ -1019,11 +1037,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
  private DataElement getPathElement(IResource resource)
  {
-  if (resource instanceof ResourceElement)
-   return ((ResourceElement)resource).getElement();	
-  if (resource instanceof Repository)
-   return ((Repository)resource).getElement();	    	    	
-  return ConvertUtility.convert(_plugin.getDataStore(), _plugin.getDataStore().getHostRoot(), resource);
+     return findResourceElement(resource);
  }
 
  
@@ -1053,13 +1067,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);	
    else
     status = dataStore.command(commandDescriptor, args, pathElement, false);		
-   monitorStatus(status);
+
+   //***   monitorStatus(status);
    _status = status;
-   if (showView)
-   {		
-    showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
-    showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
-   }
+
   }	
 
 
@@ -1570,6 +1581,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement fsD   = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement dirD = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement rootD = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
+	DataElement fileD    = dataStore.find(schemaRoot, DE.A_NAME, "file",1);	
 	DataElement projectD = dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
 	DataElement closedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Closed Project", 1);
 
@@ -1626,19 +1638,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 
         
-	DataElement fileD    = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
-        DataElement closedRemoteProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Closed Remote Project", 1);
-	
               
         DataElement parseMenuD = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
 	
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse", "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Save Parse Information", "com.ibm.cpp.ui.internal.actions.ProjectSaveParseAction");
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information", "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse", 
+			       "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Save Parse Information", 
+			       "com.ibm.cpp.ui.internal.actions.ProjectSaveParseAction");
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information", 
+			       "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
         
         dataStore.createReference(fileD, parseMenuD);
 	dataStore.createReference(dirD, parseMenuD);
-	dataStore.createObject(closedRemoteProjectD, DE.T_UI_COMMAND_DESCRIPTOR, "Open Remote Project", "com.ibm.cpp.ui.internal.actions.ProjectOpenAction");
          
        
 	// replicated project actions

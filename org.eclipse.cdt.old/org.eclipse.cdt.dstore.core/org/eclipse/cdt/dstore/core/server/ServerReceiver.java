@@ -27,6 +27,7 @@ public class ServerReceiver extends Receiver
       for (int a = 0; a < documentObject.getNestedSize(); a++)
       {
         DataElement rootOutput = (DataElement)documentObject.get(a);
+
 	DataElement log = _dataStore.getLogRoot();
 	log.addNestedData(rootOutput, false);	
 	

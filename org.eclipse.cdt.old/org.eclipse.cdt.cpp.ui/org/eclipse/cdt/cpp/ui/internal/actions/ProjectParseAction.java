@@ -5,6 +5,7 @@ package com.ibm.cpp.ui.internal.actions;
  */
 
 import com.ibm.dstore.core.model.*;
+import org.eclipse.core.resources.*;
 import java.util.*;
 
 public class ProjectParseAction extends ProjectAction
@@ -19,10 +20,50 @@ public class ProjectParseAction extends ProjectAction
     
     public void run()
     {
-	DataElement status = _dataStore.command(_parseCommand, _subject);
-	_api.monitorStatus(status);
-	//_api.showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
-	//_api.showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
+	if (_parseCommand != null)
+	    {
+		DataElement status = null;
+		if (_subject.getType().equals("Project"))
+		    {
+			status = _dataStore.command(_parseCommand, _subject);
+			_api.monitorStatus(status);
+		    }
+		else
+		    {		
+			
+			DataElement projectElement = getProjectFor(_subject);
+			if (projectElement != null)
+			    {
+				ArrayList args = new ArrayList();
+				args.add(projectElement); 
+				status = _dataStore.command(_parseCommand, args, _subject);		
+				_api.monitorStatus(status);
+			    }
+		    }
+	    }
+    }
+
+    private DataElement getProjectFor(DataElement subject)
+    {
+	DataElement parent = subject.getParent();
+	if (parent == null)
+	    {
+		return null;
+	    }
+
+	String type = parent.getType();
+	if (type.equals("Project"))
+	    {
+		return parent;
+	    }
+	else if (type.equals("Data"))
+	    {
+		return null;
+	    }
+	else 
+	    {
+		return getProjectFor(parent);
+	    }
     }
 }
 

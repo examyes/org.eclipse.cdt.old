@@ -55,9 +55,11 @@ public class ClientUpdateHandler extends UpdateHandler
 
 		  if ((object != null) )
 		      {	
-			  clean(object);
 			  if (!object.isUpdated())
-			      notify(object);
+			      {
+				  clean(object);
+				  notify(object);
+			      }
 		      }
 		}
 	  }
@@ -67,9 +69,9 @@ public class ClientUpdateHandler extends UpdateHandler
   public void notify(DataElement object)
       {    
 	  DataElement parent = object;
-        object.setUpdated(true);
-        object.setExpanded(true);
-	
+	  object.setUpdated(true);
+	  object.setExpanded(true);
+	  
         IDomainNotifier notifier = _dataStore.getDomainNotifier();
 
         if (object.getNestedSize() == 0)

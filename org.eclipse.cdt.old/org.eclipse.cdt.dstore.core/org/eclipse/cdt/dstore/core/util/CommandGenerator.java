@@ -84,12 +84,12 @@ public class CommandGenerator
 
     if (status == null)
     {
-	    status = _dataStore.createObject(commandObject, 
-					     _dataStore.getLocalizedString("model.status"), 
-					     _dataStore.getLocalizedString("model.start"), "", 
-					     commandObject.getId() + _dataStore.getLocalizedString("model.status"));
-	}
-
+	status = _dataStore.createObject(commandObject, 
+					 _dataStore.getLocalizedString("model.status"), 
+					 _dataStore.getLocalizedString("model.start"), "", 
+					 commandObject.getId() + _dataStore.getLocalizedString("model.status"));
+    }
+    
     if (_dataStore.logTimes())
     {
 	DataElement timeObject = _dataStore.createObject(status, _dataStore.getLocalizedString("model.time"), _dataStore.getLocalizedString("model.command_time"));
@@ -98,7 +98,6 @@ public class CommandGenerator
     }
 
     _log.addNestedData(commandObject, false);
-
     return commandObject;
   }
 
@@ -129,7 +128,18 @@ public class CommandGenerator
 
       if (arguments != null)
       {
-	  commandObject.addNestedData(arguments, false);
+	  for (int i = 0; i < arguments.size(); i++)
+	      {
+		  DataElement arg = (DataElement)arguments.get(i);
+		  if (!arg.isExpanded())
+		      {
+			  commandObject.addNestedData(arguments, false);
+		      }
+		  else
+		      {
+			  _dataStore.createReference(commandObject, arg, "argument");
+		      }
+	      }
       }
 
       return logCommand(commandObject);
