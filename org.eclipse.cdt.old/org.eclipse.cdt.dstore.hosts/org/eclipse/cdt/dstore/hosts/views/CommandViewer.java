@@ -389,8 +389,12 @@ public class CommandViewer extends Viewer implements SelectionListener
 				_history.remove(index);
 			    }
 		    }
-
-		_history.add(0, _command);
+		    
+		    
+		if (!_history.contains(_command))
+		{
+			_history.add(0, _command);
+		}
 		writeHistory();
 		updateCombo();
 		
@@ -399,18 +403,16 @@ public class CommandViewer extends Viewer implements SelectionListener
 		DataStore dataStore = _input.getDataStore();
 		DataElement cmdD = dataStore.localDescriptorQuery(_input.getDescriptor(), "C_COMMAND");
 		if (cmdD != null)
-
-		    {				
+		{				
 			ArrayList args = new ArrayList();
 			
 			DataElement invocationObj = dataStore.createObject(null, "invocation", _command, "");
 			args.add(invocationObj);
 		 
      		DataElement cmdStatus = dataStore.command(cmdD, args, _input);
-		ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
+			ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
 	        d.asyncExec(action);		
-		    }
-
+		}
 	    }
     }
 

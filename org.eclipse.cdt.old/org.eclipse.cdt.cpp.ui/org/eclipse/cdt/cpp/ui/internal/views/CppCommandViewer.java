@@ -57,8 +57,10 @@ public class CppCommandViewer extends CommandViewer
 	ModelInterface api = _plugin.getModelInterface();
 	if (input != _input)
 	    {
-		_resourceInput = api.findResource((DataElement)input);
-		super.setInput((DataElement)input);
+	    	DataElement element = (DataElement)input;
+			super.setInput(element);
+		
+			_resourceInput = api.findResource(_input);	
 	    }
     }
 
@@ -69,8 +71,11 @@ public class CppCommandViewer extends CommandViewer
 	    {
 		if (input != _input)
 		    {
-			_resourceInput = api.findResource((DataElement)input);
 			super.setInput((DataElement)input);
+			if (_input != null)
+			{
+			_resourceInput = api.findResource(_input);
+			}
 		    }
 	    }
 	else
@@ -86,17 +91,18 @@ public class CppCommandViewer extends CommandViewer
 		    {
 			DataElement element = null;
 
-			_resourceInput = (IResource)input;
 			element = api.findResourceElement(_resourceInput);
 			super.setElementInput(element);
+			_resourceInput = (IResource)input;
 		    }
 		else
 		    {
 			_resourceInput = null;
 		    }
 		
-
 	    }
+	    
+	    updateCombo();
     }
    
     public ArrayList readHistory()
