@@ -54,7 +54,7 @@ public class GdbDebugSession extends DebugSession
   public  String getCurrentFileName()     { return _currentFileName; }
   public  String getCurrentLineNumber()   { return _currentLineNumber; }
   public  int    getCurrentModuleID()     { return _currentModuleID; }
-  public  void   setCurrentModuleID(int currentModuleID)  
+  public  void   setCurrentModuleID(int currentModuleID)
   {  _currentModuleID = currentModuleID; }
   public  String getCurrentFunctionName() { return _currentFunctionName; }
   public  String getCurrentFrameAddress() { return _currentFrameAddress; }
@@ -66,7 +66,7 @@ public class GdbDebugSession extends DebugSession
 
   private int    _currentThreadID = 0;
   public  int    getCurrentThreadID()  { return _currentThreadID; }
-  public  void   setCurrentThreadID(int ID) 
+  public  void   setCurrentThreadID(int ID)
   { _currentThreadID = ID;    }
 
   GdbDebugEngine _gdbDebugEngine = null;
@@ -74,14 +74,14 @@ public class GdbDebugSession extends DebugSession
   {
      super(debugEngine);
      _gdbDebugEngine = debugEngine;
-     
+
      String gdbPath = _gdbDebugEngine.getGdbPath();
      if (gdbPath != null && gdbPath != "")
      {
      	gdbPath += "/";
      }
-     
-     if (Gdb.traceLogger.DBG) 
+
+     if (Gdb.traceLogger.DBG)
         Gdb.traceLogger.dbg(1,"GdbDebugSession constructor" );
 
      String shell = "cmd.exe /C ";
@@ -99,18 +99,18 @@ public class GdbDebugSession extends DebugSession
      		cmd = shell + " gdb -nw ";
      	}
      	
-        if (Gdb.traceLogger.EVT) 
+        if (Gdb.traceLogger.EVT)
             Gdb.traceLogger.evt(1,"================ GdbDebugSession, will create GdbProcess with command="+cmd );
         gdbProcess = new GdbProcess( cmd );
      }
      catch (Exception exc)
      {
-        if (Gdb.traceLogger.ERR) 
+        if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("UNHANDLED_EXCEPTION")+exc );
         gdbProcess = null;
      }
      if(gdbProcess==null)
-     {   if (Gdb.traceLogger.ERR) 
+     {   if (Gdb.traceLogger.ERR)
              Gdb.traceLogger.err(1,getResourceString("GDB_PROCESS_NULL") );
          return;
      }
@@ -118,12 +118,12 @@ public class GdbDebugSession extends DebugSession
      for(int i=0; i<=GdbProcess.MAXSECONDS; i++)
      {  if(gdbProcess.isReady())
         {
-           if (Gdb.traceLogger.EVT) 
+           if (Gdb.traceLogger.EVT)
                Gdb.traceLogger.evt(1,"<<<<<<<<======== GdbDebugSession constructor GdbProcess isReady" );
            break;
         }
         else
-        {   if (Gdb.traceLogger.EVT) 
+        {   if (Gdb.traceLogger.EVT)
                 Gdb.traceLogger.evt(2,"GdbDebugSession constructor waiting for GdbProcess, will **SLEEP** and retry" );
             try{Thread.sleep(1000);} catch(InterruptedException e){}
         }
@@ -141,17 +141,17 @@ public class GdbDebugSession extends DebugSession
          if(ready)
          {   String line = gdbProcess.readLine();
              if(line!=null && !line.equals("") && !line.startsWith(gdbProcess.MARKER))
-             {   
+             {
                  addLineToUiMessages(line);      // reads GDB copyright message
-                 if (Gdb.traceLogger.EVT) 
+                 if (Gdb.traceLogger.EVT)
                      Gdb.traceLogger.evt(3,"GdbDebugSession constructor 'gdb' response="+line );
              }
          }
      }
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession 'gdb' started" );
 
-  }  
+  }
 
   public void createManagers()
   {
@@ -168,16 +168,16 @@ public class GdbDebugSession extends DebugSession
 
   private void createGdbCommandObjects()
   {
-     _gdbCommandAndResponse = new GdbCommandAndResponse(this); 
-     _getGdbThreads         = new GetGdbThreads(this); 
-     _getGdbBreakpoints     = new GetGdbBreakpoints(this); 
-     _getGdbFile            = new GetGdbFile(this); 
-     _getGdbLocals          = new GetGdbLocals(this); 
-     _getGdbModuleParts     = new GetGdbModuleParts(this); 
-     _getGdbPartMethods     = new GetGdbPartMethods(this); 
-     _getGdbRegisters       = new GetGdbRegisters(this); 
-     _getGdbStorage         = new GetGdbStorage(this); 
-     _getGdbSharedLibraries = new GetGdbSharedLibraries(this); 
+     _gdbCommandAndResponse = new GdbCommandAndResponse(this);
+     _getGdbThreads         = new GetGdbThreads(this);
+     _getGdbBreakpoints     = new GetGdbBreakpoints(this);
+     _getGdbFile            = new GetGdbFile(this);
+     _getGdbLocals          = new GetGdbLocals(this);
+     _getGdbModuleParts     = new GetGdbModuleParts(this);
+     _getGdbPartMethods     = new GetGdbPartMethods(this);
+     _getGdbRegisters       = new GetGdbRegisters(this);
+     _getGdbStorage         = new GetGdbStorage(this);
+     _getGdbSharedLibraries = new GetGdbSharedLibraries(this);
      _gdbExceptions         = new GdbExceptions(this);
   }
 
@@ -187,7 +187,7 @@ public class GdbDebugSession extends DebugSession
 //  private String _tempFileName = null;
 //  public void setTemporaryContext(String fileName,String lineNo)
 //  {   if(!fileName.equals(_currentFileName))
-//      {  if (Gdb.traceLogger.ERR) 
+//      {  if (Gdb.traceLogger.ERR)
 //             Gdb.traceLogger.err(2,"######## GdbDebugSession.setTemporaryContext CANNOT set context.fileName="+fileName+" context.lineNum="+lineNo );
 //      }
 //     _tempLineNumber = _currentLineNumber;
@@ -208,20 +208,20 @@ public class GdbDebugSession extends DebugSession
 //        if( !ok )
 //           return;
 //        addCmdResponsesToUiMessages();
-//        cmdResponses.removeAllElements(); 
+//        cmdResponses.removeAllElements();
 //  }
 ///////  GDB uses stackFrame context rather than user specified source context //////////////
 
   public void addCmdResponsesToUiMessages()
   {
      if(!echoInternalCommands)
-        return; 
+        return;
 
      if(cmdResponses.size()>0 )
      {
         int length = cmdResponses.size();
         for(int i=0; i<length; i++)
-        {   
+        {
            String str = (String)cmdResponses.elementAt(i);
            addLineToUiMessages(str);
         }
@@ -234,21 +234,25 @@ public class GdbDebugSession extends DebugSession
         _whyExceptionMsg = null;
         int length = cmdResponses.size();
         for(int i=0; i<length; i++)
-        {   
+        {
            String str = (String)cmdResponses.elementAt(i);
 
            if(str.startsWith("Program received signal"))
            {
-              _whyStop = WS_ExceptionThrown;
+           	  if (_terminatePending)
+                  _whyStop = WS_HaltRequest;
+           	  else
+                  _whyStop = WS_ExceptionThrown;
+                  
               if(i<(length-4))
               {
                  String s = (String)cmdResponses.elementAt(i+1);
                  s += ": "+(String)cmdResponses.elementAt(i+3);
                  str += " "+s;
               }
-              if (Gdb.traceLogger.EVT) 
+              if (Gdb.traceLogger.EVT)
                   Gdb.traceLogger.evt(1,"$$$$$$$$$$$$$$$$ GdbDebugSession.checkResponseForException Received Exception="+str +"\n" );
-             _whyExceptionMsg = str; 
+             _whyExceptionMsg = str;
            }
            else if(str.startsWith("Program terminated with signal"))
            {
@@ -259,16 +263,16 @@ public class GdbDebugSession extends DebugSession
                  s += ": "+(String)cmdResponses.elementAt(i+3);
                  str += " "+s;
               }
-              if (Gdb.traceLogger.EVT) 
+              if (Gdb.traceLogger.EVT)
                   Gdb.traceLogger.evt(1,"$$$$$$$$$$$$$$$$ GdbDebugSession.checkResponseForException Termination Exception="+str +"\n"  );
-              _whyExceptionMsg = str; 
+              _whyExceptionMsg = str;
            }
            else if(str.startsWith("Program exited with code"))
            {
               _whyStop = WS_PgmQuit;
-              if (Gdb.traceLogger.EVT) 
+              if (Gdb.traceLogger.EVT)
                   Gdb.traceLogger.evt(1,"$$$$$$$$$$$$$$$$ GdbDebugSession.checkResponseForException Termination="+str +"\n"  );
-              _whyExceptionMsg = str; 
+              _whyExceptionMsg = str;
            }
            else if(str.startsWith("Program exited normally"))
            {
@@ -277,9 +281,9 @@ public class GdbDebugSession extends DebugSession
            else if(str.startsWith("The program is not being run"))
            {
               _whyStop = WS_PgmQuit;
-              if (Gdb.traceLogger.EVT) 
+              if (Gdb.traceLogger.EVT)
                   Gdb.traceLogger.evt(1,"$$$$$$$$$$$$$$$$ GdbDebugSession.checkResponseForException Termination="+str +"\n"  );
-              _whyExceptionMsg = str; 
+              _whyExceptionMsg = str;
            }
            int space = str.indexOf(" ");
            if( space>0 && str.charAt(space-1)==':' )
@@ -291,7 +295,7 @@ public class GdbDebugSession extends DebugSession
   public void addLineToUiMessages(String line)
   {
      if(!echoInternalCommands)
-        return; 
+        return;
 
      uiMessages.addElement(line);
   }
@@ -299,13 +303,13 @@ public class GdbDebugSession extends DebugSession
   public void addChangesToUiMessages()
   {
      if(!echoInternalCommands)
-        return; 
+        return;
 
      if(cmdResponses.size()>0 )
      {
         int length = cmdResponses.size();
         for(int i=0; i<length; i++)
-        {   
+        {
            String str = (String)cmdResponses.elementAt(i);
 
            int space = str.indexOf(" ");
@@ -322,16 +326,16 @@ public class GdbDebugSession extends DebugSession
 
      if(IdeFilesAndMethods) // see also addMethodsForAllParts
      {
-        if (Gdb.traceLogger.ERR) 
+        if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(2,"####### GdbDebugSession.getPartMethods part="+part.getName() +" ???***IS*** BYPASSED??? (let IDE framework control this)" );
         return new MethodInfo[0];
      }
 
      MethodInfo[] methods = _getGdbPartMethods.getPartMethods(part);
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
      {
      	if(methods!=null)
-        for(int i=0; i<methods.length; i++ )           
+        for(int i=0; i<methods.length; i++ )
           Gdb.traceLogger.evt(3,"---------------- GdbDebugSession.getPartMethods methods["+i+"] name="+methods[i]._name +" lineNum="+methods[i]._lineNum );
      }
 
@@ -345,7 +349,7 @@ public class GdbDebugSession extends DebugSession
      if (Gdb.traceLogger.EVT)
      {
      	if(debuggableMethods!=null)
-        for(int i=0; i<debuggableMethods.length; i++ )       
+        for(int i=0; i<debuggableMethods.length; i++ )
             Gdb.traceLogger.evt(3,"---------------- GdbDebugSession.addMethodsToPart DEBUGGABLE methods["+i+"] name="+debuggableMethods[i]._name
                   +" lineNum="+debuggableMethods[i]._lineNum );
      }
@@ -357,19 +361,19 @@ public class GdbDebugSession extends DebugSession
      part.setEntryIDs(entryIDs);
      part.setMethods(debuggableMethods);
   }
-                   
+
   public void getMethodsForAllParts()
   {
      if(IdeFilesAndMethods)  // see also updateAllParts and getPartMethods
      {
-//        if (Gdb.traceLogger.EVT) 
+//        if (Gdb.traceLogger.EVT)
 //            Gdb.traceLogger.evt(1,"######## GdbDebugSession.getMethodsForAllParts ***BYPASSED*** (let IDE framework control this)" );
 //        return;
-          if (Gdb.traceLogger.ERR) 
+          if (Gdb.traceLogger.ERR)
               Gdb.traceLogger.err(2,"######## GdbDebugSession.getMethodsForAllParts ???SHOULD BE BYPASSED??? (let IDE framework control this)" );
      }
 ////////////////////// The code below is not needed if the IDE Famework keeps the list of methods //////////////////////////
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"########>>>>>>>> GdbDebugSession.getMethodsForAllParts - time consuming"   );
 
      _getGdbPartMethods.getMethodsForAllParts();
@@ -378,30 +382,30 @@ public class GdbDebugSession extends DebugSession
 
 
   public int cmdCommandLogExecute(java.lang.String cmd, ERepCommandLogExecute _rep )
-  { 
+  {
      if(gdbProcess==null)
-     {   if (Gdb.traceLogger.ERR) 
+     {   if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDB_PROCESS_NULL") );
          String str = getResourceString("ENGINE_TERMINATED_MSG");
          _whyStop = WS_PgmQuit;
          _rep.setReturnCode(EPDC.ExecRc_TerminateDebugger);
          _rep.setMessage( str );
          _rep.addResponseLine ( str );
-//         _whyExceptionMsg = str; 
+//         _whyExceptionMsg = str;
 //         _rep.setExceptionMsg( str );
 
          return _whyStop;
      }
 
      if(cmd.equalsIgnoreCase("setEcho on"))
-     { 
+     {
          _rep.addResponseLine( cmd );
 //         uiMessages.addElement(cmd);
          echoInternalCommands = true;
          return 1;
      }
      else if(cmd.equalsIgnoreCase("setEcho off"))
-     { 
+     {
          _rep.addResponseLine( cmd );
  //        uiMessages.addElement(cmd);
          echoInternalCommands = false;
@@ -421,7 +425,7 @@ public class GdbDebugSession extends DebugSession
      {
         int length = uiMessages.size();
         for(int i=0; i<length; i++)
-        {   
+        {
            String str = (String)uiMessages.elementAt(i);
            if(str==null || str.equals(""))
            {   str = " ";
@@ -435,22 +439,22 @@ public class GdbDebugSession extends DebugSession
      {
          _whyStop = WS_PgmQuit;
          String str = getResourceString("ENGINE_TERMINATED_MSG");
-         if (Gdb.traceLogger.EVT) 
+         if (Gdb.traceLogger.EVT)
              Gdb.traceLogger.evt(1,"GdbDebugSession.cmdCommandLogExecute "+str );
          _rep.setReturnCode(EPDC.ExecRc_TerminateDebugger);
          _rep.setMessage( str );
          _rep.addResponseLine ( str );
-//         _whyExceptionMsg = str; 
+//         _whyExceptionMsg = str;
 //         _rep.setExceptionMsg( str );
 
          return _whyStop;
-     } 
-     
+     }
+
      updateMonitors();
      updateRegisters();
      updateStorage();
      getCurrentFileLineModule();
-     
+
 
      return 1;
   }
@@ -458,7 +462,7 @@ public class GdbDebugSession extends DebugSession
 // ########################################### WAIT-FOR-EVENT #########################################
   private void waitForEvent()
   {
-	  if (Gdb.traceLogger.EVT) 
+	  if (Gdb.traceLogger.EVT)
               Gdb.traceLogger.evt(1,"????????????????? GdbDebugSession.waitForEvent"   );
   }
 // #################################################################################################
@@ -466,14 +470,14 @@ public class GdbDebugSession extends DebugSession
   private void addModulePart(String moduleName, String partName)
   {
     _parts.put(moduleName, partName);
-	  if (Gdb.traceLogger.DBG) 
+	  if (Gdb.traceLogger.DBG)
               Gdb.traceLogger.dbg(1,"???????????????? GdbDebugSession.addModulePart ?UNUSED? moduleName="+moduleName+" partName="+partName +"\n" );
 Thread.currentThread().dumpStack();
   }
 
   private void removePart(String partName)
   {
-	  if (Gdb.traceLogger.DBG) 
+	  if (Gdb.traceLogger.DBG)
               Gdb.traceLogger.dbg(1,"???????????????? GdbDebugSession.removePart ?UNUSED? partName="+partName +"\n"  );
 Thread.currentThread().dumpStack();
     //_parts.remove(partName);
@@ -481,7 +485,7 @@ Thread.currentThread().dumpStack();
 
   private void printToConsole(final InputStream stream)
   {
-    Thread thread = new Thread() 
+    Thread thread = new Thread()
     {
       public void run()
       {
@@ -514,13 +518,13 @@ Thread.currentThread().dumpStack();
 
   public boolean setStartProgramName(String programName, String parms, String[] errMsg)
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"########>>>>>>>> GdbDebugSession.setStartProgramName - time consuming   programName="+programName +" parms="+parms );
     _mainProgram = programName;
 
     if (programName == null || programName.equals(""))
     {
-        if (Gdb.traceLogger.EVT) 
+        if (Gdb.traceLogger.EVT)
             Gdb.traceLogger.evt(1,"################ GdbDebugSession INVALID_START_PROGRAM_NAME_MSG programName=" +programName );
         return false;
     }
@@ -538,7 +542,7 @@ Thread.currentThread().dumpStack();
     boolean ok = executeGdbCommand(cmd);
     if(!ok)
         return false;
- 
+
 
     lines = getTextResponseLines();
     boolean found = false;
@@ -553,7 +557,7 @@ Thread.currentThread().dumpStack();
     }
 
     if(!found)
-    {  
+    {
        if(Gdb.traceLogger.ERR)
            Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_LOAD_PROGRAM") +programName +" ("+lastMsg+")"  );
        return false;
@@ -561,14 +565,14 @@ Thread.currentThread().dumpStack();
     else for(int i=0; i<lines.length; i++)
     {  if(lines[i]!=null && !lines[i].equals("") && !lines[i].startsWith(gdbProcess.MARKER))
        {  addLineToUiMessages(prefix+lines[i]);
-          if (Gdb.traceLogger.DBG) 
+          if (Gdb.traceLogger.DBG)
               Gdb.traceLogger.dbg(2,"GdbDebugSession.setStartProgramName 'file' response=" +lines[i] );
        }
     }
 
     found = getMainModule();
     if(!found)
-    {   
+    {
         if(Gdb.traceLogger.ERR)
            Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_FIND_MAIN_MODULE") );
         return false;
@@ -576,34 +580,34 @@ Thread.currentThread().dumpStack();
     else for(int i=0; i<lines.length; i++)
     {  if(lines[i]!=null && !lines[i].equals("") && !lines[i].startsWith(gdbProcess.MARKER))
        {  cmdResponses.addElement(prefix+lines[i]);
-          if (Gdb.traceLogger.EVT) 
+          if (Gdb.traceLogger.EVT)
               Gdb.traceLogger.evt(2,"GdbDebugSession.setStartProgramName getMainModule response=" +lines[i] );
        }
     }
 
 //    updateSharedLibraries();
-    if (Gdb.traceLogger.EVT) 
+    if (Gdb.traceLogger.EVT)
         Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.setStartProgramName DONE" );
-        
+
     // add dummy part
     _moduleManager.checkPart(1, "dummy");
-        
+
     return true;
   }
 
   public boolean remoteAttach(int processIndex, String[] errorMsg)
   {
-  if (Gdb.traceLogger.EVT) 
+  if (Gdb.traceLogger.EVT)
               Gdb.traceLogger.evt(1,"????????????????? GdbDebugSession.remoteAttach "+processIndex   );
     return false;
   }
 
   public boolean remoteDetach(int processIndex, int processDetachAction, String[] errorMsg)
   {
-	  if (Gdb.traceLogger.EVT) 
+	  if (Gdb.traceLogger.EVT)
               Gdb.traceLogger.dbg(1,"????????????????? GdbDebugSession.remoteDetach "+processIndex   );
     return false;
-  } 
+  }
 
   public boolean closeDebugger()
   {
@@ -614,13 +618,13 @@ Thread.currentThread().dumpStack();
 
   public void runToMain()
   {
-     if (Gdb.traceLogger.EVT) 
-         Gdb.traceLogger.evt(1,"########>>>>>>>> GdbDebugSession.runToMain"); 
+     if (Gdb.traceLogger.EVT)
+         Gdb.traceLogger.evt(1,"########>>>>>>>> GdbDebugSession.runToMain");
 
      String cmd = "break main";
      boolean ok = executeGdbCommand(cmd);
      if( !ok )
-     {  if (Gdb.traceLogger.ERR) 
+     {  if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN")+cmd );
         return;
      }
@@ -629,16 +633,16 @@ Thread.currentThread().dumpStack();
      cmd = "run "+_params;
      ok = executeGdbCommand(cmd);
      if( !ok )
-     {  if (Gdb.traceLogger.ERR) 
+     {  if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN")+cmd );
         return;
      }
- 
+
      if(cmdResponses.size()>0 )
      {
         int length = cmdResponses.size();
         for(int i=0; i<length; i++)
-        {   
+        {
            String str = (String)cmdResponses.elementAt(i);
            if(str!=null && !str.equals("") && (str.indexOf(".dll")<0) && (str.indexOf(" DLL")<0) )
              addLineToUiMessages(str);
@@ -650,20 +654,50 @@ Thread.currentThread().dumpStack();
 	
 	if (_whyStop == WS_PgmQuit || _whyStop == WS_ExceptionThrown)
 	{
-		if (Gdb.traceLogger.ERR) 
+		if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN")+cmd );
-            
+
         // do not continue if debugee is started with exception.
-        // we will encounter more problems if we do, may go into infinite loop        
-		return;     
+        // we will encounter more problems if we do, may go into infinite loop
+		return;
 	}
 	
 //    addCmdResponsesToUiMessages();
 
+
+//RW
+     cmd = "info program";
+     ok = executeGdbCommand(cmd);
+     if( !ok )
+     {  if (Gdb.traceLogger.DBG)
+            Gdb.traceLogger.dbg(1, "failed execution of cmd: "+cmd );
+        return;
+     }
+     String[] lines = getTextResponseLines();
+     String process = "process ";
+     int ix = 0;
+     int dot = 0;
+     _debuggeeProcessID = "";
+     for (int i=0; i<lines.length; i++)
+     {
+        ix = lines[i].indexOf(process);
+        if (ix != 0)
+        {
+           dot = lines[i].indexOf(".");
+           _debuggeeProcessID = lines[i].substring(ix + process.length(), dot);
+           System.out.println("RW _debuggeeProcessID: "+ _debuggeeProcessID);
+           break;
+        }
+     }
+
+
+
+// RW
+
      cmd = "clear main";
      ok = executeGdbCommand(cmd);
      if( !ok )
-     {  if (Gdb.traceLogger.ERR) 
+     {  if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN")+cmd );
         return;
      }
@@ -673,7 +707,7 @@ Thread.currentThread().dumpStack();
 
      updateSharedLibraries();
      updateAllParts();
-//     updateAllMethodsForAllParts();    
+//     updateAllMethodsForAllParts();
      updateMonitors();
      updateRegisters();
      updateStorage();
@@ -681,7 +715,7 @@ Thread.currentThread().dumpStack();
      monitorChangedName.removeAllElements();
      monitorChangedValue.removeAllElements();
      getCurrentFileLineModule();
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.runToMain DONE " );
   }
 
@@ -693,20 +727,20 @@ Thread.currentThread().dumpStack();
 
   private void updateRegisters()
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(3," GdbDebugSession.updateRegisters"   );
      _registerManager.updateRegisters();
   }
   private void updateStorage()
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(3," GdbDebugSession.updateStorage"   );
      _storageManager.updateStorage();
   }
 
   private void updateMonitors()
   {
-       if (Gdb.traceLogger.EVT) 
+       if (Gdb.traceLogger.EVT)
            Gdb.traceLogger.evt(2,"######## GdbDebugSession.updateMonitors BYPASSING (GDB command 'display' could be used to them) ??NOT NEEDED??"   );
   }
 
@@ -724,7 +758,7 @@ Thread.currentThread().dumpStack();
 
   private void updateSharedLibraries()
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"========>>>>>>>> GdbDebugSession.updateSharedLibraries" );
 
      GetGdbSharedLibraries.ModuleInfo[] moduleInfo = _getGdbSharedLibraries.updateSharedLibraries();
@@ -733,7 +767,7 @@ Thread.currentThread().dumpStack();
         for(int i=0; i<moduleInfo.length; i++)
         if(moduleInfo[i]!=null)
         {
-           if (Gdb.traceLogger.EVT) 
+           if (Gdb.traceLogger.EVT)
                Gdb.traceLogger.evt(1,"<<<<<<<<======== GdbDebugSession.updateSharedLibraries name="+moduleInfo[i].name
                   +" start="+moduleInfo[i].startAddress+" end="+moduleInfo[i].endAddress
                   +" fullFileName="+moduleInfo[i].fullFileName );
@@ -747,14 +781,14 @@ Thread.currentThread().dumpStack();
   {
      if(IdeFilesAndMethods) // see also addMethodsForAllParts  and getPartMethods
      {
-//        if (Gdb.traceLogger.EVT) 
+//        if (Gdb.traceLogger.EVT)
 //            Gdb.traceLogger.evt(1,"######## GdbDebugSession.updateAllParts ***BYPASSED*** (let IDE framework control this)" );
 //        return;
-          if (Gdb.traceLogger.ERR) 
+          if (Gdb.traceLogger.ERR)
               Gdb.traceLogger.err(2,"######## GdbDebugSession.updateAllParts ???SHOULD BE BYPASSED??? (let IDE framework control this)" );
      }
 ////////////////////// The code below is not needed if the IDE Famework keeps the list of Files //////////////////////////
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"################ GdbDebugSession.updateAllParts - time consuming" );
 
      _getGdbModuleParts.updateAllParts();
@@ -786,11 +820,11 @@ Thread.currentThread().dumpStack();
      int length = cmdResponses.size();
      String[] lines = new String[length];
      for(int i=0; i<length; i++)
-     {   
+     {
         lines[i] = (String)cmdResponses.elementAt(i);
      }
      cmdResponses.removeAllElements();
-     if (Gdb.traceLogger.DBG) 
+     if (Gdb.traceLogger.DBG)
          Gdb.traceLogger.dbg(3,"GdbDebugSession.getTextResponseLines lines.length="+lines.length );
      return lines;
   }
@@ -803,27 +837,27 @@ Thread.currentThread().dumpStack();
 
   public void setLastUserCmd(int cmd, int depth)
   {
-     if (Gdb.traceLogger.ERR) 
+     if (Gdb.traceLogger.ERR)
          Gdb.traceLogger.err(2,"######## GdbDebugSession.setLastUserCmd="+cmd +" BYPASSED ??NOT NEEDED??" );
   }
 
   int getLastUserCmd(int cmd)
   {
-     if (Gdb.traceLogger.ERR) 
+     if (Gdb.traceLogger.ERR)
          Gdb.traceLogger.err(2,"######## UNUSED?? GdbDebugSession.getLastUserCmd="+cmd +" BYPASSED ??NOT NEEDED??" );
     return 0;
   }
 
   int getLastUserDepth(int depth)
   {
-     if (Gdb.traceLogger.ERR) 
+     if (Gdb.traceLogger.ERR)
          Gdb.traceLogger.err(2,"######## UNUSED?? GdbDebugSession.getLastUserDepth="+depth  );
     return 0;
   }
 
   String[] getNewPartsList()
   {
-     if (Gdb.traceLogger.ERR) 
+     if (Gdb.traceLogger.ERR)
          Gdb.traceLogger.err(2,"######## UNUSED?? GdbDebugSession.getPartsList"  );
 
     if (_parts == null || _parts.size() == 0)
@@ -837,7 +871,7 @@ Thread.currentThread().dumpStack();
 
     //while (partEnum.hasMoreElements())
     for (int i = _partStartIndex; partEnum.hasMoreElements(); i++)
-         partsList[i-_partStartIndex] = (String)partEnum.nextElement();     
+         partsList[i-_partStartIndex] = (String)partEnum.nextElement();
 
     _partStartIndex = partsListSize - 1;
 
@@ -846,10 +880,10 @@ Thread.currentThread().dumpStack();
 
   public String[] getPartsList()
   {
-    if (Gdb.traceLogger.ERR) 
+    if (Gdb.traceLogger.ERR)
         Gdb.traceLogger.err(2,"######## UNUSED?? GdbDebugSession.getPartsList" );
 
-    if (Gdb.traceLogger.EVT) 
+    if (Gdb.traceLogger.EVT)
         Gdb.traceLogger.evt(3,"GdbDebugSession.getPartsList" );
 
     if (_parts == null || _parts.size() == 0)
@@ -868,7 +902,7 @@ Thread.currentThread().dumpStack();
   public String getFullProgramName(String name)
   {
 
-    if (Gdb.traceLogger.ERR) 
+    if (Gdb.traceLogger.ERR)
         Gdb.traceLogger.err(2,"######## UNUSED?? GdbDebugSession: getFullProgramName("+name+")");
     Thread.currentThread().dumpStack();
 
@@ -879,7 +913,7 @@ Thread.currentThread().dumpStack();
   {
      int stopThread = _threadManager._stoppingThread;
      String s = new Integer(stopThread).toString();
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(2,"GdbDebugSession.stopThreadName="+s  );
      return s;
   }
@@ -891,20 +925,20 @@ Thread.currentThread().dumpStack();
 
   public boolean isWaiting()
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"$$$$$$$$$$$$$$$$ GdbDebugSession.isWaiting ???? \n"  );
      return false;
   }
 
   public void setTmpBkpt(int partID, int lineNum)
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(2,"-------->>>>>>>> GdbDebugSession.setTmpBkpt partID="+partID +" lineNum="+lineNum  );
   }
 
   public void clearTmpBkpt()
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(2,"-------->>>>>>>> GdbDebugSession.clearTmpBkpt"  );
   }
 
@@ -913,7 +947,7 @@ Thread.currentThread().dumpStack();
 
   public int cmdStep(String threadName, boolean stepOver)
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"========>>>>>>>> GdbDebugSession.cmdStep threadName="+threadName +" over="+stepOver );
 
      _whyStop = WS_Unknown;
@@ -923,7 +957,7 @@ Thread.currentThread().dumpStack();
      boolean ok = executeGdbCommand(cmd);
      if(!ok)
          return _whyStop;
- 
+
       _whyStop = WS_BkptHit;
       checkResponseForException();
 //      addChangesToUiMessages();
@@ -936,7 +970,7 @@ Thread.currentThread().dumpStack();
 
   public int cmdStepDebug(String threadName)
   {
-    if (Gdb.traceLogger.EVT) 
+    if (Gdb.traceLogger.EVT)
         Gdb.traceLogger.evt(1,"========>>>>>>>> GdbDebugSession.cmdStepDebug threadName="+threadName  );
 
     // Make note of where we started to step debug
@@ -979,14 +1013,14 @@ Thread.currentThread().dumpStack();
   public int cmdGoTo(String threadName, String lineNum)
   {
      _whyStop = WS_Unknown;
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"========>>>>>>>> GdbDebugSession.cmdGoTo lineNum="+lineNum+" threadName="+threadName  );
 
      String  cmd = "break "+lineNum;
      boolean ok = executeGdbCommand(cmd);
      if(!ok)
          return _whyStop;
- 
+
      addChangesToUiMessages();
 
      String breakIndex = null;
@@ -1003,7 +1037,7 @@ Thread.currentThread().dumpStack();
            breakIndex = str.substring(0,space);
         }
      }
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"GdbDebugSession.cmdGoTo breakIndex=" +breakIndex );
      if(breakIndex!=null)
      {
@@ -1011,14 +1045,14 @@ Thread.currentThread().dumpStack();
         ok = executeGdbCommand(cmd);
         if(!ok)
             return _whyStop;
- 
+
         addChangesToUiMessages();
 
         cmd = "delete "+breakIndex;
         ok = executeGdbCommand(cmd);
         if(!ok)
             return _whyStop;
- 
+
 //        getGdbResponseLines();  //  cmdResponses.removeAllElements();
         addChangesToUiMessages();
      }
@@ -1032,7 +1066,7 @@ Thread.currentThread().dumpStack();
   public int cmdRun_User()
   {
      _whyStop = WS_Unknown;
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"========>>>>>>>> GdbDebugSession.cmdRun_User"   );
 
      String cmd = "cont ";
@@ -1040,7 +1074,7 @@ Thread.currentThread().dumpStack();
      boolean ok = executeGdbCommand(cmd);
      if(!ok)
          return _whyStop;
- 
+
      //_whyStop = WS_BkptHit;
      _whyStop = WS_UserBkptHit;
      checkResponseForException();
@@ -1056,13 +1090,13 @@ Thread.currentThread().dumpStack();
   public int cmdStepReturn_User(String threadName)
   {
      _whyStop = WS_Unknown;
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"========>>>>>>>> GdbDebugSession.cmdStepReturn threadName="+threadName  );
 
      String cmd = "finish ";
 
      if( !executeGdbCommand(cmd) )
-     {   if (Gdb.traceLogger.ERR) 
+     {   if (Gdb.traceLogger.ERR)
              Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ECECUTE_STEP_RETURN") );
          return _whyStop;
      }
@@ -1085,7 +1119,7 @@ Thread.currentThread().dumpStack();
 
   public boolean setWatchpoint(String expression)
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setWatchpoint expression="+expression  );
 
      boolean ret = _getGdbBreakpoints.watchBreakpoint(expression);
@@ -1098,7 +1132,7 @@ Thread.currentThread().dumpStack();
      String fileName = _moduleManager.getFullPartName(partID);
      String lineNum = new Integer(lineNumber).toString();
 
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setLineBreakpoint partID="+partID +" fileName="+fileName+" lineNum="+lineNum  );
 
      boolean ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
@@ -1107,12 +1141,12 @@ Thread.currentThread().dumpStack();
      return ret;
   }
 
-  // set breakpoint with filename and line number  
+  // set breakpoint with filename and line number
   public boolean setLineBreakpoint(String fileName, int lineNumber)
   {
      String lineNum = new Integer(lineNumber).toString();
 
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setLineBreakpoint fileName="+fileName+" lineNum="+lineNum  );
 
      boolean ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
@@ -1129,7 +1163,7 @@ Thread.currentThread().dumpStack();
      String fileName = _moduleManager.getFullPartName(partID);
      String lineNum = new Integer(lineNumber).toString();
 
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.clearBreakpoint partID="+partID +" fileName="+fileName+" lineNum="+lineNum  );
 
      boolean ret = _getGdbBreakpoints.clearBreakpoint(fileName, lineNum);
@@ -1140,7 +1174,7 @@ Thread.currentThread().dumpStack();
 
   public int setMethodBreakpoint(int partID, int methodIndex)
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setMethodBreakpoint partID="+partID +" methodIndex="+methodIndex  );
 
      Part part = _moduleManager.getPart(partID);
@@ -1148,13 +1182,13 @@ Thread.currentThread().dumpStack();
          return -1;
      String methodName =  part.getEntryName(methodIndex % 0x10000);
      int bracket = methodName.indexOf("(");
-     if(bracket>0) 
+     if(bracket>0)
         methodName = methodName.substring(0,bracket);
 
      String cmd = "break "+methodName;
 
      if( !executeGdbCommand(cmd) )
-     {   if (Gdb.traceLogger.ERR) 
+     {   if (Gdb.traceLogger.ERR)
              Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_EXECUTE_METHOD_BREAKPOINT")+cmd );
          return -1;
      }
@@ -1171,12 +1205,12 @@ Thread.currentThread().dumpStack();
 
   public boolean terminateDebuggee()
   {
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"################ GdbDebugSession.terminateDebuggee" );
-
+     
      String cmd = "kill ";
      if( !executeGdbCommand(cmd) )
-     {   if (Gdb.traceLogger.ERR) 
+     {   if (Gdb.traceLogger.ERR)
              Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_EXECUTE_TERMINATE") );
          return false;
      }
@@ -1184,12 +1218,12 @@ Thread.currentThread().dumpStack();
      if(lines.length>0)
      {
         for(int i=0; i<lines.length; i++)
-           if (Gdb.traceLogger.EVT) 
+           if (Gdb.traceLogger.EVT)
                Gdb.traceLogger.evt(1,"???????????????? GdbDebugSession.terminateDebuggee KILL returned str="+lines[i] );
      }
 
      // in case there is another prepareProgram(restart) instead of a TerminateDebugEngine
-     if (Gdb.traceLogger.EVT) 
+     if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"---------------- GdbDebugSession.terminateDebuggee is recreating Managers incase of following prepareProgram (restart)" );
      createManagers();
 
@@ -1226,7 +1260,7 @@ Thread.currentThread().dumpStack();
 
   public void cmdStepException(String threadName)
   {
-     if (Gdb.traceLogger.ERR) 
+     if (Gdb.traceLogger.ERR)
          Gdb.traceLogger.err(1,"######## GdbDebugSession.cmdStepException UNSUPPORTED STEP-EXCEPTION threadName="+threadName +"\n" );
      cmdStep(threadName, false);
   }
@@ -1263,6 +1297,10 @@ Thread.currentThread().dumpStack();
    private String    _mainProgram;
    private String    _params = "";
    public  String     getProgramName() { return _mainProgram; }
+   private String    _debuggeeProcessID = "";
+   public  String    getDebuggeeProcessID() { return _debuggeeProcessID; }
+   private boolean   _terminatePending = false;
+   public  void  setTerminatePending(boolean b) {_terminatePending = b;}
    private Hashtable _parts = new Hashtable();
    protected String _dataAddress = "";
    public    String getDataAddress() { return _dataAddress; }

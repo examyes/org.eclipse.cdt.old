@@ -67,7 +67,7 @@ class CommandProcessor extends Thread
                _commandQueue.removeElementAt(0);
             }
 
-            if (Gdb.traceLogger.DBG) 
+            if (Gdb.traceLogger.DBG)
                 Gdb.traceLogger.dbg(1,"Executing command cmd="+cmd);
 
             // We will wake up here if we completed the execute OR we were halted
@@ -75,26 +75,26 @@ class CommandProcessor extends Thread
 
             if (!_exit)
             {
-               if (Gdb.traceLogger.DBG) 
+               if (Gdb.traceLogger.DBG)
                    Gdb.traceLogger.dbg(1,"Sending EPDC reply cmd="+cmd );
 
                cmd.reply(_connection);
-               if (Gdb.traceLogger.DBG) 
+               if (Gdb.traceLogger.DBG)
                    Gdb.traceLogger.dbg(2,"CommandProcessor.run reply DONE, about to OutputStream.flush" );
 
                _connection.flush();
             }
-            if (Gdb.traceLogger.DBG) 
+            if (Gdb.traceLogger.DBG)
                 Gdb.traceLogger.dbg(2,"CommandProcessor.run cmd.reply DONE" );
 
             if (cmd instanceof CmdTerminateDE)
             {
-               if (Gdb.traceLogger.EVT) 
+               if (Gdb.traceLogger.EVT)
                    Gdb.traceLogger.evt(1,"################ CommandProcessor.run cmdTerminateDE !!!" );
                _exit = true;
             }
          }
-         if (Gdb.traceLogger.EVT) 
+         if (Gdb.traceLogger.EVT)
              Gdb.traceLogger.evt(1,"CommandProcessor.run DONE (end of debugging)" );
       }
       catch (InterruptedException e)
@@ -119,12 +119,12 @@ class CommandProcessor extends Thread
       }
       catch (EOFException e)
       {
-         if (Gdb.traceLogger.ERR) 
+         if (Gdb.traceLogger.ERR)
              Gdb.traceLogger.err(3,"Warning: had trouble trying to close connection");
       }
       catch (IOException e)
       {
-         if (Gdb.traceLogger.ERR) 
+         if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(3,"Warning: had trouble trying to close conenction");
       }
    }
@@ -148,6 +148,20 @@ class CommandProcessor extends Thread
          if (_debugSession.isWaiting())
          {
             interrupt();
+         }
+         else
+         {
+               System.out.println("RW CommandProcessor execute === kill -s SIGINT " + ((GdbDebugSession)_debugSession).getDebuggeeProcessID());
+               try
+               {
+               	  ((GdbDebugSession)_debugSession).setTerminatePending(true);
+                  Runtime.getRuntime().exec("kill -s SIGINT " + ((GdbDebugSession)_debugSession).getDebuggeeProcessID());		     
+               }
+               catch(java.io.IOException ioe)
+               {
+                  if (Gdb.traceLogger.ERR)
+                   Gdb.traceLogger.err(2,"GdbProcess IOException = " +ioe);
+               }
          }
       }
       else
