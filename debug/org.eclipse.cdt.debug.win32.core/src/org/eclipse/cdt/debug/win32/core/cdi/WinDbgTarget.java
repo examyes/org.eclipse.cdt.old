@@ -19,6 +19,7 @@ import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIResumedEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIExceptionpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExpression;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
@@ -66,7 +67,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	}
 	
 	// Native interface
-	private long p;
+	//private long p;
 	private static native void initNative();
 	static {
 		initNative();
@@ -374,6 +375,11 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		WinDbgSession wSession = (WinDbgSession)getSession();
 		WinDbgBreakpointManager bMgr = wSession.getBreakpointManager();
 		return bMgr.setLocationBreakpoint(this, type, location, condition, deferred);
+	}
+
+	public ICDIExceptionpoint setExceptionBreakpoint(String clazz, boolean stopOnThrow, boolean stopOnCatch)
+	throws CDIException {
+		throw new CDIException("Not implemented"); //$NON-NLS-1$
 	}
 
 
