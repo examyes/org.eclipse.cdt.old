@@ -102,6 +102,11 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
 	    }
 	return _openAction;
     }
+
+    public CustomAction getOpenPerspectiveAction()
+    {
+	return null;
+    }
     
     public CustomAction loadAction(String source, String name)
     {
