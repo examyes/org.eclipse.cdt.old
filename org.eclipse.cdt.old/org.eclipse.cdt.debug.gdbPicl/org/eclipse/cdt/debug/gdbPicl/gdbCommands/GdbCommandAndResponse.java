@@ -116,20 +116,22 @@ public class GdbCommandAndResponse
                
                //  Could be a complex structure, class object, if yes put it all in one line   
                int j = i+1;
-               if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
-                   lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
-                   lines[j].startsWith(ARRAY_SECTION_BEGIN_keyword) 
+               if( (j < length) &&
+                   (lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
+                    lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
+                    lines[j].startsWith(ARRAY_SECTION_BEGIN_keyword))
                   )
                {
                   j++;
-                  while (!lines[j].equals("}") || (lines[j].equals("}") && (lines[j+1].startsWith(FIELD_END_keyword) || lines[j+1].startsWith(ARRAY_ELEMENT_keyword)) ))    
+                  while ((j < length) && ((!lines[j].equals("}") || (lines[j].equals("}") && (lines[j+1].startsWith(FIELD_END_keyword) || lines[j+1].startsWith(ARRAY_ELEMENT_keyword)) ))))
                   {
                  	 classObject.append(lines[j]);
                  	 j++;
-                 	 if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
-                         lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
-                         lines[j].startsWith(ARRAY_ELEMENT_keyword) || lines[j].startsWith(ARRAY_SECTION_BEGIN_keyword) ||
-                         lines[j].startsWith(ARRAY_SECTION_END_keyword)
+                 	 if( (j < length) &&
+                 	     (lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
+                          lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
+                          lines[j].startsWith(ARRAY_ELEMENT_keyword) || lines[j].startsWith(ARRAY_SECTION_BEGIN_keyword) ||
+                          lines[j].startsWith(ARRAY_SECTION_END_keyword))
                         )
                      {
                         j++;
