@@ -870,6 +870,7 @@ public class GdbDebugSession extends DebugSession {
 			Gdb.traceLogger.evt(1, "########>>>>>>>> GdbDebugSession.runToMain");
 
 		String cmd = "break main";
+		String bkpNum = "";
 		boolean ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
@@ -878,6 +879,25 @@ public class GdbDebugSession extends DebugSession {
 					getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN") + cmd);
 			return;
 		}
+		
+		if (cmdResponses.size() > 0)
+		{
+			for (int i = 0; i < cmdResponses.size(); i++) 
+			{
+				String str = (String) cmdResponses.elementAt(i);
+				if (str.startsWith("Breakpoint"))
+				{
+					int idx = str.indexOf(" ");
+					int idx2 = str.indexOf (" at");
+					if (idx > 0 && idx2 > 0 && idx2 > idx) 
+					{
+						bkpNum = str.substring(idx, idx2);
+					}
+					break;
+				}
+			}
+		}
+		
 		addCmdResponsesToUiMessages();
 
 		cmd = "run " + _params;
@@ -980,7 +1000,14 @@ public class GdbDebugSession extends DebugSession {
 
 		// RW
 
-		cmd = "clear main";
+		if (!bkpNum.equals(""))
+		{
+			cmd = "delete " + bkpNum;
+		}
+		else
+		{
+			cmd = "clear main";
+		}
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
