@@ -2571,9 +2571,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toProgTargetCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
 	//***********************************
-	
-	
-	
+
+
+
+	//-------------------------------
+	// Find help for functions
+	DataElement functionHelp = dataStore.createObject(function, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Find Help",
+							  "com.ibm.cpp.ui.internal.actions.HelpAction");
+	// Find help for classes
+	DataElement classHelp = dataStore.createObject(classD, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Find Help",
+							  "com.ibm.cpp.ui.internal.actions.HelpAction");
+	//-------------------------------
 	
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
