@@ -220,6 +220,7 @@ public class XMLgenerator
 		  try
 		      {
 			  flush();
+
 			  FileInputStream inFile = new FileInputStream(file);
 			  			  
 			  // read all bytes into buffer
@@ -454,7 +455,7 @@ public class XMLgenerator
 			tagType = "File";
 		    }
 
-		if (object.isUpdated() && !_generateBuffer)
+		if (object.isUpdated() && !_generateBuffer && (file == null))
 		    {
 		    }
 		else

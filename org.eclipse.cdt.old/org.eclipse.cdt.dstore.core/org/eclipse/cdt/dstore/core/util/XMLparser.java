@@ -271,8 +271,7 @@ public class XMLparser
             {
 	      String attribute = fullTag.substring(nextQuote + 1, nextnextQuote);	      
 
-	      //	     *** attributes[index] = convertStringFromXML(attribute);  
-	      attributes[index] = attribute;  
+	      attributes[index] = convertStringFromXML(attribute);  
               index++;
             }
           }
