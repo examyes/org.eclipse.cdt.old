@@ -480,6 +480,10 @@ public void doExpand(DataElement obj)
 	    }
     }
 
+    public void internalRefresh(DataElement element)
+    {
+	super.internalRefresh(element, false);
+    }
 
     public void setSelected(DataElement selected)
     { 
