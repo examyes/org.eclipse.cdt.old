@@ -750,16 +750,6 @@ public class GdbDebugSession extends DebugSession {
 		}
 
                /*
-		cmd = "file " + programName;
-		ok = executeGdbCommand(cmd);
-		if (!ok) {
-			if (Gdb.traceLogger.ERR)
-				Gdb.traceLogger.err(
-					1,
-					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
-		}
-                 */
-                
                 cmd = "symbol " + programName;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
@@ -768,9 +758,18 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
-
-
-               
+                */
+                
+                cmd = "file " + "/proc/" +processIndex +"/exe ";  // works on both gdb 5.11 and 5.2
+                
+		ok = executeGdbCommand(cmd);
+		if (!ok) {
+			if (Gdb.traceLogger.ERR)
+				Gdb.traceLogger.err(
+					1,
+					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
+		}
+              
 		cmd = "attach " + processIndex;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
