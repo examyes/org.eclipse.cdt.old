@@ -341,12 +341,17 @@ public class TransferFiles extends Thread
     private long getDate(DataElement fileElement)
     {
 	DataElement dateObj = null;
-	ArrayList timeArray = fileElement.getAssociated("modified at");
-	if (timeArray.size() > 0)
+	ArrayList attributes = fileElement.getAssociated("attributes");
+
+	for (int i = 0; (i < attributes.size()) && dateObj == null; i++)
 	    {
-		dateObj = (DataElement)timeArray.get(0); 
+		DataElement attribute = (DataElement)attributes.get(i);
+		if (attribute.getType().equals("date"))
+		    {
+			dateObj = attribute;
+		    }
 	    }
-	else
+	if (dateObj == null)
 	    {
 		fileElement.doCommandOn("C_DATE", true);
 		return getDate(fileElement);
@@ -366,11 +371,15 @@ public class TransferFiles extends Thread
 	if (fileElement != null)
 	    {
 	    	DataElement dateObj = null;
-		ArrayList timeArray = fileElement.getAssociated("modified at");
-		if (timeArray.size() > 0)
+		ArrayList attributes = fileElement.getAssociated("attributes");
+		for (int i = 0; (i < attributes.size()) && dateObj == null; i++)
 		    {
-			dateObj = (DataElement)timeArray.get(0); 
-			dateObj.setAttribute(DE.A_NAME, "" + newDate);
+			DataElement attribute = (DataElement)attributes.get(i);
+			if (attribute.getType().equals("date"))
+			    {
+				dateObj = attribute;
+				dateObj.setAttribute(DE.A_NAME, "" + newDate);
+			    }
 		    }
 		
 		DataStore dataStore = fileElement.getDataStore();
