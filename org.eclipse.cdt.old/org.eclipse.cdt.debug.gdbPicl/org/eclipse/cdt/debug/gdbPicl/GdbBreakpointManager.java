@@ -871,6 +871,13 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
       if (!bkp.isDeferred())
           removeBreakpoint(bkp);
+      else
+      	  _numDeferredBkpt--;
+          
+	  if (_numDeferredBkpt == 0)
+	  {
+   		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
+	  }
 
       bkp.deleteBreakpoint();
       _changedBreakpoints.addElement(bkp);
