@@ -63,6 +63,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  projectMinerProject = dataStore.createObject(workspace, "Project",
 								       _project.getName(),
 								       _project.getLocation().toString());
+			  dataStore.setObject(workspace, false);
 			  dataStore.setObject(projectMinerProject);
 		      }	
 	      }
