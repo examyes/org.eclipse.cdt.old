@@ -371,12 +371,12 @@ public class MakefileAmManager {
 
 		}
 	}
-	protected void updateMakefileAm(DataElement project,boolean actionIsManageProject)
+	protected void updateMakefileAm(DataElement subject,boolean actionIsManageProject)
 	{
-		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
-		File Makefile_am = new File(project.getFileObject(),MAKEFILE_AM);
+		ProjectStructureManager structureManager = new ProjectStructureManager( subject.getFileObject());
+		File Makefile_am = new File(subject.getFileObject(),MAKEFILE_AM);
 			
-		if(Makefile_am.exists()&&!project.getFileObject().getName().startsWith("."))
+		if(Makefile_am.exists()&&!subject.getFileObject().getName().startsWith("."))
 		{
 			int classification = classifier.classify(Makefile_am);
 			switch (classification)
