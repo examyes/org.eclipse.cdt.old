@@ -230,33 +230,43 @@ public void transferStreams(InputStream source, OutputStream destination,
 {
   try 
     {
+      int totalWritten = 0;
 	  boolean firstAppend = true;    
-      byte[] buffer = new byte[8192];
+	  int bufferSize = 8192;
+      byte[] buffer = new byte[bufferSize];
+
       while (true) 
 		{
-	  	int bytesRead = source.read(buffer);
-	  	if (bytesRead == -1)
-	    	break;
+			int available = source.available();
+			available = (bufferSize > available) ? available : bufferSize;
+	  		
+	  		if (available <= 0) 
+	  			break;
+	  		
+	  		int bytesRead = source.read(buffer, 0, available);
+	  		if (bytesRead == -1)
+	    		break;
 
-		if (doRemote)
-		{
-			if (firstAppend)
+			if (doRemote)
 			{
-				firstAppend = false;
-				_element.getDataStore().replaceFile(remotePath, buffer, bytesRead);
+				if (firstAppend)
+				{
+					firstAppend = false;
+					_element.getDataStore().replaceFile(remotePath, buffer, bytesRead);
+				}
+				else 
+				{
+					_element.getDataStore().replaceAppendFile(remotePath, buffer, bytesRead);				
+				}
 			}
-			else 
-			{
-				_element.getDataStore().replaceAppendFile(remotePath, buffer, bytesRead);				
-			}
-		}
-	  	destination.write(buffer, 0, bytesRead);	
+		  	destination.write(buffer, 0, bytesRead);	
+		  	totalWritten += bytesRead;
 	  
-	  	if (monitor != null)
-	      {
-		  	monitor.worked(1);
-	      }
-	}
+	 	 	if (monitor != null)
+	  	    {
+		  		monitor.worked(1);
+	   	   }
+		}	
     } 
   finally 
     {
