@@ -322,6 +322,10 @@ public class PAMiner extends Miner {
          
    String formatStr = null;
    String queryCommand = "nm" + " " + file.getName() + "|grep \"mcount\\|cyg_profile_func_enter\"";
+   
+   String theOS = System.getProperty("os.name");
+   if (theOS.toLowerCase().equals("aix"))
+     queryCommand = "nm" + " " + file.getName() + "|egrep \"mcount|cyg_profile_func_enter\"";
       
    DataElement cmdStatus = PADataStoreAdaptor.runCommand(fileElement.getParent(), queryCommand);
    
