@@ -159,7 +159,7 @@ public class CppEditor extends LpexTextEditor
 
       		DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.core.miners.parser.ParseMiner");
       		DataElement projectObj = api.findProjectElement(project);
-      		DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, PM.PARSED_FILES, 1);
+      		DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
       		
       		DataElement fileObj = dataStore.find(parsedSource, DE.A_NAME, fileName, 1);
       		if (fileObj == null)

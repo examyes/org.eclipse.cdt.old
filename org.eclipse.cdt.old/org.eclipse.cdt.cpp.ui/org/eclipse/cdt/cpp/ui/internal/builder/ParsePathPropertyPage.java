@@ -46,7 +46,7 @@ public class ParsePathPropertyPage extends PropertyPage
 		  _pathControl.setContext(project);
 	      }
 
-          _pathControl.setPaths(CppPlugin.readProperty(project, PM.INCLUDE_PATH));
+          _pathControl.setPaths(CppPlugin.readProperty(project, "Include Path"));
           _pathControl.setLayout(layout);
           return _pathControl;
         }
@@ -72,7 +72,7 @@ public class ParsePathPropertyPage extends PropertyPage
   public boolean performOk()
       {
         ArrayList paths = _pathControl.getPaths();
-        CppPlugin.writeProperty(getProject(), PM.INCLUDE_PATH, paths);
+        CppPlugin.writeProperty(getProject(), "Include Path", paths);
 
 	ModelInterface api = ModelInterface.getInstance();
 	api.setParseIncludePath(getProject());

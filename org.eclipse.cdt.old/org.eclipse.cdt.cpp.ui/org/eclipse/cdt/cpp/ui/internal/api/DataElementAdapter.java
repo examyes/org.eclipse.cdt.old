@@ -40,7 +40,7 @@ public class DataElementAdapter
 
     DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.core.miners.parser.ParseMiner");
     DataElement projectObj = api.findProjectElement(project);
-    DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, PM.PARSED_FILES, 1);
+    DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
     DataElement pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
     return pathElement;
   }
@@ -74,7 +74,7 @@ public class DataElementAdapter
 
     DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.core.miners.parser.ParseMiner");
     DataElement projectObj = api.findProjectElement(project);
-    DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, PM.PARSED_FILES, 1);
+    DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
     DataElement pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
 
     if (pathElement == null)
