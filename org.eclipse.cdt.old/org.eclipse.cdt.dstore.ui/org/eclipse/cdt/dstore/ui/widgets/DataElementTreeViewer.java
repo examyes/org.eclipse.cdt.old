@@ -215,7 +215,6 @@ public class DataElementTreeViewer extends TreeViewer
     public void domainChanged(DomainEvent ev)
     {
 	_isWorking = true;
-
 	boolean selectionListening = _listener.isEnabled();
 	if (selectionListening)
 	    {
@@ -225,9 +224,10 @@ public class DataElementTreeViewer extends TreeViewer
 	DataElement parent = (DataElement)ev.getParent();   
 	Tree tree = getTree();
 
+
 	if (parent.isDeleted())
 	    {		
-		    if (parent == _currentInput)
+	    if (parent == _currentInput)
 			{
 			    clearView();
 			}
@@ -455,6 +455,7 @@ public void doExpand(DataElement obj)
 		boolean selectionListening = _listener.isEnabled();
 		if (selectionListening)
 		{
+
 		    Tree tree = getTree();
 		    if (tree != null)
 			{
@@ -463,7 +464,10 @@ public void doExpand(DataElement obj)
 				    try
 					{
 					    tree.setRedraw(false);
-					    internalRefresh(_currentInput);
+					    
+					    //internalRefresh(_currentInput);
+					    refresh(_currentInput);
+
 					    tree.setRedraw(true);
 					    DataElement selected = getSelected();
 					    select(selected);
@@ -472,7 +476,6 @@ public void doExpand(DataElement obj)
 				    catch (Exception e)
 					{
 					    System.out.println(e);
-					    //***					    setInput(_currentInput);
 					}
 				}
 			}

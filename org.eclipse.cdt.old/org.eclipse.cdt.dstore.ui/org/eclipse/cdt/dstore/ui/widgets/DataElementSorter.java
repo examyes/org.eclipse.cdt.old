@@ -191,6 +191,7 @@ public class DataElementSorter extends ViewerSorter
 	    }
 	catch (NumberFormatException e)
 	    {
+		e.printStackTrace();
 	    }
 
 	return 0;

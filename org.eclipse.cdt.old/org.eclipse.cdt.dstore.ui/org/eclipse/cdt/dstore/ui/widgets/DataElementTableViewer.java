@@ -837,6 +837,7 @@ public class DataElementTableViewer extends TableViewer
 
 		if (col1Type != null)
 		    {
+			DataStore dataStore = col1Type.getDataStore();
 			TableColumn tc = null;
 			if (numColumns > 0 && columns[0] != null)
 			    {
@@ -847,7 +848,7 @@ public class DataElementTableViewer extends TableViewer
 				_layout.addColumnData(new ColumnWeightData(200));
 
 				int ralignment = SWT.LEFT;
-				ArrayList rattributeFormats = col1Type.getAssociated("attributes");
+				ArrayList rattributeFormats = col1Type.getAssociated(dataStore.getAttributesRelation());
 				if (rattributeFormats.size() > 0)
 				    {
 					DataElement rattributeFormat = (DataElement)rattributeFormats.get(0);
@@ -869,7 +870,7 @@ public class DataElementTableViewer extends TableViewer
 			_attributeColumns.add(col1Type);
 			
 			// find attributes of filter type
-			ArrayList attributeTypes = col1Type.getAssociated("attributes");
+			ArrayList attributeTypes = col1Type.getAssociated(dataStore.getAttributesRelation());
 			for (int i = 0; i < attributeTypes.size(); i++)
 			    {
 				DataElement attributeType = (DataElement)attributeTypes.get(i);
@@ -884,7 +885,7 @@ public class DataElementTableViewer extends TableViewer
 					_layout.addColumnData(new ColumnWeightData(100));
 					
 					int alignment = SWT.RIGHT;
-					ArrayList attributeFormats = attributeType.getAssociated("attributes");
+					ArrayList attributeFormats = attributeType.getAssociated(dataStore.getAttributesRelation());
 					if (attributeFormats.size() > 0)
 					    {
 						DataElement attributeFormat = (DataElement)attributeFormats.get(0);
@@ -893,23 +894,23 @@ public class DataElementTableViewer extends TableViewer
 							alignment = SWT.LEFT;
 						    }
 					    }
-
+					
 					atc = new TableColumn(table, alignment, i + 1);
 					atc.addSelectionListener(this);
 				    }
 				
 				_attributeColumns.add(attributeType);
-
+				
 				atc.setText(provider.getText(attributeType));
 			    }
-
+			
 			while (attributeTypes.size() + 1 < numColumns)
 			    {
 				columns[numColumns - 1].dispose();
 				numColumns--;
 			    }
-
-
+			
+			
 			// compute widths
 			columns = table.getColumns();
 			Rectangle clientA = table.getClientArea();
@@ -921,7 +922,7 @@ public class DataElementTableViewer extends TableViewer
 				int difference = 150 - averageWidth;
 				firstWidth = 150;
 				averageWidth -= difference / columns.length;
-
+				
 				if (averageWidth < 80)
 				    {
 					averageWidth = 80;
@@ -932,7 +933,14 @@ public class DataElementTableViewer extends TableViewer
 			    {
 				if (i == 0)
 				    {
-					columns[i].setWidth(firstWidth);
+					if (columns.length == 0)
+					    {
+						columns[i].setWidth(totalWidth);
+					    }
+					else
+					    {
+						columns[i].setWidth(firstWidth);
+					    }
 				    }
 				else
 				    {
@@ -946,14 +954,14 @@ public class DataElementTableViewer extends TableViewer
 					    }
 				    }
 			    }
-
-			if (attributeTypes.size() == 0)
+			
+			if (attributeTypes.size() > 0)
 			    {
-				table.setHeaderVisible(false);
+				table.setHeaderVisible(true);	
 			    }
 			else
 			    {
-				table.setHeaderVisible(true);	
+				table.setHeaderVisible(false);
 			    }
 		    }
 		else
