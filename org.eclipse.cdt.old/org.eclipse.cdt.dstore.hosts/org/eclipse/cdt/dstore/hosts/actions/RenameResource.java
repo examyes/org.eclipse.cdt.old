@@ -43,7 +43,7 @@ public class RenameResource extends CustomAction
 		{
 			DataElement des = subject.getDescriptor();
 			
-			if (des == null || !des.isOfType("file"))
+			if (type.equals("Project") || des == null || !des.isOfType("file"))
 		    {
 		    	setEnabled(false);	
 		    	return false;
