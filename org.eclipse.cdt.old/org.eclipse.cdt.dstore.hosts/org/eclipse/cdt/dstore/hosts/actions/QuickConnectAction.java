@@ -49,6 +49,7 @@ public class QuickConnectAction implements Runnable
     private String _directory;
     private String _mountedDirectory;
     private boolean _useDaemon = true;
+    private HostsPlugin _plugin;
 
     public QuickConnectAction(String host, String port, String directory)
     {
@@ -56,6 +57,7 @@ public class QuickConnectAction implements Runnable
 	_port = port;
 	_directory = directory;
 	_selected = null;
+	_plugin = HostsPlugin.getInstance();
     }
 
     public QuickConnectAction(String host, String port, String directory, boolean useDaemon)
@@ -65,6 +67,7 @@ public class QuickConnectAction implements Runnable
 	_directory = directory;
 	_selected = null;
 	_useDaemon = useDaemon;
+	_plugin = HostsPlugin.getInstance();
     }
 
     public void run()
@@ -92,7 +95,7 @@ public class QuickConnectAction implements Runnable
 		
 		DataElement input = host.get(0).dereference();
 		input.expandChildren();
-		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", 
+		DataElementFileDialog dialog = new DataElementFileDialog(_plugin.getLocalizedString("actions.Select_Directory"), 
 									 input);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
@@ -112,14 +115,14 @@ public class QuickConnectAction implements Runnable
 		if (!status.isConnected())
 		    {
 			MessageDialog failD = new MessageDialog(null, 
-								"Connection Failure", 
+								_plugin.getLocalizedString("actions.Connection_Failure"), 
 								null, msg, 
 								MessageDialog.INFORMATION,
 								new String[]  { "OK" },
 								0);
 			
 			
-			failD.openInformation(new Shell(), "Connection Failure", msg);          
+			failD.openInformation(new Shell(), _plugin.getLocalizedString("actions.Connection_Failure"), msg);          
 		    }
 	    }
     }

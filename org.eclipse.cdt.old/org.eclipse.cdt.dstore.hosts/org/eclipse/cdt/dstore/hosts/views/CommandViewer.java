@@ -342,7 +342,7 @@ public class CommandViewer extends Viewer implements SelectionListener
 		
 		if (dlgInput != null) 
 		{
-		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", dlgInput, true);
+		DataElementFileDialog dialog = new DataElementFileDialog(_plugin.getLocalizedString("actions.Select_Directory"), dlgInput, true);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
 		    {

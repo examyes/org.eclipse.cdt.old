@@ -38,7 +38,7 @@ public class SearchDictionaryAction extends CustomAction
 
     public void run()
     {
-	DictionarySearchDialog dialog = new DictionarySearchDialog("Search Dictionary");
+	DictionarySearchDialog dialog = new DictionarySearchDialog(_plugin.getLocalizedString("actions.Search_Dictionary"));
 	dialog.open();
     }    
 }

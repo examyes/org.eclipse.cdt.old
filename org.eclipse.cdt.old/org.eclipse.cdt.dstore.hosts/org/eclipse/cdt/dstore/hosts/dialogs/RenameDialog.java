@@ -8,6 +8,7 @@ package org.eclipse.cdt.dstore.hosts.dialogs;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.hosts.*;
 
 import java.util.*;
 
@@ -35,12 +36,15 @@ public class RenameDialog extends org.eclipse.jface.dialogs.Dialog implements Li
   
   private final static int	SIZING_SELECTION_WIDGET_HEIGHT = 150;
   private final static int	SIZING_SELECTION_WIDGET_WIDTH = 300;
+    
+    private HostsPlugin _plugin;
 
   public RenameDialog(String title, String oldName)
   {
     super(null);
     _title = title;
     _name = oldName;
+    _plugin = HostsPlugin.getInstance();
   }
 
 
@@ -71,7 +75,7 @@ public class RenameDialog extends org.eclipse.jface.dialogs.Dialog implements Li
     c.setLayoutData(new GridData(GridData.FILL_BOTH));
   
   	Label aLabel = new Label(c, SWT.NONE);	
-	aLabel.setText("New Name");
+	aLabel.setText(_plugin.getLocalizedString("dialogs.New_Name"));
 	
 	_aText = new Text(c, SWT.SINGLE | SWT.BORDER);
     GridData textData = new GridData(GridData.HORIZONTAL_ALIGN_FILL |

@@ -82,7 +82,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	// local viewer
 	Group localGroup = new Group(c, SWT.NONE);
-	localGroup.setText("Local File System");
+	localGroup.setText(_plugin.getLocalizedString("dialogs.Local_Files"));
 
 	GridLayout llayout= new GridLayout();
 	llayout.numColumns = 2;
@@ -176,7 +176,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	// remote viewer
 	Group remoteGroup = new Group(c, SWT.NONE);
-	remoteGroup.setText("Target Context");
+	remoteGroup.setText(_plugin.getLocalizedString("dialogs.Target_Context"));
 
 	GridLayout rlayout= new GridLayout();
 	rlayout.numColumns = 2;
@@ -231,7 +231,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	// progress
 	Group progress = new Group(c, SWT.NONE);
-	progress.setText("State");
+	progress.setText(_plugin.getLocalizedString("dialogs.State"));
 	GridLayout prglayout= new GridLayout();
 	progress.setLayout(prglayout);
 
@@ -240,7 +240,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 	progress.setLayoutData(progressGrid);
 
 	_progressIndicator = new Text(progress, SWT.SINGLE | SWT.READ_ONLY);
-	_progressIndicator.setText("Ready");
+	_progressIndicator.setText(_plugin.getLocalizedString("dialogs.Ready"));
 	_progressIndicator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.HORIZONTAL_ALIGN_CENTER));
 	
 	

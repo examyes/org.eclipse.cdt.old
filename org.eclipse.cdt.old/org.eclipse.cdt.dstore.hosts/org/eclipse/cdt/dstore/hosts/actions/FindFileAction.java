@@ -39,7 +39,7 @@ public class FindFileAction extends CustomAction
 
     public void run()
     {
-	FindFileDialog ffd = new FindFileDialog("Find Files", _subject);
+	FindFileDialog ffd = new FindFileDialog(_plugin.getLocalizedString("actions.Find_Files"), _subject);
 	ffd.open();
     }    
 }

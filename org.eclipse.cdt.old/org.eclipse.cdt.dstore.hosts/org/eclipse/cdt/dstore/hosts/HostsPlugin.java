@@ -138,6 +138,11 @@ public class HostsPlugin extends AbstractUIPlugin
 	return _actionLoader;
     }    
 
+    public void setActionLoader(IActionLoader loader)
+    {
+	_actionLoader = loader;
+    }
+
     public IActionLoader getDialogActionLoader()
     {
 	return _dialogActionLoader;
@@ -181,6 +186,8 @@ public class HostsPlugin extends AbstractUIPlugin
 	_dataStore.setMinersLocation("org.eclipse.cdt.dstore.miners");
 	_clientConnection.localConnect();
 
+	_instance = this;
+
 	// load schema
 	_dataStore.showTicket(_dataStore.getTicket().getName());
 	_dataStore.getSchema();
@@ -188,7 +195,6 @@ public class HostsPlugin extends AbstractUIPlugin
 
 	extendSchema(_dataStore.getDescriptorRoot());
 	
-	_instance = this;
 
         // for remote connections
         _connectionManager = new ConnectionManager(_dataStore.getRoot(), _dataStore.getDomainNotifier());
@@ -345,7 +351,7 @@ public class HostsPlugin extends AbstractUIPlugin
         disconnect.setAttribute(DE.A_VALUE, "C_DISCONNECT");
 	
 	DataElement editConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						  "Edit Connection", 
+						  getLocalizedString("model.Edit_Connection"), 
 						  "org.eclipse.cdt.dstore.ui.connections.EditConnectionAction");	 
         editConnection.setAttribute(DE.A_VALUE, "C_EDIT");
 
@@ -355,27 +361,29 @@ public class HostsPlugin extends AbstractUIPlugin
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");	
 
 	DataElement fileTransfer = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "File Transfer", 
+							  getLocalizedString("model.File_Transfer"), 
 							  "org.eclipse.cdt.dstore.hosts.actions.FileTransferAction");
-
+	
 	DataElement findFiles = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
-						       "Find Files", 
+						       getLocalizedString("model.Find_Files"), 
 						       "org.eclipse.cdt.dstore.hosts.actions.FindFileAction");
 	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");
-
-	DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
-							      "Dictionary Search", 
+	
+	/*
+	  DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
+							      getLocalizedString("model.Dictionary_Search"), 
 							      "org.eclipse.cdt.dstore.hosts.actions.SearchDictionaryAction");
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
+	*/
 
 	DataElement renameResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
-							    "Rename Resource",
+							    getLocalizedString("model.Rename_Resource"),
 							    "org.eclipse.cdt.dstore.hosts.actions.RenameResource");
 
 	renameResource.setAttribute(DE.A_VALUE, "RENAME");
 
 	DataElement deleteResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
-							    "Delete Resource",
+							    getLocalizedString("model.Delete_Resource"),
 							    "org.eclipse.cdt.dstore.hosts.actions.DeleteResource");
 
 	deleteResource.setAttribute(DE.A_VALUE, "DELETE");

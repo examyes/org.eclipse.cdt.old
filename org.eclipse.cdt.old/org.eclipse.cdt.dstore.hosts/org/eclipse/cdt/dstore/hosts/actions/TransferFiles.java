@@ -185,11 +185,11 @@ public class TransferFiles extends Thread
 		String utask = null;	
 		if (scratchUpdate)
 		    {
-			utask = "Creating " + newSourceStr + "...";
+			utask = _plugin.getLocalizedString("actions.Creating") + " " + newSourceStr + "...";
 		    }
 		else
 		    {
-			utask = "Updating " + newSourceStr + "...";
+			utask = _plugin.getLocalizedString("actions.Updating") + " " + newSourceStr + "...";
 		    }
 		
 		if (_listener != null)
@@ -317,7 +317,7 @@ public class TransferFiles extends Thread
 	    }
 	}
 	
-	if ((type.equals("directory") || type.equals("Project")))
+	if ((type.equals("directory") || type.equals("Project"))) // hack
 	    {	
 		if (_checkTimestamps)
 		{

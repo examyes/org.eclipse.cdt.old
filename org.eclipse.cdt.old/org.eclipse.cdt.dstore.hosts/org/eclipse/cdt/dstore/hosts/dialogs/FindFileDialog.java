@@ -37,7 +37,9 @@ public class FindFileDialog extends SearchDialog
 {
     public FindFileDialog(String title, DataElement root)
     {
-	super(title, root, "File Pattern", "Find");
+	super(title, root, 
+	      "File Pattern", 
+	      "Find");
 
 	_width = 350;
     }

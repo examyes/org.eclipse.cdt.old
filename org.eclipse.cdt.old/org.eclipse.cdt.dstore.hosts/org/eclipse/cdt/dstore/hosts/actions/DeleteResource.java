@@ -36,67 +36,70 @@ import org.eclipse.core.resources.*;
 
 public class DeleteResource extends CustomAction
 {
+    private HostsPlugin _plugin;
     public DeleteResource(DataElement subject, String label, DataElement command, DataStore dataStore)
     {	
-		super(subject, label, command, dataStore);
-
-		if (!isValid(subject))
-		{
-			return;	
-		}	
-    }
-
-	public DeleteResource(java.util.List subjects, String label, DataElement command, DataStore dataStore)
-	{
-		super(subjects, label, command, dataStore);
-		
-		for (int i = 0; i < subjects.size(); i++)
-		{
-			DataElement sub = (DataElement)subjects.get(i);			
-			if (!isValid(sub))
-			{
-				return;
-	    	}
-		}		
-	}
+	super(subject, label, command, dataStore);
 	
-	private boolean isValid(DataElement subject)
-	{
-		String type = subject.getType();
-		if (type.equals("Project"))
+	if (!isValid(subject))
+	    {
+		return;	
+	    }	
+	_plugin = HostsPlugin.getDefault();
+    }
+    
+    public DeleteResource(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+    {
+	super(subjects, label, command, dataStore);
+	
+	for (int i = 0; i < subjects.size(); i++)
+	    {
+		DataElement sub = (DataElement)subjects.get(i);			
+		if (!isValid(sub))
 		    {
-			setEnabled(false);
-			return false;
+			return;
 		    }
-	    return true;
-	}
-
+	    }		
+	_plugin = HostsPlugin.getDefault();
+    }
+    
+    private boolean isValid(DataElement subject)
+    {
+	String type = subject.getType();
+	if (type.equals("Project")) // hack
+	    {
+		setEnabled(false);
+		return false;
+	    }
+	return true;
+    }
+    
     public void run()
     {
 	Shell shell = null;
-
+	
 	String cmd = _command.getValue();
 	String dCmdStr = "C_" + cmd; 
-	String msg = "About to delete: ";
+	String msg = _plugin.getLocalizedString("actions.About_to_delete") + " ";
 	
 	int maxsize = 30;
 	for (int i = 0; i < _subjects.size() && i <= maxsize; i++)
-		{
-			if (i > 0)
-			{
-				msg += "\t\t";
-			}
-			msg += ((DataElement)_subjects.get(i)).getName() + "\n";
-			
-			if (i == maxsize)
-			{
-				msg += "\t\t...\n";
-			}	
-		} 
-
+	    {
+		if (i > 0)
+		    {
+			msg += "\t\t";
+		    }
+		msg += ((DataElement)_subjects.get(i)).getName() + "\n";
+		
+		if (i == maxsize)
+		    {
+			msg += "\t\t...\n";
+		    }	
+	    } 
 	
-	msg += "\nAre you sure you want to do this?";
-	String title = "Delete Resource";
+	
+	msg += _plugin.getLocalizedString("actions.Confirm_Delete");
+	String title = _plugin.getLocalizedString("actions.Delete_Resource");
 
 	boolean deleteResource = MessageDialog.openQuestion(shell, title, msg);
 

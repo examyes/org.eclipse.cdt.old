@@ -29,17 +29,19 @@ import org.eclipse.swt.widgets.*;
 
 public class RenameResource extends CustomAction
 {
+    private HostsPlugin _plugin;
     public RenameResource(DataElement subject, String label, DataElement command, DataStore dataStore)
     {	
 	 super(subject, label, command, dataStore);
 	
 	 isValid(subject);	
+	 _plugin = HostsPlugin.getInstance();
     }
     
     private boolean isValid(DataElement subject)
 	{
 		String type = subject.getType();
-		if (type.equals("Project"))
+		if (type.equals("Project")) // hack
 		    {
 			setEnabled(false);
 			return false;
@@ -53,7 +55,7 @@ public class RenameResource extends CustomAction
 	 String oldNameStr = new String(_subject.getName());
 	 String oldSourceStr = new String(_subject.getSource());
 	 
-     RenameDialog dialog = new RenameDialog("Rename Resource", _subject.getName());
+     RenameDialog dialog = new RenameDialog(_plugin.getLocalizedString("actions.Rename_Resource"), _subject.getName());
      dialog.open();
      if (dialog.getReturnCode() == dialog.OK)
      {     

@@ -48,23 +48,25 @@ public class HostsActionLoader extends GenericActionLoader
 	private String _defaultIcon;
 	private HashMap _hashMap;
 	private String _baseDir;
+    private HostsPlugin _plugin;
 
     public HostsActionLoader()
     {
-		super(); 
-
-		try
-    	{
+	super(); 
+	
+	try
+	    {
       	 	_iconBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.hosts.IconResources");
-    	}
+	    }
     	catch (MissingResourceException mre)
-    	{
+	    {
        		_iconBundle = null;
-    	}
+	    }
     	
     	_hashMap = new HashMap();
     	_instance = this;    	
-      }
+	_plugin = HostsPlugin.getDefault();
+    }
       
     public static HostsActionLoader getInstance()
     {
@@ -76,7 +78,7 @@ public class HostsActionLoader extends GenericActionLoader
 		if (_openPerspectiveAction == null)
 	    {
 		_openPerspectiveAction = loadAction("org.eclipse.cdt.dstore.hosts.actions.OpenPerspectiveAction", 
-						    "Open Perspective On");
+						    _plugin.getLocalizedString("actions.Open_Perspective_On"));
 	    }
 		return _openPerspectiveAction;
     }

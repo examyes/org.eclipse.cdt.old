@@ -35,10 +35,12 @@ import java.util.*;
 public class OutputViewPart extends ViewPart implements ILinkable
 {
     protected OutputViewer        _viewer;
+    private HostsPlugin _plugin;
     
     public OutputViewPart()
     {
-		super();
+	super();
+	_plugin = HostsPlugin.getInstance();
     }
     
     public void createPartControl(Composite container)
@@ -52,7 +54,7 @@ public class OutputViewPart extends ViewPart implements ILinkable
 	
 	layout.addColumnData(new ColumnWeightData(256));
 	TableColumn tc = new TableColumn(table, SWT.NONE, 0);
-	tc.setText("Output");
+	tc.setText(_plugin.getLocalizedString("OutputViewer.Output"));
 	
 	getSite().setSelectionProvider(_viewer);
 	fillLocalToolBar();
