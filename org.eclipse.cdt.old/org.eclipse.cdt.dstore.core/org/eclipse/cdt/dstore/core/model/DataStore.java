@@ -1341,7 +1341,7 @@ public DataElement command(DataElement commandDescriptor,
 	    ArrayList filters = null;
 	    if ((relation == null) || relation.getName().equals(getLocalizedString("model.contents")))
 		{
-		    filters = descriptor.getNestedData();
+		    filters = descriptor.getAssociated(getLocalizedString("model.contents"));
 		    if (filters != null)
 			{
 			    for (int i = 0; i < filters.size(); i++)
