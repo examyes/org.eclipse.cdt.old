@@ -139,6 +139,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 		{
 		    String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
 		    String elementType = (String)(_element.getElementProperty(DE.P_TYPE));
+		    DataElement descriptor = _element.getDescriptor();
 
 		    if ((fileName != null) && (fileName.length() > 0))
 			{
@@ -153,6 +154,10 @@ public class OpenEditorAction extends Action implements IOpenAction
 					    if (elementType.equals("file"))
 						{
 						    fileElement = _element;			
+						}
+					    else if (descriptor != null && descriptor.isOfType("Filesystem Objects"))
+						{
+						    return;
 						}
 					    else
 						{
@@ -174,7 +179,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 							}
 						}
 					    
-					    fileElement.getFileObject(false);
 					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, null);
 					}
 				    		    
