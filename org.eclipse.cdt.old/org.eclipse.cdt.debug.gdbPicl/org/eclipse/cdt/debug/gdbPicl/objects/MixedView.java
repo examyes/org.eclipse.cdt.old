@@ -334,7 +334,7 @@ abstract class MixedView extends View
       StringBuffer processedLine;
 
       // Strip off old prefix
-      srcLine = srcLine.substring(_prefixl);
+      srcLine = srcLine.substring(super._prefixl);
 
       // create new prefix      
       processedLine = new StringBuffer(Integer.toString(lineNum));
@@ -674,4 +674,5 @@ abstract class MixedView extends View
 
    protected Vector			 _mixedExecutableLines;
    protected Hashtable       _lineMap;
+   static byte _prefixl = 10;
 }

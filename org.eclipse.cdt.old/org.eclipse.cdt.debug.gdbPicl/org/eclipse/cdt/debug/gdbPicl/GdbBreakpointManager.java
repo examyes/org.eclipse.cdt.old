@@ -117,6 +117,69 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
    }
 
    /**
+    * Add an address breakpoint
+    * @return 0 if succesful
+    * @return -1 if failed
+    * @return breakpoint ID of a duplicate breakpoint if this line already has a line breakpoint set.
+    */
+	public int setAddressBreakpoint(int partID,int srcFileIndex,int viewNum,int lineNum,String address,boolean enable,EStdExpression2 conditionalExpr) 
+	{
+		// first make sure there are no other line breakpoints at the same location
+		for (int i = 0; i < _breakpoints.size(); i++) {
+			Object obj = _breakpoints.elementAt(i);
+			if (!(obj instanceof LineBreakpoint))
+				continue;
+	
+			LineBreakpoint bkp = (LineBreakpoint) obj;
+			if ((bkp != null)
+				&& (bkp.partID() == partID)
+				&& (bkp.lineNum() == lineNum)
+				&& (bkp.getBkpAddress().equals(address))) {
+				if (Gdb.traceLogger.DBG)
+					Gdb.traceLogger.dbg(1, "Duplicate breakpoint");
+				return bkp.bkpID();
+			}
+		}
+	
+		// now try to set the breakpoint
+		ModuleManager cm = _debugSession.getModuleManager();
+		
+		address = address.trim();
+		
+		if (!address.startsWith("0x"))
+		{
+			// this is a line number in mixed view
+			// but we have no info about part or filename, so cannot set breakpoint
+			// in mixed view, source lines are shown as non-executable line
+			// so it's ok if we don't set breakpoint here.
+			return -1;
+		}
+	
+		int gdbBkpID = ((GdbDebugSession) _debugSession).setAddressBreakpoint(address);
+		if (gdbBkpID < 0)
+			return -1;
+	
+		int bkpID = _breakpoints.size() + 1;
+	
+		if (Gdb.traceLogger.DBG)
+				Gdb.traceLogger.dbg(1,"Address breakpoint set: "+ address);
+	
+		LineBreakpoint lineBkp = new LineBreakpoint(_debugSession,	bkpID,
+				gdbBkpID,0,partID,srcFileIndex,viewNum,lineNum,conditionalExpr);
+	
+		lineBkp.setBkpAddress(address);
+	
+		_breakpoints.addElement(lineBkp);
+	
+		// if breakpoint should be disabled, then disable it.
+		if (!enable)
+			disableBreakpoint(bkpID);
+		else
+			_changedBreakpoints.addElement(lineBkp);
+		return 0;
+	}
+
+   /**
     * Add a deferred line breakpoint
     * @return 0 if succesful
     * @return -1 if failed
@@ -807,30 +870,13 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
    }
 
   /*
-    * Remove a location breakpoint if it is safe to do so (there
-    * are no other breakpoints at the same location).
+    * Remove a location breakpoint 
     */
    protected void removeLocationBreakpoint(LocationBreakpoint bkp) {
-      boolean removeBkp = true;
-      int bkpID = bkp.bkpID();
-      int partID = bkp.partID();
-      int lineNum = bkp.lineNum();
-/*
-      int i = 0;
-      while ((i < _breakpoints.size()) && removeBkp == true) {
-         Object obj = _breakpoints.elementAt(i);
-         if (obj instanceof LocationBreakpoint)
-         {
-             LocationBreakpoint b = (LocationBreakpoint)obj;
-             if ((i != bkpID) && (b.partID() == partID) &&
-                 (b.lineNum() == lineNum) && b.isEnabled())
-                 removeBkp = false;
-         }
-         i++;
-      }
-*/
-      if (removeBkp)
-         _debugEngine.getDebugSession().clearBreakpoint(partID, lineNum);
+
+     int gdbBkID = bkp.getGdbBkID();
+      ((GdbDebugSession)_debugEngine.getDebugSession()).clearBreakpoint(gdbBkID);
+
    }
 
 

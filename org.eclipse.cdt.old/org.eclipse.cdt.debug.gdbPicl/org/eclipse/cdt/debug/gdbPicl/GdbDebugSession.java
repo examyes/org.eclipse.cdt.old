@@ -1374,6 +1374,34 @@ public class GdbDebugSession extends DebugSession {
 		addChangesToUiMessages();
 		return ret;
 	}
+	
+	// set breakpoint with address
+	public int setAddressBreakpoint(String address) {
+
+		if (Gdb.traceLogger.EVT)
+			Gdb.traceLogger.evt(
+				1,
+				"-------->>>>>>>> GdbDebugSession.setAddressBreakpoint address="
+					+ address);
+					
+		// check to see if address is valid
+		boolean ok = executeGdbCommand("x " + address);
+		String[] lines = getTextResponseLines();
+		if (lines.length > 0) {
+			int index = lines[0].indexOf("Cannot access memory at address");
+			if (index != -1)
+			{
+				if (Gdb.traceLogger.ERR)
+					Gdb.traceLogger.err(1, "Bad Address Breakpoint Location:  " + address);
+				return -1;
+			}
+		}			
+				
+		int ret = _getGdbBreakpoints.addressBreakpoint(address);
+
+		addChangesToUiMessages();
+		return ret;
+	}
 
 	/**
 	 * Remove a breakpoint at a specific location
@@ -1393,6 +1421,23 @@ public class GdbDebugSession extends DebugSession {
 					+ lineNum);
 
 		int ret = _getGdbBreakpoints.clearBreakpoint(fileName, lineNum);
+
+		addChangesToUiMessages();
+		return;
+	}
+	
+	/**
+	 * Delete a breakpoint with breakpoint ID
+	 */
+	public void clearBreakpoint(int id) {
+
+		if (Gdb.traceLogger.EVT)
+			Gdb.traceLogger.evt(
+				1,
+				"-------->>>>>>>> GdbDebugSession.clearBreakpoint gdbBkptID="
+					+ id);
+
+		int ret = _getGdbBreakpoints.deleteBreakpoint(id);
 
 		addChangesToUiMessages();
 		return;

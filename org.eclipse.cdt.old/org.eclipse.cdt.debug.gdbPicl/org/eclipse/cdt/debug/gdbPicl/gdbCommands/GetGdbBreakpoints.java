@@ -46,6 +46,18 @@ public class GetGdbBreakpoints  //extends ThreadManager
        String cmd = "watch ";
        return breakpointCommand(cmd, " ", expression);
    }
+   
+   public int addressBreakpoint(String address)
+   {
+   	   String cmd = "break *";
+      return breakpointCommand(cmd, " ", address);
+   }
+   
+   public int deleteBreakpoint(int bkpID)
+   {	
+   		String cmd = "delete ";
+  		return breakpointCommand(cmd, " ", String.valueOf(bkpID));
+   }
 
    
    public int breakpointCommand(String command, String fileName, String location)

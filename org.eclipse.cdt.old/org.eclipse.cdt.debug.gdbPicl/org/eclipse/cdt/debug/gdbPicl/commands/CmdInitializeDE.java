@@ -337,7 +337,7 @@ public class CmdInitializeDE extends Command
          EPDC.FCT_LINE_BREAKPOINT           | // support line bkpts
 //       EPDC.FCT_STATEMENT_BREAKPOINT      | // support stmt bkpts
 //         EPDC.FCT_FUNCTION_BREAKPOINT       | // support function bkpts
-//         EPDC.FCT_ADDRESS_BREAKPOINT        | // support address bkpts
+         EPDC.FCT_ADDRESS_BREAKPOINT        | // support address bkpts
 //         EPDC.FCT_CHANGE_ADDRESS_BREAKPOINT | // support chg addr bkpts
 //       EPDC.FCT_BREAKPOINT_MONITOR_8BYTES | // support monitor 8 bytes
 //       EPDC.FCT_BREAKPOINT_MONITOR_4BYTES | // support monitor 4 bytes
@@ -349,7 +349,7 @@ public class CmdInitializeDE extends Command
 //       EPDC.FCT_BREAKPOINT_NO_THREADS     | // do not support thread specific breakpoints
          EPDC.FCT_BREAKPOINT_NO_FREQUENCY   | // do not support frequency conditions
 //         EPDC.FCT_BREAKPOINT_EXPRESSION     | // conditional expressions
-//         EPDC.FCT_BREAKPOINT_DEFERRED       | // support deferred bkpts
+         EPDC.FCT_BREAKPOINT_DEFERRED       | // support deferred bkpts
          0,
 
          // Monitor Options

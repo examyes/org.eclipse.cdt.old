@@ -38,7 +38,7 @@ public class CmdBreakpointLocation extends Command
       int partID       = bkpContext.getPPID();
       int lineNum      = bkpContext.getLineNum();
 //    srcFileIndex = bkpContext.getSrcFileIndex();
-//    viewNum      = bkpContext.getViewNo(); //Part.VIEW_SOURCE;
+
 
       int ret = 0;
 
@@ -47,19 +47,8 @@ public class CmdBreakpointLocation extends Command
       String methodName = "<unknown>";
       String sourceName;
 
-      // All sun.tool breakpoints are marked as deferred as the time they
-      // are restored but we really do not want to treat them as deferred.
-      // Therefore, we need to make sure that for sun.tool deferred
-      // breakpoints, their classes are forced to be loaded and hence make
-      // the breakpoints not deferred.
       boolean isDeferred = (_req.bkpAttr() & EPDC.BkpDefer) != 0;
 
-      if(isDeferred)
-      {
-//         isDeferred = false;
-         if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(2,"######### UNIMPLEMENTED CmdBreakpointLocation.execute **FORCING** deferred=false;" );
-      }
 
       boolean isEnabled = ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? true : false;
 
@@ -347,6 +336,34 @@ public class CmdBreakpointLocation extends Command
                        return false;
                  }
               }
+              // ########### Address BREAKPOINT ####################################
+            case EPDC.AddressBkpType:
+            
+			if (isDeferred) {
+				_rep.setReturnCode(EPDC.ExecRc_BadBrkType);
+				_rep.setMessage(
+					_debugSession.getResourceString("UNSUPPORTED_BREAKPOINT_TYPE_MSG"));
+				return false;
+			}
+            
+			if (Gdb.traceLogger.EVT)
+				Gdb.traceLogger.evt(1, "Breakpoint type=" + _req.bkpType());
+			String address = _req.bkpVarInfo(); // get requested address
+			partID = bkpContext.getPPID();
+			viewNum = bkpContext.getViewNo(); //Part.VIEW_SOURCE;
+			ret = ((GdbBreakpointManager)bm).setAddressBreakpoint(partID, srcFileIndex, 
+				viewNum, lineNum, address, 
+				((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
+				true : false, _req.getConditionalExpression());
+
+			if (ret < 0) {
+				_rep.setReturnCode(EPDC.ExecRc_BadLineNum);
+				_rep.setMessage(
+					_debugSession.getResourceString("INVALID_BREAKPOINT_LOCATION_MSG") + address);
+			}
+
+			return false;
+
             // ########### UNKNOWN BREAKPOINT TYPE ####################################
             default:
                 if (Gdb.traceLogger.ERR) 

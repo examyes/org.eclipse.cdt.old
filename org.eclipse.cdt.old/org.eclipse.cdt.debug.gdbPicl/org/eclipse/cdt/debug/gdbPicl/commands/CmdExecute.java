@@ -109,32 +109,42 @@ public class CmdExecute extends Command
 
 			  if (Gdb.supportDeferredBreakpoint && ((GdbDebugSession)_debugSession).getGdbProcess().stopOnSharedLibEvents())
 			  {
-			  	// set line breakpoint
-			  	gdbID = ((GdbDebugSession)_debugSession).setLineBreakpoint(filename, line);
 			  	
-			  	if (gdbID > 0)
+			  	if (viewNo == Part.VIEW_SOURCE)
 			  	{
-			  		needClear = true;			  		
+				  	// set line breakpoint
+				  	gdbID = ((GdbDebugSession)_debugSession).setLineBreakpoint(filename, line);
+				  	
+				  	if (gdbID > 0)
+				  	{
+				  		needClear = true;			  		
+				  	}
+				  	else
+				 	{
+				 		// breakpoint not successfully set
+				 		// should unset stop at shared lib event, otherwise, bad results
+				   		// the side effect of this is that some deferred breakpoints may not be set 
+				   		// manually try to enable the breakpoints if an error occurs
+				   		
+	   		      if (Gdb.traceLogger.EVT) 
+					          Gdb.traceLogger.evt(1,"+++ Error setting bkpt at: " + filename + "," + line + " - unset solib event");
+				 		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
+				 		needReset = true;
+				 	}
 			  	}
 			  	else
-			 	{
-			 		// breakpoint not successfully set
-			 		// should unset stop at shared lib event, otherwise, bad results
-			   		// the side effect of this is that some deferred breakpoints may not be set 
-			   		// manually try to enable the breakpoints if an error occurs
-			   		
-   		      if (Gdb.traceLogger.EVT) 
-				          Gdb.traceLogger.evt(1,"+++ Error setting bkpt at: " + filename + "," + line + " - unset solib event");
+			  	{
+			  		// if in mixed or disassembly view, turn shared lib events off.
 			 		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
-			 		needReset = true;
-			 	}
+			  		needReset = true;
+			  	}
 			  }
                
 			   ((GdbDebugSession)_debugSession).cmdStep(threadManager.getThreadName(DU), true, viewNo);
 			   
 			   if (Gdb.supportDeferredBreakpoint && needClear)
 			   {
-			   	((GdbDebugSession)_debugSession).executeGdbCommand("delete " + gdbID);
+			   	((GdbDebugSession)_debugSession).clearBreakpoint(gdbID);
 			   }
 			   
 			   if (Gdb.supportDeferredBreakpoint && needReset)
@@ -164,48 +174,55 @@ public class CmdExecute extends Command
 			  needClear = false;
 			  needReset = false;
 			  
-			  if (Gdb.supportDeferredBreakpoint && ((GdbDebugSession)_debugSession).getGdbProcess().stopOnSharedLibEvents())
-			  {
-               ThreadComponent tc = threadManager.getThreadComponent(DU);
-               GdbStackFrame[] callStack = ((GdbThreadComponent)tc).getCallStack();
-               
-               returnFile = callStack[1].getFileName();
-               
-             try
-               {
-	               line = callStack[1].getLineNumber() + 1;
-               }
-             catch (java.lang.NumberFormatException e)
-               {
-               		line = 0;
-               }
-               
-               // set breakpint
-				gdbID = ((GdbDebugSession)_debugSession).setLineBreakpoint(returnFile, line);
-			  	
-			  	if (gdbID > 0)
-			  	{
-			  		needClear = true;			  		
-			  	}
-			  	else
-			 	{
-			 		// breakpoint not successfully set
-			 		// should unset stop at shared lib event, otherwise, bad results
-			   		// the side effect of this is that some deferred breakpoints may not be set 
-			   		// manually try to enable the breakpoints if an error occurs
-   		      if (Gdb.traceLogger.EVT) 
-				          Gdb.traceLogger.evt(1,"+++ Error setting bkpt at: " + returnFile + "," + line + " - unset solib event");
-			   		
-			 		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
-			 		needReset = true;
-			 	}
-               
-   			  }
+			if (Gdb.supportDeferredBreakpoint
+				&& ((GdbDebugSession) _debugSession).getGdbProcess().stopOnSharedLibEvents()) {
+					
+				if (viewNo == Part.VIEW_SOURCE)	
+				{
+					ThreadComponent tc = threadManager.getThreadComponent(DU);
+					GdbStackFrame[] callStack = ((GdbThreadComponent) tc).getCallStack();
+	
+					returnFile = callStack[1].getFileName();
+	
+					try {
+						line = callStack[1].getLineNumber() + 1;
+					} catch (java.lang.NumberFormatException e) {
+						line = 0;
+					}
+	
+					// set breakpint
+					gdbID = ((GdbDebugSession) _debugSession).setLineBreakpoint(returnFile, line);
+	
+					if (gdbID > 0) {
+						needClear = true;
+					} else {
+						// breakpoint not successfully set
+						// should unset stop at shared lib event, otherwise, bad results
+						// the side effect of this is that some deferred breakpoints may not be set 
+						// manually try to enable the breakpoints if an error occurs
+						if (Gdb.traceLogger.EVT)
+							Gdb.traceLogger.evt(
+								1,
+								"+++ Error setting bkpt at: "
+									+ returnFile
+									+ ","
+									+ line
+									+ " - unset solib event");
+	
+						((GdbDebugSession) _debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
+						needReset = true;
+					}
+				}
+				else
+				{
+					((GdbDebugSession) _debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
+					needReset = true;					
+				}
+			}
                _debugSession.cmdStepReturn_User(threadManager.getThreadName(DU));
                
 				if (Gdb.supportDeferredBreakpoint && needClear) {
-					((GdbDebugSession) _debugSession).executeGdbCommand(
-						"delete " + gdbID);
+					((GdbDebugSession) _debugSession).clearBreakpoint(gdbID);
 				}
 	
 				if (Gdb.supportDeferredBreakpoint && needReset) {
