@@ -108,6 +108,10 @@ public class CppOutputViewPart extends OutputViewPart
                                                  _sendButton.setEnabled(false);
                                                }
                                              	}
+                                             	else
+                                             	{
+                                             	 _inputEntry.setEnabled(false);	
+                                             	}
                                              }
                                        }
                                        );
