@@ -293,7 +293,7 @@ public class GetGdbStorage
       {   
 		  String registerAdd = evaluateAddressOfRegister(expr);
 		  
-		  if (registerAdd != null)
+		  if (registerAdd != null && isAddressValid(registerAdd))
 		  	return registerAdd;
       	
           if (Gdb.traceLogger.ERR) 
@@ -330,7 +330,15 @@ public class GetGdbStorage
 		  }
 		  
 	      str = str.trim();
-	      return str;
+	      
+	      if (!isAddressValid(str))
+	      {
+	      	return null;
+	      }
+	      else
+	      {
+		      return str;
+	      }		      
       }	      
       
       int space = str.lastIndexOf(" ");
@@ -356,6 +364,11 @@ public class GetGdbStorage
              return null;
          }
          str = "0x"+Long.toHexString(decimal);
+      }
+      
+      if (!isAddressValid(str))
+      {
+      	return null;
       }
 
       if (Gdb.traceLogger.EVT) 
@@ -411,6 +424,33 @@ public class GetGdbStorage
 		}			
 		
 		return str;
+	}
+	
+	private boolean isAddressValid(String address)
+	{
+		String cmd = "x "+address;
+	    boolean ok = _debugSession.executeGdbCommand(cmd);
+	    if(!ok)
+	        return false;
+	 
+	
+	    String[] lines = _debugSession.getTextResponseLines();
+	    if(lines.length<=0)
+	    {   if (Gdb.traceLogger.ERR) 
+	           Gdb.traceLogger.err(1,"Invalid Address: " + address);
+	        return false;                       
+	    }		
+	    
+	    for (int i=0; i<lines.length; i++)
+	    {
+	    	if (lines[i].indexOf("Cannot access memory") != -1)
+	    	{
+	    		if (Gdb.traceLogger.ERR) 
+		           Gdb.traceLogger.err(1,"Invalid Address: " + address);
+	    		return false;
+	    	}
+	    }
+	    return true;
 	}
 }
 
