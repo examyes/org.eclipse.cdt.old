@@ -50,7 +50,7 @@ public final class DataStore
     
     private DomainNotifier      _domainNotifier;
 
-    private ExternalLoader      _loader;
+    private ArrayList           _loaders;
     private String              _minersLocation;
     
     private boolean             _isConnected;
@@ -172,13 +172,27 @@ public final class DataStore
     }
 
     /**
-     * Sets the loader for this <code>DataStore</code>.  The loader is used to load miners (extension tools). 
+     * Sets the loaders for this <code>DataStore</code>.  The loaders are used to load miners (extension tools). 
      *
      * @param loader the loader for the miners this <code>DataStore</code> will be using
      */
-    public void setLoader(ExternalLoader loader)
+    public void setLoaders(ArrayList loaders)
     {
-	_loader         = loader;
+	_loaders         = loaders;
+    }
+
+    /**
+     * Adds a loader for this <code>DataStore</code>.  The loader is used to load miners (extension tools). 
+     *
+     * @param loader the loader for the miners this <code>DataStore</code> will be using
+     */
+    public void addLoader(ExternalLoader loader)
+    {
+	if (_loaders == null)
+	    {
+		_loaders = new ArrayList();
+	    }
+	_loaders.add(loader);
     }
 
     /**
@@ -514,9 +528,9 @@ public final class DataStore
      *
      * @return the loader
      */
-    public ExternalLoader getLoader()
+    public ArrayList getLoaders()
     {
-	return _loader;
+	return _loaders;
     }
     
     /**
