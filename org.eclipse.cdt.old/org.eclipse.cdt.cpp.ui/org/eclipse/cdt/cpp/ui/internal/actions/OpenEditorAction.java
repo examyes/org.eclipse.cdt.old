@@ -203,7 +203,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
 							    fileElement = dataStore.createObject(null, "file", name, fileName);
 							    // create the object on server
-							    dataStore.setObject(fileElement);
+							    //DataElement temp = dataStore.getTempRoot();
+							    //dataStore.setObject(temp);
 							}	
 						    else
 							{

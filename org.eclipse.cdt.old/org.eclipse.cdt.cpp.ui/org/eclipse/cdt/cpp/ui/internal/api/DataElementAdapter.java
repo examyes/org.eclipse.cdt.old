@@ -36,7 +36,18 @@ public class DataElementAdapter
   {
       ModelInterface api = ModelInterface.getInstance();
       IProject project = e.getProject();
-      
+
+      String path = null;
+      if (e instanceof ResourceElement)
+	  {
+	      ResourceElement res = (ResourceElement)e;
+	      path = res.getElement().getSource();
+	  }
+      else
+	  {
+	      path = e.getLocation().toString();
+	  }
+
       DataElement projectElement = api.findProjectElement(project);
       if (projectElement != null)
 	  { 
@@ -47,7 +58,7 @@ public class DataElementAdapter
 		      DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
 		      DataElement parsedSource = dataStore.find(projectParseInformation, DE.A_NAME, "Parsed Files", 1);
 		     
-		      String path1 = e.getLocation().toString();		      
+		      String path1 = path;		      
 		      path1 = path1.replace('/', '\\');
 		      String path2 = path1.replace('\\', '/');
 		      if (parsedSource != null)
