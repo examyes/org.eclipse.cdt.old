@@ -7,18 +7,13 @@ Project Issues (Local and Remote)
 
 1.  C/C++ files contained in non C/C++ projects will not get parsed in the
     current driver.
-2.  When deleting a project created with files found in "Local directory",
-    those files will be deleted as well, unless the project is closed first.
-    A message box will ask if you are sure you want to delete the files.
-
-
-Host Actions
-------------
-
-1.  There are actions in the Hosts Perspective that are in prototype stage 
-    and may not work as expected.  The prototyped actions are not required 
-    by any of the C++ components at this time so they should not significantly
-    impact the usage of this plugin.
+2.  When deleting a project created with files found in "Local directory" using the 
+    "Delete Project" action, a message box will ask you if you want to delete 
+    all the source files as well. If you instead try to delete the project with the 
+    "Delete" action then all your source files will be deleted as well without 
+    warning.    
+3.  If you have two files with the same name in the same directory but different case 
+    then only one will show up in the C/C++ Projects View
 
 
 Appearance on Linux
@@ -41,42 +36,19 @@ Exception objects that will appear intermingled in with the other C/C++
 objects when looking at the Details view of a Parsed File...
 Here are some of the most common known problems:
 
-- Just before packaging this plugin, we noticed that the parser is having 
-  trouble with struct types.  So the following function declaration is 
-  parsed as an error:
-    int foo(struct node * x);
-  These types are found in the studentdata sample included with this plugin.
-  This problem will be fixed in the next release.
-
-- The Parse Views (Parsed-Files, System-Objects and Project-Objects) sometimes
-  don't refresh until they are selected by the user.  To select a view, just 
-  Left-Click on its title bar.
-
-- We have implemented simple progress indication for a parse job. 
-  So when you kick off a parse, you will see a status bar in the bottom right corner
-  start moving...When it reaches the end of it's area it remains visible until the
-  job is complete (but doesn't move any more).  So when the status bar disappears,
-  you know that a parse job has completed.
-
 - There are several known issues with UI responsiveness during a large parse job.  
-  We will be addressing this in an upcoming release with some major work in the
-  threading paradigm of the DataStore Miners.  For now, once a large parse has been
-  started, it is best to wait until the status bar has disappeared before trying to 
-  access the parse information in the UI.
+  For now, once a large parse has been started, it is best to wait until the status
+  bar has disappeared before trying to access the parse information in the UI.
  
 - When parsing a large project, there is a potential to use a large amount 
-  of memory.  We have noticed that when the java.exe process gets to 80M 
-  there are significant slowdowns.  Our work-around has been to create a batch\script 
+  of memory. If you encounter memory problems create a batch\script 
   file that starts eclipse (so that we can have control over the command-line 
   parameters sent to the JVM.  A typical script would look like this:
 
-  ./jre/bin/java -Xms100m -Xmx200m -verify -cp startup.jar org.eclipse.core.launcher.Main  
+  java -Xms100m -Xmx200m -verify -cp startup.jar org.eclipse.core.launcher.Main  
   
   The -Xms and -Xmx set the minimum and maximum memory size that the JVM is invoked with.
   (We will be looking into memory issues in upcoming releases)
-
-- After a Details View has been populated with Parse Information, and you
-  close the project, the view continues to show the Parse Information.
 
 - Known language limitations:
     - Some names of enums and structs are being shown incorrectly
@@ -95,10 +67,10 @@ Here are some of the most common known problems:
       namespaces, etc.
     - There are others...but they will all eventually get looked at ;-)
 
-Command View
-------------
+Command Launcher View
+--------------------
 
-1. The Command View sometimes requires an object in the C/C++ Projects view to be selected.
+1. The Command Launcher View requires an object in the C/C++ Projects view to be selected.
    If you find that the Run Button in the Command View doesn't appear to work, 
    goto the C/C++ Projects view and select a Project or File and try again.
 
@@ -112,7 +84,7 @@ Command Specifications View
    highlighted and selected automatically. Changing it to another project
    from within the wizard will not cause the command specification to belong to the
    selected project. This will be fixed in the next release
-
+3. This feature does not support remote projects.
 
 
 Searching
@@ -120,10 +92,7 @@ Searching
 
 1. Search results only appear for objects contained in the files of local projects.
    Objects contained in included files or remote projects do not show up in the 
-   search results view.
-2. We have found that when displaying many search results, the Search Results view
-   can spend an inordinate amount of time drawing and refreshing itself.  We are 
-   looking into this.
+   search results view. For remote projects use the Output view to see the results.
 
 
 General View Issues
@@ -138,11 +107,16 @@ General View Issues
 3. For large projects, parse view refreshing is quite slow.
 4. The C/C++ Projects view and the Navigator are not always in sync. The solution is to
    do a refresh in the view that appears not up to date.
+5. If you display a large amounts of information in the Output view, then painting problems 
+   have been known to occur.
+6. Markers are not be displayed in the Editor for remote projects.e.g adding a breakpoint
+    will succedd even though the marker is not visible in the Editor left margin.
 
 Platform issues
 ---------------
-1. The C/C++ Plugin is intended for Linux, although some of its features will not work 
-   with Windows.
+1. The C/C++ Plugin is intended for Linux, although some of its features will work 
+   with Windows(with cygwin and some even without it.)
+   - With remote Linux projects, Windows Eclipse should support most features.
 
 Debugger issues
 ---------------
