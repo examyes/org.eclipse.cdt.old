@@ -114,7 +114,43 @@ public class CmdBreakpointEvent extends Command
          
         return false;
 
-      default:
+      case EPDC.LoadBkpType:
+		String dllName = null;
+		context = null;
+
+		try {
+			dllName = _req.bkpVarInfo();
+			context = _req.bkpContext();
+			boolean isEnabled =
+				((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? true : false;
+
+			ret = ((GdbBreakpointManager) bm).setLoadBreakpoint(dllName, isEnabled);
+
+			rc = EPDC.ExecRc_OK;
+			msg = null;
+			switch (ret) {
+				case 0 :
+					rc = EPDC.ExecRc_OK;
+					break;
+				default :
+					rc = EPDC.ExecRc_DupBrkPt;
+					msg = _debugEngine.getResourceString("DUPLICATE_BREAKPOINT");
+					break;
+			}
+
+			_rep.setReturnCode(rc);
+			if (msg != null)
+				_rep.setMessage(msg);
+			return false;				
+		} catch (Exception excp) {
+			_rep.setReturnCode(EPDC.ExecRc_BadExpr);
+			_rep.setMessage(_debugEngine.getResourceString("EXPRESSION_EVAL_FAILED_MSG"));
+			return false;
+		}
+		//	      _rep.setReturnCode(EPDC.ExecRc_BadBrkType);
+		//	      _rep.setMessage("Load Breakpoint not supported");
+
+		default:
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"Unknown breakpoint type="+_req.bkpType() );
         _rep.setReturnCode(EPDC.ExecRc_BadBrkType);

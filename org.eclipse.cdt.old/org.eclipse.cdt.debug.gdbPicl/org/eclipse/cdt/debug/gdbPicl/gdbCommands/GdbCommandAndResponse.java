@@ -187,7 +187,7 @@ public class GdbCommandAndResponse
 		   		    ((GdbDebugSession)_debugSession).updateSharedLibraries();
 		   		    _debugSession.enableDeferredBreakpoints();
 		   		    
-		   		    if(((GdbBreakpointManager)(_debugSession.getBreakpointManager())).getNumDeferredBkpt() == 0)
+					if(_debugSession.resetStopOnSharedLibEvents())
 		   		    {
 		 	           if (Gdb.traceLogger.DBG)
 		    	            Gdb.traceLogger.dbg(1, " ...... GdbDebugSession.getGdbResponseLines - unset stop-on-solib-events" );               

@@ -880,7 +880,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       else
       	  _numDeferredBkpt--;
           
-	  if (_numDeferredBkpt == 0)
+	  if (((GdbDebugSession)_debugSession).resetStopOnSharedLibEvents())
 	  {
    		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
 	  }
@@ -1179,6 +1179,36 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 	 */
 	public void setNumDeferredBkpt(int numDeferredBkpt) {
 		_numDeferredBkpt = numDeferredBkpt;
+	}
+	
+	// return 0 if ok
+	// otherwise, duplicate breakpoint
+	public int setLoadBreakpoint(String dllName, boolean enable)
+	{
+		int gdbBkId = ((GdbDebugSession) _debugSession).setLoadBreakpoint(dllName);
+		/*
+			public LoadBreakpoint(
+		DebugSession debugSession,
+		int bkpID,
+		int gdbBkID,
+		int bkpType,
+		int bkpAttr,
+		String dllName) {
+		*/
+
+		int bkpID = _breakpoints.size() + 1;
+		LoadBreakpoint bkp =
+			new LoadBreakpoint(_debugSession, bkpID, gdbBkId, EPDC.LoadBkpType, 0, dllName);
+
+		_breakpoints.addElement(bkp);
+
+		// if breakpoint should be disabled, then disable it.
+		if (!enable)
+			disableBreakpoint(bkpID);
+		else
+			_changedBreakpoints.addElement(bkp);
+ 
+		return 0;		
 	}
    
    private int _numDeferredBkpt = 0;

@@ -1650,30 +1650,8 @@ public class GdbDebugSession extends DebugSession {
 	public String exceptionName() {
 		return _whyExceptionMsg;
 	}
-
-	// data members
-
-	private String _mainProgram;
-	private String _params = "";
-	public String getProgramName() {
-		return _mainProgram;
-	}
-	private String _debuggeeProcessID = "";
-	public String getDebuggeeProcessID() {
-		return _debuggeeProcessID;
-	}
-	private boolean _terminatePending = false;
-	private int _attachedProcessID;
-	public int getAttachedProcessID() {
-		return _attachedProcessID;
-	}
-	private boolean _attached = false;
-	public void setTerminatePending(boolean b) {
-		_terminatePending = b;
-	}
-	private Hashtable _parts = new Hashtable();
-	protected String _dataAddress = "";
-	public String getDataAddress() {
+	
+		public String getDataAddress() {
 		return _dataAddress;
 	}
 	public void setDataAddress(String dataAddress) {
@@ -1705,5 +1683,68 @@ public class GdbDebugSession extends DebugSession {
 
 		rep.addLogChangePacket(cp);
     }
+
+	// add the name to the list of dll to stop for    
+    public int setLoadBreakpoint(String dllName)
+    {
+    	int id;
+	   	id = _dllToStop.size();
+    	
+    	_dllToStop.put(new Integer(id), dllName);
+
+    	gdbProcess.setStopOnSharedLibEvents(true);    	    	
+    	
+    	return id;
+    }
+    
+	// remove dll name from the list of dll to stop for
+    public void clearLoadBreakpoint(int id)
+    {
+    	Integer dllId = new Integer(id);
+    	
+    	if (_dllToStop.containsKey(dllId))
+    	{
+    		_dllToStop.remove(dllId);
+    		if (resetStopOnSharedLibEvents())
+    		{
+    			gdbProcess.setStopOnSharedLibEvents(false);
+    		}
+    	}
+    }
+    
+    // return true - if num of deferred bkpt + num of load bkpt is zero
+    // false - otherwise
+    public boolean resetStopOnSharedLibEvents()
+    {
+    	int numDeferred = ((GdbBreakpointManager)this.getBreakpointManager()).getNumDeferredBkpt();
+    	int loadBkpt = _dllToStop.size();
+    	
+    	return ((numDeferred + loadBkpt) == 0);
+    }
+
+
+	// data members
+
+	private String _mainProgram;
+	private String _params = "";
+	public String getProgramName() {
+		return _mainProgram;
+	}
+	private String _debuggeeProcessID = "";
+	public String getDebuggeeProcessID() {
+		return _debuggeeProcessID;
+	}
+	private boolean _terminatePending = false;
+	private int _attachedProcessID;
+	public int getAttachedProcessID() {
+		return _attachedProcessID;
+	}
+	private boolean _attached = false;
+	public void setTerminatePending(boolean b) {
+		_terminatePending = b;
+	}
+	private Hashtable _parts = new Hashtable();
+	private Hashtable _dllToStop = new Hashtable();
+	protected String _dataAddress = "";
 
 }
