@@ -130,7 +130,7 @@ public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements 
 			index = targetsPage.getRootIndex(root);
 			if(index < 0)
 			{
-				System.out.println("\n root has been added");
+				//System.out.println("\n root has been added");
 				targetsPage.targetStore.projectList.add(new RootElement(root, null));
 			}
 
