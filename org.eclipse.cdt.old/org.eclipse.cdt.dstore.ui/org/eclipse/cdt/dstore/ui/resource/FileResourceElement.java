@@ -189,6 +189,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 		      java.io.File theFile = new java.io.File(localPath);    
 		      FileOutputStream output = new FileOutputStream(theFile);
 		      transferStreams(in, output, monitor);
+		     
 		      updateRemoteFile(theFile);
 		  }
 	      catch (IOException e)
@@ -216,10 +217,11 @@ public class FileResourceElement extends ResourceElement implements IFile
         String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
         remotePath = remotePath.replace('\\', '/');
 
-        if (!remotePath.equals(localPath))
-	{		  
-	  _element.getDataStore().replaceFile(remotePath, theFile);
-	} 
+	File remoteFile = new File(remotePath);
+	if (!remoteFile.exists() &&(!remotePath.equals(localPath)))
+	    {		  
+		_element.getDataStore().replaceFile(remotePath, theFile);
+	    } 
       }
 
 public void transferStreams(InputStream source, OutputStream destination, IProgressMonitor monitor) throws IOException {
@@ -233,6 +235,7 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 	  int bytesRead = source.read(buffer);
 	  if (bytesRead == -1)
 	    break;
+
 	  destination.write(buffer, 0, bytesRead);
 	  fileBuffer.append(buffer);
 	  
