@@ -605,35 +605,38 @@ public class FileSystemMiner extends Miner
 				      {
 					  String filePath = path.toString().replace('\\', '/') + list[i];
 					  String objName = list[i];
-					  
-					  DataElement objType = _directoryDescriptor;
-					  File f = new File (filePath);
-					  if (!f.isDirectory())
-					      {
-						  objType  = _fileDescriptor;
 
-						  if (f.isHidden() || objName.charAt(0) == '.')
-						      {
-							  objType = _hiddenFileDescriptor;
-						      }
-					      }
-					  else
+					  DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
+					  if (newObject == null || newObject.isDeleted())
 					      {
-						  if (f.isHidden() || objName.charAt(0) == '.')
+						  DataElement objType = _directoryDescriptor;
+						  File f = new File (filePath);
+						  if (!f.isDirectory())
 						      {
-							  objType = _hiddenDirectoryDescriptor;
+							  objType  = _fileDescriptor;
+							  
+							  if (f.isHidden() || objName.charAt(0) == '.')
+							      {
+								  objType = _hiddenFileDescriptor;
+							      }
 						      }
-					      }
-
-					  DataElement newObject = _dataStore.createObject (theElement, objType, 
-											   objName, filePath);
-					  if (!f.isDirectory())
-					      {
-						  newObject.setDepth(1);
-					      }		      
-				      }				  
+						  else
+						      {
+							  if (f.isHidden() || objName.charAt(0) == '.')
+							      {
+								  objType = _hiddenDirectoryDescriptor;
+							      }
+						      }
+						  
+						  newObject = _dataStore.createObject (theElement, objType, 
+												   objName, filePath);
+						  if (!f.isDirectory())
+						      {
+							  newObject.setDepth(1);
+						      }		      
+					      }				  
+				      }
 			      }
-			  
 		      }	
 		  catch (Exception e)
 		      {
