@@ -262,6 +262,7 @@ public abstract class StorageMonitor
          String address = s.address +"\0";
          int lineNum = s.lineNum;
          flags = (short)s.flag;
+                          
          id   = s.id;  
          contents = contents  +"\0................\0"+ attributes;
          if (Gdb.traceLogger.DBG) 
@@ -288,6 +289,12 @@ public abstract class StorageMonitor
 //2C  0x00 -- end-of-2nd-Contents
 //2D  0x00 0x00 0x00 0x00 -- 4 attributes
       }
+
+         if(getStorageDeleted())
+         {
+         	id = getID();
+         	flags = (short)EPDC.MonStorDeleted;
+         }
 
 ERepGetNextMonitorStorageId storage = new ERepGetNextMonitorStorageId(
             id, range, location, expr, unitStyle, unitCount, addressStyle, 
@@ -335,4 +342,20 @@ ERepGetNextMonitorStorageId storage = new ERepGetNextMonitorStorageId(
 
    // status flags
    protected boolean _storageChanged = false;
+   protected boolean _storageDeleted = false;
+	/**
+	 * Gets the storageDeleted
+	 * @return Returns a boolean
+	 */
+	public boolean getStorageDeleted() {
+		return _storageDeleted;
+	}
+	/**
+	 * Sets the storageDeleted
+	 * @param storageDeleted The storageDeleted to set
+	 */
+	public void setStorageDeleted(boolean storageDeleted) {
+		_storageDeleted = storageDeleted;
+	}
+
 }

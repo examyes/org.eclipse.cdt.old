@@ -21,6 +21,7 @@ public class StorageManager extends ComponentManager      //HC
       super(debugSession);
       _storageMonitors = new Hashtable(100);
       _changedStorage  = new Vector();
+      _deletedStorage  = new Vector();
    }
 
    /**
@@ -45,6 +46,13 @@ public class StorageManager extends ComponentManager      //HC
       }
 
       _changedStorage.removeAllElements();
+      
+      for (int i=0; i<_deletedStorage.size(); i++)
+      {
+ 			_storageMonitors.remove(new Integer(((StorageMonitor)_deletedStorage.elementAt(i)).getID()));
+      }
+      
+      _deletedStorage.removeAllElements();
    }
 
   /**
@@ -156,7 +164,13 @@ public class StorageManager extends ComponentManager      //HC
       GdbStorageMonitor monitor = (GdbStorageMonitor)_storageMonitors.get(new Integer(id));
       if(monitor==null)
          return; // happens when ui collapses thread and sends free of all groups (even if not expanded)
-      _storageMonitors.remove(new Integer(id));
+         
+
+	  monitor.setStorageDeleted(true);
+         
+	  _changedStorage.addElement(monitor);  
+	  _deletedStorage.addElement(monitor);       
+
    }
 
   /**
@@ -293,6 +307,7 @@ public class StorageManager extends ComponentManager      //HC
    // data fields
    protected Hashtable    _storageMonitors;   // hashtable of thread StorageMonitors
    protected Vector       _changedStorage;
+   protected Vector		  _deletedStorage;
    protected short        _id = 0;
    protected String       _startAddress = "0x0";
    protected String       _baseAddress  = "0x0";
