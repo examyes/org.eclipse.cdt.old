@@ -267,7 +267,14 @@ public abstract class StorageMonitor
 		int firstContents = 0x0B;
 		int secondContents = 0x2C;
 		int attributeIndex = 0x2D;
-		ERepGetNextMonitorStorageLine[] lines = new ERepGetNextMonitorStorageLine[requestedSize];
+
+		int arraySize = requestedSize;	
+		if (size > requestedSize)
+		{
+			arraySize = size;
+		}
+		
+		ERepGetNextMonitorStorageLine[] lines = new ERepGetNextMonitorStorageLine[arraySize];
 	
 		String attributes = "\5\5\5\5"; //4=allocated, 2=changed, 1=editable
 		short flags = 0;
