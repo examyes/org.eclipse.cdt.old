@@ -618,6 +618,7 @@ class CommandMinerThread extends MinerThread
 				exitcode = -1;
 				_theProcess.destroy();
 			    }			
+			    _theProcess = null;
 		    }		
 	    }
 	catch (IOException e) 
@@ -625,6 +626,7 @@ class CommandMinerThread extends MinerThread
 		e.printStackTrace();
 	    }
     }
+
 
 
  
