@@ -243,7 +243,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
       _debugSession.getLocalVariablesMonitorManager().updateLocalMonitors();
 
       int length = _debugSession.monitorChangedID.size();
-
+      
       if (length !=0 )
       {
          Enumeration elements = _monitors.elements();
@@ -251,7 +251,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
          while (elements.hasMoreElements())
          {
             GdbVariableMonitor monitor = (GdbVariableMonitor) elements.nextElement();
-            if (monitor != null)
+            if ((monitor != null) && (monitor.getMonitorType() == EPDC.MonTypeProgram))
             {
                GdbVariable monVar = monitor.getMonitoredVariable();
                if (Gdb.traceLogger.DBG)
@@ -283,7 +283,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
             }
          }
       }
-
+      
       if (Gdb.traceLogger.DBG)
       {
          for(int i=0; i<length; i++)
