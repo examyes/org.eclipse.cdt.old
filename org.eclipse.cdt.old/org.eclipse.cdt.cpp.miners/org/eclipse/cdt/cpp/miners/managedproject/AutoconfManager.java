@@ -24,7 +24,7 @@ public class AutoconfManager {
 	ConfigureInManager configureInManager;
 	MakefileAmManager makefileAmManager; 
 	static Object O = new Object();
-	String cygwinPrefix = new String("sh ");
+	String cygwinPrefix = new String("sh -c ");
 
 	public AutoconfManager()
 	{
@@ -56,9 +56,9 @@ public class AutoconfManager {
 			updateAutoconfFiles(project,status,true,classifier);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project,status,"./bootstrap.sc;./configure");
+				runCommand(project,status,"./bootstrap.sc"+"&&"+"./configure");
 			else
-				runCommand(project, status, cygwinPrefix+"bootstrap.sc;"+cygwinPrefix+"configure");
+				runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure");
 		}
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
@@ -202,10 +202,10 @@ public class AutoconfManager {
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./bootstrap.sc;./configure&&"+"touch -m "+
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure&&"+"touch -m "+
 				configure.getName());
 			else
-			runCommand(project, status,cygwinPrefix+"bootstrap.sc;" +cygwinPrefix+"configure&&"+
+			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure&&"+
 			cygwinPrefix+"touch -m "+configure.getName());
 		}
 		else
@@ -230,9 +230,9 @@ public class AutoconfManager {
 				}
 				
 				if(getOS().equals("Linux"))
-					runCommand(project, status,"./bootstrap.sc;./configure&&"+"touch -m "+configure.getName());
+					runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure&&"+"touch -m "+configure.getName());
 				else
-					runCommand(project, status,cygwinPrefix+"bootstrap.sc;" +cygwinPrefix+"configure&&"+cygwinPrefix+"touch -m "+configure.getName());
+					runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure&&"+cygwinPrefix+"touch -m "+configure.getName());
 			}
 		}
 	} 
