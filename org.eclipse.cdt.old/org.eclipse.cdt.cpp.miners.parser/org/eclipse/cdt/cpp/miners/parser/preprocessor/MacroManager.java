@@ -57,7 +57,6 @@ class MacroManager
  
  private String getIdentifier(String currentLine, int startAt)
  {
-    
   int lineLength = currentLine.length();
   
   //Skip to start of next identifier
@@ -70,9 +69,9 @@ class MacroManager
   if (startAt >= lineLength)
    return null;
     
-  int endAt = startAt;
+  int endAt = startAt+1;
  
-  while ( (endAt < lineLength) && Character.isJavaIdentifierStart(currentLine.charAt(endAt)))
+  while ( (endAt < lineLength) && Character.isJavaIdentifierPart(currentLine.charAt(endAt)))
    endAt++;
  
   return currentLine.substring(startAt, endAt);
@@ -91,6 +90,7 @@ class MacroManager
     
   while ( (curId = getIdentifier(currentLine.toString(), startIndex)) != null)
   {
+    
    if (curId.length() == 0)
     break;
    

@@ -9,12 +9,24 @@ package com.ibm.cpp.miners.parser.preprocessor;
 import java.io.*;
 import java.lang.*;
 
+/*
+ * This class is responsible for reading the file, trimming comments and extraneous 
+ * whitespace from the code.  Also line continuation (e.g \ followed directly by 
+ * either \n or \r\n) is handled here...If there is line continuation, the Trimmer 
+ * concats it all into one line and trims it.  The next call to readLine() will 
+ * return a #line directive to let the parser know what the actual current line 
+ * of the file is. 
+ */
 public class Trimmer
 {
  public  String           fileName    = null;;
- public  int              lineNumber  = 0;
+ public  int              lineNumber  = 1;
+
+
+ private boolean          _inString   = false;
+ private boolean          _inComment  = false;
+ private boolean          _emitLine   = false;
  private BufferedReader   _reader     = null;
- private String           nextLine    = null;
 
  public Trimmer(String theFile)
  {
@@ -22,33 +34,62 @@ public class Trimmer
   try
   {
    _reader = new BufferedReader( new FileReader (new File (theFile)));
-   lineNumber = 0;
+   lineNumber = 1;
   }
   catch (IOException e) {}
  }
  
  public String readLine()
  {
+  if (_emitLine)
+  {
+   _emitLine = false;
+   return "#line " + lineNumber;
+  }
   return getNextLine();
  }
   
- private boolean inString   = false;
- private boolean inComment  = false;
- 
- private String getNextLine()
+ private StringBuffer getContinuedLine()
  {
+  StringBuffer continuedLine = new StringBuffer();
   try
   {
-   nextLine = _reader.readLine();
-  }
-  catch (IOException e)
-  {
-   return null;
-  }
-  
-  if (nextLine == null)
+   String theLine = _reader.readLine();
+   if (theLine == null)
     return null;
+   if (theLine.length() == 0)
+    return continuedLine;
+   continuedLine.append(theLine);
+   while (continuedLine.charAt(continuedLine.length()-1) == '\\')
+   {
+    _emitLine = true;
+    try
+    {
+     String nextnextLine = _reader.readLine();
+     if (nextnextLine == null)
+      return continuedLine;
+     continuedLine.deleteCharAt(continuedLine.length()-1);
+     continuedLine.append(nextnextLine);
+     lineNumber++;
+    }
+    catch (IOException f) 
+    {
+     return continuedLine;
+    }
+   }
+  }
+  catch (IOException e) { return null; }
+  return continuedLine;
+  
+ }
+ 
 
+ private String getNextLine()
+ {
+  StringBuffer nextLine = getContinuedLine();
+  if (nextLine == null)
+   return null;
+  
   StringBuffer theLine = new StringBuffer("");
   
   char    ch         = '\n';
@@ -63,11 +104,11 @@ public class Trimmer
    ch = nextLine.charAt(curPos);
   
    //Check to see if we are in a Comment
-   if (inComment)
+   if (_inComment)
    {
     if ( (ch == '/') && (prev_ch == '*'))  
     {  
-     inComment = false;
+     _inComment = false;
      //reset ch and prev_ch since it is like we are starting fresh on this line.
      ch = (prev_ch = '\n');
      continue;
@@ -79,7 +120,7 @@ public class Trimmer
    //Check to see if we are entering or leaving a string literal
    if ((ch == '"') && (prev_ch != '\\')) 
    {
-    inString = !inString;
+    _inString = !_inString;
     theLine.append('"');
     continue;
    }
@@ -95,13 +136,13 @@ public class Trimmer
    //Check for start of comment...if we find one, we need to remove the / from the output string.
    if ((ch == '*') && (prev_ch == '/'))
    {
-    inComment = true; 
+    _inComment = true; 
     theLine.deleteCharAt(theLine.length()-1);
     continue;
    }
     
    //Check for extra spaces as long as we're not in a string
-   if (!inString)
+   if (!_inString)
    {
     if ( ((ch == ' ') || (ch == '\t')) && ((prev_ch == ' ') || (prev_ch == '\t')) )
      continue;  

@@ -19,7 +19,8 @@ public class ExpressionEvaluator
      an expression tree).  I'm a little wary of using Stacks though, since they are derived from Vectors which
      are not the best-performing structures due to the fact that they are synchronized.  In the future I may 
      want to implement my own Stack, maybe using ArrayLists.  I more or less follow the algorithms outlined on 
-     http://www.cs.rit.edu/~cs4/CompilerProject/inToPost.html
+     http://www.cs.rit.edu/~cs4/Projects/projectSmada/inToPost.html
+
   */
   return evaluatePostFix(convertToPostFix(theExpression));
  }
@@ -65,7 +66,7 @@ public class ExpressionEvaluator
  private ArrayList convertToPostFix(String infix)
  {
   /* This method is used to take an expression in infix order and convert it to postfix order.  There are several
-     algorithms to do this...I use the algorithm described on http://www.cs.rit.edu/~cs4/CompilerProject/inToPost.html
+     algorithms to do this...I use the algorithm described on http://www.cs.rit.edu/~cs4/Projects/projectSmada/inToPost.html
      I reproduce the essence of it here for reference:
     
     - Push '(' onto the stack. 
@@ -100,7 +101,8 @@ public class ExpressionEvaluator
   while (!stack.isEmpty())
   { 
    t = tokenizer.getNextToken();
- 
+   System.out.println(t);
+   
    if ((t == null) || (t.kind == ExprToken.CLOSEPAREN))
    { 
     try
@@ -133,6 +135,8 @@ public class ExpressionEvaluator
     return null;
    }
   }
+  System.out.println(postfix);
+  
   return postfix;
  }
 
@@ -141,9 +145,6 @@ public class ExpressionEvaluator
   ExpressionEvaluator eval = new ExpressionEvaluator();
   System.out.println(eval.evaluate(args[0]));
  }
- 
-
-
 }
  
 

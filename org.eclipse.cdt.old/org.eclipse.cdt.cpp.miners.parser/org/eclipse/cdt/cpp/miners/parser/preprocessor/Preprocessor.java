@@ -90,6 +90,8 @@ public class Preprocessor extends Thread
     String curLine = null;
     while ( (curLine = _sourceReader.getNextLine()) != null)
     {
+    
+     
      _emit.append(process(curLine) + "\n");
     }
     in.close();
@@ -115,8 +117,7 @@ public class Preprocessor extends Thread
   line = replaceTrigraphs(line);
   //System.out.println(line);
   
-  
-  //Find the # chararcter on the line...
+    //Find the # chararcter on the line...
   int loc = line.indexOf("#");
 
   if (loc == -1)
@@ -226,7 +227,7 @@ public class Preprocessor extends Thread
    case 7:  handleIncludeDirective(dArgs);  if (alone) return ("");   break; 
    case 8:  handleDefineDirective(dArgs);   if (alone) return ("");   break;
    case 9:  handleUndefDirective(dArgs);    if (alone) return ("");   break;
-    //case 10: handleLineDirective(dArgs);     if (alone) return null;  break;//Inserts text so we don't need to emit a newline 
+   case 10: handleLineDirective(dArgs);     if (alone) return ("");   break;
    case 11: handleErrorDirective(dArgs);    if (alone) return ("");   break;
    case 12: handlePragmaDirective(dArgs);   if (alone) return ("");   break;
    default: handleBogusDirective(dArgs);    if (alone) return ("");   break;
@@ -349,43 +350,9 @@ public class Preprocessor extends Thread
  
  private void handleLineDirective(String dArgs) 
  {
-  dArgs = dArgs.trim();
-  if (dArgs.length() == 0) //Nothing on the line so flag a warning
-  {
-   //addError("Expected a line number after #line but found nothing");
-   return;
-  }
-  
-  String expandedLine     = _macroManager.expandMacros(dArgs);
-  int    nextSpace        = expandedLine.indexOf (" ");
-  String lineNumberString = null;
-  String fileNameString   = _sourceReader.currentFile();
-
-  if (nextSpace == -1) //Only 1 term on the line
-   lineNumberString = expandedLine;
-  else //There are at least 2 terms, so assume the second is the fileName
-  {
-   lineNumberString = expandedLine.substring(0,nextSpace);
-   fileNameString   = expandedLine.substring(nextSpace, expandedLine.length());
-  }
-   
-  //Next, make sure that lineNumberString is infact an Integer, and is postive
-  int lineNumber = 0;
-  try
-  {
-   lineNumber = Integer.parseInt(lineNumberString);
-  }
-  catch (NumberFormatException e)
-  {
-   //addError("Expected a line number after #line but found : \"" + lineNumberString + "\"");
-   return;
-  }
-  if (lineNumber < 0)
-  {
-   //addError("Line number after #line is negative (" + lineNumber + ")");
-   return;
-  }
-  //_sourceReader.addLineControl(lineNumber, fileNameString, 0);
+  //For now we just handle our own #line directives from the Trimmer...we just emit them, and let the parser deal
+  //with them
+  _emit.append("#line " + dArgs);
  }
 
  //The following methods handle Macro Replacement (16.3)

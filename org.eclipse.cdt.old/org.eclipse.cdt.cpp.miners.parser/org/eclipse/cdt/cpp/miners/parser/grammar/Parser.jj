@@ -31,11 +31,13 @@ public final class Parser
  private boolean      _lazy;
  public  boolean      isConstructor;
  public  Parser()     {}
-
+  
  
  public void setSymbolTable(SymbolTable theSymbolTable)
  {
+  
   symtab = theSymbolTable;
+ 
   _lazy  = (symtab instanceof DataStoreSymbolTable);
  }
 
@@ -339,7 +341,7 @@ SKIP :
  | "#define " : IN_DEFINE
  | < "#include " <STRING> > 
     {symtab.addIncludeFile(image.toString().substring(10,image.toString().length()-1).replace('?','\\')); } 
- | < "#" ([" ", "\t"])* ["0"-"9"] > { input_stream.backup(1); } : LINE_NUMBER
+ | < "#line" ([" ", "\t"])* ["0"-"9"] > { input_stream.backup(1); } : LINE_NUMBER
 }
 
 <LINE_NUMBER> SKIP:
@@ -715,7 +717,7 @@ void function_definition_lookahead() :
    (LOOKAHEAD(2) ptr_operator())* (id_expression())? 
    "(" (")" | LOOKAHEAD(3) parameter_list(false) ")" | expression() ")")
    //Don't match a ";" below since we want A B(); to be matched as a variable declaration;
-   ( ":" | "{" | "try" | "=" | declaration_specifier() )
+   ( ":" | "{" | "try" | "=" | ";" | declaration_specifier() )
 }
 
 //The declaration_specifiers have already been matched when we get here:
@@ -781,7 +783,6 @@ void asm_definition() :
 {
  "(" "\""  skip_string_literal() ")" ";"
 }
-
 
 //The declaration_specifiers have already been matched when we get here:
 void function_definition(String theTypes) :
@@ -1888,8 +1889,6 @@ void skip_string_literal() :
   token_source.skipOverStringLiteral(t);
  }
 }
-
-
 
 void skip_object_body(DataElement theObject) :
 {}

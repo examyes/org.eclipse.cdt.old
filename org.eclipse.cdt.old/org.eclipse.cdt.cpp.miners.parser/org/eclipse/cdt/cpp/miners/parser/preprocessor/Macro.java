@@ -47,6 +47,7 @@ public class Macro
    _replacement.append(macroLine.substring(closingparen + 1, macroLine.length()).trim());
    augmentReplacement(parameters);
   }
+ 
  }
  
  public String getName()
@@ -90,7 +91,7 @@ public class Macro
   int lineLength = macroLine.length();
   char c;
   
-  while ((index < lineLength) && Character.isJavaIdentifierStart(c=macroLine.charAt(index++)))
+  while ((index < lineLength) && Character.isJavaIdentifierPart(c=macroLine.charAt(index++)))
    theIdentifier.append(c);
   if (theIdentifier.length() == 0)
    return null;
