@@ -5,7 +5,9 @@
 
 $packaged_as = $ARGV[0];
 
-$user = $ENV{USER}; 
+#$user = $ENV{USER};
+
+$user=`whoami`; chomp($user); 
 $match = $user cmp "root";
 
 if ($match != 0)
