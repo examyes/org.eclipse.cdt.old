@@ -27,12 +27,16 @@ import org.eclipse.swt.events.HelpEvent;
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
 
 /**
  * This tab appears in the LaunchConfigurationDialog for launch configurations that
@@ -48,6 +52,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     // widgets
     private Text                             _programNameField;
     private Text                             _processIDField;
+    protected Button                         processIDBrowseButton;
 
     // constants
     private static final int SIZING_TEXT_FIELD_WIDTH = 300;
@@ -82,7 +87,10 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
    	
+   	createSpacer(composite);
    	createProgramNameGroup(composite);
+
+   	createSpacer(composite);
    	createProcessIDGroup(composite);
 
    	createSpacer(composite);
@@ -103,20 +111,22 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
      */
     protected final void createProgramNameGroup(Composite parent)
     {
+   	// new program label
+   	Label programLabel = new Label(parent,SWT.NONE);
+   	programLabel.setText(_plugin.getLocalizedString("debugAttachLauncherMain.ProgramName"));
+   	GridData data = new GridData(GridData.FILL_HORIZONTAL);
+   	programLabel.setLayoutData(data);
+   	
    	// project specification group
    	Composite programGroup = new Composite(parent,SWT.NONE);
    	GridLayout layout = new GridLayout();
-   	layout.numColumns = 2;
+   	layout.numColumns = 1;
    	programGroup.setLayout(layout);
    	programGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
    	
-   	// new program label
-   	Label programLabel = new Label(programGroup,SWT.NONE);
-   	programLabel.setText(_plugin.getLocalizedString("debugAttachLauncherMain.ProgramName"));
-   	
    	// new program name entry field
    	_programNameField = new Text(programGroup, SWT.BORDER);
-   	GridData data = new GridData(GridData.FILL_HORIZONTAL);
+   	data = new GridData(GridData.FILL_HORIZONTAL);
    	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 //      _programNameField.setText(_programName);
    	_programNameField.setLayoutData(data);
@@ -138,6 +148,12 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
      */
     protected final void createProcessIDGroup(Composite parent)
     {
+    	// new processID label
+    	Label processIDLabel = new Label(parent,SWT.NONE);
+    	processIDLabel.setText(_plugin.getLocalizedString("debugAttachLauncherMain.ProcessID"));
+    	GridData data = new GridData(GridData.FILL_HORIZONTAL);
+    	processIDLabel.setLayoutData(data);
+    	
     	// project specification group
     	Composite processIDGroup = new Composite(parent,SWT.NONE);
     	GridLayout layout = new GridLayout();
@@ -145,14 +161,10 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     	processIDGroup.setLayout(layout);
     	processIDGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
     	
-    	// new processID label
-    	Label processIDLabel = new Label(processIDGroup,SWT.NONE);
-    	processIDLabel.setText(_plugin.getLocalizedString("debugAttachLauncherMain.ProcessID"));
-    	
     	// new processID name entry field
     	_processIDField = new Text(processIDGroup, SWT.BORDER);
-    	GridData data = new GridData(GridData.FILL_HORIZONTAL);
-    	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
+   	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+   	data.horizontalSpan = 1;
     	_processIDField.setLayoutData(data);
 
 		_processIDField.addModifyListener(new ModifyListener() {
@@ -161,6 +173,19 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 			}
 		});
     	_processIDField.setEnabled(true);
+
+
+   	// browse process ids button
+   	processIDBrowseButton = new Button(processIDGroup, SWT.PUSH);
+   	processIDBrowseButton.setText(_plugin.getLocalizedString("debugLauncherMain.Browse"));
+
+		processIDBrowseButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent evt) {
+				handleProcessIDBrowseButtonPressed();
+			}
+		});
+
+   	processIDBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));	
     }
 
 
@@ -184,21 +209,23 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 
      if (element instanceof DataElement)
      {	
-   		_executable = (DataElement)element;
-	   	if (!_executable.getType().equals("file"))
-	      {
-		   	_executable = null;
-            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
-   			return;
-	      }
+        _executable = (DataElement)element;
+	 if (!_executable.getType().equals("file"))
+        {
+           _executable = null;
+ 	    _directory = null;
+           displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
+   	    return;
+        }
 
-         DataElement projectElement = _api.getProjectFor(_executable);
-         project = _api.findProjectResource(projectElement);
-         if (!project.isOpen())
-         {
-            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
-            return;
-         }
+        DataElement projectElement = _api.getProjectFor(_executable);
+        project = _api.findProjectResource(projectElement);
+        if (!project.isOpen())
+        {
+           displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+           return;
+        }
+	   	_directory = _executable.getParent();
       }	
       else if (element instanceof IProject || element instanceof IResource)
       {
@@ -264,12 +291,17 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
          if (executableName == "")
          {
             if (_executable != null)
-              _programNameField.setText(_executable.getSource());
+            {
+               _programNameField.setText(_executable.getSource());
+            }
          }
          else
          {
       		_programNameField.setText(executableName);		
+         	IResource resource  = _api.findFile(executableName);
+         	_executable = _api.findResourceElement(resource);
          }
+  			_directory = _executable.getParent();
 
 			processID = config.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
          if (processID == "")
@@ -303,7 +335,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#dispose()
 	 */
 	public void dispose() {
-      System.out.println("CppDebugInfoTab:dispose() ");
+         System.out.println("CppDebugInfoTab:dispose() ");
 	}
 
 	/**
@@ -320,21 +352,22 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 
     protected void handleProcessIDBrowseButtonPressed()
     {
-      if (_processID != null)
-      {
-         DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
-   		directory = directory.getParent();
-	   	DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", /*_directory*/directory, true);
+  	      System.out.println("handleProcessIDBrowseButton  ");
+//         DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
+//   		directory = directory.getParent();
+         BrowseProcessesDialog dialog = new BrowseProcessesDialog("select process id", _directory);
    		dialog.open();
 	   	if (dialog.getReturnCode() == dialog.OK)
    	   {
-      		DataElement selected = dialog.getSelected();
-	  	   	if (selected != null)
+     	      System.out.println("handleProcessIDBrowseButton 2 ");
+             DataElement selected = dialog.getSelected();
+
+	      if (selected != null)
    	      {
-      	      _processIDField.setText(selected.getSource());
-  		      }
+      	         System.out.println("pid = " + selected.getName());
+      	         _processIDField.setText(selected.getSource());
+  	      }
    	   }
-      }
     }	
 
 	
