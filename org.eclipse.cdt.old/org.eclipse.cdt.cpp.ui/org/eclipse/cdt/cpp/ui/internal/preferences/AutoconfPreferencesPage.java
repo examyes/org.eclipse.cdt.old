@@ -19,6 +19,9 @@ public class AutoconfPreferencesPage
 	implements IWorkbenchPreferencePage {
 	private AutoconfControl _autoconfControl;
     
+    String configureDialogKey = "Show_Configure_Dialog";
+	String configureUpdateKey = "Update_When_Configure";
+    
     String createDialogKey = "Show_Create_Dialog";
 	String createUpdateKey = "Update_When_Create";
 	
@@ -50,6 +53,26 @@ public class AutoconfPreferencesPage
 	public void performDefaults() 
     {
 		CppPlugin plugin      = CppPlugin.getDefault();
+		ArrayList autoUpdateConfigure = plugin.readProperty(configureUpdateKey);
+		if (autoUpdateConfigure.isEmpty())
+		{
+			autoUpdateConfigure.add("Yes");
+			_autoconfControl.setAutoConfigureUpdateSelection(true);
+			plugin.writeProperty(configureUpdateKey,autoUpdateConfigure);	
+		}
+		else
+		{
+			String preference = (String)autoUpdateConfigure.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setAutoConfigureUpdateSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setAutoConfigureUpdateSelection(false);
+			}
+		}
+		
 		ArrayList autoUpdateRun = plugin.readProperty(runUpdateKey);
 		if (autoUpdateRun.isEmpty())
 		{
@@ -87,6 +110,26 @@ public class AutoconfPreferencesPage
 			else
 			{
 				_autoconfControl.setAutoCreateUpdateSelection(false);
+			}
+		}
+
+		ArrayList showDialogConfigure = plugin.readProperty(configureDialogKey);
+		if (showDialogConfigure.isEmpty())
+		{
+			showDialogConfigure.add("Yes");
+			_autoconfControl.setShowConfigureDialogSelection(true);
+			plugin.writeProperty(configureDialogKey,showDialogConfigure);
+		}
+		else
+		{
+			String preference = (String)showDialogConfigure.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setShowConfigureDialogSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setShowConfigureDialogSelection(false);
 			}
 		}
 
@@ -200,6 +243,22 @@ public class AutoconfPreferencesPage
 
     public boolean performOk()
 	{
+		CppPlugin plugin      = CppPlugin.getDefault();
+		
+		// auto update when configure
+		ArrayList autoConfigureUpdate = new ArrayList();
+		if (_autoconfControl.getAutoConfigureUpdateSelection())
+		{
+			autoConfigureUpdate.add("Yes");		
+		}
+		else
+		{
+			autoConfigureUpdate.add("No");		
+		}		
+
+		plugin.writeProperty(configureUpdateKey, autoConfigureUpdate);	
+		
+		
 		// auto update when run configure
 		ArrayList autoRunUpdate = new ArrayList();
 		if (_autoconfControl.getAutoRunUpdateSelection())
@@ -211,7 +270,7 @@ public class AutoconfPreferencesPage
 			autoRunUpdate.add("No");		
 		}
 	
-		CppPlugin plugin      = CppPlugin.getDefault();
+		
 		plugin.writeProperty(runUpdateKey, autoRunUpdate);			
 
 

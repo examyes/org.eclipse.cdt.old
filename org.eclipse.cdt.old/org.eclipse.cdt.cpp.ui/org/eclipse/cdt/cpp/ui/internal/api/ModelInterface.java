@@ -2446,7 +2446,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 								  "org.eclipse.cdt.cpp.ui.internal.actions.OpenPropertiesAction");
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
 
-
+	//*********************************************
 	
 	// target Actions
 	DataElement buildCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
@@ -2459,49 +2459,21 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	executeCmd.setAttribute(DE.A_VALUE, "EXECUTE_TARGET");
 	// autoconf
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
-	/*DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Initialize autoconf files",
-							  "org.eclipse.cdt.cpp.ui.internal.actions.AdvancedConfigureAction");
-	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");*/
-//////////////////////////////////
 
-	//dataStore.createReference(startupCmds, autoconfCmds, "abstracts", "abstracted by");
-///////////////
+	//****************************
 	DataElement configurationCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
 	DataElement configureCmd = dataStore.createObject(configurationCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 								 "Configure..",
 								 "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	configureCmd.setAttribute(DE.A_VALUE,"CONFIGURE");
 
-
-
-	DataElement createConfigureCmd = dataStore.createObject(configurationCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-								 "Generate configure",
-								 "org.eclipse.cdt.cpp.ui.internal.actions.CreateConfigureAction");
-	createConfigureCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
-
-	DataElement runConfigureCmd = dataStore.createObject(configurationCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Run configure",
-							  "org.eclipse.cdt.cpp.ui.internal.actions.RunConfigureAction");
-	runConfigureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
-	
 	dataStore.createReference(configurationCmds, autoconfCmds, "abstracts", "abstracted by");
-
-/*	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
-						
-	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Create/Update,Generate,Run",
-							  "org.eclipse.cdt.cpp.ui.internal.actions.UpdateCreateRunAction");
-	mngCmd.setAttribute(DE.A_VALUE,"UPDATE_CREATE_RUN");
-	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");*/
 	
 	//****************************
 	DataElement dummy =  dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Dummy");
 	DataElement advancedCmds = dataStore.createObject(dummy, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Advanced...");
 	
 	///////////////
-	
-		
 	
 	DataElement updatesCmds = dataStore.createObject(advancedCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
 		
@@ -2559,6 +2531,21 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	//	
 	
 	dataStore.createReference(makefileCmds, advancedCmds, "abstracts", "abstracted by");
+	////////////////////////////////////
+	DataElement advancedConfCmds = dataStore.createObject(advancedCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Advanced Configure Cmds");
+	
+	DataElement createConfigureCmd = dataStore.createObject(advancedConfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+								 "Generate configure",
+								 "org.eclipse.cdt.cpp.ui.internal.actions.CreateConfigureAction");
+	createConfigureCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
+
+	DataElement runConfigureCmd = dataStore.createObject(advancedConfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Run configure",
+							  "org.eclipse.cdt.cpp.ui.internal.actions.RunConfigureAction");
+	runConfigureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
+	
+	
+	dataStore.createReference(advancedConfCmds, advancedCmds, "abstracts", "abstracted by");
 	
 	///////////////
 
@@ -2585,20 +2572,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	installCmd.setAttribute(DE.A_VALUE,"INSTALL");		
 
 	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
-	
-	
-//
-	//DataElement makefileCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customize Autoconf");
-//
-
-	/*DataElement missCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "ConfigureIn Cmds");
-
-	DataElement compilerCmd = dataStore.createObject(missCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Define Compiler Flags",
-							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");	
-	compilerCmd.setAttribute(DE.A_VALUE,"COMPILER_FLAGS");						
-	dataStore.createReference(missCmds, makefileCmds, "abstracts", "abstracted by");
-	*/	
 	
 	//***********************************
 	DataElement managedProjectD = dataStore.find(schemaRoot,DE.A_NAME,"Managed Project",1);

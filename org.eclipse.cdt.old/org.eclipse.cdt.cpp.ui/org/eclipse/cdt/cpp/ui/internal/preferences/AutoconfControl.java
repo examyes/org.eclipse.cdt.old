@@ -43,9 +43,12 @@ import java.util.*;
 
 public class AutoconfControl extends Composite
 {
+   
+    private Button _showConfigureDialogtButton;
     private Button _autoRunUpdateButton;
     private Button _showRunDialogtButton;
 
+    private Button _autoConfigureUpdateButton;
     private Button _autoCreateUpdateButton;
     private Button _showCreateDialogtButton;
     
@@ -57,32 +60,45 @@ public class AutoconfControl extends Composite
     {
 		super(cnr, style);
 
-    	Label Autoupdate = new Label(this,SWT.LEFT);
-    	Autoupdate.setText("Auto update setup:");
+    	Label ConfigureAutoupdate = new Label(this,SWT.LEFT);
+    	ConfigureAutoupdate.setText("Configure auto update setup:");
     	
-    	_autoRunUpdateButton = new Button(this, SWT.CHECK);
+    	_autoConfigureUpdateButton = new Button(this, SWT.CHECK);
+		_autoConfigureUpdateButton.setText("Perform automatic update whenever configure is executed");
+		
+	   	Label configureDialogSetup = new Label(this,SWT.LEFT);
+    	configureDialogSetup.setText("Configure confirmation message dialog setup:");
+	
+		_showConfigureDialogtButton = new Button(this, SWT.CHECK);
+		_showConfigureDialogtButton.setText("Show configure dialog before execution");
+
+		new Label(this,SWT.NONE);
+    	Label Autoupdate = new Label(this,SWT.LEFT);
+    	Autoupdate.setText("Advanced auto update setup:");
+    	
+    	_autoCreateUpdateButton = new Button(this, SWT.CHECK);
+		_autoCreateUpdateButton.setText("Perform automatic update whenever generate configure is executed");
+	
+	   	_autoRunUpdateButton = new Button(this, SWT.CHECK);
 		_autoRunUpdateButton.setText("Perform automatic update whenever run configure is executed");
 	
-    	_autoCreateUpdateButton = new Button(this, SWT.CHECK);
-		_autoCreateUpdateButton.setText("Perform automatic update whenever create configure is executed");
 	
 		new Label(this,SWT.NONE);
 	   	Label dialogSetup = new Label(this,SWT.LEFT);
-    	dialogSetup.setText("Run/Ctreate configure confirmation message dialog setup:");
-    	
-		_showRunDialogtButton = new Button(this, SWT.CHECK);
-		_showRunDialogtButton.setText("Show run configure dialog before execution");
+    	dialogSetup.setText("Advanced Generate/Run configure confirmation message dialog setup:");
 	
 		_showCreateDialogtButton = new Button(this, SWT.CHECK);
-		_showCreateDialogtButton.setText("Show create configure dialog before execution");
-
+		_showCreateDialogtButton.setText("Show generate configure dialog before execution");
+		
+		_showRunDialogtButton = new Button(this, SWT.CHECK);
+		_showRunDialogtButton.setText("Show run configure dialog before execution");
 
 		new Label(this,SWT.NONE);
 	   	Label advancedSetup = new Label(this,SWT.LEFT);
     	advancedSetup.setText("Advanced actions confirmation message dialog setup:");
     	
 		_updateAllButton = new Button(this, SWT.CHECK);
-		_updateAllButton.setText("Show \"Create/Update all automake files\" dialog before execution");
+		_updateAllButton.setText("Show \"Generate/Update all automake files\" dialog before execution");
 	
 		_updateConfigureInButton = new Button(this, SWT.CHECK);
 		_updateConfigureInButton.setText("Show \"Update configure.in\" dialog before execution");
@@ -96,6 +112,18 @@ public class AutoconfControl extends Composite
     }
 
 
+    public boolean getAutoConfigureUpdateSelection()
+    {
+		return _autoConfigureUpdateButton.getSelection();
+    }
+
+    public boolean getShowConfigureDialogSelection()
+    {
+		return _showConfigureDialogtButton.getSelection();
+    }
+
+    
+    
     public boolean getAutoRunUpdateSelection()
     {
 		return _autoRunUpdateButton.getSelection();
@@ -131,6 +159,18 @@ public class AutoconfControl extends Composite
    		return _updateMakefileAmButton.getSelection();
 	}
    
+    
+    
+    
+    public void setAutoConfigureUpdateSelection(boolean flag)
+    {
+		_autoConfigureUpdateButton.setSelection(flag);
+    }
+
+    public void setShowConfigureDialogSelection(boolean flag)
+    {
+		_showConfigureDialogtButton.setSelection(flag);
+    }
    
     public void setAutoRunUpdateSelection(boolean flag)
     {

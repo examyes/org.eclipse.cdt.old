@@ -80,11 +80,12 @@ public class ManagedProjectMiner extends Miner
 		//
 		
 		createCommandDescriptor(projectD, "Generating and running configure script","C_CONFIGURE",false);
+		createCommandDescriptor(projectD, "Generating and running configure script using existing configuration","C_CONFIGURE_NO_UPDATE",false);
 		
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Creating configure without updating", "C_CREATE_CONFIGURE_NO_UPDATE",false);
+		createCommandDescriptor(projectD, "Creating configure using existing configuration files", "C_CREATE_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Creating and running configure script", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Running configure script without updating", "C_RUN_CONFIGURE_NO_UPDATE",false);
+		createCommandDescriptor(projectD, "Running configure script using existing configuration files", "C_RUN_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Cleaning package for distribution", "C_DIST_CLEAN", false);
 		createCommandDescriptor(projectD, "maintainer-clean - recommended for package developer", "C_MAINTAINER_CLEAN", false);
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
@@ -165,7 +166,12 @@ public class ManagedProjectMiner extends Miner
 			// new : automake and autoconf action
 			else if (name.equals("C_CONFIGURE"))
 			{
-				autoconfManager.runConfigure(project, status,true,classifier);
+				autoconfManager.configure(project, status,true,classifier);
+				project.refresh(false);
+			}
+			else if (name.equals("C_CONFIGURE_NO_UPDATE"))
+			{
+				autoconfManager.configure(project, status,false,classifier);
 				project.refresh(false);
 			}
 			// end new : automake and autoconf action

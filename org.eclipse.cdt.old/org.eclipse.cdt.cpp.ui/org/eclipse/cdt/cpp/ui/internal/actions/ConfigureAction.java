@@ -45,10 +45,10 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 { 
 	CustomMessageDialog box;
 	String[] extraLabels;
-	boolean enableCreateDialog = true;
-	boolean enableCreateUpdate = true;
-	String dialogPrefernceKey = "Show_Create_Dialog";
-	String updatePreferenceKey = "Update_When_Create";
+	boolean enableConfigureDialog = true;
+	boolean enableConfigureUpdate = true;
+	String configueDialogPrefernceKey = "Show_Configure_Dialog";
+	String configureUpdatePreferenceKey = "Update_When_Configure";
 	String targetKey = "Target_Type";
 	
 	private static int tempcount = 0;
@@ -84,15 +84,15 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				
 		//enable disable based on object files
 			
-		if(_command.getValue().equals("CONFIGURE")&& doesFileExist("configure")&& configureIsUptodate(_subject))
-				setEnabled(false);
+		//if(_command.getValue().equals("CONFIGURE")&& doesFileExist("configure")&& configureIsUptodate(_subject))
+		//		setEnabled(false);
 						
 	}
     public void run()
 	{
 		//boolean execute = true;
-		int createUpdate = 0; // 0 == ok do update, 1 == no update , 2 == cancel action
-		int targetSelectionstatus = 0; // 0 = program 1 = static 2 = shared 3 == ok do update, 4 == no update , 5 == cancel action
+		int configureUpdate = 0; // 0 == ok do update, 1 == no update , 2 == cancel action
+		int targetSelectionstatus = 0; // 0 == ok do update, 1 == cancel action
 		boolean configfilesExist = false;
 		boolean sourceExistInTopLevelDir = false;
 		
@@ -137,29 +137,36 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			String str1;
 			String message;
 			String[] extraLabel = new String[]{"Do not show this dialog again"};
-			String title = "Creating configure script";
+			String title = "Generating and running configure script";
 
 			// checking if automatic updating is enabled from the autoconf preferences page
-			ArrayList autoUpdateCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(updatePreferenceKey);
-			if(!autoUpdateCreate.isEmpty())
+			ArrayList autoUpdateConfigure = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(configureUpdatePreferenceKey);
+			if(!autoUpdateConfigure.isEmpty())
 			{
-				String preference = (String)autoUpdateCreate.get(0);
+				String preference = (String)autoUpdateConfigure.get(0);
 				if (preference.equals("Yes"))
-					enableCreateUpdate = true;
+					enableConfigureUpdate = true;
 				else
-					enableCreateUpdate = false;
+					enableConfigureUpdate = false;
 			}
 			
 			if(doesAutoconfSupportExist())
 			{
 				configfilesExist = true;
-				if(enableCreateUpdate)
+				if(enableConfigureUpdate)
 				{
 					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
+					
 					if(doesFileExist("configure"))
-						message = new String("\nRegenerating project configuration script - configure is not up to date "+str1);
+					{
+						if(!configureIsUptodate(_subject))
+							message = new String("\nRegenerating and running configure script - configure is not up to date "+str1);
+						else
+							message = new String("\nRunning configure script - configure is up to date");
+					}
 					else
-						message = new String("\nGenerating project configuration script."+str1);
+						message = new String("\nGenerating and running configure script"+str1);
+
 					box = new CustomMessageDialog(
 								shell,
 								title,
@@ -170,17 +177,17 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 								0,
 								extraLabel,
 								this,
-								dialogPrefernceKey);
+								configueDialogPrefernceKey);
 					int result = box.open();
 					if(result!= -1)
-						createUpdate= result;
+						configureUpdate= result;
 					else
-						createUpdate = 0;
+						configureUpdate = 0;
 					
 				}
 				else
 				{
-					message = new String("\nUsing existing configuration files to create the configure script");
+					message = new String("\nUsing existing configuration files to create and run configure script");
 					box = new CustomMessageDialog(
 									shell,
 									title,
@@ -191,12 +198,12 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 									0,
 									extraLabel,
 									this,
-									dialogPrefernceKey);
+									configueDialogPrefernceKey);
 					int result = box.open();
 					if(result!= -1)
-						createUpdate= result+1;
+						configureUpdate= result+1;
 					else
-						createUpdate = 1;
+						configureUpdate = 1;
 					// 0 is equiv to 1 ie run with no update , 
 					//and 1 is equiv to 2 which is to cancel the action so we need to increment
 				}
@@ -204,7 +211,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			else
 			{
 				configfilesExist = false;
-				message = new String("\nCreating configuration files to generate configure script");
+				message = new String("\nGenerating and running configure script");
 				box = new CustomMessageDialog(
 								shell,
 								title,
@@ -215,20 +222,20 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 								0,
 								extraLabel,
 								this,
-								dialogPrefernceKey);
+								configueDialogPrefernceKey);
 				int result = box.open();
 				if(result!= -1)
 					if(result==1)
-						createUpdate= result+1;
+						configureUpdate= result+1;
 				else
-					createUpdate = 0;
+					configureUpdate = 0;
 				
 			}
 		}
 
-		if(createUpdate==1 && configfilesExist)
+		if(configureUpdate==1 && configfilesExist)
 		{
-			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
 			api.monitorStatus(status);			
@@ -236,7 +243,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
 		}
-		else if(createUpdate==0 && targetSelectionstatus==0)
+		else if(configureUpdate==0 && targetSelectionstatus==0)
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 			DataElement status = _dataStore.command(configureCmd, _subject);
@@ -366,7 +373,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				{
 					list.add("Yes");
 				}
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(dialogPrefernceKey,list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(configueDialogPrefernceKey,list);
 			}
 
 		}

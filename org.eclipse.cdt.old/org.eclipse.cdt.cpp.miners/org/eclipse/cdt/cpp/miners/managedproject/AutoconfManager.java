@@ -63,16 +63,52 @@ public class AutoconfManager {
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
 	}
-/*	protected void generateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
-	{
-		configureInManager.generateConfigureIn(project);
-		makefileAmManager.generateMakefileAm(project);
-	}*/
 	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject,MakefileAmClassifier classifier)
 	{
 		configureInManager.updateConfigureIn(project,true);
 		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject,classifier);
 	}
+	
+	protected void configure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
+	{
+		getAutoconfScript(project);
+		
+		// perform an update in case user has not updated the dependencies 
+		//in the Makefile.am's and configure.in
+		if(update)
+		{
+			configureInManager.updateConfigureIn(project,true);
+			makefileAmManager.updateAllMakefileAm(project,true,classifier);
+		}
+		// it will check if configure exists and if not runConfigure will generate it
+		generateAndRunConfigure(project,status,update,classifier);
+	}
+
+	
+	public void generateAndRunConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
+	{
+		// if configure is not found then create it first
+		File configure = new File (project.getSource(),"configure");
+		File script = new File (project.getSource(),"bootstrap.sc");
+		if(!configure.exists())
+		{
+			if(!script.exists())
+				getAutoconfScript(project);
+			if(getOS().equals("Linux"))
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+
+				configure.getName());
+			else
+			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
+			cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
+		}
+		else
+		{
+			if(getOS().equals("Linux"))
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+configure.getName());
+			else
+				runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
+		}
+	} 	
 	protected void createConfigure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
 		getAutoconfScript(project);
@@ -213,7 +249,7 @@ public class AutoconfManager {
 			// check that configure is up to date
 			if(!update)
 			{
-				// setting time stamp to all Makefile.am abd Makefiles.in if cuorrupted when imported
+				// setting time stamp to all Makefile.am and Makefiles.in if cuorrupted when imported
 				if(getOS().equals("Linux"))
 					runCommand(project, status, "./configure"+"&&"+"touch -m "+configure.getName());
 				else
