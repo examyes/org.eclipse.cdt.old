@@ -44,8 +44,6 @@ public class ViewToolBar extends Viewer implements IDomainListener
     private   Composite    _toolBarContainer;
     
     private   Composite    _inputTextContainer;
-    private   Composite    _topContainer;
-    
     private   ObjectWindow _parent;
     
     private   DataElement  _selected;
@@ -87,8 +85,15 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	    int y1 = r.y;
 	    int y2 = r.y;
 	    
-	    _topContainer      .setBounds(x2, y2, width2, viewHeight);
-	    _inputTextContainer.setBounds(x1, y1, width1, viewHeight);
+	    if (_viewMenu.isVisible())
+		{
+		    _viewMenu           .setBounds(x2, y2, width2, viewHeight);
+		    _inputTextContainer.setBounds(x1, y1, width1, viewHeight);
+		}
+	    else
+		{
+		    _inputTextContainer.setBounds(x1, y1, width, height);
+		}
         }
     }
     
@@ -238,9 +243,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	
 	_inputTextContainer.setLayout(new InputLayout());
 	
-	_topContainer = new Composite(_toolBarContainer, SWT.BAR);
-    
-	_viewMenu = new ViewMenu(this, _topContainer, _loader);
+	_viewMenu = new ViewMenu(this, _toolBarContainer, _loader);
 	
 	_toolBarContainer.setLayout(new ToolLayout());
 	_toolBarContainer.setVisible(false);
@@ -366,7 +369,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
     
     public Control getControl()
     {
-        return _topContainer;
+        return _viewMenu;
     }
 
     public IDataElementViewer getViewer()
@@ -420,12 +423,9 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	_toolBarContainer.dispose();
 	_viewMenu.dispose();
 	_inputTextContainer.dispose();
-	_topContainer.dispose();
 
 	_toolBarContainer = null;
 	_viewMenu = null;
 	_inputTextContainer = null;
-	_topContainer = null;
-
     }
 }

@@ -28,10 +28,9 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.*;
 
 
-public class ViewMenu implements IMenuListener
+public class ViewMenu extends Composite
+    implements IMenuListener
 {
-    private Composite   _toolBar;
-    
     private ToolBar     _viewToolBar;
     private ToolBar     _viewToolBar2;
     private ToolItem   _relationLabel, _filterLabel;
@@ -158,11 +157,12 @@ public class ViewMenu implements IMenuListener
         }
   }
 
-  public ViewMenu(ViewToolBar parent, Composite toolBar, IActionLoader loader)
+    public ViewMenu(ViewToolBar parent, Composite container, IActionLoader loader)
     {
+	super(container, SWT.BAR);
+
         _parent = parent;
 	_dataStore = parent.getDataStore();
-        _toolBar = toolBar;
         _loader = loader;
 	_isEnabled = true;
 	
@@ -182,7 +182,7 @@ public class ViewMenu implements IMenuListener
 	
 	
         // relation graphics
-        _viewToolBar = new ToolBar(toolBar, SWT.FLAT);
+        _viewToolBar = new ToolBar(this, SWT.FLAT);
         _relationLabel = new ToolItem(_viewToolBar, SWT.DROP_DOWN, 0);
 	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
 	if (plugin != null)
@@ -204,7 +204,7 @@ public class ViewMenu implements IMenuListener
 						}
 					    );
 	
-        _viewToolBar2 = new ToolBar(toolBar, SWT.FLAT);
+        _viewToolBar2 = new ToolBar(this, SWT.FLAT);
         _filterLabel = new ToolItem(_viewToolBar2, SWT.DROP_DOWN, 0);
 	if (plugin != null)
 	    {
@@ -225,7 +225,7 @@ public class ViewMenu implements IMenuListener
 					      }
                                           );
 	
-        toolBar.setLayout(new FillLayout());
+        setLayout(new FillLayout());
 	_viewToolBar.setLayout(new GridLayout());
 	_viewToolBar2.setLayout(new GridLayout());
 	
@@ -243,7 +243,7 @@ public class ViewMenu implements IMenuListener
       {
         if (_relationItems.size() > 0)
         {
-          Menu aMenu = _menuMgr.createContextMenu(_toolBar);
+          Menu aMenu = _menuMgr.createContextMenu(this);
           
           _viewingRelation = true;
           Point topLeft = new Point(0, 0);
@@ -257,7 +257,7 @@ public class ViewMenu implements IMenuListener
       {
         if (_filterItems.size() > 0)
         {
-          Menu aMenu = _menuMgr.createContextMenu(_toolBar);
+          Menu aMenu = _menuMgr.createContextMenu(this);
           
           _viewingRelation = false;
           Point topLeft = new Point(0, 0);
@@ -316,8 +316,8 @@ public class ViewMenu implements IMenuListener
 		setDefaultFilter();
 	    }
 
-        _toolBar.layout(true);
-        _toolBar.redraw();
+        layout(true);
+        redraw();
 
 	//	if (showFilter)
 	    {
@@ -353,7 +353,21 @@ public class ViewMenu implements IMenuListener
 	  _filterLabel.setEnabled(false);
       }
 
-
+    public boolean isVisible()
+    {
+	if (_input != null)
+	    {
+		if (_relationItems.size() > 1 || _filterItems.size() > 1)
+		    {
+			return true;
+		    }
+		else
+		    {
+			return false;
+		    }
+	    }
+	return true;
+    }
 
 
   public DataElement getFilter()
