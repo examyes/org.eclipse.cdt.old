@@ -24,7 +24,7 @@ public class ConfigureInManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void generateConfigureIn( boolean actionIsManageProject)
+	protected void generateConfigureIn()
 	{
 		// check if there is an existing configure.in
 		File configure_in = new File (project.getSource(),"configure.in");
