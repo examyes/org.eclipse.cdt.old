@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>Unit Tests ... A Guide to Writing JUnit Tests for the CDT</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+
+<!-- Document Header -->
+<TABLE cellPadding=2 width="100%" border=0>
+ <TBODY>
+  <TR>
+   <TD align=left width="72%">
+    <FONT class=indextop>CDT Unit Tests</FONT><BR>
+    <FONT class=indexsub>A Guide for Writing JUnit Tests for the CDT</FONT>
+   </TD>
+   <TD width="28%"><IMG height=86 src="http://dev.eclipse.org/images/Idea.jpg" width=120 alt=""></TD>
+  </TR>
+ </TBODY>
+</TABLE>
+<table>
+ <tbody>
+  <tr><td>Author</td><td>         : <a href="mailto:jgreen@qnx.com">Judy N. Green</a></td></tr>
+  <tr><td>Revision Date</td><td>  : 07/08/2002 - Version: 0.1.0</td></tr>
+  <tr><td>Change History</td><td> : 0.1.0 - Document Creation</td></tr>
+ </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+
+<!-- Table of Contents -->
+<div class=section>Table of Contents</div>
+<br>
+<div class=indent><a href="#intro">1. Introduction</a>
+ <div class=indent><a href="#overview"> 1.1 Overview</a></div>
+</div>
+<div class=indent><a href="#namingConventions"> 2. CDT JUnit Test Package Naming Conventions</a></div>
+<div class=indent><a href="#references">3. References</a></div>
+<br><br>
+<!-- End of Table of Contents -->
+
+
+<!-- Introduction -->
+<div class=section><a name="intro"> 1. Introduction</a></div>
+<p>
+Is has been well proven that the time taken to write and run unit tests 
+is recouped many times by reducing the time required to manually test, find and fix bugs.
+The CDT Team has adopted a policy of writing JUnit tests for CDT code in the following priority:
+<ul>
+	<li> Critical and/or complex code should always have a unit test associated with it
+	<li> Code that is found to contain an error, must have a unit test created and successfully run
+		 as a requirement of closing the PR associated with the error.
+	<li> All other code as time permits and common sense dictates
+</ul>
+
+These tests will be integrated into our build process. Builds will not be marked as successful unless
+all unit tests, especially regression tests, run successfully. See the current
+<a href="http://download.eclipse.org/downloads/documentation/2.0/html/plugins/org.eclipse.jdt.doc.user/tasks/tasks-207.htm">
+Eclipse JUnit </a>Help Pages for detailed 
+instructions on creating and running JUnit tests within Eclipse.</p>
+
+In addition, the CDT Team is exploring the use of the following tools derived from JUnit. 
+The following section on package naming conventions will hold true for tests using JDepend and/or JFunc and any other testing tools
+extending JUnit.
+<ul>
+ <li> <a href="http://www.clarkware.com/software/JDepend.html">JDepend </a>for generating metrics from the CDT code.
+ <li> <a href="http://jfunc.sourceforge.net/"> JFunc </a> for creating functional tests for the CDT code.
+</ul> 
+
+<!-- End of Introduction -->
+
+<div class=subsection><a name="overview">1.1 Overview</a></div>
+<p>
+In order to integrate the unit tests with our build process we have proposed the following structure and format be followed
+by all developers writing unit tests for CDT code. Suggestions for improvements are always welcome.
+</p>
+
+<div class=section><a name="namingConventions">2. CDT JUnit Test Package Naming Conventions</a></div>
+
+Create a JUnit project for each project that you are testing. The JUnit
+project name should be identical to the project being tested, with the additional postfix of ".tests". <p>
+
+<p>  This example is taken from the Eclipse JDT plugins <p>
+<table border="0" cellspacing="5" cellpadding="2" width="50%">
+ <tbody>
+   <td><b>PLUGIN:</b>	</td> <td>  </td> <td><b>TESTING PLUGIN:</b></td>
+  </tr>
+  <tr>
+   <td>org.eclipse.cdt.help</td> <td>...............</td> <td>org.eclipse.cdt.help.tests</td>
+  </tr>
+  <tr>
+   <td>org.eclipse.cdt.jdt.debug</td> <td>...............</td> <td>org.eclipse.cdt.jdt.debug.tests</td>
+  </tr>
+  <tr>
+   <td>org.eclipse.cdt.ui</td> <td>...............</td> <td>org.eclipse.cdt.ui.tests</td>
+  </tr>
+  <tr>
+   <td>etc ...</td> 
+  </tr>    
+  </tbody>  
+</table><p>
+
+<I>For example:</I><p>
+
+Say the classes that you are testing are contained in project named
+<I>org.eclipse.cdt.tools.foobar</I><p>
+
+You would create a Java Project called
+<I>org.eclipse.cdt.tools.foobar.tests</I><p>
+
+In the project <I>"org.eclipse.cdt.tools.foobar.tests"</I>
+you would create tests in package structures 
+that mirror the packages of the classes that they are 
+designed to test.<p>
+
+Say that your project contained packages called:
+<I>
+<ul>
+<li>org.eclipse.cdt.tools.foobar.internal
+<li>org.eclipse.cdt.tools.foobar.debug
+</ul></I>
+
+You would create corresponding packages within the test project 
+<I>org.eclipse.cdt.tools.foobar.tests</I> called:
+
+<I>
+<ul>
+<li>org.eclipse.cdt.tools.foobar.internal.tests
+<li>org.eclipse.cdt.tools.foobar.debug.tests
+</ul>
+</I>
+
+Individual tests and test suites would reside in each of the corresponding
+packages. Tests to test the code in <I>org.eclipse.cdt.tools.foobar.internal</I>
+would be found in <I>org.eclipse.cdt.tools.foobar.internal.tests</I>.
+Likewise, tests to test the code in <I>org.eclipse.cdt.tools.foobar.debug</I>
+would be found in <I>org.eclipse.cdt.tools.foobar.debug.tests</I>.<p>
+
+
+The higher level main test class "AllTests.java" would reside in the test
+project <I>org.eclipse.cdt.tools.foobar.common.tests</I> <p>
+
+
+<!-- References -->
+<div class=section><a name="references"> 3. References</a></div>
+<p>
+
+<ol>
+	<li>JUnit has a 
+	<a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/jdt-ui-home/plugins/org.eclipse.jdt.junit/index.html">
+	plugin</a> that is shipped with Eclipse 2.0. It includes the following plugins:  
+		<ul>
+			<li>org.junit
+			<li>org.eclipse.jdt.junit 
+		</ul>
+	
+	</li>
+	<li> The main <a href="http://www.junit.org"> JUnit </a>website has a wealth of information and additional QA tools. 
+	</li>
+	<li> The <a href="http://www.clarkware.com/software/JDepend.html">JDepend </a>homepage.
+    <li> The <a href="http://jfunc.sourceforge.net/">JFunc </a>homepage.
+	
+</ol>
+<!-- End of References -->
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
+<p>
+<center><I>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--//hide script from old browsers
+
+// Write the URL
+document.write('Last Modified on ');
+// last modified
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+var dateObj = new Date(document.lastModified)
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear < 2000)
+fyear = fyear + 1900
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+//end hiding contents -->
+</SCRIPT>
+
+</I></center>
+</body>
+</html>

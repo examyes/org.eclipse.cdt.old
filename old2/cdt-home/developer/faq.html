@@ -32,7 +32,6 @@
    <tr>
       <td><font size="-1" face="arial,helvetica,geneva">
       <p>The following is the official CDT Developer FAQ. This is a work in progress.</p>
-      Last Modified: May 14, 2002
       </font></td>
    </tr>
 
@@ -61,8 +60,6 @@
      <li><a href="#build_10">How do I develop (build\run\debug) CDT?</a></li>
    </ol>
   </li>
-  <li> <b><a href="#miners">Implementing Miners:</a></b></li>
-  <li> <b><a href="#ui">Implementing UI:</a></b></li>
 </ul>
 
 <!-- General Header -->
@@ -107,35 +104,48 @@
 </ol>
 
 <hr>
+<p>
+<center><I>
 
-<!-- Miners Header -->
-<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
- <tr>
-  <td width="90%"> <a name="miners"><b><font color="#000000" size="+1"> Implementing Miners
-      </font></b></a> </td>
-    <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
-    </td>
-  </tr>
-</table>
+<SCRIPT LANGUAGE="JavaScript">
+<!--//hide script from old browsers
 
-<hr>
+// Write the URL
+document.write('Last Modified on ');
+// last modified
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+var dateObj = new Date(document.lastModified)
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear < 2000)
+fyear = fyear + 1900
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+//end hiding contents -->
+</SCRIPT>
 
-<!-- UI Header -->
-<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
- <tr>
-  <td width="90%"> <a name="ui"><b><font color="#000000" size="+1"> Implementing UI
-      </font></b></a> </td>
-    <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
-    </td>
-  </tr>
-</table>
-
+</I></center>
 
 </body>
 </html>

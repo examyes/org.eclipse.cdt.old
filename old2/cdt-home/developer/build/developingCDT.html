@@ -61,7 +61,7 @@
 <p>
  To build the CDT inside Eclipse you will need a build of eclipse from the 
  <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>.  We recommend that you choose a 
- recent Stable Build.  In addition, you will need a Java Runtime Environment (JRE) of at least Version 1.3 or 
+ version 2.0  or a recent Stable Build.  In addition, you will need a Java Runtime Environment (JRE) of at least Version 1.3 or 
  greater.  Once you have Eclipse properly installed, the CDT CVS Respository can be accessed and the CDT 
  plugins checked-out and built.  
  <b>Note</b>: The exact steps may vary depending on what Eclipse build you use.
@@ -108,13 +108,15 @@
  <li>Expand the interactor for your new repository</li>
  <li>Expand the interactor for HEAD</li>
  <li>Hold down the &lt;Ctrl&gt; key and select all the plugins you wish to build.  The complete list for the 
-     CDT are those that match <b><i>org.eclipse.cdt.*</i></b> and <b><i>com.ibm.*</i></b>, however you may wish 
+     CDT are those that match <b><i>org.eclipse.cdt.*</i></b> </i></b>, however you may wish 
      to select only a subset.  Of course you may have to return to this step if you have checked out a subset 
      and are missing some dependencies.
  </li>
  <li>Once you have selected your plugins, right-click on the selected list and choose <b>"Check Out as Project"</b>.  This 
      should start checking out all the selected plugins and subsequently build them.  If all goes well you will hopefully 
      have no build errors.</li>
+ <li>If build errors occur indicating that org.eclipse.* plugins cannot be found, ensure that your Eclipse and VM installation are setup correctly. </li>
+ <li>You can also select each plugin and right-click then choose "Update Classpath". </li>
 </ol>
 </p>
 <div class=subsection><a name="pdeRun"> 2.2 Running CDT with Eclipse</a></div>
@@ -124,13 +126,7 @@
  PDE.  Here are the steps:
  <ol>
   <li>Open the "<b>Plug-in Development</b>" perspective (you may have to goto "Others" to find it).</li>
-  <li>Select the menu action <b>Run</b> -> <b>Run As...</b> -> <b>Run-time workbench</b>. This should cause 
-      the <b>Launch Configurations</b> dialog to appear.</li>
-  <li>Enter a name for your new Launch Configuration.</li>
-  <li>Switch to the "<b>Plug-ins and Fragments</b>" tab.</li>
-  <li>Select the box beside "<b>External Plugins</b>" to make all base Eclipse plugins visible to the Run-time Workbench.</li>
-  <li>Choose <b>Apply</b> to save your changes and verify that no error messages are shown.</li>
-  <li>Choose <b>Run</b>.</li>
+  <li>Select the menu action <b>Run</b> -> <b>Run As...</b> -> <b>Run-time workbench</li></b>. 
  </ol>
 </p>
 
@@ -140,18 +136,17 @@
 
  <ol>
   <li>Open the "<b>Plug-in Development</b>" perspective (you may have to goto "Others" to find it).</li>
-  <li>Select the menu action <b>Run</b> -> <b>Debug As...</b> -> <b>Run-time workbench</b>. This should cause 
-      the <b>Launch Configurations</b> dialog to appear.</li>
-  <li>Enter a name for your new Launch Configuration.</li>
-  <li>Switch to the "<b>Plug-ins and Fragments</b>" tab.</li>
-  <li>Select the box beside "<b>External Plugins</b>" to make all base Eclipse plugins visible to the Run-time Workbench.</li>
-  <li>Choose <b>Apply</b> to save your changes and verify that no error messages are shown.</li>
-  <li>Choose <b>Debug</b>.</li>
- </ol>
+  <li>Select the menu action <b>Run</b> -> <b>Debug As...</b> -> <b>Run-time workbench</b>.
+  </ol>
  
 </p>
 
 <div class=section><a name="commandline"> 3. Developing the CDT outside Eclipse</a></div>
+<p>
+<b><font color=red>
+ The following section and the process that it describes is in a state or extreme reorganization. 
+ This description has been left for reference but should not be taken as fact.</font></b>
+</p>
 <p>
  The CDT internal nightly build is done from the command line using makefiles.  Eventually this will be migrated
  to an Ant-based build, but in the meantime we describe the steps necessary to build the CDT from the command line here.

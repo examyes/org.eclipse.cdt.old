@@ -1,7 +1,0 @@
-**This is an automated message from Jeff Turnham.**
-
-It appears that the errors file from the nightly build is larger than the normal 910 Bytes:
-
-
-
-

@@ -1,0 +1,145 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <title>C/C++ Development Toolkit 2.0 Plan</title>
+<LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+<body>
+
+<h1>
+C/C++ Development Tools - CDT Project<br>
+R2.0 Updated Plan</h1>
+<p>First edition July 10, 2002<p>
+This document lays out the plan for the next major release of the C/C++
+Development Tools (CDT) Project, designated release 2.0. The two main goals
+of the 2.0 release will be to enable CDT to run on Eclipse R2.0, and to define 
+and implement a fully extensible framework.  <b>Note
+that the CDT 2.0 release will only run on Eclipse R2.0 or later.</b>
+<p>This plan serves as an important input to the planning processes of
+the various customers of the CDT Project. It tells them what to expect
+(or what not to expect) in the next release so that they can plan their
+projects accordingly.
+<p>Plans are rarely completely unchanging over the life cycle of a release,
+and this project is no exception. We will update this document as required
+to reflect any changes to the plan. We reserve the right to add items to this
+list. The <a href="http://www.eclipse.org/mail/index.html" target="_top">developer
+mailing list archives</a> contain further, in-depth information about how
+a component is changing. Particular problem reports being worked on for
+this release can be tracked through the Eclipse <a href="http://dev.eclipse.org/bugs/">bug
+database</a>; the "Target Milestone" field reflects when a work item will
+become available in the main development stream.
+
+<h2>Release deliverables</h2>
+The release deliverables are:
+<ul>
+  <li> Source Code for framework</li>
+  <li> Source Code for default implementation of all functionality (more detail to be added) </li>
+</ul>
+
+<h2>
+Release milestones</h2>
+The release milestones are:
+<ul>
+ <li>June 26, 2002, inital release of source code for
+	<ul>
+	<li>org.eclipse.cdt.core</li>
+	<li>org.eclipse.cdt.ui</li>
+	</ul>
+ </li>
+ <li>Subsequent source code releases will be with respect to 
+ 	<ul>
+	  <li>org.eclipse.cdt.debug.core </li>
+	  <li>org.eclipse.cdt.debug.ui </li>
+	  <li>org.eclipse.cdt.debug.mi</li>
+	  <li>org.eclipse.cdt.launch components.</li>
+	 </ul> 
+  </li>
+<li> TBD - nightly builds</li>
+<li>TBD - stable build</li>
+<li>TBD - stable build</li>
+<li>TBD - beta build</li>
+<li>TBD - release build</li>
+</ul>
+All release deliverables will
+be available for download as soon as the release has been tested and validated.
+
+
+<br>&nbsp;
+<br>&nbsp;
+<h2>
+Compatibility with Previous Release</h2>
+
+<p><br><b>API Contract Compatibility:</b> CDT 2.0 will be upwards contract
+compatible with CDT 1.0 unless noted. This means that programs in full
+compliance with contracts specified in the CDT 1.0 APIs will automatically
+be in full compliance with the CDT 2.0 APIs. Downward contract compatibility
+is not supported. There is no guarantee that compliance with the CDT 2.0
+APIs would ensure compliance with the CDT 1.0 APIs.
+<br>&nbsp;
+<h2>
+Work Items</h2>
+Note that fixing bugs, improving test coverage, documentation, examples,
+etc. are considered routine ongoing maintenance activities and are not
+included in this plan unless they would also involve significant changes
+to the plugin.
+<p>The following committed items reflect new features of CDT, or areas
+where existing features will be significantly reworked.</p>
+TBD
+
+<br>&nbsp;
+<br>&nbsp;</blockquote>
+
+
+<p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
+<p>
+<center><I>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--//hide script from old browsers
+
+// Write the URL
+document.write('Last Modified on ');
+// last modified
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+var dateObj = new Date(document.lastModified)
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear < 2000)
+fyear = fyear + 1900
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+//end hiding contents -->
+</SCRIPT>
+
+</I></center>
+
+</body>
+</html>

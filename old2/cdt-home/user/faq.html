@@ -32,7 +32,6 @@
    <tr>
       <td><font size="-1" face="arial,helvetica,geneva">
       <p>The following is the official CDT User FAQ.  This document is work in progress.</p>
-      Last Modified: May 21, 2002
       </font></td>
    </tr>
 
@@ -63,7 +62,7 @@
       <li><a href="#general_30">How is the CDT Project organized?</a></li>
       <li><a href="#general_40">How do I find out about future releases of the CDT?</a></li>
       <li><a href="#general_50">Which operating systems does the CDT support?</a></li>
-      <li><a href="#general_60">Why isn't the XXX operating system supported by CDT? (XXX usually == Windows, but may take on other values)</a></li>
+      <li><a href="#general_60">Why isn't the XXX operating system supported by CDT?</a></li>
       <li><a href="#general_70">How do I ask questions?</a></li>
       <li><a href="#general_80">How do I report a bug or request a feature?</a></li> 
       <li><a href="#general_90">What is this .log file I hear so much about?</a></li> 
@@ -74,8 +73,6 @@
     <ol>
       <li><a href="#install_10">Which CDT build should I download?</a></li>
       <li><a href="#install_30">I can't find the CDT download for XXX?</a></li>
-<!--      <li><a href="#install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></li>
--->
       <li><a href="#install_50">How do I build or debug the CDT itself?</a></li>
       <li><a href="#install_60">How do I uninstall CDT?</a></li>
     </ol>
@@ -121,8 +118,8 @@
   <li><b><a name="general_10">What is the CDT?</a></b>
     <p>
      The CDT (C/C++ Development Tools) Project is working towards providing a fully functional C and C++ Integrated 
-     Development Environment (IDE). Our focus is development on Linux for deployment on Linux, 
-     but we are interested in participation from others who would like to extend our work in other directions.  The 
+     Development Environment (IDE). Our focus is on designing and developing a fully extensible framework
+     but we are interested in participation from others who would like to extend our work.  The 
      CDT is fully open-source and implemented purely in java as a set of plugins to the 
      <a href="http://www.eclipse.org">Eclipse</a> platform.  To learn more visit the 
      <a href="http://www.eclipse.org/cdt">CDT Home Page</a>.
@@ -169,20 +166,18 @@
  
 <li><b><a name="general_50">Which operating systems does the CDT support?</a></b>
   <p>
-    The CDT supports Linux.  More specifically we support the Intel x86 Linux Versions for which Eclipse provides 
-    Primary releases. For Eclipse R1.0 this was RedHat 7.1.  For R2.0 the supported versions are RedHat 7.2 and 
-    Suse 7.3.  For more information see:<br>
-     - FAQ: <a href="#general_60">Why isn't the XXX operating system supported by CDT?"</a><br>
-     - <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/plans/CDT_R2.0_plan.html?cvsroot=Tools_Project">
-      CDT R2.0 Plan</a><br>
-     - <a href="http://eclipse.org/eclipse/eclipse_project_plan_2_0_current.html">Eciipse R2.0 Plan</a>
+    The CDT Framework is platform independent. It will run where Eclipse will run. 
+    However, the default implementations may depend on external application.
+    Example, dependencies on GDB for debugging, or Make for building, 
+    will require that these applications are available for the platform that
+    the user wishes to use.
   </p>
    <hr size="1">
   </li>
  
-  <li><b><a name="general_60">Why isn't the XXX operating system supported by CDT? (XXX usually == Windows, but may take on other values)</a></b>
+  <li><b><a name="general_60">Why isn't the XXX operating system supported by CDT?</a></b>
   <p>
-   "Supported" has a particular meaning to us.   It means that on that platform we have a good level of 
+   "Supported" has a particular meaning to us. It means that on that platform we have a good level of 
    confidence that CDT works correctly and that its function is appropriate and complete.   That means
    <ul>
     <li>someone has ensured that the function addesses the important use cases</li>
@@ -195,16 +190,16 @@
    those things all happen.
   </p>
   <p>
-    The IBM CDT team owns Linux support but doesn't have the capacity to own other platforms.
-    That doesn't mean we don't care about them.  It certainly doesn't mean we won't accept
-    code changes for them - it is already the case that much of CDT will work outside of Linux
-    and there is non-Linux code in CDT to accomplish that.<br>
-    It does mean that we can't "own" those platforms, and without an owner we don't have the necessary 
-    confidence to claim support.
+    The Framework supports all the platforms that Eclipse does. 
+    The QNX CDT team is responsible for ensuring that this remains true for the framework.
+    Specific default implementations will work only on platforms where the required applications are available.
+    Creation of additional implementations are highly encouraged and will be the mechanism used to extend functionality
+    to all platforms.
   </p>
   <p>
-   If this answer makes you want to volunteer to own a platform, that is the reaction we were 
-   hoping for!
+   If you have a favourite platform we highly encourage you to get involved and 
+   volunteer to own a feature that does not currently have an implementation that 
+   works on your platform of choice.
   </p>  
   <hr size="1">
   </li>  
@@ -263,7 +258,7 @@
     To make your bug report more helpful include the following in your bug reports:
     <ol>
       <li>The build level of both the CDT and Eclipse that you are using.  
-       For example, "cdt 20020508 with Eclipse M5 Stable Build"</li>
+       For example, "cdt 20020704 with Eclipse 2.0 Build"</li>
       <li>Your computer's specifications (OS + level, memory, other pertinent info)</li>
       <li>The contents of your .log file (or lack thereof).  This is especially
       important if you get a dialog that reports an internal error.  See
@@ -309,55 +304,39 @@
 <ol>
  <li><b><a name="install_10">Which CDT build should I download?</a></b>
   <p>
-   There are currently 2 versions of the CDT:<br>
-&nbsp;&nbsp;<b>R1</b> - for use with the Eclipse Release <a href="http://download.eclipse.org/downloads/" target="_top">R1.0</a>.<br>
-&nbsp;&nbsp;<b>R2</b> - for which we provide periodic builds that are for use with specific Eclipse <b>Stable</b> R2.0 Builds.
+   There are currently 3 versions of the CDT:<br>
+   &nbsp;&nbsp;<b>C1</b> - New architecture, for use with the Eclipse Release <a href="http://download.eclipse.org/downloads/" target="_top">R2.0</a>.<br>
+   &nbsp;&nbsp;<b>R1</b> - Previous architecture, for use with the Eclipse Release <a href="http://download.eclipse.org/downloads/" target="_top">R1.0</a>.<br>
+   &nbsp;&nbsp;<b>R2</b> - Previous architecture, for use with specific Eclipse <b>Stable</b> Pre - R2.0 Builds.
   </p>
   So,<br>
-  <ul>
-   <li>If you are using Eclipse Release R1.0, the you should download CDT R1.</li>
-   <li>If you are using a <b>Stable</b> R2 Eclipse Build, then check the 
+  If you are using a Eclipse Release R2.0, then check the 
     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
     CDT Download Page</a> for information on which CDT Build to use.</li>
-   <li>If you are using an <b>Integration</b> or <b>Nightly</b> Eclipse Build, then you can download the closest CDT 
-    R2 match, but you do so at your own risk since it is possible that Eclipse has changed enough since the last 
-    <b>Stable</b> build to break the CDT.</li>  
-  </ul><br>
+  <br>
    <hr size="1">
  </li>
  
  
  <li><b><a name="install_30">I can't find the CDT download for the XXX operating system?</a></b>
   <p>
-   There is no special CDT download for any particular operating system.  While the CDT is only 
-   <a href="#general_60">supported</a> on Linux, much of the CDT function will work on other operating systems.  The CDT
-   leverages some Linux system tools such as gdb(debugging), autoconf(packaging/build support), and 
-   gprof(profiling).  These tools are available for many platforms and if they exist on your system, there is 
-   a good chance that the function will work.  
+   There is no special CDT download for any particular operating system.  Much of the CDT default functionality
+   will uses applications that are available on most operating systems.  The CDT
+   leverages some Linux system tools such as gdb(debugging), make(building).  
+   These tools are available for many platforms and if they exist on your system, there is 
+   a good chance that the default functionality will work.  
   </p>
   <p>
    For example, on Windows you can install the <a href="http://www.redhat.com/download/cygwin.html">Cygwin toolkit</a>
-   which is a Unix environment for Windows and includes gprof, automake and gdb. 
+   which is a Unix environment for Windows and includes automake and gdb. 
   </p>
   <p>
-   The caveat is that the operation of the CDT on operating systems other than Linux has not been tested and we 
-   cannot commit time to fixing problems found on these platforms.  However, code submissions from developers 
-   wanting to improve the CDT on a non-supported operating system will be accepted.   
+   The caveat is that the operation of the CDT on some operating systems has not been fully tested and we 
+   cannot commit time to fixing platform specific problems found on these platforms.  
+   However, code submissions from developers wanting to improve the CDT will always be gratefully accepted.   
   </p>
    <hr size="1">
   </li>
-
-<!-- 
- <li><b><a name="install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></b>
-  <p>
-   With the CDT properly installed, you should see "C/C++" as a choice when creating a new project or when 
-   opening a new perspective.  If not, then either the CDT is not properly installed or there was some runtime
-   exception that prevented the CDT from loading.  Use the following check-list to troubleshoot your problem:
- 
-  </p>
-   <hr size="1">
-  </li>
--->
 
   <li><b><a name="install_50">How do I build or debug the CDT itself?</a></b>
   <p>Are you Interested in playing with the CDT source and perhaps fixing a bug or adding a feature?
@@ -371,8 +350,7 @@
 
   <li><b><a name="install_60">How do I uninstall CDT?</a></b>
   <p>
-   We do not currently ship an uninstaller.  Once we have moved up to the latest "Update" support in Eclipse this 
-   should be taken care of.  In the meantime you can uninstall the CDT in 2 manual steps: 
+   We do not currently ship an uninstaller. You can uninstall the CDT in 2 manual steps: 
   </p>
 
   <ol>
@@ -382,8 +360,6 @@
      <li>Remove the following plugins:
       <ul>
        <li>org.eclipse.cdt.*</li>
-       <li>com.ibm.debug*</li>
-       <li>com.ibm.lpex*</li>
       </ul>
      </li>
     </ul>
@@ -395,8 +371,6 @@
      <li>Remove the following directories (if they exist):
       <ul>
        <li>org.eclipse.cdt.*</li>
-       <li>com.ibm.debug*</li>
-       <li>com.ibm.lpex*</li>
       </ul>
      </li>
     </ul>
@@ -460,7 +434,55 @@
   </tr>
 </table>
 
+<p>
 
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
 
+<center><I>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--//hide script from old browsers
+
+// Write the URL
+document.write('Last Modified on ');
+// last modified
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+var dateObj = new Date(document.lastModified)
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear < 2000)
+fyear = fyear + 1900
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+//end hiding contents -->
+</SCRIPT>
+
+</I></center>
 </body>
 </html>
