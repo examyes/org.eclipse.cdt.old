@@ -37,18 +37,16 @@ import java.lang.reflect.InvocationTargetException;
 
 
 import java.util.*;
-import java.io.*;
+import java.io.*; 
 
 public class Connection implements IDomainListener
 {
     public class ConnectOperation implements IRunnableWithProgress
     {
 	private ConnectionStatus _connectStatus;
-	private String           _minersLocation;
 
-	public ConnectOperation(String minersLocation)
+	public ConnectOperation()
 	{
-	    _minersLocation = minersLocation;
 	}    
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException
@@ -74,7 +72,7 @@ public class Connection implements IDomainListener
 	    {
 		pm.beginTask(_plugin.getLocalizedString("connection.Initializing_DataStore"), 100);
 
-		if (getSchema(_connectStatus, _minersLocation, pm))
+		if (getSchema(_connectStatus, _element.getDataStore().getMinersLocation(), pm))
 		    {
 			_element.getDataStore().createReferences(_element, _client.getDataStore().getRoot().getNestedData(), "contents");
 			_element.getDataStore().refresh(_element);
@@ -85,7 +83,7 @@ public class Connection implements IDomainListener
 	    pm.done();
 	}
 	
-	public boolean getSchema(ConnectionStatus connectionStatus, String minersLocation, IProgressMonitor monitor)
+	public boolean getSchema(ConnectionStatus connectionStatus, ArrayList minersLocation, IProgressMonitor monitor)
 	{
 	    String ticketStr = connectionStatus.getTicket();
 	    boolean result = false;
@@ -99,7 +97,10 @@ public class Connection implements IDomainListener
 		    monitor.worked(10);
 
 		    monitor.subTask(_plugin.getLocalizedString("connection.Setting_miners_location"));
-		    DataElement smlStatus = dataStore.setMinersLocation(minersLocation);
+		    for (int i = 0; i <  minersLocation.size(); i++)
+			{
+			    dataStore.addMinersLocation((String)minersLocation.get(i));
+			}
 		    monitor.worked(10);
 		    
 		    // get schema
@@ -400,11 +401,6 @@ public class Connection implements IDomainListener
     
     public ConnectionStatus connect(DomainNotifier notifier)
     {
-	return connect(notifier, "org.eclipse.cdt.dstore.miners");
-    }
-
-    public ConnectionStatus connect(DomainNotifier notifier, String minersLocation)
-    {
 	_notifier = notifier;
 	if (_client == null)
 	    {	 
@@ -438,7 +434,7 @@ public class Connection implements IDomainListener
 	
 	
 	Shell shell = notifier.findShell();
-	ConnectOperation op = new ConnectOperation(minersLocation);
+	ConnectOperation op = new ConnectOperation();
 	ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(shell);
 	try
 	    {

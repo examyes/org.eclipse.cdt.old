@@ -162,9 +162,9 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 						      loadScope);
 	
  	_clientConnection = new ClientConnection("C/C++", 20000);
-	_clientConnection.addLoader(cppLoader);	 
+	_clientConnection.addLoader(cppLoader);	  
         DataStore dataStore = _clientConnection.getDataStore();
-	dataStore.setMinersLocation("org.eclipse.cdt.cpp.miners");
+	dataStore.addMinersLocation("org.eclipse.cdt.cpp.miners");
         _corePlugin.setRootDataStore(dataStore);
 
 	String install = _corePath;
@@ -181,7 +181,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
 	_interface = new ModelInterface(dataStore);	
 	_interface.getDummyShell();
-
        	_interface.initDataStore();
 
 	// set up UI schema
@@ -191,9 +190,16 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_schemaRegistry.registerSchemaExtender(_schemaExtender);
 	_schemaRegistry.registerSchemaExtender(HostsPlugin.getDefault().getSchemaExtender());
 	_schemaRegistry.extendSchema(dataStore);
-       
+
+	/*
+	DataStore hdstore = HostsPlugin.getDefault().getDataStore();
+	hdstore.addLoader(cppLoader);
+	hdstore.addMinersLocation("org.eclipse.cdt.cpp.miners");
+	hdstore.getSchema();
+	*/
+
 	// create action loader
-	new CppActionLoader(); 
+	new CppActionLoader();  
 	
 
 	DataElement workspace = _interface.findWorkspaceElement(dataStore);

@@ -50,12 +50,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 
 	String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
 	IResource resource  = _api.findFile(executableName);
-   if (resource == null)
-    {
-		displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.invalidResource"));
-		return;
-    }
-
 	IProject project = resource.getProject();
 	
 	_executable = _api.findResourceElement(resource);

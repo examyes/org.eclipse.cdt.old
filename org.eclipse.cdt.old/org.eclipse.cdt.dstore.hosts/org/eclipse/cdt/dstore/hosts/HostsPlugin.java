@@ -139,7 +139,7 @@ public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 		hostRoot.setAttribute(DE.A_SOURCE, rootDirectory);
 		
 		_clientConnection.setHostDirectory(rootDirectory);	
-		_dataStore.setMinersLocation("org.eclipse.cdt.dstore.miners");
+		_dataStore.addMinersLocation("org.eclipse.cdt.dstore.miners");
 		_clientConnection.localConnect();
 	
 		_instance = this;
