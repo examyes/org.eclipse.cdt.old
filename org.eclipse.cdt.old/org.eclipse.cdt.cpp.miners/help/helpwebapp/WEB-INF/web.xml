@@ -8,7 +8,7 @@
 
 <servlet>
   <servlet-name>Help</servlet-name>
-  <servlet-class>HelpWebApp</servlet-class>
+  <servlet-class>help.helpwebapp.servlet.HelpWebApp</servlet-class>
 </servlet>
 
 <servlet-mapping>
