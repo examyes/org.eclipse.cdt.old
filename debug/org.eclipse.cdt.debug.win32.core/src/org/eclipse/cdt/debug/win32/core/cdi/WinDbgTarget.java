@@ -20,6 +20,7 @@ import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIResumedEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
@@ -38,6 +39,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	private WinDbgThread[] threads = new WinDbgThread[0];
 	private WinDbgThread currentThread;
 	private Thread debugThread;
+	private WinDbgRuntimeOptions runtimeOptions;
 	String cmdline;
 	String dir;
 
@@ -426,6 +428,14 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public ICDIRuntimeOptions getRuntimeOptions() {
+		if (runtimeOptions == null) {
+			runtimeOptions = new WinDbgRuntimeOptions(this);
+		}
+		return runtimeOptions;
+	}
+	
 
 
 }

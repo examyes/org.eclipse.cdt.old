@@ -12,9 +12,20 @@ package org.eclipse.cdt.debug.win32.core.cdi;
 
 import java.util.Properties;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.ICDIRuntimeOptions;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
+import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 
 public class WinDbgRuntimeOptions implements ICDIRuntimeOptions {
+
+	private WinDbgTarget wTarget;
+
+	/**
+	 * 
+	 */
+	public WinDbgRuntimeOptions(WinDbgTarget target) {
+		wTarget = target;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.ICDIRuntimeOptions#setArguments(java.lang.String[])
 	 */
@@ -32,5 +43,11 @@ public class WinDbgRuntimeOptions implements ICDIRuntimeOptions {
 	 */
 	public void setWorkingDirectory(String wd) throws CDIException {
 		// TODO Auto-generated method stub
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIObject#getTarget()
+	 */
+	public ICDITarget getTarget() {
+		return wTarget;
 	}
 }

@@ -18,12 +18,12 @@ import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIExpressionManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIMemoryManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager;
-import org.eclipse.cdt.debug.core.cdi.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.ICDISharedLibraryManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISignalManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISourceManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIVariableManager;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
 import org.eclipse.core.resources.IFile;
@@ -41,7 +41,6 @@ public class WinDbgSession implements ICDISession {
 	}
 	
 	// Objects
-	private WinDbgRuntimeOptions runtimeOptions;
 	private ICDITarget[] targets;
 	private WinDbgConfiguration configuration;
 	private WinDbgEventManager eventManager;
@@ -51,7 +50,6 @@ public class WinDbgSession implements ICDISession {
 	
 	public WinDbgSession(ILaunchConfiguration config, IFile exe) {
 		eventManager = new WinDbgEventManager(this);
-		runtimeOptions = new WinDbgRuntimeOptions();
 		targets = new ICDITarget[1];
 		targets[0] = new WinDbgTarget(this, exe);
 		configuration = new WinDbgConfiguration();
@@ -150,10 +148,6 @@ public class WinDbgSession implements ICDISession {
 	public ICDIConfiguration getConfiguration() {
 		// TODO Auto-generated method stub
 		return configuration;
-	}
-	
-	public ICDIRuntimeOptions getRuntimeOptions() {
-		return runtimeOptions;
 	}
 	
 	public void terminate() throws CDIException {
