@@ -1,3 +1,18 @@
+2004-11-05  Aaron Luchko  <aluchko@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage.java (): show only C/C++ projects to 
+	   be exported
+	* src/org/eclipse/cdt/rpm/ui/RPMExportWizard.java (): ditto
+	* src/org/eclipse/cdt/rpm/ui/RPMImportPage.java (): ditto
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java (): ditto
+
+2004-11-04  Jeffery Pound  <jpound@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportOperation.java (): put commands into
+	   a properties bundle`
+	* src/org/eclipse/cdt/rpm/ui/preferences/RPMPluginPreferencesPage.java (): add
+	   shell commands to be user configurable
+
 2004-08-31  Rick Moseley  <rmoseley@redhat.com>
 
 	* build.xml: rebuilt after merge/refactoring

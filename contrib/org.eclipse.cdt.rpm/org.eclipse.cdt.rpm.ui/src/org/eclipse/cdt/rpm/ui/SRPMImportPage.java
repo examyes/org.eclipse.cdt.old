@@ -16,10 +16,12 @@
 package org.eclipse.cdt.rpm.ui;
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -66,7 +68,8 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	private Button runAutoConf;
 	private Button buildSource;
 	private List projectList;
-
+	private IStructuredSelection selection;
+	
 	/**
 	 * @see java.lang.Object#Object()
 	 *
@@ -74,7 +77,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	 * @param aWorkbench - Workbench
 	 * @param selection - IStructuredSelection
 	 */
-	public SRPMImportPage(IWorkbench aWorkbench, IStructuredSelection selection) {
+	public SRPMImportPage(IWorkbench aWorkbench, IStructuredSelection currentSelection) {
 		super(Messages.getString("SRPMImportPage.Import_SRPM"), //$NON-NLS-1$
 			Messages.getString("SRPMImportPage.Select_project_to_import"), null); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -82,6 +85,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		setPageComplete(false);
 		setDescription(Messages.getString(
 				"SRPMImportPage.Select_project_to_import")); //$NON-NLS-1$
+		selection = currentSelection;
 	}
 
 	
@@ -242,19 +246,45 @@ public class SRPMImportPage extends WizardPage implements Listener {
 					"RPMExportPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
 			return;
 		}
-
 		// Stuff the listbox with the text name of the projects 
 		// using the getName() method
-		for (int a = 0; a < internalProjectList.length; a++)
+		// Find the first selected project in the workspace
+
+		Iterator iter = selection.iterator();
+		Object selectedObject= null;
+		IProject selectedProject = null;
+		boolean isSelection = false;
+		if (iter.hasNext())
+		{
+			selectedObject = iter.next();
+			if (selectedObject instanceof IResource)
+			{
+				selectedProject = ((IResource) selectedObject).getProject();
+				isSelection = true;
+			}
+		}
+
+		// Stuff the listbox with the text names of the projects 
+		// using the getName() method and select the selected 
+		// project if available
+		
+		for (int a = 0; a < internalProjectList.length; a++) 
+		{
+
 			try {
 				IProjectNature cNature = internalProjectList[a].getNature(CProjectNature.C_NATURE_ID);
 				if (cNature!=null)
 					projectList.add(internalProjectList[a].getName());
+					if (isSelection && internalProjectList[a].equals(selectedProject))
+						projectList.setSelection(a);
 				} catch (CoreException e) {
 	
 			}
+		}
 		
-		projectList.setSelection(0);
+		if (!isSelection)
+			projectList.setSelection(0);//if none is selected select first project
+
 		projectList.addListener(SWT.FocusOut, this);
 	}
 

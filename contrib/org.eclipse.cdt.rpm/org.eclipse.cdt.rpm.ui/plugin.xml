@@ -36,7 +36,7 @@
    <extension
          point="org.eclipse.ui.exportWizards">
       <wizard
-            name="Source/Binary RPM"
+            name="Source/Binary RPM test"
             icon="icons/rpm.gif"
             class="org.eclipse.cdt.rpm.ui.RPMExportWizard"
             id="org.eclipse.cdt.rpm.ui.RPMExportWizard">
@@ -51,7 +51,7 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <wizard
-            name="Source RPM"
+            name="Source RPM test"
             icon="icons/rpm.gif"
             class="org.eclipse.cdt.rpm.ui.SRPMImportwizard"
             id="org.eclipse.cdt.rpm.ui.SRPMImportwizard">

@@ -99,10 +99,11 @@ public class SRPMImportOperation implements IRunnableWithProgress {
 		monitor.worked(1);
 		String rpm_release;
 		String rpm_version;
-			
-		rpm_version = LinuxShellCmds.getInfo("/bin/rpm --qf %{VERSION} -qp " + //$NON-NLS-1$
+		String usr_rpm_cmd = RPMCorePlugin.getDefault().getPreferenceStore().getString("IRpmConstants.RPM_CMD"); //$NON_NLS-1$
+		
+		rpm_version = LinuxShellCmds.getInfo(usr_rpm_cmd + " --qf %{VERSION} -qp " + //$NON-NLS-1$
 						srpmname);
-		rpm_release = LinuxShellCmds.getInfo("/bin/rpm --qf %{RELEASE} -qp " + //$NON-NLS-1$;
+		rpm_release = LinuxShellCmds.getInfo(usr_rpm_cmd + " --qf %{RELEASE} -qp " + //$NON-NLS-1$;
 						srpmname);
 		// If the generated checksum, and the one in the srpmInfo file are the same
 		// then the project has not changed since last import and does not need a patch

@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ ** (c) 2004 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.MultiStatus;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 
 import org.eclipse.swt.SWT;
@@ -80,6 +81,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 	private Button exportSource;
 	private Text rpmVersion;
 	private Text rpmRelease;
+	private IStructuredSelection selection;
 
 	//Composite Project Listbox control	
 	private List projectList;
@@ -90,11 +92,12 @@ public class RPMExportPage extends WizardPage implements Listener {
 	static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
 	static final String line_sep = System.getProperty("line.separator"); //$NON-NLS-1$
 	
-	public RPMExportPage() {
+	public RPMExportPage(IStructuredSelection currentSelection) {
 		super(Messages.getString("RPMExportPage.Export_SRPM"), //$NON-NLS-1$
 				  Messages.getString("RPMExportPage.Export_SRPM_from_project"), null); //$NON-NLS-1$ //$NON-NLS-2$
 		setDescription(Messages.getString("RPMExportPage.Select_project_export")); //$NON-NLS-1$
 		setPageComplete(true);
+		selection = currentSelection;
 	}
 
 	/**
@@ -520,6 +523,25 @@ public class RPMExportPage extends WizardPage implements Listener {
 
 		// Stuff the listbox with the text name of the projects 
 		// using the getName() method
+		// Find the first selected project in the workspace
+
+		Iterator iter = selection.iterator();
+		Object selectedObject= null;
+		IProject selectedProject = null;
+		boolean isSelection = false;
+		if (iter.hasNext())
+		{
+			selectedObject = iter.next();
+			if (selectedObject instanceof IResource)
+			{
+				selectedProject = ((IResource) selectedObject).getProject();
+				isSelection = true;
+			}
+		}
+
+		// Stuff the listbox with the text names of the projects 
+		// using the getName() method and select the selected 
+		// project if available
 	
 		
 		for (int a = 0; a < internalProjectList.length; a++) 
@@ -529,12 +551,15 @@ public class RPMExportPage extends WizardPage implements Listener {
 				IProjectNature cNature = internalProjectList[a].getNature(CProjectNature.C_NATURE_ID);
 				if (cNature!=null)
 					projectList.add(internalProjectList[a].getName());
+					if (isSelection && internalProjectList[a].equals(selectedProject))
+						projectList.setSelection(a);
 				} catch (CoreException e) {
 	
 			}
 		}
 		
-		projectList.setSelection(0);
+		if (!isSelection)
+			projectList.setSelection(0);//if none is selected select first project
 		
 		// Add a listener to set the name in the location box as 
 		// it is selected in project box

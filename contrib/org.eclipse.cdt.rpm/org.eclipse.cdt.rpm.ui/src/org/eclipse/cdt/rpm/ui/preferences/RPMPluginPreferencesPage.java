@@ -16,11 +16,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -46,6 +49,15 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	private Text emailField;
 	private Text nameField;
 	private Text WorkAreaField;
+	
+	private Text makeField;
+	private Text rpmField;
+	private Text rpmbuildField;
+	private Text chmodField;
+	private Text cpField;
+	private Text diffField;
+	private Text tarField;
+	
 	
 	static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
     
@@ -78,7 +90,7 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	   Label label = new Label(parent, SWT.LEFT);
 	   label.setText(text);
 	   GridData data = new GridData();
-	   data.horizontalSpan = 2;
+	   data.horizontalSpan = 1;
 	   data.horizontalAlignment = GridData.FILL;
 	   label.setLayoutData(data);
 	   return label;
@@ -88,6 +100,18 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	   Button button = new Button(parent, SWT.PUSH);
 	   button.setText(label);
 	   button.addSelectionListener(this);
+	   GridData data = new GridData();
+	   data.horizontalAlignment = GridData.FILL;
+	   button.setLayoutData(data);
+	   return button;
+   }
+   
+   private Button createBrowseButton(Composite parent, Text field, String command) {
+	   Button button = new Button(parent, SWT.PUSH);
+	   button.setText("Browse..."); //$NON-NLS-1$
+	   button.addSelectionListener(new BrowseSelectionListener(getShell(), 
+	   								"Select '" + command + //$NON-NLS-1$
+									"' Command", field)); //$NON-NLS-1$
 	   GridData data = new GridData();
 	   data.horizontalAlignment = GridData.FILL;
 	   button.setLayoutData(data);
@@ -115,6 +139,13 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	   return text;
    }
    
+   protected void createSpacer(Composite composite, int columnSpan) {
+   	   Label label = new Label(composite, SWT.NONE);
+   	   GridData gd = new GridData();
+   	   gd.horizontalSpan = columnSpan;
+   	   label.setLayoutData(gd);
+   }
+   
    private void tabForward(Composite parent) {
 	   Label vfiller = new Label(parent, SWT.LEFT);
 	   GridData gridData = new GridData();
@@ -135,13 +166,12 @@ public class RPMPluginPreferencesPage extends PreferencePage
    
    private String getUserName()
    {
-		return System.getProperty ( "user.name" );
+		return System.getProperty ( "user.name" ); //$NON-NLS-1$
 	
    }
 
    protected void initializeDefaultPreferences(IPreferenceStore store)
    {
-//	store.setDefault("IRpmConstants.DATE_FORMAT","true"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.RPM_WORK_AREA","/var/tmp"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.USER_WORK_AREA",file_sep+"rpm_workarea"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.RPM_DISPLAYED_LOG_NAME",".logfilename_" +  //$NON-NLS-1$ //$NON-NLS-2$
@@ -154,25 +184,31 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	store.setDefault("IRpmConstants.RPM_MACROS_FILE",".rpm_macros"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.AUTHOR_NAME",getUserName()); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.AUTHOR_EMAIL",getUserName()+"@" + RPMCorePlugin.getHostName()); //$NON-NLS-1$ //$NON-NLS-2$
+   
+	store.setDefault("IRpmConstants.MAKE_CMD", "/usr/bin/make"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.RPM_CMD", "/bin/rpm"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.RPMBUILD_CMD", "/usr/bin/rpmbuild"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.CHMOD_CMD", "/bin/chmod"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.CP_CMD", "/bin/cp"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.DIFF_CMD", "diff"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.TAR_CMD", "/bin/tar"); //$NON-NLS-1$ //$NON-NLS-2$
    }
    
    private void initializeDefaults()
    {
 		IPreferenceStore store = getPreferenceStore();
 		
-//		dateFormat.setSelection(store.getDefaultBoolean("IRpmConstants.DATE_FORMAT"));  //$NON-NLS-1$
 		emailField.setText(store.getDefaultString("IRpmConstants.AUTHOR_EMAIL")); //$NON-NLS-1$
 		nameField.setText(store.getDefaultString("IRpmConstants.AUTHOR_NAME")); //$NON-NLS-1$
 		rpmWorkAreaField.setText(store.getDefaultString("IRpmConstants.RPM_WORK_AREA")); //$NON-NLS-1$
-//	These fields are commented out because of a decision not to let the user change these values at this time
-//		nameField.setText(store.getDefaultString("IRpmConstants.USER_WORK_AREA")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.RPM_LOG_NAME")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.RPM_DISPLAYED_LOG_NAME")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.SPEC_FILE_PREFIX")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.SRPM_INFO_FILE")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.RPM_SHELL_SCRIPT")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.RPM_RESOURCE_FILE")); //$NON-NLS-1$
-//		nameField.setText(store.getDefaultString("IRpmConstants.RPM_MACROS_FILE")); //$NON-NLS-1$
+		makeField.setText(store.getDefaultString("IRpmConstants.MAKE_CMD")); //$NON-NLS-1$
+		rpmField.setText(store.getDefaultString("IRpmConstants.RPM_CMD")); //$NON-NLS-1$
+		rpmbuildField.setText(store.getDefaultString("IRpmConstants.RPMBUILD_CMD")); //$NON-NLS-1$
+		chmodField.setText(store.getDefaultString("IRpmConstants.CHMOD_CMD")); //$NON-NLS-1$
+		cpField.setText(store.getDefaultString("IRpmConstants.CP_CMD")); //$NON-NLS-1$
+		diffField.setText(store.getDefaultString("IRpmConstants.DIFF_CMD")); //$NON-NLS-1$
+		tarField.setText(store.getDefaultString("IRpmConstants.TAR_CMD")); //$NON-NLS-1$
+		
 		storeValues();
    }
    
@@ -180,40 +216,33 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	 {
 		   IPreferenceStore store = getPreferenceStore();
 		
-//			dateFormat.setSelection(store.getBoolean("IRpmConstants.DATE_FORMAT"));	     //$NON-NLS-1$
 			rpmWorkAreaField.setText(store.getString("IRpmConstants.RPM_WORK_AREA")); //$NON-NLS-1$
-//		These fields are commented out because of a decision not to let the user change these values at this time
-//			userWorkAreaField.setText(store.getString("IRpmConstants.USER_WORK_AREA")); //$NON-NLS-1$
-//			rpmLogNameField.setText(store.getString("IRpmConstants.RPM_LOG_NAME")); //$NON-NLS-1$
-//			displayedRpmLogNameField.setText(store.getString("IRpmConstants.RPM_DISPLAYED_LOG_NAME")); //$NON-NLS-1$
-//			specFilePrefixField.setText(store.getString("IRpmConstants.SPEC_FILE_PREFIX"));  //$NON-NLS-1$
-//			srpmInfoFileNameField.setText(store.getString("IRpmConstants.SRPM_INFO_FILE"));  //$NON-NLS-1$
-//			rpmShellScriptFileNameField.setText(store.getString("IRpmConstants.RPM_SHELL_SCRIPT")); //$NON-NLS-1$
-//			rpmResourceFileNameField.setText(store.getString("IRpmConstants.RPM_RESOURCE_FILE")); //$NON-NLS-1$
-//			rpmMacrosFileNameField.setText(store.getString("IRpmConstants.RPM_MACROS_FILE"));  //$NON-NLS-1$
 			emailField.setText(store.getString("IRpmConstants.AUTHOR_EMAIL")); //$NON-NLS-1$
 			nameField.setText(store.getString("IRpmConstants.AUTHOR_NAME")); //$NON-NLS-1$
-	  }
+			makeField.setText(store.getString("IRpmConstants.MAKE_CMD")); //$NON-NLS-1$
+			rpmField.setText(store.getString("IRpmConstants.RPM_CMD")); //$NON-NLS-1$
+			rpmbuildField.setText(store.getString("IRpmConstants.RPMBUILD_CMD")); //$NON-NLS-1$
+			chmodField.setText(store.getString("IRpmConstants.CHMOD_CMD")); //$NON-NLS-1$
+			cpField.setText(store.getString("IRpmConstants.CP_CMD")); //$NON-NLS-1$
+			diffField.setText(store.getString("IRpmConstants.DIFF_CMD")); //$NON-NLS-1$
+			tarField.setText(store.getString("IRpmConstants.TAR_CMD")); //$NON-NLS-1$
+	 }
 
 	
    private void storeValues() {
 		IPreferenceStore store = getPreferenceStore();
 	   	
-//		store.setValue("IRpmConstants.DATE_FORMAT",dateFormat.getSelection()); //$NON-NLS-1$
 		store.setValue("IRpmConstants.RPM_WORK_AREA",rpmWorkAreaField.getText()); //$NON-NLS-1$
-// These fields are commented out because of a decision not to let the user change these values at this time
-//		store.setValue("IRpmConstants.RPM_WORK_AREA",userWorkAreaField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.RPM_LOG_NAME",rpmLogNameField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.RPM_DISPLAYED_LOG_NAME",displayedRpmLogNameField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.SPEC_FILE_PREFIX",specFilePrefixField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.SRPM_INFO_FILE",srpmInfoFileNameField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.RPM_SHELL_SCRIPT",rpmShellScriptFileNameField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.RPM_RESOURCE_FILE",rpmResourceFileNameField.getText()); //$NON-NLS-1$
-//		store.setValue("IRpmConstants.RPM_MACROS_FILE",rpmMacrosFileNameField.getText()); //$NON-NLS-1$
 		store.setValue("IRpmConstants.AUTHOR_NAME",nameField.getText()); //$NON-NLS-1$
 		store.setValue("IRpmConstants.AUTHOR_EMAIL",emailField.getText()); //$NON-NLS-1$
-		
-	}
+		store.setValue("IRpmConstants.RPM_CMD", rpmField.getText()); //$NON-NLS-1$
+		store.setValue("IRpmConstants.RPMBUILD_CMD", rpmbuildField.getText()); //$NON-NLS-1$
+		store.setValue("IRpmConstants.TAR_CMD", tarField.getText()); //$NON-NLS-1$
+		store.setValue("IRpmConstants.MAKE_CMD", makeField.getText()); //$NON-NLS-1$
+		store.setValue("IRpmConstants.CHMOD_CMD", chmodField.getText()); //$NON-NLS-1$
+		store.setValue("IRpmConstants.CP_CMD", cpField.getText()); //$NON-NLS-1$
+		store.setValue("IRpmConstants.DIFF_CMD", diffField.getText()); //$NON-NLS-1$
+   	}
     
 	public void modifyText(ModifyEvent event) {
 		//Do nothing on a modification in this example
@@ -237,59 +266,74 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	
 	protected Control createContents(Composite parent)
 	{
+		//mainComposite << parent
+		Composite mainComposite = createComposite(parent, 1);
+		mainComposite.setLayout(new GridLayout());
 		
+		Group userPrefs = new Group(mainComposite, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		userPrefs.setLayout(layout);
+		userPrefs.setText("RPM Preferences"); //$NON-NLS-1$
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		userPrefs.setLayoutData(gd);
+				
+		createLabel(userPrefs, "Author Name: ");	 //$NON-NLS-1$
+		nameField = createTextField(userPrefs);
 		
-	
-		//composite_textField << parent
-		Composite composite_textField = createComposite(parent, 2);
-		createLabel(composite_textField, "Author Name: ");	 //$NON-NLS-1$
-		nameField = createTextField(composite_textField);
+		createLabel(userPrefs, "Author Email: ");	 //$NON-NLS-1$
+		emailField = createTextField(userPrefs);
 		
-		//composite_textField << parent
+		createLabel(userPrefs, "RPM Work Area: ");	 //$NON-NLS-1$
+		rpmWorkAreaField = createTextField(userPrefs);
+		
+		createSpacer(mainComposite, 2);
+		
+		Group shellPrefs = new Group(mainComposite, SWT.NONE);
+		shellPrefs.setText("Shell Commands"); //$NON-NLS-1$
+		layout = new GridLayout();
+		layout.numColumns = 3;
+		shellPrefs.setLayout(layout);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		shellPrefs.setLayoutData(gd);
+		
+		String spacer = ": "; //$NON-NLS-1$
+		String title = "rpm"; //$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);	 
+		rpmField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, rpmField, title);
+		
+		title = "rpmbuild"; //$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);
+		rpmbuildField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, rpmbuildField, title);
 
-		createLabel(composite_textField, "Author Email: ");	 //$NON-NLS-1$
-		emailField = createTextField(composite_textField);
+		title = "make"; //$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);
+		makeField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, makeField, title);
 		
-		createLabel(composite_textField, "RPM Work Area ");	 //$NON-NLS-1$
-		rpmWorkAreaField = createTextField(composite_textField);
-
-//		These fields are commented out because of a decision not to let the user change these values at this time
-/*		
-		createLabel(composite_textField, "User Work Area ");	 //$NON-NLS-1$
-		userWorkAreaField = createTextField(composite_textField);
+		title = "diff"; //$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);
+		diffField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, diffField, title);
 		
-		createLabel(composite_textField, "RPM Log Name prefix ");	 //$NON-NLS-1$
-		rpmLogNameField = createTextField(composite_textField);
+		title = "tar"; //$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);
+		tarField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, tarField, title);
 		
-		createLabel(composite_textField, "File in Work Area to Store RPM Log to be Displayed ");	 //$NON-NLS-1$
-		displayedRpmLogNameField = createTextField(composite_textField);
+		title = "chmod";	//$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);
+		chmodField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, chmodField, title);
 		
-		createLabel(composite_textField, "Spec File Prefix ");	 //$NON-NLS-1$
-		specFilePrefixField = createTextField(composite_textField);
-		
-		createLabel(composite_textField, "Source RPM Info File Name ");	 //$NON-NLS-1$
-		srpmInfoFileNameField = createTextField(composite_textField);
-		
-		createLabel(composite_textField, "RPM Shell Script Name ");	 //$NON-NLS-1$
-		rpmShellScriptFileNameField = createTextField(composite_textField);
-		
-		createLabel(composite_textField, "RPM Resource File Name ");	 //$NON-NLS-1$
-		rpmResourceFileNameField = createTextField(composite_textField); 
-		
-		createLabel(composite_textField, "RPM Macros File ");	 //$NON-NLS-1$
-		rpmMacrosFileNameField = createTextField(composite_textField); */
-		
-		
-		//composite_tab << parent
-//		Composite composite_tab = createComposite(parent, 2);
-//		createLabel(composite_tab,"Miscellaneous"); //$NON-NLS-1$
-
-//		tabForward(composite_tab);
-
-	
-//		Composite composite_checkBox = createComposite(composite_tab, 1);
-	
-//		dateFormat = createCheckBox(composite_checkBox, "Use ISO Date? ");    //$NON-NLS-1$ 
+		title = "cp"; //$NON-NLS-1$
+		createLabel(shellPrefs, title + spacer);
+		cpField = createTextField(shellPrefs);
+		createBrowseButton(shellPrefs, cpField, title);
 
 		initializeValues();
 
@@ -306,4 +350,30 @@ public class RPMPluginPreferencesPage extends PreferencePage
    public void widgetSelected(SelectionEvent event) {
 	   //Do nothing on selection in this example;
    }
+   
+   private class BrowseSelectionListener implements SelectionListener {
+   		private Text text;
+   		private String title;
+   		private Shell parent;
+   		
+   		public BrowseSelectionListener(Shell disp, String title, Text text) {
+   			this.text = text;
+   			this.title = title;
+   			this.parent = disp;
+   		}
+   		
+   		public void widgetDefaultSelected(SelectionEvent event) {
+   			// no action
+   		}
+   	  
+   		public void widgetSelected(SelectionEvent event) {
+   			
+			FileDialog fd = new FileDialog(parent, SWT.OPEN | SWT.APPLICATION_MODAL);
+   			fd.setText(title); 
+   			fd.setFileName(text.getText());
+   			String result;
+   			if( (result = fd.open()) != null )
+   				text.setText(result);
+   		}
+   	}
  }

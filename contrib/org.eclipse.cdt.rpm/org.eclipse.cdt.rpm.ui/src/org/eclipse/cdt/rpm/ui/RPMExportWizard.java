@@ -30,16 +30,17 @@ public class RPMExportWizard extends Wizard implements IExportWizard {
 	// Create a local reference to RPMExportPage
 	RPMExportPage mainPage;
 	RPMExportPage_2 patchPage;
-
+	private IStructuredSelection selection;
 	/**
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 *
 	 * Basic constructor. Don't do much, just print out debug, and set progress
 	 * monitor status to true
 	 */
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
+	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		setNeedsProgressMonitor(true);
 		setWindowTitle(Messages.getString("RPMExportWizard.Export_an_SRPM")); //$NON-NLS-1$
+		selection = currentSelection;
 	}
 
 	// We have elected to do the Finish button clickin in the RPMExportPage. So override
@@ -64,7 +65,7 @@ public class RPMExportWizard extends Wizard implements IExportWizard {
 
 	// Add the RPMExportPage as the only page in this wizard.
 	public void addPages() {
-		mainPage = new RPMExportPage();
+		mainPage = new RPMExportPage(selection);
 		addPage(mainPage);
 		patchPage = new RPMExportPage_2();
 		addPage(patchPage);
