@@ -83,7 +83,8 @@ public class LinuxShellCmds {
 
 			/* Change the file attributes so it is exectable, there is no method that I can
 			   *  find in java that performs this function   */
-			String chmodcommand = "/bin/chmod 744 " + rpm_shell; //$NON-NLS-1$
+			String usr_chmod_cmd = RPMCorePlugin.getDefault().getPreferenceStore().getString("IRpmConstants.CHMOD_CMD"); //$NON_NLS-1$
+			String chmodcommand = usr_chmod_cmd + " 744 " + rpm_shell; //$NON-NLS-1$
 
 			try {
 				executeLinuxCommand(chmodcommand, 0);
@@ -112,61 +113,73 @@ public class LinuxShellCmds {
 	 */
 	/****************************************************************************/
 	public static void executeLinuxCommand(String linux_command, int status)
-		throws CoreException {
+			throws CoreException {
 		if (debug) {
 			System.out.println("--executeLinuxCommand: " + //$NON-NLS-1$
-				linux_command);
+					linux_command);
 		}
 
 		Runtime r = Runtime.getRuntime();
 		Process p = null;
+		int result;
 		String line = ""; //$NON-NLS-1$
+		String line2 = ""; //$NON-NLS-1$
+		// prepare buffers for process output and error streams
+		StringBuffer err = new StringBuffer();
+		StringBuffer out = new StringBuffer();
 
 		try {
 			p = r.exec(linux_command);
-		} catch (Exception e) {
-			String throw_message = Messages.getString(
-					"RPMCore.Error_executing__97") + linux_command; //$NON-NLS-1$
-			IStatus error = new Status(IStatus.ERROR, Error, 1, throw_message,
-					null);
-			throw new CoreException(error);
-		}
+			// create thread for reading inputStream (process' stdout)
+			StreamReaderThread outThread = new StreamReaderThread(p
+					.getInputStream(), out);
+			// create thread for reading errorStream (process' stderr)
+			StreamReaderThread errThread = new StreamReaderThread(p
+					.getErrorStream(), err);
+			// start both threads
+			outThread.start();
+			errThread.start();
 
-		// Wait for the completion of the Linux command and check the return status
-		try {
-			p.waitFor();
+			//wait for process to end
+			result = p.waitFor();
+			//finish reading whatever's left in the buffers
+			outThread.join();
+			errThread.join();
 
-			int completionStatus = p.exitValue();
-
-			if (completionStatus != status) {
-				String throw_message = Messages.getString(
-						"RPMCore.Error_waiting_for__99") + //$NON-NLS-1$
-					linux_command +
-					Messages.getString("RPMCore._to_complete._100"); //$NON-NLS-1$
-				IStatus error = new Status(IStatus.ERROR, Error, 1,
-						throw_message, null);
-				throw new CoreException(error);
+			if (result != 0) {
+				if (debug) {
+					System.out.println(Messages.getString("LinuxShellCmds.1") //$NON-NLS-1$
+							+ result);
+					System.out.println(Messages.getString("LinuxShellCmds.2") + out.toString()); //$NON-NLS-1$
+					System.out.println(Messages.getString("LinuxShellCmds.3") + err.toString()); //$NON-NLS-1$
+				}
+			} else {
+				if (debug) {
+					System.out.println(Messages.getString("LinuxShellCmds.4")); //$NON-NLS-1$
+					System.out.println(Messages.getString("LinuxShellCmds.5") + out.toString()); //$NON-NLS-1$
+					System.out.println(Messages.getString("LinuxShellCmds.6") + err.toString()); //$NON-NLS-1$
+				}
 			}
-
-			// Catch the exception if it was interrupted during execution
-		} catch (InterruptedException e) {
-			String throw_message = Messages.getString(
-					"RPMCore.Command__102") + linux_command + //$NON-NLS-1$
-				Messages.getString("RPMCore._was_interrupted._103"); //$NON-NLS-1$
+		} catch (Exception e) {
+			String throw_message = Messages
+					.getString("RPMCore.Error_executing__97") + linux_command + //$NON-NLS-1$
+					Messages.getString("LinuxShellCmds.7") + err.toString(); //$NON-NLS-1$
 			IStatus error = new Status(IStatus.ERROR, Error, 1, throw_message,
 					null);
 			throw new CoreException(error);
 		}
 	}
+	
 	/**
-	 * Method checkCompression.
-	 * This method takes a spec file path and parses it to see what compression
-	 * will be required to untar the source file.  We assume that the compression
-	 * will either be gzip or bzip2 since those are the only 2 currently used for
-	 * RPM's that we have run into.
-	 * @param path to the spec file to be searched
-	 * @return return the tar file suffix of either ".gz" or ".bz2" if successful, 
-	 *             return "" if not.
+	 * Method checkCompression. This method takes a spec file path and parses it
+	 * to see what compression will be required to untar the source file. We
+	 * assume that the compression will either be gzip or bzip2 since those are
+	 * the only 2 currently used for RPM's that we have run into.
+	 * 
+	 * @param path
+	 *            to the spec file to be searched
+	 * @return return the tar file suffix of either ".gz" or ".bz2" if
+	 *         successful, return "" if not.
 	 */
 	public static String checkCompression(String path_to_specfile) throws CoreException {
 		if (debug) {
@@ -273,7 +286,8 @@ public class LinuxShellCmds {
 				throw new CoreException(error);  
 			}
 		}
-		String cp_cmd = "(cd " + from_path + line_sep + "/bin/cp -rp . " + to_path; //$NON-NLS-1$ //$NON-NLS-2$
+		String usr_cp_cmd = RPMCorePlugin.getDefault().getPreferenceStore().getString("IRpmConstants.CP_CMD"); //$NON_NLS-1$
+		String cp_cmd = "(cd " + from_path + line_sep + usr_cp_cmd + " -rp . " + to_path; //$NON-NLS-1$ //$NON-NLS-2$
 				try {
 					createLinuxShellScript(cp_cmd, rpmbuild_logname, rpm_shell);
 					executeLinuxCommand(rpm_shell,0);
@@ -285,7 +299,7 @@ public class LinuxShellCmds {
 				}
 	}
 	
-	/**
+		/**
 		 * Method getInfo.
 		 * This method takes a Linux/shell command, executes it and passes the output line back
 		 * as the information string.
@@ -300,32 +314,62 @@ public class LinuxShellCmds {
 
 			Runtime r = Runtime.getRuntime();
 			Process p = null;
+			int result;
 			String line = ""; //$NON-NLS-1$
+			String line2 = ""; //$NON-NLS-1$
+			int line_ctr = 0;
+			// prepare buffers for process output and error streams
+			StringBuffer err=new StringBuffer();
+			StringBuffer out=new StringBuffer();    
 
 			try {
 				p = r.exec(sh_command);
+				//create thread for reading inputStream (process' stdout)
+			    StreamReaderThread outThread=new StreamReaderThread(p.getInputStream(),out);
+			    //create thread for reading errorStream (process' stderr)
+			    StreamReaderThread errThread=new StreamReaderThread(p.getErrorStream(),err);
+			    //start both threads
+			    outThread.start();
+			    errThread.start();
 
 				// Set up and capture the stdout messages from the Linux/shell command
-				BufferedReader is = new BufferedReader(new InputStreamReader(
-							p.getInputStream()));
-				line = is.readLine();
-				p.waitFor();
+				
+			    //wait for process to end
+			    result=p.waitFor();
+			    //finish reading whatever's left in the buffers
+			    outThread.join();
+			    errThread.join();
 
-				if (debug) {
-					System.out.println(sh_command + " =  " + line); //$NON-NLS-1$
-				}
-			} catch (Exception e) {
-				System.out.println(Messages.getString(
-						"RPMCore.Error_during__191") + sh_command + //$NON-NLS-1$
-					Messages.getString("RPMCore._execution..error____192") + //$NON-NLS-1$
-					e.getMessage());
+			    if (result!=0) 
+			        {
+			    	if (debug) 
+			    		{
+			    		System.out.println(Messages.getString("LinuxShellCmds.9")+result); //$NON-NLS-1$
+			    		System.out.println(Messages.getString("LinuxShellCmds.10")+out.toString()); //$NON-NLS-1$
+			    		System.out.println(Messages.getString("LinuxShellCmds.11")+err.toString()); //$NON-NLS-1$
+			    		}
+			    	return err.toString();
+			        }
+			    else
+			        {
+			    	if (debug)
+			    		{
+			    		System.out.println(Messages.getString("LinuxShellCmds.12")); //$NON-NLS-1$
+			    		System.out.println(Messages.getString("LinuxShellCmds.13")+out.toString()); //$NON-NLS-1$
+			    		System.out.println(Messages.getString("LinuxShellCmds.14")+err.toString()); //$NON-NLS-1$
+			    		}
+			        return out.toString();
+			        }
+			    }
+			catch (Exception e)
+			    {
+			    System.out.println(Messages.getString("LinuxShellCmds.15")); //$NON-NLS-1$
+			    e.printStackTrace();
+			    }
 
-				return ""; //$NON-NLS-1$
-			}
-
-			return line;
+			return line2;
 		}
-	
+		
 	/**
 	 * Method checkForConfigure checks a project for the presence of a 
 	 * "configure" script that creates various parts of a project including

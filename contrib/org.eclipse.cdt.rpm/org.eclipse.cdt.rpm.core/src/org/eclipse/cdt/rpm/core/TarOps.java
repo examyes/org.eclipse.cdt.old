@@ -23,6 +23,7 @@ public class TarOps {
 	 private static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
 	 private static final String line_sep = System.getProperty("line.separator"); //$NON-NLS-1$
 	 
+	 private String usr_tar_cmd = RPMCorePlugin.getDefault().getPreferenceStore().getString("IRpmConstants.TAR_CMD"); //$NON_NLS-1$
 	 private String rpmdirs_path;
 	 private String proj_path;
 	 
@@ -69,7 +70,7 @@ public class TarOps {
 			String tar_path = tarball_path.substring(0,j);
 			// now get the name of the tarball
 			String tarball_name = tarball_path.substring(j+1);
-			String tar_cmd = "cd " + tar_path + line_sep + "/bin/tar x" + //$NON-NLS-1$ //$NON-NLS-2$
+			String tar_cmd = "cd " + tar_path + line_sep + usr_tar_cmd + " x" + //$NON-NLS-1$ //$NON-NLS-2$
 						tarball_type + "f " + tarball_name; //$NON-NLS-1$
 
 			try {
@@ -154,7 +155,7 @@ loop:
 		}
 
 		// Set up to untar the source tarball
-		String tar_cmd = "cd " + source_dir + line_sep + "/bin/tar -x" + tar_cmd_opt + //$NON-NLS-1$ //$NON-NLS-2$
+		String tar_cmd = "cd " + source_dir + line_sep + usr_tar_cmd + " -x" + tar_cmd_opt + //$NON-NLS-1$ //$NON-NLS-2$
 			"f " + tarball_name; //$NON-NLS-1$
 
 		try {
@@ -183,7 +184,7 @@ loop:
 							throw_message, null);
 					throw new CoreException(error);
 				} else {
-					tar_cmd = "/bin/tar -C " + source_dir + " -c" + //$NON-NLS-1$ //$NON-NLS-2$
+					tar_cmd = usr_tar_cmd + " -C " + source_dir + " -c" + //$NON-NLS-1$ //$NON-NLS-2$
 						tar_cmd_opt + "f " + source_dir + rpm_name + "-" + //$NON-NLS-1$ //$NON-NLS-2$
 						rpm_version + tar_extension + " ." + file_sep + rpm_name + //$NON-NLS-1$
 						"-" + rpm_version; //$NON-NLS-1$
@@ -270,7 +271,7 @@ loop:
 			tar_compression = "z"; //$NON-NLS-1$
 		}
 
-		String tar_cmd = "/bin/tar -C " + rpmdirs_path + file_sep + "BUILD" + " -c" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String tar_cmd = usr_tar_cmd + " -C " + rpmdirs_path + file_sep + "BUILD" + " -c" + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			tar_compression + "f " + rpmdirs_path + file_sep + "SOURCES" + file_sep + rpm_new_name + //$NON-NLS-1$ //$NON-NLS-2$
 			".tar" + tar_suffix + " ." + file_sep + rpm_new_name; //$NON-NLS-1$ //$NON-NLS-2$
 

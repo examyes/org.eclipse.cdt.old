@@ -34,7 +34,7 @@ public class RPMCorePlugin extends AbstractUIPlugin {
 		//super();
 		plugin = this;
 		try {
-			resourceBundle= ResourceBundle.getBundle("com.redhat.eclipse.rpm.RPMPluginResources"); //$NON-NLS-1$
+			resourceBundle= ResourceBundle.getBundle("org.eclipse.cdt.rpm.core.RPMPluginResources"); //$NON-NLS-1$
 		} catch (MissingResourceException x) {
 			resourceBundle = null;
 		}
@@ -100,6 +100,14 @@ public class RPMCorePlugin extends AbstractUIPlugin {
 		  store.setDefault("IRpmConstants.RPM_MACROS_FILE",".rpm_macros");
 		  store.setDefault("IRpmConstants.AUTHOR_NAME",user_name); //$NON-NLS-1$ //$NON-NLS-2$
 		  store.setDefault("IRpmConstants.AUTHOR_EMAIL",user_name +"@" + getHostName()); //$NON-NLS-1$ //$NON-NLS-2$
+	
+		  store.setDefault("IRpmConstants.MAKE_CMD", "/usr/bin/make"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault("IRpmConstants.RPM_CMD", "/bin/rpm"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault("IRpmConstants.RPMBUILD_CMD", "/usr/bin/rpmbuild"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault("IRpmConstants.CHMOD_CMD", "/bin/chmod"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault("IRpmConstants.CP_CMD", "/bin/cp"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault("IRpmConstants.DIFF_CMD", "/usr/bin/diff"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault("IRpmConstants.TAR_CMD", "/bin/tar"); //$NON-NLS-1$ //$NON-NLS-2$
 		 }
 	/** 
 	* Method getHostName gets the name of the host to use as part of the
@@ -115,18 +123,18 @@ public class RPMCorePlugin extends AbstractUIPlugin {
 			 return "";
 		 }
 		 // Trim off superflous stuff from the hostname
-		 int firstdot = hostname.indexOf(".");
-		 int lastdot = hostname.lastIndexOf(".");
+		 int firstdot = hostname.indexOf("."); //$NON-NLS-1$
+		 int lastdot = hostname.lastIndexOf("."); //$NON-NLS-1$
 		 // If the two are equal, no need to trim name
 		 if (firstdot == lastdot) {
 		   return hostname;
 		 }
-		 String hosttemp = "";
+		 String hosttemp = ""; //$NON-NLS-1$
 		 String hosttemp2 = hostname;
 		 while (firstdot != lastdot) {
 		   hosttemp = hosttemp2.substring(lastdot) + hosttemp;
 		   hosttemp2 = hostname.substring(0,lastdot);
-		   lastdot = hosttemp2.lastIndexOf(".");
+		   lastdot = hosttemp2.lastIndexOf("."); //$NON-NLS-1$
 		 }
 		 return hosttemp.substring(1);
 	}

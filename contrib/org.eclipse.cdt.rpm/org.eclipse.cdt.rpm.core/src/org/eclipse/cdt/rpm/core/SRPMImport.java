@@ -235,7 +235,7 @@ public class SRPMImport extends RPMCore {
 			 */
 			String build_opt = "-bp"; //$NON-NLS-1$
 
-			String rpmbuild_cmd = "/usr/bin/rpmbuild " + build_opt + //$NON-NLS-1$
+			String rpmbuild_cmd = usr_rpmbuild_cmd + " " + build_opt + //$NON-NLS-1$
 				" -v --rcfile " + rpmrc + " --nodeps" + " " + specdir + s[0]; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 			try {

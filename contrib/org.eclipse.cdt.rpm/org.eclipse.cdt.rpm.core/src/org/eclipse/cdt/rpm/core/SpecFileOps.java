@@ -27,6 +27,9 @@ public class SpecFileOps {
 	private static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
 	private static final String line_sep = System.getProperty("line.separator"); //$NON-NLS-1$
 	private static final String Error = Messages.getString("RPMCore.Error_1"); //$NON-NLS-1$
+	
+	private String usr_make_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.MAKE_CMD"); //$NON_NLS-1$
 	private static int[] line_ptr = { 0, 0, 0, 0 };
 	private int pat_ctr = 1;
 	private String prev_ver_no = ""; //$NON-NLS-1$
@@ -526,9 +529,9 @@ public class SpecFileOps {
 				String user_name = System.getProperty("user.name"); //$NON-NLS-1$
 				String user_wksp = wksp_path + file_sep + user_name; 
 				ArrayList file_list = new ArrayList();
-				String mkdir_cmds = "/usr/bin/make install"; //$NON-NLS-1$
+				String mkdir_cmds = "make install" + line_sep; //$NON-NLS-1$
 
-				String make_cmd = "(cd " + tar_path + line_sep + "/usr/bin/make" + line_sep; //$NON-NLS-1$ //$NON-NLS-2$
+				String make_cmd = "(cd " + tar_path + line_sep + usr_make_cmd + line_sep; //$NON-NLS-1$
 				
 				// Build the project to generate the binaries
 				try {

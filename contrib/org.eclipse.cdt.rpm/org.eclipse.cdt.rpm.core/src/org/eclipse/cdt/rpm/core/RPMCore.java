@@ -41,7 +41,19 @@ public class RPMCore  {
 		.getString("IRpmConstants.RPM_SHELL_SCRIPT"); //$NON_NLS-1$
 	protected String rpmbuild_logname = RPMCorePlugin.getDefault().getPreferenceStore()
 		.getString("IRpmConstants.RPM_LOG_NAME"); //$NON_NLS-1$
-
+	protected String usr_make_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.MAKE_CMD"); //$NON_NLS-1$
+	protected String usr_rpm_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.RPM_CMD"); //$NON_NLS-1$
+	protected String usr_rpmbuild_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.RPMBUILD_CMD"); //$NON_NLS-1$
+	protected String usr_cp_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.CP_CMD"); //$NON_NLS-1$
+	protected String usr_chmod_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.CHMOD_CMD"); //$NON_NLS-1$
+	protected String usr_diff_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
+		.getString("IRpmConstants.DIFF_CMD"); //$NON_NLS-1$
+	
 	protected String proj_path;
 	protected String path_to_rpm;
 	protected String rpmdirs_path;
@@ -519,12 +531,12 @@ public class RPMCore  {
 					// path_to_rpm = path;
 					// Now get the version/release number from the RPM
 					rpm_version = LinuxShellCmds.getInfo(
-							"/bin/rpm --qf %{VERSION} -qp " + //$NON-NLS-1$
+							usr_rpm_cmd + " --qf %{VERSION} -qp " + //$NON-NLS-1$
 							path_to_rpm);
 					rpm_release = LinuxShellCmds.getInfo(
-							"/bin/rpm --qf %{RELEASE} -qp " + //$NON-NLS-1$
+							usr_rpm_cmd + " --qf %{RELEASE} -qp " + //$NON-NLS-1$
 							path_to_rpm);
-					rpm_name = LinuxShellCmds.getInfo("/bin/rpm --qf %{NAME} -qp " + //$NON-NLS-1$
+					rpm_name = LinuxShellCmds.getInfo(usr_rpm_cmd + " --qf %{NAME} -qp " + //$NON-NLS-1$
 							path_to_rpm); 
 					srpm_info.add(1, rpm_version);
 					srpm_info.add(2, rpm_release);
@@ -951,13 +963,13 @@ outer:
 		// all three, with maintainer clean being the best
 		if (f.exists()) {
 			if (checkMakefileForString(mc_path, "maintainer-clean:")) { //$NON-NLS-1$
-				make_cmd = line_sep + "/usr/bin/make maintainer-clean"; //$NON-NLS-1$
+				make_cmd = line_sep + usr_make_cmd + " maintainer-clean"; //$NON-NLS-1$
 			} else if (checkMakefileForString(mc_path, "realclean:")) { //$NON-NLS-1$
-				make_cmd = line_sep + "/usr/bin/make realclean"; //$NON-NLS-1$
+				make_cmd = line_sep + usr_make_cmd + " realclean"; //$NON-NLS-1$
 			} else if (checkMakefileForString(mc_path, "distclean:")) { //$NON-NLS-1$
-				make_cmd = line_sep + "/usr/bin/make distclean"; //$NON-NLS-1$
+				make_cmd = line_sep + usr_make_cmd + " distclean"; //$NON-NLS-1$
 			} else {
-				make_cmd = line_sep + "/usr/bin/make clean"; //$NON-NLS-1$
+				make_cmd = line_sep + usr_make_cmd + " clean"; //$NON-NLS-1$
 			}
 
 			String mc_cmd = "( cd " + mc_path + make_cmd; //$NON-NLS-1$
@@ -1132,7 +1144,7 @@ outer:
 			}
 
 			// Set the permissions of the work area so only the owner can access for 
-			String chmodcommand = "/bin/chmod -R 744 " + rpmdirs_path + file_sep; //$NON-NLS-1$ //$NON-NLS-2$
+			String chmodcommand = usr_chmod_cmd + " -R 744 " + rpmdirs_path + file_sep; //$NON-NLS-1$
 
 			try {
 				LinuxShellCmds.executeLinuxCommand(chmodcommand, 0);
@@ -1388,8 +1400,8 @@ outer:
 		 */
 		String build_opt = "-bp"; //$NON-NLS-1$
 
-		String rpmbuild_cmd = "/usr/bin/rpmbuild " + build_opt + //$NON-NLS-1$
-			" -v --rcfile " + rpmrc + " --nodeps" + " " + specdir + s[0]; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String rpmbuild_cmd = usr_rpmbuild_cmd + " " + build_opt + //$NON-NLS-1$
+			" -v --rcfile " + rpmrc + " --nodeps " + specdir + s[0]; //$NON-NLS-1$ //$NON-NLS-2$
 
 		try {
 			LinuxShellCmds.createLinuxShellScript(rpmbuild_cmd, rpmbuild_logname, rpm_shell);
@@ -1409,12 +1421,12 @@ outer:
 		orig_srpm_path = build_dir + file_sep + build_dir_list[0];
 		copied_proj_path = orig_srpm_path + ".new"; //$NON-NLS-1$
 
-		String chmod_command = "/bin/chmod -R u+rw " + orig_srpm_path + file_sep; //$NON-NLS-1$ //$NON-NLS-2$
-		String cp_cmd1 = "(cd " + orig_srpm_path + line_sep + "/bin/cp -rp . " + //$NON-NLS-1$ //$NON-NLS-2$
+		String chmod_command = usr_chmod_cmd + " -R u+rw " + orig_srpm_path + file_sep; //$NON-NLS-1$
+		String cp_cmd1 = "(cd " + orig_srpm_path + line_sep + usr_cp_cmd + " -rp . " + //$NON-NLS-1$ //$NON-NLS-2$
 			copied_proj_path;
-		String cp_cmd2 = "(cd " + proj_path + line_sep + "/bin/cp -rp . " + //$NON-NLS-1$ //$NON-NLS-2$
+		String cp_cmd2 = "(cd " + proj_path + line_sep + usr_cp_cmd + " -rp . " + //$NON-NLS-1$ //$NON-NLS-2$
 			copied_proj_path;
-		String make_cmd = "(cd " + orig_srpm_path + line_sep + "/usr/bin/make "; //$NON-NLS-1$ //$NON-NLS-2$
+		String make_cmd = "(cd " + orig_srpm_path + line_sep + usr_make_cmd + " "; //$NON-NLS-1$ //$NON-NLS-2$
 			// Make a copy of the tree under BUILD for patch creation
 		try {
 			orig_proj_path = orig_srpm_path;
@@ -1454,7 +1466,7 @@ outer:
 			System.out.println("executeRpmBuild -- type = " + rpm_opt); //$NON-NLS-1$
 		}
 
-		String rpmbuild_cmd = "/usr/bin/rpmbuild " + rpm_opt + //$NON-NLS-1$
+		String rpmbuild_cmd = usr_rpmbuild_cmd + " " + rpm_opt + //$NON-NLS-1$
 			" -v --nodeps --rcfile " + rpmrc + " " + rpm_spec; //$NON-NLS-1$ //$NON-NLS-2$
 
 		try {
@@ -1639,7 +1651,7 @@ outer:
 			System.out.println("installRPMsource"); //$NON-NLS-1$
 		}
 
-		String rpm_cmd = "/bin/rpm -i -v --rcfile " + rpmrc + " " + //$NON-NLS-1$ //$NON-NLS-2$
+		String rpm_cmd = usr_rpm_cmd + " -i -v --rcfile " + rpmrc + " " + //$NON-NLS-1$ //$NON-NLS-2$
 			path;
 
 		try {
@@ -1684,7 +1696,7 @@ outer:
 		* The source has already been copied from the Eclipse project and has a
 		* ".new" appended to the end.
 		*/
-		String chmodcommand = "/bin/chmod -R u+r " + rpmdirs_path +  //$NON-NLS-1$
+		String chmodcommand = usr_chmod_cmd + " -R u+r " + rpmdirs_path +  //$NON-NLS-1$
 				file_sep + "BUILD" + file_sep; //$NON-NLS-1$
 
 		try {
@@ -1717,7 +1729,7 @@ outer:
 		 * when we run the "diff" command on the previous and the to-be-exported source
 		 * RPM only the differences that were edited by the developer are picked up.
 		 */
-		 String make_cmd = "(cd " + copied_proj_path + line_sep + "/usr/bin/make "; //$NON-NLS-1$ //$NON-NLS-2$
+		 String make_cmd = "(cd " + copied_proj_path + line_sep + usr_make_cmd + " "; //$NON-NLS-1$ //$NON-NLS-2$
 		try {
 			// need to make sure that "make" has been run on the Eclipse project at least
 			// once before doing the "diff" command so we "compare apples to apples"
@@ -1745,7 +1757,7 @@ outer:
 		 * which directory comes second in the command.  We want the original to come first
 		 * and we have appended a ".new" to the Eclipse project that was copied over.
 		 */
-		String diff_cmd = "(cd " + rpmdirs_path + file_sep + "BUILD" + line_sep + "diff -uNr " + //$NON-NLS-1$ //$NON-NLS-2$
+		String diff_cmd = "(cd " + rpmdirs_path + file_sep + "BUILD" + line_sep + usr_diff_cmd +" -uNr " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"--ignore-matching-lines=POT-Creation-Date --exclude=autom4te.cache " + //$NON-NLS-1$ 
 			// skip the fields that are dynamically filled in or created by autoconf
 			diff_old_dir + " " + diff_new_dir + " > " + rpmdirs_path + //$NON-NLS-1$ //$NON-NLS-2$
