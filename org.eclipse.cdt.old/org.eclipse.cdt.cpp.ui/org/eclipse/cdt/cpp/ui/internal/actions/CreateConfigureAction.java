@@ -118,7 +118,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				if(enableCreateUpdate)
 				{
 					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
-					message = new String("\nCreating project configuration script"+str1);
+					message = new String("\nRegenerating project configuration script. Configure is not up to date "+str1);
 					box = new CustomMessageDialog(
 								shell,
 								title,
