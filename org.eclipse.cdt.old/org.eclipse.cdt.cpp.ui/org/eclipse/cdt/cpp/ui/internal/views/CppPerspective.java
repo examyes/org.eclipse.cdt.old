@@ -31,7 +31,7 @@ public class CppPerspective implements IPerspectiveFactory
     					  "bottomLeft");
     topLeft.addView(IPageLayout.ID_RES_NAV);
     topLeft.addView("com.ibm.cpp.ui.internal.views.RemoteProjectViewPart");
-
+    topLeft.addView("com.ibm.cpp.ui.internal.views.CppProjectsViewPart");
 
     IFolderLayout topLeftRight = factory.createFolder("topLeftRight", IPageLayout.RIGHT, (float)0.45,
 						      "topLeft");

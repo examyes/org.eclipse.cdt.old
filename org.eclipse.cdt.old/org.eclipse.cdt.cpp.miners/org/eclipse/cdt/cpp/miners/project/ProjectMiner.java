@@ -33,12 +33,22 @@ public class ProjectMiner extends Miner
   createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.warning")));
   createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.informational")));
 
-  DataElement fsObjectD     = findDescriptor(getLocalizedString("project.FileSystemObjects"));
-  DataElement workspaceD    = createObjectDescriptor(schemaRoot, getLocalizedString("project.Workspace"));
-  DataElement projectD      = createObjectDescriptor(schemaRoot, getLocalizedString("project.Project"));
-  DataElement projectFileD  = createObjectDescriptor(schemaRoot, getLocalizedString("project.ProjectFile"));
-  DataElement projectsD     = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
+  DataElement fsObjectD      = findDescriptor(getLocalizedString("project.FileSystemObjects"));
+  DataElement workspaceD     = createObjectDescriptor(schemaRoot, getLocalizedString("project.Workspace"));
+  DataElement projectD       = createObjectDescriptor(schemaRoot, getLocalizedString("project.Project"));
+  DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
+  DataElement remoteProjectD = createObjectDescriptor(schemaRoot, "Remote Project");
+  DataElement closedRemoteProjectD = createObjectDescriptor(schemaRoot, "Closed Remote Project");
+  DataElement projectFileD   = createObjectDescriptor(schemaRoot, getLocalizedString("project.ProjectFile"));
+  DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
 
+ 
+  createCommandDescriptor(projectD, "Close Project", "C_CLOSE");
+  createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
+  createCommandDescriptor(closedProject, "Open Project", "C_OPEN");
+  //eateCommandDescriptor(closedRemoteProjectD, "Open Remote Project", "C_OPEN_REMOTE");
+  
+  
   createAbstractRelationship(fsObjectD, projectD);
   createAbstractRelationship(fsObjectD, workspaceD);
   createReference(projectsD,  projectD); 
@@ -53,40 +63,89 @@ public class ProjectMiner extends Miner
   String          name = getCommandName(theCommand);
   DataElement   status = getCommandStatus(theCommand);
   DataElement  subject = getCommandArgument(theCommand, 0);
- 
-  if (!subject.getType().equals(getLocalizedString("project.Project")))
-   if (!subject.getType().equals(getLocalizedString("project.Workspace")))
-    return status;
+  String          type = subject.getType();
+  
+  if (!type.equals(getLocalizedString("project.Workspace")))
+   if (type.indexOf("Project") < 0)
+    if (!type.equals("directory"))
+     return status;
   
   if (name.equals("C_OPEN"))
-   handleOpenProject(subject, getCommandArgument(theCommand, 1), status);
+   handleOpenProject(subject, status);
   else if (name.equals("C_CLOSE"))
    handleCloseProject(subject, status);
   else if (name.equals("C_REFRESH"))
    handleRefreshProject(subject, status);
+  else if (name.equals("C_CREATE_REMOTE"))
+   handleCreateRemote(subject, status);
+  else if (name.equals("C_OPEN_REMOTE"))
+   handleOpenRemote(subject, status);
   else 
    return status;
   
   status.setAttribute(DE.A_NAME, "done");
   return status;
  }
-    
-    
- private void handleOpenProject(DataElement project, DataElement hmm, DataElement status)
+ 
+ 
+ private DataElement findProject(String name)
  {
-     project.setParent(_workspace);
-     _workspace.addNestedData(project, true);
-     
-     project.expandChildren();
-     DataElement refreshD = _dataStore.localDescriptorQuery(project.getDescriptor(), "C_REFRESH");
-     _dataStore.command(refreshD, project);_dataStore.refresh(project);
-     _dataStore.refresh(_workspace); 
+  return _dataStore.find(_workspace, DE.A_NAME, name, 1);
+ }
+
+ 
+ private void handleOpenRemote(DataElement project, DataElement status)
+ {
+  DataElement theProject = findProject(project.getName());
+  if (theProject != null)
+  {
+   _dataStore.deleteObject(_workspace, theProject);
+   _dataStore.refresh(_workspace);
+  }
+  
+  createReference(_workspace, project);
+  _dataStore.refresh(_workspace);
+  
+ }
+ 
+ private void handleCreateRemote(DataElement project, DataElement status)
+ {
+  if (findProject(project.getName())!=null)
+   return;
+  _workspace.addNestedData(project,true);
+  project.setParent(_workspace);
+  _dataStore.refresh(project);
+  _dataStore.refresh(_workspace);
+ }
+ 
+
+ private void handleOpenProject(DataElement project, DataElement status)
+ {
+  if (project.getType().equals("Closed Project"))
+  {
+   project.setAttribute(DE.A_TYPE, "Project");
+   project.setDescriptor(null);
+  }
+  
+  else
+  {
+   project.setParent(_workspace);
+   _workspace.addNestedData(project, true);
+  }
+  
+   project.expandChildren();
+   DataElement refreshD = _dataStore.localDescriptorQuery(project.getDescriptor(), "C_REFRESH");
+   _dataStore.command(refreshD, project);_dataStore.refresh(project);
+   _dataStore.refresh(_workspace); 
  }
     
  private void handleCloseProject(DataElement project, DataElement status)
  {
   DataElement workspace = project.getParent();
-  workspace.removeNestedData(project);
+  _dataStore.deleteObjects(project);
+  project.setAttribute(DE.A_TYPE, "Closed Project");
+  project.setDescriptor(null);
+  _dataStore.refresh(project);
   _dataStore.refresh(workspace);
  }
 

@@ -68,11 +68,10 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
     public boolean performFinish()
     {
-	_plugin = CppPlugin.getDefault();
+      _plugin = CppPlugin.getDefault();
+      _mainPage.finish();
 
-	_mainPage.finish();
 	IProject project = getProject();
-	
 	if (project != null)
 	    {
 		// add C++ project indicator
@@ -84,7 +83,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		    }
 		catch (CoreException ce)
 		    {
-			System.out.println("CppNewProjectResourceWizard setPersistenProperty C++ Project CoreException: " +ce);
+			System.out.println("CppNewProjectResourceWizard setPersistentProperty C++ Project CoreException: " +ce);
 		    }
 		
 		// add parse paths
@@ -101,9 +100,11 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
 		ArrayList variables = _fProjectInfoWizardPage._workbookPageEnvironment.getVariables();
 		_plugin.writeProperty(project, "Environment", variables);
-		
+		ModelInterface api = ModelInterface.getInstance();
 		if (project instanceof Repository)
 		    {
+                     api.openProject(project);
+
 			QualifiedName mountFile = new QualifiedName("Mount Point", newPath.toString());
 			try
 			    {
@@ -136,7 +137,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			    }
 
 			// tell parser miner to open the project
-			ModelInterface api = ModelInterface.getInstance();
+			
 			api.openProject(project);	       
 		    }
 		

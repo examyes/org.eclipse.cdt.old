@@ -13,73 +13,69 @@ public class EnvironmentMiner extends Miner
 {
  private DataElement _system;
  
- public EnvironmentMiner () 
-    { 
-	super(); 
-    };
-
+ public EnvironmentMiner () {super();};
 
  public void finish() { super.finish(); }
  public void updateMinerInfo() {}
-
  public void load() 
  {
+  System.out.println("Loading Environment Miner");
   _system = _dataStore.createObject(_minerData, "Environment Variable", "System Environment");
   getSystemEnvironment();
  }
  
  public void extendSchema(DataElement schemaRoot) 
-    { 
-	DataElement containerObjectD = _dataStore.findDescriptor(DE.T_ABSTRACT_OBJECT_DESCRIPTOR, getLocalizedString("model.Container_Object"));
-	
-	DataElement envVar = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Environment Variable");
-	_dataStore.createReference(containerObjectD, envVar, "abstracts", "abstracted by");
-
-
-  _dataStore.createReference(envVar, envVar, "contents");
-  DataElement parentD    = _dataStore.createObject(schemaRoot, DE.T_RELATION_DESCRIPTOR, "Parent Environment");
-  _dataStore.createReference(envVar, parentD);
-  _dataStore.createReference(envVar, parentD);
+ { 
+  DataElement envVar = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Environment Variable");
+  _dataStore.createReference(envVar, _dataStore.createObject(schemaRoot, DE.T_RELATION_DESCRIPTOR, "Parent Environment"));
+  DataElement containerObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object", 1);
+  _dataStore.createReference(containerObjectD, envVar, "abstracts", "abstracted by");
   
-  DataElement projectD        = _dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
-  createCommandDescriptor(projectD, "Set Environment Variables", "C_SET_ENVIRONMENT_VARIABLES");
+  createCommandDescriptor(containerObjectD, "C_SET_ENVIRONMENT_VARIABLES", "C_SET_ENVIRONMENT_VARIABLES");
  }
  
  public DataElement handleCommand (DataElement theElement)
  {
-  String name         = getCommandName(theElement);
-  DataElement status  = getCommandStatus(theElement);
+  String         name = getCommandName(theElement);
+  DataElement  status = getCommandStatus(theElement);
   DataElement subject = getCommandArgument(theElement, 0);
-   
+  DataElement     env = getCommandArgument(theElement, 1);
+  
+  System.out.println("Handle Command " + theElement);
+  System.out.println("subject " + subject);
+  System.out.println("environment " + env);
   if (name.equals("C_SET_ENVIRONMENT_VARIABLES"))
-   handleSetEnvironment(subject, getCommandArgument(theElement, 1));
+   handleSetEnvironment(subject, env);
 
   status.setAttribute(DE.A_NAME, "done");
   return status;
  }
 
- public void handleSetEnvironment(DataElement preferenceRoot, DataElement environment)
+ public void handleSetEnvironment(DataElement theElement, DataElement environment)
  {
-  DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getName(), 1);
+  System.out.println("theElement = " + theElement);
+  System.out.println("env = " + environment);
+  
+  //First check to see if we already have an Environment for theElement..and get rid of it if we do.
+  DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getId(), 1);
   if (envRoot != null)
   {
    _dataStore.deleteObject(_minerData, envRoot);
    _dataStore.refresh(_minerData);
+   ArrayList theReferences = theElement.getAssociated("Environment");
+   if (theReferences.size() > 0)
+   {
+    _dataStore.deleteObject(theElement, (DataElement)theReferences.get(0));
+    _dataStore.refresh(theElement);
+   }
+   
   }
-  envRoot = _dataStore.find(preferenceRoot, DE.A_NAME, environment.getName(), 1);
-  if (envRoot != null)
-  {
-   _dataStore.deleteObject(preferenceRoot, envRoot);
-   _dataStore.refresh(preferenceRoot);
-  }   
- 
   _minerData.addNestedData(environment, false);
   environment.setParent(_minerData);
   _dataStore.refresh(environment);
   _dataStore.refresh(_minerData);
-  if (_dataStore.find(preferenceRoot, DE.A_NAME, environment.getName(), 1) == null)
-   _dataStore.createReference(preferenceRoot, environment);
-  _dataStore.refresh(preferenceRoot);
+  _dataStore.createReference(theElement, environment);
+  _dataStore.refresh(theElement);
  }
     
  //This sucks, but the best way to get the current list of environment variables is to run the "env" (or "set" on
@@ -103,6 +99,8 @@ public class EnvironmentMiner extends Miner
    {
     _dataStore.createObject(_system, "Environment Variable", curLine, curLine);
    }
+   _dataStore.refresh(_system);
+   
   }
   catch (IOException e) 
   {

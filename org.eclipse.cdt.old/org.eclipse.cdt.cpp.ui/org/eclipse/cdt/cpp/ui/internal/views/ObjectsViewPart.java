@@ -179,9 +179,13 @@ public class ObjectsViewPart extends GenericViewPart
 			 {
                           DataElement theObject = (DataElement)object;
 			  DataElement theParent = theObject;
-			  while ((theParent != null) && (!theParent.getType().equals("Project")) && (!theParent.getType().equals("data")))
+			  while ((theParent != null) 
+                            && (!theParent.getType().equals("Project")) 
+                            && (!theParent.getType().equals("directory"))  
+                            && (!theParent.getType().equals("Remote Project"))
+                            && (!theParent.getType().equals("data")))
                            theParent = theParent.getParent();
-			  if (theParent.getType().equals("Project"))
+			  if ( (theParent != null) && (!theParent.getType().equals("data")))
                           {
                            initDataElementInput(theParent);
 			   dataElement = true;
@@ -291,10 +295,11 @@ public class ObjectsViewPart extends GenericViewPart
         CustomAction newAction = null; 
         try
 	    {         
-		Object[] args = {object, name, descriptor, object.getDataStore()};
-		Class actionClass = Class.forName(source);
+	        Object[] args = {object, name, descriptor, object.getDataStore()};
+	
+         	Class actionClass = Class.forName(source);
 		Constructor constructor = actionClass.getConstructors()[0];
-		newAction = (CustomAction)constructor.newInstance(args);
+                newAction = (CustomAction)constructor.newInstance(args);
 	    }
         catch (ClassNotFoundException e)
 	    {

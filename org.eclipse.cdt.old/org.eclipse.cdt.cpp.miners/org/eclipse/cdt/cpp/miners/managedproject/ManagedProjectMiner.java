@@ -79,10 +79,8 @@ public class ManagedProjectMiner extends Miner
 	}
 	private DataElement parseAmFile(DataElement theUnmanagedProject)
 	{
-		AmParser theParser = AmParser.getInstance();
-		if (theParser.setUnmanagedProject(theUnmanagedProject) == null)
-		 return null;
-		DataElement theManagedProject = theParser.parse(theUnmanagedProject, theUnmanagedProject.getSource());
+		AmParser theParser = new AmParser(theUnmanagedProject);
+		DataElement theManagedProject = theParser.parse();
 		_dataStore.refresh(theManagedProject);
 		_dataStore.refresh(theManagedProject.getParent());
 		return theManagedProject;

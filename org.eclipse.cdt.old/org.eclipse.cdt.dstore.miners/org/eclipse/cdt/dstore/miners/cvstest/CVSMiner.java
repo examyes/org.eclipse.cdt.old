@@ -8,32 +8,40 @@ import java.io.*;
 
 
 public class CVSMiner extends Miner
-{    
-    public void load()
-    {
-    }
+{   
+ private DataElement commandD;
+ 
+ public void load()
+ {
+ }
     
-   public void extendSchema(DataElement schemaRoot)
-    {
-	DataElement fsD         = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-	DataElement dirD         = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
-	DataElement fileD        = _dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
+ public void extendSchema(DataElement schemaRoot)
+ {
+  DataElement fsD         = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+  DataElement dirD         = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
+  commandD = _dataStore.find(dirD, DE.A_VALUE, "C_COMMAND");
+  
+  DataElement fileD        = _dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
 	
-	DataElement cvsD      = createAbstractCommandDescriptor(fsD, "CVS", "C_CVS");
+  DataElement cvsD      = createAbstractCommandDescriptor(fsD, "CVS", "C_CVS");
+  DataElement updateD   = createCommandDescriptor(cvsD, "update",   "C_CVS_UPDATE");	
+  DataElement checkoutD = createCommandDescriptor(cvsD, "checkout", "C_CVS_CHECKOUT");	
+  _dataStore.createObject(checkoutD, "input", "Enter argument: ");
 	
-	DataElement updateD   = createCommandDescriptor(cvsD, "update",   "C_CVS_UPDATE");	
-	DataElement checkoutD = createCommandDescriptor(cvsD, "checkout", "C_CVS_CHECKOUT");	
-	DataElement commitD   = createCommandDescriptor(cvsD, "commit",   "C_CVS_COMMIT");	
 
-	DataElement loginD    = createCommandDescriptor(cvsD, "login",    "C_CVS_LOGIN");	
-	DataElement linputD   = _dataStore.createObject(loginD, "input", "Enter Password");	
-    }
+  DataElement commitD   = createCommandDescriptor(cvsD, "commit",   "C_CVS_COMMIT");	
+  createReference(fileD, cvsD);
+  DataElement loginD    = createCommandDescriptor(cvsD, "login",    "C_CVS_LOGIN");	
+  DataElement linputD   = _dataStore.createObject(loginD, "input", "Enter Password");	
+ }
  
    public DataElement handleCommand(DataElement theCommand)
     {
      String name          = getCommandName(theCommand);
      DataElement  status  = getCommandStatus(theCommand);
-     DataElement  subject = getCommandArgument(theCommand, 0);
+     DataElement  subject = getCommandArgument(theCommand, 0); 
+     DataElement  arg1 = getCommandArgument(theCommand, 1); 
+     
  
      if (name.equals("C_CVS_LOGIN"))
 	 {
@@ -41,7 +49,7 @@ public class CVSMiner extends Miner
 	 }
      else if (name.equals("C_CVS_CHECKOUT"))
 	 {
-	     handleCheckout(subject, status);
+	     handleCheckout(subject, arg1, status);
 	 }
      else if (name.equals("C_CVS_UPDATE"))
 	 {
@@ -69,26 +77,41 @@ public class CVSMiner extends Miner
 
     public void handleLogin(DataElement subject, DataElement password, DataElement status)
     {
-	System.out.println("cvs login");
+	execute("cvs login", subject);
     }
 
-    public void handleCheckout(DataElement subject, DataElement status)
-    {
-	String args = getArgument(subject);
-	System.out.println("cvs checkout " + args);
-    }
+ public void handleCheckout(DataElement subject, DataElement arg1, DataElement status)
+ {
+  execute("cvs checkout " + arg1.getName(), subject);
+ }
 
     public void handleUpdate(DataElement subject, DataElement status)
     {
 	String args = getArgument(subject);
-	System.out.println("cvs update " + args);
+	execute("cvs update " + args, subject);
     }
 
     public void handleCommit(DataElement subject, DataElement status)
     {
 	String args = getArgument(subject);
-	System.out.println("cvs commit -m \"test\" " + args);
+	execute("cvs commit -m \"test\" " + args, subject);
     }
+    
+    private void execute(String theCommand, DataElement theSubject)
+    {
+     ArrayList args = new ArrayList();
+     args.add(_dataStore.createObject(null, "invocation", theCommand));
+     args.add(theSubject);  
+         
+     DataElement status = _dataStore.command(commandD, args, theSubject, true);
+     //while (!status.getValue().equals("done"))
+      System.out.println("STATUS => " + status.getValue());
+     theSubject.refresh(true);
+    }
+}
 
-  }
+
+
+
+
 

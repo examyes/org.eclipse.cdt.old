@@ -12,11 +12,12 @@ import java.util.*;
 public class CppProjectEvent 
 {
     // type
-    public static final int OPEN     = 0; 
-    public static final int CLOSE    = 1;
-    public static final int DELETE   = 2;
-    public static final int COMMAND  = 3;
-    public static final int VIEW_CHANGE = 4;
+    public static final int CREATE   = 0;
+    public static final int OPEN     = 1; 
+    public static final int CLOSE    = 2;
+    public static final int DELETE   = 3;
+    public static final int COMMAND  = 4;
+    public static final int VIEW_CHANGE = 5;
     
     public static final int START    = 0;
     public static final int WORKING  = 1;

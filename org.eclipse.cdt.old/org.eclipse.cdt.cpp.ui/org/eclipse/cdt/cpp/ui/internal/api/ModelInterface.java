@@ -7,6 +7,8 @@ package com.ibm.cpp.ui.internal.api;
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.vcm.*;
+import com.ibm.cpp.ui.internal.actions.*;
+
 
 import com.ibm.dstore.ui.ConvertUtility;
 import com.ibm.dstore.ui.ILinkable;
@@ -428,7 +430,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.getDomainNotifier().addDomainListener(this);	
 	
 	DataElement invocationObj = dataStore.createObject(null, "invocation", invocation, "");
-	args.add(invocationObj);
+	args.add (invocationObj);
 	args.add(findProjectElement(CppPlugin.getCurrentProject()));
 	
 	try
@@ -455,6 +457,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     return null;
   }
 
+  public void createProject(Repository rep)
+ {
+  DataStore  dataStore = rep.getDataStore();
+  DataElement     repE = rep.getElement();
+   
+  DataElement  project = dataStore.createObject(null, "Closed Remote Project", repE.getName(), repE.getSource());
+  DataElement  createD = dataStore.createCommandDescriptor(null, "C_CREATE_REMOTE", "com.ibm.cpp.miners.project.ProjectMiner", "C_CREATE_REMOTE");
+  dataStore.synchronizedCommand(createD, project);
+ }
+ 
     public void openProjects()
     {
 	// open all local projects
@@ -470,8 +482,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void openProject(IProject project)
     {
-	if (project.isOpen())
+    	if (project.isOpen() || (project instanceof Repository) )
 	    {
+	     
 		OpenProjectAction openAction = new OpenProjectAction(project);
 		Display d= getShell().getDisplay();
 		d.asyncExec(openAction);		
@@ -491,8 +504,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
      DataStore dataStore = _plugin.getDataStore();
      
      if (_project instanceof Repository)
-      dataStore = ((Repository)_project).getDataStore();	
-
+      {
+       createProject((Repository)_project);
+       return;
+      }
+       
      DataElement projectMinerProject =  findProjectElement(_project);
      if (projectMinerProject == null)
 	 {
@@ -707,46 +723,41 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public void setEnvironment(IProject project)
   {
-      DataStore dataStore = _plugin.getDataStore();	
-      if (project instanceof Repository)
-	  dataStore = ((Repository)project).getDataStore();	
 
-      DataElement projectObj = findProjectElement(project);
-
-      if (projectObj != null)
-	  {	
-	      DataElement environmentElement = dataStore.createObject(null, "Environment Variable", project.getName() + "." + "Environment");	
-	      ArrayList envVars = _plugin.readProperty(project, "Environment");
-	      for (int i = 0; i < envVars.size(); i++)
-		  {
-		      dataStore.createObject(environmentElement, "Environment Variable", (String)envVars.get(i), (String)envVars.get(i));
-		  }
-
-	      DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_ENVIRONMENT_VARIABLES");
-	      if (setD != null)
-		  {  
-		     
-		      ArrayList args = new ArrayList();
-		      args.add(environmentElement);	
-		      
-		      DataElement theObject = dataStore.find(projectObj, DE.A_NAME, "Preferences",1);
-		      if (theObject != null)
-			  {
-			      dataStore.command(setD, environmentElement, theObject, true);
-			  }
-		  }
-	  }
-  }
-
-  public void setParseIncludePath(IProject project)
-  {
    DataStore dataStore = _plugin.getDataStore();	
    if (project instanceof Repository)
-     dataStore = ((Repository)project).getDataStore();	
+    dataStore = ((Repository)project).getDataStore();	
+      
+   DataElement envElement = dataStore.createObject(null, "Environment Variable", "");
+   ArrayList envVars = _plugin.readProperty(project, "Environment");
+   for (int i = 0; i < envVars.size(); i++)
+    dataStore.createObject(envElement, "Environment Variable", (String)envVars.get(i), (String)envVars.get(i));
+   setEnvironment(findProjectElement(project), envElement);
+  }
+ 
+ public void setEnvironment(DataElement theObject, DataElement theEnvironment)
+ {
+  if ((theObject == null) || (theEnvironment == null))
+   return;
+  theEnvironment.setAttribute(DE.A_NAME, theObject.getId());
+  DataStore dataStore = theObject.getDataStore();
+  DataElement contObj = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Container Object", 1);
+  DataElement setD = dataStore.localDescriptorQuery(contObj, "C_SET_ENVIRONMENT_VARIABLES");
+  if (setD != null)
+  {  
+   dataStore.command(setD, theEnvironment, theObject, true);
+  }
+ }
+ 
+ public void setParseIncludePath(IProject project)
+ {
+  DataStore dataStore = _plugin.getDataStore();	
+  if (project instanceof Repository)
+   dataStore = ((Repository)project).getDataStore();	
 
-   DataElement projectObj = findProjectElement(project);
+  DataElement projectObj = findProjectElement(project);
    
-   DataElement includeElement = dataStore.createObject(null, "environment", "Include Path");	
+  DataElement includeElement = dataStore.createObject(null, "environment", "Include Path");	
    ArrayList includePaths = _plugin.readProperty(project, "Include Path");
    for (int i = 0; i < includePaths.size(); i++)
     dataStore.createObject(includeElement, "directory", (String)includePaths.get(i), (String)includePaths.get(i));
@@ -1351,6 +1362,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						     dataStore.getLocalizedString("model.Connect_to"), 
 						     "com.ibm.dstore.ui.connections.ConnectAction");
         connect.setAttribute(DE.A_VALUE, "C_CONNECT");
+
 	
 	DataElement disconnect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 							dataStore.getLocalizedString("model.Disconnect_from"), 
@@ -1367,7 +1379,25 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						    "com.ibm.dstore.ui.connections.DeleteAction");	 
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");
 
+
+        
+	DataElement fileD    = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
+        DataElement closedRemoteProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Closed Remote Project", 1);
 	
+              
+        DataElement parseMenuD = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
+	
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse", "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Save Parse Information", "com.ibm.cpp.ui.internal.actions.ProjectSaveParseAction");
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information", "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
+        
+        dataStore.createReference(fileD, parseMenuD);
+	dataStore.createReference(dirD, parseMenuD);
+	dataStore.createObject(closedRemoteProjectD, DE.T_UI_COMMAND_DESCRIPTOR, "Open Remote Project", "com.ibm.cpp.ui.internal.actions.ProjectOpenAction");
+         
+       
+	
+
 	/***
 	// replicated project actions
 	DataElement replicateFrom = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR, 
@@ -1375,7 +1405,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							   "com.ibm.cpp.ui.internal.actions.ReplicateFromAction");
 	replicateFrom.
 	***/					   
-
 
 	DataElement configureCmd = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "configure", 

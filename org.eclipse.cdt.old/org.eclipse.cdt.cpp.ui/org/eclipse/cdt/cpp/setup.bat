@@ -1,9 +1,6 @@
-set ECLIPSEDIR=e:\eclipse\eclipse
+set ECLIPSEDIR=e:\eclipse
 
-set DSCORE=%ECLIPSEDIR%\plugins\com.ibm.dstore.core
-set DSUI=%ECLIPSEDIR%\plugins\com.ibm.dstore.ui
-set DSMINERS=%ECLIPSEDIR%\plugins\com.ibm.dstore.miners
-set DSEXTRA=%ECLIPSEDIR%\plugins\com.ibm.dstore.extra
+
 
 set DEBUGCORE=%ECLIPSEDIR%\plugins\org.eclipse.debug.core\dtcore.jar
 set DEBUGUI=%ECLIPSEDIR%\plugins\org.eclipse.debug.ui\dtui.jar
