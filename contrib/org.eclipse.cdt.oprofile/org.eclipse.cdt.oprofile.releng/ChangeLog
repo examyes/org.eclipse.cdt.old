@@ -1,3 +1,7 @@
+2004-10-13  Jeremy Handcock <handcock@redhat.com>
+
+	* maps/oprofile.map: Fix typo.
+
 2004-07-23  Jeremy Handcock  <handcock@redhat.com>
 
 	* customTargets.xml: Add ppc assembly target.
