@@ -48,6 +48,7 @@ public class QuickConnectAction implements Runnable
     private String _selected;
     private String _directory;
     private String _mountedDirectory;
+    private boolean _useDaemon = true;
 
     public QuickConnectAction(String host, String port, String directory)
     {
@@ -57,6 +58,15 @@ public class QuickConnectAction implements Runnable
 	_selected = null;
     }
 
+    public QuickConnectAction(String host, String port, String directory, boolean useDaemon)
+    {
+	_host = host;
+	_port = port;
+	_directory = directory;
+	_selected = null;
+	_useDaemon = useDaemon;
+    }
+
     public void run()
     {
 	HostsPlugin plugin = HostsPlugin.getInstance();
@@ -64,7 +74,7 @@ public class QuickConnectAction implements Runnable
 
 	Connection tempConnection = new Connection("temp",
 						   _host, _port, 
-						   "root", _directory, false, true, dataStore.getRoot());
+						   "root", _directory, false, _useDaemon, dataStore.getRoot());
 
 
 	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
@@ -107,6 +117,10 @@ public class QuickConnectAction implements Runnable
 			failD.openInformation(new Shell(), "Connection Failure", msg);          
 		    }
 	    }
+
+	DataElement parent = dataStore.getRoot();
+	DataElement oldConnection = tempConnection.getRoot();
+	dataStore.deleteObject(parent, oldConnection);
     }
 
     public String getSelected()
