@@ -9,7 +9,7 @@
 
     <target name="fetch" depends="init">
         <mkdir dir="${install}/features"/>
-        <cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/home/tools" dest="${install}/features" package="org.eclipse.cdt.${platformId}-feature" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/features" package="org.eclipse.cdt.${platformId}-feature" tag="${CVS.TAG}" quiet="${quiet}"/>
         <mkdir dir="${install}/plugins"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core" tag="${CVS.TAG}" quiet="${quiet}"/>
@@ -21,6 +21,7 @@
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.launch" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
     </target>
+    
     <target name="init">
         <condition property="platformId" value="${os}.${ws}">
             <not>
