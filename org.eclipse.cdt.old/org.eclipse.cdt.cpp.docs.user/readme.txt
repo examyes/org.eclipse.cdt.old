@@ -1,3 +1,5 @@
+Integration Build - Wednesday Jan 16, 2002
+
 This document is intended to point out issues or problems with the current
 release of the product.(You may also want to see the accompanying "todo.txt")
 
@@ -12,6 +14,18 @@ Project Issues (Local and Remote)
 1.  C/C++ files contained in non-C/C++ projects will not get parsed in the
     current driver.
 2.  Some memory leaks have been reported when working with large projects.
+3.  The UI may hang when trying to open an Included Source File in a Remote
+    Project.  This has already been fixed in CVS, but did not make it into 
+    this build.
+
+
+Cpp Editor View (Lpex Editor)
+-----------------------------
+
+1.  Pressing F1 in the Cpp Editor with the cursor on whitespace can cause an
+    Index Out of Bounds Exception.  This can safely be ignored (and will be 
+    fixed in the next driver).
+
 
 Appearance on Linux
 -------------------
@@ -110,15 +124,25 @@ General View Issues
 5. Markers are not be displayed in the Editor for remote projects.e.g adding a breakpoint
     will succedd even though the marker is not visible in the Editor left margin.
 
+
 Platform issues
 ---------------
+
 1. The C/C++ Plugin is intended for Linux, although some of its features will work 
    with Windows(with cygwin and some even without it.)
    - With remote Linux projects, Windows Eclipse should support most features.
 
+
 Debugger issues
 ---------------
-For debugger issues, see the accompanying "todo.txt"
+
+1. When trying to attach an existing process, the following error message may be shown, even 
+   though the debug engine has been started successfully:
+       Client startup failed (missing gdb, com.ibm.debug.gdbPicl/gdb script 
+       not executable, gdb command failed, etc.)
+   This error message can be safely ignored (and will be removed in the next driver).
+For other debugger issues, see the accompanying "todo.txt"
+
 
 Project Management Issues - autoconf and automake
 -------------------------------------------------

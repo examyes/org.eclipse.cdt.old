@@ -11,7 +11,8 @@ Work that we are planning or considering doing:
 2.  Proper Handling of Setting Environment 
      - In the current release, the support for setting\modifying 
        environment variables is not complete.  A proper mechanism of
-       overriding system environment variables is needed.
+       applying "named" environments to arbitrary commands or debug sessions
+       is needed.
 
 3.  PA Integration
      - We will be providing some level of integration with other plugins 
@@ -44,7 +45,7 @@ Work that we are planning or considering doing:
 	- to derive a view from it and user can actually easily navigate through
 	  the Makefile.am
 
-10. Project Management using autovonf and automake  
+10. Project Management using autoconf and automake  
 	- In the current release it has a limited ability for updating Makefile.am 
 	  variables - meaning that a subset of these variables get updated
 	

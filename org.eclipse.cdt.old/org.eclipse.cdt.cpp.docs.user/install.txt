@@ -1,22 +1,77 @@
-This document describes how to install the C/C++ Development Toolkit.
+This document describes how to install\upgrade the C/C++ Development Toolkit.
+
+Upgrading
+---------
+
+If you have a previous version of the CDT installed, you should remove it before
+installing the 20020116 driver.  To do this, remove the CDT plugins from your 
+eclipse/plugins directory if you are sure that you have not installed any other
+plugins whose names begin with "com.ibm".  
+
+		rm -rf <some_dir>/eclipse/plugins/com.ibm*
+
+If you have installed some other plugins whose names may also start with 
+"com.ibm", or if you are not sure, then only delete the following plugins:
+
+com.ibm.cpp.docs.user
+com.ibm.cpp.miners
+com.ibm.cpp.miners.parser
+com.ibm.cpp.ui
+com.ibm.debug
+com.ibm.debug.doc.user
+com.ibm.debug.gdbPicl
+com.ibm.dstore.core
+com.ibm.dstore.extra
+com.ibm.dstore.extra.server
+com.ibm.dstore.hosts
+com.ibm.dstore.miners
+com.ibm.dstore.ui
+com.ibm.linux.help
+com.ibm.lpex
+
+We will be providing an installer that will take care of this for you in future 
+releases.
+
+NOTE:
+
+Since eclipse persists UI information, and fields or view names may have changed,
+it may be necessary to remove the metadata for the CDT plugins.  If you find 
+some runtime exceptions from one of the above plugins, or plugins not being 
+loaded try the following:
+
+1. From a shell, navigate to where you invoke eclipse from.
+2. There should be a ".metadata" or "workspace" directory there.
+3. Navigate down to the workspace/.metadata/.plugins directory.
+4. Remove any directories that match the plugin names above.
+   If after trying this and restarting eclipse, the problems still exist, 
+   You can try removing the entire ".metadata" directory.  If the problems 
+   still exist then open a bug at http://bugs.eclipse.org
 
 
-To install the plugin for regular use, simply unzip cdt-eclipse-0.5.0-local.zip 
+Installation
+------------
+To install the plugin for regular use, simply unzip cdt-eclipse-20020116-local.zip 
 into the eclipse/plugins directory:
-     unzip cdt-eclipse-0.5.0-local.zip -d <...>/eclipse/plugins
+     unzip cdt-eclipse-20020116-local.zip -d <...>/eclipse/plugins
 Once you have unzipped the CDT plugins into the eclipse/plugins directory,
 the CDT should be ready for use.
 
-To work with remote projects, you will need to install cdt-eclipse-0.5.0-server.zip
+To work with remote projects, you will need to install cdt-eclipse-20020116-server.zip
 on the remote machine.  Refer to com.ibm.cpp.docs.user/tasks/remote/server.htm
 for details.
 
 
+Building
+--------
 
-Note: to generate a build environment for the CDT plugins, perform the following:
- 1. Ensure that the cdt-eclipse-0.5.0-local.zip has been unzipped in your eclipse/plugins directory
+To generate a build environment (which is not necessary to run the CDT) for the CDT 
+plugins, perform the following:
+ 1. Ensure that the cdt-eclipse-20020116-local.zip has been unzipped in your 
+    eclipse/plugins directory
  2. Goto the .../eclipse/plugins/com.ibm.dstore.core directory
  3. Type make dev
 
 Instructions will be provided later for working with CDT as Eclipse Plugin 
 Development Environment (PDE) projects.
+
+
