@@ -1,3 +1,12 @@
+2004-12-14  Rick Moseley  <rmoseley@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/core/RPMCore.java (generateChecksum): added call to new
+	  method to calculate a true checksum (bz# 78767)
+	* (fileCheckSum): new method to calculate checksum for a file for above change
+	* (RPMCore): catch exception added to generateChecksum() for above change
+	* (createSRPMinfo): catch exception added to generateChecksum() for above change
+	* various externalize strings issues
+
 2004-11-11  Rick Moseley  <rmoseley@redhat.com>
 	* plugin.xml: change version to 1.2
 

@@ -28,45 +28,45 @@ public class RPMCore  {
 	protected static final String Error = Messages.getString("RPMCore.Error_1"); //$NON-NLS-1$
 	
 	protected String spec_file_prefix = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.SPEC_FILE_PREFIX"); //$NON_NLS-1$
+		.getString("IRpmConstants.SPEC_FILE_PREFIX"); //$NON-NLS-1$
 	protected String srpm_info_name = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.SRPM_INFO_FILE"); //$NON_NLS-1$
+		.getString("IRpmConstants.SRPM_INFO_FILE"); //$NON-NLS-1$
 	protected String wksp_path = RPMCorePlugin.getDefault().getPreferenceStore()
 		.getString("IRpmConstants.RPM_WORK_AREA"); //$NON-NLS-1$
 	protected String rpmrc = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.RPM_RESOURCE_FILE"); //$NON_NLS-1$
+		.getString("IRpmConstants.RPM_RESOURCE_FILE"); //$NON-NLS-1$
 	protected String rpm_macros = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.RPM_MACROS_FILE"); //$NON_NLS-1$
+		.getString("IRpmConstants.RPM_MACROS_FILE"); //$NON-NLS-1$
 	protected String rpm_shell = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.RPM_SHELL_SCRIPT"); //$NON_NLS-1$
+		.getString("IRpmConstants.RPM_SHELL_SCRIPT"); //$NON-NLS-1$
 	protected String rpmbuild_logname = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.RPM_LOG_NAME"); //$NON_NLS-1$
+		.getString("IRpmConstants.RPM_LOG_NAME"); //$NON-NLS-1$
 	protected String usr_make_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.MAKE_CMD"); //$NON_NLS-1$
+		.getString("IRpmConstants.MAKE_CMD"); //$NON-NLS-1$
 	protected String usr_rpm_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.RPM_CMD"); //$NON_NLS-1$
+		.getString("IRpmConstants.RPM_CMD"); //$NON-NLS-1$
 	protected String usr_rpmbuild_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.RPMBUILD_CMD"); //$NON_NLS-1$
+		.getString("IRpmConstants.RPMBUILD_CMD"); //$NON-NLS-1$
 	protected String usr_cp_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.CP_CMD"); //$NON_NLS-1$
+		.getString("IRpmConstants.CP_CMD"); //$NON-NLS-1$
 	protected String usr_chmod_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.CHMOD_CMD"); //$NON_NLS-1$
+		.getString("IRpmConstants.CHMOD_CMD"); //$NON-NLS-1$
 	protected String usr_diff_cmd = RPMCorePlugin.getDefault().getPreferenceStore()
-		.getString("IRpmConstants.DIFF_CMD"); //$NON_NLS-1$
+		.getString("IRpmConstants.DIFF_CMD"); //$NON-NLS-1$
 	
 	protected String proj_path;
 	protected String path_to_rpm;
 	protected String rpmdirs_path;
-	protected String rpm_version = "1"; //$NON_NLS-1$
-	protected String rpm_release = "0"; //$NON_NLS-1$
+	protected String rpm_version = "1"; //$NON-NLS-1$
+	protected String rpm_release = "0"; //$NON-NLS-1$
 	protected String rpm_name;
 	protected String path_to_specfile;
 	protected String path_to_newspecfile;
 	protected String spec_file_name;
 	protected String proj_dir;
 	protected String srpm_full_name;
-	protected String ui_rel_no = ""; //$NON_NLS-1$
-	protected String ui_ver_no = ""; //$NON_NLS-1$
+	protected String ui_rel_no = ""; //$NON-NLS-1$
+	protected String ui_ver_no = ""; //$NON-NLS-1$
 	protected boolean chk_sum_diff = false;
 	
 	private boolean preserve = true;
@@ -114,17 +114,18 @@ public class RPMCore  {
 			proj_dir = proj_path.substring( j + 1);
 		}
 		if (!firstSRPM(proj_path)) {
+			long cksum;
 			ArrayList srpminfo = new ArrayList();
 			try {
 				srpminfo = getSRPMexportinfo(proj_path);
 				checkSrpmExists((String) srpminfo.get(0));
+				cksum = generateChecksum(proj_path, 0);
 			} catch (CoreException e) {
 				String throw_message = e.getMessage();
 				IStatus error = new Status(IStatus.ERROR, Error, 1, throw_message, null);
 				throw new CoreException(error); 
 			}
 
-			long cksum = generateChecksum(proj_path, 0);
 			int i = spec_file_name.lastIndexOf(file_sep);
 			if (i == -1) {
 				path_to_specfile = proj_path + file_sep + spec_file_name;
@@ -472,7 +473,7 @@ public class RPMCore  {
 						 throw_message, null);
 					 throw new CoreException(error);
 				 }
-			String conf_cmd = "cd " + orig_proj_path + line_sep + "." + file_sep + "configure " + //$NON-NLS-1$ //$NON-NLS-2$
+			String conf_cmd = "cd " + orig_proj_path + line_sep + "." + file_sep + "configure " + //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						   config_opts + " >> " + rpmdirs_path + file_sep + "configure.log"; //$NON-NLS-1$ //$NON-NLS-2$
 			try {
 				LinuxShellCmds.createLinuxShellScript(conf_cmd, rpmbuild_logname, rpm_shell);
@@ -697,8 +698,7 @@ public class RPMCore  {
 		File f = new File(path_to_specfile);
 
 		if (!f.exists()) {
-			String throw_message = Messages.getString(
-					"RPMCore.Failed_to_find_a_the_spec_file_at") + //$NON-NLS-1$
+			String throw_message = "" + //$NON-NLS-1$
 				path_to_specfile;
 			IStatus error = new Status(IStatus.ERROR, Messages.getString("RPMCore.Error_1"), 1, //$NON-NLS-1$
 					throw_message, null);
@@ -891,7 +891,8 @@ outer:
 	 * a recursive function, the value is always passed into the function)
 	 * @return long integer with total file size
 	 */
-	public long generateChecksum(String project_path, long proj_checksum) {
+	public long generateChecksum(String project_path, long proj_checksum) 
+	   throws CoreException {
 //		  if (debug) {
 //			  System.out.println("generateChecksum"); //$NON-NLS-1$
 //		  }
@@ -902,13 +903,18 @@ outer:
 			String[] children = dir.list();
 
 			for (int i = 0; i < children.length; i++) {
-				// System.out.println("children[" + i + "] = " + children[i]); //$NON-NLS-1$ //$NON-NLS-2$
 
 				File temp = new File(project_path + file_sep + children[i]);
 
 				if (temp.isDirectory()) {
-					proj_checksum = generateChecksum(project_path + file_sep + 
-							children[i], proj_checksum);
+						proj_checksum = generateChecksum(project_path
+								+ file_sep + children[i], proj_checksum);
+					/**
+					 * Here is a list of files to include for the checksum and a
+					 * couple to exclude. We want to only include source files
+					 * that are not generated or modified in some way by the
+					 * "configure" script.
+					 */
 				} else {
 					if ((children[i].endsWith(".c") | //$NON-NLS-1$
 							children[i].endsWith(".cpp") | //$NON-NLS-1$
@@ -925,17 +931,53 @@ outer:
 							children[i].endsWith(".sh")) & //$NON-NLS-1$
 							(!children[i].equals("config.log") & //$NON-NLS-1$
 							!children[i].equals("config.h"))) { //$NON-NLS-1$
-						proj_checksum = proj_checksum + temp.length();
-						// System.out.println("children[" + i + "] = " + children[i] + " ... " + temp.length() + " ... " + proj_checksum);
+						try {
+							proj_checksum += fileCheckSum(temp);
+						} catch (Exception e) {
+							String throw_message = Messages.getString("RPMCore.0") + //$NON-NLS-1$
+							  temp.toString();
+							IStatus error = new Status(IStatus.ERROR, Error, 1,
+									throw_message, null);
+							throw new CoreException(error);
+						}
 					}
 					if (children[i].equals("Makefile") & !LinuxShellCmds.checkForConfigure(project_path)) { //$NON-NLS-1$
-						proj_checksum = proj_checksum + temp.length();
+						try {
+							proj_checksum += fileCheckSum(temp);
+						} catch (Exception e) {
+							// Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
 		}
 
 		return proj_checksum;
+	}
+	
+	/**
+	 * Method fileCheckSum.
+	 * Generate a checksum for the file passed to this method.
+	 * 
+	 * @param File
+	 *            to parse
+	 * @return long containing the checksum of the file
+	 * @throws CoreException
+	 */
+	public long fileCheckSum(File input) throws Exception {
+		if (debug) {
+			System.out.println("fileCheckSum file = " + input); //$NON-NLS-1$
+		}
+		String input_line;
+		long chksum = 0;
+		BufferedReader br = new BufferedReader(new FileReader(input.toString()));
+		while ((input_line = br.readLine()) != null) {
+			for (int i=0; i<input_line.length(); i++)
+			  chksum += input_line.charAt(i);
+		}
+		br.close();
+		return chksum;
 	}
 	/**
 	 * Method executeMakeClean.
@@ -1079,8 +1121,7 @@ outer:
 
 					if (f.exists()) {
 						if (!f.delete()) {
-							String throw_message = Messages.getString(
-									"RPMCore.Error_deleting_files_in_deleteEclipseFiles_616"); //$NON-NLS-1$
+							String throw_message = ""; //$NON-NLS-1$
 							IStatus error = new Status(IStatus.ERROR, Error, 1,
 									throw_message, null);
 							throw new CoreException(error);
@@ -1352,10 +1393,10 @@ outer:
 		Date today = new Date();
 		String logname_version = rpm_version;
 		String logname_release = rpm_release;
-		if (!ui_ver_no.equals("")) {
+		if (!ui_ver_no.equals("")) { //$NON-NLS-1$
 			logname_version = ui_ver_no;
 		}
-		if (!ui_rel_no.equals("")) {
+		if (!ui_rel_no.equals("")) { //$NON-NLS-1$
 			logname_release = ui_rel_no;
 		}
 		rpmbuild_logname = wksp_path + file_sep + rpm_name + "-" + //$NON-NLS-1$
@@ -1608,12 +1649,20 @@ outer:
 		String srpm_info_file =
 			"####  DO NOT DELETE THIS FILE IF YOU EVER WANT TO RE-EXPORT THIS " + //$NON-NLS-1$
 			"PROJECT AS A BINARY OR SOURCE RPM  ####" + line_sep + path_to_rpm + //$NON-NLS-1$
-			line_sep + "Date: " + df.format(today); //$NON-NLS-1$ 
-		long file_size = generateChecksum(proj_path, 0);
+			line_sep + "Date: " + df.format(today); //$NON-NLS-1$
+		long file_chksum;
+		try {
+		file_chksum = generateChecksum(proj_path, 0);
+		} catch (Exception e) {
+			String throw_message = e.getMessage();
+			IStatus error = new Status(IStatus.ERROR, Error, 1,
+					throw_message, null);
+			throw new CoreException(error);
+		}
 
 		String new_srpm_info_file = proj_path + srpm_info_name;
 		srpm_info_file = srpm_info_file + line_sep + "Specfile: " + specfile + //$NON-NLS-1$
-			line_sep + Messages.getString("RPMCore.Checksum___32") + String.valueOf(file_size); //$NON-NLS-1$
+			line_sep + Messages.getString("RPMCore.Checksum___32") + String.valueOf(file_chksum); //$NON-NLS-1$
 
 		byte[] buf = srpm_info_file.getBytes();
 
