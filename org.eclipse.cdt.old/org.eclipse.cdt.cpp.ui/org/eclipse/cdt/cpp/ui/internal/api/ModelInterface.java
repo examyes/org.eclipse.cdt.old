@@ -528,7 +528,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	DataStore dataStore = dirObject.getDataStore();
 
-	String hostName = "localHost";
+	String hostName = "localhost";
 	try
 	    {
 		//hostName = InetAddress.getLocalHost().getHostName();
@@ -537,6 +537,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
             }
 	catch (Exception e)
 	    {
+               System.out.println(e);
 	    }
 
 	DataElement hostObj  = dataStore.createObject(null, "hostname", hostName);
