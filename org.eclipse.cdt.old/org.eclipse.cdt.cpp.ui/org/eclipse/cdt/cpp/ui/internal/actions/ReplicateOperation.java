@@ -63,6 +63,7 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
     public void complete()
     {
 	IResource subP = _api.findResource(_subject); 
+	/*
 	if (subP instanceof Repository)
 	    {
 	    }
@@ -70,12 +71,12 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
 	    {
 		try
 		    {
-			subP.refreshLocal(subP.DEPTH_INFINITE, _pm);
+			subP.refreshLocal(subP.DEPTH_ONE, _pm);
 		    }
 		catch (CoreException e)
 		    {
 			System.out.println(e);
-		    }	
+		    }
 	    }
 	
 	for (int i = 0; i < _projects.size(); i++)
@@ -89,7 +90,7 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
 		    {
 			try
 			    {
-				tarP.refreshLocal(tarP.DEPTH_INFINITE, _pm);
+				tarP.refreshLocal(tarP.DEPTH_ONE, _pm);
 			    }
 			catch (CoreException e)
 			    {
@@ -97,9 +98,22 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
 			    }	
 		    }
 	    }
+	*/
 
+	System.out.println("DONE");
 	_pm.done();
     }
     
     protected abstract void execute(IProgressMonitor pm);
 }
+
+
+
+
+
+
+
+
+
+
+

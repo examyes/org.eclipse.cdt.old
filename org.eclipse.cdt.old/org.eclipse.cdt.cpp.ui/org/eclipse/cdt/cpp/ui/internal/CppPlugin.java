@@ -181,6 +181,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_instance = this;
 
 	_interface = new ModelInterface(dataStore);	
+	_interface.getDummyShell();
        	_interface.loadSchema();
 
 

@@ -377,7 +377,7 @@ class CommandMinerThread extends MinerThread
 			    }
 			catch (IllegalThreadStateException e)
 			    {
-				e.printStackTrace();
+				//e.printStackTrace();
 				exitcode = -1;
 				_theProcess.destroy();
 			    }			

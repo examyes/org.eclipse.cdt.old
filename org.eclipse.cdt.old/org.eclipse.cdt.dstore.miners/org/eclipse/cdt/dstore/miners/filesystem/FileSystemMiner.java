@@ -186,6 +186,8 @@ public class FileSystemMiner extends Miner
 	  _dataStore.createReference(_directoryDescriptor, _hiddenDirectoryDescriptor, "abstracts", "abstracted by"); 
 
 	  
+	  DataElement queryAllD   = createCommandDescriptor(_fsystemObjectDescriptor, "Query All", "C_QUERY_ALL", false);
+
 	  DataElement fdatesD   = createCommandDescriptor(_fsystemObjectDescriptor, "Get Dates", "C_DATES", false);
 	  DataElement fdateD    = createCommandDescriptor(_fileDescriptor, "Get Date", "C_DATE", false);
 	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
@@ -244,7 +246,8 @@ public class FileSystemMiner extends Miner
 	 }
      else if (name.equals("C_SET_DATE"))
 	 {
-	     status = handleSetDate(subject, getCommandArgument(theElement, 1), status);
+	     DataElement newDate = _dataStore.find(theElement, DE.A_TYPE, "date", 1);
+	     status = handleSetDate(subject, newDate, status);
 	 }
      else if (name.equals("C_REFRESH"))
      {
@@ -418,10 +421,7 @@ public class FileSystemMiner extends Miner
      private DataElement handleCreateFile(DataElement subject, DataElement newName, DataElement status)
 	 {	
 	     StringBuffer newFileName = new StringBuffer(subject.getSource());
-	     if (newFileName.charAt(newFileName.length() - 1) != '/')
-		 {
-		     newFileName.append("/");
-		 }
+	     newFileName.append("/");
 	     newFileName.append(newName.getName());
 	     
 	     File toBeCreated = new File(newFileName.toString());
@@ -455,10 +455,7 @@ public class FileSystemMiner extends Miner
      private DataElement handleCreateDir(DataElement subject, DataElement newName, DataElement status)
 	 {	
 	     StringBuffer newDirName = new StringBuffer(subject.getSource());
-	     if (newDirName.charAt(newDirName.length() - 1) != '/')
-		 {
-		     newDirName.append("/");
-		 }
+	     newDirName.append("/");
 
 	     newDirName.append(newName.getName());
 	     
@@ -594,15 +591,26 @@ public class FileSystemMiner extends Miner
 	File file = new File(theFile.getSource());
 	if (file.exists())
 	    {
-		long date = new Long(newDate.getName()).longValue();
-		System.out.println("date = " + date);
-		if (date > 0)
+		if (newDate != null)
 		    {
-			file.setLastModified(date);
+			newDate.setParent(status);
+			try
+			    {
+				long date = new Long(newDate.getName()).longValue();
+				if (date > 0)
+				    {
+					file.setLastModified(date);
+				    }
+				_dataStore.createReference(theFile, newDate, 
+							   _modifiedAtDescriptor);
+			    }
+			catch (Exception e)
+			    {
+				System.out.println("bad date " + newDate);
+			    }
 		    }
 	    }
 	
-	_dataStore.createReference(theFile, newDate, _modifiedAtDescriptor);
         status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
 	return status;
     }
@@ -723,7 +731,7 @@ public class FileSystemMiner extends Miner
 		File theFile = new File (theElement.getSource());
 		StringBuffer path = new StringBuffer (theFile.getPath());
 		
-		if (type.charAt(type.length() - 1) != '/' && !type.equals("device"))
+		if (!type.equals("device"))
 		    {
 			path.append("/");
 		    }
@@ -732,10 +740,17 @@ public class FileSystemMiner extends Miner
 		for (int i = 0; i < theElement.getNestedSize(); i++)
 		    {
 			DataElement child = theElement.get(i);
-			File childFile = new File(child.getSource());
-			if (!childFile.exists())
+			if (child != null && !child.isDeleted())
 			    {
-				_dataStore.deleteObject(theElement, child);
+				String src = child.getSource();
+				if (src != null)
+				    {
+					File childFile = new File(src);
+					if (!childFile.exists())
+					    {
+						_dataStore.deleteObject(theElement, child);
+					    }
+				    }
 			    }
 		    }
 		

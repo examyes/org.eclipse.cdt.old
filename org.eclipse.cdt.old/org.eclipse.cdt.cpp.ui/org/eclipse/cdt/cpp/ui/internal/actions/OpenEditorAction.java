@@ -102,9 +102,13 @@ public class OpenEditorAction extends Action implements IOpenAction
   {
       if (_file != null)
 	  {
-	      if (_api.compareFileNames(_file.getLocation().toString(), fileName))
+	      IPath location = _file.getLocation();
+	      if (location != null)
 		  {
-		      return _file;
+		      if (_api.compareFileNames(location.toString(), fileName))
+			  {
+			      return _file;
+			  }
 		  }
 	  }
 

@@ -102,7 +102,7 @@ public class ReplicateFromAction extends CustomAction
 		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
 		try
 		    {
-			progressDlg.run(false, true, op);
+			progressDlg.run(true, true, op);
 		    }
 		catch (InterruptedException e) 
 		    {

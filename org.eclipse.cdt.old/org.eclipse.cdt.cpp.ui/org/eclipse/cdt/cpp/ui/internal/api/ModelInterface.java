@@ -628,9 +628,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		DataElement workspace = findWorkspaceElement(dataStore);
 		if (workspace != null)
 		    {
-			dataStore.createObject(workspace, "Closed Project",
-					       project.getName(),
-					       project.getLocation().toString());
+			IPath location = project.getLocation();
+			if (location != null)
+			    {
+				dataStore.createObject(workspace, "Closed Project",
+						       project.getName(),
+						       location.toString());
+			    }
 		    }
 	    }
     }
@@ -1711,6 +1715,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		if (resourceElement != null)
 		    {
 			DataStore dataStore = resourceElement.getDataStore();
+			
 			
 			DataElement refreshD = dataStore.localDescriptorQuery(resourceElement.getDescriptor(),
 									      "C_REFRESH");

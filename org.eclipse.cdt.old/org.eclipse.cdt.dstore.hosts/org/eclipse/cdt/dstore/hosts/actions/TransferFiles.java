@@ -70,22 +70,27 @@ public class TransferFiles extends Thread
 	DataStore sourceDataStore = _source.getDataStore();
 	DataStore targetDataStore = _target.getDataStore();
 
-	if (_source.isOfType("directory"))
+
+	boolean validSource = _source.getType().equals("file") || _source.getType().equals("directory"); 
+	if (validSource)
 	    {
-		_source.expandChildren();
-		queryDates(_source);
+		if (_source.isOfType("directory"))
+		    {
+			_source.expandChildren();
+			queryDates(_source);
+		    }
+		if (_target.isOfType("directory"))
+		    {
+			_target.expandChildren();
+			queryDates(_target);
+		    }
+		
+		transfer(_source, _target);
+		
+		targetDataStore.refresh(_target.getParent());
+		targetDataStore.refresh(_target);
 	    }
-	if (_target.isOfType("directory"))
-	    {
-		_target.expandChildren();
-		queryDates(_target);
-	    }
-
-	transfer(_source, _target);
-
-	targetDataStore.refresh(_target.getParent());
-	targetDataStore.refresh(_target);
-
+	
 	if (_listener != null)
 	    {
 		_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
@@ -96,16 +101,13 @@ public class TransferFiles extends Thread
     {
 	target.setExpanded(true);
 
+	System.out.println(source.getName() + " -> " + target.getName());
 	DataStore targetDataStore = target.getDataStore();
 	DataStore sourceDataStore = source.getDataStore();
 
 	String targetStr = target.getSource();
-	if (targetStr.charAt(targetStr.length() - 1) != '/')
-	    {
-		targetStr = "/" + targetStr;
-	    }
-	String newSourceStr = targetStr +  source.getName();
-
+	String newSourceStr = targetStr + "/" + source.getName();
+	
 	boolean needsUpdate = false;
 
 	String type = source.getType();
@@ -199,7 +201,7 @@ public class TransferFiles extends Thread
 											     invocation);
 				ArrayList args = new ArrayList();
 				args.add(invocationElement);
-				targetDataStore.command(cmd, args, target);
+				targetDataStore.synchronizedCommand(cmd, args, target);
 				setDate(copiedSource, getDate(source));
 			    }
 		    }
@@ -241,6 +243,7 @@ public class TransferFiles extends Thread
 	
 	if (type.equals("directory") && copiedSource != null)
 	    {
+		System.out.println("\tsubdir");
 		if (_pm != null)
 		    {
 			_pm.beginTask("Transfering files from " + source.getName() + "...", source.getNestedSize());
@@ -262,7 +265,7 @@ public class TransferFiles extends Thread
 					copiedSource.expandChildren();
 					queryDates(copiedSource);
 				    }
-
+				
 				transfer(child, copiedSource);
 				targetDataStore.refresh(target);
 			    }
