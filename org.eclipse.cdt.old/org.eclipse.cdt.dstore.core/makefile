@@ -193,7 +193,7 @@ javadoc:
 source-zip:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	rm -f $(patsubst %.jar,%src.zip,$(jarFile));\
-	zip -qr $(patsubst %.jar,%src.zip,$(jarFile)) . -i *.java *.jj build/*.mk build/*.java makefile 
+	zip -qr $(patsubst %.jar,%src.zip,$(jarFile)) . -i *.java *.jj *.properties build/*.mk build/*.java makefile 
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(patsubst %.jar,%src.zip,$(jarFile)) 
 
 clean:
