@@ -171,8 +171,7 @@ public class Repository extends Project
 
   public Repository(Connection connection) 
   {
-      super(Platform.getLocation(), 
-	    (Workspace)ResourcesPlugin.getWorkspace()); 
+      super(Platform.getLocation(), (Workspace)ResourcesPlugin.getWorkspace()); 
 
       _workspace = (Workspace)ResourcesPlugin.getWorkspace();
       _dataStore = CppPlugin.getDefault().getCurrentDataStore();
@@ -185,8 +184,8 @@ public class Repository extends Project
 
   public Repository(Connection connection, DataElement root)
   {
-      super(Path.ROOT.append(root.getAttribute(DE.A_NAME)),
-	    (Workspace)ResourcesPlugin.getWorkspace()); 
+      super(Platform.getLocation(), (Workspace)ResourcesPlugin.getWorkspace()); 
+      //      super(Path.ROOT.append(root.getAttribute(DE.A_NAME)), (Workspace)ResourcesPlugin.getWorkspace()); 
 
     _workspace = (Workspace)ResourcesPlugin.getWorkspace();
     _path = new Path(root.getAttribute(DE.A_SOURCE)); 
