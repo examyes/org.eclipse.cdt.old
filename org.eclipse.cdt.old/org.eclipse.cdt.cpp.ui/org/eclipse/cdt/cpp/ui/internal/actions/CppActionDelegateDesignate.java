@@ -89,7 +89,7 @@ public class CppActionDelegateDesignate extends CppActionDelegate
     protected void checkEnabledState(IAction action)
     {
 	String fileType = null;
-	if (_currentResource != null)
+	if (_currentResource != null && _currentResource instanceof IFile)
 	    {
 		IPath newPath= _currentResource.getFullPath();
 		
@@ -115,6 +115,10 @@ public class CppActionDelegateDesignate extends CppActionDelegate
 		    {
 			((Action)action).setEnabled(true);
 		    }
+	    }
+	else
+	    {
+		((Action)action).setEnabled(false);
 	    }
     }
 }

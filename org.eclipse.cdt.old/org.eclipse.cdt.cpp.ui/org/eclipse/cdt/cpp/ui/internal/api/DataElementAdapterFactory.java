@@ -10,10 +10,13 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
 
+import org.eclipse.core.internal.runtime.*;
+
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
+import org.eclipse.ui.*;
 
-public class DataElementAdapterFactory implements IAdapterFactory 
+public class DataElementAdapterFactory implements IAdapterFactory
 {
     private ModelInterface _api; 
 
@@ -22,7 +25,7 @@ public class DataElementAdapterFactory implements IAdapterFactory
 	IProject.class,
 	IFolder.class,
 	IFile.class,
-	IResource.class,
+	IResource.class
     };
 
     public DataElementAdapterFactory(ModelInterface api)
@@ -36,6 +39,7 @@ public class DataElementAdapterFactory implements IAdapterFactory
 	if (object instanceof DataElement)
 	    {
 		DataElement element = (DataElement)object;
+
 		DataStore dataStore = element.getDataStore();
 		if (dataStore == CppPlugin.getDataStore())
 		    {

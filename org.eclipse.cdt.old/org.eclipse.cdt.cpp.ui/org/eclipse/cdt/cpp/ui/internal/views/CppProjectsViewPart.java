@@ -18,7 +18,9 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
+import org.eclipse.ui.internal.*;
 import org.eclipse.ui.*;
+
 
 public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionListener, ICppProjectListener
 { 
@@ -91,6 +93,10 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     {
 	if (part == this && (sel instanceof IStructuredSelection))
 	    {
+		// hack to clear cache that maps elements to resources
+		ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
+		manager.flushLookup();
+
 		IStructuredSelection ssel = (IStructuredSelection)sel;
 		Object object = ssel.getFirstElement();
 		if (object instanceof DataElement)

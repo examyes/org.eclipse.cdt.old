@@ -69,6 +69,11 @@ public class CppActionDelegateBuild extends CppActionDelegate
 		if (fileType!=null && fileType.equals("makefile"))
 		    {
 			((Action)action).setEnabled(true);
+
+			if (_currentResource instanceof IFile)
+			    {
+				_currentResource = _currentResource.getParent();
+			    }
 		    }
 		else
 		    {
