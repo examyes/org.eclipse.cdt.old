@@ -1312,8 +1312,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public synchronized void search(DataElement subject, String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
-  {
-      DataStore dataStore = subject.getDataStore();
+  {      
+      DataStore dataStore = subject.getDataStore();     
+   
       DataElement searchDescriptor = null;
 
       if (regex)
@@ -1503,6 +1504,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					path = resource.getLocation().toString();
 				    }
 				
+
+				// normalize paths
+				path = path.replace('\\', '/');
+				fileName = fileName.replace('\\', '/');
 				
 				if (compareFileNames(path, fileName))
 				    {

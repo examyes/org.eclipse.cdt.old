@@ -52,7 +52,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 			DataElement rootElement = null;
 			IAdaptable input = getSite().getPage().getInput();
 
-			if (input instanceof IWorkspace)
+			if (input instanceof IWorkspaceRoot)
 			    {
 				rootElement = _api.findWorkspaceElement(dataStore);
 			    }
