@@ -28,9 +28,10 @@ public class ParseWorker extends Thread
  private DataElement           _masterStatus;
  private boolean			   _fileParsedDone = false;
  private boolean			   _statusDone = false;
- 
+ private StringBuffer          _emptyBuffer = null; 
  public ParseWorker()
  {
+  //setPriority(getPriority()-1);
   _objectQueue           = new ArrayList();
   _fileQueue             = new ArrayList();
   _immediateObjectQueue  = new ArrayList();
@@ -38,6 +39,8 @@ public class ParseWorker extends Thread
   _theSymbolTable        = new DataStoreSymbolTable();
   _theCharStream         = new SimpleCharStream(new StringReader("default"), 1, 1, 16);
   _theParserTokenManager = new ParserTokenManager(_theCharStream);
+  _emptyBuffer           = new StringBuffer("");
+
  }
 
  public void closeProjects()
@@ -55,17 +58,17 @@ public class ParseWorker extends Thread
  
  public void parseObject(DataElement theObject, DataElement status)
  {
-  _objectQueue.add(new DataElement[]{theObject,status});
+  _objectQueue.add(theObject);
  }
 
  public void parseObjectNow(DataElement theObject, DataElement status)
  {
-  _immediateObjectQueue.add(new DataElement[]{theObject,status});
+  _immediateObjectQueue.add(theObject);
  }
 
  public void parseFile(DataElement theFile, DataElement status)
  {
-  _fileQueue.add(new DataElement[]{theFile,status});
+  _fileQueue.add(theFile);
  }
 
  public void setParsedFiles(DataElement parsedFiles)
@@ -113,14 +116,21 @@ public class ParseWorker extends Thread
  //Start of private methods:
  private void parseObjectsInQueue()
  {
-  DataElement[] theObject = null;
+  DataElement theObject = null;
+  int threshold = 30;
+  int index = 1;
   while ((!_objectQueue.isEmpty()) || (!_immediateObjectQueue.isEmpty()))
   { 
    theObject = getObjectFromQueue();
-   if (initializeParser(theObject[0]))
-    beginObjectParse(theObject[0]);
-   update(theObject[0]);
-   statusDone(theObject[1]);
+   if (initializeParser(theObject))
+    beginObjectParse(theObject);
+   //update(theObject[0]);
+   //statusDone(theObject[1]);
+   if (index++ > threshold)
+   {
+    Thread.currentThread().yield();
+    index = 1;
+   }
   }
   
   if (_fileParsedDone && _masterStatus != null)
@@ -137,15 +147,22 @@ public class ParseWorker extends Thread
 
  private void parseFilesInQueue()
  {
-  DataElement[] theFile = null;
+  DataElement theFile = null;
+  int threshold = 1;
+  int index = 1;
   while(!_fileQueue.isEmpty())
   {
   theFile = getFileFromQueue();
-   if (initializeParser(theFile[0]))
-    beginFileParse(theFile[0]);
-   update(theFile[0]);
+  if (initializeParser(theFile))
+    beginFileParse(theFile);
+   update(theFile);
    _fileParsedDone = true;
    //statusDone(theFile[1]);
+   if (index++ > threshold)
+   {
+    Thread.currentThread().yield();
+    index = 1;
+   }
   }
   if (theFile != null)
   { 
@@ -313,7 +330,7 @@ public class ParseWorker extends Thread
  private boolean initializeParser(DataElement theObject)
  { 
   String objectContents = theObject.getBuffer().toString();
-  theObject.setBuffer(new StringBuffer(""));
+  theObject.setBuffer(_emptyBuffer);
   if ((objectContents == null) || (objectContents.length() == 0))
    return false;
   
@@ -355,22 +372,22 @@ public class ParseWorker extends Thread
   }
  }
 
- private DataElement[] getFileFromQueue()
+ private DataElement getFileFromQueue()
  {
-  DataElement[] theFile = (DataElement[])_fileQueue.get(0);
+  DataElement theFile = (DataElement)_fileQueue.get(0);
   _fileQueue.remove(0);
   return theFile;
  }
  
- private DataElement[] getObjectFromQueue()
+ private DataElement getObjectFromQueue()
  {
   if (!_immediateObjectQueue.isEmpty())
   {
-   DataElement[] theObject = (DataElement[])_immediateObjectQueue.get(0);
+   DataElement theObject = (DataElement)_immediateObjectQueue.get(0);
    _immediateObjectQueue.remove(0);
    return theObject;
   }
-  DataElement theObject[] = (DataElement[])_objectQueue.get(0);
+  DataElement theObject = (DataElement)_objectQueue.get(0);
   _objectQueue.remove(0);
   return theObject;
  }

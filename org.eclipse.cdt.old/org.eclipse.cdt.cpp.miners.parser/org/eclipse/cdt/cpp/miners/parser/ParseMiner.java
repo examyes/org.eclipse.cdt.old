@@ -502,6 +502,9 @@ public class ParseMiner extends Miner
 
  private void handleObjectParse(DataElement theElement, DataElement status)
  {
+  StringBuffer theBuf = theElement.getBuffer();
+  if ((theElement.getType().equals(ParserSchema.ParsedSource) || (theBuf == null) || (theBuf.length() == 0))
+   return;
   _parseManager.parseObject(theElement, status);
  }
 

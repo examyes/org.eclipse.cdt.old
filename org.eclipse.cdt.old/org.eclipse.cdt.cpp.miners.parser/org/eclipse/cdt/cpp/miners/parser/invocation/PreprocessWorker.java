@@ -31,6 +31,7 @@ public class PreprocessWorker extends Thread
 
  public PreprocessWorker()
  {
+  setPriority(getPriority() - 1);
   _theParseWorker  = new ParseWorker();
   _theParseWorker.setEnabled(false);
   _fileQueue       = new ArrayList();
@@ -110,17 +111,20 @@ public class PreprocessWorker extends Thread
  {
   File        theFile;
   DataElement theFileElement;
-  _theParseWorker.setEnabled(false);
-  while ((theFile = getFileFromQueue()) != null)
+  if (!_fileQueue.isEmpty())
   {
-   theFileElement = createFileElement(theFile);
-   if (theFileElement != null)
+   _theParseWorker.setEnabled(false);
+   while ((theFile = getFileFromQueue()) != null)
    {
-    initializePreprocessor(theFile);
-    beginPreprocess(theFileElement);
-   }
+    theFileElement = createFileElement(theFile);
+    if (theFileElement != null)
+    {
+     initializePreprocessor(theFile);
+      beginPreprocess(theFileElement);
+    }
+   } 
+   _theParseWorker.setEnabled(true);
   }
-  _theParseWorker.setEnabled(true);
  }
 
  //We return null here, if the file doesn't need to be parsed.
