@@ -117,10 +117,14 @@ public class ParseMiner extends Miner
 								   theProject.getSource(),
 								   theProject.getId() + ".parse");
 		     
-    _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    ParserSchema.ParsedFiles);
-    _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.SystemObjects);
-    _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.ProjectObjects);
-    _dataStore.createObject(parseProject,ParserSchema.Preferences, ParserSchema.Preferences);
+    _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    
+			    ParserSchema.ParsedFiles, "", ParserSchema.ParsedFiles + "ID");
+    _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, 
+			    ParserSchema.SystemObjects, "", ParserSchema.SystemObjects + "ID");
+    _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, 
+			    ParserSchema.ProjectObjects, "", ParserSchema.ProjectObjects + "ID");
+    _dataStore.createObject(parseProject,ParserSchema.Preferences, 
+			    ParserSchema.Preferences, "", ParserSchema.Preferences + "ID");
     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
     _dataStore.refresh(theProject);
     _dataStore.refresh(parseProject);
@@ -214,11 +218,10 @@ public class ParseMiner extends Miner
    _dataStore.load(systemObjectsElement, systemObjs);
   }
 
-
+  _dataStore.refresh(theProject);
   _dataStore.refresh(parsedSourceElement);
   _dataStore.refresh(projectObjectsElement);
   _dataStore.refresh(systemObjectsElement);
-
  }
   
  private void saveProject(DataElement project)
@@ -266,7 +269,7 @@ public class ParseMiner extends Miner
    if (autoPersistValue.equals("Yes"))
    {
     doLoad = true;
-   }
+   } 
   }
   else
   {  
