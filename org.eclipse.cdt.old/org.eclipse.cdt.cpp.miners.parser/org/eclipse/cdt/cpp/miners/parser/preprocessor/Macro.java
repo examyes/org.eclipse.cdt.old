@@ -105,6 +105,12 @@ public class Macro
   if (theList.length() == 0)
    return theParams;
   
+  if (theList.charAt(0) == '(' && theList.charAt(theList.length()-1) == ')')
+  {
+   theParams.add(theList);
+   return theParams;
+  }
+   
   while ((nextComma=theList.indexOf(',')) >= 0)
   {
    theParams.add(theList.substring(0,nextComma).trim());

@@ -89,14 +89,16 @@ class MacroManager
   Macro  theMacro;
     
   while ( (curId = getIdentifier(currentLine.toString(), startIndex)) != null)
-  {
-    
+  {    
    if (curId.length() == 0)
     break;
    
    startIndex = currentLine.toString().indexOf(curId,startIndex);
    endIndex   = startIndex + curId.length();
    
+   while (endIndex  < currentLine.length() && currentLine.charAt(endIndex) == ' ')
+    endIndex++;
+    
    //Check to see if it's a known macro:
    theMacro = (Macro)_macros.get(curId);
    if (theMacro != null)
@@ -113,8 +115,8 @@ class MacroManager
     }
      
     String theExpansion = theMacro.expand(params);
-       
-    if (theExpansion == null)
+    
+    if (theExpansion == null || theExpansion.startsWith("%%"))
      theExpansion = "";
     
     currentLine.replace(startIndex, endIndex, theExpansion);
@@ -123,7 +125,7 @@ class MacroManager
    else
     startIndex = endIndex;
   }
-   
+  
   return currentLine.toString();
  }
  
