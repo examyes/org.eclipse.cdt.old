@@ -25,14 +25,7 @@
  <topic label="Hosts Perspective\Views">
   <topic label="Details"                      href="concepts/views/hostsdetails.htm"/>
   <topic label="Hosts"                        href="concepts/views/hosts.htm"/>
- </topic>
-
- <topic label="Miner Perspective\Views">
-  <topic label="Details"                      href="concepts/views/minersdetails.htm"/>
-  <topic label="Log"                          href="concepts/views/log.htm"/>
-  <topic label="Miner"                        href="concepts/views/miner.htm"/>
-  <topic label="Schema"                       href="concepts/views/schema.htm"/>
- </topic>
+ </topic> 
 
  <topic label="Browsing(Parsing)">
   <topic label="Parsing"                      href="concepts/parse/parse.htm"/>
