@@ -36,6 +36,7 @@ public class DataDropAdapter extends ViewerDropAdapter
 
   public boolean performDrop(Object data) 
   {
+      /***
     byte[] result = ((PluginTransferData)data).getData();
     String str = new String(result);
 
@@ -57,7 +58,7 @@ public class DataDropAdapter extends ViewerDropAdapter
         currentDataStore.command(command, sourceRef, dropTarget);
       }
     }
-
+      ***/
     return false;   
   }
 

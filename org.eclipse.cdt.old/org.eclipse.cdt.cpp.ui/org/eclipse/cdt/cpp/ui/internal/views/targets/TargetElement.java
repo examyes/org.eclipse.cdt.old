@@ -68,8 +68,9 @@ TargetElement(String name, String working_dir, String make_invocation, RootEleme
 	this.fTargetName = name;
 	this.fWorkingDirectory= working_dir;
 	this.fMakeInvocation = make_invocation;
-	this.fStatus = new DataElement();
-	this.fStatus.reInit("status", "id", "name", "");
+
+	DataStore dataStore = CppPlugin.getCurrentDataStore();
+	this.fStatus = dataStore.createObject(null, "status", "name");
 	setParent(parent);
 	
 }

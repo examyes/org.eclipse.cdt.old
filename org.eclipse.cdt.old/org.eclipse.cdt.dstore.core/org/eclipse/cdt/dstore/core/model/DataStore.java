@@ -2077,41 +2077,41 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement abstractedBy  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracted_by"));	
 
 	DataElement caRelations = createAbstractRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents&arguments"));
-	createReference(caRelations, containsD);
-	createReference(caRelations, argsD);
+	createReference(caRelations, containsD, containsD);
+	createReference(caRelations, argsD, containsD);
 	
-        createReference(objectDescriptor, containsD);
-        createReference(objectDescriptor, parentD);
-        createReference(objectDescriptor, abstracts);
-        createReference(objectDescriptor, abstractedBy);
+        createReference(objectDescriptor, containsD, containsD);
+        createReference(objectDescriptor, parentD, containsD);
+        createReference(objectDescriptor, abstracts, containsD);
+        createReference(objectDescriptor, abstractedBy, containsD);
 
-        createReference(abstractObjectDescriptor, containsD);
-        createReference(abstractObjectDescriptor, parentD); 
-        createReference(abstractObjectDescriptor, abstracts);
-        createReference(abstractObjectDescriptor, abstractedBy);
+        createReference(abstractObjectDescriptor, containsD, containsD);
+        createReference(abstractObjectDescriptor, parentD, containsD); 
+        createReference(abstractObjectDescriptor, abstracts, containsD);
+        createReference(abstractObjectDescriptor, abstractedBy, containsD);
 
-	createReference(statusD, containsD);	
+	createReference(statusD, containsD, containsD);	
 	DataElement statusDetails = createAbstractObjectDescriptor(statusD, getLocalizedString("model.details"));	
-        createReference(statusDetails, allD);
+        createReference(statusDetails, allD, containsD);
 
-	createReference(commandDescriptor, allD);	
-	createReference(commandDescriptor, caRelations);
-	createReference(commandDescriptor, argsD);	
-	createReference(commandDescriptor, containsD);	
+	createReference(commandDescriptor, allD, containsD);	
+	createReference(commandDescriptor, caRelations, containsD);
+	createReference(commandDescriptor, argsD, containsD);	
+	createReference(commandDescriptor, containsD, containsD);	
 
         DataElement desDetails = createAbstractObjectDescriptor(objectDescriptor, getLocalizedString("model.details"));
-        createReference(desDetails, objectDescriptor);
-        createReference(desDetails, commandDescriptor);
-        createReference(desDetails, abstractObjectDescriptor);
-        createReference(desDetails, abstractCommandDescriptor);
-        createReference(desDetails, abstractRelationDescriptor);
-        createReference(desDetails, uiCmdD);
+        createReference(desDetails, objectDescriptor, containsD);
+        createReference(desDetails, commandDescriptor, containsD);
+        createReference(desDetails, abstractObjectDescriptor, containsD);
+        createReference(desDetails, abstractCommandDescriptor, containsD);
+        createReference(desDetails, abstractRelationDescriptor, containsD);
+        createReference(desDetails, uiCmdD, containsD);
 
         DataElement logDetails = createAbstractObjectDescriptor(logD, getLocalizedString("model.Commands"));
-        createReference(logDetails, commandDescriptor);
-        createReference(logDetails, allD);        
-	createReference(logD, caRelations);
-	createReference(logD, containsD);
+        createReference(logDetails, commandDescriptor, containsD);
+        createReference(logDetails, allD, containsD);        
+	createReference(logD, caRelations, containsD);
+	createReference(logD, containsD, containsD);
 
 	 //Base Container Object
         DataElement containerObjectD = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Container_Object"));
@@ -2119,12 +2119,12 @@ public DataElement command(DataElement commandDescriptor,
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE");
-	createReference(containerObjectD, containsD);
-        createReference(containerObjectD, parentD); 
+	createReference(containerObjectD, containsD, containsD);
+        createReference(containerObjectD, parentD, containsD); 
        
 
       // file objects
-	createReference(hostD, containsD);	
+	createReference(hostD, containsD, containsD);	
 
         DataElement deviceD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.device"), 
 						      "com.ibm.dstore.miners");
@@ -2138,34 +2138,30 @@ public DataElement command(DataElement commandDescriptor,
 						      "com.ibm.dstore.miners");
 
         DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
-         createReference(containerObjectD, fsObject, getLocalizedString("model.abstracts")
-			 , getLocalizedString("model.abstracted_by"));
+	createReference(containerObjectD, fsObject, abstracts, abstractedBy);
 
-	 createReference(fsObject, deviceD,  getLocalizedString("model.abstracts")
-			, getLocalizedString("model.abstracted_by"));
+	 createReference(fsObject, deviceD,  abstracts, abstractedBy);
 
-        createReference(fsObject, dirD,     getLocalizedString("model.abstracts")
-			, getLocalizedString("model.abstracted_by"));
-        createReference(fsObject, fileD,    getLocalizedString("model.abstracts")
-			, getLocalizedString("model.abstracted_by"));
-        createReference(fsObject, fileD,    getLocalizedString("model.contents"));
-        createReference(fsObject, dirD,     getLocalizedString("model.contents"));
-	createReference(fsObject, fsObject, getLocalizedString("model.contents"));
-	createReference(fsObject, fsObject, getLocalizedString("model.parent"));
-	createReference(hostD,    fsObject, getLocalizedString("model.contents"));
-	createReference(deviceD,  dirD);
-	createReference(deviceD,  fileD);
-	createReference(dirD,     dirD);
-	createReference(dirD,     fileD);
+        createReference(fsObject, dirD, abstracts, abstractedBy);
+        createReference(fsObject, fileD, abstracts, abstractedBy);
+        createReference(fsObject, fileD,    containsD);
+        createReference(fsObject, dirD,     containsD);
+	createReference(fsObject, fsObject, containsD);
+	createReference(fsObject, fsObject, parentD);
+	createReference(hostD,    fsObject, containsD);
+	createReference(deviceD,  dirD, containsD);
+	createReference(deviceD,  fileD, containsD);
+	createReference(dirD,     dirD, containsD);
+	createReference(dirD,     fileD, containsD);
 
 	DataElement hostDirectories  = createAbstractObjectDescriptor(hostD, getLocalizedString("model.Directories"),
 								      "com.ibm.dstore.miners");	
-	createReference(hostDirectories, dirD);
-	createReference(hostDirectories, deviceD);
+	createReference(hostDirectories, dirD, containsD);
+	createReference(hostDirectories, deviceD, containsD);
 
 	DataElement hostDetails  = createAbstractObjectDescriptor(hostD, getLocalizedString("model.Details"));	        
-	createReference(hostDetails, hostDirectories);
-        createReference(hostDetails, fileD);
+	createReference(hostDetails, hostDirectories, containsD);
+        createReference(hostDetails, fileD, containsD);
 
 	// miner descriptors
 	DataElement minersD      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.miners"));
@@ -2175,31 +2171,31 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement stateD       = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.state"));
         
 	DataElement minerDetails = createAbstractObjectDescriptor(minerD, getLocalizedString("model.Miner_Details"));
-	createReference(minerDetails, allD);
+	createReference(minerDetails, allD, containsD);
 
         DataElement hostsDetails = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Hosts"));	
-	createReference(hostsDetails, rootD);	
-	createReference(hostsDetails, hostD);	
-	createReference(hostsDetails, deviceD);	
-	createReference(hostsDetails, dirD);	
+	createReference(hostsDetails, rootD, containsD);	
+	createReference(hostsDetails, hostD, containsD);	
+	createReference(hostsDetails, deviceD, containsD);	
+	createReference(hostsDetails, dirD, containsD);	
 
         DataElement rootDetails = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Details"));	
-	createReference(rootDetails, rootD);	
-	createReference(rootDetails, minersD);	
-	createReference(rootDetails, minerD);	
+	createReference(rootDetails, rootD, containsD);	
+	createReference(rootDetails, minersD, containsD);	
+	createReference(rootDetails, minerD, containsD);	
 
         DataElement minerObjects = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Tools"));
-        createReference(minerObjects, minersD);
-        createReference(minerObjects, minerD);
-	createReference(minerObjects, dataD);	
-	createReference(minerObjects, stateD);	
+        createReference(minerObjects, minersD, containsD);
+        createReference(minerObjects, minerD, containsD);
+	createReference(minerObjects, dataD, containsD);	
+	createReference(minerObjects, stateD, containsD);	
 	
         DataElement schemaDetails = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Schema"));
-        createReference(schemaDetails, objectDescriptor);
+        createReference(schemaDetails, objectDescriptor, containsD);
 
         DataElement logInfo = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Logged_Commands"));
-        createReference(logInfo, logD);
-        createReference(logInfo, commandDescriptor);
+        createReference(logInfo, logD, containsD);
+        createReference(logInfo, commandDescriptor, containsD);
 
         // basic commands
 	DataElement cancel = createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	

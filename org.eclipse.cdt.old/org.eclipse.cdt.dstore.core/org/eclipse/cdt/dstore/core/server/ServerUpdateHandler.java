@@ -46,11 +46,7 @@ public class ServerUpdateHandler extends UpdateHandler
 
   public synchronized void updateFile(String path, byte[] bytes, int size)
     {
-	DataElement document = _dataStore.createElement();
-	document.reInit("FILE",
-			path,
-			path,
-			path);
+	DataElement document = _dataStore.createObject(null, "FILE", path, path, path);
 	  
 	for (int j = 0; j < _senders.size(); j++)
 	    { 
@@ -61,11 +57,7 @@ public class ServerUpdateHandler extends UpdateHandler
 
     public synchronized void updateAppendFile(String path, byte[] bytes, int size)
     {
-	DataElement document = _dataStore.createElement();
-	document.reInit("FILE",
-			path,
-			path,
-			path);
+	DataElement document = _dataStore.createObject(null, "FILE", path, path, path);
 	
 	for (int j = 0; j < _senders.size(); j++)
 	    { 
@@ -76,12 +68,8 @@ public class ServerUpdateHandler extends UpdateHandler
 
   public synchronized void updateFile(File file, DataElement associatedElement)
       {
-	  
-	  DataElement document = _dataStore.createElement();
-	  document.reInit("FILE",
-			  file.getAbsolutePath(),
-			  file.getAbsolutePath(),
-			  file.getAbsolutePath());
+	  String path = file.getAbsolutePath();
+	  DataElement document = _dataStore.createObject(null, "FILE", path, path, path);
 	  
 	  for (int j = 0; j < _senders.size(); j++)
 	      { 
@@ -124,8 +112,7 @@ public class ServerUpdateHandler extends UpdateHandler
         if (sender.socket() == socket)
         {
           // sender sends last ack before death
-	    DataElement document = _dataStore.createElement();
-	    document.reInit("DOCUMENT", "exit", "exit", "");
+	    DataElement document = _dataStore.createObject(null, "DOCUMENT", "exit", "exit");
 	    sender.sendDocument(document, 2);
 	    removeSender(sender);
         }

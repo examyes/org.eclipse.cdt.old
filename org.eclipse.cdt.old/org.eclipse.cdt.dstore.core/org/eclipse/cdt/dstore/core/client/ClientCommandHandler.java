@@ -22,15 +22,13 @@ public class ClientCommandHandler extends CommandHandler
 
   public synchronized void sendFile(String fileName, File file)
       {
-	  DataElement document = _dataStore.createElement();
-	  document.reInit("FILE", fileName, fileName, fileName);
+	  DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
 	  _sender.sendFile(document, file, 2);
       }
 
   public synchronized void sendCommands()
     {
-	  DataElement commandRoot = _dataStore.createElement();
-	  commandRoot.reInit("DOCUMENT", "do", "doc", "");
+	  DataElement commandRoot = _dataStore.createObject(null, "DOCUMENT", "do", "doc");
 	  while (_commands.size() > 0)
 	      {
 		  DataElement command = null;
