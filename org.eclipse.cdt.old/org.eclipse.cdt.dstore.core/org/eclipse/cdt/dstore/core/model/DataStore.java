@@ -901,7 +901,7 @@ public class DataStore
 	      }
       }
 
-    private DataElement replaceDeleted(DataElement deletedObject)
+    public DataElement replaceDeleted(DataElement deletedObject)
     {
 	if (deletedObject != null)
 	    {
