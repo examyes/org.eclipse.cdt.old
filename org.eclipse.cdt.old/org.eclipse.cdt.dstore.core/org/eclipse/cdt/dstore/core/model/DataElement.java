@@ -600,8 +600,19 @@ public class DataElement implements IDataElement
 
     public boolean isOfType(DataElement type)
     {
+	return isOfType(type, false);
+    }
+
+    public boolean isOfType(DataElement type, boolean isDescriptor)
+    {
 	boolean result = false;
-	DataElement descriptor = getDescriptor();
+
+	DataElement descriptor = this;
+	if (!isDescriptor)
+	    {
+		descriptor = getDescriptor();
+	    }
+
 	if (descriptor != null && !descriptor.isDeleted())
 	    {
 		String typeType = type.getType();
@@ -614,11 +625,11 @@ public class DataElement implements IDataElement
 		    }
 		else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 		    {
-			ArrayList abstracted = type.getAssociated("abstracts");
+			ArrayList abstracted = type.getAssociated(_dataStore.getLocalizedString("model.abstracts"));
 			for (int i = 0; (i < abstracted.size()) && !result; i++)
 			    {
 				DataElement subDescriptor = (DataElement)abstracted.get(i);
-				result = isOfType(subDescriptor);
+				result = isOfType(subDescriptor, true);
 			    }
 		    }
 	    }

@@ -255,6 +255,11 @@ public class ObjectsViewPart extends GenericViewPart
         return newAction;
     }
     
+    public CustomAction loadAction(java.util.List objects, DataElement descriptor)
+    {
+	return loadAction((DataElement)objects.get(0), descriptor);
+    }
+
     public CustomAction loadAction(DataElement object, DataElement descriptor)
     {
         String name = descriptor.getName();

@@ -171,12 +171,10 @@ public class FileSystemMiner extends Miner
 	DataElement renD= createCommandDescriptor(dirD, getLocalizedString("model.Rename"), "C_RENAME_DIR");
 	DataElement inrenD = _dataStore.createObject(renD,"input", "Enter the New Name");
 
-	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", true);
+	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", false);
 
 	//deleting files and dirs
-	DataElement delF = createCommandDescriptor(fileD,getLocalizedString("model.Delete"),"C_DELETE_FILE");
-
-       	DataElement delD = createCommandDescriptor(dirD, getLocalizedString("model.Delete"),"C_DELETE_DIR");
+	DataElement del = createCommandDescriptor(fsObject,getLocalizedString("model.Delete"),"C_DELETE");
 
 	//creating new files and dirs
 	DataElement newFD=createAbstractCommandDescriptor(dirD,getLocalizedString("model.Create"),"C_NEW");
@@ -251,7 +249,7 @@ public class FileSystemMiner extends Miner
 	     DataElement newName = getCommandArgument(theElement,1);	     
 	     status = handleRename(subject,newName,status);
 	 }  
-     else if ((name.equals("C_DELETE_FILE"))||(name.equals("C_DELETE_DIR")))
+     else if ((name.equals("C_DELETE")))
 	 {
 	     status = handleDeleteFileDir(subject, status);
 	 }

@@ -17,20 +17,32 @@ import org.eclipse.jface.window.*;
 import org.eclipse.jface.dialogs.*;
 
 import org.eclipse.swt.*;
-import org.eclipse.swt.widgets.*;
+//import org.eclipse.swt.widgets.*;
 
 public class CustomAction extends Action
 {
-  protected DataStore          _dataStore;
-  protected DataElement        _command;
-  protected DataElement        _subject;
-  
+    protected DataStore          _dataStore;
+    protected DataElement        _command;
+    protected DataElement        _subject;
+    protected List               _subjects;
+
   public CustomAction(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
         super(label);
         _dataStore = dataStore;
         _command = command;
         _subject = subject; 
+	_subjects = new ArrayList();
+	_subjects.add(_subject);
+      }
+
+  public CustomAction(List subjects, String label, DataElement command, DataStore dataStore)
+      {	
+        super(label);
+        _dataStore = dataStore;
+        _command = command;
+	_subjects = subjects;
+        _subject = (DataElement)_subjects.get(0); 
       }
 
   public CustomAction(String label) 
@@ -39,11 +51,14 @@ public class CustomAction extends Action
         _dataStore = null;
         _command = null;
         _subject = null; 
+        _subjects = null; 
       }
   
     public void setSubject(DataElement subject)
     {
 	_subject = subject;
+	_subjects = new ArrayList();
+	_subjects.add(_subject);
     }  
 
   public void run()
@@ -58,7 +73,7 @@ public class CustomAction extends Action
 						   0);
                                           
 
-        explainD.openInformation(new Shell(), "CustomAction", msg);          
+        explainD.openInformation(new org.eclipse.swt.widgets.Shell(), "CustomAction", msg);          
       }
     
   }
