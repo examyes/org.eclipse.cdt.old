@@ -62,16 +62,27 @@ public class PATokenizer {
      String token = tokenizer.nextToken();
      _tokenNumber++;
      
-     if (_tokenNumber < _maxTokenNumber || _maxTokenNumber == 0) {
-      _tokens.add(token);
+     if ((_tokenNumber < _maxTokenNumber || _maxTokenNumber == 0) && 
+          isValidLeadingCharacter(token.charAt(0), _tokenNumber-1)) 
+     {
+       _tokens.add(token);
      }
      else {
-      int lastTokenIndex = _line.lastIndexOf(token);
-      _tokens.add(_line.substring(lastTokenIndex));
+      int tokenIndex = _line.indexOf(token);
+      _tokens.add(_line.substring(tokenIndex));
       break;
      }
       
     }
+  }
+  
+  public boolean isValidLeadingCharacter(char c, int index) {
+  
+   if (index == 0)
+    return Character.isDigit(c) || c == '[';
+   else
+    return Character.isDigit(c);
+    
   }
   
   /**

@@ -258,7 +258,7 @@ public class PAMiner extends Miner {
     traceFile = PAAdaptor.createTraceFile(file, traceFormat);
    }
    catch (Exception e) {
-    System.out.println(e);
+    e.printStackTrace();
     status.setAttribute(DE.A_NAME, "error");
     return;
    }
@@ -286,7 +286,7 @@ public class PAMiner extends Miner {
     traceFile = PAAdaptor.createTraceFile(reader, traceFormat);
   }
   catch (Exception e) {
-    System.out.println(e);
+    e.printStackTrace();
     status.setAttribute(DE.A_NAME, "error");
     return;
   }

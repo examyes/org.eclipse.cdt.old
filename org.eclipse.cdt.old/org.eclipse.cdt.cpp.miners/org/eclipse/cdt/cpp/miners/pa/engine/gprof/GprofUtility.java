@@ -174,7 +174,7 @@ public class GprofUtility {
   /**
    * Return the first number from a "m/n" pair
    */
-  public static int getFirstCallNumber(String callString) throws Exception {
+  public static int getFirstCallNumber(String callString) throws NumberFormatException {
   
    int slashIndex = callString.indexOf('/');
    if (slashIndex > 0) {

@@ -50,11 +50,7 @@ public class GprofCallGraphEntry {
    }
    
    PATokenizer tokenizer = new PATokenizer(line, 6);
-   
-   if (!GprofUtility.isValidCallNumber(tokenizer.getToken(4))) {
-    tokenizer = new PATokenizer(line, 5);
-   }
-   
+      
    if (tokenizer.getTokenNumber() < 5) {
     throw new PAException("Invalid call graph primary line: " + line);
    }
@@ -129,43 +125,11 @@ public class GprofCallGraphEntry {
   private PACallArc createCallArcForEntry(String line, boolean isCaller) throws Exception {
   
    PATokenizer tokenizer = new PATokenizer(line, 4);
+   int tokenNumber = tokenizer.getTokenNumber();
    
-   double selfTime = 0;
-   double childrenTime = 0;
-   int callNumber = 0;
-   
-   // First assume this line has entries for children time and self time.
-   // If this is not true, we need to reparse the line.
-   boolean needToReparse = false;
-   if (tokenizer.getTokenNumber() == 4) {
-   
-    try {
-     selfTime = tokenizer.getTokenAsDouble(0);
-     childrenTime = tokenizer.getTokenAsDouble(1);
-     callNumber = GprofUtility.getFirstCallNumber(tokenizer.getToken(2));
-    }
-    catch (Exception e) {
-     needToReparse = true;
-    }
-    
+   if (!(tokenNumber == 4 || tokenNumber == 2)) {
+    throw new PAException("Invalid caller or callee line: " + line);
    }
-   else {
-    needToReparse = true;
-   }
-   
-   // If we see an error in the first parse, we will reparse the line
-   // assuming that it only contains the call number and function name.
-   if (needToReparse) {
-   
-    tokenizer = new PATokenizer(line, 2);
-    if (tokenizer.getTokenNumber() < 2) {
-     throw new PAException("Invalid call graph line: " + line);
-    }
-    else {     
-     callNumber = GprofUtility.getFirstCallNumber(tokenizer.getToken(0));
-    }
-    
-   } 
    
    // Find or create a PA trace function from the function name
    String lastToken = tokenizer.getLastToken();
@@ -175,31 +139,49 @@ public class GprofCallGraphEntry {
    if (GprofUtility.isCyclicFunction(lastToken)) {
     traceFunction.setCyclic(true);
    }
-
-   // Create the call arc in different ways depending on whether this is a caller or 
-   // subroutine line and the number of tokens.
+   
+   double selfTime = 0;
+   double childrenTime = 0;
+   int callNumber = 0;
    PACallArc callArc = null;
-   if (isCaller) {
    
-     if (tokenizer.getTokenNumber() == 4) {
-      callArc = new PACallArc(traceFunction, _entryFunction, callNumber, selfTime, childrenTime);
-     }
-     else {
-      callArc = new PACallArc(traceFunction, _entryFunction);
-      callArc.setCallNumber(callNumber);
-     }
-   
+   if (tokenNumber == 4) {
+    
+    try {
+     selfTime = tokenizer.getTokenAsDouble(0);
+     childrenTime = tokenizer.getTokenAsDouble(1);
+     callNumber = GprofUtility.getFirstCallNumber(tokenizer.getToken(2));
+    } 
+    catch (NumberFormatException e) {
+     throw new PAException("parse error at line: " + line);
+    }
+    
+    if (isCaller) {
+     callArc = new PACallArc(traceFunction, _entryFunction, callNumber, selfTime, childrenTime);
+    }
+    else {
+     callArc = new PACallArc(_entryFunction, traceFunction, callNumber, selfTime, childrenTime);
+    }
+    
    }
-   else {
+   else if (tokenNumber == 2) {
 
-     if (tokenizer.getTokenNumber() == 4) {
-      callArc = new PACallArc(_entryFunction, traceFunction, callNumber, selfTime, childrenTime);
-     }
-     else {
+    try {
+     callNumber = GprofUtility.getFirstCallNumber(tokenizer.getToken(0));
+    } 
+    catch (NumberFormatException e) {
+     throw new PAException("parse error at line: " + line);
+    }
+    
+    if (isCaller) {
+      callArc = new PACallArc(traceFunction, _entryFunction);
+    }
+    else {
       callArc = new PACallArc(_entryFunction, traceFunction);
-      callArc.setCallNumber(callNumber);
-     }
-   
+    }
+    
+    callArc.setCallNumber(callNumber);    
+    
    }
    
    return callArc;
