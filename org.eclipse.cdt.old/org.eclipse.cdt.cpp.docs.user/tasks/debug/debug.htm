@@ -1,0 +1,114 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>The C/C++ Development Plugin - Debugging</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">
+     Debugging a C/C++ Application<br></font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Steps to Debug a C/C++ Application</font></b></td>
+  </tr>
+</table>
+<p>
+To create a launch configuration that will load a C/C++ application for debugging, do the following:
+
+<ol>
+ <li>From a C/C++ project, select the executable you want to debug and do one of the following:
+    <ul>
+     <li>Select Run > Debug from the workbench menu bar to open the Launch 
+         Configurations dialog box.</li>
+     <li>Select the workbench toolbar Debug push button and choose <b>Debug</b> from 
+         the menu. This will open the Launch Configurations dialog box.</li>
+    </ul></li>
+
+ <li>In the Launch Configurations dialog box, do one of the following:
+     <ul>
+      <li>Select the <b>C/C++ Debug Application</b> node and click New.</li>
+      <li>Right-click the <b>C/C++ Debug Application</b> node and select <b>New</b> from
+          the pop-up menu.</li>
+     </ul>
+     This will cause the launch configuration tabs and entry fields to display 
+     on the right-hand side of the dialog box.</li>
+ 
+ <li>In the <b>Name</b> field, enter a name of your choice for the configuration that
+     you are creating.</li>
+
+ <li>Select the <b>Debug</b> tab to bring it to the foreground.</li>
+
+ <li>You will find the name of the selected executable entered in the <b>Debug</b> tab 
+     <b>Program</b> field.  You can change this field if you desired to run another 
+     executable from the project.</li>
+ 
+ <li>In the <b>Debug</b> tab <b>Program parameters</b> field, enter program parameters to be 
+     passed to the debugee.</li>
+
+ <li>In the <b>Debug</b> tab <b>Working Directory</b> field, enter the directory you wish to 
+     switch to before the debug session is launched.  This field is defaulted to 
+     the directory in which the selected executable resides.  Click the <b>Browse</b> 
+     button to choose a different directory.</li>
+ 
+ <li>Select the <b>Common</b> tab to bring it to the foreground.</li> 
+ 
+ <li>If you want the launch configuration to be stored locally and available for a 
+     single user, ensure that the <b>Local</b> radio button is selected. If the launch 
+     configuration is to be stored as a file in the workspace and shared in a 
+     repository for team use, select the <b>Shared</b> radio button and enter the project 
+     location where you wish the launch configuration to be stored in the <b>Location 
+     of shared configuration</b> field. Alternatively, you can browse for the project.</li>
+
+ <li>In the <b>Switch to/Open perspective</b> group, choose the perspective that you would 
+     like to have opened after the launch. This selection is made in the <b>Debug mode</b> 
+     field drop-down box.</li>
+ 
+ <li>If you would like the launch configuration to appear as a favorite debug 
+     configuration in the <b>Debug</b> push button favorites menu or the <b>Debug</b> menu 
+     <b>Debug History</b> list, select the <b>Debug</b> check box.</li> 
+
+ <li>If all information mandatory to the launch configuration has been provided, the 
+     <b>Debug</b> push button will be enabled. Clicking <b>Debug</b> without first clicking
+     <b>Apply</b> will launch a debug session from the new launch configuration and save 
+     the new launch configuration.<br><br>
+
+     <b>Tip</b>: If you have made entries in the launch configuration settings that you would
+     like to remove or change, clicking <b>Revert</b> will remove all changes that you have 
+     made.</li>
+ 
+ <li>If information mandatory to the launch configuration has not been provided or if 
+     there are errors in the information that you have provided, messages at the top 
+     of the dialog box will indicate what is missing.  If you choose to ignore these 
+     messages, clicking <b>Apply</b> will save the launch configuration and you can then 
+     click <b>Close</b> to exit the dialog box.</li> 
+ 
+ <li>After you have saved a debug launch configuration, you may edit it.</li>
+
+</ol>
+</p>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>
