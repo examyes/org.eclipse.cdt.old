@@ -533,14 +533,26 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void openProject(IProject project)
     {
-    	if (project.isOpen() && _plugin.isCppProject(project))
+    	if (project.isOpen())
 	    {	     
-		OpenProjectAction openAction = new OpenProjectAction(project);
-		Shell shell = getDummyShell();
-		if (shell != null)
+		if (_plugin.isCppProject(project))
 		    {
-			Display d= shell.getDisplay();
-			d.asyncExec(openAction);		
+			OpenProjectAction openAction = new OpenProjectAction(project);
+			Shell shell = getDummyShell();
+			if (shell != null)
+			    {
+				Display d= shell.getDisplay();
+				d.asyncExec(openAction);		
+			    }
+		    }
+		else
+		    {
+			DataElement closedProjectElement = findProjectElement(project, "Closed Project");
+			if (closedProjectElement != null)
+			    {
+				DataStore dataStore = closedProjectElement.getDataStore();
+				dataStore.deleteObject(closedProjectElement.getParent(), closedProjectElement);
+			    }
 		    }
 	    }   
     }
@@ -574,7 +586,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	 }
      else
 	 {
-	     projectMinerProject =  findProjectElement(_project);
+	     projectMinerProject =  findProjectElement(_project, "Closed Project");
 	     if (projectMinerProject == null)
 		 {
 		     System.out.println("can't find project miner element for " + _project);
