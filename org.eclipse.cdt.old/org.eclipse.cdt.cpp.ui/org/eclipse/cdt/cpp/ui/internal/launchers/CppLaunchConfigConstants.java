@@ -12,5 +12,6 @@ public class CppLaunchConfigConstants
 
   public static final String ATTR_EXECUTABLE_NAME   = CppPlugin.PLUGIN_ID + ".executable";
   public static final String ATTR_WORKING_DIRECTORY = CppPlugin.PLUGIN_ID + ".workingDirectory";
+  public static final String ATTR_PROCESS_ID        = CppPlugin.PLUGIN_ID + ".processID";
 
 }
