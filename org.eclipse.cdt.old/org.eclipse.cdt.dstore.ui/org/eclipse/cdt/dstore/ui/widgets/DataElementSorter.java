@@ -89,6 +89,7 @@ public class DataElementSorter extends ViewerSorter
 		      n2 = name1;
 		  }
 
+	      // check for integers
 	      Integer int1 = null;
 	      Integer int2 = null;
 	      try
@@ -102,9 +103,27 @@ public class DataElementSorter extends ViewerSorter
 		      int2 = null;
 		  }
 
+	      // check for float
+	      Float float1 = null;
+	      Float float2 = null;
+	      try
+		  {
+		      float1 = new Float(n1);
+		      float2 = new Float(n2);
+		  }
+	      catch (NumberFormatException e)
+		  {
+		      float1 = null;
+		      float2 = null;
+		  }
+
 	      if (int1 != null && int2 != null)
 		  {
 		      return int1.compareTo(int2); 
+		  }
+	      else if (float1 != null && float2 != null)
+		  {
+		      return float1.compareTo(float2); 
 		  }
 	      else
 		  {
