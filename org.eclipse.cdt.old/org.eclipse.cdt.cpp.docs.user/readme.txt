@@ -1,27 +1,34 @@
 This document is intended to point out issues or problems with the current
 release of the product.(You may also want to see the accompanying "todo.txt")
 
+This list is not complete, please refer to the CDT Bugzilla database for
+a comprehensive and up-to-date list of known defects.
+
+
 
 Project Issues (Local and Remote)
 ---------------------------------
 
-1.  C/C++ files contained in non C/C++ projects will not get parsed in the
+1.  Sometimes with small projects (no subdirectories), the C/C++ Projects View
+    will not show the files contained in the project immediately after creating
+    the project.  To get the files to appear, right-click on the Project and 
+    click "Refresh".
+2.  C/C++ files contained in non-C/C++ projects will not get parsed in the
     current driver.
-2.  When deleting a project created with files found in "Local directory" using the 
-    "Delete Project" action, a message box will ask you if you want to delete 
+3.  When deleting a project created with files found in "Local directory" using the 
+    "Delete Project" action, you are prompted asking if you want to delete 
     all the source files as well. If you instead try to delete the project with the 
-    "Delete" action then all your source files will be deleted as well without 
-    warning.    
-3.  If you have two files with the same name in the same directory but different case 
+    "Delete" action then you are not prompted, and all your source files will 
+    be deleted without warning.    
+4.  If you have two files with the same name in the same directory but different case 
     then only one will show up in the C/C++ Projects View
 
 
 Appearance on Linux
 -------------------
 
-1.  Eclipse on Linux currently uses Motif widgets.  There will soon be support
-    for GTK widgets, which should improve the look and feel of the 
-    Eclipse platform on Linux. 
+1.  Eclipse on Linux currently uses Motif widgets.  CDT will support other 
+    widget sets as Eclipse adds them. 
 
 
 Parsing Issues
@@ -65,7 +72,6 @@ Here are some of the most common known problems:
     - The type information displayed for most objects contains duplicates
     - C++ has not well been tested so there are likely problems with templates,
       namespaces, etc.
-    - There are others...but they will all eventually get looked at ;-)
 
 Command Launcher View
 --------------------
@@ -125,20 +131,22 @@ For debugger issues, see the accompanying "todo.txt"
 Project Management Issues - autoconf and automake
 -------------------------------------------------
 
-1- If the project contains only one directory, then using generate configure action will not 
-   produce the desired output, as it will generate Makefile.am which does not contain any target. 
-   What you need to do is to create a Makefile.am which include a Target- a PROGRAMS for example- 
-   In order to do that you can select Autoconf -> Advanced->create Programs Makefile.am action 
-   to have the Progaram target.
-
-2- When invoking Generate Configure and Run Configure action, a pop dialog will warn you of 
-   outdated configure, and infact sometimes it will be up to date. So, if you are sure that configure 
-   is up to date and no need to update the configuration files, you may press the cancel button
+1- When you use the automake/autoconf support to create the control files for
+   a project, it assumes by convention that no build targets are created in
+   the top level directory.  Instead, it is assumed that all real targets are
+   in subdirectories.   These assumptions can be overridden by manually 
+   editing the Makefile.am files, or by using the Autoconf->Advanced actions
+   to generate specific desired kinds of Makefile.am in each directory.
    
-3- In the above point, pressing cancel does not mean to cancel the action, but tcanceling the 
-   updates actions only 
+   In particular, if the project contains no subdirectories then using 
+   the Generate configure action will not produce a useful result as it 
+   will generate a single Makefile.am with no target. Instead, create a 
+   Makefile.am which include a Target- a PROGRAMS for example- by 
+   selecting the action
+      Autoconf -> Advanced->create Programs Makefile.am 
 
-
-
-
-
+2- When invoking the Run Configure action, a popup dialog 
+   will warn you of outdated "configure" file.  If you know that your
+   configure file is valid and you don't want to regenerate it,
+   press the cancel button.  This cancels the regeneration, but proceeds
+   to run configure.

@@ -5,15 +5,13 @@ product.
 
 Work that we are planning or considering doing:
 
-1.  Linux Version 
-     - We will be keeping up with the latest releases of Eclipse.  
-       This will include versions on Linux and Windows as they become
-       available.
+1.  Eclipse Version 
+     - We will be moving up to later releases of Eclipse as they become stable.
 
 2.  Proper Handling of Setting Environment 
-     - In the current release, there is no integrated way to set 
-       environment variables before kicking off a build or parse.  We 
-       would like to provide views to allow this.  
+     - In the current release, the support for setting\modifying 
+       environment variables is not complete.  A proper mechanism of
+       overriding system environment variables is needed.
 
 3.  PA Integration
      - We will be providing some level of integration with other plugins 
@@ -52,7 +50,7 @@ Work that we are planning or considering doing:
 	
 
 
-Work that you may consider interesting or worthwhile
+Suggestions for work that you may consider interesting or worthwhile
  
 1.  Metrics
      - The DataStore is essentially just a tree of objects.  This makes 
@@ -69,8 +67,8 @@ Work that you may consider interesting or worthwhile
        required to implement a robust layout manager using the GEF 
        (Graphical Editing Framework) in Eclipse  
 
-3.  Renamer
-     - Another useful tool could be an object renamer. One note of 
+3.  Refactoring
+     - Another useful tool could be a C++ refactoring tool. Two notes of 
        caution here:
        We have not tested any sort of round-tripping of the parse 
        information (i.e. using the parse information to re-generate the 
@@ -78,6 +76,12 @@ Work that you may consider interesting or worthwhile
        would be just to use the information in the DataStore to find where 
        objects are used and then handle the re-naming through some simple 
        file operations.
+       C++ symbol resolution in the parser does not conform 100% to the 
+       language definition for reasons of performance. Rather than 
+       producing a fully compliant parser, we prefer a solution that 
+       identifies potentially dangerous situations (e.g. some uses of templates)
+       and doesn't proceed automatically in those cases.
+
 
 4.  Test Case Generator
      - Since we have parse information down to the statement\expression 

@@ -1,0 +1,22 @@
+This document describes how to install the C/C++ Development Toolkit.
+
+
+To install the plugin for regular use, simply unzip cdt-eclipse-0.5.0-local.zip 
+into the eclipse/plugins directory:
+     unzip cdt-eclipse-0.5.0-local.zip -d <...>/eclipse/plugins
+Once you have unzipped the CDT plugins into the eclipse/plugins directory,
+the CDT should be ready for use.
+
+To work with remote projects, you will need to install cdt-eclipse-0.5.0-server.zip
+on the remote machine.  Refer to com.ibm.cpp.docs.user/tasks/remote/server.htm
+for details.
+
+
+
+Note: to generate a build environment for the CDT plugins, perform the following:
+ 1. Ensure that the cdt-eclipse-0.5.0-local.zip has been unzipped in your eclipse/plugins directory
+ 2. Goto the .../eclipse/plugins/com.ibm.dstore.core directory
+ 3. Type make dev
+
+Instructions will be provided later for working with CDT as Eclipse Plugin 
+Development Environment (PDE) projects.
