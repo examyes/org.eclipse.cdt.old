@@ -457,6 +457,8 @@ public class ViewMenu implements IMenuListener
 			    }
 		    }
 	    }
+	  _relationItems = Sorter.sort(_relationItems);
+
       }
 
 
@@ -484,6 +486,8 @@ public class ViewMenu implements IMenuListener
 		{
 		    _filterItems.add(allD);
 		}
+
+	  _filterItems = Sorter.sort(_filterItems);
       }
 
 
@@ -541,7 +545,6 @@ public class ViewMenu implements IMenuListener
 
   public void fillFilterMenu(IMenuManager menu)
       {
-	  _filterItems = Sorter.sort(_filterItems);
 	  for (int i = 0; i < _filterItems.size(); i++)
 	      {
 		  DataElement object = (DataElement)_filterItems.get(i);
@@ -561,7 +564,6 @@ public class ViewMenu implements IMenuListener
 
   public void fillRelationMenu(IMenuManager menu)
       {
-	  _relationItems = Sorter.sort(_relationItems);
 	  for (int i = 0; i < _relationItems.size(); i++)
 	      { 
 		  DataElement object = (DataElement)_relationItems.get(i);		

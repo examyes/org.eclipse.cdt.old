@@ -110,7 +110,6 @@ public class OpenEditorAction extends Action implements IOpenAction
           String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
           String elementType = (String)(_element.getElementProperty(DE.P_TYPE));
 
-          System.out.println("opening  " + _element.getSource());
           if ((fileName != null) && (fileName.length() > 0))
           {
             Integer location = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));            
