@@ -99,8 +99,13 @@ public class ClientConnection
 
   public void setPort(String port)
       {
-        _port = port;
-	_clientAttributes.setAttribute(ClientAttributes.A_HOST_PORT, _port);
+	  if (port == null || port.length() == 0)
+	      {
+		  port = "0";
+	      }
+
+	  _port = port;
+	  _clientAttributes.setAttribute(ClientAttributes.A_HOST_PORT, _port);
       }
 
   public void setHostDirectory(String directory)
@@ -228,7 +233,12 @@ public class ClientConnection
 	  ConnectionStatus result = null;
         try 
         {
-          int port = Integer.parseInt(_port);
+	    int port = 0;
+	    if (_port != null && _port.length() > 0)
+		{
+		    port = Integer.parseInt(_port);
+		}
+
           _theSocket = new Socket(_host, port);
 
           _sender    = new Sender(_theSocket);
