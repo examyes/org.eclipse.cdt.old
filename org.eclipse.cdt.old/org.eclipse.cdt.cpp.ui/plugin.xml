@@ -3,7 +3,7 @@
 <plugin
    id="org.eclipse.cdt.cpp.ui"
    name="%pluginName"
-   version="1.0.0"
+   version="2.0.0"
    vendor-name = "International Business Machines Corp." 
    class="org.eclipse.cdt.cpp.ui.internal.CppPlugin">
 <requires>
@@ -238,6 +238,7 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IFile"
          id="org.eclipse.cdt.cpp.ui.internal.menu">
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Makefile___"
             path="additions"
@@ -271,6 +272,8 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IFolder"
          id="org.eclipse.cdt.cpp.ui.internal.menu4">
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
+    
       <menu
             label="%Issue_Command___"
             path="additions"
@@ -290,6 +293,7 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IFile"
          id="org.eclipse.cdt.cpp.ui.internal.menu5">
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Parse"
             path="additions"
@@ -309,6 +313,7 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IFolder"
          id="org.eclipse.cdt.cpp.ui.internal.menu6">
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/> 
       <menu
             label="%Parse___"
             path="additions"
@@ -328,6 +333,7 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IProject"
          id="org.eclipse.cdt.cpp.ui.internal.menu7">
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Parse___"
             path="additions"
@@ -361,6 +367,7 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IProject"
          id="org.eclipse.cdt.cpp.ui.internal.menu9">
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>    
       <action
             label="Create Specification"
             class="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction"
@@ -376,7 +383,7 @@
             id="convert">
       </action>
    </objectContribution>
-</extension>
+</extension>     
 <extension
       point="org.eclipse.ui.editors">
    <editor
