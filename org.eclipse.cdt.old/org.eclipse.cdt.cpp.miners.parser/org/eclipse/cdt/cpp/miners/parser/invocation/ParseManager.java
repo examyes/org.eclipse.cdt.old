@@ -82,12 +82,29 @@ public class ParseManager
 
   if (theFile.getType().equals("directory"))
   {
-  
-   String thePath = theFile.getSource();
+   File f = new File (theFile.getSource());
+   if (!f.exists())
+    return false;
+   String thePath = null;
+   try
+   {
+    thePath = f.getCanonicalPath();
+   }
+   catch (IOException e) {return false;}
+
    for (int i = theFiles.size()-1; i >= 0; i--)
    {  
     DataElement theElement = (DataElement)theFiles.get(i);
-    if (theElement.getSource().startsWith(thePath))
+    f = new File (theElement.getSource());
+    if (!f.exists())
+     continue;
+    String theElementPath = null;
+    try
+     {
+      theElementPath = f.getCanonicalPath();
+     }
+    catch (IOException e) {continue;}
+    if (theElementPath.startsWith(thePath))
     {
      _dataStore.deleteObject(_parsedFiles, theElement);
      deletedSomething = true;
