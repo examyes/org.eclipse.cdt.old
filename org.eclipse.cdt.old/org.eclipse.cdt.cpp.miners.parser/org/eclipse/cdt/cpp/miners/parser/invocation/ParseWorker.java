@@ -344,8 +344,12 @@ public class ParseWorker extends Thread
  {
   if (( _dataStore == null) || (theStatus == null))
    return;
-  theStatus.setAttribute(DE.A_NAME, "done");
+  
+  if (!theStatus.getAttribute(DE.A_NAME).equals("done"))
+  {
+  	theStatus.setAttribute(DE.A_NAME, "done");
    _dataStore.update(theStatus);
+  }
  }
 
  private DataElement[] getFileFromQueue()
