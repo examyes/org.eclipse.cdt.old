@@ -84,9 +84,6 @@ public class CreateProjectAction extends CustomAction
 				persp = dw.openPage("com.ibm.cpp.ui.internal.views.CppPerspective", workspace.getRoot());
 			    }
 			
-			RefreshNavigatorAction refresh = new RefreshNavigatorAction("refresh");
-			refresh.run();
-			
 		    } 
 		catch (WorkbenchException e) 
 		    {
