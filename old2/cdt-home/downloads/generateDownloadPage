@@ -45,29 +45,30 @@ if [ $theSize -gt 900 ] ;
  else
   theStatus=PASS
   mln=mainLatestNightly.html
-  echo "<tr>" > mln
-  echo "<td><a href=\"http://download.eclipse.org/eclipse/downloads/build_types.html\">Nightly</a></td>" >> mln
-  echo `date +%Y/%m/%d` >> mln
-  echo "  <td><a href=\"$eclipseLink\">$eclipseVersion</a>" >> mln
-  echo "  </td>" >> mln
-  echo " <td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a>" >> mln
-  echo " </td>" >> mln
-  echo "</tr>" >> mln
+  echo "<tr>" > $mln
+  echo "<td><a href=\"http://download.eclipse.org/eclipse/downloads/build_types.html\">Nightly</a></td>" >> $mln
+  echo "<td>" `date +%Y/%m/%d` "</td>" >> $mln
+  echo "<td><a href=\"$eclipseLink\">$eclipseVersion</a></td>" >> $mln
+  echo "<td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a></td>" >> $mln
+  echo "</tr>" >> $mln
 fi
+
+#Add the nightly build to mainNightly.html
+mn=mainNightly.html
+echo "<tr>" >> $mn
+echo "<td>" `date +%Y/%m%d` "</td>" >> $mn
+echo "<td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/errors\">Error Log</a>" >> $mn
+echo " <img alt=\"\" src=\"http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/$theStatus.gif?cvsroot=Tools_Project\"></td>" >> $mn
+echo "<td><a href=\"$eclipseLink\">$eclipseVersion</a></td>" >> $mn
+echo "<td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a></td>" >> $mn
+echo "</tr>" >> $mn
 
 #Now just put the pieces together
 cat mainTop.html            > main.html
 cat mainLatestNightly.html >> main.html
 cat mainRelease.html       >> main.html
 cat mainStable.html        >> main.html
-cat mainNightly.hmtl       >> main.html
-
-cat nightlyBuilds >> nb
-mv nb nightlyBuilds 
-mv nightly.html nightly.html.old
-cat nightlyTop     > nightly.html
-cat nightlyBuilds >> nightly.html
-cat nightlyBottom >> nightly.html
+cat mainNightly.html       >> main.html
 
 #ftp the zip and error file over to the download site
 
@@ -94,4 +95,4 @@ rm errors
 rm cdt-eclipse-R2-$theDate.zip
 
 #Commit changes
-#cvs commit -m "Automated update"
+cvs commit -m "Automated update"
