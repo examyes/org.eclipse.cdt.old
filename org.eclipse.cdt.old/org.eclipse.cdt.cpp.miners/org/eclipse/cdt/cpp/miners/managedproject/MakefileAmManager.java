@@ -207,8 +207,7 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".H") || name.endsWith(".C")))
+					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
 		return line;
