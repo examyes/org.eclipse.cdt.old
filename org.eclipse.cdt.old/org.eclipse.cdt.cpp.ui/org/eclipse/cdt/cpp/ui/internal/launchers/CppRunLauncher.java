@@ -35,7 +35,7 @@ import com.ibm.cpp.ui.internal.wizards.*;
 import java.io.IOException;
 
 
-public class CppRunLauncher implements ILauncherDelegate 
+public class CppRunLauncher implements ILauncherDelegate
 {
     private static DataElement _directory;
     private static DataElement _executable;
@@ -70,7 +70,7 @@ public class CppRunLauncher implements ILauncherDelegate
 		    }
 		_directory = _executable.getParent();
 	    }	
-        else if (element instanceof IProject || element instanceof IResource) 
+        else if (element instanceof IProject || element instanceof IResource)
 	    {
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
@@ -81,10 +81,10 @@ public class CppRunLauncher implements ILauncherDelegate
 			CppPlugin plugin = CppPlugin.getDefault();
 			DataStore dataStore = plugin.getCurrentDataStore();
 
-			_directory = dataStore.createObject(null, "directory", parentRes.getName(), 
+			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
 							    parentRes.getLocation().toString());
 
-			_executable = dataStore.createObject(_directory, "file", resource.getName(), 
+			_executable = dataStore.createObject(_directory, "file", resource.getName(),
 							     resource.getLocation().toString());
 			
 		    }
@@ -113,14 +113,26 @@ public class CppRunLauncher implements ILauncherDelegate
             return false;
     }
 
-    public void doLaunch(String program, String parameters) {
+    public void doLaunch(String program, String parameters, String workingDirectory)
+    {
 
         System.out.println("CppRunLauncher.doLaunch()");
 
         ModelInterface api = ModelInterface.getInstance();
 
         String command = program + " " + parameters;
-        api.invoke(_directory, command, false);
+
+        if (workingDirectory != "")
+        {
+            System.out.println("CppRunLauncher:doLaunch() - workingDirectory = " + workingDirectory);
+         	_api.invoke(workingDirectory, command, false);
+        }
+        else
+        {
+           System.out.println("CppLoadLauncher:doLaunch() - _directory = " + _directory);
+            _api.invoke(_directory, command, false);
+        }
+
     }
 
 }

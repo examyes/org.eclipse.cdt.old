@@ -10,6 +10,7 @@ import com.ibm.cpp.ui.internal.CppProjectAttributes;
 import com.ibm.cpp.ui.internal.CppPlugin;
 
 import com.ibm.dstore.core.model.*;
+import com.ibm.dstore.hosts.dialogs.*;
 
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.HelpEvent;
@@ -51,6 +52,8 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
     private Text                             programNameField;
     private Text                             programParametersField;
     protected Combo	                        sourceNameField;
+    protected Combo		                     workingDirectoryField;
+    protected Button                         workingDirectoryBrowseButton;
 
     // constants
     private static final int SIZING_TEXT_FIELD_WIDTH = 300;
@@ -58,7 +61,9 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
     protected ArrayList    _history;
 
     private  String        _programName;
+    private  DataElement   _directory;
     private  String        _parameters;
+    private  String        _workingDirectory;
 
     /**
      * Creates a <code>WizardNewProjectCreationPage</code> instance.
@@ -66,9 +71,10 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
      * @param pageId this page's internal name
      * @param desktop the current desktop
      */
-    public CppRunLauncherWizardMainPage(String pageId, String currentSelectionName) {
+    public CppRunLauncherWizardMainPage(String pageId, String currentSelectionName, DataElement directory) {
       super(pageId);
       _programName = currentSelectionName;
+      _directory = directory;
     	setPageComplete(true);
     }
 
@@ -103,6 +109,7 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
 
    	createSpacer(composite);
 
+   	createWorkingDirectoryGroup(composite);
    	
    	programParametersField.setFocus();
    	
@@ -203,6 +210,54 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
     }
 
     /**
+     * Field for entering the working directory from which to invoke the program to execute.
+     * By default, we populate the field with the directory where the program is found, but the user
+     * can change it by manualy entering the path, or using the "Browse" button to select it.
+     *
+     * @param parent a <code>Composite</code> that is to be used as the parent
+     *     of this group's collection of visual components
+     * @see org.eclipse.swt.widgets.Composite
+     */
+    protected final void createWorkingDirectoryGroup(Composite parent)
+    {
+   	// working directory specification group
+   	Composite workingDirectoryGroup = new Composite(parent,SWT.NONE);
+   	GridLayout layout = new GridLayout();
+   	layout.numColumns = 3;
+   	workingDirectoryGroup.setLayout(layout);
+   	workingDirectoryGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
+   	
+   	// working directory name label
+   	Label directoryLabel = new Label(workingDirectoryGroup,SWT.NONE);
+   	directoryLabel.setText("Working Directory:");
+
+      GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+   	//data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+   	directoryLabel.setLayoutData(data);
+
+
+   	// Directory name entry field
+   	workingDirectoryField = new Combo(workingDirectoryGroup,SWT.BORDER);
+   	workingDirectoryField.addListener(SWT.Modify,this);
+   	workingDirectoryField.addListener(SWT.Selection,this);
+   	workingDirectoryField.setText(_directory.getSource());
+   	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+   	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
+   	data.horizontalSpan = 1;
+   	workingDirectoryField.setLayoutData(data);
+
+   	// browse button
+   	workingDirectoryBrowseButton = new Button(workingDirectoryGroup, SWT.PUSH);
+   	workingDirectoryBrowseButton.setText("Browse...");
+   	workingDirectoryBrowseButton.addListener(SWT.Selection,this);
+   	workingDirectoryBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
+
+   	
+   	
+    }
+
+
+    /**
      * Performs setup code that is to be invoked whenever the user enters this
      * page in the wizard.
      *
@@ -228,6 +283,7 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
     public boolean finish()
     {
       _parameters = programParametersField.getText();
+      _workingDirectory = workingDirectoryField.getText();
 
    	return true;
     }
@@ -237,7 +293,10 @@ public class CppRunLauncherWizardMainPage extends WizardPage implements Listener
 		return _parameters;
     }
 
-
+    public String getWorkingDirectory()
+    {
+		return _workingDirectory;
+    }
 /**
  * Returns the current contents of the project name field, or
  * its set initial value if it does not exist yet (which could
@@ -264,15 +323,43 @@ public String getProgramFieldValue() {
      */
     public void handleEvent(Event ev)
     {
-	Widget source = ev.widget;
+   	Widget source = ev.widget;
 	
-	if ((source == programNameField) || (source == programParametersField))
-	    {
+	   if ((source == programNameField) || (source == programParametersField))
+   	{
 		//resetSelection();
-	    }
+   	}
+      else if (source == workingDirectoryBrowseButton)
+    	{
+      	handleWorkingDirectoryBrowseButtonPressed();
+    	}
 
-	this.setPageComplete(this.validatePage());
+ 	   this.setPageComplete(this.validatePage());
     }
+
+    /**
+     *	Open an appropriate source browser so that the user can specify a source
+     *	to import from
+     */
+    protected void handleWorkingDirectoryBrowseButtonPressed()
+    {
+
+		DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
+		directory = directory.getParent();
+		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", /*_directory*/directory, true);
+		dialog.open();
+		if (dialog.getReturnCode() == dialog.OK)
+	   {
+   		DataElement selected = dialog.getSelected();
+	  		if (selected != null)
+		    {
+   	         workingDirectoryField.setText(selected.getSource());
+  		    }
+	    }
+    }	
+
+
+
 
     public void performHelp()
     {
@@ -287,7 +374,10 @@ public String getProgramFieldValue() {
      */
     protected boolean validatePage()
     {
-	return validateProgramNameGroup();
+   	String workingDirectoryFieldContents = workingDirectoryField.getText();
+	   if (workingDirectoryFieldContents.equals(""))
+	       return false;
+   	return validateProgramNameGroup();
     }
 
     /**

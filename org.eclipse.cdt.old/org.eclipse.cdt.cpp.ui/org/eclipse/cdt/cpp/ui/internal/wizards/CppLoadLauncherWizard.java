@@ -157,7 +157,8 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
    	_launcher = launcher;
    	_element = resource;
 	
-   	_currentSelectionName = ((DataElement)_element).getName();
+//   	_currentSelectionName = ((DataElement)_element).getName();
+   	_currentSelectionName = ((DataElement)_element).getSource();
    	_directory = ((DataElement)_element).getParent();
     }
 }

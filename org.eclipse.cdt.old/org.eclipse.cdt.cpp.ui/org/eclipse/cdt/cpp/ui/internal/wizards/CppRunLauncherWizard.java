@@ -39,12 +39,13 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     private CppPlugin                       _plugin;
     private IProject                        _project;
     private String                          _programInvocation;
+    private DataElement                     _directory;
 
     public void addPages()
     {
 	   super.addPages();
 	
-   	_mainPage = new CppRunLauncherWizardMainPage(_plugin.getLocalizedString("runLauncher"), _programInvocation);
+   	_mainPage = new CppRunLauncherWizardMainPage(_plugin.getLocalizedString("runLauncher"), _programInvocation, _directory);
     	_mainPage.setTitle(_plugin.getLocalizedString("runLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("runLauncher.Description"));
    	this.addPage(_mainPage);
@@ -61,24 +62,30 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
    	return _mainPage.getParameters();
     }
 
+    public String getWorkingDirectory()
+    {
+   	return _mainPage.getWorkingDirectory();
+    }
+
     public boolean performFinish()
     {
    	_plugin = CppPlugin.getDefault();
 	
    	_mainPage.finish();
     	String parameters = getParameters();
-	getLauncher().doLaunch(_programInvocation, parameters);
+    	String workingDirectory = getWorkingDirectory();
+   	getLauncher().doLaunch(_programInvocation, parameters, workingDirectory);
 	
-	return true;		
+   	return true;		
     }
 
 
-    protected CppRunLauncher getLauncher() 
+    protected CppRunLauncher getLauncher()
     {
-	return (CppRunLauncher) _launcher.getDelegate();
+   	return (CppRunLauncher) _launcher.getDelegate();
     }
 
-    public void init(ILauncher launcher, String mode, IStructuredSelection selection) 
+    public void init(ILauncher launcher, String mode, IStructuredSelection selection)
     {
 	if (selection.getFirstElement() instanceof DataElement)
 	    {
@@ -86,11 +93,13 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
 	    }
     }
 
-    public void init(ILauncher launcher, String mode, DataElement resource) 
+    public void init(ILauncher launcher, String mode, DataElement resource)
     {
    	_launcher = launcher;
    	_element = resource;
-	_programInvocation = ((DataElement)_element).getName();
+   	//_programInvocation = ((DataElement)_element).getName();
+   	_programInvocation = ((DataElement)_element).getSource();
+   	_directory = ((DataElement)_element).getParent();
     }
 
 

@@ -422,7 +422,10 @@ public String getProgramFieldValue() {
      */
     protected boolean validatePage()
     {
-	return validateProgramNameGroup();
+   	String workingDirectoryFieldContents = workingDirectoryField.getText();
+	   if (workingDirectoryFieldContents.equals(""))
+	       return false;
+   	return validateProgramNameGroup();
     }
 
     /**
@@ -449,11 +452,12 @@ public String getProgramFieldValue() {
 	if (programFieldContents.equals(""))
 	    return false;
 	
-	IStatus result = workspace.validateName(programFieldContents,IResource.PROJECT);
+   /*	IStatus result = workspace.validateName(programFieldContents,IResource.PROJECT);
 	if (!result.isOK()) {
-	    //**displayErrorMessage("Invalid project name: " + result.getMessage());
+	    //displayErrorMessage("Invalid project name: " + result.getMessage());
 	    return false;
 	}
+   */
 	
 	
 	return true;
