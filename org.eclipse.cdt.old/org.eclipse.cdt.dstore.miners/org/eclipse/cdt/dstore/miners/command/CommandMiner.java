@@ -369,7 +369,7 @@ class CommandMinerThread extends MinerThread
        int next = theValue.toString().indexOf("}",nextIndex);
        if (next > 0)
        {
-        String replacementValue = findValue(theValue.substring(nextIndex+1, next), theTable);
+        String replacementValue = findValue(theValue.substring(nextIndex+1, next), theTable, true);
         theValue.replace(index, next+1, replacementValue);
         index += replacementValue.length() - 1;
        }
@@ -381,7 +381,7 @@ class CommandMinerThread extends MinerThread
        {
         while ((nextIndex < theValue.length()) && (Character.isJavaIdentifierPart(c)))
          c = theValue.charAt(++nextIndex);
-        String replacementValue = findValue(theValue.substring(index+1, nextIndex),theTable);
+        String replacementValue = findValue(theValue.substring(index+1, nextIndex),theTable, true);
         theValue.replace(index, nextIndex, replacementValue);
         index += replacementValue.length() - 1;
        }
@@ -394,7 +394,7 @@ class CommandMinerThread extends MinerThread
      int next = theValue.toString().indexOf("%",index+1);
      if (next > 0)
      {
-      String replacementValue = findValue(theValue.substring(index+1, next), theTable);
+      String replacementValue = findValue(theValue.substring(index+1, next), theTable, false);
       theValue.replace(index, next+1, replacementValue);
       index += replacementValue.length() - 1;
      }
@@ -406,9 +406,21 @@ class CommandMinerThread extends MinerThread
   return theValue.toString();
  }
 
- private String findValue(String key, Hashtable theTable)
+ private String findValue(String key, Hashtable theTable, boolean caseSensitive)
  {
-  Object theValue = theTable.get(key);
+  Object theValue = null;
+  if (caseSensitive)
+   theValue = theTable.get(key);
+  else
+  {
+   String matchString = key.toUpperCase();
+   for (Enumeration e=theTable.keys(); e.hasMoreElements();)
+   {
+    String theKey = (String)e.nextElement();
+    if (matchString.equals(theKey.toUpperCase()))
+     theValue = (String)theTable.get(theKey);
+   }
+  }
   if (theValue == null)
    return "";
   return (String)theValue;
