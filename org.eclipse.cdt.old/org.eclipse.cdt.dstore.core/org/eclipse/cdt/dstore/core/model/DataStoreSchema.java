@@ -129,7 +129,6 @@ public class DataStoreSchema
 	
 	_dataStore.createReference(containerObjectD, fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, deviceD,  abstracts, abstractedBy);
-	_dataStore.createReference(hostD, fsObject,  abstracts, abstractedBy);
 	
 	_dataStore.createReference(fileD,    fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, dirD, abstracts, abstractedBy);
@@ -176,6 +175,7 @@ public class DataStoreSchema
 
 	// type descriptors
         _dataStore.createObjectDescriptor(schemaRoot, "String");
+        _dataStore.createObjectDescriptor(schemaRoot, "Date");
 
         DataElement numberD  = _dataStore.createAbstractObjectDescriptor(schemaRoot, "Number");
         DataElement integerD = _dataStore.createObjectDescriptor(schemaRoot, "Integer");
