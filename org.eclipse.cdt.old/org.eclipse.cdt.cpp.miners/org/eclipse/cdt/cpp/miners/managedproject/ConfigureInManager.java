@@ -96,7 +96,7 @@ public class ConfigureInManager {
 			updateConfigureIn(project,configure_in);
 			compareOldAndNew(configure_in.getParentFile());
 		}
-		if(forceGenerate)
+		else if(forceGenerate)
 			generateConfigureIn(project);
 	}
 	private void updateConfigureIn(DataElement project,File configure_in)

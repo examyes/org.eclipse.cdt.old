@@ -66,9 +66,9 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD,"configure.in","C_UPDATE_CONFIGURE_IN",false);		
 		//
 		
-		createCommandDescriptor(projectD, "Create configure ", "C_CREATE_CONFIGURE",false);
+		createCommandDescriptor(projectD, "Create configure", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Initialize configure.in & Makefile.am's and createte & run configure", "C_MANAGE_PROJECT", false);
+		createCommandDescriptor(projectD, "Initialize configure.in & Makefile.am's and createte & run configure", "C_INIT_CREATE_RUN", false);
 		createCommandDescriptor(projectD, "DistClean", "C_DIST_CLEAN", false);
 		
 		//
@@ -113,8 +113,9 @@ public class ManagedProjectMiner extends Miner
 			if (name.equals("C_UNMANAGE_PROJECT"))
 			{
  	 			_dataStore.deleteObject(project.getParent(), project);
+ 	 			//project.getParent().removeNestedData();
 			}
-			else if (name.equals("C_MANAGE_PROJECT"))
+			else if (name.equals("C_INIT_CREATE_RUN"))
 			{
 				autoconfManager.manageProject(project, status);
 				parseAmFile(project); 
@@ -156,10 +157,15 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.makefileAmManager.updateMakefileAm(subject,false);
 				parseAmFile(subject); 
 			}
-			else if (name.equals("C_OPEN") || name.equals("C_REFRESH"))
+			else if (name.equals("C_REFRESH"))
 			{
-			    //parseAmFile(subject); 
+				parseAmFile(subject); 
 			}
+			else if (name.equals("C_OPEN"))
+			{
+				//parseAmFile(subject);
+			}
+			
 		}
 			
 		if (subject.getType().equals("directory") || 
@@ -214,7 +220,7 @@ public class ManagedProjectMiner extends Miner
 		{
 			theParser = new AmParser(theUnmanagedProject);
 			theManagedProject = theParser.parse();
-			}
+		}
 		else if (theUnmanagedProject.getType().equals("directory"))
 		{
 			theParser = new AmParser(theUnmanagedProject.getParent(), theUnmanagedProject.getName());
