@@ -21,7 +21,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.ibm.debug.daemon.CoreDaemon;
 import com.ibm.debug.internal.pdt.PICLDebugTarget;
-import com.ibm.debug.pdt.launch.PICLDaemonInfo;
 import com.ibm.debug.pdt.launch.PICLLoadInfo;
 
 /**
@@ -138,26 +137,17 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	PICLDebugTarget target = new  PICLDebugTarget(loadInfo, loadInfo.getEngineConnectionInfo());
 	int key = CoreDaemon.generateKey();
 	CoreDaemon.storeDebugTarget(target, key);
-	
-	PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
-						       new Integer(loadInfo.getEngineConnectionInfo().getConduit()).intValue());
-	
-	if(daemonInfo == null)
-	    return;
-
+        int port = CoreDaemon.getCurrentPort();
+		
         launch.addDebugTarget(target);
 	launch.setSourceLocator(loadInfo.getWorkspaceSourceLocator());
 	//target.launchEngine(key);    		
 
-	launchEngine(daemonInfo, workingDirectory);
+	launchEngine(workingDirectory, new Integer(port).toString(), new Integer(key).toString());
     }
     
-    protected void launchEngine(PICLDaemonInfo daemonInfo, String workingDirectory)
+    protected void launchEngine(String workingDirectory, String port, String key)
     {
-	String port = new Integer(daemonInfo.getPort()).toString();
-	String key  = new Integer(daemonInfo.getKey()).toString();
-
-
       if (workingDirectory != "")
       {
          IResource resource = _api.getResource(workingDirectory);
