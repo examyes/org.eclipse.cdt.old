@@ -326,8 +326,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    attributes.put("DataElementID", output);
 				    searchMarker.setAttributes(attributes);
 				
-				    SearchUI.getSearchResultView().addMatch(message, message, file, searchMarker);
-
+					ISearchResultView sview = SearchUI.getSearchResultView();
+				    if (sview != null)
+				    {
+					    sview.addMatch(message, message, file, searchMarker);
+				    }
 				}
 			    catch (CoreException e)
 				{
@@ -336,7 +339,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				}
 			}
 		}
-	}
+	} 
     }
 
   private CppPlugin      _plugin;
@@ -1425,16 +1428,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
       if (dataStore == _plugin.getDataStore())
 	  {
+	  			
+		  SearchUI.activateSearchResultView();
+		
 	      _searchResultsView = SearchUI.getSearchResultView();
-	
-	      StringBuffer patternStr = new StringBuffer("Pattern: " + pattern + " Types: ");
-	      for (int i = 0; i < types.size(); i++)
+		  if (_searchResultsView != null)
 		  {
-		      patternStr.append((String)types.get(0));
-		      if (i < types.size()) patternStr.append(", ");
-		  }
+		      StringBuffer patternStr = new StringBuffer("Pattern: " + pattern + " Types: ");
+		      for (int i = 0; i < types.size(); i++)
+			  {
+			      patternStr.append((String)types.get(0));
+			      if (i < types.size()) patternStr.append(", ");
+			  }
 
-	      _searchResultsView.searchStarted(
+		      _searchResultsView.searchStarted(
 					       "org.eclipse.cdt.cpp.ui.CppSearchPage",
 					       patternStr.toString(),
 					       patternStr.toString(),
@@ -1444,6 +1451,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					       new ShowMarkerAction(),
 					       new GroupByKeyComputer(),
 					       null);		
+		  }
 	
 	      Display d = getDummyShell().getDisplay();
 	      d.syncExec(new Runnable()
