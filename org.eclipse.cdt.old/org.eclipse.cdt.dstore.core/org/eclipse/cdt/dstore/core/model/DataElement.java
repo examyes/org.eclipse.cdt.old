@@ -1531,6 +1531,10 @@ public final class DataElement implements Serializable, IDataElement
 		
 		return  _propertySource;	    
 	    }
+	else if (DataElementActionFilter.matches(key)) 
+	     {
+		 return DataElementActionFilter.getInstance();
+	     }
 	return null;
     }
 
