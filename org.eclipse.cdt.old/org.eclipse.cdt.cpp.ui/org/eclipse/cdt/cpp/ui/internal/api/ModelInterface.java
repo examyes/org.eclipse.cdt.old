@@ -2061,7 +2061,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	else
 	    {		
 		// This could cause slowdowns -- temporarily uncommenting for nav synchronization
-		if (parent != null)
+		if (parent != null && !parent.getDataStore().isVirtual())
 		    {		
 			synchronized (parent)
 			    {
