@@ -31,16 +31,18 @@ public class CustomMessageDialog extends MessageDialog{
 	private int defaultButtonIndex;
 	public Button [] extraButtons;
 	private SelectionListener actionListener;
+	private String preferenceKey;
 	
 	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
 							int dialogImageType, String[] dialogButtonLabels,
-							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener) 
+							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener, String preferenceKey) 
 	{
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex);
 		this.buttonLabels = dialogButtonLabels;
 		if(extraButtonLabels!= null)
 			this.extraButtonLabels = extraButtonLabels;
 		this.actionListener = actionListener;
+		this.preferenceKey = preferenceKey;
 	}
 	
 	protected Control createButtonBar(Composite parent) {
@@ -165,7 +167,7 @@ public class CustomMessageDialog extends MessageDialog{
 		button.setFont(parent.getFont());
 		return button;
 	}
-	public int open(String preferenceKey)
+	public int open()
     {
 		if(showDialog(preferenceKey))
 			return super.open();

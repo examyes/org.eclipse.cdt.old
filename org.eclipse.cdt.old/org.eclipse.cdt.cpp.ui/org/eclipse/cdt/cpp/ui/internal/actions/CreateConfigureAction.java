@@ -128,8 +128,9 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL},
 								0,
 								extraLabel,
-								this);
-					int result = box.open(dialogPrefernceKey);
+								this,
+								dialogPrefernceKey);
+					int result = box.open();
 					if(result!= -1)
 						createUpdate= result;
 					else
@@ -148,8 +149,9 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 									new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 									0,
 									extraLabel,
-									this);
-					int result = box.open(dialogPrefernceKey);
+									this,
+									dialogPrefernceKey);
+					int result = box.open();
 					if(result!= -1)
 						createUpdate= result+1;
 					else
@@ -171,8 +173,9 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 								0,
 								extraLabel,
-								this);
-				int result = box.open(dialogPrefernceKey);
+								this,
+								dialogPrefernceKey);
+				int result = box.open();
 				if(result!= -1)
 					if(result==1)
 						createUpdate= result+1;

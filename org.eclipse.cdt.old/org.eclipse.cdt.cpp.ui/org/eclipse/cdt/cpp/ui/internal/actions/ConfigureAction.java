@@ -114,8 +114,9 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 										0,
 										extraLabels,
-										this);
-					int result = dialog.open(updateAllDialogKey);
+										this,
+										updateAllDialogKey);
+					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
 					else
@@ -138,8 +139,9 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 										0,
 										extraLabels,
-										this);
-					int result = dialog.open(updateMakefileAmKey);
+										this,
+										updateMakefileAmKey);
+					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
 					else
@@ -162,8 +164,9 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 										0,
 										extraLabels,
-										this);
-					int result = dialog.open(updateConfigureInKey);
+										this,
+										updateConfigureInKey);
+					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
 					else
