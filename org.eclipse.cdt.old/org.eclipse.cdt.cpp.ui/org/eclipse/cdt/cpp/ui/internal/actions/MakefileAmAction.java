@@ -63,6 +63,7 @@ public class MakefileAmAction extends CustomAction {
 		// classifying Makefile.am
 		if(doesFileExist("Makefile.am"))
 		{
+			/*
 			File Makefile_am = new File(_subject.getSource(),"Makefile.am");
 			int classification = classifier.classify(Makefile_am);
 			switch (classification)
@@ -90,6 +91,7 @@ public class MakefileAmAction extends CustomAction {
 				default:
 				break;
 			}
+			*/
 		}
 	}
 	public void run()

@@ -91,9 +91,11 @@ public class ConfigureAction extends CustomAction
 	/*	if(_command.getValue().equals("CREATE_CONFIGURE")
 			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
 			setEnabled(false);*/
+			/*
 		if(_command.getValue().equals("CREATE_CONFIGURE")&&
-			doesFileExists("configure")&&configureIsUptodate(_subject))
+			doesFileExists("configure")  &&configureIsUptodate(_subject))
 				setEnabled(false);
+				*/
 						
 		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure") )
 				setEnabled(false);		
@@ -170,7 +172,7 @@ public class ConfigureAction extends CustomAction
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
-			if(!configureIsUptodate(_subject))
+			if (true)//if(!configureIsUptodate(_subject))
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
