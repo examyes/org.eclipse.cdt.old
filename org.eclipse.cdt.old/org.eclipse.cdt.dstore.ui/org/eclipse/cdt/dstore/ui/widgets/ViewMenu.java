@@ -344,6 +344,7 @@ public class ViewMenu implements IMenuListener
 	  if (object != null)
 	      {
 		  _relationSelected = object.dereference();
+		  property = (String)object.getElementProperty(DE.P_NAME);
 		  
 		  _parent.getViewer().setProperty(object);
 		  setDefaultFilter();
