@@ -204,10 +204,7 @@ public final class DataElement implements Serializable, IDataElement
 	  _isUpdated   = false;
 	  _descriptor  = typeDescriptor;
 
-	if (getAttribute(DE.A_NAME).equals("Classes/Structs") &&
-		getAttribute(DE.A_TYPE).equals("abstractobjectdescriptor")
-	)
-	  System.out.println(this);
+
 
 	  String depthStr = getAttribute(DE.A_DEPTH);
 	  if (depthStr != null)
