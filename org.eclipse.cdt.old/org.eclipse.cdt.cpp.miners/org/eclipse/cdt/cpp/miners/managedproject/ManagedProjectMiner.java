@@ -5,12 +5,15 @@ package org.eclipse.cdt.cpp.miners.managedproject;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.dstore.core.miners.miner.*;
-import org.eclipse.cdt.cpp.miners.managedproject.amparser.*;
+import java.io.File;
+import java.util.ArrayList;
 
-import java.util.*;
-import java.io.*;
+import org.eclipse.cdt.cpp.miners.managedproject.amparser.Am;
+import org.eclipse.cdt.cpp.miners.managedproject.amparser.AmParser;
+import org.eclipse.cdt.dstore.core.miners.miner.Miner;
+import org.eclipse.cdt.dstore.core.model.DE;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStoreAttributes;
 
 public class ManagedProjectMiner extends Miner
 {	
@@ -77,14 +80,6 @@ public class ManagedProjectMiner extends Miner
   
 		createCommandDescriptor(containerObjectD,"set ExtraDist Extensions","C_SET_EXTRA_DIST_EXTENSIONS",false);
 		
-/*		DataElement fsObj = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-		DataElement inhabits = _dataStore.createRelationDescriptor(schemaRoot, "inhabits");
-		DataElement sustains = _dataStore.createRelationDescriptor(schemaRoot, "sustains");
-		inhabits.setDepth(0);
-		sustains.setDepth(0);
-
-		_dataStore.createReference(envVar, sustains);
-		_dataStore.createReference(fsObj, inhabits);*/
 		//////////////// end new
 				
 		//createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
@@ -268,17 +263,13 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_DEBUG_OPTION"))
 			{
 				// the code to add/change CFLAGS/CXXFLAGS = -g the program Makefile.am to be optimized 
-				//System.out.println("\nDebug selected");
 				autoconfManager.makefileAmManager.setCompilerFlag(project,"-g");
 			}
 			
 			else if(name.equals("C_SET_EXTRA_DIST_EXTENSIONS"))
 			{
-			//	//handleSetExtensions(subject, args);
-			//	System.out.println("\n extran dist action:");
+				//handleSetExtensions(subject, args);
 				ArrayList extensionList = args.getNestedData();
-				//for(int i = 0; i < list.size(); i ++)
-				//	System.out.println("\n "+i+" > \n"+((DataElement)list.get(i)).getName());*/
 				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList);
 				
 			}

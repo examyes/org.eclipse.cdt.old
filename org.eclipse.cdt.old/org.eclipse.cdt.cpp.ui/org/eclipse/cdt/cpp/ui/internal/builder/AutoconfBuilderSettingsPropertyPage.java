@@ -6,26 +6,19 @@ package org.eclipse.cdt.cpp.ui.internal.builder;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
-import org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfControl;
-import org.eclipse.cdt.cpp.ui.internal.vcm.*;
+import java.util.ArrayList;
 
-import org.eclipse.cdt.dstore.core.model.*;
-
-import org.eclipse.swt.widgets.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
-
-import org.eclipse.core.resources.*;
-import java.io.*;
-import java.util.*;
-
-import org.eclipse.ui.dialogs.*;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.dialogs.PropertyPage;
 
 public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 {	
@@ -134,11 +127,7 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 			DataElement status = plugin.getDataStore().command(optimizedCmd, api.findProjectElement(project));
 
 		}
-		
-		//if(!_autoconfBuildControl.getExtensionList().isEmpty())
-	//	{
 			plugin.writeProperty(project,extensionKey,_autoconfBuildControl.getExtensionList());
-//		}
 	}
 	
 	public boolean performOk()
