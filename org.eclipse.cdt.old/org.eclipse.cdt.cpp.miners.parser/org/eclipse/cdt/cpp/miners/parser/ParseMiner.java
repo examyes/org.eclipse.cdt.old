@@ -59,6 +59,10 @@ public class ParseMiner extends Miner
    handleFileParse(subject, getCommandArgument(theElement, 1), status);
    return status;
   }
+  else if (name.equals("C_NOTIFICATION"))
+  {
+  	handleNotification(subject, getCommandArgument(theElement, 1));
+  }
   else if (name.equals("C_QUERY"))
    handleObjectParse(subject, status);
   else if (name.equals("C_CANCEL"))
@@ -87,6 +91,59 @@ public class ParseMiner extends Miner
    handleSetPreferences(subject, getCommandArgument(theElement, 1), getCommandArgument(theElement, 2),getCommandArgument(theElement, 3), status);
    status.setAttribute(DE.A_NAME, "done");
    return status;
+ }
+
+ private void handleNotification(DataElement cmd, DataElement subject)
+ {
+ 	String cmdStr = cmd.getValue();
+ 	DataElement parsedFile = getParseFileFor(subject);
+ 	if (parsedFile != null)
+ 	{
+ 	if (cmdStr.equals("C_DELETE"))
+ 	{
+ 
+ 		removeParseInfo(parsedFile);
+ 	}
+ 	else if (cmdStr.equals("C_RENAME"))
+ 	{
+ 		
+ 		removeParseInfo(parsedFile);
+ 		
+ 	}
+ 	}
+ 
+ }
+ 
+ private DataElement getParseFileFor(DataElement file)
+ {
+ 	String type = file.getType();
+ 	DataElement theProject = file;
+ 	while (!type.equals("Project") && theProject != null)
+ 	{
+ 		theProject = file.getParent();
+ 		type = theProject.getType();
+ 	}
+ 	
+ 	if (theProject != null)
+ 	{
+ 		theProject = getParseProject(theProject);
+		{
+ 			DataElement parsedFiles = getProjectElement(theProject, ParserSchema.ParsedFiles);			
+ 			if (parsedFiles != null)
+ 			{
+ 				String src = file.getSource().replace('\\', '/');
+ 				String src2 = file.getSource().replace('/', '\\');
+ 				DataElement parsedFile = _dataStore.find(parsedFiles, DE.A_VALUE, src, 1);
+ 				if (parsedFile == null)
+ 				{
+ 					parsedFile = _dataStore.find(parsedFiles, DE.A_VALUE, src2, 1);
+ 				}
+ 				return parsedFile;
+ 			}
+ 		}
+ 	}
+ 	
+ 	return null;
  }
 
  private void handleRefresh(DataElement theSubject, DataElement prj, DataElement status)
