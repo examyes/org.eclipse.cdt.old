@@ -584,6 +584,10 @@ System.out.println("????????????????? GdbDebugSession.setMainBreakpoint"   );
 //    updateSharedLibraries();
     if (Gdb.traceLogger.EVT) 
         Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.setStartProgramName DONE" );
+        
+    // add dummy part
+    _moduleManager.checkPart(1, "dummy");
+        
     return true;
   }
 
