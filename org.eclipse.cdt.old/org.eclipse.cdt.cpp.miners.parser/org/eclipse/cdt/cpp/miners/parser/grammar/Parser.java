@@ -114,21 +114,26 @@ public final class Parser implements ParserConstants {
  }
 
  //This method takes a string containing a bunch of type names and a declaration name and returns just the 
- //type names and the Declarator split into an Array
- //So if "const char *c" is passed in,  just "const char" is list[1] and "*c" is list[0];
- public String[] parseDeclaration(String theTypes)
+ //type names and the Declarator split into an Array. If pointerInType is true, the ptr operators belong to
+ //the type; otherwise they belong to the name.
+ //So if "const char *c" is passed in,  just "const char *" is list[1] and "c" is list[0] when pointerInType is true.
+ //and "const char" is list[1] and "*c" is list[0] when pointerInType is false.
+ public String[] parseDeclaration(String theTypes, boolean pointerInType)
  {
   //First find the last word...
   int division = theTypes.lastIndexOf(" ");
 
-  //Now move the division point past any ptr operators that may be next to the name (e.g. int **f1(a,b)):
-  int firstPtr = theTypes.indexOf("*");
-  if (firstPtr > 0 && firstPtr < division)
-   division = firstPtr;
+  //If the pointer operator is not part of the type, move the division point to the first ptr operator.
+  if (!pointerInType)
+  {
+   int firstPtr = theTypes.indexOf("*");
+   if (firstPtr > 0 && firstPtr < division)
+    division = firstPtr;
 
-  firstPtr = theTypes.indexOf("&");
-  if (firstPtr > 0 && firstPtr < division)
-   division = firstPtr;
+   firstPtr = theTypes.indexOf("&");
+   if (firstPtr > 0 && firstPtr < division)
+    division = firstPtr;
+  }
 
   String[] theArray = new String[2];
   if (division < 1)
@@ -1158,7 +1163,7 @@ public final class Parser implements ParserConstants {
       case THIS:
       case ID:
         name = declarator(ParserSchema.Function);
-      String [] names = parseDeclaration(theTypes);
+      String [] names = parseDeclaration(theTypes, true);
       symtab.addFunctionReturnTypes(names[1]);
       name = names[0] + name;
       DataElement funcType = ParserSchema.dFunction;
@@ -1372,7 +1377,7 @@ public final class Parser implements ParserConstants {
       jj_consume_token(COMMA);
      if ((firstTime) && (theTypes != null))
      {
-      theTypes = parseDeclaration(theTypes)[1];
+      theTypes = parseDeclaration(theTypes, false)[1];
       firstTime = false;
      }
       name = init_declarator();
@@ -2150,7 +2155,7 @@ public final class Parser implements ParserConstants {
       jj_consume_token(COMMA);
       if (firstTime)
       {
-       theTypes = parseDeclaration(theTypes)[1];
+       theTypes = parseDeclaration(theTypes, false)[1];
        firstTime = false;
       }
       name = member_declarator();
@@ -6057,24 +6062,6 @@ public final class Parser implements ParserConstants {
     boolean retval = !jj_3_116();
     jj_save(115, xla);
     return retval;
-  }
-
-  final private boolean jj_3R_224() {
-    if (jj_3R_82()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    if (jj_scan_token(CLOSEPAREN)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_389() {
-    return false;
-  }
-
-  final private boolean jj_3R_388() {
-    if (jj_3R_46()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
   }
 
   final private boolean jj_3R_92() {
@@ -10973,6 +10960,24 @@ public final class Parser implements ParserConstants {
       if (jj_3_79()) { jj_scanpos = xsp; break; }
       if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     }
+    return false;
+  }
+
+  final private boolean jj_3R_224() {
+    if (jj_3R_82()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    if (jj_scan_token(CLOSEPAREN)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3R_389() {
+    return false;
+  }
+
+  final private boolean jj_3R_388() {
+    if (jj_3R_46()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
