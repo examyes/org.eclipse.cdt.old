@@ -1938,7 +1938,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 //
-	DataElement makefileCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customconf");
+	DataElement makefileCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customize Autoconf");
 
 	DataElement libCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
 	
