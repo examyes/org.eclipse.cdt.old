@@ -122,15 +122,13 @@ public class ManagedProjectMiner extends Miner
 			if (_workspace == null)
 			{
 				_workspace = project.getParent();
-				///////////////
+				
 				// classifying Makefile.am
 				String location = _workspace.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
 				System.out.println("\n Template Location from Managed Project = "+location);
 				classifier = new MakefileAmClassifier(location);
-				///////////////
 				
 				_workspaceLocation = _workspace.getSource();
-				System.out.println("\n Managed Pfroject Workspace Location = "+_workspaceLocation);
 				autoconfManager.setWorkspaceLocation(_workspaceLocation);
 			}
 	 

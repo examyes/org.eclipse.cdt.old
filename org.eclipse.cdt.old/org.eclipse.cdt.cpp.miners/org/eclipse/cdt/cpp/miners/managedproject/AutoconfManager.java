@@ -23,7 +23,6 @@ public class AutoconfManager {
 	MakefileAmManager makefileAmManager; 
 	static Object O = new Object();
 	String cygwinPrefix = new String("sh ");
-	String workSpaceLocation = "";
 
 	public AutoconfManager()
 	{
@@ -33,17 +32,10 @@ public class AutoconfManager {
 	
 	void setWorkspaceLocation(String location)
 	{
-			makefileAmManager.setWorkspaceLocation(location);
-			workSpaceLocation = location;
-			
+		makefileAmManager.setWorkspaceLocation(location);
 	}
-	String getWorkSpaceLocation()
-	{
-		return workSpaceLocation;
-	}
-		
-
-	protected void manageProject(DataElement project, DataElement status)
+	
+	protected void manageProject(DataElement project, DataElement status,MakefileAmClassifier classifier)
 	{
 
 		String path = project.getSource().toString();
@@ -59,7 +51,7 @@ public class AutoconfManager {
 			//prompt the user that any existing autoconf files will be regenerated
 			// and existing files will be renamed as *.old
 			//generateAutoconfFiles(project,status,true);
-			updateAutoconfFiles(project,status,true);
+			updateAutoconfFiles(project,status,true,classifier);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
 				runCommand(project,status,"./autogen.sh;./configure");
@@ -74,12 +66,12 @@ public class AutoconfManager {
 		configureInManager.generateConfigureIn(project);
 		makefileAmManager.generateMakefileAm(project);
 	}*/
-	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
+	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject,MakefileAmClassifier classifier)
 	{
 		configureInManager.updateConfigureIn(project,true);
-		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject);
+		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject,classifier);
 	}
-	protected void createConfigure(DataElement project,DataElement status, boolean update)
+	protected void createConfigure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
 		getAutoconfScript(project);
 		
@@ -88,7 +80,7 @@ public class AutoconfManager {
 		if(update)
 		{
 			configureInManager.updateConfigureIn(project,true);
-			makefileAmManager.updateAllMakefileAm(project,true);
+			makefileAmManager.updateAllMakefileAm(project,true,classifier);
 		}
 		
 		createConfigureScript(project,status);
@@ -198,7 +190,7 @@ public class AutoconfManager {
 		else
 			runCommand(project, status, cygwinPrefix+"autogen.sh&&"+cygwinPrefix+"touch -m configure");
 	}
-	public void runConfigure(DataElement project, DataElement status, boolean update)
+	public void runConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
@@ -232,7 +224,7 @@ public class AutoconfManager {
 				if(update)
 				{
 					configureInManager.updateConfigureIn(project,true);
-					makefileAmManager.updateAllMakefileAm(project,true);
+					makefileAmManager.updateAllMakefileAm(project,true,classifier);
 				}
 				
 				if(getOS().equals("Linux"))
@@ -281,7 +273,7 @@ public class AutoconfManager {
 	{
 		return makefileAmManager;
 	}
-	private boolean configureIsUptodate(DataElement project)
+/*	private boolean configureIsUptodate(DataElement project)
 	{
 		long configureTimeStamp = -1;
 		structureManager = new ProjectStructureManager(project.getFileObject());
@@ -301,6 +293,6 @@ public class AutoconfManager {
 					return false;
 			}
 		return true;
-	}
+	}*/
 }
 
