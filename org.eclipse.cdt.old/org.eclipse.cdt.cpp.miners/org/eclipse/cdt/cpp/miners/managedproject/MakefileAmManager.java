@@ -619,7 +619,7 @@ public class MakefileAmManager {
 			||name.endsWith(".h") || name.endsWith(".H")||name.endsWith(".hpp"))
 				line = line.concat(" "+name);
 		}
-		return line;
+		return line.trim();
 	}
 	private String updateExtraDistLine(String line, File parent)
 	{
@@ -634,7 +634,7 @@ public class MakefileAmManager {
 		for(int i = 0; i <subdirs.length; i++)
 			if(((String)subdirs[i][1]).equals("1") && !(((File)subdirs[i][0]).getName()).startsWith("."))
 				line = line.concat(" "+((File)subdirs[i][0]).getName());
-		return line;
+		return line.trim();
 		
 	}
 	private String updateSubdirsLine(String line, File parent)
@@ -658,7 +658,7 @@ public class MakefileAmManager {
 			line = new String(trimTargetLine(line));
 			line = line.concat(" ").concat(parent.getName()).concat(targetSuffix);
 		}
-		return line;
+		return line.trim();
 	}
 	private String initSourcesLine(String line, File parent)
 	{
@@ -674,7 +674,7 @@ public class MakefileAmManager {
 					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
-		return line;
+		return line.trim();
 	}
 	private String updateSourcesLine(String line, File parent)
 	{
@@ -688,7 +688,7 @@ public class MakefileAmManager {
 					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
-		return line;
+		return line.trim();
 	}
 	private String initLdaddLine(String line, File parent)
 	{
@@ -711,7 +711,7 @@ public class MakefileAmManager {
 				line = line.concat(" "+modName);
 			}
 		}
-		return line;
+		return line.trim();
 	}
 	private String updateLdaddLine(String line, File parent)
 	{
@@ -758,7 +758,7 @@ public class MakefileAmManager {
 				}
 			}
 		}
-		return line;
+		return line.trim();
 	}			
 	private String getLastToken(String aName)
 	{
@@ -796,7 +796,7 @@ public class MakefileAmManager {
 						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
-		return line;
+		return line.trim();
 	}
 	private String updateASourcesLine(String line, File parent)
 	{
@@ -812,7 +812,7 @@ public class MakefileAmManager {
 						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
-		return line;
+		return line.trim();
 	}
 	private String initLaSourcesLine(String line, File parent)
 	{
@@ -830,7 +830,7 @@ public class MakefileAmManager {
 						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
-		return line;
+		return line.trim();
 	}
 	private String updateLaSourcesLine(String line, File parent)
 	{
@@ -845,26 +845,26 @@ public class MakefileAmManager {
 						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
-		return line;
+		return line.trim();
 	}
 	private String initLibrariesLine(String line, File parent)
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
-		return line = line.concat(" ").concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a");
+		return line = line.concat(" ").concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a").trim();
 	}
 	private String initLtlibrariesLine(String line, File parent)
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
-		return line = line.concat(" ").concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".la");
+		return line = line.concat(" ").concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".la").trim();
 	}
 	private String initLaldflagsLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_la_LDFLAGS"
 		String mod = line.substring(line.lastIndexOf(_la_LDFLAGS)).trim();
 		String lib = new String("lib");
-		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
+		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod).trim();
 		
 	}
 	private String initLalibaddLine(String line, File parent)
@@ -872,7 +872,7 @@ public class MakefileAmManager {
 		// add the target name at the begining of the "_la_LDFLAGS"
 		String mod = line.substring(line.lastIndexOf(_la_LIBADD)).trim();
 		String lib = new String("lib");
-		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
+		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod).trim();
 	}
 	private String trimTargetLine(String line)
 	{
