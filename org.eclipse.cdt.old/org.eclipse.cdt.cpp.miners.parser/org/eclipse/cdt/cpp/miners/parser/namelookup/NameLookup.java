@@ -96,34 +96,35 @@ public class NameLookup
   String      curName          = null;
   ArrayList   recursiveResults = null;
   
-  int count = 0;  
+  int count=0;  
   //Now curChild should be pointing to the startElement
-  while ((rootElement != null) && !rootElement.getType().equals("Source Files"))
+  while ((rootElement != null) && !rootElement.getType().equals("Parsed Files"))
   {
       if (count++ > 10)
 	  return results;
-
    for (; curChild >=0; curChild--)
    {
     curObject = (DataElement)children.get(curChild);
-        
-    if ( (type == null) || (curObject.getType().equals(type)) )
+       
+    if (!curObject.isReference())    
     {
-     String currAtt = curObject.getAttribute(att);
+    	if ( (type == null) || (curObject.getType().equals(type)) )
+    	{
+    	 String currAtt = curObject.getAttribute(att);
      
-     if ((currAtt != null) && (currAtt.startsWith(objName)))   //We have at least a fuzzy match
-     {
-      if (!isFuzzy && currAtt.equals(objName)) //We have an exact match
-      { 
-       results.add(curObject);
-       return results;
-      }
-      else if (isFuzzy)
-       results.add(curObject);
-     }
-    }
-     
-    if (curObject.getType().equals("includes"))             
+    	 if ((currAtt != null) && (currAtt.startsWith(objName)))   //We have at least a fuzzy match
+    	 {
+    	  if (!isFuzzy && currAtt.equals(objName)) //We have an exact match
+    	  { 
+    	   results.add(curObject);
+    	   return results;
+    	  }
+    	  else if (isFuzzy)
+    	   results.add(curObject);
+    	 }
+    	}
+    }     
+    else if (curObject.getType().equals("includes"))             
     {
      DataElement incObj = curObject.dereference();
      if (!_searchedFiles.contains(incObj.getName()))   //Only step into the include file if we haven't been there yet
@@ -149,8 +150,13 @@ public class NameLookup
     }
    }
    rootElement = rootElement.getParent();
+
    if (rootElement == null)
+   {  
     return results;
+   }
+ 
+    
    children    = rootElement.getNestedData();
    if (children == null)
     return results;
