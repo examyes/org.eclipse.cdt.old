@@ -2210,10 +2210,10 @@ public final class DataStore
 			}
 		    
 		}
-	    /*
-	    if (result.size() < 1 && (_relationSelected != null))
+	    //   /*
+	    if (result.size() < 1 && (relation != null))
 		{
-		    filters = _input.getAssociated(_relationSelected.getName());
+		    filters = descriptor.getAssociated(relation.getName());
 		    for (int i = 0; i < filters.size(); i++)
 			{
 			    DataElement object = ((DataElement)filters.get(i)).getDescriptor();		
@@ -2223,25 +2223,25 @@ public final class DataStore
 				    if (objType.equals(DE.T_OBJECT_DESCRIPTOR) || objType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 					{
 					    String objName = (String)object.getElementProperty(DE.P_NAME);
-					    if (!_filterItems.contains(object))
+					    if (!result.contains(object))
 						{
-						    if (_fixatedObjectType != null)
+						    if (fixateOn != null)
 							{
-							    if (objName.equals(_fixatedObjectType))
+							    if (objName.equals(fixateOn))
 								{
-								    _filterItems.add(object);
+								    result.add(object);
 								}
 							}
 						    else
 							{
-							    _filterItems.add(object);
+							    result.add(object);
 							}
 						}
 					}
 				}
 			}
 		}
-	    */
+	    //*/
 
         }
 	return result;
