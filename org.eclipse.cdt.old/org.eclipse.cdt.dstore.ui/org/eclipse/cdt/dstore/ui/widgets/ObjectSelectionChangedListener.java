@@ -60,14 +60,10 @@ import org.eclipse.ui.part.*;
 	  if (_isEnabled)
 	      {
 		  DataElement selected = ConvertUtility.convert(e);
-
 		  if (selected != null)
 		      {
-		  
-			  DataElement root = selected.dereference();
-			  root.expandChildren();
-			  
-			  _window.setSelected(root, true);				  
+			  DataElement root = selected.dereference();			  
+			  _window.setSelected(root, true);		
 			  if (_gotoAction != null)
 			      {
 				  _gotoAction.setSelected(selected);

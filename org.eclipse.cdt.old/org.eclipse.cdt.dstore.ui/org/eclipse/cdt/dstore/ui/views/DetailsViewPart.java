@@ -80,6 +80,7 @@ public class DetailsViewPart extends GenericViewPart
     {
 	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 	toolBarManager.add(new ZoomAction("Zoom Out", DataStoreCorePlugin.getInstance().getImageDescriptor("up.gif")));
+	super.fillLocalToolBar();
     }
     
 }

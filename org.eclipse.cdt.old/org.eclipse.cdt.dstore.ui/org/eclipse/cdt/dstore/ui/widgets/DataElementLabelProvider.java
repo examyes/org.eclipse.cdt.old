@@ -23,7 +23,9 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
     private static final String DEFAULT_ICON = "default.gif";
     private Image  _default;
     private String _labelProperty;
+    private static DataElementLabelProvider _instance;
     
+
     public DataElementLabelProvider(ImageRegistry registry)
     {
         super();
@@ -42,6 +44,12 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	    }
 	
         _default = image;
+	_instance = this;
+    }
+
+    public DataElementLabelProvider getInstance()
+    {
+	return _instance;
     }
     
     public Image getImage(Object i)
@@ -118,7 +126,7 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 		String imageStr = getImageString(element);
 		
 		Image result = getImage(imageStr);
-		return result;        
+		return result;       
 	    }
 	else
 	    {

@@ -34,10 +34,24 @@ import java.lang.reflect.*;
 public class GenericViewPart extends ViewPart 
     implements ILinkable, ISelectionListener, IActionLoader
 {
+    public class LockViewAction extends Action
+    {
+	public LockViewAction(String label, ImageDescriptor image)
+	{
+	    super(label, image );
+	}
+     
+	public void run()
+	{
+	    _viewer.toggleLock();
+	}
+    }
+
 
     protected ObjectWindow       _viewer;
     protected   boolean          _isLinked;
     protected   IOpenAction      _openAction;
+
 
     public GenericViewPart()
     {
@@ -82,6 +96,7 @@ public class GenericViewPart extends ViewPart
 	    }
 
 	initInput(null);
+	fillLocalToolBar();
     }
     
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
@@ -254,8 +269,22 @@ public class GenericViewPart extends ViewPart
 	IStatusLineManager mgr = getViewSite().getActionBars().getStatusLineManager();
 	mgr.setMessage(element.getValue());
     }
-    
 
+
+    public void fillLocalToolBar() 
+    {
+	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+
+	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+	String path = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.ui" + java.io.File.separator;
+	String imageStr = path + "icons" + java.io.File.separator + "lock.gif";
+	ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
+
+	LockViewAction lockAction = new LockViewAction("Lock View", image);
+	lockAction.setChecked(_viewer.isLocked());
+	toolBarManager.add(lockAction);
+    }
+    
 }
 
 

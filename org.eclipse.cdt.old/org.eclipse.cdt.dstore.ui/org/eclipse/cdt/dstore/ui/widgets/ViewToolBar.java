@@ -51,6 +51,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
     private   DataElement  _expanded;
     
     private   String       _property;
+    private   String       _pluginPath = null;
     
     private   IDataElementViewer _outLink;
     
@@ -237,9 +238,13 @@ public class ViewToolBar extends Viewer implements IDomainListener
     
     public String getPluginPath()
     {
-	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-	String path = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.core";
-	return path; 
+	if (_pluginPath == null)
+	    {
+		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+		_pluginPath = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.core";
+	    }
+
+	return _pluginPath; 
     }
     
     public ObjectWindow getParent()
@@ -324,15 +329,16 @@ public class ViewToolBar extends Viewer implements IDomainListener
 				      _inputTextLabel.setText("null");
 				  }
 			  }
-
 		      if (_viewMenu != null)
 			  {
 			      _viewMenu.setInput(_currentInput);
 			  }		
+
 		  }
 		
 		_toolBarContainer.layout(true);
-		_currentInput.expandChildren();
+		if (!_currentInput.isExpanded() || (_currentInput.getNestedSize() == 0))
+		    _currentInput.expandChildren();
 
 	    }
     }

@@ -130,6 +130,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private SetLabelAction     _currentViewByAction;
 
     private boolean             _isTable;
+    private boolean             _isLocked;
+
 
     public ObjectWindow(Composite container, int style, 
 			DataStore dataStore, 
@@ -181,7 +183,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
 	_outLinks = new ArrayList();
 	_isTable = isTable;
-	
+	_isLocked = false;
+
 	// setup resource bundle
 	try
 	    {
@@ -291,7 +294,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     public void setSelected(DataElement element, boolean permiate)
     {
-       	_viewer.setSelected(element);
+	_viewer.setSelected(element);
 
 	if (permiate && _outLinks.size() > 0)
 	    {
@@ -348,11 +351,24 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     public void resetInput()
     {
-	DataElement input = (DataElement)_viewer.getInput();
-	if (input != null)
+	if (!_isLocked)
 	    {
-		_viewer.resetView();
+		DataElement input = (DataElement)_viewer.getInput();
+		if (input != null)
+		    {
+			_viewer.resetView();
+		    }
 	    }
+    }
+
+    public boolean isLocked()
+    {
+	return _isLocked;
+    }
+
+    public void toggleLock()
+    {
+	_isLocked = !_isLocked;
     }
   
   public void setInput(IAdaptable adp)
@@ -368,39 +384,41 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
   public void setInput(DataElement object)
       {
-	  if (object != null)
+	  if (!_isLocked)
 	      {
-		  if (object.getDataStore() != _dataStore)
+		  if (object != null)
+		      {
+			  if (object.getDataStore() != _dataStore)
+			      {
+				  if (_dataStore != null)
+				      {
+					  if (_viewer != null)
+					      {
+						  _viewer.clearView();
+						  _dataStore.getDomainNotifier().removeDomainListener(_viewer);
+						  _dataStore.getDomainNotifier().removeDomainListener(_toolBar);
+					      }
+				      }
+				  
+				  _dataStore = object.getDataStore();
+				  _dataStore.getDomainNotifier().addDomainListener(_viewer);
+				  _dataStore.getDomainNotifier().addDomainListener(_toolBar);
+			      }
+			  if (_viewer != null)
+			      {
+				  _toolBar.setInput(object);
+			      }
+		      }
+		  else
 		      {
 			  if (_dataStore != null)
 			      {
-				  if (_viewer != null)
-				      {
-					  _viewer.clearView();
-					  _dataStore.getDomainNotifier().removeDomainListener(_viewer);
-					  _dataStore.getDomainNotifier().removeDomainListener(_toolBar);
-				      }
+				  _toolBar.setInput(null);
 			      }
-			  
-			  _dataStore = object.getDataStore();
-			  _dataStore.getDomainNotifier().addDomainListener(_viewer);
-			  _dataStore.getDomainNotifier().addDomainListener(_toolBar);
-		      }
-		  if (_viewer != null)
-		      {
-			  _toolBar.setInput(object);
-		      }
-	      }
-	  else
-	      {
-		  if (_dataStore != null)
-		      {
-			  _toolBar.setInput(null);
-			  //_viewer.clearView();
 		      }
 	      }
       }
-
+	  
     public DataElement getInput()
     {
 	return (DataElement)_viewer.getInput();

@@ -165,7 +165,6 @@ public class ExtendedTreeViewer extends TreeViewer
 			    }
 		    }
 	    }
-
 	return false;
     }   
 
@@ -302,9 +301,27 @@ public void doExpand(DataElement obj)
     return _parent;
   }
 
-
+    
+    public void setInput(DataElement object)
+    {
+	inputChanged(object, _currentInput);
+    }
+    
     protected void inputChanged(Object object, Object oldInput)
     {
+	if (object == null)
+	    {
+		System.out.println("setInput " + object);
+		try
+		    {
+			int x = 1 / 0;
+		    }
+		catch (Exception e)
+		    {
+			e.printStackTrace();
+		    }
+	    }
+
 	boolean selectionListening = _listener.isEnabled();
 	if (selectionListening)
 	    {
@@ -405,7 +422,8 @@ public void doExpand(DataElement obj)
 					}
 				    catch (Exception e)
 					{
-					    setInput(_currentInput);
+					    System.out.println(e);
+					    //***					    setInput(_currentInput);
 					}
 				}
 			}
