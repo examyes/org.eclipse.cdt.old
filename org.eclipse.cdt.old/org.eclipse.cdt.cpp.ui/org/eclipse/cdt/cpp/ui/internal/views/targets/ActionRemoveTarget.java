@@ -42,7 +42,7 @@ private void removeDescriptor( int x, RootElement root)
 		for(int i =0; i < root.getPropertyDescriptors().length; i++)
 		{
 			int numberExtension = x+root.MAX_TARGETS;
-			if(!((PropertyDescriptor)root.getPropertyDescriptors()[i]).getId().equals("Target"+numberExtension))
+			if(!((PropertyDescriptor)root.getPropertyDescriptors()[i]).getId().equals("Command"+numberExtension))
 				vec.add(root.getPropertyDescriptors()[index++]);
 		}
 		// reset the counter
