@@ -38,7 +38,7 @@
 
  <topic label="Project Management">
   <topic label="Project Management"     href="concepts/projectmanagement/projectmanagement.htm"/>
-   <topic label="Project Management"     href="concepts/projectmanagement/tutorial.htm"/>
+  <topic label="Tutorial"     href="concepts/projectmanagement/tutorial.htm"/>
  </topic>
 
  <topic label="Commands">
