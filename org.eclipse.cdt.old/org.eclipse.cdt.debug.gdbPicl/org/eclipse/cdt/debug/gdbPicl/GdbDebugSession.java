@@ -21,7 +21,7 @@ public class GdbDebugSession extends DebugSession
 {
   private boolean echoInternalCommands = false;
   private boolean IdeFilesAndMethods = true;   //see getMethodsForAllParts() and updateAllParts() and getPartMethods()
-  public  static final int MAX_GDB_LINES = 7000;
+  public  static final int MAX_GDB_LINES = 50000;
 
   public  GdbCommandAndResponse _gdbCommandAndResponse = null;
   public  GetGdbBreakpoints     _getGdbBreakpoints     = null;
@@ -595,13 +595,36 @@ Thread.currentThread().dumpStack();
     return true;
   }
 
-  public boolean remoteAttach(int processIndex, String programName, String[] errorMsg)
+  public boolean remoteAttach(int processIndex, String filename, String[] errorMsg)
   {
      if (Gdb.traceLogger.EVT)
-              Gdb.traceLogger.evt(1,"########>>>>>>>>  GdbDebugSession.remoteAttach() "+processIndex   );
+              Gdb.traceLogger.evt(1,"########>>>>>>>>  GdbDebugSession.remoteAttach() processIndex: "+processIndex + "  filename: " + filename );
 
-     String cmd = "file " + programName;
+     String programName = "";
+     String directory = "";
+     int indexOfSlash = filename.lastIndexOf("/");
+     if (indexOfSlash > 0)
+     {
+        programName = filename.substring(indexOfSlash + 1, filename.length());
+        directory = filename.substring(0, indexOfSlash);
+     }
+     else
+     {
+        programName = filename;
+     }
+
+     if (Gdb.traceLogger.DBG)
+        Gdb.traceLogger.dbg(2,"GdbDebugSession.remoteAttach() directory = " + directory + "  programName = " + programName);
+
+     String cmd = "directory " + directory;
      boolean ok = executeGdbCommand(cmd);
+     if( !ok )
+     {  if (Gdb.traceLogger.ERR)
+            Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
+     }
+
+     cmd = "file " + programName;
+     ok = executeGdbCommand(cmd);
      if( !ok )
      {  if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
@@ -615,7 +638,7 @@ Thread.currentThread().dumpStack();
 
      }
      addCmdResponsesToUiMessages();
-/*
+
      checkCurrentPart(_currentModuleID);
 
      updateSharedLibraries();
@@ -628,10 +651,9 @@ Thread.currentThread().dumpStack();
      monitorChangedName.removeAllElements();
      monitorChangedValue.removeAllElements();
      getCurrentFileLineModule();
-*/
+
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.remoteAttach() DONE " );
-
 
     return true;
   }
