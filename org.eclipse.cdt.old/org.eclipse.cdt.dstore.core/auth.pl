@@ -24,10 +24,11 @@ else
     $passwd=$passwdStruct[1];
     $encryptedPWD = crypt($pwdIN, $passwd);
     $match = $passwd cmp $encryptedPWD;
+    $classpath=$ENV{CLASSPATH};
     if ($match == 0) 
     {
 	print("success\n");
-	system("su --login $userIN -c 'java -DA_PLUGIN_PATH=$pathIN com.ibm.dstore.core.server.Server $portIN $ticketIN'");
+	system("su -lp $userIN -c 'java -cp $classpath -DA_PLUGIN_PATH=$pathIN com.ibm.dstore.core.server.Server $portIN $ticketIN'");
 	1;
     }
     else
