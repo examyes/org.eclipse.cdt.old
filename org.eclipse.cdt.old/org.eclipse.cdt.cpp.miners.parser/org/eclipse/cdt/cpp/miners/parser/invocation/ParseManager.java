@@ -62,7 +62,7 @@ public class ParseManager
  
  public void setPreferences(DataElement parseQuality, DataElement includes) 
  {
-  if (parseQuality != null) _theSymbolTable.setPreferences(parseQuality);
+  if (parseQuality != null) _theSymbolTable.setParseQuality(parseQuality);
   if (includes     != null) _thePreprocessor.setIncludes(includes);
  } 
  

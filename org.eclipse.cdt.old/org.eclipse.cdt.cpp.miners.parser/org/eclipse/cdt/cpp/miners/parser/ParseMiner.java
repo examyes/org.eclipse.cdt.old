@@ -83,32 +83,21 @@ public class ParseMiner extends Miner
   return statusDone(status);
  }
 
-  private void handleRefresh(DataElement theSubject, DataElement prj)
-    { 
-	if (theSubject.getType().equals("Project"))
-	    {
-		DataElement theProject = getParseProject(theSubject);
+ private void handleRefresh(DataElement theSubject, DataElement prj)
+ { 
+  if (!theSubject.getType().equals("Project"))
+   return;
+  
+  DataElement currentPreferences = getProjectElement(getParseProject(theSubject), ParserSchema.Preferences);
+  if (currentPreferences == null)
+   return;
+  
+  DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
+  if ( (autoParse != null) && autoParse.getValue().equals("Yes") )
+   handleParse(theSubject, prj);	
+ }
 
-		// if we do auto parse
-		DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
-
-		DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
-		if (autoParse != null)
-		    {
-			if (autoParse.getNestedSize() > 0)
-			    {
-				DataElement autoParsePref = autoParse.get(0);
-				if (autoParsePref.getName().equals("Yes"))
-				    {
-					handleParse(theSubject, prj);	
-				    }
-			    }
-		    }		
-
-	    }
-    }
-
-  private DataElement handleOpenProject(DataElement theProject)
+ private DataElement handleOpenProject(DataElement theProject)
  {  
      theProject = theProject.dereference();
      if (theProject.getType().equals("Project"))
@@ -248,46 +237,21 @@ public class ParseMiner extends Miner
  private DataElement handleSetPreferences(DataElement theProject, DataElement qualityPref, DataElement autoParsePref)
  {
   theProject = getParseProject(theProject);
-  
   DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
 
   // parse quality
   DataElement parseQuality = _dataStore.find(currentPreferences, DE.A_NAME, ParserSchema.ParseQuality,1);  
   if (parseQuality == null)
-      {
-	  parseQuality = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, ParserSchema.ParseQuality);
-      }
-  
-  if (parseQuality.getNestedSize() == 0)
-      { 
-	  parseQuality.addNestedData(qualityPref,true);
-	  qualityPref.setParent(parseQuality);
-      }
-  else
-      {
-	  ((DataElement)parseQuality.get(0)).setAttribute(DE.A_NAME, qualityPref.getName());
-      }
+   parseQuality = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, ParserSchema.ParseQuality);
+  parseQuality.setAttribute(DE.A_VALUE, qualityPref.getName());
 
   // autoParse
   DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
   if (autoParse == null)
-      {
-	  autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");
-      }
+   autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");
+  autoParse.setAttribute(DE.A_VALUE, autoParsePref.getName());
   
-  if (autoParse.getNestedSize() == 0)
-      { 
-	  autoParse.addNestedData(autoParsePref,true);
-	  autoParsePref.setParent(autoParse);
-      }
-  else
-      {
-	  ((DataElement)autoParse.get(0)).setAttribute(DE.A_NAME, autoParsePref.getName());
-      }
-
-
-  
-
+  _dataStore.refresh(autoParse);
   _dataStore.refresh(parseQuality);
   return null;
  }

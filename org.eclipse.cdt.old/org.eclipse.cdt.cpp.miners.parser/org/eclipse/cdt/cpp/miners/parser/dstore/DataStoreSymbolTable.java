@@ -23,7 +23,7 @@ public class DataStoreSymbolTable implements SymbolTable
  private NameLookup    _nameLookup      = null;
  private Stack         _rootStack       = null; 
  private String        _currentSource   = null;
- private int           _preference;
+ private int           _quality;
  private int           _idCounter       = 1;
  private boolean       _isTypedef       = false;
  
@@ -36,38 +36,18 @@ public class DataStoreSymbolTable implements SymbolTable
   _builtinTypes    = new Hashtable();
   _unresolvedTypes = new Hashtable();
   _nameLookup      = new NameLookup();
-  _preference      = 3;
+  _quality         = 3;
  }
  
- public void setPreferences(DataElement preferences)
+ public void setParseQuality(DataElement quality)
  {
- 
-  if (preferences == null)
+  try
   { 
-   _preference = 3;
-   return;
-  }
-  
-  DataElement preferenceElement = preferences.get(0);
-  if (preferenceElement == null)
-  {
-   _preference = 3;
-   return;
-  }
- 
-  String preferenceString = preferenceElement.getName();
-  if (preferenceString == null)
-  {
-   _preference = 3;
-   return;
-  }
-  try 
-  { 
-   _preference = Integer.parseInt(preferenceString); 
+   _quality = Integer.parseInt(quality.getValue()); 
   }
   catch (NumberFormatException e) 
   { 
-   _preference = 3; 
+   _quality = 3; 
   }
  }
  
@@ -482,7 +462,7 @@ public class DataStoreSymbolTable implements SymbolTable
  
  private boolean isSet(int setting)
  {
-  switch (_preference)
+  switch (_quality)
   {
    //Fastest..no bodies or relationships
    case 0 :
