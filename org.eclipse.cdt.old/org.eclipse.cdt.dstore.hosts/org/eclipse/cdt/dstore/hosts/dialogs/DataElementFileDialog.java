@@ -61,7 +61,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	_input = input;
 	_plugin = HostsPlugin.getInstance();
 	_title = title;
-	_onlyDirectories = true;
+	_onlyDirectories = showDirectories;
     }
 
     protected void buttonPressed(int buttonId)
@@ -122,6 +122,12 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	    {
 		_viewer.setInput(dataStore.getHostRoot());
 	    }
+	    
+	_viewer.fixateOnRelationType("contents");
+	if (_onlyDirectories)
+	{
+		_viewer.fixateOnObjectType("directory");
+	}
 
 	GridLayout layout= new GridLayout();
 	layout.numColumns = 1;
