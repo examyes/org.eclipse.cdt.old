@@ -2535,7 +2535,7 @@ public final class DataStore
 			remotePath = remotePath.substring(indexOfDrive + 1, remotePath.length());
 		    }
 		
-		result = new String(localRoot + remotePath.substring(localRoot.indexOf(slash), remotePath.length()));
+		result = new String(localRoot + remotePath);
 	    }
 	
 	return result;
