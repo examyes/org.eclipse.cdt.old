@@ -71,17 +71,22 @@ public class GdbCommandAndResponse
      if (Gdb.traceLogger.DBG)
          Gdb.traceLogger.dbg(3,"GdbDebugSession.getGdbResponseLines lines.length="+lines.length );
 
-     String PRE_PROMPT_keyword   = _gdbProcess.MARKER+"pre-prompt";
-     String FRAME_BEGIN_keyword  = _gdbProcess.MARKER+"frame-begin";
-     String FRAME_END_keyword    = _gdbProcess.MARKER+"frame-end";
-     String BP_RECORD_keyword    = _gdbProcess.MARKER+"record";
-     String BP_HEADERS_keyword   = _gdbProcess.MARKER+"breakpoints-headers";
-     String BP_TABLE_END_keyword = _gdbProcess.MARKER+"breakpoints-table-end";
-     String DISPLAY_BEGIN_keyword= _gdbProcess.MARKER+"display-begin";
-     String DISPLAY_END_keyword  = _gdbProcess.MARKER+"display-end";
+     String PRE_PROMPT_keyword      = _gdbProcess.MARKER+"pre-prompt";
+     String FRAME_BEGIN_keyword     = _gdbProcess.MARKER+"frame-begin";
+     String FRAME_END_keyword       = _gdbProcess.MARKER+"frame-end";
+     String BP_RECORD_keyword       = _gdbProcess.MARKER+"record";
+     String BP_HEADERS_keyword      = _gdbProcess.MARKER+"breakpoints-headers";
+     String BP_TABLE_END_keyword    = _gdbProcess.MARKER+"breakpoints-table-end";
+     String DISPLAY_BEGIN_keyword   = _gdbProcess.MARKER+"display-begin";
+     String DISPLAY_END_keyword     = _gdbProcess.MARKER+"display-end";
+     String FIELD_BEGIN_keyword     = _gdbProcess.MARKER+"field-begin";
+     String FIELD_NAME_END_keyword  = _gdbProcess.MARKER+"field-name-end";
+     String FIELD_VALUE_keyword     = _gdbProcess.MARKER+"field-value";
+     String FIELD_END_keyword       = _gdbProcess.MARKER+"field-end";
      //String combinedLine = "";
 
         int length = lines.length;
+        int bufferSize = length * 80;
 
        	//System.out.println("RW ===== GdbCommandAndResponse.java lines.length: " + length);
 
@@ -96,8 +101,40 @@ public class GdbCommandAndResponse
         {
            if (Gdb.traceLogger.DBG)
                Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines i="+i+" STR="+lines[i] );
+
            if( !lines[i].startsWith(_gdbProcess.MARKER) )
-           {  _debugSession.cmdResponses.addElement(lines[i]);
+           {
+               StringBuffer classObject = new StringBuffer(bufferSize);
+               if(lines[i]!=null && !lines[i].equals(""))
+                  classObject.append(lines[i]);
+               
+               //  Could be a complex structure, class object, if yes put it all in one line   
+               int j = i+1;
+               if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
+                   lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword))
+               {
+                  j++;
+                  while (!lines[j].equals("}"))         
+                  {
+                 	 classObject.append(lines[j]);
+                 	 j++;
+                 	 if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
+                         lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword))
+                     {
+                        j++;
+                     }     
+                   }
+                   // append the final "}"
+                   classObject.append(lines[j]);
+                   i = j;
+               }
+
+               if (Gdb.traceLogger.DBG)
+                   Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines Object = "+ classObject.toString());
+               _debugSession.cmdResponses.addElement(classObject.toString());
+              
+               System.out.println("RW ===== GdbCommandAndResponse.java classObject: " + classObject.toString());
+               classObject.setLength(0);
            }
            else if ( lines[i].equals(PRE_PROMPT_keyword) )
            {
@@ -109,7 +146,7 @@ public class GdbCommandAndResponse
                //if(!lines[i].startsWith(FRAME_BEGIN_keyword) )
                //    combinedLine = "";
                //String combinedLine = "";
-               StringBuffer combinedLine = new StringBuffer(length);
+               StringBuffer combinedLine = new StringBuffer(bufferSize);
                String frameFunctionName = "";
                String frameFile = "";
                boolean displayMonitor = false;
@@ -120,38 +157,29 @@ public class GdbCommandAndResponse
                          Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines j="+j+" STR="+lines[j] );
                      if( !lines[j].startsWith(_gdbProcess.MARKER) )
                      {
-                          //combinedLine += lines[j];
                           combinedLine.append(lines[j]);
-                          	//System.out.println("RW ===== GdbCommandAndResponse.java combinedLine 1: " + combinedLine.toString());
                      }
                      else if( lines[j].startsWith(DISPLAY_BEGIN_keyword) )
                      {
-//                        if (Gdb.traceLogger.DBG)
-//                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" BEGINNING MONITOR" );
+                        if (Gdb.traceLogger.DBG)
+                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" BEGINNING MONITOR" );
                         String exprNumbr = "";
                         String exprName = "";
                         String exprValue = "";
                         exprNumbr = lines[++i];
-//                        if (Gdb.traceLogger.DBG)
-//                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" exprNUMBR="+exprNumbr );
+                        if (Gdb.traceLogger.DBG)
+                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" exprNUMBR="+exprNumbr );
                         String str = lines[++i]; // display-number-end
                         str = lines[++i];        // ":"
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         str = lines[++i];        // display-format
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         str = lines[++i];        // ""
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         str = lines[++i];        // "display-expression"
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         exprName = lines[++i];   // exprName
-//                        if (Gdb.traceLogger.DBG)
-//                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" exprNAME="+exprName );
+                        if (Gdb.traceLogger.DBG)
+                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" exprNAME="+exprName );
                         str = lines[++i];        // "display-expression-end"
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         str = lines[++i];        // " = "
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         str = lines[++i];        // "display-expression"
-                          	System.out.println("RW ===== GdbCommandAndResponse.java str: " + str);
                         exprValue = lines[++i];  // exprValue
 //                        if (Gdb.traceLogger.DBG)
 //                            Gdb.traceLogger.dbg(3,"<<<<<<<<<<<<<< GdbDebugSession.getGdbResponseLines j="+j+" exprVALUE="+exprValue );
@@ -191,7 +219,7 @@ public class GdbCommandAndResponse
                      else if( lines[j].startsWith(FRAME_END_keyword) || lines[j].startsWith(BP_TABLE_END_keyword)
                           ||  lines[j].startsWith(DISPLAY_END_keyword) )
                      {
-                        	//System.out.println("RW ===== GdbCommandAndResponse.java combinedLine exit: " + combinedLine.toString());
+                        	System.out.println("RW ===== GdbCommandAndResponse.java combinedLine exit: " + combinedLine.toString());
                          _debugSession.cmdResponses.addElement(combinedLine.toString());
                          if (Gdb.traceLogger.DBG)
                              Gdb.traceLogger.dbg(2,"GdbDebugSession.getGdbResponseLines="+combinedLine.toString() );
