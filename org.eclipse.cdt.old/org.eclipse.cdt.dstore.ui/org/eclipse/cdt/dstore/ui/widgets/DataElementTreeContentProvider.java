@@ -71,7 +71,7 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
 	  {	  
 	      if (_property.getName().equals("contents"))
 		  {
-		      if (descriptor.isOfType(getContainerDescriptor(element)))
+		      if (descriptor.isOfType(getContainerDescriptor(element), true))
 			  {
 			      if (element.isExpanded())
 				  {
