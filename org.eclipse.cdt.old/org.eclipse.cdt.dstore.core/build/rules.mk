@@ -41,6 +41,7 @@ space:= $(empty) $(empty)
 all               : $(get-directories) $(get-files)
 jar               : createJarFile 
 source-zip        : createSourceZip
+javadoc		  : createJavadoc
 clean             : doClean
 clean-makefiles   : doCleanMakefiles
 
@@ -63,6 +64,13 @@ createJarFile:
 	touch $(jarFile);\
 	find . -name '*.class' -or -name '*.properties' | xargs jar -uf $(jarFile)
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
+
+createJavadoc:
+	@cd $(pluginsDirectory)/$(pluginName);\
+	rm -Rf docs;\
+	mkdir docs;\
+	find . -name '*.java' | xargs javadoc -d docs -classpath $(subst $(space),$(sep),$(cp))
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/docs
 
 createSourceZip:
 	@cd $(pluginsDirectory)/$(pluginName);\
