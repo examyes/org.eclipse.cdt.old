@@ -343,28 +343,32 @@ public class CppOutputViewPart extends OutputViewPart
     
     public void dispose()
     {
-    	DataElement currentInput = _viewer.getCurrentInput();
-    	if (currentInput != null)
-    	{
-    		DomainNotifier notifier = currentInput.getDataStore().getDomainNotifier();
-			notifier.removeDomainListener(_viewer);
-			notifier.removeDomainListener(this);	
-    	}	
+		if (_viewer != null)
+		{
+	    	DataElement currentInput = _viewer.getCurrentInput();
+	    	if (currentInput != null)
+	    	{
+	    		DomainNotifier notifier = currentInput.getDataStore().getDomainNotifier();
+				notifier.removeDomainListener(_viewer);
+				notifier.removeDomainListener(this);	
+	    	}	
     	
-        IWorkbench aWorkbench = _plugin.getWorkbench();
-        IWorkbenchWindow win= aWorkbench.getActiveWorkbenchWindow();
-        win.getSelectionService().removeSelectionListener(this);
+    	    IWorkbench aWorkbench = _plugin.getWorkbench();
+    	    IWorkbenchWindow win= aWorkbench.getActiveWorkbenchWindow();
+    	    win.getSelectionService().removeSelectionListener(this);
         
-        _cancelAction = null;
-        _shellAction = null;
-        _backAction = null;
-        _forwardAction = null;
+        	_cancelAction = null;
+        	_shellAction = null;
+        	_backAction = null;
+        	_forwardAction = null;
         
-        _viewer.dispose();
-        _sendButton.dispose();
-        _inputEntry.dispose();
-        _viewer = null;
+        	_viewer.dispose();
+        	_sendButton.dispose();
+        	_inputEntry.dispose();
+       	 _viewer = null;
+    	}
     }
+    
 	
  	public void widgetDefaultSelected(SelectionEvent e) 
     {
