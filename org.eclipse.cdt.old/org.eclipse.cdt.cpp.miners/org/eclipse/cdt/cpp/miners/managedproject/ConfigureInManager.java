@@ -268,8 +268,8 @@ public class ConfigureInManager {
 			// searching for the subdir line
 			BufferedReader updated = new BufferedReader(new FileReader(_new));
 			BufferedReader old= new BufferedReader(new FileReader(_old));
-			oldLine = old.readLine();
-			updatedLine = updated.readLine();
+			oldLine = old.readLine().trim();
+			updatedLine = updated.readLine().trim();
 			while(updatedLine!=null || oldLine!=null)
 			{
 				if(!updatedLine.equals(oldLine))

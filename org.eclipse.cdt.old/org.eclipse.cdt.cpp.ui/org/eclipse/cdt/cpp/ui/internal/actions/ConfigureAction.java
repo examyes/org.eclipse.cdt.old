@@ -151,7 +151,9 @@ public class ConfigureAction extends CustomAction
 			String message = new String
 			("Trying to update existing configure.in and makefile.am's "+
 			"\nconfigure.in and or Makefile.am Files will be generated if missing"+
-			"\nOld existing configuration files will be renamed *.old if updated");
+			"\nOld existing configuration files will be renamed *.old if updated"+
+			"\nPress OK to update project configuration files, or "+
+			"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
 			//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
 			createUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
 		}
@@ -273,6 +275,7 @@ public class ConfigureAction extends CustomAction
 		long configureTimeStamp = -1;
 		structureManager = new ProjectStructureManager(project.getFileObject());
 		File[] list = structureManager.getFiles();
+		File[] dirList = structureManager.getSubdirs();
 		
 		// as we are sure that configure exists then we can safely get its last modified time stamp
 		
@@ -281,12 +284,18 @@ public class ConfigureAction extends CustomAction
 		//System.out.println("\nconfigure stamp = "+configureTimeStamp);
 		//System.out.println("=========================================");	
 		for(int i = 0; i < list.length; i++)
-			if(list[i].getName().equals("Makefile.am")||list[i].getName().equals("Makefile.in")||list[i].getName().equals("configure.in"))
-			{
+			//if(list[i].getName().equals("Makefile.am")||list[i].getName().equals("Makefile.in")||list[i].getName().equals("configure.in"))
+			//{
 				//System.out.println("\n"+list[i].getName()+" = "+list[i].lastModified());
 				if(configureTimeStamp<list[i].lastModified())
 					return false;
-			}
+			//}
+		for(int i = 0; i < dirList.length; i++)
+			if(!dirList[i].getName().startsWith("."))
+			//{
+				if(configureTimeStamp<dirList[i].lastModified())
+					return false;
+			//}
 		return true;
 	}
 }
