@@ -260,6 +260,11 @@ public class OpenEditorAction extends Action implements IOpenAction
 									{
 									    editor = editors[i];
 									    _editor = editor;
+									    // force focus
+									    if (openEditor)
+									    {
+									    	_editor.setFocus();
+									    }
 		
 									    break;
 									}
