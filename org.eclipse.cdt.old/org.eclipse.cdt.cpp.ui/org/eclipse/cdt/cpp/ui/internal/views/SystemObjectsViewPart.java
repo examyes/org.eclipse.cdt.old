@@ -19,6 +19,8 @@ import org.eclipse.core.resources.*;
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.ui.*;
 
+import java.util.*;
+
 public class SystemObjectsViewPart extends ProjectViewPart
 {
     public SystemObjectsViewPart()
@@ -94,9 +96,14 @@ public class SystemObjectsViewPart extends ProjectViewPart
     DataElement findParseFiles(DataElement theProjectFile)
     {
 	DataStore dataStore = theProjectFile.getDataStore();
-	DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
-	DataElement sprojectObjects = dataStore.find(parseProject, DE.A_NAME, "System Objects", 1);
-	return sprojectObjects;
+	ArrayList ref = theProjectFile.getAssociated("Parse Reference");
+	if (ref != null && ref.size() > 0)
+	    {
+		DataElement parseProject = ((DataElement)ref.get(0)).dereference();
+		DataElement sprojectObjects = dataStore.find(parseProject, DE.A_NAME, "System Objects", 1);
+		return sprojectObjects;
+	    }
+	return null;
     }
 
     public void doSpecificInput(DataElement theElement)

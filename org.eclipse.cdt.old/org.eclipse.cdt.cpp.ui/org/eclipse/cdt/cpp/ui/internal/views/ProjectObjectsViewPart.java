@@ -175,6 +175,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	 {
 	     _viewer.setInput(theInput);	
 	     _viewer.selectRelationship("contents");
+	     setTitle(theElement.getName() + " Project-Objects");   
 	 }
  }
 
