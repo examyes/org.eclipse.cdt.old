@@ -122,6 +122,8 @@ public class ParseMiner extends Miner
     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.ProjectObjects);
     _dataStore.createObject(parseProject,ParserSchema.Preferences, ParserSchema.Preferences);
     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
+    _dataStore.refresh(theProject);
+    _dataStore.refresh(parseProject);
     return parseProject;
    }
    else
