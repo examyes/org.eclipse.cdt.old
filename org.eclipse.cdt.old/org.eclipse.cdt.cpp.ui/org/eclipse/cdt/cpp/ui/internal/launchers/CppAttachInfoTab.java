@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 /**
  * This tab appears in the LaunchConfigurationDialog for launch configurations that
@@ -330,7 +331,12 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	public void performApply(ILaunchConfigurationWorkingCopy config)
    {
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
-		config.setAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, (String)_processIDField.getText());
+      String processID = (String)_processIDField.getText();
+      if (isValidProcessID(processID))
+   		config.setAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, processID);
+      else
+        //displayMessageDialog(_plugin.getLocalizedString("CppDebugInfoTab.Exception") + ce.toString());
+        System.out.println("bad processID");
 	}
 
 	/**
@@ -365,7 +371,14 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    	   }
     }	
 
-	
+	 protected boolean isValidProcessID(String processID)
+    {
+       DataStore dataStore = _directory.getDataStore();
+       DataElement hostRoot = dataStore.getHostRoot();	
+       DataElement processRoot = dataStore.find(hostRoot, DE.A_TYPE, "Processes", 1);
+       DataElement process = dataStore.find(processRoot, DE.A_NAME, processID, 1);
+       return (process != null);
+    }
 	
 	/**
 	 * Convenience method to get the workspace root.
