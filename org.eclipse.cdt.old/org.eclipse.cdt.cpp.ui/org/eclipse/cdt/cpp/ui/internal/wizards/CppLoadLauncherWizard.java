@@ -84,7 +84,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 
 	if (_element instanceof DataElement)
 	    {
-		IFile file = _api.getNewFile(((DataElement)_element).getSource());
+		IFile file = (IFile)_api.findFile(((DataElement)_element).getSource());
 		if (file == null)
 		    {
 			DataElement projectElement = _api.getProjectFor((DataElement)_element);

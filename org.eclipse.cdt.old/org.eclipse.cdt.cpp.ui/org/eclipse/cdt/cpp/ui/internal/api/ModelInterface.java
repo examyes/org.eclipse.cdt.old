@@ -172,7 +172,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	public void run()
 	{
-	    IFile file = null;
+	    IResource file = null;
 	    for (int i = 0; i < _results.size(); i++)
 		{		
 		    DataElement output = ((DataElement)_results.get(i)).dereference();
@@ -181,7 +181,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    Integer location = (Integer)(output.getElementProperty(DE.P_SOURCE_LOCATION));
 		    int loc = location.intValue();
 		
-		    file = getNewFile(fileName);
+		    file = findFile(fileName);
 		    
 		    if (file == null)
 			{
@@ -985,7 +985,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
 	else if (type.equals("file"))
 	    {
-		return getNewFile(resourceElement.getSource());
+		return findFile(resourceElement.getSource());
 	    }
 	else
 	    {
@@ -1302,9 +1302,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	_tempFiles.add(file);
     }
 
-  public IFile getNewFile(String fileName)
+  public IResource findFile(String fileName)
   {
-    IFile file = null;
+    IResource file = null;
 
     if (fileName != null)
       {		  
@@ -1340,14 +1340,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     return file;
   }
 
-    public IFile findFile(RemoteProjectAdapter root, String fileName)
+    public IResource findFile(RemoteProjectAdapter root, String fileName)
     {
 	IProject projects[] = root.getProjects();
 	if (projects != null)
 	    {
 		for (int i = 0; i < projects.length; i++)
 		    {
-			IFile result = findFile(projects[i], fileName);
+			IResource result = findFile(projects[i], fileName);
 			if (result != null)
 			    return result;
 		    }
@@ -1356,12 +1356,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
-    public IFile findFile(IWorkspaceRoot root, String fileName)
+    public IResource findFile(IWorkspaceRoot root, String fileName)
     {
 	IProject projects[] = root.getProjects();
 	for (int i = 0; i < projects.length; i++)
 	    {
-		IFile result = findFile(projects[i], fileName);
+		IResource result = findFile(projects[i], fileName);
 		if (result != null)
 		    return result;
 	    }
@@ -1369,7 +1369,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
-    public IFile findFile(IContainer root, String fileName)
+    public IResource findFile(IContainer root, String fileName)
     {
 	try
 	    {
@@ -1393,13 +1393,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				
 				if (compareFileNames(path, fileName))
 				    {
-					if (resource instanceof IFile)
-					    return (IFile)resource;
+					    return resource;
 				    }
 				
 				if (fileName.startsWith(path) && resource instanceof IContainer)
 				    {
-					IFile result = findFile((IContainer)resource, fileName);
+					IResource result = findFile((IContainer)resource, fileName);
 					if (result != null)
 					    return result;
 				    }
@@ -1466,39 +1465,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   }
 
 
-  public IResource getResource(String fileName)
-  {
-    // filename is fully qualified
-    // need to map to eclipse!
-    String newFileName = null;
-    IResource fileHandle = null;
-
-    if ((fileName != null) /*&& (fileName.startsWith(_workbenchDirectory))*/)
-      {	
-	int len = _workbenchDirectory.length();
-	newFileName = fileName.substring(len, fileName.length());
-	IPath path = new Path(newFileName);    	
-
-	if (path != null)
-	  {	
-	    if (path.segmentCount() == 1)
-	      {		
-		fileHandle = (IResource)_workbench.getRoot().getProject(path.toString());
-	      }
-	    else
-	      {
-		fileHandle = (IResource)_workbench.getRoot().getFolder(path);
-		if (fileHandle == null)
-		  {
-		    fileHandle = (IResource)_workbench.getRoot().getFile(path);
-		  }
-	      }
-	  }
-      }
-
-    return fileHandle;
-  }
-
+    public IResource getResource(String fileName)
+    {
+	return findFile(fileName);
+    }
+    
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
@@ -1551,7 +1522,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  String state = (String)object.getElementProperty(DE.P_NAME);	    
 	  if (state.equals("done"))
 	      {               		
-		  IFile  file        = null;
+		  IResource  file        = null;
 		  String fileName    = null;
 		  String oldFileName = null;		
 		  ArrayList children = ev.getChildren();
@@ -1601,7 +1572,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 								      {			    	
 									  oldFileName = new String(fileName);
 									  
-									  file = getNewFile(fileName);
+									  file = findFile(fileName);
 								      }
 								  
 								  if ( file != null)

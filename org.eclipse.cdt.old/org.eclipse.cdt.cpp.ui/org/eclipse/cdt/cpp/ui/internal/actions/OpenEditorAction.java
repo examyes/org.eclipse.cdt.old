@@ -48,10 +48,18 @@ public class OpenEditorAction extends Action implements IOpenAction
     performGoto(true);
   }
 
-  public IFile getNewFile(String fileName)
+  public IFile findFile(String fileName)
   {
       com.ibm.cpp.ui.internal.api.ModelInterface api = _plugin.getModelInterface();
-      return api.getNewFile(fileName);
+      IResource resource =  api.findFile(fileName);
+      if (resource instanceof IFile)
+	  {
+	      return (IFile)resource;
+	  }
+      else
+	  {
+	      return null;
+	  }
   }
 
     public void addNewFile(IFile file)
@@ -77,7 +85,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 			    java.io.File realFile = new java.io.File(fileName);
 			    if ( !realFile.isDirectory())
 				{		
-				    IFile file = getNewFile(fileName);
+				    IFile file = findFile(fileName);
 				    if (file == null && openEditor)
 					{
 					    DataElement fileElement = null;	

@@ -50,7 +50,7 @@ public class AddStatementBreakpoint extends CustomAction
 	int line = lineLocation.intValue();	
 	
 	ModelInterface api = ModelInterface.getInstance();
-	IFile file =  api.getNewFile(fileName);
+	IResource file =  api.findFile(fileName);
 	if (file != null)
 	    {
 		try

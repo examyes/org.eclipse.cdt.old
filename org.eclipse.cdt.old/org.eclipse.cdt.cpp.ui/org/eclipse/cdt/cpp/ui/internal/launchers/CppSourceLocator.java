@@ -48,7 +48,7 @@ public class CppSourceLocator extends WorkspaceSourceLocator
 	DataElement found = dataStore.find(_projectElement, DE.A_NAME, fileName);
 	if (found != null)
 	    {
-		file = _api.getNewFile(found.getSource());
+		file = (IFile)_api.findFile(found.getSource());
 		if (file == null)
 		    {
 			file = new FileResourceElement(found, project);
