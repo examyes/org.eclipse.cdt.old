@@ -1,16 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <link type="text/css"
+  <link rel="stylesheet"
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
- rel="stylesheet">
+ type="text/css">
   <title>Eclipse CDT Draft 2.0 Plan</title>
 </head>
 <body>
 <h1>Eclipse CDT DRAFT 2.0 Plan</h1>
 <p style="font-weight: bold;">Revision History:</p>
-<table cellpadding="2" cellspacing="2" border="1"
- style="text-align: left; width: 100%;">
+<table style="text-align: left; width: 100%;" border="1" cellspacing="2"
+ cellpadding="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; font-weight: bold;">Date</td>
@@ -36,6 +36,15 @@ plan<br>
 consideration by IBM<br>
       </td>
     </tr>
+    <tr>
+      <td style="vertical-align: top;">Oct 16, 2003<br>
+      </td>
+      <td style="vertical-align: top;">Doug Schaefer<br>
+      </td>
+      <td style="vertical-align: top;">Added content from QNX and more
+from IBM<br>
+      </td>
+    </tr>
   </tbody>
 </table>
 <p><i>Please send comments about this draft plan to
@@ -44,7 +53,7 @@ the </i><a href="mailto:eclipse-dev@eclipse.org">cdt-dev@eclipse.org</a>
 mailing list.</i><br>
 </p>
 <p>This document lays out the feature and API set for the next feature
-release of the CDT after 1.2, designated release 2.0.</p>
+release designated release 2.0.</p>
 <ul>
   <li><a href="#Release_Deliverables">Release deliverables</a></li>
   <li><a href="#Release_Milestones">Release milestones</a></li>
@@ -146,7 +155,7 @@ environments listed in the <a
  href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#TargetOperatingEnvironments">Eclipse
 3.0 Project Plan</a>. This list is as follows:<br>
 </p>
-<table border="1" width="95%">
+<table width="95%" border="1">
   <tbody>
     <tr>
       <td width="20%"><b>Operating system</b></td>
@@ -296,6 +305,23 @@ on
 Eclipse 3.0. It also means ensuring the CDT provides the same look at
 feel and supports a number of the new features that are being provided
 by the Eclipse Platform.</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">Rename
+refactoring.</span> This feature represents our first foray into the
+world of refactoring. This includes bringing in a refactoring framework
+that is very similar to the JDT's refactoring framework. The focus is
+then on rename refactoring which will leverage off and make
+improvements to the C/C++ Search
+feature to correctly refactor the references.<br>
+</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">Content
+assist enhancements.</span>
+The
+code completion part of the contents assist feature will be enhanced
+for
+performance, handling of C visibility rules, and for the handling of
+C++ code completion on members.
+&nbsp;The majority of this work will be to make more use of the parser
+to provide accurate and speedy competion proposals.</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Managed
 Build enhancements.</span> The managed build feature will be enhanced
 for usability and for flexibility to support a large variety of build
@@ -305,29 +331,33 @@ for handling different variety of underlying tools including different
 make utilities, as well as support for different file types (like
 lex/yacc).<br>
 </p>
-<h4>Proposed Items</h4>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">Rename
-refactoring.</span> This feature represents our first foray into the
-world of refactoring. This includes bringing in a refactoring framework
-that is very similar to the JDT's refactoring framework. The focus is
-then on rename refactoring which will leverage off the C/C++ Search
-feature to refactor the references to the name.<br>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">User
+Documentation enhancements.</span> The user documentation will be
+expanded on to ensure the success of new and experienced users of the
+CDT.<br>
 </p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">Internationalization
+and Accessibility. </span>Normally, these capabilities should be
+designed into features as they have been developed. Areas where this
+hasn't be done will be addressed in this release.<br>
+</p>
+<h4>Proposed Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
 Search enhancements.</span>
 This feature will be enhanced to add the capability of selecting a name
 in the editor and searching for declarations, definitions, and
 references to that name. The parser will be used to determine
 accurately the appropriate C/C++ definition of the name to be used in
-the search.</p>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">Content
-assist enhancements.</span>
-The
-code completion part of the contents assist feature will be enhanced
-for
-performance and for the handling of C++ code completion on members.
-&nbsp;The majority of this work will be to make more use of the parser
-to provide accurate and speedy competion proposals.</p>
+the search.<br>
+</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">C++
+Class Browser/C++ Hierarchy View.</span>&nbsp;
+A view dedicated to the navigation of C++ class hierarchies associated
+with objects or classes defined in a project. This include the ability
+to see class members, their specifications (public, private, protected,
+virtual, etc), their overrides, and the inheritance structure (both
+inherited from and inherited by).<br>
+</p>
 <h4>Deferred Items</h4>
 <p style="margin-left: 40px;">None at this time.</p>
 <h4>Rejected Items<br>
