@@ -25,9 +25,9 @@ provides.</font>
 <p><b><font size=+2>1- Creating C++ Project "HelloAutoconf"</font></b>
 <ul>
 <li>
-<font size=+1>The first step is to successfully <font color="#FF0000">create
-a new cpp project </font><font color="#000000">and set its name to be "HelloAutoconf"
-and set its location to be the default location.</font></font></li>
+<font size=+1>The first step is to successfully <font color="#FF0000"><a href="../../gettingstarted/createproject/create.htm">create
+a new cpp project</a> </font><font color="#000000">and set its name to
+be "HelloAutoconf" and set its location to be the default location.</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Create a subdir which will include
@@ -35,24 +35,26 @@ the source file(s) for your C++ Program:</font></font></li>
 
 <ol>
 <li>
-<font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
-project view</font><font color="#000000">, RMC (right mouse click) the
-project and select "New -> Directory"</font></font></li>
+<font size=+1><font color="#000000">From the </font><font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
+project view</a></font><font color="#000000">, RMC (right mouse click)
+the project and select "New -> Directory"</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Enter the name of the directory&nbsp;
 "src" and press OK</font></font></li>
 </ol>
-<img SRC="images/newdir.gif" NOSAVE height=406 width=438><img SRC="images/dirEntry.gif" NOSAVE height=140 width=220>
+<img SRC="images/newdir.gif" NOSAVE height=406 width=438>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img SRC="images/dirEntry.gif" NOSAVE height=140 width=220>
 <br>&nbsp;
 <br>&nbsp;
 <li>
 <font color="#000000"><font size=+1>Create a new cpp file by RMC the source
 directory that you have created and select New - > File, then enter the
 file name to be "main.cc"</font></font></li>
-</ul>
-<img SRC="images/newfile.gif" NOSAVE height=221 width=412><img SRC="images/fileEntry.gif" NOSAVE height=140 width=220>
+
 <br>&nbsp;
+<p>&nbsp;
+<p><img SRC="images/newfile.gif" NOSAVE height=221 width=412>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img SRC="images/fileEntry.gif" NOSAVE height=140 width=220></ul>
+
 <ul>
 <li>
 <font color="#000000"><font size=+1>Now we need to write main.cc:</font></font></li>
@@ -130,8 +132,8 @@ and maintain these files:</font></font></blockquote>
 
 <ul>
 <li>
-<font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
-project view</font><font color="#000000">, RMC the HelloAutoconf project
+<font size=+1><font color="#000000">From the </font><font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
+project view</a></font><font color="#000000">, RMC the HelloAutoconf project
 </font>(top
 level directory)<font color="#000000"> and select Autoconf -> Generate
 configure.</font></font></li>
@@ -149,8 +151,8 @@ dialog.</font></font></li>
 <li>
 <font size=+1><font color="#000000">Make sure that the command has completed
 successfully -&nbsp;</font> you can monitor the command output from the
-<font color="#FF6666">output
-view</font> <font color="#000000">, then examine your project directory.
+<font color="#FF6666"><a href="../views/output.htm">output
+view</a></font> <font color="#000000">, then examine your project directory.
 You should see all the files that automake and autoconf have created to
 generate the configure script together with the configure script. This
 is one good reason as to why it is a good practice to leave the top level
@@ -187,9 +189,9 @@ the next step would be running the script and building our program&nbsp;</font><
 <td ALIGN=LEFT VALIGN=TOP COLSPAN="2">
 <ul>
 <li>
-<font size=+1>&nbsp;From the <font color="#FF0000">C/C++ project</font>,
-RMC the project (top level directory) folder and select Autoconf -> run
-configure</font></li>
+<font size=+1>&nbsp;From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
+project</a></font>, RMC the project (top level directory) folder and select
+Autoconf -> run configure</font></li>
 
 <ul>&nbsp;</ul>
 <img SRC="images/runconfigure1.gif" NOSAVE height=420 width=753>
@@ -203,8 +205,9 @@ directory.</font></li>
 <b><font size=+2>4- Building and Running HelloAutoconf Program</font></b>
 <ul>
 <li>
-<font size=+1>From the <font color="#FF0000">C/C++ project view </font>RMC
-the HelloAutoconf project and select Build Project</font></li>
+<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
+project view</a> </font>RMC the HelloAutoconf project and select Build
+Project</font></li>
 
 <ul>&nbsp;</ul>
 <img SRC="images/buildProject.gif" NOSAVE height=252 width=559>
@@ -216,10 +219,10 @@ make sure that the "src" target has been created - we will change the target
 name later.</font></li>
 
 <li>
-<font size=+1>From <font color="#FF0000">Command specification view</font>,
-create a new command - Make sure that the command container being the "src"
-directory, enter the name of the command to be&nbsp; "run HelloAutoconf"
-and the invocation to be "./src"</font></li>
+<font size=+1>From <font color="#FF0000"><a href="../views/commandspecs.htm">Command
+specification view</a></font>, create a new command - Make sure that the
+command container being the "src" directory, enter the name of the command
+to be&nbsp; "run HelloAutoconf" and the invocation to be "./src"</font></li>
 <font size=+1></font>
 <p><br><img SRC="images/createcommand.gif" NOSAVE height=531 width=778>
 <br><font size=+1></font>&nbsp;
@@ -229,7 +232,8 @@ select execute - you can use the view's local tool bar as well.</font></li>
 
 <li>
 <font size=+1>Once the command has been finished, you should see Hello
-World! in the <font color="#FF0000">output view</font></font></li>
+World! in the <font color="#FF0000"><a href="../views/output.htm">output
+view</a></font></font></li>
 
 <p><br><img SRC="images/hellooutput.gif" NOSAVE height=640 width=896>
 <br>&nbsp;</ul>
