@@ -336,6 +336,80 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
      return 0;
    }
+   
+      /**
+    * Add a deferred address breakpoint
+    * @return 0 if succesful
+    * @return -1 if failed
+    * @return breakpoint ID of a duplicate breakpoint if this line already has a line breakpoint set.
+    */
+	public int setDeferredAddressBreakpoint(String address,int attr, boolean enable,EStdExpression2 conditionalExpr) 
+	{
+		int partID = 1;
+		int srcFileIndex = 1;
+		int viewNum = Part.VIEW_SOURCE;
+		String lineNum = "1";
+		String filename = "";				
+		int num=1;
+		ModuleManager cm = _debugSession.getModuleManager();
+
+		
+		// first make sure there are no other line breakpoints at the same location
+		for (int i = 0; i < _breakpoints.size(); i++) {
+			Object obj = _breakpoints.elementAt(i);
+			if (!(obj instanceof LineBreakpoint))
+				continue;
+	
+			LineBreakpoint bkp = (LineBreakpoint) obj;
+			if (bkp != null) {
+				if (bkp.getBkpAddress() != null)
+				{
+					if (bkp.getBkpAddress().equals(address))
+					{
+						if (Gdb.traceLogger.DBG)
+							Gdb.traceLogger.dbg(1, "Duplicate breakpoint");
+							return bkp.bkpID();
+					}
+				}
+			}
+		}
+			
+		address = address.trim();
+		
+		if (!address.startsWith("0x"))
+		{
+			return -1;
+		}
+
+		// try setting a regular breakpoint... if failed, set as deferred which can be enabled later
+		if (setAddressBreakpoint(address, enable, conditionalExpr) == 0)
+		{
+			return 0;
+		}
+		else
+		{
+			int bkpID = _breakpoints.size() + 1;
+			
+			LineBreakpoint lineBkp = new LineBreakpoint(_debugSession,	bkpID,
+					0,attr,partID,srcFileIndex,viewNum,num,conditionalExpr);
+					
+			lineBkp.setBkpAddress(address);		
+			
+			_breakpoints.addElement(lineBkp);
+		
+			// if breakpoint should be disabled, then disable it.
+			if (!enable)
+				disableBreakpoint(bkpID);
+			else
+				_changedBreakpoints.addElement(lineBkp);
+				
+		    _numDeferredBkpt++;
+		    ((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(true);	
+
+			return 0;
+		}
+	}
+   
 
 
    /**
@@ -1067,11 +1141,16 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
      int viewNumber = Part.VIEW_SOURCE;
      int lineNumber = 0;
      int partID = 0;
+     String address;
+     int gdbBkpID;
 
      if (bkp.isLineBreakpoint())
      {
          LineBreakpoint lineBkp = (LineBreakpoint)bkp;
          ModuleManager cm = _debugSession.getModuleManager();
+         String filename = "file-not-found";
+         String lineNum = "1";
+         int num;
          
          cm.checkPart(1, lineBkp.fileName());
          partID = cm.getPartID(1, lineBkp.fileName());
@@ -1085,37 +1164,101 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
          // modify the deferred line breakpoint information
          lineNumber = lineBkp.lineNum();
-/*         
-         // set the deferred breakpoint
-         setLineBreakpoint(lineBkp.fileName(), lineNumber, true, null);
+         address = lineBkp.getBkpAddress();
          
-         lineBkp.deleteBreakpoint();
-      	 _changedBreakpoints.addElement(lineBkp);
-	     _breakpoints.setElementAt(null, bkpID-1);
-*/
-       int gdbBkpID = (((GdbDebugSession)_debugSession).setLineBreakpoint(lineBkp.fileName(), lineNumber));
-       
-       if (gdbBkpID < 0)
-			return;
+         if (address != null)
+         {
+         	gdbBkpID = ((GdbDebugSession)_debugSession).setAddressBreakpoint(address);
+         	
+         	if (gdbBkpID < 0)
+         		return;
+         	
+         			// get info about this breakpoint filename and line number
+			((GdbDebugSession)_debugSession).executeGdbCommand("info breakpoint " + gdbBkpID);
+			String[] lines = ((GdbDebugSession)_debugSession).getTextResponseLines();
 			
-		String address = getBreakpointAddress(gdbBkpID);			
+			if (lines.length > 0)
+			{
+				String line = lines[1];
+				String keyword = " at ";
+				int x = line.indexOf(keyword);
+				if (x > 0)
+				{
+					line = line.substring(x+keyword.length());
+					x = line.indexOf(" ");
+					if (x > 0)
+					{
+						line = line.substring(0, x);
+					}
+					
+					x = line.indexOf(":");
+					filename = line.substring(0, x);
+					lineNum = line.substring(x+1);
+				}
+			}
+			
+			partID = cm.getPartID(filename);
+			
+			// add part if it does not exist
+			if (partID == 0)
+			{
+				cm.checkPart(1, filename);
+				partID = cm.getPartID(filename);
+			}
+			
+			try
+			{
+				num = Integer.parseInt(lineNum);
+			}
+			catch (java.lang.NumberFormatException e)
+			{
+				num = 1;
+			}
+			
+			lineBkp.modify(bkpID, attr, partID, srcFileIndex, viewNumber,
+		                        lineNumber, lineBkp.conditionalExpr());
+		        
+	        lineBkp.setGdbBkID(gdbBkpID);
+	        
+		    if (!lineBkp.isEnabled())
+		    {
+		         disableBreakpoint(bkpID);                        
+		    }
+		    else
+		    {
+	        	 _changedBreakpoints.addElement(bkp);
+		    }
+	
+			_numDeferredBkpt--;         
+         	
+         }
+         else
+         {      
+         	gdbBkpID = (((GdbDebugSession)_debugSession).setLineBreakpoint(lineBkp.fileName(), lineNumber));
 
-		lineBkp.modify(bkpID, attr, partID, srcFileIndex, viewNumber,
-                        lineNumber, lineBkp.conditionalExpr());
-        
-        lineBkp.setGdbBkID(gdbBkpID);
-        lineBkp.setBkpAddress(address);
-
-	    if (!lineBkp.isEnabled())
-	    {
-	         disableBreakpoint(bkpID);                        
-	    }
-	    else
-	    {
-        	 _changedBreakpoints.addElement(bkp);
-	    }
-
-		_numDeferredBkpt--;         
+       
+		       if (gdbBkpID < 0)
+					return;
+					
+				address = getBreakpointAddress(gdbBkpID);			
+		
+				lineBkp.modify(bkpID, attr, partID, srcFileIndex, viewNumber,
+		                        lineNumber, lineBkp.conditionalExpr());
+		        
+		        lineBkp.setGdbBkID(gdbBkpID);
+		        lineBkp.setBkpAddress(address);
+		
+			    if (!lineBkp.isEnabled())
+			    {
+			         disableBreakpoint(bkpID);                        
+			    }
+			    else
+			    {
+		        	 _changedBreakpoints.addElement(bkp);
+			    }
+		
+				_numDeferredBkpt--;         
+         }
      }
      /*
       * Method breakpoints are not fixed at the moment.  Need to re-visit this code
@@ -1205,7 +1348,8 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 	   		Object obj = _breakpoints.elementAt(i);
            if (!(obj instanceof LineBreakpoint))
 	            continue;
-			if (((Breakpoint)_breakpoints.elementAt(i)).isDeferred())
+     
+			if (((Breakpoint)_breakpoints.elementAt(i)).isDeferred() )
 			{
    				enableDeferredBreakpoint((Breakpoint)_breakpoints.elementAt(i));
 	   		}

@@ -338,21 +338,40 @@ public class CmdBreakpointLocation extends Command
               }
               // ########### Address BREAKPOINT ####################################
             case EPDC.AddressBkpType:
-            
+/*            
 			if (isDeferred) {
 				_rep.setReturnCode(EPDC.ExecRc_BadBrkType);
 				_rep.setMessage(
 					_debugSession.getResourceString("UNSUPPORTED_BREAKPOINT_TYPE_MSG"));
 				return false;
 			}
-            
+*/            
 			if (Gdb.traceLogger.EVT)
 				Gdb.traceLogger.evt(1, "Breakpoint type=" + _req.bkpType());
 			String address = _req.bkpVarInfo(); // get requested address
 			partID = bkpContext.getPPID();
 			viewNum = bkpContext.getViewNo(); //Part.VIEW_SOURCE;
-			ret = ((GdbBreakpointManager)bm).setAddressBreakpoint(address, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
-				true : false, _req.getConditionalExpression());
+			
+			if (isDeferred)
+			{
+				ret = ((GdbBreakpointManager)bm).setDeferredAddressBreakpoint(address, _req.bkpAttr(), ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
+					true : false, _req.getConditionalExpression());
+			}
+			else
+			{
+				ret = ((GdbBreakpointManager)bm).setAddressBreakpoint(address, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
+					true : false, _req.getConditionalExpression());
+				
+				// if setting regular breakpoint failed, set breakpoint as deferred	
+				if (ret < 0)
+				{
+					int attr = _req.bkpAttr();
+					attr += EPDC.BkpDefer;
+
+					ret = ((GdbBreakpointManager)bm).setDeferredAddressBreakpoint(address, attr, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
+					true : false, _req.getConditionalExpression());	
+				}
+			}
 
 			if (ret < 0) {
 				_rep.setReturnCode(EPDC.ExecRc_BadLineNum);
