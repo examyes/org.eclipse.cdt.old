@@ -57,12 +57,13 @@ public class CopyAction extends CustomAction
 	    for (int i = 0; i < _projects.size(); i++)
 		{
 		    DataElement targetProject = ((DataElement)_projects.get(i)).dereference();
-		    targetProject.doCommandOn("C_DATES", true);		
+		   
 		    
 		    if (targetProject != null && targetProject != _subject)
 			{
 			    TransferFiles transferAction = new TransferFiles("transfer", _subject, 
-									     targetProject, null);					    
+									     targetProject, null);	
+				transferAction.checkTimestamps(false);							     				    
 			    transferAction.run(pm);
 			    _pm.worked(1);
 			}
@@ -79,9 +80,9 @@ public class CopyAction extends CustomAction
     public void run()
     {
 	ModelInterface api = ModelInterface.getInstance();	
-	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a where to copy to", 
+	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a directory to copy to", 
 							  api.findWorkspaceElement());
-
+	dlg.useFilter(false);
 	dlg.open();
 	
 	if (dlg.getReturnCode() == dlg.OK)

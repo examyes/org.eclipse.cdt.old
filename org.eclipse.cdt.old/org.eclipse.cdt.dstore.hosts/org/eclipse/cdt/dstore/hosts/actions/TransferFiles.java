@@ -50,6 +50,7 @@ public class TransferFiles extends Thread
     private HostsPlugin _plugin;
     private ITransferListener _listener = null;
     private IProgressMonitor  _pm = null;
+    private boolean _checkTimestamps = true;
 
     public TransferFiles(String name, DataElement source, DataElement target, ITransferListener listener)
     {
@@ -57,6 +58,11 @@ public class TransferFiles extends Thread
 	_target = target;
 	_listener = listener;
 	_plugin = HostsPlugin.getInstance();
+    }
+    
+    public void checkTimestamps(boolean flag)
+    {
+    	_checkTimestamps = flag;
     }
 
     public void run(IProgressMonitor pm)
@@ -78,16 +84,25 @@ public class TransferFiles extends Thread
 	    {
 		if (_source.isOfType("directory") || _source.isOfType("Project"))
 		    {
-			//****
 			if (!_source.isExpanded())
+			{
 			    _source.expandChildren(true);
-			queryDates(_source);
+			}
+			if (_checkTimestamps)
+			{
+				queryDates(_source);
+			}
 		    }
 		if (_target.isOfType("directory") || _target.isOfType("Project"))
 		    {
 			if (!_target.isExpanded())
+			{
 			    _target.expandChildren(true);
-			queryDates(_target);
+			}
+			if (_checkTimestamps)
+			{ 	  
+				queryDates(_target);
+			}
 		    }
 		
 		transfer(_source, _target);
@@ -149,7 +164,8 @@ public class TransferFiles extends Thread
 				targetDataStore.synchronizedCommand(mkdir, args, target);
 
 				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
-			    }
+			
+				 }
 		    }
 	    }
 	else
@@ -157,7 +173,14 @@ public class TransferFiles extends Thread
 		if (type.equals("file"))
 		    {
 			// compare dates
-			needsUpdate = compareDates(source, copiedSource);
+			if (_checkTimestamps)
+			{
+				needsUpdate = compareDates(source, copiedSource);
+			}
+			else
+			{
+				needsUpdate = true;
+			}
 		    }
 	    }
 
@@ -204,7 +227,10 @@ public class TransferFiles extends Thread
 				ArrayList args = new ArrayList();
 				args.add(invocationElement);
 				targetDataStore.synchronizedCommand(cmd, args, target);
-				setDate(copiedSource, getDate(source));
+				if (_checkTimestamps)
+				{
+					setDate(copiedSource, getDate(source));
+				}
 			    }
 		    }
 	    }
@@ -242,22 +268,27 @@ public class TransferFiles extends Thread
 
 			// this works when transferring from local to server
 			targetDataStore.replaceFile(newSourceStr, theFile);
-			setDate(copiedSource, getDate(source));
-
+			if (_checkTimestamps)
+			{
+				setDate(copiedSource, getDate(source));
+			}
 			
 		    }
 	    }
 	
-	if (type.equals("directory") && copiedSource != null)
+	if ((type.equals("directory") || type.equals("Project")) 
+	 	&& copiedSource != null) //hack
 	    {
 		if (!source.isExpanded())
 		    {
 			source.expandChildren(true);
 		    }
 
-
-		queryDates(source);
-		queryDates(copiedSource);
+		if (_checkTimestamps)
+		{
+			queryDates(source);
+			queryDates(copiedSource);
+		}
 		if (_pm != null)
 		    {
 			_pm.beginTask("Checking files from " + source.getName() + "...", source.getNestedSize());
