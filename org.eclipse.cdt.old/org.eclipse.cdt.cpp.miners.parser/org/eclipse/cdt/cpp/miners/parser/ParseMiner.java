@@ -106,7 +106,7 @@ public class ParseMiner extends Miner
  private DataElement handleOpenProject(DataElement theProject)
  {  
   theProject = theProject.dereference();
-  if ((theProject.getType().equals("Project") || (theProject.getType().equals("Closed Project"))
+  if (theProject.getType().equals("Project") || theProject.getType().equals("Closed Project"))
   {
    ArrayList parseRefs = theProject.getAssociated(ParserSchema.ParseReference);	     
    if (parseRefs.size() == 0)
