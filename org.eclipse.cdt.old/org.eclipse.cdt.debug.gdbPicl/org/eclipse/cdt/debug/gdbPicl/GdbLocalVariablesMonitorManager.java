@@ -273,9 +273,6 @@ System.out.println("GdbLocalVariablesMonitorManager.updateLocalMonitor #### SHOU
     * Stops monitoring the local variables for the specified thread DU.  If
     * report is true, send change packets for all monitored variables to
     * the front end.  Otherwise, do not send change packets.
-    * AB: for now the stack entry number is ignored,  it is passed in for symmetry
-    *     with the addLocalsVariableMonitor method and in the event that it gets
-    *     used to allow > 1 locals monitor per thread
     */
    public void removeLocalVariablesMonitor(int DU, int stackEntryNum, boolean report)
    {

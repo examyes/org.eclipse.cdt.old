@@ -23,13 +23,12 @@ public class CmdLocalVariableFree extends Command
       _req = req;
 
       _localVarDU  = req.getDU();
-      _localVarStackEntryNum = req.getStackEntryNum();
    }
 
    public boolean execute(EPDC_EngineSession EPDCSession)
    {
       LocalVariablesMonitorManager lvmm = _debugSession.getLocalVariablesMonitorManager();
-      lvmm.removeLocalVariablesMonitor(_localVarDU,_localVarStackEntryNum,true);
+      lvmm.removeLocalVariablesMonitor(_localVarDU,0,true);
 
       _rep = new ERepLocalVariableFree();
       _rep.setReturnCode(EPDC.ExecRc_OK);
