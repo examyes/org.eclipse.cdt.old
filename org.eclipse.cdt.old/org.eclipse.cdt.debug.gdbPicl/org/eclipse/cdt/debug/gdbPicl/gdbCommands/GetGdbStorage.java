@@ -298,6 +298,15 @@ public class GetGdbStorage
           if(z > 0 )
              str = str.substring(0,z);
       }
+        
+      int hex = str.indexOf("0x");
+      
+      if (hex != -1)
+      {
+	      str = str.substring(hex, hex+10);
+	      return str;
+      }	      
+      
       int space = str.lastIndexOf(" ");
       if(space<0)
       {   
@@ -305,7 +314,11 @@ public class GetGdbStorage
               Gdb.traceLogger.err(2,"GetGdbStorage.evaluateAddressOfExpression missing ' ' in response str="+str );
           return null;
       }
-      str = str.substring(space+1);
+      
+      // if it's &a
+      // $1 = 13243251
+      str = str.substring(space+1);   
+    
       if(!str.startsWith("0x"))
       {
          long decimal = 0;
