@@ -42,6 +42,10 @@
   <topic label="Makefiles"                    href="concepts/compiling/makefiles.htm"/>
  </topic>
 
+ <topic label="Autoconf Project Management">
+  <topic label="Enabling Autoconf Support"     href="concepts/autoconf/support.htm"/>
+ </topic>
+
  <topic label="Commands">
   <topic label="Commands"                     href="concepts/commands/commands.htm"/>
   <topic label="Formats"                      href="concepts/commands/formats.htm"/>
