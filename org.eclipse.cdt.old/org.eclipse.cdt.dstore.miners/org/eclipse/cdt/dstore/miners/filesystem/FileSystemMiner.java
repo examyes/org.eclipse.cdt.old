@@ -719,19 +719,20 @@ public class FileSystemMiner extends Miner
 				  path.append("/");
 			      }
 			  
-			  String[] list= theFile.list();
+			  
+			  File[] list= theFile.listFiles();
 			  if (list != null)
 			      {
 				  for (int i= 0; i < list.length; i++)
 				      {
-					  String filePath = path.toString().replace('\\', '/') + list[i];
-					  String objName = list[i];
+				      	File f = list[i];
+					  String filePath = f.getCanonicalPath().replace('\\', '/');			
+					  String objName = f.getName();
 
 					  DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
 					  if (newObject == null || newObject.isDeleted())
 					      {
 						  DataElement objType = _directoryDescriptor;
-						  File f = new File (filePath);
 						  if (!f.isDirectory())
 						      {
 							  objType  = _fileDescriptor;
@@ -806,19 +807,19 @@ public class FileSystemMiner extends Miner
 		
 		
 		// query
-		String[] list= theFile.list();
+		File[] list = theFile.listFiles();
 		if (list != null)
 		    {
 			for (int i= 0; i < list.length; i++)
 			    {				
-				String filePath = path.toString().replace('\\', '/') + list[i];				
-				String objName = list[i];
+			    	File f= list[i];
+					String filePath = f.getCanonicalPath().replace('\\', '/');				
+					String objName = f.getName();
 									  
 				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
 				if (newObject == null || newObject.isDeleted())
 				    {
 					DataElement objType = _directoryDescriptor;
-					File f = new File (filePath);
 					if (!f.isDirectory())
 					    {
 						objType = _fileDescriptor;
