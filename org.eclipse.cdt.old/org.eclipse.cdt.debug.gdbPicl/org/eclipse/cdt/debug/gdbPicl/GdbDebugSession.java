@@ -291,7 +291,7 @@ public class GdbDebugSession extends DebugSession {
 			for (int i = 0; i < length; i++) {
 				String str = (String) cmdResponses.elementAt(i);
 				
-				// produce output in GDB Console or Console
+				// produce output in GDB Console or Console 
 				// all the messages are added here
 				this.addLineToUiMessages(str, true);
 
@@ -513,6 +513,7 @@ public class GdbDebugSession extends DebugSession {
 				if (str == null || str.equals("")) {
 					str = " ";
 				}
+				cp.addPgmOutputLine(str);
 				cp.addCmdLogLine(str);
 			}
 			uiMessages.removeAllElements();
@@ -528,6 +529,7 @@ public class GdbDebugSession extends DebugSession {
 			_rep.setReturnCode(EPDC.ExecRc_TerminateDebugger);
 			_rep.setMessage(str);
 			cp.addCmdLogLine(str);
+
 			//         _whyExceptionMsg = str;
 			//         _rep.setExceptionMsg( str );
 
@@ -765,9 +767,9 @@ public class GdbDebugSession extends DebugSession {
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
                 */
-
+                
                 cmd = "file " + "/proc/" +processIndex +"/exe ";  // works on both gdb 5.11 and 5.2
-
+                
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
@@ -775,7 +777,7 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
-
+              
 		cmd = "attach " + processIndex;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
@@ -801,7 +803,7 @@ public class GdbDebugSession extends DebugSession {
 
                 String[] lines = getTextResponseLines();
                 addCmdResponsesToUiMessages();
-
+              
                 for (int i=0; i<lines.length; i++)
                 {
                    if (lines[i].indexOf("No such process") >= 0)
@@ -988,7 +990,7 @@ public class GdbDebugSession extends DebugSession {
 
 		checkCurrentPart(_currentModuleID);
 
-		// enable deferred breakpoints
+		// enable deferred breakpoints       
 		if (!Gdb.supportDeferredBreakpoint)
 			 ((GdbBreakpointManager) _breakpointManager).enableDeferredBreakpoints();
 
@@ -1857,7 +1859,7 @@ public class GdbDebugSession extends DebugSession {
 		
     }
 
-	// add the name to the list of dll to stop for
+	// add the name to the list of dll to stop for    
     public int setLoadBreakpoint(String dllName)
     {
     	int id;
@@ -1869,7 +1871,7 @@ public class GdbDebugSession extends DebugSession {
     	
     	return id;
     }
-
+    
 	// remove dll name from the list of dll to stop for
     public void clearLoadBreakpoint(int id)
     {
@@ -1884,7 +1886,7 @@ public class GdbDebugSession extends DebugSession {
     		}
     	}
     }
-
+    
     /*
      * Disable load breakpoint
      * remove the original entry from _dllToStop
@@ -1906,11 +1908,11 @@ public class GdbDebugSession extends DebugSession {
     		}
     	}
     }
-
+    
     /*
      * Enable load breakpoint
      * Given the breakpoint id, replace " " set previously from disableLoadBreakpoitn
-     * with real dllName.
+     * with real dllName.  
      */
     public void enableLoadBreakpoint(int id, String dllName)
     {
@@ -1926,7 +1928,7 @@ public class GdbDebugSession extends DebugSession {
     		}
     	}
     }
-
+    
     /*
      * Checks _dllToStop to see if the debug session should stop after a shared lib event
      * Update shared libreaires in module manager
@@ -1942,7 +1944,7 @@ public class GdbDebugSession extends DebugSession {
 	
 		GetGdbSharedLibraries.ModuleInfo[] moduleInfo =
 			_getGdbSharedLibraries.updateSharedLibraries();
-		if (moduleInfo != null)
+		if (moduleInfo != null) 
 		{
 			for (int i = 0; i < moduleInfo.length; i++)
 				if (moduleInfo[i] != null) {
@@ -1999,7 +2001,7 @@ public class GdbDebugSession extends DebugSession {
 	
 		return stop;
     }
-
+    
     // return true - if num of deferred bkpt + num of load bkpt is zero
     // false - otherwise
     public boolean resetStopOnSharedLibEvents()
@@ -2023,7 +2025,7 @@ public class GdbDebugSession extends DebugSession {
 	private void updateAllViews()
 	{
 		getCurrentFileLineModule();
-		_threadManager.updateThreads();
+//		_threadManager.updateThreads();
 		updateMonitors();
 		updateRegisters();
 		updateStorage();

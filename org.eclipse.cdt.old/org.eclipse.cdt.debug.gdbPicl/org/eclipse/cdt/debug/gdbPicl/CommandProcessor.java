@@ -170,12 +170,12 @@ class CommandProcessor extends Thread
                }
          }
       }
-//      else if (cmd instanceof CmdProgramInput)
-//      {
-//      	if (Gdb.traceLogger.DBG)
-//                   Gdb.traceLogger.dbg(1,"Program Input received");
-//      	((CmdProgramInput)cmd).execute(_engineSession);      	
-//      }
+      else if (cmd instanceof CmdProgramInput)
+      {
+      	if (Gdb.traceLogger.DBG)
+                   Gdb.traceLogger.dbg(1,"Program Input received");
+      	((CmdProgramInput)cmd).execute(_engineSession);      	
+      }
       else
       {
          // We have to protect access to this queue since debug engine is on another thread

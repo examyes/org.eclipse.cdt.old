@@ -37,8 +37,19 @@ public class CmdProgramInput extends Command {
 		if (Gdb.traceLogger.DBG)
 			Gdb.traceLogger.dbg(1,"Program input is: " + input);
 		
+		if (((GdbDebugSession)_debugSession).getGdbProcess().isReady())
+		{
+			if (Gdb.traceLogger.DBG)
+                Gdb.traceLogger.dbg(1,"GDB in control, execute GDB Command" );
 		((GdbDebugSession)_debugSession).executeGdbCommand(input);
-//		((GdbDebugSession)_debugSession).getGdbProcess().writeLine(input);
+
+		}
+		else
+		{
+			if (Gdb.traceLogger.DBG)
+                Gdb.traceLogger.dbg(1,"Program waiting for input, just pass input to process" );
+			((GdbDebugSession)_debugSession).getGdbProcess().writeLine(input);
+		}
 		
 		return false;
 	}
