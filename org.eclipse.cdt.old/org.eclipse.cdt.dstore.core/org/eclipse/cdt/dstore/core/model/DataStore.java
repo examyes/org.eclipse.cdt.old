@@ -2565,6 +2565,7 @@ public final class DataStore
           {
             File dir = new File(file.getParent());
             dir.mkdirs();
+            file.createNewFile();
           }
 	  
           File newFile = new File(file.getCanonicalPath());
