@@ -108,7 +108,7 @@ public class CppEditor extends LpexTextEditor
                 new BreakpointRulerAction(_plugin.getResourceBundle(),
                                           "ManageBreakpoints.",
                                            getVerticalRuler(),
-                                           this));
+                                           this)); 
 
         setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK, getAction("ManageBreakpoints"));		
 
@@ -161,22 +161,25 @@ public class CppEditor extends LpexTextEditor
        super.doSave(monitor);
        
       IEditorInput input = getEditorInput();
-      
+
       if (input instanceof IFileEditorInput)
       {
          ModelInterface api = ModelInterface.getInstance();	 	  
          IFile file = ((IFileEditorInput)input).getFile();
-	 if (file instanceof ResourceElement)
-	     {
-		 DataElement fileElement = ((ResourceElement)file).getElement();
-		 api.parse(fileElement, false, false);
-	     }
-	 else
-	     {
-		 api.parse(file, false);
-	     }
-         _isParsed = true;
-      }
+         if (isCFile(file))
+         {
+			 if (file instanceof ResourceElement)
+		     {
+				 DataElement fileElement = ((ResourceElement)file).getElement();
+				 api.parse(fileElement, false, false);
+		     }
+			 else
+	    	 {
+				 api.parse(file, false);
+	     	 }
+         	_isParsed = true;
+      	}
+      } 
    }
 
     public void setFocus()
@@ -188,11 +191,10 @@ public class CppEditor extends LpexTextEditor
 	if (input instanceof IFileEditorInput)
 	    {
 		IFile file = ((IFileEditorInput)input).getFile();
-		String fileName = file.getLocation().toOSString();
-
-
-		
-       	if (!_isParsed)
+		if (isCFile(file))
+		{
+			String fileName = file.getLocation().toOSString();		
+	       	if (!_isParsed)
 	      {
             _isParsed = true;
 		
@@ -210,10 +212,9 @@ public class CppEditor extends LpexTextEditor
       		{
       			api.parse(file, false);
       		}
+	      }
       	}
-      	else
-      	{
-      	}
+
       }
     }
 
@@ -242,6 +243,23 @@ public class CppEditor extends LpexTextEditor
 	    }
     }
 
+  private boolean isCFile(IFile input)
+  {
+  	 String ext = input.getFileExtension().toLowerCase();
+     if (ext.equals("cpp") ||
+               ext.equals("c") ||
+               ext.equals("hpp") ||
+               ext.equals("h") ||
+               ext.equals("inl") ||
+               ext.equals("cxx")
+              )	
+              {
+              	return true;
+              }
+              
+     return false;         
+  }
+  
   public Object getAdapter(Class key)
   {
      if (key.equals(IContentOutlinePage.class))
@@ -250,14 +268,7 @@ public class CppEditor extends LpexTextEditor
         if (editorInput instanceof IFileEditorInput)
         {
            IFile input = ((IFileEditorInput)editorInput).getFile();
-           String ext = input.getFileExtension().toLowerCase();
-           if (ext.equals("cpp") ||
-               ext.equals("c") ||
-               ext.equals("hpp") ||
-               ext.equals("h") ||
-               ext.equals("inl") ||
-               ext.equals("cxx")
-              )
+			if (isCFile(input))
            {
              page = new CppContentOutlinePage(input);
              return page;
