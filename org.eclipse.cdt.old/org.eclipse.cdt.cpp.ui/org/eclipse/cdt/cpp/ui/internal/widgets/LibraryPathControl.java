@@ -10,6 +10,7 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.hosts.dialogs.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
 import org.eclipse.cdt.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.views.*;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
@@ -23,7 +24,7 @@ public class LibraryPathControl extends PathControl
 {
     public LibraryPathControl(Composite cnr, int style)
     {
-	super(cnr, style);
+	super(cnr, style, "library");
     }
 	
     public void handleEvent(Event e)
@@ -33,16 +34,24 @@ public class LibraryPathControl extends PathControl
 	if (source == _browseButton)
 	    {
 		String selectedDirectory = null;
-		if (_project != null && _project instanceof Repository)
+		DataStore dataStore = _plugin.getCurrentDataStore();
+		if (_project instanceof Repository)
 		    {
-			DataElement currentDir = ((Repository)_project).getRemoteElement();
-			DataElement input = currentDir;
-			if (currentDir.getParent() != null)
+			if (_project.isOpen())
 			    {
-				input = currentDir.getParent();	
+				dataStore = ((Repository)_project).getDataStore();
 			    }
+			else
+			    {
+				dataStore = null;
+			    }
+		    }
+		if (dataStore != null)
+		    {
+			DataElement rootDir = dataStore.getHostRoot().get(0).dereference();
 			
-			DataElementFileDialog dialog = new DataElementFileDialog("Select Library", input);
+			DataElementFileDialog dialog = new DataElementFileDialog("Select Library", rootDir);
+			dialog.setActionLoader(CppActionLoader.getInstance());
 			dialog.open();
 			if (dialog.getReturnCode() == dialog.OK)
 			    {
@@ -52,19 +61,11 @@ public class LibraryPathControl extends PathControl
 					selectedDirectory = selected.getSource();
 				    }
 			    }
-		    }		
-		else
-		    {
-			FileDialog dialog = new FileDialog(this.getShell(), SWT.OPEN);
-			dialog.setFilterPath("*.*");
-			
-			selectedDirectory = dialog.open();
-		    }
-		
-		if (selectedDirectory != null)
-		    {
-			_pathEntry.setText(selectedDirectory);	
-			_addButton.setEnabled(true);
+			if (selectedDirectory != null)
+			    {
+				_pathEntry.setText(selectedDirectory);	
+				_addButton.setEnabled(true);
+			    }
 		    }
 	    }
 	else

@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+
 import org.eclipse.core.resources.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -29,14 +31,19 @@ public class PathControl extends Composite implements Listener
     protected Button _downButton;
     
     protected Text   _pathEntry;
-    protected List   _pathList;
+    protected Table    _pathList;
     
     protected IProject _project;
+    protected CppPlugin _plugin;
+    private   ImageDescriptor _icon;
     
-    public PathControl(Composite cnr, int style)
+    public PathControl(Composite cnr, int style, String imageName)
     {
 	super(cnr, style);
-
+	
+	_plugin = CppPlugin.getDefault();
+	_icon = _plugin.getImageDescriptor(imageName);
+	
 	_project = null;
 	Group group = new Group(this, SWT.NULL);
 	group.setText("Path");
@@ -64,7 +71,7 @@ public class PathControl extends Composite implements Listener
 	p1layout.numColumns = 2;
 	p1.setLayout(p1layout);
 	
-	_pathList       = new List(p1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+	_pathList       = new Table(p1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 	_pathList.addListener(SWT.FocusIn, this);
 	_pathList.addListener(SWT.Selection, this);
 	GridData dp2 = new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_BOTH);
@@ -251,7 +258,7 @@ public class PathControl extends Composite implements Listener
     }
     else if (source == _upButton)
     {
-      String tempString;
+      String upString, downString;
       int    j;
 
       _downButton.setEnabled(true);
@@ -262,18 +269,24 @@ public class PathControl extends Composite implements Listener
       {
         if (_pathList.isSelected(i))
         {
-          tempString = _pathList.getItem(i);
-          _pathList.remove(i);
-          j = i - 1;
-          _pathList.add(tempString, j);
-          _pathList.select(j);
-          break;
+	    TableItem item1 = _pathList.getItem(i);
+	    upString = item1.getText();
+	    j = i - 1;
+
+	    TableItem item2 = _pathList.getItem(j);
+	    downString = item2.getText();
+
+	    item1.setText(downString);
+	    item2.setText(upString);
+
+	    _pathList.select(j);
+	    break;
         }
       }
     }
     else if (source == _downButton)
     {
-      String tempString;
+      String upString, downString;
       int    j;
 
       _upButton.setEnabled(true);
@@ -284,12 +297,17 @@ public class PathControl extends Composite implements Listener
       {
         if (_pathList.isSelected(i))
         {
-          tempString = _pathList.getItem(i);
-          _pathList.remove(i);
-          j = i + 1;
-          _pathList.add(tempString, j);
-          _pathList.select(j);
-          break;
+	    TableItem item1 = _pathList.getItem(i);
+	    downString = item1.getText();
+
+	    j = i + 1;
+	    TableItem item2 = _pathList.getItem(j);
+	    upString = item2.getText();
+
+	    item1.setText(upString);
+	    item2.setText(downString);
+	    _pathList.select(j);
+	    break;
         }
       }
     }
@@ -297,7 +315,20 @@ public class PathControl extends Composite implements Listener
 
   public void addPath(String path)
       {
-        _pathList.add(path);
+	  // check for duplicates
+	  for (int i = 0; i < _pathList.getItemCount() - 1; i++)
+	  {
+	      TableItem item = _pathList.getItem(i);
+	      String string = item.getText();	      
+	      if (string.equals(path))
+		  {
+		      return;
+		  }
+	  }
+	  
+	  TableItem item = new TableItem(_pathList, SWT.NULL);
+	  item.setText(path);
+	  item.setImage(_icon.createImage());
       }
 
   public void setPaths(ArrayList paths)
@@ -314,7 +345,8 @@ public class PathControl extends Composite implements Listener
         ArrayList result = new ArrayList();
         for (int i = 0; i < _pathList.getItemCount(); i++)
         {
-          result.add(_pathList.getItem(i));
+	    TableItem item = _pathList.getItem(i);
+          result.add(item.getText());
         }
         return result;
       }

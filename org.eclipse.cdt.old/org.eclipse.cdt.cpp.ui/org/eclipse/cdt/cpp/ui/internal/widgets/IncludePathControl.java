@@ -23,7 +23,7 @@ public class IncludePathControl extends PathControl
 {
     public IncludePathControl(Composite cnr, int style)
     {
-	super(cnr, style);
+	super(cnr, style, "Included Source");
     }
 	
     public void handleEvent(Event e)
