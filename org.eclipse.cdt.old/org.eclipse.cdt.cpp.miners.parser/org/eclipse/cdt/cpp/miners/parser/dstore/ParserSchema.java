@@ -42,7 +42,7 @@ public class ParserSchema
  public static String ParsedSource       = getLocalizedString("parser.ParsedSource");
  public static String IncludedSource     = getLocalizedString("parser.IncludedSource");
  public static String Statement          = getLocalizedString("parser.Statement");
- public static String ControlStatement   = "Control Statement";
+ public static String CompoundStatement  = getLocalizedString("parser.CompoundStatement");
  public static String Constructor        = getLocalizedString("parser.Constructor");
  public static String Destructor         = getLocalizedString("parser.Destructor");
  public static String MainFunction       = getLocalizedString("parser.MainFunction");
@@ -102,7 +102,7 @@ public class ParserSchema
  public static DataElement dIncludedBy;
  public static DataElement dParsedSource;
  public static DataElement dIncludedSource;
- public static DataElement dControlStatement;
+ public static DataElement dCompoundStatement;
  public static DataElement dStatement;
  public static DataElement dConstructor;
  public static DataElement dDestructor;
@@ -192,23 +192,23 @@ public class ParserSchema
 */
 
   //Create the actual Cpp Objects (non-abstract):
-  dStatement      = createDerivativeDescriptor(dUsableCppObject,      Statement);
-  dControlStatement = createDerivativeDescriptor(dContCppObject, ControlStatement);
-  dControlStatement.getDataStore().createReference(dStatement, dControlStatement, "abstracts", "abstracted by");
+  dStatement         = createDerivativeDescriptor(dUsableCppObject, Statement);
+  dCompoundStatement = createDerivativeDescriptor(dContCppObject,   CompoundStatement);
+  dCompoundStatement.getDataStore().createReference(dStatement, dCompoundStatement, "abstracts", "abstracted by");
 
 
-  dMacro          = createDerivativeDescriptor(dUsableCppObject,      Macro);
-  dConstructor    = createDerivativeDescriptor(dFunctions,      Constructor);
-  dDestructor     = createDerivativeDescriptor(dFunctions,      Destructor);
-  dMainFunction   = createDerivativeDescriptor(dFunctions,      MainFunction);
-  dFunction       = createDerivativeDescriptor(dFunctions,      Function);
-  dClass          = createDerivativeDescriptor(dClassesStructs, Class);
-  dStruct         = createDerivativeDescriptor(dClassesStructs, Struct);
-  dUnion          = createDerivativeDescriptor(dClassesStructs, Union);
-  dNamespace      = createDerivativeDescriptor(dClassesStructs, Namespace);
-  dEnum           = createDerivativeDescriptor(dVariables,      Enum);
-  dTypedef        = createDerivativeDescriptor(dVariables,      Typedef);
-  dVariable       = createDerivativeDescriptor(dVariables,      Variable);
+  dMacro          = createDerivativeDescriptor(dUsableCppObject, Macro);
+  dConstructor    = createDerivativeDescriptor(dFunctions,       Constructor);
+  dDestructor     = createDerivativeDescriptor(dFunctions,       Destructor);
+  dMainFunction   = createDerivativeDescriptor(dFunctions,       MainFunction);
+  dFunction       = createDerivativeDescriptor(dFunctions,       Function);
+  dClass          = createDerivativeDescriptor(dClassesStructs,  Class);
+  dStruct         = createDerivativeDescriptor(dClassesStructs,  Struct);
+  dUnion          = createDerivativeDescriptor(dClassesStructs,  Union);
+  dNamespace      = createDerivativeDescriptor(dClassesStructs,  Namespace);
+  dEnum           = createDerivativeDescriptor(dVariables,       Enum);
+  dTypedef        = createDerivativeDescriptor(dVariables,       Typedef);
+  dVariable       = createDerivativeDescriptor(dVariables,       Variable);
 
   //Create others
   dProject           = findDescriptor(Project, schemaRoot.getDataStore());

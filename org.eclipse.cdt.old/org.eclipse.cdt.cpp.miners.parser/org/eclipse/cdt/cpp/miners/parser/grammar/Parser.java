@@ -2,7 +2,7 @@
 package com.ibm.cpp.miners.parser.grammar;
 
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
  */
 
 import com.ibm.dstore.core.model.*;
@@ -107,7 +107,7 @@ public final class Parser implements ParserConstants {
   return false;
  }
 
- //This method takes a string containing a bunch of type names and a declaration name and returns just the
+ //This method takes a string containing a bunch of type names and a declaration name and returns just the 
  //type names and the Declarator split into an Array
  //So if "const char *c" is passed in,  just "const char" is list[1] and "*c" is list[0];
  public String[] parseDeclaration(String theTypes)
@@ -140,9 +140,9 @@ public final class Parser implements ParserConstants {
 
 //START OF GRAMMAR DEFINITION
 
-//This is the root production that starts a file-based parse...The rest of the
+//This is the root production that starts a file-based parse...The rest of the 
 //productions below are a mixture of productions from the CPlusPlus sample
-//that comes with javacc and productions based on the C++ Standard
+//that comes with javacc and productions based on the C++ Standard 
 //(mostly the latter).
   final public void translation_unit() throws ParseException {
     label_1:
@@ -200,8 +200,8 @@ public final class Parser implements ParserConstants {
   }
 
 //This production is key in terms of performance...It is really the base production
-//used to parse each declaration.  We have to be really careful about how we use
-//LOOKAHEAD here because this method is called so many times.  So the basic idea
+//used to parse each declaration.  We have to be really careful about how we use 
+//LOOKAHEAD here because this method is called so many times.  So the basic idea 
 //is that I try to determine 1,2 or at most 3 tokens (based on the C++ standard),
 //to lookahead to decide what type of declaration we are dealing with.
   final public void declaration() throws ParseException {
@@ -1839,7 +1839,7 @@ public final class Parser implements ParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-//When this lookahead is invoked, the "class", "struct" or "union" keyword has already
+//When this lookahead is invoked, the "class", "struct" or "union" keyword has already 
 //been matched.
   final public void class_specifier_lookahead() throws ParseException {
     if (jj_2_32(2147483647)) {
@@ -3062,7 +3062,7 @@ public final class Parser implements ParserConstants {
       throw new ParseException();
     }
     jj_consume_token(COLON);
-  symtab.addObject(ParserSchema.dControlStatement, name + " :",startLine,true);
+  symtab.addObject(ParserSchema.dCompoundStatement, name + " :",startLine,true);
     statement_list();
    symtab.closeScope();
   }
@@ -3169,12 +3169,12 @@ public final class Parser implements ParserConstants {
       jj_consume_token(OPENPAREN);
       name = expression();
       jj_consume_token(CLOSEPAREN);
-                                     symtab.addObject(ParserSchema.dControlStatement, "if ( " + name + " )", startLine,true);
+                                     symtab.addObject(ParserSchema.dCompoundStatement, "if ( " + name + " )", startLine,true);
       statement();
                 symtab.closeScope();
       if (jj_2_67(2147483647)) {
         jj_consume_token(ELSE);
-             symtab.addObject(ParserSchema.dControlStatement, "else", getToken(0).beginLine,true);
+             symtab.addObject(ParserSchema.dCompoundStatement, "else", getToken(0).beginLine,true);
         statement();
                  symtab.closeScope();
       } else {
@@ -3186,7 +3186,7 @@ public final class Parser implements ParserConstants {
       jj_consume_token(OPENPAREN);
       name = expression();
       jj_consume_token(CLOSEPAREN);
-    symtab.addObject(ParserSchema.dControlStatement, "switch ( " + name + " )", startLine,true);
+    symtab.addObject(ParserSchema.dCompoundStatement, "switch ( " + name + " )", startLine,true);
       statement();
                 symtab.closeScope();
       break;
@@ -3205,12 +3205,12 @@ public final class Parser implements ParserConstants {
       jj_consume_token(OPENPAREN);
       name = expression();
       jj_consume_token(CLOSEPAREN);
-    symtab.addObject(ParserSchema.dControlStatement, "while (" + name + ")", startLine,true);
+    symtab.addObject(ParserSchema.dCompoundStatement, "while (" + name + ")", startLine,true);
       statement();
       break;
     case DO:
       jj_consume_token(DO);
-    theObject = symtab.addObject(ParserSchema.dControlStatement, "do", startLine,true);
+    theObject = symtab.addObject(ParserSchema.dCompoundStatement, "do", startLine,true);
       statement();
       jj_consume_token(WHILE);
       jj_consume_token(OPENPAREN);
@@ -3302,7 +3302,7 @@ public final class Parser implements ParserConstants {
       }
       jj_consume_token(CLOSEPAREN);
      name += ")";
-     symtab.addObject(ParserSchema.dControlStatement, name, startLine,true);
+     symtab.addObject(ParserSchema.dCompoundStatement, name, startLine,true);
       statement();
       break;
     default:
@@ -3391,7 +3391,7 @@ public final class Parser implements ParserConstants {
 
   final public void try_block() throws ParseException {
     jj_consume_token(TRY);
-    symtab.addObject(ParserSchema.dStatement, "try", getToken(0).beginLine, true);
+    symtab.addObject(ParserSchema.dCompoundStatement, "try", getToken(0).beginLine, true);
     compound_statement();
     symtab.closeScope();
     label_21:
@@ -3428,7 +3428,7 @@ public final class Parser implements ParserConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-  symtab.addObject(ParserSchema.dStatement, name, startLine, true);
+  symtab.addObject(ParserSchema.dCompoundStatement, name, startLine, true);
     compound_statement();
    symtab.closeScope();
   }

@@ -1317,7 +1317,7 @@ void labeled_statement() :
   | "default" {name = "default";} 
  )
  ":"
- {symtab.addObject(ParserSchema.dStatement, name + " :",startLine,true);}
+ {symtab.addObject(ParserSchema.dCompoundStatement, name + " :",startLine,true);}
  ( statement_list() )
  { symtab.closeScope();}
 }
@@ -1332,14 +1332,14 @@ void selection_statement() :
 {String name = empty; String next = empty; int startLine = getToken(1).beginLine;}
 {
  (
-   "if" "(" name = expression() ")" {symtab.addObject(ParserSchema.dStatement, "if ( " + name + " )", startLine,true);}
+   "if" "(" name = expression() ")" {symtab.addObject(ParserSchema.dCompoundStatement, "if ( " + name + " )", startLine,true);}
    statement() {symtab.closeScope();} 
    [ LOOKAHEAD("else")
-    "else"  {symtab.addObject(ParserSchema.dStatement, "else", getToken(0).beginLine,true);}
+    "else"  {symtab.addObject(ParserSchema.dCompoundStatement, "else", getToken(0).beginLine,true);}
     statement() {symtab.closeScope();}
    ]
  | "switch" "(" name = expression() ")" 
-   {symtab.addObject(ParserSchema.dStatement, "switch ( " + name + " )", startLine,true);} 
+   {symtab.addObject(ParserSchema.dCompoundStatement, "switch ( " + name + " )", startLine,true);} 
    statement() {symtab.closeScope();}
  )
 }
@@ -1349,10 +1349,10 @@ void iteration_statement() :
 {
  (
    "while" "(" name = expression() ")" 
-   {symtab.addObject(ParserSchema.dStatement, "while (" + name + ")", startLine,true);} 
+   {symtab.addObject(ParserSchema.dCompoundStatement, "while (" + name + ")", startLine,true);} 
    statement() 
  | "do" 
-   {theObject = symtab.addObject(ParserSchema.dStatement, "do", startLine,true);}
+   {theObject = symtab.addObject(ParserSchema.dCompoundStatement, "do", startLine,true);}
    statement() 
    "while" "(" name = expression() ")" ";"
    {if (name == null) name = empty; theObject.setAttribute(DE.A_NAME, "do...while (" + name + ")");}
@@ -1376,7 +1376,7 @@ void iteration_statement() :
     ")" 
     {
      name += ")";
-     symtab.addObject(ParserSchema.dStatement, name, startLine,true);
+     symtab.addObject(ParserSchema.dCompoundStatement, name, startLine,true);
     } 
     statement()
  )
@@ -1404,7 +1404,7 @@ void try_block() :
 {}
 {
    "try" 
-   {symtab.addObject(ParserSchema.dStatement, "try", getToken(0).beginLine, true);}
+   {symtab.addObject(ParserSchema.dCompoundStatement, "try", getToken(0).beginLine, true);}
    compound_statement() 
    {symtab.closeScope();} 
    (handler())*
@@ -1417,7 +1417,7 @@ void handler() :
    | "finally" {name = "finally";}
   )
   {
-  symtab.addObject(ParserSchema.dStatement, name, startLine, true);}
+  symtab.addObject(ParserSchema.dCompoundStatement, name, startLine, true);}
   compound_statement()
   {symtab.closeScope();}
 }
