@@ -303,7 +303,7 @@ void WinDbgTarget::setBreakpoint(long address, bool temporary)
 
 // JNI interface
 
-#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_cdi_WinDbgTarget_##name
+#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_core_cdi_WinDbgTarget_##name
 
 static jfieldID pID;
 

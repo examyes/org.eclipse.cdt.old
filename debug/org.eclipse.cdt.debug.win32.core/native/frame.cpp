@@ -16,7 +16,7 @@
 
 static jmethodID addVariableID;
 
-#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_cdi_WinDbgStackFrame_##name
+#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_core_cdi_WinDbgStackFrame_##name
 
 NATIVE(void, initNative)(JNIEnv * env, jclass cls)
 {

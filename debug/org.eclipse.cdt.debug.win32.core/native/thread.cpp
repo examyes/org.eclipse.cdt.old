@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <jni.h>
 
-#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_cdi_WinDbgThread_##name
+#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_core_cdi_WinDbgThread_##name
 
 static jfieldID processHandleID;
 static jfieldID threadHandleID;

@@ -152,7 +152,7 @@ void WinDbgProcess::destroy()
 	TerminateProcess(pi.hProcess, -1);
 }
 
-#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_cdi_WinDbgProcess_##name
+#define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_core_cdi_WinDbgProcess_##name
 
 static jfieldID pID;
 
