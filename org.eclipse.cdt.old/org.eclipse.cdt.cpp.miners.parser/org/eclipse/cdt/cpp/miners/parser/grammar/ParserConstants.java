@@ -115,23 +115,25 @@ public interface ParserConstants {
   int VOLATILE = 133;
   int WCHAR_T = 134;
   int WHILE = 135;
-  int OCTALINT = 136;
-  int OCTALLONG = 137;
-  int UNSIGNED_OCTALINT = 138;
-  int UNSIGNED_OCTALLONG = 139;
-  int DECIMALINT = 140;
-  int DECIMALLONG = 141;
-  int UNSIGNED_DECIMALINT = 142;
-  int UNSIGNED_DECIMALLONG = 143;
-  int HEXADECIMALINT = 144;
-  int HEXADECIMALLONG = 145;
-  int UNSIGNED_HEXADECIMALINT = 146;
-  int UNSIGNED_HEXADECIMALLONG = 147;
-  int FLOATONE = 148;
-  int FLOATTWO = 149;
-  int CHARACTER = 150;
-  int STRING = 151;
-  int ID = 152;
+  int THROWMACRO = 136;
+  int THROWMACRO2 = 137;
+  int OCTALINT = 138;
+  int OCTALLONG = 139;
+  int UNSIGNED_OCTALINT = 140;
+  int UNSIGNED_OCTALLONG = 141;
+  int DECIMALINT = 142;
+  int DECIMALLONG = 143;
+  int UNSIGNED_DECIMALINT = 144;
+  int UNSIGNED_DECIMALLONG = 145;
+  int HEXADECIMALINT = 146;
+  int HEXADECIMALLONG = 147;
+  int UNSIGNED_HEXADECIMALINT = 148;
+  int UNSIGNED_HEXADECIMALLONG = 149;
+  int FLOATONE = 150;
+  int FLOATTWO = 151;
+  int CHARACTER = 152;
+  int STRING = 153;
+  int ID = 154;
 
   int DEFAULT = 0;
   int LINE_NUMBER = 1;
@@ -280,6 +282,8 @@ public interface ParserConstants {
     "\"volatile\"",
     "\"wchar_t\"",
     "\"while\"",
+    "\"_THROW\"",
+    "\"__THROW\"",
     "<OCTALINT>",
     "<OCTALLONG>",
     "<UNSIGNED_OCTALINT>",

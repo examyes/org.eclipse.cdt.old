@@ -538,6 +538,8 @@ TOKEN :
 | < VOLATILE:        "volatile" >
 | < WCHAR_T:         "wchar_t" >
 | < WHILE:           "while" >
+| < THROWMACRO:      "_THROW">
+| < THROWMACRO2:     "__THROW">
 }
 
 TOKEN [IGNORE_CASE] :
@@ -738,7 +740,7 @@ void function_definition_lookahead() :
    (LOOKAHEAD(2) ptr_operator())* (LOOKAHEAD(2) id_expression())? (LOOKAHEAD(2) extended_identifier())?
    "(" (")" | LOOKAHEAD(3) parameter_list(false) ")" | expression() ")")
    //Don't match a ";" below since we want A B(); to be matched as a variable declaration;
-   ( ":" | "{" | "try" | "=" | ";" | declaration_specifier() )
+   ( ":" | "{" | "try" | "=" | ";" | exception_spec())
 }
 
 //The declaration_specifiers have already been matched when we get here:
@@ -869,7 +871,7 @@ void function_definition(String theTypes, String className) :
      (
          LOOKAHEAD(2) ";" {symtab.closeScope();}
       |  "=" constant_expression() {symtab.closeScope();}
-      |  (LOOKAHEAD(2) declaration())* "{" skip_object_body(theFunction)
+      |  "{" skip_object_body(theFunction)
      )
   )
 }
@@ -1954,7 +1956,8 @@ String optor() :
 void exception_spec() :
 {}
 {
-   "throw" "(" exception_list() ")"
+    "throw" "(" exception_list() ")" 
+  | "__THROW" | "_THROW" //This is a pretty hacky solution to the __THROW macro in stdio not being expanded properly.
 }
 
 void exception_list() :
