@@ -487,7 +487,7 @@
    <editor
          name="%Lpex_Editor"
          icon="icons/full/obj16/lpex_obj.gif"
-         extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in,dat"
+         extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in,dat,m4,guess,sub"
          default="true"
          contributorClass="org.eclipse.cdt.cpp.ui.internal.editor.contributor.CppEditorContextContributor"
          class="org.eclipse.cdt.cpp.ui.internal.editor.CppEditor"
