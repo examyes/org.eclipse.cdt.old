@@ -36,7 +36,7 @@ public class DataElementAdapter
   {
       ModelInterface api = ModelInterface.getInstance();
       IProject project = e.getProject();
-
+	
       String path = null;
       if (e instanceof ResourceElement)
 	  {
@@ -100,6 +100,7 @@ public class DataElementAdapter
       dataStore = DataStoreCorePlugin.getPlugin().getCurrentDataStore();
       path = new String(e.getLocation().toOSString());
     }
+
 
     IProject project = CppPlugin.getDefault().getCurrentProject();
     ModelInterface api = ModelInterface.getInstance();

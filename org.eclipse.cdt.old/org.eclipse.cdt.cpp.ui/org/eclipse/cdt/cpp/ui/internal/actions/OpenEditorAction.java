@@ -135,6 +135,10 @@ public class OpenEditorAction extends Action implements IOpenAction
 	    {
 		return null;
 	    }  
+	if (des.isOfType("file"))
+	{
+		return element;
+	}
 
 	String fileName   = (String)(element.getElementProperty(DE.P_SOURCE_NAME));
 	DataElement resource = _api.findResourceElement(element.getDataStore(), fileName);
@@ -178,6 +182,11 @@ public class OpenEditorAction extends Action implements IOpenAction
 			{
 			    project = _api.findProjectResource(projectElement);
 			}
+			if (project == null)
+			{
+			    project = _plugin.getCurrentProject();		
+			}
+			
 
 
 		    String fileName   = (String)(resourceElement.getElementProperty(DE.P_SOURCE_NAME));
@@ -196,7 +205,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 				    if (file == null && openEditor)
 					{
 					    DataElement fileElement = null;	
-					    if (elementType.equals("file"))
+					    if (resourceElement.isOfType("file"))
 						{
 						    fileElement = resourceElement;			
 						}
