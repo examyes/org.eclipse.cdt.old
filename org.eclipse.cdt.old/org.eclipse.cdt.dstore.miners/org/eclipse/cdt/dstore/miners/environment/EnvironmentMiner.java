@@ -105,7 +105,8 @@ public class EnvironmentMiner extends Miner
    String curLine;
    while ( (curLine = _output.readLine()) != null)
    {
-    _dataStore.createObject(_system, "Environment Variable", curLine, curLine);
+    if (curLine.indexOf("=") > 0)
+     _dataStore.createObject(_system, "Environment Variable", curLine, curLine);
    }
    _dataStore.refresh(_system);
    
