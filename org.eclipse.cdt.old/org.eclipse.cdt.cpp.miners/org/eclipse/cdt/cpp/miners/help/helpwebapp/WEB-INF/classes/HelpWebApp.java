@@ -596,7 +596,7 @@ public class HelpWebApp extends HttpServlet
 		currChar = line.charAt(i);
 		if(currChar=='<') result.append("&lt;");
 		else if (currChar=='>') result.append("&gt;");
-		else if (currChar=='&') result.append("amp;");
+		else if (currChar=='&') result.append("&amp;");
 		else if (currChar=='"') result.append("&quot;");
 		/*else if*/
 		else result.append(currChar);
