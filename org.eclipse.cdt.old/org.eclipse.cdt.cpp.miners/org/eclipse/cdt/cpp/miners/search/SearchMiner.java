@@ -78,14 +78,8 @@ public class SearchMiner extends Miner
     {      
       status.setAttribute(DE.A_NAME, getLocalizedString("model.progress"));
 
-      boolean ignoreCase = true;
-      
-      String caseCheck = pattern.getValue();
-      if (caseCheck.equals("check_case"))
-	{
-	  ignoreCase = false;
-	}
-
+      boolean respectCase = pattern.getValue().equals("check_case");
+     
       DataElement type = (DataElement)pattern.get(0).dereference();
 
       // find all matching types
@@ -102,7 +96,7 @@ public class SearchMiner extends Miner
 			      ArrayList matches = _dataStore.findObjectsOfType(parsedFiles, type);
 			      
 			      // find matches
-			      compare(pattern.getName(), matches, status);
+			      compare(pattern.getName(), matches, status, respectCase);
 			  }
 		  }
 	  }
@@ -117,7 +111,7 @@ public class SearchMiner extends Miner
 		      ArrayList matches = _dataStore.findObjectsOfType(parsedFiles, type);
 		      
 		      // find matches
-		      compare(pattern.getName(), matches, status);
+		      compare(pattern.getName(), matches, status, respectCase);
 		  }
 	  }
       
@@ -193,7 +187,7 @@ public class SearchMiner extends Miner
 	      }
       }
 
-      public void compare(String pattern, ArrayList input, DataElement status)
+      public void compare(String pattern, ArrayList input, DataElement status, boolean respectCase)
       {
 	  for (int i = 0; i < input.size(); i++)
 	      {
@@ -201,7 +195,7 @@ public class SearchMiner extends Miner
 
 		  if (!match.isReference() && !match.isDeleted())
 		      {		
-			  if (compareString(pattern, match.getValue(), false))
+			  if (compareString(pattern, match.getValue(), respectCase))
 			      {
 				  _dataStore.createReference(status, match, getLocalizedString("model.contents"));
 			      }
@@ -209,9 +203,9 @@ public class SearchMiner extends Miner
 	      }
       }
       
-      public boolean compareString(String patternStr, String compareStr, boolean ignoreCase)
+      public boolean compareString(String patternStr, String compareStr, boolean respectCase)
       {
-	  return StringCompare.compare(patternStr, compareStr, ignoreCase);
+	  return StringCompare.compare(patternStr, compareStr, !respectCase);
       }
   }
 
