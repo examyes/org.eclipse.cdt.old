@@ -1,0 +1,845 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Standard Make Enhancements</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+<!-- Document Header -->
+<table style="width: 100%;" border="0" cellpadding="2">
+  <tbody>
+    <tr>
+      <td style="text-align: left; width: 70%;"> <font class="indextop">Scanner
+Configuration Correctness Enhancements FD <br>
+      </font> <span class="indexsub"><font class="indexsub">This
+document describes the proposed work items for the scanner
+configuration correctness enhancements for the CDT 3.0 release.</font></span>
+      </td>
+      <td style="width: 30%;"><img
+ src="http://dev.eclipse.org/images/Idea.jpg" alt="" height="86"
+ width="120"></td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Author</td>
+      <td style="vertical-align: top;"> : <a
+ href="mailto:vhirsl@ca.ibm.com">Vladimir Hirsl<br>
+      </a></td>
+    </tr>
+    <tr>
+      <td>Revision Date</td>
+      <td> : 11/04/2004 - Version: 0.1.0</td>
+    </tr>
+    <tr>
+      <td>Change History</td>
+      <td> : 0.1.0 - Document Creation</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+<!-- Table of Contents -->
+<div class="section">Table of Contents</div>
+<br>
+<div class="indent"><a href="#intro">1. Introduction</a> </div>
+<div class="indent"><a href="#reqs">2. Requirements</a><br>
+<a href="#proposal">3. Design proposal</a><br>
+</div>
+<div class="indent"><a href="#references">4. References</a>
+</div>
+<br>
+<br>
+<!-- End of Table of Contents -->
+<!-- Introduction -->
+<div class="section"><a name="intro"> 1. Introduction</a></div>
+<p>Scanner configuration discovery (SCD) was introduced in CDT in
+release 2.0. Its goal was to improve the
+initial
+user experience by setting up project scanner configuration during a
+project build thus enabling features such as content assist, text
+hover, search and others that use services of the parser.<br>
+</p>
+<p>Main deficiencies of the SCD, observed by CDT 2.0 users, were that
+the scanner configuration is incomplete (does not handle GNU specific
+command line options such as '<samp>-imacros <span
+ style="font-style: italic;">file</span></samp>') and incorrect in some
+cases
+(since it is managed on a project level, some of the entries may not be
+applicable to a specific compilation unit).<br>
+</p>
+<p>This document will address main requirements on the SCD and a design
+proposal for CDT 3.0.<br>
+</p>
+<p>The list of related Bugzilla reports:<br>
+</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">PR<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=67491">67491</a><br>
+      </td>
+      <td style="vertical-align: top;">[Parser] IScannerInfo
+enhancements<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=72975">72975</a><br>
+      </td>
+      <td style="vertical-align: top;">[Scanner Config] Improving
+correctness of discovered scanner config<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=73606">73606</a><br>
+      </td>
+      <td style="vertical-align: top;">[Scanner Config] Per file
+"Generate Scanner Info Command"<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=73607">73607</a><br>
+      </td>
+      <td style="vertical-align: top;">[Scanner Config] Auto detect per
+file "Generate ScannerInfo Command"<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74474">74474</a><br>
+      </td>
+      <td style="vertical-align: top;">[ScannerConfig] Accessible
+persisted discovered scanner configuration<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>1.1 Goal</h2>
+<p>The goal of this enhancement is to improve correctness of the
+discovered scanner configuration so that for each file in a project
+parser gets the same scanner configuration as the one used to compile
+that file as a part of build process.<br>
+</p>
+<h2>1.2 Glossary</h2>
+<p>This section defines terms commonly used in this document.<br>
+</p>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 80pt;">Compilation unit<br>
+      </td>
+      <td style="vertical-align: top;">A C/C++ source file (usual
+extensions .c, .cpp)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Target specific options<br>
+      </td>
+      <td style="vertical-align: top;">Set of compiler command line
+options that influence compiler's intrinsic scanner configuration (for
+example: <samp>-ansi</samp>, <samp>-nostdinc</samp>, ...)<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>1.3 Constraints</h2>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">C1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Multiple
+scanner configurations per project are not supported</span><br>
+      <br>
+The enhancement still presumes a single scanner configuration per
+project, accessible on a compilation unit level. The scanner
+configuration is associated with build targets specified in project's
+properties, Make builder tab, Build and Rebuild property fields.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">C2</span></td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Build
+output generated by the multi process make run is not supported</span><span
+ style="font-weight: bold;"></span><br>
+      <br>
+Make build started with option -j&lt;N&gt; where N &gt; 1 creates N
+processes to run parallel build that share the same output terminal. It
+makes impossible to
+determine current working directory for each of the processes. Since
+having an accurate working directory is instrumental for scanner
+configuration discovery, the case where N is greater then 1 is not
+supported and will
+generate appropriate user notification.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="section"><a name="reqs"> 2. Requirements</a><br>
+</div>
+<p>List of requirements for scanner configuration correctness
+enhancements is classified into following categories:
+</p>
+<p>
+</p>
+<h2>2.1 Scanner Configuration Discovery</h2>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top; width: 35pt;">Priority<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R1<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Discover
+user specified scanner configuration on a compilation unit basis</span><span
+ style="font-weight: bold;"></span><br>
+      <ul>
+        <li>Discovery of user specified include paths and symbol
+definitions</li>
+      </ul>
+      <div style="margin-left: 40px;">User specified scanner
+configuration is already being discovered on compilation unit level
+from the build output.<br>
+      </div>
+      <ul>
+        <li>Discovery of compiler's intrinsic include paths and symbol
+definitions</li>
+      </ul>
+      <ul>
+Sets of files can be compiled with different compilers
+or with different target specific options during the same build
+process. Therefore, having only one compiler's internal scanner
+configuration defined on a project level may cause an incorrect or
+incomplete scanner configuration for a specific compilation unit. <br>
+Compiler's internal scanner configuration needs to be discovered per
+compilation unit.<br>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R2<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Support
+for non-trivial command line options</span><br>
+      <br>
+In the release 2.0 only plain -I and -D command options are supported.
+Other scanner configuration affecting command line options need to be
+supported as well:<br>
+      <ul>
+        <li><samp>-U <span style="font-style: italic;">name</span></samp></li>
+        <li><samp>-I-</samp></li>
+        <li><samp>-nostdinc</samp></li>
+        <li><samp>-nostdinc++</samp></li>
+        <li><samp>-include <span style="font-style: italic;">file</span></samp></li>
+        <li><samp>-imacros <span style="font-style: italic;">file</span></samp></li>
+        <li><samp>-idirafter <span style="font-style: italic;">dir</span></samp></li>
+        <li><samp>-isystem <span style="font-style: italic;">dir</span></samp></li>
+        <li><samp>-iprefix <span style="font-style: italic;">prefix</span></samp></li>
+        <li><samp>-iwithprefix <span style="font-style: italic;">dir</span></samp></li>
+        <li><samp>-iwithprefixbefore <span style="font-style: italic;">dir</span></samp></li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R3<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Use
+a previously performed nightly build logs as a source for scanner
+configuration discovery</span><br>
+      <br>
+User shall be able to provide a nightly build log file as an input to
+scanner configuration discovery. The constraint C2 applies.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>2.2 Scanner Configuration Management
+</h2>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top; width: 35pt;">Priority<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">R4</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Discovered
+scanner configuration will be managed per compilation unit<br>
+      </span><br>
+Both user specified and compiler's intrinsic parts of scanner
+configuration are currently managed (persisted, edited, retrieved) on
+project level. To improve correctness of scanner configuration for each
+compilation unit, it needs to be managed on compilation unit level.<br>
+      <br>
+Fulfilling this requirement will certainly increase memory consumption
+for both in memory scanner configuration and the persisted store. The
+solution must assure that memory consumption can scale well for large
+projects.<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R5<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">User
+shall be able to edit
+discovered scanner configuration per compilation unit</span><br>
+      <br>
+User needs an option to edit, correct or remove items from the
+discovered
+scanner configuration. User preferences should be persisted so that
+user does not have to redo them each time scanner configuration is
+rediscovered or updated. Currently this is available on project level,
+new UI is required to enable the functionality on compilation unit
+level.<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R6<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Discovered
+scanner configuration shell be persisted in accessible manner<br>
+      <br>
+      <span style="font-weight: normal;">User may want to use its own,
+or third party tools to generate scanner configuration information for
+a project. The persistence store of the discovered scanner
+configuration needs to be accessible in a well defined manner so that
+user may generate or edit this information.</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R7</td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1</td>
+      <td style="vertical-align: top; font-weight: bold;">Management of
+project's scanner
+configuration shall be compiler independent<br>
+      <br>
+      <span style="font-weight: normal;">The higher level requirement
+is to be able to support multiple compilers i.e. VC++, Intel, Visual
+Age, SunCC, etc.</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R8<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Support
+for remote builds (path prefix replacements)<br>
+      <br>
+      </span>In cases where make build is run on a different machine
+and discovered
+include paths refer to the remote machine's directory structure, prefix
+replacement variables need to be defined and used to map discovered
+remote paths to a local directory structure.<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R9<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Enable
+discovered scanner configuration management in team environment</span><br>
+      <ul>
+        <li>Project's scanner configuration shall be persisted in the
+project's workspace.<br>
+          <span style="font-weight: normal;"></span><br>
+        </li>
+        <li>Enable use of variable extended paths (similar to variable
+classpaths in JDT)<br>
+          <br>
+User shall be able to define path variables and specify include paths
+relative to the path variables. Discovered include paths may reference
+user defined path variables. A user joining a properly configured
+development project can configure his project by assigning some Eclipse
+variables.</li>
+      </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<span style="font-weight: bold;"></span>
+<ul>
+</ul>
+<br>
+<span style="font-weight: bold;"></span>
+<ul>
+</ul>
+<p><!-- End of Introduction --><!-- References -->
+</p>
+<div class="section"><a name="proposal"> 3. Design proposal</a><br>
+</div>
+<h2>3.1 Common SCD workflows<br>
+</h2>
+<p>Scanner configuration discovery is tightly linked to project's build
+process. The first part of SCD kicks in during the make build. It is
+applicable only to standard make projects. It parses the build output
+for compiler commands with options that specify definition of
+preprocessor symbols and include search paths (for GCC compiler, -D and
+-I respectively). Collected information is then consolidated and stored
+as project's discovered scanner configuration.</p>
+<p>The second part of SCD starts when make build process has finished.
+It is implemented as a separate Eclipse builder. It runs a 'generate
+scanner info command' and parses the output. The command and the parser
+for its output can be specified in project properties. The default
+generate scanner info command is 'gcc -E -P -v <span
+ style="font-style: italic;">file.c</span> | <span
+ style="font-style: italic;">file.cpp'</span>. This command will read
+compiler's configuration file ('specs' file in GCC terms) and print out
+information that includes compiler's internally defined preprocessor
+symbols and include search paths. The information is complementary to
+the scanner configuration discovered in the first phase of SCD and is
+added to project's scanner configuration.</p>
+<p>As mentioned in the requirements section, the resulting scanner
+configuration has two deficiencies:<br>
+</p>
+<ol>
+  <li>Single scanner configuration applicable to all the files in the
+project.<br>
+    <br>
+Although discovered per compilation unit, scanner configuration is
+stored per project. Thus, a single, cumulative scanner configuration is
+applied to all the files in the project. Clearly, there are cases where
+certain parts of scanner configuration are conflicting (contradictory
+symbol definitions) or inaccurate (wrong order of include paths or
+extra include paths). Also, a single compiler's internal scanner info
+may not be applicable to all the files in the project, since some files
+may be compiled with different compiler or have specific target
+specific options set.<br>
+    <br>
+  </li>
+  <li>Only basic command line options are supported.<br>
+    <br>
+Currently, only basic scanner configuration related command line
+options are recognized (-D and -I for GCC). There is a myriad of
+non-trivial scanner configuration affecting command line options that
+need to be recognized. Some of them are compiler manufacturer specific
+(for example -I- is GNU specific). For some of them relative position
+in the command line is important. All these particularities make it
+more challenging to provide generic mechanisms of scanner configuration
+discovery.<br>
+  </li>
+</ol>
+<h2>3.2 SCD design challenges<br>
+</h2>
+<h3>3.2.1 Per file scanner configuration discovery challenges<br>
+</h3>
+<p>Per file scanner configuration discovery faces following scalability
+and performance challenges:</p>
+<ul>
+  <li>Although the build output portion of discovered scanner
+configuration is already being discovered per compilation unit,
+handling it and storing it per file will introduce linear dependency of
+memory footprint on number of files.<br>
+    <br>
+  </li>
+  <li>It has been noticed that building medium sized projects with
+enabled
+scanner configuration and error parsers causes almost two times longer
+build times then building those projects outside of CDT. Parsing every
+compiler command line from make build output for all scanner
+configuration affecting options and consolidating them during the build
+may prove to be too costly for
+large objects.<br>
+    <br>
+  </li>
+  <li>Compiler intrinsic scanner configuration is retrieved
+only once
+per project, after the make build is done by running a 'generate
+scanner info command' (GSIC). Obtaining per file specific compiler
+intrinsic scanner configuration will require launching GSIC commands
+with different arguments and storing the result in memory and in a
+persistent store.<br>
+    <br>
+  </li>
+  <li>The performance price of launching a command in CDT is
+not
+negligible. Launching a number of commands, when specific compiler
+invocations or target specific options are detected, will add a
+significant time to project's build process.</li>
+</ul>
+<h3>3.2.2 Team environment challenges</h3>
+<p>There are two major workflows characteristic for CDT deployment in
+team environment:</p>
+<ul>
+  <li>Importing a project from an existing directory structure possibly
+managed by a concurrent versioning system. Definition and use of path
+variables (similar to JDT classpath variables) was identified as a
+mechanism that will enable file system dependent components (scanner
+configuration, index,...) to work properly regardless of the underlying
+directory structure.<br>
+  </li>
+</ul>
+<ul>
+  <li>Building a project on a remote machine. A common team workflow is
+that the build of a whole project is
+performed on a specialized machine different than those used for
+development. Especially if a concurrent versioning system is
+used, it is most likely that the discovered include paths on the build
+machine will be non-existent on development machines. Usually,
+discovered paths are not completely wrong, they just have wrong prefix,
+i.e. project's base directory varies among developers and build
+integrators.<br>
+    <br>
+A solution to this problem is use of prefix replacement variables where
+a discovered include path prefix is replaced either with a path
+variable or its local value.</li>
+</ul>
+<p><span style="color: rgb(255, 0, 0);"></span></p>
+<h2>3.3 General solution</h2>
+<span style="color: rgb(255, 0, 0);"><span style="color: rgb(0, 0, 0);">To
+address per file scanner configuration discovery challenges we propose
+following enhancements:<br>
+<br>
+</span></span>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="width: 35px; vertical-align: top;">Number<br>
+      </td>
+      <td colspan="1" rowspan="1" style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">CE1</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Discovery
+of compiler invocation command
+line<br>
+      <br>
+      </span>Instead
+of parsing the compiler command line for scanner configuration
+affecting options during
+the make build output, SCD will store a compiler command line in
+generic format with the list of all the files it applies to. Compiler
+command line generic format refers to a slightly modified command line
+where all instances of the compiled file name are replaced with a
+generic name.<br>
+      <br>
+After the make build is completed SCD will contain a collection of
+tuples (command line, working directories, list of files).<br>
+      <br>
+Pros:<br>
+      <ul>
+        <li>Faster make builds, since build output
+parsing is limited to compiler
+command line recognition, file name substitution and in memory storing.
+        </li>
+      </ul>
+      <ul>
+        <li>Optimized tuple representation instead of
+a plain per file collection will reduce memory footprint.</li>
+      </ul>
+Cons:<br>
+      <ul>
+        <li>As opposed to the current implementation,
+no scanner configuration information is available when the make build
+is completed.</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">CE2</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Optimized
+scanner configuration discovery and storage</span><br>
+      <br>
+Scanner
+configuration can be discovered based
+on tuple representation attained during the make build in one of the
+following ways:<br>
+      <ul>
+        <li>as the last step of make build process,</li>
+        <li>on a background thread started during the
+make build process,</li>
+        <li>on demand, upon client's request.</li>
+      </ul>
+Further characterization will be required to find which of the ways
+will perform best with regards to scalability and performance.<br>
+      <br>
+Pros:<br>
+      <ul>
+        <li>Number of discoveries is proportional to
+number of different generic commands as opposed to number of files in
+the project.</li>
+      </ul>
+      <ul>
+        <li>Once compiler command line for a compilation unit is
+discovered, scanner configuration can be obtained independently of the
+make build
+process.</li>
+      </ul>
+Cons:<br>
+      <ul>
+        <li>Off-line discovery still requires
+resources and if performed on-demand it will be added to the client's
+total execution time.</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">CE3</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Optimized
+retrieval of scanner configuration per compilation unit </span><br>
+      <br>
+Quick retrieval of per compilation unit scanner configuration. Since
+optimized tuple based scanner configuration store will be used, a
+method
+(algorithm) is required to retrieve per compilation unit scanner
+configuration efficiently.<br>
+      <br>
+Pros:<br>
+      <ul>
+        <li>Speeds up retrieval of per compilation
+unit scanner configuration.</li>
+      </ul>
+Cons:<br>
+      <ul>
+        <li>Requires additional structures - increased
+memory consumption.</li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">CE4</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Discovered
+include path prefix replacement</span><br>
+      <br>
+In case of remote builds, discovered include paths may be incorrect due
+to a difference in local and remote directory structure of the project.
+If defined, include path prefix replacement variables will be applied
+to the appropriate set of include paths when client requests scanner
+configuration for a particular compilation unit. Path prefix
+replacement variables will be managed in a project's property page.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>3.4&nbsp; GNU specific enhancements</h2>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="width: 35px; vertical-align: top;">Number<br>
+      </td>
+      <td colspan="1" rowspan="1" style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">CEG1</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Invoke
+a command to obtain exact scanner configuration for a compilation unit</span><br>
+      <br>
+Run a stored generic compiler
+command with added options: '<samp>-E -P -v</samp>'
+to get exact scanner configuration per compilation unit. This command
+will handle all scanner configuration affecting command line options
+except <samp><code>-imacros</code></samp> and <samp>-includes</samp>.
+These still need to be extracted from the command line.<br>
+      <br>
+Spawning a shell and running a command is time and resource consuming
+operation in CDT. Number of commands that need to be run to get scanner
+configuration for all the files in the project is directly proportional
+to the number of different commands used to build those files. As a
+further optimization, a virtual make file can be generated with all the
+commands thus reducing number of CDT command executions to 1. However
+this optimization requires further investigation.<br>
+      <br>
+Pros:<br>
+      <ul>
+        <li>The retrieved scanner configuration is the same as the one
+used by the GNU compiler.</li>
+      </ul>
+Cons:<br>
+      <ul>
+        <li>Running a command from CDT is relatively costly operation.</li>
+      </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>3.5 UI enhancements</h2>
+Following UI enhancements are planned to support the feature:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="width: 35px; vertical-align: top;">Number<br>
+      </td>
+      <td colspan="1" rowspan="1" style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE1</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Per
+compilation unit editing of discovered scanner configuration</span><br>
+      <br>
+Edit discovered paths container dialog is currently used to manage
+discovered scanner configuration. User has an option to enable,
+disable, move up or down and delete an entry in project's discovered
+scanner configuration. <br>
+      <br>
+With a change to per compilation unit scanner configuration discovery,
+user will be able to do the same on a compilation unit basis. The
+dialog will show the resource tree with all compilation units in the
+project and discovered scanner configuration for each of them. User
+will be able to view, enable or disable entries in compilation unit's
+discovered scanner configuration.<br>
+      <br>
+Pros:<br>
+      <ul>
+        <li>User will be able to see accurate scanner configuration
+applicable for each compilation unit in the project.<br>
+        </li>
+      </ul>
+Cons:<br>
+      <ul>
+        <li>The dialog may get cluttered since now it will contain two
+orthogonal pieces of information: project's resource tree and scanner
+configuration for each compilation unit.<br>
+        </li>
+      </ul>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE2</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Management
+of include path prefix replacement variables</span><br>
+      <br>
+A new dialog with include path prefix replacement variable definitions
+will be added to standard make project properties. <br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE3</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Management
+of path variables</span><br>
+      <br>
+A new dialog with path variable definitions
+will be added to standard make project preferences. <br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE4</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Discovered
+scanner configuration policies</span><br>
+      <br>
+A policy will be defined to group some higher level options applicable
+to scanner configuration discovery. For example: one policy would be to
+use current per project managed discovered scanner configuration,
+another would be to use per compilation unit discovered scanner
+configuration. Within a policy which inherently defines how the
+discovery and management are performed, there may be some options that
+are user configurable (i.e. when to perform actual discovery in CE2).<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="section"><a name="references"> 4. References</a></div>
+<ol>
+  <li><a
+ href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/Scanner/Usability_Scanner_SRS.html">Scanner
+Configuration Usability Enhancements SRS<br>
+    <br>
+    </a></li>
+  <li><a
+ href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Scanner/scanner_config_fds.pdf">Scanner
+Configuration Usability Enhancements FDS</a><br>
+  </li>
+</ol>
+<p>
+<table border="0" cellpadding="2" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="2" align="left" bgcolor="#0080c0" valign="top"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</p>
+<center><i>Last Modified on Thursday, November 4, 2004
+</i></center>
+</body>
+</html>
