@@ -472,11 +472,18 @@ public class HostsPlugin extends AbstractUIPlugin
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
 	*/
 
+	DataElement renameResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
+							    "Rename Resource",
+							    "com.ibm.dstore.hosts.actions.RenameResource");
+
+	renameResource.setAttribute(DE.A_VALUE, "RENAME");
+
 	DataElement deleteResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							    "Delete Resource",
 							    "com.ibm.dstore.hosts.actions.DeleteResource");
 
 	deleteResource.setAttribute(DE.A_VALUE, "DELETE");
+
 	
     }
 
