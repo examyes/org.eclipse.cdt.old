@@ -1717,7 +1717,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	 if (resource != null)
 	 {
 		String rtype = resource.getType();
-		if (rtype.equals("file") || rtype.equals("directory") || rtype.equals("Project"))
+		if (rtype.equals("file") || rtype.equals("directory") || rtype.equals("Project") || rtype.equals("Closed Project"))
 	    {
 			DataElement parent = resource;
 			String type = parent.getType();
