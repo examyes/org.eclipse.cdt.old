@@ -47,19 +47,39 @@ import java.lang.reflect.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
 import org.eclipse.core.runtime.*; 
+import org.eclipse.jface.resource.*;
 
 public class ObjectsViewPart extends GenericViewPart 
     implements ICppProjectListener
 {
+	
+	class LockViewAction extends Action
+    {
+	public LockViewAction(String label, ImageDescriptor image)
+	{
+	    super(label, image );
+	}
+     
+	public void run()
+	{
+	    _viewer.toggleLock();
+	}
+    }
+
+
     private   DataStore      _currentDataStore;    
     protected ModelInterface _api;
     protected CppPlugin      _plugin;
-
+    protected   LockViewAction   _lockAction;
+    private     boolean          _isLocked;
+    
     public ObjectsViewPart()
     {
 	super();
 	_plugin = CppPlugin.getDefault();
 	_api = _plugin.getModelInterface();
+	_isLinked = true;
+	_isLocked = false;
     }
     
     protected String getF1HelpId()
@@ -130,8 +150,9 @@ public class ObjectsViewPart extends GenericViewPart
 	CppProjectNotifier notifier = _api.getProjectNotifier();
 	notifier.addProjectListener(this);
 	
-	initInput(null);
+		initInput(null);
         WorkbenchHelp.setHelp(_viewer.getViewer().getControl(), new ViewContextComputer(this, getF1HelpId()));
+ 
     }
     
     public void initInput(DataStore dataStore)
@@ -335,6 +356,40 @@ public class ObjectsViewPart extends GenericViewPart
 		    }
 		    }
 	    }   
+    }
+    
+     public void fillLocalToolBar() 
+  	{
+  		super.fillLocalToolBar();
+    	if (!_isLocked)
+	    {
+			IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		
+				ImageDescriptor image = _plugin.getImageDescriptor("lock");
+			
+				_lockAction = new LockViewAction("Lock View", image);
+				_lockAction.setChecked(_viewer.isLocked());
+				toolBarManager.add(_lockAction);
+
+	    }
+  	}
+  	
+  	public void lock(boolean flag)
+    {
+	if (_viewer.isLocked() != flag)
+	    {
+		_viewer.toggleLock();
+
+		if (flag == true)
+		    {
+			if (_lockAction != null)
+			    {
+				IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+				toolBarManager.removeAll();
+			    }
+			_isLocked = flag;
+		    }
+	    }
     }
 }
 

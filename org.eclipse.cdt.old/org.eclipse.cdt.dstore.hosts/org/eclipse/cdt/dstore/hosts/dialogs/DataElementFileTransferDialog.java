@@ -107,12 +107,12 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	_localHome = new Button(localButtons, SWT.FLAT);
 	_localHome.addListener(SWT.Selection, this);
-	_localHome.setImage(_plugin.getImageDescriptor("home.gif").createImage());
+	_localHome.setImage(_plugin.getImageDescriptor("home").createImage());
 	_localHome.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 	_localBack = new Button(localButtons, SWT.FLAT);
 	_localBack.addListener(SWT.Selection, this);
-	_localBack.setImage(_plugin.getImageDescriptor("up.gif").createImage());
+	_localBack.setImage(_plugin.getImageDescriptor("up").createImage());
 	_localBack.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 
@@ -122,6 +122,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	_localViewer.setSorter(new DataElementSorter(DE.P_NAME));
 	_localViewer.setInput(_localInput);
+	_localViewer.setContainable(true);
 
 	GridLayout lvlayout= new GridLayout();
 	lvlayout.numColumns = 1;
@@ -199,12 +200,12 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	_remoteHome = new Button(remoteButtons, SWT.FLAT);
 	_remoteHome.addListener(SWT.Selection, this);
-	_remoteHome.setImage(_plugin.getImageDescriptor("home.gif").createImage());
+	_remoteHome.setImage(_plugin.getImageDescriptor("home").createImage());
 	_remoteHome.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 	_remoteBack = new Button(remoteButtons, SWT.FLAT);
 	_remoteBack.addListener(SWT.Selection, this);
-	_remoteBack.setImage(_plugin.getImageDescriptor("up.gif").createImage());
+	_remoteBack.setImage(_plugin.getImageDescriptor("up").createImage());
 	_remoteBack.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 
 	DataStore remoteDataStore = _remoteInput.getDataStore();
@@ -212,6 +213,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader());
 	_remoteViewer.setSorter(new DataElementSorter(DE.P_NAME));
 	_remoteViewer.setInput(_remoteInput);
+	_remoteViewer.setContainable(true);
 
 
 	GridLayout rvlayout= new GridLayout();

@@ -180,6 +180,11 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
     {
     }
 
+	public String getImageString(String name)
+	{
+		return null;
+	}
+	
     public String getImageString(DataElement object)
     {
     		DataStore dataStore   = object.getDataStore();

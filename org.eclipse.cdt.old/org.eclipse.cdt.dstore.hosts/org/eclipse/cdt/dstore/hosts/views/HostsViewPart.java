@@ -20,13 +20,16 @@ import org.eclipse.swt.widgets.*;
 
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.jface.action.*; 
+import org.eclipse.core.resources.*;
 import org.eclipse.ui.*;
+import org.eclipse.core.runtime.*; 
 
 import java.lang.reflect.*;
 
 public class HostsViewPart extends GenericViewPart
 {
     private HostsPlugin _plugin;
+    private DataElement _perspective_input = null;
 
     public HostsViewPart()
     {
@@ -55,20 +58,34 @@ public class HostsViewPart extends GenericViewPart
 
     public void initInput(DataStore dataStore)
     {
-	if (dataStore != null)
+    	IAdaptable input = getSite().getPage().getInput();
+    	
+    	if (input != null && input instanceof DataElement)
+    	{
+    		_perspective_input = (DataElement)input;
+    		_viewer.setInput(input);	
+    	}
+    	else
+    	{
+		if (dataStore != null)
 	    {
-		// for this view, the global datastore makes sense
-		DataElement root = dataStore.getRoot();
-		_viewer.setInput(root);
-		_viewer.selectFilter("Hosts");
-	    }    
+			// for this view, the global datastore makes sense
+			DataElement root = dataStore.getRoot();
+			_viewer.setInput(root);
+			_viewer.selectFilter("Hosts");
+	    }
+    	}    
+	 
     }
   
   public void fillLocalToolBar() 
     {
-	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-	toolBarManager.add(new ConnectionManager.NewConnectionAction("New Connection", 
-			   _plugin.getImageDescriptor("new.gif")));
+    	if (_perspective_input == null)
+    	{
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		toolBarManager.add(new ConnectionManager.NewConnectionAction("New Connection", 
+			   _plugin.getImageDescriptor("newhost")));
+    	}
   }
 
 

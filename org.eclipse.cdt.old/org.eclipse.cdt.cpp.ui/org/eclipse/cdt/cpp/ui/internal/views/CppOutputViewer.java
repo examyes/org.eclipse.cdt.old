@@ -7,6 +7,7 @@ package com.ibm.cpp.ui.internal.views;
  */
 
 import com.ibm.cpp.ui.internal.actions.*;
+import com.ibm.cpp.ui.internal.*;
 import com.ibm.dstore.hosts.*;
 import com.ibm.dstore.hosts.views.*;
 
@@ -36,9 +37,91 @@ public class CppOutputViewer extends OutputViewer
 {
     private OpenEditorAction      _cppOpenEditorAction;
     
+  public class CancelAction extends Action
+  {
+    public CancelAction(String name, ImageDescriptor image)
+    {
+      super(name, image);
+
+    }
+
+      public void run()
+      {
+	  DataElement input = getCurrentInput();
+	  if (input != null)
+	      {
+		  DataElement command = input.getParent();
+		  cancel(command);
+	      }
+      }
+
+      public void cancel(DataElement command)
+      {
+	  DataStore dataStore = command.getDataStore();
+	  DataElement commandDescriptor = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Cancel");
+	  if (commandDescriptor != null)
+	      {	
+		  dataStore.command(commandDescriptor, command, false, true);
+	      }
+      }
+  }
+
+  public class HistoryAction extends Action
+  {
+    private DataElement _status;
+    private int         _increment;
+
+    public HistoryAction(String name, ImageDescriptor image, int increment)
+    {
+      super(name, image);
+      _increment = increment;
+    }
+
+      public void run()
+    {
+      DataElement status = _currentInput;
+      if (status != null)
+      {
+        DataElement command = status.getParent();
+
+        DataStore dataStore = command.getDataStore();
+        DataElement logRoot = dataStore.getLogRoot();
+
+        ArrayList commands = logRoot.getNestedData();
+        int thisIndex = commands.indexOf(command);
+
+        DataElement newStatus = null;
+        int newIndex = thisIndex + _increment;
+        boolean found = false;
+        while (!found && (newIndex > -1) && (newIndex < commands.size()))
+        {
+          DataElement newCommand = (DataElement)commands.get(newIndex);	
+	  String commandName = newCommand.getName();
+
+	  if (commandName.equals("C_COMMAND") ||
+	      commandName.equals("C_SEARCH") ||
+	      commandName.equals("C_SEARCH_REGEX"))
+	    {	
+	      newStatus  = newCommand.get(newCommand.getNestedSize() - 1);
+	      if (newStatus != null)
+		{	
+		  found = (newStatus.getNestedSize() > 1);
+		}	
+	    }
+	  newIndex += _increment;
+	}
+	
+        if (found && newStatus != null)
+        {
+          setInput(newStatus);
+        }
+      }
+    }
+  }
+
     public CppOutputViewer(Table parent)
     {
-	super(parent);
+		super(parent, CppActionLoader.getInstance());
     }
 
     protected void handleDoubleSelect(SelectionEvent event)
@@ -54,5 +137,17 @@ public class CppOutputViewer extends OutputViewer
 		_cppOpenEditorAction.run();    
 	    }
     }
+    
+    
+  public void fillLocalToolBar(IToolBarManager toolBarManager)
+  {
+  	CppPlugin plugin = CppPlugin.getDefault();
+    toolBarManager.add(new HistoryAction(plugin.getLocalizedString("OutputViewer.back"),
+					 plugin.getImageDescriptor("back"), -1));
+    toolBarManager.add(new HistoryAction(plugin.getLocalizedString("OutputViewer.forward"),
+					 plugin.getImageDescriptor("forward"), 1));
+    toolBarManager.add(new CancelAction(plugin.getLocalizedString("OutputViewer.Cancel"),
+					plugin.getImageDescriptor("cancel")));
+  } 
     
 }

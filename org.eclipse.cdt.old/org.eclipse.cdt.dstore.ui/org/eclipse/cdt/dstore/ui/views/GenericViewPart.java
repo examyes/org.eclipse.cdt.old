@@ -40,31 +40,17 @@ import java.lang.reflect.*;
 public class GenericViewPart extends ViewPart 
     implements ILinkable, ISelectionListener
 {
-    class LockViewAction extends Action
-    {
-	public LockViewAction(String label, ImageDescriptor image)
-	{
-	    super(label, image );
-	}
-     
-	public void run()
-	{
-	    _viewer.toggleLock();
-	}
-    }
-
-
+ 
     protected ObjectWindow       _viewer;
     protected   boolean          _isLinked;
     protected   IOpenAction      _openAction;
-    protected   LockViewAction   _lockAction;
-    private     boolean          _isLocked;
+
+    protected   IActionLoader    _loader;
 
     public GenericViewPart()
     {
 	super();
-	_isLinked = true;
-	_isLocked = false;
+
     }
     
     public ISelection getSelection() 
@@ -114,14 +100,20 @@ public class GenericViewPart extends ViewPart
      
     public IActionLoader getActionLoader()
     {
-	return new GenericActionLoader();
+    	if (_loader == null)
+    	{
+    		_loader = new GenericActionLoader();
+    	}
+
+		return _loader;
     }
 
     public void setActionLoader(IActionLoader loader)
     {
-	if (_viewer != null)
+    	_loader = loader;
+		if (_viewer != null)
 	    {
-		_viewer.setActionLoader(loader);
+			_viewer.setActionLoader(loader);
 	    }
     }
 
@@ -219,39 +211,9 @@ public class GenericViewPart extends ViewPart
 
     public void fillLocalToolBar() 
     {
-	if (!_isLocked)
-	    {
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		
-		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		String path = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.ui" + java.io.File.separator;
-		String imageStr = path + "icons" + java.io.File.separator + "lock.gif";
-		ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
-		
-		_lockAction = new LockViewAction("Lock View", image);
-		_lockAction.setChecked(_viewer.isLocked());
-		toolBarManager.add(_lockAction);
-	    }
-    }
+   }
     
-    public void lock(boolean flag)
-    {
-	if (_viewer.isLocked() != flag)
-	    {
-		_viewer.toggleLock();
-
-		if (flag == true)
-		    {
-			if (_lockAction != null)
-			    {
-				IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-				toolBarManager.removeAll();
-			    }
-			_isLocked = flag;
-		    }
-	    }
-    }
-    
+  
 }
 
 

@@ -55,6 +55,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
     private   String       _pluginPath = null;
     
     private   IDataElementViewer _outLink;
+    private   IActionLoader _loader;
     
     private class ToolLayout extends Layout 
     {	
@@ -122,9 +123,10 @@ public class ViewToolBar extends Viewer implements IDomainListener
         }
     }
     
-    public ViewToolBar(ObjectWindow parent, Composite window)
+    public ViewToolBar(ObjectWindow parent, Composite window, IActionLoader loader)
   {
       _parent = parent;
+      _loader = loader;
       doCreateControl(window);
 
       DataStore dataStore = getDataStore();
@@ -195,6 +197,19 @@ public class ViewToolBar extends Viewer implements IDomainListener
 
     public void refresh()
     {
+    	_toolBarContainer.redraw();
+    }
+    
+    public void setLoader(IActionLoader loader)
+    {
+    	if (_loader != loader)
+    	{
+    		_loader = loader;
+    		_viewMenu.setLoader(loader);
+    	
+    		refresh();
+    		_viewMenu.updateVisibility();
+    	}
     }
 
   protected Control doCreateControl(Composite parent)
@@ -222,7 +237,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	
 	_topContainer = new Composite(_toolBarContainer, SWT.BAR);
     
-	_viewMenu = new ViewMenu(this, _topContainer);
+	_viewMenu = new ViewMenu(this, _topContainer, _loader);
 	
 	_toolBarContainer.setLayout(new ToolLayout());
 	
@@ -287,10 +302,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	return _parent.getLocalizedString(key);
     }
     
-    public DataElementLabelProvider getLabelProvider()
-    {
-    	return _parent.getLabelProvider();
-    }
+  
 
     protected void inputChanged(Object object, Object oldInput)
     {
@@ -322,7 +334,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 
 		if (_currentInput != null && !_currentInput.isDeleted())
 		  {	
-		      String imageStr = getLabelProvider().getImageString(_currentInput);
+		      String imageStr = _loader.getImageString(_currentInput);
 		      DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
 		      if (plugin != null)
 			  {

@@ -47,27 +47,21 @@ public class OpenPerspectiveAction extends CustomAction
     private void openPerspective(DataElement input)
     {
         IWorkspace workspace = CppPlugin.getDefault().getPluginWorkspace();
-	IWorkbenchWindow dw = CppPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
-	IWorkbenchPage persp = null;
+		IWorkbenchWindow dw = CppPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchPage persp = null;
 	
-	IWorkbenchPage[] perspectives = dw.getPages();
+		IWorkbenchPage[] perspectives = dw.getPages();
 
-	try 
+		try 
 	    {
-		persp = dw.openPage("com.ibm.dstore.ui.views.ObjectsPerspective", input);
+			persp = dw.openPage("com.ibm.cpp.ui.CppObjectPerspective", input);
+
 	    }
         catch (WorkbenchException e)
 	    {
 	    }
-	
-	final IViewPart viewPart = persp.findView("com.ibm.dstore.ui.views.GenericViewPart");
-	if (viewPart != null)
-	    {
-		persp.bringToTop(viewPart);
 
-		GenericViewPart gviewPart = (GenericViewPart)viewPart; 
-		gviewPart.setActionLoader(CppActionLoader.getInstance());  
-	    }
+	    
     }
 
 }

@@ -88,7 +88,7 @@ public class NewTargetGroup implements Listener
 	ModelInterface api = plugin.getModelInterface();
 	DataElement input = api.findWorkspaceElement();
 	DataStore dataStore = plugin.getDataStore();
-	_viewer = new ObjectWindow(composite, ObjectWindow.TREE, dataStore, plugin.getImageRegistry(), null);	
+	_viewer = new ObjectWindow(composite, ObjectWindow.TREE, dataStore, plugin.getImageRegistry(), com.ibm.cpp.ui.internal.views.CppActionLoader.getInstance());	
 	_viewer.setInput(input);
 	_viewer.fixateOnRelationType("contents");
 	_viewer.fixateOnObjectType("Project Containers");

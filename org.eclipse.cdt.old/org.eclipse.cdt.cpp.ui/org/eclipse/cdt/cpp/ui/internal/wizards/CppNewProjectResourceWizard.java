@@ -36,7 +36,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
     private CppWizardNewProjectCreationPage _mainPage;
     private ProjectInfoWizardPage           _fProjectInfoWizardPage;
     private ParseWizardPage                 _parserWizardPage;
-    private CppPlugin                       _plugin;
+    private CppPlugin                       _plugin = CppPlugin.getDefault();
 
     public void addPages() 
     {
@@ -44,6 +44,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	_mainPage = new CppWizardNewProjectCreationPage("C/C++ NewProjectPage");
 	_mainPage.setTitle("C/C++ Project");
 	_mainPage.setDescription("Create a new project resource.");
+	_mainPage.setImageDescriptor(_plugin.getImageDescriptor("newproject"));
 	this.addPage(_mainPage);
 	
 	_fProjectInfoWizardPage = new ProjectInfoWizardPage(this);
@@ -70,7 +71,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
     public boolean performFinish()
     {
-      _plugin = CppPlugin.getDefault();
+ 
       _mainPage.finish();
 
 	IProject project = getProject();

@@ -31,10 +31,12 @@
 	point="org.eclipse.ui.perspectives">
    <perspective
 	id="com.ibm.dstore.hosts.views.HostsPerspective"
+	icon="icons/full/cview16/host_perspective.gif"
 	name="%Hosts"
 	class="com.ibm.dstore.hosts.views.HostsPerspective">
-   </perspective>
-</extension>
+	</perspective>
+	
+  </extension>
 
 <extension
 	point="org.eclipse.ui.views">
@@ -46,28 +48,28 @@
 		id="com.ibm.dstore.hosts.views.HostsViewPart"
 		name="%Hosts"
 		category="com.ibm.dstore.hosts"
-		icon="icons/host.gif"
+		icon="icons/full/cview16/hosts_view.gif"
 		class="com.ibm.dstore.hosts.views.HostsViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.HostsDetailsViewPart"
 		name="%Host_Details"
 		category="com.ibm.dstore.hosts"
-		icon="icons/host.gif"
+		icon="icons/full/cview16/hostdetail_view.gif"
 		class="com.ibm.dstore.hosts.views.HostsDetailsViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.OutputViewPart"
 		name="%Output"
 		category="com.ibm.dstore.hosts"
-		icon="icons/output.gif"
+		icon="icons/full/cview16/outgoing_view.gif"
 		class="com.ibm.dstore.hosts.views.OutputViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.CommandViewPart"
 		name="%Command"
 		category="com.ibm.dstore.hosts"
-		icon="icons/command.gif"
+		icon="icons/full/cview16/command_view.gif"
 		class="com.ibm.dstore.hosts.views.CommandViewPart">
 	</view>
 </extension>

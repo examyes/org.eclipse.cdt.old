@@ -9,6 +9,7 @@ package com.ibm.dstore.hosts;
 import com.ibm.dstore.ui.*;
 import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.ui.connections.*;
+import com.ibm.dstore.ui.views.*;
 
 import com.ibm.dstore.hosts.actions.*;
 
@@ -71,231 +72,7 @@ public class HostsPlugin extends AbstractUIPlugin
 	    }
     }
 
-    public class HostsActionLoader implements IActionLoader
-    {
-	private IOpenAction   _openAction;
-	private CustomAction  _openPerspectiveAction;
-
-	public CustomAction getOpenPerspectiveAction()
-	{
-	    if (_openPerspectiveAction == null)
-		{
-		    _openPerspectiveAction = loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
-							"Open Perspective On");
-		}
-	    return _openPerspectiveAction;
-	}
-
-	public IOpenAction getOpenAction()
-	{
-	    if (_openAction == null)
-		{
-		    _openAction = new OpenEditorAction(null);
-		}
-	    return _openAction;
-	}
-
-	public CustomAction loadAction(String source, String name)
-	{
-	    CustomAction newAction = null;
-	    try
-		{
-		    Object[] args = { name};
-		    Class actionClass = Class.forName(source);
-		    Constructor constructor = actionClass.getConstructors()[0];
-		    newAction = (CustomAction)constructor.newInstance(args);
-		}
-	    catch (ClassNotFoundException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (InstantiationException e)
-		{ 
-		    //System.out.println(e);
-		}
-	    catch (IllegalAccessException e)
-		{
-		    //System.out.println(e);	
-		}
-	    catch (InvocationTargetException e)
-		{
-		    //System.out.println(e);
-		}
-	    
-	    return newAction;
-	}
-	public CustomAction loadAction(java.util.List objects, DataElement descriptor)
-	{
-	    String name = descriptor.getName();
-	    String source = descriptor.getSource();
-	    
-	    CustomAction newAction = null; 
-	    try
-		{         
-		    Class actionClass = Class.forName(source);
-
-		    Object[] args = {objects, 
-		        					name, 
-		        					descriptor, 
-		        					descriptor.getDataStore()};
-
-		    Class[] parameterTypes = { java.util.List.class, 
-		        							name.getClass(), 
-		        							descriptor.getClass(),
-		        							descriptor.getDataStore().getClass()};
-
-		    Constructor constructor = null;
-		    
-		    try
-		    {
-			    constructor = actionClass.getConstructor(parameterTypes);
-		    }
-		    catch (Exception e)
-		    {
-		    }
-		    
-			if (constructor != null) 
-			{		
-		    	newAction = (CustomAction)constructor.newInstance(args);
-		    }
-		    else
-		    {
-	        	return loadAction((DataElement)objects.get(0), descriptor);		    			    	
-		    }
-		}
-		
-	    catch (ClassNotFoundException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (InstantiationException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (IllegalAccessException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (InvocationTargetException e)
-		{
-		    //System.out.println(e);
-		}
-	    
-	    return newAction;
-	}
-
-	public CustomAction loadAction(DataElement object, DataElement descriptor)
-	{
-	    String name = descriptor.getName();
-	    String source = descriptor.getSource();
-	    
-	    CustomAction newAction = null; 
-        try
-	    {         
-      		Class actionClass = Class.forName(source);
-      		Object[] args = {object, name, descriptor, object.getDataStore()};
-	
-		    Class[] parameterTypes = { object.getClass(), 
-		        							name.getClass(), 
-		        							descriptor.getClass(),
-		        							descriptor.getDataStore().getClass()};
-
-		    Constructor constructor = null;
-		    
-		    try
-		    {
-			    constructor = actionClass.getConstructor(parameterTypes);
-		    }
-		    catch (Exception e)
-		    {
-		    }
-		  
-   			if (constructor != null)
-   			{
-	            newAction = (CustomAction)constructor.newInstance(args);
-   			}
-	    }
-	    catch (ClassNotFoundException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (InstantiationException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (IllegalAccessException e)
-		{
-		    //System.out.println(e);
-		}
-	    catch (InvocationTargetException e)
-		{
-		    //System.out.println(e);
-		}
-	    
-	    return newAction;
-	}
-
-	public String getImageString(DataElement object)
-	{
-	   	DataStore dataStore   = object.getDataStore();
-
-	String baseDir        = dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH); 			
-	String type           = object.getType();
-
-	StringBuffer iconPath = new StringBuffer(baseDir);
-
-	if (type.equals(DE.T_OBJECT_DESCRIPTOR) || 
-	    type.equals(DE.T_RELATION_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
-            {
-		type = object.getName();
-		String subDir = object.getSource();
-		if (subDir.length() > 0)
-		    {
-			iconPath.append(subDir);
-		    }
-		else
-		    {
-			iconPath.append("com.ibm.dstore.core");
-		    }
-            }
-	else
-            {
-		DataElement descriptor = object.getDescriptor();
-		if (descriptor != null)
-		    {
-			String subDir = descriptor.getSource(); 
-			if (subDir.length() > 0)
-			    {
-				iconPath.append(subDir);
-			    }
-			else
-			    {
-				iconPath.append("com.ibm.dstore.core");
-			    }
-		    }
-		else
-		    {
-			iconPath.append("com.ibm.dstore.ui");
-		    }
-            }
-
-	iconPath.append(java.io.File.separator);	
-	iconPath.append("icons");
-	iconPath.append(java.io.File.separator);
-	iconPath.append(type);
-	iconPath.append(".gif");        
-
-	return iconPath.toString();
-
-	}
-
-	public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)
-	{
-	}
-     }
-    
+  
     public class DialogActionLoader extends HostsActionLoader
     {
 	public IOpenAction getOpenAction()
@@ -446,14 +223,16 @@ public class HostsPlugin extends AbstractUIPlugin
 	return image;
     }
 
-
-    public ImageDescriptor getImageDescriptor(String name)
-    {
-        String file = _corePath + java.io.File.separator + 
-	    "com.ibm.dstore.hosts" + java.io.File.separator + 
-	    "icons" + java.io.File.separator + name;
+    
+     public ImageDescriptor getImageDescriptor(String name)
+      {
+	    String baseDir = _corePath + java.io.File.separator;
+	   	 HostsActionLoader loader = HostsActionLoader.getInstance();
+	    String file = loader.getImageString(name);
+	    
 	return ImageDescriptor.createFromFile(null, file);
-    }
+      }
+  
     
     public static ConnectionManager getConnectionManager()
       {

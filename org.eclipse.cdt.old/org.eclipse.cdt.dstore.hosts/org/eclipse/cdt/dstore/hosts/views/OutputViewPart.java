@@ -9,8 +9,10 @@ package com.ibm.dstore.hosts.views;
 import com.ibm.dstore.hosts.*;
 
 import com.ibm.dstore.ui.ILinkable;
+import com.ibm.dstore.ui.IActionLoader;
 import com.ibm.dstore.ui.ConvertUtility;
 import com.ibm.dstore.ui.actions.*;
+
 
 import com.ibm.dstore.core.client.*;
 import com.ibm.dstore.core.model.*;
@@ -33,16 +35,17 @@ import java.util.*;
 public class OutputViewPart extends ViewPart implements ILinkable
 {
     protected OutputViewer        _viewer;
+    
     public OutputViewPart()
     {
-	super();
+		super();
     }
     
     public void createPartControl(Composite container)
     {
 	Table table = new Table(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 	
-	_viewer = new OutputViewer(table);
+	_viewer = new OutputViewer(table, null);
 	TableLayout layout = new TableLayout();
 	table.setLayout(layout);
 	table.setHeaderVisible(true);

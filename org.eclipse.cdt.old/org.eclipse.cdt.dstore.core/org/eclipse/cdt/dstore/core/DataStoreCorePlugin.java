@@ -6,7 +6,7 @@ package com.ibm.dstore.core;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.extra.internal.extra.*;
+//import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.core.util.*;
 import com.ibm.dstore.core.client.*;
@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*; 
 import org.eclipse.core.internal.plugins.*; 
 import org.eclipse.jface.resource.*;
-
 import org.eclipse.swt.graphics.*;
+
 import org.eclipse.core.runtime.*;
 import org.eclipse.ui.*;
 import java.io.*;
@@ -115,6 +115,7 @@ public class DataStoreCorePlugin extends AbstractUIPlugin
     super.shutdown();
   }
 
+ 
   public ImageDescriptor getImageDescriptor(String name)
     {
 	return getImageDescriptor(name, true); 

@@ -31,17 +31,17 @@ public class CppPluginImages {
 
 	// The plugin registry
 	private final static ImageRegistry PLUGIN_REGISTRY= com.ibm.cpp.ui.internal.CppPlugin.getDefault().getImageRegistry();
-	private static final String T_WIZBAN= "targets/wizban/";
-	private static final String T_ELCL= "targets/elcl16/";
+	private static final String T_WIZBAN= "full/wizban/";
+	private static final String T_ELCL= "full/clcl16/";
 
 	private static final String NAME_PREFIX= "com.ibm.cpp.ui";
 	private static final int    NAME_PREFIX_LENGTH= NAME_PREFIX.length();
 
 	// Define image names
-	public static final String IMG_ELCL_TRG_ADD= NAME_PREFIX + "add_trg.gif";
-	public static final String IMG_ELCL_TRG_BUILD= NAME_PREFIX + "build_trg.gif";
-	public static final String IMG_ELCL_TRG_REM= NAME_PREFIX + "rem_trg.gif";
-	public static final String IMG_ELCL_TRG_REMALL= NAME_PREFIX + "remAll_trg.gif";
+	public static final String IMG_ELCL_TRG_ADD= NAME_PREFIX + "add_exe.gif";
+	public static final String IMG_ELCL_TRG_BUILD= NAME_PREFIX + "run_exe.gif";
+	public static final String IMG_ELCL_TRG_REM= NAME_PREFIX + "remove_exe.gif";
+	public static final String IMG_ELCL_TRG_REMALL= NAME_PREFIX + "removeall_exe.gif";
 	public static final String IMG_WIZBAN_TRG_NEW= NAME_PREFIX + "newtarget_wiz.gif";
 	
 	

@@ -152,6 +152,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     private DataElementContentProvider _provider;
 
+
     private boolean             _isTable;
     private boolean             _isLocked;
 
@@ -233,23 +234,19 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     }
 
 
-	public DataElementLabelProvider getLabelProvider()
-	{
-		if (_viewer != null)
-		{
-			return (DataElementLabelProvider)_viewer.getLabelProvider();		
-		}	
-		else
-		{
-			return null;
-		}
-	}
 	
 	
     public void setActionLoader(IActionLoader loader)
     {
-	_loader = loader;
-	_menuHandler.setActionLoader(loader);
+		_loader = loader;
+		_menuHandler.setActionLoader(loader);
+		
+		DataElementLabelProvider lprovider = (DataElementLabelProvider)_viewer.getLabelProvider();
+	 	lprovider.setLoader(loader);
+	 	       
+        _toolBar.setLoader(loader);
+	 	resetInput();	
+	 	 	
     }
 
     public void createViewActions()
@@ -559,7 +556,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
         Composite toolBarContainer = new Composite(parent, SWT.NULL);
 
-        _toolBar = new ViewToolBar(this, toolBarContainer);
+        _toolBar = new ViewToolBar(this, toolBarContainer, _loader);
         
 	GridLayout layout1 = new GridLayout();
 	layout1.numColumns = 5;

@@ -8,12 +8,14 @@ package com.ibm.cpp.ui.internal;
 
 import com.ibm.dstore.ui.resource.ResourceElement;
 import com.ibm.dstore.hosts.*;
+
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.core.util.*;
 import com.ibm.dstore.core.client.*;
 import com.ibm.dstore.core.server.*;
 import com.ibm.dstore.core.miners.miner.*;
 import com.ibm.dstore.ui.connections.*;
+import com.ibm.dstore.ui.*;
 import com.ibm.dstore.core.DataStoreCorePlugin;
 
 import com.ibm.cpp.ui.internal.api.*;
@@ -279,9 +281,10 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
   public ImageDescriptor getImageDescriptor(String name)
       {
-        String file = _corePath + java.io.File.separator + 
-	    "com.ibm.cpp.ui" + java.io.File.separator + 
-	    "icons" + java.io.File.separator + name;
+	    String baseDir = _corePath + java.io.File.separator;
+	    CppActionLoader loader = (CppActionLoader)CppActionLoader.getInstance();
+	    String file = loader.getImageString(name);
+	    
 	return ImageDescriptor.createFromFile(null, file);
       }
     

@@ -7,6 +7,8 @@ package com.ibm.cpp.ui.internal.dialogs;
  */
 
 import com.ibm.cpp.ui.internal.*;
+
+import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.dstore.hosts.*;
 
 import com.ibm.dstore.core.model.*;
@@ -100,7 +102,7 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	c.setLayoutData(cgrid);
 
 	DataStore dataStore = _input.getDataStore();
-	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), null);	
+	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), CppActionLoader.getInstance());	
 	_viewer.setInput(_input);
 	_viewer.fixateOnRelationType("contents");
 	if (_useFilter)

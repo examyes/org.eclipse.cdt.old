@@ -28,6 +28,7 @@ import org.eclipse.jface.resource.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.SWT;
+import org.eclipse.core.runtime.*; 
 
 import java.util.*;
 
@@ -74,6 +75,14 @@ public class SelectedObjectViewPart extends GenericViewPart
    
   public void initInput(DataStore dataStore)
   {
+  	   	IAdaptable input = getSite().getPage().getInput();
+    	
+    	if (input != null && input instanceof DataElement)
+    	{
+    		_viewer.setInput(input);	
+    	}
+ 
+  
   }
 
     public void setInput(DataElement element)

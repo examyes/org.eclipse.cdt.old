@@ -10,6 +10,8 @@ import com.ibm.dstore.core.DataStoreCorePlugin;
 import com.ibm.dstore.core.client.*;
 import com.ibm.dstore.core.model.*;
 
+import com.ibm.dstore.ui.*;
+
 import java.util.*;
 import java.io.*;
 
@@ -54,6 +56,7 @@ public class ViewMenu implements IMenuListener
     private String      _relGif, _filGif;
 
     private boolean     _isEnabled;
+    private IActionLoader _loader;
     
     public class MenuSelectFilterAction extends Action
     {
@@ -152,45 +155,43 @@ public class ViewMenu implements IMenuListener
         }
   }
 
-  public ViewMenu(ViewToolBar parent, Composite toolBar)
+  public ViewMenu(ViewToolBar parent, Composite toolBar, IActionLoader loader)
       {
         _parent = parent;
-	_dataStore = parent.getDataStore();
+		_dataStore = parent.getDataStore();
         _toolBar = toolBar;
-	_isEnabled = true;
+        _loader = loader;
+		_isEnabled = true;
 
         GridData textData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | 
                                          GridData.GRAB_HORIZONTAL);
 
 	_pluginPath = parent.getPluginPath() + java.io.File.separator;
-	_relGif  = _pluginPath 
-	    + File.separator + "icons" + File.separator 
-	    + "relation.gif";
 	
-	_filGif  = _pluginPath 
-	    + File.separator + "icons" + File.separator 
-	    + "filter.gif";
+	if (_loader != null)
+	{
+	_relGif = _loader.getImageString("relation");
+	_filGif = _loader.getImageString("filter");
+	}
 	
+    _filterItems = new ArrayList();
+    _relationItems = new ArrayList();
 
-        _filterItems = new ArrayList();
-        _relationItems = new ArrayList();
-
-
-	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-
+	
         // relation graphics
         _viewToolBar = new ToolBar(toolBar, SWT.FLAT);
         _relationLabel = new ToolItem(_viewToolBar, SWT.DROP_DOWN, 0);
-	if (plugin != null)
+		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+		if (plugin != null)
 	    {
-		_relationLabel.setImage(plugin.getImage(_relGif));
+			_relationLabel.setImage(plugin.getImage(_relGif));
 	    }
-	else
+		else
 	    {
-		_relationLabel.setText(_dataStore.getLocalizedString("model.contents"));
+			_relationLabel.setText(_dataStore.getLocalizedString("model.contents"));
 	    }
 
-	_relationLabel.addSelectionListener(
+		_relationLabel.addSelectionListener(
                                      new SelectionAdapter()
 				     {
                                        public void widgetSelected(SelectionEvent e) 
@@ -199,8 +200,9 @@ public class ViewMenu implements IMenuListener
                                            }
 				     }
 				   );
+  
         _filterLabel = new ToolItem(_viewToolBar, SWT.DROP_DOWN, 1);
-	if (plugin != null)
+		if (plugin != null)
 	    {
 		_filterLabel.setImage(plugin.getImage(_filGif));
 	    }
@@ -230,10 +232,7 @@ public class ViewMenu implements IMenuListener
 
       }
       
-  public DataElementLabelProvider getLabelProvider()    
-  {
-  	return _parent.getLabelProvider();
-  }
+ 
  
   public void showRelationMenu()
       {
@@ -262,6 +261,23 @@ public class ViewMenu implements IMenuListener
           aMenu.setVisible(true);        
         }
       }
+      
+  public void setLoader(IActionLoader loader)
+  {
+  		_loader = loader;
+  		if (_loader != null)
+		{
+		_relGif = _loader.getImageString("relation");
+		_filGif = _loader.getImageString("filter");
+		
+		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+		if (plugin != null)
+	    {
+			_relationLabel.setImage(plugin.getImage(_relGif));
+			_filterLabel.setImage(plugin.getImage(_filGif));
+	    }
+		}
+  }
 
   public synchronized void setInput(DataElement object)
       {
@@ -384,7 +400,7 @@ public class ViewMenu implements IMenuListener
 		  String imageStr = null;
 		  if (_relationSelected != null)
 		      {
-			  imageStr = getLabelProvider().getImageString(_relationSelected);
+			  imageStr = _loader.getImageString(_relationSelected);
 		      }
 		  
 		  if (imageStr == null)
@@ -435,7 +451,7 @@ public class ViewMenu implements IMenuListener
 	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
 	if (plugin != null)
 	    {
-		String imageStr = getLabelProvider().getImageString(_filterSelected);
+		String imageStr = _loader.getImageString(_filterSelected);
 		
 		if (!_filterLabel.isDisposed())
 		    {
@@ -588,7 +604,7 @@ public class ViewMenu implements IMenuListener
 	      {
 		  DataElement object = (DataElement)_filterItems.get(i);
 		  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		  String imageStr = getLabelProvider().getImageString(object);
+		  String imageStr = _loader.getImageString(object);
 		  if (plugin != null)
 		      {
 			  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
@@ -608,7 +624,7 @@ public class ViewMenu implements IMenuListener
 		  DataElement object = (DataElement)_relationItems.get(i);		
 		  
 		  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		  String imageStr = getLabelProvider().getImageString(object);
+		  String imageStr = _loader.getImageString(object);
 		  if (plugin != null)
 		      {
 			  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);

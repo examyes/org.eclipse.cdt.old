@@ -40,6 +40,12 @@ public class CppOutputViewPart extends OutputViewPart
 {
     protected CppPlugin         _plugin;  
 
+	public CppOutputViewPart()
+	{
+		super();
+
+	}
+
     public void createPartControl(Composite container)
     {
 	_plugin = CppPlugin.getDefault();

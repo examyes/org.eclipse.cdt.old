@@ -329,7 +329,15 @@ public class CommandViewer extends Viewer implements SelectionListener
 	    {
 		IWorkspace workbench = _plugin.getPluginWorkspace();	
 		
-		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", _input);
+		DataElement dlgInput = _input;
+		if (dlgInput == null)
+		{
+			DataStore dataStore = _plugin.getDataStore();
+			DataElement host = dataStore.getHostRoot();
+			dlgInput = host;
+		}
+		
+		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", dlgInput);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
 		    {

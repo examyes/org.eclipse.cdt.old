@@ -205,6 +205,7 @@ public class DataElementTableViewer extends TableViewer
 	    {
 		return true;
 	    }
+
 	return false;
     }   
     

@@ -321,18 +321,20 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
     {
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		
-		_homeAction = new HomeAction("Home", _plugin.getImageDescriptor("home.gif"));
+		
+		_homeAction = new HomeAction("Home", _plugin.getImageDescriptor("home"));
 		toolBarManager.add(_homeAction);
-		_backAction = new BackAction("Back", _plugin.getImageDescriptor("back.gif"));
+		_backAction = new BackAction("Back", _plugin.getImageDescriptor("back"));
 		toolBarManager.add(_backAction);
 		
-		_forwardAction = new ForwardAction("Forward", _plugin.getImageDescriptor("forward.gif"));
+		_forwardAction = new ForwardAction("Forward", _plugin.getImageDescriptor("forward"));
     	toolBarManager.add(_forwardAction);
 				
-		_drillAction = new DrillAction("Drill Down Into", _plugin.getImageDescriptor("drill.gif"));	 
+		_drillAction = new DrillAction("Drill Down Into", _plugin.getImageDescriptor("drill"));	 
     	toolBarManager.add(_drillAction); 
     	
     	updateActionStates();
+    	    	
     }
    
 }

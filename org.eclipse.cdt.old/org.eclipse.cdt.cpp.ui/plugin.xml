@@ -1,190 +1,199 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
 <plugin
-   name = "%pluginName"
-   id = "com.ibm.cpp.ui"
-   version = "1.0.0"
-   vendor-name = "International Business Machines Corp."
+   id="com.ibm.cpp.ui"
+   name="%pluginName"
+   version="1.0.0"
    class="com.ibm.cpp.ui.internal.CppPlugin">
+<requires>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.swt"/>
+   <import plugin="org.eclipse.core.runtime"/>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.core.boot"/>
+   <import plugin="com.ibm.lpex"/>
+   <import plugin="com.ibm.debug"/>
+   <import plugin="org.eclipse.search"/>
+   <import plugin="org.eclipse.help"/>
+   <import plugin="org.eclipse.debug.core"/>
+   <import plugin="org.eclipse.debug.ui"/>
+   <import plugin="org.eclipse.core.target"/>
+   <import plugin="org.eclipse.vcm.core"/>
+   <import plugin="com.ibm.dstore.miners"/>
+   <import plugin="com.ibm.cpp.miners"/>
+   <import plugin="com.ibm.cpp.miners.parser"/>
+   <import plugin="com.ibm.dstore.extra"/>
+   <import plugin="com.ibm.dstore.core"/>
+   <import plugin="com.ibm.dstore.ui"/>
+   <import plugin="com.ibm.dstore.hosts"/>
+   <import plugin="com.ibm.linux.help"/>
+</requires>
 
-   <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.core.boot"/>
-      <import plugin="com.ibm.lpex"/>
-      <import plugin="com.ibm.debug"/>
-      <import plugin="org.eclipse.search"/>
-      <import plugin="org.eclipse.help"/>
-      <import plugin="org.eclipse.debug.core"/>
-      <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.core.target"/>
-      <import plugin="org.eclipse.vcm.core"/>
-      <import plugin="com.ibm.dstore.miners"/>
-      <import plugin="com.ibm.cpp.miners"/>
-      <import plugin="com.ibm.cpp.miners.parser"/>
-      <import plugin="com.ibm.dstore.extra"/>
-      <import plugin="com.ibm.dstore.core"/>
-      <import plugin="com.ibm.dstore.ui"/>
-      <import plugin="com.ibm.dstore.hosts"/>
-      <import plugin="com.ibm.cpp.linux.help"/>
-   </requires>
-
-   <runtime>
-     <library name=".">
-       	<export name="*" />
-     </library>
-     <library name="cpp_ui.jar">
-       	<export name="*" />
-     </library>
-     
-   </runtime>
-
+<runtime>
+   <library name=".">
+      <export name="*"/>
+   </library>
+   <library name="cpp_ui.jar">
+      <export name="*"/>
+   </library>
+</runtime>
 
 <!-- C++ Project Nature -->
-
-<extension 
-	point="org.eclipse.core.resources.natures" 
-	id="cppnature"
-	name="C/C++ Project Nature">
-	<runtime>
-		<run class="com.ibm.cpp.ui.internal.CppProject">
-		</run>
-	</runtime>
+<extension
+      id="cppnature"
+      name="C/C++ Project Nature"
+      point="org.eclipse.core.resources.natures">
+   <runtime>
+      <run
+            class="com.ibm.cpp.ui.internal.CppProject">
+      </run>
+   </runtime>
 </extension>
-
-
-
 <!-- Launchers -->
-
-<extension point="org.eclipse.debug.core.launchers">
-	<launcher  id="com.ibm.cpp.ui.launchers.CppLoadLauncher"
-	   	   class="com.ibm.cpp.ui.internal.launchers.CppLoadLauncher"
-	  	   modes="debug"
- 	  	   label= "Start a C/C++ Application"
- 	  	   public= "true"
- 	  	   description= "C/C++ debug program launcher" />
-
-	<launcher  id="com.ibm.cpp.ui.launchers.CppRunLauncher"
-	   	   class="com.ibm.cpp.ui.internal.launchers.CppRunLauncher"
-	  	   modes="run"
- 	  	   label= "C/C++ Application"
- 	  	   public= "true"
- 	  	   description= "C/C++ run program launcher" />
-
-	<launcher  id="com.ibm.cpp.ui.launchers.CppAttachLauncher"
-	   	   class="com.ibm.cpp.ui.internal.launchers.CppAttachLauncher"
-	  	   modes="debug"
- 	  	   label= "Attach to C/C++ Application"
- 	  	   public= "true"
- 	  	   description= "C/C++ attach to program launcher" />
-</extension>
-
 <extension
-	point="org.eclipse.ui.perspectives">
-   <perspective
-	id="com.ibm.cpp.ui.CppPerspective"
-	name="%CppPerspective"
-	class="com.ibm.cpp.ui.internal.views.CppPerspective">
-   </perspective>
-<!--
-   <perspective
-	id="com.ibm.cpp.ui.MinersPerspective"
-	name="%Miner_Development"
-	class="com.ibm.cpp.ui.internal.views.MinersPerspective">
-   </perspective>
--->
+      point="org.eclipse.debug.core.launchers">
+   <launcher
+         label="Start a C/C++ Application"
+         description="C/C++ debug program launcher"
+         modes="debug"
+         class="com.ibm.cpp.ui.internal.launchers.CppLoadLauncher"
+         public="true"
+         id="com.ibm.cpp.ui.launchers.CppLoadLauncher">
+   </launcher>
+   <launcher
+         label="C/C++ Application"
+         description="C/C++ run program launcher"
+         modes="run"
+         class="com.ibm.cpp.ui.internal.launchers.CppRunLauncher"
+         public="true"
+         id="com.ibm.cpp.ui.launchers.CppRunLauncher">
+   </launcher>
+   <launcher
+         label="Attach to C/C++ Application"
+         description="C/C++ attach to program launcher"
+         modes="debug"
+         class="com.ibm.cpp.ui.internal.launchers.CppAttachLauncher"
+         public="true"
+         id="com.ibm.cpp.ui.launchers.CppAttachLauncher">
+   </launcher>
 </extension>
-
-<extension point="org.eclipse.ui.perspectiveExtensions">
-	<perspectiveExtension 
-		targetID="org.eclipse.ui.resourcePerspective">
-		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
-	</perspectiveExtension>
-	<perspectiveExtension 
-		targetID="org.eclipse.vcm.ui.vcmPerspective">
-		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
-	</perspectiveExtension>
-	<perspectiveExtension 
-		targetID="com.ibm.cpp.ui.CppPerspective">
-		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
-	</perspectiveExtension>
-	<perspectiveExtension 
-		targetID="com.ibm.cpp.ui.CppPerspective">
-		<perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective"/>
-	</perspectiveExtension>
-	<perspectiveExtension 
-		targetID="org.eclipse.ui.resourcePerspective">
-		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
-	</perspectiveExtension>
-	<perspectiveExtension 
-		targetID="org.eclipse.debug.ui.DebugPerspective">
-		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
-	</perspectiveExtension>
-</extension>
-
 <extension
-	point="org.eclipse.ui.views">
-	<category
-	   id="com.ibm.cpp.ui.cpp"
-	   name="&amp;C++">
-	</category>
-	<view
-		id="com.ibm.cpp.ui.DetailsViewPart"
-		name="%Details"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/details.gif"
-		class="com.ibm.cpp.ui.internal.views.DetailsViewPart">
-	</view>
-	<view
-		id="com.ibm.cpp.ui.SelectedObjectViewPart"
-		name="Selected Object"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/details.gif"
-		class="com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart">
-	</view>
-	<view
-		id="com.ibm.cpp.ui.SuperDetailsViewPart"
-		name="%More_Details"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/details.gif"
-		class="com.ibm.cpp.ui.internal.views.SuperDetailsViewPart">
-	</view>
-	<view
-		id="com.ibm.cpp.ui.CppCommandViewPart"
-		name="%Commands"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/commands.gif"
-		class="com.ibm.cpp.ui.internal.views.CppCommandViewPart">
-	</view>
-	<view
-		id="com.ibm.cpp.ui.CppOutputViewPart"
-		name="%C/C++ Output"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/output.gif"
-		class="com.ibm.cpp.ui.internal.views.CppOutputViewPart">
-	</view>
-	<view
-		id="com.ibm.cpp.ui.ProjectObjectsViewPart"
-		name="%Project_Objects"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/objects.gif"
-		class="com.ibm.cpp.ui.internal.views.ProjectObjectsViewPart">
-	</view>
-        <view
-		id="com.ibm.cpp.ui.SystemObjectsViewPart"
-		name="%System_Objects"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/objects.gif"
-		class="com.ibm.cpp.ui.internal.views.SystemObjectsViewPart">
-	</view>
-	<view
-		id="com.ibm.cpp.ui.ParsedSourceViewPart"
-		name="%Parsed_Files"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/Parsed Source.gif"
-		class="com.ibm.cpp.ui.internal.views.ParsedSourceViewPart">
-	</view>
+      point="org.eclipse.ui.perspectives">
+   <perspective
+         name="%CppPerspective"
+         icon="icons/full/cview16/c_perspective.gif"
+         class="com.ibm.cpp.ui.internal.views.CppPerspective"
+         id="com.ibm.cpp.ui.CppPerspective">
+   </perspective>
+   <perspective
+         name="C/C++ Objects"
+         icon="icons/full/cview16/c_perspective.gif"
+         class="com.ibm.cpp.ui.internal.views.CppObjectPerspective"
+         id="com.ibm.cpp.ui.CppObjectPerspective">
+   </perspective>
+  
+</extension>
+<extension
+      point="org.eclipse.ui.perspectiveExtensions">
+   <perspectiveExtension
+         targetID="org.eclipse.ui.resourcePerspective">
+      <perspectiveShortcut
+            id="com.ibm.cpp.ui.CppPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+   <perspectiveExtension
+         targetID="org.eclipse.vcm.ui.vcmPerspective">
+      <perspectiveShortcut
+            id="com.ibm.cpp.ui.CppPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+   <perspectiveExtension
+         targetID="com.ibm.cpp.ui.CppPerspective">
+      <perspectiveShortcut
+            id="com.ibm.cpp.ui.CppPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+   <perspectiveExtension
+         targetID="com.ibm.cpp.ui.CppPerspective">
+      <perspectiveShortcut
+            id="org.eclipse.debug.ui.DebugPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+   <perspectiveExtension
+         targetID="org.eclipse.ui.resourcePerspective">
+      <perspectiveShortcut
+            id="com.ibm.cpp.ui.CppPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+   <perspectiveExtension
+         targetID="org.eclipse.debug.ui.DebugPerspective">
+      <perspectiveShortcut
+            id="com.ibm.cpp.ui.CppPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+</extension>
+<extension
+      point="org.eclipse.ui.views">
+   <category
+         name="&amp;C++"
+         id="com.ibm.cpp.ui.cpp">
+   </category>
+   <view
+         name="%Details"
+         icon="icons/full/cview16/details_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.DetailsViewPart"
+         id="com.ibm.cpp.ui.DetailsViewPart">
+   </view>
+   <view
+         name="Selected Object"
+         icon="icons/full/cview16/details_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart"
+         id="com.ibm.cpp.ui.SelectedObjectViewPart">
+   </view>
+   <view
+         name="%More_Details"
+         icon="icons/full/cview16/details_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.SuperDetailsViewPart"
+         id="com.ibm.cpp.ui.SuperDetailsViewPart">
+   </view>
+   <view
+         name="%Commands"
+         icon="icons/full/cview16/command_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.CppCommandViewPart"
+         id="com.ibm.cpp.ui.CppCommandViewPart">
+   </view>
+   <view
+         name="%C/C++ Output"
+         icon="icons/full/cview16/outgoing_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.CppOutputViewPart"
+         id="com.ibm.cpp.ui.CppOutputViewPart">
+   </view>
+   <view
+         name="%Project_Objects"
+         icon="icons/full/cview16/projectobject_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.ProjectObjectsViewPart"
+         id="com.ibm.cpp.ui.ProjectObjectsViewPart">
+   </view>
+   <view
+         name="%System_Objects"
+         icon="icons/full/cview16/systemobject_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.SystemObjectsViewPart"
+         id="com.ibm.cpp.ui.SystemObjectsViewPart">
+   </view>
+   <view
+         name="%Parsed_Files"
+         icon="icons/full/cview16/parse_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.ParsedSourceViewPart"
+         id="com.ibm.cpp.ui.ParsedSourceViewPart">
+   </view>
 <!--
 	<view
 		id="com.ibm.cpp.ui.SchemaViewPart"
@@ -208,341 +217,375 @@
 		class="com.ibm.cpp.ui.internal.views.LogViewPart">
 	</view>
 -->
-	<view
-		id="com.ibm.cpp.ui.Targets"
-		name="%Run_Specifications"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/objects.gif"
-		class="com.ibm.cpp.ui.internal.views.targets.Targets">
-	</view>
-        <view
-		id="com.ibm.cpp.ui.CppProjectsViewPart"
-		name="%C++_Projects"
-		category="com.ibm.cpp.ui.cpp"
-		icon="icons/objects.gif"
-		class="com.ibm.cpp.ui.internal.views.CppProjectsViewPart">
-	</view>
+   <view
+         name="%Run_Specifications"
+         icon="icons/full/cview16/targets_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.targets.Targets"
+         id="com.ibm.cpp.ui.Targets">
+   </view>
+   <view
+         name="%C++_Projects"
+         icon="icons/full/cview16/cproject_view.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.views.CppProjectsViewPart"
+         id="com.ibm.cpp.ui.CppProjectsViewPart">
+   </view>
 </extension>
-
-
-  <extension point = "org.eclipse.ui.popupMenus">
-        <objectContribution
-           id="com.ibm.cpp.ui.internal.menu"
-           objectClass="org.eclipse.core.resources.IFile">
-	   <menu
-		id="makefileMenu"
-		path="additions"
-		label="%Makefile___">
-		<separator name = "makefileMenu"/>
-	   </menu>
-	   <action
-              id="designate"
-	      label="%Designate"
-	      menubarPath="makefileMenu/designateGroup"
-	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateDesignate"	
-	      enablesFor="1">
-	   </action>
-	   <action
-              id="com.ibm.cpp.ui.internal.action1"
-	      label="%Undesignate"
-	      menubarPath="makefileMenu/designateGroup"
-	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateUnDesignate"	
-	      enablesFor="1">
-	   </action>
-	   <action
-              id="com.ibm.cpp.ui.internal.action2"
-	      label="%Build"
-	      menubarPath="makefileMenu/designateGroup"
-	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateBuild"	
-	      enablesFor="1">
-	   </action>
-	</objectContribution>
-
-        <objectContribution
-           id="com.ibm.cpp.ui.internal.menu4"
-           objectClass="org.eclipse.core.resources.IFolder">
-	   <menu
-		id="folderCommandMenu"
-		path="additions"
-		label="%Issue_Command___">
-		<separator name = "folderCommandMenu"/>
-	   </menu>
-	   <action
-              id="com.ibm.cpp.ui.internal.actionFolderBuild"
-	      label="%Command"
-	      menubarPath="folderCommandMenu/folderCommandGroup"
-	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateFolderBuild"	
-	      enablesFor="1">
-	   </action>
-	</objectContribution>
-        <objectContribution
-           id="com.ibm.cpp.ui.internal.menu5"
-           objectClass="org.eclipse.core.resources.IFile">
-	   <menu
-		id="fileParseMenu"
-		path="additions"
-		label="%Parse">
-		<separator name = "fileParseMenu"/>
-	   </menu>
-	   <action
-              id="com.ibm.cpp.ui.internal.actionParse0"
-	      label="%File"
-	      menubarPath="fileParseMenu/ParseGroup"
-              class="com.ibm.cpp.ui.internal.actions.ParseAction"
-	      enablesFor="1">
-	   </action>
-	</objectContribution>
-        <objectContribution
-           id="com.ibm.cpp.ui.internal.menu6"
-           objectClass="org.eclipse.core.resources.IFolder">
-	   <menu
-		id="folderParseMenu"
-		path="additions"
-		label="%Parse___">
-		<separator name = "folderParseMenu"/>
-	   </menu>
-	   <action
-              id="com.ibm.cpp.ui.internal.actionParse1"
-	      label="%Folder"
-	      menubarPath="folderParseMenu/ParseGroup"
-              class="com.ibm.cpp.ui.internal.actions.ParseAction"
-	      enablesFor="1">
-	   </action>
-	</objectContribution>
-        <objectContribution
-           id="com.ibm.cpp.ui.internal.menu7"
-           objectClass="org.eclipse.core.resources.IProject">
-	   <menu
-		id="parseMenu"
-		path="additions"
-		label="%Parse___">
-		<separator name = "parseMenu"/>
-	   </menu>
-	   <action
-              id="com.ibm.cpp.ui.internal.actionClean"
-	      label="%Clean_Parse"
-	      menubarPath="parseMenu/ParseGroup"
-              class="com.ibm.cpp.ui.internal.actions.ClearAction"
-	      enablesFor="1">
-	   </action>
-	   <action
-              id="com.ibm.cpp.ui.internal.actionSave"
-	      label="%Save_Parse"
-	      menubarPath="parseMenu/ParseGroup"
-              class="com.ibm.cpp.ui.internal.actions.SaveAction"
-	      enablesFor="1">
-	   </action>
-	   <action
-              id="com.ibm.cpp.ui.internal.actionParse2"
-	      label="%Project"
-	      menubarPath="parseMenu/ParseGroup"
-	      class="com.ibm.cpp.ui.internal.actions.ParseAction"
-	      enablesFor="1">
-	   </action>
-	</objectContribution>
-        <objectContribution
-           id="com.ibm.cpp.ui.internal.menu9"
-           objectClass="org.eclipse.core.resources.IProject">
-	   <action
-              id="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"
-	      label="Create Specification"
-	      path="additions"
-	      class="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"	
-	      enablesFor="1">
-	   </action>
-	   <action
-              id="convert"
-	      label="Support C/C++"
-	      path="additions"
-	      class="com.ibm.cpp.ui.internal.actions.ConvertToCppProject"	
-	      enablesFor="1">
-	   </action>
-
-	</objectContribution>
-  </extension>
-
-  <extension point = "org.eclipse.ui.editors">
-	<editor
-        	id = "com.ibm.cpp.ui.internal.editor.CppEditor"
-      		name="%Lpex_Editor"
-		icon="icons/lpex.gif"
-      		extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in,dat"
-      		class="com.ibm.cpp.ui.internal.editor.CppEditor"
-		contributorClass="com.ibm.cpp.ui.internal.editor.contributor.CppEditorContextContributor">
-	</editor>
-   </extension>
-
-<extension point="org.eclipse.core.resources.builders"
-      	id="cppbuilder"
-	name="%C++_Builder">
-	<builder>
-		<run class="com.ibm.cpp.ui.internal.builder.CppBuilder">
-		</run>
-	</builder>
-</extension>
-
-
 <extension
-	point="org.eclipse.ui.newWizards">
-	<category
-	   id="com.ibm.cpp.ui.cpp"
-	   name="%C++">
-	</category>
-	<wizard
-	   id="com.ibm.cpp.ui.wizards.CppNewProjectResourceWizard"
-	   name="%C++_Project"
-	   availableAsShortcut="true"
-	   class="com.ibm.cpp.ui.internal.wizards.CppNewProjectResourceWizard"
-	   category="com.ibm.cpp.ui.cpp"
-	   project="true"
-	   finalPerspective="com.ibm.cpp.ui.CppPerspective"
-	   icon="icons/newprj_wiz.gif">
-           <description>%Create_a_C++_Project</description>
-        </wizard>
+      point="org.eclipse.ui.popupMenus">
+   <objectContribution
+         objectClass="org.eclipse.core.resources.IFile"
+         id="com.ibm.cpp.ui.internal.menu">
+      <menu
+            label="%Makefile___"
+            path="additions"
+            id="makefileMenu">
+         <separator
+               name="makefileMenu">
+         </separator>
+      </menu>
+      <action
+            label="%Designate"
+            class="com.ibm.cpp.ui.internal.actions.CppActionDelegateDesignate"
+            menubarPath="makefileMenu/designateGroup"
+            enablesFor="1"
+            id="designate">
+      </action>
+      <action
+            label="%Undesignate"
+            class="com.ibm.cpp.ui.internal.actions.CppActionDelegateUnDesignate"
+            menubarPath="makefileMenu/designateGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.action1">
+      </action>
+      <action
+            label="%Build"
+            class="com.ibm.cpp.ui.internal.actions.CppActionDelegateBuild"
+            menubarPath="makefileMenu/designateGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.action2">
+      </action>
+   </objectContribution>
+   <objectContribution
+         objectClass="org.eclipse.core.resources.IFolder"
+         id="com.ibm.cpp.ui.internal.menu4">
+      <menu
+            label="%Issue_Command___"
+            path="additions"
+            id="folderCommandMenu">
+         <separator
+               name="folderCommandMenu">
+         </separator>
+      </menu>
+      <action
+            label="%Command"
+            class="com.ibm.cpp.ui.internal.actions.CppActionDelegateFolderBuild"
+            menubarPath="folderCommandMenu/folderCommandGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.actionFolderBuild">
+      </action>
+   </objectContribution>
+   <objectContribution
+         objectClass="org.eclipse.core.resources.IFile"
+         id="com.ibm.cpp.ui.internal.menu5">
+      <menu
+            label="%Parse"
+            path="additions"
+            id="fileParseMenu">
+         <separator
+               name="fileParseMenu">
+         </separator>
+      </menu>
+      <action
+            label="%File"
+            class="com.ibm.cpp.ui.internal.actions.ParseAction"
+            menubarPath="fileParseMenu/ParseGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.actionParse0">
+      </action>
+   </objectContribution>
+   <objectContribution
+         objectClass="org.eclipse.core.resources.IFolder"
+         id="com.ibm.cpp.ui.internal.menu6">
+      <menu
+            label="%Parse___"
+            path="additions"
+            id="folderParseMenu">
+         <separator
+               name="folderParseMenu">
+         </separator>
+      </menu>
+      <action
+            label="%Folder"
+            class="com.ibm.cpp.ui.internal.actions.ParseAction"
+            menubarPath="folderParseMenu/ParseGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.actionParse1">
+      </action>
+   </objectContribution>
+   <objectContribution
+         objectClass="org.eclipse.core.resources.IProject"
+         id="com.ibm.cpp.ui.internal.menu7">
+      <menu
+            label="%Parse___"
+            path="additions"
+            id="parseMenu">
+         <separator
+               name="parseMenu">
+         </separator>
+      </menu>
+      <action
+            label="%Clean_Parse"
+            class="com.ibm.cpp.ui.internal.actions.ClearAction"
+            menubarPath="parseMenu/ParseGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.actionClean">
+      </action>
+      <action
+            label="%Save_Parse"
+            class="com.ibm.cpp.ui.internal.actions.SaveAction"
+            menubarPath="parseMenu/ParseGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.actionSave">
+      </action>
+      <action
+            label="%Project"
+            class="com.ibm.cpp.ui.internal.actions.ParseAction"
+            menubarPath="parseMenu/ParseGroup"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.actionParse2">
+      </action>
+   </objectContribution>
+   <objectContribution
+         objectClass="org.eclipse.core.resources.IProject"
+         id="com.ibm.cpp.ui.internal.menu9">
+      <action
+            label="Create Specification"
+            class="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"
+            path="additions"
+            enablesFor="1"
+            id="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction">
+      </action>
+      <action
+            label="Support C/C++"
+            class="com.ibm.cpp.ui.internal.actions.ConvertToCppProject"
+            path="additions"
+            enablesFor="1"
+            id="convert">
+      </action>
+   </objectContribution>
 </extension>
-
-
 <extension
-	point="org.eclipse.ui.propertyPages">
-	<page
-		id="com.ibm.cpp.ui.internal.builder.BuildPropertyPage"
-		name="%Build_Invocation"
-		objectClass="org.eclipse.core.resources.IProject"
-		class="com.ibm.cpp.ui.internal.builder.BuildPropertyPage">
-	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
-        </page>
-	<page
-		id="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage"
-		name="%Parse_Include_Path"
-		objectClass="org.eclipse.core.resources.IProject"
-		class="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage">
-	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
-        </page>
-	<page
-		id="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage"
-		name="%Parse_Quality"
-		objectClass="org.eclipse.core.resources.IProject"
-		class="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage">
-	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
-        </page>
-	<page
-		id="com.ibm.cpp.ui.internal.builder.AutoParsePropertyPage"
-		name="%Parse_Behaviour"
-		objectClass="org.eclipse.core.resources.IProject"
-		class="com.ibm.cpp.ui.internal.builder.AutoParsePropertyPage">
-	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
-        </page>
-	<page
-		id="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage"
-		name="%Environment"
-		objectClass="org.eclipse.core.resources.IProject"
-		class="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage">
-	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
-        </page>
-	<page
-		id="com.ibm.cpp.ui.internal.builder.RemotePropertyPage"
-		name="Remote Properties"
-		objectClass="com.ibm.cpp.ui.internal.vcm.Repository"
-		class="com.ibm.cpp.ui.internal.builder.RemotePropertyPage">
-	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
-        </page>
+      point="org.eclipse.ui.editors">
+   <editor
+         name="%Lpex_Editor"
+         icon="icons/full/obj16/lpex_obj.gif"
+         extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in,dat"
+         contributorClass="com.ibm.cpp.ui.internal.editor.contributor.CppEditorContextContributor"
+         class="com.ibm.cpp.ui.internal.editor.CppEditor"
+         id="com.ibm.cpp.ui.internal.editor.CppEditor">
+   </editor>
 </extension>
-
-<extension point="org.eclipse.search.searchPages">
-   <page  id="com.ibm.cpp.ui.CppSearchPage"
-         icon="icons/search.gif"
-         label="%C++_Search"
-		 sizeHint="400,240"
-		 extensions="cpp:90, C:90, c:90, hpp:90, H:90, h:90, *:1"
-		 class="com.ibm.cpp.ui.internal.views.search.CppSearchPage">
+<extension
+      id="cppbuilder"
+      name="%C++_Builder"
+      point="org.eclipse.core.resources.builders">
+   <builder>
+      <run
+            class="com.ibm.cpp.ui.internal.builder.CppBuilder">
+      </run>
+   </builder>
+</extension>
+<extension
+      point="org.eclipse.ui.newWizards">
+   <category
+         name="%C++"
+         id="com.ibm.cpp.ui.cpp">
+   </category>
+   <wizard
+         availableAsShortcut="true"
+         name="%C++_Project"
+         icon="icons/full/ctool16/newprj_wiz.gif"
+         category="com.ibm.cpp.ui.cpp"
+         class="com.ibm.cpp.ui.internal.wizards.CppNewProjectResourceWizard"
+         project="true"
+         finalPerspective="com.ibm.cpp.ui.CppPerspective"
+         id="com.ibm.cpp.ui.wizards.CppNewProjectResourceWizard">
+      <description>
+         %Create_a_C++_Project
+      </description>
+   </wizard>
+</extension>
+<extension
+      point="org.eclipse.ui.propertyPages">
+   <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Build_Invocation"
+         class="com.ibm.cpp.ui.internal.builder.BuildPropertyPage"
+         id="com.ibm.cpp.ui.internal.builder.BuildPropertyPage">
+      <filter
+            name="nature"
+            value="com.ibm.cpp.ui.cppnature">
+      </filter>
+   </page>
+   <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Parse_Include_Path"
+         class="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage"
+         id="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage">
+      <filter
+            name="nature"
+            value="com.ibm.cpp.ui.cppnature">
+      </filter>
+   </page>
+   <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Parse_Quality"
+         class="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage"
+         id="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage">
+      <filter
+            name="nature"
+            value="com.ibm.cpp.ui.cppnature">
+      </filter>
+   </page>
+   <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Parse_Behaviour"
+         class="com.ibm.cpp.ui.internal.builder.AutoParsePropertyPage"
+         id="com.ibm.cpp.ui.internal.builder.AutoParsePropertyPage">
+      <filter
+            name="nature"
+            value="com.ibm.cpp.ui.cppnature">
+      </filter>
+   </page>
+   <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Environment"
+         class="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage"
+         id="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage">
+      <filter
+            name="nature"
+            value="com.ibm.cpp.ui.cppnature">
+      </filter>
+   </page>
+   <page
+         objectClass="com.ibm.cpp.ui.internal.vcm.Repository"
+         name="Remote Properties"
+         class="com.ibm.cpp.ui.internal.builder.RemotePropertyPage"
+         id="com.ibm.cpp.ui.internal.builder.RemotePropertyPage">
+      <filter
+            name="nature"
+            value="com.ibm.cpp.ui.cppnature">
+      </filter>
    </page>
 </extension>
- 
-<extension id="cppsearchmarker" point="org.eclipse.core.resources.markers">
-	<super type="org.eclipse.core.resources.searchmarker"/>
-	<attribute name="DataElementID"/>
-</extension>
-
 <extension
-	point="org.eclipse.ui.preferencePages">
-	<page name="%C++"
-		id="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage">
-	</page>
-	<page name="%Default_Environment"
-		id="com.ibm.cpp.ui.internal.preferences.EnvironmentPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.EnvironmentPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage">
-	</page>
-	<page name="%Default_Build_Invocation"
-		id="com.ibm.cpp.ui.internal.preferences.DefaultBuildPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.DefaultBuildPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage">
-	</page>	
-       <page name="%Parser"
-	  id="com.ibm.cpp.ui.internal.preferences.ParserPreferencePage"
-          class="com.ibm.cpp.ui.internal.preferences.ParserPreferencePage"
-          category="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage">
-       </page>
-	<page name="%Default_Parse_Include_Path"
-		id="com.ibm.cpp.ui.internal.preferences.ParserPathPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.ParserPathPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.ParserPreferencePage">
-	</page>	
-	<page name="%Default_Parse_Quality"
-		id="com.ibm.cpp.ui.internal.preferences.ParserQualityPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.ParserQualityPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.ParserPreferencePage">
-	</page>	
-	<page name="%Views"
-		id="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage">
-	</page>	
-	<page name="%Generic_Views"
-		id="com.ibm.cpp.ui.internal.preferences.GenericViewPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.GenericViewPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.ViewPreferencePage">
-	</page>	
-	<page name="%Project_Objects_View"
-		id="com.ibm.cpp.ui.internal.preferences.ProjectObjectsViewPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.ProjectObjectsViewPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.ViewPreferencePage">
-	</page>	
-	<page name="%Output_View"
-		id="com.ibm.cpp.ui.internal.preferences.OutputViewPreferencePage"
-		class="com.ibm.cpp.ui.internal.preferences.OutputViewPreferencePage"
-		category= "com.ibm.cpp.ui.internal.preferences.ViewPreferencePage">
-	</page>	
+      point="org.eclipse.search.searchPages">
+   <page
+         label="%C++_Search"
+         icon="icons/full/elcl16/search_nav.gif"
+         extensions="cpp:90, C:90, c:90, hpp:90, H:90, h:90, *:1"
+         class="com.ibm.cpp.ui.internal.views.search.CppSearchPage"
+         sizeHint="400,240"
+         id="com.ibm.cpp.ui.CppSearchPage">
+   </page>
 </extension>
-
 <extension
-	point="org.eclipse.ui.actionSets">
-	<actionSet 
-		id="com.ibm.cpp.ui.CppActionSet"
-		label="C/C++"
-		visible="true"
-		description="C/C++ Action Set">
-		<action id="com.ibm.cpp.ui.ParseAction"
-			toolbarPath="Normal/C++"			
-			label="Parse"
-			tooltip="Parse"
-			icon="icons/parse.gif"
-			class="com.ibm.cpp.ui.internal.actions.ParseAction"/>
-		<action id="com.ibm.cpp.ui.CancelAction"
-			toolbarPath="Normal/C++"			
-			label="Cancel"
-			tooltip="Cancel Running Jobs"
-			icon="icons/cancel.gif"
-			class="com.ibm.cpp.ui.internal.actions.CancelAction"/>
-	</actionSet>
-
+      id="cppsearchmarker"
+      point="org.eclipse.core.resources.markers">
+   <super
+         type="org.eclipse.core.resources.searchmarker">
+   </super>
+   <attribute
+         name="DataElementID">
+   </attribute>
 </extension>
-	
-
-
+<extension
+      point="org.eclipse.ui.preferencePages">
+   <page
+         name="%C++"
+         class="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage">
+   </page>
+   <page
+         name="%Default_Environment"
+         category="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.EnvironmentPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.EnvironmentPreferencePage">
+   </page>
+   <page
+         name="%Default_Build_Invocation"
+         category="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.DefaultBuildPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.DefaultBuildPreferencePage">
+   </page>
+   <page
+         name="%Parser"
+         category="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.ParserPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.ParserPreferencePage">
+   </page>
+   <page
+         name="%Default_Parse_Include_Path"
+         category="com.ibm.cpp.ui.internal.preferences.ParserPreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.ParserPathPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.ParserPathPreferencePage">
+   </page>
+   <page
+         name="%Default_Parse_Quality"
+         category="com.ibm.cpp.ui.internal.preferences.ParserPreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.ParserQualityPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.ParserQualityPreferencePage">
+   </page>
+   <page
+         name="%Views"
+         category="com.ibm.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage">
+   </page>
+   <page
+         name="%Generic_Views"
+         category="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.GenericViewPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.GenericViewPreferencePage">
+   </page>
+   <page
+         name="%Project_Objects_View"
+         category="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.ProjectObjectsViewPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.ProjectObjectsViewPreferencePage">
+   </page>
+   <page
+         name="%Output_View"
+         category="com.ibm.cpp.ui.internal.preferences.ViewPreferencePage"
+         class="com.ibm.cpp.ui.internal.preferences.OutputViewPreferencePage"
+         id="com.ibm.cpp.ui.internal.preferences.OutputViewPreferencePage">
+   </page>
+</extension>
+<extension
+      point="org.eclipse.ui.actionSets">
+   <actionSet
+         label="C/C++"
+         description="C/C++ Action Set"
+         visible="true"
+         id="com.ibm.cpp.ui.CppActionSet">
+      <action
+            label="Parse"
+            icon="icons/full/clcl16/default_misc.gif"
+            tooltip="Parse"
+            class="com.ibm.cpp.ui.internal.actions.ParseAction"
+            toolbarPath="Normal/C++"
+            id="com.ibm.cpp.ui.ParseAction">
+      </action>
+      <action
+            label="Cancel"
+            icon="icons/full/clcl16/stop_exe.gif"
+            tooltip="Cancel Running Jobs"
+            class="com.ibm.cpp.ui.internal.actions.CancelAction"
+            toolbarPath="Normal/C++"
+            id="com.ibm.cpp.ui.CancelAction">
+      </action>
+   </actionSet>
+</extension>
 </plugin>
-
-
-
-

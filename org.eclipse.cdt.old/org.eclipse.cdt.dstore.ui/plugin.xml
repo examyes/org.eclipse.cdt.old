@@ -25,14 +25,6 @@
      </library> 
    </runtime>
 
-<extension
-	point="org.eclipse.ui.perspectives">
-   <perspective
-	id="com.ibm.dstore.ui.views.ObjectsPerspective"
-	name="%DataStore_Objects"
-	class="com.ibm.dstore.ui.views.ObjectsPerspective">
-   </perspective>
-</extension>
 
 <extension
 	point="org.eclipse.ui.views">

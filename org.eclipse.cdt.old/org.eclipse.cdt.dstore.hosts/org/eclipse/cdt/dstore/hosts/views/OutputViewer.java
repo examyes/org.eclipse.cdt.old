@@ -9,6 +9,7 @@ package com.ibm.dstore.hosts.views;
 import com.ibm.dstore.hosts.*;
 
 import com.ibm.dstore.ui.*;
+import com.ibm.dstore.hosts.actions.*;
 import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.ui.widgets.*;
 import com.ibm.dstore.extra.internal.extra.*;
@@ -34,87 +35,6 @@ import org.eclipse.swt.widgets.*;
 public class OutputViewer extends TableViewer
     implements ISelected, ISelectionChangedListener, IDomainListener, IMenuListener
 {
-  public class CancelAction extends Action
-  {
-    public CancelAction(String name, ImageDescriptor image)
-    {
-      super(name, image);
-
-    }
-
-      public void run()
-      {
-	  DataElement input = getCurrentInput();
-	  if (input != null)
-	      {
-		  DataElement command = input.getParent();
-		  cancel(command);
-	      }
-      }
-
-      public void cancel(DataElement command)
-      {
-	  DataStore dataStore = command.getDataStore();
-	  DataElement commandDescriptor = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Cancel");
-	  if (commandDescriptor != null)
-	      {	
-		  dataStore.command(commandDescriptor, command, false, true);
-	      }
-      }
-  }
-
-  public class HistoryAction extends Action
-  {
-    private DataElement _status;
-    private int         _increment;
-
-    public HistoryAction(String name, ImageDescriptor image, int increment)
-    {
-      super(name, image);
-      _increment = increment;
-    }
-
-      public void run()
-    {
-      DataElement status = _currentInput;
-      if (status != null)
-      {
-        DataElement command = status.getParent();
-
-        DataStore dataStore = command.getDataStore();
-        DataElement logRoot = dataStore.getLogRoot();
-
-        ArrayList commands = logRoot.getNestedData();
-        int thisIndex = commands.indexOf(command);
-
-        DataElement newStatus = null;
-        int newIndex = thisIndex + _increment;
-        boolean found = false;
-        while (!found && (newIndex > -1) && (newIndex < commands.size()))
-        {
-          DataElement newCommand = (DataElement)commands.get(newIndex);	
-	  String commandName = newCommand.getName();
-
-	  if (commandName.equals("C_COMMAND") ||
-	      commandName.equals("C_SEARCH") ||
-	      commandName.equals("C_SEARCH_REGEX"))
-	    {	
-	      newStatus  = newCommand.get(newCommand.getNestedSize() - 1);
-	      if (newStatus != null)
-		{	
-		  found = (newStatus.getNestedSize() > 1);
-		}	
-	    }
-	  newIndex += _increment;
-	}
-	
-        if (found && newStatus != null)
-        {
-          setInput(newStatus);
-        }
-      }
-    }
-  }
 
     protected DataElement           _selected;
     protected DataElement           _currentInput;
@@ -129,13 +49,19 @@ public class OutputViewer extends TableViewer
 
     private static int            MAX_BUFFER = 1000;
 
-  public OutputViewer(Table parent)
+  public OutputViewer(Table parent, IActionLoader loader)
       {
 		super(parent);
 
 	    _plugin = HostsPlugin.getPlugin();
 	    setContentProvider(new DataElementTableContentProvider());
-		setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry(), _plugin.getActionLoader()));
+	    
+	    if (loader == null)
+	    {
+	    	loader = _plugin.getActionLoader();
+	    }
+	    
+		setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry(), loader));
        	addSelectionChangedListener(this);
 
 		_menuHandler = new MenuHandler(_plugin.getActionLoader());
@@ -378,13 +304,7 @@ public class OutputViewer extends TableViewer
 
   public void fillLocalToolBar(IToolBarManager toolBarManager)
   {
-    toolBarManager.add(new HistoryAction(_plugin.getLocalizedString("OutputViewer.back"),
-					 _plugin.getImageDescriptor("back.gif"), -1));
-    toolBarManager.add(new HistoryAction(_plugin.getLocalizedString("OutputViewer.forward"),
-					 _plugin.getImageDescriptor("forward.gif"), 1));
-    toolBarManager.add(new CancelAction(_plugin.getLocalizedString("OutputViewer.Cancel"),
-					_plugin.getImageDescriptor("cancel.gif")));
-  }
+   }
 
   public void selectionChanged(SelectionChangedEvent e)
   {

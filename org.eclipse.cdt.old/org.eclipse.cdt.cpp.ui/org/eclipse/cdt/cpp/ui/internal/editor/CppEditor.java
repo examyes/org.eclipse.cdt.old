@@ -14,7 +14,7 @@ import com.ibm.cpp.ui.internal.editor.codeassist.*;
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.resource.*;
+import com.ibm.dstore.ui.resource.*; 
 
 import org.eclipse.core.resources.*;
 import com.ibm.lpex.alef.LpexTextEditor;
@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.*;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
-import com.ibm.linux.help.listeners.CppeditorHelpListener;
+import com.ibm.linux.help.listeners.CppeditorHelpListener; 
 import com.ibm.lpex.core.LpexWindow;
 import com.ibm.lpex.core.LpexView;
 
@@ -68,7 +68,8 @@ public class CppEditor extends LpexTextEditor
          super();
          _isParsed = false;
          _plugin = CppPlugin.getDefault();
-         setDocumentProvider(_plugin.getCppDocumentProvider());
+	         setDocumentProvider(_plugin.getCppDocumentProvider());
+//setDocumentProvider(new org.eclipse.ui.editors.text.FileDocumentProvider());
       }
 
   protected void initializeEditor()

@@ -21,4 +21,5 @@ public interface IActionLoader
 
     public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor); 
     public String getImageString(DataElement object);     
+    public String getImageString(String name);
 }

@@ -100,11 +100,11 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	Composite b = new Composite(c, SWT.NONE);
 	_back = new Button(b, SWT.FLAT);
 	_back.addListener(SWT.Selection, this);
-	_back.setImage(_plugin.getImageDescriptor("up.gif").createImage());	
+	_back.setImage(_plugin.getImageDescriptor("up").createImage());	
 
 	_forward = new Button(b, SWT.FLAT);
 	_forward.addListener(SWT.Selection, this);
-	_forward.setImage(_plugin.getImageDescriptor("down.gif").createImage());	
+	_forward.setImage(_plugin.getImageDescriptor("down").createImage());	
 	
 	b.setLayout(new GridLayout());
 	GridData data = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);

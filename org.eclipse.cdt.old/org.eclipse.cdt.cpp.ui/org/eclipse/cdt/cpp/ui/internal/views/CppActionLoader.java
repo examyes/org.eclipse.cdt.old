@@ -34,15 +34,33 @@ import org.eclipse.jface.resource.*;
 
 import java.util.*;
 import java.lang.reflect.*;
- 
+  
 
 public class CppActionLoader extends GenericActionLoader
 {
     private static CppActionLoader _instance = new CppActionLoader();
+	private ResourceBundle _iconBundle;
+	private String _defaultIcon;
+	private HashMap _hashMap; 
+	private String _baseDir;
 
     public CppActionLoader()
     {
-	super(); 
+		super(); 
+
+		try
+    	{
+      	 	_iconBundle = ResourceBundle.getBundle("com.ibm.cpp.ui.internal.IconResources");
+    	}
+    	catch (MissingResourceException mre)
+    	{
+       		_iconBundle = null;
+    	}
+    	
+    	_hashMap = new HashMap();
+    	
+    	CppPlugin plugin = CppPlugin.getDefault();
+    	_baseDir = plugin.getPluginPath();
     }
  
     public static IActionLoader getInstance()
@@ -50,14 +68,15 @@ public class CppActionLoader extends GenericActionLoader
 	return _instance;
     }
     
+    
     public CustomAction getOpenPerspectiveAction()
     {
-	if (_openPerspectiveAction == null)
+		if (_openPerspectiveAction == null)
 	    {
 		_openPerspectiveAction = loadAction("com.ibm.cpp.ui.internal.actions.OpenPerspectiveAction", 
 						    "Open Perspective On");
 	    }
-	return _openPerspectiveAction;
+		return _openPerspectiveAction;
     }
 
     public IOpenAction getOpenAction()
@@ -69,7 +88,7 @@ public class CppActionLoader extends GenericActionLoader
 	return _openAction;
     }
     
-    public CustomAction loadAction(String source, String name)
+       public CustomAction loadAction(String source, String name)
     {
 	CustomAction newAction = null;
 	try
@@ -99,7 +118,6 @@ public class CppActionLoader extends GenericActionLoader
         return newAction;
     }
     
-
 	public CustomAction loadAction(java.util.List objects, DataElement descriptor)
 	{
 	    String name = descriptor.getName();
@@ -161,7 +179,7 @@ public class CppActionLoader extends GenericActionLoader
 	}
 	
 	
-    public CustomAction loadAction(DataElement object, DataElement descriptor)
+       public CustomAction loadAction(DataElement object, DataElement descriptor)
     {
         String name = descriptor.getName();
         String source = descriptor.getSource();
@@ -211,8 +229,9 @@ public class CppActionLoader extends GenericActionLoader
 	
         return newAction;
     }
-    
-        
+   
+
+          
     public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)
     {
 	String type = input.getType();
@@ -284,60 +303,64 @@ public class CppActionLoader extends GenericActionLoader
     }
  
     public String getImageString(DataElement object)
-    {
-    	DataStore dataStore   = object.getDataStore();
-
-	String baseDir        = dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH); 			
-	String type           = object.getType();
-
-	StringBuffer iconPath = new StringBuffer(baseDir);
-
-	if (type.equals(DE.T_OBJECT_DESCRIPTOR) || 
-	    type.equals(DE.T_RELATION_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
+    {   	
+  		String type           = object.getType();
+		
+		if (type.equals(DE.T_OBJECT_DESCRIPTOR) || 
+	    	type.equals(DE.T_RELATION_DESCRIPTOR) ||
+	    	type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
+	    	type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
             {
-		type = object.getName();
-		String subDir = object.getSource();
-		if (subDir.length() > 0)
-		    {
-			iconPath.append(subDir);
-		    }
-		else
-		    {
-			iconPath.append("com.ibm.dstore.core");
-		    }
+				type = object.getName();
             }
-	else
-            {
-		DataElement descriptor = object.getDescriptor();
-		if (descriptor != null)
-		    {
-			String subDir = descriptor.getSource(); 
-			if (subDir.length() > 0)
-			    {
-				iconPath.append(subDir);
-			    }
-			else
-			    {
-				iconPath.append("com.ibm.dstore.core");
-			    }
-		    }
-		else
-		    {
-			iconPath.append("com.ibm.dstore.ui");
-		    }
-            }
-
-	iconPath.append(java.io.File.separator);	
-	iconPath.append("icons");
-	iconPath.append(java.io.File.separator);
-	iconPath.append(type);
-	iconPath.append(".gif");        
-
-	return iconPath.toString();
+   
+   		return getImageString(type);	
+    }
+    
+    
+	
+    public String getImageString(String type)
+    {		                      
+    	String result = (String)_hashMap.get(type);
+    	
+    	if (result == null)
+    	{    		   	    		
+ 			result = _baseDir + getPropertyString(type);
+			_hashMap.put(type, result);		
+    	}
+    	
+    	return result;
     }
 
+ 	private String getPropertyString(String obj)
+      {
+      	String iconStr = "";
+         {
+         try
+         {
+            if (_iconBundle != null && obj != null)
+            {
+            	String key = obj.toLowerCase();
+            	key = key.replace(' ', '_');
+            	
+               iconStr = _iconBundle.getString(key);          
+               
+            }
+         }
+         catch (MissingResourceException mre)
+         {
+         	// use default
+         	if (_defaultIcon == null)
+         	{
+         		_defaultIcon = "com.ibm.cpp.ui/icons/full/clcl16/blank_misc.gif";
+         	}
+         	
+         	iconStr = _defaultIcon;
+         	
+         }
+      	}
+         return iconStr;
+      }
 }
 
 

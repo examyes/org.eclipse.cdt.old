@@ -55,6 +55,12 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	return _instance;
     }
     
+    public void setLoader(IActionLoader loader)
+    {
+    	_actionLoader = loader;
+    	
+    }
+    
     public Image getImage(Object i)
     {
 	if (i instanceof String)
@@ -220,63 +226,29 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	    }
     }
 
+
+	public String getImageString(String key)
+	{
+		if (_actionLoader != null)
+		{
+			return _actionLoader.getImageString(key);
+		}	
+		else
+		{
+			return "";
+		}
+	}
+	
     public String getImageString(DataElement element)
     {
-    	return _actionLoader.getImageString(element);
-    	
-    	/*
-	DataStore dataStore   = element.getDataStore();
-
-	String baseDir        = dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH); 			
-	String type           = element.getType();
-
-	StringBuffer iconPath = new StringBuffer(baseDir);
-
-	if (type.equals(DE.T_OBJECT_DESCRIPTOR) || 
-	    type.equals(DE.T_RELATION_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
-            {
-		type = element.getName();
-		String subDir = element.getSource();
-		if (subDir.length() > 0)
-		    {
-			iconPath.append(subDir);
-		    }
-		else
-		    {
-			iconPath.append("com.ibm.dstore.core");
-		    }
-            }
-	else
-            {
-		DataElement descriptor = element.getDescriptor();
-		if (descriptor != null)
-		    {
-			String subDir = descriptor.getSource(); 
-			if (subDir.length() > 0)
-			    {
-				iconPath.append(subDir);
-			    }
-			else
-			    {
-				iconPath.append("com.ibm.dstore.core");
-			    }
-		    }
-		else
-		    {
-			iconPath.append("com.ibm.dstore.ui");
-		    }
-            }
-
-	iconPath.append(File.separator);	
-	iconPath.append("icons");
-	iconPath.append(File.separator);
-	iconPath.append(type);
-	iconPath.append(".gif");        
-
-	return iconPath.toString();
-	*/
+    	if (_actionLoader != null)
+    	{
+    		return _actionLoader.getImageString(element);
+    	}
+    	else
+    	{
+    		return "";
+    	}    
     }
     
     public Image getColumnImage(Object element, int columnIndex)
