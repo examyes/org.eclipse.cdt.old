@@ -47,7 +47,7 @@
 <!-- Add one target for each root element and each configuration -->
 <!-- ===================================================================== -->
 
-<target name="assemble.org.eclipse.cdt.rpm.linux.gtk.x86">
+<target name="assemble.org.eclipse.cdt.rpm">
 	<property name="archiveName" value="eclipse-rpm.zip" />
 	<ant antfile="${assembleScriptName}"/>
 </target>
