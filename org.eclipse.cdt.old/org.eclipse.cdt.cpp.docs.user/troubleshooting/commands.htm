@@ -50,36 +50,7 @@
         <pre><b>      ls | xargs grep "some text"</b></pre>  
         In some extreme cases it may be necessary to kill the "java.exe" process that the 
         Studio Workbench is running in (via Task Manager).  This will be fixed shortly.<br><br>
-     <li><font size=+1><b>Commands Won't Work on Windows 98:</b></font><br>
-        There is a limitation on Windows 98 that prevents us from being able to redirect
-        stderr to stdout.  If you are running on Windows 98, you will need to edit 
-        <i>runCommand.bat</i> which is in the <b><i>&lt;...&gt;/eclipse/plugins/com.ibm.cpp.core</i></b>
-        directory         and change the line:<pre><b>      call %THECOMMAND% 2&gt;&1</b></pre>
-        to<pre><b>      call %THECOMMAND%</b></pre> This will result in only stdout appearing
-        in the Command Output View. We will address this problem in a future release.<br><br>
-     <li><font size=+1><b>If error messages are getting parsed incorrectly or not at all:</b></font><br>
-        The formats mechanism is only a temporary proof-of-concept.  Eventually full regular expression
-        support will be added as well as a clean, integrated way of changing or adding to them. In the
-        meantime, here are the most common causes for formats not parsing output:<br>
-        <ol>
-           <li><b>Whitespace problems</b>: The biggest weakness with the current formats mechanism is
-              the lack of proper Whitespace control.  If a line of output contains "HELLO***SOME_FILE"
-              (where a * is a space), then the format <i><b>output=TEXT*FILE</i></b> will NOT match
-              the pattern in the way you might expect.  TEXT will match "HELLO" and FILE will match
-              "**SOME_FILE". To correctly match this pattern, you need to change the format to
-              <i><b>output=TEXT***FILE</i></b>.<br><br>
-           <li><b>Patterns too general</b>: Output is parsed with the formats in the order they appear in 
-              formats.dat.  Therefore if you have something like the following in formats:dat:<br>
-              error1 = TEXT:FILE<br> error2 = TEXT:FILE:LINE<br> No output will ever be parsed as
-              an error2 since error1 is more "general" than error2. (Any output that could be parsed
-              as error2 will be parsed as an error1 where the FILE in error1 contains everything after
-              the first ':') So the fix for this case is to switch the order that error1 and error2
-              appear in formats.dat.<br><br>
-           <li><b>No icons appearing</b>: To get icons appearing for the parsed output, there needs to
-              be an icon in the <b>&lt;<i>...</i>&gt;/eclipse/plugins/com.ibm.cpp.core/icons</b>
-              directory of the form <b><i>objName</i>.gif</b> for every format
-              (<b><i>objName</i> = some_pattern</b>) in the <b>formats.dat</b> file.
-        </ol>
+       </ol>
       </td>
   </tr> 
 </table>
