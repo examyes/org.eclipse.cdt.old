@@ -353,13 +353,13 @@
 		<description>Unselects the selected text. </description>
 	</context>
 	<context id="popup_blockCopy_context">
-		<description>Copy the selected text. </description>
+		<description>Copy the selected text to the current cursor position. </description>
 	</context>
 	<context id="popup_blockOverlay_context">
-		<description>Overlay with the selected text. </description>
+		<description>Overlay the text at the current cursor position with the selected text. </description>
 	</context>
 	<context id="popup_blockMove_context">
-		<description>Move the selected text. </description>
+		<description>Move the selected text to the current cursor position. </description>
 	</context>
 	<context id="popup_blockDelete_context">
 		<description>Delete the selected text. </description>
