@@ -14,22 +14,22 @@ import com.ibm.debug.epdc.*;
  */
 public class LineBreakpoint extends LocationBreakpoint
 {
-   public LineBreakpoint(DebugSession debugSession, int bkpID, 
+   public LineBreakpoint(DebugSession debugSession, int bkpID, int gdbBkID,
                   int bkpAttr, int partID, int srcFileIndex, int viewNum, 
                   int lineNum, EStdExpression2 conditionalExpr)
    {
-      super(debugSession, bkpID, EPDC.LineBkpType, bkpAttr, partID,
+      super(debugSession, bkpID, gdbBkID, EPDC.LineBkpType, bkpAttr, partID,
             srcFileIndex, viewNum, conditionalExpr);
       _lineNum = lineNum;
       update();
    }
 
    // Constructor for deferred line breakpoints
-   public LineBreakpoint(DebugSession debugSession, int bkpID, 
+   public LineBreakpoint(DebugSession debugSession, int bkpID, int gdbBkID,
                   String moduleName, String partName, String fileName, int attr, 
                   int lineNumber, EStdExpression2 conditionalExpr)
    {
-     super(debugSession, bkpID, moduleName, partName, fileName, 
+     super(debugSession, bkpID, gdbBkID, moduleName, partName, fileName, 
            lineNumber, EPDC.LineBkpType, attr, conditionalExpr);
    }
 

@@ -15,12 +15,13 @@ import com.ibm.debug.epdc.*;
  */
 public abstract class Breakpoint
 {
-   public Breakpoint(DebugSession debugSession, int bkpID, int bkpType, int bkpAttr) 
+   public Breakpoint(DebugSession debugSession, int bkpID, int gdbBkID, int bkpType, int bkpAttr) 
    {
       _debugSession  = debugSession;
       _debugEngine   = _debugSession.getDebugEngine();
       _engineSession = _debugEngine.getSession();
       _bkpID         = bkpID;
+      _gdbBkID		 = gdbBkID;
       _bkpType       = bkpType;
       _bkpTypeQual   = "";
       _bkpAttr       = bkpAttr;
@@ -130,6 +131,40 @@ public abstract class Breakpoint
    {
      return (_bkpAttr & EPDC.BkpDefer) != 0;
    }
+   
+	
+	/**
+	 * Gets the gdbBkID.
+	 * @return Returns a int
+	 */
+	public int getGdbBkID() {
+		return _gdbBkID;
+	}
+
+	/**
+	 * Sets the gdbBkID.
+	 * @param gdbBkID The gdbBkID to set
+	 */
+	public void setGdbBkID(int gdbBkID) {
+		_gdbBkID = gdbBkID;
+	}   
+	
+	
+	/**
+	 * Gets the bkpAddress.
+	 * @return Returns a String
+	 */
+	public String getBkpAddress() {
+		return _bkpAddress;
+	}
+
+	/**
+	 * Sets the bkpAddress.
+	 * @param bkpAddress The bkpAddress to set
+	 */
+	public void setBkpAddress(String bkpAddress) {
+		_bkpAddress = bkpAddress;
+	}
 
    // Data fields
    protected DebugSession         _debugSession;
@@ -137,9 +172,11 @@ public abstract class Breakpoint
    protected EPDC_EngineSession  _engineSession;
 
    private int    _bkpID;
+   private int    _gdbBkID;
    private int    _bkpType;
    private String _bkpTypeQual;
    private int    _bkpAttr;
+   private String  _bkpAddress;
 
    private boolean _bkpNew;
    private boolean _bkpChanged;

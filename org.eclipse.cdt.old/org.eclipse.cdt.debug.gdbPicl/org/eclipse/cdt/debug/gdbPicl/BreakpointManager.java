@@ -70,7 +70,7 @@ public class BreakpointManager extends ComponentManager
              Gdb.traceLogger.err(3,"Error printing out Line breakpoint info");
       }
 
-      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, 0, partID, srcFileIndex,
+      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, bkpID, 0, partID, srcFileIndex,
                                                   viewNum, lineNum, conditionalExpr);
 
       _breakpoints.addElement(lineBkp);
@@ -116,12 +116,13 @@ public class BreakpointManager extends ComponentManager
              Gdb.traceLogger.err(3,"Error printing out Line breakpoint info");
       }
 
-      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, 0, partID, 1,
+      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, bkpID, 0, partID, 1,
                                                   Part.VIEW_SOURCE, lineNum, conditionalExpr);
+/*
       String placeHolder = "";                                              
       while (_breakpoints.size() < bkpID)
          _breakpoints.addElement(placeHolder);
-         
+*/         
       _breakpoints.addElement(lineBkp);
 
       // if breakpoint should be disabled, then disable it.
@@ -207,7 +208,7 @@ public class BreakpointManager extends ComponentManager
 
      int bkpID = _breakpoints.size()+1;  //  RW to revisit
 
-     LineBreakpoint bkp = new LineBreakpoint(_debugSession, bkpID, moduleName,
+     LineBreakpoint bkp = new LineBreakpoint(_debugSession, bkpID, bkpID, moduleName,
                                              partName, fileName, attr,
                                              lineNumber, conditionalExpr);
      _breakpoints.addElement(bkp);

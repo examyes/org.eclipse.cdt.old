@@ -16,7 +16,7 @@ public class MethodBreakpoint extends LocationBreakpoint
 {
    public MethodBreakpoint(DebugSession debugSession, int bkpID, int bkpAttr, int partID, int srcFileIndex, int viewNum, int entryID, int lineNum, EStdExpression2 conditionalExpr)
    {
-      super(debugSession, bkpID, EPDC.EntryBkpType, bkpAttr, partID, srcFileIndex, viewNum, conditionalExpr);
+      super(debugSession, bkpID, 0, EPDC.EntryBkpType, bkpAttr, partID, srcFileIndex, viewNum, conditionalExpr);
 
       _entryID = entryID;
       _lineNum = lineNum;
@@ -28,7 +28,7 @@ public class MethodBreakpoint extends LocationBreakpoint
                     String partName, String methodName, int bkpAttr, 
                     EStdExpression2 conditionalExpr)
    {
-      super(debugSession, bkpID, moduleName, partName, methodName, 
+      super(debugSession, bkpID, 0, moduleName, partName, methodName, 
             EPDC.EntryBkpType, bkpAttr, conditionalExpr);
    }
 

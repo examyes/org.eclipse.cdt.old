@@ -24,6 +24,27 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       _changedBreakpoints = new Vector();
    }
 
+	/**
+	 * Get address of the breakpoint
+	 * @return address of the breakpoint if successful
+	 * @return null if unsuccessful
+	 * 
+	 */
+	protected String getBreakpointAddress(int gdbBkpId)
+	{
+		((GdbDebugSession)_debugSession).executeGdbCommand("info breakpoint " + gdbBkpId);
+		String[] str = ((GdbDebugSession)_debugSession).getTextResponseLines();        
+
+		int start = str[1].indexOf(" 0x");
+		String address=null;
+		if (start > 0)
+		{
+			int end = str[1].indexOf(" in");
+			if (end > 0 && end>start)
+				address = str[1].substring(start, end);
+		}   
+		return address; 
+	}
    /**
     * Add a line breakpoint
     * @return 0 if succesful
@@ -56,11 +77,13 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       // now try to set the breakpoint
       ModuleManager cm = _debugSession.getModuleManager();
       
-      int bkpID = _debugSession.setLineBreakpoint(partID, lineNum);
-      if (bkpID < 0)
-         return -1;
+      int gdbBkpID = _debugSession.setLineBreakpoint(partID, lineNum);
+      if (gdbBkpID < 0)
+         return -1;     
 
-      //int bkpID = _breakpoints.size()+1;
+	  String address = getBreakpointAddress(gdbBkpID);
+
+      int bkpID = _breakpoints.size()+1;
 
       if (Gdb.traceLogger.DBG) 
       {
@@ -74,12 +97,15 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
          }
       }
 
-      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, 0, partID, srcFileIndex, viewNum, lineNum, conditionalExpr );
+      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, gdbBkpID, 0, partID, srcFileIndex, viewNum, lineNum, conditionalExpr );
+      lineBkp.setBkpAddress(address);
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"Line breakpoint set");
-      String placeHolder = "";
+/*
+       String placeHolder = "";
       while (_breakpoints.size() < bkpID)
           _breakpoints.addElement(placeHolder);
+*/          
       _breakpoints.addElement(lineBkp);
      
       // if breakpoint should be disabled, then disable it.
@@ -166,8 +192,9 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
      }
 
      int bkpID = _breakpoints.size()+1;
+//     int bkpID = _breakpoints.size();
 
-     LineBreakpoint bkp = new LineBreakpoint(_debugSession, bkpID, pkgName,
+     LineBreakpoint bkp = new LineBreakpoint(_debugSession, bkpID, 0, pkgName,
                                              partName, fileName, attr,
                                              lineNumber, conditionalExpr);
      _breakpoints.addElement(bkp);
@@ -192,7 +219,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
      // Set up the method load filter pattern based on the
      // breakpoint information
-     session.prepareDeferredBreakpointMethodFilter(bkp);
+//     session.prepareDeferredBreakpointMethodFilter(bkp);
 
      return 0;
    }
@@ -208,6 +235,8 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
                             int lineNum, boolean enable,
                             EStdExpression2 conditionalExpr)
    {
+	  bkpID--;   	
+   	
       if (bkpID < 1 || bkpID > _breakpoints.size())
         return -1;
 
@@ -682,11 +711,16 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
     */
    public void disableBreakpoint(int bkpID) 
    {
+   	
+   	bkpID--;
+   	
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"GdbBreakpointManager.disableBreakpoint ID="+bkpID );
 
       GdbDebugSession _debugSession = (GdbDebugSession)_debugEngine.getDebugSession();
-      String ID = String.valueOf(bkpID);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
+//      String ID = String.valueOf(bkpID);
+      String ID = String.valueOf(bkp.getGdbBkID());
       String cmd = "disable breakpoint "+ID;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
@@ -694,8 +728,6 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 //         _debugSession.getGdbResponseLines();
          _debugSession.addCmdResponsesToUiMessages();
       }
-
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
 	  // don't need to remove breakpoint after a disable
 //      if (!bkp.isDeferred())
@@ -709,13 +741,18 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
    /**
     * Enable a breakpoint
     */
-   public void enableBreakpoint(int bkpID) 
+   public void enableBreakpoint(int bkpID)  
    {
+   	
+   	   bkpID--;
+   	
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"GdbBreakpointManager.enableBreakpoint ID="+bkpID );
   
       GdbDebugSession _debugSession = (GdbDebugSession)_debugEngine.getDebugSession();
-      String ID = String.valueOf(bkpID);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
+//      String ID = String.valueOf(bkpID);
+      String ID = String.valueOf(bkp.getGdbBkID());
       String cmd = "enable breakpoint "+ID;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
@@ -724,7 +761,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
          _debugSession.addCmdResponsesToUiMessages();
       }
 
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
+//      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
 		// don't need to add breakpoint after a enable
 //      if (!bkp.isDeferred())
@@ -739,9 +776,15 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
     * Delete a breakpoint
     */
    public void clearBreakpoint(int bkpID) {
+
+	  bkpID--;
+
       boolean removeBkp = true;
 
       Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
+      
+      if (bkp==null)
+      	return;
 
       if (!bkp.isDeferred())
           removeBreakpoint(bkp);
@@ -797,7 +840,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       int bkpID = bkp.bkpID();
       int partID = bkp.partID();
       int lineNum = bkp.lineNum();
-
+/*
       int i = 0;
       while ((i < _breakpoints.size()) && removeBkp == true) {
          Object obj = _breakpoints.elementAt(i);
@@ -810,7 +853,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
          }
          i++;
       }
-
+*/
       if (removeBkp)
          _debugEngine.getDebugSession().clearBreakpoint(partID, lineNum);
    }
@@ -889,7 +932,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
     * find out if it maps to more than one method in the part and if so
     * create new breakpoints for them.
     */
-   void enableDeferredBreakpoint(Breakpoint bkp, int partID)
+   void enableDeferredBreakpoint(Breakpoint bkp)
    {
      int bkpID = bkp.bkpID();
      int attr = bkp.attribute();
@@ -897,10 +940,15 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
      int srcFileIndex = 1;
      int viewNumber = Part.VIEW_SOURCE;
      int lineNumber = 0;
+     int partID = 0;
 
      if (bkp.isLineBreakpoint())
      {
          LineBreakpoint lineBkp = (LineBreakpoint)bkp;
+         ModuleManager cm = _debugSession.getModuleManager();
+         
+         cm.checkPart(1, lineBkp.fileName());
+         partID = cm.getPartID(1, lineBkp.fileName());
 
          /************************************************************
          // TODO: Generic defered line breakpoint
@@ -911,10 +959,42 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
          // modify the deferred line breakpoint information
          lineNumber = lineBkp.lineNum();
-         lineBkp.modify(bkpID, attr, partID, srcFileIndex, viewNumber,
+/*         
+         // set the deferred breakpoint
+         setLineBreakpoint(lineBkp.fileName(), lineNumber, true, null);
+         
+         lineBkp.deleteBreakpoint();
+      	 _changedBreakpoints.addElement(lineBkp);
+	     _breakpoints.setElementAt(null, bkpID-1);
+*/
+       int gdbBkpID = (((GdbDebugSession)_debugSession).setLineBreakpoint(lineBkp.fileName(), lineNumber));
+       
+       if (gdbBkpID < 0)
+			return;
+			
+		String address = getBreakpointAddress(gdbBkpID);			
+
+		lineBkp.modify(bkpID, attr, partID, srcFileIndex, viewNumber,
                         lineNumber, lineBkp.conditionalExpr());
-         _changedBreakpoints.addElement(bkp);
+        
+        lineBkp.setGdbBkID(gdbBkpID);
+        lineBkp.setBkpAddress(address);
+
+	    if (!lineBkp.isEnabled())
+	    {
+	         disableBreakpoint(bkpID);                        
+	    }
+	    else
+	    {
+        	 _changedBreakpoints.addElement(bkp);
+	    }
+         
+         // remove the orginal deferred breakpoint
+		 //removeBreakpoint(lineBkp);
      }
+     /*
+      * Method breakpoints are not fixed at the moment.  Need to re-visit this code
+      */
      else
      if (bkp.isMethodBreakpoint())
      {
@@ -984,6 +1064,27 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
              }
          }
      }
+   }
+   
+   /*
+    * Enable all deferred breakpoints there were set before running to main.
+    * All dlls should be loaded once we have run to main.  Therefore we can try to
+    * set the deferred breakpoints after run to main is completed.
+    */
+   public void enableDeferredBreakpoints()
+   { 	
+		int num = _breakpoints.size();
+   	
+		for (int i=0; i<num; i++)
+	   	{
+	   		Object obj = _breakpoints.elementAt(i);
+           if (!(obj instanceof LineBreakpoint))
+	            continue;
+			if (((Breakpoint)_breakpoints.elementAt(i)).isDeferred())
+			{
+   				enableDeferredBreakpoint((Breakpoint)_breakpoints.elementAt(i));
+	   		}
+   		}
    }
 
 }

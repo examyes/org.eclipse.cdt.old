@@ -16,10 +16,10 @@ import com.ibm.debug.epdc.*;
  */
 public class LocationBreakpoint extends Breakpoint
 {
-   public LocationBreakpoint(DebugSession debugSession, int bkpID, int bkpType,
+   public LocationBreakpoint(DebugSession debugSession, int bkpID, int gdbBkID, int bkpType,
       int bkpAttr, int partID, int srcFileIndex, int viewNum, EStdExpression2 conditionalExpr)
    {
-      super(debugSession, bkpID, bkpType, bkpAttr);
+      super(debugSession, bkpID, gdbBkID, bkpType, bkpAttr);
 
 
       _partID        = partID;
@@ -37,11 +37,11 @@ public class LocationBreakpoint extends Breakpoint
    }
 
    // for deferred line breakpoint
-   public LocationBreakpoint(DebugSession debugSession, int bkpID, String moduleName,
+   public LocationBreakpoint(DebugSession debugSession, int bkpID, int gdbBkID, String moduleName,
                       String partName, String fileName, int lineNumber,
                       int bkpType, int bkpAttr, EStdExpression2 conditionalExpr)
    {
-     super(debugSession, bkpID, bkpType, bkpAttr);    
+     super(debugSession, bkpID, gdbBkID, bkpType, bkpAttr);    
 
      _moduleName = moduleName;
      _partName = partName;
@@ -51,11 +51,11 @@ public class LocationBreakpoint extends Breakpoint
    }
 
    // for deferred method breakpoint
-   public LocationBreakpoint(DebugSession debugSession, int bkpID, String moduleName,
+   public LocationBreakpoint(DebugSession debugSession, int bkpID, int gdbBkID, String moduleName,
                       String partName, String methodName, int bkpType, 
                       int bkpAttr, EStdExpression2 conditionalExpr)
    {
-     super(debugSession, bkpID, bkpType, bkpAttr);
+     super(debugSession, bkpID, gdbBkID, bkpType, bkpAttr);
 
      _moduleName = moduleName;
      _partName = partName;

@@ -56,7 +56,7 @@ public class CmdBreakpointLocation extends Command
 
       if(isDeferred)
       {
-         isDeferred = false;
+//         isDeferred = false;
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"######### UNIMPLEMENTED CmdBreakpointLocation.execute **FORCING** deferred=false;" );
       }

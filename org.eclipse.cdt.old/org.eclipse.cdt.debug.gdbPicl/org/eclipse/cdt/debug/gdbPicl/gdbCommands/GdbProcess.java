@@ -168,6 +168,16 @@ public class GdbProcess {
 			cmd = "set print null-stop";
 			ok = writeLine(cmd);
 		}
+		
+		if (Gdb.supportDeferredBreakpoint)
+		{		
+			if (ok)
+			{
+				cmd = "set stop-on-solib-events 1";
+				ok = writeLine(cmd);
+			}
+		}
+		
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
 				Gdb.traceLogger.err(2, "GdbProcess failed to writeLine=" + cmd);

@@ -19,7 +19,7 @@ public class WatchBreakpoint extends Breakpoint
    public WatchBreakpoint(DebugSession debugSession, int bkpID, int bkpType, int bkpAttr,  EStdView context
                           , String expression, int byteCount )
    {
-      super(debugSession, bkpID, bkpType, bkpAttr);
+      super(debugSession, bkpID, 0, bkpType, bkpAttr);
       _context = context;
       _expression = expression;
       _partID = context.getPPID();

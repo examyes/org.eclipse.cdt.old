@@ -770,8 +770,14 @@ Thread.currentThread().dumpStack();
         return;
      }
      addCmdResponsesToUiMessages();
+     
+     getMainModule();
 
      checkCurrentPart(_currentModuleID);
+     
+      // enable deferred breakpoints       
+     if (!Gdb.supportDeferredBreakpoint)    
+	     ((GdbBreakpointManager)_breakpointManager).enableDeferredBreakpoints();
 
      updateSharedLibraries();
      updateAllParts();
@@ -783,8 +789,16 @@ Thread.currentThread().dumpStack();
      monitorChangedName.removeAllElements();
      monitorChangedValue.removeAllElements();
      getCurrentFileLineModule();
+     
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.runToMain DONE " );
+  }
+  
+  public void enableDeferredBreakpoints()
+  {
+    if (Gdb.traceLogger.EVT)
+         Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.enableDeferredBreakpoints " );
+     ((GdbBreakpointManager)_breakpointManager).enableDeferredBreakpoints();
   }
 
   public Part checkCurrentPart(int moduleID)

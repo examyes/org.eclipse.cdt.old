@@ -22,6 +22,7 @@ public class GdbCommandAndResponse
    static String PRE_PROMPT_keyword      = GdbProcess.MARKER+"pre-prompt";
    static String FRAME_BEGIN_keyword     = GdbProcess.MARKER+"frame-begin";
    static String FRAME_END_keyword       = GdbProcess.MARKER+"frame-end";
+   static String FRAME_INVALID_keyword   = GdbProcess.MARKER+"frames-invalid";
    static String BP_RECORD_keyword       = GdbProcess.MARKER+"record";
    static String BP_HEADERS_keyword      = GdbProcess.MARKER+"breakpoints-headers";
    static String BP_TABLE_END_keyword    = GdbProcess.MARKER+"breakpoints-table-end";
@@ -34,7 +35,7 @@ public class GdbCommandAndResponse
    static String ARRAY_SECTION_BEGIN_keyword = GdbProcess.MARKER+"array-section-begin";
    static String ARRAY_ELEMENT_keyword   = GdbProcess.MARKER+"elt";
    static String ARRAY_SECTION_END_keyword = GdbProcess.MARKER+"array-section-end";
-   
+
 
 
   /**
@@ -106,7 +107,7 @@ public class GdbCommandAndResponse
      {  if(lines[i]!=null && !lines[i].equals("") )
         {
            if (Gdb.traceLogger.DBG)
-               Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines i="+i+" STR="+lines[i] );
+               Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines i="+i+" STR="+lines[i] );               
 
            if( !lines[i].startsWith(_gdbProcess.MARKER) )
            {
@@ -153,6 +154,21 @@ public class GdbCommandAndResponse
            else if ( lines[i].equals(PRE_PROMPT_keyword) )
            {
               break;
+           }
+           else if (lines[i].startsWith(FRAME_INVALID_keyword))
+           {
+				if (lines[i+1].startsWith("Stopped due to shared library event"))
+           		{
+		   		    _debugSession.cmdResponses.removeAllElements();
+		   		    _debugSession.enableDeferredBreakpoints();
+					boolean ok = _gdbProcess.writeLine("cont");
+					if(ok)
+       	            {
+       	            	i = 0;
+       	            	lines = _gdbProcess.readAllLines();
+       	            	continue;
+       	            }
+           		}
            }
            else if( lines[i].startsWith(FRAME_BEGIN_keyword) || lines[i].startsWith(BP_HEADERS_keyword)
                 ||  lines[i].startsWith(DISPLAY_BEGIN_keyword) )
