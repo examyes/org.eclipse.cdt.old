@@ -37,15 +37,15 @@ public class DataElementAdapterFactory implements IAdapterFactory
 		DataStore dataStore = element.getDataStore();
 		if (dataStore == CppPlugin.getDataStore())
 		    {
-			if (IResource.class.equals(key)) 
-			    {
-				return getResource(element);
-			    } 
 			if (IFile.class.equals(key)) 
 			    {
 				return getFile(element);
 			    } 
-			if (IProject.class.equals(key)) 
+			else if (IResource.class.equals(key)) 
+			    {
+				return getResource(element);
+			    } 
+			else if (IProject.class.equals(key)) 
 			    {
 				return getProject(element);
 			    } 

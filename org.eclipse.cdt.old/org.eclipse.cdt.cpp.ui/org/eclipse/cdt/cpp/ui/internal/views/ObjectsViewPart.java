@@ -152,9 +152,6 @@ public class ObjectsViewPart extends GenericViewPart
 	
 	initInput(null);
         WorkbenchHelp.setHelp(_viewer.getViewer().getControl(), new ViewContextComputer(this, getF1HelpId()));
-
-	MenuManager menuMgr = _viewer.getMenuManager();
-	getSite().registerContextMenu(menuMgr, (StructuredViewer)_viewer.getViewer()); 
     }
     
     public void initInput(DataStore dataStore)

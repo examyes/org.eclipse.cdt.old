@@ -32,6 +32,8 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     public void createPartControl(Composite parent)
     {
 	super.createPartControl(parent);
+	MenuManager menuMgr = _viewer.getMenuManager();
+	getSite().registerContextMenu(menuMgr, (StructuredViewer)_viewer.getViewer()); 
     }
     
     protected String getF1HelpId()
