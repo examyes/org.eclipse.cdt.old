@@ -638,6 +638,8 @@ Thread.currentThread().dumpStack();
 
      }
      _mainProgram = programName;
+     _attachedProcessID = processIndex;
+
      addCmdResponsesToUiMessages();
 
      checkCurrentPart(_currentModuleID);
@@ -655,7 +657,7 @@ Thread.currentThread().dumpStack();
 
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.remoteAttach() DONE " );
-
+    _attached = true;
     return true;
   }
 
@@ -663,7 +665,15 @@ Thread.currentThread().dumpStack();
   {
 	  if (Gdb.traceLogger.EVT)
               Gdb.traceLogger.dbg(1,"????????????????? GdbDebugSession.remoteDetach "+processIndex   );
-    return false;
+
+     String cmd = "detach";
+     boolean ok = executeGdbCommand(cmd);
+     if( !ok )
+     {  if (Gdb.traceLogger.ERR)
+            Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_DETACH_FROM_PROCESSID") + processIndex);
+     }
+    
+    return ok;
   }
 
   public boolean closeDebugger()
@@ -1265,26 +1275,33 @@ Thread.currentThread().dumpStack();
   {
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"################ GdbDebugSession.terminateDebuggee" );
-
-     String cmd = "kill ";
-     if( !executeGdbCommand(cmd) )
-     {   if (Gdb.traceLogger.ERR)
-             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_EXECUTE_TERMINATE") );
-         return false;
-     }
-     String[] lines = getTextResponseLines();
-     if(lines.length>0)
+     
+     if (_attached)
      {
-        for(int i=0; i<lines.length; i++)
-           if (Gdb.traceLogger.EVT)
-               Gdb.traceLogger.evt(1,"???????????????? GdbDebugSession.terminateDebuggee KILL returned str="+lines[i] );
+         remoteDetach(_attachedProcessID, 1, null);
      }
+     else
+     {
+        String cmd = "kill ";
+        if( !executeGdbCommand(cmd) )
+        {   if (Gdb.traceLogger.ERR)
+                Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_EXECUTE_TERMINATE") );
+           return false;
+        }
+        String[] lines = getTextResponseLines();
+        if(lines.length>0)
+        {
+           for(int i=0; i<lines.length; i++)
+              if (Gdb.traceLogger.EVT)
+                  Gdb.traceLogger.evt(1,"???????????????? GdbDebugSession.terminateDebuggee KILL returned str="+lines[i] );
+        }
+   
+        // in case there is another prepareProgram(restart) instead of a TerminateDebugEngine
+        if (Gdb.traceLogger.EVT)
+            Gdb.traceLogger.evt(1,"---------------- GdbDebugSession.terminateDebuggee is recreating Managers incase of following prepareProgram (restart)" );
+        createManagers();
 
-     // in case there is another prepareProgram(restart) instead of a TerminateDebugEngine
-     if (Gdb.traceLogger.EVT)
-         Gdb.traceLogger.evt(1,"---------------- GdbDebugSession.terminateDebuggee is recreating Managers incase of following prepareProgram (restart)" );
-     createManagers();
-
+     }    
      return true;
   }
 
@@ -1358,6 +1375,9 @@ Thread.currentThread().dumpStack();
    private String    _debuggeeProcessID = "";
    public  String    getDebuggeeProcessID() { return _debuggeeProcessID; }
    private boolean   _terminatePending = false;
+   private int       _attachedProcessID;
+   public  int       getAttachedProcessID() { return _attachedProcessID; } 
+   private boolean   _attached = false;  
    public  void  setTerminatePending(boolean b) {_terminatePending = b;}
    private Hashtable _parts = new Hashtable();
    protected String _dataAddress = "";
