@@ -138,23 +138,34 @@ public class ConfigureAction extends CustomAction
 		
 		if(_command.getValue().equals("CREATE_CONFIGURE"))
 		{
-			String str1,str2;
+			String str1;
+			String message;
+			
 			if(doesAutoconfSupportExist())
 			{
 				noConffilesExist = false;
 				str1 = new String(
 				"Would you like the system to update and generate missing configuration files?");
+				message = new String("\nGenerating project configuration files"+str1);
+				updating = box.openYesNoCancel(
+												shell,
+												"Creating configure.in and Makefile.am's ",
+												message);
 			}
 			else
 			{
 				noConffilesExist = true;
-				str1 = "";str2="";
+				str1 = "";
+				message = new String("\nGenerating project configuration files"+str1);
+				box = new PreventableMessageBox(shell,
+										"Creating configure.in and Makefile.am's ",
+										null,
+										message,0,new String[]{
+									  	IDialogConstants.YES_LABEL, 
+										IDialogConstants.CANCEL_LABEL},0);
+				updating = box.open();
+
 			}
-			String message = new String("\nGenerating project configuration files"+str1);		
-			updating = box.openYesNoCancel(
-				shell,
-				"Creating configure.in and Makefile.am's ",
-				message);
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
