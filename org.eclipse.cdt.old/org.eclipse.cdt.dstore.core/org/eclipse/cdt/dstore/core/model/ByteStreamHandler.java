@@ -313,7 +313,6 @@ public class ByteStreamHandler
 					    }
 				    }
 
-				System.out.println("binary = "+ binary);
 				if (written <= maxSize)
 				    {
 				    	internalSendBytes(path, subBuffer, subWritten, binary);
