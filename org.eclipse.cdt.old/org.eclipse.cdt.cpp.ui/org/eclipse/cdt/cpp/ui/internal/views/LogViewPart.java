@@ -34,7 +34,7 @@ public class LogViewPart extends DataStoreViewPart
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
 	DataElement log = dataStore.getLogRoot();
-	_viewer.setSorter(null);
+	_viewer.setSorter((String)null);
 	_viewer.setInput(log);
 	setTitle("Log on " + dataStore.getName());
     } 
