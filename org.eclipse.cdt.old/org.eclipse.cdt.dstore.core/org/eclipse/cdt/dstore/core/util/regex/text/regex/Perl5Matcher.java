@@ -66,7 +66,7 @@ import java.util.*;
  * Perl5Compiler.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Perl5Matcher.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
+ @version $Id: Perl5Matcher.java,v 1.2 2001/11/12 17:14:41 dmcknigh Exp $
 
  * @see PatternMatcher
  * @see Perl5Compiler
@@ -739,14 +739,20 @@ public final class Perl5Matcher implements PatternMatcher {
   }
 
 
-  private int __repeat(int offset, int max) {
-    int scan, eol, operand, ret;
-    char ch;
-    char op;
+  private int __repeat(int offset, int max) 
+    {
+	int scan = 0;
+	int eol = 0;
+	int operand = 0;
+	int ret = 0;
+	char ch = ' ';
+	char op = ' ';
 
     scan = __inputOffset;
     eol  = __eol;
-
+    
+    try
+	{
     if(max != Character.MAX_VALUE && max < eol - scan)
       eol = scan + max;
 
@@ -830,6 +836,17 @@ public final class Perl5Matcher implements PatternMatcher {
 
     ret = scan - __inputOffset;
     __inputOffset = scan;
+	}
+    catch (Exception e)
+	{
+	    System.out.println(e);
+	    System.out.println("scan = " + scan);
+	    System.out.println("in = " + __inputOffset);
+	    System.out.println("eol = " + eol);
+	    System.out.println("op = " + op);
+	    System.out.println("input.len = " + __input.length);
+	}
+
 
     return ret;
   }

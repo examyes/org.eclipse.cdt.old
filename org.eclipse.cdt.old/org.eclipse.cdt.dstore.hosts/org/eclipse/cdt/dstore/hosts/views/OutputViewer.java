@@ -341,8 +341,8 @@ public class OutputViewer extends TableViewer
 		      }
 	      }
 	
-	  table.setTopIndex(index);	
 	  table.setRedraw(true);				
+	  table.setTopIndex(index);	
       }
 
     private void clearFirstItems(int items)

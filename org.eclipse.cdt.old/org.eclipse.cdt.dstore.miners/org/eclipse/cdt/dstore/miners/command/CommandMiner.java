@@ -29,9 +29,11 @@ public class CommandMiner extends Miner
 
  public void extendSchema(DataElement schemaRoot)
  {
-     //     DataElement dirD      = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
-     DataElement fsD      = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-     DataElement cmdD      = createCommandDescriptor(fsD, "Command", "C_COMMAND");
+     DataElement fsD           = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+     DataElement cancellable   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.Cancellable"), 1);
+     
+     DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND");
+     _dataStore.createReference(cancellable, cmdD, "abstracts", "abstracted by");
 
      DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
      DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");
@@ -99,13 +101,13 @@ public class CommandMiner extends Miner
    
   if (theThread != null)
   {
-   theThread.stopThread();
-   boolean done = false;
-   long stopIn = System.currentTimeMillis() + 3000;
-   
-   while (!done)
-    if ( (!theThread.isAlive()) || (stopIn < System.currentTimeMillis()) )
-     done = true;
+      theThread.stopThread();
+      boolean done = false;
+      long stopIn = System.currentTimeMillis() + 3000;
+      
+      while (!done)
+	  if ( (!theThread.isAlive()) || (stopIn < System.currentTimeMillis()) )
+	      done = true;
   }
   _dataStore.createObject(status, "stdout", "Command Cancelled by User Request");
   _dataStore.update(status);
@@ -149,7 +151,7 @@ class CommandMinerThread extends MinerThread
 	    StringBuffer theLine = new StringBuffer();
 	    int ch;
 	    boolean done = false;
-	    while(!done)
+	    while(!done && !isFinished())
 		{
 		    try
 			{
@@ -323,36 +325,48 @@ class CommandMinerThread extends MinerThread
  public void initializeThread()
  {
  }
- 
- public void cleanupThread()
- {
-  try
-  {
-   _dataStore.update(_status);
-   _status.setAttribute(DE.A_NAME, "done");
-   if (_theProcess != null)
-   {
-    int exitcode;
-    try 
+
+    public void cleanupThread()
     {
-     exitcode = _theProcess.exitValue();
+	try
+	    {
+		_status.setAttribute(DE.A_NAME, "done");
+		_dataStore.refresh(_status, true);
+		
+		_stdOutputHandler.finish();
+		_stdErrorHandler.finish();
+
+		_stdInput.close();
+		_stdError.close();
+
+		if (_theProcess != null)
+		    {
+			int exitcode;
+			try 
+			    {
+				if (_isCancelled)
+				    {
+					_theProcess.destroy();
+				    }
+				else
+				    {
+					exitcode = _theProcess.exitValue();
+					createObject("command", "> Command Completed (exit code = " + exitcode + ")");
+				    }
+			    }
+			catch (IllegalThreadStateException e)
+			    {
+				e.printStackTrace();
+				exitcode = -1;
+				_theProcess.destroy();
+			    }			
+		    }		
+	    }
+	catch (IOException e) 
+	    {
+		e.printStackTrace();
+	    }
     }
-    catch (IllegalThreadStateException e)
-    {
-	e.printStackTrace();
-     exitcode = -1;
-    }
-    createObject("command", "> Command Completed (exit code = " + exitcode + ")");
-    _stdInput.close();
-    _stdError.close();
-    _theProcess.destroy();
-   }
-  }
-  catch (IOException e) 
-  {
-   e.printStackTrace();
-  }
- }
 
 
  

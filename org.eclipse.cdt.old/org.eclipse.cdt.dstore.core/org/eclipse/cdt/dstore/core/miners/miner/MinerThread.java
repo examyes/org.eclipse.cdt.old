@@ -6,15 +6,34 @@ package com.ibm.dstore.core.miners.miner;
 
 public abstract class MinerThread extends Thread
 {
- private volatile Thread minerThread;
- 
- public synchronized void stopThread() 
- {
-  minerThread = null;
-  notify();
- }
- 
+    private volatile Thread minerThread;
+    protected boolean _isCancelled;
 
+    public MinerThread()
+    {
+	super();
+	_isCancelled = false;
+    }
+
+    public synchronized void stopThread() 
+    {
+	if (minerThread != null)
+	    {
+		_isCancelled = true;
+
+		try
+		    {
+			minerThread = null;
+		    }
+		catch (Exception e)
+		    {
+			System.out.println(e);
+		    }
+		
+	    }
+	notify();
+    }
+ 
  public void run() 
  {
   Thread thisThread = Thread.currentThread();
@@ -24,18 +43,35 @@ public abstract class MinerThread extends Thread
   //This function lets derived classes do some initialization
   initializeThread();
     
-  while (minerThread == thisThread) 
+  while (minerThread != null &&
+	 minerThread == thisThread && 
+	 minerThread.isAlive() && 
+	 !_isCancelled)
   {
-   try 
-   { 
-    thisThread.sleep(1);
-    // yield();
-   }
-   catch (InterruptedException e) {}
-   //This function is where the Threads do real work, and return false when finished
-   if ( !doThreadedWork() )
-    minerThread = null;
+      try 
+	  { 
+	      thisThread.sleep(1);
+	      // yield();
+	  }
+      catch (InterruptedException e) 
+	  {
+	      System.out.println(e);
+	  }
+      
+      //This function is where the Threads do real work, and return false when finished
+      if ( !doThreadedWork() )
+	  {
+		try
+		    {
+			minerThread = null;
+		    }
+		catch (Exception e)
+		    {
+			System.out.println(e);
+		    }		
+	  }
   }
+
   //This function lets derived classes cleanup or whatever
   cleanupThread();
  }

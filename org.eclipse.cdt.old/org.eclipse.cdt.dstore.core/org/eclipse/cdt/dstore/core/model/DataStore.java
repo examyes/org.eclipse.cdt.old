@@ -25,7 +25,8 @@ public class DataStore
     private DataElement         _tempRoot;
 
     private DataElement         _ticket;  
-    
+
+    private DataStoreSchema     _dataStoreSchema;    
     private CommandHandler      _commandHandler;
     private UpdateHandler       _updateHandler;
     
@@ -95,6 +96,7 @@ public class DataStore
 		_resourceBundle = null;
 	    }
 
+	_dataStoreSchema = new DataStoreSchema(this);
     }
 
 
@@ -2215,168 +2217,7 @@ public DataElement command(DataElement commandDescriptor,
 
   public void initializeDescriptors()
       {
-	 
-	// miner-specific descriptors are defined in the miners when they extend the schema
-
-	// these first elements are the most fundamental
-	  
-	// move this
-        DataElement uiCmdD    = createObject(_descriptorRoot, DE.T_UI_COMMAND_DESCRIPTOR, DE.T_UI_COMMAND_DESCRIPTOR);
-
-        DataElement commandDescriptor      = createCommandDescriptor (_descriptorRoot, DE.T_COMMAND_DESCRIPTOR);
-        DataElement objectDescriptor     = createObjectDescriptor  (_descriptorRoot, DE.T_OBJECT_DESCRIPTOR);
-	DataElement relationDescriptor      = createRelationDescriptor(_descriptorRoot, DE.T_RELATION_DESCRIPTOR);
-
-	DataElement abstractObjectDescriptor      = createAbstractObjectDescriptor   (_descriptorRoot, DE.T_ABSTRACT_OBJECT_DESCRIPTOR);
-        DataElement abstractCommandDescriptor      = createAbstractCommandDescriptor  (_descriptorRoot, DE.T_ABSTRACT_COMMAND_DESCRIPTOR);
-        DataElement abstractRelationDescriptor      = createAbstractRelationDescriptor (_descriptorRoot, DE.T_ABSTRACT_RELATION_DESCRIPTOR);
-
-        DataElement rootD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.root"));
-        DataElement hostD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.host"));
-       
-	DataElement logD      = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.log"));
-	DataElement statusD   = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.status"));
-
-	DataElement deletedD   = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.deleted"));
-
-
-	// misc
-        DataElement allD      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.all"));
-	allD.setDepth(1);
-
-	DataElement invokeD   = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.invocation"));	
-	DataElement patternD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.pattern"));	
-
-	DataElement inputD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.input"));
-	DataElement outputD   = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.output"));
-
-	// types of relationships
-	DataElement containsD     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents"));
-	containsD.setDepth(100);
-
-	DataElement descriptorForD  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.descriptor_for"));	
-	DataElement parentD       = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.parent"));	
-	DataElement argsD         = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.arguments"));	
-	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));
-	//***abstracts.setDepth(0);
-        
-	
-	DataElement abstractedBy  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracted_by"));	
-	//***abstractedBy.setDepth(0);
-	
-	DataElement caRelations = createAbstractRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents&arguments"));
-	createReference(caRelations, containsD, containsD);
-	createReference(caRelations, argsD, containsD); 
-	
-        createReference(objectDescriptor, containsD, containsD);
-        createReference(objectDescriptor, parentD, containsD);
-        createReference(objectDescriptor, abstracts, containsD);
-        createReference(objectDescriptor, abstractedBy, containsD);
-
-        createReference(abstractObjectDescriptor, containsD, containsD);
-        createReference(abstractObjectDescriptor, parentD, containsD); 
-        createReference(abstractObjectDescriptor, abstracts, containsD);
-        createReference(abstractObjectDescriptor, abstractedBy, containsD);
-
-	createReference(statusD, containsD, containsD);	
-
-	createReference(commandDescriptor, allD, containsD);	
-	createReference(commandDescriptor, caRelations, containsD);
-	createReference(commandDescriptor, argsD, containsD);	
-	createReference(commandDescriptor, containsD, containsD);	
-
-
-        DataElement logDetails = createAbstractObjectDescriptor(logD, getLocalizedString("model.Commands"));
-        createReference(logDetails, commandDescriptor, containsD);
-        createReference(logDetails, allD, containsD);        
-	createReference(logD, caRelations, containsD);
-	createReference(logD, containsD, containsD);
-
-	 //Base Container Object
-        DataElement containerObjectD = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Container_Object"));
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY", false);
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
-
-      // file objects
-	createReference(hostD, containsD, containsD);	
-
-        DataElement deviceD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.device"), 
-						      "com.ibm.dstore.miners");
-        DataElement fileD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.file"), 
-						      "com.ibm.dstore.miners");
-        DataElement dirD     = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.directory"), 
-						      "com.ibm.dstore.miners");
-
-        DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
-
-	createReference(containerObjectD, fsObject, abstracts, abstractedBy);
-	createReference(fsObject, deviceD,  abstracts, abstractedBy);
-
-	createReference(fileD,    fsObject, abstracts, abstractedBy);
-	createReference(fsObject, dirD, abstracts, abstractedBy);
-        createReference(fsObject, fileD,    containsD);
-        createReference(fsObject, dirD,     containsD);
-	createReference(fsObject, fsObject, containsD);
-	createReference(hostD,    fsObject, containsD);
-	createReference(deviceD,  dirD, containsD);
-	createReference(deviceD,  fileD, containsD);
-	createReference(dirD,     dirD, containsD);
-	createReference(dirD,     fileD, containsD);
-
-	DataElement hostDirectories  = createAbstractObjectDescriptor(hostD, getLocalizedString("model.Directories"),
-								      "com.ibm.dstore.miners");	
-	createReference(hostDirectories, dirD, containsD);
-	createReference(hostDirectories, deviceD, containsD);
-
-	DataElement hostDetails  = createAbstractObjectDescriptor(hostD, getLocalizedString("model.Details"));	        
-	createReference(hostDetails, hostDirectories, containsD);
-        createReference(hostDetails, fileD, containsD);
-
-	// miner descriptors
-	DataElement minersD      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.miners"));
-	DataElement minerD       = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.miner"));
-	DataElement dataD        = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.data"));
-	DataElement transientD   = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.transient"));
-	DataElement stateD       = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.state"));
-        
-	DataElement minerDetails = createAbstractObjectDescriptor(minerD, getLocalizedString("model.Miner_Details"));
-	createReference(minerDetails, allD, containsD);
-
-        DataElement hostsDetails = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Hosts"));	
-	createReference(hostsDetails, rootD, containsD);	
-	createReference(hostsDetails, hostD, containsD);	
-	createReference(hostsDetails, deviceD, containsD);	
-	createReference(hostsDetails, dirD, containsD);	
-
-        DataElement rootDetails = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Details"));	
-	createReference(rootDetails, rootD, containsD);	
-	createReference(rootDetails, minersD, containsD);	
-	createReference(rootDetails, minerD, containsD);	
-
-        DataElement minerObjects = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Tools"));
-        createReference(minerObjects, minersD, containsD);
-        createReference(minerObjects, minerD, containsD);
-	createReference(minerObjects, dataD, containsD);	
-	createReference(minerObjects, stateD, containsD);	
-	
-        DataElement schemaDetails = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Schema"));
-        createReference(schemaDetails, objectDescriptor, containsD);
-
-        DataElement logInfo = createAbstractObjectDescriptor(rootD, getLocalizedString("model.Logged_Commands"));
-        createReference(logInfo, logD, containsD);
-        createReference(logInfo, commandDescriptor, containsD);
-
-        // basic commands
-	createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
-	createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET", false); 
-	createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST", false);
-	createCommandDescriptor(rootD, getLocalizedString("model.Init_Miners"), "*", "C_INIT_MINERS", false);
-	createCommandDescriptor(rootD, "Set Miners", "-", "C_SET_MINERS", false);
-	createCommandDescriptor(rootD, getLocalizedString("model.Show_Ticket"), "-", "C_VALIDATE_TICKET", false);	
-	createCommandDescriptor(rootD, getLocalizedString("model.Get_Schema"), "*", "C_SCHEMA", false);	
-	createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT", false);
+	  _dataStoreSchema.extendSchema(_descriptorRoot);
       }
 }
 

@@ -36,46 +36,42 @@ public class CppProjectNotifier
       } 
   }
 
-  private ArrayList  _listeners;
-  private ArrayList  _events;
-  private Shell      _shell;
-  private boolean    _enabled;
+    private ArrayList  _listeners;
+    private ArrayList  _events;
+    private boolean    _enabled;
     private FireMainThread _fire;
+    private ModelInterface _api;
 
-    public CppProjectNotifier()
+    public CppProjectNotifier(ModelInterface api)
       {
         _listeners = new ArrayList();
         _events    = new ArrayList();
         _enabled   = false;
 	_fire = new FireMainThread();
+	_api = api;
       }
 
-  public void setShell(Shell shell)
-  {  
-    _shell = shell; 
-  }
-  
-  public void enable(boolean on)
-      { 
+    public void enable(boolean on)
+    { 
         _enabled = on;
-      }
-
-  public boolean isEnabled()
-      {
+    }
+    
+    public boolean isEnabled()
+    {
         return _enabled;
-      }
+    }
 
-  public void addProjectListener(ICppProjectListener listener)
-      {
-	  
+    public Shell getShell()
+    {
+	return _api.getDummyShell();
+    }
+    
+    public void addProjectListener(ICppProjectListener listener)
+    {	
 	if (!_listeners.contains(listener))
-        {
-	    _listeners.add(listener);
-	    if (_shell == null)
-		{
-		    _shell = listener.getShell();
-		}
-        }
+	    {
+		_listeners.add(listener);
+	    }
       }
 
   public void removeProjectListener(ICppProjectListener listener)
@@ -92,11 +88,11 @@ public class CppProjectNotifier
       {
 	  if (isEnabled())
 	      {
-	  if ((_shell != null) && (!_shell.isDisposed()))
+	  if ((getShell() != null) && (!getShell().isDisposed()))
 	      {
 		  try
 		      {			      
-			  Display d = _shell.getDisplay(); 
+			  Display d = getShell().getDisplay(); 
 			  if (d != null)
 			      {
 				  if (!_events.contains(event))

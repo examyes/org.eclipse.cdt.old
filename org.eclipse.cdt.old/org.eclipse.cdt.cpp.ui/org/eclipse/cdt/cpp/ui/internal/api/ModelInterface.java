@@ -251,7 +251,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     _markedFiles = new ArrayList();
     _tempFiles = new ArrayList();
 
-    _projectNotifier = new CppProjectNotifier();
+    _projectNotifier = new CppProjectNotifier(this);
     _projectNotifier.enable(true);
     
     _instance = this;
@@ -1288,10 +1288,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public void cancel(DataElement command)
   {
       DataStore dataStore = command.getDataStore();
-      DataElement cancelDescriptor = dataStore.localDescriptorQuery(command.getDescriptor(), "C_CANCEL");
+      DataElement cmdDescriptor = command.getDescriptor();
+      DataElement cancelDescriptor = dataStore.localDescriptorQuery(cmdDescriptor, "C_CANCEL");
       if (cancelDescriptor != null)
 	  {	
-	      dataStore.command(cancelDescriptor, command, false, true);
+	      dataStore.command(cancelDescriptor, command);
 	  }
   }
 
@@ -1519,28 +1520,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    }
 			else if (type.equals("directory") || type.equals("file"))
 			    {				
-				while (parent != null && !parent.getType().equals("Project"))
-				    {
-					parent = parent.getParent();
-				    }
-				
-				if (parent != null && parent.getType().equals("Project"))
-				    {
-					resource = findProjectResource(parent);
-				    }
+				resource = findResource(parent);
 			    }
-
+			
 			if (resource != null)
 			    {
 				try
 				    {
-					resource.refreshLocal(resource.DEPTH_INFINITE, null);
+					resource.refreshLocal(resource.DEPTH_ONE, null);
 				    }
 				catch (CoreException e)
 				    {
 					System.out.println(e);
-				    }	
-				
+				    }					
 			    }
 		    }
 		return false;

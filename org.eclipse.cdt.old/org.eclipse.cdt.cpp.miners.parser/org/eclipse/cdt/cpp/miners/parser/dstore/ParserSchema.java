@@ -247,8 +247,6 @@ public class ParserSchema
   dParsedSource.setDepth(dAll.depth() +3);
   dIncludedSource.setDepth(dAll.depth() +2);
   
-
-
  }
  
  private static ResourceBundle _resourceBundle = null;
