@@ -42,7 +42,7 @@ command: cat.*patterns.*
 	 statement                   pattern=.* pattern.*=.*
 
 # special for autoconf
-command: ./script.batch
+command: ./autogen.sh
 	 error          file line         pattern=aclocal: ([\w,.,/,\\]*): (\d*):.*
 	 warning        file line         pattern=([\w,.,/,\\]*):(\d*):.*
 
