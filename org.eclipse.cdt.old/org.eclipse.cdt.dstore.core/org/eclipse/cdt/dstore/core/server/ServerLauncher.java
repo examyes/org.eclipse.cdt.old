@@ -153,7 +153,7 @@ public class ServerLauncher extends Thread
 				    _outReader  = new BufferedReader(new InputStreamReader(_serverProcess.getInputStream()));
 				    _errReader  = new BufferedReader(new InputStreamReader(_serverProcess.getErrorStream()));
 				    
-				    launchStatus = _outReader.readLine();
+				    launchStatus = _outReader.readLine();				    
 				}
 			    else
 				{
@@ -172,7 +172,6 @@ public class ServerLauncher extends Thread
 				    launchStatus = "success";
 				}
 			    
-			    
 			    if ((launchStatus == null) || !launchStatus.equals("success"))
 				{
 				    _writer.println("Authentification Failed");
@@ -180,11 +179,13 @@ public class ServerLauncher extends Thread
 			    else
 				{				    
 				    String status = _errReader.readLine();
+				    _port   = _errReader.readLine();
 
 				    if ((status != null) && status.equals(ServerReturnCodes.RC_SUCCESS))
 					{
 					    _outReader.readLine();
 					    _writer.println("connected");
+					    _writer.println(_port);
 					    _writer.println(ticket);
 
 					    System.out.println("launched new server on " + _port);

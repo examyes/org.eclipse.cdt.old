@@ -271,6 +271,8 @@ public class ClientConnection
 			  else
 			      {
 				  result = new ConnectionStatus(true);
+
+				  _port = reader.readLine();
 				  String ticket = reader.readLine();
 				  result.setTicket(ticket);
 			      }
