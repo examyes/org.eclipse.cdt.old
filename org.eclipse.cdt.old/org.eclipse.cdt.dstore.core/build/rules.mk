@@ -43,8 +43,6 @@ jar               : createJarFile
 source-zip        : createSourceZip
 javadoc		  : createJavadoc
 clean             : doClean
-clean-makefiles   : doCleanMakefiles
-
 
 # Private\Implicit Targets
 # ------------------------

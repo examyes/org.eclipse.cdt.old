@@ -5,8 +5,7 @@
 #  "development" or "dev"  -> Generate Makefile & Build Environment for All Plugins, and perform build
 #  "production" or "prod"  -> Generate a tarball that includes the necessary jars and zipped up source 
 #  "all" (or no target)    -> Build all plugins (makefiles are assumed to have been created)
-#  "clean"                 -> Wipe out all class files
-#  "clean-makefiles"       -> Wipe out the Build Environment
+#  "clean-dev"             -> Wipe out all class files
 #
 # Secondary Targets (used by Primary Targets, but could still be used on their own)
 # -----------------
@@ -77,8 +76,7 @@ production      : development jars javadocs source-zips createZip createFinalPac
 jars            : $(patsubst %,%_createJars,$(buildPlugins))
 javadocs        : $(patsubst %,%_createJavadocs,$(buildPlugins))
 source-zips     : $(patsubst %,%_createSrcZips,$(buildPlugins))
-clean           : $(patsubst %,%_cleanPlugin,$(buildPlugins))
-clean-makefiles : $(patsubst %,%_cleanMakefiles,$(buildPlugins))
+clean-dev       : $(patsubst %,%_cleanPlugin,$(buildPlugins))
 makefiles       : generateBuildEnvironment
 # Helper shortcut targets (for lazy typists)
 dev             : development
@@ -114,9 +112,6 @@ fixup:
 
 %_cleanPlugin:
 	@-cd $(pluginsDirectory)/$(patsubst %_cleanPlugin,%,$@) && $(MAKE) clean
-
-%_cleanMakefiles:
-	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) clean-makefiles 
 
 generateBuildEnvironment: unzipBuildPlugins
 ifneq "$(ECLIPSE)" ""
