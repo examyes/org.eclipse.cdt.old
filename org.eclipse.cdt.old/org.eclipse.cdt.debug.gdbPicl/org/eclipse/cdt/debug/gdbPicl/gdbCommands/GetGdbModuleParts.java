@@ -761,26 +761,9 @@ public class GetGdbModuleParts
          Gdb.traceLogger.err(3,"???????????????? GetGdbModuleParts.checkCurrentPart ?????? IGNORING fullPartName="+fullFileName+" ???????????????????????????" );
      Part part = _moduleManager.addPart(moduleID, fileName, fileName);
 */
-
-	int lastSlash = fileName.lastIndexOf("/");
-	String partName;
-	if (lastSlash != -1)
-	{
-		partName = fileName.substring(lastSlash+1);
-	}
-	else
-	{
-		partName = fileName;
-	}
-
-
-	_moduleManager.checkPart(moduleID, partName);
+	_moduleManager.checkPart(moduleID, fileName);
 	
-	// fileName may contain directory info
-	// but the parts are identified with just the filename in _moduleManager
-	// so, create partName and search for it
-	
-	int id = _moduleManager.getPartID(moduleID, partName);
+	int id = _moduleManager.getPartID(moduleID, fileName);
 	Part part = _moduleManager.getPart(id);
 
      str = "";
