@@ -226,18 +226,34 @@ class CommandMinerThread extends MinerThread
     if (!theDirectory.isDirectory())
 	theDirectory = theDirectory.getParentFile();
     String theOS = System.getProperty("os.name");
-    String theShell;    
+    String theShell = null;    
 
 
     if (!theOS.toLowerCase().startsWith("win"))
 	{
-	    theShell = "sh";
+	    String property = "SHELL=";
+	    String[] env = getEnvironment(_subject);
+	    for (int i = 0; i < env.length; i++)
+		{
+		    String var = env[i];
+		    if (var.startsWith(property))
+			{
+			    theShell = var.substring(property.length(), var.length());
+			}
+		}
+
+	    if (theShell == null)
+		{
+		    theShell = "sh";
+		}
+
+
 	    String args[] = new String[3];
 	    args[0] = theShell;
 	    args[1] = "-c";
 	    args[2] = _invocation;
 
-	    _theProcess = Runtime.getRuntime().exec(args, getEnvironment(_subject), theDirectory); 
+	    _theProcess = Runtime.getRuntime().exec(args, env, theDirectory); 
 	}
     else
 	{
