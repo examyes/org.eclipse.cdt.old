@@ -131,7 +131,7 @@ public class FindObjectAction extends Action
 			columnBegin--;
 		    }
 
-		while (columnEnd <= 255) 
+		while (columnEnd <= text.length()) 
 		    {
 			char c = text.charAt(columnEnd);
 			if (c == ' ' || c == '\t' || c == '.')
