@@ -13,7 +13,7 @@ import com.ibm.debug.epdc.*;
  * This stores information for a monitored integer
  */
 class GdbScalarVariable extends GdbVariable
-{
+{	
    /**
     * Create a new monitored scalar variable.
     * @param name the variable name
@@ -21,8 +21,9 @@ class GdbScalarVariable extends GdbVariable
     * @param nodeID the tree node ID
     */
    GdbScalarVariable(DebugSession debugSession, String name, String type, String value, int nodeID)
-   {
-      super(debugSession, name, type, nodeID);
+   {   	
+     super(debugSession, name, type, nodeID);
+      
       int typ = Gdb.TYPEINDEX_INTEGER;
            if(type.equals("float"))   typ = Gdb.TYPEINDEX_FLOAT;
       else if(type.equals("double"))  typ = Gdb.TYPEINDEX_DOUBLE;
@@ -44,6 +45,9 @@ class GdbScalarVariable extends GdbVariable
       _rep     = _debugEngine.getSession()._repInfo.defaultRepresentation(typ);
       //_intVar  = intVar;
       _value   = value;
+      
+	  _name = _name.replace((char) 26, ',');
+	  _value = _value.replace((char) 26, ',');      
    }
 
 

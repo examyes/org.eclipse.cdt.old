@@ -26,6 +26,83 @@ public abstract class GdbVariable  extends Variable
       _changed     = true;
       _fullName    = "";
    }
+   
+   /**
+    * Bug 10102
+    * This function cleans up the string for template.
+    * In case a variable is a template variable, the string representing
+    * the variable may have the following format:  <<a,b>, <c,d>> = <<a,b>, <c,d>> values.
+    * The commas within '<'  and '>' will screw up parsing of the variable inside
+    * GdbObjectVariable when the tree is created.  In some extreme cases, gdbPicl will
+    * not be able to distinguish a template variable and will parse it as an array.
+    * 
+    * To get around this problem, any comma between <> will be replaced with ^Z character.
+    * ^Z will be replaced back to a comma after parsing is completed.  This function 
+    * replaces the commas to ^Z.  In GdbObjectVariable and GdbScalarVariable, ^Z will 
+    * be changed back to commas.  ^Z will not be changed to commas in GdbArrayVariable 
+    * because an array variable is either an array of objects or an array of scalars.
+    * Replacements of ^Z in GdbObjectVariable and GdbScalarVariable are sufficient 
+    * to ensure that all ^Z set here will be changed back to commas.  In fact, replacing ^Z
+    * in GdbArrayVariable will pose problem when gdbPicl tries to create an array 
+    * of objects.
+    * 
+    * Need to change the algorithm to use string buffer?
+    */
+   private static String cleanupForTemplate(String parseStr)
+	{
+		String str = parseStr;
+		
+		if (parseStr.indexOf("<") == -1)
+			return parseStr;
+		
+		int startLocation=-1;
+		int endLocation=-1;
+
+		int start=0;
+		int end=0;
+		
+		boolean quote = false;
+		
+		String returnStr="";			
+		StringBuffer buffer = new StringBuffer(parseStr.length());
+		
+		for (int i=0; i<str.length(); i++)
+		{			
+			if (str.charAt(i) == '\"')
+			{
+				quote = !quote;
+			}
+			
+			if (str.charAt(i) == '<' && !quote)
+			{			
+				start++;
+				startLocation = i;
+				buffer.append(str.charAt(i));
+			}
+			
+			if (str.charAt(i) == '>' && !quote)
+			{
+				end++;
+				endLocation = i;
+				buffer.append(str.charAt(i));
+			}
+			
+			if (start==end && str.charAt(i) != '<' && str.charAt(i) != '>')
+			{				
+				buffer.append(str.charAt(i));
+			}
+			else
+			{
+				if (str.charAt(i) == ',')
+					buffer.append((char) 26);
+				else if ((str.charAt(i) != '<') && (str.charAt(i) != '>'))
+					buffer.append(str.charAt(i));					
+			}
+		}				
+		
+		returnStr = buffer.toString();
+		return returnStr;
+	}
 
    /**
     * Create a variable object given the variable name, node ID
@@ -37,6 +114,8 @@ public abstract class GdbVariable  extends Variable
    		{
 	         return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
    		}
+   		
+   		value = cleanupForTemplate(value);
    		
    		if (value.startsWith("{"))
    		{	 

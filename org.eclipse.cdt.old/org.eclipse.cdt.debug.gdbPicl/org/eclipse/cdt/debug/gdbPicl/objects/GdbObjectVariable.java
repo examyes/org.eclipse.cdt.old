@@ -192,6 +192,7 @@ public class GdbObjectVariable extends GdbVariable {
 		in case of an union
 		{a = { ... }, b = x, {s = ..., t = ...}, abc = ... }
 		
+		what about templates?		
 	*/
 	private void createTree(String parseStr)
 	{
@@ -270,9 +271,8 @@ public class GdbObjectVariable extends GdbVariable {
 				}	    			
 			}
 			
-			fieldName = parseStr.substring(0, equal);
-			
-			
+			fieldName = parseStr.substring(0, equal);		
+			fieldName = fieldName.replace((char)26, ',');
 			
 			// get type name for this field		
 			fieldName = fieldName.trim();			

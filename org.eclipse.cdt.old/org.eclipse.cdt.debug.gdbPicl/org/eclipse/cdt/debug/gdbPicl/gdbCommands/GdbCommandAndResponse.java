@@ -126,6 +126,16 @@ public class GdbCommandAndResponse
                   j++;
                   while ((j < length) && ((!lines[j].equals("}") || (lines[j].equals("}") && (lines[j+1].startsWith(FIELD_END_keyword) || lines[j+1].startsWith(ARRAY_ELEMENT_keyword)) ))))
                   {
+					 if (j+2 < length)
+					 {
+						 if (lines[j].indexOf("<No data fields>") != -1 && !lines[j+2].startsWith(","))
+						 	break;
+					 }
+					 else
+					 {
+						 if (lines[j].indexOf("<No data fields>") != -1)
+						 	break;
+					 }
                  	 classObject.append(lines[j]);
                  	 j++;
                  	 if( (j < length) &&
