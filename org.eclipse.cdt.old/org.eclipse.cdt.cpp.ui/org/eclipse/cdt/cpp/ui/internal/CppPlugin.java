@@ -49,6 +49,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     private static DataStoreCorePlugin    _corePlugin;
 
     private static ClientConnection       _clientConnection;
+    private static ConnectionManager      _connectionManager;
 
     private static ModelInterface         _interface;
     private static CppDocumentProvider    _CppDocumentProvider;
@@ -170,9 +171,9 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	
  	_clientConnection = new ClientConnection("C/C++", 20000);
 	_clientConnection.addLoader(cppLoader);	  
-        DataStore dataStore = _clientConnection.getDataStore();
+    DataStore dataStore = _clientConnection.getDataStore();
 	dataStore.addMinersLocation("org.eclipse.cdt.cpp.miners");
-        _corePlugin.setRootDataStore(dataStore);
+    _corePlugin.setRootDataStore(dataStore);
 
 	String install = _corePath;
 	
@@ -212,6 +213,10 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    {
 		initializeProjects();
 	    }
+	    
+	    
+	    _connectionManager = new ConnectionManager(dataStore.getHostRoot(), dataStore.getDomainNotifier(), "org.eclipse.cdt.cpp.ui/connections.dat");
+	    
     }
 
     public Shell getShell()
@@ -715,6 +720,11 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     public ISchemaExtender getSchemaExtender()
     {
 	return _schemaExtender;
+    }
+    
+    public static ConnectionManager getConnectionManager()
+    {
+    	return _connectionManager;	
     }
 
 }

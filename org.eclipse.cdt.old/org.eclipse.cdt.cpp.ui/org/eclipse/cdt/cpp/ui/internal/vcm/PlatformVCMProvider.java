@@ -220,7 +220,6 @@ public void startup()
 				    BufferedReader in = new BufferedReader(new InputStreamReader(inFile));
 				    
 				    String connection = null;
-				    ConnectionManager mgr = ConnectionManager.getInstance(); 
 				    while ((connection = in.readLine()) != null)
 					{
 					    ArrayList args = new ArrayList();

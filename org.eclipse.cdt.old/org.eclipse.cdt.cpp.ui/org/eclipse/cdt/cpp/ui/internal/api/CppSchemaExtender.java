@@ -37,6 +37,7 @@ public class CppSchemaExtender implements ISchemaExtender
     public void extendSchema(DataElement schemaRoot)
     {
 	DataStore   dataStore = schemaRoot.getDataStore();
+		
 	DataElement fsD   = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement dirD = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement rootD = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
