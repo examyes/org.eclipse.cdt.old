@@ -16,7 +16,7 @@ m
 <td>
 <h1>
 <font size=+4>Autoconf Tutorial</font></h1>
-<b><font size=+3>Managing Project Using Autoconf Support</font></b>
+<b><font size=+3>Managing Project Using Autoconf Support</font></b><font size=+1></font>
 <p><font size=+1>The following is a tutorial that shows how to use the
 CDT support for the GNU autoconf and automake tools to manage a newly created
 C/C++ project. We will use a&nbsp; simple project - hello -&nbsp; in this
@@ -54,6 +54,8 @@ file name to be "HelloWorld.C"</font></font></li>
 
 <br>&nbsp;
 <p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
 <p><font color="#000000"><font size=+1>You can simply copy and paste the
 following code to your file in the Eclipse workspace or type the following:</font></font>
 <br>&nbsp;
@@ -65,9 +67,9 @@ this file for cout</font></font></font>
 main()&nbsp;</font></font></font>
 <br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>{&nbsp;</font></font></font>
 <p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
-//print out the text string, "Hello, World!"</font></font></font>
+//print out the text string, "Hello World!"</font></font></font>
 <br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
-cout &lt;&lt; "Hello,&nbsp; World!" &lt;&lt; endl;&nbsp;</font></font></font>
+cout &lt;&lt; "Hello World!" &lt;&lt; endl;&nbsp;</font></font></font>
 <p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
 return 0;&nbsp;</font></font></font>
 <br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>}</font></font></font></ul>
@@ -175,45 +177,99 @@ execute - you can use the view's local tool bar instead.</font></li>
 World! in the <font color="#FF0000">output view</font></font></li>
 </blockquote>
 
-<p><br><b><font size=+1>5- Modifying configuration files (configure.in
+<p><br><b><font size=+1>5- Modifying and updating configuration files (configure.in
 and Makefile.am)</font></b>
 <br>&nbsp;
-<ol><font size=+1>There are many scenarios in which you will need to make
-some modifications to your configuration files, below is some of these
-scenarios. The scenarios are selected to show the capabilities that the
-CDT provide in supporting the GNU automake and autoconf.</font>
-<br>&nbsp;
+<ul><font size=+1>There are many scenarios in which you will need to make
+some modifications and updates to your configuration files, below is some
+of these scenarios. The scenarios are selected to show the capabilities
+that the CDT provide in supporting the GNU automake and autoconf.</font>
+<br><font size=+1></font>&nbsp;
 <li>
-Modfifying the value for the _PROGRAMS variables (Makefile.am)</li>
+<font size=+1>Modifying the value for the _PROGRAMS variables (Makefile.am)</font></li>
 
-<ul>&nbsp;
+<ul><font size=+1></font>&nbsp;
 <li>
-We will continue with our example that we have created earlier. As you
-might already now, the name of&nbsp; the target was set to be "source"
+<font size=+1>We will continue with our example that we have created earlier.
+As you might already now, the name of&nbsp; the target was set to be "source"
 - the nake of the source file directory -&nbsp; which might not be the
 name that you were thinking of for your target. When the system tries to
-set a value for the bin_PROGRAMS&nbsp;variable, which exists in the /hello/source/Makefile.am,
+set a value for the bin_PROGRAMS variable, which exists in the /hello/source/Makefile.am,
 it sets the variable's value to be the name of its parent directory. That
 been said, then you might change the name of the directory to be your target
 name and regenerate the configuration files and you are all set. But in
 the cases that you would like to keep your directory name as it is, you
-can still change target name to be whatever value you want to use.</li>
+can still change target name to be whatever value you want to use.</font></li>
 
 <li>
-For now, all the updates to Makefile.am's will be done manually. Soon,
-the CDT&nbsp;tool will facilitate the way to perform configuration file
-updates.&nbsp;</li>
+<font size=+1>For now, all the updates to Makefile.am's will be done manually.
+In future releases, the CDT tool will facilitate the way to update configuration
+file.&nbsp;</font></li>
 
 <li>
-Open hello/sources/Makefile.am and change the value for the following variables:</li>
+<font size=+1>Open hello/sources/Makefile.am and change the value for the
+following variables:</font></li>
 
 <ol>
 <li>
-Set the bin_PROGRAMS variable to be equal to&nbsp;</li>
+<font size=+1>Set the bin_PROGRAMS variable to be equal to "hello"</font></li>
+
+<li>
+<font size=+1>change all the other values of all the variables&nbsp; that
+are related to the target name as well. The following are the variables
+that need to be changed:</font></li>
+
+<br><font size=+1>*_SOURCE, *_LDADD,&nbsp; and *_LDFLAGS, to be hello_SOURCES,
+hello_LDADD, hello_LDFLAGS</font>
+<li>
+<font size=+1>Save the changes to the Makfile.am and now you need to regenerate
+the configure script</font></li>
+
+<li>
+<font size=+1>RMC the hello project(top level directory) and select Autoconf
+-> Generate configure&nbsp;</font></li>
+
+<li>
+<font size=+1>Click yes on the message dialog box and make sure that the
+command has completed succeffuly</font></li>
+
+<li>
+<font size=+1>RMC the hello project and select Autoconf -> Run configure.&nbsp;</font></li>
+
+<li>
+<font size=+1>Ater executing the run configure commande succefuly, RMC&nbsp;the
+hello project and select buiuld Project to build the new target</font></li>
+
+<li>
+<font size=+1>You should now find that the hello target has been created
+under the source directory</font></li>
+
+<li>
+<font size=+1>In order to run hello target, you can reuse the command that
+you have created in the command specifications view. By editing the invocation
+field and change the entry field to be "./hello" instead of "./source"
+and then execute the command either from the local tool bar and select
+the Execute command icn or by RMC the taregt and select Execute command
+action from the context menu.</font></li>
 </ol>
 </ul>
-</ol>
+</ul>
 
+<ul><font size=+1></font>&nbsp;
+<li>
+<font size=+1>Adding a static lib to your program</font></li>
+
+<li>
+<font size=+1>Changing a staic library to shared library</font></li>
+
+<li>
+<font size=+1>Modifying libraries names</font></li>
+</ul>
+<b><font size=+1></font></b>
+<p><br><b><font size=+3>Managing Imported Project with existing configuration
+files</font></b>
+<br><b><font size=+1></font></b>&nbsp;
+<br><b><font size=+1></font></b>&nbsp;
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <caption>&nbsp;</caption>
 
