@@ -602,5 +602,5 @@ abstract class DisassemblyView extends View
    private Hashtable _lineMap;
    
    // Data members
-   static byte _prefixl = 10;
+   static byte _prefixl = 11;
   }
