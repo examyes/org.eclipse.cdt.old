@@ -57,6 +57,7 @@ public class GenericViewPart extends ViewPart
     protected ObjectWindow       _viewer;
     protected   boolean          _isLinked;
     protected   IOpenAction      _openAction;
+    protected   LockViewAction   _lockAction;
 
     public GenericViewPart()
     {
@@ -216,9 +217,17 @@ public class GenericViewPart extends ViewPart
 	String imageStr = path + "icons" + java.io.File.separator + "lock.gif";
 	ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
 
-	LockViewAction lockAction = new LockViewAction("Lock View", image);
-	lockAction.setChecked(_viewer.isLocked());
-	toolBarManager.add(lockAction);
+	_lockAction = new LockViewAction("Lock View", image);
+	_lockAction.setChecked(_viewer.isLocked());
+	toolBarManager.add(_lockAction);
+    }
+
+    public void lock(boolean flag)
+    {
+	if (_viewer.isLocked() != flag)
+	    {
+		_viewer.toggleLock();
+	    }
     }
     
 }
