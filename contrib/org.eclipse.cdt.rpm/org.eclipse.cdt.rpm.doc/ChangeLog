@@ -1,3 +1,10 @@
+2004-11-09  Rick Moseley  <rmoseley@redhat.com>
+
+	* RPM_Plugin.htm: updated with new screenshot for Prefs Page, added verbage
+	   describing new fields, point users to eclipse.org to post bugs/feature 
+	   requests
+	* Change name in docs from "Developers Guide" to "Users Guide"
+
 2004-07-20  Ben Konrath  <bkonrath@redhat.com>
  
  	* add new screenshots and documentation
