@@ -13,6 +13,29 @@ import java.io.*;
 public class DictionaryMiner extends Miner
 {    
     private String _dictionary;
+    private DataElement _dictionaryDescriptor;
+    private DataElement _categoryDescriptor;
+    private DataElement _wordDescriptor;
+    private DataElement _nameDescriptor;
+    private DataElement _containsDescriptor;
+
+   public void extendSchema(DataElement schemaRoot)
+    {
+	_containsDescriptor  = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.contents"));
+	_dictionaryDescriptor = createObjectDescriptor(schemaRoot, "dictionary", "com.ibm.dstore.miners");
+	_categoryDescriptor   = createObjectDescriptor(schemaRoot, "category", "com.ibm.dstore.miners");
+	_wordDescriptor       = createObjectDescriptor(schemaRoot, "word", "com.ibm.dstore.miners");
+	_nameDescriptor       = createObjectDescriptor(schemaRoot, "name", "com.ibm.dstore.miners");
+
+
+	_dataStore.createReference(_dictionaryDescriptor, _categoryDescriptor, _containsDescriptor);
+	_dataStore.createReference(_dictionaryDescriptor, _wordDescriptor, _containsDescriptor);
+	_dataStore.createReference(_dictionaryDescriptor, _nameDescriptor, _containsDescriptor);
+	_dataStore.createReference(_categoryDescriptor, _wordDescriptor, _containsDescriptor);
+	_dataStore.createReference(_categoryDescriptor, _nameDescriptor, _containsDescriptor);
+
+	DataElement cmd = createCommandDescriptor(_dictionaryDescriptor, "Search Dictionary", "C_SEARCH_DICTIONARY");	
+    }
 
    public void load()
     {
@@ -25,7 +48,7 @@ public class DictionaryMiner extends Miner
 
     private void loadLanguage(String language)
     {
-	DataElement languageRoot = _dataStore.createObject(_minerData, "dictionary", language); 
+	DataElement languageRoot = _dataStore.createObject(_minerData, _dictionaryDescriptor, language); 
 
 	String languageFile = _dictionary + File.separator + language + File.separator + "words";
 	int offset = Character.digit('a', Character.MAX_RADIX);
@@ -34,7 +57,7 @@ public class DictionaryMiner extends Miner
 	for (int i = 0; i < 26; i++)
 	    {
 		char letter = Character.forDigit(i + offset, Character.MAX_RADIX);
-		DataElement category = _dataStore.createObject(languageRoot, "category", new String("" + letter)); 
+		DataElement category = _dataStore.createObject(languageRoot, _categoryDescriptor, "" + letter); 
 		categories[i] = category;
 	    }
 	try
@@ -47,19 +70,20 @@ public class DictionaryMiner extends Miner
 		while ((line = in.readLine()) != null)
 		    {
 			char firstChar = Character.toLowerCase(line.charAt(0));
-			int index = Character.digit(firstChar, Character.MAX_RADIX);
-			if ((index > 0) && (index < 26))
+			int index = Character.digit(firstChar, Character.MAX_RADIX) - offset;
+
+			if ((index >= 0)  && (index < categories.length))
 			    {
 				DataElement parent = categories[index];
 				if (parent != null)
 				    {
-					String type = "word";
+					DataElement typeObject = _wordDescriptor;
 					if (!Character.isLowerCase(firstChar))
 					    {
-						type = "name";
+						typeObject = _nameDescriptor; 
 					    }
-
-					_dataStore.createObject(parent, type, line);
+					
+					_dataStore.createObject(parent, typeObject, line);
 				    }
 			    }
 		    }
@@ -72,22 +96,6 @@ public class DictionaryMiner extends Miner
 	    }
     }
     
-   public void extendSchema(DataElement schemaRoot)
-    {
-	DataElement dictionary = createObjectDescriptor(schemaRoot, "dictionary", "com.ibm.dstore.miners");
-	DataElement category = createObjectDescriptor(schemaRoot, "category", "com.ibm.dstore.miners");
-	DataElement word = createObjectDescriptor(schemaRoot, "word", "com.ibm.dstore.miners");
-	DataElement name = createObjectDescriptor(schemaRoot, "name", "com.ibm.dstore.miners");
-
-	_dataStore.createReference(dictionary, category);
-	_dataStore.createReference(dictionary, word);
-	_dataStore.createReference(dictionary, name);
-	_dataStore.createReference(category, word);
-	_dataStore.createReference(category, name);
-
-	DataElement cmd = createCommandDescriptor(dictionary, "Search Dictionary", "C_SEARCH_DICTIONARY");
-	
-    }
  
    public DataElement handleCommand(DataElement theCommand)
     {
@@ -147,7 +155,7 @@ public class DictionaryMiner extends Miner
 		      (child.getType().equals("word") || child.getType().equals("name")) && 
 		      matcher.matches(child.getName(), pattern)) 
 		      {
-			  _dataStore.createReference(status, child, "contents");
+			  _dataStore.createReference(status, child, _containsDescriptor);
 		      }
 		  
 		  compareRegex(matcher, pattern, child, status);
