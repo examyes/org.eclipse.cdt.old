@@ -13,6 +13,10 @@
       %license
    </license>
 
+   <url>
+      <update label="%updateSiteName" url="http://update.eclipse.org/tools/cdt/updates/release"/>
+   </url>
+
    <requires>
       <import feature="org.eclipse.cdt" version="1.1.0"/>
    </requires>
