@@ -69,20 +69,20 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD,"configure.in","C_UPDATE_CONFIGURE_IN",false);		
 		//
 		
-		createCommandDescriptor(projectD, "Create configure", "C_CREATE_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Initialize configure.in & Makefile.am's and createte & run configure", "C_INIT_CREATE_RUN", false);
-		createCommandDescriptor(projectD, "distclean", "C_DIST_CLEAN", false);
-		createCommandDescriptor(projectD, "maintainer-clean", "C_MAINTAINER_CLEAN", false);
+		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
+		createCommandDescriptor(projectD, "Running configure script - creating configure if needed", "C_RUN_CONFIGURE",false);
+		createCommandDescriptor(projectD, "Initializing configure.in & Makefile.am's and creating & running configure", "C_INIT_CREATE_RUN", false);
+		createCommandDescriptor(projectD, "Cleaning package for distribution", "C_DIST_CLEAN", false);
+		createCommandDescriptor(projectD, "maintainer-clean - recommended for package developer", "C_MAINTAINER_CLEAN", false);
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
 		
 		//
-		createCommandDescriptor(fsObjectD,"Add/Change to TopLevel Makefile.am","C_TOPLEVEL_MAKEFILE_AM",false);
-		createCommandDescriptor(fsObjectD,"Add/Change to Programs Makefile.am ","C_PROGRAMS_MAKEFILE_AM",false);		
-		createCommandDescriptor(fsObjectD,"Add/Change to StaticLib Makefile.am","C_SWITCH_TO_STATIC_LIB",false);
-		createCommandDescriptor(fsObjectD,"Add/Change to SharedLib Makefile.am","C_SWITCH_TO_SHARED_LIB",false);		
-		createCommandDescriptor(fsObjectD,"Add configure.in file","C_INSERT_CONFIGURE_IN",false);
-		createCommandDescriptor(fsObjectD,"Define Compiler Flags","C_COMPILER_FLAGS",false);
+		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to TopLevel Makefile.am","C_TOPLEVEL_MAKEFILE_AM",false);
+		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to Programs Makefile.am ","C_PROGRAMS_MAKEFILE_AM",false);		
+		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to StaticLib Makefile.am","C_SWITCH_TO_STATIC_LIB",false);
+		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to SharedLib Makefile.am","C_SWITCH_TO_SHARED_LIB",false);		
+		createCommandDescriptor(fsObjectD,"Adding configure.in file","C_INSERT_CONFIGURE_IN",false);
+		createCommandDescriptor(fsObjectD,"Defining Compiler Flags","C_COMPILER_FLAGS",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);
 		//
 		createCommandDescriptor(managedProjectD,"TopLevel","C_TOPLEVEL_MAKEFILE_AM",false);
@@ -233,7 +233,6 @@ public class ManagedProjectMiner extends Miner
 
 	private DataElement parseAmFile(DataElement theUnmanagedProject)
 	{
-	    /*
 		DataElement theManagedProject = null;
 		AmParser theParser = null;
 		if (theUnmanagedProject.getType().equals("Project"))
@@ -248,7 +247,6 @@ public class ManagedProjectMiner extends Miner
 			theManagedProject = theParser.parse();
 			_dataStore.refresh(theManagedProject);
 		}
-	    */
 	    return null;
 	}
 }
