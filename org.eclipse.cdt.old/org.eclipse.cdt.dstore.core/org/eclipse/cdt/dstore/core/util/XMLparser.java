@@ -373,7 +373,9 @@ public class XMLparser
 				  String name = attributes[DE.A_NAME];
 				  if (type.equals("status") && name.equals("done"))
 				  {
+				    result.setAttributes(attributes);
 					result.setAttribute(DE.A_NAME, "almost done");	  	
+					
 				  }
 				  else
 				  {
