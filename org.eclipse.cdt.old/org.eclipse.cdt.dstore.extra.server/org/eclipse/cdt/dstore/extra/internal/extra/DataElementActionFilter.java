@@ -27,7 +27,10 @@ public class DataElementActionFilter
 	if (name.equals(_type)) 
 	    {
 		IDataElement le = (IDataElement)target;
-		return le.getType().equals(value);
+		if (le.getType().equals(value) || le.isOfType(value))
+		    {
+			return true;
+		    }
 	    }       
 	
 	return false;
