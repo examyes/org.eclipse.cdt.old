@@ -16,6 +16,7 @@ public class ViewFilter extends ViewerFilter
 {
     static public final String V_DETAILS = "details";
     private DataElement _type;
+    private int         _depth;
     private boolean _enableContents = false;
 
     private ArrayList _notCache;
@@ -27,6 +28,7 @@ public class ViewFilter extends ViewerFilter
 	_type = null; 
 	_notCache = new ArrayList();
 	_isCache  = new ArrayList();
+	_depth = 5;
     }
     
     public ViewFilter(DataElement type)
@@ -35,6 +37,7 @@ public class ViewFilter extends ViewerFilter
         _type = type;
 	_notCache = new ArrayList();
 	_isCache = new ArrayList();
+	_depth = 5;
     }
 
   public ViewFilter(ViewFilter oTemplate)
@@ -75,7 +78,7 @@ public class ViewFilter extends ViewerFilter
 		if (_type != null)
 		    {
 			dataElement = dataElement.dereference();
-			boolean result =  doesExist(_type, dataElement);
+			boolean result =  doesExist(_type, dataElement, _depth);
 
 			if (!result)
 			    {
@@ -97,63 +100,71 @@ public class ViewFilter extends ViewerFilter
 	    }
     }
 
-  private boolean doesExist(DataElement descriptor, DataElement dataElement)
+  private boolean doesExist(DataElement descriptor, DataElement dataElement, int depth)
   {
-      if (descriptor != null && dataElement != null && !dataElement.isDeleted())
+      if (depth > 0)
 	  {
-	      DataElement elementDescriptor = dataElement.getDescriptor();
-
-	      if (_isCache.contains(elementDescriptor))
+	      depth--;
+	      if (descriptor != null && dataElement != null && !dataElement.isDeleted())
 		  {
-		      return true;
-		  }
-	      else if (!_notCache.contains(elementDescriptor))
-		  {	      
-		      String dataType  = dataElement.getType();
-		      String typeName  = descriptor.getName();
-		      String typeType  = descriptor.getType();
+		      DataElement elementDescriptor = dataElement.getDescriptor();
 		      
-		      if (dataType != null && typeName != null)
+		      if (_isCache.contains(elementDescriptor))
 			  {
-			      if (dataType.equals(typeName) || typeName.equals("all"))
+			      return true;
+			  }
+		      else if (!_notCache.contains(elementDescriptor))
+			  {	      
+			      String dataType  = dataElement.getType();
+			      String typeName  = descriptor.getName();
+			      String typeType  = descriptor.getType();
+			      
+			      if (dataType != null && typeName != null)
 				  {
-				      _isCache.add(elementDescriptor);
-				      return true; 
-				  }
-			      else
-				  {
-				      if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+				      if (dataType.equals(typeName) || typeName.equals("all"))
 					  {
-					      if (elementDescriptor != null && 
-						  elementDescriptor.isOfType(descriptor, true))
+					      _isCache.add(elementDescriptor);
+					      return true; 
+					  }
+				      else
+					  {
+					      if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 						  {
-						      _isCache.add(elementDescriptor);
-						      return true;
-						  }
-					      
-					      if (_enableContents)
-						  {
-						      ArrayList containsList = descriptor.getAssociated("contents");
-						      for (int i = 0; i < containsList.size(); i++)
+						      if (elementDescriptor != null && 
+							  elementDescriptor.isOfType(descriptor, true))
 							  {
-							      DataElement aDes = (DataElement)containsList.get(i);
-							      if (aDes != null && 
-								  doesExist(aDes, dataElement))
+							      _isCache.add(elementDescriptor);
+							      return true;
+							  }
+						      
+						      if (_enableContents)
+							  {
+							      ArrayList containsList = descriptor.getAssociated("contents");
+							      for (int i = 0; i < containsList.size(); i++)
 								  {
-								      _isCache.add(elementDescriptor);
-								      return true;
-								  }					      
+								      DataElement aDes = (DataElement)containsList.get(i);
+								      if (aDes != null && 
+									  doesExist(aDes, dataElement, depth))
+									  {
+									      _isCache.add(elementDescriptor);
+									      return true;
+									  }					      
+								  }
 							  }
 						  }
 					  }
 				  }
-			  }
-		  }	      
+			  }	      
+		  }
 	  }
       
       return false;
   }
 
+    public void setDepth(int depth)
+    {
+	_depth = depth;
+    }
 
   public void setType(DataElement type)
   {

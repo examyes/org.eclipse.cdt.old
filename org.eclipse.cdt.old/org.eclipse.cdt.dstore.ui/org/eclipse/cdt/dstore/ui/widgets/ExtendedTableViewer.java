@@ -57,6 +57,7 @@ public class ExtendedTableViewer extends TableViewer
 	
 	_property = null;
 	_viewFilter = new ViewFilter();
+	_viewFilter.setDepth(1);
 	addFilter(_viewFilter);
 	 
 	setContentProvider(new TableContentProvider(toolBar));     
