@@ -307,6 +307,7 @@ public class PADataStoreAdaptor {
  private void createAttribute(DataElement parent, String name, String value) {
  
   DataElement anAttribute = _dataStore.createObject(_attributesRoot, name, value);
+  _dataStore.refresh(anAttribute, false);
   _dataStore.createReference(parent, anAttribute, getLocalizedString("pa.Attributes"));
  }
  

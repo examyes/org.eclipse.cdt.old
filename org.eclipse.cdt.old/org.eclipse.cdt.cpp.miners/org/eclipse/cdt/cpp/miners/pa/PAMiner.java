@@ -237,9 +237,10 @@ public class PAMiner extends Miner {
   DataElement status  = getCommandStatus(theElement);
   DataElement subject = getCommandArgument(theElement, 0);
     
-  if (name.equals("C_QUERY") && subject.isOfType(getLocalizedString("pa.TraceFunction")))
+  if (name.equals("C_QUERY"))
   {
-   provideSourceFor(subject);
+   if (subject != null && subject.isOfType(getLocalizedString("pa.TraceFunction")))
+     provideSourceFor(subject);
   }
   else if (name.equals("C_PARSE_TRACE"))
   {
@@ -309,7 +310,7 @@ public class PAMiner extends Miner {
    
    status.setAttribute(DE.A_NAME, "done");
    status.setAttribute(DE.A_VALUE, formatStr);
-   _dataStore.refresh(status, false);
+   _dataStore.refresh(status, true);
  }
  
 
