@@ -152,7 +152,7 @@ public class RegisterManager extends ComponentManager      //HC
    ExprEvalInfo setValue(int exprID, int rootNodeID, String newValue)
    {
       if (Gdb.traceLogger.ERR) 
-          Gdb.traceLogger.err(1,"######## RegisterManager.setValue UNIMPLEMENTED, IGNORED " );
+          Gdb.traceLogger.err(2,"######## RegisterManager.setValue UNIMPLEMENTED, IGNORED " );
       return null;
 
 /*

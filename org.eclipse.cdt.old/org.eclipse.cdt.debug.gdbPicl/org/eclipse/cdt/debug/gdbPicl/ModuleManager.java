@@ -501,7 +501,7 @@ public class ModuleManager extends ComponentManager
       {
 
          if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(1,"####### ModuleManager.checkPart ***UNIMPLEMENTED*** moduleID="+moduleID+" partName="+partName +"\n" );
+             Gdb.traceLogger.err(2,"####### ModuleManager.checkPart ***UNIMPLEMENTED*** moduleID="+moduleID+" partName="+partName +"\n" );
 
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"ModuleManager.checkPart BLINDLY Adding part " + partName + " moduleID="+ moduleID );

@@ -275,7 +275,7 @@ public class StorageManager extends ComponentManager      //HC
    ExprEvalInfo setValue(int exprID, int rootNodeID, String newValue)
    {
       if (Gdb.traceLogger.ERR) 
-          Gdb.traceLogger.err(1,"######## StorageManager.setValue UNIMPLEMENTED, IGNORED " );
+          Gdb.traceLogger.err(2,"######## StorageManager.setValue UNIMPLEMENTED, IGNORED " );
       return null;
 
 /*

@@ -51,7 +51,8 @@ public class CmdContextConvert extends Command
            address = disassemblyView.convertDisassemblyLineToAddress(lineNum);
            //address = gdbDebugSession._getGdbFile.convertDisassemblyLineToAddress(lineNum, part.getStartAddress(), part.getEndAddress() ); 
            String srcLineNum = gdbDebugSession._getGdbFile.convertAddressToSourceLine(address); 
-System.out.println("CmdContextConvert.SOURCE file="+partName+" line="+lineNum+" address="+address+" sourceyLine="+srcLineNum );
+           if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"CmdContextConvert.SOURCE file="+partName+" line="+lineNum+" address="+address+" sourceyLine="+srcLineNum );
            int srcLine = Integer.parseInt(srcLineNum);
 
            _rep = new ERepContextConvert( new EStdView(
@@ -66,13 +67,14 @@ System.out.println("CmdContextConvert.SOURCE file="+partName+" line="+lineNum+" 
            // Convert the provided context to the disassembly view
 
            if (Gdb.traceLogger.ERR) 
-               Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW CmdContextConvert partID="+_req.context().getPPID()
+               Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW CmdContextConvert partID="+_req.context().getPPID()
                                    +" fileIndex="+_req.context().getSrcFileIndex()+" lineNum="+_req.context().getLineNum() );
 
            address = gdbDebugSession._getGdbFile.convertSourceLineToAddress(partName,lineNum); 
            String disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
            //String disLineNum = gdbDebugSession._getGdbFile.convertAddressToDisassemblyLine(address, part.getStartAddress(), part.getEndAddress() ); 
-System.out.println("CmdContextConvert.DISSASM file="+partName+" line="+lineNum+" address="+address+" disassemblyLine="+disLineNum );
+			if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"CmdContextConvert.DISSASM file="+partName+" line="+lineNum+" address="+address+" disassemblyLine="+disLineNum );
            int disLine = Integer.parseInt(disLineNum);
 
            _rep = new ERepContextConvert( new EStdView(
@@ -89,7 +91,7 @@ System.out.println("CmdContextConvert.DISSASM file="+partName+" line="+lineNum+"
            // NOTE: !!! This conversion is not implemented.  We just
            // return the old context information with the new view num.
            if (Gdb.traceLogger.ERR) 
-               Gdb.traceLogger.err(1,"######## UNIMPLEMENTED MIXED VIEW CmdContextConvert partID="+_req.context().getPPID()
+               Gdb.traceLogger.err(2,"######## UNIMPLEMENTED MIXED VIEW CmdContextConvert partID="+_req.context().getPPID()
                                    +" fileIndex="+_req.context().getSrcFileIndex()+" lineNum="+_req.context().getLineNum() );
            _rep = new ERepContextConvert( new EStdView(
               _req.context().getPPID(),

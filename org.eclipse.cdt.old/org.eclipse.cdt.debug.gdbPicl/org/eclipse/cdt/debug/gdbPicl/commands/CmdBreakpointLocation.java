@@ -58,7 +58,7 @@ public class CmdBreakpointLocation extends Command
       {
          isDeferred = false;
          if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(1,"######### UNIMPLEMENTED CmdBreakpointLocation.execute **FORCING** deferred=false;" );
+             Gdb.traceLogger.err(2,"######### UNIMPLEMENTED CmdBreakpointLocation.execute **FORCING** deferred=false;" );
       }
 
       boolean isEnabled = ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? true : false;

@@ -34,7 +34,8 @@ public class GdbPart extends Part
 
       if(isDebuggable())
          setStartEndAddress(_partName);
-System.out.println("**** GdbPart CTOR _totalLines="+_totalLines+" start="+_startAddress+" end="+_endAddress );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"**** GdbPart CTOR _totalLines="+_totalLines+" start="+_startAddress+" end="+_endAddress );
 
       _methods       = null;
       if(isDebuggable())
@@ -121,7 +122,8 @@ System.out.println("**** GdbPart CTOR _totalLines="+_totalLines+" start="+_start
 
    public int[] getLineNumbers()
    {
-System.out.println("*************** GdbPart.getLineNumbers for GdbPart="+_partName );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"*************** GdbPart.getLineNumbers for GdbPart="+_partName );
       if(_views==null || _views[VIEW_SOURCE-1]==null)
          return new int[0];
 

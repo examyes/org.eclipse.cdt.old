@@ -93,7 +93,7 @@ public class CmdBreakpointEvent extends Command
             if (_req.bkpAction() == EPDC.ReplaceBkp)  // UNIMPLEMENTED modify Watchpoint
             {
                if (Gdb.traceLogger.ERR) 
-                  Gdb.traceLogger.err(1,"######## UNIMPLEMENTED modify Watchpoint");
+                  Gdb.traceLogger.err(2,"######## UNIMPLEMENTED modify Watchpoint");
                rc = EPDC.ExecRc_BadBrkType;
                msg = _debugEngine.getResourceString("UNSUPPORTED_BREAKPOINT_TYPE_MSG");
             }

@@ -37,7 +37,8 @@ abstract class SourceView extends View
 
       boolean verified      = false;
 
-System.out.println("#### SourceView.verifyView part="+_parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"#### SourceView.verifyView part="+_parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
       Gdb.debugOutput("Verifying part " + _parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
    /**
     * even if source is not available the basefilename should still
@@ -70,7 +71,8 @@ System.out.println("#### SourceView.verifyView part="+_parentPart.getFullPartNam
    */
    public boolean verifyView(String sourceFileName) 
    {
-System.out.println("#### SourceView.verifyView(STRING) sourceFileName="+sourceFileName  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"#### SourceView.verifyView(STRING) sourceFileName="+sourceFileName  );
       File file;
       long offset = 0;
 
@@ -144,7 +146,8 @@ System.out.println("#### SourceView.verifyView(STRING) sourceFileName="+sourceFi
    */
    private String processViewLine(int lineNum, String srcLine)
    {
-System.out.println("#### SourceView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### SourceView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
       StringBuffer processedLine;
 
       // create the prefix
@@ -188,7 +191,8 @@ System.out.println("#### SourceView.processViewLine lineNum="+lineNum +" srcLine
     */
    public void getViewLines(ERepPartGet rep, int startLine, int numLines)
    {
-System.out.println("#### SourceView.getViewLines startLine="+startLine +" numLines="+numLines  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### SourceView.getViewLines startLine="+startLine +" numLines="+numLines  );
       int lineNum, index;
       index   = 0;
       String srcLine;
@@ -257,7 +261,8 @@ System.out.println("#### SourceView.getViewLines startLine="+startLine +" numLin
     */
    public int[] stringSearch(int srcFileIndex, int startLine,int startColumn,int numLinesToSearch,String searchString, int searchFlags)
    {
-System.out.println("#### SourceView.stringSearch="+searchString+" startLine="+startLine +" numLinesToSearch="+numLinesToSearch  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### SourceView.stringSearch="+searchString+" startLine="+startLine +" numLinesToSearch="+numLinesToSearch  );
       int line      = startLine;
       int index     = 0;
       boolean found = false;
@@ -330,7 +335,8 @@ System.out.println("#### SourceView.stringSearch="+searchString+" startLine="+st
    {
       int viewNo = nextPartRep.createView(_prefixl, _viewValidated ? EPDC.VIEW_VALIDATED : 0);
 
-System.out.println("#### SourceView.addViewToReply viewNo="+viewNo  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"#### SourceView.addViewToReply viewNo="+viewNo  );
       // Determine this part's source view attributes
       int viewAttr = 0;
 

@@ -53,7 +53,7 @@ public class WatchBreakpoint extends Breakpoint
       // Note: We must call setBkpContext for every supported view
       bkpChangeItem.setBkpContext((short) Part.VIEW_SOURCE, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
       if (Gdb.traceLogger.ERR) 
-          Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW WatchBreakpoint lineNum="+_lineNum );
+          Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW WatchBreakpoint lineNum="+_lineNum );
       bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
       
       if (Part.MIXED_VIEW_ENABLED)

@@ -458,20 +458,23 @@ public class GdbDebugSession extends DebugSession
 // ########################################### WAIT-FOR-EVENT #########################################
   private void waitForEvent()
   {
-System.out.println("????????????????? GdbDebugSession.waitForEvent"   );
+	  if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.evt(1,"????????????????? GdbDebugSession.waitForEvent"   );
   }
 // #################################################################################################
 
   private void addModulePart(String moduleName, String partName)
   {
     _parts.put(moduleName, partName);
-System.out.println("???????????????? GdbDebugSession.addModulePart ?UNUSED? moduleName="+moduleName+" partName="+partName +"\n" );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"???????????????? GdbDebugSession.addModulePart ?UNUSED? moduleName="+moduleName+" partName="+partName +"\n" );
 Thread.currentThread().dumpStack();
   }
 
   private void removePart(String partName)
   {
-System.out.println("???????????????? GdbDebugSession.removePart ?UNUSED? partName="+partName +"\n"  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"???????????????? GdbDebugSession.removePart ?UNUSED? partName="+partName +"\n"  );
 Thread.currentThread().dumpStack();
     //_parts.remove(partName);
   }
@@ -505,9 +508,7 @@ Thread.currentThread().dumpStack();
 
   private void setMainBreakpoint()
   {
-System.out.println("????????????????? GdbDebugSession.setMainBreakpoint"   );
     Gdb.debugOutput("GdbDebugSession: setMainBreakpoint()");
-
   }
 
 
@@ -592,13 +593,15 @@ System.out.println("????????????????? GdbDebugSession.setMainBreakpoint"   );
 
   public boolean remoteAttach(int processIndex, String[] errorMsg)
   {
-System.out.println("????????????????? GdbDebugSession.remoteAttach "+processIndex   );
+  if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.evt(1,"????????????????? GdbDebugSession.remoteAttach "+processIndex   );
     return false;
   }
 
   public boolean remoteDetach(int processIndex, int processDetachAction, String[] errorMsg)
   {
-System.out.println("????????????????? GdbDebugSession.remoteDetach "+processIndex   );
+	  if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.dbg(1,"????????????????? GdbDebugSession.remoteDetach "+processIndex   );
     return false;
   } 
 

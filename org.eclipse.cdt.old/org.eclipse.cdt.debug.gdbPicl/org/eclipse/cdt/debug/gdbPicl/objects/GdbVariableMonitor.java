@@ -28,7 +28,6 @@ public class GdbVariableMonitor extends Gdb_VariableMonitor
 
    void modifyMonitorValue()
    {
-System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ????????????????????????");
       _monValuesChanged = true;
    }
 

@@ -156,7 +156,8 @@ class GdbScalarVariable extends GdbVariable
     */
    public boolean setVariable(Object value)
    {
-System.out.println("??????????????? GdbScalarVariable.setVariable value="+value.toString() );
+	   if (Gdb.traceLogger.EVT) 
+			Gdb.traceLogger.evt(3,"??????????????? GdbScalarVariable.setVariable value="+value.toString() );
        _value = value.toString();
        return true;
    }
@@ -176,19 +177,22 @@ System.out.println("??????????????? GdbScalarVariable.setVariable value="+value.
       short[] scalarReps = new short[0];
       if(_debugEngine==null)
       {
-System.out.println("### GdbScalarVariable.getScalarItem _debugEngine==NULL" );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"### GdbScalarVariable.getScalarItem _debugEngine==NULL" );
           return null;
       }
       EPDC_EngineSession epdcSession = _debugEngine.getSession();
       if(epdcSession==null)
       {
-System.out.println("### GdbScalarVariable.getScalarItem epdcSession==NULL" );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"### GdbScalarVariable.getScalarItem epdcSession==NULL" );
       }else
       {
          ERepTypesNumGet typesNum = epdcSession._repInfo;
          if(typesNum==null)
          {
-System.out.println("### GdbScalarVariable.getScalarItem typesNum==NULL" );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"### GdbScalarVariable.getScalarItem typesNum==NULL" );
          }else
          {
             scalarReps = typesNum.repsForType(Gdb.TYPEINDEX_INTEGER);

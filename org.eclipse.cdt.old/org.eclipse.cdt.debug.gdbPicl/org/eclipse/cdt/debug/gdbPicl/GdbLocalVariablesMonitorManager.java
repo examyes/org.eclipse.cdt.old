@@ -62,13 +62,8 @@ public class GdbLocalVariablesMonitorManager extends LocalVariablesMonitorManage
          for (i=0;i<_threads.size();i++)
          {
             stackInfo    = (ThreadStackInfo) _threads.elementAt(i);
-//System.out.println("***** GdbLocalVariablesMonitorManager.updateLocalMonitor i="+i+" stackInfo.getDU="+stackInfo.getDU()+" stackInfo.partID="+stackInfo.getpartID() );
             tc           = (GdbThreadComponent)tm.getThreadComponent(stackInfo.getDU());
-
-//System.out.println("***** GdbLocalVariablesMonitorManager.updateLocalMonitor tc.DU="+tc.getDU()+" tc.ID="+tc.getID()+" tc.threadName="+tc.threadName() );
             GdbThread t = ((GdbThreadComponent)tc).getGdbThread();
-//System.out.println("***** GdbLocalVariablesMonitorManager.updateLocalMonitor gt.getSystemTID="+t.getSystemTID()+" gt.getIntThreadID="+t.getIntThreadID() );
-//System.out.println("***** GdbLocalVariablesMonitorManager.updateLocalMonitor tc.moduleID(0)="+tc.moduleID(0) );
 
             if (tc == null)
             {

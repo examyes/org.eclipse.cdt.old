@@ -58,7 +58,6 @@ public class MethodBreakpoint extends LocationBreakpoint
      */
     public String getClassFromMethodName()
     {
-System.out.println("#### MethodBreakpoint getClassFromMethodName UNUSED ################" );
       String name = entryName();
       int dotIndex = name.lastIndexOf('.');
       if (dotIndex > 0)
@@ -74,8 +73,6 @@ System.out.println("#### MethodBreakpoint getClassFromMethodName UNUSED ########
     String getUnqualifiedMethodName()
     {
       String name = entryName();
-
-System.out.println("#### MethodBreakpoint getUnqualifiedMethodName UNUSED ################" );
 
       // remove the class qualifier
       int dotIndex = name.lastIndexOf('.');

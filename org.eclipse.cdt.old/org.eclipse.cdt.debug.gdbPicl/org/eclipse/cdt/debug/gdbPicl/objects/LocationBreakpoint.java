@@ -217,7 +217,7 @@ public class LocationBreakpoint extends Breakpoint
       // Note: We must call setBkpContext for every supported view
       bkpChangeItem.setBkpContext((short) Part.VIEW_SOURCE, (short)_partID, 1, _lineNum);
      if (Gdb.traceLogger.ERR) 
-         Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW Location Breakpoint.fillBreakpointChangeItem setDLLName=_moduleName="+_moduleName+" fileName="+_partName+" lineNum="+_lineNum  );
+         Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW Location Breakpoint.fillBreakpointChangeItem setDLLName=_moduleName="+_moduleName+" fileName="+_partName+" lineNum="+_lineNum  );
       bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, (short)_partID, 1, _lineNum);
       
       if (Part.MIXED_VIEW_ENABLED)
@@ -294,7 +294,8 @@ public class LocationBreakpoint extends Breakpoint
    String getQualifiedPartName()
    {
 
-System.out.println("#### LocationBreakpoint getUnqualifiedPartName UNUSED ################" );
+	  if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.evt(1,"#### LocationBreakpoint getUnqualifiedPartName UNUSED ################" );
 
      String partName = partName();
      if (partName == null)
@@ -313,7 +314,8 @@ System.out.println("#### LocationBreakpoint getUnqualifiedPartName UNUSED ######
     */
    public boolean hasDefaultPackageName()
    {
-System.out.println("#### LocationBreakpoint hasDefaultPackageName UNUSED ################" );
+	  if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.evt(3,"#### LocationBreakpoint hasDefaultPackageName UNUSED ################" );
 
      if (_moduleName != null &&
          _moduleName.equals(_debugSession.getResourceString("DEFAULT_PACKAGE_TEXT")))

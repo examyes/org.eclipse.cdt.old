@@ -35,7 +35,7 @@ public class CmdStorageStyleSet extends Command
       int _lineOffset         = _req.getLineOffset();
       int _unitOffset        = _req.getUnitOffset();
       if (Gdb.traceLogger.ERR) 
-          Gdb.traceLogger.err(1,"######## CmdStorageStyleSet.execute UNIMPLEMENTED id="+_id +" addressStyle="+_addressStyle
+          Gdb.traceLogger.err(2,"######## CmdStorageStyleSet.execute UNIMPLEMENTED id="+_id +" addressStyle="+_addressStyle
                    +" _unitStyle="+_unitStyle+" _styleUnitCount="+_styleUnitCount
                    +" baseAddress="+_baseAddress+" lineOffset="+_lineOffset+" unitOffset="+_unitOffset );
 

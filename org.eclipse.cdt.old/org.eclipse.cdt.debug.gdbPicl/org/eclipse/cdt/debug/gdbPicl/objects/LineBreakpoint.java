@@ -61,7 +61,8 @@ public class LineBreakpoint extends LocationBreakpoint
      */
     String getFileName()
     {
-System.out.println("#### LineBreakpoint getFileName UNUSED ################" );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"#### LineBreakpoint getFileName UNUSED ################" );
 
       String name = fileName();
       int dotJavaIndex = name.lastIndexOf(".java");

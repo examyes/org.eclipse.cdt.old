@@ -285,7 +285,8 @@ public abstract class ThreadComponent    //HC
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"ThreadComponent.monitorCallStack" );
       _stackTracking = true;
-System.out.println("@@@@ ThreadComponent monitorCallStack _stackTracking==true");
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"@@@@ ThreadComponent monitorCallStack _stackTracking==true");
    }
 
    /**

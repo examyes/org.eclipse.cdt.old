@@ -38,7 +38,9 @@ abstract class DisassemblyView extends View
 
       boolean verified      = false;
 
-System.out.println("#### DisassemblyView.verifyView part="+_parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
+      if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.evt(3, "#### DisassemblyView.verifyView part="+_parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
+
       Gdb.debugOutput("Verifying part " + _parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
    /**
     * even if source is not available the basefilename should still
@@ -85,7 +87,10 @@ System.out.println("#### DisassemblyView.verifyView part="+_parentPart.getFullPa
       str = str.substring(address);
       int end = str.indexOf(" ");
       lineAddress = str.substring(0,end);
-System.out.println("@@@@ DisassemblyView.convertDisassemblyLineToAddress lineNum="+lineNum+" lineAddress="+lineAddress );
+
+	  if (Gdb.traceLogger.ERR) 
+		Gdb.traceLogger.err(3, "@@@@ DisassemblyView.convertDisassemblyLineToAddress lineNum="+lineNum+" lineAddress="+lineAddress );
+		
       return lineAddress;
    }
 
@@ -113,7 +118,9 @@ System.out.println("@@@@ DisassemblyView.convertDisassemblyLineToAddress lineNum
    */
    public boolean verifyView(String sourceFileName) 
    {
-System.out.println("#### DisassemblyView.verifyView(STRING) sourceFileName="+sourceFileName  );
+
+	  if (Gdb.traceLogger.DBG) 
+          Gdb.traceLogger.dbg(3,"#### DisassemblyView.verifyView(STRING) sourceFileName="+sourceFileName  );
       File file;
       long offset = 0;
 
@@ -183,7 +190,9 @@ System.out.println("#### DisassemblyView.verifyView(STRING) sourceFileName="+sou
    */
    private String processViewLine(int lineNum, String srcLine)
    {
-System.out.println("#### DisassemblyView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### DisassemblyView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
+              
       StringBuffer processedLine;
 /*
       // create the prefix
@@ -235,7 +244,10 @@ System.out.println("#### DisassemblyView.processViewLine lineNum="+lineNum +" sr
     */
    public void getViewLines(ERepPartGet rep, int startLine, int numLines)
    {
-System.out.println("#### DisassemblyView.getViewLines startLine="+startLine +" numLines="+numLines  );
+   	   	  
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### DisassemblyView.getViewLines startLine="+startLine +" numLines="+numLines  );
+              
       int lineNum, index;
       index   = 0;
       String srcLine;
@@ -304,7 +316,9 @@ System.out.println("#### DisassemblyView.getViewLines startLine="+startLine +" n
     */
    public int[] stringSearch(int srcFileIndex, int startLine,int startColumn,int numLinesToSearch,String searchString, int searchFlags)
    {
-System.out.println("#### DisassemblyView.stringSearch="+searchString+" startLine="+startLine +" numLinesToSearch="+numLinesToSearch  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### DisassemblyView.stringSearch="+searchString+" startLine="+startLine +" numLinesToSearch="+numLinesToSearch  );
+              
       int line      = startLine;
       int index     = 0;
       boolean found = false;
@@ -377,7 +391,8 @@ System.out.println("#### DisassemblyView.stringSearch="+searchString+" startLine
    {
       int viewNo = nextPartRep.createView(_prefixl, _viewValidated ? EPDC.VIEW_VALIDATED : 0);
 
-System.out.println("#### DisassemblyView.addViewToReply viewNo="+viewNo  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### DisassemblyView.addViewToReply viewNo="+viewNo  );
       // Determine this part's source view attributes
       int viewAttr = 0;
 

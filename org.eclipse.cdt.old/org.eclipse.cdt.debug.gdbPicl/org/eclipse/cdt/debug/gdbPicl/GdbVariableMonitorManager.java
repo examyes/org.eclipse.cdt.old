@@ -55,7 +55,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
      else
      {
         if (Gdb.traceLogger.ERR)
-            Gdb.traceLogger.err(1,"######## UNIMPLEMENTED GdbVariableMonitorManager.addVariableMonitor monVar.getName="+monVar.getName()  );
+            Gdb.traceLogger.err(2,"######## UNIMPLEMENTED GdbVariableMonitorManager.addVariableMonitor monVar.getName="+monVar.getName()  );
         return 0;
      }
    }
@@ -76,7 +76,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
    public ExprEvalInfo checkConditionalExpr(EStdExpression2 conditionalExpr)
    {
       if (Gdb.traceLogger.ERR)
-          Gdb.traceLogger.err(1,"######## UNIMPLEMENTED GdbVariableMonitorManager.checkConditionalExpr conditionalExpr. getExprString="+conditionalExpr );
+          Gdb.traceLogger.err(2,"######## UNIMPLEMENTED GdbVariableMonitorManager.checkConditionalExpr conditionalExpr. getExprString="+conditionalExpr );
       return null;
    }
    public void addDeferredExpression(short monType, String exprString,
@@ -84,7 +84,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
                                        int du)
    {
       if (Gdb.traceLogger.ERR)
-          Gdb.traceLogger.err(1,"######## UNIMPLEMENTED (treated as non-deferred) - GdbVariableMonitorManager.addDeferredExpression exprString="+exprString
+          Gdb.traceLogger.err(2,"######## UNIMPLEMENTED (treated as non-deferred) - GdbVariableMonitorManager.addDeferredExpression exprString="+exprString
                     +" fullPartName="+fullPartName
                     +" context.getPPID()="+context.getPPID()
                     +" context.getSrcFileIndex()="+context.getSrcFileIndex()

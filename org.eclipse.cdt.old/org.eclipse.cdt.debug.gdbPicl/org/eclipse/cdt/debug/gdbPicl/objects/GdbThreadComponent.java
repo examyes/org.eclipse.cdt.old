@@ -77,7 +77,7 @@ public class GdbThreadComponent extends ThreadComponent
          {
             EPDCThread.setWhereStopped(Part.VIEW_SOURCE, 1, lineNumber(0));
             if (Gdb.traceLogger.ERR) 
-                Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
+                Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
                 		
             EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  convertLineNum(lineNumber(0))); 
             if (Part.MIXED_VIEW_ENABLED)
@@ -140,17 +140,20 @@ public class GdbThreadComponent extends ThreadComponent
    {
       if(_callStack==null)
       {
-System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID="+_moduleID +"  (_callStack==null)" );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID="+_moduleID +"  (_callStack==null)" );
          return _moduleID;   //0
       }
       if (stackEntry >= _callStack.length)
       {
-System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID="+_moduleID +"  (stackEntry>=_callStack.length)" );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID="+_moduleID +"  (stackEntry>=_callStack.length)" );
          return _moduleID;   //0
       }
       if (stackEntry >= _callStack.length)
       {
-System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID stackEntry="+stackEntry );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID stackEntry="+stackEntry );
          return _moduleID;   //0
       }
       return _callStack[stackEntry].getModuleID();       
@@ -164,17 +167,20 @@ System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.moduleID stackEntry="+st
    {
       if(_callStack==null)
       {
-System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber="+_lineNumber +"  (_callStack==null)" );
+	  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber="+_lineNumber +"  (_callStack==null)" );
          return _lineNumber;   //0
       }
       if (stackEntry >= _callStack.length)
       {
-System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber="+_lineNumber +"  (stackEntry>=_callStack.length)" );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber="+_lineNumber +"  (stackEntry>=_callStack.length)" );
          return _lineNumber;   //0
       }
       if (stackEntry <0 )
       {
-System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber stackEntry ="+stackEntry );
+		  if (Gdb.traceLogger.ERR) 
+              Gdb.traceLogger.err(1,"$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber stackEntry ="+stackEntry );
          return _lineNumber;   //0
       }
       return _callStack[stackEntry].getLineNumber();
@@ -475,7 +481,7 @@ System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber stackEntry ="
          entry.setStackEntryViewInfo((short) Part.VIEW_SOURCE,
                (short)partID, 1, lineNumber(i));
          if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
+             Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
          entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
                (short)partID, 1, convertLineNum(lineNumber(i)));
          

@@ -55,7 +55,6 @@ abstract class MixedView extends View
 
       boolean verified      = false;
 
-System.out.println("#### MixedView.verifyView part="+_parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
       Gdb.debugOutput("Verifying part " + _parentPart.getFullPartName() + "(" + _viewBaseFileName + ")" );
    /**
     * even if source is not available the basefilename should still
@@ -88,7 +87,8 @@ System.out.println("#### MixedView.verifyView part="+_parentPart.getFullPartName
    */
    public boolean combineSourcePlusDisassemblyViews(String sourceFileName) 
    {
-System.out.println("#### MixedView.combineSourcePlusDisassemblyViews(STRING) sourceFileName="+sourceFileName  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### MixedView.combineSourcePlusDisassemblyViews(STRING) sourceFileName="+sourceFileName  );
       _fakeNoSource = true;
 
       if(_parentPart==null)
@@ -115,7 +115,8 @@ System.out.println("#### MixedView.combineSourcePlusDisassemblyViews(STRING) sou
 
       int totalSource = sourceView.getViewNumLines();
       int totalDisassembly = disassemblyView.getViewNumLines();
-System.out.println("MixedView.verifyView totalSource="+totalSource+" totalDisassembly="+totalDisassembly );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"MixedView.verifyView totalSource="+totalSource+" totalDisassembly="+totalDisassembly );
       if(totalSource<=0 || totalDisassembly<=0)
       {
          if (Gdb.traceLogger.ERR) 
@@ -162,7 +163,8 @@ System.out.println("MixedView.verifyView totalSource="+totalSource+" totalDisass
    public int combineSourcePlusDisassemblyLines(int mixedCurrentLine, int sourceStartLine, int sourceEndLine,
                                                int disassemblyStartLine, int disassemblyEndLine) 
    {
-System.out.println("#### MixedView.combineSourcePlusDisassemblyLines sourceStartLine="+sourceStartLine+"  sourceEndLine="+sourceEndLine
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"#### MixedView.combineSourcePlusDisassemblyLines sourceStartLine="+sourceStartLine+"  sourceEndLine="+sourceEndLine
                     +" disassemblyStartLine="+disassemblyStartLine+" disassemblyEndLine="+disassemblyEndLine );
 
       if(sourceStartLine>0 && sourceEndLine>0)
@@ -177,7 +179,8 @@ System.out.println("#### MixedView.combineSourcePlusDisassemblyLines sourceStart
          }
          line = processViewLine(mixedCurrentLine, line);
          _viewLines.addElement(line);
-System.out.println("MixedView.combineSourcePlusDisassemblyLines lineNumber="+mixedCurrentLine+" source="+line );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"MixedView.combineSourcePlusDisassemblyLines lineNumber="+mixedCurrentLine+" source="+line );
          mixedCurrentLine++;
       }
 
@@ -193,7 +196,8 @@ System.out.println("MixedView.combineSourcePlusDisassemblyLines lineNumber="+mix
          }
          line = processViewLine(mixedCurrentLine, line);
          _viewLines.addElement(line);
-System.out.println("MixedView.combineSourcePlusDisassemblyLines lineNumber="+mixedCurrentLine+" disassembly="+line );
+	     if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"MixedView.combineSourcePlusDisassemblyLines lineNumber="+mixedCurrentLine+" disassembly="+line );
          _executableLines[nextExecutableLine++] = mixedCurrentLine;
          mixedCurrentLine++;
       }
@@ -206,7 +210,8 @@ System.out.println("MixedView.combineSourcePlusDisassemblyLines lineNumber="+mix
    */
    public boolean verifyView(String sourceFileName) 
    {
-System.out.println("#### MixedView.verifyView(STRING) sourceFileName="+sourceFileName  );
+	  if (Gdb.traceLogger.EVT) 
+              Gdb.traceLogger.evt(1,"#### MixedView.verifyView(STRING) sourceFileName="+sourceFileName  );
 
        return combineSourcePlusDisassemblyViews(sourceFileName);
     }
@@ -217,7 +222,8 @@ System.out.println("#### MixedView.verifyView(STRING) sourceFileName="+sourceFil
    */
    private String processViewLine(int lineNum, String srcLine)
    {
-System.out.println("#### MixedView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### MixedView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
       StringBuffer processedLine;
 
       // Strip off old prefix
@@ -243,7 +249,8 @@ System.out.println("#### MixedView.processViewLine lineNum="+lineNum +" srcLine=
     */
    public void getViewLines(ERepPartGet rep, int startLine, int numLines)
    {
-System.out.println("#### MixedView.getViewLines startLine="+startLine +" numLines="+numLines  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### MixedView.getViewLines startLine="+startLine +" numLines="+numLines  );
       int lineNum, index;
       index   = 0;
       String srcLine;
@@ -312,7 +319,8 @@ System.out.println("#### MixedView.getViewLines startLine="+startLine +" numLine
     */
    public int[] stringSearch(int srcFileIndex, int startLine,int startColumn,int numLinesToSearch,String searchString, int searchFlags)
    {
-System.out.println("#### MixedView.stringSearch="+searchString+" startLine="+startLine +" numLinesToSearch="+numLinesToSearch  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### MixedView.stringSearch="+searchString+" startLine="+startLine +" numLinesToSearch="+numLinesToSearch  );
       int line      = startLine;
       int index     = 0;
       boolean found = false;
@@ -385,7 +393,8 @@ System.out.println("#### MixedView.stringSearch="+searchString+" startLine="+sta
    {
       int viewNo = nextPartRep.createView(_prefixl, _viewValidated ? EPDC.VIEW_VALIDATED : 0);
 
-System.out.println("#### MixedView.addViewToReply viewNo="+viewNo  );
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(1,"#### MixedView.addViewToReply viewNo="+viewNo  );
       // Determine this part's source view attributes
       int viewAttr = 0;
 

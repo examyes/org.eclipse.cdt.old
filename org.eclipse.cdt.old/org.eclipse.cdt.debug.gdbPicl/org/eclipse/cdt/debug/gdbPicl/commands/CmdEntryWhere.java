@@ -36,7 +36,7 @@ public class CmdEntryWhere extends Command
       ((ERepEntryWhere)_rep).addContextInfo((short)pid, 
                (short)Part.VIEW_SOURCE, 1, cm.getEntryLineNumber(entryID));
       if (Gdb.traceLogger.ERR) 
-          Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW CmdEntryWhere partID="+pid
+          Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW CmdEntryWhere partID="+pid
                               +" lineNum="+cm.getEntryLineNumber(entryID) );
       ((ERepEntryWhere)_rep).addContextInfo((short)pid, 
                (short)Part.VIEW_DISASSEMBLY, 1, cm.getEntryLineNumber(entryID));

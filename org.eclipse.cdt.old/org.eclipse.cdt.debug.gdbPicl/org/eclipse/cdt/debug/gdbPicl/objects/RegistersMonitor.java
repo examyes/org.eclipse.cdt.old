@@ -165,8 +165,6 @@ public abstract class RegistersMonitor
 
    public void removeGeneralRegisters()
    {
- System.out.println("#### RegistersMonitor.removeGeneral" );
-
      if (Gdb.traceLogger.DBG) 
          Gdb.traceLogger.dbg(1,"RegistersMonitor.removeGeneralRegisters");
 
