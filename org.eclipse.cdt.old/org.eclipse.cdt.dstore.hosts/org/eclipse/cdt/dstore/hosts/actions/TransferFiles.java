@@ -78,14 +78,14 @@ public class TransferFiles extends Thread
 	    {
 		if (_source.isOfType("directory") || _source.isOfType("Project"))
 		    {
-			if (!_source.isExpanded())
-			    _source.expandChildren(true);
+			//if (!_source.isExpanded())
+			//  _source.expandChildren(true);
 			queryDates(_source);
 		    }
 		if (_target.isOfType("directory") || _target.isOfType("Project"))
 		    {
-			if (!_target.isExpanded())
-			    _target.expandChildren(true);
+			//if (!_target.isExpanded())
+			//  _target.expandChildren(true);
 			queryDates(_target);
 		    }
 		
@@ -246,31 +246,20 @@ public class TransferFiles extends Thread
 	
 	if (type.equals("directory") && copiedSource != null)
 	    {
+		queryDates(source);
+		queryDates(copiedSource);
 		if (_pm != null)
 		    {
 			_pm.beginTask("Checking files from " + source.getName() + "...", source.getNestedSize());
 		    }
-		source.refresh(true);
+
+		//		source.refresh(true);
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {
 			DataElement child = source.get(i);
 			String ctype = child.getType();
 			if (ctype.equals("directory") || ctype.equals("file"))
 			    {
-				if (ctype.equals("directory"))
-				    {
-					if (!child.isExpanded())
-					    child.expandChildren(true);
-					queryDates(child);
-				    }
-				if (type.equals("directory"))
-				    {
-					if (!copiedSource.isExpanded())
-					    copiedSource.expandChildren(true);
-					queryDates(copiedSource);
-				    }
-				
-
 				transfer(child, copiedSource);
 				targetDataStore.refresh(target);
 			    }
@@ -302,16 +291,9 @@ public class TransferFiles extends Thread
 	    }
 	else
 	    {
-		queryDates(fileElement.getParent());
+		System.out.println("no date for "+ fileElement.getSource());
+		fileElement.doCommandOn("C_DATE", true);
 		return getDate(fileElement);
-		/*
-		DataElement status = fileElement.doCommandOn("C_DATE", true);	
-		if (status != null && status.getNestedSize() > 0)
-		    {
-			dateObj = status.get(0);			
-		    }	
-		*/
-		
 	    }
 
 	if (dateObj != null && dateObj.getType().equals("date"))
