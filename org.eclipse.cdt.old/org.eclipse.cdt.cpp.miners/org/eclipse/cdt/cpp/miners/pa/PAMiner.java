@@ -59,6 +59,9 @@ public class PAMiner extends Miner {
   DataElement numTraceFunctionsD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numTraceFunctions"));
   DataElement numCallEntriesD    = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numCallGraphEntries"));
   
+  // additional attribute for gprof trace files
+  DataElement samplingRateD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SamplingRate"));
+  
   // additional attributes for functioncheck trace files
   DataElement timeModeD          = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TimeMode"));
   DataElement profileModeD       = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ProfileMode"));
@@ -96,7 +99,10 @@ public class PAMiner extends Miner {
   DataElement gprofTraceTargetD  = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.gprofTraceTarget"));
   DataElement fcTraceTargetD     = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.fcTraceTarget"));
 
-  // set up the additional attributes for functioncheck trace files
+  // set up additional attributes for gprof trace files
+  createReference(gprofTraceTargetD, samplingRateD, attributesD);
+  
+  // set up additional attributes for functioncheck trace files
   createReference(fcTraceTargetD, timeModeD, 	attributesD);
   createReference(fcTraceTargetD, profileModeD, attributesD);
   createReference(fcTraceTargetD, processIdD, 	attributesD);
@@ -202,7 +208,7 @@ public class PAMiner extends Miner {
   DataElement status  = getCommandStatus(theElement);
   DataElement subject = getCommandArgument(theElement, 0);
     
-  if (name.equals("C_QUERY") && subject.isOfType("trace function"))
+  if (name.equals("C_QUERY") && subject.isOfType(getLocalizedString("pa.TraceFunction")))
   {
    provideSourceFor(subject);
   }

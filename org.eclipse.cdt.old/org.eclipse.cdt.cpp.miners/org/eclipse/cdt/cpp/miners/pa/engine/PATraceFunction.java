@@ -11,15 +11,15 @@ import java.util.*;
 public class PATraceFunction {
   
   // Attributes for a trace function
-  private String _name;
-  private String _mangledName;
-  private String _sourceLocation;
-  private int _callNumber;
-  private double _selfSeconds;
-  private double _totalSeconds;
-  private double _selfMsPerCall;
-  private double _totalMsPerCall;
-  private double _totalPercentage;
+  private String  _name;
+  private String  _mangledName;
+  private String  _sourceLocation;
+  private int     _callNumber;
+  private double  _selfSeconds;
+  private double  _totalSeconds;
+  private double  _selfMsPerCall;
+  private double  _totalMsPerCall;
+  private double  _totalPercentage;
   private boolean _isRecursive;
   private boolean _isCyclic;
   private boolean _hasSummary;
@@ -58,7 +58,6 @@ public class PATraceFunction {
    this(traceFile, name);
    _callNumber = callNumber;
    _selfSeconds = selfSeconds;
-   _selfMsPerCall = _selfSeconds * 1000.0 / _callNumber;
   }
   
   // Add a caller
@@ -160,28 +159,18 @@ public class PATraceFunction {
   
   public void setSelfSeconds(double selfSeconds) {
    _selfSeconds = selfSeconds;
-   if (_callNumber > 0)
-    _selfMsPerCall = _selfSeconds * 1.0e6 / _callNumber;
   }
   
-  public void setSelfMsPerCall(double selfTime) {
-    
-   _selfMsPerCall = selfTime * (1.0e6 / _traceFile.getTimeUnit());
-   if (_callNumber > 0)
-    _selfSeconds = selfTime * _callNumber / _traceFile.getTimeUnit();
-   
+  public void setSelfMsPerCall(double selfTime) {    
+   _selfMsPerCall = selfTime * (1.0e6 / _traceFile.getTimeUnit());   
   }
   
   public void setTotalSeconds(double totalSeconds) {
    _totalSeconds = totalSeconds;
-   if (_callNumber > 0)
-    _totalMsPerCall = _totalSeconds * 1.0e6 / _callNumber;
   }
   
   public void setTotalMsPerCall(double totalTime) {
    _totalMsPerCall = totalTime * (1.0e6 / _traceFile.getTimeUnit());
-   if (_callNumber > 0)
-    _totalSeconds = totalTime * _callNumber / _traceFile.getTimeUnit();
   }
   
   public void setTotalPercentage(double totalPercentage) {

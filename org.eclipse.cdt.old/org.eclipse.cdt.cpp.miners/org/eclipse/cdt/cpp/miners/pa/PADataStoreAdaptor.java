@@ -236,6 +236,10 @@ public class PADataStoreAdaptor {
    createAttribute(fileElement, getLocalizedString("pa.ProcessId"),   String.valueOf(fcTraceFile.getProcessId()));
    createAttribute(fileElement, getLocalizedString("pa.ProgramName"), fcTraceFile.getProgramName());   
   }
+  else if (traceFile instanceof GprofTraceFile) {
+   GprofTraceFile gprofTraceFile = (GprofTraceFile)traceFile;
+   createAttribute(fileElement, getLocalizedString("pa.SamplingRate"), String.valueOf(gprofTraceFile.getSamplingRate()));
+  }
   
  }
  

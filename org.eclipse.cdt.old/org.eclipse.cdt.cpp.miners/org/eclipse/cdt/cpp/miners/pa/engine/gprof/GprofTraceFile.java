@@ -124,13 +124,50 @@ public class GprofTraceFile extends PATraceFile {
    String functionName = GprofUtility.trimmedFunctionName(lastToken);
    PATraceFunction traceFunction = findOrCreateTraceFunction(functionName);
    
+   int tokenNumber = tokenizer.getTokenNumber();
+   
    try {
-    traceFunction.setTotalPercentage(tokenizer.getTokenAsDouble(0));
-    traceFunction.setSelfSeconds(tokenizer.getTokenAsDouble(2));
-    traceFunction.setCallNumber(tokenizer.getTokenAsInt(3));
-    traceFunction.setTotalMsPerCall(tokenizer.getTokenAsDouble(5));
+   
+    for (int i=0; i < tokenNumber-1; i++) {   
+     switch (i) {
+      
+       case 0:
+       
+        traceFunction.setTotalPercentage(tokenizer.getTokenAsDouble(i));
+        break;
+         
+       case 1:
+       
+        _cumulativeTime = tokenizer.getTokenAsDouble(i);
+        break;
+       
+       case 2:
+       
+        traceFunction.setSelfSeconds(tokenizer.getTokenAsDouble(i));
+        break;
+       
+       case 3:
+       
+        traceFunction.setCallNumber(tokenizer.getTokenAsInt(i));
+        break;
+       
+       case 4:
+       
+        traceFunction.setSelfMsPerCall(tokenizer.getTokenAsDouble(i));
+        break;
+       
+       case 5:
+       
+        traceFunction.setTotalMsPerCall(tokenizer.getTokenAsDouble(i));
+        break;
+       
+       default:
+        break;
+       
+     }     
+    }
+    traceFunction.setTotalSeconds(traceFunction.getCallNumber() * traceFunction.getTotalMsPerCall() / 1.0e6);
     traceFunction.setHasSummary(true);
-    _cumulativeTime = tokenizer.getTokenAsDouble(1);
    }
    catch (NumberFormatException e) {
     System.out.println(e);
