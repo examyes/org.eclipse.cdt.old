@@ -37,7 +37,7 @@ command: xl.*
 
 command: cat.*patterns.*
 	 warning file 		 pattern=# .*(PATTERNS.DAT).*
-	 Output 			         pattern=command: .*
+	 Output 			             pattern=command: .*
 	 #statement 			         pattern=#.*
 	 statement                   pattern=.* pattern.*=.*
 
