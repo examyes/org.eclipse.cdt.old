@@ -107,9 +107,24 @@ Work that you may consider interesting or worthwhile
        that test each branch of a conditional statement for example
 
 
-
-
-
-
-
+Debugger:
+1.  Breakpoints
+    - Set entry breakpoint
+    - Set address breakpoint
+    - Set watchpoint
+    - Set dll/object load breakpoint
+    - Add condition
+2.  Source
+    - Disassembly view for files not in project
+    - Mixed view
+3.  Monitor view
+    - Disable monitor(even if disabled, it gets updated when tree is expanded)
+    - Type information(creating type info degrades performance)
+    - Change representation
+4.  Gdb console
+    - update ui for any command executed
+5.  Exception Handling
+    - Rerun Exception
+6.  Storage view
+    - Removing
 
