@@ -315,8 +315,7 @@ public class ObjectsViewPart extends GenericViewPart
 		
 		if ((commandObject != null) && (event.getProject() != null))
 		    {
-			String commandStr = "Issuing " + 
-			    commandObject.getValue() + " on " + event.getProject().getName();
+			String commandStr = commandObject.getValue() + " running on " + event.getProject().getName();
 			mgr.setMessage(commandStr);
 			
 			if (event.getStatus() == CppProjectEvent.DONE)
