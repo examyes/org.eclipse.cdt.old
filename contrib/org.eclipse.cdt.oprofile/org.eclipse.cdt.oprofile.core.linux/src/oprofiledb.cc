@@ -41,7 +41,7 @@ oprofile_db::_open_db (void)
     {
       int rc;
 
-      _tree = new samples_odb_t;
+      _tree = new odb_t;
       rc = odb_open (_tree, _filename.c_str (), ODB_RDONLY, sizeof (opd_header));
       if (rc != 0)
 	{
@@ -65,7 +65,7 @@ oprofile_db::_close_db (void)
 }
 
 static void
-samples_odb_travel (samples_odb_t* hash, int start, int end, oprofile_db::callback_t callback, void* data)
+samples_odb_travel (odb_t* hash, int start, int end, oprofile_db::callback_t callback, void* data)
 {
   odb_node_nr_t node_nr, pos;
   odb_node_t* node = odb_get_iterator (hash, &node_nr);

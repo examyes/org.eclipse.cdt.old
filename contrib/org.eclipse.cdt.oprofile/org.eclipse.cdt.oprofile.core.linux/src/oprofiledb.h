@@ -16,7 +16,7 @@
 #include <map>
 #include <string>
 #include <bfd.h>
-#include <odb_hash.h>
+#include <odb.h>
 
 class sample;
 class symboltable;
@@ -77,7 +77,7 @@ class oprofile_db
   std::string _filename;
 
   // The oprofile sample database for the file
-  samples_odb_t* _tree;
+  odb_t* _tree;
 
   // A map of all the samples
   samples_t _samples;
