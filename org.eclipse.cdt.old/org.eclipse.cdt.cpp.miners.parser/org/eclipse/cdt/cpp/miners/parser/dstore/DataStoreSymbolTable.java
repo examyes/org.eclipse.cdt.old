@@ -207,8 +207,9 @@ public class DataStoreSymbolTable implements SymbolTable
    objType = ParserSchema.dTypedef;
   }  
   
-  DataElement theObject = _dataStore.createObject(_root, objType, objName, _currentSource + ":" + beginLine);//, "" + _idCounter++);
+  DataElement theObject = _dataStore.createObject(_root, objType, objName, _currentSource);//, "" + _idCounter++);
   theObject.setAttribute(DE.A_VALUE,objName);
+  theObject.setAttribute(DE.A_SOURCE_LOCATION, "" + beginLine); 
   
   if (isScope) 
    _root = theObject;
