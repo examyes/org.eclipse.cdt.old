@@ -135,13 +135,33 @@ public class AutoconfManager {
 			rt.exec("sh -c ./support.dist", null, project.getFileObject());
 		}catch(IOException e){e.printStackTrace();}	
 	}
-	public void runConfigureScript()
+
+	public void runConfigureScript(DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		try
-		{
-			rt.exec("sh -c ./configure", null, project.getFileObject());
-		}catch(IOException e){System.out.println(e);}	
+		//		try
+		    {
+			DataStore ds = status.getDataStore();
+			String invocation = "sh -c ./configure";
+			DataElement invocationElement = ds.createObject(null, "invocation", invocation);
+
+			//Process p = rt.exec("sh -c ./configure", null, project.getFileObject());
+			DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(), "C_COMMAND");
+			if (cmdD != null)
+			    {
+				ArrayList args = new ArrayList();
+				args.add(invocationElement);
+				DataElement s = ds.command(cmdD, args, project);
+				status.addNestedData(s, true);
+			    }
+			
+		    }
+		/*
+		catch(IOException e)
+		    {
+			System.out.println(e);
+		    }
+		*/	
 	} 
 }
 

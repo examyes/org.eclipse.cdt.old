@@ -29,8 +29,9 @@ public class CommandMiner extends Miner
 
  public void extendSchema(DataElement schemaRoot)
  {
-     DataElement dirD      = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
-     DataElement cmdD      = createCommandDescriptor(dirD, "Command", "C_COMMAND");
+     //     DataElement dirD      = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
+     DataElement fsD      = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+     DataElement cmdD      = createCommandDescriptor(fsD, "Command", "C_COMMAND");
 
      DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
      DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");

@@ -1322,6 +1322,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement fsD   = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement dirD = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement rootD = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
+	DataElement projectD = dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
 
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
@@ -1356,6 +1357,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							   "com.ibm.cpp.ui.internal.actions.ReplicateFromAction");
 	replicateFrom.
 	***/					   
+
+
+	DataElement configureCmd = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "configure", 
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	
 
     }
     

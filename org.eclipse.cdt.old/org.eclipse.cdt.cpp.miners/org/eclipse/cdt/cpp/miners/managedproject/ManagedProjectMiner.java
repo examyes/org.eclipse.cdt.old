@@ -20,7 +20,7 @@ public class ManagedProjectMiner extends Miner
 	{
 		DataElement projectD = _dataStore.find(schemaRoot, DE.A_NAME, "Project");
 		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT");
-		createCommandDescriptor(projectD, "configure", "C_CONFIGURE");
+		createCommandDescriptor(projectD, "configure", "C_CONFIGURE", false);
     
 		DataElement managedProjectD  = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.MANAGED_PROJECT);
 		createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
@@ -67,7 +67,7 @@ public class ManagedProjectMiner extends Miner
 		}
 		else if (name.equals("C_CONFIGURE"))
 		{
-			manager.runConfigureScript();
+		    manager.runConfigureScript(status);
 		}
 		else if (name.equals("C_REFRESH"))
   			refreshProject(project);
