@@ -3,7 +3,7 @@
    name = "%pluginName"
    id = "com.ibm.dstore.hosts"
    version = "1.2.1"
-   vendor-name = "IBM"
+   vendor-name = "International Business Machines Corp."
    class="com.ibm.dstore.hosts.HostsPlugin">
 
    <requires>
