@@ -22,6 +22,7 @@ public class ParserSchema
  public static String RemoveParseInformation = getLocalizedString("parser.RemoveParseInformation");
  public static String SaveParseInformation   = getLocalizedString("parser.SaveParseInformation");
  public static String CodeAssist             = getLocalizedString("parser.CodeAssist");
+ public static String ProvideSourceFor       = getLocalizedString("parser.ProvideSourceFor");
  public static String FindDeclaration        = getLocalizedString("parser.FindDeclaration");
  public static String SetIncludePath         = getLocalizedString("parser.SetIncludePath");
  public static String SetPreferences         = getLocalizedString("parser.SetPreferences");
@@ -89,6 +90,7 @@ public class ParserSchema
  public static DataElement dC_REMOVE_PARSE;
  public static DataElement dC_SAVE_PARSE;
  public static DataElement dC_CODE_ASSIST;
+ public static DataElement dC_PROVIDE_SOURCE_FOR;
  public static DataElement dC_FIND_DECLARATION;
  public static DataElement dC_SET_INCLUDE_PATH;
  public static DataElement dC_SET_PREFERENCES;
@@ -174,6 +176,9 @@ public class ParserSchema
   dC_SAVE_PARSE       = createCommandDescriptor(dFsObjects, SaveParseInformation,   "C_SAVE_PARSE", false);
   dC_CODE_ASSIST      = createCommandDescriptor(dFsObjects, CodeAssist,             "C_CODE_ASSIST");
   dC_CODE_ASSIST.setDepth(0);
+  dC_PROVIDE_SOURCE_FOR = createCommandDescriptor(dCppObject, ProvideSourceFor,     "C_PROVIDE_SOURCE_FOR");
+  dC_PROVIDE_SOURCE_FOR.setDepth(0);
+  
   dC_FIND_DECLARATION = createCommandDescriptor(dFsObjects, FindDeclaration,        "C_FIND_DECLARATION");
   dC_FIND_DECLARATION.setDepth(0);
   dC_SET_INCLUDE_PATH = createCommandDescriptor(dFsObjects, SetIncludePath,         "C_SET_INCLUDE_PATH");

@@ -30,8 +30,62 @@ public class NameLookup
   _dataStore   = theProject.getDataStore();
   _parsedFiles = _dataStore.find(theProject, DE.A_NAME, "Parsed Files", 1);
  }
- 
   
+ public DataElement provideSourceFor(DataElement theElement, DataElement parsedFiles, DataElement status)
+ {
+  if ((theElement == null) || (parsedFiles == null) || (status == null))
+   return null;
+ 
+  DataElement foundFunction = findFunction(parsedFiles, getFunctionName(theElement.getValue()), countCommas(theElement.getValue()));
+  if (foundFunction == null)
+   return null;
+
+  theElement.setAttribute(DE.A_SOURCE, foundFunction.getSource());
+  theElement.getDataStore().update(theElement);
+  return status;
+ }
+
+ public DataElement findFunction(DataElement root, String functionName, int commas)
+ {
+  ArrayList contents = root.getAssociated("contents");
+  for (int i = contents.size()-1; i>=0; i--)
+  {
+   DataElement theElement = (DataElement)contents.get(i);
+   String theType = theElement.getType();
+   if (  theType.equals("function") || theType.equals("constructor") || theType.equals("destructor") )
+   {
+    if ( (getFunctionName(theElement.getValue()).equals(functionName)) && 
+         (countCommas(theElement.getValue()) == commas))
+     return theElement;
+   }
+   else if ( theType.equals("Parsed Source") || theType.equals("Included Source") || theType.equals("class") || theType.equals("namespace") || theType.equals("struct") )
+   {
+    DataElement result = findFunction(theElement, functionName, commas);
+    if (result != null)
+     return result;
+   }  
+  }
+  return null;
+ } 
+
+ public String getFunctionName(String functionSignature)
+ {
+  int firstParen = functionSignature.indexOf("(");
+  if (firstParen < 0)
+   return functionSignature;
+  return functionSignature.substring(0, firstParen);
+ }
+ 
+ public int countCommas(String functionName)
+ {
+  int commas = 0;
+  char[] letters = functionName.toCharArray();
+  for (int i=letters.length-1; i>=0; i--)
+   if (letters[i] == ',')
+    commas++;
+  return commas;
+ }
+ 
  public DataElement nameLookup(String objName, String type, DataElement start)
  {
   _searchedFiles.clear();
@@ -224,8 +278,6 @@ public class NameLookup
    DataElement theChild = (DataElement)children.get(i);
    if (theChild!=null)
    {
-   
-    
     if (theChild.getSource().toLowerCase().equals(pattern.toLowerCase()))
      results.add(theChild);
     results.addAll(findAllElements(theChild, attribute, pattern));

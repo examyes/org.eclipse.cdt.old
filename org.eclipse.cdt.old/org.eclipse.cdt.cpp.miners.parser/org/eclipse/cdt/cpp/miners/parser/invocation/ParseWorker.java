@@ -87,7 +87,7 @@ public class ParseWorker extends Thread
 
  public void setEnabled(boolean enabled)
  {
-  _enabled = enabled;
+   _enabled = enabled;
  }
 
  public void run()
@@ -168,6 +168,7 @@ public class ParseWorker extends Thread
   { 
    update(_projectObjects);
   }
+  
   if (!_statusDone)
   {
    statusDone(_masterStatus);

@@ -33,6 +33,12 @@ public class CodeAssist
   _dataStore  = theProject.getDataStore();
   _nameLookup.setProject(theProject);
  }
+
+ public DataElement doProvideSourceFor(DataElement theElement, DataElement parsedFiles, DataElement status)
+ {
+  return _nameLookup.provideSourceFor(theElement, parsedFiles, status);
+ }
+
  
  public DataElement doFindDeclaration(DataElement theProject, DataElement patternElement, DataElement status)
  {
