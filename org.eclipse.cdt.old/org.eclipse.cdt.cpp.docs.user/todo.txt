@@ -15,7 +15,7 @@ Work that we are planning or considering doing:
 
 3.  PA Integration
      - We will be providing some level of integration with other plugins 
-       such as Performance Analaysis.  
+       such as Performance Analysis.  
 
 4.  Limited support for Mixed Language Projects
      - We need to look at the issues that arise from having Java, C/C++ 
