@@ -82,11 +82,29 @@
 
 	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
 		<launchConfigurationTypeImage
-			id="org.eclipse.cdt.launchimage"
-			configTypeID="org.eclipse.cdt.launchconfig"
+			id="org.eclipse.cdt.run.launchimage"
+			configTypeID="org.eclipse.cdt.run.launchconfig"
 			icon="icons/full/clcl16/run_exe.gif">
 		</launchConfigurationTypeImage>	
 	</extension>
+
+        <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+		<launchConfigurationTypeImage
+			id="org.eclipse.cdt.debugattach.launchimage"
+			configTypeID="org.eclipse.cdt.debugattach.launchconfig"
+			icon="icons/full/clcl16/run_exe.gif">
+		</launchConfigurationTypeImage>	
+	</extension>
+
+        <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+		<launchConfigurationTypeImage
+			id="org.eclipse.cdt.debugload.launchimage"
+			configTypeID="org.eclipse.cdt.debugload.launchconfig"
+			icon="icons/full/clcl16/run_exe.gif">
+		</launchConfigurationTypeImage>	
+	</extension>
+      
+
 
        <extension point = "org.eclipse.debug.ui.launchConfigurationTabGroups">
        	<launchConfigurationTabGroup
