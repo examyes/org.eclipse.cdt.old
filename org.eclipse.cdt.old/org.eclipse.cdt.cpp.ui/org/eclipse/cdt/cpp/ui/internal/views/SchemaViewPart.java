@@ -41,9 +41,8 @@ public class SchemaViewPart extends DataStoreViewPart
 	setTitle("Schema - no DataStore selected");
     }
     
-    public void doInput()
+    public void doInput(DataStore dataStore)
     {
-	DataStore dataStore = _plugin.getCurrentDataStore();
 	DataElement schema = dataStore.getDescriptorRoot();
 	_viewer.setInput(schema);      
 	

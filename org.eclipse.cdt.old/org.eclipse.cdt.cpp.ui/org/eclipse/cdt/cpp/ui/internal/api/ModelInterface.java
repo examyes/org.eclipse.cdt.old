@@ -144,9 +144,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	private DataElement _status;
 	private IProject    _project;
-	
+	private int         _threshold;
+	private int         _timesHandled;
+
 	public MonitorStatusThread(DataElement status, IProject project)
 	{
+	    super();
+	    setWaitTime(500);
+	    _threshold = 100;
+	    _timesHandled = 0;
 	    _status = status;
 	    _project = project;
 	    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
@@ -158,8 +164,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	public void handle()
 	{	
 	    String statusValue = _status.getName();
-	    if (statusValue.equals(_status.getDataStore().getLocalizedString("model.done")) ||
-		statusValue.equals(_status.getDataStore().getLocalizedString("model.timeout")))
+	    if (_timesHandled > _threshold)
+		{
+		    if (!_project.isOpen())
+			{
+			    statusValue = "done";
+			}
+		}
+
+	    if (statusValue.equals("done") || statusValue.equals("timeout"))
 		{
 		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
 									    CppProjectEvent.DONE,
@@ -173,6 +186,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 									    CppProjectEvent.WORKING,
 									    _status,
 									    _project));
+		    _timesHandled++;
 		}
 	}
     }

@@ -14,15 +14,15 @@ import org.eclipse.jface.viewers.*;
 
 public class MinersViewPart extends DataStoreViewPart
 {
-  public MinersViewPart()
-  {
-    super();
-  }
+    public MinersViewPart()
+    {
+	super();
+    }
 
-  public void createPartControl(Composite parent)
-  {
-    super.createPartControl(parent);    
-  }
+    public void createPartControl(Composite parent)
+    {
+	super.createPartControl(parent);    
+    }
 
     public void doClear()
     {
@@ -30,17 +30,14 @@ public class MinersViewPart extends DataStoreViewPart
 	setTitle("Miners - no DataStore selected");
     }
     
-    public void doInput()
+    public void doInput(DataStore dataStore)
     {
-	DataStore dataStore = _plugin.getCurrentDataStore();
-
 	DataElement minerRoot = dataStore.getMinerRoot();
 	_viewer.fixateOnRelationType(dataStore.getLocalizedString("model.contents"));
-	_viewer.fixateOnObjectType(dataStore.getLocalizedString("model.all"));
 	_viewer.setInput(minerRoot);      
 	
 	setTitle(_plugin.getLocalizedString("MinersViewer.Miners_on") + " " + dataStore.getName());    
-    } 
+    }
   
 }
 

@@ -19,7 +19,7 @@ public abstract class DataStoreViewPart extends ObjectsViewPart
     private DataStore _inputDataStore;
 
     public DataStoreViewPart()
-    {
+    { 
 	super();
     }
 
@@ -30,15 +30,15 @@ public abstract class DataStoreViewPart extends ObjectsViewPart
     
     public void initInput(DataStore dataStore)
     {
-	if (dataStore != _inputDataStore)
+	if (dataStore != null && dataStore != _inputDataStore)
 	    {
-		doInput();
+		doInput(dataStore);
 		_inputDataStore = dataStore;
 	    }
     }
 
     public abstract void doClear();
-    public abstract void doInput();
+    public abstract void doInput(DataStore dataStore);
     
     public void projectChanged(CppProjectEvent event)
     {
@@ -48,13 +48,16 @@ public abstract class DataStoreViewPart extends ObjectsViewPart
 	    {
 	    case CppProjectEvent.OPEN:
 		{
-		    doInput();
-		    _viewer.resetView();
+		    if (_inputDataStore != null)
+			{
+			    doInput(_inputDataStore);
+			    _viewer.resetView();
+			}
 		}
 		break;
 	    case CppProjectEvent.CLOSE:
 	    case CppProjectEvent.DELETE:
-		{
+		{		    
 		    doClear();
 		    _viewer.resetView();
 		}

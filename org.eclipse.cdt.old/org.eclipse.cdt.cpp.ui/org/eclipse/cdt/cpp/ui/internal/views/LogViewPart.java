@@ -32,9 +32,8 @@ public class LogViewPart extends DataStoreViewPart
 	setTitle("Log - no DataStore selected");
     }
     
-    public void doInput()
+    public void doInput(DataStore dataStore)
     {
-	DataStore dataStore = _plugin.getCurrentDataStore();
 	DataElement log = dataStore.getLogRoot();
 	_viewer.setSorter("null");
 	_viewer.setInput(log);
