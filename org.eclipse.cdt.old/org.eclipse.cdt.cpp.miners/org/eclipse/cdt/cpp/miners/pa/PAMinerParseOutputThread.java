@@ -15,6 +15,7 @@ import org.eclipse.cdt.cpp.miners.pa.engine.*;
 public class PAMinerParseOutputThread extends Thread {
 
   private PAMiner		 _miner;
+  private DataStore		 _dataStore;
   private DataElement	 _traceElement;
   private DataElement	 _status;
   private InputStream    _stdout;
@@ -34,6 +35,7 @@ public class PAMinerParseOutputThread extends Thread {
    _status = status;
    _stdout = stdout;
    _traceFormat = traceFormat;
+   _dataStore = _miner.getDataStore();
    
    _reader = new BufferedReader(new InputStreamReader(_stdout));
    
@@ -112,10 +114,15 @@ public class PAMinerParseOutputThread extends Thread {
 
   if (_parseStatus.isAllDone())
   {
+    // Reset the type of the trace element after the parsing
+    _traceElement.setAttribute(DE.A_TYPE, PADataStoreAdaptor.getTraceProgramFormat(_traceFile));
+    DataElement traceFunctionsRoot =  _dataStore.find(_traceElement, DE.A_VALUE, _miner.getLocalizedString("pa.TraceFuncRoot"), 1);
+    traceFunctionsRoot.setAttribute(DE.A_TYPE, _traceElement.getType());
+
     PADataStoreAdaptor adaptor = new PADataStoreAdaptor(_traceElement);
     adaptor.populateDataStore(_traceElement, _traceFile);
     _status.setAttribute(DE.A_NAME, "done");
-    _miner.getDataStore().refresh(_status, false);
+    _dataStore.refresh(_status, false);
   }
   
   // System.out.println("Return from output thread");

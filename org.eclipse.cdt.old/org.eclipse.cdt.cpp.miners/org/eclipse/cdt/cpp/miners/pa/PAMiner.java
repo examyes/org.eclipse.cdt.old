@@ -17,6 +17,10 @@ import org.eclipse.cdt.cpp.miners.pa.engine.*;
 
 public class PAMiner extends Miner { 
  
+ private DataElement _callArcD;
+ private DataElement _callerArcD;
+ private DataElement _calleeArcD;
+ 
  
  // Constructor
  public PAMiner ()
@@ -91,24 +95,42 @@ public class PAMiner extends Miner {
   DataElement programNameD       = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ProgramName"));
   
   // Common trace function attributes (%time, #calls, total time, self time, children time, 
-  // total ms/call and self ms/call).
+  // total time/call and self time/call).
   DataElement timePercentD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TimePercentage"));  
   DataElement numCallsD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numCalls"));
   DataElement selfTimeD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTime"));
   DataElement totalTimeD     = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTime"));
   DataElement childrenTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ChildrenTime"));
-  DataElement selfPerCallD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTimePerCall"));
-  DataElement totalPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTimePerCall"));
   
+  // For gprof, the unit for self and total time per call can be ms, us, ts or ps.
+  // We create different descriptors for different time units.
+  DataElement selfMsPerCallD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfMsPerCall"));
+  DataElement selfUsPerCallD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfUsPerCall"));
+  DataElement selfTsPerCallD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTsPerCall"));
+  DataElement selfPsPerCallD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfPsPerCall"));
+  
+  DataElement totalMsPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalMsPerCall"));
+  DataElement totalUsPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalUsPerCall"));
+  DataElement totalTsPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTsPerCall"));
+  DataElement totalPsPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalPsPerCall"));
+  
+
   // set the types of the attributes
   createReference(timePercentD,  floatD,   attributesD);
   createReference(numCallsD, 	 integerD, attributesD);
   createReference(selfTimeD, 	 floatD,   attributesD);
   createReference(totalTimeD, 	 floatD,   attributesD);
   createReference(childrenTimeD, floatD,   attributesD);
-  createReference(selfPerCallD,  floatD,   attributesD);
-  createReference(totalPerCallD, floatD,   attributesD);
-  
+    
+  createReference(selfMsPerCallD,  floatD,   attributesD);
+  createReference(selfUsPerCallD,  floatD,   attributesD);
+  createReference(selfTsPerCallD,  floatD,   attributesD);
+  createReference(selfPsPerCallD,  floatD,   attributesD);
+
+  createReference(totalMsPerCallD, floatD,   attributesD);
+  createReference(totalUsPerCallD, floatD,   attributesD);
+  createReference(totalTsPerCallD, floatD,   attributesD);
+  createReference(totalPsPerCallD, floatD,   attributesD);
   
   // Additional attributes for functioncheck trace functions
   DataElement minTotalTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MinTotalTime"));
@@ -132,6 +154,7 @@ public class PAMiner extends Miner {
   createReference(traceTargetD, numTraceFunctionsD, attributesD);
   createReference(traceTargetD, numCallEntriesD, 	attributesD);
   
+  
   // Create intermediate  object descriptors.
   // The intermediate descriptors are used to model the common characteristics of the more concrete 
   // descriptors. 
@@ -143,7 +166,8 @@ public class PAMiner extends Miner {
   //                                             |    |
   // TraceFileD    --> gprofTraceFileD  <--------     |
   //              |--> fcTraceFileD     <------- fcTraceTargetD
-  //                                            
+  //
+  
   DataElement traceProgramD      = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.TraceProgram"));
   DataElement traceFileD         = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.TraceFile"));
   DataElement gprofTraceTargetD  = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.gprofTraceTarget"));
@@ -165,70 +189,111 @@ public class PAMiner extends Miner {
   createAbstractRelationship(traceFileD, gprofTraceFileD);
   createAbstractRelationship(traceFileD, fcTraceFileD);
   
+  // Derivative descriptors from gprof trace file for different time units.
+  DataElement gprofTraceFile_msD = createDerivativeDescriptor(gprofTraceFileD, getLocalizedString("pa.gprofTraceFile_ms"));
+  DataElement gprofTraceFile_usD = createDerivativeDescriptor(gprofTraceFileD, getLocalizedString("pa.gprofTraceFile_us"));
+  DataElement gprofTraceFile_tsD = createDerivativeDescriptor(gprofTraceFileD, getLocalizedString("pa.gprofTraceFile_ts"));
+  DataElement gprofTraceFile_psD = createDerivativeDescriptor(gprofTraceFileD, getLocalizedString("pa.gprofTraceFile_ps"));
+  
   // Concrete descriptors for trace programs
   // gprofTraceProgramD inherits from both gprofTraceTargetD and traceProgramD.
   DataElement gprofTraceProgramD   = createDerivativeDescriptor(gprofTraceTargetD, getLocalizedString("pa.gprofTraceProgram"));
   DataElement fcTraceProgramD      = createDerivativeDescriptor(fcTraceTargetD,    getLocalizedString("pa.fcTraceProgram"));
   createAbstractRelationship(traceProgramD, gprofTraceProgramD);
   createAbstractRelationship(traceProgramD, fcTraceProgramD); 
+
+  // Derivative descriptors from gprof trace program for different time units.
+  DataElement gprofTraceProgram_msD = createDerivativeDescriptor(gprofTraceProgramD, getLocalizedString("pa.gprofTraceProgram_ms"));
+  DataElement gprofTraceProgram_usD = createDerivativeDescriptor(gprofTraceProgramD, getLocalizedString("pa.gprofTraceProgram_us"));
+  DataElement gprofTraceProgram_tsD = createDerivativeDescriptor(gprofTraceProgramD, getLocalizedString("pa.gprofTraceProgram_ts"));
+  DataElement gprofTraceProgram_psD = createDerivativeDescriptor(gprofTraceProgramD, getLocalizedString("pa.gprofTraceProgram_ps"));
+
+  // Descriptors for call arcs
+  _callArcD             = createObjectDescriptor(schemaRoot, getLocalizedString("pa.CallArc"));
+
+  // set the attributes for call arcs (#calls, self time and children time).
+  createReference(_callArcD, numCallsD, 	attributesD);
+  createReference(_callArcD, selfTimeD, 	attributesD);
+  createReference(_callArcD, childrenTimeD, attributesD);
+
   
   // Abstract descriptor for trace functions
   DataElement traceFunctionD       = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("pa.TraceFunction"));
   
+  // Relation Descriptors
+  DataElement callsD             = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.Calls"));
+  DataElement calledByD          = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.CalledBy"));
+  DataElement referencedFileD    = createRelationDescriptor(traceTargetD,   getLocalizedString("pa.ReferencedFile"));
+  DataElement referencedProjectD = createRelationDescriptor(traceTargetD,   getLocalizedString("pa.ReferencedProject"));
+ 
+  _callerArcD  = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.CallerArc"));
+  _calleeArcD  = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.CalleeArc"));
+
   // Descriptor for gprof trace functions
-  DataElement gprofTraceFunctionD  = createDerivativeDescriptor(traceFunctionD, 	 getLocalizedString("pa.gprofTraceFunction"));
+  DataElement gprofTraceFunctionD  = createDerivativeDescriptor(traceFunctionD, getLocalizedString("pa.gprofTraceFunction"));
 
   // set the attributes for gprof trace functions
   createReference(gprofTraceFunctionD, timePercentD,  attributesD);  
   createReference(gprofTraceFunctionD, numCallsD, 	  attributesD);
   createReference(gprofTraceFunctionD, selfTimeD, 	  attributesD);
   createReference(gprofTraceFunctionD, totalTimeD, 	  attributesD);
-  createReference(gprofTraceFunctionD, selfPerCallD,  attributesD);
-  createReference(gprofTraceFunctionD, totalPerCallD, attributesD);
 
+  // Derivative descriptors from gprof trace function for different time units.
+  DataElement gprofTraceFunction_msD  = createDerivativeFunctionDescriptor(gprofTraceFunctionD, getLocalizedString("pa.gprofTraceFunction_ms"));
+  DataElement gprofTraceFunction_usD  = createDerivativeFunctionDescriptor(gprofTraceFunctionD, getLocalizedString("pa.gprofTraceFunction_us"));
+  DataElement gprofTraceFunction_tsD  = createDerivativeFunctionDescriptor(gprofTraceFunctionD, getLocalizedString("pa.gprofTraceFunction_ts"));
+  DataElement gprofTraceFunction_psD  = createDerivativeFunctionDescriptor(gprofTraceFunctionD, getLocalizedString("pa.gprofTraceFunction_ps"));
+
+  // Create attributes for self time/call and total time/call.
+  createReference(gprofTraceFunction_msD, selfMsPerCallD,  attributesD);
+  createReference(gprofTraceFunction_usD, selfUsPerCallD,  attributesD);
+  createReference(gprofTraceFunction_tsD, selfTsPerCallD,  attributesD);
+  createReference(gprofTraceFunction_psD, selfPsPerCallD,  attributesD);
+  
+  createReference(gprofTraceFunction_msD, totalMsPerCallD,  attributesD);
+  createReference(gprofTraceFunction_usD, totalUsPerCallD,  attributesD);
+  createReference(gprofTraceFunction_tsD, totalTsPerCallD,  attributesD);
+  createReference(gprofTraceFunction_psD, totalPsPerCallD,  attributesD);
+
+  
   // Descriptor for gprof cyclic trace functions
   DataElement gprofCyclicTrcFuncD  = createDerivativeDescriptor(gprofTraceFunctionD, getLocalizedString("pa.gprofCyclicTraceFunction"));
+
+  // Derivative descriptors for gprof cyclic trace functions
+  DataElement gprofCyclicTrcFunc_msD = createDerivativeFunctionDescriptor(gprofTraceFunction_msD, getLocalizedString("pa.gprofCyclicTraceFunction_ms"));
+  DataElement gprofCyclicTrcFunc_usD = createDerivativeFunctionDescriptor(gprofTraceFunction_usD, getLocalizedString("pa.gprofCyclicTraceFunction_us"));
+  DataElement gprofCyclicTrcFunc_tsD = createDerivativeFunctionDescriptor(gprofTraceFunction_tsD, getLocalizedString("pa.gprofCyclicTraceFunction_ts"));
+  DataElement gprofCyclicTrcFunc_psD = createDerivativeFunctionDescriptor(gprofTraceFunction_psD, getLocalizedString("pa.gprofCyclicTraceFunction_ps"));
+  
+  createAbstractRelationship(gprofCyclicTrcFuncD, gprofCyclicTrcFunc_msD);
+  createAbstractRelationship(gprofCyclicTrcFuncD, gprofCyclicTrcFunc_usD);
+  createAbstractRelationship(gprofCyclicTrcFuncD, gprofCyclicTrcFunc_tsD);
+  createAbstractRelationship(gprofCyclicTrcFuncD, gprofCyclicTrcFunc_psD);
   
   // Descriptor for functioncheck trace functions
-  DataElement fcTraceFunctionD     = createDerivativeDescriptor(traceFunctionD, getLocalizedString("pa.fcTraceFunction"));
+  DataElement fcTraceFunctionD     = createDerivativeFunctionDescriptor(traceFunctionD, getLocalizedString("pa.fcTraceFunction"));
   
   // set the attributes for functioncheck trace functions
   createReference(fcTraceFunctionD, timePercentD,  attributesD);  
   createReference(fcTraceFunctionD, numCallsD, 	   attributesD);
   createReference(fcTraceFunctionD, selfTimeD, 	   attributesD);
   createReference(fcTraceFunctionD, totalTimeD,    attributesD);
-  createReference(fcTraceFunctionD, selfPerCallD,  attributesD);
-  createReference(fcTraceFunctionD, totalPerCallD, attributesD);
+  createReference(fcTraceFunctionD, selfMsPerCallD,  attributesD);
+  createReference(fcTraceFunctionD, totalMsPerCallD, attributesD);
   createReference(fcTraceFunctionD, minSelfTimeD,  attributesD);
   createReference(fcTraceFunctionD, maxSelfTimeD,  attributesD);
   createReference(fcTraceFunctionD, minTotalTimeD, attributesD);
   createReference(fcTraceFunctionD, maxTotalTimeD, attributesD);
   
   // Descriptor for functioncheck cyclic trace functions
-  DataElement fcCyclicTrcFuncD     = createDerivativeDescriptor(fcTraceFunctionD, getLocalizedString("pa.fcCyclicTraceFunction"));
-  
-  // Descriptors for call arcs
-  DataElement callArcD             = createObjectDescriptor(schemaRoot, getLocalizedString("pa.CallArc"));
-
-  // set the attributes for call arcs (#calls, self time and children time).
-  createReference(callArcD, numCallsD, 		attributesD);
-  createReference(callArcD, selfTimeD, 		attributesD);
-  createReference(callArcD, childrenTimeD,  attributesD);
-    
-  // Relation Descriptors
-  DataElement callsD             = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.Calls"));
-  DataElement calledByD          = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.CalledBy"));
-  DataElement callerArcD         = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.CallerArc"));
-  DataElement calleeArcD         = createRelationDescriptor(traceFunctionD, getLocalizedString("pa.CalleeArc"));
-  DataElement referencedFileD    = createRelationDescriptor(traceTargetD,   getLocalizedString("pa.ReferencedFile"));
-  DataElement referencedProjectD = createRelationDescriptor(traceTargetD,   getLocalizedString("pa.ReferencedProject"));
-  
+  DataElement fcCyclicTrcFuncD     = createDerivativeFunctionDescriptor(fcTraceFunctionD, getLocalizedString("pa.fcCyclicTraceFunction"));
+        
   createRelationDescriptor(gprofCyclicTrcFuncD, getLocalizedString("pa.Cycles"));
   createRelationDescriptor(fcCyclicTrcFuncD, getLocalizedString("pa.Cycles"));
   
   // make the caller/callee arc relations invisible
-  callerArcD.setDepth(0);
-  calleeArcD.setDepth(0);
+  _callerArcD.setDepth(0);
+  _calleeArcD.setDepth(0);
   referencedFileD.setDepth(0);
   referencedProjectD.setDepth(0);
   
@@ -238,18 +303,23 @@ public class PAMiner extends Miner {
   // Set up the relation between trace targets and trace functions.
   // This models the fact that a gprof trace file or program can contain 
   // a list of gprof trace functions.
-  createReference(gprofTraceTargetD, gprofTraceFunctionD);
   createReference(fcTraceTargetD, fcTraceFunctionD);
+  
+  createReference(gprofTraceFile_msD, gprofTraceFunction_msD);
+  createReference(gprofTraceFile_usD, gprofTraceFunction_usD);
+  createReference(gprofTraceFile_tsD, gprofTraceFunction_tsD);
+  createReference(gprofTraceFile_psD, gprofTraceFunction_psD);
+
+  createReference(gprofTraceProgram_msD, gprofTraceFunction_msD);
+  createReference(gprofTraceProgram_usD, gprofTraceFunction_usD);
+  createReference(gprofTraceProgram_tsD, gprofTraceFunction_tsD);
+  createReference(gprofTraceProgram_psD, gprofTraceFunction_psD);
   
   // set up the calls and called by relations
   createReference(gprofTraceFunctionD,  gprofTraceFunctionD, callsD);
   createReference(gprofTraceFunctionD,  gprofTraceFunctionD, calledByD);
   createReference(fcTraceFunctionD, 	fcTraceFunctionD, 	 callsD);
   createReference(fcTraceFunctionD, 	fcTraceFunctionD, 	 calledByD);
-  createReference(gprofTraceFunctionD,  callArcD, 			 callerArcD);
-  createReference(gprofTraceFunctionD,  callArcD, 			 calleeArcD);
-  createReference(fcTraceFunctionD, 	callArcD, 			 callerArcD);
-  createReference(fcTraceFunctionD, 	callArcD, 			 calleeArcD);
     
   // Descriptor for call root
   DataElement callRootD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.CallRoot"));
@@ -420,6 +490,7 @@ public class PAMiner extends Miner {
    traceElement.setAttribute(DE.A_TYPE, PADataStoreAdaptor.getTraceFileFormat(traceFile));
    DataElement traceFunctionsRoot = _dataStore.find(traceElement, DE.A_VALUE, getLocalizedString("pa.TraceFuncRoot"), 1);
    traceFunctionsRoot.setAttribute(DE.A_TYPE, traceElement.getType());
+   _dataStore.refresh(traceFunctionsRoot, false);
    
    adaptor.populateDataStore(traceElement, traceFile);
    status.setAttribute(DE.A_NAME, "done");
@@ -491,6 +562,19 @@ public class PAMiner extends Miner {
   errorThread.start();
   outputThread.start();
       
+ }
+ 
+ 
+ /**
+  * Create a derivative function descriptor from a given base descriptor.
+  * We need to create the callerArc and calleeArc relations for function descriptors.
+  */
+ private DataElement createDerivativeFunctionDescriptor(DataElement base, String derivedName)
+ {
+   DataElement descriptor = createDerivativeDescriptor(base, derivedName);
+   createReference(descriptor, 	_callArcD, 	_callerArcD);
+   createReference(descriptor, 	_callArcD, 	_calleeArcD);
+   return descriptor;
  }
  
  

@@ -23,8 +23,8 @@ public class PATraceFunction {
   private int     _callNumber;
   private double  _selfSeconds;
   private double  _totalSeconds;
-  private double  _selfMsPerCall;
-  private double  _totalMsPerCall;
+  private double  _selfTimePerCall;
+  private double  _totalTimePerCall;
   private double  _totalPercentage;
   private boolean _isRecursive;
   private boolean _isCyclic;
@@ -44,8 +44,8 @@ public class PATraceFunction {
    _selfSeconds = 0;
    _totalSeconds = 0;
    _callNumber = 0;
-   _selfMsPerCall = 0;
-   _totalMsPerCall = 0;
+   _selfTimePerCall = 0;
+   _totalTimePerCall = 0;
    _totalPercentage = 0;
    _isRecursive = false;
    _isCyclic = false;
@@ -167,16 +167,16 @@ public class PATraceFunction {
    _selfSeconds = selfSeconds;
   }
   
-  public void setSelfMsPerCall(double selfTime) {    
-   _selfMsPerCall = selfTime * _traceFile.getTimeUnit();   
+  public void setSelfTimePerCall(double selfTime) {    
+   _selfTimePerCall = selfTime;   
   }
   
   public void setTotalSeconds(double totalSeconds) {
    _totalSeconds = totalSeconds;
   }
   
-  public void setTotalMsPerCall(double totalTime) {
-   _totalMsPerCall = totalTime * _traceFile.getTimeUnit();
+  public void setTotalTimePerCall(double totalTime) {
+   _totalTimePerCall = totalTime;
   }
   
   public void setTotalPercentage(double totalPercentage) {
@@ -224,12 +224,12 @@ public class PATraceFunction {
    return _callNumber;
   }
   
-  public double getSelfMsPerCall() {
-   return _selfMsPerCall;
+  public double getSelfTimePerCall() {
+   return _selfTimePerCall;
   }
 
-  public double getTotalMsPerCall() {
-   return _totalMsPerCall;
+  public double getTotalTimePerCall() {
+   return _totalTimePerCall;
   }
 
   public double getTotalPercentage() {

@@ -22,13 +22,36 @@ public class PADataStoreAdaptor {
  private static PAMiner		_miner;
  private static DataStore   _dataStore;
  private static DataElement _provideSourceForD;
- 	
+ 
+ private static String _attributesD;
+ private static String _callsD;
+ private static String _calledByD;
+ private static String _callArcD;
+ private static String _callerArcD;
+ private static String _calleeArcD;
+ private static String _numCallsD;
+ private static String _selfTimeD;
+ private static String _childrenTimeD;
+ private static String _totalTimeD;
+ private static String _timePercentD;
+ private static String _selfMsPerCallD;
+ private static String _totalMsPerCallD;
+ private static String _minSelfTimeD;
+ private static String _maxSelfTimeD;
+ private static String _minTotalTimeD;
+ private static String _maxTotalTimeD;
+ 
  private DataElement _traceElement;
  private DataElement _referencedProject;
  private DataElement _traceFunctionsRoot;
  private DataElement _callTreeRoot;
  private DataElement _attributesRoot;
  private DataElement _callArcsRoot;
+ 
+ private String		 _traceFunctionFormat;
+ private String		 _cyclicTraceFunctionFormat;
+ private String		 _selfTimeString;
+ private String		 _totalTimeString;
  private boolean	 _hasParsedSource;
  
  // This map stores the correspondence between PA trace functions and their 
@@ -69,7 +92,27 @@ public class PADataStoreAdaptor {
     return;
    }
    
-   _provideSourceForD = _dataStore.localDescriptorQuery(cppObjD, "C_PROVIDE_SOURCE_FOR", 1);    
+   _provideSourceForD = _dataStore.localDescriptorQuery(cppObjD, "C_PROVIDE_SOURCE_FOR", 1);
+   
+   // Initialize the relation strings
+   _attributesD = getLocalizedString("pa.Attributes");
+   _callsD		= getLocalizedString("pa.Calls");
+   _calledByD   = getLocalizedString("pa.CalledBy");
+   _callArcD	= getLocalizedString("pa.CallArc");
+   _calleeArcD  = getLocalizedString("pa.CalleeArc");
+   _callerArcD	= getLocalizedString("pa.CallerArc");
+   _numCallsD	= getLocalizedString("pa.numCalls");
+   _selfTimeD	= getLocalizedString("pa.SelfTime");
+   _totalTimeD	= getLocalizedString("pa.TotalTime");
+
+   _childrenTimeD 	= getLocalizedString("pa.ChildrenTime");   
+   _timePercentD	= getLocalizedString("pa.TimePercentage");
+   _selfMsPerCallD  = getLocalizedString("pa.SelfMsPerCall");
+   _totalMsPerCallD = getLocalizedString("pa.TotalMsPerCall");
+   _minSelfTimeD 	= getLocalizedString("pa.MinSelfTime");
+   _maxSelfTimeD	= getLocalizedString("pa.MaxSelfTime");
+   _minTotalTimeD	= getLocalizedString("pa.MinTotalTime");
+   _maxTotalTimeD	= getLocalizedString("pa.MaxTotalTime");
  }
  
  
@@ -103,42 +146,80 @@ public class PADataStoreAdaptor {
   */
  public static String getTraceFileFormat(PATraceFile traceFile) {
  
-   if (traceFile instanceof GprofTraceFile)
-    return getLocalizedString("pa.gprofTraceFile");
+   if (traceFile instanceof GprofTraceFile) {
+    if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_M)
+      return getLocalizedString("pa.gprofTraceFile_ms");
+    else if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_U)
+      return getLocalizedString("pa.gprofTraceFile_us");
+    else if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_T)
+      return getLocalizedString("pa.gprofTraceFile_ts");
+    else if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_P)
+      return getLocalizedString("pa.gprofTraceFile_ps");
+    else
+      return getLocalizedString("pa.gprofTraceFile");
+    
+   }
    else if (traceFile instanceof FunctionCheckTraceFile)
     return getLocalizedString("pa.fcTraceFile");
    else
-    return getLocalizedString("pa.UnknownTraceFile");
+    return traceFile.getClass().getName();
     
  }
  
- 
+
  /**
-  * Return the trace file format as a String
+  * Return the trace program format as a String
   */
- public static String getTraceFunctionFormat(PATraceFunction traceFunction) {
+ public static String getTraceProgramFormat(PATraceFile traceFile) {
  
-  String type = null;
-  
-  if (traceFunction instanceof FunctionCheckTraceFunction) {
-   if (traceFunction.isCyclic())
-    type = getLocalizedString("pa.fcCyclicTraceFunction");
-   else
-    type = getLocalizedString("pa.fcTraceFunction");
-  }
-  else {
-   if (traceFunction.isCyclic()) {
-    type = getLocalizedString("pa.gprofCyclicTraceFunction");
+   if (traceFile instanceof GprofTraceFile) {
+    if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_M)
+      return getLocalizedString("pa.gprofTraceProgram_ms");
+    else if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_U)
+      return getLocalizedString("pa.gprofTraceProgram_us");
+    else if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_T)
+      return getLocalizedString("pa.gprofTraceProgram_ts");
+    else if (traceFile.getTimeUnit() == PATraceFile.TIME_UNIT_P)
+      return getLocalizedString("pa.gprofTraceProgram_ps");
+    else
+      return getLocalizedString("pa.gprofTraceProgram");
    }
+   else if (traceFile instanceof FunctionCheckTraceFile)
+    return getLocalizedString("pa.fcTraceProgram");
    else
-    type = getLocalizedString("pa.gprofTraceFunction");   
-  }
-  
-  return type;
-  
- } 
+    return getLocalizedString("pa.TraceProgram");
+    
+ }
 
-
+ /**
+  * Set the trace function format strings
+  */
+ private void setTraceFunctionFormat(PATraceFile traceFile) {
+ 
+   _selfTimeString  = getLocalizedString("pa.SelfMsPerCall");
+   _totalTimeString = getLocalizedString("pa.TotalMsPerCall");
+   
+   if (traceFile instanceof GprofTraceFile) {
+   
+     String timeUnit = traceFile.getTimeUnitString();
+     _traceFunctionFormat = "gprof trace function (" + timeUnit + ")";
+     _cyclicTraceFunctionFormat = "gprof cyclic trace function (" + timeUnit + ")";     
+     _selfTimeString = "self " + timeUnit + "/call";
+     _totalTimeString = "total " + timeUnit + "/call";
+   }
+   else if (traceFile instanceof FunctionCheckTraceFile) {
+   
+     _traceFunctionFormat = getLocalizedString("pa.fcTraceFunction");
+     _cyclicTraceFunctionFormat = getLocalizedString("pa.fcCyclicTraceFunction");   
+   }
+   else {
+   
+     _traceFunctionFormat = getLocalizedString("pa.TraceFunction");
+     _cyclicTraceFunctionFormat = getLocalizedString("pa.cyclicTraceFunction");
+   }
+ }
+ 
+ 
  /**
   * Round a double to an approximate value with 3 digits after the dot.
   */
@@ -278,6 +359,8 @@ public class PADataStoreAdaptor {
      cleanTraceInformation(fileElement);
    }
    
+   setTraceFunctionFormat(traceFile);
+   
    // Detect whether the project has been parsed
    _hasParsedSource = hasParsedSource();
    
@@ -299,12 +382,12 @@ public class PADataStoreAdaptor {
    while (it.hasNext()) {
     PATraceFunction trcFunc = (PATraceFunction)it.next();
     DataElement funcElement = findOrCreateTraceFunctionElement(trcFunc);
-    createCallNestingRelations(trcFunc);
+    createCallNestingRelations(trcFunc, funcElement);
         
     // Create a "calls" reference between the call root and the top level
     // trace functions.
     if (trcFunc.isTopLevelFunction()) {
-     _dataStore.createReference(_callTreeRoot, funcElement, getLocalizedString("pa.Calls"));
+     _dataStore.createReference(_callTreeRoot, funcElement, _callsD);
     }
     
    }
@@ -343,7 +426,9 @@ public class PADataStoreAdaptor {
    */
   private DataElement createTraceFunction(PATraceFunction traceFunction) {
   
-   String type = getTraceFunctionFormat(traceFunction);
+   String type = _traceFunctionFormat;
+   if (traceFunction.isCyclic())
+    type = _cyclicTraceFunctionFormat;
    
    DataElement traceFuncElement = _dataStore.createObject(_traceFunctionsRoot, type, traceFunction.getName());
    
@@ -362,7 +447,7 @@ public class PADataStoreAdaptor {
  private void createAttribute(DataElement parent, String name, String value) {
  
   DataElement anAttribute = _dataStore.createObject(_attributesRoot, name, value);
-  _dataStore.createReference(parent, anAttribute, getLocalizedString("pa.Attributes"));
+  _dataStore.createReference(parent, anAttribute, _attributesD);
  }
  
  
@@ -409,12 +494,12 @@ public class PADataStoreAdaptor {
   */
  private void createGprofTraceFunctionAttributes(DataElement funcElement, PATraceFunction trcFunc) {
 
-  createAttribute(funcElement, getLocalizedString("pa.TimePercentage"),   String.valueOf(trcFunc.getTotalPercentage()));
-  createAttribute(funcElement, getLocalizedString("pa.numCalls"), 		  String.valueOf(trcFunc.getCallNumber()));
-  createAttribute(funcElement, getLocalizedString("pa.SelfTime"), 		  String.valueOf(trcFunc.getSelfSeconds()));
-  createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	      roundDouble(trcFunc.getTotalSeconds()));  
-  createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  String.valueOf(trcFunc.getSelfMsPerCall()));
-  createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), String.valueOf(trcFunc.getTotalMsPerCall()));
+  createAttribute(funcElement, _timePercentD,    String.valueOf(trcFunc.getTotalPercentage()));
+  createAttribute(funcElement, _numCallsD, 		 String.valueOf(trcFunc.getCallNumber()));
+  createAttribute(funcElement, _selfTimeD, 		 String.valueOf(trcFunc.getSelfSeconds()));
+  createAttribute(funcElement, _totalTimeD, 	 roundDouble(trcFunc.getTotalSeconds()));  
+  createAttribute(funcElement, _selfTimeString,  String.valueOf(trcFunc.getSelfTimePerCall()));
+  createAttribute(funcElement, _totalTimeString, String.valueOf(trcFunc.getTotalTimePerCall()));
  
  }
  
@@ -424,16 +509,16 @@ public class PADataStoreAdaptor {
   */
  private void createFunctionCheckTraceFunctionAttributes(DataElement funcElement, FunctionCheckTraceFunction trcFunc) {
 
-  createAttribute(funcElement, getLocalizedString("pa.TimePercentage"),   String.valueOf(trcFunc.getTotalPercentage()));
-  createAttribute(funcElement, getLocalizedString("pa.numCalls"), 		  String.valueOf(trcFunc.getCallNumber()));
-  createAttribute(funcElement, getLocalizedString("pa.SelfTime"), 		  String.valueOf(trcFunc.getSelfSeconds()));
-  createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	      String.valueOf(trcFunc.getTotalSeconds()));  
-  createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  roundDouble(trcFunc.getSelfMsPerCall()));  
-  createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), roundDouble(trcFunc.getTotalMsPerCall()));
-  createAttribute(funcElement, getLocalizedString("pa.MinSelfTime"),  	  String.valueOf(trcFunc.getMinLocalTime()));
-  createAttribute(funcElement, getLocalizedString("pa.MaxSelfTime"),  	  String.valueOf(trcFunc.getMaxLocalTime()));
-  createAttribute(funcElement, getLocalizedString("pa.MinTotalTime"), 	  String.valueOf(trcFunc.getMinTotalTime())); 
-  createAttribute(funcElement, getLocalizedString("pa.MaxTotalTime"), 	  String.valueOf(trcFunc.getMaxTotalTime()));
+  createAttribute(funcElement, _timePercentD,     String.valueOf(trcFunc.getTotalPercentage()));
+  createAttribute(funcElement, _numCallsD, 		  String.valueOf(trcFunc.getCallNumber()));
+  createAttribute(funcElement, _selfTimeD, 		  String.valueOf(trcFunc.getSelfSeconds()));
+  createAttribute(funcElement, _totalTimeD, 	  String.valueOf(trcFunc.getTotalSeconds()));  
+  createAttribute(funcElement, _selfMsPerCallD,   roundDouble(trcFunc.getSelfTimePerCall()));  
+  createAttribute(funcElement, _totalMsPerCallD,  roundDouble(trcFunc.getTotalTimePerCall()));
+  createAttribute(funcElement, _minSelfTimeD,  	  String.valueOf(trcFunc.getMinLocalTime()));
+  createAttribute(funcElement, _maxSelfTimeD,  	  String.valueOf(trcFunc.getMaxLocalTime()));
+  createAttribute(funcElement, _minTotalTimeD, 	  String.valueOf(trcFunc.getMinTotalTime())); 
+  createAttribute(funcElement, _maxTotalTimeD, 	  String.valueOf(trcFunc.getMaxTotalTime()));
   
  }
 
@@ -441,10 +526,9 @@ public class PADataStoreAdaptor {
  /**
   * Create the call nesting relations for a trace function
   */
- private void createCallNestingRelations(PATraceFunction traceFunction) {
+ private void createCallNestingRelations(PATraceFunction traceFunction, DataElement funcElement) 
+ {
  
-  DataElement funcElement = findOrCreateTraceFunctionElement(traceFunction);
-  
   ArrayList callees = traceFunction.getCallees();
   
   int numCallees = callees.size();
@@ -453,34 +537,27 @@ public class PADataStoreAdaptor {
    PACallArc callArc = (PACallArc)callees.get(i);
    PATraceFunction callee = callArc.getCallee();
    DataElement calleeElement = findOrCreateTraceFunctionElement(callee);
+      
+   // create caller/callee relations
+   _dataStore.createReference(funcElement, calleeElement, _callsD);
+   _dataStore.createReference(calleeElement, funcElement, _calledByD);
    
-   if (calleeElement != null) {
+   // create a DataElement to represent the call arc
+   DataElement callArcElement    = _dataStore.createObject(_callArcsRoot, _callArcD, traceFunction.getName());
+   callArcElement.setAttribute(DE.A_VALUE, callee.getName());
+     
+   DataElement numCalls     = _dataStore.createObject(_attributesRoot, _numCallsD, 		String.valueOf(callArc.getCallNumber()));
+   DataElement selfTime     = _dataStore.createObject(_attributesRoot, _selfTimeD, 		String.valueOf(callArc.getSelfTime()));
+   DataElement childrenTime = _dataStore.createObject(_attributesRoot, _childrenTimeD, 	String.valueOf(callArc.getChildrenTime()));
    
-     // create caller/callee relations
-     _dataStore.createReference(funcElement, calleeElement, getLocalizedString("pa.Calls"));
-     _dataStore.createReference(calleeElement, funcElement, getLocalizedString("pa.CalledBy"));
+   // create the relations between trace functions and call arcs
+   _dataStore.createReference(funcElement,   callArcElement, _calleeArcD);
+   _dataStore.createReference(calleeElement, callArcElement, _callerArcD);
    
-     // create a caller arc and a callee arc
-     DataElement calleeArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), callee.getName());
-     DataElement callerArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), traceFunction.getName());
+   _dataStore.createReference(callArcElement, numCalls,     _attributesD);
+   _dataStore.createReference(callArcElement, selfTime,     _attributesD);
+   _dataStore.createReference(callArcElement, childrenTime, _attributesD);
    
-     DataElement numCalls     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.numCalls"), String.valueOf(callArc.getCallNumber()));
-     DataElement selfTime     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.SelfTime"), String.valueOf(callArc.getSelfTime()));
-     DataElement childrenTime = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.ChildrenTime"), String.valueOf(callArc.getChildrenTime()));
-   
-     // create the relations between trace functions and call arcs
-     _dataStore.createReference(funcElement,   calleeArc, getLocalizedString("pa.CalleeArc"));
-     _dataStore.createReference(calleeElement, callerArc, getLocalizedString("pa.CallerArc"));
-   
-     _dataStore.createReference(calleeArc, numCalls,     getLocalizedString("pa.Attributes"));
-     _dataStore.createReference(calleeArc, selfTime,     getLocalizedString("pa.Attributes"));
-     _dataStore.createReference(calleeArc, childrenTime, getLocalizedString("pa.Attributes"));
-   
-     _dataStore.createReference(callerArc, numCalls,     getLocalizedString("pa.Attributes"));
-     _dataStore.createReference(callerArc, selfTime,     getLocalizedString("pa.Attributes"));
-     _dataStore.createReference(callerArc, childrenTime, getLocalizedString("pa.Attributes"));
-   }
-
   }
     
  }

@@ -219,12 +219,12 @@ public class GprofTraceFile extends PATraceFile {
        
        case 4:
        
-        traceFunction.setSelfMsPerCall(tokenizer.getTokenAsDouble(i));
+        traceFunction.setSelfTimePerCall(tokenizer.getTokenAsDouble(i));
         break;
        
        case 5:
        
-        traceFunction.setTotalMsPerCall(tokenizer.getTokenAsDouble(i));
+        traceFunction.setTotalTimePerCall(tokenizer.getTokenAsDouble(i));
         break;
        
        default:
@@ -232,7 +232,7 @@ public class GprofTraceFile extends PATraceFile {
        
      }     
     }
-    traceFunction.setTotalSeconds(traceFunction.getCallNumber() * traceFunction.getTotalMsPerCall() * 1.0e-3);
+    traceFunction.setTotalSeconds(traceFunction.getCallNumber() * traceFunction.getTotalTimePerCall() * getTimeUnit());
     traceFunction.setHasSummary(true);
    }
    catch (NumberFormatException e) {
