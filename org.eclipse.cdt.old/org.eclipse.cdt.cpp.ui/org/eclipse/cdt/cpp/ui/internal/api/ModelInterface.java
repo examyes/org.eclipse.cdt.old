@@ -13,6 +13,7 @@ import org.eclipse.cdt.cpp.ui.internal.actions.*;
 
 import org.eclipse.cdt.dstore.ui.ConvertUtility;
 import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.resource.*;
@@ -192,6 +193,27 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
       public void fill(IMenuManager menu, IInputSelectionProvider inputProvider)
       {
+	  Object results = inputProvider.getInput();
+	  if (results instanceof java.util.List)
+	      {
+		  Object input = ((java.util.List)results).get(0);
+		  if (input instanceof ISearchResultViewEntry)
+		      {
+			  IMarker marker = ((ISearchResultViewEntry)input).getSelectedMarker();
+			  try
+			      {
+				  Object de = marker.getAttribute("DataElementID");
+				  if (de != null && de instanceof DataElement)
+				      {
+					  DataElement element = (DataElement)de;
+					  _menuHandler.fillContextMenu(menu, null, element);
+				      }
+			      }
+			  catch (CoreException e)
+			      {
+			      }
+		      }
+	    }
       }
   }
 
@@ -360,6 +382,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   private static ModelInterface _instance;
 
+    private MenuHandler _menuHandler;
+
   public ModelInterface(DataStore dataStore)
   {
     _workspace = WorkbenchPlugin.getPluginWorkspace();
@@ -379,6 +403,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     _projectNotifier.enable(true);
     
     _projectNotifier.addProjectListener(StatusLineUpdater.getInstance());
+
+    _menuHandler = new MenuHandler(CppActionLoader.getInstance());
 
     _instance = this;
   }
