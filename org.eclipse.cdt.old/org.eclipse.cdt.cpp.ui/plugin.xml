@@ -379,28 +379,35 @@
 	point="org.eclipse.ui.propertyPages">
 	<page
 		id="com.ibm.cpp.ui.internal.builder.BuildPropertyPage"
-		name="%C++_Build_Invocation"
+		name="%Build_Invocation"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.BuildPropertyPage">
 	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
         </page>
 	<page
 		id="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage"
-		name="%C++_Parse_Include_Path"
+		name="%Parse_Include_Path"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage">
 	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
         </page>
 	<page
 		id="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage"
-		name="%C++_Parse_Quality"
+		name="%Parse_Quality"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage">
 	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
         </page>
 	<page
+		id="com.ibm.cpp.ui.internal.builder.AutoParsePropertyPage"
+		name="%Parse_Behaviour"
+		objectClass="org.eclipse.core.resources.IProject"
+		class="com.ibm.cpp.ui.internal.builder.AutoParsePropertyPage">
+	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>
+        </page>
+	<page
 		id="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage"
-		name="%C++_Environment"
+		name="%Environment"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage">
 	       <filter name="nature" value="com.ibm.cpp.ui.cppnature"/>

@@ -879,6 +879,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    DataElement projectObj = findProjectElement(project);
    if (projectObj != null)
        {
+
+	   // parse quality
 	   DataElement qualityElement = dataStore.createObject(null, "quality", "2");
 	   ArrayList quality = _plugin.readProperty(project, "ParseQuality");
 	   
@@ -887,13 +889,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		   String qualityStr = (String)quality.get(0);
 		   qualityElement.setAttribute(DE.A_NAME, qualityStr);
 	       }
+
+	   // parse behaviour
+	   DataElement autoParseElement = dataStore.createObject(null, "autoparse", "No");
+	   ArrayList autoParse = _plugin.readProperty(project, "AutoParse");
+	   
+	   if (!autoParse.isEmpty())
+	       {
+		   String autoParseStr = (String)autoParse.get(0);
+		   autoParseElement.setAttribute(DE.A_NAME, autoParseStr);
+	       }
 	   
 	   DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_PREFERENCES");
 	   if (setD != null)
 	       {
 		   ArrayList args = new ArrayList();
 		   args.add(qualityElement);			
-		   dataStore.command(setD, qualityElement, projectObj, true);
+		   args.add(autoParseElement);			
+		   dataStore.command(setD, args, projectObj);
 	       }
        }
   }

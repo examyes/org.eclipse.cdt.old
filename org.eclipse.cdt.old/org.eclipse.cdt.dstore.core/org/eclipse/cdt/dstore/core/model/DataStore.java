@@ -366,47 +366,54 @@ public class DataStore
 
   public DataElement createReference(DataElement parent, DataElement realObject, DataElement relationType)
       {
-	// reference with a specified type of relationship
-	  DataElement reference = createElement();
-
-	  reference.reInit(parent, realObject, relationType);
-	  parent.addNestedData(reference, false);
-	  
-	  String sugId = reference.getId();
-	  _hashMap.put(sugId, reference);
-
-	  /*****/
-	  refresh(parent);
-	  /*****/
-
-	  return reference;
+	  if (parent != null)
+	      {
+		  // reference with a specified type of relationship
+		  DataElement reference = createElement();
+		  
+		  reference.reInit(parent, realObject, relationType);
+		  parent.addNestedData(reference, false);
+		  
+		  String sugId = reference.getId();
+		  _hashMap.put(sugId, reference);
+		  
+		  refresh(parent);
+		  
+		  return reference;
+	      }
+	  else
+	      {
+		  return null;
+	      }
       }
 
   public DataElement createReference(DataElement parent, DataElement realObject, String relationType)
       {
-	// reference with a specified type of relationship
-	  DataElement reference = createElement();
-
-	  DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, relationType);
-	  if (toDescriptor != null)
+	  if (parent != null)
 	      {
-		  reference.reInit(parent, realObject, toDescriptor);
+		  // reference with a specified type of relationship
+		  DataElement reference = createElement();
+		  
+		  DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, relationType);
+		  if (toDescriptor != null)
+		      {
+			  reference.reInit(parent, realObject, toDescriptor);
+		      }
+		  else
+		      {
+			  reference.reInit(parent, realObject, relationType);
+		      }
+		  
+		  parent.addNestedData(reference, false);
+		  
+		  String sugId = reference.getId();
+		  _hashMap.put(sugId, reference);
+
+		  refresh(parent);
+		  
+		  return reference;
 	      }
-	  else
-	      {
-		  reference.reInit(parent, realObject, relationType);
-	      }
-
-	  parent.addNestedData(reference, false);
-	  
-	  String sugId = reference.getId();
-	  _hashMap.put(sugId, reference);
-
-	  /*****/
-	  refresh(parent);
-	  /*****/
-
-	  return reference;
+	  return null;
       }
 
 
@@ -441,76 +448,79 @@ public class DataStore
   public DataElement createReference(DataElement parent, DataElement realObject, 
 				     DataElement toRelation, DataElement fromRelation)
     {
-	  // reference with "to" relationship
-	DataElement toReference = createElement();
-	toReference.reInit(parent, realObject, toRelation);
-
-        parent.addNestedData(toReference, false);
-
-        String toId = toReference.getId();
-        _hashMap.put(toId, toReference);
-
-	// reference with "from" relationship
-	DataElement fromReference = createElement();
-
-	fromReference.reInit(realObject, parent, fromRelation);
-	
-        realObject.addNestedData(fromReference, false);
-	
-        String fromId = fromReference.getId();
-        _hashMap.put(fromId, fromReference);
-
-	/*****/
-	refresh(parent);
-	/*****/
-	
-        return toReference;
+	if (parent != null)
+	    {
+		// reference with "to" relationship
+		DataElement toReference = createElement();
+		toReference.reInit(parent, realObject, toRelation);
+		
+		parent.addNestedData(toReference, false);
+		
+		String toId = toReference.getId();
+		_hashMap.put(toId, toReference);
+		
+		// reference with "from" relationship
+		DataElement fromReference = createElement();
+		
+		fromReference.reInit(realObject, parent, fromRelation);
+		
+		realObject.addNestedData(fromReference, false);
+		
+		String fromId = fromReference.getId();
+		_hashMap.put(fromId, fromReference);
+		
+		refresh(parent);
+		
+		return toReference;
+	    }
+	return null;
       }
 
   public DataElement createReference(DataElement parent, DataElement realObject, 
 				     String toRelation, String fromRelation)
     {
-	  // reference with "to" relationship
-	DataElement toReference = createElement();
-	DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, toRelation);
-	if (toDescriptor != null)
+	if (parent != null)
 	    {
-		toReference.reInit(parent, realObject, toDescriptor);
+		// reference with "to" relationship
+		DataElement toReference = createElement();
+		DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, toRelation);
+		if (toDescriptor != null)
+		    {
+			toReference.reInit(parent, realObject, toDescriptor);
+		    }
+		else
+		    {
+			toReference.reInit(parent, realObject, toRelation);
+		    }
+		
+		parent.addNestedData(toReference, false);
+		
+		String toId = toReference.getId();
+		_hashMap.put(toId, toReference);
+		
+		// reference with "from" relationship
+		DataElement fromReference = createElement();
+		
+		DataElement fromDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, fromRelation);
+		if (fromDescriptor != null)
+		    {
+			fromReference.reInit(realObject, parent, fromDescriptor);
+		    }
+		else
+		    {
+			fromReference.reInit(realObject, parent, fromRelation);
+		    }
+		
+		realObject.addNestedData(fromReference, false);
+		
+		
+		String fromId = fromReference.getId();
+		_hashMap.put(fromId, fromReference);
+		refresh(parent);
+ 	
+		return toReference;
 	    }
-	else
-	    {
-		toReference.reInit(parent, realObject, toRelation);
-	    }
-
-        parent.addNestedData(toReference, false);
-
-
-        String toId = toReference.getId();
-        _hashMap.put(toId, toReference);
-
-	// reference with "from" relationship
-	DataElement fromReference = createElement();
-
-	DataElement fromDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, fromRelation);
-	if (fromDescriptor != null)
-	    {
-		fromReference.reInit(realObject, parent, fromDescriptor);
-	    }
-	else
-	    {
-		fromReference.reInit(realObject, parent, fromRelation);
-	    }
-	
-        realObject.addNestedData(fromReference, false);
-
-	
-        String fromId = fromReference.getId();
-        _hashMap.put(fromId, fromReference);
-	/*****/
-	refresh(parent);
-	/*****/
-
-        return toReference;
+	return null;
       }
 
 
