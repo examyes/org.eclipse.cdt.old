@@ -70,11 +70,12 @@
   <!-- Installation subheader -->
   <li> <b><a href="#install">Download & Installation:</a></b>
     <ol>
-      <li><a href="#install_10">What CDT build should I download?</a></li>
+      <li><a href="#install_10">Which CDT build should I download?</a></li>
       <li><a href="#install_20">Which operating systems does the CDT support?</a></li>
-      <li><a href="#install_30">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></li>
-      <li><a href="#install_40">What must I install on another machine to enable "Remote Projects"?</a></li>
-      <li><a href="#install_50">How do I uninstall CDT?</a></li>
+      <li><a href="#install_30">I can't find the CDT download for Windows, isn't there one?</a></li>
+      <li><a href="#install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></li>
+      <li><a href="#install_50">What must I install on another machine to enable "Remote Projects"?</a></li>
+      <li><a href="#install_60">How do I uninstall CDT?</a></li>
     </ol>
   </li>
   <!-- Project Creations subheader -->
@@ -262,7 +263,7 @@
 
 <!-- Installation Content -->
 <ol>
- <li><b><a name="install_10">What CDT build should I download?</a></b>
+ <li><b><a name="install_10">Which CDT build should I download?</a></b>
   <p>
    ?
   </p>
@@ -276,21 +277,34 @@
    <hr size="1">
   </li>
 
- <li><b><a name="install_30">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></b>
+ <li><b><a name="install_30">>I can't find the CDT download for Windows, isn't there one?</a></b>
+  <p>
+   There is no special download for Windows.  Much of the CDT function will work on Windows, but in some cases
+   we are leveraging Linux system tools for things like debugging (gdb), autoconf support, and profiling (gprof).  
+   So this function will not work "out of the box" on Windows. 
+  </p>
+  <p>
+   However, installing the <a href="http://www.redhat.com/download/cygwin.html">Cygwin toolkit</a>, which is a Unix
+   environment for Windows, gets you some of this function.
+  </p>
+   <hr size="1">
+  </li>
+ 
+ <li><b><a name="install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></b>
   <p>
    ?
   </p>
    <hr size="1">
   </li>
 
- <li><b><a name="install_40">What must I install on another machine to enable "Remote Projects"?</a></b>
+ <li><b><a name="install_50">What must I install on another machine to enable "Remote Projects"?</a></b>
   <p>
    ?
   </p>
    <hr size="1">
   </li>
 
-  <li><b><a name="install_50">How do I uninstall CDT?</a></b>
+  <li><b><a name="install_60">How do I uninstall CDT?</a></b>
   <p>
    We do not currently ship an uninstaller.  Once we have moved up to the latest "Update" support in Eclipse this 
    should be taken care of.  In the meantime you can uninstall the CDT in 2 manual steps: 
