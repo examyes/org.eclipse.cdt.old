@@ -66,7 +66,7 @@ import java.util.*;
  * Perl5Compiler.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Perl5Matcher.java,v 1.2 2001/11/12 17:14:41 dmcknigh Exp $
+ @version $Id: Perl5Matcher.java,v 1.3 2001/11/12 19:25:23 dmcknigh Exp $
 
  * @see PatternMatcher
  * @see Perl5Compiler
@@ -866,6 +866,8 @@ public final class Perl5Matcher implements PatternMatcher {
     boolean inputRemains = true, minMod = false;
     Perl5Repetition rep;
 
+    try
+	{
     input    = __inputOffset;
     inputRemains = (input < __endOffset);
     nextChar = (inputRemains ? __input[input] : __EOS);
@@ -1340,7 +1342,11 @@ public final class Perl5Matcher implements PatternMatcher {
       //scan = (next > 0 ? next : 0);
       scan = next;
     } // end while scan
-
+	}
+    catch (Exception e)
+	{
+	    System.out.println(e);
+	}
     return false;
   }
 
