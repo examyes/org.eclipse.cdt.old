@@ -79,15 +79,25 @@ public class ViewFilter extends ViewerFilter
     
     public boolean select(Viewer viewer, Object element, Object other)
     {
-		if (_type == null || _type.getName().equals("all"))
-	    {
-			return true;
-	    }
+	
 		_root = (DataElement)viewer.getInput();
 		
 		DataElement dataElement = (DataElement)element;	
+		
 		if (dataElement != null)
 	    {	
+	    	if (_type == null || _type.getName().equals("all"))
+	    	{
+	    	   if (dataElement.depth() > 0)
+	    	   {
+			   	return true;
+	    	   }
+	    	   else
+	    	   {
+	    	   	return false;
+	    	   }
+	   		 }
+	   		 
 			if (_type != null) 
 		    {
 				dataElement = dataElement.dereference();
@@ -138,8 +148,8 @@ public class ViewFilter extends ViewerFilter
 				  {
 				      if (dataType.equals(typeName) || typeName.equals("all"))
 					  {
-					      addTo(_isCache, elementDescriptor);
-					      return true; 
+					      	addTo(_isCache, elementDescriptor);					      
+					      	return true; 
 					  }				      
 				      else
 					  {

@@ -111,14 +111,14 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	    int width  = r.width;
 	    
 	    int buttonSize = 18;
-	    int iconSize = 15;
+	    int iconSize = 16;
 	    int x1 = r.x;
 	    int x2 = r.x + 3;
 	    int x3 = x2 + iconSize + 2;
 	    int y1 = r.y + 4;   
 	    int textWidth = width - x3;
 	    
-	    _inputIconLabel.setBounds(x2, y1, iconSize, iconSize);
+	    _inputIconLabel.setBounds(x2, y1, iconSize + 3, iconSize);
 	    _inputTextLabel.setBounds(x3, y1, textWidth, height);
         }
     }
@@ -152,9 +152,11 @@ public class ViewToolBar extends Viewer implements IDomainListener
     
     public Shell getShell()
     {
-	if (!getControl().isDisposed())
-	    return getControl().getShell();
-	else
+    	Control control = getControl();
+		if (!control.isDisposed())
+		{
+	   	 	return control.getShell();
+		}
 	    return null;
     }
     
