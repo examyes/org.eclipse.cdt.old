@@ -49,14 +49,14 @@ public class CppDocumentProvider extends FileDocumentProvider {
 	 * Constructor
 	 */
 	public CppDocumentProvider() {
-    System.out.println("CppDocumentProvider constructor");
+   
 	}
 	/**
 	 * @see IWorkingCopyManager#connect(IEditorInput)
 	 */
 	public void connect(IEditorInput input) throws CoreException {
 		super.connect(input);
-    System.out.println("CppDocumentProvider:connect()");
+   
 	}
 
 /*	protected ICompilationUnit createCompilationUnit(IFile file) {
@@ -75,7 +75,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
 //			throw new CoreException(new JavaModelStatus(IJavaModelStatusConstants.INVALID_RESOURCE_TYPE));
 		
 		IFileEditorInput input= (IFileEditorInput) element;
-    System.out.println("CppDocumentProvider:createCppAnnotationModel()");
+   
 		return new CppMarkerAnnotationModel(input.getFile());
 	}
 	/**
@@ -85,7 +85,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
    {
 //		if ( !(element instanceof IFileEditorInput))
 //			throw new CoreException(new JavaModelStatus(IJavaModelStatusConstants.INVALID_RESOURCE_TYPE));
-    System.out.println("CppDocumentProvider:createElementInfo()");
+   
 			
 		ElementInfo info = null;
 		IFileEditorInput input = (IFileEditorInput) element;
@@ -93,7 +93,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
 		if (original != null)
       {
 				
-         System.out.println("CppDocumentProvider:createElementInfo - original is NOT null ");
+         
 	      try
          {
 				try
@@ -115,7 +115,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
             System.out.println("CppDocumentProvider:createElementInfo Core exception - " +ce);
 			}
 		} else {		
-         System.out.println("CppDocumentProvider:createElementInfo else - original is null ");
+        
 			info = super.createElementInfo(element);
 		}
       return info;
