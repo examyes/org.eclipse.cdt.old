@@ -23,10 +23,13 @@ import java.util.*;
 import java.net.*;
 
 
-public class DataStoreUIPlugin extends AbstractUIPlugin
+public class DataStoreUIPlugin extends AbstractUIPlugin implements ISchemaProvider
 {
     private static DataStoreUIPlugin    _instance;
     private ResourceBundle _resourceBundle;
+    private        SchemaRegistry         _schemaRegistry;
+    private        ISchemaExtender        _schemaExtender;
+
 
   public DataStoreUIPlugin(IPluginDescriptor descriptor)
   {
@@ -75,6 +78,9 @@ public class DataStoreUIPlugin extends AbstractUIPlugin
         try
         {
           super.startup();
+
+	// setup schema
+	_schemaRegistry = new SchemaRegistry();
         }
         catch (CoreException e)
         {}
@@ -125,6 +131,15 @@ public class DataStoreUIPlugin extends AbstractUIPlugin
 	return "";
     }
 
+    public ISchemaRegistry getSchemaRegistry()
+    {
+	return _schemaRegistry;
+    }
+
+    public ISchemaExtender getSchemaExtender()
+    {
+	return _schemaExtender;
+    }
 }
 
 

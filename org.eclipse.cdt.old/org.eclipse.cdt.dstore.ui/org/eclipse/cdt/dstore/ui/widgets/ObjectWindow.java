@@ -389,7 +389,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     public boolean setFocus()
     {
-	if (!_viewer.isShowing())
+	if (_viewer != null && !_viewer.isShowing())
 	    {
 		_viewer.setShowing(true);		
 		_viewer.resetView();

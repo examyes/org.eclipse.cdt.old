@@ -42,19 +42,16 @@ public class GenericActionLoader implements IActionLoader
     protected   IOpenAction            _openAction;
     protected   CustomAction           _openPerspectiveAction;
     private     DataStoreUIPlugin      _plugin;
-    private     ArrayList              _externalLoaders;
-
-    public GenericActionLoader()	
+    private     ISchemaRegistry        _schemaRegistry;
+    
+    public GenericActionLoader(ISchemaProvider schemaProvider)	
     {	
+	_schemaRegistry = schemaProvider.getSchemaRegistry();
 	_plugin = DataStoreUIPlugin.getInstance();
-	_externalLoaders = new ArrayList();
+
+	System.out.println("schema reg = " + _schemaRegistry);
     }
 
-    public void provideExternalLoader(ExternalLoader loader)
-    {
-	_externalLoaders.add(loader);
-    }
-   
     public CustomAction getOpenPerspectiveAction()
     {
 	if (_openPerspectiveAction == null)
@@ -83,10 +80,10 @@ public class GenericActionLoader implements IActionLoader
 	    }
 	catch (ClassNotFoundException e)
 	    {
-		for (int i = 0; i < _externalLoaders.size(); i++)
+		if (_schemaRegistry != null)
 		    {
-			ExternalLoader loader = (ExternalLoader)_externalLoaders.get(i);
-			if (loader.canLoad(source))
+			ExternalLoader loader = _schemaRegistry.getLoaderFor(source);
+			if (loader != null)
 			    {
 				return loader.loadClass(source);
 			    }

@@ -13,7 +13,6 @@ import java.util.*;
 
 public interface IActionLoader
 {
-    public void provideExternalLoader(ExternalLoader loader);
     public IOpenAction getOpenAction();
     public CustomAction getOpenPerspectiveAction();
 
