@@ -22,7 +22,7 @@ CDT support for the GNU autoconf and automake tools to manage a newly created
 C/C++ project. We will use a&nbsp; simple project - HelloAutoconf -&nbsp;
 in this tutorial as the focus is to explain the various feature that CDT
 provides.</font>
-<p><b><font size=+2>1- Creating C++ Project</font></b>
+<p><b><font size=+2>1- Creating C++ Project "HelloAutoconf"</font></b>
 <ul>
 <li>
 <font size=+1>The first step is to successfully <font color="#FF0000">create
@@ -36,8 +36,8 @@ the source file(s) for your C++ Program:</font></font></li>
 <ol>
 <li>
 <font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
-project view</font><font color="#000000">, RMC(right mouse click) the project
-and select "New -> Directory"</font></font></li>
+project view</font><font color="#000000">, RMC (right mouse click) the
+project and select "New -> Directory"</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Enter the name of the directory&nbsp;
@@ -85,7 +85,7 @@ we need to write the following hello.cc and hello.h files</font></font></font></
 CHello::display()</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-//Helloworld:</font></font></font>
+//Hello Autoconf:</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
 std::string strHello;</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
@@ -187,7 +187,7 @@ can monitor the command output from the <font color="#FF0000">output view</font>
 and&nbsp;&nbsp; also by making sure that there is Makefile in your source
 directory.</font></li>
 </ul>
-<b><font size=+2>4- Building and Running HelloWorld Program</font></b>
+<b><font size=+2>4- Building and Running HelloAutoconf Program</font></b>
 <blockquote>
 <li>
 <font size=+1>From the <font color="#FF0000">C/C++ project view </font>RMC
@@ -295,16 +295,18 @@ from the context menu.</font></li>
 <li>
 <b><font size=+1>Expanding HelloAutoconf Project</font></b></li>
 
-<p><br><font size=+1>Let us now expand our sample HelloAutoconf project
-to include source files in a sub directories of the "src" directory.&nbsp;
-As the project now has several levels of subfolders, it is called a deep
+<br>&nbsp;
+<p>&nbsp;
+<p><font size=+1>Let us now expand our sample HelloAutoconf project to
+include source files in a sub directories of the "src" directory.&nbsp;
+As the project now has several levels of sub folders, it is called a deep
 projects.&nbsp; The tool is designed - this the default option - to allow
-the user to build code in subdirectories into temporary non-installing
+the user to build code in sub directories into temporary non-installing
 libraries. This library will be linked to the code by the make program.&nbsp;</font>
 <br>&nbsp;
 <ul>
 <li>
-<font size=+1>Create a new subdirectory and set the name to be "decorations."</font></li>
+<font size=+1>Create a new sub directory and set the name to be "decorations."</font></li>
 
 <li>
 <font size=+1>Create the following two files. frame.cc and frame.h.</font></li>
@@ -342,7 +344,7 @@ code is in red</font></li>
 <br><font size=+1>&nbsp;<font color="#CC0000">&nbsp;&nbsp; //Decorations:</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; CFrame frame;</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; int frameSize
-= frame.getSize();</font></font><font size=+1></font>
+= frame.getSize();</font></font>
 <p><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; for(int i = 0;
 i &lt;frameSize; i++)</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; {</font></font>
@@ -350,27 +352,27 @@ i &lt;frameSize; i++)</font></font>
 std::cout &lt;&lt; "*";</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt;
-"\n";</font></font><font size=+1></font>
+"\n";</font></font>
 <p><font size=+1>&nbsp;&nbsp;&nbsp; //Helloworld:</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp; std::string strHello;</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp; strHello = "<font color="#CC0000">*</font>
 Hello World! <font color="#CC0000">*</font>\n";</font>
-<br><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt; strHello;</font><font size=+1></font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt; strHello;</font>
 <p><font size=+1>&nbsp;&nbsp;&nbsp;<font color="#CC0000"> for(int i = 0;
 i &lt;frameSize; i++)</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; {</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 std::cout &lt;&lt; "*";</font></font>
-<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font><font size=+1></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font>
 <p><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt;
 "\n";</font></font>
 <br><font color="#CC0000"><font size=+1>}</font></font>
-<br><font size=+1></font>&nbsp;</ul>
+<br>&nbsp;</ul>
 
 <li>
 <font size=+1>&nbsp;Once this is done, we have to update our configuration
 files - the configure.in and the Makefile.am - and also we need to generate
-a Makefile.am in the new directotry that we have just created and added
+a Makefile.am in the new directory that we have just created and added
 frame.cc and frame.h. We will let the tool does this for us and here what
 you need to do:</font></li>
 
@@ -381,7 +383,7 @@ You would notice that the Generate configure action is now enabled as changes
 were made to the configuration files and configure now is not up to date</font></li>
 
 <li>
-<font size=+1>Click Yes if prompted by the message popup dialog as you&nbsp;
+<font size=+1>Click Yes if prompted by the message pop up dialog as you&nbsp;
 want the tool to update and generate you configuration files</font></li>
 
 <li>
@@ -404,21 +406,20 @@ you have already done that before</font></li>
 <font size=+1>You should now see the changes that we have added to our
 HulloAutoconf program displayed in the output view</font></li>
 </ol>
-<font size=+1></font>
-<br><font size=+1></font>&nbsp;</ul>
+</ul>
 
 <li>
 <b><font size=+1>Modifying libraries names</font></b></li>
 
-<ul><b><font size=+1></font></b>&nbsp;</ul>
+<ul>&nbsp;</ul>
 <font size=+1>The purpose of this section is to show how the tool handles
 the dependencies between Makefile.am's.&nbsp; Follow the scenario below
-to examin how the tool can help you in this regard.</font>
-<br><font size=+1></font>&nbsp;
+to examine how the tool can help you in this regard.</font>
+<br>&nbsp;
 <ul>
 <li>
 <font size=+1>Suppose that you want to change the name of your static library
-that we have just created in the previuos section. Currently, it has the
+that we have just created in the previous section. Currently, it has the
 name of libdecorations.a</font></li>
 
 <ol>
@@ -435,24 +436,52 @@ and leave the value of the variable as it is</font></li>
 
 <li>
 <font size=+1>Now, select the parent directory of the Makefile.am file.
-RMC&nbsp;and select Autoconf -> Generate configure</font></li>
+RMC and select Autoconf -> Generate configure</font></li>
 
 <li>
-<font size=+1>Click on the Yes button if the popup message dialog is showing.</font></li>
+<font size=+1>Click on the Yes button if the pop up message dialog is showing.</font></li>
 
 <li>
-<font size=+1>After a successful completion of the command, examin the
+<font size=+1>After a successful completion of the command, examine the
 HelloAutoconf/src/Makefile.am. You should see now that the new library
 name "./decorations/libframes.a" has been used in the value of the hello_LDADD
 variable instead.&nbsp;</font></li>
+
+<li>
+<font size=+1>Build the executable and run the program and it should run
+as expected.</font></li>
 </ol>
 </ul>
 </ul>
 
 <p><br><b><font size=+3>Managing Imported Project with Existing Configuration
 Files</font></b>
-<br>&nbsp;
-<br>&nbsp;
+<blockquote>&nbsp;
+<br><font size=+1>When importing a project with existing configuration
+files - configure.in and Makefile.am,- Autoconf support through the CDT
+tool can help you with the following tasks:</font>
+<ul>
+<li>
+<font size=+1>Running the configure script - see the section "Running the
+generated configure script" in this tutorial for more information</font></li>
+</ul>
+
+<ul>
+<li>
+<font size=+1>Installing the package, provided you have the right permissions
+to do so - by clicking the make install action from the Autoconf menu</font></li>
+</ul>
+
+<ul>
+<li>
+<font size=+1>Updating configuration files is very limited and depends
+on the type of the project and how it is organized - this will be enhanced
+in new CDT&nbsp;releases.&nbsp; If you are an experienced autoconf and
+automake user, then check the documentation to see what types of Makefile.am
+and variables can the tool helps you with.</font></li>
+</ul>
+</blockquote>
+<font size=+1></font>
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <caption>&nbsp;</caption>
 
