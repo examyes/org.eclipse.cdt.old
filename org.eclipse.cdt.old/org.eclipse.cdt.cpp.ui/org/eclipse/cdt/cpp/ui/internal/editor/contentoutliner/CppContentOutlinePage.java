@@ -182,14 +182,24 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 
 	if (_elementRoot == null || _elementRoot.isDeleted())
 	    {
-		_elementRoot = _adapter.getElementRoot((IFile)input);		
-		if (_elementRoot != null)
+		IFile fileInput = (IFile)input;
+		IProject project = fileInput.getProject();
+		if (project == null || !project.isOpen())
 		    {
-			setViewInput(_elementRoot);
-			
-			getTreeViewer().internalRefresh(_elementRoot);
-			
-			return true;
+			dataStore.getDomainNotifier().removeDomainListener(this);
+			return false;
+		    }
+		else
+		    {
+			_elementRoot = _adapter.getElementRoot((IFile)input);		
+			if (_elementRoot != null)
+			    {
+				setViewInput(_elementRoot);
+				
+				getTreeViewer().internalRefresh(_elementRoot);
+				
+				return true;
+			    }
 		    }
 	    }
 	else
