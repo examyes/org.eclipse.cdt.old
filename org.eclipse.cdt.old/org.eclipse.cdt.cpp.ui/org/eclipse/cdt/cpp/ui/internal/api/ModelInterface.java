@@ -75,6 +75,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  //System.out.println("can't find project miner element for " + _project);
 			  return;
 		      }
+		  else
+		      {
+			  projectMinerProject.setAttribute(DE.A_SOURCE, _project.getLocation().toString());
+		      }
 	      }
 	
 	  if (projectMinerProject != null)
