@@ -19,7 +19,6 @@
    <import plugin="org.eclipse.help" version="2.0.0"/>
    <import plugin="org.eclipse.debug.core" version="2.0.0"/>
    <import plugin="org.eclipse.debug.ui" version="2.0.0"/>
-   <import plugin="org.eclipse.core.target" version="2.0.0"/>
    <import plugin="org.eclipse.cdt.dstore.miners"/>
    <import plugin="org.eclipse.cdt.cpp.miners"/>
    <import plugin="org.eclipse.cdt.cpp.miners.parser"/>
