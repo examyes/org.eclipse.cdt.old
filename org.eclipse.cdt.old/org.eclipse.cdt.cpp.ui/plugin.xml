@@ -49,7 +49,7 @@
    </runtime>
 </extension>
 
-<!-- C++ launch configurations   -->	
+<!-- C++ launch configurations   -->
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
    		<launchConfigurationType
    	   		id="org.eclipse.cdt.run.launchconfig"
@@ -59,7 +59,7 @@
 	   		modes= "run">
    		</launchConfigurationType>
 	</extension>
-	
+
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
    		<launchConfigurationType
    	   		id="org.eclipse.cdt.debugload.launchconfig"
@@ -68,7 +68,7 @@
 	   		modes= "debug">
    		</launchConfigurationType>
 	</extension>
-	
+
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
    		<launchConfigurationType
    	   		id="org.eclipse.cdt.debugattach.launchconfig"
@@ -83,7 +83,7 @@
 			id="org.eclipse.cdt.run.launchimage"
 			configTypeID="org.eclipse.cdt.run.launchconfig"
 			icon="icons/full/clcl16/run_exe.gif">
-		</launchConfigurationTypeImage>	
+		</launchConfigurationTypeImage>
 	</extension>
 
         <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -91,7 +91,7 @@
 			id="org.eclipse.cdt.debugattach.launchimage"
 			configTypeID="org.eclipse.cdt.debugattach.launchconfig"
 			icon="icons/full/clcl16/run_exe.gif">
-		</launchConfigurationTypeImage>	
+		</launchConfigurationTypeImage>
 	</extension>
 
         <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
@@ -99,9 +99,9 @@
 			id="org.eclipse.cdt.debugload.launchimage"
 			configTypeID="org.eclipse.cdt.debugload.launchconfig"
 			icon="icons/full/clcl16/run_exe.gif">
-		</launchConfigurationTypeImage>	
+		</launchConfigurationTypeImage>
 	</extension>
-      
+
 
 
        <extension point = "org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -128,7 +128,7 @@
        	</launchConfigurationTabGroup>
        </extension>
 
-	<extension point = "org.eclipse.debug.ui.launchConfigurationShortcuts">
+	<extension point = "org.eclipse.debug.ui.launchShortcuts">
 		<shortcut
 			id="org.eclipse.cdt.cpp.debugattachLaunchConfigShortcut"
 			configTypeID="org.eclipse.cdt.debugattach.launchconfig">
@@ -137,7 +137,7 @@
 		</shortcut>
 	</extension>
 
-	<extension point = "org.eclipse.debug.ui.launchConfigurationShortcuts">
+	<extension point = "org.eclipse.debug.ui.launchShortcuts">
 		<shortcut
 			id="org.eclipse.cdt.cpp.debugLaunchConfigShortcut"
 			configTypeID="org.eclipse.cdt.debugload.launchconfig">
@@ -146,7 +146,7 @@
 		</shortcut>
 	</extension>
 
-	<extension point = "org.eclipse.debug.ui.launchConfigurationShortcuts">
+	<extension point = "org.eclipse.debug.ui.launchShortcuts">
 		<shortcut
 			id="org.eclipse.cdt.cpp.runLaunchConfigShortcut"
 			configTypeID="org.eclipse.cdt.run.launchconfig">
@@ -154,7 +154,7 @@
 			<perspective id="org.eclipse.cdt.cpp.ui.CppPerspective"/>
 		</shortcut>
 	</extension>
-	
+
 <extension
       point="org.eclipse.ui.perspectives">
    <perspective
@@ -488,6 +488,7 @@
          name="%Lpex_Editor"
          icon="icons/full/obj16/lpex_obj.gif"
          extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in,dat"
+         default="true"
          contributorClass="org.eclipse.cdt.cpp.ui.internal.editor.contributor.CppEditorContextContributor"
          class="org.eclipse.cdt.cpp.ui.internal.editor.CppEditor"
          id="org.eclipse.cdt.cpp.ui.internal.editor.CppEditor">
