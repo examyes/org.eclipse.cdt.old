@@ -47,20 +47,23 @@ public class MakefileAmAction extends CustomAction {
 	public MakefileAmAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
+		
+		DataElement makefileAm = getFileElement("Makefile.am");
+		
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-		if(_command.getValue().equals("COMPILER_FLAGS")&&!doesFileExist("Makefile.am"))	
+		if(_command.getValue().equals("COMPILER_FLAGS") && makefileAm==null)	
 			setEnabled(false);
 		//	
-		if(_command.getValue().equals("INSERT_CONFIGURE_IN")&&doesFileExist("configure.in"))	
+		DataElement configureIn = getFileElement("configure.in");
+		if(_command.getValue().equals("INSERT_CONFIGURE_IN") && configureIn !=null)	
 				setEnabled(false);
 		// classifying Makefile.am
-		if(doesFileExist("Makefile.am"))
+
+		if(makefileAm!=null)
 		{
-			/*
-			File Makefile_am = new File(_subject.getSource(),"Makefile.am");
-			int classification = classifier.classify(Makefile_am);
+			int classification = classifier.classify(makefileAm.getFileObject());
 			switch (classification)
 			{
 				case (TOPLEVEL):
@@ -86,7 +89,6 @@ public class MakefileAmAction extends CustomAction {
 				default:
 				break;
 			}
-			*/
 		}
 	}
 	public void run()
@@ -132,16 +134,16 @@ public class MakefileAmAction extends CustomAction {
 		}catch(IOException e){System.out.println(e);}  	
     	return "FLAG DEF";
     }
-	private boolean doesFileExist(String fileName)
+	private DataElement getFileElement(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
 		{
 			DataElement child = _subject.get(i).dereference();
 			if (!child.isDeleted() && child.getName().equals(fileName))
 			{
-				return true;
+				return child;
 			}
 		}
-		return false;
+		return null;
 	}
 }
