@@ -109,7 +109,7 @@
         	<fileset dir="buildScripts" includes="features/org.eclipse.cdt-feature/build.xml" />
             <fileset dir="buildScripts" includes="features/org.eclipse.cdt.${platformId}-feature/build.xml" />
             <fileset dir="buildScripts" includes="features/org.eclipse.cdt.source-feature/build.xml" />
-            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${os}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml,plugins/org.eclipse.cdt.debug.ui.tests/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml, plugins/org.eclipse.cdt.ui.tests/build.xml, plugins/org.eclipse.cdt.source/build.xml, plugins/org.eclipse.cdt.${platformId}/build.xml" />
+            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.${platformId}/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${os}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml,plugins/org.eclipse.cdt.debug.ui.tests/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml, plugins/org.eclipse.cdt.ui.tests/build.xml, plugins/org.eclipse.cdt.source/build.xml" />
         </copy>
     </target>
     
