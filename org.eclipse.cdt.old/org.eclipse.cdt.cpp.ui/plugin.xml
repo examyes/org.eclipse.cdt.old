@@ -498,17 +498,30 @@
             value="org.eclipse.cdt.cpp.ui.cppnature">
       </filter>
    </page>
-     <page
+    <page
          objectClass="org.eclipse.core.resources.IProject"
-         name="%Autoconf_Settings"
+         name="%Autoconf_Dialog_Settings"
+         category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
          class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
          id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage">
       <filter
             name="nature"
             value="org.eclipse.cdt.cpp.ui.cppnature">
       </filter>
+      
    </page>
-
+    <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Autoconf_Build_Properties"
+         category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
+         class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
+         id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage">
+      <filter
+            name="nature"
+            value="org.eclipse.cdt.cpp.ui.cppnature">
+      </filter>
+      
+   </page>
    
 </extension>
 <extension

@@ -29,7 +29,7 @@ import org.eclipse.ui.dialogs.*;
 
 public class AutoconfSettingsPropertyPage extends PropertyPage implements SelectionListener
 {	
-	private AutoconfPropertyPageControl _autoconfControl;
+	private AutoconfDialogPropertyPageControl _autoconfControl;
 	String globalSettingKey = "Is_Global_Setting_Enabled";
 	// items in the project property page
 	String configureDialogKey = "Show_Configure_Dialog"; // done
@@ -55,7 +55,7 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 
 		if (CppPlugin.isCppProject(project))
 		{
-			_autoconfControl = new AutoconfPropertyPageControl(parent, SWT.NONE);
+			_autoconfControl = new AutoconfDialogPropertyPageControl(parent, SWT.NONE);
 			performInit();
 			_autoconfControl.setLayout(layout);
 			_autoconfControl.globalSettingsButton.addSelectionListener(this);

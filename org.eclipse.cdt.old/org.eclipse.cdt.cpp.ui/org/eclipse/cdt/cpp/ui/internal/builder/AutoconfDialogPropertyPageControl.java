@@ -42,7 +42,7 @@ import java.util.*;
 
 import com.ibm.debug.model.Line;
 
-public class AutoconfPropertyPageControl extends Composite
+public class AutoconfDialogPropertyPageControl extends Composite
 {
    
     private Button _showConfigureDialogtButton;
@@ -65,7 +65,7 @@ public class AutoconfPropertyPageControl extends Composite
     
     private CppPlugin _plugin;
 
-    public AutoconfPropertyPageControl(Composite cnr, int style)
+    public AutoconfDialogPropertyPageControl(Composite cnr, int style)
     {
 		super(cnr, style);
 		
