@@ -453,7 +453,6 @@ public class Gdb
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
       // Gdb.msgOutput(getConsoleResourceString("PRODUCT_NAME_MSG"));
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
-      Gdb.msgOutput("IBM Distributed Debugger");
 
       // Ask BuildInformation what version we are and format our version text
       Object[] versionArg = new Object[1];
@@ -462,7 +461,7 @@ public class Gdb
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
       // String versionText = getConsoleResourceString("VERSION_TXT");
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
-      String versionText = "Version {0} (" + BuildInformation.getBuildShortDate() + ") - Licensed Material - Property of IBM";
+      String versionText = "GdbPicl (" + BuildInformation.getBuildShortDate() + ")";
 
       MessageFormat form = new MessageFormat(versionText);
       Gdb.msgOutput(form.format(versionArg));
@@ -470,13 +469,15 @@ public class Gdb
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
       // Gdb.msgOutput(getConsoleResourceString("COPYRIGHT_MSG"));
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
-      Gdb.msgOutput("Copyright (c) 1995, 2001 International Business Machines Corporation. All rights reserved.");
-      Gdb.msgOutput("This program and the accompanying materials are made available under the terms of");
-      Gdb.msgOutput("the Common Public License which accompanies this distribution.");
+      Gdb.msgOutput("Copyright (c) 1995, 2001 International Business Machines Corporation.");
+      Gdb.msgOutput("All rights reserved.");
+      Gdb.msgOutput("This program and the accompanying materials are made available ");
+      Gdb.msgOutput("under the terms of the Common Public License which accompanies");
+      Gdb.msgOutput("this distribution.");
       Gdb.msgOutput("");
 
       Gdb.debugOutput("engine build date :" + BuildInformation.getBuildDate());
-      Gdb.debugOutput("engine version    :" + BuildInformation.getPiclVersion());
+//      Gdb.debugOutput("engine version    :" + BuildInformation.getPiclVersion());
 
 // ***************************************************************************
 //    Create server socket and wait for a connection.  serverPort may have
