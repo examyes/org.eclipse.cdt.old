@@ -461,7 +461,9 @@ public class Gdb
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
       // Gdb.msgOutput(getConsoleResourceString("COPYRIGHT_MSG"));
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
-      Gdb.msgOutput("GdbPicl");
+      String buildDate = (new java.text.SimpleDateFormat("yy/MM/dd").format(new Date())).toString();
+      
+      Gdb.msgOutput("GdbPicl (" + buildDate + ")");
       Gdb.msgOutput("Copyright (c) 1995, 2001 International Business Machines Corporation.");
       Gdb.msgOutput("All rights reserved.");
       Gdb.msgOutput("This program and the accompanying materials are made available ");
@@ -469,8 +471,7 @@ public class Gdb
       Gdb.msgOutput("this distribution.");
       Gdb.msgOutput("");
 
-//      Gdb.debugOutput("engine build date :" + BuildInformation.getBuildDate());
-//      Gdb.debugOutput("engine version    :" + BuildInformation.getPiclVersion());
+      Gdb.debugOutput("engine build date :" + (new Date()).toString());
 
 // ***************************************************************************
 //    Create server socket and wait for a connection.  serverPort may have
