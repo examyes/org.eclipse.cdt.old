@@ -1046,7 +1046,6 @@ public class FileSystemMiner extends Miner
     
     private void handleFindHelper (DataElement root, String patternStr, DataElement status)
     {
-	System.out.println("looking in " + root.getName());
 	if (compareString(patternStr, root.getName(), true))
 	    {
 		_dataStore.createReference(status, root, getLocalizedString("model.contents"));
