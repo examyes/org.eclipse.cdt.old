@@ -98,8 +98,7 @@ public class CVSMiner extends Miner
 
     public void handleCommit(DataElement subject, DataElement status)
     {
-	String args = getArgument(subject);
-	execute("cvs commit -m \"test\" " + args, subject, status);
+	execute("cvs commit -m \"test\" ", subject, status);
     }
     
     private void execute(String theCommand, DataElement theSubject, DataElement status)

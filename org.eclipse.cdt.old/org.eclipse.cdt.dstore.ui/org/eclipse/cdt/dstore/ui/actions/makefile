@@ -5,12 +5,9 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: OpenEditorAction.class CloseSectionAction.class CommandAction.class ExportAction.class ImportAction.class ModifyAction.class OpenPerspectiveAction.class OpenSectionAction.class RemoteOperation.class ZoomInAction.class CustomAction.class UICommandAction.class
+all: CloseSectionAction.class CommandAction.class ExportAction.class ImportAction.class ModifyAction.class OpenPerspectiveAction.class OpenSectionAction.class RemoteOperation.class ZoomInAction.class CustomAction.class UICommandAction.class OpenEditorAction.class
 
 # Class Targets
-OpenEditorAction.class: OpenEditorAction.java
-	javac OpenEditorAction.java
-
 CloseSectionAction.class: CloseSectionAction.java
 	javac CloseSectionAction.java
 
@@ -43,6 +40,9 @@ CustomAction.class: CustomAction.java
 
 UICommandAction.class: UICommandAction.java
 	javac UICommandAction.java
+
+OpenEditorAction.class: OpenEditorAction.java
+	javac OpenEditorAction.java
 
 
 

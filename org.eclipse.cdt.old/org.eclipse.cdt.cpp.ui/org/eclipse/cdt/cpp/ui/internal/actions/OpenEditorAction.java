@@ -29,8 +29,8 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
-  private DataElement _element;
-  private CppPlugin   _plugin = CppPlugin.getDefault();
+    private DataElement _element;
+    private CppPlugin   _plugin = CppPlugin.getDefault();
 
   public OpenEditorAction(DataElement element)
       {
