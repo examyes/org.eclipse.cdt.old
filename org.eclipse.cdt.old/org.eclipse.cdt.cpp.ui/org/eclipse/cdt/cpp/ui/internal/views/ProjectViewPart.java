@@ -387,6 +387,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
   public void fillLocalToolBar()
     {
 	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+	toolBarManager.removeAll();
 	
 	if (_homeAction == null)
 	    {
