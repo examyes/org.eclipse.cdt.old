@@ -44,6 +44,7 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
     private CppPlugin    _plugin;
 
     private IStructuredSelection _selection;
+	private boolean      _useFilter;
 
     public ChooseProjectDialog(String title, DataElement input)
     {
@@ -51,6 +52,7 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	_input = input;
 	_title = title;
 	_plugin = CppPlugin.getDefault();
+	_useFilter = true;
     }
 
     protected void buttonPressed(int buttonId)
@@ -79,6 +81,10 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	    }
     }
 
+	public void useFilter(boolean flag)
+	{
+		_useFilter = flag;
+	}
 
     public Control createDialogArea(Composite parent)
     {
@@ -97,8 +103,11 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), null);	
 	_viewer.setInput(_input);
 	_viewer.fixateOnRelationType("contents");
-	_viewer.fixateOnObjectType("Project Containers");
-
+	if (_useFilter)
+	{
+		_viewer.fixateOnObjectType("Project Containers");
+	}
+	
 	GridLayout layout= new GridLayout();
 	layout.numColumns = 1;
 	layout.marginHeight = 2;
