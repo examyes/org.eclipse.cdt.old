@@ -30,6 +30,7 @@ public final class Parser
 {
  private SymbolTable  symtab;
  private boolean      isConstructor;
+ private int          parameterLevel = 0;
  private String       empty = "";
  private ParseWorker  _theParseWorker;
 
@@ -810,7 +811,7 @@ void asm_definition() :
 
 //The declaration_specifiers have already been matched when we get here:
 void function_definition(String theTypes, String className) :
-{String name; boolean isConstructor = false;}
+{String name;}
 {
   // Determine whether this function is a constructor
   { 
@@ -825,12 +826,14 @@ void function_definition(String theTypes, String className) :
      if (index > 0)
       isConstructor = theTypes.substring(0, index).equals(theTypes.substring(index+2)) ||
       		      theTypes.substring(0, index).equals("inline " + theTypes.substring(index+2));
+     else
+      isConstructor = false;
     }
   }
   (  LOOKAHEAD(2) "~" constructor_destructor_definition(theTypes, ParserSchema.Destructor)
    | LOOKAHEAD({isConstructor}) constructor_destructor_definition(theTypes, ParserSchema.Constructor)
    | 
-     name = declarator(ParserSchema.Function, true) 
+     name = declarator(ParserSchema.Function) 
      {
       String [] names = parseDeclaration(theTypes, true);
       symtab.addFunctionReturnTypes(names[1]);
@@ -896,7 +899,7 @@ void init_declarator_list(String theTypes) :
 String init_declarator() :
 { String name=empty;}
 {
-  [LOOKAHEAD(3) name = declarator(ParserSchema.Variable, true)] 
+  [LOOKAHEAD(3) name = declarator(ParserSchema.Variable)] 
   [LOOKAHEAD(2) (   "(" ( ")" | expression() ")" ) 
                   | "=" ( "{" skip_initializer() | expression())
                 )
@@ -907,21 +910,21 @@ String init_declarator() :
 
 
 
-String declarator(String objType, boolean addTypes) :
+String declarator(String objType) :
 { String name,ptr; }
 {
-  (  LOOKAHEAD(ptr_operator()) ptr = ptr_operator() name = declarator(objType, addTypes) {name = ptr + " " + name;}
-   | name = direct_declarator(objType, addTypes)
+  (  LOOKAHEAD(ptr_operator()) ptr = ptr_operator() name = declarator(objType) {name = ptr + " " + name;}
+   | name = direct_declarator(objType)
   )
   { return name; }
 }
 
 
-String direct_declarator(String objType, boolean addTypes) :
+String direct_declarator(String objType) :
 {String name = empty, params = null;}
 {
  ( 
-     LOOKAHEAD(8) "("  name = declarator(objType, addTypes) ")" [LOOKAHEAD(2) params = declarator_suffix(addTypes)]
+     LOOKAHEAD(8) "("  name = declarator(objType) ")" [LOOKAHEAD(2) params = declarator_suffix()]
      { 
       if (objType.equals("function"))
        return "(" + name + ")";
@@ -930,20 +933,20 @@ String direct_declarator(String objType, boolean addTypes) :
       return name; 
      }
    | name = id_expression()      
-   | name = declarator_suffix(addTypes)  
+   | name = declarator_suffix()  
  )
  
- (LOOKAHEAD(2) params = declarator_suffix(addTypes) {name += " " + params;})* 
+ (LOOKAHEAD(2) params = declarator_suffix() {name += " " + params;})* 
  {return name;}
 }
 
 
-String declarator_suffix(boolean addTypes) :
+String declarator_suffix() :
 {String name = empty, next = empty;}
 {
  (
      (LOOKAHEAD(2) "[" "]" | "[" next = constant_expression() "]")  {name = "[" + next + "]";} 
-  |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(addTypes) | expression())  ")")  {name = "(" + next + ")";}
+  |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(true) | expression())  ")")  {name = "(" + next + ")";}
  )
  [LOOKAHEAD(2) ("const" | "volatile")]
  [LOOKAHEAD(2) exception_spec()] 
@@ -1129,7 +1132,7 @@ void member_declarator_list(String theTypes) :
 String member_declarator() :
 {String name = empty;}
 {
-   name = declarator(ParserSchema.Variable, true)
+   name = declarator(ParserSchema.Variable)
    [   "=" (LOOKAHEAD(2) constant_expression() | <DECIMALINT>)
      | ":" constant_expression() 
    ]
@@ -1225,10 +1228,11 @@ void mem_initializer() :
 String parameter_list(boolean addTypes) :
 {String name = empty; String next = empty;}
 {
+   { parameterLevel++; }
    name = parameter_declaration() [LOOKAHEAD(2)"..." {name += " ...";}]
-   {if (addTypes) symtab.addFunctionParameter(name);}
-   ("," next = parameter_declaration() {if (addTypes) symtab.addFunctionParameter(next); name += "," + next;})*
-   {return name;}
+   {if (addTypes && parameterLevel < 2) symtab.addFunctionParameter(name);}
+   ("," next = parameter_declaration() {if (addTypes && parameterLevel < 2) symtab.addFunctionParameter(next); name += "," + next;})*
+   {parameterLevel--; return name;}
 }
 
 String parameter_declaration() :
@@ -1236,7 +1240,7 @@ String parameter_declaration() :
 {
    ( "..." {return "...";}
     | name = declaration_specifiers() {if (name == null) return empty;}
-      (  LOOKAHEAD(2) next = declarator(ParserSchema.Variable, false) {name += " " + next;} 
+      (  LOOKAHEAD(2) next = declarator(ParserSchema.Variable) {name += " " + next;} 
        | next = abstract_declarator() {name += " " + next;}
       ) 
       ["=" next = assignment_expression() {name += " = " + next;}]
