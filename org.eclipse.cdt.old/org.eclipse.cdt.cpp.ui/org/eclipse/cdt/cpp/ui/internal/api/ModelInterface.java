@@ -472,7 +472,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				"markers",
 				1);
 
-		dataStore.getDomainNotifier().addDomainListener(this);
+		//dataStore.getDomainNotifier().addDomainListener(this);
 
 	}
 
