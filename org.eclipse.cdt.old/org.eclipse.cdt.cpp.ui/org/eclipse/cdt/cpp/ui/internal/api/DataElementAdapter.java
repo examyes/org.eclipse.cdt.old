@@ -38,11 +38,18 @@ public class DataElementAdapter
 
     String path = new String(e.getLocation().toOSString());
 
-    DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.core.miners.parser.ParseMiner");
-    DataElement projectObj = api.findProjectElement(project);
-    DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
-    DataElement pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
-    return pathElement;
+    DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
+    DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
+   
+    if (projectObj != null)
+	{
+	    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
+	    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
+
+	    return pathElement;
+	}
+
+    return null;
   }
 
 
@@ -72,18 +79,17 @@ public class DataElementAdapter
     IProject project = CppPlugin.getDefault().getCurrentProject();
     ModelInterface api = ModelInterface.getInstance();
 
-    DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.core.miners.parser.ParseMiner");
-    DataElement projectObj = api.findProjectElement(project);
-    DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
-    DataElement pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
+    DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
+    
+    DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
+   
+    if (projectObj != null)
+	{
+	    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
+	    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
 
-    if (pathElement == null)
-      {
-	  //***	api.parse(e, false);	
-	pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
-      }
-
-    return pathElement;
+	    return pathElement;
+	}
+    return null;
   }
-
 }
