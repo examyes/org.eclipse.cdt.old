@@ -216,34 +216,20 @@ public class PADataStoreAdaptor {
  public static void cleanTraceInformation(DataElement traceElement) {
  
    // System.out.println("Calling cleanTraceInformation");
-   DataStore dataStore = traceElement.getDataStore();
    
    DataElement traceFunctionsRoot = _dataStore.find(traceElement, DE.A_VALUE, getLocalizedString("pa.TraceFuncRoot"));
    DataElement callTreeRoot 	  = _dataStore.find(traceElement, DE.A_TYPE,  getLocalizedString("pa.CallRoot"));
    DataElement attributesRoot 	  = _dataStore.find(traceElement, DE.A_NAME,  getLocalizedString("pa.AttributesRoot"));
    DataElement callArcsRoot 	  = _dataStore.find(traceElement, DE.A_NAME,  getLocalizedString("pa.CallArcsRoot"));
    
-   deleteChildren(traceFunctionsRoot);
-   deleteChildren(callTreeRoot);
-   dataStore.deleteObject(traceElement, attributesRoot);
-   dataStore.deleteObject(traceElement, callArcsRoot);
-   // System.out.println(traceFunctionsRoot.getNestedSize());
- }
-  
- /**
-  * Delete all the children under a given data element
-  */
- private static void deleteChildren(DataElement element) {
- 
-   DataStore dataStore = element.getDataStore();
+   _dataStore.deleteObjects(traceFunctionsRoot);
+   _dataStore.deleteObjects(callTreeRoot);
+   _dataStore.deleteObject(traceElement, attributesRoot);
+   _dataStore.deleteObject(traceElement, callArcsRoot);
    
-   int size = element.getNestedSize();
-   for (int i=0; i < size; i++) {
-     DataElement child = element.get(i);
-     dataStore.deleteObject(element, child);
-   }
+   _dataStore.refresh(traceElement, false);
  }
- 
+   
  
  /**
   * Populate the datastore using the information from the PA trace file.

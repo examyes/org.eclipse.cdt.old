@@ -95,7 +95,7 @@ public class PAMinerParseErrorThread extends Thread {
     			dataStore.createObject(_traceElement, "error code", errorCode);
     			_status.setAttribute(DE.A_NAME, "done");
     			_status.setAttribute(DE.A_VALUE, "error");
-                dataStore.refresh(_status, true);
+                dataStore.refresh(_status, false);
                 
                 if (_outputThread.isAlive())
                  _outputThread.finish();

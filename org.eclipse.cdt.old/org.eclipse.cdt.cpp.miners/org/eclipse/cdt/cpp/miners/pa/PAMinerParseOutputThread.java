@@ -100,7 +100,7 @@ public class PAMinerParseOutputThread extends Thread {
     
     _status.setAttribute(DE.A_NAME, "done");
 	_status.setAttribute(DE.A_VALUE, "error");
-	_miner.getDataStore().refresh(_status, true);
+	_miner.getDataStore().refresh(_status, false);
     return;
   }
 
@@ -109,7 +109,7 @@ public class PAMinerParseOutputThread extends Thread {
     PADataStoreAdaptor adaptor = new PADataStoreAdaptor(_traceElement);
     adaptor.populateDataStore(_traceElement, _traceFile);
     _status.setAttribute(DE.A_NAME, "done");
-    _miner.getDataStore().refresh(_status, true);
+    _miner.getDataStore().refresh(_status, false);
   }
   
   // System.out.println("Return from output thread");

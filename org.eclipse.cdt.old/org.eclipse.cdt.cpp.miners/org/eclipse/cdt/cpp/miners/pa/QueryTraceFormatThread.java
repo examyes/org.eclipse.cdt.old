@@ -56,7 +56,7 @@ public class QueryTraceFormatThread extends Thread
     
     _status.setAttribute(DE.A_NAME, "done");
     _status.setAttribute(DE.A_VALUE, format);
-    _status.getDataStore().refresh(_status, true);
+    _status.getDataStore().refresh(_status, false);
   }
   
 }

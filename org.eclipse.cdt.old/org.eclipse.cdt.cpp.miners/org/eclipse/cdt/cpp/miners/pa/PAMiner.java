@@ -309,6 +309,7 @@ public class PAMiner extends Miner {
    
    status.setAttribute(DE.A_NAME, "done");
    status.setAttribute(DE.A_VALUE, formatStr);
+   _dataStore.refresh(status, false);
  }
  
 
@@ -360,6 +361,7 @@ public class PAMiner extends Miner {
     e.printStackTrace();
     status.setAttribute(DE.A_NAME, "done");
     status.setAttribute(DE.A_VALUE, "error");
+    _dataStore.refresh(status, false);
     return;
    }
    
@@ -370,6 +372,7 @@ public class PAMiner extends Miner {
    
    adaptor.populateDataStore(traceElement, traceFile);
    status.setAttribute(DE.A_NAME, "done");
+   _dataStore.refresh(status, false);
  }
  
  /**
@@ -396,6 +399,7 @@ public class PAMiner extends Miner {
    System.out.println("Invalid trace format: " + traceFormat);
    status.setAttribute(DE.A_NAME, "done");
    status.setAttribute(DE.A_VALUE, "error");
+   _dataStore.refresh(status, false);
    return;
   }
   
@@ -404,7 +408,8 @@ public class PAMiner extends Miner {
   if (!file.exists()) {
    System.out.println("Trace program does not exist: " + traceElement.getSource());
    status.setAttribute(DE.A_NAME, "done");
-   status.setAttribute(DE.A_VALUE, "error");   
+   status.setAttribute(DE.A_VALUE, "error");
+   _dataStore.refresh(status, false);
    return;   
   }
   
@@ -423,6 +428,7 @@ public class PAMiner extends Miner {
    _dataStore.createObject(traceElement, "error code", getLocalizedString("pa.NoCommand"));
    status.setAttribute(DE.A_NAME, "done");
    status.setAttribute(DE.A_VALUE, "error");
+   _dataStore.refresh(status, false);
    return;
   }
   
