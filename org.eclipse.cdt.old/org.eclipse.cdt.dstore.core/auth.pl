@@ -29,7 +29,7 @@ else
     if ($match == 0) 
     {
 	print("success\n");
-	system("su -lp $userIN -c 'java -cp $classpath -DA_PLUGIN_PATH=$pathIN com.ibm.dstore.core.server.Server $portIN $ticketIN'");
+	system("su -lp $userIN -c 'java -cp $classpath -DA_PLUGIN_PATH=$pathIN com.ibm.dstore.core.server.Server $portIN $timeoutIN $ticketIN'");
 	1;
     }
     else
