@@ -308,29 +308,29 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
     if (_dummyShell == null)
       {	
-	_plugin.getDataStore().getDomainNotifier().enable(true);
-	IWorkbenchWindow win = _plugin.getActiveWorkbenchWindow();
-
-	if (win != null)
-	  {	
-	    _dummyShell = win.getShell();
-	  }
-
-	else
-	  {
-	      try
-		  {
-		      _dummyShell = new Shell();	
-		  }
-	      catch (Exception e)
-		  {
-		      return null;
-		  }
-	  }
-	
-	_plugin.getDataStore().getDomainNotifier().setShell(_dummyShell);
+	  IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+	  IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+	  
+	  if (win != null)
+	      {	
+		  _dummyShell = win.getShell();
+	      }
+	  else
+	      {
+		  try
+		      {
+			  _dummyShell = new Shell();	
+		      }
+		  catch (Exception e)
+		      {
+			  return null;
+		      }
+	      }
+	  
+	  _plugin.getDataStore().getDomainNotifier().setShell(_dummyShell);
       }
-
+    
+    _plugin.getDataStore().getDomainNotifier().enable(true);
     return _dummyShell;
   }
 
@@ -530,8 +530,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     	if (project.isOpen())
 	    {	     
 		OpenProjectAction openAction = new OpenProjectAction(project);
-		Display d= getDummyShell().getDisplay();
-		d.asyncExec(openAction);		
+		Shell shell = getDummyShell();
+		if (shell != null)
+		    {
+			Display d= shell.getDisplay();
+			d.asyncExec(openAction);		
+		    }
 	    }   
     }
 
