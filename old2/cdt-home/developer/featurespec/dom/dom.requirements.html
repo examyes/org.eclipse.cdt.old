@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>CDT DOM Requirements</title>
+</head>
+<body>
+<h1>CDT DOM Requirements</h1>
+<h2>Features<br>
+</h2>
+<ul>
+  <li>Provide syntactic and semantic information about the code in a
+project</li>
+  <li>Outline view</li>
+  <ul>
+    <li>Show major structural features in the current file (working
+copy)</li>
+    <li>Used for navigation into the file</li>
+    <li>Also used to give overview of the contents of the file</li>
+  </ul>
+  <li>Search</li>
+  <ul>
+    <li>Provide the ability to find references to
+declarations/definitions</li>
+    <li>Provide table of contents of declarations/definitions for the
+project</li>
+    <li>Provide declaration information about the code in the current
+selection<br>
+    </li>
+  </ul>
+  <li>Content Assist</li>
+  <ul>
+    <li>Provide possible completions given the context of the current
+cursor position</li>
+  </ul>
+  <li>Refactoring</li>
+  <ul>
+    <li>Allow for structural changes to the code while facilitating
+checking to ensure semantics do not change</li>
+  </ul>
+</ul>
+<h2>Environment<br>
+</h2>
+<ul>
+  <li>Build Environment</li>
+  <ul>
+    <li>Allow features to work independent (as much as possible) of
+build configuration</li>
+    <ul>
+      <li>users should not have to change configs to make elements of
+the code visible in the model<br>
+      </li>
+    </ul>
+    <li>Allow features to work when the source files and the build are
+at a remote location</li>
+    <ul>
+      <li>where no remote file system (e.g. NFS) or cross compilation
+is available</li>
+    </ul>
+  </ul>
+  <li>Scalability</li>
+  <ul>
+    <li>Allow features to work on large projects without disturbing
+work flow</li>
+    <ul>
+      <li>regular edit/build/debug workflows should work the same
+independent of project size</li>
+      <li>performance should not degrade to the point where the
+features do not work "reasonably" on large projects</li>
+    </ul>
+    <li>A typical large project would be 100,000 files with an average
+of 500 characters per file stored in a slow file system (e.g. NFS)<br>
+    </li>
+    <ul>
+      <li>Idealy should handle larger, but this represents real
+projects we've seen</li>
+    </ul>
+  </ul>
+  <li>Languages</li>
+  <ul>
+    <li>Support multiple C and C++ language variants</li>
+    <li>Allow the adoption of this framework by other compiled language
+IDEs</li>
+    <ul>
+      <li>e.g., Fortran, Ada, Cobol<br>
+      </li>
+    </ul>
+  </ul>
+</ul>
+</body>
+</html>
