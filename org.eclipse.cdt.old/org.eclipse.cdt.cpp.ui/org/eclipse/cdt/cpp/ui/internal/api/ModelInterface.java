@@ -1656,7 +1656,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		// compare source to filename
 		if (source.equals(fileName))
 		    {
-			result = new org.eclipse.cdt.dstore.ui.resource.FileResourceElement(child, project);
+			if (child.isOfType("directory"))
+			{
+			    result = new org.eclipse.cdt.dstore.ui.resource.FolderResourceElement(child, project);	  	    
+			}
+			else
+			{
+			    result = new org.eclipse.cdt.dstore.ui.resource.FileResourceElement(child, project);
+			}
+			addNewFile((IFile)result);
 			return result;
 		    }	
 		else if (child.isOfType("directory"))
