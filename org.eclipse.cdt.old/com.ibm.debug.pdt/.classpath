@@ -7,6 +7,5 @@
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.debug.ui_2.0.0/dtui.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.debug.core_2.0.0/dtcore.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui_2.0.0/workbench.jar"/>
-    <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.apache.xerces_3.2.1/xerces.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
