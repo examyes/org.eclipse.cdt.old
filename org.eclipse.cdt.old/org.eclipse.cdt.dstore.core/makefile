@@ -18,10 +18,16 @@
 # which used java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
 pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
 
+ifdef ECLIPSE
+eclipseLocation := $(ECLIPSE)
+else
+eclipseLocation := $(shell test -r .eclipse && cat .eclipse)
+endif
+
 # List of Plugins that we build
-buildPlugins += com.ibm.dstore.core
 buildPlugins += com.ibm.dstore.extra
 buildPlugins += com.ibm.dstore.extra.server
+buildPlugins += com.ibm.dstore.core
 buildPlugins += com.ibm.debug
 buildPlugins += com.ibm.cpp.miners.parser
 buildPlugins += com.ibm.dstore.hosts
@@ -47,7 +53,7 @@ allPlugins += com.ibm.debug.doc.user
 # plugin, we accomplish this by appending some text like "_buildPlugin" to every plugin name, 
 # and then provide the actual rules for these pseudo-prerequisites below.
 all:
-	@cd com 2>/dev/null && (${MAKE} -${MAKEFLAGS} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
+	@cd com 2>/dev/null && (${MAKE} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars source-zips createZip
@@ -61,7 +67,15 @@ makefiles       : generateBuildEnvironment
 dev             : development
 prod            : production
 
-
+#
+# WORKAROUND
+# Correct the file modes of executable scripts in case the
+# components were acquired by Eclipse CVS
+fixup:
+	find .. -type f -a \! -name '*.java' \
+		-a \! -name '*.class' -a \! -name '*html' \
+		-a \! -name '*.gif' | xargs file | grep executable | \
+		sed -e 's/\(.*\):.*/\1/' | xargs chmod a+x
 
 # PRIVATE TARGETS
 # ---------------
@@ -69,23 +83,26 @@ prod            : production
 # Don't try to use these targets...They are helpers.
 %_buildPlugin: 
 	@echo Building $(patsubst %_buildPlugin,%,$@)
-	@-cd $(pluginsDirectory)/$(patsubst %_buildPlugin,%,$@) && $(MAKE) -$(MAKEFLAGS)
+	@-cd $(pluginsDirectory)/$(patsubst %_buildPlugin,%,$@) && $(MAKE) 
 	@echo Finished $(patsubst %_buildPlugin,%,$@)
 
 %_createJars:
-	@-cd $(pluginsDirectory)/$(patsubst %_createJars,%,$@) && $(MAKE) -$(MAKEFLAGS) jar   
+	@-cd $(pluginsDirectory)/$(patsubst %_createJars,%,$@) && $(MAKE) jar   
 
 %_createSrcZips:
-	@-cd $(pluginsDirectory)/$(patsubst %_createSrcZips,%,$@) && $(MAKE) -$(MAKEFLAGS) source-zip   
+	@-cd $(pluginsDirectory)/$(patsubst %_createSrcZips,%,$@) && $(MAKE) source-zip   
 
 %_cleanPlugin:
-	@-cd $(pluginsDirectory)/$(patsubst %_cleanPlugin,%,$@) && $(MAKE) -$(MAKEFLAGS) clean
+	@-cd $(pluginsDirectory)/$(patsubst %_cleanPlugin,%,$@) && $(MAKE) clean
 
 %_cleanMakefiles:
-	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) -$(MAKEFLAGS) clean-makefiles 
+	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) clean-makefiles 
 
 generateBuildEnvironment: unzipBuildPlugins
-	@cd build && java -cp . GenerateMakefiles $(buildPlugins)
+ifneq "$(ECLIPSE)" ""
+	@echo $(eclipseLocation) >.eclipse
+endif
+	@cd build && java -cp . -DECLIPSE=$(eclipseLocation) GenerateMakefiles $(buildPlugins) || (echo '***' Error: Usage: make ECLIPSE=eclipse_directory targets && false)
 
 unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 
@@ -113,7 +130,7 @@ jar:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	rm -f $(jarFile);\
 	touch $(jarFile);\
-	find . -name '*.class' -or -name '*.properties' | xargs jar -uf $(jarFile)
+	find . -name '*.class' -or -name '*.properties' | xargs jar uf $(jarFile)
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
 
 source-zip:

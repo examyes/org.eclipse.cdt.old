@@ -10,7 +10,8 @@ import java.util.*;
 
 class GenerateMakefiles
 {
- private static String _pluginsDir;
+ private static String _pluginsDir;	// Location of the cpp plugins
+ private static String _basePluginsDir; // Location of the Eclipse base plugins
  private static String _theRulesMakefile;
  
  public static void main(String args[])
@@ -19,11 +20,13 @@ class GenerateMakefiles
   if (args.length == 0)
   {
    System.out.println(_pluginsDir);
-   return;
+   System.exit(0);
   }
+  _basePluginsDir = getBasePluginsDirectory();
   _theRulesMakefile = _pluginsDir + "/com.ibm.dstore.core/build/rules.mk";
   for (int i=0; i<args.length; i++)
    generateBuildMakefilesFor(args[i]);
+  System.exit(0);
  }
  
  
@@ -45,11 +48,12 @@ class GenerateMakefiles
   File[] subdirs = theDirectory.listFiles();
   for (int i=0; i<subdirs.length; i++)
   {
+    
    File theSubdir = subdirs[i];
-   if (  theSubdir.isDirectory() && 
-       (!theSubdir.getName().equals("CVS")) &&
-       (!theSubdir.getName().equals("build")) &&
-       (!theSubdir.getName().equals("icons")))
+   if ( theSubdir.isDirectory() &&
+	(!theSubdir.getName().equals("CVS")) &&
+	(!theSubdir.getName().equals("build")) &&
+	(!theSubdir.getName().equals("icons")))
     recursiveCreateMakefiles(theSubdir, theEnvMakefile);
   }
  }
@@ -93,6 +97,8 @@ class GenerateMakefiles
    namePieces.add(strtok.nextToken());
     
   int names = namePieces.size()-1;
+  if(names <= 0)
+	return "";
   String jarName = (String)namePieces.get(names-1) + "_" + (String)namePieces.get(names) + ".jar";
   return jarName;
  }
@@ -104,15 +110,22 @@ class GenerateMakefiles
   env.append("pluginName:=" + thePlugin +"\n");
   env.append("jarFile:=" + getJarFileName(thePlugin) +"\n");
 
-  File pluginXML = new File(_pluginsDir + "/" + thePlugin + "/plugin.xml");
+  File pluginXML = new File(_pluginsDir + "/" + thePlugin + "/Imports.make");
   if (!pluginXML.exists())
-   pluginXML = new File(_pluginsDir + "/" + thePlugin + "/Imports.make");
+	pluginXML = new File(_pluginsDir + "/" + thePlugin + "/plugin.xml");
   
   ArrayList classpaths = getClassPaths(pluginXML);
   env.append("cp:=" + _pluginsDir + "/" + thePlugin + "\\\n");
   for (int i=0; i<classpaths.size(); i++)
   {
-   ArrayList theJars = getJars((String)classpaths.get(i));
+   ArrayList theJars = getJars((String)classpaths.get(i), _pluginsDir);
+   if(theJars == null || theJars.size() == 0 && _basePluginsDir != null)
+	theJars = getJars((String)classpaths.get(i), _basePluginsDir);
+   if(theJars == null || theJars.size() == 0) {
+	System.out.println("Cannot find jars from "+(String)classpaths.get(i));
+	System.exit(1);
+   }
+
    for (int j=0; j<theJars.size(); j++)
     env.append(((String)theJars.get(j))+"\\\n");
   }
@@ -145,14 +158,18 @@ class GenerateMakefiles
   return theClassPaths;
  }
  
- private static ArrayList getJars(String theClassPath)
+ private static ArrayList getJars(String theClassPath, String pluginsDir)
  {
   ArrayList jarNames = new ArrayList();
   try
   {
-   File pluginXML = new File (_pluginsDir + "/" + theClassPath + "/plugin.xml");
+   File pluginXML = new File (pluginsDir + "/" + theClassPath + "/plugin.xml");
+   if(!pluginXML.exists() || !pluginXML.isFile() || !pluginXML.canRead())
+	return null;
+
    BufferedReader br = new BufferedReader(new FileReader(pluginXML));
    String nextLine;
+
    while ( (nextLine = br.readLine()) != null)
    {
     if (nextLine.indexOf("library name=") > -1)
@@ -165,9 +182,9 @@ class GenerateMakefiles
       { 
        String theJar = nextLine.substring(firstQuote+1, secondQuote);
        if (theJar.equals("."))
-        jarNames.add(_pluginsDir + "/" + theClassPath);
+        jarNames.add(pluginsDir + "/" + theClassPath);
        else
-        jarNames.add(_pluginsDir + "/" + theClassPath + "/" + theJar);        
+        jarNames.add(pluginsDir + "/" + theClassPath + "/" + theJar);        
       }
      }      
     }
@@ -179,14 +196,34 @@ class GenerateMakefiles
  
  private static String getPluginsDirectory()
  {
-  String plugins = new String("plugins");
   String pwd = System.getProperty("user.dir");
   try
   { 
    pwd = new File(pwd).getCanonicalPath();
   }
-  catch (IOException e) {}
-  return pwd.substring(0, pwd.indexOf(plugins) + plugins.length()).replace('\\','/');
+  catch (IOException e) { return ""; }
+  pwd.replace('\\','/');
+  int last = pwd.lastIndexOf('/');
+  if(last == pwd.length()-1)
+  	last = pwd.lastIndexOf('/', last-1);
+  last = pwd.lastIndexOf('/', last-1);
+  return pwd.substring(0, last);
+ } 
+
+ private static String getBasePluginsDirectory()
+ {
+  String pwd = System.getProperty("ECLIPSE");
+
+  if(pwd == null || pwd.equals(""))
+     return _pluginsDir;		// Our best guess
+
+  try {
+    pwd = new File(pwd).getCanonicalPath();
+  } catch(IOException e) { return null; }
+  if(pwd.indexOf("plugins") < 0)
+	pwd += File.separator + "plugins";
+
+  return pwd;
  } 
 }
 
