@@ -96,7 +96,8 @@ public class GdbCommandAndResponse
                Gdb.traceLogger.err(1, _debugSession.getResourceString("GDBPICL_COMMAND_PRODUCED_TOO_MANY_RESPONSE_LINES")+length+">"+_debugSession.MAX_GDB_LINES );
         }
 
-    StringBuffer classObject = new StringBuffer(bufferSize);
+     StringBuffer classObject = new StringBuffer(bufferSize);
+     StringBuffer combinedLine = new StringBuffer(bufferSize);
 
      for(int i=0; i<length; i++)
      {  if(lines[i]!=null && !lines[i].equals("") )
@@ -135,7 +136,7 @@ public class GdbCommandAndResponse
                    Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines Object = "+ classObject.toString());
                _debugSession.cmdResponses.addElement(classObject.toString());
               
-               System.out.println("RW ===== GdbCommandAndResponse.java classObject: " + classObject.toString());
+//               System.out.println("RW ===== GdbCommandAndResponse.java classObject: " + classObject.toString());
                classObject.setLength(0);
            }
            else if ( lines[i].equals(PRE_PROMPT_keyword) )
@@ -148,7 +149,6 @@ public class GdbCommandAndResponse
                //if(!lines[i].startsWith(FRAME_BEGIN_keyword) )
                //    combinedLine = "";
                //String combinedLine = "";
-               StringBuffer combinedLine = new StringBuffer(bufferSize);
                String frameFunctionName = "";
                String frameFile = "";
                boolean displayMonitor = false;
@@ -191,7 +191,7 @@ public class GdbCommandAndResponse
                             if(s!=null && !s.equals("") && !s.startsWith(_gdbProcess.MARKER) )
                             {
                                 exprValue += s;
-                              	System.out.println("RW ===== GdbCommandAndResponse.java exprValue: " + exprValue);
+//                              	System.out.println("RW ===== GdbCommandAndResponse.java exprValue: " + exprValue);
                             }
                             if(i<(length-1))
                                s = lines[++i];
@@ -221,7 +221,7 @@ public class GdbCommandAndResponse
                      else if( lines[j].startsWith(FRAME_END_keyword) || lines[j].startsWith(BP_TABLE_END_keyword)
                           ||  lines[j].startsWith(DISPLAY_END_keyword) )
                      {
-                        	System.out.println("RW ===== GdbCommandAndResponse.java combinedLine exit: " + combinedLine.toString());
+//                        	System.out.println("RW ===== GdbCommandAndResponse.java combinedLine exit: " + combinedLine.toString());
                          _debugSession.cmdResponses.addElement(combinedLine.toString());
                          if (Gdb.traceLogger.DBG)
                              Gdb.traceLogger.dbg(2,"GdbDebugSession.getGdbResponseLines="+combinedLine.toString() );
