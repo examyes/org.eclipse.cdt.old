@@ -45,13 +45,6 @@
 			<property value="true" name="javacFailOnError"/>
 			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
 		</ant>
-			<ant target="build.sources" dir="../org.eclipse.cdt.core.tests">
-			<property value="true" name="javacFailOnError"/>
-		</ant>
-		<ant target="gather.sources" dir="../org.eclipse.cdt.core.tests">
-			<property value="true" name="javacFailOnError"/>
-			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
-		</ant>
 		<ant target="build.sources" dir="../org.eclipse.cdt.debug.core">
 			<property value="true" name="javacFailOnError"/>
 		</ant>
@@ -77,13 +70,6 @@
 			<property value="true" name="javacFailOnError"/>
 		</ant>
 			<ant target="gather.sources" dir="../org.eclipse.cdt.debug.ui">
-			<property value="true" name="javacFailOnError"/>
-			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
-		</ant>
-		<ant target="build.sources" dir="../org.eclipse.cdt.debug.ui.tests">
-			<property value="true" name="javacFailOnError"/>
-		</ant>
-		<ant target="gather.sources" dir="../org.eclipse.cdt.debug.ui.tests">
 			<property value="true" name="javacFailOnError"/>
 			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
 		</ant>
@@ -164,24 +150,10 @@
 			<property value="true" name="javacFailOnError"/>
 			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
 		</ant>
-		<ant target="build.sources" dir="../org.eclipse.cdt.testing">
-			<property value="true" name="javacFailOnError"/>
-		</ant>
-		<ant target="gather.sources" dir="../org.eclipse.cdt.testing">
-			<property value="true" name="javacFailOnError"/>
-			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
-		</ant>
 		<ant target="build.sources" dir="../org.eclipse.cdt.ui">
 			<property value="true" name="javacFailOnError"/>
 		</ant>
 		<ant target="gather.sources" dir="../org.eclipse.cdt.ui">
-			<property value="true" name="javacFailOnError"/>
-			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
-		</ant>
-		<ant target="build.sources" dir="../org.eclipse.cdt.ui.tests">
-			<property value="true" name="javacFailOnError"/>
-		</ant>
-		<ant target="gather.sources" dir="../org.eclipse.cdt.ui.tests">
 			<property value="true" name="javacFailOnError"/>
 			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
 		</ant>
