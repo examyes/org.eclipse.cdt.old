@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<plugin name="JLPEX" id="com.ibm.lpex.doc.user" version="0.0.1" vendor-name="IBM">
+
+<extension point="org.eclipse.help.contributions">
+
+<topics name="topics.xml" />
+
+
+</extension>
+
+</plugin>
+

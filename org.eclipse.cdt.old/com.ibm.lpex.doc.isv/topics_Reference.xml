@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ==================================== -->
+<!-- Define topics for LPEX API Reference -->
+<!-- ==================================== -->
+<topics id="topics_Reference">
+<topic label="%topic_api" href="reference/api/overview-summary.html">
+<!--	<topic label="%topic_core_api">
+		<topic label="com.ibm.lpex.core" href="reference/api/com/ibm/lpex/core/package-summary.html"/>
+		<topic label="com.ibm.lpex.util" href="reference/api/com/ibm/lpex/util/package-summary.html"/>
+	</topic>
+	<topic label="%topic_parsers_api">
+		<topic label="com.ibm.lpex.cics" href="reference/api/com/ibm/lpex/cics/package-summary.html"/>
+		<topic label="com.ibm.lpex.cobol" href="reference/api/com/ibm/lpex/cobol/package-summary.html"/>
+		<topic label="com.ibm.lpex.cpp" href="reference/api/com/ibm/lpex/cpp/package-summary.html"/>
+		<topic label="com.ibm.lpex.hlasm" href="reference/api/com/ibm/lpex/hlasm/package-summary.html"/>
+		<topic label="com.ibm.lpex.html" href="reference/api/com/ibm/lpex/html/package-summary.html"/>
+		<topic label="com.ibm.lpex.java" href="reference/api/com/ibm/lpex/java/package-summary.html"/>
+		<topic label="com.ibm.lpex.jcl" href="reference/api/com/ibm/lpex/jcl/package-summary.html"/>
+		<topic label="com.ibm.lpex.pli" href="reference/api/com/ibm/lpex/pli/package-summary.html"/>
+		<topic label="com.ibm.lpex.prop" href="reference/api/com/ibm/lpex/prop/package-summary.html"/>
+		<topic label="com.ibm.lpex.rexx" href="reference/api/com/ibm/lpex/rexx/package-summary.html"/>
+		<topic label="com.ibm.lpex.sql" href="reference/api/com/ibm/lpex/sql/package-summary.html"/>
+		<topic label="com.ibm.lpex.xml" href="reference/api/com/ibm/lpex/xml/package-summary.html"/>
+		<topic label="com.ibm.lpex.xsl" href="reference/api/com/ibm/lpex/xsl/package-summary.html"/>
+	</topic>
+	<topic label="%topic_eclipse_api">
+		<topic label="com.ibm.lpex.alef" href="reference/api/com/ibm/lpex/alef/package-summary.html"/>
+		<topic label="com.ibm.lpex.alef.contentassist" href="reference/api/com/ibm/lpex/alef/contentassist/package-summary.html"/>
+	</topic>
+	<topic label="%topic_samples">
+		<topic label="com.ibm.lpex.samples" href="reference/api/com/ibm/lpex/samples/package-summary.html"/>
+	</topic> -->
+</topic>
+</topics>

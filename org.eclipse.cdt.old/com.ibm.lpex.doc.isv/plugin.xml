@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================== -->
+<!-- LPEX Plug-in Developer Guide.                            -->
+<!-- (c) Copyright IBM Corp. 1998, 2002. All Rights Reserved. -->
+<!-- ======================================================== -->
+
+<plugin
+   name="%pluginName"
+   id="com.ibm.lpex.doc.isv"
+   version="1.3.1"
+   provider-name="International Business Machines Corp.">
+
+   <extension point="org.eclipse.help.contributions">
+       <topics name="topics_Reference.xml" />
+   </extension>
+
+</plugin>
