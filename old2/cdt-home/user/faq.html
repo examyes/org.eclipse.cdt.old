@@ -265,19 +265,31 @@
 <ol>
  <li><b><a name="install_10">Which CDT build should I download?</a></b>
   <p>
-   ?
+   There are currently 2 versions of the CDT:<br>
+&nbsp;&nbsp;<b>R1</b> - for use with the Eclipse Release <a href="http://download.eclipse.org/downloads/" target="_top">R1.0</a>.<br>
+&nbsp;&nbsp;<b>R2</b> - for which we provide periodic builds that are for use with specific Eclipse <b>Stable</b> R2.0 Builds.
   </p>
+  So,<br>
+  <ul>
+   <li>If you are using Eclipse Release R1.0, the you should download CDT R1.</li>
+   <li>If you are using a <b>Stable</b> R2 Eclipse Build, then check the 
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project#">
+    CDT Download Page</a> for information on which CDT Build to use.</li>
+   <li>If you are using an <b>Integration</b> or <b>Nightly</b> Eclipse Build, then you can download the closest CDT 
+    R2 match, but you do so at your own risk since it is possible that Eclipse has changed enough since the last 
+    <b>Stable</b> build to break the CDT.</li>  
+  </ul><br>
    <hr size="1">
  </li>
  
  <li><b><a name="install_20">Which operating systems does the CDT support?</a></b>
   <p>
-   ?
+   The CDT team is focused on providing a quality C/C++ IDE for the Linux Platform.  ?
   </p>
    <hr size="1">
   </li>
 
- <li><b><a name="install_30">>I can't find the CDT download for Windows, isn't there one?</a></b>
+ <li><b><a name="install_30">I can't find the CDT download for Windows, isn't there one?</a></b>
   <p>
    There is no special download for Windows.  Much of the CDT function will work on Windows, but in some cases
    we are leveraging Linux system tools for things like debugging (gdb), autoconf support, and profiling (gprof).  
