@@ -210,8 +210,7 @@ public class FileSystemMiner extends Miner
      DataElement subject = getCommandArgument(theElement, 0);
      if (name.equals("C_QUERY"))
        {
-	   System.out.println("Query " + subject);
-         if (subject != null)
+	  if (subject != null)
          {
 	     status = handleQuery(subject, status);
          }
