@@ -5,6 +5,8 @@ package com.ibm.cpp.ui.internal.views.targets;
  * WebSphere Studio Workbench
  * (c) Copyright IBM Corp 2000
  */
+//import org.eclipse.ui.views.properties.IPropertySource;
+
 import org.eclipse.jface.viewers.*;
 import java.util.*;
 import org.eclipse.swt.widgets.*;

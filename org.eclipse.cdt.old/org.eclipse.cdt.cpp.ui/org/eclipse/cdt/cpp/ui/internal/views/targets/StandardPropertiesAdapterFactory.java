@@ -7,7 +7,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  */
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
-
+import org.eclipse.ui.views.properties.IPropertySource;
 /**
  * Dispenses an <code>IPropertySource</code> adapter for the core resource objects.
  */

@@ -9,6 +9,8 @@ package com.ibm.cpp.ui.internal.views.targets;
  */
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
+//import org.eclipse.ui.views.properties.IPropertySourceProvider;
+//import org.eclipse.ui.views.properties.IPropertySource;
  
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.*;
