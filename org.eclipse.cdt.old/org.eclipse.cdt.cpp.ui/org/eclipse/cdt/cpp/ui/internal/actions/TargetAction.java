@@ -74,7 +74,7 @@ public class TargetAction extends CustomAction
 	public void run()
 	{
 		Shell shell = _dataStore.getDomainNotifier().findShell();
-		String message = new String("No Makefile has been found in this directory"+
+		String message = new String("No Makefile to build '"+_subject.getName()+"' has been found in this directory"+
 		"\nYou may want to create and or run configure before performing this action");
 		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 		
@@ -82,7 +82,7 @@ public class TargetAction extends CustomAction
 		File parent = _subject.getFileObject().getParentFile();
 		File Makefile = new File(parent,"Makefile");
 		if(!Makefile.exists())
-			dialog.openWarning(shell,"Generating Autoconf Support Files ",message);
+			dialog.openWarning(shell,"Building "+_subject.getName(),message);
 		else
 		{
 			DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());

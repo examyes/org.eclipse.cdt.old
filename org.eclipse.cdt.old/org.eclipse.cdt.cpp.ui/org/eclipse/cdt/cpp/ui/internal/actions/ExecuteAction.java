@@ -61,7 +61,7 @@ public class ExecuteAction extends CustomAction
 		File parent = _subject.getFileObject().getParentFile();
 		File exec = new File(parent,_subject.getName());
 		if(!exec.exists())
-			dialog.openWarning(shell,"Executing ",message);
+			dialog.openWarning(shell,"Executing "+_subject.getName(),message);
 		else
 		{
 			DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
