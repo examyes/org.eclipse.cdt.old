@@ -2,7 +2,7 @@
 
 $port = $ARGV[0];
 
-$dir= $ENV{PWD};
+$dir= `pwd`;
 
 $plugins_dir=substr($dir,0,rindex($dir,"/"));
 
