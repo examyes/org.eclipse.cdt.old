@@ -207,11 +207,11 @@ public void transferStreams(InputStream source, OutputStream destination,
 				if (firstAppend)
 				{
 					firstAppend = false;
-					_element.getDataStore().replaceFile(remotePath, buffer, bytesRead);
+					_element.getDataStore().replaceFile(remotePath, buffer, bytesRead, false);
 				}
 				else 
 				{
-					_element.getDataStore().replaceAppendFile(remotePath, buffer, bytesRead);				
+					_element.getDataStore().replaceAppendFile(remotePath, buffer, bytesRead, false);				
 				}
 			}
 		  	destination.write(buffer, 0, bytesRead);	
