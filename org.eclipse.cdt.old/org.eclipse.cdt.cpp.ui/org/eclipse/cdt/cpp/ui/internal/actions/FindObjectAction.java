@@ -94,6 +94,8 @@ public class FindObjectAction extends Action
 					try
 					    {
 						persp.showView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
+						viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
+
 					    }
 					catch (PartInitException e)
 					    {
