@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="help.helpwebapp" default="build.jars" basedir=".">
+	<property name="jarfile.source.dir" value="${basedir}/help/helpwebapp/servlet"/>
+	<property name="jarfile.dest.dir" value="${basedir}/help/helpwebapp/WEB-INF/lib"/>
+	<property name="jarfile.name" value="${jarfile.dest.dir}/helpwebapp.jar"/>
+	<target name="init"
+		description="init">
+		<mkdir dir="${jarfile.dest.dir}"/>
+	</target>
+	<target name="build.jars" depends="init"
+		description="generate help jars">
+		<jar jarfile="${jarfile.name}"
+			basedir="${jarfile.source.dir}"
+			includes="**/*.class"
+			/>		
+	</target>
+	<target name="clean.jars"
+		description="clean up">
+	</target>
+</project>
