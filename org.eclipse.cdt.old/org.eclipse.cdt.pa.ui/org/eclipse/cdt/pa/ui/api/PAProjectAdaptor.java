@@ -8,9 +8,11 @@ package org.eclipse.cdt.pa.ui.api;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.*;
 import java.util.*;
+
 
 public class PAProjectAdaptor implements ICppProjectListener {
 
@@ -48,13 +50,29 @@ public class PAProjectAdaptor implements ICppProjectListener {
   	IProject project = event.getProject();
   	switch (type)
   	{
-  	  case CppProjectEvent.CLOSE:
+  	
+	  case CppProjectEvent.OPEN:
+      {		    
+		 if (project instanceof Repository)
+		 {
+			Repository rep = (Repository)project;		      
+			_api.extendSchema(rep.getDataStore().getDescriptorRoot());
+		 }
+	  }
+	  break;
+	  
+	  case CppProjectEvent.CLOSE:
   	  case CppProjectEvent.DELETE:
   	  {
-  		 String projectName = project.getLocation().toString();
-  		 System.out.println("project closed: " + projectName);
+  		 // System.out.println("project closed: " + projectName);
+  		 
+  		 DataStore dataStore = _api.getDataStore();
+		 if (project instanceof Repository)
+		 {
+			dataStore = ((Repository)project).getDataStore();
+		 }
 
-  		 DataElement traceProject = _api.findTraceProjectElement(projectName);
+  		 DataElement traceProject = _api.findTraceProjectElement(project);
   		 if (traceProject != null) {
   		   
   		   ArrayList traceFiles = _api.getTraceFiles(traceProject);
@@ -69,8 +87,7 @@ public class PAProjectAdaptor implements ICppProjectListener {
   		   PATraceEvent projectEvent = new PATraceEvent(PATraceEvent.PROJECT_DELETED, traceProject);
   		   _api.getTraceNotifier().fireTraceChanged(projectEvent);
   		   
-  		   DataStore dataStore = _api.getDataStore();
-  		   dataStore.deleteObject(_api.getProjectsRoot(), traceProject);
+  		   dataStore.deleteObject(_api.getProjectsRoot(dataStore), traceProject);
   		 }		 
   	  }
   	  break;

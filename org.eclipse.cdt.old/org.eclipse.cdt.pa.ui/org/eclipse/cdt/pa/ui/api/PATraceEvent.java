@@ -7,33 +7,44 @@ package org.eclipse.cdt.pa.ui.api;
  */
 
 import org.eclipse.cdt.dstore.core.model.*;
-import java.util.*;
 
 public class PATraceEvent 
 {
-    // type
-    public static final int FILE_CREATED    = 0;
-    public static final int PARSED    		= 1; 
-    public static final int PROJECT_DELETED = 2;
-    public static final int FILE_DELETED    = 3;
-    private int         _type;  
-    private DataElement _object;
+  // type
+  public static final int FILE_CREATED    = 0;
+  public static final int FORMAT_CHANGED  = 1; 
+  public static final int PROJECT_DELETED = 2;
+  public static final int FILE_DELETED    = 3;
+  private int         _type;  
+  private DataElement _object;
+  private DataElement _argument;
 
   public PATraceEvent(int type, DataElement object) 
-      {
+  {
 	_type = type;	
 	_object = object;
-      }
-    
-    public int getType()
-    {
+  }
+      
+  public PATraceEvent(int type, DataElement object, DataElement argument)
+  {
+	_type = type;	
+	_object = object;
+    _argument = argument;
+  }
+  
+  public int getType()
+  {
 	return _type;    
-    }  
+  }  
     
-    public DataElement getObject()
-    {
+  public DataElement getObject()
+  {
 	return _object;
-    }
-    
+  }
+   
+  public DataElement getArgument()
+  {
+    return _argument;
+  }
 }
 

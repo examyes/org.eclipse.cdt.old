@@ -9,20 +9,16 @@ package org.eclipse.cdt.pa.ui.views;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.widgets.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.cpp.ui.internal.views.*;
 
 import org.eclipse.cdt.pa.ui.PAPlugin;
 import org.eclipse.cdt.pa.ui.api.*;
 
-import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.ui.*;
 
 
-public class CalleesViewPart extends ObjectsViewPart implements IPATraceListener
+public class CalleesViewPart extends PAObjectsViewPart
 {
   private PAPlugin _plugin;
   private PAModelInterface _api;
@@ -41,9 +37,6 @@ public class CalleesViewPart extends ObjectsViewPart implements IPATraceListener
   {
     super.createPartControl(parent); 
     _viewer.fixateOnRelationType("callee arc");
-    
-    PATraceNotifier notifier = _api.getTraceNotifier();
-    notifier.addTraceListener(this);
   }
  
   public ObjectWindow createViewer(Composite parent, IActionLoader loader)
@@ -52,24 +45,9 @@ public class CalleesViewPart extends ObjectsViewPart implements IPATraceListener
     return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader);
   }
 
-  public IActionLoader getActionLoader()
-  {
-	IActionLoader loader = PAActionLoader.getInstance();
-	return loader;
-  }
-    
   protected String getF1HelpId()
   {
-    return CppHelpContextIds.DEFAULT_OBJECTS_VIEW;
-  }
-
-  public void initInput(DataStore dataStore)
-  {
-  }
-
-  public void setFocus()
-  {  
-      _viewer.setFocus(); 
+    return "org.eclipse.cdt.pa.ui.callees_view_context";
   }
 
   

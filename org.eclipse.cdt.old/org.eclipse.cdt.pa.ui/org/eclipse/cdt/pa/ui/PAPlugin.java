@@ -97,7 +97,7 @@ public class PAPlugin extends AbstractUIPlugin {
 	super.startup();
 	
 	_interface = new PAModelInterface(getDataStore());
-	_interface.extendSchema();
+	_interface.extendSchema(getDataStore().getDescriptorRoot());
 	
   }
 

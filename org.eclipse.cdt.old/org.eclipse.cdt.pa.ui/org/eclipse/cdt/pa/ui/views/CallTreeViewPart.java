@@ -9,14 +9,10 @@ package org.eclipse.cdt.pa.ui.views;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.widgets.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.cpp.ui.internal.views.*;
 
 import org.eclipse.cdt.pa.ui.PAPlugin;
 import org.eclipse.cdt.pa.ui.api.*;
 
-import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
@@ -27,7 +23,7 @@ import org.eclipse.ui.*;
  * If the input is a trace function, it displays the "calls" and "called by" relations of 
  * the trace function.
  */
-public class CallTreeViewPart extends ObjectsViewPart implements IPATraceListener
+public class CallTreeViewPart extends PAObjectsViewPart
 {
   private PAPlugin _plugin;
   private PAModelInterface _api;
@@ -42,12 +38,6 @@ public class CallTreeViewPart extends ObjectsViewPart implements IPATraceListene
     _currentTraceFile = null;
   }
 
-  public void createPartControl(Composite parent)
-  {
-    super.createPartControl(parent);    
-    PATraceNotifier notifier = _api.getTraceNotifier();
-    notifier.addTraceListener(this);
-  }
  
   public ObjectWindow createViewer(Composite parent, IActionLoader loader)
   {  
@@ -55,24 +45,10 @@ public class CallTreeViewPart extends ObjectsViewPart implements IPATraceListene
     return new ObjectWindow(parent, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), loader);
   }
 
-  public IActionLoader getActionLoader()
-  {
-	IActionLoader loader = PAActionLoader.getInstance();
-	return loader;
-  }
     
   protected String getF1HelpId()
   {
-    return CppHelpContextIds.DEFAULT_OBJECTS_VIEW;
-  }
-
-  public void initInput(DataStore dataStore)
-  {
-  }
-
-  public void setFocus()
-  {  
-      _viewer.setFocus(); 
+    return "org.eclipse.cdt.pa.ui.calltree_view_context";
   }
 
   
@@ -88,7 +64,7 @@ public class CallTreeViewPart extends ObjectsViewPart implements IPATraceListene
      if (traceObject.isOfType("trace file") || traceObject.isOfType("trace program")) {
       
       _currentTraceFile = traceObject;
-      DataElement callTraceRoot = _api.getCallTraceRoot(traceObject);
+      DataElement callTraceRoot = _api.getCallTreeRoot(traceObject);
       _viewer.setInput(callTraceRoot);
       _viewer.selectRelationship("calls");
      }
@@ -115,7 +91,7 @@ public class CallTreeViewPart extends ObjectsViewPart implements IPATraceListene
     case PATraceEvent.FILE_CREATED:
       
       _currentTraceFile = traceFile;
-      DataElement callTreeRoot = _api.getCallTraceRoot(traceFile);
+      DataElement callTreeRoot = _api.getCallTreeRoot(traceFile);
       _viewer.setInput(callTreeRoot);
       _viewer.selectRelationship("calls");
       break;

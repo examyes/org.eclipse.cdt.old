@@ -19,15 +19,18 @@ import org.eclipse.swt.events.*;
 import org.eclipse.ui.*;
 
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
 
 import org.eclipse.cdt.pa.ui.*;
 import org.eclipse.cdt.pa.ui.api.*;
+import java.util.*;
 
 
-public class PATraceTypeWizardPage extends WizardPage implements Listener {
+public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATraceListener {
 
+   private PAPlugin	 _plugin;
    private PAModelInterface  _api;
    private Button    _traceFileRadio;
    private Button	 _traceProgramRadio;
@@ -38,7 +41,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
    private Button	 _targetPathBrowseButton;
    
    private int       _traceType;
-   private int		 _traceFormat;
+   private String  	 _traceFormat;
    private DataElement _traceElement;
    
    private static final int SIZING_TEXT_FIELD_WIDTH = 150;
@@ -46,11 +49,15 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
    
    // Constructor
    public PATraceTypeWizardPage(String pageId) {
+	 
 	 super(pageId);
 	 
+	 _plugin = PAPlugin.getDefault();
 	 _api = PAModelInterface.getInstance();
+	 _api.getTraceNotifier().addTraceListener(this);
+	 
 	 _traceType = PAResource.TRACE_FILE;
-	 _traceFormat = PAResource.AUTO;
+	 _traceFormat = "auto";
 	 _traceElement = null;
 	 setPageComplete(false);
    }
@@ -154,13 +161,48 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
 	
    }
    
+ 
+   // From IPATraceListener
+   public void traceChanged(PATraceEvent event) {
    
+     DataElement object = event.getObject();
+     DataElement argument = event.getArgument();
+     int type = event.getType();
+     
+     switch (type) {
+      
+       case PATraceEvent.FORMAT_CHANGED:
+       
+         String format = object.getValue();
+         if (format.equals("invalid trace file")) {
+           setErrorMessage("Not a valid trace file: " + argument.getSource());
+           setPageComplete(false);
+         }
+         else if (format.equals("invalid trace program")) {
+           setErrorMessage("Not a valid trace program: " + argument.getSource());
+           setPageComplete(false);
+         }
+         else {
+           setErrorMessage(null);
+           setMessage("Real trace format: " + format);
+           _traceFormat = format;
+           setPageComplete(true);
+         }         
+         break;
+         
+       default:
+         break;
+     }
+     
+   }
+    
+ 
    public int getTraceType() {
      return _traceType;
    }
    
    
-   public int getTraceFormat() {
+   public String getTraceFormat() {
      return _traceFormat;
    }
    
@@ -172,30 +214,13 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
    
    public boolean finish() {
    
-     boolean result = true;
      if (_traceType == PAResource.TRACE_FILE) {
-      result = _api.addTraceFile(_traceElement, PAResource.traceFormatToString(_traceFormat));
+       _api.addTraceFile(_traceElement, _traceFormat);
      }
      else {
-      // System.out.println("_traceFormat = " + String.valueOf(_traceFormat));
-      // System.out.println(PAResource.traceFormatToString(_traceFormat));
-      _api.addTraceProgram(_traceElement, PAResource.traceFormatToString(_traceFormat));
+      _api.addTraceProgram(_traceElement, _traceFormat);
      }
-          
-     if (!result) {
-      Display d = _api.getShell().getDisplay();
-      d.asyncExec(new Runnable() {
-        
-        public void run() 
-        {
-          MessageDialog dialog = new MessageDialog(_api.getShell(),null,null,null,3,null,0);
-          dialog.openWarning(_api.getShell(), "Error Parsing Trace File", 
-            "There was an error when parsing the trace file: " + _traceElement.getSource());
-        }
-       });
-        
-     }
-     
+               
      return true;
    }
    
@@ -226,15 +251,13 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
 	 _traceType = PAResource.TRACE_PROGRAM;
 	}
 	else if (source == _autoFormatRadio && _autoFormatRadio.getSelection()) {
-	 _traceFormat = PAResource.AUTO;
-	 // System.out.println("auto format");
+	 _traceFormat = "auto";
 	}
 	else if (source == _gprofFormatRadio && _gprofFormatRadio.getSelection()) {
-	 _traceFormat = PAResource.GPROF_GNU;
-	 // System.out.println("gprof format: " + getTraceFormat());
+	 _traceFormat = "gprof";
 	}
 	else if (source == _fcFormatRadio && _fcFormatRadio.getSelection()) {
-	 _traceFormat = PAResource.FUNCTIONCHECK;
+	 _traceFormat = "functioncheck";
 	}
 	else if (source == _targetPathField) {
 	 // System.out.println("Text field modified");
@@ -249,55 +272,25 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
    
    protected void handleTargetPathChanged() {
    
-    int realTraceFormat = 0;
     if (_traceType == PAResource.TRACE_FILE) {    
-      realTraceFormat = _api.queryTraceFileFormat(_traceElement);      
+      _api.queryTraceFileFormat(_traceElement);      
     }
-    else if (_traceType == PAResource.TRACE_PROGRAM) {    
-      realTraceFormat = _api.queryTraceProgramFormat(_traceElement);      
-    }
+    else if (_traceType == PAResource.TRACE_PROGRAM ) {
     
-    if (realTraceFormat == PAResource.NOT_EXECUTABLE) {
-     
-     setErrorMessage("Not a platform executable: " + _traceElement.getSource());
-     setPageComplete(false);
+      if (_traceElement.isOfType("executable")) {
+        if (_traceFormat.equals("auto"))
+         _api.queryTraceProgramFormat(_traceElement);
+        else
+         setPageComplete(true);
+      }
+      else {
+        setErrorMessage("Not a platform executable: " + _traceElement.getSource());
+        setPageComplete(false);        
+      }
     }
-    else if (realTraceFormat == PAResource.INVALID) {
-     
-     if (_traceType == PAResource.TRACE_FILE) {
-      setErrorMessage("Not a valid trace file: " + _traceElement.getSource());
-     }
-     else if (_traceType == PAResource.TRACE_PROGRAM) {
-      setErrorMessage("Not a valid trace program: " + _traceElement.getSource());
-     }
-     
-     setPageComplete(false);
-    }
-    else  {
-     setErrorMessage(null);
-     setMessage("Real trace format: " + traceFormatToString(realTraceFormat));
-     _traceFormat = realTraceFormat;
-     setPageComplete(true);
-    }
-    
+        
    }
-   
-   
-   private String traceFormatToString(int traceFormat) {
-   
-    if (traceFormat == PAResource.GPROF_GNU)
-     return "gprof_gnu";
-    else if (traceFormat == PAResource.GPROF_BSD)
-     return "gprof_bsd";
-    else if (traceFormat == PAResource.GPROF_ALL)
-     return "gprof";
-    else if (traceFormat == PAResource.FUNCTIONCHECK)
-     return "functioncheck";
-    else
-     return "unknown";
-     
-   }
-   
+      
    
    protected void handleTargetPathBrowseButtonPressed() {
 
@@ -322,16 +315,14 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
 	 if (selections.size() > 0) {
 	 
 	  DataElement selected = (DataElement)selections.get(0);
-	  if (selected.getType().equals("file")) {
+	  if (selected.isOfType("file")) {
 	    // System.out.println("file selected: " + selected);
 	    _traceElement = selected;
 	    _targetPathField.setText(selected.getSource());
 	  }
 	 }
 	  
-	}
-	 	
+	}	 	
    }
-   
     
 }

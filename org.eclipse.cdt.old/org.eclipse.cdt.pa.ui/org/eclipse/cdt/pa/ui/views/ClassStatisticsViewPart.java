@@ -12,6 +12,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.ui.*;
 import org.eclipse.cdt.cpp.ui.internal.views.*;
 
-public class ClassStatisticsViewPart extends ObjectsViewPart {
+public class ClassStatisticsViewPart extends PAObjectsViewPart {
 
 }

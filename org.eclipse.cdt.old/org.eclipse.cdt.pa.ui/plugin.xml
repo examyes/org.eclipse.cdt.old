@@ -179,6 +179,25 @@
 
 </extension>
 
+<extension
+      point="org.eclipse.ui.actionSets">
+   <actionSet
+         label="PA"
+         description="PA Action Set"
+         visible="true"
+         id="org.eclipse.cdt.pa.ui.PAActionSet">
+      <action
+            label="Trace"
+            icon="icons/full/clcl16/trace.gif"
+            tooltip="Trace"
+            pulldown="true"
+            class="org.eclipse.cdt.pa.ui.actions.TraceDropDownAction"
+            toolbarPath="Normal/C++"
+            id="org.eclipse.cdt.pa.ui.TraceDropDownAction">
+      </action>
+   </actionSet>
+</extension>
+
 </plugin>
 
 

@@ -22,8 +22,7 @@ public class AnalyzeTraceProgramAction extends CustomAction
   }
   
   public void run()
-  {
-    
+  {    
      _api.analyzeTraceProgram(_subject);
   }
   

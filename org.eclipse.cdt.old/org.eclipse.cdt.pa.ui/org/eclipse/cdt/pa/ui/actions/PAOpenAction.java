@@ -33,7 +33,7 @@ public class PAOpenAction extends OpenEditorAction
 	  
 	  while (!_cmdStatus.getName().equals("done")) {
 	   try {
-	    Thread.sleep(40);
+	    Thread.sleep(20);
 	   }
 	   catch (InterruptedException e) { break; }
 	  }

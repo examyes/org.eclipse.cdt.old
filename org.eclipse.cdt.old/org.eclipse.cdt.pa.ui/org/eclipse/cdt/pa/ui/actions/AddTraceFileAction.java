@@ -10,26 +10,7 @@ import org.eclipse.swt.widgets.*;
 
 
 public class AddTraceFileAction extends CustomAction
-{
- 
-  public class ShowMessageDialogAction implements Runnable
-  {
-    private PAModelInterface _api;
-    
-    public ShowMessageDialogAction()
-    {
-      _api = PAModelInterface.getInstance();
-    }
-    
-    public void run()
-    {
-      Shell shell = _api.getShell();
-      MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-	  dialog.openWarning(shell,"Invalid Trace File", "This is not a valid trace file.");
-	}    
-    
-  }
-  
+{  
   
   private ModelInterface _cppApi;
   private PAModelInterface _api;
@@ -52,13 +33,7 @@ public class AddTraceFileAction extends CustomAction
    
   public void run()
   {
-    boolean result = _api.addTraceFile(_subject, "auto");
-    if (!result) {
-     ShowMessageDialogAction action = new ShowMessageDialogAction();
-     Display d = _api.getShell().getDisplay();
-	 d.asyncExec(action);
-	}
-    
+    _api.addTraceFile(_subject, "auto");    
   }
   
 }

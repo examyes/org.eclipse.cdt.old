@@ -9,20 +9,17 @@ package org.eclipse.cdt.pa.ui.views;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.widgets.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.cpp.ui.internal.views.*;
 
 import org.eclipse.cdt.pa.ui.PAPlugin;
 import org.eclipse.cdt.pa.ui.api.*;
 
-import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.ui.*;
 
 
-public class FunctionStatisticsViewPart extends ObjectsViewPart implements IPATraceListener {
+public class FunctionStatisticsViewPart extends PAObjectsViewPart {
 
 
     private PAPlugin _plugin;
@@ -42,37 +39,17 @@ public class FunctionStatisticsViewPart extends ObjectsViewPart implements IPATr
       _currentProject = null;
     }
   
-    public void createPartControl(Composite parent)
-    {
-      super.createPartControl(parent);    
-      PATraceNotifier notifier = _api.getTraceNotifier();
-      notifier.addTraceListener(this);
-    }
-   
+ 
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {  
       DataStore dataStore = _plugin.getDataStore();
       return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader);
     }
   
-    public IActionLoader getActionLoader()
-    {
-  	IActionLoader loader = PAActionLoader.getInstance();
-  	return loader;
-    }
-      
+  
     protected String getF1HelpId()
     {
-      return CppHelpContextIds.DEFAULT_OBJECTS_VIEW;
-    }
-  
-    public void initInput(DataStore dataStore)
-    {
-    }
-  
-    public void setFocus()
-    {  
-        _viewer.setFocus(); 
+      return "org.eclipse.cdt.pa.ui.function_statistics_view_context";
     }
   
     
@@ -84,7 +61,8 @@ public class FunctionStatisticsViewPart extends ObjectsViewPart implements IPATr
       Object selected = ((IStructuredSelection)sel).getFirstElement();
       if (selected instanceof DataElement) {
        DataElement traceFileElement = (DataElement)selected;
-       if (traceFileElement != _currentTraceFile) {
+       if (traceFileElement != _currentTraceFile) 
+       {
         _currentTraceFile = traceFileElement;
         _currentProject = _api.findReferencedProject(traceFileElement);
         _viewer.setInput(_api.getTraceFuctionsRoot(traceFileElement));
@@ -126,17 +104,17 @@ public class FunctionStatisticsViewPart extends ObjectsViewPart implements IPATr
      */
     public void traceChanged(PATraceEvent event) {
     
-     // System.out.println("traceChanged called");
      DataElement traceFile = event.getObject();
      int type = event.getType();
      switch (type) {
      
       case PATraceEvent.FILE_CREATED:
         
+        // System.out.println("trace file: " + traceFile);
         _currentTraceFile = traceFile;
         _currentProject = _api.findReferencedProject(traceFile);
         _viewer.setInput(_api.getTraceFuctionsRoot(traceFile));
-        break;
+	    break;
        
       case PATraceEvent.FILE_DELETED:
         
