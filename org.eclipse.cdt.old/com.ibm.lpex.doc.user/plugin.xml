@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<plugin 
+   name = "LPEX Editor" 
+   id = "com.ibm.lpex.doc.user" 
+   version = "4.0.0" 
+   provider-name = "IBM"> 
+
+   <extension point="org.eclipse.help.contributions">
+   	<infoset name="infoSet.xml"/>
+   </extension>
+
+<extension point="org.eclipse.help.contributions"> 
+    <topics name="topics.xml"/> 
+    <actions name="actions_view_Contents.xml" /> 
+</extension>
+
+
+</plugin>
+
+

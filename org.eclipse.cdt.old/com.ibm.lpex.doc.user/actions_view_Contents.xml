@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<actions infoview="com.ibm.lpex.doc.user.view_Contents" standalone="true"> 
+    <insert 
+        from="com.ibm.lpex.doc.user.mt_topics" 
+        to="com.ibm.lpex.doc.user.view_Contents" 
+        as="child"/> 
+</actions>

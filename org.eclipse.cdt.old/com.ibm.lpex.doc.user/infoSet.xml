@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<infoset id="helpcontent" label="LPEX Editor" standalone="true"> 
+    <infoview label="Content" id="view_Contents" /> 
+</infoset>
