@@ -1642,6 +1642,60 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return findFile(fileName);
     }
 
+
+    private void synchronizeWithNavigator(IResource resource, DataElement parent)
+    {
+	if (resource instanceof IContainer)
+	    {
+		boolean needsRefresh = false;
+		IContainer container = (IContainer)resource;
+		
+		// compare elements to resources				
+		for (int i = 0; (i < parent.getNestedSize()) && !needsRefresh; i++)
+		    {
+			DataElement child = parent.get(i);
+			IResource match = container.findMember(child.getName());
+			
+			needsRefresh = (match == null);
+		    }
+		
+		// compare resources to elements in case deleted
+		if (!needsRefresh)
+		    {
+			try
+			    {
+				IResource[] members = container.members();
+				for (int i = 0; (i < members.length) && !needsRefresh; i++)
+				    {
+					IResource member = members[i];
+					DataElement match = parent.getDataStore().find(parent, 
+										       DE.A_NAME, 
+										       member.getName(), 
+										       1);
+					needsRefresh = ((match == null) || match.isDeleted());
+				    }
+			    }
+			catch (CoreException e)
+			    {
+				System.out.println(e);
+			    }
+		    }
+		
+		if (needsRefresh)
+		    {
+			try
+			    {
+				resource.refreshLocal(resource.DEPTH_ONE, null);
+			    }
+			catch (CoreException e)
+			    {
+				System.out.println(e);
+			    }					
+		    }
+		
+	    }
+    }
+	
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
@@ -1653,34 +1707,28 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	else
 	    {		
 		// This could cause slowdowns -- temporarily uncommenting for nav synchronization
-		/*
 		if (parent != null)
 		    {		
-			IResource resource = null;
-			String type = parent.getType();
-			
-			if (type.equals("Project"))
+			synchronized (parent)
 			    {
-				resource = findProjectResource(parent);
-			    }
-			else if (type.equals("directory"))
-			    {				
-				resource = findResource(parent);
-			    }
-			
-			if (resource != null)
-			    {
-				try
+				IResource resource = null;
+				String type = parent.getType();
+				
+				if (type.equals("Project"))
 				    {
-					resource.refreshLocal(resource.DEPTH_ONE, null);
+					resource = findProjectResource(parent);
 				    }
-				catch (CoreException e)
+				else if (type.equals("directory"))
+				    {				
+					resource = findResource(parent);
+				    }
+				
+				if (resource != null)
 				    {
-					System.out.println(e);
-				    }					
+					synchronizeWithNavigator(resource, parent);
+				    }
 			    }
 		    }
-		*/
 		return false;
 	    }
     }
@@ -1961,6 +2009,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							 "Open Project",
 							 "com.ibm.cpp.ui.internal.actions.OpenProjectAction");
 
+	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+						   "Build Project",
+						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+	build.setAttribute(DE.A_VALUE, "BUILD");
+
+	DataElement clean = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+						   "Clean Project",
+						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+	clean.setAttribute(DE.A_VALUE, "CLEAN");
+
+
 	DataElement closeProject = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Close Project",
 							 "com.ibm.cpp.ui.internal.actions.CloseProjectAction");
@@ -1971,16 +2030,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.createReference(projectD, deleteProject);
 
 
-
-	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
-						   "Build Project",
-						   "com.ibm.cpp.ui.internal.actions.BuildAction");
-	build.setAttribute(DE.A_VALUE, "BUILD");
-
-	DataElement clean = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
-						   "Clean Project",
-						   "com.ibm.cpp.ui.internal.actions.BuildAction");
-	clean.setAttribute(DE.A_VALUE, "CLEAN");
 
 	
 	DataElement openFile = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
