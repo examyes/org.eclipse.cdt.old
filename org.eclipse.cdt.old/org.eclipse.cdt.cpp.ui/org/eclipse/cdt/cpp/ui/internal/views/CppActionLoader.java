@@ -216,15 +216,15 @@ public class CppActionLoader extends GenericActionLoader
 	    }
         catch (InstantiationException e)
 	    {
-		//System.out.println(e);
+	     System.out.println(e);
 	    }
         catch (IllegalAccessException e)
 	    {
-		//System.out.println(e);
+		System.out.println(e);
 	    }
         catch (InvocationTargetException e)
 	    {
-		//System.out.println(e);
+		System.out.println(e);
 	    }
 	
         return newAction;
