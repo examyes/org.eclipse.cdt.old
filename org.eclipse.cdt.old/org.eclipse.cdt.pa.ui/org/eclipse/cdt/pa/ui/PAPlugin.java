@@ -43,7 +43,7 @@ public class PAPlugin extends AbstractUIPlugin implements ISchemaProvider
   {
     super(descriptor);
 
-    _pluginPath = getInstallLocation();
+    _pluginPath = getInstallLocation(); 
 
     _cppPlugin = org.eclipse.cdt.cpp.ui.internal.CppPlugin.getPlugin();
 
