@@ -109,7 +109,7 @@ public class GenericViewPart extends ViewPart
     
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
-	return new ObjectWindow(parent, 0, null, new ImageRegistry(), loader);
+	return new ObjectWindow(parent, ObjectWindow.TREE, null, new ImageRegistry(), loader);
     }
      
     public IActionLoader getActionLoader()

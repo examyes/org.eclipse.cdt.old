@@ -55,7 +55,7 @@ public class DetailsViewPart extends GenericViewPart
 
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
-	return new ObjectWindow(parent, 0, null, new ImageRegistry(), loader, true);
+	return new ObjectWindow(parent, ObjectWindow.TABLE, null, new ImageRegistry(), loader);
     }
 
     

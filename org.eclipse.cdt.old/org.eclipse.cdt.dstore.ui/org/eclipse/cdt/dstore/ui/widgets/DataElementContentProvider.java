@@ -11,12 +11,11 @@ import com.ibm.dstore.core.model.*;
 import java.io.*;
 import java.util.*;
 
-/****/
 import org.eclipse.ui.internal.misc.*;
 import org.eclipse.jface.viewers.*;
 
  
-public class TestContentProvider extends ContainerContentProvider
+public class DataElementContentProvider extends ContainerContentProvider
 {
   private DataElement _input; 
 

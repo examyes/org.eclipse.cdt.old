@@ -127,6 +127,9 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    _currentViewByAction = this;
 	}
     }
+
+    public static int           TREE  = 0;
+    public static int           TABLE = 1;
   
     private IDataElementViewer  _viewer;
     private ViewToolBar         _toolBar;
@@ -147,17 +150,18 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private SetLabelAction[]   _viewByAction;
     private SetLabelAction     _currentViewByAction;
 
+    private DataElementContentProvider _provider;
+
     private boolean             _isTable;
     private boolean             _isLocked;
 
 
     public ObjectWindow(Composite container, int style, 
-			DataStore dataStore, 
-			ImageRegistry imageRegistry,
+			DataStore dataStore, ImageRegistry imageRegistry,
 			IActionLoader loader)
     {
-	super(container, style);
-
+	super(container, 0);
+	
 	if (dataStore != null)
 	    {
 		_dataStore = dataStore;
@@ -169,38 +173,35 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	
 	_imageRegistry = imageRegistry;
 	_loader = loader;
-	initialize(false);
-    }
+	_provider = null;
 
-    public ObjectWindow(Composite container, int style, 
-			DataStore dataStore, 
-			ImageRegistry imageRegistry,
-			IActionLoader loader, 
-			boolean isTable)
-    {
-	super(container, style);
-
-	if (dataStore != null)
-	    {
-		_dataStore = dataStore;
-	    }
-	else
-	    {
-		_dataStore = com.ibm.dstore.core.DataStoreCorePlugin.getCurrentDataStore();
-	    }
-	
-	_imageRegistry = imageRegistry;
-	_loader = loader;
-	
+	boolean isTable = ((style & TABLE) != 0);
 	initialize(isTable);
     }
 
-
-    public void setActionLoader(IActionLoader loader)
+    public ObjectWindow(Composite container, int style, 
+			DataStore dataStore, ImageRegistry imageRegistry,
+			IActionLoader loader, DataElementContentProvider provider)
     {
+	super(container, 0);
+	
+	if (dataStore != null)
+	    {
+		_dataStore = dataStore;
+	    }
+	else
+	    {
+		_dataStore = com.ibm.dstore.core.DataStoreCorePlugin.getCurrentDataStore();
+	    }
+	
+	_imageRegistry = imageRegistry;
 	_loader = loader;
-	_menuHandler.setActionLoader(loader);
+	_provider = provider;
+
+	boolean isTable = ((style & TABLE) != 0);
+	initialize(isTable);
     }
+
 
     public void initialize(boolean isTable)
     {
@@ -224,9 +225,14 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	createViewActions();
     } 
 
-    public void createViewActions()
+    public void setActionLoader(IActionLoader loader)
     {
-	
+	_loader = loader;
+	_menuHandler.setActionLoader(loader);
+    }
+
+    public void createViewActions()
+    {	
 	_sortByAction = new SortElementsAction[5];
 
 	_sortByAction[0] = new SortElementsAction("Do not sort", null);
@@ -555,6 +561,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	treeContainer.setLayout(layout2);        
         treeContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
  
+	
 
 	Composite widget = null;
 	if (_isTable)
@@ -562,16 +569,27 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		widget = new Table(treeContainer, SWT.MULTI);
 		widget.setLayoutData(textData);
 		
-		_viewer = new ExtendedTableViewer(this, (Table)widget, _toolBar);
+		_viewer = new DataElementTableViewer(this, (Table)widget);
+
+		if (_provider == null)
+		    {
+			_provider = new DataElementTableContentProvider();
+		    }
 	    }
 	else
 	    {
 		widget = new Tree(treeContainer, SWT.MULTI);
 		widget.setLayoutData(textData);
 		
-		_viewer = new ExtendedTreeViewer(this, (Tree)widget, _toolBar);
+		_viewer = new DataElementTreeViewer(this, (Tree)widget);
+
+		if (_provider == null)
+		    {
+			_provider = new DataElementTreeContentProvider();
+		    }
 	    }
 		
+	_viewer.setContentProvider(_provider);     
 	_viewer.setLabelProvider(new DataElementLabelProvider(_imageRegistry));
 	if (_dataStore != null)
 	    {

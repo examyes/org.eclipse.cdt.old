@@ -424,9 +424,6 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	info.setType(type);
 	IMarker result = new ElementMarker(this, type);
 
-	//Workspace workspace = (Workspace)getWorkspace();
-	//	workspace.getMarkerManager().add(this, new MarkerInfo[] { info });
-
 	return result;
     }
 

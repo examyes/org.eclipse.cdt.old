@@ -14,23 +14,14 @@ import org.eclipse.core.resources.*;
 import org.eclipse.jface.viewers.*;
 import java.util.*;
 
-public class TreeContentProvider extends TestContentProvider implements ITreeContentProvider
+public class DataElementTreeContentProvider extends DataElementContentProvider implements ITreeContentProvider
 {
     private DataElement _property;
     private DataElement _containerDescriptor = null;
-    private ViewToolBar _toolBar;
 
-  public TreeContentProvider(ViewToolBar  toolBar)
+  public DataElementTreeContentProvider()
   {
     super();
-    _toolBar = toolBar;
-    _property = null;
-  }
-
-  public TreeContentProvider()
-  {
-    super();
-    _toolBar = null;
     _property = null;
   }
   
@@ -120,29 +111,6 @@ public class TreeContentProvider extends TestContentProvider implements ITreeCon
 	      return false;
 	  }      
   }
-
-  public boolean matchDescriptor(DataElement descriptor, DataElement filter, ArrayList checked)
-      {
-        if (descriptor == filter)
-        {
-          return true;
-        }
-        else if (!checked.contains(filter))
-        {
-	    checked.add(filter);
-	    String filterType = (String)filter.getElementProperty(DE.P_TYPE);
-	    if (filterType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
-		{
-		    for (int i = 0; i < filter.getNestedSize(); i++)
-			{
-			    if (matchDescriptor(descriptor, filter.get(i).dereference(), checked))
-				return true;
-			}
-		}          
-        }
-
-        return false;
-      }
 
   public void setProperty(DataElement property)
   {

@@ -7,6 +7,7 @@ package com.ibm.dstore.ui.widgets;
  */
 
 import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.widgets.*;
 import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.core.client.*;
 import com.ibm.dstore.core.model.*;
@@ -28,7 +29,7 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.events.*;
 
-public class ExtendedTableViewer extends TableViewer 
+public class DataElementTreeViewer extends TreeViewer 
     implements ISelected, Listener, IDataElementViewer
 {
     private   ViewFilter   _viewFilter;
@@ -49,29 +50,23 @@ public class ExtendedTableViewer extends TableViewer
 
     private ObjectSelectionChangedListener _listener;
     
-    public ExtendedTableViewer(ObjectWindow parent, Table table, ViewToolBar toolBar)
+    public DataElementTreeViewer(ObjectWindow parent, Tree tree)
     {
-	super(table);
+	super(tree);
 	
 	_parent = parent;
 	
 	_property = null;
 	_viewFilter = new ViewFilter();
-	_viewFilter.setEnableContents(false);
-	_viewFilter.setDepth(1);
+	_viewFilter.setEnableContents(true);
 	addFilter(_viewFilter);
-	 
-	setContentProvider(new TableContentProvider(toolBar));     
+	
+	tree.addListener(SWT.Expand, this);
 	_isShowing = false;
 	_isWorking = false;
 	
     }
     
-    public void setFocus()
-    {
-	getTable().setFocus();
-    }
-
     public void setListener(ObjectSelectionChangedListener listener)
     {
 	_listener = listener;
@@ -87,35 +82,41 @@ public class ExtendedTableViewer extends TableViewer
 	    }
     }
     
-  public void setBackground(int r, int g, int b)
-  {
-    Table table = getTable();
-   
-    Display display = table.getDisplay();
-    table.setBackground(new Color(display, r, g, b));    
-  }
-
-  public void setForeground(int r, int g, int b)
-  {
-    Table table = getTable();
-   
-    Display display = table.getDisplay();
-    table.setForeground(new Color(display, r, g, b));    
-  }
-
+    public void setBackground(int r, int g, int b)
+    {
+	Tree tree = getTree();
+	
+	Display display = tree.getDisplay();
+	tree.setBackground(new Color(display, r, g, b));    
+    }
+    
+    public void setForeground(int r, int g, int b)
+    {
+	Tree tree = getTree();
+	
+	Display display = tree.getDisplay();
+	tree.setForeground(new Color(display, r, g, b));    
+    }
+    
     public void setFont(FontData data)
     {
-	Table table = getTable();
+	Tree tree = getTree();
 	
-	Display display = table.getDisplay();
-	table.setFont(new Font(display, data));    
+	Display display = tree.getDisplay();
+	tree.setFont(new Font(display, data));    
     }
-  
+
+    public void setFocus()
+    {
+	getTree().setFocus();
+    }
+    
+    
     public void setShowing(boolean flag)
     {
 	_isShowing = flag;
     }
-
+    
     public boolean isShowing()
     {
 	return _isShowing;
@@ -124,6 +125,17 @@ public class ExtendedTableViewer extends TableViewer
     public void handleEvent(Event e)
     {
         Widget widget = e.widget;        
+        DataElement selected = (DataElement)e.item.getData();
+        if (selected != null)
+	    {
+		switch (e.type)
+		    {
+		    case SWT.Expand:
+			doExpand(selected);
+			break;
+		    default:
+		    }
+	    }
     }
     
     public String getSchemaPath()
@@ -145,39 +157,49 @@ public class ExtendedTableViewer extends TableViewer
 		    {
 		    }
 	    }
-
+	
 	return null;
     }
     
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
-	
-	if ((parent == _selected) || 
-	    (parent == _currentInput) || 
-	    (parent == _expanded) ||
-	    ((_currentInput != null) && (_currentInput.contains(parent, _property)))
-	    )
+	if (parent != null && _currentInput != null)
 	    {
-		return true;
+		if ((parent == _selected) || 
+		    (parent == _currentInput) || 
+		    (parent == _expanded) ||
+		    (_currentInput.contains(parent, _property, 2)))
+		    {
+			if ((getTree() != null) && !getTree().isDisposed())
+			    {
+				return true;
+			    }
+		    }
 	    }
+	
 	return false;
     }   
-
-    private Item findItemFor(Table widget, Object res)
+    
+    private Item findItemFor(Widget widget, Object res)
     {
-	Item[] items  = widget.getItems();
+	Item[] items  = getChildren(widget);
 	if (items != null) 
 	    {
 		for (int i= 0; i < items.length; i++) 
 		    {
 			Item child = items[i];
-			if (!child.isDisposed()) 
+			Object data = child.getData();
+			if (data == res)
 			    {
-				Object data = child.getData();
-				if (data == res)
+				return child;
+			    }
+			else
+			    {
+				Item result = findItemFor(child, res);
+				if (result != null)
 				    {
-					return child;
+					return result;
 				    }
 			    }
 		    }
@@ -185,7 +207,6 @@ public class ExtendedTableViewer extends TableViewer
 	
 	return null;
     }
-
     
     public void domainChanged(DomainEvent ev)
     {
@@ -198,22 +219,23 @@ public class ExtendedTableViewer extends TableViewer
 	    }
 
 	DataElement parent = (DataElement)ev.getParent();   
+
 	if (parent.isDeleted())
-	    {
-		if (parent == _currentInput)
-		    {
-			clearView();
-		    }
+	    {		
+		    if (parent == _currentInput)
+			{
+			    clearView();
+			}
 		else
 		    {
 			synchronized(parent)
-			    {
+			    {			
 				try
-			    {
-				getTable().setRedraw(false);
-				remove(parent);
-				getTable().setRedraw(true);				      
-			    }
+				    {
+					getTree().setRedraw(false);
+					internalRefresh(parent.getParent());					  
+					getTree().setRedraw(true);				      
+				    }
 				catch (Exception e)
 				    {
 					e.printStackTrace();
@@ -225,11 +247,6 @@ public class ExtendedTableViewer extends TableViewer
 	else if (_currentInput == null)
 	    {
 		_currentInput = null;
-		setInput(null);
-	    }
-	else if (_currentInput == parent)
-	    {
-		internalRefresh(parent);
 	    }
 	else		     
 	    {
@@ -238,20 +255,20 @@ public class ExtendedTableViewer extends TableViewer
 			
 			try
 			    {
-				Table table = getTable();
-				table.setRedraw(false);
-				Item item = findItemFor(table, parent);
-				if (item != null)
-				    {
-					updateItem(item, parent);
-				    }
-				table.setRedraw(true);
+				Tree tree = getTree();
+				tree.setRedraw(false);				
+				internalRefresh(parent);
+				tree.setRedraw(true);
 			    }
 			catch (Exception e)
 			    {
-				System.out.println(e);
-			    }			
+			    }
 			
+			
+			if ((_expanded == parent))
+			    {
+			       	expandToLevel(parent, 1);
+			    }
 		    }
 	    }
 	
@@ -262,172 +279,78 @@ public class ExtendedTableViewer extends TableViewer
 	    }
     }	
 
+
+    protected void doUpdateItem(Item item, Object element) 
+    {
+	// update icon and label
+	ILabelProvider provider = (ILabelProvider) getLabelProvider();
+	String text = provider.getText(element); 
+	if (text != null && !text.equals(item.getText()))
+	    {
+		item.setText(text);
+	    }
+
+	Image image = provider.getImage(element);
+	if (image != null) 
+	    {
+		item.setImage(image);
+	    }
+    }
+
+
     public void enable(boolean flag)
     {
 	if (flag)
-	    {
-		Table table = getTable();
-		table.setRedraw(false);
-		ScrollBar scrollBar = table.getVerticalBar();
-		scrollBar.setEnabled(false);
-		
-		internalRefresh(_currentInput);
-		
-		scrollBar.setEnabled(true);
-		table.setRedraw(true);
+	    {	       
+		//refresh();
 	    }
     }
+    
+  protected Item newItem(Widget parent, int flags, int ix)  
+      {
+	  if (parent instanceof Tree)
+	      {
+		  return new TreeItem((Tree) parent, flags);
+	      }
+	  else
+	      {
+		  return new TreeItem((TreeItem) parent, flags);
+	      }
+	}
 
-    private void internalRefresh(DataElement parent)
+    public void setVisibility(boolean flag)
     {
-	try
-	    {
-		TableContentProvider contentProvider = (TableContentProvider)getContentProvider();
-
-		Table table = getTable();
-		if (table.isVisible())
-		    {					
-			ArrayList associated = contentProvider.getList(_currentInput);
-			
-			// remove those that are gone	
-			TableItem[] items = table.getItems();
-			ArrayList toRemove = new ArrayList();
-			for (int i = 0; i < items.length; i++) 
-			    {
-				TableItem item = items[i];
-				if (item != null)
-				    {
-					DataElement data = (DataElement)item.getData();
-					if (!associated.contains(data))
-					    {
-						toRemove.add(item);
-					    }
-					else if (data == null || data.isDeleted() ||
-						 !_viewFilter.select(this, data, null))
-					    {
-						toRemove.add(item);
-					    }
-				    }
-			    }
-			
-			
-			table.setRedraw(false);
-			
-			
-			updateItems(table, associated, toRemove);
-
-			
-			if (_listener.isEnabled())
-			    {
-				//refresh();
-			    }
-			
-			if (table.getItemCount() == 0) 
-			    {
-				table.removeAll();
-			    }
-			
-			table.setRedraw(true);
-		    }
-	    }
-	catch (Exception e)
-	    {
-		e.printStackTrace();
-		System.out.println(e);
-	    }				
-    }    
-
-    private void updateItems(Table table, ArrayList elements, ArrayList recycled)
-    {
-	int maxAdd = 100;
-	int numAdded = 0;
-	
-	synchronized(_currentInput)
-	    {
-		for (int i = 0; i < elements.size(); i++)
-		    {
-			DataElement child = (DataElement)elements.get(i);			
-			{
-			    TableItem item = (TableItem)findItemFor(table, child);
-			    if (item != null)
-				{
-				    if (!item.getText().equals(child.getValue()))
-					{
-					    updateItem(item, child);
-					}
-				}
-			    else
-				{
-				    if (numAdded < maxAdd)
-					{
-					    if (_viewFilter.select(this, child, null))
-						{ 							
-						    if (recycled.size() > 0)
-							{
-							    item = (TableItem)recycled.get(0);
-							}
-						    else
-							{
-							    item = (TableItem)newItem(table, SWT.NONE, i);
-							    numAdded++;
-							}
-						    
-						    updateItem(item, child); 
-						    
-						}
-					}
-				    else
-					{
-					    // defer draw until later
-					    //_currentInput.getDataStore().refresh(_currentInput);
-					    
-					}
-				}
-			}
-		    }		
-	    }
-	
-	
-	if (recycled.size() > 0)
-	    {
-		for (int i = 0; i < recycled.size(); i++)
-		    {
-			TableItem item = (TableItem)recycled.get(i);
-			item.dispose();
-			item = null;
-		    }
-	    }
-
-    }
-   
-    protected Item newItem(Widget parent, int flags, int ix)  
-    {
-	return new TableItem((Table)parent, flags);
+	Tree tree = getTree();
+	if (tree != null)
+	    tree.setVisible(flag);		
     }
 
-    public void doExpand(DataElement obj)
-    {
+
+
+public void doExpand(DataElement obj)
+      {
         DataElement root = obj.dereference();
         setSelected(obj);
         setExpanded(root);               
         root.expandChildren();
-    }
+      }
 
   public void setExpanded(DataElement element)
       {
         _expanded = element;
       }
 
-    public ObjectWindow getParent()
-    {
-	return _parent;
-    }
+  public ObjectWindow getParent()
+  {
+    return _parent;
+  }
 
+    
     public void setInput(DataElement object)
     {
 	inputChanged(object, _currentInput);
     }
-
+    
     protected void inputChanged(Object object, Object oldInput)
     {
 	if (object == null)
@@ -448,36 +371,26 @@ public class ExtendedTableViewer extends TableViewer
 			    }
 
 			_currentInput = (DataElement)object;
-			_currentInput.expandChildren();
-			_viewFilter.reset();
 
 			super.inputChanged(object, oldInput);
-			internalRefresh(_currentInput);
 			_isShowing = true;
+			_viewFilter.reset();
 		    }
 	    }
     }
 
-
-    public void setVisibility(boolean flag)
-    {
-	Table table = getTable();
-	if (table != null)
-	    table.setVisible(flag);		
-    }
-
     public void clearView()
     {
-	Control table = getTable();
-	if (table != null)
+	Control tree = getTree();
+	if (tree != null)
 	    {
-		synchronized(table)
+		synchronized(tree)
 		    {
 			try
 			    {
-				table.setRedraw(false);
-				getTable().removeAll();
-				table.setRedraw(true);	
+				tree.setRedraw(false);
+				getTree().removeAll();
+				tree.setRedraw(true);	
 			    }
 			catch (Exception e)
 			    {
@@ -498,16 +411,16 @@ public class ExtendedTableViewer extends TableViewer
 		    }
 		else
 		    {
-			Control table = getTable();
-			if (table != null)
+			Control tree = getTree();
+			if (tree != null)
 			    {
-				synchronized(table)
+				synchronized(tree)
 				    {
 					try
 					    {
-						table.setRedraw(false);
+						tree.setRedraw(false);
 						internalRefresh(parent);
-						table.setRedraw(true);
+						tree.setRedraw(true);
 
 						DataElement selected = getSelected();
 						select(selected);
@@ -530,16 +443,16 @@ public class ExtendedTableViewer extends TableViewer
 		boolean selectionListening = _listener.isEnabled();
 		if (selectionListening)
 		{
-		    Control table = getTable();
-		    if (table != null)
+		    Control tree = getTree();
+		    if (tree != null)
 			{
-			    synchronized (table)
+			    synchronized (tree)
 				{
 				    try
 					{
-					    table.setRedraw(false);
+					    tree.setRedraw(false);
 					    internalRefresh(_currentInput);
-					    table.setRedraw(true);
+					    tree.setRedraw(true);
 					    DataElement selected = getSelected();
 					    select(selected);
 
@@ -547,7 +460,7 @@ public class ExtendedTableViewer extends TableViewer
 				    catch (Exception e)
 					{
 					    System.out.println(e);
-					    setInput(_currentInput);
+					    //***					    setInput(_currentInput);
 					}
 				}
 			}
@@ -563,11 +476,22 @@ public class ExtendedTableViewer extends TableViewer
     
     public DataElement getSelected()
     {
+	if ((_selected != null) && _selected.isDeleted())
+	    {
+		//_selected = findElement(_selected);
+	    }
+
 	return _selected;
     }
 
     public Object getInput()
     {
+	if ((_currentInput != null) && _currentInput.isDeleted())
+	    {
+		//_currentInput = findElement(_currentInput);
+
+	    }
+	
 	return _currentInput;
     }
 
@@ -584,6 +508,44 @@ public class ExtendedTableViewer extends TableViewer
 	    }
     }
 
+    public Widget findWidget(Widget parent, String type, String name)
+    {
+	Widget widget = null;
+	Item[] items  = getChildren(parent);
+
+	if (items != null) 
+	    {
+		for (int i= 0; i < items.length; i++) 
+		    {
+			Item child = items[i];
+			DataElement element = (DataElement)child.getData();
+			if ((element != null) && element.getType().equals(type))
+			    {
+				if (element.getName().equals(name))
+				    {
+					widget = child;
+					return widget;
+				    }
+			    }
+			
+			widget = findWidget(child, type, name);
+			if (widget != null)
+			    {
+				return widget;
+			    }
+		    }
+	    }
+
+	return widget;
+    }
+
+    protected Widget internalExpand(Object element, boolean expand) 
+    {	
+	if (element == null)
+	    return null;
+	
+	return findItem(element);
+    }
 
     public void select(DataElement object)
     {
@@ -591,49 +553,57 @@ public class ExtendedTableViewer extends TableViewer
 	    {
 		String type = object.getType();
 		String name = object.getName();
-		reveal(object);
+		//***reveal(object);
 		Widget widget = findItem(object);		
 
 		if (widget != null)
 		    {
 			ArrayList selection = new ArrayList();
 			selection.add(widget);
+			try
+			    {
+				setSelection(selection);
+			    }
+			catch (ArrayStoreException e)
+			    {
+				System.out.println(e);
+				getTree().setRedraw(false);
+				getTree().removeAll();
+				_selected = null;
+				getTree().setRedraw(true);
+				resetView();
+			    }
 		    }
 	    }
     }
 
-
-
-
-  public void setFilter(DataElement type)
-  {
-    DataElement oldType = _viewFilter.getType();
-    if ((oldType != type) &&
-	(type != null))
+    public void setFilter(DataElement type)
     {
-	_viewFilter.setType(type);
+	DataElement oldType = _viewFilter.getType();
+	if ((oldType != type) &&
+	    (type != null))
+	    {
+		_viewFilter.setType(type);
+	    }
     }
-  }
+    
+    public DataElement getFilter()
+    {
+	return _viewFilter.getType();
+    }
 
-  public DataElement getFilter()
-  {
-    return _viewFilter.getType();
-  }
+    public void setProperty(DataElement property)
+    {
+	DataElementTreeContentProvider provider = (DataElementTreeContentProvider)getContentProvider();
 
-  public void setProperty(DataElement property)
-  {
-    TableContentProvider provider = (TableContentProvider)getContentProvider();
-
-    if (property != null && 
-	provider != null && 
-	property != provider.getProperty())
-    {      
-      _property = property;
-      provider.setProperty(property);       
-    }	
-  }
-
-  public DataElement getProperty()
+	if (property != provider.getProperty())
+	    {      
+		_property = property;
+		provider.setProperty(property);		
+	    }	
+    }
+    
+    public DataElement getProperty()
       {
         return _property;
       }
@@ -650,41 +620,16 @@ public class ExtendedTableViewer extends TableViewer
 		_openEditorAction = new OpenEditorAction(_selected);
 	    }
 	
-	if (_selected != null)
-	    {
-		DataElement type = _selected.getDescriptor();
-		boolean isContainer = false;
-		if (type != null)
-		    {
-			ArrayList contents = type.getAssociated("contents");
-			for (int i = 0; (i < contents.size()) && !isContainer; i++)
-			    {
-				DataElement contained = (DataElement)contents.get(i);
-				if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
-				    {
-					isContainer = true;
-				    }		    
-			    }
-		    }
-		
-		if (isContainer)
-		    {
-			_selected.expandChildren();
-			_parent.setInput(_selected);
-		    }
-
-		_openEditorAction.setSelected(_selected);
-		_openEditorAction.run();
-	    }
+	_openEditorAction.setSelected(_selected);
+	_openEditorAction.run();
     }
   
     public void refreshView(DataElement relation, DataElement filter)
     {
 	setFilter(filter);
-	setProperty(relation);
-	internalRefresh(_currentInput);
+	setProperty(relation);	
+	resetView();
     }
-
 
     public boolean isWorking()
     {
@@ -693,6 +638,6 @@ public class ExtendedTableViewer extends TableViewer
 
     public void dispose()
     {
-	getTable().dispose();
+	getTree().dispose();
     }
 }

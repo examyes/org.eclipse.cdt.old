@@ -75,7 +75,7 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
 	c.setLayoutData(cgrid);
 
 	DataStore dataStore = _input.getDataStore();
-	_viewer = new ObjectWindow(c, 0, dataStore, new ImageRegistry(), this, true);	
+	_viewer = new ObjectWindow(c, ObjectWindow.TABLE, dataStore, new ImageRegistry(), this);	
 	_viewer.setInput(_input);
 
 	GridLayout layout= new GridLayout();
