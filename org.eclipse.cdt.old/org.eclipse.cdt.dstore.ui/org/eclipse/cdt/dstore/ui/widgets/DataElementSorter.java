@@ -191,7 +191,7 @@ public class DataElementSorter extends ViewerSorter
 			if (i == 0 && c == '-')
 			    {
 			    }
-			else if (i == '.')
+			else if (c == '.')
 			    {
 			    }
 			else
