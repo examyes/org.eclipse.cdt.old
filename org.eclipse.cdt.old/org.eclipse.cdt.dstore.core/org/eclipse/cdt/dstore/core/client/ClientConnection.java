@@ -46,6 +46,13 @@ public class ClientConnection
         
       }
 
+  public ClientConnection(String name, int initialSize)
+      {
+        _domainNotifier = new DomainNotifier();
+        _name = name;
+        init(initialSize);        
+      }
+
   public ClientConnection(String name, DomainNotifier notifier)
       {
         _domainNotifier = notifier;
@@ -53,12 +60,24 @@ public class ClientConnection
         init();
       }
 
-  public void init()
+  public ClientConnection(String name, DomainNotifier notifier, int initialSize)
+      {
+        _domainNotifier = notifier;
+        _name = name;
+        init(initialSize);
+      }
+
+  private void init()
+    {
+	init(10000);
+    }
+
+  private void init(int initialSize)
       {
         _clientAttributes = new ClientAttributes();
         _clientAttributes.setAttribute(ClientAttributes.A_ROOT_NAME, _name);
 
-        _dataStore = new DataStore(_clientAttributes);
+        _dataStore = new DataStore(_clientAttributes, initialSize);
         _dataStore.setDomainNotifier(_domainNotifier);
 	_dataStore.createRoot();
 

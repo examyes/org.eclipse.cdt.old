@@ -43,10 +43,11 @@ public class DataStore
     
     private HashMap             _hashMap;
     private ArrayList           _recycled;
-    private int                 _MAX_FREE = 10000;
     
     private ResourceBundle      _resourceBundle;
     private Random              _random;  
+
+    private int                 _initialSize;
     
     /////////////////////////////////////////
     //
@@ -62,12 +63,28 @@ public class DataStore
         _domainNotifier      = null;
         _isConnected         = false;
         _logTimes            = false;
+	_initialSize         = 10000;
 
 	initialize();
       }
 
-  public DataStore(DataStoreAttributes attributes, CommandHandler commandHandler,
-                   UpdateHandler updateHandler, DomainNotifier domainNotifier)
+    public DataStore(DataStoreAttributes attributes, int initialSize)
+    {
+        _dataStoreAttributes = attributes;
+        _commandHandler      = null;
+        _updateHandler       = null;
+        _domainNotifier      = null;
+        _isConnected         = false;
+        _logTimes            = false;
+	_initialSize         = initialSize;
+
+	initialize();
+      }
+
+  public DataStore(DataStoreAttributes attributes, 
+		   CommandHandler commandHandler,
+                   UpdateHandler updateHandler, 
+		   DomainNotifier domainNotifier)
       {
         _dataStoreAttributes = attributes;
         _commandHandler      = commandHandler;
@@ -75,19 +92,38 @@ public class DataStore
         _domainNotifier      = domainNotifier;
         _isConnected         = true;
         _logTimes            = false;
+	_initialSize         = 10000;
 
 	initialize();
 	createRoot();
       }
 
-    public void initialize()
+  public DataStore(DataStoreAttributes attributes, 
+		   CommandHandler commandHandler,
+                   UpdateHandler updateHandler, 
+		   DomainNotifier domainNotifier,
+		   int initialSize)
+      {
+        _dataStoreAttributes = attributes;
+        _commandHandler      = commandHandler;
+        _updateHandler       = updateHandler;
+        _domainNotifier      = domainNotifier;
+        _isConnected         = true;
+        _logTimes            = false;
+	_initialSize         = initialSize;
+
+	initialize();
+	createRoot();
+      }
+
+    private void initialize()
     {
 	_minersLocation = "com.ibm.dstore.core";
 	_random = new Random(System.currentTimeMillis());
 
-        _hashMap = new HashMap(100000);
-	_recycled = new ArrayList(_MAX_FREE);
-	initElements(_MAX_FREE);
+        _hashMap = new HashMap(2 * _initialSize);
+	_recycled = new ArrayList(_initialSize);
+	initElements(_initialSize);
 
 	_timeout = 10000;
 	try

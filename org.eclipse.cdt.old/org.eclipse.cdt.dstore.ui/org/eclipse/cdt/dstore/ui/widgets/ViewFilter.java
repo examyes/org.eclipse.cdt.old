@@ -18,18 +18,24 @@ public class ViewFilter extends ViewerFilter
     private DataElement _type;
     private boolean _enableContents = false;
 
-  public ViewFilter()
-  {
-    super();
-    _type = null; 
-    
-  }
+    private ArrayList _notCache;
+    private ArrayList _isCache;
 
-  public ViewFilter(DataElement type)
-      {
+    public ViewFilter()
+    {
+	super();
+	_type = null; 
+	_notCache = new ArrayList();
+	_isCache  = new ArrayList();
+    }
+    
+    public ViewFilter(DataElement type)
+    {
         super();
         _type = type;
-      }
+	_notCache = new ArrayList();
+	_isCache = new ArrayList();
+    }
 
   public ViewFilter(ViewFilter oTemplate)
       {
@@ -41,56 +47,68 @@ public class ViewFilter extends ViewerFilter
 	_enableContents = flag;
     }  
 
-  public Object[] filter(Viewer viewer,
-		       Object parent,
-		       Object[] input)
-  {
-    ArrayList elements = new ArrayList();
-    for (int i = 0; i < input.length; i++)
-	{
-	    DataElement data =  (DataElement)input[i];
-	    if (select(viewer, data, null))
-		{	
-		    elements.add(data);
-		}
-      }
+    public Object[] filter(Viewer viewer, Object parent, Object[] input)
+    {
+	ArrayList elements = new ArrayList();
+	for (int i = 0; i < input.length; i++)
+	    {
+		DataElement data =  (DataElement)input[i];
+		if (select(viewer, data, null))
+		    {	
+			elements.add(data);
+		    }
+	    }
+	
+	return elements.toArray();
+    }
+    
+    public boolean isFilterProperty(Object element, Object property)
+    {
+	return true;
+    }
+    
+    public boolean select(Viewer viewer, Object element, Object other)
+    {
+	DataElement dataElement = (DataElement)element;	
+	if (dataElement != null)
+	    {	
+		if (_type != null)
+		    {
+			dataElement = dataElement.dereference();
+			boolean result =  doesExist(_type, dataElement);
 
-    return elements.toArray();
-  }
+			if (!result)
+			    {
+				DataElement notDescriptor = dataElement.getDescriptor();
+				if (!_notCache.contains(notDescriptor))
+				    {
+					_notCache.add(notDescriptor);
+				    }
+			    }
 
-  public boolean isFilterProperty(Object element, Object property)
-  {
-    return true;
-  }
+			return result;
+		    }
+		else
+		    return true;
+	    }
+	else
+	    {	
+		return false;
+	    }
+    }
 
-  public boolean select(Viewer viewer, Object element, Object other)
+  private boolean doesExist(DataElement descriptor, DataElement dataElement)
   {
-    DataElement dataElement = (DataElement)element;	
-    if (dataElement != null)
-      {	
-        if (_type != null)
-        {
-	    dataElement = dataElement.dereference();
-	    ArrayList checked = new ArrayList();
-            boolean result =  doesExist(_type, dataElement, checked);
-	    return result;
-        }
-        else
-          return true;
-      }
-    else
-      {	
-	return false;
-      }
-  }
-
-  public boolean doesExist(DataElement descriptor, DataElement dataElement, ArrayList checked)
-  {
-      if (!checked.contains(descriptor))
+      if (descriptor != null && dataElement != null && !dataElement.isDeleted())
 	  {
-	      checked.add(descriptor);
-	      if (descriptor != null && dataElement != null && !dataElement.isDeleted())
+	      DataElement elementDescriptor = dataElement.getDescriptor();
+
+	      if (_isCache.contains(elementDescriptor))
 		  {
+		      return true;
+		  }
+	      else if (!_notCache.contains(elementDescriptor))
+		  {	      
 		      String dataType  = dataElement.getType();
 		      String typeName  = descriptor.getName();
 		      String typeType  = descriptor.getType();
@@ -99,32 +117,38 @@ public class ViewFilter extends ViewerFilter
 			  {
 			      if (dataType.equals(typeName) || typeName.equals("all"))
 				  {
+				      _isCache.add(elementDescriptor);
 				      return true; 
 				  }
 			      else
 				  {
-				      DataElement ddes = dataElement.getDescriptor();
-				      if (ddes != null && ddes.isOfType(descriptor, true))
+				      if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 					  {
-					      return true;
-					  }
-
-				      if (_enableContents)
-					  {
-					      ArrayList containsList = descriptor.getAssociated("contents");
-					      for (int i = 0; i < containsList.size(); i++)
+					      if (elementDescriptor != null && 
+						  elementDescriptor.isOfType(descriptor, true))
 						  {
-						      DataElement aDes = (DataElement)containsList.get(i);
-						      if (aDes != null && 
-							  doesExist(aDes, dataElement, checked))
+						      _isCache.add(elementDescriptor);
+						      return true;
+						  }
+					      
+					      if (_enableContents)
+						  {
+						      ArrayList containsList = descriptor.getAssociated("contents");
+						      for (int i = 0; i < containsList.size(); i++)
 							  {
-							      return true;
-							  }					      
+							      DataElement aDes = (DataElement)containsList.get(i);
+							      if (aDes != null && 
+								  doesExist(aDes, dataElement))
+								  {
+								      _isCache.add(elementDescriptor);
+								      return true;
+								  }					      
+							  }
 						  }
 					  }
 				  }
 			  }
-		  }
+		  }	      
 	  }
       
       return false;
@@ -133,14 +157,25 @@ public class ViewFilter extends ViewerFilter
 
   public void setType(DataElement type)
   {
-    _type = type;
+      if (_type != type)
+	  {
+	      _type = type;
+	      _notCache.clear();
+	      _isCache.clear();
+	  }
   }
+    
+    public DataElement getType()
+    {
+	return _type;
+    }
 
-  public DataElement getType()
-  {
-    return _type;
-  }
 
+    public void reset()
+    {
+	_notCache.clear();
+	_isCache.clear();
+    }
 }
 
 

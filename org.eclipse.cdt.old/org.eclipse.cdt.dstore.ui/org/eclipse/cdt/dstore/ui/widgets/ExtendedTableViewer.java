@@ -330,21 +330,6 @@ public class ExtendedTableViewer extends TableViewer
 	    }				
     }    
 
-    private void updateItems(TableItem[] items, Object[] elements)
-    {
-	for (int i = 0; i < elements.length; i++)
-	    {
-		DataElement child = (DataElement)elements[i];			
-		synchronized(child)
-		    {
-			if (_viewFilter.select(this, child, null))
-			    {
-				updateItem(items[i], child);
-			    }
-		    }		
-	    }
-    }
-   
     private void updateItems(Table table, Object[] elements)
     {
 	for (int i = 0; i < elements.length; i++)
@@ -357,7 +342,7 @@ public class ExtendedTableViewer extends TableViewer
 				Item item = findItemFor(table, child);
 				if (item != null)
 				    {
-					updateItem(item, child);
+					//updateItem(item, child);
 				    }
 				else
 				    {

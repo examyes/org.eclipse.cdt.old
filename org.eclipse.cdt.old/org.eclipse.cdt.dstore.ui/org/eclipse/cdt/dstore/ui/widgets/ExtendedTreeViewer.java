@@ -573,7 +573,7 @@ public void doExpand(DataElement obj)
     {      
       _property = property;
       provider.setProperty(property);
-       
+
     }	
   }
 

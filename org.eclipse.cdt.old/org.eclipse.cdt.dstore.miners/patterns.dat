@@ -13,7 +13,7 @@ command: nmake.*
 	 error         file              pattern =[\w,.,\\,:]*\(([\w,.]*)\) : error LNK.*
 	 error         file line         pattern=([\w,.]*):(\d*):\d*\) : error .*
 	 warning       file line         pattern=([\w,.]*)\((\d*):\d*\) : warning .*
-	 informational file line         pattern=([\w,.]*)\((\d*):\d*\) : informational .* 
+	 informational file line         pattern=([\w,.]*)\((\d*):\d*\) : informational .*   
 
 command: .*make.*
 	 warning       file line         pattern =([\w,.]*):(\d*): warning: .*

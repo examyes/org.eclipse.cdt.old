@@ -479,10 +479,17 @@ public final class DataElement implements Serializable, IDataElement
 	  }
         else if ((_descriptor == null) && (_dataStore != null))
 	    {
-		_descriptor = _dataStore.findDescriptor(DE.T_OBJECT_DESCRIPTOR, getAttribute(DE.A_TYPE));	   
-		if (_descriptor == null)
+		if (_isDescriptor)
 		    {
-			_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 3);	   
+			_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 1);
+		    }
+		else
+		    {
+			_descriptor = _dataStore.findDescriptor(DE.T_OBJECT_DESCRIPTOR, getAttribute(DE.A_TYPE));	   
+			if (_descriptor == null)
+			    {
+				_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 3);	   
+			    }
 		    }
 	    }
 

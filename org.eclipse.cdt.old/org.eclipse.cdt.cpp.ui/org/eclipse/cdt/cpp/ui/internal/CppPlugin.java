@@ -160,7 +160,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     {
     if (_instance == null)
       {	
- 	_clientConnection = new ClientConnection("Hosts");
+ 	_clientConnection = new ClientConnection("C/C++", 20000);
 	_clientConnection.setLoader(new MinerClassLoader());	
         DataStore dataStore = _clientConnection.getDataStore();
 	dataStore.setMinersLocation("com.ibm.cpp.miners");
