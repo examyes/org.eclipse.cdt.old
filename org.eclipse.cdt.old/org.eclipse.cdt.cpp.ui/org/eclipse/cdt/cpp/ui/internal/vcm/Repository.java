@@ -52,9 +52,10 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.dialogs.*;
 
 import org.eclipse.ui.model.*;
+import org.eclipse.ui.*;
  
 public class Repository extends Project 
-    implements IRepository, IProject, IWorkbenchAdapter, IDataElementContainer, IResource
+    implements IRepository, IProject, IWorkbenchAdapter, IDataElementContainer, IResource, IActionFilter
 {
   private class PersistentProperty
   {
@@ -154,6 +155,7 @@ public class Repository extends Project
     private DataElement _root;
     private DataElement _remoteRoot;
     private DataElement _resourceDescriptor;
+    private DataElement _closedElement;
     
     private RepositoryDescription _description;  
     
@@ -169,47 +171,67 @@ public class Repository extends Project
  
     private Workspace _workspace;
 
-  public Repository(Connection connection) 
-  {
-      super(Platform.getLocation(), (Workspace)ResourcesPlugin.getWorkspace()); 
-
-      _workspace = (Workspace)ResourcesPlugin.getWorkspace();
-      _dataStore = CppPlugin.getDefault().getCurrentDataStore();
-      DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
-      _root = fsMinerData.get(0);  
-    _path = new Path(_root.getAttribute(DE.A_SOURCE));
-    _connection = connection;
-    initialize();
-  }
-
-  public Repository(Connection connection, DataElement root)
-  {
-      super(Platform.getLocation(), (Workspace)ResourcesPlugin.getWorkspace()); 
-      //      super(Path.ROOT.append(root.getAttribute(DE.A_NAME)), (Workspace)ResourcesPlugin.getWorkspace()); 
-
-    _workspace = (Workspace)ResourcesPlugin.getWorkspace();
-    _path = new Path(root.getAttribute(DE.A_SOURCE)); 
-    _phantomPath = Path.ROOT.append(root.getAttribute(DE.A_NAME)); 
-
-    _dataStore = root.getDataStore();
-    _connection = connection;
+    public Repository(Connection connection) 
+    {
+	super(Platform.getLocation(), (Workspace)ResourcesPlugin.getWorkspace()); 
+	
+	_workspace = (Workspace)ResourcesPlugin.getWorkspace();
+	_dataStore = CppPlugin.getDefault().getCurrentDataStore();
+	DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
+	_root = fsMinerData.get(0);  
+	_path = new Path(_root.getAttribute(DE.A_SOURCE));
+	_connection = connection;
+	initialize();
+    }
     
-    _root = root;    
-    initialize();
-  }
+    public Repository(Connection connection, DataElement root)
+    {
+	super(Platform.getLocation(), (Workspace)ResourcesPlugin.getWorkspace()); 
+	
+	_workspace = (Workspace)ResourcesPlugin.getWorkspace();
+	_path = new Path(root.getAttribute(DE.A_SOURCE)); 
+	_phantomPath = Path.ROOT.append(root.getAttribute(DE.A_NAME)); 
+	
+	_dataStore = root.getDataStore();
+	_connection = connection;
+	
+	_root = root;    
+	initialize();
+    }
+    
+    public void initialize()
+    {
+	_resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1); 
+	
+	_plugin = CppPlugin.getDefault();
+	_persistentProperties = new ArrayList();
+	readProperties();
+		
+	_children = new Vector();
+    }
 
-  public void initialize()
-  {
-    _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1); 
 
-    _plugin = CppPlugin.getDefault();
-    _persistentProperties = new ArrayList();
-    readProperties();
+    public void setClosedElement(DataElement closedElement)
+    {
+	_closedElement = closedElement;
+    }
 
+    public DataElement getClosedElement()
+    {
+	return _closedElement;
+    }
 
-    _children = new Vector();
-  }
-  
+    public void changePath(String path)
+    {
+	if (_closedElement != null)
+	    {
+		_closedElement.setAttribute(DE.A_SOURCE, path);
+		_closedElement.getDataStore().refresh(_closedElement);
+	    }
+
+	_path = new Path(path); 
+    }
+    
     public ImageDescriptor getImageDescriptor(Object object)
     {
 	return _plugin.getImageDescriptor((String)object);
@@ -406,21 +428,35 @@ public class Repository extends Project
         return _children.toArray();
       }
   
-  
-  public Object getAdapter(Class adapter) 
-  {
-    if (PropertySource.matches(adapter))
-      {
-	return new PropertySource(_root);	    
-      }
-    else if (adapter == org.eclipse.ui.model.IWorkbenchAdapter.class)
+    
+    public boolean testAttribute(Object target, String name, String value)
     {
-	return this;
+	if (value.equals("com.ibm.cpp.ui.cppnature"))
+	    {
+		return true;
+	    }
+	
+	return false;
     }
-    else
-	{
-	    return null;
-	}
+    
+    public Object getAdapter(Class adapter) 
+    {
+	if (PropertySource.matches(adapter))
+	    {
+		return new PropertySource(_root);	    
+	  }
+      else if (adapter == org.eclipse.ui.model.IWorkbenchAdapter.class)
+	  {
+	      return this;
+	  }
+      else if (adapter == org.eclipse.ui.IActionFilter.class)
+	  {
+	      return this;
+	  }
+      else
+	  {
+	      return Platform.getAdapterManager().getAdapter(this, adapter);
+	  }
   }
 
   
@@ -953,6 +989,18 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
     }
 
 
-    
+    public ProjectDescription internalGetDescription() 
+    {
+	ProjectInfo info = (ProjectInfo) getResourceInfo(false, false);
+	if (info == null)
+	    return null;
+	return info.getDescription();
+    }
+ 
+    public IProject[] getReferencedProjects() throws CoreException 
+    {
+	return new IProject[0];
+    }
+   
 }
 

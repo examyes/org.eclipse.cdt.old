@@ -139,6 +139,8 @@ public class RemotePropertyPage extends PropertyPage
 	  connection.setDir(_remoteHostDirectoryField.getText());
 	  connection.setIsUsingDaemon(_remoteHostDaemonButton.getSelection());
 	  
+	  project.changePath(_remoteHostDirectoryField.getText());
+
 	  ArrayList mountPoints = new ArrayList();
 	  mountPoints.add(new String(_remoteHostMountField.getText()));
 	  CppPlugin.writeProperty(getProject(), "Mount Point",  mountPoints);

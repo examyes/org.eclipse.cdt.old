@@ -63,7 +63,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  projectMinerProject = dataStore.createObject(workspace, "Project",
 								       _project.getName(),
 								       _project.getLocation().toString());
-			  dataStore.setObject(workspace, false);
 			  dataStore.setObject(projectMinerProject);
 		      }	
 	      }
@@ -636,9 +635,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			IPath location = project.getLocation();
 			if (location != null)
 			    {
-				dataStore.createObject(workspace, "Closed Project",
-						       project.getName(),
-						       location.toString());
+				DataElement closedProject = dataStore.createObject(workspace, "Closed Project",
+										   project.getName(),
+										   location.toString());
+
+
+				if (project instanceof Repository)
+				    {
+					// we need to distinguish it's host from others
+					((Repository)project).setClosedElement(closedProject);
+				    } 
+			 
+
 			    }
 		    }
 	    }
@@ -1090,6 +1098,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	// first search local projects
 	IProject[] projects = _workbench.getRoot().getProjects();
+	DataStore ldataStore = _plugin.getDataStore();
 	for (int i = 0; i < projects.length; i++)
 	    {	
 		IProject project = projects[i];
@@ -1099,7 +1108,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    {
 				if (projectElement.getName().equals(project.getName()))
 				    {
-					return project;
+					if (ldataStore == projectElement.getDataStore())
+					    {
+						return project;
+					    }
 				    }
 			    }
 		    }
@@ -1120,7 +1132,22 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    {
 					if (projectElement.getName().equals(project.getName()))
 					    {
-						return project;
+						if (project.isOpen())
+						    {
+							DataStore rdataStore = ((Repository)project).getDataStore();
+							if (rdataStore == projectElement.getDataStore())
+							    {
+								return project;
+							    }
+						    }
+						else
+						    {
+							DataElement root = ((Repository)project).getClosedElement();
+							if (root == projectElement)
+							    {
+								return project;
+							    }
+						    }
 					    }
 				    }
 			    }
