@@ -1185,7 +1185,7 @@ public class DataStore
     }
 
     while ((status != null) 
-	   && isConnected()
+	   && (_status == null || _status.getName().equals("okay"))
 	   && !status.getName().equals(state) 
 	   && !status.getName().equals(getLocalizedString("model.incomplete")) 
 	   && !timedOut)
