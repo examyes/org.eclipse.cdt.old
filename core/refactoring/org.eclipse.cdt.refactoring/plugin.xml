@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension point="org.eclipse.ui.popupMenus">
+      <viewerContribution 
+            targetID="#CEditorContext" 
+            id="org.eclipse.cdt.refactoring.rename"
+      >
+         <action 
+               label="Rename (work in progress)" 
+               class="org.eclipse.cdt.refactoring.CRenameRefactoringAction" 
+               menubarPath="org.eclipse.cdt.ui.refactoring.menu/additions" 
+               id="org.eclipse.cdt.refactoring.rename"
+         />
+      </viewerContribution>
+   </extension>
+</plugin>
