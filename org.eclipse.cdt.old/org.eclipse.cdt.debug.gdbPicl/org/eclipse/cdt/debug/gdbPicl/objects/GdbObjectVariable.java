@@ -242,7 +242,30 @@ public class GdbObjectVariable extends GdbVariable {
 			// get field name (up to equal sign)
 			// there must be an equal sign here... otherwise, it won't get here
 			int equal = parseStr.indexOf("=");
+			
+			if (equal == -1)
+			{
+				// skip... 
+				// at the end of object, may get following data:
+				// a = {x=1, y=2, <no data fields>}
+				// we are skipping <no data fields> here as index("=") will be -1
+				
+				if (!lastone)
+				{
+					if (comma+2 < parseStr.length())
+					{
+						parseStr = parseStr.substring(comma + 2);						
+					}
+				}
+				else
+				{	
+	    			break;
+				}	    			
+			}
+			
 			fieldName = parseStr.substring(0, equal);
+			
+			
 			
 			// get type name for this field		
 			fieldName = fieldName.trim();			
