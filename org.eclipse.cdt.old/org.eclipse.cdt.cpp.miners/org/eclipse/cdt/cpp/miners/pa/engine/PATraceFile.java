@@ -117,6 +117,7 @@ public abstract class PATraceFile {
   
     String line = null;
     while (!_status.isAllDone() && (line = _reader.readLine()) != null) {
+     // System.out.println("line: " + line);
      processLine(line);
     }
     

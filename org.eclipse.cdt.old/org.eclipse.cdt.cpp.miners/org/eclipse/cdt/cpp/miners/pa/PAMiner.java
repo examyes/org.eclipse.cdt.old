@@ -374,7 +374,11 @@ public class PAMiner extends Miner {
     return;
    }
    
+   // Reset the type of the trace element after the parsing
    traceElement.setAttribute(DE.A_TYPE, PADataStoreAdaptor.getTraceFileFormat(traceFile));
+   DataElement traceFunctionsRoot = _dataStore.find(traceElement, DE.A_VALUE, getLocalizedString("pa.TraceFuncRoot"), 1);
+   traceFunctionsRoot.setAttribute(DE.A_TYPE, traceElement.getType());
+   
    adaptor.populateDataStore(traceElement, traceFile);
    status.setAttribute(DE.A_NAME, "done");
  }
@@ -425,26 +429,42 @@ public class PAMiner extends Miner {
   }
   catch (Exception e) {
    System.out.println("Error running the profile command: " + profileCommand);
+   _dataStore.createObject(traceElement, "error code", getLocalizedString("pa.NoCommand"));
    status.setAttribute(DE.A_NAME, "error");
    return;
   }
-      
-  // Parse the trace output
-  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-  PATraceFile traceFile = null;
   
-  try {
-    traceFile = PAAdaptor.createTraceFile(reader, traceFormat);
-  }
-  catch (Exception e) {
-    e.printStackTrace();
+  // Detect errors from the error stream  
+  BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+    
+  String errorCode = PADataStoreAdaptor.getErrorCode(stderr);
+    
+  if (errorCode != null) {
+    // System.out.println("Found an error: " + errorCode);
+    _dataStore.createObject(traceElement, "error code", errorCode);
     status.setAttribute(DE.A_NAME, "error");
     return;
   }
+  else {
+      
+    // Parse the trace output
+    BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    PATraceFile traceFile = null;
+  
+    try {
+      traceFile = PAAdaptor.createTraceFile(stdout, traceFormat);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      status.setAttribute(DE.A_NAME, "error");
+      return;
+    }
     
-  PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
-  adaptor.populateDataStore(traceElement, traceFile);
-  status.setAttribute(DE.A_NAME, "done");
+    PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
+    adaptor.populateDataStore(traceElement, traceFile);
+    status.setAttribute(DE.A_NAME, "done");
+  }
+  
  }
  
  
