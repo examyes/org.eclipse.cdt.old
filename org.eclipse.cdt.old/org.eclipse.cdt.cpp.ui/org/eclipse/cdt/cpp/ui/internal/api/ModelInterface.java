@@ -1945,7 +1945,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	buildCmd.setAttribute(DE.A_VALUE, "BUILD_TARGET");
 	DataElement executeCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Execute",
-							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+							  "com.ibm.cpp.ui.internal.actions.ExecuteAction");
 	executeCmd.setAttribute(DE.A_VALUE, "EXECUTE_TARGET");
 	// autoconf
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
