@@ -51,26 +51,48 @@ public class CppCommandViewer extends CommandViewer
      
     public void setInput(Object input)
     {
-	if (input instanceof IResource)
-	    {
-		_resourceInput = (IResource)input;
-	    }
-	else
-	    {
-		_resourceInput = null;
-	    }
-
-	if (input instanceof Repository)
-	    {
-		Repository project = (Repository)input;
-		if (project.isOpen())
-		    {
-			super.setInput(project.getRemoteElement());
-		    }
-	    }
-	else
+	if (input instanceof DataElement)
 	    {
 		super.setInput(input);
+	    }
+	else
+	    {
+		if (input instanceof IResource)
+		    {
+			DataElement element = null;
+
+			_resourceInput = (IResource)input;
+			ModelInterface api = _plugin.getModelInterface();
+
+			if (_resourceInput instanceof IProject)
+			    {
+				element = api.findProjectElement((IProject)_resourceInput);
+			    }
+			else
+			    {
+				IProject project = _resourceInput.getProject();
+				DataElement prjElement = api.findProjectElement(project);
+				element = prjElement.getDataStore().find(prjElement, DE.A_NAME, _resourceInput.getName());
+			    }			
+			super.setInput(element);
+		    }
+		else
+		    {
+			_resourceInput = null;
+		    }
+		
+		if (input instanceof Repository)
+		    {
+			Repository project = (Repository)input;
+			if (project.isOpen())
+			    {
+				super.setInput(project.getRemoteElement());
+			    }
+		    }
+		else
+		    {
+			super.setInput(input);
+		    }
 	    }
     }
    

@@ -43,22 +43,12 @@ public class CommandMiner extends Miner
   DataElement   status = getCommandStatus(theElement);
   DataElement  subject = getCommandArgument(theElement, 0);
   String    invocation = getCommandArgument(theElement, 1).getName();
-  DataElement  project = getCommandArgument(theElement, 2);
 
   if (name.equals("C_COMMAND"))
   {
-   System.out.println("name = " + name);
-   System.out.println("subject = " + subject);
-   System.out.println("invocation = " + invocation);
-   System.out.println("project = " + project);   
-
-   
-
-
-
     //Remove all extra whitespace from the command
    if (invocation.trim().length() > 0)
-    launchCommand(subject, invocation, status, project);
+    launchCommand(subject, invocation, status);
    return status;
   }
   if (name.equals("C_CANCEL"))
@@ -71,7 +61,7 @@ public class CommandMiner extends Miner
   return status;
  }
 
- public void launchCommand (DataElement subject, String invocation, DataElement status, DataElement project)
+ public void launchCommand (DataElement subject, String invocation, DataElement status)
  {
   //First Check to make sure that there are no "zombie" threads
   for (Enumeration e = _threads.keys() ; e.hasMoreElements() ;) 
@@ -84,7 +74,7 @@ public class CommandMiner extends Miner
     
    }
   }
-  CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, project, _patterns);
+  CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, _patterns);
   _threads.put(invocation, newCommand);
   newCommand.start();
  }
@@ -195,7 +185,7 @@ class CommandMinerThread extends MinerThread
  private OutputHandler    _stdOutputHandler;
  private OutputHandler    _stdErrorHandler;
   
- public CommandMinerThread (DataElement theElement, String invocation, DataElement status, DataElement project, Patterns thePatterns)
+ public CommandMinerThread (DataElement theElement, String invocation, DataElement status, Patterns thePatterns)
  {
   
   _status     = status;
@@ -231,12 +221,12 @@ class CommandMinerThread extends MinerThread
 	    args[1] = "-c";
 	    args[2] = _invocation;
 
-	    _theProcess = Runtime.getRuntime().exec(args, getEnvironment(project), theDirectory); 
+	    _theProcess = Runtime.getRuntime().exec(args, getEnvironment(_subject), theDirectory); 
 	}
     else
 	{
 	    theShell = "cmd /c ";
-	    _theProcess = Runtime.getRuntime().exec(theShell + _invocation, getEnvironment(project), theDirectory); 
+	    _theProcess = Runtime.getRuntime().exec(theShell + _invocation, getEnvironment(_subject), theDirectory); 
 	}
     
     _stdInput = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
@@ -261,7 +251,7 @@ class CommandMinerThread extends MinerThread
  }
  
  
- private String[] getEnvironment(DataElement theProject)
+ private String[] getEnvironment(DataElement theSubject)
  {
   ArrayList theVars = new ArrayList();
  
@@ -275,28 +265,25 @@ class CommandMinerThread extends MinerThread
    for (int i=0; i<MAX; i++)
     theVars.add(((DataElement)systemVars.get(i)).getName());
   
-   //Now grab the Project Environment: 
-   DataElement thePrefs       = _dataStore.find(theProject, DE.A_NAME, "Preferences", 1);
-   
-   if (thePrefs == null)
+   ArrayList prjEnv = theSubject.getAssociated("inhabits");
+   if (prjEnv != null && (prjEnv.size() > 0))
        {
-	   // the preferences should be set but we're doing a command before the project was initialized
-	   // this is a temporary hack
-	   return null;
+	   DataElement theEnvironment = (DataElement)prjEnv.get(0);
+	   ArrayList varElements = theEnvironment.getNestedData();
+	   MAX = varElements.size();
+	   for (int i = 0; i<MAX; i++)
+	       {
+		   String var = ((DataElement)varElements.get(i)).getName();
+		   theVars.add(var);
+		   System.out.println(var);
+	       }
        }
-
-   DataElement theEnvironment = ((DataElement)thePrefs.get(0)).dereference();
-   ArrayList varElements = theEnvironment.getNestedData();
-   MAX = varElements.size();
-   for (int i = 0; i<MAX; i++)
-    theVars.add(((DataElement)varElements.get(i)).getName());
+  
   }
   catch (Throwable e) 
-  {
-   e.printStackTrace();
-   
-  }
-  
+      {
+	  e.printStackTrace();	  
+      }  
   
   int MAX = theVars.size();
   String[] env = new String[MAX];

@@ -143,6 +143,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 				    {
 					resource = resource.getParent();
 				    }
+
 				
 				input = dataStore.createObject(null, "directory", 
 							       resource.getName(), 
@@ -160,39 +161,39 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     private void setElementInput(DataElement input)
     {
 	String type = input.getType();
-	if (type.equals("directory") || type.equals("project") || type.equals("host") || type.equals("device"))
+	if (type.equals("directory") || type.equals("Project") || type.equals("host") || type.equals("device"))
 	    {
-	_input = input;
-	DataElement element = _input;
-
-	if (element != null)
-	    {
-		if (element.getType().equals("directory"))
-		    {
-			String directory = element.getSource();				
-			if ((directory != null) && (_directoryText != null))
-			    {		
-				try
-				    {		
-					_directoryText.setText(directory);
-				    }
-				catch (SWTException e)
-				    {
-					System.out.print(e);		
-				    }
-			    }			
-		    }
-		else if (element.getType().equals("file"))
-		    {
-			setInput(element.getParent());
-		    }
-		if (_history != null)
-		    {
-			_history.removeAll(_history);
-		    }
+		_input = input;
+		DataElement element = _input;
 		
-		updateCombo();	
-	    }
+		if (element != null)
+		    {
+			if (element.getDescriptor().isOfType("Filesystem Objects"))
+			{
+			    String directory = element.getSource();				
+				if ((directory != null) && (_directoryText != null))
+				    {		
+					try
+					    {		
+						_directoryText.setText(directory);
+					    }
+					catch (SWTException e)
+					    {
+						System.out.print(e);		
+					    }
+				    }			
+			    }
+			else if (element.getType().equals("file"))
+			    {
+				setInput(element.getParent());
+			    }
+			if (_history != null)
+			    {
+				_history.removeAll(_history);
+			    }
+			
+			updateCombo();	
+		    }
 	    }
 		
     }

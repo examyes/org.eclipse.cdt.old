@@ -121,7 +121,7 @@ public class CommandGenerator
 
       if (refArg)
 	  {
-	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.arguments"));
+	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
 	  }
       else
 	  {
@@ -148,7 +148,7 @@ public class CommandGenerator
 
       if (refArg)
 	  {
-	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.arguments"));
+	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
 	  }
       else
 	  {

@@ -728,7 +728,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    if (project instanceof Repository)
     dataStore = ((Repository)project).getDataStore();	
       
-   DataElement envElement = dataStore.createObject(null, "Environment Variable", "");
+   DataElement envElement = dataStore.createObject(null, "Environment Variable", project.getName());
    ArrayList envVars = _plugin.readProperty(project, "Environment");
    for (int i = 0; i < envVars.size(); i++)
     dataStore.createObject(envElement, "Environment Variable", (String)envVars.get(i), (String)envVars.get(i));

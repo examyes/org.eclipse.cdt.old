@@ -31,6 +31,13 @@ public class EnvironmentMiner extends Miner
   _dataStore.createReference(containerObjectD, envVar, "abstracts", "abstracted by");
   
   createCommandDescriptor(containerObjectD, "C_SET_ENVIRONMENT_VARIABLES", "C_SET_ENVIRONMENT_VARIABLES");
+
+  DataElement fsObj = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+  DataElement inhabits = _dataStore.createRelationDescriptor(schemaRoot, "inhabits");
+  DataElement sustains = _dataStore.createRelationDescriptor(schemaRoot, "sustains");
+
+  _dataStore.createReference(envVar, sustains);
+  _dataStore.createReference(fsObj, inhabits);
  }
  
  public DataElement handleCommand (DataElement theElement)
@@ -51,7 +58,9 @@ public class EnvironmentMiner extends Miner
  public void handleSetEnvironment(DataElement theElement, DataElement environment)
  {
   //First check to see if we already have an Environment for theElement..and get rid of it if we do.
-  DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getId(), 1);
+     DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getName(), 1);
+
+  
   if (envRoot != null)
   {
    _dataStore.deleteObject(_minerData, envRoot);
@@ -64,11 +73,15 @@ public class EnvironmentMiner extends Miner
    }
    
   }
+
+
+  environment.setAttribute(DE.A_NAME, theElement.getName() + ".env");
+
   _minerData.addNestedData(environment, false);
   environment.setParent(_minerData);
-  _dataStore.refresh(environment);
   _dataStore.refresh(_minerData);
-  _dataStore.createReference(theElement, environment);
+  _dataStore.createReference(theElement, environment, "inhabits", "sustains");
+  _dataStore.refresh(environment);
   _dataStore.refresh(theElement);
  }
     
