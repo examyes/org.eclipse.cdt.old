@@ -97,6 +97,11 @@ public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 	return _actionLoader;
     }    
 
+    public static void setActionLoader(IActionLoader loader)
+    {
+	_actionLoader = loader;
+    }    
+
     protected void initializeDefaultPreferences()
     {
     }

@@ -61,19 +61,19 @@ public class HostsViewPart extends GenericViewPart
     	IAdaptable input = getSite().getPage().getInput();
     	
     	if (input != null && input instanceof DataElement)
-    	{
+	    {
     		_perspective_input = (DataElement)input;
     		_viewer.setInput(input);	
-    	}
+	    }
     	else
     	{
-		if (dataStore != null)
-	    {
-			// for this view, the global datastore makes sense
-			DataElement root = dataStore.getRoot();
-			_viewer.setInput(root);
-			_viewer.selectFilter("Hosts");
-	    }
+	    if (dataStore != null)
+		{		    
+		    // for this view, the global datastore makes sense
+		    DataElement root = dataStore.getRoot();
+		    _viewer.setInput(root);
+		    _viewer.selectFilter("Hosts");
+		}
     	}    
 	 
     }
