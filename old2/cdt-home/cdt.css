@@ -17,6 +17,6 @@ body {  font-family: arial, helvetica, geneva; font-size: 10pt; clip:   rect(   
   margin-right 10%; 
   font-family: Courier;
 }
-.indent {margin-left:1%;}
-new { color: green;}
-old { text-decoration: line-through; color: red;}
+.indent {margin-left: 1%;}
+.new { color: green;}
+.old { text-decoration: line-through; color: red;}
