@@ -337,15 +337,55 @@ private void createItem(Object node, Widget parent, int i) {
 	    DataElement status = subChild.getStatus();
 	    if (status == parent)
 	    {
-		Table table = tableTree.getTable();
-		TableItem item = table.getItem(j);
-		item.setText(2, status.getName());
+		TableItem item = getItemForTarget(j);
+		if (item != null)
+		    {
+			item.setText(2, status.getName());
+		    }
 
 		return;
 	      }	    
 	  }	
 	  }
   }  
+
+    private TableItem getItemForTarget(int targetIndex)
+    {
+	int tindex = 0;
+	Table table = tableTree.getTable();
+	TargetsEntry root = null;
+	for (int i = 0; i < table.getItemCount(); i++)
+	    {
+		TableItem item = table.getItem(i);
+		Object data = item.getData();
+		if (data instanceof TableTreeItem)
+		    {
+			TableTreeItem ttitem = (TableTreeItem)data;
+			TargetsEntry entry = (TargetsEntry)ttitem.getData();
+			if (entry != null)
+			    {
+				TargetsEntry parent = entry.getParent();
+					
+				if (root == null)
+				    {
+					root = parent;
+				    }
+				if (parent == root)
+				    {
+					if (tindex == targetIndex)
+					    {
+						return item;
+					    }
+					tindex++;
+				    }
+			    }
+		    }
+	    }
+    
+	return null;
+    }
+
+
 /**
  * Return a table tree item in the targets view that has 
  * the same entry in its user data field as the supplied

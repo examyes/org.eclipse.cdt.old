@@ -330,7 +330,7 @@ public Image getImage() {
 /*
  * Return the parent. 
  */
-private TargetsEntry getParent() {
+public TargetsEntry getParent() {
 	return parent;
 }
 /**
