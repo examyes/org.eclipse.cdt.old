@@ -21,12 +21,12 @@
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.cdt.core"/>
       <import plugin="org.eclipse.cdt.ui"/>
-      <import plugin="org.eclipse.cdt.oprofile.core"/>
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.jface"/>
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.text"/>
+      <import plugin="org.eclipse.cdt.oprofile.core"/>
    </requires>
 
 

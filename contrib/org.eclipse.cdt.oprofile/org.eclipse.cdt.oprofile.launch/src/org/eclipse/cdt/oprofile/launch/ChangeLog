@@ -1,4 +1,50 @@
-2004-08-11  Aaron Luchko <aluchko@redhat.com>
+2004-08-27  Keith Seitz  <keiths@redhat.com>
+
+	* LaunchOptions.java: New file.
+	* OprofileCounter.java (ARG_COUNTER): Remove.
+	(ARG_EVENT): Remove.
+	(ARG_COUNT): Remove.
+	(ARG_PROFILE_KERNEL): Remove.
+	(ARG_PROFILE_USER): Remove.
+	(ARG_UNIT_MASK): Remove.
+	(ARG_NONE): Remove.
+	(_event): Remove.
+	(_profileKernel): Remove.
+	(_profileUser): Remove.
+	(_count): Remove.
+	(_daemonEvent): New private variable.
+	(OprofileCounter): Remove deleted variables.
+	Initialize _daemonEvent.
+	(saveConfiguration): Use _daemonEvent instead of _event.
+	(loadConfiguration)): Likewise.
+	(getText): Likewise.
+	(getNumber): Likewise.
+	(getEnabled): Likewise.
+	(getEvent): Likewise.
+	(getProfileKernel): Likewise.
+	(getProfileUser): Likewise.
+	(getCount): Likewise.
+	(toArguments): Remove. This is not the right place for this.
+	(getDaemonEvent): New method.
+	(_argEvent): Remove.
+	(_argCount): Remove.
+	(_argProfileKernel): Remove.
+	(_argProfileUser): Remove.
+	(_argUnitMask): Remove.
+	(_argDisabled): Remove.
+	* OprofileOptions.java: Remove.
+	* OprofileSession.java (_options): Change type to LaunchOptions.
+	(OprofileSession): Change _options initialization to match new type.
+	(run): Don't do the whole toArguments thing. Handled elsewhere.
+	Update new IOpcontrolProvider interface setup.
+	* OprofileSetupTab.java (_options): Change type to LaunchOptions.
+	(setDefaults): Change _options initialization to match new type.
+	(createControl): Likewise.
+	(_handleButtonSelected): Use new LaunchOptions API.
+	(_updateDisplay): Likewise.
+
+2004-08-11  Aaron Luchko  <aluchko@redhat.com>
+
 	* OprofileEventConfigTab.java (verifyText): Allow non-text
 	VerifyEvents, such as backspace and delete, to execute, 
 	fixed bug #129271.

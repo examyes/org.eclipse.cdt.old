@@ -1,6 +1,6 @@
 /* sample - A class which represents an Oprofile sample
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 #include "sample.h"
 #include "xmlfmt.h"
-#include "stable.h"
 
 using namespace std;
 
@@ -30,6 +29,13 @@ sample::sample(bfd_vma addr, symbol* sym, unsigned int count)
 {
 }
 
+/*
+ * <sample>
+ *   <addr>08059cdc</addr>
+ *   <count>1</count>
+ *   [SYMBOL]
+ * </sample>
+ */
 ostream&
 operator<< (ostream& os, const sample* s)
 {
@@ -42,11 +48,6 @@ operator<< (ostream& os, const sample* s)
   
   if (s->has_symbol ())
     os << s->get_symbol ();
-
-#if 0
-  if (s->_debuginfo != NULL)
-    os << s->_debuginfo;
-#endif
 
   return os << endt;
 }

@@ -4,13 +4,15 @@
  * This program is open source software licensed under the
  * Eclipse Public License ver. 1
 */
+
 package org.eclipse.cdt.oprofile.ui.system;
 
 import java.util.ArrayList;
 
 import org.eclipse.cdt.oprofile.core.ISampleContainer;
 import org.eclipse.cdt.oprofile.core.SampleSession;
-import org.eclipse.cdt.oprofile.ui.*;
+import org.eclipse.cdt.oprofile.ui.OprofilePlugin;
+import org.eclipse.cdt.oprofile.ui.OprofileUIMessages;
 import org.eclipse.cdt.oprofile.ui.internal.IProfileElement;
 import org.eclipse.cdt.oprofile.ui.internal.ProfileElement;
 import org.eclipse.swt.graphics.Image;

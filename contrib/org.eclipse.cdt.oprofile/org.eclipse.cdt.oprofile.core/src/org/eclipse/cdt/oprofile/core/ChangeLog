@@ -1,3 +1,79 @@
+2004-08-27  Keith Seitz  <keiths@redhat.com>
+
+	* IOpcontrolProvider.java (setupDaemon): Remove ArrayList parameter: use
+	OprofileDaemonOptions and OprofileDaemonEvent for setup.
+	* IOpxmlProvider.java (debugInfo): SampleFile is gone. Use ProfileImage.
+	* ISample.java: Remove.
+	* ISampleContainer.java: Remove ISample.
+	(setExecutableName): Remove.
+	(getEvent): Remove.
+	(getSampleCount): Add from ISample.
+	* OpInfo.java (SortEventComparator): Sort by event name now, not number.
+	(SearchEventComparator): Likewise for search.
+	(getEvents): Clarify use of -1 to get all events on all counters.
+	(findEvent): Remove counter and event numbers. Search for string name of
+	event.
+	* Oprofile.java (_DEFAULT_SESSION_NAME): New constant.
+	(getEvents): Clarify use of -1 to get all events on all counters.
+	(sampleFileCounter): Remove.
+	(getDebugInfo): SampleFile is gone. Use ProfileImage.
+	(findEvent): Remove counter and event numbers. Search for name of event.
+	(isSeparateSampleFile): Remove.
+	(isDefaultSession): New static method.
+	* OprofileDaemonEvent.java: New class.
+	* OprofileDaemonOptions.java: New class.
+	* ProfileImage.java: Previously SampleFile.java. Remove all occurences
+	of counters and event numbers.
+	(getSampleFile): New method.
+	(setSampleFile): New method.
+	* Sample.java: Change all occurences of SampleFile to ProfileImage.
+	* SampleContainer.java (_counter): Remove.
+	(_demangled_name): Remove.
+	(_containers): Change to ArrayList.
+	(SampleContainer): Remove counter argument.
+	Initialize ArrayList.
+	(getExecutableName): Return the filename of the File.
+	(getSampleContainers): Convert ArrayList into fixed array.
+	(setSampleContainers): Remove.
+	(addSampelContainer): New method.
+	(getCounter): Remove.
+	* SampleFile.java: Renamed to ProfileImage.java to avoid confusion with
+	OProfile's real samplefiles. They're different data models entirely.
+	* SampleFileFilter.java: Remove.
+	* SampleSession.java (SampleSession): Remove counter parameter.
+	Add String event name parameter.
+	(getSampleContainers): Check size of ArrayList instead of null.
+	Return super implementation.
+	(setEvent): Remove.
+	(isDefaultSession): Ask Oprofile module to ascertain if this class
+	is the default session.
+	(getExecutableName): Remove default session junk.
+	* SeparateSampleFileFilter.java: Remove.
+	* opxml/HeaderProcessor.java (COUNTER): Remove.
+	* opxml/SampleProcessor.java: Change all occurences of SampleFile to
+	ProfileImage.
+	* opxml/SamplesProcessor.java (DEMANGLED_NAME): Remove.
+	(IMAGE_TAG): New tag.
+	(_sfile, _samplefiles): Remove.
+	(_session): New variable.
+	(_separates, _separate): Remove.
+	(_currentImage, _imageStack): New variables.
+	(reset): Initialize _session and _imageStack.
+	(startElement): Change SAMPLEFILE_TAG to IMAGE_TAG.
+	If currently constructing an image, push the current image onto the
+	stack. Create the new image.
+	Set _currentImage as the image file for sample processing.
+	(endElement): Add the sample to the current image for end of sample.
+	If processing end of image, check if image stack is empty. If it is, add
+	this toplevel image to the session. Otherwise add the image to the last
+	image on the stack.
+	If processing samplefile, set the ProfileImage's samplefile name.
+	If processing header, set it for the current image.
+	Remove SAMPLES_TAG, DEMANGLED_NAME_TAG processing.
+	* opxml/SessionsProcessor.java (_SESSION_CTR_ATTR): Remove.
+	(startElement): Remove _SESSION_CTR_ATTR. Use current event name to
+	construct session.
+
 2004-07-29  Keith Seitz  <keiths@redhat.com>
 
 	* Oprofile.java (initializeOprofileModule): "New" method.

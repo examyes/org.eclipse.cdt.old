@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-
 /**
  * Thic class represents the event configuration tab of the launcher dialog.
  * @author keiths
@@ -309,7 +308,7 @@ public class OprofileEventConfigTab extends AbstractLaunchConfigurationTab
 				{
 
 					//An event which doesn't contain text (backspace and delete)
-					//should still be allowed
+					//should still be allowed.
 					String text = ve.text;
 					if (text.length() != 0)
 					{					

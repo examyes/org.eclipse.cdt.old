@@ -1,4 +1,9 @@
-2004-07-13  Keith Seitz <keiths@redhat.com>
+2004-08-27  Keith Seitz  <keiths@redhat.com>
+
+	* SampleViewLabelProvider.java: Update comments about change from
+	SampleFile to ProfileImage.
+
+2004-07-13  Keith Seitz  <keiths@redhat.com>
 
 	* SampleView.java (DEFAULT_TEXT_EDITOR_ID): New constant.
 	(_openEditor): Use IDE.openEditor. New Eclipse 3.0 change.

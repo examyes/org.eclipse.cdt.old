@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 import org.eclipse.cdt.oprofile.core.IOpxmlProvider;
 import org.eclipse.cdt.oprofile.core.OpInfo;
-import org.eclipse.cdt.oprofile.core.SampleFile;
+import org.eclipse.cdt.oprofile.core.ProfileImage;
 import org.eclipse.cdt.oprofile.core.SampleSession;
-import org.eclipse.cdt.oprofile.opxml.OpxmlConstants;
-import org.eclipse.cdt.oprofile.opxml.SamplesProcessor;
-import org.eclipse.cdt.oprofile.opxml.SessionsProcessor;
+import org.eclipse.cdt.oprofile.core.opxml.OpxmlConstants;
+import org.eclipse.cdt.oprofile.core.opxml.SamplesProcessor;
+import org.eclipse.cdt.oprofile.core.opxml.SessionsProcessor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -45,8 +45,8 @@ public class LinuxOpxmlProvider implements IOpxmlProvider {
 				OpxmlRunner runner = new OpxmlRunner();
 				String[] args = new String[] {
 					OpxmlConstants.OPXML_SAMPLES,
-					Integer.toString(session.getCounter()),
-					session.getExecutableName()
+					session.getEvent().getText(),
+					session.getExecutableName() /* (session name) */
 				};
 				
 				SamplesProcessor.CallData data = new SamplesProcessor.CallData(monitor, session);
@@ -57,11 +57,11 @@ public class LinuxOpxmlProvider implements IOpxmlProvider {
 		return runnable;
 	}
 	
-	public IRunnableWithProgress debugInfo(final SampleFile sfile, final ArrayList infoList) {
+	public IRunnableWithProgress debugInfo(final ProfileImage image, final ArrayList infoList) {
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) {
 				OpxmlRunner runner = new OpxmlRunner();
-				boolean ok = runner.run(new String[] { OpxmlConstants.OPXML_DEBUGINFO, sfile.getFile().getPath() }, infoList);
+				boolean ok = runner.run(new String[] { OpxmlConstants.OPXML_DEBUGINFO, image.getSampleFile() }, infoList);
 			}
 		};
 		return runnable;

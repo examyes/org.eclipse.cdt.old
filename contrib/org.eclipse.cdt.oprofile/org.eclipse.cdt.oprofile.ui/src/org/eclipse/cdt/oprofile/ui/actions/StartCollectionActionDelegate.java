@@ -10,7 +10,6 @@ import org.eclipse.cdt.oprofile.core.OpcontrolException;
 import org.eclipse.cdt.oprofile.core.OprofileCorePlugin;
 import org.eclipse.jface.action.IAction;
 
-
 /**
  * Action to cause Oprofiled to start collecting data (and startup, if necessary)
  * @author Keith Seitz  <keiths@redhat.com>

@@ -13,8 +13,8 @@ import java.net.URL;
 
 import org.eclipse.cdt.oprofile.core.Oprofile;
 import org.eclipse.cdt.oprofile.core.OprofileCorePlugin;
-import org.eclipse.cdt.oprofile.opxml.OprofileSAXHandler;
-import org.eclipse.cdt.oprofile.opxml.XMLProcessor;
+import org.eclipse.cdt.oprofile.core.opxml.OprofileSAXHandler;
+import org.eclipse.cdt.oprofile.core.opxml.XMLProcessor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.xml.sax.InputSource;
@@ -63,8 +63,9 @@ public class OpxmlRunner {
 		
 		try {
 			// Create XMLReader
-			reader = XMLReaderFactory.createXMLReader(); //$NON-NLS-1$
+			reader = XMLReaderFactory.createXMLReader();
 		} catch (SAXException e1) {
+			// FIXME error? Exception?
 		}
 		
 		// Set content/error handlers

@@ -1,8 +1,8 @@
-/* samplefile - A class which represents a samplefile. This class is more
-   user-visible functionality. The nitty-gritty details of parsing oprofile
-   sample files is handled by oprofile_db.
+/* samplefile - A class which represents a samplefile. This class either
+   represents a real disk file or a "fake" one (needed in cases where
+   Oprofile only collected samples in a dependency, like a library).
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,8 +26,9 @@
 #include <ostream>
 
 #include "oprofiledb.h"
+#include "util.h"
 
-class samplefile_header;
+class opd_header;
 class symboltable;
 
 class samplefile
@@ -48,79 +49,64 @@ class samplefile
   static inline sample* SAMPLE (sample_t sample)
     { return oprofile_db::SAMPLE (sample); };
 
-  // Returns the demangled name of the given sample filename.
-  // "/foo/bar/baz" for "}foo}bar}baz#0" 
-  // "/lib/foo.so" for "}foo}bar}baz}}}lib}foo.so"
-  static void demangle_sample_filename (std::string sample_file,
-					std::string& demangled_name);
-
-  // Does the given FILE represent a separate sample file?
-  static bool is_separate_samplefile (const std::string& file);
-
-  // Get the parent name of a separate sample file
-  static void get_parent_name (std::string& result, const std::string& sep_file);
-
-  // Constructor
-  samplefile (int ctr, std::string dir, std::string basename, bool fake = false);
+  // Constructor -- pass in the filename (must be valid)
   samplefile (std::string filename);
+
+  // Constructor -- pass in the parsed filename (may be NULL when there
+  // were no samples collected for the profileimage, i.e., "fake").
+  // Memory will be free'd by this class's destructor.
+  samplefile (parsed_filename* pfname);
 
   // Destructor
   ~samplefile (void);
 
-  // Returns the disk filename for this samplefile. Uses FILENAME
-  // for storage.
-  std::string& get_sample_file_name (std::string& filename) const;
+  // Does this sample have a samplefile? This happens when Oprofile has
+  // collected samples for an image, but all those samples were collected
+  // in libraries and other dependencies.
+  bool has_samplefile (void) const { return _parsed_filename != NULL; };
 
-  // Returns the header for this samplefile
-  samplefile_header* get_header (void);
+  // Is this samplefile a dependency?
+  bool is_dependency (void) const;
 
-  // Returns a list of "separate" sample files (i.e., from oprofile's
-  // --separate-{lib,kernel} parameter)
-  samplefilelist_t get_separate_sample_files (void) const;
+  // Returns the filename of this samplefile (or "" if it is "fake")
+  std::string get_sample_file_name (void) const
+    { return has_samplefile () ? _parsed_filename->filename : ""; };
 
-  // Returns a list of all the samples in this samplefile
-  const samples_t get_samples (void);
+  // Returns the image name (see parsed_image.image_name)
+  std::string get_image (void) const;
+
+  // Returns the library image name (see parsed_image.lib_image)
+  std::string get_lib_image (void) const;
+
+  // Returns the logical name of the image in this samplefile, i.e.,
+  // the lib_image if this is a dependency or image_name if not
+  std::string get_name (void) const;
 
   // Get count of all samples
   long get_count (void);
 
-  // Does this samplefile have any samples?
-  bool has_samples (void);
+  // Returns the event name that was collected in this samplefile
+  std::string get_event (void);
+
+  // Returns a list of all the samples in this samplefile
+  const samples_t get_samples (void);
+
+  // Returns the header for this samplefile
+  const opd_header* get_header (void) const;
 
   // Returns the debug info for the given VMA.
   bool get_debug_info (bfd_vma vma, const char*& func, const char*& file, unsigned int& line);
 
-  // Frees the result of get_samples
-  static void free_samplefiles (samplefilelist_t& list);
-
-  // Is this samplefile a "separate" samplefile?
-  bool is_separate_samplefile (void) const;
-
-  // Insert operator for this class
-  friend std::ostream& operator<< (std::ostream& os, samplefile* sf);
-
  private:
-  // The samples directory where this samplefile is located
-  std::string _dir;
-
-  // The base filename of this samplefile (no counter)
-  std::string _basename;
-
   // The oprofile_db associated with this samplefile
   oprofile_db* _db;
 
   // The symbol table opened for the executable represented by this samplefile
   symboltable* _st;
 
-  // The counter this samplefile collected
-  int _ctr;
-
-  // The header for this samplefile
-  samplefile_header* _header;
-
-  // Is this a "fake" samplefile, i.e., it has no disk-image associated with it
-  // (This can happen when executables have separate sample files, but no
-  //  main sample file.)
-  bool _is_fake;
+  // The fully parsed filanme for this samplefile. May be NULL.
+  parsed_filename* _parsed_filename;
 };
+
+std::ostream& operator<< (std::ostream& os, samplefile* sf);
 #endif // !_SAMPLEFILE_H

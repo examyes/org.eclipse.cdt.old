@@ -1,3 +1,26 @@
+2004-08-27  Keith Seitz  <keiths@redhat.com>
+
+	* LinuxOpcontrolProvider.java (_OPD_SETUP_SEPARATE): New constant.
+	(_OPD_SETUP_SEPARATE_SEPARATOR): New constant.
+	(_OPD_SETUP_SEPARATE_SEPARATOR): New constant.
+	(_OPD_SETUP_SEPARATE_LIBRARY): New constant.
+	(_OPD_SETUP_SEPARATE_KERNEL): New constant.
+	(_OPD_SETUP_SEPARATE_THREAD): New constant.
+	(_OPD_SETUP_SEPARATE_CPU): New constant.
+	(_OPD_SETUP_SEPARATE_EVENT): New constant.
+	(_OPD_SETUP_SEPARATE_EVENT_SEPARATOR): New constant.
+	(_OPD_SETUP_SEPARATE_EVENT_TRUE): New constant.
+	(_OPD_SETUP_SEPARATE_FALSE): New constant.
+	(setupDaemon): Change parameter list to OprofileDaemonOptions
+	and OprofileDaemonEvent.
+	Derive command-line arguments from arguments.
+	(_eventToArguments): New method.
+	(_optionsToArguments): New method.
+	* LinuxOpxmlProvider.java (samples): Remove integer counter number; use
+	event text name instead.
+	(debugInfo): Use ProfileImage instead of SampleFile.
+	* OpxmlRunner.java (run): Remove invalid comment.
+
 2004-07-13  Keith Seitz  <keiths@redhat.com>
 
 	* LinuxOpcontrolProvider.java (_OPCONTROL_PROGRAM): Call _findOpcontrol.

@@ -18,7 +18,6 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.widgets.Display;
 
-
 /**
  * A Runnable to read oprofile's logfile and stuff it into the daemon view's TextViewer.
  * @author Keith Seitz  <keiths@redhat.com>

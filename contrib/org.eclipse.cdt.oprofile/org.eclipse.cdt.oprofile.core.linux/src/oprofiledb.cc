@@ -1,6 +1,6 @@
 /* oprofile_db - An Oprofile sample file database wrapper.
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
    Boston, MA 02111-1307, USA.  */
 
 #include <iostream>
+#include <op_sample_file.h>
+
 #include "oprofiledb.h"
 #include "stable.h"
 #include "sample.h"
-
-#include "op_sample_file.h"
 
 oprofile_db::oprofile_db (std::string filename)
   : _filename (filename), _tree (NULL), _symbol_table (NULL)
@@ -47,15 +47,14 @@ oprofile_db::_open_db (void)
   if (_tree == NULL)
     {
       int rc;
-      char* err_msg;
 
       _tree = new samples_odb_t;
-      rc = odb_open (_tree, _filename.c_str (), ODB_RDONLY, sizeof (opd_header), &err_msg);
-      if (rc != EXIT_SUCCESS)
+      rc = odb_open (_tree, _filename.c_str (), ODB_RDONLY, sizeof (opd_header));
+      if (rc != 0)
 	{
 	  // This shouldn't happen, but let's at least print something out.
-	  std::cerr << "Error opening oprofile database: " << err_msg << std::endl;
-	  free (err_msg);
+	  std::cerr << "Error opening oprofile database: " << strerror (rc)
+		    << std::endl;
 	}
     }
 }
@@ -70,6 +69,18 @@ oprofile_db::_close_db (void)
     }
 
   _tree = NULL;
+}
+
+static void
+samples_odb_travel (samples_odb_t* hash, int start, int end, oprofile_db::callback_t callback, void* data)
+{
+  odb_node_nr_t node_nr, pos;
+  odb_node_t* node = odb_get_iterator (hash, &node_nr);
+  for (pos = 0; pos < node_nr; ++pos)
+    {
+      if (node[pos].key)
+	callback (node[pos].key, node[pos].value, data);
+    }
 }
 
 void

@@ -4,6 +4,7 @@
  * This program is open source software licensed under the
  * Eclipse Public License ver. 1
 */
+
 package org.eclipse.cdt.oprofile.launch;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 import org.eclipse.cdt.oprofile.core.OpcontrolException;
 import org.eclipse.cdt.oprofile.core.OprofileCorePlugin;
+import org.eclipse.cdt.oprofile.core.OprofileDaemonEvent;
 import org.eclipse.cdt.oprofile.core.OprofileProperties;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -18,47 +20,43 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jface.dialogs.ErrorDialog;
 
-
 /**
  * This class represents an Oprofile launch. It is responsible for starting and configuring
  * the daemon given a launch configuration. [Note that this also means that it will
  * launch a CLaunchConfiguration if one was specified in the config.]
- * @author keiths
+ * @author Keith Seitz <keiths@redhat.com>
  */
-public class OprofileSession
-{
+public class OprofileSession {
 	OprofileCounter[] _counters;
-	OprofileOptions _options;
+	LaunchOptions _options;
 	String _launchConfig;
 	
-	public OprofileSession(ILaunchConfiguration config)
-	{
+	public OprofileSession(ILaunchConfiguration config) {
 		_counters = OprofileCounter.getCounters(config);
-		_options = new OprofileOptions();
+		_options = new LaunchOptions();
 		_options.loadConfiguration(config);
-		try
-		{
+		try {
 			_launchConfig = config.getAttribute(LaunchPlugin.ATTR_C_LAUNCH_CONFIG, (String) null);
-		}
-		catch (CoreException ce)
-		{
+		} catch (CoreException ce) {
 			_launchConfig = null;
 		}
 	}
 	
-	public void run ()
-	{
-		// Setup and start the daemon
-		ArrayList command = new ArrayList();
-		command.addAll(_options.toArguments());
-		for (int i = 0; i < _counters.length; i++) {
-			command.addAll(_counters[i].toArguments());
-		}
-		
+	public void run () {
 		try {
 			// Shutdown any currently running oprofile session
 			OprofileCorePlugin.getDefault().getOpcontrolProvider().shutdownDaemon();
-			OprofileCorePlugin.getDefault().getOpcontrolProvider().setupDaemon(command);
+			
+			ArrayList events = new ArrayList();
+			for (int i = 0; i < _counters.length; ++i) {
+				if (_counters[i].getEnabled())
+					events.add(_counters[i].getDaemonEvent());
+			}
+			OprofileDaemonEvent[] devents = new OprofileDaemonEvent[events.size()];
+			events.toArray(devents);
+			OprofileCorePlugin.getDefault().getOpcontrolProvider().setupDaemon(_options.getOprofileDaemonOptions(), devents);
+			
+			// Start the daemon & collection
 			OprofileCorePlugin.getDefault().getOpcontrolProvider().startCollection();
 		} catch (OpcontrolException oe) {
 			String title = OprofileProperties.getString("opcontrolProvider.error.dialog.title"); //$NON-NLS-1$
@@ -67,42 +65,30 @@ public class OprofileSession
 		}
 		
 		// Run c/c++ launch config, if defined
-		if (_launchConfig != null)
-		{
+		if (_launchConfig != null) {
 			ILaunchConfiguration claunch = null;
 			ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-			try
-			{
+			try {
 				claunch = manager.getLaunchConfiguration(_launchConfig);
-			}
-			catch (CoreException ce)
-			{
+			} catch (CoreException ce) {
 				claunch = null;
 			}
 			
-			if (claunch != null)
-			{
-				try
-				{
+			if (claunch != null) {
+				try {
 					// TODO: Progress monitor
 					claunch.launch(ILaunchManager.RUN_MODE, null);
-				}
-				catch (CoreException ce)
-				{
+				} catch (CoreException ce) {
 				}
 			}
 		}
 	}
 
-	private Process _runCommand(String[] cmdArray)
-	{
+	private Process _runCommand(String[] cmdArray) {
 		Process p = null;
-		try
-		{
+		try {
 			p = Runtime.getRuntime().exec(cmdArray);
-		}
-		catch (IOException ioe)
-		{
+		} catch (IOException ioe) {
 			if (p != null)
 				p.destroy();
 			p = null;

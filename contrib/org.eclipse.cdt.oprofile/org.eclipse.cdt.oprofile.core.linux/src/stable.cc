@@ -1,6 +1,6 @@
 /* symboltable - A symbol table class
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,9 +19,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-
-#include <algorithm>
-#include <vector>
 
 #include "stable.h"
 #include "symbol.h"
@@ -171,7 +168,6 @@ symboltable::read_symbols ()
 	      return true;
 	    }
 	}
-
       /* This may not seem correct, since we're pasing pointers of asymbols
 	 and the like to other pieces of opxml (class symbol, in particular),
 	 but remember that we've allocated memory for the symbol table earlier,
@@ -277,6 +273,7 @@ symboltable::get_debug_info (bfd_vma vma, const char*& function,
   return false;
 }
 
+#if 0
 void
 symboltable::dump_table (void)
 {
@@ -290,6 +287,7 @@ symboltable::dump_table (void)
 	     sym->name ());
     }
 }
+#endif
 
 // Helper function to sort two symbols based on VMA
 static bool

@@ -58,17 +58,17 @@ public class Sample
 	// The total number of samples at this address
 	private int _count;
 	
-	// The containing sample file
-	private SampleFile _sampleFile;
+	// The containing image file
+	private ProfileImage _image;
 	
 	/**
 	 * Constructor.
-	 * @param file the SampleFile from which this sample came
+	 * @param file the ProfileImage from which this sample came
 	 */
-	public Sample(SampleFile file) {
+	public Sample(ProfileImage image) {
 		_count = 0;
 		_symbol = null;
-		_sampleFile = file;
+		_image = image;
 	}
 	
 	/**
@@ -169,6 +169,6 @@ public class Sample
 		// Set default debug info for this sample. When the debug info is fetched,
 		// it will overwrite this default with the real thing via setDebugInfo.
 		_info = new DebugInfo();
-		_sampleFile.getDebugInfo();
+		_image.getDebugInfo();
 	}
 }

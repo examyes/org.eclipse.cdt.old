@@ -14,7 +14,6 @@ import org.eclipse.cdt.oprofile.ui.internal.IProfileElement;
 import org.eclipse.cdt.oprofile.ui.internal.ProfileElement;
 import org.eclipse.swt.graphics.Image;
 
-
 /**
  * @author keiths
  */

@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import org.eclipse.cdt.oprofile.core.Sample.DebugInfo;
-import org.eclipse.cdt.oprofile.opxml.CheckEventsProcessor;
+import org.eclipse.cdt.oprofile.core.opxml.CheckEventsProcessor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -41,6 +41,9 @@ public class Oprofile
 		"/proc/sys/dev/oprofile/cpu_type",  //$NON-NLS-1$
 		"/dev/oprofile/cpu_type" //$NON-NLS-1$
 	};
+	
+	// Name of the "default" session (disk name)
+	private static final String _DEFAULT_SESSION_NAME = "current"; //$NON-NLS-1$
 	
 	// Oprofile information
 	private static OpInfo _info;
@@ -77,6 +80,7 @@ public class Oprofile
 	 * Queries oprofile for the number of counters on the current CPU.
 	 * @return the number of counters
 	 */
+	// ONLY FOR LAUNCH
 	public static int getNumberOfCounters() {
 		if (isKernelModuleLoaded())
 			return _info.getNrCounters();
@@ -95,12 +99,14 @@ public class Oprofile
 	
 	/**
 	 * Get all the events that may be collected on the given counter.
-	 * @param num	the counter number
+	 * (-1 for all counters)
+	 * @param num the counter number
 	 * @return an array of all valid events -- NEVER RETURNS NULL!
 	 */
 	public static OpEvent[] getEvents(int num) {
 		if (isKernelModuleLoaded())
 			return _info.getEvents(num);
+		
 		return new OpEvent[0];
 	}
 
@@ -200,8 +206,7 @@ public class Oprofile
 	 * @param session the session for which to get samples
 	 * @param shell the composite shell to use for the progress dialog
 	 */
-	public static void getSamples(final SampleSession session, Shell shell)
-	{		
+	public static void getSamples(final SampleSession session, Shell shell) {
 		/* As much as I would like to get all this UI stuff back into the UI code, it really confuses
 		   things. It would be a real PITA for the UI to check whether we need samples to be read.
 		   Reading samples should just magically happen (as far as the UI is concerned). */
@@ -251,42 +256,16 @@ public class Oprofile
 	}
 	
 	/**
-	 * Returns the counter number of the given sample file.
-	 * @param file	(input) the sample file
-	 * @return the counter
-	 */
-	public static int sampleFileCounter(File file)
-	{
-		String name = file.getName();
-		int idx = name.lastIndexOf('#');
-		if (idx > -1)
-		{
-			int counter = -1;
-			try
-			{
-				counter = Integer.parseInt (name.substring (idx + 1));
-			}
-			catch (NumberFormatException nfe)
-			{
-			}
-			
-			return counter;
-		}
-		
-		return -1;
-	}
-	
-	/**
 	 * Collects the debug information for the given sample file.
 	 * There's a lot of searching going on, and it probably isn't even really needed,
 	 * since all the samples and debug-info from opxml are ordered. Nonetheless,
 	 * speed seems very good even with a binary search, so what the heck.
 	 * 
-	 * This function will set the debuginfo objects for every Sample in the SampleFile.
-	 * @param sfile the sample file
+	 * This function will set the debuginfo objects for every Sample in the ProfileImage.
+	 * @param image the sample file
 	 */
-	public static void getDebugInfo(SampleFile sfile) {
-		Sample[] samples = sfile.getSamples(null);
+	public static void getDebugInfo(ProfileImage image) {
+		Sample[] samples = image.getSamples(null);
 		
 		// Sort samples
 		Arrays.sort(samples, new Comparator() {
@@ -300,7 +279,7 @@ public class Oprofile
 		// Run opxml and get the list of all the debug info
 		ArrayList infoList = new ArrayList();
 		try {
-			IRunnableWithProgress opxml = OprofileCorePlugin.getDefault().getOpxmlProvider().debugInfo(sfile, infoList);
+			IRunnableWithProgress opxml = OprofileCorePlugin.getDefault().getOpxmlProvider().debugInfo(image, infoList);
 			opxml.run(null);
 		} catch (InvocationTargetException e) {
 		} catch (InterruptedException e) {
@@ -335,20 +314,18 @@ public class Oprofile
 	}
 	
 	/**
-	 * Finds the event with the given value for the given counter.
-	 * @param ctr the counter number
-	 * @param num the event's value
+	 * Finds the event with the given name
+	 * @param name the event's name (i.e., CPU_CLK_UNHALTED)
 	 * @return the event or <code>null</code> if not found
 	 */
-	public static OpEvent findEvent(int ctr, int num) {
+	public static OpEvent findEvent(String name) {
 		if (isKernelModuleLoaded())
-			return _info.findEvent(ctr, num);
+			return _info.findEvent(name);
 		return null;
 	}
 	
 	// Make sure the kernel module is loaded
-	private static void _checkKernelModuleLoaded()
-	{
+	private static void _checkKernelModuleLoaded() {
 		if (!isKernelModuleLoaded())
 			_initializeOprofile();
 	}
@@ -357,21 +334,18 @@ public class Oprofile
 	// but it is the only way of knowing whether the module is loaded (and we can
 	// succesfully call into the oprofile wrapper library without causing it to print out
 	// a lot of warnings).
-	public static boolean isKernelModuleLoaded()
-	{
-			for (int i = 0; i < _OPROFILE_CPU_TYPE_FILES.length; ++i)
-			{
-				File f = new File(_OPROFILE_CPU_TYPE_FILES[i]);
-				if (f.exists())
-					return true;
-			}
-			
-			return false;
+	public static boolean isKernelModuleLoaded() {
+		for (int i = 0; i < _OPROFILE_CPU_TYPE_FILES.length; ++i) {
+			File f = new File(_OPROFILE_CPU_TYPE_FILES[i]);
+			if (f.exists())
+				return true;
+		}
+		
+		return false;
 	}
 	
 	// initialize oprofile module
-	private static void _initializeOprofile()
-	{
+	private static void _initializeOprofile() {
 		Throwable except = null;
 		try {
 			OprofileCorePlugin.getDefault().getOpcontrolProvider().initModule();
@@ -390,23 +364,20 @@ public class Oprofile
 			ErrorDialog.openError(null /* parent shell */, title, msg, status);
 		}
 	}
-			
-	/**
-	 * Is the given file a separate sample file? In other words, is it a library for an application
-	 * for which samples were collected separately?
-	 * @param file the filename
-	 * @return true if this file is a "separate" sample file
-	 */
-	public static boolean isSeparateSampleFile(File file)
-	{
-		int index = file.toString().indexOf("}}}"); //$NON-NLS-1$
-		return (index != -1);
-	}
 	
 	// Little helper function
 	private static void _showErrorDialog(String key, CoreException except) {
 		String title = OprofileProperties.getString(key + ".error.dialog.title"); //$NON-NLS-1$
 		String msg = OprofileProperties.getString(key + ".error.dialog.message"); //$NON-NLS-1$
 		ErrorDialog.openError(null /* parent shell */, title, msg, except.getStatus());
+	}
+
+	/**
+	 * Is the file the "default" session?
+	 * @param file the file
+	 * @return boolean indicating whether the file is the default session
+	 */
+	public static boolean isDefaultSession(File file) {
+		return (file.getName().compareTo(_DEFAULT_SESSION_NAME) == 0);
 	}
 }

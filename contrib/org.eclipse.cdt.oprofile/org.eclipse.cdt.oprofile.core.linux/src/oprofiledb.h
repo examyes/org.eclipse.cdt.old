@@ -1,6 +1,6 @@
 /* oprofile_db - An Oprofile sample file database wrapper.
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@
 #include <map>
 #include <string>
 #include <bfd.h>
-
-#include "odb_hash.h"
+#include <odb_hash.h>
 
 class sample;
 class symboltable;

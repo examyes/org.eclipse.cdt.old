@@ -1,8 +1,8 @@
-/* samplefile - A class which represents a samplefile. This class is more
-   user-visible functionality. The nitty-gritty details of parsing oprofile
-   sample files is handled by oprofile_db.
+/* samplefile - A class which represents a samplefile. This class either
+   represents a real disk file or a "fake" one (needed in cases where
+   Oprofile only collected samples in a dependency, like a library).
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,43 +19,81 @@
    Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.  */
 
-#include <list>
-#include <sstream>
-
 #include "samplefile.h"
-#include "sfheader.h"
+#include "sample.h"
 #include "stable.h"
 #include "xmlfmt.h"
-#include "sample.h"
-#include "util.h"
 
 using namespace std;
 
-samplefile::samplefile (int ctr, string dir, string basename, bool fake)
-  : _dir (dir), _basename (basename), _st (NULL), _ctr (ctr),
-    _header (NULL), _is_fake (fake)
+samplefile::samplefile (string filename)
 {
-  string name;
-  get_sample_file_name (name);
-  if (_is_fake)
-    _db = NULL;
-  else
-    _db = new oprofile_db (_dir + name);
+  _st = NULL;
+  _db = new oprofile_db (filename);
+  _parsed_filename = parse_filename (filename);
 }
 
-samplefile::samplefile (string filename)
-  : _st (NULL), _header (NULL), _is_fake (false)
+samplefile::samplefile (parsed_filename* pfname)
+  : _parsed_filename (pfname)
 {
-  string::size_type slash = filename.rfind ('/');
-  string::size_type hash = filename.rfind ('#');
-  _dir = filename.substr (0, slash+1);
-  _basename = filename.substr (slash+1, hash - slash -1);
-  _ctr = strtol (filename.substr (hash+1, string::npos).c_str (), NULL, 10);
-  _db = new oprofile_db (filename);
+  _st = NULL;
+  if (_parsed_filename != NULL)
+    _db = new oprofile_db (_parsed_filename->filename);
+}
+
+bool
+samplefile::is_dependency (void) const
+{
+  // If _parsed_filename == NULL, this object is a toplevel image
+  // with no samples (all samples are in the dependencies)
+  return ((_parsed_filename == NULL)
+	  || (_parsed_filename->image != _parsed_filename->lib_image));
+}
+
+string
+samplefile::get_image (void) const
+{
+  return _parsed_filename->image;
+}
+
+string
+samplefile::get_lib_image (void) const
+{
+  return _parsed_filename->lib_image;
+}
+
+string
+samplefile::get_name (void) const
+{
+  return (is_dependency () ? get_lib_image () : get_image ());
+}
+
+long
+samplefile::get_count (void)
+{
+  return (has_samplefile () ? _db->get_count () : 0);
+}
+
+string
+samplefile::get_event (void)
+{
+  return _parsed_filename->event;
+}
+
+const opd_header*
+samplefile::get_header (void) const
+{
+  return (has_samplefile () ? _db->get_header () : NULL);
 }
 
 samplefile::~samplefile (void)
 {
+  if (_parsed_filename != NULL)
+    {
+      delete _parsed_filename;
+      _parsed_filename = NULL;
+    }
+
   if (_db != NULL)
     {
       delete _db;
@@ -67,68 +105,8 @@ samplefile::~samplefile (void)
       delete _st;
       _st = NULL;
     }
-
-  if (_header != NULL)
-    {
-      delete _header;
-      _header = NULL;
-    }
 }
 
-samplefile_header*
-samplefile::get_header (void)
-{
-  if (_header == NULL)
-    {
-      if (_is_fake)
-	{
-	  list<samplefile*> addl = get_separate_sample_files ();
-	  samplefile* sfile = *(addl.begin ());
-	  _header = new samplefile_header (sfile->get_header ());
-	  free_samplefiles (addl);
-	}
-      else
-	_header = new samplefile_header (_db->get_header ());      
-    }
-
-  return _header;
-}
-
-string&
-samplefile::get_sample_file_name (string& name) const
-{
-  ostringstream fname;
-  fname << _basename << "#" << _ctr;
-  name.assign (fname.str ());
-  return name;
-}
-
-samplefile::samplefilelist_t
-samplefile::get_separate_sample_files (void) const
-{
-  samplefilelist_t files;
-
-  ostringstream filename;
-  filename << _basename << "}}}*#" << _ctr;
-
-  list<string> filelist;
-  get_sample_file_list (filelist, _dir, filename.str ());
-
-  list<string>::iterator i;
-  for (i = filelist.begin (); i != filelist.end (); ++i)
-    files.push_back (new samplefile (_ctr, _dir, (*i)));
-
-  return files;
-}
-
-void
-samplefile::free_samplefiles (samplefilelist_t& list)
-{
-  samplefilelist_t::iterator i;
-  for (i = list.begin (); i != list.end (); ++i)
-    delete *i;
-  list.clear ();
-}
 
 // DO NOT FREE THE RESULT. ~oprofile_db will do it.
 const samplefile::samples_t
@@ -136,14 +114,11 @@ samplefile::get_samples (void)
 {
   samplefile::samples_t samples;
 
-  if (!_is_fake)
+  if (has_samplefile ())
     {
-      string executable;
-      demangle_sample_filename (_basename, executable);
-
       if (_st == NULL)
 	{
-	  _st = new symboltable (executable.c_str ());
+	  _st = new symboltable (get_name ().c_str ());
 	  _st->read_symbols ();
 	}
 
@@ -153,87 +128,22 @@ samplefile::get_samples (void)
   return samples;
 }
 
-long
-samplefile::get_count (void)
-{
-  return (_is_fake ? 0 : _db->get_count ());
-}
-
-bool
-samplefile::has_samples (void)
-{
-  return (_is_fake ? true : _db->has_samples ());
-}
-
-bool
-samplefile::is_separate_samplefile (void) const
-{
-  return is_separate_samplefile (_basename);
-}
-
-bool
-samplefile::is_separate_samplefile (const string& file)
-{
-  return (file.find ("}}}") != string::npos);
-}
-
-void
-samplefile::demangle_sample_filename (string sample_file,
-				      string& demangled_name)
-{
-  demangled_name = sample_file;
-
-  // If it's a separate file, erase the parent's name from the filename
-  size_t pos = demangled_name.find ("}}}");
-  if (pos != string::npos)
-      demangled_name.erase (0, pos + 2);
-
-  // Replace all occurrences of the mangling character
-  pos = demangled_name.find_first_of (OPD_MANGLE_CHAR);
-  if (pos != string::npos)
-    {
-      demangled_name.erase (0, pos);
-      replace (demangled_name.begin (), demangled_name.end (), OPD_MANGLE_CHAR, '/');
-    }
-  pos = demangled_name.find_last_of ('#');
-  if (pos != string::npos)
-    demangled_name.erase (pos, string::npos);
-}
-
-void
-samplefile::get_parent_name (string& result, const string& separate)
-{
-  result = separate;
-
-  size_t pos;
-
-  pos = result.find("}}}");
-  if (pos != string::npos)
-    result.erase (pos, result.length ());
-
-  pos = result.find_last_of ('#');
-  if (pos != string::npos)
-    result.erase (pos, string::npos);
-}
-
 bool
 samplefile::get_debug_info (bfd_vma vma, const char*& func, const char*& file, unsigned int& line)
 {
   return (_st == NULL ? false : _st->get_debug_info (vma, func, file, line));
 }
 
+// Output header & list of samples
+/*
+ * <samplefile>/var/lib/oprofile/samples/current/blah/blah/blah</samplefile>
+ * SAMPLE (handled by class sample)
+ */
 ostream&
 operator<< (ostream& os, samplefile* sf)
 {
-  string demangled_name;
-  samplefile::demangle_sample_filename (sf->_basename, demangled_name);
-
-  // output header & demangled name
-  string name;
-  os << startt ("samplefile")
-     << attrt ("name", sf->_dir + sf->get_sample_file_name (name))
-     << startt ("demangled-name") << demangled_name << endt
-     << sf->get_header ();
+  // output the sfile's full pathname (used for fetching debug info)
+  os << startt ("samplefile") << sf->get_sample_file_name () << endt;
 
   // output list of samples
   samplefile::samples_t samples = sf->get_samples ();
@@ -244,13 +154,5 @@ operator<< (ostream& os, samplefile* sf)
       os << smpl;
     }
 
-  // output additional samples files
-  list<samplefile*>::iterator i;
-  list<samplefile*> addl = sf->get_separate_sample_files ();
-  for (i = addl.begin (); i != addl.end (); ++i)
-    os << (*i);
-  samplefile::free_samplefiles (addl);
-
-  return os << endt;
+  return os;
 }
-

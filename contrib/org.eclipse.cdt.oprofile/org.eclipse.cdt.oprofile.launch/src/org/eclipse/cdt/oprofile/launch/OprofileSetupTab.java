@@ -7,6 +7,9 @@
 
 package org.eclipse.cdt.oprofile.launch;
 
+import java.io.File;
+
+import org.eclipse.cdt.oprofile.core.OprofileDaemonOptions;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
@@ -27,8 +30,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import java.io.File;
-
 /**
  * This tab is used by the launcher to configure global oprofile run options.
  * @author keiths
@@ -42,7 +43,7 @@ public class OprofileSetupTab extends AbstractLaunchConfigurationTab
 	private Button _separateLibrariesButton;
 	private Button _separateKernelButton;
 
-	private static OprofileOptions _options = null;
+	private static LaunchOptions _options = null;
 
 	/**
 	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
@@ -84,7 +85,7 @@ public class OprofileSetupTab extends AbstractLaunchConfigurationTab
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy config)
 	{
-		_options = new OprofileOptions();
+		_options = new LaunchOptions();
 		_options.saveConfiguration(config);
 	}
 
@@ -93,7 +94,7 @@ public class OprofileSetupTab extends AbstractLaunchConfigurationTab
 	 */
 	public void createControl(Composite parent)
 	{
-		_options = new OprofileOptions();
+		_options = new LaunchOptions();
 
 		Composite top = new Composite(parent, SWT.NONE);
 		setControl(top);
@@ -206,13 +207,13 @@ public class OprofileSetupTab extends AbstractLaunchConfigurationTab
 		else if (b == _separateLibrariesButton || b == _separateKernelButton)
 		{
 			if (_separateLibrariesButton.getSelection() && _separateKernelButton.getSelection())
-				_options.setSeparateSamples(OprofileOptions.SEPARATE_ALL);
+				_options.setSeparateSamples(OprofileDaemonOptions.SEPARATE_ALL);
 			else if (_separateLibrariesButton.getSelection())
-				_options.setSeparateSamples(OprofileOptions.SEPARATE_LIBRARY);
+				_options.setSeparateSamples(OprofileDaemonOptions.SEPARATE_LIBRARY);
 			else if (_separateKernelButton.getSelection())
-				_options.setSeparateSamples(OprofileOptions.SEPARATE_KERNEL);
+				_options.setSeparateSamples(OprofileDaemonOptions.SEPARATE_KERNEL);
 			else
-				_options.setSeparateSamples(OprofileOptions.SEPARATE_NONE);
+				_options.setSeparateSamples(OprofileDaemonOptions.SEPARATE_NONE);
 		}
 	}
 	
@@ -295,11 +296,11 @@ public class OprofileSetupTab extends AbstractLaunchConfigurationTab
 		boolean lib, kernel;
 		switch (how)
 		{
-			case OprofileOptions.SEPARATE_LIBRARY:
+			case OprofileDaemonOptions.SEPARATE_LIBRARY:
 				lib = true;	kernel = false;	break;
-			case OprofileOptions.SEPARATE_KERNEL:
+			case OprofileDaemonOptions.SEPARATE_KERNEL:
 				lib = false;	kernel = true;		break;
-			case OprofileOptions.SEPARATE_ALL:
+			case OprofileDaemonOptions.SEPARATE_ALL:
 				lib = true;	kernel = true;		break;
 			default:
 				lib = false;	kernel = false;	break;

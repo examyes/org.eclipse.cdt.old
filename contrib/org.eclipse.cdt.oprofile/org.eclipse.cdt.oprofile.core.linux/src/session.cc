@@ -1,9 +1,7 @@
 /* session - a class which represents an oprofile session.
-   All sessions occur as directories of the samples directory. The
-   so-called "default" (which uses just the samples directory itself)
-   is the exception.
+   All sessions occur as directories of the samples directory.
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2003, 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,23 +19,16 @@
    Boston, MA 02111-1307, USA.  */
 
 #include "session.h"
-#include <sstream>
 #include <iostream>
-#include <map>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
 
-#include <op_config.h>
-#include <op_sample_file.h>
-
-#include "samplefile.h"
-#include "sfheader.h"
+#include "sevent.h"
 #include "opinfo.h"
 #include "xmlfmt.h"
-#include "util.h"
 
 using namespace std;
 
@@ -46,103 +37,10 @@ session::session(string name, const opinfo* info)
 {
 }
 
-// Return for all counters
-samplefile::samplefilelist_t
-session::get_samplefiles (int counter)
+string
+session::get_base_directory (void) const
 {
-  samplefile::samplefilelist_t samplefiles;
-
-  // Always ensure that the session directory ends in a slash
-  string session_dir = _info->get_samples_directory () + _name;
-  if (*(--session_dir.end ()) != '/')
-    session_dir += "/";
-
-  int start_counter = (counter == -1 ? 0 : counter);
-  int max_counter = (counter == -1 ? _info->get_nr_counters () : counter + 1);
-  list<string> files;
-
-  // Create samplefiles for all the basic executable sample files
-  for (int ctr = start_counter; ctr < max_counter; ++ctr)
-    {
-      list<string> filelist, separates;
-      ostringstream ctr_filter;
-      ctr_filter << "*#" << ctr;
-      get_sample_file_list (filelist, session_dir, ctr_filter.str ());
-
-      /* Filter out any "separate-libs" kind of files -- they are
-	 handled by samplefile.
-
-	 One problem, though... It is possible to have separate sample
-	 files for executables which do not have a sample file. This can
-	 happen, for example, when using the --separate=kernel flag.
-	 You get }bin}bash}}}kernel#0 but no }bin}bash#0.
-
-	 To deal with this, we pass through the file list twice. Once to
-	 insert all the "main" samplefiles and once to insert fake/empty
-	 "main" samplefiles for any separates that may not have parents. */
-
-      list<string>::iterator i;
-      for (i = filelist.begin (); i != filelist.end (); ++i)
-	{
-	  // First construct the full, disk-image filename of the samplefile
-	  ostringstream file;
-	  file << (*i) << "#" << ctr;
-	  string filename = file.str ();
-
-	  // Now add all "main" samplefiles
-	  if (samplefile::is_separate_samplefile (filename))
-	    separates.push_back (filename);
-	  else
-	    {
-	      files.push_back ((*i));
-	      samplefiles.push_back (new samplefile (ctr, session_dir, (*i)));
-	    }
-	}
-
-      // Now loop through and add any "fake" samplefiles
-      filelist.clear ();
-      for (i = separates.begin (); i != separates.end (); ++i)
-	{
-	  string parent;
-	  samplefile::get_parent_name (parent, (*i));
-
-	  if ((find (filelist.begin (), filelist.end (), parent)
-	       == filelist.end ())
-	      && (find (files.begin (), files.end (), parent)
-		  == files.end ()))
-	    {
-	      filelist.push_back (parent);
-	      samplefiles.push_back (new samplefile (ctr, session_dir,
-						     parent, true));
-	    }
-	}
-    }
-
-  return samplefiles;
-}
-
-int
-session::get_event (int counter) const
-{
-  // Always ensure that the session directory ends in a slash
-  string session_dir = _info->get_samples_directory () + _name;
-  if (*(--session_dir.end ()) != '/')
-    session_dir += "/";
-
-  list<string> filelist;
-  ostringstream ctr_filter;
-  ctr_filter << "*#" << counter;
-  get_sample_file_list (filelist, session_dir, ctr_filter.str ());
-
-  // Grab the first sample file and get the event stored in the header
-  if (!filelist.empty ())
-    {
-      samplefile sfile (counter, session_dir, filelist.front ());
-      int event = sfile.get_header ()->get_event ();
-      return event;
-    }
-
-  return -1;
+  return _info->get_samples_directory () + _name;
 }
 
 session::sessionlist_t
@@ -176,63 +74,135 @@ session::get_sessions (const opinfo& info)
   struct dirent* dir;
   while ((dir = readdir (dirp)) != NULL)
     {
-      if (strcmp (dir->d_name, ".") == 0)
+      if (strcmp (dir->d_name, ".") != 0 && strcmp (dir->d_name, "..") != 0)
 	{
-	  // Special case: add one for the "default"
-	  sessions.push_back (new session ("", &info));
-	}
-      else if (strcmp (dir->d_name, "..") != 0)
-	{
-	  // Okay, we're going to cheat.. Instead of stat'ing every file,
-	  // we simply check if it starts with the mangle character...
-	  if (dir->d_name[0] != OPD_MANGLE_CHAR)
-	    {
-	      string name (dir->d_name);
-	      sessions.push_back (new session (name, &info));
-	    }
+	  string name (dir->d_name);
+	  sessions.push_back (new session (name, &info));
 	}
     }
 
   return sessions;
 }
 
-/*
- * <session name="foo" counter="0">
- *   <has_samples>1</has_samples>
- *   <event>112</event>
- * </session>
- */
-ostream&
-operator<< (ostream& os, const session_counter& sc)
+// returns NULL if not found
+sessionevent*
+session::get_event (string event_name)
 {
-  samplefile::samplefilelist_t lst = sc._session->get_samplefiles (sc._ctr);
-  samplefile::samplefilelist_t::iterator i;
+  list<string> filelist;
+  get_sample_file_list (filelist, get_base_directory ());
 
-  long count = 0;
-  for (i = lst.begin (); i != lst.end (); ++i)
+  // Loop through all sample files, create & populate sessionevents
+  // with sample file lists
+  sessionevent* the_sevent = NULL;
+  list<samplefile*> deps;
+  list<string>::iterator fit = filelist.begin ();
+  for (; fit != filelist.end (); ++fit)
     {
-      samplefile* sfile = *i;
-      count += sfile->get_count ();
+      parsed_filename* parsed = parse_filename (*fit);
+      if (parsed != NULL && parsed->event == event_name)
+	{
+	  samplefile* sfile = new samplefile (parsed);
+	  if (!sfile->is_dependency ())
+	    {
+	      // main image
+	      if (the_sevent == NULL)
+		{
+		  // found the desired event -- create it
+		  the_sevent = new sessionevent (this, parsed->event); 
+		}
 
-      /* Don't forget to add in separates..
-	 You're wondering why samplefile::get_count doesn't do this...
-	 Simple: samplefile represents the real, disk image. Getting the
-	 count for it simply gets the count specifically for that file.
-	 It is in Eclipse where the abstraction layer is raised. Getting
-	 the count of a samplefile there _will_ include the separates. */
-      samplefile::samplefilelist_t separates
-	= sfile->get_separate_sample_files ();
-      samplefile::samplefilelist_t::iterator j;
-      for (j = separates.begin (); j != separates.end (); ++j)
-	count += (*j)->get_count ();
+	      // Add this sample file to the sessionevent
+	      the_sevent->add_sample_file (sfile);
+	    }
+	  else
+	    {
+	      // dependency -- save it for later resolution
+	      deps.push_back (sfile);
+	    }
+	}
     }
 
-  ostringstream counter;
-  counter << sc._ctr;
-  os << startt ("session") << attrt ("name", sc._session->_name)
-     << attrt ("counter", counter.str ())
-     << startt ("count") << count << endt
-     << endt;
-  samplefile::free_samplefiles (lst);
-  return os;
+  // Now run through the list of dependencies
+  if (the_sevent != NULL)
+    {
+      list<samplefile*>::iterator sfit;
+      for (sfit = deps.begin (); sfit != deps.end (); ++sfit)
+	{
+	  samplefile* sfile = *sfit;
+	  the_sevent->add_sample_file (sfile);
+	}
+    }
+
+  return the_sevent;
+}
+
+session::seventlist_t
+session::get_events ()
+{
+  list<string> filelist;
+  get_sample_file_list (filelist, get_base_directory ());
+
+  // Loop through all sample files, create & populate sessionevents
+  // with sample file lists
+  seventlist_t events;
+  map<string, sessionevent*> emap;
+  list<samplefile*> deps;
+  list<string>::iterator fit = filelist.begin ();
+  for (; fit != filelist.end (); ++fit)
+    {
+      parsed_filename* parsed = parse_filename (*fit);
+      if (parsed != NULL && !parsed->event.empty ())
+	{
+	  samplefile* sfile = new samplefile (parsed);
+	  if (!sfile->is_dependency ())
+	    {
+	      // main image
+	      map<string, sessionevent*>::iterator item;
+	      item = emap.find (parsed->event);
+	      if (item == emap.end ())
+		{
+		  // new event -- create sessionevent
+		  sessionevent* se = new sessionevent (this, parsed->event); 
+
+		  // Save this sessionevent in the event map
+		  emap.insert (make_pair<string, sessionevent*> (parsed->event, se));
+
+		  // Add this sample file to the list
+		  se->add_sample_file (sfile);
+
+		  // Finally, add this new sessionevent to result
+		  events.push_back (se);
+		}
+	      else
+		{
+		  // Add this sample file to the sessionevent
+		  sessionevent* se = (*item).second;
+		  se->add_sample_file (sfile);
+		}
+	    }
+	  else
+	    {
+	      // dependency -- save it for later resolution
+	      deps.push_back (sfile);
+	    }
+	}
+    }
+
+  // Now run through the list of dependencies
+  list<samplefile*>::iterator sfit;
+  for (sfit = deps.begin (); sfit != deps.end (); ++sfit)
+    {
+      samplefile* sfile = *sfit;
+      map<string, sessionevent*>::iterator item;
+      item = emap.find (sfile->get_event ());
+      if (item != emap.end ())
+	{
+	  sessionevent* se = (*item).second;
+	  se->add_sample_file (sfile);
+	}
+      else
+	cerr << "WARNING! dep file with no event!" << endl;
+    }
+
+  return events;
 }

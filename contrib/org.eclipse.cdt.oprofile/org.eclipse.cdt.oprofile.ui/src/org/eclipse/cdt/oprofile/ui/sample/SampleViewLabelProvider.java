@@ -28,7 +28,7 @@ import org.eclipse.swt.graphics.Image;
  * Session:
  * "", samples, percentage, image name, ""
  * 
- * SampleFile:
+ * ProfileImage:
  * "", samples, percentage, symbol name, ""
  * 
  * SampleSymbol:

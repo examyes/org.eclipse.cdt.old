@@ -29,7 +29,6 @@ import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
 
 
-
 /**
  * This is the SystemProfileView. It is similar to the Navigation view,
  * but in a profiling-centric way. This class is responsible for creating and

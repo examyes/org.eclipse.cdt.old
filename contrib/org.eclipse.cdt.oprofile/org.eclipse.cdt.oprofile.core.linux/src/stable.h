@@ -1,6 +1,6 @@
 /* symboltable - A symbol table class
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -52,8 +52,10 @@ class symboltable
   bool get_debug_info (bfd_vma vma, const char*& function,
 		       const char*& source_file, unsigned int& line);
 
+#if 0
   // Debugging. Dump the symbol table
   void dump_table (void);
+#endif
 
  protected:
   // Opens the BFD associated with the executable

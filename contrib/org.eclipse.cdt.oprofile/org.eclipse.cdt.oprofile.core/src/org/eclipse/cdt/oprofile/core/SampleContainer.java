@@ -26,57 +26,30 @@ public abstract class SampleContainer implements ISampleContainer
 	// The disk image of this container
 	protected File _file;
 	
-	// The counter for this container
-	protected int _counter;
-	
-	// The demangled name
-	protected String _demangled_name = null;
-	
 	// The list of sample containers associated with this container (if any)
-	protected ISampleContainer[] _containers;
+	protected ArrayList _containers;
 	
 	/**
 	 * Constructor SampleContainer.
-	 * @param counter the counter number
 	 * @param file the disk image of this container
 	 */
-	public SampleContainer(int counter, File file)
-	{
+	public SampleContainer(File file) {
 		_file = file;
-		_counter = counter;
-		_containers = null;
+		_containers = new ArrayList();
 		_samples = new ArrayList();
-	}
-	
-	/**
-	 * Constructor. The counter number is derived from the filename.
-	 * @param file the disk image of this container
-	 */
-	public SampleContainer(File file)
-	{
-		this(Oprofile.sampleFileCounter(file), file);
 	}
 	
 	/**
 	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#getExecutableName()
 	 */
-	public String getExecutableName()
-	{
-		return _demangled_name;
+	public String getExecutableName() {
+		return getFile().getPath();
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#setExecutableName(java.lang.String)
-	 */
-	public void setExecutableName(String name) {
-		_demangled_name = name;
-	}
-	
+		
 	/**
 	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#getFile()
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return _file;
 	}
 	
@@ -84,22 +57,23 @@ public abstract class SampleContainer implements ISampleContainer
 	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#getSampleContainers()
 	 */
 	public ISampleContainer[] getSampleContainers(Shell shell) {
-		return _containers;
+		ISampleContainer[] containers = new ISampleContainer[_containers.size()];
+		_containers.toArray(containers);
+		return containers;
 	}
 	
 	/**
-	 * Set the sample containers this container contains (i.e., "--separate-libs")
-	 * @param containers the containers
+	 * Add a sample container to this container (i.e., "--separate-libs")
+	 * @param container the container
 	 */
-	public void setSampleContainers(ISampleContainer[] containers) {
-		_containers = containers;
+	public void addSampleContainer(ISampleContainer container) {
+		_containers.add(container);
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#getSamples()
 	 */
-	public Sample[] getSamples(Shell shell)
-	{
+	public Sample[] getSamples(Shell shell) {
 		Sample[] samples = new Sample[_samples.size()];
 		_samples.toArray(samples);
 		return samples;
@@ -111,13 +85,5 @@ public abstract class SampleContainer implements ISampleContainer
 	 */
 	public void addSample(Sample smpl) {
 		_samples.add(smpl);
-	}
-	
-	/**
-	 * Get the counter for this session
-	 * @return the counter number
-	 */
-	public int getCounter() {
-		return _counter;
 	}
 }

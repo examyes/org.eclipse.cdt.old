@@ -13,7 +13,6 @@ import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 
-
 /**
  * This class defines the launch tab group that is displayed by the
  * launch manager.

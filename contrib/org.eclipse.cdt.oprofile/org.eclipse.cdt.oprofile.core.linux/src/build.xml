@@ -14,12 +14,14 @@
       dir="${src-path}" includes="opxml.cc" />
   <fileset id="oprofile-lib-srcs"
       dir="${src-path}"
-      includes="opinfo.cc
+      includes="imageheader.cc
+		opinfo.cc
 	        oprofiledb.cc
+		profileimage.cc
 	        sample.cc
 	        samplefile.cc
 	        session.cc
-                sfheader.cc
+		sevent.cc
                 stable.cc
                 symbol.cc
 		util.cc

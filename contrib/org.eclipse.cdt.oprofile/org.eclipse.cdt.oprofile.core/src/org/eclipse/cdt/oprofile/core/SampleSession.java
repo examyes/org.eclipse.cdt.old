@@ -25,29 +25,26 @@ public class SampleSession extends SampleContainer
 	
 	// The event collected in this session
 	protected OpEvent _event;
-	
+
 	/**
 	 * Constructor SampleSession.
-	 * @param counter the counter number
 	 * @param file a File object of this session
 	 */
-	public SampleSession(int counter, File file)
-	{
-		super(counter, file);
+	public SampleSession(File file, String event) {
+		super(file);
 		_count = 0;
-		_event = null;
+		_event = Oprofile.findEvent(event);
 	}
 	
 	/**
 	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#getSampleContainters()
 	 */
-	public ISampleContainer[] getSampleContainers(Shell shell)
-	{
-		if (_containers == null) {
+	public ISampleContainer[] getSampleContainers(Shell shell) {
+		if (_containers.size() == 0) {
 			// Haven't read samples for this session yet. Do it now.
 			Oprofile.getSamples(this, shell);
 		}
-		return _containers;
+		return super.getSampleContainers(shell);
 	}
 	
 	/**
@@ -65,39 +62,28 @@ public class SampleSession extends SampleContainer
 		_count = count;
 	}
 	
-	/**
+    /**
 	 * Get a description of the event collected in this session.
+	 * 
 	 * @return the event
 	 */
 	public OpEvent getEvent() {
 		return _event;
 	}
-	
-	/**
-	 * Sets the event that was collected in this session
-	 * @param event the event
-	 */
-	public void setEvent(int event) {
-		_event = Oprofile.findEvent(_counter, event);	
-	}
-	
+		
 	/**
 	 * Is this session the "default" session?
+	 * 
 	 * @return whether this session is the default session
 	 */
-	public boolean isDefaultSession()
-	{
-		return (getFile() == null);
+	public boolean isDefaultSession() {
+		return Oprofile.isDefaultSession(getFile());
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.oprofile.core.ISampleContainer#getExecutableName()
 	 */
 	public String getExecutableName() {
-		if (isDefaultSession()) {
-			return new String();
-		}
-		
 		return _file.getName();
 	}
 }

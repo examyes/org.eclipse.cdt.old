@@ -18,7 +18,6 @@ import org.eclipse.cdt.oprofile.ui.internal.IProfileElement;
 import org.eclipse.cdt.oprofile.ui.internal.ProfileElement;
 import org.eclipse.swt.graphics.Image;
 
-
 /**
  * Convenience class for all SystemProfile root elements.
  * @author keiths

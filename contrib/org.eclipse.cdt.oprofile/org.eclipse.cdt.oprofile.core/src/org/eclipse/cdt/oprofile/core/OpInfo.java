@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import org.eclipse.cdt.oprofile.opxml.DefaultsProcessor;
+import org.eclipse.cdt.oprofile.core.opxml.DefaultsProcessor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -30,26 +30,28 @@ public class OpInfo {
 	public static final String DEFAULT_DUMP_STATUS = DefaultsProcessor.DUMP_STATUS;
 	
 	// A comparator class used when sorting events
+	// (sorting by event name)
 	private static class SortEventComparator implements Comparator {
 		public int compare(Object a, Object b) {
 			OpEvent event1 = (OpEvent) a;
 			OpEvent event2 = (OpEvent) b;
-			return event1.getNumber() - event2.getNumber();
+			return event1.getText().compareTo(event2.getText());
 		}
 	}
 
 	// A comparator class used when searching events
+	// (searching by event name)
 	private static class SearchEventComparator implements Comparator {
 		public int compare(Object a, Object b) {
-			int aint, bint;
-			if (a instanceof Integer) {
-				aint = ((Integer) a).intValue();
-				bint = ((OpEvent) b).getNumber();
+			String astr, bstr;
+			if (a instanceof String) {
+				astr = (String) a;
+				bstr = ((OpEvent) b).getText();
 			} else {
-				aint = ((OpEvent) a).getNumber();
-				bint = ((Integer) b).intValue();
+				astr = ((OpEvent) a).getText();
+				bstr = (String) b;
 			}
-			return aint - bint;
+			return astr.compareTo(b);
 		}
 	}
 	
@@ -98,6 +100,7 @@ public class OpInfo {
 	// Initializes internal state
 	private void _init() {
 		_dir = getDefault(DEFAULT_SAMPLE_DIR);
+		
 		_eventList = new OpEvent[getNrCounters()][];
 		for (int i = 0; i < getNrCounters(); ++i) {
 			_eventList[i] = new OpEvent[_eventArrayList[i].size()];
@@ -188,29 +191,28 @@ public class OpInfo {
 	
 	/**
 	 * Returns an array of events valid for the given counter number.
+	 * (-1 for all counters) 
 	 * @param num the counter number
 	 * @return an array of valid events; <bold>never</bold> returns <code>null</code>.
-	 */
+	 */ 
 	public OpEvent[] getEvents(int num) {
-		if (num < _eventList.length) {
+		if (num < _eventList.length)
 			return _eventList[num];
-		}
 		
 		return new OpEvent[0];
 	}
-
+	
 	/**
-	 * Searches the for the event with the given integer value for the given counter.
-	 * @param counter the counter
-	 * @param num the event's integer value 
+	 * Searches the for the event with the given name
+	 * @param name the name of the event (e.g., CPU_CLK_UNHALTED)
 	 * @return the event or <code>null</code> if not found
 	 */
-	public OpEvent findEvent(int counter, int num) {
-		if (counter < getNrCounters()) {
-			int idx = Arrays.binarySearch(getEvents(counter), new Integer(num), new SearchEventComparator());
-			if (idx > 0) {
+	public OpEvent findEvent(String name) {
+		// Search through all counters
+		for (int counter = 0; counter < getNrCounters(); ++counter) {
+			int idx = Arrays.binarySearch(getEvents(counter), name, new SearchEventComparator());
+			if (idx > 0)
 				return _eventList[counter][idx];
-			}
 		}
 		
 		return null;

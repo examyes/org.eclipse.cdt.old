@@ -15,8 +15,7 @@ import org.eclipse.swt.widgets.Shell;
  * An interface that all sample-containing "root" objects contain (files and sessions).
  * @author Keith Seitz  <keiths@redhat.com>
  */
-public interface ISampleContainer extends ISample
-{
+public interface ISampleContainer {
 	/**
 	 * Method getExecutableName().
 	 *  @return the name of the executable with which this sample file corresponds.
@@ -24,22 +23,11 @@ public interface ISampleContainer extends ISample
 	String getExecutableName();
 	
 	/**
-	 * Method setExecutableName().
-	 */
-	void setExecutableName(String name);
-	
-	/**
 	 * Method getFile().
 	 * @return the File representing this container. This is a real File on disk.
 	 */
 	File getFile();
 	
-	/**
-	 * Method getEvent.
-	 * @return the event collected in this container
-	 */
-	OpEvent getEvent();
-		
 	/**
 	 * Get any sample containers associated with this container.
 	 * @param shell the shell to use for progress dialog (or <code>null</code> for none)
@@ -53,4 +41,10 @@ public interface ISampleContainer extends ISample
 	 * @return samples in this container
 	 */
 	Sample[] getSamples(Shell shell);
+	
+	/**
+	 * Computes the total of all samples in the implementing class.
+	 * @return	the total count of all samples
+	 */
+	int getSampleCount();
 }

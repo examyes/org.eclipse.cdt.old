@@ -1,3 +1,107 @@
+2004-08-27  Keith Seitz  <keiths@redhat.com>
+
+	* Makefile: Update for OProfile-0.8.
+	* build.xml: Likewise.
+	* imageheader.cc: New file.
+	* imageheader.h: New file.
+	* oprofiledb.cc (_open_db): Remove err_msg. Return code of odb_open
+	is now errno.
+	(samples_odb_travel): New function.
+	* oprofiledb.h: odb_hash.h is a system file.
+	* opxml.cc (args_help): Use session and event names for gettting
+	samples.
+	(data_t): Remove definition.
+	(eventlist_t): Remove global defintion.
+	(event_sorter): Remove definition.
+	(session_sorter): Rename to sevent_sorter. Update for sorting
+	sessionevents.
+	(samples): Remove counter argument. Use event name.
+	Get sessionevent and output profileimages from that.
+	(sessions):  Define local typedef for eventlist_t which contains
+	sessionevents.
+	Loop through all sessions and sessionevents, adding them to the list
+	of known sessionevents, as necessary.
+	Sort and output result.
+	* profileimage.cc: New file.
+	* profileimage.h: New file.
+	* sample.cc (operator<<): Update comments about output.
+	Remove unused code.
+	* samplefile.cc (samplefile (int, string, string, bool)): Remove
+	constructor.
+	(samplefile (string)): Remove initializers.
+	Remove basename/dir and counter junk.
+	Parse the filename and store it.
+	(samplefile (parsed_filename*)): New constructor.
+	(~samplefile): Delete _parsed_filename, if allocated.
+	(get_header): Use has_samplefile instead of _is_fake.
+	(is_dependency): New method.
+	(get_sample_file_name): Remove.
+	(get_image): New method.
+	(get_separate_sample_files): Remove.
+	(get_lib_image): New method.
+	(free_samplefiles): Remove.
+	(get_name): New method.
+	(get_count): Use has_samplefle instead of _is_fake.
+	(has_samples): Remove.
+	(get_event): New method.
+	(is_separate_samplefile): Remove.
+	(demangle_sample_filename): Remove.
+	(get_parent_name): Remove.
+	(get_samples): New method.
+	(operator<<): Remove demangled name. Don't output dependencies here,
+	it's now done in profileimage.
+	* samplefile.h (demangle_sample_filename): Remove.
+	(is_separate_sample_file): Remove.
+	(get_parent_name): Remove.
+	(samplefile (int, string, string, bool)): Remove constructor.
+	(samplefile (parsed_filename*)): New constructor.
+	(is_dependency): New method.
+	(get_sample_file_name): Inline using parsed filename.
+	(get_image): New method.
+	(get_lib_image): New method.
+	(get_name): New method.
+	(get_header): Return opd_header instead of samplefile_header.
+	(get_event): New method.
+	(get_separate_sample_files): Remove.
+	(has_samples): Remove.
+	(free_samplefiles): Remove.
+	(operator<<): Remove friend. Add to global scope.
+	(_dir): Remove private data.
+	(_basename): Likewise.
+	(_ctr): Likewise.
+	(_header): Likewise.
+	(_parsed_filename): New private variable.
+	* session.cc (get_samplefiles): Remove.
+	(get_base_directory): New method.
+	(get_event): CHANGED API USAGE. Now it searches for
+	all sessionevents which collected the requested event name.
+	(get_events): New method.
+	(get_sessions): Remove special case for "default" session. OProfile-0.8
+	now creates a real "current" session for this purpose.
+	(operator<<): Remove.
+	* session.h (get_samplefiles): Remove.
+	(get_event): Rewrite. CHANGED API USAGE.
+	(get_events): New method.
+	(get_base_directory): New method.
+	(operator<<): Remove.
+	(session_counter): Remove.
+	* sevent.cc: New file.
+	* sevent.h: New file.
+	* sfheader.cc: Remove.
+	* sfheader.h: Remove.
+	* stable.cc: Clean-up includes.
+	(dump_table): Ifdef out.
+	* stable.h (dump_table): Likewise.
+	* util.cc (strip_counter_suffix): Remove.
+	(separate_token): New extern declaration.
+	(get_sample_file_list): Remove filter parameter.
+	(parse_event_spec): New function.
+	(reomve_base_dir): New function.
+	(parse_filename): New function.
+	* util.h (get_sample_file_list): Remove filter parameter.
+	(parsed_filename): New datatype.
+	(parse_filename): New function.
+ 
 2004-08-10  Keith Seitz  <keiths@redhat.com>
 
 	* oprofiledb.cc (walk_samples): Call _close_db.

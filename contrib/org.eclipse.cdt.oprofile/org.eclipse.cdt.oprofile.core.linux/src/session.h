@@ -1,9 +1,7 @@
 /* session - a class which represents an oprofile session.
-   All sessions occur as directories of the samples directory. The
-   so-called "default" (which uses just the samples directory itself)
-   is the exception.
+   All sessions occur as directories of the samples directory.
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2003, 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -25,10 +23,11 @@
 #include <string>
 #include <list>
 #include <op_cpu_type.h>
+
 #include "samplefile.h"
 
 class opinfo;
-class session_counter;
+class sessionevent;
 
 class session
 {
@@ -37,9 +36,6 @@ class session
   // and cpu/config information
   session (std::string name, const opinfo* info);
 
-  // Returns a list of the samplefiles in the session with the given counter (-1 = all counters)
-  samplefile::samplefilelist_t get_samplefiles (int ctr = -1);
-
   // Returns a list of all sessions
   typedef std::list<session*> sessionlist_t;
   static sessionlist_t get_sessions (const opinfo& info);
@@ -47,10 +43,17 @@ class session
   // Returns the name of this session
   const std::string& get_name (void) const { return _name; };
 
-  // Returns the event that was collected on the given COUNTER or -1 if unknown/error.
-  int get_event (int counter) const;
+  // Returns a list of events collected in this session.
+  typedef std::list<sessionevent*> seventlist_t;
+  seventlist_t get_events ();
 
-  friend std::ostream& operator<< (std::ostream& os, const session_counter& sc);
+  // Searches for and returns the sessionevent which collected the
+  // given event_name. Returns NULL if not found. Return value must be
+  // freed by caller.
+  sessionevent* get_event (std::string event_name);
+
+  // Returns the directory for this session, i.e., SAMPLES_DIR+session_name
+  std::string get_base_directory (void) const;
 
  private:
   // The name of this session
@@ -58,16 +61,5 @@ class session
 
   // The cpu info
   const opinfo* _info;
-};
-
-class session_counter
-{
- public:
-  session_counter (session* s, int ctr) : _session (s), _ctr (ctr) {};
-  friend std::ostream& operator<< (std::ostream& os, const session_counter& sc);
-
- private:
-  session* _session;
-  int _ctr;
 };
 #endif // !_SESSION_H

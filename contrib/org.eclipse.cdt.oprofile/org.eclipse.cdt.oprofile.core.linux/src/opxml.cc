@@ -2,7 +2,7 @@
    files (and a little more). This program exists as a bridge between
    GPL'd software (oprofile and BFD) and CPL'd software (Eclipse).
    Written by Keith Seitz <keiths@redhat.com>
-   Copyright 2003, Red Hat, Inc.
+   Copyright 2004 Red Hat, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,15 +24,13 @@
 #include <string>
 #include <getopt.h>
 #include <errno.h>
-#include <string.h>
-#include <map>
-#include <sstream>
-#include <functional>
+#include <iterator>
 
 #include "opinfo.h"
 #include "oxmlstream.h"
 #include "session.h"
 #include "sample.h"
+#include "sevent.h"
 
 using namespace std;
 
@@ -69,7 +67,7 @@ static const struct help args_help[] =
   {"[CPU]\t\t\t", "information for given cpu (defualt: current cpu)" },
   {"CTR EVENT UMASK\t", "check counter/event validity"},
   {"SAMPLEFILE\t\t", "return debug information for in SAMPLEFILE"},
-  {"COUNTER [SESSION]\t", "get samples for given SESSION and COUNTER (default: \"\")"},
+  {"EVENT [SESSION]\t", "get samples for given SESSION and EVENT (default: current)"},
   {"\t\t\t", "get session information"}
 };
 
@@ -86,35 +84,11 @@ static int debug_info (opinfo& info, int argc, char* argv[]);
 static int samples (opinfo& info, int argc, char* argv[]);
 static int sessions (opinfo& info, int argc, char* argv[]);
 
-// Convenience type for "sessions". The first arg is counter number.
-typedef pair<int, session*> data_t;
-
-// A class to order the insertions for a map of events. Used by "sessions".
-class event_sorter
+class sevent_sorter : public binary_function<sessionevent*, sessionevent*, bool>
 {
 public:
-  event_sorter (op_cpu type) : _cpu_type (type) {};
-  bool operator() (int e1, int e2)
+  bool operator() (sessionevent* lhs, sessionevent* rhs)
   {
-    struct op_event* event1 = op_find_event (_cpu_type, e1);
-    struct op_event* event2 = op_find_event (_cpu_type, e2);
-    return strcmp (event1->name, event2->name) < 0;
-  }
-
-private:
-  op_cpu _cpu_type;
-};
-
-// Convenience type for "sessions"
-typedef map<int, list<data_t>*, event_sorter> eventlist_t;
-
-class session_sorter : public binary_function<data_t, data_t, bool>
-{
-public:
-  bool operator() (data_t& left, data_t& right)
-  {
-    session* lhs = left.second;
-    session* rhs = right.second;
     bool result;
     if (lhs->get_name () == "")
       result = true;
@@ -415,37 +389,40 @@ debug_info (opinfo& info, int argc, char* argv[])
 static int
 samples (opinfo& info, int argc, char* argv[])
 {
-  string session_name;
-
   if (argc < 2)
-    wrong_num_arguments (1, argv, "counter [session]");
+    wrong_num_arguments (1, argv, "event [session]");
 
-  int ctr = get_integer (argv[1]);
-  if (ctr < 0 || ctr > info.get_nr_counters ())
-    {
-      cerr << "invalid counter \"" << argv[1] << "\": must be between 0 and "
-	   << info.get_nr_counters () << endl;
-      return EXIT_FAILURE;
-    }
+  string event (argv[1]);
 
+  string session_name ("current");
   if (argc == 3)
     session_name = argv[2];
 
   session session (session_name, &info);
-  samplefile::samplefilelist_t list = session.get_samplefiles (ctr);
+  sessionevent* sevent = session.get_event (event);
+
+  if (sevent == NULL)
+    {
+      cerr << "no such session or event: session=" << session_name
+	   << "; event=" << event << endl;
+      return EXIT_FAILURE;
+    }
+
+  sessionevent::profileimages_t* images = sevent->get_images ();
 
   oxmlstream oxml (cout);
   oxml << startt ("samples");
 
-  samplefile::samplefilelist_t::iterator i;
-  for (i = list.begin (); i != list.end (); ++i)
+  sessionevent::profileimages_t::iterator i;
+  for (i = images->begin (); i != images->end (); ++i)
     oxml << (*i);
 
   oxml << endt << endxml;
-
-  samplefile::free_samplefiles (list);
+  
+  // delete sevent; -- don't do this: it takes too much time!
   return EXIT_SUCCESS;
 }
+
 
 static int
 sessions (opinfo& info, int argc, char* argv[])
@@ -454,38 +431,38 @@ sessions (opinfo& info, int argc, char* argv[])
   sessions = session::get_sessions (info);
 
   /* This seems goofy, but this is best for the UI.
-     Arrange the sessions by the event that they collected.
-     If multiple counters for a given session collected the same event,
-     only report it once (ignoring the rest). */
+     Arrange the sessions by the event that they collected. */
 
-  eventlist_t events (event_sorter (info.get_cpu_type ()));
+  typedef map<string, list<sessionevent*>*, greater<string> > eventlist_t;
+  eventlist_t eventlist;
 
-  // Iterate through all counters and sessions, checking if the event
-  // has been seen.
-  session::sessionlist_t::iterator i;
-  for (int ctr = 0; ctr < info.get_nr_counters (); ++ctr)
+  session::sessionlist_t::iterator sit = sessions.begin ();
+  session::sessionlist_t::iterator const send = sessions.end ();
+  for (; sit != send; ++sit)
     {
-      for (i = sessions.begin (); i != sessions.end (); ++i)
+      session* s = *sit;
+      session::seventlist_t events = s->get_events ();
+
+      session::seventlist_t::iterator sit = events.begin ();
+      for (; sit != events.end (); ++sit)
 	{
-	  session* s = *i;
-	  int event = s->get_event (ctr);
-	  if (event != -1)
+	  sessionevent* sevent = *sit;
+	  string event = sevent->get_name ();
+
+	  if (eventlist.find (event) == eventlist.end ())
 	    {
-	      if (events.find (event) == events.end ())
-		{
-		  // New event -- add this session to the list and add
-                  // the list and event to the list of known events.
-		  list<data_t>* lst = new list<data_t> ();
-		  lst->push_back (data_t (ctr, s));
-		  events.insert (pair<int, list<data_t>*> (event, lst));
-		}
-	      else
-		{
-		  // Known event -- add this session to the list of
-                  // sessions for this event
-		  list<data_t>* lst = events[event];
-		  lst->push_back (data_t (ctr, s));
-		}
+	      // New event -- add this session to the list and add
+	      // the list and event to the list of known events.
+	      list<sessionevent*>* lst = new list<sessionevent*> ();
+	      lst->push_back (sevent);
+	      eventlist.insert (pair<string, list<sessionevent*>*> (event, lst));
+	    }
+	  else
+	    {
+	      // Known event -- add this session to the list of
+	      // sessions for this event
+	      list<sessionevent*>* lst = eventlist[event];
+	      lst->push_back (sevent);
 	    }
 	}
     }
@@ -493,35 +470,24 @@ sessions (opinfo& info, int argc, char* argv[])
   // Done compiling the list of events. Output information.
   oxmlstream oxml (cout);
   oxml << startt ("sessions");
-
-  if (!events.empty ())
+  
+  if (!eventlist.empty ())
     {
-      eventlist_t::iterator j;
-      for (j = events.begin (); j != events.end (); ++j)
+      eventlist_t::iterator elit;
+      for (elit = eventlist.begin (); elit != eventlist.end (); ++elit)
 	{
-	  int event = (*j).first;
+	  string event = (*elit).first;
+	  list<sessionevent*>* lst = (*elit).second;
 
-	  list<data_t>* lst = (*j).second;
-	  lst->sort (session_sorter ());
-	  struct op_event* e = op_find_event (info.get_cpu_type (), event);
-	  if (e != NULL)
-	    {
-	      oxml << startt ("event") << attrt ("name", e->name);
-	      for (list<data_t>::iterator li = lst->begin ();
-		   li != lst->end (); ++li)
-		{
-		  data_t data = (*li);
-		  int ctr = data.first;
-		  session* session = data.second;
-		  oxml << session_counter (session, ctr);
-		}
-	      oxml << endt;
-	    }
+	  lst->sort (sevent_sorter ());
+	  oxml << startt ("event") << attrt ("name", event);
+	  copy (lst->begin (), lst->end (), ostream_iterator<sessionevent*> (oxml, ""));
+	  oxml << endt;
 	  delete lst;
 	}
     }
 
   oxml << endt << endxml;
+
   return EXIT_SUCCESS;
 }
-

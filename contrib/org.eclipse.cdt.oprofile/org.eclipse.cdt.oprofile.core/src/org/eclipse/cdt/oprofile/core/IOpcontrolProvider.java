@@ -6,8 +6,6 @@
 */
 package org.eclipse.cdt.oprofile.core;
 
-import java.util.ArrayList;
-
 /**
  * Interface for oprofile core to utilize opcontrol program. Platform plugins should define/register
  * an OpcontrolProvider for the core to use.
@@ -41,10 +39,11 @@ public interface IOpcontrolProvider {
 	
 	/**
 	 * Setup oprofiled collection parameters
-	 * @param args	a list of command-line arguments for opcontrol
+	 * @param options a list of command-line arguments for opcontrol
+	 * @param events list of events to collect
 	 * @throws OpcontrolException
 	 */
-	public void setupDaemon(ArrayList args) throws OpcontrolException;
+	public void setupDaemon(OprofileDaemonOptions options, OprofileDaemonEvent[] events) throws OpcontrolException;
 	
 	/**
 	 * Start data collection by oprofiled (will start oprofiled if necessary)

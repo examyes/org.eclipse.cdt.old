@@ -12,7 +12,6 @@ import org.eclipse.cdt.oprofile.core.ISampleContainer;
 import org.eclipse.cdt.oprofile.ui.internal.IProfileElement;
 import org.eclipse.swt.graphics.Image;
 
-
 /**
  * @author keiths
  */

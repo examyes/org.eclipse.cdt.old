@@ -34,12 +34,12 @@ public interface IOpxmlProvider {
 	
 	/**
 	 * Returns an <code>IRunnableWithProgress</code> that fetches the debug info for the
-	 * given <code>SampleFile</code>
-	 * @param sfile the <code>SampleFile</code> for which debug info is desired
+	 * given <code>ProfileImage</code>
+	 * @param image the <code>ProfileImage</code> for which debug info is desired
 	 * @param infoList the <code>ArrayList</code> in which to return the debug info
 	 * @return <code>IRunnableWithProgressv that may be run by the caller
 	 */
-	public IRunnableWithProgress debugInfo(SampleFile sfile, ArrayList infoList);
+	public IRunnableWithProgress debugInfo(ProfileImage image, ArrayList infoList);
 	
 	/**
 	 * Returns an <code>IRunnableWithProgress</code> that checks the validity of the given

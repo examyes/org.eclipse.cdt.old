@@ -15,10 +15,11 @@ import java.util.ArrayList;
 import org.eclipse.cdt.oprofile.core.IOpcontrolProvider;
 import org.eclipse.cdt.oprofile.core.OpcontrolException;
 import org.eclipse.cdt.oprofile.core.OprofileCorePlugin;
+import org.eclipse.cdt.oprofile.core.OprofileDaemonEvent;
+import org.eclipse.cdt.oprofile.core.OprofileDaemonOptions;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-
 
 /**
  * A class which encapsulates running opcontrol.
@@ -33,6 +34,16 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 	
 	// Setup daemon collection arguments
 	private static final String _OPD_SETUP = "--setup"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE = "--separate="; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE_SEPARATOR = ","; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE_LIBRARY = "library"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE_KERNEL = "kernel"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE_THREAD = "thread"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE_CPU = "cpu"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_EVENT = "--event="; //$NON-NLS-1$
+	private static final String _OPD_SETUP_EVENT_SEPARATOR = ":"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_EVENT_TRUE = "1"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_EVENT_FALSE = "0"; //$NON-NLS-1$
 	
 	// Start the daemon process without starting data collection
 	private static final String _OPD_START_DAEMON = "--start-daemon"; //$NON-NLS-1$
@@ -106,7 +117,14 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 	 * @param args	list of parameters for daemon
 	 * @throws OpcontrolException
 	 */
-	public void setupDaemon(ArrayList args) throws OpcontrolException {
+	public void setupDaemon(OprofileDaemonOptions options, OprofileDaemonEvent[] events) throws OpcontrolException {
+		// Convert options & events to arguments for opcontrol
+		ArrayList args = new ArrayList();
+		args.add(_OPD_SETUP);
+		_optionsToArguments(args, options);
+		for (int i = 0; i < events.length; ++i) {
+			_eventToArguments(args, events[i]);
+		}
 		_runOpcontrol(args, true);
 	}
 	
@@ -199,5 +217,36 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 		// TODO: display error in unlikely event opcontrol not found
 		// (which could only happen in case of corrupt installation)
 		return null;
+	}	
+
+	// Convert the event into arguments for opcontrol
+	private void _eventToArguments(ArrayList args, OprofileDaemonEvent event) {
+		// Event spec: "EVENT:count:mask:profileKernel:profileUser"
+		String spec = new String(_OPD_SETUP_EVENT);
+		spec += event.getEvent().getText();
+		spec += _OPD_SETUP_EVENT_SEPARATOR;
+		spec += event.getResetCount();
+		spec += _OPD_SETUP_EVENT_SEPARATOR;
+		spec += event.getEvent().getUnitMask().getMaskValue();
+		spec += _OPD_SETUP_EVENT_SEPARATOR;
+		spec += (event.getProfileKernel() ? _OPD_SETUP_EVENT_TRUE : _OPD_SETUP_EVENT_FALSE);
+		spec += _OPD_SETUP_EVENT_SEPARATOR;
+		spec += (event.getProfileUser() ? _OPD_SETUP_EVENT_TRUE : _OPD_SETUP_EVENT_FALSE);
+		args.add(spec);
 	}
+	
+	// Convert the options into arguments for opcontrol
+	private void _optionsToArguments(ArrayList args, OprofileDaemonOptions options) {
+		String separate = new String(_OPD_SETUP_SEPARATE);
+		int mask = options.getSeparateProfilesMask();
+		if ((mask & OprofileDaemonOptions.SEPARATE_LIBRARY) != 0)
+			separate += _OPD_SETUP_SEPARATE_LIBRARY + _OPD_SETUP_SEPARATE_SEPARATOR;
+		if ((mask & OprofileDaemonOptions.SEPARATE_KERNEL) != 0)
+			separate += _OPD_SETUP_SEPARATE_KERNEL + _OPD_SETUP_SEPARATE_SEPARATOR;
+		if ((mask & OprofileDaemonOptions.SEPARATE_THREAD) != 0)
+			separate += _OPD_SETUP_SEPARATE_THREAD + _OPD_SETUP_SEPARATE_SEPARATOR;
+		if ((mask & OprofileDaemonOptions.SEPARATE_CPU) != 0)
+			separate += _OPD_SETUP_SEPARATE_CPU + _OPD_SETUP_SEPARATE_SEPARATOR;
+	}
+
 }
