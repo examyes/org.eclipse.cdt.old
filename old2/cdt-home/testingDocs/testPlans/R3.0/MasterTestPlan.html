@@ -1,0 +1,971 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>CDT 3.0 Master Test Plan</title>
+  <style type="text/css">
+
+.verify 	{ color: blue; font-weight: bold; }
+.indextop   { font-size: x-large; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold}
+.indexsub   { font-size: xx-small; font-family: Arial, Helvetica, sans-serif; color: #8080FF}
+.section    { font-size: 16pt; padding-left: 3pt; background: #0080C0; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsection { font-size: 12pt; padding-left: 3pt; background: #999999; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsubsection { font-size: 10pt; padding-left: 6pt; background: white; color: black; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.tb			{ font-size: 10pt; border-style: solid; border-width: 1px }
+
+  </style>
+</head>
+<body style="background-color: rgb(255, 255, 255);">
+<font face="arial" size="2">
+<table border="0" cellpadding="2" width="100%">
+  <tbody>
+    <tr>
+      <td align="left" width="72%"><font class="indextop">CDT 3.0
+Master Test Plan</font><br>
+&nbsp; <span
+ style="font-size: 7.5pt; font-family: Arial; color: rgb(128, 128, 255);">Organization
+of testing collaboration for CDT 3.0</span></td>
+      <td width="28%"><img alt=""
+ src="http://dev.eclipse.org/images/Idea.jpg" height="86" width="120"> </td>
+    </tr>
+  </tbody>
+</table>
+&nbsp;</font>
+<p class="subsection"><font face="arial" size="2">Change History</font></p>
+<font face="arial" size="2"><font face="Arial" size="2"> </font></font>
+<table border="1">
+  <tbody>
+    <tr>
+      <td><b>Date</b></td>
+      <td><b>Revision</b></td>
+      <td><b>Author</b></td>
+      <td><b>Description</b></td>
+    </tr>
+    <tr>
+      <td class="tb" align="left" valign="top">2005/02/08</td>
+      <td class="tb" align="left" valign="top">0.1.0</td>
+      <td class="tb" align="left" valign="top">Brent Nicolle</td>
+      <td class="tb" align="left" valign="top">Initial version for CDT
+3.0.</td>
+    </tr>
+    <tr>
+      <td class="tb">2005/02/10<br>
+      </td>
+      <td class="tb">0.2.0<br>
+      </td>
+      <td class="tb">Brent Nicolle<br>
+      </td>
+      <td class="tb">A rough draft.&nbsp; Awaiting a final Project
+Plan. </td>
+    </tr>
+  </tbody>
+</table>
+&nbsp;
+<div class="subsection"> Table of Contents
+</div>
+<a href="#1.0">1. Introduction</a><br>
+<a href="#2.0">2. Motivation and Objectives</a><br>
+<a href="#3.0">3. Target Test Items</a><br>
+<a href="#4.0">4. Test Strategy</a><br>
+<a href="#5.0">5. Quality Criteria</a><br>
+<a href="#6.0">6. Deliverables</a><br>
+<a href="#7.0">7. Resourcing</a><br>
+<a href="#8.0">8. Schedule</a><br>
+<a href="#9.0">9. Risks and Mitigations</a><br>
+<a href="#10.0">10. Processes and Procedures</a><br>
+<a href="#reqmts"><br>
+</a>
+<div class="section"><a name="1.0">1. Introduction</a>
+</div>
+<div class="subsection"> 1.1 Document Purpose
+</div>
+<p class="MsoBodyText">The purpose of the Master Test Plan is to gather
+all of
+the information necessary to plan and control the Open-Source Testing
+effort for the
+C/C++
+Development Tools (CDT) 3.0 project. It
+describes the approach to testing the
+software, and is the top-level plan generated and used by managers to
+direct
+the test effort.<br>
+</p>
+<p class="MsoBodyText">This <i>Test Plan </i>has the
+following objectives:</p>
+<ul>
+  <li><!--[if !supportLists]--><!--[endif]-->Identification of the
+motivations stated by the
+evaluation mission</li>
+  <li>Identification of the
+targets for tests, including new features and other non-feature testing
+areas.</li>
+  <li>Outlines the testing
+approach
+that will be
+used.&nbsp; Details are included in the test
+case documents.</li>
+  <li><!--[if !supportLists]--><!--[endif]-->Identifies the required
+resources, provides an
+estimate of the test efforts and lays out a schedule</li>
+  <li><!--[if !supportLists]--><!--[endif]-->Lists the deliverable
+elements
+of the test project </li>
+  <li>Outlines some testing-related processes<br>
+  </li>
+</ul>
+<div class="subsection"> 1.2 References
+</div>
+<p>See the CDT Project Plan, and probably the Eclipse Project Plan too.<br>
+</p>
+<p>See the CDT Development Plan (TBD) for deliverables that affect the
+testing schedule.</p>
+<p>For details about testing an individual component or aspect of CDT,
+see its corresponding Test Plan (TBD: list them here).<br>
+</p>
+<div class="subsection"> 1.3 Terminology
+</div>
+<p>TBD</p>
+<div class="section"> <a name="2.0">2. Motivation and Objectives</a>
+</div>
+<div class="subsection"> 2.1 Motivation for Open-Source Testing
+</div>
+<p>CDT is a component used in products ("Productized CDT") of several
+stakeholders ("Stakeholders").&nbsp; Stakeholders can choose to test
+the CDT component in an open-source manner ("Open-Source Testing"),
+and/or in an internal manner ("Internal Testing").&nbsp; Internal
+Testing is "an elephant in the room" that deserves acknowledgment and
+respect from this test plan.<br>
+</p>
+<p>This test plan necessarily excludes Integration testing of
+"Productized CDT"; each Stakeholder is responsible for integrating CDT
+into their own products.</p>
+<p>This test plan may also exclude aspects of testing deemed "business
+confidential" by one or more Stakeholders.&nbsp; For example, a
+Stakeholder may withhold evidence from the open-source community that
+they are testing the CDT on some new platform, until their Productized
+CDT offering is announced as available for the new platform.</p>
+<p>The benefits of Open-Source Testing allow you to:</p>
+<ul>
+  <li>leverage contributions of testing resources by collaborating
+with other
+contributing Stakeholders.<br>
+  </li>
+  <li>reduce product risk by detecting and fixing high-priority bugs
+early in the development process.&nbsp; The earlier such bugs are
+identified, the less risk that your Productized CDT will not need major
+revision to address them later to address them.<br>
+  </li>
+  <li>improve product quality by reducing low-priority bugs
+early.&nbsp; Low priority bugs do not typically get addressed in
+maintenance releases and late-stage private branches, but a great
+number of such bugs leaves your customers with the impression of poor
+product quality.&nbsp; The earlier such bugs are identified, the higher
+likelihood they will be addressed and the higher the quality of your
+Productized CDT.<br>
+  </li>
+  <li>reduce duplication of development effort caused by fixing many
+bugs in several private branches, or in private branches and the public
+branch.</li>
+  <li>reduce duplication of internal bug-tracking and open-source
+bug-tracking.&nbsp; Bugs found in your Productized CDT but resulting in
+a CDT change should have an open-source Bugzilla entry, in addition to
+your internal bug-tracking entry.&nbsp; Bugs found by someone else in
+CDT will be raised in open-source Bugzilla, but may represent a known
+problem with your Productized CDT, requiring separate tracking and
+verification in your bug-tracking system.<br>
+  </li>
+</ul>
+<br>
+<div class="subsection"> 2.2 Purpose<br>
+</div>
+The Stakeholders' purpose of testing CDT is to produce a high-quality
+CDT and from that, a high-quality Productized CDT.&nbsp; <br>
+<div class="subsection"> 2.3 Testing Summary<br>
+</div>
+New features should be tested before GA.<br>
+Some older features should also be tested.<br>
+<div class="section"> <a name="3.0">3. Target Test Items</a>
+</div>
+<br>
+<div class="subsection"> 3.1 Features and other components
+</div>
+The table below lists committed and proposed components of CDT
+requiring testing.&nbsp; See the Project Plan or Dev Plan for details
+on each component.&nbsp; Components are grouped into Themes where
+appropriate.<br>
+<br>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Test
+Component (or Theme)</span><br>
+      </td>
+      <td style="vertical-align: top;">Bugzilla ref<br>
+      </td>
+      <td style="vertical-align: top;">Test plan link<br>
+      </td>
+      <td style="vertical-align: top;">QE owner<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Compatibility
+from CDT 2.x:</span><br>
+      </td>
+      <td style="vertical-align: top;">TBD...<br>
+      </td>
+      <td style="vertical-align: top;">TBD...<br>
+      </td>
+      <td style="vertical-align: top;">TBD...<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Compatibility for Workspaces and
+Projects<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">API Source/Binary/Contract
+Compatibility for plugins<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Scalability
+to and Performance of large projects:</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Reduce indexing time and cost<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Reduce search time and cost
+(proposed)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Parser
+Correctness:</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">K&amp;R C Language Support<br>
+      </td>
+      <td style="vertical-align: top;"><a
+ href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929"><br>
+      </a></td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Parser/Scanner Environment
+Discovery<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Parser/Scanner language
+extensions (proposed)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">C/C++ Language Variants
+(proposed)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Abstract
+Syntax Tree/Data Object Model for C++:</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT AST/DOM creation (proposed)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">User
+Experience:</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Remote system (target) model
+definition<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Managed Build System<br>
+      </td>
+      <td style="vertical-align: top;"><a
+ href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a></td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Debugger Specialization for GDB
+embedded targets<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Debugger memory view synched
+with Platform memory view<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Launch configuration UI
+adjustment<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Template extension point for new
+project specialties (KDE/Win32/console/shared lib)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Better support for nested
+projects and linked resources<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Other
+items:</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Pervasive use of workspace
+variables<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Enhanced refactoring<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Source based hover help<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Java based C/C++ code formatter<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Improved ISV documentation<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Other
+testing items:</span><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Build Verification Testing
+(BVT), or Sanity Testing<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Unit Tests<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Regression Tests<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="subsection"> 3.2 Test Environments
+</div>
+<p>We need to identify:<br>
+A list of supported platforms<br>
+A list of supported JREs<br>
+A list of supported configurations, if applicable (eg. national
+language support in Japanese...)</p>
+<div class="section"> <a name="4.0">4. Test Strategy</a>
+</div>
+<p>Specific choice of test strategies are dealt with in the Component
+Test Plans, but here is a generic list.<br>
+</p>
+<div class="subsection">4.1 Use of builds<br>
+</div>
+Unless otherwise specified in the Component Test Plan, this strategy
+applies to all Component testing.<br>
+<br>
+Testing is only performed on identifiable CDT builds (not the latest
+from HEAD).&nbsp; This facilitates reporting and reproducing of
+problems.<br>
+<br>
+Typically, installations should be from clean installs of the latest
+milestone build Eclipse 3.1, followed by the CDT.<br>
+<br>
+The builds under test should have undergone Sanity testing or BVT, but
+if a particular component is not blocked by BVT failure this is not
+strictly necessary.
+<div class="subsection"> 4.2 Black-box testing<br>
+</div>
+<p>Most testing should be done from an end-user perspective,
+without access or knowledge of the source-code.&nbsp; Typically that
+excludes testing from a PDE workspace.&nbsp; Typically that also means,
+only the Eclipse and CDT run-times (not the SDKs) are installed.<br>
+</p>
+<div class="subsection"> 4.3 Subjective testing<br>
+</div>
+<p>The "ICED T" model is a useful strategy for reporting and tracking
+subjective software quality.<br>
+For more details, see the white paper, <a
+ onmousedown="return clk(this,'res',2)"
+ href="http://www.stickyminds.com/se/S2135.asp">Using The "<b>ICED</b> <b>T</b>"
+Model to Test Subjective Software Qualities</a>, by Andy Roth.<br>
+</p>
+<div class="subsection"> 4.4 Optimize coverage of platform
+configurations<br>
+</div>
+Given 60 test-cases and 8 platform configurations, that's 480
+executions!&nbsp; It's far more efficient to identify a much smaller
+subset of test cases to run on all platform configurations, and to
+distribute other test-cases across all platform configurations.<br>
+For example, run test-cases 1 and 2 (high-priority test-cases) and
+test-cases 3 and 4 (lower priority, but very platform-dependent in
+nature) across all eight platform configurations, 5-12 on config 1,
+13-20 on config 2, ... and 53-60 on config 8.&nbsp; Or better yet,
+randomize the distribution prior to executing the suite.&nbsp; That
+produces a more reasonable total of 88 executions (82% savings), with
+considerable platform configuration coverage and negligible risk to
+quality.<br>
+<div class="section"><a name="5.0">5. Quality Criteria</a></div>
+<p>Some suggested quality criteria.<br>
+</p>
+<div class="subsection">5.1 Sanity Criteria<br>
+</div>
+CDT starts up on the prescribed Eclipse platform.<br>
+You can create new projects and artifacts, and run basic C/C++
+edit/compile/debug workflows.<br>
+All JUnit failures have defects associated with them.<br>
+<br>
+<div class="subsection">5.1 Milestone Criteria<br>
+</div>
+<p>(All Sanity Criteria, plus...)<br>
+Open bug count: <br>
+JUnit coverage: more than previous milestone.<br>
+Performance metrics (faster than previous milestone):<br>
+</p>
+<ul>
+  <li>how long does it take to import some arbitrarily big project</li>
+  <li>how long does it take to find some declaration, eg. printf,&nbsp;
+for a particular code snippet (eg. which includes stdio.h, iostream,
+and windows.h)</li>
+</ul>
+<p></p>
+<p>A list of "pain points"<br>
+A list of new features<br>
+</p>
+<div class="section"> <a name="6.0">6. Deliverables</a>
+</div>
+<p>This section outlines how to report results.<br>
+</p>
+<div class="subsection"> 6.1 Sanity results<br>
+</div>
+<p>A quick email to cdt-test-dev@eclipse.org is appropriate to indicate
+testing is complete, with a recommendation for (or warning against)
+adopting that build.<br>
+</p>
+<div class="subsection"> 6.2 Milestone test results<br>
+</div>
+<p>An email to cdt-dev@eclipse.org at the start to remind against
+checking in while milestone testing is underway.<br>
+An email to cdt-dev@eclipse.org to state testing is complete, and that
+check-ins can continue.<br>
+An email to cdt-dev and cdt-test-dev to state milestone
+conclusions.&nbsp; <br>
+</p>
+<div class="subsection"> 6.3 Component test results<br>
+</div>
+TBD.&nbsp; Is there reason to standardize test reports?&nbsp; HTML
+would be nice, but not necessarily necessary.<br>
+<div class="section"> <a name="7.0">7. Resourcing</a>
+</div>
+<br>
+<div class="subsection">7.1 Stakeholders
+</div>
+IBM Rational Software<br>
+QNX<br>
+who else? step right up, step right up....<br>
+<div class="subsection">7.2 Staffing</div>
+The number of people from each Stakeholder, and their names.<br>
+Good question.<br>
+<span style="text-decoration: underline;"><span
+ style="font-weight: bold;"></span></span>
+<div class="subsection">7.4 Tooling
+</div>
+<p>Test automation tools are used where available and where
+appropriate. Test automation is recommendable for regression tests and
+frequently run tests.&nbsp; See the Component Test Plans for
+specific details.</p>
+<p>Since commercial automation tools are expensive and some
+contributors
+have their favourites, no standardization upon particular commercial
+tools between all test
+contributors is expected.&nbsp; However, contributors are generally
+amenable to sharing of
+commercial
+automation scripts between contributors.&nbsp; This may include the
+version-control of automation scripts.&nbsp; Non-commercial automation
+tools continue to be evaluated.</p>
+<p>JUnit tests are used for developer-level unit-testing and regression
+tests.&nbsp; The JUnit tests are largely written by developers.<br>
+</p>
+<div class="section"> <a name="8.0">8. Schedule</a>
+</div>
+<div class="subsection"> 8.1 Documentation Schedule<br>
+</div>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">CDT 3.0
+Deliverable<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Plan Date<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Dependencies<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Project Plan<br>
+      </td>
+      <td style="vertical-align: top;">2005/02/10 (draft)<br>
+      </td>
+      <td style="vertical-align: top;">none<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Master Test Plan<br>
+      </td>
+      <td style="vertical-align: top;">2005/02/16<br>
+      </td>
+      <td style="vertical-align: top;">Project Plan<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">&lt;Feature&gt; Requirements<br>
+      </td>
+      <td style="vertical-align: top;">may be contained in
+&lt;Feature&gt; Test Plan<br>
+      </td>
+      <td style="vertical-align: top;">Project Plan<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">&lt;Feature&gt; Test Plan<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">Master Test Plan<br>
+Feature Test Plan<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">&lt;Feature&gt; Test Report<br>
+      </td>
+      <td style="vertical-align: top;">GA<br>
+      </td>
+      <td style="vertical-align: top;">Feature Test Plan<br>
+Feature<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><br>
+<br>
+</p>
+<div class="subsection"> 8.2 Milestone and Release Candidates Test
+Criteria<br>
+</div>
+A brief summary of Eclipse milestones is summarized here:<br>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Expected
+Eclipse milestone declaration date, and content<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Corresponding
+CDT milestone candidate (MC), first build date<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Eclipse 3.1 M5 (Fri 2005/02/18)</td>
+      <td style="vertical-align: top;">CDT 3.0 MC5 (Mon 2005/03/14)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Eclipse 3.1 M6 (Fri 2005/04/01),<br>
+API complete and API frozen<br>
+      </td>
+      <td style="vertical-align: top;">CDT 3.0 MC6 (Mon 2005/04/11)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Eclipse 3.1 M7 (Fri 2005/05/13),<br>
+feature complete,<br>
+development freeze and lock-down<br>
+      </td>
+      <td style="vertical-align: top;">CDT 3.0 MC7 (Mon 2005/05/30)</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Eclipse 3.1 GA (Fri 2005/07/01)</td>
+      <td style="vertical-align: top;">CDT 3.0 RC3 (Mon 2005/07/18)</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The CDT Milestones criteria are summarized here:<br>
+<table style="width: 100%; text-align: left;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">Build
+Milestone Candidate (MC)<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Content<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">CDT Testing
+Criteria<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 MC5 (from Mon 2005/03/14)<br>
+      </td>
+      <td style="vertical-align: top;">Eclipse 3.1 M5 integration<br>
+stable build reflecting progress<br>
+      </td>
+      <td style="vertical-align: top;">stable build reflecting progress<br>
+integrates with Eclipse 3.1 M5<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 MC6 (from Mon 2005/04/11)<br>
+      </td>
+      <td style="vertical-align: top;">Eclipse 3.1 M6 integration,<br>
+APIs are documented<br>
+      </td>
+      <td style="vertical-align: top;">stable build reflecting progress<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 MC7 (from Mon 2005/05/30)<br>
+      </td>
+      <td style="vertical-align: top;">Eclipse 3.1 M7 integration<br>
+Feature complete<br>
+APIs frozen<br>
+Development lock-down (bug-fixes only)<br>
+      </td>
+      <td style="vertical-align: top;">stable build<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 M7 declared (expect Fri
+2005/06/04)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">External (beta) testing begins<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 RC1 (from Mon 2005/06/13)<br>
+      </td>
+      <td style="vertical-align: top;">features complete<br>
+      </td>
+      <td style="vertical-align: top;">features are complete<br>
+All major bugs verified<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 RC2 (from Mon 2005/06/27)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">Zero major bugs<br>
+All major bugs verified<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 RC3 (from Mon 2005/07/18)<br>
+      </td>
+      <td style="vertical-align: top;">Eclipse 3.1 GA integration<br>
+      </td>
+      <td style="vertical-align: top;">Testing reports due<br>
+Zero major bugs<br>
+All major bugs verified<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">CDT 3.0 GA declared (expect Fri
+2005/07/22)<br>
+      </td>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">All major bugs verified<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="section"> <a name="9.0">9. Risks and Mitigations</a>
+</div>
+<p>This section lists any project-wide risks to Open-Source Testing, if
+applicable.&nbsp; They are followed by various mitigating options:<br>
+</p>
+<p>"X delivered a feature F at the last minute that requires testing."<br>
+</p>
+<ul>
+  <li>Reject or repeal F from the stable stream, particularly if it was
+late and unplanned.<br>
+  </li>
+  <li>Branch the stable stream and allow F into the unstable stream.</li>
+  <li>Request that X test the feature.<br>
+  </li>
+  <li>Delay the release until F is tested</li>
+</ul>
+"X promises to test something, F, upon which my Productized CDT
+depends.&nbsp; How do I know they will do a good job?"<br>
+<ul>
+  <li>Make sure that X knows you are a Stakeholder in F.</li>
+  <li>Review X's test plan and results.</li>
+  <li>If necessary, add testing resources to F.<br>
+  </li>
+  <li>Spot-check X's work in testing F.</li>
+</ul>
+"X promised to test something, F, upon which I depend, then reneged."
+<ul>
+  <li>Make sure that X knows you are a Stakeholder in F.</li>
+  <li>Commit some testing resources to F.</li>
+  <li>Review X's test plan and monitor X's progress.<br>
+  </li>
+  <li>If all else fails, complete the testing yourself.&nbsp; Delay the
+release of CDT or of
+Productized CDT until the testing is complete.&nbsp; Lower X's status
+as a Stakeholder.</li>
+</ul>
+<div class="section"><a name="10.0">10. Processes and Procedures</a></div>
+<br>
+<div class="subsection"> 10.1 Bugzilla<br>
+</div>
+Bugzilla bugs should generally be verified by the submitter.<br>
+In some cases, the submitter was also the implementer and should
+request an alternate person to verify.<br>
+In some cases, the submitter is not available and a Stakeholder
+designates an alternate person to verify.<br>
+Bugzilla bugs should be closed once the release is released.<br>
+<div class="subsection"> 10.2 Version control of test plan documents<br>
+</div>
+Let's put them in CVS.<br>
+<div class="subsection"> 10.3 Build Verification Testing (BVT), or
+Sanity Testing<br>
+</div>
+See the Sanity Test Plan for an actual set of tests.<br>
+Sanity testing needs to be scheduled.&nbsp; See the Sanity Test Plan.<br>
+We need to rotate the responsibility of performing BVTs.<br>
+We need to decide when and how often they are necessary or useful.<br>
+The Sanity Test report should also report on any recent JUnit failures.<br>
+<br>
+<div class="subsection"> 10.4 Suggested Feature Testing Process<br>
+</div>
+1. Produce a test plan, containing:<br>
+<ul>
+  <li>Purpose: what requirements you want to test<br>
+  </li>
+  <li>Strategy: how you're going to test it (eg. Blackbox), how much
+coverage, on what platforms, etc.<br>
+  </li>
+  <li>Summary: how many test-cases will need to be written and
+executed, and their difficulty level.<br>
+  </li>
+  <li>Effort Estimation: how long implementation and execution is going
+to take.<br>
+  </li>
+</ul>
+2. Review it and approve it<br>
+3. Implementation: Write the test-cases as necessary.<br>
+4. Execution: Execute the test-cases, monitoring your progress.&nbsp;
+Raise defects as necessary.<br>
+5. Verify defects as they are resolved.&nbsp; Re-run previously failed
+or blocked test-cases.<br>
+6. Report the completion rate, failure rate, list defects and "pain
+points" to Stakeholder(s)<br>
+7. Repeat execution test cycle (4,5,6) as necessary.<br>
+<br>
+</body>
+</html>
