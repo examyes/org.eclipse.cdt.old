@@ -1,0 +1,105 @@
+/////////////////////////////////////////////////////////////////////////
+//                     IBM Confidential
+//  xxxx-xxx (C) Copyright IBM Corp. 1995, 2001 All rights reserved.
+//             OCO Source Materials-Property of IBM.
+//
+// The source code for this program is not published or otherwise
+// divested of its trade secrets, irrespective of what has been
+// deposited with the U.S. Copyright Office.
+//
+// %W%
+// Version %I% (last modified %G% %U%)   (based on Jde 12/29/98 1.15)
+///////////////////////////////////////////////////////////////////////
+
+package com.ibm.debug.gdbPicl.commands;
+import com.ibm.debug.gdbPicl.*;
+import com.ibm.debug.gdbPicl.objects.*;
+import com.ibm.debug.gdbPicl.objects.Part;
+import com.ibm.debug.gdbPicl.objects.View;
+
+import java.io.*;
+import com.ibm.debug.epdc.*;
+
+/**
+ * Processes set part request
+ */
+public class CmdPartSet extends Command
+{
+   public CmdPartSet(DebugSession debugSession, EReqPartSet req)
+   {
+      super(debugSession);
+      _req = req;
+   }
+
+   /**
+    * Sets the source file to the given file name, if it exists
+    */
+   public boolean execute(EPDC_EngineSession EPDCSession)
+   {
+     _rep = new ERepPartSet();
+     
+     int partID       = _req.partID();
+     int viewID       = _req.viewID();
+     int srcFileIndex = _req.srcFileIndex();
+
+     ModuleManager classManager = _debugSession.getModuleManager();
+
+     String srcFileName = null;
+     
+     try
+     {
+        srcFileName = _req.partFileName();
+        
+        Part part = classManager.getPart(partID);
+ 
+        if (part != null)
+        {
+           View view = part.getView(viewID);
+ 
+           if (view != null)
+           {
+              // Remember these in case the verify fails.
+              boolean viewVerify = view.isViewVerify();
+              boolean viewVerifyAttemptedFE = view.isViewVerifyAttemptedFE();
+              boolean viewVerifyLocal = view.isViewVerifyLocal();
+
+              // Reset some flags
+              view.setViewVerify(false);
+              view.setViewVerifyAttemptedFE(false);
+              view.setViewVerifyLocal(false);
+
+              boolean verified = view.verifyView(srcFileName);
+
+              // int fileIndex        = srcFileName.lastIndexOf(_fileSeparator);
+              // String pathString    = srcFileName.substring(0, fileIndex+1);
+
+              // Set the last info for the last CmdPartSet we processed.
+              // (Used by CmdViewSearchPath)
+              if (!verified)
+              {
+                 // Reset back to known state since filename isn't valid.
+                 view.setViewVerify(viewVerify);
+                 view.setViewVerifyAttemptedFE(viewVerifyAttemptedFE);
+                 view.setViewVerifyLocal(viewVerifyLocal);
+                 _rep.setMessage(_debugSession.getResourceString("FILE_NOT_FOUND_MSG")+srcFileName);
+                 _rep.setReturnCode(EPDC.ExecRc_FileNotFound);
+                 _debugSession.setLastPartSetFailed(true, srcFileName);
+              }
+              else
+              {
+                 _debugSession.setLastPartSetFailed(false, "");
+              }
+           }
+        }
+     } 
+     catch (IOException ioe)
+     {
+       Gdb.handleException(ioe);
+     }
+  
+     return false;
+   }
+
+   // Data fields
+   private EReqPartSet _req;
+}

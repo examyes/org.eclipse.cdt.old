@@ -1,0 +1,64 @@
+/////////////////////////////////////////////////////////////////////////
+//                     IBM Confidential
+//  xxxx-xxx (C) Copyright IBM Corp. 1995, 2001 All rights reserved.
+//             OCO Source Materials-Property of IBM.
+//
+// The source code for this program is not published or otherwise
+// divested of its trade secrets, irrespective of what has been
+// deposited with the U.S. Copyright Office.
+//
+// %W%
+// Version %I% (last modified %G% %U%)   (based on Jde 3/9/01)
+/////////////////////////////////////////////////////////////////////////
+
+options 
+{
+  STATIC=false;
+}
+
+PARSER_BEGIN(ArgumentsParser)
+
+package com.ibm.debug.gdbPicl.parser;
+
+import java.util.*;
+import java.io.*;
+
+public class ArgumentsParser 
+{
+  public static void main(String args[])
+  {
+      ArgumentsParser a = new ArgumentsParser(System.in);
+      
+      Token t;
+      do
+      {
+         t = a.getNextToken();
+         if (t.kind != EOF)
+            { System.out.print("\"" + t + "\""); System.out.println(t.kind); }
+      } while (t.kind != EOF);
+  }
+}
+
+PARSER_END(ArgumentsParser)
+
+SKIP :
+{
+   " " | "\t" | "\n" | "\r"
+}
+
+TOKEN :
+{
+  <QOUTED_STRING :
+	"\""
+	(   (~["\"","\\","\n","\r"])
+	  | ("\\"
+	      ( ["n","t","b","r","f","\\","'","\""]
+	      | ["0"-"7"] ( ["0"-"7"] )?
+	      | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+	      )
+	    )
+	)*
+	"\""
+   > |
+   <STRING : (~[" "])*>
+}
