@@ -106,18 +106,19 @@ public class DetailsViewPart extends ObjectsViewPart
 
     protected void updateSelectionStatus(CppProjectEvent event)
     {
-	if (event.getType() == CppProjectEvent.COMMAND)
-	    {
-		if (event.getStatus() == CppProjectEvent.DONE)
-		    {
+     	if (event.getType() == CppProjectEvent.COMMAND)
+      {
+     		if (event.getStatus() == CppProjectEvent.DONE)
+     	    {
 			_viewer.enableSelection(true);
 			_viewer.resetInput();
-		    }
-		else if (event.getStatus() == CppProjectEvent.START)
-		    {
-			_viewer.enableSelection(false);			
-		    }
 	    }
+	    else if (event.getStatus() == CppProjectEvent.START)
+	    {
+	     _viewer.enableSelection(false);			
+	    }
+       }
+	    
     }
 
 }

@@ -157,7 +157,7 @@ public class FileSystemMiner extends Miner
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
 	  //DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
-	  //					  getLocalizedString("model.Query"), "C_QUERY", false);
+	  //u					  getLocalizedString("model.Query"), "C_QUERY", false);
 	  //DataElement refresh   = createCommandDescriptor(_fsystemObjectDescriptor, 
 	  //						  getLocalizedString("model.Refresh"), "C_REFRESH");
 	  DataElement fileQuery  = createCommandDescriptor(_fileDescriptor,    

@@ -302,6 +302,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  {	
 	    _dummyShell = win.getShell();
 	  }
+
 	else
 	  {
 	    _dummyShell = new Shell();	
