@@ -27,14 +27,15 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 {
     private IProject _input = null;
     private DataElement _specificInput = null;
-	protected ArrayList _browseHistory;
-	protected int _browsePosition;
-	
-	private HomeAction _homeAction = null;
-	private BackAction _backAction = null;
-	private ForwardAction _forwardAction = null;
-	private DrillAction _drillAction = null;
-
+    protected ArrayList _browseHistory;
+    protected int _browsePosition;
+    
+    private HomeAction _homeAction = null;
+    private BackAction _backAction = null;
+    private ForwardAction _forwardAction = null;
+    private DrillAction _drillAction = null;
+    private SortAction  _sortAction  = null;
+    
     public ProjectViewPart()
     {
 		super();
@@ -145,9 +146,9 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	  } 	
   }
     
-	 public abstract DataElement doSpecificInput(DataElement projectParseInformation);
-
- public void projectChanged(CppProjectEvent event)
+    public abstract DataElement doSpecificInput(DataElement projectParseInformation);
+    
+    public void projectChanged(CppProjectEvent event)
     {
 	int type = event.getType();
 	IProject project = event.getProject();
@@ -298,6 +299,43 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  		}
  	}
  }
+
+ class SortAction extends Action
+ {
+     private boolean _isSorting = false;
+     public SortAction(String label, ImageDescriptor des)
+     {
+	 super(label, des);
+     }
+     
+     public void checkEnabledState()
+     {
+	 boolean enabled = _viewer != null && _viewer.getInput() != null;
+	 setEnabled(enabled);
+     }
+
+     public boolean isSorting()
+     {
+	 return _isSorting;
+     }
+     
+     public void run()
+     {
+	 if (!_isSorting)
+	     {
+		 _isSorting = true;
+		 _viewer.setSorter(DE.P_VALUE);
+	     }
+	 else
+	     {
+		 _isSorting = false;
+		 _viewer.setSorter("null");
+	     }
+
+	 IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+	 toolBarManager.removeAll();
+     }
+ }
  
  class DrillAction extends BrowseAction
  {
@@ -337,34 +375,36 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  
   public void updateActionStates()
   {
-   if (_homeAction == null)
-    fillLocalToolBar();
- 	_homeAction.checkEnabledState();
- 	_forwardAction.checkEnabledState();
- 	_backAction.checkEnabledState();
- 	_drillAction.checkEnabledState(); 	
+      if (_homeAction == null)
+	  fillLocalToolBar();
+      _homeAction.checkEnabledState();
+      _forwardAction.checkEnabledState();
+      _backAction.checkEnabledState();
+      _drillAction.checkEnabledState(); 	
+      _sortAction.checkEnabledState(); 	
   }
  
   public void fillLocalToolBar()
     {
-		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-		
-		if (_homeAction == null)
-		{
-		_homeAction = new HomeAction("Home", _plugin.getImageDescriptor("home"));
-		toolBarManager.add(_homeAction);
+	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+	
+	if (_homeAction == null)
+	    {
+		_sortAction = new SortAction("Sort", _plugin.getImageDescriptor("sort"));	 
+		_homeAction = new HomeAction("Home", _plugin.getImageDescriptor("home"));		
 		_backAction = new BackAction("Back", _plugin.getImageDescriptor("back"));
-		toolBarManager.add(_backAction);
-		
 		_forwardAction = new ForwardAction("Forward", _plugin.getImageDescriptor("forward"));
-    	toolBarManager.add(_forwardAction);
-				
 		_drillAction = new DrillAction("Drill Down Into", _plugin.getImageDescriptor("drill"));	 
-    	toolBarManager.add(_drillAction); 
-		}
-		  	
-    	updateActionStates();
-    	    	
+	    }
+	
+	_sortAction.setChecked(_sortAction.isSorting());
+	toolBarManager.add(_sortAction); 
+	toolBarManager.add(_homeAction);
+	toolBarManager.add(_backAction);
+	toolBarManager.add(_forwardAction);
+	toolBarManager.add(_drillAction); 
+	
+    	updateActionStates();    	    	
     }
    
 }
