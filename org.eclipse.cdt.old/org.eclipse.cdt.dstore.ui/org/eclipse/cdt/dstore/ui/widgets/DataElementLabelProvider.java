@@ -258,6 +258,10 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 				iconPath.append("com.ibm.dstore.core");
 			    }
 		    }
+		else
+		    {
+			iconPath.append("com.ibm.dstore.ui");
+		    }
             }
 
 	iconPath.append(File.separator);	
