@@ -90,6 +90,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  // open closed project
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
 
+			  // open descriptor for FS object
+			  oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), 
+								       "C_OPEN", 4);
 			  // open opened project - recursive query
 			  dataStore.command(oDescriptor, projectMinerProject);
 		      }

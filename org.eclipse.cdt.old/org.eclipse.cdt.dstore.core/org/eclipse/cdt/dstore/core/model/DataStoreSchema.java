@@ -114,7 +114,7 @@ public class DataStoreSchema
 	_dataStore.createReference(containerObjectD, containsD, containsD);
 	
 	// file objects
-	_dataStore.createReference(hostD, containsD, containsD);	
+	_dataStore.createReference(containerObjectD, hostD, abstracts, abstractedBy);	
 	
 	
         DataElement deviceD  = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.device"), 
@@ -135,6 +135,7 @@ public class DataStoreSchema
 	
 	_dataStore.createReference(fileD,    fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, dirD, abstracts, abstractedBy);
+	_dataStore.createReference(fsObject, deviceD, abstracts, abstractedBy);
         _dataStore.createReference(fsObject, fileD,    containsD);
         _dataStore.createReference(fsObject, dirD,     containsD);
 	_dataStore.createReference(fsObject, fsObject, containsD);

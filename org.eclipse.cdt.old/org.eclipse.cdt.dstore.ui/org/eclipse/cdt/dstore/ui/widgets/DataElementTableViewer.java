@@ -740,7 +740,7 @@ public class DataElementTableViewer extends TableViewer
 		DataElement type = _selected.getDescriptor();
 		if (type != null && _isContainable)
 		    {
-			if (type.isOfType("Container Object"))
+			if (type.isOfType("Container Object", true))
 			    {
 				_selected.expandChildren();
 				_parent.setInput(_selected);

@@ -254,6 +254,8 @@ public class FileSystemMiner extends Miner
 
      DataElement status  = getCommandStatus(theElement);
      DataElement subject = getCommandArgument(theElement, 0);
+
+     _dataStore.trace(name + " on " + subject.getName());
      if (name.equals("C_QUERY"))
        {
 	  if (subject != null)
@@ -794,7 +796,7 @@ public class FileSystemMiner extends Miner
       {
 	  theElement = theElement.dereference();
 	  if (theElement.getDescriptor() == null || 
-	      theElement.getDescriptor().isOfType(_fsystemObjectDescriptor))
+	      theElement.getDescriptor().isOfType(_fsystemObjectDescriptor, true))
 	      {
 	      
 		  // DKM - this prevents refresh when we create projects 

@@ -42,7 +42,8 @@ public final class DataElement implements Serializable, IDataElement
 
 
     // convenience
-    private DataElement         _abstracts = null;
+    private DataElement         _abstractedby = null;
+    private DataElement         _containerDescriptor = null;
 
     /**
      * Creates a new <code>DataElement</code> without initializing it.
@@ -831,6 +832,18 @@ public final class DataElement implements Serializable, IDataElement
     /**
      * Tests if this element is of the specified type. 
      *
+     * @param typeStr a string representing the type descriptor to compare with 
+     * @return whether the element is of the specified type
+     */       
+    public boolean isOfType(String typeStr, boolean isDescriptor)
+    {
+	DataElement typeDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, typeStr, 1);
+	return isOfType(typeDescriptor, isDescriptor);
+    }
+    
+    /**
+     * Tests if this element is of the specified type. 
+     *
      * @param type the type descriptor to compare with 
      * @return whether the element is of the specified type
      */       
@@ -861,14 +874,18 @@ public final class DataElement implements Serializable, IDataElement
 		descriptor = getDescriptor();
 	    }
 	
+	if (descriptor == type)
+	    {
+		return true;
+	    }
+
 	if (descriptor != null && !descriptor.isDeleted())
 	    {
 		String typeType = type.getType();
 		String typeName = type.getName();
 		if (typeType.equals(DE.T_OBJECT_DESCRIPTOR))
 		    {
-			if ((descriptor == type) || 
-			    descriptor.getName().equals(typeName) ||
+			if (descriptor.getName().equals(typeName) ||
 			    (typeName.equals("all")))
 			    {
 				result = true;
@@ -876,24 +893,27 @@ public final class DataElement implements Serializable, IDataElement
 			    }
 		    }
 		
-		DataElement relationship = getAbstractsRelationship();
+		DataElement relationship = getAbstractedByRelationship();
 		ArrayList abstracted = null;
 		
 		if (relationship != null)
 		    {
-			abstracted = type.getAssociated(relationship);
+			abstracted = descriptor.getAssociated(relationship);
 		    }
 		else
 		    {
-			abstracted = type.getAssociated("abstracts");
+			abstracted = descriptor.getAssociated("abstracted by");
 		    }
 
 		for (int i = 0; (i < abstracted.size()) && !result; i++)
 		    {
-			DataElement subDescriptor = (DataElement)abstracted.get(i);
-			result = isOfType(subDescriptor, true);
+			DataElement superDescriptor = (DataElement)abstracted.get(i);
+
+			result = superDescriptor.isOfType(type, true);
 		    }
 	    }
+
+	
 	
 	return result;
     }
@@ -1319,9 +1339,10 @@ public final class DataElement implements Serializable, IDataElement
     {    
 	if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
 	    {	  
-		if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
+		if (getDescriptor() != null && _descriptor.isOfType(getContainerDescriptor(), true))
 		    {
 			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
+			System.out.println(queryDescriptor);
 			if (queryDescriptor != null)
 			    {	
 				_dataStore.command(queryDescriptor, this);
@@ -1342,7 +1363,7 @@ public final class DataElement implements Serializable, IDataElement
 	DataElement status = null;
 	if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
 	    {
-	    	if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
+	    	if (getDescriptor() != null && _descriptor.isOfType(getContainerDescriptor(), true))
 		    {
 			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
 			if (queryDescriptor != null)
@@ -1404,7 +1425,7 @@ public final class DataElement implements Serializable, IDataElement
 	    
 	    String type = getType();
 	    
-	    if ((getDescriptor() != null) && !getDescriptor().isOfType("Filesystem Objects") &&
+	    if ((getDescriptor() != null) && !_descriptor.isOfType("Filesystem Objects", true) &&
 		(getParent() != _dataStore.getDescriptorRoot()))
 		{			  
 		    String localPath = _dataStore.mapToLocalPath(source);
@@ -1738,17 +1759,25 @@ public final class DataElement implements Serializable, IDataElement
 	_buffer = null;
     }
 
-    private DataElement getAbstractsRelationship()
+    private DataElement getAbstractedByRelationship()
     {
-	if (_abstracts == null)
+	if (_abstractedby == null)
 	    {
-		String abstractsStr = _dataStore.getLocalizedString("model.abstracts");
-		_abstracts = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, abstractsStr);
+		String abstractsStr = _dataStore.getLocalizedString("model.abstracted_by");
+		_abstractedby = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, abstractsStr);
 	    }
-	return _abstracts;
+	return _abstractedby;
     }
 
-
+    private DataElement getContainerDescriptor()
+    {
+	if (_containerDescriptor == null)
+	    {
+		_containerDescriptor = _dataStore.findDescriptor(DE.T_ABSTRACT_OBJECT_DESCRIPTOR, 
+								 _dataStore.getLocalizedString("model.Container_Object"));
+	    }
+	return _containerDescriptor;
+    }
       
 }
 

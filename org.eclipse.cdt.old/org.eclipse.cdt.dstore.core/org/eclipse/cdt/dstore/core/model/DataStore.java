@@ -2823,7 +2823,7 @@ public final class DataStore
 
 	_dataStoreSchema = new DataStoreSchema(this);
 	_traceFileHandle = new File(".dstoreTrace");
-	_tracingOn = false;
+	_tracingOn = true;
 	try
 	    {
 		_traceFile = new RandomAccessFile(_traceFileHandle, "rw");		
@@ -3132,7 +3132,7 @@ public final class DataStore
 	    {
 		try
 		    {
-			_traceFile.seek(_traceFileHandle.length());
+			//_traceFile.seek(_traceFileHandle.length());
 			_traceFile.writeBytes(message);		
 			_traceFile.writeBytes(System.getProperty("line.separator"));
 		    }
@@ -3149,7 +3149,7 @@ public final class DataStore
 	    {
 		try
 		    {
-			_traceFile.seek(_traceFileHandle.length());
+			//_traceFile.seek(_traceFileHandle.length());
 			_traceFile.writeBytes("Finished Tracing");
 			_traceFile.writeBytes(System.getProperty("line.separator"));
 			_traceFile.close();
