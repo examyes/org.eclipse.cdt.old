@@ -80,7 +80,8 @@ public class DataElementAdapter
     ModelInterface api = ModelInterface.getInstance();
 
     DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
-    
+
+    String prName = project.getName().replace('\\', '/');
     DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
    
     if (projectObj != null)

@@ -131,13 +131,16 @@ public class CommandGenerator
 	  for (int i = 0; i < arguments.size(); i++)
 	      {
 		  DataElement arg = (DataElement)arguments.get(i);
-		  if (!arg.isExpanded())
+		  if (arg != null)
 		      {
-			  commandObject.addNestedData(arguments, false);
-		      }
-		  else
-		      {
-			  _dataStore.createReference(commandObject, arg, "argument");
+			  if (!arg.isExpanded() || (arg.getParent() == null))
+			      {
+				  commandObject.addNestedData(arguments, false);
+			      }
+			  else
+			      {
+				  _dataStore.createReference(commandObject, arg, "argument");
+			      }
 		      }
 	      }
       }

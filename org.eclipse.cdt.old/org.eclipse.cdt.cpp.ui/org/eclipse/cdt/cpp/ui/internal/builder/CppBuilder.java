@@ -8,6 +8,8 @@ import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.dialogs.*;
 import com.ibm.cpp.ui.internal.*;
 
+import com.ibm.dstore.core.model.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -32,17 +34,28 @@ public class CppBuilder extends IncrementalProjectBuilder
     {
     }
 
+    static public void doBuild(DataElement project)
+    {
+	ModelInterface api = CppPlugin.getModelInterface();	
+	
+	IProject projectR = api.findProjectResource(project); 
+	String invocation = getInvocation(projectR);
+	
+	api.invoke(project, invocation, false);
+    }
+
     static public void doBuild(IProject project)
     {
         if ((project != null) && project.isOpen() &&
 	    (CppPlugin.getDefault().isCppProject(project)))
 	    {
     		ModelInterface api = CppPlugin.getModelInterface();	
-		
+			
     		String path = new String(project.getLocation().toOSString());	
    		String invocation = getInvocation(project);
-		
-   		api.command(project, invocation, false);
+		DataElement projectElement = api.findProjectElement(project);
+
+   		api.invoke(projectElement, invocation, false);
 	    }		
     }
 
