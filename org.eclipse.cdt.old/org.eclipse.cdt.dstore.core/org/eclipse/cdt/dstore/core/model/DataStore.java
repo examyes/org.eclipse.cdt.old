@@ -1303,7 +1303,10 @@ public final class DataStore
 		  for (int i = from.getNestedSize() - 1; i >= 0; i--)
 		      {
 			  DataElement deletee = from.get(i);
-			  deleteObjectHelper(from, deletee, 5);		  
+			  if (deletee != null)
+			      {
+				  deleteObjectHelper(from, deletee, 5);		  
+			      }
 		      }
 		  
 		  refresh(from);
@@ -1318,9 +1321,12 @@ public final class DataStore
      */
     public void deleteObject(DataElement from, DataElement toDelete)
     {
-        deleteObjectHelper(from, toDelete, 5);
-	refresh(toDelete);	
-	refresh(from);
+	if (toDelete != null)
+	    {
+		deleteObjectHelper(from, toDelete, 5);
+		refresh(toDelete);	
+		refresh(from);
+	    }
     }
     
     /**
