@@ -509,7 +509,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	data0.horizontalAlignment = GridData.FILL;
 	data0.grabExcessHorizontalSpace = true;
         parent.setLayoutData(data0);
-
         GridData textData = new GridData(GridData.FILL_BOTH);
 
         Composite toolBarContainer = new Composite(parent, SWT.NULL);
