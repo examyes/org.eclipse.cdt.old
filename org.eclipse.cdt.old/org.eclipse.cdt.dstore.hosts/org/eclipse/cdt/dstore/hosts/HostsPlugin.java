@@ -399,6 +399,7 @@ public class HostsPlugin extends AbstractUIPlugin
     {
 	DataStore   dataStore = schemaRoot.getDataStore();
 	DataElement dirD      = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
+	DataElement fsD       = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement rootD     = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
 	DataElement hostD     = dataStore.find(schemaRoot, DE.A_NAME, "host", 1);
 		
@@ -430,10 +431,12 @@ public class HostsPlugin extends AbstractUIPlugin
 	DataElement fileTransfer = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "File Transfer", 
 							  "com.ibm.dstore.hosts.actions.FileTransferAction");
-	selectFile.setAttribute(DE.A_VALUE, "C_FILE_TRANSFER");
 
-
-	DataElement findFiles = dataStore.createObject(dirD, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement fileTransfer2 = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
+							   "File Transfer", 
+							   "com.ibm.dstore.hosts.actions.FileTransferAction");
+	
+	DataElement findFiles = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
 						       "Find Files", 
 						       "com.ibm.dstore.hosts.actions.FindFileAction");
 	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");

@@ -36,11 +36,23 @@ public class FileTransferAction extends CustomAction
 
     public void run()
     {
-	DataElement localInput =  _plugin.getDataStore().getHostRoot().get(0).dereference().getParent();
-	DataElement remoteInput = _subject.getDataStore().getHostRoot().get(0).dereference().getParent();
+	DataStore localDataStore  = _plugin.getDataStore();
+	DataStore remoteDataStore = _subject.getDataStore();
 
-	DataElementFileTransferDialog ftd = new DataElementFileTransferDialog("Transfer Files", localInput, remoteInput);
-	ftd.open();
+	if (localDataStore != remoteDataStore)
+	    {
+		DataElement localInput =  localDataStore.getHostRoot().get(0).dereference().getParent();		
+
+		DataElement remoteInput = _subject;
+		if (_subject.getType().equals("host"))
+		    {
+			remoteInput = remoteDataStore.getHostRoot().get(0).dereference().getParent();
+		    }
+
+		DataElementFileTransferDialog ftd = new DataElementFileTransferDialog("Transfer Files", 
+										      localInput, remoteInput);
+		ftd.open();
+	    }
     }    
 }
 
