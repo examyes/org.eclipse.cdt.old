@@ -52,12 +52,22 @@ public class SynchronizeWithAction extends CustomAction
 	    for (int i = 0; i < _projects.size(); i++)
 		{
 		    DataElement project2 = ((DataElement)_projects.get(i)).dereference();
+
+		    if (!project1.isExpanded())
+			{
+			    project1.expandChildren(true);
+			}
+		    if (!project2.isExpanded())
+			{
+			    project2.expandChildren(true);
+			}
+				
 		    project1.doCommandOn("C_DATES", true);		
 		    project2.doCommandOn("C_DATES", true);		
 		    
 		    if (project2 != null && project1 != project2)
 			{
-			    _pm.beginTask("Comparing " + 
+			    _pm.beginTask("Synchronizing " + 
 					  project1.getName() + " with " + project2.getName() + "...", 
 					  project1.getNestedSize());
 
@@ -74,7 +84,7 @@ public class SynchronizeWithAction extends CustomAction
 				    _pm.worked(1);
 				}
 
-			    _pm.beginTask("Comparing " + 
+			    _pm.beginTask("Synchronizing " + 
 					  project2.getName() + " with " + project1.getName() + "...", 
 					  project2.getNestedSize());
 			    
@@ -121,9 +131,11 @@ public class SynchronizeWithAction extends CustomAction
 		    }
 		catch (InterruptedException e) 
 		    {
+			  e.printStackTrace();
 		    } 
 		catch (InvocationTargetException e) 
 		    {
+		    	e.printStackTrace();
 		    }
 
 

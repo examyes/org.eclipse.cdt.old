@@ -82,39 +82,17 @@ public class TransferFiles extends Thread
 	    _source.getType().equals("Project"); // hack 
 	if (validSource)
 	    {
-		if (_source.isOfType("directory") || _source.isOfType("Project"))
-		    {
-			if (!_source.isExpanded())
-			{
-			    _source.expandChildren(true);
-			}
-			if (_checkTimestamps)
-			{
-				queryDates(_source);
-			}
-		    }
-		if (_target.isOfType("directory") || _target.isOfType("Project"))
-		    {
-			if (!_target.isExpanded())
-			{
-			    _target.expandChildren(true);
-			}
-			if (_checkTimestamps)
-			{ 	  
-				queryDates(_target);
-			}
-		    }
-		
+			
 		transfer(_source, _target);
-		
-		targetDataStore.refresh(_target.getParent());
-		targetDataStore.refresh(_target);
-	    }
-	
-	if (_listener != null)
+		if (_listener != null)
 	    {
 		_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
 	    }
+	    	
+		targetDataStore.refresh(_target.getParent());
+	    }
+	
+
     }
 
     private void transfer(DataElement source, DataElement target)
@@ -199,7 +177,7 @@ public class TransferFiles extends Thread
 	    }
 	else
 	    {
-		String utask = "";
+		String utask = newSourceStr + " is up-to-date";
 		if (_listener != null)
 		    {
 			_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
@@ -211,15 +189,15 @@ public class TransferFiles extends Thread
 	    }
 
 	// both projects on same machine
+	if (needsUpdate)
+	{
 	if ((targetDataStore == sourceDataStore) || (!targetDataStore.isVirtual() && !sourceDataStore.isVirtual()))
 	    {
 		// files on the same system
-		if (needsUpdate)
-		    {
 			// simply copy them
 			DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
 			if (cmd != null)
-			    {
+			{
 				String invocation = "cp -f " + source.getSource() + " " + newSourceStr;
 				DataElement invocationElement = targetDataStore.createObject(null, 
 											     "invocation", 
@@ -231,38 +209,29 @@ public class TransferFiles extends Thread
 				{
 					setDate(copiedSource, getDate(source));
 				}
-			    }
-		    }
+			}
 	    }
 	else if (targetDataStore == _plugin.getDataStore())
 	    {
-		if (needsUpdate)
-		    {
+	
 			source.getFileObject();
 			String sourceMapping = sourceDataStore.mapToLocalPath(source.getSource());
 			java.io.File newSource = new java.io.File(sourceMapping);
 
 			if (newSource != null && newSource.exists())
 			    {
-				File newFile = new java.io.File(newSourceStr);
-				if (newFile.exists())
+					File newFile = new java.io.File(newSourceStr);
+					if (newFile.exists())
 				    {
-					newFile.delete();
+						newFile.delete();
 				    }
 				
-				newSource.renameTo(newFile);
-			    }
-		    }
-		else if (type.equals("directory"))
-		    {
-			java.io.File targetDir = new java.io.File(newSourceStr);
-			targetDir.mkdir();
-		    }
+					newSource.renameTo(newFile);
+			    }		
 	    }
 	else
 	    {	
-		if (needsUpdate)
-		    {
+
 			// make sure we have a local copy of the file
 			File theFile = source.getFileObject();
 
@@ -273,8 +242,8 @@ public class TransferFiles extends Thread
 				setDate(copiedSource, getDate(source));
 			}
 			
-		    }
 	    }
+	}
 	
 	if ((type.equals("directory") || type.equals("Project")) 
 	 	&& copiedSource != null) //hack
@@ -289,10 +258,7 @@ public class TransferFiles extends Thread
 			queryDates(source);
 			queryDates(copiedSource);
 		}
-		if (_pm != null)
-		    {
-			_pm.beginTask("Checking files from " + source.getName() + "...", source.getNestedSize());
-		    }
+	
 
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {

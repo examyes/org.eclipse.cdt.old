@@ -48,16 +48,29 @@ public class ReplicateToAction extends CustomAction
 	    _pm = pm;
 	    _pm.beginTask("Replicating...", _projects.size());
 
+
+  		if (!_subject.isExpanded())
+			   {
+			    _subject.expandChildren(true);
+			   }
+	    _subject.doCommandOn("C_DATES", true);	
+  			 
+	
 	    for (int i = 0; i < _projects.size(); i++)
 		{
 		    DataElement targetProject = ((DataElement)_projects.get(i)).dereference();
 		    
 		    if (targetProject != null && _subject != targetProject)
 			{
+		       if (!targetProject.isExpanded())
+			   {
+			    targetProject.expandChildren(true);
+			   }
+		     
  			    targetProject.doCommandOn("C_DATES", true);		
-
-			    _pm.beginTask("Checking files from " + _subject.getName() + "...", _subject.getNestedSize());
-  			    _subject.doCommandOn("C_DATES", true);		
+  			   
+			    _pm.beginTask("Replicating files from " + _subject.getName() + "...", _subject.getNestedSize());
+	
 
 			    // do transfer files
 			    for (int j = 0; j < _subject.getNestedSize(); j++)
@@ -101,9 +114,11 @@ public class ReplicateToAction extends CustomAction
 		    }
 		catch (InterruptedException e) 
 		    {
+		    	e.printStackTrace();
 		    } 
 		catch (InvocationTargetException e) 
 		    {
+		    	e.printStackTrace();
 		    }		
 	    }
     }

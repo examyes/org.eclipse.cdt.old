@@ -51,17 +51,30 @@ public class ReplicateFromAction extends CustomAction
 	    DataElement project1 = _subject;
 
 	    _pm.beginTask("Replicating...", _projects.size());
-
+	    
+	    if (!_subject.isExpanded())
+			   {
+			    _subject.expandChildren(true);
+			   }
 	    _subject.doCommandOn("C_DATES", true);		
 
 	    for (int i = 0; i < _projects.size(); i++)
 		{
 		    DataElement sourceProject = ((DataElement)_projects.get(i)).dereference();
-		    sourceProject.doCommandOn("C_DATES", true);		
+		
+		    	      		    	       
+		    if (!sourceProject.isExpanded())
+			   {
+			    sourceProject.expandChildren(true);
+			   }
+		      
+ 			    sourceProject.doCommandOn("C_DATES", true);		
+  
+  
 
 		    if (sourceProject != null && sourceProject != _subject)
 			{
-			    _pm.beginTask("Checking files from " + sourceProject.getName() + "...", sourceProject.getNestedSize());
+			    _pm.beginTask("Replicating files from " + sourceProject.getName() + "...", sourceProject.getNestedSize());
 
 			    // do transfer files
 			    for (int j = 0; j < sourceProject.getNestedSize(); j++)
@@ -112,6 +125,12 @@ public class ReplicateFromAction extends CustomAction
 		    {
 			e.printStackTrace();
 		    }
+
+		IProgressMonitor monitor = progressDlg.getProgressMonitor();
+		if (monitor.isCanceled())
+		{
+			System.out.println("cancelled");
+		}
 
 	    }
     }
