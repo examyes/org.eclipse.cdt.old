@@ -129,7 +129,6 @@ public class ServerCommandHandler extends CommandHandler
 	      }
           else if (commandName.equals("C_SCHEMA"))
 	      {
-		  _dataStore.refresh(_dataStore.getRoot());
 		  if (_miners.size() == 0)
 		      {
 			  loadMiners(); 
