@@ -11,7 +11,7 @@ public class ConfigureInManager {
 	String amKey = new String("AM_INIT_AUTOMAKE");
 	String acKey = new String("AC_OUTPUT");
 	String pack = new String("@PACKAGE@");
-	String makefile = new String("/Makefile");
+	String MAKEFILE = new String("/Makefile");
 	int[] delimPosition = {-1,-1,-1};
 	char delim = '@';
 	static long timeStamp=-1;
@@ -49,7 +49,7 @@ public class ConfigureInManager {
 					line = insertVersionName(line.toCharArray(),delimPosition[1]);
 				}
 				if(line.indexOf(acKey)!=-1)
-					line = updateAcoutputMacroLine(subdirs,line);
+					line = updateAcoutputMacroLine(subdirs,line,out);
 					
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
@@ -123,7 +123,19 @@ public class ConfigureInManager {
 					}
 				}
 				if(line.indexOf(acKey)!=-1)
-					line = updateAcoutputMacroLine(subdirs,line);
+				{
+					// delete all the lines which belong to ACOUTPUT if any
+					String deleteLine = new String(line);
+					if(deleteLine.indexOf("\\")!=-1 && deleteLine.indexOf(")")==-1)
+					{
+						deleteLine = in.readLine();
+						while(deleteLine.indexOf(")") ==-1 )
+							deleteLine = in.readLine();
+					}
+					// update the line
+					line = updateAcoutputMacroLine(subdirs,line,out);
+
+				}
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
 			}
@@ -197,16 +209,32 @@ public class ConfigureInManager {
 		String versionName = (new String(modLine)).trim();
 		return versionName;
 	}
-	private String updateAcoutputMacroLine(String[] subdirs,String line)
+	private String updateAcoutputMacroLine(String[] subdirs,String line, BufferedWriter out)
 	{
 		line = line.substring(0,line.indexOf('('));
 		StringBuffer buff = new StringBuffer(line);
-		buff.append("(Makefile"+" ");
-		for(int j = 0; j< subdirs.length; j++)
-			if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
-				buff.append(" "+subdirs[j]).append(makefile);
-		buff.append(')');	
-		return buff.toString();
+		buff.append("(Makefile"+" "+"\\");
+		try{	
+			out.write(buff.toString());
+		}catch(IOException e){System.out.println("Erroe: "+e);};
+		if(subdirs.length>0)
+		{
+			try
+			{	
+				out.newLine();
+				for(int j = 0; j< subdirs.length; j++)
+				{
+					if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
+					{
+						out.write(subdirs[j]+MAKEFILE+" "+"\\");
+							out.newLine();
+					}
+				}
+			}catch(IOException e){System.out.println("Erroe: "+e);};
+			return "\t"+")";
+		}
+		else
+		return "\t"+")";
 	}
 	protected void getConfigureInTemplateFile(DataElement project)
 	{
