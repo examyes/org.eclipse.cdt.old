@@ -45,7 +45,8 @@ public class DebugMiner extends Miner
 	_debugOptions = getLocalizedString("debug_options");
 	
 	_gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "org.eclipse.cdt.debug.gdbPicl";
-	String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.pdt";
+//	String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.pdt";
+	String debugPath = new String(_gdbPiclPath);
 	String ps = System.getProperty("path.separator");
 	String fs = "/";
         _debugJarPath =  debugPath;
