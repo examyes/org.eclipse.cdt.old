@@ -141,6 +141,7 @@ public class MakefileAmManager {
 					if(line.indexOf(SUBDIRS)!=-1)
 					{
 						found = true;
+						removeIfMoreThanOneLine(line,in);
 						line = insertSubdirValueDef(structureManager, out);
 					}
 				
@@ -806,22 +807,26 @@ public class MakefileAmManager {
 			File[] subdirs = dir_structure.getSubdirs();
 			for(int i = 0; i < subdirs.length; i++)
 			{
-				File MakefileAm = new File(subdirs[i],"Makefile.am");
-				if(MakefileAm.exists())
+				// check if the directory starts with "."
+				if(subdirs[i].getName().indexOf(".")==-1)
 				{
-					int fileClass = classifier.classify(MakefileAm);
-					String absPath = MakefileAm.getAbsolutePath();
-					String parentPath = parent.getAbsolutePath();
-					String loc = absPath.substring(parentPath.length());
-					String path= loc.substring(0,loc.lastIndexOf("Makefile.am"));
-					if(fileClass == STATICLIB)
+					File MakefileAm = new File(subdirs[i],"Makefile.am");
+					if(MakefileAm.exists())
 					{
-						
-						line = line+" "+"."+path+getLibName(MakefileAm,_LIBRARIES);
-					}
-					if(fileClass == SHAREDLIB)
-					{
-						line = line+" "+"."+path+getLibName(MakefileAm,_LTLIBRARIES);
+						int fileClass = classifier.classify(MakefileAm);
+						String absPath = MakefileAm.getAbsolutePath();
+						String parentPath = parent.getAbsolutePath();
+						String loc = absPath.substring(parentPath.length());
+						String path= loc.substring(0,loc.lastIndexOf("Makefile.am"));
+						if(fileClass == STATICLIB)
+						{
+							
+							line = line+" "+"."+path+getLibName(MakefileAm,_LIBRARIES);
+						}
+						if(fileClass == SHAREDLIB)
+						{
+							line = line+" "+"."+path+getLibName(MakefileAm,_LTLIBRARIES);
+						}
 					}
 				}
 			}

@@ -12,5 +12,4 @@ EXTRA_DIST =
 INCLUDES= $(all_includes)
 
 # the library search path.
-!TARGET!_LDFLAGS = $(all_libraries) 
-                                                                                
+!TARGET!_LDFLAGS = $(all_libraries)

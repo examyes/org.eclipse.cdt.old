@@ -6,20 +6,26 @@ dnl Checks for programs.
 
 AM_INIT_AUTOMAKE(@PACKAGE@, @VERSION@)
 
+AM_CONFIG_HEADER(config.h:config.in)
+
+AM_MAINTAINER_MODE
+
 dnl Checks for libraries.
 
 AC_PROG_RANLIB
+
 AC_PROG_CC
+
 AC_PROG_CXX
+
 AC_PROG_INSTALL
+
 AM_PROG_LIBTOOL
+
+AC_DEFINE(_GNU_SOURCE)
+
 dnl Checks for header files.
+
 AC_HEADER_STDC
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-
-dnl Checks for library functions.
-
-
 
 AC_OUTPUT(Makefile @SUBDIR/Makefile@)

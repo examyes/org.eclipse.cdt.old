@@ -245,10 +245,13 @@ public class ConfigureInManager {
 		{
 			// add configure.in template files only if not exist
 			try{
-				Process p = rt.exec("cp "+ project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
-				 					+"/"+"com.ibm.cpp.miners/autoconf_templates/configure.in "
-						+project.getSource());
+				Process p;
+				p = rt.exec("cp "+ project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
+					"/com.ibm.cpp.miners/autoconf_templates/configure.in "+project.getSource());
 				p.waitFor();
+				p = rt.exec("cp "+ project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
+						"/com.ibm.cpp.miners/autoconf_templates/acconfig.h "+project.getSource());
+					p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
