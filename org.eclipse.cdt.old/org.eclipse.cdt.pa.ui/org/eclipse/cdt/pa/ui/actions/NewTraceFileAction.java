@@ -2,8 +2,6 @@ package org.eclipse.cdt.pa.ui.actions;
 
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.jface.dialogs.*;
-import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 
 import org.eclipse.cdt.dstore.core.model.*;

@@ -1,18 +1,14 @@
 package org.eclipse.cdt.pa.ui.actions;
 
-import org.eclipse.core.resources.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.pa.ui.api.*;
-import org.eclipse.jface.dialogs.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.cdt.pa.ui.dialogs.*;
 
 
 public class AddTraceProgramAction extends CustomAction
 {
  
-  private ModelInterface _cppApi;
   private PAModelInterface _api;
   
   // Constructors
@@ -20,7 +16,6 @@ public class AddTraceProgramAction extends CustomAction
   {	
         super(subject, label, command, dataStore);
         
-        _cppApi = ModelInterface.getInstance();
         _api = PAModelInterface.getInstance();
 		
   }
@@ -33,7 +28,13 @@ public class AddTraceProgramAction extends CustomAction
    
   public void run()
   {
-    _api.addTraceProgram(_subject, "gprof_gnu");
+     	AddTraceProgramDialog dlg = new AddTraceProgramDialog("Add Trace Program", _subject);
+        dlg.open();
+        
+        if (dlg.getReturnCode() == dlg.OK)
+        {
+	      _api.addTraceProgram(_subject, dlg.getTraceFormat());
+        }
   }
   
 }

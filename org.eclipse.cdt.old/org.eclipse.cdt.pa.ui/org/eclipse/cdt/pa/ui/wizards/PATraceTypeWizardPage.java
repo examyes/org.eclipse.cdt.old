@@ -19,13 +19,11 @@ import org.eclipse.swt.events.*;
 import org.eclipse.ui.*;
 
 import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
 
 import org.eclipse.cdt.pa.ui.*;
 import org.eclipse.cdt.pa.ui.api.*;
-import java.util.*;
 
 
 public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATraceListener {

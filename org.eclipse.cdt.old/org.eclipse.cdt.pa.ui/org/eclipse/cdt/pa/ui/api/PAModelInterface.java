@@ -642,36 +642,7 @@ public class PAModelInterface implements IDomainListener
  public void addTraceFile(DataElement fileElement, String traceFormat) {
 
    DataStore dataStore = fileElement.getDataStore();
-   
-   /*
-   // Detect the real trace format if the designated format string is "auto".
-   if (traceFormat.equals("auto")) {
-     
-     DataElement queryTraceCommand = dataStore.localDescriptorQuery(fileElement.getDescriptor(), "C_QUERY_TRACE_FILE_FORMAT");
-     DataElement status = dataStore.command(queryTraceCommand, fileElement);
-     
-     // Wait until the query command is done.
-     while (!status.getName().equals("done")) {
-       try {
-         Thread.sleep(20);
-       }
-       catch (InterruptedException e) { break; }
-     }
-     
-     realTraceFormat = new String(status.getValue());
-     
-     // System.out.println("Real trace format is: " + realTraceFormat);
-     
-     // Display a message if it is not a valid trace file.
-     if (realTraceFormat.equals("invalid trace file")) {
-       
-       Display d = getShell().getDisplay();
-	   d.asyncExec(new showMessageAction("Invalid Trace File", "Not a valid trace file:\n" + fileElement.getSource()));
-       return;
-     }
-   }
-   */
-   
+  
    // Set the type of the trace file
    String type = null;
    if (traceFormat.indexOf("gprof") >= 0)

@@ -1,16 +1,13 @@
 package org.eclipse.cdt.pa.ui.actions;
 
-import org.eclipse.core.resources.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.pa.ui.api.*;
 
 
 public class RemoveTraceTargetAction extends CustomAction
 {
 
-  private ModelInterface _cppApi;
   private PAModelInterface _api;
   
   // Constructors
@@ -18,7 +15,6 @@ public class RemoveTraceTargetAction extends CustomAction
   {	
         super(subject, label, command, dataStore);
         
-        _cppApi = ModelInterface.getInstance();
         _api = PAModelInterface.getInstance();
 		
   }

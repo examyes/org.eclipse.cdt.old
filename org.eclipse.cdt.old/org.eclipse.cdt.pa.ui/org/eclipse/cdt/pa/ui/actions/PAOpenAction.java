@@ -1,12 +1,8 @@
 package org.eclipse.cdt.pa.ui.actions;
 
-import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.cpp.ui.internal.actions.OpenEditorAction;
 import org.eclipse.cdt.pa.ui.api.*;
-
-import org.eclipse.jface.action.*;
-import org.eclipse.ui.*;
 import org.eclipse.swt.widgets.*;
 
 

@@ -2,12 +2,12 @@ package org.eclipse.cdt.pa.ui.actions;
 
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.*;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.pa.ui.*;
 import org.eclipse.cdt.pa.ui.api.*;
+import org.eclipse.cdt.pa.ui.dialogs.*;
 
 
 public class NewTraceProgramAction extends Action implements IWorkbenchWindowActionDelegate
@@ -38,10 +38,19 @@ public class NewTraceProgramAction extends Action implements IWorkbenchWindowAct
       DataElement selection = _api.getSelection();
       
       if (selection != null && selection.isOfType("executable"))
-	   _api.addTraceProgram(selection, "gprof");
-	   _api.openPerspective();	   
+      {
+        AddTraceProgramDialog dlg = new AddTraceProgramDialog("Add Trace Program", selection);
+        dlg.open();
+        
+        if (dlg.getReturnCode() == dlg.OK)
+        {
+	      _api.addTraceProgram(selection, dlg.getTraceFormat());
+	      _api.openPerspective();	             
+        }
+      }
     }
 
+    
 	public void run(IAction action)
 	{
 	  run();

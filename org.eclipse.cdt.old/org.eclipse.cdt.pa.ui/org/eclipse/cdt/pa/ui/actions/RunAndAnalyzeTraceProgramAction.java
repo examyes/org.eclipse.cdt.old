@@ -1,11 +1,8 @@
 package org.eclipse.cdt.pa.ui.actions;
 
-import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
-import org.eclipse.ui.*;
-import org.eclipse.ui.internal.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.cdt.pa.ui.api.*;
 
