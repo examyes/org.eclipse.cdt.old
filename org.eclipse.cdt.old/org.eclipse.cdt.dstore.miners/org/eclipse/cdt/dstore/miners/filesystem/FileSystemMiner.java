@@ -504,6 +504,8 @@ public class FileSystemMiner extends Miner
 		     DataElement newObject = _dataStore.createObject(subject, type,
 								     objName, newFileName.toString());
 		     
+		     handleSize(newObject, status);
+		     handleDate(newObject, status);
 		     newObject.setDepth(1);// the new file has no children
 		     subject.setDepth(2);// my parent directory has the new file as its child
 		     _dataStore.update(subject);
@@ -542,6 +544,9 @@ public class FileSystemMiner extends Miner
 		     
 		     DataElement newObject=_dataStore.createObject(subject, type,
 								   objName, newDirName.toString());
+		     handleSize(newObject, status);
+		     handleDate(newObject, status);
+		     
 		     newObject.setDepth(1);//new directory is empty so it does not have any children(i.e.depth=1)
 		     subject.setDepth(2);// the parent directory now has the new directory as its child.
 		     _dataStore.update(subject);
@@ -882,8 +887,10 @@ public class FileSystemMiner extends Miner
 					    }
 					else
 					    {
+						handleSize(newObject, status);
+						handleDate(newObject, status);
 						classifyExecutable(newObject);
-						newObject.expandChildren();
+						//newObject.expandChildren();
 						newObject.setDepth(1);
 					    }
 				    }
@@ -1015,7 +1022,10 @@ public class FileSystemMiner extends Miner
 						    {
 							if (!f.isDirectory())
 							    {
-								newObject.expandChildren();
+								handleSize(newObject, status);
+								handleDate(newObject, status);
+								
+								//newObject.expandChildren();
 								newObject.setDepth(1);
 
 								// classify
