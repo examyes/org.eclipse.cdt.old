@@ -354,7 +354,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
       DataElement rootDirectory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
       DataElement directory = rootDirectory.getDataStore().getHostRoot().get(0).dereference();
   		directory = directory.getParent();
-     	DataElementFileDialog dialog = new DataElementFileDialog("Select Executable Program", directory, true);
+     	DataElementFileDialog dialog = new DataElementFileDialog("Select executable program", directory, true);
      	dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
   		dialog.open();
      	if (dialog.getReturnCode() == dialog.OK)
@@ -372,7 +372,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
       DataElement rootDirectory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
       DataElement directory = rootDirectory.getDataStore().getHostRoot().get(0).dereference();
   		directory = directory.getParent();
-     	DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", directory, true);
+     	DataElementFileDialog dialog = new DataElementFileDialog("Select directory", directory, true);
      	dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
   		dialog.open();
      	if (dialog.getReturnCode() == dialog.OK)

@@ -51,7 +51,6 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     // widgets
     private Text                             _programNameField;
     private Text                             _processIDField;
-    protected Button                         processIDBrowseButton;
 
     // constants
     private static final int SIZING_TEXT_FIELD_WIDTH = 300;
@@ -103,7 +102,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    	// project specification group
    	Composite programGroup = new Composite(parent,SWT.NONE);
    	GridLayout layout = new GridLayout();
-   	layout.numColumns = 1;
+   	layout.numColumns = 2;
    	programGroup.setLayout(layout);
    	programGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
    	
@@ -119,7 +118,20 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 			}
 		});
    	_programNameField.setEnabled(true);
-   	
+
+
+   	// browse executable/library name button
+   	Button programBrowseButton = new Button(programGroup, SWT.PUSH);
+   	programBrowseButton.setText(_plugin.getLocalizedString("debugLauncherMain.Browse"));
+
+		programBrowseButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent evt) {
+				handleProgramBrowseButtonPressed();
+			}
+		});
+
+   	programBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));	
+      	
     }
 
     /**
@@ -158,7 +170,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 
 
    	// browse process ids button
-   	processIDBrowseButton = new Button(processIDGroup, SWT.PUSH);
+   	Button processIDBrowseButton = new Button(processIDGroup, SWT.PUSH);
    	processIDBrowseButton.setText(_plugin.getLocalizedString("debugLauncherMain.Browse"));
 
 		processIDBrowseButton.addSelectionListener(new SelectionAdapter() {
@@ -326,7 +338,29 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	protected void createVerticalSpacer(Composite comp) {
 		new Label(comp, SWT.NONE);
 	}
-	
+
+	/**
+	 * Show a dialog that lets the user select a program name.
+	 */
+
+    protected void handleProgramBrowseButtonPressed()
+    {
+      DataElement rootDirectory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
+      DataElement directory = rootDirectory.getDataStore().getHostRoot().get(0).dereference();
+  		directory = directory.getParent();
+     	DataElementFileDialog dialog = new DataElementFileDialog("Select executable program", directory, true);
+     	dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
+  		dialog.open();
+     	if (dialog.getReturnCode() == dialog.OK)
+  	   {
+     		DataElement selected = dialog.getSelected();
+    	   	if (selected != null)
+  	      {
+     	      _programNameField.setText(selected.getSource());
+ 		   }
+  	   }
+    }	
+
 	/**
 	 * Show a dialog that lets the user select a process ID.
 	 * Equivalent to output from a "ps" command on Unix
@@ -334,7 +368,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 
     protected void handleProcessIDBrowseButtonPressed()
     {
-         BrowseProcessesDialog dialog = new BrowseProcessesDialog("select process id", _directory);
+         BrowseProcessesDialog dialog = new BrowseProcessesDialog("Select process id", _directory);
    		dialog.open();
 	   	if (dialog.getReturnCode() == dialog.OK)
    	   {
