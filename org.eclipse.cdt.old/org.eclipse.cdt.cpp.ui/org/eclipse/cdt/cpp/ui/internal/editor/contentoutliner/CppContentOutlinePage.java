@@ -178,6 +178,8 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
+	synchronized(parent)
+	{
 	DataStore dataStore = parent.getDataStore();
 
 	if (_elementRoot == null || _elementRoot.isDeleted())
@@ -204,11 +206,12 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	    }
 	else
 	    {	
-		if (parent == _elementRoot || parent.contains((DataElement)_elementRoot))
+		if (parent == _elementRoot || parent.contains(_elementRoot))
 		    {
 			return true;
 		    }
 	    }
+	}
 
 	return false;    
     }

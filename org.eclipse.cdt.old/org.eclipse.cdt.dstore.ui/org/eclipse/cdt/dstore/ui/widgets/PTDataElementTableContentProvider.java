@@ -70,29 +70,45 @@ public class PTDataElementTableContentProvider extends DataElementTableContentPr
 	    {
 		return resultList;
 	    }
+	    
+	    
+	synchronized(object)
+	{    
 	ArrayList list = object.getAssociated(_property);
 
 	for (int i = 0; i < list.size(); i++)
 	    {
 		DataElement result = (DataElement)list.get(i);
-		DataElement rDescriptor = result.getDescriptor();
-		if (rDescriptor != null)
+		if (result != null && !result.isDeleted() && !result.isReference())
+		{
+			try
+			{
+			DataElement rDescriptor = result.getDescriptor();
+			if (rDescriptor != null)
 		    {
-			if (_pbDescriptors.contains(rDescriptor))
+				if (_pbDescriptors.contains(rDescriptor))
 			    {
-				// pass by this descriptor
+					// pass by this descriptor
 			    }
-			else if (containsPT(rDescriptor))
+				else if (containsPT(rDescriptor))
 			    {
-				ArrayList subList = getPTList(result);
-				resultList.addAll(subList);
+					ArrayList subList = getPTList(result);
+					resultList.addAll(subList);
 			    }
-			else
+				else
 			    {
-				resultList.add(result);
+					resultList.add(result);
 			    }
 		    }
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("PT: " + result);
+			}
 	    }
+	    }
+	}
 	
 	return resultList;
     }
