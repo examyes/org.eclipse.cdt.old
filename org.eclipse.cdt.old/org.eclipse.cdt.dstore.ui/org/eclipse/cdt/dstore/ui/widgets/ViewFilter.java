@@ -163,7 +163,7 @@ public class ViewFilter extends ViewerFilter
 							    }
 						    }
 						
-						if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+						//if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 						    {
 							if (elementDescriptor != null && 
 							    elementDescriptor.isOfType(descriptor, true))
