@@ -615,8 +615,8 @@ public class MakefileAmManager {
 		for(int i = 0; i <parent.listFiles().length; i++)
 		{
 			String name = parent.listFiles()[i].getName();
-			if(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") 
-			||name.endsWith(".H") || name.endsWith(".C")||name.endsWith(".hpp"))
+			if(name.endsWith(".c")|| name.endsWith(".C")||name.endsWith(".cpp")||name.endsWith(".cc") 
+			||name.endsWith(".h") || name.endsWith(".H")||name.endsWith(".hpp"))
 				line = line.concat(" "+name);
 		}
 		return line;
@@ -771,7 +771,7 @@ public class MakefileAmManager {
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
 					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".H") || name.endsWith(".C")))
+						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
 		return line;
@@ -787,7 +787,7 @@ public class MakefileAmManager {
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
 					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".H") || name.endsWith(".C")))
+						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
 		return line;
@@ -805,7 +805,7 @@ public class MakefileAmManager {
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
 					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".H") || name.endsWith(".C")))
+						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
 		return line;
@@ -820,7 +820,7 @@ public class MakefileAmManager {
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
 					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".H") || name.endsWith(".C")))
+						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
 					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
 		return line;
