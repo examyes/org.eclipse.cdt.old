@@ -11,9 +11,7 @@ import org.eclipse.cdt.cpp.miners.parser.namelookup.*;
 import java.lang.*;
 import java.util.*;
 
-//This is the base class for the DataStoreSymbolTable and CommandLineSymbolTable.  Whenever a new 
-//SymbolTable method is needed by Parser.jj, make sure you put it here, so that both child classes
-//are required to implement it.
+//This is the base class for the DataStoreSymbolTable
 public interface SymbolTable
 { 
  //Methods that actually create or deal with DataElement in the dataStore.

@@ -12,9 +12,7 @@ import java.lang.*;
 import java.util.*;
 import java.io.*;
 
-//This is an implementation of the SymbolTable interface.  The SymbolTable interface contains methods
-//that are used by Parser.jj, since Parser.jj can feed either the CommandLineSymbolTable or the 
-//DataStoreSymbolTable.
+//This is an implementation of the SymbolTable interface. 
 public class DataStoreSymbolTable implements SymbolTable
 {
  private SymbolObject  _curObj          = null;
@@ -24,7 +22,6 @@ public class DataStoreSymbolTable implements SymbolTable
  private Hashtable     _builtinTypes    = null;
  private Hashtable     _unresolvedTypes = null;
  private NameLookup    _nameLookup      = null;
- private Stack         _rootStack       = null; 
  private String        _currentSource   = null;
  private int           _quality;
  private int           _idCounter       = 1;
@@ -35,7 +32,6 @@ public class DataStoreSymbolTable implements SymbolTable
  {
   super();
   _curObj          = new SymbolObject();
-  _rootStack       = new Stack();
   _builtinTypes    = new Hashtable();
   _unresolvedTypes = new Hashtable();
   _nameLookup      = new NameLookup();
@@ -151,23 +147,7 @@ public class DataStoreSymbolTable implements SymbolTable
  {
   return isSet(BODIES);
  }
- 
- public void pushRoot()
- {
-  if (_root != null)
-   _rootStack.push(_root);
- }
-
- public void popRoot()
- {
-  if (!_rootStack.empty())
-  {
-    DataElement newRoot = (DataElement)_rootStack.peek();
-    setRoot(newRoot);
-    _rootStack.pop();
-  }
- }
-  
+   
  public boolean isInitialized()
  {
   return ((_parsedFiles != null) && (_dataStore != null));
@@ -335,6 +315,7 @@ public class DataStoreSymbolTable implements SymbolTable
   name += "(";
   
   ArrayList theFuncs = _nameLookup.fuzzyNameLookup(name, _root);
+  
   if (theFuncs.size() > 0)
   {
    //If we get here, then we know we have at least found a match for the function name...Now we will
@@ -408,7 +389,7 @@ public class DataStoreSymbolTable implements SymbolTable
    return theObj;
   
   //Now do a regular name lookup...
-  if ( (theObj = _nameLookup.valueLookup(theType, startObject)) != null)
+  if ((theObj = _nameLookup.valueLookup(theType, startObject)) != null)
    return theObj;
 
   //Now do a lookup in the unresolved Types
