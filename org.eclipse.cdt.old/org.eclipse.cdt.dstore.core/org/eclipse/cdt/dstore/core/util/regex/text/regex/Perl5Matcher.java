@@ -66,7 +66,7 @@ import java.util.*;
  * Perl5Compiler.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Perl5Matcher.java,v 1.3 2001/11/12 19:25:23 dmcknigh Exp $
+ @version $Id: Perl5Matcher.java,v 1.4 2001/11/19 18:55:48 dmcknigh Exp $
 
  * @see PatternMatcher
  * @see Perl5Compiler
@@ -1345,7 +1345,7 @@ public final class Perl5Matcher implements PatternMatcher {
 	}
     catch (Exception e)
 	{
-	    System.out.println(e);
+	    System.out.println("Exception in regex matcher:" + e);
 	}
     return false;
   }
