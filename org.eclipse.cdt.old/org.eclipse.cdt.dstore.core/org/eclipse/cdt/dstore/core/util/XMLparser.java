@@ -335,7 +335,10 @@ public class XMLparser
 				      {
 					  if (result.getParent() == null)
 					      {
-						  result.setParent(parent);
+					      	if (result != _dataStore.getRoot())
+					      	{
+							  result.setParent(parent);
+					      	}
 					      }
 				      }
 				  
@@ -348,6 +351,10 @@ public class XMLparser
 				      	if (result != _dataStore.getRoot())
 				      	{
 					  		System.out.println("parent of " + result.getName() + " is NULL!");
+				      	}
+				      	else 
+				      	{
+				      		result.setParent(null);
 				      	}
 				      }
 			      }
