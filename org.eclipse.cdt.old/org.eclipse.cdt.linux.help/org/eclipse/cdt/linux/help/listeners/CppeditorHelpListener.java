@@ -41,6 +41,15 @@ public class CppeditorHelpListener implements HelpListener
 		else
 		    keyword.insert(0,letter);
 	    }	
+
+	for(int i=column+1;i<line.length();i++)
+	    {
+		char letter = line.charAt(i);
+		if(!isValidIdentifier(letter))
+		    break;
+		else
+		    keyword.append(letter);
+	    }
 	_plugin.showMatches(keyword.toString());	
     }   
     private boolean isValidIdentifier(char c)
