@@ -13,8 +13,8 @@ public class DebugMiner extends Miner
     
     public void load()
     {  
-	_debugJarPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.temp/derdebug.jar";
-	_debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb -qhost=localhost ";
+	_debugJarPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdb/derdebug.jar";
+	_debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb ";
     }
         
     public void extendSchema(DataElement schemaRoot)
@@ -34,6 +34,7 @@ public class DebugMiner extends Miner
 		handleDebug(subject, 
 			    getCommandArgument(theCommand, 1), 
 			    getCommandArgument(theCommand, 2), 
+			    getCommandArgument(theCommand, 2), 
 			    status);
 	    }
 
@@ -41,14 +42,17 @@ public class DebugMiner extends Miner
 	return status;
     }
 
-    public void handleDebug(DataElement directory, DataElement port, DataElement key, DataElement status)
+    public void handleDebug(DataElement directory, DataElement hostName, DataElement port, DataElement key, DataElement status)
     {
-	String invocationStr = _debugInvocation + "-quiport=" + port.getName() + " -startupKey=" + key.getName(); 
+	String invocationStr = _debugInvocation + "-qhost=" + 
+	    hostName.getName() + " -quiport=" + port.getName() + " -startupKey=" + key.getName(); 
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
 
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
+	System.out.println("cd for  " + directory + " is " + cmdDescriptor);
 	if (cmdDescriptor != null)
 	    {
+		System.out.println("launching engine");
 		ArrayList args = new ArrayList(); 
 		args.add(invocation);
 		args.add(status);

@@ -32,6 +32,7 @@ import org.eclipse.search.internal.ui.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
+import java.net.*;
 
 public class ModelInterface implements IDomainListener, IResourceChangeListener
 {
@@ -341,14 +342,31 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void debug(String pathStr, String port, String key)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	DataElement dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);
-	DataElement portObj = dataStore.createObject(null, "port", port);
-	DataElement keyObj  = dataStore.createObject(null, "key", key);
+	DataElement dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);	
+
+	String hostName = "localHost";
+	try
+	    {
+		hostName = InetAddress.getLocalHost().getHostName();
+	    }
+	catch (Exception e)
+	    {
+	    }
+
+	DataElement hostObj  = dataStore.createObject(null, "hostname", hostName);
+	DataElement portObj    = dataStore.createObject(null, "port", port);
+	DataElement keyObj     = dataStore.createObject(null, "key", key);
+	
+	dataStore.setObject(dirObject);
+	dataStore.setObject(hostObj);
+	dataStore.setObject(portObj);
+	dataStore.setObject(keyObj);
 
 	DataElement debugDescriptor = dataStore.localDescriptorQuery(dirObject.getDescriptor(), "C_DEBUG");
 	if (debugDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
+		args.add(hostObj);
 		args.add(portObj);
 		args.add(keyObj);
 

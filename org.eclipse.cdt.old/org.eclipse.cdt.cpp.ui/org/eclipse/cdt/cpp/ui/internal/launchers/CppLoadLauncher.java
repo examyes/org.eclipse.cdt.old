@@ -56,7 +56,7 @@ public class CppLoadLauncher implements ILauncherDelegate {
 
 /*
         // display the wizard
-        PICLLoadWizard w= new PICLLoadWizard();
+u        PICLLoadWizard w= new PICLLoadWizard();
         w.init(launcher, ILaunchManager.DEBUG_MODE, selection);
         WizardDialog wd= new WizardDialog(PICLDebugPlugin.getActiveWorkbenchWindow().getShell(), w);
 
@@ -96,6 +96,7 @@ public class CppLoadLauncher implements ILauncherDelegate {
             else if(resource instanceof IResource)
                 curProject = ((IResource)resource).getProject();
 
+	    System.out.println("project = " + curProject);
             if (curProject != null)
                 sourceLocator.setHomeProject(curProject);
         }
@@ -109,41 +110,15 @@ public class CppLoadLauncher implements ILauncherDelegate {
         launchEngine(daemonInfo);
     }
 
-    protected void launchEngine(PICLDaemonInfo daemonInfo) {
-
-
-
-//        String command = "irmtdbgc -qhost=localhost -quiport=" +
-//        String command = "irmtdbgg -qhost=localhost -quiport=" +
-/*
-        String command = "java com.ibm.debug.gdb.Gdb -qhost=localhost -quiport=" +
-                         (new Integer(daemonInfo.getPort())).toString() +
-                           " -startupKey=" +
-                         (new Integer(daemonInfo.getKey())).toString();
-
-        ModelInterface api = ModelInterface.getInstance();
-        String path = _directory;
-
-        api.command(path, command, false);
-*/
-
+    protected void launchEngine(PICLDaemonInfo daemonInfo) 
+    {
 	ModelInterface api = ModelInterface.getInstance();
 	String port = new Integer(daemonInfo.getPort()).toString();
 	String key  = new Integer(daemonInfo.getKey()).toString();
  
 	api.debug(_directory, port, key);
-
-        /*
-        try {
-            Runtime.getRuntime().exec(command);
-        } catch(SecurityException e) {
-            //displayError(LAUNCHER+".engineLaunchSecurityError");
-        } catch(IOException e) {
-            //displayError(LAUNCHER+".engineLaunchError");
-        }
-        */
-
     }
+
     /*
     protected void displayError(String msgCode) {
         String title = PICLUtils.getResourceString(LAUNCHER+".errorTitle");
