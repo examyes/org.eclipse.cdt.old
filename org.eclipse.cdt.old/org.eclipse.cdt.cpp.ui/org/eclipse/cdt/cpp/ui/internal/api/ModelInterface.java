@@ -1331,6 +1331,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public synchronized void search(String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
   {
+  	  // search of current project
       IProject project = _plugin.getCurrentProject();
       DataElement subject = findProjectElement(project);
 
@@ -1343,11 +1344,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
     if (input instanceof DataElement)
       {
-	search((DataElement)input, pattern, types, relations, ignoreCase, regex);	
+		search((DataElement)input, pattern, types, relations, ignoreCase, regex);	
       }
+    else if (input instanceof IContainer)
+    {
+    	if (input instanceof IWorkspace)
+    	{
+    		DataElement subject = findWorkspaceElement();
+    		search(subject, pattern, types, relations, ignoreCase, regex);
+    	}
+    	else if (input instanceof IProject)
+    	{
+    		DataElement subject = findProjectElement((IProject)input);
+    		search(subject, pattern, types, relations, ignoreCase, regex);	
+    	}
+    }
     else
       {
-	search(pattern, types, relations, ignoreCase, regex);	
+		search(pattern, types, relations, ignoreCase, regex);	
       }
   }
 
@@ -1386,11 +1400,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
       for (int i = 0; i < types.size(); i++)
       {
-	String type = (String)types.get(i);
-	DataElement objDescriptor = dataStore.findObjectDescriptor(type);
-	if (objDescriptor != null)
+		String type = (String)types.get(i);
+		DataElement objDescriptor = dataStore.findObjectDescriptor(type);
+		if (objDescriptor != null)
 	    {
-		dataStore.createReference(patternElement, objDescriptor);
+			dataStore.createReference(patternElement, objDescriptor);
 	    }
       }
 
@@ -1408,6 +1422,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	      _searchResultsView.searchStarted(
 					       "org.eclipse.cdt.cpp.ui.CppSearchPage",
+					       patternStr.toString(),
 					       patternStr.toString(),
 					       CppPlugin.getDefault().getImageDescriptor("details.gif"),//null,
 					       null,
@@ -1431,7 +1446,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		      }
 		  });
 	  }
-
 
       DataElement status = dataStore.command(searchDescriptor, args, subject, true);
       _status = status;
