@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>CDT Nightly Builds</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+
+<!-- Document Header -->
+<TABLE cellPadding=2 width="100%" border=0>
+ <TBODY>
+  <TR>
+   <TD align=left width="72%">
+    <FONT class=indextop>CDT Nightly Builds</FONT><BR>
+    <FONT class=indexsub>Download the nightly CDT builds</FONT>
+   </TD>
+   <TD width="28%"><IMG height=86 src="http://dev.eclipse.org/images/Idea.jpg" width=120 alt=""></TD>
+  </TR>
+ </TBODY>
+</TABLE>
+<br>
+<!-- End of Document Header -->
+
+<!-- Status -->
+<div class=section>Downloading Nightly CDT Builds</a></div>
+<p>
+The nightly builds on this page have not been tested at all and are provided &quot;as is&quot;.  It 
+is possible that these builds have major bugs and may not run at all.  The only check that is performed 
+by the script that generates this page is a quick glance at the size of the Error\Warning log from the 
+build.  In the table below the glyphs indicate the following:
+</p>
+<table>
+ <tr>
+  <td>
+   <img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/PASS.gif?cvsroot=Tools_Project">    
+  </td>
+  <td>
+    - indicates the the Error\Warning log is not any larger than expected, so there is a good chance that there 
+   were no serious errors.
+  </td>
+ </tr>
+  <td>
+   <img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/FAIL.gif?cvsroot=Tools_Project">    
+  </td>
+  <td>
+   - indicates the the Error\Warning log is larger than expected which probably means the build is broken.
+  </td>
+ </tr>
+</table>
+</p>
+<hr>
+<br>
+
+<table cellpadding=3 border=1 width="80%">
+ <tbody>
+ <tr align=center>
+  <td><b>Build Date</b></td>
+  <td><b>Error Log</b></td>
+  <td><b>Use With Eclipse Version</b></td>
+  <td><b>Package</b></td>
+ </tr>
+
