@@ -218,11 +218,14 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_CLASSIFY_MAKEFILE_AM"))
 			{
 				File makefileAm = getfile(subject.getFileObject(),"Makefile.am");
-				if(makefileAm!=null)
 				{	
-					String classification = getMakefileClassification(makefileAm);		
-					//DataElement state = _dataStore.createObject(status, "classification", classification);
-					//_dataStore.refresh(status);
+					
+					String classification = "0";
+					
+					if (makefileAm != null)
+					{
+						classification = getMakefileClassification(makefileAm);		
+					}
 					
 					
 					DataElement state = null;
@@ -244,6 +247,7 @@ public class ManagedProjectMiner extends Miner
 					status.setAttribute(DE.A_NAME, "done");
 					
 				}	
+			
 			}
 			
 		}
