@@ -46,13 +46,16 @@ public class CppLoadLauncher implements ILauncherDelegate, IOldDaemonSupport
     private static DataElement _directory;
     private static DataElement _executable;
     private static ModelInterface _api;
+    private static CppPlugin   _plugin;
     private static Object[] _elements;
 
 
     public CppLoadLauncher()
     {
 	_api = ModelInterface.getInstance();
+      _plugin = CppPlugin.getDefault();
     }
+
 public String getLaunchMemento(Object obj)
 	{
 		return null;	
@@ -69,57 +72,61 @@ public String getLaunchMemento(Object obj)
         StructuredSelection selection = new StructuredSelection(elements);
         if(selection == null)
 	    {
-		System.out.println("CppLoadLauncher.launch() error = selection is null");
+         displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.noSelection"));
 		return false;
 	    }
 
         Object element = selection.getFirstElement();
 
 	if (element instanceof DataElement)
-	    {	
+   {	
 		_executable = (DataElement)element;
 		if (!_executable.getType().equals("file"))
-		    {
+	    {
 			_executable = null;
 			_directory = null;
+               displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
 			return false;
-		    }
+	    }
 
 		_directory = _executable.getParent();
-	    }	
-        else if (element instanceof IProject || element instanceof IResource)
-	    {
+    }	
+    else if (element instanceof IProject || element instanceof IResource)
+    {
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
-		    {
-			IResource resource = (IResource)element;
-			IResource parentRes = resource.getParent();
-			
-			CppPlugin plugin = CppPlugin.getDefault();
-			DataStore dataStore = plugin.getCurrentDataStore();
-			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
-							    parentRes.getLocation().toString());
-
-			_executable = dataStore.createObject(_directory, "file", resource.getName(),
-							     resource.getLocation().toString());
-			
-		    }
-		else
-		    {
-			_directory = _executable.getParent();
-		    }
-	    }
-	else
 	    {
+         IProject project = ((IResource)element).getProject();
+         if (_plugin.isCppProject(project))
+         {
+   			IResource resource = (IResource)element;
+	   		IResource parentRes = resource.getParent();
+			
+   			DataStore dataStore = _plugin.getCurrentDataStore();
+	   		_directory = dataStore.createObject(null, "directory", parentRes.getName(),
+ 	  						    parentRes.getLocation().toString());
+
+	   		_executable = dataStore.createObject(_directory, "file", resource.getName(),
+							     resource.getLocation().toString());
+         }
+         else
+         {
+            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notCppProject"));
+            return false;
+         }
+
+	    }
+   	else
+       {
+			_directory = _executable.getParent();
+	    }
+	}
+	else
+	{
 		_executable = null;
 		_directory = null;
 		return false;
-	    }
-
-        //start the daemon to listen
-        //int port = DaemonLauncherDelegate.launchDaemon(elements);
-        //if (port < 0)
-        //    return false;
+	}
 
         // display the wizard
         CppLoadLauncherWizard w= new CppLoadLauncherWizard();
@@ -178,14 +185,23 @@ public String getLaunchMemento(Object obj)
 
       if (workingDirectory != "")
       {
-      System.out.println("CppLoadLauncher:launchEngine() - workingDirectory = " + workingDirectory);
        	_api.debug(workingDirectory, port, key);
       }
       else
       {
-         System.out.println("CppLoadLauncher:launchEngine() - _directory = " + _directory);
        	_api.debug(_directory, port, key);
       }
+    }
+
+
+    /**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
     }
 
 
