@@ -1,7 +1,7 @@
 
 MAKE=nmake
  
-all: project managedproject search parser 
+all: project managedproject search parser debug
 
 project:
 	cd project
@@ -15,6 +15,11 @@ managedproject:
 
 search:
 	cd search
+	$(MAKE)
+	cd ..
+
+debug:
+	cd debug
 	$(MAKE)
 	cd ..
 
