@@ -11,6 +11,7 @@ import com.ibm.cpp.ui.internal.api.*;
 
 import com.ibm.dstore.ui.ILinkable;
 import com.ibm.dstore.ui.ConvertUtility;
+import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.core.client.*;
 import com.ibm.dstore.core.model.*;
 
@@ -51,41 +52,71 @@ import org.eclipse.swt.widgets.*;
 import java.util.*;
 
 public class RemoteProjectViewPart extends ViewPart 
-    implements ISetSelectionTarget, 
-    IMenuListener, 
-    ICppProjectListener
+    implements ISetSelectionTarget, IMenuListener, ICppProjectListener
 {
-  private RemoteProjectNavigator _viewer;
+    public class ResourceElementAction extends Action
+    {
+	private String _name;
+	private String _command;
 
-  private AddBookmarkAction addBookmarkAction;
-  private BuildAction buildAction;
-  private BuildAction rebuildAllAction;
-  private CloseResourceAction closeResourceAction;
-  private CopyResourceAction copyResourceAction;
-  private CreateFolderAction createFolderAction;
-  private CreateFileAction createFileAction;
-  private DeleteResourceAction deleteResourceAction;
-  private OpenFileAction openFileAction;
-  private OpenResourceAction openResourceAction;
-  private OpenSystemEditorAction openSystemEditorAction; 
-  private PropertyDialogAction propertyDialogAction;
-  private RefreshAction localRefreshAction;
-  
-  private CopyProjectAction copyProjectAction;
-  private MoveProjectAction moveProjectAction;
-  private MoveResourceAction moveResourceAction;
-  private NewWizardAction newWizardAction;
+	public ResourceElementAction(String name, String command)
+	{
+	    super(name);
+	    _name = name;
+	    _command = command;
+	}
 
+	public void run()
+	{
+	    DataElement selected = _viewer.getSelected();
+	    DataStore dataStore = selected.getDataStore();
+	    DataElement descriptor = dataStore.localDescriptorQuery(selected.getDescriptor(), _command);
+	    if (descriptor != null)
+		{
+		    UICommandAction cmdAction = new UICommandAction(selected, _name, descriptor, dataStore);
+		    cmdAction.run();
+		}
+	}	
+    }
+    
+
+    private RemoteProjectNavigator _viewer;
+    
+    private AddBookmarkAction addBookmarkAction;
+    private BuildAction buildAction;
+    private BuildAction rebuildAllAction;
+    private CloseResourceAction closeResourceAction;
+    private CopyResourceAction copyResourceAction;
+    
+    private CreateFolderAction createFolderAction;
+    private CreateFileAction createFileAction;
+    
+    private ResourceElementAction renameResourceAction;
+    private DeleteResourceAction deleteResourceAction;
+    
+    
+    private OpenFileAction openFileAction;
+    private OpenResourceAction openResourceAction;
+    private OpenSystemEditorAction openSystemEditorAction; 
+    private PropertyDialogAction propertyDialogAction;
+    private RefreshAction localRefreshAction;
+    
+    private CopyProjectAction copyProjectAction;
+    private MoveProjectAction moveProjectAction;
+    private MoveResourceAction moveResourceAction;
+    private NewWizardAction newWizardAction;
+    
     private RemoteProjectAdapter _root;
-
+    
     static private RemoteProjectViewPart _instance;
 
     private CppPlugin _plugin;
-  public RemoteProjectViewPart() 
-  {
-    super(); 
-    _instance = this;
-  }
+
+    public RemoteProjectViewPart() 
+    {
+	super(); 
+	_instance = this;
+    }
 
     static public RemoteProjectViewPart getInstance()
     {
@@ -108,7 +139,6 @@ public class RemoteProjectViewPart extends ViewPart
     
 
     getSite().setSelectionProvider(_viewer);
-
 
     _viewer.addDoubleClickListener(new IDoubleClickListener() 
 	{
@@ -212,6 +242,7 @@ void makeActions()
   copyResourceAction = new CopyResourceAction(shell);
   moveResourceAction = new MoveResourceAction(shell);
   deleteResourceAction = new DeleteResourceAction(shell);
+  renameResourceAction = new ResourceElementAction("Rename", "C_RENAME");
 
   addBookmarkAction = new AddBookmarkAction(shell);
   propertyDialogAction = new PropertyDialogAction(getShell(), _viewer);
@@ -303,6 +334,7 @@ void fillFileMenu(IMenuManager menu, IStructuredSelection selection)
 	***/
 	if (anyResourceSelected) 
 	    {
+		 menu.add(renameResourceAction);
 		 menu.add(deleteResourceAction);
 	    }
 	/*

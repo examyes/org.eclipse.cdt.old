@@ -59,7 +59,6 @@ public class FileSystemMiner extends Miner
 	  DataElement currentDirectory = findFile(_minerData, hostFile);
 	  if (currentDirectory != null)
 	      {
-		  System.out.println("currentDir:" + currentDirectory.getName());
 		  DataElement ref = _dataStore.createReference(host,currentDirectory);
 	      }
 	  else
@@ -164,12 +163,9 @@ public class FileSystemMiner extends Miner
 	//        DataElement delete    = createCommandDescriptor(fsObject, getLocalizedString("model.Delete"), "C_DELETE");        
       	///////////////////////////
 	//renaming files and dirs
-	DataElement renF = createCommandDescriptor(fileD, getLocalizedString("model.Rename"), "C_RENAME_FILE");
+	DataElement renF = createCommandDescriptor(fsObject, getLocalizedString("model.Rename"), "C_RENAME");
 	renF.setDepth(1);
 	DataElement inRenF = _dataStore.createObject(renF,"input", "Enter the New Name");
-
-	DataElement renD= createCommandDescriptor(dirD, getLocalizedString("model.Rename"), "C_RENAME_DIR");
-	DataElement inrenD = _dataStore.createObject(renD,"input", "Enter the New Name");
 
 	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", false);
 
@@ -242,8 +238,7 @@ public class FileSystemMiner extends Miner
        status = handleMove(subject.dereference(), moveSource.dereference(), status);
      }
 
-      //////////////////////
-     else if ((name.equals("C_RENAME_FILE"))||(name.equals("C_RENAME_DIR")))
+     else if (name.equals("C_RENAME"))
 	 {
 	     DataElement newName = getCommandArgument(theElement,1);	     
 	     status = handleRename(subject,newName,status);

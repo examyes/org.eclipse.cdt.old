@@ -39,7 +39,8 @@ import org.eclipse.swt.widgets.*;
 
 import org.eclipse.ui.model.*;
 
-public class RemoteProjectNavigator extends TreeViewer  implements ISelected, IDomainListener
+public class RemoteProjectNavigator extends TreeViewer  
+    implements ISelected, IDomainListener, ISelectionChangedListener
 {
   private DataElement  _selected;
   private RemoteProjectAdapter  _currentInput;
@@ -56,6 +57,8 @@ public class RemoteProjectNavigator extends TreeViewer  implements ISelected, ID
 
 	Display display = parent.getDisplay();
 	parent.setBackground(new Color(display, 255, 255, 255));
+
+	addSelectionChangedListener(this); 
       }
 
 
@@ -175,13 +178,24 @@ public class RemoteProjectNavigator extends TreeViewer  implements ISelected, ID
 
 
   public void selectionChanged(SelectionChangedEvent e)
-  {
-    DataElement selected = ConvertUtility.convert(e);
-    if (selected != null)
+  {      
+    ISelection selection = e.getSelection();
+    IStructuredSelection es= (IStructuredSelection) selection;
+    Object obj = es.getFirstElement();
+    if (obj instanceof ResourceElement)
+	{	    
+	    setSelected(((ResourceElement)obj).getElement());
+	}
+    else if (obj instanceof Repository)
+	{
+	    setSelected(((Repository)obj).getRemoteElement());
+	}
+    else if (obj instanceof DataElement)
       {
-	setSelected(selected);
+	  setSelected((DataElement)obj);
       }
   }
+
 
   protected Item newItem(Widget parent, int flags, int ix) 
       {
