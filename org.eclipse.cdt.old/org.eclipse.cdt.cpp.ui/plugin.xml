@@ -364,7 +364,7 @@
             id="org.eclipse.cdt.cpp.ui.internal.actionParse2">
       </action>
    </objectContribution>
-   <objectContribution
+     <objectContribution
          objectClass="org.eclipse.core.resources.IProject"
          id="org.eclipse.cdt.cpp.ui.internal.menu9">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>    
@@ -373,8 +373,12 @@
             class="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction"
             path="additions"
             enablesFor="1"
-            id="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction">
+            id="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction">            
       </action>
+  </objectContribution>
+  <objectContribution
+         objectClass="org.eclipse.core.resources.IProject"
+         id="org.eclipse.cdt.cpp.ui.internal.menu10">   
       <action
             label="Support C/C++"
             class="org.eclipse.cdt.cpp.ui.internal.actions.ConvertToCppProject"
@@ -383,6 +387,7 @@
             id="convert">
       </action>
    </objectContribution>
+   
 </extension>     
 <extension
       point="org.eclipse.ui.editors">
