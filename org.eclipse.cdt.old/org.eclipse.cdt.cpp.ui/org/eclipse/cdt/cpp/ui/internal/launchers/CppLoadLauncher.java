@@ -5,6 +5,8 @@ package com.ibm.cpp.ui.internal.launchers;
  */
 
 
+import com.ibm.dstore.core.model.*;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -45,6 +47,13 @@ public class CppLoadLauncher implements ILauncherDelegate {
             return false;
         }
         Object element = selection.getFirstElement();
+	
+	if (element instanceof DataElement)
+	    {
+		ModelInterface api = ModelInterface.getInstance();
+		element = api.findResource((DataElement)element);
+	    }
+	
         if(!(element instanceof IProject || element instanceof IResource)) {
            System.out.println("CppLoadLauncher.launch() error = selection is not an IProject or an IResource");
             return false;

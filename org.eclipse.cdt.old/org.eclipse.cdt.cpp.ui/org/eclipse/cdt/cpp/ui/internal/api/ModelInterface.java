@@ -824,6 +824,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	return workspaceObj;
     }  
+
+    public IResource findResource(DataElement resourceElement)
+    {
+	String type = resourceElement.getType();
+	if (type.equals("Project"))
+	    {
+		return findProjectResource(resourceElement);
+	    }
+	else
+	    {
+		String source = resourceElement.getSource();
+		return getResource(source);
+	    }	
+    }
     
   public IProject findProjectResource(DataElement projectElement)
     {
