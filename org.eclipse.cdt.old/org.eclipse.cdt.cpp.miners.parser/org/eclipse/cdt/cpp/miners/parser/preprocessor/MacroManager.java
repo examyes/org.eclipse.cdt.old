@@ -96,6 +96,7 @@ class MacroManager
    startIndex = currentLine.toString().indexOf(curId,startIndex);
    endIndex   = startIndex + curId.length();
    
+   int oldEndIndex = endIndex;
    while (endIndex  < currentLine.length() && currentLine.charAt(endIndex) == ' ')
     endIndex++;
     
@@ -114,7 +115,7 @@ class MacroManager
      }
     }
     else
-     endIndex--;
+     endIndex = oldEndIndex;
          
     String theExpansion = theMacro.expand(params);
     
