@@ -140,14 +140,17 @@ public class ServerLauncher extends Thread
 			    String launchStatus = null;
 			    String ticket = new String("" + System.currentTimeMillis());
 
-			    String theOS = System.getProperty("os.name");			    
+			    String theOS = System.getProperty("os.name");
+			    String timeout = "120000";
+			    			    
 			    if (theOS.toLowerCase().startsWith("linux"))
 				{
 				    String authStr = _path + File.separator + "com.ibm.dstore.core" + 
 					File.separator + "auth.pl ";
 				    String authString = authStr + 
-					user + " " + password + " " + _path + " " + 
-					_port + " " + ticket;
+						user + " " + password + " " + _path + " " + 
+						_port + " " + timeout + " " + ticket;
+					
 				    String[] authArray = {"sh", "-c", authString};
 				    
 				    // test password
@@ -164,6 +167,7 @@ public class ServerLauncher extends Thread
 							 "-DA_PLUGIN_PATH=" + _path,
 							 "com.ibm.dstore.core.server.Server", 
 							 _port,
+							 timeout,
 							 ticket
 				    };
 				

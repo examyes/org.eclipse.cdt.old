@@ -18,23 +18,34 @@ public class Server
 	    {
 		Server theServer = null;
 		
-		if (args.length > 0)
-		    {
-			if (args.length > 1)
-			{
-			    theServer = new Server(args[0], args[1]);	      
-			}
-			else
-			    {
-				theServer = new Server(args[0]);	      	      			    }
-		    }	
-		else
-		    {
-			theServer = new Server();
-		    }
+		// args:
+		// 1 = port
+		// 2 = timeout
+		// 3 = ticket
 		
-		theServer.run();
-	    }
+		switch (args.length)
+		{
+			case 0:
+			  theServer = new Server();
+			  break;
+			case 1:
+			  theServer = new Server(args[0]);
+			  break;
+			case 2:
+			  theServer = new Server(args[0], args[1]);
+			  break;
+			case 3:
+			  theServer = new Server(args[0], args[1], args[2]);
+			  break;
+			default:
+			  break;  
+		}
+		
+	    if (theServer != null)
+		{
+			theServer.run();
+		}
+	  }
 	catch (SecurityException e) 
 	    {
 		System.err.println(ServerReturnCodes.RC_SECURITY_ERROR);
@@ -52,9 +63,14 @@ public class Server
         _establisher = new ConnectionEstablisher(port);
     } 
     
-    public Server(String port, String ticket)
+    public Server(String port, String timeout)
     {
-	_establisher = new ConnectionEstablisher(port, ticket);
+    	_establisher = new ConnectionEstablisher(port, timeout);	
+    }
+    
+    public Server(String port, String timeout, String ticket)
+    {
+	  _establisher = new ConnectionEstablisher(port, timeout, ticket);
     }
   
 

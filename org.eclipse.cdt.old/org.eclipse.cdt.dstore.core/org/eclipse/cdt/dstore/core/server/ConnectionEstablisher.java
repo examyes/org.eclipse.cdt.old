@@ -26,37 +26,52 @@ public class ConnectionEstablisher
   private ServerCommandHandler  _commandHandler;
   private ServerUpdateHandler   _updateHandler;
  
-  private ServerAttributes      _serverAttributes;
+  private ServerAttributes      _serverAttributes = new ServerAttributes();
   private DataStore             _dataStore;
 
   private int                   _maxConnections;
+  private int                   _timeout;
   
   public ConnectionEstablisher()
   {
-    _maxConnections = 1;
-    _serverAttributes = new ServerAttributes();
     String port = _serverAttributes.getAttribute(ServerAttributes.A_HOST_PORT);
-    setup(port, null);
+    setup(port, null, null);
   }
   
   public ConnectionEstablisher(String port)
   {
-    _maxConnections = 1;
-    _serverAttributes = new ServerAttributes();
-    setup(port, null);
+    setup(port, null, null);
   }
   
-  public ConnectionEstablisher(String port, String ticket)
+  public ConnectionEstablisher(String port, String timeout)
   {
-    _maxConnections = 1; 
-    _serverAttributes = new ServerAttributes();
-    setup(port, ticket);
+  	
+   setup(port, timeout, null);
   }
   
+  public ConnectionEstablisher(String port, String timeout, String ticket)
+  {
+   setup(port, timeout, ticket);
+  }
 
-  public void setup(String portStr, String ticketStr)
+
+  public void setup(String portStr, String timeoutStr, String ticketStr)
       {
+      _maxConnections = 1; 
+
+ 
+ 	  // port	
       int port = Integer.parseInt(portStr);
+      
+      // timeout
+      if (timeoutStr != null)
+      {
+      	_timeout = Integer.parseInt(timeoutStr);
+      }
+      else
+      {
+      	_timeout = 120000;
+      }
 
       _commandHandler = new ServerCommandHandler(new Loader());
       _updateHandler = new ServerUpdateHandler();
@@ -75,8 +90,14 @@ public class ConnectionEstablisher
           {
             // create server socket from port
             _serverSocket = new ServerSocket(port);
-	    System.err.println(ServerReturnCodes.RC_SUCCESS);
-	    System.err.println(_serverSocket.getLocalPort());
+            
+            if (_timeout > 0)
+            {
+            	_serverSocket.setSoTimeout(_timeout);
+            }
+	    
+	    	System.err.println(ServerReturnCodes.RC_SUCCESS);
+	    	System.err.println(_serverSocket.getLocalPort());
             System.out.println("Server running on: " + InetAddress.getLocalHost().getHostName());
           }
       catch (UnknownHostException e)

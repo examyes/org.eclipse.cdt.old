@@ -1,16 +1,17 @@
 #!/usr/bin/perl -w
-if (!defined($ARGV[0]) || !defined($ARGV[1]) || !defined($ARGV[2]) || !defined($ARGV[3]) || !defined($ARGV[4]))
+if (!defined($ARGV[0]) || !defined($ARGV[1]) || !defined($ARGV[2]) || !defined($ARGV[3]) || !defined($ARGV[4]) || !defined($ARGSV[5]))
 {
     print("command usage:\n");
-   print("auth.pl USER, PASSWORD, PATH, PORT, TICKET\n");
+   print("auth.pl USER, PASSWORD, PATH, PORT, TIMEOUT, TICKET\n");
 }
 else
 {
-  $userIN   = $ARGV[0];
-  $pwdIN    = $ARGV[1];
-  $pathIN   = $ARGV[2];
-  $portIN   = $ARGV[3];
-  $ticketIN = $ARGV[4];
+  $userIN    = $ARGV[0];
+  $pwdIN     = $ARGV[1];
+  $pathIN    = $ARGV[2];
+  $portIN    = $ARGV[3];
+  $timeoutIN = $ARGV[4];
+  $ticketIN  = $ARGV[5];
 
   @passwdStruct = getpwnam($userIN);
 
