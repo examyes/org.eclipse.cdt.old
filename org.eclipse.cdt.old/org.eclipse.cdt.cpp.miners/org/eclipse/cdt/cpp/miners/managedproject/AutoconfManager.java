@@ -58,7 +58,8 @@ public class AutoconfManager {
 		{	// chechk if there are existing autoconf files anf if there are then
 			//prompt the user that any existing autoconf files will be regenerated
 			// and existing files will be renamed as *.old
-			generateAutoconfFiles(project,status,true);
+			//generateAutoconfFiles(project,status,true);
+			updateAutoconfFiles(project,status,true);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
 				runCommand(project,status,"./autogen.sh;./configure");
@@ -68,11 +69,11 @@ public class AutoconfManager {
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
 	}
-	protected void generateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
+/*	protected void generateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
 	{
 		configureInManager.generateConfigureIn(project);
 		makefileAmManager.generateMakefileAm(project);
-	}
+	}*/
 	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
 	{
 		configureInManager.updateConfigureIn(project,true);
@@ -192,8 +193,11 @@ public class AutoconfManager {
 	{
 		// if configure is not found then create it first
 		File conf = new File (project.getSource(),"configure");
+		File script = new File (project.getSource(),"autogen.sh");
 		if(!conf.exists())
 		{
+			if(!script.exists())
+				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
 				runCommand(project, status,"./autogen.sh;./configure");
 			else

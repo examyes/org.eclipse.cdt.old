@@ -47,7 +47,7 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.*;
 
-public class InitCreateRunAction extends CustomAction
+public class UpdateCreateRunAction extends CustomAction
 { 
 	public class RunThread extends Handler
 	{
@@ -83,27 +83,24 @@ public class InitCreateRunAction extends CustomAction
 		}
 	}
 	
-	public InitCreateRunAction(DataElement subject, String label, DataElement command, DataStore dataStore)
+	public UpdateCreateRunAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
 		if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-		if(_command.getValue().equals("INIT_CREATE_RUN")&& !projectHasSubdir())
+		if(_command.getValue().equals("UPDATE_CREATE_RUN")&& !projectHasSubdir())
 				setEnabled(false);		
 	}
     public void run()
 	{
-		String overwrite = "";
-		if(doesAutoconfSupportExist())
-			overwrite = "\nAll existing Autoconf related files will be overwritten";
 		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
-		String message = new String("This action will generate all the files needed for Autoconf Support"
-				+overwrite+"\nDo you wish to continue?");
+		String message = new String("Updating and or generating all the files needed by Autoconf"
+				+"\nDo you wish to continue?");
 				
 		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
-		if(dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
+		if(dialog.openConfirm(shell,"Updating Autoconf Support Files ",message))
 		{
-			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_INIT_CREATE_RUN");
+			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_UPDATE_CREATE_RUN");
 			DataElement status = _dataStore.command(manageProjectCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
 			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
@@ -159,17 +156,5 @@ public class InitCreateRunAction extends CustomAction
 			    }
 		    }
 		return false;
-
-		/*
-
-		File project = _subject.getFileObject();
-		ProjectStructureManager structure = new ProjectStructureManager(project);
-		File[]fileList = structure.getFiles();
-
-		for (int i = 0; i < fileList.length; i++)
-			if(fileList[i].getName().equals("Makefile")||fileList[i].getName().equals("Makefile.am")||fileList[i].getName().equals("Configure.in"))
-				return true;
-		return false;
-		*/
 	}
 }

@@ -2053,36 +2053,22 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	executeCmd.setAttribute(DE.A_VALUE, "EXECUTE_TARGET");
 	// autoconf
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
-	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	/*DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Initialize autoconf files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");
+	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");*/
 //////////////////////////////////
-	//DataElement updateCmd = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Update...");
-	DataElement updateCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
-	DataElement updateAutoconfFilesCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Update all autoconf files",
+
+	//dataStore.createReference(startupCmds, autoconfCmds, "abstracts", "abstracted by");
+///////////////
+	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
+	
+	DataElement updateAutoconfFilesCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create/Update all automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
-	
-	
-	
-	DataElement updateMakefileAmCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Update local Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	updateMakefileAmCmd.setAttribute(DE.A_VALUE, "UPDATE_MAKEFILE_AM");
-	
-	DataElement updateConfigureInCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Update local configure.in",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
-
-	dataStore.createReference(updateCmds, autoconfCmds, "abstracts", "abstracted by");
-
-	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
-
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-								 "Create configure",
+								 "Generate configure",
 								 "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
 
@@ -2096,10 +2082,77 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
 						
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Initialize/Create/Run",
-							  "com.ibm.cpp.ui.internal.actions.InitCreateRunAction");
-	mngCmd.setAttribute(DE.A_VALUE,"INIT_CREATE_RUN");
+							  "Create/Update,Generate,Run",
+							  "com.ibm.cpp.ui.internal.actions.UpdateCreateRunAction");
+	mngCmd.setAttribute(DE.A_VALUE,"UPDATE_CREATE_RUN");
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
+	
+	//****************************
+	DataElement dummy =  dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Dummy");
+	DataElement advancedCmds = dataStore.createObject(dummy, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Advanced...");
+	
+	///////////////
+	
+		
+	
+	DataElement updatesCmds = dataStore.createObject(advancedCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
+	
+	DataElement updateMakefileAmCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Update Makefile.am",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateMakefileAmCmd.setAttribute(DE.A_VALUE, "UPDATE_MAKEFILE_AM");
+	
+	DataElement updateConfigureInCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Update configure.in",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
+	
+	dataStore.createReference(updatesCmds, advancedCmds, "abstracts", "abstracted by");
+	
+	DataElement makefileCmds = dataStore.createObject(advancedCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Create Cmds");
+	DataElement libCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
+	
+	DataElement toStatLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create StaticLib Makfile.am",
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toStatLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
+	
+	DataElement toSharedLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create SharedLib Makefile.am",
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toSharedLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
+
+	dataStore.createReference(libCmds, makefileCmds, "abstracts", "abstracted by");
+	
+	DataElement toTopLevelCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create TopLevel Makefile.am",
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
+	
+	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create Programs Makefile.am",
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toProgCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
+	
+	//
+	DataElement confInCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "ConfigureIn Cmds");
+
+	DataElement confInCmd = dataStore.createObject(confInCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create configure.in",
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
+	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						
+	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
+	//	
+	
+	dataStore.createReference(makefileCmds, advancedCmds, "abstracts", "abstracted by");
+	
+	///////////////
+
+	
+	dataStore.createReference(dummy, autoconfCmds, "abstracts", "abstracted by");
+	
+	//***********************************
+	
 	DataElement defCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Default Cmds");
 						
 	DataElement distCleanCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
@@ -2121,41 +2174,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	
 //
-	DataElement makefileCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customize Autoconf");
+	//DataElement makefileCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customize Autoconf");
+//
 
-	DataElement libCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
-	
-	DataElement toStatLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to StaticLib Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toStatLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
-	
-	DataElement toSharedLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to SharedLib Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toSharedLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
-
-	dataStore.createReference(libCmds, makefileCmds, "abstracts", "abstracted by");
-	
-	DataElement toTopLevelCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to TopLevel Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
-	
-	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to Programs Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toProgCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
-	
-	//
-	DataElement confInCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "ConfigureIn Cmds");
-
-	DataElement confInCmd = dataStore.createObject(confInCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add configure.in file",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
-	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						
-	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
-	//
 	/*DataElement missCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "ConfigureIn Cmds");
 
 	DataElement compilerCmd = dataStore.createObject(missCmds, DE.T_UI_COMMAND_DESCRIPTOR,
@@ -2197,7 +2218,5 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
 
 }
-
-
 
 

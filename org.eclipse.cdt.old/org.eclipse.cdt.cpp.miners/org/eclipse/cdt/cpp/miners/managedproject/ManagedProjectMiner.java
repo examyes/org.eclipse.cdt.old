@@ -62,7 +62,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(targetD, "Execute", "C_EXECUTE_TARGET",false);
 		
 		// autoconf	
-		createCommandDescriptor(projectD, "Generating all files - configure.in and Makefile.am's - needed by Autoconf & Automake", "C_GENERATE_AUTOCONF_FILES", false);
+		//createCommandDescriptor(projectD, "Generating all files - configure.in and Makefile.am's - needed by Autoconf & Automake", "C_GENERATE_AUTOCONF_FILES", false);
 		createCommandDescriptor(projectD, "Updating all - configure.in and Makefile.am's - missing files will be generated", "C_UPDATE_AUTOCONF_FILES", false);
 		//
 		createCommandDescriptor(fsObjectD,"Updating local Makefile.am","C_UPDATE_MAKEFILE_AM",false);
@@ -71,7 +71,7 @@ public class ManagedProjectMiner extends Miner
 		
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Running configure script - creating configure if needed", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Initializing configure.in & Makefile.am's and creating & running configure", "C_INIT_CREATE_RUN", false);
+		createCommandDescriptor(projectD, "Updating configure.in & Makefile.am's and creating & running configure", "C_UPDATE_CREATE_RUN", false);
 		createCommandDescriptor(projectD, "Cleaning package for distribution", "C_DIST_CLEAN", false);
 		createCommandDescriptor(projectD, "maintainer-clean - recommended for package developer", "C_MAINTAINER_CLEAN", false);
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
@@ -121,16 +121,16 @@ public class ManagedProjectMiner extends Miner
  	 			_dataStore.deleteObject(project.getParent(), project);
  	 			//project.getParent().removeNestedData();
 			}
-			else if (name.equals("C_INIT_CREATE_RUN"))
+			else if (name.equals("C_UPDATE_CREATE_RUN"))
 			{
 				autoconfManager.manageProject(project, status);
 				//parseAmFile(project); 
 			}
-			else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
+		/*	else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.generateAutoconfFiles(project, status,false);
 				//parseAmFile(project); 
-			}
+			}*/
 			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.updateAutoconfFiles(project, status,false);

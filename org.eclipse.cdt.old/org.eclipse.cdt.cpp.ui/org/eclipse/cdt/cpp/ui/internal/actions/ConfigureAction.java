@@ -70,18 +70,14 @@ public class ConfigureAction extends CustomAction
 	{	
 		super(subject, label, command, dataStore);
 		
-		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES")||_command.getValue().equals("CREATE_CONFIGURE")
-			||_command.getValue().equals("RUN_CONFIGURE")||_command.getValue().equals("UPDATE_AUTOCONF_FILES")
-			||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
+		if(_command.getValue().equals("CREATE_CONFIGURE")||_command.getValue().equals("RUN_CONFIGURE")||
+		_command.getValue().equals("UPDATE_AUTOCONF_FILES")||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
 		//enable disable based on object files
-		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")	&& !doesAutoconfSupportExist())
-				setEnabled(false);
-		//enable disable based on object files
 		
 		
-		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES")&& !projectHasSubdir())
+		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")&& !projectHasSubdir())
 				setEnabled(false);		
 		
 		if((_command.getValue().equals("UPDATE_MAKEFILE_AM")&&!doesFileExists("Makefile.am")))
@@ -91,31 +87,15 @@ public class ConfigureAction extends CustomAction
 			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExists("configure.in")))
 				setEnabled(false);
 				
-		if(_command.getValue().equals("CREATE_CONFIGURE")&&
-		   (!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
+		if((_command.getValue().equals("CREATE_CONFIGURE")||_command.getValue().equals("RUN_CONFIGURE"))
+			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
 				setEnabled(false);		
-
-	/*	if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure"))
-			if (subject.getType().equals("Project"))	
-				setEnabled(false);*/
 	}
     public void run()
 	{
 		boolean execute = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
-		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES"))
-		{
-			if(doesAutoconfSupportExist())
-			{
-				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-				String message = new String("This action will generate all the files needed for Autoconf Support"+
-					"\nExisting configure.in and Makefile.am's will be overwritten"+
-					"\nDo you wish to continue?");
-				if(!dialog.openConfirm(shell,"Generating configure.in and Makefile.am's ",message))
-					execute = false;
-			}
-		}
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
@@ -126,7 +106,8 @@ public class ConfigureAction extends CustomAction
 				("Trying to update existing configure.in and makefile.am's "+
 				"\nconfigure.in and or Makefile.am Files will be generated if missing"
 					+"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
-				dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+				execute = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
@@ -137,7 +118,8 @@ public class ConfigureAction extends CustomAction
 				String message = new String
 				("Trying to update existing makefile.am's"+
 					"\nIf updated then old Makefile.am's will be renamed *.old");
-				dialog.openInformation(shell,"Updating Makefile.am's ",message);
+				//dialog.openInformation(shell,"Updating Makefile.am's ",message);
+				execute = dialog.openConfirm(shell,"Updating Makefile.am's ",message);
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
@@ -148,7 +130,8 @@ public class ConfigureAction extends CustomAction
 				String message = new String
 				("Trying to update existing configure.in "+
 					"\nIf updated then old configure.in shall be renamed *.old");
-				dialog.openInformation(shell,"Updating configure.in",message);
+				//dialog.openInformation(shell,"Updating configure.in",message);
+				execute = dialog.openConfirm(shell,"Updating configure.in",message);
 			}
 		}	
 		if(execute)
@@ -198,40 +181,27 @@ public class ConfigureAction extends CustomAction
     private boolean doesAutoconfSupportExistHelper(DataElement root)
 	{
 		for (int i = 0; i < root.getNestedSize(); i++)
-		    {
+		{
 			DataElement child = root.get(i).dereference();
 			String type = child.getType();
 			if (type.equals("file"))
-			    {
+			{
 				if (!child.isDeleted())
-				    {
+				{
 					String name = child.getName();
-					if (name.equals("Makefile") ||
-					    name.equals("Makefile.am") ||
-					    name.equals("configure.in"))
-					    {
-							return true;
-					    }
-				    }
-			    }
+					if (name.equals("Makefile")||name.equals("Makefile.am")
+						||name.equals("configure.in"))
+					{
+						return true;
+					}
+				}
+			}
 			else if (type.equals("Project") || type.equals("directory"))
-			    {
+			{
 				return doesAutoconfSupportExistHelper(child);
-			    }
-		    }
+			}
+		}
 		return false;
-
-		/*
-
-		File project = _subject.getFileObject();
-		ProjectStructureManager structure = new ProjectStructureManager(project);
-		File[]fileList = structure.getFiles();
-
-		for (int i = 0; i < fileList.length; i++)
-			if(fileList[i].getName().equals("Makefile")||fileList[i].getName().equals("Makefile.am")||fileList[i].getName().equals("Configure.in"))
-				return true;
-		return false;
-		*/
 	}
 }
 
