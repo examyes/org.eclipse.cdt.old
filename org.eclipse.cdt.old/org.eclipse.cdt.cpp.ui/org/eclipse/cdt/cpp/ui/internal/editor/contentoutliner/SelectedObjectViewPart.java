@@ -104,7 +104,7 @@ public class SelectedObjectViewPart extends GenericViewPart
 
     public void updateViewForeground()
     {
-      ArrayList colours = _plugin.readProperty("OutputViewForeground");
+      ArrayList colours = _plugin.readProperty("ViewForeground");
       if (colours.size() == 3)
 	  {
 	      int r = new Integer((String)colours.get(0)).intValue();
@@ -117,7 +117,7 @@ public class SelectedObjectViewPart extends GenericViewPart
     
   public void updateViewBackground()
   {
-      ArrayList colours = _plugin.readProperty("OutputViewBackground");
+      ArrayList colours = _plugin.readProperty("ViewBackground");
       if (colours.size() == 3)
 	  {
 	      int r = new Integer((String)colours.get(0)).intValue();
@@ -130,7 +130,7 @@ public class SelectedObjectViewPart extends GenericViewPart
 
     public void updateViewFont()
     {
-      ArrayList fontArray = _plugin.readProperty("OutputViewFont");
+      ArrayList fontArray = _plugin.readProperty("ViewFont");
       if (fontArray.size() > 0)
 	  {
 	      String fontStr = (String)fontArray.get(0);
