@@ -302,11 +302,21 @@ public class ViewMenu implements IMenuListener
   public void fixateOnRelationType(String relationType)
       {
 	  _fixatedRelationType = relationType;
+
+	  getRelationItems();
+
+	  selectRelationship(relationType);
+	  _relationLabel.setEnabled(false);
       }
 
   public void fixateOnObjectType(String objectType)
       {
-        _fixatedObjectType = objectType;
+	  _fixatedObjectType = objectType;
+
+	  getFilterItems();    
+	  selectFilter(objectType);
+
+	  _filterLabel.setEnabled(false);
       }
 
 
@@ -477,7 +487,7 @@ public class ViewMenu implements IMenuListener
 	  DataStore dataStore = _input.getDataStore();
 	  DataElement descriptor = _inputDescriptor;
 	  _filterItems.clear();
-	  ArrayList items = dataStore.getFilterItems(descriptor, _fixatedRelationType, _relationSelected);
+	  ArrayList items = dataStore.getFilterItems(descriptor, null, _relationSelected);
 	  for (int i = 0; i < items.size(); i++)
 	      {
 		  DataElement item = (DataElement)items.get(i);
