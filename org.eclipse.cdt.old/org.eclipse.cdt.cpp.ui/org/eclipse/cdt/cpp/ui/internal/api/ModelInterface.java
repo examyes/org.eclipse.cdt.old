@@ -1722,9 +1722,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	if (resource != null)
 	    {
 		DataElement resourceElement = findResourceElement(resource);
-		if (resourceElement.getType().equals("file"))
+		if (resourceElement != null && 
+		    resourceElement.getType().equals("file"))
+		    {
 			resourceElement = resourceElement.getParent();
-		
+		    }
 		if (resourceElement != null)
 		    {
 			DataStore dataStore = resourceElement.getDataStore();
