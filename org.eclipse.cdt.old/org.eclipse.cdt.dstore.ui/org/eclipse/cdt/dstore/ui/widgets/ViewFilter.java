@@ -10,6 +10,7 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import org.eclipse.jface.viewers.*;
+
 import java.util.*;
 
 public class ViewFilter extends ViewerFilter
@@ -18,6 +19,7 @@ public class ViewFilter extends ViewerFilter
     private DataElement _type;
     private int         _depth;
     private boolean _enableContents = false;
+	private DataElement _root;
 
     private ArrayList _notCache;
     private ArrayList _isCache;
@@ -56,6 +58,7 @@ public class ViewFilter extends ViewerFilter
 
     public Object[] filter(Viewer viewer, Object parent, Object[] input)
     {
+    	  	
 	ArrayList elements = new ArrayList();
 	for (int i = 0; i < input.length; i++)
 	    {
@@ -76,33 +79,34 @@ public class ViewFilter extends ViewerFilter
     
     public boolean select(Viewer viewer, Object element, Object other)
     {
-	if (_type == null || _type.getName().equals("all"))
+		if (_type == null || _type.getName().equals("all"))
 	    {
-		return true;
+			return true;
 	    }
-
-	DataElement dataElement = (DataElement)element;	
-	if (dataElement != null)
+		_root = (DataElement)viewer.getInput();
+		
+		DataElement dataElement = (DataElement)element;	
+		if (dataElement != null)
 	    {	
-		if (_type != null) 
+			if (_type != null) 
 		    {
-			dataElement = dataElement.dereference();
-			boolean result =  doesExist(_type, dataElement, _depth);
+				dataElement = dataElement.dereference();
+				boolean result =  doesExist(_type, dataElement, _depth);
 
-			if (!result)
+				if (!result)
 			    {
-				DataElement notDescriptor = dataElement.getDescriptor();
-				addTo(_notCache, notDescriptor);
+					DataElement notDescriptor = dataElement.getDescriptor();
+					addTo(_notCache, notDescriptor);
 			    }
 
-			return result;
+				return result;
 		    }
-		else
-		    return true;
+			else
+			    return true;
 	    }
-	else
+		else
 	    {	
-		return false;
+			return false;
 	    }
     }
 
@@ -155,20 +159,34 @@ public class ViewFilter extends ViewerFilter
 							      addTo(_isCache, elementDescriptor);
 							      return true;
 							  }
-						      
+							 
+							 	       
 						      if (_enableContents)
 							  {
+								 if (_root != null && !_root.contains(dataElement))
+								 {
+								 
 							      ArrayList containsList = descriptor.getAssociated("contents");
 							      for (int i = 0; i < containsList.size(); i++)
 								  {
 								      DataElement aDes = (DataElement)containsList.get(i);
-								      if (aDes != null && 
-									  doesExist(aDes, dataElement, depth))
-									  {
-									      addTo(_isCache, elementDescriptor);
-									      return true;
-									  }					      
+								      if (aDes != null && !aDes.getName().equals("all"))
+								      { 
+								      	if (aDes.getType().equals(DE.T_OBJECT_DESCRIPTOR) || 
+								      		aDes.getType().equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+								      	{
+							
+									  		if (doesExist(aDes, dataElement, depth))
+									  		{
+									    		  //addTo(_isCache, elementDescriptor);
+									    		  return true;
+									  		}
+								      	}
+								      }					      
 								  }
+							
+								 }
+					
 							  }
 						  }
 					  }
