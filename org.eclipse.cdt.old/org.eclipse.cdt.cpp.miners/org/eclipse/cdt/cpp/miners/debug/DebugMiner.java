@@ -42,6 +42,7 @@ public class DebugMiner extends Miner
 	String fs = "/";
         _debugJarPath =  debugPath;
 	_debugJarPath += ps + debugPath + fs + "ibm_debug.jar";
+        _debugJarPath += ps + _gdbPiclPath;
 	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " com.ibm.debug.gdbPicl.Gdb ";
     }
