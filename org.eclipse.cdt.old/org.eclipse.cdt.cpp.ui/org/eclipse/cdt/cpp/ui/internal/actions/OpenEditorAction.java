@@ -35,7 +35,7 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
-    private static DataElement _element;
+    protected static DataElement _element;
 
     private static IFile         _previousFile = null;
     private static IFile         _file = null;
