@@ -41,9 +41,102 @@ public class CmdInitializeDE extends Command
       _EPDCSession = EPDCSession;
 
       byte frontendEncoding = _req.debugFrontendEncoding();
+      String codePage = _req.codePage();
       String locale   = _req.locale();
 
-      if (frontendEncoding != EPDC.StrEncode_UTF8)
+      // We have to make sure we tell EStdString objects to encode in the
+      // same code page the front end expects.
+
+      if (Gdb.traceLogger.DBG) 
+          Gdb.traceLogger.dbg(1,"front end using code page:"+codePage);
+
+      if (frontendEncoding == EPDC.StrEncode_Ext_ASCII)
+      {
+        // In this case, we should tell epdc to encode to whatever the
+        // code page field tells us to.
+
+        if (Gdb.traceLogger.DBG) 
+            Gdb.traceLogger.dbg(1,"front end encoding:Ext_ASCII");
+        // We are not sure at this point whether the code page requested by
+        // the front end is supported by the java runtime.  We will try to use
+        // it and catch the error.
+        try
+        {
+           if (Gdb.traceLogger.DBG) 
+               Gdb.traceLogger.dbg(1,"   testing code page:"+codePage);
+           byte[] testCodePage = "testCodePage".getBytes(codePage);
+        }
+        catch (Exception e)
+        {
+           // Either UnsupportedEncodingException or IllegalArgumentException
+
+           if (Gdb.traceLogger.DBG) 
+               Gdb.traceLogger.dbg(1,"   code page is not supported");
+           // This encoding is not supported, we will detect any code pages
+           // for which we know we have a replacement here.
+           if (codePage.equalsIgnoreCase("ibm-1386"))
+           {
+              if (Gdb.traceLogger.DBG) 
+                  Gdb.traceLogger.dbg(1,"   switching to ibm-1381");
+              codePage = "ibm-1381";
+           }
+           else if (codePage.equalsIgnoreCase("ibm-1363"))
+           {
+               if (Gdb.traceLogger.DBG) 
+                   Gdb.traceLogger.dbg(1,"   switching to EUC_KR");
+              codePage = "EUC_KR";
+           }
+           else if (codePage.equalsIgnoreCase("ibm-1252"))
+           {
+               if (Gdb.traceLogger.DBG) 
+                   Gdb.traceLogger.dbg(1,"   switching to Cp1252");
+              codePage = "Cp1252";
+           }
+           else
+           {
+              // Fallback to whatever the runtime's default encoding is and also
+              // switch the locale to the platform's default.
+              String defaultEncoding = System.getProperty("file.encoding");
+              codePage = defaultEncoding;
+
+              Locale localeObj = Locale.getDefault();
+              String language = localeObj.getLanguage();
+              String country  = localeObj.getCountry();
+              String variant  = localeObj.getVariant();
+
+              if (country !=null && country.length() > 0 &&
+                  language!=null && language.length() > 0 &&
+                  variant != null && variant.length() > 0)
+                 locale = language + "_" + country + "_" + variant;
+              else if (country != null && country.length() > 0 &&
+                       language!= null && language.length() > 0)
+                 locale = language + "_" + country;
+              else if (language != null && language.length() > 0)
+                 locale = language;
+              else
+                 locale = "en_US";
+
+               if (Gdb.traceLogger.DBG) 
+                   Gdb.traceLogger.dbg(1,"   switching codepage to platform default:"+defaultEncoding);
+               if (Gdb.traceLogger.DBG) 
+                   Gdb.traceLogger.dbg(1,"   switching locale to platform default:"+locale);
+           }
+        }
+
+        if (Gdb.traceLogger.DBG) 
+            Gdb.traceLogger.dbg(1,"back end using code page:"+codePage);
+        EStdString.setEncoding(codePage);
+      }
+      else if (frontendEncoding == EPDC.StrEncode_UTF8)
+      {
+        // In this case, we should tell epdc to encode int UTF8 only
+        // (!!! is the codePage field useless in this case?)
+
+        if (Gdb.traceLogger.DBG) 
+            Gdb.traceLogger.dbg(1,"front end encoding:UTF8");
+        EStdString.setEncoding("UTF8");
+      }
+      else
       {
          returnCode = EPDC.ExecRc_Error;
       }
@@ -89,6 +182,9 @@ public class CmdInitializeDE extends Command
       _EPDCSession._debugEnginePlatformID = EPDC.PLATFORM_ID_AIX;
 
       _EPDCSession._defaultSettings       = EPDC.DebuggerBusyBoxEnable;
+      _EPDCSession._PMDebuggingAction     = EPDC.NoPaint;
+      _EPDCSession._PMDebuggingColor      = EPDC.Black;
+      _EPDCSession._PMDebuggingMode       = EPDC.Synchronous;
       _EPDCSession._processDetachAction   = EPDC.ProcessRelease;
 
 // ***************************************************************************
@@ -293,6 +389,8 @@ public class CmdInitializeDE extends Command
          // Stack Options
          0);
 
+      _EPDCSession._helpFileName     = helpFileName();
+      _EPDCSession._tutorialFileName = tutorialFileName();
    }
 
    String nlsCode()
@@ -335,7 +433,35 @@ public class CmdInitializeDE extends Command
       return nlsCode;
    }
 
+   String helpFileName()
+   {
+      String helpFileName;
 
+      String filePrefix = _req.filePrefix();
+
+      if (filePrefix == null)
+         filePrefix = "iwz";
+
+      helpFileName = filePrefix + "d" + "h" + "j" + nlsCode() +
+                     DEBUGGER_RELEASE_NUMBER + ".hlp";
+
+      return helpFileName;
+   }
+
+   String tutorialFileName()
+   {
+      String tutorialFileName;
+
+      String filePrefix = _req.filePrefix();
+
+      if (filePrefix == null)
+         filePrefix = "iwz";
+
+      tutorialFileName = filePrefix + "d" + "i" + "j" + nlsCode() +
+                         DEBUGGER_RELEASE_NUMBER+ ".inf";
+
+      return tutorialFileName;
+   }
 
 
    // Data members
