@@ -208,7 +208,7 @@ public class PreprocessWorker extends Thread
    else if (theFile.isDirectory())
    {
     File[] theFiles = theFile.listFiles();
-    for (int i=theFiles.length-1; i>=0; i--)
+    for (int i=theFiles.length-1; i>=0; i--) 
     {
      try
      {
@@ -259,7 +259,7 @@ public class PreprocessWorker extends Thread
 
  private File getParseExtensionsFile()
  {
-  String fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) +  _dataStore.getMinersLocation() + "/CPPExtensions.dat";  
+     String fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) +  /*_dataStore.getMinersLocation()*/  "org.eclipse.cdt.cpp.miners/CPPExtensions.dat";  
   File extFile = new File (fileName);
   if (!extFile.exists())
   {   
