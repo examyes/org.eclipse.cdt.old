@@ -28,7 +28,7 @@ public class XMLparser
     private int               _maxBuffer;
     
     private boolean           _panic = false;
-    
+    private Exception         _panicException = null;
 
     public XMLparser(DataStore dataStore)
     {
@@ -73,8 +73,7 @@ public class XMLparser
 		    }
 		catch (IOException e)
 		    {
-			System.out.println("XMLparser:read:" + e);
-			_panic = true;
+			handlePanic(e);
 		    }
 	    }
 
@@ -119,8 +118,9 @@ public class XMLparser
 		catch (IOException e)
 		    {
 			done = true; 
-			System.out.println("XMLparser:readLine:" + e);
-			_panic = true;
+
+			handlePanic(e);
+			
 			return null;
 		    }
 	    }
@@ -135,6 +135,18 @@ public class XMLparser
 	    {
 		return null;
 	    }
+    }
+
+
+    private void handlePanic(Exception e)
+    {
+	_panic = true;			
+	_panicException = e;
+    }
+    
+    public Exception getPanicException()
+    {
+	return _panicException;
     }
 
   public DataElement parseDocument(BufferedInputStream reader) throws IOException

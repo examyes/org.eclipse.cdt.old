@@ -25,6 +25,7 @@ public class DataStore
     private DataElement         _hostRoot;
     private DataElement         _minerRoot;
     private DataElement         _tempRoot;
+    private DataElement         _status;
 
     private DataElement         _ticket;  
 
@@ -299,6 +300,11 @@ public class DataStore
     return _minerRoot;
   }
 
+    public DataElement getStatus()
+    {
+	return _status;
+    }  
+
   public DataElement getLogRoot()
       {
         return _logRoot;
@@ -419,6 +425,8 @@ public class DataStore
       _hostRoot = createObject(_root,  getLocalizedString("model.host"),
 			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
 			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH));
+
+      _status = createObject(_root, getLocalizedString("model.status"), "okay");
   }
 
 

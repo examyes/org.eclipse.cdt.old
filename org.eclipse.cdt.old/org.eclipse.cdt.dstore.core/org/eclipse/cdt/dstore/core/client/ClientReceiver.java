@@ -39,5 +39,11 @@ public class ClientReceiver extends Receiver
       }
     }
     
-    public void handleError(Exception e) {}
+    public void handleError(Exception e) 
+    {
+	//e.printStackTrace();
+	DataElement status = _dataStore.getStatus();
+	status.setAttribute(DE.A_NAME, e.getMessage());
+	_dataStore.refresh(status);
+    }
 }

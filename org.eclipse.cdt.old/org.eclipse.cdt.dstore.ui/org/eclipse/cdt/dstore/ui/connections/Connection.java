@@ -38,7 +38,7 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
 import java.lang.reflect.InvocationTargetException;
 
-public class Connection
+public class Connection implements IDomainListener
 {
     public class ConnectOperation implements IRunnableWithProgress
     {
@@ -179,6 +179,8 @@ public class Connection
     
     private String _user = null;
     private String _password = null;
+
+    private DomainNotifier _notifier = null;
 
     public Connection(String name, ArrayList args, DataElement parent)
     {
@@ -390,6 +392,7 @@ public class Connection
 
     public ConnectionStatus connect(DomainNotifier notifier, String minersLocation)
     {
+	_notifier = notifier;
 	if (_client == null)
 	    {	
 		_client = new ClientConnection(_name, notifier);
@@ -435,6 +438,13 @@ public class Connection
 	    {
 	    }
 	
+
+	if (_client.isConnected())
+	    {
+		notifier.addDomainListener(this);
+	    }
+
+
 	return op.getStatus();
     }
     
@@ -448,6 +458,8 @@ public class Connection
 		_element.getDataStore().refresh(_element);
 		_client.disconnect();
 		_client = null;
+
+		_notifier.removeDomainListener(this);
 	    }
     }
     
@@ -481,6 +493,41 @@ public class Connection
 	
 	return false;
 	
+    }
+
+
+    public boolean listeningTo(DomainEvent e)
+    {
+	DataElement dsStatus = _client.getDataStore().getStatus();	
+	DataElement parent = (DataElement)e.getParent();
+	
+	if (dsStatus == parent)
+	    {
+		return true;
+	    }
+
+	return false;
+    }
+  
+    public void domainChanged(DomainEvent e)
+    {
+	DataElement status = (DataElement)e.getParent();
+	if (!status.getName().equals("okay"))
+	    {
+		// report an error message
+		Shell shell = _notifier.findShell();
+		if (shell != null)
+		    {
+			String msg = status.getName();
+			MessageDialog.openError(shell, "Connection Error", msg);          
+		    }
+	    }
+	
+    }
+
+    public Shell getShell()
+    {
+	return null;
     }
     
 }

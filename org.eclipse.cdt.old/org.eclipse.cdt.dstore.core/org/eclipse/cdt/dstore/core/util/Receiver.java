@@ -90,23 +90,18 @@ public abstract class Receiver extends Thread
 		}
 	    else
 		{
-		   
 		    // something really bad happened
 		    _canExit = true;
-		    handleError(null);
+		    handleError(_xmlParser.getPanicException());
 		}
         }        
         catch (IOException ioe)
 	    {
-		System.out.println("Receiver:handleInput()" + ioe);
-		ioe.printStackTrace();
 		_canExit = true;
 		handleError(ioe);
 	    }
 	catch (Exception e)
 	    {
-		System.out.println("Receiver: " + e);
-		e.printStackTrace();
 		handleError(e);
 	    }
       }
