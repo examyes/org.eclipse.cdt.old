@@ -50,12 +50,18 @@ public class Trimmer
   
  private StringBuffer getContinuedLine()
  {
+  if (_reader == null)
+   return null;
   StringBuffer continuedLine = new StringBuffer();
   try
   {
    String theLine = _reader.readLine();
    if (theLine == null)
+   {
+    _reader.close();
+    _reader=null;
     return null;
+   }
    if (theLine.length() == 0)
     return continuedLine;
    continuedLine.append(theLine);
@@ -77,7 +83,7 @@ public class Trimmer
     }
    }
   }
-  catch (IOException e) { return null; }
+  catch (IOException e) { _reader.close(); _reader=null; return null; }
   return continuedLine;
   
  }
