@@ -21,6 +21,7 @@ package com.ibm.cpp.miners.parser.grammar;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.dstore.*;
+import com.ibm.cpp.miners.parser.invocation.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*; 
@@ -30,7 +31,12 @@ public final class Parser
  private SymbolTable  symtab;
  private boolean      isConstructor;
  private String       empty = "";
- public Parser() {}
+ private ParseWorker  _theParseWorker;
+
+ public Parser(ParseWorker theParseWorker) 
+ {
+  _theParseWorker = theParseWorker;
+ }
  public void setSymbolTable(SymbolTable theSymbolTable)
  {
   symtab = theSymbolTable;
@@ -1916,7 +1922,7 @@ void skip_object_body(DataElement theObject) :
    StringBuffer buf = new StringBuffer(t.beginLine + ":" + body);
    //System.out.println("SETTING BUFFER=>" + buf);
    theObject.setBuffer(buf);
-   theObject.expandChildren();
+   _theParseWorker.parseObject(theObject);
   }
   symtab.closeScope();
  }

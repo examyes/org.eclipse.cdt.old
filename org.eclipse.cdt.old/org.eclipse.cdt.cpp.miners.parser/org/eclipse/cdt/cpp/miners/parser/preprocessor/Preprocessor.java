@@ -26,7 +26,7 @@ import java.util.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.invocation.*;
 
-public class Preprocessor extends Thread
+public class Preprocessor
 {
  //Objects with state
  private SourceReader           _sourceReader;
@@ -34,29 +34,24 @@ public class Preprocessor extends Thread
  private TruthStack             _truthStack;
  private HashMap                _directives;
  private Vector                 _includes;
- private ParseManager           _parseManager = null;
- private boolean                skipIncludes;
  private StringBuffer           _emit = null;
  private Stack                  _emitStack; 
- 
- //addPreprocessorError(text,file,line); 
- public Preprocessor (ParseManager parseManager)
+ private Stack                  _fileStack;
+ private File                   _theFile;
+ private PreprocessWorker       _ppWorker;
+
+
+ public Preprocessor(PreprocessWorker ppWorker)
  {
-  if (parseManager == null)
-   skipIncludes = true;
-  else
-  {
-   _parseManager           = parseManager;
-   skipIncludes = false;
-  }
-  
+  _ppWorker               = ppWorker;
   _sourceReader           = new SourceReader(this);
   _macroManager           = new MacroManager();
   //_evaluator              = new Evaluator();
   _truthStack             = new TruthStack();
   _includes               = new Vector();
   _emitStack              = new Stack();
-  
+  _fileStack              = new Stack();
+
   //Set up a Hashtable for easy access to the defined preprocessor directives
   _directives = new HashMap(); 
   _directives.put(""        ,new Integer(0));
@@ -74,50 +69,76 @@ public class Preprocessor extends Thread
   _directives.put("pragma"  ,new Integer(12));
  }
 
- public String preprocess(String fileName)
+ public void reset()
  {
-  _emit = new StringBuffer();
-  File rawSource;
-  try 
+  _sourceReader.reset();
+  _macroManager.reset();
+  _truthStack.reset();
+ }
+ 
+ public void pushState()
+ {
+  _sourceReader.pushState();
+  if (_theFile != null)
+   _fileStack.push(_theFile);
+  if (_emit != null)
+   _emitStack.push(_emit);
+ }
+ 
+ 
+ public void popState()
+ {
+  _sourceReader.popState();
+  if (!_emitStack.empty())
   {
-   rawSource = new File (fileName);
-   if (rawSource.length() == 0)
-    return ""; 
-   BufferedReader in = new BufferedReader(new FileReader(rawSource), (int)rawSource.length());
-   if (in != null)
-   {
-    _sourceReader.setFile(fileName);
-    String curLine = null;
-    while ( (curLine = _sourceReader.getNextLine()) != null)
-    {
-    
-     
-     _emit.append(process(curLine) + "\n");
-    }
-    in.close();
+   _emit = (StringBuffer)_emitStack.peek();
+   _emitStack.pop();
+  }
+  if (!_fileStack.empty())
+  {
+   _theFile = (File)_fileStack.peek();
+   _fileStack.pop();
+  }
+ }
+   
+ public void setIncludes(DataElement includes)
+ {
+  if (includes == null) 
+   return;
+  _includes.clear();
+  ArrayList incs = includes.getNestedData();
+  if (incs != null)
+  {
+   for(int i=0; i<incs.size(); i++)
+   { 
+    String path = new String(((DataElement)incs.get(i)).getName());
+    path = path.replace('/', java.io.File.separator.charAt(0));
+    _includes.add(path);
    }
   }
-  catch (IOException e) 
-  {
-   //e.printStackTrace();
-   //System.out.println(e.getMessage());
-   
-   return null;
-  } 
+ } 
  
-  //System.out.println(_emit);
-  
-  return _emit.toString();
+ public void setFile(File theFile)
+ {
+  _theFile = theFile;
+ }
+
+ public StringBuffer preprocess()
+ {
+  _emit = new StringBuffer();
+  if (_theFile.length() == 0)
+   return _emit; 
+  _sourceReader.setFile(_theFile);
+  String curLine = null;
+  while ( (curLine = _sourceReader.getNextLine()) != null)
+   _emit.append(process(curLine) + "\n");
+  return _emit;
  }
  
  private String process(String line)
  {
   //First we need to replace the trigraph sequences:
-   
   line = replaceTrigraphs(line);
-  //System.out.println(line);
-  
-    //Find the # chararcter on the line...
   int loc = line.indexOf("#");
 
   if (loc == -1)
@@ -127,8 +148,6 @@ public class Preprocessor extends Thread
    return scan(line.substring(0,loc)) + processDirective(line.substring(loc,line.length()),false);
   return processDirective(line.substring(loc,line.length()),true); //Directive is alone on the line
  }
-
- 
 
  private String scan(String line)
  {
@@ -178,7 +197,6 @@ public class Preprocessor extends Thread
   }
   return theLine.toString();
  }
- 
  
  private String stripComments (String line)
  {
@@ -314,7 +332,7 @@ public class Preprocessor extends Thread
  //The following method handles Source File Inclusion
  private void handleIncludeDirective(String fileString)
  {
-  if ( (skipIncludes) || (fileString.length() < 3))
+  if (fileString.length() < 3)
    return;
   
   //First expand all macros and trim Whitespace.
@@ -337,13 +355,14 @@ public class Preprocessor extends Thread
 
   //FIX THIS SHould look at the current directory If quote Delimiters were used, then first search the current directory
   File theFile = findFile(fileString);
+  
   if (theFile == null)
    _emit.append("#include \"" + fileString + "\""); 
   
   else 
    {
     _emit.append("#include \"" + theFile.getPath().replace('\\','?') + "\""); 
-   _parseManager.parse(theFile.getPath(),true);
+    _ppWorker.preprocessIncludeFile(theFile);
    //System.out.println(_emit.toString());
    }
  }
@@ -370,49 +389,7 @@ public class Preprocessor extends Thread
   _macroManager.forgetMacro(identifier);
  }
 
- public void reset()
- {
-  _sourceReader.reset();
-  _macroManager.reset();
-  _truthStack.reset();
- }
- 
- public void pushState()
- {
-  _sourceReader.pushState();
-  if (_emit != null)
-   _emitStack.push(_emit);
- }
- 
- 
- public void popState()
- {
-  _sourceReader.popState();
-  if (!_emitStack.empty())
-  {
-   _emit = (StringBuffer)_emitStack.peek();
-   _emitStack.pop();
-  }
- }
-   
- public void setIncludes(DataElement includes)
- {
-  if (includes == null) 
-   return;
-  _includes.clear();
-  ArrayList incs = includes.getNestedData();
-  if (incs != null)
-      {
-	  for(int i=0; i<incs.size(); i++)
-	      {
-		  String path = new String(((DataElement)incs.get(i)).getName());
-		  path = path.replace('/', java.io.File.separator.charAt(0));
-		  _includes.add(path);
 
-	      }
-      }
- } 
- 
  public void addError(String theText)
  {
  
@@ -447,9 +424,9 @@ public class Preprocessor extends Thread
  //Standalone preprocessor driver
  public static void main(String args[])
  {
-  Preprocessor _thePP= new Preprocessor(null);
-  String huge = _thePP.preprocess(args[0]);
-  System.out.println(huge);
+  // Preprocessor _thePP= new Preprocessor();
+  //String huge = _thePP.preprocess(args[0]);
+  //System.out.println(huge);
  }
 }
 

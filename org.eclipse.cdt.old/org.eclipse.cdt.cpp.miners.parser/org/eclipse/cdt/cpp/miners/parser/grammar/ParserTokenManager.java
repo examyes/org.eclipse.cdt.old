@@ -6,6 +6,7 @@ package com.ibm.cpp.miners.parser.grammar;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.dstore.*;
+import com.ibm.cpp.miners.parser.invocation.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;

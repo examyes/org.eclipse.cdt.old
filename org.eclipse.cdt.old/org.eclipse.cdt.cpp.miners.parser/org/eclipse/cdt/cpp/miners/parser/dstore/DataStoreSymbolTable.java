@@ -10,6 +10,7 @@ import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.namelookup.*;
 import java.lang.*;
 import java.util.*;
+import java.io.*;
 
 //This is an implementation of the SymbolTable interface.  The SymbolTable interface contains methods
 //that are used by Parser.jj, since Parser.jj can feed either the CommandLineSymbolTable or the 
@@ -73,6 +74,8 @@ public class DataStoreSymbolTable implements SymbolTable
   _unresolvedTypes.clear();
   DataElement unresolvedTypesRoot = _dataStore.createObject(_parsedFiles, "Unresolved Types", "Unresolved Types");
   _unresolvedTypes.put("UNRESOLVEDROOT", unresolvedTypesRoot);
+  builtins.setDepth(0);
+  unresolvedTypesRoot.setDepth(0); 
   
   //Storage Class Specifiers
   _builtinTypes.put("auto",       _dataStore.createObject(builtins, ParserSchema.Types, "auto"));
@@ -401,8 +404,13 @@ public class DataStoreSymbolTable implements SymbolTable
  {
   if (!isSet(INHERITANCE)) 
    return;
-  DataElement incFile = _dataStore.find (_parsedFiles, DE.A_NAME, fileName,1);
-  if (incFile != null)
+  try
+  {
+   fileName = (new File (fileName)).getCanonicalPath();
+  }
+  catch (IOException e) {}
+  DataElement incFile = _dataStore.find(_parsedFiles, DE.A_VALUE, fileName,1);
+   if (incFile != null)
   {
    //Check this!!!!Root could be pointing at something other than a source object
    DataElement theRef = _dataStore.createReference(_root, incFile, ParserSchema.Includes, ParserSchema.IncludedBy);

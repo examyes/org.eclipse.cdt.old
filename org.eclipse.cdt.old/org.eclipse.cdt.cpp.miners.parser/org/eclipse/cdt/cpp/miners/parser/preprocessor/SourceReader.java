@@ -20,9 +20,9 @@ class SourceReader
  {
   _trimmerStack.clear();
  }
- public void setFile (String fileName)
+ public void setFile (File theFile)
  { 
-  _currentTrimmer = new Trimmer(fileName);
+  _currentTrimmer = new Trimmer(theFile);
  }
  public void pushState()
  {

@@ -25,28 +25,21 @@ public class ProjectParseAction extends ProjectAction
 	if (_parseCommand != null)
 	    {
 		DataElement status = null;
-		if (_subject.getType().equals("Project"))
-		    {
-			status = _dataStore.command(_parseCommand, _subject);
-			_api.monitorStatus(status);
-		    }
-		else
-		    {		
-			
-			DataElement projectElement = getProjectFor(_subject);
-			if (projectElement != null)
-			    {
-				ArrayList args = new ArrayList();
-				args.add(projectElement); 
-				status = _dataStore.command(_parseCommand, args, _subject);		
-				_api.monitorStatus(status);
-			    }
-		    }
+		DataElement projectElement = getProjectFor(_subject);
+		if (projectElement != null)
+	        {
+		 ArrayList args = new ArrayList();
+		 args.add(projectElement); 
+		 status = _dataStore.command(_parseCommand, args, _subject);		
+		 _api.monitorStatus(status);
+		}
 	    }
     }
 
     private DataElement getProjectFor(DataElement subject)
     {
+     if (subject.getType().equals("Project"))
+      return subject;
 	DataElement parent = subject.getParent();
 	if (parent == null)
 	    {

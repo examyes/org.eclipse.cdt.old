@@ -7,6 +7,7 @@ package com.ibm.cpp.miners.parser.grammar;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.dstore.*;
+import com.ibm.cpp.miners.parser.invocation.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -15,7 +16,12 @@ public final class Parser implements ParserConstants {
  private SymbolTable  symtab;
  private boolean      isConstructor;
  private String       empty = "";
- public Parser() {}
+ private ParseWorker  _theParseWorker;
+
+ public Parser(ParseWorker theParseWorker)
+ {
+  _theParseWorker = theParseWorker;
+ }
  public void setSymbolTable(SymbolTable theSymbolTable)
  {
   symtab = theSymbolTable;
@@ -5243,7 +5249,7 @@ public final class Parser implements ParserConstants {
    StringBuffer buf = new StringBuffer(t.beginLine + ":" + body);
    //System.out.println("SETTING BUFFER=>" + buf);
    theObject.setBuffer(buf);
-   theObject.expandChildren();
+   _theParseWorker.parseObject(theObject);
   }
   symtab.closeScope();
   }
@@ -6058,38 +6064,6 @@ public final class Parser implements ParserConstants {
     boolean retval = !jj_3_116();
     jj_save(115, xla);
     return retval;
-  }
-
-  final private boolean jj_3R_101() {
-    if (jj_3R_104()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3_81()) { jj_scanpos = xsp; break; }
-      if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    }
-    return false;
-  }
-
-  final private boolean jj_3_76() {
-    if (jj_scan_token(OR)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    if (jj_3R_97()) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_455() {
-    if (jj_scan_token(TEMPLATE)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
-  }
-
-  final private boolean jj_3R_93() {
-    if (jj_scan_token(BITWISEANDEQUAL)) return true;
-    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
-    return false;
   }
 
   final private boolean jj_3R_100() {
@@ -10973,6 +10947,38 @@ public final class Parser implements ParserConstants {
 
   final private boolean jj_3R_94() {
     if (jj_scan_token(BITWISEXOREQUAL)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3R_101() {
+    if (jj_3R_104()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3_81()) { jj_scanpos = xsp; break; }
+      if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    }
+    return false;
+  }
+
+  final private boolean jj_3_76() {
+    if (jj_scan_token(OR)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    if (jj_3R_97()) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3R_455() {
+    if (jj_scan_token(TEMPLATE)) return true;
+    if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
+    return false;
+  }
+
+  final private boolean jj_3R_93() {
+    if (jj_scan_token(BITWISEANDEQUAL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }

@@ -21,19 +21,18 @@ public class Trimmer
 {
  public  String           fileName    = null;;
  public  int              lineNumber  = 1;
-
-
  private boolean          _inString   = false;
  private boolean          _inComment  = false;
  private boolean          _emitLine   = false;
  private BufferedReader   _reader     = null;
 
- public Trimmer(String theFile)
+ public Trimmer(File theFile)
  {
-  fileName = theFile;
+  
   try
   {
-   _reader = new BufferedReader( new FileReader (new File (theFile)));
+   fileName = theFile.getCanonicalPath();
+   _reader = new BufferedReader(new FileReader (theFile));
    lineNumber = 1;
   }
   catch (IOException e) {}

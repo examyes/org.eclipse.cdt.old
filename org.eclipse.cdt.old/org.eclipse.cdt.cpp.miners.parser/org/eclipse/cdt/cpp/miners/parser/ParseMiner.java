@@ -16,14 +16,11 @@ import com.ibm.cpp.miners.parser.dstore.*;
 import com.ibm.cpp.miners.parser.invocation.*;
 import com.ibm.cpp.miners.parser.codeassist.*;
 
-
 public class ParseMiner extends Miner
 {
  private ParseManager _parseManager;
- private File         _parseExtensionFile;
- private ArrayList    _validCPPFiles;
  private CodeAssist   _codeAssist;
- private String       PARSE_EXTENSIONS = "CPPExtensions.dat"; 
+
  public ParseMiner ()
  {
   super();
@@ -36,10 +33,6 @@ public class ParseMiner extends Miner
 
  public void load()
  {
-  _parseManager    = new ParseManager();
-  _parseExtensionFile  = getParseExtensionsFile();
-  _codeAssist          = new CodeAssist(_parseManager);
-  updateParseExtensions();
  }
 
  public void extendSchema(DataElement schemaRoot)
@@ -49,19 +42,29 @@ public class ParseMiner extends Miner
 
  public DataElement handleCommand (DataElement theElement)
  {
+  if (_parseManager == null)
+   _parseManager = new ParseManager(theElement.getDataStore());
+  if (_codeAssist == null)
+  _codeAssist   = new CodeAssist(_parseManager);
+
   String name         = getCommandName(theElement);
   DataElement status  = getCommandStatus(theElement);
   DataElement subject = getCommandArgument(theElement, 0);
-   
   
-  statusProgress(status);
-
+  status.setAttribute(DE.A_NAME, "progress");
+  _dataStore.update(status);
+  
   if (name.equals("C_PARSE"))
-   handleParse(subject, getCommandArgument(theElement, 1));
-  else if (name.equals("C_REFRESH"))
-    handleRefresh(subject, getCommandArgument(theElement, 1));
+  {
+   handleFileParse(subject, getCommandArgument(theElement, 1), status);
+   return status;
+  }
   else if (name.equals("C_QUERY"))
    handleObjectParse(subject);
+  else if (name.equals("C_CANCEL"))
+   handleCancelCommand(subject, getCommandArgument(theElement, 1));
+  else if (name.equals("C_REFRESH"))
+    handleRefresh(subject, getCommandArgument(theElement, 1), status); 
   else if (name.equals("C_CODE_ASSIST"))
    handleCodeAssist(subject,getCommandArgument(theElement, 1),status);
   else if (name.equals("C_FIND_DECLARATION"))
@@ -81,15 +84,12 @@ public class ParseMiner extends Miner
   else if (name.equals("C_SET_INCLUDE_PATH"))
    handleSetIncludePath(subject, getCommandArgument(theElement, 1));
   else if (name.equals("C_SET_PREFERENCES")) 
-   handleSetPreferences(subject, 
-			getCommandArgument(theElement, 1), 
-			getCommandArgument(theElement, 2),
-			getCommandArgument(theElement, 3)
-			);
-  return statusDone(status);
+   handleSetPreferences(subject, getCommandArgument(theElement, 1), getCommandArgument(theElement, 2),getCommandArgument(theElement, 3), status);
+   status.setAttribute(DE.A_NAME, "done");
+   return status;
  }
 
- private void handleRefresh(DataElement theSubject, DataElement prj)
+ private void handleRefresh(DataElement theSubject, DataElement prj, DataElement status)
  { 
   if (!theSubject.getType().equals("Project"))
    return;
@@ -100,42 +100,36 @@ public class ParseMiner extends Miner
   
   DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
   if ( (autoParse != null) && autoParse.getValue().equals("Yes") )
-   handleParse(theSubject, prj);	
+   handleFileParse(theSubject, prj, status);	
  }
 
  private DataElement handleOpenProject(DataElement theProject)
  {  
-     theProject = theProject.dereference();
-     if (theProject.getType().equals("Project"))
-	 {
-	     ArrayList parseRefs = theProject.getAssociated(ParserSchema.ParseReference);	     
-	     if (parseRefs.size() == 0)
-		 {
-		     _dataStore.update(_minerData);
-		     DataElement parseProject = _dataStore.createObject(_minerData, 
-									ParserSchema.Project, 
-									theProject.getName(), 
-									theProject.getSource(),
-									theProject.getId() + ".parse");
+  theProject = theProject.dereference();
+  if (theProject.getType().equals("Project"))
+  {
+   ArrayList parseRefs = theProject.getAssociated(ParserSchema.ParseReference);	     
+   if (parseRefs.size() == 0)
+   {
+    _dataStore.update(_minerData);
+    DataElement parseProject = _dataStore.createObject(_minerData, ParserSchema.Project, 
+								   theProject.getName(), 
+								   theProject.getSource(),
+								   theProject.getId() + ".parse");
 		     
-		     _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    ParserSchema.ParsedFiles);
-		     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.SystemObjects);
-		     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.ProjectObjects);
-		     _dataStore.createObject(parseProject,ParserSchema.Preferences, ParserSchema.Preferences);
-		     
-		     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
-		     
-		     return parseProject;
-		 }
-	     else
-		 {
-		     return (DataElement)parseRefs.get(0);
-		 }
-	 }
-     else
-	 {
-	     return null;
-	 }
+    _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    ParserSchema.ParsedFiles);
+    _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.SystemObjects);
+    _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.ProjectObjects);
+    _dataStore.createObject(parseProject,ParserSchema.Preferences, ParserSchema.Preferences);
+    _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
+    return parseProject;
+   }
+   else
+   {
+    return (DataElement)parseRefs.get(0);
+   }
+  }
+  return null;
  }
 
 
@@ -246,7 +240,7 @@ public class ParseMiner extends Miner
  }
  
  private DataElement handleSetPreferences(DataElement project, DataElement qualityPref, 
-					  DataElement autoParsePref, DataElement autoPersistPref)
+					  DataElement autoParsePref, DataElement autoPersistPref, DataElement status)
  {
   DataElement theProject = getParseProject(project);
   DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
@@ -264,53 +258,51 @@ public class ParseMiner extends Miner
   String autoPersistValue = autoPersistPref.getName();
   DataElement autoPersist = _dataStore.find(currentPreferences, DE.A_NAME, "autopersist", 1);  
   if (autoPersist == null)
-      {
-	  autoPersist = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autopersist");
-	  autoPersist.setAttribute(DE.A_VALUE, autoPersistValue);
-	  if (autoPersistValue.equals("Yes"))
-	      {
-		  doLoad = true;
-	      }
-      }
+  {
+   autoPersist = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autopersist");
+   autoPersist.setAttribute(DE.A_VALUE, autoPersistValue);
+   if (autoPersistValue.equals("Yes"))
+   {
+    doLoad = true;
+   }
+  }
   else
-      {  
-	  if (autoPersist.getName().equals("No") && autoPersistValue.equals("Yes"))
-	      {
-		  doLoad = true;
-	      }
-	  autoPersist.setAttribute(DE.A_VALUE, autoPersistValue);
-      }
+  {  
+   if (autoPersist.getName().equals("No") && autoPersistValue.equals("Yes"))
+   {
+    doLoad = true;
+   }
+   autoPersist.setAttribute(DE.A_VALUE, autoPersistValue);
+  }
 
   // autoParse
   String autoParseValue = autoParsePref.getName();
   DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
   if (autoParse == null)
-      {
-	  autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");	  
-	  autoParse.setAttribute(DE.A_VALUE, autoParseValue);
-	  if (autoParseValue.equals("Yes"))
-	      {
-		  doParse = true;
-	      }
-      }
+  {
+   autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");	  
+   autoParse.setAttribute(DE.A_VALUE, autoParseValue);
+   if (autoParseValue.equals("Yes"))
+   {
+    doParse = true;
+   }
+  }
   else
-      {
-	  if (autoParse.getName().equals("No") && autoParseValue.equals("Yes"))
-	      {
-		  doParse = true;
-	      }
-	  autoParse.setAttribute(DE.A_VALUE, autoParseValue);
-      }
-  
+  {
+   if (autoParse.getName().equals("No") && autoParseValue.equals("Yes"))
+   {
+    doParse = true;
+   }
+   autoParse.setAttribute(DE.A_VALUE, autoParseValue);
+  }
   if (doLoad)
-      {
-	  loadProject(project);
-      }
+  {
+   loadProject(project);
+  }
   else if (doParse)
-      {
-	  handleParse(project, project);
-      }
-
+  {
+   handleFileParse(project, project, status);
+  }
   return null;
  }
   
@@ -359,154 +351,29 @@ public class ParseMiner extends Miner
    return _parseManager.removeParseInformation(theFile);
   return theFile;
  }
- 
- 
- 
- private DataElement handleObjectParse(DataElement theElement)
+
+ private void handleObjectParse(DataElement theElement)
  {
-  try 
-  {
-   _parseManager.parseObject(theElement);
-  }
-  catch (Throwable e) 
-  {
-  }
- 
-  return null;
+  _parseManager.parseObject(theElement);
  }
 
- private DataElement parseFile(File theFile)
+ private void handleFileParse(DataElement theElement, DataElement theProject, DataElement status)
  {
-  try
-  {
-      if (!theFile.exists())
-	  return null;
-      
-      if (theFile.isFile())
-	  {
-	      if (isCorCPPFile(theFile.getName()) && _parseManager.isInitialized())
-		  {
-		      _parseManager.parse(theFile.getCanonicalPath(),false);
-		  }
-	  }
-      else 
-	  {
-	      File[] files = theFile.listFiles();
-	      for (int i= 0; i < files.length; i++)
-		  parseFile(files[i]);
-	  }
-  }
-  catch (IOException e)
-      {
-	  System.out.println("Parser -> " + e.getMessage());
-      }
-  return null;
- }
-    
-    private DataElement handleParse(DataElement theElement, DataElement theProject)
-{
-  //If theProject is of type status, then this command came from the C++ projects view, as opposed to ModelInterface.
-  //Kind of Hacky, but just set theProject to be theElement for now..
-  if (theProject.getType().equals("status"))
-   theProject = theElement;
- 
-  try
-  { 
-   if (theProject == null)
-    {
-    theProject = _dataStore.createObject(_minerData.get(0), ParserSchema.Project, "fake project");
-    _dataStore.createObject(theProject, ParserSchema.dParsedFiles,    ParserSchema.ParsedFiles);
-    _dataStore.createObject(theProject, ParserSchema.dProjectObjects,  ParserSchema.SystemObjects);
-    _dataStore.createObject(theProject, ParserSchema.dProjectObjects, ParserSchema.ProjectObjects);
-   }
-   else if (!theProject.getName().equals("fake project")) 
-    theProject = getParseProject(theProject);
-   if (theProject == null)
-    return null;
-      
-   _parseManager.setProject(theProject);  
-   parseFile(new File(theElement.getSource()));
-   _dataStore.update(getProjectElement(theProject, ParserSchema.ParsedFiles));
-   _dataStore.update(getProjectElement(theProject, ParserSchema.ProjectObjects));
-   _dataStore.update(getProjectElement(theProject, ParserSchema.SystemObjects));
-  
- }
-  
-  
-  catch (Throwable e) 
-  {
-   System.out.println("Unrecoverable Parse Error...Parsing of the current source will be halted:");
-   e.printStackTrace();
-  }
-  
-  
-  //doTest(getParsedFiles(theProject));
-  return null;
- }
-
- private File getParseExtensionsFile()
- {
- 
-  _validCPPFiles = new ArrayList();
-  
-  String fileLocation = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-  if (fileLocation == null)
-  {
-   System.out.println("Problem reading " + PARSE_EXTENSIONS + "..Set A_PLUGIN_PATH to eclipse\\plugins");
-   return null;
-  }
-   
-  String fullFileName = fileLocation + "/com.ibm.cpp.miners.parser/" + PARSE_EXTENSIONS;
-  
-  File extFile = new File (fullFileName);
-  if (!extFile.exists())
-  {
-   System.out.println("Can't find " + fullFileName);
-   return null;
-  }
-  return extFile;
+  _parseManager.parseFile(theElement, getParseProject(theProject), status);
  }
  
- private void updateParseExtensions()
+ private void handleCancelCommand(DataElement hmm, DataElement hmm2)
  {
-  _validCPPFiles.clear();
-  if (_parseExtensionFile == null)
-   return;
-  try
-  {
-   BufferedReader br = new BufferedReader(new FileReader(_parseExtensionFile));
-   String nextLine;
-   while ( (nextLine = br.readLine()) != null)
-   {
-    nextLine = nextLine.trim();
-    if (nextLine.length() > 0)
-     if (nextLine.charAt(0) == '.') 
-      _validCPPFiles.add(nextLine);
-   }
-  }
-  catch (IOException e) 
-  {
-   System.out.println("Problem reading " + PARSE_EXTENSIONS);
-  }
+  _parseManager.cancelParse();
  }
-
- private boolean isCorCPPFile(String objName)
- {
-  int dotIndex = objName.lastIndexOf(".");
-  if (dotIndex < 0) return false;
-  String extension = objName.substring(dotIndex, objName.length()).trim();
-
-  boolean yes = _validCPPFiles.contains(extension);
-  return yes;
- }
-
+ 
  private DataElement getProjectElement(DataElement theProject, String name)
  {
-     if (theProject == null)
-	 return null;
-     if (theProject.getId().indexOf(".parse") < 0)
-	 theProject = getParseProject(theProject);
-     return _dataStore.find(theProject, DE.A_NAME, name,1);
+  if (theProject == null)
+   return null;
+  if (theProject.getId().indexOf(".parse") < 0)
+   theProject = getParseProject(theProject);
+  return _dataStore.find(theProject, DE.A_NAME, name,1);
  }
  
  private DataElement getParseProject(DataElement theProject)
@@ -515,19 +382,6 @@ public class ParseMiner extends Miner
   if (parseRefs.size() == 0)
    return handleOpenProject(theProject);
   return ((DataElement)parseRefs.get(0)).dereference();
- }
- 
- private DataElement statusProgress(DataElement theStatus)
- {
-  theStatus.setAttribute(DE.A_NAME, "progress");
-  _dataStore.update(theStatus);
-  return theStatus;
- }
-
- private DataElement statusDone(DataElement theStatus)
- { 
-  theStatus.setAttribute(DE.A_NAME, "done");
-  return theStatus;
  }
 }
 
