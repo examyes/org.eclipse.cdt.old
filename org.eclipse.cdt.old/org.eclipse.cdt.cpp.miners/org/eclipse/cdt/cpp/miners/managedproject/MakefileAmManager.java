@@ -1472,7 +1472,7 @@ public class MakefileAmManager {
 		// open a makefile.am to force an update for configure - hack
 		if(commandDescriptor.equals("C_SET_EXTRA_DIST_EXTENSIONS"))
 		{
-			System.out.println("\n Modified");
+			//System.out.println("\n Modified");
 			ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
 			String[] subdirs = structureManager.getSubdirWorkspacePath();
 			Object[][] projectStucture = structureManager.getProjectStructure();

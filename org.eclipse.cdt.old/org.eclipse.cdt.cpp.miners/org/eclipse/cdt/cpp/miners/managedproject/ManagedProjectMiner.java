@@ -270,7 +270,7 @@ public class ManagedProjectMiner extends Miner
 			{
 				//handleSetExtensions(subject, args);
 				ArrayList extensionList = args.getNestedData();
-				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList);
+				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList,project,"C_SET_EXTRA_DIST_EXTENSIONS");
 				
 			}
 			// new : to havdle delete notification
