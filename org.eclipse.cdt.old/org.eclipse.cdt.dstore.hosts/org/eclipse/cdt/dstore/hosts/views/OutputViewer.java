@@ -286,12 +286,13 @@ public class OutputViewer extends TableViewer
 		if (table != null && !table.isDisposed())
 		    {
 			updateChildren(children);
+
 			TableColumn column = table.getColumn(0);
 
 			if (column.getWidth() < _maxWidth)
 			    {
 				table.setRedraw(false);
-				column.setWidth(_maxWidth);		
+				column.setWidth(_maxWidth);		 
 				table.setRedraw(true);
 			    }
 		    }	
@@ -319,8 +320,10 @@ public class OutputViewer extends TableViewer
 	      }
 	  index = table.getItemCount();
 	  	
+	  TableItem latestItem = null;
 	  for (int i = 0; i < children.size(); i++)
 	      {
+
 		  DataElement child = ((DataElement)children.get(i)).dereference();
 		  if ((child != null) && !child.isUpdated())
 		      {
@@ -336,13 +339,18 @@ public class OutputViewer extends TableViewer
 				  int itemWidth = charLen * _charWidth;
 				
 				  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
-				
+
+				  latestItem = newItem;				
 			      }	
 		      }
 	      }
 	
+	  if (latestItem != null)
+	      {
+		  table.showItem(latestItem);
+	      }
+
 	  table.setRedraw(true);				
-	  table.setTopIndex(index);	
       }
 
     private void clearFirstItems(int items)
