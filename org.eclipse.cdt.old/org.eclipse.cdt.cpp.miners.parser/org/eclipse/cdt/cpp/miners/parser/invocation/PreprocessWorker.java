@@ -47,7 +47,8 @@ public class PreprocessWorker extends Thread
   _theParseWorker.setParsedFiles(_parsedFiles);
   _projectObjects = _dataStore.find(_parsedFiles.getParent(), DE.A_NAME, ParserSchema.ProjectObjects, 1);
   _systemObjects  = _dataStore.find(_parsedFiles.getParent(), DE.A_NAME, ParserSchema.SystemObjects, 1);
-  try{_projectCanonicalPath = (new File (_parsedFiles.getParent().getSource())).getCanonicalPath();} catch (IOException e){}
+  try{_projectCanonicalPath = (new File (_parsedFiles.getParent().getSource())).getCanonicalPath();} 
+  catch (Throwable e){}
   updateParseExtensions(); 
  }
  
