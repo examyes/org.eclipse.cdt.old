@@ -70,10 +70,10 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(fsObjectD,"Add configure.in file","C_INSERT_CONFIGURE_IN",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);
 		//
-		createCommandDescriptor(managedProjectD,"Add/Change to TopLevel Makefile.am","C_TOPLEVEL_MAKEFILE_AM");
-		createCommandDescriptor(managedProjectD,"Add/Change to Programs Makefile.am ","C_PROGRAMS_MAKEFILE_AM");		
-		createCommandDescriptor(managedProjectD,"Add/Change to StaticLib Makefile.am","C_SWITCH_TO_STATIC_LIB");
-		createCommandDescriptor(managedProjectD,"Add/Change to SharedLib Makefile.am","C_SWITCH_TO_SHARED_LIB");
+		createCommandDescriptor(managedProjectD,"TopLevel","C_TOPLEVEL_MAKEFILE_AM",false);
+		createCommandDescriptor(managedProjectD,"Programs","C_PROGRAMS_MAKEFILE_AM",false);		
+		createCommandDescriptor(managedProjectD,"StaticLib","C_SWITCH_TO_STATIC_LIB",false);
+		createCommandDescriptor(managedProjectD,"SharedLib","C_SWITCH_TO_SHARED_LIB",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);		
 		
 					

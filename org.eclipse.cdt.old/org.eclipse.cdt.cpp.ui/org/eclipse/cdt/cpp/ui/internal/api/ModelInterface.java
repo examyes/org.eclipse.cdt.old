@@ -1998,6 +1998,35 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
 	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						  
 	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
+	
+	
+	//***********************************
+	DataElement managedProjectD = dataStore.find(schemaRoot,DE.A_NAME,"Managed Project",1);
+	DataElement makefileTargetCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change Target to..");
+
+	DataElement libTargetCmds = dataStore.createObject(makefileTargetCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
+	
+	DataElement toStatLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "StaticLib", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
+	
+	DataElement toSharedLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "SharedLib", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
+
+	dataStore.createReference(libTargetCmds, makefileTargetCmds, "abstracts", "abstracted by");
+
+	DataElement toProgTargetCmd = dataStore.createObject(makefileTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "bin Programs", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toProgTargetCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
+	//***********************************
+	
+	
+	
+	
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
     }
