@@ -209,7 +209,7 @@ public class FileSystemMiner extends Miner
 							  getLocalizedString("model.Move"), "C_MOVE", false);
 	  
 	  //renaming files and dirs
-	  DataElement renF = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Rename"), "C_RENAME");
+	  DataElement renF = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Rename"), "C_RENAME", false);
 	  DataElement inRenF = _dataStore.createObject(renF,"input", "Enter the New Name");
 	  
 	  DataElement findD = createCommandDescriptor(_fsystemObjectDescriptor, "Find", "C_FIND_FILE", false);
