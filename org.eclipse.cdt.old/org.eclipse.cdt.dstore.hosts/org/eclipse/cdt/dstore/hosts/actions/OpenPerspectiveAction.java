@@ -45,19 +45,18 @@ public class OpenPerspectiveAction extends CustomAction
     private void openPerspective(DataElement input)
     {
     	IWorkbench workbench = DataStoreUIPlugin.getDefault().getWorkbench();
-   		IWorkbenchPage persp = null;
+	IWorkbenchPage persp = null;
+	IWorkbenchWindow dw = workbench.getActiveWorkbenchWindow();
 
-		/* JEFF: Commenting this part out to get build to work...IWorkbench API has changed -> openPage is gone.			try
-	        {
-	          persp = workbench.openPage("org.eclipse.cdt.dstore.hosts.views.HostsPerspective", input, 0);
-	        }
-                catch (WorkbenchException e)
-	        {
-			System.out.println(e);
-			e.printStackTrace();
-	        }
-                */
-	
+	try
+	    {
+		persp = workbench.showPerspective("org.eclipse.cdt.dstore.hosts.views.HostsPerspective", dw, input);
+	    }
+	catch (WorkbenchException e)
+	    {
+		System.out.println(e);
+		e.printStackTrace();
+	    }
     }
 
 }

@@ -837,39 +837,37 @@ public class PAModelInterface implements IDomainListener
    */
   public void openPerspective()
   {
-     IWorkbench workbench = _plugin.getWorkbench();
-     IWorkspace workspace = _plugin.getPluginWorkspace();
-	 IWorkbenchWindow dw  = workbench.getActiveWorkbenchWindow();
-	 IWorkbenchPage persp = null;
-	
-	 IWorkbenchPage[] perspectives = dw.getPages();
-	
-	 /*JEFF: Commenting this section out since it calls the non-existant IWorkbench.openPage() api
-	 try
-	 {
-		for (int i = 0; i < perspectives.length; i++)
-		{
-			IWorkbenchPage aPersp = perspectives[i];
-			String layoutId = aPersp.getLabel();
-			
-			// System.out.println("perspective: " + layoutId);
-			if (layoutId.equals("Workspace - Performance Trace"))
-			{
-			  persp = aPersp;	
-			  dw.setActivePage(persp);
-			  break;
-			}	
-		}
-		
-		if (persp == null)
-		{
-		  persp = workbench.openPage("org.eclipse.cdt.pa.ui.PAPerspective", workspace.getRoot(), 0);
-		}
-	 }
-     catch (WorkbenchException e)
-	 {
-	 }
-	 */
+      IWorkbench workbench = _plugin.getWorkbench();
+      IWorkspace workspace = _plugin.getPluginWorkspace();
+      IWorkbenchWindow dw  = workbench.getActiveWorkbenchWindow();
+      IWorkbenchPage persp = null;
+      
+      IWorkbenchPage[] perspectives = dw.getPages();
+      
+      try
+	  {
+	      for (int i = 0; i < perspectives.length; i++)
+		  {
+		      IWorkbenchPage aPersp = perspectives[i];
+		      String layoutId = aPersp.getLabel();
+		      
+		      // System.out.println("perspective: " + layoutId);
+		      if (layoutId.equals("Workspace - Performance Trace"))
+			  {
+			      persp = aPersp;	
+			      dw.setActivePage(persp);
+			      break;
+			  }	
+		  }
+	      
+	      if (persp == null)
+		  {
+		      persp = workbench.showPerspective("org.eclipse.cdt.pa.ui.PAPerspective", dw, workspace.getRoot());
+		  }
+	  }
+      catch (WorkbenchException e)
+	  {
+	  }
   }
     
 }
