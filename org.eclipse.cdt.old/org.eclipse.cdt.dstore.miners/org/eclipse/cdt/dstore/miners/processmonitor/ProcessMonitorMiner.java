@@ -173,7 +173,11 @@ public class ProcessMonitorMiner extends Miner
 		//	System.out.println(e);
 	    }	
 	
-	_monitor.finish();
+	if (_monitor != null)
+	    {
+		_monitor.finish();
+	    }
+
 	super.finish();
     }
     
