@@ -101,8 +101,8 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	cangrid.widthHint = 50;
 	_cancel.setLayoutData(cangrid);
 	
-	_resultViewer = new ObjectWindow(c, 0, _plugin.getDataStore(), 
-					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader(), true);
+	_resultViewer = new ObjectWindow(c, ObjectWindow.TABLE, _plugin.getDataStore(), 
+					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader());
 
 
 	GridLayout vlayout = new GridLayout();

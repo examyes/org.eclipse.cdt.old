@@ -87,7 +87,7 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	c.setLayoutData(cgrid);
 
 	DataStore dataStore = _input.getDataStore();
-	_viewer = new ObjectWindow(c, 0, dataStore, _plugin.getImageRegistry(), null);	
+	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), null);	
 	_viewer.setInput(_input);
 
 	GridLayout layout= new GridLayout();

@@ -48,7 +48,7 @@ public class SelectedObjectViewPart extends GenericViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	ObjectWindow viewer =  new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, false);
+	ObjectWindow viewer =  new ObjectWindow(parent, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), loader);
     
 	return viewer;
     }

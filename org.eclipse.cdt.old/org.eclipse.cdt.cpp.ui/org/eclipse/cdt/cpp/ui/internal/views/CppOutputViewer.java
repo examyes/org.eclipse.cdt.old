@@ -11,7 +11,6 @@ import com.ibm.dstore.hosts.*;
 import com.ibm.dstore.hosts.views.*;
 
 import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.TableContentProvider;
 import com.ibm.dstore.ui.widgets.*;
 import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.dstore.core.model.*;

@@ -74,7 +74,7 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	TreeViewer treeViewer = getTreeViewer();
 	treeViewer.setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry()));
 
-	TreeContentProvider provider = new TreeContentProvider(); 
+	DataElementTreeContentProvider provider = new DataElementTreeContentProvider(); 
 	provider.setProperty(ds.findDescriptor(DE.T_RELATION_DESCRIPTOR, "contents"));
 	treeViewer.setContentProvider(provider);
 		

@@ -23,17 +23,31 @@ import org.eclipse.ui.*;
 
 public class ProjectObjectsViewPart extends ProjectViewPart
 {
- public ProjectObjectsViewPart()
- {
-  super();
- }
- 
-    /*public ObjectWindow createViewer(Composite parent, IActionLoader loader)
+    public ProjectObjectsViewPart()
+    {
+	super();
+    }
+
+    public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, false);
+
+	DataElement parsedSourceD = dataStore.findObjectDescriptor("Parsed Source");
+	DataElement includedSourceD = dataStore.findObjectDescriptor("Included Source");
+	DataElement parsedFilesD = dataStore.findObjectDescriptor("Parsed Files");
+
+	PTDataElementTableContentProvider provider = new PTDataElementTableContentProvider();
+
+	// pass thru these
+	provider.addPTDescriptor(parsedSourceD);
+       	provider.addPTDescriptor(includedSourceD); 
+	provider.addPTDescriptor(parsedFilesD);
+       	provider.addPTDescriptor(builtInD);
+       	provider.addPTDescriptor(unresolvedD);
+
+
+	return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader, provider);
     }
-    */
 
  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
  {
@@ -121,27 +135,44 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 
  public void doSpecificInput(DataElement theElement)
  {
-  DataElement theInput = null;
-  if (theElement.getType().equals("file"))
-   theInput = findParseFile(theElement);
-  else if (theElement.getType().equals("Project"))
-   theElement = ((DataElement)(theElement.getAssociated("Parse Reference").get(0))).dereference();
-  if (theElement.getType().equals("Namespace"))
-   theInput = theElement.getDataStore().find(theElement, DE.A_NAME, "Project Objects", 1);
-  
-  if (theInput == null)
-   return;
-  
-  //Finally just set the input and the title
-  if (_viewer.getInput() == theInput)
-   _viewer.resetView();
-  else
-  {
-   _viewer.setInput(theInput);	
-   _viewer.selectRelationship("contents");
-   //setTitle(theInput.getName() + " Objects");   
-  }
+     DataElement theInput = null;
+     if (theElement.getType().equals("file"))
+	 {
+	     theInput = findParseFile(theElement);
+	 }
+     else if (theElement.getType().equals("Project"))
+	 {
+	     theInput = findParseFiles(theElement);
+	 }
+
+     /*
+     if (theElement.getType().equals("Namespace"))
+	 theInput = theElement.getDataStore().find(theElement, DE.A_NAME, "Project Objects", 1);
+     */
+
+     if (theInput == null)
+	 return;
+     
+     //Finally just set the input and the title
+     if (_viewer.getInput() == theInput)
+	 _viewer.resetView();
+     else
+	 {
+	     _viewer.setInput(theInput);	
+	     _viewer.selectRelationship("contents");
+	     //setTitle(theInput.getName() + " Objects");   
+	 }
  }
+
+ DataElement findParseFiles(DataElement theProjectFile)
+    {
+	DataStore dataStore = theProjectFile.getDataStore();
+	DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
+	//DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
+	//return parsedFiles;
+	DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
+	return projectObjects;
+    }
 
  DataElement findParseFile(DataElement theProjectFile)
  {

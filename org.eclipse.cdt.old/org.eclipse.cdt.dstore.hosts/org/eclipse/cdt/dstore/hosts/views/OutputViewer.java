@@ -10,7 +10,6 @@ import com.ibm.dstore.hosts.*;
 
 import com.ibm.dstore.ui.*;
 import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.ui.widgets.TableContentProvider;
 import com.ibm.dstore.ui.widgets.*;
 import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.dstore.core.model.*;
@@ -134,7 +133,7 @@ public class OutputViewer extends TableViewer
 	super(parent);
 
         _plugin = HostsPlugin.getPlugin();
-        setContentProvider(new TableContentProvider());
+        setContentProvider(new DataElementTableContentProvider());
 	setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry()));
        	addSelectionChangedListener(this);
 

@@ -26,7 +26,7 @@ public class HostsDetailsViewPart extends DetailsViewPart
 {
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
-	return new ObjectWindow(parent, 0, null, new ImageRegistry(), loader, true);
+	return new ObjectWindow(parent, ObjectWindow.TABLE, null, new ImageRegistry(), loader);
     }
     
     public IActionLoader getActionLoader()

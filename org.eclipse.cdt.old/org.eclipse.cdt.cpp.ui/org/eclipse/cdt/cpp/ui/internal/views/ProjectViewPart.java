@@ -41,7 +41,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, true);
+	return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader);
     }
     
     public IActionLoader getActionLoader() 

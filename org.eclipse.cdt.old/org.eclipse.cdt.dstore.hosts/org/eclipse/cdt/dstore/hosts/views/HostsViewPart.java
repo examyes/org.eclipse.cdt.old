@@ -37,7 +37,7 @@ public class HostsViewPart extends GenericViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getDataStore();
-	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader);
+	return new ObjectWindow(parent, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), loader);
     }
     
     public IActionLoader getActionLoader()
