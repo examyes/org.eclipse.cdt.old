@@ -146,17 +146,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	ArrayList history = readProperty("DefaultBuildInvocation");
 	if ((history == null) || (history.size() == 0))
 	    {
-		String osString = org.eclipse.core.boot.BootLoader.getOS();
-		String defaultBuild = "";
-		if (osString.equals("win32"))
-		    {			
-			defaultBuild = "nmake";
-		    }
-		else
-		    {
-			defaultBuild = "gmake";
-		    }
-
+		String defaultBuild = "gmake all";
 		ArrayList list = new ArrayList();
 		list.add(defaultBuild);
 		writeProperty("DefaultBuildInvocation", list);
