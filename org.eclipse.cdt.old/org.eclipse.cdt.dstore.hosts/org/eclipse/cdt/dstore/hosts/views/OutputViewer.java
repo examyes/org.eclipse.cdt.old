@@ -271,9 +271,9 @@ public class OutputViewer extends TableViewer
 	if (children != null)
 	    {
 		Table table = getTable();
+		table.setRedraw(false);	
 		if (table != null && !table.isDisposed())
 		    {
-			table.setRedraw(false);	
 			updateChildren(children);
 			TableColumn column = table.getColumn(0);
 
@@ -281,8 +281,8 @@ public class OutputViewer extends TableViewer
 			    {
 				column.setWidth(_maxWidth);		
 			    }
-			table.setRedraw(true);				
 		    }	
+		table.setRedraw(true);				
 	    }
 
     }
@@ -308,6 +308,7 @@ public class OutputViewer extends TableViewer
             child.setUpdated(true);
 	    if (doFindItem(child) == null)	
 	      {		
+
 		  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
 		  updateItem(newItem, child);
 		  index++;
@@ -317,6 +318,8 @@ public class OutputViewer extends TableViewer
 		
 		  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
 
+		  //reveal(newItem);
+		  table.setTopIndex(index);
 	      }	
           }
         }
