@@ -39,6 +39,7 @@ public final class DataStore
     private DataElement         _hostRoot;
     private DataElement         _minerRoot;
     private DataElement         _tempRoot;
+    private DataElement         _externalRoot;
     private DataElement         _status;
 
     private DataElement         _ticket;  
@@ -465,6 +466,11 @@ public final class DataStore
     public DataElement getHostRoot()
     {
 	return _hostRoot;
+    }
+
+    public DataElement getExternalRoot()
+    {
+	return _externalRoot;
     }
 
     /**
@@ -3076,6 +3082,8 @@ public final class DataStore
 
     private void createRoots()
     {
+	_externalRoot = createObject(_root, getLocalizedString("model.host"), "External DataStores", "", "extID");
+
 	_tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
 	
 	_logRoot     = createObject(_root, getLocalizedString("model.log"), 
