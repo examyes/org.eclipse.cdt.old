@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+  name="Linux Help Plugin"
+  id = "com.ibm.linux.help"
+  version="1.2.1"
+  provider-name="IBM"
+  class="com.ibm.linux.help.HelpPlugin">
+
+  <requires>
+         <import plugin="org.eclipse.core.runtime"/>
+         <import plugin="org.eclipse.core.resources"/>
+         <import plugin="org.eclipse.swt"/>
+	 <import plugin="org.eclipse.ui"/>
+         <import plugin="com.ibm.dstore.core"/>
+	 <import plugin="com.ibm.lpex"/>
+  </requires>
+
+  <runtime>
+    <library name=".">
+      <export name="*"/>
+    </library>
+  </runtime>
+
+  <extension
+	point="org.eclipse.ui.views">
+	<category
+		id="com.ibm.linux.help"
+		name="%View.Category.HelpSearch">
+	</category>
+	
+	<view
+		id="com.ibm.linux.help.views.ResultsViewPart"
+		name="%View.Title.HelpResults"
+		category="com.ibm.linux.help"
+		icon="icons/results.gif"
+		class="com.ibm.linux.help.views.ResultsViewPart">
+	</view>	
+  </extension>
+
+  <extension
+    point = "org.eclipse.ui.viewActions">
+      <viewContribution 
+         id="com.ibm.linux.help.actions.vc1" 
+         targetID="com.ibm.linux.help.views.ResultsViewPart">        
+	 <action id="com.ibm.linux.help.actions.va1" 
+              label="%PopupMenu.ResultsView.label" 
+	      menubarPath="additions"
+              toolbarPath="additions" 
+              icon="icons/sections.gif" 
+              tooltip="%PopupMenu.ResultsView.tooltip" 
+   	     
+              class="com.ibm.linux.help.actions.ViewActionDelegate" 
+              > 			   
+	</action>
+      </viewContribution>
+  </extension>
+
+</plugin>
+
+
+
+
