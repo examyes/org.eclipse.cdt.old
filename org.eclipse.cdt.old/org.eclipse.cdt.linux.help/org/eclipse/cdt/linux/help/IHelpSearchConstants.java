@@ -28,4 +28,7 @@ public interface IHelpSearchConstants
     public static final String HELP_SETTINGS_PATHSMODIFIED="help_settings_pathsmodified";
     public static final String HELP_SETTINGS_INDEXEXISTS="help_settings_indexexists";
 
+    //---- Filter constants
+    public static final String HELP_FILTER_PATTERNS="help_filter_patterns";
+
 }

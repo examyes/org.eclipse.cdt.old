@@ -66,7 +66,9 @@ public class ResultsViewPart extends ViewPart
 		    }				
 	    }
 	
-	ItemElement element = HelpSearch.getItemElement(index);
+	//ItemElement element = HelpSearch.getItemElement(index);
+	ItemElement element = _plugin.getFilter().getItem(index);
+	
 
 	if(element.getType().equals(ItemElement.MAN_TYPE))
 	    {		
@@ -213,6 +215,10 @@ public class ResultsViewPart extends ViewPart
     
     private Label _settings;
 
+    //--------------    
+    private Button addFilterAction;
+
+
     public ResultsViewPart()
     {
 	super();
@@ -320,9 +326,7 @@ public class ResultsViewPart extends ViewPart
 	    e.printStackTrace();
 	}
 
-    }
-    
-    
+    }   
 
     public void populate(ArrayList list)
     {

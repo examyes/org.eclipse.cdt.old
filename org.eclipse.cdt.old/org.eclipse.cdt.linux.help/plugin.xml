@@ -50,6 +50,16 @@
               class="com.ibm.linux.help.actions.ViewActionDelegate" 
               > 			   
 	</action>
+        <action id="com.ibm.linux.help.actions.va2"
+		label="%PopupMenu.ResultsView.AddFilter.label"
+		menubarPath="additions"
+		toolbarPath="additions"
+		icon="icons/filter.gif"
+		tooltip="%PopupMenu.ResultsView.AddFilter.tooltip"
+		class="com.ibm.linux.help.actions.FilterActionDelegate"
+		>              
+        </action>
+
       </viewContribution>
   </extension>
 

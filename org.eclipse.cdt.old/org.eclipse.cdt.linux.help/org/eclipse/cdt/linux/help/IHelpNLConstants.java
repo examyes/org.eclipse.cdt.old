@@ -41,4 +41,10 @@ public interface IHelpNLConstants
     public static final String SETTINGS_PATH_TITLE ="HelpResults.Settings.Path.Title";
     public static final String SETTINGS_PATH_MAN ="HelpResults.Settings.Path.Man";
     public static final String SETTINGS_PATH_INFO ="HelpResults.Settings.Path.Info";   
+
+    //-----
+    public static final String FILTER_TITLE="HelpResults.Filter.Title";
+
+
+
 }

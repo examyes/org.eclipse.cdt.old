@@ -15,21 +15,21 @@ import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
 import com.ibm.linux.help.views.ResultsViewPart;
+import com.ibm.linux.help.filter.HelpFilter;
 
 import org.eclipse.jface.resource.*;
 import org.eclipse.swt.graphics.*;
 
-import org.eclipse.core.internal.plugins.*;///FIXME: ((PluginDescriptor)getDescriptor()).getInstallURLInternal()
+import org.eclipse.core.internal.plugins.*;
 
 public class HelpPlugin extends AbstractUIPlugin
 {
     private static HelpPlugin _instance=null;
     private static HelpSearch _search=null;
 
-    private static String _installLocation=null;
+    private static HelpFilter _filter = null;
 
-    ////Mirrors the list of elements in the view table////
-    //   private static ArrayList _itemElementList = new ArrayList();
+    private static String _installLocation=null;   
 
     private ResourceBundle _resourceBundle;
     
@@ -119,8 +119,7 @@ public class HelpPlugin extends AbstractUIPlugin
 	    persp.showView("com.ibm.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
 	}catch(PartInitException pie){
 	    pie.printStackTrace();
-	}
-	
+	}	
 	
 	ResultsViewPart theView=(ResultsViewPart)persp.findView("com.ibm.linux.help.views.ResultsViewPart");
 	
@@ -134,5 +133,13 @@ public class HelpPlugin extends AbstractUIPlugin
 	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 	IWorkbenchPage persp= win.getActivePage();
 	return (ResultsViewPart)persp.findView("com.ibm.linux.help.views.ResultsViewPart");
-    }   
+    }
+
+    public HelpFilter getFilter()
+    {
+	if(_filter == null)
+	    _filter = new HelpFilter();
+	
+	return _filter;
+    }
 }

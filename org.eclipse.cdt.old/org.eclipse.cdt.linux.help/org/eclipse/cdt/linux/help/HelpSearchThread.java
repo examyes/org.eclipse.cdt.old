@@ -7,6 +7,7 @@ package com.ibm.linux.help;
  */
 
 import com.ibm.linux.help.views.ResultsViewPart;
+import com.ibm.linux.help.filter.HelpFilter;
 import java.lang.*;
 import java.util.*;
 import org.eclipse.swt.widgets.Display;
@@ -36,8 +37,9 @@ public class HelpSearchThread extends Thread
 			yield();
 		    }
 	    }
+		
+	result = HelpPlugin.getDefault().getFilter().doSearch(theKey);
 
-	result= HelpPlugin.getListElements(theKey);
 	if (result==null)
 	    return;// no results	
 	

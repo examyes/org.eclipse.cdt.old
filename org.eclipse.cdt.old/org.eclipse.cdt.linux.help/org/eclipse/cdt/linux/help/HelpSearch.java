@@ -324,7 +324,10 @@ public class HelpSearch
 	    return true;
     }
 
-    // Execute a search and return the results in an ArrayList. Will return 'null' is 'key' is invalid.
+    // Execute a search and return the results in an ArrayList. 
+    // Returns:
+    //   'null' is 'key' is invalid.
+    //    empty ArrayList if 'key' is not found.
     public ArrayList FindListOfMatches(String key)
     {
 	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
