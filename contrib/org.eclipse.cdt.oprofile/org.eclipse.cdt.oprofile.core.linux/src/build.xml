@@ -42,7 +42,8 @@
 
   <property name="libbfd" value="-lbfd" />
   <property name="liberty" value="-liberty" />
-  <property name="other-libs" value="${libbfd} ${liberty}" />
+  <property name="libelf" value="-lelf" />
+  <property name="other-libs" value="${libbfd} ${liberty} ${libelf}" />
 
   <!-- This target holds all initialization code that needs to be done for
        all tests that are to be run. Initialization for individual tests

@@ -3,13 +3,14 @@
 #
 # Copyright (c) 2004, Red Hat, Inc.
 
-CFLAGS += -g -Wall 
+CFLAGS += -g -Wall
 CXXFLAGS = $(CFLAGS)
 
 OPROFILE_LIBS = -lop -lodb -loputil++ -loputil
 BFD_LIBRARY = -lbfd
 LIBIBERTY = -liberty
-OTHER_LIBS = $(BFD_LIBRARY)
+LIBELF = -lelf
+OTHER_LIBS = $(BFD_LIBRARY) $(LIBELF)
 EXTRA_LIBS = $(OPROFILE_LIBS) $(OTHER_LIBS) $(LIBIBERTY)
 
 OPXML = 		opxml

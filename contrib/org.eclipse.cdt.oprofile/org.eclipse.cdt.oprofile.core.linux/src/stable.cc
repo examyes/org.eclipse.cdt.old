@@ -19,12 +19,12 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <iostream>
+#include <fcntl.h>
+#include <gelf.h>
 
 #include "stable.h"
 #include "symbol.h"
-
-#include "elf/common.h"
-#include "elf/internal.h"
 
 static bool ltvma (const symbol* a, const symbol* b);
 
@@ -208,38 +208,51 @@ symboltable::_open_bfd (void)
   if (_abfd == NULL)
     {
       bfd_init ();
-      _abfd = bfd_openr (_filename, NULL);
+      int fd = open (_filename, O_RDONLY); // bfd_close will close fd
+      _abfd = bfd_fdopenr (_filename, NULL, fd);
       if (_abfd != NULL)
 	{
 	  char** matches;
 	  if (bfd_check_format_matches (_abfd, bfd_object, &matches))
 	    {
 	      // Get the physical load address
-	      long phdr_upper_bound;
-	      long phdr_count;
-	      Elf_Internal_Phdr* phdrs;
-	      int ld_hdr;
+	      elf_version (EV_CURRENT);
 
-	      // This seems lame, since it requires intimate knowledge
-	      // about the ELF file. (What if the file is not ELF?)
-	      phdr_upper_bound =  bfd_get_elf_phdr_upper_bound (_abfd);
-	      phdrs = (Elf_Internal_Phdr*) malloc (phdr_upper_bound);
-	      phdr_count = bfd_get_elf_phdrs (_abfd, phdrs);
-
-	      for (ld_hdr = 0; ld_hdr < phdr_count; ld_hdr++)
+	      Elf* elf = elf_begin (fd, ELF_C_READ, NULL);
+	      GElf_Ehdr ehdr_mem;
+	      GElf_Ehdr* ehdr = gelf_getehdr (elf, &ehdr_mem);
+	      if (ehdr != NULL)
 		{
-		  if ((phdrs[ld_hdr].p_type == PT_LOAD)
-		      && (phdrs[ld_hdr].p_flags & (PF_R | PF_X)))
+		  switch (ehdr->e_type)
 		    {
-		      _start_vma = phdrs[ld_hdr].p_paddr;
+		    case ET_EXEC:
+		      for (int i = 0; i < ehdr->e_phnum; ++i)
+			{
+			  GElf_Phdr phdr_mem;
+			  GElf_Phdr* phdr = gelf_getphdr (elf, i, &phdr_mem);
+			  if (phdr->p_type == PT_LOAD
+			      && (phdr->p_flags & (PF_R | PF_X)))
+			    {
+			      _start_vma = phdr->p_paddr;
+			      break;
+			    }
+			}
+		      break;
+
+		    case ET_REL:
+		    case ET_DYN:
+		      // Do I need to worry about this?
+		      break;
+
+		    default:
 		      break;
 		    }
 		}
-	      free (phdrs);
+
+	      elf_end (elf);
 	    }
 	}
     }
-
   return (_abfd != NULL);
 }
 

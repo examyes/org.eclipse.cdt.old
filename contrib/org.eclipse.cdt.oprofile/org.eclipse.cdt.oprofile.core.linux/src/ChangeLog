@@ -1,3 +1,12 @@
+2005-01-26  Keith Seitz  <keiths@redhat.com>
+
+	* stable.cc (_open_bfd): Get rid of BFD for ELF file inspection.
+	Use the gelf interface provided by libelf.
+	* Makefile: Link against libelf.
+	* build.xml: Likewise.
+	* elf/internal.h: Remove.
+	* elf/common.h: Remove.
+	
 2004-08-27  Keith Seitz  <keiths@redhat.com>
 
 	* Makefile: Update for OProfile-0.8.
