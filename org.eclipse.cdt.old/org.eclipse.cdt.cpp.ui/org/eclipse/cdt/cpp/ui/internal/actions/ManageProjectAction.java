@@ -40,6 +40,12 @@ import org.eclipse.debug.core.IDebugConstants;
 //
 import org.eclipse.jface.dialogs.*;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.*;
+
 public class ManageProjectAction extends CustomAction
 { 
 	public class RunThread extends Handler
@@ -62,6 +68,20 @@ public class ManageProjectAction extends CustomAction
 			}		
 		}
 	}
+	public class CustomDialog extends MessageDialog
+	{
+		public CustomDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, int dialogImageType, String[] dialogButtonLabels, int defaultIndex)
+		{
+			super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType,dialogButtonLabels,defaultIndex);
+		}
+		public Control createCustomArea(Composite parent)
+		{
+			Label lb = new Label(parent, SWT.CENTER);
+			lb.setText("Testing");
+			return lb;
+		}
+	}
+	
 	public ManageProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
@@ -72,8 +92,8 @@ public class ManageProjectAction extends CustomAction
 		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
 		String message = new String("This action will generate all the files needed for Autoconf Support"+
 		"\nExisting configure.in and Makefile.am's will be overwritten - do you wish to continue?");
-		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-		if(dialog.openConfirm(shell,"Autoconf",message))
+		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
+		if(dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
 		{
 		
 			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
