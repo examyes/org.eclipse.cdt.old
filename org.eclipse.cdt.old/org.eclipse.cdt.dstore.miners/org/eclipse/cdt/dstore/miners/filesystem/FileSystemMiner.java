@@ -318,13 +318,14 @@ public class FileSystemMiner extends Miner
 	String newName;
 	
 	//if my parent already has a slash("/" or "d:\"), then I don't need to add another.
-	if (parentName.substring(parentName.length()-1).equals(File.separator))
+	int length = parentName.length();
+	if (length > 0 && parentName.substring(length - 1).equals("/"))
 	    {				
 		newName = new String(parentName.toString()+subject.getAttribute(DE.A_NAME));		
 	    }
 	else
 	    {
-		newName = new String(parentName.toString()+File.separator+subject.getAttribute(DE.A_NAME));
+		newName = new String(parentName.toString()+"/"+subject.getAttribute(DE.A_NAME));
 	    }
 	subject.setAttribute(DE.A_SOURCE,newName); // update my "source"
 
@@ -385,7 +386,7 @@ public class FileSystemMiner extends Miner
      private DataElement handleCreateFile(DataElement subject, DataElement newName, DataElement status)
 	 {	
 	     StringBuffer newFileName = new StringBuffer(subject.getSource());
-	     newFileName.append(File.separator+newName.getName());
+	     newFileName.append("/"+newName.getName());
 	     
 	     File toBeCreated = new File(newFileName.toString());
 	     if (!toBeCreated.exists())
@@ -418,7 +419,7 @@ public class FileSystemMiner extends Miner
      private DataElement handleCreateDir(DataElement subject, DataElement newName, DataElement status)
 	 {	
 	     StringBuffer newDirName = new StringBuffer(subject.getSource());
-	     newDirName.append(File.separator+newName.getName());
+	     newDirName.append("/"+newName.getName());
 	     
 	     File toBeCreated = new File(newDirName.toString());
 	     if (!toBeCreated.exists())
@@ -581,7 +582,7 @@ public class FileSystemMiner extends Miner
                           			  
 			  if ((type != null) && (!type.equals("device")))
 			      {
-				  path.append(File.separator);
+				  path.append("/");
 			      }
 			  
 			  String[] list= theFile.list();
@@ -634,7 +635,7 @@ public class FileSystemMiner extends Miner
 		
 		if (!type.equals("device"))
 		    {
-			path.append(File.separator);
+			path.append("/");
 		    }
 		
 		// check for deleted
@@ -655,8 +656,7 @@ public class FileSystemMiner extends Miner
 		    {
 			for (int i= 0; i < list.length; i++)
 			    {
-				String filePath = path.toString().replace('\\', '/') + list[i];
-				
+				String filePath = path.toString().replace('\\', '/') + list[i];				
 				String objName = list[i];
 									  
 				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
