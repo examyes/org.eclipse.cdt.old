@@ -224,6 +224,18 @@ public class DataStore
   //
   /////////////////////////////////////////
 
+    public boolean isVirtual()
+    {
+	if (_commandHandler instanceof com.ibm.dstore.core.client.ClientCommandHandler)
+	    {
+		return true;
+	    }
+	else
+	    {
+		return false;
+	    }
+    }  
+
   public boolean isConnected()
       { 
         return _isConnected;
