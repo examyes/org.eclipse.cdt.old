@@ -1589,22 +1589,33 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return false;
     }
 
-
  public DataElement findParseFiles(DataElement theProjectFile)
     {
-	DataStore dataStore = theProjectFile.getDataStore();
-	ArrayList parseRef = theProjectFile.getAssociated("Parse Reference");
-	if (parseRef != null && parseRef.size() > 0)
+		DataStore dataStore = theProjectFile.getDataStore();
+		DataElement parseProject = null;
+		if (!theProjectFile.getType().equals("Namespace"))
+		{
+			ArrayList parseRef = theProjectFile.getAssociated("Parse Reference");
+			if (parseRef != null && parseRef.size() > 0)
+			{
+				parseProject = ((DataElement)(parseRef.get(0))).dereference();
+			}
+		}
+		else
+		{
+			parseProject = theProjectFile;
+		}
+		if (parseProject != null)
+		{
+			DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
+			return projectObjects;
+		}
+		else
 	    {
-		DataElement parseProject = ((DataElement)(parseRef.get(0))).dereference();
-		DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
-		return projectObjects;
-	    }
-	else
-	    {
-		return null;
+			return null;
 	    }
     }
+
 
  public DataElement findParseFile(DataElement theProjectFile)
  {
