@@ -24,7 +24,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
 import com.ibm.debug.internal.picl.IPICLDebugConstants;
-import com.ibm.debug.internal.picl.PICLModelPresentation;
+import com.ibm.debug.PICLModelPresentation;
 
 public class CppMarkerAnnotation extends MarkerAnnotation {		
 	Image _breakpointImage;
