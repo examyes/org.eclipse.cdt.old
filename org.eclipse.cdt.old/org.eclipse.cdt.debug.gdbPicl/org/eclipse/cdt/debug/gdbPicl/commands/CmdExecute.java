@@ -124,7 +124,17 @@ public class CmdExecute extends Command
 							}
 						}						
 					}
-					((GdbDebugSession)_debugSession).cmdGoToAddress(address);										
+					if (address != null)
+					{
+						((GdbDebugSession)_debugSession).cmdGoToAddress(address);										
+					}
+					else
+					{
+			            _rep = new ERepExecute(0, 0);
+			            _rep.setReturnCode(EPDC.ExecRc_BadAddress);
+			            _rep.setMessage(_debugSession.getResourceString("FAILED_TO_JUMP_TO_LOCATION"));
+			            return false;			            
+					}
 				}
 				
                break;
@@ -349,19 +359,30 @@ public class CmdExecute extends Command
 						}						
 					}
 					
-					int id = ((GdbDebugSession)_debugSession).setAddressBreakpoint(address);
-					
-					if (id < 0)
+					if (address != null)
 					{
-	                     _rep = new ERepExecute(0, 0);
-	                     _rep.setReturnCode(EPDC.ExecRc_BadLineNum);
-	                     _rep.setMessage(_debugSession.getResourceString("LINE_NOT_EXECUTABLE_MSG"));
-	                     return false;
+						int id = ((GdbDebugSession)_debugSession).setAddressBreakpoint(address);
+						
+						if (id < 0)
+						{
+		                     _rep = new ERepExecute(0, 0);
+		                     _rep.setReturnCode(EPDC.ExecRc_BadAddress);
+		                     _rep.setMessage(_debugSession.getResourceString("LINE_NOT_EXECUTABLE_MSG"));
+		                     return false;
+						}
+						
+						_debugSession.setLastUserCmd(DebugSession.CmdRun,0);
+						_debugSession.cmdRun_User();
+						((GdbDebugSession)_debugSession).clearBreakpoint(id);
 					}
-					
-					_debugSession.setLastUserCmd(DebugSession.CmdRun,0);
-					_debugSession.cmdRun_User();
-					((GdbDebugSession)_debugSession).clearBreakpoint(id);
+					else
+					{
+			            _rep = new ERepExecute(0, 0);
+			            _rep.setReturnCode(EPDC.ExecRc_BadAddress);
+			            _rep.setMessage(_debugSession.getResourceString("FAILED_TO_JUMP_TO_LOCATION"));
+			            return false;			            
+					}
+
 					break;
 			   }
 
