@@ -12,92 +12,152 @@
 building C/C++ projects. The build settings are presented to the user
 in a simplified yet flexible format in the UI and managed by a Build
 Model. This model is used to write out the makefiles as necessary. The
-model is persisted in the project to allow reuse by project members.<br>
-</p>
+model is persisted in the project to allow reuse by project members.</p>
 <h2>Requirements</h2>
 <p>In CDT 1.2, much of the framework was put in place for the UI
 elements, build model, and the makefile generation and builder itself.
 CDT 2.0 will focus on cleaning up usability issues and filling out the
-build model. <br>
-</p>
-<p>To ensure common understanding, here are some definitions:<br>
-</p>
+build model.</p>
+<p>To ensure common understanding, here are some definitions:</p>
 <ul>
-  <li><span style="font-weight: bold;">Tool</span> - a utility of some
-sort that is used in the build process. A tool will generally execute
-on one or more resources to produce output resources. Most tools have a
-set of options that can be used to configure the functionality of the
-tool.<br>
-  </li>
-  <li><span style="font-weight: bold;">Target</span> - a target in the
+  <li><span style="font-weight: bold;"> <B>Build Goal - </B></span>the main files that are produced as a result of a build, e.g. an executable, a shared library, or a static library.</li>
+	<LI><SPAN style="font-weight: bold">Tool</SPAN> - a utility of some
+	sort that is used in the build process. A tool will generally process
+	one or more resources to produce output resources. Most tools have a
+	set of options that can be used to configure the functionality of the
+	tool.</LI>
+	<LI><B>Tool Chain </B> - the main set of tools that produce a build goal for the project.</LI>
+	<li><span style="font-weight: bold;">Target</span> - a target in the
 build sense represents the execution environment for the build output.
-This can include a number of different factors including operating
+A target  can be described using a number of different aspects including operating
 system, processor, system libraries, etc. Probably the best analogy
 would be the --target argument used to configure the gnu tools.</li>
-  <li><span style="font-weight: bold;">Configuration</span> - a line up
-of tools and tool options to configure a given build for a given
-target. A configuration is associated with a target and
-inherits/overrides the tool set defined for the target. The most common
-example of configurations is debug versus release (or optimized). Other
-examples can introduce build tools for profiling, instrumentation, etc.<br>
-  </li>
+	<LI><B>Configuration -</B> a configuration is a line up of tools and settings for the options for those tools as well as other information that configures the project to produce a build goal.</LI>
 </ul>
-<p>The requirements are as follows: (Note: all of these requirements
-are P1 unless marked otherwise).<br>
-</p>
-<ul>
-  <li>A given project should be able to support multiple configurations
-for multiple targets.</li>
-  <li>Different configurations on the same target should be able to
-select a different set of tools to run during the build.</li>
-  <li>Configurations can&nbsp; be defined at the Workspace level
-(default for new projects), Project level (default for all source
-files), or the Source File level.</li>
-  <li>A Configuration can inherit and override tool sets and options
-from another Configuration at any level.</li>
-  <li>The user should be able to exclude source files from a
-Configuration.</li>
-  <li>The user should be able to specify commands to be invoked before
-and after the build. <span style="font-style: italic;">(Note: it might
-be possible to do this with the external tools builder).</span><br>
-  </li>
-  <li>The Configuration should define a clean script that is
-inheritable/overiddable.</li>
-  <li>It should be possible to use Build Macros in the settings of tool
-options. It should be possible for the user to define their build
-macros. A set of predefined build macros should also be provided
-(either in the generated makefile or on the command line) that describe
-useful information concerning the build environment.</li>
-  <li>It should be possible to place intermediate build results in a
-different directory from the build results.</li>
-  <li>It should be possible for the user to define new targets and tool
-sets. These new definitions shall be persisted on the file system to
-support sharing and delivery with integrated tool chains. [P2] A wizard
-should be provided to do this. {/P2]<br>
-  </li>
-  <li>When defining a new tool, it should be possible to
-inherit/override options from another tool.</li>
-  <li>Ensure 1.2 Managed Make users can bring their projects forward.
-Any necessary conversion should take place automatically (with
-notification to the user).<br>
-  </li>
-</ul>
-<h3>Supported Targets/Tool Sets</h3>
-<p>The objective is to support as many targets and tool sets as
-possible.<br>
-</p>
-<p>To ensure a good out-of-box experience for the CDT, a default set
-should be supported. The default targets should be the host development
-environments (i.e. the machines that the CDT runs on). The default tool
-set shall be the gnu tool chain. On Windows, this should include both
-MinGW/Msys and cygwin.<br>
-</p>
+<p>The requirements are given below. The first set is from Leo Treggiari's cdt-dev mail from Oct 17/03. Terms have been replace to match the above definitions and additional comments have been added.</p>
+<UL>
+	<LI>A configuration should allow the user to specify a target. The build infrastructure should support multiple targets. A single project should be able to support configurations that target different targets.</LI>
+	<LI>A configuratoin should allow the user to specify a tool chain. The build infrastructure should support multiple tool chains per target. A single project should be able to support configurations that use different tool chains on the same or different targets.</LI>
+	<LI>A configuration should allow the user to override some of the tools in a tool chain. Tool chains define a mapping of file extensions to tools. The user should be able to override or extend the default mapping and specify a tool, or ordered set of tools, to be used with a file extension (or set of file extensions). This should be available at the workspace, project, and configuration level. (Update: file extensions are somewhat restrictive. Regular expressions to match file names should be used instead).</LI>
+	<LI>A configuraiton should allow the user to specify tool command line
+	options. The user should be able to define default command line options
+	per tool at the workspace, project, and configuration level.</LI>
+
+	<LI>A configuration should allow the user to exclude a source file from a configuration. The user should be able to mark a source file as not to be built in a particular configuration. This would be commonly used in projects that support multiple targets with target specific implementations in different source files.</LI>
+	<LI>A configuration should allow the user to specify commands to be invoked before the build. The user should be able to specify a script that runs before any or after all of the other build steps.</LI>
+	<LI>A configuration should allow the user to override building a particular source file. The user should be able to specify that a tool (or a set of tools) different than the default be used to build a particular source file. The user should also be able to specify a script that runs before, instead of, or after the default tool for a particular source file.</LI>
+	<LI>A configuration should allow the user to override the &quot;clean&quot; script. The user should be able to specify a script that runs before, instead of, or after the default clean script.</LI>
+	<LI>A configuration should allow the user to use pre-defined and user-specified build macros in string tool options and scripts. Build macros are replaceable string used in tool options that take a string value. They may also be used in build scripts. For example, a macro can be used that will be replaced by the configuration's output directory. In that way, changing the out put directory prioeprty automatically changes all of the uses of that macro.</LI>
+	<LI>A configuration should allow the user to specify an intermediate output directory as distinct from the output directory. The user may want to separate these output. These two directories would default to the same directory.</LI>
+	<LI>A configuration should allow the user to export the generated makefile. This would allow the build to be run on platforms that do not support the CDT.</LI>
+	<LI>A configuration should allow the user to derive a new configuration from an existing configuration and have tool options carry over to the new configuration. Since different tools of the same kind (e.g. C++ compilers) will likely define unique options, this goal is probably not 100% doable. But the CDT could define a set of &quot;generic&quot; options and values that could be written/read by all tools of a kind and provide a very usefull subset to the total solution.</LI>
+	
+
+</UL>
+<P>Additional requirements include:</P>
+<UL>
+	<LI>Configurations can be defined at a number of levels.
+	<UL>
+		<LI>A root configuration is a configuration defined outside of the
+		context of a project. It is used as a template for new configurations.
+		Two such configurations shall be provided, Debug, for use in debugging
+		sessions, and Release, used to create deployable artifacts.</LI>
+		<LI>A project configuration which provides default settings for all
+		files on the project. A project configuration may be derived from a
+		root configuration and may override tools and options settings defined
+		in the root configuration.</LI>
+		<LI>A file configuration provides settings for a given file in a
+		project. A file configuration exists in the context of a given project
+		configuration and may override individual option settings defined in
+		the project configuration.</LI>
+	</UL>
+	</LI>
+	<LI>A project configuration must select a single target, a single tool chain that supports that target, and a single build goal that the tool chain can build.</LI>
+	<LI>Each project should have one project configuration with is marked
+	active. The active configuration is the configuration that is built by
+	default when the Builder is invoked. File configurations can not be
+	selected indendently of their associated project configuration.</LI>
+	<LI>It should be possible for a tool to specify both the host that it
+	can run on and the target it can build for. The builder should then
+	filter which configurations can be active given the host that the CDT
+	is currently running on.</LI>
+	<LI>A project configuration can add and remove tools to the set of tools provided by the tool chain.</LI>
+	<LI>A tool is associated with either a file or a project. This drives under which property browser the settings for the tool can be seen/changed.</LI>
+	<LI>A tool specifies the make target(s) and prequisites that it builds
+	for. It should also be possible for a tool to provide a method to
+	dynamically calculate the prequisites for cases when they can not be
+	specified statically. This mechanism could be a regular expression or a
+	function that produces the list (such as a makedepend type utility).</LI><LI>It should be possible for toolsets to associate with multiple targets. This would be used for tools that can build for multiple targets such as gcc.</LI>
+	<LI>It should be possible for tools to specify options that are specific to a given target. This would be used for adding things like processor specific optimizations.</LI>
+	<LI>A tool can provide an error parser that would scan the build output to produce task items for build errors and warnings.</LI>
+	<LI>Extra build functionality can be provided by scripts that can be inserted before and after the build of a given file, and before and after the build of the project.</LI>
+	<LI>Automatic conversion should be provided for users that have existing managed build project to ensure the build settings in these projects are carried forward.</LI>
+	<LI>Defaults should be specified to ensure a good out-of-box experience for new users of the CDT. When the user creates a new project and the user skips over the build configuration settings, enough of a build environment should be instantiate to build Debug builds for the host gnu tool chain.</LI>
+	<LI>All attempts should be made to ensure the pattern of the generated
+	makefile can be used with all versions of make. Where not possible, an
+	extension point should be defined to allow a customizable pattern. The
+	extension point would also allow for setting of the default build
+	command. (One extreme would be to create an extension to this extension
+	point that would generate an ant build file and invoke the internal
+	antRunner).</LI>
+	<LI>[P2] Allow for builds in individual files. This would execute the tools associated with the file. This would be used to test compile a file to check for compile errors.</LI>
+	<LI>[P2] Allow users to add in their own make rules and add UI to call those rules.</LI>
+	<LI>Add toolbar buttons that invoke the build.</LI>
+	<LI>Add a widget to the tool bar to select the active configuration for the current selection in the C Projects View or Navigator.</LI>
+	<LI>Allow tool providers to define custom option editors.</LI>
+	<LI>Allow for a headless build.</LI>
+	<LI>Inter-project dependencies should be done at the configuration level. By default, configurations with the same name are matched up. When a project builds, it builds it's active configuration as well as any other configurations that are required by active configurations in other projects.</LI>
+	<LI>Include files and build output should be automatically added to dependant configuration's settings.</LI>
+
+</UL>
+<H3>Example Workflow</H3>
+<P>To help be clear about what the build model can achieve, we'll walk though an example.</P>
+<P>A user is building a distributed application that runs on a combination of a desktop x86 machine and a arm embedded Linux machine. There is a library that is common to both parts.</P>
+<P>First the user creates the library:</P>
+
+<UL>
+	<LI>Create a new managed build project</LI>
+	<LI>Create Release and Debug configurations for each target/toolset combination and mark them all as static libraries 
+	<UL>
+		<LI>Targets are x86-linux and arm-linux</LI>
+		<LI>Toolsets are gcc and intel for x86-linux and gcc for arm-linux and
+		flex/bison for all targets</LI>
+	</UL>
+	</LI><LI>Set a compiler flag (e.g. -DFOO) that applies to all configurations in the project with a single gesture</LI>
+	<LI>Set a compiler flag that applies to both toolsets for the x86 target.</LI>
+	<LI>Set a compiler flag that applies to the intel toolset on x86</LI>
+	<LI>Set a compiler flag that applies to the debug configuration on x86</LI>
+	<LI>Set a compiler flag that applies to both gnu toolsets</LI>
+	<LI>Generate a makefile which determines the necessary rules from the build settings and from dependency calculations provided by the toolset integrations.</LI><LI>Run make and call the error parsers provided by the toolset integrations to parser any build error output.</LI>
+	<LI>Mark the folders that contain header files as include folders</LI>
+
+</UL>
+<P>Then the user creates one of the applications. We'll choose the x86 app but the arm app would be similar:</P>
+<UL>
+	<LI>Create a new managed build target</LI>
+	<LI>Create a Release and Debug configuration for each target/toolset combination and mark them as executable.
+	<UL>
+		<LI>Target is x86-linux</LI>
+		<LI>Toolsets are gcc and intel for x86-linux</LI>
+	</UL>
+	</LI>
+	<LI>Add the project reference to the library project defined above.
+	<UL>
+		<LI>Each config in the application project can specify which config in the library project it depends on. It may also exclude the library project in a config. By default, the config will depend on the config in the library with the same name.</LI>
+	</UL>
+	</LI>
+
+	</UL>
+<P>When building, a project  will have an active configuration that it builds by default when asked to build. When other projects reference that project, they specify what configs they depend on. At build time, a project will also build those configs.</P>
+<P>The order of panes in the new project wizard:</P>
+<OL>
+	<LI>Target Selection</LI>
+	<LI>Tool/Toolset Selection</LI>
+	<LI>???</LI>
+</OL>
 <h2>Architecture Notes</h2>
-<p>This section will document the Build Model.<br>
-</p>
-<h2>Design Notes</h2>
-<p>None at this time.<br>
-</p>
-<br>
-</body>
+<P>None at this time.</P>
+<H2>Design Notes</H2>
+
+<p>None at this time.</p></body>
 </html>
