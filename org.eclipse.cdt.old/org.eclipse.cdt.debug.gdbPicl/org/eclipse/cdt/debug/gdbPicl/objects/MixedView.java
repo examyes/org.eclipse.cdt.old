@@ -147,7 +147,8 @@ abstract class MixedView extends View
 	      		// get the next executable line by "info line *address" where address comes from prev "info line" call
 	      		String nextLineNum = gdbDebugSession._getGdbFile.convertAddressToSourceLine(startEnd.startAddress);
 	      		// add source from current line to next executable line to _viewLine
-	      		String line;
+	      		SourceView.SourceLine line;
+	      		String strLine;
 	      		
 	      		int nextLine = Integer.parseInt(nextLineNum);
 	      		
@@ -156,12 +157,33 @@ abstract class MixedView extends View
 	      		
 	      		for (int j=i; j< nextLine; j++)
 	      		{
-	      			line = sourceView.getViewLine(j);
+	      			line = sourceView.getLine(j);
+
 	      			if (line != null)
 	      			{
-						line = processViewLine(line);      			
-		      			_viewLines.addElement(line);
-		      			mixedCurrentLine++;
+	      				disStart = line.getStart();
+						disEnd = line.getEnd();
+						
+						// gdb may be bad returning next line info... in case we have disassembly code for a certain line already, combine it
+						if (disStart != -1 && disEnd != -1)
+						{		      			
+				   			int sourceStartLine = j;
+				   			int sourceEndLine = j;
+				   			
+				      		if (Gdb.traceLogger.DBG) 
+				              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### For line " + i + " start disp line: " + disStart + " end disp line:  " + disEnd);  
+				      			
+				   			// combineSourcePlusDisassemblyLines
+							mixedCurrentLine = combineSourcePlusDisassemblyLines(mixedCurrentLine, sourceStartLine, sourceEndLine,
+								disStart, disEnd);
+						}
+						else
+						{
+						
+								strLine = processViewLine(line.toString());      			
+				      			_viewLines.addElement(strLine);
+				      			mixedCurrentLine++;
+						}
 	      			}
 	      		}
 	      		// i = next executable line
@@ -350,7 +372,7 @@ abstract class MixedView extends View
          return false;
       }
 
-//	  constructMixedView(sourceFileName);
+//      _viewConstructed = constructMixedView(_viewFileName, startLine, numLines);
 
       int srcMax = sourceView.getViewRecordLength();
       int disMax = disassemblyView.getViewRecordLength();
