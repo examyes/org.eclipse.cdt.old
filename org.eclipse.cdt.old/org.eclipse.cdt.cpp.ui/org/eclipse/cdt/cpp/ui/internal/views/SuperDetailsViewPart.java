@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
 
 public class SuperDetailsViewPart extends ObjectsViewPart
-{
+{ 
   public SuperDetailsViewPart()
   {
     super();

@@ -147,8 +147,22 @@ public class OpenEditorAction extends Action implements IOpenAction
 	    if (_element.getParent() != dataStore.getDescriptorRoot())
 		{
 		    DataElement resourceElement = getResourceFor(_element);
+
+		    //DKM
+		    if (resourceElement == null)
+			{
+			    return;
+			}
+
+
 		    DataElement projectElement = _api.getProjectFor(resourceElement);
-		    IProject project = _api.findProjectResource(projectElement);
+		    
+		    IProject project = null;
+		    if (projectElement != null)
+			{
+			    project = _api.findProjectResource(projectElement);
+			}
+
 
 		    String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
 		    fileName = fileName.replace('\\', '/');

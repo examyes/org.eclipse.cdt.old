@@ -347,7 +347,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	Display d= getDummyShell().getDisplay();
 	
 	ShowViewAction action = new ShowViewAction(id, input);
-	d.asyncExec(action);
+	d.syncExec(action);
       }
 
     public void monitorStatus(DataElement status)
@@ -535,12 +535,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void openProject(IProject project)
     {
+	openProject(project, getDummyShell());
+    }
+
+    public void openProject(IProject project, Shell shell)
+    {
     	if (project.isOpen())
 	    {	     
 		if (_plugin.isCppProject(project))
 		    {
 			OpenProjectAction openAction = new OpenProjectAction(project);
-			Shell shell = getDummyShell();
 			if (shell != null)
 			    {
 				Display d= shell.getDisplay();
@@ -632,8 +636,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			 }
 		 }
 
-	     CppProjectNotifier notifier = getProjectNotifier();
-	     notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
+	     //	     CppProjectNotifier notifier = getProjectNotifier();
+	     //notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
 	 }
     } 
   }
@@ -1682,22 +1686,28 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			if ((flags & IResourceDelta.CONTENT) != 0)
 			    {
 				resourceChanged(resource);
+				return;
 			    }
 			else if ((flags & IResourceDelta.OPEN) != 0)
 			    {
 				if (resource instanceof IProject)
 				    {
 					openProject((IProject)resource);
+					return;
 				    }
-			    }			
+			    }	
 			break;
 		    case IResourceDelta.ADDED:
 		    case IResourceDelta.REMOVED:
-			resourceChanged(resource.getParent());
-			break;
+			{
+			    resourceChanged(resource.getParent());
+			    resourceChanged(resource);
+			    return;
+			}
 		    default:
 			break;
 		    }
+
 	    }
 
 	IResourceDelta[] aff = delta.getAffectedChildren();
