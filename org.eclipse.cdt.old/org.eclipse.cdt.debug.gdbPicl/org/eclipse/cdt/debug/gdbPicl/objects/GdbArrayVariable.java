@@ -21,6 +21,7 @@ public class GdbArrayVariable extends GdbVariable {
 		String name,
 		String type,
 		String value,
+		String fullName,
 		int nodeID) {
 		super(debugSession, name, type, nodeID);
 		
@@ -29,7 +30,8 @@ public class GdbArrayVariable extends GdbVariable {
 		value = value.trim();
 		_gdbData = value;	
 		_numNodes = 1;
-				
+		_fullName = fullName;
+
 		createTree(value);
 	}
 
@@ -156,6 +158,7 @@ public class GdbArrayVariable extends GdbVariable {
 				String fieldValue = parseStr;
 				String fieldType = _type;
 				GdbScalarVariable element = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+				element.setFullName(_fullName+"[0]");
 				_elements.add(element);
 				return;
 			}
@@ -221,6 +224,7 @@ public class GdbArrayVariable extends GdbVariable {
 
 			// create element 			
 	    	GdbScalarVariable newElement  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+	    	newElement.setFullName(_fullName+"["+counter+"]");
 			_elements.add(newElement);
 			
 			counter++;
@@ -232,6 +236,7 @@ public class GdbArrayVariable extends GdbVariable {
 				fieldValue = parseStr;
 				fieldName = _name + "[" + counter + "]";
 		    	GdbScalarVariable lastElement  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+		    	lastElement.setFullName(_fullName+"["+counter+"]");		    	
 		    	_elements.add(lastElement);
 		    	_numNodes++;
 			}
@@ -251,10 +256,12 @@ public class GdbArrayVariable extends GdbVariable {
 		String fieldValue;
 		String fieldName;		
 		String fieldType = _type;
+		String fullName;
 		
 		while (parseStr != "" && parseStr != null)
 		{
 			fieldName = _name + "[" + counter + "]";
+			fullName = _fullName + "[" + counter + "]";
 			
 			// delimite by "{}"
 			endElement = findMatchingEnd(parseStr);
@@ -263,16 +270,17 @@ public class GdbArrayVariable extends GdbVariable {
 			{
 				// something wrong with data, return as a plain scalar
 				fieldValue = parseStr;
-				GdbScalarVariable element = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+				GdbScalarVariable element = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);	
+				element.setFullName(fullName);
 				_elements.add(element);
 				_numNodes++;
 				break;
 			}
 			
 			if (endElement+2 < parseStr.length())
-			{						
+			{										
 				fieldValue = parseStr.substring(0, endElement+1);
-				GdbArrayVariable element = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);	
+				GdbArrayVariable element = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, fullName, _nodeID + _numNodes);	
 				_elements.add(element);
 				
 				parseStr = parseStr.substring(endElement+3);
@@ -283,7 +291,8 @@ public class GdbArrayVariable extends GdbVariable {
 			{
 				// last element
 				fieldValue = parseStr;
-				GdbArrayVariable element = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);	
+				GdbArrayVariable element = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, fullName, _nodeID + _numNodes);	
+		    	element.setFullName(_fullName+"["+counter+"]");				
 				_elements.add(element);
 				parseStr = "";
 				_numNodes = _numNodes + element.numNodes();
@@ -316,6 +325,7 @@ public class GdbArrayVariable extends GdbVariable {
 				// something wrong with data, return as a plain scalar
 				fieldValue = parseStr;
 				GdbScalarVariable element = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+		    	element.setFullName(_fullName+"["+counter+"]");
 				_elements.add(element);
 				_numNodes++;
 				break;
@@ -325,6 +335,7 @@ public class GdbArrayVariable extends GdbVariable {
 			{						
 				fieldValue = parseStr.substring(0, endElement+1);
 				GdbObjectVariable element = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, fieldName, _nodeID + _numNodes);	
+		    	element.setFullName(_fullName+"["+counter+"]");
 				_elements.add(element);
 				
 				parseStr = parseStr.substring(endElement+3);
@@ -336,6 +347,7 @@ public class GdbArrayVariable extends GdbVariable {
 				// last element
 				fieldValue = parseStr;
 				GdbObjectVariable element = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, fieldName, _nodeID + _numNodes);	
+		    	element.setFullName(_fullName+"["+counter+"]");				
 				_elements.add(element);
 				parseStr = "";
 				_numNodes += element.numNodes();
@@ -394,6 +406,7 @@ public class GdbArrayVariable extends GdbVariable {
 	private Vector _elements;
 	private String _gdbData;
 	private int _numNodes;
+	private String _prefix;
 
 }
 

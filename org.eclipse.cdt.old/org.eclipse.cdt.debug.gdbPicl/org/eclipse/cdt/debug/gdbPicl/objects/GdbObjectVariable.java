@@ -215,6 +215,7 @@ public class GdbObjectVariable extends GdbVariable {
 				fieldValue = parseStr.substring(0, endClass+1);
 
 	    		GdbObjectVariable newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID + _numNodes);
+				newField.setFullName(_prefix + "." + fieldName);	    		
 	    		_fields.add(newField);
 	    		_numNodes += newField.numNodes();
 			    		
@@ -288,11 +289,13 @@ public class GdbObjectVariable extends GdbVariable {
 				{
 					// this is an array
 					int endClass = findMatchingEnd(parseStr);
-					
+					String fullName = _prefix + "." + fieldName;
+
 					if (endClass != -1)
 					{
-			    		fieldValue = parseStr.substring(equal+2, endClass+1);
-			    		GdbArrayVariable newField = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+			    		fieldValue = parseStr.substring(equal+2, endClass+1);		    		
+			    		GdbArrayVariable newField = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, fullName, _nodeID + _numNodes);
+						newField.setFullName(_prefix + "." + fieldName);			    		
 			    		_fields.add(newField);
 			    		_numNodes += newField.numNodes();
 			    		
@@ -310,6 +313,7 @@ public class GdbObjectVariable extends GdbVariable {
 						// create scalar and break
 						GdbScalarVariable newField;
 						newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);						
+						newField.setFullName(_prefix + "." + fieldName);						
 						_fields.add(newField);
 						_numNodes++;
 						break;
@@ -324,6 +328,7 @@ public class GdbObjectVariable extends GdbVariable {
 					{
 			    		fieldValue = parseStr.substring(equal+2, endClass+1);
 			    		GdbObjectVariable newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID + _numNodes);
+						newField.setFullName(_prefix + "." + fieldName);			    		
 			    		_fields.add(newField);
 			    		_numNodes += newField.numNodes();
 			    		
@@ -341,6 +346,7 @@ public class GdbObjectVariable extends GdbVariable {
 						// create scalar and break
 						GdbScalarVariable newField;
 						newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+						newField.setFullName(_prefix + "." + fieldName);
 						_fields.add(newField);
 						_numNodes++;
 						break;

@@ -74,7 +74,7 @@ public abstract class GdbVariable  extends Variable
  					if (value.indexOf(fieldName, comma) != -1)
  					{
  						// this is an array
- 						return new GdbArrayVariable(debugSession, varName, type, value, nodeID);
+ 						return new GdbArrayVariable(debugSession, varName, type, value, varName, nodeID);
  					}				
  					else
  					{
@@ -86,7 +86,7 @@ public abstract class GdbVariable  extends Variable
    			else
    			{
    				// it's really an array
-				return new GdbArrayVariable(debugSession, varName, type, value, nodeID);
+				return new GdbArrayVariable(debugSession, varName, type, value, varName, nodeID);
    			}	         
    		}
    		else
@@ -230,7 +230,7 @@ public abstract class GdbVariable  extends Variable
    public abstract GdbVariable getNode(int nodeID);
 
    private static boolean _allowTreeStructure=true;
-   private String _fullName;
+   protected String _fullName;
 
 
 }
