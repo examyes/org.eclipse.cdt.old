@@ -165,16 +165,19 @@ public class DataElementTreeViewer extends TreeViewer
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
-	if (parent != null && _currentInput != null)
+	if (parent != null && _currentInput != null && !_currentInput.isDeleted())
 	    {
-		if ((parent == _selected) || 
-		    (parent == _currentInput) || 
-		    (parent == _expanded) ||
-		    (_currentInput.contains(parent, _property, 2)))
+		synchronized(_currentInput)
 		    {
-		 	if ((getTree() != null) && !getTree().isDisposed())
+			if ((parent == _selected) || 
+			    (parent == _currentInput) || 
+			    (parent == _expanded) ||
+			    (_currentInput.contains(parent, _property, 2)))
 			    {
-				return true;
+				if ((getTree() != null) && !getTree().isDisposed())
+				    {
+					return true;
+				    }
 			    }
 		    }
 	    }
