@@ -93,8 +93,8 @@ public class DefaultBuildPreferencePage extends PreferencePage implements IWorkb
 	    }
 	else
 	    {
-		_buildInvocationEntry.setBuildText("gmake all");
-		_buildInvocationEntry.addBuild("gmake all", 0);
+		_buildInvocationEntry.setBuildText("gmake -k");
+		_buildInvocationEntry.addBuild("gmake -k", 0);
 	    }
 
 	// clean 

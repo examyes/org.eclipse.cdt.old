@@ -33,6 +33,14 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
+import org.eclipse.debug.core.model.IBreakpoint;
+
+import com.ibm.debug.breakpoints.*;
+import com.ibm.debug.internal.picl.PICLUtils;
+
 public class AddStatementBreakpoint extends CustomAction
 { 
   public AddStatementBreakpoint(DataElement subject, String label, DataElement command, DataStore dataStore)
@@ -42,7 +50,6 @@ public class AddStatementBreakpoint extends CustomAction
 
     public void createBreakpointMarker(DataElement statement)
     {
-	/*
 	String fileName   = (String)(statement.getElementProperty(DE.P_SOURCE_NAME));
 	Integer lineLocation = (Integer)(statement.getElementProperty(DE.P_SOURCE_LOCATION));
 	int line = lineLocation.intValue();	
@@ -53,14 +60,18 @@ public class AddStatementBreakpoint extends CustomAction
 	    {
 		try
 		    {
-			IMarker breakpoint = file.createMarker("com.ibm.debug.internal.picl.PICLLineBreakpoint");
+			PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
+			IMarker breakpointMarker = file.createMarker("com.ibm.debug.internal.picl.PICLLineBreakpoint");
 			
 			IBreakpointManager breakpointManager= DebugPlugin.getDefault().getBreakpointManager();
-			breakpointManager.configureLineBreakpoint(breakpoint, "com.ibm.debug.internal.picl" , true, line, 0, 1);
 			
-			Map map= breakpoint.getAttributes();
+			breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
+						       new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), lineLocation, new Integer(-1), new Integer(-1)});
+			breakpoint.setMarker(breakpointMarker);
+			
+			Map map= breakpointMarker.getAttributes();
 			map.put(IMarker.MESSAGE, "cpp");
-			breakpoint.setAttributes(map);
+			breakpointMarker.setAttributes(map);
 			
 			try
 			    {
@@ -68,15 +79,15 @@ public class AddStatementBreakpoint extends CustomAction
 			    }
 			catch (DebugException de)
 			    {
-				System.out.println(de);
+				System.out.println("BreakpointRulerAction: de" +de);
 			    }
+			
 		    }
 		catch (CoreException ce)
 		    {
 			System.out.println(ce);
 		    }
 	    }
-	*/
       }
 
     public void run()

@@ -2367,15 +2367,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement projectD = dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
 	DataElement closedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Closed Project", 1);
 
+	DataElement targetD = dataStore.find(schemaRoot,DE.A_NAME, "Project Target",1);
+
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
-	DataElement targetD = dataStore.find(schemaRoot,DE.A_NAME, "Project Target",1);
 
-
-	
-
-	
 	
 	// project actions
 
@@ -2655,7 +2652,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Find Help",
 							  "org.eclipse.cdt.cpp.ui.internal.actions.HelpAction");
 	//-------------------------------
+
+	// breakpoint actions
+	dataStore.createObject(classD, DE.T_UI_COMMAND_DESCRIPTOR,
+			       "Set Class Breakpoint",
+			       "org.eclipse.cdt.cpp.ui.internal.actions.AddClassBreakpoint");
+	dataStore.createObject(function, DE.T_UI_COMMAND_DESCRIPTOR,
+			       "Set Function Breakpoint",
+			       "org.eclipse.cdt.cpp.ui.internal.actions.AddFunctionBreakpoint");
+	dataStore.createObject(statement, DE.T_UI_COMMAND_DESCRIPTOR,
+			       "Set Breakpoint",
+			       "org.eclipse.cdt.cpp.ui.internal.actions.AddStatementBreakpoint");
 	
+
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
     }

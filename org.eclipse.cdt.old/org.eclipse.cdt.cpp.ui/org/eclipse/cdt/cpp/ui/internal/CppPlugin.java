@@ -155,7 +155,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	ArrayList history = readProperty("DefaultBuildInvocation");
 	if ((history == null) || (history.size() == 0))
 	    {
-		String defaultBuild = "gmake all";
+		String defaultBuild = "gmake -k";
 		ArrayList list = new ArrayList();
 		list.add(defaultBuild);
 		writeProperty("DefaultBuildInvocation", list);

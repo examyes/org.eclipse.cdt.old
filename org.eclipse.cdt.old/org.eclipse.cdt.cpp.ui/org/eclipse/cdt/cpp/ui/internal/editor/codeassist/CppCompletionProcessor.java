@@ -66,8 +66,9 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 	 * @see IContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
 	 */
    public char[] getCompletionProposalAutoActivationCharacters()
-      {
-        return null;
+      {	  
+	  //return null;
+        return new char[] { '.' };
       }
 	
   /**

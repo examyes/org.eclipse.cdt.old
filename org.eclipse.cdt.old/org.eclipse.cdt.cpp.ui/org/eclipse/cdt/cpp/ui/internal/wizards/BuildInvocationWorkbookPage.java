@@ -28,7 +28,7 @@ public class BuildInvocationWorkbookPage {
 public BuildInvocationWorkbookPage(Composite parent) 
     {
 	ArrayList blist = CppPlugin.readProperty("DefaultBuildInvocation");
-	String defaultBuildStr = "gmake all";
+	String defaultBuildStr = "gmake -k";
 	if (blist.size() > 0)
 	    {
 		defaultBuildStr = (String)blist.get(0);
