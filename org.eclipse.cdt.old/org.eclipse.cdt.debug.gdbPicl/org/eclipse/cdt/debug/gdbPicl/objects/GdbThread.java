@@ -233,9 +233,9 @@ public class GdbThread
            {
               str = lines[++i];
               fileName = str;
-              int slash = fileName.lastIndexOf("/");
-              if(slash>=0)
-                 fileName = fileName.substring(slash+1);
+//              int slash = fileName.lastIndexOf("/");
+//              if(slash>=0)
+//                 fileName = fileName.substring(slash+1);
            }
            else if( str.equals(FRAME_SOURCE_WHERE) )
            {

@@ -79,7 +79,7 @@ public class GdbThreadComponent extends ThreadComponent
             if (Gdb.traceLogger.ERR) 
                 Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
                 		
-            EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  convertLineNum(lineNumber(0))); 
+            EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  convertLineNum(lineNumber(0), _partID)); 
             if (Part.MIXED_VIEW_ENABLED)
 	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
          }
@@ -483,7 +483,7 @@ public class GdbThreadComponent extends ThreadComponent
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
          entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
-               (short)partID, 1, convertLineNum(lineNumber(i)));
+               (short)partID, 1, convertLineNum(lineNumber(i), partID));
          
          if (Part.MIXED_VIEW_ENABLED)               
          {
@@ -518,11 +518,11 @@ public class GdbThreadComponent extends ThreadComponent
     }
     
     
-    private int convertLineNum(int line)
+    private int convertLineNum(int line, int partID)
     {
         // convert to correct disassembly line number
 		ModuleManager moduleManager = _debugSession.getModuleManager();            
-		GdbPart part = (GdbPart)moduleManager.getPart(_partID);
+		GdbPart part = (GdbPart)moduleManager.getPart(partID);
 		int disNum;
 
 		if (part != null)

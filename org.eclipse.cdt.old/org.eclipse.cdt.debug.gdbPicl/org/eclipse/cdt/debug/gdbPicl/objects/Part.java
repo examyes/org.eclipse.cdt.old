@@ -431,4 +431,13 @@ public abstract class Part
    public static final int VIEW_DISASSEMBLY = 2;
    public static final int VIEW_MIXED       = 3;
    public static boolean MIXED_VIEW_ENABLED = NUM_VIEWS >= VIEW_MIXED;
+
+	/**
+	 * Sets the partVerified
+	 * @param partVerified The partVerified to set
+	 */
+	public void setPartVerified(boolean partVerified) {
+		_PartVerified = partVerified;
+	}
+
 }

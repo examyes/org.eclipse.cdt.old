@@ -136,11 +136,13 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
       return lineAddress;
    }
 */
-   public String[] getDisassemblyLines(String startAddress, String endAddress)
+
+   public String[] getDisassemblyLines(String address)
    {
       String[] disassembly = null;
 
-      String cmd = "disassemble "+startAddress+" "+endAddress;
+//      String cmd = "disassemble "+startAddress+" "+endAddress;
+      String cmd = "disassemble " + address;
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(3,"GetGdbFile.getDissassemblyLines cmd="+cmd );
 
@@ -157,7 +159,8 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
           Gdb.traceLogger.dbg(3,"GetGdbFile.getDissassemblyLines lines[0]="+str );
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(3,"GetGdbFile.getDissassemblyLines lines[last]="+lastStr );
-      String keyword = "Dump of assembler code from ";
+//      String keyword = "Dump of assembler code from ";
+      String keyword = "Dump of assembler code ";
       int end = 0;
       if(str!=null)
          end = str.indexOf(keyword);
@@ -184,7 +187,7 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
 
       return disassembly;
    }
-
+   
    public int getTotalLines(String fileName)
    {
       int totalLines = 0;

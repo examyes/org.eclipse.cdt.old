@@ -31,11 +31,13 @@ public class GdbPart extends Part
       getTotalLines(_partName);
       if(_totalLines>0) _SymbolTbl = true;
       else              _SymbolTbl = false;
-
+/*
+	  // sam:  don't need this anymore as we are now dynamically generating the disassembly view
       if(isDebuggable())
-         setStartEndAddress(_partName);
+         setStartEndAddress(_partName);         
 	  if (Gdb.traceLogger.DBG) 
               Gdb.traceLogger.dbg(1,"**** GdbPart CTOR _totalLines="+_totalLines+" start="+_startAddress+" end="+_endAddress );
+*/              
 
       _methods       = null;
       if(isDebuggable())

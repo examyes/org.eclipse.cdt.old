@@ -11,6 +11,7 @@ import  com.ibm.debug.gdbPicl.objects.Module;
 import  com.ibm.debug.gdbPicl.objects.Part;
 import  com.ibm.debug.gdbPicl.objects.GdbPart;
 import  com.ibm.debug.gdbPicl.objects.View;
+import  com.ibm.debug.gdbPicl.objects.GdbDisassemblyView;
 import  com.ibm.debug.gdbPicl.objects.GdbThreadComponent;
 
 /**
@@ -276,6 +277,8 @@ public class GetGdbModuleParts
      currentModuleName = _moduleManager.getModuleName(currentModuleID);
      currentPartID = _moduleManager.getPartID(currentModuleID, currentFileName);   
      
+     String lastFunctionName = _debugSession.getCurrentFunctionName();     
+     
      // update debug session
      // threadManager.updateThreads() depends on some of this info   
      _debugSession.setCurrentFileLineModule(currentLineNumber, currentFileName, currentFunctionName,
@@ -324,6 +327,22 @@ public class GetGdbModuleParts
                 {
                     String name = view.getBaseViewFileName();
                 }
+             }
+             
+             if (part != null)
+             {
+	             if (!lastFunctionName.equals(currentFunctionName))
+	             {
+	   				String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(currentFileName,currentLineNumber);
+					View tempView = ((GdbPart)part).getView(Part.VIEW_DISASSEMBLY);
+	             	if (!((GdbDisassemblyView)tempView).containsAddressInView(address))
+	             	{
+	             		((GdbPart)part).setPartVerified(false);
+	             		((GdbPart)part).setPartChanged(true);
+	             		tempView.setViewVerify(false);
+	            		((GdbPart)part).verifyViews();
+	             	}             		
+	             }
              }
          }
      }
@@ -701,14 +720,19 @@ public class GetGdbModuleParts
      // "Compilation directory is "
      keyword = "Located in ";
      str = lines[2];
+     String fullFileName;
      if(!str.startsWith(keyword))
      {
          if (Gdb.traceLogger.ERR)
              Gdb.traceLogger.err(2,"GetGdbModuleParts.checkCurrentPart was expecting str="+keyword+", received str="+str );
-         return null;
+//         return null;
+		 fullFileName = fileName;
      }
-     str = str.substring( keyword.length() );
-     String fullFileName = str;
+     else
+     {
+	     str = str.substring( keyword.length() );
+	     fullFileName = str;
+     }    
 
 // SAM:  not sure what it is doing here... this does not make sense
 /*

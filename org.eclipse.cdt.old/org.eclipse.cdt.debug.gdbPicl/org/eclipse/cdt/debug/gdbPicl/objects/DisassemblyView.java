@@ -112,9 +112,23 @@ abstract class DisassemblyView extends View
 
       return lineNum;
    }
+   
+   public boolean containsAddressInView(String address)
+   {
+ 	  Object tmp = _lineMap.get(address);
+ 	  return (tmp != null);
+   }
 
   /**
    * Attempts to load the disassembly file and create index of line number locations.
+   * Since we are now generating the disassembly view dynamically, meaning of verifyView
+   * based on a filename has changed.  Before the change, the picl tries to generate the 
+   * disassembly view based on a file's start and end address.  However, gdb's disassemble function
+   * is based on function scope.  So, the picl will generate the view every time the debugging
+   * session is changing scope, steping into a new function.  It will try to disassemble for the entire
+   * function based on an address and append the disassembly source at the end of the view.  In this case, verifying
+   * a view will require the picl to parse through the call stacks, find out all the stack frame addresses
+   * that are associated with the file and generate the disassembly codes for the addresses.
    */
    public boolean verifyView(String sourceFileName) 
    {
@@ -136,67 +150,83 @@ abstract class DisassemblyView extends View
          return true;
       }
 
-      file = new File(sourceFileName);
-      if (!file.exists() || file.isDirectory())
-      { 
-      	 _parentPart.setPartChanged(true);
-      	 _fakeNoSource = true;	
-         return false;
-      }
-
       GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
-      String startAddress = ((GdbPart)_parentPart).getStartAddress();
-      String endAddress = ((GdbPart)_parentPart).getEndAddress();
-      long startAddInt = 0;
-      long endAddInt = 0;
       
-      try
-      {
-      	  if (startAddress != null && endAddress != null)
-      	  {
-		      startAddInt = Long.parseLong(startAddress.substring(2), 16);
-		      endAddInt = Long.parseLong(endAddress.substring(2), 16);
-      	  }		      
+      // Get all line numbers associated with a sourceFileName from all call stack
       
-	      if (startAddInt > endAddInt || startAddress == null || endAddress == null)
-	      {
-	      	_parentPart.setPartChanged(true);
-	      	_fakeNoSource = true;
-	      	return true;
+      GdbThreadManager threadManager = (GdbThreadManager) gdbDebugSession.getThreadManager();
+      
+//	  Vector locations = threadManager.getFrameAddressforPart(sourceFileName);
+	  Vector locations = threadManager.getLineNumforPart(sourceFileName);
+	  
+	  if (locations.size() == 0)
+	  {
+         _parentPart.setPartChanged(true);
+         _fakeNoSource = true;
+        
+         return true;
+	  }
+       
+	  for (int i=0; i<locations.size(); i++)
+	  { 	  	
+	  //	  String disAddress = (String)locations.elementAt(i);	
+	  
+	  	  String disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, ((Integer)locations.elementAt(i)).toString());
+	      
+	      // generate the disassembly code for the location if it's not already part of the view
+	      if (!containsAddressInView(disAddress))
+	      {		  	
+		      String[] lines = gdbDebugSession._getGdbFile.getDisassemblyLines(disAddress);	      
+		
+		      int lineNum   = 0;
+		      int maxLength = 0;
+	
+		      String srcLine = null;
+		      String address = null;
+		      
+		      int dispNumLines = _viewLines.size();
+		      
+		      if (lines == null)
+		      	continue;
+		      
+		      while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
+		      {
+		      	 int space = srcLine.indexOf(" ");
+		      	 if (space != -1)
+		      	 {
+					 address = srcLine.substring(0, space);
+		      	 }
+		      	 else
+		      	 {
+			      	 address = srcLine.substring(0,9);
+		      	 }	      	 
+		         srcLine = processViewLine(lineNum+1, " "+srcLine);
+		         
+		         dispNumLines++;
+		
+		         _viewLines.addElement(srcLine);      
+		         
+		         /*
+		         This hashtable keeps track of the addresses and their associated line numbers
+		         in disassembly view.  This hashtable is used for reporting where a debugee stopped
+		         in the disassembly.  Before reporting the status of the stack frame to UI, we
+		         get the location of a part, convert this line number to an address, and look up
+		         this address in the hashtable.  Then we report the associated line number as the
+		         correct location of a particular line in disassembly view.
+		         */  
+		         _lineMap.put(address, new String(Integer.toString(dispNumLines)));
+		                  
+		         if (srcLine.length() > maxLength)
+		            maxLength = srcLine.length();
+		
+		         lineNum++;
+		      }      
+		      
+		      setViewRecordLength(maxLength);
+		      setViewLineRange(1, dispNumLines);
+		      setExecutableLines();
 	      }
-      }
-      catch(NumberFormatException e)
-      {
-      	  _parentPart.setPartChanged(true);
-		  _fakeNoSource = true;
-		  return true;
-      }
-      
-      String[] lines = gdbDebugSession._getGdbFile.getDisassemblyLines(startAddress, endAddress);
-
-      int lineNum   = 0;
-      int maxLength = 0;
-      _viewLines.removeAllElements();
-      String srcLine = null;
-      String address = null;
-      
-      while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
-      {
-      	 address = srcLine.substring(0,9);
-         srcLine = processViewLine(lineNum+1, " "+srcLine);
-
-         _viewLines.addElement(srcLine);        
-         _lineMap.put(address, new String(Integer.toString(lineNum+1)));
-                  
-         if (srcLine.length() > maxLength)
-            maxLength = srcLine.length();
-
-         lineNum++;
-      }
-
-      setViewRecordLength(maxLength);
-      setViewLineRange(1, lineNum);
-      setExecutableLines();
+	  }
 
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"File opened and read: " + sourceFileName);
