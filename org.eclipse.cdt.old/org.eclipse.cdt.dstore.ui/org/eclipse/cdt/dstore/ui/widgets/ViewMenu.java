@@ -490,11 +490,25 @@ public class ViewMenu implements IMenuListener
 		      }
 	      }	
 	  
-	    DataElement allD = dataStore.findObjectDescriptor(_dataStore.getLocalizedString("model.all"));
-	    if (!_filterItems.contains(allD))
-		{
-		    _filterItems.add(allD);
-		}
+	  DataElement allD = dataStore.findObjectDescriptor(_dataStore.getLocalizedString("model.all"));
+	  if (!_filterItems.contains(allD))
+	      {
+		  boolean containsAll = false;
+		  // find the name all
+		  for (int i = 0; (i < _filterItems.size()) && !containsAll; i++)
+		      {
+			  DataElement des = (DataElement)_filterItems.get(i);
+			  if (des.getName().equals("all"))
+			      {
+				  containsAll = true;
+			      }
+		      }
+
+		  if (!containsAll)
+		      {
+			  _filterItems.add(allD);
+		      }
+	      }
 
 	  _filterItems = Sorter.sort(_filterItems);
       }
