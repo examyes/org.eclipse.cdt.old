@@ -55,9 +55,9 @@ public class CmdProcessAttach extends Command
                                   null,
                                   filename);
         // !!! Anything other than ExecRc_ProgName will kill SUI.  Why?
-        _rep.setReturnCode(EPDC.ExecRc_ProgName);
-        _rep.setMessage(errorMsg[0]);
-        return false;
+        _rep.setReturnCode(EPDC.ExecRc_Error);
+       _rep.setMessage(errorMsg[0]);
+       return false;
      }
 
      /* Attach succeeded ... good. */

@@ -760,8 +760,21 @@ public class GdbDebugSession extends DebugSession {
 		_attachedProcessID = processIndex;
 		_debuggeeProcessID = (new Integer(_attachedProcessID)).toString();
 
-		addCmdResponsesToUiMessages();
-
+                String[] lines = getTextResponseLines();
+                addCmdResponsesToUiMessages();
+              
+                for (int i=0; i<lines.length; i++)
+                {
+                   if (lines[i].indexOf("No such process") >= 0)
+                   {
+                       if (Gdb.traceLogger.ERR)
+				Gdb.traceLogger.err(1,
+					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
+                       errorMsg[0] = lines[i];
+                       return false;
+                   }
+                }
+		
 		checkCurrentPart(_currentModuleID);
 
 		updateSharedLibraries();
