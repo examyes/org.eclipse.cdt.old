@@ -8,6 +8,9 @@ import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.editor.*;
 import com.ibm.cpp.ui.internal.api.*;
 
+import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.widgets.*;
+
 import org.eclipse.ui.*;
 
 import com.ibm.dstore.core.model.*;
@@ -17,6 +20,8 @@ import com.ibm.dstore.ui.dialogs.*;
 import java.util.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.*;
+import org.eclipse.ui.internal.*;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.action.*;
@@ -78,8 +83,28 @@ public class FindObjectAction extends Action
 			
 			if (status.getNestedSize() > 0)
 			    {
-				DataElementDialog dlg = new DataElementDialog("Select Object", status);
-				dlg.open();
+				IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+				IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+				
+				IWorkbenchPage persp= win.getActivePage();
+				ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
+
+				if (viewPart == null)
+				    {
+					try
+					    {
+						persp.showView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
+					    }
+					catch (PartInitException e)
+					    {
+						System.out.println(e);
+					    }
+				    }
+
+				if (viewPart != null)
+				    {
+					viewPart.setInput(status.get(0));
+				    }
 			    }
 		    }		
 	    }
@@ -91,17 +116,28 @@ public class FindObjectAction extends Action
 	String text = viewer.elementText(viewer.currentElement());
 	
 	// ZERO-based column preceding cursor's
-	int column = viewer.currentPosition() - 2;
+	int cursor = viewer.currentPosition();
+	int columnBegin = cursor - 2;
+	int columnEnd   = cursor - 1;
 	
-	if (text != null && text.length() > column) 
+	if (text != null && text.length() > columnBegin) 
 	    {
-		while (column >= 0) 
+		while (columnBegin >= 0) 
 		    {
-			char c = text.charAt(column);
-			if (c == ' ' || c == '\t')
+			char c = text.charAt(columnBegin);
+			if (c == ' ' || c == '\t' || c == '.')
 			    break;
 			currentText.insert(0, c);
-			column--;
+			columnBegin--;
+		    }
+
+		while (columnEnd <= 255) 
+		    {
+			char c = text.charAt(columnEnd);
+			if (c == ' ' || c == '\t' || c == '.')
+			    break;
+			currentText.append(c);
+			columnEnd++;
 		    }
 	    }
 	

@@ -1,4 +1,7 @@
-all: CppContentOutlinePage.class
 
-CppContentOutlinePage.class: CppContentOutlinePage.java
-	javac $(FLAGS) CppContentOutlinePage.java
+.SUFFIXES: .java .class
+
+.java.class:
+       javac %s
+
+all: CppContentOutlinePage.class SelectedObjectViewPart.class

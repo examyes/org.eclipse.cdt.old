@@ -57,6 +57,13 @@
 		class="com.ibm.cpp.ui.internal.views.DetailsViewPart">
 	</view>
 	<view
+		id="com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart"
+		name="Selected Object"
+		category="com.ibm.cpp.ui"
+		icon="icons/details.gif"
+		class="com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart">
+	</view>
+	<view
 		id="com.ibm.cpp.ui.internal.views.SuperDetailsViewPart"
 		name="%More_Details"
 		category="com.ibm.cpp.ui"

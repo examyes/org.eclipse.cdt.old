@@ -112,7 +112,7 @@ public class CppEditor extends LpexTextEditor
         addAction(menu, "ContentAssistProposal");
 	/***/
 	MenuManager findCascade = new MenuManager("Find", "Find");
-	findCascade.add(new FindObjectAction("Declaration", this, true));
+	findCascade.add(new FindObjectAction("Declaration@Ctrl+X", this, true));
 	menu.add(findCascade);
 	/***/
       }

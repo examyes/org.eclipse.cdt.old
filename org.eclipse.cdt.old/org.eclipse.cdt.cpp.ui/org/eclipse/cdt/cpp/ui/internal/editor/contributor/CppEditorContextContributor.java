@@ -5,6 +5,7 @@ package com.ibm.cpp.ui.internal.editor.contributor;
  */
 
 import com.ibm.cpp.ui.internal.editor.*;
+import com.ibm.cpp.ui.internal.actions.*;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.*;
