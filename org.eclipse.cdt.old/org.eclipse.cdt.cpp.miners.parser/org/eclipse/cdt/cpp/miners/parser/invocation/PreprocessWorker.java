@@ -71,6 +71,7 @@ public class PreprocessWorker extends Thread
   _theParseWorker = new ParseWorker();
   _theParseWorker.setEnabled(false);
   setParsedFiles(_parsedFiles);
+  _theParseWorker.start();
  }
  
  public void parseObjectNow(DataElement theObject, DataElement status)
