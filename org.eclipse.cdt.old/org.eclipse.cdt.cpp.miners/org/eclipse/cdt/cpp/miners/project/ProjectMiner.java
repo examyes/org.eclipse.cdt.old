@@ -37,6 +37,8 @@ public class ProjectMiner extends Miner
   createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.informational")));
 
   DataElement fsObjectD      = findDescriptor(getLocalizedString("project.FileSystemObjects"));
+  DataElement directoryD     = findDescriptor(getLocalizedString("model.directory"));
+  DataElement fileD          = findDescriptor(getLocalizedString("model.file"));
   DataElement workspaceD     = createObjectDescriptor(schemaRoot, getLocalizedString("project.Workspace"));
   DataElement projectD       = createObjectDescriptor(schemaRoot, getLocalizedString("project.Project"));
   DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
@@ -66,7 +68,9 @@ public class ProjectMiner extends Miner
   createReference(projectsD,  projectD); 
   createReference(projectsD,  closedProject); 
   createReference(projectsD,  projectFileD); 
-  createReference(projectsD,  fsObjectD); 
+  createReference(projectsD,  directoryD); 
+  createReference(projectsD,  fileD); 
+  //  createReference(projectsD,  fsObjectD); 
 
   createReference(workspaceD, projectsD);
 
