@@ -37,6 +37,8 @@ public class EnvironmentMiner extends Miner
   DataElement fsObj = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
   DataElement inhabits = _dataStore.createRelationDescriptor(schemaRoot, "inhabits");
   DataElement sustains = _dataStore.createRelationDescriptor(schemaRoot, "sustains");
+  inhabits.setDepth(0);
+  sustains.setDepth(0);
 
   _dataStore.createReference(envVar, sustains);
   _dataStore.createReference(fsObj, inhabits);
