@@ -145,6 +145,10 @@
          name="&amp;C++"
          id="org.eclipse.cdt.cpp.ui.cpp">
    </category>
+   <category
+         name="&amp;C++ Browsing"
+         id="org.eclipse.cdt.cpp.ui.cppbrowsing">
+   </category>
    <view
          name="%Details"
          icon="icons/full/cview16/details_view.gif"
@@ -153,7 +157,14 @@
          id="org.eclipse.cdt.cpp.ui.DetailsViewPart">
    </view>
    <view
-         name="Selected Object"
+         name="%Process_Monitor"
+         icon="icons/full/cview16/details_view.gif"
+         category="org.eclipse.cdt.cpp.ui.cpp"
+         class="org.eclipse.cdt.cpp.ui.internal.views.ProcessMonitorViewPart"
+         id="org.eclipse.cdt.cpp.ui.ProcessMonitorViewPart">
+   </view>
+   <view
+         name="%Selected_Object"
          icon="icons/full/cview16/details_view.gif"
          category="org.eclipse.cdt.cpp.ui.cpp"
          class="org.eclipse.cdt.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart"
@@ -162,7 +173,7 @@
    <view
          name="%More_Details"
          icon="icons/full/cview16/details_view.gif"
-         category="org.eclipse.cdt.cpp.ui.cpp"
+         category="org.eclipse.cdt.cpp.ui.cppbrowsing"
          class="org.eclipse.cdt.cpp.ui.internal.views.SuperDetailsViewPart"
          id="org.eclipse.cdt.cpp.ui.SuperDetailsViewPart">
    </view>
@@ -183,21 +194,21 @@
    <view
          name="%Project_Objects"
          icon="icons/full/cview16/projectobject_view.gif"
-         category="org.eclipse.cdt.cpp.ui.cpp"
+         category="org.eclipse.cdt.cpp.ui.cppbrowsing"
          class="org.eclipse.cdt.cpp.ui.internal.views.ProjectObjectsViewPart"
          id="org.eclipse.cdt.cpp.ui.ProjectObjectsViewPart">
    </view>
    <view
          name="%System_Objects"
          icon="icons/full/cview16/systemobject_view.gif"
-         category="org.eclipse.cdt.cpp.ui.cpp"
+         category="org.eclipse.cdt.cpp.ui.cppbrowsing"
          class="org.eclipse.cdt.cpp.ui.internal.views.SystemObjectsViewPart"
          id="org.eclipse.cdt.cpp.ui.SystemObjectsViewPart">
    </view>
    <view
          name="%Parsed_Files"
          icon="icons/full/cview16/parse_view.gif"
-         category="org.eclipse.cdt.cpp.ui.cpp"
+         category="org.eclipse.cdt.cpp.ui.cppbrowsing"
          class="org.eclipse.cdt.cpp.ui.internal.views.ParsedSourceViewPart"
          id="org.eclipse.cdt.cpp.ui.ParsedSourceViewPart">
    </view>
