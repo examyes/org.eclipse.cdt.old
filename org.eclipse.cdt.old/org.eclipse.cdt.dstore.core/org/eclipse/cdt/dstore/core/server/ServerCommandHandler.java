@@ -144,7 +144,8 @@ public class ServerCommandHandler extends CommandHandler
 	  
 	  if (_dataStore.validTicket())
 	      {
-		  if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.start")))
+		  String statusValue = status.getAttribute(DE.A_NAME);
+		  //		  if (!statusValue.equals(_dataStore.getLocalizedString("model.done")))
 		  {
 		   
 		      boolean failure = false;

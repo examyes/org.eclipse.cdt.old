@@ -44,9 +44,11 @@ public class CommandMiner extends Miner
   DataElement  subject = getCommandArgument(theElement, 0);
   String    invocation = getCommandArgument(theElement, 1).getName();
   DataElement  project = getCommandArgument(theElement, 2);
-  
+
   if (name.equals("C_COMMAND"))
   {
+    System.out.println("doing " + invocation);
+
    //Remove all extra whitespace from the command
    if (invocation.trim().length() > 0)
     launchCommand(subject, invocation, status, project);
@@ -191,6 +193,7 @@ class CommandMinerThread extends MinerThread
   
   _status     = status;
   _dataStore  =  theElement.getDataStore();
+
  
   _invocation = invocation.trim();
   _patterns = thePatterns;
@@ -212,6 +215,8 @@ class CommandMinerThread extends MinerThread
 	theDirectory = theDirectory.getParentFile();
     String theOS = System.getProperty("os.name");
     String theShell;    
+
+
     if (!theOS.toLowerCase().startsWith("win"))
 	{
 	    theShell = "sh";

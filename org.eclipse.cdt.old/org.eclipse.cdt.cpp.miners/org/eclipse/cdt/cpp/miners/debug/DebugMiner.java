@@ -31,14 +31,17 @@ public class DebugMiner extends Miner
 
 	if (name.equals("C_DEBUG"))
 	    {
-		handleDebug(subject, getCommandArgument(theCommand, 1), getCommandArgument(theCommand, 2));
+		handleDebug(subject, 
+			    getCommandArgument(theCommand, 1), 
+			    getCommandArgument(theCommand, 2), 
+			    status);
 	    }
 
 	status.setAttribute(DE.A_NAME, "done");
 	return status;
     }
 
-    public void handleDebug(DataElement directory, DataElement port, DataElement key)
+    public void handleDebug(DataElement directory, DataElement port, DataElement key, DataElement status)
     {
 	String invocationStr = _debugInvocation + "-quiport=" + port.getName() + " -startupKey=" + key.getName(); 
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
@@ -46,10 +49,10 @@ public class DebugMiner extends Miner
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
 	if (cmdDescriptor != null)
 	    {
-		ArrayList args = new ArrayList();
+		ArrayList args = new ArrayList(); 
 		args.add(invocation);
-
-		_dataStore.command(cmdDescriptor, invocation, directory);
+		args.add(status);
+		_dataStore.command(cmdDescriptor, args, directory);
 	    }
     }
 }

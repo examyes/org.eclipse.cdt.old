@@ -73,19 +73,30 @@ public class CommandGenerator
         }
       }
 
+
     // create time and status objects
-    DataElement status = _dataStore.createObject(commandObject, 
-						 _dataStore.getLocalizedString("model.status"), 
-						 _dataStore.getLocalizedString("model.start"), "", 
-						 commandObject.getId() + _dataStore.getLocalizedString("model.status"));
-    
+    DataElement status = _dataStore.find(commandObject, DE.A_TYPE, _dataStore.getLocalizedString("model.status"), 1);
+
+    if (status != null)
+	{
+	    status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.start"));
+	}
+
+    if (status == null)
+    {
+	    status = _dataStore.createObject(commandObject, 
+					     _dataStore.getLocalizedString("model.status"), 
+					     _dataStore.getLocalizedString("model.start"), "", 
+					     commandObject.getId() + _dataStore.getLocalizedString("model.status"));
+	}
+
     if (_dataStore.logTimes())
     {
 	DataElement timeObject = _dataStore.createObject(status, _dataStore.getLocalizedString("model.time"), _dataStore.getLocalizedString("model.command_time"));
       DataElement startTime = _dataStore.createObject(timeObject, _dataStore.getLocalizedString("model.property"), _dataStore.getLocalizedString("model.start_time"));
       startTime.setAttribute(DE.A_VALUE, new String(System.currentTimeMillis() + ""));
     }
-    
+
     _log.addNestedData(commandObject, false);
     _dataStore.refresh(_log);
 
