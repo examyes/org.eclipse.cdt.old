@@ -14,13 +14,13 @@ public class DebugMiner extends Miner
     public void load()
     {  
 	_debugJarPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdb.Gdb/derdebug.jar";
-	_debugInvocation = "java -cp " + _debugJarPath + " ";
+	_debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb -qhost=localhost ";
     }
         
     public void extendSchema(DataElement schemaRoot)
     {
-	DataElement fileD      = _dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
-	DataElement cmdD      = createCommandDescriptor(fileD, "Debug", "C_DEBUG");
+	DataElement dirD      = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
+	DataElement cmdD      = createCommandDescriptor(dirD, "Debug", "C_DEBUG");
     }
     
     public DataElement handleCommand(DataElement theCommand)
@@ -31,33 +31,26 @@ public class DebugMiner extends Miner
 
 	if (name.equals("C_DEBUG"))
 	    {
-		handleDebug(subject);
+		handleDebug(subject, getCommandArgument(theCommand, 1), getCommandArgument(theCommand, 2));
 	    }
 
 	status.setAttribute(DE.A_NAME, "done");
 	return status;
     }
 
-    public void handleDebug(DataElement fileToDebug)
+    public void handleDebug(DataElement directory, DataElement port, DataElement key)
     {
-	String fileName = fileToDebug.getSource();
-	File debugFile = new File(fileName);
-	File debugDirectory = debugFile.getParentFile();
-
-	DataElement directoryObject = _dataStore.createObject(null, "directory", 
-							      debugDirectory.getName(), debugDirectory.getAbsolutePath());
-	
-	String invocationStr = _debugInvocation + fileToDebug.getName(); 
+	String invocationStr = _debugInvocation + "-quiport=" + port.getName() + " -startupKey=" + key.getName(); 
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
 
-	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directoryObject, "C_COMMAND");
+	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory, "C_COMMAND");
 	if (cmdDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
 		args.add(invocation);
 
 		System.out.println("doing " + invocation);
-		_dataStore.command(cmdDescriptor, invocation, directoryObject);
+		_dataStore.command(cmdDescriptor, invocation, directory);
 	    }
     }
 }
