@@ -271,16 +271,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy config)
    {
-    /*
-    		IJavaElement je = getContext();
-		if (je == null) {
-			initializeHardCodedDefaults(config);
-		} else {
-			initializeDefaults(je, config);
-		}
-		config.setAttribute(IDebugUIConstants.ATTR_TARGET_RUN_PERSPECTIVE, (String)null);
-		config.setAttribute(IDebugUIConstants.ATTR_TARGET_DEBUG_PERSPECTIVE, (String)null);
-    */
 
      IProject project;
      IStructuredSelection selection = getSelection();
@@ -355,9 +345,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	   	_directory = null;
    		return;
 	   }
-      //_programNameField.setText(_executable.getSource());
-      //_workingDirectoryField.setText(_directory.getSource());
-
 	}
 	
 	/**
@@ -426,53 +413,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 		new Label(comp, SWT.NONE);
 	}
 	
-	/**
-	 * Show a dialog that lists all main types
-	 */
-		/*
-	protected void handleSearchButtonSelected() {
-		Shell shell = getShell();
-		IWorkbenchWindow workbenchWindow = CppPlugin.getActiveWorkbenchWindow();
-		IJavaProject javaProject = getJavaProject();
-		
-		SelectionDialog dialog = new TestSelectionDialog(shell, getLaunchConfigurationDialog(), javaProject);
-		dialog.setTitle("Test Selection");
-		dialog.setMessage("Choose a test case or test suite:");
-		if (dialog.open() == dialog.CANCEL) {
-			return;
-		}
-		
-		Object[] results = dialog.getResult();
-		if ((results == null) || (results.length < 1)) {
-			return;
-		}		
-		IType type = (IType)results[0];
-		
-		if (type != null) {
-			fTestText.setText(type.getFullyQualifiedName());
-			javaProject = type.getJavaProject();
-			fProjText.setText(javaProject.getElementName());
-		}
-	}
-      */
-		
-	/**
-	 * Show a dialog that lets the user select a project.  This in turn provides
-	 * context for the main type, allowing the user to key a main type name, or
-	 * constraining the search for main types to the specified project.
-	 */
-//	protected void handleProjectButtonSelected() {
-    /*
-		IJavaProject project = chooseJavaProject();
-		if (project == null) {
-			return;
-		}
-		
-		String projectName = project.getElementName();
-		fProjText.setText(projectName);		
-     */
-//	}
-
     protected void handleWorkingDirectoryBrowseButtonPressed()
     {
       if (_directory != null)
@@ -492,38 +432,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
       }
     }	
 
-	
-	/**
-	 * Realize a Java Project selection dialog and return the first selected project,
-	 * or null if there was none.
-	 */
-   /*
-	protected IJavaProject chooseJavaProject() {
-		IJavaProject[] projects;
-		try {
-			projects= JavaCore.create(getWorkspaceRoot()).getJavaProjects();
-		} catch (JavaModelException e) {
-			JUnitPlugin.log(e.getStatus());
-			projects= new IJavaProject[0];
-		}
-		
-		ILabelProvider labelProvider= new JavaElementLabelProvider(JavaElementLabelProvider.SHOW_DEFAULT);
-		ElementListSelectionDialog dialog= new ElementListSelectionDialog(getShell(), labelProvider);
-		dialog.setTitle("Project Selection");
-		dialog.setMessage("Choose a project to constrain the search for main types:");
-		dialog.setElements(projects);
-		
-		IJavaProject javaProject = getJavaProject();
-		if (javaProject != null) {
-			dialog.setInitialSelections(new Object[] { javaProject });
-		}
-		if (dialog.open() == dialog.OK) {			
-			return (IJavaProject) dialog.getFirstResult();
-		}			
-		return null;		
-	}
-   */
-	
 	/**
 	 * Convenience method to get the workspace root.
 	 */
@@ -534,29 +442,26 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	/**
 	 * @see ILaunchConfigurationTab#isPageComplete()
 	 */
-	public boolean isValid() {
-
+	public boolean isValid()
+      {
 		setErrorMessage(null);
 		setMessage(null);
 
-      if (_programNameField.getText() == "" || _workingDirectoryField.getText() == "")
-         return false;
-      else
+        if (_programNameField.getText() == "")
+        {
+           setErrorMessage(_plugin.getLocalizedString("missingProgramName"));
+           return false;
+        }
+        elseif (_workingDirectoryField.getText() == "")
+        {
+           setErrorMessage(_plugin.getLocalizedString("missingWorkingDirectory"));
+           return false;
+        }
+        else
   	   	return true;
 		
 	}
 	
-	/**
-	 * Initialize default attribute values based on the
-	 * given Java element.
-	 */
-/*
-	protected void initializeDefaults(IJavaElement javaElement, ILaunchConfigurationWorkingCopy config) {
-//		initializeJavaProject(javaElement, config);
-//		initializeTestTypeAndName(javaElement, config);
-//		initializeHardCodedDefaults(config);
-	}
-
 	/**
 	 * @see ILaunchConfigurationTab#getName()
 	 */
@@ -594,5 +499,4 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
     }
 
-	
 }
