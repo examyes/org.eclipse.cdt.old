@@ -1,0 +1,237 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Eclipse Tools - CDT May Project Meeting Minutes</title>
+<LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+&nbsp; 
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+ <tr> 
+  <td ALIGN=LEFT width="60%"><font class=indextop>CDT </font><br>
+   <font class=indexsub>May Project Meeting Minutes</font>
+  </td>
+  <td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
+ </tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b><font color="#FFFFFF" face="Arial,Helvetica">CDT Meeting Minutes</font></b>
+ </td>
+</tr>
+</table>
+<p>
+ <b> <i>21 May 2003, Ottawa Canada</i> <p>
+    </b><p>
+  Phone in meeting of Eclipse CDT stakeholders. Review progress to date and map out the future direction for the Eclipse CDT Project.
+ 
+ <p>
+
+11:00 to 1PM EST on May 21 2003<p>
+
+ <b> View the <a <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/02-2003/02-2003-notice.html?cvsroot=Tools_Project"> Agenda </a></b><p>
+ <b> Minutes</b><p>
+ 
+<p>
+
+Here are the minutes of the CDT conference call.
+</p>
+
+<b>
+Present:</b>
+
+<table ALIGN=CENTER VALIGN=TOP COLSPAN="2">
+<tr><td WIDTH="33%" VALIGN=TOP>
+QNX
+<ul>
+   <li>Sebastien Marineau
+   <li>David Inglis
+   <li>Alain Magloire
+   <li>Mikhail Khodjaiants
+</ul>
+</td>
+<td WIDTH="33%" VALIGN=TOP>
+Rational
+<ul>
+   <li>Dave Daoust
+   <li>Kleo Hapitas
+   <li>John Camelon
+   <li>Michel Paquet
+   <li>Sean Evoy
+   <li>Doug Schaefer
+   <li>Hoda Amer
+   <li>Andrew Niefer
+   <li>Martin Lescuyer
+</ul>
+</td>
+<td WIDTH="33%" VALIGN=TOP>
+
+Redhat
+<ul>
+   <li>John Healy
+   <li>Phil Muldoon
+   <li>Rick Moseley
+</ul>
+</td>
+</tr>
+<tr>
+<td WIDTH="33%" VALIGN=TOP>
+Timesys
+<ul>
+   <li>Gene
+   <li>Sam Robb
+</ul>
+</td>
+
+</table><p>
+
+The following was discussed:<br>
+
+<ol>
+
+<li> <b>ESC update:</b><p>
+Several Eclipse events were held at the embedded systems conference in San
+Francisco in April. The main
+goal of the Eclipse events at ESC was to raise the awareness of Eclipse in
+the embedded industry. The events held included an 
+Eclipse breakfast, organized by Rational
+and QNX, as well as a birds of a feather (BOF) session, that covered a
+range of topics related to Eclipse and CDT in the embedded market. More
+info on the BOF session can be found
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/bof-esc03/bof-esc-2003.html?cvsroot=Tools_Project"> here.</a><br>
+</p>
+
+<p>
+Cory Bialowas also discussed his ESC activities. His main objective was to evangelize CDT
+to the embedded community. Cory also discussed the Eclipse panel at ESC, which included
+representatives from IBM, IBM/Rational, QNX, Timesys and Tensilica. Information Week
+subsequently wrote an article based on the panel, which can be found 
+<a href="http://www.informationweek.com/story/showArticle.jhtml?articleID=9600064">here.</a><br>
+Finally, Cory showed a very impressive demo at ESC -- he installed QNX Momentics, Rational's clearcase,
+and an internal version of XDE for C++. He was then able to seamlessly create and edit a C++
+QNX project and then switch to the XDE modelling tool and view/edit the model of the C++ project.
+It was a powerful demonstration of integration between tools from different vendors in Eclipse.
+</p>
+
+
+<li> 
+<b>CDT 1.1 status:</b><p>
+Congratulations to the CDT 1.1 team! The CDT 1.1 has been released, and is 
+available on the download page. Doug has also created
+an update site, which will allow people to update to new versions through the Eclipse 
+update mechanism. The possibility of a CDT 1.1.1 release was also discussed. At this point,
+it was agreed that critical fixes would be put on the 1.1 branch, but that we would for feedback
+from users and commercial companies as to whether we would formally create a 1.1.1 release.
+
+</p>
+</li>
+
+<li> <b>CDT 1.x</b>
+<p>
+We discussed the timing of upcoming releases. The concensus was to target a 1.2 release
+with an end of August release date, and a CDT 2.0 release for the end of the year (December).
+As the core APIs are still in flux, the API freeze would be targetted at the 2.0 release. 
+</p>
+<p>
+Alain discussed various debugger improvements that were on the roadmap for CDT 1.2 and 2.0.
+This includes supporting gdb 5.4 and 5.5, which have made significant changes to the MI
+interface. Work is also underway to round out the debugger features with the addition
+of support for tracepoints. Alain will be posting a feature list to the mailing list.
+Alain also discussed the core model, as well as the indexer.
+</p>
+<p>
+Doug presented a roadmap for the CDT core components. This includes firming up
+the build model, search capabilities, indexer rework, ongoing parser work, and the
+addition of class wizards. The goal is to achieve parity with the JDT and support, with
+2.0, a CDOM and allow features such as refactoring.
+</p>
+<p>
+A C++ class browser was also discussed. This is something that Redhat mentionned they might be
+able to take on. Another possibility that was discussed is that someone from QNX take that on. In
+any case, a class browser would likely need some of the CDT core model work to be completed first.
+</p>
+<p>
+Kleo (Rational) offered to help with the 1.2 and 2.0 scoping and plan. Kleo will be 
+collecting the feature list for 1.2, posting it on the newsgroup, and offered to
+track those activities.
+</p>
+
+</li>
+
+<li><b>Other framework and features</b><p>
+The only one discussed was the target model proposal. Thomas was not
+on the call at that point, but he thought he could get a proposal to
+the mailing list in late May</p>
+<p>
+
+
+<li> <b>Infrastructure</b><p>
+
+Due to personal reasons, Judy has had to scale back her involvement
+with CDT. I want to personally thank her for all of her efforts and hard work;
+her energy and contributions will be missed. 
+</p>
+<p>
+For the CDT 1.1 release, the builds have been automated through ant scripts,
+and this is what was used. Doug has also automated the update site zip file
+generation and upload, and we may move to that for the official CDT builds
+as well. As for the web site, we are looking for volunteers to help out (Kleo
+has offered to help in this area).
+</p>
+
+</li>
+
+<li> <b>Documentation</b><p>
+
+Rational is providing help in this area; work is ongoing. QNX will also
+be donating raw content from our own tool suite documentation.
+
+</p></li>
+
+<li> <b>Verification</b><p>
+
+The discussion on automated UI testing was postponed again, as there is no
+concensus on the right commercial tool to use. The topic of host coverage was
+then brought up. Redhat is doing some testing with different versions of RH 
+distributions, while Timesys tests the CDT with different combinations of tools
+and target systems. In order to assess the test coverage, it was thought best to
+construct a matrix of all host/target combinations being tested to assess coverage.
+
+</p><p>
+QNX also offered that Peter Graves put together a basic test plan for CDT, based
+upon our internal test plans. We could then ask the different participants to execute
+that test plan on their combination of host/target.
+</p></li>
+
+<li><b>Varia:</b><p>
+
+Redhat discussed the compiled version of Eclipse (gcj), which they now have running. This
+provides significant speed increases over the Java version.
+Redhat also talked about the port of Eclipse to a 64-bit architecture.
+</p>
+</li>
+</ol>
+
+Any comments, additions, corrections etc. welcome!
+
+As always, many thanks to everyone for your ongoing support.
+
+
+  
+<!-- Footer -->
+<p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
+<center><I>
+Last Modified on Saturday, May 24, 2003
+</I></center>
+
+</body>
+</html>
