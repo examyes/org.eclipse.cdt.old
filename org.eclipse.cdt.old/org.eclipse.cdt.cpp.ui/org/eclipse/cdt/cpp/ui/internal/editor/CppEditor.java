@@ -1,6 +1,6 @@
 package org.eclipse.cdt.cpp.ui.internal.editor;
 
-/* 
+/*
  * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
@@ -14,7 +14,7 @@ import org.eclipse.cdt.cpp.ui.internal.editor.codeassist.*;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
-import org.eclipse.cdt.dstore.ui.resource.*; 
+import org.eclipse.cdt.dstore.ui.resource.*;
 
 import org.eclipse.core.resources.*;
 import com.ibm.lpex.alef.LpexTextEditor;
@@ -52,9 +52,11 @@ import org.eclipse.swt.widgets.*;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
-import org.eclipse.cdt.linux.help.listeners.CppeditorHelpListener; 
+import org.eclipse.cdt.linux.help.listeners.CppeditorHelpListener;
 import com.ibm.lpex.core.LpexWindow;
 import com.ibm.lpex.core.LpexView;
+
+import com.ibm.debug.DebugEditorActionContributor;
 
 public class CppEditor extends LpexTextEditor
 {
@@ -62,10 +64,12 @@ public class CppEditor extends LpexTextEditor
   private ResourceBundle fResourceBundle;
   private boolean _isParsed;
   private CppPlugin     _plugin;
+  private DebugEditorActionContributor dbgEditorContributor;
 
   public CppEditor()
       {
          super();
+         dbgEditorContributor = new DebugEditorActionContributor();
          _isParsed = false;
          _plugin = CppPlugin.getDefault();
 	         setDocumentProvider(_plugin.getCppDocumentProvider());
@@ -80,7 +84,7 @@ public class CppEditor extends LpexTextEditor
 
 
     // test
-    
+
 
    public void createPartControl(Composite parent)
       {
@@ -103,14 +107,20 @@ public class CppEditor extends LpexTextEditor
 
   protected void createActions()
       {
+
         super.createActions();
+        /*
         setAction("ManageBreakpoints",
                 new BreakpointRulerAction(_plugin.getResourceBundle(),
                                           "ManageBreakpoints.",
                                            getVerticalRuler(),
-                                           this)); 
+                                           this));
 
         setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK, getAction("ManageBreakpoints"));		
+        */
+        dbgEditorContributor.createDebugRulerActions(this,getVerticalRuler());
+        dbgEditorContributor.createDebugMenuActions(this);
+
 
 	///////////////////////////////
 	LpexSourceViewer lpexSourceViewer= (LpexSourceViewer)getSourceViewer();	
@@ -118,7 +128,7 @@ public class CppEditor extends LpexTextEditor
 	LpexView lpexView = lpexSourceViewer.getLpexView();	
 	try{
 	    lpexWindow.addHelpListener(new CppeditorHelpListener(lpexView));
-	}catch(Exception e){	   
+	}catch(Exception e){	
 	    e.printStackTrace();
 	}
 	//////////////////////////////
@@ -129,6 +139,12 @@ public class CppEditor extends LpexTextEditor
   public void editorContextMenuAboutToShow(IMenuManager menu)
       {
         super.editorContextMenuAboutToShow(menu);
+        dbgEditorContributor.addDebugEditorMenuActions(menu,
+           DebugEditorActionContributor.BREAKPOINT_MENU_ACTION |
+           DebugEditorActionContributor.JUMP_MENU_ACTION |
+           DebugEditorActionContributor.RUN_MENU_ACTION |
+           DebugEditorActionContributor.MONITOR_MENU_ACTION |
+           DebugEditorActionContributor.STORAGE_MENU_ACTION);
 
 	/*
 	FindObjectAction action = new FindObjectAction("Find Selected@F4", this, true);
@@ -141,16 +157,23 @@ public class CppEditor extends LpexTextEditor
     /**
      * @see AbstractTextEditor#rulerContextMenuAboutToShow
      */
-    protected void rulerContextMenuAboutToShow(IMenuManager menu) 
+    protected void rulerContextMenuAboutToShow(IMenuManager menu)
     {
-	super.rulerContextMenuAboutToShow(menu);
-	// only add/remove breakpoints if clicked on a valid line in the edit window
-	if (getVerticalRuler().getLineOfLastMouseButtonActivity() >= 0)
+   	 super.rulerContextMenuAboutToShow(menu);
+
+       // only add/remove breakpoints if clicked on a valid line in the edit window
+	    if (getVerticalRuler().getLineOfLastMouseButtonActivity() >= 0)
 	    {
-		addAction(menu, "ManageBreakpoints");
+    		//addAction(menu, "ManageBreakpoints");
+         dbgEditorContributor.addDebugEditorRulerActions(menu,
+            DebugEditorActionContributor.BREAKPOINT_MENU_ACTION |
+            DebugEditorActionContributor.JUMP_MENU_ACTION |
+            DebugEditorActionContributor.RUN_MENU_ACTION);
 	    }
+       setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK,
+                 getAction(DebugEditorActionContributor.BREAKPOINT_RULER_ACTION_ID));
     }
-    
+
     /**
      * Saves the contents of the target.
      * @see ITextEditor#doSave
@@ -159,12 +182,12 @@ public class CppEditor extends LpexTextEditor
     public void doSave(IProgressMonitor monitor)
    {
        super.doSave(monitor);
-       
+
       IEditorInput input = getEditorInput();
 
       if (input instanceof IFileEditorInput)
       {
-         ModelInterface api = ModelInterface.getInstance();	 	  
+         ModelInterface api = ModelInterface.getInstance();	 	
          IFile file = ((IFileEditorInput)input).getFile();
          if (isCFile(file))
          {
@@ -179,7 +202,7 @@ public class CppEditor extends LpexTextEditor
 	     	 }
          	_isParsed = true;
       	}
-      } 
+      }
    }
 
     public void setFocus()
@@ -256,10 +279,10 @@ public class CppEditor extends LpexTextEditor
               {
               	return true;
               }
-              
-     return false;         
+
+     return false;
   }
-  
+
   public Object getAdapter(Class key)
   {
      if (key.equals(IContentOutlinePage.class))
