@@ -215,16 +215,37 @@ public class CppCompletionProcessor implements IContentAssistProcessor
       int column = lpexView.currentPosition() - 2;
 
       if (text != null && text.length() > column) {
-         while (column >= 0) {
-            char c = text.charAt(column);
-            if (c == ' ' || c == '\t')
-               break;
-            currentText.insert(0, c);
-            column--;
-            }
-         }
+         while (column >= 0) 
+	     {
+		 char c = text.charAt(column);
+		 
+		 boolean isValid = Character.isLetterOrDigit(c);
+		 if (!isValid)
+		     {
+			 switch (c)
+			     {
+			     case '_':
+			     case '.':
+			     case '-':
+				 isValid = true;
+				 break;
+			     default:
+				 isValid = false;
+				 break;
+			     }
+		     }
+		 
+		 if (!isValid)
+		     {
+			 break;
+		     }
 
+		 currentText.insert(0, c);
+		 column--;
+	     }
+      }
+      
       return currentText.toString();
-   }
-
+    }
+    
 }
