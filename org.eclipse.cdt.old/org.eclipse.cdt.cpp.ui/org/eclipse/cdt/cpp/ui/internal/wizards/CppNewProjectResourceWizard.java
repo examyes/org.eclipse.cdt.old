@@ -146,10 +146,15 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 				projectDescription.setBuildSpec(newCommands);	
 			
 				// specify nature
+				/*
 				String[] natures = projectDescription.getNatureIds();
 				String[] newNatures = new String[natures.length + 1];
 				System.arraycopy(natures, 0, newNatures, 0, natures.length);
 				newNatures[natures.length] = "org.eclipse.cdt.cpp.ui.cppnature";
+				*/
+
+				String[] newNatures = new String[1];
+				newNatures[0] = "org.eclipse.cdt.cpp.ui.cppnature";
 				projectDescription.setNatureIds(newNatures);
 				project.setDescription(projectDescription, null);
 
