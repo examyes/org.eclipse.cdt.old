@@ -29,144 +29,14 @@ public class GdbObjectVariable extends GdbVariable {
 	    _className = type;
 	    _expand = false;
 	    _fields = new Vector();
+       	_gdbData = value;
+       	_prefix = prefix;
 	    
-	    boolean done = false;
-	    
+	    value.trim();
     	String parseStr = value.substring(1,value.length()-1);
     	    
-	    while(parseStr != "")
-	    {
-	    	int equal = parseStr.indexOf(" = ");
-	    	int comma = parseStr.indexOf(",");
-	    	
-	    	if (equal != -1 && comma != -1)
-	    	{
-		    	String fieldName = parseStr.substring (0, equal);	
-		    	
-		    	if (fieldName.startsWith("{"))
-		    	{    		
-		    		fieldName = fieldName.substring(1);
-		    	}
-		    	    	
-		    	String fieldValue = parseStr.substring(equal + 3, comma);
-		    	
-		    	if (!fieldValue.startsWith("{"))
-		    	{
-		    		// scalar value    	
-		    		
-		    		String fieldType;
-		    		
-		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
-		    		{
-			    		String fullFieldName = prefix + "." + fieldName;
-						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)debugSession, fullFieldName);		    								
-		    		}
-		    		else			    		
-		    		{
-		    			// if name is enclosed by <>, it's the actual type
-		    			fieldType = fieldName.substring(1, fieldName.length()-1);
-		    		}
-					GdbScalarVariable newField;
-			    	parseStr = parseStr.substring(comma + 2);
-					newField  = new GdbScalarVariable(debugSession, fieldName, fieldType, fieldValue, nodeID);
-					_fields.add(newField);
-		    	}
-		    	else
-		    	{
-		    		// a sub tree, need to create another GdbObjectVariable
-		    		// object value
-		    		GdbObjectVariable newField;
-					int endClass = findMatchingEnd(parseStr);
-		    		
-		    		if (endClass != -1)
-		    		{
-		    			String fieldType;
-		    		
-			    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
-			    		{
-				    		String fullFieldName = prefix + "." + fieldName;
-				    		prefix = fullFieldName;
-							fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)debugSession, fullFieldName);		    								
-			    		}
-			    		else			    		
-			    		{
-			    			fieldType = fieldName.substring(1, fieldName.length()-1);
-			    		}
-		
-			    		fieldValue = parseStr.substring(equal+3, endClass+1);
-			    		newField = new GdbObjectVariable(debugSession, fieldName, fieldType, fieldValue, prefix, nodeID);
-			    		_fields.add(newField);
-		    		
-		    			if (endClass+2 < parseStr.length())
-		    			{
-				    		parseStr = parseStr.substring(endClass + 2);
-		    			}
-		    			else
-		    			{
-		    				break;
-		    			}
-		    		}
-		    		else
-		    		{	    			
-		    			// error
-		    			break;
-		    		}			    		
-		    	}					
-	    	}
-	    	else if (equal != -1 && comma == -1)
-	    	{
-	    		// last field
-	    		int endBrace = parseStr.indexOf("}");
-	    		if (endBrace != -1)
-	    		{
-	    			GdbScalarVariable newField;
-	    			String fieldName = parseStr.substring(0, equal);
-	    			String fieldType;
-	    			
-	    			if (fieldName.startsWith("{"))
-			    	{
-			    		fieldName = fieldName.substring(1);
-			    	}
-			    	
-		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
-		    		{
-			    		String fullFieldName = prefix + "." + fieldName;
-						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)debugSession, fullFieldName);		    		
-		    		}
-		    		else			    		
-		    		{
-		    			fieldType = fieldName.substring(1, fieldName.length()-1);
-		    		}
-	    			
-	    			String fieldValue = parseStr.substring(equal + 3, endBrace);
-	    			
-					newField  = new GdbScalarVariable(debugSession, fieldName, fieldType, fieldValue, nodeID);
-				
-					_fields.add(newField);	    			
-	    			
-	    			break;
-	    		}	    		
-	    		// something wrong...missing end "}"
-	    		else
-	    		{
-	    			GdbScalarVariable newField;
-	    			String fieldName = parseStr.substring(0, equal);
-	    			String fieldValue = parseStr.substring(equal + 3);
-	    			
-					newField  = new GdbScalarVariable(debugSession, fieldName, "int", fieldValue, nodeID);
-				
-					_fields.add(newField);	    	    			
+		createTree(parseStr);    	    
 
-	    			break;
-	    		}
-	    	}
-	    	else
-	    	{
-	    		// all done... parseStr is empty
-	    		break;
-	    	}
-	    	
-	    }
 	}
 	
 	/**
@@ -186,13 +56,27 @@ public class GdbObjectVariable extends GdbVariable {
 	 * @see GdbVariable#setScalarValue(String)
 	 */
 	public void setScalarValue(String s) {
+		
+		if (!s.equals(_gdbData))
+		{
+			_fields.removeAllElements();
+		
+			String parseStr = s;		
+		
+			if (parseStr.startsWith("{") && parseStr.endsWith("}"))
+			{
+		    	parseStr = s.substring(1,s.length()-1);   	    
+			}	    	
+			createTree(parseStr);
+			_changed = true;
+		}
 	}
 
 	/**
 	 * @see GdbVariable#getScalarValue()
 	 */
 	public String getScalarValue() {
-		return null;
+		return _gdbData;
 	}
 
 	/**
@@ -289,14 +173,239 @@ public class GdbObjectVariable extends GdbVariable {
 		
 		return endLocation;
 	}
+	
+	/*
+		Create Tree Structure for object data
+		Possible Input:
+		{a=1, b=2, c=3}
+		{<type_name> = <something>, a=1, b=2, c=3}
+		{<type_name> = {a=1, b=2, c=3}, d=4, e=5}
+		{a = {b=1, c=2, d=3}, x=y, k=z}
+		{x=y, k=z, a = {...}}
+		{a = {1, 2, 3, 4}, b=4, d=5}
+		
+	*/
+	private void createTree(String parseStr)
+	{
+		while(parseStr != "")
+	    {
+	    	int equal = parseStr.indexOf(" = ");
+	    	int comma = parseStr.indexOf(",");
+	    	
+	    	if (equal != -1 && comma != -1 && !parseStr.startsWith("{{"))
+	    	{
+		    	String fieldName = parseStr.substring (0, equal);	
+		    	
+		    	if (fieldName.startsWith("{"))
+		    	{    		
+		    		fieldName = fieldName.substring(1);
+		    	}
+		    	    	
+		    	String fieldValue = parseStr.substring(equal + 3, comma);
+		    	
+		    	if (!fieldValue.startsWith("{"))
+		    	{
+		    		// scalar value    	
+		    		
+		    		String fieldType;
+		    		
+		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+		    		{
+			    		String fullFieldName = _prefix + "." + fieldName;
+						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    								
+		    		}
+		    		else			    		
+		    		{
+		    			// if name is enclosed by <>, it's the actual type
+		    			fieldType = fieldName.substring(1, fieldName.length()-1);
+		    		}
+					GdbScalarVariable newField;
+			    	parseStr = parseStr.substring(comma + 2);
+					newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+					_fields.add(newField);
+		    	}
+		    	else
+		    	{
+		    		// a sub tree, need to create another GdbObjectVariable
+		    		// object value
+		    		GdbObjectVariable newField;
+					int endClass = findMatchingEnd(parseStr);
+		    		
+		    		if (endClass != -1)
+		    		{
+		    			String fieldType;
+		    			String prefix = _prefix;
+			    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+			    		{
+				    		String fullFieldName = _prefix + "." + fieldName;
+				    		prefix = fullFieldName;
+							fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    								
+			    		}
+			    		else			    		
+			    		{
+			    			fieldType = fieldName.substring(1, fieldName.length()-1);
+			    		}
+		
+			    		fieldValue = parseStr.substring(equal+3, endClass+1);
+			    		newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID);
+			    		_fields.add(newField);
+		    		
+		    			if (endClass+2 < parseStr.length())
+		    			{
+				    		parseStr = parseStr.substring(endClass + 2);
+		    			}
+		    			else
+		    			{
+		    				break;
+		    			}
+		    		}
+		    		else
+		    		{	    			
+		    			// error
+		    			break;
+		    		}			    		
+		    	}					
+	    	}
+	    	else if (equal != -1 && comma == -1)
+	    	{
+	    		// last field
+	    		int endBrace = parseStr.indexOf("}");
+	    		if (endBrace != -1)
+	    		{
+	    			GdbScalarVariable newField;
+	    			String fieldName = parseStr.substring(0, equal);
+	    			String fieldType;
+	    			
+	    			if (fieldName.startsWith("{"))
+			    	{
+			    		fieldName = fieldName.substring(1);
+			    	}
+			    	
+		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+		    		{
+			    		String fullFieldName = _prefix + "." + fieldName;
+						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    		
+		    		}
+		    		else			    		
+		    		{
+		    			fieldType = fieldName.substring(1, fieldName.length()-1);
+		    		}
+	    			
+	    			String fieldValue = parseStr.substring(equal + 3, endBrace);
+	    			
+					newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+				
+					_fields.add(newField);	    			
+	    			
+	    			break;
+	    		}	    		
+	    		// something wrong...missing end "}"
+	    		else
+	    		{
+	    			GdbScalarVariable newField;
+	    			String fieldName = parseStr.substring(0, equal);
+	    			String fieldValue = parseStr.substring(equal + 3);
+   					String fieldType;
+	    			
+	    			if (fieldName.startsWith("{"))
+			    	{
+			    		fieldName = fieldName.substring(1);
+			    	}
+			    	
+		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+		    		{
+			    		String fullFieldName = _prefix + "." + fieldName;
+						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    		
+		    		}
+		    		else			    		
+		    		{
+		    			fieldType = fieldName.substring(1, fieldName.length()-1);
+		    		}
+	    			
+					newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+				
+					_fields.add(newField);	    	    			
+
+	    			break;
+	    		}
+	    	}
+	    	else if (equal == -1 || parseStr.startsWith("{{"))
+	    	{
+	    		// this is an array 
+	    		//1, 2, 3, 4, 5
+	    		String fieldName = _name+"[]";	
+	    		String fieldValue;
+	    		String fieldType;
+	    		if (comma != -1)		    			    	    	
+			    	fieldValue = parseStr.substring(0, comma);
+			    else
+			    	fieldValue = parseStr;
+			    	
+			    if (parseStr.indexOf("{") == -1 && parseStr.indexOf("}") == -1)
+			    {	
+			    	// scalar
+			    	fieldType = _type;
+			    	GdbScalarVariable newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);				
+					_fields.add(newField);	
+					
+					if (comma != -1)
+					{  
+						parseStr = parseStr.substring(comma+2);  			
+					}
+					else
+					{
+						parseStr = "";
+					}
+			    }					
+			    else
+			    {
+			    	// complex
+			    	int endClass = findMatchingEnd(parseStr);
+		    		fieldType = _type;
+		    		
+		    		if (endClass != -1)
+		    		{
+			    		fieldValue = parseStr.substring(0, endClass+1);
+		    		}
+		    		else
+		    		{
+		    			fieldValue = parseStr;
+		    		}
+		    		
+		    		GdbObjectVariable newField  = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, _prefix, _nodeID);
+		    		_fields.add(newField);
+		    		
+		    		if (endClass == -1)
+		    			break;
+		    		
+	    			if (endClass+2 < parseStr.length())
+	    			{
+			    		parseStr = parseStr.substring(endClass + 2);
+	    			}
+	    			else
+	    			{
+	    				break;
+	    			}
+			    }					
+	    	}
+	    	else
+	    	{
+	    		// all done... parseStr is empty
+	    		break;
+	    	}
+	    	
+	    }
+	}
+		
 
     private int _rep;
+    private String _gdbData;		// store data from gdb for comparison later
+    private String _prefix;
+    
     protected String _className;
-
     protected boolean _expand;
     protected int _startChild;
     protected int _endChild;
-
     protected Vector _fields;
 }
 

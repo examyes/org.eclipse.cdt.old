@@ -31,14 +31,34 @@ public abstract class GdbVariable  extends Variable
     */
    public static GdbVariable createVariable(DebugSession debugSession, String varName, String type, String value, int nodeID) 
    {
-//   		if (value.startsWith("{"))
-//   		{		
-//	         return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
-//   		}
-//   		else
-//   		{
+   		if (value.startsWith("{"))
+   		{	 
+   			int comma = value.indexOf(",");
+   			String testStr;
+   			if (comma != -1)
+   			{
+   				testStr = value.substring(0, comma);
+   			}
+   			else
+   			{
+   				return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+   			}
+   			
+   			if (testStr.indexOf("=") != -1 && !testStr.startsWith("{{"))
+   			{
+   				// object
+				return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+   			}
+   			else
+   			{
+   				// it's really an array
+				return new GdbArrayVariable(debugSession, varName, type, value, nodeID);
+   			}	         
+   		}
+   		else
+   		{
 	         return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
-//   		}
+   		}
    }
 
    /**
