@@ -509,14 +509,21 @@ public class FileSystemMiner extends Miner
   private DataElement handleOpen(DataElement theElement, DataElement status)
       {
         String sourceString = theElement.getSource().replace('\\', '/');
-	int indexOfLocation = sourceString.lastIndexOf(":");
-	if (indexOfLocation > 1)
-	  {	
-	    sourceString = sourceString.substring(0, indexOfLocation);
-	  }
-
-	File file = new File(sourceString);
-	if (!file.isDirectory() && file.exists())
+		int indexOfLocation = sourceString.lastIndexOf(":");
+		if (indexOfLocation > 1)
+	  	{	
+	   	 sourceString = sourceString.substring(0, indexOfLocation);
+	  	}
+ 
+		File file = new File(sourceString);
+		try
+		{
+		 file = file.getCanonicalFile();
+		}
+		catch (IOException e)
+		{
+		}
+		if (!file.isDirectory() && file.exists())
 	    {
 		int maxSize = 5000000;
 		int size = (int)file.length();
@@ -726,7 +733,7 @@ public class FileSystemMiner extends Miner
 				  for (int i= 0; i < list.length; i++)
 				      {
 				      	File f = list[i];
-					  String filePath = f.getCanonicalPath().replace('\\', '/');			
+					  String filePath = f.getAbsolutePath().replace('\\', '/');			
 					  String objName = f.getName();
 
 					  DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
@@ -813,7 +820,7 @@ public class FileSystemMiner extends Miner
 			for (int i= 0; i < list.length; i++)
 			    {				
 			    	File f= list[i];
-					String filePath = f.getCanonicalPath().replace('\\', '/');				
+					String filePath = f.getAbsolutePath().replace('\\', '/');				
 					String objName = f.getName();
 									  
 				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
