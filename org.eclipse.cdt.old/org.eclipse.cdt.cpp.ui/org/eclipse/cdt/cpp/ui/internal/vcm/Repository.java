@@ -216,7 +216,7 @@ public class Repository extends Project
     public void shutdown()
     {
     	saveProperties();	
-    }
+    } 
 
 
     public void setClosedElement(DataElement closedElement)
@@ -622,8 +622,12 @@ public class Repository extends Project
 		ArrayList args = new ArrayList();
 		StringTokenizer tokenizer = new StringTokenizer(property, "\t");
 		
-		String key   = (String)tokenizer.nextElement();		
-		String value = (String)tokenizer.nextElement();		
+		String key   = (String)tokenizer.nextElement();
+		String value = "";
+		if (tokenizer.hasMoreElements())
+		    {
+			value = (String)tokenizer.nextElement();		
+		    }
 		
 		setPersistentProperty(key, value);		
 	      }        
