@@ -138,7 +138,10 @@ public class GdbCommandAndResponse
                      }     
                    }
                    // append the final "}"
-                   classObject.append(lines[j]);
+                   if (j < lines.length)
+                   {
+						classObject.append(lines[j]);
+                   }
                    i = j;
                }
 
