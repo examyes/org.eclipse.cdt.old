@@ -222,7 +222,8 @@ System.out.println("GdbLocalVariablesMonitorManager.updateLocalMonitor #### SHOU
                   if (!stackInfo.getexprIDs().containsKey(varName))
                   {
                      int nodeID = 1;
-                     GdbVariable monVar = GdbVariable.createVariable(_debugSession,varName, "int",varValue, nodeID);
+                     String varType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, varName);                     
+                     GdbVariable monVar = GdbVariable.createVariable(_debugSession,varName, varType,varValue, nodeID);
                      exprID = new Integer(vmm.addVariableMonitor((short)EPDC.MonTypeLocal, monVar, context, stackInfo.getDU()));
                      stackInfo.getexprIDs().put(varName, exprID);
                      if (Gdb.traceLogger.DBG) 

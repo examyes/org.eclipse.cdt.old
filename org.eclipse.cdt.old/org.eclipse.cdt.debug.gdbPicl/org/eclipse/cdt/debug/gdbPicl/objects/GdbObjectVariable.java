@@ -8,6 +8,7 @@ package com.ibm.debug.gdbPicl.objects;
 
 import com.ibm.debug.epdc.*;
 import com.ibm.debug.gdbPicl.DebugSession;
+import com.ibm.debug.gdbPicl.GdbDebugSession;
 import java.util.*;
 
 public class GdbObjectVariable extends GdbVariable {
@@ -20,6 +21,7 @@ public class GdbObjectVariable extends GdbVariable {
 		String name,
 		String type,
 		String value,
+		String prefix,
 		int nodeID) {
 		super(debugSession, name, type, nodeID);
 		
@@ -43,7 +45,6 @@ public class GdbObjectVariable extends GdbVariable {
 		    	
 		    	if (fieldName.startsWith("{"))
 		    	{    		
-		    		// ignore new node for now... ok?
 		    		fieldName = fieldName.substring(1);
 		    	}
 		    	    	
@@ -52,21 +53,48 @@ public class GdbObjectVariable extends GdbVariable {
 		    	if (!fieldValue.startsWith("{"))
 		    	{
 		    		// scalar value    	
+		    		
+		    		String fieldType;
+		    		
+		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+		    		{
+			    		String fullFieldName = prefix + "." + fieldName;
+						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)debugSession, fullFieldName);		    								
+		    		}
+		    		else			    		
+		    		{
+		    			// if name is enclosed by <>, it's the actual type
+		    			fieldType = fieldName.substring(1, fieldName.length()-1);
+		    		}
 					GdbScalarVariable newField;
 			    	parseStr = parseStr.substring(comma + 2);
-					newField  = new GdbScalarVariable(debugSession, fieldName, "int", fieldValue, nodeID);
+					newField  = new GdbScalarVariable(debugSession, fieldName, fieldType, fieldValue, nodeID);
 					_fields.add(newField);
 		    	}
 		    	else
 		    	{
+		    		// a sub tree, need to create another GdbObjectVariable
 		    		// object value
 		    		GdbObjectVariable newField;
 					int endClass = findMatchingEnd(parseStr);
 		    		
 		    		if (endClass != -1)
 		    		{
+		    			String fieldType;
+		    		
+			    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+			    		{
+				    		String fullFieldName = prefix + "." + fieldName;
+				    		prefix = fullFieldName;
+							fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)debugSession, fullFieldName);		    								
+			    		}
+			    		else			    		
+			    		{
+			    			fieldType = fieldName.substring(1, fieldName.length()-1);
+			    		}
+		
 			    		fieldValue = parseStr.substring(equal+3, endClass+1);
-			    		newField = new GdbObjectVariable(debugSession, fieldName, "int", fieldValue, nodeID);
+			    		newField = new GdbObjectVariable(debugSession, fieldName, fieldType, fieldValue, prefix, nodeID);
 			    		_fields.add(newField);
 		    		
 		    			if (endClass+2 < parseStr.length())
@@ -93,16 +121,26 @@ public class GdbObjectVariable extends GdbVariable {
 	    		{
 	    			GdbScalarVariable newField;
 	    			String fieldName = parseStr.substring(0, equal);
+	    			String fieldType;
 	    			
 	    			if (fieldName.startsWith("{"))
 			    	{
-			    		// ignore new node for now... ok?
 			    		fieldName = fieldName.substring(1);
 			    	}
+			    	
+		    		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
+		    		{
+			    		String fullFieldName = prefix + "." + fieldName;
+						fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)debugSession, fullFieldName);		    		
+		    		}
+		    		else			    		
+		    		{
+		    			fieldType = fieldName.substring(1, fieldName.length()-1);
+		    		}
 	    			
 	    			String fieldValue = parseStr.substring(equal + 3, endBrace);
 	    			
-					newField  = new GdbScalarVariable(debugSession, fieldName, "int", fieldValue, nodeID);
+					newField  = new GdbScalarVariable(debugSession, fieldName, fieldType, fieldValue, nodeID);
 				
 					_fields.add(newField);	    			
 	    			
@@ -260,9 +298,5 @@ public class GdbObjectVariable extends GdbVariable {
     protected int _endChild;
 
     protected Vector _fields;
-
-
-
-
 }
 
