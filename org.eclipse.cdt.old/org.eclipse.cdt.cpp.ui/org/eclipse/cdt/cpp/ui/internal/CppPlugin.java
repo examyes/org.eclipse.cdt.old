@@ -153,7 +153,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	   super.startup();
         }
         catch (CoreException e)
-        {
+        {  
 	}
 	
 	// register the default adapter for elements

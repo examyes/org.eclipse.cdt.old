@@ -2838,7 +2838,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	/*
 	dataStore.createObject(classD, DE.T_UI_COMMAND_DESCRIPTOR,
 			       "Set Class Breakpoint",
-			       "org.eclipse.cdt.cpp.ui.internal.actions.AddClassBreakpoint");
+	 		       "org.eclipse.cdt.cpp.ui.internal.actions.AddClassBreakpoint");
 	*/
 	dataStore.createObject(function, DE.T_UI_COMMAND_DESCRIPTOR,
 			       "Set Breakpoint",
