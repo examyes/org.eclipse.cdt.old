@@ -702,8 +702,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					// we need to distinguish it's host from others
 					((Repository)project).setClosedElement(closedProject);
 				    }
-			
 
+				fireProjectChanged(CppProjectEvent.REFRESH, project);			
 			    }
 		    }
 	    }

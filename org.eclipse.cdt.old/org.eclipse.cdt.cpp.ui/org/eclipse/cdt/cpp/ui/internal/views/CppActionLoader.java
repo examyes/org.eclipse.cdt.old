@@ -125,7 +125,7 @@ public class CppActionLoader extends GenericActionLoader
 	    }
 
 	// add additions item
-	menu.add(new Separator("additions"));
+	menu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
 
 	menu.add(new Separator("Properties"));
 	if (input.isOfType("file") || type.equals("Closed Project"))

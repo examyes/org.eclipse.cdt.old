@@ -191,7 +191,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_schemaRegistry.registerSchemaExtender(HostsPlugin.getDefault().getSchemaExtender());
 	_schemaRegistry.extendSchema(dataStore);
 
-	/*
+	/* Example miner loader mech
 	DataStore hdstore = HostsPlugin.getDefault().getDataStore();
 	hdstore.addLoader(cppLoader);
 	hdstore.addMinersLocation("org.eclipse.cdt.cpp.miners");

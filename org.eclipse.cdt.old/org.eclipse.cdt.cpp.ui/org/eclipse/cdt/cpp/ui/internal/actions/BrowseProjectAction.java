@@ -67,7 +67,7 @@ public class BrowseProjectAction extends Action
 	IWorkbenchWindow dw = workbench.getActiveWorkbenchWindow();
 	try 
 	    {
-		persp = workbench.showPerspective(_perspective, dw, input);
+		persp = workbench.showPerspective(_perspective, dw);
 	    }
         catch (WorkbenchException e)
 	    {

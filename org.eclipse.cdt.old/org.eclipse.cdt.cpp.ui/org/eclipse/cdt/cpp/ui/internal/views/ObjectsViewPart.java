@@ -29,6 +29,8 @@ import org.eclipse.cdt.dstore.ui.views.*;
 import org.eclipse.ui.help.ViewContextComputer;
 import org.eclipse.ui.help.WorkbenchHelp;
 
+import org.eclipse.ui.internal.*;
+
 
 import org.eclipse.core.resources.*;
 import org.eclipse.ui.views.navigator.*;
@@ -72,6 +74,7 @@ public class ObjectsViewPart extends GenericViewPart
     protected CppPlugin      _plugin;
     protected   LockViewAction   _lockAction;
     private     boolean          _isLocked;
+    protected   DataElement      _lastSelected = null;
     
     public ObjectsViewPart()
     {
@@ -152,6 +155,10 @@ public class ObjectsViewPart extends GenericViewPart
 	
 	initInput(null);
         WorkbenchHelp.setHelp(_viewer.getViewer().getControl(), new ViewContextComputer(this, getF1HelpId()));
+
+	MenuManager menuMgr = _viewer.getMenuManager();
+	getSite().registerContextMenu(menuMgr, (StructuredViewer)_viewer.getViewer()); 
+
     }
     
     public void initInput(DataStore dataStore)
@@ -228,22 +235,40 @@ public class ObjectsViewPart extends GenericViewPart
 
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
-   	if ((part instanceof ResourceNavigator) || 
-            (part instanceof CppProjectsViewPart)
-	    )
+	if (sel instanceof IStructuredSelection)
 	    {
-		if  (part.getSite().getPage() == getSite().getPage())
+		IStructuredSelection es= (IStructuredSelection) sel;
+		if (((part instanceof ResourceNavigator) || 
+		     (part instanceof CppProjectsViewPart)) &&
+		    (part != this)
+		    )
 		    {
-			if (sel instanceof IStructuredSelection)
+			if  (part.getSite().getPage() == getSite().getPage())
 			    {
-				IStructuredSelection es= (IStructuredSelection) sel;
 				handleSelection(es);
 			    }  
 		    }
+		else if (part == this)
+		    {
+			Object object = es.getFirstElement();
+			if (object instanceof DataElement)
+			    {
+				DataElement element = (DataElement)object;
+				if (_lastSelected == null || 
+				    (element != _lastSelected && 
+				    !_lastSelected.getType().equals(element.getType())))
+				    {
+					// hack to clear cache that maps elements to resources
+					ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
+					manager.flushLookup();
+				    }
+				_lastSelected = element;				
+			    }
+		    }
 	    }
     }
-    
-    public void dispose()
+	
+	public void dispose()
     {
         IWorkbench aWorkbench = _plugin.getWorkbench();
         IWorkbenchWindow win= aWorkbench.getActiveWorkbenchWindow();
@@ -301,8 +326,10 @@ public class ObjectsViewPart extends GenericViewPart
 		    updateViewFont();
 		}
 		break;
-		
-		
+	    case CppProjectEvent.REFRESH:
+		{
+		    initInput(_plugin.getCurrentDataStore());
+		}		
 	    default:
 		break;
 	    }

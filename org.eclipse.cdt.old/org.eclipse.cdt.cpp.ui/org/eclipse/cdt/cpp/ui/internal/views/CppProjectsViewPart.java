@@ -25,7 +25,6 @@ import org.eclipse.ui.*;
 public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionListener, ICppProjectListener
 { 
     private boolean _inputed = false;
-    private DataElement _lastSelected = null;
 
     public CppProjectsViewPart()
     {
@@ -35,8 +34,6 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     public void createPartControl(Composite parent)
     {
 	super.createPartControl(parent);
-	MenuManager menuMgr = _viewer.getMenuManager();
-	getSite().registerContextMenu(menuMgr, (StructuredViewer)_viewer.getViewer()); 
     }
     
     protected String getF1HelpId()
@@ -75,11 +72,10 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 			    {
 				_viewer.setInput(rootElement);
 				_viewer.setSorter(DE.P_NAME);
-
+				lock(true);
+				_inputed = true;
 			    }
 			
-			lock(true);
-			_inputed = true;
 			return;
 		    } 
 		_viewer.setInput(null);
