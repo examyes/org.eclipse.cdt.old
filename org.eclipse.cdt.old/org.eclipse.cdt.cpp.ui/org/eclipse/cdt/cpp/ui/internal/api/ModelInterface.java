@@ -42,20 +42,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 {
   private class OpenProjectAction extends Thread
   {
-      private IProject _project = null;
-      private CppPlugin _plugin = null;
-      
-      public OpenProjectAction(CppPlugin plugin, IProject project)
+      private IProject _project;
+      public OpenProjectAction(IProject project)
       {
-      	_plugin =plugin;
 	  _project = project;
       }
       
       public void run()
       {
-      	
 	  DataStore dataStore = _plugin.getDataStore();
-
 	  
 	  DataElement projectMinerProject = null;
 	  if (_project instanceof Repository)
@@ -74,26 +69,23 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	      }
 	  else
 	      {
-
 		  projectMinerProject =  findProjectElement(_project, "Closed Project");
 		  if (projectMinerProject == null)
 		      {
 			  System.out.println("can't find project miner element for " + _project);
 			  return;
 		      }
-
 	      }
 	  
 	  if (projectMinerProject != null)
 	      {
-
 		  DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
 		  if (oDescriptor != null)
 		      {
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
 			  projectMinerProject.refresh(true);
 		      }
-
+		  
 		  setParseIncludePath(_project);	
 		  setParseQuality(_project);	
 		  setEnvironment(_project);
@@ -120,20 +112,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				  localDataStore.refresh(localWorkspace);
 			      }
 		      }
-
+		  
 		  CppProjectNotifier notifier = getProjectNotifier();
-	
 		  notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
 	      }
-
       } 
-
   }
- 
+  
 
     public class MonitorStatusThread extends Handler
     {
-	private DataElement _status;
+	private DataElement _status;  
 	private IProject    _project;
 	
 	public MonitorStatusThread(DataElement status, IProject project)
@@ -312,7 +301,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	}
     }
 
-  private CppPlugin      _plugin = null;
+  private CppPlugin      _plugin;
   private DataElement    _markersDescriptor;
   private IWorkspace     _workbench;
 
@@ -618,7 +607,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		IProject project = projects[i];
 		if (project.isOpen() && _plugin.isCppProject(project))
 		    {
-
 			openProject(project);
 		    }
 	    }			    	
@@ -635,8 +623,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {	     
 		if (_plugin.isCppProject(project))
 		    {
-		    findProjectElement(project, "Closed Project");
-			OpenProjectAction openAction = new OpenProjectAction(_plugin, project);
+			if (project instanceof Repository)
+			    {
+			    }
+			else
+			    {
+				findProjectElement(project, "Closed Project");
+			    }
+			OpenProjectAction openAction = new OpenProjectAction(project);
 			openAction.start();
 		    }
 		else
@@ -1155,12 +1149,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return found;
     }
     
-  public synchronized DataElement findProjectElement(IProject project)
+  public DataElement findProjectElement(IProject project)
     {
 	return findProjectElement(project, "Project");
     }
 
-  public synchronized DataElement findProjectElement(IProject project, String type)
+  public DataElement findProjectElement(IProject project, String type)
   {
       if (project == null)
 	  return null;
@@ -1177,13 +1171,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       
       DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
       if (projectObj == null)
-	  { 
-	  		IPath location = project.getLocation();
+	  {
+	      projectObj = dataStore.createObject(workspace, type, project.getName(), project.getLocation().toString());
 
-	  		java.io.File file = location.toFile();
-	  		String path = file.getAbsolutePath();
-	      projectObj = dataStore.createObject(workspace, type, project.getName(), path);
-	  		
 	      if (dataStore != _plugin.getDataStore())
 		  {
 		      dataStore.setObject(workspace);
@@ -1728,7 +1718,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			{
 			    if (resource instanceof IProject)
 				{
-			
+				    System.out.println("added " + resource);
 				}
 			    else
 				{
@@ -1962,7 +1952,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	buildCmd.setAttribute(DE.A_VALUE, "BUILD_TARGET");
 	DataElement executeCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Execute",
-							  "com.ibm.cpp.ui.internal.actions.ExecuteAction");
+							  "com.ibm.cpp.ui.internal.actions.TargetAction");
 	executeCmd.setAttribute(DE.A_VALUE, "EXECUTE_TARGET");
 	// autoconf
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
