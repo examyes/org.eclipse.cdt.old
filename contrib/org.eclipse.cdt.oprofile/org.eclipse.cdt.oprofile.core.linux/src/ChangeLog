@@ -1,3 +1,9 @@
+2005-04-05  Keith Seitz  <keiths@redhat.com>
+
+	* opinfo.h (get_cpu_frequency): Resurrect. It really is needed.
+	* opinfo.cc (get_cpu_frequency): Likewise.
+	(operator<<): Likewise.
+
 2005-04-04  Keith Seitz  <keiths@redhat.com>
 
 	* oprofiledb.h (class oprofile_db): samples_odb_t is now called odb_t.

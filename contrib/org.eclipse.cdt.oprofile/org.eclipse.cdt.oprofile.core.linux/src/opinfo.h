@@ -79,6 +79,9 @@ class opinfo
   // Returns the samples directory in use
   inline const std::string& get_samples_directory (void) const { return _dir; };
 
+  // Returns the CPU frequency in MHz
+  double get_cpu_frequency (void) const;
+
   // Returns an eventcheck object representing whether the given
   // CTR, EVENT, and MASK are valid for this cpu type
   eventcheck check (int ctr, int event, int mask) const;

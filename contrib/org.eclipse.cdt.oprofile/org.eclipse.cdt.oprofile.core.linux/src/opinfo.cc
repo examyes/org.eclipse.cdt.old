@@ -18,6 +18,10 @@
 
 using namespace std;
 
+// From liboputil.a. Sadly this won't work if we want to enable
+// remote-system profiling.
+extern "C" double op_cpu_frequency (void);
+
 // Forward declaration
 static void __output_unit_mask_info (ostream& os, const opinfo::event_t* e);
 
@@ -47,6 +51,13 @@ opinfo::get_events (eventlist_t& list, int ctr) const
       if (/*event->counter_mask == CTR_ALL || */ event->counter_mask & (1 << ctr))
 	list.push_back (event);
     }
+}
+
+// Returns cpu frequency
+double
+opinfo::get_cpu_frequency (void) const
+{
+  return op_cpu_frequency ();
 }
 
 // Checks whether the given CTR, EVENT, and MASK are valid
@@ -80,6 +91,7 @@ operator<< (ostream& os, const opinfo& info)
 
   // Output out number of counters and defaults
   os << startt ("num-counters") << info.get_nr_counters () << endt
+     << startt ("cpu-frequency") << info.get_cpu_frequency () << endt
      << startt ("defaults")
      << startt ("sample-dir") << opinfo::get_default_samples_dir () << endt
      << startt ("lock-file") << opinfo::get_default_lock_file () << endt
