@@ -337,7 +337,7 @@ public class DataElementTableViewer extends TableViewer
 
     private void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
-	int maxAdd = 100;
+	int maxAdd = 80;
 	int numAdded = 0;
 	int totalItems = table.getItemCount();
 	
@@ -365,6 +365,7 @@ public class DataElementTableViewer extends TableViewer
 						    if (recycled.size() > 0)
 							{
 							    item = (TableItem)recycled.get(0);
+							    recycled.remove(0);
 							}
 						    else
 							{
