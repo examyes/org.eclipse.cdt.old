@@ -42,7 +42,7 @@ public class MakefileAmAction extends CustomAction {
 	public MakefileAmAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
-		if(_command.getValue().equals("INSERT_CONFIGURE_IN"))
+		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
 		{
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
