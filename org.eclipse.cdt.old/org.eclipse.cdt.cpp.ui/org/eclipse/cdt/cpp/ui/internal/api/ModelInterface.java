@@ -1902,13 +1902,70 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					return;
 				    }
 			    }	
+			else
+			{
+				// special case for rename
+				IResourceDelta[] aff = delta.getAffectedChildren();
+				if (aff.length >= 2)
+				{
+				
+					IResourceDelta c1 = aff[0];
+					IResourceDelta c2 = aff[1];
+					
+					IResource r1 = c1.getResource();
+					IResource r2 = c2.getResource();
+					
+					int kind1 = c1.getKind();
+					int kind2 = c2.getKind();
+					
+					IResource oldRes = null;
+					IResource newRes = null;
+					if (kind1 == IResourceDelta.REMOVED)
+					{
+						oldRes = c1.getResource();
+						if (kind2 == IResourceDelta.ADDED)
+						{
+							newRes = c2.getResource();
+						}
+					}
+					else if (kind1 == IResourceDelta.ADDED)
+					{
+						newRes = c1.getResource();
+						if (kind2 == IResourceDelta.REMOVED)
+						{
+							oldRes = c2.getResource();
+						}
+					}
+					
+					if (oldRes != null && newRes != null)
+						 {
+						    // this is a rename
+						 	if ((oldRes instanceof IProject) && (newRes instanceof IProject))
+						 	{
+						 		DataElement element = findProjectElement((IProject)oldRes);
+
+						 		element.setAttribute(DE.A_NAME, newRes.getName());
+						 		element.setAttribute(DE.A_SOURCE, newRes.getLocation().toString()); 
+						 		element.getDataStore().refresh(element.getParent());
+						 		return;
+						 	}
+						 }
+				   
+				}							
+			}
+		
+			    
 			break;
 		    case IResourceDelta.ADDED:
 		    case IResourceDelta.REMOVED:
 			{
 			    if (resource instanceof IProject)
 				{
-				    initializeProject((IProject)resource);
+					if (kind == IResourceDelta.ADDED)
+					{
+					    initializeProject((IProject)resource);
+					}
+				
 				}
 			    else
 				{
