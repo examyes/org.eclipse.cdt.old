@@ -30,8 +30,16 @@ public class CmdProcessAttach2 extends Command
 
      // Note: The processIndices returned from SUI are based at 1. Our internal
      // array is based at 0
+     String progName = "";
+     try
+     {
+        progName = _req.processPath();
+     }
+     catch (IOException ioe)
+     {
+     }
 
-     if (!_debugSession.remoteAttach(_req.processIndex()-1, errorMsg))
+     if (!_debugSession.remoteAttach(_req.processIndex()-1, progName, errorMsg))
      {
         _rep = new ERepProcessAttach(EPDCSession,
                                   new EStdTime(0,0,0),

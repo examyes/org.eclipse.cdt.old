@@ -36,8 +36,20 @@ public class CmdProcessAttach extends Command
      // remote JVM we specified when we started up the backend.
 
      int processIndex = _req.processId();
-
-     if (!_debugSession.remoteAttach(processIndex, errorMsg))
+     String progName = "";
+     try
+     {
+        progName = _req.processPath();
+     }
+     catch (IOException ioe)
+     {
+     	System.out.println("CmdProcessAttach.execute() IOException = " + ioe);
+     }
+     
+     if (Gdb.traceLogger.DBG)
+        Gdb.traceLogger.dbg(2,"CmdProcessAttach.execute() calling remoteAttach() with processIndex = " + processIndex + "progName = " + progName);
+     
+     if (!_debugSession.remoteAttach(processIndex, progName, errorMsg))
      {
         _rep = new ERepProcessAttach(EPDCSession,
                                   new EStdTime(0,0,0),

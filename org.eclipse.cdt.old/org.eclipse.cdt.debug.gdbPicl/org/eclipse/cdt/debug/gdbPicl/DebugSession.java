@@ -84,7 +84,7 @@ public abstract class DebugSession
    * and password specified by pid (see DebugEngine.addHost()).
    * @return boolean true if the attach was successful, false otherwise
    */
-   public abstract boolean remoteAttach(int processIndex, String[] errorMsg);
+   public abstract boolean remoteAttach(int processIndex, String progName, String[] errorMsg);
 
   /**
    * Return true if modification watchpoints are supported, false otherwise.

@@ -595,11 +595,27 @@ Thread.currentThread().dumpStack();
     return true;
   }
 
-  public boolean remoteAttach(int processIndex, String[] errorMsg)
+  public boolean remoteAttach(int processIndex, String programName, String[] errorMsg)
   {
-  if (Gdb.traceLogger.EVT)
+     if (Gdb.traceLogger.EVT)
               Gdb.traceLogger.evt(1,"????????????????? GdbDebugSession.remoteAttach "+processIndex   );
-    return false;
+        
+     String cmd = "file " + programName;
+     boolean ok = executeGdbCommand(cmd);
+     if( !ok )
+     {  if (Gdb.traceLogger.ERR)
+            Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
+     }    
+  
+     cmd = "attach " + processIndex;
+     ok = executeGdbCommand(cmd);
+     if( !ok )
+     {  if (Gdb.traceLogger.ERR)
+            Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
+            
+     }          
+           
+    return true;
   }
 
   public boolean remoteDetach(int processIndex, int processDetachAction, String[] errorMsg)
