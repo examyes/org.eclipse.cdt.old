@@ -40,7 +40,7 @@ public class AmParser
 	      }
 	  catch (Throwable e)
 	      {
-		  System.out.println("Problem opening " + _curFile);
+	       _theFileReader = null;
 	      }
       }
  }
@@ -93,7 +93,10 @@ public class AmParser
  }
 
  public DataElement parse()
- {  
+ { 
+  if (_theFileReader == null)
+  return null;
+ 
   String nextLine;
   while ((nextLine = readLine()) != null)
    processLine(nextLine);
