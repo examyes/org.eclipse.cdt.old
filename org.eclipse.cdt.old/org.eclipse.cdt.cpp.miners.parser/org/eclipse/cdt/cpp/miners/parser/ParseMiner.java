@@ -301,7 +301,7 @@ public class ParseMiner extends Miner
      return null;
  }
 
-  private DataElement handleSaveProject(DataElement theProject)
+ private DataElement handleSaveProject(DataElement theProject)
  {
   saveProject(theProject);
   return null;
@@ -353,6 +353,7 @@ public class ParseMiner extends Miner
   String systemObjs   = sourcePath + "system_objects.xml";
   String projectObjs  = sourcePath + "project_objects.xml";
     
+  
   _dataStore.saveFile(getProjectElement(project, ParserSchema.ParsedFiles), parsedSource, 10);
   _dataStore.saveFile(getProjectElement(project, ParserSchema.ProjectObjects), projectObjs, 10);
   _dataStore.saveFile(getProjectElement(project, ParserSchema.SystemObjects), systemObjs, 10);
@@ -455,6 +456,7 @@ public class ParseMiner extends Miner
  
  private boolean removeParseInfo(DataElement theFile, DataElement project)
  {  
+ 	handleCancelCommand();
      if (theFile.getType().equals("Project"/*ParserSchema.Project*/))
   {
      
@@ -495,7 +497,9 @@ public class ParseMiner extends Miner
   	{
   		theProject = getParseProject(project);
   	}
-  	return _parseManager.removeParseInformation(theFile, theProject);
+  	boolean result = _parseManager.removeParseInformation(theFile, theProject);
+ 
+  	return result;
   }
 
  }
