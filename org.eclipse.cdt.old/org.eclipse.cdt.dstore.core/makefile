@@ -36,7 +36,7 @@ buildPlugins += com.ibm.cpp.ui
 buildPlugins += com.ibm.dstore.miners
 buildPlugins += com.ibm.cpp.miners
 buildPlugins += com.ibm.debug.gdbPicl
-buildPlugins += com.ibm.linux.help	
+buildPlugins += com.ibm.cpp.linux.help	
 
 # List of All Plugins Used in C/C++ Deliverable (e.g buildPlugins plus the ones we don't build)
 allPlugins = $(buildPlugins)
