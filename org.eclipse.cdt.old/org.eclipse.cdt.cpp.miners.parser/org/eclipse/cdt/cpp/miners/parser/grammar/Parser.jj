@@ -4,8 +4,8 @@
 
 options 
 {
-  //DEBUG_PARSER=true;
-  //DEBUG_LOOKAHEAD=true;
+ //DEBUG_PARSER=true;
+ // DEBUG_LOOKAHEAD=true;
   //DEBUG_TOKEN_MANAGER=true;
   //USER_CHAR_STREAM=true;
   static=false;
@@ -44,8 +44,17 @@ public final class Parser
  {
   int number_of_curlies = 1;
   
-  Token tok = token_source.jumpPastBadTokens();
-
+  Token tok;
+  try
+  {
+   tok = getToken(1);
+  }
+  catch (Throwable e)
+   {
+    token_source.jumpPastBadTokens();
+    token_source.getInputStream().backupToken();
+    return false;
+   }
   if ((tok == null) || (tok.kind == EOF))
    return true;
   try
@@ -156,7 +165,8 @@ TOKEN_MGR_DECLS:
  public int beginLine;
  public SymbolTable symtab;
  public void setSymbolTable(SymbolTable st) {symtab = st;} 
- 
+
+ public SimpleCharStream getInputStream() {return input_stream;} 
  public String skipOverObjectBody(Token curToken)
  {
   StringBuffer objectBody = new StringBuffer();
@@ -299,14 +309,13 @@ TOKEN_MGR_DECLS:
    try
    {
     t = getNextToken();
-    //If we get here, then the getNextToken was successful...just return the token
-    return t;
+     //If we get here, then the getNextToken was successful...just return the previous token
+     return t;
    }
    catch (Throwable e) 
    {
     try 
     {
-     input_stream.readChar();
      input_stream.BeginToken();
     }
     catch (Throwable f) {}
@@ -706,7 +715,7 @@ void function_definition_lookahead() :
    (LOOKAHEAD(2) ptr_operator())* (id_expression())? 
    "(" (")" | LOOKAHEAD(3) parameter_list(false) ")" | expression() ")")
    //Don't match a ";" below since we want A B(); to be matched as a variable declaration;
-   ( ";" | ":" | "{" | "try" | "=" | "const" | "volatile" )
+   ( ":" | "{" | "try" | "=" | declaration_specifier() )
 }
 
 //The declaration_specifiers have already been matched when we get here:
@@ -790,9 +799,10 @@ void function_definition(String theTypes) :
       DataElement theFunction = symtab.addObject(ParserSchema.dFunction, names[0], name, getToken(0).beginLine, true);
      }
      (
-         ";" {symtab.closeScope();} 
+         LOOKAHEAD(2) ";" {symtab.closeScope();} 
       |  "=" constant_expression() {symtab.closeScope();}
-      | (LOOKAHEAD({!_lazy}) function_body() | "{" skip_object_body(theFunction)) 
+      |  (LOOKAHEAD(2) declaration())*
+         (LOOKAHEAD({!_lazy}) function_body() | "{" skip_object_body(theFunction)) 
      )
   )
 }
@@ -893,7 +903,7 @@ String declarator_suffix() :
   |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(true) | expression())  ")")  {name = "(" + next + ")";}
  )
  [LOOKAHEAD(2) ("const" | "volatile")]
- [exception_spec()] 
+ [LOOKAHEAD(2) exception_spec()] 
  {return name;}
 }
 
@@ -1331,7 +1341,7 @@ void iteration_statement() :
    {theObject = symtab.addObject(ParserSchema.dStatement, "do", startLine,true);}
    statement() 
    "while" "(" name = expression() ")" ";"
-   {theObject.setAttribute(DE.A_NAME, "do...while (" + name + ")");}
+   {if (name == null) name = ""; theObject.setAttribute(DE.A_NAME, "do...while (" + name + ")");}
  | "for" "(" {Token currentToken = getToken(1); name = "for(";}
      (
         ";" {name += ";";}

@@ -22,8 +22,7 @@ class SourceReader
  }
  public void setFile (String fileName)
  { 
-  try { _currentTrimmer = new Trimmer(fileName); }
-  catch (IOException e) {}
+  _currentTrimmer = new Trimmer(fileName);
  }
  public void pushState()
  {

@@ -20,18 +20,18 @@ public class CommandLineSymbolTable implements SymbolTable
  {
   _indent    = "";
   _dummy     = new DataElement();
-  //_dummy.reInit("A", "B", "C", "D");
+  _dummy.reInit(null, null, "B", "C", "D", "E", false);
  }
  
  public DataElement addObject(DataElement a, String name, int line, boolean hasChildred)
  {
-  return null;
+  return _dummy;
   
  }
  
  public DataElement addObject(DataElement a, String name, String value, int line, boolean hasChildred)
  {
-  return null;
+  return _dummy;
  }
  
  //Methods that actually create or deal with DataElement in the dataStore.

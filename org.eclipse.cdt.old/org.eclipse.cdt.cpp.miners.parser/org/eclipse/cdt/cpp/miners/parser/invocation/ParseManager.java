@@ -148,7 +148,7 @@ public class ParseManager
     createExceptionObject(e);
     done = _theParser.jumpToNextDeclaration(theType);
     partiallyDone = true;
-    if (++errorCount > 15)
+    if (++errorCount > 10)
      done = true;
    }
   }
@@ -236,7 +236,7 @@ public class ParseManager
    { 
     createExceptionObject(e);
     done = _theParser.jumpToClosingCurly();
-    if (++errorCount > 100)
+    if (++errorCount > 30)
      done = true;
    } 
   }

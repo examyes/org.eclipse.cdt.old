@@ -16,6 +16,7 @@ public class ParserTokenManager implements ParserConstants
  public SymbolTable symtab;
  public void setSymbolTable(SymbolTable st) {symtab = st;}
 
+ public SimpleCharStream getInputStream() {return input_stream;}
  public String skipOverObjectBody(Token curToken)
  {
   StringBuffer objectBody = new StringBuffer();
@@ -158,14 +159,13 @@ public class ParserTokenManager implements ParserConstants
    try
    {
     t = getNextToken();
-    //If we get here, then the getNextToken was successful...just return the token
-    return t;
+     //If we get here, then the getNextToken was successful...just return the previous token
+     return t;
    }
    catch (Throwable e)
    {
     try
     {
-     input_stream.readChar();
      input_stream.BeginToken();
     }
     catch (Throwable f) {}

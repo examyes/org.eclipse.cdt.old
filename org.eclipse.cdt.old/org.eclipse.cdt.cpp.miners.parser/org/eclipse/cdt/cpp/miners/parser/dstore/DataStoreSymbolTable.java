@@ -203,7 +203,7 @@ public class DataStoreSymbolTable implements SymbolTable
   if (_isTypedef)
    objType = ParserSchema.dTypedef;
    
-  _curObj.object = _dataStore.createObject(_root, objType, objName,  _currentSource + ":" + beginLine, "" + _idCounter++);
+  _curObj.object = _dataStore.createObject(_root, objType, objName, _currentSource + ":" + beginLine);//, "" + _idCounter++);
   _curObj.object.setAttribute(DE.A_VALUE,objName);
    
   if (isScope) 

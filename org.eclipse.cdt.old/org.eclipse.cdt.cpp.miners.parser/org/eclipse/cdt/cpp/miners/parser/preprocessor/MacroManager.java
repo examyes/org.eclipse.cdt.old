@@ -169,32 +169,6 @@ class MacroManager
   }
   return out.toString();
  }
- 
- 
- public static void main (String args[])
- {
-  try
-   {
-    
-   MacroManager mm = new MacroManager();
-   String m = "_IMPORT _Import";
-   mm.rememberMacro(m,"");
-   m = "_LNK_CONV _Optlink";
-   mm.rememberMacro(m,"");
-   
-   String s = mm.expandMacros("     extern int      _IMPORT _LNK_CONV abs (int);");
-   
-   System.out.println(m + "\n" + s);
-  }
-  catch (Throwable e) 
-   {
-    e.printStackTrace();
-    
-    System.out.println(e.getMessage());
-   }
- }
- 
-  
 }
 
   

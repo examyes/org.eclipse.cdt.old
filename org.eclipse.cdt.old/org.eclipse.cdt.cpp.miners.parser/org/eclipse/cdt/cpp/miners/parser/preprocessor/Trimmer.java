@@ -16,11 +16,15 @@ public class Trimmer
  private BufferedReader   _reader     = null;
  private String           nextLine    = null;
 
- public Trimmer(String theFile) throws IOException
+ public Trimmer(String theFile)
  {
   fileName = theFile;
-  _reader = new BufferedReader( new FileReader (new File (theFile)));
-  lineNumber = 0;
+  try
+  {
+   _reader = new BufferedReader( new FileReader (new File (theFile)));
+   lineNumber = 0;
+  }
+  catch (IOException e) {}
  }
  
  public String readLine()
@@ -52,7 +56,7 @@ public class Trimmer
   int     curPos     = -1;    //It's -1 since we're going to increment at the start of the loop below.
   
   int     lineLength = nextLine.length();
-   
+    
   while (++curPos < lineLength) 
   {
    prev_ch = ch;
@@ -64,6 +68,8 @@ public class Trimmer
     if ( (ch == '/') && (prev_ch == '*'))  
     {  
      inComment = false;
+     //reset ch and prev_ch since it is like we are starting fresh on this line.
+     ch = (prev_ch = '\n');
      continue;
     }
     else
@@ -108,37 +114,6 @@ public class Trimmer
   return theLine.toString();
  }
 
- /* This is a 
-  * multi-line
- 
-  comment */
-
- int x;  //This is a comment not at the beginning of a line
- int z /*This is a embedded comment*/ = 1;
- 
- /* Another
-  * multi-line comment but
-  with stuff after it */ int y =2;
- 
- 
- public static void main(String args[])
- {
-  Trimmer t = null;
-  
-  try
-  {
-   t = new Trimmer          (args[0]);
-  }
-  catch (IOException e)
-  {
-   System.out.println("Couldn't create a Trimmer        for " + args[0]);
-  }
-  
-  String l;
-  
-  while ( (l = t.readLine()) != null)
-   System.out.println(l);
- }
 }
 
 
