@@ -19,82 +19,88 @@ import java.lang.*;
 
 public class CommandMiner extends Miner
 {
- private Hashtable _threads = new Hashtable();
- private Patterns _patterns;
- 
- public CommandMiner() { super();  }
- public void finish()  { super.finish(); }
- public void load()    
- {
-  _patterns = new Patterns(_dataStore);
- }
+    private Hashtable _threads = new Hashtable();
+    private Patterns _patterns;
+    
+    public void load()    
+    {
+	_patterns = new Patterns(_dataStore);
+    }
+    
+    protected ArrayList getDependencies()
+    {
+	ArrayList dependencies = new ArrayList();
+	dependencies.add("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner");
+	dependencies.add("org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner");
+	return dependencies;
+    }
 
- public void extendSchema(DataElement schemaRoot)
- {
-     DataElement fsD           = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-     DataElement cancellable   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.Cancellable"), 1);
-     
-
-     DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND", false);
-     _dataStore.createReference(cancellable, cmdD, "abstracts", "abstracted by");
-     
-     DataElement shellD        = createCommandDescriptor(fsD, "Shell", "C_SHELL", false);
-     _dataStore.createReference(cancellable, shellD, "abstracts", "abstracted by");
-
-     DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
-     DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");
-     _dataStore.createObject(schemaRoot, "stdout", "stdout","org.eclipse.cdt.dstore.miners");
- }
-
- public DataElement handleCommand (DataElement theElement)
- {
-  String          name = getCommandName(theElement);
-  DataElement   status = getCommandStatus(theElement);
-  DataElement  subject = getCommandArgument(theElement, 0);
-
- 
-  if (name.equals("C_COMMAND"))
-      {
-	  DataElement   invArg = getCommandArgument(theElement, 1);
-	  if (invArg != null)
-	      {
-		  String    invocation = invArg.getName();
-		  
-		  //Remove All extra whitespace from the command
-		  if (invocation.trim().length() > 0)
-		  {
-		   if (invocation.equals("?") || invocation.equals("help"))
-		    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/org.eclipse.cdt.dstore.miners/patterns.dat";
-		   launchCommand(subject, invocation, status);
-  
-		  } 
-                  return status;
-	      }
-	  else
-	      {
-		  status.setAttribute(DE.A_NAME, "done");
-	      }
-      }
-  else if (name.equals("C_SHELL"))
-  {
-   	String invocation = ">";
-  	launchCommand(subject, invocation, status);
-  }
-  else if (name.equals("C_SEND_INPUT"))
-  {
-  	DataElement input = getCommandArgument(theElement, 1);
-  	DataElement de = (DataElement)subject.dereference().get(1);
-  	sendInputToCommand(de.getName().trim(), input.getName(), getCommandStatus(subject));
-  }
-  else if (name.equals("C_CANCEL"))
-      {
-	  DataElement de = (DataElement)subject.dereference().get(1);
-	  DataElement cancelStatus = getCommandStatus(subject);
-	  cancelCommand(de.getName().trim(),cancelStatus);
-	  return status;
-      }
-  return status;
- }
+    public void extendSchema(DataElement schemaRoot)
+    {
+	DataElement fsD           = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+	DataElement cancellable   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.Cancellable"), 1);
+	
+	
+	DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND", false);
+	_dataStore.createReference(cancellable, cmdD, "abstracts", "abstracted by");
+	
+	DataElement shellD        = createCommandDescriptor(fsD, "Shell", "C_SHELL", false);
+	_dataStore.createReference(cancellable, shellD, "abstracts", "abstracted by");
+	
+	DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
+	DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");
+	_dataStore.createObject(schemaRoot, "stdout", "stdout","org.eclipse.cdt.dstore.miners");
+    }
+    
+    public DataElement handleCommand (DataElement theElement)
+    {
+	String          name = getCommandName(theElement);
+	DataElement   status = getCommandStatus(theElement);
+	DataElement  subject = getCommandArgument(theElement, 0);
+	
+	
+	if (name.equals("C_COMMAND"))
+	    {
+		DataElement   invArg = getCommandArgument(theElement, 1);
+		if (invArg != null)
+		    {
+			String    invocation = invArg.getName();
+			
+			//Remove All extra whitespace from the command
+			if (invocation.trim().length() > 0)
+			    {
+				if (invocation.equals("?") || invocation.equals("help"))
+				    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/org.eclipse.cdt.dstore.miners/patterns.dat";
+				launchCommand(subject, invocation, status);
+				
+			    } 
+			return status;
+		    }
+		else
+		    {
+			status.setAttribute(DE.A_NAME, "done");
+		    }
+	    }
+	else if (name.equals("C_SHELL"))
+	    {
+		String invocation = ">";
+		launchCommand(subject, invocation, status);
+	    }
+	else if (name.equals("C_SEND_INPUT"))
+	    {
+		DataElement input = getCommandArgument(theElement, 1);
+		DataElement de = (DataElement)subject.dereference().get(1);
+		sendInputToCommand(de.getName().trim(), input.getName(), getCommandStatus(subject));
+	    }
+	else if (name.equals("C_CANCEL"))
+	    {
+		DataElement de = (DataElement)subject.dereference().get(1);
+		DataElement cancelStatus = getCommandStatus(subject);
+		cancelCommand(de.getName().trim(),cancelStatus);
+		return status;
+	    }
+	return status;
+    }
     
  public void launchCommand (DataElement subject, String invocation, DataElement status)
  {
