@@ -55,11 +55,13 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     public class SortElementsAction extends Action
     {
 	private String _property;
+	private DataElementSorter _sorter;
 	
 	public SortElementsAction(String property)
 	{
 	    super(property);      
 	    _property = property;      
+	    _sorter = new DataElementSorter(_property);
 	}
 	
 	public String getProperty()
@@ -67,11 +69,16 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    return _property;
 	}
 	
+	public DataElementSorter getSorter()
+	{
+	    return _sorter;
+	}
+
 	public void run()
 	{
 	    if ((_viewer != null) && (_property != null))
 		{
-		    _viewer.setSorter(new DataElementSorter(_property));
+		    _viewer.setSorter(_sorter);
 		    _currentSortAction = this;
 		}
 	}
@@ -96,7 +103,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	{ 
 	    ((DataElementLabelProvider)_viewer.getLabelProvider()).setLabelProperty(_property);
 	    _viewer.refresh();
-	    _currentViewAction = this;
+	    _currentViewByAction = this;
 	}
     }
   
@@ -115,8 +122,12 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private ResourceBundle      _resourceBundle;  
 
     private NoSortElementsAction _noSort;
-    private SortElementsAction _sortByName, _sortByValue, _sortByType, _currentSortAction;
-    private SetLabelAction     _viewByName, _viewByValue, _viewByType, _currentViewAction;
+
+    private SortElementsAction[] _sortByAction;
+    private SortElementsAction   _currentSortAction;
+
+    private SetLabelAction[]   _viewByAction;
+    private SetLabelAction     _currentViewByAction;
 
     private boolean             _isTable;
 
@@ -187,26 +198,53 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     {
 	_noSort      = new NoSortElementsAction("Do not sort");
 
-	_sortByType  = new SortElementsAction(DE.P_TYPE);
-	_sortByName  = new SortElementsAction(DE.P_NAME);
-	_sortByValue = new SortElementsAction(DE.P_VALUE);
-	_currentSortAction = _sortByType;
+	_sortByAction = new SortElementsAction[4];
+
+	_sortByAction[0] = new SortElementsAction(DE.P_TYPE);
+	_sortByAction[1] = new SortElementsAction(DE.P_NAME);
+	_sortByAction[2] = new SortElementsAction(DE.P_VALUE);
+	_sortByAction[3] = new SortElementsAction(DE.P_SOURCE_NAME);
+
+	_currentSortAction = _sortByAction[0];
 	
-	_viewByName  = new SetLabelAction(DE.P_NAME);
-	_viewByValue = new SetLabelAction(DE.P_VALUE);
-	_viewByType  = new SetLabelAction(DE.P_TYPE);
-	_currentViewAction = _viewByValue;
+	_viewByAction = new SetLabelAction[4];
+	_viewByAction[0]  = new SetLabelAction(DE.P_NAME);
+	_viewByAction[1]  = new SetLabelAction(DE.P_VALUE);
+	_viewByAction[2]  = new SetLabelAction(DE.P_TYPE);
+	_viewByAction[3]  = new SetLabelAction(DE.P_SOURCE_NAME);
+	_currentViewByAction = _viewByAction[1];
 
 
 	_viewer.setSorter(new DataElementSorter(_currentSortAction.getProperty()));
-	((DataElementLabelProvider)_viewer.getLabelProvider()).setLabelProperty(_currentViewAction.getProperty());
+	((DataElementLabelProvider)_viewer.getLabelProvider()).setLabelProperty(_currentViewByAction.getProperty());
+    }
+
+    public void setSorter(String property)
+    {
+	for (int i = 0; i < _sortByAction.length; i++)
+	    {
+		if (_sortByAction[i].getProperty().equals(property))
+		    {
+			_sortByAction[i].run();
+		    }
+	    }	
     }
 
     public void setSorter(DataElementSorter sorter)
-    {
+    {	
 	_viewer.setSorter(sorter);
     }
 
+    public void setViewer(String property)
+    {
+	for (int i = 0; i < _viewByAction.length; i++)
+	    {
+		if (_viewByAction[i].getProperty().equals(property))
+		    {
+			_viewByAction[i].run();
+		    }
+	    }	
+    }
 
     public String getLocalizedString(String key)
     {
@@ -548,28 +586,22 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	menu.add(new Separator("#View"));
 	MenuManager sort = new MenuManager(getLocalizedString("ui.Sort_by"), "#SortMenu");
 	sort.add(_noSort);
-	sort.add(_sortByName);
-	sort.add(_sortByValue);
-	sort.add(_sortByType);
+	for (int i = 0; i < _sortByAction.length; i++)
+	    {
+		_sortByAction[i].setChecked(false);
+		sort.add(_sortByAction[i]);
+	    }
 	menu.add(sort);
 
 	MenuManager label = new MenuManager(getLocalizedString("ui.View"), "#ViewMenu");
-	label.add(_viewByName);
-	label.add(_viewByValue);
-	label.add(_viewByType);
+	for (int i = 0; i < _viewByAction.length; i++)
+	    {
+		_viewByAction[i].setChecked(false);
+		label.add(_viewByAction[i]);
+	    }
 	menu.add(label);	
-
-
-	_sortByName.setChecked(false);
-	_sortByType.setChecked(false);
-	_sortByValue.setChecked(false);
-
-	_viewByName.setChecked(false);
-	_viewByType.setChecked(false);
-	_viewByValue.setChecked(false);
-
 	_currentSortAction.setChecked(true);
-	_currentViewAction.setChecked(true);
+	_currentViewByAction.setChecked(true);
       }
 
   public void fillContextMenuHelper(IMenuManager menu, DataElement object, DataElement descriptor)
