@@ -89,8 +89,7 @@ public class MenuHandler
     }  
 
     private DataElement mergeDescriptors(DataElement merge,  DataElement descriptor)
-    {
-	DataStore dataStore = merge.getDataStore();
+    {	
 	if (merge == null)
 	    {
 		return merge;
@@ -101,6 +100,8 @@ public class MenuHandler
 	    }
 	else 
 	    {
+		DataStore dataStore = merge.getDataStore();
+
 		if (descriptor.isOfType(merge, true))
 		    {
 			return merge;

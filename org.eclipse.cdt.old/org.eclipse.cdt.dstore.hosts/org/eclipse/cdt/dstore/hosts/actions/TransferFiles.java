@@ -90,23 +90,41 @@ public class TransferFiles extends Thread
 
 	boolean needsUpdate = false;
 
+	String type = source.getType();
+
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
 	    {
-		copiedSource = targetDataStore.createObject(target, 
-							     source.getType(), 
-							     source.getName(),
-							     newSourceStr);
-		// transfer to remote
-		targetDataStore.setObject(target);
-		if (source.getType().equals("file"))
+		if (type.equals("file"))
 		    {
+			copiedSource = targetDataStore.createObject(target, 
+								    type, 
+								    source.getName(),
+								    newSourceStr);
+
+			// transfer to remote
+			targetDataStore.setObject(target);
 			needsUpdate = true;
+		    }
+		else
+		    {
+			DataElement mkdir = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_DIR");
+			if (mkdir != null)
+			    {
+				ArrayList args = new ArrayList();				
+				
+				DataElement newDir = targetDataStore.createObject(null, type, source.getName());
+				args.add(newDir);
+				
+				targetDataStore.synchronizedCommand(mkdir, args, target);
+
+				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
+			    }
 		    }
 	    }
 	else
 	    {
-		if (source.getType().equals("file"))
+		if (type.equals("file"))
 		    {
 			// compare dates
 			needsUpdate = compareDates(source, copiedSource);
@@ -147,7 +165,7 @@ public class TransferFiles extends Thread
 				newSource.renameTo(new java.io.File(newSourceStr));
 			    }
 		    }
-		else if (source.getType().equals("directory"))
+		else if (type.equals("directory"))
 		    {
 			java.io.File targetDir = new java.io.File(newSourceStr);
 			targetDir.mkdir();
@@ -165,7 +183,7 @@ public class TransferFiles extends Thread
 		    }
 	    }
 	
-	if (source.getType().equals("directory"))
+	if (type.equals("directory"))
 	    {
 		
 		for (int i = 0; i < source.getNestedSize(); i++)
