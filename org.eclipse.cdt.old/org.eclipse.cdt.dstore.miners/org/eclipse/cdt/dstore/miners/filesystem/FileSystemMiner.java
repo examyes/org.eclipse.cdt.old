@@ -627,8 +627,8 @@ public class FileSystemMiner extends Miner
 			  String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
 			  File theFile = new File (theElement.getSource());
 			  StringBuffer path = new StringBuffer (theFile.getPath());
-                          			  
-			  if ((type != null) && (!type.equals("device")))
+			  
+			  if (type.charAt(type.length() - 1) != '/' &&!type.equals("device"))
 			      {
 				  path.append("/");
 			      }
@@ -695,7 +695,7 @@ public class FileSystemMiner extends Miner
 		File theFile = new File (theElement.getSource());
 		StringBuffer path = new StringBuffer (theFile.getPath());
 		
-		if (!type.equals("device"))
+		if (type.charAt(type.length() - 1) != '/' && !type.equals("device"))
 		    {
 			path.append("/");
 		    }
@@ -717,7 +717,7 @@ public class FileSystemMiner extends Miner
 		if (list != null)
 		    {
 			for (int i= 0; i < list.length; i++)
-			    {
+			    {				
 				String filePath = path.toString().replace('\\', '/') + list[i];				
 				String objName = list[i];
 									  
