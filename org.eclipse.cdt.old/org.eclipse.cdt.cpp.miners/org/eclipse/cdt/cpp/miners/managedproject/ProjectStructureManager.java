@@ -1,6 +1,8 @@
 package com.ibm.cpp.miners.managedproject;
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 import java.io.*;
 import java.util.*;
