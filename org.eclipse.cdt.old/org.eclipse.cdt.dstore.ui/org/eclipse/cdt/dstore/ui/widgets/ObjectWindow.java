@@ -465,7 +465,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 			          	ArrayList relationships = _dataStore.getRelationItems(des, null);	
 				      	if (relationships.size() == 0)
 				      	{
-				      	-	return;
+				      		return;
 				      	}
 				      	else
 				      	{
