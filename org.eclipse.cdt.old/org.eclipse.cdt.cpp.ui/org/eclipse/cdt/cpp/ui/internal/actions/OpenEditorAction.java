@@ -103,8 +103,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 				    
 				    if (file != null)
 					{	
-					    System.out.println("editor open " +fileName);
-
 					    if (_plugin != null)
 						{
 						    IWorkbench desktop = _plugin.getWorkbench();
@@ -122,7 +120,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 								{
 								    editor = editors[i];		
 								    persp.bringToTop(editor);		
-								    //break;
+								    break;
 								}
 							}
 						    
