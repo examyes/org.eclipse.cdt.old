@@ -170,6 +170,32 @@ public class PADataStoreAdaptor {
   
  } 
 
+ public static String roundDouble(double d) {
+ 
+   String result = String.valueOf(d);
+   int dotIndex = result.indexOf('.');
+   int eIndex = result.indexOf('E');
+   if (eIndex < 0)
+    eIndex = result.indexOf('e');
+   
+   if (dotIndex >= 0) {
+   
+     if (eIndex > dotIndex) {
+     
+       if (eIndex > dotIndex + 4)
+         result = result.substring(0, dotIndex + 4) + result.substring(eIndex);
+     }
+     else {
+       
+       if (result.length() - dotIndex > 3)
+         result = result.substring(0, dotIndex + 4);
+     }
+     
+   }
+   
+   return result;
+ }
+ 
  /**
   * Find out the source location for a trace function
   */
@@ -317,11 +343,25 @@ public class PADataStoreAdaptor {
  
   createAttribute(funcElement, getLocalizedString("pa.TotalPercentage"),  String.valueOf(trcFunc.getTotalPercentage()));
   createAttribute(funcElement, getLocalizedString("pa.numCalls"), 		  String.valueOf(trcFunc.getCallNumber()));
-  createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 		  String.valueOf(trcFunc.getTotalSeconds()));
+
+  if (trcFunc instanceof FunctionCheckTraceFunction) {
+   createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	  String.valueOf(trcFunc.getTotalSeconds()));
+  }
+  else {
+   createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	  roundDouble(trcFunc.getTotalSeconds()));
+  }
+  
   createAttribute(funcElement, getLocalizedString("pa.SelfTime"), 		  String.valueOf(trcFunc.getSelfSeconds()));
-  createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), String.valueOf(trcFunc.getTotalMsPerCall()));
-  createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  String.valueOf(trcFunc.getSelfMsPerCall()));
-    
+  
+  if (trcFunc instanceof FunctionCheckTraceFunction) {
+   createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), roundDouble(trcFunc.getTotalMsPerCall()));
+   createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  roundDouble(trcFunc.getSelfMsPerCall()));  
+  }
+  else {
+   createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), String.valueOf(trcFunc.getTotalMsPerCall()));
+   createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  String.valueOf(trcFunc.getSelfMsPerCall()));
+  }
+  
   // create additional attributes for functioncheck trace functions
   if (trcFunc instanceof FunctionCheckTraceFunction) {
    FunctionCheckTraceFunction fcTrcFunc = (FunctionCheckTraceFunction)trcFunc;
