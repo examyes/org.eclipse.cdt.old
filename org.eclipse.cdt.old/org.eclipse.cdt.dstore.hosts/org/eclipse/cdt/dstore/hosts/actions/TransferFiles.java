@@ -262,7 +262,11 @@ public class TransferFiles extends Thread
 				transfer(child, copiedSource);
 				targetDataStore.refresh(target);
 			    }
-			_pm.worked(1);
+
+			if (_pm != null)
+			    {
+				_pm.worked(1);
+			    }
 		    }
 	    }	
     }
