@@ -682,7 +682,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
           Gdb.traceLogger.dbg(1,"GdbBreakpointManager.disableBreakpoint ID="+bkpID );
 
       GdbDebugSession _debugSession = (GdbDebugSession)_debugEngine.getDebugSession();
-      String ID = String.valueOf(bkpID+1);
+      String ID = String.valueOf(bkpID);
       String cmd = "disable breakpoint "+ID;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
@@ -693,8 +693,9 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
       Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
 
-      if (!bkp.isDeferred())
-          removeBreakpoint(bkp);
+	  // don't need to remove breakpoint after a disable
+//      if (!bkp.isDeferred())
+//          removeBreakpoint(bkp);
 
       bkp.disableBreakpoint();
       _changedBreakpoints.addElement(bkp);
@@ -710,7 +711,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
           Gdb.traceLogger.dbg(1,"GdbBreakpointManager.enableBreakpoint ID="+bkpID );
   
       GdbDebugSession _debugSession = (GdbDebugSession)_debugEngine.getDebugSession();
-      String ID = String.valueOf(bkpID+1);
+      String ID = String.valueOf(bkpID);
       String cmd = "enable breakpoint "+ID;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
@@ -721,8 +722,9 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
       Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
 
-      if (!bkp.isDeferred())
-          addBreakpoint(bkp);
+		// don't need to add breakpoint after a enable
+//      if (!bkp.isDeferred())
+//          addBreakpoint(bkp);
 
       bkp.enableBreakpoint();
 
