@@ -237,7 +237,7 @@ public class GdbThread
            }
            else if( str.equals(FRAME_ARGS) )
            {
-              while( !str.equals(FRAME_SOURCE_BEGIN) && !str.equals(FRAME_END_keyword) && i<lines.length )
+              while( !str.equals(FRAME_SOURCE_BEGIN) && !str.equals(FRAME_END_keyword) && !str.equals(FRAME_SOURCE_WHERE) && i<lines.length )
               {
                  str = lines[++i];
                  
@@ -253,7 +253,7 @@ public class GdbThread
  	                	break;
                  }
               }
-              if(str.equals(FRAME_SOURCE_BEGIN) || str.equals(FRAME_END_keyword))
+              if(str.equals(FRAME_SOURCE_BEGIN) || str.equals(FRAME_END_keyword) || str.equals(FRAME_SOURCE_WHERE))
                   --i;
            }
            else if( str.equals(FRAME_SOURCE_FILE) )
