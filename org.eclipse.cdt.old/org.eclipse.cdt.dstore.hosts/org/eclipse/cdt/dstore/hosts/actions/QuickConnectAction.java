@@ -68,7 +68,11 @@ public class QuickConnectAction implements Runnable
 
 
 	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
-	if (status == null || status.isConnected())
+	if (status != null)
+	    {
+		// command cancelled
+	    }
+	else if (status.isConnected())
 	    {
 		DataStore rmtDataStore = tempConnection.getDataStore();
 		DataElement input = rmtDataStore.getHostRoot().get(0).dereference();
@@ -88,7 +92,7 @@ public class QuickConnectAction implements Runnable
 		tempConnection.disconnect();
 	    }
 	else
-	    {
+	    {		
 		String msg = status.getMessage();
 		if (!status.isConnected())
 		    {
