@@ -662,7 +662,31 @@ public class MakefileAmManager {
 	}
 	private String updateExtraDistLine(String line, File parent, BufferedWriter out)
 	{
-		return initExtraDistLine(line,parent, out);
+		boolean update = false;
+		try
+		{
+			line = line.substring(0,line.lastIndexOf("=")+1);
+			out.write(line);
+			// add files to the EXTRA_DIST variable
+			for(int i = 0; i <parent.listFiles().length; i++)
+			{
+				String name = parent.listFiles()[i].getName();
+				if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
+				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.startsWith(".")
+				&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")&&!name.endsWith(".old")
+				&&!name.equals("Makefile") && !name.equals("makefile")&&!name.equals("configur"))
+				{
+					update = true;
+					out.write(" "+"\\");
+					out.newLine();
+					out.write(name);
+				}
+			}
+			
+		}catch (IOException e){}
+		if(update)
+			return "\n";
+		return "";
 	}
 	private String initSubdirsLine(String line, File parent, BufferedWriter out)
 	{
@@ -689,7 +713,29 @@ public class MakefileAmManager {
 	}
 	private String updateSubdirsLine(String line, File parent, BufferedWriter out)
 	{
-		return initSubdirsLine(line,parent,out);
+		line = SUBDIRS+" =";
+		boolean update = false;
+		// add subdire to the SUBDIRS variable
+		try
+		{
+			out.write(line.trim());
+		}catch(IOException e){}
+		
+		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
+		Object[][] subdirs = dir_structure.getProjectStructure();
+		for(int i = 0; i <subdirs.length; i++)
+			if(((String)subdirs[i][1]).equals("1") && !(((File)subdirs[i][0]).getName()).startsWith("."))
+			{
+				try
+				{
+					update = true;
+					out.write(" "+"\\");out.newLine();
+					out.write(((File)subdirs[i][0]).getName());
+				}catch(IOException e){}
+			}
+		if(update)
+			return "\n";
+		return "";
 	}
 	private String initLdflagsLine(String line, File parent)
 	{
