@@ -1926,7 +1926,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 
 
-	// replicated project actions
+	// copy project actions
+	DataElement copy = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR, "Copy to...",
+						  "com.ibm.cpp.ui.internal.actions.CopyAction");
+	
+
+	// replicate project actions
 	DataElement replicate = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR,
 							   "Replicate");
 
@@ -1956,25 +1961,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
 
-
-	/*
-	// cvs actions
-	DataElement cvsD = dataStore.find(fsD, DE.A_NAME, "CVS", 1);
-	DataElement cvsUpdate     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR,
-							   "update",
-							   "com.ibm.cpp.ui.internal.actions.CVSAction");
-	cvsUpdate.setAttribute(DE.A_VALUE, "CVS_UPDATE");
-
-	DataElement cvsCheckout     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR,
-							     "checkout",
-							     "com.ibm.cpp.ui.internal.actions.CVSAction");
-	cvsCheckout.setAttribute(DE.A_VALUE, "CVS_CHECKOUT");	
-
-	DataElement cvsCommit     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR,
-							     "commit",
-							     "com.ibm.cpp.ui.internal.actions.CVSAction");
-	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
-	*/
 
 	
 	// target Actions
@@ -2014,30 +2000,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	dataStore.createReference(updateCmds, autoconfCmds, "abstracts", "abstracted by");
 
-////////////////////////////////////////
-//////////////////////////////////
-/*	DataElement updateCmd = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Update...");
-	
-	DataElement updateAutoconfFilesCmd = dataStore.createObject(updateCmd, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "All - configure.in and Makefile.am's",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
-	
-	DataElement updateCmds = dataStore.createObject(updateCmd, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
-	
-	DataElement updateMakefileAmCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	updateMakefileAmCmd.setAttribute(DE.A_VALUE, "UPDATE_MAKEFILE_AM");
-	
-	DataElement updateConfigureInCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "configure.in",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
-
-	dataStore.createReference(updateCmds, updateCmd, "abstracts", "abstracted by");*/
-
-////////////////////////////////////////
 	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
 
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
