@@ -355,15 +355,7 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 
     private DataElement getAttributeDescriptor(DataElement rootDescriptor, int attributeIndex)
     {
-    /*
-	ArrayList attributes = rootDescriptor.getAssociated(_attributesD);
-	if (attributes.size() > attributeIndex)
-	    {
-		DataElement attributeDescriptor = (DataElement)attributes.get(attributeIndex);
-		return attributeDescriptor;
-	    }	*/
-	
-	
+    
 	int attributeNum = 0;
 	
 	for (int i = 0; i < rootDescriptor.getNestedSize(); i++)
