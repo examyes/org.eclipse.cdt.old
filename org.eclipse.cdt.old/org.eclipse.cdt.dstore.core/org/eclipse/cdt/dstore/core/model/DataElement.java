@@ -1343,7 +1343,8 @@ public final class DataElement implements Serializable, IDataElement
     {    
 	if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
 	    {	  
-		if (getDescriptor() != null && _descriptor.isOfType(getContainerDescriptor(), true))
+		// DKM - non-containers can still do queries
+		if (getDescriptor() != null /*&& _descriptor.isOfType(getContainerDescriptor(), true)*/)
 		    {
 			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
 			System.out.println(queryDescriptor);
@@ -1367,7 +1368,8 @@ public final class DataElement implements Serializable, IDataElement
 	DataElement status = null;
 	if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
 	    {
-	    	if (getDescriptor() != null && _descriptor.isOfType(getContainerDescriptor(), true))
+		// DKM - non-containers can still do queries
+	    	if (getDescriptor() != null /*&& _descriptor.isOfType(getContainerDescriptor(), true)*/)
 		    {
 			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
 			if (queryDescriptor != null)
