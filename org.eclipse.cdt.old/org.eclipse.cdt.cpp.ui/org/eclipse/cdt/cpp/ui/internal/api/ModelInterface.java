@@ -105,6 +105,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				  if (localRemoteProject != null)
 				      {
 					  localDataStore.deleteObject(localWorkspace, localRemoteProject);
+					  ((Repository)_project).setClosedElement(null);
 				      }
 				
 				  localDataStore.createReference(localWorkspace, projectMinerProject);		
@@ -971,7 +972,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   if (project instanceof Repository)
    dataStore = ((Repository)project).getDataStore();	
 
-  DataElement projectObj = findProjectElement(project);
+
+  DataElement projectObj = findProjectElement(project, "Project");
   if (projectObj != null)
       {
 	  DataElement includeElement = dataStore.createObject(null, "environment", "Include Path");	

@@ -18,38 +18,31 @@ public class CppProjectNotifier
 {
   public class FireMainThread implements Runnable
   {
-    public FireMainThread()
-    {
-    }
+      private CppProjectEvent _event;
+      
+      public FireMainThread(CppProjectEvent event)
+      {
+	  _event = event;
+      }
     
-    public void run()
+      public void run()
       {    
-	  for (int a = 0; a < _events.size(); a++)
+	  for (int i = 0; i < _listeners.size(); i++)
 	      {
-		  CppProjectEvent event = (CppProjectEvent)_events.get(a);
-		  for (int i = 0; i < _listeners.size(); i++)
-		      {
-			  ICppProjectListener listener = (ICppProjectListener)_listeners.get(i);			  
-			  listener.projectChanged(event);
-		      }
-	      }
-
-	  _events.clear();
+		  ICppProjectListener listener = (ICppProjectListener)_listeners.get(i);			  
+		  listener.projectChanged(_event);
+	      }	  
       } 
   }
 
     private ArrayList  _listeners;
-    private ArrayList  _events;
     private boolean    _enabled;
-    private FireMainThread _fire;
     private ModelInterface _api;
 
     public CppProjectNotifier(ModelInterface api)
       {
         _listeners = new ArrayList();
-        _events    = new ArrayList();
         _enabled   = false;
-	_fire = new FireMainThread();
 	_api = api;
       }
 
@@ -87,30 +80,26 @@ public class CppProjectNotifier
       }
 
   public void fireProjectChanged(CppProjectEvent event)
-      {
-	  if (isEnabled())
-	      {
-	  if ((getShell() != null) && (!getShell().isDisposed()))
-	      {
-		  try
-		      {			      
-			  Display d = getShell().getDisplay(); 
-			  if (d != null)
-			      {
-				  if (!_events.contains(event))
-				      {		    
-					  _events.add(event);		  
-					  d.asyncExec(_fire); 
-					  return;
-				      }		      
-			      }	      
-		      }
-		  catch (SWTException e)
-		      {
-			  System.out.println(e);	      
-		      }
-	      }
-	      }	
-      }
-
+    {
+	if (isEnabled())
+	    {
+		if ((getShell() != null) && (!getShell().isDisposed()))
+		    {
+			try
+			    {			      
+				Display d = getShell().getDisplay(); 
+				if (d != null)
+				    {
+					FireMainThread fire = new FireMainThread(event);
+					d.asyncExec(fire); 
+				    }	      
+			    }
+			catch (SWTException e)
+			    {
+				System.out.println(e);	      
+			    }
+		    }
+	    }	
+    }
+    
 }
