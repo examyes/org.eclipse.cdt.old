@@ -1,3 +1,10 @@
+2005-02-04  Keith Seitz  <keiths@redhat.com>
+
+	* opxml/NumCountersProcessor.java: Remove.
+	* opxml/OpInfoProcessor.java (_numCountersProc): Remove.
+	(startElement): Remove NUM_COUNTERS special case.
+	(endElement): For NUM_COUNTERS, just read a number from the buffer.
+
 2004-08-27  Keith Seitz  <keiths@redhat.com>
 
 	* IOpcontrolProvider.java (setupDaemon): Remove ArrayList parameter: use

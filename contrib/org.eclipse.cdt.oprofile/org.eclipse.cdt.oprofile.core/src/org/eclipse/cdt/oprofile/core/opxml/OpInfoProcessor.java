@@ -17,7 +17,6 @@ import org.xml.sax.Attributes;
  */
 public class OpInfoProcessor extends XMLProcessor {
 	// Other XMLProcessors used by this processor
-	private NumCountersProcessor _numCountersProc;
 	private DefaultsProcessor _defaultsProc;
 	private EventListProcessor _eventListProc;
 	
@@ -28,7 +27,6 @@ public class OpInfoProcessor extends XMLProcessor {
 	public static final String CPU_FREQUENCY_TAG = "cpu-frequency"; //$NON-NLS-1$
 
 	public OpInfoProcessor() {
-		_numCountersProc = new NumCountersProcessor();
 		_defaultsProc = new DefaultsProcessor();
 		_eventListProc = new EventListProcessor();
 	}
@@ -37,9 +35,7 @@ public class OpInfoProcessor extends XMLProcessor {
 	 * @see org.eclipse.cdt.oprofile.core.opxml.XMLProcessor#startElement(java.lang.String, org.xml.sax.Attributes, java.lang.Object)
 	 */
 	public void startElement(String name, Attributes attrs, Object callData) {
-		if (name.equals(NUM_COUNTERS_TAG)) {
-			OprofileSAXHandler.getInstance(callData).push(_numCountersProc);
-		} else if (name.equals(DEFAULTS_TAG)) {
+		if (name.equals(DEFAULTS_TAG)) {
 			OprofileSAXHandler.getInstance(callData).push(_defaultsProc);
 		} else if (name.equals(EVENT_LIST_TAG)) {
 			OprofileSAXHandler.getInstance(callData).push(_eventListProc);
@@ -57,6 +53,14 @@ public class OpInfoProcessor extends XMLProcessor {
 			double speed = Double.parseDouble(_characters);
 			OpInfo info = (OpInfo) callData;
 			info.setCPUSpeed(speed);
+		} else if (name.endsWith(NUM_COUNTERS_TAG)) {
+			int numCounters = 0;
+			try {
+				numCounters = Integer.parseInt(_characters);
+			} catch (NumberFormatException nfe) {
+			}
+			OpInfo info = (OpInfo) callData;
+			info.setNrCounters(numCounters);
 		}
 	}
 	
