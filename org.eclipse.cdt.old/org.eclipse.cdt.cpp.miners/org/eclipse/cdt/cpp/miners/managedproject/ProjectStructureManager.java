@@ -10,21 +10,26 @@ public class ProjectStructureManager {
 	File project;
 	private Vector files = new Vector(5,5);
 	private Vector subdirs = new Vector(5,5);
+	private Vector subdirs_depth = new Vector(5,5);
+	int depth;
+	
+	
 	public ProjectStructureManager(File project_object)
 	{
 		project = project_object;
-		analyze(project);
 	}
-	private void analyze(File project)
+	private void analyze(File project, int depth)
 	{
 		// do the work
+		depth++;
 		File[] contents = project.listFiles();
 		for(int i = 0;i<contents.length; i++ )
 		{
 			if(contents[i].isDirectory())
 			{
 				subdirs.add(contents[i]);
-				analyze(contents[i]);
+				subdirs_depth.add(new Integer(depth));
+				analyze(contents[i],depth);
 			}
 			else
 			{
@@ -38,7 +43,7 @@ public class ProjectStructureManager {
 		subdirs.removeAllElements();
 		files.removeAllElements();
 		// analyze
-		analyze(project);
+		analyze(project,0);
 		File[] subDirsList = new File[subdirs.size()];
 		for(int i =0; i < subdirs.size(); i++)
 		{
@@ -52,7 +57,7 @@ public class ProjectStructureManager {
 		// analyze fresh
 		subdirs.removeAllElements();
 		files.removeAllElements();
-		analyze(project);
+		analyze(project,0);
 		File[] filesList = new File[files.size()];
 		for(int i =0; i < files.size(); i++)
 		{
@@ -65,13 +70,13 @@ public class ProjectStructureManager {
 	{
 		return project.getPath();
 	}
-	public String[] getSubdirWprkspacePath()
+	public String[] getSubdirWorkspacePath()
 	{
 		// analyze fresh
 		subdirs.removeAllElements();
 		files.removeAllElements();
 		// analyze
-		analyze(project);
+		analyze(project,0);
 		String[] locations = new String[subdirs.size()];
 		for(int i = 0; i < subdirs.size(); i ++)
 		{
@@ -79,6 +84,21 @@ public class ProjectStructureManager {
 			System.out.println("\n location = "+locations[i]);
 		}
 		return locations;
+	}
+	protected String[][] getSubdirWithDepth()
+	{
+		// analyze fresh
+		subdirs.removeAllElements();
+		files.removeAllElements();
+		// analyze
+		analyze(project,0);
+		String[][] dirWithDepth = new String [subdirs.size()][2];
+		for(int i = 0; i < subdirs.size(); i ++)
+		{
+			dirWithDepth[i][0]=((File)subdirs.elementAt(i)).getName();
+			dirWithDepth[i][1]=subdirs_depth.elementAt(i).toString();
+		}
+		return dirWithDepth;
 	}
 }
 
