@@ -79,6 +79,8 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD,"Updating configure.in","C_UPDATE_CONFIGURE_IN",false);		
 		//
 		
+		createCommandDescriptor(projectD, "Generating and running configure script","C_CONFIGURE",false);
+		
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Creating configure without updating", "C_CREATE_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Creating and running configure script", "C_RUN_CONFIGURE",false);
@@ -160,6 +162,13 @@ public class ManagedProjectMiner extends Miner
 				project.refresh(false);
 				//parseAmFile(project); 
 			}		
+			// new : automake and autoconf action
+			else if (name.equals("C_CONFIGURE"))
+			{
+				autoconfManager.runConfigure(project, status,true,classifier);
+				project.refresh(false);
+			}
+			// end new : automake and autoconf action
 			else if (name.equals("C_CREATE_CONFIGURE"))
 			{
 				autoconfManager.createConfigure(project, status,true,classifier);
@@ -195,10 +204,22 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.maintainerClean(project,status);
 				project.refresh(false);
 			}
-
-		}
+			// new : to havdle delete notification
+ 			else if (name.equals("C_NOTIFICATION"))
+			{
+ 				DataElement anotherArg = getCommandArgument(project, 2);
+  				if (anotherArg != status)
+  				{  		
+  					handleNotification(subject, getCommandArgument(project, 1), anotherArg, status);
+  				}
+  				else
+  				{
+  					handleNotification(subject, getCommandArgument(project, 1), null, status);
+  				}
+		    }
+		    // end new : to havdle delete notification
 		
-		
+		}	
 		if (subject.getType().equals("directory") || subject.getType().equals("Project"))
 		{	
 		 	if (name.equals("C_UPDATE_MAKEFILE_AM"))
@@ -408,6 +429,41 @@ public class ManagedProjectMiner extends Miner
 					return false;
 		return true;
 	}
+	// new :to havdle delete notification
+	private void handleNotification(DataElement cmd, DataElement subject, DataElement subjectArg, DataElement status)
+	{
+ 		String cmdStr = cmd.getValue();
+ 		DataElement project = getProjectFor(subject);
+ 		if (cmdStr.equals("C_RENAME"))
+ 		{
+  		
+ 		} 	
+ 		else if (cmdStr.equals("C_DELETE"))
+ 		{ 
+
+	 	}
+ 		else if (cmdStr.equals("C_ADD"))
+ 		{
+ 	 
+ 		}
+ 	}
+	private DataElement getProjectFor(DataElement file)
+ 	{
+ 		String type = file.getType();
+ 		DataElement theProject = file;
+ 		while (!type.equals("Project") && theProject != null)
+ 		{
+ 			theProject = theProject.getParent();
+ 			if (theProject != null)
+ 			{
+ 				type = theProject.getType();
+ 			}
+ 		}
+ 	
+ 	
+ 		return theProject;
+ 	}
+ 	// end new : to havdle delete notification
 }
 
 	

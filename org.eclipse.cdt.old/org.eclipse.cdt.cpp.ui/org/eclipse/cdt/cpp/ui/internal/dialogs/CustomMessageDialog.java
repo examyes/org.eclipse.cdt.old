@@ -6,7 +6,7 @@ package org.eclipse.cdt.cpp.ui.internal.dialogs;
  */
 
 import java.util.ArrayList;
-import org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction;
+import org.eclipse.cdt.cpp.ui.internal.actions.AdvancedConfigureAction;
 import org.eclipse.cdt.dstore.ui.actions.CustomAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Widget;
  */
 public class CustomMessageDialog extends MessageDialog{
 	
+	private final int DEFAULT_BUTTON_TYPE = 1<<5; // SWT.CHECK
 	private Button[] buttons;
 	private String[] buttonLabels;
 	private String[] extraButtonLabels;
@@ -37,6 +38,8 @@ public class CustomMessageDialog extends MessageDialog{
 	public Button [] extraButtons;
 	private SelectionListener actionListener;
 	private String preferenceKey;
+	private int customButtonType;
+	private String propertyKey;
 	
 	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
 							int dialogImageType, String[] dialogButtonLabels,
@@ -48,6 +51,20 @@ public class CustomMessageDialog extends MessageDialog{
 			this.extraButtonLabels = extraButtonLabels;
 		this.actionListener = actionListener;
 		this.preferenceKey = preferenceKey;
+		this.customButtonType = DEFAULT_BUTTON_TYPE;
+	}
+	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
+							int dialogImageType, String[] dialogButtonLabels,int buttonType,
+							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener, String propertyKey) 
+	{
+		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex);
+		this.buttonLabels = dialogButtonLabels;
+		if(extraButtonLabels!= null)
+			this.extraButtonLabels = extraButtonLabels;
+		this.actionListener = actionListener;
+		this.preferenceKey="";
+		this.propertyKey = propertyKey;
+		this.customButtonType = buttonType;
 	}
 	
 	protected Control createButtonBar(Composite parent) {
@@ -78,10 +95,9 @@ public class CustomMessageDialog extends MessageDialog{
 
 		leftPane.setLayout(leftPaneLayout);
 
-		GridData leftPanedata = new GridData(
-			GridData.HORIZONTAL_ALIGN_END |
-			GridData.VERTICAL_ALIGN_CENTER);
-		leftPane.setLayoutData(leftPanedata);		
+		GridData leftPaneData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING
+		|GridData.HORIZONTAL_ALIGN_CENTER);
+		leftPane.setLayoutData(leftPaneData);		
 
 		// Add a check box if needed
 		if(extraButtonLabels!= null )
@@ -122,7 +138,7 @@ public class CustomMessageDialog extends MessageDialog{
 		extraButtons = new Button[extraButtonLabels.length];
 		for (int i = 0; i < extraButtonLabels.length; i++) {
 			String label = extraButtonLabels[i];
-			Button button = createExtraButton(parent,i,label,SWT.CHECK);
+			Button button = createExtraButton(parent,i,label,customButtonType);
 			extraButtons[i] = button;
 		}
 	}
@@ -166,7 +182,13 @@ public class CustomMessageDialog extends MessageDialog{
 		data.widthHint = Math.max(widthHint, button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
 		button.setLayoutData(data);
 		
-		button.setData(new Integer(id));
+		
+		if(type == 1<<5)
+			button.setData(new Integer(id));
+		else
+			button.setData(new Integer(id+100));
+		
+		
 		button.setSelection(false);
 		button.addSelectionListener(actionListener);
 		button.setFont(parent.getFont());
@@ -181,7 +203,9 @@ public class CustomMessageDialog extends MessageDialog{
     }
     private boolean showDialog(String preferenceKey)
     {
-    	ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(preferenceKey);
+    	ArrayList list = new ArrayList();
+    	if(preferenceKey!="")
+    		list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(preferenceKey);
 		if (!list.isEmpty())
 		{
 			String preference = (String)list.get(0);
