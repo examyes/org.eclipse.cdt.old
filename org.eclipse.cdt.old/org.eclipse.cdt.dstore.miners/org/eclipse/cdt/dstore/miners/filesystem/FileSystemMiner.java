@@ -829,25 +829,7 @@ public class FileSystemMiner extends Miner
 		// check for deleted
 		if (refresh)
 		    {
-			for (int i = 0; i < theElement.getNestedSize(); i++)
-			    {
-				DataElement child = theElement.get(i);
-				if (child != null && !child.isDeleted())
-				    {
-					if (child.getType().equals("file") || child.getType().equals("directory"))
-					    {
-						String src = child.getSource();
-						if (src != null)
-						    {
-							File childFile = new File(src);
-							if (!childFile.exists())
-								    {
-									_dataStore.deleteObject(theElement, child);
-								    }
-						    }
-					    }
-				    }
-			    }
+			checkForDeleted(theElement);
 		    }
 		
 		// use 'ls -F' command
@@ -936,25 +918,7 @@ public class FileSystemMiner extends Miner
 			// check for deleted
 			if (refresh)
 			    {
-				for (int i = 0; i < theElement.getNestedSize(); i++)
-				    {
-					DataElement child = theElement.get(i);
-					if (child != null && !child.isDeleted())
-					    {
-						if (child.getType().equals("file") || child.getType().equals("directory"))
-						    {
-							String src = child.getSource();
-							if (src != null)
-							    {
-								File childFile = new File(src);
-								if (!childFile.exists())
-								    {
-									_dataStore.deleteObject(theElement, child);
-								    }
-							    }
-						    }
-					    }
-				    }
+				checkForDeleted(theElement);
 			    }
 			
 			
@@ -1053,6 +1017,29 @@ public class FileSystemMiner extends Miner
 	    }
     }
 
+
+    private void checkForDeleted(DataElement theElement)
+    {
+	for (int i = 0; i < theElement.getNestedSize(); i++)
+	    {
+		DataElement child = theElement.get(i);
+		if (child != null && !child.isReference() && !child.isDeleted())
+		    {
+			if (child.isOfType(_fileDescriptor))
+			    {
+				String src = child.getSource();
+				if (src != null)
+				    {
+					File childFile = new File(src);
+					if (!childFile.exists())
+					    {
+						_dataStore.deleteObject(theElement, child);
+					    }
+				    }
+			    }
+		    }
+	    }
+    }
 
     public DataElement findFile (DataElement root, String matchStr, DataElement status)
     {
