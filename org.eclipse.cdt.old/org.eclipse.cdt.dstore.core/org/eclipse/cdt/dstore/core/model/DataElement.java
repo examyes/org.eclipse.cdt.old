@@ -841,7 +841,10 @@ public final class DataElement implements Serializable, IDataElement
 								    }
 								else
 								    {
-									return nestedObject.contains(object, property, depth);
+									 if (nestedObject.contains(object, property, depth))
+									 {
+									 	return true;
+									 }
 								    }
 							    }
 						    }
