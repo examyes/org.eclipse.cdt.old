@@ -6,10 +6,8 @@ package org.eclipse.cdt.pa.ui.api;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.swt.widgets.*;
 
 public interface IPATraceListener
 {
-  public Shell getShell();
   public void traceChanged(PATraceEvent e);
 }
