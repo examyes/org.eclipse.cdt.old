@@ -9,8 +9,8 @@ import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.lang.Runtime;
+import java.util.*;
 
 public class AutoconfManager {
 	
@@ -20,18 +20,26 @@ public class AutoconfManager {
 	String aclocal = new String("aclocal");
 	String autoheader = new String("autoheader");
 	String autoscan = new String ("autoscan");
-	
+	ProjectStructureManager structureManager;
+	String[] subdirs;
 	
 	// will be grouped under Configure_in Manager
 	String version = new String("@VERSION@");
 	String pack = new String("@PACKAGE@");
-	String subdir = new String ("@SUBDIR@");
+	String subdir = new String ("@SUBDIR/Makefile@");
+	String makefile = new String("/Makefile");
 	int[] delimPosition = {-1,-1,-1,-1};
 	char delim = '@';
 	
-	protected void manageProject(DataElement proj)
+	public AutoconfManager(DataElement aProject)
 	{
-		project = proj;
+		this.project = aProject;
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		subdirs = structureManager.getSubdirWprkspacePath();
+	}
+	
+	protected void manageProject()
+	{
 		// check if it is a unix like system
 		if(getOS().equals("Linux")) // to be modified
 		{
@@ -91,17 +99,14 @@ public class AutoconfManager {
 			}catch(IOException e){System.out.println(e);}	
 		}
 		// provide one makefile.am in each subdiectory
-		File[] structure = projectFile.listFiles();
-		for(int i =0; i < structure.length; i++)
+		for(int i =0; i < subdirs.length ; i++)
 		{
-			if(structure[i].isDirectory())
-			{
-				try{
-					rt.exec(
-						"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-						+structure[i].getPath());
-				}catch(IOException e){System.out.println(e);}
-			}
+			try{
+				rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
+					+project.getSource()+"/"+subdirs[i]);
+			}catch(IOException e){System.out.println(e);}
+			
 		}
 	}
 	protected void initializeAutoconfSupprotFiles(DataElement project)
@@ -130,9 +135,12 @@ public class AutoconfManager {
 				
 				if(line.indexOf(subdir)!=-1)
 				{
-					line = trimTargetLine(line);
-					line = insertSubdirs(line.toCharArray(),delimPosition[0]);
 					
+					if(subdirs.length>0)
+					{
+						line = trimTargetLine(line);
+						line = insertSubdirs(line.toCharArray(),delimPosition[0]);
+					}
 				}
 				// needed at the end of each line when writing  the modified file
 				out.write(line+"\n"); 
@@ -208,23 +216,34 @@ public class AutoconfManager {
 	}
 	private String insertSubdirs(char[] line, int position)
 	{
-		int k=0;
 		int counetrForModLine = 0;
 		char[] modLine = new char[256];
 		System.out.println("\n line length = "+line.length);
+		
+		for(int p = 0 ; p < subdirs.length; p++)
+			System.out.println("Sub dirs = "+subdirs[p]);
+		
 		int i = 0;
 		while(line[i]!= '\0')
 		{
 			if(i == position)
-				for(int j=0; j<project.getName().toCharArray().length; j++)
-					modLine[counetrForModLine++]=project.getName().toCharArray()[j];
+			{
+				
+				for(int j = 0; j< subdirs.length; j++)
+				{
+					for(int k=0; k< subdirs[j].toCharArray().length; k++)
+						modLine[counetrForModLine++]=subdirs[j].toCharArray()[k];
+					for(int l=0; l< "/Makefile ".length(); l++)
+						modLine[counetrForModLine++]="/Makefile ".toCharArray()[l];
+				}
+				
+			}
 			modLine[counetrForModLine++]=line[i];
 			i++;
 		}
-		int extra_chars = delimPosition[1] - delimPosition[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
-		delimPosition[1] = position+project.getName().toCharArray().length+extra_chars;
+		int insertPosition = 0;
+		
 		return new String(modLine);
-	}	
-	
+	}		
 }
 
