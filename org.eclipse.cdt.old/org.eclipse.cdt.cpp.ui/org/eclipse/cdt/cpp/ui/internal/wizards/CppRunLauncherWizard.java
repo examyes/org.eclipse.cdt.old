@@ -40,7 +40,6 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     private IProject                        _project;
     private String                          _programInvocation;
 
-
     public void addPages()
     {
 	   super.addPages();
@@ -65,39 +64,36 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     public boolean performFinish()
     {
    	_plugin = CppPlugin.getDefault();
-
+	
    	_mainPage.finish();
     	String parameters = getParameters();
-      getLauncher().doLaunch(_programInvocation, parameters);
-
-      return true;		
+	getLauncher().doLaunch(_programInvocation, parameters);
+	
+	return true;		
     }
 
 
-	protected CppRunLauncher getLauncher() {
-		return (CppRunLauncher) _launcher.getDelegate();
-	}
+    protected CppRunLauncher getLauncher() 
+    {
+	return (CppRunLauncher) _launcher.getDelegate();
+    }
 
-    /**
-     *	@param selection org.eclipse.jface.viewer.IStructuredSelection
-     */
-    public void init(ILauncher launcher, String mode, IStructuredSelection currentSelection) {
+    public void init(ILauncher launcher, String mode, IStructuredSelection selection) 
+    {
+	if (selection.getFirstElement() instanceof DataElement)
+	    {
+		init(launcher, mode, (DataElement)selection.getFirstElement());		
+	    }
+    }
+
+    public void init(ILauncher launcher, String mode, DataElement resource) 
+    {
    	_launcher = launcher;
-   	_selection = currentSelection;
-      _element = _selection.getFirstElement();
-      String currentSelectionName = ((IResource)_element).getName();
-      String extension = ((IResource)_element).getFileExtension();
-      if (extension != null)
-      {
-   		int indexOfExtension = currentSelectionName.lastIndexOf(extension);
-   		_programInvocation = currentSelectionName.substring(0, indexOfExtension - 1);
-      }
-      else
-      {
-   		_programInvocation = currentSelectionName;		      		
-      }
-
-      System.out.println("CppRunLauncherWizard - curentSelectionName = " + _programInvocation);
-      _project = ((IResource)_element).getProject();
+   	_element = resource;
+	_programInvocation = ((DataElement)_element).getName();
     }
+
+
 }
+
+

@@ -35,9 +35,16 @@ import com.ibm.cpp.ui.internal.wizards.*;
 import java.io.IOException;
 
 
-public class CppRunLauncher implements ILauncherDelegate {
+public class CppRunLauncher implements ILauncherDelegate 
+{
+    private static DataElement _directory;
+    private static DataElement _executable;
+    private static ModelInterface _api;
 
-    private static String _directory = "";
+    public CppRunLauncher()
+    {
+	_api = ModelInterface.getInstance();
+    }
 
     /**
      * @see ILauncherDelegate#launch(Object[], String, ILauncher)
@@ -51,27 +58,27 @@ public class CppRunLauncher implements ILauncherDelegate {
             return false;
         }
         Object element = selection.getFirstElement();
-	
-        	if (element instanceof DataElement)
-	      {
-   	   	ModelInterface api = ModelInterface.getInstance();
-   	   	element = api.findResource((DataElement)element);
-	      }
-	
-        if(!(element instanceof IProject || element instanceof IResource)) {
-           System.out.println("CppRunLauncher.launch() error = selection is not an IProject or an IResource");
-            return false;
-        }
-        IPath location = ((IResource)element).getLocation();
-        IPath directory = location.removeLastSegments(1);
-        _directory = directory.toString();
-        System.out.println("CppRunLauncher.launch() _directory = " + _directory);
 
-        IProject project = ((IResource)element).getProject();
+	if (element instanceof DataElement)
+	    {
+		_executable = (DataElement)element;
+		_directory = _executable.getParent();
+	    }	
+        else if (element instanceof IProject || element instanceof IResource) 
+	    {
+		_executable = _api.findResourceElement((IResource)element);
+		_directory = _executable.getParent();
+	    }
+	else
+	    {
+		_executable = null;
+		_directory = null;
+		return false;
+	    }
 
         // display the wizard
         CppRunLauncherWizard w= new CppRunLauncherWizard();
-        w.init(launcher, ILaunchManager.RUN_MODE, selection);
+        w.init(launcher, ILaunchManager.RUN_MODE, _executable);
         WizardDialog wd= new WizardDialog(CppPlugin.getActiveWorkbenchWindow().getShell(), w);
 
         int rc = wd.open();
@@ -88,10 +95,8 @@ public class CppRunLauncher implements ILauncherDelegate {
 
         ModelInterface api = ModelInterface.getInstance();
 
-        String path = _directory;
         String command = program + " " + parameters;
-
-        api.command(path, command, false);
+        api.invoke(_directory, command, false);
     }
 
 }
