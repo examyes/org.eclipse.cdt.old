@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================== -->
+<!-- This plugin provides a line-oriented editing framework.  -->
+<!-- (c) Copyright IBM Corp. 1998, 2001. All Rights Reserved. -->
+<!-- ======================================================== -->
+
+<plugin
+   name="%pluginName"
+   id="com.ibm.lpex"
+   version="1.3.1"
+   provider-name="International Business Machines Corp."
+   class="com.ibm.lpex.alef.LpexPlugin">
+
+   <description>%pluginDescription</description>
+
+   <requires>
+     <import plugin="org.eclipse.ui"/>
+     <import plugin="org.eclipse.core.resources"/>
+   </requires>
+
+   <runtime>
+     <library name="lpex.jar">
+       <export name="*"/>
+     </library>
+     <library name="./"/>
+   </runtime>
+
+   <!-- LPEX Editor preference pages -->
+
+   <extension point="org.eclipse.ui.preferencePages">
+     <page name="%preferencePage.main"
+       id="com.ibm.lpex.alef.preferences.LpexBasePreferencePage"
+       class="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.appearance"
+       id="com.ibm.lpex.alef.preferences.AppearancePreferencePage"
+       class="com.ibm.lpex.alef.preferences.AppearancePreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.block"
+       id="com.ibm.lpex.alef.preferences.BlockPreferencePage"
+       class="com.ibm.lpex.alef.preferences.BlockPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.compare"
+       id="com.ibm.lpex.alef.preferences.ComparePreferencePage"
+       class="com.ibm.lpex.alef.preferences.ComparePreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.controls"
+       id="com.ibm.lpex.alef.preferences.ControlsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.ControlsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.findText"
+       id="com.ibm.lpex.alef.preferences.FindTextPreferencePage"
+       class="com.ibm.lpex.alef.preferences.FindTextPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.parserAssociations"
+       id="com.ibm.lpex.alef.preferences.ParserAssociationsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.ParserAssociationsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.parsers"
+       id="com.ibm.lpex.alef.preferences.ParsersPreferencePage"
+       class="com.ibm.lpex.alef.preferences.ParsersPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.print"
+       id="com.ibm.lpex.alef.preferences.PrintPreferencePage"
+       class="com.ibm.lpex.alef.preferences.PrintPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.save"
+       id="com.ibm.lpex.alef.preferences.SavePreferencePage"
+       class="com.ibm.lpex.alef.preferences.SavePreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.tabs"
+       id="com.ibm.lpex.alef.preferences.TabsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.TabsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.userActions"
+       id="com.ibm.lpex.alef.preferences.UserActionsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.UserActionsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.userCommands"
+       id="com.ibm.lpex.alef.preferences.UserCommandsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.UserCommandsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.userKeyActions"
+       id="com.ibm.lpex.alef.preferences.UserKeyActionsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.UserKeyActionsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.userMouseActions"
+       id="com.ibm.lpex.alef.preferences.UserMouseActionsPreferencePage"
+       class="com.ibm.lpex.alef.preferences.UserMouseActionsPreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+     <page name="%preferencePage.userProfile"
+       id="com.ibm.lpex.alef.preferences.UserProfilePreferencePage"
+       class="com.ibm.lpex.alef.preferences.UserProfilePreferencePage"
+       category="com.ibm.lpex.alef.preferences.LpexBasePreferencePage">
+     </page>
+   </extension>
+
+</plugin>
