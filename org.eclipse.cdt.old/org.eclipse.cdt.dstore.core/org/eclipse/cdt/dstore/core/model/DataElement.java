@@ -1102,7 +1102,9 @@ public final class DataElement implements Serializable, IDataElement
 		    if (localPath != null)
 			{
 			    result = new File(localPath);
-			    if (!result.exists())
+			    
+			    //if (!result.exists())
+			    if (true)
 				{		  
 				    // initiate query
 				    DataElement fileDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(),
