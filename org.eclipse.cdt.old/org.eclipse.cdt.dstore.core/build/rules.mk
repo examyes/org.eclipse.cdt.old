@@ -69,7 +69,7 @@ createJavadoc:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	rm -Rf docs;\
 	mkdir docs;\
-	find . -name '*.java' | xargs javadoc -d docs -classpath $(subst $(space),$(sep),$(cp))
+	find . -name '*.java' | xargs javadoc -d docs -classpath $(subst $(space),$(sep),$(cp)) 2>/dev/null
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/docs
 
 createSourceZip:

@@ -68,7 +68,7 @@ all:
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars javadocs source-zips createZip createFinalPackage
 jars            : $(patsubst %,%_createJars,$(buildPlugins))
-javadocs         : $(patsubst %,%_createJavadocs,$(buildPlugins))
+javadocs        : $(patsubst %,%_createJavadocs,$(buildPlugins))
 source-zips     : $(patsubst %,%_createSrcZips,$(buildPlugins))
 clean           : $(patsubst %,%_cleanPlugin,$(buildPlugins))
 clean-makefiles : $(patsubst %,%_cleanMakefiles,$(buildPlugins))
@@ -180,7 +180,7 @@ javadoc:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	rm -Rf docs;\
 	mkdir docs;\
-	find . -name '*.java' | xargs javadoc -d docs -classpath $(subst $(space),$(sep),$(cp))
+	find . -name '*.java' | xargs javadoc -d docs -classpath $(subst $(space),$(sep),$(cp)) 2>/dev/null
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/docs
 
 source-zip:
