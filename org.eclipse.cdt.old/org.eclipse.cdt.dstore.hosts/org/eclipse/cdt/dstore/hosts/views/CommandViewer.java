@@ -163,42 +163,38 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     private void setElementInput(DataElement input)
     {
 	String type = input.getType();
-	if (type.equals("file") || input.getDescriptor().isOfType("file"))
-	    {
+	DataElement descriptor = input.getDescriptor();
+	if (type.equals("file") || (descriptor != null && input.getDescriptor().isOfType("file")))
+	{
 		_input = input;
 		DataElement element = _input;
 		
-		if (element != null)
+		if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
 		    {
-			DataElement descriptor = element.getDescriptor();
-			if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
-			    {
-			    String directory = element.getSource();				
-				if ((directory != null) && (_directoryText != null))
+			String directory = element.getSource();				
+			if ((directory != null) && (_directoryText != null))
+			    {		
+				try
 				    {		
-					try
-					    {		
-						_directoryText.setText(directory);
-					    }
-					catch (SWTException e)
-					    {
-						System.out.print(e);		
-					    }
-				    }			
-			    }
-			else if (element.getType().equals("file"))
-			    {
-				setElementInput(element.getParent());
-			    }
-			if (_history != null)
-			    {
-				_history.removeAll(_history);
-			    }
-			
-			updateCombo();	
+					_directoryText.setText(directory);
+				    }
+				catch (SWTException e)
+				    {
+					System.out.print(e);		
+				    }
+			    }			
 		    }
-	    }
+		else if (element.getType().equals("file"))
+		    {
+			setElementInput(element.getParent());
+		    }
+		if (_history != null)
+		    {
+			_history.removeAll(_history);
+		    }
 		
+		updateCombo();	
+	}		
     }
 
     protected void updateCombo()
