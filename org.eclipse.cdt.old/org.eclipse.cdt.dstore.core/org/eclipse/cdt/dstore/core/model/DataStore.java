@@ -2426,13 +2426,16 @@ public final class DataStore
     {
 	if (_descriptorRoot != null)
 	    {
-		for (int i = 0; i < _descriptorRoot.getNestedSize(); i++)
+		synchronized(_descriptorRoot)
 		    {
-			DataElement descriptor = _descriptorRoot.get(i);
-			if (descriptor.getName().equals(name) &&
-			    descriptor.getType().equals(type))
+			for (int i = 0; i < _descriptorRoot.getNestedSize(); i++)
 			    {
-				return descriptor;
+				DataElement descriptor = _descriptorRoot.get(i);
+				if (descriptor.getName().equals(name) &&
+				    descriptor.getType().equals(type))
+				    {
+					return descriptor;
+				    }
 			    }
 		    }
 	    }
