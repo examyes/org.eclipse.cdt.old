@@ -64,30 +64,34 @@ public class PAProjectAdaptor implements ICppProjectListener {
 	  case CppProjectEvent.CLOSE:
   	  case CppProjectEvent.DELETE:
   	  {
-  		 // System.out.println("project closed: " + projectName);
+  		 // System.out.println("project closed: ");
   		 
-  		 DataStore dataStore = _api.getDataStore();
 		 if (project instanceof Repository)
 		 {
-			dataStore = ((Repository)project).getDataStore();
+  		    PATraceEvent projectEvent = new PATraceEvent(PATraceEvent.PROJECT_CHANGED, null);
+  		    _api.getTraceNotifier().fireTraceChanged(projectEvent);
 		 }
-
-  		 DataElement traceProject = _api.findTraceProjectElement(project);
-  		 if (traceProject != null) {
+		 else
+		 {
+  		   DataElement traceProject = _api.findTraceProjectElement(project);
+  		   if (traceProject != null)
+  		   {
   		   
-  		   ArrayList traceFiles = _api.getTraceFiles(traceProject);
-  		   for (int i=0; i < traceFiles.size(); i++) {
-  		    DataElement fileElement = (DataElement)traceFiles.get(i);
+  		     ArrayList traceFiles = _api.getTraceFiles(traceProject);
+  		     for (int i=0; i < traceFiles.size(); i++)
+  		     {
+  		       DataElement fileElement = (DataElement)traceFiles.get(i);
             
-            PATraceEvent fileEvent = new PATraceEvent(PATraceEvent.FILE_DELETED, fileElement);
-            _api.getTraceNotifier().fireTraceChanged(fileEvent);
-            
-           }
+               PATraceEvent fileEvent = new PATraceEvent(PATraceEvent.FILE_DELETED, fileElement);
+               _api.getTraceNotifier().fireTraceChanged(fileEvent);
+             }
   		   
-  		   PATraceEvent projectEvent = new PATraceEvent(PATraceEvent.PROJECT_DELETED, traceProject);
-  		   _api.getTraceNotifier().fireTraceChanged(projectEvent);
+  		     PATraceEvent projectEvent = new PATraceEvent(PATraceEvent.PROJECT_DELETED, traceProject);
+  		     _api.getTraceNotifier().fireTraceChanged(projectEvent);
   		   
-  		   dataStore.deleteObject(_api.getProjectsRoot(dataStore), traceProject);
+  		     _api.getDataStore().deleteObject(_api.getLocalProjectsRoot(), traceProject);
+  		   }
+  		   
   		 }		 
   	  }
   	  break;

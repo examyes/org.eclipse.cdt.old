@@ -10,6 +10,7 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 import org.eclipse.cdt.pa.ui.*;
 
 import org.eclipse.ui.*;
@@ -242,9 +243,7 @@ public class PAModelInterface implements IDomainListener
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Run", "org.eclipse.cdt.pa.ui.actions.RunTraceProgramAction");
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Analyze", "org.eclipse.cdt.pa.ui.actions.AnalyzeTraceProgramAction");
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Run and Analyze", "org.eclipse.cdt.pa.ui.actions.RunAndAnalyzeTraceProgramAction");
-  
-  dataStore.getDomainNotifier().addDomainListener(this);
-  
+    
  }
 
  // From IDomainListener
@@ -276,10 +275,7 @@ public class PAModelInterface implements IDomainListener
              
        if (commandValue.equals("C_QUERY_TRACE_FILE_FORMAT") 
           || commandValue.equals("C_QUERY_TRACE_PROGRAM_FORMAT"))
-       {
-          // System.out.println("format changed");
-	  // System.out.println("format: " + object);
-	  
+       {	  
           PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FORMAT_CHANGED, object, traceElement);
          _notifier.fireTraceChanged(traceEvent);
        }
@@ -401,15 +397,17 @@ public class PAModelInterface implements IDomainListener
   * for a given IProject.
   */
  public DataElement findTraceProjectElement(IProject project) {
- 
-  DataElement projectElement = _cppApi.findProjectElement(project);
-  
-  if (projectElement != null) {
-   DataStore dataStore = projectElement.getDataStore();
-   return dataStore.find(getProjectsRoot(dataStore), DE.A_SOURCE, projectElement.getSource());
+
+  String source = project.getLocation().toString();
+  DataStore dataStore = _dataStore;
+    
+  if (project instanceof Repository)
+  {	      
+	dataStore = ((Repository)project).getDataStore();
   }
-  else
-   return null;
+  
+  DataElement traceProject = dataStore.find(getProjectsRoot(dataStore), DE.A_SOURCE, source);
+  return traceProject;
   
  }
  

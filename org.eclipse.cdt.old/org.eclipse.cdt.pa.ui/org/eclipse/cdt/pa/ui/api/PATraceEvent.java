@@ -15,6 +15,8 @@ public class PATraceEvent
   public static final int FORMAT_CHANGED  = 1; 
   public static final int PROJECT_DELETED = 2;
   public static final int FILE_DELETED    = 3;
+  public static final int PROJECT_CHANGED = 4;
+  
   private int         _type;  
   private DataElement _object;
   private DataElement _argument;

@@ -104,26 +104,36 @@ public class FunctionStatisticsViewPart extends PAObjectsViewPart {
      */
     public void traceChanged(PATraceEvent event) {
     
-     DataElement traceFile = event.getObject();
+     DataElement traceObject = event.getObject();
      int type = event.getType();
      switch (type) {
      
       case PATraceEvent.FILE_CREATED:
         
         // System.out.println("trace file: " + traceFile);
-        _currentTraceFile = traceFile;
-        _currentProject = _api.findReferencedProject(traceFile);
-        _viewer.setInput(_api.getTraceFuctionsRoot(traceFile));
+        _currentTraceFile = traceObject;
+        _currentProject = _api.findReferencedProject(traceObject);
+        _viewer.setInput(_api.getTraceFuctionsRoot(traceObject));
 	    break;
        
       case PATraceEvent.FILE_DELETED:
         
-        if (traceFile == _currentTraceFile) {
-          _viewer.setInput(_api.getDummyElement());
-          _viewer.resetView();
+        if (traceObject == _currentTraceFile) {
+          initInput(null);
         }
         break;
-        
+
+      case PATraceEvent.PROJECT_CHANGED:
+    
+        if (traceObject != null) {
+          _viewer.setInput(traceObject);
+        }
+        else {
+          initInput(null);
+        }
+      
+        break;
+              
       default:
         break;
      }

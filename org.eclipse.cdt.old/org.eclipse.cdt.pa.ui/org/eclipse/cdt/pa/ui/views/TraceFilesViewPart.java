@@ -138,9 +138,19 @@ public class TraceFilesViewPart extends PAObjectsViewPart
     
       if (_currentTraceProject == traceObject) {
         _currentTraceProject = null;
-        _viewer.setInput(_api.getDummyElement());      
-        _viewer.resetView();
+        initInput(null);
       }
+      break;
+    
+    case PATraceEvent.PROJECT_CHANGED:
+    
+      if (traceObject != null) {
+        _viewer.setInput(traceObject);
+      }
+      else {
+        initInput(null);
+      }
+      
       break;
       
     default:

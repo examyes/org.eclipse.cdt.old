@@ -184,7 +184,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
          }
          else {
            setErrorMessage(null);
-           setMessage("Real trace format: " + format);
+           setMessage("Detected trace format: " + format);
            _traceFormat = format;
            setPageComplete(true);
          }         
