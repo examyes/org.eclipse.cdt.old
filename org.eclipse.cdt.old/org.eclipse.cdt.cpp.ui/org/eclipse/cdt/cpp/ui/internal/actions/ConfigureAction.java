@@ -41,10 +41,6 @@ import org.eclipse.debug.core.IDebugConstants;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 
-import org.eclipse.swt.graphics.*;
-import org.eclipse.swt.layout.*;
-import org.eclipse.swt.*;
-
 public class ConfigureAction extends CustomAction
 { 
 	public class RunThread extends Handler
