@@ -498,6 +498,18 @@
             value="org.eclipse.cdt.cpp.ui.cppnature">
       </filter>
    </page>
+     <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="%Autoconf_Settings"
+         class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
+         id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage">
+      <filter
+            name="nature"
+            value="org.eclipse.cdt.cpp.ui.cppnature">
+      </filter>
+   </page>
+
+   
 </extension>
 <extension
       point="org.eclipse.search.searchPages">
