@@ -1140,8 +1140,12 @@ public class MakefileAmManager {
 		
 		while(dir != null &&  path != null && !path.equals(wpath))
 		{
+			
+				
 			list.add(counter,dir);counter++;
+			try{
 			dir = dir.getParentFile();
+			
 			if (dir != null)
 			{		
 				path = dir.getAbsolutePath();
@@ -1150,6 +1154,7 @@ public class MakefileAmManager {
 					path = path.replace('\\', '/');
 				}
 			}
+			}catch(Exception e){System.out.println("");}// to be fixed later
 		}
 		//boolean found = false;
 		for(int i = 0; i < list.size(); i++)
