@@ -87,11 +87,13 @@
 	name="%CppPerspective"
 	class="com.ibm.cpp.ui.internal.views.CppPerspective">
    </perspective>
+<!--
    <perspective
 	id="com.ibm.cpp.ui.MinersPerspective"
 	name="%Miner_Development"
 	class="com.ibm.cpp.ui.internal.views.MinersPerspective">
    </perspective>
+-->
 </extension>
 
 <extension point="org.eclipse.ui.perspectiveExtensions">
@@ -183,6 +185,7 @@
 		icon="icons/Parsed Source.gif"
 		class="com.ibm.cpp.ui.internal.views.ParsedSourceViewPart">
 	</view>
+<!--
 	<view
 		id="com.ibm.cpp.ui.SchemaViewPart"
 		name="%Schema"
@@ -204,6 +207,7 @@
 		icon="icons/log.gif"
 		class="com.ibm.cpp.ui.internal.views.LogViewPart">
 	</view>
+-->
 	<view
 		id="com.ibm.cpp.ui.Targets"
 		name="%Targets"
@@ -362,7 +366,7 @@
         	id = "com.ibm.cpp.ui.internal.editor.CppEditor"
       		name="%Lpex_Editor"
 		icon="icons/lpex.gif"
-      		extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in"
+      		extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in,dat"
       		class="com.ibm.cpp.ui.internal.editor.CppEditor"
 		contributorClass="com.ibm.cpp.ui.internal.editor.contributor.CppEditorContextContributor">
 	</editor>
