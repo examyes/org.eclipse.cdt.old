@@ -26,9 +26,16 @@ command: dir.*
 	 directory     file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s<DIR>\s([\w,.,/,\\]*).*
 	 file          file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s[\d,,]*\s([\w,.,/,\\]*).*
 
-command: ls.*
-	 file          file              pattern=.*\d{2}:\d{2} ([\w,.,/,\\]*)
-	 file          file              pattern=.* \d{4} ([\w,.,/,\\]*)
+command: ls -l.*
+	 file          file              pattern=-.*\d{2}:\d{2} ([\w,.,/,\\]*)
+	 file          file              pattern=-.* \d{4} ([\w,.,/,\\]*)
+         directory     file              pattern=d.*\d{2}:\d{2} ([\w,.,/,\\]*)
+
+command: ls
+         file          file              pattern=([\w]*\.[\w]*)
+                                                             
+command: find .*                    
+         file          file              pattern=([\w,.,/,\\]*)
 
 command: xl.*
 	 error         file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
