@@ -636,8 +636,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			 }
 		 }
 
-	     //	     CppProjectNotifier notifier = getProjectNotifier();
-	     //notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
+	     CppProjectNotifier notifier = getProjectNotifier();
+	     notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
 	 }
     } 
   }
