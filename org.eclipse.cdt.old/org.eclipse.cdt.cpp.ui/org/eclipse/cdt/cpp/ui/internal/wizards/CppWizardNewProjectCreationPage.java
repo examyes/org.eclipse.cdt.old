@@ -83,7 +83,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
     private   CheckboxTableViewer           referenceProjectsViewer;
     
     // constants
-    private static final int SIZING_TEXT_FIELD_WIDTH = 100;
+    private static final int SIZING_TEXT_FIELD_WIDTH = 150;
     private static final int SIZING_INDENTATION_WIDTH = 10;
     protected int  _sourceLocation  = CppProjectAttributes.LOCATION_WORKBENCH;
     protected CppPlugin    _plugin = CppPlugin.getPlugin();
