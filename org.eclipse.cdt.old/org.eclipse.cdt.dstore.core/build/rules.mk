@@ -20,7 +20,7 @@ $(filter-out build,\
 $(filter-out %CVS,\
 $(filter-out %cvs,\
 $(filter-out %icons,\
-$(shell find * -type d -maxdepth 0))))))
+$(shell find * -type d -prune))))))
 endef
 
 # Determine the system path separator
@@ -60,7 +60,7 @@ createJarFile:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	rm -f $(jarFile);\
 	touch $(jarFile);\
-	find . -name '*.class' -or -name '*.properties' | xargs jar -uf $(jarFile)
+	find . -name '*.class' -o -name '*.properties' | xargs jar -uf $(jarFile)
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
 
 createJavadoc:
