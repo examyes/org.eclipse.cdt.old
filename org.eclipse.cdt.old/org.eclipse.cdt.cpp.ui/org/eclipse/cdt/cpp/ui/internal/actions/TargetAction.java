@@ -85,11 +85,8 @@ public class TargetAction extends CustomAction
 		String message = new String("No Makefile to build '"+_subject.getName()+"' has been found in this directory"+
 		"\nYou may want to create and or run configure before performing this action");
 		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-		
-		
-		File parent = _subject.getFileObject().getParentFile();
-		File Makefile = new File(parent,"Makefile");
-		if(!Makefile.exists())
+
+		if(!doesFileExists("Makefile"))
 			dialog.openWarning(shell,"Building "+_subject.getName(),message);
 		else
 		{
@@ -103,13 +100,16 @@ public class TargetAction extends CustomAction
 			monitor.start();
 		}
     }
-    private boolean doesFileExists(String fileName)
+	private boolean doesFileExists(String fileName)
 	{
-		File project = _subject.getFileObject();
-		File[]fileList = project.listFiles();
-		for (int i = 0; i < fileList.length; i++)
-			if(fileList[i].getName().equals(fileName))
+		for (int i = 0; i < _subject.getNestedSize(); i++)
+		{
+			DataElement child = _subject.get(i).dereference();
+			if (!child.isDeleted() && child.getName().equals(fileName))
+			{
 				return true;
+			}
+		}
 		return false;
 	}
 }
