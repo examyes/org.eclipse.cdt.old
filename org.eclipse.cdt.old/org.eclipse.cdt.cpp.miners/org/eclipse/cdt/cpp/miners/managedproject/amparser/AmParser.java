@@ -12,249 +12,238 @@ import com.ibm.dstore.core.model.*;
 
 public class AmParser
 {
- private DataElement     _project;
- private DataStore       _dataStore;
- private BufferedReader  _theFileReader;
- private String          _curFile;
- private int             _curLine;
- private int             _curCol;
- 
- public AmParser (DataElement theUnmanagedProject)
- {
-  _dataStore = theUnmanagedProject.getDataStore();
-  
-  DataElement workspace = theUnmanagedProject.getParent();
-  DataElement project = findExistingManagedProject(workspace, theUnmanagedProject.getName() );
-  if (project != null)
-  {
-  	//_dataStore.deleteObject(workspace, _project);
-  	workspace.removeNestedData(project);
-  }
-  
-   _curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
-  File theFile = new File(_curFile);
-  if (theFile.exists())
-      {
-	  try 
-	      {
-		  _theFileReader = new BufferedReader(new FileReader(theFile));
-                  _project   = _dataStore.createObject(workspace, Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
-	      }
-	  catch (Throwable e)
-	      {
-	       _theFileReader = null;
-	       _project = null;
-	       
-	      }
-      }
- }
- 
- public AmParser (DataElement root, String subdir)
- {
-  _dataStore = root.getDataStore();
 
-	if (!root.getType().equals(Am.MANAGED_PROJECT))
+	private DataElement     _project;
+	private DataStore       _dataStore;
+	private BufferedReader  _theFileReader;
+	private String          _curFile;
+	private int             _curLine;
+	private int             _curCol;
+ 
+	public AmParser (DataElement theUnmanagedProject)
 	{
-		DataElement parent = root.getParent();
-		if(parent!=null)
-			root = findExistingManagedProject(parent, root.getName());
+		_dataStore = theUnmanagedProject.getDataStore();
+ 
+		DataElement workspace = theUnmanagedProject.getParent();
+		DataElement project = findExistingManagedProject(workspace, theUnmanagedProject.getName());////////////////////////////////////////
+		if (project != null) // check the workspace
+		{
+			//_dataStore.deleteObject(workspace, _project);
+			workspace.removeNestedData(project);
+		}
+		_curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
+		File theFile = new File(_curFile);
+		if (theFile.exists())
+		{
+			try 
+			{
+				_theFileReader = new BufferedReader(new FileReader(theFile));
+				_project   = _dataStore.createObject(workspace, Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
+			}
+			catch (Throwable e)
+			{
+				_theFileReader = null;
+				_project = null;
+	       
+			}
+		}
 	}
-    
-  DataElement project = findExistingManagedProject(root, subdir);
-  if (project != null)
-  {
-  	_dataStore.deleteObject(root, project);	
-	//root.removeNestedData(project);
-  }
-  
-  if(root != null)
-  { 
-  	_project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
-  	_curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
-  	_project.setAttribute(DE.A_SOURCE, root.getSource() + "/" + subdir + "/");		
-
-	  File theFile = new File(_curFile);
-	  if (theFile.exists())
-	      {
-		  try 
-		      {
-			  _theFileReader = new BufferedReader(new FileReader(theFile));
-		      }
-		  catch (Throwable e)
-		      {
-			  System.out.println("Problem opening " + _curFile);
-		      }
-	      }  
-  }
- }
  
- private DataElement findExistingManagedProject(DataElement workspace, String name)
- {
- 	if(workspace!=null)
- 	{
- 		for (int i = 0; i < workspace.getNestedSize(); i++)
- 		{
- 			DataElement child = workspace.get(i);
- 			if (child.getType().equals(Am.MANAGED_PROJECT))
+	public AmParser (DataElement root, String subdir)
+	{
+		_dataStore = root.getDataStore();
+		if (!root.getType().equals(Am.MANAGED_PROJECT))
+		{
+			DataElement parent = root.getParent();
+			if(parent!=null)
+				root = findExistingManagedProject(parent, root.getName());
+		}
+    	DataElement project = findExistingManagedProject(root, subdir);
+    	if (project != null)
+		{
+			_dataStore.deleteObject(root, project);	
+			//root.removeNestedData(project);
+		}
+  
+		if(root != null)
+		{ 
+			_project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
+			_curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
+			_project.setAttribute(DE.A_SOURCE, root.getSource() + "/" + subdir + "/");		
+
+			File theFile = new File(_curFile);
+			if (theFile.exists())
+			{
+				try 
+				{
+					_theFileReader = new BufferedReader(new FileReader(theFile));
+				}
+				catch (Throwable e)
+				{
+					System.out.println("Problem opening " + _curFile);
+				}
+			}  
+		}
+	}
+ 
+	private DataElement findExistingManagedProject(DataElement workspace, String name)
+	{
+		if(workspace!=null)
+		{
+			for (int i = 0; i < workspace.getNestedSize(); i++)
  			{
- 				if (child.getName().equals(name))
+ 				DataElement child = workspace.get(i);
+ 				if (child.getType().equals(Am.MANAGED_PROJECT))
  				{
- 					return child;
- 				}
- 				
- 			}	
+ 					if (child.getName().equals(name))
+ 					{
+ 						return child;
+ 					}
+ 						
+ 				}	
+ 			}
  		}
- 	}
- 	return null;
- }
+ 		return null;
+	}
 
- public DataElement parse()
- { 
-  if (_theFileReader == null)
-  return null;
+	public DataElement parse()
+	{ 
+		if (_theFileReader == null)
+			return null;
+		String nextLine;
+		while ((nextLine = readLine()) != null)
+			processLine(nextLine);
+		return _project;
+	}
+
+	//Just return the next line from the BufferedReader.
+	private String readLine()
+	{
+		if (_theFileReader == null)
+		  return null;
  
-  String nextLine;
-  while ((nextLine = readLine()) != null)
-   processLine(nextLine);
-   
-  return _project;
- }
-
- //Just return the next line from the BufferedReader.
- private String readLine()
- {
-  if (_theFileReader == null)
-   return null;
+		try
+		{
+			String theLine = _theFileReader.readLine();
+			_curLine++;
+			_curCol=1;
+			return theLine;
+		}
+		catch (IOException e){}
+		return null;
+	}
  
-  try
-  {
-   String theLine = _theFileReader.readLine();
-   _curLine++;
-   _curCol=1;
-   return theLine;
-  }
-  catch (IOException e)
-  {}
-  return null;
- }
- 
- private void processLine(String theLine)
- {
-  int type;
-  
-  if ( (type = targetDefinition(theLine)) >= 0)
-   handleTargetDefinition(theLine, type);
-  else if ( (type = attributeDefinition(theLine)) >= 0)
-   handleAttributeDefinition(theLine, type);
-  else if (subdirsDefinition(theLine))
-   handleSubdirsDefinition(theLine);
- }
+	private void processLine(String theLine)
+	{
+		int type;
+		if ( (type = targetDefinition(theLine)) >= 0)
+			handleTargetDefinition(theLine, type);
+		else if ( (type = attributeDefinition(theLine)) >= 0)
+			handleAttributeDefinition(theLine, type);
+		else if (subdirsDefinition(theLine))
+			handleSubdirsDefinition(theLine);
+	}
 
- //Return the target type if one is found...-1 otherwise
- private int targetDefinition(String theLine)
- {
-  for (int i = Am.TARGETTYPE_START; i <= Am.TARGETTYPE_END; i++)
-  {
-   if (theLine.indexOf("_" + Am.getString(i)) >= 0)
-    return i;
-  }
-  return -1;
- }
+	//Return the target type if one is found...-1 otherwise
+	private int targetDefinition(String theLine)
+	{
+		for (int i = Am.TARGETTYPE_START; i <= Am.TARGETTYPE_END; i++)
+		{
+			if (theLine.indexOf("_" + Am.getString(i)) >= 0)
+				return i;
+		}
+		return -1;
+	}
 
- //Return the attribute type if one is found...-1 otherwise
- private int attributeDefinition(String theLine)
- {
-  for (int i = Am.ATTRIBUTE_START; i <= Am.ATTRIBUTE_END; i++)
-  {
-   if (theLine.indexOf("_" + Am.getString(i)) >= 0)
-    return i;
-  }
-  return -1;
- }
-
- private boolean subdirsDefinition(String theLine)
- {
-  return (theLine.indexOf(Am.SUBDIRS) >= 0);
- }
+	//Return the attribute type if one is found...-1 otherwise
+	private int attributeDefinition(String theLine)
+	{
+		for (int i = Am.ATTRIBUTE_START; i <= Am.ATTRIBUTE_END; i++)
+		{
+			if (theLine.indexOf("_" + Am.getString(i)) >= 0)
+			return i;
+		}
+		return -1;
+	}
+	private boolean subdirsDefinition(String theLine)
+	{
+		return (theLine.indexOf(Am.SUBDIRS) >= 0);
+	}
  
 
  
- //Sample line:
- //   bin_PROGRAMS    =    hello goodbye
- private void handleTargetDefinition(String theLine, int theType)
- {
-  int index = theLine.indexOf("_" + Am.getString(theType));
-  if (index < 0)
-   return;
-  int startOfTargetNames = theLine.indexOf("=", index) + 1;
-  if ( (startOfTargetNames < 0) || (startOfTargetNames == theLine.length()))
-   return;
-  String targetNames = theLine.substring(startOfTargetNames,theLine.length()).trim();
-  for (int i=0; i<targetNames.length(); i++)
-  {
-   int nextSpace = targetNames.indexOf(" ", i);
-   if (nextSpace < 0)
-    nextSpace = targetNames.length();
-   addTarget(targetNames.substring(i,nextSpace), theType);
-   i = nextSpace;
-  }
- }
+	//Sample line:
+	//   bin_PROGRAMS    =    hello goodbye
+	private void handleTargetDefinition(String theLine, int theType)
+	{
+		int index = theLine.indexOf("_" + Am.getString(theType));
+		if (index < 0)
+			return;
+		int startOfTargetNames = theLine.indexOf("=", index) + 1;
+		if ( (startOfTargetNames < 0) || (startOfTargetNames == theLine.length()))
+			return;
+		String targetNames = theLine.substring(startOfTargetNames,theLine.length()).trim();
+		for (int i=0; i<targetNames.length(); i++)
+		{
+			int nextSpace = targetNames.indexOf(" ", i);
+			if (nextSpace < 0)
+				nextSpace = targetNames.length();
+			addTarget(targetNames.substring(i,nextSpace), theType);
+			i = nextSpace;
+		}
+	}
  
- private DataElement addTarget(String name, int type)
- {
-  if ( (type < Am.TARGETTYPE_START) || (type > Am.TARGETTYPE_END))
-   type = Am.PROGRAMS; //Default to PROGRAMS if no type was specified
-  
-  DataElement theTarget = findCanonicalName(_project, name);
-  if (theTarget == null)
-   theTarget = _dataStore.createObject(_project, Am.PROJECT_TARGET, name, getSourceLocation());
-  return theTarget;
- }
- 
+	private DataElement addTarget(String name, int type)
+	{
+		if ( (type < Am.TARGETTYPE_START) || (type > Am.TARGETTYPE_END))
+			type = Am.PROGRAMS; //Default to PROGRAMS if no type was specified
+		DataElement theTarget = findCanonicalName(_project, name);
+		if (theTarget == null)
+			theTarget = _dataStore.createObject(_project, Am.PROJECT_TARGET, name, getSourceLocation());
+		return theTarget;
+	}
 
- 
- private void handleAttributeDefinition(String theLine, int theType)
- {
-  int index = theLine.indexOf("_" + Am.getString(theType));
-  if (index < 0)
-   return;
-  String targetName = theLine.substring(0,index).trim();
-  int startOfAttributes = theLine.indexOf("=", index) + 1;
-  if ( (startOfAttributes < 0) || (startOfAttributes == theLine.length()))
-   return;
-  String attributes = theLine.substring(startOfAttributes,theLine.length()).trim();
-  for (int i=0; i<attributes.length(); i++)
-  {
-   int nextSpace = attributes.indexOf(" ", i);
-   if (nextSpace < 0)
-    nextSpace = attributes.length();
-   addTargetAttribute(targetName, theType, attributes.substring(i,nextSpace));
-   i = nextSpace;
-  }
- }
+	private void handleAttributeDefinition(String theLine, int theType)
+ 	{
+		int index = theLine.indexOf("_" + Am.getString(theType));
+		if (index < 0)
+			return;
+		String targetName = theLine.substring(0,index).trim();
+		int startOfAttributes = theLine.indexOf("=", index) + 1;
+		if ( (startOfAttributes < 0) || (startOfAttributes == theLine.length()))
+			return;
+		String attributes = theLine.substring(startOfAttributes,theLine.length()).trim();
+		for (int i=0; i<attributes.length(); i++)
+		{
+			int nextSpace = attributes.indexOf(" ", i);
+			if (nextSpace < 0)
+				nextSpace = attributes.length();
+			addTargetAttribute(targetName, theType, attributes.substring(i,nextSpace));
+			i = nextSpace;
+		}
+	}
 
- private void handleSubdirsDefinition(String theLine)
- {
-  int startOfDirs = theLine.indexOf("=") + 1;
-  if ( (startOfDirs < 0) || (startOfDirs >= theLine.length())) 
-   return;
-  String theDirs = theLine.substring(startOfDirs, theLine.length()).trim();
-   
-  for (int i =0; i<theDirs.length(); i++)
-  {
-   int nextSpace = theDirs.indexOf(" ", i);
-   if (nextSpace < 0)
-    nextSpace = theDirs.length();
-   parseSubMakefile(theDirs.substring(i, nextSpace).trim());
-   i = nextSpace;
-  }
- }
- 
- private void parseSubMakefile(String theDir)
- {
-  AmParser theParser = new AmParser(_project, theDir);
-  theParser.parse();
- }
+	private void handleSubdirsDefinition(String theLine)
+	{
+		int startOfDirs = theLine.indexOf("=") + 1;
+		if ( (startOfDirs < 0) || (startOfDirs >= theLine.length())) 
+			return;
+		String theDirs = theLine.substring(startOfDirs, theLine.length()).trim(); 
+		for (int i =0; i<theDirs.length(); i++)
+		{
+			int nextSpace = theDirs.indexOf(" ", i);
+			if (nextSpace < 0)
+				nextSpace = theDirs.length();
+			parseSubMakefile(theDirs.substring(i, nextSpace).trim());
+			i = nextSpace;
+		}
+	}
+
+	private void parseSubMakefile(String theDir)
+	{
+		AmParser theParser = new AmParser(_project, theDir);
+		theParser.parse();
+	}
  
  private DataElement addTargetAttribute(String targetName, int attType, String attValue)
  {
