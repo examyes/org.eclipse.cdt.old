@@ -22,6 +22,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExpression;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMixedInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
@@ -548,6 +549,46 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDISourceManagement#getMixedInstructions(java.lang.String, int, int)
 	 */
 	public ICDIMixedInstruction[] getMixedInstructions(String filename, int linenum, int lines) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#createMemoryBlock(java.lang.String, int)
+	 */
+	public ICDIMemoryBlock createMemoryBlock(String address, int length) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#createMemoryBlock(java.math.BigInteger, int)
+	 */
+	public ICDIMemoryBlock createMemoryBlock(BigInteger address, int length) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#removeBlocks(org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock[])
+	 */
+	public void removeBlocks(ICDIMemoryBlock[] memoryBlocks) throws CDIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#removeAllBlocks()
+	 */
+	public void removeAllBlocks() throws CDIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#getMemoryBlocks()
+	 */
+	public ICDIMemoryBlock[] getMemoryBlocks() throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
