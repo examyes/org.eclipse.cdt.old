@@ -37,7 +37,7 @@ public class CmdPointerDeref extends Command {
         if (!ok)
         {
         	_rep.setMessage("Failed to Dereference Pointer.");
-        	_rep.setReturnCode(EPDC.ExecRc_BadExpr);
+        	_rep.setReturnCode(EPDC.ExecRc_Error);
         }
         
 		return false;

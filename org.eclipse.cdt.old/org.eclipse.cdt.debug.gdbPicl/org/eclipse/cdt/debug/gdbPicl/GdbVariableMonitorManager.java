@@ -268,7 +268,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
          ExprEvalInfo evalInfo = null;
          evalInfo = addExpression((short)monType, exprName, context, du, isDeferred);
          
-         if (evalInfo == null)
+         if (evalInfo.expressionFailed())
          	return false;
          else
          {
