@@ -1528,7 +1528,7 @@ public final class DataStore
 	    }
 	else
 	    {
-		saveFile(remotePath, bytes);
+		saveFile(remotePath, bytes, size);
 	    }  	  	
     }
   
@@ -1553,7 +1553,7 @@ public final class DataStore
 	    }
 	else
 	    {
-		appendToFile(remotePath, bytes);
+		appendToFile(remotePath, bytes, size);
 	    }  	  	
     }
 
@@ -2648,7 +2648,7 @@ public final class DataStore
      * @param remotePath the path where to save the file
      * @param buffer the buffer to save in the file
      */         
-    public void saveFile(String remotePath, byte[] buffer)
+    public void saveFile(String remotePath, byte[] buffer, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
@@ -2670,7 +2670,8 @@ public final class DataStore
 
             File newFile = new File(fileName);
             FileOutputStream fileStream = new FileOutputStream(newFile);
-            fileStream.write(buffer);
+            //fileStream.write(buffer);
+            fileStream.write(buffer, 0, size);
             fileStream.close();
           }
           catch (IOException e)
@@ -2686,7 +2687,7 @@ public final class DataStore
      * @param remotePath the path where to save the file
      * @param buffer the buffer to append into the file
      */         
-    public void appendToFile(String remotePath, byte[] buffer)
+    public void appendToFile(String remotePath, byte[] buffer, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
@@ -2704,7 +2705,7 @@ public final class DataStore
 
 		    File newFile = new File(fileName);
 		    FileOutputStream fileStream = new FileOutputStream(newFile);
-		    fileStream.write(buffer);
+		    fileStream.write(buffer, 0, size);
 		    fileStream.close();
 		}
 	    else
@@ -2744,7 +2745,7 @@ public final class DataStore
 		    oldFileStream.close();		    		    
 
 		    // write new buffer to new file
-		    newFileStream.write(buffer);
+		    newFileStream.write(buffer, 0, size);
 		    newFileStream.close();
 
 		    // remote old file
