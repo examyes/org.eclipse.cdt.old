@@ -136,7 +136,7 @@ public class OutputViewer extends TableViewer
 	_menuHandler = new MenuHandler(_plugin.getActionLoader());
 
 	_maxWidth = 200;	
-	_charWidth = 5;
+	_charWidth = 6;
 
 	Table table = getTable();
 
