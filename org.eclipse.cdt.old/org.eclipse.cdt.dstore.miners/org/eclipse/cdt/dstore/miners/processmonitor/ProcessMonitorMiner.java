@@ -37,32 +37,12 @@ public class ProcessMonitorMiner extends Miner
 	return resourceBundle;
     }
 
-    public void extendSchema(DataElement schemaRoot)
+    public void load(DataElement status)
     {
-	DataElement hostD = _dataStore.find(schemaRoot, DE.A_NAME, "host", 1);
-	DataElement containerD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object", 1);
-
-	DataElement processesD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Processes");	
-	_dataStore.createReference(processesD, containerD, "abstracted by", "abstracts"); 
+	DataElement schemaRoot = _dataStore.getDescriptorRoot();
+	DataElement processD = _dataStore.find(schemaRoot, DE.A_NAME, "Process", 1);	
 	
 
-	DataElement processD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Process");	
-	_dataStore.createReference(hostD, processesD);
-	_dataStore.createReference(processesD, processD);
-
-	DataElement cprocessD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Child Process");	
-	_dataStore.createReference(processD, cprocessD, "abstracts", "abstracted by");
-
-	DataElement killD = createCommandDescriptor(processD, "Kill", "C_KILL");
-
-	String theOS = System.getProperty("os.name").replace(' ', '_');
-	_psCommand = getLocalizedString(theOS + "_ps");
-	if (_psCommand == null)
-	    {
-		// get default
-		_psCommand = getLocalizedString("default_ps");
-	    }
-	
 	// run ps to get column formats
 	try
 	    {
@@ -116,6 +96,46 @@ public class ProcessMonitorMiner extends Miner
 	    {
 		e.printStackTrace();
 	    }
+
+	if (_validPS)
+	    {
+		// get host object
+		DataElement hostObject = _dataStore.getHostRoot();
+		
+		DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
+		_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
+		_monitor.setWaitTime(3000);
+		_monitor.setDataStore(_dataStore);
+		_monitor.start();
+	    }
+    }
+
+    public void extendSchema(DataElement schemaRoot)
+    {
+	DataElement hostD = _dataStore.find(schemaRoot, DE.A_NAME, "host", 1);
+	DataElement containerD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object", 1);
+
+	DataElement processesD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Processes");	
+	_dataStore.createReference(processesD, containerD, "abstracted by", "abstracts"); 
+	
+
+	DataElement processD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Process");	
+	_dataStore.createReference(hostD, processesD);
+	_dataStore.createReference(processesD, processD);
+
+	DataElement cprocessD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Child Process");	
+	_dataStore.createReference(processD, cprocessD, "abstracts", "abstracted by");
+
+	DataElement killD = createCommandDescriptor(processD, "Kill", "C_KILL");
+
+	String theOS = System.getProperty("os.name").replace(' ', '_');
+	_psCommand = getLocalizedString(theOS + "_ps");
+	if (_psCommand == null)
+	    {
+		// get default
+		_psCommand = getLocalizedString("default_ps");
+	    }
+	
     }
 
     private void defineProcessSchema(DataElement schemaRoot, DataElement processD, String headers)
@@ -142,21 +162,6 @@ public class ProcessMonitorMiner extends Miner
 		    {
 			_dataStore.createReference(attributeD, stringD, "attributes");
 		    }
-	    }
-    }
-    
-    public void load()
-    {
-	if (_validPS)
-	    {
-		// get host object
-		DataElement hostObject = _dataStore.getHostRoot();
-		
-		DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
-		_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
-		_monitor.setWaitTime(3000);
-		_monitor.setDataStore(_dataStore);
-		_monitor.start();
 	    }
     }
     
