@@ -16,7 +16,7 @@ public class CppRunTabGroup extends AbstractLaunchConfigurationTabGroup {
 	 * @see ILaunchConfigurationTabGroup#createTabs(ILaunchConfigurationDialog, String)
 	 */
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-      		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[2];
+  		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[2];
 		tabs[0] = new CppRunInfoTab();
       tabs[1] = new CommonTab();
 		setTabs(tabs);

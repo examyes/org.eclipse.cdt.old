@@ -27,9 +27,9 @@ import com.ibm.debug.pdt.launch.PICLLoadInfo;
 /**
  * Launches a local VM.
  */
-public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigurationDelegate 
+public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 {
-    
+
     private CppPlugin                       _plugin;
     private ModelInterface                  _api;
     private DataElement                     _executable;
@@ -38,14 +38,13 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	/**
 	 * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
 	 */
-    public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) 
+    public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 	throws CoreException
     {
 	_plugin = CppPlugin.getDefault();
 	_api = ModelInterface.getInstance();
 
 	String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-	System.out.println("exename = " + executableName);
 	IResource resource  = _api.findFile(executableName);
 	IProject project = resource.getProject();
 	
@@ -103,7 +102,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	doLaunch(loadInfo, launch, workingDirectory);
 	
     }	
-    
+
     public void doLaunch(PICLLoadInfo loadInfo, ILaunch launch, String workingDirectory)
     {
         CppSourceLocator sourceLocator = null;
@@ -144,13 +143,13 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 
 	launchEngine(workingDirectory, new Integer(port).toString(), new Integer(key).toString());
     }
-    
+
     protected void launchEngine(String workingDirectory, String port, String key)
     {
       if (workingDirectory != "")
       {
          IResource resource = _api.getResource(workingDirectory);
-	 
+	
          DataElement deDirectory = _api.findResourceElement(resource);
        	_api.debug(deDirectory, port, key);
       }
