@@ -113,5 +113,17 @@ public class ConvertToCppProject extends CppActionDelegate
 
     protected void checkEnabledState(IAction a)
     {
+	if (_currentResource != null && _currentResource instanceof IProject)
+	    {
+		if (_plugin.isCppProject((IProject)_currentResource))
+		    {
+			((Action)a).setEnabled(false);
+		    }
+		else
+		    {
+			((Action)a).setEnabled(true);
+		    }
+	    }
+	((Action)a).setEnabled(false);
     }
 }
