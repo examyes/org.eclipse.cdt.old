@@ -42,6 +42,7 @@ public class AddStatementBreakpoint extends CustomAction
 
     public void createBreakpointMarker(DataElement statement)
     {
+	/*
 	String fileName   = (String)(statement.getElementProperty(DE.P_SOURCE_NAME));
 	Integer lineLocation = (Integer)(statement.getElementProperty(DE.P_SOURCE_LOCATION));
 	int line = lineLocation.intValue();	
@@ -75,6 +76,7 @@ public class AddStatementBreakpoint extends CustomAction
 			System.out.println(ce);
 		    }
 	    }
+	*/
       }
 
     public void run()
