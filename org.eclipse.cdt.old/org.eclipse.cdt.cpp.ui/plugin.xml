@@ -554,7 +554,7 @@
    </page>
     <page
          objectClass="org.eclipse.core.resources.IProject"
-         name="%Autoconf_Build_Properties"
+         name="%Makefile_AM_Variable_Settings"
          category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfBuilderSettingsPropertyPage"
          class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfBuilderSettingsPropertyPage"
          id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfBuilderSettingsPropertyPage">
