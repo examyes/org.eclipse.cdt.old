@@ -11,13 +11,13 @@ import java.util.*;
 
 public class MakefileAmManager {
 
+
+	private String _workspaceLocation;
 	private final int TOPLEVEL = 1;
 	private final int PROGRAMS = 2;
 	private final int STATICLIB = 3;
 	private final int SHAREDLIB = 4;
-	
-	//DataElement project;
-	//ProjectStructureManager structureManager;
+
 	public static Hashtable timeStamps = new Hashtable();
 	private final String MAKEFILE_AM = "Makefile.am";
 	
@@ -29,9 +29,6 @@ public class MakefileAmManager {
 	final String EXTRA_DIST = new String("EXTRA_DIST");
 	final String INCLUDES = new String("INCLUDES");
 	final String _LDFLAGS= new String("_LDFLAGS");
-	
-	// needed to for creating Makefile.am's
-	//String[] subdirs;
 	
 	//for static lib files
 	final String _LIBRARIES = new String("_LIBRARIES");
@@ -57,6 +54,12 @@ public class MakefileAmManager {
 	public MakefileAmManager() 
 	{
 	}
+	
+	public void setWorkspaceLocation(String location)
+	{
+		_workspaceLocation = location;	
+	}
+	
 	protected void generateMakefileAm(DataElement project)
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
@@ -778,13 +781,13 @@ public class MakefileAmManager {
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
-		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a");
+		return line = line.concat(" ").concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a");
 	}
 	private String initLtlibrariesLine(String line, File parent)
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
-		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".la");
+		return line = line.concat(" ").concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".la");
 	}
 	private String initLaldflagsLine(String line, File parent)
 	{
@@ -835,6 +838,7 @@ public class MakefileAmManager {
 			"/com.ibm.cpp.miners/autoconf_templates/sub/static/",parent.getAbsolutePath());
 		initializeStaticLibMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
+		updateMakefileAmDependency(parent);
 	}
 	protected void setMakefileAmToPrograms(File parent ,DataElement status)
 	{
@@ -846,7 +850,8 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/",parent.getAbsolutePath());
 		initializeProgramsMakefileAm(parent);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));				
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
+		updateMakefileAmDependency(parent);				
 	}
 	protected void setMakefileAmToTopLevel(DataElement project,DataElement status)
 	{
@@ -862,7 +867,8 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
 		initializeTopLevelMakefileAm(parent,structureManager,true);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
+		updateMakefileAmDependency(parent);	
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
 	{
@@ -874,7 +880,107 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/shared/",parent.getAbsolutePath());
 		initializeSharedLibMakefileAm(parent);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
+		updateMakefileAmDependency(parent);	
+	}
+	private void updateMakefileAmDependency(File parent)//,int classification
+	{
+		File dir = parent;
+		ArrayList list = new ArrayList();
+		int counter = 0;
+		//find the first level parent
+		System.out.println("\n Workspace location = "+_workspaceLocation);
+		while(!dir.getParentFile().getAbsolutePath().equals(_workspaceLocation))
+		{
+			System.out.println("\n location"+counter+" = "+dir.getParentFile().getAbsolutePath());
+			list.add(counter++,dir);
+			dir = dir.getParentFile();
+		}
+		if(counter>1)
+		{
+			// update might be needed
+			File parentDir = ((File)list.get(counter-1));
+			System.out.println("\n Dir name = "+parentDir.getName());
+			File parent_Makefile_am = new File(parentDir,"Makefile.am");
+			int parentClass = classifier.classify(parent_Makefile_am);
+			File Makefile_am = new File(parent,"Makefile.am");
+			if(parentClass==PROGRAMS)
+			{
+				// read the file and get the tooken that contains the parnet dir
+				//String tok = getUpdatedSting(updated_Makefile_am);
+				// then either updtae or delet
+				try
+				{
+					// searching for the subdir line
+					String line ;
+					File modMakefile_am = new File(parentDir,"mod.am");
+					BufferedReader in = new BufferedReader(new FileReader(parent_Makefile_am));
+					BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+					while((line=in.readLine())!=null)
+					{
+						if(line.indexOf(_LDADD)!=-1)
+							line = updateDependenciesLine(line, Makefile_am);
+						out.write(line);
+						out.newLine();
+					}
+					in.close();
+					out.close();
+					File abstractPath = new File(parent_Makefile_am.getAbsolutePath());
+					parent_Makefile_am.delete();
+					modMakefile_am.renameTo(abstractPath);
+					//modMakefile_am.renameTo(Makefile_am);
+				}catch(FileNotFoundException e){System.out.println(e);}
+				catch(IOException e){System.out.println(e);}
+			}
+		}
+	}
+	private String updateDependenciesLine(String line,File Makefile_am)
+	{
+		StringBuffer modLine = new StringBuffer();
+		System.out.println("\n Affected line = "+line);
+		StringTokenizer tokenizer = new StringTokenizer(line);
+		File old = new File(Makefile_am.getParentFile(),"Makefile.am.old");
+		while (tokenizer.hasMoreTokens())
+		{
+			String token = tokenizer.nextToken();
+			
+			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1)
+			{
+				int classification = classifier.classify(Makefile_am);
+				if(classification==STATICLIB && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
+					token = getModifiedLibString(token,getLibName(Makefile_am,_LIBRARIES));
+				else if (classification==SHAREDLIB && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
+					token = getModifiedLibString(token,getLibName(Makefile_am,_LTLIBRARIES));
+				else
+					token = "";
+			}
+			modLine.append(token+" ");
+		}
+		System.out.println("\n modLine line = "+modLine);
+		return modLine.toString();
+	}
+	private String getLibName(File Makefile_am, String key)
+	{
+		String target = new String();
+		try
+		{
+			String line ;
+			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+			while((line=in.readLine())!=null)
+				if(line.indexOf(key)!=-1)
+					target = line.substring(line.indexOf("=")+2);
+			in.close();
+		}catch(IOException e){System.out.println(e);}
+		return target;
+	}
+	private String getModifiedLibString(String tok, String target)
+	{
+		StringBuffer mod = new StringBuffer();
+		StringTokenizer tokenizer = new StringTokenizer(tok,"/");
+		int counter = tokenizer.countTokens();
+		for(int i = 0; i< ( counter-1); i++)
+			mod.append(tokenizer.nextToken()).append("/");
+		return mod.append(target).toString();
 	}
 	private void displayHassTableContents()
 	{

@@ -5,6 +5,7 @@ package com.ibm.cpp.miners.managedproject;
  * the Common Public License which accompanies this distribution.
  */
 
+
 import com.ibm.dstore.core.model.*;
 
 import java.io.*;
@@ -28,6 +29,12 @@ public class AutoconfManager {
 		configureInManager = new ConfigureInManager();
 		makefileAmManager = new MakefileAmManager();
 	}
+	
+	void setWorkspaceLocation(String location)
+	{
+			makefileAmManager.setWorkspaceLocation(location);
+	}
+		
 
 	protected void manageProject(DataElement project, DataElement status)
 	{

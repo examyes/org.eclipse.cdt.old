@@ -14,6 +14,8 @@ import java.io.*;
 
 public class ManagedProjectMiner extends Miner
 {	private AutoconfManager autoconfManager;
+	private DataElement _workspace = null;
+	
 	public void load() 
 	{
 		autoconfManager = new AutoconfManager();
@@ -67,11 +69,23 @@ public class ManagedProjectMiner extends Miner
 	//	object.
 	}
 	
+	public DataElement getWorkspace()
+	{
+		return _workspace;
+	}
+	
 	public DataElement handleCommand(DataElement theCommand)
  	{
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
   		DataElement  project = getCommandArgument(theCommand, 0);
+
+		if (_workspace == null)
+		{
+			_workspace = project.getParent();
+			autoconfManager.setWorkspaceLocation(_workspace.getSource());
+		}
+
   		//if (!project.getType().equals("project"))  // refer to jeff regarding  this line
    			//return status;
 		if (name.equals("C_UNMANAGE_PROJECT"))
