@@ -738,8 +738,9 @@ public class GdbDebugSession extends DebugSession {
 					+ directory
 					+ "  programName = "
 					+ programName);
-
+                boolean ok;
 		String cmd = "directory " + directory;
+                /*
 		boolean ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
@@ -747,7 +748,7 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
-
+               
 		cmd = "file " + programName;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
@@ -756,7 +757,10 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
+                 */
 
+
+               
 		cmd = "attach " + processIndex;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
@@ -795,6 +799,12 @@ public class GdbDebugSession extends DebugSession {
                    }
                 }
 		
+                cmd = "handle SIGUSR2 nostop";  // if attaching to java process, don't stop on garbage collector signals
+                ok = executeGdbCommand(cmd);
+                cmd = "handle SIG32 nostop";    // if attaching to java process, don't stop on SIG32		
+
+                ok = executeGdbCommand(cmd);
+
 		checkCurrentPart(_currentModuleID);
 
 		updateSharedLibraries();
