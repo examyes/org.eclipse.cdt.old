@@ -440,7 +440,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 		
 		DataElement status = _element.doCommandOn("C_DATE", true);
 
-		if (status.getNestedSize() > 0)
+		if (status != null && status.getNestedSize() > 0)
 		    {
 			dateObj = status.get(0);
 		    }

@@ -61,9 +61,7 @@ public class TransferFiles extends Thread
 	DataStore targetDataStore = _target.getDataStore();
 
 	String sourceMapping = sourceDataStore.mapToLocalPath(_source.getSource());
-	
-	String targetMapping = targetDataStore.getAttribute(DataStoreAttributes.A_LOCAL_PATH) +
-	    java.io.File.separator + _target.getName() + java.io.File.separator + _source.getName();
+	String targetMapping = _target.getSource() + java.io.File.separator + _source.getName();
 	
 	transfer(_source, _target);
 
@@ -98,7 +96,8 @@ public class TransferFiles extends Thread
 								source.getType(), 
 								source.getName(),
 								newSourceStr);
-	
+
+	// if we're receiving
 	if (targetDataStore == _plugin.getDataStore())
 	    {
 		source.getFileObject();

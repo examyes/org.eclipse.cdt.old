@@ -586,13 +586,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     closeEditors();
 
     DataElement solutionObj = findWorkspaceElement(dataStore);
-    DataElement commandDescriptor = dataStore.localDescriptorQuery(solutionObj.getDescriptor(), "C_CLOSE_PROJECTS");
-    if (commandDescriptor != null)
-      {		
-	  dataStore.cancelAllCommands();
-	  dataStore.synchronizedCommand(commandDescriptor, solutionObj);	
-	  dataStore.cleanBadReferences(dataStore.getLogRoot());
-      }
+    if (solutionObj != null)
+	{
+	    DataElement commandDescriptor = dataStore.localDescriptorQuery(solutionObj.getDescriptor(), "C_CLOSE_PROJECTS");
+	    if (commandDescriptor != null)
+		{		
+		    dataStore.cancelAllCommands();
+		    dataStore.synchronizedCommand(commandDescriptor, solutionObj);	
+		    dataStore.cleanBadReferences(dataStore.getLogRoot());
+		}
+	}
   }
 
   public void closeProject(IProject project)

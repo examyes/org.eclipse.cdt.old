@@ -117,7 +117,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 					_plugin.getImageRegistry(), _plugin.getDialogActionLoader(), true);
 
 	_localViewer.setSorter(new DataElementSorter(DE.P_NAME));
-	_localViewer.setInput(localDataStore.getHostRoot());
+	_localViewer.setInput(localDataStore.getHostRoot().get(0).dereference().getParent());
 
 	GridLayout lvlayout= new GridLayout();
 	lvlayout.numColumns = 1;
@@ -199,7 +199,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 	_remoteViewer = new ObjectWindow(remoteGroup, 0, remoteDataStore, 
 					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader(), true);
 	_remoteViewer.setSorter(new DataElementSorter(DE.P_NAME));
-	_remoteViewer.setInput(remoteDataStore.getHostRoot());
+	_remoteViewer.setInput(remoteDataStore.getHostRoot().get(0).dereference().getParent());
 
 
 	GridLayout rvlayout= new GridLayout();
