@@ -24,7 +24,7 @@ public class ConfigureInManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void manageConfigureIn( boolean actionIsManageProject)
+	protected void generateConfigureIn( boolean actionIsManageProject)
 	{
 		// check if there is an existing configure.in
 		File configure_in = new File (project.getSource(),"configure.in");
@@ -33,19 +33,26 @@ public class ConfigureInManager {
 			getConfigureInTemplateFile(project);
 			initializeConfigureIn(new File(project.getSource(),"configure.in"));
 		}
-		else // it does exist
+		else // if it exists - to an update
+			updateConfigureIn(new File(project.getSource(),"configure.in"));
+	}
+	protected void updateConfigureIn( boolean actionIsManageProject)
+	{
+		// if the action was mangeProject then
+		if(actionIsManageProject)
 		{
-			// if the action was mangeProject then
-			if(actionIsManageProject)
-			{
-				System.out.println("************************************************"+
-									"\n* configure.in will be updated"+ 
-									"\n* existing file will be named configure.in.old"+
-									"\n* Never prompt me again! - check box"+
-									"***********************************************");
-			}
-			// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
-			// the rest of the file will be te same
+			System.out.println("\n************************************************"+
+								"\n* configure.in will be updated"+ 
+								"\n* existing file will be named configure.in.old"+
+								"\n* Never prompt me again! - check box"+
+								"\n***********************************************");
+		}
+		// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
+		// the rest of the file will be te same
+				// check if there is an existing configure.in
+		File configure_in = new File (project.getSource(),"configure.in");
+		if(configure_in.exists())
+		{
 			Runtime rt = Runtime.getRuntime();
 			// copy the old configure.in to configure.in.old
 			try{
@@ -54,7 +61,7 @@ public class ConfigureInManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 			// update configure.in
-			updateConfigureIn(new File(project.getSource(),"configure.in"));
+			updateConfigureIn(configure_in);
 		}
 	}
 	private void updateConfigureIn(File configure_in)

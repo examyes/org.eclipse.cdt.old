@@ -47,9 +47,12 @@ public class MakefileAmManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void manageMakefileAm()
+	protected void manageMakefileAm(boolean actionIsManagedProject)
 	{
-		// check if there is an existing makefile.am in top level dir - sufficient to check if the user has autoconf/automake support
+		
+		// check if there is an existing makefile.am in the project structure
+		// if found and the action was manage project then prompt the user that files will be chenged 
+		//- to rename them *.old
 		File makefile_am = new File (project.getSource(),"Makefile.am");
 		if(!makefile_am.exists())
 		{
@@ -62,7 +65,7 @@ public class MakefileAmManager {
 		{
 			System.out.println("\n exist");
 			// if there is then
-			//updateConfigure_in(new File(project.getSource(),"configure.in"));
+			//updateMakefileAM(new File(project.getSource(),"Makefile.am"));
 		}
 	}
 	private void initializeMakeFile_am()

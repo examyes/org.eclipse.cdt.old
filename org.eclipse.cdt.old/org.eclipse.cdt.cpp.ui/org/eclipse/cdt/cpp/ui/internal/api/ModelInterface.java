@@ -1748,6 +1748,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Generate Autoconf/Automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");
+	DataElement updateAutoconfFilesCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Update Autoconf/Automake files",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
 	DataElement createConfigureeCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
