@@ -125,8 +125,11 @@ public class ParseWorker extends Thread
   
   if (_fileParsedDone && _masterStatus != null)
   {
-   _masterStatus.setAttribute(DE.A_VALUE, "really done");
-   _masterStatus.getDataStore().refresh(_masterStatus);
+  	if (!_masterStatus.getAttribute(DE.A_VALUE).equals("really done"))
+  	{
+   	_masterStatus.setAttribute(DE.A_VALUE, "really done");
+   	_masterStatus.getDataStore().refresh(_masterStatus);
+  	}
   }
   if (theObject != null)
    update(_projectObjects);
