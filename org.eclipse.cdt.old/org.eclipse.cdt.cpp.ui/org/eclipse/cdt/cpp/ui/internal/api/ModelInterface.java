@@ -11,7 +11,6 @@ import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.vcm.*;
 import com.ibm.cpp.ui.internal.actions.*;
 
-
 import com.ibm.dstore.ui.ConvertUtility;
 import com.ibm.dstore.ui.ILinkable;
 import com.ibm.dstore.ui.actions.*;
@@ -1954,8 +1953,31 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Initialize Autoconf",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");
+//////////////////////////////////
+	//DataElement updateCmd = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Update...");
+	DataElement updateCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
+	DataElement updateAutoconfFilesCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Update autoconf files",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
 	
-	DataElement updateCmd = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Update...");
+	
+	
+	DataElement updateMakefileAmCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Update Makefile.am",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateMakefileAmCmd.setAttribute(DE.A_VALUE, "UPDATE_MAKEFILE_AM");
+	
+	DataElement updateConfigureInCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Update configure.in",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
+
+	dataStore.createReference(updateCmds, autoconfCmds, "abstracts", "abstracted by");
+
+////////////////////////////////////////
+//////////////////////////////////
+/*	DataElement updateCmd = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Update...");
 	
 	DataElement updateAutoconfFilesCmd = dataStore.createObject(updateCmd, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "All - configure.in and Makefile.am's",
@@ -1974,9 +1996,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
 
-	dataStore.createReference(updateCmds, updateCmd, "abstracts", "abstracted by");
+	dataStore.createReference(updateCmds, updateCmd, "abstracts", "abstracted by");*/
 
-
+////////////////////////////////////////
 	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
 
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,

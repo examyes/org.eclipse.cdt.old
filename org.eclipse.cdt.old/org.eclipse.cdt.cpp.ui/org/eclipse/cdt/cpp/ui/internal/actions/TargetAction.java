@@ -61,9 +61,6 @@ public class TargetAction extends CustomAction
 			}		
 		}
 	}
-	
-	
-	
 	public TargetAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
