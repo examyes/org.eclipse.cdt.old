@@ -227,17 +227,20 @@ public class GdbObjectVariable extends GdbVariable {
 			fieldName = parseStr.substring(0, equal);
 			
 			// get type name for this field		
-			fieldName = fieldName.trim();	    		
+			fieldName = fieldName.trim();			
 	   		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
 	   		{
 				fullFieldName = _prefix + "." + fieldName;
 	    		prefix = fullFieldName;
 				fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    								
-	   		}
+	   		}	   		
 	   		else			    		
 	   		{
-	   			// if name is enclosed by <>, it's the actual type
-	   			fieldType = fieldName.substring(1, fieldName.length()-1);
+	   			// if name is enclosed by <>, it's the actual type			
+	   			// comment out for now, return "" for all type names
+	   			//fieldType = fieldName.substring(1, fieldName.length()-1);
+	   			
+	   			fieldType = "";
 	   		}
 			
 			// get value (from first equal sign to comma)

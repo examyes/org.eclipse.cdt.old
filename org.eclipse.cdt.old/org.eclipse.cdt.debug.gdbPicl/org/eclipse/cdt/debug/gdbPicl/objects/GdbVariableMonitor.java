@@ -195,7 +195,7 @@ public class GdbVariableMonitor extends Gdb_VariableMonitor
   	// types of all variables
   	if (true)
   	{
-	  	return " ";
+	  	return "";
   	}
   	  	
       String exprType = "unknown_Type";  	
