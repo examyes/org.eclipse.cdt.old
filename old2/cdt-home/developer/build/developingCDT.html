@@ -115,6 +115,19 @@
  <li>Once you have selected your plugins, right-click on the selected list and choose <b>"Check Out as Project"</b>.  This 
      should start checking out all the selected plugins and subsequently build them.  If all goes well you will hopefully 
      have no build errors.</li>
+  <li> The Eclipse CDT projects are organized for team development. 
+  	As a result the classpath is not stored with the project. 
+  	You must add the required plugins as External Packages and/or Fragments.<br>
+  	Click on the project "org.eclipse.cdt", to select it, and perform the following actions.
+  	<ol>
+  		<li>Click on the "File" menu </li>
+  		<li>Select "Import > External Packages and Fragments" </li>
+		<li>Select "Choose from Plug-ins in the Runtime Workbench"</li>
+		<li>Enter your eclipse installation directory in the text field labeled "Plug-in Location" (i.e. C:\eclipse)</li>
+		<li>Select "Add Required Plugins" or "All" (Sometimes "Add Required ..." does not add all required plugins) </li>
+		<li>Press "Finish" </li>
+    </ol>
+  </li>
  <li>If build errors occur indicating that org.eclipse.* plugins cannot be found, ensure that your Eclipse and VM installation are setup correctly. </li>
  <li>You can also select each plugin and right-click then choose "Update Classpath". </li>
 </ol>
