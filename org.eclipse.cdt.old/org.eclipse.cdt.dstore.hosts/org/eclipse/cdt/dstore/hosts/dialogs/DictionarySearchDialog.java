@@ -31,69 +31,16 @@ import org.eclipse.swt.events.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.dialogs.*;
 
-public class DictionarySearchDialog extends org.eclipse.jface.dialogs.Dialog 
-    implements Listener
+public class DictionarySearchDialog extends SearchDialog 
 {
-    private Text         _searchEntry;
-
-    private Button       _search;
-    private ObjectWindow _resultViewer;
-
-    private HostsPlugin  _plugin;
-    private String       _title;
-
     public DictionarySearchDialog(String title)
     {
-	super(null);
-	_plugin = HostsPlugin.getInstance();
-	_title = title;
-    }
-
-    public Control createDialogArea(Composite parent)
-    {
-	Composite c = (Composite)super.createDialogArea(parent);
-
-	GridLayout clayout= new GridLayout();
-	clayout.numColumns = 3;
-	clayout.marginHeight = 5;
-	clayout.marginWidth = 5;
-	c.setLayout(clayout);
-
-	GridData cgrid = new GridData(GridData.FILL_BOTH);
-	c.setLayoutData(cgrid);
-
-	Label searchLabel = new Label(c, SWT.NONE);
-	searchLabel.setText("Search");
-
-	_searchEntry = new Text(c, SWT.BORDER);
-	GridData egrid = new GridData(GridData.FILL_HORIZONTAL);
-	egrid.widthHint = 100;
-	//	egrid.horizontalSpan = 2;
-	_searchEntry.setLayoutData(egrid);
-
-	_search = new Button(c, SWT.PUSH);
-	_search.setText("Run");
-	_search.addListener(SWT.Selection, this);
-	
-	_resultViewer = new ObjectWindow(c, 0, _plugin.getDataStore(), 
-					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader(), true);
-
-
-	GridLayout vlayout = new GridLayout();
-	_resultViewer.setLayout(vlayout);
-
-	GridData lvgrid = new GridData(GridData.FILL_BOTH);
-	lvgrid.heightHint = 250;
-	lvgrid.widthHint = 250;
-	lvgrid.horizontalSpan = 3;
-	_resultViewer.setLayoutData(lvgrid);
-
-	getShell().setText(_title);
-	return c;
+	super(title, null, "Pattern", "Find");
     }
 
     public void handleEvent(Event e)
     {
+	super.handleEvent(e);
 	Widget widget = e.widget;
 	if (widget == _search)
 	    {

@@ -425,10 +425,15 @@ public class HostsPlugin extends AbstractUIPlugin
 	selectFile.setAttribute(DE.A_VALUE, "C_FILE_TRANSFER");
 
 
+	DataElement findFiles = dataStore.createObject(dirD, DE.T_UI_COMMAND_DESCRIPTOR,
+						       "Find Files", 
+						       "com.ibm.dstore.hosts.actions.FindFileAction");
+	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");
+
 	DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							      "Dictionary Search", 
 							      "com.ibm.dstore.hosts.actions.SearchDictionaryAction");
-	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH");
+	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
     }
 
 }

@@ -3,7 +3,7 @@
 .java.class:
        javac %s
 
-all:  DataElementFileDialog.class DataElementFileTransferDialog.class DictionarySearchDialog.class
+all:  SearchDialog.class DataElementFileDialog.class DataElementFileTransferDialog.class DictionarySearchDialog.class FindFileDialog.class 
 
 clean:
 	rm *.class
