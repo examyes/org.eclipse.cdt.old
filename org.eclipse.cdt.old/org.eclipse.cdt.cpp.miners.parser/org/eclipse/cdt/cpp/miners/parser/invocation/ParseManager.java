@@ -60,11 +60,35 @@ public class ParseManager
   _thePreprocessWorker.start();
  }
  
- public DataElement removeParseInformation(DataElement theFile)
+ public boolean removeParseInformation(DataElement theFile)
  {
-  _dataStore.deleteObject(_parsedFiles,theFile);
-  _dataStore.update(_parsedFiles);
-  return null;
+  ArrayList theFiles = _parsedFiles.getAssociated("contents");
+  boolean deletedSomething = false;
+  
+  if ((theFiles == null) || (theFiles.size() == 0))
+   return false;
+  
+  if (theFiles.contains(theFile))
+  {
+   _dataStore.deleteObject(_parsedFiles, theFile);
+   return true;
+  }
+
+  if (theFile.getType().equals("directory"))
+  {
+  
+   String thePath = theFile.getSource();
+   for (int i = theFiles.size()-1; i >= 0; i--)
+   {  
+    DataElement theElement = (DataElement)theFiles.get(i);
+    if (theElement.getSource().startsWith(thePath))
+    {
+     _dataStore.deleteObject(_parsedFiles, theElement);
+     deletedSomething = true;
+    }
+   }
+  }
+  return deletedSomething;
  }
  
  public DataElement nameLookup(String name, String type, DataElement theRoot)
