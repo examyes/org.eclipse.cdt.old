@@ -9,6 +9,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  */
 import org.eclipse.ui.views.properties.IPropertySource; 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
  
 import com.ibm.dstore.core.model.*;
 import org.eclipse.jface.viewers.*;
