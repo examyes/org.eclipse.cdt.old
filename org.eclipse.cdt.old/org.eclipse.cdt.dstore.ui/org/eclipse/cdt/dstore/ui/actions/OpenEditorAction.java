@@ -191,17 +191,18 @@ public class OpenEditorAction extends Action implements IOpenAction
 				    
 						    IEditorPart editor = null;
 						    
-						    IEditorPart [] editors = persp.getEditors();
+						    IEditorReference [] editors = persp.getEditorReferences();
 						    for (int i = 0; i < editors.length; i++)
 							{
-							    IEditorInput einput = editors[i].getEditorInput();
+								IEditorPart editorp = editors[i].getEditor(false);
+							    IEditorInput einput = editorp.getEditorInput();
 							    if (einput instanceof IFileEditorInput)
 								{
 								    IFileEditorInput input = (IFileEditorInput)einput;
 								    if ((input != null) 
 									&& input.getName().equals(file.getName()))
 									{
-									    editor = editors[i];		      
+									    editor = editorp;		      
 									    persp.bringToTop(editor);		      
 									}
 								}
