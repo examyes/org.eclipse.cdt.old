@@ -37,6 +37,7 @@ public class CmdStartPgm extends Command
 
      int DU = tm.getThreadDU(_debugSession.stopThreadName());
      int whyStop = 0;
+
      String msg = errorMsg[0];
 
      switch (_debugSession.whyStop()) {
@@ -63,7 +64,12 @@ public class CmdStartPgm extends Command
      }
 
      _rep = new ERepStartPgm(DU, whyStop, null);
-     _rep.setMessage(msg);
+     
+     if (msg != null)
+     {
+     	if (msg.length() > 0)
+		     _rep.setMessage(msg);
+     }
      _rep.setReturnCode(returnCode);
 
      return false;
