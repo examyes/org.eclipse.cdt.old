@@ -63,8 +63,10 @@ this plan.
 
 <p>The current status of each plan item is noted:
 <ul>
-  <li><b>Committed</b> plan item - A committed plan item is one that we have decided 
-    to address for the release.</li>
+  <li><b>Committed</b> plan item - A committed plan item is one that someone in 
+  the CDT opensource community has decided 
+    to address for the release (includes development, testing, and 
+  documentation).</li>
   <li><b>Proposed</b> plan item - A proposed plan item is one that we are
     considering addressing for the release. Although we are actively
     investigating it, we are not yet in a position to commit to it, or to say
@@ -78,6 +80,8 @@ this plan.
     unworkable are marked as rejected plan items, with an accompanying summary
     of why they were dismissed. Keeping track of rejected items avoids repeating
     the discussion.</li>
+  <li><b>No Committment</b> plan item - Plan items that were proposed but no 
+  volunteers have agreed to produce this feature.</li>
 </ul>
 
 <h2><a name="Deliverables"></a>Release deliverables</h2>
@@ -86,9 +90,9 @@ this plan.
   <li>Source code release for CDT Project, available as versions tagged 
       &quot;CDT_30&quot; 
     in the CDT Project <a href="http://dev.cdt.org/viewcvs/">CVS repository</a>.</li>
-  <li> CDT Project (downloadable, and update site) -- source + binary 
+  <li> CDT Project (downloadable zips and update site) -- source + binary 
   distribution, used to develop on, or extend the CDT</li>
-  <li>CDT runtime binary distribution (downloadable and update site) -- the 
+  <li>CDT runtime binary distribution (downloadable zips and update site) -- the 
   stuff needed to run CDT</li>
   <li>CDT Test Plugins (downloadable zips and update site) -- All the JUnit and 
   test infrastructure need to run the automated CDT tests</li>
@@ -96,7 +100,7 @@ this plan.
 
 <h2><a name="Milestones"></a>Release milestones</h2>
 
-<p>Release milestone occurring at regular intervals (~4 weeks) exist to facilitate 
+<p>Release milestone occurring at regular intervals (~6 weeks) exist to facilitate 
   coarse-grained planning and staging. 
 
 <br><b>Synchronization Expectations</b><br>
@@ -241,7 +245,7 @@ more accurate results (for refactoring and outlining).</p>
 <!--
   <p><b>??short description of item n??.</b> ??longer description of item n?? 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> status (eg in progress, completed, 
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> status (eg in progress, completed, 
     hold) </em>]</p>
 -->  
 <p><b>Reduce indexing time and cost.</b> The CDT relies heavily on having a valid index. 
@@ -271,7 +275,8 @@ information to the index clients.&nbsp;
 	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79661">Bug 79661: All Index Entries should make use of Path Variables</a>
 </pre>
 <p> 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress 
+    (IBM)</em></p>
 <p>&nbsp;</p>
 </blockquote>
 
@@ -288,12 +293,13 @@ information to the index clients.&nbsp;
 	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69013">Bug 69013: [C/C++ Search]: Search for Namespace definition and declaration give the same results.</a>
 	</pre>
   <p> 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress 
+    (IBM)</em></p>
     
   <p><b>Error parser re-design.</b> Work to specifically improve the performance of the 
     error parsers and to improve their programatic interface. 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress </em></p>
 
 </blockquote>
 
@@ -302,7 +308,8 @@ information to the index clients.&nbsp;
   <blockquote>  
   <p><b>K&R C Language Support.</b>
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> Complete</em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> Complete 
+  (IBM)</em></p>
     
   <p><b>Parser/Scanner Environment Discovery.</b>
       <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/scannerconf_correctness_3.0_fds.html?cvsroot=Tools_Project">feature
@@ -314,20 +321,21 @@ spec</a>
     	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73607">73607</a>, 
     	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=74474">74474</a>
     ) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress 
+  (IBM)</em></p>
     </blockquote>
 
 
 <h4>Proposed Items (Eclipse Platform subproject, Parser Correctness theme)</h4>
 <blockquote>
  <p><b>Parser/Scanner language extensions.</b> 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>)
+ <em>No Committment</em></p>
 
   <p><b>C/C++ Language Variants.</b> This work would add the possibility to add new
     compiler/language specific capabilities into the parser (ie GNU extensions) 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>)
+  <em>No Committment</em></p>
     
  </blockquote>   
 <h3><a name="ThemeAST">Theme 3: AST/DOM</a></h3>
@@ -338,8 +346,8 @@ spec</a>
   Doc</a>,&nbsp;
   <a href="https://bugs.eclipse.org/bugs/attachment.cgi?id=14650&action=view">
   CDT AST v0.1</a>, bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=57816">57816</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress</em>
-    <ul>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress</em> 
+(IBM)<ul>
     	<li>DOM available in M5</li>
     	<li>Selection client ported to new DOM in M6</li>
     	<li>Indexer Client ported to new DOM in M6</li>
@@ -360,7 +368,7 @@ around the Managed Build System.</p>
 <!--
   <p><b>??short description of item n??.</b> ??longer description of item n?? 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> status (eg in progress, completed, 
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> status (eg in progress, completed, 
     hold) </em>]</p>
 -->  
 </blockquote>
@@ -372,38 +380,34 @@ around the Managed Build System.</p>
     embedded developers and various OEM/VARs.  One common theme that each group must
     re-invent is the concept of their remote system.  This activity proposes to unify that 
     interface.
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
-
-  <p><b>Managed build system.</b>
-        <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/MBS_3_0_Proposal.html.html?cvsroot=Tools_Project">Design spec </a> &nbsp;bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>)
+  <em>No Committment.</em></p>
 
   <p><b>Debugger specialization for gdb embedded.</b> Further GDB specific enhancements to
     facilitate working with embedded targets.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress </em></p>
 
   <p><b>Debugger memory view.</b> Synchronization of the debugger's memory view with
     the platform generic memory view.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress </em></p>
 
   <p><b>Launch configuration UI adjustment.</b> A simplification of the CDT launch 
     configuration panels to simplify and speed-up the time from code to debug. 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress </em></p>
 
   <p><b>Template extension point for new projects
 .</b> Initial extension point used to 
     create code template stubs for new projects (ie KDE/GNOME/Win32 application, command 
     line application, shared library etc)
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress </em></p>
 
   <p><b>Better support for nested projects and linked resources.</b> 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>)
+  <em>No Committment</em></p>
 
 </blockquote>
 
@@ -412,37 +416,39 @@ around the Managed Build System.</p>
 <blockquote> 
 </blockquote>
 
-<h4>Proposed Items ( no theme)</h4>
+<h4>Proposed Items ( <b>Managed build system.</b>
+        <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/MBS_3_0_Proposal.html.html?cvsroot=Tools_Project">Design spec </a> &nbsp;bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>) 
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress&nbsp; 
+)</em></h4>
 <blockquote> 
-<pre>- Multi-Version Tool-chain support
+<p><b>Multi-Version Tool-chain support</b>
 Add the ability to support multiple versions simultaneously and to
 support migration from one version to another.
-Bugzilla entries: 81450
-Priority: High
-Status: In design
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> In design,
 Milestone: TBD
 
-- Converter extension point
+<p><b>Converter extension point</b>
 Add the ability to convert Projects, Tool-chains, Tools, Builders.  This
 supports tool version migration (previous item) and converting a project
-from one tool-chain to a different one.
-Bugzilla entries: 81450
-Priority: High
-Status: In design
+from one tool-chain to a different one. bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> In design,
 Milestone: TBD
 
-- Tool-chain installation support
+<p><b>Tool-chain installation support</b>
 Add an isSupported extension callback that allows a tool-chain
-integration to report whether the tool-chain that is deswcribes is
+integration to report whether the tool-chain that is describes is
 installed on the system.
 Add an initialize extension callback that allows a tool-chain to
 initialize itself.
-Bugzilla entries: 81450
-Priority: High
-Status: In design
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> In design,
 Milestone: TBD
 
-- Build macros - ${macro}
+<p><b>Build macros - ${macro}</b>
 Add support for build macros in configuration properties that accept
 text.  MBS will define many built-in macros (files, paths, names).
 Tool-chains can define additional macros and values at configuration and
@@ -453,12 +459,12 @@ current file, configuration, project, etc.).  More specific scope
 overrides less specific (e.g. configuration takes precedence over
 workspace). User defined values override tool-chain defined values which
 override built-in values at the same scope.
-Bugzilla entries: 81450
-Priority: High
-Status: In design
-Milestone: TBD
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> 
+In design, Milestone: TBD
 
-- Environment variables
+<p><b>Environment variables</b>
 Allow tool-chains to define additional environment variables and values
 at configuration and project scope.  This includes being able to set the
 executable, include and library paths, so that the user is not required
@@ -469,64 +475,65 @@ takes precedence over workspace).  User defined values override
 tool-chain defined values which override built-in values at the same
 scope.  Environment variables are passed to the build process and can be
 used as build macros.
-Bugzilla entries: 81450
-Priority: High
-Status: In design
-Milestone: TBD
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> 
+In design, Milestone: TBD
 
-- Custom build steps (command line scripts)
+<p><b>Custom build steps (command line scripts)</b>
 Add support for Pre & Post build command scripts.  Allow a user to
 define a set of commands to be run on all files with a specified
 extension(s).  This is a simple tool integration method that could be
 used with tools such as lex and yacc.  Allow a user to define a set of
-commands to be used to build a specific source file. Bugzilla entries: 81450
-Priority: High
-Status: In design
+commands to be used to build a specific source file. 
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> In design,
 Milestone: TBD
 
-- Custom file extensions
+<p><b>Custom file extensions</b>
 Allow the user to modify the default file extensions that map to a tool.
 CDT already has the C/C++ File Types property page.  MBS will use that
 information.  MBS would also like to extend that page to allow
 tool-integrators to define "file-types" and default extensions for any
 tool that they want to integrate into their tool chain - for example,
 lex, yacc, or a Fortran compiler.
-Bugzilla entries: 81450
-Priority: High
-Status: In design
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> In design,
 Milestone: TBD
 
-- Integrate into Scanner configuration discovery mechanisms:
+<p><b>Integrate into Scanner configuration discovery mechanisms:</b>
 Update MBS to use the new CDT mechanisms.
-Bugzilla entries: 81450
-Priority: High
-Status: Not started 
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: High,
+Status: Not started ,
 Milestone: TBD
 
-- Tool Input ordering
+<p><b>Tool Input ordering</b>
 Allow the user to specify the order for input files for tools that
 accept multiple files (e.g. Linker).
-Bugzilla entries: 81450
-Priority: Medium
-Status: Not started
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: Medium,
+Status: Not started,
 Milestone: TBD
 
-- Option enhancements:
+<p><b>Option enhancements:</b>
 Add an extension callback for option "applicability".  This would allow
 a tool-chain to specify whether or not an option is currently displayed,
 enabled, and used in command-line generation.
 Support the browseType attribute for String properties by displaying a
 file selection dialog box.
-Bugzilla entries: 81450
-Priority: Medium
-Status: Not started
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: Medium,
+Status: Not started,
 Milestone: TBD
 
-- Support new Remote Building
+<p><b>Support new Remote Building</b>
 Allow tool integrators to use the new Remote System support in CDT 3.0.
-Bugzilla entries: 81450
-Priority: Medium
-Status: Not started
+bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>),
+Priority: Medium,
+Status: Not started,
 Milestone: TBD
 </pre>
 </blockquote>
@@ -537,7 +544,7 @@ Milestone: TBD
 <blockquote> 
 <!--
   <p><strong>??short description n ?? .</strong> ?? longer description?? bugzilla 
-    ref.(####) <em><img src="ok.gif" width="12" height="12"> status</em></p>
+    ref.(####) <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> status</em></p>
   </blockquote>
 -->
 
@@ -547,85 +554,92 @@ Milestone: TBD
   <p><b>Pervasive use of workspace variables.</b> This helps developers create location
     independant projects and all paths/symbols created in the CDT should be "variable" aware.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> No Committment</em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> No Committment</em></p>
 
 
   <p><b>Enhanced refactoring.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=75364">75364</a>) 
-    <em><img src="ok.gif" width="12" height="12"> No Committment </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> No Committment </em></p>
 
 
   <p><b>Source based hover help.</b> Using the comments within the source and headers to
     provide content dynamic hover help and content assist help.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> No Committment</em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> No Committment</em></p>
 
 
   <p><b>Java based C/C++ code formatter.</b> A java native (ie portable) based code formatter.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress </em></p>
 
   <p><b>Improved ISV documentation.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> No Committment</em></p>
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> No Committment</em></p>
 
 <pre>Core
-		 - Error Parser: The current error parser is limited,
-		   and there is no clean way to maintain contexts for
-		   multiline errors matching.
-		 		 * new Interface been proposed(PR 54812)
-		 		 * new feature: hyperlinking (PR 50124)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Error Parser: The current error parser is limited,
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; and there is no clean way to maintain contexts for
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; multiline errors matching.
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* new Interface been proposed(PR 54812)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* new feature: hyperlinking (PR 50124)
 
-		 - Resolver Model: The current file mappings/associations
-		   are standalone to CDT, the resolver needs to propagate
-		   the information to the Eclipse platform.  This can now
-		   be done with the new IContentTypeManager and extension
-		   points in Eclipse-3.1 (PR 78821 ..).
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Resolver Model: The current file mappings/associations
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; are standalone to CDT, the resolver needs to propagate
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; the information to the Eclipse platform.&nbsp; This can now
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; be done with the new IContentTypeManager and extension
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; points in Eclipse-3.1 (PR 78821 ..).
 
-		 - IPathEntry interface changes: The scanner automatic discovery
-		   is now more powerfull and can return information on per file basis.
-		   The interface of the IPathEntry needs to be change to accomodate (PR 72821).
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- IPathEntry interface changes: The scanner automatic discovery
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; is now more powerfull and can return information on per file basis.
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; The interface of the IPathEntry needs to be change to accomodate (PR 72821).
 
-		 - Variable substitution: A service offered by the Core Model to mantain
-		   variables specific to the CDT, those variables could be exported (PR 79518).
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Variable substitution: A service offered by the Core Model to mantain
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; variables specific to the CDT, those variables could be exported (PR 79518).
 
-UI
-		 - Overhaul of the OpenType, Type Hierarchy and C/C++ browsing views: The
-		   OpenType was doing a very agressive caching, with the new features provided
-		   by the indexer(providing offset locations) we can scale down the process and
-		   rely more on the indexer (PR 48213, ...).
+  &nbsp; &nbsp; &nbsp; UI
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Overhaul of the OpenType, Type Hierarchy and C/C++ browsing views: The
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; OpenType was doing a very agressive caching, with the new features provided
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; by the indexer(providing offset locations) we can scale down the process and
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; rely more on the indexer (PR 48213, ...).
 
-		 - Generate overriding methods in the CEditor, for C++ classes (PR 58932)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Generate overriding methods in the CEditor, for C++ classes (PR 58932)
 
-		 - Class Wizard
-		 		 * generate user customizable define guards (PR 75153)
-		 		 * use documentation templates(PR 56207)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Class Wizard
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* generate user customizable define guards (PR 75153)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* use documentation templates(PR 56207)
 
-		 - More Drag && Drop support, in the views (PR 83112, ..).
- 
-		 - C/C++ Editor improvements:
-		 		 * coloring of operators, braces and numbers,
-		 		 * outline in selectable dialog (Ctrl O) with search input(PR 83112).
-		 		 * Preference Pages changes to match Eclipse-3.1 policies(Many settings
-		 		   are now common on the Workbench/Text Editor).
- 
-		 - Removing of the old Template scheme to match Eclipse-3.1 (PR 71111).
-		 
-		 - Definition/Declaration view, showing the definition of a symbol(relies
-		   on the indexer.
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- More Drag && Drop support, in the views (PR 83112, ..).
+&nbsp; &nbsp; &nbsp; &nbsp;
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- C/C++ Editor improvements:
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* coloring of operators, braces and numbers,
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* outline in selectable dialog (Ctrl O) with search input(PR 83112).
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Preference Pages changes to match Eclipse-3.1 policies(Many settings
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;&nbsp; are now common on the Workbench/Text Editor).
+&nbsp; &nbsp; &nbsp; &nbsp;
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Removing of the old Template scheme to match Eclipse-3.1 (PR 71111).
+  &nbsp; &nbsp; &nbsp; 		&nbsp;
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Definition/Declaration view, showing the definition of a symbol(relies
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; on the indexer.
 
-		 - Open call hierarchy view.
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Open call hierarchy view.
 
 
-Make Builder
-		 - Make targets
-		 		 * Allow setting environment for build targets(PR 47241)
-		 		 * Allow variables substitution in arguments(PR 48009).
+  &nbsp; &nbsp; &nbsp; Make Builder
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- Make targets
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Allow setting environment for build targets(PR 47241)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Allow variables substitution in arguments(PR 48009).
 
-Launch
-		 - New launch configuration, gdbserver.  Currently the
-		   gdb server launch is tied to the local launcher,
-		   confusing the user(PR 79458)
+  &nbsp; &nbsp; &nbsp; Launch
+  &nbsp; &nbsp; &nbsp; 		&nbsp;- New launch configuration, gdbserver.&nbsp; Currently the
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; gdb server launch is tied to the local launcher,
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; confusing the user(PR 79458)
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+&nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; &nbsp; 		&nbsp;&nbsp;
+&nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; 		&nbsp;&nbsp;
+&nbsp; 		&nbsp;&nbsp;
+  		&nbsp;&nbsp;
 		   
 </pre>
 
