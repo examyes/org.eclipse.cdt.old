@@ -27,7 +27,7 @@ else
     if ($match == 0) 
     {
 	print("success\n");
-	system("su $userIN -c 'java -DA_PLUGIN_PATH=$pathIN com.ibm.dstore.core.server.Server $portIN $ticketIN'");
+	system("su --login $userIN -c 'java -DA_PLUGIN_PATH=$pathIN com.ibm.dstore.core.server.Server $portIN $ticketIN'");
 	1;
     }
     else
