@@ -62,6 +62,10 @@ createJarFile:
 	touch $(jarFile);\
 	find . -name '*.class' -o -name '*.properties' | xargs jar -uf $(jarFile)
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
+ifeq ($(pluginName), org.eclipse.cdt.cpp.miners)
+	$(createHelpJar)
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(helpjarDir)/$(helpjarFile)
+endif
 
 createJavadoc:
 	@cd $(pluginsDirectory)/$(pluginName);\
@@ -80,7 +84,21 @@ doClean:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	find . -name '*.class' |xargs rm -f
 
+#This constructs the help webapp jar and puts it in the right place
+deployHelpWebApp:
+ifeq ($(pluginName),org.eclipse.cdt.cpp.miners)
+	$(createHelpJar)
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(helpjarDir)/$(helpjarFile)
+endif
 
+helpjarFile=helpwebapp.jar
+helpjarDir=help/helpwebapp/WEB-INF/lib
+define createHelpJar
+	@cd $(pluginsDirectory)/$(pluginName);\
+	rm -Rf $(pluginsDirectory)/$(pluginName)/$(helpjarDir);\
+	mkdir $(pluginsDirectory)/$(pluginName)/$(helpjarDir);\
+	find help/helpwebapp/servlet -name '*.class' |xargs jar -cf $(helpjarDir)/$(helpjarFile)
+endef
 
 
 
