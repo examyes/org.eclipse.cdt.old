@@ -1084,6 +1084,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			if (workspaceObj == null)
 			    {
 				//System.out.println("couldn't find workspace");
+					findWorkspaceElement();
 			    }
 		    }
 		
