@@ -881,7 +881,7 @@ public class FileSystemMiner extends Miner
 					    }
 					else
 					    {
-						newObject.setExpanded(false);
+						classifyExecutable(newObject);
 						newObject.expandChildren();
 						newObject.setDepth(1);
 					    }
@@ -895,27 +895,7 @@ public class FileSystemMiner extends Miner
 	else if (theElement.isOfType(_fileDescriptor))
 	    {
 		handleSize(theElement, status);
-		handleDate(theElement, status);
-
-		if (theElement.isOfType(_exeDescriptor))
-		    {
-			try
-			    {
-				// next level query using "file"?
-				// find out if binary exe
-				Process theProcess = Runtime.getRuntime().exec("file " + theElement.getSource());	
-				BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
-				String line = reader.readLine();
-				if (line.indexOf("executable") > 0)
-				    {
-					theElement.setAttribute(DE.A_TYPE, "binary executable");
-					_dataStore.refresh(theElement);
-				    }
-			    }
-			catch (IOException e)
-			    {
-			    }
-		    }
+		handleDate(theElement, status);		
 	    }
 
 	if (status != null)
@@ -923,6 +903,29 @@ public class FileSystemMiner extends Miner
 		status.setAttribute(DE.A_NAME, "done");
 	    }
 	return status;
+    }
+
+    private void classifyExecutable(DataElement theElement)
+    {
+	if (theElement.isOfType(_exeDescriptor))
+	    {
+		try
+		    {
+			// next level query using "file"?
+			// find out if binary exe
+			Process theProcess = Runtime.getRuntime().exec("file " + theElement.getSource());	
+			BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
+			String line = reader.readLine();
+			if (line.indexOf("executable") > 0)
+			    {
+				theElement.setAttribute(DE.A_TYPE, "binary executable");
+				_dataStore.refresh(theElement);
+			    }
+		    }
+		catch (IOException e)
+		    {
+		    }
+	    }	
     }
 
     private DataElement internalHandleQuery (DataElement theElement, DataElement status, boolean refresh)
