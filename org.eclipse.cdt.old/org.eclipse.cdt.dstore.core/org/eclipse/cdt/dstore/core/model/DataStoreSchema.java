@@ -197,6 +197,8 @@ public class DataStoreSchema
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Show_Ticket"), "-", "C_VALIDATE_TICKET", false);	
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Get_Schema"), "*", "C_SCHEMA", false);	
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT", false);
+     
+    _dataStore.createCommandDescriptor(rootD, "Notification", "*", "C_NOTIFICATION", false);
       }
 
 
