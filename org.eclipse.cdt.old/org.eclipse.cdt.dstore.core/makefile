@@ -27,7 +27,6 @@ eclipseLocation := $(shell test -r .eclipse && cat .eclipse)
 endif
 
 # List of Plugins that we build
-buildPlugins += com.ibm.debug
 buildPlugins += org.eclipse.cdt.dstore.extra
 buildPlugins += org.eclipse.cdt.dstore.extra.server
 buildPlugins += org.eclipse.cdt.dstore.core
@@ -44,9 +43,10 @@ buildPlugins += org.eclipse.cdt.linux.help
 allPlugins = $(buildPlugins)
 allPlugins += org.eclipse.cdt.cpp.docs.user
 allPlugins += com.ibm.lpex
-allPlugins += com.ibm.lpex.doc.user
-allPlugius += com.ibm.lpex.doc.isv
+#allPlugins += com.ibm.lpex.doc.user
+#allPlugius += com.ibm.lpex.doc.isv
 allPlugins += com.ibm.debug.doc.user
+allPlugins += com.ibm.debug
 
 # List of Plugins needed for the Serverside Zip
 serverPlugins =  org.eclipse.cdt.dstore.core
