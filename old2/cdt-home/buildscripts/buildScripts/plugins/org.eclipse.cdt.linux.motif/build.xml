@@ -33,7 +33,7 @@
 	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy todir="${destination.temp.folder}/${full.name}">
-			<fileset dir="${basedir}" includes="about.html,about.ini,about.mappings,about.properties,eclipse32.gif,plugin.properties,plugin.xml,welcome.xml"/>
+			<fileset dir="${basedir}" includes="about.html,about.ini,about.mappings,about.properties,eclipse32.gif,plugin.properties,plugin.xml"/>
 		</copy>
 	</target>
 
