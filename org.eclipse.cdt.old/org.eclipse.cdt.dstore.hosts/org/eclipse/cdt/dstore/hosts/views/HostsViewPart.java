@@ -52,6 +52,7 @@ public class HostsViewPart extends GenericViewPart
 		// for this view, the global datastore makes sense
 		DataElement root = dataStore.getRoot();
 		_viewer.setInput(root);
+		_viewer.selectFilter("Hosts");
 	    }    
     }
   
