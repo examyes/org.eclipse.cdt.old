@@ -284,9 +284,6 @@ public void startup()
     public void addVCMListener(IVCMListener listener)
     {
     }
-    public void notify(IVCMEvent event)
-    {
-    }
     public void removeVCMListener(IVCMListener listener)
     {
     }
