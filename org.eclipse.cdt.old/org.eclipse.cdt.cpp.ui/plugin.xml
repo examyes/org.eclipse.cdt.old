@@ -565,8 +565,8 @@
      <page
          name="%Autoconf"
          category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
-         class="org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfPreferencePage"
-         id="org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfPreferencePage">
+         class="org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfPreferencesPage"
+         id="org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfPreferencesPage">
    </page>
 </extension>
 <extension
