@@ -1,9 +1,0 @@
-#!/bin/bash
-export ECLIPSEDIR=/home/enrique/r10/eclipse
-export HELP=$ECLIPSEDIR/plugins/com.ibm.linux.help
-export CORE=$ECLIPSEDIR/plugins/com.ibm.dstore.core
-
-export CLASSPATH=.:$CLASSPATH:$ECLIPSEDIR/plugins/org.eclipse.ui.plugin:$HELP
-
-export CLASSPATH=$CLASSPATH:$ECLIPSEDIR/plugins:$ECLIPSEDIR/plugins/org.eclipse.core.runtime/runtime.jar:$ECLIPSEDIR/plugins/org.eclipse.core.boot/boot.jar:$ECLIPSEDIR/plugins/org.eclipse.core.resources/resources.jar:$ECLIPSEDIR/plugins/org.eclipse.ui/workbench.jar:$ECLIPSEDIR/plugins/org.eclipse.swt/swt.jar:$ECLIPSEDIR/startup.jar:$ECLIPSEDIR/plugins/com.ibm.lpex/lpex.jar:$HELP:$CORE
-export PATH=$PATH:$ECLIPSEDIR/jre/bin:$ECLIPSEDIR
