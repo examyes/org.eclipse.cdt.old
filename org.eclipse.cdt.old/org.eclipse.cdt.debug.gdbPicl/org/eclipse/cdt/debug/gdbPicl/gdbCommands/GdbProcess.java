@@ -154,6 +154,20 @@ public class GdbProcess {
 			cmd = "set width 0";
 			ok = writeLine(cmd);
 		}
+		// this setting may cause problem if we have a huge array
+		// I tested this array with an array of 1000 elements
+		// Gdb only gave back about 700 elements.
+		if (ok)
+		{
+			cmd = "set print elements 0";
+			ok = writeLine(cmd);
+		}
+		// print out char arrays more nicely
+		if (ok)
+		{
+			cmd = "set print null-stop";
+			ok = writeLine(cmd);
+		}
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
 				Gdb.traceLogger.err(2, "GdbProcess failed to writeLine=" + cmd);
