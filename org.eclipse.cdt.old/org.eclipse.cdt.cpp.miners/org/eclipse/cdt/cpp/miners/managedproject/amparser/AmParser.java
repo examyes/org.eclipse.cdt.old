@@ -21,7 +21,7 @@ public class AmParser
  {
   _dataStore = theUnmanagedProject.getDataStore();
   _project   = _dataStore.createObject(theUnmanagedProject.getParent(), Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
-  _curFile   = theUnmanagedProject.getSource() + File.separator + "Makefile.am";
+  _curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
   try 
   {
    _theFileReader = new BufferedReader(new FileReader(new File(_curFile)));
@@ -36,7 +36,7 @@ public class AmParser
  {
   _dataStore = root.getDataStore();
   _project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
-  _curFile   = root.getSource() + File.separator + subdir + File.separator + "Makefile.am";
+  _curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
   try 
   {
    _theFileReader = new BufferedReader(new FileReader(new File(_curFile)));

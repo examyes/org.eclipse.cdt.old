@@ -20,7 +20,6 @@ public class ProjectStructureManager {
 	}
 	private void analyze(File project, int depth)
 	{
-		// do the work
 		if(project != null)
 		{
 			if(project.isDirectory())
@@ -88,7 +87,8 @@ public class ProjectStructureManager {
 		String[] locations = new String[subdirs.size()];
 		for(int i = 0; i < subdirs.size(); i ++)
 		{
-			locations[i]= ((File)subdirs.elementAt(i)).getPath().substring(getProjectLocation().length()+1);
+			String location =  ((File)subdirs.elementAt(i)).getPath().substring(getProjectLocation().length()+1);
+			locations[i]= location.replace('\\','/');
 		}
 		return locations;
 	}

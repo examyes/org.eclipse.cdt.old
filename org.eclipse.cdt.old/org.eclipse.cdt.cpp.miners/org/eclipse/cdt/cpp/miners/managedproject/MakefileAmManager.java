@@ -664,18 +664,15 @@ public class MakefileAmManager {
 		// provide one makefile.am in each subdiectory
 		for(int i =0; i < subdirs.length ; i++)
 		{
-			String name = new String(subdirs[i].toString());
-			
-			String modName = name.replace('\\','/');
-			if(modName.indexOf(".")==-1)
+			if(subdirs[i].indexOf(".")==-1)
 			{
-				StringTokenizer token = new StringTokenizer(modName,"/");
+				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
 				if (token.countTokens()==1)
 				{
 					try{
 						Process p = 	rt.exec(
 							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-							+project.getSource()+"/"+modName);
+							+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
@@ -686,7 +683,7 @@ public class MakefileAmManager {
 					try{
 						Process p= rt.exec(
 							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-							+project.getSource()+"/"+modName);
+							+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
