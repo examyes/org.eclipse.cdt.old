@@ -135,15 +135,15 @@ public final class Parser
  {
   //First find the last word...
   int division = theTypes.lastIndexOf(" ");
-
+  
   //Now move the division point past any ptr operators that may be next to the name (e.g. int **f1(a,b)):
-  int lastPtr = theTypes.lastIndexOf("*");
-  if (lastPtr > division) 
-   division = lastPtr;
-  lastPtr = theTypes.lastIndexOf("&");
-  if (lastPtr > division)
-   division = lastPtr;
-
+  int firstPtr = theTypes.indexOf("*");
+  if (firstPtr > 0 && firstPtr < division)
+   division = firstPtr;
+  
+  firstPtr = theTypes.indexOf("&");
+  if (firstPtr > 0 && firstPtr < division)
+   division = firstPtr;
 
   String[] theArray = new String[2];
   if (division < 1)
@@ -153,8 +153,8 @@ public final class Parser
   } 
   else 
   { 
-   theArray[0] = theTypes.substring(division + 1, theTypes.length()).trim();
-   theArray[1] = theTypes.substring(0, division + 1).trim();
+   theArray[0] = theTypes.substring(division, theTypes.length()).trim();
+   theArray[1] = theTypes.substring(0, division).trim();
   }
   return theArray;
  }
@@ -690,13 +690,14 @@ String declaration_specifier() :
    | "*"
    | "&"
    | "operator" name = optor() {name = "operator" + name;}
-   | LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier() 
-     [LOOKAHEAD(2) "template"] [LOOKAHEAD(2)name = identifier() {name = next+name;]
+   | LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier()
+     [LOOKAHEAD(2) "template"] [LOOKAHEAD(2)name = identifier() {name = next+name;}]
    | ["::"] [LOOKAHEAD(nested_name_lookahead()) nested_name_specifier() ["template"]] name = identifier()
   )
   { 
    if (name == null)
     name = getToken(0).image;
+   
    return name;
   }
 }
@@ -1127,11 +1128,12 @@ void enumerator_list() :
 }
 
 void enumerator() :
-{String name = empty; int startLine = getToken(1).beginLine;}
+{String name = empty; String value = empty; int startLine = getToken(1).beginLine;}
 {
-  identifier() {name = getToken(0).image;} ("=" constant_expression())?
+  identifier() {name = getToken(0).image;} ("=" { value = constant_expression(); })?
   {
-   symtab.addObject(ParserSchema.dVariable, name,startLine, false);
+   value = name + "=" + value;
+   symtab.addObject(ParserSchema.dVariable, name, value, startLine, false);
   }
 }
 
