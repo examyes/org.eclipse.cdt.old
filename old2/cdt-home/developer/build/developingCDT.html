@@ -14,7 +14,7 @@
   <TR>
    <TD align=left width="72%">
     <FONT class=indextop>Developing the CDT</FONT><BR>
-    <FONT class=indexsub>information for how to build/run/debug the CDT from source</FONT>
+    <FONT class=indexsub>faq for developers of the CDT</FONT>
    </TD>
    <TD width="28%"><IMG height=86 src="http://dev.eclipse.org/images/Idea.jpg" width=120 alt=""></TD>
   </TR>
@@ -39,8 +39,8 @@
 
 <div class=section><a name="intro"> 1. Introduction</a></div>
 <p>
- This document describes the process of building, running and debugging the CDT both within Eclipse and from 
- the command line.  The specific information such as screen shots or the detailed steps for some action, may 
+ This document describes the process of building, running and debugging the CDT within Eclipse.  
+ The specific information such as screen shots or the detailed steps for some action, may 
  differ from your experience depending on what Eclipse build you are using.  
  We will try to keep this document up-to-date with the behaviour of the latest builds. 
 </p> 
@@ -60,8 +60,8 @@
 
 <p>
  To build the CDT inside Eclipse you will need a build of eclipse from the 
- <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>.  We recommend that you choose a 
- version 2.0  or a recent Stable Build.  In addition, you will need a Java Runtime Environment (JRE) of at least Version 1.3 or 
+ <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>.  We recommend that you choose 
+ version 2.0.1  or a recent Stable Build.  In addition, you will need a Java Runtime Environment (JRE) of at least Version 1.3 or 
  greater.  Once you have Eclipse properly installed, the CDT CVS Respository can be accessed and the CDT 
  plugins checked-out and built.  
  <b>Note</b>: The exact steps may vary depending on what Eclipse build you use.
@@ -110,26 +110,67 @@
  <li>Hold down the &lt;Ctrl&gt; key and select all the plugins you wish to build.  The complete list for the 
      CDT are those that match <b><i>org.eclipse.cdt.*</i></b> </i></b>, however you may wish 
      to select only a subset.  Of course you may have to return to this step if you have checked out a subset 
-     and are missing some dependencies.
+     and are missing some dependencies. <br>
+     Currently the following list are the plugins that must be checked out.
+     <ul>
+       <li>org.eclipse.cdt
+       <li>org.eclipse.cdt.core
+       <li>org.eclipse.cdt.core.linux
+       <li>org.eclipse.cdt.core.qnx
+       <li>org.eclipse.cdt.core.solaris
+       <li>org.eclipse.cdt.core.win32
+       <li>org.eclipse.cdt.debug.core
+       <li>org.eclipse.cdt.debug.mi.core
+       <li>org.eclipse.cdt.debug.mi.ui
+       <li>org.eclipse.cdt.debug.ui
+       <li>org.eclipse.cdt.launch
+       <li>org.eclipse.cdt.ui
+       <li>org.eclipse.cdt-feature 
+       <li>Optional:<br>
+		The "org.eclipse.cdt.*.tests" packages can also be checked out.
+		In which case you will also need to import the org.junit package (and others
+		?) in the next step. Additional instructions regarding testing will be coming soon.   </li>
+     </ul>
  </li>
  <li>Once you have selected your plugins, right-click on the selected list and choose <b>"Check Out as Project"</b>.  This 
-     should start checking out all the selected plugins and subsequently build them.  If all goes well you will hopefully 
-     have no build errors.</li>
+     should start checking out all the selected plugins and subsequently build them.  You will have build errors until you complete the next step.</li>
   <li> The Eclipse CDT projects are organized for team development. 
   	As a result the classpath is not stored with the project. 
-  	You must add the required plugins as External Packages and/or Fragments.<br>
-  	Click on the project "org.eclipse.cdt", to select it, and perform the following actions.
+  	You must add the required plugins as External Packages and/or Fragments.<br>  	
   	<ol>
   		<li>Click on the "File" menu </li>
-  		<li>Select "Import > External Packages and Fragments" </li>
+  		<li>Select "Import > External Plugins & Fragments" </li>
 		<li>Select "Choose from Plug-ins in the Runtime Workbench"</li>
 		<li>Enter your eclipse installation directory in the text field labeled "Plug-in Location" (i.e. C:\eclipse)</li>
-		<li>Select "Add Required Plugins" or "All" (Sometimes "Add Required ..." does not add all required plugins) </li>
+		<li>Select "Plugins from the Runtime Workbench"
+		<li>Select the following from the list:
+			<ul>
+			  <li>org.apache.lucene
+			  <li>org.apache.xerces
+			  <li>org.eclipse.ant.core
+			  <li>org.eclipse.compare
+			  <li>org.eclipse.core.boot
+			  <li>org.eclipse.core.resources
+			  <li>org.eclipse.core.runtime
+			  <li>org.eclipse.debug.core
+			  <li>org.eclipse.debug.ui
+			  <li>org.eclipse.help
+			  <li>org.eclipse.platform
+			  <li>org.eclipse.search
+			  <li>org.eclipse.swt
+			  <li>org.eclipse.swt.win32 <br>
+			  		(or other platform specific projects, this will be added
+					through the next step)
+			  <li>org.eclipse.ui
+			  <li>org.eclipse.update.core
+			</ul> </li>
+		
+		<li>Select "Add Required Plugins" (Sometimes "Add Required ..." does not add all required plugins ... if this happens select "Add All") </li>
 		<li>Press "Finish" </li>
     </ol>
   </li>
  <li>If build errors occur indicating that org.eclipse.* plugins cannot be found, ensure that your Eclipse and VM installation are setup correctly. </li>
- <li>You can also select each plugin and right-click then choose "Update Classpath". </li>
+ <li>You can also select each plugin and right-click then choose "Update Classpath", but this should not be necessary. </li>
 </ol>
 </p>
 <div class=subsection><a name="pdeRun"> 2.2 Running CDT with Eclipse</a></div>
@@ -246,7 +287,7 @@
 </tr>
 </table>
 <center><I>
-Last Modified on Tuesday, July 23, 2002
+Last Modified on Friday, September 27, 2002
 </I></center>
 
 </body>
