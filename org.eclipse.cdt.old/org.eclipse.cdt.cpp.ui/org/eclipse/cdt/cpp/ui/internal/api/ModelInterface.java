@@ -1453,6 +1453,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
 
+
+	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+						   "Build Project",
+						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+       
 	
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						     dataStore.getLocalizedString("model.Connect_to"), 
