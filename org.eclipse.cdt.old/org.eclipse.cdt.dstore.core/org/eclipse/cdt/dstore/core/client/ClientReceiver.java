@@ -28,12 +28,14 @@ public class ClientReceiver extends Receiver
       }
       else
       {        
-        for (int i = 0; i < documentObject.getNestedSize(); i++)
-        {
-          DataElement rootOutput = documentObject.get(i);
-          _dataStore.refresh(rootOutput);
-        }
-
+	  synchronized(documentObject)
+	      {
+		  for (int i = 0; i < documentObject.getNestedSize(); i++)
+		      {
+			  DataElement rootOutput = documentObject.get(i);
+			  _dataStore.refresh(rootOutput);
+		      }
+	      }
       }
     }
     

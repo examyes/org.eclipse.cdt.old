@@ -116,10 +116,18 @@ public class CommandGenerator
     {
 	if (commandDescriptor != null)
 	    {
-		return _dataStore.createObject(null,
-					       commandDescriptor.getName(),
-					       commandDescriptor.getValue(),
-					       commandDescriptor.getSource());
+		if (commandDescriptor.getType().equals(DE.T_COMMAND_DESCRIPTOR))
+		    {
+			return _dataStore.createObject(null,
+						       commandDescriptor.getName(),
+						       commandDescriptor.getValue(),
+						       commandDescriptor.getSource());
+		    }
+		else
+		    {
+			System.out.println("not cd -> " + commandDescriptor);
+			return null;
+		    }
 	    }
 	else
 	    {

@@ -317,9 +317,12 @@ public final class DataElement implements Serializable, IDataElement
     
   public synchronized void removeNestedData(DataElement object)
       {
-        _nestedData.remove(object);
+	  if (_nestedData != null)
+	      {
+		  _nestedData.remove(object);
+	      }
         _isExpanded = false;
-        _isUpdated = false;
+        _isUpdated = false; 
       }
 
   public synchronized void removeNestedData()

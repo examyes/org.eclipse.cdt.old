@@ -87,6 +87,11 @@ public abstract class Miner
 	DataElement status = getCommandStatus(command);
 	long startTime = System.currentTimeMillis();
 	
+	if (status == null)
+	    {
+		System.out.println("bad command " + name);
+		return null;
+	    }
 	status.setAttribute(DE.A_NAME, getLocalizedString("model.working"));
 
 	if (name.equals("C_INIT_MINERS"))
