@@ -28,6 +28,14 @@ public class DataElementContentProvider extends ContainerContentProvider
 
   public boolean isDeleted(Object element)
   {
+  	
+  	if (element instanceof DataElement)
+  	{
+  		DataElement delement = (DataElement)element;
+  		return delement.isDeleted();	
+  	}
+  	
+  	
     return false;
   }
 }
