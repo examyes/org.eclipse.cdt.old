@@ -180,6 +180,16 @@ public class GenericViewPart extends ViewPart
 		_viewer.linkTo(viewer);
 	    }
     }
+
+    public void fixateOnRelationType(String relationType)
+    {
+	_viewer.fixateOnRelationType(relationType);
+    }
+
+    public void fixateOnObjectType(String objectType)
+    {
+	_viewer.fixateOnObjectType(objectType);
+    }
     
     public void unlinkTo(ILinkable viewer)
     {

@@ -9,6 +9,7 @@ package org.eclipse.cdt.dstore.ui.widgets;
 import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
 import org.eclipse.cdt.dstore.core.client.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 
 import org.eclipse.cdt.dstore.ui.*;
 
@@ -597,38 +598,6 @@ public class ViewMenu implements IMenuListener
       }
 
   
-    public static class Sorter
-    {
-	public static ArrayList sort(ArrayList list)
-	    {
-		ArrayList sortedList = new ArrayList(list.size());
-		while (list.size() > 0)
-		    {
-			DataElement first = findFirst(list);
-			sortedList.add(first);
-		    }
-
-		return sortedList;
-	    }
-
-
-	private static DataElement findFirst(ArrayList list)
-	    {
-		DataElement result = null;
-		for (int i = 0; i < list.size(); i++)
-		    {
-			DataElement item = (DataElement)list.get(i);
-			int depth = item.depth();
-			if ((result == null) || (depth > result.depth()))
-			    {
-				result = item;
-			    }			
-		    }
-		
-		list.remove(result);
-		return result;			
-	    }
-    }
 
 
   public void fillFilterMenu(IMenuManager menu)
