@@ -65,13 +65,19 @@ public class DeleteResource extends CustomAction
 	String dCmdStr = "C_" + cmd; 
 	String msg = "About to delete: ";
 	
-	for (int i = 0; i < _subjects.size(); i++)
+	int maxsize = 30;
+	for (int i = 0; i < _subjects.size() && i <= maxsize; i++)
 		{
 			if (i > 0)
 			{
 				msg += "\t\t";
 			}
-			msg += ((DataElement)_subjects.get(i)).getName() + "\n";	
+			msg += ((DataElement)_subjects.get(i)).getName() + "\n";
+			
+			if (i == maxsize)
+			{
+				msg += "\t\t...\n";
+			}	
 		} 
 
 	
