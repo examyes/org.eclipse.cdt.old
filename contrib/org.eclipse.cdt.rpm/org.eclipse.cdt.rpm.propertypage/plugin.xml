@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+	id="org.eclipse.cdt.rpm.propertypage"
+   name="RPM Property Page Plug-in"
+   version="1.0"
+   provider-name="Red Hat, Inc.">
+
+	<runtime>
+   <library name="RPMPropertyPage.jar"/>
+   <library name="RPMCore.jar">        
+   		<export name="*"/>      
+   </library>   
+   </runtime>
+   
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.cdt.rpm.core"/>
+ 
+   </requires>
+   
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="Spec File Header"
+            nameFilter="*.rpm"
+            class="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage"
+            id="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage1">
+      </page>
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="Changelog Entries"
+            nameFilter="*.rpm"
+            class="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage2"
+            id="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage2">
+      </page>
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="Arch/Platform/OS"
+            nameFilter="*.rpm"
+            class="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage3"
+            id="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage3">
+      </page>
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="Pre/Post Install/Uninstall Scripts(if any)"
+            nameFilter="*86.rpm"
+            class="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage4"
+            id="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage4">
+      </page>
+      <page
+            objectClass="org.eclipse.core.resources.IFile"
+            name="Files Package Provides"
+            nameFilter="*.rpm"
+            class="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage5"
+            id="org.eclipse.cdt.rpm.propertypage.properties.RPMPropertyPage5">
+      </page>
+   </extension>
+   
+   
+
+</plugin>
+
