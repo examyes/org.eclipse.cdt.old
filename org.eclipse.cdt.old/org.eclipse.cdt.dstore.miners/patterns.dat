@@ -5,17 +5,20 @@
 command: grep -Hn.*
 	 grep         file line          pattern =([\w,.]*):(\d*):.*   
 
+command: nmake.*
+	 error                           pattern=NMAKE : .*
+	 error        file line          pattern =([\w,.,\\,:]*)\((\d*):(\d*)\) : error EDC.*
+	 error        file               pattern =[\w,.,\\,:]*\(([\w,.]*)\) : error LNK.*
+	 error        file line          pattern=([\w,.]*):(\d*):\d*\) : error .*
+	 warning      file line          pattern=([\w,.]*)\((\d*):\d*\) : warning .*
+	 informational file line          pattern=([\w,.]*)\((\d*):\d*\) : informational .* 
+
 command: .*make.*
 	 warning      file line          pattern =([\w,.]*):(\d*): warning: .*
 	 error        file line          pattern =([\w,.]*):(\d*):.*   
 	 informational file              pattern =([\w,.]*):.*   
 	 informational file line         pattern =In file included from ([\w,.]*):(\d*):
 
-command: nmake.*
-	 error                           pattern=NMAKE : .*
-	 error        file line          pattern=([\w,.]*)\((\d*):\d*\) : error .*
-	 warning      file line          pattern=([\w,.]*)\((\d*):\d*\) : warning .*
-	 informational file line          pattern=([\w,.]*)\((\d*):\d*\) : informational .* 
 
 command: dir.*
 	 directory    file               pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s<DIR>\s([\w,.]*).*

@@ -139,7 +139,7 @@ public class OutputViewer extends TableViewer
 	_menuHandler = new MenuHandler(_plugin.getActionLoader());
 
 	_maxWidth = 200;	
-	_charWidth = 6;
+	_charWidth = 8;
 
 	Table table = getTable();
 
@@ -314,38 +314,34 @@ public class OutputViewer extends TableViewer
 	  int index = table.getItemCount();
 	  if (index > MAX_BUFFER)
 	      {
-		  //		  table.setTopIndex(index - (MAX_BUFFER / 2));	  
 		  clearFirstItems(index - (MAX_BUFFER / 2));
 
 	      }
 	  index = table.getItemCount();
 	  	  
-	  synchronized(table)
+	  for (int i = 0; i < children.size(); i++)
 	      {
-		  for (int i = 0; i < children.size(); i++)
+		  DataElement child = ((DataElement)children.get(i)).dereference();
+		  if ((child != null) && !child.isUpdated())
 		      {
-			  DataElement child = ((DataElement)children.get(i)).dereference();
-			  if ((child != null) && !child.isUpdated())
-			      {
-				  child.setUpdated(true);
-				  if (doFindItem(child) == null)	
-				      {		
-					  
-					  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
-					  updateItem(newItem, child);
-					  index++;
-					  
-					  int charLen = child.getName().length();		
-					  int itemWidth = charLen * _charWidth;
-					  
-					  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
-					  
-				      }	
-			      }
+			  child.setUpdated(true);
+			  if (doFindItem(child) == null)	
+			      {		
+				  
+				  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
+				  updateItem(newItem, child);
+				  index++;
+				  
+				  int charLen = child.getName().length();		
+				  int itemWidth = charLen * _charWidth;
+				  
+				  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
+				  
+			      }	
 		      }
-
-		  table.setTopIndex(index);	  
 	      }
+	  
+	  table.setTopIndex(index);	  
 	  table.setRedraw(true);				
       }
 
@@ -420,11 +416,13 @@ public class OutputViewer extends TableViewer
 	Table table = getTable();
 	
 	Display display = table.getDisplay();
-	table.setFont(new Font(display, data));    
+
+	_charWidth = data.height;
+	setFont(new Font(display, data));
     }
 
     public void setFont(Font font)
-    {
+    {	
 	getTable().setFont(font);    
     }
 }
