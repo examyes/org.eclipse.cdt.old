@@ -24,12 +24,14 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMixedInstruction;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterGroup;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISharedLibrary;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.debug.win32.core.cdi.events.BreakpointHit;
 import org.eclipse.cdt.debug.win32.core.cdi.events.CreatedEvent;
@@ -276,13 +278,6 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 */
 	public void suspend() throws CDIException {
 		// TODO Auto-generated method stub
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepReturn()
-	 */
-	public void stepReturn() throws CDIException {
-		getTarget().getCurrentThread().getCurrentStackFrame().stepReturn();
 	}
 
 	/* (non-Javadoc)
@@ -600,5 +595,21 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	public ICDISharedLibrary[] getSharedLibraries() throws CDIException {
 		// TODO Auto-generated method stub
 		return new ICDISharedLibrary[0];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#getGlobalVariableDescriptors(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public ICDIVariableDescriptor getGlobalVariableDescriptors(String filename, String function, String name) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#getRegisterGroups()
+	 */
+	public ICDIRegisterGroup[] getRegisterGroups() throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

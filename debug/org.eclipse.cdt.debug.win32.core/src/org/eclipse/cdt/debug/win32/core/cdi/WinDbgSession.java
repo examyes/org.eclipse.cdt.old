@@ -15,9 +15,7 @@ import java.io.IOException;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDIConfiguration;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
-import org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
-import org.eclipse.cdt.debug.core.cdi.ICDIVariableManager;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
 import org.eclipse.core.resources.IFile;
@@ -60,18 +58,6 @@ public class WinDbgSession implements ICDISession {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#getCurrentTarget()
-	 */
-	public ICDITarget getCurrentTarget() {
-		return targets[0];
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#setCurrentTarget(org.eclipse.cdt.debug.core.cdi.model.ICDITarget)
-	 */
-	public void setCurrentTarget(ICDITarget target) throws CDIException {
-		// TODO Auto-generated method stub
-	}
-	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#setAttribute(java.lang.String, java.lang.String)
 	 */
 	public void setAttribute(String key, String value) {
@@ -89,11 +75,11 @@ public class WinDbgSession implements ICDISession {
 		return breakpointManager;
 	}
 	
-	public ICDIVariableManager getVariableManager() {
+	public WinDbgVariableManager getVariableManager() {
 		return variableManager;
 	}
 	
-	public ICDIRegisterManager getRegisterManager() {
+	public WinDbgRegisterManager getRegisterManager() {
 		return registerManager;
 	}
 
@@ -102,7 +88,6 @@ public class WinDbgSession implements ICDISession {
 	}
 
 	public ICDIConfiguration getConfiguration() {
-		// TODO Auto-generated method stub
 		return configuration;
 	}
 	

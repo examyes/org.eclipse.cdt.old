@@ -11,24 +11,23 @@
 package org.eclipse.cdt.debug.win32.core.cdi;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRegister;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterObject;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterDescriptor;
 
-public class WinDbgRegisterManager implements ICDIRegisterManager {
+public class WinDbgRegisterManager {
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager#getRegisterObjects()
 	 */
-	public ICDIRegisterObject[] getRegisterObjects() throws CDIException {
+	public ICDIRegisterDescriptor[] getRegisterObjects() throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager#createRegister(org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterObject)
+	 * @see org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager#createRegister(org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterDescriptor)
 	 */
-	public ICDIRegister createRegister(ICDIRegisterObject reg)
+	public ICDIRegister createRegister(ICDIRegisterDescriptor reg)
 			throws CDIException {
 		// TODO Auto-generated method stub
 		return null;

@@ -16,11 +16,14 @@ import java.util.List;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgument;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIArgumentDescriptor;
+import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
+
 
 public class WinDbgStackFrame implements ICDIStackFrame {
 
@@ -54,14 +57,14 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 		populated = true;
 	}
 
-	private void addVariable(boolean isArg, String name, int value) {
-		WinDbgValue valueObj = new WinDbgValue(Integer.toString(value));
-		if (isArg) {
-			arguments.add(new WinDbgArgument(this, name, valueObj));
-		} else {
-			locals.add(new WinDbgVariable(this, name, valueObj));
-		}
-	}
+//	private void addVariable(boolean isArg, String name, int value) {
+//		WinDbgValue valueObj = new WinDbgValue(Integer.toString(value));
+//		if (isArg) {
+//			arguments.add(new WinDbgArgument(this, name, valueObj));
+//		} else {
+//			locals.add(new WinDbgVariable(this, name, valueObj));
+//		}
+//	}
 	
 	public ICDILocation getLocation() {
 		return location;
@@ -94,7 +97,10 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 	}
 
 	public boolean equals(ICDIStackFrame stackframe) {
-		// TODO Auto-generated method stub
+		if (stackframe instanceof WinDbgStackFrame) {
+			WinDbgStackFrame wFrame = (WinDbgStackFrame)stackframe;
+			return wFrame.getLevel() == getLevel();
+		}
 		return false;
 	}
 
@@ -106,15 +112,29 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStepReturn#stepReturn()
 	 */
 	public void stepReturn() throws CDIException {
-		// TODO Auto-generated method stub
-		
+		thread.stepReturn();
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStepReturn#stepReturn(org.eclipse.cdt.debug.core.cdi.model.ICDIValue)
 	 */
 	public void stepReturn(ICDIValue value) throws CDIException {
-		// TODO Auto-generated method stub
-		
+		throw new CDIException("Not supported"); //$NON-NLS-1$
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame#getLocalVariableDescriptors()
+	 */
+	public ICDILocalVariableDescriptor[] getLocalVariableDescriptors() throws CDIException {
+		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
+		return varMgr.getLocalVariableDescriptor(this);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame#getArgumentDescriptors()
+	 */
+	public ICDIArgumentDescriptor[] getArgumentDescriptors() throws CDIException {
+		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
+		return varMgr.getArgumentDescriptors(this);
 	}
 }

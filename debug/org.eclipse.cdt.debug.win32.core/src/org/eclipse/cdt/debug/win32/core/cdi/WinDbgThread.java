@@ -20,6 +20,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorageDescriptor;
 
 public class WinDbgThread implements ICDIThread {
 
@@ -215,12 +216,23 @@ public class WinDbgThread implements ICDIThread {
 	}
 
 
-	public boolean equals(ICDIThread thead) {
+	public boolean equals(ICDIThread thread) {
+		if (thread instanceof WinDbgThread) {
+			WinDbgThread wThread = (WinDbgThread)thread;
+			return id == wThread.id;
+		}
 		return false;
 	}
 
 	public ICDITarget getTarget() {
 		return target;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIThread#getThreadStorageDescriptors()
+	 */
+	public ICDIThreadStorageDescriptor[] getThreadStorageDescriptors() throws CDIException {
+		return null;
 	}
 
 

@@ -15,7 +15,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIVariableObject;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.type.ICDIType;
 
 public class WinDbgVariable implements ICDIVariable {
@@ -78,13 +78,45 @@ public class WinDbgVariable implements ICDIVariable {
 		return name;
 	}
 
-	public boolean equals(ICDIVariableObject varObject) {
+	public boolean equals(ICDIVariableDescriptor varObject) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public ICDITarget getTarget() {
 		return frame.getTarget();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIVariable#dispose()
+	 */
+	public void dispose() throws CDIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor#getVariableDescriptorAsArray(int, int)
+	 */
+	public ICDIVariableDescriptor getVariableDescriptorAsArray(int start, int length) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor#getVariableDescriptorAsType(java.lang.String)
+	 */
+	public ICDIVariableDescriptor getVariableDescriptorAsType(String type) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor#createVariable()
+	 */
+	public ICDIVariable createVariable() throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
