@@ -121,7 +121,6 @@ public class DataElementTableViewer extends TableViewer
 
 	setVisibility(false);
 
-	table.addControlListener(this);
     }
 
     /**
@@ -140,7 +139,7 @@ public class DataElementTableViewer extends TableViewer
      * @param e an event containing information about the resize
      */
     public void controlResized(ControlEvent e)
-    {
+    {	
 	computeLayout();
     }
     
@@ -799,6 +798,7 @@ public class DataElementTableViewer extends TableViewer
 		_attributeColumns.clear();
 
 		Table table = getTable();
+		table.removeControlListener(this);
 		
 		// get column information
 		
@@ -891,7 +891,6 @@ public class DataElementTableViewer extends TableViewer
 					    }
 					catch (Exception e)
 					    {
-						System.out.println("Column Width = " + averageWidth);
 						e.printStackTrace();
 					    }
 				    }
@@ -912,7 +911,7 @@ public class DataElementTableViewer extends TableViewer
 		    }
 
 		table.setLayout(_layout);
-		
+		table.addControlListener(this);		
 	    }
     }
 
