@@ -283,12 +283,16 @@ public class ParseManager
   if (theFileElement.getSource().indexOf(projectPath) < 0)
   {
    theFileElement.setAttribute(DE.A_TYPE, ParserSchema.IncludedSource);
-   _dataStore.createReferences(_systemObjects, theFileElement.getAssociated("contents"), "contents");
+   // DKM
+   _dataStore.createReference(_systemObjects, theFileElement);
+   //****   _dataStore.createReferences(_systemObjects, theFileElement.getAssociated("contents"), "contents");
    //_dataStore.update(_systemObjects);
   }
   else
   {
-   _dataStore.createReferences(_projectObjects, theFileElement.getAssociated("contents"), "contents");
+      // DKM
+      _dataStore.createReference(_projectObjects, theFileElement);
+      //****   _dataStore.createReferences(_projectObjects, theFileElement.getAssociated("contents"), "contents");
    //_dataStore.update(_projectObjects);
   }
   _theSymbolTable.popRoot();

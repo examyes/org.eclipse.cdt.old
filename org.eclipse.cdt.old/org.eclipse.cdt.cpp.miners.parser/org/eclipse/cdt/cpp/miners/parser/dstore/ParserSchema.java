@@ -25,7 +25,7 @@ public class ParserSchema
  public static String FindDeclaration        = getLocalizedString("parser.FindDeclaration");
  public static String SetIncludePath         = getLocalizedString("parser.SetIncludePath");
  public static String SetPreferences         = getLocalizedString("parser.SetPreferences");
- 
+
  //Relationships
  public static String Uses               = getLocalizedString("parser.Uses");
  public static String ReturnType         = getLocalizedString("parser.ReturnType");
@@ -37,11 +37,12 @@ public class ParserSchema
  public static String ParseReference     = getLocalizedString("parser.ParseReference");
  public static String Includes           = getLocalizedString("parser.Includes");
  public static String IncludedBy         = getLocalizedString("parser.IncludedBy");
- 
+
  //C/C++ Objects
  public static String ParsedSource       = getLocalizedString("parser.ParsedSource");
  public static String IncludedSource     = getLocalizedString("parser.IncludedSource");
  public static String Statement          = getLocalizedString("parser.Statement");
+ public static String ControlStatement   = "Control Statement";
  public static String Constructor        = getLocalizedString("parser.Constructor");
  public static String Destructor         = getLocalizedString("parser.Destructor");
  public static String MainFunction       = getLocalizedString("parser.MainFunction");
@@ -54,8 +55,8 @@ public class ParserSchema
  public static String Typedef            = getLocalizedString("parser.Typedef");
  public static String Variable           = getLocalizedString("parser.Variable");
  public static String Macro              = getLocalizedString("parser.Macro");
- 
- 
+
+
  //Other Object Descriptors (those defined in other schemas, among other things)
  public static String Project            = getLocalizedString("parser.Project");
  public static String ParsedFiles        = getLocalizedString("parser.ParsedFiles");
@@ -73,12 +74,12 @@ public class ParserSchema
  public static String Functions          = getLocalizedString("parser.Functions");
  public static String ClassesStructs     = getLocalizedString("parser.ClassesStructs");
  public static String Variables          = getLocalizedString("parser.Variables");
- public static String TimeStamp          = getLocalizedString("parser.TimeStamp"); 
+ public static String TimeStamp          = getLocalizedString("parser.TimeStamp");
  public static String IncludePath        = getLocalizedString("parser.IncludePath");
  public static String ParseQuality       = getLocalizedString("parser.ParseQuality");
  public static String Error              = getLocalizedString("parser.Error");
  public static String Contents           = getLocalizedString("parser.Contents");
- 
+
 
  public static DataElement dC_QUERY;
  public static DataElement dC_PARSE;
@@ -101,6 +102,7 @@ public class ParserSchema
  public static DataElement dIncludedBy;
  public static DataElement dParsedSource;
  public static DataElement dIncludedSource;
+ public static DataElement dControlStatement;
  public static DataElement dStatement;
  public static DataElement dConstructor;
  public static DataElement dDestructor;
@@ -131,8 +133,8 @@ public class ParserSchema
  public static DataElement dTimeStamp;
  public static DataElement dContents;
  public static DataElement dAll;
- public static DataElement dObject; 
- 
+ public static DataElement dObject;
+
  public ParserSchema(DataElement schemaRoot)
  {
   dObject     = findDescriptor(ObjectDescriptor, schemaRoot.getDataStore());
@@ -143,8 +145,8 @@ public class ParserSchema
   dContents.setDepth(100);
   dAll        = findDescriptor("all", schemaRoot.getDataStore());
 
-  
-  
+
+
   //Set up the abstract object descriptors:
   dCppObject          = createAbstractDerivativeDescriptor(dObject,          CppObject);
   dContCppObject      = createAbstractDerivativeDescriptor(dContObject,      ContCppObject);
@@ -168,29 +170,33 @@ public class ParserSchema
   dC_SET_INCLUDE_PATH.setDepth(0);
   dC_SET_PREFERENCES  = createCommandDescriptor(dFsObjects, SetPreferences,         "C_SET_PREFERENCES");
   dC_SET_PREFERENCES.setDepth(0);
-  
+
   DataElement dFile   = findDescriptor("file", schemaRoot.getDataStore());
   dC_PARSE = createCommandDescriptor(dFile, Parse, "C_PARSE");
   dC_PARSE.setDepth(0);
   createCommandDescriptor(dFile, RemoveParseInformation, "C_REMOVE_PARSE").setDepth(0);
-  
+
   dUses            = createRelationDescriptor(dUsableCppObject, Uses);
   dReturnType      = createRelationDescriptor(dFunctions,       ReturnType);
   dParameters      = createRelationDescriptor(dFunctions,       Parameters);
   dCallees         = createRelationDescriptor(dFunctions,       Callees);
   dCallers         = createRelationDescriptor(dFunctions,       Callers);
-  dBaseClasses     = createRelationDescriptor(dClassesStructs,  BaseClasses);  
+  dBaseClasses     = createRelationDescriptor(dClassesStructs,  BaseClasses);
   dDerivedClasses  = createRelationDescriptor(dClassesStructs,  DerivedClasses);
   dTypes           = createRelationDescriptor(dVariables,       Types);
-  
+
   /*
   DataElement dC_QUERY = createCommandDescriptor(dFunctions, "Query", "C_QUERY");
   createReference(dClassesStructs, dC_QUERY);
   createReference(dUsableCppObject, dC_QUERY);
 */
 
-  //Create the actual Cpp Objects (non-abstract): 
+  //Create the actual Cpp Objects (non-abstract):
   dStatement      = createDerivativeDescriptor(dUsableCppObject,      Statement);
+  dControlStatement = createDerivativeDescriptor(dContCppObject, ControlStatement);
+  dControlStatement.getDataStore().createReference(dStatement, dControlStatement, "abstracts", "abstracted by");
+
+
   dMacro          = createDerivativeDescriptor(dUsableCppObject,      Macro);
   dConstructor    = createDerivativeDescriptor(dFunctions,      Constructor);
   dDestructor     = createDerivativeDescriptor(dFunctions,      Destructor);
@@ -203,38 +209,38 @@ public class ParserSchema
   dEnum           = createDerivativeDescriptor(dVariables,      Enum);
   dTypedef        = createDerivativeDescriptor(dVariables,      Typedef);
   dVariable       = createDerivativeDescriptor(dVariables,      Variable);
-  
+
   //Create others
   dProject           = findDescriptor(Project, schemaRoot.getDataStore());
   if (dProject == null)
    dProject = createDerivativeDescriptor(dFsObjects, Project);
-  
+
   dParseReference    = createRelationDescriptor(dProject, ParseReference);
-  dParseReference.setDepth(0); //make it invisible 
-  dParsedFiles       = createDerivativeDescriptor(dContObject, ParsedFiles); 
-  dProjectObjects    = createDerivativeDescriptor(dContObject, ProjectObjects);  
+  dParseReference.setDepth(0); //make it invisible
+  dParsedFiles       = createDerivativeDescriptor(dContObject, ParsedFiles);
+  dProjectObjects    = createDerivativeDescriptor(dContObject, ProjectObjects);
   dPreferences       = createDerivativeDescriptor(dContObject, Preferences);
   dError             = createDerivativeDescriptor(dContObject, Error);
   dTimeStamp         = createDerivativeDescriptor(dContObject, TimeStamp);
-  
+
   //Set up the DataElements representing files:
   dSourceFiles      = createAbstractDerivativeDescriptor(dFsObjects, SourceFiles);
   dIncludes         = createRelationDescriptor(dSourceFiles,         Includes);
   dIncludedBy       = createRelationDescriptor(dSourceFiles,         IncludedBy);
-  dIncludedSource   = createDerivativeDescriptor(dSourceFiles,       IncludedSource);  
+  dIncludedSource   = createDerivativeDescriptor(dSourceFiles,       IncludedSource);
   dParsedSource     = createDerivativeDescriptor(dSourceFiles,       ParsedSource);
-  
-  
+
+
   //Set up some contents relationships
   createReference(dParsedFiles, dSourceFiles);
   createReference(dParsedFiles, dParsedSource);
   createReference(dParsedFiles, dIncludedSource);
-  
+
   createReference(dProjectObjects, dClassesStructs);
   createReference(dProjectObjects, dFunctions);
   createReference(dProjectObjects, dVariables);
   createReference(dProjectObjects, dMacro);
- 
+
   createReference(dSourceFiles, dClassesStructs);
   createReference(dSourceFiles, dFunctions);
   createReference(dSourceFiles, dVariables);
@@ -245,29 +251,29 @@ public class ParserSchema
   createReference(dIncludedSource, dVariables);
   createReference(dIncludedSource, dMacro);
 
-  createReference(dFunctions,    dVariables); 
+  createReference(dFunctions,    dVariables);
   createReference(dFunctions,    dStatement);
 
   createReference(dClassesStructs, dFunctions);
   createReference(dClassesStructs, dVariables);
   createReference(dUnion,       dVariables);
- 
-  
+
+
 
   dVariables.setDepth(dMacro.depth() + 1);
   dClassesStructs.setDepth(dVariables.depth() + 1);
   dFunctions.setDepth(dClassesStructs.depth() + 1);
- 
+
   dUses.setDepth(dContents.depth() + 100);
-  
+
   dSourceFiles.setDepth(dAll.depth() + 4);
   dParsedSource.setDepth(dAll.depth() +3);
   dIncludedSource.setDepth(dAll.depth() +2);
-  
+
  }
- 
+
  private static ResourceBundle _resourceBundle = null;
- 
+
  public static String getLocalizedString(String key)
  {
   try
@@ -275,12 +281,12 @@ public class ParserSchema
    if (key == null)
     return "";
    if (_resourceBundle == null)
-    _resourceBundle = ResourceBundle.getBundle("com.ibm.cpp.miners.parser.dstore.ParserSchema"); 
+    _resourceBundle = ResourceBundle.getBundle("com.ibm.cpp.miners.parser.dstore.ParserSchema");
    String value = _resourceBundle.getString(key);
    if ((value == null) || (value.length() == 0))
     System.out.println("ParserSchema problem finding " + key);
    return value;
-   
+
   }
   catch (MissingResourceException mre) {}
   System.out.println("ParserSchema problem finding " + key);
@@ -311,7 +317,7 @@ public class ParserSchema
  {
   return createCommandDescriptor(descriptor, name, value, true);
  }
- 
+
  private DataElement createCommandDescriptor(DataElement descriptor, String name, String value, boolean visible)
  {
   DataElement cmdD = descriptor.getDataStore().createCommandDescriptor(descriptor, name, "com.ibm.cpp.miners.parser.ParseMiner", value);
@@ -324,17 +330,17 @@ public class ParserSchema
  {
   return descriptor.getDataStore().createRelationDescriptor(descriptor, name);
  }
- 
+
  private DataElement createAbstractRelationship(DataElement from, DataElement to)
  {
   return from.getDataStore().createReference(from, to, "abstracts", "abstracted by");
  }
- 
+
  private DataElement createAbstractObjectDescriptor(DataElement descriptor, String name)
  {
   return descriptor.getDataStore().createAbstractObjectDescriptor(descriptor, name);
  }
- 
+
  private DataElement createObjectDescriptor(DataElement descriptor, String name)
  {
   return descriptor.getDataStore().createObjectDescriptor(descriptor, name);
