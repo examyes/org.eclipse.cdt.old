@@ -960,27 +960,34 @@ public final class DataElement implements Serializable, IDataElement
   public DataElement refresh(boolean isSynchronized)
   {    
       DataElement status = null;
-      if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
-      {
-	  DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_REFRESH");
-	  if (queryDescriptor != null)
-	      {	
-		  if (isSynchronized)
-		      {
-			  status = _dataStore.synchronizedCommand(queryDescriptor, this);
-		      }
-		  else
-		      {
-			  status = _dataStore.command(queryDescriptor, this);
-		      }
-		  _isExpanded = true; 
-		  _isUpdated = false;
-	      }
-      }
+      if (!_isExpanded )
+	  {
+	      expandChildren(isSynchronized);
+	  }
+      else
+	  {
+	      if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
+		  {
+		      DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_REFRESH");
+		      if (queryDescriptor != null)
+			  {	
+			      if (isSynchronized)
+				  {
+				      status = _dataStore.synchronizedCommand(queryDescriptor, this);
+				  }
+			      else
+				  {
+				      status = _dataStore.command(queryDescriptor, this);
+				  }
+			      _isExpanded = true; 
+			      _isUpdated = false;
+			  }
+		  }
+	  }
       return status;
   }
 
-  public void expandChildren()
+    public void expandChildren()
   {    
       if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
       {	  
