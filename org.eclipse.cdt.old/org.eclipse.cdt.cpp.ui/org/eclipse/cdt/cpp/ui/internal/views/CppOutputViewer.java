@@ -33,7 +33,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 
-public class CppOutputViewer extends OutputViewer  
+public class CppOutputViewer extends OutputViewer
 {
     private OpenEditorAction      _cppOpenEditorAction;
     
