@@ -360,8 +360,9 @@ public class PAMiner extends Miner {
    
    PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
    
-   String traceFormat = adaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
-   
+   ArrayList formats = traceElement.getAssociated(getLocalizedString("pa.TraceFormat"));
+   String traceFormat = ((DataElement)formats.get(0)).getName();
+      
    // System.out.println("trace format: " + traceFormat);
    
    PATraceFile traceFile = null;
@@ -386,7 +387,8 @@ public class PAMiner extends Miner {
   
   // System.out.println("traceElement: " + traceElement);
   
-  String traceFormat = PADataStoreAdaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
+  ArrayList formats = traceElement.getAssociated(getLocalizedString("pa.TraceFormat"));
+  String traceFormat = ((DataElement)formats.get(0)).getName();
   
   // System.out.println("trace format: " + traceFormat);
   

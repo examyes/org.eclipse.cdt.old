@@ -193,8 +193,9 @@ public class PADataStoreAdaptor {
   ArrayList attributes = element.getAssociated(getLocalizedString("pa.Attributes"));
   for (int i=0; i < attributes.size(); i++) {
    DataElement anAttr = (DataElement)attributes.get(i);
-   if (anAttr.getType().equals(name))
+   if (!anAttr.isDeleted() && anAttr.getType().equals(name)) {
     return anAttr.getName();
+   }
   }
   
   return null;
@@ -287,6 +288,28 @@ public class PADataStoreAdaptor {
    }
    
  }
+ 
+ /**
+  * Remove the trace information for the given trace element
+  */
+ public static void cleanTraceInformation(DataElement traceElement) {
+ 
+   // System.out.println("Calling cleanTraceInformation");
+   DataStore dataStore = traceElement.getDataStore();
+   
+   int size = traceElement.getNestedSize();
+   for (int i=0; i < size; i++) {
+     DataElement child = traceElement.get(i);
+     String type = child.getType();
+     if (!type.equals(getLocalizedString("pa.ReferencedFile")) && 
+         !type.equals(getLocalizedString("pa.ReferencedProject")) &&
+	 !type.equals(getLocalizedString("pa.TraceFormat")) )
+     {
+       dataStore.deleteObject(traceElement, child);
+     }
+   }
+   
+ }
   
  /**
   * Create a trace function object in the datastore
@@ -305,7 +328,11 @@ public class PADataStoreAdaptor {
   * Populate the datastore using the information from the PA trace file.
   */
  public void populateDataStore(DataElement fileElement, PATraceFile traceFile) {
-                   
+   
+   if (_dataStore.find(fileElement, DE.A_VALUE, getLocalizedString("pa.TraceFuncRoot")) != null) {
+     cleanTraceInformation(fileElement);
+   }
+                 
    // set the trace file attributes
    createTraceFileSummary(fileElement, traceFile);
    
