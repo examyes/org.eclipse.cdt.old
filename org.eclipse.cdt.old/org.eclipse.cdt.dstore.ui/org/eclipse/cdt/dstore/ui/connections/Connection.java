@@ -242,7 +242,7 @@ public class Connection implements IDomainListener
 	    }
 
         _element = parent.getDataStore().createObject(parent, _type, _name, _dir);
-        parent.getDataStore().update(parent);
+        parent.getDataStore().refresh(parent);
 	_plugin = DataStoreUIPlugin.getDefault();
     }        
     

@@ -468,6 +468,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 			          	ArrayList relationships = _dataStore.getRelationItems(des, null);	
 				      	if (relationships.size() == 0)
 				      	{
+					    System.out.println("no relationships");
 				      		return;
 				      	}
 				      	else
@@ -484,12 +485,13 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 				      		
 				      		if (visible == false)
 				      		{
+						    System.out.println("no visible relationships");
 
 				      			return;	
 				      		}
 				      	}
-			      	}
-			      
+					}
+					
 			      	
 				  _toolBar.setInput(object);
 			      }
