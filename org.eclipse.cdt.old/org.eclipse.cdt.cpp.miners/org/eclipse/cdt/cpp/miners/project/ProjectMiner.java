@@ -129,7 +129,7 @@ public class ProjectMiner extends Miner
    _workspace.addNestedData(project, true);
    project.setParent(_workspace);
   }  
-  else
+  else if  (project.getType().equals("Project"))
   {
    project.setParent(_workspace);
    _workspace.addNestedData(project, true);
