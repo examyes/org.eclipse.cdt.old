@@ -176,6 +176,7 @@ public class FileSystemMiner extends Miner
 	  _modifiedAtDescriptor     = createRelationDescriptor(schemaRoot, "modified at");
 	  _dateDescriptor           = createObjectDescriptor(schemaRoot, "date");
 	  
+	  
 	  _dataStore.createReference(_fileDescriptor, _modifiedAtDescriptor);
 
 	  _hiddenFileDescriptor     = createObjectDescriptor(schemaRoot, "hidden file");
@@ -267,10 +268,17 @@ public class FileSystemMiner extends Miner
 	 DataElement subElement2 = getCommandArgument(theElement, 1);
 	 status = handleImport(subElement1.dereference(), subElement2, status);	 
      }
-     else if (name.equals("C_OPEN") && (!subject.getDescriptor().isOfType(_fsystemObjectDescriptor)))
+     else if (name.equals("C_OPEN"))
 	 {
-	     status = handleOpen(subject.dereference(), status);
-       }
+	     if  (!subject.getDescriptor().isOfType(_fsystemObjectDescriptor))
+		 {
+		     status = handleOpen(subject.dereference(), status);
+		 }
+	     else
+		 {
+		     status = handleQueryAll(subject, status);
+		 }
+	 }
      else if (name.equals("C_MOVE"))
      {
        DataElement moveSource = getCommandArgument(theElement, 1);
@@ -474,12 +482,11 @@ public class FileSystemMiner extends Miner
 	     return status;
 	 }
      
-     /////////////////////   
-
   private DataElement handleMove(DataElement target, DataElement source, DataElement status)
       {
         // make sure target is expanded
-        DataElement subStatus = _dataStore.createObject(null, getLocalizedString("status"), getLocalizedString("model.start"));
+        DataElement subStatus = _dataStore.createObject(null, getLocalizedString("status"), 
+							getLocalizedString("model.start"));
 	_dataStore.moveObject(source, target);
 	
         status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
@@ -616,6 +623,18 @@ public class FileSystemMiner extends Miner
         return status;        
       }
 
+
+    private DataElement handleQueryAll(DataElement theElement, DataElement status)
+    {
+	handleQuery(theElement, status);
+	for (int i = 0; i < theElement.getNestedSize(); i++)
+	    {
+		DataElement child = theElement.get(i);
+		handleQueryAll(child, status);
+	    }
+
+	return status;
+    }   
 
   private DataElement handleQuery (DataElement theElement, DataElement status)
     {
