@@ -119,6 +119,12 @@ public abstract class RegistersMonitor
          for (int z=0; z<_maxGeneral; z++)
          {
             int groupID = 1;
+            char delimiter = '\u0009';
+       		int x = genValues[z].indexOf(delimiter);
+       		
+       		if (x != -1)
+       			genValues[z] = genValues[z].substring(0, x);            
+            
             if( !_generalValues[z].equals(genValues[z]) )
             {
                _changedRegisters.addElement( new ChangedRegister(_generalNames[z], genValues[z], groupID, z, flags) );
