@@ -94,7 +94,7 @@ public class Repository extends Project
 	public void run()
 	{
 	    DomainNotifier notifier = _dataStore.getDomainNotifier();
-	    ConnectionStatus status = _connection.connect(notifier, "org.eclipse.cdt.cpp.miners");	
+	    ConnectionStatus status = _connection.connect(notifier);	
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
