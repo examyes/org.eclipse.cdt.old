@@ -1181,7 +1181,7 @@ public class MakefileAmManager {
 			"/org.eclipse.cdt.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
 		initializeTopLevelMakefileAm(parent,structureManager,true);
 		updateMakefileAmDependency(parent,classifier);	
-	}
+	}	
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status,MakefileAmClassifier classifier)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
