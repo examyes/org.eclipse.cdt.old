@@ -108,7 +108,7 @@ public class AutoconfManager {
 			if(getOS().equals("Linux"))
 				runCommand(project, status,"./configure"+"&&"+"touch -m "+"configure");
 			else
-				runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+				runCommand(project, status,cygwinPrefix+"./configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 		else
 		{
@@ -118,7 +118,7 @@ public class AutoconfManager {
 			if(getOS().equals("Linux"))
 				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 			else
-			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
+				runCommand(project, status,cygwinPrefix+"./bootstrap.sc"+"&&"+cygwinPrefix+"./configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 
@@ -256,7 +256,7 @@ public class AutoconfManager {
 		if(getOS().equals("Linux"))
 			runCommand(project, status, "./bootstrap.sc"+"&&"+"touch -m configure");
 		else 
-			runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"\'touch -m configure\'");
+			runCommand(project, status, cygwinPrefix+"./bootstrap.sc"+"&&"+cygwinPrefix+"\'touch -m configure\'");
 	}
 	public void runConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
@@ -271,7 +271,7 @@ public class AutoconfManager {
 				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+
 				"configure");
 			else
-			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
+			runCommand(project, status,cygwinPrefix+"./bootstrap.sc"+"&&"+cygwinPrefix+"./configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 		else
@@ -283,7 +283,7 @@ public class AutoconfManager {
 				if(getOS().equals("Linux"))
 					runCommand(project, status, "./configure"+"&&"+"touch -m "+"configure");
 				else
-					runCommand(project, status, cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+					runCommand(project, status, cygwinPrefix+"./configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 			}
 			else
 			{
@@ -298,7 +298,7 @@ public class AutoconfManager {
 				if(getOS().equals("Linux"))
 					runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 				else
-					runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+					runCommand(project, status,cygwinPrefix+"./bootstrap.sc"+"&&"+cygwinPrefix+"./configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 			}
 		}
 	} 
