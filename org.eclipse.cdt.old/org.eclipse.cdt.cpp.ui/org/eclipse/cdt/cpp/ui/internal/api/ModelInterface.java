@@ -1958,6 +1958,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Add/Change to TopLevel Makefile.am", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
+	
 	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Add/Change to Programs Makefile.am", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
