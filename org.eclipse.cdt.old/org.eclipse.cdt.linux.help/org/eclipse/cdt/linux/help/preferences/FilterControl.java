@@ -34,8 +34,10 @@ public class FilterControl extends Composite implements Listener
     {
 	super(cnr, style);
 	
+	HelpPlugin plugin= HelpPlugin.getDefault();
+	
 	group = new Group(this, SWT.NULL);
-	group.setText("Patterns to filter out");
+	group.setText(plugin.getLocalizedString(IHelpNLConstants.FILTER_GROUPTITLE));
 	group.setLayout(new GridLayout());
 	group.setLayoutData(new GridData(GridData.GRAB_VERTICAL | GridData.FILL_BOTH));
 	
@@ -57,7 +59,7 @@ public class FilterControl extends Composite implements Listener
 	_pathEntry.setLayoutData(dp0);	
 	
 	_addButton      = new Button(entryCmp, SWT.PUSH);
-	_addButton.setText("Add");
+	_addButton.setText(plugin.getLocalizedString(IHelpNLConstants.FILTER_ADD));
 	_addButton.addListener(SWT.Selection, this);
 	GridData dp3 = new GridData(GridData.FILL_HORIZONTAL);	
 	_addButton.setLayoutData(dp3);
@@ -79,7 +81,7 @@ public class FilterControl extends Composite implements Listener
 	_pathList.setLayoutData(dp2);			
 		
 	_removeButton   = new Button(p1, SWT.PUSH);	
-	_removeButton.setText("Remove");
+	_removeButton.setText(plugin.getLocalizedString(IHelpNLConstants.FILTER_REMOVE));
 	_removeButton.addListener(SWT.Selection, this);
 	GridData dp4 = new GridData(GridData.FILL_HORIZONTAL);
 	dp4.verticalAlignment=GridData.BEGINNING;

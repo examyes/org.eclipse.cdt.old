@@ -7,6 +7,7 @@ package org.eclipse.cdt.linux.help;
  */
 
 import org.eclipse.cdt.linux.help.search.*;
+import org.eclipse.cdt.linux.help.preferences.HelpDialogSettingUtil;
 
 import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 import org.eclipse.jface.dialogs.*;
@@ -328,6 +329,9 @@ public class HelpSearch
 	long begin=System.currentTimeMillis();
 	ArrayList result=new ArrayList();	
 
+	// set default search mode,scope
+	HelpDialogSettingUtil.setDefaultSettings();
+	/**************************
 	// WINDOWS specific
 	String theOs = System.getProperty("os.name");
 	if (theOs.toLowerCase().startsWith("window"))
@@ -354,6 +358,7 @@ public class HelpSearch
 		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN, true);
 		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO, true);	
 	    }	
+	**********/
 
 	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
 		(optSearchType!=null && optSearchType.equals(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT)) )

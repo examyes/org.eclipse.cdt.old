@@ -385,6 +385,9 @@ public class HelpDialogSetting extends Dialog implements SelectionListener
     {
 	//store all settings
 	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
+
+	settings.put(IHelpSearchConstants.HELP_SETTINGS_SELECTED,true); //indicate user selection
+
 	settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT, radioButton1.getSelection());
 	settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS, radioButton2.getSelection());
 	settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP, radioButton3.getSelection());
@@ -430,38 +433,40 @@ public class HelpDialogSetting extends Dialog implements SelectionListener
     {	
 	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
 
-	// WINDOWS specific
-	String theOs = System.getProperty("os.name");
-	if (theOs.toLowerCase().startsWith("window"))
+	if(!settings.getBoolean(IHelpSearchConstants.HELP_SETTINGS_SELECTED))
 	    {
-		//Only html(i.e exact) with Windows. 		
-		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT, true);
-		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML, true);
-	    }
+		// WINDOWS specific
+		String theOs = System.getProperty("os.name");
+		if (theOs.toLowerCase().startsWith("window"))
+		    {
+			//Only html(i.e exact) with Windows. 		
+			settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT, true);
+			settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML, true);
+		    }
 	
-	//set the default search TYPE if appropriate
-	if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
-	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS) ||
-	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP) ) )
-	    {		
-		// Set default search TYPE to SUBSTRING.
-		radioButton2.setSelection(true);
-		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS, true);
-	    }
+		//set the default search TYPE if appropriate
+		if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
+		       settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS) ||
+		       settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP) ) )
+		    {		
+			// Set default search TYPE to SUBSTRING.
+			radioButton2.setSelection(true);
+			settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS, true);
+		    }
 	
-	//set the default search SCOPE if appropriate
-	if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL) ||
-	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN) ||
-	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO) ||
-	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML) ) )
-	    {
-		// Set default search SCOPE to MAN,INFO.
-		checkBox2.setSelection(true);
-		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN, true);
-		checkBox3.setSelection(true);
-		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO, true);		
-	    }	
-
+		//set the default search SCOPE if appropriate
+		if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL) ||
+		       settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN) ||
+		       settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO) ||
+		       settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML) ) )
+		    {
+			// Set default search SCOPE to MAN,INFO.
+			checkBox2.setSelection(true);
+			settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN, true);
+			checkBox3.setSelection(true);
+			settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO, true);		
+		    }	
+	    }
 	// activate/deactivate browsers if they are present/absent.
 	boolean kdeBrowserExists=HelpBrowserUtil.existsCommand("konqueror");
 	boolean gnomeBrowserExists=HelpBrowserUtil.existsCommand("gnome-help-browser");	

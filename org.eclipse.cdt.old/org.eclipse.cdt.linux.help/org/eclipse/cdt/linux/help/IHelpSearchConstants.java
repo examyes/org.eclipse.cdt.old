@@ -31,4 +31,6 @@ public interface IHelpSearchConstants
     //---- Filter constants
     public static final String HELP_FILTER_PATTERNS="help_filter_patterns";
 
+    //---- Settings initialized by user
+    public static final String HELP_SETTINGS_SELECTED="help_settings_selected";
 }

@@ -34,13 +34,17 @@ public class IndexPathControl extends Composite implements Listener
     private Button _indexButton;
 
     private String originalPaths;
+
+    private HelpPlugin plugin;
     
     public IndexPathControl(Composite cnr, int style)
     {
 	super(cnr, style);
+
+	plugin= HelpPlugin.getDefault();
 	
 	group = new Group(this, SWT.NULL);
-	group.setText("Html directories to index");
+	group.setText(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_TITLE));
 	group.setLayout(new GridLayout());
 	group.setLayoutData(new GridData(GridData.GRAB_VERTICAL | GridData.FILL_BOTH));
 	
@@ -53,7 +57,7 @@ public class IndexPathControl extends Composite implements Listener
 	_pathEntry.setLayoutData(dp0);
 	
 	_browseButton      = new Button(entryCmp, SWT.PUSH);
-	_browseButton.setText("Browse");
+	_browseButton.setText(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_BROWSE));
 	_browseButton.addListener(SWT.Selection, this);
 	GridData dp1 = new GridData(GridData.HORIZONTAL_ALIGN_END);
 	dp1.widthHint = 80;
@@ -76,21 +80,21 @@ public class IndexPathControl extends Composite implements Listener
 	Composite p2    = new Composite(p1, SWT.NULL);
 	
 	_addButton      = new Button(p2, SWT.PUSH);
-	_addButton.setText("Add");
+	_addButton.setText(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_ADD));
 	_addButton.addListener(SWT.Selection, this);
 	GridData dp3 = new GridData(GridData.HORIZONTAL_ALIGN_END);
 	dp3.widthHint = 80;
 	_addButton.setLayoutData(dp3);
 	
 	_removeButton   = new Button(p2, SWT.PUSH);	
-	_removeButton.setText("Remove");
+	_removeButton.setText(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_REMOVE));
 	_removeButton.addListener(SWT.Selection, this);
 	GridData dp4 = new GridData(GridData.HORIZONTAL_ALIGN_END);
 	dp4.widthHint = 80;
 	_removeButton.setLayoutData(dp4);
 	
 	_indexButton = new Button(p2,SWT.PUSH);
-	_indexButton.setText("Create Index");
+	_indexButton.setText(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CREATE));
 	_indexButton.addListener(SWT.Selection,this);
 	GridData dp5 = new GridData(GridData.HORIZONTAL_ALIGN_END);
 	dp5.widthHint = 80;
@@ -132,7 +136,7 @@ public class IndexPathControl extends Composite implements Listener
 		String selectedDirectory = null;
 		
 		DirectoryDialog dialog = new DirectoryDialog(this.getShell(), SWT.SAVE);
-		dialog.setMessage("Select the source directory of files to index.");
+		dialog.setMessage(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_BROWSEDIRMESSAGE));
 		dialog.setFilterPath("*.*");
 		
 		selectedDirectory = dialog.open();
@@ -256,7 +260,7 @@ public class IndexPathControl extends Composite implements Listener
     {
 	if(!checkIndexCreation())
 	    {
-		boolean confirmation = MessageDialog.openConfirm(HelpPlugin.getDefault().getView().getSite().getShell(), "Confirmation","The 'Directories to Index' have not changed\nDo you still want to recreate the index?");
+		boolean confirmation = MessageDialog.openConfirm(HelpPlugin.getDefault().getView().getSite().getShell(), plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CONFIRMATION),plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CONFIRMATIONMESSAGE));
 		if(confirmation)
 		    {
 			if(createIndex()) //attempt to create the index
@@ -275,7 +279,7 @@ public class IndexPathControl extends Composite implements Listener
 	if(needIndexing) // do we need to update the index?
 	    {
 		// ask user confirmation to create index
-		boolean createIndex = MessageDialog.openQuestion(HelpPlugin.getDefault().getView().getSite().getShell(),"question","The 'Directories to Index' have changed\nDo you want to recreate the index?");
+	        boolean createIndex = MessageDialog.openQuestion(HelpPlugin.getDefault().getView().getSite().getShell(), plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_QUESTION),plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_QUESTIONMESSAGE));
 		if(createIndex)
 		    {			
 			if(createIndex()) //attempt to create the index

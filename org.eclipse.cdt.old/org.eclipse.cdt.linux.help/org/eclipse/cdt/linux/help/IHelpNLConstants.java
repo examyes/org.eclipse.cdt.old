@@ -44,7 +44,20 @@ public interface IHelpNLConstants
 
     //-----
     public static final String FILTER_TITLE="HelpResults.Filter.Title";
+    public static final String FILTER_GROUPTITLE="HelpResults.Filter.GroupTitle";
+    public static final String FILTER_ADD="HelpResults.Filter.AddButton";
+    public static final String FILTER_REMOVE="HelpResults.Filter.RemoveButton";
 
+    public static final String SETTINGS_INDEX_TITLE="HelpResults.Settings.Index.Title";
+    public static final String SETTINGS_INDEX_BROWSE="HelpResults.Settings.Index.BrowseButton";
+    public static final String SETTINGS_INDEX_ADD="HelpResults.Settings.Index.AddButton";
+    public static final String SETTINGS_INDEX_REMOVE="HelpResults.Settings.Index.RemoveButton";
+    public static final String SETTINGS_INDEX_CREATE="HelpResults.Settings.Index.CreateIndexButton";
 
+    public static final String SETTINGS_INDEX_BROWSEDIRMESSAGE="HelpResults.Settings.Index.BrowseDirMessage";
+    public static final String SETTINGS_INDEX_QUESTION="HelpResults.Settings.Index.Question";
+    public static final String SETTINGS_INDEX_QUESTIONMESSAGE="HelpResults.Settings.Index.QuestionMessage";
+    public static final String SETTINGS_INDEX_CONFIRMATION="HelpResults.Settings.Index.Confirmation";
+    public static final String SETTINGS_INDEX_CONFIRMATIONMESSAGE="HelpResults.Settings.Index.ConfirmationMessage";
 
 }
