@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-if (!defined($ARGV[0]) || !defined($ARGV[1]) || !defined($ARGV[2]) || !defined($ARGV[3]) || !defined($ARGV[4]) || !defined($ARGSV[5]))
+if (!defined($ARGV[0]) || !defined($ARGV[1]) || !defined($ARGV[2]) || !defined($ARGV[3]) || !defined($ARGV[4]) || !defined($ARGV[5]))
 {
     print("command usage:\n");
    print("auth.pl USER, PASSWORD, PATH, PORT, TIMEOUT, TICKET\n");
