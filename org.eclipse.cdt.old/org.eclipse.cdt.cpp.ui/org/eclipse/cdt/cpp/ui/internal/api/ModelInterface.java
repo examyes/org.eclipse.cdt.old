@@ -123,7 +123,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       private void setPreferences(IProject project)
       {
 	  Display d= getDummyShell().getDisplay();
-	  d.asyncExec(new SetPreferencesAction(project));
+	  d.syncExec(new SetPreferencesAction(project));
       }
   }
 
