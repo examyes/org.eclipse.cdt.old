@@ -1,0 +1,116 @@
+#! /bin/sh
+#This is the cron job that updates our download page.  It currently runs on machine turnham
+#at 5:00 a.m.
+
+#Path to the cdt-home
+rootDir=/home/turnham/cdtweb
+#Change the next 2 lines when we change the build that CDT is being built with
+eclipseVersion=F1
+eclipseLink=http://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php
+netrc=$HOME/.netrc
+theDate=`date +%Y%m%d`
+
+#Goto the CVS downloads directory and do a CVS update (so that the subsequent commit won't complain)
+cd $rootDir/cdt-home/downloads
+cvs update
+
+#Remove any existing .zip files or errors file
+rm -f *.zip
+rm -f errors
+
+#Get the Errors File and the driver from goose
+rm $netrc
+touch $netrc
+chmod 600 $netrc
+echo "machine goose login anonymous password turnham@ca.ibm.com" >>$netrc
+echo "macdef init" >>$netrc
+echo "image" >>$netrc
+echo "prompt" >>$netrc
+echo "cd pub/$eclipseVersion/latest" >>$netrc
+echo "get errors" >>$netrc
+echo "bin" >>$netrc
+echo "mget cdt-eclipse-R2-$theDate.zip" >>$netrc
+echo "bye" >>$netrc
+echo "close" >>$netrc
+echo "" >>$netrc
+ftp goose
+rm $netrc
+
+#Send mail if errors file is large, also set the status to PASS or FAIL and update mainLatestNightly.html
+theSize=`ls -l errors | awk '{print $5}'`
+if [ $theSize -gt 900 ] 
+ then
+  theStatus=FAIL
+  cat $rootDir/cdt-home/downloads/ErrorsMessage.txt errors | mail -s "POSSIBLE ERRORS IN CDT NIGHTLY BUILD" turnham@ca.ibm.com weisz@ca.ibm.com chanskw@ca.ibm.com dmcknigh@ca.ibm.com
+ elif
+  theStatus=PASS
+  mln=mainLatestNightly.html
+  echo "<tr>" > mln
+  echo "<td><a href=\"http://download.eclipse.org/eclipse/downloads/build_types.html\">Nightly</a></td>" >> mln
+  echo `date +%Y/%m/%d` >> mln
+  echo "<td><a href=\"$eclipseVhttp://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php">F1</a></td>
+  <td><a href="http://download.eclipse.org/tools/cdt/downloads/nightly/20020530/cdt-eclipse-R2-20020530.zip">
+   cdt-eclipse-R2-20020530.zip</a>
+  </td>
+ </tr>
+
+fi
+
+#Update Create nightly.html (nb = newbuild)
+echo "<tr align=center>" > nb
+echo "<td>$theDate</td>" >> nb
+echo "<td>" >> nbD
+<tr>
+  <td><a href="http://download.eclipse.org/eclipse/downloads/build_types.html">Nightly</a></td>
+  <td>2002/05/30</td>
+  <td><a href="http://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php">F1</a></td>
+  <td><a href="http://download.eclipse.org/tools/cdt/downloads/nightly/20020530/cdt-eclipse-R2-20020530.zip">
+   cdt-eclipse-R2-20020530.zip</a>
+  </td>
+ </tr>
+
+
+echo " <a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/errors\">Error Log</a>" >> nb
+echo " <img src=\"http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/$theStatus.gif?cvsroot=Tools_Project\">" >> nb
+echo "</td>" >> nb
+echo "<td>" >> nb
+echo " <a href=\"$eclipseLink\">$eclipseVersion</a>" >> nb
+echo "</td>" >> nb
+echo "<td>" >> nb
+echo " <a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a>" >> nb
+echo "</td>" >> nb
+echo "</tr>" >> nb
+
+cat nightlyBuilds >> nb
+mv nb nightlyBuilds 
+mv nightly.html nightly.html.old
+cat nightlyTop     > nightly.html
+cat nightlyBuilds >> nightly.html
+cat nightlyBottom >> nightly.html
+
+#ftp the zip and error file over to the download site
+
+#What you thought I would put my password in this file? ;-)
+ftpPassword=`cat ftpPassword`
+
+touch $netrc
+chmod 600 $netrc
+echo "machine download.eclipse.org login turnham password $ftpPassword" >>$netrc
+echo "macdef init" >>$netrc
+echo "image" >>$netrc
+echo "prompt" >>$netrc
+echo "cd nightly" >>$netrc
+echo "mkdir $theDate" >>$netrc
+echo "cd $theDate" >>$netrc
+echo "put cdt-eclipse-R2-$theDate.zip" >>$netrc 
+echo "put errors"  >>$netrc
+echo "bye" >>$netrc 
+echo "close" >>$netrc
+echo "" >>$netrc
+ftp download.eclipse.org
+rm $netrc
+rm errors
+rm cdt-eclipse-R2-$theDate.zip
+
+#Commit changes
+cvs commit -m "Automated update"
