@@ -108,7 +108,7 @@ public class ObjectsViewPart extends GenericViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader);
+	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), new CppActionLoader());
     }
     
   public void createPartControl(Composite parent)
