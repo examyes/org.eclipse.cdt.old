@@ -33,16 +33,19 @@ public class FunctionCheckTraceFile extends PATraceFile {
   public FunctionCheckTraceFile(String name) throws PAException {
    
    super(name);   
+   setTraceFormat("FunctionCheck");
   }
   
   public FunctionCheckTraceFile(File file) throws PAException {
    
    super(file);   
+   setTraceFormat("FunctionCheck");
   }
   
   public FunctionCheckTraceFile(BufferedReader reader) {
   
    super(reader);
+   setTraceFormat("FunctionCheck");
   }
   
   // getter methods

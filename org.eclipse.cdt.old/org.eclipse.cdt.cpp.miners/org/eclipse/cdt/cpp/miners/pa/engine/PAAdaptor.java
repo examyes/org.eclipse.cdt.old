@@ -57,14 +57,20 @@ public class PAAdaptor {
    format = queryTraceFileFormat(file);
    
   PATraceFile traceFile = null;
-  if (format == GPROF_GNU || format == GPROF_ALL) {
+  if (format == GPROF_GNU) {
    traceFile = new GprofTraceFile(file);
+   traceFile.setTraceFormat("GNU gprof");
    traceFile.parse();   
   }
   else if (format == GPROF_BSD) {
    traceFile = new GprofTraceFile(file);
+   traceFile.setTraceFormat("BSD gprof");
    traceFile.parse();   
-   markCyclicFunctions(traceFile.getTraceFunctions());  
+   // markCyclicFunctions(traceFile.getTraceFunctions());  
+  }
+  else if (format == GPROF_ALL) {
+   traceFile = new GprofTraceFile(file);
+   traceFile.parse();     
   }
   else if (format == FUNCTIONCHECK) {
    traceFile = new FunctionCheckTraceFile(file);
@@ -121,14 +127,21 @@ public class PAAdaptor {
   public static PATraceFile createTraceFile(BufferedReader reader, int format) throws Exception {
      
    PATraceFile traceFile = null;
-   if (format == GPROF_GNU || format == GPROF_ALL) {
+   
+   if (format == GPROF_ALL) {
     traceFile = new GprofTraceFile(reader);
+    traceFile.parse();      
+   }
+   else if (format == GPROF_GNU) {
+    traceFile = new GprofTraceFile(reader);
+    traceFile.setTraceFormat("GNU gprof");
     traceFile.parse();   
    }
    else if (format == GPROF_BSD) {
     traceFile = new GprofTraceFile(reader);
+    traceFile.setTraceFormat("BSD gprof");
     traceFile.parse();   
-    markCyclicFunctions(traceFile.getTraceFunctions());  
+    // markCyclicFunctions(traceFile.getTraceFunctions());  
    }
    else if (format == FUNCTIONCHECK) {
     traceFile = new FunctionCheckTraceFile(reader);

@@ -34,7 +34,8 @@ public abstract class PATraceFile {
   protected PAParseStatus 	_status;
   
   // Trace file attributes
-  protected int 			_numberOfCallGraphEntries;  
+  protected int 			_numberOfCallGraphEntries;
+  protected String			_traceFormat;
   private   double 			_timeUnit;
   private   double 			_totalExecutionTime;
   
@@ -134,7 +135,12 @@ public abstract class PATraceFile {
   public void setTimeUnit(double timeUnit) {
    _timeUnit = timeUnit;
   }
-    
+  
+  public void setTraceFormat(String traceFormat) {
+   _traceFormat = traceFormat;
+  }
+  
+  
   /**
    * Add a trace function to the table
    */
@@ -177,6 +183,11 @@ public abstract class PATraceFile {
   public int getNumberOfCallCycles() {
    return _callCycles.size();
   }
+  
+  public String getTraceFormat() {
+   return _traceFormat;
+  }
+  
   
   /**
    * Return a PA trace function for the given name

@@ -311,18 +311,6 @@ public class PADataStoreAdaptor {
    
  }
   
- /**
-  * Create a trace function object in the datastore
-  */
- public DataElement createTraceFunction(DataElement parent, PATraceFunction traceFunction) {
- 
-  String type = getTraceFunctionFormat(traceFunction);
-  
-  DataElement traceFuncElement = _dataStore.createObject(parent, type, traceFunction.getName());
-  //traceFuncElement.expandChildren();
-  provideSourceFor(traceFuncElement);
-  return traceFuncElement;
- }
  
  /**
   * Populate the datastore using the information from the PA trace file.
@@ -384,6 +372,8 @@ public class PADataStoreAdaptor {
   */
  private void createTraceFileSummary(DataElement fileElement, PATraceFile traceFile) {
  
+  
+  createAttribute(fileElement, getLocalizedString("pa.TraceFormat"),  		 traceFile.getTraceFormat());
   createAttribute(fileElement, getLocalizedString("pa.totalExecutionTime"),  String.valueOf(traceFile.getTotalExecutionTime()));
   createAttribute(fileElement, getLocalizedString("pa.numTraceFunctions"),   String.valueOf(traceFile.getNumberOfTraceFunctions()));
   createAttribute(fileElement, getLocalizedString("pa.numCallGraphEntries"), String.valueOf(traceFile.getNumberOfCallGraphEntries()));
@@ -426,7 +416,20 @@ public class PADataStoreAdaptor {
   
  }
  
- 
+  /**
+   * Create a trace function object in the datastore
+   */
+  public DataElement createTraceFunction(DataElement parent, PATraceFunction traceFunction) {
+  
+   String type = getTraceFunctionFormat(traceFunction);
+   
+   DataElement traceFuncElement = _dataStore.createObject(parent, type, traceFunction.getName());
+   //traceFuncElement.expandChildren();
+   provideSourceFor(traceFuncElement);
+   return traceFuncElement;
+  }
+
+
  /**
   * Create the call nesting relations for all trace functions
   */

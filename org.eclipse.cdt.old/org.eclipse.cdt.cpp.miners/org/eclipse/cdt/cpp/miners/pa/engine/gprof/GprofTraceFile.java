@@ -21,17 +21,20 @@ public class GprofTraceFile extends PATraceFile {
   // constructor
   public GprofTraceFile(String filename) throws PAException {
   
-   super(filename);   
+   super(filename);
+   setTraceFormat("gprof");
   }
 
   public GprofTraceFile(File file) throws PAException {
   
    super(file);   
+   setTraceFormat("gprof");
   }
   
   public GprofTraceFile(BufferedReader reader) {
   
    super(reader);
+   setTraceFormat("gprof");
   }
   
 
