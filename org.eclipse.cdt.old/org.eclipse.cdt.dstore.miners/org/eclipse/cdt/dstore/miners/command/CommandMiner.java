@@ -47,8 +47,6 @@ public class CommandMiner extends Miner
 
   if (name.equals("C_COMMAND"))
   {
-    System.out.println("doing " + invocation);
-
    //Remove all extra whitespace from the command
    if (invocation.trim().length() > 0)
     launchCommand(subject, invocation, status, project);
