@@ -105,12 +105,39 @@ public class GdbVariableMonitor extends Gdb_VariableMonitor
          if(_debugSession.cmdResponses.size()>0)
          {
             String str = null;
-            for(int i=0; i<_debugSession.cmdResponses.size(); i++)
+            int i = 0;
+            for(i=0; i<_debugSession.cmdResponses.size(); i++)
             {
                str = (String)_debugSession.cmdResponses.elementAt(i);
                if(str!=null && !str.equals("") && !str.equals(" ") && !str.startsWith("(gdb)") )
                   break;
             }
+            
+            if (str.startsWith("Cannot access memory at address") || 
+            	str.startsWith("Attempt to take contents of a non-pointer value.") ||
+            	str.startsWith("The history is empty."))
+            {
+            	if (i+1 < _debugSession.cmdResponses.size())
+            	{
+            		str = (String)_debugSession.cmdResponses.elementAt((short)i+1);
+            		// try to clean up for this invalid display
+            		if (str.startsWith("Disabling display"))
+            		{
+            			String keyword1 = "display ";
+            			String keyword2 = " to";
+            			int idx = str.indexOf(keyword1);
+            			int end = str.indexOf(keyword2);
+            			if (idx > -1 && end > -1)
+            			{
+            				str = str.substring(idx+keyword1.length(), end);
+            				cmd = "undisplay "+str;
+					 	    _debugSession.executeGdbCommand(cmd);
+            			}
+        			    return new GdbExprEvalInfo(GdbExprEvalInfo.exprNOTFOUND);
+            		}
+            	}
+            }
+            
             if(str!=null && !str.equals("") && !str.equals(" ") && !str.startsWith("(gdb)") )
             {
                if (Gdb.traceLogger.EVT) 
@@ -145,6 +172,14 @@ public class GdbVariableMonitor extends Gdb_VariableMonitor
                   if (Gdb.traceLogger.DBG) 
                       Gdb.traceLogger.dbg(3,"GdbVariableMonitor.evaluateExpression exprName="+exprName +"<<<<" );
                   exprValue = str.substring(equals+3);
+                  
+                  if (exprValue.equals("void") || (exprValue.equals("Attempt to dereference a generic pointer.") && exprName.startsWith("(*")))
+                  {
+                  	exprValue = "???";
+                  	cmd = "undisplay "+exprNumber;
+					_debugSession.executeGdbCommand(cmd);
+                  }
+                  
                   if (Gdb.traceLogger.DBG) 
                       Gdb.traceLogger.dbg(3,"GdbVariableMonitor.evaluateExpression exprValue="+exprValue +"<<<<" );
                }

@@ -64,6 +64,16 @@ public class CmdExpression extends Command
 
       // For deferred expressions, build context information
       if (_req.isDeferred()) {
+      	
+ 		// do not support deferred expression for now
+      	msg = "Deferred Expression not supported";
+		_rep.setMessage(msg);
+		_rep.setReturnCode(EPDC.ExecRc_BadExpr);
+		return false;     
+      }
+      
+      if (_req.isDeferred())
+      {
 	// Extract these separately as they may be null
 	String partNameES = _req.getPartName();
 	String moduleNameES = _req.getModuleName();
@@ -122,19 +132,29 @@ public class CmdExpression extends Command
 	}
       }
       
-      evalInfo = varMonMgr.addExpression(monType, 
-    				         exprString, 
-					 context, 
-					 du, 
-					 _req.isDeferred());
+	evalInfo =varMonMgr.addExpression(monType,exprString,context,du,_req.isDeferred());
       
-      if (evalInfo.expressionFailed() && !_req.isDeferred()) {
-        msg = evalInfo.whyFailed(_debugEngine);
-	_rep.setMessage(msg);
-	_rep.setReturnCode(EPDC.ExecRc_BadExpr);
-	return false;
-      }
-       
+	if (evalInfo.expressionFailed() && !_req.isDeferred()) {
+
+		msg = evalInfo.whyFailed(_debugEngine);
+		
+		exprString = "$" + exprString;
+
+		// if failed, try registers
+		evalInfo =
+			varMonMgr.addExpression(
+				monType,
+				exprString,
+				context,
+				du,
+				_req.isDeferred());
+
+		if (evalInfo.expressionFailed() && !_req.isDeferred()) {
+			_rep.setMessage(msg);
+			_rep.setReturnCode(EPDC.ExecRc_BadExpr);
+			return false;
+		}
+	}       
       varMonMgr.addChangesToReply(_rep);
       
       return false;
@@ -143,7 +163,7 @@ public class CmdExpression extends Command
       Gdb.handleException(excp);
       evalInfo =  
 	new GdbExprEvalInfo(GdbExprEvalInfo.exprFAILED, 
-			     "(Internal Debug Engine Error: JDE-EXPR-01)");
+			     "Invalid Expression");
       msg = evalInfo.whyFailed(_debugEngine);
       _rep.setMessage(msg);
       _rep.setReturnCode(EPDC.ExecRc_BadExpr);
