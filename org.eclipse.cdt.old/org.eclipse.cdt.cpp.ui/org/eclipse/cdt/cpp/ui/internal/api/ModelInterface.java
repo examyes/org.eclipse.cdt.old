@@ -18,6 +18,7 @@ import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.resource.*;
 import com.ibm.dstore.extra.internal.extra.*;
+import com.ibm.dstore.hosts.*;
 
 import java.util.*;
  
