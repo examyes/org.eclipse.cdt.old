@@ -898,7 +898,6 @@ public class MakefileAmManager {
 		boolean found = false;
 		for(int i = 0; i < list.size(); i++)
 		{
-			System.out.println("\n "+i+ " ="+((File)list.get(i)).getName());
 			File parent_Makefile_am = new File((File)list.get(i),"Makefile.am");
 			int parentClass = classifier.classify(parent_Makefile_am);
 			
