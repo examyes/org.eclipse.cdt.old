@@ -816,7 +816,7 @@ public class DebugEngine extends Thread
 
     // AB: the following represent the supported versions of EPDC that the engine will handle.
     public static final int MIN_SUPPORTED_EPDC_VERSION = 307;
-    public static final int MAX_SUPPORTED_EPDC_VERSION = 307;
+    public static final int MAX_SUPPORTED_EPDC_VERSION = 308;
 
 //    public static final int MIN_SUPPORTED_EPDC_VERSION = 305;
 //    public static final int MAX_SUPPORTED_EPDC_VERSION = 307;
