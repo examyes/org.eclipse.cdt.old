@@ -1,0 +1,714 @@
+<html>
+<head>
+<title>CDT 3.0 - Modules View Test Suite</title>
+
+<style type="text/css">
+
+.verify 	{ color: blue; font-weight: bold; }
+.indextop   { font-size: x-large; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold}
+.indexsub   { font-size: xx-small; font-family: Arial, Helvetica, sans-serif; color: #8080FF}
+.section    { font-size: 16pt; padding-left: 3pt; background: #0080C0; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsection { font-size: 12pt; padding-left: 3pt; background: #999999; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsubsection { font-size: 10pt; padding-left: 6pt; background: white; color: black; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.tb			{ border-style: solid; border-width: 1px; font-size: 10pt }
+
+</style>
+
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<font face="arial" size="2">
+
+<table cellPadding="2" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td align="left" width="72%"><font class="indextop">CDT3.0 Debug Modules View Test
+        Suite</font><br>
+        &nbsp;<span style="FONT-SIZE: 7.5pt; COLOR: #8080ff; FONT-FAMILY: Arial">Test
+        strategy and test cases for Debug Modules View.</span></td>
+      <td width="28%"><img alt src="http://dev.eclipse.org/images/Idea.jpg" width="120" height="86"></td>
+    </tr>
+  </tbody>
+</table>
+&nbsp;
+<p class="subsection">Change History</p>
+<table border="1" class="tb">
+  <tbody>
+    <tr>
+      <td><b>Date</b></td>
+      <td><b>Revision</b></td>
+      <td><b>Author</b></td>
+      <td><b>Description</b></td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">2005/3/7</td>
+      <td class="tb" vAlign="top" align="left">0.1.0</td>
+      <td class="tb" vAlign="top" align="left">James Tan</td>
+      <td class="tb" vAlign="top" align="left">initial plan</td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+&nbsp;
+<div class="subsection">
+  Table of Contents
+</div>
+<a href="#intro">1. Introduction</a><br>
+<a href="#strategy">2. Test Strategy</a><br>
+<a href="#TC_org">3. Test Cases</a><br>
+<div class="section">
+  <a name="intro">1. Introduction</a>
+</div>
+<div class="subsection">
+  1.1 Document Purpose
+</div>
+<p>This test plan defines the test strategy and test cases for testing the
+feature under test.&nbsp; The feature under test is Debug Modules View,&nbsp; specifically
+QNX commitments for CDT 3.0.</p>
+<p><span lang="EN" style="mso-ansi-language: EN">The Modules view of the Debug
+perspective lets you view information about the modules loaded in the current
+debug session, including executables and shared libraries. The view consists of
+two areas: the modules tree and the detail pane. The detail pane displays the
+detail information for the module selected in the modules tree. Expanding a
+module users can view the module’s internals - functions, global variables,
+associated source files, etc. Two context menu options are provided:<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal"><span lang="EN" style="FONT-SIZE: 10pt; COLOR: black; FONT-FAMILY: Arial; mso-ansi-language: EN"><b>Load
+Symbols<o:p>
+</o:p>
+</b></span></font>: <font face="arial" size="2"><span lang="EN">Loads the
+symbols of the module. The symbols will be loaded from the file specified in the
+module’s properties.</span></p>
+<p class="MsoNormal"><b><span lang="EN" style="FONT-SIZE: 10pt; COLOR: black; FONT-FAMILY: Arial; mso-ansi-language: EN">Load
+Symbols For All: </span></b><span lang="EN" style="FONT-SIZE: 10pt; COLOR: black; FONT-FAMILY: Arial; mso-ansi-language: EN">Loads
+the symbols of the all modules involved in the current session. This option does
+not affect the modules whose symbols are already loaded.<o:p>
+</o:p>
+</span></p>
+<p>The test plan ensures that the feature's implementation satisfies the stated
+requirements stated in the SRS, and that the feature's design elements are of
+high quality.&nbsp; This test plan may also test project-level
+requirements (scalability, internationalization, etc.) as they relate to this
+feature.</p>
+<div class="subsection">
+  1.2 References
+</div>
+<p>The feature is outlined in Modules View feature document.</p>
+<p>The delivery schedule of this feature is specified in CDT3.0 Master Project
+Plan</p>
+<p>The configurations, reporting criteria, general risks, etc. for the CDT 3.0
+project are specified in the Master
+Test Plan.</p>
+<font face="Arial" size="2">
+<div class="subsection">
+  1.3 Terminology
+</div>
+</font>
+<p>FDS: Feature Design Specification</p>
+<p>SRS: Software Requirements Specification</p>
+<p>TC: Test Case</p>
+<div class="section">
+  <a name="strategy">2. Test Strategy</a>
+</div>
+<p>This section discusses the scope of testing, which is used for effort
+estimation and tractability, and assumptions about testing.&nbsp; It also
+discusses risks and dependencies for scheduling purposes.&nbsp; Finally, the
+effort estimation is summarized.</p>
+<div class="subsection">
+  2.1 Scope
+</div>
+<p>The scope of testing includes requirements, test areas of interest and design
+elements. For convenience, references to test cases are provided for tractability. For reference, anticipated test cases are listed under Test Cases.</p>
+<div class="subsubsection">2.1.1 Requirements</div>
+<p>The tested requirements include:</p>
+<table class="tb" width="687" border="1" height="351">
+  <tbody>
+    <tr>
+      <td width="408" height="16"><b>Requirement</b></td>
+      <td width="95" height="16"><b>Tests references</b></td>
+    </tr>
+</font>
+    <tr>
+      <td width="408" height="16"> <font face="Arial" size="1"> Basic accessibility and walkthrough&nbsp;</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T1,T2.T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">The view should include executables and shared
+        libs</font></td>
+      <td width="95" height="16">
+
+<font face="Arial" size="1">
+
+T1,T2.T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">The view should consist of two areas: the modules
+        tree and the detail pane</font></td>
+      <td width="95" height="16">
+
+<font face="Arial" size="1">
+
+T1,T2.T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="17"><font face="Arial" size="1">The detail pane should display the detail
+        information for the module selected in the modules tree</font></td>
+      <td width="95" height="17">
+
+<font face="Arial" size="1">
+
+T1,T2.T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">User can expanding a module to view the
+        module's internals- functions, global variables, associated source
+        files, etc</font></td>
+      <td width="95" height="16">
+
+<font face="Arial" size="1">
+
+T1,T2.T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">The module information is automatically
+        refreshed</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T2</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="14"><font face="Arial" size="1">Load Symbols option is provided in context
+        menu</font></td>
+      <td width="95" height="14"><font face="Arial" size="1">T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">Symbols for the selected module will be loaded
+        from the file specified in the module's properties</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">Load Symbols For All option is provided in
+        context menu</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T3</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16"><font face="Arial" size="1">Load Symbols For All option should not affect
+        the modules whose symbols are already loaded</font></td>
+      <td width="95" height="16"><font face="Arial" size="1">T3</font></td>
+    </tr>
+  </tbody>
+</table>
+ <font face="arial" size="2">
+<div class="subsubsection">&nbsp;
+  <p>2.1.2 Test Areas</div>
+<p>Test areas of interest include:</p>
+<table class="tb" width="619" border="1">
+  <tbody>
+    <tr>
+      <td width="194"><b>Test Area</b></td>
+      <td width="195"><b>Tests references</b></td>
+    </tr>
+</font>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Scalability</font></td>
+      <td width="195">
+        <font face="Arial" size="1">
+        T4</font></td>
+    </tr>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Adoptability</font></td>
+      <td width="195">
+        <font face="Arial" size="1">N/A</font>
+      </td>
+    </tr>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Documentation</font></td>
+      <td width="195"><font face="Arial" size="1">N/A</font></td>
+    </tr>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Accessibility</font></td>
+      <td width="195"><font face="Arial" size="1">T1</font></td>
+    </tr>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Internationalization</font></td>
+ <font face="arial" size="2">
+      <td width="195">&nbsp;</td>
+    </tr>
+</font>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Integration</font></td>
+ <font face="arial" size="2">
+      <td width="195">&nbsp;</td>
+    </tr>
+</font>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Usability/Robustness</font></td>
+      <td width="195">
+        <font face="Arial" size="1">
+        T1</font></td>
+    </tr>
+    <tr>
+      <td width="194"><font face="Arial" size="1">User
+        Interface</font></td>
+      <td width="195"><font face="Arial" size="1">T1, T2, T3</font></td>
+    </tr>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Installation</font></td>
+ <font face="arial" size="2">
+      <td width="195">&nbsp;</td>
+    </tr>
+</font>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Fail-over
+        Recovery</font></td>
+ <font face="arial" size="2">
+      <td width="195">&nbsp;</td>
+    </tr>
+</font>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Extensibility</font></td>
+ <font face="arial" size="2">
+      <td width="195">&nbsp;</td>
+    </tr>
+</font>
+    <tr>
+      <td width="194"><font face="Arial" size="1">Regression</font></td>
+ <font face="arial" size="2">
+      <td width="195">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+<font face="Arial" size="2">
+<div class="subsubsection">&nbsp;
+  <p>2.1.3
+</font>
+</font><font face="Arial" size="2">GUI Changes</font></div>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+<p>New or changed UI</font>s
+<font face="Arial" size="2">
+ are subject to testing for
+</font>
+</font><font face="Arial" size="2">Usability, <font face="arial" size="2">Robustness, and Accessibility.&nbsp;
+</font></font><font face="arial" size="2">The&nbsp;<font face="Arial" size="2"> new or changed UI</font></font><font face="Arial" size="2">s
+<font face="arial" size="2">as expected listed here:</p>
+</font></font>
+<table border="1" width="652" class="tb" height="245">
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="2"><b>UI </b></font>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+<b>name</b></td>
+		<td width="293" height="16"><b>Details</b></td>
+		<td width="60" height="16"><b>Status</b></td>
+</font>
+        </font>
+		<td height="16" width="72"><font face="arial" size="2"><b>Tests&nbsp;</b><font face="Arial" size="2"><b>
+          Ref.</b></td>
+	</tr>
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="1">Modules view</font></td>
+		<td width="293" height="16"><font face="Arial" size="1">new view in CDT3.0&nbsp; to replace shared
+          libraries view</font></td>
+		<td width="60" height="16"><font face="Arial" size="1">New</font></td>
+
+		<td height="16" width="72"><font face="Arial" size="1">T1</font></td>
+	</tr>
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="1">context menu: load symbols for all</font></td>
+		<td width="293" height="16"><span lang="EN" style="color: black; mso-ansi-language: EN"><font size="1" face="Arial">Loads
+the symbols of the all modules involved in the current session. This option does
+not affect the modules whose symbols are already loaded.<o:p>
+          &nbsp;</font>
+</span></td>
+		<td width="60" height="16"><font face="Arial" size="1">New</font></td>
+
+		<td height="16" width="72"><font face="Arial" size="1">T3</font></td>
+	</tr>
+	<tr>
+		<td width="199" height="8"><font face="Arial" size="1">context menu: load symbols</font></td>
+		<td width="293" height="8"><span lang="EN"><font size="1" face="Arial">Loads the
+symbols of the module. The symbols will be loaded from the file specified in the
+module’s properties.</font></span></td>
+		<td width="60" height="8"><font face="Arial" size="1">New</font></td>
+
+		<td height="8" width="72"><font face="Arial" size="1">T3</font></td>
+	</tr>
+	<tr>
+		<td width="199" height="1"><font face="Arial" size="1">button: load symbols for all</font></td>
+		<td width="293" height="1"><font face="Arial" size="1">Same as the
+          context menu option</font></td>
+		<td width="60" height="1"><font face="Arial" size="1">New&nbsp;</font></td>
+
+		<td height="1" width="72"><font face="Arial" size="1">T3</font></td>
+	</tr>
+
+</table>
+
+<font face="arial" size="2">
+
+<div class="subsubsection" style="width: 635785; height: 27">&nbsp;
+  <p>2.1.4 Exclusions</div>
+<p>N/A</p>
+<font face="Arial" size="2">
+<div class="subsection">
+  2.2 Risks
+</div>
+<p>There are no known feature-specific risks.</p>
+</font>
+<div class="subsection">
+  2.3 Dependencies 
+</div>
+    <p>N/A</p>
+<div class="subsection">
+ 2.4 Effort Estimation
+</div>
+<div class="subsubsection">2.4.1 Test Case Estimation</div>
+    <p>Test cases are grouped for convenience during planning.</p>
+    <table class="tb" width="655" border="1">
+      <tbody>
+        <tr>
+          <td width="62"><b>Tests</b></td>
+          <td width="270"><b>Description</b></td>
+          <td align="middle" width="140"><b>Estimated # TCs</b></td>
+        </tr>
+      </font>
+        <tr>
+          <td width="62"><font face="arial" size="1">T1</font></td>
+          <td width="270"><font face="arial" size="1">General accessibility and&nbsp; basic workflow</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">1</font></td>
+        </tr>
+        <tr>
+          <td width="62"><font face="arial" size="1">T2</font></td>
+          <td width="270">
+
+<font face="arial" size="1">
+
+Display modules</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">1</font></td>
+        </tr>
+        <tr>
+          <td width="62"><font face="arial" size="1">T3</font></td>
+          <td width="270"><font face="arial" size="1">Loading symbols (Linux, QNX)</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">1</font></td>
+        </tr>
+        <tr>
+          <td width="62"><font face="arial" size="1">T4</font></td>
+          <td width="270"><font face="arial" size="1">Working with multiple debug sessions</font></td>
+          <td align="middle" width="140"><font face="arial" size="1">1</font></td>
+        </tr>
+
+<font face="arial" size="2">
+
+        <tr>
+          <td width="62">&nbsp;</td>
+</font>
+          <td width="270">
+            <p align="right"><font face="arial" size="1">TOTAL =&nbsp;&nbsp;</font>
+          </td>
+          <td align="middle" width="140"><font face="arial" size="1">4</font></td>
+        </tr>
+      </tbody>
+    </table>
+
+<font face="arial" size="2">
+
+    <p>There are&nbsp; 4 Test Cases identified.</p>
+<div class="subsubsection">2.4.2 Specific Platform Execution</div>
+    <p>Testing for Basic Workflows will be executed on all supported platforms.&nbsp;
+    T3 loading symbols has to be tested in Linux or QNX platform.</p>
+<div class="subsubsection">2.4.3 Effort Calculation Summary</div>
+</font>
+<table class="tb" border="1">
+  <tbody>
+    <tr>
+      <td><font face="arial" size="1">Test Case Development</font></td>
+      <td><font face="arial" size="1">0.5 person days</font></td>
+    </tr>
+    <tr>
+      <td> <font face="arial" size="1"> Test Case Execution in M5</font></td>
+      <td><font face="arial" size="1">0.5 person days</font></td>
+    </tr>
+
+<font face="arial" size="2">
+
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    </font>
+    <tr>
+      <td><b><font face="arial" size="1">Total (risk adjusted)</font></b></td>
+      <td><b><font face="arial" size="1">1.0 person days</font></b></td>
+    </tr>
+
+<font face="arial" size="2">
+
+  	<tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+<font face="Arial" size="2">
+<p>It will take </font></font>
+    <font face="Arial" size="2">1.0 <font face="arial" size="2">person days to test the functionality of this feature.&nbsp;</p>
+<div class="subsection">2.5 Candidates for Regression</div>
+    </font>
+    </font>
+
+<p><font face="Arial" size="2">N/A</font></p>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+<div class="subsection">2.6 Candidates for Sanity</div>
+</font>
+
+<p>N/A</p>
+
+<div class="section"><a name="TC_org">3. Test Cases&nbsp;</a></div>
+<table border="1" width="97%" height="468">
+  <tr>
+    <td width="5%" height="38"><b>Test ID</b></td>
+    <td width="17%" height="38"><b>Synopsis</b></td>
+    <td width="81%" height="38"><b>Steps</b></td>
+  </tr>
+</font>
+<tr>
+  <td width="5%" height="26"><font size="1" face="Arial">T1.1</font></td>
+  <td width="17%" height="26"><font size="1" face="Arial">Basic workflows</font></td>
+  <td width="81%" height="26">
+  <ol>
+    <li><font face="Arial" size="1"><span style="mso-ansi-language: EN-US">Use&nbsp; attached main.c and
+      display.c to build a project and launch a debug session</span></font>
+    </li>
+    <li><font size="1" face="Arial">Open modules view&nbsp;</font></li>
+    <li><font size="1" face="Arial">Verify all the modules are displayed
+      (including executables)</font></li>
+    <li><font size="1" face="Arial">Select a module from modules tree, verify
+      more information displayed in the detail pane</font></li>
+    <li><font size="1" face="Arial">Expanding a module, verify the module's
+      internal structure is displayed: functions. global variables, etc..</font></li>
+  </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="48"><font size="1" face="Arial">T2.1</font></td>
+  <td width="17%" height="48"><font size="1" face="Arial">Display modules for a
+    shared lib project</font></td>
+  <td width="81%" height="48">
+  <span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Check
+  if all modules are shown in the view. Needs a program that loads and unloads a
+  DLL during the execution (may use&nbsp; attached main.c and display.c).<o:p>
+  </o:p>
+  </font></span>
+  <ol>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Start
+      a debug session.<o:p>
+      </o:p>
+      </font></span></li>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><font face="Arial" size="1"><span lang="EN-US" style="mso-ansi-language: EN-US">When
+      the session is suspended switch to the Modules view. <o:p>
+      </o:p>
+      Verify that all modules are shown correctly, including the detail
+      information for each module.</span><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+      </o:p>
+      </span></font></li>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><font size="1" face="Arial"><span lang="EN-US" style="mso-ansi-language: EN-US"><span style="font-style: normal; font-variant: normal; font-weight: normal">&nbsp;</span>Step
+      through the code until the DLL is loaded.<o:p>
+      </o:p>
+      </span><span lang="EN-US">Verify that DLL is added to the view.</span></font></li>
+    <li>
+      <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo2; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Step
+      through the code until the DLL is unloaded.<o:p>
+      </o:p>
+      </font></span></li>
+    <li>
+      <p class="MsoBodyTextIndent" style="MARGIN-LEFT: 0in"><span lang="EN-US"><font size="1" face="Arial">Verify
+      that DLL is removed from the view.</font></span></li>
+  </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="1"><font size="1" face="Arial">T3.1</font></td>
+  <td width="17%" height="1"><font size="1" face="Arial">Loading Symbols (Linux,
+    QNX)</font></td>
+  <td width="81%" height="1"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Check
+    if the symbols related operations. Needs a program that loads a DLL during
+    the execution.<o:p>
+    (may use&nbsp; attached main.c and display.c).<o:p>
+    </o:p>
+    </font></span>
+    <ol>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Start
+        a debug session. Make sure that the “Load shared libraries symbols
+        automatically” option of the Shared Libraries tab is checked
+        (default).<o:p>
+        </o:p>
+        </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><font size="1" face="Arial"><span lang="EN-US" style="mso-ansi-language: EN-US">When
+        the session is suspended switch to the Modules view. </o:p>
+        Verify that symbols are loaded for all modules that are compiled with
+        the debug information.<o:p>
+        </span><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+        </o:p>
+        </span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Uncheck
+        the “Load shared libraries symbols automatically” option and start a
+        new session. <o:p>
+        </o:p>
+        </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><font face="Arial" size="1"><span lang="EN-US" style="mso-ansi-language: EN-US">When
+        the session is suspended switch to the Modules view.<o:p>
+        </o:p>
+        Verify
+        that symbols are not loaded for all modules.</span><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+        </o:p>
+        </span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><font size="1" face="Arial"><span lang="EN-US" style="mso-ansi-language: EN-US"><span style="font-style: normal; font-variant: normal; font-weight: normal">&nbsp;</span>Select
+        a module and load it’s symbols by using “Load Symbols” from the
+        module context menu.<o:p>
+        </o:p>
+        Verify that
+        symbols are loaded for this module.</span><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+        </o:p>
+        </span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><font size="1" face="Arial"><span lang="EN-US" style="mso-ansi-language: EN-US"><span style="font-style: normal; font-variant: normal; font-weight: normal">&nbsp;
+        </span>Select “Load Symbols for All” from the view’s context menu
+        or press the button on modules view.<o:p>
+        </o:p>
+        Verify that
+        symbols are loaded for all modules that are compiled with the debug
+        information.</span><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+        </o:p>
+        </span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><font size="1" face="Arial"><span lang="EN-US" style="mso-ansi-language: EN-US"><span style="font-style: normal; font-variant: normal; font-weight: normal">&nbsp;</span>Step
+        through the code until the DLL is loaded.<o:p>
+        </o:p>
+        </span> <span lang="EN-US">Verify that DLL’s symbols are not loaded.</span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l7 level1 lfo9; tab-stops: list .25in"><font size="1" face="Arial"><span lang="EN-US" style="mso-ansi-language: EN-US"><span style="font-style: normal; font-variant: normal; font-weight: normal">&nbsp;
+        </span>Select the DLL and load it’s symbols by using “Load
+        Symbols” from the context menu.<o:p>
+        </o:p>
+        Verify that
+        symbols are loaded for the DLL.</span><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+        </o:p>
+        </span></font></li>
+    </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="42"><font size="1" face="Arial">T4.1</font></td>
+  <td width="17%" height="42"><font size="1" face="Arial">Working with multiple
+    debug sessions</font></td>
+  <td width="81%" height="42">
+  <font face="Arial" size="1">Launch multiple debug sessions and repeat T2.1 and
+  T3.1, make sure no surprises occurred</font>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="61"></td>
+  <td width="17%" height="61"></td>
+  <td width="81%" height="61">
+  </td>
+  </tr>
+</table>
+    <p class="section">4. Attachment</p>
+    <p><b><font size="3"><span style="background-color: #C0C0C0">Main.c</span></font></b></p>
+    <pre>/*****************************
+* Name: main.c
+* Purpose: simple app testing dll
+* Date: 06/09/2004
+* ***************************/
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;dlfcn.h&gt;
+
+#define VALUE 5
+
+int calling_lib (int z){
+	void *handle;
+	int (*display)(int);
+	int y;
+	const char *error;
+	
+	printf(&quot;About to call display()\n&quot;);
+	handle = dlopen ( &quot;/tmp/libdisplay_g.so&quot;,RTLD_LAZY);
+	if (!handle){
+		fputs (dlerror(), stderr);
+		exit(1);
+	}
+	display = dlsym(handle, &quot;display&quot;);
+	if ((error = dlerror()) != NULL)  {
+		fputs(error, stderr);
+		exit(1);
+	}
+	y = (*display)(z); // &lt;- regular breakpoint
+	dlclose(handle);
+	return (y);
+}
+
+int main(int argc, char *argv[]) {
+	int y, x, z;
+	
+	printf(&quot;Testing shared lib dll\n&quot;);
+	for (x = 0; x &lt; VALUE; x++){
+    	z = x + 1; // &lt;-conditional breakpoint x==2
+    } 
+	y = calling_lib(z); // &lt;- regular breakpoint
+	printf(&quot;The y is %d and z is %d\n&quot;,y,z);
+	return (0);
+}
+</pre>
+    <pre>&nbsp;</pre>
+    <pre><span style="background-color: #C0C0C0"><font size="3"><b>Display.c</b></font></span></pre>
+    <pre>#include &lt;stdio.h&gt;
+
+int display (int x)
+{
+	if (x != NULL)
+		printf(&quot;The display is %d\n&quot;,x);	
+	return (x+1);
+}</pre>
+    <pre>&nbsp;</pre>
+    <p>&nbsp;</p>
+
+
+</html>
