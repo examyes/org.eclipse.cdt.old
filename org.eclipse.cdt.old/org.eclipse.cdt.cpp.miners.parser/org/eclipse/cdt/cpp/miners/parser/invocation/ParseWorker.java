@@ -319,6 +319,11 @@ public class ParseWorker extends Thread
   int startLine   = Integer.parseInt(objectContents.substring(0,sep));
   objectContents  = objectContents.substring(sep+1,objectContents.length());
 
+	if (objectContents.length() == 0)
+	{
+		return false;	
+	}
+	
   BufferedReader input = new BufferedReader(new StringReader(objectContents), objectContents.length());
   _theCharStream.ReInit(input, startLine, 1, 4096); 
   _theParserTokenManager.ReInit(_theCharStream);
