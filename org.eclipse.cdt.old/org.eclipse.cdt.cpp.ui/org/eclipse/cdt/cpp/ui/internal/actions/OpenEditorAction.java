@@ -99,7 +99,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 			_previousElement.setAttribute(DE.A_SOURCE, _element.getSource());
 		    }
 
-		System.out.println("prev = " + _previousElement);
 	    }
 
 	_element = selected;
