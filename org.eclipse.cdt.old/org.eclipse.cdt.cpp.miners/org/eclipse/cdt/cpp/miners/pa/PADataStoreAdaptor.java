@@ -219,21 +219,7 @@ public class PADataStoreAdaptor {
    }
  }
  
- 
- /**
-  * Retain 3 digits after the dot for a double value
-  */
- private static String truncateDigits(double d) {
- 
-   String doubleStr = String.valueOf(d);
-   int dotIndex = doubleStr.indexOf('.');
-   if (dotIndex >= 0 && doubleStr.length() - dotIndex > 4) {
-     return doubleStr.substring(0, dotIndex + 4);
-   }
-   else
-     return doubleStr;
- }
- 
+  
  /**
   * Round a double to an approximate value with 3 digits after the dot.
   */
@@ -250,28 +236,63 @@ public class PADataStoreAdaptor {
      if (eIndex > dotIndex) {
      
        if (eIndex > dotIndex + 4) {
-         
-         double base = d;
-         try {
-          base = Double.parseDouble(result.substring(0, eIndex)) + 0.0005;
-         }
-         catch (NumberFormatException e)
-         {     
-         }	 
-	 
-         result = truncateDigits(base) + result.substring(eIndex);
+                 
+         result = roundBase(result.substring(0, eIndex), dotIndex) + result.substring(eIndex);
        }
      }
      else {
        
-       if (result.length() - dotIndex > 3) {
-         result = truncateDigits(d + 0.0005);
+       if (result.length() - dotIndex > 4) {
+         result = roundBase(result, dotIndex);
        }
      }
      
    }
    
    return result;
+ }
+ 
+ 
+ /**
+  * Round the base to 3 digits after the dot
+  */
+ private static String roundBase(String base, int dotIndex) {
+    
+   if (dotIndex + 4 < base.length())
+   {
+     if (base.charAt(dotIndex + 4) <'5')
+     {
+       return base.substring(0, dotIndex + 4);
+     }
+     else
+     {
+       StringBuffer buffer = new StringBuffer(base.substring(0, dotIndex + 4));
+       int index = dotIndex + 3;
+       char ch = 0;
+       while (index >=0  && ((ch = buffer.charAt(index)) == '9' || ch =='.'))
+       {
+         if (ch == '9')
+           buffer.setCharAt(index, '0');
+           
+         index--;
+       }
+       
+       if (index >= 0)
+       {
+         int digit = Character.digit(buffer.charAt(index), 10);
+         buffer.setCharAt(index, Character.forDigit(digit+1, 10));
+       }
+       else
+       {
+         buffer.insert(0, '1');
+       }
+       
+       return buffer.toString();
+     }
+   }
+   else
+     return base;
+     
  }
  
  
