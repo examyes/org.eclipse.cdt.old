@@ -1416,6 +1416,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							   "com.ibm.cpp.ui.internal.actions.ReplicateToAction");
 	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_TO");
 
+	DataElement synchronizeWith = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR, 
+							     "Synchronize with...",
+							     "com.ibm.cpp.ui.internal.actions.SynchronizeWithAction");
+	synchronizeWith.setAttribute(DE.A_VALUE, "C_SYNCHRONIZE_WITH");
+
+
 	DataElement configureCmd = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");

@@ -82,7 +82,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						{
 						    String name = fileName;
 						    
-						    int indexOfSlash = fileName.lastIndexOf(java.io.File.separator);
+						    int indexOfSlash = fileName.lastIndexOf("/");
 						    if (indexOfSlash > 0)
 							{
 							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
@@ -96,7 +96,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 							}
 						}
 					    
-					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, _plugin.getCurrentProject());
+					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, 
+												      _plugin.getCurrentProject());
 					}
 				    
 				    if (file != null)
@@ -112,11 +113,12 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    for (int i = 0; i < editors.length; i++)
 							{
 							    IFileEditorInput input = (IFileEditorInput)editors[i].getEditorInput();
-							    if ((input != null)
-								&& input.getName().equals(file.getName()))
+							    IFile openFile = input.getFile();
+							    if ((input != null) && openFile == file)
 								{
 								    editor = editors[i];		
 								    persp.bringToTop(editor);		
+								    break;
 								}
 							}
 						    

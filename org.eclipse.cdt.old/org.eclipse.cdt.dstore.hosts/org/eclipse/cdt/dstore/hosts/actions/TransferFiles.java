@@ -62,21 +62,6 @@ public class TransferFiles extends Thread
 
 	transfer(_source, _target);
 
-	if (targetDataStore == sourceDataStore)
-	    {		
-	    }
-	else if ((targetDataStore == _plugin.getDataStore()))
-	    {
-		String sourceMapping = sourceDataStore.mapToLocalPath(_source.getSource());
-		String targetMapping = _target.getSource() + java.io.File.separator + _source.getName();
-		
-		java.io.File newSource = new java.io.File(sourceMapping);
-		if (newSource.exists())
-		    {
-			newSource.renameTo(new java.io.File(targetMapping));
-		    }
-	    }
-
 	targetDataStore.refresh(_target.getParent());
 
 	if (_listener != null)
@@ -101,43 +86,58 @@ public class TransferFiles extends Thread
 		_listener.getShell().getDisplay().asyncExec(new Notify("Creating " + newSourceStr + "...")); 
 	    }
 
-	DataElement copiedSource = targetDataStore.createObject(target, 
-								source.getType(), 
-								source.getName(),
-								newSourceStr);
 
-	// if we're receiving
-	if (targetDataStore == sourceDataStore)
+	boolean needsUpdate = true;
+
+	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
+	if (copiedSource == null)
 	    {
-		// files on the same system
-		// simply copy them
-		DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
-		if (cmd != null)
-		    {
-			String invocation = "cp -f " + source.getSource() + " " + newSourceStr;
-			DataElement invocationElement = targetDataStore.createObject(null, 
-										     "invocation", 
-										     invocation);
-			ArrayList args = new ArrayList();
-			args.add(invocationElement);
-			targetDataStore.command(cmd, args, target);
-		    }
-	    }
-	else if (targetDataStore == _plugin.getDataStore())
-	    {
-		source.getFileObject();
+		copiedSource = targetDataStore.createObject(target, 
+							     source.getType(), 
+							     source.getName(),
+							     newSourceStr);
+		// transfer to remote
+		targetDataStore.setObject(target);
 	    }
 	else
 	    {
-		targetDataStore.setObject(target);
-	
 		if (source.getType().equals("file"))
 		    {
-			File theFile = new File(source.getSource());
-			targetDataStore.replaceFile(newSourceStr, theFile);
+			// compare dates
+			needsUpdate = compareDates(source, copiedSource);
 		    }
 	    }
 
+	if (targetDataStore == sourceDataStore)
+	    {
+		// files on the same system
+		if (needsUpdate)
+		    {
+			// simply copy them
+			DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
+			if (cmd != null)
+			    {
+				String invocation = "cp -f " + source.getSource() + " " + newSourceStr;
+				DataElement invocationElement = targetDataStore.createObject(null, 
+											     "invocation", 
+											     invocation);
+				ArrayList args = new ArrayList();
+				args.add(invocationElement);
+				targetDataStore.command(cmd, args, target);
+			    }
+		    }
+	    }
+	else
+	    {	
+		if (needsUpdate)
+		    {
+			// make sure we have a local copy of the file
+			File theFile = source.getFileObject();
+			
+			targetDataStore.replaceFile(newSourceStr, theFile);
+		    }
+	    }
+	
 	if (source.getType().equals("directory"))
 	    {
 		for (int i = 0; i < source.getNestedSize(); i++)
@@ -148,6 +148,27 @@ public class TransferFiles extends Thread
 		    }
 
 	    }	
+    }
 
+    private boolean compareDates(DataElement newSource, DataElement oldSource)
+    {
+    	long date1 = getDate(newSource);
+	long date2 = getDate(oldSource);
+
+	return (date1 > date2);
+    }
+
+    private long getDate(DataElement fileElement)
+    {
+	DataElement status = fileElement.doCommandOn("C_DATE", true);	
+	if (status != null && status.getNestedSize() > 0)
+	    {
+		DataElement dateObj = status.get(0);
+
+		Long date = new Long(dateObj.getName());
+		return date.longValue(); 
+	    }	
+
+	return -1;
     }
 }
