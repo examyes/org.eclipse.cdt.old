@@ -256,9 +256,11 @@ public class CppOutputViewPart
 		label.setText("Standard Input");
 
 		_inputEntry = new StyledText(inputContainer, SWT.SINGLE | SWT.BORDER);
-		//_inputEntry = new Combo(inputContainer, SWT.SINGLE | SWT.BORDER);
 
-		_inputEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData idata = new GridData(GridData.VERTICAL_ALIGN_END | GridData.FILL_HORIZONTAL);
+		idata.heightHint = 20;
+		_inputEntry.setLayoutData(idata);
+	
 		_inputEntry.addModifyListener(new ModifyListener()
 		{
 			public void modifyText(ModifyEvent e)
@@ -284,7 +286,9 @@ public class CppOutputViewPart
 		});
 		_inputEntry.addListener(SWT.KeyUp, new Listener() 
 		    {
-			public void handleEvent(Event e) {
+			public void handleEvent(Event e) 
+			{
+				System.out.println("got key = " + e.character);
 			    if (e.character == '\r') // "enter" key
 				{
 				    sendInput();
@@ -292,6 +296,7 @@ public class CppOutputViewPart
 			}
 		});
 		_inputEntry.setFont(new Font(getShell().getDisplay(), "Courier", 10, SWT.NORMAL));
+		
 		
 		_sendButton = new Button(inputContainer, SWT.PUSH);
 		_sendButton.setText("Send");

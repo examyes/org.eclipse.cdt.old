@@ -103,6 +103,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	_searchEntry = new StyledText(c, SWT.BORDER | SWT.SINGLE);
 	GridData egrid = new GridData(GridData.FILL_HORIZONTAL);
 	egrid.widthHint = 100;
+	egrid.heightHint = 20;
 	_searchEntry.setLayoutData(egrid);
 
 	_search = new Button(c, SWT.PUSH);
