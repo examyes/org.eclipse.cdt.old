@@ -647,9 +647,10 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
-				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.startsWith(".")
-				&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")&&!name.endsWith(".old")
-				&&!name.equals("Makefile") && !name.equals("makefile")&&!name.equals("configur"))
+				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".hh")
+				&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")
+				&&!name.endsWith(".old")&&!name.endsWith(".cxx")&&!name.endsWith(".c++")
+				&&!name.equals("Makefile") &&!name.equals("makefile")&&!name.equals("configur"))
 				{
 					out.write(" "+"\\");
 					out.newLine();
@@ -674,6 +675,7 @@ public class MakefileAmManager {
 				if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
 				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.startsWith(".")
 				&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")&&!name.endsWith(".old")
+				&&!name.endsWith(".cxx")&&!name.endsWith(".c++")
 				&&!name.equals("Makefile") && !name.equals("makefile")&&!name.equals("configur"))
 				{
 					update = true;
@@ -771,8 +773,8 @@ public class MakefileAmManager {
 			if(!parent.listFiles()[i].isDirectory())
 			{
 				String name = parent.listFiles()[i].getName();
-				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
+				if(line.indexOf(name)==-1 &&(name.endsWith(".c")|| name.endsWith(".cpp") 
+				|| name.endsWith(".C")|| name.endsWith(".cc")||name.endsWith(".c++")||name.endsWith(".cxx")))
 					{
 						try
 						{
@@ -795,8 +797,8 @@ public class MakefileAmManager {
 			if(!parent.listFiles()[i].isDirectory())
 			{
 				String name = parent.listFiles()[i].getName();
-				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
+				if(line.indexOf(name)==-1 && (name.endsWith(".c")|| name.endsWith(".cpp") 
+				|| name.endsWith(".C")|| name.endsWith(".cc")||name.endsWith(".cxx")||name.endsWith(".c++")))
 					{
 						try
 						{
@@ -923,8 +925,9 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||name.endsWith(".hpp") ||
+						name.endsWith(".cc") ||name.endsWith(".hh") ||name.endsWith(".cxx") ||name.endsWith(".H") 
+						||name.endsWith(".c++") || name.endsWith(".C")))
 						{
 							try
 							{
@@ -949,8 +952,9 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||name.endsWith(".hpp")||
+						name.endsWith(".cc") ||name.endsWith(".hh")||name.endsWith(".cxx") ||name.endsWith(".c++") 
+						||name.endsWith(".H") || name.endsWith(".C")))
 						{
 							try
 							{
@@ -977,8 +981,9 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||name.endsWith(".hpp")||
+						name.endsWith(".cc") ||name.endsWith(".hh")||name.endsWith(".H") || name.endsWith(".cxx")|| 
+						name.endsWith(".c++")||name.endsWith(".C")))
 						{
 							try
 							{
@@ -1002,8 +1007,9 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
-					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
-						name.endsWith(".cc") ||name.endsWith(".H") || name.endsWith(".C")))
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||name.endsWith(".hpp")||
+						name.endsWith(".cc")||name.endsWith(".hh") ||name.endsWith(".H")  ||name.endsWith(".cxx")
+						||name.endsWith(".c++")|| name.endsWith(".C")))
 						{
 							try
 							{
