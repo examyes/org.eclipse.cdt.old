@@ -100,7 +100,9 @@ rm errors
 rm cdt-eclipse-R2-$theDate.zip
 
 #Commit changes
-cvs commit -m 'Automated update'
+cvs commit -m 'Automated update' main.html mainNightly.html mainLatestNightly.html
+
+
 
 
 
