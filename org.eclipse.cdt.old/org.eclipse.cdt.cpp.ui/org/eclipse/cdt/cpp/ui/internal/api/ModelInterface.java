@@ -1741,6 +1741,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	clean.setAttribute(DE.A_VALUE, "CLEAN");
        
 	
+	DataElement openFile = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
+							 "Open File",
+							 "com.ibm.cpp.ui.internal.actions.OpenFileAction");
+
+
 	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Open Project",
 							 "com.ibm.cpp.ui.internal.actions.OpenProjectAction");
@@ -1873,33 +1878,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
 	
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
-	
-	DataElement managedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Managed Project", 1);
-	
-	/*
-	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change target to");
-	
-	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Programs", 
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toProgCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
-	DataElement toStatLibCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Static lib", 
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toStatLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
-	
-	DataElement toSharedLibCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Shared lib", 
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toSharedLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
-	
-	DataElement toTopLevelCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Top level", 
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
-	*/
-
- 	
     }
         
 }
