@@ -628,8 +628,19 @@ void declaration() :
       if (theTypes == null)
        return;
      } 
-     (LOOKAHEAD(function_definition_lookahead()) function_definition(theTypes) | simple_declaration(theTypes))
-  
+     (LOOKAHEAD(function_definition_lookahead()) function_definition(theTypes, null) | simple_declaration(theTypes))
+   | function_pointer_without_return_type()
+}
+
+//This matches a function pointer without return type (e.g. (*fpt)(int, void*)).
+void function_pointer_without_return_type() :
+{String name = empty; String type = empty;}
+{
+ "(" "*" name = identifier() ")" "(" type = parameter_list(false) ")" ";"
+ {
+  name = "(*)(" + type + ")" + " " + name;
+  symtab.addObject(ParserSchema.dVariable, name, getToken(0).beginLine, false);
+ }
 }
 
 String declaration_specifiers() :
@@ -659,7 +670,7 @@ String declaration_specifier() :
                                     [LOOKAHEAD(class_specifier_lookahead()) next = class_specifier() 
                                     {name += " " + next;}]
                                     [LOOKAHEAD(";") ";" {semicolonFound = true;}]
-                                    { if ((semicolonFound) || (getToken(0).image.equals(";"))) return null;}  
+                                    { if ((semicolonFound) || (getToken(0).image.equals(";"))) return null;}                                    
    | "enum"   {name = "enum";} 
               [LOOKAHEAD(enum_specifier_lookahead())  next = enum_specifier() {name += " " + next;}]
               [LOOKAHEAD(";") ";" {return null;}]
@@ -698,6 +709,7 @@ String declaration_specifier() :
    | LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier()
      [LOOKAHEAD(2) "template"] [LOOKAHEAD(2)name = identifier() {name = next+name;}]
    | ["::"] [LOOKAHEAD(nested_name_lookahead()) nested_name_specifier() ["template"]] name = identifier()
+     [LOOKAHEAD(2) ":" next = constant() { name += ":" + next; } ]
   )
   { 
    if (name == null)
@@ -797,20 +809,28 @@ void asm_definition() :
 }
 
 //The declaration_specifiers have already been matched when we get here:
-void function_definition(String theTypes) :
-{String name;}
+void function_definition(String theTypes, String className) :
+{String name; boolean isConstructor = false;}
 {
- //To determine if something is a constructor we do a hacky thing:  Look for spaces in the type specifiers for 
- //the function...If there is no space, that means that there is only the function name (no return type), so 
- //we know it is a constructor...Addtionally we check for the case of "inline A::A() {...}, by just making 
- //sure there is only the inline specifier...
- {isConstructor = (   (theTypes.indexOf(" ") == -1) 
-                   || ( (theTypes.lastIndexOf(" ") == theTypes.indexOf(" ")) && (theTypes.startsWith("inline")))
-                  );}
+  // Determine whether this function is a constructor
+  { 
+    // If we have a class name, then the function is a constructor if the function name
+    // is the same as the class name plus an optional "inline" prefix.
+    if (className != null && className.length() > 0)
+     isConstructor = theTypes.equals(className) || theTypes.equals("inline " + className);
+    else
+    {
+     // Try to find "::" if the class name is not given.
+     int index = theTypes.lastIndexOf("::");
+     if (index > 0)
+      isConstructor = theTypes.substring(0, index).equals(theTypes.substring(index+2)) ||
+      		      theTypes.substring(0, index).equals("inline " + theTypes.substring(index+2));
+    }
+  }
   (  LOOKAHEAD(2) "~" constructor_destructor_definition(theTypes, ParserSchema.Destructor)
    | LOOKAHEAD({isConstructor}) constructor_destructor_definition(theTypes, ParserSchema.Constructor)
    | 
-     name = declarator(ParserSchema.Function) 
+     name = declarator(ParserSchema.Function, true) 
      {
       String [] names = parseDeclaration(theTypes, true);
       symtab.addFunctionReturnTypes(names[1]);
@@ -876,7 +896,7 @@ void init_declarator_list(String theTypes) :
 String init_declarator() :
 { String name=empty;}
 {
-  [LOOKAHEAD(3) name = declarator(ParserSchema.Variable)] 
+  [LOOKAHEAD(3) name = declarator(ParserSchema.Variable, true)] 
   [LOOKAHEAD(2) (   "(" ( ")" | expression() ")" ) 
                   | "=" ( "{" skip_initializer() | expression())
                 )
@@ -887,21 +907,21 @@ String init_declarator() :
 
 
 
-String declarator(String objType) :
+String declarator(String objType, boolean addTypes) :
 { String name,ptr; }
 {
-  (  LOOKAHEAD(ptr_operator()) ptr = ptr_operator() name = declarator(objType) {name = ptr + " " + name;}
-   | name = direct_declarator(objType)
+  (  LOOKAHEAD(ptr_operator()) ptr = ptr_operator() name = declarator(objType, addTypes) {name = ptr + " " + name;}
+   | name = direct_declarator(objType, addTypes)
   )
   { return name; }
 }
 
 
-String direct_declarator(String objType) :
+String direct_declarator(String objType, boolean addTypes) :
 {String name = empty, params = null;}
 {
  ( 
-     LOOKAHEAD(8) "("  name = declarator(objType) ")" [LOOKAHEAD(2) params = declarator_suffix()]
+     LOOKAHEAD(8) "("  name = declarator(objType, addTypes) ")" [LOOKAHEAD(2) params = declarator_suffix(addTypes)]
      { 
       if (objType.equals("function"))
        return "(" + name + ")";
@@ -910,20 +930,20 @@ String direct_declarator(String objType) :
       return name; 
      }
    | name = id_expression()      
-   | name = declarator_suffix()  
+   | name = declarator_suffix(addTypes)  
  )
  
- (LOOKAHEAD(2) params = declarator_suffix() {name += " " + params;})* 
+ (LOOKAHEAD(2) params = declarator_suffix(addTypes) {name += " " + params;})* 
  {return name;}
 }
 
 
-String declarator_suffix() :
+String declarator_suffix(boolean addTypes) :
 {String name = empty, next = empty;}
 {
  (
      (LOOKAHEAD(2) "[" "]" | "[" next = constant_expression() "]")  {name = "[" + next + "]";} 
-  |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(true) | expression())  ")")  {name = "(" + next + ")";}
+  |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(addTypes) | expression())  ")")  {name = "(" + next + ")";}
  )
  [LOOKAHEAD(2) ("const" | "volatile")]
  [LOOKAHEAD(2) exception_spec()] 
@@ -1002,7 +1022,7 @@ String class_specifier() :
    | {name = UnnamedTypeManager.instance().getNextUnnamedType(classType);}
   )
   [";" {return name;}]
-  { 
+  {
    DataElement theClass = null;
    if (classType.equals(ParserSchema.Union))
     theClass = symtab.addObject(ParserSchema.dUnion, name, startLine, true);
@@ -1042,20 +1062,20 @@ void access_specifier() :
  | "protected" 
 }
 
-void class_body() : 
+void class_body(String className) : 
 {}  
 {
-  "{" [member_declaration_list()] "}"
+  "{" [member_declaration_list(className)] "}"
   { symtab.closeScope(); }
 }
 
-void member_declaration_list() :
+void member_declaration_list(String className) :
 {}
 {
-  (member_declaration())+ 
+  (member_declaration(className))+ 
 }
 
-void member_declaration() :
+void member_declaration(String className) :
 {String theTypes = empty;}
 {
  ( 
@@ -1068,14 +1088,15 @@ void member_declaration() :
   | "export" "template" "<" template_declaration()
   | "template" "<" template_declaration()
   | ";"
-  | LOOKAHEAD("~") function_definition("")
+  | LOOKAHEAD("~") function_definition("", className)
   | theTypes = declaration_specifiers()
     { 
      if (theTypes == null)
       return;
     } 
-    (LOOKAHEAD(member_function_definition_lookahead()) function_definition(theTypes)
+    (LOOKAHEAD(member_function_definition_lookahead()) function_definition(theTypes, className)
                                                      | member_declarator_list(theTypes))
+  | function_pointer_without_return_type()                                                  
   
  )
 }
@@ -1108,7 +1129,7 @@ void member_declarator_list(String theTypes) :
 String member_declarator() :
 {String name = empty;}
 {
-   name = declarator(ParserSchema.Variable)
+   name = declarator(ParserSchema.Variable, true)
    [   "=" (LOOKAHEAD(2) constant_expression() | <DECIMALINT>)
      | ":" constant_expression() 
    ]
@@ -1215,7 +1236,7 @@ String parameter_declaration() :
 {
    ( "..." {return "...";}
     | name = declaration_specifiers() {if (name == null) return empty;}
-      (  LOOKAHEAD(2) next = declarator(ParserSchema.Variable) {name += " " + next;} 
+      (  LOOKAHEAD(2) next = declarator(ParserSchema.Variable, false) {name += " " + next;} 
        | next = abstract_declarator() {name += " " + next;}
       ) 
       ["=" next = assignment_expression() {name += " = " + next;}]
@@ -1256,7 +1277,7 @@ String abstract_declarator_suffix() :
      LOOKAHEAD(2) "[" "]" {return "[]";} 
    | LOOKAHEAD(2) "(" ")" {return "()";}
    | "[" name = constant_expression() "]" {return "[" + name + "]";}
-   | "(" name = parameter_list(true) ")"
+   | "(" name = parameter_list(false) ")"
  )
  {return "(" + name + ")";}
 }
