@@ -7,7 +7,9 @@ package org.eclipse.cdt.dstore.hosts.actions;
  */
 
 import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
+
 
 import org.eclipse.cdt.dstore.hosts.*;
 import org.eclipse.cdt.dstore.hosts.dialogs.*;
@@ -25,6 +27,11 @@ import org.eclipse.jface.dialogs.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
+
+import org.eclipse.ui.*;
+import org.eclipse.ui.internal.*;
+import org.eclipse.core.runtime.*;
+import org.eclipse.core.resources.*;
 
 
 public class DeleteResource extends CustomAction
@@ -93,6 +100,8 @@ public class DeleteResource extends CustomAction
 	    		DataElement subject = (DataElement)_subjects.get(i);
 				DataElement cmdDescriptor = _dataStore.localDescriptorQuery(subject.getDescriptor(), 
 									    dCmdStr, 4);
+									    
+				closeEditor(subject);
 				if (cmdDescriptor != null)
 		    	{
 		    		DataElement notifyD = _dataStore.localDescriptorQuery(_dataStore.getRoot().getDescriptor(), "C_NOTIFICATION", 1);
@@ -104,10 +113,50 @@ public class DeleteResource extends CustomAction
 		    			_dataStore.command(notifyD, args, dummyD);
 		    		}
 		    		
+		    		
 					_dataStore.command(cmdDescriptor, subject);									 
 		    	}
 	    	}
 	    }
     }    
+    
+  private void closeEditor(DataElement fileElement)
+  {
+	IWorkbench desktop = HostsPlugin.getDefault().getWorkbench();
+
+	IWorkbenchWindow[] windows = desktop.getWorkbenchWindows();
+	for (int a = 0; a < windows.length; a++)
+	    {	
+		IWorkbenchWindow window = windows[a];
+		IWorkbenchPage[] pages = window.getPages();
+		for (int b = 0; b < pages.length; b++)
+		    {
+			IWorkbenchPage page = pages[b];
+			IEditorPart[] editors = page.getEditors();
+		        for (int c = 0; c < editors.length; c++)
+			    {
+				IEditorPart editor = editors[c];
+				if (editor.getEditorInput() instanceof IFileEditorInput)
+				  {
+				    IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
+				    if (input != null)
+				      {
+						IFile file = input.getFile();
+						if (file instanceof ResourceElement)
+						{
+							ResourceElement resFile = (ResourceElement)file;
+							if (resFile.getElement() == fileElement)
+							{
+								page.closeEditor(editor, false);	
+							}	
+						}
+				  	  }
+				  }
+			    }
+		    }	
+	    }
+    }
+    
+ 
 }
 
