@@ -1500,7 +1500,17 @@ public final class DataElement implements Serializable, IDataElement
      * @return the specified property
      */       
     public Object getElementProperty(Object name)
+    {
+    	return getElementProperty(name, 3);
+    }
+    
+    private Object getElementProperty(Object name, int depth)    
     {        
+       if (depth == 0)
+       {
+       	return null;
+       }	
+    	
        if(_isReference)
 	      {          
 		  if (_referencedObject == null)
@@ -1510,7 +1520,7 @@ public final class DataElement implements Serializable, IDataElement
 		  
 		  if (_referencedObject != null)
 		      {
-			  return _referencedObject.getElementProperty(name);
+			  return _referencedObject.getElementProperty(name, depth - 1);
 		      }
 		  else
 		      {
