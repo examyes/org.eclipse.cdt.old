@@ -44,8 +44,9 @@ public class MinerLoader
 		minerFile = pluginDir + File.separator + minersDir + File.separator + "minerFile.dat";
 	    }
 
-	File file = new File(minerFile);
-	
+	// load the miners
+	ArrayList unconnectedMiners = new ArrayList();
+	File file = new File(minerFile);	
 	try
 	    {
 		FileInputStream inFile = new FileInputStream(file);
@@ -65,9 +66,7 @@ public class MinerLoader
 				Miner miner = _loader.loadMiner(name);
 				if (miner != null)
 				    {
-					_miners.add(miner);
-					miner.setDataStore(_dataStore);	
-
+					unconnectedMiners.add(miner);
 				    }
 			    }
 		    }
@@ -80,7 +79,50 @@ public class MinerLoader
 	    {
 		System.out.println(e);
 	    }
-
+	
+	
+	connectMiners(unconnectedMiners);
 	return _miners;
+    }
+
+    private void connectMiners(ArrayList unconnectedMiners)
+    {
+	ArrayList connectedList = new ArrayList();
+	while (unconnectedMiners.size() > 0)
+	    {
+		Miner miner = (Miner)unconnectedMiners.get(0);
+		unconnectedMiners.remove(miner);					
+		if (connectMiner(connectedList, miner))
+		    {
+			_miners.add(miner);
+			connectedList.add(miner.getName());
+			_dataStore.trace("connected " + miner.getName());
+		    }
+		else
+		    {
+			unconnectedMiners.add(miner);					
+		    }
+	    }
+    }
+    
+    private boolean connectMiner(ArrayList connectedList, Miner miner)
+    {
+	boolean canConnect = true;
+	ArrayList dependencies = miner.getMinerDependencies();
+	for (int i = 0; i < dependencies.size(); i++)
+	    {
+		String dependency = (String)dependencies.get(i);
+		if (!connectedList.contains(dependency))
+		    {
+			canConnect = false;
+		    }
+	    }
+	
+	if (canConnect)
+	    {
+		// get the schema for the miner 
+		miner.setDataStore(_dataStore);
+	    }
+	return canConnect;
     }
 }

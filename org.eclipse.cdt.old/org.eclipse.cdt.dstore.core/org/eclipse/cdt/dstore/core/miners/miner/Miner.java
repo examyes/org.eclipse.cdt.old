@@ -27,8 +27,11 @@ public abstract class Miner
     public DataElement _minerTransient;
     
     private boolean    _initialized;
+    private boolean    _connected;
+
     protected String   _name = null;
     protected String   _value = null;
+    protected ArrayList _dependencies;
     
     protected ResourceBundle _resourceBundle = null;  
     
@@ -39,10 +42,52 @@ public abstract class Miner
     protected Miner()
     {
 	_initialized = false;
+	_connected = false;
+    }
+
+    /**
+     * Returns the qualified names of all miner schemas that
+     * this miner depends on.  By default it returns an empty
+     * list.
+     */
+    public final ArrayList getMinerDependencies()
+    {
+	if (_dependencies == null)
+	    {
+		_dependencies = getDependencies();
+	    }
+	return _dependencies;
+    }
+
+    /**
+     * Returns the qualified names of all miner schemas that
+     * this miner depends on.  By default it returns an empty
+     * list.
+     */
+    protected ArrayList getDependencies()
+    {
+	return new ArrayList();
     }
     
     /**
-     * Shuts down the miner and cleans up it's meta-information
+     * Have we called load on the miner? 
+     */
+    public final boolean isInitialized()
+    {
+	return _initialized;
+    }
+
+    /**
+     * Have we called extendSchema on the miner?
+     */
+    public final boolean isConnected()
+    {
+	return _connected;
+    }
+
+    /**
+     * Shuts down the miner and cleans up it's meta-information.
+     * Override this function to do your own cleanup.
      */
     public void finish()
     {
@@ -102,7 +147,7 @@ public abstract class Miner
      *
      * @return the qualified name of this miner
      */
-    public String getName()
+    public final String getName()
     {
         if (_name == null)
 	    _name = getClass().getName();
@@ -114,7 +159,7 @@ public abstract class Miner
      *
      * @return the name of this miner
      */
-    public String getValue()
+    public final String getValue()
     {
         if (_value == null)
 	    {
@@ -133,7 +178,7 @@ public abstract class Miner
      * @param command the command that has been sent to this miner
      * @return the status of the command
      */
-    public DataElement command(DataElement command)
+    public final DataElement command(DataElement command)
     {
 	String      name   = getCommandName(command);
 	DataElement status = getCommandStatus(command);
@@ -152,14 +197,12 @@ public abstract class Miner
 
 	if (name.equals("C_INIT_MINERS"))
 	    {
-		//System.out.println("loading " + this + "...");
 		if (!_initialized)
 		    {
 			load(status);
 			_initialized = true;
 		    }
 		updateMinerInfo();
-		//System.out.println("...loading " + this);
 
 		DataElement minerRoot = _dataStore.getMinerRoot();
 		_dataStore.refresh(minerRoot, true);
@@ -196,14 +239,6 @@ public abstract class Miner
 		    }
 	    }
 	
-	if (_dataStore.logTimes())
-	    {
-		long endTime = System.currentTimeMillis(); 
-		
-		DataElement time    = getCommandTime(command);
-		DataElement endMinerTime = _dataStore.createObject(time, getLocalizedString("model.property"), "Time in " + _value);      
-		endMinerTime.setAttribute(DE.A_VALUE, new String(endTime - startTime + "ms"));
-	    }
 	return status;
     }
     
@@ -211,10 +246,11 @@ public abstract class Miner
     /**
      * Sets the DataStore and performs some fundamental initialization for this miner.  
      * The framework calls this method on a miner before any commands are issued.
+     * The extendSchema() is called on the miner.
      *
      * @param dataStore the DataStore that owns this miner
      */
-    public void setDataStore(DataStore dataStore)
+    public final void setDataStore(DataStore dataStore)
     {
 	_dataStore = dataStore;
 	
@@ -233,12 +269,12 @@ public abstract class Miner
 	
 	// extend schema
 	DataElement schemaRoot = _dataStore.getDescriptorRoot();
-	//System.out.println("extend schema " + name + "...");
 	extendSchema(schemaRoot);
-	//System.out.println("...extend schema " + name);
 
-	_dataStore.refresh(root, true);	
+	_dataStore.refresh(root, true);		
 	_dataStore.refresh(_minerElement);	
+
+	_connected = true;
     }
     
     
@@ -251,7 +287,7 @@ public abstract class Miner
      * @param value the identifier for this command
      * @return the new command descriptor
      */
-    public DataElement createAbstractCommandDescriptor(DataElement descriptor, String name, String value) 
+    public final DataElement createAbstractCommandDescriptor(DataElement descriptor, String name, String value) 
     {
 	return _dataStore.createAbstractCommandDescriptor(descriptor, name, getName(), value);
     }
@@ -265,7 +301,7 @@ public abstract class Miner
      * @param value the identifier for this command
      * @return the new command descriptor
      */
-    public DataElement createCommandDescriptor(DataElement descriptor, String name, String value)
+    public final DataElement createCommandDescriptor(DataElement descriptor, String name, String value)
     {
 	return createCommandDescriptor(descriptor, name, value, true);
     }
@@ -280,7 +316,7 @@ public abstract class Miner
      * @param visible an indication whether this command descriptor should be visible to an end-user
      * @return the new command descriptor
      */
-    public DataElement createCommandDescriptor(DataElement descriptor, String name, String value, boolean visible)
+    public final DataElement createCommandDescriptor(DataElement descriptor, String name, String value, boolean visible)
     {
         DataElement cmdD = _dataStore.createCommandDescriptor(descriptor, name, getName(), value);
 	if (!visible)
@@ -299,7 +335,7 @@ public abstract class Miner
      * @param name the name of the object type
      * @return the new object descriptor
      */
-    public DataElement createAbstractObjectDescriptor(DataElement descriptor, String name)
+    public final DataElement createAbstractObjectDescriptor(DataElement descriptor, String name)
     {
 	return _dataStore.createAbstractObjectDescriptor(descriptor, name);
     }
@@ -313,7 +349,7 @@ public abstract class Miner
      * @param source the plugin location of the miner that owns this object type
      * @return the new object descriptor
      */
-    public DataElement createAbstractObjectDescriptor(DataElement descriptor, String name, String source)
+    public final DataElement createAbstractObjectDescriptor(DataElement descriptor, String name, String source)
     {
 	return _dataStore.createAbstractObjectDescriptor(descriptor, name, source);
     }
@@ -326,7 +362,7 @@ public abstract class Miner
      * @param name the name of the object type
      * @return the new object descriptor
      */
-    public DataElement createObjectDescriptor(DataElement descriptor, String name)
+    public final DataElement createObjectDescriptor(DataElement descriptor, String name)
     {
 	return _dataStore.createObjectDescriptor(descriptor, name);
     }
@@ -340,7 +376,7 @@ public abstract class Miner
      * @param source the plugin location of the miner that owns this object type
      * @return the new object descriptor
      */
-    public DataElement createObjectDescriptor(DataElement descriptor, String name, String source)
+    public final DataElement createObjectDescriptor(DataElement descriptor, String name, String source)
     {
 	return _dataStore.createObjectDescriptor(descriptor, name, source);
     }
@@ -353,7 +389,7 @@ public abstract class Miner
      * @param name the name of the relationship type
      * @return the new relationship descriptor
      */
-    public DataElement createRelationDescriptor(DataElement descriptor, String name)
+    public final DataElement createRelationDescriptor(DataElement descriptor, String name)
     {
      return _dataStore.createRelationDescriptor(descriptor, name);
     }
@@ -369,7 +405,7 @@ public abstract class Miner
      * @param to the descriptor that is abstracted
      * @return the new relationship descriptor
      */
-    public DataElement createAbstractRelationship(DataElement from, DataElement to)
+    public final DataElement createAbstractRelationship(DataElement from, DataElement to)
     {
 	return _dataStore.createReference(from, to, "abstracts", "abstracted by");
     }
@@ -381,7 +417,7 @@ public abstract class Miner
      * @param to the element that is contained
      * @return the new relationship
      */
-    public DataElement createReference(DataElement from, DataElement to)
+    public final DataElement createReference(DataElement from, DataElement to)
     {
      return _dataStore.createReference(from, to);
     }
@@ -392,7 +428,7 @@ public abstract class Miner
      * @param descName the name of the descriptor 
      * @return the found object descriptor
      */
-    public DataElement findDescriptor(String descName)
+    public final DataElement findDescriptor(String descName)
     {
 	return _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, descName, 1);
     }
@@ -402,7 +438,7 @@ public abstract class Miner
      *
      * @return the miner element
      */
-    public DataElement getMinerElement()
+    public final DataElement getMinerElement()
     {
         return _minerElement;
     }
@@ -412,7 +448,7 @@ public abstract class Miner
      *
      * @return the miner data element
      */
-    public DataElement getMinerData()
+    public final DataElement getMinerData()
     {
 	return _minerData;
     }
@@ -422,7 +458,7 @@ public abstract class Miner
      *
      * @return the transient element
      */
-    public DataElement getMinerTransient()
+    public final DataElement getMinerTransient()
     {
         return _minerTransient;
     }
@@ -432,7 +468,7 @@ public abstract class Miner
      *
      * @param objectDescriptor the object descriptor type that is transient
      */
-    public void makeTransient(DataElement objectDescriptor)
+    public final void makeTransient(DataElement objectDescriptor)
     {
         _dataStore.createReference(_minerTransient, objectDescriptor);
     }
@@ -444,7 +480,7 @@ public abstract class Miner
      * @param command a tree of elements representing a command
      * @return the name of the command
      */
-    public String getCommandName(DataElement command)
+    public final String getCommandName(DataElement command)
     {
 	return (String)command.getAttribute(DE.A_NAME);
     }
@@ -456,7 +492,7 @@ public abstract class Miner
      * @param command a tree of elements representing a command
      * @return the status element for the command
      */
-    public DataElement getCommandStatus(DataElement command)
+    public final DataElement getCommandStatus(DataElement command)
     {
 	return _dataStore.find(command, DE.A_TYPE, getLocalizedString("model.status"), 1);
     }
@@ -468,7 +504,7 @@ public abstract class Miner
      * @param command a tree of elements representing a command
      * @return the element representing time for a command
      */
-    public DataElement getCommandTime(DataElement command)
+    public final DataElement getCommandTime(DataElement command)
     {
 	return _dataStore.find(getCommandStatus(command), DE.A_TYPE, getLocalizedString("model.time"), 1);
     }
@@ -480,7 +516,7 @@ public abstract class Miner
      * @param command a tree of elements representing a command
      * @return the number of arguments for this command
      */
-    public int getNumberOfCommandArguments(DataElement command)
+    public final int getNumberOfCommandArguments(DataElement command)
     {
 	return command.getNestedSize();
     }
@@ -493,7 +529,7 @@ public abstract class Miner
      * @param arg the index into the commands children
      * @return the argument of the command
      */
-    public DataElement getCommandArgument(DataElement command, int arg)
+    public final DataElement getCommandArgument(DataElement command, int arg)
     {
 	if (command.getNestedSize() > 0)
 	    {
@@ -515,7 +551,7 @@ public abstract class Miner
      * @param key the key identifying the string
      * @return the NL enabled string
      */
-    public String getLocalizedString(String key)
+    public final String getLocalizedString(String key)
     {
 	try
 	    {
@@ -537,7 +573,7 @@ public abstract class Miner
      *
      * @return the descriptor root
      */
-    public DataElement getSchemaRoot()
+    public final DataElement getSchemaRoot()
     {
 	return _dataStore.getDescriptorRoot();
     }
