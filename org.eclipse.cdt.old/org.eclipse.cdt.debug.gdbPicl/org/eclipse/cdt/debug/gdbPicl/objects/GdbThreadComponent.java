@@ -62,6 +62,16 @@ public class GdbThreadComponent extends ThreadComponent
          int systemTID = _DU;
          systemTID = _gdbThread._systemTID;
 
+         if (_partID <= 1)
+         {
+			GdbModuleManager cm = (GdbModuleManager)_debugSession.getModuleManager();
+			int partID = cm.getPartID(moduleID(0),fileName(0));
+         	if (partID > 0)
+         		_partID = partID;
+         	else
+         		_partID = 1;	
+         }
+
          EPDCThread = super.getEPDCThread();
 //         EPDCThread = new ERepGetNextThread(_debugEngine.getSession(),
 //               _partID, _state, getDbgState(), _priority, systemTID, _DU); // ThreadComponent doesnt use systemTID
@@ -303,13 +313,28 @@ public class GdbThreadComponent extends ThreadComponent
 
    /**
     * Get the last known call stack for this thread
+    * Only report call stack if _stackTracking is true
     */
    public GdbStackFrame[] getCallStack()
    {
       if (Gdb.traceLogger.DBG) 
          Gdb.traceLogger.dbg(1,"GdbThreadComponent.getCallStack DU="+_DU );
 
-      _callStack = _gdbThread.getStack();
+      _callStack = _gdbThread.getStack(false);
+
+      return _callStack;
+   }
+  
+   /**
+    * Get the last known call stack for this thread
+    * Only report call stack if _stackTracking is true
+    */
+   public GdbStackFrame[] getCallStack(boolean ignoreStackTracking)
+   {
+      if (Gdb.traceLogger.DBG) 
+         Gdb.traceLogger.dbg(1,"GdbThreadComponent.getCallStack DU="+_DU );
+
+      _callStack = _gdbThread.getStack(ignoreStackTracking);
 
       return _callStack;
    }
@@ -517,7 +542,7 @@ public class GdbThreadComponent extends ThreadComponent
        _lineNumber = i; 
     }
     
-    
+/*    
     private int convertLineNum(int line, int partID)
     {
         // convert to correct disassembly line number
@@ -551,4 +576,5 @@ public class GdbThreadComponent extends ThreadComponent
 		
 		return disNum;
     }
+    */
 }

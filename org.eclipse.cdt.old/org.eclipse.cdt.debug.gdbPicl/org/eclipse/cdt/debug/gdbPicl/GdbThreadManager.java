@@ -342,7 +342,8 @@ public Vector getLineNumforPart(String partName)
 		tc = (GdbThreadComponent) _threads.elementAt(j);
 		if (tc != null)
 		{
-			GdbStackFrame[] stackFrames = tc.getCallStack();
+			// get all call stack, ignore _stackTracking flag
+			GdbStackFrame[] stackFrames = tc.getCallStack(true);
 			
 			for (int i=0; i < stackFrames.length; i++)
 			{				

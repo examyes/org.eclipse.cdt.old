@@ -97,7 +97,7 @@ public class GdbThread
       public boolean isCurrentThread()
       { return _current; }
 
-      GdbStackFrame[] getStack()
+      GdbStackFrame[] getStack(boolean ignoreStackTracking)
       {
          GdbStackFrame gdbStackFrame = new GdbStackFrame(0,_intThreadID,0,_fileName,_functionName, _frameAddress, _fileLine, _moduleID );
          GdbStackFrame[] frames = new GdbStackFrame[1];
@@ -110,11 +110,15 @@ public class GdbThread
          }
          if (Gdb.traceLogger.EVT)
              Gdb.traceLogger.evt(2,"GdbThread.getStack intThreadID="+_intThreadID+" DU="+_gdbThreadComponent._DU+" stackTracking="+_gdbThreadComponent._stackTracking+" stackReported="+_gdbThreadComponent._stackReported );
-         if(!_gdbThreadComponent._stackTracking)
+             
+         if (!ignoreStackTracking)             
          {
-//System.out.println("GdbThread.getStack **IGNORING _stackTracking==FALSE " );
-            return frames;
-         }
+	         if(!_gdbThreadComponent._stackTracking)
+	         {
+				//System.out.println("GdbThread.getStack **IGNORING _stackTracking==FALSE " );
+	            return frames;
+	         }
+	      }
 
          Vector SFs = getStackFrames();
          if(SFs==null || SFs.size()==0)
@@ -233,9 +237,9 @@ public class GdbThread
            {
               str = lines[++i];
               fileName = str;
-//              int slash = fileName.lastIndexOf("/");
-//              if(slash>=0)
-//                 fileName = fileName.substring(slash+1);
+              int slash = fileName.lastIndexOf("/");
+              if(slash>=0)
+                 fileName = fileName.substring(slash+1);
            }
            else if( str.equals(FRAME_SOURCE_WHERE) )
            {

@@ -206,8 +206,9 @@ public abstract class ThreadComponent    //HC
       
       // temporary fix, if part ID <= 0, force it to run to avoid infinite loop
       if (_partID <= 0)
-      	_partID = 1;
-      
+      {
+       	_partID = 1;
+      }     
       
       EStdView[] whereStopped = new EStdView[Part.NUM_VIEWS];
       whereStopped[Part.VIEW_SOURCE-1] = new EStdView((short)_partID,
@@ -217,7 +218,7 @@ public abstract class ThreadComponent    //HC
       whereStopped[Part.VIEW_DISASSEMBLY-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_DISASSEMBLY,
                                                       1,
-                                                      _lineNumber);
+                                                      convertLineNum(_lineNumber, _partID));
 	  if (Part.MIXED_VIEW_ENABLED)                                                      
 	  {
 	      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
@@ -428,6 +429,40 @@ public abstract class ThreadComponent    //HC
    {
       _partID = i;
    }
+   
+    public int convertLineNum(int line, int partID)
+    {
+        // convert to correct disassembly line number
+		ModuleManager moduleManager = _debugSession.getModuleManager();            
+		GdbPart part = (GdbPart)moduleManager.getPart(partID);
+		int disNum;
+
+		if (part != null)
+		{			
+			String partName = part.getName();           
+			GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
+			String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(partName,String.valueOf(line));
+			String disLineNum = null;
+			
+			if (address != null)
+				disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
+			
+			if (disLineNum != null)
+			{
+				disNum = Integer.parseInt(disLineNum);
+			}
+			else
+			{
+				disNum = line;
+			}
+		}
+		else
+		{
+			disNum = 0;
+		}
+		
+		return disNum;
+    }
   
 
    // data fields

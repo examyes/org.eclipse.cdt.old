@@ -115,8 +115,15 @@ abstract class DisassemblyView extends View
    
    public boolean containsAddressInView(String address)
    {
- 	  Object tmp = _lineMap.get(address);
- 	  return (tmp != null);
+   	  if (_lineMap != null && address != null)
+   	  {
+	 	  Object tmp = _lineMap.get(address);
+	 	  return (tmp != null);
+   	  }
+   	  else
+   	  {
+   	  	  return true;
+   	  }
    }
 
   /**
@@ -156,7 +163,6 @@ abstract class DisassemblyView extends View
       
       GdbThreadManager threadManager = (GdbThreadManager) gdbDebugSession.getThreadManager();
       
-//	  Vector locations = threadManager.getFrameAddressforPart(sourceFileName);
 	  Vector locations = threadManager.getLineNumforPart(sourceFileName);
 	  
 	  if (locations.size() == 0)
@@ -168,10 +174,12 @@ abstract class DisassemblyView extends View
 	  }
        
 	  for (int i=0; i<locations.size(); i++)
-	  { 	  	
-	  //	  String disAddress = (String)locations.elementAt(i);	
-	  
+	  {
 	  	  String disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, ((Integer)locations.elementAt(i)).toString());
+	  	  
+	  	  // ignore this location if address is null
+	  	  if (disAddress == null)
+	  	  	continue;
 	      
 	      // generate the disassembly code for the location if it's not already part of the view
 	      if (!containsAddressInView(disAddress))

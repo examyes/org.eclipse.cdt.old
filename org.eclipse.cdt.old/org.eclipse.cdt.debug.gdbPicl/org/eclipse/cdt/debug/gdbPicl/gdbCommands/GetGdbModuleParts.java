@@ -335,7 +335,7 @@ public class GetGdbModuleParts
 	             {
 	   				String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(currentFileName,currentLineNumber);
 					View tempView = ((GdbPart)part).getView(Part.VIEW_DISASSEMBLY);
-	             	if (!((GdbDisassemblyView)tempView).containsAddressInView(address))
+	             	if (address != null && !((GdbDisassemblyView)tempView).containsAddressInView(address))
 	             	{
 	             		((GdbPart)part).setPartVerified(false);
 	             		((GdbPart)part).setPartChanged(true);
