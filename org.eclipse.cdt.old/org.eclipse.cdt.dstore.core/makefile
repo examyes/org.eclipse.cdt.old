@@ -138,6 +138,8 @@ createFinalPackage: createServerZip createFinalZip
 createFinalZip:
 	@-cd $(pluginsDirectory) && mkdir $(tempDir);\
 	cp com.ibm.cpp.docs.user/readme.txt $(tempDir);\
+	cp com.ibm.cpp.docs.user/install.txt $(tempDir);\
+	cp com.ibm.cpp.docs.user/todo.txt $(tempDir);\
 	cp $(zipFile) $(tempDir);\
 	cp $(serverZipFile) $(tempDir);\
 	zip -qr $(finalZip) $(tempDir);\
