@@ -42,6 +42,8 @@ public class MakefileAmManager {
 	
 	//String targetSuffix = new String("_target");
 	String targetSuffix = new String("");
+	
+	private ArrayList extradistExtensions;
 	/**
 	 * Constructor for MakefileAmManager
 	 */
@@ -709,7 +711,7 @@ public class MakefileAmManager {
 				if(!parent.listFiles()[i].isDirectory())
 				{
 					String name = parent.listFiles()[i].getName();
-					if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".CPP")
+					/*if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".CPP")
 					&&!name.endsWith(".cc")&&!name.endsWith(".CC")&&!name.endsWith(".cxx")&&!name.endsWith(".CXX")
 					&&!name.endsWith(".c++")&&!name.endsWith(".C++")
 					&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".HPP")
@@ -717,7 +719,8 @@ public class MakefileAmManager {
 					&&!name.endsWith(".h++")&&!name.endsWith(".H++")
 					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&& (name.indexOf(".")!=-1)
 					&&!name.endsWith(".o")&&!name.endsWith(".old")&&!name.equals("Makefile")
-					&&!name.equals("makefile")&&!name.equals("configur"))
+					&&!name.equals("makefile")&&!name.equals("configur"))*/
+					if(foundInExtraList(name))
 					{
 						out.write(" "+"\\");
 						out.newLine();
@@ -742,7 +745,7 @@ public class MakefileAmManager {
 				if(!parent.listFiles()[i].isDirectory())
 				{
 					String name = parent.listFiles()[i].getName();
-					if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".CPP")
+					/*if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".CPP")
 					&&!name.endsWith(".cc")&&!name.endsWith(".CC")&&!name.endsWith(".cxx")&&!name.endsWith(".CXX")
 					&&!name.endsWith(".c++")&&!name.endsWith(".C++")
 					&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".HPP")
@@ -750,7 +753,8 @@ public class MakefileAmManager {
 					&&!name.endsWith(".h++")&&!name.endsWith(".H++")
 					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&(name.indexOf(".")!=-1)
 					&&!name.endsWith(".o")&&!name.endsWith(".old")&&!name.equals("Makefile") &&!name.equals("makefile")
-					&&!name.equals("configur"))
+					&&!name.equals("configur"))*/
+					if(foundInExtraList(name))
 					{
 						update = true;
 						out.write(" "+"\\");
@@ -1449,6 +1453,32 @@ public class MakefileAmManager {
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
 		
+	}
+	public void setExtradistExtensions(ArrayList extensionList)
+	{
+		extradistExtensions = new ArrayList();
+		for(int i = 0; i < extensionList.size(); i ++)
+					extradistExtensions.add(((DataElement)extensionList.get(i)).getName());
+		System.out.println("\n setExtradistExtensions()");
+		for(int j = 0; j < extradistExtensions.size(); j++)
+			System.out.println("\n extension  = "+extradistExtensions.get(j));
+					
+	}
+	private boolean foundInExtraList(String name)
+	{
+		System.out.println("\n foundInExtraList()");
+		for(int j = 0; j < extradistExtensions.size(); j++)
+			System.out.println("\n extension  = "+extradistExtensions.get(j));
+
+		for(int i= 0; i < extradistExtensions.size(); i++)
+		{
+			String item = (String)extradistExtensions.get(i);
+			String ext = item.substring(item.indexOf("."));
+			System.out.println("\n name = "+name+"\n > ext = "+ext);
+			if(name.endsWith(ext)||name.equals(item))
+				return true;
+		}
+		return false;
 	}
 }
 

@@ -274,8 +274,12 @@ public class ManagedProjectMiner extends Miner
 			
 			else if(name.equals("C_SET_EXTRA_DIST_EXTENSIONS"))
 			{
-				//handleSetExtensions(subject, args);
-				//System.out.println("\n extran dist action"+"\n"+args);
+			//	//handleSetExtensions(subject, args);
+			//	System.out.println("\n extran dist action:");
+				ArrayList extensionList = args.getNestedData();
+				//for(int i = 0; i < list.size(); i ++)
+				//	System.out.println("\n "+i+" > \n"+((DataElement)list.get(i)).getName());*/
+				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList);
 				
 			}
 			// new : to havdle delete notification
