@@ -56,16 +56,20 @@ public class ASTManager {
         return name;
     }
 
+    
     public static IASTFileLocation getFileLocation(IASTNode node) {
         IASTNodeLocation[] locs = node.getNodeLocations();
-        if (locs != null && locs.length == 1) {
-            IASTNodeLocation loc= locs[0];
-            if (loc instanceof IASTFileLocation) {
-                return (IASTFileLocation) loc;
+        for(int i = 0; i < locs.length; i++) {
+            IASTFileLocation fl = locs[i].asFileLocation();
+            if (fl != null && 
+     
+    fl.getFileName().equals(node.getTranslationUnit().getFilePath())) {
+                return fl;
             }
         }
-        return node.getTranslationUnit().flattenLocationsToFile(locs);
+        return null;
     }
+
     
     /**
      * Returns TRUE, FALSE or UNKNOWN.
