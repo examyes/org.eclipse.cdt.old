@@ -86,7 +86,6 @@ public class CppEditor extends LpexTextEditor
       {
 
         super.createActions();
-        /*
         setAction("ManageBreakpoints",
                 new BreakpointRulerAction(_plugin.getResourceBundle(),
                                           "ManageBreakpoints.",
@@ -94,7 +93,6 @@ public class CppEditor extends LpexTextEditor
                                            this));
 
         setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK, getAction("ManageBreakpoints"));		
-        */
         dbgEditorContributor.createDebugRulerActions(this,getVerticalRuler());
         dbgEditorContributor.createDebugMenuActions(this);
 
@@ -137,20 +135,20 @@ public class CppEditor extends LpexTextEditor
     protected void rulerContextMenuAboutToShow(IMenuManager menu)
     {
    	 super.rulerContextMenuAboutToShow(menu);
-
-       // only add/remove breakpoints if clicked on a valid line in the edit window
-	    if (getVerticalRuler().getLineOfLastMouseButtonActivity() >= 0)
-	    {
-    		//addAction(menu, "ManageBreakpoints");
-         dbgEditorContributor.addDebugEditorRulerActions(menu,
-            DebugEditorActionContributor.BREAKPOINT_MENU_ACTION |
-            DebugEditorActionContributor.JUMP_MENU_ACTION |
-            DebugEditorActionContributor.RUN_MENU_ACTION);
-	    }
-       setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK,
-                 getAction(DebugEditorActionContributor.BREAKPOINT_RULER_ACTION_ID));
+	 
+	 // only add/remove breakpoints if clicked on a valid line in the edit window
+	 if (getVerticalRuler().getLineOfLastMouseButtonActivity() >= 0)
+	     {
+		 //addAction(menu, "ManageBreakpoints");
+		 dbgEditorContributor.addDebugEditorRulerActions(menu,
+								 DebugEditorActionContributor.BREAKPOINT_MENU_ACTION |
+								 DebugEditorActionContributor.JUMP_MENU_ACTION |
+								 DebugEditorActionContributor.RUN_MENU_ACTION);
+	     }
+	 setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK,
+		   getAction(DebugEditorActionContributor.BREAKPOINT_RULER_ACTION_ID));
     }
-
+    
     /**
      * Saves the contents of the target.
      * @see ITextEditor#doSave

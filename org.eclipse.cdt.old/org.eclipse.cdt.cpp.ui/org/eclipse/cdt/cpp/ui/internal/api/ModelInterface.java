@@ -122,6 +122,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			      }
 		      }
 		
+		  _plugin.setCurrentDataStore(projectMinerProject.getDataStore());
+
 		  CppProjectNotifier notifier = getProjectNotifier();
 		  notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
 	      }
