@@ -143,8 +143,9 @@ public class ServerLauncher extends Thread
 			    String theOS = System.getProperty("os.name");
 			    String timeout = "120000";
 			    			    
-			    if (theOS.toLowerCase().startsWith("linux"))
+			    if (!theOS.toLowerCase().startsWith("win"))
 				{
+					// assuming linux compatable
 				    String authStr = _path + File.separator + "org.eclipse.cdt.dstore.core" + 
 					File.separator + "auth.pl ";
 				    String authString = authStr + 
