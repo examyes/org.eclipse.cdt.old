@@ -1,3 +1,10 @@
+/*
+ * (c) 2004 Red Hat, Inc.
+ *
+ * This program is open source software licensed under the 
+ * Eclipse Public License ver. 1
+ */
+
 package org.eclipse.cdt.rpm.propertypage.properties;
 
 import org.eclipse.core.resources.IResource;
