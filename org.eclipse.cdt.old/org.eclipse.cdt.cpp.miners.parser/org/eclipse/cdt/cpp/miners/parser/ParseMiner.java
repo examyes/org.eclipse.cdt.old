@@ -476,8 +476,13 @@ public class ParseMiner extends Miner
   }
   else
   {
-   return _parseManager.removeParseInformation(theFile);
+   DataElement theProject = getProjectFor(theFile);
+   if (theProject != null)
+    {
+   return _parseManager.removeParseInformation(theFile, getParseProject(theProject));
+    }
   }
+     return false;
  }
 
 

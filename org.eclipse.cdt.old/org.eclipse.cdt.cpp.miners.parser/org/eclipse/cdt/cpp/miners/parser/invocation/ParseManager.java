@@ -60,9 +60,12 @@ public class ParseManager
   _thePreprocessWorker.start();
  }
  
- public boolean removeParseInformation(DataElement theFile)
+ public boolean removeParseInformation(DataElement theFile, DataElement theProject)
  {
-  if (_parsedFiles == null)
+  if (theProject == null)
+   return false;
+  DataElement theParsedFiles = _dataStore.find(theProject,DE.A_NAME, ParserSchema.ParsedFiles,1);
+  if (theParsedFiles == null)
    return false;
 
   ArrayList theFiles = _parsedFiles.getAssociated("contents");
