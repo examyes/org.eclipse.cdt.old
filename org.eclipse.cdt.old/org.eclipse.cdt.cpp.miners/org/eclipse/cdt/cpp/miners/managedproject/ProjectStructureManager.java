@@ -9,7 +9,7 @@ public class ProjectStructureManager {
 
 	File project;
 	private Vector files = new Vector(5,5);
-	private Vector subdirs = new Vector(5,5); 
+	private Vector subdirs = new Vector(5,5);
 	private Vector subdirs_depth = new Vector(5,5);
 	int depth;
 	
@@ -21,36 +21,35 @@ public class ProjectStructureManager {
 	private void analyze(File project, int depth)
 	{
 		// do the work
-		
-		if (project != null)
+		if(project != null)
 		{
-                 depth++;
-		 
-                 if (project.isDirectory())
-                 {
-                   File[] contents = project.listFiles();
-                   for(int i = 0;i<contents.length; i++ )
-		   {
-		    if(contents[i].isDirectory())
-		    {
-		     subdirs.add(contents[i]);
-		     subdirs_depth.add(new Integer(depth));
-		     analyze(contents[i],depth);
-		    }
-		    else
-		    {
-		     files.add(contents[i]);
-		    }
-		   }
-		 }
-		 else
-                  files.add(project);
-	        }
+			if(project.isDirectory())
+			{
+				depth++;
+				File[] contents = project.listFiles();
+				for(int i = 0;i<contents.length; i++ )
+				{
+					if(contents[i].isDirectory())
+					{
+						subdirs.add(contents[i]);
+						subdirs_depth.add(new Integer(depth));
+						analyze(contents[i],depth);
+					}
+					else
+					{
+						files.add(contents[i]);
+					}
+				}
+			}
+			else
+			{
+				files.add(project);
+			}
+		}
 	}
-
-    public File[] getSubdirs()
-    {
-	// analyze fresh
+	public File[] getSubdirs()
+	{
+		// analyze fresh
 		subdirs.removeAllElements();
 		files.removeAllElements();
 		// analyze

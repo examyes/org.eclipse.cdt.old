@@ -4,6 +4,9 @@ package com.ibm.cpp.miners.managedproject;
  */
 
 import com.ibm.dstore.core.model.*;
+import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.*;
 
 import java.io.*;
 import java.lang.Runtime;
@@ -27,7 +30,7 @@ public class AutoconfManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 	}
 	
-	protected void manageProject()
+	protected void manageProject(DataElement status)
 	{
 		// check if it is a unix like system
 		if(getOS().equals("Linux")) // to be modified
@@ -45,9 +48,9 @@ public class AutoconfManager {
 			{
 				// running autoconf support
 				// add all the necessary needed template files
-				getAutoconfSupprotFiles(project);
-				initializeAutoconfSupprotFiles(project);
-				createConfigureScript();
+				getAutoconfSupportFiles(project);
+				initializeAutoconfSupportFiles(project);
+				createConfigureScript(status);
 				
 			}
 				// autoloca
@@ -70,7 +73,7 @@ public class AutoconfManager {
 		// check for autoheader
 		return true;
 	}
-	protected void getAutoconfSupprotFiles(DataElement project)
+	protected void getAutoconfSupportFiles(DataElement project)
 	{
 		Runtime rt = Runtime.getRuntime();
 		//check the project structure
@@ -79,19 +82,27 @@ public class AutoconfManager {
 		{
 			// add configure.in template files only if not exist
 			try{
+				Process p1,p2,p3;
 				// check if exist then
-				rt.exec(
+				p1 = rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/configure.in "
 						+project.getSource());
+				p1.waitFor();
+				//System.out.println("\n p1 exit value = "+p1.exitValue());
 				// check if exist then
-				rt.exec(
+				p2= rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
 						+project.getSource());
+				p2.waitFor();
+				//System.out.println("\n p2 exit value = "+p2.exitValue());
 				// check if exist then
-				rt.exec(
+				p3 = rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/support.dist "
 						+project.getSource());
-			}catch(IOException e){System.out.println(e);}	
+				p3.waitFor();
+				//System.out.println("\n p3 exit value = "+p3.exitValue());
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
 		}
 		// provide one makefile.am in each subdiectory
 		for(int i =0; i < subdirs.length ; i++)
@@ -102,23 +113,27 @@ public class AutoconfManager {
 				if (token.countTokens()==1)
 				{
 					try{
-						rt.exec(
+						Process p = 	rt.exec(
 							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
 							+project.getSource()+"/"+subdirs[i]);
+						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
+					catch(InterruptedException e){System.out.println(e);}
 				}
 				else
 				{
 					try{
-						rt.exec(
+						Process p= rt.exec(
 							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
 							+project.getSource()+"/"+subdirs[i]);
+						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
+					catch(InterruptedException e){System.out.println(e);}
 				}
 			}
 		}
 	}
-	protected void initializeAutoconfSupprotFiles(DataElement project)
+	protected void initializeAutoconfSupportFiles(DataElement project)
 	{
 		//udpdate configure.in
 		ConfigureInManager configure_in_manager = new ConfigureInManager(project);
@@ -127,41 +142,49 @@ public class AutoconfManager {
 		MakefileAmManager makefile_am_manager = new MakefileAmManager(project);
 		makefile_am_manager.manageMakefile_am();
 	}
-	private void createConfigureScript()
+/*	private void createConfigureScript()
 	{
 		Runtime rt = Runtime.getRuntime();
 		try
 		{
-			rt.exec("sh -c ./support.dist", null, project.getFileObject());
+			Process pro = rt.exec("sh -c ./support.dist", null, project.getFileObject());
+			BufferedReader _stdInput = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+			while (_stdInput.readLine()!=null)
+				System.out.println("\n INPUT\n"+_stdInput.readLine());
+			BufferedReader _stdError = new BufferedReader(new InputStreamReader(pro.getErrorStream()));
+			while (_stdError.readLine()!=null)
+				System.out.println("\n ERROR\n"+_stdError.readLine());
+			BufferedWriter _stdOutput = new BufferedWriter(new OutputStreamWriter(pro.getOutputStream()));
+			System.out.println("\n OUTPUT\n"+_stdOutput.toString());
 		}catch(IOException e){e.printStackTrace();}	
-	}
-
+	}*/
 	public void runConfigureScript(DataElement status)
 	{
-		Runtime rt = Runtime.getRuntime();
-		//		try
-		    {
-			DataStore ds = status.getDataStore();
-			String invocation = "sh -c ./configure";
-			DataElement invocationElement = ds.createObject(null, "invocation", invocation);
-
-			//Process p = rt.exec("sh -c ./configure", null, project.getFileObject());
-			DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(), "C_COMMAND");
-			if (cmdD != null)
-			    {
-				ArrayList args = new ArrayList();
-				args.add(invocationElement);
-				DataElement s = ds.command(cmdD, args, project);
-				status.addNestedData(s, true);
-			    }
-			
-		    }
-		/*
-		catch(IOException e)
-		    {
-			System.out.println(e);
-		    }
-		*/	
+		DataStore ds = status.getDataStore();
+		String invocation = new String("./configure");
+		DataElement invocationElement = ds.createObject(null,"invocation",invocation);
+		DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(),"C_COMMAND");
+		if(cmdD!=null)
+		{
+			ArrayList args = new ArrayList();
+			args.add(invocationElement);
+			args.add(status);
+			ds.command(cmdD,args,project);
+		}	
 	} 
+	private void createConfigureScript(DataElement status)
+	{
+		DataStore ds = status.getDataStore();
+		String invocation = new String("./support.dist");
+		DataElement invocationElement = ds.createObject(null,"invocation",invocation);
+		DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(),"C_COMMAND");
+		if(cmdD!=null)
+		{
+			ArrayList args = new ArrayList();
+			args.add(invocationElement);
+			args.add(status);
+			ds.command(cmdD,args,project);
+		}	
+	}
 }
 

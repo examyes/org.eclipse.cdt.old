@@ -19,8 +19,10 @@ public class ManagedProjectMiner extends Miner
 	public void extendSchema(DataElement schemaRoot)
 	{
 		DataElement projectD = _dataStore.find(schemaRoot, DE.A_NAME, "Project");
-		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT");
-		createCommandDescriptor(projectD, "configure", "C_CONFIGURE", false);
+		DataElement fsObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects");
+		
+		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", false);
+		createCommandDescriptor(projectD, "configure", "C_CONFIGURE",false);
     
 		DataElement managedProjectD  = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.MANAGED_PROJECT);
 		createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
@@ -62,12 +64,12 @@ public class ManagedProjectMiner extends Miner
  	 		_dataStore.deleteObject(project.getParent(), project);
 		else if (name.equals("C_MANAGE_PROJECT"))
 		{
-			manager.manageProject();
-			parseAmFile(project); // to be put back again
+			manager.manageProject(status);
+			parseAmFile(project); 
 		}
 		else if (name.equals("C_CONFIGURE"))
 		{
-		    manager.runConfigureScript(status);
+			manager.runConfigureScript(status);
 		}
 		else if (name.equals("C_REFRESH"))
   			refreshProject(project);
@@ -77,8 +79,10 @@ public class ManagedProjectMiner extends Miner
 	}
 	private DataElement parseAmFile(DataElement theUnmanagedProject)
 	{
-		AmParser theParser = new AmParser(theUnmanagedProject);
-		DataElement theManagedProject = theParser.parse();
+		AmParser theParser = AmParser.getInstance();
+		if (theParser.setUnmanagedProject(theUnmanagedProject) == null)
+		 return null;
+		DataElement theManagedProject = theParser.parse(theUnmanagedProject, theUnmanagedProject.getSource());
 		_dataStore.refresh(theManagedProject);
 		_dataStore.refresh(theManagedProject.getParent());
 		return theManagedProject;
