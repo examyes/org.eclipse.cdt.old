@@ -14,6 +14,7 @@ import org.eclipse.cdt.dstore.core.util.*;
 import java.lang.*;
 import java.io.*;
 import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class FileSystemMiner extends Miner
 {
@@ -26,7 +27,9 @@ public class FileSystemMiner extends Miner
     private DataElement _hostDescriptor;
     private DataElement _containsDescriptor;
     private DataElement _dateDescriptor;
+    private DataElement _permissionsDescriptor;
     private DataElement _modifiedAtDescriptor;
+    private DataElement _attributesDescriptor;
 
   public FileSystemMiner ()
       {
@@ -182,13 +185,19 @@ public class FileSystemMiner extends Miner
 	  _hostDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.host"), 1);
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
+	  _attributesDescriptor     = _dataStore.find(schemaRoot, DE.A_NAME, "attributes", 1);
 
 	  _modifiedAtDescriptor     = createRelationDescriptor(schemaRoot, "modified at");
 	  _modifiedAtDescriptor.setDepth(0);
 	  
+
 	  _dateDescriptor           = createObjectDescriptor(schemaRoot, "date");
+	  _permissionsDescriptor    = createObjectDescriptor(schemaRoot, "permissions");
+
+	  _dataStore.createReference(_fileDescriptor, _dateDescriptor, _attributesDescriptor);	  
+	  _dataStore.createReference(_fileDescriptor, _permissionsDescriptor, _attributesDescriptor);	  
 	  
-	  
+
 	  _dataStore.createReference(_fileDescriptor, _modifiedAtDescriptor);
 
 	  _hiddenFileDescriptor     = createObjectDescriptor(schemaRoot, "hidden file");
@@ -258,9 +267,9 @@ public class FileSystemMiner extends Miner
 	 {
 	     status = handleDate(subject, status);
 	 }
-	 else if (name.equals("C_PERMISSIONS"))
+     else if (name.equals("C_PERMISSIONS"))
 	 {
-	 	status = handlePermissions(subject, status);	
+	     status = handlePermissions(subject, status);	
 	 }
      else if (name.equals("C_SET_DATE"))
 	 {
@@ -553,13 +562,16 @@ public class FileSystemMiner extends Miner
 	{
 		File file = new File(theFile.getSource());
 		if (file.canWrite())
-		{
-			_dataStore.createObject(status, "permissions", "readwrite");	
-		}
+		    {
+			DataElement permissions = _dataStore.createObject(status, _permissionsDescriptor, "rw");	
+			_dataStore.createReference(theFile, permissions, _attributesDescriptor);
+
+		    }
 		else
-		{
-			_dataStore.createObject(status, "permissions", "readonly");	
-		}	
+		    {
+			DataElement permissions = _dataStore.createObject(status, _permissionsDescriptor, "r");	
+			_dataStore.createReference(theFile, permissions, _attributesDescriptor);
+		    }	
 		
 		return status;
 	}
@@ -579,7 +591,8 @@ public class FileSystemMiner extends Miner
 
     private DataElement handleDate(DataElement theFile, DataElement status)
     {
-	ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
+	//	ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
+	ArrayList dateInfo = theFile.getAssociated(_attributesDescriptor);
 	DataElement dateObj = null;
 	if (dateInfo.size() != 0)
 	    {
@@ -597,24 +610,31 @@ public class FileSystemMiner extends Miner
 	if (file.exists())
 	    {
 		long date = file.lastModified();
+		Date dateC = new Date(date);
+		SimpleDateFormat format = new SimpleDateFormat();
+		String value = format.format(dateC);
 		
 		if (dateObj == null)
 		    {
 			dateObj = _dataStore.createObject(status, _dateDescriptor, "" + date);
-			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);
+			dateObj.setAttribute(DE.A_VALUE, value);
+			//_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);
+			_dataStore.createReference(theFile, dateObj, _attributesDescriptor);
 		    }
 		else
 		    {
 			dateObj.setAttribute(DE.A_NAME, "" + date);
+			dateObj.setAttribute(DE.A_VALUE, value);
 		    }
-
+ 
 	    }
 	else
 	    {
 		if (dateObj == null)
 		    {
 			dateObj = _dataStore.createObject(status, _dateDescriptor, "-1");
-			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
+			//_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
+			_dataStore.createReference(theFile, dateObj, _attributesDescriptor);		
 		    }
 		else
 		    {
@@ -647,25 +667,36 @@ public class FileSystemMiner extends Miner
 			try
 			    {
 				long date = new Long(newDate.getName()).longValue();
+				Date dateC = new Date(date);
+				SimpleDateFormat format = new SimpleDateFormat();
+				String value = format.format(dateC);
 				if (date > 0)
 				    {
 					file.setLastModified(date);
 				    }
 				    
-				ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
+				ArrayList attributes = theFile.getAssociated(_attributesDescriptor);
 				DataElement dateObj = null;
-				if (dateInfo.size() != 0)
-	    		{
-					dateObj = (DataElement)dateInfo.get(0);		
-	    		}
-	    		if (dateObj == null)
-				{
-					_dataStore.createReference(theFile, newDate, _modifiedAtDescriptor);
-				}
+				for (int a = 0; a < attributes.size() && dateObj == null; a++)
+				    {
+					DataElement attribute = (DataElement)attributes.get(a);
+					if (attribute.getType().equals("date"))
+					    {
+						dateObj = attribute;
+					    }
+				    }
+				if (dateObj == null)
+				    {
+					newDate.setAttribute(DE.A_VALUE, value);
+					_dataStore.createReference(theFile, newDate, _attributesDescriptor);
+				    }
 				else
-				{
+				    {
 					dateObj.setAttribute(DE.A_NAME, newDate.getName());
-				}
+					dateObj.setAttribute(DE.A_VALUE, value);
+					_dataStore.refresh(dateObj);
+					_dataStore.refresh(theFile);
+				    }
 			    }
 			catch (Exception e)
 			    {
@@ -673,7 +704,7 @@ public class FileSystemMiner extends Miner
 			    }
 		    }
 	    }
-	
+
         status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
 	return status;
     }
@@ -769,6 +800,8 @@ public class FileSystemMiner extends Miner
 												   objName, filePath);
 						  if (!f.isDirectory())
 						      {
+							  handleDate(newObject, status);
+							  handlePermissions(newObject, status);
 							  newObject.setDepth(1);
 						      }		      
 					      }				  
@@ -860,7 +893,9 @@ public class FileSystemMiner extends Miner
 									     objName, filePath);
 					changed = true;				     
 					if (!f.isDirectory())
-					    {
+					    {						
+						handleDate(newObject, status);
+						handlePermissions(newObject, status);
 						newObject.setDepth(1);
 					    }
 				    }
