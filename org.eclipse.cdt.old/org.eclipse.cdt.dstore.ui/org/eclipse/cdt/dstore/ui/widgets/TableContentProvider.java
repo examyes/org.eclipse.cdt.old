@@ -52,6 +52,7 @@ public class TableContentProvider extends TestContentProvider
 
   public boolean hasChildren(Object object)
   {
+      /*
     DataElement element = ((DataElement)object).dereference();
 
     if (element.isDeleted())
@@ -115,6 +116,8 @@ public class TableContentProvider extends TestContentProvider
       
       return false;	
     }
+      */
+      return false;
   }
 
   public boolean matchDescriptor(DataElement descriptor, DataElement filter, ArrayList checked)
@@ -140,33 +143,38 @@ public class TableContentProvider extends TestContentProvider
         return false;
       }
 
-  public void setProperty(DataElement property)
-  {
-    _property = property;
-  }
-  public Object getElementAt(Object object, int i)
-  {
-    if (object instanceof DataElement)
-      {
-	DataElement element = (DataElement)object;
-	return element.get(i); 	
-      }
-    return null;
+    public void setProperty(DataElement property)
+    {
+	_property = property;
+    }
     
-  }
-  
-  public Object[] getElements(Object object)
-  {
-    if (object instanceof DataElement)
+    public Object getElementAt(Object object, int i)
     {
-      DataElement element = (DataElement)object;
-      ArrayList objs = element.getAssociated(_property);      
-      return objs.toArray();
+	if (object instanceof DataElement)
+	    {
+		DataElement element = (DataElement)object;
+		return element.get(i); 	
+	    }
+	return null;	
     }
-    else
+    
+    public ArrayList getList(DataElement object)
     {
-      return new Vector(0).toArray();
+	return object.getAssociated(_property);
     }
+    
+    public Object[] getElements(Object object)
+    {
+	if (object instanceof DataElement)
+	    {
+		DataElement element = (DataElement)object;
+		ArrayList objs = element.getAssociated(_property);      
+		return objs.toArray();
+	    }
+	else
+	    {
+		return new Vector(0).toArray();
+	    }
   }
 	
 }

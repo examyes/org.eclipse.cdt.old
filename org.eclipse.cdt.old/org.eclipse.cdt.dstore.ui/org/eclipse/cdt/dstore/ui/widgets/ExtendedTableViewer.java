@@ -158,9 +158,7 @@ public class ExtendedTableViewer extends TableViewer
 	    ((_currentInput != null) && (_currentInput.contains(parent, _property)))
 	    )
 	    {
-		Table table = getTable();
-		if ((table != null) &&  !table.isDisposed())
-		    return true;
+		return true;
 	    }
 	return false;
     }   
@@ -283,51 +281,52 @@ public class ExtendedTableViewer extends TableViewer
     {
 	try
 	    {
+		TableContentProvider contentProvider = (TableContentProvider)getContentProvider();
+
 		Table table = getTable();
 		if (table.isVisible())
-		    {
-		
-		// remove those that are gone	
-		ArrayList associated = parent.getAssociated(_property);
-
-		TableItem[] items = table.getItems();
-		ArrayList toRemove = new ArrayList();
-		for (int i = 0; i < items.length; i++) 
-		    {
-			TableItem item = items[i];
-			if (item != null)
+		    {					
+			ArrayList associated = contentProvider.getList(_currentInput);
+			
+			// remove those that are gone	
+			TableItem[] items = table.getItems();
+			ArrayList toRemove = new ArrayList();
+			for (int i = 0; i < items.length; i++) 
 			    {
-				DataElement data = (DataElement)item.getData();
-				if (!associated.contains(data))
+				TableItem item = items[i];
+				if (item != null)
 				    {
-					toRemove.add(item);
-				    }
-				else if (data == null || data.isDeleted() ||
-				    !_viewFilter.select(this, data, null))
-				    {
-					toRemove.add(item);
+					DataElement data = (DataElement)item.getData();
+					if (!associated.contains(data))
+					    {
+						toRemove.add(item);
+					    }
+					else if (data == null || data.isDeleted() ||
+						 !_viewFilter.select(this, data, null))
+					    {
+						toRemove.add(item);
+					    }
 				    }
 			    }
-		    }
-		
+			
+			
+			table.setRedraw(false);
+			
+			
+			updateItems(table, associated, toRemove);
 
-		table.setRedraw(false);
-		
-		
-		updateItems(table, associated, toRemove);
-
-
-	       	if (_listener.isEnabled())
-		    {
-			//refresh();
-		    }
-
-		if (table.getItemCount() == 0) 
-		    {
-			table.removeAll();
-		    }
-
-		table.setRedraw(true);
+			
+			if (_listener.isEnabled())
+			    {
+				//refresh();
+			    }
+			
+			if (table.getItemCount() == 0) 
+			    {
+				table.removeAll();
+			    }
+			
+			table.setRedraw(true);
 		    }
 	    }
 	catch (Exception e)
@@ -339,8 +338,6 @@ public class ExtendedTableViewer extends TableViewer
 
     private void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
-	DataElementLabelProvider prov = (DataElementLabelProvider)getLabelProvider();
-	
 	int maxAdd = 100;
 	int numAdded = 0;
 	
@@ -407,23 +404,23 @@ public class ExtendedTableViewer extends TableViewer
 	return new TableItem((Table)parent, flags);
     }
 
-public void doExpand(DataElement obj)
-      {
+    public void doExpand(DataElement obj)
+    {
         DataElement root = obj.dereference();
         setSelected(obj);
         setExpanded(root);               
         root.expandChildren();
-      }
+    }
 
   public void setExpanded(DataElement element)
       {
         _expanded = element;
       }
 
-  public ObjectWindow getParent()
-  {
-    return _parent;
-  }
+    public ObjectWindow getParent()
+    {
+	return _parent;
+    }
 
     public void setInput(DataElement object)
     {
