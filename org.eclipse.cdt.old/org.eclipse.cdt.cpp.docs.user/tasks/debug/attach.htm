@@ -1,0 +1,120 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>The C/C++ Development Plugin - Browsing Parse Information</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">
+     Attaching to C/C++ Application</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Steps to Attach to a C/C++ Application</font></b></td>
+  </tr>
+</table>
+
+<p>
+To create a debug launch configuration that will attach to a compiled language application, do the following:
+<ol>
+ <li>Select the executable from a C/C++ Project and do one of the following:
+  <ul>
+   <li>Select <b>Run</b> > <b>Debug</b> from the workbench menu bar to open the 
+       <b>Launch Configurations</b> dialog box.</li>
+   <li>Select the workbench toolbar <b>Debug</b> push button and choose <b>Debug</b> 
+       from the menu.</li>
+  </ul> 
+  This will open the <b>Launch Configurations</b> dialog box.</li>
+
+ <li>In the <b>Launch Configurations</b> dialog box, do one of the following: 
+  <ul>
+   <li>Select the <b>C/C++ Debug Attach to Application</b> node and click <b>New</b>.</li>
+   <li>Right-click the <b>C/C++ Debug Attach to Application</b> node and select 
+       <b>New</b> from the pop-up menu.</li>
+  </ul>
+  This will cause the launch configuration tabs and entry fields to 
+  display on the right-hand side of the dialog box.</li>
+
+ <li>In the <b>Name</b> field, enter a name of your choice for the configuration
+     that you are creating.</li>
+
+ <li>Select the <b>Attach to</b> tab to bring it to the foreground.</li>
+
+ <li>The name of the selected executable can be found in the <b>Attach to</b> tab 
+     Program field.  You may change this field by clicking the <b>Browse</b> button
+     and selecting another executable to attach to.</li>
+
+ <li>In the <b>Attach</b> to tab <b>Program process ID</b> field, enter the process 
+     id of the program to attach to.  You may click the <b>Browse</b> button to 
+     bring up the <b>Select process id</b> dialog.  Select the desired process to 
+     attach and click <b>OK</b>.  Completion of this field is mandatory.</li>
+
+ <li>Select the <b>Common</b> tab to bring it to the foreground.</li>
+
+ <li>If you want the launch configuration to be stored locally and available for a
+     single user, ensure that the <b>Local</b> radio button is selected. If the 
+     launch configuration is to be stored as a file in the workspace and shared in
+     a repository for team use, select the <b>Shared</b> radio button and enter the
+     project location where you wish the launch configuration to be stored in the 
+     <b>Location of shared configuration</b> field.  Alternatively, you may browse
+      for the project.</li>
+
+ <li>In the <b>Switch to/Open perspective</b> group, choose the perspective that
+     you would like to have opened after the launch. This selection is made in 
+     the <b>Debug mode</b> field drop-down box.</li> 
+
+ <li>If you would like the launch configuration to appear as a favorite debug 
+     configuration in the Debug push button favorites menu or the Debug menu 
+     Debug History list, select the Debug check box.</li> 
+
+ <li>If all information mandatory to the launch configuration has been provided, 
+     the <b>Debug</b> push button will be enabled. Clicking <b>Debug</b> without 
+     first clicking <b>Apply</b> will launch a debug session from the new launch 
+     configuration and save the new launch configuration.<br><br> 
+
+    <b>Note</b>: When you save a launch configuration for attaching to a running 
+    process, the process ID that you enter is saved. You must edit the 
+    configuration if you wish to attach to another process.<br><br>
+
+    <b>Tip</b>: If you have made entries in the launch configuration settings that 
+    you would like to remove or change, clicking <b>Revert</b> will remove all 
+    changes that you have made.</li>
+
+ <li>If information mandatory to the launch configuration has not been provided or if 
+     there are errors in the information that you have provided, messages at the top of 
+     the dialog box will indicate what is missing. If you choose to ignore these 
+     messages, clicking <b>Apply</b> will save the launch configuration and you can 
+     then click </b>Close to exit the dialog box.</li>
+
+ <li>After you have saved a debug launch configuration, you may edit it. For further
+     information about editing debug launch configurations, see the related task below.</li> 
+
+</ol>
+<b>Note</b>: Unexpected results may occur if an incorrect process ID is entered or if you try to attach to a system ID.
+</p>
+
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>
