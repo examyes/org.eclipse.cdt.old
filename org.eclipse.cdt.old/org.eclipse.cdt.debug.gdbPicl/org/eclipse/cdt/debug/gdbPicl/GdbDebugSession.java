@@ -716,6 +716,7 @@ public class GdbDebugSession extends DebugSession {
 		}
 		_mainProgram = programName;
 		_attachedProcessID = processIndex;
+		_debuggeeProcessID = (new Integer(_attachedProcessID)).toString();
 
 		addCmdResponsesToUiMessages();
 
