@@ -143,4 +143,4 @@ ifeq (gdbPicl,$(findstring gdbPicl, $(buildPlugins)))
 endif
 
 setUpGdbPiclPlugin:
-	$(setUpGdbPiclString)
+	@$(setUpGdbPiclString)

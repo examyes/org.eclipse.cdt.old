@@ -21,7 +21,7 @@ class GenerateMakefiles
    System.out.println(_pluginsDir);
    return;
   }
-  _theRulesMakefile = _pluginsDir + "/com.ibm.dstore.core/rules.mk";
+  _theRulesMakefile = _pluginsDir + "/com.ibm.dstore.core/build/rules.mk";
   for (int i=0; i<args.length; i++)
    generateBuildMakefilesFor(args[i]);
  }
@@ -68,7 +68,7 @@ class GenerateMakefiles
    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(theFile)));
    out.println("# Copyright (c) 2001 International Business Machines Corporation. All rights reserved.");
    out.println("# This program and the accompanying materials are made available under the terms of the");
-   out.println "# Common Public License which accompanies this distribution.");
+   out.println("# Common Public License which accompanies this distribution.");
    out.println("SHELL=sh");
    out.println(contents);
    out.flush();
