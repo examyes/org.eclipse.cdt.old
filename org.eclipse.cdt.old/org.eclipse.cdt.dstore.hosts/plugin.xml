@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<plugin
+   name = "DataStore Hosts Plugin"
+   id = "com.ibm.dstore.hosts"
+   version = "1.2.1"
+   vendor-name = "IBM"
+   class="com.ibm.dstore.hosts.HostsPlugin">
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.ibm.dstore.extra"/>
+      <import plugin="com.ibm.dstore.core"/>
+      <import plugin="com.ibm.dstore.ui"/>
+      <import plugin="com.ibm.dstore.miners"/>
+   </requires>
+
+   <runtime>
+    <library name=".">
+       	<export name="*" />      
+     </library> 
+   </runtime>
+
+<extension
+	point="org.eclipse.ui.perspectives">
+   <perspective
+	id="com.ibm.dstore.hosts.views.HostsPerspective"
+	name="Hosts"
+	class="com.ibm.dstore.hosts.views.HostsPerspective">
+   </perspective>
+</extension>
+
+<extension
+	point="org.eclipse.ui.views">
+	<category
+	   id="com.ibm.dstore.hosts"
+	   name="&amp;Hosts">
+	</category>
+	<view
+		id="com.ibm.dstore.hosts.views.HostsViewPart"
+		name="Hosts"
+		category="com.ibm.dstore.hosts"
+		icon="icons/host.gif"
+		class="com.ibm.dstore.hosts.views.HostsViewPart">
+	</view>
+	<view
+		id="com.ibm.dstore.ui.views.DetailsViewPart"
+		name="Host Details"
+		category="com.ibm.dstore.hosts"
+		icon="icons/host.gif"
+		class="com.ibm.dstore.ui.views.DetailsViewPart">
+	</view>
+	<view
+		id="com.ibm.dstore.hosts.views.OutputViewPart"
+		name="Output"
+		category="com.ibm.dstore.hosts"
+		icon="icons/output.gif"
+		class="com.ibm.dstore.hosts.views.OutputViewPart">
+	</view>
+	<view
+		id="com.ibm.dstore.hosts.views.CommandViewPart"
+		name="Command"
+		category="com.ibm.dstore.hosts"
+		icon="icons/command.gif"
+		class="com.ibm.dstore.hosts.views.CommandViewPart">
+	</view>
+</extension>
+
+</plugin>
+
+
+
+
+
+
+
