@@ -86,7 +86,6 @@ public class ConvertToCppProject implements IActionDelegate, ISelectionChangedLi
 		ICommand command = projectDescription.newCommand();
 		command.setBuilderName(builderName);
 
-		//ICommand[] newCommands = new ICommand[1];
 		ICommand[] commands = projectDescription.getBuildSpec();
 		ICommand[] newCommands = new ICommand[commands.length + 1];
 		System.arraycopy(commands, 0, newCommands, 0, commands.length);

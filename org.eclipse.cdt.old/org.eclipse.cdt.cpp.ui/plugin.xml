@@ -230,7 +230,6 @@
 	   <action
               id="designate"
 	      label="%Designate"
-	      icon="icons/project.gif"
 	      menubarPath="makefileMenu/designateGroup"
 	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateDesignate"	
 	      enablesFor="1">
@@ -238,7 +237,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.action1"
 	      label="%Undesignate"
-	      icon="icons/project.gif"
 	      menubarPath="makefileMenu/designateGroup"
 	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateUnDesignate"	
 	      enablesFor="1">
@@ -246,7 +244,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.action2"
 	      label="%Build"
-	      icon="icons/project.gif"
 	      menubarPath="makefileMenu/designateGroup"
 	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateBuild"	
 	      enablesFor="1">
@@ -265,7 +262,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.actionFolderBuild"
 	      label="%Command"
-	      icon="icons/project.gif"
 	      menubarPath="folderCommandMenu/folderCommandGroup"
 	      class="com.ibm.cpp.ui.internal.actions.CppActionDelegateFolderBuild"	
 	      enablesFor="1">
@@ -283,7 +279,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.actionParse0"
 	      label="%File"
-	      icon="icons/objects.gif"
 	      menubarPath="fileParseMenu/ParseGroup"
               class="com.ibm.cpp.ui.internal.actions.ParseAction"
 	      enablesFor="1">
@@ -301,7 +296,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.actionParse1"
 	      label="%Folder"
-	      icon="icons/objects.gif"
 	      menubarPath="folderParseMenu/ParseGroup"
               class="com.ibm.cpp.ui.internal.actions.ParseAction"
 	      enablesFor="1">
@@ -319,7 +313,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.actionClean"
 	      label="%Clean_Parse"
-	      icon="icons/objects.gif"
 	      menubarPath="parseMenu/ParseGroup"
               class="com.ibm.cpp.ui.internal.actions.ClearAction"
 	      enablesFor="1">
@@ -327,7 +320,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.actionSave"
 	      label="%Save_Parse"
-	      icon="icons/objects.gif"
 	      menubarPath="parseMenu/ParseGroup"
               class="com.ibm.cpp.ui.internal.actions.SaveAction"
 	      enablesFor="1">
@@ -335,7 +327,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.actionParse2"
 	      label="%Project"
-	      icon="icons/objects.gif"
 	      menubarPath="parseMenu/ParseGroup"
 	      class="com.ibm.cpp.ui.internal.actions.ParseAction"
 	      enablesFor="1">
@@ -347,7 +338,6 @@
 	   <action
               id="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"
 	      label="%Create_Target"
-	      icon="icons/objects.gif"
 	      path="additions"
 	      class="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"	
 	      enablesFor="1">
@@ -355,9 +345,8 @@
 	   <action
               id="convert"
 	      label="Support C/C++"
-	      icon="icons/objects.gif"
 	      path="additions"
-	class="com.ibm.cpp.ui.internal.actions.ConvertToCppProject"	
+	      class="com.ibm.cpp.ui.internal.actions.ConvertToCppProject"	
 	      enablesFor="1">
 	   </action>
 
