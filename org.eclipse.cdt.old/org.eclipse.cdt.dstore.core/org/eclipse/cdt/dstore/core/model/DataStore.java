@@ -2168,8 +2168,6 @@ public DataElement command(DataElement commandDescriptor,
         createReference(abstractObjectDescriptor, abstractedBy, containsD);
 
 	createReference(statusD, containsD, containsD);	
-	DataElement statusDetails = createAbstractObjectDescriptor(statusD, getLocalizedString("model.details"));	
-        createReference(statusDetails, allD, containsD);
 
 	createReference(commandDescriptor, allD, containsD);	
 	createReference(commandDescriptor, caRelations, containsD);
