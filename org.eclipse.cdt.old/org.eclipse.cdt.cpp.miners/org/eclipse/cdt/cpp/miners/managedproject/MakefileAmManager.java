@@ -9,10 +9,10 @@ import java.util.*;
 
 public class MakefileAmManager {
 
-	private final int TOPLEVEL = 0;
-	private final int PROGRAMS = 1;
-	private final int STATICLIB = 2;
-	private final int SHAREDLIB = 3;
+	private final int TOPLEVEL = 1;
+	private final int PROGRAMS = 2;
+	private final int STATICLIB = 3;
+	private final int SHAREDLIB = 4;
 	
 	DataElement project;
 	ProjectStructureManager structureManager;
@@ -388,13 +388,23 @@ public class MakefileAmManager {
 			{
 				//  need to figure out what kind of a target that I am dealing with
 				// then update
-				int classification = classifier.getClassification(Makefile_am);
+				
+		// this is for switching Makefiles.am's to specific targets
+		//checkFileStamp();
+		
+		//if(notModified)
+			//generateNewMakefilAm();
+		//else
+			//updateMakefileAmBasedOnClassification();
+				int classification = classifier.classify(Makefile_am);
 				switch (classification)
 				{
 					case (TOPLEVEL):
+					updateTopLevelMakefileAm(Makefile_am.getParentFile());
 					break;
 					
 					case (PROGRAMS):
+					updateProgramsMakefileAm(Makefile_am.getParentFile());
 					break;
 					
 					case (STATICLIB):
@@ -428,29 +438,9 @@ public class MakefileAmManager {
 	}
 	private void updateTopLevelMakefileAm(File parent)
 	{
-		long fileStamp=-1;
-		long hashedStamp=-2;
-		File MakefileAm = new File(parent,"Makefile.am");
-		if(MakefileAm.exists())
-		{
-			fileStamp = getMakefileAmStamp(MakefileAm);
-			Runtime rt = Runtime.getRuntime();
-			// copy the old Makefile.am to Makefile.am.old
-			try{
-				Process p = rt.exec("cp Makefile.am Makefile.am.old",null, parent);
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		
-			// compare time stamps to veriy that it is safe to update
-			try{
-			hashedStamp = ((Long)timeStamps.get(MakefileAm.getAbsolutePath())).longValue();
-			}catch(NullPointerException e){System.out.println("Error: "+e);}
-			
-			if(hashedStamp == fileStamp)
-				initTopLevelMakefileAm(parent);// updates the subdir variable
-		}
+		initTopLevelMakefileAm(parent);
 	}
+
 	private void updateProgramsMakefileAm(File MakefileAm)
 	{
 	}

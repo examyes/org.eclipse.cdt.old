@@ -5,10 +5,10 @@ package com.ibm.cpp.miners.managedproject;
 import java.util.*;
 import java.io.*;
 public class MakefileAmClassifier {
-	private final int TOPLEVEL = 0;
-	private final int PROGRAMS = 1;
-	private final int STATICLIB = 2;
-	private final int SHAREDLIB = 3;
+	private final int TOPLEVEL = 1;
+	private final int PROGRAMS = 2;
+	private final int STATICLIB = 3;
+	private final int SHAREDLIB = 4;
 	
 	protected Hashtable classifier = new Hashtable();
 	
@@ -208,10 +208,86 @@ public class MakefileAmClassifier {
 			}catch(IOException e){System.out.println(e);}
 		}
 	}
-	public int getClassification(File MakefileAm)
+	public int classify(File Makefile_am)
 	{
-		System.out.println("\n Got it :"+MakefileAm.getAbsolutePath());
-		return -1;
+		Vector profile = new Vector(3,3);
+		
+		profile = getProfile(Makefile_am);
+		
+		return getClassification(profile);
+	}
+	private int getClassification(Vector profile)
+	{	
+		int classification = 0;
+		int unique = 0;
+		for(int i = 0; i < profile.size(); i++)
+		{
+			String line = (String)profile.elementAt(i);
+			if(line.indexOf(_PROGRAMS)!=-1)
+			{
+				classification = PROGRAMS;
+				unique++;
+			}
+			if(line.indexOf(_LIBRARIES)!=-1)
+			{
+				classification = STATICLIB;
+				unique++;
+			}
+			if(line.indexOf(_LTLIBRARIES)!=-1)
+			{
+				classification = SHAREDLIB;
+				unique++;
+			}
+			if(line.indexOf(AUTOMAKE_OPTIONS)!=-1)
+			{
+				classification = TOPLEVEL;	
+				unique++;
+			}
+		}
+			
+		if(unique ==1)
+			return classification= checkProfileLength(profile,classification);
+		else
+			return 0;
+	}
+	private int checkProfileLength(Vector profile,int classification)
+	{	
+		int profileLength = profile.size();
+		int topLevelLenght = toplevelAm.size();
+		int programsLength = programsAm.size();
+		int staticLenght = staticlAm.size();
+		int sharedLength = sharedlAm.size();
+		
+		if(classification==TOPLEVEL&& (profileLength>=topLevelLenght-1&&profileLength<=topLevelLenght+1))
+			return TOPLEVEL;
+		if(classification==PROGRAMS&& (profileLength>=programsLength-1&&profileLength<=programsLength+1))
+			return TOPLEVEL;
+		if(classification==STATICLIB&& (profileLength>=staticLenght-1&&profileLength<=staticLenght+1))
+			return TOPLEVEL;
+		if(classification==SHAREDLIB&& (profileLength>=sharedLength-1&&profileLength<=sharedLength+1))
+			return TOPLEVEL;				
+		return 0;
+	}
+	private Vector getProfile(File Makefile_am)
+	{
+		Vector profile = new Vector(3,3);
+		String line;
+		try
+		{
+			// searching for the subdir line
+			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+			while((line=in.readLine())!=null)
+			{
+				if(line.indexOf(SUBDIRS)!=-1||line.indexOf(AUTOMAKE_OPTIONS)!=-1||line.indexOf(_PROGRAMS)!=-1
+				||line.indexOf(_SOURCES)!=-1||line.indexOf(_LDADD)!=-1||line.indexOf(EXTRA_DIST)!=-1
+				||line.indexOf(INCLUDES)!=-1||line.indexOf(_LDFLAGS)!=-1||line.indexOf(_LIBRARIES)!=-1
+				||line.indexOf(_a_SOURCES)!=-1||line.indexOf(_LTLIBRARIES)!=-1||line.indexOf(_la_SOURCES)!=-1
+				||line.indexOf(_la_LDFLAGS)!=-1||line.indexOf(_la_LIBADD)!=-1||line.indexOf(_HEADERS)!=-1)
+					profile.addElement(line);
+			}
+			in.close();
+		}catch(IOException e){System.out.println(e);}
+		return profile;
 	}
 	private void print(Vector vec)
 	{
