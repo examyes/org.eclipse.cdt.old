@@ -45,7 +45,15 @@ public class CppRunLauncher implements ILauncherDelegate
     {
 	_api = ModelInterface.getInstance();
     }
-
+public String getLaunchMemento(Object obj)
+	{
+		return null;	
+	}
+	
+	public Object getLaunchObject(String mem)
+	{
+		return null;	
+	}
     /**
      * @see ILauncherDelegate#launch(Object[], String, ILauncher)
      */
