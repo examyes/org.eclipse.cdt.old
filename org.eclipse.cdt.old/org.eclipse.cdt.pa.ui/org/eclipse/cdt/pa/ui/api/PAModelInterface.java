@@ -254,6 +254,9 @@ public class PAModelInterface implements IDomainListener
    // Only do something when the object's type is status.
    if ((object != null) && (object.getType().equals("status")))
    {
+
+     object.getDataStore().setUpdateWaitTime(100);
+   
      DataElement traceElement = (DataElement)_statuses.get(object);
      _statuses.remove(object);
 
@@ -362,6 +365,7 @@ public class PAModelInterface implements IDomainListener
  {
    if (status != null && !_statuses.containsKey(status))
    {
+     status.getDataStore().setUpdateWaitTime(500);
      _statuses.put(status, traceElement);
      
      // Start a status monitor thread if we want to see the progress monitor.
@@ -632,7 +636,7 @@ public class PAModelInterface implements IDomainListener
    // Set the type of the trace file
    String type = null;
    if (traceFormat.indexOf("gprof") >= 0)
-     type = "gprof trace file";
+     type = "gprof trace file (us)";
    else if (traceFormat.indexOf("functioncheck") >= 0)
      type = "functioncheck trace file";
    else
@@ -798,6 +802,7 @@ public class PAModelInterface implements IDomainListener
    
    // Call the C_ANALYZE_PROGRAM command in PAMiner to do the real job.
    DataStore dataStore = traceProgram.getDataStore();        
+   
    DataElement analyzeCommand = dataStore.localDescriptorQuery(traceProgram.getDescriptor(), "C_ANALYZE_PROGRAM");
    DataElement status = dataStore.command(analyzeCommand, traceProgram);
    
