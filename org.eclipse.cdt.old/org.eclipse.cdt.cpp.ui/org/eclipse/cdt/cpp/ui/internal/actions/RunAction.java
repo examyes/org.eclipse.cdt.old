@@ -53,8 +53,8 @@ public class RunAction extends CustomAction
     public void run()
     {	    
 	// fill in details here
-	System.out.println("Not implemented yet");
-
+	org.eclipse.debug.ui.actions.RunAction run = new org.eclipse.debug.ui.actions.RunAction();
+	run.runWithEvent(null, null);
     }
 }
 

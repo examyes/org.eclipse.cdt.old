@@ -52,7 +52,8 @@ public class DebugAction extends CustomAction
     
     public void run()
     {	    
-	System.out.println("Not implemented yet");
+	org.eclipse.debug.ui.actions.DebugAction dbg = new org.eclipse.debug.ui.actions.DebugAction();
+	dbg.runWithEvent(null, null);
     }
 }
 

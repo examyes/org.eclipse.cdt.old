@@ -53,7 +53,9 @@ public class AttachAction extends CustomAction
     public void run()
     {	    
 	// fill in details here
-	System.out.println("Not implemented yet");
+	System.out.println("not implemented yet!");
+	org.eclipse.debug.ui.actions.DebugAction dbg = new org.eclipse.debug.ui.actions.DebugAction();
+	dbg.runWithEvent(null, null);
     }
 }
 
