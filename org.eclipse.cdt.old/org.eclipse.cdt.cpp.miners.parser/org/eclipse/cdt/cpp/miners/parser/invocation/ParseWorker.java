@@ -56,9 +56,13 @@ public class ParseWorker extends Thread
  public void setParsedFiles(DataElement parsedFiles, DataElement status)
  {
   _status = status;
-  _theSymbolTable.setParsedFiles(parsedFiles);
   _dataStore = parsedFiles.getDataStore();
   _projectObjects = _dataStore.find(parsedFiles.getParent(), DE.A_NAME, ParserSchema.ProjectObjects,1);
+  DataElement preferences = _dataStore.find(parsedFiles.getParent(), DE.A_NAME, ParserSchema.Preferences, 1);
+  DataElement parseQuality = _dataStore.find(preferences, DE.A_NAME, ParserSchema.ParseQuality, 1);
+  _theSymbolTable.setParsedFiles(parsedFiles);
+  _theSymbolTable.setParseQuality(parseQuality);
+  
  }
 
  public void setEnabled(boolean enabled)
