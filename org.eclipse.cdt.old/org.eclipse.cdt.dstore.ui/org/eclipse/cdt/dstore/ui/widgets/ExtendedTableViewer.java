@@ -378,6 +378,12 @@ public class ExtendedTableViewer extends TableViewer
 						    
 						}
 					}
+				    else
+					{
+					    // defer draw until later
+					    //_currentInput.getDataStore().refresh(_currentInput);
+					    
+					}
 				}
 			}
 		    }		

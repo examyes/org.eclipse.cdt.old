@@ -88,8 +88,9 @@ public class ViewFilter extends ViewerFilter
 			if (!result)
 			    {
 				DataElement notDescriptor = dataElement.getDescriptor();
-				if (!_notCache.contains(notDescriptor))
+				if (notDescriptor != null && !_notCache.contains(notDescriptor))
 				    {
+					System.out.println(notDescriptor.getName() + " is not");
 					_notCache.add(notDescriptor);
 				    }
 			    }
