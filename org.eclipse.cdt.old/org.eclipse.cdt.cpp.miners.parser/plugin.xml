@@ -3,7 +3,7 @@
    name = "Cpp ParseMiner Plugin"
    id = "com.ibm.cpp.miners.parser"
    version = "1.2.1"
-   vendor-name = "IBM">
+   vendor-name = "International Business Machines Corp.">
    <requires>
      <import plugin="com.ibm.cpp.miners"/> 
      <import plugin="com.ibm.dstore.core"/>
