@@ -138,7 +138,7 @@ public class FunctionCheckUtility {
     return Double.parseDouble(totalTimeString);
    }
    else
-    throw new PAException("Cannot get total time");;
+    throw new PAException("Cannot get total time");
    
   }
   
