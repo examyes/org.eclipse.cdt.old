@@ -99,15 +99,30 @@ public class ParseMiner extends Miner
  	DataElement project = getProjectFor(subject);
  	if (cmdStr.equals("C_DELETE"))
  	{ 
- 		DataElement parsedFile = getParseFileFor(subject);
- 		if (parsedFile != null)
+ 		String type = subject.getType();
+ 		if (type.equals("file"))
  		{
- 			removeParseInfo(parsedFile);
+ 			DataElement parsedFile = getParseFileFor(subject);
+ 			if (parsedFile != null)
+ 			{
+ 				removeParseInfo(parsedFile);
  			
- 			DataElement theProject = getParseProject(project);
- 			DataElement projectObjects = getProjectElement(theProject, ParserSchema.ProjectObjects);
+ 				DataElement theProject = getParseProject(project);
+ 				DataElement projectObjects = getProjectElement(theProject, ParserSchema.ProjectObjects);
  			
- 			_dataStore.refresh(projectObjects);
+ 				_dataStore.refresh(projectObjects);
+ 			}
+ 		}
+ 		else if (subject.isOfType("directory"))
+ 		{
+ 			for (int i = 0; i < subject.getNestedSize(); i++)
+ 			{
+ 				DataElement file = subject.get(i);
+ 				if (!file.isReference())
+ 				{
+ 					handleNotification(cmd, file, status);
+ 				}
+ 			}
  		}
  	}
  	else if (cmdStr.equals("C_ADD"))
