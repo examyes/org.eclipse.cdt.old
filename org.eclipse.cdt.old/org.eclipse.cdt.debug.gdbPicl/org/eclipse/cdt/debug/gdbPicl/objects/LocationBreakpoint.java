@@ -218,10 +218,10 @@ public class LocationBreakpoint extends Breakpoint
 
       // Note: We must call setBkpContext for every supported view
       bkpChangeItem.setBkpContext((short) Part.VIEW_SOURCE, (short)_partID, 1, _lineNum);
-      bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, (short)_partID, 1, _lineNum);
+      bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, (short)_partID, 1, getLineNumberInView(Part.VIEW_DISASSEMBLY, address));
       
       if (Part.MIXED_VIEW_ENABLED)
-   	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, 1);
+   	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, getLineNumberInView(Part.VIEW_MIXED, address));
 
       bkpChangeItem.setEntryID(_entryID);
       bkpChangeItem.setVarInfo(_entryName);
@@ -330,6 +330,35 @@ public class LocationBreakpoint extends Breakpoint
    {
      return _conditionalExpr;
    }
+   
+   	private int getLineNumberInView(int viewNum, String address)
+	{
+		ModuleManager mm = _debugSession.getModuleManager();
+		Part p = mm.getPart(_partID);
+		String line = "1";
+		int lineNum;
+		
+		if (p == null)
+		{
+			return 1;
+		}
+		
+		if (viewNum == Part.VIEW_DISASSEMBLY)
+		{
+			DisassemblyView view = (DisassemblyView)p.getView(viewNum);
+			line = view.convertAddressToLineNum(address);
+		}
+		else if (viewNum == Part.VIEW_MIXED)
+		{
+			MixedView view = (MixedView)p.getView(viewNum);
+			line = view.convertAddressToLineNum(address);
+		}
+		
+		lineNum = Integer.parseInt(line);
+		
+		return lineNum;
+	}
+
 
    // Data fields
    private String _moduleName;
