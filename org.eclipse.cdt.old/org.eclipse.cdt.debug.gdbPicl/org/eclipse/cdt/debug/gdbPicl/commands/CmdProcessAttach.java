@@ -32,7 +32,7 @@ public class CmdProcessAttach extends Command
      // Our DebugSession object maintains an artificial process list.  Since
      // this process id is specified from the command line invocation of
      // the front end, when debugging java we simply pass in a value of 0
-     // to indicate we wish to attach to the first (and probably only) 
+     // to indicate we wish to attach to the first (and probably only)
      // remote JVM we specified when we started up the backend.
 
      int processIndex = _req.processId();
@@ -45,21 +45,21 @@ public class CmdProcessAttach extends Command
      {
      	System.out.println("CmdProcessAttach.execute() IOException = " + ioe);
      }
-     
+
      if (Gdb.traceLogger.DBG)
-        Gdb.traceLogger.dbg(2,"CmdProcessAttach.execute() calling remoteAttach() with processIndex = " + processIndex + "progName = " + progName);
-     
+        Gdb.traceLogger.dbg(2,"CmdProcessAttach.execute() calling remoteAttach() with processIndex = " + processIndex + "  progName = " + progName);
+
      if (!_debugSession.remoteAttach(processIndex, progName, errorMsg))
      {
         _rep = new ERepProcessAttach(EPDCSession,
                                   new EStdTime(0,0,0),
                                   new EStdDate(0,0,0),
-                                  _debugSession.getResourceString("REMOTE_JVM_TEXT"),
-                                  1,
+                                  progName,
+                                  processIndex,
                                   1,
                                   EPDC.Why_ProcessChanged,
-                                  "Remote JVM",
-                                  "Remote JVM");
+                                  null,
+                                  progName);
         // !!! Anything other than ExecRc_ProgName will kill SUI.  Why?
         _rep.setReturnCode(EPDC.ExecRc_ProgName);
         _rep.setMessage(errorMsg[0]);
@@ -70,12 +70,12 @@ public class CmdProcessAttach extends Command
      _rep = new ERepProcessAttach(EPDCSession,
                                new EStdTime(0,0,0),
                                new EStdDate(0,0,0),
-                               _debugSession.getResourceString("REMOTE_JVM_TEXT"),
+                               progName,
                                processIndex,
                                tm.getThreadDU(_debugSession.stopThreadName()),
                                EPDC.Why_ProcessChanged,
-                               "Remote JVM",
-                               "Remote JVM");
+                               null,
+                               progName);
 
      // Set watchpoint FCT bits if supported
      if (_debugSession.modificationWatchpointsSupported())
@@ -91,7 +91,7 @@ public class CmdProcessAttach extends Command
            options = options | EPDC.FCT_CHANGE_ADDRESS_BREAKPOINT |
                      EPDC.FCT_BREAKPOINT_MONITOR_1BYTES |
                      EPDC.FCT_BREAKPOINT_MONITOR_2BYTES |
-                     EPDC.FCT_BREAKPOINT_MONITOR_4BYTES | 
+                     EPDC.FCT_BREAKPOINT_MONITOR_4BYTES |
                      EPDC.FCT_BREAKPOINT_MONITOR_8BYTES;
         }
         EPDCSession._functCustomTable.setBreakpointCapabilities(options);
@@ -106,7 +106,7 @@ public class CmdProcessAttach extends Command
      EPDCSession._functCustomTable.setProcessAttachSupported(false);
      _rep.addFCTChangePacket(new ERepGetFCT(EPDCSession._functCustomTable));
 
-     return false;
+     return true;
   }
 
   // Data members

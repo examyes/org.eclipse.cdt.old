@@ -243,7 +243,7 @@ public class GdbDebugSession extends DebugSession
                   _whyStop = WS_HaltRequest;
            	  else
                   _whyStop = WS_ExceptionThrown;
-                  
+
               if(i<(length-4))
               {
                  String s = (String)cmdResponses.elementAt(i+1);
@@ -598,23 +598,41 @@ Thread.currentThread().dumpStack();
   public boolean remoteAttach(int processIndex, String programName, String[] errorMsg)
   {
      if (Gdb.traceLogger.EVT)
-              Gdb.traceLogger.evt(1,"????????????????? GdbDebugSession.remoteAttach "+processIndex   );
-        
+              Gdb.traceLogger.evt(1,"########>>>>>>>>  GdbDebugSession.remoteAttach() "+processIndex   );
+
      String cmd = "file " + programName;
      boolean ok = executeGdbCommand(cmd);
      if( !ok )
      {  if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
-     }    
-  
+     }
+
      cmd = "attach " + processIndex;
      ok = executeGdbCommand(cmd);
      if( !ok )
      {  if (Gdb.traceLogger.ERR)
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
-            
-     }          
-           
+
+     }
+     addCmdResponsesToUiMessages();
+/*
+     checkCurrentPart(_currentModuleID);
+
+     updateSharedLibraries();
+     updateAllParts();
+//     updateAllMethodsForAllParts();
+     updateMonitors();
+     updateRegisters();
+     updateStorage();
+     monitorChangedID.removeAllElements();     // remove model-restored monitors
+     monitorChangedName.removeAllElements();
+     monitorChangedValue.removeAllElements();
+     getCurrentFileLineModule();
+*/
+     if (Gdb.traceLogger.EVT)
+         Gdb.traceLogger.evt(1,"<<<<<<<<######## GdbDebugSession.remoteAttach() DONE " );
+
+
     return true;
   }
 
@@ -1224,7 +1242,7 @@ Thread.currentThread().dumpStack();
   {
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"################ GdbDebugSession.terminateDebuggee" );
-     
+
      String cmd = "kill ";
      if( !executeGdbCommand(cmd) )
      {   if (Gdb.traceLogger.ERR)
