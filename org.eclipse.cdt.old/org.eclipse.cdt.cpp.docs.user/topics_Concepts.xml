@@ -10,13 +10,12 @@
   <topic label="Output"                       href="concepts/views/output.htm"/>
   <topic label="Parsed-Files"                 href="concepts/views/parsedfiles.htm"/>
   <topic label="Project-Objects"              href="concepts/views/projectobjects.htm"/>
-  <topic label="Properties"                   href="concepts/views/properties.htm"/>
-  <topic label="Remote Projects"              href="concepts/views/remote.htm"/>
+  <topic label="Properties"                   href="concepts/views/properties.htm"/>  
   <topic label="Search"                       href="concepts/views/search.htm"/>
   <topic label="Search Docs"                  href="concepts/views/searchdocs.htm"/>
   <topic label="Source"                       href="concepts/views/source.htm"/>
   <topic label="System-Objects"               href="concepts/views/systemobjects.htm"/>
-  <topic label="Targets"                      href="concepts/views/targets.htm"/>
+  <topic label="Command Specifications"       href="concepts/views/commandspecs.htm"/>
   <topic label="View Content Controls">
    <topic label="View Content"                href="concepts/views/content.htm"/>
   </topic>
