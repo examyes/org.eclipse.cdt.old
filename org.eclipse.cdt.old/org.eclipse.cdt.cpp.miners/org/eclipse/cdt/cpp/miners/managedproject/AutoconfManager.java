@@ -79,21 +79,33 @@ public class AutoconfManager {
 		//in the Makefile.am's and configure.in
 		if(update)
 		{
-		
+			//System.out.println("\n Updating All Makefile.am and configure.in");
 			configureInManager.updateConfigureIn(project,true);
 			makefileAmManager.updateAllMakefileAm(project,classifier);
 		}
 		// it will check if configure exists and if not runConfigure will generate it
-		generateAndRunConfigure(project,status,update,classifier);
+		generateAndRunConfigure(project,status,classifier);
 	}
 
 	
-	public void generateAndRunConfigure(DataElement project, DataElement status, boolean updateFlag,MakefileAmClassifier classifier)
+	public void generateAndRunConfigure(DataElement project, DataElement status,MakefileAmClassifier classifier)
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
 		File script = new File (project.getSource(),"bootstrap.sc");
-		if(!configure.exists()||updateFlag)
+
+		if(configure.exists())
+		{
+			if(configureIsUptodate(project))
+			{
+				//System.out.println("\n configure is up to date"+"dont care just don't update and use existing configure");
+				if(getOS().equals("Linux"))
+					runCommand(project, status,"./configure"+"&&"+"touch -m "+"configure");
+				else
+					runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+			}
+		}
+		else
 		{
 			//System.out.println("\n configure does not exist!"+"   Or force update");
 			if(!script.exists())
@@ -104,14 +116,7 @@ public class AutoconfManager {
 			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
-		else if(configureIsUptodate(project)||!updateFlag)
-		{
-			//System.out.println("\n configure is up to date"+"dont care just don't update and use existing configure");
-			if(getOS().equals("Linux"))
-				runCommand(project, status,"./configure"+"&&"+"touch -m "+"configure");
-			else
-				runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
-		}
+
 	} 	
 
 	protected void configureTarget(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier, int projectTarget)
@@ -126,7 +131,7 @@ public class AutoconfManager {
 			makefileAmManager.updateAllMakefileAm(project,classifier,projectTarget);
 		}
 		// it will check if configure exists and if not runConfigure will generate it
-		generateAndRunConfigure(project,status,update,classifier);
+		generateAndRunConfigure(project,status,classifier);
 	}
 
 	protected void createConfigure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
@@ -343,11 +348,10 @@ public class AutoconfManager {
 		
 		for(int i = 0; i < list.length; i++)
 		{
-			if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")&&!list[i].getName().equals("Makefile"))
-			{
+			if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")
+											&&!list[i].getName().equals("Makefile")&&!list[i].getName().equals("config.h"))
 					if(list[i].lastModified()>configureTimeStamp)
 						return false;
-			}
 		}
 		return true;
 	}

@@ -91,7 +91,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Creating configure using existing configuration files", "C_CREATE_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Creating and running configure script", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Running configure script using existing configuration files", "C_RUN_CONFIGURE_NO_UPDATE",false);
+		createCommandDescriptor(projectD, "Running existing configure script", "C_RUN_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Cleaning package for distribution", "C_DIST_CLEAN", false);
 		createCommandDescriptor(projectD, "maintainer-clean - recommended for package developer", "C_MAINTAINER_CLEAN", false);
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
@@ -451,10 +451,14 @@ public class ManagedProjectMiner extends Miner
 		ProjectStructureManager manager = new ProjectStructureManager(rootObject);
 		
 		File[] list = manager.getFiles();
+		
 		for(int i = 0; i < list.length; i++)
-			if(!list[i].getName().equals("configure"))
-				if(list[i].lastModified()>configureTimeStamp)
-					return false;
+		{
+			if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")
+											&&!list[i].getName().equals("Makefile")&&!list[i].getName().equals("config.h"))
+					if(list[i].lastModified()>configureTimeStamp)
+						return false;
+		}
 		return true;
 	}
 	// new :to handle delete notification

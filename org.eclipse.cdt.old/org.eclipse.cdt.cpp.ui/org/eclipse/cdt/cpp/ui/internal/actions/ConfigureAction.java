@@ -242,16 +242,32 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 
 		if(configureUpdate==1 && configFilesExist)
 		{
-			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
-			DataElement status = _dataStore.command(configureCmd, _subject);
-			ModelInterface api = ModelInterface.getInstance();
-			api.monitorStatus(status);			
-			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
-			RunThread thread = new RunThread(_subject, status);
-			thread.start();
+			if(configureIsUptodate(_subject))
+			{
+				//System.out.println("\n C_CONFIGURE_NO_UPDATE # 1A");
+				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
+				DataElement status = _dataStore.command(configureCmd, _subject);
+				ModelInterface api = ModelInterface.getInstance();
+				api.monitorStatus(status);			
+				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+				RunThread thread = new RunThread(_subject, status);
+				thread.start();
+			}
+			else
+			{
+				//System.out.println("\n C_CONFIGURE_NO_UPDATE # 1B");
+				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
+				DataElement status = _dataStore.command(configureCmd, _subject);
+				ModelInterface api = ModelInterface.getInstance();
+				api.monitorStatus(status);			
+				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+				RunThread thread = new RunThread(_subject, status);
+				thread.start();
+			}
 		}
 		else if(configureUpdate==0 && targetType==DEFAULT&&dialogButtonPushed!=1) 
 		{
+			//System.out.println("\n "+"C_" + _command.getValue()+" # 2");
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 			DataElement status = _dataStore.command(configureCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
@@ -264,6 +280,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		else if(configureUpdate==0 && targetType==PROGRAM_TARGET && dialogButtonPushed!=1) 
 		// targetSelection 0 means no selection was made and it will default to program
 		{
+			//System.out.println("\nC_CONFIGURE_PROGRAM # 3");
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_PROGRAM");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
@@ -276,6 +293,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		// Static Target
 		else if(configureUpdate==0 && targetType==STATIC_TARGET && dialogButtonPushed!=1)
 		{
+			//System.out.println("\nC_CONFIGURE_STATIC # 4");
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_STATIC");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
@@ -286,6 +304,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		}	
 		else if(configureUpdate==0 && targetType==SHARED_TARGET & dialogButtonPushed!=1)
 		{
+			//System.out.println("\nC_CONFIGURE_SHARED # 5");
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_SHARED");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
