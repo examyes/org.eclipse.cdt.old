@@ -85,7 +85,11 @@ public class CommandGenerator
 	{
 	    status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.start"));
 	    status.setParent(commandObject);
+
+	     commandObject.addNestedData(status, false);
 	    _dataStore.refresh(commandObject);
+	    _dataStore.refresh(status);
+	
 	
 	}
 
