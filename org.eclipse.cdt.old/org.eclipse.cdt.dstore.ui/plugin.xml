@@ -23,7 +23,7 @@
 	point="org.eclipse.ui.perspectives">
    <perspective
 	id="com.ibm.dstore.ui.views.ObjectsPerspective"
-	name="DataStore Objects"
+	name="%DataStore_Objects"
 	class="com.ibm.dstore.ui.views.ObjectsPerspective">
    </perspective>
 </extension>
@@ -36,14 +36,14 @@
 	</category>
 	<view
 		id="com.ibm.dstore.ui.views.GenericViewPart"
-		name="Generic View Part"
+		name="%Generic_View_Part"
 		category="com.ibm.dstore.ui"
 		icon="icons/objects.gif"
 		class="com.ibm.dstore.ui.views.GenericViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.ui.views.DetailsViewPart"
-		name="Object Details"
+		name="%Object_Details"
 		category="com.ibm.dstore.ui"
 		icon="icons/details.gif"
 		class="com.ibm.dstore.ui.views.DetailsViewPart">

@@ -6,6 +6,9 @@ package com.ibm.cpp.ui.internal.wizards;
  
 import com.ibm.cpp.ui.internal.builder.ParsePathControl;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.wizards.*;
+import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.core.resources.*;
 
 import org.eclipse.swt.layout.*;
 import java.io.File;
@@ -17,7 +20,7 @@ import java.util.*;
 
 public class ParsePathWorkbookPage 
 {
-    ParsePathControl _pathControl;
+    public ParsePathControl _pathControl;
     
     public ParsePathWorkbookPage(Composite parent) 
     {
@@ -35,6 +38,12 @@ public class ParsePathWorkbookPage
 	_pathControl.setLayoutData(dData);
 
     }
+
+    public void setRemote(boolean isRemote)
+    {
+	_pathControl.setRemote(isRemote);	
+    }
+
 
     protected Control getControl() 
     {

@@ -6,6 +6,7 @@ package com.ibm.cpp.ui.internal.wizards;
  
 import com.ibm.cpp.ui.internal.preferences.ParseQualityControl;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.wizards.*;
 
 import org.eclipse.swt.layout.*;
 import java.io.File;

@@ -5,6 +5,7 @@ package com.ibm.cpp.ui.internal;
  */
 
 import com.ibm.dstore.ui.resource.ResourceElement;
+import com.ibm.dstore.hosts.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.core.util.*;
 import com.ibm.dstore.core.client.*;
@@ -186,6 +187,8 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
 	_interface = new ModelInterface(dataStore);	
        	_interface.loadSchema();
+
+	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());
 
 	// open all local projects
 	IProject[] projects = workbench.getRoot().getProjects();

@@ -86,8 +86,6 @@ public class ParsePathControl extends Composite implements Listener
     dp4.widthHint = 80;
     _removeButton.setLayoutData(dp4);
 
-    /** Reorder buttons *****************/
-
     _upButton      = new Button(p2, SWT.PUSH);
     _upButton.setText("Up");
     _upButton.addListener(SWT.Selection, this);
@@ -102,10 +100,6 @@ public class ParsePathControl extends Composite implements Listener
     GridData gdDown = new GridData(GridData.HORIZONTAL_ALIGN_END);
     gdDown.widthHint = 80;
     _downButton.setLayoutData(gdDown);
-
-
-    /********************/
-
 
 
     // layouts
@@ -137,6 +131,11 @@ public class ParsePathControl extends Composite implements Listener
     public void setContext(IProject project)
     {
 	_project = project;
+    }
+
+    public void setRemote(boolean flag)
+    {
+	_browseButton.setVisible(!flag);
     }
 
   public void handleEvent(Event e)

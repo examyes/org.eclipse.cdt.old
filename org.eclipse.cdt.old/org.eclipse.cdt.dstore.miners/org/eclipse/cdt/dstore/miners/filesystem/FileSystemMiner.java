@@ -191,6 +191,7 @@ public class FileSystemMiner extends Miner
   public DataElement handleCommand (DataElement theElement)
    {	
      String name         = getCommandName(theElement);    
+
      DataElement status  = getCommandStatus(theElement);
 
      DataElement subject = getCommandArgument(theElement, 0);
@@ -263,8 +264,6 @@ public class FileSystemMiner extends Miner
 	     DataElement newName = getCommandArgument(theElement,1);
 	     status = handleCreateDir(subject,newName,status);
 	 }
-     //////////////////////
-
      return status;
    }
     
@@ -343,22 +342,29 @@ public class FileSystemMiner extends Miner
      private boolean deleteHelper(String fullPath)
 	 {
 	     File filename = new File(fullPath);	    
-	     if(filename.isFile())
+	     if (filename.exists())
 		 {
-		     return filename.delete();
+		     if(filename.isFile())
+			 {
+			     return filename.delete();
+			 }
+		     String[] names = filename.list(); 
+		     boolean success=true;	     	     
+		     for(int i=0;i<names.length;i++)
+			 {
+			     if (!deleteHelper(fullPath+File.separator+names[i]))
+				 success = false;
+			 }	
+		     if(success)
+			 {		
+			     success=filename.delete();
+			 }
+		     return success;
 		 }
-	     String[] names = filename.list(); 
-	     boolean success=true;	     	     
-	     for(int i=0;i<names.length;i++)
+	     else
 		 {
-		     if (!deleteHelper(fullPath+File.separator+names[i]))
-			 success = false;
-		 }	
-	     if(success)
-		 {		
-		     success=filename.delete();
+		     return false;
 		 }
-	     return success;
 	 }
      private DataElement handleCreateFile(DataElement subject, DataElement newName, DataElement status)
 	 {	

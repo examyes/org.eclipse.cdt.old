@@ -12,24 +12,34 @@ import java.io.*;
 
 public class DictionaryMiner extends Miner
 {    
+    private String _dictionary;
+
    public void load()
     {
-	DataElement dictionaryRoot = _dataStore.createObject(_minerData, "dictionary", "English Words"); 
+	String fileLocation = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
+	_dictionary = fileLocation + File.separator + "com.ibm.dstore.miners" + File.separator + "dictionary";	
 
+	// english
+	loadLanguage("english");
+	loadLanguage("c");
+    }
+
+    private void loadLanguage(String language)
+    {
+	DataElement languageRoot = _dataStore.createObject(_minerData, "dictionary", language); 
+
+	String languageFile = _dictionary + File.separator + language + File.separator + "words";
 	int offset = Character.digit('a', Character.MAX_RADIX);
 
 	for (int i = 0; i < 26; i++)
 	    {
 		char letter = Character.forDigit(i + offset, Character.MAX_RADIX);
-		DataElement category = _dataStore.createObject(dictionaryRoot, "category", new String("" + letter)); 
+		DataElement category = _dataStore.createObject(languageRoot, "category", new String("" + letter)); 
 	    }
-
-	String fileLocation = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-	String dictionary = fileLocation + File.separator + "com.ibm.dstore.miners" + File.separator + "words";
 
 	try
 	    {
-		File wordsFile = new File(dictionary);
+		File wordsFile = new File(languageFile);
 		FileInputStream inFile = new FileInputStream(wordsFile);
 		BufferedReader in= new BufferedReader(new InputStreamReader(inFile));
 		
@@ -37,7 +47,7 @@ public class DictionaryMiner extends Miner
 		while ((line = in.readLine()) != null)
 		    {
 			char firstChar = line.charAt(0);
-			DataElement parent = _dataStore.find(dictionaryRoot, DE.A_NAME, 
+			DataElement parent = _dataStore.find(languageRoot, DE.A_NAME, 
 							     new String("" + Character.toLowerCase(firstChar)), 1);				
 			String type = "word";
 			if (!Character.isLowerCase(firstChar))
@@ -54,7 +64,7 @@ public class DictionaryMiner extends Miner
 		System.out.println(e);
 	    }
     }
-
+    
    public void extendSchema(DataElement schemaRoot)
     {
 	DataElement dictionary = createObjectDescriptor(schemaRoot, "dictionary", "com.ibm.dstore.miners");

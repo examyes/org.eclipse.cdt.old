@@ -23,17 +23,19 @@ public class ProjectInfoWizardPage extends WizardPage {
 
     private Text text;
     protected CppPlugin    _plugin = CppPlugin.getPlugin();
-    
+    private CppNewProjectResourceWizard _wizard;
+
     /**
      * Creates a new class page.
      */
-    public ProjectInfoWizardPage() 
+    public ProjectInfoWizardPage(CppNewProjectResourceWizard wizard) 
     {
 	super("ProjectInfoWizardPage");
 	setTitle(_plugin.getLocalizedString("createProjectWizard.Info.Title"));
 	setDescription(_plugin.getLocalizedString("createProjectWizard.Info.Description"));
 	//	setImageDescriptor(titleImage);
 	setPageComplete(false);
+	_wizard = wizard;
     }
     
     /**
@@ -64,6 +66,7 @@ public class ProjectInfoWizardPage extends WizardPage {
            item1.setText(_plugin.getLocalizedString("createProjectWizard.Info.BuildTab"));
            item1.setData(_workbookPageBuildInvocation);
            item1.setControl(_workbookPageBuildInvocation.getControl());
+
 	  
 	   //page 3
            TabItem item3;
@@ -79,8 +82,18 @@ public class ProjectInfoWizardPage extends WizardPage {
            setControl(composite);
 	}
 
-    protected void enter(int direction) 
+    public void setVisible(boolean flag)
     {
+	if (flag)
+	    {
+		enter(1);
+	    }
+	super.setVisible(flag);
+    }
+
+    public void enter(int direction) 
+    {
+	_workbookPageEnvironment.setRemote(_wizard.isRemote());
 	setPageComplete(true);
     }
 

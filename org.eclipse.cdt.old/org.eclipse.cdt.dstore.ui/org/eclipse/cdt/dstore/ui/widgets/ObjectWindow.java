@@ -322,6 +322,11 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
         return _viewer;
     }
     
+    public IStructuredSelection getSelection()
+    {
+	return (IStructuredSelection)_viewer.getSelection();
+    }
+
     public boolean setFocus()
     {
 	if (!_viewer.isShowing())

@@ -292,7 +292,15 @@ public class Repository extends Project
 	IResource[] resources = new IResource[_children.size()];
 	for (int i = 0; i < _children.size(); i++)
 	    {
-		resources[i] = (IResource)_children.get(i);
+		ResourceElement child = (ResourceElement)_children.get(i);
+		if (!child.getElement().isDeleted())
+		    {
+			resources[i] = (IResource)child;
+		    }
+		else
+		    {
+			//_children.remove(child);
+		    }
 	    }
 
 	return resources;
@@ -332,7 +340,6 @@ public class Repository extends Project
 
 	  if (!element.getAttribute(DE.A_TYPE).equals("file"))
 	    {	      
-		//***element.expandChildren(true);
 	      ArrayList objs = element.getNestedData();	  
 	      
 	      // hard-coded for now
@@ -340,21 +347,21 @@ public class Repository extends Project
 		{
 		  DataElement obj = ((DataElement)objs.get(i)).dereference();
 		  
-		  if (obj.getDataStore().filter(_resourceDescriptor, obj))
-		    {	    
-		      String type = obj.getType();
-		      ResourceElement child = null;
-		      if (type.equals("directory"))
-			{
-			  child = new FolderResourceElement(obj, this, this);		
-			}
-		      else 
-			{
-			  child = new FileResourceElement(obj, this, this);		
-			}
-		      
-		      _children.add(child);		      
-		    }	
+		  if (!obj.isDeleted() && obj.getDataStore().filter(_resourceDescriptor, obj))
+		      {	    
+			  String type = obj.getType();
+			  ResourceElement child = null;
+			  if (type.equals("directory"))
+			      {
+				  child = new FolderResourceElement(obj, this, this);		
+			      }
+			  else 
+			      {
+				  child = new FileResourceElement(obj, this, this);		
+			      }
+			  
+			  _children.add(child);		      
+		      }	
 		}
 	    }	  
 	}
@@ -431,7 +438,7 @@ public class Repository extends Project
 
 
       _connection.disconnect();  
-      _dataStore = _root.getDataStore();	
+      _dataStore = _remoteRoot.getDataStore();	
       _refreshAction.run();
       saveProperties();
 
@@ -465,11 +472,11 @@ public class Repository extends Project
     {
 	removeChildren();
 
-	DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_root, "C_REFRESH");
+	DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_remoteRoot.getDescriptor(), "C_REFRESH");
         if (refreshDescriptor != null)
         {	
-	    _dataStore.synchronizedCommand(refreshDescriptor, _root);	   
-
+	    _dataStore.synchronizedCommand(refreshDescriptor, _remoteRoot);	   
+	    
 	    Object[] children = getChildren(null);
 	    for (int i = 0; i < children.length; i++)
 		{
@@ -806,6 +813,28 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
 
 	return null;
     }
+
+    public ResourceElement findResource(DataElement element)
+    {
+	for (int i = 0; i < _children.size(); i++)
+	    {
+		ResourceElement resource = (ResourceElement)_children.get(i);
+		if (resource.getElement() == element)
+		    {
+			return resource;
+		    }
+		else
+		    {
+			ResourceElement subResource = resource.findResource(element);
+			if (subResource != null)
+			    {
+				return subResource;
+			    }
+		    }
+	    }
+	
+	return null;	
+    }
   
   public IPath getFullPath()
   {
@@ -838,7 +867,7 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
 	ArrayList args = new ArrayList();
 	args.add(newResource);
 	
-	DataElement createDescriptor = _dataStore.localDescriptorQuery(getElement(), "C_CREATE");
+	DataElement createDescriptor = _dataStore.localDescriptorQuery(getElement().getDescriptor(), "C_CREATE");
         if (createDescriptor != null)
 	    {	
 		_dataStore.synchronizedCommand(createDescriptor, args, getElement());

@@ -667,12 +667,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     // for parser
     DataElement projectObj = findProjectElement(project);
-    DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_CLOSE_PROJECT");
-
-    if (commandDescriptor != null)
-      {		
-	  dataStore.synchronizedCommand(commandDescriptor, projectObj);	
-      }
+    if (projectObj != null)
+	{
+	    DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_CLOSE_PROJECT");
+	    
+	    if (commandDescriptor != null)
+		{		
+		    dataStore.synchronizedCommand(commandDescriptor, projectObj);	
+		}
+	}
   }
 
     public void saveProject(IProject project)

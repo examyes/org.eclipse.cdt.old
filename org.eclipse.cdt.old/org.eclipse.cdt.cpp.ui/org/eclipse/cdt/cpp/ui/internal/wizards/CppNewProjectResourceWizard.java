@@ -44,10 +44,10 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	_mainPage.setDescription("Create a new project resource.");
 	this.addPage(_mainPage);
 	
-	_fProjectInfoWizardPage = new ProjectInfoWizardPage();
+	_fProjectInfoWizardPage = new ProjectInfoWizardPage(this);
  	this.addPage(_fProjectInfoWizardPage);	
 
-	_parserWizardPage = new ParseWizardPage();
+	_parserWizardPage = new ParseWizardPage(this);
  	this.addPage(_parserWizardPage);	
     }
 
@@ -56,13 +56,22 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	return _mainPage;
     }
 
+    public boolean isRemote()
+    {
+	return _mainPage.isRemote();
+    }
+
+    public IProject getProject()
+    {
+	return _mainPage.getNewProject();
+    }
+
     public boolean performFinish()
     {
 	_plugin = CppPlugin.getDefault();
 
 	_mainPage.finish();
-	IProject project = _mainPage.getNewProject();
-
+	IProject project = getProject();
 	
 	if (project != null)
 	    {

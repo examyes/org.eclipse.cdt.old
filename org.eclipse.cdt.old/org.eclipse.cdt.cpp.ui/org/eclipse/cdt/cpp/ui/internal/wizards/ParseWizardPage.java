@@ -22,13 +22,15 @@ public class ParseWizardPage extends WizardPage
     public ParseQualityWorkbookPage _workbookPageParseQuality;
 
     protected CppPlugin    _plugin = CppPlugin.getPlugin();
+    private CppNewProjectResourceWizard _wizard;
 
-    public ParseWizardPage()  
+    public ParseWizardPage(CppNewProjectResourceWizard wizard)  
     {
 	super("ParseWizardPage");
 	setTitle("Parser Properties");
 	setDescription("Configure the C/C++ Parser");
 	setPageComplete(true);
+	_wizard = wizard;
     }
 
     private void checkCompleteState() 
@@ -36,8 +38,7 @@ public class ParseWizardPage extends WizardPage
     }
 
     public void createControl(Composite parent)
-    {
-	
+    {	
 	Composite composite = new Composite(parent, SWT.NONE);
 
 	TabFolder folder = new TabFolder(composite, SWT.NONE);
@@ -66,9 +67,19 @@ public class ParseWizardPage extends WizardPage
 	setControl(composite);
     }
 
-    protected void enter(int direction) 
+    public void setVisible(boolean flag)
     {
-	setPageComplete(false);
+	if (flag)
+	    {
+		enter(1);
+	    }
+	super.setVisible(flag);
+    }
+
+    public void enter(int direction) 
+    {
+	setPageComplete(true);
+	_workbookPageParsePath.setRemote(_wizard.isRemote());
     }
 
 }

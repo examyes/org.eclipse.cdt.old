@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <plugin
-   name = "DataStore Hosts Plugin"
+   name = "%pluginName"
    id = "com.ibm.dstore.hosts"
    version = "1.2.1"
    vendor-name = "IBM"
@@ -25,7 +25,7 @@
 	point="org.eclipse.ui.perspectives">
    <perspective
 	id="com.ibm.dstore.hosts.views.HostsPerspective"
-	name="Hosts"
+	name="%Hosts"
 	class="com.ibm.dstore.hosts.views.HostsPerspective">
    </perspective>
 </extension>
@@ -38,28 +38,28 @@
 	</category>
 	<view
 		id="com.ibm.dstore.hosts.views.HostsViewPart"
-		name="Hosts"
+		name="%Hosts"
 		category="com.ibm.dstore.hosts"
 		icon="icons/host.gif"
 		class="com.ibm.dstore.hosts.views.HostsViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.HostsDetailsViewPart"
-		name="Host Details"
+		name="%Host_Details"
 		category="com.ibm.dstore.hosts"
 		icon="icons/host.gif"
 		class="com.ibm.dstore.hosts.views.HostsDetailsViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.OutputViewPart"
-		name="Output"
+		name="%Output"
 		category="com.ibm.dstore.hosts"
 		icon="icons/output.gif"
 		class="com.ibm.dstore.hosts.views.OutputViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.CommandViewPart"
-		name="Command"
+		name="%Command"
 		category="com.ibm.dstore.hosts"
 		icon="icons/command.gif"
 		class="com.ibm.dstore.hosts.views.CommandViewPart">

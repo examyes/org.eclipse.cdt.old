@@ -169,7 +169,9 @@ public class ViewToolBar extends Viewer implements IDomainListener
     {
         DataElement parent = (DataElement)ev.getParent();   
 	String name = (String)_currentInput.getElementProperty(DE.P_NAME);	  
-	if (!_inputTextLabel.getText().equals(name))
+	if ((_inputTextLabel != null) && 
+	    !_inputTextLabel.isDisposed() &&
+	    !_inputTextLabel.getText().equals(name))
 	    {	      
 		if (name != null)
 		    {

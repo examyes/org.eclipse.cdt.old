@@ -2,6 +2,6 @@
 local e root dmcknigh2 4033 e:/ true
 local e root 127.0.0.1 4033 e:/ true
 e l root 127.0.0.1 4033 e:/ true
-test1 root 127.0.0.1 4033 e:/IBMCPPW/SAMPLES true true
-dmcknigh2 root dmcknigh2 4033 d:/ false true
+test1 root 127.0.0.1 4033 e:/IBMCPPW/SAMPLES false true
+dmcknigh2 root 9.26.150.243 4033 d:/ false true
 goose root goose 4033 /home/ftp false true

@@ -122,7 +122,9 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		if (results == null || results.size() == 0)
 		    {
 			DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
-			DataElement root = dictionaryData.get(0);
+			
+			String language = "english";
+			DataElement root = dataStore.find(dictionaryData, DE.A_NAME, language, 1);
 			DataElement pattern = dataStore.createObject(null, "pattern", currentString + ".*");
 			DataElement search = dataStore.localDescriptorQuery(root.getDescriptor(),
 									    "C_SEARCH_DICTIONARY", 1);

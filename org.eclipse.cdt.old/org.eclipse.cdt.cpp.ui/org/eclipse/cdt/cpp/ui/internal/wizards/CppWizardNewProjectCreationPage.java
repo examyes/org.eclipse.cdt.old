@@ -290,9 +290,8 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 		return _projectHandle;
 	    }
 	
-	referencedProjects = getReferencedProjects();
-  	selectedDirectory = sourceNameField.getText();
-	
+  	selectedDirectory      = sourceNameField.getText();
+	referencedProjects     = getReferencedProjects();
 	selectedHostName       = remoteHostNameField.getText();
 	selectedHostPortNumber = remoteHostPortNumberField.getText();
 	selectedHostDirectory  = remoteHostDirectoryField.getText();

@@ -330,9 +330,15 @@ public class NameValueTableControl extends Composite implements Listener
 
     }
 
+    public void clearVariables()
+    {
+	_table.removeAll();
+    }
+
     public void setVariables(ArrayList variables)
     {
 	_table.setRedraw(false);
+	_table.removeAll();
 	for (int i = 0; i < variables.size(); i++)
 	    {
 		String variable = (String)variables.get(i);

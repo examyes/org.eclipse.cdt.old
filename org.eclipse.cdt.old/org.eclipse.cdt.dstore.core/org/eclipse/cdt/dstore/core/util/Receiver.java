@@ -86,6 +86,7 @@ public abstract class Receiver extends Thread
 		}
 	    else
 		{
+		   
 		    // something really bad happened
 		    _canExit = true;
 		}
@@ -95,6 +96,11 @@ public abstract class Receiver extends Thread
 		System.out.println("Receiver:handleInput()" + ioe);
 		ioe.printStackTrace();
 		_canExit = true;
+	    }
+	catch (Exception e)
+	    {
+		System.out.println("Receiver: " + e);
+		e.printStackTrace();
 	    }
       }
 

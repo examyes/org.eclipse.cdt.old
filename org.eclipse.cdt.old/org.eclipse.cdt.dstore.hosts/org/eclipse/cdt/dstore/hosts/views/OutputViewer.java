@@ -281,16 +281,18 @@ public class OutputViewer extends TableViewer
 		if (children != null)
 		    {
 			Table table = getTable();
-			
-			table.setRedraw(false);	
-			updateChildren(children);
-			TableColumn column = table.getColumn(0);
-			if (column.getWidth() < _maxWidth)
+			if (table != null && !table.isDisposed())
 			    {
-				column.setWidth(_maxWidth);		
-			    }
-			table.setRedraw(true);				
-		    }	
+				table.setRedraw(false);	
+				updateChildren(children);
+				TableColumn column = table.getColumn(0);
+				if (column.getWidth() < _maxWidth)
+				    {
+					column.setWidth(_maxWidth);		
+				    }
+				table.setRedraw(true);				
+			    }	
+		    }
 	    }
     }
 

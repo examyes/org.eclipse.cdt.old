@@ -142,7 +142,15 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	IResource[] resources = new IResource[_children.size()];
 	for (int i = 0; i < _children.size(); i++)
 	    {
-		resources[i] = (IResource)_children.get(i);
+		ResourceElement child = (ResourceElement)_children.get(i);
+		if (!child.getElement().isDeleted())
+		    {
+			resources[i] = (IResource)child;
+		    }
+		else
+		    {
+			//_children.remove(child);
+		    }
 	    }
 	
 	return resources;
@@ -167,7 +175,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	    for (int i = 0; i < objs.size(); i++)
 	      {
 		DataElement obj = (DataElement)objs.get(i);
-		if (obj.getDataStore().filter(_resourceDescriptor, obj))
+		if (!obj.isDeleted() && obj.getDataStore().filter(_resourceDescriptor, obj))
 		  {	    
 		    String type = obj.getType();
 		    ResourceElement child = null;
@@ -332,7 +340,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	    }
 
 	DataStore dataStore = _element.getDataStore();	
-        DataElement deleteDescriptor = dataStore.localDescriptorQuery(_element, "C_DELETE");
+        DataElement deleteDescriptor = dataStore.localDescriptorQuery(_element.getDescriptor(), "C_DELETE");
         if (deleteDescriptor != null)
         {	 
 	    dataStore.command(deleteDescriptor, _element);
@@ -366,7 +374,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     {
 	_modificationStamp = stamp;
 	// for now, we'll get the actual modification date
-	DataElement dateDescriptor = _dataStore.localDescriptorQuery(_element, "C_SET_DATE");
+	DataElement dateDescriptor = _dataStore.localDescriptorQuery(_element.getDescriptor(), "C_SET_DATE");
 	if (dateDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
@@ -423,6 +431,30 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	return null;
     }
 
+    public ResourceElement findResource(DataElement element)
+    {
+	if (_children != null)
+	    {
+		for (int i = 0; i < _children.size(); i++)
+		    {
+			ResourceElement resource = (ResourceElement)_children.get(i);
+			if (resource.getElement() == element)
+			    {
+				return resource;
+			    }
+			else
+			    {
+				ResourceElement subResource = resource.findResource(element);
+				if (subResource != null)
+				    {
+					return subResource;
+				    }
+			    }
+		    }
+	    }	
+	return null;
+    }
+    
     public ResourceElement createResource(String type, String name)
     {
 	if (_children == null)
@@ -448,7 +480,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	ArrayList args = new ArrayList();
 	args.add(newResource);
 	
-	DataElement createDescriptor = _dataStore.localDescriptorQuery(getElement(), "C_CREATE");
+	DataElement createDescriptor = _dataStore.localDescriptorQuery(getElement().getDescriptor(), "C_CREATE");
         if (createDescriptor != null)
 	    {	
 		_dataStore.synchronizedCommand(createDescriptor, args, getElement());
@@ -475,7 +507,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     {
 	removeChildren();
 
-	DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_element, "C_REFRESH");
+	DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_element.getDescriptor(), "C_REFRESH");
         if (refreshDescriptor != null)
         {	
 	    _dataStore.synchronizedCommand(refreshDescriptor, _element);	    

@@ -6,9 +6,11 @@ package com.ibm.cpp.ui.internal.wizards;
  
 import com.ibm.cpp.ui.internal.preferences.NameValueTableControl;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.vcm.*;
 
 import com.ibm.dstore.core.model.*;
 
+import org.eclipse.core.resources.*;
 import org.eclipse.swt.layout.*;
 import java.io.File;
 import org.eclipse.jface.viewers.*;
@@ -43,9 +45,13 @@ public class EnvironmentWorkbookPage
 	FillLayout layout2 = new FillLayout();	
 	_systemVariableControl.setLayout(layout2);	
 	
-       	setDefaults(true);
     }
 
+    public void setRemote(boolean isRemote)
+    {
+	setDefaults(!isRemote);
+	_systemVariableControl.setVisible(!isRemote);
+    }
 
     public void setDefaults(boolean showSystemEnvironment)
     {
@@ -53,8 +59,6 @@ public class EnvironmentWorkbookPage
 	ArrayList variables = plugin.readProperty("DefaultEnvironment");
 	_variableControl.setVariables(variables);
 
-
-	if (showSystemEnvironment)
 	    {
 		DataStore dataStore = plugin.getCurrentDataStore();
 		DataElement systemInfo = dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");

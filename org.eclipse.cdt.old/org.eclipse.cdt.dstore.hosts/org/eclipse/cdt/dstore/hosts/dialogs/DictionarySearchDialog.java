@@ -46,12 +46,13 @@ public class DictionarySearchDialog extends SearchDialog
 	    {
 		DataStore dataStore = _plugin.getDataStore();
 		DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
-		DataElement root = dictionaryData.get(0);
+
+		DataElement english = dataStore.find(dictionaryData, DE.A_NAME, "english", 1);
 		DataElement pattern = dataStore.createObject(null, "pattern", _searchEntry.getText());
-		DataElement search = dataStore.localDescriptorQuery(root.getDescriptor(), "C_SEARCH_DICTIONARY", 1);
+		DataElement search = dataStore.localDescriptorQuery(english.getDescriptor(), "C_SEARCH_DICTIONARY", 1);
 		if (search != null)
 		    {	       
-			DataElement status = dataStore.command(search, pattern, root);		
+			DataElement status = dataStore.command(search, pattern, english);		
 			_resultViewer.setInput(status);
 		    }
 	    }

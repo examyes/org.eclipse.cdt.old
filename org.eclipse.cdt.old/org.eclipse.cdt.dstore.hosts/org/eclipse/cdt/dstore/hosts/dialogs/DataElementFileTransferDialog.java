@@ -240,19 +240,44 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 	Widget widget = e.widget;
 	if (widget == _sendRemote)
 	    {
+		DataElement target = _remoteViewer.getInput();
+
+		IStructuredSelection es= (IStructuredSelection) _localViewer.getSelection();
+		java.util.List list = es.toList();
+		for (int i = 0; i < list.size(); i++)
+		    {
+			DataElement source = (DataElement)list.get(i);			
+			TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
+			transferAction.start();
+		    }
+
+		/***
 		DataElement source = _localViewer.getSelected();
 		DataElement target = _remoteViewer.getInput();
 
 		TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
 		transferAction.start();
+		***/
 	    }
 	else if (widget == _sendLocal)
 	    {
+		DataElement target = _localViewer.getInput();
+
+		IStructuredSelection es= (IStructuredSelection) _remoteViewer.getSelection();
+		java.util.List list = es.toList();
+		for (int i = 0; i < list.size(); i++)
+		    {
+			DataElement source = (DataElement)list.get(i);			
+			TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
+			transferAction.start();
+		    }
+		/*
 		DataElement source = _remoteViewer.getSelected();
 		DataElement target = _localViewer.getInput();
 
 		TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
 		transferAction.start();
+		*/
 	    }
 	else if (widget == _localBack)
 	    {
