@@ -2457,6 +2457,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement dirD = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement rootD = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
 	DataElement fileD    = dataStore.find(schemaRoot, DE.A_NAME, "file",1);	
+	DataElement exeD    = dataStore.find(schemaRoot, DE.A_NAME, "binary executable",1);	
 	DataElement projectD = dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
 	DataElement closedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Closed Project", 1);
 
@@ -2465,6 +2466,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "Statements", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "Functions", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
+	DataElement processD    = dataStore.find(schemaRoot, DE.A_NAME, "Process", 1);
 
 	
 	// project actions
@@ -2749,6 +2751,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.createObject(statement, DE.T_UI_COMMAND_DESCRIPTOR,
 			       "Set Breakpoint",
 			       "org.eclipse.cdt.cpp.ui.internal.actions.AddStatementBreakpoint");
+
+
+	// debug actions
+	dataStore.createObject(exeD, DE.T_UI_COMMAND_DESCRIPTOR,
+			       "Run...",
+			       "org.eclipse.cdt.cpp.ui.internal.actions.RunAction");
+	dataStore.createObject(exeD, DE.T_UI_COMMAND_DESCRIPTOR,
+			       "Debug...",
+			       "org.eclipse.cdt.cpp.ui.internal.actions.DebugAction");
+	dataStore.createObject(processD, DE.T_UI_COMMAND_DESCRIPTOR,
+			       "Attach to...",
+			       "org.eclipse.cdt.cpp.ui.internal.actions.AttachAction");
 
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
