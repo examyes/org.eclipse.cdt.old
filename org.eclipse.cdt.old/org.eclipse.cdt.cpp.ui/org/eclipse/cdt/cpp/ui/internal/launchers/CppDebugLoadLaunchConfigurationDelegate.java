@@ -101,11 +101,11 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	loadInfo.setStartupBehaviour(startupBehaviour);
 	
 	
-	doLaunch(loadInfo, workingDirectory);
+	doLaunch(loadInfo, launch, workingDirectory);
 	
     }	
     
-    public void doLaunch(PICLLoadInfo loadInfo, String workingDirectory)
+    public void doLaunch(PICLLoadInfo loadInfo, ILaunch launch, String workingDirectory)
     {
         CppSourceLocator sourceLocator = null;
 	
@@ -139,13 +139,16 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	int key = CoreDaemon.generateKey();
 	CoreDaemon.storeDebugTarget(target, key);
 	
-	//      PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
 	PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
 						       new Integer(loadInfo.getEngineConnectionInfo().getConduit()).intValue());
 	
 	if(daemonInfo == null)
 	    return;
-	
+
+        launch.addDebugTarget(target);
+	launch.setSourceLocator(loadInfo.getWorkspaceSourceLocator());
+	//target.launchEngine(key);    		
+
 	launchEngine(daemonInfo, workingDirectory);
     }
     
