@@ -1,0 +1,176 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+   <title>Eclipse Tools - CDT June Project Meeting Minutes</title>
+<link rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css">
+</head>
+<body>
+&nbsp;
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT WIDTH="60%">CDT&nbsp;
+<br>July 2004 Project Meeting Minutes</td>
+
+<td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
+</tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b><font face="Arial,Helvetica"><font color="#FFFFFF">CDT
+Meeting Minutes</font></font></b></td>
+</tr>
+</table>
+
+<p><b><i>July7, 2004</i></b>
+<p>Phone in meeting of Eclipse CDT stakeholders. Review progress to date
+and map out the future direction for the Eclipse CDT Project.
+<p>1:00 PM EST on July 7, 2004<p>&nbsp;<b>View the
+<a <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/news/07-2004/07-2004-notice.html?cvsroot=Tools_Project">Agenda</a></b><p>&nbsp;<p><b>
+<font size="3">Minutes</font></b><font size="3"> </font>
+<br>&nbsp;<p>Here are the minutes of the CDT conference call.
+<br>&nbsp;<p><b><font size="3">Present:</font></b><font size="3"> </font>
+<p><b>QNX, IBM-Rational, RedHat, Intel,  MontaVista, 
+Texas Instruments, Rockwell, WindRiver</b><p>&nbsp;<p>
+<b><font size="3">Update from participants:</font></b><font size="3"></li>
+</font> </p>
+<p><u><b>QNX</b>:</u></p>
+<ol>
+<li>Starting to work on debugger enhancements to catch up to Eclipse 3.0 that 
+did not make it into CDT 2.0, and also on some managed build system 
+generalizations. This is feature work and will be delivered in the HEAD stream 
+for release 2.1. This work WILL cause API churn.<br>
+&nbsp;</li>
+</ol>
+<p><u><b>IBM-Rational:</b></u><ol>
+  <li>Working on performance improvements and other defects that are required 
+  for a 2.0 maintenance release. Next CDT based product release (fall 2004) will 
+  be based on the 2.0 maintenance release.<br>
+&nbsp;</li>
+  <li>Will continue with testing of 2.0 and 2.0.1 stream, especially in areas 
+  not rigorously tested by us to date.<br>
+&nbsp;</li>
+  </ol>
+
+          <p><u><b>Rockwell:</b></u><ol>
+            <li>Still working on getting corporate approval&nbsp; to contribute 
+            to open source and the CDT project.<br>
+&nbsp;</li>
+            <li>Doing some plug-in development that they would like to 
+            contribute (pending approval) in the areas of:<br>
+&nbsp;&nbsp;&nbsp; - C++ code formatter<br>
+&nbsp;&nbsp;&nbsp; - PC Link Integration<br>
+&nbsp;</li>
+            <li>Availability of ClearCase plugin for Eclipse 3.0 (due Sept. 
+            2004) gating internal adoption of Eclipse 3.0 and CDT 2.0<br>
+&nbsp;</li>
+            </ol>
+        <p><u><b>Texas Instruments:</b></u><ol>
+          <li>Concentrating on product due to ship this fall, based on CDT 2.0. 
+          Will be keeping an eye on the 2.0 maintenance stream and 2.0.1 release 
+          to gauge wether or not to pick some fixed up or stick with 2.0.<br>
+&nbsp;</li>
+          </ol>
+
+<p><u><b>Redhat</b></u>: 
+<ol>
+  <li>Awating resolutin of how &amp; where to contribute RPM and Profiling plugins 
+  that have been developed.<br>
+&nbsp;</li>
+  <li>Working CDT 2.0 into next product release schedule for August 2004<br>
+&nbsp;</li>
+  </ol>
+  <p><u><b>Intel</b></u>:<ol>
+    <li>Have proposed some managed build enhancements and are looking to work 
+    with community to implement them.<br>
+&nbsp;</li>
+    <li>Have raised some error parser issues that should be resolved, not 
+    necessarily in the 2.0 maintenance stream but definitely for a subsequent 
+    release.<br>
+&nbsp;</li>
+    </ol>
+      <p><u><b>MontaVista:</b></u><ol>
+        <li>Moving forward to CDT 2.0 internally<br>
+&nbsp;</li>
+        </ol>
+        <p><b><u>Wind River</u>:</b></p>
+<ol>
+  <li>Looking at CDT 2.0 and comparing capability with their previous IDE 
+  (Eclipse 2.x based).<br>
+&nbsp;</li>
+  <li>Interested in additional functionality &amp; looking to collaborate on 
+  Refactoring and Managed Build enhancements</li>
+  </ol>
+              <p>&nbsp;<p><b><font size="3">CDT 2.0 Maintenance Stream Plan &amp; 
+  Process :</font></b></p>
+  <ul>
+    <li>General agreement that the 2.0 branch should stay frozen from an API 
+    perspective and remain backwards compatible.</li>
+    <li>Defect fixing only, and all commits to the branch should reference the 
+    defects being addressed by the changes.</li>
+    <li>All defects that will be fixed in the 2.0 branch should have the 
+    Bugzilla target_milestone field set to 2.0.1</li>
+    <li><b><i>Any potential API changes/breaks should be communicated and 
+    discussed within the community PRIOR to committing them.</i></b></li>
+  </ul>
+  <p>&nbsp;<p>
+<b><font size="3">CDT 2.1 Content &amp; Timing</font></b></p>
+
+              <ul>
+                <li>To help the CDT community plan for on-going releases, it was 
+                proposed that the community should put in place a formal 
+                planning exercise on a six month cycle.</li>
+                <li>Current view is that a 2.1 release would be required by the 
+                end of October, primarily in support of a QNX product release.</li>
+                <li>Outside of the formal 6-month planning session, plans should 
+                be captured and discussed using Bugzilla plan items. Each of 
+                these plan items should capture what is being proposed and when 
+                it is expected to be delivered.<br>
+&nbsp;</li>
+  </ul>
+  <p>
+<b><font size="3">Contributing RPM and Profiling Plugins (Red Hat)</font></b></p>
+  <ul>
+    <li>2 possibilities were proposed: a) create a separate project or b) create 
+    a new CDT component with the Red Hat contributors set up as the initial 
+    committers. It was felt that creating a separate project for this is too 
+    heavyweight, so it was agreed to proceed with option b.</li>
+    <li>Sebastien Marineau will formally request the creation of the new 
+    component.</li>
+    <li>As with the CppUnit, these plugins will be hosted on the CDT community 
+    page, not on the main download page.</li>
+  </ul>
+  <p>&nbsp;<p>
+<b><font size="3">Managed Build system proposal</font></b></p>
+  <ul>
+    <li>Many CDT participants are interested in generalizing the managed build 
+    system so that we can all share it as much as possible and avoid each 
+    company doing their own. Several proposals have been made along the way. 
+    Sean Evoy, who has been quarterbacking most of the work done to date on MB 
+    will set up a meeting within the next couple of weeks with the goal of 
+    identifying and assigning specific pieces of work to help achieve this goal. 
+    Stay tuned to the <a href="mailto:cdt-dev@eclipse.org">cdt-dev@eclipse.org</a> 
+    mailing list for more information on this.</li>
+    </ul>
+  <p>&nbsp;<p><b><font size="3">Error Parser issues</font></b><ul>
+      <li>Intel has proposed to fix several error parser issues (Bugzilla items: 
+      65576, 66762, 66808). Alain Magloire at QNX has some additional 
+      suggestions and will work with Intel on getting this stuff implemented. It 
+      is not required for the 2.0 maintenance branch, although there is one 
+      piece of low hanging fruit that could be addressed on the maintenance 
+      branch (restoring defaults).</li>
+      </ul>
+  <p>&nbsp;<p>Any comments, additions, corrections etc. welcome! As always, many thanks
+to everyone for your ongoing support.&nbsp;<!-- Footer --> </p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"></td>
+</tr>
+</table>
+
+<center><i>Last Modified on July 9, 2004</i></center>
+
+</body>
+</html>
