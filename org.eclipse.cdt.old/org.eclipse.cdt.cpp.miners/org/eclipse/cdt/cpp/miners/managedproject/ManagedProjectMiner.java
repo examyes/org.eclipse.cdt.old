@@ -11,9 +11,10 @@ import java.util.*;
 import java.io.*;
 
 public class ManagedProjectMiner extends Miner
-{
+{	private AutoconfManager autoconfManager;
 	public void load() 
 	{
+		autoconfManager = new AutoconfManager();
 	}
 	public void extendSchema(DataElement schemaRoot)
 	{
@@ -69,39 +70,36 @@ public class ManagedProjectMiner extends Miner
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
   		DataElement  project = getCommandArgument(theCommand, 0);
-  	
-  		
-  		AutoconfManager autoconfManager = new AutoconfManager(project);
   		//if (!project.getType().equals("project"))  // refer to jeff regarding  this line
    			//return status;
 		if (name.equals("C_UNMANAGE_PROJECT"))
  	 		_dataStore.deleteObject(project.getParent(), project);
 		else if (name.equals("C_MANAGE_PROJECT"))
 		{
-			autoconfManager.manageProject(status);
+			autoconfManager.manageProject(project, status);
 			refresh(project);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
-			autoconfManager.generateAutoconfFiles(status,false);
+			autoconfManager.generateAutoconfFiles(project, status,false);
 			refresh(project);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 		{
-			autoconfManager.updateAutoconfFiles(status,false);
+			autoconfManager.updateAutoconfFiles(project, status,false);
 			refresh(project);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_CREATE_CONFIGURE"))
 		{
-			autoconfManager.runSupportScript(status);
+			autoconfManager.runSupportScript(project, status);
 			refresh(project);
 		}
 		else if (name.equals("C_RUN_CONFIGURE"))
 		{
-			autoconfManager.runConfigureScript(status);
+			autoconfManager.runConfigureScript(project, status);
 			refresh(project);
 		}
 		else if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
@@ -116,7 +114,7 @@ public class ManagedProjectMiner extends Miner
 		}
 		else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 		{
-			autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(project.getFileObject(),status);
+			autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(project,status);
 			refresh(project);
 		}
 		else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
@@ -124,8 +122,7 @@ public class ManagedProjectMiner extends Miner
 			autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
 			refresh(project);
 		}
-		//Make sure that the project is a managed project before doing anything for a refresh -Jeff
-		else if (name.equals("C_REFRESH") && project.getType().equals(Am.MANAGED_PROJECT))
+		else if (name.equals("C_REFRESH") && (project.getType().equals(Am.MANAGED_PROJECT)))
 		{
   			refreshProject(project);
   			parseAmFile(project); 
@@ -138,8 +135,6 @@ public class ManagedProjectMiner extends Miner
 	{
 		AmParser theParser = new AmParser(theUnmanagedProject);
 		DataElement theManagedProject = theParser.parse();
-	//	_dataStore.refresh(theManagedProject);
-	//	_dataStore.refresh(theManagedProject.getParent());
 		return theManagedProject;
 	}
 	private DataElement refreshProject(DataElement theUnmanagedProject)
