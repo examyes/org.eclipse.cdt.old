@@ -49,7 +49,7 @@ all:
 	@cd com 2>/dev/null && (${MAKE} ${MAKEFLAGS} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
-production      : development jars source-zips createTar
+production      : development jars source-zips createZip
 
 jars            : $(patsubst %,%_createJars,$(buildPlugins))
 source-zips     : $(patsubst %,%_createSrcZips,$(buildPlugins))
