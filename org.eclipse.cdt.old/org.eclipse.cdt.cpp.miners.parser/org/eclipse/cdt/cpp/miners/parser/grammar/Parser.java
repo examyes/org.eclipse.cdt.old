@@ -18,7 +18,7 @@ public final class Parser implements ParserConstants {
  public  Parser()     {}
 
 
- public void setSymbolTable(SymbolTable theSymbolTable)
+ public void setSymbolTable(SymbolTable theSymbolTable) 
  {
   symtab = theSymbolTable;
   _lazy  = (symtab instanceof DataStoreSymbolTable);

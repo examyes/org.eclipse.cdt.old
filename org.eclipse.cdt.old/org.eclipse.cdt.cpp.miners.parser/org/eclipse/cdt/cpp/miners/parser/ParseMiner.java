@@ -82,7 +82,11 @@ public class ParseMiner extends Miner
   else if (name.equals("C_SET_INCLUDE_PATH"))
    handleSetIncludePath(subject, getCommandArgument(theElement, 1));
   else if (name.equals("C_SET_PREFERENCES")) 
-   handleSetPreferences(subject, getCommandArgument(theElement, 1), getCommandArgument(theElement, 2));
+   handleSetPreferences(subject, 
+			getCommandArgument(theElement, 1), 
+			getCommandArgument(theElement, 2),
+			getCommandArgument(theElement, 3)
+			);
   return statusDone(status);
  }
 
@@ -119,9 +123,6 @@ public class ParseMiner extends Miner
 	     
 	     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
 	     
-	     _dataStore.update(theProject);
-	     _dataStore.update(parseProject);
-	     
 	     loadProject(theProject);
 	     return parseProject;
 	 }
@@ -149,27 +150,26 @@ public class ParseMiner extends Miner
 
  private DataElement handleCloseProjects(DataElement projectsRoot)
  { 
-    //DataElement theFiles = getParsedFiles();
-  //
-  //while (theFiles.getNestedSize() > 0)
-  // handleRemoveParseInfo((DataElement)theFiles.get(0);
-  //
-  // saveProject(projectsRoot.get(i));
-  //_dataStore.deleteObjects(projectsRoot);  
-
      for (int i = 0; i < projectsRoot.getNestedSize(); i++)
 	 {
 	     DataElement project = projectsRoot.get(i);
 	     handleCloseProject(project);
 	 }
+     
      return null;
  }
  
  private DataElement handleCloseProject(DataElement theSubject)
  {
      DataElement theProject = getParseProject(theSubject);
-     //saveProject(theProject);
-
+     
+     DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
+     DataElement autoPersist = _dataStore.find(currentPreferences, DE.A_NAME, "autopersist", 1);  
+     if ((autoPersist != null) && autoPersist.getValue().equals("Yes") )
+	 {
+	     saveProject(theProject);
+	 }
+     
      _dataStore.deleteObject(theProject.getParent(), theProject);
      return null;
  }
@@ -222,10 +222,7 @@ public class ParseMiner extends Miner
   String parsedSource = sourcePath + "parsed_source.xml";
   String systemObjs   = sourcePath + "system_objects.xml";
   String projectObjs  = sourcePath + "project_objects.xml";
-  
- 
-  project = getParseProject(project);
-  
+    
   _dataStore.saveFile(getProjectElement(project, ParserSchema.ParsedFiles), parsedSource, 10);
   _dataStore.saveFile(getProjectElement(project, ParserSchema.ProjectObjects), projectObjs, 10);
   _dataStore.saveFile(getProjectElement(project, ParserSchema.SystemObjects), systemObjs, 10);
@@ -237,7 +234,8 @@ public class ParseMiner extends Miner
   return null;
  }
  
- private DataElement handleSetPreferences(DataElement theProject, DataElement qualityPref, DataElement autoParsePref)
+ private DataElement handleSetPreferences(DataElement theProject, DataElement qualityPref, 
+					  DataElement autoParsePref, DataElement autoPersistPref)
  {
   theProject = getParseProject(theProject);
   DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
@@ -253,9 +251,13 @@ public class ParseMiner extends Miner
   if (autoParse == null)
    autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");
   autoParse.setAttribute(DE.A_VALUE, autoParsePref.getName());
+
+  // autoPersist
+  DataElement autoPersist = _dataStore.find(currentPreferences, DE.A_NAME, "autopersist", 1);  
+  if (autoPersist == null)
+      autoPersist = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autopersist");
+  autoPersist.setAttribute(DE.A_VALUE, autoPersistPref.getName());
   
-  _dataStore.refresh(autoParse);
-  _dataStore.refresh(parseQuality);
   return null;
  }
   
