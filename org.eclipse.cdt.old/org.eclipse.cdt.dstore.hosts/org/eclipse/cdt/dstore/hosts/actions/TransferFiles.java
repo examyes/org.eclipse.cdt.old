@@ -290,7 +290,6 @@ public class TransferFiles extends Thread
 	    }
 	else
 	    {
-		System.out.println("no date for "+ fileElement.getSource());
 		fileElement.doCommandOn("C_DATE", true);
 		return getDate(fileElement);
 	    }
