@@ -192,23 +192,37 @@ public class AutoconfManager {
 	public void runConfigureScript(DataElement project, DataElement status)
 	{
 		// if configure is not found then create it first
-		File conf = new File (project.getSource(),"configure");
+		File configure = new File (project.getSource(),"configure");
 		File script = new File (project.getSource(),"autogen.sh");
-		if(!conf.exists())
+		if(!configure.exists())
 		{
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./autogen.sh;./configure");
+				runCommand(project, status,"./autogen.sh;./configure"+"touch -m "+
+				configure.getName());
 			else
-			runCommand(project, status,cygwinPrefix+"autogen.sh;" +cygwinPrefix+"configure");
+			runCommand(project, status,cygwinPrefix+"autogen.sh;" +cygwinPrefix+"configure"+
+			cygwinPrefix+"touch -m "+configure.getName());
 		}
 		else
 		{ 
-			if(getOS().equals("Linux"))
-				runCommand(project, status, "./configure");
+			// chck that configure is up to date
+			if(configureIsUptodate(project))
+			{
+				// setting time stamp to all Makefile.am abd Makefiles.in if cuorrupted when imported
+				if(getOS().equals("Linux"))
+					runCommand(project, status, "./configure;"+"touch -m "+configure.getName());
+				else
+					runCommand(project, status, cygwinPrefix+"configure;"+cygwinPrefix+"touch -m "+configure.getName());
+			}
 			else
-				runCommand(project, status, cygwinPrefix+"configure");
+			{
+				if(getOS().equals("Linux"))
+					runCommand(project, status,"./autogen.sh;./configure;"+"touch -m "+configure.getName());
+				else
+					runCommand(project, status,cygwinPrefix+"autogen.sh;" +cygwinPrefix+"configure;"+cygwinPrefix+"touch -m "+configure.getName());
+			}
 		}
 	} 
 	public void distClean(DataElement project, DataElement status)
@@ -249,6 +263,27 @@ public class AutoconfManager {
 	public MakefileAmManager getMakeFileAmManager()
 	{
 		return makefileAmManager;
+	}
+	private boolean configureIsUptodate(DataElement project)
+	{
+		long configureTimeStamp = -1;
+		structureManager = new ProjectStructureManager(project.getFileObject());
+		File[] list = structureManager.getFiles();
+		
+		// as we are sure that configure exists then we can safely get its last modified time stamp
+		
+		File configure = new File(project.getSource(),"configure");
+		configureTimeStamp = configure.lastModified();	
+		//System.out.println("\nconfigure stamp = "+configureTimeStamp);
+		//System.out.println("=========================================");	
+		for(int i = 0; i < list.length; i++)
+			if(list[i].getName().equals("Makefile.am")||list[i].getName().equals("Makefile.in")||list[i].getName().equals("configure.in"))
+			{
+				//System.out.println("\n"+list[i].getName()+" = "+list[i].lastModified());
+				if(configureTimeStamp<list[i].lastModified())
+					return false;
+			}
+		return true;
 	}
 }
 
