@@ -430,7 +430,19 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	if (dateDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
-		args.add(_dataStore.createObject(null, "date", "" + stamp));
+		ArrayList timeArray = _element.getAssociated("modified at");
+		DataElement dateObj = null;
+		if (timeArray.size() > 0)
+		{
+			dateObj = (DataElement)timeArray.get(0);
+			dateObj.setAttribute(DE.A_NAME, "" + stamp);
+		}
+		else
+		{
+			dateObj = _dataStore.createObject(null, "date", "" + stamp);
+		}
+		
+		args.add(dateObj); 
 		_dataStore.synchronizedCommand(dateDescriptor, args, _element);
 	    }
     }
