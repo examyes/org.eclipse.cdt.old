@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="org.eclipse.cdt.rpm.ui"
+   name="RPM UI Plug-in"
+   version="1.1"
+   provider-name="Eclipse.org"
+   >
+   
+
+   <runtime>
+      <library name="RpmUi.jar"/>
+   <library name="RPMCore.jar">        
+   		<export name="*"/>      
+   </library>      
+   
+   <library name="RPMPluginPreferencesPage.jar">        
+   		<export name="*"/>      
+   </library>
+   </runtime>
+   
+   <requires>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.text"/>
+      <import plugin="org.eclipse.cdt.core" />
+      <import plugin="org.eclipse.cdt.rpm.core"/>
+   </requires>
+
+
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            name="Source/Binary RPM"
+            icon="icons/rpm.gif"
+            class="org.eclipse.cdt.rpm.ui.RPMExportWizard"
+            id="org.eclipse.cdt.rpm.ui.RPMExportWizard">
+         <description>
+            Export C/C++ projects to RPM format
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <wizard
+            name="Source RPM"
+            icon="icons/rpm.gif"
+            class="org.eclipse.cdt.rpm.ui.SRPMImportwizard"
+            id="org.eclipse.cdt.rpm.ui.SRPMImportwizard">
+         <description>
+            Imports a Source RPM to a project
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+   <extension
+   				point="org.eclipse.ui.views">
+   		<category
+   				name="RPM Plugin Log File"
+   				id="org.eclipse.cdt.rpm.ui.logviewer">
+   		</category>
+   <view
+   			name="RPM Plugin Log Viewer"
+   			icon="icons/rpm.gif"
+   			class="org.eclipse.cdt.rpm.ui.logviewer.RPMLogViewer"
+   			id="org.eclipse.cdt.rpm.ui.logviewer.RPMLogViewer"
+   			category="org.eclipse.cdt.rpm.ui.logviewer">
+   	</view>
+   		</extension>
+	
+	<extension
+      point = "org.eclipse.ui.preferencePages">
+       <page id="org.eclipse.cdt.rpm.ui.preferences.Page1"
+	      class="org.eclipse.cdt.rpm.ui.preferences.RPMPluginPreferencesPage"
+            name="RPM Plugin">
+       </page>
+	</extension>
+</plugin>

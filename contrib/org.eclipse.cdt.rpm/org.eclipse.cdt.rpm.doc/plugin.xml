@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="org.eclipse.cdt.rpm.doc"
+   name="%pluginName"
+   version="1.1"
+   provider-name="%providerName">
+
+   <runtime>
+   </runtime>
+
+<!-- This part should be in a documentation plugin -->
+<!-- Configure the help contribution for this plugin -->
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+   </extension>
+</plugin>

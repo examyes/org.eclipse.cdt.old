@@ -1,0 +1,48 @@
+2004-07-20  Ben Konrath  <bkonrath@redhat.com>
+ 
+ 	* add new screenshots and documentation
+ 	* remove old screenshots and documentation
+
+2004-07-15  Rick Moseley  <rmoseley@redhat.com>
+
+	* build.xml: changed version to 1.1
+	* plugin.xml: changed verison to 1.1
+
+2004-07-14  Rick Moseley  <rmoseley@redhat.com>
+
+	* build.properties: added custom=true
+
+
+2004-04-05  Jeremy Handcock  <handcock@redhat.com>
+
+	* raw/RPMPlugin/RPMVersion3U1.htm: File bugs in Red Hat Bugzilla, not
+	eclipse.org.		
+
+2003-9-10   Phil Muldoon <pmuldoon@redhat.com>
+
+	* raw/hglegal2002.htm: Added
+
+	   build.xml: Rewrote gather.bin.parts to not use excludes
+	   	
+	   plugin.xml: Changed version to match build.xml. Removed
+	   					  context help extensions
+	   
+	   build.properties: Changed incorrect comments		
+
+	   plugin.properties: Changed provider and title
+
+2003-9-10	Phil Muldoon <pmuldoon@redhat.com>
+
+	* Removed doc.zip
+
+2003-08-27  Phil Muldoon  <pmuldoon@redhat.com>
+
+	* build.xml(zip.plugin): Removed parent dir in doc.zip
+
+2003-08-27  Phil Muldoon  <pmuldoon@redhat.com>
+
+	* Added build.xml
+
+2003-08-27  Phil Muldoon  <pmuldoon@@redhat.com>
+
+	* Imported Red Hat RPM Documentation files

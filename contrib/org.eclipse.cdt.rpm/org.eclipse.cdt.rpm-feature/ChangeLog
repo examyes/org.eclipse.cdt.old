@@ -1,0 +1,28 @@
+2004-07-15  Rick Moseley  <rmoseley@redhat.com>
+
+	* change versions to 1.1 from 1.0
+	feature.xml - missed one
+
+2004-07-14  Rick Moseley  <rmoseley@redhat.com>
+	* feature.xml: id renamed to com.redhat.eclipse.rpm
+		Recompute dependencies
+	* build.properties: added
+
+2004-02-11  Phil Muldoon  <pmuldoon@redhat.com>
+
+	* build.xml (all.plugins) added ui/core. Removed import_export
+	* feature.xml : com.redhat.eclipse.rp.import_export removed
+	com.redhat.eclipse.rpm.ui added
+	com.redhat.eclipse.rom.core added
+	* .classpath : Updated for 2.1.2
+
+2003-09-08  Tom Tromey  <tromey@redhat.com>
+
+	* feature.xml (id, label): Updated.
+	* feature.properties: New file.
+
+2003-08-27  Phil Muldoon  <pmuldoon@redhat.com>
+
+	* build.xml(all.plugins): Added com.redhat.eclipse.rpm.doc
+	* feature.xml: Added com.redhat.eclipse.rpm.doc
+	*.classpath: Added for easier project work
