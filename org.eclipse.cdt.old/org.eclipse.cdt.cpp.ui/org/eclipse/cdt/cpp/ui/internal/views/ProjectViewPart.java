@@ -150,11 +150,19 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 			)
 			{
 			    doInput(project);
+			    
+			    DataElement input = _viewer.getInput();		    
+			    if (input != null && input.isDeleted())
+			    {
+			    	_homeAction.run();
+			    }
 			}
-		}
-		super.projectChanged(event);
-		break;
 
+		super.projectChanged(event);
+
+		break;
+		}
+		
 	    default:
 		super.projectChanged(event);
 		break;
