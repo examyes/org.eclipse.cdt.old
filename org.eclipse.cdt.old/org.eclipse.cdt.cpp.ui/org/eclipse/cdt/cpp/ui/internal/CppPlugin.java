@@ -162,7 +162,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 						      loadScope);
 	
  	_clientConnection = new ClientConnection("C/C++", 20000);
-	_clientConnection.setLoader(cppLoader);	
+	_clientConnection.addLoader(cppLoader);	 
         DataStore dataStore = _clientConnection.getDataStore();
 	dataStore.setMinersLocation("org.eclipse.cdt.cpp.miners");
         _corePlugin.setRootDataStore(dataStore);
