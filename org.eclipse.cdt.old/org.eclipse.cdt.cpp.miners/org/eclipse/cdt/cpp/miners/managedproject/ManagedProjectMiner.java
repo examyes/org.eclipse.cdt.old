@@ -158,10 +158,9 @@ public class ManagedProjectMiner extends Miner
 				parseAmFile(subject); 
 			}
 			else if (name.equals("C_OPEN") || name.equals("C_REFRESH"))
-			    {
-		
-				//parseAmFile(subject); 
-			    }
+			{
+				parseAmFile(subject); 
+			}
 		}
 			
 		if (subject.getType().equals("directory") || 
