@@ -1562,7 +1562,51 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement cvsCommit     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
 							     "commit", 
 							     "com.ibm.cpp.ui.internal.actions.CVSAction");
-	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");	
+	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
+	
+	
+		DataElement buildCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Build");
+	DataElement generateAutoconfFilesCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Generate Autoconf/Automake support", 
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "C_GENERATE_SUPPORT");
+	DataElement createConfigureeCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create configure", 
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	createConfigureeCmd.setAttribute(DE.A_VALUE,"C_CREATE_CONFIGURE");
+	DataElement configureCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Run configure", 
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	configureCmd.setAttribute(DE.A_VALUE,"C_RUN_CONFIGURE");
+							  
+	DataElement mngCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Manage Project", 
+							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
+	
+	
+	DataElement managedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Managed Project", 1);
+	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Makefile.am as");
+
+	DataElement toStatLibCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Static lib", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toStatLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
+	
+	DataElement toSharedLibCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Shared lib", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toSharedLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
+	
+	DataElement toTopLevelCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Top level", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
+	
+	DataElement toDefCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Default", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toDefCmd.setAttribute(DE.A_VALUE,"DEFAULT_MAKEFILE_AM");
+ 	
     }
         
 }
