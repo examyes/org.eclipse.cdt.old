@@ -1214,7 +1214,7 @@ public final class DataElement implements Serializable, IDataElement
 		String name = getAttribute(DE.A_NAME);		
 		if ((_referencedObject != null))
 		    {
-			if (_referencedObject.getName().equals(name))
+			if (_referencedObject.getId().equals(name))
 			    {
 				return _referencedObject;	
 			    }
