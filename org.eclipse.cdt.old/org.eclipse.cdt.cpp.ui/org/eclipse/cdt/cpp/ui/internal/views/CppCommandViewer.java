@@ -53,9 +53,11 @@ public class CppCommandViewer extends CommandViewer
      
     public void setInput(Object input)
     {
+	ModelInterface api = _plugin.getModelInterface();
 	if (input instanceof DataElement)
 	    {
-		super.setInput(input);
+		_resourceInput = api.findResource((DataElement)input);
+		super.setInput((DataElement)input);
 	    }
 	else
 	    {
@@ -64,7 +66,6 @@ public class CppCommandViewer extends CommandViewer
 			DataElement element = null;
 
 			_resourceInput = (IResource)input;
-			ModelInterface api = _plugin.getModelInterface();
 			element = api.findResourceElement(_resourceInput);
 			super.setInput(element);
 		    }
