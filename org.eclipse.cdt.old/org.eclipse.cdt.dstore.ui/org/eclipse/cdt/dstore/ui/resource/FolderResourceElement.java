@@ -46,9 +46,6 @@ public class FolderResourceElement extends ResourceElement implements IFolder
     return IResource.FOLDER;    
   }
 
-  public void create(boolean force, boolean local, IProgressMonitor monitor) throws CoreException
-  {
-  }
   
     /*
   
@@ -97,5 +94,14 @@ public class FolderResourceElement extends ResourceElement implements IFolder
   {
     return null;
   }
+
+  public void create(boolean force, boolean local, IProgressMonitor monitor) throws CoreException
+  {
+  }
+
+  public void create(int i, boolean force, IProgressMonitor monitor) throws CoreException
+  {
+  }
+
 }
 

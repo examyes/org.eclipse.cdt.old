@@ -119,10 +119,6 @@ public class FileResourceElement extends ResourceElement implements IFile
     return null;
   }
 
-  public void create(InputStream content, boolean force, IProgressMonitor monitor) throws CoreException 
-  {
-  }
-
     public void setMountedFile(java.io.File file)
     {
 	_mountedFile = file;
@@ -137,47 +133,6 @@ public class FileResourceElement extends ResourceElement implements IFile
 	return _mountedFile;
     }
 
-  public void setContents(IFileState source, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
-  {
-  }
-
-  public void setContents(InputStream in, boolean b, IProgressMonitor m)
-  {    
-  }
-
-  public void setContents(InputStream in, boolean a, boolean b, IProgressMonitor monitor)
-  {    
-    IWorkspace workspace = ResourcesPlugin.getWorkspace();
-    
-    if (monitor != null)
-	{
-	    monitor = Policy.monitorFor(monitor);
-	}
-    try 
-      {
-	  if (monitor != null)
-	      {
-		  monitor.beginTask(Policy.bind("settingContents", new String[] {getFullPath().toString()}), Policy.totalWork);
-	      }
-	internalSetContents(in, monitor);	  
-
-	long time = System.currentTimeMillis();
-	setModificationStamp(time);
-
-	/*
-	ResourceInfo info = getResourceInfo(false, true);
-	info.incrementContentId();
-	((Workspace)workspace).updateModificationStamp(info);  
-	*/
-      } 
-    finally 
-      {
-	  if (monitor != null)
-	      {
-		  monitor.done();
-	      }
-      }
-  }
 
   private void internalSetContents(InputStream in, IProgressMonitor monitor)
   {
@@ -429,8 +384,89 @@ public void transferStreams(InputStream source, OutputStream destination,
     public void appendContents(InputStream source, boolean force, boolean keepHistory, IProgressMonitor monitor)
 	throws CoreException
     {
+	System.out.println("FileResourceElement.appendContents: not implemented");
     }
 
+    public void appendContents(InputStream source, int i, IProgressMonitor monitor)
+	throws CoreException
+    {
+	System.out.println("FileResourceElement.appendContents: not implemented");
+    }
+
+    public void create(InputStream content, boolean force, IProgressMonitor monitor) throws CoreException 
+    {
+	System.out.println("FileResourceElement.create: not implemented");
+    }
+
+    public void create(InputStream content, IProgressMonitor monitor) throws CoreException 
+    {
+	System.out.println("FileResourceElement.create: not implemented");
+    }
+
+    public void create(InputStream content, int i, IProgressMonitor monitor) throws CoreException 
+    {
+	System.out.println("FileResourceElement.create: not implemented");
+    }
+
+    public void setContents(IFileState source, boolean force, boolean keepHistory, IProgressMonitor monitor) 
+	throws CoreException
+    {
+	System.out.println("FileResourceElement.setContents: not implemented");
+    }
+    
+    public void setContents(InputStream in, boolean b, IProgressMonitor m)
+    {    
+	System.out.println("FileResourceElement.setContents: not implemented");
+    }
+
+    public void setContents(InputStream in, IProgressMonitor m)
+    {    
+	System.out.println("FileResourceElement.setContents: not implemented");
+    }
+
+    public void setContents(InputStream in, int i, IProgressMonitor m)
+    {    
+	System.out.println("FileResourceElement.setContents: not implemented");
+    }
+
+    public void setContents(IFileState state, int i, IProgressMonitor m)
+    {    
+	System.out.println("FileResourceElement.setContents: not implemented");
+    }
+
+  public void setContents(InputStream in, boolean a, boolean b, IProgressMonitor monitor)
+  {    
+    IWorkspace workspace = ResourcesPlugin.getWorkspace();
+    
+    if (monitor != null)
+	{
+	    monitor = Policy.monitorFor(monitor);
+	}
+    try 
+      {
+	  if (monitor != null)
+	      {
+		  monitor.beginTask(Policy.bind("settingContents", new String[] {getFullPath().toString()}), Policy.totalWork);
+	      }
+	internalSetContents(in, monitor);	  
+
+	long time = System.currentTimeMillis();
+	setModificationStamp(time);
+
+	/*
+	ResourceInfo info = getResourceInfo(false, true);
+	info.incrementContentId();
+	((Workspace)workspace).updateModificationStamp(info);  
+	*/
+      } 
+    finally 
+      {
+	  if (monitor != null)
+	      {
+		  monitor.done();
+	      }
+      }
+  }
 
 
 }

@@ -237,6 +237,16 @@ public class ProjectResourceElement extends ResourceElement implements IProject
 	return null;
     }
 
+    public boolean isNatureEnabled(String str)
+    {
+	System.out.println("not implemented");
+	return false;
+    }
+
+    public void setDescription(IProjectDescription description, int updateFlags, IProgressMonitor monitor) throws CoreException
+    {
+    }
+
 }
 
 
