@@ -705,7 +705,7 @@ public class FileSystemMiner extends Miner
 			  File theFile = new File (theElement.getSource());
 			  StringBuffer path = new StringBuffer (theFile.getPath());
 			  
-			  if (type.charAt(type.length() - 1) != '/' &&!type.equals("device"))
+			  if (!type.equals("device"))
 			      {
 				  path.append("/");
 			      }
