@@ -1037,7 +1037,7 @@ public class FileSystemMiner extends Miner
     public DataElement handleFind (DataElement root, String patternStr, DataElement status)
     {
 	status.setAttribute(DE.A_NAME, getLocalizedString("model.progress"));
-
+	root = root.dereference();
 	handleFindHelper(root, patternStr, status);
 
 	status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
@@ -1046,13 +1046,14 @@ public class FileSystemMiner extends Miner
     
     private void handleFindHelper (DataElement root, String patternStr, DataElement status)
     {
+	System.out.println("looking in " + root.getName());
 	if (compareString(patternStr, root.getName(), true))
 	    {
 		_dataStore.createReference(status, root, getLocalizedString("model.contents"));
 	    }
 	
 	int nestedSize = root.getNestedSize();       
-	if ((nestedSize == 0) && (root.getType().equals(getLocalizedString("model.directory"))))
+	if (root.isOfType(_directoryDescriptor))
 	    {	
 		handleQuery(root, null);
 		nestedSize = root.getNestedSize();
@@ -1062,7 +1063,10 @@ public class FileSystemMiner extends Miner
 	for (int j = 0; j < nestedSize; j++)
 	    {
 		DataElement child = (DataElement)root.get(j);
-		handleFindHelper(child, patternStr, status);
+		if (!child.isReference())
+		    {
+			handleFindHelper(child, patternStr, status);
+		    }
 	    }     
     }
     
