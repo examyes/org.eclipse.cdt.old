@@ -48,7 +48,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.model.IBreakpoint;
 
-import com.ibm.debug.internal.picl.PICLLineBreakpoint;  // temporary to compile for R2
+import com.ibm.debug.breakpoints.*;
 import com.ibm.debug.internal.picl.PICLUtils;
 
 
