@@ -148,7 +148,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  setParseIncludePath(_project);	
 	  setParseQuality(_project);	
 	  setEnvironment(_project);
-	  setDistributionExtensions(_project);
+	  setDistributionExtensions(_project,true);
       }
   }
 
@@ -972,7 +972,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
     }
 
-	public void setDistributionExtensions(IProject project)
+	public void setDistributionExtensions(IProject project, boolean init)
 	{
 		DataStore dataStore = _plugin.getDataStore();	
 		if (project instanceof Repository)
