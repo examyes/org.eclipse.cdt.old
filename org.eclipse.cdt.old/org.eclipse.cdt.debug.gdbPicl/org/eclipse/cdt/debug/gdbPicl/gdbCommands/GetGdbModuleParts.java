@@ -763,6 +763,15 @@ public class GetGdbModuleParts
 */
 	_moduleManager.checkPart(moduleID, fileName);
 	
+	// even though the part is created with path info, when querying for it,
+	// we only need the filename
+	
+	int slash = fileName.lastIndexOf("/");
+	if (slash != -1)
+	{
+		fileName = fileName.substring(slash+1);
+	}
+	
 	int id = _moduleManager.getPartID(moduleID, fileName);
 	Part part = _moduleManager.getPart(id);
 

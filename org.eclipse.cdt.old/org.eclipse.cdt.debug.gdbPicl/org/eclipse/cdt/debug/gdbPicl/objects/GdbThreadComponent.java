@@ -460,6 +460,26 @@ public class GdbThreadComponent extends ThreadComponent
          if(!fileName(i).startsWith("?"))
             mm.checkPart(moduleID(i),fileName(i));
       }
+      
+      // now check to see if the disassembly view is complete
+      // if we are missing new function, add it when the view is verified
+      for (int i=0; i<_callStack.length; i++)
+      {
+      	    int partId = mm.getPartID(fileName(i));
+      	    GdbPart part = (GdbPart) mm.getPart(partId);
+      	    
+      	    if (part == null)
+      	    	continue;
+      	    
+			View tempView = ((GdbPart)part).getView(Part.VIEW_DISASSEMBLY);
+			
+			if (tempView.isViewVerify())
+			{
+				part.setPartChanged(true);
+           		tempView.setViewVerify(false);
+           		part.verifyViews();
+			}      	    
+      }
    }
 
    /**
