@@ -238,8 +238,8 @@ public class ParserSchema
   
 
   dVariables.setDepth(dMacro.depth() + 1);
-  dFunctions.setDepth(dVariables.depth() + 1);
-  dClassesStructs.setDepth(dFunctions.depth() + 1);
+  dClassesStructs.setDepth(dVariables.depth() + 1);
+  dFunctions.setDepth(dClassesStructs.depth() + 1);
  
   dUses.setDepth(dContents.depth() + 100);
   

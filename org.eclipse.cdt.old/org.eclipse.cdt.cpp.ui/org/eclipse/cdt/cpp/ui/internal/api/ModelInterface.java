@@ -785,24 +785,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	{
 	    dataStore = ((Repository)project).getDataStore();		    
 	}
-    
-    // cancel all pending commands
-    dataStore.cancelAllCommands();
-
-
-    // close parse project
-    DataElement projectObj = findProjectElement(project);
-    if (projectObj != null)
-	{
-	    DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_CLOSE_PROJECT");
-	    
-	    if (commandDescriptor != null)
-		{		
-		    dataStore.synchronizedCommand(commandDescriptor, projectObj);	
-		}
-	}
-
-
+  
     // close project
     DataElement workspace = findWorkspaceElement(dataStore);	    
     DataElement cprojectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);

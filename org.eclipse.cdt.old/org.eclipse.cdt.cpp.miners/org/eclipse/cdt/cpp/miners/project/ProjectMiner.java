@@ -17,7 +17,7 @@ public class ProjectMiner extends Miner
  public void load() 
     {
 	_workspace = _dataStore.createObject(_minerData, getLocalizedString("project.Workspace"), 
-					     "Local Workspace");
+					     "Workspace");
     }
 
     public void updateMinerInfo()
@@ -40,6 +40,9 @@ public class ProjectMiner extends Miner
   DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
   DataElement projectFileD   = createObjectDescriptor(schemaRoot, getLocalizedString("project.ProjectFile"));
   DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
+
+  projectsD.setDepth(100);
+  projectD.setDepth(100);
 
  
   DataElement closeD = createCommandDescriptor(projectD, "Close Project", "C_CLOSE_PROJECT");
@@ -140,6 +143,7 @@ public class ProjectMiner extends Miner
  {
   DataElement workspace = project.getParent();
   _dataStore.deleteObjects(project);
+
   project.setAttribute(DE.A_TYPE, "Closed Project");
   project.setDescriptor(null);
   _dataStore.refresh(project);

@@ -123,7 +123,6 @@ public class ParseMiner extends Miner
 	     
 	     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
 	     
-	     loadProject(theProject);
 	     return parseProject;
 	 }
      else
@@ -234,10 +233,10 @@ public class ParseMiner extends Miner
   return null;
  }
  
- private DataElement handleSetPreferences(DataElement theProject, DataElement qualityPref, 
+ private DataElement handleSetPreferences(DataElement project, DataElement qualityPref, 
 					  DataElement autoParsePref, DataElement autoPersistPref)
  {
-  theProject = getParseProject(theProject);
+  DataElement theProject = getParseProject(project);
   DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
 
   // parse quality
@@ -246,18 +245,60 @@ public class ParseMiner extends Miner
    parseQuality = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, ParserSchema.ParseQuality);
   parseQuality.setAttribute(DE.A_VALUE, qualityPref.getName());
 
-  // autoParse
-  DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
-  if (autoParse == null)
-   autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");
-  autoParse.setAttribute(DE.A_VALUE, autoParsePref.getName());
+  boolean doLoad = false;
+  boolean doParse = false;
 
   // autoPersist
+  String autoPersistValue = autoPersistPref.getName();
   DataElement autoPersist = _dataStore.find(currentPreferences, DE.A_NAME, "autopersist", 1);  
   if (autoPersist == null)
-      autoPersist = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autopersist");
-  autoPersist.setAttribute(DE.A_VALUE, autoPersistPref.getName());
+      {
+	  autoPersist = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autopersist");
+	  autoPersist.setAttribute(DE.A_VALUE, autoPersistValue);
+	  if (autoPersistValue.equals("Yes"))
+	      {
+		  doLoad = true;
+	      }
+      }
+  else
+      {  
+	  if (autoPersist.getName().equals("No") && autoPersistValue.equals("Yes"))
+	      {
+		  doLoad = true;
+	      }
+	  autoPersist.setAttribute(DE.A_VALUE, autoPersistValue);
+      }
+
+  // autoParse
+  String autoParseValue = autoParsePref.getName();
+  DataElement autoParse = _dataStore.find(currentPreferences, DE.A_NAME, "autoparse", 1);  
+  if (autoParse == null)
+      {
+	  autoParse = _dataStore.createObject(currentPreferences, ParserSchema.Preferences, "autoparse");	  
+	  autoParse.setAttribute(DE.A_VALUE, autoParseValue);
+	  if (autoParseValue.equals("Yes"))
+	      {
+		  doParse = true;
+	      }
+      }
+  else
+      {
+	  if (autoParse.getName().equals("No") && autoParseValue.equals("Yes"))
+	      {
+		  doParse = true;
+	      }
+	  autoParse.setAttribute(DE.A_VALUE, autoParseValue);
+      }
   
+  if (doLoad)
+      {
+	  loadProject(project);
+      }
+  else if (doParse)
+      {
+	  handleParse(project, project);
+      }
+
   return null;
  }
   
