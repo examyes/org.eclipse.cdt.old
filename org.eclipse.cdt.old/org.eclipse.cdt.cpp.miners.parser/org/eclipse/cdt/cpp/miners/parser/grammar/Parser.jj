@@ -4,8 +4,8 @@
 
 options 
 {
-    //DEBUG_PARSER=true;
-    //DEBUG_LOOKAHEAD=true;
+  //DEBUG_PARSER=true;
+  //DEBUG_LOOKAHEAD=true;
   //DEBUG_TOKEN_MANAGER=true;
   //USER_CHAR_STREAM=true;
   static=false;
@@ -718,7 +718,7 @@ void function_definition_lookahead() :
 void simple_declaration(String theTypes) :
 {}
 {
-  init_declarator_list(theTypes) 
+  init_declarator_list(theTypes)  
 }
 
 //The "template <" keywords have already been matched when we get here:
@@ -748,7 +748,19 @@ void namespace_definition() :
     | {name = UnnamedTypeManager.instance().getNextUnnamedType("namespace");}
   )
   {
-   symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true); 
+   DataElement theNamespace = symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true); 
+  }
+  (";" {symtab.closeScope();} | "{" skip_object_body(theNamespace))
+}
+
+void namespace_body():
+{}
+{ 
+  (  <EOF>
+   | "{" [translation_unit()] "}"
+  )
+  {
+   symtab.closeScope();
   }
 }
 
@@ -824,7 +836,9 @@ void init_declarator_list(String theTypes) :
    if (theTypes != null)
    {
     name = theTypes + " " + name;
-    symtab.addObject(ParserSchema.dVariable, name, startLine,false);
+    Token t = getToken(1);
+    if ( (t!=null) && ( (t.kind==COMMA) || (t.kind==SEMICOLON))) 
+     symtab.addObject(ParserSchema.dVariable, name, startLine,false);
    }
   }     
   ( 

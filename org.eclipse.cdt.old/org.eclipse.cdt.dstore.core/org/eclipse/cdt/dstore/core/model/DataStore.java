@@ -292,6 +292,10 @@ public class DataStore
         return _logRoot;
       }
 
+    public DataElement getTempRoot()
+    {
+	return _tempRoot;
+    }
   public CommandHandler getCommandHandler()
   {
     return _commandHandler;    

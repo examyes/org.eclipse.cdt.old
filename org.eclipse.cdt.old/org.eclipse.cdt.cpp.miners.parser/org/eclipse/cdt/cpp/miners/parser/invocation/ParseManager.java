@@ -139,6 +139,15 @@ public class ParseManager
      else
       _theParser.enum_body();
     }
+
+    else if (theType.equals(ParserSchema.Namespace))
+    {
+     if (partiallyDone)
+      _theParser.translation_unit();
+     else
+      _theParser.namespace_body();
+    }
+    
   
     done = true;
    }
@@ -181,6 +190,7 @@ public class ParseManager
 
   //Create a fresh DataElement, and add the Time Stamp object.
   theFileElement = _dataStore.createObject(_parsedFiles, ParserSchema.dParsedSource, fileName, fileName);
+  theFileElement.setAttribute(DE.A_NAME, theFile.getName());
   DataElement theNewTimeStamp = _dataStore.createObject(null, ParserSchema.dTypes, Long.toString(theTimeStamp), fileName);
   _dataStore.createReference(theFileElement, theNewTimeStamp, ParserSchema.dTimeStamp);
   
