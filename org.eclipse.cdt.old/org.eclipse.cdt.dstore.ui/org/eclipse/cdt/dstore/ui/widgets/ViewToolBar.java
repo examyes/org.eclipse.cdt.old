@@ -286,6 +286,11 @@ public class ViewToolBar extends Viewer implements IDomainListener
     {
 	return _parent.getLocalizedString(key);
     }
+    
+    public DataElementLabelProvider getLabelProvider()
+    {
+    	return _parent.getLabelProvider();
+    }
 
     protected void inputChanged(Object object, Object oldInput)
     {
@@ -317,7 +322,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 
 		if (_currentInput != null && !_currentInput.isDeleted())
 		  {	
-		      String imageStr = DataElementLabelProvider.getImageString(_currentInput);
+		      String imageStr = getLabelProvider().getImageString(_currentInput);
 		      DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
 		      if (plugin != null)
 			  {

@@ -229,6 +229,11 @@ public class ViewMenu implements IMenuListener
 	_menuMgr.addMenuListener(this);
 
       }
+      
+  public DataElementLabelProvider getLabelProvider()    
+  {
+  	return _parent.getLabelProvider();
+  }
  
   public void showRelationMenu()
       {
@@ -379,7 +384,7 @@ public class ViewMenu implements IMenuListener
 		  String imageStr = null;
 		  if (_relationSelected != null)
 		      {
-			  imageStr = DataElementLabelProvider.getImageString(_relationSelected);
+			  imageStr = getLabelProvider().getImageString(_relationSelected);
 		      }
 		  
 		  if (imageStr == null)
@@ -430,7 +435,7 @@ public class ViewMenu implements IMenuListener
 	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
 	if (plugin != null)
 	    {
-		String imageStr = DataElementLabelProvider.getImageString(_filterSelected);
+		String imageStr = getLabelProvider().getImageString(_filterSelected);
 		
 		if (!_filterLabel.isDisposed())
 		    {
@@ -583,7 +588,7 @@ public class ViewMenu implements IMenuListener
 	      {
 		  DataElement object = (DataElement)_filterItems.get(i);
 		  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		  String imageStr = DataElementLabelProvider.getImageString(object);
+		  String imageStr = getLabelProvider().getImageString(object);
 		  if (plugin != null)
 		      {
 			  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
@@ -603,7 +608,7 @@ public class ViewMenu implements IMenuListener
 		  DataElement object = (DataElement)_relationItems.get(i);		
 		  
 		  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		  String imageStr = DataElementLabelProvider.getImageString(object);
+		  String imageStr = getLabelProvider().getImageString(object);
 		  if (plugin != null)
 		      {
 			  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);

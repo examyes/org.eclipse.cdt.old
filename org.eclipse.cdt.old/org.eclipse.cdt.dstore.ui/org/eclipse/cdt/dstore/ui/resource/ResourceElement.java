@@ -249,10 +249,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	  }
       else
 	  {
-	      DataElement element = toElement(object);
-	      
-	      String imageFile = DataElementLabelProvider.getImageString(element);
-	      return DataStoreCorePlugin.getPlugin().getImage(imageFile, false);
+	  	return null;   
 	  }
   }
 
@@ -264,10 +261,8 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	  }
       else
 	  {
-	      DataElement element = toElement(object);
-	      
-	      String imageFile = DataElementLabelProvider.getImageString(element);
-	      return DataStoreCorePlugin.getPlugin().getImageDescriptor(imageFile, false);
+	   
+	   return null; 
 	  }
 
   }

@@ -26,15 +26,17 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
     private Image  _default;
     private String _labelProperty;
     private static DataElementLabelProvider _instance;
-    
+    private IActionLoader _actionLoader;
 
-    public DataElementLabelProvider(ImageRegistry registry)
+    public DataElementLabelProvider(ImageRegistry registry, IActionLoader loader)
     {
         super();
         _labelProperty = DE.P_VALUE;
 	
         _registry = registry;
-	String baseDir        = DataStoreUIPlugin.getInstance().getInstallLocation(); 
+        _actionLoader = loader;
+        
+		String baseDir        = DataStoreUIPlugin.getInstance().getInstallLocation(); 
         String imageStr = baseDir + java.io.File.separator + "icons" + java.io.File.separator + "default.gif";
 	
         Image image = _registry.get(imageStr); 
@@ -218,8 +220,11 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	    }
     }
 
-    public static String getImageString(DataElement element)
+    public String getImageString(DataElement element)
     {
+    	return _actionLoader.getImageString(element);
+    	
+    	/*
 	DataStore dataStore   = element.getDataStore();
 
 	String baseDir        = dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH); 			
@@ -271,6 +276,7 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	iconPath.append(".gif");        
 
 	return iconPath.toString();
+	*/
     }
     
     public Image getColumnImage(Object element, int columnIndex)

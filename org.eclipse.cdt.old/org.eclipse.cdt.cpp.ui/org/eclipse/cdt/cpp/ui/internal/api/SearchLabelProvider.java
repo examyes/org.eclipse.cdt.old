@@ -53,7 +53,7 @@ public class SearchLabelProvider extends LabelProvider implements ITableLabelPro
 		    DataElement element = getElement(marker);
 		    if (element != null)
 			{
-			    String imageStr = com.ibm.dstore.ui.widgets.DataElementLabelProvider.getImageString(element);
+			    String imageStr = CppActionLoader.getInstance().getImageString(element);
 			    return CppPlugin.getDefault().getImage(imageStr);
 			}
 		    else

@@ -285,7 +285,57 @@ public class CppActionLoader extends GenericActionLoader
  
     public String getImageString(DataElement object)
     {
-	return null;
+    	DataStore dataStore   = object.getDataStore();
+
+	String baseDir        = dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH); 			
+	String type           = object.getType();
+
+	StringBuffer iconPath = new StringBuffer(baseDir);
+
+	if (type.equals(DE.T_OBJECT_DESCRIPTOR) || 
+	    type.equals(DE.T_RELATION_DESCRIPTOR) ||
+	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
+	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
+            {
+		type = object.getName();
+		String subDir = object.getSource();
+		if (subDir.length() > 0)
+		    {
+			iconPath.append(subDir);
+		    }
+		else
+		    {
+			iconPath.append("com.ibm.dstore.core");
+		    }
+            }
+	else
+            {
+		DataElement descriptor = object.getDescriptor();
+		if (descriptor != null)
+		    {
+			String subDir = descriptor.getSource(); 
+			if (subDir.length() > 0)
+			    {
+				iconPath.append(subDir);
+			    }
+			else
+			    {
+				iconPath.append("com.ibm.dstore.core");
+			    }
+		    }
+		else
+		    {
+			iconPath.append("com.ibm.dstore.ui");
+		    }
+            }
+
+	iconPath.append(java.io.File.separator);	
+	iconPath.append("icons");
+	iconPath.append(java.io.File.separator);
+	iconPath.append(type);
+	iconPath.append(".gif");        
+
+	return iconPath.toString();
     }
 
 }

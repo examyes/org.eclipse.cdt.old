@@ -232,6 +232,20 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    }
     }
 
+
+	public DataElementLabelProvider getLabelProvider()
+	{
+		if (_viewer != null)
+		{
+			return (DataElementLabelProvider)_viewer.getLabelProvider();		
+		}	
+		else
+		{
+			return null;
+		}
+	}
+	
+	
     public void setActionLoader(IActionLoader loader)
     {
 	_loader = loader;
@@ -598,7 +612,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		
 
 	_viewer.setContentProvider(_provider);     
-	_viewer.setLabelProvider(new DataElementLabelProvider(_imageRegistry));
+	_viewer.setLabelProvider(new DataElementLabelProvider(_imageRegistry, _loader));
 	if (_dataStore != null)
 	    {
 		_dataStore.getDomainNotifier().addDomainListener(_viewer);

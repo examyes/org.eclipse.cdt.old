@@ -131,17 +131,17 @@ public class OutputViewer extends TableViewer
 
   public OutputViewer(Table parent)
       {
-	super(parent);
+		super(parent);
 
-        _plugin = HostsPlugin.getPlugin();
-        setContentProvider(new DataElementTableContentProvider());
-	setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry()));
+	    _plugin = HostsPlugin.getPlugin();
+	    setContentProvider(new DataElementTableContentProvider());
+		setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry(), _plugin.getActionLoader()));
        	addSelectionChangedListener(this);
 
-	_menuHandler = new MenuHandler(_plugin.getActionLoader());
+		_menuHandler = new MenuHandler(_plugin.getActionLoader());
 
-	_maxWidth = 200;	
-	_charWidth = 8;
+		_maxWidth = 200;	
+		_charWidth = 8;
 
 	Table table = getTable();
 

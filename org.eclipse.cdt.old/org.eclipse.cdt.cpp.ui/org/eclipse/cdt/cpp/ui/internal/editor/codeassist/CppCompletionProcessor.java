@@ -8,6 +8,7 @@ package com.ibm.cpp.ui.internal.editor.codeassist;
 
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.views.*;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.resource.*;
@@ -152,7 +153,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			    {
 				DataElement found = ((DataElement)results.get(i)).dereference();
 				String text     = (String)found.getElementProperty(DE.P_VALUE);
-				String imageStr = com.ibm.dstore.ui.widgets.DataElementLabelProvider.getImageString(found);
+				String imageStr = CppActionLoader.getInstance().getImageString(found);
 				Image image     = _plugin.getImage(imageStr);
 				
 				int len = currentString.length();
