@@ -12,9 +12,10 @@
       <import plugin="com.ibm.lpex"/>
       <import plugin="org.eclipse.search"/>
       <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.core.target"/>
-       <import plugin="org.eclipse.vcm.core"/>
-       <import plugin="com.ibm.dstore.miners"/>
+      <import plugin="org.eclipse.vcm.core"/>
+      <import plugin="com.ibm.dstore.miners"/>
       <import plugin="com.ibm.cpp.miners"/>
       <import plugin="com.ibm.dstore.extra"/>
       <import plugin="com.ibm.dstore.core"/>
