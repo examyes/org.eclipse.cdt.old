@@ -1,5 +1,0 @@
-aclocal
-autoheader
-autoconf
-touch README AUTHORS NEWS ChangeLog COPYING INSTALL
-automake --add-missing

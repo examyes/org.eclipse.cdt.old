@@ -61,9 +61,9 @@ public class AutoconfManager {
 			generateAutoconfFiles(project,status,true);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project,status,"./script.batch;./configure");
+				runCommand(project,status,"./autogen.sh;./configure");
 			else
-				runCommand(project, status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
+				runCommand(project, status, cygwinPrefix+"autogen.sh;"+cygwinPrefix+"configure");
 		}
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
@@ -99,15 +99,15 @@ public class AutoconfManager {
 		Process p;	
 		Runtime rt = Runtime.getRuntime();
 		// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
-		File script = new File (project.getSource(),"script.batch");
+		File script = new File (project.getSource(),"autogen.sh");
 		if(!script.exists())
 		{
 			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			{
-				try{// add script.batch only if not exist
+				try{// add autogen.sh only if not exist
 					p = rt.exec(
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
-						"/com.ibm.cpp.miners/autoconf_templates/script.batch "+project.getSource());
+						"/com.ibm.cpp.miners/autoconf_templates/autogen.sh "+project.getSource());
 					p.waitFor();
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	
@@ -116,7 +116,7 @@ public class AutoconfManager {
 		modifyScript(script,projectFile);
 		try
 		{
-			p = rt.exec("chmod +x "+project.getSource()+"/script.batch ");
+			p = rt.exec("chmod +x "+project.getSource()+"/autogen.sh ");
 			p.waitFor();	
 		}catch(IOException e){System.out.println(e);}
 		catch(InterruptedException e){System.out.println(e);}	
@@ -161,9 +161,9 @@ public class AutoconfManager {
 	{
 		
 		if(getOS().equals("Linux"))
-			runCommand(project, status, "./script.batch");
+			runCommand(project, status, "./autogen.sh");
 		else
-			runCommand(project, status, cygwinPrefix+"script.batch");
+			runCommand(project, status, cygwinPrefix+"autogen.sh");
 	}
 	public void runConfigureScript(DataElement project, DataElement status)
 	{
