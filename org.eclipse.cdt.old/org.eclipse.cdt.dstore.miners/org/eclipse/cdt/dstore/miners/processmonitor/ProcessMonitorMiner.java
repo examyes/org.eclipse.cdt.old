@@ -20,6 +20,7 @@ public class ProcessMonitorMiner extends Miner
     private Process        _theProcess;
     private BufferedReader _reader;
     private BufferedWriter _writer;
+    private boolean        _validPS = false;
 
     public ResourceBundle getResourceBundle()
     {
@@ -81,11 +82,35 @@ public class ProcessMonitorMiner extends Miner
 		    }	
 		
 		
-		String headers = _reader.readLine();
-		if (headers != null)
+		try
 		    {
-			defineProcessSchema(schemaRoot, processD, headers);
-		    }		
+			Thread.currentThread().sleep(1000);
+		    }
+		catch (InterruptedException e)
+		    {
+		    }
+
+		if (_reader.ready())
+		{
+			String headers = _reader.readLine();
+			if (headers != null)
+			    {
+				// validate cmd
+				if (headers.charAt(0) == '\'')
+				    {
+					_validPS = false;
+				    }
+				else
+				    {
+					defineProcessSchema(schemaRoot, processD, headers);
+					_validPS = true;
+				    }
+			    }		
+		    }
+		else
+		    {
+			_validPS = false;
+		    }
 	    }
 	catch (IOException e)
 	    {
@@ -122,15 +147,17 @@ public class ProcessMonitorMiner extends Miner
     
     public void load()
     {
-	// get host object
-	DataElement hostObject = _dataStore.getHostRoot();
-	
-	String theOS = System.getProperty("os.name");
-	DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
-	_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
-	_monitor.setWaitTime(3000);
-	_monitor.setDataStore(_dataStore);
-	_monitor.start();
+	if (_validPS)
+	    {
+		// get host object
+		DataElement hostObject = _dataStore.getHostRoot();
+		
+		DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
+		_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
+		_monitor.setWaitTime(3000);
+		_monitor.setDataStore(_dataStore);
+		_monitor.start();
+	    }
     }
     
     public void finish()
