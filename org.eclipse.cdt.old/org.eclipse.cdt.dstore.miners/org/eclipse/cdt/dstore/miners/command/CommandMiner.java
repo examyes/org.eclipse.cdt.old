@@ -76,7 +76,7 @@ public class CommandMiner extends Miner
   {
   	DataElement input = getCommandArgument(theElement, 1);
   	DataElement de = (DataElement)subject.dereference().get(1);
-  	sendInputToCommand(de.getName().trim(), input.getName());
+  	sendInputToCommand(de.getName().trim(), input.getName(), getCommandStatus(subject));
   }
   else if (name.equals("C_CANCEL"))
       {
@@ -102,41 +102,26 @@ public class CommandMiner extends Miner
    }
   }
   CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, _patterns);
-  _threads.put(invocation, newCommand);
+  _threads.put(/*invocation*/status.getAttribute(DE.A_ID), newCommand);
   newCommand.start();
  }
 
- private void sendInputToCommand(String theCommand, String input)
+ private void sendInputToCommand(String theCommand, String input, DataElement status)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(status.getAttribute(DE.A_ID));
 
      
    if (theThread != null)
    {
-   	  Process theProcess = theThread.getProcess();
-   	  if (theProcess != null)
-   	  {  	  	 
-   	  	 int len = input.length();
-   	  	 byte[] intoout = input.getBytes();
-	   	 OutputStream output = theProcess.getOutputStream();
-   	  	 try
-   	  	 {   	  	 	
-   	  	 	output.write(intoout, 0, len);
-   	  	 	output.write('\n');
-   	  	 	output.flush();
-   	  	 }
-   	  	 catch (IOException e)
-   	  	 {
-   	  	 	System.out.println(e);
-   	  	 }
-   	  }      
+   	  theThread.sendInput(input);
+  
   	}
 
  }
 
  private void cancelCommand (String theCommand, DataElement status)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(/*theCommand*/ status.getAttribute(DE.A_ID));
 
   if (theThread != null)
   { 	
@@ -147,9 +132,10 @@ public class CommandMiner extends Miner
       while (!done)
 	  if ( (!theThread.isAlive()) || (stopIn < System.currentTimeMillis()) )
 	      done = true;
-  }
+
   	_dataStore.createObject(status, "stdout", "Command Cancelled by User Request");
   	_dataStore.refresh(status);
+ }
  }
 
 }
@@ -324,6 +310,25 @@ class CommandMinerThread extends MinerThread
  public Process getProcess()
  {
  	return _theProcess;
+ }
+ 
+ public void sendInput(String input)
+ {
+ 	 byte[] intoout = input.getBytes();
+	 OutputStream output = _theProcess.getOutputStream();
+   	 try
+   		{   	  	 	
+   	  	 	output.write(intoout, 0, input.length());
+   	  	 	output.write('\n');
+   	  	 	output.flush();
+   	  	 	
+   	  	 	createObject("command", input);
+   	  	 	_patterns.refresh(input);
+   	  	 }
+   	  	 catch (IOException e)
+   	  	 {
+   	  	 	System.out.println(e);
+   	  	 }	
  }
  
  
@@ -717,7 +722,7 @@ public String removeWhitespace(String theLine)
     private void createObject (String,String)
     Create a simple object with no source information
  *************************************************************************************************/
- private DataElement createObject (String type, String text)
+ public DataElement createObject (String type, String text)
  {
    return _dataStore.createObject(_status, type, text, "");
  }
