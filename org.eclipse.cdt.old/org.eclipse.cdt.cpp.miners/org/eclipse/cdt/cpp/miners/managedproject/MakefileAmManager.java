@@ -47,28 +47,12 @@ public class MakefileAmManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void manageMakefileAm(boolean actionIsManagedProject)
+	protected void generateMakefileAm()
 	{
-		
-		// check if there is an existing makefile.am in the project structure
-		// if found and the action was manage project then prompt the user that files will be chenged 
-		//- to rename them *.old
-		File makefile_am = new File (project.getSource(),"Makefile.am");
-		if(!makefile_am.exists())
-		{
-			System.out.println("\n does not exist");
-			// if not 
-			getMakefileAmTemplateFiles(project);
-			initializeMakeFile_am();
-		}
-		else
-		{
-			System.out.println("\n exist");
-			// if there is then
-			//updateMakefileAM(new File(project.getSource(),"Makefile.am"));
-		}
+		getMakefileAmTemplateFiles(project);
+		initializeMakefileAm();
 	}
-	private void initializeMakeFile_am()
+	protected void updateMakefileAm(boolean actionIsManageProject)
 	{
 		Object[][] projectStucture = structureManager.getProjectStructure();
 		for(int i =0; i < projectStucture.length; i++)
@@ -78,19 +62,51 @@ public class MakefileAmManager {
 			{
 				case (0):
 					// update top level Makefile.am - basically updating the SUBDIR variable definition
-					updateTopLevelMakefile_am(project.getFileObject());
+					updateTopLevelMakefileAm(project.getFileObject());
 					break;
 				case (1):
-					// update First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
-					updateDefaultMakefile_am((File)projectStucture[i][0]);
+					// update First level Makefile.am - updating the SUBDIR variable definition
+					updateDefaultMakefileAm((File)projectStucture[i][0]);
 					break;
 				default:
 				// update all other files in the subdirs
-					updateStaticLibMakefile_am((File)projectStucture[i][0]);
+					updateStaticLibMakefileAm((File)projectStucture[i][0]);
 			}
 		}
 	}
-	private void updateDefaultMakefile_am(File parent)
+	private void updateTopLevelMakefileAm(File MakefileAm)
+	{
+		initTopLevelMakefileAm(MakefileAm);// updates the subdir variable
+	}
+	private void updateDefaultMakefileAm(File MakefileAm)
+	{
+	}
+	private void updateStaticLibMakefileAm(File MakefileAm)
+	{
+	}
+	private void initializeMakefileAm()
+	{
+		Object[][] projectStucture = structureManager.getProjectStructure();
+		for(int i =0; i < projectStucture.length; i++)
+		{
+			Integer level = new Integer((String)projectStucture[i][1]);
+			switch (level.intValue())
+			{
+				case (0):
+					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
+					initTopLevelMakefileAm(project.getFileObject());
+					break;
+				case (1):
+					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
+					initDefaultMakefileAm((File)projectStucture[i][0]);
+					break;
+				default:
+				// initialize all other files in the subdirs
+					initStaticLibMakefileAm((File)projectStucture[i][0]);
+			}
+		}
+	}
+	private void initDefaultMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -254,7 +270,7 @@ public class MakefileAmManager {
 		return last_dir_name;
 		
 	}		
-	private void updateTopLevelMakefile_am(File parent)
+	private void initTopLevelMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
@@ -327,7 +343,7 @@ public class MakefileAmManager {
 		String line=new String (SUBDIRS+" ="+childrenOfTopDir);
 		return line;
 	}
-	private void updateStaticLibMakefile_am(File parent)
+	private void initStaticLibMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -489,7 +505,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		updateStaticLibMakefile_am(parent);
+		initStaticLibMakefileAm(parent);
 	}
 	protected void setMakefileAmToDefault(File parent ,DataElement status)
 	{
@@ -520,7 +536,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		updateDefaultMakefile_am(parent);
+		initDefaultMakefileAm(parent);
 			
 	}
 	protected void setMakefileAmToTopLevel(File parent ,DataElement status)
@@ -552,7 +568,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		updateTopLevelMakefile_am(parent);
+		initTopLevelMakefileAm(parent);
 			
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
@@ -584,9 +600,9 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		updateSharedLibMakefile_am(parent);	
+		initSharedLibMakefileAm(parent);	
 	}
-	private void updateSharedLibMakefile_am(File parent)
+	private void initSharedLibMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
