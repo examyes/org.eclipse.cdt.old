@@ -44,20 +44,17 @@ public class OpenPerspectiveAction extends CustomAction
  
     private void openPerspective(DataElement input)
     {
-        IWorkspace workspace = DataStoreUIPlugin.getDefault().getPluginWorkspace();
-		IWorkbenchWindow dw =  DataStoreUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
-		IWorkbenchPage persp = null;
-	
-		IWorkbenchPage[] perspectives = dw.getPages();
-
-	try
+    	IWorkbench workbench = DataStoreUIPlugin.getDefault().getWorkbench();
+   		IWorkbenchPage persp = null;
+		
+		try
 	    {
-		persp = dw.openPage("org.eclipse.cdt.dstore.hosts.views.HostsPerspective", input);
+			persp = workbench.openPage("org.eclipse.cdt.dstore.hosts.views.HostsPerspective", input, 0);
 	    }
         catch (WorkbenchException e)
 	    {
-		System.out.println(e);
-		e.printStackTrace();
+			System.out.println(e);
+			e.printStackTrace();
 	    }
 	
     }

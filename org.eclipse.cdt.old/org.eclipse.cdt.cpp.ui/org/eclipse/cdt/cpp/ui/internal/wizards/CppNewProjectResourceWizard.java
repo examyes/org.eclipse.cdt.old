@@ -172,8 +172,9 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
     private void openPerspective(IProject project)
     {
-        IWorkspace workspace = _plugin.getPluginWorkspace();
-	IWorkbenchWindow dw = _plugin.getWorkbench().getActiveWorkbenchWindow();
+    IWorkbench workbench = _plugin.getWorkbench();
+    IWorkspace workspace = _plugin.getPluginWorkspace();
+	IWorkbenchWindow dw = workbench.getActiveWorkbenchWindow();
 	IWorkbenchPage persp = null;
 	
 	IWorkbenchPage[] perspectives = dw.getPages();
@@ -194,7 +195,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		
 		if (persp == null)
 		    {
-			persp = dw.openPage("org.eclipse.cdt.cpp.ui.CppPerspective", workspace.getRoot());
+			persp = workbench.openPage("org.eclipse.cdt.cpp.ui.CppPerspective", workspace.getRoot(), 0);
 		    }
 	    }
         catch (WorkbenchException e)
