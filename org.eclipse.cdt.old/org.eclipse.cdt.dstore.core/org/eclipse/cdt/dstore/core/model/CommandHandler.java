@@ -119,4 +119,8 @@ public abstract class CommandHandler extends Handler
   // implemented by extending classes
   public abstract void sendCommands();
   public abstract void sendFile(String fileName, File file);
+  public abstract void sendFile(String fileName, byte[] bytes, int size);
+  public abstract void sendAppendFile(String fileName, byte[] bytes, int size);
+  
 }
+

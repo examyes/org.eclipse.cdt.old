@@ -419,7 +419,7 @@ public class DataStore
     initializeDescriptors();
   }
 
-  public void createRoots()
+  private void createRoots()
   {
       _tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
       
@@ -901,7 +901,7 @@ public class DataStore
 	      }
       }
 
-    public DataElement replaceDeleted(DataElement deletedObject)
+    private DataElement replaceDeleted(DataElement deletedObject)
     {
 	if (deletedObject != null)
 	    {
@@ -1071,10 +1071,9 @@ public class DataStore
     }
 
   public void replaceFile(String remotePath, File file)
-      {
-
-        remotePath = new String(remotePath.replace('\\', '/'));
-        String fileName = mapToLocalPath(remotePath);
+  {
+    remotePath = new String(remotePath.replace('\\', '/'));
+   	String fileName = mapToLocalPath(remotePath);
 
 	String dsName = getName();
 	if (!dsName.equals("local"))
@@ -1085,7 +1084,40 @@ public class DataStore
 	    {
 		saveFile(remotePath, file);
 	    }
-      }
+  }
+      
+  public void replaceFile(String remotePath, byte[] bytes, int size)
+  {
+	remotePath = new String(remotePath.replace('\\', '/'));
+   	String fileName = mapToLocalPath(remotePath);
+ 
+	String dsName = getName();
+	if (!dsName.equals("local"))
+	    {
+		_commandHandler.sendFile(remotePath, bytes, size);
+	    }
+	else
+	    {
+		saveFile(remotePath, bytes);
+	    }  	  	
+  }
+  
+  
+  public void replaceAppendFile(String remotePath, byte[] bytes, int size)
+  {
+	remotePath = new String(remotePath.replace('\\', '/'));
+   	String fileName = mapToLocalPath(remotePath);
+
+	String dsName = getName();
+	if (!dsName.equals("local"))
+	    {
+		_commandHandler.sendAppendFile(remotePath, bytes, size);
+	    }
+	else
+	    {
+		appendToFile(remotePath, bytes);
+	    }  	  	
+  }
 
   public void setObject(DataElement localObject)
   {
@@ -1096,7 +1128,6 @@ public class DataStore
     {
       DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
       DataElement status = synchronizedCommand(cmd, localObject, noRef);
-      //DataElement status = command(cmd, localObject, noRef);
   }
 
   public void modifyObject(DataElement localObject)
@@ -1863,45 +1894,7 @@ public DataElement command(DataElement commandDescriptor,
         }
       }
 
-    /***
-  public void saveFile(String fileName, InputStream input)
-      {
-          try
-          {
-            // need to create directories as well
-            File file = new File(fileName);
-            if (!file.exists())
-            {
-	      File parent = new File(file.getParent());	      
-	      parent.mkdirs();
-            }
-            else
-            {
-            }
-
-            File newFile = new File(fileName);
-            FileOutputStream fileStream = new FileOutputStream(newFile);
-            BufferedReader in= new BufferedReader(new InputStreamReader(input));
-
-            StringBuffer buffer = new StringBuffer();
-            String line = null;
-
-            while ((line = in.readLine()) != null)
-            {
-              buffer.append(new String(line));	      
-              buffer.append("\n\r");
-            }
-            
-            fileStream.write(buffer.toString().getBytes());            
-            fileStream.close();
-          }
-          catch (IOException e)
-          {
-            System.out.println(e);
-          }        
-      }
-    ***/
-
+  
     public void saveFile(String localPath, File file)
     {
 	File newFile = new File(localPath);
@@ -2137,7 +2130,7 @@ public DataElement command(DataElement commandDescriptor,
         }
       }
 
-  public String readerToString(BufferedReader in)
+  private String readerToString(BufferedReader in)
       {
         if (in != null)
         {
@@ -2170,7 +2163,7 @@ public DataElement command(DataElement commandDescriptor,
   //
   //////////////////////
 
-  public boolean sameTree(DataElement root1, DataElement root2, int depth)
+  private boolean sameTree(DataElement root1, DataElement root2, int depth)
   {
     if (root1.equals(root2))
       {
@@ -2211,7 +2204,7 @@ public DataElement command(DataElement commandDescriptor,
   }
 
 
-  public void walkTree(DataElement root)
+  private void walkTree(DataElement root)
   {
     if (root != null)
       {	
@@ -2300,7 +2293,7 @@ public DataElement command(DataElement commandDescriptor,
         return isTransient;
       }
 
-  public void initializeDescriptors()
+  private void initializeDescriptors()
       {
 	  _dataStoreSchema.extendSchema(_descriptorRoot);
       }

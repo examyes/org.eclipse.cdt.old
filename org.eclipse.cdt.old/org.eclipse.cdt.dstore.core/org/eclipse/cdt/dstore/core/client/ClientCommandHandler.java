@@ -22,12 +22,24 @@ public class ClientCommandHandler extends CommandHandler
         super();
         _sender = sender;
       }
-
+ 
   public synchronized void sendFile(String fileName, File file)
       {
 	  DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
 	  _sender.sendFile(document, file, 1);
       }
+      
+  public synchronized void sendFile(String fileName, byte[] bytes, int size)
+  {
+	  DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
+	  _sender.sendFile(document, bytes, size);  	
+  }
+   
+  public synchronized void sendAppendFile(String fileName, byte[] bytes, int size)
+  {
+  	DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
+  	_sender.sendAppendFile(document, bytes, size);
+  }
 
   public synchronized void sendCommands()
     {

@@ -206,6 +206,15 @@ public class ServerCommandHandler extends CommandHandler
 
 
   public void sendFile(String fileName, File file)
-      {
-      }
+  {
+  }
+      
+      
+  public void sendFile(String fileName, byte[] bytes, int size)
+  {  	
+  }
+  
+  public void sendAppendFile(String fileName, byte[] bytes, int size)
+  {
+  }
 }

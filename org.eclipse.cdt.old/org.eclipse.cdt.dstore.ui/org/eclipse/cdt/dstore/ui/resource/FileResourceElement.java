@@ -189,9 +189,20 @@ public class FileResourceElement extends ResourceElement implements IFile
 		  {	
 		      java.io.File theFile = new java.io.File(localPath);    
 		      FileOutputStream output = new FileOutputStream(theFile);
-		      transferStreams(in, output, monitor);
-		     
-		      updateRemoteFile(theFile);
+		      		
+		      // remote?		
+			  boolean doRemote = false;
+        	  localPath = localPath.replace('\\', '/');
+        	  String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
+        	  remotePath = remotePath.replace('\\', '/');
+
+			  File remoteFile = new File(remotePath);
+			  if (!remoteFile.exists() &&(!remotePath.equals(localPath)))
+		      {	
+	 	     	doRemote = true;
+	    	  }
+	      		      		      
+		      transferStreams(in, output, doRemote, remotePath, monitor);
 		  }
 	      catch (IOException e)
 		  {
@@ -202,63 +213,63 @@ public class FileResourceElement extends ResourceElement implements IFile
 	      try
 		  {	
 		      FileOutputStream output = new FileOutputStream(_mountedFile);
-		      transferStreams(in, output, monitor);
+		      transferStreams(in, output, false, "", monitor);
 		  }
 	      catch (IOException e)
 		  {
 		  }     	      
 	  }
   }
+  
+ 
 
-  private void updateRemoteFile(java.io.File theFile)
-      {
-        // now update remote file
-        String localPath = getFullPath().toString();
-        localPath = localPath.replace('\\', '/');
-        String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
-        remotePath = remotePath.replace('\\', '/');
-
-	File remoteFile = new File(remotePath);
-	if (!remoteFile.exists() &&(!remotePath.equals(localPath)))
-	    {		  
-		_element.getDataStore().replaceFile(remotePath, theFile);
-	    } 
-      }
-
-public void transferStreams(InputStream source, OutputStream destination, IProgressMonitor monitor) throws IOException {
+public void transferStreams(InputStream source, OutputStream destination, 
+							boolean doRemote, String remotePath,
+							IProgressMonitor monitor) 
+		throws IOException 
+{
   try 
     {
-      StringBuffer fileBuffer = new StringBuffer();
-      
+	  boolean firstAppend = true;    
       byte[] buffer = new byte[8192];
       while (true) 
-	{
-	  int bytesRead = source.read(buffer);
-	  if (bytesRead == -1)
-	    break;
+		{
+	  	int bytesRead = source.read(buffer);
+	  	if (bytesRead == -1)
+	    	break;
 
-	  destination.write(buffer, 0, bytesRead);
-	  fileBuffer.append(buffer);
+		if (doRemote)
+		{
+			if (firstAppend)
+			{
+				firstAppend = false;
+				_element.getDataStore().replaceFile(remotePath, buffer, bytesRead);
+			}
+			else 
+			{
+				_element.getDataStore().replaceAppendFile(remotePath, buffer, bytesRead);				
+			}
+		}
+	  	destination.write(buffer, 0, bytesRead);	
 	  
-	  if (monitor != null)
+	  	if (monitor != null)
 	      {
-		  monitor.worked(1);
+		  	monitor.worked(1);
 	      }
 	}
-
     } 
   finally 
     {
     try 
       {
-	source.close();
+		source.close();
       } 
     catch (IOException e) 
       {
       }
     try 
       {
-	destination.close();
+		destination.close();
       } 
     catch (IOException e) 
       {
