@@ -166,7 +166,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 		    DataElement resourceElement = getResourceFor(_element);
 
 		    //DKM
-		    if (resourceElement == null || !resourceElement.getType().equals("file"))
+		    if (resourceElement == null && !resourceElement.getType().equals("file"))
 			{
 			    return;
 			}
