@@ -62,11 +62,11 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(targetD, "Execute", "C_EXECUTE_TARGET",false);
 		
 		// autoconf	
-		createCommandDescriptor(projectD, "Initialize Autoconf", "C_GENERATE_AUTOCONF_FILES", false);
-		createCommandDescriptor(projectD, "All - configure.in and Makefile.am's", "C_UPDATE_AUTOCONF_FILES", false);
+		createCommandDescriptor(projectD, "Initializing Autoconf", "C_GENERATE_AUTOCONF_FILES", false);
+		createCommandDescriptor(projectD, "Updating All - configure.in and Makefile.am's", "C_UPDATE_AUTOCONF_FILES", false);
 		//
-		createCommandDescriptor(fsObjectD,"Makefile.am","C_UPDATE_MAKEFILE_AM",false);
-		createCommandDescriptor(projectD,"configure.in","C_UPDATE_CONFIGURE_IN",false);		
+		createCommandDescriptor(fsObjectD,"Updating local Makefile.am","C_UPDATE_MAKEFILE_AM",false);
+		createCommandDescriptor(projectD,"Updating local configure.in","C_UPDATE_CONFIGURE_IN",false);		
 		//
 		
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
