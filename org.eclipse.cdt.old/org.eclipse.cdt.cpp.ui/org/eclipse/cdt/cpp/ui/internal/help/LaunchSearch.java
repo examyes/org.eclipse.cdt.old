@@ -101,9 +101,10 @@ public class LaunchSearch
 		    });
 		 ******/
 
+	  //-----moved the registration for local projects to ResultsViewPart(i.e.upon double click) ------------
 		//Attempt to register the WebApp for LOCAL projects only if applicable
-		if(!isRemote() && settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_DEFAULT))
-		    registerHelpWebApp();
+		//		if(!isRemote() && settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_DEFAULT))
+		//               registerHelpWebApp();
 	    }
     }
 
