@@ -79,8 +79,21 @@ public class ConvertToCppProject implements IActionDelegate, ISelectionChangedLi
 	// add build spec
 	try 
 	    { 
-		// specify nature
+		// add build spec
+		String builderName = "com.ibm.cpp.ui.cppbuilder";
 		IProjectDescription projectDescription =  _project.getDescription();
+		
+		ICommand command = projectDescription.newCommand();
+		command.setBuilderName(builderName);
+
+		//ICommand[] newCommands = new ICommand[1];
+		ICommand[] commands = projectDescription.getBuildSpec();
+		ICommand[] newCommands = new ICommand[commands.length + 1];
+		System.arraycopy(commands, 0, newCommands, 0, commands.length);
+		newCommands[commands.length] = command;
+		projectDescription.setBuildSpec(newCommands);	
+		
+		// specify nature
 		String[] natures = projectDescription.getNatureIds();
 		String[] newNatures = new String[natures.length + 1];
 		System.arraycopy(natures, 0, newNatures, 0, natures.length);
@@ -92,6 +105,8 @@ public class ConvertToCppProject implements IActionDelegate, ISelectionChangedLi
 	    {
 		System.out.println(e);
 	    }
+
+	api.openProject(_project);
     }
     
     
