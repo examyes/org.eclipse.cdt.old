@@ -191,7 +191,7 @@ public class ConfigureInManager {
 	{
 		line = line.substring(0,line.indexOf('('));
 		StringBuffer buff = new StringBuffer(line);
-		buff.append('(');
+		buff.append("( Makefile");
 		for(int j = 0; j< subdirs.length; j++)
 			if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
 				buff.append(subdirs[j]).append(makefile).append('\\');
