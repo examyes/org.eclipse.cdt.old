@@ -41,6 +41,8 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	setTitle("System-Objects");
 	if (_browseHistory != null)
 		_browseHistory.clear();
+		
+	updateActionStates();
     }
 
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 

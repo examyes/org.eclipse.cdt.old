@@ -282,6 +282,11 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  		super(label, des);
  	}
  	
+ 	public void checkEnabledState()
+ 	{
+ 		setEnabled(_viewer != null && _viewer.getInput() != null);
+ 	}
+ 	
  	public void run()
  	{
  		if (_history.size() > 0)
@@ -304,6 +309,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  	
  	public void checkEnabledState()
  	{
+ 		setEnabled(_viewer != null && _viewer.getInput() != null);
  	}
  	
  	public void run()

@@ -44,7 +44,10 @@ public class ParsedSourceViewPart extends ProjectViewPart
      setTitle("Parsed-Files");
      if (_browseHistory != null)
      	_browseHistory.clear();
+     	
+     updateActionStates();	
  }
+ 
     
  public DataElement doSpecificInput(DataElement projectParseInformation)
  {

@@ -101,7 +101,8 @@ public class ProjectObjectsViewPart extends ProjectViewPart
   
   if (_browseHistory != null)
 	  _browseHistory.clear();
-  
+	  
+  updateActionStates();
  }
 
  public void projectChanged(CppProjectEvent event)
