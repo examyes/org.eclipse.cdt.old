@@ -79,6 +79,7 @@ public class ManagedProjectMiner extends Miner
 		_dataStore.createReference(containerObjectD, extVar, "abstracts", "abstracted by");
   
 		createCommandDescriptor(containerObjectD,"set ExtraDist Extensions","C_SET_EXTRA_DIST_EXTENSIONS",false);
+		createCommandDescriptor(containerObjectD,"init ExtraDist Extensions","C_INIT_EXTRA_DIST_EXTENSIONS",false);
 		
 		//////////////// end new
 				
@@ -271,6 +272,13 @@ public class ManagedProjectMiner extends Miner
 				//handleSetExtensions(subject, args);
 				ArrayList extensionList = args.getNestedData();
 				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList,project,"C_SET_EXTRA_DIST_EXTENSIONS");
+				
+			}
+			else if(name.equals("C_INIT_EXTRA_DIST_EXTENSIONS"))
+			{
+				//handleSetExtensions(subject, args);
+				ArrayList extensionList = args.getNestedData();
+				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList,project,"C_INIT_EXTRA_DIST_EXTENSIONS");
 				
 			}
 			// new : to havdle delete notification

@@ -148,7 +148,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  setParseIncludePath(_project);	
 	  setParseQuality(_project);	
 	  setEnvironment(_project);
-	  setDistributionExtensions(_project,true);
+	  setDistributionExtensions(_project,"init");
       }
   }
 
@@ -972,7 +972,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
     }
 
-	public void setDistributionExtensions(IProject project, boolean init)
+	public void setDistributionExtensions(IProject project, String init_set_Key)
 	{
 		DataStore dataStore = _plugin.getDataStore();	
 		if (project instanceof Repository)
@@ -983,16 +983,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		for (int i = 0; i < extensions.size(); i++)
 			dataStore.createObject(extensionElement, "ExtraDist File Extensions", (String)extensions.get(i), (String)extensions.get(i));
 
-		setDistributionExtensions(findProjectElement(project), extensionElement);
+		setDistributionExtensions(findProjectElement(project), extensionElement,init_set_Key);
 	}
-	public void setDistributionExtensions(DataElement theObject, DataElement theExtensions)
+	public void setDistributionExtensions(DataElement theObject, DataElement theExtensions, String init_set_Key)
 	{
 		if ((theObject == null) || (theExtensions == null))
 			return;
 		theExtensions.setAttribute(DE.A_NAME, theObject.getId());
 		DataStore dataStore = theObject.getDataStore();
 		DataElement contObj = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Container Object", 1);
-		DataElement setD = dataStore.localDescriptorQuery(contObj, "C_SET_EXTRA_DIST_EXTENSIONS");
+		DataElement setD;
+		if(init_set_Key.equals("init"))
+		{
+			setD = dataStore.localDescriptorQuery(contObj, "C_INIT_EXTRA_DIST_EXTENSIONS");
+		}
+		else
+		{
+			setD = dataStore.localDescriptorQuery(contObj, "C_SET_EXTRA_DIST_EXTENSIONS");
+		}
 		if (setD != null)
 		{
 			dataStore.command(setD, theExtensions, theObject, true);
