@@ -148,7 +148,6 @@ public class CppCommandViewer extends CommandViewer
 				    }
 			    }
 		    }
-		
 	    }
 	else
 	    {
