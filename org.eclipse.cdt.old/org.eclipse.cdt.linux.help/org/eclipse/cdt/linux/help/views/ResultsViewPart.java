@@ -42,7 +42,7 @@ import org.eclipse.cdt.linux.help.preferences.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
-import org.eclipse.help.internal.ui.WorkbenchHelpPlugin;
+import org.eclipse.help.ui.internal.WorkbenchHelpPlugin;
 import org.eclipse.help.ui.browser.IBrowser;
 
 import org.eclipse.cdt.dstore.core.*;
