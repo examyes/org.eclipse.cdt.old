@@ -10,15 +10,23 @@ import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
 import java.util.*;
 import java.util.ResourceBundle;
+import java.io.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
 import com.ibm.linux.help.views.ResultsViewPart;
 
+import org.eclipse.jface.resource.*;
+import org.eclipse.swt.graphics.*;
+
+import org.eclipse.core.internal.plugins.*;///FIXME: ((PluginDescriptor)getDescriptor()).getInstallURLInternal()
+
 public class HelpPlugin extends AbstractUIPlugin
 {
     private static HelpPlugin _instance=null;
     private static HelpSearch _search=null;
+
+    private static String _installLocation=null;
 
     ////Mirrors the list of elements in the view table////
     //   private static ArrayList _itemElementList = new ArrayList();
@@ -65,6 +73,28 @@ public class HelpPlugin extends AbstractUIPlugin
     static public HelpPlugin getDefault()
     {
 	return _instance;
+    }
+
+     public String getInstallLocation()
+    {
+	if(_installLocation==null)
+	    {
+	        _installLocation = ((PluginDescriptor)getDescriptor()).getInstallURLInternal().getFile();
+	    }
+	return _installLocation;
+    }
+
+    public Image getImage(String name)
+    {
+	ImageRegistry reg = getImageRegistry();
+	Image image = reg.get(getInstallLocation()+"icons"+File.separator+name);
+	if(image==null)
+	    {
+		ImageDescriptor des = ImageDescriptor.createFromFile(null, getInstallLocation()+"icons"+File.separator+ name);
+		image = des.createImage();
+		reg.put(name, des);		
+	    }
+	return image;
     }
 
     static public ArrayList getListElements(String key)
