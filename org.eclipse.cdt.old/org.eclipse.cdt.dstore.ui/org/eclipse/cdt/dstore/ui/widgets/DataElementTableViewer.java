@@ -872,6 +872,11 @@ public class DataElementTableViewer extends TableViewer
 				int difference = 200 - averageWidth;
 				firstWidth = 200;
 				averageWidth -= difference / columns.length;
+
+				if (averageWidth < 100)
+				    {
+					averageWidth = 100;
+				    }
 			    }
 			
 			for (int i = columns.length - 1; i >= 0; i--)
