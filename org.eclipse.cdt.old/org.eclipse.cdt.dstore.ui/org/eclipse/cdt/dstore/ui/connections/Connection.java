@@ -41,7 +41,7 @@ public class Connection
     public String  _dir;
     public String  _local;
     public String  _useDaemon;
-    
+
     public boolean _isLocal;
     public boolean _isUsingDaemon;
     
@@ -245,10 +245,16 @@ public class Connection
     
     public ConnectionStatus connect(DomainNotifier notifier)
     {
+	return connect(notifier, "com.ibm.dstore.miners");
+    }
+
+    public ConnectionStatus connect(DomainNotifier notifier, String minersLocation)
+    {
 	if (_client == null)
 	    {	
 		_client = new ClientConnection(_name, notifier);
 		_client.setLoader(_element.getDataStore().getLoader());
+		
 	    }
 	
 	_client.setHost(_host);
@@ -282,7 +288,7 @@ public class Connection
 	
 	if (connectStatus.isConnected())
 	    {
-		if (getSchema(connectStatus))
+		if (getSchema(connectStatus, minersLocation))
 		    {
 			_element.getDataStore().createReferences(_element, _client.getDataStore().getRoot().getNestedData(), "contents");
 			_element.getDataStore().refresh(_element);
@@ -344,8 +350,12 @@ public class Connection
 	
     }
     
-    //    public boolean getSchema(String ticketStr)
     public boolean getSchema(ConnectionStatus connectionStatus)
+    {
+	return getSchema(connectionStatus, "com.ibm.dstore.miners");
+    }
+
+    public boolean getSchema(ConnectionStatus connectionStatus, String minersLocation)
     {
 	String ticketStr = connectionStatus.getTicket();
 	boolean result = false;
@@ -355,6 +365,8 @@ public class Connection
 	// show ticket	
 	if (dataStore.showTicket(ticketStr))
 	    {
+		dataStore.setMinersLocation(minersLocation);
+		
 		// get schema
 		dataStore.getSchema();
 		

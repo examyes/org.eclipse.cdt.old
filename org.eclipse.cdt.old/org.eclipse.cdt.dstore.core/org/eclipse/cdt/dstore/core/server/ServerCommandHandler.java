@@ -27,15 +27,22 @@ public class ServerCommandHandler extends CommandHandler
     }
 
   public void setDataStore(DataStore dataStore)
-  {
-    super.setDataStore(dataStore);
-
-    MinerLoader minerLoader = new MinerLoader(dataStore, _loader);
-
-    // load the miners
-    _miners = minerLoader.loadMiners();
+  { 
+      super.setDataStore(dataStore);
   }
     
+    public void loadMiners()
+    {
+	if (_dataStore != null)
+	    {
+		MinerLoader minerLoader = new MinerLoader(_dataStore, _loader);
+		
+		// load the miners
+		_miners = minerLoader.loadMiners();
+	    } 
+    }
+    
+
   public void finish()
   {
     for (int i = 0; i < _miners.size(); i++)
@@ -117,10 +124,16 @@ public class ServerCommandHandler extends CommandHandler
 	      {
 		  DataElement location = (DataElement)command.get(1);
 		  _dataStore.setMinersLocation(location);
-		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));		
+		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));	
+		  _dataStore.refresh(status);
 	      }
           else if (commandName.equals("C_SCHEMA"))
 	      {
+		  if (_miners.size() == 0)
+		      {
+			  loadMiners(); /***/
+		      }
+		  
 		  DataElement schemaRoot = _dataStore.getDescriptorRoot();
 		  
 		  // update all descriptor objects

@@ -13,7 +13,12 @@ public class EnvironmentMiner extends Miner
 {
  private DataElement _system;
  
- public EnvironmentMiner () { super(); };
+ public EnvironmentMiner () 
+    { 
+	super(); 
+    };
+
+
  public void finish() { super.finish(); }
  public void updateMinerInfo() {}
 

@@ -159,6 +159,8 @@ public class ClientConnection
 
     _commandHandler.setDataStore(_dataStore);
     _updateHandler.setDataStore(_dataStore);
+    ((ServerCommandHandler)_commandHandler).loadMiners();
+
 
     _clientAttributes.setAttribute(_clientAttributes.A_LOCAL_NAME,
 				   _clientAttributes.getAttribute(ClientAttributes.A_HOST_NAME));

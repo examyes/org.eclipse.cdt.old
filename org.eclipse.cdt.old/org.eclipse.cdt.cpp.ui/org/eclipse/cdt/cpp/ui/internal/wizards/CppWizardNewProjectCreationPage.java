@@ -864,9 +864,10 @@ protected String getDirectoryName() {
 	for (int i = 0; i < control.getItemCount(); i++)
 	    {
 		String item = (String)control.getItem(i);
-		history.add(item);
+		if (!history.contains(item))
+		    history.add(item);
 	    }	
-
+	
 	_plugin.writeProperty(attribute, history);
     }
 

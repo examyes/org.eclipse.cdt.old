@@ -57,7 +57,8 @@ public class QuickConnectAction implements Runnable
 						   _host, _port, 
 						   "root", _directory, false, true, dataStore.getRoot());
 
-	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier());
+
+	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
 	DataStore rmtDataStore = tempConnection.getDataStore();
 	if (rmtDataStore != null && tempConnection.isConnected())
 	    {

@@ -32,9 +32,16 @@ public class MinerLoader
 	String pluginDir = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
 	String minersDir = _dataStore.getMinersLocation();
 
-	String minerFile = new String(pluginDir + File.separator +
-				      minersDir + File.separator +
-				      "minerFile.dat");
+	String minerFile = null;
+	if (minersDir.endsWith(".dat"))
+	    {
+		minerFile = pluginDir + File.separator + minersDir;		
+	    }
+	else
+	    {
+		minerFile = pluginDir + File.separator + minersDir + File.separator + "minerFile.dat";
+	    }
+
 	File file = new File(minerFile);
 	
 	try
@@ -42,18 +49,21 @@ public class MinerLoader
 		FileInputStream inFile = new FileInputStream(file);
 		BufferedReader in = new BufferedReader(new InputStreamReader(inFile));
 		
+
 		String name = null;
 		while ((name = in.readLine()) != null)
 		    {
 			// check name
 			name = name.trim();
-			if (!name.startsWith("#"))
+			if (!name.startsWith("#") && 
+			    (name.length() > 5))
 			    {
 				Miner miner = _loader.loadMiner(name);
 				if (miner != null)
 				    {
 					_miners.add(miner);
 					miner.setDataStore(_dataStore);	
+
 				    }
 			    }
 		    }

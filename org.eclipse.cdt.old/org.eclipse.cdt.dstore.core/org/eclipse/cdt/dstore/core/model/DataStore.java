@@ -116,15 +116,12 @@ public class DataStore
 
     public void setMinersLocation(String minersLocation)
     {
-	if (_minersLocation != minersLocation)
-	    {
-		_minersLocation = minersLocation;
-		DataElement location = createObject(null, "location", _minersLocation);
-		DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_MINERS", 1);  
-		ArrayList args = new ArrayList();
-		args.add(location);
-		synchronizedCommand(cmd, args, _root);
-	    }
+	_minersLocation = minersLocation;
+	DataElement location = createObject(_tempRoot, "location", _minersLocation);
+	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_MINERS", 1);  
+	ArrayList args = new ArrayList();
+	args.add(location);
+	synchronizedCommand(cmd, args, _root);
     }
 
     public void setMinersLocation(DataElement location)
@@ -796,21 +793,23 @@ public class DataStore
 
   public void setHost(DataElement localHostObject)
   {
-    DataElement cmd = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.Set_Host"), 2);  
-    DataElement status = _commandHandler.command(cmd, localHostObject, false);
-    waitUntil(status, getLocalizedString("model.done"));
+      DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_HOST", 1);  
+      DataElement status = _commandHandler.command(cmd, localHostObject, false);
+      waitUntil(status, getLocalizedString("model.done"));
   }
-
+    
     public void getSchema()
     {
-	commandByName(getLocalizedString("model.Get_Schema"),  _descriptorRoot, true);	
+	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SCHEMA", 1);
+	synchronizedCommand(cmd, _descriptorRoot);
     }
-
+    
     public DataElement initMiners()
     {
-	return commandByName(getLocalizedString("model.Init_Miners"), _descriptorRoot, true);
+	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_INIT_MINERS", 1);
+	return synchronizedCommand(cmd, _descriptorRoot);
     } 
-
+    
     public boolean showTicket(String ticketStr)
     {
 	if (ticketStr == null)
@@ -818,8 +817,8 @@ public class DataStore
 		ticketStr = "null";
 	    }
 
-	DataElement ticket = createObject(null, getLocalizedString("model.ticket"), ticketStr);
-	DataElement cmd = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.Show_Ticket"), 2);  
+	DataElement ticket = createObject(_tempRoot, getLocalizedString("model.ticket"), ticketStr);
+	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_VALIDATE_TICKET", 1);  
 	DataElement status = _commandHandler.command(cmd, ticket, false);
 	waitUntil(status, getLocalizedString("model.done"));	
 
@@ -2050,17 +2049,28 @@ public DataElement command(DataElement commandDescriptor,
 
         // basic commands
 	DataElement cancel = createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
-	DataElement vTicket = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Show_Ticket"), "-", "C_VALIDATE_TICKET");	
-	DataElement sQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Get_Schema"), "*", "C_SCHEMA");	
  	DataElement oQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "-", "C_QUERY");
-	DataElement info  = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Init_Miners"), "*", "C_INIT_MINERS");
 
 	DataElement set = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Set"), "-", "C_SET"); 
-	DataElement setHost = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST");
-	DataElement setMiners = createCommandDescriptor(rootD, "Set Miners", "-", "C_SET_MINERS");
 
-	DataElement oExit = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Exit"), "*", "C_EXIT");	 
+	DataElement setHost = createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST");
+	setHost.setDepth(0);
+	DataElement info  = createCommandDescriptor(rootD, getLocalizedString("model.Init_Miners"), "*", 
+						    "C_INIT_MINERS");
+	info.setDepth(0);
+	DataElement setMiners = createCommandDescriptor(rootD, "Set Miners", "-", 
+							"C_SET_MINERS");
+	setMiners.setDepth(0);
+	DataElement vTicket = createCommandDescriptor(rootD, getLocalizedString("model.Show_Ticket"), "-", 
+						      "C_VALIDATE_TICKET");	
+	
+	vTicket.setDepth(0);
+	DataElement sQuery = createCommandDescriptor(rootD, getLocalizedString("model.Get_Schema"), "*", 
+						     "C_SCHEMA");	
 
+	sQuery.setDepth(0);
+	DataElement oExit = createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT");	 
+	oExit.setDepth(0);
       }
 }
 

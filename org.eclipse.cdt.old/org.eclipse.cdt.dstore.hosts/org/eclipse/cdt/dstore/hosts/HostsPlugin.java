@@ -57,7 +57,11 @@ public class HostsPlugin extends AbstractUIPlugin
 		    {
 			System.out.println(e);
 		    }
-		
+		catch (Exception e)
+		    {
+			System.out.println(e);
+		    }
+
 		return miner;
 	    }
     }
@@ -233,10 +237,8 @@ public class HostsPlugin extends AbstractUIPlugin
     if (_instance == null)
       {	
  	_clientConnection = new ClientConnection("Hosts");
-	_clientConnection.setLoader(new MinerClassLoader());	
-
+      	_clientConnection.setLoader(new MinerClassLoader());	
         _dataStore = _clientConnection.getDataStore();
-	_dataStore.setMinersLocation("com.ibm.dstore.miners");
 	String install = _corePath;
 	
 	_dataStore.setAttribute(DataStoreAttributes.A_PLUGIN_PATH, install);
@@ -249,6 +251,7 @@ public class HostsPlugin extends AbstractUIPlugin
 	DataElement hostRoot = _dataStore.getHostRoot();
         hostRoot.setAttribute(DE.A_SOURCE, rootDirectory);
        	_clientConnection.setHostDirectory(rootDirectory);	
+	_dataStore.setMinersLocation("com.ibm.dstore.miners");
 	_clientConnection.localConnect();
 
 	// load schema

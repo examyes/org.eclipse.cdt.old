@@ -21,7 +21,6 @@ public abstract class Handler extends Thread
   {
     _keepRunning = true;
     _waitIncrement = 100;
-    setDaemon(true);
   }
 
   public void setWaitTime(int value)
