@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Create scripts for all CDT features & Plugins -->
+
+<eclipse.buildScript elements="plugin@org.eclipse.cdt, plugin@org.eclipse.cdt.core"
+	install="C:\Dev\2.1\eclipse\workspace"/>
+
+
