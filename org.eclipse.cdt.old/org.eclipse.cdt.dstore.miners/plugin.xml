@@ -2,7 +2,7 @@
 <plugin
    name = "DataStore Miners Plugin"
    id = "org.eclipse.cdt.dstore.miners"
-   version = "0.5.0"
+   version = "2.0.0"
    vendor-name = "International Business Machines Corp.">
 
    <requires>
