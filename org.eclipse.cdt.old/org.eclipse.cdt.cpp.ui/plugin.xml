@@ -355,7 +355,7 @@
         	id = "com.ibm.cpp.ui.internal.editor.CppEditor"
       		name="%Lpex_Editor"
 		icon="icons/lpex.gif"
-      		extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl"
+      		extensions="app,asm,c,cc,cpp,cpy,cxx,h,hh,hla,hpp,inc,inl,am,in"
       		class="com.ibm.cpp.ui.internal.editor.CppEditor"
 		contributorClass="com.ibm.cpp.ui.internal.editor.contributor.CppEditorContextContributor">
 	</editor>
