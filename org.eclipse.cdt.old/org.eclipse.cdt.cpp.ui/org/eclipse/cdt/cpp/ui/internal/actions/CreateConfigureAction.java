@@ -133,7 +133,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 						str1 = new String("\nWould you like the system to update and generate missing configuration files?");
 						message = new String("\nGenerating project configuration files"+str1);
 						String[] extraLabel = new String[]{"Do not show this Dialog again"};
-						CustomMessageDialog box = new CustomMessageDialog(
+						box = new CustomMessageDialog(
 									shell,
 									"Creating configure.in and Makefile.am's ",
 									null,
@@ -149,7 +149,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 					{
 						message = new String("\nUsing existing configuration files to generate the configure script");
 						String[] extraLabel = new String[]{"Do not show this Dialog again"};
-						CustomMessageDialog box = new CustomMessageDialog(
+						box = new CustomMessageDialog(
 										shell,
 										"Generating configure script",
 										null,
@@ -180,7 +180,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				str1 = "";
 				message = new String("\nGenerating project configuration files"+str1);
 				String[] extraLabel = new String[]{"Do not show this Dialog again"};
-				CustomMessageDialog box = new CustomMessageDialog(
+				box = new CustomMessageDialog(
 										shell,
 										"Creating configure.in and Makefile.am's ",
 										null,
