@@ -149,10 +149,13 @@ public class OutputViewer
 			if (_currentInput.getType().equals("status"))
 				{
 				DataElement commandInstance = _currentInput.getParent();
-				String commandValue = commandInstance.getAttribute(DE.A_VALUE);
-
-				TableColumn column = getTable().getColumn(0);
-				column.setText(commandValue);
+				if (commandInstance != null)
+				    {
+					String commandValue = commandInstance.getAttribute(DE.A_VALUE);
+					
+					TableColumn column = getTable().getColumn(0);
+					column.setText(commandValue);
+				    }	
 			}
 			else
 				{
