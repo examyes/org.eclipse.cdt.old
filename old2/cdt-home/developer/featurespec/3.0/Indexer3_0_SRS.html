@@ -1,0 +1,753 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Indexer 3.0</title>
+  <meta content="text/html; charset=iso-8859-1"
+ http-equiv="Content-Type">
+  <link type="text/css"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ rel="stylesheet">
+</head>
+<body>
+<!-- Document Header -->
+<table cellpadding="2" border="0" style="width: 100%;">
+  <tbody>
+    <tr>
+      <td style="text-align: left; width: 70%;"> <font class="indextop">Indexer
+SRS for 3.0<br>
+      </font> <span class="indexsub"><font class="indexsub">This
+document describes the proposed work items for the indexer for the CDT
+3.0 release.</font></span> </td>
+      <td style="width: 30%;"><img width="120" height="86" alt=""
+ src="http://dev.eclipse.org/images/Idea.jpg"></td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Author</td>
+      <td style="vertical-align: top;"> : Bogdan Gheorghe<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Revision Date</td>
+      <td> : 11/29/2004 - Version: 0.1.0</td>
+    </tr>
+    <tr>
+      <td>Change History</td>
+      <td> : 0.1.0 - Document Creation</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+<!-- Table of Contents -->
+<div class="section">Table of Contents</div>
+<br>
+<div class="indent"><a href="#intro">1. Introduction</a> </div>
+<div class="indent"><a href="#reqs">2. Requirements</a><br>
+<a href="#proposal">3. UI Requirements</a><br>
+</div>
+<div class="indent"><a href="#references">4. References</a>
+</div>
+<br>
+<br>
+<!-- End of Table of Contents -->
+<!-- Introduction -->
+<div class="section"><a name="intro"> 1. Introduction</a></div>
+<p>The Indexer has been around since CDT 1.2 and currently provides
+support for Search, Navigation, and Refactoring. Its main purpose is to
+provide rapid access to a complete database of code elements and to
+manage this database in an efficient and non-intrusive manner. As the
+CDT has evolved; so has the indexer - adding more elements to the
+index, refining job scheduling, providing feedback mechanisms for
+indexes. Although the indexer is sufficiently developed to provide most
+requested information to clients; it has become clear that the next
+step in the indexer's evolution will have to address its ability to
+handle very large projects efficiently.</p>
+<p>Having the indexer work well on large scale projects requires some
+new architecture to reduce the amount of time spent indexing as much as
+possible, reuse existing indexes as much as possible and provide users
+with mechanisms to extend the index framework.<br>
+</p>
+<p>This document will address main requirements on the indexer for CDT
+3.0.<br>
+</p>
+<h2>1.0 Definitions</h2>
+<table cellspacing="2" cellpadding="2" border="1"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; width: 80pt;">Resource<br>
+      </td>
+      <td style="vertical-align: top;">A project, folder or file within
+the Eclipse workspace<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Index profiles<br>
+      </td>
+      <td style="vertical-align: top;">Separate indexes that are
+created for different configurations of include paths/symbols<samp></samp><samp></samp><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h2>1.1 Current Architecture</h2>
+Quick overview of the indexing architecture:<br>
+<br>
+<ol>
+  <li>The indexer responds to resource events from the workbench. These
+events occur whenever a resource gets created, modified or deleted.</li>
+  <li>The indexer will create index jobs based on the resource events.
+These jobs might schedule other jobs (such as in the case of indexing
+an entire project) but most index jobs eventually boil down to an
+AddCompilationUnitToIndex job.</li>
+  <li>The indexer creates a new parser, passes in the current include
+paths and symbol definitions and parses the file and any other files
+included by the file in full parse mode (which generates cross
+reference information).</li>
+  <li>The index gets created as the parser returns information about
+the elements in the file - the index is stored in memory and at certain
+intervals gets merged with the persisted index on disk.</li>
+</ol>
+<br>
+Currently the indexes have the following structure:<br>
+<br>
+<ul>
+  <li>Index Version Number <br>
+  </li>
+  <li>Summary Block Location</li>
+  <li>File Blocks [1 ... N]:</li>
+  <ul>
+    <li>Each full file block is 8k</li>
+    <li>File block entries associate the path of a file with a unique ID</li>
+  </ul>
+  <li>Word Blocks [1 ... N]:</li>
+  <ul>
+    <li>Each full word block is 8k</li>
+    <li>Word block entries encode the element in a special format and
+add the referring file number</li>
+  </ul>
+  <li>Include Blocks [1 ... N]:</li>
+  <ul>
+    <li>Each full include block is 8k</li>
+    <li>Include block entries associate a file with the initial file
+that was parsed to get to the current file<br>
+    </li>
+  </ul>
+  <li>Summary Block:</li>
+  <ul>
+    <li>Keeps track of the total number of words, files and include
+entries in the index</li>
+    <li>Keeps track of the first file block number, the first word
+block number and the first include block number</li>
+    <li>Keeps track of the first file for every File Block, the first
+word entry for every Word Block, and the first include for every
+Include Block<br>
+    </li>
+  </ul>
+</ul>
+<p></p>
+<h2>1.1 Constraints</h2>
+<table cellspacing="2" cellpadding="2" border="1"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">C1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Multiple
+indexer profiles not possible until similar build profile notion appears</span><br>
+      <br>
+In order to get an accurate index the indexer depends on being able to
+pass on the relevant includes/symbols to the parser.&nbsp; As long as
+there is no standard representation for build profiles in all build
+types (both standard and managed), it isn't possible to enable index
+profiles.<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=25682">Bug
+25682: Indexer Profiles</a><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="section"><a name="reqs"> 2. Requirements</a><br>
+</div>
+<p>List of requirements for the indexer is classified into following
+categories:
+</p>
+<p>
+</p>
+<h2>2.1 Index Management Requirements<br>
+</h2>
+<table cellspacing="2" cellpadding="2" border="1"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top; width: 35pt;">Priority<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R1<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+must provide different types of indexing services</span><span
+ style="font-weight: bold;"></span><br>
+      <br>
+It has become apparent that the one-size-fits all indexing approach
+does
+not meet all of our users needs. Most clients with existing legacy
+projects want some form of search/navigation but some don't want the
+hassle of having to wait for an entire project to index fully before
+being able to use search/navigation. Thus, in order to accommodate both
+sets of user groups (those who are willing to wait for a full index to
+complete and those who just want the absolute bare minimum index) we
+need to offer the following indexer options:<br>
+      <br>
+      <ol>
+        <li>Full Index: this is the "regular" index mode; everything
+gets indexed</li>
+        <li>Minimal Index with Path/Symbol setup: this will make use of
+the quickest parser setting available</li>
+        <li>Quick Index with no setup: this will result in a "best
+effort" bare bones index that should enable some navigation/search.<br>
+        </li>
+      </ol>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69078"><br>
+Bug 69078: C/C++ indexer too slow</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R2<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexes
+should be shareable between team members</span><br>
+      <br>
+As part of streamlining the indexing process for large projects,
+indexes should be able to be shared between users working on the same
+project. All index entries should make use of path variables in order
+to allow indexes to be translated into different workspace locations.
+(See<span style="font-style: italic;"> Scanner Config Correctness
+Enhancement FDS</span> for more details about path variables)<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79661">Bug
+79661: All Index Entries should make use of Path Variables</a><br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79518">Bug
+79518: Path/Variable Manager support service in the core(string
+substitution)</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R3<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+should be able to index a project offline<br>
+      <br>
+      </span>For features that require a complete index it would be
+ideal to have the index be created somewhere separately and imported in
+at a later date. This is especially true for medium to large projects
+that need a long time to index. <br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74433">Bug
+74433: Offline Indexing/Index Hierarchy</a><br>
+      <span style="font-weight: bold;"></span></td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R4<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+should be able to work in a hierarchical manner<br>
+      <br>
+      </span>With all of the new options for indexing, it is
+conceivable that any project might have several sources to look at for
+a single index. The indexer should be able to work with multiple index
+sources, with any order preference specified by the user settings.<span
+ style="font-weight: bold;"><br>
+      <br>
+      </span><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=52126">Bug 52126:
+Indexer should maintain per project indices</a><br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74433">Bug
+74433: Offline Indexing/Index Hierarchy</a><br>
+      <span style="font-weight: bold;"></span></td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R5<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+should allow user to specify global indexer settings </span><br>
+      <br>
+Currently the indexer uses the same settings for all projects. This
+might not suit all users. Indexer settings that should be customizable
+include:<br>
+      <br>
+      <ul>
+        <li>Indexing policy: (default normal)<br>
+        </li>
+        <ul>
+          <li>normal (always up to date)</li>
+          <li>idle time (index on idle time; will require us to keep
+track of changes received in between indexes)</li>
+          <li>manual (index only when manually requested)</li>
+          <li>static (don't update current index)</li>
+        </ul>
+      </ul>
+      <ul>
+        <li>Index Progress Bar displayed: (Checkbox, default displayed)</li>
+      </ul>
+      <ul>
+        <li>Refresh behaviour for file types: (Checkboxes)<br>
+        </li>
+        <ul>
+          <li>Upon addition/deletion of new file types(s), immediately
+add/remove all new file type(s) to the index</li>
+          <li>Upon addition/deletion of new file type(s), wait until
+next time the folder gets indexed</li>
+        </ul>
+      </ul>
+      <ul>
+        <li>Refresh behaviour for new paths</li>
+        <ul>
+          <li>Upon addition/deletion of new paths/symbols, immediately
+index files affected by the changes<br>
+          </li>
+          <li>Upon addition/deletion of new file type(s), wait until
+next time the folder gets indexed<br>
+          </li>
+        </ul>
+      </ul>
+      <ul>
+        <li>Index Hierarchy order: The user can set the order that the
+indexer should look at various index contributors. The options are:</li>
+        <ul>
+          <li>Offline Indexer (this will be a complete index using the
+CDT parser)<br>
+          </li>
+          <li>Local Index (this will be an index of the local workspace
+using the CDT parser)<br>
+          </li>
+          <li>Any additional Indexer Extension Point indexes</li>
+        </ul>
+      </ul>
+      <ul>
+        <li>Indexer Thread priority: The user could specify what
+priority the indexer should run at.<br>
+        </li>
+      </ul>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=75884">Bug
+75884: Allow C/C++ Indexing to be set on or off as a default setting</a><br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=60084">Bug
+60084: Indexer should reduce its priority when running in background</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R6<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Index
+Manager must improve job scheduling smarts</span><br>
+      <br>
+The indexer currently has limited smarts when it comes to job
+scheduling; it will prevent the same job from being queued up. But
+there are other circumstances when being more aware of what's in the
+job queue would solve numerous problems: including the ever recurring
+double index, and source folder changes. Essentially, more information
+needs to be added to individual job requests about the event that
+created the job in order to enable the index manager to make smart
+choices about how to best schedule the jobs. <br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">R7</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+must try to keep as much as possible from all failed index attempts<br>
+      <br>
+      </span>The indexer needs to persist a list of all files that are
+to be indexed as part of an index job. As each merge happens, the list
+is updated. In the event of a crash, all work that has been merged to
+disk<span style="font-weight: bold;"><span style="font-weight: bold;"><span
+ style="font-weight: bold;"> </span></span></span>shall be considered
+as sane and the indexer will restart on the remaining files on the next
+startup. (It will ask the user if they want to continue with the old
+index or if they can get rid&nbsp; By doing this we can avoid losing
+all the indexing job <span style="font-weight: bold;"><br>
+      </span><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=62366"><br>
+Bug 62366: [Index] Need ability to read a partial index and resume</a><span
+ style="font-weight: bold;"><br>
+      </span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">R8</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+needs to deal with new path/symbol addition/deletion gracefully<br>
+      <br>
+      </span>The indexer currently reindexes the entire project on the
+addition/deletion of each new path/symbol. With the new per-file
+scanner settings, we should only index the range of files that are
+affected. (See<span style="font-style: italic;"> Scanner Config
+Correctness Enhancement FDS</span> for more details about per file
+scanner settings).<br>
+      <br>
+      <span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"></span></td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R9<br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+needs to handle Source Folder changes gracefully</span><br>
+      <br>
+The indexer currently does a brute force reindex of whenever anything
+changes in the source folder view. This needs to change to a more
+scalable solution.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R10<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Resources
+can be added manually to the index</span><br>
+      <br>
+Users can request a new index on any resource in the workspace
+(including files that are included from external directories) by
+selecting one or more files and choosing the appropriate option
+from the context menu.<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=71821">Bug
+71821: Action on the indexer to parse file/folder</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R11<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">FileType
+changes should trigger indexes</span><br>
+      <br>
+Changing the file type settings on a project might introduce new file
+types as extensions that have not been indexed as of yet. The indexer
+should react in accordance to the users settings (as defined in R5).<br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=72396"><br>
+Bug 72396: The indexer is not aware of the File Type (ResolverModel)</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">R12</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P2</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+Extension point</span><br>
+      <br>
+If all the current versions of the indexer don't meet the users
+requirements, the CDT should provide an extension point that will allow
+users to write their own indexer that will populate the index. Provided
+the information is complete, all index-based CDT features should work
+as normal.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R13<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P3<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Index
+Manager should allow for ongoing search while indexing</span> <br>
+      <br>
+The indexer should be able to compare incoming index entries with
+any pending search queries and return the matches. <br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=72803">Bug
+72803: [Performance][Usability][Indexer/Search] Waiting policy for
+index results</a><br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=53792">Bug
+53792: [Scalability] Prioritizing the indexing when searching a working
+set</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R14<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Index
+should provide an interface to allow clients to determine what features
+are available with the current indexes</span><br>
+      <br>
+With the prospect of having various levels of detail available in a
+project's indexes, the Index Manager needs to be able to provide an
+interface that will answer any client whether there is sufficient
+information in the index to run the client's service. If the necessary
+index detail is missing, it would be up to the client to ask the user
+if they wish to schedule a new index.<br>
+      <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>2.2 Index Content Requirements<br>
+</h2>
+<table cellspacing="2" cellpadding="2" border="1"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top; width: 35pt;">Priority<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">R15</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+will provide enough information to run searches without a second parse<br>
+      </span><br>
+Currently the index stores just the location information for the
+entries - this currently causes search to require two separate parses:
+one for the initial index and another to determine the offset
+information. The indexer should store this offset information in the
+initial index and thus avoid the second parse. Enough information must
+be available in the index to answer all of the possible MatchLocator
+queries. Additional info that needs to be added to the indexer includes:<br>
+      <ul>
+        <li>function/method parameters</li>
+        <li>if a variable has an initializer clause, extern specifier
+or linkage specification (needed to determine if it is a definition)</li>
+        <li>if a field is static (needed&nbsp; to see if we need to
+check for definition)</li>
+      </ul>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74427">Bug
+74427: Indexer needs to store more info</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R16<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P3<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">References
+in the index should be tied into their declarations</span><br>
+      <br>
+We need to be able to match up references to their declarations
+(possible requirement for refactoring support).<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69606">Bug
+69606: [Search] Match locator has to make sure that the reference
+belongs to the specified declaration</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R17<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P?<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">New Indexer
+needs to be written for new AST<br>
+      <br style="font-weight: normal;">
+      <span style="font-weight: normal;">As the CDT switches over to
+the new AST, the indexer will have to be rewritten to extract
+information from the AST.</span><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<span style="font-weight: bold;"></span>
+<ul>
+</ul>
+<br>
+<h2>2.3 Problem Markers<br>
+</h2>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top; width: 35pt;">Priority<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">&nbsp;R18<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">&nbsp;P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Problem
+Markers should be able to be removed manually<br>
+      <br>
+      </span>There are a number scenarios in which Index problem
+markers get placed on resources and cannot be removed. There needs to
+be some sort of menu option that can manually delete selected problem
+markers.<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74284">Bug
+74284: [IProblem] All Problem markers removed for project when one file
+is excluded</a><br>
+      <span style="font-weight: bold;"></span></td>
+    </tr>
+  </tbody>
+</table>
+<span style="font-weight: bold;"></span>
+<ul>
+</ul>
+<p><!-- End of Introduction --><!-- References -->
+</p>
+<div class="section"><a name="proposal"> 3. UI Requirements</a><br>
+</div>
+<br>
+<h2>3.1 UI enhancements</h2>
+Following UI enhancements are planned to support the feature:<br>
+<br>
+<table cellspacing="2" cellpadding="2" border="1"
+ style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td style="width: 35px; vertical-align: top;">Number<br>
+      </td>
+      <td style="vertical-align: top;" rowspan="1" colspan="1">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE1</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
+Options Preference Page<br>
+      <br>
+      </span>This page will allow users to make changes to the Indexer
+that affect the entire workspace:<span style="font-weight: bold;"><br>
+      <br>
+      </span>
+      <ul>
+        <li>Indexer to use: if a number of indexers are available (ie.
+SourceIndexer, SourceIndexer2, CTagsIndexer) , users can specify which
+indexer should be used for the entire workspace</li>
+        <li>Index Progress Bar displayed</li>
+        <li>Indexer Thread Priority<br>
+        </li>
+      </ul>
+      <span style="font-weight: bold;"></span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; font-weight: bold;">UE2<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Indexer
+Project Properties Page<br>
+      <br>
+      <span style="font-weight: normal;">This page will allow users to
+set indexer settings per project:</span><br style="font-weight: normal;">
+      <ul style="font-weight: normal;">
+        <li>Indexing policy</li>
+        <li>Refresh behaviour for new File Types</li>
+        <li>Refresh behaviour for new Symbols/Includes</li>
+        <li>Index Hierarchy order</li>
+      </ul>
+      <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="section"><a name="references"> 4. References</a> <br>
+</div>
+<br>
+<ol>
+  <li> Scanner Config Correctness Enhancement FDS </li>
+</ol>
+<p>
+<table width="100%" cellpadding="2" border="0">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#0080c0" align="left" colspan="2"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</p>
+<center><i>Last Modified on Monday, November 29, 2004
+</i></center>
+</body>
+</html>
