@@ -350,7 +350,7 @@ public class PAModelInterface implements IDomainListener
      
 	   IProject project = CppPlugin.getDefault().getCurrentProject();
 	   MonitorStatusThread monitor = new MonitorStatusThread(status, project);
-	   monitor.setWaitTime(600);
+	   monitor.setWaitTime(1000);
 	   monitor.start(); 
 	 }
 			
@@ -372,11 +372,12 @@ public class PAModelInterface implements IDomainListener
        
        String dataFileName = "";
        if (traceElement.isOfType("gprof trace program"))
-         dataFileName = " gmon.out ";
+         dataFileName = "gmon.out";
        else if (traceElement.isOfType("functioncheck trace program"))
-         dataFileName = " functioncheck.fc ";
+         dataFileName = "functioncheck.fc";
          
-       result = "The trace data file" + dataFileName +  "does not exist!";
+       result = "Cannot find the trace data file: " + dataFileName +  ".\n"
+       		+ "You should run the trace program before analyzing.";
      }
      else if (errorCode.equals("no file")) {
        result = "Cannot find the trace target file:\n" + traceElement.getSource();
