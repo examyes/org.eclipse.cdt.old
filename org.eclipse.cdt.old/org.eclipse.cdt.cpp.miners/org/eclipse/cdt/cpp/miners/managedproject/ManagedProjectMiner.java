@@ -124,7 +124,8 @@ public class ManagedProjectMiner extends Miner
 			autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
 			refresh(project);
 		}
-		else if (name.equals("C_REFRESH"))
+		//Make sure that the project is a managed project before doing anything for a refresh -Jeff
+		else if (name.equals("C_REFRESH") && project.getType().equals(Am.MANAGED_PROJECT))
 		{
   			refreshProject(project);
   			parseAmFile(project); 
