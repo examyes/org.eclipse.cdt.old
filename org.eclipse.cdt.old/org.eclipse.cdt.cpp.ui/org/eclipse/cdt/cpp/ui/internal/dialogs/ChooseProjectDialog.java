@@ -31,6 +31,8 @@ import org.eclipse.swt.events.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.dialogs.*;
 
+import java.util.List;
+
 public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
     implements Listener
 {
@@ -39,7 +41,7 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
     private String       _title;
     private CppPlugin    _plugin;
 
-    private DataElement  _selected;
+    private IStructuredSelection _selection;
 
     public ChooseProjectDialog(String title, DataElement input)
     {
@@ -54,7 +56,7 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	if (OK == buttonId)
 	    {	
 		setReturnCode(OK);
-		_selected = _viewer.getSelected();
+		_selection =_viewer.getSelection();
 	    }
 	else if (CANCEL == buttonId)
 	    setReturnCode(CANCEL);
@@ -63,9 +65,9 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	close();
     }
 
-    public DataElement getSelected()
+    public List getSelected()
     {
-	return _selected;
+	return _selection.toList();
     }
 
 

@@ -35,7 +35,6 @@ public class SynchronizeWithAction extends CustomAction
     public void run()
     {
 	DataElement project1 = _subject;
-	DataElement project2 = null;
 	ModelInterface api = ModelInterface.getInstance();
 	
 	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a Project To Synchronize With", 
@@ -44,33 +43,36 @@ public class SynchronizeWithAction extends CustomAction
 	
 	if (dlg.getReturnCode() == dlg.OK)
 	    {
-		project2 = dlg.getSelected();
-	    }
+		List selection = dlg.getSelected();
+		for (int i = 0; i < selection.size(); i++)
+		    {
+			DataElement project2 = ((DataElement)selection.get(i)).dereference();
 	
-	if (project2 != null && project1 != project2)
-	    {
-		// transfer from project1 to project2
-		for (int i = 0; i < project1.getNestedSize(); i++)
-		    {
-			DataElement source = project1.get(i);
-			if (!source.isReference())
+			if (project2 != null && project1 != project2)
 			    {
-				TransferFiles transferAction = new TransferFiles("transfer", source, project2, null);
-				transferAction.start();
+				// transfer from project1 to project2
+				for (int j = 0; j < project1.getNestedSize(); j++)
+				    {
+					DataElement source = project1.get(j);
+					if (!source.isReference())
+					    {
+						TransferFiles transferAction = new TransferFiles("transfer", source, project2, null);
+						transferAction.start();
+					    }
+				    }
+				
+				// transfer from project2 to project1
+				for (int k = 0; k < project2.getNestedSize(); k++)
+				    {
+					DataElement source = project2.get(k);
+					if (!source.isReference())
+					    {
+						TransferFiles transferAction = new TransferFiles("transfer", source, project1, null);
+						transferAction.start();
+					    }
+				    }				
 			    }
 		    }
-
-		// transfer from project2 to project1
-		for (int i = 0; i < project2.getNestedSize(); i++)
-		    {
-			DataElement source = project2.get(i);
-			if (!source.isReference())
-			    {
-				TransferFiles transferAction = new TransferFiles("transfer", source, project1, null);
-				transferAction.start();
-			    }
-		    }
-
 	    }
     }
 }

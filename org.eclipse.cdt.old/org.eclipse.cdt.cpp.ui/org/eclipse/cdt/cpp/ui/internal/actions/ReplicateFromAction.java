@@ -25,6 +25,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
 
+import java.util.List;
+
 public class ReplicateFromAction extends CustomAction
 { 
   public ReplicateFromAction(DataElement subject, String label, DataElement command, DataStore dataStore)
@@ -35,7 +37,6 @@ public class ReplicateFromAction extends CustomAction
     public void run()
     {
 	DataElement target = _subject;
-	DataElement sourceProject = null;
 	ModelInterface api = ModelInterface.getInstance();
 	
 	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a Project To Replicate From", api.findWorkspaceElement());
@@ -44,19 +45,22 @@ public class ReplicateFromAction extends CustomAction
 	
 	if (dlg.getReturnCode() == dlg.OK)
 	    {
-		sourceProject = dlg.getSelected();
-	    }
-
-	if (sourceProject != null && sourceProject != target)
-	    {
-		// do transfer files
-		for (int i = 0; i < sourceProject.getNestedSize(); i++)
+		List selection = dlg.getSelected();
+		for (int i = 0; i < selection.size(); i++)
 		    {
-			DataElement source = sourceProject.get(i);
-			if (!source.isReference())
+			DataElement sourceProject = ((DataElement)selection.get(i)).dereference();
+			if (sourceProject != null && sourceProject != target)
 			    {
-				TransferFiles transferAction = new TransferFiles("transfer", source, target, null);
-				transferAction.start();
+				// do transfer files
+				for (int j = 0; j < sourceProject.getNestedSize(); j++)
+				    {
+					DataElement source = sourceProject.get(j);
+					if (!source.isReference())
+					    {
+						TransferFiles transferAction = new TransferFiles("transfer", source, target, null);
+						transferAction.start();
+					    }
+				    }
 			    }
 		    }
 	    }

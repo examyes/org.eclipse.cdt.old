@@ -259,7 +259,10 @@ public class ViewMenu implements IMenuListener
       {
         _input = object;
 	_dataStore = _input.getDataStore();
-        if (object.getDescriptor() != _inputDescriptor)
+	
+	if ((_inputDescriptor == null) || 
+	    (object.getDescriptor() == null) ||
+	    (!object.getDescriptor().getType().equals(_inputDescriptor.getType())))
         {
           _inputDescriptor = object.getDescriptor();          
           getRelationItems();
@@ -593,7 +596,10 @@ public class ViewMenu implements IMenuListener
 		DataElement object = (DataElement)_relationItems.get(i);
 		if (object.getName().equals(relationship))
 		    {
-			setRelation(object);
+			if (object != _relationSelected)
+			    {
+				setRelation(object);
+			    }
 		    }
 	    }
     }
@@ -605,7 +611,10 @@ public class ViewMenu implements IMenuListener
 		DataElement object = (DataElement)_filterItems.get(i);
 		if (object.getName().equals(filter))
 		    {
-			setFilter(object);
+			if (object != _filterSelected)
+			    {
+				setFilter(object);
+			    }
 		    }
 	    }
     }

@@ -35,28 +35,33 @@ public class ReplicateToAction extends CustomAction
     public void run()
     {
 	DataElement sourceProject = _subject;
-	DataElement targetProject = null;
 	ModelInterface api = ModelInterface.getInstance();
 	
-	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a Project To Replicate To", api.findWorkspaceElement());
-
+	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a Project To Replicate To", 
+							  api.findWorkspaceElement());
+	
 	dlg.open();
 	
 	if (dlg.getReturnCode() == dlg.OK)
 	    {
-		targetProject = dlg.getSelected();
-	    }
-
-	if (targetProject != null && sourceProject != targetProject)
-	    {
-		// do transfer files
-		for (int i = 0; i < sourceProject.getNestedSize(); i++)
+		List selection = dlg.getSelected();
+		for (int i = 0; i < selection.size(); i++)
 		    {
-			DataElement source = sourceProject.get(i);
-			if (!source.isReference())
+			DataElement targetProject = ((DataElement)selection.get(i)).dereference();
+
+			if (targetProject != null && sourceProject != targetProject)
 			    {
-				TransferFiles transferAction = new TransferFiles("transfer", source, targetProject, null);
-				transferAction.start();
+				// do transfer files
+				for (int j = 0; j < sourceProject.getNestedSize(); j++)
+				    {
+					DataElement source = sourceProject.get(j);
+					if (!source.isReference())
+					    {
+						TransferFiles transferAction = new TransferFiles("transfer", source, 
+												 targetProject, null);
+						transferAction.start();
+					    }
+				    }
 			    }
 		    }
 	    }
