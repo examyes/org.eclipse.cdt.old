@@ -1166,7 +1166,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		return findProjectResource(resourceElement);
 	    }
-	else if (type.equals("file") || type.equals("directory"))
+	else if (resourceElement.isOfType("file") || resourceElement.isOfType("directory"))
 	    {
 		return findFile(resourceElement.getSource());
 	    }
@@ -1295,33 +1295,30 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 	    	if (root.getType().equals("Workspace") || path.startsWith(root.getSource()))
 	    	{
-	    	ArrayList children = root.getAssociated("contents");
-			for (int i = 0; i < children.size(); i++)
-		    {		    	
-				DataElement child = (DataElement)children.get(i);
-				if (child != null && !child.isDeleted())
+		    ArrayList children = root.getAssociated("contents");
+		    for (int i = 0; i < children.size(); i++)
+			{		    	
+			    DataElement child = (DataElement)children.get(i);
+			    if (child != null && !child.isDeleted())
 			    {
-					if (child.getType().equals("file")  ||
-					    child.getType().equals("directory") ||
-					    child.getType().equals("Project")
-					    )
-					    {	
-					   
-								found = findResourceElement(child, path);
-								if (found != null)
-							    {
-									return found;
-							    }
-					 
+				if (child.isOfType("file"))
+				    {	
+					
+					found = findResourceElement(child, path);
+					if (found != null)
+					    {
+						return found;
 					    }
+					
+				    }
 			    }
-		    }
+			}
 	    	}
 	    }
-
+	
 	return found;
     }
-
+    
   public DataElement findProjectElement(IProject project)
     {
 	return findProjectElement(project, "Project");
@@ -1787,30 +1784,30 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	 if (resource != null)
 	 {
-		String rtype = resource.getType();
-		if (rtype.equals("file") || rtype.equals("directory") || rtype.equals("Project") || rtype.equals("Closed Project"))
-	    {
-			DataElement parent = resource;
-			String type = parent.getType();
-			while (parent != null &&			   
-		       !type.equals("Project") &&
-		       !type.equals("Closed Project"))
-		    {		
-				if (type.equals("temp") || type.equals("Root"))
-				{ 
-					parent = null;
-				}
-				else
-				{   
-				 	parent = parent.getParent();
+	     String rtype = resource.getType();
+	     if (resource.isOfType("file") || rtype.equals("Closed Project"))
+		 {
+		     DataElement parent = resource;
+		     String type = parent.getType();
+		     while (parent != null &&			   
+			    !type.equals("Project") &&
+			    !type.equals("Closed Project"))
+			 {		
+			     if (type.equals("temp") || type.equals("Root"))
+				 { 
+				     parent = null;
+				 }
+			     else
+				 {   
+				     parent = parent.getParent();
 				 	if (parent != null)
-				 	{
+					    {
 					 	type = parent.getType();
-				 	}
-				}
-		    }
-			return parent;
-	    }
+					    }
+				 }
+			 }
+		     return parent;
+		 }
 		else
 	    {
 			return null;
@@ -2081,11 +2078,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
     	DataStore dataStore = element.getDataStore();
     	
-    	if (element.getType().equals("file") || element.getType().equals("directory"))
-    	{
+    	if (element.isOfType("file") || element.isOfType("directory"))
+	    {
     		DataElement notifyD = dataStore.localDescriptorQuery(dataStore.getRoot().getDescriptor(), "C_NOTIFICATION", 1);
-			if (notifyD != null)
-			{
+		if (notifyD != null)
+		    {
 				ArrayList args = new ArrayList();
 				args.add(element);
 				DataElement delD = dataStore.createObject(null, "dummy command", "C_DELETE");

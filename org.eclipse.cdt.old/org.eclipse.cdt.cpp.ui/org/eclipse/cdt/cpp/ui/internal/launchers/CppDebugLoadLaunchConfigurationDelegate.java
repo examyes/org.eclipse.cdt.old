@@ -45,6 +45,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	_api = ModelInterface.getInstance();
 
 	String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+	System.out.println("exename = " + executableName);
 	IResource resource  = _api.findFile(executableName);
 	IProject project = resource.getProject();
 	

@@ -71,7 +71,7 @@ public class DataElementAdapterFactory implements IAdapterFactory
 
     public IFile getFile(DataElement element)
     {
-	if (element.getType().equals("file"))
+	if (element.isOfType("file"))
 	    {
 		IFile file = (IFile)_api.findResource(element);
 		return file;

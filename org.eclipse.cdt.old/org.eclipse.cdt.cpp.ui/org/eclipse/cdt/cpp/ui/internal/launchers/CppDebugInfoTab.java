@@ -295,7 +295,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
      if (element instanceof DataElement)
      {	
    		_executable = (DataElement)element;
-	   	if (!_executable.getType().equals("file"))
+	   	if (!_executable.isOfType("executable"))
 	      {
 		   	_executable = null;
 			   _directory = null;
@@ -333,7 +333,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	      		_directory = dataStore.createObject(null, "directory", parentRes.getName(),
  	  	   					    parentRes.getLocation().toString());
 
-	   	   	_executable = dataStore.createObject(_directory, "file", resource.getName(),
+	   	   	_executable = dataStore.createObject(_directory, "executable", resource.getName(),
 				   			     resource.getLocation().toString());
             }
             else
