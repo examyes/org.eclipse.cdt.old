@@ -19,7 +19,7 @@ public class AutoconfManager {
 	ConfigureInManager configureInManager;
 	MakefileAmManager makefileAmManager; 
 	static Object O = new Object();
-	String cygwinPrefix = new String("sh -c ");
+	String cygwinPrefix = new String("sh ");
 
 	public AutoconfManager()
 	{

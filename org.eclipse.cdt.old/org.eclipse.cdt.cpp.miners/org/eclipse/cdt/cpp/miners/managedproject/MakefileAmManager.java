@@ -19,7 +19,6 @@ public class MakefileAmManager {
 	
 	public static Hashtable timeStamps = new Hashtable();
 	private final String MAKEFILE_AM = "Makefile.am";
-	private final String TEMPLOCATION = "workspace/com.ibm.cpp.miners/autoconf_templates/";
 	
 	// Member Variables which can be defined in Makefile.am
 	final String SUBDIRS = new String("SUBDIRS");
@@ -52,9 +51,9 @@ public class MakefileAmManager {
 	/**
 	 * Constructor for MakefileAmManager
 	 */
-	public MakefileAmManager(DataElement aProject) {
-		
-		//this.project = aProject;
+	public MakefileAmManager(DataElement project) {
+         
+		//this.project = project;
 		//structureManager = new ProjectStructureManager( project.getFileObject());
 		//subdirs = structureManager.getSubdirWorkspacePath();
 		
@@ -81,7 +80,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+MAKEFILE_AM+" "+project.getSource());
+				p= rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/"+MAKEFILE_AM+" "+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -95,7 +94,7 @@ public class MakefileAmManager {
 				if (token.countTokens()==1)
 				{
 					try{
-						Process p = rt.exec("cp "+TEMPLOCATION+"/sub/Makefile.am "+project.getSource()+"/"+subdirs[i]);
+						Process p = rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/"+"/sub/Makefile.am "+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
@@ -104,7 +103,7 @@ public class MakefileAmManager {
 				{
 					
 					try{
-						Process p= rt.exec("cp "+TEMPLOCATION+"/sub/static/Makefile.am "+project.getSource()+"/"+subdirs[i]);
+						Process p= rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/"+"/sub/static/Makefile.am "+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
@@ -679,7 +678,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+"/sub/static/Makefile.am "+parent.getAbsolutePath());
+				p= rt.exec("cp "+status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/"+"/sub/static/Makefile.am "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -708,7 +707,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+"sub/Makefile.am "+parent.getAbsolutePath());
+				p= rt.exec("cp "+status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/"+"sub/Makefile.am "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -739,7 +738,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+MAKEFILE_AM+" "+parent.getAbsolutePath());
+				p= rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/"+MAKEFILE_AM+" "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -768,7 +767,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+"sub/shared/Makefile.am "+parent.getAbsolutePath());
+				p= rt.exec("cp "+ status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners/autoconf_templates/sub/shared/Makefile.am "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
