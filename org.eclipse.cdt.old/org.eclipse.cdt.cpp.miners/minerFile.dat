@@ -1,11 +1,11 @@
 org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner
 org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner
 org.eclipse.cdt.dstore.miners.command.CommandMiner
+org.eclipse.cdt.dstore.miners.processmonitor.ProcessMonitorMiner
 org.eclipse.cdt.cpp.miners.project.ProjectMiner
 org.eclipse.cdt.cpp.miners.parser.ParseMiner
 org.eclipse.cdt.cpp.miners.search.SearchMiner
 org.eclipse.cdt.cpp.miners.managedproject.ManagedProjectMiner
-#org.eclipse.cdt.dstore.miners.cvstest.CVSMiner
 org.eclipse.cdt.cpp.miners.debug.DebugMiner
 org.eclipse.cdt.cpp.miners.pa.PAMiner
 

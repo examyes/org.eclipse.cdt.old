@@ -91,7 +91,6 @@ public class ProjectMiner extends Miner
 
     createReference(workspaceD, projectsD);
     createReference(workspaceD, oprojectsD);
-    createReference(workspaceD, pContainersD);
     
   projectsD.setDepth(100); 
  }
