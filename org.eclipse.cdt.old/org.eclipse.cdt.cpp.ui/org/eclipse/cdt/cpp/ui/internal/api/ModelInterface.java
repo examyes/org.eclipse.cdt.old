@@ -74,14 +74,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	      }
 	  else
 	      {
-		System.out.println("find closed");
+
 		  projectMinerProject =  findProjectElement(_project, "Closed Project");
 		  if (projectMinerProject == null)
 		      {
 			  System.out.println("can't find project miner element for " + _project);
 			  return;
 		      }
-		      System.out.println("...find closed");
+
 	      }
 	  
 	  if (projectMinerProject != null)
@@ -1728,7 +1728,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			{
 			    if (resource instanceof IProject)
 				{
-				    System.out.println("added " + resource);
+			
 				}
 			    else
 				{
