@@ -4,6 +4,7 @@ package com.ibm.dstore.miners.filesystem;
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
  */
 
+
 import com.ibm.dstore.core.miners.miner.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.core.util.*;
@@ -53,7 +54,6 @@ public class FileSystemMiner extends Miner
 	  for(int i=0;i<deviceList.length;i++)
 	      {		  
 		  DataElement temp=_dataStore.createObject(_minerData, getLocalizedString("model.device"),deviceList[i].getPath(),deviceList[i].getPath());
-		  // _dataStore.createReference(host, temp);
 	      }	 
 
 	  DataElement currentDirectory = findFile(_minerData, hostFile);
@@ -171,6 +171,8 @@ public class FileSystemMiner extends Miner
 	DataElement renD= createCommandDescriptor(dirD, getLocalizedString("model.Rename"), "C_RENAME_DIR");
 	DataElement inrenD = _dataStore.createObject(renD,"input", "Enter the New Name");
 
+	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", false);
+
 	//deleting files and dirs
 	DataElement delF = createCommandDescriptor(fileD,getLocalizedString("model.Delete"),"C_DELETE_FILE");
 
@@ -219,7 +221,7 @@ public class FileSystemMiner extends Miner
        {
 	 DataElement subElement1 = getCommandArgument(theElement, 0);
 	 DataElement subElement2 = getCommandArgument(theElement, 1);
-	 status = handleFind(subElement1.dereference(), subElement2.getName().toLowerCase(), status);	 
+	 status = handleFind(subElement1.dereference(), subElement2.getName(), status);	 
        }
      else if (name.equals("C_SET_TYPE"))
        {
@@ -446,7 +448,6 @@ public class FileSystemMiner extends Miner
 			FileInputStream inFile = new FileInputStream(file);
 			int written = 0;
 
-			/****/
 			int bufferSize = (size > maxSize) ? maxSize : size;
 			byte[] subBuffer = new byte[bufferSize];
 
@@ -532,113 +533,6 @@ public class FileSystemMiner extends Miner
         return status;        
       }
 
-  private DataElement handleFindHelper (DataElement root, String matchStr, DataElement status)
-  {
-    DataElement found = null;
-    
-    int nestedSize = root.getNestedSize();    
-   
-    if ((nestedSize == 0) && (root.getType().equals(getLocalizedString("model.directory"))))
-      {	
-	handleQuery(root, status);
-	nestedSize = root.getNestedSize();
-      }
-    
-    // do we have a match
-    for (int i = 0; i < nestedSize; i++)
-      {
-	DataElement child = (DataElement)root.get(i);	
-	String childName = child.getName();
-	
-	if (matchStr.toLowerCase().equals(childName.toLowerCase()))
-	  {
-	    found = child;	    
-	    return found;	    
-	  }
-      }  
-    
-    // search next depth
-    for (int j = 0; j < nestedSize; j++)
-      {
-	DataElement child = (DataElement)root.get(j);
-	found = handleFindHelper(child, matchStr, status);
-	if (found != null)
-	  {
-	    return found;
-	  }	
-      }      
-    // no find
-    return null;
-  }
-
-  public DataElement handleFind (DataElement root, String matchStr, DataElement status)
-  {
-    DataElement result = handleFindHelper(root, matchStr, status);
-
-    if (result != null)
-      {	
-	status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
-	_dataStore.createReference(root, result); //Changed this from status to root so that the file 
-	                                          //wouldn't show up in the command output view	    
-      }
-    else
-      {
-	status.setAttribute(DE.A_NAME, getLocalizedString("model.failed"));		
-      }
-    
-    // no find
-    return result;
-  }
-
-  public DataElement findFile (DataElement root, String matchStr, DataElement status)
-  {
-   return handleFind(root, matchStr, status);
-  }
-  
-  public DataElement adopt(String orphanFile)
-      {
-        File theFile = new File(orphanFile);
-        File regressingFile = theFile;
-        
-        Stack fileStack = new Stack();
-        
-        DataElement result = null;
-        while ((result == null) && (regressingFile != null))
-        {
-          result = _dataStore.find(_minerData, DE.A_SOURCE, regressingFile.getPath());
-          if (result == null)
-          {
-            fileStack.push(regressingFile);
-            regressingFile = new File(regressingFile.getParent());
-          }
-        }
-
-        if (result != null)
-        {
-          while (!fileStack.isEmpty())
-          {
-            File anewFile = (File)fileStack.pop();
-            String type = null;
-            if (anewFile.isDirectory())
-            {
-              type = getLocalizedString("model.directory");
-            }
-	    else
-	      {
-		type = getLocalizedString("model.file");		
-	      }
-	    
-            DataElement nextResult = _dataStore.createObject(result, type, anewFile.getName(), anewFile.getPath());
-            result = nextResult;
-
-
-            DataElement subStatus = _dataStore.createObject(null, getLocalizedString("model.status"), getLocalizedString("model.start"));
-            handleQuery(result, subStatus);
-          }
-        }
-
-        return result;
-      }
 
   private synchronized DataElement handleQuery (DataElement theElement, DataElement status)
       {
@@ -686,10 +580,57 @@ public class FileSystemMiner extends Miner
 		      }
 	      }
 
-	status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));	 
+	  if (status != null)
+	      status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));	 
+
         return status;
       }
 
+
+    public DataElement findFile (DataElement root, String matchStr, DataElement status)
+    {
+	return handleFind(root, matchStr, status);
+    }
+    
+    public DataElement handleFind (DataElement root, String patternStr, DataElement status)
+    {
+	status.setAttribute(DE.A_NAME, getLocalizedString("model.progress"));
+	_dataStore.refresh(status);
+	
+
+	handleFindHelper(root, patternStr, status);
+
+	status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
+	return status;
+    }
+    
+    private void handleFindHelper (DataElement root, String patternStr, DataElement status)
+    {
+	if (compareString(patternStr, root.getName(), true))
+	    {
+		_dataStore.createReference(status, root);
+		_dataStore.refresh(status);
+	    }
+	
+	int nestedSize = root.getNestedSize();       
+	if ((nestedSize == 0) && (root.getType().equals(getLocalizedString("model.directory"))))
+	    {	
+		handleQuery(root, null);
+		nestedSize = root.getNestedSize();
+	    }
+	
+	// search next depth
+	for (int j = 0; j < nestedSize; j++)
+	    {
+		DataElement child = (DataElement)root.get(j);
+		handleFindHelper(child, patternStr, status);
+	    }     
+    }
+    
+    private boolean compareString(String patternStr, String compareStr, boolean ignoreCase)
+    {
+	return StringCompare.compare(patternStr, compareStr, ignoreCase);
+    }
 }
 
 
