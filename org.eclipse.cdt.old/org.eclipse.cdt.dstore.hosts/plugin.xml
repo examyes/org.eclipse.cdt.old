@@ -4,6 +4,7 @@
    id="org.eclipse.cdt.dstore.hosts"
    name="%pluginName"
    version="2.0.0"
+   provider-name="International Business Machines Corp."
    class="org.eclipse.cdt.dstore.hosts.HostsPlugin">
 <requires>
    <import plugin="org.eclipse.ui"/>

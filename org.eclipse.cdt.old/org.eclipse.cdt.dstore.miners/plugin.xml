@@ -3,7 +3,7 @@
    name = "DataStore Miners Plugin"
    id = "org.eclipse.cdt.dstore.miners"
    version = "2.0.0"
-   vendor-name = "International Business Machines Corp.">
+   provider-name="International Business Machines Corp.">
 
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
