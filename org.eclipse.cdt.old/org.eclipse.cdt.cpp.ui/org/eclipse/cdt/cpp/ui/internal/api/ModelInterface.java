@@ -1667,17 +1667,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public IResource findFile(String fileName)
     {
 	IResource result = null;
+	if (!_plugin.getCurrentDataStore().isVirtual())
+	{
 	java.io.File theFile = new java.io.File(fileName);
 	result = findFile(theFile);
-
-	// search remote files
-	if (result == null)
-	    {		
+	}
+	else
+	{
 		RemoteProjectAdapter rmt = RemoteProjectAdapter.getInstance();		
 		if (rmt != null)
+		{
 		    result = findFile(rmt, fileName);
-	    }
-	
+	    }	
+		
+	}	
 
 	return result;
     }
@@ -1818,6 +1821,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			IResource resources[] = root.members();
 			if (resources != null)
 			    {
+			    	String fileNameString = fileName.getAbsolutePath();
 				for (int i = 0; i < resources.length; i++)
 				    {
 					IResource resource = resources[i];
@@ -1839,8 +1843,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						return resource;
 					    }
 					
-					//if (fileName.startsWith(path) && resource instanceof IContainer)
-					if (resource instanceof IContainer)
+					
+
+					if (fileNameString.startsWith(path) && resource instanceof IContainer)
+					//**if (resource instanceof IContainer)
 					    {
 						IResource result = findFile((IContainer)resource, fileName);
 						if (result != null)
