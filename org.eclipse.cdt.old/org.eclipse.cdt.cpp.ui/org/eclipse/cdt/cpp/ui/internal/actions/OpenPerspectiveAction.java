@@ -49,6 +49,7 @@ public class OpenPerspectiveAction extends CustomAction
         IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
 		IWorkbenchPage persp = null;
 
+       /* JEFF: Commenting this part out to get build to work...IWorkbench API has changed -> openPage is gone.
 		try 
 	    {
 			persp = workbench.openPage("org.eclipse.cdt.cpp.ui.CppObjectPerspective", input, 0);
@@ -56,6 +57,7 @@ public class OpenPerspectiveAction extends CustomAction
         catch (WorkbenchException e)
 	    {
 	    }
+       */
 
 	    
     }

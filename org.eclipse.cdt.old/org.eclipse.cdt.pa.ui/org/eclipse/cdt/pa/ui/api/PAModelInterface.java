@@ -844,6 +844,7 @@ public class PAModelInterface implements IDomainListener
 	
 	 IWorkbenchPage[] perspectives = dw.getPages();
 	
+	 /*JEFF: Commenting this section out since it calls the non-existant IWorkbench.openPage() api
 	 try
 	 {
 		for (int i = 0; i < perspectives.length; i++)
@@ -868,7 +869,7 @@ public class PAModelInterface implements IDomainListener
      catch (WorkbenchException e)
 	 {
 	 }
-	 
+	 */
   }
     
 }

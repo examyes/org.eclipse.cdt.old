@@ -1533,7 +1533,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			      patternStr.append((String)types.get(0));
 			      if (i < types.size()) patternStr.append(", ");
 			  }
-
+                      
+                      /* JEFF: Commenting this out to get the build to work...This method is now reported to 
+                               be amigious.  A similar signature must have been added to ISearchResultView
 		      _searchResultsView.searchStarted(
 					       "org.eclipse.cdt.cpp.ui.CppSearchPage",
 					       patternStr.toString(),
@@ -1543,7 +1545,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					       SearchLabelProvider.getInstance(),
 					       new ShowMarkerAction(),
 					       new GroupByKeyComputer(),
-					       null);		
+					       null);
+		      */		
 		  }
 	
 	      Display d = getDummyShell().getDisplay();
