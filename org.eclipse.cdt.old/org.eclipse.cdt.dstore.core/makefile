@@ -27,6 +27,7 @@ buildPlugins += com.ibm.dstore.ui
 buildPlugins += com.ibm.cpp.ui
 buildPlugins += com.ibm.dstore.miners
 buildPlugins += com.ibm.cpp.miners
+buildPlugins += com.ibm.debug
 buildPlugins += com.ibm.debug.gdbPicl
 buildPlugins += com.ibm.linux.help	
 
@@ -34,7 +35,6 @@ buildPlugins += com.ibm.linux.help
 allPlugins = $(buildPlugins)
 allPlugins += com.ibm.cpp.docs.user
 allPlugins += com.ibm.lpex
-allPlugins += com.ibm.debug
 allPlugins += com.ibm.debug.doc.user
 
 
