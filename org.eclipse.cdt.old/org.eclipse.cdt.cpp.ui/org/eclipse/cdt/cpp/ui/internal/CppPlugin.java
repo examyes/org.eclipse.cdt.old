@@ -70,26 +70,33 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
     private static CppPlugin              _instance;
     private static DataStoreCorePlugin    _corePlugin;
-    
+
     private static ClientConnection       _clientConnection;
-    
+
     private static ModelInterface         _interface;
     private static CppDocumentProvider    _CppDocumentProvider;
-    
+
     private        String                 _pluginPath;
     private        String                 _corePath;
-    
+
     private static IProject               _currentProject;
     private        ResourceBundle         _resourceBundle;
-    
+
     private static DataStore              _hostDataStore;
+
+
+	/**
+	 * CDT plug-in identifier
+	 * (value <code>"org.eclipse.cdt.cpp.ui"</code>).
+	 */
+    public static final String PLUGIN_ID = "org.eclipse.cdt.cpp.ui";
 
     private static final String FN_LOCAL_HISTORY= "proj_local.hist";
     private static final String FN_URL_HISTORY= "proj_url.hist";
     private static final String FN_HOST_NAME_HISTORY= "proj_host_name.hist";
     private static final String FN_HOST_PORT_HISTORY= "proj_host_port.hist";
     private static final String FN_HOST_DIR_HISTORY= "proj_host_dir.hist";
-    
+
   public CppPlugin(IPluginDescriptor descriptor)
   {
     super(descriptor);
@@ -148,8 +155,8 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	
 	// register the default adapter for elements
 	IAdapterManager manager = Platform.getAdapterManager();
-	manager.registerAdapters(new DataElementAdapterFactory(_interface), DataElement.class);	  
-	manager.registerAdapters(new ResourceAdapterFactory(_interface), IResource.class);	  
+	manager.registerAdapters(new DataElementAdapterFactory(_interface), DataElement.class);	
+	manager.registerAdapters(new ResourceAdapterFactory(_interface), IResource.class);	
       }
 
     public void initDefaultBuildPreference()
@@ -275,7 +282,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
     return image;
   }
-    
+
     public String getPluginPath()
     {
 	return _corePath;
@@ -286,14 +293,14 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    String baseDir = _corePath + java.io.File.separator;
 	    CppActionLoader loader = (CppActionLoader)CppActionLoader.getInstance();
 	    String file = loader.getImageString(name);
-	    
+	
 	return ImageDescriptor.createFromFile(null, file);
       }
-    
+
     public static DataStore getHostDataStore()
     {
 	return _hostDataStore;
-    }  
+    }
 
   public static DataStore getDataStore()
   {
@@ -318,7 +325,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
   public boolean setCurrentProject(Repository obj)
   {
     boolean changed = false;
-    
+
     if (obj.isOpen())
 	{
 	    DataStore dataStore = ((Repository)obj).getDataStore();	
@@ -332,7 +339,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
     return changed;
   }
-    
+
 
   public boolean setCurrentProject(IResource obj)
   {
