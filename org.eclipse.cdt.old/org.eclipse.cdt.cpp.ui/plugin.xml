@@ -494,16 +494,6 @@
    </page>
    <page
          objectClass="org.eclipse.core.resources.IProject"
-         name="%Parse_Include_Path"
-         class="org.eclipse.cdt.cpp.ui.internal.builder.ParsePathPropertyPage"
-         id="org.eclipse.cdt.cpp.ui.internal.builder.ParsePathPropertyPage">
-      <filter
-            name="nature"
-            value="org.eclipse.cdt.cpp.ui.cppnature">
-      </filter>
-   </page>
-   <page
-         objectClass="org.eclipse.core.resources.IProject"
          name="%Parse_Quality"
          class="org.eclipse.cdt.cpp.ui.internal.builder.ParseQualityPropertyPage"
          id="org.eclipse.cdt.cpp.ui.internal.builder.ParseQualityPropertyPage">
@@ -619,12 +609,6 @@
          category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
          class="org.eclipse.cdt.cpp.ui.internal.preferences.ParserPreferencePage"
          id="org.eclipse.cdt.cpp.ui.internal.preferences.ParserPreferencePage">
-   </page>
-   <page
-         name="%Default_Parse_Include_Path"
-         category="org.eclipse.cdt.cpp.ui.internal.preferences.ParserPreferencePage"
-         class="org.eclipse.cdt.cpp.ui.internal.preferences.ParserPathPreferencePage"
-         id="org.eclipse.cdt.cpp.ui.internal.preferences.ParserPathPreferencePage">
    </page>
    <page
          name="%Default_Parse_Quality"
