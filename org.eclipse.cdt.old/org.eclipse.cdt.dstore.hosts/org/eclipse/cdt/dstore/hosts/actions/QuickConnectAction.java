@@ -68,14 +68,16 @@ public class QuickConnectAction implements Runnable
 
 
 	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
-	if (status.isConnected())
+	if (status == null || status.isConnected())
 	    {
 		DataStore rmtDataStore = tempConnection.getDataStore();
+		DataElement input = rmtDataStore.getHostRoot().get(0).dereference();
+		input.expandChildren();
 		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", 
-									 rmtDataStore.getHostRoot().get(0).dereference());
+									 input);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
-		    {
+		    { 
 			DataElement selected = dialog.getSelected();
 			if (selected != null)
 			    {
