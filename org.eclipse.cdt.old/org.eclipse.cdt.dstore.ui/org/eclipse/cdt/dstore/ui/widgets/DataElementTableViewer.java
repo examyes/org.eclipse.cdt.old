@@ -37,17 +37,15 @@ public class DataElementTableViewer extends TableViewer
 	private Shell _shell;
 	public DelayedRefresher(ArrayList elements)
 	{
-	    _shell = getTable().getShell();
+	    _shell = _currentInput.getDataStore().getDomainNotifier().findShell();
 	    _elements = elements;
-	    setDaemon(true);
 	}
 
 	public void run()
 	{
 	    try
 		{
-		    Thread.currentThread().sleep(5000);
-		    Thread.currentThread().yield();
+		    Thread.currentThread().sleep(1000);
 		}
 	    catch (InterruptedException e)
 		{
@@ -61,7 +59,8 @@ public class DataElementTableViewer extends TableViewer
 			{
 			    public void run()
 			    {
-				//	updateItems(getTable(), _elements, new ArrayList(0));
+				System.out.println("updating...");
+			       	//updateItems(getTable(), _elements, new ArrayList(0));
 			    }
 			});
 		}
@@ -314,6 +313,7 @@ public class DataElementTableViewer extends TableViewer
 	    }
     }
 
+    /*
     private void internalRefresh(DataElement parent)
     {
 	try
@@ -378,8 +378,9 @@ public class DataElementTableViewer extends TableViewer
 		System.out.println(e);
 	    }				
     }    
+    */
  
-
+    /*
     private synchronized void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
 	int maxAdd = (recycled.size() > 100) ? recycled.size() : 100;
@@ -460,6 +461,7 @@ public class DataElementTableViewer extends TableViewer
     {
 	return new TableItem((Table)parent, flags, ix);
     }
+    */
     
     public void doExpand(DataElement obj)
     {
@@ -504,7 +506,7 @@ public class DataElementTableViewer extends TableViewer
 			    }
 
 			_currentInput = (DataElement)object;
-
+			
 			internalRefresh(_currentInput);
 			_isShowing = true;
 		    }
