@@ -160,29 +160,35 @@ serverZipFile=cdt-eclipse-R2-$(DATE)-server.zip
 createServerZip: createEmptyServerZip zipServerPlugins zipHelpUtils
 	@echo Created $(pluginsDirectory)/$(serverZipFile)
 
+# These jars are needed in the server by the Help
+tomcatDir=org.eclipse.tomcat_4.0.3
+luceneDir=org.apache.lucene_1.2.0
+xercesDir=org.apache.xerces_4.0.3
+cdtutilsDir=cdt_utils
 zipHelpUtils:
-	@-cd $(pluginsDirectory) && mkdir cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/bootstrap.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/catalina.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/jakarta-regexp-1.2.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/jasper-compiler.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/jasper-runtime.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/naming-common.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/naming-factory.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/naming-resources.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlet.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlets-common.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlets-default.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlets-invoker.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlets-manager.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlets-snoop.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/servlets-webdav.jar cdt_utils;\
-	cp org.eclipse.tomcat_4.0.3/tomcat-util.jar cdt_utils;\
-	cp org.apache.lucene_1.2.0/lucene-1.2-rc4.jar cdt_utils;\
-	cp org.apache.lucene_1.2.0/lucene-demos-1.2-rc4.jar cdt_utils;\
-	cp org.apache.xerces_3.2.1/xerces.jar cdt_utils;\
-	zip -qr $(serverZipFile) cdt_utils;\
-	rm -r cdt_utils
+	@-cd $(pluginsDirectory) && mkdir $(cdtutilsDir);\
+	cp $(tomcatDir)/bootstrap.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/catalina.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/jakarta-regexp-1.2.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/jasper-compiler.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/jasper-runtime.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/naming-common.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/naming-factory.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/naming-resources.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlet.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlets-common.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlets-default.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlets-invoker.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlets-manager.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlets-snoop.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/servlets-webdav.jar $(cdtutilsDir);\
+	cp $(tomcatDir)/tomcat-util.jar $(cdtutilsDir);\
+	cp $(luceneDir)/lucene-1.2-rc4.jar $(cdtutilsDir);\
+	cp $(luceneDir)/lucene-demos-1.2-rc4.jar $(cdtutilsDir);\
+	cp $(xercesDir)/xercesImpl.jar $(cdtutilsDir);\
+	cp $(xercesDir)/xmlParserAPIs.jar $(cdtutilsDir);\
+	zip -qr $(serverZipFile) $(cdtutilsDir);\
+	rm -r $(cdtutilsDir)
 
 #Not sure how to create an empty zip (without priming it with something)...so I just add the parser directory by default
 createEmptyServerZip:
