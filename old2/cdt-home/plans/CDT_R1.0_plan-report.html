@@ -24,8 +24,7 @@ R1.0 Updated Plan</h1><p>
 <td>Fourth edition</td><td>October 22, 2002</td>
 </tr>
 <tr>
-<td>Fifth edition</td><td>November 15, 2002<br>
-Added Report on 1.0 plan see <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/plans/CDT_R1.0_plan-report.html?cvsroot=Tools_Project"> CDT 1.0 plan report<a></td>
+<td>Fifth edition</td><td>November 15, 2002</td>
 </tr>
 
 </table><p>
@@ -289,10 +288,11 @@ Every effort is made to allow for backward compatibility, but backward compatibi
 </tr>
 <tr>
 <td>
-   Project conversion wizards
+   Project conversion wizards <font color="red">--> Completed</font>
    <ul>
- 	 <li>convert from generic to C/C++ project
-	 <li> convert from C to C++
+ 	 <li>convert from Simple to C/C++ project
+	 <li>convert from C to C++
+	 <li>Convert from C++ to C
    </ul>
 </td>
 <tr>
@@ -388,9 +388,10 @@ Every effort is made to allow for backward compatibility, but backward compatibi
   <td>
    Supported platforms:
   <ul>
-   <li> Linux w/gdb 5.2.1
-   <li> QNX w/gdb 5.2.1
+   <li> Linux w/gdb 5.2.1 <font color="red">--> Completed</font>
+   <li> QNX w/gdb 5.2.1  <font color="red">--> In Progress</font>
    <li> Maybe windows with cygwin and gdb 5.2.1 (need someone to take ownership)
+   		<font color="red">--> Completed except for "Add Global Variables" action</font>
   </ul>
  </td>
  
@@ -405,7 +406,7 @@ Every effort is made to allow for backward compatibility, but backward compatibi
 
 <tr>
  <td>
-  Basic debug functionality
+  Basic debug functionality <font color="red">--> Completed</font>
   <ul>
  	<li>step
 	<li> source
@@ -425,7 +426,7 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
   CDI
   <ul>
-	<li>   Draft of debug interfaces
+	<li>   Draft of debug interfaces <font color="red">--> Completed</font>
   </ul>
  </td>
  <td>
@@ -441,17 +442,17 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
   Breakpoints/Watchpoints
   <ul>
-	<li>Add within C editor.
- 	<li>Enable/Disable/Remove within view and C editor.
- 	<li>Properties within view and C editor.
-	<li>Support setting/changing breakpoints at anytime during execution.
+	<li>Add within C editor. <font color="red">--> Completed</font>
+ 	<li>Enable/Disable/Remove within view and C editor. <font color="red">--> Completed</font>
+ 	<li>Properties within view and C editor. <font color="red">--> Completed</font>
+	<li>Support setting/changing breakpoints at anytime during execution. <font color="red">--> Completed</font>
  </ul>
  
  If time/resources permits;
  <ul>
- 	<li>Thread conditional breakpoints.         
-	<li>Outliner control of setting breakpoint on functions.
-	<li>Assembly editor with breakpoint on address
+ 	<li>Thread conditional breakpoints.  <font color="red">--> Deferred</font>       
+	<li>Outliner control of setting breakpoint on functions. <font color="red">--> Deferred</font>
+	<li>Assembly editor with breakpoint on address <font color="red">--> Deferred</font>
  </ul>
  </td>
  <td>
@@ -467,16 +468,16 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
   Variables
   <ul>
-	<li>Viewing of variables (base type).
-	<li>Viewing values in different formats.
-	<li>Pointer type/Array expansion.
-	<li>Changing values.
+	<li>Viewing of variables (base type). <font color="red">--> Completed</font>
+	<li>Viewing values in different formats. <font color="red">--> Deferred</font>
+	<li>Pointer type/Array expansion. <font color="red">--> Deferred</font>
+	<li>Changing values. <font color="red">--> Completed</font>
   </ul>
   
   If time/resources permits;
   <ul>
-    <li>Cast to type.
-    <li>Expression evaluation.
+    <li>Cast to type. <font color="red">--> Deferred</font>
+    <li>Expression evaluation. <font color="red">--> Completed</font>
   </ul>
  
  </td>
@@ -493,11 +494,11 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
  Source Management
  <ul>
- <li>      Basic source lookup in project and referenced projects.
+ <li>      Basic source lookup in project and referenced projects. <font color="red">--> Completed</font>
  </ul>
  If time/resources permits;
  <ul>
-   <li>Fallback to assembly.
+   <li>Fallback to assembly. <font color="red">--> Completed</font>
  </ul>
  
  </td>
@@ -515,12 +516,12 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
  Register View
  <ul>
- 	<li>Show all registers.
-	<li>View values in different format.
+ 	<li>Show all registers.<font color="red">--> Completed</font>
+	<li>View values in different format. <font color="red">--> Deferred</font>
  </ul>
  If time/resources permits;
  <ul>
-	 <li>Support creation of custom register sets.
+	 <li>Support creation of custom register sets. <font color="red">--> Deferred</font>
  </ul>
  
  </td>
@@ -538,7 +539,7 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
  Memory View
  <ul>
-	<li>basic hex dump.
+	<li>basic hex dump. <font color="red">--> Completed</font>
  </ul>
  </td>
  <td>
@@ -579,7 +580,7 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  <td>
  Editor Support
  <ul>
- <li>Add hover support in C editor.
+ <li>Add hover support in C editor. <font color="red">--> Completed</font>
  </ul>
  </td>
  <td>
@@ -596,8 +597,8 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  GDB/MI <br>
  Add Gdb launch options:
  <ul>
- 	<li>gdb path.
- 	<li>Shared lib search path.
+ 	<li>gdb path. <font color="red">--> Completed</font>
+ 	<li>Shared lib search path. 
  </ul>
  </td>
  <td>
@@ -615,9 +616,11 @@ Every effort is made to allow for backward compatibility, but backward compatibi
  
  CDT Launching
  <ul>
- 	<li>Attach to Process.
- 	<li>Corefile support.
- 	<li>Allow extensibility to contribute own lauch parameters
+ 	<li> Basic run/debug support <font color="red">--> Completed</font>
+	<li>Attach debugger to Process. <font color="red">--> Completed</font> 
+	<li>Post-mortem debugging (corefiles). <font color="red">--> Completed</font> 
+	<li>Provide general machanism for contribution of other CDI debugger to launch parameters <font color="red">--> Completed</font> 
+	<li>Provide a framework that can easly be extended by other launch configurations <br> <font color="red">--> Completed</font> 
   </ul>
  
  </td>
@@ -715,7 +718,7 @@ to the plugin.<p>
 </tr>
 </table>
 <center><I>
-Last Modified on Wednesday, October 30, 2002
+Last Modified on Friday, November 15, 2002
 </I></center>
 
 </body>
