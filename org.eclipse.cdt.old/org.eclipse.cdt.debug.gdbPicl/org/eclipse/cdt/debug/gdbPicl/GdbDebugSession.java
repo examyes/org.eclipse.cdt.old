@@ -13,7 +13,7 @@ import java.net.*;
 import java.io.*;
 import java.text.*;
 
-import com.ibm.debug.epdc.ECPCommandLog;
+import com.ibm.debug.epdc.ECPLog;
 import com.ibm.debug.epdc.EPDC;
 import com.ibm.debug.epdc.ERepCommandLog;
 import com.ibm.debug.epdc.EStdCmdLogLine;
@@ -420,7 +420,7 @@ public class GdbDebugSession extends DebugSession {
 
 	public int cmdCommandLogExecute(java.lang.String cmd, ERepCommandLog _rep) {
 		
-		ECPCommandLog cp = new ECPCommandLog();
+		ECPLog cp = new ECPLog();
 		
 		if (gdbProcess == null) {
 			if (Gdb.traceLogger.ERR)
@@ -429,8 +429,8 @@ public class GdbDebugSession extends DebugSession {
 			_whyStop = WS_PgmQuit;
 			_rep.setReturnCode(EPDC.ExecRc_TerminateDebugger);
 			_rep.setMessage(str);
-			cp.addLogLine(str);
-			_rep.addCmdLogChangePacket(cp);
+			cp.addCmdLogLine(str);
+			_rep.addLogChangePacket(cp);
 			//         _whyExceptionMsg = str;
 			//         _rep.setExceptionMsg( str );
 
@@ -438,14 +438,14 @@ public class GdbDebugSession extends DebugSession {
 		}
 
 		if (cmd.equalsIgnoreCase("setEcho on")) {
-			cp.addLogLine(cmd);
-			_rep.addCmdLogChangePacket(cp);
+			cp.addCmdLogLine(cmd);
+			_rep.addLogChangePacket(cp);
 			//         uiMessages.addElement(cmd);
 			echoInternalCommands = true;
 			return 1;
 		} else if (cmd.equalsIgnoreCase("setEcho off")) {
-			cp.addLogLine(cmd);
-			_rep.addCmdLogChangePacket(cp);
+			cp.addCmdLogLine(cmd);
+			_rep.addLogChangePacket(cp);
 			//        uiMessages.addElement(cmd);
 			echoInternalCommands = false;
 			return 1;
@@ -468,12 +468,12 @@ public class GdbDebugSession extends DebugSession {
 				if (str == null || str.equals("")) {
 					str = " ";
 				}
-				cp.addLogLine(str);
+				cp.addCmdLogLine(str);
 			}
 			uiMessages.removeAllElements();
 		}
 
-		_rep.addCmdLogChangePacket(cp);
+		_rep.addLogChangePacket(cp);
 
 		if (gdbProcess == null || !gdbProcess.isProcessRunning()) {
 			_whyStop = WS_PgmQuit;
@@ -482,11 +482,11 @@ public class GdbDebugSession extends DebugSession {
 				Gdb.traceLogger.evt(1, "GdbDebugSession.cmdCommandLogExecute " + str);
 			_rep.setReturnCode(EPDC.ExecRc_TerminateDebugger);
 			_rep.setMessage(str);
-			cp.addLogLine(str);
+			cp.addCmdLogLine(str);
 			//         _whyExceptionMsg = str;
 			//         _rep.setExceptionMsg( str );
 
-			_rep.addCmdLogChangePacket(cp);
+			_rep.addLogChangePacket(cp);
 			return _whyStop;
 		}
 

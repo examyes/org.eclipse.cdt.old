@@ -27,7 +27,7 @@ public class CmdCommandLogExecute extends Command {
 	public boolean execute(EPDC_EngineSession EPDCSession) {
 
 		//////////////////////////////////////////////////////////////////////////////////////
-		String commandString = _req.getCommandString();
+		String commandString = _req.getString();
 		if (commandString == null)
 			commandString = " ";
 		if (Gdb.traceLogger.EVT)
