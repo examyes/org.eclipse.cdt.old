@@ -258,7 +258,7 @@ public class ExtendedTreeViewer extends TreeViewer
 			
 			if ((_expanded == parent))
 			    {
-				expandToLevel(parent, 1);
+			       	expandToLevel(parent, 1);
 			    }
 		    }
 	    }
@@ -311,15 +311,7 @@ public void doExpand(DataElement obj)
     {
 	if (object == null)
 	    {
-		System.out.println("setInput " + object);
-		try
-		    {
-			int x = 1 / 0;
-		    }
-		catch (Exception e)
-		    {
-			e.printStackTrace();
-		    }
+		return;
 	    }
 
 	boolean selectionListening = _listener.isEnabled();
@@ -500,6 +492,14 @@ public void doExpand(DataElement obj)
 	    }
 
 	return widget;
+    }
+
+    protected Widget internalExpand(Object element, boolean expand) 
+    {	
+	if (element == null)
+	    return null;
+	
+	return findItem(element);
     }
 
     public void select(DataElement object)

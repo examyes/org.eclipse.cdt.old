@@ -289,15 +289,7 @@ public void doExpand(DataElement obj)
     {
 	if (object == null)
 	    {
-		System.out.println("setInput " + object);
-		try
-		    {
-			int x = 1 / 0;
-		    }
-		catch (Exception e)
-		    {
-			e.printStackTrace();
-		    }
+		return;
 	    }
 
 	boolean selectionListening = _listener.isEnabled();
@@ -466,6 +458,9 @@ public void doExpand(DataElement obj)
 		    }
 	    }
     }
+
+
+
 
   public void setFilter(DataElement type)
   {
