@@ -82,7 +82,7 @@ public IWorkspace getWorkspace()
     public void addRepository(Repository repository)
     {
 	_repositories.add(repository);
-	writeRepositories();	
+	
     }
 
   public void deleteRepository(Repository r)
@@ -127,6 +127,11 @@ public void setWorkspace(IWorkspace value)
 
 public void shutdown(IProgressMonitor monitor) 
   {
+  	for (int i = 0; i < _repositories.size(); i++)
+  	{
+  		((Repository)_repositories.get(i)).shutdown();
+  	}
+  	
     writeRepositories();    
   }
 

@@ -114,7 +114,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	    int iconSize = 16;
 	    int x1 = r.x;
 	    int x2 = r.x + 3;
-	    int x3 = x2 + iconSize + 2;
+	    int x3 = x2 + iconSize + 5;
 	    int y1 = r.y + 4;   
 	    int textWidth = width - x3;
 	    

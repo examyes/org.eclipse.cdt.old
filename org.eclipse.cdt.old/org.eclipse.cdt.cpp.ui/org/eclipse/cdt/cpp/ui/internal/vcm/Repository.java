@@ -212,6 +212,11 @@ public class Repository extends Project
 		
 	_children = new Vector();
     }
+    
+    public void shutdown()
+    {
+    	saveProperties();	
+    }
 
 
     public void setClosedElement(DataElement closedElement)
@@ -506,7 +511,7 @@ public class Repository extends Project
     {	
 	ModelInterface api = ModelInterface.getInstance();
 	_children.clear();
-	saveProperties();
+
 
 	DomainNotifier dnotifier = _dataStore.getDomainNotifier();
 	dnotifier.removeDomainListener(this);		    
