@@ -81,8 +81,8 @@ public class HelpSearch
 				String line;
 				while((line=input.readLine())!=null )
 				    {
-					
-					int limit= line.indexOf('-');
+					int limit= line.indexOf('-',line.indexOf(')'));	
+
 					if(limit ==-1)
 					    continue; //skip lines with no description
 					String name = line.substring(0,limit); 
