@@ -172,7 +172,7 @@ public class DataElementTreeViewer extends TreeViewer
 			if ((parent == _selected) || 
 			    (parent == _currentInput) || 
 			    (parent == _expanded) ||
-			    (_currentInput.contains(parent, _property, 2)))
+			    (_currentInput.contains(parent, _property, 1)))
 			    {
 				if ((getTree() != null) && !getTree().isDisposed())
 				    {
