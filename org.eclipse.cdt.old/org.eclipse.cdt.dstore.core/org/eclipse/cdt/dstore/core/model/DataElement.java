@@ -694,11 +694,14 @@ public final class DataElement implements Serializable, IDataElement
     {
         if (attribute != null)
 	    {
-		if ((attributeIndex == DE.A_NAME) && (getAttribute(DE.A_NAME).equals(getAttribute(DE.A_VALUE))))
+			if ((attributeIndex == DE.A_NAME) && (getAttribute(DE.A_NAME).equals(getAttribute(DE.A_VALUE))))
 		    {
-			_attributes[DE.A_VALUE] = attribute;
-			
+			_attributes[DE.A_VALUE] = attribute;						
 		    }
+		 	if (attributeIndex == DE.A_DEPTH)
+		 	{
+		 		_depth = Integer.parseInt(attribute);
+		 	}   
 		
 		_attributes[attributeIndex] = attribute;
 		_isUpdated = false;
@@ -807,6 +810,9 @@ public final class DataElement implements Serializable, IDataElement
     public void setDepth(int depth)
     {
         _depth = depth;
+        setAttribute(DE.A_DEPTH, "" + _depth);
+        _isUpdated = false;
+        _dataStore.refresh(this);
     }
 
 
@@ -1636,6 +1642,8 @@ public final class DataElement implements Serializable, IDataElement
 	_isUpdated   = false;
 	_descriptor  = typeDescriptor;
 	
+	
+	
 	String depthStr = getAttribute(DE.A_DEPTH);
 	if (depthStr != null)
 	    {
@@ -1660,7 +1668,7 @@ public final class DataElement implements Serializable, IDataElement
 	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR)
 	    )
 	    {
-		  _isDescriptor = true; 
+		  _isDescriptor = true; 		  		 
 	    }
 	
 	if (_nestedData != null)
