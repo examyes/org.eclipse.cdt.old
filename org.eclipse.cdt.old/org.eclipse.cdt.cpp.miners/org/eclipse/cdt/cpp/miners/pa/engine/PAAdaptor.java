@@ -15,7 +15,8 @@ public class PAAdaptor {
  public static final int AUTO = 0;
  public static final int GPROF_GNU = 1;
  public static final int GPROF_BSD = 2;
- public static final int FUNCTIONCHECK = 3;
+ public static final int GPROF_ALL = 3;
+ public static final int FUNCTIONCHECK = 4;
  public static final int INVALID = -1;
  
  // The default trace file format is AUTO
@@ -56,7 +57,7 @@ public class PAAdaptor {
    format = queryTraceFileFormat(file);
    
   PATraceFile traceFile = null;
-  if (format == GPROF_GNU) {
+  if (format == GPROF_GNU || format == GPROF_ALL) {
    traceFile = new GprofTraceFile(file);
    traceFile.parse();   
   }
@@ -87,6 +88,8 @@ public class PAAdaptor {
    return createTraceFile(file, GPROF_GNU);
   else if (formatString.toLowerCase().equals("gprof_bsd"))
    return createTraceFile(file, GPROF_BSD);
+  else if (formatString.toLowerCase().equals("gprof"))
+   return createTraceFile(file, GPROF_ALL);  
   else if (formatString.toLowerCase().equals("functioncheck"))
    return createTraceFile(file, FUNCTIONCHECK);
   else
@@ -103,6 +106,8 @@ public class PAAdaptor {
    return createTraceFile(reader, GPROF_GNU);
   else if (formatString.toLowerCase().equals("gprof_bsd"))
    return createTraceFile(reader, GPROF_BSD);
+  else if (formatString.toLowerCase().equals("gprof"))
+   return createTraceFile(reader, GPROF_ALL);  
   else if (formatString.toLowerCase().equals("functioncheck"))
    return createTraceFile(reader, FUNCTIONCHECK);
   else
@@ -116,7 +121,7 @@ public class PAAdaptor {
   public static PATraceFile createTraceFile(ITraceReader reader, int format) throws Exception {
      
    PATraceFile traceFile = null;
-   if (format == GPROF_GNU) {
+   if (format == GPROF_GNU || format == GPROF_ALL) {
     traceFile = new GprofTraceFile(reader);
     traceFile.parse();   
    }
