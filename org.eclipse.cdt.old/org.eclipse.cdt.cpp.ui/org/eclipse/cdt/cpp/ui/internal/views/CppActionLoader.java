@@ -197,20 +197,23 @@ public class CppActionLoader extends GenericActionLoader
 	MenuManager browseCascade = new MenuManager("Browse", "Browse");			
 	
 	DataElement descriptor = input.getDescriptor();
-	ArrayList relationships = descriptor.getDataStore().getRelationItems(descriptor, null);
-	relationships = Sorter.sort(relationships);
+	if (descriptor != null)
+	 {
+		ArrayList relationships = descriptor.getDataStore().getRelationItems(descriptor, null);
+		relationships = Sorter.sort(relationships);
 
-	for (int i = 0; i < relationships.size(); i++)
+		for (int i = 0; i < relationships.size(); i++)
 	    {
-		DataElement des = (DataElement)relationships.get(i);
-		if (des.depth() > 0)
+		 DataElement des = (DataElement)relationships.get(i);
+		 if (des.depth() > 0)
 		    {
 			browseCascade.add(new BrowseObjectAction(des, input, 
 								 "org.eclipse.cdt.cpp.ui.SuperDetailsViewPart"));
 		    }
 	    }
 	
-	menu.add(browseCascade);			
+		menu.add(browseCascade);
+	 }
     }
  
     public String getImageString(DataElement object)
