@@ -52,11 +52,7 @@ public class MakefileAmAction extends CustomAction implements IDomainListener
 			DataElement cmdD = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CLASSIFY_MAKEFILE_AM");
 			if (cmdD != null)
 			{
-				// to be removed
-				//DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);	
-				//DataElement classifier = (DataElement)status.get(0);
-				//String type = classifier.getName();
-				// end of to be removed
+
 				DataElement classifier = null;
 				ArrayList updated = _subject.getAssociated("class type");
 				if (updated.size() > 0)
@@ -137,22 +133,6 @@ public class MakefileAmAction extends CustomAction implements IDomainListener
     
     public void run()
 	{
-		/*
-		// open dialog to set Makefile.am compiler flags
-		if(_command.getValue().equals("COMPILER_FLAGS"))
-		{
-			org.eclipse.cdt.dstore.hosts.dialogs.CompilerFlagDialog cfd = new org.eclipse.cdt.dstore.hosts.dialogs.CompilerFlagDialog(_subject);
-			// populate if found any C or CXX flag def
-			String existingDef = getExistingDef(_subject);
-			//cfd.setDefinition(existingDef);
-			cfd.open();
-			System.out.println("\n ysuuhsa = "+cfd._definitionArea.getText());
-			//get the user input
-			//String newDef = cfd.getDefinitionInput();
-			// insert this def in Makefile.am
-			// modify Makefile.am
-		}
-		*/
 		
 		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(makefileAmCmd, _subject);
@@ -160,29 +140,7 @@ public class MakefileAmAction extends CustomAction implements IDomainListener
 		api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
-    /*
-    private String getExistingDef(DataElement parent)
-    {
-    	
-    	File MakefileAm = new File(_subject.getSource(),"Makefile.am");
-		String line;
-		boolean found = false;
-		try
-		{
-			// searching for FLAGS line
-			BufferedReader in = new BufferedReader(new FileReader(MakefileAm));
-			while((line=in.readLine())!=null)
-			{
-				if(line.indexOf("CFLAGS")!=-1||line.indexOf("CXXFLAGS")!=-1
-					||line.indexOf("CPPFLAGS")!=-1)
-					return line;
-			}
-			in.close();
-		}catch(IOException e){System.out.println(e);}  	
-		
-    	return "FLAG DEF";
-    }
-    */
+
  	private boolean doesFileExist(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
