@@ -18,15 +18,15 @@ import java.lang.*;
 public class ServerCommandHandler extends CommandHandler
 {
     private ArrayList            _miners;
-    private ExternalLoader       _loader;
-
-  public ServerCommandHandler(ExternalLoader loader)
+    private ArrayList            _loaders;
+    
+  public ServerCommandHandler(ArrayList loaders)
     {
       super();
-
-      _loader = loader;
+      _loaders = loaders;
       _miners = new ArrayList();
     }
+
 
   public void setDataStore(DataStore dataStore)
   { 
@@ -37,7 +37,7 @@ public class ServerCommandHandler extends CommandHandler
   {
 	if (_dataStore != null)
 	{
-		MinerLoader minerLoader = new MinerLoader(_dataStore, _loader);
+		MinerLoader minerLoader = new MinerLoader(_dataStore, _loaders);
 		
 		// load the miners
 		_miners = minerLoader.loadMiners();

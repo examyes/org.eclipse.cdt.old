@@ -56,7 +56,7 @@ public class ClientConnection
     private String                _port;
     private String                _hostDirectory;
     
-    private ExternalLoader        _loader;  
+    private ArrayList             _loaders;  
     
     /**
      * Creates a new ClientConnection instance
@@ -112,14 +112,29 @@ public class ClientConnection
 
     
     /**
-     * Specifies the loader used to instantiate the miners
+     * Specifies the loaders used to instantiate the miners
+     *
+     * @param loaders the loaders 
+     */
+    public void setLoaders(ArrayList loaders)
+    {
+	_loaders = loaders;	
+    }
+
+    /**
+     * Adds a loader to be used to instantiate the miners
      *
      * @param loader the loader 
      */
-    public void setLoader(ExternalLoader loader)
+    public void addLoader(ExternalLoader loader)
     {
-	_loader = loader;	
+	if (_loaders == null)
+	    {
+		_loaders = new ArrayList();
+	    }
+	_loaders.add(loader);	
     }
+
 
     /**
      * Specifies the hostname or IP of the host to connect to 
@@ -244,21 +259,19 @@ public class ClientConnection
 	_updateHandler = new ClientUpdateHandler();
 	_updateHandler.start();
 	
-	if (_loader != null)
+	if (_loaders == null)
 	    {
-		_commandHandler = new ServerCommandHandler(_loader);
+		_loaders = new ArrayList();
+		_loaders.add(new ExternalLoader(getClass().getClassLoader(), "*"));
 	    }
-	else
-	    {
-		_commandHandler = new ServerCommandHandler(new ExternalLoader(getClass().getClassLoader(), "*"));
-	    }
-	
+
+	_commandHandler = new ServerCommandHandler(_loaders);	
 	_commandHandler.start();
 	
 	_dataStore.setCommandHandler(_commandHandler);
 	_dataStore.setUpdateHandler(_updateHandler);
 	_dataStore.setConnected(true);
-	_dataStore.setLoader(_loader);
+	_dataStore.setLoaders(_loaders);
 	_dataStore.getDomainNotifier().enable(true);
 	
 	_commandHandler.setDataStore(_dataStore);

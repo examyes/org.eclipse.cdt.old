@@ -7,7 +7,8 @@ package org.eclipse.cdt.dstore.core.miners.miner;
  */
  
 import org.eclipse.cdt.dstore.core.model.*;
-
+import org.eclipse.cdt.dstore.core.util.*;
+ 
 import java.lang.*;
 import java.io.*;
 import java.util.*;
@@ -19,7 +20,7 @@ import java.util.*;
  * To add a new miner, developers must extend this class and implement the abstract methods declared here.
  *
  */
-public abstract class Miner
+public abstract class Miner implements ISchemaExtender
 {
     public DataStore   _dataStore;
     public DataElement _minerElement; 
@@ -28,11 +29,12 @@ public abstract class Miner
     
     private boolean    _initialized;
     private boolean    _connected;
+    private ExternalLoader _loader; 
 
     protected String   _name = null;
     protected String   _value = null;
     protected ArrayList _dependencies;
-    
+     
     protected ResourceBundle _resourceBundle = null;  
     
     /**
@@ -578,19 +580,20 @@ public abstract class Miner
     public final DataElement getSchemaRoot()
     {
 	return _dataStore.getDescriptorRoot();
-    }
- 
-    /**
-     * Add this tool's schema to the global DataStore schema.
-     * This interface must be implemented by each miner in order to
-     * populate the DataStore schema with information about this tool's
-     * object model and information about how to communicate with the
-     * tool from objects available to the user interface.
-     *
-     * @param schemaRoot the descriptor root
-     */
-    public abstract void extendSchema(DataElement schemaRoot);
+    } 
 
+
+    public void setExternalLoader(ExternalLoader loader)
+    {
+	_loader = loader;
+    }
+
+    public ExternalLoader getExternalLoader()
+    {
+	return _loader;
+    }     
+
+ 
     /**
      * Handle commands that are routed to this miner.
      * This interface must be implemented by each miner in order to
@@ -599,5 +602,5 @@ public abstract class Miner
      * @param theCommand an instance of a command containing a tree of arguments
      */
     public abstract DataElement handleCommand (DataElement theCommand);
-}
+} 
 

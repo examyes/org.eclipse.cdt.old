@@ -193,7 +193,9 @@ public class ConnectionEstablisher
 		  _timeout = 120000;
 	      }
 	  
-	  _commandHandler = new ServerCommandHandler(new ExternalLoader(getClass().getClassLoader(), "*"));
+	  ArrayList loaders = new ArrayList();
+	  loaders.add(new ExternalLoader(getClass().getClassLoader(), "*"));
+	  _commandHandler = new ServerCommandHandler(loaders);
 	  _updateHandler = new ServerUpdateHandler();
 	  
 	  _dataStore = new DataStore(_serverAttributes, _commandHandler, _updateHandler, null);
