@@ -10,8 +10,10 @@
 <h1>
 C/C++ Development Tools - CDT Project<br>
 R2.0 Updated Plan</h1>
-<p>First edition July 10, 2002<p>
-<p>Second edition July 25, 2002<p>
+<p>First edition July 10, 2002<br>
+Second edition July 25, 2002<br>
+Third edition September 4, 2002<p>
+
 This document lays out the plan for the next major release of the C/C++
 Development Tools (CDT) Project, designated release 2.0. The two main goals
 of the 2.0 release will be to enable CDT to run on Eclipse R2.0, and to define 
@@ -28,49 +30,579 @@ list. The <a href="http://www.eclipse.org/mail/index.html" target="_top">develop
 mailing list archives</a> contain further, in-depth information about how
 a component is changing. Particular problem reports being worked on for
 this release can be tracked through the Eclipse <a href="http://dev.eclipse.org/bugs/">bug
-database</a>; the "Target Milestone" field reflects when a work item will
-become available in the main development stream.
+database</a>; the "Target Date" field reflects when a work item will
+become available in the main development stream.</p>
 
-<h2>Release deliverables</h2>
-The release deliverables are:
-<ul>
-  <li> Source Code for framework</li>
-  <li> Source Code for default implementation of all functionality (more detail to be added) </li>
-</ul>
-
-<h2>
-Release milestones</h2>
-The release milestones are:
-<ul>
- <li>June 26, 2002, inital release of source code for
+<table BORDER=0 CELLSPACING =10 CELLPADDING=10 WIDTH="100%">
+<tr>
+<td><h2> Release Milestone</h2></td> <td><h2> Target Date </h2></td>
+</tr>
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+   Inital release of source code for <br>
 	<ul>
-	<li>org.eclipse.cdt.core</li>
-	<li>org.eclipse.cdt.ui</li>
+		<li>org.eclipse.cdt.core 
+		<li>org.eclipse.cdt.ui
 	</ul>
- </li>
- <li>Subsequent source code releases will be with respect to 
- 	<ul>
- 	  <li> 1 August, 2002, inital release of proposed framework API
+ </td>
+ <td>
+ June 26, 2002
+ </td>
+</tr>
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+ 	Inital release of proposed Debugger framework & API
  	  <ul>
 	  	<li>org.eclipse.cdt.debug.core </li>
+	  	<li>org.eclipse.cdt.debug.mi.core</li>
+	  	<li>org.eclipse.cdt.debug.mi.ui</li>
 	  	<li>org.eclipse.cdt.debug.ui </li>
-	  	<li>org.eclipse.cdt.debug.mi</li>
-	  <ul></li>
-	  <li>org.eclipse.cdt.launch components.</li>
-	 </ul> 
-  </li>
-<li> TBD - nightly builds</li>
-<li>TBD - stable build</li>
-<li>TBD - stable build</li>
-<li>TBD - beta build</li>
-<li>TBD - release build</li>
-</ul>
-All release deliverables will
+	    <li>org.eclipse.cdt.launch</li>
+	   </ul>
+  </td>
+  <td>
+  August 1, 2002
+  </td>
+ </tr>
+ <tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+ </tr>
+ <tr>
+ <td>
+ 	Initial working version of the Debugger
+ 	  <ul>
+	  	<li>org.eclipse.cdt.debug.core </li>
+	  	<li>org.eclipse.cdt.debug.mi.core</li>
+	  	<li>org.eclipse.cdt.debug.mi.ui</li>
+	  	<li>org.eclipse.cdt.debug.ui </li>
+	    <li>org.eclipse.cdt.launch</li>
+	   </ul>
+  </td>
+  <td>
+  August 31, 2002
+  </td>
+ </tr>
+ <tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+ </tr>
+ <tr>
+ <td><h3> CDT Core </h3><br>
+ The draft plan for the CDT core and UI components.
+ The plan is split into 3 major "releases", which align
+ with the debugger/launcher plan. The first is in
+ october, as the first, working prototype implementation, the
+ second is targetted for march 2003, and the third for august 2003.
+ </td>
+</tr>
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"></td>
+</tr>
+
+<tr>
+ <td>
+ The focus is on cleaning up the QNX CDT code and doing all
+ of the 2.0 catchup items, as well as adding features to
+ support the modularity and overridability of the CDT components.
+ </td>
+</tr>
+
+<tr>
+ <td>
+   Supported platforms:
+  <ul>
+   <li> Linux w/gdb 5.2.1
+   <li> QNX w/gdb 5.2.1
+   <li> Maybe windows with cygwin and gdb 5.2.1 (need someone to take ownership)
+  </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>C component manager
+  <ul>
+ 	<li> manages the selection of which components to use for a project.
+ 	<li> allows overriding the default CDT implementation (e.g. replace the builder)
+  </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+  2.0 catchup items
+  <ul>
+ 	<li> clean up extension points
+	<li> component manager bring editor to 2.0 GA level
+ 	<li> bring menu handling to 2.0 level
+ 	<li> clean up deprecated function warnings
+  </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+ Provide prototype versions of CDT API's
+  <ul>
+   <li> C model
+   <li> Indexer interface
+   <li> Parser interface
+   <li> Help integration interface
+  </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+ Prototype version of builder (simple builder model)
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+ Improve indexer
+ <ul>
+ 	<li>bound amount of memory used
+ 	<li>save indexing info to file for persistence
+ </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+   Project conversion wizards
+   <ul>
+ 	 <li>convert from generic to C/C++ project
+	 <li> convert from C to C++
+   </ul>
+<tr>
+ <td>
+ Additional preferences
+ <ul>
+ 	<li> component arguments/settings
+	<li> formatting preferences
+ </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+<tr>
+ <td>
+  The last two items are currently unassigned and will probably
+ not get done:
+ <ul>
+   <li> C search page
+   <li> Class browser
+ </ul>
+
+
+ As well, we are lacking user documentation, due to resourcing constraints.
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+ Based on the experience and feedback gathered with the october
+ release, we will finalize the public interfaces for the parser,
+ indexer and C model. This is also the target for adding code
+ formatting support, as well as a prototype of the CDOM.
+ 
+ </td>
+ <td>
+  March 2003
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+ Feature set for this will be determined by the feedback and direction
+ that the CDT takes.
+ </td>
+ <td>
+  August 2003 
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td><h3> CDT Debugger </h3><br>
+ The draft plan for the debugger/launcher components.
+ The plan is split into 3 major "releases". The first is in
+ october, as the first, working prototype implementation, the
+ second is targetted for march 2003, and the third for august 2003.
+ </td>
+</tr>
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"></td>
+</tr>
+
+<tr>
+ <td>
+  The focus is on creating a first working prototype of the CDT debugger,
+ that works with a gdb/mi backend. The debugger includes standard
+ functionality such as source file integration, stepping, variables,
+ etc. as well as C-specific views such as registers, assembly and memory.
+ It also includes an initial version of the C Debug Interface (CDI)
+ that is used to programmatically control the CDT debugger.
+</tr> 
+ <tr>
+  <td>
+   Supported platforms:
+  <ul>
+   <li> Linux w/gdb 5.2.1
+   <li> QNX w/gdb 5.2.1
+   <li> Maybe windows with cygwin and gdb 5.2.1 (need someone to take ownership)
+  </ul>
+ </td>
+ 
+ <td>
+ October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+  Basic debug functionality
+  <ul>
+ 	<li>step
+	<li> source
+	<li> variables
+  </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+ 
+<tr>
+ <td>
+  CDI
+  <ul>
+	<li>   Draft of debug interfaces
+  </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+ 
+<tr>
+ <td>
+  Breakpoints/Watchpoints
+  <ul>
+	<li>Add within C editor.
+ 	<li>Enable/Disable/Remove within view and C editor.
+ 	<li>Properties within view and C editor.
+	<li>Support setting/changing breakpoints at anytime during execution.
+ </ul>
+ 
+ If time/resources permits;
+ <ul>
+ 	<li>Thread conditional breakpoints.         
+	<li>Outliner control of setting breakpoint on functions.
+	<li>Assembly editor with breakpoint on address
+ </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+  Variables
+  <ul>
+	<li>Viewing of variables (base type).
+	<li>Viewing values in different formats.
+	<li>Pointer type/Array expansion.
+	<li>Changing values.
+  </ul>
+  
+  If time/resources permits;
+  <ul>
+    <li>Cast to type.
+    <li>Expression evaluation.
+  </ul>
+ 
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+ Source Management
+ <ul>
+ <li>      Basic source lookup in project and referenced projects.
+ </ul>
+ If time/resources permits;
+ <ul>
+   <li>Fallback to assembly.
+ </ul>
+ 
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+
+<tr>
+ <td>
+ Register View
+ <ul>
+ 	<li>Show all registers.
+	<li>View values in different format.
+ </ul>
+ If time/resources permits;
+ <ul>
+	 <li>Support creation of custom register sets.
+ </ul>
+ 
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+
+<tr>
+ <td>
+ Memory View
+ <ul>
+	<li>basic hex dump.
+ </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+
+<tr>
+ <td>
+  Preferences/Properties
+  <ul>
+ 	<li>Basic UI preferences for Debug views (colors/formats/ others?).
+  </ul>
+  If time permits:
+  <ul>
+  	<li>Properties of target to change various attributes at runtime<br>
+  		(ie shared lib search paths).</li>
+  </ul>
+  
+ 
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+
+<tr>
+ <td>
+ Editor Support
+ <ul>
+ <li>Add hover support in C editor.
+ </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"></td>
+</tr>
+
+<tr>
+ <td>
+ GDB/MI <br>
+ Add Gdb launch options:
+ <ul>
+ 	<li>gdb path.
+ 	<li>Shared lib search path.
+ </ul>
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+
+<tr>
+ <td>
+ 
+ CDT Launching
+ <ul>
+ 	<li>Attach to Process.
+ 	<li>Corefile support.
+ 	<li>Allow extensibility to contribute own lauch parameters
+  </ul>
+ 
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+ One area that is lacking is user documentation, due to resourcing
+ constraints.
+ </td>
+ <td>
+  October 2002
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+  Based on the experience and feedback gathered with the october
+ release, debugged features will be refined and finalized. The goal
+ is also to finalize the CDI interfaces. Some features are planned,
+ such as scripting/playback, tracepoints, a gdb prompt and C++ name
+ demangling.<p>
+
+ Emphasis will also be placed on developing regression tests for the
+ debugger components.
+ </td>
+ <td>
+  March 2003
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+
+<tr>
+ <td>
+  Feature set for this will be determined by the feedback and direction
+ that the CDT takes.
+ </td>
+ <td>
+	August 2003
+ </td>
+</tr>
+
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"> </td>
+</tr>
+ 
+</table>
+<p>
+<i>*** All release deliverables will
 be available for download as soon as the release has been tested and validated.
+</i></p>
 
-
-<br>&nbsp;
-<br>&nbsp;
 <h2>
 Compatibility with Previous Release</h2>
 
@@ -89,23 +621,7 @@ Work Items</h2>
 Note that fixing bugs, improving test coverage, documentation, examples,
 etc. are considered routine ongoing maintenance activities and are not
 included in this plan unless they would also involve significant changes
-to the plugin.
-<p>The following committed items reflect new features of CDT, or areas
-where existing features will be significantly reworked.</p>
-
-TBD
-
-<br>&nbsp;
-<br>&nbsp;</blockquote>
-
-
-<p>
-<table BORDER=0 CELLPADDING=2 WIDTH="100%">
-<tr>
- <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
- </td>
-</tr>
-</table>
+to the plugin.<p>
 
 <!-- Footer -->
 <p>
@@ -116,7 +632,7 @@ TBD
 </tr>
 </table>
 <center><I>
-Last Modified on Tuesday, July 23, 2002
+Last Modified on Wednesday, September 4, 2002
 </I></center>
 
 </body>
