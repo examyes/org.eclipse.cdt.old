@@ -154,7 +154,9 @@ public class ObjectsViewPart extends GenericViewPart
 	notifier.addProjectListener(this);
 	
 	initInput(null);
-        WorkbenchHelp.setHelp(_viewer.getViewer().getControl(), new ViewContextComputer(this, getF1HelpId()));
+
+// deprecated
+//        WorkbenchHelp.setHelp(_viewer.getViewer().getControl(), new ViewContextComputer(this, getF1HelpId()));
 
 	MenuManager menuMgr = _viewer.getMenuManager();
 	getSite().registerContextMenu(menuMgr, (StructuredViewer)_viewer.getViewer()); 
