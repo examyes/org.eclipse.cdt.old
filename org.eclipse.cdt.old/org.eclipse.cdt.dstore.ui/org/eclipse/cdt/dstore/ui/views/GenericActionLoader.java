@@ -42,10 +42,17 @@ public class GenericActionLoader implements IActionLoader
     protected   IOpenAction            _openAction;
     protected   CustomAction           _openPerspectiveAction;
     private     DataStoreUIPlugin      _plugin;
+    private     ArrayList              _externalLoaders;
 
     public GenericActionLoader()	
     {	
 	_plugin = DataStoreUIPlugin.getInstance();
+	_externalLoaders = new ArrayList();
+    }
+
+    public void provideExternalLoader(ExternalLoader loader)
+    {
+	_externalLoaders.add(loader);
     }
    
     public CustomAction getOpenPerspectiveAction()
@@ -68,9 +75,24 @@ public class GenericActionLoader implements IActionLoader
 	return _openAction;
     }
     
-    public Class forName(String source) throws ClassNotFoundException
+    public final Class forName(String source) throws ClassNotFoundException
     {
-	return Class.forName(source);
+	try
+	    {
+		return Class.forName(source);
+	    }
+	catch (ClassNotFoundException e)
+	    {
+		for (int i = 0; i < _externalLoaders.size(); i++)
+		    {
+			ExternalLoader loader = (ExternalLoader)_externalLoaders.get(i);
+			if (loader.canLoad(source))
+			    {
+				return loader.loadClass(source);
+			    }
+		    }
+	    }
+	return null;
     }
     
     public CustomAction loadAction(String source, String name)
