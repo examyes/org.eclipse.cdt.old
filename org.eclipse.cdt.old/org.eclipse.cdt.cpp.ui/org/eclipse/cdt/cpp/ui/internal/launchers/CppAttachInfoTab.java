@@ -334,10 +334,17 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
       String processID = (String)_processIDField.getText();
       if (isValidProcessID(processID))
    		config.setAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, processID);
-      else
-        //displayMessageDialog(_plugin.getLocalizedString("CppDebugInfoTab.Exception") + ce.toString());
-        System.out.println("bad processID");
 	}
+
+	/**
+	 * @see ILaunchConfigurationTab#okToLeave()
+	 */
+   /*
+	public boolean okToLeave()
+   {
+      return true;
+	}
+   */
 
 	/**
 	 * @see ILaunchConfigurationTab#dispose()
@@ -394,9 +401,17 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 
 		setErrorMessage(null);
 		setMessage(null);
-		
-		// TO DO should verify that test exists
-		return true;
+      String processID = _processIDField.getText();
+
+      if (_programNameField.getText() == "" || processID == "")
+         return false;
+      else
+      {
+         if (isValidProcessID(processID))
+   	   	return true;
+         else
+      		return false;
+      }
 	}
 	
 	/**
