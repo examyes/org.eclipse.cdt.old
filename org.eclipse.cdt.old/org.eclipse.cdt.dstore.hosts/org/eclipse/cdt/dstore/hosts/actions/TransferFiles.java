@@ -118,7 +118,6 @@ public class TransferFiles extends Thread
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
 	    {
-
 		if (type.equals("file"))
 		    {
 			DataElement mkfile = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_FILE");
@@ -151,7 +150,6 @@ public class TransferFiles extends Thread
 				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 			    }
 		    }
-
 	    }
 	else
 	    {
@@ -189,7 +187,7 @@ public class TransferFiles extends Thread
 	    }
 
 	// both projects on same machine
-	if ((targetDataStore == sourceDataStore) || !targetDataStore.isVirtual())
+	if ((targetDataStore == sourceDataStore) || (!targetDataStore.isVirtual() && !sourceDataStore.isVirtual()))
 	    {
 		// files on the same system
 		if (needsUpdate)
@@ -207,6 +205,31 @@ public class TransferFiles extends Thread
 				targetDataStore.synchronizedCommand(cmd, args, target);
 				setDate(copiedSource, getDate(source));
 			    }
+		    }
+	    }
+	else if (targetDataStore == _plugin.getDataStore())
+	    {
+		if (needsUpdate)
+		    {
+			source.getFileObject();
+			String sourceMapping = sourceDataStore.mapToLocalPath(source.getSource());
+			java.io.File newSource = new java.io.File(sourceMapping);
+
+			if (newSource != null && newSource.exists())
+			    {
+				File newFile = new java.io.File(newSourceStr);
+				if (newFile.exists())
+				    {
+					newFile.delete();
+				    }
+				
+				newSource.renameTo(newFile);
+			    }
+		    }
+		else if (type.equals("directory"))
+		    {
+			java.io.File targetDir = new java.io.File(newSourceStr);
+			targetDir.mkdir();
 		    }
 	    }
 	else
