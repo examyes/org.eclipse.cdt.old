@@ -19,8 +19,10 @@
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.mi.core" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.mi.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.ui.tests" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.launch" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.ui.tests" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.source" tag="${CVS.TAG}" quiet="${quiet}"/>
     </target>
     

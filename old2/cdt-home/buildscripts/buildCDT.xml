@@ -11,8 +11,8 @@
     <!--  sourcepath setting for rt.jar in javadoc scripts in org.eclipse.platform.doc.isv and org.eclipse.jdt.doc.isv  -->
     <property name="rt" value="${bootclasspath}" />
         
-    <!--  default target that runs complete build   -->
-    <target name="run" depends="copyScripts,clean,fetchAll,slamBuildId,copyScripts,compile,build.update.jar,build.zips,zip.distribution,build.sources,zip.sources" />
+    <!--  default target that runs complete build   ,build.sources,zip.sources -->
+    <target name="run" depends="copyScripts,clean,fetchAll,slamBuildId,copyScripts,compile,build.update.jar,build.zips,zip.distribution" />
     
     <!--  all features required to build eclipse sdk and javadoc  -->
     <target name="allElements">
@@ -106,7 +106,8 @@
     <target name="copyScripts" depends="init">
         <copy todir="${install}" overwrite="true" >
             <fileset dir="buildScripts" includes="features/org.eclipse.cdt.${platformId}-feature/build.xml" />
-            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${os}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml" />
+            <fileset dir="buildScripts" includes="features/org.eclipse.cdt.source-feature/build.xml" />
+            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${os}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml,plugins/org.eclipse.cdt.debug.ui.tests/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml, plugins/org.eclipse.cdt.ui.tests/build.xml, plugins/org.eclipse.cdt.source/build.xml, plugins/org.eclipse.cdt.${platformId}/build.xml" />
         </copy>
     </target>
     

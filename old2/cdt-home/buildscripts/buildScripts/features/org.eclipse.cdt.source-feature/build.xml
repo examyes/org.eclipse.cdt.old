@@ -24,10 +24,7 @@
 	</target>
 
 	<target name="all.fragments" depends="init">
-		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.linux/" target="${target}"/>
-		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.qnx/" target="${target}"/>
-		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.solaris/" target="${target}"/>
-		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.win32/" target="${target}"/>
+		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.${os}/" target="${target}"/>
 	</target>
 
 	<target name="all.children" depends="init,all.plugins,all.fragments">
