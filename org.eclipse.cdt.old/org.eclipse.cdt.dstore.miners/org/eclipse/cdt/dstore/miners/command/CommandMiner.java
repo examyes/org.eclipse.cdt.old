@@ -845,7 +845,7 @@ public String removeWhitespace(String theLine)
 		       if (fileElement != null)
 			   {
 			       String fileStr = fileElement.getSource();
-			       if (fileStr.length() > 0)
+			       if (fileStr != null && fileStr.length() > 0)
 				   {
 				       file = fileStr;
 				   }
