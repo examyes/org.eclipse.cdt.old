@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>Building the CDT</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+
+<!-- Document Header -->
+<TABLE cellPadding=2 width="100%" border=0>
+ <TBODY>
+  <TR>
+   <TD align=left width="72%">
+    <FONT class=indextop>Building the CDT</FONT><BR>
+    <FONT class=indexsub>steps to build the CDT from source</FONT>
+   </TD>
+   <TD width="28%"><IMG height=86 src="http://dev.eclipse.org/images/Idea.jpg" width=120 alt=""></TD>
+  </TR>
+ </TBODY>
+</TABLE>
+<table>
+ <tbody>
+  <tr><td>Author</td><td>         : <a href="turnham@ca.ibm.com">Jeff Turnham</a></td></tr>
+  <tr><td>Revision Date</td><td>  : 05/23/2002 - Version: 1.0.0</td></tr>
+  <tr><td>Change History</td><td> : 1.0.0 - Document Creation</td></tr>
+ </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+
+<!-- Table of Contents -->
+<div class=section>Table of Contents</div>
+<br>
+<div class=indent><a href="#intro">       1. Introduction</a>
+ <div class=indent><a href="#prereqs">     1.1 Prerequisites</a></div>
+</div>
+<div class=indent><a href="#downloaded">  2. Building from source included with downloaded builds</a></div>
+<div class=indent><a href="#commandline"> 3. Building from CVS at the command line</a></div>
+<div class=indent><a href="#eclipse">     4. Building from CVS within Eclipse (PDE)</a></div>
+<br><br>
+<!-- End of Table of Contents -->
+
+
+<div class=section><a name="intro"> 1. Introduction</a></div>
+<p>
+
+</p>
+</div>
+
+<div class=subsection><a name="prereqs"> 1.1 Prerequisites</a></div>
+<p>
+ The CDT is written in java and depends on many parts of the Eclipse base, so the following must be on your 
+ system before building the CDT:
+ <ol>
+  <li><b>JDK version 1.3 or greater</b>
+   <ul>
+    <li>Find a JDK for your system 
+        <a href="http://download.eclipse.org/downloads/drops/S-F1-200205211339/java-runtimes.html">here</a>
+    </li>
+   </ul>
+  </li>
+  <li><b>A version of Eclipse that matches the level of CDT you intend to check out of cvs</b>
+   <ul>
+    <li>Find out what Eclipse version you need 
+     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/status.html?cvsroot=Tools_Project">here</a>
+    </li>
+   </ul>
+  </li>
+  <li><b>Linux\Unix System Tools</b>
+   <ul>
+    <li>
+     The makefile-based build process uses the following Linux\Unix System Tools:<br>
+     - make, find, test, cat, rm, xargs, and others<br>  
+     These tools should be standard on most Linux\Unix systems.  On Windows these tools can be obtained 
+     by installing <a href="http://www.redhat.com/software/tools/cygwin/">Cygwin</a>
+    </li>
+   </ul>
+  </li>
+ </ol>
+ <B>OPTIONAL</b>
+ <ol>
+  <li><b>JavaCC - only required if you intend to make changes to and regenerate the C/C++ Parser)</b>
+   <ul>
+    <li>Get the latest version of JavaCC <a href="http://www.webgain.com/products/java_cc">here</a>
+    </li>
+   </ul>
+  </li>
+ </ol>
+</p>
+
+<div class=section><a name="downloaded"> 2. Building from source included with downloaded builds</a></div>
+<p>
+Intro goes here
+</p>
+
+<div class=section><a name="commandline"> 3. Building from CVS at the command line</a></div>
+<p>
+Intro goes here
+</p>
+
+<div class=section><a name="eclipse"> 4. Building from CVS within Eclipse (PDE)</a></div>
+<p>
+ This scenario is currently being "worked on".  We should be able to include various files in our cvs such as 
+ <b>.project</b>, <b>.classpath</b>, and <b>build.xml</b> that simplify the steps necessary to import the CDT 
+ code into the Eclipse PDE (Plugin Development Environment).  Stay tuned...
+</p>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>Creating new CDT Web Content</title>
+ <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+
+<!-- Document Header -->
+<TABLE cellPadding=2 width="100%" border=0>
+ <TBODY>
+  <TR>
+   <TD align=left width="72%">
+    <FONT class=indextop>Creating CDT Web Content</FONT><BR>
+    <FONT class=indexsub>Guidelines for creating new CDT web pages</FONT>
+   </TD>
+   <TD width="28%"><IMG height=86 src="http://dev.eclipse.org/images/Idea.jpg" width=120></TD>
+  </TR>
+ </TBODY>
+</TABLE>
+<table>
+ <tbody>
+  <tr><td>Author</td><td>         : <a href="mailto:turnham@ca.ibm.com">Jeff Turnham</a></td></tr>
+  <tr><td>Revision Date</td><td>  : 05/21/2002 - Version: 1.0.0</td></tr>
+  <tr><td>Change History</td><td> : 1.0.0 - Document Creation</td></tr>
+ </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+
+<!-- Table of Contents -->
+<div class=section>Table of Contents</div>
+<br>
+<div class=indent><a href="#create">1. Create the HTML</a>
+</div>
+<div class=indent><a href="#store">2. Store the Pages in CVS</a></div>
+<div class=indent><a href="#links">3. Useful Links</a>
+</div>
+<br><br>
+<!-- End of Table of Contents -->
+
+
+<div class=section><a name="create"> 1. Create the web pages</a></div>
+<p>
+ In an attempt to unify the appearance of the CDT webpages, we now have a
+ <a href="http://www.w3.org/TR/REC-CSS1">Cascading Style Sheet</a> called 
+ <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project">cdt.css</a>.  
+ It is recommended that you use the
+ <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/template.html?cvsroot=Tools_Project">
+ CDT Web Template</a> as a starting point.  If however you wish to create a webpage from scratch, then this style sheet
+ can be included in your HTML documents by adding the following the HEAD section:<br>
+ <pre>
+  &lt;LINK rel="stylesheet" type="text/css" 
+   HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"&gt; 
+ </pre>
+</p>
+<p>
+ The CDT Style Sheet gives us a central location to specify the look of CDT web pages.  This is accomplished
+ by defining how various HTML entities should be displayed.  Below is the current list of styles and how they
+ appear:
+</p>
+<table border=1>
+ <tbody>
+  <tr>
+   <td><b>Style & Usage</b></td>
+   <td><b>Description</b></td>
+   <td><b>Visual Result</b></td>
+  </tr>
+  <tr>
+   <td>
+    indextop<br><br>
+    <div class=code>
+     &lt;div class=indextop&gt;<br>
+     Hello World<br>
+     &lt;/div&gt;
+    </div>
+   </td>
+   <td>Very large letters used for the document title</td>
+   <td><div class=indextop>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>indexsub<br><br>
+    <div class=code>
+     &lt;div class=indexsub&gt;<br>
+     Hello World<br>
+     &lt;/div&gt;
+    </div>
+   </td>
+   <td>Very small letters used for the document subtitle</td>
+   <td><div class=indexsub>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>section</td>
+   <td>&lt;div class=<font color=red>section</font>&gt;Hello World&lt;/div&gt;</td>
+   <td><div class=section>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>subsection</td>
+   <td>&lt;div class=<font color=red>subsection</font>&gt;Hello World&lt;/div&gt;</td>
+   <td><div class=subsection>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>code</td>
+   <td>&lt;div class=<font color=red>code</font>&gt;Hello World&lt;/div&gt;</td>
+   <td><div class=code>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>indent</td>
+   <td>&lt;div class=<font color=red>indent</font>&gt;Hello World&lt;/div&gt;</td>
+   <td><div class=indent>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>new</td>
+   <td>&lt;div class=<font color=red>new</font>&gt;Hello World&lt;/div&gt;</td>
+   <td><div class=new>Hello World</div></td>
+  </tr>
+  <tr>
+   <td>old</td>
+   <td>&lt;div class=<font color=red>old</font>&gt;Hello World&lt;/div&gt;</td>
+   <td><div class=old>Hello World</div></td>
+  </tr>
+ </tbody>  
+</table>
+<div class=section><a name="store"> 2. Store the pages in CVS</a></div>
+<p>
+
+</p>
+
+<div class=section><a name="links"> 3. Useful Links</a></div>
+<p>
+
+<p>
+<!-- End of References -->
+</body>
+</html>
