@@ -166,9 +166,9 @@ public class CommandViewer extends Viewer implements SelectionListener
     	{
 	String type = input.getType();
 	DataElement descriptor = input.getDescriptor();
-	if (type.equals("file") || (descriptor != null && input.getDescriptor().isOfType("file")))
+	if (type.equals("file") || (descriptor != null && input.getDescriptor().isOfType("file", true)))
 	{
-		if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
+		if ((descriptor != null) && descriptor.isOfType("Filesystem Objects", true))
 		 {
 			_input = input;
 			String directory = input.getSource();				
