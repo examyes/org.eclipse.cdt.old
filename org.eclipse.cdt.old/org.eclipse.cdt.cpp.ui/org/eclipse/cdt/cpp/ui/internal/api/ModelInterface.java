@@ -455,12 +455,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
      DataElement projectMinerProject =  findProjectElement(_project);
      if (projectMinerProject == null)
-       return;
+	 {
+	     return;
+	 }
+
      DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
      if (oDescriptor != null)
 	 {
 	     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
 	 }
+
      setParseIncludePath(_project);	
      setParseQuality(_project);	
      setEnvironment(_project);
@@ -742,10 +746,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public DataElement findWorkspaceElement(DataStore dataStore)
     {
 	DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
+
 	DataElement workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
+	if (workspaceObj == null)
+	    {
+		System.out.println("couldn't find workspace in miner");
+	    }
+
 	return workspaceObj;
     }  
-
+    
   public DataElement findProjectElement(IProject project)
   {
    if (project == null)
@@ -766,8 +776,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    if (projectObj == null)
        {
 	   projectObj = dataStore.createObject(workspace, "Project", project.getName(), project.getLocation().toString());
-	   //	   dataStore.setObject(workspace);
-	   //dataStore.setObject(projectObj);
+	   dataStore.setObject(projectObj);
      } 
    return projectObj;
   }

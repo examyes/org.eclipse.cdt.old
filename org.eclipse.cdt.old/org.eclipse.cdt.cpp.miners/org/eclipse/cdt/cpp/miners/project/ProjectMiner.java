@@ -12,15 +12,17 @@ import java.io.*;
 
 public class ProjectMiner extends Miner
 {
+    private DataElement _workspace;
+
  public void load() 
- {
-  _dataStore.createObject(_minerData, getLocalizedString("project.Workspace"), getLocalizedString("project.Workspace"));
- }
+    {
+	_workspace = _dataStore.createObject(_minerData, getLocalizedString("project.Workspace"), getLocalizedString("project.Workspace"));
+    }
 
     public void updateMinerInfo()
     {
-	_dataStore.refresh(_minerData.get(0));
 	_dataStore.refresh(_minerData);
+	_dataStore.refresh(_workspace);
     }
 
  
@@ -57,7 +59,11 @@ public class ProjectMiner extends Miner
     return status;
   
   if (name.equals("C_OPEN_PROJECT"))
-   handleOpenProject(subject, getCommandArgument(theCommand, 1), status);
+   handleOpenProject(subject, status);
+  else if (name.equals("C_OPEN"))
+      {
+	  handleOpenProject(subject, status);
+      }
   else if (name.equals("C_CLOSE_PROJECT"))
    handleCloseProject(subject, status);
   else if (name.equals("C_REFRESH_PROJECT"))
@@ -68,13 +74,13 @@ public class ProjectMiner extends Miner
  }
     
     
- private void handleOpenProject(DataElement workspace, DataElement project, DataElement status)
+ private void handleOpenProject(DataElement project, DataElement status)
  {
-  /*project.setParent(workspace);
-  workspace.addNestedData(project, true);
-  project.expandChildren();
-  _dataStore.refresh(workspace);
-  */
+     project.setParent(_workspace);
+     _workspace.addNestedData(project, true);
+     
+     project.expandChildren();
+     _dataStore.refresh(_workspace);     
  }
     
  private void handleCloseProject(DataElement project, DataElement status)
