@@ -12,6 +12,13 @@ import java.lang.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Miner is the abstact base class of all DataStore extensions (miners).  
+ * The DataStore framework knows how to load and route commands to miners
+ * because it interfaces miners through the restricted set of interfaces declared here.
+ * To add a new miner, developers must extend this class and implement the abstract methods declared here.
+ *
+ */
 public abstract class Miner
 {
     public DataStore   _dataStore;
@@ -25,11 +32,18 @@ public abstract class Miner
     
     protected ResourceBundle _resourceBundle = null;  
     
+    /**
+     * Creates a new Miner
+     *
+     */
     public Miner()
     {
 	_initialized = false;
     }
     
+    /**
+     * Shuts down the miner and cleans up it's meta-information
+     */
     public void finish()
     {
 	DataElement root = _dataStore.getMinerRoot();
@@ -45,24 +59,49 @@ public abstract class Miner
 	_dataStore.update(root);
     }
     
+    /**
+     * Interface to retrieve an NL enabled resource bundle.  
+     * Override this function to get access to a real resource bundle.
+     */
     public ResourceBundle getResourceBundle()  
     {
 	return null;
     }
     
+    /**
+     * Default method that gets called on a Miner when it is loaded.
+     * Override this function to perform some initialization at miner loading time.
+     */
     public void load()
     {
     }
 
+    /**
+     * Default method that gets called on a Miner when it is loaded.
+     * Override this function to perform some initialization at miner loading time.
+     * If loading the miner can result in some failure, set that status to incomplete
+     *
+     * @param status the status of the initialize miner command
+     */
     public void load(DataElement status)
     {
 	load();
     }
     
+    /**
+     * This gets called after a miner is initialized.  
+     * If you need to update element information at that time, override this method.
+     *
+     */
     public void updateMinerInfo()
     {
     }
 
+    /**
+     * Returns the qualified name of this miner
+     *
+     * @return the qualified name of this miner
+     */
     public String getName()
     {
         if (_name == null)
@@ -70,6 +109,11 @@ public abstract class Miner
         return _name;
     }
     
+    /**
+     * Returns the name of this miner
+     *
+     * @return the name of this miner
+     */
     public String getValue()
     {
         if (_value == null)
@@ -81,6 +125,14 @@ public abstract class Miner
         return _value;
     }
     
+    /**
+     * Issues a specified command on this miner from the DataStore framework.
+     * The base class handles "C_INIT_MINERS" but other commands are delegated to
+     * the concrete miner implementations through handleCommand()
+     *
+     * @param command the command that has been sent to this miner
+     * @return the status of the command
+     */
     public DataElement command(DataElement command)
     {
 	String      name   = getCommandName(command);
@@ -156,6 +208,12 @@ public abstract class Miner
     }
     
     
+    /**
+     * Sets the DataStore and performs some fundamental initialization for this miner.  
+     * The framework calls this method on a miner before any commands are issued.
+     *
+     * @param dataStore the DataStore that owns this miner
+     */
     public void setDataStore(DataStore dataStore)
     {
 	_dataStore = dataStore;
@@ -182,17 +240,44 @@ public abstract class Miner
     }
     
     
-    // creation helpers
+    /**
+     * Creates an abstract command descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the command
+     * @param value the identifier for this command
+     * @return the new command descriptor
+     */
     public DataElement createAbstractCommandDescriptor(DataElement descriptor, String name, String value) 
     {
 	return _dataStore.createAbstractCommandDescriptor(descriptor, name, getName(), value);
     }
     
+    /**
+     * Creates a command descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the command
+     * @param value the identifier for this command
+     * @return the new command descriptor
+     */
     public DataElement createCommandDescriptor(DataElement descriptor, String name, String value)
     {
 	return createCommandDescriptor(descriptor, name, value, true);
     }
     
+    /**
+     * Creates a command descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the command
+     * @param value the identifier for this command
+     * @param visible an indication whether this command descriptor should be visible to an end-user
+     * @return the new command descriptor
+     */
     public DataElement createCommandDescriptor(DataElement descriptor, String name, String value, boolean visible)
     {
         DataElement cmdD = _dataStore.createCommandDescriptor(descriptor, name, getName(), value);
@@ -204,96 +289,208 @@ public abstract class Miner
         return cmdD;
     }
     
+    /**
+     * Creates an abstract object descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the object type
+     * @return the new object descriptor
+     */
     public DataElement createAbstractObjectDescriptor(DataElement descriptor, String name)
     {
 	return _dataStore.createAbstractObjectDescriptor(descriptor, name);
     }
 
+    /**
+     * Creates an abstract object descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the object type
+     * @param source the plugin location of the miner that owns this object type
+     * @return the new object descriptor
+     */
     public DataElement createAbstractObjectDescriptor(DataElement descriptor, String name, String source)
     {
 	return _dataStore.createAbstractObjectDescriptor(descriptor, name, source);
     }
     
+    /**
+     * Creates a object descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the object type
+     * @return the new object descriptor
+     */
     public DataElement createObjectDescriptor(DataElement descriptor, String name)
     {
 	return _dataStore.createObjectDescriptor(descriptor, name);
     }
 
+    /**
+     * Creates a object descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the object type
+     * @param source the plugin location of the miner that owns this object type
+     * @return the new object descriptor
+     */
     public DataElement createObjectDescriptor(DataElement descriptor, String name, String source)
     {
 	return _dataStore.createObjectDescriptor(descriptor, name, source);
     }
 
-    public DataElement createAbstractRelationship(DataElement from, DataElement to)
-    {
-	return _dataStore.createReference(from, to, "abstracts", "abstracted by");
-    }
-     
-    public DataElement createReference(DataElement from, DataElement to)
-    {
-     return _dataStore.createReference(from, to);
-    }
-    
+    /**
+     * Creates a new type of relationship descriptor.  This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain
+     *
+     * @param descriptor the parent descriptor for the new descriptor
+     * @param name the name of the relationship type
+     * @return the new relationship descriptor
+     */
     public DataElement createRelationDescriptor(DataElement descriptor, String name)
     {
      return _dataStore.createRelationDescriptor(descriptor, name);
     }
  
- 
+
+    /**
+     * Creates an abstract relationship between two descriptors.  An abstract relationship between two descriptors
+     * indicates that the first descriptor abstracts the second, while the second inherits the
+     * properties of the first. This is a helper method that miner may call
+     * when it creates or updates the schema for it's tool domain.
+     *
+     * @param from the abstacting descriptor 
+     * @param to the descriptor that is abstracted
+     * @return the new relationship descriptor
+     */
+    public DataElement createAbstractRelationship(DataElement from, DataElement to)
+    {
+	return _dataStore.createReference(from, to, "abstracts", "abstracted by");
+    }
      
-
- //Find an object under the schema Root.
- public DataElement findDescriptor(String descName)
- {
-  return _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, descName, 1);
- }
- 
-
+    /**
+     * Creates a contents relationship between any two elements. 
+     *
+     * @param from the containing element 
+     * @param to the element that is contained
+     * @return the new relationship
+     */
+    public DataElement createReference(DataElement from, DataElement to)
+    {
+     return _dataStore.createReference(from, to);
+    }
     
+    /**
+     * Helper method for finding an object descriptor in the DataStore schema. 
+     *
+     * @param descName the name of the descriptor 
+     * @return the found object descriptor
+     */
+    public DataElement findDescriptor(String descName)
+    {
+	return _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, descName, 1);
+    }
 
-    
-    // gets
+    /**
+     * Returns the element that represents this miner. 
+     *
+     * @return the miner element
+     */
     public DataElement getMinerElement()
     {
         return _minerElement;
     }
     
+    /**
+     * Returns the element that contains this miners meta-information. 
+     *
+     * @return the miner data element
+     */
     public DataElement getMinerData()
-      {
-	  return _minerData;
-      }
+    {
+	return _minerData;
+    }
     
+    /**
+     * Returns the transient object container for this element. 
+     *
+     * @return the transient element
+     */
     public DataElement getMinerTransient()
     {
         return _minerTransient;
     }
     
+    /**
+     * Identifies a give object descriptor type to be transient in this miner. 
+     *
+     * @param objectDescriptor the object descriptor type that is transient
+     */
     public void makeTransient(DataElement objectDescriptor)
     {
         _dataStore.createReference(_minerTransient, objectDescriptor);
     }
     
-    // functions for extracting command information
+    /**
+     * Returns the name of a command. 
+     * This is a helper method to be used inside handleCommand().
+     *
+     * @param command a tree of elements representing a command
+     * @return the name of the command
+     */
     public String getCommandName(DataElement command)
     {
 	return (String)command.getAttribute(DE.A_NAME);
     }
     
+    /**
+     * Returns the status of a command. 
+     * This is a helper method to be used inside handleCommand().
+     *
+     * @param command a tree of elements representing a command
+     * @return the status element for the command
+     */
     public DataElement getCommandStatus(DataElement command)
     {
 	return _dataStore.find(command, DE.A_TYPE, getLocalizedString("model.status"), 1);
     }
     
+    /**
+     * Returns the status of a command. 
+     * This is a helper method to be used inside handleCommand().
+     *
+     * @param command a tree of elements representing a command
+     * @return the element representing time for a command
+     */
     public DataElement getCommandTime(DataElement command)
     {
 	return _dataStore.find(getCommandStatus(command), DE.A_TYPE, getLocalizedString("model.time"), 1);
     }
     
+    /**
+     * Returns the number of arguments for this command. 
+     * This is a helper method to be used inside handleCommand().
+     *
+     * @param command a tree of elements representing a command
+     * @return the number of arguments for this command
+     */
     public int getNumberOfCommandArguments(DataElement command)
     {
 	return command.getNestedSize();
     }
     
+    /**
+     * Returns the argument of a command specified at a given index. 
+     * This is a helper method to be used inside handleCommand().
+     *
+     * @param command a tree of elements representing a command
+     * @param arg the index into the commands children
+     * @return the argument of the command
+     */
     public DataElement getCommandArgument(DataElement command, int arg)
     {
 	if (command.getNestedSize() > 0)
@@ -309,6 +506,13 @@ public abstract class Miner
     }
     
     
+    /**
+     * If a resource bundle is supplied (ie. getResourceBundle() is overridden),
+     * then this is a convenience metho for getting at an NL enabled string
+     *
+     * @param key the key identifying the string
+     * @return the NL enabled string
+     */
     public String getLocalizedString(String key)
     {
 	try
@@ -326,15 +530,34 @@ public abstract class Miner
 	return _dataStore.getLocalizedString(key);
     }
 
- public DataElement getSchemaRoot()
- {
-  return _dataStore.getDescriptorRoot();
-  
-  }
+    /**
+     * Returns the descriptor root for the DataStore schema 
+     *
+     * @return the descriptor root
+     */
+    public DataElement getSchemaRoot()
+    {
+	return _dataStore.getDescriptorRoot();
+    }
  
-
-    // functions that miners need to implement
+    /**
+     * Add this tool's schema to the global DataStore schema.
+     * This interface must be implemented by each miner in order to
+     * populate the DataStore schema with information about this tool's
+     * object model and information about how to communicate with the
+     * tool from objects available to the user interface.
+     *
+     * @param schemaRoot the descriptor root
+     */
     public abstract void extendSchema(DataElement schemaRoot);
-    public abstract DataElement handleCommand (DataElement theElement);
+
+    /**
+     * Handle commands that are routed to this miner.
+     * This interface must be implemented by each miner in order to
+     * perform tool actions driven from user interface interaction.
+     *
+     * @param theCommand an instance of a command containing a tree of arguments
+     */
+    public abstract DataElement handleCommand (DataElement theCommand);
 }
 
