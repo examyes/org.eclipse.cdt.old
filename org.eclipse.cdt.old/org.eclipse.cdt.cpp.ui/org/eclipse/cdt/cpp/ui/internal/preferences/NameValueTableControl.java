@@ -279,9 +279,7 @@ public class NameValueTableControl extends Composite implements Listener
 	if (source == _table)
 	{
 		if (_addButton != null)
-		{
-			_addButton.setEnabled(false);
-
+		{	
 	       for (int i = 0; i < _table.getItemCount(); i++)
 	       {
     	      if (_table.isSelected(i))
