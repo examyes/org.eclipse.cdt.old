@@ -363,12 +363,10 @@ public class HostsPlugin extends AbstractUIPlugin
 						       "org.eclipse.cdt.dstore.hosts.actions.FindFileAction");
 	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");
 
-	/*
 	DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							      "Dictionary Search", 
 							      "org.eclipse.cdt.dstore.hosts.actions.SearchDictionaryAction");
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
-	*/
 
 	DataElement renameResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							    "Rename Resource",

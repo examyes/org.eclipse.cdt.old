@@ -63,16 +63,11 @@ public class DeleteResource extends CustomAction
 	private boolean isValid(DataElement subject)
 	{
 		String type = subject.getType();
-		if (!type.equals("directory") && !type.equals("file"))
-		{
-			DataElement des = subject.getDescriptor();
-			
-			if (type.equals("Project") || des == null || !des.isOfType("file"))
+		if (type.equals("Project"))
 		    {
-		    	setEnabled(false);	
-		    	return false;
+			setEnabled(false);
+			return false;
 		    }
-		}	
 	    return true;
 	}
 
