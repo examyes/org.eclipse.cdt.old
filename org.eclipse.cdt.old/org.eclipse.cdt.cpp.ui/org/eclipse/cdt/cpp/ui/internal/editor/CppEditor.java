@@ -201,11 +201,11 @@ public class CppEditor extends LpexTextEditor
 			 if (file instanceof ResourceElement)
 		     {
 				 DataElement fileElement = ((ResourceElement)file).getElement();
-				 api.parse(fileElement, false, false);
+				 api.parse(fileElement, false, true);
 		     }
 			 else
 	    	 {
-				 api.parse(file, false);
+				 api.parse(file, false, true);
 	     	 }
          	_isParsed = true;
       	}
