@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Search 3.0</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+<!-- Document Header -->
+<table style="width: 100%;" border="0" cellpadding="2">
+  <tbody>
+    <tr>
+      <td style="text-align: left; width: 70%;"> <font class="indextop">Search
+SRS for 3.0<br>
+      </font> <span class="indexsub"><font class="indexsub">This
+document describes the proposed work items for search for the CDT
+3.0 release.</font></span> </td>
+      <td style="width: 30%;"><img
+ src="http://dev.eclipse.org/images/Idea.jpg" alt="" height="86"
+ width="120"></td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Author</td>
+      <td style="vertical-align: top;"> : Bogdan Gheorghe<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Revision Date</td>
+      <td> : 11/29/2004 - Version: 0.1.0</td>
+    </tr>
+    <tr>
+      <td>Change History</td>
+      <td> : 0.1.0 - Document Creation</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+<!-- Table of Contents -->
+<div class="section">Table of Contents</div>
+<br>
+<div class="indent"><a href="#intro">1. Introduction</a> </div>
+<div class="indent"><a href="#reqs">2. Requirements</a><br>
+<a href="#proposal">3. UI Requirements</a><br>
+</div>
+<div class="indent"><a href="#references">4. References</a>
+</div>
+<br>
+<br>
+<!-- End of Table of Contents -->
+<!-- Introduction -->
+<div class="section"><a name="intro"> 1. Introduction</a></div>
+<br>
+Search has evolved over the last few releases. In brief:<br>
+<br>
+<ul>
+  <li>Users can perform searches using the Search dialog; they are able
+to choose search scopes: workspace, working sets, or selected resources
+(which can be any element in the CView, Search view or Outline view)</li>
+  <li>Users can also perform searches via the Selection Search facility
+by which the user selects an element in the editor (or from the CView,
+Outline view, Search view) and selects what
+type of search he wishes to perform</li>
+  <li>Search Engine provides access to index
+information&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </li>
+</ul>
+<p>This document will address main requirements on Search for CDT
+3.0.<br>
+</p>
+<br>
+<div class="section"><a name="reqs"> 2. Requirements</a><br>
+</div>
+<p><br>
+</p>
+<p>
+</p>
+<h2>2.1 Search Requirements<br>
+</h2>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
+      </td>
+      <td style="vertical-align: top; width: 35pt;">Priority<br>
+      </td>
+      <td style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R1<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Search
+must rely on the index for all information required<br>
+      <br>
+      </span>Currently, the search uses two parses to locate matches -
+one to catalogue the individual elements, and another parse to locate
+the matches within the files that are returned from the index. This
+leads to a potentially long running search operation if the file being
+parsed includes a lot of other files or if there's a large number of
+files that need to be parsed. In order to speed up search results, the
+indexer needs to keep track of all the information that is currently
+required by the MatchLocator. We would be able to get search results
+directly from the index for most cases; if a working copy is involved,
+a parse would still be involved.<br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79406"><br>
+Bug 79406: Search needs to do away with second parse</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R2<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Search
+needs to handle C searches</span><br>
+      <br>
+Search doesn't handle searches on files that don't explicitly include
+other files. We need to introduce the notion of inexact matches
+(matches that match the criteria but we aren't 100% sure if it is the
+right element).<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45015">Bug
+45015: Search only work on perfect code</a><br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=49783">Bug
+49783: Parsing C files requires communication w/client on unresolved
+references</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R3<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Search
+engine API needs to be cleaned up<br>
+      <br>
+      </span>Since we're getting rid of the second parse, we need to
+clean up the API to allow the users to determine what information they
+need out of the index.<br>
+      <br>
+      <span style="font-weight: bold;"></span></td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R4<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
+      </td>
+      <td style="vertical-align: top; font-weight: bold;">Clean
+up definitions/declarations for all search elements<br>
+      <br>
+      <span style="font-weight: normal;">Make sure that we're following
+declaration/definition
+notion as set out in the C++ ANSI standard. <br>
+      <br>
+      </span> <a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69013">Bug 69013:
+[C/C++ Search]: Search for Namespace definition and declaration give
+the same results.</a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R5<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Search
+Patterns need to provide more flexibility for queries</span><br>
+      <br>
+The current search engine uses search patterns to find info in the
+index - we need to add an AND pattern.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">R6</span><br>
+      </td>
+      <td style="vertical-align: top; text-align: center;"><span
+ style="font-weight: bold;">P1</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">C/C++
+Search should be disabled if no index is available for a project<br>
+      <br>
+      </span>Users should not be able to search a project with no index.<br>
+      <span style="font-weight: bold;"><br>
+      </span><a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=62366"></a><span
+ style="font-weight: bold;"> </span></td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">R7<br>
+      </td>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Search
+needs to add Macro references </span><br>
+      <br>
+Search needs to be able to keep track of macro references.<a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=71821"></a><br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">R8<br>
+      </td>
+      <td
+ style="vertical-align: top; text-align: center; font-weight: bold;">P2<br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Add
+Enclosing Project scope<br>
+      <br>
+      </span>The search dialog should support project scope whereby we
+search the selected project.<a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=72396"></a><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2><br>
+</h2>
+<span style="font-weight: bold;"></span>
+<ul>
+</ul>
+<p><!-- End of Introduction --><!-- References -->
+</p>
+<div class="section"><a name="proposal"> 3. UI Requirements</a><br>
+</div>
+<br>
+<h2>3.1 UI enhancements</h2>
+Following UI enhancements are planned to support the feature:<br>
+<br>
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="width: 35px; vertical-align: top;">Number<br>
+      </td>
+      <td colspan="1" rowspan="1" style="vertical-align: top;">Description<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE1</td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Search
+Dialog needs new design<br>
+      <br>
+      </span><br>
+The current search dialog is cluttered and doesn't offer the user all
+of the choices that are truly made available through the search engine.
+The design needs to be revisited.<br>
+&nbsp;<span style="font-weight: bold;"></span></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div class="section"><a name="references"> 4. References</a> <br>
+</div>
+<br>
+<ol>
+  <li>Indexer 3.0 SRS</li>
+</ol>
+<ol>
+</ol>
+<p>
+<table border="0" cellpadding="2" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="2" align="left" bgcolor="#0080c0" valign="top"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</p>
+<center><i>Last Modified on Monday, November 29, 2004
+</i></center>
+</body>
+</html>
