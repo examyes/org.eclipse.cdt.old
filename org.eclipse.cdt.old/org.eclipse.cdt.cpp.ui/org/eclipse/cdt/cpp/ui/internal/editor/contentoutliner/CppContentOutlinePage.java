@@ -109,7 +109,7 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
     
     protected IAdaptable getContentOutline(IAdaptable input)
     {
-	if (_elementRoot == null)
+	if (_elementRoot == null || _elementRoot.isDeleted())
 	    {
 		_elementRoot = _adapter.getContentOutline(input);
 	    }
@@ -162,7 +162,7 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	DataElement parent = (DataElement)ev.getParent();
 	DataStore dataStore = parent.getDataStore();
 
-	if (_elementRoot == null)
+	if (_elementRoot == null || _elementRoot.isDeleted())
 	    {
 		_elementRoot = _adapter.getElementRoot((IFile)input);	
 	    }
