@@ -892,7 +892,15 @@ public class FileSystemMiner extends Miner
 					    {
 						if (!newObject.isOfType(_directoryDescriptor))
 						    {
-							classifyExecutable(newObject);
+							if (type != newObject.getDescriptor())
+							    {
+								newObject.setAttribute(DE.A_TYPE, type.getName());
+							    }
+
+							if (type == _exeDescriptor)
+							    {
+								classifyExecutable(newObject);
+							    }
 						    }
 					    }
 				    }
