@@ -19,7 +19,7 @@
         </condition>
         
 		<property name="feature" value="org.eclipse.cdt.linux.motif"/>
-		<property name="feature.version.suffix" value="_1.0.1"/>
+		<property name="feature.version.suffix" value="_1.1.0"/>
 		<property name="feature.full.name" value="${feature}${feature.version.suffix}"/>
         <property name="feature.dated.filename" value="org.eclipse.cdt-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
 		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
