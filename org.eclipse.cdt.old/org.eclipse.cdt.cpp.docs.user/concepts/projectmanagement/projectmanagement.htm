@@ -4,7 +4,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta http-equiv="Content-Language" content="en-us">
    <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
-   <title>The C/C++ Development Plugin - Command View</title>
+   <title>The C/C++ Development Plugin - Project Management</title>
 <!----------------------------------------------------------------------------------->
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
@@ -15,275 +15,281 @@
 <tr>
 <td>
 <h1>
-<font size=+4>Project Management support using GNU autoconf and automake
-tools</font></h1>
+Project Management support using GNU autoconf and automake</h1>
 </td>
 </tr>
 
 <tr>
-<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">
-<dd>
-<font size=+1>The C/C++ IDE provides support for using GNU automake and
-autoconf tools.&nbsp; These tools are used to manage C/C++ projects under
-UNIX like systems. Using these tools has many advantages. The&nbsp; first
-is solving the project portability problems, when software packages are
-required to run on multi - UNIX like platforms. In addition, these tools
-takes away the burden of creating and maintaining Makefiles and instead,
-the user will deal with a much simpler files named Makefile.am.</font></dd>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">The C/C++ IDE provides support for
+using GNU automake and autoconf tools.&nbsp; These tools are used to manage
+C/C++ projects under UNIX like systems. Using these tools has many advantages.
+The&nbsp; first is solving the project portability problems, when software
+packages are required to run on multi - UNIX like platforms. In addition,
+these tools takes away the burden of creating and maintaining Makefiles
+and instead, the user will deal with a much simpler files named Makefile.am.&nbsp;
+<p>For more information regarding automake and autoconf, we suggest to
+visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;
+<p>Support for Project Management, which is provided by the C/C++ IDE,
+can be defined in two categories.&nbsp; The first category is automatic
+generation of configuration files&nbsp; for projects that are either newly
+created or imported to the tool without configuration files. The second
+category is maintaining existing when importing a software package that
+has already autoconf and automake configuration files.&nbsp;
+<p>Before we dive in and explain how to accomplish these tasks to manage
+your project, let us explain some of the terminology that will be used
+in this section.&nbsp;
+<h2>
+Terminology and Definitions</h2>
 
-<dd>
-<font size=+1>For more information regarding automake and autoconf, we
-suggest to visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;</font></dd>
-
-<dd>
-<font size=+1>Support for Project Management, which is provided by the
-C/C++ IDE, can be defined in two categories.&nbsp; The first category is
-automatic generation of configuration files&nbsp; for projects that are
-either newly created or imported to the tool without configuration files.
-The second category is maintaining existing when importing a software package
-that has already autoconf and automake configuration files.&nbsp;</font></dd>
-
-<dd>
-<font size=+1>Before we dive in and explain how to accomplish these tasks
-to manage your project, let us explain some of the terminology that will
-be used in this section.</font></dd>
-
-<p><br><b><font size=+3>Terminology and Definitions</font></b>
 <ul>
 <li>
-<font size=+1>Configuration files: Any files that are either input or output&nbsp;
-to automake and autoconf&nbsp; - Makefile.am,&nbsp; Makefile.in, configure.in
+Configuration files: Any files that are either input or output&nbsp; to
+automake and autoconf&nbsp; - Makefile.am,&nbsp; Makefile.in, configure.in
 , configure and some other auxiliary files. Makefile.am and configure.in
 can be updated by the user. The tool does not enforce any defined layout
 for the makefile.am's. Although, when that tool detects that these files
-are different than the tool has gen erated, no updates will occur</font></li>
+are different than the tool has generated, no updates will occur</li>
 
 <li>
-<font size=+1>Managed Project:&nbsp; A project that has all the configuration
-files mentioned above.</font></li>
+Managed Project:&nbsp; A project that has all the configuration files mentioned
+above.</li>
 
 <li>
-<font size=+1>Unmanaged Project: A project that does not have any configuration
-files.</font></li>
+Unmanaged Project: A project that does not have any configuration files.</li>
 
 <li>
-<font size=+1>Project Structure: The way the structure is organized with
-regard to its directories and their Makefile.am's.</font></li>
+Project Structure: The way the structure is organized with regard to its
+directories and their Makefile.am's.</li>
 
 <li>
-<font size=+1>Top Level Directory: Usually it is the project directory
-and it is recommended that this directory does not contain any source files
-as most of the configuration files will be generated in this directory.&nbsp;</font></li>
+Top Level Directory: Usually it is the project directory and it is recommended
+that this directory does not contain any source files as most of the configuration
+files will be generated in this directory.&nbsp;</li>
 
 <li>
-<font size=+1>Program Directory: A directory that contains Makefile.am
-which is a Program target</font></li>
+Program Directory: A directory that contains Makefile.am which is a Program
+target</li>
 
 <li>
-<font size=+1>Recommended Project Structure: If you don't want to manage
-any of the configuration files yourself- Makefile.am and configure.in and
-their updates-&nbsp; and let the tool do this task for you, you may organize
-your project as follows:</font></li>
+Recommended Project Structure:</li>
 
+<br>&nbsp;
 <ol>
 <li>
-<font size=+1>Top Level directory with no source files</font></li>
+Top Level directory with no source files</li>
 
 <li>
-<font size=+1>Programs directory in the next level&nbsp; - one can have
-multiple targets as any directory in this level will be treated as a&nbsp;
-Program target</font></li>
+Programs directory in the next level&nbsp; - one can have multiple targets
+as any directory in this level will be treated as a&nbsp; Program target</li>
 
 <li>
-<font size=+1>all the children of the Programs directory will be initially
-assumed to be static library targets, but the user has the flexibility
-to alter this option to a different type target.</font></li>
+all the children of the Programs directory will be initially assumed to
+be static library targets, but the user has the flexibility to alter this
+option to a different type target.</li>
 </ol>
+We should emphasize here that this is not enforcing any Project structure
+,but rather the tool is designed to give all the flexibility to the developer
+depending on how he/she is able&nbsp; to control the generating, modifying
+and updating of the configuration files.&nbsp; In this release, the tool
+is providing a simple update mechanism and it will get more sophisticated
+in later releases taking more responsibility in managing project configuration
+files.</ul>
 
-<p><br><font size=+1>We should emphasize here that this is not enforcing
-any Project structure ,but rather the tool is designed to give all the
-flexibility to the developer depended on how he/she is able&nbsp; to control
-the generating, modifying and updating of the configuration files.&nbsp;
-Also, the tool is providing a simple update mechanism in this release and
-it will get more sophisticated in later releases taking a bigger share
-in managing the configuration files.</font></ul>
-<b><font size=+2>Automatic Generation for Project Configuration Files</font></b>
-<p><font size=+1>Whether it is a newly created C/C++ project or a project
-that was imported with no configuration files, that task to generate the
-support is the as follows:</font>
+<h2>
+Automatic Generation for Project Configuration Files</h2>
+Whether it is a newly created C/C++ project or a project that was imported
+with no configuration files, that task to generate the support is the as
+follows:
 <ol>
 <li>
-<font size=+1>Make sure that your project structure is organized as the
-recommended project structure defined earlier</font></li>
+Make sure that your project structure is organized as the recommended project
+structure defined earlier</li>
 
 <li>
-<font size=+1>From the<font color="#FF0000"> <a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory</font></li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory</li>
 
 <li>
-<font size=+1>Select&nbsp; Autoconf -> Generate Configure - this action
-will generate and update all the configuration files and generate configure
-for you</font></li>
+Select Autoconf -> Configure - this action will generate and&nbsp; update
+all the configuration files and generate the configure script then it will
+run configure for you</li>
 </ol>
-
+Please note that if source code files do exist in your top level directory,
+a popup dialog will appear and you need to let the tool know what type
+of target you are going to build. There are three targets that you can
+build and these are program, static library and shared library.
 <ul>
 <li>
-<font size=+1>Now if you wish to test your configuration script, do the
-following</font></li>
+Alternatively, you can generate configure and then run configure using
+two distinct actions instead of the configure action which encapsulate
+the following two actions</li>
 </ul>
 
 <ol>
 <li>
-<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory</font></li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory</li>
 
 <li>
-<font size=+1>Select&nbsp; Autoconf -> Run Configure</font></li>
+Select&nbsp; Autoconf ->&nbsp; Advanced -> Generate Configure - this action
+will generate and update all the configuration files and generate configure
+for you</li>
 
 <li>
-<font size=+1>Build the project using the Build Project action</font></li>
+Select&nbsp; Autoconf ->&nbsp; Advanced -> Run Configure</li>
 
 <li>
-<font size=+1>Afar successful build you can execute the target by using
-the Command Launcher view or&nbsp; the Run Specifications view</font></li>
+Build the project using the Build Project action</li>
+
+<li>
+Afar successful build you can execute the target by using the Command Launcher
+view or&nbsp; the Run Specifications view</li>
 </ol>
 
-<p><br><b><font size=+2>Maintaining Existing Project Configuration Files</font></b>
-<p><font size=+1>When one download open source projects or importing projects
-to the workspace that are managed by autoconf and automake tools, one scenario
-is usually to test the package and run&nbsp; configure. below is the steps
-need to run an existing configure</font>
+<h2>
+Maintaining Existing Project Configuration Files</h2>
+When one download open source projects or importing projects to the workspace
+that are managed by autoconf and automake tools, one scenario is usually
+to test the package and run&nbsp; configure. below is the steps need to
+run an existing configure
 <ol>
 <li>
-<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory</font></li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory</li>
 
 <li>
-<font size=+1>Select&nbsp; Autoconf -> Run Configure - this action will
-generate and update all the configuration files and generate configure
-for you</font></li>
+Select&nbsp; Autoconf ->&nbsp; Advanced -> Run Configure - this action
+will run the configure script using the existing configuration files.</li>
+
+<li>
+Alternatively you can use Autoconf -> Configure and you can control whether
+or not to update the configuration files - not recommended to do update
+in this scenario.</li>
 </ol>
-<b><font size=+3>Implicit Updating Configuration files</font></b>
-<br>&nbsp;
-<p><font size=+1>If any of the configuration files has been updated , configure
-will be not up to date and regenerating configure is needed. so invoking
-generate configure and run configure will perform an update.</font>
+
+<h2>
+Implicit Updating Configuration files</h2>
+If any of the configuration files has been updated , configure will not
+be up to date and regenerating configure is needed. so invoking configure
+from the autoconf menu or generate configure and run configure from the
+autoconf -> Advanced menu will perform an update.
 <ol>
 <li>
-<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory&nbsp;</font></li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory&nbsp;</li>
 
 <li>
-<font size=+1>Select Autoconf -> Generate Configure if you wish only to
-generate configure - an update will be performed if needed OR</font></li>
-
-<li>
-<font size=+1>Select Autoconf -> Run Configure and this action will perform
-an update as well if need</font></li>
+Select Autoconf -> Configure, this action will regenerate the configure
+script and then run it.</li>
 </ol>
-<b><font size=+3>Explicit Updating for Configuration files</font></b>
-<br>&nbsp;
-<dd>
-<font size=+1>The tool provide actions for those users who are familiar
-with autoconf and provide them with the flexibility to make there own preferred
-updates. Once you need to make updates and take owner ship of the package,
-the tool provide actions that will help you accomplish that. Also, you
-need to be aware of the following automatic updates that the tool perform.&nbsp;</font></dd>
 
-<dd>
-<font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The C/C++ IDE
-can only do an update to certain Makefile.am templates and the configure.in
-template as well. For example an automatic update will occur if each makefile
-has one designated target per file. Also, the updated Targets are either
-Programs, Static Libraries Shared Libraries.&nbsp; Basic variables for
-each target will get updated for this release. Later, more and more update
-will be performed. For example, the Program target will have its _SOURCES,_LDADD,
-SUBDIRS and EXTRA_DIST variables updates. For Static Libraries targets,
-the C/C++ tool will update LIBRARIES,&nbsp; _a_SOURCES,&nbsp; SUBDIRS and
-EXTRA_DIST will be updated. For shared libraries, the _LTLIBRARIE, _la_SOURCES,
-SUBDIRS and EXTA_DIST will be updated .</font></dd>
-
-<dd>
-<font size=+1>I order to perform the previous actions, you need to&nbsp;
-do the following:</font></dd>
+<ul>
+<li>
+OR alternatively</li>
+</ul>
 
 <ol>
 <li>
-<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory</font></li>
+Select Autoconf -> Advanced -> Generate Configure if you wish only to generate
+configure - an update will be performed if needed OR</li>
 
 <li>
-<font size=+1>Select&nbsp; Autoconf -> Advanced-> and then you will have
-three options to choose from</font></li>
-
-<li>
-<font size=+1>Select Create/Update all&nbsp; automake files to update all
-configuration files</font></li>
-
-<li>
-<font size=+1>Select update configure.in if you wish to update the top
-level configure.in</font></li>
-
-<li>
-<font size=+1>Select update Makefile.am to update the one Makefile.am that
-exist in this directory</font></li>
+Select Autoconf -> Advanced -> Run Configure and this action will perform
+an update as well if need</li>
 </ol>
 
-<p><br><b><font size=+3>Modifying the Project Structure</font></b>
-<p><font size=+1>The&nbsp; C/C++ IDE provides a set of actions that helps
-the user to easily modify the Makefile.am target . In order to that&nbsp;
-you need to :</font>
+<h2>
+Explicit Updating for Configuration files</h2>
+&nbsp; The tool provide actions for those users who are familiar with autoconf
+and provide them with the flexibility to make there own preferred updates.
+Once you need to make updates and take owner ship of the package, the tool
+provide actions that will help you accomplish that. Also, you need to be
+aware of the following automatic updates that the tool perform.&nbsp;
+<p>The C/C++ IDE can only do an update to certain Makefile.am templates
+and the configure.in template as well. For example an automatic update
+will occur if each makefile has one designated target per file. Also, the
+updated Targets are either Programs, Static Libraries Shared Libraries.&nbsp;
+Basic variables for each target will get updated for this release. Later,
+more and more update will be performed. For example, the Program target
+will have its _SOURCES,_LDADD, SUBDIRS and EXTRA_DIST variables updates.
+For Static Libraries targets, the C/C++ tool will update LIBRARIES,&nbsp;
+_a_SOURCES,&nbsp; SUBDIRS and EXTRA_DIST will be updated. For shared libraries,
+the _LTLIBRARIE, _la_SOURCES, SUBDIRS and EXTA_DIST will be updated .&nbsp;
+<p>In order to perform the previous actions, you need to&nbsp; do the following:&nbsp;
 <ol>
 <li>
-<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory</font></li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory</li>
 
 <li>
-<font size=+1>Select&nbsp; Autoconf -> Advanced-> and then you will have
-five create actions</font></li>
+Select&nbsp; Autoconf -> Advanced -> and then you will have three options
+to choose from</li>
 
 <li>
-<font size=+1>Selecting Create TopLevel Makefile.am will generate the top
-level Makefile .am and if there was an existing Makefile.am, it will be
-renamed *.old</font></li>
+Select Create/Update all&nbsp; automake files to update all configuration
+files</li>
 
 <li>
-<font size=+1>Selecting Create Programs Makefile.am will generate the Programs
-Makefile .am and if there was an existing Makefile.am, it will be renamed
-*.old</font></li>
+Select update configure.in if you wish to update the top level configure.in</li>
 
 <li>
-<font size=+1>Selecting Create Static Lib Makefile.am will generate the
-static library&nbsp; Makefile.am and if there was an existing Makefile.am,
-it will be renamed *.old</font></li>
-
-<li>
-<font size=+1>Selecting Create Stared Lib Makefile.am will generate the
-shared library Makefile.am and if there was an existing Makefile.am, it
-will be renamed *.old</font></li>
-
-<li>
-<font size=+1>Selecting Create Configure.in will generate the top level
-configure.in and if there was an existing configure.in, it will be renamed
-*.old</font></li>
+Select update Makefile.am to update the one Makefile.am that exist in this
+directory</li>
 </ol>
-<b><font size=+3>Running Autoconf Standard targets</font></b>
-<p><font size=+1>You may invoke any of the following three standard autoconf
-targets from the The tool. These targets are make-install, distclean and
-maintainer-clean</font>
+
+<h2>
+Modifying the Project Structure</h2>
+The&nbsp; C/C++ IDE provides a set of actions that helps the user to easily
+modify the Makefile.am target . In order to that&nbsp; you need to :
 <ol>
 <li>
-<font size=+1>From the <font color="#FF0000"><a href="../views/cppprojects.htm">C/C++
-Projects view</a></font>, right mouse click on the project directory</font></li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory</li>
 
 <li>
-<font size=+1>Select Autoconf -> distclean</font></li>
+Select&nbsp; Autoconf -> Advanced -> and then you will have five create
+actions</li>
 
 <li>
-<font size=+1>Select Autoconf -> maintainer clean</font></li>
+Selecting Create TopLevel Makefile.am will generate the top level Makefile
+.am and if there was an existing Makefile.am, it will be renamed *.old</li>
 
 <li>
-<font size=+1>Select Autoconf -> make-install</font></li>
+Selecting Create Programs Makefile.am will generate the Programs Makefile
+.am and if there was an existing Makefile.am, it will be renamed *.old</li>
+
+<li>
+Selecting Create Static Lib Makefile.am will generate the static library&nbsp;
+Makefile.am and if there was an existing Makefile.am, it will be renamed
+*.old</li>
+
+<li>
+Selecting Create Stared Lib Makefile.am will generate the shared library
+Makefile.am and if there was an existing Makefile.am, it will be renamed
+*.old</li>
+
+<li>
+Selecting Create Configure.in will generate the top level configure.in
+and if there was an existing configure.in, it will be renamed *.old</li>
+</ol>
+
+<h2>
+Running Autoconf Standard targets</h2>
+You may invoke any of the following three standard autoconf targets from
+the The tool. These targets are make-install, distclean and maintainer-clean
+<ol>
+<li>
+From the <a href="../views/cppprojects.htm">C/C++ Projects view</a>, right
+mouse click on the project directory</li>
+
+<li>
+Select Autoconf -> distclean</li>
+
+<li>
+Select Autoconf -> maintainer clean</li>
+
+<li>
+Select Autoconf -> make-install</li>
 </ol>
 
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
@@ -307,7 +313,7 @@ Projects view</a></font>, right mouse click on the project directory</font></li>
 <tr>
 <td ALIGN=LEFT VALIGN=TOP COLSPAN="2"><a href="../../frames/contact.htm">Contact
 Us</a>
-<p><a href="../../hglegal.htm"><img SRC="ngibmcpy.gif" BORDER=0 height=12 width=195></a></td>
+<p><a href="../../hglegal.htm"><img SRC="../../images/ngibmcpy.gif" BORDER=0 height=12 width=195></a></td>
 </tr>
 </table>
 
