@@ -173,4 +173,10 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 		    }
 	    }
     }
+    
+    public boolean close()
+    {
+    	_viewer.dispose();
+    	return super.close();
+    }
 }

@@ -345,4 +345,11 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
     {
 	_progressIndicator.setText(message);
     }
+    
+    public boolean close()
+    {
+    	_localViewer.dispose();
+    	_remoteViewer.dispose();
+    	return super.close();
+    }
 }

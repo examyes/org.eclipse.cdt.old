@@ -134,4 +134,10 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 		    }
 	    }
     }
+    
+    public boolean close()
+    {
+    	_resultViewer.dispose();
+    	return super.close();
+    }
 }

@@ -125,6 +125,12 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 
 	return c;
     }
+    
+    public boolean close()
+    {
+    	_viewer.dispose();
+    	return super.close();
+    }
 
     public void handleEvent(Event e)
     {
