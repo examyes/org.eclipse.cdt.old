@@ -303,7 +303,10 @@ public class GetGdbStorage
       
       if (hex != -1)
       {
-	      str = str.substring(hex, hex+10);
+      	  if (hex+10 <= str.length())
+		      str = str.substring(hex, hex+10);
+		  else
+		  	  str = str.substring(hex);
 	      return str;
       }	      
       
