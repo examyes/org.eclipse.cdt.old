@@ -324,7 +324,7 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
       return _path.getFileExtension();
   }
   
-  public String getFileExtension()
+  public String getFileExtension() 
   {
       return _path.getFileExtension();
   }
@@ -339,10 +339,6 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 	return _path;
     }
 
-  public IPath getLocalLocation()
-  {
-      return _path;    
-  }
    
   public Object[] getChildren(Object o) 
   {

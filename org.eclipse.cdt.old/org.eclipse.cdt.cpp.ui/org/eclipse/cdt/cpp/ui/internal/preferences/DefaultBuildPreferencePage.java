@@ -89,8 +89,8 @@ public class DefaultBuildPreferencePage extends PreferencePage implements IWorkb
 		String osString = org.eclipse.core.boot.BootLoader.getOS();
 		if (osString.equals("win32"))
 		    {
-			_buildInvocationEntry.setText("nmake");
-			_buildInvocationEntry.add("nmake", 0);
+			_buildInvocationEntry.setText("make");
+			_buildInvocationEntry.add("make", 0);
 		    }
 		else
 		    {

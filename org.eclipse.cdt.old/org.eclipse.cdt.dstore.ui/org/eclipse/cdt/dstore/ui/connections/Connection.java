@@ -397,7 +397,7 @@ public class Connection
 	    {  
 		if (_isUsingDaemon)
 		    {
-			Shell shell = parentDS.getDomainNotifier().findShell();
+			Shell shell = notifier.findShell();
 			LoginDialog ldialog = new LoginDialog();
 			ldialog.open();
 			if (ldialog.getReturnCode() != ldialog.OK)

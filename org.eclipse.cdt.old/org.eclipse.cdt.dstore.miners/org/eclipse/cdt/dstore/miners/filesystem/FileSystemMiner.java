@@ -465,7 +465,7 @@ public class FileSystemMiner extends Miner
 
   private DataElement handleOpen(DataElement theElement, DataElement status)
       {
-        String sourceString = theElement.getSource();
+        String sourceString = theElement.getSource().replace('\\', '/');
 	int indexOfLocation = sourceString.lastIndexOf(":");
 	if (indexOfLocation > 1)
 	  {	

@@ -189,7 +189,6 @@
 
 
   <extension point = "org.eclipse.ui.popupMenus">
-
         <objectContribution
            id="com.ibm.cpp.ui.internal.menu"
            objectClass="org.eclipse.core.resources.IFile">

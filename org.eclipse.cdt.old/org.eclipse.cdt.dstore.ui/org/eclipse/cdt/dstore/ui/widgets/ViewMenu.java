@@ -260,9 +260,8 @@ public class ViewMenu implements IMenuListener
         _input = object;
 	_dataStore = _input.getDataStore();
 	
-	if ((_inputDescriptor == null) || 
-	    (object.getDescriptor() == null) ||
-	    (!object.getDescriptor().getType().equals(_inputDescriptor.getType())))
+	if ((_inputDescriptor == null) || (object.getDescriptor() == null) ||
+	    (!object.getDescriptor().getName().equals(_inputDescriptor.getName())))
         {
           _inputDescriptor = object.getDescriptor();          
           getRelationItems();

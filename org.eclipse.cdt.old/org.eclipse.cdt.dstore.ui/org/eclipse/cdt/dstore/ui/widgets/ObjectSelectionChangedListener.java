@@ -55,7 +55,7 @@ import org.eclipse.ui.part.*;
 	  return _isEnabled;
       }
       
-      public void selectionChanged(SelectionChangedEvent e)
+      public synchronized void selectionChanged(SelectionChangedEvent e)
       {
 	  if (_isEnabled)
 	      {

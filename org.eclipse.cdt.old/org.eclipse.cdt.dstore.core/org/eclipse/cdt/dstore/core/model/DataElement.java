@@ -1053,7 +1053,6 @@ public final class DataElement implements Serializable, IDataElement
 			    result = new File(localPath);
 			    if (!result.exists())
 				{		  
-				    System.out.println("getting " + localPath);
 				    // initiate query
 				    DataElement fileDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(),
 										 DE.A_NAME,
@@ -1062,13 +1061,14 @@ public final class DataElement implements Serializable, IDataElement
 				    if (fileDescriptor != null)
 					{	
 					    DataElement openDescriptor = _dataStore.localDescriptorQuery(fileDescriptor, "C_OPEN");
+
 					    if (openDescriptor != null)
 						{
 						    if (doSynchronize)
 							{
-						      DataElement status = _dataStore.synchronizedCommand(openDescriptor, this);
+							    DataElement status = _dataStore.synchronizedCommand(openDescriptor, this);
 						      
-						      if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.done")))
+							    if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.done")))
 							  {
 							      return new File(localPath);
 							  }

@@ -68,7 +68,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 	    if (_element.getParent() != dataStore.getDescriptorRoot())
 		{
 		    String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
-		    fileName = fileName.replace('/', '\\');
+		    fileName = fileName.replace('\\', '/');
 		    
 		    String elementType = (String)(_element.getElementProperty(DE.P_TYPE));
 		    
@@ -89,7 +89,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						{
 						    String name = fileName;
 						    
-						    int indexOfSlash = fileName.lastIndexOf("\\");
+						    int indexOfSlash = fileName.lastIndexOf("/");
 						    if (indexOfSlash > 0)
 							{
 							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
@@ -140,6 +140,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 							    
 							    try
 								{
+								    System.out.println("opening "+ file);
+
 								    persp.openEditor(file);
 								}
 							    catch (org.eclipse.ui.PartInitException e)

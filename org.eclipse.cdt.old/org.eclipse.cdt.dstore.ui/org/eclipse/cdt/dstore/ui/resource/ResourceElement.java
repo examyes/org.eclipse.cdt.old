@@ -39,6 +39,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     
     protected DataElement _resourceDescriptor;
     protected Path        _path;
+    protected Path        _localPath;
     
     protected Vector   _children;
     protected IProject _project;  
@@ -52,6 +53,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 
     _project = project;
     _path = new Path(e.getAttribute(DE.A_SOURCE));
+    _localPath = new Path(e.getAttribute(DE.A_SOURCE));
     _parent = null; 
     _element = e;    
     _dataStore = _element.getDataStore();
@@ -65,6 +67,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 
     _project = project;
     _path = new Path(e.getAttribute(DE.A_SOURCE));
+    _localPath = new Path(e.getAttribute(DE.A_SOURCE));
     _parent = parent;
     _element = e;    
     _dataStore = _element.getDataStore();
@@ -327,7 +330,12 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     return _path;    
   }
 
-  public boolean exists()
+  public IPath getLocalLocation()
+  {
+    return _localPath;    
+  }
+
+  public boolean exists() 
   {
     return true;
   }

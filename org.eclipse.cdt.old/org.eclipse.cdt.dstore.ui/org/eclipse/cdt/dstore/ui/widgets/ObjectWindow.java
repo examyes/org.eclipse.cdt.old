@@ -611,7 +611,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 			sort.add(_sortByAction[i]);
 		    }
 		menu.add(sort);
-		
+
+		/****
 		MenuManager label = new MenuManager(getLocalizedString("ui.View"), "#ViewMenu");
 		for (int i = 0; i < _viewByAction.length; i++)
 		    {
@@ -619,13 +620,17 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 			label.add(_viewByAction[i]);
 		    }
 		menu.add(label);	
+		****/
+
 		_currentSortAction.setChecked(true);
 		_currentViewByAction.setChecked(true);		
 
+		/****
 	      MenuManager zoom = new MenuManager(getLocalizedString("ui.Zoom"), "#ZoomMenu");
 	      zoom.add(new ZoomInAction(getLocalizedString("ui.in"), selected, this));
 	      zoom.add(new ZoomInAction(getLocalizedString("ui.out"), input.getParent(), this));
 	      menu.add(zoom);
+		****/
 	    }
       }
 

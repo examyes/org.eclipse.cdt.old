@@ -1266,7 +1266,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  for (int i = 0; i < _tempFiles.size(); i++)
 		      {
 			  FileResourceElement tempFile = (FileResourceElement)_tempFiles.get(i);
-			  String tempFileName = tempFile.getLocation().toString(); 
+			  String tempFileName = tempFile.getLocalLocation().toString(); 
 			  if (compareFileNames(tempFileName, fileName))
 			      {
 				  return tempFile;
@@ -1353,10 +1353,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     private boolean compareFileNames(String file1, String file2)
     {
-	String f1 = file1.replace('/', '\\');
-	String f2 = file2.replace('/', '\\');
+	String f1 = file1.replace('\\', '/');
+	String f2 = file2.replace('\\', '/');
 	return f1.equalsIgnoreCase(f2);
     }
+
 
 
   public IProject getProjectFor(IResource resource)

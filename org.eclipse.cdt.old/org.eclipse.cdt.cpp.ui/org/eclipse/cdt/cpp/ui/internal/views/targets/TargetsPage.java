@@ -344,10 +344,13 @@ public final void selectionChanged(IWorkbenchPart part, ISelection sel) {
 		else if (root instanceof DataElement)
 		    {
 			ModelInterface api = ModelInterface.getInstance();
-			IResource theResource = api.findResource((DataElement)root);
-			if (theResource != null)
+			if (((DataElement)root).getType().equals("Project"))
 			    {
-				NavigatorSelection.selection = theResource.getProject();
+				IResource theResource = api.findProjectResource((DataElement)root);
+				if (theResource != null)
+				    {
+					NavigatorSelection.selection = theResource.getProject();
+				    }
 			    }
 		    }		
 	}
