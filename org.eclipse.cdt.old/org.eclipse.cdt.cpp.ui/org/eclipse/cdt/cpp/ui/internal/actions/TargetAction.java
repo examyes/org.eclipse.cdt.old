@@ -76,8 +76,6 @@ public class TargetAction extends CustomAction
 				setEnabled(false);
 		if(_command.getValue().equals("DIST_CLEAN")&&!doesFileExists("Makefile"))
 			setEnabled(false);		
-
-		
 	}
 	public void run()
 	{
