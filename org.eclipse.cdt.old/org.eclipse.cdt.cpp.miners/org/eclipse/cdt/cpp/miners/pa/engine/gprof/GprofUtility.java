@@ -128,15 +128,16 @@ public class GprofUtility {
    */
   public static double getSamplingRate(String line) throws Exception {
   
-   PATokenizer tokenizer = new PATokenizer(line);
-   int tokenNumber = tokenizer.getTokenNumber();
+   int lastIndex = line.indexOf(" seconds");
+   String substring = line.substring(0, lastIndex);
+   int firstIndex = substring.lastIndexOf(' ');
    
-   if (tokenNumber > 4) {
-    String samplingRateString = tokenizer.getToken(tokenNumber-2);    
-    return Double.parseDouble(samplingRateString);    
+   if (lastIndex > firstIndex && firstIndex > 0) {
+    return Double.parseDouble(line.substring(firstIndex+1, lastIndex));
    }
    else
     return 0;
+   
   }
   
   /**
