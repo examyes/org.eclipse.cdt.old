@@ -1216,6 +1216,54 @@ public class GdbDebugSession extends DebugSession {
 
 		return _whyStop;
 	}
+	
+	public int cmdGoToAddress(String address)
+	{		
+		_whyStop = WS_Unknown;
+
+		String cmd = "break * " + address;
+		boolean ok = executeGdbCommand(cmd);
+		if (!ok)
+			return _whyStop;
+
+		addChangesToUiMessages();
+
+		String breakIndex = null;
+		String BREAKPOINT_keyword = "Breakpoint ";
+		String str = (String) cmdResponses.elementAt(0);
+		if (str.startsWith("Note: breakpoint"))
+			str = (String) cmdResponses.elementAt(1);
+		if (str.startsWith(BREAKPOINT_keyword)) {
+			str = str.substring(BREAKPOINT_keyword.length());
+			int space = str.indexOf(" ");
+			if (space > 0) {
+				breakIndex = str.substring(0, space);
+			}
+		}
+		if (Gdb.traceLogger.EVT)
+			Gdb.traceLogger.evt(1, "GdbDebugSession.cmdGoTo breakIndex=" + breakIndex);
+		if (breakIndex != null) {
+			cmd = "jump * " + address;
+			ok = executeGdbCommand(cmd);
+			if (!ok)
+				return _whyStop;
+
+			addChangesToUiMessages();
+
+			cmd = "delete " + breakIndex;
+			ok = executeGdbCommand(cmd);
+			if (!ok)
+				return _whyStop;
+
+			//        getGdbResponseLines();  //  cmdResponses.removeAllElements();
+			addChangesToUiMessages();
+		}
+		_whyStop = WS_BkptHit;
+		checkResponseForException();
+		getCurrentFileLineModule();
+
+		return _whyStop;
+	}
 
 	public int cmdGoTo(String threadName, String lineNum) {
 		_whyStop = WS_Unknown;

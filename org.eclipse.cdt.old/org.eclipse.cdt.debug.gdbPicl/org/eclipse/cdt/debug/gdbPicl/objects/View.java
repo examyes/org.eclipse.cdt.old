@@ -166,7 +166,7 @@ public abstract class View
       _viewNumLines  = (_viewEndLine - _viewStartLine) + 1;
    }
 
-   int getViewNumLines()
+   public int getViewNumLines()
    {
       return _viewNumLines;
    }

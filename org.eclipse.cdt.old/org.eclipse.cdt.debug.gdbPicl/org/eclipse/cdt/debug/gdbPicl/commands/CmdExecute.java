@@ -83,7 +83,50 @@ public class CmdExecute extends Command
 
             case EPDC.Exec_GoTo:
                _debugSession.setLastUserCmd(DebugSession.CmdGoTo,threadManager.getCallStackSize(DU));
-               _debugSession.cmdGoTo(threadManager.getThreadName(DU), String.valueOf(lineNum));
+               
+				if (viewNo == Part.VIEW_SOURCE) {
+					_debugSession.cmdGoTo(threadManager.getThreadName(DU), String.valueOf(lineNum));
+				}
+				else  // MIXED AND DISASSEMBLY VIEW
+				{
+			   		Part part = classManager.getPart(partID);
+			   		View viewInfo = part.getView(viewNo);		   		
+					String lineInfo = viewInfo.getViewLine(lineNum);
+					String address = null;
+					
+					lineInfo = lineInfo.trim();
+					
+					// get address from view
+					if (lineInfo.startsWith("0x"))
+					{
+						int idx = lineInfo.indexOf(" ");
+						if (idx > 0)
+						{
+							address = lineInfo.substring(0, _viewPrefix);
+						}
+					}
+					else
+					{
+						// get next executable line in mixed view
+						for (int x=lineNum+1; x<viewInfo.getViewNumLines(); x++)
+						{
+							lineInfo = viewInfo.getViewLine(x);
+							lineInfo = lineInfo.trim();
+							
+							if (lineInfo.startsWith("0x"))
+							{
+								int idx = lineInfo.indexOf(" ");
+								if (idx > 0)
+								{
+									address = lineInfo.substring(0, _viewPrefix);
+								}
+								break;
+							}
+						}						
+					}
+					((GdbDebugSession)_debugSession).cmdGoToAddress(address);										
+				}
+				
                break;
 
             case EPDC.Exec_StepOver:
@@ -245,29 +288,82 @@ public class CmdExecute extends Command
                if (Gdb.traceLogger.DBG) 
                    Gdb.traceLogger.dbg(1,"Running to location: part " + Integer.toString(partID) + ", line " +
                         Integer.toString(lineNum));
-
-               if (breakpointManager.isLocationBreakpoint(partID, lineNum))
-               {
-                  _debugSession.cmdRun_User();
-               }
-               else
-               {
-                  // attempt to set breakpoint
-                  if (_debugSession.setLineBreakpoint(partID, lineNum) < 0) {
-                     _rep = new ERepExecute(0, 0);
-                     _rep.setReturnCode(EPDC.ExecRc_BadLineNum);
-                     _rep.setMessage(_debugSession.getResourceString("LINE_NOT_EXECUTABLE_MSG"));
-                     return false;
-                  }
-                  _debugSession.setTmpBkpt(partID, lineNum);
-
-                  _debugSession.setLastUserCmd(DebugSession.CmdRun,0);
-                  _debugSession.cmdRun_User();
-
-                  _debugSession.clearBreakpoint(partID, lineNum);
-                  _debugSession.clearTmpBkpt();
-               }
-               break;
+                        
+			   if (viewNo == Part.VIEW_SOURCE)  // SOURCE VIEW
+			   {
+					if (breakpointManager.isLocationBreakpoint(partID, lineNum)) {
+						_debugSession.cmdRun_User();
+					} else {
+						// attempt to set breakpoint
+						if (_debugSession.setLineBreakpoint(partID, lineNum) < 0) {
+							_rep = new ERepExecute(0, 0);
+							_rep.setReturnCode(EPDC.ExecRc_BadLineNum);
+							_rep.setMessage(_debugSession.getResourceString("LINE_NOT_EXECUTABLE_MSG"));
+							return false;
+						}
+						_debugSession.setTmpBkpt(partID, lineNum);
+	
+						_debugSession.setLastUserCmd(DebugSession.CmdRun, 0);
+						_debugSession.cmdRun_User();
+	
+						_debugSession.clearBreakpoint(partID, lineNum);
+						_debugSession.clearTmpBkpt();
+					}
+					break;
+			   }
+			   else  // MIXED VIEW OR DISASSEMBLY VIEW
+			   {
+			   		Part part = classManager.getPart(partID);
+			   		View viewInfo = part.getView(viewNo);		   		
+					String lineInfo = viewInfo.getViewLine(lineNum);
+					String address = null;
+					
+					lineInfo = lineInfo.trim();
+					
+					// get address from view
+					if (lineInfo.startsWith("0x"))
+					{
+						int idx = lineInfo.indexOf(" ");
+						if (idx > 0)
+						{
+							address = lineInfo.substring(0, _viewPrefix);
+						}
+					}
+					else
+					{
+						// get next executable line in mixed view
+						for (int x=lineNum+1; x<viewInfo.getViewNumLines(); x++)
+						{
+							lineInfo = viewInfo.getViewLine(x);
+							lineInfo = lineInfo.trim();
+							
+							if (lineInfo.startsWith("0x"))
+							{
+								int idx = lineInfo.indexOf(" ");
+								if (idx > 0)
+								{
+									address = lineInfo.substring(0, _viewPrefix);
+								}
+								break;
+							}
+						}						
+					}
+					
+					int id = ((GdbDebugSession)_debugSession).setAddressBreakpoint(address);
+					
+					if (id < 0)
+					{
+	                     _rep = new ERepExecute(0, 0);
+	                     _rep.setReturnCode(EPDC.ExecRc_BadLineNum);
+	                     _rep.setMessage(_debugSession.getResourceString("LINE_NOT_EXECUTABLE_MSG"));
+	                     return false;
+					}
+					
+					_debugSession.setLastUserCmd(DebugSession.CmdRun,0);
+					_debugSession.cmdRun_User();
+					((GdbDebugSession)_debugSession).clearBreakpoint(id);
+					break;
+			   }
 
             default:
                System.err.println("This execution not implemented.");
@@ -410,4 +506,5 @@ public class CmdExecute extends Command
 
    // Class fields
    private EReqExecute _req;
+   private int _viewPrefix = 10;
 }
