@@ -188,6 +188,43 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
       return disassembly;
    }
    
+   /**
+    * Ask gdb to display the entire source file a file
+    * 
+    */
+  public String[] getSourceLines(String filename)
+  { 
+     String cmd = "list "+filename+":1,99999";
+      if (Gdb.traceLogger.DBG) 
+          Gdb.traceLogger.dbg(3,"GetGdbFile.SourceLines cmd="+cmd );
+
+      boolean ok = _debugSession.executeGdbCommand(cmd);
+      if(!ok)
+         return null;
+ 
+      String[] lines = _debugSession.getTextResponseLines();
+      if(lines.length==0)
+          return null;
+      String str = lines[0];
+      String keyword = "No such file";
+//      String keyword = filename;
+     int end = str.indexOf(keyword);
+     if(end>0)
+          return null;
+          
+      keyword = "No source file";
+      end = str.indexOf(keyword);
+      if (end >0)
+      		return null;
+      		
+	  keyword = "in " + filename;
+	  end = str.indexOf(keyword);
+	  if (end > 0)
+	  	return null;      		          
+      
+	  return lines;
+  }
+   
    public int getTotalLines(String fileName)
    {
       int totalLines = 0;

@@ -88,13 +88,20 @@ abstract class SourceView extends View
          return true;
       }
 
+	  String filename = sourceFileName;
 	  sourceFileName = _parentPart.getFilePath() + sourceFileName;
       file = new File(sourceFileName);
       if (!file.exists() || file.isDirectory())
       {
-      	 _parentPart.setPartChanged(true);
-      	 _fakeNoSource = true;
-         return false;
+      	 boolean ok = getSourceFromGdb(filename);
+      	 
+      	 if (!ok)
+      	 {
+	      	 _parentPart.setPartChanged(true);
+	      	 _fakeNoSource = true;
+			 return false;
+      	 }
+         return true;
       }
 
       BufferedReader reader = null;
@@ -390,6 +397,50 @@ abstract class SourceView extends View
          nextPartRep.addSrcFile(viewNo, _viewRecLength, 1, _viewNumLines, _viewFileName, _viewBaseFileName, viewAttr);
       }
    }
+   
+   /**
+    * In case we can't locate the source, make use of gdb to display source file.
+    * 
+    */
+   boolean getSourceFromGdb(String filename)
+   {
+   		GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
+		String[] lines = gdbDebugSession._getGdbFile.getSourceLines(filename);	  
+		if (lines == null)
+			return false;
+	
+		String srcLine;		
+		int maxLength=0;
+		int lineNum=0;
+		for (int i=0; i<lines.length; i++)
+        {
+            srcLine = lines[i];
+            
+  			int tab = srcLine.indexOf("\t");
+      		if (tab > 0) 
+       		{
+				srcLine = srcLine.substring(tab+1);
+       		}
+					
+            srcLine = processViewLine(i+1, " "+srcLine);
+            _viewLines.addElement(srcLine);
+
+            if (srcLine.length() > maxLength)
+               maxLength = srcLine.length();
+
+            lineNum++;
+         }
+
+		setViewRecordLength(maxLength);
+		setViewLineRange(1, lineNum);
+		setExecutableLines();
+		_viewVerify = true;
+		setViewFileName(1,filename);
+		_parentPart.setPartChanged(true);
+			
+		return true;						
+   }
+   
 
    // Data members
    protected int           _moduleID;
