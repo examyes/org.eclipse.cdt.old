@@ -231,12 +231,19 @@ public class OpenEditorAction extends Action implements IOpenAction
 							}
 						}
 					    
+					    java.io.File theFile = fileElement.getFileObject(true);
+					    if (!theFile.exists())
+					    {
+					    	return;	
+					    }
+					    
 					    file = new FileResourceElement(fileElement, project);
+					   
 					    addNewFile(file);
 					}
 				    
 
-				    if (file != null)
+				    if (file != null && file.exists())
 					{	
 					    _file = file;
 
