@@ -291,7 +291,7 @@ public class GdbDebugSession extends DebugSession {
 			for (int i = 0; i < length; i++) {
 				String str = (String) cmdResponses.elementAt(i);
 				
-				// produce output in GDB Console or Console 
+				// produce output in GDB Console or Console
 				// all the messages are added here
 				this.addLineToUiMessages(str, true);
 
@@ -746,7 +746,7 @@ public class GdbDebugSession extends DebugSession {
 					+ programName);
 
          	String cmd = "directory " + directory;
-                
+
 		boolean ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
@@ -765,9 +765,9 @@ public class GdbDebugSession extends DebugSession {
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
                 */
-                
+
                 cmd = "file " + "/proc/" +processIndex +"/exe ";  // works on both gdb 5.11 and 5.2
-                
+
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
@@ -775,7 +775,7 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
-              
+
 		cmd = "attach " + processIndex;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
@@ -801,7 +801,7 @@ public class GdbDebugSession extends DebugSession {
 
                 String[] lines = getTextResponseLines();
                 addCmdResponsesToUiMessages();
-              
+
                 for (int i=0; i<lines.length; i++)
                 {
                    if (lines[i].indexOf("No such process") >= 0)
@@ -860,7 +860,7 @@ public class GdbDebugSession extends DebugSession {
 		return false;
 	}
 
-	public void runToMain() {
+	public void runToMain(String[] errorMsg) {
 		if (Gdb.traceLogger.EVT)
 			Gdb.traceLogger.evt(1, "########>>>>>>>> GdbDebugSession.runToMain");
 
@@ -906,6 +906,17 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN") + cmd);
 
+         String[] lines = getTextResponseLines();
+         for (int i=0; i<lines.length; i++)
+         {
+             if (lines[i].indexOf("signal") >= 0)
+             {
+                 String error = lines[i];
+                 if (i < lines.length)
+                   errorMsg[0] = error + lines[i+1];      // gdb puts on next line the name of the signal
+                 break;
+             }
+         }
 			// do not continue if debugee is started with exception.
 			// we will encounter more problems if we do, may go into infinite loop
 			return;
@@ -976,7 +987,7 @@ public class GdbDebugSession extends DebugSession {
 
 		checkCurrentPart(_currentModuleID);
 
-		// enable deferred breakpoints       
+		// enable deferred breakpoints
 		if (!Gdb.supportDeferredBreakpoint)
 			 ((GdbBreakpointManager) _breakpointManager).enableDeferredBreakpoints();
 
@@ -1845,7 +1856,7 @@ public class GdbDebugSession extends DebugSession {
 		
     }
 
-	// add the name to the list of dll to stop for    
+	// add the name to the list of dll to stop for
     public int setLoadBreakpoint(String dllName)
     {
     	int id;
@@ -1857,7 +1868,7 @@ public class GdbDebugSession extends DebugSession {
     	
     	return id;
     }
-    
+
 	// remove dll name from the list of dll to stop for
     public void clearLoadBreakpoint(int id)
     {
@@ -1872,7 +1883,7 @@ public class GdbDebugSession extends DebugSession {
     		}
     	}
     }
-    
+
     /*
      * Disable load breakpoint
      * remove the original entry from _dllToStop
@@ -1894,11 +1905,11 @@ public class GdbDebugSession extends DebugSession {
     		}
     	}
     }
-    
+
     /*
      * Enable load breakpoint
      * Given the breakpoint id, replace " " set previously from disableLoadBreakpoitn
-     * with real dllName.  
+     * with real dllName.
      */
     public void enableLoadBreakpoint(int id, String dllName)
     {
@@ -1914,7 +1925,7 @@ public class GdbDebugSession extends DebugSession {
     		}
     	}
     }
-    
+
     /*
      * Checks _dllToStop to see if the debug session should stop after a shared lib event
      * Update shared libreaires in module manager
@@ -1930,7 +1941,7 @@ public class GdbDebugSession extends DebugSession {
 	
 		GetGdbSharedLibraries.ModuleInfo[] moduleInfo =
 			_getGdbSharedLibraries.updateSharedLibraries();
-		if (moduleInfo != null) 
+		if (moduleInfo != null)
 		{
 			for (int i = 0; i < moduleInfo.length; i++)
 				if (moduleInfo[i] != null) {
@@ -1987,7 +1998,7 @@ public class GdbDebugSession extends DebugSession {
 	
 		return stop;
     }
-    
+
     // return true - if num of deferred bkpt + num of load bkpt is zero
     // false - otherwise
     public boolean resetStopOnSharedLibEvents()

@@ -107,7 +107,7 @@ public abstract class DebugSession
 
 
   /**
-   * Sets the program which will be executed.  
+   * Sets the program which will be executed.
    *
    * The debugger is started with the <code> DbgStarter </code> class
    * running, which redirectes the debuggee's TCP/IP socket stream
@@ -134,7 +134,7 @@ public abstract class DebugSession
   /**
    * Executes the program set by the method setStartProgramName() to the main method.
    */
-   public abstract void runToMain();
+   public abstract void runToMain(String[] errorMsg);
 
 
   /**
@@ -256,7 +256,7 @@ public abstract class DebugSession
    public abstract String[] getPartsList();
 
    /**
-    * Return an array of part names that match a name 
+    * Return an array of part names that match a name
     */
    String[] getPartsList(String name)
    {
@@ -357,7 +357,7 @@ public abstract class DebugSession
    * @return whether the breakpoint was successfully set
    */
    public abstract int setWatchpoint(String expression);
- 
+
   /**
    * Get the debugger ModuleManager object
    */
@@ -406,7 +406,7 @@ public abstract class DebugSession
    public LocalVariablesMonitorManager getLocalVariablesMonitorManager() {
       return _localVariablesMonitorManager;
    }
- 
+
   /**
    * Clear all thread, parts, breakpoints, variable monitors and local variable
    * monitors from the managers.
@@ -437,14 +437,14 @@ public abstract class DebugSession
    protected LocalVariablesMonitorManager _localVariablesMonitorManager;
    protected RegisterManager              _registerManager;
    protected StorageManager               _storageManager;
- 
+
    protected String            _parms[];          // array of parameters to pass to run method
    protected int               _whyStop;          // why the program stopped
    protected String            _whyStopMsg;       // additional text to add to the whystop
    public    String            _whyExceptionMsg = null;
    protected String            _exceptionName;    // name of exception thrown
    protected boolean[]         _exceptionsStatus; // false = ignore, true = catch
-   protected Vector            _breakpointsEncountered; // user breakpoints or watchpoints 
+   protected Vector            _breakpointsEncountered; // user breakpoints or watchpoints
                                                         // that caused program to stop, if any
    protected int _partStartIndex;
    protected int lastUserCmd   = CmdStepInto;

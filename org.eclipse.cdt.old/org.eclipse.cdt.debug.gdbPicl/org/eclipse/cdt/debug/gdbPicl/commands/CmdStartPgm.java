@@ -26,15 +26,18 @@ public class CmdStartPgm extends Command
     */
 
    public boolean execute(EPDC_EngineSession EPDCSession)
-   {  
-      
+   {
+
        int returnCode = EPDC.ExecRc_OK;
-     _debugSession.runToMain();
+       String[] errorMsg = new String[1];
+
+     _debugSession.runToMain(errorMsg);
      ThreadManager tm =_debugSession.getThreadManager();
-     
+
 
      int DU = tm.getThreadDU(_debugSession.stopThreadName());
      int whyStop = 0;
+     String msg = errorMsg[0];
 
      switch (_debugSession.whyStop()) {
         case DebugSession.WS_BkptHit:
@@ -43,21 +46,24 @@ public class CmdStartPgm extends Command
 
         case DebugSession.WS_PgmQuit:
            whyStop=EPDC.Why_done;
-           returnCode = EPDC.ExecRc_Error;
+//           returnCode = EPDC.ExecRc_TeError;
+           returnCode = EPDC.ExecRc_TerminateDebugger;
            break;
 
         case DebugSession.WS_ExceptionThrown:
            whyStop=EPDC.Why_done;
-           returnCode = EPDC.ExecRc_Error;
+           returnCode = EPDC.ExecRc_TerminateDebugger;
            break;
 
         case DebugSession.WS_ThreadDeath:
            whyStop = EPDC.Why_Other;
-           returnCode = EPDC.ExecRc_Error;
+  //         returnCode = EPDC.ExecRc_Error;
+           returnCode = EPDC.ExecRc_TerminateDebugger;
            break;
      }
 
      _rep = new ERepStartPgm(DU, whyStop, null);
+     _rep.setMessage(msg);
      _rep.setReturnCode(returnCode);
 
      return false;
