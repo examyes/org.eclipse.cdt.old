@@ -129,10 +129,11 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 												IDialogConstants.CANCEL_LABEL},
 											0,
 											extraLabels,
-											this
+											this,
+											runDialogKey
 											);
 					// open	the xbox		
-					int result = box.open(runDialogKey);
+					int result = box.open();
 					if(result != -1)
 						runUpdate = result; 
 					else 
@@ -152,10 +153,10 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 										  	IDialogConstants.CANCEL_LABEL},
 											0,
 											extraLabels,
-											this
-											);
+											this,
+											runDialogKey);
 					// open	the xbox		
-					int result = box.open(runDialogKey); 
+					int result = box.open(); 
 					if(result!=-1)
 						runUpdate = ++result;
 					else
