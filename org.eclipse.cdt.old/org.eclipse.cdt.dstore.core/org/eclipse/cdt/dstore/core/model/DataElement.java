@@ -14,10 +14,10 @@ import java.io.*;
 import java.util.*;
 
 /**
- * DataElement is the unit of information for the DataStore.  All objects including
- * schema descriptors, commands and instance objects are represented by DataElements.
- * DataElements should not be constructed directly, rather they are requested via the createObject()
- * method in DataStore
+ * <code>DataElement</code> is the unit of information for the <code>DataStore</code>.  All objects including
+ * schema descriptors, commands and instance objects are represented by <code>DataElement</code>s.
+ * <code>DataElement</code>s should not be constructed directly, rather they are requested via the createObject()
+ * method in <code>DataStore</code>
  *
  */
 public final class DataElement implements Serializable, IDataElement
@@ -45,19 +45,19 @@ public final class DataElement implements Serializable, IDataElement
     private DataElement         _abstracts = null;
 
     /**
-     * Creates a new DataElement without initializing it.
+     * Creates a new <code>DataElement</code> without initializing it.
      *
      */
-	public DataElement()
-	{ 
-		_dataStore = null;
-		_parent = null;
-	}
+    public DataElement()
+    { 
+	_dataStore = null;
+	_parent = null;
+    }
   
     /**
-     * Creates a new DataElement without initializing it.
+     * Creates a new <code>DataElement</code> without initializing it.
      *
-     * @param dataStore the owner DataStore for this element
+     * @param dataStore the owner <code>DataStore</code> for this element
      */
     protected DataElement(DataStore dataStore)
     {
@@ -67,8 +67,8 @@ public final class DataElement implements Serializable, IDataElement
     }
 
     /**
-     * Initializes a DataElement to be reference to some other DataElement.  
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> to be reference to some other <code>DataElement</code>.  
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the element that contains this reference
      * @param originalObject the element that gets referenced
@@ -95,8 +95,8 @@ public final class DataElement implements Serializable, IDataElement
     }
 
     /**
-     * Initializes a DataElement to be reference to some other DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> to be reference to some other <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the element that contains this reference
      * @param originalObject the element that gets referenced
@@ -124,8 +124,8 @@ public final class DataElement implements Serializable, IDataElement
       }
 
     /**
-     * Initializes a DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the parent of the element
      * @param type the type descriptor of the element
@@ -148,8 +148,8 @@ public final class DataElement implements Serializable, IDataElement
     }
 
     /**
-     * Initializes a DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the parent of the element
      * @param type a string representing the type descriptor of the element
@@ -173,8 +173,8 @@ public final class DataElement implements Serializable, IDataElement
 
 
     /**
-     * Initializes a DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the parent of the element
      * @param type the type descriptor of the element
@@ -199,8 +199,8 @@ public final class DataElement implements Serializable, IDataElement
     }
 
     /**
-     * Initializes a DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the parent of the element
      * @param type a string representing the type descriptor of the element
@@ -225,8 +225,8 @@ public final class DataElement implements Serializable, IDataElement
     }
     
     /**
-     * Initializes a DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the parent of the element
      * @param type the type descriptor of the element
@@ -243,8 +243,8 @@ public final class DataElement implements Serializable, IDataElement
       }
 
     /**
-     * Initializes a DataElement 
-     * This method should only be called from the DataStore.
+     * Initializes a <code>DataElement</code> 
+     * This method should only be called from the <code>DataStore</code>.
      *
      * @param parent the parent of the element
      * @param attributes the attributes for this element (type, name, source, id, etc.) 
@@ -259,102 +259,8 @@ public final class DataElement implements Serializable, IDataElement
     }
 
 
-
-    private void initialize()
-    {
-	initialize(null);
-    }
-
-    private void initialize(DataElement typeDescriptor)
-    {
-	_isReference  = false;
-	_isDescriptor = false;
-	_depth        = 2;
-	
-	_referencedObject = null; 
-	_isExpanded  = false;
-	_isUpdated   = false;
-	_descriptor  = typeDescriptor;
-	
-	String depthStr = getAttribute(DE.A_DEPTH);
-	if (depthStr != null)
-	    {
-	      	if (!depthStr.equals("2"))
-		    {			
-			_depth = Integer.parseInt(depthStr);
-		    }
-	    }
-	
-	String isRef = getAttribute(DE.A_ISREF);
-	if (isRef != null && isRef.equals("true"))
-	    {
-		_isReference = true;	 
-	    }
-	
-	String type  = getAttribute(DE.A_TYPE);
-	if (type.equals(DE.T_OBJECT_DESCRIPTOR)          ||
-	    type.equals(DE.T_COMMAND_DESCRIPTOR)         ||
-	    type.equals(DE.T_RELATION_DESCRIPTOR)        ||
-	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR) ||
-	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR)
-	    )
-	    {
-		  _isDescriptor = true; 
-	    }
-	
-	if (_nestedData != null)
-	    _nestedData.clear();
-    }
-    
     /**
-     * Removes all the attributes of a DataElement. 
-     * This method should only be called from the UpdateHandlers.
-     */
-    protected synchronized void clear()
-    {
-	if (_attributes != null)
-	    {
-		for (int i = 0; i < _attributes.length; i++)
-		    {
-			String att = _attributes[i];
-			if (att != null)
-			    {
-				att = null;
-			    }
-		    }		
-	    }
-
-	if (_nestedData != null)
-	    {
-		_nestedData.clear();
-	    }
-
-	_parent = null;
-	_descriptor = null;	
-	_referencedObject = null;
-
-	_buffer = null;
-    }
-
-
-    /**
-     * Marks a DataElement as deleted.
-     * This method should only be called from the DataStore
-     */
-    protected synchronized void delete()
-    {
-	// set delete attribute
-	setAttribute(DE.A_SOURCE, "deleted");
-	setAttribute(DE.A_VALUE, "deleted");
-	
-	_isUpdated = false;	 
-	_isExpanded = true;
-	_buffer = null;
-    }
-
-    /**
-     * Indicates whether the DataElement is deleted or not.
+     * Indicates whether the <code>DataElement</code> is deleted or not.
      *
      * @return whehther the element is deleted or not
      */
@@ -570,9 +476,9 @@ public final class DataElement implements Serializable, IDataElement
     }
     
     /**
-     * Returns the DataStore for this element.
+     * Returns the <code>DataStore</code> for this element.
      *
-     * @return the DataStore 
+     * @return the <code>DataStore</code> 
      */
     public DataStore getDataStore()
     {
@@ -884,7 +790,7 @@ public final class DataElement implements Serializable, IDataElement
     }
   
     /**
-     * Sets the DataStore for this element. 
+     * Sets the <code>DataStore</code> for this element. 
      *
      * @param dataStore the new dataStore 
      */       
@@ -901,16 +807,6 @@ public final class DataElement implements Serializable, IDataElement
     public void setDepth(int depth)
     {
         _depth = depth;
-    }
-
-    private DataElement getAbstractsRelationship()
-    {
-	if (_abstracts == null)
-	    {
-		String abstractsStr = _dataStore.getLocalizedString("model.abstracts");
-		_abstracts = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, abstractsStr);
-	    }
-	return _abstracts;
     }
 
 
@@ -1451,7 +1347,7 @@ public final class DataElement implements Serializable, IDataElement
     
     /**
      * Get the file that this element's source points to if there is one.
-     * If this element is in a virtual DataStore, a file transfer is done to get the actual file,
+     * If this element is in a virtual <code>DataStore</code>, a file transfer is done to get the actual file,
      * otherwise the local file is used.
      *
      * @return the file
@@ -1463,7 +1359,7 @@ public final class DataElement implements Serializable, IDataElement
 
     /**
      * Get the file that this element's source points to if there is one.
-     * If this element is in a virtual DataStore, a file transfer is done to get the actual file,
+     * If this element is in a virtual <code>DataStore</code>, a file transfer is done to get the actual file,
      * otherwise the local file is used.
      *
      * @param doSynchronized an indication of whether this command should be synchronized
@@ -1711,6 +1607,112 @@ public final class DataElement implements Serializable, IDataElement
 	      }
        
   }  
+
+
+    private void initialize()
+    {
+	initialize(null);
+    }
+
+    private void initialize(DataElement typeDescriptor)
+    {
+	_isReference  = false;
+	_isDescriptor = false;
+	_depth        = 2;
+	
+	_referencedObject = null; 
+	_isExpanded  = false;
+	_isUpdated   = false;
+	_descriptor  = typeDescriptor;
+	
+	String depthStr = getAttribute(DE.A_DEPTH);
+	if (depthStr != null)
+	    {
+	      	if (!depthStr.equals("2"))
+		    {			
+			_depth = Integer.parseInt(depthStr);
+		    }
+	    }
+	
+	String isRef = getAttribute(DE.A_ISREF);
+	if (isRef != null && isRef.equals("true"))
+	    {
+		_isReference = true;	 
+	    }
+	
+	String type  = getAttribute(DE.A_TYPE);
+	if (type.equals(DE.T_OBJECT_DESCRIPTOR)          ||
+	    type.equals(DE.T_COMMAND_DESCRIPTOR)         ||
+	    type.equals(DE.T_RELATION_DESCRIPTOR)        ||
+	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
+	    type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR) ||
+	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR)
+	    )
+	    {
+		  _isDescriptor = true; 
+	    }
+	
+	if (_nestedData != null)
+	    _nestedData.clear();
+    }
+    
+    /**
+     * Removes all the attributes of a <code>DataElement</code>. 
+     * This method should only be called from the UpdateHandlers.
+     */
+    protected synchronized void clear()
+    {
+	if (_attributes != null)
+	    {
+		for (int i = 0; i < _attributes.length; i++)
+		    {
+			String att = _attributes[i];
+			if (att != null)
+			    {
+				att = null;
+			    }
+		    }		
+	    }
+
+	if (_nestedData != null)
+	    {
+		_nestedData.clear();
+	    }
+
+	_parent = null;
+	_descriptor = null;	
+	_referencedObject = null;
+
+	_buffer = null;
+    }
+
+
+    /**
+     * Marks a <code>DataElement</code> as deleted.
+     * This method should only be called from the <code>DataStore</code>
+     */
+    protected synchronized void delete()
+    {
+	// set delete attribute
+	setAttribute(DE.A_SOURCE, "deleted");
+	setAttribute(DE.A_VALUE, "deleted");
+	
+	_isUpdated = false;	 
+	_isExpanded = true;
+	_buffer = null;
+    }
+
+    private DataElement getAbstractsRelationship()
+    {
+	if (_abstracts == null)
+	    {
+		String abstractsStr = _dataStore.getLocalizedString("model.abstracts");
+		_abstracts = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, abstractsStr);
+	    }
+	return _abstracts;
+    }
+
+
       
 }
 

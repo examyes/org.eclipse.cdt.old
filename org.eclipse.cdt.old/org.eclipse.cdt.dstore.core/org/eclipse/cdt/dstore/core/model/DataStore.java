@@ -17,7 +17,7 @@ import java.io.*;
 
 /**
  * DataStore is the central interface into the DataStore Distributed Tooling Framework.
- * This class is used for creating and accessing DataElements and for communicating commands 
+ * This class is used for creating and accessing <code>DataElement</code>s and for communicating commands 
  * to miners (tools).
  *
  */
@@ -57,9 +57,9 @@ public final class DataStore
     private int                 _initialSize;
     
     /**
-     * Creates a new DataStore instance
+     * Creates a new <code>DataStore</code> instance
      *
-     * @param attributes the default attributes of the DataStore
+     * @param attributes the default attributes of the <code>DataStore</code>
      */
     public DataStore(DataStoreAttributes attributes)
     {
@@ -77,8 +77,8 @@ public final class DataStore
     /**
      * Creates a new DataStore instance
      *
-     * @param attributes the default attributes of the DataStore
-     * @param initialSize the initial number of preallocated DataElements
+     * @param attributes the default attributes of the <code>DataStore</code>
+     * @param initialSize the initial number of preallocated <code>DataElement</code>s
      */
     public DataStore(DataStoreAttributes attributes, int initialSize)
     {
@@ -94,9 +94,9 @@ public final class DataStore
       }
 
     /**
-     * Creates a new DataStore instance
+     * Creates a new <code>DataStore</code> instance
      *
-     * @param attributes the default attributes of the DataStore
+     * @param attributes the default attributes of the <code>DataStore</code>
      * @param commandHandler the DataStore's handler for sending commands
      * @param updateHandler the DataStore's handler for doing updates
      * @param domainNotifier the domain notifier 
@@ -121,11 +121,11 @@ public final class DataStore
     /**
      * Creates a new DataStore instance
      *
-     * @param attributes the default attributes of the DataStore
+     * @param attributes the default attributes of the <code>DataStore</code>
      * @param commandHandler the DataStore's handler for sending commands
      * @param updateHandler the DataStore's handler for doing updates
      * @param domainNotifier the domain notifier 
-     * @param initialSize the initialNumber of preallocated DataElements 
+     * @param initialSize the initialNumber of preallocated <code>DataElement</code>s 
      */
   public DataStore(DataStoreAttributes attributes, 
 		   CommandHandler commandHandler,
@@ -145,33 +145,11 @@ public final class DataStore
 	createRoot();
       }
 
-    private void initialize()
-    {
-	_minersLocation = "org.eclipse.cdt.dstore.core";
-	_random = new Random(System.currentTimeMillis());
-
-        _hashMap = new HashMap(2 * _initialSize);
-	_recycled = new ArrayList(_initialSize);
-	initElements(_initialSize);
-
-	_timeout = 10000;
-	try
-	    {
-		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.core.model.DataStoreResources");
-	    }
-	catch (MissingResourceException mre)
-	    {
-		_resourceBundle = null;
-	    }
-
-	_dataStoreSchema = new DataStoreSchema(this);
-    }
-
     /**
-     * Sets the ticket for this DataStore.  A ticket is used to prevent unauthorized users
-     * from accessing the DataStore
+     * Sets the ticket for this <code>DataStore</code>.  A ticket is used to prevent unauthorized users
+     * from accessing the <code>DataStore</code>
      *
-     * @param ticket the DataElement representing the ticket
+     * @param ticket the <code>DataElement</code> representing the ticket
      */
     public void setTicket(DataElement ticket)
     {
@@ -179,9 +157,9 @@ public final class DataStore
     }
 
     /**
-     * Sets the loader for this DataStore.  The loader is used to load miners (extension tools). 
+     * Sets the loader for this <code>DataStore</code>.  The loader is used to load miners (extension tools). 
      *
-     * @param loader the loader for the miners this DataStore will be using
+     * @param loader the loader for the miners this <code>DataStore</code> will be using
      */
     public void setLoader(ILoader loader)
     {
@@ -189,7 +167,7 @@ public final class DataStore
     }
 
     /**
-     * Tells the DataStore where to find the miners which it needs to load. 
+     * Tells the <code>DataStore</code> where to find the miners which it needs to load. 
      *
      * @param minersLocation a string representing the location of the miners
      */
@@ -204,9 +182,9 @@ public final class DataStore
     }
 
     /**
-     * Tells the DataStore where to find the miners which it needs to load. 
+     * Tells the <code>DataStore</code> where to find the miners which it needs to load. 
      *
-     * @param minersLocation a DataElement representing the location of the miners
+     * @param minersLocation a <code>DataElement</code> representing the location of the miners
      */
     public void setMinersLocation(DataElement location)
     {
@@ -217,7 +195,7 @@ public final class DataStore
     }
   
     /**
-     * Tells the DataStore that it is connected to it's tools 
+     * Tells the <code>DataStore</code> that it is connected to it's tools 
      *
      * @param isConnected indicates whether it is connected or not
      */
@@ -227,7 +205,7 @@ public final class DataStore
     }
  
     /**
-     * Sets the DataStore's DomainNotifier 
+     * Sets the <code>DataStore</code>'s DomainNotifier 
      *
      * @param domainNotifier the domainNotifier
      */
@@ -237,7 +215,7 @@ public final class DataStore
     }
 
     /**
-     * Sets the DataStore's handler for doing updates 
+     * Sets the <code>DataStore</code>'s handler for doing updates 
      *
      * @param updateHandler the handler for doing updates
      */
@@ -247,7 +225,7 @@ public final class DataStore
     }
 
     /**
-     * Sets the DataStore's handler for sending commands to miners 
+     * Sets the <code>DataStore</code>'s handler for sending commands to miners 
      *
      * @param commandHandler the handler for sending commands to miners
      */
@@ -277,7 +255,7 @@ public final class DataStore
     }
 
     /**
-     * Sets the maximum amount of time that the DataStore will wait to receive a response
+     * Sets the maximum amount of time that the <code>DataStore</code> will wait to receive a response
      * for a synchronous command
      *
      * @param time interval to wait
@@ -288,7 +266,7 @@ public final class DataStore
     }
 
     /**
-     * Sets an attribute of the DataStore  
+     * Sets an attribute of the <code>DataStore</code>  
      *
      * @param attribute index of the attribute to set
      * @param value value to set the attribute at the give index
@@ -299,7 +277,7 @@ public final class DataStore
     }
 
     /**
-     * Tells the DataStore to log durations of commands  
+     * Tells the <code>DataStore</code> to log durations of commands  
      *
      * @param flag whether to log times or not
      */
@@ -309,11 +287,11 @@ public final class DataStore
     }
 
     /**
-     * Indicates whether this DataStore is virtual or not.  A virtual DataStore  
+     * Indicates whether this <code>DataStore</code> is virtual or not.  A virtual <code>DataStore</code>  
      * is one that does not have it's own tools, but rather communicates with a non-virtual
-     * DataStore that does.
+     * <code>DataStore</code> that does.
      *
-     * @return whether the DataStore is virtual or not
+     * @return whether the <code>DataStore</code> is virtual or not
      */
     public boolean isVirtual()
     {
@@ -328,9 +306,9 @@ public final class DataStore
     }  
 
     /**
-     * Indicates whether this DataStore is connected to it's miners or another DataStore
+     * Indicates whether this <code>DataStore</code> is connected to it's miners or another <code>DataStore</code>
      *
-     * @return whether the DataStore is connected or not
+     * @return whether the <code>DataStore</code> is connected or not
      */
     public boolean isConnected()
     { 
@@ -338,9 +316,9 @@ public final class DataStore
     }
 
     /**
-     * Indicates whether this DataStore logs the durations of commands
+     * Indicates whether this <code>DataStore</code> logs the durations of commands
      *
-     * @return whether the DataStore logs command times or not
+     * @return whether the <code>DataStore</code> logs command times or not
      */
     public boolean logTimes()
     {
@@ -348,7 +326,7 @@ public final class DataStore
     }
 
     /**
-     * Returns the DataStore's ticket
+     * Returns the <code>DataStore</code>'s ticket
      *
      * @return the ticket
      */
@@ -407,9 +385,9 @@ public final class DataStore
     }
 
     /**
-     * Returns the name of the DataStore
+     * Returns the name of the <code>DataStore</code>
      *
-     * @return the name of the DataStore
+     * @return the name of the <code>DataStore</code>
      */
     public String getName()
     {
@@ -417,11 +395,11 @@ public final class DataStore
     }
   
     /**
-     * Returns the root DataElement in the DataStore.
-     * The root DataElement has no parent and contains every DataElement
-     * in the DataStore through a DataElement tree
+     * Returns the root <code>DataElement</code> in the <code>DataStore</code>.
+     * The root <code>DataElement</code> has no parent and contains every <code>DataElement</code>
+     * in the <code>DataStore</code> through a <code>DataElement</code> tree
      *
-     * @return the root DataElement
+     * @return the root <code>DataElement</code>
      */
     public DataElement getRoot()
     {
@@ -429,11 +407,11 @@ public final class DataStore
     }
 
     /**
-     * Returns the host root DataElement in the DataStore.
-     * The host root DataElement is a child of root and references
-     * DataElements in the DataStore that are related to host information
+     * Returns the host root <code>DataElement</code> in the <code>DataStore</code>.
+     * The host root <code>DataElement</code> is a child of root and references
+     * <code>DataElement</code>s in the <code>DataStore</code> that are related to host information
      *
-     * @return the host root DataElement
+     * @return the host root <code>DataElement</code>
      */
     public DataElement getHostRoot()
     {
@@ -441,11 +419,11 @@ public final class DataStore
     }
 
     /**
-     * Returns the miner root DataElement in the DataStore.
-     * The miner root DataElement is a child of root and contains
-     * DataElements the represent tools and the information that tools possess
+     * Returns the miner root <code>DataElement</code> in the <code>DataStore</code>.
+     * The miner root <code>DataElement</code> is a child of root and contains
+     * <code>DataElement</code>s the represent tools and the information that tools possess
      *
-     * @return the miner root DataElement
+     * @return the miner root <code>DataElement</code>
      */
     public DataElement getMinerRoot()
     {
@@ -453,9 +431,9 @@ public final class DataStore
     }
     
     /**
-     * Returns the status of the DataStore.  
+     * Returns the status of the <code>DataStore</code>.  
      *
-     * @return the status of the DataStore
+     * @return the status of the <code>DataStore</code>
      */
     public DataElement getStatus()
     {
@@ -463,8 +441,8 @@ public final class DataStore
     }  
 
     /**
-     * Returns the log root DataElement of the DataStore.
-     * The log root contains all commands that are issued from the DataStore
+     * Returns the log root <code>DataElement</code> of the <code>DataStore</code>.
+     * The log root contains all commands that are issued from the <code>DataStore</code>
      *
      * @return the log root
      */
@@ -474,8 +452,8 @@ public final class DataStore
     }
 
     /**
-     * Returns the descriptor root DataElement of the DataStore.
-     * The descriptor root contains the schema for the DataStore and it's tools
+     * Returns the descriptor root <code>DataElement</code> of the <code>DataStore</code>.
+     * The descriptor root contains the schema for the <code>DataStore</code> and it's tools
      *
      * @return the descriptor root
      */
@@ -485,7 +463,7 @@ public final class DataStore
       }
     
     /**
-     * Returns the temp root DataElement of the DataStore.
+     * Returns the temp root <code>DataElement</code> of the <code>DataStore</code>.
      * The temp root contains temporary information.
      *
      * @return the temp root
@@ -557,7 +535,7 @@ public final class DataStore
     }
 
     /**
-     * Returns the number of live elements in the DataStore.
+     * Returns the number of live elements in the <code>DataStore</code>.
      *
      * @return the number of live elements
      */
@@ -567,7 +545,7 @@ public final class DataStore
     }
 
     /**
-     * Returns the table of live elements in the DataStore.
+     * Returns the table of live elements in the <code>DataStore</code>.
      *
      * @return the table of live elements
      */
@@ -576,57 +554,9 @@ public final class DataStore
         return _hashMap;
     }
 
-    /**
-     * Preallocates a set of DataElements.
-     *
-     * @param the number of elements to preallocate
-     */
-    private void initElements(int size)
-    {
-	for (int i = 0; i < size; i++)
-	    {
-		_recycled.add(new DataElement(this));
-	    }
-    }
   
     /**
-     * Returns a new DataElement by either using an existing preallocated DataElement or
-     * by creating a new one.
-     *
-     * @return the new DataElement
-     */
-    private DataElement createElement()  
-    {
-	DataElement newObject = null;
-	int numRecycled = _recycled.size();
-
-	if (numRecycled > 0)
-	    {
-		/*
-		if (numRecycled > _MAX_FREE)
-		    {
-			int numRemoved = numRecycled - _MAX_FREE;
-			for (int i = 1; i <= numRemoved; i++)
-			    {
-				DataElement toRemove = (DataElement)_recycled.remove(numRemoved - i);
-				toRemove = null;
-			    }
-		    }
-		*/
-
-		newObject = (DataElement)_recycled.remove(0);
-	    }
-	else
-	    {
-		newObject = new DataElement(this);
-	    }
-
-	newObject.setUpdated(false);
-	return newObject;
-    }
-  
-    /**
-     * Initializes the DataStore by creating the root elements
+     * Initializes the <code>DataStore</code> by creating the root elements
      *
      */
     public void createRoot()
@@ -645,26 +575,9 @@ public final class DataStore
 	initializeDescriptors();
     }
     
-    private void createRoots()
-    {
-	_tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
-	
-	_logRoot     = createObject(_root, getLocalizedString("model.log"), 
-				    getLocalizedString("model.Log_Root"), "", "logID");
-	
-	
-	_minerRoot   = createObject(_root, getLocalizedString("model.miners"), 
-				    getLocalizedString("model.Tool_Root"), "", "minersID");
-	
-	_hostRoot = createObject(_root,  getLocalizedString("model.host"),
-				 _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
-				 _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH), "hostID");
-	
-	_status = createObject(_root, getLocalizedString("model.status"), "okay", "", "statusID");
-    }
 
     /**
-     * Creates a contents relationship between two DataElements
+     * Creates a contents relationship between two <code>DataElement</code>s
      *
      * @param from the element that contains the other
      * @param to the element that is contained by the other
@@ -677,7 +590,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a relationship between two DataElements given a type of relationship
+     * Creates a relationship between two <code>DataElement</code>s given a type of relationship
      *
      * @param parent the element that references the other element
      * @param realObject the element that is referenced by the parent element
@@ -708,7 +621,7 @@ public final class DataStore
       }
 
     /**
-     * Creates a relationship between two DataElements given a type of relationship
+     * Creates a relationship between two <code>DataElement</code>s given a type of relationship
      *
      * @param parent the element that references the other element
      * @param realObject the element that is referenced by the parent element
@@ -746,7 +659,7 @@ public final class DataStore
 
 
     /**
-     * Creates a set of  relationships between one DataElement and a set of DataElements given a type of relationship
+     * Creates a set of  relationships between one <code>DataElement</code> and a set of <code>DataElement</code>s given a type of relationship
      *
      * @param from the element that references the other elements
      * @param to a list of elements that from references
@@ -771,7 +684,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a set of  relationships between one DataElement and a set of DataElements given a type of relationship
+     * Creates a set of  relationships between one <code>DataElement</code> and a set of <code>DataElement</code>s given a type of relationship
      *
      * @param from the element that references the other elements
      * @param to a list of elements that from references
@@ -884,7 +797,7 @@ public final class DataStore
       }
 
     /**
-     * Creates a set of two-way relationship between a DataElement and a list of elements
+     * Creates a set of two-way relationship between a <code>DataElement</code> and a list of elements
      *
      * @param from an element that references the other elements
      * @param to a list of elements that reference from 
@@ -929,7 +842,7 @@ public final class DataStore
     
 
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the descriptor representing the type of the new element 
@@ -942,7 +855,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the string representing the type of the new element 
@@ -955,7 +868,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the descriptor element representing the type of the new element 
@@ -970,7 +883,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the string representing the type of the new element 
@@ -990,7 +903,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the descriptor element representing the type of the new element 
@@ -1005,7 +918,7 @@ public final class DataStore
     }
     
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the string representing the type of the new element 
@@ -1020,7 +933,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the descriptor element representing the type of the new element 
@@ -1056,7 +969,7 @@ public final class DataStore
 
  
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param type the string representing the type of the new element 
@@ -1098,7 +1011,7 @@ public final class DataStore
       }
     
     /**
-     * Creates a new DataElement
+     * Creates a new <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param attributes the attributes to use in this new element
@@ -1133,7 +1046,7 @@ public final class DataStore
       }
 
     /**
-     * Creates a new abstract object descriptor DataElement
+     * Creates a new abstract object descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1145,7 +1058,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new abstract object descriptor DataElement
+     * Creates a new abstract object descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1158,7 +1071,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new object descriptor DataElement
+     * Creates a new object descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1170,7 +1083,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new object descriptor DataElement
+     * Creates a new object descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1183,7 +1096,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new abstract relation descriptor DataElement
+     * Creates a new abstract relation descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1195,7 +1108,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new abstract relation descriptor DataElement
+     * Creates a new abstract relation descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1208,7 +1121,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new relation descriptor DataElement
+     * Creates a new relation descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1220,7 +1133,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new relation descriptor DataElement
+     * Creates a new relation descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1233,7 +1146,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new abstract command descriptor DataElement
+     * Creates a new abstract command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1245,7 +1158,7 @@ public final class DataStore
     }
 
     /**
-     * Creates a new abstract command descriptor DataElement
+     * Creates a new abstract command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1260,7 +1173,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new abstract command descriptor DataElement
+     * Creates a new abstract command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1276,7 +1189,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new command descriptor DataElement
+     * Creates a new command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1288,7 +1201,7 @@ public final class DataStore
     } 
 
     /**
-     * Creates a new command descriptor DataElement
+     * Creates a new command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1303,7 +1216,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new command descriptor DataElement
+     * Creates a new command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1319,7 +1232,7 @@ public final class DataStore
     }   
 
     /**
-     * Creates a new command descriptor DataElement
+     * Creates a new command descriptor <code>DataElement</code>
      *
      * @param parent the parent of the new element 
      * @param name the name of the new element
@@ -1343,7 +1256,7 @@ public final class DataStore
 
 
     /**
-     * Moves a element from one location in the DataStore tree to another
+     * Moves a element from one location in the <code>DataStore</code> tree to another
      *
      * @param source the element to move 
      * @param target the element to move source to
@@ -1391,28 +1304,6 @@ public final class DataStore
 	refresh(from);
     }
     
-    private void deleteObjectHelper(DataElement from, DataElement toDelete, int depth)
-    {
-	if (depth > 0)
-	    {
-		depth--;
-		toDelete.delete();
-		  for (int i = 0; i < toDelete.getNestedSize(); i++)
-		      {
-			  DataElement subDelete = toDelete.get(i);
-			  if (subDelete != null && !subDelete.isDeleted())
-			      {
-				  deleteObjectHelper(toDelete, subDelete, depth);
-			      }
-		      }
-		  
-		  String id = toDelete.getAttribute(DE.A_ID);
-		  _hashMap.remove(id);
-		  _recycled.add(toDelete);
-	    }
-    }
-    
-    
     /**
      * Replaces a deleted object
      */
@@ -1451,50 +1342,8 @@ public final class DataStore
 	return null;
     }   
     
-    private String makeIdUnique(String id)
-    {
-	if (!_hashMap.containsKey(id))
-	    {
-		return id;
-	    }
-	else
-	    {
-		String newId = String.valueOf(_random.nextInt());
-		while (_hashMap.containsKey(newId))
-		    {	    
-			newId = String.valueOf(_random.nextInt());
-		    }
-		
-		return newId;
-	    }
-    }
-    
-    
-    private String generateId(DataElement parent, String type, String name)
-    {
-	// by default, name will be the id
-	//return name;
-	return generateId();
-    }
-    
     /**
-     * Generates a new unique ID to be used by a DataElement
-     *
-     * @return the new id  
-     */
-    protected String generateId()
-    {
-	String newId = String.valueOf(_random.nextInt());
-	while (_hashMap.containsKey(newId))
-	    {	    
-	    	newId = String.valueOf(_random.nextInt());
-	    }
-	
-	return newId;
-    }	
-
-    /**
-     * Checks if a DataElement with a given ID exists in the DataStore
+     * Checks if a <code>DataElement</code> with a given ID exists in the <code>DataStore</code>
      *
      * @param id the id to look for  
      * @return whether it exists or not  
@@ -1505,15 +1354,7 @@ public final class DataStore
     }
 
     /**
-     * Fire a domain changed event
-     */
-    private void fireDomainChanged(DomainEvent e)
-    {
-        _domainNotifier.fireDomainChanged(e);
-    }
-
-    /**
-     * Refresh a set of DataElements
+     * Refresh a set of <code>DataElement</code>s
      *
      * @param elements a list of elements to refresh
      */
@@ -1527,7 +1368,7 @@ public final class DataStore
     }
 
     /**
-     * Refresh a DataElement
+     * Refresh a <code>DataElement</code>
      *
      * @param element an element to refresh
      */
@@ -1545,7 +1386,7 @@ public final class DataStore
     }
 
     /**
-     * Refresh a DataElement - immediately if indicated
+     * Refresh a <code>DataElement</code> - immediately if indicated
      *
      * @param element an element to refresh
      * @param immediate indicates to do the refresh immediately
@@ -1737,7 +1578,7 @@ public final class DataStore
     }
 
     /**
-     * Used at DataStore initialization time to indicate where to point the host root
+     * Used at <code>DataStore</code> initialization time to indicate where to point the host root
      *
      * @param localHostObject the client host element to transfer to the server site 
      */
@@ -1749,7 +1590,7 @@ public final class DataStore
     }
     
     /**
-     * Used at DataStore initialization time to setup the schema
+     * Used at <code>DataStore</code> initialization time to setup the schema
      *
      */
     public void getSchema()
@@ -1759,7 +1600,7 @@ public final class DataStore
     }
     
     /**
-     * Used at DataStore initialization time to initialize the miners
+     * Used at <code>DataStore</code> initialization time to initialize the miners
      *
      * @return the status element for the initMiners command
      */
@@ -1771,7 +1612,7 @@ public final class DataStore
     
     
     /**
-     * Used at DataStore initialization validate access to the DataStore
+     * Used at <code>DataStore</code> initialization validate access to the <code>DataStore</code>
      *
      * @param ticketStr ticket string
      * @return and indication of whether the ticket is valid or not
@@ -1792,7 +1633,7 @@ public final class DataStore
     }
     
     /**
-     * Indicates whether a client has permission to access the DataStore
+     * Indicates whether a client has permission to access the <code>DataStore</code>
      *
      * @return and indication of whether the ticket is valid or not
      */
@@ -2089,7 +1930,7 @@ public final class DataStore
     }
  
     /**
-     * Delete information from the DataStore.  
+     * Delete information from the <code>DataStore</code>.  
      *
      */     
     public void flush()
@@ -2102,7 +1943,7 @@ public final class DataStore
     }
     
     /**
-     * Delete information from the DataStore contained by an element.  
+     * Delete information from the <code>DataStore</code> contained by an element.  
      *
      * @param element the element from which to delete
      */     
@@ -2516,31 +2357,6 @@ public final class DataStore
     }
 
 
-    private ArrayList fuzzyResolveName(DataElement object, String pattern)
-    {
-	ArrayList results = new ArrayList();
-	if (object != null)
-	    {	
-		for (int i = 0; i < object.getNestedSize(); i++)
-		    {
-			DataElement subObject = (DataElement)object.get(i);
-			if (subObject.getName().startsWith(pattern))
-			    {
-				results.add(subObject);
-			    }
-		    }
-		
-		ArrayList subResults = fuzzyResolveName(object.getParent(), pattern);
-		for (int j = 0; j < subResults.size(); j++)
-		    {
-			results.add(subResults.get(j));
-		    }	
-	    }
-	
-	return results;
-    }
-
-    
     /**
      * Returns the element that represents the specified miner's data.  
      *
@@ -2668,25 +2484,6 @@ public final class DataStore
         return null;
       }
 
-    private DataElement resolveName(DataElement object, String keyName)
-    {
-	if (object != null)
-	    {	
-		for (int i = 0; i < object.getNestedSize(); i++)
-		    {
-			DataElement subObject = (DataElement)object.get(i);
-			if (keyName.equals(subObject.getName()))
-			    {
-				return subObject;
-			    }
-		    }
-		
-		return resolveName(object.getParent(), keyName);
-	    }
-	
-	return null;
-    }
-
 
     /**
      * Get the mapping from a remote path to a local path.  
@@ -2733,7 +2530,7 @@ public final class DataStore
     
     
     /**
-     * Persist the DataStore tree from a given root   
+     * Persist the <code>DataStore</code> tree from a given root   
      *
      * @param root the element to persist from
      * @param remotePath the path where the persisted file should be saved
@@ -2997,7 +2794,7 @@ public final class DataStore
       }
     
     /**
-     * Load a persisted DataStore tree into the specified DataElement   
+     * Load a persisted <code>DataStore</code> tree into the specified <code>DataElement</code>   
      *
      * @param root the root element of the persisted tree 
      * @param pathName the location of the persisted file
@@ -3050,87 +2847,6 @@ public final class DataStore
         }
       }
 
-    // this should be gone
-    private String readerToString(BufferedReader in)
-    {
-        if (in != null)
-	    {
-		StringBuffer buffer= new StringBuffer();
-		
-		String line;
-		try
-		    {
-			while ((line = in.readLine()) != null)
-			    {
-				buffer.append(line);
-				buffer.append("\n");
-			    }
-		    }
-		catch (IOException e)
-		    {
-		    }
-		
-		return buffer.toString();
-	    }
-        else
-	    {
-		return null;
-	    }
-    }
-
-  private boolean sameTree(DataElement root1, DataElement root2, int depth)
-  {
-    if (root1.equals(root2))
-      {
-	depth--;
-	
-	if (depth > 0)
-	  {	
-	    int size1 = root1.getNestedSize();
-	    int size2 = root2.getNestedSize();
-	
-	    if (size1 == size2)
-	      {	
-		for (int i = 0; i < size1; i++)
-		  {
-		    DataElement child1 = (DataElement)root1.get(i);
-		    DataElement child2 = (DataElement)root2.get(i);
-		
-		    if (!sameTree(child1, child2, depth))		
-		      {
-			return false;
-		      }
-		  }
-
-		return true;
-	      }
-	    else
-	      {
-		return false;
-	      }
-	  }	
-	else
-	  {
-	    return true;
-	  }
-      }
-
-    return false;
-  }
-
-
-  private void walkTree(DataElement root)
-  {
-    if (root != null)
-      {	
-	root.expandChildren();
-	for (int i = 0; i < root.getNestedSize(); i++)
-        {
-          DataElement currentElement = (DataElement)root.get(i);
-          walkTree(currentElement);
-        }
-      }
-  }
 
     /**
      * Indicate whether a given descriptor can contain the specified element   
@@ -3238,5 +2954,286 @@ public final class DataStore
     {
 	_dataStoreSchema.extendSchema(_descriptorRoot);
     }
+
+    private void initialize()
+    {
+	_minersLocation = "org.eclipse.cdt.dstore.core";
+	_random = new Random(System.currentTimeMillis());
+
+        _hashMap = new HashMap(2 * _initialSize);
+	_recycled = new ArrayList(_initialSize);
+	initElements(_initialSize);
+
+	_timeout = 10000;
+	try
+	    {
+		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.core.model.DataStoreResources");
+	    }
+	catch (MissingResourceException mre)
+	    {
+		_resourceBundle = null;
+	    }
+
+	_dataStoreSchema = new DataStoreSchema(this);
+    }
+
+    /**
+     * Preallocates a set of <code>DataElement</code>s.
+     *
+     * @param the number of elements to preallocate
+     */
+    private void initElements(int size)
+    {
+	for (int i = 0; i < size; i++)
+	    {
+		_recycled.add(new DataElement(this));
+	    }
+    }
+  
+    /**
+     * Returns a new <code>DataElement</code> by either using an existing preallocated <code>DataElement</code> or
+     * by creating a new one.
+     *
+     * @return the new <code>DataElement</code>
+     */
+    private DataElement createElement()  
+    {
+	DataElement newObject = null;
+	int numRecycled = _recycled.size();
+
+	if (numRecycled > 0)
+	    {
+		/*
+		if (numRecycled > _MAX_FREE)
+		    {
+			int numRemoved = numRecycled - _MAX_FREE;
+			for (int i = 1; i <= numRemoved; i++)
+			    {
+				DataElement toRemove = (DataElement)_recycled.remove(numRemoved - i);
+				toRemove = null;
+			    }
+		    }
+		*/
+
+		newObject = (DataElement)_recycled.remove(0);
+	    }
+	else
+	    {
+		newObject = new DataElement(this);
+	    }
+
+	newObject.setUpdated(false);
+	return newObject;
+    }
+
+    private void createRoots()
+    {
+	_tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
+	
+	_logRoot     = createObject(_root, getLocalizedString("model.log"), 
+				    getLocalizedString("model.Log_Root"), "", "logID");
+	
+	
+	_minerRoot   = createObject(_root, getLocalizedString("model.miners"), 
+				    getLocalizedString("model.Tool_Root"), "", "minersID");
+	
+	_hostRoot = createObject(_root,  getLocalizedString("model.host"),
+				 _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
+				 _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH), "hostID");
+	
+	_status = createObject(_root, getLocalizedString("model.status"), "okay", "", "statusID");
+    }
+
+    private void deleteObjectHelper(DataElement from, DataElement toDelete, int depth)
+    {
+	if (depth > 0)
+	    {
+		depth--;
+		toDelete.delete();
+		  for (int i = 0; i < toDelete.getNestedSize(); i++)
+		      {
+			  DataElement subDelete = toDelete.get(i);
+			  if (subDelete != null && !subDelete.isDeleted())
+			      {
+				  deleteObjectHelper(toDelete, subDelete, depth);
+			      }
+		      }
+		  
+		  String id = toDelete.getAttribute(DE.A_ID);
+		  _hashMap.remove(id);
+		  _recycled.add(toDelete);
+	    }
+    }
+    
+    
+    private String makeIdUnique(String id)
+    {
+	if (!_hashMap.containsKey(id))
+	    {
+		return id;
+	    }
+	else
+	    {
+		String newId = String.valueOf(_random.nextInt());
+		while (_hashMap.containsKey(newId))
+		    {	    
+			newId = String.valueOf(_random.nextInt());
+		    }
+		
+		return newId;
+	    }
+    }
+    
+    
+    private String generateId(DataElement parent, String type, String name)
+    {
+	// by default, name will be the id
+	//return name;
+	return generateId();
+    }
+    
+    /**
+     * Generates a new unique ID to be used by a <code>DataElement</code>
+     *
+     * @return the new id  
+     */
+    protected String generateId()
+    {
+	String newId = String.valueOf(_random.nextInt());
+	while (_hashMap.containsKey(newId))
+	    {	    
+	    	newId = String.valueOf(_random.nextInt());
+	    }
+	
+	return newId;
+    }	
+
+
+    private ArrayList fuzzyResolveName(DataElement object, String pattern)
+    {
+	ArrayList results = new ArrayList();
+	if (object != null)
+	    {	
+		for (int i = 0; i < object.getNestedSize(); i++)
+		    {
+			DataElement subObject = (DataElement)object.get(i);
+			if (subObject.getName().startsWith(pattern))
+			    {
+				results.add(subObject);
+			    }
+		    }
+		
+		ArrayList subResults = fuzzyResolveName(object.getParent(), pattern);
+		for (int j = 0; j < subResults.size(); j++)
+		    {
+			results.add(subResults.get(j));
+		    }	
+	    }
+	
+	return results;
+    }
+
+
+    private DataElement resolveName(DataElement object, String keyName)
+    {
+	if (object != null)
+	    {	
+		for (int i = 0; i < object.getNestedSize(); i++)
+		    {
+			DataElement subObject = (DataElement)object.get(i);
+			if (keyName.equals(subObject.getName()))
+			    {
+				return subObject;
+			    }
+		    }
+		
+		return resolveName(object.getParent(), keyName);
+	    }
+	
+	return null;
+    }
+    
+    // this should be gone
+    private String readerToString(BufferedReader in)
+    {
+        if (in != null)
+	    {
+		StringBuffer buffer= new StringBuffer();
+		
+		String line;
+		try
+		    {
+			while ((line = in.readLine()) != null)
+			    {
+				buffer.append(line);
+				buffer.append("\n");
+			    }
+		    }
+		catch (IOException e)
+		    {
+		    }
+		
+		return buffer.toString();
+	    }
+        else
+	    {
+		return null;
+	    }
+    }
+
+  private boolean sameTree(DataElement root1, DataElement root2, int depth)
+  {
+    if (root1.equals(root2))
+      {
+	depth--;
+	
+	if (depth > 0)
+	  {	
+	    int size1 = root1.getNestedSize();
+	    int size2 = root2.getNestedSize();
+	
+	    if (size1 == size2)
+	      {	
+		for (int i = 0; i < size1; i++)
+		  {
+		    DataElement child1 = (DataElement)root1.get(i);
+		    DataElement child2 = (DataElement)root2.get(i);
+		
+		    if (!sameTree(child1, child2, depth))		
+		      {
+			return false;
+		      }
+		  }
+
+		return true;
+	      }
+	    else
+	      {
+		return false;
+	      }
+	  }	
+	else
+	  {
+	    return true;
+	  }
+      }
+
+    return false;
+  }
+
+
+  private void walkTree(DataElement root)
+  {
+    if (root != null)
+      {	
+	root.expandChildren();
+	for (int i = 0; i < root.getNestedSize(); i++)
+        {
+          DataElement currentElement = (DataElement)root.get(i);
+          walkTree(currentElement);
+        }
+      }
+  }
+
 }
 
