@@ -127,7 +127,7 @@ createEmptyZip:
 zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 
 %_zipPlugin: 
-	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x com *com\/* *CVS*
+	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x com makefile setenv.mk *com\/* *CVS*
 
 tempDir=cdt
 finalZip=cdt-eclipse-0.5.0.zip
@@ -150,12 +150,12 @@ createServerZip: createEmptyServerZip zipServerPlugins
 
 #Not sure how to create an empty zip (without priming it with something)...so I just add the parser directory by default
 createEmptyServerZip:
-	@-cd $(pluginsDirectory) && rm -f $(serverZipFile) && zip -q $(serverZipFile) com.ibm.cpp.miners.parser
+	@-cd $(pluginsDirectory) && rm -f $(serverZipFile) && zip -q $(serverZipFile) com.ibm.dstore.core/makefile
 
 zipServerPlugins: $(patsubst %,%_zipServerPlugin,$(serverPlugins))
 
 %_zipServerPlugin:
-	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x com *com\/* *CVS*
+	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x makefile setenv.mk com *com\/* *CVS*
 
 # Targets specific to com.ibm.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
 jarFile=dstore_core.jar
