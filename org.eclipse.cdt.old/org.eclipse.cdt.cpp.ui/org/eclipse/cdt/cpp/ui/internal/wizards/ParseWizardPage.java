@@ -22,7 +22,6 @@ import org.eclipse.jface.wizard.*;
 public class ParseWizardPage extends WizardPage 
 {
     public ParseBehaviourWorkbookPage    _workbookPageParseBehaviour;
-    public ParsePathWorkbookPage         _workbookPageParsePath;
     public ParseQualityWorkbookPage       _workbookPageParseQuality;
 
     protected CppPlugin    _plugin = CppPlugin.getPlugin();
@@ -57,14 +56,6 @@ public class ParseWizardPage extends WizardPage
 	item1.setData(_workbookPageParseBehaviour);
 	item1.setControl(_workbookPageParseBehaviour.getControl());
 
-	//page 2
-	TabItem item2;
-	_workbookPageParsePath = new ParsePathWorkbookPage(folder);
-	item2 = new TabItem(folder, SWT.NONE);
-	item2.setText(_plugin.getLocalizedString("createProjectWizard.Info.ParseTab"));
-	item2.setData(_workbookPageParsePath);
-	item2.setControl(_workbookPageParsePath.getControl());
-
 	//page 3
 	TabItem item3;
 	_workbookPageParseQuality = new ParseQualityWorkbookPage(folder);
@@ -90,7 +81,6 @@ public class ParseWizardPage extends WizardPage
     public void enter(int direction) 
     {
 	setPageComplete(true);
-	_workbookPageParsePath.setRemote(_wizard.isRemote());
     }
 
 }

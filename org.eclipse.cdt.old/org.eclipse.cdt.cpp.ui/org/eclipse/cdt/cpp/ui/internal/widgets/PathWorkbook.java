@@ -62,19 +62,11 @@ public class PathWorkbook extends Composite
 	item3.setControl(_externalSourcePage.getControl());	
     }
 
-    public void setVisible(boolean flag)
+    public void setRemote(boolean isRemote)
     {
-	if (flag)
-	    {
-		enter(1);
-	    }
-	super.setVisible(flag);
-    }
-
-    public void enter(int direction) 
-    {
-	//setPageComplete(true);
-	//_workbookPageParsePath.setRemote(_wizard.isRemote());
+	_includePathPage.setRemote(isRemote);
+	_externalSourcePage.setRemote(isRemote);
+	_libraryPage.setRemote(isRemote);
     }
 
     public ArrayList getIncludePath()

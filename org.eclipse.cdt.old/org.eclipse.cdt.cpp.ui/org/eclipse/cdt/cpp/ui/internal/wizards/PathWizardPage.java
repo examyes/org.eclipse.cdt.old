@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.Image;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import java.util.*;
 import org.eclipse.jface.wizard.*;
 
 public class PathWizardPage extends WizardPage 
@@ -47,6 +48,7 @@ public class PathWizardPage extends WizardPage
 	_pathWorkbook.setLayout(new FillLayout());
 
 	setControl(_pathWorkbook);
+	setDefaults();
     }
 
     public void setVisible(boolean flag)
@@ -61,7 +63,33 @@ public class PathWizardPage extends WizardPage
     public void enter(int direction) 
     {
 	setPageComplete(true);
-	//_workbookPageParsePath.setRemote(_wizard.isRemote());
+	_pathWorkbook.setRemote(_wizard.isRemote());
     }
 
+    private void setDefaults()
+    {
+	CppPlugin plugin = CppPlugin.getDefault();
+	ArrayList includePath        = plugin.readProperty("DefaultIncludePath");
+	ArrayList externalSourcePath = plugin.readProperty("DefaultExternalSourcePath");
+	ArrayList libraries          = plugin.readProperty("DefaultLibraries");
+
+	_pathWorkbook.setIncludePath(includePath);
+	_pathWorkbook.setExternalSourcePath(externalSourcePath);
+	_pathWorkbook.setLibraries(libraries);
+    }
+
+    public ArrayList getIncludePath()
+    {
+	return _pathWorkbook.getIncludePath();
+    }
+
+    public ArrayList getExternalSourcePath()
+    {
+	return _pathWorkbook.getExternalSourcePath();
+    }
+    
+    public ArrayList getLibraries()
+    {
+	return _pathWorkbook.getLibraries();
+    }
 }

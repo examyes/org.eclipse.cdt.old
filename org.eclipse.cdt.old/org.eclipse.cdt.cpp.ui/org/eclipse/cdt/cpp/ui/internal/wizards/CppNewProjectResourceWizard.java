@@ -95,10 +95,6 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			
 		    }
 		
-		// add parse paths
-		ArrayList paths = _parserWizardPage._workbookPageParsePath._pathControl.getPaths();
-		_plugin.writeProperty(project, "Include Path", paths);
-		
 		// add parse behaviour
 		ArrayList autoParse = _parserWizardPage._workbookPageParseBehaviour.getAutoParse();
 		_plugin.writeProperty(project, "AutoParse", autoParse);
@@ -120,6 +116,17 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
 		ArrayList variables = _fProjectInfoWizardPage._workbookPageEnvironment.getVariables();
 		_plugin.writeProperty(project, "Environment", variables);
+
+		ArrayList includePath        = _pathWizardPage.getIncludePath();
+		_plugin.writeProperty(project, "Include Path", includePath);
+
+		ArrayList externalSourcePath = _pathWizardPage.getExternalSourcePath();
+		_plugin.writeProperty(project, "External Source", externalSourcePath);
+
+		ArrayList libraries          = _pathWizardPage.getLibraries();
+		_plugin.writeProperty(project, "Libraries", libraries);
+		
+
 		ModelInterface api = ModelInterface.getInstance();
 		if (project instanceof Repository)
 		    {
