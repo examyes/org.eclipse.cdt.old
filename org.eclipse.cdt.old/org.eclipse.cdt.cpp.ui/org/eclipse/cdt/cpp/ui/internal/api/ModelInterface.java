@@ -1345,7 +1345,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		   DataElement status = null;
 		   status = dataStore.command(commandDescriptor, args, pathElement, false);		
 		
-		   monitorStatus(status);
+		   if (showView)
+		   {
+			   monitorStatus(status);
+		   }
 		   _status = status;
 	       }
        }
@@ -1511,6 +1514,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     if (fileName != null)
       {		
+      	fileName = fileName.replace('\\', '/');
 	  IWorkspace ws = _plugin.getPluginWorkspace();
 	  IWorkspaceRoot root = ws.getRoot();
 
