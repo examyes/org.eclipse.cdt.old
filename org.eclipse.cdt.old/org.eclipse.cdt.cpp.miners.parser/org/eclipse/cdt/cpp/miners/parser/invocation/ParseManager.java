@@ -68,7 +68,7 @@ public class ParseManager
   if (theParsedFiles == null)
    return false;
 
-  ArrayList theFiles = _parsedFiles.getAssociated("contents");
+  ArrayList theFiles = theParsedFiles.getAssociated("contents");
   boolean deletedSomething = false;
   
   if ((theFiles == null) || (theFiles.size() == 0))
