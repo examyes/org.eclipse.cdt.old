@@ -528,10 +528,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void openProject(IProject project)
     {
     	if (project.isOpen())
-	    {
-	     
+	    {	     
 		OpenProjectAction openAction = new OpenProjectAction(project);
-		Display d= getShell().getDisplay();
+		Display d= getDummyShell().getDisplay();
 		d.asyncExec(openAction);		
 	    }   
     }
