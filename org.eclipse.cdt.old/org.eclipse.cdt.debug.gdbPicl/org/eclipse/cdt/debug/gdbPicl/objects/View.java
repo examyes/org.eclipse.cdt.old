@@ -80,7 +80,7 @@ public abstract class View
 
       if (eview.name() != null) // only if it is not null defect 14341
         _viewFileName            = eview.name();
-      _viewVerify              = eview.hasBeenVerified();
+      _viewVerify              = eview.isVerified();
       _viewVerify_Attempted    = eview.verificationAttempted();
       _viewVerify_Attempted_FE = eview.verificationAttemptedFE();
       _viewVerify_Local        = eview.verificationLocal();
