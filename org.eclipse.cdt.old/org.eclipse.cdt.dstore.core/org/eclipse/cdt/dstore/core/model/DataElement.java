@@ -11,16 +11,16 @@ import com.ibm.dstore.core.util.*;
 import java.io.*;
 import java.util.*;
 
-public final class DataElement implements IDataElement 
+public final class DataElement implements Serializable, IDataElement
 {
     private String              _attributes[];
     private StringBuffer        _buffer;
     
-    private boolean             _isReference  = false;
-    private boolean             _isDescriptor = false;
-    private boolean             _isExpanded   = false;
-    private boolean             _isUpdated    = false;
-    private int                 _depth        = 1;
+ private boolean             _isReference = false;
+ private boolean             _isDescriptor = false;
+ private boolean             _isExpanded   = false;
+ private boolean             _isUpdated    = false;
+ private int                 _depth        = 1;
     
     private DataStore           _dataStore = null;
     private DataElement         _parent = null;
@@ -41,8 +41,10 @@ public final class DataElement implements IDataElement
     // default constructor
     public DataElement()
     {
+
 	_dataStore   = null;
 	_parent      = null;
+
     }
 
   /////////////////////////////////////////
@@ -1151,7 +1153,7 @@ public final class DataElement implements IDataElement
   /////////////////////////////////////////
   public Object getElementProperty(Object name)
       {        
-	  if (_isReference)
+       if(_isReference)
 	      {          
 		  if (_referencedObject == null)
 		      {
@@ -1251,6 +1253,12 @@ public final class DataElement implements IDataElement
 			  return null;
 		      }
 	      }
-      }    
+       
+  }  
+      
 }
+
+
+
+
 
