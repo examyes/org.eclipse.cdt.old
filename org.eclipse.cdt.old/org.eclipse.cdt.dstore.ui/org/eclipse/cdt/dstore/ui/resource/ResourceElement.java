@@ -430,7 +430,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 		if (status != null && status.getNestedSize() > 0)
 		{
 			permissionObj = status.get(0);
-			System.out.println(permissionObj);
+
 			if (permissionObj.getName().equals("readonly"))
 			{
 				return true;	
