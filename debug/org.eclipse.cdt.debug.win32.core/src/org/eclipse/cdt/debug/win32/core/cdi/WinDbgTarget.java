@@ -477,4 +477,12 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDISignalManagement#getSignals()
+	 */
+	public ICDISignal[] getSignals() throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
