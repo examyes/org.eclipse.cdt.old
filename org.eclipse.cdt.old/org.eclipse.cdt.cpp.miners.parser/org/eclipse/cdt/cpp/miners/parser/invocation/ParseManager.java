@@ -174,6 +174,8 @@ public class ParseManager
    DataElement savedTimeStampElement = null;
    if (theTimeStamps.size() == 1)
     savedTimeStampElement = ((DataElement)theTimeStamps.get(0)).dereference();
+
+   System.out.println("saved time stamp  = " + savedTimeStampElement);
    if ((savedTimeStampElement != null) && (Long.parseLong(savedTimeStampElement.getName()) == theTimeStamp))
     return null; 
    removeParseInformation(theFileElement); 

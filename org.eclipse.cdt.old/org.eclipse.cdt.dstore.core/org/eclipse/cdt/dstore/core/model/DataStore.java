@@ -41,6 +41,7 @@ public class DataStore
     
     private HashMap             _hashMap;
     private ArrayList           _recycled;
+    private int                 _MAX_FREE = 10000;
     
     private ResourceBundle      _resourceBundle;
     private Random              _random;  
@@ -83,8 +84,8 @@ public class DataStore
 	_random = new Random(System.currentTimeMillis());
 
         _hashMap = new HashMap(100000);
-	_recycled = new ArrayList();
-	initElements(4000);
+	_recycled = new ArrayList(_MAX_FREE);
+	initElements(_MAX_FREE);
 
 	_timeout = 10000;
 	try
@@ -309,9 +310,22 @@ public class DataStore
   public DataElement createElement()  
     {
 	DataElement newObject = null;
+	int numRecycled = _recycled.size();
 
-	if (_recycled.size() > 0)
+	if (numRecycled > 0)
 	    {
+		/*
+		if (numRecycled > _MAX_FREE)
+		    {
+			int numRemoved = numRecycled - _MAX_FREE;
+			for (int i = 1; i <= numRemoved; i++)
+			    {
+				DataElement toRemove = (DataElement)_recycled.remove(numRemoved - i);
+				toRemove = null;
+			    }
+		    }
+		*/
+
 		newObject = (DataElement)_recycled.remove(0);
 	    }
 	else
@@ -379,7 +393,7 @@ public class DataStore
 		  String sugId = reference.getId();
 		  _hashMap.put(sugId, reference);
 		  
-		  refresh(parent);
+		  //***refresh(parent);
 		  
 		  return reference;
 	      }
@@ -411,7 +425,7 @@ public class DataStore
 		  String sugId = reference.getId();
 		  _hashMap.put(sugId, reference);
 
-		  refresh(parent);
+		  //***refresh(parent);
 		  
 		  return reference;
 	      }
@@ -471,7 +485,7 @@ public class DataStore
 		String fromId = fromReference.getId();
 		_hashMap.put(fromId, fromReference);
 		
-		refresh(parent);
+		//***refresh(parent);
 		
 		return toReference;
 	    }
@@ -518,7 +532,7 @@ public class DataStore
 		
 		String fromId = fromReference.getId();
 		_hashMap.put(fromId, fromReference);
-		refresh(parent);
+		//***refresh(parent);
  	
 		return toReference;
 	    }
@@ -611,9 +625,7 @@ public class DataStore
 
         _hashMap.put(id, newObject);
 
-	/*****/
 	refresh(parent);
-	/*****/
         return newObject;
     }
 
@@ -644,9 +656,7 @@ public class DataStore
 	    }
 
         _hashMap.put(id, newObject);
-	/*****/
 	refresh(parent);
-	/*****/
         return newObject;
       }
     
@@ -675,9 +685,7 @@ public class DataStore
 	      }
 	  
 	  _hashMap.put(attributes[DE.A_ID], newObject);
-	/*****/
-	refresh(parent);
-	/*****/
+	  //***refresh(parent);
 	  return newObject;
       }
 

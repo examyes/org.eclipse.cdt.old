@@ -437,7 +437,12 @@ public class Preprocessor extends Thread
   if (incs != null)
       {
 	  for(int i=0; i<incs.size(); i++)
-	      _includes.add(new String(((DataElement)incs.get(i)).getName()));
+	      {
+		  String path = new String(((DataElement)incs.get(i)).getName());
+		  path = path.replace('/', java.io.File.separator.charAt(0));
+		  _includes.add(path);
+
+	      }
       }
  } 
  

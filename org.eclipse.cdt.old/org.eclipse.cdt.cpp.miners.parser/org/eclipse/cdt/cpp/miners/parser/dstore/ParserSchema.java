@@ -174,6 +174,11 @@ public class ParserSchema
   dDerivedClasses  = createRelationDescriptor(dClassesStructs,  DerivedClasses);
   dTypes           = createRelationDescriptor(dVariables,       Types);
   
+  /*
+  DataElement dC_QUERY = createCommandDescriptor(dFunctions, "Query", "C_QUERY");
+  createReference(dClassesStructs, dC_QUERY);
+  createReference(dUsableCppObject, dC_QUERY);
+*/
 
   //Create the actual Cpp Objects (non-abstract): 
   dStatement      = createDerivativeDescriptor(dUsableCppObject,      Statement);

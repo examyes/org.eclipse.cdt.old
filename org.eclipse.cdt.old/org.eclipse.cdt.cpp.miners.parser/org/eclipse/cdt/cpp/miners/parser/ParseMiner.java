@@ -171,7 +171,8 @@ public class ParseMiner extends Miner
 	     saveProject(theProject);
 	 }
      
-     _dataStore.deleteObject(theProject.getParent(), theProject);
+     if (theProject != null)
+	 _dataStore.deleteObject(theProject.getParent(), theProject);
      return null;
  }
 
@@ -197,22 +198,26 @@ public class ParseMiner extends Miner
   DataElement parsedSourceElement   = getProjectElement(theProject, ParserSchema.ParsedFiles);
   DataElement projectObjectsElement = getProjectElement(theProject, ParserSchema.ProjectObjects);
   DataElement systemObjectsElement  = getProjectElement(theProject, ParserSchema.SystemObjects);
+
   
   if (f1.exists() && (parsedSourceElement != null))
   {
    _dataStore.load(parsedSourceElement, parsedSource);		
-   _dataStore.update(parsedSourceElement);
   }
   if (f2.exists() && (projectObjectsElement != null) )
   {
    _dataStore.load(projectObjectsElement, projectObjs);
-   _dataStore.update(projectObjectsElement);
   }
   if (f3.exists() && (systemObjectsElement != null))
   {
    _dataStore.load(systemObjectsElement, systemObjs);
-   _dataStore.update(systemObjectsElement);
   }
+
+
+  _dataStore.refresh(parsedSourceElement);
+  _dataStore.refresh(projectObjectsElement);
+  _dataStore.refresh(systemObjectsElement);
+
  }
   
  private void saveProject(DataElement project)
@@ -316,6 +321,7 @@ public class ParseMiner extends Miner
   currentIncludePath.removeNestedData();
   currentIncludePath.addNestedData(includePath.getNestedData(), true);	
   includePath.setParent(currentIncludePath);
+
   _dataStore.refresh(currentIncludePath);
    return null;
  }

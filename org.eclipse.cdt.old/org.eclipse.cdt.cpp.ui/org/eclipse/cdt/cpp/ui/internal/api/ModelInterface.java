@@ -584,6 +584,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	     if (oDescriptor != null)
 		 {
 		     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
+		     projectMinerProject.expandChildren(true);
 		 }
 	     
 	     setParseIncludePath(_project);	
@@ -1843,14 +1844,23 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Update Autoconf/Automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
-	DataElement createConfigureeCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Create configure", 
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+
+
+
+	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
+
+	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+								 "Create configure", 
+								 "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
-	DataElement configureCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+
+	DataElement configureCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Run configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	configureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
+	
+	dataStore.createReference(configureCmds, autoconfCmds, "abstracts", "abstracted by");
+
 							  
 	DataElement mngCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Manage Project", 

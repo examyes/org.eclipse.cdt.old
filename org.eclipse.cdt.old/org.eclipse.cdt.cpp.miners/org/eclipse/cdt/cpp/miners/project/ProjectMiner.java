@@ -123,19 +123,8 @@ public class ProjectMiner extends Miner
    project.setParent(_workspace);
    _workspace.addNestedData(project, true);
   }
-  
-  _dataStore.refresh(_workspace); 
-  if (project.isExpanded())
-      {
-	  project.refresh(false); 
-      }
-  else
-      {
-	  project.expandChildren();
-      }
 
-  project.refresh(false);
-  //_dataStore.refresh(project);
+  
   
    status.setAttribute(DE.A_NAME, "done");
    _dataStore.refresh(status);
