@@ -56,6 +56,8 @@ public class GdbArrayVariable extends GdbVariable {
 		if (!s.equals(_gdbData))
 		{
 			_elements.removeAllElements();
+			
+			_gdbData = s;
 		
 			String parseStr = s;		
 			parseStr = parseStr.trim();

@@ -57,8 +57,9 @@ public class GdbObjectVariable extends GdbVariable {
 	 */
 	public void setScalarValue(String s) {
 		
-		if (!s.equals(_gdbData))
+		if (!s.equals(_gdbData))		
 		{
+			_gdbData = s;
 			_fields.removeAllElements();
 		
 			String parseStr = s;		
