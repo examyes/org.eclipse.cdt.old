@@ -2216,7 +2216,7 @@ public final class DataStore
 		    filters = descriptor.getAssociated(relation.getName());
 		    for (int i = 0; i < filters.size(); i++)
 			{
-			    DataElement object = ((DataElement)filters.get(i)).getDescriptor();		
+			    DataElement object = (DataElement)filters.get(i);		
 			    if (object != null)
 				{
 				    String objType = object.getType();
