@@ -96,6 +96,8 @@ public class GdbCommandAndResponse
                Gdb.traceLogger.err(1, _debugSession.getResourceString("GDBPICL_COMMAND_PRODUCED_TOO_MANY_RESPONSE_LINES")+length+">"+_debugSession.MAX_GDB_LINES );
         }
 
+    StringBuffer classObject = new StringBuffer(bufferSize);
+
      for(int i=0; i<length; i++)
      {  if(lines[i]!=null && !lines[i].equals("") )
         {
@@ -104,7 +106,7 @@ public class GdbCommandAndResponse
 
            if( !lines[i].startsWith(_gdbProcess.MARKER) )
            {
-               StringBuffer classObject = new StringBuffer(bufferSize);
+
                if(lines[i]!=null && !lines[i].equals(""))
                   classObject.append(lines[i]);
                
