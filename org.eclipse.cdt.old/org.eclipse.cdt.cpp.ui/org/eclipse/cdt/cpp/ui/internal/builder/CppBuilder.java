@@ -104,21 +104,42 @@ public class CppBuilder extends IncrementalProjectBuilder
 
         if (kind == AUTO_BUILD)
         {
-           IResourceDelta change = getDelta(project);
-           if (change != null)
+           IResourceDelta pchange = getDelta(project);
+           if (pchange != null)
            {
-              IResourceDelta[] children = change.getAffectedChildren();
-              for (int i = 0; i < children.length; ++i)
+	      IResourceDelta[] children = pchange.getAffectedChildren();
+	      for (int i = 0; (goAndBuild == false) && (i < children.length); ++i) 
               {
-                if (children[i] != null)
+		  IResourceDelta change = children[i];
+		  if (change != null)
                 {
-                  goAndBuild = true;
-                  break;
-                }
-              }
-           }
-        }
-        else
+		    IResource resource = change.getResource();
+		    if (resource instanceof IProject)
+			{
+			}
+		    else
+			{
+			    int ckind = change.getKind();
+			    boolean isAdded = ckind == IResourceDelta.ADDED;
+			    boolean isRemoved = ckind == IResourceDelta.REMOVED;
+			    boolean isChanged = ckind == IResourceDelta.CHANGED;
+			    int flags = change.getFlags();		
+			    boolean contentChanged = (isChanged  && (flags & IResourceDelta.CONTENT) != 0);
+			    if (contentChanged)
+				{
+				    // is this an editable resource
+				    ModelInterface api = CppPlugin.getModelInterface();	
+				    if (api.isBeingEdited(resource))
+					{
+					    goAndBuild = true;
+					}
+				}
+			}
+		}
+	      }
+	   }
+	}
+	else
         {
            goAndBuild = true;
         }

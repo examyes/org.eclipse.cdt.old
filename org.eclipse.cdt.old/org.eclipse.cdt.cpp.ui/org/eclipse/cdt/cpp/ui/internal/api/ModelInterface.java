@@ -474,12 +474,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	catch (CoreException e)
 	    {
 	    }
-
-        
-	
+       	
 	DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_COMMAND");
-	DataElement status = dataStore.command(commandDescriptor, args, pathElement, true);		
-	invocationObj.setParent(status.getParent());
+	DataElement status = dataStore.command(commandDescriptor, args, pathElement, true);
+	if (status != null)
+	    invocationObj.setParent(status.getParent());
 	_status = status;
 
 	monitorStatus(status);
@@ -653,6 +652,40 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    }
 		    }
 	    }
+    }
+
+    public boolean isBeingEdited(IResource resource)
+    {
+	IWorkbench desktop = CppPlugin.getDefault().getWorkbench();
+	IWorkbenchWindow[] windows = desktop.getWorkbenchWindows();
+	for (int a = 0; a < windows.length; a++)
+	    {		
+		IWorkbenchWindow window = windows[a];
+		IWorkbenchPage[] pages = window.getPages();
+		for (int b = 0; b < pages.length; b++)
+		    {
+			IWorkbenchPage page = pages[b];
+			IEditorPart[] editors = page.getEditors();
+		        for (int c = 0; c < editors.length; c++)
+			    {
+				IEditorPart editor = editors[c];
+				if (editor.getEditorInput() instanceof IFileEditorInput) 
+				    {
+					IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
+					if (input != null)
+					    {
+						IFile file = input.getFile();
+						if (file.getLocation().toString().equals(resource.getLocation().toString()))
+						    {
+							return true;
+						    }
+					    }
+				    }
+			    }
+		    }
+	    }
+	
+	return false;
     }
 
     private void closeEditors(IProject project)
@@ -1071,7 +1104,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
       if (projectObj == null)
 	  {
-	      System.out.println("no project obj for " + project.getName());
+	      //System.out.println("no project obj for " + project.getName());
 	      projectObj = dataStore.createObject(workspace, "Project", project.getName(), project.getLocation().toString());
 	      dataStore.setObject(workspace);
 	  } 
@@ -1375,6 +1408,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
 
 
+	    
+
 
   public IProject getProjectFor(IResource resource)
   {
@@ -1625,8 +1660,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 										 IResourceDelta.REMOVED);
 			    for (int i = 0; i < changes.length; i++)
 				{
-				    resource = changes[i].getResource();
-				    resourceChanged(resource);
+				    IResourceDelta change = changes[i];
+				    int flags = change.getFlags();		
+				    if ((flags & IResourceDelta.CONTENT) != 0)
+					{
+					    resource = change.getResource();
+					    resourceChanged(resource);
+					}
 				}
 			}
 		    else
