@@ -36,7 +36,6 @@ public class XMLparser
     
     public void readFile(BufferedInputStream reader, int size, String path)
     {
-	System.out.println("reading file " +path);
 	byte[] buffer = new byte[size];
 	boolean done = false;
 

@@ -964,7 +964,6 @@ public class DataStore
         }
       }
 
-    /***/
     public void updateAppendFile(String remotePath, byte[] bytes, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
@@ -974,19 +973,21 @@ public class DataStore
 	    _updateHandler.updateAppendFile(remotePath, bytes, size);
         }	
     }
-    /***/
 
   public void replaceFile(String remotePath, File file)
       {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
 
-	System.out.println("replacing " + file);
-	//***	if (!remotePath.equals(fileName))
-	  {
-	      System.out.println("\tsending " + remotePath);
-	    _commandHandler.sendFile(remotePath, file);
-	  }
+	String dsName = getName();
+	if (!dsName.equals("local"))
+	    {
+		_commandHandler.sendFile(remotePath, file);
+	    }
+	else
+	    {
+		saveFile(remotePath, file);
+	    }
       }
 
   public void setObject(DataElement localObject)
@@ -1732,6 +1733,7 @@ public DataElement command(DataElement commandDescriptor,
       }
   
 
+
   public void saveFile(DataElement root, String remotePath, int depth)
       {
         remotePath = new String(remotePath.replace('\\', '/'));
@@ -1764,6 +1766,7 @@ public DataElement command(DataElement commandDescriptor,
         }
       }
 
+    /***
   public void saveFile(String fileName, InputStream input)
       {
           try
@@ -1777,7 +1780,6 @@ public DataElement command(DataElement commandDescriptor,
             }
             else
             {
-              file.renameTo(new File(fileName + ".bak"));
             }
 
             File newFile = new File(fileName);
@@ -1789,7 +1791,7 @@ public DataElement command(DataElement commandDescriptor,
 
             while ((line = in.readLine()) != null)
             {
-              buffer.append(new String(line));
+              buffer.append(new String(line));	      
               buffer.append("\n\r");
             }
             
@@ -1801,7 +1803,54 @@ public DataElement command(DataElement commandDescriptor,
             System.out.println(e);
           }        
       }
+    ***/
 
+    public void saveFile(String localPath, File file)
+    {
+	File newFile = new File(localPath);
+
+	try
+	    {
+		FileOutputStream newFileStream = new FileOutputStream(newFile);
+
+		if (!file.isDirectory() && file.exists())
+		    {
+			int maxSize = 5000000;
+			int size = (int)file.length();
+
+			FileInputStream inFile = new FileInputStream(file);
+			int written = 0;
+			
+			int bufferSize = (size > maxSize) ? maxSize : size;
+			byte[] subBuffer = new byte[bufferSize];
+			
+			while (written < size)
+			    {
+				int subWritten = 0;
+				
+				while (written < size && subWritten < bufferSize)
+				    {
+					int available = inFile.available();
+					available = (bufferSize > available) ? available : bufferSize;
+					int read = inFile.read(subBuffer, subWritten, available);
+					subWritten += read;
+					written += subWritten;
+				    }
+				
+				newFileStream.write(subBuffer, 0, subWritten);
+			    }
+			
+			inFile.close();
+			newFileStream.close();
+		    }
+	    }
+	catch (IOException e)
+	    {
+		System.out.println(e);
+		e.printStackTrace();			
+	    }
+    }
+	
     public void saveFile(String remotePath, byte[] buffer)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
@@ -1820,7 +1869,6 @@ public DataElement command(DataElement commandDescriptor,
             }
             else
             {
-              file.renameTo(new File(fileName + ".bak"));
             }
 
             File newFile = new File(fileName);

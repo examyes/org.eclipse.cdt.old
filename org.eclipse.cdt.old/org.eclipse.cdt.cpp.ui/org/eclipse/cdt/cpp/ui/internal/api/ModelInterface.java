@@ -988,17 +988,51 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		return findProjectElement((IProject)resource);
 	    }
+	if (resource instanceof ResourceElement)
+	    {
+		ResourceElement resElement = (ResourceElement)resource;
+		return resElement.getElement();
+	    }
 
+	DataElement result = null;
 	DataStore dataStore = _plugin.getCurrentDataStore();
 	DataElement workspace = findWorkspaceElement(dataStore);
 	if (workspace != null)
 	    {
 		String resString = resource.getLocation().toString().replace('\\', '/');
-		return dataStore.find(workspace, DE.A_SOURCE, resString);
+		result = findResourceElement(workspace, resString);
 	    }
 
-	return null;
+	return result;
     }  
+
+    private DataElement findResourceElement(DataElement root, String path)
+    {
+	DataElement found = null;
+	if (compareFileNames(root.getSource(), path))
+	    {
+		found = root;
+	    }
+	else
+	    {
+		for (int i = 0; i < root.getNestedSize(); i++)
+		    {
+			DataElement child = root.get(i);
+			if (child != null && !child.isDeleted() && !child.isReference())
+			    {
+				if (child.getType().equals("file")  || 
+				    child.getType().equals("directory") ||
+				    child.getType().equals("Project")
+				    )
+				    {
+					found = findResourceElement(child, path);
+				    }
+			    }
+		    }
+	    }
+
+	return found;
+    }
     
   public DataElement findProjectElement(IProject project)
   {
@@ -1045,33 +1079,37 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public void parse(IResource resource, boolean isSynchronized, boolean showView)
   {
    DataElement pathElement = getPathElement(resource);
-   DataStore   dataStore   = pathElement.getDataStore();
-   IProject    theProject  = getProjectFor(resource);
-  
-   if (theProject == null)
-    return;
-  
-   String      name = new String(theProject.getName());
-   DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
-   DataElement projectsRoot = findWorkspaceElement(dataStore);		
-   DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
-   
-   if ((commandDescriptor == null) || (projectRoot == null))
-    return;
-     
-   ArrayList args = new ArrayList();	
-   args.add(projectRoot);
-   dataStore.getDomainNotifier().addDomainListener(this);
-   
-   DataElement status = null;
-   if (isSynchronized)
-    status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);	
-   else
-    status = dataStore.command(commandDescriptor, args, pathElement, false);		
 
-   //***   monitorStatus(status);
-   _status = status;
-
+   if (pathElement != null)
+       {
+	   DataStore   dataStore   = pathElement.getDataStore();
+	   IProject    theProject  = getProjectFor(resource);
+	   
+	   if (theProject == null)
+	       return;
+	   
+	   String      name = new String(theProject.getName());
+	   DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
+	   DataElement projectsRoot = findWorkspaceElement(dataStore);		
+	   DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
+	   
+	   if ((commandDescriptor == null) || (projectRoot == null))
+	       return;
+	   
+	   ArrayList args = new ArrayList();	
+	   args.add(projectRoot);
+	   dataStore.getDomainNotifier().addDomainListener(this);
+	   
+	   DataElement status = null;
+	   if (isSynchronized)
+	       status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);	
+	   else
+	       status = dataStore.command(commandDescriptor, args, pathElement, false);		
+	   
+	   monitorStatus(status);
+	   _status = status;
+	   
+       }
   }	
 
 
