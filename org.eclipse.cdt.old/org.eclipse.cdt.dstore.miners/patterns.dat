@@ -50,7 +50,7 @@ command: cat.*patterns.*
 	 statement                   pattern=.* pattern.*=.*
 
 # special for autoconf
-command: ./autogen.sh.*
+command: ./bootstrap.sc.*
 	 error          file line         pattern=aclocal: ([\w,.,/,\\]*): (\d*):.*
 	 warning        file line         pattern=([\w,.,/,\\]*):(\d*):.*
 

@@ -1,4 +1,4 @@
-# Run this program (./autogen.sh) after changing any of
+# Run this program (./bootstrap.sc) after changing any of
 # the files that will affect the generation of the configure script
 
 aclocal

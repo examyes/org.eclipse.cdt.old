@@ -36,9 +36,9 @@ public class TargetManager {
 			}
 			autoconfmanager.getAutoconfScript(parentData);
 			if(getOS().equals("Linux"))
-				runCommand(parentData,status,"./autogen.sh;./configure");
+				runCommand(parentData,status,"./bootstrap.sc;./configure");
 			else
-				runCommand(parentData, status, cygwinPrefix+"autogen.sh;"+cygwinPrefix+"configure");
+				runCommand(parentData, status, cygwinPrefix+"bootstrap.sc;"+cygwinPrefix+"configure");
 			autoconfmanager.runConfigureScript(parentData,status);
 			autoconfmanager.runSupportScript(parentData,status);
 		}*/
