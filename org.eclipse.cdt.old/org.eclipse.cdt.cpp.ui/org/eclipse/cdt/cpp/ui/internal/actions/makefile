@@ -5,14 +5,11 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: AbstractSourceSyncher.class AddClassBreakpoint.class AddFunctionBreakpoint.class AddStatementBreakpoint.class ClearAction.class CppActionDelegateBuild.class CppActionDelegateDesignate.class CppActionDelegateFolderBuild.class CppActionDelegateUnDesignate.class ExtractFiles.class MergeFiles.class OpenPerspectiveAction.class ParseAction.class ReleaseFiles.class SaveAction.class SourceExtractor.class SourceReleaser.class SourceSyncher.class SynchronizeFiles.class MakefileAmAction.class FindObjectAction.class ProjectOpenAction.class BuildAction.class ProjectParseAction.class OpenEditorAction.class OpenProjectAction.class ProjectRemoveParseAction.class ProjectSaveParseAction.class SharedLibMakefileAmAction.class StaticLibMakefileAmAction.class ReplicateFromAction.class DefaultMakefileAmAction.class TopLevelMakefileAmAction.class ProjectAction.class ReplicateToAction.class RefreshNavigatorAction.class CloseProjectAction.class SynchronizeWithAction.class ConfigureAction.class ManageProjectAction.class OpenPropertiesAction.class CVSAction.class DeleteProjectAction.class
+all: AddClassBreakpoint.class AddFunctionBreakpoint.class AddStatementBreakpoint.class ClearAction.class CppActionDelegateBuild.class CppActionDelegateDesignate.class CppActionDelegateFolderBuild.class CppActionDelegateUnDesignate.class  OpenPerspectiveAction.class ParseAction.class  SaveAction.class   MakefileAmAction.class FindObjectAction.class ProjectOpenAction.class BuildAction.class ProjectParseAction.class OpenEditorAction.class OpenProjectAction.class ProjectRemoveParseAction.class ProjectSaveParseAction.class SharedLibMakefileAmAction.class StaticLibMakefileAmAction.class ReplicateFromAction.class DefaultMakefileAmAction.class TopLevelMakefileAmAction.class ProjectAction.class ReplicateToAction.class RefreshNavigatorAction.class CloseProjectAction.class SynchronizeWithAction.class ConfigureAction.class ManageProjectAction.class OpenPropertiesAction.class CVSAction.class DeleteProjectAction.class
 
 # Class Targets
 DeleteProjectAction.class: DeleteProjectAction.java
 	javac DeleteProjectAction.java
-
-AbstractSourceSyncher.class: AbstractSourceSyncher.java
-	javac AbstractSourceSyncher.java
 
 AddClassBreakpoint.class: AddClassBreakpoint.java
 	javac AddClassBreakpoint.java
