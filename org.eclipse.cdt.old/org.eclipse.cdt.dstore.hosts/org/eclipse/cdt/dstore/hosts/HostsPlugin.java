@@ -73,14 +73,6 @@ public class HostsPlugin extends AbstractUIPlugin
 	    }
     }
 
-  
-    public class DialogActionLoader extends HostsActionLoader
-    {
-	public IOpenAction getOpenAction()
-	{
-	    return null;
-	}	
-    }
 
     private static HostsPlugin         _instance;
     
@@ -94,15 +86,13 @@ public class HostsPlugin extends AbstractUIPlugin
     private        ResourceBundle      _resourceBundle;
 
     private        IActionLoader       _actionLoader;
-    private        IActionLoader       _dialogActionLoader;
 
     public HostsPlugin(IPluginDescriptor descriptor)
     {
 	super(descriptor);
 	_corePlugin = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin();
 	_corePath = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();	
-	_actionLoader = new HostsActionLoader();
-	_dialogActionLoader = new DialogActionLoader();
+	_actionLoader = new HostsActionLoader(this);
 	try
 	    {
 		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.hosts.PluginResources");

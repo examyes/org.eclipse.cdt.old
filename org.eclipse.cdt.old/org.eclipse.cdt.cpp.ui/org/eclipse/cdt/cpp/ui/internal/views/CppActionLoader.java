@@ -62,6 +62,12 @@ public class CppActionLoader extends GenericActionLoader
     	
     	CppPlugin plugin = CppPlugin.getDefault();
     	_baseDir = plugin.getPluginPath();
+
+	ArrayList loadScope = new ArrayList();
+	loadScope.add("org.eclipse.cdt.cpp.ui.*");
+	loadScope.add("org.eclipse.cdt.dstore.hosts.*");
+	provideExternalLoader(new ExternalLoader(plugin.getDescriptor().getPluginClassLoader(),
+						 loadScope));
     }
  
     public static IActionLoader getInstance()
@@ -89,11 +95,6 @@ public class CppActionLoader extends GenericActionLoader
 	return _openAction;
     }
     
-
-    public Class forName(String source) throws ClassNotFoundException
-    {
-	return Class.forName(source);
-    }
 
           
     public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)

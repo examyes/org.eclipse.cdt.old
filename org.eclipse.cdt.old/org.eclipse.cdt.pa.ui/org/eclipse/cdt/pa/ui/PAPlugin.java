@@ -98,6 +98,8 @@ public class PAPlugin extends AbstractUIPlugin {
 	
 	_interface = new PAModelInterface(getDataStore());
 	_interface.extendSchema(getDataStore().getDescriptorRoot());
+	CppPlugin.getDefault().provideExternalLoader(new ExternalLoader(getDescriptor().getPluginClassLoader(),
+							   "org.eclipse.cdt.pa.ui.*"));
 	
   }
 

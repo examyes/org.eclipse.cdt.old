@@ -43,7 +43,9 @@ public class PAActionLoader extends CppActionLoader {
       {
        	_paIconBundle = null;
       }
-    	
+
+	  provideExternalLoader(new ExternalLoader(PAPlugin.getDefault().getDescriptor().getPluginClassLoader(),
+						   "org.eclipse.cdt.pa.ui.*"));
     }
  
  
@@ -52,11 +54,12 @@ public class PAActionLoader extends CppActionLoader {
 	 return _instance;
     }
     
-    
+    /*
     public Class forName(String source) throws ClassNotFoundException 
     {
      return Class.forName(source);
     }
+    */
     
     
     public IOpenAction getOpenAction()

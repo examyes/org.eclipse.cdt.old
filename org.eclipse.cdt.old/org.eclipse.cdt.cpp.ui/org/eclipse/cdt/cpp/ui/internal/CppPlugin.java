@@ -280,8 +280,12 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    }
 	RemoteProjectAdapter adapter = new RemoteProjectAdapter(dataStore.getRoot());
 	adapter.setChildren(rmtProjects);	
+    }
 
-
+    public void provideExternalLoader(ExternalLoader loader)
+    {
+	IActionLoader cpploader = CppActionLoader.getInstance();
+	cpploader.provideExternalLoader(loader);
     }
 
   public String getInstallLocation()

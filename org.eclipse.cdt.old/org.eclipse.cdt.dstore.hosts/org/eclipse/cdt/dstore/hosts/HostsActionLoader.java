@@ -39,18 +39,18 @@ import org.eclipse.jface.action.*;
 
 public class HostsActionLoader extends GenericActionLoader
 {
-   	private static HostsActionLoader _instance;
-    	
-	private IOpenAction   _openAction;
-	private CustomAction  _openPerspectiveAction;
-	
-	private ResourceBundle _iconBundle;
-	private String _defaultIcon;
-	private HashMap _hashMap;
-	private String _baseDir;
+    private static HostsActionLoader _instance;
+    
+    private IOpenAction   _openAction;
+    private CustomAction  _openPerspectiveAction;
+    
+    private ResourceBundle _iconBundle;
+    private String _defaultIcon;
+    private HashMap _hashMap;
+    private String _baseDir;
     private HostsPlugin _plugin;
-
-    public HostsActionLoader()
+    
+    public HostsActionLoader(HostsPlugin plugin)
     {
 	super(); 
 	
@@ -65,7 +65,9 @@ public class HostsActionLoader extends GenericActionLoader
     	
     	_hashMap = new HashMap();
     	_instance = this;    	
-	_plugin = HostsPlugin.getDefault();
+	_plugin = plugin;
+	provideExternalLoader(new ExternalLoader(_plugin.getDescriptor().getPluginClassLoader(), 
+						 "org.eclipse.cdt.dstore.hosts.*"));
     }
       
     public static HostsActionLoader getInstance()
@@ -83,10 +85,12 @@ public class HostsActionLoader extends GenericActionLoader
 		return _openPerspectiveAction;
     }
 
+    /*
     public Class forName(String source) throws ClassNotFoundException
     {
 	return Class.forName(source);
     }
+    */
 
   public String getImageString(DataElement object)
     {   	
@@ -103,7 +107,7 @@ public class HostsActionLoader extends GenericActionLoader
    		return getImageString(type);	
     }   
 	
-    public String getImageString(String type)
+    public String getImageString(String type) 
     {		                      
     	String result = (String)_hashMap.get(type);
     	
