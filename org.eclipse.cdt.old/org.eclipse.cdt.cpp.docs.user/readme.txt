@@ -122,6 +122,16 @@ Debugger issues
 ---------------
 For debugger issues, see the accompanying "todo.txt"
 
+Project Management Issues - autoconf and automake
+-------------------------------------------------
+
+1- If the project contains only one directory, then using generate configure action will not 
+   produce the desired output, as it will generate Makefile.am which does not contain any target. 
+   What you need to do is to create a Makefile.am which include a Target- a PROGRAMS for example- 
+   In order to do that you can select Autoconf -> Advanced->create Programs Makefile.am action 
+   to have the Progaram target.
+
+2-  
 
 
 
