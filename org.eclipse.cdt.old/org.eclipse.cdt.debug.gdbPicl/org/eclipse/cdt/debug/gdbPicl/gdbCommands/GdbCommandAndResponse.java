@@ -15,6 +15,23 @@ public class GdbCommandAndResponse
 {
    GdbDebugSession  _debugSession  = null;
    GdbProcess       _gdbProcess    = null;
+   
+   StringBuffer classObject = null;
+   StringBuffer combinedLine = null;
+   
+   static String PRE_PROMPT_keyword      = GdbProcess.MARKER+"pre-prompt";
+   static String FRAME_BEGIN_keyword     = GdbProcess.MARKER+"frame-begin";
+   static String FRAME_END_keyword       = GdbProcess.MARKER+"frame-end";
+   static String BP_RECORD_keyword       = GdbProcess.MARKER+"record";
+   static String BP_HEADERS_keyword      = GdbProcess.MARKER+"breakpoints-headers";
+   static String BP_TABLE_END_keyword    = GdbProcess.MARKER+"breakpoints-table-end";
+   static String DISPLAY_BEGIN_keyword   = GdbProcess.MARKER+"display-begin";
+   static String DISPLAY_END_keyword     = GdbProcess.MARKER+"display-end";
+   static String FIELD_BEGIN_keyword     = GdbProcess.MARKER+"field-begin";
+   static String FIELD_NAME_END_keyword  = GdbProcess.MARKER+"field-name-end";
+   static String FIELD_VALUE_keyword     = GdbProcess.MARKER+"field-value";
+   static String FIELD_END_keyword       = GdbProcess.MARKER+"field-end";
+
 
   /**
    * Create a new GdbCommandAndResponse. command object
@@ -23,6 +40,8 @@ public class GdbCommandAndResponse
    {
      _debugSession  = gdbDebugSession;
      _gdbProcess    = _debugSession.getGdbProcess();
+     classObject = new StringBuffer(_debugSession.MAX_GDB_LINES*80);
+	 combinedLine = new StringBuffer(_debugSession.MAX_GDB_LINES*80);
    }
 
 
@@ -70,7 +89,7 @@ public class GdbCommandAndResponse
 
      if (Gdb.traceLogger.DBG)
          Gdb.traceLogger.dbg(3,"GdbDebugSession.getGdbResponseLines lines.length="+lines.length );
-
+/*
      String PRE_PROMPT_keyword      = _gdbProcess.MARKER+"pre-prompt";
      String FRAME_BEGIN_keyword     = _gdbProcess.MARKER+"frame-begin";
      String FRAME_END_keyword       = _gdbProcess.MARKER+"frame-end";
@@ -83,6 +102,7 @@ public class GdbCommandAndResponse
      String FIELD_NAME_END_keyword  = _gdbProcess.MARKER+"field-name-end";
      String FIELD_VALUE_keyword     = _gdbProcess.MARKER+"field-value";
      String FIELD_END_keyword       = _gdbProcess.MARKER+"field-end";
+*/     
      //String combinedLine = "";
 
         int length = lines.length;
@@ -95,9 +115,6 @@ public class GdbCommandAndResponse
            if (Gdb.traceLogger.ERR)
                Gdb.traceLogger.err(1, _debugSession.getResourceString("GDBPICL_COMMAND_PRODUCED_TOO_MANY_RESPONSE_LINES")+length+">"+_debugSession.MAX_GDB_LINES );
         }
-
-     StringBuffer classObject = new StringBuffer(bufferSize);
-     StringBuffer combinedLine = new StringBuffer(bufferSize);
 
      for(int i=0; i<length; i++)
      {  if(lines[i]!=null && !lines[i].equals("") )
