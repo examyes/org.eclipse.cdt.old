@@ -372,9 +372,14 @@ public class ViewToolBar extends Viewer implements IDomainListener
     public void dispose()
     {
 	_toolBarContainer.dispose();
-	
+	_viewMenu.dispose();
 	_inputTextContainer.dispose();
 	_topContainer.dispose();
+
+	_toolBarContainer = null;
+	_viewMenu = null;
+	_inputTextContainer = null;
+	_topContainer = null;
 
     }
 }

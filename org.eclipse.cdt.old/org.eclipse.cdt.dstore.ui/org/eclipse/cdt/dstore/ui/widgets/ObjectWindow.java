@@ -616,6 +616,9 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
   public void dispose()
       {
+	  _outLinks.clear();
+	  _isLinked = false;
+
 	  if (_dataStore != null)
 	      {
 		  _dataStore.getDomainNotifier().removeDomainListener(_viewer);
@@ -632,10 +635,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	  _toolBar.dispose();
 	  _viewer.dispose();
 
-	  _outLinks.clear();
-	  _isLinked = false;
-
-	  super.dispose();
+	  _toolBar = null;
+	  _viewer = null;
       }
 
   protected void initDragAndDrop() 

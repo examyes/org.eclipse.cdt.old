@@ -32,8 +32,6 @@ public class ViewMenu implements IMenuListener
     private ToolBar     _viewToolBar;
     private ToolItem   _relationLabel, _filterLabel;
     
-    private Button      _relButton;
-    
     private ArrayList      _filterItems, _relationItems;
     
     private DataElement _filterSelected, _relationSelected;
@@ -426,7 +424,11 @@ public class ViewMenu implements IMenuListener
 	      {
 		  String imageStr = DataElementLabelProvider.getImageString(_filterSelected);
 
-		  _filterLabel.setEnabled(false);
+		  if (!_filterLabel.isDisposed())
+		      {
+			  _filterLabel.setEnabled(false);
+		      }
+
 		  Image image = plugin.getImage(imageStr);
 		  if (image == null)
 		      {
@@ -621,6 +623,20 @@ public class ViewMenu implements IMenuListener
 			    }
 		    }
 	    }
+    }
+    
+    public void dispose()
+    {
+	if (_filterLabel != null)
+	    _filterLabel.dispose();
+	if (_relationLabel != null)
+	    _relationLabel.dispose();
+	if (_viewToolBar != null)
+	    _viewToolBar.dispose();
+
+	_filterLabel = null;
+	_relationLabel = null;
+	_viewToolBar = null;    
     }
 
     public void enable(boolean flag)
