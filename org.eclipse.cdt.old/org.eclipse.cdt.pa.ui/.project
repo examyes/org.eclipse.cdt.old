@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>org.eclipse.cdt.pa.ui</name>
+	<comment></comment>
+	<projects>
+		<project>org.eclipse.cdt.cpp.ui</project>
+		<project>org.eclipse.cdt.dstore.core</project>
+		<project>org.eclipse.cdt.dstore.extra</project>
+		<project>org.eclipse.cdt.dstore.hosts</project>
+		<project>org.eclipse.cdt.dstore.ui</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>org.eclipse.team.cvs.core.cvsnature</nature>
+	</natures>
+</projectDescription>
