@@ -198,6 +198,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
             _debugSession.addCmdResponsesToUiMessages();
          }
          monitor.enableMonitor();
+         updateMonitors();
          monitor.updateVariable();
          if (!_changedMonitors.contains(monitor))
             _changedMonitors.addElement(monitor);
