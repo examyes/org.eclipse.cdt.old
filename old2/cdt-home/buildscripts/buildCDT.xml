@@ -16,14 +16,14 @@
     
     <!--  all features required to build eclipse sdk and javadoc  -->
     <target name="allElements">
-        <ant antfile="${install}/features/org.eclipse.cdt-feature/build.xml" target="${target}" dir="${install}/features/org.eclipse.cdt-feature" />
+        <ant antfile="${install}/features/org.eclipse.cdt.${platformId}-feature/build.xml" target="${target}" dir="${install}/features/org.eclipse.cdt.${platformId}-feature" />
     </target>
     
     <!--   runs targets that fetch all projects required for eclipse CDT from dev.eclipse.org  -->
     <target name="fetchAll" depends="fetchProjects" />
 
     <target name="fetchProjects" depends="cvspass">    
-        <ant antfile="buildScripts/fetch_org.eclipse.cdt-feature.xml" />
+        <ant antfile="buildScripts/fetch_org.eclipse.cdt.${platformId}-feature.xml" />
     </target>
     
     <!--     Fill in values for original timestamp in all about.mappings files  -->
@@ -104,7 +104,7 @@
     <!--  copies only those scripts required to build the specified platform of the Eclipse CDT  -->
     <target name="copyScripts" depends="init">
         <copy todir="${install}" overwrite="true" >
-            <fileset dir="buildScripts" includes="features/org.eclipse.cdt-feature/build.xml" />
+            <fileset dir="buildScripts" includes="features/org.eclipse.cdt.${platformId}-feature/build.xml" />
             <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${os}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml" />
         </copy>
     </target>
