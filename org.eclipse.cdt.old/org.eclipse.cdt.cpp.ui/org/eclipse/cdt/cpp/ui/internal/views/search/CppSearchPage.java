@@ -266,11 +266,6 @@ private Control createScope(Composite parent) {
 			boolean state= ((Button)event.widget).getSelection();
 			if(state)
 			{
-				//if(getNavigatorSelection()!=null)
-			//	{
-			//		scopeField.setText(getNavigatorSelection().toString().substring(1)); // initialize scope field
-			//		setScopeInput(getNavigatorSelection().toString().substring(1));// initializing the scope Input
-			//	}
 				scopeField.setEnabled(true);
 				browseButton.setEnabled(true);
 				
@@ -541,8 +536,15 @@ private SearchPatternData trySelection(ISelection selection)
 	} 
 	else if (o instanceof IAdaptable) 
 	{	
-		IWorkbenchAdapter element= (IWorkbenchAdapter)((IAdaptable)o).getAdapter(IWorkbenchAdapter.class);
-		result= new SearchPatternData(TYPE, REFERENCES, element.getLabel(o));
+	    if (o instanceof DataElement)
+		{
+		    result= new SearchPatternData(TYPE, REFERENCES, ((DataElement)o).getName());		    
+		}
+	    else
+		{
+		    IWorkbenchAdapter element= (IWorkbenchAdapter)((IAdaptable)o).getAdapter(IWorkbenchAdapter.class);
+		    result= new SearchPatternData(TYPE, REFERENCES, element.getLabel(o));
+		}
 	}
 	return result;
 }
