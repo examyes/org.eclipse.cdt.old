@@ -303,14 +303,34 @@ class CommandMinerThread extends MinerThread
 	}
     else
 	{
-	    theShell = "cmd";
+		if ((theOS.indexOf("95")>=0) ||
+            (theOS.indexOf("98")>=0) ||
+            (theOS.indexOf("ME")>=0)) 
+        {
+	       	theShell = "start";
+        }
+        else
+        {
+	    	theShell = "cmd";
+        }
+        
 	    if (_invocation.equals(">"))
 	    {
 	    	_invocation = theShell;
 	    	_isShell = true;
-	    }
-	
-	    _theProcess = Runtime.getRuntime().exec(theShell + " /C " + _invocation, getEnvironment(_subject), theDirectory); 
+	    } 
+
+		if (theShell.equals("start"))
+			{
+				theShell += " /B ";	
+			}
+		else
+			{
+				theShell += " /C ";
+			}
+		
+			
+	    _theProcess = Runtime.getRuntime().exec(theShell + _invocation, getEnvironment(_subject), theDirectory); 
         }
     
     _stdInput = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
