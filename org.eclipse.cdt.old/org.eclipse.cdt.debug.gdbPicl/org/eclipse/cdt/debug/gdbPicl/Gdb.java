@@ -317,7 +317,7 @@ public class Gdb
                      {
                         _dbgLog = new PrintWriter(new FileOutputStream(optionArg), true);
                      }
-                     catch(Exception e) 
+                     catch(Exception e)
                      {
                          System.out.println("***ERROR: Could not open " + optionArg);
                         _dbgLog = null;
@@ -356,7 +356,7 @@ public class Gdb
                   }
                   else if (option.startsWith("jsrcpath"))
                   { ; }
-                  else if (option.startsWith("juserhome")) 
+                  else if (option.startsWith("juserhome"))
                   { ; }
                   else
                   {
@@ -473,7 +473,7 @@ public class Gdb
       // Gdb.msgOutput(getConsoleResourceString("COPYRIGHT_MSG"));
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
       String buildDate = (new java.text.SimpleDateFormat("yy/MM/dd").format(new Date())).toString();
-      
+
       Gdb.msgOutput("GdbPicl (" + buildDate + ")");
       Gdb.msgOutput("Copyright (c) 1995, 2002 International Business Machines Corporation.");
       Gdb.msgOutput("All rights reserved.");
@@ -532,19 +532,26 @@ public class Gdb
             // a problem.  You must run past the accept when debugging this code.
             if (!uidHost.equals(""))
             {
-               InetAddress addr1 = InetAddress.getLocalHost();
-               ipAddr = addr1.getHostAddress();
                String originatingHost = null;
-               originatingHost = addr1.getByName(ipAddr).getHostName();
+               if (uidHost.equals("localhost"))
+               {
+                  originatingHost = uidHost;
+               }
+               else
+               {
+                  InetAddress addr1 = InetAddress.getLocalHost();
+                  ipAddr = addr1.getHostAddress();
+                  originatingHost = addr1.getByName(ipAddr).getHostName();
 
-               /* some machine network configuration may still not give
-                  fully-qualified name if DSN suffix is not filled out. In this
-                  case we would use the numeric IP address until a better
-                  solution can be found since an IPaddr may not get through
-                  firewalls.
-               */
-               if (originatingHost.indexOf(".") == -1) // use ipAddr if not fully-qualified
-                  originatingHost = ipAddr;
+                  /* some machine network configuration may still not give
+                     fully-qualified name if DSN suffix is not filled out. In this
+                     case we would use the numeric IP address until a better
+                     solution can be found since an IPaddr may not get through
+                     firewalls.
+                  */
+                  if (originatingHost.indexOf(".") == -1) // use ipAddr if not fully-qualified
+                     originatingHost = ipAddr;
+               }
                UIStarter uiStarter =
                    new UIStarter(uidHost, uidPort, uidPid, uidTitle,
                                  originatingHost, String.valueOf(serverPort),
@@ -567,7 +574,7 @@ public class Gdb
             }
 
             Socket sock = server.accept();
-            if (Gdb.traceLogger.EVT) 
+            if (Gdb.traceLogger.EVT)
                 Gdb.traceLogger.evt(1,"########>>>>>>>> Gdb serverSocket.accept, will new DebugEngine then DebugEngine.start\n" );
 
             // Remove socket timeout (inherited from the ServerSocket
@@ -627,7 +634,7 @@ public class Gdb
       System.exit(0);
    }
 
- 
+
   // ***************************************************************************
   // Internationalization Initialization
   // ***************************************************************************
@@ -675,25 +682,25 @@ public class Gdb
   /**
    * Get a resource string from the Messages ResourceBundle object
    */
-   public static String getResourceString(String key) 
+   public static String getResourceString(String key)
    {
       if(_messagesBundle==null)
       {
           return key;
       }
       try
-      {  
+      {
          return _messagesBundle.getString(key);
       }
       catch (MissingResourceException e)
-      {  
+      {
          if(traceLogger.ERR)
              traceLogger.err(2,getResourceString("MISSING_RESOURCE_STRING")+key );
          return key+" ";
       }
    }
 
- 
+
 // ***************************************************************************
 //  Type Indices
 // ***************************************************************************
