@@ -59,7 +59,6 @@ public class TreeContentProvider extends TestContentProvider implements ITreeCon
 
     if ((element.depth() < 2) && ((_property == null) || (_property.getName().equals("contents"))))
 	{
-	    System.out.println(element.getName() + " does not have children");
 	    return false;
 	}
 
