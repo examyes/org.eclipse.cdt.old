@@ -123,6 +123,11 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	      doClear();
 	  }
 	  break;
+	  case CppProjectEvent.REFRESH:
+	  {
+	  	_viewer.resetView();
+	  }
+	  break;
       case CppProjectEvent.COMMAND:
 	  {
 	      if ((event.getStatus() == CppProjectEvent.START) || (event.getStatus() == CppProjectEvent.DONE))

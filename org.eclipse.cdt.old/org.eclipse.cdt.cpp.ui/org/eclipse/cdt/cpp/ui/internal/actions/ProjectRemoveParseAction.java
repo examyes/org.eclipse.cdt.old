@@ -6,7 +6,9 @@ package org.eclipse.cdt.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.dstore.core.model.*;
+
 import java.util.*;
 
 public class ProjectRemoveParseAction extends ProjectAction
@@ -24,5 +26,7 @@ public class ProjectRemoveParseAction extends ProjectAction
  {
   DataElement status = _dataStore.command(_removeCommand, _subject);
   _api.monitorStatus(status);
+  
+  _api.fireProjectChanged(CppProjectEvent.REFRESH, null);
  }
 }

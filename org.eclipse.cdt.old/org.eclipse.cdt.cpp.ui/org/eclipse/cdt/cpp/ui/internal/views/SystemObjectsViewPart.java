@@ -161,6 +161,44 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	    }
 	return theInput;
  }
+ 
+ public void projectChanged(CppProjectEvent event)
+ {
+  int type = event.getType();
+  IProject project = event.getProject();
+
+  switch (type)
+      {
+      case CppProjectEvent.OPEN:
+	  {
+	      doInput(project);
+	  }
+	  break;
+      case CppProjectEvent.CLOSE:
+      case CppProjectEvent.DELETE:
+	  {
+	      doClear();
+	  }
+	  break;
+	  case CppProjectEvent.REFRESH:
+	  {
+	  	_viewer.resetView();
+	  }
+	  break;
+      case CppProjectEvent.COMMAND:
+	  {
+	      if ((event.getStatus() == CppProjectEvent.START) || (event.getStatus() == CppProjectEvent.DONE))
+		  {
+		      doInput(project); 
+		  }
+	  }	  
+
+	  break;
+      default:
+	  super.projectChanged(event);
+	  break;
+      }
+ }
 }
 
 

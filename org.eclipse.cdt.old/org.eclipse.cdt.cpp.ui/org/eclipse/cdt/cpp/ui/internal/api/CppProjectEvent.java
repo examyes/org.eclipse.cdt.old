@@ -20,6 +20,7 @@ public class CppProjectEvent
     public static final int DELETE   = 3;
     public static final int COMMAND  = 4;
     public static final int VIEW_CHANGE = 5;
+    public static final int REFRESH  = 6;
     
     public static final int START    = 0;
     public static final int WORKING  = 1;

@@ -2346,6 +2346,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
 
 
+    public void fireProjectChanged(int event, IProject project)
+    {
+	_projectNotifier.fireProjectChanged(new CppProjectEvent(event, project));
+    }
+
+
     // temporary place for extending schema from UI side
     public void extendSchema(DataElement schemaRoot)
     {
