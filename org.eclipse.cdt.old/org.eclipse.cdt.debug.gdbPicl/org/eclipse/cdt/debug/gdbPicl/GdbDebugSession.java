@@ -616,29 +616,11 @@ public class GdbDebugSession extends DebugSession {
 					+ programName
 					+ " parms="
 					+ parms);
+					
+		programName = escapedString(programName);
+					
 		_mainProgram = programName;
-		
-		StringBuffer buffer = new StringBuffer();
-		char[] mainProg = _mainProgram.toCharArray();
-		
-		for (int i=0; i<mainProg.length; i++)
-		{
-			if (escapeChars.indexOf(mainProg[i]) >= 0)
-			{
-				buffer.append('\\');
-			}
-			buffer.append(mainProg[i]);
-		}
-		
-		_mainProgram = buffer.toString();
-		
-		if (Gdb.traceLogger.DBG)
-		{
-			Gdb.traceLogger.dbg(1, "Program name parsed:  " + _mainProgram);
-		}
-		
-		programName = _mainProgram;
-		
+				
 		if (_mainProgram.indexOf("/") != -1)
 		{
 			int last = _mainProgram.lastIndexOf("/");
@@ -1782,7 +1764,7 @@ public class GdbDebugSession extends DebugSession {
 				Gdb.traceLogger.evt(
 					1,
 					"---------------- GdbDebugSession.terminateDebuggee is recreating Managers incase of following prepareProgram (restart)");
-			createManagers();
+//			createManagers();
 
 		//}
 		return true;
@@ -2052,6 +2034,30 @@ public class GdbDebugSession extends DebugSession {
 		updateStorage();
 //		updateBreakpoints();
 	}
+	
+	private String escapedString(String str)
+	{
+		if (str == null)
+			return null;
+		
+		String escapeChars=" ~`!@#$%^&()+={}[];,:*?\"<>|";
+		
+		StringBuffer buffer = new StringBuffer();
+		char[] charStr = str.toCharArray();
+		boolean escaped = false;
+		
+		for (int i=0; i<charStr.length; i++)
+		{
+			if (escapeChars.indexOf(charStr[i]) >= 0 && !escaped)
+			{
+				buffer.append('\\');
+			}
+			buffer.append(charStr[i]);
+			escaped = (escaped)? false : (charStr[i]=='\\' );
+		}
+
+		return buffer.toString();
+	}
 
 	// data members
 
@@ -2076,9 +2082,4 @@ public class GdbDebugSession extends DebugSession {
 	private Hashtable _parts = new Hashtable();
 	private Hashtable _dllToStop = new Hashtable();
 	protected String _dataAddress = "";
-	
-	private String escapeChars=" ~`!@#$%^&()+={}[];,\\/:*?\"<>|";
-	
-	// \/:*?"<>|
-
 }
