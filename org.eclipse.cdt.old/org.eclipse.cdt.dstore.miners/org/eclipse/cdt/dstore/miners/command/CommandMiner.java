@@ -76,7 +76,7 @@ public class CommandMiner extends Miner
   {
   	DataElement input = getCommandArgument(theElement, 1);
   	DataElement de = (DataElement)subject.dereference().get(1);
-  	sendInputToCommand(de.getName().trim(), input.getName());
+  	sendInputToCommand(de.getName().trim(), input.getName(), getCommandStatus(subject));
   }
   else if (name.equals("C_CANCEL"))
       {
@@ -102,13 +102,13 @@ public class CommandMiner extends Miner
    }
   }
   CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, _patterns);
-  _threads.put(invocation, newCommand);
+  _threads.put(/*invocation*/status.getAttribute(DE.A_ID), newCommand);
   newCommand.start();
  }
 
- private void sendInputToCommand(String theCommand, String input)
+ private void sendInputToCommand(String theCommand, String input, DataElement status)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(status.getAttribute(DE.A_ID));
 
      
    if (theThread != null)
@@ -138,7 +138,7 @@ public class CommandMiner extends Miner
 
  private void cancelCommand (String theCommand, DataElement status)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(/*theCommand*/ status.getAttribute(DE.A_ID));
 
   if (theThread != null)
   { 	
