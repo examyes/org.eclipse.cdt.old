@@ -186,11 +186,11 @@ class CommandMinerThread extends MinerThread
  private String          _invocation;
  private BufferedReader  _stdInput;
  private BufferedReader  _stdError;
- private DataElement     _files;
  private Patterns        _patterns;
  private FileSystemMiner _fileMiner;
  private Process         _theProcess;
  private String          _fileLocation;
+    private DataElement _subject;
 
  private OutputHandler    _stdOutputHandler;
  private OutputHandler    _stdErrorHandler;
@@ -200,7 +200,7 @@ class CommandMinerThread extends MinerThread
   
   _status     = status;
   _dataStore  =  theElement.getDataStore();
-
+  _subject = theElement;
  
   _invocation = invocation.trim();
   _patterns = thePatterns;
@@ -209,7 +209,6 @@ class CommandMinerThread extends MinerThread
   _fileMiner = (FileSystemMiner)(sch.getMiners("com.ibm.dstore.miners.filesystem.FileSystemMiner"));
   
   //This dataElement is where the handleQuerys from FileSystem Miner get put during a find file
-  _files      = _dataStore.createObject(theElement, "directory", "",theElement.getSource().trim());
   createObject("command", "> " + _invocation);
   createObject("stdout","");
   _dataStore.update(status);
@@ -514,7 +513,7 @@ public String removeWhitespace(String theLine)
     file = file.substring(lastBckSlash+1,file.length());
   
    DataElement subStatus = _dataStore.createObject(null, "status", "start");
-   _fileMiner.findFile(_files, file, subStatus);
+   _fileMiner.findFile(_subject, file, subStatus);
    DataElement theFile = subStatus.get(0);
 
    if (theFile != null) 

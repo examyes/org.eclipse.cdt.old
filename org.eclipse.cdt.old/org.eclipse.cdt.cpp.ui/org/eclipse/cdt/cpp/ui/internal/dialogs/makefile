@@ -1,8 +1,9 @@
+.SUFFIXES: .java .class
 
-all: BuildDialog.class
+.java.class:
+       javac %s
 
-BuildDialog.class: BuildDialog.java
-	javac BuildDialog.java
+all: BuildDialog.class ChooseProjectDialog.class
 
 clean:
 	rm *.class

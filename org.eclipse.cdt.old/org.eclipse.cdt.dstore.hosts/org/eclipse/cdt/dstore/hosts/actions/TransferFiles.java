@@ -60,13 +60,17 @@ public class TransferFiles extends Thread
 	DataStore sourceDataStore = _source.getDataStore();
 	DataStore targetDataStore = _target.getDataStore();
 
-	String sourceMapping = sourceDataStore.mapToLocalPath(_source.getSource());
-	String targetMapping = _target.getSource() + java.io.File.separator + _source.getName();
-	
 	transfer(_source, _target);
 
-	if (targetDataStore == _plugin.getDataStore())
+	if (targetDataStore == sourceDataStore)
 	    {
+		
+	    }
+	else if ((targetDataStore == _plugin.getDataStore()))
+	    {
+		String sourceMapping = sourceDataStore.mapToLocalPath(_source.getSource());
+		String targetMapping = _target.getSource() + java.io.File.separator + _source.getName();
+		
 		java.io.File newSource = new java.io.File(sourceMapping);
 		if (newSource.exists())
 		    {
@@ -75,7 +79,11 @@ public class TransferFiles extends Thread
 	    }
 
 	targetDataStore.refresh(_target);
-	_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
+
+	if (_listener != null)
+	    {
+		_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
+	    }
     }
 
     private void transfer(DataElement source, DataElement target)
@@ -89,8 +97,10 @@ public class TransferFiles extends Thread
 	String targetStr = target.getSource();
 	String newSourceStr = targetStr + java.io.File.separator + source.getName();
 
-	_listener.getShell().getDisplay().asyncExec(new Notify("Creating " + newSourceStr + "...")); 
-	
+	if (_listener != null)
+	    {
+		_listener.getShell().getDisplay().asyncExec(new Notify("Creating " + newSourceStr + "...")); 
+	    }
 
 	DataElement copiedSource = targetDataStore.createObject(target, 
 								source.getType(), 
@@ -98,7 +108,23 @@ public class TransferFiles extends Thread
 								newSourceStr);
 
 	// if we're receiving
-	if (targetDataStore == _plugin.getDataStore())
+	if (targetDataStore == sourceDataStore)
+	    {
+		// files on the same system
+		// simply copy them
+		DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
+		if (cmd != null)
+		    {
+			String invocation = "cp -f " + source.getSource() + " " + newSourceStr;
+			DataElement invocationElement = targetDataStore.createObject(null, 
+										     "invocation", 
+										     invocation);
+			ArrayList args = new ArrayList();
+			args.add(invocationElement);
+			targetDataStore.command(cmd, args, target);
+		    }
+	    }
+	else if (targetDataStore == _plugin.getDataStore())
 	    {
 		source.getFileObject();
 	    }

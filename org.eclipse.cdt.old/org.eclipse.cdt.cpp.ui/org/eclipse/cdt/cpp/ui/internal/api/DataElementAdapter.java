@@ -88,6 +88,11 @@ public class DataElementAdapter
 	    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
 	    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
 
+	    if (pathElement != null)
+		{
+		    api.parse(e);
+		}
+
 	    return pathElement;
 	}
     return null;

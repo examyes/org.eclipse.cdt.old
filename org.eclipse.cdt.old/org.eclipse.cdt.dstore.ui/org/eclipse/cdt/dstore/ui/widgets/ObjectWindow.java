@@ -547,7 +547,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    }
 	else
 	    {
-		widget = new Tree(treeContainer, SWT.NULL);
+		widget = new Tree(treeContainer, SWT.MULTI);
 		widget.setLayoutData(textData);
 		
 		_viewer = new ExtendedTreeViewer(this, (Tree)widget, _toolBar);
@@ -560,8 +560,13 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		_dataStore.getDomainNotifier().addDomainListener(_toolBar);
 	    }
 
-	IOpenAction openAction = _loader.getOpenAction();
-	_viewer.setOpenAction(openAction);
+	IOpenAction openAction = null;
+	if (_loader != null)
+	    {
+		openAction = _loader.getOpenAction();
+		_viewer.setOpenAction(openAction);
+	    }
+
 	_selectionListener = new ObjectSelectionChangedListener(this, openAction); 
 	_viewer.setListener(_selectionListener);
  

@@ -796,6 +796,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    }
   }
 
+    public DataElement findWorkspaceElement()
+    {
+	return findWorkspaceElement(_plugin.getDataStore());
+    }
+
     public DataElement findWorkspaceElement(DataStore dataStore)
     {
 	DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
@@ -1396,15 +1401,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.createObject(closedRemoteProjectD, DE.T_UI_COMMAND_DESCRIPTOR, "Open Remote Project", "com.ibm.cpp.ui.internal.actions.ProjectOpenAction");
          
        
-	
-
-	/***
 	// replicated project actions
-	DataElement replicateFrom = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							   "Replicate from...",
+	DataElement replicate = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, 
+							   "Replicate");
+
+	DataElement replicateFrom = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR, 
+							   "From...",
 							   "com.ibm.cpp.ui.internal.actions.ReplicateFromAction");
-	replicateFrom.
-	***/					   
+	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_FROM");
+
+	DataElement replicateTo = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR, 
+							   "To...",
+							   "com.ibm.cpp.ui.internal.actions.ReplicateToAction");
+	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_TO");
 
 	DataElement configureCmd = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "configure", 

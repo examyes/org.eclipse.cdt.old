@@ -153,8 +153,12 @@ public class MenuHandler
 	  {	    
 	      if (_openPerspectiveAction == null)
 		  {
-		      _openPerspectiveAction = _loader.loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
-								  getLocalizedString("ui.Open_Perspective_On"));
+		      if (_loader != null)
+			  {
+			      _openPerspectiveAction = _loader.loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
+									  getLocalizedString("ui.Open_Perspective_On"));
+		  
+			  }
 		  }
 	      
 	      if (_openPerspectiveAction != null)
@@ -202,9 +206,12 @@ public class MenuHandler
 			  }
 		      else if (type.equals(DE.T_UI_COMMAND_DESCRIPTOR))
 			  {
-			      CustomAction action = _loader.loadAction(objects, subDescriptor);
-			      if (action != null)
-				  menu.add(action);
+			      if (_loader != null)
+				  {
+				      CustomAction action = _loader.loadAction(objects, subDescriptor);
+				      if (action != null)
+					  menu.add(action);
+				  }
 			  }
 		  }
 
