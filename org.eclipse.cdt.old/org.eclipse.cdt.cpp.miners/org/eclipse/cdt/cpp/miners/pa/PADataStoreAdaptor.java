@@ -371,7 +371,7 @@ public class PADataStoreAdaptor {
    deleteChildren(callTreeRoot);
    dataStore.deleteObject(traceElement, attributesRoot);
    dataStore.deleteObject(traceElement, callArcsRoot);
-     
+   // System.out.println(traceFunctionsRoot.getNestedSize());
  }
   
  /**
@@ -514,7 +514,9 @@ public class PADataStoreAdaptor {
   for (int i=0; i < numTraceFuncs; i++) {
    DataElement funcElement = funcRoot.get(i);
    PATraceFunction trcFunc = (PATraceFunction)_elementToTraceFuncMap.get(funcElement);
-   createCallMap(funcElement, trcFunc);
+   if (trcFunc != null) {
+    createCallMap(funcElement, trcFunc);
+   }
   }
   
  }
@@ -523,7 +525,7 @@ public class PADataStoreAdaptor {
   * Create the caller/callee relations for a given trace function
   */
  private void createCallMap(DataElement funcElement, PATraceFunction trcFunc) {
-   
+  
   ArrayList callees = trcFunc.getCallees();
   
   int numCallees = callees.size();
