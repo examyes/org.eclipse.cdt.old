@@ -1,0 +1,217 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>updateProfile Command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>updateProfile command</h3>
+<p>The <b>updateProfile</b> command can be used to update the current document
+view's profile.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <p>updateProfile [ all ]</p>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">all</td>
+    <td valign="top">Use the optional parameter <b>all</b> to indicate that you
+      want to update the profiles of all of the document views that are
+      currently open.&nbsp; Note that if <b>updateProfile</b> has never been
+      issued for a document view, issuing <b>updateProfile all</b> will not
+      affect that document view.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>updateProfile</b> command is normally issued when a document view is
+  created, but it may be issued at any time to allow the document view to reflect
+  changes to the profile.</p>
+  <p>The following is the sequence of events that occur when the <b>updateProfile</b>
+  command is issued against a document view:</p>
+  <ol>
+    <li>The <b>readonly</b> parameter is set to <b>off</b>.</li>
+    <li>The <b>includedClasses</b> parameter is set such that all classes are
+      included.</li>
+    <li>The <b>excludedClasses</b> parameter is set such that no classes are
+      excluded.</li>
+    <li>Any registered <b>classes</b> are deregistered.</li>
+    <li>The style characters set by the <b>styleAttributes</b> parameter are
+      cleared.</li>
+    <li>The <b>popup</b> parameter is reset to <b>default</b>.</li>
+    <li>The <b>expandTabs</b> parameter is reset to <b>default</b>.</li>
+    <li>The <b>fields</b> parameter is reset such that there are no editing
+      fields.</li>
+    <li>The <b>tabs</b> parameter is reset to <b>default</b>.</li>
+
+    <p>
+    <li>The base profile is set to the value returned by
+      <b>current.updateProfile.baseProfile</b>.</li>
+    <li>If the base profile is <b>ispf</b>, <b>seu</b>, or <b>xedit</b>, then<b>:</b>
+      <ul>
+        <li><b>prefixArea</b> is set to <b>on</b>
+        <li><b>prefixProtect</b> is set to <b>off</b>
+        <li>if sequence numbers starting in column 1 are set in the document, then
+          <b>prefixAreaText</b> is set to <b>sequenceNumbers</b>, and
+          <b>hideSequenceNumbers</b> is set to <b>on</b>;&nbsp;
+          otherwise, the <b>hideSequenceNumbers</b> parameter is reset to <b>default</b>.
+      </ul>
+      Otherwise:
+      <ul>
+        <li><b>prefixArea</b> is reset to <b>default</b>
+        <li><b>prefixProtect</b> is set to <b>on</b>
+        <li>the <b>hideSequenceNumbers</b> parameter is reset to <b>default</b>
+        <li>any lines excluded by prefix commands in a previous base profile are
+          shown.
+      </ul>
+    </li>
+    <li>If the base profile is <b>vi</b>, then<b>:</b>
+      <ul>
+        <li><b>commandLine</b> is set to <b>off</b>
+        <li><b>autoCheck</b> is set to <b>off</b>.
+      </ul>
+      Otherwise:
+      <ul>
+        <li><b>commandLine</b> is reset to <b>default</b>
+        <li><b>autoCheck</b> is set to <b>on</b>.
+      </ul>
+    </li>
+
+    <p>
+    <li>All of the <b>show</b> elements for this view are deleted.</li>
+    <li>The <b>style</b> parameter for the current view's view of all of the
+      document's elements is reset.</li>
+    <li>The <b>elementClasses</b> parameter for the current view's view of all
+      of the document's elements is reset.</li>
+    <li>The color palette is set to the value returned by <b>current.updateProfile.palette</b>.</li>
+    <li>The built-in styles are assigned style attributes based on the values
+      returned by <b>current.updateProfile.paletteAttributes.</b><i>style</i><b>.</b><i>palette</i>,
+      where <b><i>style</i></b> is substituted for each of the built-in styles
+      and <i>palette</i> is the value returned by the <b>palette</b>
+      parameter.&nbsp;
+      Refer to the <b>styleAttributes</b> parameter for information on the built-in styles.</li>
+
+    <p>
+    <li>All of the <b>keys</b> settings are cleared.</li>
+    <li>All of the <b>mouseEvents</b> settings are cleared.</li>
+    <li>All of the <b>actions</b> settings are cleared.</li>
+    <li>New <b>keys</b> settings based on <b>baseProfile</b> are set.</li>
+    <li>New <b>mouseEvents</b> settings based on <b>baseProfile</b> are set.</li>
+    <li>New <b>actions</b> settings based on <b>current.updateProfile.userActions</b>
+      are set.</li>
+    <li>Additional <b>keys</b> settings based on <b>current.updateProfile.userKeyActions</b>
+      are set.</li>
+    <li>Additional <b>mouseEvents</b> settings base on <b>current.updateProfile.userMouseActions</b>
+      are set.</li>
+    <li>All of the <b>commands</b> settings are cleared.</li>
+    <li>New <b>commands</b> settings based on <b>current.updateProfile.userCommands</b>
+      are set.</li>
+    <li>The user profile from <b>current.updateProfile.userProfile</b> is
+      issued.</li>
+
+    <p>
+    <li>If the current view has a parser, the <b>resetParser</b> method of the <b>LpexParser</b>
+      interface is issued, and the parser is discarded.</li>
+    <li>The parse pending list is cleared.</li>
+    <li>If <b>current.updateProfile.noParser</b> is set to <b>off</b>, the new
+      parser name is retrieved from <b>current.updateProfile.parser</b>.</li>
+    <li>If the parser name is <b>associated</b>, the parser name is retrieved
+      from the <b>current.updateProfile.parserAssociation.</b><i>extension</i>
+      parameter.</li>
+    <li>The parser class is retrieved form <b>current.updateProfile.parserClass.</b><i>parserName</i>.</li>
+    <li>An instance of the parser is created.</li>
+    <li>The <b>totalParse</b> method of the <b>LpexParser</b> interface is issued.</li>
+
+    <p>
+    <li>If the document has a <b>name</b>, the readonly attribute of the file is
+      queried.&nbsp; If the file is readonly, the <b>readonly</b> parameter for this
+      document view is set to <b>on</b>.</li>
+    <li>If there are any <b>LpexViewListener</b> objects listening to this view,
+      the <b>updateProfile</b> method is issued.</li>
+  </ol>
+
+  <p>The <b>updateProfile</b> command must be issued after any change to one or
+  more of the <b>updateProfile.</b><i>parameter</i> parameters in order to have
+  the change reflected in any of the active document views.</p>
+  <p>Note that if you are constructing your own <b>LpexView</b> object and you
+  customize it by adding actions, commands, key settings or mouse event
+  settings, the <b>updateProfile</b> command will eliminate these settings
+  unless you perform customizations of this sort within the <b>updateProfile</b>
+  method of an <b>LpexViewListener</b>.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>updateProfile all </pre>
+  The following sequence changes the base profile of the current document view to <b>xedit</b>:
+  <pre>set updateProfile.baseProfile xedit
+updateProfile </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlcload.htm#top">load</a> command<br>
+<a href="rlcparse.htm#top">parse</a> command<br>
+<a href="rlpactcl.htm#top">actionClass</a> parameter<br>
+<a href="rlpactio.htm#top">actions</a> parameter<br>
+<a href="rlpautoc.htm#top">autoCheck</a> parameter<br>
+<a href="rlpbsprf.htm#top">baseProfile</a> parameter<br>
+<a href="rlpclss.htm#top">class</a> parameter<br>
+<a href="rlpclsss.htm#top">classes</a> parameter<br>
+<a href="rlpcmdcl.htm#top">commandClass</a> parameter<br>
+<a href="rlpcmdln.htm#top">commandLine</a> parameter<br>
+<a href="rlpcmds.htm#top">commands</a> parameter<br>
+<a href="rlpelmtc.htm#top">elementClasses</a> parameter<br>
+<a href="rlpexpt.htm#top">expandTabs</a> parameter<br>
+<a href="rlpflds.htm#top">fields</a> parameter<br>
+<a href="rlphdseq.htm#top">hideSequenceNumbers</a> parameter<br>
+<a href="rlpkeyac.htm#top">keyAction</a> parameter<br>
+<a href="rlpkeys.htm#top">keys</a> parameter<br>
+<a href="rlpmousa.htm#top">mouseAction</a> parameter<br>
+<a href="rlpmouse.htm#top">mouseEvents</a> parameter<br>
+<a href="rlpname.htm#top">name</a> parameter<br>
+<a href="rlppalet.htm#top">palette</a> parameter<br>
+<a href="rlpparsr.htm#top">parser</a> parameter<br>
+<a href="rlppopup.htm#top">popup</a> parameter<br>
+<a href="rlppfxa.htm#top">prefixArea</a> parameter<br>
+<a href="rlppfxat.htm#top">prefixAreaText</a> parameter<br>
+<a href="rlppfxpr.htm#top">prefixProtect</a> parameter<br>
+<a href="rlpreado.htm#top">readonly</a> parameter<br>
+<a href="rlpsqnms.htm#top">sequenceNumbers</a> parameter<br>
+<a href="rlpshow.htm#top">show</a> parameter<br>
+<a href="rlpstyl.htm#top">style</a> parameter<br>
+<a href="rlpstyla.htm#top">styleAttributes</a> parameter<br>
+<a href="rlptabs.htm#top">tabs</a> parameter<br>
+<a href="rlsdfact.htm#setParser">setParser</a> action<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+
+<a href="rlpupbpr.htm#top">updateProfile.baseProfile</a> parameter<br>
+<a href="rlpupext.htm#top">updateProfile.extensions</a> parameter<br>
+<a href="rlpupnop.htm#top">updateProfile.noParser</a> parameter<br>
+<a href="rlpuppl.htm#top">updateProfile.palette</a> parameter<br>
+<a href="rlpuppla.htm#top">updateProfile.paletteAttributes</a> parameter<br>
+<a href="rlpuppls.htm#top">updateProfile.palettes</a> parameter<br>
+<a href="rlpupps.htm#top">updateProfile.parser</a> parameter<br>
+<a href="rlpuppsa.htm#top">updateProfile.parserAssociation</a> parameter<br>
+<a href="rlpuppsc.htm#top">updateProfile.parserClass</a> parameter<br>
+<a href="rlpuppss.htm#top">updateProfile.parsers</a> parameter<br>
+<a href="rlpupua.htm#top">updateProfile.userActions</a> parameter<br>
+<a href="rlpupuc.htm#top">updateProfile.userCommands</a> parameter<br>
+<a href="rlpupuka.htm#top">updateProfile.userKeyActions</a> parameter<br>
+<a href="rlpupuma.htm#top">updateProfile.userMouseActions</a> parameter<br>
+<a href="rlpupupr.htm#top">updateProfile.userProfile</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

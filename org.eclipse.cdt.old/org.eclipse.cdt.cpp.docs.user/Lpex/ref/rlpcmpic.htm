@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>compare.ignoreCase Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>compare.ignoreCase parameter</h3>
+<p>The <b>compare.ignoreCase</b> parameter determines whether differences in
+character case are significant when comparing files with the <b>compare</b>
+command.&nbsp;</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>compare.ignoreCase</b> is scoped to the current view.<br>
+  <b>current.compare.ignoreCase</b> is scoped to the current view.<br>
+  <b>default.compare.ignoreCase</b> is globally scoped.<br>
+  <b>install.compare.ignoreCase</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query compare.ignoreCase
+set compare.ignoreCase [default | on | off]
+query current.compare.ignoreCase
+query default.compare.ignoreCase
+set default.compare.ignoreCase [install | on | off]
+query install.compare.ignoreCase </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      compare.ignoreCase</b> command, the current view will use the value of <b>default.compare.ignoreCase</b>
+      to determine if the <b>compare</b> command should be case sensitive.</td>
+  </tr>
+  <tr>
+    <td valign="top">on</td>
+    <td valign="top">If you specify the <b>on</b> parameter for the <b>set
+      compare.ignoreCase</b> command, the <b>compare</b> command will not be
+      case sensitive for the current view.&nbsp; If you specify the <b>on</b>
+      parameter for the set <b>default.compare.ignoreCase</b> command, the <b>compare</b>
+      command will not be case sensitive for all of the document views that have
+      <b>compare.ignoreCase</b> set to <b>default</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">off</td>
+    <td valign="top">If you specify the <b>off</b> parameter for the <b>set
+      compare.ignoreCase</b> command, the <b>compare</b> command will be case
+      sensitive for the current view.&nbsp; If you specify the <b>off</b>
+      parameter for the set <b>default.compare.ignoreCase</b> command, the <b>compare</b>
+      command will be case sensitive for all of the document views that have <b>compare.ignoreCase</b>
+      set to <b>default</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.compare.ignoreCase</b> command, all of the document views that
+      have <b>compare.ignoreCase</b> set to <b>default</b> will use the value of
+      <b>install.compare.ignoreCase</b> to determine if the <b>compare</b>
+      command should not be case sensitive.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>query compare.ignoreCase</b> command will return the case
+  sensitivity setting that will be used by the <b>compare</b> command.</p>
+  <p>If you do not specify any of the parameters for the <b>set
+  compare.ignoreCase</b> command, <b>default</b> is assumed.</p>
+  <p>If you do not specify any of the parameters for the <b>set
+  default.compare.ignoreCase</b> command, <b>install</b> is assumed.</p>
+  <p>The <b>query current.compare.ignoreCase</b> command will return <b>on</b>
+  if, for the current view, the <b>compare</b> command will not be case
+  sensitive, and <b>off</b> if, for the current view, the <b>compare</b> command
+  will be case sensitive.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query compare.ignoreCase
+set compare.ignoreCase on
+query current.compare.ignoreCase
+query default.compare.ignoreCase
+set default.compare.ignoreCase off
+query install.compare.ignoreCase </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlccompr.htm#top">compare</a> command<br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a> parameter<br>
+<a href="rlpcmpil.htm#top">compare.ignoreLeadingBlanks</a> parameter<br>
+<a href="rlpcmpit.htm#top">compare.ignoreTrailingBlanks</a> parameter<br>
+<a href="rlpcmpia.htm#top">compare.ignoreAllBlanks</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>keyAction Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>keyAction parameter</h3>
+<p>The <b>keyAction</b> parameter may be used to query or set an action
+assignment for a specified key or series of keys.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p>The current view.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query keyAction.[<i>modifer</i>-][...]<i>key</i>[,[<i>modifer</i>-][...]<i>key</i>][...][.<i>context</i>][...][.secondary]
+set keyAction.[<i>modifer</i>-][...]<i>key</i>[,[<i>modifer</i>-][...]<i>key</i>][...][.<i>context</i>][...][.secondary] [<i>action</i>] </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>modifier</i></td>
+    <td valign="top">The <i>modifier</i> parameter can be any of <b>a</b>, <b>c</b>,
+      or <b>s</b>.&nbsp;
+      <b>a</b> is used to indicate the alt key modifier.&nbsp;
+      <b>c</b> is used to indicate the ctrl key modifier.&nbsp;
+      <b>s</b> is used to indicate the shift key modifier.&nbsp;
+      For example if you want to set a key for
+      Ctrl+Alt+A you can specify &quot;c-a-a&quot;.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>key</i></td>
+    <td valign="top">The <i>key</i> parameter can be any of the following:&nbsp;
+      <ul>
+        <li><b>a</b> through <b>z</b></li>
+        <li><b>0</b> through <b>9</b></li>
+        <li><b>f1</b> through <b>f12</b></li>
+        <li><b>ampersand</b></li>
+        <li><b>asterisk</b></li>
+        <li><b>atSign</b></li>
+        <li><b>backQuote</b></li>
+        <li><b>backSlash</b></li>
+        <li><b>backSpace</b></li>
+        <li><b>closeBrace</b></li>
+        <li><b>closeBracket</b></li>
+        <li><b>closeParenthesis</b></li>
+        <li><b>colon</b></li>
+        <li><b>comma</b></li>
+        <li><b>delete</b></li>
+        <li><b>dollarSign</b></li>
+        <li><b>doubleQuote</b></li>
+        <li><b>down</b></li>
+        <li><b>end</b></li>
+        <li><b>enter</b></li>
+        <li><b>equals</b></li>
+        <li><b>escape</b></li>
+        <li><b>exclamationMark</b></li>
+        <li><b>greaterThanSign</b></li>
+        <li><b>home</b></li>
+        <li><b>hyphen</b></li>
+        <li><b>insert</b></li>
+        <li><b>karat</b></li>
+        <li><b>left</b></li>
+        <li><b>lessThanSign</b></li>
+        <li><b>numberSign</b></li>
+        <li><b>openBrace</b></li>
+        <li><b>openBracket</b></li>
+        <li><b>openParenthesis</b></li>
+        <li><b>pageDown</b></li>
+        <li><b>pageUp</b></li>
+        <li><b>percent</b></li>
+        <li><b>period</b></li>
+        <li><b>plus</b></li>
+        <li><b>questionMark</b></li>
+        <li><b>quote</b></li>
+        <li><b>right</b></li>
+        <li><b>semicolon</b></li>
+        <li><b>slash</b></li>
+        <li><b>space</b></li>
+        <li><b>tab</b></li>
+        <li><b>tilde</b></li>
+        <li><b>underscore</b></li>
+        <li><b>up</b></li>
+        <li><b>verticalBar</b></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><i>context</i></td>
+    <td valign="top">The <i>context</i> parameter can be any of <b>t</b>, <b>p</b>,
+      or <b>c</b>.&nbsp; <b>t</b> is used to indicate that the key should be
+      available when the cursor is in the text area. <b>p</b> is used to
+      indicate that the key should be available when the cursor is in the prefix
+      area.&nbsp; <b>c</b> is used to indicate that the key should be available
+      when the cursor is on the command line.&nbsp; If you do not specify a
+      context, the context is assumed to be <b>t</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">secondary</td>
+    <td valign="top">Use the <b>secondary</b> parameter if you wish to assign an
+      additional key to an action.&nbsp; Only one primary key can be assigned to
+      an action at a time but you can assign as many secondary keys to the same
+      action as you want.&nbsp; The primary key that is assigned to an action is
+      the one that is returned by the <b>actionKey</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>action</i></td>
+    <td valign="top">Use the <i>action</i> parameter to specify the action that
+      you want to assign to the specified key.&nbsp; If you do not specify an
+      action, the key will not have an action assigned to it.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>To assign an action to a series of keys, specify additional keys separated by
+  commas.&nbsp; All of the specified keys must be issued in the correct order
+  before the action will be invoked.</p>
+
+  <p>When the <b>vi</b> base profile is active, the editor does not use the <b>keyAction</b>
+  parameter for key assignments in the text area.&nbsp;
+  Instead, the editor's <b>vi</b> key handler is activated.</p>
+
+  <p>The actual keys received by the editor depend on the
+  environment (workstation configuration, operating system, Java support, etc.)
+  in which the editor is running.&nbsp;
+  Certain key actions may not be activated in some environments.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query keyAction.c-f
+set keyAction.a-backSpace.t.p.secondary undo
+set keyAction.c-x,c-x.t findQuickMark </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpactky.htm#top">actionKey</a> parameter<br>
+<a href="rlpactkt.htm#top">actionKeyText</a> parameter<br>
+<a href="rlpkeys.htm#top">keys</a> parameter<br>
+<a href="rlpupuka.htm#top">updateProfile.userKeyActions</a> parameter<br>
+<a href="rlbvi.htm#top">vi</a> base profile</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>processPrefix Command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>processPrefix command</h3>
+<p>The <b>processPrefix</b> command can be used to process the prefix commands
+in the prefix area.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>processPrefix <i>profile</i> </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>profile</i></td>
+    <td valign="top">Use the <i>profile</i> parameter to indicate which profile
+      should be used to process the prefix commands.&nbsp; The <b>processPrefix</b>
+      command only processes the prefix commands if <i>profile</i> is <b>seu</b>,
+      <b>xedit</b>, or <b>ispf</b>.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>processPrefix</b> command will attempt to process all of the prefix
+  commands in the prefix area starting at the top of the document and moving
+  down until no more prefix commands remain.&nbsp; If a prefix command is
+  encountered that is not recognized, it is left in the prefix area.&nbsp; Refer
+  to the following profiles to see the prefix commands that are processed by the
+  <b>processPrefix</b> command:</p>
+</blockquote>
+<blockquote>
+  <ul>
+    <li>ispf</li>
+    <li>seu</li>
+    <li>xedit.</li>
+  </ul>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>processPrefix seu
+processPrefix xedit </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlpbsprf.htm#top">baseProfile</a> parameter<br>
+<a href="rlpinpfx.htm#top">inPrefix</a> parameter<br>
+<a href="rlppfxa.htm#top">prefixArea</a> parameter<br>
+<a href="rlppfxpo.htm#top">prefixPosition</a> parameter<br>
+<a href="rlppfxtx.htm#top">prefixText</a> parameter<br>
+<a href="rlpupbpr.htm#top">updateProfile.baseProfile</a> parameter<br>
+<a href="rlsdfact.htm#processPrefix">processPrefix</a> action<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

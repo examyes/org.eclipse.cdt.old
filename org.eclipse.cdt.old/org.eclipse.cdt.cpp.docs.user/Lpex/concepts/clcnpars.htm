@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<title>Parsers </title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>Parsers</h3>
+
+<p>A parser is an editor extension that acts interactively on a
+document to improve the presentation of the data in that document.&nbsp;
+A parser uses colors and fonts to highlight different
+items in a programming language source document.&nbsp;
+For example, language keywords are highlighted in one color, variable names
+in another, and string literals in yet another.&nbsp;
+The original indentation of the program code is maintained.&nbsp;
+The editor comes with a selection of parsers for common programming languages.</p>
+
+<p><strong>Using a Parser</strong></p>
+<p>When you open a file, the editor checks whether the
+file name extension of that file is associated with a parser.&nbsp;
+For example, the editor comes configured to recognize and parse C/C++
+program files.&nbsp;
+If you open a file called <b>sample.c</b>, the editor invokes the C/C++ parser.&nbsp;
+If you open a file called <b>sample.asm</b>, the editor invokes the HLASM parser.</p>
+
+<p>Typically, the parser will: </p>
+<ul>
+    <li>Set default fonts and colors </li>
+    <li>Color and emphasize the data being displayed </li>
+    <li>Set up special actions for keys </li>
+    <li>Set up language-specific additions to the editing pane
+        pop-up menu.</li>
+</ul>
+
+<p><strong>Elements, Classes, and Styles</strong></p>
+<p>In a programming language source document, each line is an element.&nbsp;
+An element class definition describes the type of data the element contains.&nbsp;
+An element may contain more than one element class.&nbsp;
+The element displayed below includes the <b>code</b> and <b>comment</b> classes.</p>
+
+<p>The style of an element determines the way an element will be displayed.&nbsp;
+The parser sets a string of style characters that is equal in
+length to the text of the element.&nbsp;
+The editor draws each character of an element text with the attributes
+of the style character that is in the corresponding position in the element
+style string.&nbsp;
+The style of the element displayed below includes keyword, layout blank,
+punctuation, identifier, operator, quoted string, and comment style characters.</p>
+
+
+<!-- <p>Note:&nbsp; Class names are chosen by the writer of the parser.</p> -->
+<div align="center"><center>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <td valign="top" width="40%">&nbsp;</td>
+        <td align="center" valign="top" width="30%"><b>code</b> class</td>
+        <td align="center" valign="top" width="30%"><b>comment</b> class</td>
+    </tr>
+    <tr>
+        <td valign="top" width="40%">Line of C code, element text <br>
+                                     Element style
+        </td>
+        <td align="center" valign="top" width="30%"><pre>
+&nbsp;if (x == &quot;test&quot;)&nbsp;&nbsp;
+&nbsp;kk_pi_oo_qqqqqqp_&nbsp;</td>
+        <td align="center" valign="top" width="30%"><pre>
+/*test for x*/
+cccccccccccccc</td>
+</pre>
+    </tr>
+</table>
+</center></div>
+
+<p><strong>Live Parsing</strong></p>
+<p>The editor monitors and records all the changes that you make to a document.&nbsp;
+As you complete each line, the editor examines that line for constructs specific to
+the type of document being edited.&nbsp;
+For example, in a C program, the parser recognizes the text between an open-comment
+marker (<tt>/*</tt>) and a close-comment marker (<tt>*/</tt>) as being comments.&nbsp;
+It displays those comments in the color specified for the comment style character, and
+marks the lines with the <b>comment</b> element class.</p>
+
+<p><strong>Using a Parser's Pop-up Menu</strong></p>
+<p>A parser may add its own selections to the editing pane's pop-up menu,
+specifying which elements are displayed in the document or adding actions
+specific to the type of document being edited.&nbsp;
+For example, you can select the <tt><b>Filter view-&gt;Functions</b></tt>
+selection from the pop-up menu to display only function headers in a C/C++
+document.</p>
+
+<hr>
+
+<p> <a href="cllnotic.htm#top"><img
+src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a>
+</p>
+</body>
+</html>

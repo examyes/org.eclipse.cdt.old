@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>help.configuration Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>help.configuration parameter</h3>
+<p>The <b>help.configuration</b> parameter may be used to query or set the
+configuration file that will be used by the <b>help</b> command.&nbsp;
+The help configuration file governs the setup of the html help system.&nbsp;
+Without a correct help configuration file, it is not possible to view the editor help.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>help.configuration</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query help.configuration
+set help.configuration </pre>
+</blockquote>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>query help.configuration</b> command will return the help
+  configuration file that will be used by the <b>help</b> command.</p>
+  <p>The configuration file must be specified using a full path name.</p>
+  <p>If a configuration file is specified that cannot be understood by the help
+  system, the editor will behave as though no configuration file were specified,
+  in which case no help will be shown.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query help.configuration
+set help.configuration f:\help.cfg </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlchelp.htm#top">help</a> command<br>
+<a href="rlphlplo.htm#top">help.location</a> parameter<br>
+<a href="rlphlphp.htm#top">help.homepage</a> parameter<br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

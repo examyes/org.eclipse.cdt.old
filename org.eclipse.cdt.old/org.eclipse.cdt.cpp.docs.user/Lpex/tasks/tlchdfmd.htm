@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Changing the default marking mode</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>Changing the default marking mode</h3>
+<p>You can change the default marking mode to one of the following choices:</p>
+<blockquote>
+  <table border="0" cellpadding="5" cellspacing="0" width="90%">
+    <tr>
+      <td valign="top" width="15%"><strong>stream</strong></td>
+      <td valign="top" width="85%">Default. This is the marking mode commonly
+        used in most text editors and word processors. Text is selected on a
+        character to character basis.
+        <p>Unlike the other marking modes, the cursor cannot be moved to another
+        part of the file without deselecting a block of selected text. Once text
+        is selected, the next keyboard action will usually affect the entire
+        selection of text. For example, pressing a keyboard character will
+        replace the entire selected text with that character, and pressing the <strong>Delete</strong>
+        key will remove the entire selected block.</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" width="15%"><strong>character</strong></td>
+      <td valign="top" width="85%">Similar to stream, except that the cursor is <em>not</em>
+        coupled with the marked text selection. You can mark a block of text
+        with the mouse, then click the mouse at another location in the file
+        without unmarking the block of text already selected.</td>
+    </tr>
+    <tr>
+      <td valign="top" width="15%"><strong>element</strong></td>
+      <td valign="top" width="85%">Whole elements are marked. The cursor is not
+        coupled to the marked text selection.</td>
+    </tr>
+    <tr>
+      <td valign="top" width="15%"><strong>rectangle</strong></td>
+      <td valign="top" width="85%">Rectangular areas can be marked starting at
+        any character position on a line and extending over as many lines as
+        needed. The cursor is not coupled to the marked text selection.</td>
+    </tr>
+  </table>
+</blockquote>
+<p>&nbsp;</p>
+<p>To change the default block marking mode for new files or files already open
+for editing:</p>
+<ol>
+  <li>Select <strong>File</strong> from the main menu bar.</li>
+  <li>Select <strong>Preferences</strong>. The Application Preferences dialog
+    appears.</li>
+  <li>Expand the <strong>Editor</strong> preferences tree by clicking on the +
+    sign.</li>
+  <li>Select <strong>Block</strong> from the expanded list of <strong>Editor</strong>
+    preference settings. The Block pane appears in the Application Preferences
+    dialog.</li>
+  <li>Select one of the available block types form the <strong>Default block
+    type</strong> selection list.</li>
+  <li>Click <strong>Apply</strong> to apply the selected block type to the
+    editor.</li>
+  <li>Click <strong>OK</strong> to close the Application Preferences dialog.</li>
+</ol>
+<p>&nbsp;</p>
+<p>To change the default block marking mode only for the current file:</p>
+<ol>
+  <li>Press <strong>Esc</strong> to open the editor command line.</li>
+  <li>Enter the following command on the editor command line:
+    <blockquote>
+      <pre>set block.defaultType <em>mode</em></pre>
+    </blockquote>
+    <p>where <em>mode</em> is one of the marking modes described above.</p>
+  </li>
+</ol>
+<p>&nbsp;</p>
+<p>To determine the current default block marking mode for the current file:</p>
+<ol>
+  <li>Press <strong>Esc</strong> to open the editor command line.</li>
+  <li>Enter the following command on the editor command line:
+    <blockquote>
+      <pre>query current.block.defaultType</pre>
+    </blockquote>
+  </li>
+  <li>The current blocking mode is returned in the message area below the
+    editing area.</li>
+</ol>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelt.gif" width="112" height="9"><br>
+<a href="tlmrkman.htm#top">Marking and manipulating blocks of text</a><br>
+<a href="tlmarkt.htm#top">Marking blocks of text</a><br>
+<a href="tlunmark.htm#top">Unmarking a block of text</a><br>
+<a href="tlmanipt.htm#top">Manipulating blocks of text</a></p>
+<p><a href="file:///C:/work/jlpex/source/concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+
+</html>

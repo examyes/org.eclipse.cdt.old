@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>hideSequenceNumbers Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>hideSequenceNumbers parameter</h3>
+<p>The <b>hideSequenceNumbers</b> parameter may be used to query or set the visibility
+of the document's sequence numbers.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>hideSequenceNumbers</b> is scoped to the current view.<br>
+  <b>current.hideSequenceNumbers</b> is scoped to the current view.<br>
+  <b>default.hideSequenceNumbers</b> is globally scoped.<br>
+  <b>install.hideSequenceNumbers</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query hideSequenceNumbers
+set hideSequenceNumbers [ default | on | off ]
+query current.hideSequenceNumbers
+query default.hideSequenceNumbers
+set default.hideSequenceNumbers [ install | on | off ]
+query install.hideSequenceNumbers </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      hideSequenceNumbers</b> command, the current view will use the value of <b>default.hideSequenceNumbers</b>
+      to determine if the document's sequence numbers should be visible or not.</td>
+  </tr>
+  <tr>
+    <td valign="top">on</td>
+    <td valign="top">If you specify the <b>on</b> parameter for the <b>set
+      hideSequenceNumbers</b> command, the document's sequence numbers will be
+      hidden in the current view.&nbsp; If you specify the <b>on</b> parameter
+      for the <b>set default.hideSequenceNumbers</b> command, the document's
+      sequence numbers will be hidden in all document views that have <b>hideSequenceNumbers</b>
+      set to <b>default</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">off</td>
+    <td valign="top">If you specify the <b>off</b> parameter for the <b>set
+      hideSequenceNumbers</b> command, the document's sequence numbers will be
+      visible in the current view.&nbsp; If you specify the <b>off</b> parameter
+      for the <b>set default.hideSequenceNumbers</b> command, the document's
+      sequence numbers will be visible in all document views that have <b>hideSequenceNumbers</b>
+      set to <b>default</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.hideSequenceNumbers</b> command, all of the views that have <b>hideSequenceNumbers</b>
+      set to <b>default</b> will use the value of <b>install.hideSequenceNumbers</b>
+      to determine if the document's sequence numbers should be visible or not.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>If you do not specify any of the parameters for the <b>set
+  hideSequenceNumbers</b> command, <b>default</b> is assumed.</p>
+  <p>If you do not specify any of the parameters for the <b>set
+  default.hideSequenceNumbers</b> command, <b>install</b> is assumed.</p>
+  <p>The <b>query current.hideSequenceNumbers</b> command will return <b>off</b>
+  if the document's sequence numbers are visible, and <b>on</b> if the
+  document's sequence numbers are hidden.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query hideSequenceNumbers
+set hideSequenceNumbers off
+query current.hideSequenceNumbers
+query default.hideSequenceNumbers
+set default.hideSequenceNumbers off
+query install.hideSequenceNumbers </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a>l parameter<br>
+<a href="rlpsqnm.htm#top">sequenceNumber</a> parameter<br>
+<a href="rlpsqnms.htm#top">sequenceNumbers</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

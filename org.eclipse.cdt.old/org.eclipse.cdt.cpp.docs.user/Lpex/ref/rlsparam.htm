@@ -1,0 +1,764 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Editor parameters</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>Editor parameters</h3>
+<p>The editor window is fully programmable through the use of an extensive
+command, action, and parameter set.&nbsp;
+You can use commands and parameters to customize the editor window, search for
+or change text in your document, and perform many other functions.</p>
+<p>Select a parameter from the list below to display complete reference
+information for that parameter.&nbsp;
+Parameters can be set and queried unless noted otherwise.</p>
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
+  <tr>
+    <th align="left" valign="top" width="35%" nowrap>Parameter Name</th>
+    <th align="left" valign="top" nowrap>Description</th>
+  </tr>
+  <tr>
+    <td valign="top" colspan="2" width="35%">
+      <hr size="1">
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpactar.htm#top">actionArgument</a></td>
+    <td valign="top">Sets or queries the general purpose argument that is used
+      by editor actions.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpactcl.htm#top">actionClass</a></td>
+    <td valign="top">Defines a user-defined action for the current view.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpactky.htm#top">actionKey</a></td>
+    <td valign="top">Returns the primary key that is assigned to a specified
+      action. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpactkt.htm#top">actionKeyText</a></td>
+    <td valign="top">Obtains a translated text string for the primary key that
+      is assigned to the specified action. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpactrp.htm#top">actionRepeat</a></td>
+    <td valign="top">Query a numeric interpretation of the <b>actionArgument</b>
+      parameter. This value is used by many actions as a repeat count.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpactio.htm#top">actions</a></td>
+    <td valign="top">Lists all actions defined for the current view. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpautoc.htm#top">autoCheck</a></td>
+    <td valign="top">Sets or queries if the editor is implicitly completing document
+      changes when the cursor is moved off a changed line.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpbsprf.htm#top">baseProfile</a></td>
+    <td valign="top">Returns the base profile that was used the last time the
+      <b>updateProfile</b> command was issued. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpbeep.htm#top">beep</a></td>
+    <td valign="top">Determines if a beep is emitted when the <b>screenShow</b>
+      command is issued.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblkbe.htm#top">block.bottomElement</a></td>
+    <td valign="top">Returns the element number of the last element in the block
+      selection. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblkbp.htm#top">block.bottomPosition</a></td>
+    <td valign="top">Returns the column number of the last column of the last
+      element in the block selection. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblktp.htm#top">block.defaultType</a></td>
+    <td valign="top">Sets or queries the default block type.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblkiv.htm#top">block.inView</a></td>
+    <td valign="top">Indicates if the block selection is in the current view.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblktx.htm#top">block.text</a></td>
+    <td valign="top">Returns the text that is currently selected. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblkte.htm#top">block.topElement</a></td>
+    <td valign="top">Returns the element number of the first element in the
+      block selection. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblkto.htm#top">block.topPosition</a></td>
+    <td valign="top">Returns the column number of the first column of the first
+      element in the block selection. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpblkty.htm#top">block.type</a></td>
+    <td valign="top">Returns the current block type. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpchngs.htm#top">changes</a></td>
+    <td valign="top">Returns the number of completed undoable changes made since
+      the last save. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpclss.htm#top">class</a></td>
+    <td valign="top">Registers or deregister element classes for the current view.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpclsss.htm#top">classes</a></td>
+    <td valign="top">Returns a list of all of the element classes that are currently
+      registered for the current view. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpcmdcl.htm#top">commandClass</a></td>
+    <td valign="top">Defines a user-defined command for the current view.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpcmdln.htm#top">commandLine</a></td>
+    <td valign="top">Sets or queries the visibility of the command line.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpcmds.htm#top">commands</a></td>
+    <td valign="top">Returns a list all of the commands defined for the current
+      view. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpcmpia.htm#top">compare.ignoreAllBlanks</a></td>
+    <td valign="top">Determines whether differences in the number of blanks in a
+      line are significant when comparing files with the <b>compare</b> command.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpcmpic.htm#top">compare.ignoreCase</a></td>
+    <td valign="top">Determines whether differences in character case are
+      significant when comparing files with the <b>compare</b> command.</td>
+  </tr>
+  <tr>
+    <td valign="top" width="35%"><a href="rlpcmpil.htm#top">compare.ignoreLeadingBlanks</a></td>
+    <td valign="top">Determines whether differences in the number of blanks at
+      the start of a line are significant when comparing files with the <b>compare</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpcmpit.htm#top">compare.ignoreTrailingBlanks</a></td>
+    <td valign="top">Determines whether differences in the number of blanks at
+      the end of a line are significant when comparing files with the <b>compare</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpcrrnt.htm#top">current</a></td>
+    <td valign="top">Returns the current setting of a parameter. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpcrrky.htm#top">currentKey</a></td>
+    <td valign="top">Returns the key that was last issued. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpcrsrw.htm#top">cursorRow</a></td>
+    <td valign="top">Sets or queries the physical row of the line containing the
+      cursor.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpdeflt.htm#top">default</a></td>
+    <td valign="top">Sets the default setting of a parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpdeflp.htm#top">defaultProfile</a></td>
+    <td valign="top">Sets or queries the name of a java properties file used to
+      specify default settings for the editor.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpdirty.htm#top">dirty</a></td>
+    <td valign="top">Indicates if there is an uncomplete change in the current document.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpdsply.htm#top">displayPosition</a></td>
+    <td valign="top">Sets or queries the cursor's display column position in the
+      current element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpdocid.htm#top">documentId</a></td>
+    <td valign="top">Returns a unique integer that can be used to identify the
+      document. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpelmt.htm#top">element</a></td>
+    <td valign="top">Returns the ordinal number of the current element. Query
+      only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpelmtc.htm#top">elementClasses</a></td>
+    <td valign="top">Sets or queries classes for the current element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpelmts.htm#top">elements</a></td>
+    <td valign="top">Returns the total number of elements in the current
+      document. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpemphl.htm#top">emphasisLength</a></td>
+    <td valign="top">Sets or queries the number of characters that are
+      emphasized.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpexccl.htm#top">excludedClasses</a></td>
+    <td valign="top">Sets or queries the element classes that should be excluded
+      from the current view.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpexph.htm#top">expandHide</a></td>
+    <td valign="top">Set or queries the visibility of the expand/hide area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpexpha.htm#top">expandHideAreaWidth</a></td>
+    <td valign="top">Returns the width in pixels of the expand/hide area. Query
+      only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpexpt.htm#top">expandTabs</a></td>
+    <td valign="top">Sets or queries the state of tab character expansion.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpexpnd.htm#top">expanded</a></td>
+    <td valign="top">Sets or queries the visibility of hidden elements between
+      the current element and the next visible element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpflds.htm#top">fields</a></td>
+    <td valign="top">Sets or queries the current editing fields.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndas.htm#top">findText.asis</a></td>
+    <td valign="top">Sets or queries case sensitivity setting for the <b>findText</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndbl.htm#top">findText.block</a></td>
+    <td valign="top">Sets or queries if find operations are restricted to
+      selected text.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndcl.htm#top">findText.columns</a></td>
+    <td valign="top">Sets or queries if find operations are restricted to
+      selected columns of text.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndem.htm#top">findText.emphasis</a></td>
+    <td valign="top">Sets or queries whether found text is emphasized.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfnden.htm#top">findText.endColumn</a></td>
+    <td valign="top">Sets or queries the end column used if find operations are
+      restricted to a column range.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndfi.htm#top">findText.findText</a></td>
+    <td valign="top">Sets or queries text to be found by the <b>findText</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndma.htm#top">findText.mark</a></td>
+    <td valign="top">Sets or queries whether found text is selected.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndrg.htm#top">findText.regularExpression</a></td>
+    <td valign="top">Sets or queries the regular expression setting for the <b>findText</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndrp.htm#top">findText.replaceText</a></td>
+    <td valign="top">Sets or queries replacement text used by the <b>findText</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndst.htm#top">findText.startColumn</a></td>
+    <td valign="top">Sets or queries the start column used if find operations
+      are restricted to a column range.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfndwr.htm#top">findText.wrap</a></td>
+    <td valign="top">Sets or queries the wrap setting for the <b>findText</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfont.htm#top">font</a></td>
+    <td valign="top">Sets or queries the current font used to display text in
+      the edit window.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfrcav.htm#top">forceAllVisible</a></td>
+    <td valign="top">Sets or queries the forced visibility of all of document
+      elements.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfrcv.htm#top">forceVisible</a></td>
+    <td valign="top">Sets or queries the forced visibility of the current element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfmtln.htm#top">formatLine</a></td>
+    <td valign="top">Sets or queries the visibility of the format line.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpfmttx.htm#top">formatLineText</a></td>
+    <td valign="top">Sets or queries the text displayed in the format line.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlphdrmk.htm#top">headerMark</a></td>
+    <td valign="top">Determine if the current element is a header element for an
+      excluded mark. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlphlpcf.htm#top">help.configuration</a></td>
+    <td valign="top">Sets or queries the configuration file used by the <b>help</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlphlphp.htm#top">help.homepage</a></td>
+    <td valign="top">Sets or queries the default help page that is displayed
+      when no other help is available for a help request.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlphlplo.htm#top">help.location</a></td>
+    <td valign="top">Sets or queries the location of properties files used to
+      map help requests to the appropriate html pages.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlphex.htm#top">hex</a></td>
+    <td valign="top">Returns the hexadecimal value of the character at the
+      current cursor location. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlphdseq.htm#top">hideSequenceNumbers</a></td>
+    <td valign="top">Sets or queries whether document sequence numbers should be
+      visible or not.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpinccl.htm#top">includedClasses</a></td>
+    <td valign="top">Sets or queries the element classes that should be included in the
+      current view.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpinpfx.htm#top">inPrefix</a></td>
+    <td valign="top">Sets or queries the cursor location in the prefix or text
+      area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpinsrt.htm#top">insertMode</a></td>
+    <td valign="top">Sets or queries the current insertion mode.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpinstl.htm#top">install</a></td>
+    <td valign="top">Returns the installation setting of a parameter. Query
+      only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpinstp.htm#top">installProfile</a></td>
+    <td valign="top">Sets or queries the name of a java properties file used to
+      specify installation settings for the editor.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpkeyac.htm#top">keyAction</a></td>
+    <td valign="top">Sets or queries the action assignment for a specified key.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpkeys.htm#top">keys</a></td>
+    <td valign="top">Lists all keys to which actions have been assigned. Query
+      only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlplengt.htm#top">length</a></td>
+    <td valign="top">Returns the length of the current element. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpline.htm#top">line</a></td>
+    <td valign="top">Returns the line number of the current element. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlplines.htm#top">lines</a></td>
+    <td valign="top">Returns the total number of lines in the current document.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmntsq.htm#top">maintainSequenceNumbers</a></td>
+    <td valign="top">Sets or queries whether the editor is maintaining the
+      current document's sequence numbers.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmk.htm#top">mark</a></td>
+    <td valign="top">Sets, queries, or removes a named mark.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmkexp.htm#top">markExcluded</a></td>
+    <td valign="top">Sets or queries the excluded attribute of a mark.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmkexh.htm#top">markExcludedHeader</a></td>
+    <td valign="top">Sets or queries whether a specified mark should have a
+      header element when it is excluded.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmkhlt.htm#top">markHighlight</a></td>
+    <td valign="top">Sets or queries whether a specified mark should be
+      highlighted.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmkid.htm#top">markId</a></td>
+    <td valign="top">Returns the id number of a specified mark. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmkinc.htm#top">markIncluded</a></td>
+    <td valign="top">Sets or queries the included attribute of a mark.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmkprt.htm#top">markProtect</a></td>
+    <td valign="top">Sets or queries the protect attribute of a mark.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmksty.htm#top">markStyle</a></td>
+    <td valign="top">Sets or queries the style character associated with a mark.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmsgln.htm#top">messageLine</a></td>
+    <td valign="top">Sets or queries the visibility of the message line.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmsgtx.htm#top">messageText</a></td>
+    <td valign="top">Sets or queries text displayed in the message line.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmousa.htm#top">mouseAction</a></td>
+    <td valign="top">Sets or queries the action assignment for a specified mouse
+      event.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpmouse.htm#top">mouseEvents</a></td>
+    <td valign="top">Lists all mouse events to which actions have been assigned.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpname.htm#top">name</a></td>
+    <td valign="top">Sets or queries the current document's file name.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppalet.htm#top">palette</a></td>
+    <td valign="top">Returns the color palette in use the last time the
+      <b>updateProfile</b> command was issued. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpparsr.htm#top">parser</a></td>
+    <td valign="top">Returns the name of the parser used by the current view.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppixel.htm#top">pixelPosition</a></td>
+    <td valign="top">Returns the pixel offset of the current cursor position.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppopup.htm#top">popup</a></td>
+    <td valign="top">Sets or queries the contents of the pop-up menu.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpposit.htm#top">position</a></td>
+    <td valign="top">Sets or queries the cursor column position on the current
+      element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppfxa.htm#top">prefixArea</a></td>
+    <td valign="top">Sets or queries the visibility of the prefix area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppfxat.htm#top">prefixAreaText</a></td>
+    <td valign="top">Sets or queries the text that is displayed in the prefix area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppfxaw.htm#top">prefixAreaWidth</a></td>
+    <td valign="top">Returns the width in pixels of the prefix area. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppfxpo.htm#top">prefixPosition</a></td>
+    <td valign="top">Sets or queries the cursor column position in the prefix
+      area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppfxpr.htm#top">prefixProtect</a></td>
+    <td valign="top">Sets or queries if the cursor can be moved into the
+      prefix area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlppfxtx.htm#top">prefixText</a></td>
+    <td valign="top">Sets or queries the current element's prefix text.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprtbm.htm#top">print.bottomMargin</a></td>
+    <td valign="top">Sets or queries the bottom margin used by the <b>print</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprtfn.htm#top">print.font</a></td>
+    <td valign="top">Sets or queries the font used by the <b>print</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprtlm.htm#top">print.leftMargin</a></td>
+    <td valign="top">Sets or queries the left margin used by the <b>print</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprtln.htm#top">print.lineNumbers</a></td>
+    <td valign="top">Sets or queries if the <b>print</b> command
+      prints line numbers at the start of each line.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprtrm.htm#top">print.rightMargin</a></td>
+    <td valign="top">Sets or queries the right margin used by the <b>print</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprttk.htm#top">print.tokenized</a></td>
+    <td valign="top">Sets or queries if the <b>print</b> command
+      prints tokenized attributes displayed by the parser.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpprttm.htm#top">print.topMargin</a></td>
+    <td valign="top">Sets or queries the top margin used by the <b>print</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpreado.htm#top">readonly</a></td>
+    <td valign="top">Sets or queries if the document can be edited with the
+      current view.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlprcrd.htm#top">recording</a></td>
+    <td valign="top">Sets or queries if the editor is recording document changes.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlprowht.htm#top">rowHeight</a></td>
+    <td valign="top">Returns the height in pixels of a text row.
+      Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlprows.htm#top">rows</a></td>
+    <td valign="top">Returns the number of rows of text that can be displayed in
+      the text window. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsvtxt.htm#top">save.textLimit</a></td>
+    <td valign="top">Sets or queries the maximum line length used by the <b>save</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsvtrm.htm#top">save.trim</a></td>
+    <td valign="top">Sets or queries if the <b>save</b> command should trim
+      trailing blanks from all of the lines in the document.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpscrll.htm#top">scroll</a></td>
+    <td valign="top">Sets or queries the number of pixels that the current view
+      is scrolled to the right.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsqdtx.htm#top">sequenceDefaultText</a></td>
+    <td valign="top">Sets or queries the sequence-numbers default text part.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsqnm.htm#top">sequenceNumber</a></td>
+    <td valign="top">Sets or queries the current element's sequence number.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsqnms.htm#top">sequenceNumbers</a></td>
+    <td valign="top">Sets or queries the starting column and width of the
+      sequence numbers.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsqnmf.htm#top">sequenceNumbersFormat</a></td>
+    <td valign="top">Sets or queries the format string used to display the
+      sequence numbers area.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsqtx.htm#top">sequenceText</a></td>
+    <td valign="top">Sets or queries the current element's sequence-numbers text part.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsichr.htm#top">shiftInCharacter</a></td>
+    <td valign="top">Sets or queries the character used to display emulated
+      SI control characters.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsochr.htm#top">shiftOutCharacter</a></td>
+    <td valign="top">Sets or queries the character used to display emulated
+      SO control characters.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpshow.htm#top">show</a></td>
+    <td valign="top">Determine if the current view's current element is a show
+      element. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpshso.htm#top">showSosi</a></td>
+    <td valign="top">Sets or queries if the editor displays emulated SO/SI control
+      characters.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpsrcen.htm#top">sourceEncoding</a></td>
+    <td valign="top">Sets or queries the character encoding of the file on its
+      originating platform.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpstat.htm#top">status</a></td>
+    <td valign="top">Sets or queries the command status.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpstatl.htm#top">statusLine</a></td>
+    <td valign="top">Sets or queries the visibility of the status line.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpstyl.htm#top">style</a></td>
+    <td valign="top">Sets or queries style characters that used to display the
+      text on the current element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpstyla.htm#top">styleAttributes</a></td>
+    <td valign="top">Sets or queries style attributes for a style character or
+      for one of the built in styles.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlptabs.htm#top">tabs</a></td>
+    <td valign="top">Set or queries tab stops used by the <b>nextTabStop</b>
+      and <b>prevTabStop</b> actions.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlptxt.htm#top">text</a></td>
+    <td valign="top">Sets or queries the current element's text.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlptxtaw.htm#top">textAreaWidth</a></td>
+    <td valign="top">Returns the width in pixels of the text area. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlptxtwd.htm#top">textWidth</a></td>
+    <td valign="top">Returns the width in pixels of the current element's text.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlptopex.htm#top">topExpanded</a></td>
+    <td valign="top">Sets or queries the visibility of hidden elements between
+      the top of the document and the first visible element.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupbpr.htm#top">updateProfile.baseProfile</a></td>
+    <td valign="top">Sets or queries the base profile that will be used by the
+      <b>updateProfile</b> command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupext.htm#top">updateProfile.extensions</a></td>
+    <td valign="top">Lists all of file extensions that are associated with
+      parsers. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupnop.htm#top">updateProfile.noParser</a></td>
+    <td valign="top">Sets or queries if the <b>updateProfile</b>
+      command should set a parser.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpuppl.htm#top">updateProfile.palette</a></td>
+    <td valign="top">Sets or queries the color palette that will be used by the
+      <b>updateProfile</b> command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpuppla.htm#top">updateProfile.paletteAttributes</a></td>
+    <td valign="top">Sets or queries style attributes used for a specified style
+      and palette when the <b>updateProfile</b> command is issued.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpuppls.htm#top">updateProfile.palettes</a></td>
+    <td valign="top">Lists all color palettes available to the <b>updateProfile</b>
+      command. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupps.htm#top">updateProfile.parser</a></td>
+    <td valign="top">Sets or queries the parser used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpuppsa.htm#top">updateProfile.parserAssociation</a></td>
+    <td valign="top">Sets or queries the parser associated with a file
+      extension.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpuppsc.htm#top">updateProfile.parserClass</a></td>
+    <td valign="top">Sets or queries the class name for a parser.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpuppss.htm#top">updateProfile.parsers</a></td>
+    <td valign="top">Lists all parsers that are available to the <b>updateProfile</b>
+      command. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupua.htm#top">updateProfile.userActions</a></td>
+    <td valign="top">Sets or queries user actions used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupuc.htm#top">updateProfile.userCommands</a></td>
+    <td valign="top">Sets or queries user commands used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupuka.htm#top">updateProfile.userKeyActions</a></td>
+    <td valign="top">Sets or queries user key actions used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupuma.htm#top">updateProfile.userMouseActions</a></td>
+    <td valign="top">Sets or queries user mouse actions used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpupupr.htm#top">updateProfile.userProfile</a></td>
+    <td valign="top">Sets or queries the user profile used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpusesc.htm#top">useSourceColumns</a></td>
+    <td valign="top">Sets or queries
+      <!-- the manner in which the editor determines column-related settings. -->
+      whether the editor uses column characteristics of the file in its source
+      character encoding.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpvers.htm#top">version</a></td>
+    <td valign="top">Returns the version of the editor. Query only.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="rlpvisib.htm#top">visible</a></td>
+    <td valign="top">Determine if the current view's current element is visible
+      in the current view. Query only.</td>
+  </tr>
+</table>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands, actions, and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>font Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>font parameter</h3>
+<p>The <b>font</b> parameter may be used to query or set the current font used
+to display text in the edit window.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>font</b> is scoped to the current view.<br>
+  <b>current.font</b> is scoped to the current view.<br>
+  <b>default.font</b> is globally scoped.<br>
+  <b>install.font</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query font
+set font [ default | &quot;<i>fontName</i>&quot; ]
+query current.font
+query default.font
+set default.font [ install | &quot;<i>fontName</i>&quot; ]
+query install.font </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      font</b> command, the current view will use the value of <b>default.font</b>
+      to determine the font that should be used to display text in the edit
+      window.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>fontName</i></td>
+    <td valign="top">If you specify the <i>fontName</i> parameter for the <b>set
+      font</b> command, the font indicated by <i>fontName</i> will be used by
+      the current view.&nbsp; If you specify the <i>fontName</i> parameter for
+      the <b>set default.font</b> command, the font indicated by fontName will
+      be used by all views that have <b>font</b> set to <b>default</b>.&nbsp;
+      The <i>fontName</i> parameter should be in one of the following forms:
+      <ul>
+        <li><i>fontname</i>-<i>style</i>-<i>height</i></li>
+        <li><i>fontname</i>-<i>height</i></li>
+        <li><i>fontname</i>-<i>style</i></li>
+        <li><i>fontname</i></li>
+      </ul>
+      <p>where <i>style</i> is one of&nbsp; <b>bold</b>, <b>italic</b>,
+      <b>bold&nbsp;italic</b>, or <b>regular</b>,
+      and <i>height</i> is a decimal representation of the font height.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.font</b> command, all of the views that have <b>font</b> set to <b>default</b>
+      will use the value of <b>install.font</b> to determine the font that
+      should be used to display text in the edit window.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>If you do not specify any of the parameters for the <b>set font</b>
+  command, <b>default</b> is assumed.</p>
+  <p>If you do not specify any of the parameters for the <b>set default.font</b>
+  command, <b>install</b> is assumed.</p>
+  <p>The <b>query current.font</b> command will return the font that is being
+  used by the current view.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query font
+set font &quot;Courier New-8&quot;
+query current.font
+query default.font
+set default.font &quot;Courier New-bold-10&quot;
+query install.font </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Author" content="Bruce Baker">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>input Command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>input command</h3>
+<p>The <b>input</b> command can be used to get user input, then run an editor
+command.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>input [ &quot;<i>label</i>&quot; [ &quot;<i>text</i>&quot; ] ] &quot;<i>command</i>&quot; </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>label</i></td>
+    <td valign="top">Use the <i>label</i> parameter to specify the prompt that
+      you want to display for the user.&nbsp; If <i>label</i> contains quotes or
+      backslashes, they must be quoted with the backslash character.&nbsp; If
+      you do not wish to specify a prompt string but you need to specify the <i>text</i>
+      parameter, then you must specify an empty string (&quot;&quot;).</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>text</i></td>
+    <td valign="top">Use the <i>text</i> parameter to specify the text that you
+      want to initialize the entry field with.&nbsp; If <i>text</i> contains
+      quotes or backslashes, they must be quoted with the backslash character.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>command</i></td>
+    <td valign="top">Use the <i>command</i> parameter to specify the command
+      that you want to run if the user hits enter from the input prompt.&nbsp;
+      The command must include any parameters and trailing spaces.&nbsp; The
+      text that the user entered into the entry field will be appended to the
+      command's parameters.&nbsp; The command may be any valid editor
+      command.&nbsp; If the command contains quotes or backslashes, they must be
+      quoted with the backslash character.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>input &quot;Enter fill character:&quot; &quot;block fill &quot; 
+input &quot;&quot; &quot;text&quot; &quot;set messageText &quot; </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlsdfact.htm#blockFill">blockFill</a> action<br>
+<a href="rlsdfact.htm#locateLine">locateLine</a> action<br>
+<a href="rlsdfact.htm#nameMark">nameMark</a> action<br>
+<a href="rlsdfact.htm#rename">rename</a> action<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+
+</html>

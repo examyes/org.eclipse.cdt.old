@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Author" content="Bruce Baker">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>get Command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>get command</h3>
+<p>The <b>get</b> command can be used to import a file into the current document
+at the current cursor position.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>get { prompt [ &quot;<i>fileName</i>&quot; ] 
+&nbsp;&nbsp;&nbsp; | &quot;<i>fileName</i>&quot; 
+&nbsp;&nbsp;&nbsp; } </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">prompt [ &quot;<i>fileName</i>&quot; ]</td>
+    <td valign="top">Use the parameter <b>prompt</b> to indicate that the get
+      file dialog should be displayed to allow the user to select a file.&nbsp;
+      If the optional parameter <i>fileName</i> is specified, the get file
+      dialog will be initialized with the specified file name.</td>
+  </tr>
+  <tr>
+    <td valign="top">&quot;<i>fileName</i>&quot;</td>
+    <td valign="top">Use the parameter <i>fileName</i> to indicate the file that
+      should be used.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter will be set to one of the following:</p>
+</blockquote>
+<blockquote>
+  <table border="0" cellpadding="5" width="100%">
+    <tr>
+      <td valign="top">null</td>
+      <td valign="top">Indicates that the <b>get</b> command successfully
+        located and loaded the specified file.</td>
+    </tr>
+    <tr>
+      <td valign="top">file.notFound</td>
+      <td valign="top">Indicates that the <b>get</b> command could not locate
+        the specified file.</td>
+    </tr>
+    <tr>
+      <td valign="top">findText.errorReading</td>
+      <td valign="top">Indicates that the <b>get</b> command encountered an
+        error while reading the file.</td>
+    </tr>
+  </table>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>get &quot;test.java&quot; 
+get prompt </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlsdfact.htm#get">get</a> action<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+
+</html>

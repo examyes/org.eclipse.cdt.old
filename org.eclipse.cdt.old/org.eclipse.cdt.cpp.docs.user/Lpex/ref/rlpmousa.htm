@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>mouseAction Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>mouseAction parameter</h3>
+<p>The <b>mouseAction</b> parameter may be used to query or set an action
+assignment for a specified mouse event.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p>The current view.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query mouseAction.[<i>modifer</i>-][...]{dragged |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; entered |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exited |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hover |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; moved |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pressed.<i>count</i> |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; released.<i>count</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }[.<i>context</i>][...]
+set mouseAction.[<i>modifer</i>-][...]{dragged |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; entered |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; exited |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hover |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; moved |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pressed.<i>count</i> |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; released.<i>count</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }[.<i>context</i>][...] [<i>action</i>] </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>modifier</i></td>
+    <td valign="top">The <b>modifier</b> parameter can be any of <b>1</b>, <b>2</b>,
+      <b>3</b>, <b>a</b>, <b>c</b>, or <b>s</b>.&nbsp;
+      <b>1</b> is used to indicate mouse button 1.&nbsp;
+      <b>2</b> is used to indicate mouse button 2.
+      <b>3</b> is used to indicate mouse button 3.&nbsp;
+      <b>a</b> is used to indicate the alt key modifier.&nbsp;
+      <b>c</b> is used to indicate the ctrl key modifier.&nbsp;
+      <b>s</b> is used to indicate the shift key modifier.&nbsp;
+      For example if you want to specify an action for double clicking mouse button
+      1 with the Ctrl and Alt keys pressed, you can specify <b>c-a-1-pressed.2</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">dragged</td>
+    <td valign="top">Use the <b>dragged</b> parameter to assign an action to the
+      mouse dragged event.</td>
+  </tr>
+  <tr>
+    <td valign="top">entered</td>
+    <td valign="top">Use the <b>entered</b> parameter to assign an action to the
+      mouse entered event.</td>
+  </tr>
+  <tr>
+    <td valign="top">exited</td>
+    <td valign="top">Use the <b>exited</b> parameter to assign an action to the
+      mouse exited event.</td>
+  </tr>
+  <tr>
+    <td valign="top">hover</td>
+    <td valign="top">Use the <b>hover</b> parameter to assign an action to the
+      mouse hover event.</td>
+  </tr>
+  <tr>
+    <td valign="top">moved</td>
+    <td valign="top">Use the <b>moved</b> parameter to assign an action to the
+      mouse moved event.</td>
+  </tr>
+  <tr>
+    <td valign="top">pressed.<i>count</i></td>
+    <td valign="top">Use the <b>pressed</b> parameter to assign an action to a
+      mouse pressed event.&nbsp;
+      The <i>count</i> parameter indicates the number
+      of button clicks that are associated with the event.</td>
+  </tr>
+  <tr>
+    <td valign="top">released.<i>count</i></td>
+    <td valign="top">Use the <b>released</b> parameter to assign an action to a
+      mouse released event.&nbsp;
+      The <i>count</i> parameter indicates the number of button clicks that are
+      associated with the event.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>context</i></td>
+    <td valign="top">The <i>context</i> parameter can be any of <b>t</b>, <b>p</b>,
+      or <b>e</b>.&nbsp;
+      <b>t</b> is used to indicate that the mouse action should be available when
+      the mouse cursor is in the text area.&nbsp;
+      <b>p</b> is used to indicate that the mouse action should be available when
+      the mouse cursor is in the prefix area.&nbsp;
+      <b>e</b> is used to indicate that the mouse action should be available
+      when the mouse cursor is in the expand/hide area.&nbsp;
+      If you do not specify a context,
+      the context is assumed to be <b>t</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>action</i></td>
+    <td valign="top">Use the <i>action</i> parameter to specify the action that
+      you want assigned to the specified mouse event.&nbsp;
+      If you do not specify an action,
+      the event will have no action assigned to it.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>The actual mouse events received by the editor depend on the
+  environment (workstation configuration, operating system, Java support, etc.)
+  in which the editor is running.&nbsp;
+  Certain mouse actions may not be activated in some environments.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query mouseAction.popup
+set mouseAction.1-pressed.1.t.p cursorToMouse </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpmouse.htm#top">mouseEvents</a> parameter<br>
+<a href="rlpupuma.htm#top">updateProfile.userMouseActions</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>
