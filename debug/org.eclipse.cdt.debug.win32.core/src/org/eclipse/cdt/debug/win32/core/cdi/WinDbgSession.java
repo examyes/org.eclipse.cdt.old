@@ -19,7 +19,6 @@ import org.eclipse.cdt.debug.core.cdi.ICDIMemoryManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.ICDISharedLibraryManager;
-import org.eclipse.cdt.debug.core.cdi.ICDISourceManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIVariableManager;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
@@ -104,13 +103,6 @@ public class WinDbgSession implements ICDISession {
 	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#getMemoryManager()
 	 */
 	public ICDIMemoryManager getMemoryManager() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#getSourceManager()
-	 */
-	public ICDISourceManager getSourceManager() {
 		// TODO Auto-generated method stub
 		return null;
 	}
