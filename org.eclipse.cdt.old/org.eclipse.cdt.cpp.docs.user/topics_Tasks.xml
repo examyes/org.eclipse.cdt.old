@@ -17,6 +17,12 @@
     <topic label="Handling Build Errors"    href="tasks/compile/errors.htm"/>
   </topic>
 
+ <topic label="Debugging Projects">
+    <topic label="Debugging a C/C++ Appliation"       href="tasks/debug/debug.htm"/>
+    <topic label="Attaching to a C/C++ Applicationt"  href="tasks/debug/attach.htm"/>
+  </topic>
+
+
   <topic label="Working with Commands">
     <topic label="Launch"                   href="tasks/commands/launch.htm"/>
     <topic label="View/Cancel Output"       href="tasks/commands/view.htm"/>
