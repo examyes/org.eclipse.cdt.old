@@ -2162,7 +2162,7 @@ public DataElement command(DataElement commandDescriptor,
 
 	 //Base Container Object
         DataElement containerObjectD = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Container_Object"));
-        //createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY");
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE");
