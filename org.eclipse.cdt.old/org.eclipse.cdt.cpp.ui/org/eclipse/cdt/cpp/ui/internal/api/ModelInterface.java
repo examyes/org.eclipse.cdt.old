@@ -1669,13 +1669,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		       !type.equals("Project") &&
 		       !type.equals("Closed Project"))
 		    {		
-			if (!type.equals("temp") || !type.equals("Root"))
-			{
+			if (type.equals("temp") || type.equals("Root"))
+			{ 
 				parent = null;
 			}
 			else
 			{   
 			 	parent = parent.getParent();
+			 	type = parent.getType();
 			}
 
 		    }
