@@ -59,8 +59,10 @@ public class EnvironmentMiner extends Miner
 
  public void handleSetEnvironment(DataElement theElement, DataElement environment)
  {
+  String envName = theElement.getValue() + ".env";
+
   //First check to see if we already have an Environment for theElement..and get rid of it if we do.
-  DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getName() + ".env", 1);
+  DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, envName, 1);
   if (envRoot != null)
   {
    _dataStore.deleteObject(_minerData, envRoot);
@@ -73,7 +75,8 @@ public class EnvironmentMiner extends Miner
    }
   }
 
-  environment.setAttribute(DE.A_NAME, theElement.getName() + ".env");
+  environment.setAttribute(DE.A_NAME, envName);
+  environment.setAttribute(DE.A_VALUE, envName);
 
   _minerData.addNestedData(environment, false);
   environment.setParent(_minerData);
