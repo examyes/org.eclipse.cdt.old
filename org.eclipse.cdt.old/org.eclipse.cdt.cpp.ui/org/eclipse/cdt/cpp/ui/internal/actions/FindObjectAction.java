@@ -143,7 +143,7 @@ public class FindObjectAction extends Action
 		while (columnBegin >= 0) 
 		    {
 			char c = text.charAt(columnBegin);
-			if (isSeparator(c))
+			if (!isValid(c))
 			    break;
 			currentText.insert(0, c);
 			columnBegin--;
@@ -152,7 +152,7 @@ public class FindObjectAction extends Action
 		while (columnEnd < text.length()) 
 		    {
 			char c = text.charAt(columnEnd);
-			if (isSeparator(c))
+			if (!isValid(c))
 			    break;
 			currentText.append(c);
 			columnEnd++;
@@ -162,9 +162,9 @@ public class FindObjectAction extends Action
 	return currentText.toString();
     }
 
-    boolean isSeparator(char c)
+    boolean isValid(char c)
     {
-	boolean result = !Character.isLetterOrDigit(c);
+	boolean result = Character.isLetterOrDigit(c);
 	return result;
     }
 }

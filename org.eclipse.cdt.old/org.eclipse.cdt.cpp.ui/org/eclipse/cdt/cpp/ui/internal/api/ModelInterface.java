@@ -56,7 +56,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	public void handle()
 	{	  
-	    if (_status.getName().equals(_status.getDataStore().getLocalizedString("model.done")))
+	    String statusValue = _status.getName();
+	    if (statusValue.equals(_status.getDataStore().getLocalizedString("model.done")) ||
+		statusValue.equals(_status.getDataStore().getLocalizedString("model.timeout")))
 		{
 		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
 									    CppProjectEvent.DONE,
@@ -1423,7 +1425,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
-    private boolean compareFileNames(String file1, String file2)
+    public boolean compareFileNames(String file1, String file2)
     {
 	String f1 = file1.replace('\\', '/');
 	String f2 = file2.replace('\\', '/');

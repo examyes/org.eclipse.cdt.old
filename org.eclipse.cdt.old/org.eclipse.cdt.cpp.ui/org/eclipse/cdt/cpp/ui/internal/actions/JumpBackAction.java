@@ -54,22 +54,7 @@ public class JumpBackAction extends Action
 
     public void run()
     {   
-	LpexView lpexView = _editor.getLpexView();
-		
-	String path = null;
-	IEditorInput input = _editor.getEditorInput();
-	if (input instanceof IFileEditorInput)
-	    {
-		IFile file = ((IFileEditorInput)input).getFile();
-		path = new String(file.getLocation().toOSString());
-		
-		int line = lpexView.currentElement();
-				
-		IOpenAction openAction = CppActionLoader.getInstance().getOpenAction();
-		openAction.resetSelection();
-		openAction.run();
-
-		openAction.setLocation(path, line);
-	    }
+	IOpenAction openAction = CppActionLoader.getInstance().getOpenAction();
+	openAction.resetSelection();
     }
 }

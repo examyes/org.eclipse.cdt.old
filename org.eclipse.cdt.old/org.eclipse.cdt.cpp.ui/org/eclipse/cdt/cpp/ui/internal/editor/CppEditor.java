@@ -142,8 +142,10 @@ public class CppEditor extends LpexTextEditor
 
     public void doSave(IProgressMonitor monitor)
    {
-      super.doSave(monitor);
+       super.doSave(monitor);
+       
       IEditorInput input = getEditorInput();
+      
       if (input instanceof IFileEditorInput)
       {
          ModelInterface api = ModelInterface.getInstance();	 	  

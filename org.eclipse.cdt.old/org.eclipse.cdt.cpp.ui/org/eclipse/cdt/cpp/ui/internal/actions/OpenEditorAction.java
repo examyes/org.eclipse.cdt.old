@@ -34,10 +34,17 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
-    private static DataElement _previousElement;
+    private static DataElement _element;
 
-    private DataElement _element;
+    private static IFile         _previousFile = null;
+    private static IFile         _file = null;
+
+    private static int         _previousLine = 0;
+    private static int         _line = 0;
+
+    private IEditorPart _previousEditor;
     private IEditorPart _editor;
+
     private CppPlugin   _plugin = CppPlugin.getDefault();
 
   public OpenEditorAction(DataElement element)
@@ -48,28 +55,38 @@ public class OpenEditorAction extends Action implements IOpenAction
 
     public void resetSelection()
     {
-	_element = _previousElement;
+	if ((_previousFile != null) && (_previousEditor != null))
+	    {
+		IFile prevFile  = _file; 
+		_file = _previousFile;	
+		_previousFile = prevFile;
+		
+		int prevLine  = _line; 
+		_line = _previousLine;
+		_previousLine = prevLine;
+		
+		IEditorPart prevEditor = _editor;
+		_editor = _previousEditor;
+		_previousEditor = prevEditor;
+		
+		showEditor(_editor);
+		gotoLocation(_editor, _file, _line);
+	    }
     }
 
-    public void setLocation(String filename, int location)
+    public void setLocation(String str, int line)
     {
-	if (_previousElement == null)
-	    {
-		if (_element != null)
-		    {
-			DataStore dataStore = _element.getDataStore();
-			_previousElement = dataStore.createObject(null, "file", "location");
-		    }
-	    }
-
-	if (_previousElement != null)
-	    {
-		_previousElement.setAttribute(DE.A_SOURCE, filename + ":" + location);
-	    }
     }
-    
+
     public void setSelected(DataElement selected)
-    {
+    {	
+	if (_editor != null)
+	    {
+		_previousEditor = _editor;
+		_previousLine = _line;
+		_previousFile = _file;
+	    }
+
 	_element = selected;
     }
 
@@ -81,6 +98,14 @@ public class OpenEditorAction extends Action implements IOpenAction
   public IFile findFile(String fileName)
   {
       com.ibm.cpp.ui.internal.api.ModelInterface api = _plugin.getModelInterface();
+      if (_file != null)
+	  {
+	      if (api.compareFileNames(_file.getLocation().toString(), fileName))
+		  {
+		      return _file;
+		  }
+	  }
+
       IResource resource =  api.findFile(fileName);
       if (resource instanceof IFile)
 	  {
@@ -146,13 +171,16 @@ public class OpenEditorAction extends Action implements IOpenAction
 					    addNewFile(file);
 					}
 				    
+
 				    if (file != null)
 					{	
+					    _file = file;
+
 					    if (_plugin != null)
 						{
+						    
 						    IWorkbench desktop = _plugin.getWorkbench();
 						    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
-						    
 						    IEditorPart editor = null;
 						    
 						    IEditorPart [] editors = persp.getEditors();
@@ -166,8 +194,9 @@ public class OpenEditorAction extends Action implements IOpenAction
 								    if ((input != null) && 
 									openFile.getLocation().toString().equals(file.getLocation().toString()))
 									{
-									    editor = editors[i];		
-									    persp.bringToTop(editor);		
+									    editor = editors[i];
+									    _editor = editor;
+		
 									    break;
 									}
 								}
@@ -189,33 +218,17 @@ public class OpenEditorAction extends Action implements IOpenAction
 								}
 							    
 							    editor = persp.getActiveEditor();
+							    _editor = editor;
 							}
 						    
+						    showEditor(editor);
 						    
 						    Integer lineLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));
 						    int line = lineLocation.intValue();	
 						    if ((line > 0) && (editor != null))
 							{	
-							    _editor = editor;
-							    if (_editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
-								{
-								    ((com.ibm.cpp.ui.internal.editor.CppEditor)_editor).gotoLine(line);
-								}
-							    else
-								{
-								    try
-									{
-									    IMarker marker = file.createMarker(IMarker.TEXT);
-									    marker.setAttribute(IMarker.LINE_NUMBER, line);
-									    marker.setAttribute(IMarker.CHAR_START, -1);
-									    marker.setAttribute(IMarker.CHAR_END, -1);
-									    
-									    _editor.gotoMarker(marker);
-									}
-								    catch (CoreException e)
-									{
-									}
-								}
+							    gotoLocation(editor, file, line);
+							    _line = line;
 							}
 						}
 					}
@@ -224,4 +237,35 @@ public class OpenEditorAction extends Action implements IOpenAction
 		}	
 	}
       }
+
+
+    protected void showEditor(IEditorPart editor)
+    { 
+	IWorkbench desktop = _plugin.getWorkbench();
+	IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
+	persp.bringToTop(editor);		
+    }
+
+    protected void gotoLocation(IEditorPart editor, IFile file, int line)
+    {
+	if (editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
+	    {
+		((com.ibm.cpp.ui.internal.editor.CppEditor)editor).gotoLine(line);
+	    }
+	else
+	    {
+		try
+		    {
+			IMarker marker = file.createMarker(IMarker.TEXT);
+			marker.setAttribute(IMarker.LINE_NUMBER, line);
+			marker.setAttribute(IMarker.CHAR_START, -1);
+			marker.setAttribute(IMarker.CHAR_END, -1);
+			
+			editor.gotoMarker(marker);
+		    }
+		catch (CoreException e)
+		    {
+		    }
+	    }	
+    }
 }

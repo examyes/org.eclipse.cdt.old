@@ -18,6 +18,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.util.Assert;
+import org.eclipse.ui.editors.text.*;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -71,15 +72,12 @@ public class CppDocumentProvider extends FileDocumentProvider {
 	/**
 	 * Replaces createAnnotationModel of the super class
 	 */
-//	protected IAnnotationModel createCppAnnotationModel(Object element) throws CoreException {
-	protected IAnnotationModel createCppAnnotationModel(Object element) {
-//		if ( !(element instanceof IFileEditorInput))
-//			throw new CoreException(new JavaModelStatus(IJavaModelStatusConstants.INVALID_RESOURCE_TYPE));
-		
-		IFileEditorInput input= (IFileEditorInput) element;
-   
-		return new CppMarkerAnnotationModel(input.getFile());
-	}
+    protected IAnnotationModel createCppAnnotationModel(Object element) 
+    {
+	IFileEditorInput input= (IFileEditorInput) element;	
+	return new CppMarkerAnnotationModel(input.getFile());
+    }
+
 	/**
 	 * @see AbstractDocumentProvider#createElementInfo(Object)
 	 */
@@ -93,28 +91,27 @@ public class CppDocumentProvider extends FileDocumentProvider {
 		IFileEditorInput input = (IFileEditorInput) element;
 		IFile original = input.getFile();
 		if (original != null)
-      {
-				
-         
-	      try
-         {
+		    {
+			try
+			    {
 				try
-            {
+				    {
 					input.getFile().refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (CoreException ce) {
-               System.out.println("CppDocumentProvider:createElementInfo Core exception - " +ce);
-				}
+				    } 
+				catch (CoreException ce) 
+				    {
+					System.out.println("CppDocumentProvider:createElementInfo Core exception - " +ce);
+				    }
 				
 				IDocument document = createDocument(element);
-
 				IAnnotationModel model = createCppAnnotationModel(element);
 
-            FileInfo elementInfo= new FileInfo(document, model, null);
+				FileInfo elementInfo= new FileInfo(document, model, null);
 				elementInfo.fModificationStamp = computeModificationStamp(original);
-            return elementInfo;
+				return elementInfo;
 				
 			} catch (CoreException ce) {
-            System.out.println("CppDocumentProvider:createElementInfo Core exception - " +ce);
+			    System.out.println("CppDocumentProvider:createElementInfo Core exception - " +ce);
 			}
 		} else {		
         
@@ -145,47 +142,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
 		super.disposeElementInfo(element, info);
 	}
 */
-	/**
-	 * @see AbstractDocumentProvider#doSaveDocument(IProgressMonitor, Object, IDocument, boolean)
-	 */
-/*
-	protected void doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite) throws CoreException {
-				
-		ElementInfo elementInfo= getElementInfo(element);		
-		if (elementInfo instanceof CompilationUnitInfo) {
-			CompilationUnitInfo info= (CompilationUnitInfo) elementInfo;
-			
-			try {					
-				// update structure, assumes lock on info.fCopy
-				info.fCopy.reconcile();
-				
-				ICompilationUnit original= (ICompilationUnit) info.fCopy.getOriginalElement();
-				IResource resource= original.getUnderlyingResource();
-				
-				if (resource != null && !overwrite)
-					checkSynchronizationState(info.fModificationStamp, resource);
-				
-				// commit working copy
-				info.fCopy.commit(overwrite, monitor);
-				
-				AbstractMarkerAnnotationModel model= (AbstractMarkerAnnotationModel) info.fModel;
-				model.updateMarkers(info.fDocument);
-				
-				if (resource != null)
-					info.setModificationStamp(computeModificationStamp(resource));
-										
-			} catch (JavaModelException x) {
-				throw new CoreException(x.getStatus());
-			}
-			
-		} else {
-			super.doSaveDocument(monitor, element, document, overwrite);
-		}		
-	}
-*/
-	/**
-	 * @see IWorkingCopyManager#getWorkingCopy(Object)
-	 */
+
 /*
 	public ICompilationUnit getWorkingCopy(IEditorInput element) {
 		

@@ -100,9 +100,11 @@ public class ParseAction implements ISelectionChangedListener, IWorkbenchWindowA
 	else if (first instanceof DataElement)
 	    {
 		_resourceElement = (DataElement)first;
+		String type = _resourceElement.getType();
 		DataElement descriptor = _resourceElement.getDescriptor();
 		
-		if (descriptor != null && descriptor.isOfType("file"))
+		if (type.equals("file") || 
+		    (descriptor != null && descriptor.isOfType("file")))
 		    {
 			((Action)action).setEnabled(true);			
 		    }

@@ -95,17 +95,19 @@ public class CppMarkerAnnotationModel extends AbstractMarkerAnnotationModel impl
 	 * @see IResourceChangeListener#resourceChanged
 	 */
 	public void resourceChanged(IResourceChangeEvent e) {
+	    System.out.println("resource changed");
 		IResourceDelta delta= e.getDelta();
-		try {
-			
-			if (delta != null) {
+		try 
+		    {			
+			if (delta != null) 
+			    {
 				fChangesApplied= false;
 				delta.accept(this);
 				if (fChangesApplied)
-					fireModelChanged();
-			}
+				    fireModelChanged();
+			    }
 			
-		} catch (CoreException x) {
+		    } catch (CoreException x) {
 			handleCoreException(x, "ClassFileMarkerAnnotationModel.resourceChanged");
 		}
 	}
@@ -118,8 +120,9 @@ public class CppMarkerAnnotationModel extends AbstractMarkerAnnotationModel impl
 	/**
 	 * @see IResourceDeltaVisitor#visit
 	 */
-	public boolean visit(IResourceDelta delta) throws CoreException {
-		
+	public boolean visit(IResourceDelta delta) throws CoreException 
+    {
+	System.out.println("visit");
 		if (delta != null) {
 			
 			if (fMarkerResource != null && !fMarkerResource.equals(delta.getResource()))
