@@ -21,7 +21,7 @@ public class ManagedProjectMiner extends Miner
 		DataElement projectD = _dataStore.find(schemaRoot, DE.A_NAME, "Project");
 		DataElement fsObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects");
 		
-		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", false);
+		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", true);
 		createCommandDescriptor(projectD, "configure", "C_CONFIGURE",false);
     
 		DataElement managedProjectD  = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.MANAGED_PROJECT);
