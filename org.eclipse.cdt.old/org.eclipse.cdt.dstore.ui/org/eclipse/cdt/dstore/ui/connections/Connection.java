@@ -123,6 +123,14 @@ public class Connection implements IDomainListener
 		    // initialize miners
 		    monitor.subTask("Initializing Miners...");
 		    DataElement status = dataStore.initMiners();
+		    DataElement rootDir = dataStore.getHostRoot().get(0);
+		    if (rootDir == null)
+			{
+			    String msg = "Could not find " + hostDirectory + " on " + _host + ".";
+			    status.setAttribute(DE.A_NAME, "failed");
+			    dataStore.createObject(status, "error", msg);			    
+			}
+
 		    monitor.worked(20);
 
 		    monitor.subTask("Setting Status...");
@@ -137,7 +145,7 @@ public class Connection implements IDomainListener
 				}
 			    else
 				{
-				    connectionStatus.setMessage("Couldn't Connect");
+				    connectionStatus.setMessage("Couldn't Connect to " + _host + ".");
 				}
 			    result = false;
 			}
@@ -439,7 +447,7 @@ public class Connection implements IDomainListener
 	    }
 	
 
-	if (_client.isConnected())
+	if (_client != null && _client.isConnected())
 	    {
 		notifier.addDomainListener(this);
 	    }
