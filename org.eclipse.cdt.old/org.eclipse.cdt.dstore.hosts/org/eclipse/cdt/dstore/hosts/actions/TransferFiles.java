@@ -196,6 +196,7 @@ public class TransferFiles extends Thread
 			DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
 			if (cmd != null)
 			{
+				/*
 				String invocation = "cp -f " + source.getSource() + " " + newSourceStr;
 				DataElement invocationElement = targetDataStore.createObject(null, 
 											     "invocation", 
@@ -203,6 +204,10 @@ public class TransferFiles extends Thread
 				ArrayList args = new ArrayList();
 				args.add(invocationElement);
 				targetDataStore.synchronizedCommand(cmd, args, target);
+				*/
+				java.io.File sFile = source.getFileObject();
+				targetDataStore.replaceFile(newSourceStr, sFile);
+				
 				if (_checkTimestamps)
 				{
 					setDate(copiedSource, getDate(source));
