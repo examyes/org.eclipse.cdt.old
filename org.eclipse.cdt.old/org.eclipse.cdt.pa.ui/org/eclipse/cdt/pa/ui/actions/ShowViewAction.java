@@ -10,7 +10,6 @@ import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.ui.*;
-import org.eclipse.ui.internal.*;
 import org.eclipse.swt.widgets.*;
 
 public class ShowViewAction implements Runnable
@@ -27,7 +26,7 @@ public class ShowViewAction implements Runnable
 
     public void run()
     {
-      IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+      IWorkbench desktop = PlatformUI.getWorkbench();
       IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 
       IWorkbenchPage persp= win.getActivePage();
