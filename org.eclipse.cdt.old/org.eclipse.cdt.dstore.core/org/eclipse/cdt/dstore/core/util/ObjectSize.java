@@ -5,10 +5,20 @@ package com.ibm.dstore.core.util;
  */
 
 import java.io.*;
+import java.util.*;
 
-public class ObjectSize
+public class ObjectSize implements Serializable
 {
- public static int getSize(Object theObject)
+ private static ObjectSize _os = null;
+ 
+ public static ObjectSize getInstance()
+ {
+  if (_os == null)
+   _os = new ObjectSize();
+  return _os;
+ }
+ 
+ public int getSize(Object theObject)
  {
   try
   {
@@ -18,7 +28,23 @@ public class ObjectSize
    p.flush();
    return ostream.toByteArray().length;
   }
-  catch (Throwable e) {}
+  catch (Throwable e) {e.printStackTrace();}
   return -1;
+ }
+
+ public int test(Object theObject, int iterations)
+ {
+  return getSize(new Dummy(theObject, iterations));
+ }
+
+ public class Dummy implements Serializable
+ {
+  ArrayList theList;
+  public Dummy (Object theObject, int iterations)
+  {
+   theList = new ArrayList();
+   for (int i=0; i<iterations; i++)
+    theList.add(theObject);
+  }
  }
 }
