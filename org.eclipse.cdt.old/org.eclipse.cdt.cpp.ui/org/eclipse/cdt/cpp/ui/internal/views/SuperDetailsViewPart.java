@@ -52,8 +52,11 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 
   public void selectionChanged(IWorkbenchPart part, ISelection sel) 
   {
-      ((ILinkable)part).linkTo(this);	
-      setLinked(true);
+      if (part instanceof ILinkable)
+	  {
+	      ((ILinkable)part).linkTo(this);	
+	      setLinked(true);
+	  }
   }
 
     public void projectChanged(CppProjectEvent event)

@@ -56,8 +56,11 @@ public class CppCommandViewer extends CommandViewer
 	ModelInterface api = _plugin.getModelInterface();
 	if (input instanceof DataElement)
 	    {
-		_resourceInput = api.findResource((DataElement)input);
 		super.setInput((DataElement)input);
+		if (input == _input)
+		    {
+			_resourceInput = api.findResource((DataElement)input);
+		    }
 	    }
 	else
 	    {
