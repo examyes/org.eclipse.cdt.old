@@ -50,9 +50,9 @@ public class AutoconfManager {
 				// add all the necessary needed template files
 				getAutoconfSupprotFiles(project);
 				initializeAutoconfSupprotFiles(project);
+				createConfigureScript();
+				
 			}
-			//ModelInterface api = CppPlugin.getModelInterface();	
-			//DataElement status = api.command(project.getSource(), autoconf);
 				// autoloca
 				// autoheader
 				// automake
@@ -78,27 +78,47 @@ public class AutoconfManager {
 		Runtime rt = Runtime.getRuntime();
 		//check the project structure
 		File projectFile = project.getFileObject();
-		if(projectFile.isDirectory())
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add configure.in template
+			// add configure.in template files only if not exist
 			try{
+				// check if exist then
 				rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/configure.in "
 						+project.getSource());
+				// check if exist then
 				rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
+						+project.getSource());
+				// check if exist then
+				rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/support.dist "
 						+project.getSource());
 			}catch(IOException e){System.out.println(e);}	
 		}
 		// provide one makefile.am in each subdiectory
 		for(int i =0; i < subdirs.length ; i++)
 		{
-			try{
-				rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-					+project.getSource()+"/"+subdirs[i]);
-			}catch(IOException e){System.out.println(e);}
-			
+			if(subdirs[i].indexOf(".")==-1)
+			{
+				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
+				if (token.countTokens()==1)
+				{
+					try{
+						rt.exec(
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
+							+project.getSource()+"/"+subdirs[i]);
+					}catch(IOException e){System.out.println(e);}
+				}
+				else
+				{
+					try{
+						rt.exec(
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
+							+project.getSource()+"/"+subdirs[i]);
+					}catch(IOException e){System.out.println(e);}
+				}
+			}
 		}
 	}
 	protected void initializeAutoconfSupprotFiles(DataElement project)
@@ -110,5 +130,21 @@ public class AutoconfManager {
 		MakefileAmManager makefile_am_manager = new MakefileAmManager(project);
 		makefile_am_manager.manageMakefile_am();
 	}
+	private void createConfigureScript()
+	{
+		Runtime rt = Runtime.getRuntime();
+		try
+		{
+			rt.exec("sh -c ./support.dist", null, project.getFileObject());
+		}catch(IOException e){e.printStackTrace();}	
+	}
+	public void runConfigureScript()
+	{
+		Runtime rt = Runtime.getRuntime();
+		try
+		{
+			rt.exec("sh -c ./configure", null, project.getFileObject());
+		}catch(IOException e){System.out.println(e);}	
+	} 
 }
 

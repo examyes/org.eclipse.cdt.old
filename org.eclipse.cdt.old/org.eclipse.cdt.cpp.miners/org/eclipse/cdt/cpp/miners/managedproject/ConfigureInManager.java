@@ -108,7 +108,8 @@ public class ConfigureInManager {
 		}
 		int extra_chars = delimPosition[1] - delimPosition[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
 		delimPosition[1] = position+project.getName().toCharArray().length+extra_chars;
-		return new String(modLine);
+		String packageName = (new String(modLine)); 
+		return packageName;
 	}
 	private String insertVersionName(char[] line, int pos)
 	{
@@ -126,7 +127,8 @@ public class ConfigureInManager {
 			modLine[counetrForModLine++]=line[i];
 			i++;
 		}
-		return new String(modLine);
+		String versionName = (new String(modLine)).trim();
+		return versionName;
 	}
 	private String insertSubdirs(char[] line, int position)
 	{
@@ -140,19 +142,21 @@ public class ConfigureInManager {
 				
 				for(int j = 0; j< subdirs.length; j++)
 				{
-					for(int k=0; k< subdirs[j].toCharArray().length; k++)
-						modLine[counetrForModLine++]=subdirs[j].toCharArray()[k];
-					for(int l=0; l< makefile.length(); l++)
-						modLine[counetrForModLine++]=makefile.toCharArray()[l];
+					if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
+					{
+						for(int k=0; k< subdirs[j].toCharArray().length; k++)
+							modLine[counetrForModLine++]=subdirs[j].toCharArray()[k];
+						for(int l=0; l< makefile.length(); l++)
+							modLine[counetrForModLine++]=makefile.toCharArray()[l];
+					}
 				}
 				
 			}
 			modLine[counetrForModLine++]=line[i];
 			i++;
 		}
-		int insertPosition = 0;
-		
-		return new String(modLine);
+		String subdirs = (new String(modLine)).trim();
+		return subdirs;
 	}		
 }
 
