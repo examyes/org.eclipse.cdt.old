@@ -354,11 +354,6 @@ public class HostsPlugin extends AbstractUIPlugin
 						    "org.eclipse.cdt.dstore.ui.connections.DeleteAction");	 
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");	
 
-	DataElement selectFile = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
-							"File Dialog", 
-							"org.eclipse.cdt.dstore.hosts.actions.SelectFileAction");
-	selectFile.setAttribute(DE.A_VALUE, "C_SELECT");
-
 	DataElement fileTransfer = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "File Transfer", 
 							  "org.eclipse.cdt.dstore.hosts.actions.FileTransferAction");

@@ -82,7 +82,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	// local viewer
 	Group localGroup = new Group(c, SWT.NONE);
-	localGroup.setText("Local Files");
+	localGroup.setText("Local File System");
 
 	GridLayout llayout= new GridLayout();
 	llayout.numColumns = 2;
@@ -176,7 +176,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	// remote viewer
 	Group remoteGroup = new Group(c, SWT.NONE);
-	remoteGroup.setText("Remote Files");
+	remoteGroup.setText("Target Context");
 
 	GridLayout rlayout= new GridLayout();
 	rlayout.numColumns = 2;
