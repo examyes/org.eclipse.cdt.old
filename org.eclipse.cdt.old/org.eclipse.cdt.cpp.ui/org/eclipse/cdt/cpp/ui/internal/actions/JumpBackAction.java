@@ -45,7 +45,7 @@ public class JumpBackAction extends Action
     {
 	super(title);
 	_editor = editor;
-    }
+    } 
     
     public void setEditor(CppEditor editor)
     {
