@@ -6,7 +6,7 @@
             <format property="TIME" pattern="hh:mm aa" /> 
             <format property="TODAYS_DATE" pattern="yyyyMMddhhmm" /> 
         </tstamp>
-        
+ 
         <condition property="platformId" value="${os}-${ws}">
             <not>
                 <equals arg1="${os}" arg2="${ws}" />
@@ -18,7 +18,7 @@
             </and>
         </condition>
         
-		<property name="feature" value="org.eclipse.cdt.linux.gtk"/>
+ 		<property name="feature" value="org.eclipse.cdt.linux.gtk"/>
 		<property name="feature.version.suffix" value="_1.0.1"/>
 		<property name="feature.full.name" value="${feature}${feature.version.suffix}"/>
         <property name="feature.dated.name" value="${feature}-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
@@ -27,6 +27,7 @@
 	</target>
 
 	<target name="all.plugins" depends="init">
+		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.linux.gtk/" target="${target}"/>
 	</target>
 
 	<target name="all.fragments" depends="init">
