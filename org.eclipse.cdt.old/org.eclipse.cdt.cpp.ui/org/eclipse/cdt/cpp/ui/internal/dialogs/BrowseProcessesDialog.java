@@ -51,12 +51,21 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
     public BrowseProcessesDialog(String title, DataElement input)
     {
 	super(null);
+	_plugin = CppPlugin.getDefault();
 
-	DataStore dataStore = input.getDataStore();	
+	DataStore dataStore = null;	
+	if (input != null)
+	    {
+		dataStore = input.getDataStore();	
+	    }
+	else
+	    {
+		dataStore = _plugin.getCurrentDataStore();
+	    }
+
 	_input = dataStore.find(dataStore.getHostRoot(), DE.A_TYPE, "Processes", 1);
 		
 	_title = title;
-	_plugin = CppPlugin.getDefault();
 	_useFilter = true;
     }
 
