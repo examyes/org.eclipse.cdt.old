@@ -39,7 +39,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
-import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
 import org.eclipse.debug.core.DebugException;
@@ -180,7 +179,7 @@ public class BreakpointRulerAction extends LpexMarkerRulerAction {
                breakpointManager.configureLineBreakpoint(breakpoint,
                            "com.ibm.debug.internal.picl" , true, _rulerLine + 1, -1, -1);
                   //         "com.ibm.debug.internal.picl" , true, _rulerLine + 1, _start, _end);  revisit - Adrian
-                  // since it should match with EditorActionDelegate in case of multiple statements on same line, hence multiple breakpoints
+                  // in case of multiple statements on same line, hence multiple breakpoints
 
                Map map= breakpoint.getAttributes();
                map.put(IMarker.MESSAGE, "cpp");
