@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.ibm.debug.common"
+   name="%plugin_name.label"
+   version="2.0.0"
+   provider-name="%plugin_provider.label"
+   class="com.ibm.debug.internal.common.CommonDebugPlugin">
+
+<runtime>
+   <library name="commondebug.jar">
+      <export name="*"/>
+   </library>
+</runtime>
+<requires>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.debug.core"/>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.debug.ui"/>
+</requires>
+
+
+<!-- Presentation services -->
+<extension
+      point="org.eclipse.debug.ui.debugModelPresentations">
+   <debugModelPresentation
+         class="com.ibm.debug.internal.common.CommonDebugModelPresentation"
+         id="com.ibm.debug.common">
+   </debugModelPresentation>
+</extension>
+<!-- Breakpoint types -->
+<extension
+      point="org.eclipse.debug.core.breakpoints">
+   <breakpoint
+         markerType="com.ibm.debug.common.GenericLineBreakpointMarker"
+         class="com.ibm.debug.common.GenericLineBreakpoint"
+         id="GenericLineBreakpoint">
+   </breakpoint>
+</extension>
+<!-- Breakpoint markers -->
+<extension
+      id="GenericLineBreakpointMarker"
+      point="org.eclipse.core.resources.markers">
+   <super
+         type="org.eclipse.debug.core.breakpointMarker">
+   </super>
+   <persistent
+         value="true">
+   </persistent>
+</extension>
+<!-- Infopop (F1 Help) enablement
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            name="contextsCommonDebug.xml"
+            plugin="com.ibm.debug.common">
+      </contexts>
+   </extension> -->
+
+</plugin>

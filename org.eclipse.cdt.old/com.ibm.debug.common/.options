@@ -1,0 +1,3 @@
+com.ibm.debug.common/debug=true
+com.ibm.debug.common/debug/logging=false
+com.ibm.debug.common/debug/events=false
