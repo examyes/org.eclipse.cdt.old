@@ -77,7 +77,7 @@ public class CommandViewer extends Viewer implements SelectionListener
   private final static int	SIZING_SELECTION_WIDGET_HEIGHT = 150;
   private final static int	SIZING_SELECTION_WIDGET_WIDTH = 300;
   private static final int	SIZING_TEXT_FIELD_WIDTH = 100;
-  private static final int	SIZING_BUTTON_WIDTH = 50;
+  private static final int	SIZING_BUTTON_WIDTH = 80;
 
   protected String             _command;
 
