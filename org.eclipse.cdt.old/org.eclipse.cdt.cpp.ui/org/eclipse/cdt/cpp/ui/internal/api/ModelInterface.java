@@ -893,13 +893,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	   // parse behaviour
 	   DataElement autoParseElement = dataStore.createObject(null, "autoparse", "No");
 	   ArrayList autoParse = _plugin.readProperty(project, "AutoParse");
-	   
+	   	       
 	   if (!autoParse.isEmpty())
 	       {
 		   String autoParseStr = (String)autoParse.get(0);
 		   autoParseElement.setAttribute(DE.A_NAME, autoParseStr);
-	       }
-	   
+	       }	   
 	   DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_PREFERENCES");
 	   if (setD != null)
 	       {
@@ -1824,10 +1823,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement managedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Managed Project", 1);
 	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change target to");
 	
-	DataElement toDefCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Programs", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toDefCmd.setAttribute(DE.A_VALUE,"DEFAULT_MAKEFILE_AM");
+	toProgCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
 	DataElement toStatLibCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Static lib", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");

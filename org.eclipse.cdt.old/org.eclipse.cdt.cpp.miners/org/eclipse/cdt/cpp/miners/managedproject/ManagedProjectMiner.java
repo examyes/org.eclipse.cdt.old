@@ -56,7 +56,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(managedProjectD,"Static lib","C_SWITCH_TO_STATIC_LIB", false);
 		createCommandDescriptor(managedProjectD,"Shared lib ","C_SWITCH_TO_SHARED_LIB", false);
 		createCommandDescriptor(managedProjectD,"Top level","C_TOPLEVEL_MAKEFILE_AM",false);
-		createCommandDescriptor(managedProjectD,"Default ","C_DEFAULT_MAKEFILE_AM",false);  			
+		createCommandDescriptor(managedProjectD,"Programs ","C_PROGRAMS_MAKEFILE_AM",false);  			
 	}
 	
 	private void refresh(DataElement object)
@@ -104,9 +104,9 @@ public class ManagedProjectMiner extends Miner
 			autoconfManager.runConfigureScript(status);
 			refresh(project);
 		}
-		else if (name.equals("C_DEFAULT_MAKEFILE_AM"))
+		else if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
 		{
-			autoconfManager.getMakeFileAmManager().setMakefileAmToDefault(project.getFileObject(),status);
+			autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(project.getFileObject(),status);
 			refresh(project);
 		}
 		else if (name.equals("C_SWITCH_TO_STATIC_LIB"))

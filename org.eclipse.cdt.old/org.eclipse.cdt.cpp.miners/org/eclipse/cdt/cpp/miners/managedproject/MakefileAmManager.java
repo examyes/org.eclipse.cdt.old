@@ -9,31 +9,42 @@ import java.util.*;
 
 public class MakefileAmManager {
 
+	private final int TOPLEVEL = 0;
+	private final int PROGRAMS = 1;
+	private final int STATICLIB = 2;
+	private final int SHAREDLIB = 3;
+	
 	DataElement project;
 	ProjectStructureManager structureManager;
+	
 	public static Hashtable timeStamps = new Hashtable();
+	private final String MAKEFILE_AM = "Makefile.am";
+	private final String TEMPLOCATION = "workspace/com.ibm.cpp.miners/autoconf_templates/";
 	
 	// Member Variables which can be defined in Makefile.am
-	String SUBDIRS = new String("SUBDIRS");
-	String bin_BROGRAMS = new String ("bin_PROGRAMS");
-	String _LDADD = new String("_LDADD");
-	String _SOURCES = new String("_SOURCES");
-	String EXTRA_DIST = new String("EXTA_DIST");
-	String INCLUDES = new String("INCLUDES");
-	String _LDFLAGS= new String("_LDFLAGS");
+	final String SUBDIRS = new String("SUBDIRS");
+	final String bin_PROGRAMS = new String ("bin_PROGRAMS");
+	final String _LDADD = new String("_LDADD");
+	final String _SOURCES = new String("_SOURCES");
+	final String EXTRA_DIST = new String("EXTA_DIST");
+	final String INCLUDES = new String("INCLUDES");
+	final String _LDFLAGS= new String("_LDFLAGS");
 	
 	// needed to for creating Makefile.am's
 	String[] subdirs;
 	
 	//for static lib files
-	String _LIBRARIES = new String("_LIBRARIES");
-	String _a_SOURCES = new String("_a_SOURCES");
+	final String _LIBRARIES = new String("_LIBRARIES");
+	final String _a_SOURCES = new String("_a_SOURCES");
 	//for shared lib files
-	String _LTLIBRARIES = new String("_LTLIBRARIES");
-	String _la_SOURCES = new String("_la_SOURCES"); 	
+	final String _LTLIBRARIES = new String("_LTLIBRARIES");
+	final String _la_SOURCES = new String("_la_SOURCES"); 	
 	// updating data
-	String TARGET = new String("!TARGET!");
-	char delim = '!';
+	final String TARGET = new String("!TARGET!");
+	final char delim = '!';
+	
+	// to identify Makefile.am identity
+	private static MakefileAmClassifier classifier = new MakefileAmClassifier();
 	
 	// default values in Makefile.am
 	//String targetSuffix = new String("_target");
@@ -64,9 +75,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
-						+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+MAKEFILE_AM+" "+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -80,9 +89,7 @@ public class MakefileAmManager {
 				if (token.countTokens()==1)
 				{
 					try{
-						Process p = 	rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
+						Process p = rt.exec("cp "+TEMPLOCATION+"/sub/Makefile.am "+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
@@ -91,9 +98,7 @@ public class MakefileAmManager {
 				{
 					
 					try{
-						Process p= rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
+						Process p= rt.exec("cp "+TEMPLOCATION+"/sub/static/Makefile.am "+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
@@ -113,19 +118,19 @@ public class MakefileAmManager {
 				case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
 					initTopLevelMakefileAm(project.getFileObject());
-					absPath = project.getFileObject().getAbsolutePath()+"Makefile.am";
+					absPath = project.getFileObject().getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(project.getFileObject().getAbsolutePath(),new Long(getMakefileAmStamp(project.getFileObject())));
 					break;
 				case (1):
 					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
-					initDefaultMakefileAm((File)projectStucture[i][0]);
-					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+"Makefile.am";
+					initProgramsMakefileAm((File)projectStucture[i][0]);
+					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				default:
 				// initialize all other files in the subdirs
 					initStaticLibMakefileAm((File)projectStucture[i][0]);
-					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+"Makefile.am";
+					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 			}
 		}
@@ -166,7 +171,7 @@ public class MakefileAmManager {
 			catch(IOException e){System.out.println(e);}
 		}
 	}
-	private void initDefaultMakefileAm(File parent)
+	private void initProgramsMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -189,7 +194,7 @@ public class MakefileAmManager {
 				while((line=in.readLine())!=null)
 				{
 					// searching for the bin_PROGRAMS line
-					if(line.indexOf(bin_BROGRAMS)!=-1)
+					if(line.indexOf(bin_PROGRAMS)!=-1)
 					{
 						found_bin_PROGRAMS = true;
 						line = updateBinProgramsLine(line, parent);
@@ -376,9 +381,31 @@ public class MakefileAmManager {
 		Object[][] projectStucture = structureManager.getProjectStructure();
 		// update Makefile in the top level directory
 		// first check if it is ok to update
-		
 		for(int i =0; i < projectStucture.length; i++)
 		{
+			File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
+			if(Makefile_am.exists())
+			{
+				int classification = classifier.getClassification(Makefile_am);
+				switch (classification)
+				{
+					case (TOPLEVEL):
+					break;
+					
+					case (PROGRAMS):
+					break;
+					
+					case (STATICLIB):
+					break;
+					
+					case (SHAREDLIB):
+					break;
+					
+					default:
+					break;
+				
+				}
+			}
 		/*	Integer level = new Integer((String)projectStucture[i][1]);
 			switch (level.intValue())
 			{
@@ -422,7 +449,7 @@ public class MakefileAmManager {
 				initTopLevelMakefileAm(parent);// updates the subdir variable
 		}
 	}
-	private void updateDefaultMakefileAm(File MakefileAm)
+	private void updateProgramsMakefileAm(File MakefileAm)
 	{
 	}
 	private void updateStaticLibMakefileAm(File MakefileAm)
@@ -644,17 +671,15 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				System.out.println("\n>>>>>>>>>>>>>>>>>>>>  "+parent.getAbsolutePath());
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-						+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+"/sub/static/Makefile.am "+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		initStaticLibMakefileAm(parent);
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
-	protected void setMakefileAmToDefault(File parent ,DataElement status)
+	protected void setMakefileAmToPrograms(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
 		File projectFile = project.getFileObject();
@@ -676,15 +701,13 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-						+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+"sub/Makefile.am "+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initDefaultMakefileAm(parent);
-			
+		initProgramsMakefileAm(parent);
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));				
 	}
 	protected void setMakefileAmToTopLevel(File parent ,DataElement status)
 	{
@@ -708,15 +731,13 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
-						+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+MAKEFILE_AM+" "+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		initTopLevelMakefileAm(parent);
-			
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
 	{
@@ -740,14 +761,13 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/shared/Makefile.am "
-						+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+"sub/shared/Makefile.am "+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initSharedLibMakefileAm(parent);	
+		initSharedLibMakefileAm(parent);
+		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	private void displayHassTableContents()
 	{
