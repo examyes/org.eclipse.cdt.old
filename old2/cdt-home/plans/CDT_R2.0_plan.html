@@ -75,6 +75,14 @@ updated compatibility section, parser enhancment feature.</td>
             Managed Build Enhancements item from the proposed to the committed 
             list.</TD>
 		</TR>
+		<TR>
+			<TD style="vertical-align: top">Feb 17, 2004</TD>
+			<TD style="vertical-align: top" width="121">Kleo Hapitas</TD>
+			<TD style="vertical-align: top" width="576">Added Design Spec links 
+            for Managed Build, Search, Scanner Config (Usability), Parser &amp; 
+            Symbol table plan items and also moved those plan items from the 
+            proposed list to the committed list.</TD>
+		</TR>
 	</tbody>
 </table>
 <p><i>Please send comments about this draft plan to
@@ -333,7 +341,7 @@ assist feature will be enhanced for performance, handling of C
 visibility rules, and for the handling of C++ code completion on
 members. &nbsp;The majority of this work will be to make more use of the
 parser to provide accurate and speedy competion proposals. 
-<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47428">(47428)</a>&nbsp; (<a href="http://download.eclipse.org/tools/cdt/docs/specs/ContentAssist/ContentAssist.htm">feature
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47428">(47428)</a>&nbsp; (<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/ContentAssist/ContentAssist.htm">feature
 &amp; design spec</a>)</p>
 
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C++
@@ -355,16 +363,54 @@ those proposals are valid and valuable, they are too many for any one
 contributor to tackle them all. This plan item covers a small, manageable yet 
 essential subset of the overall list that IBM-Rational will implement for the 
 2.0 release. <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=49145">
-(49145)</a>&nbsp;&nbsp; (<a href="http://download.eclipse.org/tools/cdt/docs/specs/ManagedBuild/Managed_Build_2_SRS.html">feature
+(49145)</a>&nbsp;&nbsp; (<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/ManagedBuild/Managed_Build_2_SRS.html">feature
 spec</a>)&nbsp;&nbsp;&nbsp;
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Managed_Build_2_FDS.pdf">
-(Design Spec)</a></p>
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Managed_Build/Managed_Build_2_FDS.pdf">(Design Spec)</a></p>
+
+<p style="margin-left: 40px;"><span style="font-weight: 700">CDT Usability - 
+Environment Set-up</span><span style="font-weight: bold;">.</span>
+<font FACE="Arial" SIZE="2">CDT features such as search and content assist 
+require environment information (include paths, libraries, #defines, etc.) in 
+order to work properly. Currently, when working with existing code, the user 
+must set up all of that information manually, which in addition to being time 
+consuming is also very prone to error. Some enhancements are needed so that the 
+required environment information can be extracted from existing source code with 
+minimal input from the user.
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47465">(47465)</a>&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/Scanner/Usability_Scanner_SRS.html">(Feature Spec)</a>&nbsp;&nbsp;&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Scanner/scanner_config_fds.pdf">(Design Spec)</a></p>
+</font>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
+Search enhancements.</span>
+This feature will be enhanced to add the capability of selecting a name
+in the editor and searching for declarations, definitions, and
+references to that name. The parser will be used to determine
+accurately the appropriate C/C++ definition of the name to be used in
+the search.&nbsp; <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47438">
+(47438)</a>
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/Search/Search%202_0%20SRS.html">(feature spec)</a>&nbsp;&nbsp;&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Search/SearchFDS.pdf">(Design Spec)</a></p>
+<p style="margin-left: 40px;"><b>C++ Parser Enhancements.</b> Enhancements to 
+the parser for supporting content assist &amp;selection search/navigation. Also to 
+provide improved error handling and traceability, improved support for GCC and 
+to support Internationalization.
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=50432">(50432)</a>.&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/Parser/Parser-2.0-Requirements.pdf">(Parser 
+Feature spec)</a>&nbsp;&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/Parser_Symbol_Table/PST_Requirements.html">
+(Parser Symbol Table Feature Spec)</a>&nbsp;&nbsp;&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Parser/Parser-2.0-Design.pdf">
+(Parser Design Spec)</a>&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Parser_Symbol_Table/PST_FDS.pdf">
+(Parser Symbol Table Design Spec)</a></p>
 
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Internationalization
 and Accessibility. </span>Normally, these capabilities should be
 designed into features as they have been developed. Areas where this
 hasn't be done will be addressed in this release. The objective is to allow translation of the CDT to different languages and to comply with government standards on accessibility.&nbsp;
-<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47529">(47529)</a></p>
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47529">(47529)</a>&nbsp;
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/Globalization/G11N_FDS.htm">
+(Globalization Design Spec)</a></p>
 <h4>Proposed Items<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b></h4>
 <blockquote>
 <p><b>Eclipse 3.0 Support - Enhancements. </b>Changes to ensure that the CDT 
@@ -396,43 +442,9 @@ spec</A>)</P>
 Documentation enhancements.</SPAN> The user documentation should be
 expanded on to ensure the success of new and experienced users of the
 CDT.&nbsp; <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47520">(47520)</a></P>
-<p style="margin-left: 40px;"><span style="font-weight: 700">CDT Usability - 
-Environment Set-up</span><span style="font-weight: bold;">.</span>
-<font FACE="Arial" SIZE="2">CDT features such as search and content assist 
-require environment information (include paths, libraries, #defines, etc.) in 
-order to work properly. Currently, when working with existing code, the user 
-must set up all of that information manually, which in addition to being time 
-consuming is also very prone to error. Some enhancements are needed so that the 
-required environment information can be extracted from existing source code with 
-minimal input from the user.
-<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47465">(47465)</a>&nbsp;
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Scanner/Usability_Scanner_SRS.html">
-(Feature Spec)</a>&nbsp;&nbsp;&nbsp;
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/scanner_config_fds.pdf">
-(Design Spec)</a></p>
-</font>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
-Search enhancements.</span>
-This feature will be enhanced to add the capability of selecting a name
-in the editor and searching for declarations, definitions, and
-references to that name. The parser will be used to determine
-accurately the appropriate C/C++ definition of the name to be used in
-the search.&nbsp; <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47438">
-(47438)</a>
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Search/Search%202_0%20SRS.html">(feature spec)</a>&nbsp;&nbsp;&nbsp;
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Design_Specs/SearchFDS.pdf">
-(Design Spec)</a></p>
-<p style="margin-left: 40px;"><b>C++ Parser Enhancements.</b> Enhancements to 
-the parser for supporting content assist &amp;selection search/navigation. Also to 
-provide improved error handling and traceability, improved support for GCC and 
-to support Internationalization.
-<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=50432">(50432)</a>.&nbsp;
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Parser/Parser-2.0-Requirements.pdf">
-(feature spec)</a></p>
 <p style="margin-left: 40px;"><b>Indexer Enhancements. </b>
 <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=50434">(50434)</a>&nbsp;
-<a href="http://download.eclipse.org/tools/cdt/docs/specs/Indexer/Indexer2_0_SRS.html">
-(feature spec)</a></p>
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Feature_Specs/Indexer/Indexer2_0_SRS.html">(feature spec)</a></p>
 <p style="margin-left: 40px;">&nbsp;</p>
 <h4>Deferred Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Quick
