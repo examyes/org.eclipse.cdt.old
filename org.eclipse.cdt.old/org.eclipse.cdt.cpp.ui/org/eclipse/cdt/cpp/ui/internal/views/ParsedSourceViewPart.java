@@ -44,13 +44,13 @@ public class ParsedSourceViewPart extends ProjectViewPart
      setTitle("Parsed-Files");
  }
     
- public void doSpecificInput(DataElement projectParseInformation)
+ public DataElement doSpecificInput(DataElement projectParseInformation)
  {
   //Find the Parsed Source Object under the projectParseInformation
   DataElement parsedSource = projectParseInformation.getDataStore().find(projectParseInformation, 
 									 DE.A_NAME, "Parsed Files", 1);
   if (parsedSource == null)
-   return;
+   return null;
   
   //Finally just set the input and the title 
   if (_viewer.getInput() == parsedSource)
@@ -63,7 +63,14 @@ public class ParsedSourceViewPart extends ProjectViewPart
 	  _viewer.setInput(parsedSource);	
 	  _viewer.selectRelationship("contents");
 	  setTitle(projectParseInformation.getName() + " Parsed-Files");   
+	  
+	   	  _browseHistory.clear();
+     		  _browseHistory.add(parsedSource);
+     	      _browsePosition = 0;
+     	      updateActionStates();
       }
+      
+   return parsedSource;   
  } 	
 }
 

@@ -106,7 +106,7 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	return null;
     }
 
-    public void doSpecificInput(DataElement theElement)
+    public DataElement doSpecificInput(DataElement theElement)
     {
 	DataElement theInput = null;
 	if (theElement.getType().equals("file"))
@@ -120,7 +120,7 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	    }
 
 	if (theInput == null)
-	    return;
+	    return null;
 	
 	
 	//Finally just set the input and the title
@@ -134,8 +134,14 @@ public class SystemObjectsViewPart extends ProjectViewPart
 		_viewer.setInput(theInput);	
 		_viewer.selectRelationship("contents");
 		setTitle(theElement.getName() + " System-Objects");   
+		
+		 	  _browseHistory.clear();
+     		  _browseHistory.add(theInput);
+     	      _browsePosition = 0;
+     	      updateActionStates();
+
 	    }
-	
+	return theInput;
  }
 }
 

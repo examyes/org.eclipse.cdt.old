@@ -15,22 +15,31 @@ import com.ibm.dstore.ui.*;
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.jface.action.*;
-import org.eclipse.core.resources.*;
+import org.eclipse.core.resources.*; 
 import org.eclipse.swt.widgets.*;
 
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.ui.*;
 import java.util.*;
-
+import org.eclipse.jface.resource.*;
 
 public abstract class ProjectViewPart extends ObjectsViewPart implements ISelectionListener
 {
     private IProject _input = null;
     private DataElement _specificInput = null;
+	protected ArrayList _browseHistory;
+	protected int _browsePosition;
+	
+	private HomeAction _homeAction = null;
+	private BackAction _backAction = null;
+	private ForwardAction _forwardAction = null;
+	private DrillAction _drillAction = null;
 
     public ProjectViewPart()
     {
-	super();
+		super();
+		_browseHistory = new ArrayList();
+		_browsePosition = 0;
     }
     
     public void createPartControl(Composite parent)
@@ -74,7 +83,8 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
      if (projectParseInformation == null)
 	 return;
 
-     doSpecificInput(projectParseInformation);
+     _specificInput = doSpecificInput(projectParseInformation);
+  
  }
     
     public abstract void doClear();
@@ -105,15 +115,17 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 
 	      if (_specificInput != projectParseInformation)
 		  {
-		      doSpecificInput(projectParseInformation);
-		      _specificInput = projectParseInformation;
+		      _specificInput = doSpecificInput(projectParseInformation);		  
 		  }
+		        
+		        
+		 
 	  } 	
   }
     
- public abstract void doSpecificInput(DataElement projectParseInformation);
+	 public abstract DataElement doSpecificInput(DataElement projectParseInformation);
 
-    public void projectChanged(CppProjectEvent event)
+ public void projectChanged(CppProjectEvent event)
     {
 	int type = event.getType();
 	IProject project = event.getProject();
@@ -149,7 +161,170 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	    }
     }
 
+  class BrowseAction extends Action
+ {
+ 	protected ArrayList _history = null;
+ 	public BrowseAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 		
+ 		_history = _browseHistory;
+ 		setToolTipText(label);
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 	}
+ 	 	
+ 	
+ 	public void setPosition(int i)
+ 	{
+ 		setInput((DataElement)_history.get(i));
+ 	}
+ }
  
+ class BackAction extends BrowseAction
+ {
+ 	public BackAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 		
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 		setEnabled(false);
+ 		if (_browseHistory.size() > 1)
+ 		{
+ 			if (_browsePosition > 0)
+ 			{
+ 				setEnabled(true);
+ 			}
+ 		}
+
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		_browsePosition--;
+ 		setPosition(_browsePosition);
+ 		updateActionStates();
+ 	}
+ }
+ 
+ class ForwardAction extends BrowseAction
+ {
+ 	public ForwardAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 					
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 		 setEnabled(false);
+ 		if (_history.size() > 1)
+ 		{
+ 			if (_browsePosition < (_history.size() - 1))
+ 			{
+ 				setEnabled(true);
+ 			}
+ 		}
+
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		_browsePosition++;
+ 		setPosition(_browsePosition);
+ 		updateActionStates();
+ 	}
+ }
+ 
+ class HomeAction extends BrowseAction
+ {
+ 	public HomeAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		if (_history.size() > 0)
+ 		{
+ 			DataElement input = (DataElement)_history.get(0);
+ 			_viewer.setInput(input);	
+ 			_browsePosition = 0;
+ 			updateActionStates();
+ 		}
+ 	}
+ }
+ 
+ class DrillAction extends BrowseAction
+ {
+ 	
+ 	public DrillAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);		
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		DataElement selected = _viewer.getSelected();
+ 		if (selected != null)
+ 		{
+ 			int i = _history.size() - 1;
+ 			if (_history.size() > 1)
+ 			{
+ 				for (; i > _browsePosition; i--)
+ 				{
+ 					_history.remove(i);	
+ 				}
+ 			}
+ 			
+ 			_history.add(selected);
+ 			_browsePosition = i + 1;
+			_viewer.setInput(selected);		
+ 			updateActionStates();
+ 		}
+ 	}
+ 	
+ }
+ 
+  public void updateActionStates()
+  {
+ 	_homeAction.checkEnabledState();
+ 	_forwardAction.checkEnabledState();
+ 	_backAction.checkEnabledState();
+ 	_drillAction.checkEnabledState(); 	
+  }
+ 
+  public void fillLocalToolBar()
+    {
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		
+		_homeAction = new HomeAction("Home", _plugin.getImageDescriptor("home.gif"));
+		toolBarManager.add(_homeAction);
+		_backAction = new BackAction("Back", _plugin.getImageDescriptor("back.gif"));
+		toolBarManager.add(_backAction);
+		
+		_forwardAction = new ForwardAction("Forward", _plugin.getImageDescriptor("forward.gif"));
+    	toolBarManager.add(_forwardAction);
+				
+		_drillAction = new DrillAction("Drill Down Into", _plugin.getImageDescriptor("drill.gif"));	 
+    	toolBarManager.add(_drillAction); 
+    	
+    	updateActionStates();
+    }
+   
 }
 
 
