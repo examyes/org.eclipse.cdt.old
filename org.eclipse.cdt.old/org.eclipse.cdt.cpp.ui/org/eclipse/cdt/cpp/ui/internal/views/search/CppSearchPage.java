@@ -53,7 +53,7 @@ public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearc
 	private static  String LIMIT_TO_DECL = "SearchViewer.Limit_To.Declarations";
 	private static  String LIMIT_TO_BOTH = "SearchViewer.Limit_To.Both";
 	
-	private static  String FILTER_CASE = "SearchViewer.Filter.Case_Sensetive";
+	private static  String FILTER_CASE = "SearchViewer.Filter.Case_Sensitive";
 	private static  String FILTER_REGULAR = "SearchViewer.Filter.Regular_Expressions";
 	
 	private   String SELEC_SCOPE_TITLE = "SearchViewer.Scope.Selection.Title";
