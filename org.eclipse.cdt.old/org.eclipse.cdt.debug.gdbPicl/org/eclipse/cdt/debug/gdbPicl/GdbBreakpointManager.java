@@ -799,7 +799,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       int lineNum = bkp.lineNum();
 
       int i = 0;
-      while ((i <= _breakpoints.size()) && removeBkp == true) {
+      while ((i < _breakpoints.size()) && removeBkp == true) {
          Object obj = _breakpoints.elementAt(i);
          if (obj instanceof LocationBreakpoint)
          {
