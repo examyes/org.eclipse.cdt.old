@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2000, 2001, 2002 International Business Machines Corporation and others. All Rights Reserved.
  */
 
 options
@@ -16,7 +16,7 @@ PARSER_BEGIN(Parser)
 package org.eclipse.cdt.cpp.miners.parser.grammar;
 
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
+ * Copyright (C) 2000, 2001, 2002 International Business Machines Corporation and others. All Rights Reserved.
  */
 
 import org.eclipse.cdt.dstore.core.model.*;

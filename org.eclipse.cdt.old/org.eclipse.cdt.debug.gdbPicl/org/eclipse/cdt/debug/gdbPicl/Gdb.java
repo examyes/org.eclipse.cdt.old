@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1995, 2001 International Business Machines Corporation. All rights reserved.
+ * Copyright (c) 1995, 2001, 2002 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
@@ -464,7 +464,7 @@ public class Gdb
       String buildDate = (new java.text.SimpleDateFormat("yy/MM/dd").format(new Date())).toString();
       
       Gdb.msgOutput("GdbPicl (" + buildDate + ")");
-      Gdb.msgOutput("Copyright (c) 1995, 2001 International Business Machines Corporation.");
+      Gdb.msgOutput("Copyright (c) 1995, 2001, 2002 International Business Machines Corporation.");
       Gdb.msgOutput("All rights reserved.");
       Gdb.msgOutput("This program and the accompanying materials are made available ");
       Gdb.msgOutput("under the terms of the Common Public License which accompanies");

@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
@@ -74,7 +74,7 @@ class GenerateMakefiles
     theFile.delete();
    theFile.createNewFile();
    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(theFile)));
-   out.println("# Copyright (c) 2001 International Business Machines Corporation. All rights reserved.");
+   out.println("# Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.");
    out.println("# This program and the accompanying materials are made available under the terms of the");
    out.println("# Common Public License which accompanies this distribution.");
    out.println("SHELL=sh");
