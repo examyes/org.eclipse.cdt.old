@@ -165,6 +165,7 @@ public class AmParser
 		}
 		return -1;
 	}
+	
 	private boolean subdirsDefinition(String theLine)
 	{
 		return (theLine.indexOf(Am.SUBDIRS) >= 0);
@@ -298,8 +299,3 @@ public class AmParser
 		return theCanonicalString.toString();
 	}
 }
-
-
-
-
-

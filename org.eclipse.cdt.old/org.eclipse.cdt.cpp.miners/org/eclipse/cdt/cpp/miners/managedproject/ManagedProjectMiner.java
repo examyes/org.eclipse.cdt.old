@@ -22,6 +22,7 @@ public class ManagedProjectMiner extends Miner
 		autoconfManager = new AutoconfManager();
 		targetManager = new TargetManager();
 	}
+	
 	public void extendSchema(DataElement schemaRoot)
 	{
 		DataElement projectD = _dataStore.find(schemaRoot, DE.A_NAME, "Project");
@@ -86,8 +87,6 @@ public class ManagedProjectMiner extends Miner
 		
 					
 	}
-	
-
 	
 	public DataElement getWorkspace()
 	{
@@ -206,6 +205,7 @@ public class ManagedProjectMiner extends Miner
   		status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
   		return status;
 	}
+
 	private DataElement parseAmFile(DataElement theUnmanagedProject)
 	{
 		DataElement theManagedProject = null;
@@ -223,6 +223,5 @@ public class ManagedProjectMiner extends Miner
 		}
 	    return null;
 	}
-
 }
 
