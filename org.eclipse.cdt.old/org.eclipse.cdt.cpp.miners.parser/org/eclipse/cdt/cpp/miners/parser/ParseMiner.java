@@ -126,7 +126,7 @@ public class ParseMiner extends Miner
  	DataElement theProject = file;
  	while (!type.equals("Project") && theProject != null)
  	{
- 		theProject = file.getParent();
+ 		theProject = theProject.getParent();
  		type = theProject.getType();
  	}
  	
