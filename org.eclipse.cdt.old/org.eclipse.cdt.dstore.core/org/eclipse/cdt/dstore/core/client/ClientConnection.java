@@ -138,6 +138,8 @@ public class ClientConnection
   {
     if (_isConnected)
       {
+	  _dataStore.setConnected(false);
+
 	if (_isRemote)
 	  {
 	    _commandHandler.command(_dataStore.find(_dataStore.getRoot(), DE.A_NAME, "Exit"),
