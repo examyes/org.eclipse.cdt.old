@@ -79,6 +79,12 @@ public class CopyAction extends CustomAction
         super(subject, label, command, dataStore);
       }
 
+
+  public CopyAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+  {
+  	super(subjects, label, command, dataStore);
+  }	
+
     public void run()
     {
 	ModelInterface api = ModelInterface.getInstance();	
@@ -91,22 +97,24 @@ public class CopyAction extends CustomAction
 	    {
 		List projects = dlg.getSelected();
 		
-		
-		CopyOperation op = new CopyOperation(_subject, projects, api);
-		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
-		try
+		for (int i = 0; i < _subjects.size(); i++)
+		{		
+			DataElement subject = (DataElement)_subjects.get(i);
+			CopyOperation op = new CopyOperation(subject, projects, api);
+			ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
+			try
 		    {
-			progressDlg.run(false, true, op);
+				progressDlg.run(false, true, op);
 		    }
-		catch (InterruptedException e) 
+			catch (InterruptedException e) 
 		    {
-			e.printStackTrace();
+				e.printStackTrace();
 		    } 
-		catch (InvocationTargetException e) 
+			catch (InvocationTargetException e) 
 		    {
-			e.printStackTrace();
+				e.printStackTrace();
 		    }
-
+	    }
 	    }
     }
 }
