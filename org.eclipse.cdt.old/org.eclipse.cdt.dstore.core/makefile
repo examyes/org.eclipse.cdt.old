@@ -83,7 +83,7 @@ prod            : production
 %_cleanMakefiles:
 	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) -$(MAKEFLAGS) clean-makefiles 
 
-generateBuildEnvironment: unzipBuildPlugins setUpSpecialPlugins
+generateBuildEnvironment: unzipBuildPlugins setUpExtraPlugin
 	@cd build && java -cp . GenerateMakefiles $(buildPlugins)
 
 unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
@@ -125,11 +125,6 @@ clean:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	find . -name '*.class' |xargs rm -f
 
-
-
-# The last 3 targets are some hacky stuff to set up the dstore.extra and gdbPicl Plugins...
-setUpSpecialPlugins: setUpExtraPlugin setUpGdbPiclPlugin
-
 setUpExtraPlugin:
 	@echo Generating Build Environment for All Plugins
 	@-cd $(pluginsDirectory)/com.ibm.dstore.extra/com/ibm/dstore/extra/internal;\
@@ -145,14 +140,3 @@ setUpExtraPlugin:
 	rm -rf extra;\
 	cp -r extra.Client extra;
 
-ifeq (gdbPicl,$(findstring gdbPicl, $(buildPlugins)))
- setUpGdbPiclString=cd $(pluginsDirectory)/com.ibm.debug.gdbPicl/com/ibm/debug;\
- rm -rf util;\
- mkdir util;\
- cd util;\
- java -classpath $(pluginsDirectory)/com.ibm.debug/IBMDebug.jar com.ibm.debug.util.CreateBuildInformation;\
- javac *.java;
-endif
-
-setUpGdbPiclPlugin:
-	@$(setUpGdbPiclString)
