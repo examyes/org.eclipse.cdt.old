@@ -499,7 +499,9 @@ public String removeWhitespace(String theLine)
     file = file.substring(lastBckSlash+1,file.length());
   
    DataElement subStatus = _dataStore.createObject(null, "status", "start");
-   DataElement theFile = _fileMiner.findFile(_files, file, subStatus);
+   _fileMiner.findFile(_files, file, subStatus);
+   DataElement theFile = subStatus.get(0);
+
    if (theFile != null) 
    {
     file = theFile.getSource();
