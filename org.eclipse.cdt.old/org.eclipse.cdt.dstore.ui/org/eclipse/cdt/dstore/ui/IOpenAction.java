@@ -16,4 +16,5 @@ public interface IOpenAction
     public void setSelected(DataElement selected);
     public void performGoto(boolean flag);
     public void run();
+    public void setLocation(String filename, int location);
 }

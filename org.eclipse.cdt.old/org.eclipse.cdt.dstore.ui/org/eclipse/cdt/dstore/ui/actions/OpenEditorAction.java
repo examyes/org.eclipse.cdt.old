@@ -29,8 +29,9 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
-  private DataElement _previousElement;
+  private static DataElement _previousElement;
   private DataElement _element;
+
   public OpenEditorAction(DataElement element)
       {
         super("Open Action");
@@ -42,12 +43,29 @@ public class OpenEditorAction extends Action implements IOpenAction
 	_element = _previousElement;
     }
 
-  public void setSelected(DataElement selected)
-  {
-      _previousElement = _element;
-      _element = selected;
-  }  
+    public void setLocation(String filename, int location)
+    {	
+	if (_previousElement != null)
+	    {
+		_previousElement.setAttribute(DE.A_SOURCE, filename + ":" + location);
+	    }
+    }
+    
+    public void setSelected(DataElement selected)
+    {
+	if (_element != null)
+	    {
+		DataStore dataStore = _element.getDataStore();
+		if (_previousElement == null)
+		    {
+			_previousElement = dataStore.createObject(null, "file", "location");
+		    }
 
+		_previousElement.setAttribute(DE.A_SOURCE, selected.getSource());
+	    }
+	_element = selected;
+    }  
+    
   public void run()
   {
     performGoto(true); 
