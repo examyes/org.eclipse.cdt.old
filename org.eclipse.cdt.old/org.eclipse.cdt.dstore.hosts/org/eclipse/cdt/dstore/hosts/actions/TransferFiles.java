@@ -179,102 +179,102 @@ public class TransferFiles extends Thread
 	    }
 	
 
-		// both projects on same machine
-		if (needsUpdate)
-		{
-			String utask = null;	
-			if (scratchUpdate)
-			{
-				utask = "Creating " + newSourceStr + "...";
-			}
-			else
-			{
-			    utask = "Updating " + newSourceStr + "...";
-			}
-		
-			if (_listener != null)
+	// both projects on same machine
+	if (needsUpdate)
+	    {
+		String utask = null;	
+		if (scratchUpdate)
 		    {
-				_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
+			utask = "Creating " + newSourceStr + "...";
 		    }
-			else if (_pm != null)
+		else
 		    {
-				_pm.subTask(utask);
+			utask = "Updating " + newSourceStr + "...";
+		    }
+		
+		if (_listener != null)
+		    {
+			_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
+		    }
+		else if (_pm != null)
+		    {
+			_pm.subTask(utask);
 		    }	
 		
 		if ((targetDataStore == sourceDataStore) || (!targetDataStore.isVirtual() && !sourceDataStore.isVirtual()))
-	    {
-		// files on the same system
+		    {
+			// files on the same system
 			// simply copy them
 			DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
 			if (cmd != null)
-			{
+			    {
 				java.io.File sFile = source.getFileObject();
 				targetDataStore.replaceFile(newSourceStr, sFile);
 				
 				if (_checkTimestamps)
-				{
+				    {
 					setDate(copiedSource, getDate(source));
-				}
-
-			}
-	    }
+				    }
+				
+			    }
+		    }
 		else if (targetDataStore == _plugin.getDataStore())
-	    {
-	
+		    {
+			
 			source.getFileObject();
 			String sourceMapping = sourceDataStore.mapToLocalPath(source.getSource());
 			java.io.File newSource = new java.io.File(sourceMapping);
-
+			
 			if (newSource != null && newSource.exists())
 			    {
-					File newFile = new java.io.File(newSourceStr);
-					if (newFile.exists())
+				File newFile = new java.io.File(newSourceStr);
+				if (newFile.exists())
 				    {
-						newFile.delete();
+					newFile.delete();
 				    }
 				
-					newSource.renameTo(newFile);
+				newSource.renameTo(newFile);
 			    }		
-	    }
+		    }
 		else
-	    {	
-
+		    {	
+			
 			// make sure we have a local copy of the file
 			File theFile = source.getFileObject();
-
+			
 			try
-			{ 
+			    { 
 				FileInputStream input = new FileInputStream(theFile);
 				long size = theFile.length();
 				boolean firstAppend = true;
 				int bufferSize = 500000;
 				byte[] buffer = new byte[bufferSize];
-
+				
 				int written = 0;
 				while (written < size)
-				{ 
+				    { 
 					int subWritten = 0;
 					while (written < size && subWritten < bufferSize)
-				    {
+					    {
 						int available = input.available();
 						available = (bufferSize > available) ? available : bufferSize;
 						int read = input.read(buffer, subWritten, available);
 						subWritten += read;
 						written += subWritten;
-				    }
-	
+					    }
+					
 				    	
 					if (written <= bufferSize) 
-					{ 
-						targetDataStore.replaceFile(newSourceStr, buffer, subWritten);				
-					}
+					    { 
+						targetDataStore.replaceFile(newSourceStr, buffer, subWritten);
+					    }
 					else
-					{		
+					    {		
 						targetDataStore.replaceAppendFile(newSourceStr, buffer, subWritten);					
-					}
+					    }
 					
 					
-				if (_pm != null)
+					if (_pm != null)
 		  		  {
 		  		  	String msg = "Writing " + newSourceStr;
 		  		  	//if (written < size)
@@ -294,7 +294,7 @@ public class TransferFiles extends Thread
 			
 			if (_checkTimestamps)
 			{
-				setDate(copiedSource, getDate(source));
+			    setDate(copiedSource, getDate(source));
 			}
 			
 	    }

@@ -195,6 +195,10 @@ public class FileSystemMiner extends Miner
 	  _dataStore.createReference(_fileDescriptor, _sizeDescriptor, _attributesDescriptor);	  
 	  _dataStore.createReference(_fileDescriptor, _dateDescriptor, _attributesDescriptor);	  
 	  _dataStore.createReference(_fileDescriptor, _permissionsDescriptor, _attributesDescriptor);	  
+
+	  _dataStore.createReference(_directoryDescriptor, _sizeDescriptor, _attributesDescriptor);	  
+	  _dataStore.createReference(_directoryDescriptor, _dateDescriptor, _attributesDescriptor);	  
+	  _dataStore.createReference(_directoryDescriptor, _permissionsDescriptor, _attributesDescriptor);	  
 	  
 
 
@@ -696,10 +700,11 @@ public class FileSystemMiner extends Miner
 	File file = new File(theFile.getSource());
 	try
 	{
-		file = file.getCanonicalFile();
+	    file = file.getCanonicalFile();
 	}
 	catch (IOException e)
 	{
+	    e.printStackTrace();
 	}
 	if (file.exists())
 	    {
