@@ -68,7 +68,7 @@ public class QuickConnectAction implements Runnable
 
 
 	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
-	if (status != null)
+	if (status == null)
 	    {
 		// command cancelled
 	    }
