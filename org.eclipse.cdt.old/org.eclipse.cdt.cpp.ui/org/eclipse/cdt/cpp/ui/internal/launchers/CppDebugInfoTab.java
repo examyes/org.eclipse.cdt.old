@@ -49,7 +49,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 
     // widgets
     private Text                             _programNameField;
-    private   Text                           programParametersField;
+    private   Text                           _parametersField;
     protected Text		                     _workingDirectoryField;
     protected Button                         workingDirectoryBrowseButton;
 
@@ -85,7 +85,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
    	createSpacer(composite);
    	createWorkingDirectoryGroup(composite);
 
-   	programParametersField.setFocus();
+   	_parametersField.setFocus();
    	
    	setControl(composite);
     }
@@ -153,21 +153,20 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
     	
     	
     	// new parameters name entry field
-    	programParametersField = new Text(parametersGroup, SWT.BORDER);
-    	//programParametersField.addListener(SWT.Modify, this);
+    	_parametersField = new Text(parametersGroup, SWT.BORDER);
     	data = new GridData(GridData.FILL_HORIZONTAL);
     	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
-    	programParametersField.setLayoutData(data);
+    	_parametersField.setLayoutData(data);
 
-		programParametersField.addModifyListener(new ModifyListener() {
+		_parametersField.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent evt) {
 				updateLaunchConfigurationDialog();
 			}
 		});
-    	programParametersField.setEnabled(true);
+    	_parametersField.setEnabled(true);
          	
     	if (initialParametersFieldValue != null)
-    	    programParametersField.setText(initialParametersFieldValue);
+    	    _parametersField.setText(initialParametersFieldValue);
 
 
 
@@ -316,12 +315,20 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	protected void updateExecutableFromConfig(ILaunchConfiguration config) {
 		String executableName = "";
 		String workingDirectory = "";
+		String parameters = "";
+
 		try
       {
        	executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
          if (executableName.length() != 0)
          {
       		_programNameField.setText(executableName);		
+         }
+
+			parameters = config.getAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, "");
+         if (parameters.length() != 0)
+         {
+      		_parametersField.setText(parameters);		
          }
 
 			workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
@@ -342,6 +349,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	public void performApply(ILaunchConfigurationWorkingCopy config)
    {
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
+		config.setAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, (String)_parametersField.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, (String)_workingDirectoryField.getText());
 	}
 
