@@ -44,6 +44,7 @@ public class ProjectMiner extends Miner
   DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
   DataElement projectFileD   = createObjectDescriptor(schemaRoot, getLocalizedString("project.ProjectFile"));
   DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
+  DataElement pContainersD   = createAbstractObjectDescriptor(schemaRoot, "Project Containers");
 
   projectsD.setDepth(100);
   projectD.setDepth(100);
@@ -70,10 +71,15 @@ public class ProjectMiner extends Miner
   createReference(projectsD,  projectFileD); 
   createReference(projectsD,  directoryD); 
   createReference(projectsD,  fileD); 
-  //  createReference(projectsD,  fsObjectD); 
 
-  createReference(workspaceD, projectsD);
+    createReference(pContainersD, projectD);
+    createReference(pContainersD, closedProject);
+    createReference(pContainersD, directoryD);
+    
 
+    createReference(workspaceD, projectsD);
+    createReference(workspaceD, pContainersD);
+    
   projectsD.setDepth(100); 
  }
  
