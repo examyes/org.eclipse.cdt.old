@@ -329,9 +329,7 @@ private int getLimitTo() {
 	Assert.isTrue(false, pluginInstance.getLocalizedString(ERROR_MESSAGE));
 	return -1;
 }
-/*
- * Author : Yasser
- */
+
 private Object getNavigatorSelection() {
 	IWorkbenchWindow window= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	if (window != null)
