@@ -326,8 +326,8 @@ public class ExtendedTableViewer extends TableViewer
 	    {
 		System.out.println(e);
 	    }				
-    }
-    
+    }    
+   
     protected Item newItem(Widget parent, int flags, int ix)  
     {
 	if (parent instanceof Table)
@@ -557,7 +557,9 @@ public void doExpand(DataElement obj)
   {
     TableContentProvider provider = (TableContentProvider)getContentProvider();
 
-    if (property != provider.getProperty())
+    if (property != null && 
+	provider != null && 
+	property != provider.getProperty())
     {      
       _property = property;
       provider.setProperty(property);       
