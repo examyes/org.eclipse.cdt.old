@@ -16,12 +16,12 @@ public class DebugMiner extends Miner
     {
        String pluginPath = null;
        pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-       _gdbPluginPath = pluginPath + "com.ibm.debug.gdb/";
 
        String ps = System.getProperty("path.separator");
        String fs = System.getProperty("file.separator");
-       _debugJarPath = pluginPath + "com.ibm.debug.gdb" + fs + "epdc.jar" + ps + pluginPath + "com.ibm.debug.gdb" + fs + "gdbPicl.jar";
-       _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb ";
+       _gdbPluginPath = pluginPath + "com.ibm.debug.gdbPicl" + fs;
+       _debugJarPath = pluginPath + "com.ibm.debug.gdbPicl" + fs + "epdc.jar" + ps + pluginPath + "com.ibm.debug.gdbPicl" + fs + "gdbPicl.jar";
+       _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdbPicl.Gdb ";
     }
 
     public void extendSchema(DataElement schemaRoot)
