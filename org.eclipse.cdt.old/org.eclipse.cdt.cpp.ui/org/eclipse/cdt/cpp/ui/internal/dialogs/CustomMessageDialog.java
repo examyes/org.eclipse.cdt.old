@@ -224,35 +224,40 @@ public class CustomMessageDialog extends MessageDialog{
     	ArrayList global = new ArrayList();
     	
     	// check wethere to use preference settings- global - or to use the properties settings
-    	global = CppPlugin.readProperty(project,globalSettingKey);
-    	if(!global.isEmpty())
+    	if(project!=null)
     	{
-    	
-    		if(global.get(0).equals("Yes"))
+    		global = CppPlugin.readProperty(project,globalSettingKey);
+    		if(!global.isEmpty())
     		{
-    			preferenceList = CppPlugin.readProperty(preferenceKey);
-    			if(!preferenceList.isEmpty())
+    		
+    			if(global.get(0).equals("Yes"))
     			{
-    				String preference = (String)preferenceList.get(0);
+    				preferenceList = CppPlugin.readProperty(preferenceKey);
+    				if(!preferenceList.isEmpty())
+    				{
+    					String preference = (String)preferenceList.get(0);
+						if (preference.equals("Yes"))
+							return true;
+						else
+							return false;
+    				}
+    				else
+    				{
+    					return true;
+    				}
+    			}
+    			else
+    			{
+    				propertyList = CppPlugin.readProperty(project, preferenceKey);
+    				String preference = (String)propertyList.get(0);
 					if (preference.equals("Yes"))
 						return true;
 					else
 						return false;
     			}
-    			else
-    			{
-    				return true;
-    			}
     		}
     		else
-    		{
-    			propertyList = CppPlugin.readProperty(project, preferenceKey);
-    			String preference = (String)propertyList.get(0);
-				if (preference.equals("Yes"))
-					return true;
-				else
-					return false;
-    		}
+    			return true;
     	}
     	else
     	{
