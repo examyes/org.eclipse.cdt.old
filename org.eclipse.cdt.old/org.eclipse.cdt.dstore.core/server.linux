@@ -1,0 +1,40 @@
+#!/usr/bin/perl -w
+
+
+$port = $ARGV[0];
+
+$dir= $ENV{PWD};
+
+$plugins_dir=substr($dir,0,rindex($dir,"/"));
+
+$ENV{A_PLUGIN_PATH}="$plugins_dir/";
+
+$oldClasspath = $ENV{CLASSPATH};
+
+$ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/:$plugins_dir/com.ibm.dstore.core/:$plugins_dir/com.ibm.dstore.miners/:$plugins_dir/com.ibm.cpp.miners/:$plugins_dir/com.ibm.cpp.miners.parser/:$plugins_dir/com.ibm.dstore.extra.server/extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$plugins_dir/com.ibm.cpp.miners.parser/miners_parser.jar:$oldClasspath";
+
+
+
+while (1)
+  {
+
+    if (defined($port))
+      {
+	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.Server $port");
+      }
+    else
+      {
+	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.Server");
+      }
+
+    if ($signo &= 127)
+      {
+	$ENV{CLASSPATH}=$oldClasspath;
+	die "Server terminated\n";
+      }
+    
+    sleep 1;
+  }
+
+
+
