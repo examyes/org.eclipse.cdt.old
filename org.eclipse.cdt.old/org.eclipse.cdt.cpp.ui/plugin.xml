@@ -523,6 +523,16 @@
       </filter>
    </page>
    <page
+         objectClass="org.eclipse.core.resources.IProject"
+         name="Paths"
+         class="org.eclipse.cdt.cpp.ui.internal.builder.PathsPropertyPage"
+         id="org.eclipse.cdt.cpp.ui.internal.builder.PathsPropertyPage">
+      <filter
+            name="nature"
+            value="org.eclipse.cdt.cpp.ui.cppnature">
+      </filter>
+   </page>
+   <page
          objectClass="org.eclipse.cdt.cpp.ui.internal.vcm.Repository"
          name="Remote Properties"
          class="org.eclipse.cdt.cpp.ui.internal.builder.RemotePropertyPage"
