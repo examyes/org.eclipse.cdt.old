@@ -848,7 +848,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       }
       else if (bkp instanceof LoadBreakpoint)
       {
-	      ((GdbDebugSession)_debugSession).clearLoadBreakpoint(bkp.getGdbBkID());
+	      ((GdbDebugSession)_debugSession).disableLoadBreakpoint(bkp.getGdbBkID());
 	      ((LoadBreakpoint)bkp).disableBreakpoint();
 	      _changedBreakpoints.addElement(bkp);
 
@@ -885,7 +885,9 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       }
       else if (bkp instanceof LoadBreakpoint)
       {
-	      ((GdbDebugSession)_debugSession).setLoadBreakpoint(((LoadBreakpoint)bkp).getDllName());
+	      int id = ((LoadBreakpoint)bkp).getGdbBkID();
+	      String name = ((LoadBreakpoint)bkp).getDllName();
+	      ((GdbDebugSession)_debugSession).enableLoadBreakpoint(id, name);
 	      ((LoadBreakpoint)bkp).enableBreakpoint();
 	      _changedBreakpoints.addElement(bkp);
       }

@@ -1851,6 +1851,48 @@ public class GdbDebugSession extends DebugSession {
     }
     
     /*
+     * Disable load breakpoint
+     * remove the original entry from _dllToStop
+     * replace entry with " "
+     * as debug session is stopped at a shared lib event, dll in the debug session
+     * will be updated, but will continue to run without stopping after update
+     */
+    public void disableLoadBreakpoint(int id)
+    {
+    	Integer dllId = new Integer(id);
+    	
+    	if (_dllToStop.containsKey(dllId))
+    	{
+    		_dllToStop.remove(dllId);
+    		_dllToStop.put(dllId, new String (" "));
+    		if (resetStopOnSharedLibEvents())
+    		{
+    			gdbProcess.setStopOnSharedLibEvents(false);
+    		}
+    	}
+    }
+    
+    /*
+     * Enable load breakpoint
+     * Given the breakpoint id, replace " " set previously from disableLoadBreakpoitn
+     * with real dllName.  
+     */
+    public void enableLoadBreakpoint(int id, String dllName)
+    {
+    	Integer dllId = new Integer(id);
+    	
+    	if (_dllToStop.containsKey(dllId))
+    	{
+    		_dllToStop.remove(dllId);
+    		_dllToStop.put(dllId, dllName);
+    		if (resetStopOnSharedLibEvents())
+    		{
+    			gdbProcess.setStopOnSharedLibEvents(false);
+    		}
+    	}
+    }
+    
+    /*
      * Checks _dllToStop to see if the debug session should stop after a shared lib event
      * Update shared libreaires in module manager
      */
