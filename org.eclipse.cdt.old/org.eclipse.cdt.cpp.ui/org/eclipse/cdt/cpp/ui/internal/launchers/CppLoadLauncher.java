@@ -25,7 +25,9 @@ import com.ibm.debug.WorkspaceSourceLocator;
 import com.ibm.debug.launch.PICLDaemonInfo;
 import com.ibm.debug.launch.PICLLoadInfo;
 
+import com.ibm.cpp.ui.internal.CppPlugin;
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.wizards.*;
 
 
 import java.io.IOException;
@@ -63,11 +65,12 @@ public class CppLoadLauncher implements ILauncherDelegate {
         _directory = directory.toString();
         System.out.println("CppLoadLauncher.launch() _directory = " + _directory);
 
-/*
+        IProject project = ((IResource)element).getProject();
+
         // display the wizard
-u        PICLLoadWizard w= new PICLLoadWizard();
+        CppLoadLauncherWizard w= new CppLoadLauncherWizard();
         w.init(launcher, ILaunchManager.DEBUG_MODE, selection);
-        WizardDialog wd= new WizardDialog(PICLDebugPlugin.getActiveWorkbenchWindow().getShell(), w);
+        WizardDialog wd= new WizardDialog(CppPlugin.getActiveWorkbenchWindow().getShell(), w);
 
         int rc = wd.open();
 
@@ -75,28 +78,13 @@ u        PICLLoadWizard w= new PICLLoadWizard();
             return true;
         } else
             return false;
-*/
-        PICLLoadInfo loadInfo = new PICLLoadInfo();
-
-        loadInfo.setResource(element); // this doesn't seem to do anything
-	loadInfo.setLauncher(launcher);
-	String name = ((IResource)element).getName();
-        //String name = ((IResource)element).getLocation().toString();
-	
-        System.out.println("CppLoadLauncher.launch() program name = " + name);
-        loadInfo.setProgramName(name);
-        loadInfo.setProgramParms("3");
-        int startupBehaviour = loadInfo.RUN_TO_MAIN;
-        loadInfo.setStartupBehaviour(startupBehaviour);
-
-        doLaunch(loadInfo);
-            return true;
-
     }
 
-    protected void doLaunch(PICLLoadInfo loadInfo) {
+    public void doLaunch(PICLLoadInfo loadInfo) {
 
         WorkspaceSourceLocator sourceLocator = new WorkspaceSourceLocator();
+
+           System.out.println("CppLoadLauncher.doLaunch()");
 
         // If we can get a project from the selection, tell source locator
         Object resource = loadInfo.getResource();
@@ -117,25 +105,30 @@ u        PICLLoadWizard w= new PICLLoadWizard();
         if(daemonInfo == null)
             return;
 
-	
-
         launchEngine(daemonInfo);
     }
 
-    protected void launchEngine(PICLDaemonInfo daemonInfo) 
+
+
+/*
+        String command = "java com.ibm.debug.gdb.Gdb -qhost=localhost -quiport=" +
+                         (new Integer(daemonInfo.getPort())).toString() +
+                           " -startupKey=" +
+                         (new Integer(daemonInfo.getKey())).toString();
+
+        ModelInterface api = ModelInterface.getInstance();
+        String path = _directory;
+
+        api.command(path, command, false);
+*/
+
+    protected void launchEngine(PICLDaemonInfo daemonInfo)
     {
 	ModelInterface api = ModelInterface.getInstance();
 	String port = new Integer(daemonInfo.getPort()).toString();
 	String key  = new Integer(daemonInfo.getKey()).toString();
- 
+
 	api.debug(_directory, port, key);
     }
 
-    /*
-    protected void displayError(String msgCode) {
-        String title = PICLUtils.getResourceString(LAUNCHER+".errorTitle");
-        String msg = PICLUtils.getResourceString(msgCode);
-        MessageDialog.openError(PICLDebugPlugin.getActiveWorkbenchShell(), title, msg);
-    }
-    */
 }
