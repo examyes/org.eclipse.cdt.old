@@ -27,10 +27,10 @@
 	</target>
 
 	<target name="all.plugins" depends="init">
-		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core/" target="${target}"/>
 		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt/" target="${target}"/>
-		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.core/" target="${target}"/>
+		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core/" target="${target}"/>
 		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.ui/" target="${target}"/>
+		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.core/" target="${target}"/>
 		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.ui/" target="${target}"/>
 		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.mi.core/" target="${target}"/>
 		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.launch/" target="${target}"/>
