@@ -671,6 +671,7 @@ public class MakefileAmManager {
 	}
 	private String updateLdaddLine(String line, File parent)
 	{
+		// done by the dependencies function
 	/*	line = line.substring(0,line.lastIndexOf("=")+1);
 		// add libs to the _LDADD variable
 		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
@@ -939,30 +940,46 @@ public class MakefileAmManager {
 		StringBuffer modLine = new StringBuffer();
 		System.out.println("\n Affected line = "+line);
 		StringTokenizer tokenizer = new StringTokenizer(line);
-		File old = new File(Makefile_am.getParentFile(),"Makefile.am.old");
+		//File old = new File(Makefile_am.getParentFile(),"Makefile.am.old");
 		int classification = classifier.classify(Makefile_am);
-		if(!old.exists())
-			old = Makefile_am;
+		
+		//if(!old.exists())
+			//old = Makefile_am;
+		
+		//String libName = getLibName(old,"LIBRARIES"); // has to be mod - if user save > am.old = am
 		
 		while (tokenizer.hasMoreTokens())
 		{
 			String token = tokenizer.nextToken();
-			
-			
-			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1 && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
+			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1)
 			{
-				
-				if(classification==STATICLIB)
-					token = getModifiedLibString(token,getLibName(Makefile_am,_LIBRARIES));
-				else if (classification==SHAREDLIB)
-					token = getModifiedLibString(token,getLibName(Makefile_am,_LTLIBRARIES));
-				else
-					token = "";
+				if(isRightTokenToModify(Makefile_am.getParentFile().getName(),token) )
+			//if(token.indexOf(Makefile_am.getParentFile().getName())!=-1 && token.indexOf(libName)!=-1)
+				{
+					if(classification==STATICLIB)
+						token = getModifiedLibString(token,getLibName(Makefile_am,_LIBRARIES));
+					else if (classification==SHAREDLIB)
+						token = getModifiedLibString(token,getLibName(Makefile_am,_LTLIBRARIES));
+					else
+						token = "";
+				}
 			}
 			modLine.append(token+" ");
 		}
 		System.out.println("\n modLine line = "+modLine);
 		return modLine.toString();
+	}
+	private boolean isRightTokenToModify(String dir, String tok)
+	{
+		ArrayList list = new ArrayList();
+		StringTokenizer tokenizer = new StringTokenizer(tok,"/");
+		int counter = tokenizer.countTokens();
+		for(int i = 0; i<counter ; i++)
+			list.add(i,tokenizer.nextToken());
+		if(list.get(counter-2).toString().equals(dir))
+			return true;
+		
+		return false;
 	}
 	private String getLibName(File Makefile_am, String key)
 	{
