@@ -47,6 +47,9 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
 	_input = input;
 	_title = title;
     }
+    
+    //Jeff:  Added this api to match IActionLoader
+    public void provideExternalLoader(ExternalLoader loader) {};
 
     protected void buttonPressed(int buttonId)
     {
