@@ -108,6 +108,7 @@ public class DataStoreSchema
 		 //Base Container Object
         DataElement containerObjectD = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Container_Object"));
         _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY", false);
+		_dataStore.createReference(containerObjectD, containsD, containsD);
 
 		// file objects
 		_dataStore.createReference(hostD, containsD, containsD);	

@@ -2122,7 +2122,7 @@ public final class DataStore
 			}
 		}
         }        
-
+/*
 	DataElement containsD   = findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.contents"));	
 	if (!result.contains(containsD))
 	    {
@@ -2140,6 +2140,7 @@ public final class DataStore
 	    {
 		result.add(descriptorD);
 	    }
+*/
 
 	return result;
     }

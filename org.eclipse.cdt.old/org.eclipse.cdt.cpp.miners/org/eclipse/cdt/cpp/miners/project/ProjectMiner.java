@@ -44,11 +44,14 @@ public class ProjectMiner extends Miner
   DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
   DataElement projectFileD   = createObjectDescriptor(schemaRoot, getLocalizedString("project.ProjectFile"));
   DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
+  DataElement oprojectsD      = createAbstractObjectDescriptor(schemaRoot, "Open Projects");
   DataElement pContainersD   = createAbstractObjectDescriptor(schemaRoot, "Project Containers");
-
+  DataElement containerObjectD = findDescriptor(getLocalizedString("model.Container_Object"));
+ 
   projectsD.setDepth(100);
   projectD.setDepth(100);
 
+ 	
  
   DataElement closeD = createCommandDescriptor(projectD, "Close Project", "C_CLOSE_PROJECT");
   closeD.setDepth(0);
@@ -64,7 +67,7 @@ public class ProjectMiner extends Miner
   
   
   createAbstractRelationship(fsObjectD, projectD);
-
+  _dataStore.createReference(containerObjectD, workspaceD, "abstracts", "abstracted by");
 
   _dataStore.createReference(projectsD,  projectD, "abstracts", "abstracted by"); 
   _dataStore.createReference(projectsD,  closedProject, "abstracts", "abstracted by"); 
@@ -72,12 +75,18 @@ public class ProjectMiner extends Miner
   _dataStore.createReference(projectsD,  directoryD, "abstracts", "abstracted by"); 
   _dataStore.createReference(projectsD,  fileD, "abstracts", "abstracted by"); 
 
+  _dataStore.createReference(oprojectsD,  projectD, "abstracts", "abstracted by"); 
+  _dataStore.createReference(oprojectsD,  projectFileD, "abstracts", "abstracted by"); 
+  _dataStore.createReference(oprojectsD,  directoryD, "abstracts", "abstracted by"); 
+  _dataStore.createReference(oprojectsD,  fileD, "abstracts", "abstracted by"); 
+
   _dataStore.createReference(pContainersD, projectD, "abstracts", "abstracted by");
   _dataStore.createReference(pContainersD, closedProject, "abstracts", "abstracted by");
   _dataStore.createReference(pContainersD, directoryD, "abstracts", "abstracted by");
     
 
     createReference(workspaceD, projectsD);
+    createReference(workspaceD, oprojectsD);
     createReference(workspaceD, pContainersD);
     
   projectsD.setDepth(100); 
@@ -136,7 +145,8 @@ public class ProjectMiner extends Miner
   }
 
 
-  
+   _dataStore.refresh(_workspace);
+   
    status.setAttribute(DE.A_NAME, "done");
    _dataStore.refresh(status);
  }
