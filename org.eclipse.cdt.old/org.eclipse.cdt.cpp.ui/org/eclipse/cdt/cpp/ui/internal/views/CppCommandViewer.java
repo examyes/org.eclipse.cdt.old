@@ -46,7 +46,7 @@ public class CppCommandViewer extends CommandViewer
     public CppCommandViewer(Composite parent)
     { 
 	super(parent);
-	setOutputId("com.ibm.cpp.ui.internal.views.CppOutputViewPart");
+	setOutputId("com.ibm.cpp.ui.CppOutputViewPart");
     }
      
     public void setInput(Object input)
