@@ -351,9 +351,7 @@ public class CmdBreakpointLocation extends Command
 			String address = _req.bkpVarInfo(); // get requested address
 			partID = bkpContext.getPPID();
 			viewNum = bkpContext.getViewNo(); //Part.VIEW_SOURCE;
-			ret = ((GdbBreakpointManager)bm).setAddressBreakpoint(partID, srcFileIndex, 
-				viewNum, lineNum, address, 
-				((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
+			ret = ((GdbBreakpointManager)bm).setAddressBreakpoint(address, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
 				true : false, _req.getConditionalExpression());
 
 			if (ret < 0) {

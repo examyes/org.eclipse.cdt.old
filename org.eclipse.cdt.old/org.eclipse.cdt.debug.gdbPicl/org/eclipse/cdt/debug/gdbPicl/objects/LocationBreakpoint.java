@@ -205,24 +205,23 @@ public class LocationBreakpoint extends Breakpoint
 
      if (Gdb.traceLogger.EVT) 
          Gdb.traceLogger.evt(1,"<<<<<<<<-------- Location Breakpoint.fillBreakpointChangeItem setDLLName=_moduleName="+_moduleName+" fileName="+_partName+" lineNum="+_lineNum  );
+         
+	  String address = this.getBkpAddress();         
 
       bkpChangeItem.setDU(0);
       bkpChangeItem.setDLLName(_moduleName);              //module
       bkpChangeItem.setSourceName(_partName);            //part
       bkpChangeItem.setIncludeName(_fileName);           //File
       bkpChangeItem.setEntryReturnType("");
-      bkpChangeItem.setAddress("");
+      bkpChangeItem.setAddress(address);
       bkpChangeItem.setStatementNum("");
 
       // Note: We must call setBkpContext for every supported view
       bkpChangeItem.setBkpContext((short) Part.VIEW_SOURCE, (short)_partID, 1, _lineNum);
-     if (Gdb.traceLogger.ERR) 
-         Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW Location Breakpoint.fillBreakpointChangeItem setDLLName=_moduleName="+_moduleName+" fileName="+_partName+" lineNum="+_lineNum  );
       bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, (short)_partID, 1, _lineNum);
       
       if (Part.MIXED_VIEW_ENABLED)
    	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, 1);
-//	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, _lineNum);
 
       bkpChangeItem.setEntryID(_entryID);
       bkpChangeItem.setVarInfo(_entryName);

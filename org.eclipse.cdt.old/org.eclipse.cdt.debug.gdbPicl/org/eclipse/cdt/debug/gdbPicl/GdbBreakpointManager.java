@@ -122,8 +122,17 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
     * @return -1 if failed
     * @return breakpoint ID of a duplicate breakpoint if this line already has a line breakpoint set.
     */
-	public int setAddressBreakpoint(int partID,int srcFileIndex,int viewNum,int lineNum,String address,boolean enable,EStdExpression2 conditionalExpr) 
+	public int setAddressBreakpoint(String address,boolean enable,EStdExpression2 conditionalExpr) 
 	{
+		int partID = 0;
+		int srcFileIndex = 1;
+		int viewNum = Part.VIEW_SOURCE;
+		String lineNum = "1";
+		String filename = "";				
+		int num=1;
+		ModuleManager cm = _debugSession.getModuleManager();
+
+		
 		// first make sure there are no other line breakpoints at the same location
 		for (int i = 0; i < _breakpoints.size(); i++) {
 			Object obj = _breakpoints.elementAt(i);
@@ -131,19 +140,13 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 				continue;
 	
 			LineBreakpoint bkp = (LineBreakpoint) obj;
-			if ((bkp != null)
-				&& (bkp.partID() == partID)
-				&& (bkp.lineNum() == lineNum)
-				&& (bkp.getBkpAddress().equals(address))) {
+			if ((bkp != null) && (bkp.getBkpAddress().equals(address))) {
 				if (Gdb.traceLogger.DBG)
 					Gdb.traceLogger.dbg(1, "Duplicate breakpoint");
 				return bkp.bkpID();
 			}
 		}
-	
-		// now try to set the breakpoint
-		ModuleManager cm = _debugSession.getModuleManager();
-		
+			
 		address = address.trim();
 		
 		if (!address.startsWith("0x"))
@@ -163,9 +166,51 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 	
 		if (Gdb.traceLogger.DBG)
 				Gdb.traceLogger.dbg(1,"Address breakpoint set: "+ address);
+				
+		// get info about this breakpoint filename and line number
+		((GdbDebugSession)_debugSession).executeGdbCommand("info breakpoint " + gdbBkpID);
+		String[] lines = ((GdbDebugSession)_debugSession).getTextResponseLines();
+		
+		if (lines.length > 0)
+		{
+			String line = lines[1];
+			String keyword = " at ";
+			int x = line.indexOf(keyword);
+			if (x > 0)
+			{
+				line = line.substring(x+keyword.length());
+				x = line.indexOf(" ");
+				if (x > 0)
+				{
+					line = line.substring(0, x);
+				}
+				
+				x = line.indexOf(":");
+				filename = line.substring(0, x);
+				lineNum = line.substring(x+1);
+			}
+		}
+		
+		partID = cm.getPartID(filename);
+		
+		// add part if it does not exist
+		if (partID == 0)
+		{
+			cm.checkPart(1, filename);
+			partID = cm.getPartID(filename);
+		}
+		
+		try
+		{
+			num = Integer.parseInt(lineNum);
+		}
+		catch (java.lang.NumberFormatException e)
+		{
+			num = 1;
+		}
 	
 		LineBreakpoint lineBkp = new LineBreakpoint(_debugSession,	bkpID,
-				gdbBkpID,0,partID,srcFileIndex,viewNum,lineNum,conditionalExpr);
+				gdbBkpID,0,partID,srcFileIndex,viewNum,num,conditionalExpr);
 	
 		lineBkp.setBkpAddress(address);
 	
