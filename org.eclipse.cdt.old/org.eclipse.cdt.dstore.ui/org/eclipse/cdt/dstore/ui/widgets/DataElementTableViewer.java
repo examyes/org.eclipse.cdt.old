@@ -299,7 +299,7 @@ public class DataElementTableViewer extends TableViewer
     {
 	if (flag)
 	    {
-		internalRefresh(_currentInput);
+	//	internalRefresh(_currentInput);
 	    }
     }
 
