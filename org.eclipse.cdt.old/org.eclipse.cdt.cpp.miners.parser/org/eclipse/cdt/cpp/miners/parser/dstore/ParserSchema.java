@@ -148,7 +148,8 @@ public class ParserSchema
 
 
   //Set up the relations and commands for the above objects:
-  dC_QUERY            = findDescriptor(Query, schemaRoot.getDataStore());
+  //  dC_QUERY            = findDescriptor(Query, schemaRoot.getDataStore());
+  dC_QUERY            = createCommandDescriptor(dCppObject, "Query", "C_QUERY", false);
   dC_REMOVE_PARSE     = createCommandDescriptor(dFsObjects, RemoveParseInformation, "C_REMOVE_PARSE", false);
   dC_SAVE_PARSE       = createCommandDescriptor(dFsObjects, SaveParseInformation,   "C_SAVE_PARSE", false);
   dC_CODE_ASSIST      = createCommandDescriptor(dFsObjects, CodeAssist,             "C_CODE_ASSIST");

@@ -77,7 +77,10 @@ public class ExtendedTreeViewer extends TreeViewer
     public void removeListener(ObjectSelectionChangedListener listener)
     {
 	_listener = null;
-	removeSelectionChangedListener(listener);
+	if (listener != null)
+	    {
+		removeSelectionChangedListener(listener);
+	    }
     }
     
   public void setBackground(int r, int g, int b)
@@ -597,5 +600,10 @@ public void doExpand(DataElement obj)
     public boolean isWorking()
     {
 	return _isWorking;
+    }
+
+    public void dispose()
+    {
+	getTree().dispose();
     }
 }

@@ -35,7 +35,6 @@ public class ViewToolBar extends Viewer implements IDomainListener
     private   Label        _inputIconLabel;
     private   Label        _inputTextLabel;
     
-    private   Button       _zoomOutButton;
     
     private   ViewMenu     _viewMenu;
     
@@ -368,5 +367,14 @@ public class ViewToolBar extends Viewer implements IDomainListener
     public void selectFilter(String filter)
     {
 	_viewMenu.selectFilter(filter);
+    }
+
+    public void dispose()
+    {
+	_toolBarContainer.dispose();
+	
+	_inputTextContainer.dispose();
+	_topContainer.dispose();
+
     }
 }

@@ -191,7 +191,6 @@ public class CppEditor extends LpexTextEditor
 
 
 		
-	 /***
        	if (!_isParsed)
 	      {
             _isParsed = true;
@@ -214,7 +213,6 @@ public class CppEditor extends LpexTextEditor
       	else
       	{
       	}
-	 ***/
       }
     }
 

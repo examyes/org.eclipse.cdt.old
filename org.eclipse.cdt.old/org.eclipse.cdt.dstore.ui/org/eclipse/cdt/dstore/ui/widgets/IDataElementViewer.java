@@ -43,6 +43,7 @@ public interface IDataElementViewer extends IDomainListener
     public String getSchemaPath();
     public ObjectWindow getParent();
 
+    public void dispose();
     public void clearView();    
     public void resetView(DataElement parent);
     public void resetView();

@@ -16,10 +16,12 @@ import org.eclipse.ui.*;
 
 public abstract class DataStoreViewPart extends ObjectsViewPart
 {
-  public DataStoreViewPart()
-  {
-    super();
-  }
+    private DataStore _inputDataStore;
+
+    public DataStoreViewPart()
+    {
+	super();
+    }
 
     public void createPartControl(Composite parent)
     {
@@ -28,7 +30,11 @@ public abstract class DataStoreViewPart extends ObjectsViewPart
     
     public void initInput(DataStore dataStore)
     {
-	doInput();
+	if (dataStore != _inputDataStore)
+	    {
+		doInput();
+		_inputDataStore = dataStore;
+	    }
     }
 
     public abstract void doClear();
@@ -54,11 +60,6 @@ public abstract class DataStoreViewPart extends ObjectsViewPart
 		}
 		break;
 		
-	    case CppProjectEvent.COMMAND:
-		_viewer.resetView();
-		super.projectChanged(event);
-		break;
-
 	    default:
 		super.projectChanged(event);
 		break;

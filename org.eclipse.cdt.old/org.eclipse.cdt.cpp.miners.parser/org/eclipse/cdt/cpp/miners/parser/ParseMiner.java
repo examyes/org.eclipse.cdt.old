@@ -379,29 +379,31 @@ public class ParseMiner extends Miner
  {
   try
   {
-   if (!theFile.exists())
-    return null;
- 
-   if (theFile.isFile())
-   {
-    if (isCorCPPFile(theFile.getName()) && _parseManager.isInitialized())
-     _parseManager.parse(theFile.getCanonicalPath(),false);
-   }
-   else 
-   {
-    File[] files = theFile.listFiles();
-    for (int i= 0; i < files.length; i++)
-     parseFile(files[i]);
-   }
+      if (!theFile.exists())
+	  return null;
+      
+      if (theFile.isFile())
+	  {
+	      if (isCorCPPFile(theFile.getName()) && _parseManager.isInitialized())
+		  {
+		      _parseManager.parse(theFile.getCanonicalPath(),false);
+		  }
+	  }
+      else 
+	  {
+	      File[] files = theFile.listFiles();
+	      for (int i= 0; i < files.length; i++)
+		  parseFile(files[i]);
+	  }
   }
   catch (IOException e)
-  {
-   System.out.println("Parser -> " + e.getMessage());
-  }
+      {
+	  System.out.println("Parser -> " + e.getMessage());
+      }
   return null;
  }
- 
- private DataElement handleParse(DataElement theElement, DataElement theProject)
+    
+    private DataElement handleParse(DataElement theElement, DataElement theProject)
 {
   //If theProject is of type status, then this command came from the C++ projects view, as opposed to ModelInterface.
   //Kind of Hacky, but just set theProject to be theElement for now..
@@ -493,7 +495,9 @@ public class ParseMiner extends Miner
   int dotIndex = objName.lastIndexOf(".");
   if (dotIndex < 0) return false;
   String extension = objName.substring(dotIndex, objName.length()).trim();
-  return _validCPPFiles.contains(extension);
+
+  boolean yes = _validCPPFiles.contains(extension);
+  return yes;
  }
 
  private DataElement getProjectElement(DataElement theProject, String name)

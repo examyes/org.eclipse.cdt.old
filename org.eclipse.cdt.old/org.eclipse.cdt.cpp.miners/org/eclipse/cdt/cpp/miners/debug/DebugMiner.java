@@ -22,7 +22,6 @@ public class DebugMiner extends Miner
        pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
 
        String ps = System.getProperty("path.separator");
-       //       String fs = System.getProperty("file.separator");
        String fs = "/";
        _gdbPluginPath = pluginPath + "com.ibm.debug.gdbPicl" + fs;
        _debugJarPath = pluginPath + "com.ibm.debug.gdbPicl" + fs + "epdc.jar" + ps + pluginPath + "com.ibm.debug.gdbPicl" + fs + "gdbPicl.jar";
@@ -85,10 +84,12 @@ public class DebugMiner extends Miner
 	    invocationStr += " -gdbPath=" + _gdbPluginPath;
 	}
 
+	/**
 	if (jre != null)
 	    {
 		invocationStr = jre.getName() + invocationStr;
 	    }
+	**/
 
 	System.out.println("invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);

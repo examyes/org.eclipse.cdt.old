@@ -607,25 +607,9 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		    }
 		menu.add(sort);
 
-		/****
-		MenuManager label = new MenuManager(getLocalizedString("ui.View"), "#ViewMenu");
-		for (int i = 0; i < _viewByAction.length; i++)
-		    {
-			_viewByAction[i].setChecked(false);
-			label.add(_viewByAction[i]);
-		    }
-		menu.add(label);	
-		****/
 
 		_currentSortAction.setChecked(true);
 		_currentViewByAction.setChecked(true);		
-
-		/****
-	      MenuManager zoom = new MenuManager(getLocalizedString("ui.Zoom"), "#ZoomMenu");
-	      zoom.add(new ZoomInAction(getLocalizedString("ui.in"), selected, this));
-	      zoom.add(new ZoomInAction(getLocalizedString("ui.out"), input.getParent(), this));
-	      menu.add(zoom);
-		****/
 	    }
       }
 
@@ -638,15 +622,20 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		  _dataStore.getDomainNotifier().removeDomainListener(_toolBar);
 	      }
 
-	  _viewer.removeListener(_selectionListener);
-	  _selectionListener.enable(false);
-	  _selectionListener = null;
-	  _viewer = null;
+	  if (_selectionListener != null)
+	      {
+		  _viewer.removeListener(_selectionListener);
+		  _selectionListener.enable(false);
+		  _selectionListener = null;
+	      }
+
+	  _toolBar.dispose();
+	  _viewer.dispose();
 
 	  _outLinks.clear();
 	  _isLinked = false;
 
-	  //        super.dispose();
+	  super.dispose();
       }
 
   protected void initDragAndDrop() 

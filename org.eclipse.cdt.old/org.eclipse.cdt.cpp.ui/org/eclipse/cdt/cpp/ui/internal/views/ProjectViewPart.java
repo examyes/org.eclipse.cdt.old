@@ -26,6 +26,7 @@ import java.util.*;
 public abstract class ProjectViewPart extends ObjectsViewPart implements ISelectionListener
 {
     private IProject _input = null;
+    private DataElement _specificInput = null;
 
     public ProjectViewPart()
     {
@@ -100,8 +101,12 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	      DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
 	      if (projectParseInformation == null)
 		  return;
-	      
-	      doSpecificInput(projectParseInformation);
+
+	      if (_specificInput != projectParseInformation)
+		  {
+		      doSpecificInput(projectParseInformation);
+		      _specificInput = projectParseInformation;
+		  }
 	  } 	
   }
     
