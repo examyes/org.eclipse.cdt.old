@@ -42,7 +42,7 @@ public class DebugMiner extends Miner
 	String fs = "/";
         _debugJarPath =  debugPath;
 	_debugJarPath += ps + debugPath + fs + "ibm_debug.jar";
-	_debugJarPath += ps + _gdbPiclPath;
+	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " com.ibm.debug.gdbPicl.Gdb ";
     }
 
@@ -60,39 +60,6 @@ public class DebugMiner extends Miner
 
 	if (name.equals("C_DEBUG"))
 	    {
-		DataElement jre = getCommandArgument(theCommand, 4);
-		if (jre != status)
-		    {
-			handleDebug(subject,
-				    getCommandArgument(theCommand, 1),
-				    getCommandArgument(theCommand, 2),
-				    getCommandArgument(theCommand, 3),			
-				    jre,
-				    status);
-		    }
-		else
-		    {
-			handleDebug(subject,
- 				    getCommandArgument(theCommand, 1),
-				    getCommandArgument(theCommand, 2),
-				    getCommandArgument(theCommand, 3),			
-				    status);
-		    }
-	    }
-
-	status.setAttribute(DE.A_NAME, "done");
-	return status;
-    }
-
-    public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
-			    DataElement key, DataElement status)
-    {
-	handleDebug(directory, hostName, port, key, null, status);
-    }
-
-    public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
-			    DataElement key, DataElement jre, DataElement status)
-    {
 	String invocationStr = _debugInvocation + "-qhost=" + hostName.getName() +
                                               " -quiport=" + port.getName() +
                                               " -startupKey=" + key.getName();
@@ -101,23 +68,11 @@ public class DebugMiner extends Miner
 	{
 	    invocationStr += " -gdbPath=" + _gdbPiclPath;
 	}
-
-	/**
-	if (jre != null)
-	    {
-		invocationStr = jre.getName() + invocationStr;
-	    }
-	**/
-
-	System.out.println("invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
 
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
 	if (cmdDescriptor != null)
 	    {
-		//		File dir = new File(directory.getName());
-		//	directory.setAttribute(DE.A_SOURCE, dir.getAbsolutePath());
-		System.out.println("launching engine in " + directory.getSource());
 		ArrayList args = new ArrayList();
 		args.add(invocation);
 		args.add(status);
