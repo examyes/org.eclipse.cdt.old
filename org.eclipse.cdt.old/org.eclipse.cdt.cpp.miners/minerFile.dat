@@ -7,4 +7,5 @@ org.eclipse.cdt.cpp.miners.search.SearchMiner
 org.eclipse.cdt.cpp.miners.managedproject.ManagedProjectMiner
 #org.eclipse.cdt.dstore.miners.cvstest.CVSMiner
 org.eclipse.cdt.cpp.miners.debug.DebugMiner
+org.eclipse.cdt.cpp.miners.pa.PAMiner
 
