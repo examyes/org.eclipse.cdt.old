@@ -54,8 +54,6 @@ public class ProjectMiner extends Miner
   DataElement   status = getCommandStatus(theCommand);
   DataElement  subject = getCommandArgument(theCommand, 0);
  
-  System.out.println(theCommand + " " + subject);
-  
   if (!subject.getType().equals(getLocalizedString("project.Project")))
    if (!subject.getType().equals(getLocalizedString("project.Workspace")))
     return status;
