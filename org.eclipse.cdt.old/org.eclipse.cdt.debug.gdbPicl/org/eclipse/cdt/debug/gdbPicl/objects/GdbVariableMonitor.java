@@ -78,7 +78,7 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
     
 //      GdbDebugSession debugSession = (GdbDebugSession) ((GdbDebugEngine)debugEngine).getDebugSession();
 
-     int l = context.getLineNum();
+      int l = context.getLineNum();
       String lineNo = Integer.toString(l);
       int partID = context.getPPID();
       String fileName = "";
@@ -99,7 +99,6 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
       String exprValue = "???";
       String exprType = "unknown_Type";
       String cmd = "display "+exprString;
-      //String cmd = "print "+exprString;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
       {
@@ -188,8 +187,7 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
         Gdb.traceLogger.evt(3,"GdbVariableMonitor.evaluateExpression initialValue="+exprValue );
     
         // Expression evaluation successful.
-    return varInfo;
-    
+    return varInfo;   
   }
   
   static public String getExpressionType(GdbDebugSession _debugSession, String exprString)
