@@ -29,7 +29,7 @@
       point="org.eclipse.ui.views">
    <view
          name="%View.Title.HelpResults"
-         icon="icons/results.gif"
+         icon="icons/full/cview16/docsearch_view.gif"
          category="org.eclipse.cdt.cpp.ui.cpp"
          class="org.eclipse.cdt.linux.help.views.ResultsViewPart"
          id="org.eclipse.cdt.linux.help.views.ResultsViewPart">
@@ -42,7 +42,7 @@
          id="org.eclipse.cdt.linux.help.actions.vc1">
       <action
             label="%PopupMenu.ResultsView.label"
-            icon="icons/sections.gif"
+            icon="icons/full/clcl16/properties.gif"
             tooltip="%PopupMenu.ResultsView.tooltip"
             class="org.eclipse.cdt.linux.help.actions.ViewActionDelegate"
             menubarPath="additions"
@@ -51,7 +51,7 @@
       </action>
       <action
             label="%PopupMenu.ResultsView.AddFilter.label"
-            icon="icons/filter.gif"
+            icon="icons/full/clcl16/filter_misc.gif"
             tooltip="%PopupMenu.ResultsView.AddFilter.tooltip"
             class="org.eclipse.cdt.linux.help.actions.FilterActionDelegate"
             menubarPath="additions"

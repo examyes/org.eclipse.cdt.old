@@ -346,19 +346,19 @@ public class ResultsViewPart extends ViewPart
 		
 		if (type == ItemElement.MAN_TYPE)
 		    {
-			ti.setImage(0,_plugin.getImage("man.gif"));
+			ti.setImage(0,_plugin.getImage("full/obj16/manual_obj.gif"));
        			//ti.setText(0,manType);
 			ti.setText(1,theItem.getName());			
 		    }
 		else if (type == ItemElement.INFO_TYPE)
 		    {	
-			ti.setImage(0,_plugin.getImage("info.gif"));
+			ti.setImage(0,_plugin.getImage("full/obj16/infopage_obj.gif"));
 			//ti.setText(0,infoType);
 			ti.setText(1,theItem.getKey());
 		    }
 		else if (type == ItemElement.HTML_TYPE)
 		    {
-			ti.setImage(0,_plugin.getImage("html.gif"));
+			ti.setImage(0,_plugin.getImage("full/obj16/htmlpage_obj.gif"));
 			//ti.setText(0,htmlType);
 			String filename = theItem.getName();
 			ti.setText(1,filename.substring(filename.lastIndexOf(File.separator)+1));
