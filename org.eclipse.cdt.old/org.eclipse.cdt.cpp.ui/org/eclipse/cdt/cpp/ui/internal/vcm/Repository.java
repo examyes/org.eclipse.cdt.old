@@ -107,8 +107,10 @@ public class Repository extends Project
 		    
 		    
 		    // create directory for project
-		    Path rootPath = (Path)Platform.getLocation();
-		    String path = rootPath.toOSString() + java.io.File.separator + getName();
+		    String rootPath = CppPlugin.getDefault().getStateLocation().
+			append(".repositories").toOSString();
+
+		    String path = rootPath + java.io.File.separator + getName();
 		    java.io.File workingPath = new java.io.File(path);
 		    if (!workingPath.exists())
 			{
