@@ -195,9 +195,9 @@ public class ObjectsViewPart extends GenericViewPart
 					changed = _plugin.setCurrentProject((IResource)object);
 				    }  
 			    }
-                        else if (object instanceof DataElement)
+             else if (object instanceof DataElement)
 			 {
-                          DataElement theObject = (DataElement)object;
+              DataElement theObject = (DataElement)object;
 			  DataElement theParent = _api.getProjectFor(theObject);
 
 			  if (theParent != null)
@@ -220,8 +220,8 @@ public class ObjectsViewPart extends GenericViewPart
 					_plugin.setCurrentDataStore(dataStore);					  
 					dataStore.getDomainNotifier().enable(true);
 				    }
-				initInput(dataStore);		
-			    }	    
+			    }
+			initInput(dataStore);		    
 			
 		    }	
 	    }
