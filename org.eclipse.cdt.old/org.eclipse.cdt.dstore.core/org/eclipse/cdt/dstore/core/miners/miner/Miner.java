@@ -226,7 +226,7 @@ public abstract class Miner
 
     public DataElement createAbstractRelationship(DataElement from, DataElement to)
     {
-     return _dataStore.createReference(from, to, "abstracts", "abstracted by");
+	return _dataStore.createReference(from, to, "abstracts", "abstracted by");
     }
      
     public DataElement createReference(DataElement from, DataElement to)
