@@ -355,6 +355,7 @@ public class HostsPlugin extends AbstractUIPlugin
 						  "org.eclipse.cdt.dstore.ui.connections.EditConnectionAction");	 
         editConnection.setAttribute(DE.A_VALUE, "C_EDIT");
 
+
 	DataElement removeConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						    dataStore.getLocalizedString("model.Delete_Connection"), 
 						    "org.eclipse.cdt.dstore.ui.connections.DeleteAction");	 
@@ -375,7 +376,11 @@ public class HostsPlugin extends AbstractUIPlugin
 							      "org.eclipse.cdt.dstore.hosts.actions.SearchDictionaryAction");
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
 	*/
-
+	DataElement newD = dataStore.find(fsD, DE.A_VALUE, "C_NEW", 1);
+	DataElement newFile = dataStore.createObject(newD, DE.T_UI_COMMAND_DESCRIPTOR,
+						     getLocalizedString("model.New_File"),
+						     "org.eclipse.cdt.dstore.hosts.actions.NewFile");
+	
 	DataElement renameResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							    getLocalizedString("model.Rename_Resource"),
 							    "org.eclipse.cdt.dstore.hosts.actions.RenameResource");
