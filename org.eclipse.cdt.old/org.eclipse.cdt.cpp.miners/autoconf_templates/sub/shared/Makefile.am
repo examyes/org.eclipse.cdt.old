@@ -13,3 +13,6 @@ noinst_HEADERS =
 lib!TARGET!_la_LDFLAGS =
 
 lib!TARGET!_la_LIBADD =
+
+CFLAGS = -g
+CXXFLAGS = $(CFLAGS)

@@ -1401,12 +1401,53 @@ public class MakefileAmManager {
 			}catch (IOException e){}
 		}
 	}
-	public void setCompilerFlag(DataElement subject, String key)
+	public void setCompilerFlag(DataElement project, String option)
 	{
-		// iterate through the project and find the list of Makefile.am's
-		//System.out.println("\n option = "+key);
+
+		String name = "Makefile.am";
 		
-		// switch the compiler falg to the key
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		
+		File topLevelMakefileAm = new File( project.getFileObject(),name);
+		if(topLevelMakefileAm.exists())
+		{
+			updateCflagValue(topLevelMakefileAm,option);
+		}	
+		
+		File[] projectDirs = structureManager.getSubdirs();
+		for (int i = 0; i<projectDirs.length; i++)
+		{
+			//System.out.println("\n name = "+projectDirs[i].getName());
+			File makefile = new File(projectDirs[i],name);
+			if(makefile.exists())
+			{
+				updateCflagValue(makefile,option);
+			}	
+		}
+	}
+	public void updateCflagValue(File makefileAm, String option)
+	{
+		try
+		{
+			// searching for the subdir line
+			String line ;			
+			File modMakefile_am = new File(makefileAm.getParentFile(),"mod.am");
+			BufferedReader in = new BufferedReader(new FileReader(makefileAm));
+			BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				while((line=in.readLine())!=null)
+				{
+					if(line.indexOf("CFLAGS")!=-1&&line.indexOf("$(CFLAGS)")==-1)
+						line = "CFLAGS = "+option;
+					out.write(line);
+					out.newLine();
+				}
+				in.close();
+				out.close();
+				File abstractPath = new File(makefileAm.getAbsolutePath());
+				makefileAm.delete();
+				modMakefile_am.renameTo(abstractPath);
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
 		
 	}
 }
