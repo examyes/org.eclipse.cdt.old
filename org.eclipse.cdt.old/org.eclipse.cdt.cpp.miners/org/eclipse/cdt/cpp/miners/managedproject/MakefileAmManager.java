@@ -53,7 +53,6 @@ public class MakefileAmManager {
 	
 	public void setWorkspaceLocation(String location)
 	{
-		//System.out.println("\n Workspace Location = "+location);
 		_workspaceLocation = location;	
 	}
 	
@@ -1466,15 +1465,15 @@ public class MakefileAmManager {
 	}
 	private boolean foundInExtraList(String name)
 	{
-		System.out.println("\n foundInExtraList()");
+		//System.out.println("\n foundInExtraList()");
 		for(int j = 0; j < extradistExtensions.size(); j++)
-			System.out.println("\n extension  = "+extradistExtensions.get(j));
+			//System.out.println("\n extension  = "+extradistExtensions.get(j));
 
 		for(int i= 0; i < extradistExtensions.size(); i++)
 		{
 			String item = (String)extradistExtensions.get(i);
 			String ext = item.substring(item.indexOf("."));
-			System.out.println("\n name = "+name+"\n > ext = "+ext);
+			//System.out.println("\n name = "+name+"\n > ext = "+ext);
 			if(name.endsWith(ext)||name.equals(item))
 				return true;
 		}
