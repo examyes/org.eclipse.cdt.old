@@ -1,0 +1,229 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Eclipse Tools - CDT News</title>
+<LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+&nbsp; 
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+ <tr> 
+  <td ALIGN=LEFT width="60%"><font class=indextop>CDT Project Structure</font><br>
+   <font class=indexsub>C/C++ Development Tools</font>
+  </td>
+  <td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
+ </tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">History</font></b></td>
+</tr>
+</table>
+   <p>
+    The CDT was the first approved subproject of the Eclipse Tools Project hosted at
+    <a href="http://www.eclipse.org/tools">www.eclipse.org/tools</a>.  To learn more about
+    the organization of the Eclipse Tools Project, read the
+    <a href="http://www.eclipse.org/tools/eclipsetools-charter.html">Eclipse Tools Charter</a>.
+   </p>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Project Members</font></b></td>
+</tr>
+</table>
+   <p>
+    &nbsp;</p>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Project Structure</font></b></td>
+</tr>
+</table>
+
+   <p>
+    The CDT project itself is organized into autonomous
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/main.html?cvsroot=Tools_Project#components">components</a>
+    each with its own set of committers, bug categories and mailing lists.
+   </p>
+   <p>
+    As of Feb 4/2004 the CDT project is broken down as follows:</p>
+<p>The CDT subproject is broken down into components. Each component
+operates as an autonomous project, with its own set of committers,
+bug categories and mailing lists. Each component supports information
+regarding its requirements, design, planning/milestones and test
+plans. </p>
+<p>&nbsp;</p>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td width="26%" valign="top">
+      <p><b>CDT Components</b></p>
+      </td>
+      <td width="74%">
+      <p><b>Description</b></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/org.eclipse.cdt?cvsroot=Tools_Project">Primary
+CDT Plugin</a></p>
+      </td>
+      <td width="74%">
+      <p>Eclipse Primary CDT Plugin</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/org.eclipse.cdt-feature?cvsroot=Tools_Project">CDT
+Feature</a></p>
+      </td>
+      <td width="74%">
+      <p>Eclipse CDT Feature Component</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-core-home/main.html?cvsroot=Tools_Project">CDT
+Core</a></p>
+      </td>
+      <td width="74%">
+      <p>Core Model, CDOM and Core Components</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-ui-home/main.html?cvsroot=Tools_Project">CDT
+UI</a></p>
+      </td>
+      <td width="74%">
+      <p>Core UI, Views, Editors and Wizards</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-launcher-home/main.html?cvsroot=Tools_Project">CDT
+Launch</a></p>
+      </td>
+      <td width="74%">
+      <p>Generic Launch Mechanism</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-debug-home/main.html?cvsroot=Tools_Project">CDT
+Debug Core</a></p>
+      </td>
+      <td width="74%">
+      <p>Core Debug Model</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-debug-home/main.html?cvsroot=Tools_Project">CDT
+Debug UI</a></p>
+      </td>
+      <td width="74%">
+      <p>Core Debug UI, Views, Editors and Wizards</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-debug-home/main.html?cvsroot=Tools_Project">CDT
+Debug MI</a></p>
+      </td>
+      <td width="74%">
+      <p>Debug controller that interfaces to MI-capable debuggers</p>
+      </td>
+    </tr>
+    <tr>
+      <td width="26%" valign="top">
+      <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-debug-home/main.html?cvsroot=Tools_Project">CDT
+Debug MI UI</a></p>
+      </td>
+      <td width="74%">
+      <p>UI components for debug controller that interfaces to MI-capable debuggers</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+   <p>a total of 7 plugins which are grouped into 3 components which each behave 
+   as an autonomous project:<ol>
+    <li>
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-core-home/main.html?cvsroot=Tools_Project">
+    CDT Core Homepage</a>
+    <ul>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.core?cvsroot=Tools_Project">
+      org.eclipse.cdt.core</a> - Core C/C++ Editor environment </li>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.core.ui?cvsroot=Tools_Project">
+      org.eclipse.cdt.core.ui</a> - UI Components and Wizards using cdt.core
+      </li>
+    </ul>
+    </li>
+    <li>
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-launch-home/main.html?cvsroot=Tools_Project">
+    CDT Launch Homepage</a>
+    <ul>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.launch?cvsroot=Tools_Project">
+      org.eclipse.cdt.launch</a> - CDT Launch code </li>
+    </ul>
+    </li>
+    <li>
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-debug-home/main.html?cvsroot=Tools_Project">
+    CDT Debug Homepage</a>
+    <ul>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.debug?cvsroot=Tools_Project">
+      org.eclipse.cdt.debug</a> - contributions of a C++ Perspective, views,and 
+      actions </li>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.debug.ui?cvsroot=Tools_Project">
+      org.eclipse.cdt.debug.ui</a> - ui Data Store related general views and 
+      actions </li>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.debug.mi?cvsroot=Tools_Project">
+      org.eclipse.cdt.debug.mi</a> - remote system support </li>
+      <li>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.cdt.debug.mi.ui?cvsroot=Tools_Project">
+      org.eclipse.cdt.debug.mi.ui</a> - ui components for the remote system 
+      support </li>
+    </ul>
+    </li>
+  </ol>
+
+ 
+<p>
+	<br>
+ &nbsp;<p>
+
+
+<!-- Footer -->
+<p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
+<center><I>
+Last Modified on Tuesday, Feb 10, 2004</I></center>
+
+</body>
+</html>

@@ -26,10 +26,18 @@ it...</font></p>
     </tr>
   </tbody>
 </table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" height="16">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0" height="10"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Guidelines</font></b></td>
+</tr>
+</table>
+
 <p><i><span
  style="background: rgb(255, 255, 0) none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-inline-policy: initial; -moz-background-origin: initial;">Note</span>:
-These documents
-are in the very early stages of development. If you have any
+
+If you have any
 suggestions, feedback, or unanswered questions, please send them to
 the cdt-dev mailing list and we'll try to address them.</i></p>
 <p>As the CDT begins to mature as a product and project and as the
@@ -50,7 +58,7 @@ These are honorable goals aimed at making the CDT the best C/C++ IDE
 on the planet (and off for that matter). These documents should
 hopefully convey what “best” means so that new developers
 can carry on the torch.</p>
-<p>To help answer the two questions, the following two (or course)
+<p>To help answer the two questions, the following two (or more)
 documents are created.</p>
 <ul>
   <li>
@@ -59,7 +67,7 @@ documents are created.</p>
 Specification</b></a><span style=""> – describes what the CDT does.
 There are two main ways of describing features: first by describing the
 visible components that the users sees, second by describing how the
-user accompishes specific tasks. This spec does both.</span></p>
+user accomplishes specific tasks. This spec does both.</span></p>
   </li>
   <li>
     <p><b>Design Specification</b><span style=""> – describes how the
@@ -69,8 +77,261 @@ ensure we can stretch the CDT in new and exciting (yet not really
 thought out yet) ways.</p>
   </li>
 </ul>
-<p><br>
-<br>
-</p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" height="16">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0" height="10"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Designer Documents</font></b></td>
+</tr>
+</table>
+<table border="1" cellspacing="1" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber1" height="31">
+  <tr>
+    <td width="13%" height="16" align="center"><b>Date</b></td>
+    <td width="7%" height="16" align="center"><b>Written for Release</b></td>
+    <td width="67%" height="16" align="center"><b>Title</b></td>
+    <td width="6%" height="16" align="center"><b>Feature Specification</b></td>
+    <td width="6%" height="16" align="center"><b>Design Specification</b></td>
+    <td width="7%" height="16" align="center"><b>Misc</b></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+    <td width="67%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Makefile Editor Enhancements</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Eclipse
+3.0 support - Compatibility</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47523">47523</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Jan 29, 2004</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">C++ Class Browser/C++ Hierarchy 
+    View</td>
+    <td width="6%" height="16" align="center">
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-ui-home/docs/CDTClassBrowser/CDTClassBrowser.html?cvsroot=Tools_Project">
+    feature spec</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47441">47441</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Internationalization and 
+    Accessibility</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47529">47529</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Eclipse 3.0 Support - Enhancements.</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47527">47527</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">User Documentation enhancements</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"> <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47520">
+    47520</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Dec 14, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">CDT Usability - 
+Environment Set-up</td>
+    <td width="6%" height="16" align="center">
+<font FACE="Arial" SIZE="2">
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Scanner/Usability_Scanner_SRS.html">
+    Feature Spec</a></font></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<font FACE="Arial" SIZE="2">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47465">47465</a></font></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Dec 12, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Content assist enhancements</td>
+    <td width="6%" height="16" align="center"><a href="http://download.eclipse.org/tools/cdt/docs/specs/ContentAssist/ContentAssist.htm">feature
+spec</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"> 
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47428">47428</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="11" align="center"></td>
+    <td width="7%" height="11" align="center">2.0</td>
+    <td width="67%" height="11" align="center">C/C++ Search enhancements</td>
+    <td width="6%" height="11" align="center">
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Search/Search%202_0%20SRS.html">
+    feature spec</a></td>
+    <td width="6%" height="11" align="center"></td>
+    <td width="7%" height="11" align="center"> <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47438">
+    47438</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Dec 8, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Indexer Enhancements</td>
+    <td width="6%" height="16" align="center">
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Indexer/Indexer2_0_SRS.html">
+    feature spec</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=50434">50434</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Dec 5, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Essential Managed Build Enhancments 
+    (IBM-Rational)</td>
+    <td width="6%" height="16" align="center"><a href="http://download.eclipse.org/tools/cdt/docs/specs/ManagedBuild/Managed_Build_2_SRS.html">feature
+spec</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"> <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=49145">
+    49145</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Nov 28, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">C++ Parser Enhancements</td>
+    <td width="6%" height="16" align="center">
+<a href="http://download.eclipse.org/tools/cdt/docs/specs/Parser/Parser-2.0-Requirements.pdf">
+    feature spec</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=50432">50432</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Nov 9, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Managed
+Build enhancements.</td>
+    <td width="6%" height="16" align="center"><A
+	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/managedmake.html?cvsroot=Tools_Project">feature
+spec</A></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47435">47435</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Oct 20, 2003</td>
+    <td width="7%" height="16" align="center">2.0</td>
+    <td width="67%" height="16" align="center">Rename
+refactoring</td>
+    <td width="6%" height="16" align="center"><A
+	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
+spec</A></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"> 
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47439">47439</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="19" align="center">Sept 29, 2003</td>
+    <td width="7%" height="19" align="center">2.0</td>
+    <td width="67%" height="19" align="center">CDT 2.0 Plan</td>
+    <td width="6%" height="19" align="center">&nbsp;</td>
+    <td width="6%" height="19" align="center">&nbsp;</td>
+    <td width="7%" height="19" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_R2.0_plan.html?cvsroot=Tools_Project">
+    plan</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">June 26,2003</td>
+    <td width="7%" height="16" align="center">1.2</td>
+    <td width="67%" height="16" align="center">CDT 1.2 Plan</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT-R1.2_plan.html?cvsroot=Tools_Project">
+    plan</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Feb 14, 2003</td>
+    <td width="7%" height="16" align="center">1.0.2</td>
+    <td width="67%" height="16" align="center">CDT Core Evolution Overview</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-core-home/docs/rationalProposals/index.html?cvsroot=Tools_Project">
+    Overview</a></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Jan 29, 2003</td>
+    <td width="7%" height="16" align="center">1.0.2</td>
+    <td width="67%" height="16" align="center">C++ Scanner Specification and 
+    Design</td>
+    <td width="6%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-core-home/docs/rationalProposals/Scanner/Scanner.html?cvsroot=Tools_Project">
+    here</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Jan 28,2003</td>
+    <td width="7%" height="16" align="center">1.0.2</td>
+    <td width="67%" height="16" align="center">CDT Code Indexer Design Document
+    </td>
+    <td width="6%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-core-home/docs/rationalProposals/Indexer/CDTIndexer.html?cvsroot=Tools_Project">
+    here</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Jan 14, 2003</td>
+    <td width="7%" height="16" align="center">1.0.2</td>
+    <td width="67%" height="16" align="center">CDT Parser Design Proposal </td>
+    <td width="6%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-core-home/docs/rationalProposals/Parser.html?cvsroot=Tools_Project">
+    here</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Jan 14, 2003</td>
+    <td width="7%" height="16" align="center">1.0.2</td>
+    <td width="67%" height="16" align="center">C Model Design</td>
+    <td width="6%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-core-home/docs/rationalProposals/CModel/CModelFDS.html?cvsroot=Tools_Project">
+    here</a></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center"></td>
+  </tr>
+  <tr>
+    <td width="13%" height="16" align="center">Sept 4, 2002</td>
+    <td width="7%" height="16" align="center">1.0</td>
+    <td width="67%" height="16" align="center">CDT 1.0 Plan</td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="6%" height="16" align="center"></td>
+    <td width="7%" height="16" align="center">
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_R1.0_plan.html?cvsroot=Tools_Project">
+    plan</a></td>
+  </tr>
+</table>
 </body>
 </html>
