@@ -232,7 +232,15 @@ public class GprofTraceFile extends PATraceFile {
        
      }     
     }
-    traceFunction.setTotalSeconds(traceFunction.getCallNumber() * traceFunction.getTotalTimePerCall() * getTimeUnit());
+    
+    double totalSeconds = traceFunction.getCallNumber() * traceFunction.getTotalTimePerCall() * getTimeUnit();
+    
+    // The total seconds cannot be less than the self seconds.
+    if (totalSeconds < traceFunction.getSelfSeconds()) {
+      totalSeconds = traceFunction.getSelfSeconds();
+    }
+    
+    traceFunction.setTotalSeconds(totalSeconds);
     traceFunction.setHasSummary(true);
    }
    catch (NumberFormatException e) {
