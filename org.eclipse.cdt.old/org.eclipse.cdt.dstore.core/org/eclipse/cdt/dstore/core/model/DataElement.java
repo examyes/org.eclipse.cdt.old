@@ -1025,73 +1025,73 @@ public final class DataElement implements Serializable, IDataElement
 		{
 		    source = source.substring(0, locationIndex);
 		}
-          
-	  String type = getType();
-          if (!type.equals(_dataStore.getLocalizedString("model.directory")) &&
-	      (getParent() != _dataStore.getDescriptorRoot()))
-          {	
-	      
-	      File result = new File(source);
-	      if (result.exists())
-		  {
-		      return result;
-		  }
 
-	      String localPath = _dataStore.mapToLocalPath(source);
-	      
-	      if (localPath != null)
-		  {
-		      result = new File(localPath);
-		      if (!result.exists())
-			  {		  
-		  // initiate query
-		    DataElement fileDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(),
-								 DE.A_NAME,
-								 _dataStore.getLocalizedString("model.file"),
-								 1);
-		    if (fileDescriptor != null)
-                  {	
-		      DataElement openDescriptor = _dataStore.localDescriptorQuery(fileDescriptor, "C_OPEN");
-		      if (openDescriptor != null)
+	    File result = new File(source);
+	    if (result.exists())
+		{
+		    return result;
+		}
+	    
+	    String type = getType();
+	    if (!getDescriptor().isOfType("Filesystem Objects") &&
+		(getParent() != _dataStore.getDescriptorRoot()))
+		{			  
+		    String localPath = _dataStore.mapToLocalPath(source);
+		    
+		    if (localPath != null)
 			{
-			    if (doSynchronize)
-				{
-				    DataElement status = _dataStore.synchronizedCommand(openDescriptor, this);
-				    if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.done")))
-					{
-					    return new File(localPath);
-					}
-				    else
-					{
-					    System.out.println(_dataStore.getLocalizedString("model.timeout"));
-
-					    return null;
+			    result = new File(localPath);
+			    if (!result.exists())
+				{		  
+				    // initiate query
+				    DataElement fileDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(),
+										 DE.A_NAME,
+										 _dataStore.getLocalizedString("model.file"),
+										 1);
+				    if (fileDescriptor != null)
+					{	
+					    DataElement openDescriptor = _dataStore.localDescriptorQuery(fileDescriptor, "C_OPEN");
+					    if (openDescriptor != null)
+						{
+						    if (doSynchronize)
+							{
+						      DataElement status = _dataStore.synchronizedCommand(openDescriptor, this);
+						      
+						      if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.done")))
+							  {
+							      return new File(localPath);
+							  }
+						      else
+							  {
+							      System.out.println(_dataStore.getLocalizedString("model.timeout"));
+							      
+							      return null;
+							  }
+							}
+						    else
+							{
+							    _dataStore.command(openDescriptor, this);
+							    return null;
+							}
+						}
+					    else
+						{
+						    System.out.println("no such file");
+						    return null;
+						}
 					}
 				}
 			    else
-				{
-				    _dataStore.command(openDescriptor, this);
-				    return null;
-				}
-			}
-		    else
-			{
-			    System.out.println("no such file");
-			    return null;
-			}
-                  }
+				{		  
+				    return result;
+				}	      
+			}	
 		}
-	      else
-		{		  
-		  return result;
-		}	      
-            }	
-          }
         }
         
         return null;
       }
-
+    
 	
   public void fireDomainChanged()
       {
