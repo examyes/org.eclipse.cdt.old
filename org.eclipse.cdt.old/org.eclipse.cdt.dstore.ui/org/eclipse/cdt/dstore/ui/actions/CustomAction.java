@@ -38,12 +38,12 @@ public class CustomAction extends Action
 	_subjects.add(_subject);
       }
 
-  public CustomAction(List subjects, String label, DataElement command, DataStore dataStore)
+  public CustomAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
       {	
         super(label);
         _dataStore = dataStore;
         _command = command;
-	_subjects = subjects;
+	    _subjects = subjects;
         _subject = (DataElement)_subjects.get(0); 
       }
 

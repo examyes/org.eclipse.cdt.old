@@ -99,11 +99,68 @@ public class CppActionLoader extends GenericActionLoader
         return newAction;
     }
     
-    public CustomAction loadAction(java.util.List objects, DataElement descriptor)
-    {
-	return loadAction((DataElement)objects.get(0), descriptor);
-    }
 
+	public CustomAction loadAction(java.util.List objects, DataElement descriptor)
+	{
+	    String name = descriptor.getName();
+	    String source = descriptor.getSource();
+	    
+	    CustomAction newAction = null; 
+	    try
+		{         
+		    Class actionClass = Class.forName(source);
+
+		    Object[] args = {objects, 
+		        					name, 
+		        					descriptor, 
+		        					descriptor.getDataStore()};
+
+		    Class[] parameterTypes = { java.util.List.class, 
+		        							name.getClass(), 
+		        							descriptor.getClass(),
+		        							descriptor.getDataStore().getClass()};
+
+		    Constructor constructor = null;
+		    
+		    try
+		    {
+			    constructor = actionClass.getConstructor(parameterTypes);
+		    }
+		    catch (Exception e)
+		    {
+		    }
+		    
+			if (constructor != null) 
+			{		
+		    	newAction = (CustomAction)constructor.newInstance(args);
+		    }
+		    else
+		    {
+		    	return loadAction((DataElement)objects.get(0), descriptor);
+	   	    }
+		}
+		
+	    catch (ClassNotFoundException e)
+		{
+		    //System.out.println(e);
+		}
+	    catch (InstantiationException e)
+		{
+		    //System.out.println(e);
+		}
+	    catch (IllegalAccessException e)
+		{
+		    //System.out.println(e);
+		}
+	    catch (InvocationTargetException e)
+		{
+		    //System.out.println(e);
+		}
+	    
+	    return newAction;
+	}
+	
+	
     public CustomAction loadAction(DataElement object, DataElement descriptor)
     {
         String name = descriptor.getName();
@@ -112,11 +169,28 @@ public class CppActionLoader extends GenericActionLoader
         CustomAction newAction = null; 
         try
 	    {         
-	        Object[] args = {object, name, descriptor, object.getDataStore()};
+      		Class actionClass = Class.forName(source);
+      		Object[] args = {object, name, descriptor, object.getDataStore()};
 	
-         	Class actionClass = Class.forName(source);
-		Constructor constructor = actionClass.getConstructors()[0];
-                newAction = (CustomAction)constructor.newInstance(args);
+		    Class[] parameterTypes = { object.getClass(), 
+		        							name.getClass(), 
+		        							descriptor.getClass(),
+		        							descriptor.getDataStore().getClass()};
+
+		    Constructor constructor = null;
+		    
+		    try
+		    {
+			    constructor = actionClass.getConstructor(parameterTypes);
+		    }
+		    catch (Exception e)
+		    {
+		    }
+		  
+   			if (constructor != null)
+   			{
+	            newAction = (CustomAction)constructor.newInstance(args);
+   			}
 	    }
         catch (ClassNotFoundException e)
 	    {

@@ -225,7 +225,15 @@ public class MenuHandler
 			  {
 			      if (_loader != null)
 				  {
-				      CustomAction action = _loader.loadAction(objects, subDescriptor);
+				  		CustomAction action = null;
+				  		if (objects.size() == 1)
+				  		{
+				  		  action = _loader.loadAction((DataElement)objects.get(0), subDescriptor);
+				  		}
+				  		else
+				  		{
+				      	 action = _loader.loadAction(objects, subDescriptor);
+				  		}
 				      if (action != null)
 					  menu.add(action);
 				  }

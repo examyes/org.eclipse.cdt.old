@@ -1728,7 +1728,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    {				
 					resource = findResource(parent);
 				    }
-				
 				if (resource != null)
 				    {
 					synchronizeWithNavigator(resource, parent);
