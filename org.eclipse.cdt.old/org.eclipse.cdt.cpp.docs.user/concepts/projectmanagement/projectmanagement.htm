@@ -110,8 +110,7 @@ the generating, modifying and updating of the configuration files.&nbsp;
 Also, the tool is providing a simple update mechanism in this release and
 it will get more sophisticated in later releases taking a bigger share
 in managing the configuration files.</font></ul>
-
-<p><b><font size=+2>Automatic Generation for Project Configuration Files</font></b>
+<b><font size=+2>Automatic Generation for Project Configuration Files</font></b>
 <p><font size=+1>Whether it is a newly created C/C++ project or a project
 that was imported with no configuration files, that task to generate the
 support is the as follows:</font>
@@ -152,9 +151,10 @@ directory</font></li>
 the Command Launcher view or&nbsp; the Run Specifications view</font></li>
 </ol>
 
-<p><br><b><font size=+3>Updating Configuration files</font></b>
+<p><br><b><font size=+3>Implicit Updating Configuration files</font></b>
 <p><font size=+1>If any of the configuration files has been updated , configure
-will be not up to date and regenerating configure is needed.</font>
+will be not up to date and regenerating configure is needed. so invoking
+generate configure and run configure will perform an update.</font>
 <ol>
 <li>
 <font size=+1>From the C/C++ Projects view, right mouse click on the project
@@ -168,44 +168,8 @@ generate configure - an update will be performed if needed OR</font></li>
 <font size=+1>Select Autoconf -> Run Configure and this action will perform
 an update as well if need</font></li>
 </ol>
-
-<br>&nbsp;
-<p><b><font size=+3>Running Autoconf Standard targets</font></b>
-<p><font size=+1>You may invoke any of the following three standard autoconf
-targets from the The tool. These targets are make-install, distclean and
-maintainer-clean</font>
-<ol>
-<li>
-<font size=+1>From the C/C++ Projects view, right mouse click on the project
-directory</font></li>
-
-<li>
-<font size=+1>Select Autoconf -> distclean</font></li>
-
-<li>
-<font size=+1>Select Autoconf -> maintainer clean</font></li>
-
-<li>
-<font size=+1>Select Autoconf -> make-install</font></li>
-</ol>
 <font size=+1></font><font size=+1></font>
-<p><b><font size=+2>Maintaining Existing Project Configuration Files</font></b>
-<p><font size=+1>When one download open source projects or importing projects
-to the workspace that are managed by autoconf and automake tools, one scenario
-is usually to test the package and run&nbsp; configure. below is the steps
-need to run an existing configure</font>
-<ol>
-<li>
-<font size=+1>From the <a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/compiling/projects.htm">C/C++
-Projects view,</a> right mouse click on the project directory</font></li>
-
-<li>
-<font size=+1>Select&nbsp; Autoconf -> Run Configure - this action will
-generate and update all the configuration files and generate configure
-for you</font></li>
-</ol>
-
-<p><br><b><font size=+3>Explicit Updating for Configuration files</font></b>
+<p><b><font size=+3>Explicit Updating for Configuration files</font></b>
 <br>&nbsp;
 <dd>
 <font size=+1>The tool provide actions for those users who are familiar
@@ -213,9 +177,6 @@ with autoconf and provide them with the flexibility to make there own prefered
 updates. Once you need to make updates and take owner ship of the package,
 the tool provide actions that will help you accomplish that. Also, you
 need to be aware of the following automatic updates that the tool perform.&nbsp;</font></dd>
-
-<dd>
-<font size=+1></font></dd>
 
 <dd>
 <font size=+1></font></dd>
@@ -237,14 +198,57 @@ SUBDIRS and EXTA_DIST will be updated .</font></dd>
 <font size=+1></font></dd>
 
 <dd>
-</dd>
-<b><font size=+3></font></b>
-<p><br><b><font size=+3>Running Autoconf Standard targets</font></b>
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
+<font size=+1>I order to perform the previous actions, you need to&nbsp;
+do the following:</font></dd>
+
+<ol>
+<li>
+<font size=+1>From the <a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/compiling/projects.htm">C/C++
+Projects view,</a> right mouse click on the project directory</font></li>
+
+<li>
+<font size=+1>Select&nbsp; Autoconf -> Advanced-> and then you will have
+three options to choose from</font></li>
+</ol>
+
+<dd>
+<font size=+1></font></dd>
+
+<p><br><b><font size=+2>Maintaining Existing Project Configuration Files</font></b>
+<p><font size=+1>When one download open source projects or importing projects
+to the workspace that are managed by autoconf and automake tools, one scenario
+is usually to test the package and run&nbsp; configure. below is the steps
+need to run an existing configure</font>
+<ol>
+<li>
+<font size=+1>From the <a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/compiling/projects.htm">C/C++
+Projects view,</a> right mouse click on the project directory</font></li>
+
+<li>
+<font size=+1>Select&nbsp; Autoconf -> Run Configure - this action will
+generate and update all the configuration files and generate configure
+for you</font></li>
+</ol>
+
+<p><b><font size=+3>Running Autoconf Standard targets</font></b>
+<p><font size=+1>You may invoke any of the following three standard autoconf
+targets from the The tool. These targets are make-install, distclean and
+maintainer-clean</font>
+<ol>
+<li>
+<font size=+1>From the C/C++ Projects view, right mouse click on the project
+directory</font></li>
+
+<li>
+<font size=+1>Select Autoconf -> distclean</font></li>
+
+<li>
+<font size=+1>Select Autoconf -> maintainer clean</font></li>
+
+<li>
+<font size=+1>Select Autoconf -> make-install</font></li>
+</ol>
+
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <caption>&nbsp;</caption>
 
