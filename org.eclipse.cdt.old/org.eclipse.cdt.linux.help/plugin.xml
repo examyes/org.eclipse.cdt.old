@@ -3,7 +3,7 @@
   name="Linux Help Plugin"
   id = "com.ibm.linux.help"
   version="1.2.1"
-  provider-name="IBM"
+  provider-name="International Business Machines Corp."
   class="com.ibm.linux.help.HelpPlugin">
 
   <requires>
