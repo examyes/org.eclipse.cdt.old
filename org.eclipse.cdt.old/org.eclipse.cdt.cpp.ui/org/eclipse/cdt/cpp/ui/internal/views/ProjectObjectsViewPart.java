@@ -266,6 +266,8 @@ public class ProjectObjectsViewPart extends ProjectViewPart
  	public BrowseAction(String label, ImageDescriptor des)
  	{
  		super(label, des);
+ 		
+ 		setToolTipText(label);
  	}
  	
  	public void checkEnabledState()
@@ -411,7 +413,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 		_forwardAction = new ForwardAction("Forward", _plugin.getImageDescriptor("forward.gif"));
     	toolBarManager.add(_forwardAction);
 				
-		_drillAction = new DrillAction("Drill Down", _plugin.getImageDescriptor("drill.gif"));	 
+		_drillAction = new DrillAction("Drill Down Into", _plugin.getImageDescriptor("drill.gif"));	 
     	toolBarManager.add(_drillAction); 
     	
     	updateActionStates();
