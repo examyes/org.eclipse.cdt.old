@@ -15,17 +15,35 @@ public class DebugMiner extends Miner
     private String _gdbPiclPath = null;
     private String _debugJarPath = null;
     private String _debugInvocation = null;
+    private String _debugOptions = null;
+
+    public ResourceBundle getResourceBundle()  
+    {
+	ResourceBundle resourceBundle = null;
+	// setup resource bundle
+	try
+	    {
+		resourceBundle = ResourceBundle.getBundle(getName());
+	    }
+	catch (MissingResourceException mre)
+	    {
+	    }	  	
+
+	return resourceBundle;
+    }
 
     public void load()
     {
-      _gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
-      String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug";
-      String ps = System.getProperty("path.separator");
-      String fs = "/";
-      _debugJarPath =       debugPath + fs + "epdc.jar";
-      _debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
-      _debugJarPath += ps + _gdbPiclPath;
-       _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdbPicl.Gdb ";
+	_debugOptions = getLocalizedString("debug_options");
+	
+	_gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
+	String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug";
+	String ps = System.getProperty("path.separator");
+	String fs = "/";
+	_debugJarPath =       debugPath + fs + "epdc.jar";
+	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
+	_debugJarPath += ps + _gdbPiclPath;
+	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " com.ibm.debug.gdbPicl.Gdb ";
     }
 
     public void extendSchema(DataElement schemaRoot)
