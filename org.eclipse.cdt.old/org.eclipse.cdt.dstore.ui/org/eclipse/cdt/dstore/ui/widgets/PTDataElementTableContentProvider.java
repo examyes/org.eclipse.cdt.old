@@ -78,7 +78,7 @@ public class PTDataElementTableContentProvider extends DataElementTableContentPr
 			    {
 				// pass by this descriptor
 			    }
-			else if (_ptDescriptors.contains(rDescriptor))
+			else if (containsPT(rDescriptor))
 			    {
 				ArrayList subList = getPTList(result);
 				resultList.addAll(subList);
@@ -91,6 +91,20 @@ public class PTDataElementTableContentProvider extends DataElementTableContentPr
 	    }
 	
 	return resultList;
+    }
+
+    private boolean containsPT(DataElement descriptor)
+    {
+	for (int i = 0; i < _ptDescriptors.size(); i++)
+	    {
+		DataElement des = (DataElement)_ptDescriptors.get(i);
+		if (des.getName().equals(descriptor.getName()))
+		    {
+			return true;
+		    }
+	    }
+
+	return false;
     }
 
     public ArrayList getList(DataElement object)
