@@ -1,3 +1,4 @@
+
 package org.eclipse.cdt.cpp.miners.parser;
 
 /*
@@ -74,7 +75,7 @@ public class ParseMiner extends Miner
   else if (name.equals("C_QUERY"))
    handleObjectParse(subject, status);
   else if (name.equals("C_CANCEL"))
-   handleCancelCommand(subject, getCommandArgument(theElement, 1));
+   handleCancelCommand();
   else if (name.equals("C_REFRESH"))
     handleRefresh(subject, getCommandArgument(theElement, 1), status); 
   else if (name.equals("C_CODE_ASSIST"))
@@ -513,7 +514,7 @@ public class ParseMiner extends Miner
   _parseManager.parseFile(theElement, getParseProject(theProject), status);
  }
  
- private void handleCancelCommand(DataElement hmm, DataElement hmm2)
+ private void handleCancelCommand()
  {
   _parseManager.closeProjects();
   _parseManager.cancelParse();

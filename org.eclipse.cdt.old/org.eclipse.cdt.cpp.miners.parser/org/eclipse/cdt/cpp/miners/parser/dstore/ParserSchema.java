@@ -182,9 +182,9 @@ public class ParserSchema
   dC_PARSE = createCommandDescriptor(dFile, Parse, "C_PARSE");
   dC_PARSE.setDepth(0);
   createCommandDescriptor(dFile, RemoveParseInformation, "C_REMOVE_PARSE").setDepth(0);
-
-  
-  
+  DataElement cancellable = findDescriptor("Cancellable",schemaRoot.getDataStore());
+  schemaRoot.getDataStore().createReference(cancellable, dC_PARSE, "abstracts","abstracted by");
+   
   dUses            = createRelationDescriptor(dUsableCppObject, Uses);
   dReturnType      = createRelationDescriptor(dFunctions,       ReturnType);
   dParameters      = createRelationDescriptor(dFunctions,       Parameters);

@@ -64,7 +64,12 @@ public class PreprocessWorker extends Thread
  public void closeProjects()
  {
   _fileQueue.clear();
+  //Here we'll interrupt the parse worker and then recreate another one.
   _theParseWorker.closeProjects();
+  _theParseWorker.interrupt();
+  _theParseWorker = new ParseWorker();
+  _theParseWorker.setEnabled(false);
+  setParsedFiles(_parsedFiles);
  }
  
  public void parseObjectNow(DataElement theObject, DataElement status)

@@ -26,8 +26,8 @@ public class ParseWorker extends Thread
  private DataElement           _projectObjects;
  private DataStore             _dataStore;
  private DataElement           _masterStatus;
- private boolean			   _fileParsedDone = false;
- private boolean			   _statusDone = false;
+ private boolean	       _fileParsedDone = false;
+ private boolean	       _statusDone = false;
  private StringBuffer          _emptyBuffer = null; 
  public ParseWorker()
  {
@@ -45,8 +45,8 @@ public class ParseWorker extends Thread
 
  public void closeProjects()
  {
-  _objectQueue.clear();
-  _fileQueue.clear();
+  statusDone(_masterStatus);
+  update(_projectObjects);
  }
   
  public void setMasterStatus(DataElement status)
