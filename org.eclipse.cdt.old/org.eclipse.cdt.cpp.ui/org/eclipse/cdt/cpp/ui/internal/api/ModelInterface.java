@@ -288,7 +288,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  
 	  dataStore.getDomainNotifier().addDomainListener(this);
 
-	  HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
       }
 
   public Shell getShell()
@@ -1891,6 +1890,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
 	
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
+
+
+	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
     }
         
 }
