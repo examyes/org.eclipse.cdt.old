@@ -1,0 +1,1060 @@
+<html>
+<head>
+<title>CDT 3.0 - Memory View Test Suite</title>
+
+<style type="text/css">
+
+.verify 	{ color: blue; font-weight: bold; }
+.indextop   { font-size: x-large; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold}
+.indexsub   { font-size: xx-small; font-family: Arial, Helvetica, sans-serif; color: #8080FF}
+.section    { font-size: 16pt; padding-left: 3pt; background: #0080C0; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsection { font-size: 12pt; padding-left: 3pt; background: #999999; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsubsection { font-size: 10pt; padding-left: 6pt; background: white; color: black; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.tb			{ border-style: solid; border-width: 1px; font-size: 10pt }
+
+</style>
+
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<font face="arial" size="2">
+
+<table cellPadding="2" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td align="left" width="72%"><font class="indextop">CDT3.0 Debug Memory
+        View Test
+        Suite</font><br>
+        &nbsp;<span style="FONT-SIZE: 7.5pt; COLOR: #8080ff; FONT-FAMILY: Arial">Test
+        strategy and test cases for Memory View.</span></td>
+      <td width="28%"><img alt src="http://dev.eclipse.org/images/Idea.jpg" width="120" height="86"></td>
+    </tr>
+  </tbody>
+</table>
+&nbsp;
+<p class="subsection">Change History</p>
+<table border="1" class="tb">
+  <tbody>
+    <tr>
+      <td><b>Date</b></td>
+      <td><b>Revision</b></td>
+      <td><b>Author</b></td>
+      <td><b>Description</b></td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">2005/3/3</td>
+      <td class="tb" vAlign="top" align="left">0.1.0</td>
+      <td class="tb" vAlign="top" align="left">James Tan</td>
+      <td class="tb" vAlign="top" align="left">initial plan</td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+      <td class="tb" vAlign="top" align="left">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+&nbsp;
+<div class="subsection">
+  Table of Contents
+</div>
+<a href="#intro">1. Introduction</a><br>
+<a href="#strategy">2. Test Strategy</a><br>
+<a href="#TC_org">3. Test Cases</a><br>
+<div class="section">
+  <a name="intro">1. Introduction</a>
+</div>
+<div class="subsection">
+  1.1 Document Purpose
+</div>
+<p>This test plan defines the test strategy and test cases for testing the
+feature under test.&nbsp; The feature under test is Debug Memory View,&nbsp; specifically
+QNX commitments for CDT 3.0.</p>
+<p>The test plan ensures that the feature's implementation satisfies the stated
+requirements stated in the SRS, and that the feature's design elements are of
+high quality.&nbsp; This test plan may also test project-level
+requirements (scalability, internationalization, etc.) as they relate to this
+feature.</p>
+<div class="subsection">
+  1.2 References
+</div>
+<p>The feature is outlined in Memory View feature document.&nbsp;</p>
+<p>The delivery schedule of this feature is specified in CDT3.0 Master Project
+Plan</p>
+<p>The configurations, reporting criteria, general risks, etc. for the CDT 3.0
+project are specified in the Master
+Test Plan.</p>
+<font face="Arial" size="2">
+<div class="subsection">
+  1.3 Terminology
+</div>
+</font>
+<p>FDS: Feature Design Specification</p>
+<p>GCC: Gnu Compiler Collection (includes gcc and g++)</p>
+<p>SRS: Software Requirements Specification</p>
+<p>TC: Test Case</p>
+<div class="section">
+  <a name="strategy">2. Test Strategy</a>
+</div>
+<p>This section discusses the scope of testing, which is used for effort
+estimation and tractability, and assumptions about testing.&nbsp; It also
+discusses risks and dependencies for scheduling purposes.&nbsp; Finally, the
+effort estimation is summarized.</p>
+<div class="subsection">
+  2.1 Scope
+</div>
+<p>The scope of testing includes requirements, test areas of interest and design
+elements. For convenience, references to test cases are provided for tractability. For reference, anticipated test cases are listed under Test Cases.</p>
+<div class="subsubsection">2.1.1 Requirements</div>
+<p>The tested requirements include:</p>
+<table class="tb" width="687" border="1" height="351">
+  <tbody>
+    <tr>
+      <td width="408" height="16"><b>Requirement</b></td>
+      <td width="95" height="16"><b>Tests references</b></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">1. Basic accessibility&nbsp;</td>
+      <td width="95" height="16">T1</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">2. Memory monitors can be added</td>
+      <td width="95" height="16">T2</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">3. When a new memory monitor created, the
+        memory renderings pane should displays the contents of memory locations
+        beginning at the specified address (base address)</td>
+      <td width="95" height="16">T2</td>
+    </tr>
+    <tr>
+      <td width="408" height="17">4. Memory monitors can be removed</td>
+      <td width="95" height="17">T3</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">5. Memory monitor can be added in different
+        ways, such as:&nbsp; hexadecimal address, variable's name or *ptr</td>
+      <td width="95" height="16">T2</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">6. Memory renderings can be added</td>
+      <td width="95" height="16"><font face="arial" size="2">T4</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="14">7.&nbsp; Memory renderings can be deleted</td>
+      <td width="95" height="14"><font face="arial" size="2">T5</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">8. Memory renderings can have four types of
+        display: hexadecimal, ascii, signed/unsighed decimal</td>
+      <td width="95" height="16">T4</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">9. The size of rendering columns can be
+        changed to: 1,2,4,8,16</td>
+      <td width="95" height="16">T6</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">10. Each memory monitor rendering can be
+        configured independently</td>
+      <td width="95" height="16">T6</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">11. Memory view can be customized in colors
+        and fonts</td>
+      <td width="95" height="16">T6</td>
+    </tr>
+    <tr>
+      <td width="408" height="16">12. a list of memory view options should be available&nbsp;</td>
+      <td width="95" height="16"><font face="arial" size="2">T6</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">13.&nbsp; memory renderings can be scrolled up
+        and down</td>
+      <td width="95" height="16"><font face="arial" size="2">T7</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">14. memory changes can be monitored during
+        debugging</td>
+      <td width="95" height="16"><font face="arial" size="2">T8</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">15. Memory content can be modified</td>
+      <td width="95" height="16"><font face="arial" size="2">T9</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">16. Memory View for multiple debug sessions is
+        supported</td>
+      <td width="95" height="16"><font face="arial" size="2">T10</font></td>
+    </tr>
+    <tr>
+      <td width="408" height="16">17.&nbsp; Error handling</td>
+      <td width="95" height="16"><font face="arial" size="2">T11</font></td>
+    </tr>
+  </tbody>
+</table>
+<div class="subsubsection">&nbsp;
+  <p>2.1.2 Test Areas</div>
+<p>Test areas of interest include:</p>
+<table class="tb" width="619" border="1">
+  <tbody>
+    <tr>
+      <td width="194"><b>Test Area</b></td>
+      <td width="208"><b>Notes</b></td>
+      <td width="195"><b>Tests references</b></td>
+    </tr>
+    <tr>
+      <td width="194">Scalability</td>
+      <td width="208">
+        Adding multiple memory monitors and multiple memory renderings; Creating
+        memory monitors for multiple debug sessions</td>
+      <td width="195">
+        T12</td>
+    </tr>
+    <tr>
+      <td width="194">Adoptability</td>
+      <td width="208">
+        N/A
+      </td>
+      <td width="195">
+        <font face="arial" size="2">N/A
+</font>
+      </td>
+    </tr>
+    <tr>
+      <td width="194">Documentation</td>
+      <td width="208"><font face="arial" size="2">N/A
+</font></td>
+      <td width="195"><font face="arial" size="2">N/A
+</font></td>
+    </tr>
+    <tr>
+      <td width="194">Accessibility</td>
+      <td width="208">easy to access&nbsp;</td>
+      <td width="195">T1</td>
+    </tr>
+    <tr>
+      <td width="194">Internationalization</td>
+      <td width="208"><font face="arial" size="2">N/A
+</font></td>
+      <td width="195"><font face="arial" size="2">N/A
+</font></td>
+    </tr>
+    <tr>
+      <td width="194">Integration</td>
+      <td width="208"><font face="arial" size="2">N/A
+</font></td>
+      <td width="195"><font face="arial" size="2">N/A
+</font></td>
+    </tr>
+    <tr>
+      <td width="194">Usability/Robustness</td>
+      <td width="208">
+        <ul>
+          <li>easy to use</li>
+          <li>UI robustness</li>
+        </ul>
+      </td>
+      <td width="195">
+        T7, T12</td>
+    </tr>
+    <tr>
+      <td width="194">User
+        Interface</td>
+      <td width="208">
+        <ul>
+          <li>new user interface</li>
+          <li>options button</li>
+        </ul>
+      </td>
+      <td width="195">T6</td>
+    </tr>
+    <tr>
+      <td width="194">Installation</td>
+      <td width="208"><font face="arial" size="2">N/A
+</font></td>
+      <td width="195"><font face="arial" size="2">N/A
+</font></td>
+    </tr>
+    <tr>
+      <td width="194">Fail-over
+        Recovery</td>
+      <td width="208">error handling is implemented</td>
+      <td width="195">T11</td>
+    </tr>
+    <tr>
+      <td width="194">Extensibility</td>
+      <td width="208"><font face="arial" size="2">N/A
+</font></td>
+      <td width="195"><font face="arial" size="2">N/A
+</font></td>
+    </tr>
+    <tr>
+      <td width="194">Regression</td>
+      <td width="208"><font face="arial" size="2">N/A
+</font></td>
+      <td width="195"><font face="arial" size="2">N/A
+</font></td>
+    </tr>
+  </tbody>
+</table>
+<font face="Arial" size="2">
+<div class="subsubsection">&nbsp;
+  <p>2.1.3
+</font>
+</font><font face="Arial" size="2">GUI Changes</font></div>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+<p>New or changed UI</font>s
+<font face="Arial" size="2">
+ are subject to testing for
+</font>
+</font><font face="Arial" size="2">Usability, <font face="arial" size="2">Robustness, and Accessibility.&nbsp;
+</font></font><font face="arial" size="2">The&nbsp;<font face="Arial" size="2"> new or changed UI</font></font><font face="Arial" size="2">s
+<font face="arial" size="2">as expected listed here:</p>
+</font></font>
+<table border="1" width="652" class="tb" height="362">
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="2"><b>UI </b></font>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+<b>name</b></td>
+		<td width="293" height="16"><b>Details</b></td>
+		<td width="60" height="16"><b>Status</b></td>
+</font>
+        </font>
+		<td height="16" width="72"><font face="arial" size="2"><b>Tests&nbsp;</b><font face="Arial" size="2"><b>
+          Ref.</b></td>
+	</tr>
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="2">Memory view</font></td>
+		<td width="293" height="16"><font face="Arial" size="2">view, in debug
+          perspective</font></td>
+		<td width="60" height="16"><font face="Arial" size="2">changed</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="16" width="72"><font face="arial" size="2">T</font></font><font face="arial">1</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="2">Memory
+          monitors&nbsp;</font></td>
+		<td width="293" height="16"><font face="Arial" size="2">pane, a list of
+          selected process memory</font></td>
+		<td width="60" height="16"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="16" width="72"><font face="arial" size="2">T</font></font><font face="arial">2,
+T3</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="32"><font face="Arial" size="2">Memory
+          Renderings</font></td>
+		<td width="293" height="32"><font face="Arial" size="2">pane, a detailed
+          display of each memory monitor</font></td>
+		<td width="60" height="32"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="32" width="72"><font face="arial" size="2">T</font></font><font face="arial">4,
+T5</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="32"><font face="Arial" size="2">Toggle Memory
+          monitors pane</font></td>
+		<td width="293" height="32"><font face="Arial" size="2">button,
+          shows/hides the memory monitors pane</font></td>
+		<td width="60" height="32"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="32" width="72"><font face="arial" size="2">T</font></font><font face="arial">6</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="32"><font face="Arial" size="2">Toggle split
+          pane&nbsp;</font></td>
+		<td width="293" height="32"><font face="Arial" size="2">button, toggles
+          the memory renderings pane split</font></td>
+		<td width="60" height="32"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="32" width="72"><font face="arial" size="2">T</font></font><font face="arial">6</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="32"><font face="Arial" size="2">Link Memory
+          Rendering Panes</font></td>
+		<td width="293" height="32"><font face="Arial" size="2">Synchronizes the
+          selections of two memory renderings</font></td>
+		<td width="60" height="32"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="32" width="72"><font face="arial" size="2">T</font></font><font face="arial">6</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="32"><font face="Arial" size="2">Menu</font></td>
+		<td width="293" height="32"><font face="Arial" size="2">Menu with two
+          items: set padded string and set default column size</font></td>
+		<td width="60" height="32"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="32" width="72"><font face="arial" size="2">T</font></font><font face="arial">6</font></font></td>
+	</tr>
+	<tr>
+		<td width="199" height="12"><font face="Arial" size="2">Padded String</font></td>
+		<td width="293" height="12"><font face="Arial" size="2">dialog:
+          specifies the string that represents the irretrievable memory</font></td>
+		<td width="60" height="12"><font face="arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="12" width="72"><font face="arial" size="2">T</font></font>6</td>
+	</tr>
+    </font>
+	<tr>
+		<td width="199" height="16"><font face="Arial" size="2">Default Column
+          Size</font></td>
+		<td width="293" height="16"><font face="Arial" size="2">dialog: set the
+          default column size of the memory presentation, can be overwritten by
+          each rendering</font></td>
+		<td width="60" height="16"><font face="Arial" size="2">new</font></td>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+		<td height="16" width="72"><font face="arial" size="2">T</font></font>6</td>
+	</tr>
+</table>
+<div class="subsubsection" style="width: 635785; height: 27">&nbsp;
+  <p>2.1.4 Exclusions</div>
+<p>N/A</p>
+<font face="Arial" size="2">
+<div class="subsection">
+  2.2 Risks
+</div>
+<p>There are no known feature-specific risks.</p>
+</font>
+<div class="subsection">
+  2.3 Dependencies 
+</div>
+    <p>N/A</p>
+<div class="subsection">
+ 2.4 Effort Estimation
+</div>
+<div class="subsubsection">2.4.1 Test Case Estimation</div>
+    <p>Test cases are grouped for convenience during planning.</p>
+    <table class="tb" width="655" border="1">
+      <tbody>
+        <tr>
+          <td width="62"><b>Tests</b></td>
+          <td width="270"><b>Description</b></td>
+          <td align="middle" width="140"><b>Estimated # TCs</b></td>
+          <td width="155"><b>Notes</b></td>
+        </tr>
+        <tr>
+          <td width="62">T1</td>
+          <td width="270">basic workflows</td>
+          <td align="middle" width="140">1</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T2</td>
+          <td width="270">
+
+<font face="arial" size="2">
+
+Adding memory monitors</font></td>
+          <td align="middle" width="140">3</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T3</td>
+          <td width="270">Removing memory monitors</td>
+          <td align="middle" width="140">2</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T4</td>
+          <td width="270">Adding memory rendering</td>
+          <td align="middle" width="140">1</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T5</td>
+          <td width="270">Removing memory rendering</td>
+          <td align="middle" width="140">1</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T6</td>
+          <td width="270">Memory view options operations</td>
+          <td align="middle" width="140">5</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T7</td>
+          <td width="270">Memory rendering operations</td>
+          <td align="middle" width="140">4</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T8</td>
+          <td width="270">Monitor memory changes&nbsp;</td>
+          <td align="middle" width="140">1</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T9</td>
+          <td width="270">Modify Memory content</td>
+          <td align="middle" width="140">3</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T10</td>
+          <td width="270">Memory view for multiple debug sessions</td>
+          <td align="middle" width="140">1</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T11</td>
+          <td width="270">Error handling</td>
+          <td align="middle" width="140">2</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="62">T12</td>
+          <td width="270">User scenarios</td>
+          <td align="middle" width="140">5</td>
+          <td width="155">test the memory view with multiple
+            monitors/renderings, multiple debug sessions, static lib,
+            dynamic lib</td>
+        </tr>
+        <tr>
+          <td width="62">&nbsp;</td>
+          <td width="270">
+            <p align="right">TOTAL =&nbsp;&nbsp;</p>
+          </td>
+          <td align="middle" width="140">29</td>
+          <td width="155">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>There are&nbsp; 29 Test Cases identified.</p>
+<div class="subsubsection">2.4.2 Effort Calculation Summary</div>
+<table class="tb" border="1">
+  <tbody>
+    <tr>
+      <td>Test Case Development</td>
+      <td>1.5 person days</td>
+    </tr>
+    <tr>
+      <td>First Test Case Execution</td>
+      <td>1 person days</td>
+    </tr>
+    <tr>
+      <td>Verifying Bugs</td>
+      <td>1.5 person days</td>
+    </tr>
+    <tr>
+      <td>Second Test Case Execution</td>
+      <td>1 person days</td>
+    </tr>
+    <tr>
+      <td><b>Total (risk adjusted)</b></td>
+      <td><b>5 person days</b></td>
+    </tr>
+  </tbody>
+</table>
+<font face="Arial" size="2">
+<p>It will take
+</font>
+
+</font>
+<font face="Arial" size="2">5</font>
+<font face="Arial" size="2">
+
+<font face="arial" size="2">
+
+ person days to test the functionality of this feature.&nbsp;</p>
+<div class="subsection">2.5 Candidates for Regression</div>
+    </font>
+</font>
+
+<p><font face="Arial" size="2">N/A</font></p>
+
+<font face="arial" size="2">
+
+<font face="Arial" size="2">
+<div class="subsection">2.6 Candidates for Sanity</div>
+</font>
+
+<p>N/A</p>
+
+<div class="section"><a name="TC_org">3. Test Cases&nbsp;</a></div>
+<table border="1" width="97%" height="1428">
+  <tr>
+    <td width="5%" height="38"><b>Test ID</b></td>
+    <td width="17%" height="38"><b>Synopsis</b></td>
+    <td width="81%" height="38"><b>Steps</b></td>
+  </tr>
+</font>
+<tr>
+  <td width="5%" height="14"><font face="arial" size="1">T1.1</font></td>
+  <td width="17%" height="14"><font face="arial" size="1">basic workflows</font></td>
+  <td width="81%" height="14"><font face="arial" size="1">&nbsp;open Memory view from
+    Windows/Show Views/Memory, close the view, verify the no surprises.</font></td>
+</tr>
+<tr>
+  <td width="5%" height="103"><font face="arial" size="1">T2.1</font></td>
+  <td width="17%" height="103"><font face="arial" size="1">Adding memory monitor from Memory
+    monitors pane</font></td>
+  <td width="81%" height="103">
+    <ol>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l1 level1 lfo2; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Start a debug session.<o:p>
+</o:p>
+    </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l1 level1 lfo2; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>When session is suspended select “Add Monitor” in the context menu of
+the Memory Monitor pane. <o:p>
+</o:p>
+Verify that the menu is disabled if session is not suspended.</font></span><font face="arial" size="1"><span lang="EN-US" style="COLOR: blue; mso-ansi-language: EN-US"><o:p>
+    </o:p>
+    </span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l1 level1 lfo2; tab-stops: list .25in"><font size="1"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>Type an address or expression in the “Enter address or expression
+field” field and press OK.<o:p>
+</o:p>
+    </font></span>
+
+<font face="arial">
+
+<span lang="EN-US">Verify that memory monitor is added and default rendering
+tabs are created in the Memory Renderings pane.</span></font></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l1 level1 lfo2; tab-stops: list .25in"><font face="arial" size="1"><span lang="EN-US">Verify
+        the base address is highlighted in memory renderings pane</span></font></li>
+    </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="122"><font face="arial" size="1">T2.2</font></td>
+  <td width="17%" height="122"><font size="1"><font face="arial">Adding memory monitor from
+    Memory Renderings&nbsp; pane</font></font></td>
+  <td width="81%" height="122">
+    <ol>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l0 level1 lfo4; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>Start a debug session.<o:p>
+    </o:p>
+    </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l0 level1 lfo4; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>When session is suspended select “Add Rendering” in the context
+    menu of the Memory Renderings pane. <o:p>
+    </o:p>
+    </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l0 level1 lfo4; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>Press the “Add New…” button.<o:p>
+    </o:p>
+    </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l0 level1 lfo4; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Type an address or expression in the “Enter address or expression
+    field” field and press OK.<o:p>
+    </o:p>
+    </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l0 level1 lfo4; tab-stops: list .25in"><font size="1"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial">Select renderings from the list and press OK.<o:p>
+    </o:p>
+    </font></span> <span lang="EN-US"> <font face="arial">Verify that memory
+    monitor is added and rendering tabs are created in the Memory</font></span></font>
+        <font face="arial" size="1"><span lang="EN-US">Renderings
+    pane.</span></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l0 level1 lfo4; tab-stops: list .25in"><font face="arial" size="1"><span lang="EN-US">Verify
+        the base address is highlighted in memory renderings pane</span></font></li>
+    </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T2.3</font></td>
+  <td width="17%" height="28"><font face="Arial" size="1">Adding memory monitors
+    by using&nbsp; different expressions</font></td>
+  <td width="81%" height="28"><font face="Arial" size="1">repeat T2.1 and T2.2
+    but using different expressions: hexadecimal, variable's name and pointers.</font></td>
+</tr>
+<tr>
+  <td width="5%" height="47"><font face="arial" size="1">T3.1</font></td>
+  <td width="17%" height="47"><font face="arial" size="1">Removing Memory monitors</font></td>
+  <td width="81%" height="47">
+    <ol>
+      <li><font face="Arial" size="1">Select a memory monitor, Remove a memory
+        monitor by using &quot;Remove Memory Monitor&quot; from context menu or
+        the button</font></li>
+      <li><font face="Arial" size="1">Verify the corresponding memory monitor is
+        removed</font></li>
+    </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="61"><font face="arial" size="1">T3.2</font></td>
+  <td width="17%" height="61"><font face="arial" size="1">Remove all&nbsp; Memory monitors</font></td>
+  <font face="arial" size="2">
+  <td width="81%" height="61">
+    <ol>
+      <li><font face="Arial" size="1">Remove </font></font><font face="Arial" size="1">all&nbsp;</font><font face="arial" size="2"><font face="Arial" size="1">
+      memory monitor by using &quot;Remove Memory Monitor&quot; from context
+      menu or the button</font>
+</font>
+    </li>
+    <li><font face="Arial" size="1">Or, Select multiple memory monitors and use
+      &quot;Remove Memory Monitor&quot; from context menu to remove all of them</font></li>
+    <li><font face="Arial" size="1">Verify all of memory monitors are removed</font></li>
+  </ol>
+  </td>
+  </tr>
+<tr>
+  <td width="5%" height="103"><font face="arial" size="1">T4.1</font></td>
+  <td width="17%" height="103"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Add
+    a new memory rendering<o:p>
+    </o:p>
+    </font></span></td>
+  <td width="81%" height="103">
+    <ol>
+      <li><font face="arial" size="1">Select an memory monitor from memory
+        monitors pane, on a memory renderings pane, select &quot;</font><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Add Rendering” in the context
+    menu of the Memory Renderings pane.
+    </font></span></li>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">Verify
+        the selected memory monitor is the one displayed in Memory Monitors
+        dropdown list, choose another if you want</span></font></span></li>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">select
+        one from memory rendering(s) type list, then press &quot;OK&quot;</span></font></span></li>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">Verify
+        a new rendering is created with memory monitor's name, value and
+        rendering type display on the tab</span></font></span></li>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">Repeat
+        above steps but choose different types</span></font></span></li>
+    </ol>
+  </td>
+  </tr>
+<tr>
+  <td width="5%" height="61"><font face="arial" size="1">T5.1</font></td>
+  <td width="17%" height="61">
+
+<font face="arial" size="1">
+
+Removing memory rendering</font></td>
+  <td width="81%" height="61">
+    <ol>
+      <li><font size="1"><font face="arial">&nbsp;On a memory renderings pane,
+        select &quot;</font><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial"><span style="mso-ansi-language: EN-US">Remove
+        </span></font></span><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial">Rendering” in the context
+    menu of the Memory Renderings pane.
+    </font></span></font></li>
+      <li><font face="arial" size="1"><span style="mso-ansi-language: EN-US" lang="EN-US">Alternatively,
+        press the &quot;X&quot; button on right corner of Memory renderings pane</span></font></li>
+      <li><font size="1"><span style="mso-ansi-language: EN-US" lang="EN-US"><font face="arial">Verify
+        the memory rendering is removed</font></span></font></li>
+    </ol>
+  </td>
+  </tr>
+<tr>
+  <td width="5%" height="42"><font face="arial" size="1">T6.1&nbsp;</font></td>
+  <td width="17%" height="42"><font face="arial" size="1"><font face="arial">Use Memory view
+    options:</font> <font face="Arial">Toggle Memory monitors pane</font></font></td>
+  <td width="81%" height="42"><font face="arial" size="1">Verify the memory
+    monitors pane can be toggled on and off by pressing the &quot;Toggle Memory
+    Monitors Pane&quot; button on top right corner of memory view</font></td>
+  </tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T6.2</font></td>
+  <td width="17%" height="28"><font face="arial" size="1"><font face="arial">Use Memory view
+    options:</font> <font face="Arial">Toggle split pane&nbsp;</font></font></td>
+  <td width="81%" height="28"><font face="arial" size="1">V</font><font face="arial" size="1"><font face="arial" size="2">erify
+    the memory
+</font>
+    <font face="arial">rendering </font></font><font face="arial" size="1"><font face="arial" size="2">pane
+    can be
+    </font>splitter by pressing the &quot;</font><font face="Arial">Toggle split pane&nbsp;</font><font face="arial" size="2"><font face="arial" size="1">&quot;
+    button on top right corner of memory view</font></font></td>
+  </tr>
+<tr>
+  <td width="5%" height="42"><font size="1"><font face="arial">T6.3</font></font></td>
+  <td width="17%" height="42"><font face="arial" size="1"><font face="arial">Use Memory view
+    options:</font> <font face="Arial">Link Memory Rendering Panes</font></font></td>
+  <td width="81%" height="42">
+    <ol>
+      <li><span style="font-family: Arial; mso-ansi-language: EN" lang="EN"><font size="1">Press
+        down&nbsp; the button of &quot;Link Memory Rendering Panes&quot;</font></span></li>
+      <li><span style="font-family: Arial; mso-ansi-language: EN" lang="EN"><font size="1"><span style="font-family: Arial; mso-ansi-language: EN">Create
+        2 renderings and make them</span></font></span><span style="font-family: Arial; mso-ansi-language: EN" lang="EN"><font size="1"><span style="font-family: Arial; mso-ansi-language: EN">
+        splitted</span></font></span></li>
+      <li><span style="font-family: Arial; mso-ansi-language: EN" lang="EN"><font size="1">Verify
+    the selection of memory content from one rendering is synchronized with
+        another</font></span></li>
+    </ol>
+  </td>
+  </tr>
+<tr>
+  <td width="5%" height="28"><font size="1"><font face="arial">T6.4</font></font></td>
+  <td width="17%" height="28"><font size="1"><font face="arial">Use Memory view options:</font><font face="Arial">
+    Padded String</font></font></td>
+  <td width="81%" height="28"><font face="arial" size="1">Verify the string that
+    represents the un-retrievable memory can be specified with &quot;Padded
+    String&quot; option</font></td>
+  </tr>
+<tr>
+  <td width="5%" height="47"><font size="1"><font face="arial">T6.5</font></font></td>
+  <td width="17%" height="47"><font face="arial" size="1"><font face="arial">Use Memory view
+    options:</font><font face="Arial"> Default Column Size</font></font></td>
+  <td width="81%" height="47">
+    <ol>
+      <li>
+  <font face="arial" size="1">
+  <span style="color: black; font-family: Arial; mso-ansi-language: EN" lang="EN">Verify
+  </span><span lang="EN" style="color: black; font-family: Arial; mso-ansi-language: EN">the
+  default column size of the memory presentation (1 , 2 , 4 , 8 or 16 bytes) can
+  be specified.&nbsp;</span>
+</font>
+      </li>
+      <li><font size="1">Verify the default setting <span lang="EN" style="color: black; font-family: Arial; mso-ansi-language: EN"><font face="arial">can
+        be overwritten by each rendering.
+</font>
+        </span></font><font face="arial" size="2"><span lang="EN" style="FONT-SIZE: 10pt; COLOR: black; FONT-FAMILY: Arial; mso-ansi-language: EN"><o:p>
+        </o:p>
+        </span></li>
+      </ol>
+    </td>
+  </tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T6.6</font></td>
+  <td width="17%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Change
+    Color and font of memory view</font></span></td>
+  <td width="81%" height="28">
+    <ol>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">From
+        Windows/Preference/General/color and fonts, change the font for displays
+        in memory rendering</span></font></span></li>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">Verify
+        the fond changed accordingly</span></font></span></li>
+      <li><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">From
+        Windows/Preference/Run and Debug, change the color of buffered and
+        un-buffered lines in memory renderings pane</span></font></span></li>
+    </ol>
+  </td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T7.1</font></td>
+  <td width="17%" height="28"><font face="arial" size="1">Memory rendering operation:
+    scrolling ability</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Scroll
+    the content of a memory rendering up and down.<o:p>
+    </o:p>
+    </font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T7.2</font></td>
+  <td width="17%" height="28"><font face="arial" size="1">Memory rendering operation:
+    context menu-1</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Try
+    “Go to address” action.<o:p>
+    </o:p>
+    </font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T7.3</font></td>
+  <td width="17%" height="28"><font face="arial" size="1">Memory rendering operation:
+    context menu-2</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Try
+    “Restore base address” action.</font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T7.4</font></td>
+  <td width="17%" height="28"><font face="arial" size="1">Memory rendering operation:
+    context menu-3</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="mso-ansi-language: EN-US">Try
+    other menu options</span></font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T8.1</font></td>
+  <td width="17%" height="28"><font face="arial" size="1">Memory changes during debugging</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Monitor
+    the memory changes occurred during debugging(stepping).<o:p>
+    </o:p>
+    </font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="14"><font face="arial" size="1">T9.1</font></td>
+  <td width="17%" height="14">
+
+<font face="arial" size="1">
+
+Modify Memory content</font></td>
+  <td width="81%" height="14">
+    <p class="MsoNormal"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Modify
+    the content of overlapping memory monitors.<o:p>
+    </o:p>
+    </font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T9.2</font></td>
+  <td width="17%" height="28">
+
+<font face="arial" size="1">
+
+Modify Memory content - overlapping</font></td>
+  <td width="81%" height="28">
+    <p class="MsoNormal"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Modify
+    the content of overlapping memory monitors.</font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="110"><font face="arial" size="1">T9.3</font></td>
+  <td width="17%" height="110">
+
+<font face="arial" size="1">
+
+Variable view changes after Memory content modified</font></td>
+  <td width="81%" height="110"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Check
+    if memory modifications are reflected in the Variables view.<o:p>
+    </o:p>
+    </font></span>
+    <ol>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo5; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Create a memory monitor based on a variable. <o:p>
+    </o:p>
+    </font></span></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo5; tab-stops: list .25in"><font size="1"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>Modify the content of variable in the memory view.<o:p>
+    </o:p>
+    </font></span> <font face="arial"><span lang="EN-US">Verify that the value
+    of the variable is updated.</span></font></font></li>
+      <li>
+        <p class="MsoNormal" style="MARGIN-LEFT: 0.25in; TEXT-INDENT: -0.25in; mso-list: l3 level1 lfo5; tab-stops: list .25in"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1"><span style="FONT: 7pt 'Times New Roman'">&nbsp;</span>Modify the variable’s value. Verify that changes are reflected in
+    the memory view.<o:p>
+    </o:p>
+    </font></span></li>
+    </ol>
+  </td>
+  </tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T10.1</font></td>
+  <td width="17%" height="28">
+
+<font face="arial" size="1">
+
+Memory view for multiple debug sessions</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Test
+    the behavior of the memory monitors created for multiple debug sessions. <o:p>
+    </o:p>
+    Check
+    adding and removing monitors/renderings and&nbsp; modifying contents...
+    </font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T10.1</font></td>
+  <td width="17%" height="28">
+
+<font face="arial" size="1">
+
+Memory view for multiple debug sessions - </font><font face="arial" size="1">scalability</font></td>
+  <td width="81%" height="28"><span lang="EN-US" style="mso-ansi-language: EN-US"><font face="arial" size="1">Test
+    the behavior of the memory monitors created for multiple debug sessions(5 or
+    6). <o:p>
+    </o:p>
+    &nbsp;
+    </font></span></td>
+</tr>
+<tr>
+  <td width="5%" height="80"><font face="arial" size="1">T11.1</font></td>
+  <td width="17%" height="80"><font face="arial" size="1">Error handling -
+    invalid memory monitor expression</font></td>
+  <td width="81%" height="80"><span lang="EN-US" style="mso-ansi-language: EN-US"><font size="1" face="Arial">Enter
+    an invalid expression in the “Add memory monitor” dialog. </font></span><font size="1" face="Arial"><span lang="EN-GB">Verify
+    that the error is reported</span></font></td>
+</tr>
+<tr>
+  <td width="5%" height="14"><font face="arial" size="1">T11.2</font></td>
+  <td width="17%" height="14"><font face="arial" size="1">Error handling -
+    Invalid value of memory content</font></td>
+  <td width="81%" height="14"><font size="1" face="Arial"><span lang="EN-GB">Click
+    a memory content, and enter an invalid value, such as &quot;kkk&quot; for
+    hex, or &quot;abc&quot; for integer, verify the error dialog pop up&nbsp;</span></font></td>
+</tr>
+<tr>
+  <td width="5%" height="14"><font face="arial" size="1">T12.1</font></td>
+  <td width="17%" height="14"><font face="arial" size="1">Multiple entries in
+    memory monitors pane</font></td>
+  <td width="81%" height="14"><font face="arial" size="1">Keep adding memory
+    monitors and make sure no exceptions or errors occurred.</font></td>
+</tr>
+<tr>
+  <td width="5%" height="13"><font face="arial" size="1">T12.2</font></td>
+  <td width="17%" height="13"><font face="arial" size="1">Multiple entries in
+    memory renderings pane</font></td>
+  <td width="81%" height="13"><font face="arial" size="1">Keep adding memory
+    renderings and make sure no exceptions or errors occurred.</font></td>
+</tr>
+<tr>
+  <td width="5%" height="13"><font face="arial" size="1">T12.3</font></td>
+  <td width="17%" height="13"><font face="arial" size="1">Static lib</font></td>
+  <td width="81%" height="13"><font face="arial" size="1">Check how the memory view handles
+    static
+  lib.&nbsp;</font></td>
+</tr>
+<tr>
+  <td width="5%" height="16"><font face="arial" size="1">T12.4</font></td>
+  <td width="17%" height="16"><font face="arial" size="1">shared&nbsp; lib</font></td>
+  <td width="81%" height="16"><font face="arial" size="1">Check how the memory view handles
+    shared&nbsp; lib.&nbsp;</font></td>
+  </tr>
+<tr>
+  <td width="5%" height="28"><font face="arial" size="1">T12.5</font></td>
+  <font face="arial" size="2">
+  <td width="17%" height="28"><font face="arial" size="1">D</font></font><font face="arial" size="1">LL
+  <font face="arial" size="2">
+ loaded </font>with&nbsp; </font><font face="arial" size="2"><font face="arial" size="1">dlopen()</font></font></td>
+  <td width="81%" height="28"><font face="arial" size="1">Check how the memory view handles
+    dll&nbsp; lib.&nbsp;</font></td>
+  </tr>
+<tr>
+  <td width="5%" height="19">&nbsp;</td>
+  <font face="arial" size="2">
+  <td width="17%" height="19">&nbsp;</td>
+  <td width="81%" height="19">&nbsp;</td>
+  </tr>
+</table>
+</font>
+
+
+</html>
