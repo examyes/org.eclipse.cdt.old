@@ -195,11 +195,10 @@ public class ResultsViewPart extends ViewPart
 	public void mouseDoubleClick(MouseEvent me)
 	{
 	    showItem();
-
+	    /*
 	    Rectangle tablesize=_table.getClientArea();
 	    System.out.println("table width="+tablesize.width);
-
-	    
+	    */	    
 	}
 	
     }
@@ -303,7 +302,7 @@ public class ResultsViewPart extends ViewPart
 	_table.addSelectionListener(new SelectionAdapter(){
 		public void widgetSelected(SelectionEvent e)
 		{
-		    showItem();
+		    //showItem();
 		}
 	    });
 
