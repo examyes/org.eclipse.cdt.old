@@ -334,7 +334,10 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
 
                      // Only add this variable if it has changed since last update
                      if (monitor.hasChanged() && !_changedMonitors.contains(monitor))
+                     {
                         _changedMonitors.addElement(monitor);
+                        monitor.resetChanged();
+                     }
                   }
                }
             }

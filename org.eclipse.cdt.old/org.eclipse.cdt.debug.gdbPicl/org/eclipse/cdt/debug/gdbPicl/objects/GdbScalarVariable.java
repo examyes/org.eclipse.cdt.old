@@ -140,10 +140,13 @@ class GdbScalarVariable extends GdbVariable
     */
    public void setScalarValue(String s)
    {
-      _value = s;
-      _changed = true;
+   		if (!s.equals(_value))
+   		{
+	      _value = s;
+	      _changed = true;
+   		}
    }
-
+   
    /**
     * Update the variable with a new variable object.
     * @return true if variable is correctly updated, false if the

@@ -23,7 +23,7 @@ public abstract class GdbVariable  extends Variable
       _type        = type;
       _nodeID      = nodeID;
       _inScope     = true;
-      _changed     = true;
+      _changed     = false;
       _fullName    = "";
    }
    
@@ -267,6 +267,11 @@ public abstract class GdbVariable  extends Variable
    public boolean hasChanged()
    {
       return _changed;
+   }
+   
+   public void resetChanged()
+   {
+   		_changed = false;
    }
 
    /**

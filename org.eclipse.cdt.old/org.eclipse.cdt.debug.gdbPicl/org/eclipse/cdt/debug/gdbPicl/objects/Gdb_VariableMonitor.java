@@ -44,6 +44,11 @@ public abstract class Gdb_VariableMonitor
       return _monValuesChanged | _monEnablementChanged | _monTreeStructChanged;
    }
    
+   public void resetChanged()
+   {
+   	  _monitoredVar.resetChanged();
+   }
+   
    /**
     * Return this monitor's type
     */
