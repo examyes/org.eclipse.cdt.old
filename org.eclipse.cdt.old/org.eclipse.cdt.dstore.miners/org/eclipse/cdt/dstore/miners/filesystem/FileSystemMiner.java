@@ -434,8 +434,12 @@ public class FileSystemMiner extends Miner
 	 }
      private DataElement handleCreateFile(DataElement subject, DataElement newName, DataElement status)
 	 {	
-	     StringBuffer newFileName = new StringBuffer(subject.getSource());
-	     newFileName.append("/");
+	     String parentSource = subject.getSource();
+	     StringBuffer newFileName = new StringBuffer(parentSource);
+	     if (parentSource.charAt(parentSource.length() - 1) != '/')
+		 {
+		     newFileName.append("/");
+		 }
 	     newFileName.append(newName.getName());
 	     
 	     File toBeCreated = new File(newFileName.toString());
@@ -468,8 +472,13 @@ public class FileSystemMiner extends Miner
      
      private DataElement handleCreateDir(DataElement subject, DataElement newName, DataElement status)
 	 {	
-	     StringBuffer newDirName = new StringBuffer(subject.getSource());
-	     newDirName.append("/");
+	     String parentStr = subject.getSource();
+	     StringBuffer newDirName = new StringBuffer(parentStr);
+	    
+	     if (parentStr.charAt(parentStr.length() - 1) != '/')
+		 {
+		     newDirName.append("/");
+		 }
 
 	     newDirName.append(newName.getName());
 	     
