@@ -29,15 +29,10 @@ import org.eclipse.ui.dialogs.*;
 
 public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 {	
-	private AutoconfBuilderPropertyPageControl _autoconfControl;
+	private AutoconfBuilderPropertyPageControl _autoconfBuildControl;
 
 	// items in the project property page
-	String configureDialogKey = "Show_Configure_Dialog"; // done
-	String updateAllDialogKey = "Show_Update_All_Dialog";
-	String updateMakefileAmKey = "Show_Update_MakefileAm_Dialog";
-	String updateConfigureInKey = "Show_Update_ConfigureIn_Dialog";
-	String createDialogKey = "Show_Create_Dialog";
-	String runDialogKey = "Show_Run_Dialg";
+	String execKey = "Executable_Type"; 
 
 	IProject project;
 
@@ -55,10 +50,10 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 
 		if (CppPlugin.isCppProject(project))
 		{
-			_autoconfControl = new AutoconfBuilderPropertyPageControl(parent, SWT.NONE);
+			_autoconfBuildControl = new AutoconfBuilderPropertyPageControl(parent, SWT.NONE);
 			performInit();
-			_autoconfControl.setLayout(layout);
-			return _autoconfControl;
+			_autoconfBuildControl.setLayout(layout);
+			return _autoconfBuildControl;
 		}
 		else
 		{
@@ -74,7 +69,30 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 
 	protected void performInit()
 	{
-		
+		CppPlugin plugin      = CppPlugin.getDefault();
+		ArrayList execType = plugin.readProperty(project,execKey);
+		if (execType.isEmpty())
+		{
+			execType.add("Debug");
+			_autoconfBuildControl.setDebugButonSelection(true);
+			_autoconfBuildControl.setOptimizedButtonSelection(false);
+			plugin.writeProperty(project,execKey,execType);	
+		}
+		else
+		{
+			String type = (String)execType.get(0);
+			if (type.equals("Debug"))
+			{
+				_autoconfBuildControl.setDebugButonSelection(true);
+				_autoconfBuildControl.setOptimizedButtonSelection(false);
+				
+			}
+			else
+			{
+				_autoconfBuildControl.setOptimizedButtonSelection(true);
+				_autoconfBuildControl.setDebugButonSelection(false);
+			}
+		}
 	}
 	protected void performDefaults()
 	{
@@ -111,30 +129,4 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 		return (IProject)getElement();
 	}
     
-    public void applyConfigureDialogSettings(ArrayList list)
-    {
-    	CppPlugin plugin      = CppPlugin.getDefault();
-    	// begin  - checking configure diaolg set up
-		if (list.isEmpty())
-		{
-			list.add("Yes");
-			_autoconfControl.setShowConfigureDialogSelection(true);
-			plugin.writeProperty(project,configureDialogKey,list);
-		}
-		else
-		{
-			String preference = (String)list.get(0);
-			if (preference.equals("Yes"))
-			{
-				_autoconfControl.setShowConfigureDialogSelection(true);
-			}
-			else
-			{
-				_autoconfControl.setShowConfigureDialogSelection(false);
-			}
-		}
-		// end configure dialog setup
-    }
-
-
 }

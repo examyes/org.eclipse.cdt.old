@@ -91,12 +91,12 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 	   	c1Layout.numColumns = 1;
 		execComp.setLayout(c1Layout);
 
+		_debuggableButton = new Button(execComp, SWT.RADIO);
+		_debuggableButton.setText("Debug executable");	   	
 
-		_optimizedButton = new Button(_execGroup, SWT.RADIO);
-		_optimizedButton.setText("optimized executables");
+		_optimizedButton = new Button(execComp, SWT.RADIO);
+		_optimizedButton.setText("Optimized executable");
 		
-		_debuggableButton = new Button(_execGroup, SWT.RADIO);
-		_debuggableButton.setText("optimized executables");	   	
 /*	   	// group #2 - advanced autoconf files group
 	   	
 	   	_advancedGroup = new Group(this,SWT.NONE);
@@ -158,16 +158,17 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 
 	// gets
 	
-    public boolean getShowConfigureDialogSelection()
+     
+    public boolean getDebugButonSelection()
+    {
+		return _debuggableButton.getSelection();
+    }
+    public boolean getOptimizedButtonSelection()
     {
 		return _optimizedButton.getSelection();
     }
 
-    
-    public boolean getShowRunDialogSelection()
-    {
-		return _debuggableButton.getSelection();
-    }
+
     
 /*    public boolean getShowCreateDialogSelection()
     {
@@ -195,12 +196,12 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     // sets
     
 
-    public void setShowConfigureDialogSelection(boolean flag)
+    public void setDebugButonSelection(boolean flag)
     {
 		_debuggableButton.setSelection(flag);
     }
    
-    public void setShowRunDialogSelection(boolean flag)
+    public void setOptimizedButtonSelection(boolean flag)
     {
 		_optimizedButton.setSelection(flag);
     }
