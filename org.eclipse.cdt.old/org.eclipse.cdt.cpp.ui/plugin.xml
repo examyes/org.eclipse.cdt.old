@@ -62,9 +62,16 @@
 	<launcher  id="com.ibm.cpp.ui.launchers.CppRunLauncher"
 	   	   class="com.ibm.cpp.ui.internal.launchers.CppRunLauncher"
 	  	   modes="run"
- 	  	   label= "Start a C/C++ Application"
+ 	  	   label= "C/C++ Application"
  	  	   public= "true"
  	  	   description= "C/C++ run program launcher" />
+
+	<launcher  id="com.ibm.cpp.ui.launchers.CppAttachLauncher"
+	   	   class="com.ibm.cpp.ui.internal.launchers.CppAttachLauncher"
+	  	   modes="debug"
+ 	  	   label= "Attach to C/C++ Application"
+ 	  	   public= "true"
+ 	  	   description= "C/C++ attach to program launcher" />
 </extension>
 
 <extension
