@@ -151,7 +151,8 @@ public class ParsePathControl extends Composite implements Listener
 	    {
 		if (_project instanceof Repository)
 		    {
-			DataElement input = ((Repository)_project).getRemoteElement();
+			DataElement currentDir = ((Repository)_project).getRemoteElement();
+			DataElement input = currentDir.getParent();
 			DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", input);
 			dialog.open();
 			if (dialog.getReturnCode() == dialog.OK)
