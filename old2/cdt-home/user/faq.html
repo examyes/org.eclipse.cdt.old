@@ -1162,7 +1162,7 @@ Bugzilla Bug 71443.  The Build Automatically flag removes the build menus.
 	<p>  
 		The ManagedBuilder does not  respect  the src paths when generating the makefile (as of CDT 2.0).  However, there is a hack to prevent the generated makefile from building files.  
 	<p>
-	To remove the file "devices/devices.c[pp]" from the build, add a file named "makefile.deps" to the project ROOT and added the following lines to it:
+	To remove the file "devices/devices.c[pp]" from the build, add a file named "makefile.defs" to the project ROOT and added the following lines to it:
 <pre>OBJS := $(OBJS:devices/devices.o=)
 </pre>
 That has the effect of removing the offending (i.e. non-compiling) sources from the required objects and hence make will never attempt to build them.
