@@ -46,6 +46,8 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
     private Button       _back;
     private Button       _forward;
 
+    private IActionLoader _actionLoader;
+
     public DataElementFileDialog(String title, DataElement input)
     {
 	super(null);
@@ -83,6 +85,21 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	return _selected;
     }
 
+    public void setActionLoader(IActionLoader loader)
+    {
+	_actionLoader = loader;
+    }
+
+    public IActionLoader getActionLoader()
+    {
+	if (_actionLoader == null)
+	    {
+		_actionLoader = _plugin.getDialogActionLoader();
+	    }
+
+	return _actionLoader;
+    }
+    
 
     public Control createDialogArea(Composite parent)
     {
@@ -112,9 +129,9 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 
 
 	DataStore dataStore = _input.getDataStore();
-	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), _plugin.getDialogActionLoader());
+	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), _actionLoader);
 	
-	if (_input.getDescriptor().isOfType("Filesystem Objects") || _input.getType().equals("data"))
+	if (_input.isOfType("Filesystem Objects") || _input.getType().equals("data"))
 	    {
 		_viewer.setInput(_input);
 		_input.expandChildren();
