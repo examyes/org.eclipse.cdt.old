@@ -267,7 +267,7 @@ public class DataElementTreeViewer extends TreeViewer
 			    }
 			
 			
-		//	if ((_expanded == parent))
+			if ((_expanded == parent))
 			    {
 			       	expandToLevel(parent, 1);
 			    }
