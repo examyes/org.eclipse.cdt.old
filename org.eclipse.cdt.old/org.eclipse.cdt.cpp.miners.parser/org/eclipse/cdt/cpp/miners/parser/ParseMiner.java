@@ -502,7 +502,8 @@ public class ParseMiner extends Miner
 
  private DataElement getProjectElement(DataElement theProject, String name)
  {
-  //DataElement theParseProject = getParseProject(theProject);
+     if (theProject.getId().indexOf(".parse") < 0)
+   theProject = getParseProject(theProject);
   if (theProject == null)
    return null;
   return _dataStore.find(theProject, DE.A_NAME, name,1);
@@ -511,7 +512,6 @@ public class ParseMiner extends Miner
  private DataElement getParseProject(DataElement theProject)
  {
   ArrayList parseRefs = theProject.getAssociated(ParserSchema.ParseReference);
-  
   if (parseRefs.size() == 0)
    return handleOpenProject(theProject);
   return ((DataElement)parseRefs.get(0)).dereference();
