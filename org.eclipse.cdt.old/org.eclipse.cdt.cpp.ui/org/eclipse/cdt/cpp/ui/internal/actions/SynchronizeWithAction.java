@@ -57,8 +57,8 @@ public class SynchronizeWithAction extends CustomAction
 		    
 		    if (project2 != null && project1 != project2)
 			{
-			    _pm.beginTask("Transfering from " + 
-					  project1.getName() + " to " + project2.getName() + "...", 
+			    _pm.beginTask("Comparing " + 
+					  project1.getName() + " with " + project2.getName() + "...", 
 					  project1.getNestedSize());
 
 			    // transfer from project1 to project2
@@ -74,8 +74,8 @@ public class SynchronizeWithAction extends CustomAction
 				    _pm.worked(1);
 				}
 
-			    _pm.beginTask("Transfering from " + 
-					  project2.getName() + " to " + project1.getName() + "...", 
+			    _pm.beginTask("Comparing " + 
+					  project2.getName() + " with " + project1.getName() + "...", 
 					  project2.getNestedSize());
 			    
 

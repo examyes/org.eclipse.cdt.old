@@ -61,7 +61,7 @@ public class ReplicateFromAction extends CustomAction
 
 		    if (sourceProject != null && sourceProject != _subject)
 			{
-			    _pm.beginTask("Transfering files from " + sourceProject.getName() + "...", sourceProject.getNestedSize());
+			    _pm.beginTask("Checking files from " + sourceProject.getName() + "...", sourceProject.getNestedSize());
 
 			    // do transfer files
 			    for (int j = 0; j < sourceProject.getNestedSize(); j++)

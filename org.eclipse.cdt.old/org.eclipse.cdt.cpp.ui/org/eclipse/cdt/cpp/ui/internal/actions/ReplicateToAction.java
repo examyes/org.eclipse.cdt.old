@@ -56,7 +56,7 @@ public class ReplicateToAction extends CustomAction
 			{
  			    targetProject.doCommandOn("C_DATES", true);		
 
-			    _pm.beginTask("Transfering files from " + _subject.getName() + "...", _subject.getNestedSize());
+			    _pm.beginTask("Checking files from " + _subject.getName() + "...", _subject.getNestedSize());
   			    _subject.doCommandOn("C_DATES", true);		
 
 			    // do transfer files
