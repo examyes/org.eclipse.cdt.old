@@ -181,10 +181,11 @@ class GenerateMakefiles
       if (secondQuote > firstQuote)
       { 
        String theJar = nextLine.substring(firstQuote+1, secondQuote);
+       String baseDir = pluginsDir + "/" + theClassPath;
        if (theJar.equals("."))
-        jarNames.add(pluginsDir + "/" + theClassPath);
+        jarNames.add(baseDir);
        else
-        jarNames.add(pluginsDir + "/" + theClassPath + "/" + theJar);        
+        jarNames.add(baseDir + "/" + expandJarName(theJar,baseDir));        
       }
      }      
     }
@@ -194,6 +195,27 @@ class GenerateMakefiles
   return jarNames;
  }
  
+ //This method takes care of the $ws$ that is used in the SWT jar paths:
+ private static String expandJarName(String jarName, String baseDir)
+ {
+  int startOfWS = jarName.indexOf("$ws$");
+  if (startOfWS < 0)
+   return jarName;
+  
+  //If we get here, then there is a $ws$...To expand it we need to determine what the subdirectory of ws/ is. 
+  //Rather that hardcode motif or win32, I'll use File api's to determine it.
+  
+  File wsDir = new File(baseDir + "/ws");
+  if (!wsDir.exists())
+   return jarName;
+  
+  String [] subdirs = wsDir.list();
+  if ((subdirs == null) || (subdirs.length == 0))
+   return jarName;
+  
+  return "ws/" + subdirs[0] + "/" + jarName.substring(5,jarName.length());
+ }
+
  //Here we assume that GenerateMakefiles is run from org.eclipse.cdt.dstore.core
  private static String getPluginsDirectory()
  {
