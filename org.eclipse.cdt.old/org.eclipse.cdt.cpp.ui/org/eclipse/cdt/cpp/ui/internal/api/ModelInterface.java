@@ -354,6 +354,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   private DataElement    _status;
 
+
   private ISearchResultView _searchResultsView;
   private Shell             _dummyShell;
 
@@ -599,15 +600,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	DataElement invocationObj = dataStore.createObject(null, "invocation", invocation, "");
 	args.add (invocationObj);
-	args.add(findProjectElement(CppPlugin.getCurrentProject()));
 	
-	try
-	    {
-		_workbench.getRoot().deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);	
-	    }
-	catch (CoreException e)
-	    {
-	    }
+	IProject currentProject = CppPlugin.getCurrentProject();
+	args.add(findProjectElement(currentProject));
+	
+
+	deleteAssociatedMarkers(currentProject);
+
        	
 	DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_COMMAND");
 	DataElement status = dataStore.command(commandDescriptor, args, pathElement, true);
@@ -1808,6 +1807,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 										
 										  errorMarker.setAttribute(IMarker.SEVERITY, priority);
 										  errorMarker.setAttribute(IMarker.LINE_NUMBER, loc);
+											
+										  if (!_markedFiles.contains(file))	
+											  _markedFiles.add(file);
 									      }
 									  catch (CoreException e)
 									      {
@@ -1824,6 +1826,26 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       }
   }
 
+
+ private void deleteAssociatedMarkers(IProject project)
+ {
+ 	for (int i = 0; i < _markedFiles.size(); i++)
+ 	{
+ 		IFile file = (IFile)_markedFiles.get(i);
+ 		if (file.getProject().equals(project))
+ 		{
+ 			try
+	    	{
+				file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);	
+	    	}
+			catch (CoreException e)
+	    	{
+	    	}
+	    	
+	    	_markedFiles.remove(file);
+ 		}
+ 	}
+ }
 
     private void resourceChanged(IResource resource)
     {
