@@ -865,53 +865,52 @@ public final class DataElement implements Serializable, IDataElement
   public ArrayList getAssociated(String propertyStr)
     {
 	DataElement property = _dataStore.findObjectDescriptor(propertyStr);
-	return getAssociated(property);
+	if (property != null)
+	    {
+		return getAssociated(property);
+	    }
+	else
+	    {
+		return new ArrayList(1);
+	    }
     }
 
 
   public ArrayList getAssociated(DataElement property)
       {	  
-	  if (getNestedSize() == 0)
+	  ArrayList set = new ArrayList();
+	 	  
+	  if (property == null || getNestedSize() == 0)
 	      {
-		  return new ArrayList(1);
+		  return set;
 	      }
-
-	  ArrayList set = new ArrayList(getNestedSize());
-
-	if (property == null)
-	    {
-		property = _dataStore.findObjectDescriptor(_dataStore.getLocalizedString("model.contents"));
-	    }
-	if (property != null)
-	    {
-		if (property.getType().equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
-		    {
-			for (int i = 0; i < property.getNestedSize(); i++)
-			    {
-				DataElement subProperty = property.get(i).dereference();
-				ArrayList subSet = getAssociated(subProperty);
-				for (int j = 0; j < subSet.size(); j++)
-				    {
-					DataElement item = (DataElement)subSet.get(j);
-					if (!item.isDeleted())
-					    set.add(item);
-				    }
-			    }
-		    }
-		else
-		    {
-			String type = property.getName();
-			if (type.equals(_dataStore.getLocalizedString("model.parent")) && (_parent != null))	
-			    {
-				set.add(_parent);
-			    }
-			else if (type.equals(_dataStore.getLocalizedString("model.descriptor_for")))
-			    {
-				getDescriptor();
-				if (_descriptor != null)
-				    set.add(_descriptor);
-			    }
-			else if (_nestedData != null)
+	  else
+	      {
+		  if (property.getType().equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR))
+		      {
+			  // recursively concat the abstracted matches
+			  for (int i = 0; i < property.getNestedSize(); i++)
+			      {
+				  DataElement subProperty = property.get(i).dereference();
+				  ArrayList subSet = getAssociated(subProperty);
+				  set.addAll(subSet);
+			      }
+		      }
+		  else
+		      {
+			  String type = property.getName();
+			  if (type.equals(_dataStore.getLocalizedString("model.parent")) && (_parent != null))	
+			      {
+				  set.add(_parent);
+				  return set;
+			      }
+			  else if (type.equals(_dataStore.getLocalizedString("model.descriptor_for")))
+			      {
+				  getDescriptor();
+				  if (_descriptor != null)
+				      set.add(_descriptor);
+			      }
+			  else if (_nestedData != null)
 			    {	
 				for (int i = 0; i < _nestedData.size(); i++)
 				    {
@@ -920,7 +919,7 @@ public final class DataElement implements Serializable, IDataElement
 					    {
 						if (nestedObject.isReference())
 						    {
-							String relType = nestedObject.getAttribute(DE.A_TYPE);
+							String relType = nestedObject.getType();
 							if (relType.equals(type))
 							    {
 								DataElement referenced = nestedObject.dereference();
@@ -938,14 +937,13 @@ public final class DataElement implements Serializable, IDataElement
 					    }
 				    }
 			    }
-		    }
-	    }
-		
-	return set;
+		      }
+	      }
+	  
+	  return set;
       }
-
-
-  /////////////////////////////////////////
+    
+    /////////////////////////////////////////
   //
   // query operations
   //
