@@ -154,8 +154,7 @@ public class ConfigureAction extends CustomAction
 				noConffilesExist = true;
 				str1 = "";str2="";
 			}
-			String message = new String
-			(str1+"\nGenerating project configuration files"+str2);
+			String message = new String(str1+"\nGenerating project configuration files"+str2);
 			createUpdate = dialog.openConfirm(shell,"Creating configure.in and Makefile.am's ",message);
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
@@ -279,7 +278,6 @@ public class ConfigureAction extends CustomAction
 			DataElement status = _dataStore.synchronizedCommand(cmdD, root);		
 			DataElement updateState = (DataElement)status.get(0);
 		    String state = updateState.getName();
-		    System.out.println("state = " + state);
 		    if(state.equals("uptodate"))
 		    	return true;
 		}
