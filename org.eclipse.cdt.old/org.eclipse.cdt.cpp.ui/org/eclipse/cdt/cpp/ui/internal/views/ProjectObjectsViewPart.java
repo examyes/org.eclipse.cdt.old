@@ -161,7 +161,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 		 }
 	 }
      
-     if (theElement.getType().equals("Project"))
+     if (theElement != null && theElement.getType().equals("Project"))
 	 {
 	     theInput = _api.findParseFiles(theElement);
 	 }
