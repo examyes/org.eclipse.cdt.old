@@ -87,9 +87,15 @@ class GenerateMakefiles
  {
   if (thePlugin.indexOf("extra") >= 0)
    thePlugin = thePlugin + "_client";
-  int firstDot  = thePlugin.indexOf(".");
-  int secondDot = thePlugin.indexOf(".",firstDot+1);
-  return thePlugin.substring(secondDot+1, thePlugin.length()).replace('.','_') + ".jar";
+
+  StringTokenizer strtok = new StringTokenizer(thePlugin,".");
+  ArrayList namePieces = new ArrayList();
+  while (strtok.hasMoreTokens())
+   namePieces.add(strtok.nextToken());
+    
+  int names = namePieces.size()-1;
+  String jarName = (String)namePieces.get(names-1) + "_" + (String)namePieces.get(names) + ".jar";
+  return jarName;
  }
  
  private static String getEnvironmentInfo(String thePlugin)
