@@ -21,24 +21,31 @@ public class ProjectStructureManager {
 	private void analyze(File project, int depth)
 	{
 		// do the work
-		depth++;
+		
 		if (project != null)
+		{
+                 depth++;
+		 
+                 if (project.isDirectory())
+                 {
+                   File[] contents = project.listFiles();
+                   for(int i = 0;i<contents.length; i++ )
+		   {
+		    if(contents[i].isDirectory())
 		    {
-			File[] contents = project.listFiles();
-			for(int i = 0;i<contents.length; i++ )
-			    {
-				if(contents[i].isDirectory())
-				    {
-					subdirs.add(contents[i]);
-					subdirs_depth.add(new Integer(depth));
-					analyze(contents[i],depth);
-				    }
-				else
-				    {
-					files.add(contents[i]);
-				    }
-			    }
+		     subdirs.add(contents[i]);
+		     subdirs_depth.add(new Integer(depth));
+		     analyze(contents[i],depth);
 		    }
+		    else
+		    {
+		     files.add(contents[i]);
+		    }
+		   }
+		 }
+		 else
+                  files.add(project);
+	        }
 	}
 
     public File[] getSubdirs()

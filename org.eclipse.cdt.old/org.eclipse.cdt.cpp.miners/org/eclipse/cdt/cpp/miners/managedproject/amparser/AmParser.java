@@ -170,7 +170,7 @@ public class AmParser
 
  private void handleSubdirsDefinition(String theLine)
  {
-  int startOfDirs = theLine.indexOf(Am.SUBDIRS) + 7;
+  int startOfDirs = theLine.indexOf("=") + 1;
   if ( (startOfDirs < 0) || (startOfDirs >= theLine.length())) 
    return;
   String theDirs = theLine.substring(startOfDirs, theLine.length()).trim();
@@ -246,6 +246,8 @@ public class AmParser
  }
  
 }
+
+
 
 
 

@@ -63,7 +63,7 @@ public class ManagedProjectMiner extends Miner
 		else if (name.equals("C_MANAGE_PROJECT"))
 		{
 			manager.manageProject();
-			//parseAmFile(project); // to be put back again
+			parseAmFile(project); // to be put back again
 		}
 		else if (name.equals("C_CONFIGURE"))
 		{
