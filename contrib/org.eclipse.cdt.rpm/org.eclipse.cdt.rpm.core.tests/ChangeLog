@@ -1,0 +1,14 @@
+2004-12-10  Jeremy Handcock  <handcock@redhat.com>
+
+	* plugin.xml (requires): Remove org.eclipse.cdt.core.tests dependency.
+	* src/org/eclipse/cdt/rpm/tests/AllTests.java: Move ...
+	* src/org/eclipse/cdt/rpm/core/tests/AllTests.java: ... to here.
+	* src/org/eclipse/cdt/rpm/core/tests/CProjectHelper.java: New file.
+	* src/org/eclipse/cdt/rpm/core/tests/RPMExportTests.java: Don't catch 
+	exceptions; let the test harness handle them.
+	* src/org/eclipse/cdt/rpm/core/tests/SRPMExportTests.java: Ditto.
+	* src/org/eclipse/cdt/rpm/core/tests/SRPMImportTests.java: Ditto.
+
+2004-12-03  Aaron Luchko <aluchko@redhat.com>
+
+	* Initial Import
