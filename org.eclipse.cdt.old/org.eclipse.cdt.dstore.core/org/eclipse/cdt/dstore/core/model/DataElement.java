@@ -42,7 +42,6 @@ public final class DataElement implements Serializable, IDataElement
 
 
     // convenience
-    private DataElement         _abstractedby = null;
     private DataElement         _containerDescriptor = null;
 
     /**
@@ -911,18 +910,14 @@ public final class DataElement implements Serializable, IDataElement
 			    }
 		    }
 		
-		DataElement relationship = getAbstractedByRelationship();
+		DataElement relationship = _dataStore.getAbstractedByRelation();
 		ArrayList abstracted = null;
 		
 		if (relationship != null)
 		    {
 			abstracted = descriptor.getAssociated(relationship);
 		    }
-		else
-		    {
-			abstracted = descriptor.getAssociated("abstracted by");
-		    }
-
+		
 		for (int i = 0; (i < abstracted.size()) && !result; i++)
 		    {
 			DataElement superDescriptor = (DataElement)abstracted.get(i);
@@ -997,7 +992,7 @@ public final class DataElement implements Serializable, IDataElement
 
 		if (property == null)
 		    {
-			property = _dataStore.findObjectDescriptor(_dataStore.getLocalizedString("model.contents"));
+			property = _dataStore.getContentsRelation();
 		    }
 		
 		if (getNestedSize() == 0)
@@ -1755,7 +1750,6 @@ public final class DataElement implements Serializable, IDataElement
 	_referencedObject = null;
      
     _propertySource = null;
-    _abstractedby = null;
     _containerDescriptor = null;
 	_buffer = null;
     }
@@ -1778,15 +1772,6 @@ public final class DataElement implements Serializable, IDataElement
 	_buffer = null;
     }
 
-    private DataElement getAbstractedByRelationship()
-    {
-	if (_abstractedby == null)
-	    {
-		String abstractsStr = _dataStore.getLocalizedString("model.abstracted_by");
-		_abstractedby = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, abstractsStr);
-	    }
-	return _abstractedby;
-    }
 
     private DataElement getContainerDescriptor()
     {

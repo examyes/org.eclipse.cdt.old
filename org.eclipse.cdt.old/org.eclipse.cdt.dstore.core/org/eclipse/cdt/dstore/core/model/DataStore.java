@@ -551,6 +551,21 @@ public final class DataStore
     {
 	return _loaders;
     }
+
+    public DataElement getContentsRelation()
+    {
+	return _dataStoreSchema.getContentsRelation();
+    }
+
+    public DataElement getAbstractedByRelation()
+    {
+	return _dataStoreSchema.getAbstractedByRelation();
+    }
+
+    public DataElement getAbstractsRelation()
+    {
+	return _dataStoreSchema.getAbstractsRelation();
+    }
     
     /**
      * Returns the location of the miners.
@@ -644,7 +659,7 @@ public final class DataStore
     public DataElement createReference(DataElement from, DataElement to)
     {
 	// default reference is a containment relationship
-        return createReference(from, to, getLocalizedString("model.contents"));
+        return createReference(from, to, getContentsRelation());
     }
 
     /**
@@ -2077,7 +2092,7 @@ public final class DataStore
 			    }
 		    }
 		
-		DataElement abstractedBy = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.abstracted_by"), 1);
+		DataElement abstractedBy= getAbstractedByRelation();
 		ArrayList abstractDescriptors = descriptor.getAssociated(abstractedBy);
 		int numInherited = abstractDescriptors.size();
 		
@@ -2124,7 +2139,7 @@ public final class DataStore
     public ArrayList findObjectsOfType(DataElement root, DataElement type)
     {
 	ArrayList results = new ArrayList();
-	ArrayList searchList = root.getAssociated("contents");
+	ArrayList searchList = root.getAssociated(getContentsRelation());
 	if (searchList != null)
 	{
 		for (int i = 0; i < searchList.size(); i++)
@@ -2156,7 +2171,7 @@ public final class DataStore
 	    public ArrayList findObjectsOfType(DataElement root, String type)
 	    {
 		ArrayList results = new ArrayList();
-		ArrayList searchList = root.getAssociated("contents");
+		ArrayList searchList = root.getAssociated(getContentsRelation());
 		if (searchList != null)
 		{
 			for (int i = 0; i < searchList.size(); i++)
@@ -2266,6 +2281,7 @@ public final class DataStore
 	    ArrayList baseDescriptors = descriptor.getAssociated(getLocalizedString("model.abstracted_by"));
 	    for (int j = 0; j < baseDescriptors.size(); j++)
 		{
+
 		    DataElement baseDescriptor = (DataElement)baseDescriptors.get(j);
 		    ArrayList baseRelations = getRelationItems(baseDescriptor, fixateOn);
 		    for (int k = 0; k < baseRelations.size(); k++)
@@ -2317,7 +2333,7 @@ public final class DataStore
 	    ArrayList filters = null;
 	    if ((relation == null) || relation.getName().equals(getLocalizedString("model.contents")))
 		{
-		    filters = descriptor.getAssociated(getLocalizedString("model.contents"));
+		    filters = descriptor.getAssociated(getContentsRelation());
 		    if (filters != null)
 			{
 			    for (int i = 0; i < filters.size(); i++)
@@ -2556,6 +2572,7 @@ public final class DataStore
 			for (int i = 0; i < _descriptorRoot.getNestedSize(); i++)
 			    {
 				DataElement descriptor = _descriptorRoot.get(i);
+		
 				if (descriptor.getName().equals(name) &&
 				    descriptor.getType().equals(type))
 				    {
@@ -2576,7 +2593,7 @@ public final class DataStore
      */     
     public DataElement findObjectDescriptor(String name)
       {
-        return find(_descriptorRoot, DE.A_NAME, name, 5);
+        return find(_descriptorRoot, DE.A_NAME, name, 2);
       }
 
     /**

@@ -15,11 +15,30 @@ import java.lang.*;
 public class DataStoreSchema
 {
     private DataStore _dataStore;
+    private DataElement _abstractedBy;
+    private DataElement _abstracts;
+    private DataElement _contents;
 
     public DataStoreSchema(DataStore dataStore)
     {
 	_dataStore = dataStore;
     }
+
+    public DataElement getAbstractedByRelation()
+    {
+	return _abstractedBy;
+    }
+
+    public DataElement getAbstractsRelation()
+    {
+	return _abstracts;
+    }
+
+    public DataElement getContentsRelation()
+    {
+	return _contents;
+    }
+
 
     public void extendSchema(DataElement schemaRoot)
     {	 
@@ -60,8 +79,8 @@ public class DataStoreSchema
 	DataElement outputD   = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.output"));
 	
 	// types of relationships
-	DataElement containsD     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.contents"));
-	containsD.setDepth(100);
+	_contents     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.contents"));
+	_contents.setDepth(100);
 	
 	DataElement descriptorForD  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.descriptor_for"));
 	descriptorForD.setDepth(0);
@@ -73,41 +92,42 @@ public class DataStoreSchema
 	attributesD.setDepth(0);
 	
 	DataElement argsD         = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.arguments"));	
-	DataElement abstracts     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.abstracts"));
+	_abstracts     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.abstracts"));
 	
-	DataElement abstractedBy  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.abstracted_by"));		
+	_abstractedBy  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.abstracted_by"));		
+
 	DataElement caRelations = _dataStore.createAbstractRelationDescriptor(schemaRoot, getLocalizedString("model.contents&arguments"));
-	_dataStore.createReference(caRelations, containsD, containsD);
-	_dataStore.createReference(caRelations, argsD, containsD); 
+	_dataStore.createReference(caRelations, _contents, _contents);
+	_dataStore.createReference(caRelations, argsD, _contents); 
 	
-        _dataStore.createReference(objectDescriptor, containsD, containsD);
-        _dataStore.createReference(objectDescriptor, parentD, containsD);
-        _dataStore.createReference(objectDescriptor, abstracts, containsD);
-        _dataStore.createReference(objectDescriptor, abstractedBy, containsD);
+        _dataStore.createReference(objectDescriptor, _contents, _contents);
+        _dataStore.createReference(objectDescriptor, parentD, _contents);
+        _dataStore.createReference(objectDescriptor, _abstracts, _contents);
+        _dataStore.createReference(objectDescriptor, _abstractedBy, _contents);
 	
-        _dataStore.createReference(abstractObjectDescriptor, containsD, containsD);
-        _dataStore.createReference(abstractObjectDescriptor, parentD, containsD); 
-        _dataStore.createReference(abstractObjectDescriptor, abstracts, containsD);
-        _dataStore.createReference(abstractObjectDescriptor, abstractedBy, containsD);
+        _dataStore.createReference(abstractObjectDescriptor, _contents, _contents);
+        _dataStore.createReference(abstractObjectDescriptor, parentD, _contents); 
+        _dataStore.createReference(abstractObjectDescriptor, _abstracts, _contents);
+        _dataStore.createReference(abstractObjectDescriptor, _abstractedBy, _contents);
 	
-	_dataStore.createReference(statusD, containsD, containsD);	
+	_dataStore.createReference(statusD, _contents, _contents);	
 	
-	_dataStore.createReference(commandDescriptor, allD, containsD);	
-	_dataStore.createReference(commandDescriptor, caRelations, containsD);
-	_dataStore.createReference(commandDescriptor, argsD, containsD);	
-	_dataStore.createReference(commandDescriptor, containsD, containsD);	
+	_dataStore.createReference(commandDescriptor, allD, _contents);	
+	_dataStore.createReference(commandDescriptor, caRelations, _contents);
+	_dataStore.createReference(commandDescriptor, argsD, _contents);	
+	_dataStore.createReference(commandDescriptor, _contents, _contents);	
 	
 	
         DataElement logDetails = _dataStore.createAbstractObjectDescriptor(logD, getLocalizedString("model.Commands"));
-        _dataStore.createReference(logDetails, commandDescriptor, containsD);
-        _dataStore.createReference(logDetails, allD, containsD);        
-	_dataStore.createReference(logD, caRelations, containsD);
-	_dataStore.createReference(logD, containsD, containsD);
+        _dataStore.createReference(logDetails, commandDescriptor, _contents);
+        _dataStore.createReference(logDetails, allD, _contents);        
+	_dataStore.createReference(logD, caRelations, _contents);
+	_dataStore.createReference(logD, _contents, _contents);
 	
 	//Base Container Object
         DataElement containerObjectD = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Container_Object"));
         _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY", false);
-	_dataStore.createReference(containerObjectD, containsD, containsD);
+	_dataStore.createReference(containerObjectD, _contents, _contents);
 	
 	// file objects
         DataElement deviceD  = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.device"), 
@@ -123,23 +143,23 @@ public class DataStoreSchema
         _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
         _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
 	
-	_dataStore.createReference(containerObjectD, fsObject, abstracts, abstractedBy);
+	_dataStore.createReference(containerObjectD, fsObject, _abstracts, _abstractedBy);
 	
-	_dataStore.createReference(fileD,    fsObject, abstracts, abstractedBy);
-	_dataStore.createReference(fsObject, dirD, abstracts, abstractedBy);
-	_dataStore.createReference(fsObject, deviceD, abstracts, abstractedBy);
+	_dataStore.createReference(fileD,    fsObject, _abstracts, _abstractedBy);
+	_dataStore.createReference(fsObject, dirD, _abstracts, _abstractedBy);
+	_dataStore.createReference(fsObject, deviceD, _abstracts, _abstractedBy);
 
-        _dataStore.createReference(fsObject, fileD,    containsD);
-        _dataStore.createReference(fsObject, dirD,     containsD);
-	_dataStore.createReference(fsObject, fsObject, containsD);
+        _dataStore.createReference(fsObject, fileD,    _contents);
+        _dataStore.createReference(fsObject, dirD,     _contents);
+	_dataStore.createReference(fsObject, fsObject, _contents);
 
-	_dataStore.createReference(hostD,    fsObject, containsD); 
+	_dataStore.createReference(hostD,    fsObject, _contents); 
 
-	_dataStore.createReference(deviceD,  fileD, containsD);
-	_dataStore.createReference(deviceD,  dirD, containsD);
+	_dataStore.createReference(deviceD,  fileD, _contents);
+	_dataStore.createReference(deviceD,  dirD, _contents);
 
-	_dataStore.createReference(dirD,     fileD, containsD);
-	_dataStore.createReference(dirD,     dirD, containsD);
+	_dataStore.createReference(dirD,     fileD, _contents);
+	_dataStore.createReference(dirD,     dirD, _contents);
 	
 	
 	// miner descriptors
@@ -148,27 +168,26 @@ public class DataStoreSchema
 	DataElement dataD        = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.data"));
 	DataElement transientD   = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.transient"));
 	DataElement stateD       = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.state"));
-        
-       
-	
+
+
         DataElement hostsDetails = _dataStore.createAbstractObjectDescriptor(rootD, getLocalizedString("model.Hosts"));	
-	_dataStore.createReference(hostsDetails, rootD, abstracts, abstractedBy);	
-	_dataStore.createReference(hostsDetails, hostD, abstracts, abstractedBy);	
-	_dataStore.createReference(hostsDetails, deviceD, abstracts, abstractedBy);	
-	_dataStore.createReference(hostsDetails, dirD, abstracts, abstractedBy);	
+	_dataStore.createReference(hostsDetails, rootD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(hostsDetails, hostD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(hostsDetails, deviceD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(hostsDetails, dirD, _abstracts, _abstractedBy);	
 	
         DataElement minerObjects = _dataStore.createAbstractObjectDescriptor(rootD, getLocalizedString("model.Tools"));
-        _dataStore.createReference(minerObjects, minersD, abstracts, abstractedBy);
-        _dataStore.createReference(minerObjects, minerD, abstracts, abstractedBy);
-        _dataStore.createReference(minerObjects, dataD, abstracts, abstractedBy);
+        _dataStore.createReference(minerObjects, minersD, _abstracts, _abstractedBy);
+        _dataStore.createReference(minerObjects, minerD, _abstracts, _abstractedBy);
+        _dataStore.createReference(minerObjects, dataD, _abstracts, _abstractedBy);
 		
 	// containers
-	_dataStore.createReference(containerObjectD, rootD, abstracts, abstractedBy);	
-	_dataStore.createReference(containerObjectD, hostD, abstracts, abstractedBy);	
-	_dataStore.createReference(containerObjectD, logD, abstracts, abstractedBy);	
-	_dataStore.createReference(containerObjectD, minersD, abstracts, abstractedBy);	
-	_dataStore.createReference(containerObjectD, minerD, abstracts, abstractedBy);	
-	_dataStore.createReference(containerObjectD, dataD, abstracts, abstractedBy);	
+	_dataStore.createReference(containerObjectD, rootD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(containerObjectD, hostD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(containerObjectD, logD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(containerObjectD, minersD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(containerObjectD, minerD, _abstracts, _abstractedBy);	
+	_dataStore.createReference(containerObjectD, dataD, _abstracts, _abstractedBy);	
 
 	// type descriptors
         _dataStore.createObjectDescriptor(schemaRoot, "String");
@@ -177,8 +196,8 @@ public class DataStoreSchema
         DataElement numberD  = _dataStore.createAbstractObjectDescriptor(schemaRoot, "Number");
         DataElement integerD = _dataStore.createObjectDescriptor(schemaRoot, "Integer");
         DataElement floatD   = _dataStore.createObjectDescriptor(schemaRoot, "Float");
-	_dataStore.createReference(numberD, integerD, abstracts, abstractedBy);
-	_dataStore.createReference(numberD, floatD, abstracts, abstractedBy);
+	_dataStore.createReference(numberD, integerD, _abstracts, _abstractedBy);
+	_dataStore.createReference(numberD, floatD, _abstracts, _abstractedBy);
 	
 	
         // basic commands
