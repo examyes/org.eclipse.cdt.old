@@ -59,8 +59,11 @@ public class GetGdbSharedLibraries  //extends ThreadManager
      int maxNTAddresses=0;
      int[] addresses = {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,0 };
      String PRE_PROMPT_keyword   = _gdbProcess.MARKER+"pre-prompt";
-     if(lines!=null && lines.length>0)
-        lines[lines.length-1] = null; // remove trailing "(gdb)" prompt
+    if(lines!=null && lines.length>0)
+     {
+     	if (lines[lines.length-1].startsWith("(gdb)"))
+	        lines[lines.length-1] = null; // remove trailing "(gdb)" prompt
+     }
      if(lines.length>=3)  // colum headings, 1+ library names, blank, prompt
      for(int i=0; i<lines.length; i++)
      {  
