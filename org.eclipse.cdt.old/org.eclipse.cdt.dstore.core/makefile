@@ -15,7 +15,7 @@
 #  "jars"                  -> Generate Jar Files for every Plugin
 
 # Grab Absolute Path to Plugin Directory...We do this by launching GenerateMakefiles with no arguments,
-# which used java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
+# which uses java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
 pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
 
 ifdef ECLIPSE
@@ -44,6 +44,14 @@ allPlugins += com.ibm.cpp.docs.user
 allPlugins += com.ibm.lpex
 allPlugins += com.ibm.debug.doc.user
 
+# List of Plugins needed for the Serverside Zip
+serverPlugins =  com.ibm.dstore.core
+serverPlugins += com.ibm.dstore.extra.server
+serverPlugins += com.ibm.dstore.miners
+serverPlugins += com.ibm.cpp.miners
+serverPlugins += com.ibm.cpp.miners.parser
+serverPlugins += com.ibm.debug
+serverPlugins += com.ibm.debug.gdbPicl
 
 # PUBLIC TARGETS
 # --------------
@@ -56,8 +64,7 @@ all:
 	@cd com 2>/dev/null && (${MAKE} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
-production      : development jars source-zips createZip
-
+production      : development jars source-zips createZip createFinalPackage
 jars            : $(patsubst %,%_createJars,$(buildPlugins))
 source-zips     : $(patsubst %,%_createSrcZips,$(buildPlugins))
 clean           : $(patsubst %,%_cleanPlugin,$(buildPlugins))
@@ -121,6 +128,34 @@ zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 
 %_zipPlugin: 
 	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x com *com\/* *CVS*
+
+tempDir=cdt
+finalZip=cdt-eclipse-0.5.0.zip
+
+createFinalPackage: createServerZip createFinalZip
+	@echo Created $(pluginsDirectory)/$(finalZip)
+
+createFinalZip:
+	@-cd $(pluginsDirectory) && mkdir $(tempDir);\
+	cp com.ibm.cpp.docs.user/readme.txt $(tempDir);\
+	cp $(zipFile) $(tempDir);\
+	cp $(serverZipFile) $(tempDir);\
+	zip -qr $(finalZip) $(tempDir);\
+	rm -r $(tempDir)
+
+serverZipFile=cdt-eclipse-0.5.0-server.zip
+
+createServerZip: createEmptyServerZip zipServerPlugins
+	@echo Created $(pluginsDirectory)/$(serverZipFile)
+
+#Not sure how to create an empty zip (without priming it with something)...so I just add the parser directory by default
+createEmptyServerZip:
+	@-cd $(pluginsDirectory) && rm -f $(serverZipFile) && zip -q $(serverZipFile) com.ibm.cpp.miners.parser
+
+zipServerPlugins: $(patsubst %,%_zipServerPlugin,$(serverPlugins))
+
+%_zipServerPlugin:
+	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x com *com\/* *CVS*
 
 # Targets specific to com.ibm.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
 jarFile=dstore_core.jar
