@@ -55,7 +55,7 @@ public class AddFunctionBreakpoint extends AddStatementBreakpoint
     }
 
     public void run()
-      {
+      { 
 	  createFunctionBreakpoint(_subject);
       }
 }

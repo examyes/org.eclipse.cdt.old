@@ -43,58 +43,79 @@ import com.ibm.debug.internal.picl.PICLUtils;
 
 public class AddStatementBreakpoint extends CustomAction
 { 
-  public AddStatementBreakpoint(DataElement subject, String label, DataElement command, DataStore dataStore)
+    private IWorkspace _workspace = null;
+    private DataElement _statement;
+    
+    public AddStatementBreakpoint(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
         super(subject, label, command, dataStore);
+	_workspace = CppPlugin.getPluginWorkspace();
       }
 
     public void createBreakpointMarker(DataElement statement)
     {
-	String fileName   = (String)(statement.getElementProperty(DE.P_SOURCE_NAME));
-	Integer lineLocation = (Integer)(statement.getElementProperty(DE.P_SOURCE_LOCATION));
-	int line = lineLocation.intValue();	
-	
-	ModelInterface api = ModelInterface.getInstance();
-	IResource file =  api.findFile(fileName);
-	if (file != null)
+	_statement = statement;
+	IWorkspaceRunnable body = new IWorkspaceRunnable()
 	    {
-		try
-		    {
-			PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
-			IMarker breakpointMarker = file.createMarker("com.ibm.debug.PICLLineBreakpoint");
-			
-			IBreakpointManager breakpointManager= DebugPlugin.getDefault().getBreakpointManager();
-			
-			breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
-						       new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), lineLocation, new Integer(-1), new Integer(-1)});
-			breakpoint.setMarker(breakpointMarker);
-			
-			Map map= breakpointMarker.getAttributes();
-			map.put(IMarker.MESSAGE, "cpp");
-			breakpointMarker.setAttributes(map);
-			
-			try
-			    {
-				breakpointManager.addBreakpoint(breakpoint);
-			    }
-			catch (DebugException de)
-			    {
-				System.out.println("BreakpointRulerAction: de" +de);
-			    }
-			
-		    }
-		catch (CoreException ce)
-		    {
-			System.out.println(ce);
-		    }
-	    }
-      }
+		private DataElement statement = _statement;
 
+		public void run(IProgressMonitor monitor) throws CoreException
+		{
+		    String fileName   = (String)(statement.getElementProperty(DE.P_SOURCE_NAME));
+		    Integer lineLocation = (Integer)(statement.getElementProperty(DE.P_SOURCE_LOCATION));
+		    int line = lineLocation.intValue();	
+		    
+		    ModelInterface api = ModelInterface.getInstance();
+		    IResource file =  api.findFile(fileName);
+		    if (file != null)
+			{
+			    try
+				{
+				    PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
+				    IMarker breakpointMarker = file.createMarker("com.ibm.debug.PICLLineBreakpoint");
+				    
+				    IBreakpointManager breakpointManager= DebugPlugin.getDefault().getBreakpointManager();
+				    
+				    breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
+								   new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), lineLocation, new Integer(-1), new Integer(-1)});
+				    breakpoint.setMarker(breakpointMarker);
+				    
+				    Map map= breakpointMarker.getAttributes();
+				    map.put(IMarker.MESSAGE, "cpp");
+				    breakpointMarker.setAttributes(map);
+			
+				    try
+					{
+					    breakpointManager.addBreakpoint(breakpoint);
+					}
+				    catch (DebugException de)
+					{
+					    System.out.println("BreakpointRulerAction: de" +de);
+					}
+				    
+				}
+			    catch (CoreException ce)
+				{
+				    System.out.println(ce);
+				}
+			}
+		}
+	    };
+	    
+	    try
+		{
+		    _workspace.run(body, null);
+		}
+	catch (CoreException ce)
+	    {
+	    }
+    }
+    
     public void run()
     {
 	createBreakpointMarker(_subject);
     }
-
+    
 }
 
 
