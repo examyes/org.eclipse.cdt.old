@@ -389,12 +389,14 @@ public class MakefileAmManager {
 					case (TOPLEVEL):
 					createDotOldFileFor(Makefile_am);
 					updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
+					updateMakefileAmDependency(Makefile_am.getParentFile());
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (PROGRAMS):
 					createDotOldFileFor(Makefile_am);
 					updateProgramsMakefileAm(Makefile_am.getParentFile());
+					updateMakefileAmDependency(Makefile_am.getParentFile());
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
@@ -671,20 +673,25 @@ public class MakefileAmManager {
 	private String updateLdaddLine(String line, File parent)
 	{
 		line = line.substring(0,line.lastIndexOf("=")+1);
-		// add libs to the _LDADD variable
-		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
-		String[] subNames = dir_structure.getSubdirWorkspacePath();
-		for(int i = 0; i <subNames.length; i++)
+		File Makefile_am = new File(parent,"Makefile.am");
+		if(Makefile_am.exists())
 		{
-			// check if the directory starts with "."
-			if(subNames[i].indexOf(".")==-1)
+			// add libs to the _LDADD variable
+			ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
+			String[] subNames = dir_structure.getSubdirWorkspacePath();
+			for(int i = 0; i <subNames.length; i++)
 			{
-				String tok = getLastToken(subNames[i]);
-				String modTok = new String();
-				String modName = new String("./").concat(subNames[i]).concat("/");
-				modTok = modTok.concat("lib").concat(tok).concat(targetSuffix).concat(".a");
-				modName = modName.concat(modTok);
-				line = line.concat(" "+modName);
+				// check if the directory starts with "."
+				if(subNames[i].indexOf(".")==-1)
+				{
+					String tok = getLastToken(subNames[i]);
+					System.out.println("\n dir name = "+subNames[i]);
+					String modTok = new String();
+					String modName = new String("./").concat(subNames[i]).concat("/");
+					modTok = modTok.concat("lib").concat(tok).concat(targetSuffix).concat(".a");
+					modName = modName.concat(modTok);
+					line = line.concat(" "+modName);
+				}
 			}
 		}
 		return line;
