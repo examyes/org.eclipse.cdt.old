@@ -65,6 +65,7 @@ public class GdbThreadComponent extends ThreadComponent
          if (_partID <= 1)
          {
 			GdbModuleManager cm = (GdbModuleManager)_debugSession.getModuleManager();
+         	cm.checkPart(moduleID(0), fileName(0));
 			int partID = cm.getPartID(moduleID(0),fileName(0));
          	if (partID > 0)
          		_partID = partID;

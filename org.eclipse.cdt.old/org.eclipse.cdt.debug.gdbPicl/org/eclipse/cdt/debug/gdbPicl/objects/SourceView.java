@@ -365,7 +365,18 @@ abstract class SourceView extends View
             // wasn't.  We use the noSourceLines array of strings as the source
             // of our message.
             viewAttr |= EPDC.VIEW_VERIFIED;
-            nextPartRep.addSrcFile(viewNo, _viewRecLength, 1, _noViewLines.length, _viewFileName, _viewBaseFileName, viewAttr);
+
+			// if we are faking source view, then reply number of lines as 0
+			// this will ensure that the disassembly view is displayed
+			
+			if (_viewFileName.equals("dummy") || _viewFileName.equals("?FileName?"))
+			{
+				nextPartRep.addSrcFile(viewNo, _viewRecLength, 1, _noViewLines.length, _viewFileName, _viewBaseFileName, viewAttr);
+			}
+			else
+			{
+    	        nextPartRep.addSrcFile(viewNo, _viewRecLength, 1, 0, _viewFileName, _viewBaseFileName, viewAttr);
+			}
          }
          else
          {
