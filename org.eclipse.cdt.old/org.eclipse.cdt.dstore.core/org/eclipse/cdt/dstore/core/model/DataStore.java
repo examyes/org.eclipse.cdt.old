@@ -1300,7 +1300,7 @@ public final class DataStore
       {
 	  if (from != null)
 	      {
-		  for (int i = 0; i < from.getNestedSize(); i++)
+		  for (int i = from.getNestedSize() - 1; i >= 0; i--)
 		      {
 			  DataElement deletee = from.get(i);
 			  deleteObjectHelper(from, deletee, 5);		  
