@@ -653,7 +653,7 @@ public void inputChanged(Object obj, Object oldobj) {
 					{
 						String status = new String(((TargetElement)(rootElement.getTargets().elementAt(targetCounter++))).getStatus().getValue());
 						if(status.equals("name")) // has to be changed - discuss with Dave
-							table.getItem(i).setText(2,"unused");
+							table.getItem(i).setText(2," ");
 						else
 							table.getItem(i).setText(2,status); // update from targetelement
 					}
