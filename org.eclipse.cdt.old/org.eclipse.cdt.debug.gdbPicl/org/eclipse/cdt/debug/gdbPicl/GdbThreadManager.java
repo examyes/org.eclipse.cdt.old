@@ -255,84 +255,14 @@ public void updateThreads()
 
 }
 
-/*
-	This function parses through all call stacks and return
-	a list of functions that are associated with the given
-	part name.
-*/
-public Vector getMethodsforPart(String partName)
-{
-	Vector functions = new Vector();
-	GdbThreadComponent tc;
-	
-	for (int j = 0; j < _threads.size(); j++)
-	{
-		tc = (GdbThreadComponent) _threads.elementAt(j);
-		if (tc != null)
-		{
-			GdbStackFrame[] stackFrames = tc.getCallStack();
-			
-			for (int i=0; i < stackFrames.length; i++)
-			{						
-				if (stackFrames[i].getFileName().equals(partName))
-				{
-					if (Gdb.traceLogger.DBG) 
-					{
-						Gdb.traceLogger.dbg(1,"GdbThreadManager.getMethodsforPart filename: " + stackFrames[i].getFileName());
-						Gdb.traceLogger.dbg(1,"GdbThreadManager.getMethodsforPart Matched:  " + stackFrames[i].getMethodName());
-					}						
-						
-					functions.add(stackFrames[i].getMethodName());
-				}
-			}
-		}
-	}
-	
-	return functions;
-}
+
 
 /*
 	This function parses through all call stacks and return
-	a list of frame addresses that are associated with the given
+	a list of stack frames that are associated with the given
 	part name.
 */
-public Vector getFrameAddressforPart(String partName)
-{
-	Vector linesNum = new Vector();
-	GdbThreadComponent tc;
-	
-	for (int j = 0; j < _threads.size(); j++)
-	{
-		tc = (GdbThreadComponent) _threads.elementAt(j);
-		if (tc != null)
-		{
-			GdbStackFrame[] stackFrames = tc.getCallStack();
-			
-			for (int i=0; i < stackFrames.length; i++)
-			{				
-//				if (stackFrames[i].getFileName().equals(partName))
-				if (partName.endsWith(stackFrames[i].getFileName()))
-				{
-					if (Gdb.traceLogger.DBG) 
-					{
-						Gdb.traceLogger.dbg(1,"GdbThreadManager.getFrameAddressforPart filename: " + stackFrames[i].getFileName());
-						Gdb.traceLogger.dbg(1,"GdbThreadManager.getFrameAddressforPart Matched:  " + stackFrames[i].getFrameAddress());
-					}
-					linesNum.add(stackFrames[i].getFrameAddress());
-				}
-			}
-		}
-	}
-	
-	return linesNum;
-}
-
-/*
-	This function parses through all call stacks and return
-	a list of frame addresses that are associated with the given
-	part name.
-*/
-public Vector getLineNumforPart(String partName)
+public Vector getStackFramesforPart(String partName)
 {
 	Vector linesNum = new Vector();
 	GdbThreadComponent tc;
@@ -347,7 +277,6 @@ public Vector getLineNumforPart(String partName)
 			
 			for (int i=0; i < stackFrames.length; i++)
 			{				
-//				if (stackFrames[i].getFileName().equals(partName))
 				if (partName.endsWith(stackFrames[i].getFileName()))
 				{
 					if (Gdb.traceLogger.DBG) 
@@ -355,7 +284,44 @@ public Vector getLineNumforPart(String partName)
 						Gdb.traceLogger.dbg(1,"GdbThreadManager.getLinesNumforPart filename: " + stackFrames[i].getFileName());
 						Gdb.traceLogger.dbg(1,"GdbThreadManager.getLinesNumforPart Matched:  " + stackFrames[i].getLineNumber());
 					}
-					linesNum.add(new Integer(stackFrames[i].getLineNumber()));
+					linesNum.add(stackFrames[i]);
+				}
+			}
+		}
+	}
+	
+	return linesNum;
+}
+
+/*
+	This function parses through all call stacks and return
+	a list of thread components that are associated with the given
+	part name.
+*/
+public Vector getThreadComponentsforPart(String partName)
+{
+	Vector linesNum = new Vector();
+	GdbThreadComponent tc;
+	
+	for (int j = 0; j < _threads.size(); j++)
+	{
+		tc = (GdbThreadComponent) _threads.elementAt(j);
+		if (tc != null)
+		{
+			// get all call stack, ignore _stackTracking flag
+			GdbStackFrame[] stackFrames = tc.getCallStack(false);
+			
+			for (int i=0; i < stackFrames.length; i++)
+			{				
+				if (partName.endsWith(stackFrames[i].getFileName()))
+				{
+					if (Gdb.traceLogger.DBG) 
+					{
+						Gdb.traceLogger.dbg(1,"GdbThreadManager.getLinesNumforPart filename: " + stackFrames[i].getFileName());
+						Gdb.traceLogger.dbg(1,"GdbThreadManager.getLinesNumforPart Matched:  " + stackFrames[i].getLineNumber());
+					}
+					linesNum.add(_threads.elementAt(j));
+					break;
 				}
 			}
 		}
