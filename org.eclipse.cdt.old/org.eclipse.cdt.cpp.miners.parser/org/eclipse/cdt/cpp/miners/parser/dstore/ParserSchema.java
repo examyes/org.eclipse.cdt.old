@@ -161,7 +161,12 @@ public class ParserSchema
 
   //Set up the relations and commands for the above objects:
   //  dC_QUERY            = findDescriptor(Query, schemaRoot.getDataStore());
-  dC_QUERY            = createCommandDescriptor(dCppObject, "Query", "C_QUERY", false);
+/***** DKM ****/
+  /***** cont cpp overrides container object, whilc cpp object doesnt */
+  //dC_QUERY            = createCommandDescriptor(dCppObject, "Query", "C_QUERY", false);
+  dC_QUERY            = createCommandDescriptor(dContCppObject, "Query", "C_QUERY", false);
+/**** DKM ****/
+ 
   dC_REMOVE_PARSE     = createCommandDescriptor(dFsObjects, RemoveParseInformation, "C_REMOVE_PARSE", false);
   dC_SAVE_PARSE       = createCommandDescriptor(dFsObjects, SaveParseInformation,   "C_SAVE_PARSE", false);
   dC_CODE_ASSIST      = createCommandDescriptor(dFsObjects, CodeAssist,             "C_CODE_ASSIST");
@@ -230,7 +235,12 @@ public class ParserSchema
   dTimeStamp         = createDerivativeDescriptor(dContObject, TimeStamp);
 
   //Set up the DataElements representing files:
-  dSourceFiles      = createAbstractDerivativeDescriptor(dFsObjects, SourceFiles);
+  /**** DKM ****/
+  ///dSourceFiles      = createAbstractDerivativeDescriptor(dFsObjects, SourceFiles);
+  dSourceFiles      = createAbstractDerivativeDescriptor(dContCppObject, SourceFiles);
+ 
+   /**** DKM ****/
+   
   dIncludes         = createRelationDescriptor(dSourceFiles,         Includes);
   dIncludedBy       = createRelationDescriptor(dSourceFiles,         IncludedBy);
   dIncludedSource   = createDerivativeDescriptor(dSourceFiles,       IncludedSource);
