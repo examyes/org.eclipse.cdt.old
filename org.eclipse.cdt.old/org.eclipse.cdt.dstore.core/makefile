@@ -73,9 +73,8 @@ all:
 	@cd org 2>/dev/null && (${MAKE} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
-production      : development jars javadocs source-zips createZip createFinalPackage
+production      : development jars source-zips createZip createFinalPackage
 jars            : $(patsubst %,%_createJars,$(buildPlugins))
-javadocs        : $(patsubst %,%_createJavadocs,$(buildPlugins))
 source-zips     : $(patsubst %,%_createSrcZips,$(buildPlugins))
 clean-dev       : $(patsubst %,%_cleanPlugin,$(buildPlugins))
 makefiles       : generateBuildEnvironment
@@ -104,9 +103,6 @@ fixup:
 
 %_createJars:
 	@-cd $(pluginsDirectory)/$(patsubst %_createJars,%,$@) && $(MAKE) jar   
-
-%_createJavadocs:
-	@-cd $(pluginsDirectory)/$(patsubst %_createJavadocs,%,$@) && $(MAKE) javadoc   
 
 %_createSrcZips:
 	@-cd $(pluginsDirectory)/$(patsubst %_createSrcZips,%,$@) && $(MAKE) source-zip   
@@ -180,13 +176,6 @@ jar:
 	touch $(jarFile);\
 	find . -name '*.class' -or -name '*.properties' | xargs jar uf $(jarFile)
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
-
-javadoc:
-	@cd $(pluginsDirectory)/$(pluginName);\
-	rm -Rf docs;\
-	mkdir docs;\
-	find . -name '*.java' | xargs javadoc -d docs -classpath $(subst $(space),$(sep),$(cp)) 2>/dev/null
-	@echo " Created" $(pluginsDirectory)/$(pluginName)/docs
 
 source-zip:
 	@cd $(pluginsDirectory)/$(pluginName);\
