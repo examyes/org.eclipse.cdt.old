@@ -815,8 +815,12 @@ public class GdbDebugSession extends DebugSession {
 			// we will encounter more problems if we do, may go into infinite loop
 			return;
 		}
-
-		//    addCmdResponsesToUiMessages();
+	
+		// On platform like AIX, main module's addresses are not valid
+		// until after the program is run.  Even though we have already obtained
+		// addresses for main module previously, we need to update those info
+		// after the program is run.
+		updateMainSegment();
 
 		//RW
 		cmd = "info program";
@@ -856,8 +860,6 @@ public class GdbDebugSession extends DebugSession {
 			return;
 		}
 		addCmdResponsesToUiMessages();
-
-		getMainModule();
 
 		checkCurrentPart(_currentModuleID);
 
@@ -919,6 +921,10 @@ public class GdbDebugSession extends DebugSession {
 		return _getGdbModuleParts.getMainModule();
 	}
 
+	private boolean updateMainSegment() {
+		return _getGdbModuleParts.updateMainSegment();
+	}
+
 	private void updateSharedLibraries() {
 		if (Gdb.traceLogger.EVT)
 			Gdb.traceLogger.evt(
@@ -935,17 +941,14 @@ public class GdbDebugSession extends DebugSession {
 							1,
 							"<<<<<<<<======== GdbDebugSession.updateSharedLibraries name="
 								+ moduleInfo[i].name
-								+ " start="
-								+ moduleInfo[i].startAddress
-								+ " end="
-								+ moduleInfo[i].endAddress
+								+ " moduleInfo[i].segments.size()="
+								+ moduleInfo[i].segments.size()
 								+ " fullFileName="
 								+ moduleInfo[i].fullFileName);
 					_moduleManager.addModule(moduleInfo[i].name, moduleInfo[i].fullFileName);
 					_moduleManager.setModuleStartFinishAddress(
 						moduleInfo[i].name,
-						moduleInfo[i].startAddress,
-						moduleInfo[i].endAddress);
+						moduleInfo[i].segments);
 				}
 		}
 	}

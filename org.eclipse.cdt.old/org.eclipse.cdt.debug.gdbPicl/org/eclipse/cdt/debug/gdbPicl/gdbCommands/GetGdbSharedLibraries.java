@@ -8,6 +8,8 @@ package org.eclipse.cdt.debug.gdbPicl.gdbCommands;
 
 import  org.eclipse.cdt.debug.gdbPicl.*;
 import  org.eclipse.cdt.debug.gdbPicl.gdbCommands.GdbProcess;
+import  org.eclipse.cdt.debug.gdbPicl.objects.ModuleSegment;
+import  java.util.*;
 
 /**
  * gets Gdb Threads
@@ -18,8 +20,7 @@ public class GetGdbSharedLibraries  //extends ThreadManager
    public class ModuleInfo 
    { public String name = null;
      public String fullFileName = null;
-     public String startAddress = null;
-     public String endAddress = null;
+     public Vector segments = new Vector(0);
    }
    ModuleInfo[] _moduleInfo = null;
 
@@ -55,15 +56,12 @@ public class GetGdbSharedLibraries  //extends ThreadManager
      String fullObjFileName = "??????";
      String objPath = "??????";
      String objFile = "??????";
+     String start = "-1", end = "-1", startData ="-1", endData = "-1";
      boolean NT = false;
      int maxNTAddresses=0;
      int[] addresses = {0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,0 };
      String PRE_PROMPT_keyword   = _gdbProcess.MARKER+"pre-prompt";
-    if(lines!=null && lines.length>0)
-     {
-     	if (lines[lines.length-1].startsWith("(gdb)"))
-	        lines[lines.length-1] = null; // remove trailing "(gdb)" prompt
-     }
+
      if(lines.length>=3)  // colum headings, 1+ library names, blank, prompt
      for(int i=0; i<lines.length; i++)
      {  
@@ -115,15 +113,19 @@ public class GetGdbSharedLibraries  //extends ThreadManager
                       Gdb.traceLogger.err(2,"GetGdbSharedLibraries.getSharedLibraries missing '0x' startAddress in str="+str );
                   continue;
                }
+
+	       String keyword = " "; // default to space
+	       if (System.getProperty("os.name").equals("AIX"))
+		keyword = "-";
                str = str.substring(x);
-               int space = str.indexOf(" ");
-               if(space<=0)
+               int index = str.indexOf(keyword);
+               if(index<=0)
                {  if (Gdb.traceLogger.ERR) 
                       Gdb.traceLogger.err(2,"GetGdbSharedLibraries.getSharedLibraries missing ' ' after startAddress in str="+str );
                   continue;
                }
-               String start = str.substring(0,space);
-               str = str.substring(space+1);
+               start = str.substring(0,index);
+               str = str.substring(index+1);
 
                x = str.indexOf("0x");
                if(x<0)
@@ -131,17 +133,53 @@ public class GetGdbSharedLibraries  //extends ThreadManager
                       Gdb.traceLogger.err(1,"GetGdbSharedLibraries.getSharedLibraries missing '0x' endAddress in str="+str );
                   continue;
                }
+	       if (System.getProperty("os.name").equals("AIX"))
+		keyword = "\t";
                str = str.substring(x);
-               space = str.indexOf(" ");
-               if(space<=0)
+               index = str.indexOf(keyword);
+               if(index<=0)
                {  if (Gdb.traceLogger.ERR) 
                       Gdb.traceLogger.err(2,"GetGdbSharedLibraries.getSharedLibraries missing ' ' after startAddress in str="+str );
                   continue;
                }
-               String end = str.substring(0,space);
-               str = str.substring(space+1);
+               end = str.substring(0,index);
+	       if(System.getProperty("os.name").equals("AIX")) {
+		str = str.substring(index+1);
+		keyword = "-";
+		index = str.indexOf(keyword);
+		if(index>0) {  // data segment?
+			x = str.indexOf("0x");
+			if(x<0) {
+				if (Gdb.traceLogger.ERR)
+				    Gdb.traceLogger.err(1,"GetGdbSharedLibraries.getSharedLibraries missing '0x' startDataAddress in str="+str );
 
-               x = str.lastIndexOf(" ");
+				continue;
+			}
+			startData = str.substring(x,index);
+			str = str.substring(index+1);
+			x = str.indexOf("0x");
+			if(x<0) {
+				if (Gdb.traceLogger.ERR)
+				    Gdb.traceLogger.err(1,"GetGdbSharedLibraries.getSharedLibraries missing '0x' endData in str="+str );
+ 
+				continue;
+			}
+			index = str.indexOf("\t");
+			if(index<=0) {
+				if (Gdb.traceLogger.ERR)
+				Gdb.traceLogger.err(2,"GetGdbSharedLibraries.getSharedLibraries missing '\t' after startData in str="+str );
+ 
+				continue;
+			}
+			endData = str.substring(0,index);
+		   } // data segment
+	       } // for AIX
+
+               str = str.substring(index+1);
+	       keyword = " "; // default to space
+	       if (System.getProperty("os.name").equals("AIX"))
+		keyword = "\t";
+               x = str.lastIndexOf(keyword);
                if(x<0)
                {  if (Gdb.traceLogger.ERR) 
                       Gdb.traceLogger.err(2,"GetGdbSharedLibraries.getSharedLibraries missing ' XXXXXX' moduleName in str="+str );
@@ -151,8 +189,19 @@ public class GetGdbSharedLibraries  //extends ThreadManager
                String moduleName = str;
 
                int slash = str.lastIndexOf("/");
-               objPath = str.substring(0,slash+1);
+	       if(System.getProperty("os.name").equals("AIX")) {
+		int p= str.indexOf(")");
+		if(p > 0)
+			objPath = str.substring(p+2,slash+1);
+		else
+			objPath = str.substring(0, slash+1);
+	       }
+	       else
+                objPath = str.substring(0,slash+1);
                objFile = str.substring(slash+1);
+	       if(System.getProperty("os.name").equals("AIX")) 
+		fullObjFileName = lines[i].substring(0);
+	       else 
                fullObjFileName = objPath+objFile;
                if(NT)
                {  try
@@ -189,8 +238,8 @@ public class GetGdbSharedLibraries  //extends ThreadManager
                }
                _moduleInfo[indx].name = objFile;
                _moduleInfo[indx].fullFileName = fullObjFileName;
-               _moduleInfo[indx].startAddress = start;
-               _moduleInfo[indx].endAddress = end;
+               _moduleInfo[indx].segments.addElement(new ModuleSegment(start, end));
+               _moduleInfo[indx].segments.addElement(new ModuleSegment(startData, endData));
 
            }  // end-of line!=marker
            else if( lines[i].equals(PRE_PROMPT_keyword))

@@ -13,7 +13,8 @@ import  org.eclipse.cdt.debug.gdbPicl.objects.GdbPart;
 import  org.eclipse.cdt.debug.gdbPicl.objects.View;
 import  org.eclipse.cdt.debug.gdbPicl.objects.GdbDisassemblyView;
 import  org.eclipse.cdt.debug.gdbPicl.objects.GdbThreadComponent;
-
+import  org.eclipse.cdt.debug.gdbPicl.objects.ModuleSegment;
+import java.util.*;
 /**
  * gets Gdb Threads
  */
@@ -23,6 +24,7 @@ public class GetGdbModuleParts
    GdbProcess       _gdbProcess    = null;
    GdbModuleManager _moduleManager = null;
    GdbThreadManager _threadManager = null;
+   Vector segments = new Vector(0);
 
   /**
    * Create a new GetGdbModuleParts. command object
@@ -93,18 +95,15 @@ public class GetGdbModuleParts
                  strt = str.indexOf(keyword);
                  if(strt<=0)
                      break;
-                 if(startAddress.equals(""))
-                 {
-                    int x = str.indexOf("0x");
-                    if(x>0)
+                 int x = str.indexOf("0x");
+                 if(x>0)
                        startAddress = str.substring(x,strt);
-                 }
                  if (_debugSession.getDataAddress().equals(""))
                  {
                     int isData = str.indexOf(" is .data");
                     if(isData>=0)
                     {
-                       int x = str.indexOf("0x");
+                       x = str.indexOf("0x");
                        if(x>0)
                        _debugSession.setDataAddress( str.substring(x,strt) );
                        if (Gdb.traceLogger.EVT)
@@ -118,25 +117,26 @@ public class GetGdbModuleParts
                  str = str.substring(0,space);
                  endAddress = str;
                  _debugSession.addLineToUiMessages(str);
-                 str = lines[i++];
-              }
-              if(endAddress.equals(""))
-              {
-                 if (Gdb.traceLogger.ERR)
-                     Gdb.traceLogger.err(2,"GetGdbModuleParts.getMainModule could not locate main module information, missing: "+"endAddress from str="+str );
-                 return false;
-              }
+		 if(startAddress.equals("") || endAddress.equals(""))
+		 {
+		   if (Gdb.traceLogger.ERR)
+		     Gdb.traceLogger.err(2,"GetGdbModuleParts.getMainModule could not locate main module information, missing: startAddress or endAddress from str="+str );
+		   return false;
+		 }
+		 segments.addElement(new ModuleSegment(startAddress, endAddress));
+		 if (Gdb.traceLogger.EVT)
+		     Gdb.traceLogger.evt(1,"<<<<<<<<======== GetGdbModuleParts.getMainModule name="+shortName
+			+" start="+startAddress+" end="+endAddress+" fullFileName="+fullName );
+		 str = lines[i++];
+	       } // while loop
 
               // ALL DONE, create the module
               _moduleManager.addModule(shortName, fullName);
               _debugSession.setCurrentModuleID(_moduleManager.getModuleID(shortName) );
-              if (Gdb.traceLogger.EVT)
-                  Gdb.traceLogger.evt(1,"<<<<<<<<======== GetGdbModuleParts.getMainModule name="+shortName
-                      +" start="+startAddress+" end="+endAddress+" fullFileName="+fullName );
-              _moduleManager.setModuleStartFinishAddress(shortName,startAddress,endAddress);
+	      _moduleManager.setModuleStartFinishAddress(shortName, segments);
               _moduleManager.setModuleDebuggable(shortName,true);
               if (Gdb.traceLogger.EVT)
-                  Gdb.traceLogger.evt(2,"GetGdbModuleParts.getMainModule moduleID="+_debugSession.getCurrentModuleID()+" shortName="+shortName+" fullName=" +fullName+" startAddress="+startAddress+" endAddress="+endAddress );
+                  Gdb.traceLogger.evt(2,"GetGdbModuleParts.getMainModule moduleID="+_debugSession.getCurrentModuleID()+" shortName="+shortName+" fullName=" +fullName);
               found = true;
               _debugSession.cmdResponses.removeAllElements();
               return found;
@@ -148,7 +148,115 @@ public class GetGdbModuleParts
     return false;
  }
 
+  public boolean updateMainSegment()
+  {
+    String cmd="info file";
+    boolean ok = _debugSession.executeGdbCommand(cmd);
+    if(!ok)
+        return false;
 
+    String[] lines = _debugSession.getTextResponseLines();
+    String keyword = "Local exec file:";
+    String fullName = "";
+    String shortName = "";
+    String startAddress = "";
+    String endAddress = "";
+    boolean found = false;
+
+    segments = new Vector(0);
+    for(int i=0; i<lines.length; i++)
+    {  if(lines[i]!=null && !lines[i].equals("") && !lines[i].startsWith(_gdbProcess.MARKER))
+       {
+          int strt= lines[i].indexOf(keyword);
+          if(strt>=0)      // found "Local exec file:"
+          {
+              _debugSession.addLineToUiMessages(lines[i++]);
+              String str = lines[i++];   // next line is '/path/exeName'
+              _debugSession.addLineToUiMessages(str);
+
+              int quote = str.indexOf("`");
+              if(quote<0)
+              {
+                  if (Gdb.traceLogger.ERR)
+                      Gdb.traceLogger.err(2,"GetGdbModuleParts.updateMainSegment could not locate main module information, missing: "+"' from str="+str );
+                  return false;
+              }
+              str = str.substring(quote+1);
+              quote = str.indexOf("'");
+              if(quote<0)
+              {
+                  if (Gdb.traceLogger.ERR)
+                      Gdb.traceLogger.err(2,"GetGdbModuleParts.updateMainSegment could not locate main module information, missing: "+"' from str="+str );
+                  return false;
+              }
+              str = str.substring(0,quote);
+              fullName = str;
+              shortName = str;
+              int slash = fullName.lastIndexOf("\\");
+              if(slash<0) slash = fullName.lastIndexOf("/");
+              if(slash>0)
+                  shortName = str.substring(slash+1);
+
+              str = lines[i++];    // next line is "Entry point: "
+              str = lines[i++];   // next lines are of form "0x1234 - 0x5678"
+              keyword = " - ";
+              while(i<lines.length && str!=null && !str.equals("") )
+              {
+                 strt = str.indexOf(keyword);
+                 if(strt<=0)
+                     break;
+                 int x = str.indexOf("0x");
+                 if(x>0)
+                       startAddress = str.substring(x,strt);
+                 if (_debugSession.getDataAddress().equals(""))
+                 {
+                    int isData = str.indexOf(" is .data");
+                    if(isData>=0)
+                    {
+                       x = str.indexOf("0x");
+                       if(x>0)
+                       _debugSession.setDataAddress( str.substring(x,strt) );
+                       if (Gdb.traceLogger.EVT)
+                           Gdb.traceLogger.evt(2,"---------------- GetGdbModuleParts.updateMainSegment _debugSession._dataAddress="+_debugSession.getDataAddress()+" str="+str );
+                    }
+                 }
+                 str = str.substring(strt +keyword.length());
+                 int space = str.indexOf(" is ");
+                 if(space<=0)
+                     break;
+                 str = str.substring(0,space);
+                 endAddress = str;
+                 _debugSession.addLineToUiMessages(str);
+		 if(startAddress.equals("") || endAddress.equals(""))
+		 {
+		   if (Gdb.traceLogger.ERR)
+		     Gdb.traceLogger.err(2,"GetGdbModuleParts.updateMainSegment could not locate main module information, missing: startAddress or endAddress from str="+str );
+		   return false;
+		 }
+		 segments.addElement(new ModuleSegment(startAddress, endAddress));
+		 if (Gdb.traceLogger.EVT)
+		     Gdb.traceLogger.evt(1,"<<<<<<<<======== GetGdbModuleParts.updateMainSegment name="+shortName
+			+" start="+startAddress+" end="+endAddress+" fullFileName="+fullName );
+		 str = lines[i++];
+	       } // while loop
+
+              // ALL DONE, create the module
+              _moduleManager.addModule(shortName, fullName);
+              _debugSession.setCurrentModuleID(_moduleManager.getModuleID(shortName) );
+	      _moduleManager.setModuleStartFinishAddress(shortName, segments);
+              _moduleManager.setModuleDebuggable(shortName,true);
+              if (Gdb.traceLogger.EVT)
+                  Gdb.traceLogger.evt(2,"GetGdbModuleParts.updateMainSegment moduleID="+_debugSession.getCurrentModuleID()+" shortName="+shortName+" fullName=" +fullName);
+              found = true;
+              _debugSession.cmdResponses.removeAllElements();
+              return found;
+          }
+       }
+    }
+    if (Gdb.traceLogger.ERR)
+        Gdb.traceLogger.err(2,"GetGdbModuleParts.updateMainSegment could not locate main module information, missing: "+keyword );
+    return false;
+ }
 
   public boolean getCurrentFileLineModule()
   {
@@ -534,7 +642,14 @@ public class GetGdbModuleParts
                   {
                      objFile = str.substring(slash+1,colon);
                   }
+		  else
+		   if(colon>0) // AIX: Object file shr.o: Objfile at 0xXXXXXXXX, bfd at 0xXXXXXXXX, XX minsyms
+		   {  int x = str.indexOf(keyword);
+		      objFile = str.substring(x+keyword.length(),colon);
+		   }
+
                   fullObjFileName = str.substring(keyword.length(),colon).trim();
+		  if(slash>0)
                   objPath = str.substring(keyword.length(),slash+1);
                   if(objPath.startsWith("//"))
                   {

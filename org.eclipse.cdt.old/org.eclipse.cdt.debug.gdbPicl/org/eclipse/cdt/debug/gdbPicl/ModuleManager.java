@@ -967,22 +967,22 @@ public class ModuleManager extends ComponentManager
    /**
     * Set the startingAddress and endingAddress for sharedLibrary modules
     */
-   public void setModuleStartFinishAddress(String moduleName, String start, String finish)
+   public void setModuleStartFinishAddress(String moduleName, Vector segments)
    { 
       int moduleID = getModuleID(moduleName);
-      setModuleStartFinishAddress(moduleID, start, finish);
+      setModuleStartFinishAddress(moduleID, segments);
    }
    /**
     * Set the startingAddress and endingAddress for sharedLibrary modules
     */
-   private void setModuleStartFinishAddress(int moduleID, String start, String finish)
+   private void setModuleStartFinishAddress(int moduleID, Vector segments)
    {
       if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(2,"ModuleManager.setModuleStartFinishAddress moduleID="+moduleID+" start="+start+"finish="+finish );
+          Gdb.traceLogger.dbg(2,"ModuleManager.setModuleStartFinishAddress moduleID="+moduleID+" with segments size="+segments.size() );
       if(moduleID<=0 || _modules.size()==0)
          return;
       Module module = (Module) _modules.elementAt(moduleID-1);
-      module.setModuleStartFinishAddress(start, finish);
+      module.setModuleSegment(segments);
    }
 
    /**

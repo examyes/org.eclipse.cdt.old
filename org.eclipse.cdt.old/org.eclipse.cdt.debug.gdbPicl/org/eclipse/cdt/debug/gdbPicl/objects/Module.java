@@ -5,6 +5,7 @@
  */
 package org.eclipse.cdt.debug.gdbPicl.objects;
 import  org.eclipse.cdt.debug.gdbPicl.*;
+import  java.math.*;
 
 import java.util.*;
 import com.ibm.debug.epdc.*;
@@ -21,14 +22,13 @@ public class Module
     * @param ModuleName the package name
     * @param FullPathModuleName the full path to the package
     */
-
    public Module(DebugSession debugSession, int ModuleID, String ModuleName, String ModuleNameAsPath) 
    {
       _debugSession = debugSession;
       _moduleID    = ModuleID;
       _moduleName  = ModuleName;
       _moduleNameAsPath = ModuleNameAsPath;
-
+      _segments = new Vector(0);
       _parts   = new Hashtable();
       _partIDs = new Hashtable();
 
@@ -37,9 +37,6 @@ public class Module
       _moduleEntryHasParts     = false;
 
       _moduleEntryHasDebugData = true;
-      
-      // creates dummy part with partId = 1
-//      addPart(1, "dummy", "dummy");
 
       DebugEngine _debugEngine = _debugSession.getDebugEngine();
       Vector filteredModules = _debugEngine.getFilteredModules();
@@ -59,53 +56,78 @@ public class Module
    /**
     * Set the startingAddress and endingAddress for sharedLibrary modules
     */
-   public void setModuleStartFinishAddress(String start, String finish)
+   public void setModuleSegment(Vector segs)
    {
-       start = start.substring(2);
-       finish = finish.substring(2);
-       _startAddress = -1;
-       _finishAddress = -1;
-       try
-       {
-          _startAddress = Integer.parseInt(start,16);
-          _finishAddress = Integer.parseInt(finish,16);
-          _startAddressHex = "0x"+start;
-          _finishAddressHex = "0x"+finish;
-       }
-       catch(java.lang.NumberFormatException exc)
-       {
-          if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(1,"Module.setModuleStartFinishAddress NUMBER_EXCEPTION start="+start+" finish="+finish);
-       }
-       if (Gdb.traceLogger.EVT) 
-           Gdb.traceLogger.evt(3,"Module.setModuleStartFinishAddress start="+Integer.toHexString(_startAddress)+" finish="+Integer.toHexString(_finishAddress) );
+	_segments = segs;
+	if (Gdb.traceLogger.DBG)
+		Gdb.traceLogger.dbg(1,"Module.setModuleSegment size="+_segments.size());
+	if (Gdb.traceLogger.EVT)
+		Gdb.traceLogger.evt(3,"Module.setModuleSegment with segment size="+_segments.size());
    }
 
-   /**
-    * Checks the startingAddress and endingAddress to see if this address is contained (default is true)
-    */
-   public boolean containsAddress(String address)
-   {
-       boolean contained = false;
-       address = address.substring(2);
-       int i = -1;
-       try
-       {
-          i = Integer.parseInt(address,16);
-          if (_startAddress<0 || _finishAddress<0)
-             contained = false;
-          else if (i>_startAddress & i<_finishAddress)
-             contained = true;
-       }
-       catch(java.lang.NumberFormatException exc)
-       {
-          if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(1,"Module.containsAddress NUMBER_EXCEPTION address="+address );
-       }
-       if (Gdb.traceLogger.DBG) 
-           Gdb.traceLogger.dbg(2,"Module.containsAddress targetAddress="+address +" CONTAINED="+contained+" moduleStart=0x"+Integer.toHexString(_startAddress) +" moduleFinish=0x"+Integer.toHexString(_finishAddress) );
-       return contained;
-   }
+	/**
+	 * Checks the startingAddress and endingAddress to see if this address is contained (default is true)
+	 */
+	public boolean containsAddress(String address) {
+		boolean contained = false;
+		address = address.substring(2);
+		BigInteger addr = new BigInteger("-1", 16);
+		BigInteger start = new BigInteger("-1", 16);
+		BigInteger end = new BigInteger("-1", 16);
+		ModuleSegment seg;
+		String startAddress, endAddress;
+		int i;
+	
+		if (Gdb.traceLogger.DBG) {
+			Gdb.traceLogger.dbg(
+				3,
+				"Entering Module.containsAddress targetAddress=" + address);
+			for (i = 0; i < _segments.size(); i++) {
+				seg = (ModuleSegment) _segments.elementAt(i);
+				Gdb.traceLogger.dbg(
+					2,
+					"Module.containsAddress:seg["
+						+ i
+						+ "].startAddress="
+						+ seg.getStartAddress()
+						+ " seg["
+						+ i
+						+ "].endAddress="
+						+ seg.getEndAddress());
+			}
+		}
+		try {
+			addr = new BigInteger(address, 16);
+			for (i = 0; i < _segments.size(); i++) {
+				seg = (ModuleSegment) _segments.elementAt(i);
+				startAddress = seg.getStartAddress().substring(2);
+				endAddress = seg.getEndAddress().substring(2);
+				if (startAddress.length() > 0 && endAddress.length() > 0) {
+					start = new BigInteger(startAddress, 16);
+					end = new BigInteger(endAddress, 16);
+				}
+				if (addr.compareTo(start) >= 0 && addr.compareTo(end) <= 0) {
+					contained = true;
+					break;
+				}
+			}
+		} catch (java.lang.NumberFormatException exc) {
+			if (Gdb.traceLogger.DBG)
+				Gdb.traceLogger.dbg(
+					1,
+					"Module.containsAddress NUMBER_EXCEPTION address=" + address);
+		}
+		if (Gdb.traceLogger.DBG)
+			Gdb.traceLogger.dbg(
+				2,
+				"Module.containsAddress targetAddress="
+					+ address
+					+ " CONTAINED="
+					+ contained
+					+ "\n");
+	
+		return contained;
+	}
 
    private Part createPart(int partID, String partName, String fullPartName)
    {
@@ -213,13 +235,8 @@ public class Module
 
 
    // data members
-   private int _startAddress = -1;
-   private int _finishAddress = -1;
-   private String _startAddressHex = "0x????????";
-   private String _finishAddressHex = "0x????????";
-   public String getStartAddressHex()   {  return _startAddressHex; }
-   public String getFinishAddressHex()   {  return _finishAddressHex; }
 
+   Vector _segments = new Vector(0);
    protected DebugSession _debugSession;
    protected int         _moduleID;
    protected String      _moduleName;
