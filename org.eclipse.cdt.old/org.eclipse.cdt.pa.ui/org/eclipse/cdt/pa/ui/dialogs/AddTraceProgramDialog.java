@@ -72,9 +72,9 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
     {
 	  Composite c = (Composite)super.createDialogArea(parent);
 	  
-      Label traceFormatLabel = createBoldLabel(c, "Select the trace format:");
+      	  Label traceFormatLabel = createBoldLabel(c, "Select the trace format:");
       
-      Composite traceFormatGroup = new Composite(c, SWT.NONE);
+      	  Composite traceFormatGroup = new Composite(c, SWT.NONE);
 	  GridLayout layout= new GridLayout();
 	  layout.numColumns = 1;
 	  traceFormatGroup.setLayout(layout);
@@ -111,11 +111,12 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  
 	  data = new GridData(GridData.FILL_BOTH);
 	  data.horizontalIndent = 8;
-	  data.widthHint  = 340;
+	  data.widthHint  = 360;
 	  data.heightHint = 45;
 	  description.setLayoutData(data);
 	  
-      getShell().setText(_title);
+	  _gprofFormatRadio.setSelection(true);
+      	  getShell().setText(_title);
       
 	  return c;
     }
