@@ -63,23 +63,13 @@ public class MakefileAmManager {
 	}
 	protected void getMakefileAmTemplateFiles(DataElement project,ProjectStructureManager structureManager)
 	{
-		
 		String[] subdirs = structureManager.getSubdirWorkspacePath();
 		Runtime rt = Runtime.getRuntime();
 		//check the project structure
 		File projectFile = project.getFileObject();
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
-		{
-			// add configure.in template files only if not exist
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) +
-				 "/com.ibm.cpp.miners/autoconf_templates/"+MAKEFILE_AM+" "+project.getSource());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+			"/com.ibm.cpp.miners/autoconf_templates/",project.getSource());
 		// provide one makefile.am in each subdiectory
 		for(int i =0; i < subdirs.length ; i++)
 		{
@@ -87,24 +77,11 @@ public class MakefileAmManager {
 			{
 				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
 				if (token.countTokens()==1)
-				{
-					try{
-						Process p = rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
-						 + "/com.ibm.cpp.miners/autoconf_templates/"+"/sub/Makefile.am "+project.getSource()+"/"+subdirs[i]);
-						p.waitFor();
-					}catch(IOException e){System.out.println(e);}
-					catch(InterruptedException e){System.out.println(e);}
-				}
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+					 "/com.ibm.cpp.miners/autoconf_templates/sub/",project.getSource()+"/"+subdirs[i]);
 				else
-				{
-					
-					try{
-						Process p= rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
-						 + "/com.ibm.cpp.miners/autoconf_templates/"+"/sub/static/Makefile.am "+project.getSource()+"/"+subdirs[i]);
-						p.waitFor();
-					}catch(IOException e){System.out.println(e);}
-					catch(InterruptedException e){System.out.println(e);}
-				}
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+					 "/com.ibm.cpp.miners/autoconf_templates/sub/static/",project.getSource()+"/"+subdirs[i]);
 			}
 		}
 	}
@@ -399,6 +376,7 @@ public class MakefileAmManager {
 		for(int i =0; i < projectStucture.length; i++)
 		{
 			File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
+			
 			if(Makefile_am.exists())
 			{
 				int classification = classifier.classify(Makefile_am);
@@ -429,6 +407,28 @@ public class MakefileAmManager {
 					break;
 					
 					default:
+					break;
+				}
+			}
+			else
+			{
+				Integer level = new Integer((String)projectStucture[i][1]);
+				switch (level.intValue())
+				{
+					case (0):
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						"/com.ibm.cpp.miners/autoconf_templates/",project.getSource());
+					initializeTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
+					break;
+					case (1):
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+					 	"/com.ibm.cpp.miners/autoconf_templates/sub/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeProgramsMakefileAm((File)projectStucture[i][0]);
+					break;
+					default:
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						"/com.ibm.cpp.miners/autoconf_templates/sub/static/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
 					break;
 				}
 			}
@@ -959,6 +959,17 @@ public class MakefileAmManager {
 			Process p;
 			// check if exist then
 			p= rt.exec("cp "+aFile.getName()+" "+aFile.getName()+".old ", null, aFile.getParentFile());
+			p.waitFor();
+		}catch(IOException e){System.out.println(e);}
+		catch(InterruptedException e){System.out.println(e);}	
+	}
+	private void copyMakefileFromTempDir(String pluginLocation, String makefileLocation,String copyLocation)
+	{
+		Runtime rt = Runtime.getRuntime();
+		try{
+			Process p;
+			// check if exist then
+			p= rt.exec("cp "+ pluginLocation + makefileLocation + MAKEFILE_AM +" "+copyLocation);
 			p.waitFor();
 		}catch(IOException e){System.out.println(e);}
 		catch(InterruptedException e){System.out.println(e);}	
