@@ -529,35 +529,38 @@ public class PADataStoreAdaptor {
   ArrayList callees = trcFunc.getCallees();
   
   int numCallees = callees.size();
+  // System.out.println("trcFunc: " + trcFunc.getName() + "  number of callees: " + numCallees);
   for (int i=0; i < numCallees; i++) {
    PACallArc callArc = (PACallArc)callees.get(i);
    PATraceFunction callee = callArc.getCallee();
    DataElement calleeElement = (DataElement)_traceFuncToElementMap.get(callee);
    
-   // create caller/callee relations
-   _dataStore.createReference(funcElement, calleeElement, getLocalizedString("pa.Calls"));
-   _dataStore.createReference(calleeElement, funcElement, getLocalizedString("pa.CalledBy"));
+   if (calleeElement != null) {
    
-   // create a caller arc and a callee arc
-   DataElement calleeArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), callee.getName());
-   DataElement callerArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), trcFunc.getName());
+     // create caller/callee relations
+     _dataStore.createReference(funcElement, calleeElement, getLocalizedString("pa.Calls"));
+     _dataStore.createReference(calleeElement, funcElement, getLocalizedString("pa.CalledBy"));
    
-   DataElement numCalls     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.numCalls"), String.valueOf(callArc.getCallNumber()));
-   DataElement selfTime     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.SelfTime"), String.valueOf(callArc.getSelfTime()));
-   DataElement childrenTime = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.ChildrenTime"), String.valueOf(callArc.getChildrenTime()));
+     // create a caller arc and a callee arc
+     DataElement calleeArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), callee.getName());
+     DataElement callerArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), trcFunc.getName());
    
-   // create the relations between trace functions and call arcs
-   _dataStore.createReference(funcElement,   calleeArc, getLocalizedString("pa.CalleeArc"));
-   _dataStore.createReference(calleeElement, callerArc, getLocalizedString("pa.CallerArc"));
+     DataElement numCalls     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.numCalls"), String.valueOf(callArc.getCallNumber()));
+     DataElement selfTime     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.SelfTime"), String.valueOf(callArc.getSelfTime()));
+     DataElement childrenTime = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.ChildrenTime"), String.valueOf(callArc.getChildrenTime()));
    
-   _dataStore.createReference(calleeArc, numCalls,     getLocalizedString("pa.Attributes"));
-   _dataStore.createReference(calleeArc, selfTime,     getLocalizedString("pa.Attributes"));
-   _dataStore.createReference(calleeArc, childrenTime, getLocalizedString("pa.Attributes"));
+     // create the relations between trace functions and call arcs
+     _dataStore.createReference(funcElement,   calleeArc, getLocalizedString("pa.CalleeArc"));
+     _dataStore.createReference(calleeElement, callerArc, getLocalizedString("pa.CallerArc"));
    
-   _dataStore.createReference(callerArc, numCalls,     getLocalizedString("pa.Attributes"));
-   _dataStore.createReference(callerArc, selfTime,     getLocalizedString("pa.Attributes"));
-   _dataStore.createReference(callerArc, childrenTime, getLocalizedString("pa.Attributes"));
+     _dataStore.createReference(calleeArc, numCalls,     getLocalizedString("pa.Attributes"));
+     _dataStore.createReference(calleeArc, selfTime,     getLocalizedString("pa.Attributes"));
+     _dataStore.createReference(calleeArc, childrenTime, getLocalizedString("pa.Attributes"));
    
+     _dataStore.createReference(callerArc, numCalls,     getLocalizedString("pa.Attributes"));
+     _dataStore.createReference(callerArc, selfTime,     getLocalizedString("pa.Attributes"));
+     _dataStore.createReference(callerArc, childrenTime, getLocalizedString("pa.Attributes"));
+   }
   }
   
  }
