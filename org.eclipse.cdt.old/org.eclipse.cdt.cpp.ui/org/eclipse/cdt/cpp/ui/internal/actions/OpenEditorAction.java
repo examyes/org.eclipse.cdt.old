@@ -201,7 +201,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 		    if ((fileName != null) && (fileName.length() > 0))
 			{
 			    java.io.File realFile = new java.io.File(fileName);
-			    if (!realFile.exists() || !realFile.isDirectory())
+			    if (!realFile.exists() || !realFile.isDirectory() || dataStore.isVirtual())
 				{		
 				    IFile file = findFile(fileName);
 				    
