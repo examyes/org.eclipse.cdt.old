@@ -115,8 +115,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private ArrayList           _outLinks;
     private boolean             _isLinked;
     private IActionLoader       _loader;
-    
-    private CustomAction        _openPerspectiveAction;
+
+    private MenuHandler         _menuHandler;
     private ObjectSelectionChangedListener _selectionListener;
 
     private ResourceBundle      _resourceBundle;  
@@ -177,6 +177,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     public void initialize(boolean isTable)
     {
+	_menuHandler = new MenuHandler(_loader);
+
 	_outLinks = new ArrayList();
 	_isTable = isTable;
 	
@@ -497,7 +499,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	Composite widget = null;
 	if (_isTable)
 	    {
-		widget = new Table(treeContainer, SWT.NULL);
+		widget = new Table(treeContainer, SWT.MULTI);
 		widget.setLayoutData(textData);
 		
 		_viewer = new ExtendedTableViewer(this, (Table)widget, _toolBar);
@@ -538,115 +540,44 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
   public void menuAboutToShow(IMenuManager menu) 
       {
-	fillContextMenu(menu);
-      }
+	IStructuredSelection es= (IStructuredSelection) _viewer.getSelection();
+	if (es.size() > 1)
+	    {
+		_menuHandler.multiFillContextMenu(menu, es);
+	    }
+	else
+	    {
+		DataElement selected = (DataElement)es.getFirstElement();
+		DataElement input = (DataElement)_viewer.getInput();
+		_menuHandler.fillContextMenu(menu, input, selected);
 
-  public void fillContextMenu(IMenuManager menu)
-      {
-	DataElement selected = ConvertUtility.convert(_viewer.getSelection());
-        DataElement input = (DataElement)_viewer.getInput();
-
-        if (selected == null)
-        {
-          selected = input;
-        }
-
-	if (selected != null)
-	  {	    
-	      if (_workbook != null)
-		  {
-		      menu.add(new Separator(getLocalizedString("ui.Perspective")));
-		      menu.add(new OpenSectionAction(getLocalizedString("ui.Open_Section_On"), selected, this));
-		  }
-	      else
-		  {
-		      if (_openPerspectiveAction == null)
-			  {
-			      _openPerspectiveAction = _loader.loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
-									  getLocalizedString("ui.Open_Perspective_On"));
-			  }
-
-		      if (_openPerspectiveAction != null)
-			  {
-			      _openPerspectiveAction.setSubject(selected);
-			      menu.add(_openPerspectiveAction);
-			  }
-		  }
+		menu.add(new Separator("#View"));
+		MenuManager sort = new MenuManager(getLocalizedString("ui.Sort_by"), "#SortMenu");
+		sort.add(_noSort);
+		for (int i = 0; i < _sortByAction.length; i++)
+		    {
+			_sortByAction[i].setChecked(false);
+			sort.add(_sortByAction[i]);
+		    }
+		menu.add(sort);
+		
+		MenuManager label = new MenuManager(getLocalizedString("ui.View"), "#ViewMenu");
+		for (int i = 0; i < _viewByAction.length; i++)
+		    {
+			_viewByAction[i].setChecked(false);
+			label.add(_viewByAction[i]);
+		    }
+		menu.add(label);	
+		_currentSortAction.setChecked(true);
+		_currentViewByAction.setChecked(true);		
 
 	      MenuManager zoom = new MenuManager(getLocalizedString("ui.Zoom"), "#ZoomMenu");
 	      zoom.add(new ZoomInAction(getLocalizedString("ui.in"), selected, this));
 	      zoom.add(new ZoomInAction(getLocalizedString("ui.out"), input.getParent(), this));
 	      menu.add(zoom);
-
-	    menu.add(new Separator(getLocalizedString("ui.Object_Actions")));	    
-	    DataElement descriptor = selected.getDescriptor();
-	    fillContextMenuHelper(menu, selected, descriptor);
-	  }
-	
-	menu.add(new Separator("#View"));
-	MenuManager sort = new MenuManager(getLocalizedString("ui.Sort_by"), "#SortMenu");
-	sort.add(_noSort);
-	for (int i = 0; i < _sortByAction.length; i++)
-	    {
-		_sortByAction[i].setChecked(false);
-		sort.add(_sortByAction[i]);
 	    }
-	menu.add(sort);
-
-	MenuManager label = new MenuManager(getLocalizedString("ui.View"), "#ViewMenu");
-	for (int i = 0; i < _viewByAction.length; i++)
-	    {
-		_viewByAction[i].setChecked(false);
-		label.add(_viewByAction[i]);
-	    }
-	menu.add(label);	
-	_currentSortAction.setChecked(true);
-	_currentViewByAction.setChecked(true);
       }
 
-  public void fillContextMenuHelper(IMenuManager menu, DataElement object, DataElement descriptor)
-      {
-	if (object != null)
-	  {    	
-	    if (descriptor != null)
-	      {	
-		  // add actions for contained command descriptors
-		  ArrayList subDescriptors = descriptor.getAssociated(_dataStore.getLocalizedString("model.contents"));		  
-		  for (int i = 0; i < subDescriptors.size(); i++)
-		  { 
-		      DataElement subDescriptor = (DataElement)subDescriptors.get(i);
-		      String type = subDescriptor.getType();
-		      if (type.equals(DE.T_COMMAND_DESCRIPTOR) && (subDescriptor.depth() > 0))
-			  {
-			      String name = subDescriptor.getName();
-			      menu.add(new UICommandAction(object, name, subDescriptor, object.getDataStore()));
-			  }
-		      else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
-			  {
-			      String name = subDescriptor.getName();
-			      MenuManager cascade = new MenuManager(name, name);
-			      fillContextMenuHelper(cascade, object, subDescriptor);
-			      menu.add(cascade);
-			  }
-		      else if (type.equals(DE.T_UI_COMMAND_DESCRIPTOR))
-			  {
-			      CustomAction action = _loader.loadAction(object, subDescriptor);
-			      if (action != null)
-				  menu.add(action);
-			  }
-		  }
-		  // inherit actions from abstract object descriptors
-		  menu.add(new Separator(_dataStore.getLocalizedString("model.abstracted_by")));
-
-		  ArrayList baseDescriptors = descriptor.getAssociated(_dataStore.getLocalizedString("model.abstracted_by"));
-		  for (int j = 0; j < baseDescriptors.size(); j++)
-		      {
-			  DataElement baseDescriptor = (DataElement)baseDescriptors.get(j);
-			  fillContextMenuHelper(menu, object, baseDescriptor);			  
-		      }
-	      }
-	  }
-      }
 
   public void dispose()
       {
