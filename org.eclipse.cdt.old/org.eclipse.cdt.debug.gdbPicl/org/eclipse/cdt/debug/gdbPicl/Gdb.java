@@ -577,7 +577,6 @@ public class Gdb
 
             // EPDC connection.  Enable epdc dump when EPDCDUMP prop set.
             SocketConnection socketConnection = new SocketConnection(sock);
-            socketConnection.startDumping();
 
             debugEngine = new GdbDebugEngine(socketConnection, gdbPath);
 
