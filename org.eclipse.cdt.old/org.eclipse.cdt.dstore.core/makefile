@@ -115,7 +115,7 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 
 %_unzipPlugin:
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
-	cd com 2>/dev/null || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -q *src.zip)
+	cd com 2>/dev/null || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -qo *src.zip)
 
 zipFile=cdt-eclipse-0.5.0-local.zip
 createZip: createEmptyZip zipUpPlugins
