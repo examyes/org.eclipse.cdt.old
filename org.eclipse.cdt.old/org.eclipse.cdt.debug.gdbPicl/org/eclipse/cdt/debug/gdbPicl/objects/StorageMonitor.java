@@ -252,6 +252,7 @@ public abstract class StorageMonitor
       String attributes = "\5\5\5\5";  //4=allocated, 2=changed, 1=editable
       short flags = 0;
       short  id   = 0;  
+           
       //???????? StorageMonitor.getStorageChangeInfo should use z+_startLine instead of z ????????????
       for(int z=0; z<size; z++)
       {
@@ -264,7 +265,10 @@ public abstract class StorageMonitor
          flags = (short)s.flag;
                           
          id   = s.id;  
-         contents = contents  +"\0................\0"+ attributes;
+
+		 String translatedText = getTranlsatedText(contents);
+
+         contents = contents  + "\0" + translatedText + "\0"+ attributes;
          if (Gdb.traceLogger.DBG) 
              Gdb.traceLogger.dbg(3,"StorageMonitor.getStorageChangeInfo line="+z+" address="+address+" flags="+Integer.toHexString(flags)+" contents="+contents );
 
@@ -305,6 +309,45 @@ ERepGetNextMonitorStorageId storage = new ERepGetNextMonitorStorageId(
 
       return changeInfo; 
    }
+   
+   /*
+   		Translate raw data from storage monitor to character representation
+   */
+   private String getTranlsatedText(String inputStr)
+   {
+   		String resultStr = "";
+   	
+   		if (inputStr.length() != 32)
+   		{
+            if (Gdb.traceLogger.ERR) 
+                Gdb.traceLogger.err(1,"Cannot translated raw data to characters:"  + inputStr);
+   			return new String("............");
+   		}
+   			
+		for (int i=0; i<=30; i=i+2)
+		{
+			try
+			{
+				int intValue = Integer.parseInt(inputStr.substring(i, i+2), 16);
+				char translatedChar = (char)intValue;
+				
+				if (Character.isLetterOrDigit(translatedChar))
+					resultStr += translatedChar;
+				else
+					// put "." for non-printable data
+					resultStr += '.';					
+			}
+			catch(NumberFormatException exp)
+			{
+	            if (Gdb.traceLogger.ERR) 
+	                Gdb.traceLogger.err(1,"Cannot translated raw data to characters:"  + inputStr);
+				return new String("................");
+			}			
+		} 
+		
+		return resultStr;  			
+   }
+   
 /*
    // data fields
    protected DebugSession _debugSession;
