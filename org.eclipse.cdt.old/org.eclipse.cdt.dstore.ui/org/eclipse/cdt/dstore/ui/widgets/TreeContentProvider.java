@@ -16,8 +16,9 @@ import java.util.*;
 
 public class TreeContentProvider extends TestContentProvider implements ITreeContentProvider
 {
-  private DataElement _property;
-  private ViewToolBar _toolBar;
+    private DataElement _property;
+    private DataElement _containerDescriptor = null;
+    private ViewToolBar _toolBar;
 
   public TreeContentProvider(ViewToolBar  toolBar)
   {
@@ -50,72 +51,74 @@ public class TreeContentProvider extends TestContentProvider implements ITreeCon
     return element.getParent();
   }
 
+    public DataElement getContainerDescriptor(DataElement object)
+    {
+	if (_containerDescriptor == null)
+	    {
+		DataStore dataStore = object.getDataStore();
+		_containerDescriptor = dataStore.findDescriptor(DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Container Object");
+	    }
+
+	return _containerDescriptor;
+    }
+
   public boolean hasChildren(Object object)
   {
-    DataElement element = ((DataElement)object).dereference();
+      if (_property == null)
+	  {
+	      return false;
+	  }
 
-    if (element.isDeleted())
-	{
-	    return false;
-	}
-
-    if ((element.depth() < 2) && ((_property == null) || (_property.getName().equals("contents"))))
-	{
-	    return false;
-	}
-
-    if (element.isExpanded())
-    {
-      if (element.getNestedSize() > 0)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
-    else
-    {
-      DataElement descriptor = element.getDescriptor();
+      DataElement element = ((DataElement)object).dereference();
+      if (element.isDeleted())
+	  {
+	      return false;
+	  }
       
+      DataElement descriptor = element.getDescriptor();      
       if (descriptor != null)
-      {
-        boolean result = false;
-        for (int i = 0; i < descriptor.getNestedSize(); i++)
-        {
-          DataElement subDescriptor = descriptor.get(i).dereference();
-          String type = (String)subDescriptor.getElementProperty(DE.P_TYPE);
-          if (type.equals(DE.T_OBJECT_DESCRIPTOR))
-          {
-	    if (_toolBar != null)
-	      {		
-		  IDataElementViewer viewer = _toolBar.getViewer();		  
-		  DataElement filter = viewer.getFilter();    
-		  if (filter != null)
-		      {
-			  ArrayList checked = new ArrayList();		      
-			  result = matchDescriptor(subDescriptor, filter.dereference(), checked);
-			  if (result == true)
-			      {
-				  return true;
-			      }
-		      }
-		  else
-		      {
-			  return true;
-		      }
-	      }
-	    else
-	      {
-		return true;		
-	      }	    
-          }
-        }
-      }
-      
-      return false;	
-    }
+	  {	  
+	      if (_property.getName().equals("contents"))
+		  {
+		      if (descriptor.isOfType(getContainerDescriptor(element)))
+			  {
+			      if (element.isExpanded())
+				  {
+				      if (element.getNestedSize() > 0)
+					  {
+					      return true;
+					  }
+				      else
+					  {
+					      if (element.depth() > 1)
+						  {
+						      return true;
+						  }
+					      else
+						  {
+						      return false;
+						  }
+					  }
+				  }
+			      else
+				  {
+				      return true;
+				  }
+			  }
+		      else
+			  {
+			      return false;
+			  }
+		  }
+	      else
+		  {
+		      return true;
+		  }
+	  }
+      else
+	  {
+	      return false;
+	  }      
   }
 
   public boolean matchDescriptor(DataElement descriptor, DataElement filter, ArrayList checked)
