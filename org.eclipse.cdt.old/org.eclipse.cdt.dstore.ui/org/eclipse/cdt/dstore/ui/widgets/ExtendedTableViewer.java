@@ -434,21 +434,21 @@ public void doExpand(DataElement obj)
     {
 	if (object == null)
 	    {
+		_currentInput = null;
+		setVisibility(false);
 		return;
 	    }
 
 	boolean selectionListening = _listener.isEnabled();
 	if (selectionListening)
 	    {
-		if (object == null)
+		if (_currentInput != object)
 		    {
-			_currentInput = null;
-			getTable().setRedraw(false);
-			getTable().removeAll();
-			getTable().setRedraw(true);
-		    } 
-		else if (_currentInput != object)
-		    {
+			if (_currentInput == null)
+			    {
+				setVisibility(true);
+			    }
+
 			_currentInput = (DataElement)object;
 			_currentInput.expandChildren();
 
@@ -457,6 +457,14 @@ public void doExpand(DataElement obj)
 			_isShowing = true;
 		    }
 	    }
+    }
+
+
+    public void setVisibility(boolean flag)
+    {
+	Table table = getTable();
+	if (table != null)
+	    table.setVisible(flag);		
     }
 
     public void clearView()

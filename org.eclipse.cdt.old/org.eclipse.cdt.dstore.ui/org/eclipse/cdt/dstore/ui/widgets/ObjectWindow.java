@@ -439,12 +439,11 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		      }
 		  else
 		      {
-			  if (_dataStore != null)
-			      {
-				  _toolBar.setInput(null);
-			      }
+			  _toolBar.setInput(null);
 		      }
 	      }
+
+
       }
 	  
     public DataElement getInput()

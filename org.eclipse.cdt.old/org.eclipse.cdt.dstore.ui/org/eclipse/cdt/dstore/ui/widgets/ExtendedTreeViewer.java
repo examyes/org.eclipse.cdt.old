@@ -319,6 +319,14 @@ public class ExtendedTreeViewer extends TreeViewer
 	      }
 	}
 
+    public void setVisibility(boolean flag)
+    {
+	Tree tree = getTree();
+	if (tree != null)
+	    tree.setVisible(flag);		
+    }
+
+
 
 public void doExpand(DataElement obj)
       {
@@ -348,21 +356,21 @@ public void doExpand(DataElement obj)
     {
 	if (object == null)
 	    {
+		_currentInput = null;
+		setVisibility(false);
 		return;
 	    }
 
 	boolean selectionListening = _listener.isEnabled();
 	if (selectionListening)
 	    {
-		if (object == null)
+		if (_currentInput != object)
 		    {
-			_currentInput = null;
-			getTree().setRedraw(false);
-			getTree().removeAll();
-			getTree().setRedraw(true);
-		    } 
-		else if (_currentInput != object)
-		    {
+			if (_currentInput == null)
+			    {
+				setVisibility(true);
+			    }
+
 			_currentInput = (DataElement)object;
 
 			super.inputChanged(object, oldInput);
