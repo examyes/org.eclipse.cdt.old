@@ -23,7 +23,7 @@
     <target name="fetchAll" depends="fetchProjects" />
 
     <target name="fetchProjects" depends="cvspass">    
-        <ant antfile="buildScripts/fetch_org.eclipse.cdt.${platformId}-feature.xml" />
+        <ant antfile="buildScripts/fetch_org.eclipse.cdt-feature.xml" />
     </target>
     
     <!--     Fill in values for original timestamp in all about.mappings files  -->
