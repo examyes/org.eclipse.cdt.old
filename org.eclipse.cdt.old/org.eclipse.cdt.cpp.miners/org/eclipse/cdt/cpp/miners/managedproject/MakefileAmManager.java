@@ -645,16 +645,19 @@ public class MakefileAmManager {
 			// add files to the EXTRA_DIST variable
 			for(int i = 0; i <parent.listFiles().length; i++)
 			{
-				String name = parent.listFiles()[i].getName();
-				if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
-				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".hh")
-				&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")
-				&&!name.endsWith(".old")&&!name.endsWith(".cxx")&&!name.endsWith(".c++")
-				&&!name.equals("Makefile") &&!name.equals("makefile")&&!name.equals("configur"))
+				if(!parent.listFiles()[i].isDirectory())
 				{
-					out.write(" "+"\\");
-					out.newLine();
-					out.write(name);
+					String name = parent.listFiles()[i].getName();
+					if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
+					&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".hh")
+					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")
+					&&!name.endsWith(".old")&&!name.endsWith(".cxx")&&!name.endsWith(".c++")
+					&&!name.equals("Makefile") &&!name.equals("makefile")&&!name.equals("configur"))
+					{
+						out.write(" "+"\\");
+						out.newLine();
+						out.write(name);
+					}
 				}
 			}
 			
@@ -671,17 +674,20 @@ public class MakefileAmManager {
 			// add files to the EXTRA_DIST variable
 			for(int i = 0; i <parent.listFiles().length; i++)
 			{
-				String name = parent.listFiles()[i].getName();
-				if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
-				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.startsWith(".")
-				&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")&&!name.endsWith(".old")
-				&&!name.endsWith(".cxx")&&!name.endsWith(".c++")
-				&&!name.equals("Makefile") && !name.equals("makefile")&&!name.equals("configur"))
+				if(!parent.listFiles()[i].isDirectory())
 				{
-					update = true;
-					out.write(" "+"\\");
-					out.newLine();
-					out.write(name);
+					String name = parent.listFiles()[i].getName();
+					if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
+					&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.startsWith(".")
+					&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")&&!name.endsWith(".old")
+					&&!name.endsWith(".cxx")&&!name.endsWith(".c++")
+					&&!name.equals("Makefile") && !name.equals("makefile")&&!name.equals("configur"))
+					{
+						update = true;
+						out.write(" "+"\\");
+						out.newLine();
+						out.write(name);
+					}
 				}
 			}
 			
