@@ -10,43 +10,21 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core;
 
-import org.eclipse.cdt.debug.core.ICDebugger;
-import org.eclipse.cdt.debug.core.cdi.CDIException;
+import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
+import org.eclipse.cdt.debug.core.ICDIDebugger;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.win32.core.cdi.WinDbgSession;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.ILaunch;
 
 /**
  */
-public class Win32Debugger implements ICDebugger {
-	/**
-	 */
-	public Win32Debugger() {
+public class Win32Debugger implements ICDIDebugger {
+
+	public ICDISession createDebuggerSession(ILaunch launch, IBinaryObject exe,
+			IProgressMonitor monitor) throws CoreException {
+		return new WinDbgSession(launch, exe);
 	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.ICDebugger#createAttachSession(org.eclipse.debug.core.ILaunchConfiguration, org.eclipse.core.resources.IFile, int)
-	 */
-	public ICDISession createAttachSession(ILaunchConfiguration config,
-		IFile exe, int pid) throws CDIException
-	{
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.ICDebugger#createCoreSession(org.eclipse.debug.core.ILaunchConfiguration, org.eclipse.core.resources.IFile, org.eclipse.core.runtime.IPath)
-	 */
-	public ICDISession createCoreSession(ILaunchConfiguration config,
-		IFile exe, IPath corefile) throws CDIException
-	{
-		return null;
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.ICDebugger#createLaunchSession(org.eclipse.debug.core.ILaunchConfiguration, org.eclipse.core.resources.IFile)
-	 */
-	public ICDISession createLaunchSession(ILaunchConfiguration config,
-		IFile exe) throws CDIException
-	{
-		return new WinDbgSession(config, exe);
-	}
+	
 }

@@ -12,6 +12,7 @@ package org.eclipse.cdt.debug.win32.core.cdi;
 
 import java.math.BigInteger;
 
+import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
@@ -40,7 +41,6 @@ import org.eclipse.cdt.debug.win32.core.cdi.events.CreatedEvent;
 import org.eclipse.cdt.debug.win32.core.cdi.events.ExitedEvent;
 import org.eclipse.cdt.debug.win32.core.cdi.events.ResumedEvent;
 import org.eclipse.cdt.debug.win32.core.cdi.events.SuspendedEvent;
-import org.eclipse.core.resources.IFile;
 
 public class WinDbgTarget implements ICDITarget, Runnable {
 	
@@ -54,12 +54,13 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	String cmdline;
 	String dir;
 
-	public WinDbgTarget(WinDbgSession session, IFile exe) {
+	public WinDbgTarget(WinDbgSession session, IBinaryObject exe) {
 		this.session = session;
-		cmdline = exe.getLocation().toOSString();
-		dir = exe.getProject().getLocation().toOSString().toLowerCase();
+		cmdline = exe.getPath().toOSString();
+		dir = exe.getPath().removeLastSegments(1).toOSString();
 		debugThread = new Thread(this);
 		init(cmdline);
+		configuration = new WinDbgTargetConfiguration(this);
 	}
 
 	String getDir() {
@@ -67,7 +68,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	}
 	
 	// Native interface
-	//private long p;
+	private long p;
 	private static native void initNative();
 	static {
 		initNative();
@@ -426,7 +427,6 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createLocation(java.lang.String, java.lang.String, int)
 	 */
 	public ICDILocation createLocation(String file, String function, int line) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -618,7 +618,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 */
 	public ICDIRegisterGroup[] getRegisterGroups() throws CDIException {
 		// TODO Auto-generated method stub
-		return null;
+		return new ICDIRegisterGroup[0];
 	}
 
 	/* (non-Javadoc)

@@ -57,14 +57,14 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 		populated = true;
 	}
 
-//	private void addVariable(boolean isArg, String name, int value) {
-//		WinDbgValue valueObj = new WinDbgValue(Integer.toString(value));
-//		if (isArg) {
-//			arguments.add(new WinDbgArgument(this, name, valueObj));
-//		} else {
-//			locals.add(new WinDbgVariable(this, name, valueObj));
-//		}
-//	}
+	private void addVariable(boolean isArg, String name, int value) {
+		WinDbgValue valueObj = new WinDbgValue(Integer.toString(value));
+		if (isArg) {
+			arguments.add(new WinDbgArgument(this, name, valueObj));
+		} else {
+			locals.add(new WinDbgVariable(this, name, valueObj));
+		}
+	}
 	
 	public ICDILocation getLocation() {
 		return location;

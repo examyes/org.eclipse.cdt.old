@@ -18,6 +18,7 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.cdt.debug.core"/>
+      <import plugin="org.eclipse.cdt.core"/>
    </requires>
    <extension
          point="org.eclipse.cdt.debug.core.CDebugger">

@@ -10,12 +10,14 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core;
 
+import java.io.IOException;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
-
-import java.io.IOException;
-import java.util.*;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -81,8 +83,9 @@ public class CorePlugin extends Plugin {
 	}
 	
 	public void loadLibrary(String libname) throws IOException {
-		String pluginPath = Platform.resolve(getDescriptor().getInstallURL()).getFile();
-		System.load( pluginPath + "/lib/" + libname + ".dll");
+		Path libpath = new Path("lib/" + libname + ".dll");
+		String libfile = Platform.asLocalURL(find(libpath)).getFile();
+		System.load(libfile);
 	}
 
 }

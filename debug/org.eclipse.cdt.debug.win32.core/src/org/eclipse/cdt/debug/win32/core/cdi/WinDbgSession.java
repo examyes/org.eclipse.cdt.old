@@ -12,20 +12,19 @@ package org.eclipse.cdt.debug.win32.core.cdi;
 
 import java.io.IOException;
 
+import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.ICDISessionConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunch;
 
 public class WinDbgSession implements ICDISession {
 	
 	static {
 		try {
-			CorePlugin.getDefault().loadLibrary("dbghelp"); //$NON-NLS-1$
 			CorePlugin.getDefault().loadLibrary("win32cdi"); //$NON-NLS-1$
 		} catch (IOException e) {
 			System.out.println("Failed to load: " + e); //$NON-NLS-1$
@@ -40,7 +39,7 @@ public class WinDbgSession implements ICDISession {
 	private WinDbgBreakpointManager breakpointManager;
 	private WinDbgVariableManager variableManager;
 	
-	public WinDbgSession(ILaunchConfiguration config, IFile exe) {
+	public WinDbgSession(ILaunch config, IBinaryObject exe) {
 		eventManager = new WinDbgEventManager(this);
 		targets = new ICDITarget[1];
 		targets[0] = new WinDbgTarget(this, exe);
