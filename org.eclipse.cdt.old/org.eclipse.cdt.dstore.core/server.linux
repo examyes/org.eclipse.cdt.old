@@ -13,6 +13,7 @@ $oldClasspath = $ENV{CLASSPATH};
 
 #Needed by the Help
 $toolspath=getToolsPath();
+#the "cdt_utils" directory contains all external jars,is created with "make prod" and included in the server zip.
 $cdtutilsdir="cdt_utils";
 $tomcatpath="$plugins_dir/$cdtutilsdir";
 $lucenepath="$plugins_dir/$cdtutilsdir";
