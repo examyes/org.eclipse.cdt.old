@@ -1576,9 +1576,9 @@ public class GdbDebugSession extends DebugSession {
 		if (Gdb.traceLogger.EVT)
 			Gdb.traceLogger.evt(1, "################ GdbDebugSession.terminateDebuggee");
 
-		if (_attached) {
-			remoteDetach(_attachedProcessID, 1, null);
-		} else {
+		//if (_attached) { no need for this, Disconnect button is supported now
+		//	remoteDetach(_attachedProcessID, 1, null);
+		//} else {
 			String cmd = "kill ";
 			if (!executeGdbCommand(cmd)) {
 				if (Gdb.traceLogger.ERR)
@@ -1604,7 +1604,7 @@ public class GdbDebugSession extends DebugSession {
 					"---------------- GdbDebugSession.terminateDebuggee is recreating Managers incase of following prepareProgram (restart)");
 			createManagers();
 
-		}
+		//}
 		return true;
 	}
 
