@@ -25,15 +25,15 @@ public class ClientReceiver extends Receiver
         _canExit = true;
       }
       else
-      {   
-	  /*     
+      {        
         for (int i = 0; i < documentObject.getNestedSize(); i++)
         {
           DataElement rootOutput = documentObject.get(i);
           _dataStore.refresh(rootOutput);
         }
-	  */
 
       }
     }
+    
+    public void handleError(Exception e) {}
 }

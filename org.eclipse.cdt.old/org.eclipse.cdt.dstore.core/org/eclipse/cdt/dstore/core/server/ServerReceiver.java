@@ -41,4 +41,11 @@ public class ServerReceiver extends Receiver
         }
       }
     }
+	/**
+	 * @see Receiver#finish()
+	 */
+	public void handleError(Exception e) {
+		_connection.finished(this);
+	}
+
 }

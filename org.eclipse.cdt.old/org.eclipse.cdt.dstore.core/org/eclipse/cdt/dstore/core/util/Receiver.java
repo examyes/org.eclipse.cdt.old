@@ -62,11 +62,12 @@ public abstract class Receiver extends Thread
             handleInput();
           }
         }
-        catch (Throwable t)
+        catch (Exception e)
         {
-	    System.out.println("Receiver:run()" + t);
+	    System.out.println("Receiver:run()" + e);
 	    _canExit = true;
-	    t.printStackTrace();
+	    e.printStackTrace();
+	    handleError(e);
         }
       }
 
@@ -89,6 +90,7 @@ public abstract class Receiver extends Thread
 		   
 		    // something really bad happened
 		    _canExit = true;
+		    handleError(null);
 		}
         }        
         catch (IOException ioe)
@@ -96,11 +98,13 @@ public abstract class Receiver extends Thread
 		System.out.println("Receiver:handleInput()" + ioe);
 		ioe.printStackTrace();
 		_canExit = true;
+		handleError(ioe);
 	    }
 	catch (Exception e)
 	    {
 		System.out.println("Receiver: " + e);
 		e.printStackTrace();
+		handleError(e);
 	    }
       }
 
@@ -122,6 +126,8 @@ public abstract class Receiver extends Thread
 
   // this is implemented by extended classes
   public abstract void handleDocument(DataElement documentObject);
+  
+  public abstract void handleError(Exception e);
 }
 
 
