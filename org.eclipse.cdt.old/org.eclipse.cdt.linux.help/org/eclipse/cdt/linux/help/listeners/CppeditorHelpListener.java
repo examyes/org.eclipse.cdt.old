@@ -10,6 +10,7 @@ import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.HelpEvent;
 import com.ibm.lpex.core.LpexView;
 
+import org.eclipse.cdt.linux.help.IHelpSearchConstants;
 import org.eclipse.cdt.linux.help.HelpPlugin;
 
 import java.io.*;
@@ -58,7 +59,7 @@ public class CppeditorHelpListener implements HelpListener
 
 	if(keyword.length()!=0)
 	    {
-		_plugin.showMatches(keyword.toString());
+		_plugin.showMatches(keyword.toString(),IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS);
 	    }		
     }   
     private boolean isValidIdentifier(char c)

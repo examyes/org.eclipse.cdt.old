@@ -97,16 +97,21 @@ public class HelpPlugin extends AbstractUIPlugin
 	return image;
     }
 
-    static public ArrayList getListElements(String key)
+    static public ArrayList getListElements(String key, String optSearchType)
     {
 	if(_search == null)
 	    {		
 		_search= new HelpSearch();
 	    }
-	return _search.FindListOfMatches(key);
+	return _search.FindListOfMatches(key,optSearchType);
     }
 
-    public void showMatches(String key)
+	public void showMatches(String key)
+	{
+		showMatches(key,null);	
+	}
+
+    public void showMatches(String key, String optSearchType)
     {
 	if(_search == null)
 	    {		
@@ -123,7 +128,7 @@ public class HelpPlugin extends AbstractUIPlugin
 	
 	ResultsViewPart theView=(ResultsViewPart)persp.findView("org.eclipse.cdt.linux.help.views.ResultsViewPart");
 	
-	workerThread=new HelpSearchThread(key,theView);
+	workerThread=new HelpSearchThread(key,theView,optSearchType);
 	workerThread.start();
     }
 

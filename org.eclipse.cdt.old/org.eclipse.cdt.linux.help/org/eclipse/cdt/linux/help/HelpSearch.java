@@ -264,20 +264,7 @@ public class HelpSearch
 		return null; // no section
 	    }
 	else	    
-	    {
-		/****
-		int temp_end=begin+1;
-		for(int i=begin+1;i<end;i++)
-		    {
-			if("123456789".indexOf(name.charAt(i))!=-1)
-			    temp_end++;
-			else
-			    break;			    			
-		    }
-		if(temp_end==begin+1)
-		    return null; // no section number
-		return name.substring(begin+1,temp_end);
-		****/
+	    {		
 		return name.substring(begin+1,end);
 	    }
     }
@@ -328,7 +315,7 @@ public class HelpSearch
     // Returns:
     //   'null' is 'key' is invalid.
     //    empty ArrayList if 'key' is not found.
-    public ArrayList FindListOfMatches(String key)
+    public ArrayList FindListOfMatches(String key, String optSearchType)
     {
 	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
 
@@ -368,7 +355,8 @@ public class HelpSearch
 		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO, true);	
 	    }	
 
-	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT))
+	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
+		(optSearchType!=null && optSearchType.equals(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT)) )
 	    {
 		// HTML available only with EXACT search type
 		if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL))
@@ -393,7 +381,8 @@ public class HelpSearch
 			    }
 		    }
 	    }
-	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS))
+	else if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS) ||
+		(optSearchType!=null && optSearchType.equals(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS)) )
 	    {
 		//No HTML with SUBSTRING search type
 		if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL))
@@ -413,7 +402,7 @@ public class HelpSearch
 			    }
 		    }				
 	    }
-	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP))
+	else if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP))
 	    {
 		//No HTML with REGULAR EXPRESSION search type
 		if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL))

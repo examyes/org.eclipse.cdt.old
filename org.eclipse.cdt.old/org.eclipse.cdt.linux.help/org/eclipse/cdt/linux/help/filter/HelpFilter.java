@@ -40,7 +40,7 @@ public class HelpFilter
        null if key is null
        empty ArrayList if key not found
     */    
-    public ArrayList doSearch(String key)
+    public ArrayList doSearch(String key,String optSearchType)
     {
 	if (!checkValidKey(key))
 	    {
@@ -49,7 +49,7 @@ public class HelpFilter
 	    }
 
 	//Do the search
-   	ArrayList result = HelpPlugin.getListElements(key);
+   	ArrayList result = HelpPlugin.getListElements(key,optSearchType);
 	if (result == null)
 	    {
 		result = new ArrayList();

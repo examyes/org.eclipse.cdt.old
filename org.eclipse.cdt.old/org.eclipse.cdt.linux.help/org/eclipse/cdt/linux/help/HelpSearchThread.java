@@ -16,13 +16,15 @@ public class HelpSearchThread extends Thread
 {
     ResultsViewPart theView;
     String theKey;
+	String optSearchType;
     ArrayList result;
 
 
-    public HelpSearchThread(String key, ResultsViewPart view)
+    public HelpSearchThread(String key, ResultsViewPart view, String searchType)
     {
 	theKey=key;
 	theView=view;
+    optSearchType=searchType;
     }
 
     public void run()
@@ -38,7 +40,7 @@ public class HelpSearchThread extends Thread
 		    }
 	    }
 		
-	result = HelpPlugin.getDefault().getFilter().doSearch(theKey);
+	result = HelpPlugin.getDefault().getFilter().doSearch(theKey,optSearchType);
 
 	if (result==null)
 	    return;// no results	
