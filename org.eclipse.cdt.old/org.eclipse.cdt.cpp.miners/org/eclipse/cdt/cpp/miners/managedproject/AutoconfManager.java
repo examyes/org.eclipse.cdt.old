@@ -4,6 +4,9 @@ package com.ibm.cpp.miners.managedproject;
  */
 
 import com.ibm.dstore.core.model.*;
+import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.*;
 
 import java.io.*;
 import java.lang.Runtime;
@@ -20,6 +23,7 @@ public class AutoconfManager {
 	ProjectStructureManager structureManager;
 	ConfigureInManager configure_in_manager;
 	MakefileAmManager makefile_am_manager; 
+	static Object O = new Object();
 
 	public AutoconfManager(DataElement aProject)
 	{
@@ -44,16 +48,23 @@ public class AutoconfManager {
 				+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
 			}
 			else
-			{	// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
-				File script = new File (project.getSource(),"script.batch");
-				if(!script.exists())
-					getAutoconfScript(project);
-				configure_in_manager.manageConfigure_in();
-				makefile_am_manager.manageMakefile_am();
-				createConfigureScript(status);
+			{	
+				generateSupportFile(status);
+				getAutoconfScript(project);
+				runCommand(status, "./script.batch;./configure");
 			}
 			//check // autoloca	// autoheader // automake // autoconf // else notify the user with the missed packages
 		}
+	}
+	protected void generateSupportFile(DataElement status)
+	{
+		configure_in_manager.manageConfigure_in();
+		makefile_am_manager.manageMakefile_am();
+	}
+	protected void runSupportScript(DataElement status)
+	{
+		getAutoconfScript(project);
+		createConfigureScript(status);
 	}
 	protected String getOS()
 	{
@@ -67,58 +78,40 @@ public class AutoconfManager {
 	}
 	protected void getAutoconfScript(DataElement project)
 	{
-		Runtime rt = Runtime.getRuntime();
-		//check the project structure
-		File projectFile = project.getFileObject();
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
+		File script = new File (project.getSource(),"script.batch");
+		if(!script.exists())
 		{
-			// add configure.in template files only if not exist
-			try{
-				Process p;	
-				p = rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/script.batch "
-						+project.getSource());
-				p.waitFor();
-				//System.out.println("\n p3 exit value = "+p3.exitValue());
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
+			Runtime rt = Runtime.getRuntime();
+			//check the project structure
+			File projectFile = project.getFileObject();
+			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+			{
+				// add configure.in template files only if not exist
+				try{
+					Process p;	
+					p = rt.exec(
+						"cp workspace/com.ibm.cpp.miners/autoconf_templates/script.batch "
+							+project.getSource());
+					p.waitFor();
+					//System.out.println("\n p3 exit value = "+p3.exitValue());
+				}catch(IOException e){System.out.println(e);}
+				catch(InterruptedException e){System.out.println(e);}	
+			}
 		}	
 	}
-
-/*	private void createConfigureScript()
-	{
-		Runtime rt = Runtime.getRuntime();
-		try
-		{
-			Process pro = rt.exec("sh -c ./support.dist", null, project.getFileObject());
-			BufferedReader _stdInput = new BufferedReader(new InputStreamReader(pro.getInputStream()));
-			while (_stdInput.readLine()!=null)
-				System.out.println("\n INPUT\n"+_stdInput.readLine());
-			BufferedReader _stdError = new BufferedReader(new InputStreamReader(pro.getErrorStream()));
-			while (_stdError.readLine()!=null)
-				System.out.println("\n ERROR\n"+_stdError.readLine());
-			BufferedWriter _stdOutput = new BufferedWriter(new OutputStreamWriter(pro.getOutputStream()));
-			System.out.println("\n OUTPUT\n"+_stdOutput.toString());
-		}catch(IOException e){e.printStackTrace();}	
-	}*/
-	public void runConfigureScript(DataElement status)
-	{
-		DataStore ds = status.getDataStore();
-		String invocation = new String("./configure");
-		DataElement invocationElement = ds.createObject(null,"invocation",invocation);
-		DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(),"C_COMMAND");
-		if(cmdD!=null)
-		{
-			ArrayList args = new ArrayList();
-			args.add(invocationElement);
-			args.add(status);
-			ds.command(cmdD,args,project);
-		}	
-	} 
 	private void createConfigureScript(DataElement status)
 	{
+		runCommand(status, "./script.batch");
+	}
+	public void runConfigureScript(DataElement status)
+	{
+		runCommand(status, "./configure");
+	} 
+	
+	public void runCommand(DataElement status, String invocation)
+	{
 		DataStore ds = status.getDataStore();
-		String invocation = new String("./script.batch");
 		DataElement invocationElement = ds.createObject(null,"invocation",invocation);
 		DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(),"C_COMMAND");
 		if(cmdD!=null)
@@ -127,8 +120,9 @@ public class AutoconfManager {
 			args.add(invocationElement);
 			args.add(status);
 			ds.command(cmdD,args,project);
-		}	
+		}		
 	}
+	
 	public MakefileAmManager getMakeFileAmManager()
 	{
 		return makefile_am_manager;
