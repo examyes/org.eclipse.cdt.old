@@ -88,35 +88,6 @@ public class CppActionLoader extends GenericActionLoader
 	return _openAction;
     }
     
-       public CustomAction loadAction(String source, String name)
-    {
-	CustomAction newAction = null;
-	try
-	    {
-		Object[] args = { name};
-		Class actionClass = Class.forName(source);
-		Constructor constructor = actionClass.getConstructors()[0];
-		newAction = (CustomAction)constructor.newInstance(args);
-	    }
-	catch (ClassNotFoundException e)
-	    {
-		//System.out.println(e);
-	    }
-	catch (InstantiationException e)
-	    { 
-		//System.out.println(e);
-	    }
-	catch (IllegalAccessException e)
-	    {
-		//System.out.println(e);	
-	    }
-	catch (InvocationTargetException e)
-	    {
-		//System.out.println(e);
-	    }
-	
-        return newAction;
-    }
 
     public Class forName(String source) throws ClassNotFoundException
     {
