@@ -38,23 +38,24 @@ public class QuickConnectAction implements Runnable
     private String _host;
     private String _port;
     private String _selected;
+    private String _directory;
 
-    public QuickConnectAction(String host, String port)
+    public QuickConnectAction(String host, String port, String directory)
     {
 	_host = host;
 	_port = port;
+	_directory = directory;
 	_selected = null;
     }
 
     public void run()
     {
-	System.out.println("Quick Connect " + _host + ":" + _port);
 	HostsPlugin plugin = HostsPlugin.getInstance();
 	DataStore dataStore = plugin.getDataStore();
 
 	Connection tempConnection = new Connection("temp",
 						   _host, _port, 
-						   "root", "", false, true, dataStore.getRoot());
+						   "root", _directory, false, true, dataStore.getRoot());
 
 	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier());
 	DataStore rmtDataStore = tempConnection.getDataStore();
@@ -62,9 +63,15 @@ public class QuickConnectAction implements Runnable
 	    {
 		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", rmtDataStore.getHostRoot());
 		dialog.open();
-
-		DataElement selected = dialog.getSelected();
-		_selected = selected.getSource();
+		if (dialog.getReturnCode() == dialog.OK)
+		    {
+			DataElement selected = dialog.getSelected();
+			if (selected != null)
+			    {
+				_selected = selected.getSource();
+			    }
+			
+		    }
 		tempConnection.disconnect();
 	    }
     }

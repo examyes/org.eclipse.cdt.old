@@ -56,27 +56,29 @@ public class FileSystemMiner extends Miner
 							   getLocalizedString("model.device"),
 							   deviceList[i].getPath(),deviceList[i].getPath());
 
-		  
-		  if (dir.equals("") && (host.getNestedSize() == 0))
-		      {
-			  _dataStore.createReference(host, temp);
-		      }
 	      }	 
-
-	  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
-	  File hostFile = new File(dir2);
 	  
-	  DataElement currentDirectory = findFile(_minerData, hostFile);
-	  if (currentDirectory != null)
-	      {
-		  DataElement ref = _dataStore.createReference(host,currentDirectory);
-	      }
+	  if (dir.equals("/"))
+	  {
+	      _dataStore.createReference(host, _minerData);
+	  }
 	  else
 	      {
-		  /*
-		    status.setAttribute(DE.A_NAME, getLocalizedString("model.incomplete"));
-		    _dataStore.createObject(status, "message", "Specified host directory does not exist.  Please correct the specification and reconnect.");
-		  */
+		  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
+		  File hostFile = new File(dir2);
+		  
+		  DataElement currentDirectory = findFile(_minerData, hostFile);
+		  if (currentDirectory != null)
+		      {
+			  DataElement ref = _dataStore.createReference(host,currentDirectory);
+		      }
+		  else
+		      {
+			  /*
+			    status.setAttribute(DE.A_NAME, getLocalizedString("model.incomplete"));
+			    _dataStore.createObject(status, "message", "Specified host directory does not exist.  Please correct the specification and reconnect.");
+			  */
+		      }
 	      }
       }
 
