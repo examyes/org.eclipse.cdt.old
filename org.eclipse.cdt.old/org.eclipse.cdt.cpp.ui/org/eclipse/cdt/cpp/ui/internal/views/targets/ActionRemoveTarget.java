@@ -92,14 +92,16 @@ public void run() {
 			String key = new String("not defined");
 			
 			viewer.getSelectionFromWidget(vec);
-			Object element = ((TargetsEntry)vec.elementAt(0)).values[0] ; // The vector has only on element - 
-			//this element is a list of all the children of the element
-			if(element instanceof TargetElement)
-				key = ((TargetElement)element).getID();
+			if(!vec.isEmpty())
+			{
+				Object element = ((TargetsEntry)vec.elementAt(0)).values[0] ; // The vector has only on element - 
+				//this element is a list of all the children of the element
+				if(element instanceof TargetElement)
+					key = ((TargetElement)element).getID();
 			
-			// remove the selected target - this method calls remove descriptor as well
-			removeTarget(key,rootElement);
-			
+				// remove the selected target - this method calls remove descriptor as well
+				removeTarget(key,rootElement);
+			}
 			List list = new ArrayList();
 			list.add((RootElement)page.targetStore.projectList.elementAt(index));
 			//list.add(rootElement);
