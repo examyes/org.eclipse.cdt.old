@@ -512,11 +512,15 @@ public class PADataStoreAdaptor {
  
   int numTraceFuncs = funcRoot.getNestedSize();
   for (int i=0; i < numTraceFuncs; i++) {
+   
    DataElement funcElement = funcRoot.get(i);
-   PATraceFunction trcFunc = (PATraceFunction)_elementToTraceFuncMap.get(funcElement);
-   if (trcFunc != null) {
-    createCallMap(funcElement, trcFunc);
-   }
+   if (!funcElement.isDeleted()) {
+    
+     PATraceFunction trcFunc = (PATraceFunction)_elementToTraceFuncMap.get(funcElement);
+     if (trcFunc != null) {
+      createCallMap(funcElement, trcFunc);
+     }
+    }
   }
   
  }
