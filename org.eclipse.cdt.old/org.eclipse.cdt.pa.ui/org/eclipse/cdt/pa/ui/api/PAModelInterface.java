@@ -512,6 +512,7 @@ public class PAModelInterface implements IDomainListener
    
    // Create the trace file element
    DataElement traceFile = dataStore.createObject(traceProject, "trace file", fileElement.getName(), fileElement.getSource());
+   DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
    
    // Create a reference to the trace file from the local trace files root
    getDataStore().createReference(getLocalTraceFilesRoot(), traceFile);
@@ -519,10 +520,12 @@ public class PAModelInterface implements IDomainListener
    // Create references to the original file and project
    dataStore.createReference(traceFile, fileElement, "referenced file");
    dataStore.createReference(traceFile, _cppApi.getProjectFor(fileElement), "referenced project");
-
-   setAttribute(traceFile, "trace format", traceFormat);
+   dataStore.createReference(traceFile, traceFormatElement, "trace format");
+   
+   // setAttribute(traceFile, "trace format", traceFormat);
    
    if (dataStore != getDataStore()) {
+    dataStore.setObject(traceFormatElement);
     dataStore.setObject(traceFile);
    }
       
@@ -577,16 +580,19 @@ public class PAModelInterface implements IDomainListener
    
    // Create the trace program element
    DataElement traceProgram = dataStore.createObject(traceProject, type, progElement.getName(), progElement.getSource());
+   DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
    getDataStore().createReference(getLocalTraceFilesRoot(), traceProgram);
    
    // Create references to the original file and project
    dataStore.createReference(traceProgram, progElement, "referenced file");
    dataStore.createReference(traceProgram, _cppApi.getProjectFor(progElement), "referenced project");
-
-   setAttribute(traceProgram, "trace format", traceFormat);
+   dataStore.createReference(traceProgram, traceFormatElement, "trace format");
+   
+   // setAttribute(traceProgram, "trace format", traceFormat);
    
    if (dataStore != getDataStore()) {
-     dataStore.setObject(traceProject);
+     dataStore.setObject(traceFormatElement);
+     dataStore.setObject(traceProgram);
    }
    
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceProgram);
