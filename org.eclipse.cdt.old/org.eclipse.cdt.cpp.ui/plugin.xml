@@ -4,6 +4,7 @@
    id="org.eclipse.cdt.cpp.ui"
    name="%pluginName"
    version="1.0.0"
+   vendor-name = "International Business Machines Corp." 
    class="org.eclipse.cdt.cpp.ui.internal.CppPlugin">
 <requires>
    <import plugin="org.eclipse.ui"/>
