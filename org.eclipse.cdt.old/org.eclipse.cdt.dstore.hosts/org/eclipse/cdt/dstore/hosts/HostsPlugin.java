@@ -433,10 +433,6 @@ public class HostsPlugin extends AbstractUIPlugin
 							  "File Transfer", 
 							  "com.ibm.dstore.hosts.actions.FileTransferAction");
 
-	DataElement fileTransfer2 = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
-							   "File Transfer", 
-							   "com.ibm.dstore.hosts.actions.FileTransferAction");
-	
 	DataElement findFiles = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
 						       "Find Files", 
 						       "com.ibm.dstore.hosts.actions.FindFileAction");

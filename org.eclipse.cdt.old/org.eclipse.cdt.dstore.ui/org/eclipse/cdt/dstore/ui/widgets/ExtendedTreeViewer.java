@@ -144,9 +144,17 @@ public class ExtendedTreeViewer extends TreeViewer
     public Shell getShell()
     {
 	if (!getControl().isDisposed())
-	    return getControl().getShell();
-	else
-	    return null;
+	    {
+		try
+		    {
+			return getControl().getShell();
+		    }
+		catch (Exception e)
+		    {
+		    }
+	    }
+
+	return null;
     }
     
     public boolean listeningTo(DomainEvent ev)
