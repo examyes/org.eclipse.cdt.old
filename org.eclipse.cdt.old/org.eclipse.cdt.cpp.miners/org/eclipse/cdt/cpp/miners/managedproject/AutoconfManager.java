@@ -19,12 +19,12 @@ public class AutoconfManager {
 	String autoscan = new String ("autoscan");
 	
 	
-	
+	// will be grouped under Configure_in Manager
 	String version = new String("@VERSION@");
 	String pack = new String("@PACKAGE@");
 	String subdir = new String ("@SUBDIR@");
-	
-	
+	int[] pos = {-1,-1,-1,-1};
+	char delim = '@';
 	
 	protected void manageProject(DataElement proj)
 	{
@@ -135,7 +135,7 @@ public class AutoconfManager {
 				if(line.indexOf(pack)!=-1)
 				{
 					// replace this line with the new values
-					line = modifyLine(line);
+					line = modifyPackageLine(line);
 					//line = new String("***********************************");
 				}
 				out.write(line+"\n");
@@ -149,18 +149,67 @@ public class AutoconfManager {
 		catch(IOException e){System.out.println(e);}
 		
 	}
-	private String modifyLine(String line)
+	private String modifyPackageLine(String line)
 	{
-		String modLine= new String();
-		java.util.StringTokenizer token = new java.util.StringTokenizer(line);
-		while(token.hasMoreTokens())
+		char[] originalLine = line.toCharArray();
+		char[] modLine= new char[line.length()];
+		boolean found = true;
+		int counter = 0;
+		int loc = 0;
+		for(int i = 0; i < originalLine.length; i++)
 		{
-			String buff = new String(token.nextToken());
-			if(buff.equals(pack))
-				buff = new String(project.getName());
-			if(buff.equals(version))
-				buff = new String("0.1");
-			modLine.concat(buff);
+			if(originalLine[i] != delim)
+			{
+				modLine[counter]=originalLine[i];
+				counter++;
+			}
+			else
+			{
+				
+				pos[loc++] = i++;
+				System.out.println("\n pos = "+pos[loc-1]);
+				while(originalLine[i]!=delim)
+					i++;
+			}
+		}
+		modLine = insertPackageName(modLine,pos[0]);
+		modLine = insertVersionName(modLine,pos[1]);
+		return new String(modLine);
+	}
+	private char[] insertPackageName(char[] line, int position)
+	{
+		int k=0;
+		int counetrForModLine = 0;
+		char[] modLine = new char[256];
+		System.out.println("\n line length = "+line.length);
+		int i = 0;
+		while(line[i]!= '\0')
+		{
+			if(i == position)
+				for(int j=0; j<project.getName().toCharArray().length; j++)
+					modLine[counetrForModLine++]=project.getName().toCharArray()[j];
+			modLine[counetrForModLine++]=line[i];
+			i++;
+		}
+		int extra_chars = pos[1] - pos[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
+		pos[1] = position+project.getName().toCharArray().length+extra_chars;
+		return modLine;
+	}
+	private char[] insertVersionName(char[] line, int pos)
+	{
+		System.out.println("\n line length = "+line.length);
+		String version = new String("0.1");
+		int k=0;
+		int counetrForModLine = 0;
+		char[] modLine = new char[256];
+		int i = 0;
+		while(line[i]!= '\0')
+		{
+			if(i == pos)
+				for(int j=0; j<version.toCharArray().length; j++)
+					modLine[counetrForModLine++]=version.toCharArray()[j];
+			modLine[counetrForModLine++]=line[i];
+			i++;
 		}
 		return modLine;
 	}
