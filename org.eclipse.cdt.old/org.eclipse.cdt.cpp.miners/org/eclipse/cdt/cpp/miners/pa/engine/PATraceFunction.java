@@ -168,7 +168,7 @@ public class PATraceFunction {
   }
   
   public void setSelfMsPerCall(double selfTime) {    
-   _selfMsPerCall = selfTime * (1.0e6 / _traceFile.getTimeUnit());   
+   _selfMsPerCall = selfTime * _traceFile.getTimeUnit();   
   }
   
   public void setTotalSeconds(double totalSeconds) {
@@ -176,7 +176,7 @@ public class PATraceFunction {
   }
   
   public void setTotalMsPerCall(double totalTime) {
-   _totalMsPerCall = totalTime * (1.0e6 / _traceFile.getTimeUnit());
+   _totalMsPerCall = totalTime * _traceFile.getTimeUnit();
   }
   
   public void setTotalPercentage(double totalPercentage) {

@@ -48,12 +48,17 @@ public class GprofUtility {
    * Is this the first header line of the flat profile?
    */
   public static boolean isFlatProfileHeaderLine1(String line) {
-        
-   if (isEmptyLine(line))
+   
+   int length = line.length();
+   int index = 0;
+   while (index < length && Character.isWhitespace(line.charAt(index)))
+     index++;
+     
+   if (index >= length)
     return false;
    else
-    return (line.charAt(0) == '%' && 
-       line.substring(1).trim().startsWith("cumulative")); 
+    return (line.charAt(index) == '%' && 
+       line.substring(index+1).trim().startsWith("cumulative")); 
        
   }
 
@@ -67,14 +72,18 @@ public class GprofUtility {
   }
   
   /**
-   * Return the time unit for self/total time per call
+   * Return the time unit for self/total time per call.
+   * The default time unit is "ms".
    */
   public static double getPerCallTimeUnit(String line) {
   
    int index = line.indexOf("s/call");
    if (index > 0) {
     char ch = Character.toLowerCase(line.charAt(index-1));
-    if (ch == 't')
+    
+    if (ch == 'u')
+     return PATraceFile.TIME_UNIT_U;
+    else if (ch == 't')
      return PATraceFile.TIME_UNIT_T;
     else if (ch == 'p')
      return PATraceFile.TIME_UNIT_P;
@@ -90,7 +99,7 @@ public class GprofUtility {
    */
   public static boolean isCallGraphHeaderLine1(String line) {
 
-   return (line.startsWith("granularity") || line.startsWith("ngranularity"));
+   return (line.startsWith("granularity:") || line.startsWith("ngranularity:"));
   }
   
   /**
@@ -157,14 +166,30 @@ public class GprofUtility {
   public static boolean isCyclicFunction(String functionName) {
    return (functionName.indexOf("<cycle ") > 0);
   }
-  
+ 
   /**
-   * Remove the extra characters that are not part of a function name
+   * Remove the extra characters that are not part of a function name in
+   * the flat profile of BSD gprof output.
    */
-  public static String trimmedFunctionName(String name) {
+  public static String trimmedBsdFlatProfileFunctionName(String name) {
+   
+    if (name.charAt(0) == '.')
+      name = name.substring(1);
+     
+    if (name.charAt(name.length()-1) == ']') {
+      int bracketIndex = name.lastIndexOf('[');
+      
+      if (bracketIndex > 0)
+       name = name.substring(0, bracketIndex).trim();
+    }
+   
+    return name;
+  }
 
-   if (name.charAt(0) == '.')
-    name = name.substring(1);
+  /**
+   * Trim the function name for a call graph entry in GNU gprof output.
+   */
+  public static String trimmedGnuCallGraphFunctionName(String name) {
     
    int cycleIndex = name.indexOf("<cycle ");
    
@@ -179,6 +204,23 @@ public class GprofUtility {
     else
      return name;
    }
+   
+  }
+ 
+  /**
+   * Trim the function name for a call graph entry in BSD gprof output.
+   */
+  public static String trimmedBsdCallGraphFunctionName(String name) {
+
+   if (name.charAt(0) == '.')
+    name = name.substring(1);
+    
+   int bracketIndex = name.lastIndexOf('[');
+   
+   if (bracketIndex > 0)
+     return name.substring(0, bracketIndex).trim();
+   else
+     return name;
    
   }
   

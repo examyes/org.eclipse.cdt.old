@@ -20,12 +20,12 @@ public class GprofCallGraphEntry {
 
   private PATraceFunction _entryFunction;
   private PACallCycle _callCycle;
-  private PATraceFile _traceFile;
+  private GprofTraceFile _traceFile;
   private int _entryIndex;
   private ArrayList _callers;
   
   // Constructor
-  public GprofCallGraphEntry(PATraceFile traceFile) {
+  public GprofCallGraphEntry(GprofTraceFile traceFile) {
    _traceFile = traceFile;
    _entryFunction = null;
    _callCycle = null;
@@ -70,7 +70,12 @@ public class GprofCallGraphEntry {
    
    // Get the function name
    String lastToken = tokenizer.getLastToken();
-   String entryFunctionName = GprofUtility.trimmedFunctionName(lastToken);
+   String entryFunctionName = null;
+   
+   if (_traceFile.getGprofVariation() == GprofTraceFile.GNU_GPROF)
+     entryFunctionName = GprofUtility.trimmedGnuCallGraphFunctionName(lastToken);
+   else
+     entryFunctionName = GprofUtility.trimmedBsdCallGraphFunctionName(lastToken);
    
    // Detect whether this primary line is for a cycle or a regular function
    if (entryFunctionName.startsWith("<cycle")) {
@@ -140,7 +145,13 @@ public class GprofCallGraphEntry {
    
    // Find or create a PA trace function from the function name
    String lastToken = tokenizer.getLastToken();
-   String functionName = GprofUtility.trimmedFunctionName(lastToken);
+   String functionName = null;
+   
+   if (_traceFile.getGprofVariation() == GprofTraceFile.GNU_GPROF)
+     functionName = GprofUtility.trimmedGnuCallGraphFunctionName(lastToken);
+   else
+     functionName = GprofUtility.trimmedBsdCallGraphFunctionName(lastToken);
+     
    PATraceFunction traceFunction = _traceFile.findOrCreateTraceFunction(functionName);
    
    if (GprofUtility.isCyclicFunction(lastToken)) {

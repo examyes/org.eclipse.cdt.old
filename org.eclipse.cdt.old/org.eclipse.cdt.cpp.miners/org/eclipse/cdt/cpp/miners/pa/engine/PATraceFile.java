@@ -20,10 +20,11 @@ public abstract class PATraceFile {
   // The time unit constants.
   // Time units are used in the flat profile for the self/total 
   // time per call information.
-  // M: 1E6 	T: 1E9		P: 1E12
-  public static double 		TIME_UNIT_M = 1.0e6;
-  public static double 		TIME_UNIT_T = 1.0e9;
-  public static double 		TIME_UNIT_P = 1.0e12;
+  // M: 1.0 		U: 1.0E-3		T: 1.0E-6		P: 1.0E-9
+  public static double 		TIME_UNIT_M = 1.0;
+  public static double 		TIME_UNIT_U = 1.0e-3;
+  public static double 		TIME_UNIT_T = 1.0e-6;
+  public static double 		TIME_UNIT_P = 1.0e-9;
 
   // Trace file name
   protected String 			_traceFileName;
