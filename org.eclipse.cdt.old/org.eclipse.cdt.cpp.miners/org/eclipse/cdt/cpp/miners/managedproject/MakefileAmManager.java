@@ -598,7 +598,7 @@ public class MakefileAmManager {
 	private String initLdflagsLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_LDFLAGS"
-		String mod = line.substring(line.lastIndexOf(_LDFLAGS));
+		String mod = line.substring(line.lastIndexOf(_LDFLAGS)).trim();
 		return line = parent.getName().concat(targetSuffix).concat(mod);
 	}
 	private String updateLdflagsLine(String line, File parent)
@@ -617,7 +617,7 @@ public class MakefileAmManager {
 	private String initSourcesLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_SOURCES"
-		String mod = line.substring(line.lastIndexOf(_SOURCES));
+		String mod = line.substring(line.lastIndexOf(_SOURCES)).trim();
 		line = parent.getName().concat(targetSuffix).concat(mod);
 		// add files to the _SOURCES variable
 		for(int i = 0; i <parent.listFiles().length; i++)
@@ -640,14 +640,14 @@ public class MakefileAmManager {
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
 					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
-					line = line.concat(parent.listFiles()[i].getName()).concat(" ");
+					line = line.concat(" ").concat(parent.listFiles()[i].getName());
 			}
 		return line;
 	}
 	private String initLdaddLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_LDADD"
-		String mod = line.substring(line.lastIndexOf(_LDADD));
+		String mod = line.substring(line.lastIndexOf(_LDADD)).trim();
 		line = parent.getName().concat(targetSuffix).concat(mod);
 		// add libs to the _LDADD variable
 		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
@@ -745,7 +745,7 @@ public class MakefileAmManager {
 	private String initLaSourcesLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_SOURCES"
-		String mod = line.substring(line.lastIndexOf(_la_SOURCES));
+		String mod = line.substring(line.lastIndexOf(_la_SOURCES)).trim();
 		String lib = new String("lib");
 		line = lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
 		// add files to the _SOURCES variable
@@ -790,7 +790,7 @@ public class MakefileAmManager {
 	private String initLaldflagsLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_la_LDFLAGS"
-		String mod = line.substring(line.lastIndexOf(_la_LDFLAGS));
+		String mod = line.substring(line.lastIndexOf(_la_LDFLAGS)).trim();
 		String lib = new String("lib");
 		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
 		
@@ -798,7 +798,7 @@ public class MakefileAmManager {
 	private String initLalibaddLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_la_LDFLAGS"
-		String mod = line.substring(line.lastIndexOf(_la_LIBADD));
+		String mod = line.substring(line.lastIndexOf(_la_LIBADD)).trim();
 		String lib = new String("lib");
 		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
 	}
