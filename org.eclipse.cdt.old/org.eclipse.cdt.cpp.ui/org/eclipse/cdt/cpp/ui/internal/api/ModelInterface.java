@@ -83,7 +83,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	  if (projectMinerProject != null)
 	      {
-		  DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), 
+		  DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(),
 									   "C_OPEN", 4);
 		  if (oDescriptor != null)
 		      {
@@ -91,7 +91,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
 
 			  // open descriptor for FS object
-			  oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), 
+			  oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(),
 								       "C_OPEN", 4);
 			  // open opened project - recursive query
 			  dataStore.command(oDescriptor, projectMinerProject);
@@ -117,7 +117,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				
 				  localDataStore.createReference(localWorkspace, projectMinerProject);		
 				  projectMinerProject.setParent(rworkspace);
-				  
+				
 				  localDataStore.refresh(localWorkspace);
 			      }
 		      }
@@ -186,7 +186,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    statusValue = "done";
 			}
 		}
-	    
+	
 	    if (statusValue.equals("done") || statusValue.equals("timeout"))
 		{
 		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
@@ -350,7 +350,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				}
 			}
 		}
-	} 
+	}
     }
 
   private CppPlugin      _plugin;
@@ -531,13 +531,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	String hostName = "localhost";
 	try
 	    {
-		//hostName = InetAddress.getLocalHost().getHostName();
-                // instead get the IP address, and make this less dependent on DNS
-                hostName = InetAddress.getLocalHost().getHostAddress(); 
-            }
+          hostName = InetAddress.getLocalHost().getHostName();
+       }
 	catch (Exception e)
 	    {
-               System.out.println(e);
+          System.out.println(e);
 	    }
 
 	DataElement hostObj  = dataStore.createObject(null, "hostname", hostName);
@@ -624,7 +622,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   	
     return invoke(pathElement, invocation, showProgress);
   }
- 
+
   public DataElement invoke(DataElement pathElement, String invocation, boolean showProgress)
   {
    if (invocation != null)
@@ -682,8 +680,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    {
 					// we need to distinguish it's host from others
 					((Repository)project).setClosedElement(closedProject);
-				    } 
-			 
+				    }
+			
 
 			    }
 		    }
@@ -844,7 +842,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				      {
 					IFile file = input.getFile();
 					IProject fProject = file.getProject();					
-					if (fProject == null || 
+					if (fProject == null ||
 					    fProject == project ||
 					    fProject.getLocation() == project.getLocation())
 					    {
@@ -1125,7 +1123,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public DataElement findWorkspaceElement(DataStore dataStore)
     {
-   
+
     	if (_workspaceElement != null && _workspaceElement.getDataStore() == dataStore)
     	{
     		return _workspaceElement;
@@ -1184,7 +1182,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
     	if (projectElement == null)
     	  return null;
-    	  
+    	
 	// first search local projects
 	IProject[] projects = _workbench.getRoot().getProjects();
 	DataStore ldataStore = _plugin.getDataStore();
@@ -1321,7 +1319,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	return found;
     }
-    
+
   public DataElement findProjectElement(IProject project)
     {
 	return findProjectElement(project, "Project");
@@ -1452,14 +1450,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public synchronized void search(DataElement subject, String pattern, ArrayList types, ArrayList relations,
 				  boolean regex, boolean respectCase)
-  {      
+  {
   	  if (subject == null)
   	  {
   	  	return;
   	  }
-  	  
-      DataStore dataStore = subject.getDataStore();     
-   
+  	
+      DataStore dataStore = subject.getDataStore();
+
       DataElement searchDescriptor = null;
 
       if (regex)
@@ -1540,7 +1538,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       DataElement status = dataStore.command(searchDescriptor, args, subject, true);
       _status = status;
       monitorStatus(_status);
-      
+
       // needed because eclipse doesn't support remote files
       if (dataStore != _plugin.getDataStore())
 	  {
@@ -1748,8 +1746,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   String projectFileSource2 = theProjectFile.getSource().replace('/','\\');
   DataStore dataStore = theProjectFile.getDataStore();
 
-  
-  while (!(theProjectFile = theProjectFile.getParent()).getType().equals("Project")) 
+
+  while (!(theProjectFile = theProjectFile.getParent()).getType().equals("Project"))
       {
       }
 
@@ -1760,7 +1758,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	 {
 	     theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource2, 1);
 	 }
-     
+
      if (theParseFile == null)
 	 {
 	     DataElement dummyInput = dataStore.find(dataStore.getTempRoot(), DE.A_NAME, "Non-Parsed File", 1);
@@ -1777,11 +1775,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		     dataStore.createObject(theParseFile, "warning", projectFileSource1 + " has not been parsed.");
 		 }
 	 }
-     
-     
+
+
      return theParseFile;
  }
- 
+
  	
     public DataElement getProjectFor(DataElement resource)
     {
@@ -1792,16 +1790,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		 {
 		     DataElement parent = resource;
 		     String type = parent.getType();
-		     while (parent != null &&			   
+		     while (parent != null &&			
 			    !type.equals("Project") &&
 			    !type.equals("Closed Project"))
 			 {		
 			     if (type.equals("temp") || type.equals("Root"))
-				 { 
+				 {
 				     parent = null;
 				 }
 			     else
-				 {   
+				 {
 				     parent = parent.getParent();
 				 	if (parent != null)
 					    {
@@ -1879,7 +1877,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				}
 			}			
 		}
-		 
+		
 		// compare resources to elements in case deleted
 		if (!needsRefresh)
 		    {
@@ -1890,9 +1888,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    {
 						IResource member = members[i];
 						DataStore dataStore = parent.getDataStore();
-						DataElement match = dataStore.find(parent, 
-										       DE.A_NAME, 
-										       member.getName(), 
+						DataElement match = dataStore.find(parent,
+										       DE.A_NAME,
+										       member.getName(),
 										       1);
 						needsRefresh = ((match == null) || match.isDeleted());					
 						if (needsRefresh)
@@ -2076,7 +2074,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
  }
 
-   
+
     private void removeParseInfo(DataElement element)
     {
     	DataStore dataStore = element.getDataStore();
@@ -2115,14 +2113,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			}    	
 		}
     }
-    
 
 
 
 
 
 
-    
+
+
     private void parseFile(DataElement element)
     {
 			DataStore dataStore = element.getDataStore();
@@ -2142,7 +2140,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	if (resource != null)
 	    {
 		DataElement resourceElement = findResourceElement(resource);
-		if (resourceElement != null && 
+		if (resourceElement != null &&
 		    resourceElement.getType().equals("file"))
 		    {
 				resourceElement = resourceElement.getParent();
@@ -2162,7 +2160,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    }		
 	    }
     }
- 
+
     private void traverseDelta(IResourceDelta delta)
     {
 	int kind  = delta.getKind();
@@ -2234,7 +2232,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						 	{
 						 		DataElement element = findResourceElement((IResource)oldRes);
 						 		if (element != null)
-						 		{						 
+						 		{						
 						 			DataStore dataStore = element.getDataStore();
  						 	
 									String oldName = element.getName();
@@ -2242,7 +2240,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 									
 									String newName = newRes.getLocation().toString();
 									element.setAttribute(DE.A_NAME, newRes.getName());
-						 			element.setAttribute(DE.A_SOURCE, newName); 
+						 			element.setAttribute(DE.A_SOURCE, newName);
 						 								 													 		
 						 			dataStore.refresh(element.getParent());
 					
@@ -2256,7 +2254,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 										args.add(dummyOldName);
 										
 										DataElement renameD = dataStore.createObject(null, "dummy command", "C_RENAME");
-										dataStore.command(notifyD, args, renameD); 
+										dataStore.command(notifyD, args, renameD);
 									}
 								
 								}
@@ -2293,11 +2291,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						 		return;
 						 	}
 						 }
-				   
+				
 				}							
 			}
 		
-			    
+			
 			break;
 		    case IResourceDelta.ADDED:
 		    case IResourceDelta.REMOVED:
@@ -2369,9 +2367,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 	    case IResourceChangeEvent.POST_CHANGE:
 		{		
-		    traverseDelta(delta); 
+		    traverseDelta(delta);
 		}
-		break; 
+		break;
 	    case IResourceChangeEvent.PRE_CLOSE:
 		{
 		
@@ -2506,16 +2504,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
         DataElement parseMenuD = dataStore.createObject(fileD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
 	
-        DataElement parseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
+        DataElement parseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR,
         			"Begin Parse",
 			       "org.eclipse.cdt.cpp.ui.internal.actions.ProjectParseAction");
-				       
-				     
-	    DataElement saveParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
+				
+				
+	    DataElement saveParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR,
 	    			"Save Parse Information",
 			       "org.eclipse.cdt.cpp.ui.internal.actions.ProjectSaveParseAction");
 
-	    DataElement removeParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
+	    DataElement removeParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR,
         			"Remove Parse Information",
 			       "org.eclipse.cdt.cpp.ui.internal.actions.ProjectRemoveParseAction");
 
