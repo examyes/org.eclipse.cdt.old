@@ -1,6 +1,160 @@
-total 13800
--rw-rw-r--    1 turnham  turnham  14098394 Mar 20 11:25 cdt-eclipse-0.5.0-local.zip
--rwxrwxr-x    1 turnham  turnham         0 Mar 20 12:23 install-cdt
-drwxrwxr-x   19 turnham  turnham      4096 Mar 20 11:56 myBackup
-drwxrwxr-x   19 turnham  turnham      4096 Mar 20 12:17 temp
-drwxrwxr-x   19 turnham  turnham      4096 Mar 20 12:17 temp2
+#!/bin/sh
+
+# This script installs the CDT plugins after removing (or saving) any
+# existing CDT plugins.
+# Uncomment the next line for debugging 
+# set -x
+
+# Function that performs initial verification of script environment\usage
+# Params: $0 = Script Invocation
+#         $1 = Script Arguments
+Verify_Usage()
+{
+ # First set the PATH properly just to be safe
+ PATH=/usr/ucb:/usr/bin:/bin; export PATH
+
+ # Now check to see if any arguments were supplied and complain if so.
+ if [ $# -ne 1 ]; then
+  echo 1>&2 Usage: $0
+  echo
+  exit 127
+ fi
+
+ # This next bit figures out figures out which echo we are dealing with.
+ if [ "`echo -n`" = "-n" ]; then
+  n="";   c="\c"
+ else
+  n="-n"; c=""
+ fi
+}
+
+# Function that makes sure the user really wants to continue
+# Params: None
+Verify_Continue()
+{
+ # Show a header for the script and make sure the user wants to keep going.
+ clear 
+ echo "CDT INSTALLER"
+ echo "-------------"
+ echo "This script will install the CDT plugins for Eclipse."
+ echo
+ echo $n "Continue? (y or n) -> " $c; read ans
+ case "$ans" in  n*|N*)
+  exit 0;;
+ esac
+ echo 
+}
+
+# Function that asks for the installation directory.
+# Params: None
+Get_InstallDirectory()
+{
+ InstallDir="someimaginarydirectory"
+ while [ ! -d $InstallDir ]; do
+  echo $n "Enter Installation Directory (typically <..>/eclipse/plugins) -> " $c;
+  read InstallDir
+   (eval "ls -d $InstallDir 2>&1" > /dev/null) || 
+   (echo
+    echo "ERROR: Can't find directory \"$InstallDir\","
+    pwd="`pwd`/"
+    case "$InstallDir" in /*)
+     pwd=""
+    esac 
+    echo $n "would you like to create $pwd$InstallDir? (y or n) -> " $c;
+    read ans
+     case "$ans" in  y*|Y*)
+      mkdir -p $InstallDir;;
+     esac
+   )
+ done
+}
+
+# Function that lets the user backup any existing CDT plugins
+# Params: None
+backupCDT()
+{
+ echo "WARNING: An Existing CDT installation was found."
+ echo
+ echo $n "Would you like to backup your CDT installation? (y or n) -> " $c;
+ read ans
+ case "$ans" in  
+  n*|N*)
+   BackupOperation="rm -r"
+   BackupDir=""
+  ;;
+  y*|Y*|*) 
+   BackupOperation="mv"
+   BackupDir="someimaginarydirectory"
+   while [ ! -d $BackupDir ]; do
+    echo $n "Enter Directory for CDT Backup -> " $c;
+    read BackupDir
+    (eval "ls -d $BackupDir 2>&1" > /dev/null) || 
+    (echo
+     echo "ERROR: Can't find backup directory \"$BackupDir\","
+     pwd="`pwd`/"
+     case "$BackupDir" in /*)
+      pwd=""
+     esac 
+     echo $n "would you like to create $pwd$BackupDir? (y or n) -> " $c;
+     read ans
+     case "$ans" in  y*|Y*)
+      mkdir -p $BackupDir;;
+     esac
+    )
+    if [ "$BackupDir" = "$InstallDir" ]; then
+     echo "ERROR: Cannot Backup CDT into the target Installation Directory."
+     BackupDir="someimaginarydirectory"
+     echo
+    fi
+   done
+  ;;
+ esac
+ echo
+ echo "Cleaning $InstallDir..."
+ for plugin in $InstallDir/* 
+  do
+    case "$plugin" in
+     *com.ibm.cpp* | *com.ibm.dstore* | *com.ibm.linux.help* | *com.ibm.debug* | *com.ibm.lpex* | *org.eclipse.cdt.* )
+      echo $BackupOperation $plugin $BackupDir 
+      $BackupOperation $plugin $BackupDir
+      ;;
+    esac
+  done
+
+}
+
+
+# Function that makes sure there are no cdt plugins existing.
+# Params: None
+Verify_CleanInstallDirectory()
+{
+ ( ( eval "ls -d $InstallDir/com.ibm.cpp*         2>&1" > /dev/null ) || 
+   ( eval "ls -d $InstallDir/com.ibm.dstore*      2>&1" > /dev/null ) || 
+   ( eval "ls -d $InstallDir/com.ibm.linux.help*  2>&1" > /dev/null ) || 
+   ( eval "ls -d $InstallDir/com.ibm.debug*       2>&1" > /dev/null ) || 
+   ( eval "ls -d $InstallDir/com.ibm.lpex*        2>&1" > /dev/null ) || 
+   ( eval "ls -d $InstallDir/org.eclipse.cdt.*    2>&1" > /dev/null )
+ ) && backupCDT 
+}
+
+# Function that actually does the installation
+# Params: None
+Begin_Installation()
+{
+ echo
+ echo $n  $InstallDir "is ready for the CDT Install to begin...Proceed? (y or n) -> " $c;
+ read ans
+ case "$ans" in y*|Y*)
+  ((unzip *local.zip -d $InstallDir) && (echo "CDT Installation Successful")) || (echo "Problem unzipping local cdt zip")
+ esac
+}
+
+# Execution Starts Here
+Verify_Usage $0 $@
+Verify_Continue
+Get_InstallDirectory
+Verify_CleanInstallDirectory
+Begin_Installation
+echo
+echo
+exit 0
