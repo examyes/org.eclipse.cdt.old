@@ -385,15 +385,27 @@ public class GetGdbModuleParts
      currentModuleName = _moduleManager.getModuleName(currentModuleID);
      
      // in case there is directory info in the filename, get rid of it
-     int lastSlash = currentFileName.lastIndexOf("/");
-     if (lastSlash != -1)
-     {
-     	currentFileName = currentFileName.substring(lastSlash+1);
-     }
+	 if (currentFileName.equals(""))
+	 {
+	 	currentFileName = "file-not-found";
+	 }
+	 else
+	 {
+	     int lastSlash = currentFileName.lastIndexOf("/");
+	     if (lastSlash != -1)
+	     {
+	     	currentFileName = currentFileName.substring(lastSlash+1);
+	     }
+	 }
      
      currentPartID = _moduleManager.getPartID(currentModuleID, currentFileName);   
      
-     String lastFunctionName = _debugSession.getCurrentFunctionName();     
+     String lastFunctionName = _debugSession.getCurrentFunctionName();
+     
+     if (currentFunctionName.equals("") || currentFunctionName.equals("??"))
+     {
+     	currentFunctionName = "unknown function()";
+     }     
      
      // update debug session
      // threadManager.updateThreads() depends on some of this info   
@@ -449,7 +461,8 @@ public class GetGdbModuleParts
              {
 	             if (!lastFunctionName.equals(currentFunctionName))
 	             {
-	   				String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(currentFileName,currentLineNumber);
+//	   				String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(currentFileName,currentLineNumber);
+					String address = currentFrameAddress;
 					View tempView = ((GdbPart)part).getView(Part.VIEW_DISASSEMBLY);
 					if (tempView.isViewVerify())
 					{

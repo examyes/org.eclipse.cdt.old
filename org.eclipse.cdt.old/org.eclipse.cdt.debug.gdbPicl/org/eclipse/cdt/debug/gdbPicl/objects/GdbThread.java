@@ -153,6 +153,7 @@ public class GdbThread
       String cmd = "info stack ";
       boolean ok = _gdbDebugSession.getGdbProcess().writeLine(cmd);
       String[] lines = _gdbDebugSession.getGdbProcess().readAllLines();
+            
       if (Gdb.traceLogger.EVT)
           Gdb.traceLogger.evt(3,"GdbThread.getStackFrames respones lines.length="+lines.length );
 
@@ -194,6 +195,23 @@ public class GdbThread
               if( str.equals(FRAME_END_keyword) )
               {
 //                 String response = "_intThreadID="+_intThreadID+" frameID="+frameID+" (address="+frameAddress+" moduleID="+moduleID+")  in "+functionName+" args="+args+ "  at file "+fileName+":"+fileLine;
+        
+			  if (frameAddress.startsWith("0x0"))
+			  {
+			  	String value = frameAddress.substring(3);
+			  	frameAddress = "0x" + value;
+			  }
+			  
+			  if (fileName.equals(""))
+			  {
+			  	fileName = "file-not-found";
+			  }
+			  
+			  if (functionName.equals("") || functionName.equals("??"))
+			  {
+			  	functionName = "unknown function()";
+			  }
+
                  String response = "_intThreadID="+_intThreadID+" frameID="+frameID+" (address="+frameAddress+" moduleID="+moduleID+")  in "+functionName+" args="+args.toString()+ "  at file "+fileName+":"+fileLine;
                  _gdbDebugSession.addLineToUiMessages(response);
                  if (Gdb.traceLogger.EVT)
@@ -301,6 +319,7 @@ public class GdbThread
               }
               frameID = str.substring(0,space);
               frameAddress = str.substring(space+1);
+              
               moduleID = mm.containsAddress(frameAddress);
               if (Gdb.traceLogger.DBG)
                   Gdb.traceLogger.dbg(2,"GdbThread.getStackFrames intThreadID="+_intThreadID+" frameID="+frameID+" frameAddress="+frameAddress+" moduleID="+moduleID );

@@ -201,16 +201,13 @@ abstract class DisassemblyView extends View
 	  for (int i=0; i<locations.size(); i++)
 	  {
 	  	  Integer line = new Integer(((GdbStackFrame)locations.elementAt(i)).getLineNumber());
-	  	  String disAddress;
+	  	  String disAddress = ((GdbStackFrame)locations.elementAt(i)).getFrameAddress();
 	  	  
-	  	  if (line.intValue() > 0)
+	  	  if (disAddress == null && line.intValue() > 0)
 	  	  {
 	  	  	disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, line.toString());
 	  	  }
-	  	  else
-	  	  {
-	  	  	disAddress = ((GdbStackFrame)locations.elementAt(i)).getFrameAddress();
-	  	  }
+	  	  
 	  	
 //	  	  String disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, ((Integer)locations.elementAt(i)).toString());
 	  	  

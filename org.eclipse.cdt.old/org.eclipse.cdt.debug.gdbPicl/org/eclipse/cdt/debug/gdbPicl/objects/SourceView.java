@@ -80,7 +80,7 @@ abstract class SourceView extends View
       // put up a source not available message.  We tell the user we are
       // verified.
       _fakeNoSource = false;
-      if (sourceFileName == null || sourceFileName.length() == 0)
+      if (sourceFileName == null || sourceFileName.length() == 0 || sourceFileName.equals("file-not-found"))
       {
          _parentPart.setPartChanged(true);
          _fakeNoSource = true;
@@ -395,14 +395,15 @@ abstract class SourceView extends View
 			// if we are faking source view, then reply number of lines as 0
 			// this will ensure that the disassembly view is displayed
 			
-			if (_viewFileName.equals("dummy") || _viewFileName.equals("?FileName?"))
+/*			if (_viewFileName.equals("file-not-found") || _viewFileName.equals("?FileName?"))
 			{
 				nextPartRep.addSrcFile(viewNo, _viewRecLength, 1, _noViewLines.length, _viewFileName, _viewBaseFileName, viewAttr);
 			}
 			else
 			{
+*/			
     	        nextPartRep.addSrcFile(viewNo, _viewRecLength, 1, 0, _viewFileName, _viewBaseFileName, viewAttr);
-			}
+//			}
          }
          else
          {

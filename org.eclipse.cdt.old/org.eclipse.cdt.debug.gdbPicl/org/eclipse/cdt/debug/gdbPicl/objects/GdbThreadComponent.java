@@ -74,8 +74,6 @@ public class GdbThreadComponent extends ThreadComponent
          }
 
          EPDCThread = super.getEPDCThread();
-//         EPDCThread = new ERepGetNextThread(_debugEngine.getSession(),
-//               _partID, _state, getDbgState(), _priority, systemTID, _DU); // ThreadComponent doesnt use systemTID
 
          // NOTE: We must call setWhereStopped for each supported view
          if (isPartial() || _isZombie)
@@ -86,11 +84,12 @@ public class GdbThreadComponent extends ThreadComponent
          }
          else
          {
-            EPDCThread.setWhereStopped(Part.VIEW_SOURCE, 1, lineNumber(0));
-            if (Gdb.traceLogger.ERR) 
-                Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
+          int line = lineNumber(0);
+	       if (line == 0)	
+    	     	line = 1;    
+            EPDCThread.setWhereStopped(Part.VIEW_SOURCE, 1, line);
                 
-			int location = convertLineNum(Part.VIEW_DISASSEMBLY, lineNumber(0), _partID);
+			int location = -1;
 			if (location < 1)
 			{
 				location = convertLineNum(Part.VIEW_DISASSEMBLY, frameAddress(0), _partID);                				
@@ -98,12 +97,12 @@ public class GdbThreadComponent extends ThreadComponent
 					location = 1;	
 			}			
 			            		
-//	        EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  convertLineNum(lineNumber(0), _partID)); 
 	        EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  location); 
 
             if (Part.MIXED_VIEW_ENABLED)
             {
             	location = convertLineNum(Part.VIEW_MIXED, lineNumber(0), _partID);
+            	location = -1;
 				if (location < 1)
 				{
 					location = convertLineNum(Part.VIEW_MIXED, frameAddress(0), _partID);                				
@@ -111,7 +110,6 @@ public class GdbThreadComponent extends ThreadComponent
 						location = 1;	
 				}	
    	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, location); 
-//	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
             }
          }
       return EPDCThread;
@@ -395,6 +393,7 @@ public class GdbThreadComponent extends ThreadComponent
          _lineNumber = lineNumber(0);
          _moduleID   = moduleID(0);
          _partID     = cm.getPartID(_moduleID,fileName(0));
+         _frameAddress = frameAddress(0);
 
          String status = threadStatus();
          if (status.equals("cond. waiting"))
@@ -546,21 +545,26 @@ public class GdbThreadComponent extends ThreadComponent
          	if (partID <= 0)
 	         	partID = 1;
          }
+         
+         int line = lineNumber(i);
+         if (line == 0)
+         	line = 1;         	
 
          // NOTE: We must call setStackEntryViewInfo for each supported view
          entry.setStackEntryViewInfo((short) Part.VIEW_SOURCE,
-               (short)partID, 1, lineNumber(i));
+               (short)partID, 1, line);
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
-             
-		 int location = convertLineNum(Part.VIEW_DISASSEMBLY, lineNumber(i), partID);
+         
+         int location;    
+//		 int location = convertLineNum(Part.VIEW_DISASSEMBLY, lineNumber(i), partID);
 		 		 
-		 if (location < 1)
-		 {
+//		 if (location < 1)
+//		 {
 		 	location = convertLineNum(Part.VIEW_DISASSEMBLY, frameAddress(i), partID);
 		 	if (location < 1)
 		 		location = 1;
-		 }             
+//		 }             
 
 // 	        entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
 //             (short)partID, 1, convertLineNum(frameAddress(i), partID));
@@ -571,14 +575,14 @@ public class GdbThreadComponent extends ThreadComponent
          
          if (Part.MIXED_VIEW_ENABLED)               
          {
-         	 location = convertLineNum(Part.VIEW_MIXED, lineNumber(i), partID);
+//         	 location = convertLineNum(Part.VIEW_MIXED, lineNumber(i), partID);
 		 		 
-			 if (location < 1)
-			 {
+//			 if (location < 1)
+//			 {
 			 	location = convertLineNum(Part.VIEW_MIXED, frameAddress(i), partID);
 			 	if (location < 1)
 			 		location = 1;
-			 }       
+//			 }       
 //	         entry.setStackEntryViewInfo((short) Part.VIEW_MIXED,
 //	               (short)partID, 1, lineNumber(i));
 	         entry.setStackEntryViewInfo((short) Part.VIEW_MIXED,

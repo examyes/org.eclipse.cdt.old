@@ -652,7 +652,7 @@ public class GdbDebugSession extends DebugSession {
 				"<<<<<<<<######## GdbDebugSession.setStartProgramName DONE");
 
 		// add dummy part
-		_moduleManager.checkPart(1, "dummy");
+		_moduleManager.checkPart(1, "file-not-found");
 
 		return true;
 	}
@@ -1139,8 +1139,13 @@ public class GdbDebugSession extends DebugSession {
 
 	// ##############################################################################################
 	// ##############################################################################################
+	public int cmdStep(String threadName, boolean stepOver)
+	{
+		return cmdStep(threadName, stepOver, Part.VIEW_SOURCE);
+	}
 
-	public int cmdStep(String threadName, boolean stepOver) {
+
+	public int cmdStep(String threadName, boolean stepOver, int view) {
 		if (Gdb.traceLogger.EVT)
 			Gdb.traceLogger.evt(
 				1,
@@ -1153,6 +1158,9 @@ public class GdbDebugSession extends DebugSession {
 		String cmd = "step ";
 		if (stepOver)
 			cmd = "next ";
+			
+		if (view != Part.VIEW_SOURCE)	
+			cmd = "stepi ";
 
 		boolean ok = executeGdbCommand(cmd);
 		if (!ok)

@@ -219,13 +219,13 @@ public abstract class ThreadComponent    //HC
       whereStopped[Part.VIEW_DISASSEMBLY-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_DISASSEMBLY,
                                                       1,
-                                                      convertLineNum(Part.VIEW_DISASSEMBLY, _lineNumber, _partID));                                                     
+                                                      convertLineNum(Part.VIEW_DISASSEMBLY, _frameAddress, _partID));                                                     
 	  if (Part.MIXED_VIEW_ENABLED)                                                      
 	  {
 	      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_MIXED,
                                                       1,
-                                                      convertLineNum(Part.VIEW_MIXED, _lineNumber, _partID));
+                                                      convertLineNum(Part.VIEW_MIXED, _frameAddress, _partID));
 /*	      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_MIXED,
                                                       1,
@@ -336,14 +336,15 @@ public abstract class ThreadComponent    //HC
 
       // Organize these from most frequent to least frequent for efficiency
       if (
-          _lineNumber != _prevLineNumber ||
+          _lineNumber != _prevLineNumber ||         
           _partID     != _prevPartID     ||
           _moduleID   != _prevModuleID   ||
           _isZombie   != _prevIsZombie   ||
           _state      != _prevState      ||
           _dbgState   != _prevDbgState   ||
           _priority   != _prevPriority   ||
-          _isPartial  != _prevIsPartial
+          _isPartial  != _prevIsPartial  ||
+          !_frameAddress.equals(_prevFrameAddress)
          )
       {
          hasChanged = true;
@@ -357,6 +358,7 @@ public abstract class ThreadComponent    //HC
       _prevDbgState   = _dbgState;
       _prevPriority   = _priority;
       _prevIsPartial  = _isPartial;
+      _prevFrameAddress = _frameAddress;
 
       return hasChanged;
    }
@@ -528,6 +530,7 @@ public abstract class ThreadComponent    //HC
   
 
    protected int          _lineNumber;
+   protected String		 _frameAddress;
    protected int          _partID;
    protected int          _moduleID;
    protected int          _priority;
@@ -537,6 +540,7 @@ public abstract class ThreadComponent    //HC
    private   boolean      _isPartial;
 
    private int          _prevLineNumber;
+   private String		   _prevFrameAddress;
    private int          _prevPartID;
    private int          _prevModuleID;
    private int          _prevPriority;

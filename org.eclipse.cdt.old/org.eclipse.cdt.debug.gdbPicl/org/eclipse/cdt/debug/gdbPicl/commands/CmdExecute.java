@@ -53,6 +53,7 @@ public class CmdExecute extends Command
       EStdView view = _req.getViewInfo();
       int partID = view.getPPID();
       int lineNum = view.getLineNum();
+      int viewNo = view.getViewNo();
       int line;
 
       try
@@ -77,7 +78,7 @@ public class CmdExecute extends Command
 
             case EPDC.Exec_StepInto:
                _debugSession.setLastUserCmd(DebugSession.CmdStepInto, threadManager.getCallStackSize(DU));
-               _debugSession.cmdStep(threadManager.getThreadName(DU), false);
+               ((GdbDebugSession)_debugSession).cmdStep(threadManager.getThreadName(DU), false, viewNo);
                break;
 
             case EPDC.Exec_GoTo:
@@ -89,11 +90,23 @@ public class CmdExecute extends Command
                _debugSession.setLastUserCmd(DebugSession.CmdStepOver, threadManager.getCallStackSize(DU));               
                
 			  String filename = ((GdbDebugSession)_debugSession).getCurrentFileName();
-			  line =  Integer.parseInt(((GdbDebugSession)_debugSession).getCurrentLineNumber());
-			  line ++;
+			  
+			  try
+			  {
+				  line =  Integer.parseInt(((GdbDebugSession)_debugSession).getCurrentLineNumber());
+			  }
+			  catch (java.lang.NumberFormatException e)
+			  {
+			  	  line = 0;
+			  }
+			  
+			  if (line > 0)
+			  {
+			  	line ++;
+			  }
 			  boolean needClear = false;
 			  boolean needReset = false;
-               
+
 			  if (Gdb.supportDeferredBreakpoint && ((GdbDebugSession)_debugSession).getGdbProcess().stopOnSharedLibEvents())
 			  {
 			  	// set line breakpoint
@@ -117,7 +130,7 @@ public class CmdExecute extends Command
 			 	}
 			  }
                
-			   _debugSession.cmdStep(threadManager.getThreadName(DU), true);
+			   ((GdbDebugSession)_debugSession).cmdStep(threadManager.getThreadName(DU), true, viewNo);
 			   
 			   if (Gdb.supportDeferredBreakpoint && needClear)
 			   {
@@ -157,7 +170,15 @@ public class CmdExecute extends Command
                GdbStackFrame[] callStack = ((GdbThreadComponent)tc).getCallStack();
                
                returnFile = callStack[1].getFileName();
-               line = callStack[1].getLineNumber() + 1;
+               
+             try
+               {
+	               line = callStack[1].getLineNumber() + 1;
+               }
+             catch (java.lang.NumberFormatException e)
+               {
+               		line = 0;
+               }
                
                // set breakpint
 				gdbID = ((GdbDebugSession)_debugSession).setLineBreakpoint(returnFile, line);
