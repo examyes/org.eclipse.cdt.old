@@ -457,7 +457,7 @@ public class ManagedProjectMiner extends Miner
 					return false;
 		return true;
 	}
-	// new :to havdle delete notification
+	// new :to handle delete notification
 	private void handleNotification(DataElement cmd, DataElement subject, DataElement subjectArg, DataElement status)
 	{
  		String cmdStr = cmd.getValue();
@@ -491,7 +491,7 @@ public class ManagedProjectMiner extends Miner
  	
  		return theProject;
  	}
- 	// end new : to havdle delete notification
+ 	// end new : to handle delete notification
 }
 
 	
