@@ -829,18 +829,8 @@ public class MakefileAmManager {
 			createDotOldFileFor(Makefile_am);
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			Runtime rt = Runtime.getRuntime();
-			// add proper Makefile.am template files 
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("cp "+status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) 
-				+ "/com.ibm.cpp.miners/autoconf_templates/"+"/sub/static/Makefile.am "+parent.getAbsolutePath());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+			"/com.ibm.cpp.miners/autoconf_templates/sub/static/",parent.getAbsolutePath());
 		initializeStaticLibMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
@@ -851,18 +841,8 @@ public class MakefileAmManager {
 			createDotOldFileFor(Makefile_am);
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			Runtime rt = Runtime.getRuntime();
-			// add proper Makefile.am template files 
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("cp "+status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) 
-				+ "/com.ibm.cpp.miners/autoconf_templates/"+"sub/Makefile.am "+parent.getAbsolutePath());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+			"/com.ibm.cpp.miners/autoconf_templates/sub/",parent.getAbsolutePath());
 		initializeProgramsMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));				
 	}
@@ -877,18 +857,8 @@ public class MakefileAmManager {
 		}
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			Runtime rt = Runtime.getRuntime();
-			// add proper Makefile.am template files 
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
-				 + "/com.ibm.cpp.miners/autoconf_templates/"+MAKEFILE_AM+" "+parent.getAbsolutePath());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+			"/com.ibm.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
 		initializeTopLevelMakefileAm(parent,structureManager,true);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
@@ -899,18 +869,8 @@ public class MakefileAmManager {
 			createDotOldFileFor(Makefile_am);
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			Runtime rt = Runtime.getRuntime();
-			// add proper Makefile.am template files 
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("cp "+ status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
-				 + "/com.ibm.cpp.miners/autoconf_templates/sub/shared/Makefile.am "+parent.getAbsolutePath());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+			"/com.ibm.cpp.miners/autoconf_templates/sub/shared/",parent.getAbsolutePath());
 		initializeSharedLibMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
