@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path=""/>
+    <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+    <classpathentry kind="src" path="/org.eclipse.cdt.dstore.core"/>
+    <classpathentry kind="src" path="/org.eclipse.cdt.dstore.extra"/>
+    <classpathentry kind="var" path="JAR_HOME/org.eclipse.core.runtime_2.0.0/runtime.jar"/>
+    <classpathentry kind="output" path=""/>
+</classpath>

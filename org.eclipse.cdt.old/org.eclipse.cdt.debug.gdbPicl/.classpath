@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path=""/>
+    <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+    <classpathentry kind="var" path="JAR_HOME/com.ibm.debug.pdt/epdc.jar"/>
+    <classpathentry kind="var" path="JAR_HOME/com.ibm.debug.common/commondebug.jar"/>
+    <classpathentry kind="output" path=""/>
+</classpath>
