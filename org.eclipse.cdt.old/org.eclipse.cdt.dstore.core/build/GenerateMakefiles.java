@@ -10,13 +10,15 @@ import java.util.*;
 
 class GenerateMakefiles
 {
- private static String _pluginsDir;	// Location of the cpp plugins
- private static String _basePluginsDir; // Location of the Eclipse base plugins
+ private static String _pluginsDir;        // Location of the cpp plugins
+ private static String _basePluginsDir;    // Location of the Eclipse base plugins
  private static String _theRulesMakefile;
+ private static String _swtjar;            // Location of the swt.jar...it's a special case due to the $ws$ variable
  
  public static void main(String args[])
  {
   _pluginsDir = getPluginsDirectory();
+  _swtjar     = getSWTJar();
   if (args.length == 0)
   {
    System.out.println(_pluginsDir);
@@ -29,7 +31,25 @@ class GenerateMakefiles
   System.exit(0);
  }
  
- 
+ private static String getSWTJar()
+ {
+  String [] platforms = new String[] {"motif", "win32"};
+  for (int i=0; i<platforms.length; i++)
+  {
+   String theJarString = _pluginsDir + "/" + "org.eclipse.swt." + platforms[i] + "_2.0.0/ws/" + platforms[i] + "/swt.jar";
+   File theFile = new File(theJarString);
+   if (theFile.exists())
+    return theJarString;
+  }
+  return "";
+ }
+
+ static class SWTFilter implements FilenameFilter 
+ {
+  public boolean accept (File dir, String name)
+  {return (name.indexOf("swt") > 0);}  
+ }
+
  private static void generateBuildMakefilesFor(String thePlugin)
  {
   String envMakefile = generateEnvironmentMakefile(thePlugin);
@@ -149,7 +169,18 @@ class GenerateMakefiles
      {
       int secondQuote = nextLine.indexOf("\"", firstQuote+1);
       if (secondQuote > firstQuote)
-       theClassPaths.add(nextLine.substring(firstQuote+1, secondQuote));
+      {
+       String pluginId = nextLine.substring(firstQuote+1, secondQuote);
+       //Now look for version info, we'll just assume it's the next string:
+       firstQuote = nextLine.indexOf("\"", secondQuote+1);
+       if (firstQuote > secondQuote)
+       {
+        secondQuote = nextLine.indexOf("\"", firstQuote+1);
+        if (secondQuote > firstQuote)
+         pluginId += "_" + nextLine.substring(firstQuote+1, secondQuote);
+       }
+       theClassPaths.add(pluginId);
+      }
      }
     }
    }
@@ -184,8 +215,10 @@ class GenerateMakefiles
        String baseDir = pluginsDir + "/" + theClassPath;
        if (theJar.equals("."))
         jarNames.add(baseDir);
+       else if (baseDir.indexOf("swt") > 0)
+        jarNames.add(_swtjar);
        else
-        jarNames.add(baseDir + "/" + expandJarName(theJar,baseDir));        
+        jarNames.add(baseDir + "/" + theJar);
       }
      }      
     }
