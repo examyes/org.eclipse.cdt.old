@@ -51,7 +51,7 @@ public class CppLoadLauncher implements ILauncherDelegate {
         }
         IPath location = ((IResource)element).getLocation();
         IPath directory = location.removeLastSegments(1);
-        _directory = directory.toOSString();
+        _directory = directory.toString();
         System.out.println("CppLoadLauncher.launch() _directory = " + _directory);
 
 /*
@@ -69,9 +69,11 @@ u        PICLLoadWizard w= new PICLLoadWizard();
 */
         PICLLoadInfo loadInfo = new PICLLoadInfo();
 
-        loadInfo.setResource(element);
-        loadInfo.setLauncher(launcher);
-        String name = ((IResource)element).getName();
+        loadInfo.setResource(element); // this doesn't seem to do anything
+	loadInfo.setLauncher(launcher);
+	String name = ((IResource)element).getName();
+        //String name = ((IResource)element).getLocation().toString();
+	
         System.out.println("CppLoadLauncher.launch() program name = " + name);
         loadInfo.setProgramName(name);
         loadInfo.setProgramParms("3");
@@ -96,16 +98,17 @@ u        PICLLoadWizard w= new PICLLoadWizard();
             else if(resource instanceof IResource)
                 curProject = ((IResource)resource).getProject();
 
-	    System.out.println("project = " + curProject);
-            if (curProject != null)
-                sourceLocator.setHomeProject(curProject);
+	    if (curProject != null)
+		sourceLocator.setHomeProject(curProject);
         }
 
-        loadInfo.setWorkspaceSourceLocator(sourceLocator);
+	loadInfo.setWorkspaceSourceLocator(sourceLocator);
 
         PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
         if(daemonInfo == null)
             return;
+
+	
 
         launchEngine(daemonInfo);
     }

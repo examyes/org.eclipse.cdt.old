@@ -34,7 +34,7 @@ public class DebugMiner extends Miner
 		handleDebug(subject, 
 			    getCommandArgument(theCommand, 1), 
 			    getCommandArgument(theCommand, 2), 
-			    getCommandArgument(theCommand, 2), 
+			    getCommandArgument(theCommand, 3), 
 			    status);
 	    }
 
@@ -52,7 +52,9 @@ public class DebugMiner extends Miner
 	System.out.println("cd for  " + directory + " is " + cmdDescriptor);
 	if (cmdDescriptor != null)
 	    {
-		System.out.println("launching engine");
+		//		File dir = new File(directory.getName());
+		//	directory.setAttribute(DE.A_SOURCE, dir.getAbsolutePath());
+		System.out.println("launching engine in " + directory.getSource());
 		ArrayList args = new ArrayList(); 
 		args.add(invocation);
 		args.add(status);
