@@ -94,24 +94,27 @@ public class MakefileAmManager {
 		Object[][] projectStucture = structureManager.getProjectStructure();
 		for(int i =0; i < projectStucture.length; i++)
 		{
-			Integer level = new Integer((String)projectStucture[i][1]);
-			String absPath = new String("");
-			switch (level.intValue())
+			if(!((File)projectStucture[i][0]).getName().startsWith("."))
 			{
-				case (0):
+				Integer level = new Integer((String)projectStucture[i][1]);
+				String absPath = new String("");
+				switch (level.intValue())
+				{
+					case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
 					initializeTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					break;
-				case (1):
+					case (1):
 					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
 					initializeProgramsMakefileAm((File)projectStucture[i][0]);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					break;
-				default:
-				// initialize all other files in the subdirs
+					default:
+					// initialize all other files in the subdirs
 					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
+				}
 			}
 		}
 	}
@@ -378,7 +381,7 @@ public class MakefileAmManager {
 		{
 			File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
 			
-			if(Makefile_am.exists())
+			if(Makefile_am.exists()&&!((File)projectStucture[i][0]).getName().startsWith("."))
 			{
 				int classification = classifier.classify(Makefile_am);
 				switch (classification)
@@ -667,8 +670,7 @@ public class MakefileAmManager {
 	}
 	private String updateLdaddLine(String line, File parent)
 	{
-		// done by the dependencies function
-	/*	line = line.substring(0,line.lastIndexOf("=")+1);
+		line = line.substring(0,line.lastIndexOf("=")+1);
 		// add libs to the _LDADD variable
 		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
 		String[] subNames = dir_structure.getSubdirWorkspacePath();
@@ -684,7 +686,7 @@ public class MakefileAmManager {
 				modName = modName.concat(modTok);
 				line = line.concat(" "+modName);
 			}
-		}*/
+		}
 		return line;
 	}			
 	private String getLastToken(String aName)
@@ -909,7 +911,7 @@ public class MakefileAmManager {
 					while((line=in.readLine())!=null)
 					{
 						if(line.indexOf(_LDADD)!=-1)
-							line = updateDependenciesLine(line, Makefile_am);
+							line = updateDependenciesLine(line, Makefile_am,parent_Makefile_am);
 						out.write(line);
 						out.newLine();
 					}
@@ -924,7 +926,7 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	private String updateDependenciesLine(String line,File Makefile_am)
+	private String updateDependenciesLine(String line,File Makefile_am,File ProgramsMakefile)
 	{
 		StringBuffer modLine = new StringBuffer();
 		StringTokenizer tokenizer = new StringTokenizer(line);
@@ -950,7 +952,21 @@ public class MakefileAmManager {
 		}
 		if(!found)
 		{
-			modLine.append(" ./newValue/should/be/added.la");
+			String path = new String("");
+			String name =ProgramsMakefile.getParentFile().getName();
+			File file = Makefile_am.getParentFile();
+			while(!name.equals(file.getName()))
+			{
+				path = "/"+file.getName()+path;
+				file = file.getParentFile();
+			}
+			if(classification==STATICLIB)
+				path = "."+path+"/"+"lib"+Makefile_am.getParentFile().getName()+".a";
+			else if(classification==SHAREDLIB)
+				path = "."+path+"/"+"lib"+Makefile_am.getParentFile().getName()+".la";
+			else
+				path = "";
+			modLine.append(path+"");
 		}
 		return modLine.toString();
 	}
