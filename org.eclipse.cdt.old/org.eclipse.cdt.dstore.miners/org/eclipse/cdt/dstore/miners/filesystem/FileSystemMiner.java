@@ -410,7 +410,11 @@ public class FileSystemMiner extends Miner
      private DataElement handleCreateFile(DataElement subject, DataElement newName, DataElement status)
 	 {	
 	     StringBuffer newFileName = new StringBuffer(subject.getSource());
-	     newFileName.append("/"+newName.getName());
+	     if (newFileName.charAt(newFileName.length() - 1) != '/')
+		 {
+		     newFileName.append("/");
+		 }
+	     newFileName.append(newName.getName());
 	     
 	     File toBeCreated = new File(newFileName.toString());
 	     if (!toBeCreated.exists())
