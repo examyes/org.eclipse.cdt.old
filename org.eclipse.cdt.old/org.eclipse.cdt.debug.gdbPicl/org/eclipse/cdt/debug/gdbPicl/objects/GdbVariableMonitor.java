@@ -35,11 +35,13 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"GdbVariableMonitor.deleteMonitor _exprID="+_exprID );
 
+      /*  RW - "display" was never issued, no reason for "undisplay"  
       String ID = String.valueOf(_exprID);
       String cmd = "undisplay "+ID;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
          _debugSession.addCmdResponsesToUiMessages();
+      */  
 
       _monDeleted = true;
    }
