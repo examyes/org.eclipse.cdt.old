@@ -13,11 +13,11 @@ import java.lang.Runtime;
 import java.util.*;
 
 public class AutoconfManager {
-	String autoconf = new String("autoconf");
-	String automake = new String("automake");
-	String ACLOCAL = new String("aclocal");
-	String autoheader = new String("autoheader");
-	String autoscan = new String ("autoscan");
+	final String AUTOCONF = new String("autoconf");
+	final String AUTOMAKE = new String("automake");
+	final String ACLOCAL = new String("aclocal");
+	final String AUTOHEADER = new String("autoheader");
+	final String AUTOSCAN = new String ("autoscan");
 	ProjectStructureManager structureManager;
 	ConfigureInManager configureInManager;
 	MakefileAmManager makefileAmManager; 
