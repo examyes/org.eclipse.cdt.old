@@ -2006,7 +2006,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		if (resourceElement != null && 
 		    resourceElement.getType().equals("file"))
 		    {
-			resourceElement = resourceElement.getParent();
+				resourceElement = resourceElement.getParent();
+				resourceElement.doCommandOn("C_DATE", false);
 		    }
 		if (resourceElement != null)
 		    {
