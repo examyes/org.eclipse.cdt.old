@@ -136,7 +136,11 @@ public class RemoteProjectNavigator extends TreeViewer  implements ISelected, ID
 			Tree tree = getTree();
 			tree.setRedraw(false);
 			internalRefresh(_currentInput);
-			expandToLevel(_currentInput, 1);
+			//internalRefresh(repository);
+
+			reveal(repository);
+			expandToLevel(repository, 2);
+
 			tree.setRedraw(true);				
 			return;
 		    }
@@ -148,6 +152,7 @@ public class RemoteProjectNavigator extends TreeViewer  implements ISelected, ID
 				Tree tree = getTree();
 				tree.setRedraw(false);
 				internalRefresh(resource);
+				reveal(resource);
 				tree.setRedraw(true);	
 				return;
 			    }

@@ -48,13 +48,12 @@ public class FolderResourceElement extends ResourceElement implements IFolder
   {
   }
   
-  public void delete(boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
-  {
-  }
+    /*
   
   public void move(IPath destination, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {  
   }
+    */
 
   public IResource findMember(IPath path)
   {

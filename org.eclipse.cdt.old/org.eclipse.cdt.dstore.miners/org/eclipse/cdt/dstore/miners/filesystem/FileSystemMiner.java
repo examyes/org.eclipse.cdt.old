@@ -213,8 +213,10 @@ public class FileSystemMiner extends Miner
      else if (name.equals("C_REFRESH"))
      {
 	 _dataStore.deleteObjects(subject);
-	 status = handleQuery(subject, status);      
 	 _dataStore.refresh(subject, true);
+	 DataElement subStatus = _dataStore.createObject(status, "status", "start");
+	 handleQuery(subject, subStatus, true);
+	 status.setAttribute(DE.A_NAME, "done");
      }
      else if (name.equals("C_FIND_FILE"))
        {
@@ -538,10 +540,15 @@ public class FileSystemMiner extends Miner
       }
 
 
-  private synchronized DataElement handleQuery (DataElement theElement, DataElement status)
+  private DataElement handleQuery (DataElement theElement, DataElement status)
+    {
+	return handleQuery(theElement, status, false);
+    }
+
+  private DataElement handleQuery (DataElement theElement, DataElement status, boolean force)
       {
 	  theElement = theElement.dereference();
-	  if (!theElement.isExpanded() || (theElement.getNestedSize() == 0))
+	  if (force || (!theElement.isExpanded() || (theElement.getNestedSize() == 0)))
 	      {
 		  try
 		      {

@@ -77,6 +77,41 @@ public class Repository extends Project
     }    
   }
 
+    private class RefreshResourcesAction implements Runnable
+    {
+	private Repository _repository;
+
+	public RefreshResourcesAction()
+	{
+	}
+
+	public void run()
+	{
+	    DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_remoteRoot.getDescriptor(), "C_REFRESH");
+	    if (refreshDescriptor != null)
+		{	
+		    _dataStore.synchronizedCommand(refreshDescriptor, _remoteRoot);	   
+		    Object[] children = internalGetChildren(_remoteRoot, true);
+		    System.out.println("refreshing...");
+		    /*
+		    for (int i = 0; i < children.length; i++)
+			{
+			    ResourceElement child = (ResourceElement)children[i];
+			    System.out.println("    " + child.getName());
+			    //			    child.refreshLocal(1, null);
+			}
+		    */
+		    for (int i = 0; i < _remoteRoot.getNestedSize(); i++)
+			{
+			    DataElement child = _remoteRoot.get(i);
+			    System.out.println("   " + child.getName());
+			}
+
+		    _dataStore.refresh(_remoteRoot);
+		} 
+	}
+    }
+
     private class OpenConnectionAction implements Runnable
     {
 	private Repository _repository;
@@ -158,7 +193,10 @@ public class Repository extends Project
 
     private Connection _connection;
     protected Vector  _children;
+
     private RefreshNavigatorAction _refreshAction;
+    private RefreshResourcesAction _refreshResourcesAction;
+
     private ArrayList _persistentProperties;
     private CppPlugin _plugin;
  
@@ -170,9 +208,9 @@ public class Repository extends Project
 	    (Workspace)ResourcesPlugin.getWorkspace()); 
 
       _workspace = (Workspace)ResourcesPlugin.getWorkspace();
-    _dataStore = CppPlugin.getDefault().getCurrentDataStore();
-    DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
-    _root = fsMinerData.get(0);  
+      _dataStore = CppPlugin.getDefault().getCurrentDataStore();
+      DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
+      _root = fsMinerData.get(0);  
     _path = new Path(_root.getAttribute(DE.A_SOURCE));
     _connection = connection;
     initialize();
@@ -198,6 +236,8 @@ public class Repository extends Project
   {
     _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1); 
     _refreshAction = new RefreshNavigatorAction("refresh");
+    _refreshResourcesAction = new RefreshResourcesAction();
+
     _persistentProperties = new ArrayList();
     _plugin = CppPlugin.getDefault();
 
@@ -297,10 +337,6 @@ public class Repository extends Project
 		    {
 			resources[i] = (IResource)child;
 		    }
-		else
-		    {
-			//_children.remove(child);
-		    }
 	    }
 
 	return resources;
@@ -309,23 +345,28 @@ public class Repository extends Project
   public Object[] getChildren(Object o) 
   {
     if (isOpen())
-    {
-      return internalGetChildren(o);
-    }
+	{
+	    return internalGetChildren(o);
+	}
     else
-    {
-      return new Vector(0).toArray(); 
-    }
+	{
+	    return new Vector(0).toArray(); 
+	}
   }
 
   public Object[] internalGetChildren(Object o)
+    {
+	return internalGetChildren(o, false);
+    }
+
+  public Object[] internalGetChildren(Object o, boolean force)
       {
         if (_children == null)
 	    {
 		_children = new Vector();
 	    }
 
-	if (_children.size() == 0)
+	if ((_children.size() == 0) || force)
         {	
           DataElement element = null;
 
@@ -335,7 +376,7 @@ public class Repository extends Project
           }
           else 
           {
-            element = _root;
+            element = _remoteRoot;
           }
 
 	  if (!element.getAttribute(DE.A_TYPE).equals("file"))
@@ -347,20 +388,45 @@ public class Repository extends Project
 		{
 		  DataElement obj = ((DataElement)objs.get(i)).dereference();
 		  
-		  if (!obj.isDeleted() && obj.getDataStore().filter(_resourceDescriptor, obj))
+		  if (obj.getDataStore().filter(_resourceDescriptor, obj))
 		      {	    
 			  String type = obj.getType();
-			  ResourceElement child = null;
-			  if (type.equals("directory"))
+			  String name = obj.getName();
+
+			  ResourceElement child = findResource(name);
+			  if (child != null)
 			      {
-				  child = new FolderResourceElement(obj, this, this);		
+				  DataElement childElement = child.getElement();
+				  if (childElement.isDeleted())
+				      {
+					  _children.remove(child);
+					  if (!obj.isDeleted())
+					      {
+						  if (type.equals("directory"))
+						      {
+							  child = new FolderResourceElement(obj, this, this);		
+						      }
+						  else 
+						      {
+							  child = new FileResourceElement(obj, this, this);		
+						      }
+						  _children.add(child);		      
+					      }
+				      }
 			      }
-			  else 
-			      {
-				  child = new FileResourceElement(obj, this, this);		
+			  else
+			  {
+				  if (type.equals("directory"))
+				      {
+					  child = new FolderResourceElement(obj, this, this);		
+				      }
+				  else 
+				      {
+					  child = new FileResourceElement(obj, this, this);		
+				      }
+				  _children.add(child);		      
+
 			      }
-			  
-			  _children.add(child);		      
 		      }	
 		}
 	    }	  
@@ -465,25 +531,16 @@ public class Repository extends Project
 
     public void refresh()
     {
-	_refreshAction.run();
+	if (_refreshAction != null)
+	    {
+		_refreshAction.run();
+	    }
     }
 
     public void refreshLocal(int depth, IProgressMonitor monitor)
     {
-	removeChildren();
-
-	DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_remoteRoot.getDescriptor(), "C_REFRESH");
-        if (refreshDescriptor != null)
-        {	
-	    _dataStore.synchronizedCommand(refreshDescriptor, _remoteRoot);	   
-	    
-	    Object[] children = getChildren(null);
-	    for (int i = 0; i < children.length; i++)
-		{
-		    ResourceElement child = (ResourceElement)children[i];
-		    child.refreshLocal(depth - 1, monitor);
-		} 
-        }
+	Display d= ModelInterface.getInstance().getDummyShell().getDisplay();
+	d.asyncExec(_refreshResourcesAction);
     }  
 
   public String getPropertyPath()
