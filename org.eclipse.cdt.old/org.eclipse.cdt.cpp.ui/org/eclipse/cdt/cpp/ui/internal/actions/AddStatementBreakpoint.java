@@ -61,7 +61,7 @@ public class AddStatementBreakpoint extends CustomAction
 		try
 		    {
 			PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
-			IMarker breakpointMarker = file.createMarker("com.ibm.debug.internal.picl.PICLLineBreakpoint");
+			IMarker breakpointMarker = file.createMarker("com.ibm.debug.PICLLineBreakpoint");
 			
 			IBreakpointManager breakpointManager= DebugPlugin.getDefault().getBreakpointManager();
 			
