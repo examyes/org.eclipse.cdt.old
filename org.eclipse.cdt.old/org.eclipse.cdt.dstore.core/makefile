@@ -46,7 +46,7 @@ allPlugins += com.ibm.debug.doc.user
 # plugin, we accomplish this by appending some text like "_buildPlugin" to every plugin name, 
 # and then provide the actual rules for these pseudo-prerequisites below.
 all:
-	@cd com 2>/dev/null && (${MAKE} ${MAKEFLAGS} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
+	@cd com 2>/dev/null && (${MAKE} -${MAKEFLAGS} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars source-zips createZip
@@ -68,20 +68,20 @@ prod            : production
 # Don't try to use these targets...They are helpers.
 %_buildPlugin: 
 	@echo Building $(patsubst %_buildPlugin,%,$@)
-	@-cd $(pluginsDirectory)/$(patsubst %_buildPlugin,%,$@) && $(MAKE) $(MAKEFLAGS)
+	@-cd $(pluginsDirectory)/$(patsubst %_buildPlugin,%,$@) && $(MAKE) -$(MAKEFLAGS)
 	@echo Finished $(patsubst %_buildPlugin,%,$@)
 
 %_createJars:
-	@-cd $(pluginsDirectory)/$(patsubst %_createJars,%,$@) && $(MAKE) $(MAKEFLAGS) jar   
+	@-cd $(pluginsDirectory)/$(patsubst %_createJars,%,$@) && $(MAKE) -$(MAKEFLAGS) jar   
 
 %_createSrcZips:
-	@-cd $(pluginsDirectory)/$(patsubst %_createSrcZips,%,$@) && $(MAKE) $(MAKEFLAGS) source-zip   
+	@-cd $(pluginsDirectory)/$(patsubst %_createSrcZips,%,$@) && $(MAKE) -$(MAKEFLAGS) source-zip   
 
 %_cleanPlugin:
-	@-cd $(pluginsDirectory)/$(patsubst %_cleanPlugin,%,$@) && $(MAKE) $(MAKEFLAGS) clean
+	@-cd $(pluginsDirectory)/$(patsubst %_cleanPlugin,%,$@) && $(MAKE) -$(MAKEFLAGS) clean
 
 %_cleanMakefiles:
-	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) $(MAKEFLAGS) clean-makefiles 
+	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) -$(MAKEFLAGS) clean-makefiles 
 
 generateBuildEnvironment: unzipBuildPlugins setUpSpecialPlugins
 	@cd build && java -cp . GenerateMakefiles $(buildPlugins)
