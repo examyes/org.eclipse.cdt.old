@@ -143,6 +143,11 @@ public class GenericViewPart extends ViewPart
 	    _viewer.dispose();
         super.dispose();
     }
+
+    public void setViewDescription(String description)
+    {
+	setTitle(description);
+    }
     
     public void setInput(DataElement element)
     {    
