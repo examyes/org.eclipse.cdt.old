@@ -42,7 +42,10 @@ public class ProcessMonitor extends Handler
 		_writer.write('\n');
 		_writer.flush();
 		
-		_outputHandler.handle();
+		if (_outputHandler != null)
+		    {
+			_outputHandler.handle();
+		    }
 	    }
 	catch (IOException e)
 	    {
