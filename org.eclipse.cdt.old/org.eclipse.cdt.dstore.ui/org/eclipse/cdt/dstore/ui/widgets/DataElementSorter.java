@@ -122,7 +122,7 @@ public class DataElementSorter extends ViewerSorter
 		  }
 	      else if (hasFormat(descriptor, "Date"))
 		  {		 
-		      return compareFloats(n1, n2);
+		      return compareDates(n1, n2);
 		  }
 	      else if (hasFormat(descriptor, "String"))
 		  {
@@ -130,7 +130,14 @@ public class DataElementSorter extends ViewerSorter
 		  }
 	      else
 		  {
-		      return compareStrings(n1, n2);
+		      if (isInteger(n1) && isInteger(n2))
+			  {
+			      return compareIntegers(n1, n2);
+			  }
+		      else
+			  {
+			      return compareStrings(n1, n2);
+			  }
 		  }
 	  }
       catch (Exception e)

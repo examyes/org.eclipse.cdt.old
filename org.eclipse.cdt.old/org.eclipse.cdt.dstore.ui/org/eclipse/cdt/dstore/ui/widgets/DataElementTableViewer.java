@@ -832,7 +832,20 @@ public class DataElementTableViewer extends TableViewer
 			else
 			    {
 				_layout.addColumnData(new ColumnWeightData(200));
-				tc = new TableColumn(table, SWT.NONE, 0);				
+
+				int ralignment = SWT.LEFT;
+				ArrayList rattributeFormats = col1Type.getAssociated("attributes");
+				if (rattributeFormats.size() > 0)
+				    {
+					DataElement rattributeFormat = (DataElement)rattributeFormats.get(0);
+					if (rattributeFormat.getName().equals("Integer") ||
+					    rattributeFormat.getName().equals("Float"))
+					    {
+						ralignment = SWT.RIGHT;
+					    }
+				    }
+
+				tc = new TableColumn(table, ralignment, 0);				
 				tc.addSelectionListener(this);
 			    }
 
