@@ -65,17 +65,7 @@ public class CppCommandViewer extends CommandViewer
 
 			_resourceInput = (IResource)input;
 			ModelInterface api = _plugin.getModelInterface();
-
-			if (_resourceInput instanceof IProject)
-			    {
-				element = api.findProjectElement((IProject)_resourceInput);
-			    }
-			else
-			    {
-				IProject project = _resourceInput.getProject();
-				DataElement prjElement = api.findProjectElement(project);
-				element = prjElement.getDataStore().find(prjElement, DE.A_NAME, _resourceInput.getName());
-			    }			
+			element = api.findResourceElement(_resourceInput);
 			super.setInput(element);
 		    }
 		else
