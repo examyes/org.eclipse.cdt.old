@@ -3,7 +3,7 @@ package com.ibm.dstore.core.model;
 /*
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
  */
-
+ 
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.dstore.core.util.*;
@@ -29,7 +29,6 @@ public final class DataElement implements Serializable, IDataElement
     private ArrayList           _nestedData = null;
     private DataElement         _referencedObject = null;
     
-    private DesktopElement      _desktopElement = null;
     private PropertySource      _propertySource = null;
   
   /////////////////////////////////////////
@@ -1090,7 +1089,7 @@ public final class DataElement implements Serializable, IDataElement
         }
         
         return null;
-      }
+      } 
     
 	
   public void fireDomainChanged()
@@ -1107,16 +1106,6 @@ public final class DataElement implements Serializable, IDataElement
 	      {
 		  return adapter;
 	      }
-	  
-	  if (DesktopElement.matches(key))
-	      {
-		  if (_desktopElement == null)
-		      {
-			  _desktopElement = new DesktopElement((IDataElement)this);
-		      }
-
-		  return _desktopElement;
-	      }	  
 	  else if (PropertySource.matches(key))
 	      {
 		  if (_propertySource == null)
