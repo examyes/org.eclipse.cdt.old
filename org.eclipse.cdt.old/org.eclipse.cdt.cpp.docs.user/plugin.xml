@@ -19,6 +19,7 @@
   <topics name="topics_Tutorial.xml" />
   <topics name="topics_Troubleshooting.xml" />
   <topics name="topics_Extensibility.xml" />
+  <topics name="topics_Disclaimer.xml" />
   <actions name="actions_All.xml" />
  </extension> 
  

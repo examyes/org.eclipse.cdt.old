@@ -23,5 +23,9 @@
      from="com.ibm.cpp.docs.user.topics_Extensibility" 
      to="com.ibm.cpp.docs.user.Extensibility" 
      as="child"/>
+<insert 
+     from="com.ibm.cpp.docs.user.topics_Disclaimer" 
+     to="com.ibm.cpp.docs.user.Disclaimer" 
+     as="child"/>
 </actions> 
  
