@@ -25,12 +25,12 @@ public abstract class MinerThread extends Thread
     
   while (minerThread == thisThread) 
   {
-   //try 
-   //{ 
-    //thisThread.sleep(0);
-    yield();
-   //}
-   //catch (InterruptedException e) {}
+   try 
+   { 
+    thisThread.sleep(1);
+    // yield();
+   }
+   catch (InterruptedException e) {}
    //This function is where the Threads do real work, and return false when finished
    if ( !doThreadedWork() )
     minerThread = null;
