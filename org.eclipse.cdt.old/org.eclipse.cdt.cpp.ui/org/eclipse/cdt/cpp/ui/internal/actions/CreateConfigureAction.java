@@ -14,6 +14,8 @@ import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.DomainEvent;
+import org.eclipse.cdt.dstore.extra.internal.extra.IDomainListener;
 
 import java.io.*; 
 import java.util.*;
@@ -42,7 +44,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.dialogs.*;
 
 
-public class CreateConfigureAction extends CustomAction implements SelectionListener
+public class CreateConfigureAction extends CustomAction implements SelectionListener, IDomainListener
 { 
 	CustomMessageDialog box;
 	String[] extraLabels;
@@ -54,6 +56,10 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 	CppPlugin _plugin = CppPlugin.getDefault();
 	IProject project;
 	String projectStatusKey = "Imported_Vs_CreatedFromScratch";
+	
+	private DataElement _cmdStatus;
+	private boolean configureFlag = true;
+	
 	
 	
 	public class RunThread extends Handler
@@ -87,10 +93,10 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				
 		//enable disable based on object files
 			
-		if(_command.getValue().equals("CREATE_CONFIGURE")&& doesFileExist("configure")&& configureIsUptodate(_subject))
-				setEnabled(false);
-						
+		if(_command.getValue().equals("CREATE_CONFIGURE")&& doesFileExist("configure"))
+			setEnabled(!configureIsUptodate(_subject));		
 	}
+	
     public void run()
 	{
 		boolean execute = true;
@@ -310,16 +316,20 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 	
 		if (cmdD != null)
 		{
+			/*
 			DataElement status = _dataStore.synchronizedCommand(cmdD, root);		
 			DataElement updateState = (DataElement)status.get(0);
 		    String state = updateState.getName();
 		    if(state.equals("uptodate"))
 		    	return true;
+		    	*/
+		    _cmdStatus = _dataStore.command(cmdD, _subject);
+			_dataStore.getDomainNotifier().addDomainListener(this);
+
 		}
-		return false;
+		return configureFlag;
 	}
-	
-	
+
 	public void widgetDefaultSelected(SelectionEvent e)
     {
 		widgetSelected(e);
@@ -345,6 +355,45 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			}
 			CppPlugin.writeProperty(project,dialogPrefernceKey,list);
 		}
+    }
+        public Shell getShell()
+    {
+		ModelInterface api = ModelInterface.getInstance();
+		return api.getDummyShell();
+    }
+    
+
+    public boolean listeningTo(DomainEvent e)
+    {
+		DataElement parent = (DataElement)e.getParent();
+		if (parent == _cmdStatus)
+	    {
+			if (parent.getName().equals("done"))
+			{
+				return true;
+			}
+		}
+
+		return false;
+    }
+    public void domainChanged(DomainEvent e)
+    {
+		DataElement updateState = (DataElement)_cmdStatus.get(0);
+		String state = updateState.getName();
+		    
+	    if(state.equals("uptodate"))
+	    {
+	    	setEnabled(false);
+	    	configureFlag = false;
+	    }
+	    else 
+	    {
+	    	configureFlag = true;
+	    	setEnabled(true);
+	    }
+		
+		_cmdStatus = null;
+		_dataStore.getDomainNotifier().removeDomainListener(this);
     }
 }
 
