@@ -43,6 +43,7 @@ public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements 
 
     // NL enablement
     private String Wizard_TITLE = "TargetsViewer.Wizard.Title";
+    private String Title = "TargetsViewer.Wizard.Description";
     
     /**
      *	Answer self's Wizard, optionally utilizing the passed workbench
@@ -90,6 +91,7 @@ public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements 
     public void addPages() 
     {
 	super.addPages();
+	super.setWindowTitle(_pluginInstance.getLocalizedString(Title));
 	mainPage = new NewWizardTargetMainPage(_pluginInstance.getLocalizedString(Wizard_TITLE),selection);
 	addPage(mainPage);
     }
