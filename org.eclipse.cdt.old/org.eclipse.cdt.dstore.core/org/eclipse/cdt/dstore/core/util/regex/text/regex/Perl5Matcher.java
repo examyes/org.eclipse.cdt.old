@@ -66,7 +66,7 @@ import java.util.*;
  * Perl5Compiler.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Perl5Matcher.java,v 1.6 2001/12/07 23:52:52 enriquev Exp $
+ @version $Id: Perl5Matcher.java,v 1.7 2002/01/20 22:37:38 turnham Exp $
 
  * @see PatternMatcher
  * @see Perl5Compiler
@@ -839,12 +839,9 @@ public final class Perl5Matcher implements PatternMatcher {
 	}
     catch (Exception e)
 	{
-	    System.out.println(e);
-	    System.out.println("scan = " + scan);
-	    System.out.println("in = " + __inputOffset);
-	    System.out.println("eol = " + eol);
-	    System.out.println("op = " + op);
-	    System.out.println("input.len = " + __input.length);
+	    // this can cause big problems!
+	    e.printStackTrace();
+	    return ret;
 	}
 
 
