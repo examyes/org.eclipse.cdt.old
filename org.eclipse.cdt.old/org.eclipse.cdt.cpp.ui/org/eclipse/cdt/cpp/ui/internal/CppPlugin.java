@@ -198,7 +198,15 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_interface.getDummyShell();
        	_interface.loadSchema();
 
-	dataStore.getDomainNotifier().addDomainListener(this);
+	DataElement workspace = _interface.findWorkspaceElement(dataStore);
+	if (workspace == null)
+	    {
+		dataStore.getDomainNotifier().addDomainListener(this);
+	    }
+	else
+	    {
+		initializeProjects();
+	    }
     }
 
     public Shell getShell()
