@@ -67,6 +67,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	IProject project;
 	
 	String globalSettingKey = "Is_Global_Setting_Enabled";
+	String projectStatusKey = "Imported_Vs_CreatedFromScratch";
 	
 	public class RunThread extends Handler
 	{
@@ -138,7 +139,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		
 		else if(_command.getValue().equals("CONFIGURE"))
 		{
-			String str1;
+			String str1 = new String();
 			String message;
 			String[] extraLabel = new String[]{"Do not show this dialog again"};
 			String title = "Generating and running configure script";
@@ -160,16 +161,25 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			{
 				configFilesExist = true;
 				String[] buttonTitles = new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL};
+				dialogHas2Buttons = false;
 				if(enableConfigureUpdate)
 				{
-					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
+					
+					if(isProjectImported(project,projectStatusKey))
+					{
+						str1 = new String("\nWould you like the system to update and generate missing configuration files?");
+					}
+					else
+					{
+						dialogHas2Buttons = true;
+						buttonTitles = new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL};
+					}
 					
 					if(doesFileExist("configure"))
 					{
 						if(!configureIsUptodate(_subject))
 						{
 							message = new String("\nRegenerating and running configure script - configure is not up to date "+str1);
-							dialogHas2Buttons = false;
 						}
 						else
 						{
@@ -344,9 +354,20 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		return false;
 	}
 
+	private boolean isProjectImported(IProject project,String key)
+	{
+		ArrayList list = CppPlugin.readProperty(project,key);
+		if(!list.isEmpty())
+		{
+			if(list.get(0).equals("Imported"))
+				return true;
+		}
+		
+		return false;
+	}
     private boolean doesAutoconfSupportExist()
     {
-	return doesAutoconfSupportExistHelper(_subject);
+		return doesAutoconfSupportExistHelper(_subject);
     }
     private boolean doesAutoconfSupportExistHelper(DataElement root)
 	{
@@ -362,6 +383,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					if (name.equals("Makefile")||name.equals("Makefile.am")
 						||name.equals("Makefile.in")||name.equals("configure.in"))
 					{
+						setProjectStatusKey(project,projectStatusKey,"Imported");
 						return true;
 					}
 				}
@@ -371,8 +393,22 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				return doesAutoconfSupportExistHelper(child);
 			}
 		}
+		setProjectStatusKey(project,projectStatusKey,"CreatedFromScratch");
 		return false;
 	}
+	
+	private void setProjectStatusKey(IProject project, String key, String val)
+	{
+		ArrayList projectstatus = CppPlugin.readProperty(project,key);
+		if(projectstatus.isEmpty())
+		{
+			ArrayList list = new ArrayList();
+			list.add(val);
+			CppPlugin.writeProperty(project, key,list);
+		}
+	}
+	
+	
 	
 	private boolean sourceFilesExist()
     {

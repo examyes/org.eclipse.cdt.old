@@ -53,6 +53,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 
 	CppPlugin _plugin = CppPlugin.getDefault();
 	IProject project;
+	String projectStatusKey = "Imported_Vs_CreatedFromScratch";
+	
 	
 	public class RunThread extends Handler
 	{
@@ -102,10 +104,11 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				
 		if(_command.getValue().equals("CREATE_CONFIGURE"))
 		{
-			String str1;
+			String str1 = new String();
 			String message;
 			String[] extraLabel = new String[]{"Do not show this dialog again"};
 			String title = "Creating configure script";
+			String[] buttonTitles = new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL};
 
 			// checking if automatic updating is enabled from the autoconf preferences page
 			ArrayList autoUpdateCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(updatePreferenceKey);
@@ -123,7 +126,15 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				configfilesExist = true;
 				if(enableCreateUpdate)
 				{
-					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
+					
+					if(isProjectImported(project,projectStatusKey))
+					{
+						str1 = new String("\nWould you like the system to update and generate missing configuration files?");
+					}
+					else
+					{
+						buttonTitles = new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL};
+					}
 					if(doesFileExist("configure"))
 						message = new String("\nRegenerating project configuration script - configure is not up to date "+str1);
 					else
@@ -134,7 +145,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								null,
 								message,
 								3,
-								new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL},
+								buttonTitles,
 								0,
 								extraLabel,
 								this,
@@ -142,7 +153,10 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								project);
 					int result = box.open();
 					if(result!= -1)
-						createUpdate= result;
+						if(buttonTitles.length==2 && result==1)// has 2 buttons and cancel pressed
+							createUpdate= result+1;
+						else
+							createUpdate = result;
 					else
 						createUpdate = 0;
 					
@@ -150,13 +164,14 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				else
 				{
 					message = new String("\nUsing existing configuration files to create the configure script");
+					buttonTitles = new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL};
 					box = new CustomMessageDialog(
 									shell,
 									title,
 									null,
 									message,
 									2,
-									new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+									buttonTitles,
 									0,
 									extraLabel,
 									this,
@@ -222,6 +237,17 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			}	
 		}
 	}
+	private boolean isProjectImported(IProject project,String key)
+	{
+		ArrayList list = CppPlugin.readProperty(project,key);
+		if(!list.isEmpty())
+		{
+			if(list.get(0).equals("Imported"))
+				return true;
+		}
+		
+		return false;
+	}
 	private boolean doesFileExist(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
@@ -253,6 +279,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 					if (name.equals("Makefile")||name.equals("Makefile.am")
 						||name.equals("Makefile.in")||name.equals("configure.in"))
 					{
+						setProjectStatusKey(project,projectStatusKey,"Imported");
 						return true;
 					}
 				}
@@ -262,7 +289,19 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				return doesAutoconfSupportExistHelper(child);
 			}
 		}
+		setProjectStatusKey(project,projectStatusKey,"CreatedFromScratch");
 		return false;
+	}
+		
+	private void setProjectStatusKey(IProject project, String key, String val)
+	{
+		ArrayList projectstatus = CppPlugin.readProperty(project,key);
+		if(projectstatus.isEmpty())
+		{
+			ArrayList list = new ArrayList();
+			list.add(val);
+			CppPlugin.writeProperty(project, key,list);
+		}
 	}
 	
 	private boolean configureIsUptodate(DataElement root)
@@ -279,6 +318,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 		}
 		return false;
 	}
+	
+	
 	public void widgetDefaultSelected(SelectionEvent e)
     {
 		widgetSelected(e);

@@ -54,6 +54,9 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 	CppPlugin _plugin = CppPlugin.getDefault();
 	IProject project;
 	
+	String projectStatusKey = "Imported_Vs_CreatedFromScratch";
+	
+	
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -225,23 +228,6 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 		    }
 		return false;
 	}
-/*    private boolean projectHasSubdir()
-    {
-    	return projectHasSubdirHelper(_subject);
-    }    
-    private boolean projectHasSubdirHelper(DataElement root)
-	{
-		for (int i = 0; i < root.getNestedSize(); i++)
-		{
-			DataElement child = root.get(i).dereference();
-			String type = child.getType();
-			if (type.equals("Project") || type.equals("directory"))
-				return true;
-		}
-		return false;
-	}*/
-
-
     private boolean doesAutoconfSupportExist()
     {
 	return doesAutoconfSupportExistHelper(_subject);
@@ -260,6 +246,7 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 					if (name.equals("Makefile")||name.equals("Makefile.am")
 						||name.equals("Makefile.in")||name.equals("configure.in"))
 					{
+						setProjectStatusKey(project,projectStatusKey,"Imported");
 						return true;
 					}
 				}
@@ -269,8 +256,22 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 				return doesAutoconfSupportExistHelper(child);
 			}
 		}
+		setProjectStatusKey(project,projectStatusKey,"CreatedFromScratch");
 		return false;
 	}
+	
+	private void setProjectStatusKey(IProject project, String key, String val)
+	{
+		ArrayList projectstatus = CppPlugin.readProperty(project,key);
+		if(projectstatus.isEmpty())
+		{
+			ArrayList list = new ArrayList();
+			list.add(val);
+			CppPlugin.writeProperty(project, key,list);
+		}
+	}
+	
+	
 	
 	public void widgetDefaultSelected(SelectionEvent e)
     {
