@@ -1,0 +1,582 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Managed Build System 2.0 SRS Document</title>
+  <meta name="author" content="Sean Evoy">
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+<!-- Document Header -->
+<table cellpadding="2" style="width: 100%;" border="0">
+  <tbody>
+    <tr>
+      <td align="left" width="72%"><font class="indextop">CDT 2.0
+Managed Build
+System SRS</font><br>
+      <font class="indexsub">This document describes the proposed work
+items for the managed build system for the CDT 2.0 release.<br>
+      </font></td>
+      <td style="width: 28%;"><p:colorscheme
+ colors="#000000,#FFFFFF,#CCCCFF,#808080,#7889FB,#2DB6B3,#C0C0C0,#D18213"></p:colorscheme>
+      <div v:shape="_x0000_s1026" class="O" style=""><span lang="EN-US"
+ style="font-size: 13pt;"><img
+ src="http://dev.eclipse.org/images/Idea.jpg" alt=""
+ style="width: 120px; height: 86px;"><br>
+      </span></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td>Author</td>
+      <td>: <a href="mailto:sevoy@ca.ibm.com">Sean Evoy</a></td>
+    </tr>
+    <tr>
+      <td>Revision Date</td>
+      <td>: 12/05/2003 - Version: 0.1.0</td>
+    </tr>
+    <tr>
+      <td>Change History</td>
+      <td>: 0.1.0 - Document Creation</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<!-- End of Document Header --><!-- Table of Contents -->
+<p class="section">Table of Contents
+</p>
+<div class="indent">
+<div class="indent"><a href="#toc_1">1 Introduction</a>
+<div class="indent"><a href="#toc_1.1">1.1 Terms</a></div>
+</div>
+<div class="indent"><a href="#toc_2">2 Requirements</a>
+</div>
+<div class="indent"><a href="#toc_4">4 Design Discussion</a><br>
+<div class="indent"><a href="#toc_4.1">4.1 Modifying the Tool
+Command</a></div>
+<div class="indent"><a href="#toc_4.2">4.2 Setting Build Options
+Simultaneously</a></div>
+<div class="indent"><a href="#toc_4.3">4.3 Converting a Project
+from Managed to Standard</a></div>
+<div class="indent"><a href="#toc_4.4">4.4 Refactor the Current
+Default Manifest</a></div>
+<div class="indent"><a href="#toc_4.5">4.5 Replace Current Default
+targets with a "Gnu" Target</a></div>
+<div class="indent"><a href="#toc_4.6">4.6 Automatically Update
+the Build Information</a></div>
+<div class="indent"><a href="#toc_4.7">4.7 Target Definitions
+Contain Reasonable Default
+Build Settings</a><br>
+</div>
+<div class="indent"><a href="#toc_4.8">4.8 Cloning an Existing
+Configuration</a>
+</div>
+<div class="indent"><a href="#toc_4.9">4.9 Debug Configuration
+Should be Default </a>
+</div>
+<div class="indent"><a href="#toc_4.10">4.10 Remove Gnu Make Extensions</a><br>
+</div>
+<div class="indent"><a href="#toc_4.11">4.11 New Project Wizard
+Should Show All Targets</a></div>
+<div class="indent"><a href="#toc_4.12">4.12 Changing a Project's
+Build Goal</a></div>
+</div>
+<div class="indent"><a href="#toc_10">10 References</a></div>
+</div>
+<!-- End of Table of Contents --><br>
+<p class="section"><a name="toc_1">1 Introduction</a></p>
+<p>This is a partial SRS for the managed build system for the CDT 2.0
+release. A long list of requirements was compiled based on feedback we
+received from a number of end users. However, there were simply too
+many suggestions for us to implement in the time we have allocated to
+this release. This document describes the requirements that we feel are
+important to the end-user experience and that should be considered for
+the next release of the managed build system. That said, the
+requirements that are not on the short list are all valid, and if some
+other partner wishes to contribute the work, then they can also be
+considered for the release.</p>
+<p class="subsection"><a name="toc_1.1">1.1 Terms</a></p>
+<p>This section defines the terms commonly used in this document.<br>
+</p>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 95%;">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Build goal</td>
+      <td style="vertical-align: top;">The
+main files that are produced as a result of a build, e.g. an
+executable, a shared library, or a static library.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Tool<br>
+      </td>
+      <td style="vertical-align: top;">A utility of some
+sort that is used in the build process. A tool will generally process
+one or more resources to produce output resources. Most tools have a
+set of options that can be used to configure the functionality of the
+tool.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Tool chain<br>
+      </td>
+      <td style="vertical-align: top;">The main set of tools that
+produce a build
+goal for the project.</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Target<br>
+      </td>
+      <td style="vertical-align: top;">A target in the
+build sense represents the execution environment for the build output.
+A target can be described using a number of different aspects including
+operating
+system, processor, system libraries, etc.<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Configuration<br>
+      </td>
+      <td style="vertical-align: top;">A configuration is a line up of
+tools and
+settings for the options for those tools as well as other information
+that configures the project to produce a build goal.</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<p class="section"><a name="toc_2">2 Requirements</a><br>
+</p>
+<p>While there is a large list of requirements for the managed build
+system, the following items have been identified as the key work items
+for
+IBM to commit to. The priority of the requirements will determine which
+features get tackled first, but the order of the requirements in this
+list does not imply any relative importance within a given priority.<br>
+</p>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 95%; height: 518px;">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">Number<br>
+      </td>
+      <td style="vertical-align: middle;">Requirement<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">Priority<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C1</td>
+      <td style="vertical-align: middle;">A configuration shall allow
+the
+user to change the tool command. The user should be able to change the
+default command per tool at the workspace, project, and configuration
+level.
+The overridden tool command will be
+associated with a particular configuration for a project. The
+overridden setting will be stored between sessions for the
+configuration. The user will be able to reset the tool command back to
+the default command defined in the plugin manifest.</td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C2<br>
+      </td>
+      <td style="vertical-align: middle;">The user shall be able to
+simultaneously change the settings for more than one project
+configuration. For example, rather than selecting 'debug' and entering
+includes paths, then selecting 'release' and duplicating the work, the
+user should be able to select the 'all' configuration, set the paths
+once, and have the build system will put that information in all the
+defined configurations. If an option has been overridden in one of the
+configurations, the property page shall display it in a way that is
+clear to the user.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C3</td>
+      <td style="vertical-align: middle;">The user shall be allowed to
+convert a managed make project to a standard build project. <br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C4<br>
+      </td>
+      <td style="vertical-align: middle;">Refactor the build model to
+allow a more compact definition of configurations that derive from a
+common root.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C5<br>
+      </td>
+      <td style="vertical-align: middle;">The UI shall support a "Gnu"
+target as the default for executable, library, and shared library build
+goals on all platforms.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C6<br>
+      </td>
+      <td style="vertical-align: middle;">The build model will
+automatically update the include path, linker commands and defined
+symbols settings for a project when another project is added to or
+deleted from, its
+list of referenced projects.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C7<br>
+      </td>
+      <td style="vertical-align: middle;">Default values for includes
+paths, defined symbols, and macros shall be
+specified for all targets to
+ensure a good out-of-box
+experience for new users of the CDT. When the user creates a new
+project and the user skips over the build configuration settings, the
+defaults should be sufficient to build for all the defined targets
+supplied in the default plugin manifest. The defaults shall also be
+sufficient to allow search, content assist, and indexing to work
+properly.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P1<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C8<br>
+      </td>
+      <td style="vertical-align: middle;">The user shall be able to add
+new configurations to a project by cloning an existing configuration.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P2<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C9<br>
+      </td>
+      <td style="vertical-align: middle;">The debug configuration of
+all the targets supplied in the default plugin manifest shall be
+treated as the "default" configuration.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P2<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C10<br>
+      </td>
+      <td style="vertical-align: middle;">All attempts should be made
+to
+ensure the pattern of the
+generated makefile can be used with all versions of make. Where not
+possible, an extension point should be defined to allow a customizable
+pattern. The extension point would also allow for setting of the
+default build command. <br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P2<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C11<br>
+      </td>
+      <td style="vertical-align: middle;">The build model shall support
+the use of variables or macros within an 'includes' or library path.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P2<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C12<br>
+      </td>
+      <td style="vertical-align: middle;">A default implementation for
+the
+Visual C/C++ tools shall be provided along with the gnu implementation
+that currently ships with CDT.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P3<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C13<br>
+      </td>
+      <td style="vertical-align: middle;">The user shall be presented
+with
+the entire list of defined targets. The new project wizard shall select
+the first target that is appropriate for the host platform but the user
+will still be allowed to create projects for other platforms if they
+wish.</td>
+      <td style="text-align: center; vertical-align: middle;">P3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C14<br>
+      </td>
+      <td style="vertical-align: middle;">Implement tool inheritance.<br>
+      </td>
+      <td style="text-align: center; vertical-align: middle;">P3 </td>
+    </tr>
+    <tr>
+      <td style="text-align: center; vertical-align: middle;">C15<br>
+      </td>
+      <td style="vertical-align: middle;">The user shall be able to
+change
+the type of build goal for a project, for example from an executable to
+a library. The build system will transfer any tool settings that are
+appropriate (please refer to the discussion of this feature for more
+information on what can reasonably be done).</td>
+      <td style="text-align: center; vertical-align: middle;">P3<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p class="section"><a name="toc_4">4 Design Discussion<br>
+</a></p>
+<p>This section contains more detail on the requirements listed in
+section 2. Certain requirements such as bug fixing and providing an
+implementation for the Visual Studio tool chain are self-explanatory
+and are not discussed in this section.<br>
+</p>
+<p class="subsection"><a name="toc_4.1"></a>4.1 Modifying the Tool
+Command (C1)<br>
+</p>
+<p>Users have said that they would like to be able to change the
+command used to invoke certain tools defined in a tool chain. The
+example that is often used is replacing the linker command with <span
+ style="font-style: italic;">Purify</span> to instrument a build goal,
+as in <code>purify gcc</code>. Tools are defined in a plugin manifest
+and part of that definition is the command to invoke the tool on the
+host platform. When an individual user creates a new project, the
+settings in the manifest are used unless they are overridden by the
+user. However, the user can only modify the options associated with a
+tool, not the actual command. The only way for a user to specify a
+variant command for a tool is to edit the plugin manifest itself. This
+is a barrier to the average user, so the proposal is to any tool
+invocation to be changed at the project level.<br>
+</p>
+<p>The change is scoped to the project; it <span
+ style="font-style: italic;">will not</span> effect the manifest. This
+is important to understand because if the user does not edit the
+manifest manually, the next time a project is created they will have to
+override the tool command again. Project creation is not a
+high-frequency activity, so this should not be a huge problem. If the
+user wants to permanently override a tool command for a project they
+can do so for an existing configuration. It is also possible to clone
+existing configurations, so to stick with our example, a user could
+clone one of the default configurations and override the command for
+the linker to produce an instrumented executable with Purify. <br>
+</p>
+<p>For teams, one would expect the initial setup of a project would be
+the responsibility of a build team. They would follow the same workflow
+as a single developer. The project, tool settings, and default
+configurations including the new "purify" configuration, would all be
+shared through their CM system.<br>
+</p>
+<p class="subsection"><a name="toc_4.2"></a>4.2 Setting Build Options
+Simultaneously (C2)
+</p>
+<p>Users have pointed out that it is tedious and error prone to set
+options individually for each configuration of a given target. The
+build system should supply an 'all' configuration by default where any
+changes to the options would be applied to all defined configurations.
+The build settings page should also support cutting and pasting option
+values between configurations.<br>
+</p>
+<p>Consider the following case. The user has set
+(overridden from the default) the value of option A in configuration 1
+but not configuration 2. At some later time, the user switches to the
+'all' configuration. When the user edits option A, they
+change the setting in configuration 1 and override the default
+value in configuration 2 simultaneously.</p>
+<p>Another case concerns the behaviour of the system when the 'Reset to
+Defaults' command is received and the 'all' configuration is selected.
+The default option settings for every configuration will be reset to
+the defaults defined in the manifest. We could prompt the user to make
+sure this is what they want to do, since hitting this button
+with the 'all' configuration selected may have major consequences for
+the project settings.<br>
+</p>
+<p>Cutting and pasting shall only be enabled on widgets that logically
+support it. For example, cutting and pasting a radio button selection
+makes no sense.<br>
+</p>
+<p class="subsection"><a name="toc_4.3"></a>4.3 Converting a Managed to
+a Standard Build
+Project (C3)<br>
+</p>
+<p>Some users have mentioned that they would like to use the managed
+build system to create the project makefiles, then manage those
+makefiles manually after that. The workflow would be the user creates a
+managed project. The user adds all of the
+relevant classes and files to that project and the CDT generates a
+set of makefiles to build the project. At some point the user decides
+that they want to manage the
+makefile themselves and turn off makefile generation. Every new file
+that is added to the project would have to be manually added to the
+list of source files in the makefile, all of its dependencies captured,
+as would any custom build commands. The user could turn makefile
+generation back on, but the makefile generator would override the
+manual changes they made.<br>
+</p>
+<p>To support this, we shall supply a
+managed-to-standard conversion wizard. The include paths and defined
+symbols will be transferred, but all other build settings will be lost.<br>
+</p>
+<p class="subsection"><a name="toc_4.4"></a>4.4 Refactor the Current
+Default Manifest (C4)<br>
+</p>
+<p>The current default manifest that defines the Gnu tool chain is
+bulky because options are duplicated for each tool on each host. The
+default tool chain definition should be made more compact by better
+defining inheritance of tools and options. This will make it easier to
+correct problems and maintain the definitions going forward.<br>
+</p>
+<p class="subsection"><a name="toc_4.5"></a>4.5 Replace Current Default
+Targets with a "Gnu" Target (C5)</p>
+<p>The current set of targets in the default manifest do not differ
+significantly in any way from one another. In fact, for most host
+platforms the Gnu tool chain is invoked the same way with the same
+command line options. If we refactor the default manifest, as per the
+C4 requirement, then a user would really only have to select the type
+of build goal and the tool chain they want to use to build it. We would
+then replace the current set of targets, such as "Cygwin Executable"
+with "Gnu Executable" or "Executable built with Gnu". This will make it
+easier to port the managed build system to other host platforms.<br>
+</p>
+<p class="subsection"><a name="toc_4.6"></a>4.6 Automatically Update
+Build Information for
+Inter-project Dependencies (C6)<br>
+</p>
+<p>It is possible to specify that a project references other projects
+in the workspace. For the CDT, this has three important consequences
+for the build system. The first is that the build goal of the
+referencing project has a dependency on the build goals of the
+referenced projects, so the build system has to insure that the
+referenced project is built before the referencing project. The second
+is that the makefile for the referencing project must properly invoke
+the tools needed to produce the build goal. For example, if the
+referenced project builds a library, then the linker needs to know what
+the library name is and where it can be located, and the compiler will
+likely need to know the path to the include file that defines the
+library interface. Finally, this information needs to be captured and
+stored in the build system so that clients like the parser can find out
+about it. <br>
+</p>
+<p>The use case begins when the user defines an inter-project
+dependency between two projects in the workspace. The referencing
+project must be a managed project. If the referenced project is a
+managed project, the referencing project can query it for the build
+goal name and location. The include file search path will also be
+updated. This information will be stored by the build model. <br>
+</p>
+<p>If the referenced project is not managed, the build system will not
+be able to automatically update the information for the referencing
+project. </p>
+<p class="subsection"><a name="toc_4.7"></a>4.7 Target Definitions
+Contain Reasonable Default
+Build Settings (C7)<br>
+</p>
+<p>The user creates a new project with a build goal based on one or
+more
+execution targets. The user builds the project. The project builds
+correctly with no input from the user. <br>
+</p>
+There is a possible additional requirement here that the new project
+contain
+some sort of "boiler-plate" code after it is created. Consider a
+project that has an
+executable as a build goal and uses a Gnu tool chain. Minimally, there
+needs to be a file with a <code>main</code> function for it to build
+correctly.<br>
+<br>
+<p class="subsection"><a name="toc_4.8"></a>4.8 Add New Configurations
+to a Project by Cloning an Existing Configuration (C8)</p>
+<p>In the current version of the managed make project, a user can add a
+new configuration to a project based on a configuration defined in the
+plugin manifest. In CDT 2.0, the user shall also be able to clone an
+existing configuration so they do not have to recreate all the includes
+paths, symbols, and library settings.<br>
+</p>
+<p class="subsection"><a name="toc_4.9"></a>4.9 The Debug Configuration
+Should be Default (C9)</p>
+<p>For any new project created from a default tool chain, the debug
+configuration shall be the default. That is, when the user creates a
+project or opens the property page, the debug configuration shall
+appear as the first selection in any widget.<br>
+</p>
+<p class="subsection"><a name="toc_4.10"></a>4.10 Remove Gnu Make
+Extensions from Generated
+Makefiles (C10)<br>
+</p>
+<p>The current version of the managed build system relies on the
+pattern
+substitution extension of Gnu make to generate a more compact makefile.
+For users unwilling or unable to use the Gnu version of make, this is a
+problem. The makefile generator shall be modified so that it no longer
+outputs a makefile that uses this extension. The generated makefile
+will be less compact. <br>
+</p>
+<p class="subsection"><a name="toc_4.11"></a>4.11 New Project Wizard
+Should Show All Targets (C13)</p>
+<p>In the CDT 1.2, the New project wizard only displays the targets
+that define tool chains hosted on the platform that the user is running
+Eclipse on. This is too restrictive, since a user may be running on one
+platform and decide to create a project for a target that has tools
+hosted on another host platform. Obviously, the user will not be able
+to build the new project on their host platform, but they may intend to
+share it through their CM system with other users, or they may intend
+to copy the files immediately prior to building. <br>
+</p>
+<p>When the user runs the New project wizard, they will be presented
+with a list of all defined targets. The list will either be sorted so
+that the targets with tools on the host platform appear first, or there
+will be a way for users to filter out targets that are not available on
+the host platform.<br>
+</p>
+<p class="subsection"><a name="toc_4.12"></a>4.12 Changing a Project's
+Build Goal (C15)
+</p>
+<p>The user that wants to change the build goal type for a project, for
+example from an executable to a library. Currently, they have to create
+a new project with a different name, copy and paste all the source
+files into the new project, delete the original project, and rename the
+new project to the original. While this is a low-frequency activity,
+and one that is not typically supported by other IDEs, we should be
+able to simplify the process. The question is the degree of automation
+that we want to provide.<br>
+</p>
+<p>The lowest level of support is to create a conversion wizard which
+prompts the user to select the project build type and tool chain, then
+simply overrides all of the existing build settings for the project
+based on the defaults in the manifest. The settings for the original
+project could be stored in case the user wants to switch back at some
+point, but this has some technical issues associated with storage and
+reconciliation should the manifest definition change before the user
+switches back.<br>
+</p>
+<p>A more sophisticated wizard would attempt to transfer tool settings
+that are common to both build goal types. The simplest case would be
+switching build goal types but keeping the tool chain the same. For
+example, a library and an executable are built with exactly the same
+Gnu compiler, and there are few options that are unique to one type and
+not the other. This is not the case if the tool chains are different.
+Simply, the challenge is determining what tools and options the two
+types have in common.</p>
+<p class="section"><a name="toc_10">10 References</a></p>
+<br>
+<br>
+</body>
+</html>
