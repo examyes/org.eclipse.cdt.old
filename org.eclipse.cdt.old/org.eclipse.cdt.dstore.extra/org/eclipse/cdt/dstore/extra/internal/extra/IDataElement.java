@@ -21,4 +21,6 @@ public interface IDataElement extends IElement
 
     Object getElementProperty(Object obj);
     ArrayList getAssociated(String key);
+
+    boolean isOfType(String typeStr);
 }
