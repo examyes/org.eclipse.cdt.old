@@ -51,18 +51,19 @@ file name to be "main.cc"</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Now we need to write main.cc:</font></font></li>
+</ul>
 
-<p><br><font color="#000000"><font size=+1>You can simply copy and paste
-the following code to your file in the Eclipse workspace or type the following:</font></font>
-<ul><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;
-<br><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>main.cc</font></font></font></u><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<ul><font color="#000000"><font size=+1>You can simply copy and paste the
+following code to your file in the Eclipse workspace or type the following:</font></font>
+<ul>&nbsp;
+<br><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>main.cc</font></font></font></u>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#ifdef
 HAVE_CONFIG_H</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
 &lt;config.h></font></font></font>
-<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#endif</font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#endif</font></font></font>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
-"hello.h"</font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+"hello.h"</font></font></font>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>main()</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
@@ -70,16 +71,16 @@ CHello helloAutoconf;</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
 helloAutoconf.display();</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>}</font></font></font>
-<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;</ul>
+<br>&nbsp;</ul>
 
 <li>
 <font face="Times New Roman,Times"><font color="#000000"><font size=+1>Also,
 we need to write the following hello.cc and hello.h files</font></font></font></li>
 
-<ul><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;
-<br><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>hello.cc</font></font></font></u><u><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font></u>
+<ul>&nbsp;
+<br><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>hello.cc</font></font></font></u>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
-"hello.h"</font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+"hello.h"</font></font></font>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>void
 CHello::display()</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
@@ -92,12 +93,12 @@ strHello = "Hello World! \n";</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
 std::cout &lt;&lt; strHello;</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>}</font></font></font>
-<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;<font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
-<p><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>hello.h</font></font></font></u><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<br>&nbsp;
+<p><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>hello.h</font></font></font></u>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
 &lt;iostream></font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
-&lt;string></font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+&lt;string></font></font></font>
 <p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>class
 CHello</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
@@ -105,15 +106,14 @@ CHello</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
 void display();</font></font></font>
 <br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>};</font></font></font>
-<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;</ul>
+<br>&nbsp;</ul>
 <font color="#000000"><font size=+1>Before we move to the next part make
 sure that you have the following project structure:</font></font>
 <p><font color="#000000"><font size=+1>HelloAutoconf</font></font>
 <ul><font color="#000000"><font size=+1>src</font></font>
 <ul><font color="#000000"><font size=+1>hello.cc</font></font>
 <br><font color="#000000"><font size=+1>hello.h</font></font>
-<br><font color="#000000"><font size=+1>main.cc</font></font>
-<br><font color="#000000"><font size=+1></font></font>&nbsp;</ul>
+<br><font color="#000000"><font size=+1>main.cc</font></font></ul>
 </ul>
 </ul>
 <b><font color="#000000"><font size=+2>2- Creating Project Configuration
@@ -130,8 +130,9 @@ and maintain these files:</font></font></blockquote>
 <li>
 <font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
 project view</font><font color="#000000">, RMC the HelloAutoconf project
-</font>(top level directory)<font color="#000000"> and select Autoconf
--> Generate configure.</font></font></li>
+</font>(top
+level directory)<font color="#000000"> and select Autoconf -> Generate
+configure.</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Click the OK button in the message
@@ -290,58 +291,58 @@ from the context menu.</font></li>
 </ul>
 </ul>
 
-<ul>&nbsp;
+<ul>
 <li>
-<b><font size=+1>Expanding and Working with HelloAutoconf Project</font></b></li>
+<b><font size=+1>Expanding HelloAutoconf Project</font></b></li>
 
-<br>&nbsp;
-<p>&nbsp;
-<p><font size=+1>Let us now expand our sample HelloAutoconf project to
-include source files in a sub directories of the "sources" directory. Usually
-these typr of project are designated as deep projects.&nbsp;&nbsp;</font>
+<p><br><font size=+1>Let us now expand our sample HelloAutoconf project
+to include source files in a sub directories of the "src" directory.&nbsp;
+As the project now has several levels of subfolders, it is called a deep
+projects.&nbsp; The tool is designed - this the default option - to allow
+the user to build code in subdirectories into temporary non-installing
+libraries. This library will be linked to the code by the make program.&nbsp;</font>
 <br>&nbsp;
 <ul>
 <li>
-<font size=+1>Create a new subdirectory and set the name to be decorations</font></li>
+<font size=+1>Create a new subdirectory and set the name to be "decorations."</font></li>
 
 <li>
 <font size=+1>Create the following two files. frame.cc and frame.h.</font></li>
 </ul>
-<u><font color="#3366FF"><font size=+1></font></font></u>
+
 <ul>
-<ul><u><font color="#3366FF"><font size=+1>frame.cc</font></font></u><font size=+1></font>
+<ul><u><font color="#3366FF"><font size=+1>frame.cc</font></font></u>
 <p><font size=+1>#include "frame.h"</font></ul>
 </ul>
-<font size=+1></font>
+
 <ul>
 <ul><font size=+1>int CFrame::getSize()</font>
 <br><font size=+1>{</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp; return 16;</font>
-<br><font size=+1>}</font><font size=+1></font>
+<br><font size=+1>}</font>
 <p><u><font color="#3366FF"><font size=+1>frame.h</font></font></u></ul>
 </ul>
-<font size=+1></font>
+
 <ul>
 <ul><font size=+1>class CFrame</font>
 <br><font size=+1>{</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public:</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int getSize();</font>
-<br><font size=+1>};</font>
-<br><font size=+1></font>&nbsp;</ul>
+<br><font size=+1>};</font></ul>
 
 <li>
 <font size=+1>Also, modify main.cc to include the following code - added
 code is in red</font></li>
 
-<ul><font size=+1></font>&nbsp;
-<br><u><font color="#3366FF"><font size=+1>main.cc</font></font></u><font size=+1></font>
-<p><font size=+1>#include "hello.h"</font><font size=+1></font>
+<ul>&nbsp;
+<br><u><font color="#3366FF"><font size=+1>main.cc</font></font></u>
+<p><font size=+1>#include "hello.h"</font>
 <p><font size=+1>void CHello::display()</font>
 <br><font size=+1>{</font>
 <br><font size=+1>&nbsp;<font color="#CC0000">&nbsp;&nbsp; //Decorations:</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; CFrame frame;</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; int frameSize
-= frame.getSize();</font></font><font color="#CC0000"><font size=+1></font></font>
+= frame.getSize();</font></font><font size=+1></font>
 <p><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; for(int i = 0;
 i &lt;frameSize; i++)</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; {</font></font>
@@ -349,33 +350,103 @@ i &lt;frameSize; i++)</font></font>
 std::cout &lt;&lt; "*";</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt;
-"\n";</font></font><font color="#CC0000"><font size=+1></font></font>
+"\n";</font></font><font size=+1></font>
 <p><font size=+1>&nbsp;&nbsp;&nbsp; //Helloworld:</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp; std::string strHello;</font>
-<br><font size=+1>&nbsp;&nbsp;&nbsp; strHello = "* Hello World! *\n";</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp; strHello = "<font color="#CC0000">*</font>
+Hello World! <font color="#CC0000">*</font>\n";</font>
 <br><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt; strHello;</font><font size=+1></font>
 <p><font size=+1>&nbsp;&nbsp;&nbsp;<font color="#CC0000"> for(int i = 0;
 i &lt;frameSize; i++)</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; {</font></font>
 <br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 std::cout &lt;&lt; "*";</font></font>
-<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font><font color="#CC0000"><font size=+1></font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font><font size=+1></font>
 <p><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt;
 "\n";</font></font>
 <br><font color="#CC0000"><font size=+1>}</font></font>
-<br><font color="#CC0000"><font size=+1></font></font>&nbsp;
-<br><font size=+1></font>&nbsp;
-<br><font size=+1></font>&nbsp;
-<br><font size=+1></font>&nbsp;
 <br><font size=+1></font>&nbsp;</ul>
-</ul>
 
 <li>
-<b><font size=+1>Changing a static library to a shared library and vise
-cersa</font></b></li>
+<font size=+1>&nbsp;Once this is done, we have to update our configuration
+files - the configure.in and the Makefile.am - and also we need to generate
+a Makefile.am in the new directotry that we have just created and added
+frame.cc and frame.h. We will let the tool does this for us and here what
+you need to do:</font></li>
+
+<ol>
+<li>
+<font size=+1>RMC the project and select Autoconf -> Generate configure.
+You would notice that the Generate configure action is now enabled as changes
+were made to the configuration files and configure now is not up to date</font></li>
+
+<li>
+<font size=+1>Click Yes if prompted by the message popup dialog as you&nbsp;
+want the tool to update and generate you configuration files</font></li>
+
+<li>
+<font size=+1>Once the command is completed successfully, RMC on the project
+and select Autoconf -> Run configure.</font></li>
+
+<li>
+<font size=+1>Then RMC the project and select Build Project - you can use
+the main tool bar icons instead</font></li>
+
+<li>
+<font size=+1>After a successful build, switch to the Command specification
+view and select the Run command - you don't need to create a new one as
+you have already done that before</font></li>
+
+<li>
+<font size=+1>RMC the command and select execute</font></li>
+
+<li>
+<font size=+1>You should now see the changes that we have added to our
+HulloAutoconf program displayed in the output view</font></li>
+</ol>
+<font size=+1></font>
+<br><font size=+1></font>&nbsp;</ul>
 
 <li>
 <b><font size=+1>Modifying libraries names</font></b></li>
+
+<ul><b><font size=+1></font></b>&nbsp;</ul>
+<font size=+1>The purpose of this section is to show how the tool handles
+the dependencies between Makefile.am's.&nbsp; Follow the scenario below
+to examin how the tool can help you in this regard.</font>
+<br><font size=+1></font>&nbsp;
+<ul>
+<li>
+<font size=+1>Suppose that you want to change the name of your static library
+that we have just created in the previuos section. Currently, it has the
+name of libdecorations.a</font></li>
+
+<ol>
+<li>
+<font size=+1>Edit HelloAutoconf/src/decorations/Makefile.am and change
+the value of the noinst_LIBRARIES to become libframes.a</font></li>
+
+<li>
+<font size=+1>Also, change the&nbsp; libdecorations_a_SOURCES to be libframes_a_SOURCES
+and leave the value of the variable as it is</font></li>
+
+<li>
+<font size=+1>Save the Makefile.am file</font></li>
+
+<li>
+<font size=+1>Now, select the parent directory of the Makefile.am file.
+RMC&nbsp;and select Autoconf -> Generate configure</font></li>
+
+<li>
+<font size=+1>Click on the Yes button if the popup message dialog is showing.</font></li>
+
+<li>
+<font size=+1>After a successful completion of the command, examin the
+HelloAutoconf/src/Makefile.am. You should see now that the new library
+name "./decorations/libframes.a" has been used in the value of the hello_LDADD
+variable instead.&nbsp;</font></li>
+</ol>
+</ul>
 </ul>
 
 <p><br><b><font size=+3>Managing Imported Project with Existing Configuration
