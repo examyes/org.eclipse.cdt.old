@@ -37,6 +37,7 @@ public interface IHelpNLConstants
     public static final String SETTINGS_BROWSER_TITLE ="HelpResults.Settings.Browser.Title";
     public static final String SETTINGS_BROWSER_KDE ="HelpResults.Settings.Browser.Kde";
     public static final String SETTINGS_BROWSER_GNOME ="HelpResults.Settings.Browser.Gnome";
+    public static final String SETTINGS_BROWSER_DEFAULT ="HelpResults.Settings.Browser.Default";
 
     public static final String SETTINGS_PATH_TITLE ="HelpResults.Settings.Path.Title";
     public static final String SETTINGS_PATH_MAN ="HelpResults.Settings.Path.Man";

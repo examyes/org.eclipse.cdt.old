@@ -8,12 +8,17 @@
    class="org.eclipse.cdt.linux.help.HelpPlugin">
 <requires>
    <import plugin="org.eclipse.core.runtime" version="2.0.0"/>
-   <import plugin="org.eclipse.core.resources" version="2.0.0"/>
+   <import plugin="org.eclipse.core.resources"  version="2.0.0"/>
    <import plugin="org.eclipse.swt" version="2.0.0"/>
    <import plugin="org.eclipse.ui" version="2.0.0"/>
+   <import plugin="org.eclipse.cdt.dstore.extra"/>
    <import plugin="org.eclipse.cdt.dstore.core"/>
    <import plugin="com.ibm.lpex"/>
-   <import plugin="org.apache.lucene"  version="1.2.0"/>
+   <import plugin="org.apache.lucene" version="1.2.0"/>
+   <import plugin="org.eclipse.help.ui" version="2.0.0"/>
+   <import plugin="org.eclipse.cdt.cpp.ui"/>
+   <import plugin="org.eclipse.help" version="2.0.0"/>
+  <import plugin="org.eclipse.cdt.dstore.hosts"/>
 </requires>
 
 <runtime>
@@ -35,11 +40,13 @@
          id="org.eclipse.cdt.linux.help.views.ResultsViewPart">
    </view>
 </extension>
+
 <extension
       point="org.eclipse.ui.viewActions">
    <viewContribution
          targetID="org.eclipse.cdt.linux.help.views.ResultsViewPart"
          id="org.eclipse.cdt.linux.help.actions.vc1">
+<!--
       <action
             label="%PopupMenu.ResultsView.label"
             icon="icons/full/clcl16/properties.gif"
@@ -49,7 +56,17 @@
             toolbarPath="additions"
             id="org.eclipse.cdt.linux.help.actions.va1">
       </action>
+-->
       <action
+            label="%PopupMenu.ResultsView.label"
+            icon="icons/full/clcl16/properties.gif"
+            tooltip="%PopupMenu.ResultsView.tooltip"
+            class="org.eclipse.cdt.linux.help.actions.HelpPreferencesActionDelegate"
+            menubarPath="additions"
+            toolbarPath="additions"
+            id="org.eclipse.cdt.linux.help.actions.va1">
+      </action>
+<!--      <action
             label="%PopupMenu.ResultsView.AddFilter.label"
             icon="icons/full/clcl16/filter_misc.gif"
             tooltip="%PopupMenu.ResultsView.AddFilter.tooltip"
@@ -58,6 +75,33 @@
             toolbarPath="additions"
             id="org.eclipse.cdt.linux.help.actions.va2">
       </action>
+-->
    </viewContribution>
 </extension>
+
+<extension
+     point="org.eclipse.ui.preferencePages">
+   <page
+         name="%Help.Preferences"
+         category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="org.eclipse.cdt.linux.help.preferences.HelpPreferencePage"
+         id="org.eclipse.cdt.linux.help.preferences.HelpPreferencePage">
+   </page>
+
+</extension>
+
+<extension 
+   point="org.eclipse.ui.propertyPages">
+   <page
+      objectClass="org.eclipse.cdt.cpp.ui.internal.vcm.Repository"
+      name="%Help.Remote.Properties"
+      class="org.eclipse.cdt.linux.help.preferences.HelpPropertyPage"
+      id="org.eclipse.cdt.linux.help.preferences.HelpPropertyPage">
+      <filter
+	      name="nature"
+	      value="org.eclipse.cdt.cpp.ui.cppnature">
+      </filter>
+   </page>
+</extension>
+
 </plugin>

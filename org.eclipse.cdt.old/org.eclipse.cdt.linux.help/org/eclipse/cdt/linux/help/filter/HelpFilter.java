@@ -8,17 +8,25 @@ package org.eclipse.cdt.linux.help.filter;
 
 import java.util.*;
 
-import org.eclipse.jface.dialogs.*;
+import org.eclipse.swt.widgets.Display;
 
 import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 import org.eclipse.cdt.linux.help.*;
 import org.eclipse.cdt.linux.help.ItemElement;
+import org.eclipse.cdt.linux.help.preferences.*;
+
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
+import org.eclipse.cdt.linux.help.views.*;
 
 public class HelpFilter
 {
     private static ArrayList _indexList = null;// "list of indexes" of filtered ItemElements 
     private static ArrayList _patternList = null; //"list of patterns" to check against.
-    
+
+    DataElement status;
+    String _keyText;
+
     public HelpFilter()
     {		
     }
@@ -33,35 +41,6 @@ public class HelpFilter
 	else
 	    return true;
     }
-
-    /*
-      run a search and return a 'list' of ItemElement's that do NOT match any of the patterns in '_patternList'
-     Returns:
-       null if key is null
-       empty ArrayList if key not found
-    */    
-    public ArrayList doSearch(String key,String optSearchType)
-    {
-	if (!checkValidKey(key))
-	    {
-		// maybe display a dialog box here.
-		return null;
-	    }
-
-	//Do the search
-   	ArrayList result = HelpPlugin.getListElements(key,optSearchType);
-	if (result == null)
-	    {
-		result = new ArrayList();
-	    }
-
-	//update the 'filtered indexes'
-	updateIndexList(result);
-	
-	//Map the 'filtered indexes' to actual ItemElements
-	ArrayList filteredResult = getFilteredResults();
-	return filteredResult;
-    }    
 
     //Given a 'list' of ItemElements, update the '_indexList' to reflect the filters in place.
     public void updateIndexList(ArrayList list)
@@ -86,7 +65,10 @@ public class HelpFilter
     public void loadPatterns ()
     {
 	ArrayList filterList = new ArrayList();
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
+	
+	HelpSettings settings = new HelpSettings();
+	settings.read();
+
 	String filters = settings.get(IHelpSearchConstants.HELP_FILTER_PATTERNS);	
 
 	if(filters==null)
@@ -95,7 +77,7 @@ public class HelpFilter
 		return;
 	    }
 
-	StringTokenizer tokenizer = new StringTokenizer(filters,"|");
+	StringTokenizer tokenizer = new StringTokenizer(filters,"##");
 	while(tokenizer.hasMoreTokens())
 	    {
 		filterList.add(tokenizer.nextToken());
@@ -139,7 +121,7 @@ public class HelpFilter
     public ArrayList getFilteredResults()
     {
 	//get the list of ItemElements 
-	ArrayList unfilteredList = HelpSearch.getList();		
+	ArrayList unfilteredList = HelpPlugin.getDefault().getList();
 
 	//create a new list of ItemElements that correspond to the '_indexList' and return it.
 	ArrayList filteredList = new ArrayList();
@@ -149,13 +131,12 @@ public class HelpFilter
 	    }
 	return filteredList;
     }
-    
 
     //Given an 'index' into the "list of indexes", it returns the corresponding ItemElement
     public ItemElement getItem(int index)
     {	
 	int itemElementIndex = ((Integer)_indexList.get(index)).intValue();
-	return HelpSearch.getItemElement(itemElementIndex);
+	return HelpPlugin.getDefault().getItemElement(itemElementIndex);
     }
 
 }

@@ -19,6 +19,7 @@ public interface IHelpSearchConstants
     
     public static final String HELP_SEARCH_BROWSER_KONQUEROR="help_search_browser_konqueror";
     public static final String HELP_SEARCH_BROWSER_GNOMEHELPBROWSER="help_search_browser_gnomehelpbrowser";
+    public static final String HELP_SEARCH_BROWSER_DEFAULT="help_search_browser_default";
 
     public static final String HELP_SEARCH_PATH_WHATIS="help_search_path_whatis";
     public static final String HELP_SEARCH_PATH_DIR="help_search_path_dir";
@@ -33,4 +34,6 @@ public interface IHelpSearchConstants
 
     //---- Settings initialized by user
     public static final String HELP_SETTINGS_SELECTED="help_settings_selected";
+
+    public static final String HELP_TOMCAT_PORT="help_tomcat_port";
 }

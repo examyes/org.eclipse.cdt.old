@@ -8,6 +8,7 @@ package org.eclipse.cdt.linux.help;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
+
 import java.util.*;
 import java.util.ResourceBundle;
 import java.io.*;
@@ -16,16 +17,20 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
 import org.eclipse.cdt.linux.help.views.ResultsViewPart;
 import org.eclipse.cdt.linux.help.filter.HelpFilter;
+import org.eclipse.cdt.linux.help.preferences.*;
 
 import org.eclipse.jface.resource.*;
 import org.eclipse.swt.graphics.*;
+import org.eclipse.help.AppServer;
 
 import org.eclipse.core.internal.plugins.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
+
+import org.eclipse.cdt.cpp.ui.internal.help.LaunchSearch;
 
 public class HelpPlugin extends AbstractUIPlugin
 {
     private static HelpPlugin _instance=null;
-    private static HelpSearch _search=null;
 
     private static HelpFilter _filter = null;
 
@@ -34,7 +39,13 @@ public class HelpPlugin extends AbstractUIPlugin
     private ResourceBundle _resourceBundle;
     
     private Thread workerThread;
-    
+
+    private ArrayList _result;
+
+    private boolean _isWebAppRegistered=false;
+
+    private static LaunchSearch _launchSearch=null;
+
     public HelpPlugin(IPluginDescriptor descriptor)
     {
 	super(descriptor);
@@ -51,6 +62,8 @@ public class HelpPlugin extends AbstractUIPlugin
 		_resourceBundle = null;
 	    }
 
+	if(_launchSearch==null)
+	    _launchSearch = LaunchSearch.getDefault();
     }
     
     public static String getLocalizedString(String key)
@@ -97,41 +110,6 @@ public class HelpPlugin extends AbstractUIPlugin
 	return image;
     }
 
-    static public ArrayList getListElements(String key, String optSearchType)
-    {
-	if(_search == null)
-	    {		
-		_search= new HelpSearch();
-	    }
-	return _search.FindListOfMatches(key,optSearchType);
-    }
-
-	public void showMatches(String key)
-	{
-		showMatches(key,null);	
-	}
-
-    public void showMatches(String key, String optSearchType)
-    {
-	if(_search == null)
-	    {		
-		_search= new HelpSearch();
-	    }
-	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
-	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
-	IWorkbenchPage persp= win.getActivePage();	
-	try{
-	    persp.showView("org.eclipse.cdt.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
-	}catch(PartInitException pie){
-	    pie.printStackTrace();
-	}	
-	
-	ResultsViewPart theView=(ResultsViewPart)persp.findView("org.eclipse.cdt.linux.help.views.ResultsViewPart");
-	
-	workerThread=new HelpSearchThread(key,theView,optSearchType);
-	workerThread.start();
-    }
-
     public ResultsViewPart getView()
     {
 	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
@@ -143,8 +121,58 @@ public class HelpPlugin extends AbstractUIPlugin
     public HelpFilter getFilter()
     {
 	if(_filter == null)
-	    _filter = new HelpFilter();
-	
+	    {
+		_filter = new HelpFilter();
+	    }
 	return _filter;
+    }
+
+    //is the current project a remote one?
+    public boolean isRemote()
+    {
+	DataStoreCorePlugin plugin = DataStoreCorePlugin.getDefault();	
+	if(plugin.getCurrentDataStore().isVirtual())
+	    return true;
+	else
+	    return false;
+    }
+
+    public void setList(ArrayList list)
+    {
+	if (list==null)
+	    {
+		if(_result==null)
+		    _result= new ArrayList();
+		else
+		    _result.clear();
+	    }
+	else
+	    {
+		if(_result==null)
+		    {
+			_result= new ArrayList();
+		    }
+		else
+		    {
+		       _result.clear();			
+		    }
+		_result.addAll(list);
+	    }	
+    }
+
+    public ArrayList getList()
+    {
+	return _result;
+    }
+
+    public ItemElement getItemElement(int index)
+    {
+	return (ItemElement)_result.get(index);
+    }
+
+    public void shutdown()
+	throws CoreException
+    {
+	super.shutdown();
     }
 }
