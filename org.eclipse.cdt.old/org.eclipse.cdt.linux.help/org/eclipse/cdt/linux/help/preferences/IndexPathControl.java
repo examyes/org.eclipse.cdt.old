@@ -40,7 +40,7 @@ public class IndexPathControl extends Composite implements Listener
 	super(cnr, style);
 	
 	group = new Group(this, SWT.NULL);
-	group.setText("Directories to index");
+	group.setText("Html directories to index");
 	group.setLayout(new GridLayout());
 	group.setLayoutData(new GridData(GridData.GRAB_VERTICAL | GridData.FILL_BOTH));
 	
