@@ -232,7 +232,7 @@ public class PAModelInterface implements IDomainListener
   // System.out.println("extend schema");
   DataStore   dataStore 	= schemaRoot.getDataStore();
   DataElement fileD         = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
-  DataElement executableD	= dataStore.find(schemaRoot, DE.A_NAME, "executable",1);
+  DataElement executableD	= dataStore.find(schemaRoot, DE.A_NAME, "binary executable",1);
   DataElement traceFileD    = dataStore.find(schemaRoot, DE.A_NAME, "trace file", 1);
   DataElement traceProgramD = dataStore.find(schemaRoot, DE.A_NAME, "trace program", 1);
     
@@ -281,21 +281,37 @@ public class PAModelInterface implements IDomainListener
        }
        else if (commandValue.equals("C_PARSE_TRACE") || commandValue.equals("C_ANALYZE_PROGRAM"))
        {  
-         PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceElement);
+         PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_PARSED, traceElement);
          _notifier.fireTraceChanged(traceEvent);
        }
+       
      }
      else if (object.getName().equals("error")) {
       
       System.out.println("Error parsing trace file or program");
       
       String name = new String(traceElement.getSource());
+      
+      // Generate the normal error message
+      String errorMsg = null;
       if (traceElement.isOfType("trace file")) {
-       traceElement.getDataStore().deleteObject(traceElement.getParent(), traceElement);
+        traceElement.getDataStore().deleteObject(traceElement.getParent(), traceElement);
+        errorMsg = "Not a valid trace file:\n" + name;
+      }
+      else if (traceElement.isOfType("trace program")) {
+        errorMsg = "Error parsing the trace output of:\n" + name;
+      }
+      
+      // If the error code exists, generate an error message from the error code.
+      DataStore dataStore = traceElement.getDataStore();
+      DataElement errorElement = dataStore.find(traceElement, DE.A_TYPE, "error code", 1);
+      
+      if (errorElement != null) {      
+        errorMsg = getErrorMessage(errorElement, traceElement);        
       }
       
       Display d = getShell().getDisplay();
-	  d.asyncExec(new showMessageAction("Invalid Trace File", "Not a valid trace file:\n" + name));
+	  d.asyncExec(new showMessageAction("Trace Parsing Error", errorMsg));
 	  
      }
 	 
@@ -312,8 +328,59 @@ public class PAModelInterface implements IDomainListener
      _statuses.put(status, traceElement);		
    }
  }
-  
-  
+ 
+ 
+ /**
+  * Return an error message from the error code data element
+  */
+ public String getErrorMessage(DataElement errorElement, DataElement traceElement) {
+ 
+   String result = "Unknown error";
+   
+   String errorCode = errorElement.getName();
+   if (errorCode != null) {
+    
+     if (errorCode.equals("no trace data")) {
+       
+       String dataFileName = "";
+       if (traceElement.isOfType("gprof trace program"))
+         dataFileName = " gmon.out ";
+       else if (traceElement.isOfType("functioncheck trace program"))
+         dataFileName = " functioncheck.fc ";
+         
+       result = "The trace data file" + dataFileName +  "does not exist!";
+     }
+     else if (errorCode.equals("no file")) {
+       result = "Cannot find the trace target file:\n" + traceElement.getSource();
+     }
+     else if (errorCode.equals("no command")) {
+     
+       String profileCommand = "";
+       if (traceElement.isOfType("gprof trace program"))
+         profileCommand = " gprof ";
+       else if (traceElement.isOfType("functioncheck trace program"))
+         profileCommand = " fcdump ";
+        
+       result = "The profile command" + profileCommand + "does not exist or it is not an executable!";
+     }
+     else if (errorCode.equals("unsupported option")) {
+
+       String profileCommand = "";
+       if (traceElement.isOfType("gprof trace program"))
+         profileCommand = "gprof";
+       else if (traceElement.isOfType("functioncheck trace program"))
+         profileCommand = "fcdump";
+     
+       result = "You might have an incompatible version of " + profileCommand + 
+                ". Please update to a newer version.";
+     }
+     
+   }
+   
+   return result;
+ }
+ 
+ 
  /**
   * Run a given command and return the status element
   */
@@ -523,14 +590,23 @@ public class PAModelInterface implements IDomainListener
    dataStore.createReference(traceFile, fileElement, "referenced file");
    dataStore.createReference(traceFile, _cppApi.getProjectFor(fileElement), "referenced project");
    dataStore.createReference(traceFile, traceFormatElement, "trace format");
+
+   // Create trace functions root and call tree root
+   DataElement traceFunctionsRoot = dataStore.createObject(traceFile, traceFile.getType(), traceFile.getName());
+   traceFunctionsRoot.setAttribute(DE.A_VALUE, "trace functions root");
    
-   // setAttribute(traceFile, "trace format", traceFormat);
-   
+   DataElement callTreeRoot = dataStore.createObject(traceFile, "call root", traceFile.getName());
+      
    if (dataStore != getDataStore()) {
     dataStore.setObject(traceFormatElement);
     dataStore.setObject(traceFile);
    }
-      
+   
+   // Fire file created event
+   PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceFile);
+   _notifier.fireTraceChanged(traceEvent);
+   
+   // call the parse trace command
    DataElement parseCommand = dataStore.localDescriptorQuery(traceFile.getDescriptor(), "C_PARSE_TRACE");
    DataElement status = dataStore.command(parseCommand, traceFile);
    
@@ -558,7 +634,7 @@ public class PAModelInterface implements IDomainListener
   */
  public void addTraceProgram(DataElement progElement, String traceFormat) {
 
-   if (!progElement.isOfType("executable")) {
+   if (!progElement.isOfType("binary executable")) {
      
      Display d = getShell().getDisplay();
 	 d.asyncExec(new showMessageAction("Invalid Trace Program", 
@@ -590,7 +666,11 @@ public class PAModelInterface implements IDomainListener
    dataStore.createReference(traceProgram, _cppApi.getProjectFor(progElement), "referenced project");
    dataStore.createReference(traceProgram, traceFormatElement, "trace format");
    
-   // setAttribute(traceProgram, "trace format", traceFormat);
+   // Create trace functions root and call tree root
+   DataElement traceFunctionsRoot = dataStore.createObject(traceProgram, traceProgram.getType(), traceProgram.getName());
+   traceFunctionsRoot.setAttribute(DE.A_VALUE, "trace functions root");
+   
+   DataElement callTreeRoot = dataStore.createObject(traceProgram, "call root", traceProgram.getName());
    
    if (dataStore != getDataStore()) {
      dataStore.setObject(traceFormatElement);
@@ -644,7 +724,7 @@ public class PAModelInterface implements IDomainListener
   */
  public void queryTraceProgramFormat(DataElement progElement) {
  
-   if (progElement.isOfType("executable")) {
+   if (progElement.isOfType("binary executable")) {
    
     DataStore dataStore = progElement.getDataStore();
     DataElement queryTraceCommand = dataStore.localDescriptorQuery(progElement.getDescriptor(), "C_QUERY_TRACE_PROGRAM_FORMAT");

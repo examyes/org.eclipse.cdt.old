@@ -66,11 +66,16 @@ public class PAProjectAdaptor implements ICppProjectListener {
   	  {
   		 // System.out.println("project closed: ");
   		 
+  		 // If this is a remote project, then the connection is already closed
+  		 // when we get here. We simply fire a project changed event so that the
+  		 // views can update their input elements.
 		 if (project instanceof Repository)
 		 {
   		    PATraceEvent projectEvent = new PATraceEvent(PATraceEvent.PROJECT_CHANGED, null);
   		    _api.getTraceNotifier().fireTraceChanged(projectEvent);
 		 }
+		 // If it is a local project, we will dispatch corresponding PA events to 
+		 // delete the trace file and trace project elements.
 		 else
 		 {
   		   DataElement traceProject = _api.findTraceProjectElement(project);

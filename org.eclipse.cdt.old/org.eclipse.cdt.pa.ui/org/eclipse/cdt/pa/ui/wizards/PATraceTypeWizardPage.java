@@ -277,7 +277,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
     }
     else if (_traceType == PAResource.TRACE_PROGRAM ) {
     
-      if (_traceElement.isOfType("executable")) {
+      if (_traceElement.isOfType("binary executable")) {
         if (_traceFormat.equals("auto"))
          _api.queryTraceProgramFormat(_traceElement);
         else

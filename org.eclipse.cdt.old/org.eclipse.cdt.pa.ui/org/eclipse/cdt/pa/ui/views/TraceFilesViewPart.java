@@ -128,7 +128,12 @@ public class TraceFilesViewPart extends PAObjectsViewPart
       }
             
       break;
-     
+    
+    case PATraceEvent.FILE_PARSED:
+    
+      _viewer.setSelected(traceObject, false);
+      break;
+      
     case PATraceEvent.FILE_DELETED:
       
       _viewer.resetView();      

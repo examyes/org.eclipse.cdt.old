@@ -75,21 +75,27 @@ public class CallersViewPart extends PAObjectsViewPart
   public void traceChanged(PATraceEvent event) {
   
    // System.out.println("traceChanged called");
-   DataElement traceFile = event.getObject();
+   DataElement traceObject = event.getObject();
    int type = event.getType();
    switch (type) {
-   
-    case PATraceEvent.FILE_CREATED:
-      
-      break;
-     
+        
     case PATraceEvent.FILE_DELETED:
       
-      if (traceFile == _currentTraceFile) {
+      if (traceObject == _currentTraceFile) {
         _currentTraceFile = null;
-        _viewer.setInput(_api.getDummyElement());      
-        _viewer.resetView();
+		initInput(null);
       }
+      break;
+      
+    case PATraceEvent.PROJECT_CHANGED:
+    
+      if (traceObject != null) {
+        _viewer.setInput(traceObject);
+      }
+      else {
+        initInput(null);
+      }
+      
       break;
       
     default:

@@ -95,6 +95,11 @@ public class CallTreeViewPart extends PAObjectsViewPart
       _viewer.setInput(callTreeRoot);
       _viewer.selectRelationship("calls");
       break;
+
+    case PATraceEvent.FILE_PARSED:
+      
+      _viewer.resetView();
+      break;
      
     case PATraceEvent.FILE_DELETED:
       

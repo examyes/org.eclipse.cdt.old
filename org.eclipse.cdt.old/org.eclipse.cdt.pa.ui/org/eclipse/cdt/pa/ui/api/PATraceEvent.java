@@ -12,10 +12,11 @@ public class PATraceEvent
 {
   // type
   public static final int FILE_CREATED    = 0;
-  public static final int FORMAT_CHANGED  = 1; 
-  public static final int PROJECT_DELETED = 2;
-  public static final int FILE_DELETED    = 3;
-  public static final int PROJECT_CHANGED = 4;
+  public static final int FILE_PARSED	  = 1;
+  public static final int FORMAT_CHANGED  = 2; 
+  public static final int PROJECT_DELETED = 3;
+  public static final int FILE_DELETED    = 4;
+  public static final int PROJECT_CHANGED = 5;
   
   private int         _type;  
   private DataElement _object;

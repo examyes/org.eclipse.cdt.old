@@ -115,7 +115,13 @@ public class FunctionStatisticsViewPart extends PAObjectsViewPart {
         _currentProject = _api.findReferencedProject(traceObject);
         _viewer.setInput(_api.getTraceFuctionsRoot(traceObject));
 	    break;
-       
+      
+      case PATraceEvent.FILE_PARSED:
+      
+        _viewer.setInput(null);
+        _viewer.setInput(_api.getTraceFuctionsRoot(traceObject));
+        break;
+        
       case PATraceEvent.FILE_DELETED:
         
         if (traceObject == _currentTraceFile) {
