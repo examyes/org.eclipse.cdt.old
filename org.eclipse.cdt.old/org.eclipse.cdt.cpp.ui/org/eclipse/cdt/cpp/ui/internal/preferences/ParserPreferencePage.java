@@ -41,8 +41,8 @@ import java.util.*;
 
 public class ParserPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
 {
-    private Button _autoParseButton;
-
+    private ParseBehaviourControl _parseBehaviourControl;
+    
     public ParserPreferencePage() 
     {
     }
@@ -55,8 +55,8 @@ public class ParserPreferencePage extends PreferencePage implements IWorkbenchPr
     {	
 	Composite control = new Composite(parent, SWT.NONE);
 
-	_autoParseButton = new Button(control, SWT.CHECK);
-	_autoParseButton.setText("Perform parse automatically on resource modification");
+	_parseBehaviourControl = new ParseBehaviourControl(control, SWT.NONE);
+
 	performDefaults();
 	
 	control.setLayout(new GridLayout());
@@ -67,39 +67,74 @@ public class ParserPreferencePage extends PreferencePage implements IWorkbenchPr
     public void performDefaults() 
     {
 	CppPlugin plugin      = CppPlugin.getDefault();
-	ArrayList preferences = plugin.readProperty("AutoParse");
-	if (preferences.isEmpty())
+	ArrayList autoParse = plugin.readProperty("AutoParse");
+	if (autoParse.isEmpty())
 	    {
-		_autoParseButton.setSelection(false);
+		_parseBehaviourControl.setAutoParseSelection(false);
 	    }
 	else
 	    {
-		String preference = (String)preferences.get(0);
+		String preference = (String)autoParse.get(0);
 		if (preference.equals("Yes"))
 		    {
-			_autoParseButton.setSelection(true);
+			_parseBehaviourControl.setAutoParseSelection(true);
 		    }
 		else
 		    {
-			_autoParseButton.setSelection(false);
+			_parseBehaviourControl.setAutoParseSelection(false);
 		    }
 	    }
+
+	ArrayList autoPersist = plugin.readProperty("AutoPersist");
+	if (autoPersist.isEmpty())
+	    {
+		_parseBehaviourControl.setAutoPersistSelection(false);
+	    }
+	else
+	    {
+		String preference = (String)autoPersist.get(0);
+		if (preference.equals("Yes"))
+		    {
+			_parseBehaviourControl.setAutoPersistSelection(true);
+		    }
+		else
+		    {
+			_parseBehaviourControl.setAutoPersistSelection(false);
+		    }
+	    }
+
+
     }
 
     public boolean performOk()
     {
-	ArrayList preferences = new ArrayList();
-	if (_autoParseButton.getSelection())
+	// auto parse
+	ArrayList autoParse = new ArrayList();
+	if (_parseBehaviourControl.getAutoParseSelection())
 	    {
-		preferences.add("Yes");		
+		autoParse.add("Yes");		
 	    }
 	else
 	    {
-		preferences.add("No");		
+		autoParse.add("No");		
 	    }
 
 	CppPlugin plugin      = CppPlugin.getDefault();
-	plugin.writeProperty("AutoParse", preferences);	
+	plugin.writeProperty("AutoParse", autoParse);	
+
+
+	// auto persist
+	ArrayList autoPersist = new ArrayList();
+	if (_parseBehaviourControl.getAutoPersistSelection())
+	    {
+		autoPersist.add("Yes");		
+	    }
+	else
+	    {
+		autoPersist.add("No");		
+	    }
+
+	plugin.writeProperty("AutoPersist", autoPersist);	
 
 	return true;
     }

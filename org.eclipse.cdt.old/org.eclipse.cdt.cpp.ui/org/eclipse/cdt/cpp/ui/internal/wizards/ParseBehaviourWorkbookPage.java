@@ -4,7 +4,7 @@ package com.ibm.cpp.ui.internal.wizards;
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
  */
  
-import com.ibm.cpp.ui.internal.preferences.ParseQualityControl;
+import com.ibm.cpp.ui.internal.preferences.*;
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.wizards.*;
 
@@ -18,16 +18,16 @@ import java.util.*;
 
 public class ParseBehaviourWorkbookPage 
 {
-    private Button _autoParseButton;
+    private ParseBehaviourControl _parseBehaviourControl;
+
     private Composite _control;
 
     public ParseBehaviourWorkbookPage(Composite parent) 
     {
 	_control = new Composite(parent, SWT.NONE);
 
-	_autoParseButton = new Button(_control, SWT.CHECK);
-	_autoParseButton.setText("Perform parse automatically on resource modification");
-	
+	_parseBehaviourControl = new ParseBehaviourControl(_control, SWT.NONE);
+
 	_control.setLayout(new GridLayout());
 
 	setDefaults();
@@ -37,21 +37,39 @@ public class ParseBehaviourWorkbookPage
     public void setDefaults()
     {
 	CppPlugin plugin      = CppPlugin.getDefault();
-	ArrayList preferences = plugin.readProperty("AutoParse");
-	if (preferences.isEmpty())
+	ArrayList autoParse = plugin.readProperty("AutoParse");
+	if (autoParse.isEmpty())
 	    {
-		_autoParseButton.setSelection(false);
+		_parseBehaviourControl.setAutoParseSelection(false);
 	    }
 	else
 	    {
-		String preference = (String)preferences.get(0);
+		String preference = (String)autoParse.get(0);
 		if (preference.equals("Yes"))
 		    {
-			_autoParseButton.setSelection(true);
+			_parseBehaviourControl.setAutoParseSelection(true);
 		    }
 		else
 		    {
-			_autoParseButton.setSelection(false);
+			_parseBehaviourControl.setAutoParseSelection(false);
+		    }
+	    }
+
+	ArrayList autoPersist = plugin.readProperty("AutoPersist");
+	if (autoPersist.isEmpty())
+	    {
+		_parseBehaviourControl.setAutoPersistSelection(false);
+	    }
+	else
+	    {
+		String preference = (String)autoPersist.get(0);
+		if (preference.equals("Yes"))
+		    {
+			_parseBehaviourControl.setAutoPersistSelection(true);
+		    }
+		else
+		    {
+			_parseBehaviourControl.setAutoPersistSelection(false);
 		    }
 	    }
     }
@@ -59,7 +77,21 @@ public class ParseBehaviourWorkbookPage
     public ArrayList getAutoParse()
     {
 	ArrayList preferences = new ArrayList();
-	if (_autoParseButton.getSelection())
+	if (_parseBehaviourControl.getAutoParseSelection())
+	    {
+		preferences.add("Yes");
+	    }
+	else
+	    {
+		preferences.add("No");
+	    }
+	return preferences;
+    }
+
+    public ArrayList getAutoPersist()
+    {
+	ArrayList preferences = new ArrayList();
+	if (_parseBehaviourControl.getAutoPersistSelection())
 	    {
 		preferences.add("Yes");
 	    }

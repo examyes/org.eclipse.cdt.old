@@ -112,7 +112,9 @@ public class CppEditor extends LpexTextEditor
         super.editorContextMenuAboutToShow(menu);
         addAction(menu, "ContentAssistProposal");
 
-	menu.add(new FindObjectAction("Find Selected@Ctrl+X", this, true));
+	FindObjectAction action = new FindObjectAction("Find Selected@Ctrl+X", this, true);
+	menu.add(action);
+	setAction(ITextEditorActionConstants.FIND, action);
       }
 
 

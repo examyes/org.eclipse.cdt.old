@@ -24,7 +24,7 @@ import org.eclipse.ui.dialogs.*;
 
 public class AutoParsePropertyPage extends PropertyPage
 {	
-    private Button _autoParseButton;
+    private ParseBehaviourControl _parseBehaviourControl;
 
   public AutoParsePropertyPage()
       {
@@ -42,8 +42,7 @@ public class AutoParsePropertyPage extends PropertyPage
         {
 	    Composite control = new Composite(parent, SWT.NONE);
 
-	    _autoParseButton = new Button(control, SWT.CHECK);
-	    _autoParseButton.setText("Perform parse automatically on resource modification");
+	    _parseBehaviourControl = new ParseBehaviourControl(control, SWT.NONE);
 	    
 	    control.setLayout(new GridLayout());
 	    performDefaults();
@@ -64,40 +63,71 @@ public class AutoParsePropertyPage extends PropertyPage
   protected void performDefaults()
       {
 	  super.performDefaults();	  
-	  
-	  ArrayList preferences = CppPlugin.readProperty(getProject(), "AutoParse");
-	  if (!preferences.isEmpty())
+	 
+	  ArrayList autoParsePreferences = CppPlugin.readProperty(getProject(), "AutoParse");
+	  if (!autoParsePreferences.isEmpty())
 	      {
-		  String autoParse = (String)preferences.get(0);
+		  String autoParse = (String)autoParsePreferences.get(0);
 		  if (autoParse.equals("Yes"))
 		      {
-			  _autoParseButton.setSelection(true);
+			  _parseBehaviourControl.setAutoParseSelection(true);
 		      }
 		  else
 		      {
-			  _autoParseButton.setSelection(false);
+			  _parseBehaviourControl.setAutoParseSelection(false);
 		      }
 	      }
 	  else
 	      {
-		  _autoParseButton.setSelection(false);
+		  _parseBehaviourControl.setAutoParseSelection(false);
+	      }
+
+	  ArrayList autoPersistPreferences = CppPlugin.readProperty(getProject(), "AutoPersist");
+	  if (!autoPersistPreferences.isEmpty())
+	      {
+		  String autoPersist = (String)autoPersistPreferences.get(0);
+		  if (autoPersist.equals("Yes"))
+		      {
+			  _parseBehaviourControl.setAutoPersistSelection(true);
+		      }
+		  else
+		      {
+			  _parseBehaviourControl.setAutoPersistSelection(false);
+		      }
+	      }
+	  else
+	      {
+		  _parseBehaviourControl.setAutoPersistSelection(false);
 	      }
       }
     
   public boolean performOk()
       {
-	  ArrayList preferences = new ArrayList();
-	  if (_autoParseButton.getSelection())
+	  ArrayList autoParsePreferences = new ArrayList();
+	  if (_parseBehaviourControl.getAutoParseSelection())
 	      {
-		  preferences.add("Yes");
+		  autoParsePreferences.add("Yes");
 	      }
 	  else
 	      {
-		  preferences.add("No");
+		  autoParsePreferences.add("No");
 	      }
 
-	  CppPlugin.writeProperty(getProject(), "AutoParse", preferences);
+	  CppPlugin.writeProperty(getProject(), "AutoParse", autoParsePreferences);
 	  
+	  ArrayList autoPersistPreferences = new ArrayList();
+	  if (_parseBehaviourControl.getAutoPersistSelection())
+	      {
+		  autoPersistPreferences.add("Yes");
+	      }
+	  else
+	      {
+		  autoPersistPreferences.add("No");
+	      }
+
+	  CppPlugin.writeProperty(getProject(), "AutoPersist", autoPersistPreferences);
+	  
+
 	  ModelInterface api = ModelInterface.getInstance();
 	  api.setParseQuality(getProject());	
 

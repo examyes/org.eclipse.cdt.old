@@ -943,12 +943,23 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		   String autoParseStr = (String)autoParse.get(0);
 		   autoParseElement.setAttribute(DE.A_NAME, autoParseStr);
 	       }	   
+
+	   DataElement autoPersistElement = dataStore.createObject(null, "autopersist", "No");
+	   ArrayList autoPersist = _plugin.readProperty(project, "AutoPersist");
+	   	       
+	   if (!autoPersist.isEmpty())
+	       {
+		   String autoPersistStr = (String)autoPersist.get(0);
+		   autoPersistElement.setAttribute(DE.A_NAME, autoPersistStr);
+	       }	   
+
 	   DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_PREFERENCES");
 	   if (setD != null)
 	       {
 		   ArrayList args = new ArrayList();
 		   args.add(qualityElement);			
 		   args.add(autoParseElement);			
+		   args.add(autoPersistElement);			
 		   dataStore.command(setD, args, projectObj);
 	       }
        }

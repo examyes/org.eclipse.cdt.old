@@ -94,6 +94,9 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		ArrayList autoParse = _parserWizardPage._workbookPageParseBehaviour.getAutoParse();
 		_plugin.writeProperty(project, "AutoParse", autoParse);      
 
+		ArrayList autoPersist = _parserWizardPage._workbookPageParseBehaviour.getAutoPersist();
+		_plugin.writeProperty(project, "AutoPersist", autoPersist);      
+
 		// add parse quality
 		ArrayList preferences = _parserWizardPage._workbookPageParseQuality.getQuality();
 		_plugin.writeProperty(project, "ParseQuality", preferences);      
