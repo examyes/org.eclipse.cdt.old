@@ -501,9 +501,9 @@
     <page
          objectClass="org.eclipse.core.resources.IProject"
          name="%Autoconf_Dialog_Settings"
-         category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
-         class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
-         id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage">
+         category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfDialogSettingsPropertyPage"
+         class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfDialogSettingsPropertyPage"
+         id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfDialogSettingsPropertyPage">
       <filter
             name="nature"
             value="org.eclipse.cdt.cpp.ui.cppnature">
@@ -513,9 +513,9 @@
     <page
          objectClass="org.eclipse.core.resources.IProject"
          name="%Autoconf_Build_Properties"
-         category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
-         class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage"
-         id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfSettingsPropertyPage">
+         category="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfBuilderSettingsPropertyPage"
+         class="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfBuilderSettingsPropertyPage"
+         id="org.eclipse.cdt.cpp.ui.internal.builder.AutoconfBuilderSettingsPropertyPage">
       <filter
             name="nature"
             value="org.eclipse.cdt.cpp.ui.cppnature">
