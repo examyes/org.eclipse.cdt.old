@@ -1531,21 +1531,23 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     private void resourceChanged(IResource resource)
     {
-	IProject project = _plugin.getCurrentProject();
 	if (resource != null)
 	    {
-		project = getProjectFor(resource);
-	    }
-
-	DataElement cProject = findProjectElement(project);
-	if (cProject != null)
-	    {
-		DataStore dataStore = cProject.getDataStore();
-		DataElement refreshD = dataStore.localDescriptorQuery(cProject.getDescriptor(), "C_REFRESH_PROJECT");
-		if (refreshD != null)
+		IProject project = resource.getProject();
+		DataElement cProject = findProjectElement(project);
+		if (cProject != null)
 		    {
+			DataStore dataStore = cProject.getDataStore();
 			System.out.println("refreshing project " + project);
-			dataStore.command(refreshD, cProject);
+			DataElement refreshD = dataStore.localDescriptorQuery(cProject.getDescriptor(), "C_REFRESH");
+			if (refreshD != null)
+			    {
+				dataStore.command(refreshD, cProject);
+			    }
+		    }
+		else
+		    {
+			System.out.println("no project " + project);     					
 		    }
 	    }
     }
@@ -1597,7 +1599,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    DataElement cProject = findProjectElement((IProject)resource);
 			    if (cProject != null)
 				{
-				    System.out.println("calling delete of " + cProject);
 				    DataElement commandDescriptor = dataStore.localDescriptorQuery(cProject.getDescriptor(), 
 												   "C_DELETE_PROJECT");
 				    if (commandDescriptor != null)
@@ -1606,7 +1607,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					}				
 				}    
 			}
-
+		    
 		    resourceChanged(resource);
 		}
 		break;

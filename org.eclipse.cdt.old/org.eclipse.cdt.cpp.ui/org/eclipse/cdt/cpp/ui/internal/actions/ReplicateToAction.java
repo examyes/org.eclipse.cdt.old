@@ -25,8 +25,53 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
 
+
+import org.eclipse.core.runtime.*;
+import org.eclipse.jface.operation.*;
+import org.eclipse.jface.dialogs.*;
+import java.lang.reflect.InvocationTargetException;
+
+
 public class ReplicateToAction extends CustomAction
 { 
+    public class ReplicateToOperation extends ReplicateOperation
+    {
+	public ReplicateToOperation(DataElement subject, List projects, ModelInterface api)
+	{
+	    super(subject, projects, api);
+	}
+
+	protected void execute(IProgressMonitor pm) 
+	{
+	    _pm = pm;
+	    _pm.beginTask("Replicating...", _projects.size());
+
+	    for (int i = 0; i < _projects.size(); i++)
+		{
+		    _pm.worked(1);
+
+		    DataElement targetProject = ((DataElement)_projects.get(i)).dereference();
+		    
+		    if (targetProject != null && _subject != targetProject)
+			{
+			    // do transfer files
+			    for (int j = 0; j < _subject.getNestedSize(); j++)
+				{
+				    DataElement source = _subject.get(j);
+				    if (!source.isReference())
+					{
+					    TransferFiles transferAction = new TransferFiles("transfer", source, 
+											     targetProject, this);
+					    transferAction.start();
+					}
+				}
+			}
+		}
+	    _pm.done();
+	}
+    }
+
+
   public ReplicateToAction(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
         super(subject, label, command, dataStore);
@@ -34,36 +79,27 @@ public class ReplicateToAction extends CustomAction
 
     public void run()
     {
-	DataElement sourceProject = _subject;
 	ModelInterface api = ModelInterface.getInstance();
-	
 	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a Project To Replicate To", 
 							  api.findWorkspaceElement());
 	
 	dlg.open();
-	
 	if (dlg.getReturnCode() == dlg.OK)
 	    {
-		List selection = dlg.getSelected();
-		for (int i = 0; i < selection.size(); i++)
+		List projects = dlg.getSelected();
+		
+		ReplicateToOperation op = new ReplicateToOperation(_subject, projects, api);
+		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
+		try
 		    {
-			DataElement targetProject = ((DataElement)selection.get(i)).dereference();
-
-			if (targetProject != null && sourceProject != targetProject)
-			    {
-				// do transfer files
-				for (int j = 0; j < sourceProject.getNestedSize(); j++)
-				    {
-					DataElement source = sourceProject.get(j);
-					if (!source.isReference())
-					    {
-						TransferFiles transferAction = new TransferFiles("transfer", source, 
-												 targetProject, null);
-						transferAction.start();
-					    }
-				    }
-			    }
+			progressDlg.run(false, true, op);
 		    }
+		catch (InterruptedException e) 
+		    {
+		    } 
+		catch (InvocationTargetException e) 
+		    {
+		    }		
 	    }
     }
 }

@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: AddClassBreakpoint.class AddFunctionBreakpoint.class AddStatementBreakpoint.class ClearAction.class CppActionDelegateBuild.class CppActionDelegateDesignate.class CppActionDelegateFolderBuild.class CppActionDelegateUnDesignate.class  OpenPerspectiveAction.class ParseAction.class  SaveAction.class   MakefileAmAction.class FindObjectAction.class ProjectOpenAction.class BuildAction.class ProjectParseAction.class OpenEditorAction.class OpenProjectAction.class ProjectRemoveParseAction.class ProjectSaveParseAction.class SharedLibMakefileAmAction.class StaticLibMakefileAmAction.class ReplicateFromAction.class DefaultMakefileAmAction.class TopLevelMakefileAmAction.class ProjectAction.class ReplicateToAction.class  CloseProjectAction.class SynchronizeWithAction.class ConfigureAction.class ManageProjectAction.class OpenPropertiesAction.class CVSAction.class DeleteProjectAction.class
+all: AddClassBreakpoint.class AddFunctionBreakpoint.class AddStatementBreakpoint.class ClearAction.class CppActionDelegateBuild.class CppActionDelegateDesignate.class CppActionDelegateFolderBuild.class CppActionDelegateUnDesignate.class  OpenPerspectiveAction.class ParseAction.class  SaveAction.class   MakefileAmAction.class FindObjectAction.class ProjectOpenAction.class BuildAction.class ProjectParseAction.class OpenEditorAction.class OpenProjectAction.class ProjectRemoveParseAction.class ProjectSaveParseAction.class SharedLibMakefileAmAction.class StaticLibMakefileAmAction.class ReplicateFromAction.class DefaultMakefileAmAction.class TopLevelMakefileAmAction.class ProjectAction.class ReplicateToAction.class  CloseProjectAction.class SynchronizeWithAction.class ConfigureAction.class ManageProjectAction.class OpenPropertiesAction.class CVSAction.class DeleteProjectAction.class ReplicateOperation.class
 
 # Class Targets
 DeleteProjectAction.class: DeleteProjectAction.java
@@ -112,6 +112,9 @@ ProjectAction.class: ProjectAction.java
 
 ReplicateToAction.class: ReplicateToAction.java
 	javac ReplicateToAction.java
+
+ReplicateOperation.class: ReplicateOperation.java
+	javac ReplicateOperation.java
 
 RefreshNavigatorAction.class: RefreshNavigatorAction.java
 	javac RefreshNavigatorAction.java

@@ -33,58 +33,11 @@ import java.lang.reflect.InvocationTargetException;
 
 public class SynchronizeWithAction extends CustomAction
 { 
-    public class SynchronizeWithOperation implements IRunnableWithProgress, ITransferListener
+    public class SynchronizeWithOperation extends ReplicateOperation
     {
-	private ModelInterface _api;
-	private List _projects;
-	IProgressMonitor _pm;
-
-	public SynchronizeWithOperation(List projects, ModelInterface api)
+	public SynchronizeWithOperation(DataElement subject, List projects, ModelInterface api)
 	{
-	    _api = api;
-	    _projects = projects;
-	}    
-
-	public void run(IProgressMonitor monitor) throws InvocationTargetException
-	{
-	    execute(monitor);
-	}
-
-	public Shell getShell()
-	{
-	    return _api.getShell();
-	}
-
-	public void update(String updateString)
-	{
-	    _pm.subTask(updateString);
-	    
-	    if (updateString.equals("Ready"))
-		{
-		    IProject subP = _api.findProjectResource(_subject); 
-		    try
-			{
-			    subP.refreshLocal(subP.DEPTH_INFINITE, _pm);
-			}
-		    catch (CoreException e)
-			{
-			    System.out.println(e);
-			}	
-		    
-		    for (int i = 0; i < _projects.size(); i++)
-			{
-			    DataElement project = (DataElement)_projects.get(i); 
-			    IProject tarP = _api.findProjectResource(project); 
-			    try
-				{
-				    tarP.refreshLocal(tarP.DEPTH_INFINITE, _pm);
-				}
-			    catch (CoreException e)
-				{
-				    System.out.println(e);
-				}	
-			}
-		}    
+	    super(subject, projects, api);
 	}
 
 	protected void execute(IProgressMonitor pm) 
@@ -92,8 +45,8 @@ public class SynchronizeWithAction extends CustomAction
 	    _pm = pm;
 	    DataElement project1 = _subject;
 	    
-	    pm.beginTask("Synchronizing...", _projects.size());
-
+	    _pm.beginTask("Synchronizing...", _projects.size());
+	    
 	    for (int i = 0; i < _projects.size(); i++)
 		{
 		    _pm.worked(1);
@@ -149,7 +102,7 @@ public class SynchronizeWithAction extends CustomAction
 	    {
 		List projects = dlg.getSelected();
 		
-		SynchronizeWithOperation op = new SynchronizeWithOperation(projects, api);
+		SynchronizeWithOperation op = new SynchronizeWithOperation(_subject, projects, api);
 		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
 		try
 		    {
