@@ -44,6 +44,7 @@ public class CppPerspective implements IPerspectiveFactory
 						      editorArea);
     bbottomRight.addView("org.eclipse.cdt.cpp.ui.CppOutputViewPart");
 
+    factory.addActionSet(IDebugUIConstants.LAUNCH_ACTION_SET);
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
 		
     // views - c++
