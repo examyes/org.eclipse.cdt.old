@@ -18,7 +18,6 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.dstore.ui.resource.*;
 
-import org.eclipse.vcm.internal.core.base.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 

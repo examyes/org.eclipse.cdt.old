@@ -39,8 +39,6 @@ import org.eclipse.ui.dialogs.*;
 import org.eclipse.ui.model.*;
 import org.eclipse.ui.actions.*;
 
-import org.eclipse.vcm.internal.core.base.*;
-import org.eclipse.vcm.internal.core.*;
 
 /**
  * Concrete implementation of a typical project creation main page.  Isv's can
@@ -227,7 +225,8 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 	
 	new Label(composite, SWT.NONE).setText(_plugin.getLocalizedString("createProjectWizard.ReferencedProjects"));
 	
-	referenceProjectsViewer = new CheckboxTableViewer(composite, SWT.BORDER);
+	referenceProjectsViewer = new CheckboxTableViewer(composite);
+
 	referenceProjectsViewer.getTable().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	referenceProjectsViewer.setLabelProvider(new WorkbenchLabelProvider());
 	referenceProjectsViewer.setContentProvider(new WorkbenchContentProvider());

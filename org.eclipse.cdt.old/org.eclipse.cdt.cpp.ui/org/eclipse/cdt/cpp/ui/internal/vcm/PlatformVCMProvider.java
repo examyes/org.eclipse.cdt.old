@@ -17,12 +17,11 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 
-import org.eclipse.vcm.internal.core.base.*;
 
 import java.util.*;
 import java.io.*;
 
-public class PlatformVCMProvider implements IVCMProvider 
+public class PlatformVCMProvider 
 {
   protected IWorkspace workspace;
   protected ArrayList _repositories = new ArrayList();
@@ -56,33 +55,15 @@ public IProject[] getKnownProjects()
     return result;
   }
 
-public IRepository[] getKnownRepositories() 
-  {
-    IRepository[] result = new IRepository[_repositories.size()];
-    int i = 0;
-    for (i = 0; i < _repositories.size(); i++) 
-      {
-	result[i] = (IRepository)_repositories.get(i);
-      }
-    return result;
-  }
 
-public ISharingManager getSharingManager() 
-{
-  return null;
-}
 
-public String[] getSupportedRepositoryTypes() 
-  {
-    return null;  
-  }
 
 public IWorkspace getWorkspace() 
   {
     return workspace;
   }
 
-  public IRepository createRepository(Connection connection, DataElement root) 
+  public Repository createRepository(Connection connection, DataElement root) 
   {
     // create new project connection
     Connection repConnection = new Connection(connection, root);
@@ -91,14 +72,14 @@ public IWorkspace getWorkspace()
     return nRepository;
   }
 
-  public IRepository createRepository(Connection connection) 
+  public Repository createRepository(Connection connection) 
   {
     Repository nRepository = new Repository(connection);
     addRepository(nRepository);
     return nRepository;
   }
 
-    public void addRepository(IRepository repository)
+    public void addRepository(Repository repository)
     {
 	_repositories.add(repository);
 	writeRepositories();	
@@ -137,15 +118,7 @@ public IWorkspace getWorkspace()
       }
   }  
 
-  public IRepository newRepository(IRepositoryLocation location) throws CoreException 
-  {
-    return null; 
-  }
 
-public IRepositoryLocation newRepositoryLocation(String type, String location) throws CoreException 
-  {
-      return null;
-    }
 
 public void setWorkspace(IWorkspace value) 
   {
@@ -258,7 +231,7 @@ public void startup()
 					    DataStore ds = CppPlugin.getDefault().getDataStore();	    
 					    DataElement root = ds.getRoot();
 					    Connection con = new Connection(name, args, root);
-					    IRepository newPrj = createRepository(con, con.getRoot());	   
+					    Repository newPrj = createRepository(con, con.getRoot());	   
 					}        
 				    
 				    inFile.close();
@@ -275,25 +248,7 @@ public void startup()
 		}
         }      
       }
-  
-  public IStatus validateRepositoryLocation(String type, String location) 
-  {
-    return null;
-  }
-
-    public void addVCMListener(IVCMListener listener)
-    {
-    }
-    public void notify(IVCMEvent event)
-    {
-    }
-    public void removeVCMListener(IVCMListener listener)
-    {
-    }
-
-    public void discardRepository(IRepository repository)
-    {
-    }
+ 
 
     
 }

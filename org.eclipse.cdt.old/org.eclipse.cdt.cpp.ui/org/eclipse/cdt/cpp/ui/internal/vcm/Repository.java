@@ -23,8 +23,7 @@ import org.eclipse.cdt.dstore.ui.connections.*;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.*;
-import org.eclipse.vcm.internal.core.base.*;
-import org.eclipse.vcm.internal.core.*;
+
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -55,7 +54,7 @@ import org.eclipse.ui.model.*;
 import org.eclipse.ui.*;
  
 public class Repository extends Project 
-    implements IRepository, IProject, IWorkbenchAdapter, 
+    implements IProject, IWorkbenchAdapter, 
     IDataElementContainer, IDomainListener, 
     IResource, IActionFilter
 {
@@ -462,10 +461,6 @@ public class Repository extends Project
   }
 
   
-  public IRepositoryLocation getRepositoryLocation() 
-  {
-      return null;
-  }
   
   public int getType() 
   {
@@ -783,15 +778,6 @@ public class Repository extends Project
   {
   }
 
-  public IMergeManager createMergeManager(IResource destination, IResourceEdition beforeEdition, IResourceEdition afterEdition, IProgressMonitor m) 
-  {
-    return null;
-  }
-  
-public ITeamStream createTeamStream(String name, IProgressMonitor progressMonitor) throws CoreException 
-  {
-    return null;
-  }
 
   public void deleteProjectVersion(String projectName, String versionName, IProgressMonitor monitor)
     throws CoreException 
@@ -814,25 +800,6 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
     
   }
   
-  public IVersionHistory fetchProjectHistory(String name, IProgressMonitor progressMonitor) throws CoreException 
-  {
-    return null;  
-  }
-  
-  public String[] fetchProjectList(IProgressMonitor progressMonitor) throws CoreException 
-  {
-    return null;
-  }
-  
-  public IVersionHistory fetchResourceHistory(String projectName, IPath path, IProgressMonitor monitor) throws CoreException 
-  {
-    return null;	
-  }
-
-  public ITeamStream[] fetchTeamStreams(IProgressMonitor progressMonitor) throws CoreException 
-  {
-    return null;
-  }
 
   public String getFileExtension()
   {
@@ -854,11 +821,7 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
   {
     return null;
   }
-
-  TeamStream getTeamStream(String name) throws CoreException 
-  {
-    return null;
-  }
+ 
 
     public ResourceElement findResource(String name)
     {

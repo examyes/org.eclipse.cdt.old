@@ -19,7 +19,6 @@
    <import plugin="org.eclipse.debug.core"/>
    <import plugin="org.eclipse.debug.ui"/>
    <import plugin="org.eclipse.core.target"/>
-   <import plugin="org.eclipse.vcm.core"/>
    <import plugin="org.eclipse.cdt.dstore.miners"/>
    <import plugin="org.eclipse.cdt.cpp.miners"/>
    <import plugin="org.eclipse.cdt.cpp.miners.parser"/>
