@@ -55,13 +55,16 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 			if (end > 0 && end>start)
 				address = str[1].substring(start, end);
 		}   
-		
-		address = address.trim();
-		
-		if (address.startsWith("0x0"));
-		{
-			String value = address.substring(3);
-			address="0x" + value;
+
+		if (address != null)
+		{		
+			address = address.trim();
+			
+			if (address.startsWith("0x0"));
+			{
+				String value = address.substring(3);
+				address="0x" + value;
+			}
 		}
 		
 		return address; 

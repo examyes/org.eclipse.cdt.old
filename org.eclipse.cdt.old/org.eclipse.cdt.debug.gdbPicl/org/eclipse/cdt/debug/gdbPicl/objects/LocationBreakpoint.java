@@ -338,7 +338,7 @@ public class LocationBreakpoint extends Breakpoint
 		String line = "1";
 		int lineNum;
 		
-		if (p == null)
+		if (p == null || address == null)
 		{
 			return 1;
 		}
