@@ -1,3 +1,8 @@
+2004-12-15  Rick Moseley  <rmoseley@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage.java (returnProjectPath): 
+	  bz #81145 - fixed unhandled exception when exporting a source/binary RPM
+
 2004-12-09  Rick Moseley  <rmoseley@redhat.com>
 
 	* src/org/eclipse/cdt/rpm/ui/rpm_strings.properties: bz# 78773/78788

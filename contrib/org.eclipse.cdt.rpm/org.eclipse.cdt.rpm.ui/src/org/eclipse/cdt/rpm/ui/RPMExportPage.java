@@ -127,13 +127,17 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 */
 	public String returnProjectPath() {
 		String[] projectSelection = projectList.getSelection();
+		IProject projectDetail;
 
-		// As we only allow a single selection in the listbox, and the listbox always
-		// comes with the first element selected, we can assume the first element
-		// in the returned array is valid. Need to add a try/catch group to check for
-		// null though
+		// As we only allow a single selection in the listbox, and the listbox
+		// always comes with the first element selected, we can assume
+		// the first element in the returned array is valid.
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		IProject projectDetail = workspaceRoot.getProject(projectSelection[0]);
+		try {
+			projectDetail = workspaceRoot.getProject(projectSelection[0]);
+		} catch (Exception e) {
+			return null;
+		}
 
 		return projectDetail.getLocation().toOSString();
 	}
