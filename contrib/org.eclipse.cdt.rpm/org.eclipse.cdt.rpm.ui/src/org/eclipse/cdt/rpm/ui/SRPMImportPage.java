@@ -35,6 +35,8 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -153,7 +155,6 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		srpmBrowse.setToolTipText(Messages.getString(
 				"SRPMImportPage.toolTip_Open_file_navigator")); //$NON-NLS-1$
 		srpmBrowse.setText(Messages.getString("RPMExportPage.Browse")); //$NON-NLS-1$
-		
 		srpmBrowse.addListener(SWT.Selection,
 			new Listener() {
 				public void handleEvent(Event event) {
@@ -283,7 +284,17 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		}
 		
 		if (!isSelection)
-			projectList.setSelection(0);//if none is selected select first project
+			projectList.setSelection(0);//if none is selected select first
+										// project
+		else
+			projectList.addSelectionListener(new SelectionListener() {
+				public void widgetSelected(SelectionEvent e) {
+					handleEvent(null);
+				}
+
+				public void widgetDefaultSelected(SelectionEvent e) {
+				}
+			});
 
 		projectList.addListener(SWT.FocusOut, this);
 	}

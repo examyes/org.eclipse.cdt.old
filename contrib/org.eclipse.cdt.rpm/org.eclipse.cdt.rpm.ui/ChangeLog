@@ -1,4 +1,9 @@
 2004-11-11  Rick Moseley  <rmoseley@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java (createProjectBox): add
+	  addSelectionListener for when a project to imort into is not selected
+
+2004-11-11  Rick Moseley  <rmoseley@redhat.com>
 	* plugin.xml: remove "test" from labels
 
 2004-11-11  Rick Moseley  <rmoseley@redhat.com>
