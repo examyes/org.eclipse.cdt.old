@@ -30,6 +30,7 @@ public class FileSystemMiner extends Miner
     private DataElement _sizeDescriptor;
     private DataElement _attributesDescriptor;
     private DataElement _permissionsDescriptor;
+    private DataElement _exeDescriptor;
 
   public FileSystemMiner ()
       {
@@ -194,6 +195,8 @@ public class FileSystemMiner extends Miner
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 	  _attributesDescriptor     = _dataStore.find(schemaRoot, DE.A_NAME, "attributes", 1);
 
+	  _exeDescriptor            = createObjectDescriptor(schemaRoot, "executable");
+	  _dataStore.createReference(_fileDescriptor, _exeDescriptor, "abstracts", "abstracted by");
 
 	  DataElement intD          = _dataStore.find(schemaRoot, DE.A_NAME, "Integer", 1);
 	  DataElement dateD         = _dataStore.find(schemaRoot, DE.A_NAME, "Date", 1);
@@ -867,6 +870,9 @@ public class FileSystemMiner extends Miner
 							    {
 								newObject.expandChildren();
 								newObject.setDepth(1);
+
+								// classify
+								classifyFile(newObject);
 							    }		      
 							else
 							    {
@@ -902,6 +908,38 @@ public class FileSystemMiner extends Miner
 
 	  return status;
       }
+
+    private void classifyFile(DataElement theFile)
+    {
+	String theOS = System.getProperty("os.name");
+	if (theOS.startsWith("Win"))
+	    {
+		// use 'exe' extension
+		String name = theFile.getName();
+		if (name.endsWith(".exe"))
+		    {
+			theFile.setAttribute(DE.A_TYPE, "executable");
+		    }
+	    }
+	else
+	    {
+		// use 'ls -F' command
+		String cmd = "ls -F " + theFile.getSource();
+		try
+		    {
+			Process theProcess = Runtime.getRuntime().exec(cmd);	
+			BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
+			String out = reader.readLine();
+			if (out.endsWith("*"))
+			    {
+				theFile.setAttribute(DE.A_TYPE, "executable");			
+			    }
+		    }
+		catch (IOException e)
+		    {
+		    }
+	    }	
+    }
 
     public DataElement handleRefresh(DataElement theElement, DataElement status)
     {
@@ -988,6 +1026,7 @@ public class FileSystemMiner extends Miner
 							    {				
 								newObject.expandChildren();		
 								newObject.setDepth(1);
+								classifyFile(newObject);
 							    }
 							else
 							    {
