@@ -505,16 +505,18 @@ public class Repository extends Project
 
   public void close(boolean save, IProgressMonitor monitor) throws CoreException
   {
-    if (isOpen())
+      if (isOpen())
     {	
 	ModelInterface api = ModelInterface.getInstance();
 	_children.clear();
+	saveProperties();
 
 	DomainNotifier dnotifier = _dataStore.getDomainNotifier();
 	dnotifier.removeDomainListener(this);		    
 	_connection.disconnect();  
-	_dataStore = _root.getDataStore();	
-	saveProperties();
+	_root.setDataStore(_root.getParent().getDataStore());
+	_dataStore = _root.getDataStore();
+	_remoteRoot = null;
 
 
 	CppProjectNotifier notifier = api.getProjectNotifier();
@@ -1034,7 +1036,7 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
 		// close the project
 		ModelInterface api = ModelInterface.getInstance();
 		api.closeProject(this);
-
+		
 		try
 		    {
 			close(null);

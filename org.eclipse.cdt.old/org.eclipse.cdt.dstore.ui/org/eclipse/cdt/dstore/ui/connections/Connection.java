@@ -452,6 +452,19 @@ public class Connection implements IDomainListener
     {
         if (_client != null && _client.isConnected())
 	    {
+		DataElement dsStatus = _client.getDataStore().getStatus();	
+		if (!dsStatus.getName().equals("okay"))
+		    {			
+			// report an error message
+			Shell shell = _notifier.findShell();
+			if (shell != null)
+			    {
+				String msg = dsStatus.getName();
+				MessageDialog.openError(shell, "Connection Error", msg);   
+			    }
+		    }
+		
+
 		_element.removeNestedData();
 		_element.setUpdated(false);
 		_element.setExpanded(false);	  
@@ -460,6 +473,7 @@ public class Connection implements IDomainListener
 		_client = null;
 
 		_notifier.removeDomainListener(this);
+		_notifier = null;
 	    }
     }
     
@@ -500,7 +514,6 @@ public class Connection implements IDomainListener
     {
 	DataElement dsStatus = _client.getDataStore().getStatus();	
 	DataElement parent = (DataElement)e.getParent();
-	
 	if (dsStatus == parent)
 	    {
 		return true;
@@ -511,18 +524,7 @@ public class Connection implements IDomainListener
   
     public void domainChanged(DomainEvent e)
     {
-	DataElement status = (DataElement)e.getParent();
-	if (!status.getName().equals("okay"))
-	    {
-		// report an error message
-		Shell shell = _notifier.findShell();
-		if (shell != null)
-		    {
-			String msg = status.getName();
-			MessageDialog.openError(shell, "Connection Error", msg);   
-		    }
-	    }
-	
+	// let disconnect take of this and let others take care of disconnect
     }
 
     public Shell getShell()
