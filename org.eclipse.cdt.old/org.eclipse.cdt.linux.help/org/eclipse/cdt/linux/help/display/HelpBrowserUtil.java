@@ -13,9 +13,11 @@ public class HelpBrowserUtil
 {
     public static boolean existsCommand(String command)
     {
-	String[] arg=new String[2];
-	arg[0]="which";
-	arg[1]=command;
+	String[] arg=new String[4];
+	arg[0]="sh";
+	arg[1]="-c";
+	arg[2]="which";
+	arg[3]=command;
 	Process p;
 	try{
 	    p=Runtime.getRuntime().exec(arg);

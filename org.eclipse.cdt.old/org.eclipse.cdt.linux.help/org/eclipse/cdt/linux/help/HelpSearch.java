@@ -71,124 +71,127 @@ public class HelpSearch
 		_mandone=false; // indicate load about to start
 		File filepath = getWhatIsPath();
 
-		try
+		// DKM - need to check if this exists before trying to read
+		if (filepath != null && filepath.exists())
 		    {
-			BufferedReader input = new BufferedReader(new FileReader(filepath));
-			
-			String line;
-			while((line=input.readLine())!=null )
+			try
 			    {
-			      
-				int limit= line.indexOf('-');
-				if(limit ==-1)
-				    continue; //skip lines with no description
-				String name = line.substring(0,limit); 
-				String content = line.substring(limit+1,line.length());
-				String key = getManKey(name);
-				String invocation= getManInvocation(name);
-				String section = getManSection(name);
-								
-				if(key ==null || key.trim().length()==0)
-				    continue;//skip entry
+				BufferedReader input = new BufferedReader(new FileReader(filepath));
 				
-				ItemElement i= new ItemElement(key,name,content,invocation,section,
-							       ItemElement.MAN_TYPE);
-				
-				list.add(i);
-				_mansize++;
+				String line;
+				while((line=input.readLine())!=null )
+				    {
+					
+					int limit= line.indexOf('-');
+					if(limit ==-1)
+					    continue; //skip lines with no description
+					String name = line.substring(0,limit); 
+					String content = line.substring(limit+1,line.length());
+					String key = getManKey(name);
+					String invocation= getManInvocation(name);
+					String section = getManSection(name);
+					
+					if(key ==null || key.trim().length()==0)
+					    continue;//skip entry
+					
+					ItemElement i= new ItemElement(key,name,content,invocation,section,
+								       ItemElement.MAN_TYPE);
+					
+					list.add(i);
+					_mansize++;
+				    }				
 			    }
-		    }
-		catch(Exception e)
-		    {
-
-			//FIXME: filenotfoundexception
-			e.printStackTrace();
-		    }
-
-		_mandone=true;	// indicate done
+			catch(Exception e)
+			    {
+				
+				//FIXME: filenotfoundexception
+				e.printStackTrace();
+			    }
+			_mandone=true;	// indicate done
+		    }			
 	    }
 	else if (type==INFO_TYPE)
 	    {
 		_infodone=false; //indicate about to start
 		File path =getInfoPath();
-		
-		try
+		if (path != null && path.exists())
 		    {
-			BufferedReader input = new BufferedReader(new FileReader(path));
-			
-			String line;
-			while((line=input.readLine())!=null )
-			    {				
-
-				int lend=line.length();
-				int lcurr=0;
+			try
+			    {
+				BufferedReader input = new BufferedReader(new FileReader(path));
 				
-				//skip noncharacters
-				while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
-				if(lcurr>=lend)continue;
-
-				//get the key
-				int fbegin=lcurr;
-				while(lcurr<lend &&line.charAt(lcurr)!=':')lcurr++;
-				if(lcurr>=lend)continue;
-				String key=line.substring(fbegin,lcurr);
-				
-				//skip noncharacters
-				while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
-				if(lcurr>=lend)continue;
-
-				//get the invocation
-				fbegin=lcurr;
-				while(lcurr<lend &&line.charAt(lcurr)!=')')lcurr++;
-				if(lcurr>=lend)continue;
-				StringBuffer invocation= new StringBuffer("info:/"+line.substring(fbegin,lcurr));
-				lcurr++;
-				//skip noncharacters
-				//while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
-
-				if(lcurr>=lend)continue;
-				fbegin=lcurr;
-				while(lcurr<lend &&line.charAt(lcurr)!='.')lcurr++;
-				if(lcurr>=lend)continue;
-				if(lcurr==fbegin) 
-				    invocation.append("/Top");
-				else				    
-				    invocation.append("/"+line.substring(fbegin,lcurr).trim());
-
-				//skip noncharacters
-				while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
-				if(lcurr>=lend)continue;
-
-				//get the content
-				 String content=line.substring(lcurr,lend);
-
-				/*StringBuffer content=line.substring(lcurr,lend);
-				if(line.charAt(lend-1)!='.')
-				    {
-					// the line continues so read the next line
-					if((line=input.readLine())!=null)
-					    content.append(line);
+				String line;
+				while((line=input.readLine())!=null )
+				    {				
 					
+					int lend=line.length();
+					int lcurr=0;
+					
+					//skip noncharacters
+					while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
+					if(lcurr>=lend)continue;
+					
+					//get the key
+					int fbegin=lcurr;
+					while(lcurr<lend &&line.charAt(lcurr)!=':')lcurr++;
+					if(lcurr>=lend)continue;
+					String key=line.substring(fbegin,lcurr);
+					
+					//skip noncharacters
+					while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
+					if(lcurr>=lend)continue;
+					
+					//get the invocation
+					fbegin=lcurr;
+					while(lcurr<lend &&line.charAt(lcurr)!=')')lcurr++;
+					if(lcurr>=lend)continue;
+					StringBuffer invocation= new StringBuffer("info:/"+line.substring(fbegin,lcurr));
+					lcurr++;
+					//skip noncharacters
+					//while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
+					
+					if(lcurr>=lend)continue;
+					fbegin=lcurr;
+					while(lcurr<lend &&line.charAt(lcurr)!='.')lcurr++;
+					if(lcurr>=lend)continue;
+					if(lcurr==fbegin) 
+					    invocation.append("/Top");
+					else				    
+					    invocation.append("/"+line.substring(fbegin,lcurr).trim());
+					
+					//skip noncharacters
+					while(lcurr<lend && !Character.isLetterOrDigit(line.charAt(lcurr))) lcurr++;
+					if(lcurr>=lend)continue;
+					
+					//get the content
+					String content=line.substring(lcurr,lend);
+					
+					/*StringBuffer content=line.substring(lcurr,lend);
+					  if(line.charAt(lend-1)!='.')
+					  {
+					  // the line continues so read the next line
+					  if((line=input.readLine())!=null)
+					  content.append(line);
+					  
+					  }
+					*/
+					
+					
+					ItemElement i= new ItemElement(key,null,content,invocation.toString(),null,
+								       ItemElement.INFO_TYPE);
+					
+					list.add(i);
+					_infosize++;
 				    }
-				*/
-
-				 
-				ItemElement i= new ItemElement(key,null,content,invocation.toString(),null,
-							       ItemElement.INFO_TYPE);
-								
-				list.add(i);
-				_infosize++;
 			    }
+			catch(Exception e)
+			    {
+				
+				//FIXME: filenotfoundexception
+				e.printStackTrace();
+			    }
+			_infodone=true; //indicate done.
 		    }
-		catch(Exception e)
-		    {
-
-			//FIXME: filenotfoundexception
-			e.printStackTrace();
-		    }
-
-		_infodone=true; //indicate done.
-		
 	    }
 
     }
