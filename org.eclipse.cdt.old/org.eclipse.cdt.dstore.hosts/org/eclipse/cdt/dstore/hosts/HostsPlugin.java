@@ -167,7 +167,7 @@ public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 		
 		
 		// for remote connections
-		_connectionManager = new ConnectionManager(_dataStore.getRoot(), _dataStore.getDomainNotifier());
+		_connectionManager = new ConnectionManager(_dataStore.getExternalRoot(), _dataStore.getDomainNotifier(), "org.eclipse.cdt.dstore.hosts/connections.dat");
 		_connectionManager.readConnections();
 	    }
     }

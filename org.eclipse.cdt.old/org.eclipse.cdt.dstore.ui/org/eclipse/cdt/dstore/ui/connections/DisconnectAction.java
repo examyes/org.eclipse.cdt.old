@@ -22,22 +22,20 @@ import org.eclipse.jface.dialogs.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
 
-public class DisconnectAction extends CustomAction
-{
-  public DisconnectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
-      {	
-        super(subject, label, command, dataStore);
-
-        Connection connection = ConnectionManager.getInstance().findConnectionFor(subject);
-        setEnabled(connection.isConnected());
-      }
+public abstract class DisconnectAction extends ConnectActionDelegate
+{      
+  protected void checkEnabledState(IAction action, Connection connection)
+  {
+  	action.setEnabled(connection.isConnected());	
+  }
 
   public void run()
       {
         DataElement selected = _subject;
         
-        ConnectionManager manager = ConnectionManager.getInstance();
+        ConnectionManager manager = getConnectionManager();
         manager.disconnect(selected);
+        selected.setDepth(1);
       }  
 }
 

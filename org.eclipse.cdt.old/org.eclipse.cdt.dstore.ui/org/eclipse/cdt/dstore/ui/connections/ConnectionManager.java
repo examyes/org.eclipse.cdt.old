@@ -34,51 +34,24 @@ import java.io.*;
 
 public class ConnectionManager
 {
-  public static class NewConnectionAction extends Action
-  {
-    public NewConnectionAction(String label, ImageDescriptor image)
-        {
-          super(label, image);
-        }
 
-    public NewConnectionAction(String label)
-        {
-          super(label);
-        }
   
-    public void run()
-        {
-          ConnectDialog dialog = new ConnectDialog("Create New Connection");	      
-          dialog.open();
-          if (dialog.getReturnCode() != dialog.OK)
-            return;
-          
-          String name = dialog.getName();
-          String host = dialog.getHostIP();
-          String port = dialog.getPort();
-          String dir  = dialog.getHostDirectory();
+  private ArrayList              _connections;
+  private DataElement            _input;
+  private DomainNotifier         _notifier;
+  private String                 _connectionsFile;
 
-          Connection con = new Connection(name, host, port, "root",  dir, dialog.isLocal(), dialog.isUsingDaemon(), _input);
-          _connections.add(con);
-        }
-  }
-  
-  private static ConnectionManager      _instance;
-  private static ArrayList              _connections;
-  private static DataElement            _input;
-  private static DomainNotifier         _notifier;
-
-  public ConnectionManager(DataElement input, DomainNotifier notifier)
+  public ConnectionManager(DataElement input, DomainNotifier notifier, String connectionsFile)
       {
         _input = input;
         _notifier = notifier;
-        _instance = this;
         _connections = new ArrayList();
+        _connectionsFile = _input.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + connectionsFile;
       }
-
-  static public ConnectionManager getInstance()
+      
+  public DataElement getInput()
   {
-    return _instance;
+  	return _input;	
   }
 
   public ArrayList getConnections()
@@ -175,10 +148,7 @@ public class ConnectionManager
 
     public String getConnectionFile()
     {
-	return new String(_input.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + 
-			  "org.eclipse.cdt.dstore.ui" +
-			  File.separator + 
-			  "connections.dat");        
+		return _connectionsFile;	
     }   
 
   public void writeConnections()

@@ -5,7 +5,7 @@ package org.eclipse.cdt.dstore.ui.connections;
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
- 
+
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.ui.dialogs.*;
@@ -31,40 +31,38 @@ import org.eclipse.swt.layout.*;
 import java.util.*;
 import java.io.*;
 
-
-public class EditConnectionAction extends CustomAction
+public abstract class EditConnectionAction extends ConnectActionDelegate
 {
-    private DataElement _host;
-    private DataStoreUIPlugin _plugin;
+	private DataStoreUIPlugin _plugin = DataStoreUIPlugin.getDefault();
 
-    public EditConnectionAction(DataElement subject, String label, DataElement command, DataStore dataStore)
-    {
-	super(label);
-	_host = subject;
-	_plugin = DataStoreUIPlugin.getDefault();
-    }
-    
-    public void run()
-    {
-	Connection connection = ConnectionManager.getInstance().findConnectionFor(_host);
-
-	ConnectDialog dialog = new ConnectDialog(_plugin.getLocalizedString("Edit_Connection"), connection);	      
-	dialog.open();
-	if (dialog.getReturnCode() != dialog.OK)
-	    return;
+	protected void checkEnabledState(IAction action, Connection connection)
+	{
+		action.setEnabled(!connection.isConnected());	
+	}
 	
-	String name = dialog.getName();
-	String host = dialog.getHostIP();
-	String port = dialog.getPort();
-	String dir  = dialog.getHostDirectory();
 	
-	connection.setName(name);
-	connection.setHost(host);
-	connection.setPort(port);
-	connection.setDir(dir);
-	connection.setIsLocal(dialog.isLocal());
-	connection.setIsUsingDaemon(dialog.isUsingDaemon());
+	public void run()
+	{
+		if (_connection != null)
+		{
+			ConnectDialog dialog = new ConnectDialog(_plugin.getLocalizedString("Edit_Connection"), _connection);
+			dialog.open();
+			if (dialog.getReturnCode() != dialog.OK)
+				return;
 
-	_host.getDataStore().refresh(_host);
-    }
+			String name = dialog.getName();
+			String host = dialog.getHostIP();
+			String port = dialog.getPort();
+			String dir = dialog.getHostDirectory();
+
+			_connection.setName(name);
+			_connection.setHost(host);
+			_connection.setPort(port);
+			_connection.setDir(dir);
+			_connection.setIsLocal(dialog.isLocal());
+			_connection.setIsUsingDaemon(dialog.isUsingDaemon());
+
+			_dataStore.refresh(_dataStore.getHostRoot());
+		}
+	}
 }

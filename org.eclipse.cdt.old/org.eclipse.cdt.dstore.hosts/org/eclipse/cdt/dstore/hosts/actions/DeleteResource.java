@@ -142,10 +142,10 @@ public class DeleteResource extends CustomAction
 		for (int b = 0; b < pages.length; b++)
 		    {
 			IWorkbenchPage page = pages[b];
-			IEditorPart[] editors = page.getEditors();
+			IEditorReference[] editors = page.getEditorReferences();
 		        for (int c = 0; c < editors.length; c++)
 			    {
-				IEditorPart editor = editors[c];
+				IEditorPart editor = editors[c].getEditor(false);
 				if (editor.getEditorInput() instanceof IFileEditorInput)
 				  {
 				    IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();

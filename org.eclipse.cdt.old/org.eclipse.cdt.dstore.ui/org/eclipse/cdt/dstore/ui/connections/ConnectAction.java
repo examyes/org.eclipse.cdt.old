@@ -22,31 +22,25 @@ import org.eclipse.jface.dialogs.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
 
-public class ConnectAction extends CustomAction
+public abstract class ConnectAction extends ConnectActionDelegate
 {
-    protected Connection _connection;
-    private DataStoreUIPlugin _plugin;
-
-    public ConnectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
-    {	
-        super(subject, label, command, dataStore);
-        
-        _connection = ConnectionManager.getInstance().findConnectionFor(subject);
-        setEnabled(!_connection.isConnected());
-
-	_plugin = DataStoreUIPlugin.getDefault();
-      }
-    
-    public void run()
+	private DataStoreUIPlugin _plugin = DataStoreUIPlugin.getDefault();
+  
+    protected void checkEnabledState(IAction action, Connection connection)
     {
-	DataElement selected = _subject;
-	ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier());
-	if (status != null)
+   		action.setEnabled(!connection.isConnected());
+    }
+ 
+    public void run()
+    { 
+		DataElement selected = _subject;
+		ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier());
+		if (status != null)
 	    {
-		String msg = status.getMessage();
-		if (!status.isConnected())
+			String msg = status.getMessage();
+			if (!status.isConnected())
 		    {
-			MessageDialog failD = new MessageDialog(null, 
+				MessageDialog failD = new MessageDialog(null, 
 								_plugin.getLocalizedString("dialog.Connection_Failure"), 
 								null, msg, 
 								MessageDialog.INFORMATION,
@@ -54,15 +48,15 @@ public class ConnectAction extends CustomAction
 								0);
 			
 			
-			failD.openInformation(new Shell(), 								
+				failD.openInformation(new Shell(), 								
 					      _plugin.getLocalizedString("dialog.Connection_Failure"), 
 					      msg);          
 		    }
 		else
 		    {
+		    	selected.setDepth(2);
 		    }
 	    }
-    }
-	
+    }	
 }
 

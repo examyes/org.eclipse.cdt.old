@@ -22,19 +22,20 @@ import org.eclipse.jface.dialogs.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
 
-public class DeleteAction extends CustomAction
+public abstract class DeleteAction extends ConnectActionDelegate
 {
-  public DeleteAction(DataElement subject, String label, DataElement command, DataStore dataStore)
-      {	
-        super(subject, label, command, dataStore);
-      }
-
+  protected void checkEnabledState(IAction action, Connection connection)
+  {
+  	action.setEnabled(!connection.isConnected());	
+  }
+  
   public void run()
       {
         DataElement selected = _subject;
        
-        ConnectionManager manager = ConnectionManager.getInstance();
+        ConnectionManager manager = getConnectionManager();
         manager.delete(selected);
+        selected.setDepth(0);
       }  
 }
 

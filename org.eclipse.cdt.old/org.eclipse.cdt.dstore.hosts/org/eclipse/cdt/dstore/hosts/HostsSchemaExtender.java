@@ -44,12 +44,14 @@ public class HostsSchemaExtender implements ISchemaExtender
     public void extendSchema(DataElement schemaRoot)
     {
 	DataStore   dataStore = schemaRoot.getDataStore();
+	
 	DataElement fileD     = dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
 	DataElement dirD      = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement fsD       = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement rootD     = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
 	DataElement hostD     = dataStore.find(schemaRoot, DE.A_NAME, "host", 1);
 		
+		/*
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						     dataStore.getLocalizedString("model.Connect_to"), 
 						     "org.eclipse.cdt.dstore.hosts.actions.HostConnectAction");
@@ -70,6 +72,7 @@ public class HostsSchemaExtender implements ISchemaExtender
 						    dataStore.getLocalizedString("model.Delete_Connection"), 
 						    "org.eclipse.cdt.dstore.ui.connections.DeleteAction");	 
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");	
+        */
 
 	DataElement fileTransfer = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  _plugin.getLocalizedString("model.File_Transfer"), 

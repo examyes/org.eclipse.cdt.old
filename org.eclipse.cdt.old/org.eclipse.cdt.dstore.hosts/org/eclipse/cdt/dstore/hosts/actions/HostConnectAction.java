@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.*;
 
 public class HostConnectAction extends ConnectAction
 {
-  public HostConnectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
-      {	
-        super(subject, label, command, dataStore);
-      }
+	protected ConnectionManager getConnectionManager()
+	{
+		return HostsPlugin.getInstance().getConnectionManager();	
+	}
  
   public void run()
       {
