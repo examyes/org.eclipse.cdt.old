@@ -84,13 +84,21 @@ public class OutputHandler extends Handler
 		ArrayList attributes = processD.getAssociated("attributes");
 		while(tokenizer.hasMoreTokens() && i < attributes.size())
 		    {
-			String nextToken = tokenizer.nextToken();
 			DataElement attributeType = (DataElement)attributes.get(i);
+
+			String nextToken = tokenizer.nextToken();
+			if (attributeType.getName().equals("STIME"))
+			    {
+				//*** hack for windows ***//
+				if (Character.isLetter(nextToken.charAt(0)))
+				    {
+					nextToken += " " + tokenizer.nextToken();
+				    }
+			    }
+
 			DataElement attribute = _dataStore.find(process, DE.A_TYPE, attributeType.getName(), 1);
 			if (attribute == null)
 			    {
-				attribute = _dataStore.createObject(process, attributeType, nextToken);
-				_dataStore.createReference(process, attribute, "attributes");
 				if (attributeType.getName().equals("PPID") && 
 				    (!nextToken.equals("1") && !nextToken.equals("0")))
 				    {
@@ -99,6 +107,10 @@ public class OutputHandler extends Handler
 						process.setAttribute(DE.A_TYPE, "Child Process");
 					    }
 				    }			       
+				
+				attribute = _dataStore.createObject(process, attributeType, nextToken);
+				_dataStore.createReference(process, attribute, "attributes");
+
 			    }
 			else
 			    {
