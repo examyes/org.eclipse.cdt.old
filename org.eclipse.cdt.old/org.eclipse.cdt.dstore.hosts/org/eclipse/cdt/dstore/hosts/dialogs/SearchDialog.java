@@ -143,6 +143,11 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 					_searchText = _searchEntry.getText();
 				   handleSearch();
 				} 
+				else if (e.keyCode == 13)
+				{
+					_searchText = _searchEntry.getText();
+				   handleSearch();	
+				}
 			}
 		});
 	_searchEntry.setFont(new Font(getShell().getDisplay(), "Courier", 10, SWT.NORMAL));

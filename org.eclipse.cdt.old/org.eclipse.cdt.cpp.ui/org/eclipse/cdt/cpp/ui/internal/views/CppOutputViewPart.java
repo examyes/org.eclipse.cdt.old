@@ -288,11 +288,14 @@ public class CppOutputViewPart
 		    {
 			public void handleEvent(Event e) 
 			{
-				System.out.println("got key = " + e.character);
 			    if (e.character == '\r') // "enter" key
 				{
 				    sendInput();
 				} 
+				else if (e.keyCode == 13)
+				{
+					sendInput();	
+				}
 			}
 		});
 		_inputEntry.setFont(new Font(getShell().getDisplay(), "Courier", 10, SWT.NORMAL));
