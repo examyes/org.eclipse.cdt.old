@@ -218,7 +218,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    
 						    int indexOfSlash = fileName.lastIndexOf("/");
 						    if (indexOfSlash > 0)
-							{
+							{ 
 							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
 							    fileElement = dataStore.createObject(null, "file", name, fileName);
 							    // create the object on server
@@ -231,19 +231,12 @@ public class OpenEditorAction extends Action implements IOpenAction
 							}
 						}
 					    
-					    java.io.File theFile = fileElement.getFileObject(true);
-					    if (!theFile.exists())
-					    {
-					    	return;	
-					    }
-					    
 					    file = new FileResourceElement(fileElement, project);
-					   
 					    addNewFile(file);
 					}
 				    
 
-				    if (file != null && file.exists())
+				    if (file != null)
 					{	
 					    _file = file;
 
@@ -296,7 +289,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    
 						    Integer lineLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));
 						    int line = lineLocation.intValue();	
-						    if ((line > 0) && (editor != null))
+						    if ((line > 1) && (editor != null))
 							{	
 							    gotoLocation(editor, file, line);
 							    _line = line;
