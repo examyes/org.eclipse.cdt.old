@@ -14,27 +14,44 @@ import java.util.*;
 public class PropertySource implements IPropertySource
 {
   private IDataElement   _dataElement;
-  private ArrayList      _descriptors;
+  private HashMap        _properties;
+  private IPropertyDescriptor[] _descriptors;
   
   public PropertySource(IDataElement element)
   {
     _dataElement = element;
     
-    _descriptors = new ArrayList();
-    _descriptors.add(new TextPropertyDescriptor("type", "type"));
-    _descriptors.add(new TextPropertyDescriptor("name", "name"));
-
+    _properties = new HashMap();
     
     IDataElement descriptor = (IDataElement)element.getElementProperty("descriptor");
+    
+    ArrayList attributes = null;
+    int attributesSize = 0;
     if (descriptor != null)
 	{
-	    ArrayList attributes = descriptor.getAssociated("attributes");
-	    for (int i = 0; i < attributes.size(); i++)
-		{
-		    IDataElement attribute = (IDataElement)attributes.get(i);	    
-		    _descriptors.add(new TextPropertyDescriptor(attribute.getName(), attribute.getName()));
-		}
+	    attributes = descriptor.getAssociated("attributes");
+	    attributesSize = attributes.size();
 	}
+	
+	_descriptors = new IPropertyDescriptor[attributesSize + 2];
+	_descriptors[0] = new TextPropertyDescriptor("type", "type");
+	_descriptors[1] = new TextPropertyDescriptor("name", "name");
+	
+	for (int i = 0; i < attributesSize; i++)
+    {
+		IDataElement attribute = (IDataElement)attributes.get(i);
+		ArrayList types = attribute.getAssociated("attributes");
+		    
+		String type = null;
+		if (types.size() > 0)
+		  type = ((IDataElement)types.get(0)).getName();
+		else
+		  type = "String";
+		
+		_properties.put(attribute.getName(), type);
+		_descriptors[i+2] = new TextPropertyDescriptor(attribute.getName(), attribute.getName());
+    }
+    
   }
 
   public static boolean matches(Class aClass)
@@ -50,17 +67,7 @@ public class PropertySource implements IPropertySource
 
   public IPropertyDescriptor[] getPropertyDescriptors()
   {
-      if (_descriptors.size() > 0)
-	  {
-	      IPropertyDescriptor [] results = new IPropertyDescriptor[_descriptors.size()];
-	      for (int i = 0; i < _descriptors.size(); i++)
-		  {
-		      results[i] = (IPropertyDescriptor)_descriptors.get(i);
-		  }
-	      return results;
-	  }
-      else
-	  return null;
+    return _descriptors;
   }
 
   public Object getPropertyValue(Object name)
@@ -71,6 +78,7 @@ public class PropertySource implements IPropertySource
   public Object getPropertyValue(String name)
   {
       Object result = null;
+            
       // find the appropriate attribute
       ArrayList attributes = _dataElement.getAssociated("attributes");
       for (int i = 0; i < attributes.size(); i++)
@@ -81,11 +89,19 @@ public class PropertySource implements IPropertySource
 		      result = attribute.getElementProperty("value");
 		  }
 	  }
-      if (result == null)
-	  { 
-	      result = _dataElement.getElementProperty(name);
+	  
+	  if (result == null)
+	  {
+	  	String type = (String)_properties.get(name);
+	  	
+	  	if (type != null && type.equals("Integer"))
+	  	  result = "0";
+	  	else if (type != null && type.equals("Float"))
+	  	  result = "0.0";
+	  	else
+	  	  result = _dataElement.getElementProperty(name);
 	  }
-
+	  
       return result;
   }
 
