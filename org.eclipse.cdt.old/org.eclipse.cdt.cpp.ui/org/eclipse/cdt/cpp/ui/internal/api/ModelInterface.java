@@ -1452,7 +1452,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
-	
+
 	
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						     dataStore.getLocalizedString("model.Connect_to"), 
@@ -1516,6 +1516,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 								  "Properties...",
 								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
+
+
+	// cvs actions
+	DataElement cvsD = dataStore.find(fsD, DE.A_NAME, "CVS", 1); 
+	DataElement cvsUpdate     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
+							   "update", 
+							   "com.ibm.cpp.ui.internal.actions.CVSAction");
+	cvsUpdate.setAttribute(DE.A_VALUE, "CVS_UPDATE");
+
+	DataElement cvsCheckout     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
+							     "checkout", 
+							     "com.ibm.cpp.ui.internal.actions.CVSAction");
+	cvsCheckout.setAttribute(DE.A_VALUE, "CVS_CHECKOUT");	
+
+	DataElement cvsCommit     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
+							     "commit", 
+							     "com.ibm.cpp.ui.internal.actions.CVSAction");
+	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");	
     }
         
 }
