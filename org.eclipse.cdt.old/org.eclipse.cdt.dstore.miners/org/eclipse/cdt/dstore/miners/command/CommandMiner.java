@@ -40,6 +40,7 @@ public class CommandMiner extends Miner
 
      DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
      DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");
+     _dataStore.createObject(schemaRoot, "stdout", "stdout","com.ibm.dstore.miners");
  }
 
  public DataElement handleCommand (DataElement theElement)
