@@ -396,6 +396,10 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    {
 		return true;	
 	    }	
+	else if (resource == null)
+	    {
+		return false;
+	    }
 	else
 	    {
 		if (resource.isOpen())

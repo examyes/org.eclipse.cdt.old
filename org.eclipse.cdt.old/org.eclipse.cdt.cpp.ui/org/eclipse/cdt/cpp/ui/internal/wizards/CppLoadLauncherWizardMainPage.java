@@ -263,18 +263,6 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
      */
     public boolean finish()
     {
-
-      /*
-      if (debugInitialization.getSelection())
-      {
-         _debugInitialization = true;
-      }
-      else
-      {
-         _debugInitialization = false;
-      }
-      */
-
       _parameters = programParametersField.getText();
 
    	return true;
@@ -285,12 +273,6 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
 		return _parameters;
     }
 
-    /*
-    public boolean debugInitialization()
-    {
-      return _debugInitialization;
-    }
-    */
 /**
  * Returns the current contents of the project name field, or
  * its set initial value if it does not exist yet (which could

@@ -37,9 +37,9 @@ public class CppActionLoader extends GenericActionLoader
 
     public CppActionLoader()
     {
-	super();
+	super(); 
     }
-
+ 
     public static IActionLoader getInstance()
     {
 	return _instance;

@@ -1548,7 +1548,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }	
 	else
 	    {		
-		/*
+		// This could cause slowdowns -- temporarily uncommenting for nav synchronization
 		if (parent != null)
 		    {		
 			IResource resource = null;
@@ -1558,7 +1558,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    {
 				resource = findProjectResource(parent);
 			    }
-			else if (type.equals("directory") || type.equals("file"))
+			else if (type.equals("directory"))
 			    {				
 				resource = findResource(parent);
 			    }
@@ -1575,7 +1575,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    }					
 			    }
 		    }
-		*/
 		return false;
 	    }
     }
