@@ -465,7 +465,7 @@ public class MakefileAmManager {
 					case (0):
 					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 						 	"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/shared/",Makefile_am.getParentFile().getAbsolutePath());
-					initializeProgramsMakefileAm((File)projectStucture[i][0]);
+					initializeSharedLibMakefileAm((File)projectStucture[i][0]);
 					break;
 					default:
 						copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
