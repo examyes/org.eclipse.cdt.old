@@ -58,7 +58,7 @@ public class ClientUpdateHandler extends UpdateHandler
 		  if ((object != null) )
 		      {	 
 			  clean(object);
-			  if (!object.isUpdated() && !object.isDeleted())
+			  if (!object.isUpdated())
 			      {
 				  notify(object);
 			      }

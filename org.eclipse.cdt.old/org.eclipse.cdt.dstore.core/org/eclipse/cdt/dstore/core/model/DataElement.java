@@ -1768,6 +1768,7 @@ public final class DataElement implements Serializable, IDataElement
 		setAttribute(DE.A_SOURCE, "deleted");
 		setAttribute(DE.A_SOURCE_LOCATION,   "deleted");
 		setAttribute(DE.A_VALUE,  "deleted");
+		setAttribute(DE.A_TYPE,  "deleted");
 		
 		_isUpdated = false;	 
 		_isExpanded = true;

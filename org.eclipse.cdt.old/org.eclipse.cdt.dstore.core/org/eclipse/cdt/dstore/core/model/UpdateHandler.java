@@ -33,10 +33,10 @@ public abstract class UpdateHandler extends Handler
     
     protected void clean(DataElement object)    
     {
-        if (_dataObjects.size() == 0)
+	if (_dataObjects.size() == 0)
         {
-		 clean(object, 2);
-		}
+	    clean(object, 2);
+	}
     } 
     
     protected synchronized void clean(DataElement object, int depth)
