@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Icon Refresh 3.0</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+<!-- Document Header -->
+<table style="width: 100%;" border="0" cellpadding="2">
+  <tbody>
+    <tr>
+      <td style="text-align: left; width: 70%;"> <font class="indextop">Icon 
+      Refresh for CDT 3.0<br>
+      </font> <span class="indexsub"><font class="indexsub">This
+document describes the proposed work items for the icons for the CDT
+3.0 release.</font></span> </td>
+      <td style="width: 30%;"><img
+ src="http://dev.eclipse.org/images/Idea.jpg" alt="" height="86"
+ width="120"></td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">Author</td>
+      <td style="vertical-align: top;"> : David Daoust<br>
+      </td>
+    </tr>
+    <tr>
+      <td>Revision Date</td>
+      <td> : March 17, 2005 -- version 1.0</td>
+    </tr>
+    <tr>
+      <td>Change History</td>
+      <td> &nbsp; 1.0 - Document Creation</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+<!-- Table of Contents -->
+<div class="section">Table of Contents</div>
+<br>
+<div class="indent"><a href="#intro">1. Introduction</a> </div>
+
+<div class="indent"><a href="#First">2. First Proposal</a></div>
+<div class="indent"><a href="#Second">3. Second Proposal</a></div>
+<div class="indent"><a href="#Third">4. Third Proposal</a></div>
+<div class="indent"><a href="#Final">4. Final Results</a></div>
+<br>
+<!-- End of Table of Contents -->
+<!-- Introduction -->
+<div class="section"><a name="intro"> 1. Introduction</a></div>
+<p>The IBM media design team has submitted a proposal to update the CDT icons to 
+be more consistent with Eclipse 3.0/3.1.</p>
+<p>This doc presents the changes and options and is a placeholder for feedback.<br>
+</p>
+<br>
+<!-- End of Introduction -->
+
+<div class="section"><a name="first"> 2. First Proposal</a></div>
+<p>
+<h2>cdt.debug.ui</h2>
+<p>
+If there is more than one solution in the a to E columns, I've indicated my preference by using a black marquee. The original icon from R2.x is in the original column. Thank you so much for your help in refreshing this icon set.
+<p>
+If you could review each icon and raise any questions to me, regarding changes that I've made to bring this icon family more in line with the eclipse- Project/Tools components.
+<p>Q: icons 85/86: is an H file the same as a 'heap' or a 'hash' file? Is it representative of a 'datapool'? 
+<p>Q: what about an S file... is that a structure file or something else?
+<p>Q: 27, 29, 30, 32-35, 37, 39, 46, 59, 65, I'm not sure how these icons are used and what they mean or represent?
+
+
+<img border="0" src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/IconImages/debug.ui-1.jpg?cvsroot=Tools_Project" width="778" height="2558">
+
+
+<h3>Responses</h3>
+<h4>Dave:</h4><pre>#13 should be A
+#23 could we add the "target" to B?
+#59 should be A, the suggested icon is too much like the link to active editor icon in the base.
+#71 I prefer B
+#75 I dislike all the choices (including the original :-)
+#48 to #57 is the same as #101 to 110 --> I will look into why we have two...
+</pre>
+<h4>Thomas:</h4><p>
+Some general comments from my look through the listings that I'll throw
+out for comment ... if I didn't comment then I liked the new icon proposed:
+<p>
+#2 - Memory view, We should be consistent with the platform on this, but I don't really think that
+a "can" is a better representation than a memory stick =;-) and it would collide with the current "header" representation proposed.
+<p>
+#4/#78,79 - Signals view/Signal toolbar
+The same comments about signals in the debugger.
+<p>
+#13 - Arguments view,
+I don't get it.
+<p>
+#15 - Environment,
+Same comments as with the debug comments above.
+<p>
+#22 - Make,
+As long as the representation falls in line with the build menu/target obj
+icons
+from above, I don't think that we can go wrong replacing the current icons.
+<p>
+How come the profile configuration and the tool configuration icons are the
+same?
+
+<h2>cdt.ui:</h2>
+<p>
+If you could review each icon and raise any questions to me, regarding changes that I've made to bring this icon family more in line with the eclipse- Project/Tools components.
+Specifically I had some concerns about the following icons and the changes I've made:
+library icons [3/58]
+tool configuration icons [44-48/97-101]</p>
+
+<pre><img border="0" src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/IconImages/ui-1.jpg?cvsroot=Tools_Project" width="404" height="3577"></pre>
+
+</font>
+<h3>Responses</h3>
+<h4>Dave:</h4><p>
+Q: 27, 29, 30, 32-35, 37, 39, 46, 59, 65, I'm not sure how these icons are used and what they mean or represent?
+<p>
+A:&nbsp; These are all used by the CDT debugger to represent stuff extracted from the executables
+
+<h4>Bogdan:</h4><p>
+95 - namespace, 
+107 - struct,
+110 - typedef,
+112- union,
+These are all used in the same context (CView, OpenType dialog) so it would make sense to adopt a similar style.&nbsp; I think that the originals are more appropriate.
+<p>
+85 - header file,
+86 - header folder,
+100 - assembler file,
+Used in the same context as source files (57), should adopt similar convention.
+<p>
+111 - IProblem Marker.
+Coloured orange on purpose - in order to match up to orange annotation.
+
+<h4>Thomas:</h4><p>
+Some general comments from my look through the listings that I'll throw
+out for comment ... if I didn't comment then I liked the new icon proposed:
+<p>
+#26 - signal_obj -
+&nbsp;I personally don't feel that the new icon represents a "signal" concept
+which is an asynchronous communication into the program (hence the
+"lightning").
+I'm not tied to the lightning, but can we ask them to try again?
+<p>
+#28 - var_env -
+&nbsp;I'm not a fan of the old icon, but at least it gave you an indication of
+that it was an "environment" variable, the new one is just another dot.
+<p>
+#31 - var_pointer -
+#38 - vard_pointer -
+&nbsp;The new icon doesn't "feel" in line with the other variable icons.
+I think that they were basing this on the same image/concept as the
+instr_ptr (current instruction pointer used in the editor tray).
+<p>
+#49 - target_obj -
+&nbsp;I really like the new icon(s).
+<p>
+#56 - build menu -
+&nbsp;This is somewhat tied to the #49 and I think that iconographically it
+would be nice to have a tie between them.&nbsp; Right now they are very distinct
+<p>
+#85 - hfile_obj -
+#86 - hfolder_obj -
+&nbsp;I don't think that the new icons are representative at all.&nbsp; I like the
+concept of marking header files/folders the same as C/C++ files and folders.
+This graphical representation doesn't mean anything (to me anyway).
+<p>
+#110 - typedef_obj -
+#112 - union_obj -
+&nbsp;I think that if enumerations are going to be marked with an E (which I
+like)
+then typedefs/unions should be marked similarly ... or at least similarly to
+
+structs. The suggested icons don't map consistantly and since these items
+are
+"similar" then the iconography should also be similar (arguable point I'm
+sure).
+
+<h4>Mikhail:</h4><p>
+#1, #2 Address breakpoint - I don't like the current one with "A", but I'm
+not sure that the new image can be associated with an address breakpoint.
+<p>
+#6 org.eclipse.cdt.debug.ui/icons/full/obj16/disassembly_obj is no longer in
+use.
+<p>
+#7 org.eclipse.cdt.debug.ui/icons/full/obj16/ is no longer in use.
+<p>
+#15, #16 images for shared libraries with or without debug information.
+The new image is used for regular libraries. To indicate that library or
+executable contains debug information it would be nice to have an overlay
+image - the green bug, for instance, instead of "S".
+<p>
+#26 signal. I would prefer the old image.
+
+<div class="section"><a name="second"> 3. Second Proposal</a></div>
+<p>
+
+<h2>cdt.debug.ui:</h2>
+
+<font FACE="Helv" SIZE="2">
+<p>Q: should 57/55 be different? are they ever seen in the same place?</p>
+</font>
+<pre><img border="0" src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/IconImages/debug.ui-2.jpg?cvsroot=Tools_Project" width="439" height="4427"></pre>
+
+<h2>cdt.ui:</h2>
+
+<pre>Q: Icon 46: what is an irule?
+Q: Icon 59: what is a cdeclaration?
+Q: Icon 65: need to change this from a bomb to something a bit more peaceful... *wink... what does it represent?</pre>
+
+<pre><img border="0" src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/IconImages/ui-2.jpg?cvsroot=Tools_Project" width="401" height="3583"></pre>
+
+<pre>&nbsp;</pre>
+
+<pre></pre>
+
+<div class="section"><a name="third"> 4. Third Proposal</a></div>
+<p>
+<div class="section"><a name="final"> 5. Final Result</a></div>
+<p>
+<table border="0" cellpadding="2" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="2" align="left" bgcolor="#0080c0" valign="top"><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</p>
+<center><i>Last Modified on Monday, March 17, 2005
+</i></center>
+</body>
+</html>
