@@ -270,9 +270,7 @@ public class PAMiner extends Miner {
   */
  public void handleQueryTraceFormat(DataElement fileElement, DataElement status) {
  
-   System.out.println("fileElement: " + fileElement);
    File file = fileElement.getFileObject(true);
-   System.out.println("java file: " + file);
    int traceFormat = -1;
    try {
     traceFormat = PAAdaptor.queryTraceFileFormat(file);
