@@ -46,25 +46,37 @@ public class FileSystemMiner extends Miner
 	  // load persisted information
 	  DataElement host =  _dataStore.getHostRoot();
 	  DataElement minerRoot = null;
-	  String dir = host.getSource();
-	  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
-	  File hostFile = new File(dir2);
+
 	  	 
 	  File[] deviceList = File.listRoots();
 	  for(int i=0;i<deviceList.length;i++)
 	      {		  
-		  DataElement temp=_dataStore.createObject(_minerData, getLocalizedString("model.device"),deviceList[i].getPath(),deviceList[i].getPath());
+		  DataElement temp=_dataStore.createObject(_minerData, 
+							   getLocalizedString("model.device"),
+							   deviceList[i].getPath(),deviceList[i].getPath());
+
 	      }	 
 
-	  DataElement currentDirectory = findFile(_minerData, hostFile);
-	  if (currentDirectory != null)
-	      {
-		  DataElement ref = _dataStore.createReference(host,currentDirectory);
+	  String dir = host.getSource();	  
+	  if (dir.equals(""))
+	      {		  
+		  _dataStore.createReferences(host, _minerData.getNestedData(), "contents");
 	      }
 	  else
 	      {
-		  status.setAttribute(DE.A_NAME, getLocalizedString("model.incomplete"));
-		  _dataStore.createObject(status, "message", "Specified host directory does not exist.  Please correct the specification and reconnect.");
+		  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
+		  File hostFile = new File(dir2);
+		  
+		  DataElement currentDirectory = findFile(_minerData, hostFile);
+		  if (currentDirectory != null)
+		      {
+			  DataElement ref = _dataStore.createReference(host,currentDirectory);
+		      }
+		  else
+		      {
+			  status.setAttribute(DE.A_NAME, getLocalizedString("model.incomplete"));
+			  _dataStore.createObject(status, "message", "Specified host directory does not exist.  Please correct the specification and reconnect.");
+		      }
 	      }
       }
 
