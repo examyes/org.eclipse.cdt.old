@@ -60,14 +60,17 @@ public class ParsedSourceViewPart extends ProjectViewPart
       }
   else
       {
-	  _viewer.setInput(parsedSource);	
-	  _viewer.selectRelationship("contents");
-	  setTitle(projectParseInformation.getName() + " Parsed-Files");   
+      	if (!_browseHistory.contains(parsedSource))
+      	{
+	  		_viewer.setInput(parsedSource);	
+	  		_viewer.selectRelationship("contents");
+	  		setTitle(projectParseInformation.getName() + " Parsed-Files");   
 	  
-	   	  _browseHistory.clear();
-     		  _browseHistory.add(parsedSource);
-     	      _browsePosition = 0;
-     	      updateActionStates();
+	   	  	_browseHistory.clear();
+     		_browseHistory.add(parsedSource);
+     	    _browsePosition = 0;
+     	    updateActionStates();
+      	}
       }
       
    return parsedSource;   

@@ -131,15 +131,17 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	    }
 	else
 	    {
-		_viewer.setInput(theInput);	
-		_viewer.selectRelationship("contents");
-		setTitle(theElement.getName() + " System-Objects");   
+	    	if (!_browseHistory.contains(theInput))
+	    	{
+				_viewer.setInput(theInput);	
+				_viewer.selectRelationship("contents");
+				setTitle(theElement.getName() + " System-Objects");   
 		
-		 	  _browseHistory.clear();
-     		  _browseHistory.add(theInput);
-     	      _browsePosition = 0;
-     	      updateActionStates();
-
+		 	  	_browseHistory.clear();
+     		  	_browseHistory.add(theInput);
+     	      	_browsePosition = 0;
+     	      	updateActionStates();
+	    	}
 	    }
 	return theInput;
  }

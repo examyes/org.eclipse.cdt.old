@@ -172,17 +172,18 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	 	return null;
      }
      
-     
+     DataElement oldInput = _viewer.getInput();
      
      //Finally just set the input and the title
-     if (_viewer.getInput() == theInput)
+     if (oldInput == theInput)
 	 {
 	     // this is too expensive
 	     //_viewer.resetView();
 	 }
      else
 	 {
-
+	 	 if (!_browseHistory.contains(theInput))
+	 	{
 	     _viewer.setInput(theInput);	
 	     _viewer.selectRelationship("contents");
 	     setTitle(theElement.getName() + " Project-Objects");   
@@ -191,7 +192,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      		  _browseHistory.add(theInput);
      	      _browsePosition = 0;
      	      updateActionStates();
-
+	 	}
 	 }
 	 
 	 return theInput;

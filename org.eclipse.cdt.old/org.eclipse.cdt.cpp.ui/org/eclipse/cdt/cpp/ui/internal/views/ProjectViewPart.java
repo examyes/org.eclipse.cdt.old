@@ -83,8 +83,8 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
      if (projectParseInformation == null)
 	 return;
 
-     _specificInput = doSpecificInput(projectParseInformation);
-  
+
+    _specificInput = doSpecificInput(projectParseInformation);
  }
     
     public abstract void doClear();
