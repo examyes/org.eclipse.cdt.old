@@ -1651,11 +1651,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement deleteProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Delete Project",
 							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
-
-	DataElement deleteProject2 = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
-							 "Delete Project",
-							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
-
+	dataStore.createReference(projectD, deleteProject);
+	
+	DataElement deleteResource = dataStore.createObject(dirD, DE.T_UI_COMMAND_DESCRIPTOR,
+							    "Delete",
+							    "com.ibm.cpp.ui.internal.actions.DeleteResourceAction");
+	dataStore.createReference(fileD, deleteResource);
 
 
 	// connection actions

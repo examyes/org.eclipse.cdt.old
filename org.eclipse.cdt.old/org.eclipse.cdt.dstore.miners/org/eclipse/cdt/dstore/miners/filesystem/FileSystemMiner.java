@@ -174,6 +174,7 @@ public class FileSystemMiner extends Miner
 	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), "C_OPEN");
 	  DataElement move      = createCommandDescriptor(_fsystemObjectDescriptor, 
 							  getLocalizedString("model.Move"), "C_MOVE", false);
+
 	  
 	  //renaming files and dirs
 	  DataElement renF = createCommandDescriptor(_fsystemObjectDescriptor, 
@@ -190,12 +191,16 @@ public class FileSystemMiner extends Miner
 	  
 	  DataElement findD = createCommandDescriptor(_fsystemObjectDescriptor, "Find", "C_FIND_FILE", false);
 
-	  //deleting dirs
-	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,getLocalizedString("model.Delete"),
-						    "C_DELETE");	  
 
-	  DataElement delFile = createCommandDescriptor(_fileDescriptor,getLocalizedString("model.Delete"),
-							"C_DELETE");	  
+	  //deleting dirs
+	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,
+						    getLocalizedString("model.Delete"),
+						    "C_DELETE", false);
+	  DataElement del2 = createCommandDescriptor(_fileDescriptor,
+						     getLocalizedString("model.Delete"),
+						     "C_DELETE", false);
+	  
+
 	  //creating new files and dirs
 	  DataElement newFD=createAbstractCommandDescriptor(_fsystemObjectDescriptor,getLocalizedString("model.Create"),
 							    "C_NEW");

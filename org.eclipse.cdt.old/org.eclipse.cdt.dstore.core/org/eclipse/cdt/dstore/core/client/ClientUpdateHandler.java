@@ -54,10 +54,10 @@ public class ClientUpdateHandler extends UpdateHandler
 		      }
 
 		  if ((object != null) )
-		      {	
+		      {	 
+			  clean(object);
 			  if (!object.isUpdated())
 			      {
-				  clean(object);
 				  notify(object);
 			      }
 		      }
