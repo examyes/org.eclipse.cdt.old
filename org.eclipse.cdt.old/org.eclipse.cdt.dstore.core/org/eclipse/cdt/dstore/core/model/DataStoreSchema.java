@@ -133,14 +133,18 @@ public class DataStoreSchema
 	_dataStore.createReference(fileD,    fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, dirD, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, deviceD, abstracts, abstractedBy);
+
         _dataStore.createReference(fsObject, fileD,    containsD);
         _dataStore.createReference(fsObject, dirD,     containsD);
 	_dataStore.createReference(fsObject, fsObject, containsD);
+
 	_dataStore.createReference(hostD,    fsObject, containsD); 
-	_dataStore.createReference(deviceD,  dirD, containsD);
+
 	_dataStore.createReference(deviceD,  fileD, containsD);
-	_dataStore.createReference(dirD,     dirD, containsD);
+	_dataStore.createReference(deviceD,  dirD, containsD);
+
 	_dataStore.createReference(dirD,     fileD, containsD);
+	_dataStore.createReference(dirD,     dirD, containsD);
 	
 	
 	// miner descriptors

@@ -169,7 +169,6 @@ public abstract class Miner
 		else
 		    {
 			status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
-			_dataStore.refresh(status);
 		    }
 	    }    
 	else
