@@ -1,10 +1,19 @@
 package org.eclipse.cdt.cpp.miners.pa.engine.functioncheck;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 
 import java.util.*;
 import java.io.*;
 import org.eclipse.cdt.cpp.miners.pa.engine.*;
 
+/**
+ * FunctionCheckTraceFile represents a trace file in FunctionCheck format.
+ * It extends PATraceFile and overwrites the processLine() interface.
+ */
 public class FunctionCheckTraceFile extends PATraceFile {
 
   // Time mode constants
@@ -29,26 +38,37 @@ public class FunctionCheckTraceFile extends PATraceFile {
   private boolean _foundFlatProfileHeader2 = false;
   private PATraceFunction _currentCaller = null;
   
-  // Constructors
+  /**
+   * Create a FunctionCheckTraceFile from a given file name
+   */
   public FunctionCheckTraceFile(String name) throws PAException {
    
    super(name);   
    setTraceFormat("FunctionCheck");
   }
   
+  /**
+   * Create a FunctionCheckTraceFile from a given Java File object
+   */
   public FunctionCheckTraceFile(File file) throws PAException {
    
    super(file);   
    setTraceFormat("FunctionCheck");
   }
   
+  /**
+   * Create a FunctionCheckTraceFile from a BufferedReader.
+   * The trace contents are read from the stream associated with the BufferedReader.
+   */
   public FunctionCheckTraceFile(BufferedReader reader) {
   
    super(reader);
    setTraceFormat("FunctionCheck");
   }
   
-  // getter methods
+  /**
+   * Return the time mode (cpu time or real clock time).
+   */
   public String getTimeMode() {
    
    if (_timeMode == CPU_TIME)
@@ -60,6 +80,9 @@ public class FunctionCheckTraceFile extends PATraceFile {
     
   }
   
+  /**
+   * Return the profile mode (single process, fork or thread).
+   */
   public String getProfileMode() {
   
    if (_profileMode == SINGLE_PROCESS)
@@ -72,15 +95,24 @@ public class FunctionCheckTraceFile extends PATraceFile {
     return "unknown";
   }
   
+  /**
+   * Return the process id.
+   */
   public int getProcessId() {
    return _processId;
   }
   
+  /**
+   * Return the program name.
+   */
   public String getProgramName() {
    return _programName;
   }
   
-  // Process an input line
+  /**
+   * Process a line from the input. The input can be a file or
+   * a stream reader.
+   */
   public void processLine(String line) throws Exception {
 
    if (_status.isParsingFlatProfile()) {
@@ -133,7 +165,9 @@ public class FunctionCheckTraceFile extends PATraceFile {
   
   }
     
-  // Parse a flat profile line
+  /**
+   * Parse a flat profile line
+   */
   private void parseFlatProfileEntry(String line) throws Exception {
   
    String delimiter = " \t\n\r\f|";

@@ -1,9 +1,24 @@
 package org.eclipse.cdt.cpp.miners.pa.engine.functioncheck;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 
 import java.util.*;
 import org.eclipse.cdt.cpp.miners.pa.engine.*;
 
+/**
+ * FunctionCheckTraceFunction represents a trace function in a FunctionCheck trace file.
+ * In addition to the attributes in PATraceFunction, a FunctionCheckTraceFunction has
+ * the following additional attributes:
+ *
+ * - Min total time
+ * - Max total time
+ * - Min local time
+ * - Max local time
+ */
 public class FunctionCheckTraceFunction extends PATraceFunction {
 
   private double _selfPercentage = 0;

@@ -1,5 +1,10 @@
 package org.eclipse.cdt.cpp.miners.pa.engine;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 
 import java.util.*;
 import java.io.*;
@@ -86,7 +91,7 @@ public abstract class PATraceFile {
   }
   
   /**
-   * Create a PA trace file from a trace reader
+   * Create a PA trace file from a BufferedReader
    */
   public PATraceFile(BufferedReader reader) {
    
@@ -129,7 +134,10 @@ public abstract class PATraceFile {
    
   }
   
-  // The abstract processLine() method should be implemented by a subclass.
+  /**
+   * Process an input line.
+   * This abstract interface should be implemented by a subclass.
+   */
   public abstract void processLine(String line) throws Exception;
   
   // setter methods

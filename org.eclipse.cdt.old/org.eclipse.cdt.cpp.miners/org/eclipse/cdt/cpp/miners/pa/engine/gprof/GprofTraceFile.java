@@ -1,5 +1,10 @@
 package org.eclipse.cdt.cpp.miners.pa.engine.gprof;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 
 import java.util.*;
 import java.io.*;
@@ -18,19 +23,27 @@ public class GprofTraceFile extends PATraceFile {
   private double 			  _cumulativeTime = 0;
   private boolean 			  _foundCallGraphPrimaryLine = false;
 
-  // constructor
+  /**
+   * Create a GprofTraceFile from a given file name
+   */
   public GprofTraceFile(String filename) throws PAException {
   
    super(filename);
    setTraceFormat("gprof");
   }
 
+  /**
+   * Create a GprofTraceFile from a given Java File
+   */
   public GprofTraceFile(File file) throws PAException {
   
    super(file);   
    setTraceFormat("gprof");
   }
   
+  /**
+   * Create a GprofTraceFile from a given BufferedReader
+   */
   public GprofTraceFile(BufferedReader reader) {
   
    super(reader);
@@ -176,7 +189,7 @@ public class GprofTraceFile extends PATraceFile {
   }
   
   /**
-   * Parse a line from the call graph section
+   * Parse a line from the call graph
    */
   private void parseCallGraphEntry(String line) throws Exception {
      

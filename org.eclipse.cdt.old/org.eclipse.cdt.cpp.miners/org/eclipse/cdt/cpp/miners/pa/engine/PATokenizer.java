@@ -1,8 +1,21 @@
 package org.eclipse.cdt.cpp.miners.pa.engine;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
+
 import java.util.*;
 
-
+/**
+ * PATokenizer is a utility class used to separate an input line in a PATraceFile
+ * into individual tokens. It is similar with the StringTokenizer, but has some extra
+ * capabilities. If you designate the max token number through the constructor, 
+ * the number of tokens generated will be less than or equal to the given number. 
+ * It is useful in parsing the flat profile because the last entry (the function name)
+ * may contain whitespaces. 
+ */
 public class PATokenizer {
 
   private String _line;
@@ -11,7 +24,9 @@ public class PATokenizer {
   private int _maxTokenNumber;
   private ArrayList _tokens;
 
-  // Constructor
+  /**
+   * Create a PATokenizer from a given String.
+   */
   public PATokenizer(String line) {
    _line = line;
    _tokenNumber = 0;
@@ -20,6 +35,9 @@ public class PATokenizer {
    parse();
   }
   
+  /**
+   * Create a PATokenizer from a given String and delimiter.
+   */
   public PATokenizer(String line, String delimiter) {
    _line = line;
    _tokenNumber = 0;
@@ -29,6 +47,10 @@ public class PATokenizer {
    parse();
   }
   
+  /**
+   * Create a PATokenizer from a given String and a number which designates
+   * the maximal number of tokens.
+   */
   public PATokenizer(String line, int maxTokenNumber) {
    _line = line;
    _tokenNumber = 0;
@@ -37,6 +59,9 @@ public class PATokenizer {
    parse();
   }
   
+  /**
+   * Create a PATokenizer from a given String, delimiter and the max token number.
+   */
   public PATokenizer(String line, String delimiter, int maxTokenNumber) {
    _line = line;
    _delimiter = delimiter;
@@ -76,6 +101,9 @@ public class PATokenizer {
     }
   }
   
+  /**
+   * Is it a valid leading character in a token?
+   */
   public boolean isValidLeadingCharacter(char c, int index) {
   
    if (index == 0)

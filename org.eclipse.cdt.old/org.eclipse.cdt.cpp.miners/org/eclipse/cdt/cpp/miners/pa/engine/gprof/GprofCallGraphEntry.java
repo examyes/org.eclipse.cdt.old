@@ -1,13 +1,20 @@
 package org.eclipse.cdt.cpp.miners.pa.engine.gprof;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
+
 import java.util.*;
 import org.eclipse.cdt.cpp.miners.pa.engine.*;
 
 /**
  * GprofCallGraphEntry represents an entry in gprof's call graph.
  * Entries are separated by dash-lines. Each entry has one primary line
- * which has a leading number in brackets. An entry may also have 
- * caller and subroutine lines.
+ * which designates the function the entry is for. The primary line has 
+ * a leading number enclosed in brackets. An entry may also have caller and 
+ * subroutine lines.
  */
 public class GprofCallGraphEntry {
 

@@ -1,5 +1,12 @@
 package org.eclipse.cdt.cpp.miners.pa.engine;
 
+/*
+ * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
+
+
 /**
  * PAParseStatus describes the current status in the parsing process.
  * From an object of this class, we will know whether we are currently
@@ -15,7 +22,9 @@ public class PAParseStatus {
   private int _flatProfileStatus;
   private int _callGraphStatus;
   
-  // Constructor
+  /**
+   * Create a PAParseStatus object
+   */
   public PAParseStatus() {
    _flatProfileStatus = NOTYET;
    _callGraphStatus = NOTYET;
