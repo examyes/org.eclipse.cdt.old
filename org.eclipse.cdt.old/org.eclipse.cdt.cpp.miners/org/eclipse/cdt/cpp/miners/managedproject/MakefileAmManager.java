@@ -1122,10 +1122,14 @@ public class MakefileAmManager {
 		ArrayList list = new ArrayList();
 		int counter = 0;
 		//find the first level parent
-		while(!dir.getAbsolutePath().equals(_workspaceLocation))
+		String path = dir.getAbsolutePath().replace('\\', '/');
+		String wpath = _workspaceLocation.replace('\\', '/');
+		
+		while(path != null && !path.equals(wpath))
 		{
 			list.add(counter,dir);counter++;
 			dir = dir.getParentFile();
+			path = dir.getAbsolutePath().replace('\\', '/');
 		}
 		//boolean found = false;
 		for(int i = 0; i < list.size(); i++)
