@@ -105,7 +105,7 @@ public class OutputHandler extends Handler
 					    {
 						if (process.getAttribute(DE.A_TYPE).equals("Process"))
 						    {
-							process.setAttribute(DE.A_TYPE, "Child Process");
+							//process.setAttribute(DE.A_TYPE, "Child Process");
 						    }
 					    }			       
 					

@@ -110,7 +110,8 @@ public class ProcessMonitorMiner extends Miner
 	DataElement containerD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object", 1);
 
 	DataElement processesD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Processes");	
-	_dataStore.createReference(processesD, containerD, "abstracted by", "abstracts"); 
+	_dataStore.createReference(processesD, containerD, 
+				   _dataStore.getAbstractedByRelation(), _dataStore.getAbstractsRelation()); 
 	
 
 	DataElement processD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Process");	
@@ -118,7 +119,8 @@ public class ProcessMonitorMiner extends Miner
 	_dataStore.createReference(processesD, processD);
 
 	DataElement cprocessD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Child Process");	
-	_dataStore.createReference(processD, cprocessD, "abstracts", "abstracted by");
+	_dataStore.createReference(cprocessD, processD, 
+				   _dataStore.getAbstractedByRelation(), _dataStore.getAbstractsRelation()); 	
 
 	DataElement killD = createCommandDescriptor(processD, "Kill", "C_KILL");
 	createCommandDescriptor(processesD, "Query", "C_QUERY");
