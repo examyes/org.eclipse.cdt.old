@@ -167,7 +167,7 @@ public class ConfigureAction extends CustomAction
 				"\nPress OK to update project configuration files, or "+
 				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
 				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
-				runUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+				runUpdate = dialog.openConfirm(shell,"Updating configure.in, Makefile.am's and generating configure ",message);
 			}
 			else
 			{
