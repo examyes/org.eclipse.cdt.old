@@ -48,7 +48,7 @@ public class GprofTraceFile extends PATraceFile {
   /**
    * Process an input line
    */
-  protected void processLine(String line) throws Exception {
+  public void processLine(String line) throws Exception {
        
    if (_status.isParsingFlatProfile()) {
    

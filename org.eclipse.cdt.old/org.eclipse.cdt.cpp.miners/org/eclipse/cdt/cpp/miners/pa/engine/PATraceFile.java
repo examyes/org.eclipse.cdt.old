@@ -122,11 +122,15 @@ public abstract class PATraceFile {
     }
     
     _reader.close();
+    
+    if (_status.getFlatProfileStatus() != PAParseStatus.DONE) {
+     throw new PAException("No profile information"); 
+    }
    
   }
   
   // The abstract processLine() method should be implemented by a subclass.
-  protected abstract void processLine(String line) throws Exception;
+  public abstract void processLine(String line) throws Exception;
   
   // setter methods
   protected void setTotalExecutionTime(double time) {
@@ -189,6 +193,9 @@ public abstract class PATraceFile {
    return _traceFormat;
   }
   
+  public PAParseStatus getParseStatus() {
+   return _status;
+  }
   
   /**
    * Return a PA trace function for the given name

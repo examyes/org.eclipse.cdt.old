@@ -6,7 +6,6 @@ import java.io.*;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.core.client.*;
 import org.eclipse.cdt.dstore.core.miners.miner.*;
-
 import org.eclipse.cdt.cpp.miners.pa.engine.*;
 
 
@@ -317,31 +316,20 @@ public class PAMiner extends Miner {
   * Query the trace program format
   */
  public void handleQueryTraceProgramFormat(DataElement fileElement, DataElement status) {
-   
+ 
    File file = new File(fileElement.getSource());
-      
+         
    String formatStr = null;
-   String gprofQueryCommand = "nm" + " " + file.getName() + "| grep mcount";
-   String fcQueryCommand = "nm" + " " + file.getName() + "| grep cyg_profile_func_enter";
+   String queryCommand = "nm" + " " + file.getName() + "|grep \"mcount\\|cyg_profile_func_enter\"";
+      
+   DataElement cmdStatus = PADataStoreAdaptor.runCommand(fileElement.getParent(), queryCommand);
    
-   String line = PADataStoreAdaptor.getFirstCommandOutputLine(file.getParentFile(), gprofQueryCommand);
-   if (line != null && line.indexOf("mcount") >= 0)
-     formatStr = "gprof";
-   else {
-     line = PADataStoreAdaptor.getFirstCommandOutputLine(file.getParentFile(), fcQueryCommand);
-     if (line != null && line.indexOf("cyg_profile_func_enter") >= 0) {
-       formatStr = "functioncheck";
-     }
-     else {
-       formatStr = "invalid trace program";
-     }
-   }
-   
-   status.setAttribute(DE.A_NAME, "done");
-   status.setAttribute(DE.A_VALUE, formatStr);   
+   QueryTraceFormatThread queryThread = new QueryTraceFormatThread();
+   queryThread.init(cmdStatus, status);
+   queryThread.start();
    
  }
-
+ 
 
  /**
   * Parse the given trace file and use the parsed result to populate the datastore 
@@ -370,7 +358,8 @@ public class PAMiner extends Miner {
    }
    catch (Exception e) {
     e.printStackTrace();
-    status.setAttribute(DE.A_NAME, "error");
+    status.setAttribute(DE.A_NAME, "done");
+    status.setAttribute(DE.A_VALUE, "error");
     return;
    }
    
@@ -405,7 +394,8 @@ public class PAMiner extends Miner {
   }
   else {
    System.out.println("Invalid trace format: " + traceFormat);
-   status.setAttribute(DE.A_NAME, "error");
+   status.setAttribute(DE.A_NAME, "done");
+   status.setAttribute(DE.A_VALUE, "error");
    return;
   }
   
@@ -413,7 +403,8 @@ public class PAMiner extends Miner {
   File file = new File(traceElement.getSource());
   if (!file.exists()) {
    System.out.println("Trace program does not exist: " + traceElement.getSource());
-   status.setAttribute(DE.A_NAME, "error");
+   status.setAttribute(DE.A_NAME, "done");
+   status.setAttribute(DE.A_VALUE, "error");   
    return;   
   }
   
@@ -430,41 +421,19 @@ public class PAMiner extends Miner {
   catch (Exception e) {
    System.out.println("Error running the profile command: " + profileCommand);
    _dataStore.createObject(traceElement, "error code", getLocalizedString("pa.NoCommand"));
-   status.setAttribute(DE.A_NAME, "error");
+   status.setAttribute(DE.A_NAME, "done");
+   status.setAttribute(DE.A_VALUE, "error");
    return;
   }
   
-  // Detect errors from the error stream  
-  BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-    
-  String errorCode = PADataStoreAdaptor.getErrorCode(stderr);
-    
-  if (errorCode != null) {
-    // System.out.println("Found an error: " + errorCode);
-    _dataStore.createObject(traceElement, "error code", errorCode);
-    status.setAttribute(DE.A_NAME, "error");
-    return;
-  }
-  else {
+  PAMinerParseErrorThread errorThread = new PAMinerParseErrorThread(this, traceElement, status, process.getErrorStream());
+  PAMinerParseOutputThread outputThread = new PAMinerParseOutputThread(this, traceElement, status, traceFormat, process.getInputStream());
+  errorThread.setOutputThread(outputThread);
+  outputThread.setErrorThread(errorThread);
+  
+  errorThread.start();
+  outputThread.start();
       
-    // Parse the trace output
-    BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    PATraceFile traceFile = null;
-  
-    try {
-      traceFile = PAAdaptor.createTraceFile(stdout, traceFormat);
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-      status.setAttribute(DE.A_NAME, "error");
-      return;
-    }
-    
-    PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
-    adaptor.populateDataStore(traceElement, traceFile);
-    status.setAttribute(DE.A_NAME, "done");
-  }
-  
  }
  
  

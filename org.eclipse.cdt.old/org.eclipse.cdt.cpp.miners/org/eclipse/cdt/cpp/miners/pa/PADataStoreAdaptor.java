@@ -73,165 +73,21 @@ public class PADataStoreAdaptor {
    return _miner.getLocalizedString(key);
  }
  
- /**
-  * Run the given command and retrieve the command output
-  */
- public static ArrayList getCommandResult(File workingDir, String command) {
- 
-  // Run the given command
-  Process process = null;
-  String theShell = getShell();
-  try {
-  
-   if (theShell.equals("sh")) {
-     String args[] = new String[3];
-     args[0] = theShell;
-     args[1] = "-c";
-     args[2] = command;
-     process = Runtime.getRuntime().exec(args, null, workingDir);
-   }
-   else {
-     process = Runtime.getRuntime().exec(theShell + command, null, workingDir);
-   }
-  }
-  catch (Exception e) {
-   System.out.println("Error running the command: " + command);
-   return null;
-  }
-    
-  // Parse the command output
-  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-  
-  ArrayList results = new ArrayList();
-  String line = null;
-  try {
-    while ((line = reader.readLine()) != null) {
-     results.add(line);
-    }
-    reader.close();
-  }
-  catch (IOException e) {
-   System.out.println(e);
-  }
-  
-  return results;
- }
  
  /**
-  * Return the shell command for a particular OS
+  * Run a given command and return the status element
   */
- private static String getShell() {
- 
-   String theOS = System.getProperty("os.name");
-   String theShell = null;
+ public static DataElement runCommand(DataElement workingDir, String command) {
    
-   if (!theOS.toLowerCase().startsWith("win")) {
-    theShell = "sh";
-   }
-   else {
-   
-    if ((theOS.indexOf("95")>=0) ||
-        (theOS.indexOf("98")>=0) ||
-        (theOS.indexOf("ME")>=0)) 
-    {
-	   theShell = "start /B ";
-    }
-    else
-    {
-	  theShell = "cmd /C ";
-    }
-   }
-   
-   return theShell;
- }
- 
- 
- /**
-  * Return the first non-empty output line for a command
-  */
- public static String getFirstCommandOutputLine(File workingDir, String command) {
-   
-  // System.out.println("command: " + command);
+   DataElement cmdD = _dataStore.localDescriptorQuery(workingDir.getDescriptor(), "C_COMMAND");
+   ArrayList args = new ArrayList();
+  			
+   DataElement invocationObj = _dataStore.createObject(null, "invocation", command, "");
+   args.add(invocationObj);
   
-  // Run the given command
-  Process process = null;
-  String theShell = getShell();
-  try {
-  
-   if (theShell.equals("sh")) {
-     String args[] = new String[3];
-     args[0] = theShell;
-     args[1] = "-c";
-     args[2] = command;
-     process = Runtime.getRuntime().exec(args, null, workingDir);
-   }
-   else {
-     process = Runtime.getRuntime().exec(theShell + command, null, workingDir);
-   }
-  }
-  catch (Exception e) {
-   System.out.println("Error running the command: " + command);
-   return null;
-  }
-     
-  // Parse the command output
-  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-  
-  return getFirstLine(reader);
- }
+   DataElement cmdStatus = _dataStore.command(cmdD, args, workingDir);
+   return cmdStatus;
  
- /**
-  * Retrieve the first non-empty line from a buffered reader
-  */
- public static String getFirstLine(BufferedReader reader) {
- 
-   String result = null;
-   try {
-     
-     Thread.sleep(100);
-     while (reader.ready() && (result = reader.readLine()) != null) {
-       if (result.trim().length() > 0)
-        break;
-     }
-     
-     reader.close();
-   }
-   catch (Exception e) {
-     System.out.println(e);
-   }
-   
-   return result;
- }
- 
- 
- /**
-  * Return an error code from the error stream
-  */
- public static String getErrorCode(BufferedReader stderr) {
- 
-   String firstLine = getFirstLine(stderr);
-   if (firstLine != null) {
-   
-     if (firstLine.indexOf("gmon.out:") >= 0)
-      return getLocalizedString("pa.NoTraceData");
-     
-     else if (firstLine.indexOf("ommand not found") >= 0)
-      return getLocalizedString("pa.NoCommand");
-     
-     else if (firstLine.indexOf("o such file or directory") >= 0 ||
-     		  firstLine.indexOf("does not exist") >= 0)
-      return getLocalizedString("pa.NoFile");
-     
-     else if (firstLine.indexOf("he specified flag is not valid") >= 0 ||
-     		  firstLine.indexOf("unrecognized option") >= 0)
-      return getLocalizedString("pa.NoOption");
-     
-     else
-      return null;
-   }
-   else
-     return null;
-     
  }
  
  /**
@@ -510,16 +366,14 @@ public class PADataStoreAdaptor {
   */
  private void createCallNestingRelations(DataElement funcRoot) {
  
-  int numTraceFuncs = funcRoot.getNestedSize();
-  for (int i=0; i < numTraceFuncs; i++) {
+  ArrayList traceFunctions = funcRoot.getAssociated("contents");
+  for (int i=0; i < traceFunctions.size(); i++) {
    
-   DataElement funcElement = funcRoot.get(i);
-   if (!funcElement.isDeleted()) {
+    DataElement funcElement = (DataElement)traceFunctions.get(i);
     
-     PATraceFunction trcFunc = (PATraceFunction)_elementToTraceFuncMap.get(funcElement);
-     if (trcFunc != null) {
+    PATraceFunction trcFunc = (PATraceFunction)_elementToTraceFuncMap.get(funcElement);
+    if (trcFunc != null) {
       createCallMap(funcElement, trcFunc);
-     }
     }
   }
   
@@ -533,7 +387,6 @@ public class PADataStoreAdaptor {
   ArrayList callees = trcFunc.getCallees();
   
   int numCallees = callees.size();
-  // System.out.println("trcFunc: " + trcFunc.getName() + "  number of callees: " + numCallees);
   for (int i=0; i < numCallees; i++) {
    PACallArc callArc = (PACallArc)callees.get(i);
    PATraceFunction callee = callArc.getCallee();

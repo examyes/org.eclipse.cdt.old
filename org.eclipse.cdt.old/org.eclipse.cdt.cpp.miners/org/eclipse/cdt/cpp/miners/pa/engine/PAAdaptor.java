@@ -130,22 +130,22 @@ public class PAAdaptor {
    
    if (format == GPROF_ALL) {
     traceFile = new GprofTraceFile(reader);
-    traceFile.parse();      
+    //traceFile.parse();      
    }
    else if (format == GPROF_GNU) {
     traceFile = new GprofTraceFile(reader);
     traceFile.setTraceFormat("GNU gprof");
-    traceFile.parse();   
+   //traceFile.parse();   
    }
    else if (format == GPROF_BSD) {
     traceFile = new GprofTraceFile(reader);
     traceFile.setTraceFormat("BSD gprof");
-    traceFile.parse();   
+    //traceFile.parse();   
     // markCyclicFunctions(traceFile.getTraceFunctions());  
    }
    else if (format == FUNCTIONCHECK) {
     traceFile = new FunctionCheckTraceFile(reader);
-    traceFile.parse();
+    //traceFile.parse();
    }
    else
     throw new PAException("Illegal trace file format.");

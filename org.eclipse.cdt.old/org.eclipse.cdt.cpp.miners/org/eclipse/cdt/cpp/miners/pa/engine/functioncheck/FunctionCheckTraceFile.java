@@ -81,7 +81,7 @@ public class FunctionCheckTraceFile extends PATraceFile {
   }
   
   // Process an input line
-  protected void processLine(String line) throws Exception {
+  public void processLine(String line) throws Exception {
 
    if (_status.isParsingFlatProfile()) {
     if (FunctionCheckUtility.isEmptyLine(line)) {
