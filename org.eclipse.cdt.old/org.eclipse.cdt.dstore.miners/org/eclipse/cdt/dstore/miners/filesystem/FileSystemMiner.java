@@ -284,7 +284,7 @@ public class FileSystemMiner extends Miner
 	 }
      else if (name.equals("C_DATE"))
 	 {
-	     status = handleDate(subject, status);
+	     status = handleDate(subject, status, true);
 	 }
      else if (name.equals("C_PERMISSIONS"))
 	 {
@@ -427,7 +427,6 @@ public class FileSystemMiner extends Miner
      	     boolean success = deleteHelper(subject.getSource());// recursively delete all files rooted at 'subject'	
 	     if (success)
 		 { 		    
-		     //***subject.setUpdated(false);
 		     _dataStore.deleteObject(parent, subject);
 		     _dataStore.refresh(parent);
 		 }
@@ -505,10 +504,10 @@ public class FileSystemMiner extends Miner
 								     objName, newFileName.toString());
 		     
 		     handleSize(newObject, status);
-		     handleDate(newObject, status);
+		     handleDate(newObject, status, false);
 		     newObject.setDepth(1);// the new file has no children
 		     subject.setDepth(2);// my parent directory has the new file as its child
-		     _dataStore.update(subject);
+		     _dataStore.refresh(subject);
 		 }
 	     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
 	     return status;
@@ -545,11 +544,11 @@ public class FileSystemMiner extends Miner
 		     DataElement newObject=_dataStore.createObject(subject, type,
 								   objName, newDirName.toString());
 		     handleSize(newObject, status);
-		     handleDate(newObject, status);
+		     handleDate(newObject, status, false);
 		     
 		     newObject.setDepth(1);//new directory is empty so it does not have any children(i.e.depth=1)
 		     subject.setDepth(2);// the parent directory now has the new directory as its child.
-		     _dataStore.update(subject);
+		     _dataStore.refresh(subject);
 		 }
 	     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
 	     return status;
@@ -642,18 +641,18 @@ public class FileSystemMiner extends Miner
 
     private DataElement handleDates(DataElement theDirectory, DataElement status)
     {
-	handleDate(theDirectory, status);
+	handleDate(theDirectory, status, false);
 	ArrayList contents = theDirectory.getAssociated(_containsDescriptor);
 	for (int i = 0; i < contents.size(); i++)
 	    {
-		handleDate((DataElement)contents.get(i), status);
+		handleDate((DataElement)contents.get(i), status, false);
 	    }
 
 	_dataStore.refresh(theDirectory);
 	return status;
     }
 
-    private DataElement handleDate(DataElement theFile, DataElement status)
+    private DataElement handleDate(DataElement theFile, DataElement status, boolean doRefresh)
     {
 	ArrayList dateInfo = theFile.getAssociated(_attributesDescriptor);
 	DataElement dateObj = null;
@@ -711,8 +710,11 @@ public class FileSystemMiner extends Miner
 
 	    }
 	
-	_dataStore.refresh(dateObj.getParent());
-	_dataStore.refresh(theFile);
+	if (doRefresh)
+	    {
+		_dataStore.refresh(dateObj.getParent());
+		_dataStore.refresh(theFile);
+	    }
 
 	return status;
     }
@@ -883,14 +885,13 @@ public class FileSystemMiner extends Miner
 					if (type == _directoryDescriptor)
 					    {
 						handleSize(newObject, status);
-						handleDate(newObject, status);
+						handleDate(newObject, status, false);
 					    }
 					else
 					    {
 						handleSize(newObject, status);
-						handleDate(newObject, status);
-						classifyExecutable(newObject);
-						//newObject.expandChildren();
+						handleDate(newObject, status, false);
+						classifyExecutable(newObject, false);
 						newObject.setDepth(1);
 					    }
 				    }
@@ -907,7 +908,7 @@ public class FileSystemMiner extends Miner
 
 							if (type == _exeDescriptor)
 							    {
-								classifyExecutable(newObject);
+								classifyExecutable(newObject, false);
 							    }
 						    }
 						else
@@ -928,12 +929,6 @@ public class FileSystemMiner extends Miner
 		    {
 		    }
 	    }
-	else if (theElement.isOfType(_fileDescriptor))
-	    {
-		handleSize(theElement, status);
-		handleDate(theElement, status);		
-	    }
-
 	if (status != null)
 	    {
 		status.setAttribute(DE.A_NAME, "done");
@@ -941,7 +936,7 @@ public class FileSystemMiner extends Miner
 	return status;
     }
 
-    private void classifyExecutable(DataElement theElement)
+    private void classifyExecutable(DataElement theElement, boolean doRefresh)
     {
 	if (theElement.isOfType(_exeDescriptor))
 	    {
@@ -955,7 +950,11 @@ public class FileSystemMiner extends Miner
 			if (line.indexOf("executable") > 0)
 			    {
 				theElement.setAttribute(DE.A_TYPE, "binary executable");
-				_dataStore.refresh(theElement);
+
+				if (doRefresh)
+				    {
+					_dataStore.refresh(theElement);
+				    }
 			    }
 		    }
 		catch (IOException e)
@@ -1033,7 +1032,7 @@ public class FileSystemMiner extends Miner
 							if (!f.isDirectory())
 							    {
 								handleSize(newObject, status);
-								handleDate(newObject, status);
+								handleDate(newObject, status, false);
 								
 								//newObject.expandChildren();
 								newObject.setDepth(1);
@@ -1051,7 +1050,7 @@ public class FileSystemMiner extends Miner
 								
 								
 								handleSize(newObject, status);
-								handleDate(newObject, status);
+								handleDate(newObject, status, false);
 							    }
 						    }
 					    }
@@ -1085,12 +1084,6 @@ public class FileSystemMiner extends Miner
 			e.printStackTrace();
 		    }
 	    }
-	else if (theElement.isOfType(_fileDescriptor))
-	    {
-		handleSize(theElement, status);
-		handleDate(theElement, status);
-	    }
-	  
 	  if (status != null)
 	      status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));	 
 
