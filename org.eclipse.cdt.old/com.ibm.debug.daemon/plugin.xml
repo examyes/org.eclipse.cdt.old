@@ -51,4 +51,13 @@
       </viewContribution>
    </extension>
 
+<!-- Infopop (F1 Help) enablement -->
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            name="contextsDaemonDebug.xml"
+            plugin="com.ibm.debug.daemon">
+      </contexts>
+   </extension>
+
 </plugin>

@@ -132,7 +132,7 @@ Available representations vary depending on the operating system on which the pr
 		<description>If you have scrolled away from the address that you are monitoring, select this to return to the address.</description>
 	</context>
 	<context  id="add_function_breakpoint_action" >
-		<description>This will set a new breakpoint that stops program execution when the start of a function, method, or entry point is encountered.</description>
+		<description>This will set a new breakpoint that stops program execution when the start of a function or entry point is encountered.</description>
 		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbfunc.htm" label="Setting a function breakpoint"></topic>
 	</context>
 
@@ -160,7 +160,7 @@ Available representations vary depending on the operating system on which the pr
 	</context>
 
 	<context  id="add_entry_breakpoint_action" >
-		<description>This will launch a dialog box that allows you to set a new breakpoint that stops program execution when the start of a function, method, or entry point is encountered.</description>
+		<description>This will launch a dialog box that allows you to set a new breakpoint that stops program execution when the start of a function or entry point is encountered.</description>
 		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
 		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbentr.htm" label="Setting an entry breakpoint"></topic>
 	</context>
@@ -257,7 +257,7 @@ Programs under debug mode must include at least one module that has been compile
 
 	<!-- Entry breakpoint -->
 	<context  id="entry_bp_wizard" >
-		<description>Use this wizard to set a breakpoint that is triggered when the method, function, or entry point it applies to is entered. In this wizard page, you can complete the following:
+		<description>Use this wizard to set a breakpoint that is triggered when the function or entry point it applies to is entered. In this wizard page, you can complete the following:
 
 <b>Project</b> field: Enter the name of or browse for the debug project in which to set a breakpoint.
 <b>Source</b> field: Enter the name of or browse for the source file with which you want the breakpoint associated.

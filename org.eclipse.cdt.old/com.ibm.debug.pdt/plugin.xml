@@ -546,6 +546,7 @@
          <editor
              name="%EditorName.label"
              icon="icons/full/cview16/source_view.gif"
+             extensions="cpp"
              helpContextId="debugger_editor"
              contributorClass="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditorContextContributor"
              class="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditor"
