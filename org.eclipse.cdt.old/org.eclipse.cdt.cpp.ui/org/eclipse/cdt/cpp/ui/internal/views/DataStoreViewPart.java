@@ -55,14 +55,6 @@ public abstract class DataStoreViewPart extends ObjectsViewPart
 			}
 		}
 		break;
-	    case CppProjectEvent.CLOSE:
-	    case CppProjectEvent.DELETE:
-		{		    
-		    doClear();
-		    _viewer.resetView();
-		}
-		break;
-		
 	    default:
 		super.projectChanged(event);
 		break;

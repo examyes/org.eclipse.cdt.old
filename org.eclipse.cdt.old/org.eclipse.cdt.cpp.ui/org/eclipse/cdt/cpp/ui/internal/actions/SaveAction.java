@@ -26,59 +26,16 @@ import org.eclipse.ui.*;
 import java.io.*;
 import java.util.*;
 
-public class SaveAction implements IActionDelegate, ISelectionChangedListener
+public class SaveAction extends CppActionDelegate
 {
-  private String    _path;
-    private IProject  _project;
-  private ISelection _selection;
-
-
   public void run(IAction action)
   {
-    ISelection selection = _selection;
-    if (selection.isEmpty() || !(selection instanceof IStructuredSelection))
-      return;
-
-    IStructuredSelection ss = (IStructuredSelection)selection;
     ModelInterface api = CppPlugin.getModelInterface();	
-    if (_project != null)
-      api.saveProject(_project);
+    if (_currentResource != null && _currentResource instanceof IProject)
+      api.saveProject((IProject)_currentResource);
   }
-
-
-  public void activateLauncher(Window window, IStructuredSelection selection)
-  {
-    if (window instanceof IWorkbenchWindow)
-      {
-	((IWorkbenchWindow) window).getActivePage().saveAllEditors(true);
-      }
-  }
-
-  public void selectionChanged(SelectionChangedEvent selection)
-  {
-  }
-
-
-  public void selectionChanged(IAction action, ISelection selection)
-  {
-    boolean state= !selection.isEmpty();
-    _selection = selection;
-
-    if (selection instanceof IStructuredSelection)
-      {
-       	IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-      	_project = (IProject)structuredSelection.getFirstElement();
-         if (_project != null)
-         {
-            if (CppPlugin.isCppProject(_project))
-            {
-               ((Action)action).setEnabled(true);
-            }
-            else
-            {
-      	      ((Action)action).setEnabled(false);
-            }
-         }
-      }
-  }
+    
+    protected void checkEnabledState(IAction action)
+    {
+    }
 }

@@ -17,10 +17,12 @@ public class DataElementAdapterFactory implements IAdapterFactory
 {
     private ModelInterface _api; 
 
-    private static Class[] PROPERTIES= new Class[] {
-	IResource.class,
+    private static Class[] PROPERTIES= new Class[] 
+    {
 	IProject.class,
-	IFile.class
+	IFolder.class,
+	IFile.class,
+	IResource.class,
     };
 
     public DataElementAdapterFactory(ModelInterface api)
@@ -37,17 +39,25 @@ public class DataElementAdapterFactory implements IAdapterFactory
 		DataStore dataStore = element.getDataStore();
 		if (dataStore == CppPlugin.getDataStore())
 		    {
-			if (IFile.class.equals(key)) 
+			if (IProject.class.equals(key)) 
+			    {
+				return getProject(element);
+			    } 
+			else if (IFolder.class.equals(key)) 
+			    {
+				IResource res = getResource(element);
+				if (res instanceof IFolder)
+				    {
+					return res;
+				    }
+			    } 
+			else if (IFile.class.equals(key)) 
 			    {
 				return getFile(element);
 			    } 
 			else if (IResource.class.equals(key)) 
 			    {
 				return getResource(element);
-			    } 
-			else if (IProject.class.equals(key)) 
-			    {
-				return getProject(element);
 			    } 
 		    }
 	    }

@@ -505,7 +505,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void debug(String pathStr, String port, String key)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	DataElement dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);	
+
+	DataElement dirObject = null;
+	IResource resource = findFile(pathStr);
+	if (resource == null)
+	    {
+		dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);	
+	    }
+	else
+	    {
+		dirObject = findResourceElement(resource);	
+	    }
+
 	dataStore.setObject(dirObject);
 	debug(dirObject, port, key);
     }
@@ -2379,8 +2390,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement targetD = dataStore.find(schemaRoot,DE.A_NAME, "Project Target",1);
 
-	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
-	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
+	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "Statements", 1);
+	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "Functions", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
 
 	

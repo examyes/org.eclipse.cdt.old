@@ -155,8 +155,8 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	
 	// register the default adapter for elements
 	IAdapterManager manager = Platform.getAdapterManager();
-	manager.registerAdapters(new DataElementAdapterFactory(_interface), DataElement.class);	
-	manager.registerAdapters(new ResourceAdapterFactory(_interface), IResource.class);	
+	manager.registerAdapters(new DataElementAdapterFactory(_interface), DataElement.class);	  
+      	manager.registerAdapters(new ResourceAdapterFactory(_interface), IResource.class);	  
       }
 
     public void initDefaultBuildPreference()

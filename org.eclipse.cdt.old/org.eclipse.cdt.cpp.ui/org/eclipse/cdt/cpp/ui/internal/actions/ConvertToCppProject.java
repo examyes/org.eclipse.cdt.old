@@ -25,9 +25,8 @@ import org.eclipse.core.resources.*;
 import java.io.*;
 import java.util.*;
 
-public class ConvertToCppProject implements IActionDelegate, ISelectionChangedListener 
+public class ConvertToCppProject extends CppActionDelegate 
 {
-    private IProject      _project= null;
     private CppPlugin     _plugin;
 
     public ConvertToCppProject()
@@ -38,97 +37,81 @@ public class ConvertToCppProject implements IActionDelegate, ISelectionChangedLi
     public void run(IAction action)     
     {
 	// add C++ project indicator
-	IPath newPath = _project.getFullPath();
-	QualifiedName indicatorFile = new QualifiedName("C++ Project", newPath.toString());
-	try
+	if (_currentResource != null && _currentResource instanceof IProject)
 	    {
-		_project.setPersistentProperty(indicatorFile, "yes");
-	    }
-	catch (CoreException ce)
-	    {
-	    }
+		IProject project = (IProject)_currentResource;
+		IPath newPath = project.getFullPath();
+		QualifiedName indicatorFile = new QualifiedName("C++ Project", newPath.toString());
+		try
+		    {
+			project.setPersistentProperty(indicatorFile, "yes");
+		    }
+		catch (CoreException ce)
+		    {
+		    }
 		
-	// add parse paths
-	ArrayList paths = _plugin.readProperty("DefaultParseIncludePath");
-	_plugin.writeProperty(_project, "Include Path", paths);
-	
-	// add parse behaviour
-	ArrayList autoParse = _plugin.readProperty("AutoParse");
-	_plugin.writeProperty(_project, "AutoParse", autoParse);      
-
-	ArrayList autoPersist = _plugin.readProperty("AutoPerist");
-	_plugin.writeProperty(_project, "AutoPersist", autoPersist);      
-
-	// add parse quality
-	ArrayList preferences = _plugin.readProperty("ParseQuality");
-	_plugin.writeProperty(_project, "ParseQuality", preferences);      
+		// add parse paths
+		ArrayList paths = _plugin.readProperty("DefaultParseIncludePath");
+		_plugin.writeProperty(project, "Include Path", paths);
 		
-	// add build history
-	ArrayList builds = _plugin.readProperty("DefaultBuildInvocation");
-	_plugin.writeProperty(_project, "Build History", builds);
-
-	// add clean history
-	ArrayList cleans = _plugin.readProperty("DefaultCleanInvocation");
-	_plugin.writeProperty(_project, "Clean History", cleans);
-
-	ArrayList variables = _plugin.readProperty("DefaultEnvironment");
-	_plugin.writeProperty(_project, "Environment", variables);
-
-	ModelInterface api = ModelInterface.getInstance();
-
-	// add build spec
-	try 
-	    { 
+		// add parse behaviour
+		ArrayList autoParse = _plugin.readProperty("AutoParse");
+		_plugin.writeProperty(project, "AutoParse", autoParse);      
+		
+		ArrayList autoPersist = _plugin.readProperty("AutoPerist");
+		_plugin.writeProperty(project, "AutoPersist", autoPersist);      
+		
+		// add parse quality
+		ArrayList preferences = _plugin.readProperty("ParseQuality");
+		_plugin.writeProperty(project, "ParseQuality", preferences);      
+		
+		// add build history
+		ArrayList builds = _plugin.readProperty("DefaultBuildInvocation");
+		_plugin.writeProperty(project, "Build History", builds);
+		
+		// add clean history
+		ArrayList cleans = _plugin.readProperty("DefaultCleanInvocation");
+		_plugin.writeProperty(project, "Clean History", cleans);
+		
+		ArrayList variables = _plugin.readProperty("DefaultEnvironment");
+		_plugin.writeProperty(project, "Environment", variables);
+		
+		ModelInterface api = ModelInterface.getInstance();
+		
 		// add build spec
-		String builderName = "org.eclipse.cdt.cpp.ui.cppbuilder";
-		IProjectDescription projectDescription =  _project.getDescription();
+		try 
+		    { 
+			// add build spec
+			String builderName = "org.eclipse.cdt.cpp.ui.cppbuilder";
+			IProjectDescription projectDescription =  project.getDescription();
+			
+			ICommand command = projectDescription.newCommand();
+			command.setBuilderName(builderName);
+			
+			ICommand[] commands = projectDescription.getBuildSpec();
+			ICommand[] newCommands = new ICommand[commands.length + 1];
+			System.arraycopy(commands, 0, newCommands, 0, commands.length);
+			newCommands[commands.length] = command;
+			projectDescription.setBuildSpec(newCommands);	
+			
+			// specify nature
+			String[] natures = projectDescription.getNatureIds();
+			String[] newNatures = new String[natures.length + 1];
+			System.arraycopy(natures, 0, newNatures, 0, natures.length);
+			newNatures[natures.length] = "org.eclipse.cdt.cpp.ui.cppnature";
+			projectDescription.setNatureIds(newNatures);
+			project.setDescription(projectDescription, null);
+		    } 
+		catch (CoreException e)  
+		    {
+			System.out.println(e);
+		    }
 		
-		ICommand command = projectDescription.newCommand();
-		command.setBuilderName(builderName);
-
-		ICommand[] commands = projectDescription.getBuildSpec();
-		ICommand[] newCommands = new ICommand[commands.length + 1];
-		System.arraycopy(commands, 0, newCommands, 0, commands.length);
-		newCommands[commands.length] = command;
-		projectDescription.setBuildSpec(newCommands);	
-		
-		// specify nature
-		String[] natures = projectDescription.getNatureIds();
-		String[] newNatures = new String[natures.length + 1];
-		System.arraycopy(natures, 0, newNatures, 0, natures.length);
-		newNatures[natures.length] = "org.eclipse.cdt.cpp.ui.cppnature";
-		projectDescription.setNatureIds(newNatures);
-		_project.setDescription(projectDescription, null);
-	    } 
-	catch (CoreException e)  
-	    {
-		System.out.println(e);
+		api.openProject(project);
 	    }
+    }
 
-	api.openProject(_project);
-    }
-    
-    
-    public void selectionChanged(IAction action, ISelection selection) 
-    {
-	if (selection instanceof IStructuredSelection)
-        {
-	    IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-	    IResource resource = (IResource)structuredSelection.getFirstElement();
-	    if (resource instanceof IProject)
-		{
-		    if (!_plugin.isCppProject((IProject)resource))
-			{
-			    _project = (IProject)resource;
-			    ((Action)action).setEnabled(true);
-			    return;
-			}
-		}
-	}
-	((Action)action).setEnabled(false);
-    }
-    
-    public void selectionChanged(SelectionChangedEvent selection) 
+    protected void checkEnabledState(IAction a)
     {
     }
 }

@@ -34,123 +34,87 @@ import org.eclipse.ui.*;
  * availability, it is possible that the button will disable
  * instead of executing.
  */
-public class CppActionDelegateDesignate implements IActionDelegate, ISelectionChangedListener {
-	private static String TITLE = "Cpp ActionDelegate";
+public class CppActionDelegateDesignate extends CppActionDelegate 
+{
+    private static String TITLE = "Cpp ActionDelegate";
 
-	Shell localShell;
-  private ISelection _selection;
-
-
-/**
- * Checks the current selection and runs the separate browser
- * to show the content of the Cpp file. This code shows how
- * to launch separate browsers that are not VA/Base desktop parts.
- *
- * @param action  the action that was performed
- * @param shell  the shell in which the action was performed
- */
-
-public void run(IAction action)
-  {
-    IResource currentResource= null;
-      Iterator e= null;
-      int i;
-      String fileType="";
-
-      ISelection selection = _selection;
-
-      if ((selection != null) && (selection instanceof IStructuredSelection))
-      {
-         IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-	 currentResource = (IResource)structuredSelection.getFirstElement();
-	 IPath newPath= currentResource.getFullPath();
-	 QualifiedName qNameFileTypeProperty = new QualifiedName("com.ibm.cpp", newPath.toString());  // for now null qualifier
-	 
-	 try
-	     {
-		 fileType = currentResource.getPersistentProperty(qNameFileTypeProperty);
-	     }
-	 catch (CoreException ce)
-	     {
-		 System.out.println("CppActionDelegateDesignate CoreException3 " +fileType +ce);
-	     }
-	 
-	 if (fileType == null)
-	     {
-		 try
-		     {
-			 currentResource.setPersistentProperty(qNameFileTypeProperty, "makefile"); // this is a makefile - store this fact in server property
-		     }
-		 catch (CoreException ce)
-		     {
-			 System.out.println("CppActionDelegateDesignate CoreException1 " +ce);
-		     }
-	     }
-	 else
-	     {
-		 try
-		     {
-			 currentResource.setPersistentProperty(qNameFileTypeProperty, null); // remove server property
-		     }
-		 catch (CoreException ce)
-		     {
-			 System.out.println("CppActionDelegateDesignate CoreException2 " +ce);
-		     }
-	     }
-      }
-  }
-
-/**
- * Does nothing - we will let simple rules in the XML
- * config file react to selections.
- *
- * @param action  the action performed
- * @param selection  the new selection
- */
-public void selectionChanged(IAction action, ISelection selection) 
-  {
-    IResource currentResource= null;
-    Iterator e= null;
-				int i;
-            String fileType="";
-
-	    _selection = selection;
+    /**
+     * Checks the current selection and runs the separate browser
+     * to show the content of the Cpp file. This code shows how
+     * to launch separate browsers that are not VA/Base desktop parts.
+     *
+     * @param action  the action that was performed
+     * @param shell  the shell in which the action was performed
+     */
+    
+    public void run(IAction action)
+    {
+	String fileType="";
 	
-            if (selection instanceof IStructuredSelection)
-            {
-		IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-		currentResource = (IResource)structuredSelection.getFirstElement();
-		if (currentResource != null)
+	IPath newPath= _currentResource.getFullPath();
+	QualifiedName qNameFileTypeProperty = new QualifiedName("com.ibm.cpp", newPath.toString());  // for now null qualifier		
+	try
+	    {
+		fileType = _currentResource.getPersistentProperty(qNameFileTypeProperty);
+	    }
+	catch (CoreException ce)
+	    {
+	    }
+	
+	if (fileType == null)
+	    {
+		try
 		    {
-			IPath newPath= currentResource.getFullPath();
-			QualifiedName qNameFileTypeProperty = new QualifiedName("com.ibm.cpp", newPath.toString());  // for now null qualifier
-			
-			
-			String extension = currentResource.getFileExtension();
-			try
-			    {
-				fileType = currentResource.getPersistentProperty(qNameFileTypeProperty);
-			    }
-			catch (CoreException ce)
-			    {
-				System.out.println("CppActionDelegateDesignate CoreException3 " +fileType +ce);
-			    }
-			
-			
-			if (fileType!=null && fileType.equals("makefile"))
-			    {
-				((Action)action).setEnabled(false);
-			    }
-			else
-			    {
-				((Action)action).setEnabled(true);
-			    }
+			// this is a makefile - store this fact in server property			    
+			_currentResource.setPersistentProperty(qNameFileTypeProperty, "makefile");
+		    }
+		catch (CoreException ce)
+		    {
+			System.out.println("CppActionDelegateDesignate CoreException1 " +ce);
 		    }
 	    }
-  }
-
-public void selectionChanged(SelectionChangedEvent selection)
-  {
-
-  }
+	else
+	    {
+		try
+		    {
+			_currentResource.setPersistentProperty(qNameFileTypeProperty, null); // remove server property
+		    }
+		catch (CoreException ce)
+		    {
+			System.out.println("CppActionDelegateDesignate CoreException2 " +ce);
+		    }
+	    }
+    }
+    
+    protected void checkEnabledState(IAction action)
+    {
+	String fileType = null;
+	if (_currentResource != null)
+	    {
+		IPath newPath= _currentResource.getFullPath();
+		
+		// for now null qualifier
+		QualifiedName qNameFileTypeProperty = new QualifiedName("com.ibm.cpp", newPath.toString());
+		
+		String extension = _currentResource.getFileExtension();
+		try
+		    {
+			fileType = _currentResource.getPersistentProperty(qNameFileTypeProperty);
+		    }
+		catch (CoreException ce)
+		    {
+			System.out.println("CppActionDelegateDesignate CoreException3 " +fileType +ce);
+		    }
+		
+		
+		if (fileType!=null && fileType.equals("makefile"))
+		    {
+			((Action)action).setEnabled(false);
+		    }
+		else
+		    {
+			((Action)action).setEnabled(true);
+		    }
+	    }
+    }
 }

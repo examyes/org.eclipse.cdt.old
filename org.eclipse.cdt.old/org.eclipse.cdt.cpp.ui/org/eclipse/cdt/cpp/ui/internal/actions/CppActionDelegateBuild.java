@@ -25,83 +25,56 @@ import org.eclipse.core.resources.*;
 import java.io.*;
 import java.util.*;
 
-public class CppActionDelegateBuild implements IActionDelegate, ISelectionChangedListener 
+public class CppActionDelegateBuild extends CppActionDelegate 
 {
-  private static String TITLE = "Cpp ActionDelegate";
-  private static String EXTENSION = "mak";
+    private static String TITLE = "Cpp ActionDelegate";
+    private static String EXTENSION = "mak";
   
-  private QualifiedName  fqnHistory= null;
-  private IResource      fCurrentResource= null;
-
-  private String _path;
-
-  public void run(IAction action) 
-      {
-        BuildDialog d= new BuildDialog(fCurrentResource, "Build History");
+    private QualifiedName  fqnHistory= null;
+    
+    public void run(IAction action) 
+    {
+        BuildDialog d= new BuildDialog(_currentResource, "Build History");
 	d.open();
-
+	
         if (d.getReturnCode() == d.OK)
-        {	  
-	  String invocation = d.getInvocation();
-	  ModelInterface api = CppPlugin.getModelInterface();	
-	  api.command(_path, invocation);
-	}
-      }
+	    {	  
+		String invocation = d.getInvocation();
+		ModelInterface api = CppPlugin.getModelInterface();	
+		api.command(_currentResource, invocation, true);
+	    }
+    }
+    
 
-
-  public void selectionChanged(IAction action, ISelection selection) 
-      {
-        boolean state= !selection.isEmpty();
-        Iterator e= null;
-        int i;
-        String fileType="";
-        
-        if (selection instanceof IStructuredSelection)
-        {
-          IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-	  fCurrentResource = (IResource)structuredSelection.getFirstElement();
-	  if (fCurrentResource != null)
-	      {
-	  IPath newPath= fCurrentResource.getFullPath();
-            
-	  if (fCurrentResource instanceof IFolder)
-	      {
-		  _path = new String(fCurrentResource.getLocation().toOSString());    
-	      }
-	  else if (fCurrentResource instanceof IFile)
-	      {		      
-		  IPath location = fCurrentResource.getParent().getLocation();
-		  if (location != null)
-		      {		  
-			  _path = new String(location.toOSString());
-		      }	      
-	      }		 
-	  
-	  QualifiedName qNameFileTypeProperty = new QualifiedName("com.ibm.cpp", newPath.toString());
-	  
-	  fqnHistory = qNameFileTypeProperty;
-	  String extension = fCurrentResource.getFileExtension();
-	  try
-	      {
-		  fileType = fCurrentResource.getPersistentProperty(qNameFileTypeProperty);
-	      }
-	  catch (CoreException ce)
-	      {
-		  System.out.println("CppActionDelegateBuild CoreException3 " +fileType +ce);
-	      }
-	  
-	  if (fileType!=null && fileType.equals("makefile"))
-	      {
-		  ((Action)action).setEnabled(true);
-	      }
-	  else
-	      {
-		  ((Action)action).setEnabled(false);
-	      }         
-	      }
-        }
-      }
-
-public void selectionChanged(SelectionChangedEvent selection) {
-}
+    protected void checkEnabledState(IAction action)
+    {
+	String fileType = null;
+	if (_currentResource != null)
+	    {
+		IPath newPath= _currentResource.getFullPath();
+		
+		QualifiedName qNameFileTypeProperty = new QualifiedName("com.ibm.cpp", newPath.toString());
+		
+		fqnHistory = qNameFileTypeProperty;
+		String extension = _currentResource.getFileExtension();
+		try
+		    {
+			fileType = _currentResource.getPersistentProperty(qNameFileTypeProperty);
+		    }
+		catch (CoreException ce)
+		    {
+			System.out.println("CppActionDelegateBuild CoreException3 " +fileType +ce);
+		    }
+		
+		if (fileType!=null && fileType.equals("makefile"))
+		    {
+			((Action)action).setEnabled(true);
+		    }
+		else
+		    {
+			((Action)action).setEnabled(false);
+		    }         
+	    }
+    }    
+    
 }

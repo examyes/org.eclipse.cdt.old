@@ -28,48 +28,18 @@ import org.eclipse.core.resources.*;
 import java.io.*;
 import java.util.*;
 
-public class ClearAction implements IActionDelegate
+public class ClearAction extends CppActionDelegate
 {
-  private String    _path;
-  private IProject  _project;
-  private ISelection _selection;
-
   public void run(IAction action)
   {
-    ISelection selection = _selection;
-    if (selection.isEmpty() || !(selection instanceof IStructuredSelection))
-      return;
-
-    IStructuredSelection ss = (IStructuredSelection)selection;
     ModelInterface api = CppPlugin.getModelInterface();	
-    if (_project != null)
+    if (_currentResource != null && _currentResource instanceof IProject)
 	{
-	    api.clearProject(_project);
+	    api.clearProject((IProject)_currentResource);
 	}
   }
 
-
-  public void selectionChanged(IAction action, ISelection selection)
-  {
-    boolean state= !selection.isEmpty();
-    _selection = selection;
-
-    if (selection instanceof IStructuredSelection)
+    protected void checkEnabledState(IAction action)
     {
-       IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-       _project = (IProject)structuredSelection.getFirstElement();
-
-       if (_project != null)
-       {
-          if (CppPlugin.isCppProject(_project))
-          {
-             ((Action)action).setEnabled(true);
-          }
-      	 else
-          {
-      	    ((Action)action).setEnabled(false);
-          }
-       }
     }
-  }
 }
