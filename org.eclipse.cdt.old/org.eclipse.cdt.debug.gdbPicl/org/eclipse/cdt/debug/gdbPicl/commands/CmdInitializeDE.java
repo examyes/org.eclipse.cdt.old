@@ -199,10 +199,14 @@ public class CmdInitializeDE extends Command
                          _debugSession.getResourceString("DISASSEMBLY_TEXT"),
                          (byte) (EPDC.LINEBP_CAPABLE | EPDC.MONITOR_CAPABLE));
 
-      _EPDCSession._viewInfo[Part.VIEW_MIXED-1] =
+	  // if mixed view is enabled	
+	  if (Part.MIXED_VIEW_ENABLED)
+	  {
+		 _EPDCSession._viewInfo[Part.VIEW_MIXED-1] =
          new ERepGetViews(EPDC.Viewtype_prefix, EPDC.View_Class_Mixed,
                          _debugSession.getResourceString("MIXED_TEXT"),
                           (byte) (EPDC.LINEBP_CAPABLE | EPDC.MONITOR_CAPABLE));
+	  }
 
 // ***************************************************************************
 //    Default Representations for Java types.

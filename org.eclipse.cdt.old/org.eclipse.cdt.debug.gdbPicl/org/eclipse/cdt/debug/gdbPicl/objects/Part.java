@@ -424,8 +424,9 @@ public abstract class Part
 
    private static final byte _PartLang = EPDC.LANG_CPP;
 
-   public static final int NUM_VIEWS        = 3;
+   public static final int NUM_VIEWS        = 2;
    public static final int VIEW_SOURCE      = 1;
    public static final int VIEW_DISASSEMBLY = 2;
    public static final int VIEW_MIXED       = 3;
+   public static boolean MIXED_VIEW_ENABLED = NUM_VIEWS >= VIEW_MIXED;
 }

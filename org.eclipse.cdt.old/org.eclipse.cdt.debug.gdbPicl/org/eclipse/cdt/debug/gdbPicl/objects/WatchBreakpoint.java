@@ -53,7 +53,9 @@ public class WatchBreakpoint extends Breakpoint
       if (Gdb.traceLogger.ERR) 
           Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW WatchBreakpoint lineNum="+_lineNum );
       bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
-      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
+      
+      if (Part.MIXED_VIEW_ENABLED)
+	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
 
 //      bkpChangeItem.setEntryID(0);
 //      bkpChangeItem.setVarInfo("");

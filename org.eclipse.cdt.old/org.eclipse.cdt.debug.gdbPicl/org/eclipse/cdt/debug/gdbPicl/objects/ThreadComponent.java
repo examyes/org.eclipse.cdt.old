@@ -216,10 +216,13 @@ public abstract class ThreadComponent    //HC
                                                       (short)Part.VIEW_DISASSEMBLY,
                                                       1,
                                                       _lineNumber);
-      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
+	  if (Part.MIXED_VIEW_ENABLED)                                                      
+	  {
+	      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_MIXED,
                                                       1,
                                                       _lineNumber);
+	  }
       
       EPDC_EngineSession _engineSession = _debugSession.getDebugEngine().getSession();
       EPDCThread = new ERepGetNextThread(_engineSession,
@@ -235,7 +238,8 @@ public abstract class ThreadComponent    //HC
       {
          EPDCThread.setPartialThreadInfo(Part.VIEW_SOURCE);
          EPDCThread.setPartialThreadInfo(Part.VIEW_DISASSEMBLY);
-         EPDCThread.setPartialThreadInfo(Part.VIEW_MIXED);
+         if (Part.MIXED_VIEW_ENABLED)
+	         EPDCThread.setPartialThreadInfo(Part.VIEW_MIXED);
       }
       
 

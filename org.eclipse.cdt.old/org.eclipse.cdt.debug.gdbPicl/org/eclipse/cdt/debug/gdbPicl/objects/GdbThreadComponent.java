@@ -77,7 +77,8 @@ public class GdbThreadComponent extends ThreadComponent
             if (Gdb.traceLogger.ERR) 
                 Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
             EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1, lineNumber(0)); 
-            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
+            if (Part.MIXED_VIEW_ENABLED)
+	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
          }
       return EPDCThread;
 
@@ -474,8 +475,12 @@ System.out.println("$$$$$$$$$$$$$$$$ GdbThreadComponent.lineNumber stackEntry ="
              Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
          entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
                (short)partID, 1, lineNumber(i));
-         entry.setStackEntryViewInfo((short) Part.VIEW_MIXED,
-               (short)partID, 1, lineNumber(i));
+         
+         if (Part.MIXED_VIEW_ENABLED)               
+         {
+	         entry.setStackEntryViewInfo((short) Part.VIEW_MIXED,
+	               (short)partID, 1, lineNumber(i));
+         }
 
          if (Gdb.traceLogger.EVT) 
              Gdb.traceLogger.evt(3,"GdbThreadComponent getEPDCStack DU="+_DU+" fileName="+fileName(i)+" methodName="+methodName(i,true)+"  _callStack.length-1="+(_callStack.length - i) );

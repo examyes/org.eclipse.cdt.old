@@ -38,8 +38,12 @@ public class CmdEntryWhere extends Command
                               +" lineNum="+cm.getEntryLineNumber(entryID) );
       ((ERepEntryWhere)_rep).addContextInfo((short)pid, 
                (short)Part.VIEW_DISASSEMBLY, 1, cm.getEntryLineNumber(entryID));
-      ((ERepEntryWhere)_rep).addContextInfo((short)pid, 
-               (short)Part.VIEW_MIXED, 1, cm.getEntryLineNumber(entryID));
+               
+	  if (Part.MIXED_VIEW_ENABLED)
+	  {               
+    	  ((ERepEntryWhere)_rep).addContextInfo((short)pid, 
+	           (short)Part.VIEW_MIXED, 1, cm.getEntryLineNumber(entryID));
+	  }
 
       return false;
    }

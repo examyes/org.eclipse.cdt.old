@@ -35,7 +35,11 @@ public class CmdContextConvert extends Command
      int viewNo = _req.context().getViewNo();
      GdbSourceView sourceView = (GdbSourceView)part.getView(Part.VIEW_SOURCE);
      GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
-     GdbMixedView mixedView = (GdbMixedView)part.getView(Part.VIEW_MIXED);
+     
+     if (Part.MIXED_VIEW_ENABLED)
+     {
+     	GdbMixedView mixedView = (GdbMixedView)part.getView(Part.VIEW_MIXED);
+     }
 
      switch (_req.viewNum())
      {

@@ -60,8 +60,11 @@ System.out.println("**** GdbPart CTOR _totalLines="+_totalLines+" start="+_start
       // Create the disassembly view for this Part
       _views[VIEW_DISASSEMBLY-1] = new GdbDisassemblyView((GdbDebugEngine)_debugEngine, this);
 
-      // Create the mixed view for this Part
-      _views[VIEW_MIXED-1] = new GdbMixedView((GdbDebugEngine)_debugEngine, this);
+	  if (Part.MIXED_VIEW_ENABLED)
+	  {
+    	  // Create the mixed view for this Part
+	      _views[VIEW_MIXED-1] = new GdbMixedView((GdbDebugEngine)_debugEngine, this);
+	  }
 
       _InUse        = true;
       _PartNew      = true;
