@@ -685,7 +685,6 @@ public class MakefileAmManager {
 				if(subNames[i].indexOf(".")==-1)
 				{
 					String tok = getLastToken(subNames[i]);
-					System.out.println("\n dir name = "+subNames[i]);
 					String modTok = new String();
 					String modName = new String("./").concat(subNames[i]).concat("/");
 					modTok = modTok.concat("lib").concat(tok).concat(targetSuffix).concat(".a");
@@ -887,32 +886,30 @@ public class MakefileAmManager {
 	}
 	private void updateMakefileAmDependency(File parent)
 	{
-		File dir = parent;
+		File dir = parent.getParentFile();
 		ArrayList list = new ArrayList();
 		int counter = 0;
 		//find the first level parent
-		while(!dir.getParentFile().getAbsolutePath().equals(_workspaceLocation))
+		while(!dir.getAbsolutePath().equals(_workspaceLocation))
 		{
-			list.add(counter++,dir);
+			list.add(counter,dir);counter++;
 			dir = dir.getParentFile();
 		}
-		if(counter>1)
+		boolean found = false;
+		for(int i = 0; i < list.size(); i++)
 		{
-			// update might be needed
-			File parentDir = ((File)list.get(counter-1));
-			File parent_Makefile_am = new File(parentDir,"Makefile.am");
+			System.out.println("\n "+i+ " ="+((File)list.get(i)).getName());
+			File parent_Makefile_am = new File((File)list.get(i),"Makefile.am");
 			int parentClass = classifier.classify(parent_Makefile_am);
-			File Makefile_am = new File(parent,"Makefile.am");
+			
 			if(parentClass==PROGRAMS)
 			{
-				// read the file and get the tooken that contains the parnet dir
-				//String tok = getUpdatedSting(updated_Makefile_am);
-				// then either updtae or delet
+				File Makefile_am = new File(parent,"Makefile.am");
 				try
 				{
 					// searching for the subdir line
 					String line ;
-					File modMakefile_am = new File(parentDir,"mod.am");
+					File modMakefile_am = new File((File)list.get(i),"mod.am");
 					BufferedReader in = new BufferedReader(new FileReader(parent_Makefile_am));
 					BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
 					while((line=in.readLine())!=null)
@@ -942,7 +939,7 @@ public class MakefileAmManager {
 		while (tokenizer.hasMoreTokens())
 		{
 			String token = tokenizer.nextToken();
-			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1)
+			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1&&token.indexOf("/")!=-1)
 			{
 				if(isRightTokenToModify(Makefile_am.getParentFile().getName(),token) )
 				{
