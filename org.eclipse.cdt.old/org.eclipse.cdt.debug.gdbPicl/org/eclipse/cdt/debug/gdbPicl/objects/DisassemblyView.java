@@ -147,11 +147,16 @@ abstract class DisassemblyView extends View
       GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
       String startAddress = ((GdbPart)_parentPart).getStartAddress();
       String endAddress = ((GdbPart)_parentPart).getEndAddress();
+      long startAddInt = 0;
+      long endAddInt = 0;
       
       try
       {
-	      long startAddInt = Long.parseLong(startAddress.substring(2), 16);
-	      long endAddInt = Long.parseLong(endAddress.substring(2), 16);
+      	  if (startAddress != null && endAddress != null)
+      	  {
+		      startAddInt = Long.parseLong(startAddress.substring(2), 16);
+		      endAddInt = Long.parseLong(endAddress.substring(2), 16);
+      	  }		      
       
 	      if (startAddInt > endAddInt || startAddress == null || endAddress == null)
 	      {
