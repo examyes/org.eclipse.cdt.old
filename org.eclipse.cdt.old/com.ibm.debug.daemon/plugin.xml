@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
+<plugin
+   id="com.ibm.debug.daemon"
+   name="DebugDaemonPlugin"
+   version="1.0.0"
+   class="com.ibm.debug.daemon.DebugDaemonPlugin">
+<requires>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.debug.core"/>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.debug.ui"/>
+</requires>
+
+<runtime>
+   <library name=".">
+      <export name="*"/>
+   </library>
+   <library name="daemon.jar">
+      <export name="*"/>
+   </library>
+</runtime> 
+
+<!-- Launchers -->
+<extension
+      point="org.eclipse.debug.core.launchers">
+   <launcher
+         label="%Launchers.engineListener"
+         modes="debug"
+         class="com.ibm.debug.daemon.DaemonLauncherDelegate"
+         id="com.ibm.debug.daemon.DaemonLauncherDelegate">
+   </launcher>
+</extension> 
+<!-- Preference Pages -->
+<extension
+      point="org.eclipse.ui.preferencePages">
+   <page
+         name="%Preferences.title1"
+         helpContextId="debug_daemon_preference_page"
+         category="org.eclipse.debug.ui.DebugPreferencePage"
+         class="com.ibm.debug.daemon.DebugDaemonPreferencePage"
+         id="com.ibm.debug.daemon.DebugDaemonPreferencePage">
+   </page>
+</extension> 
+</plugin>

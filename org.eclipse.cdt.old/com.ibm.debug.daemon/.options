@@ -1,0 +1,3 @@
+com.ibm.debug.daemon/debug=true 
+com.ibm.debug.daemon/debug/err=true
+com.ibm.debug.daemon/debug/dbg=true
