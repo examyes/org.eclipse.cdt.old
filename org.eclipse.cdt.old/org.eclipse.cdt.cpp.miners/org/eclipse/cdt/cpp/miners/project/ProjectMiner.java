@@ -66,15 +66,15 @@ public class ProjectMiner extends Miner
   createAbstractRelationship(fsObjectD, projectD);
 
 
-  createReference(projectsD,  projectD); 
-  createReference(projectsD,  closedProject); 
-  createReference(projectsD,  projectFileD); 
-  createReference(projectsD,  directoryD); 
-  createReference(projectsD,  fileD); 
+  _dataStore.createReference(projectsD,  projectD, "abstracts", "abstracted by"); 
+  _dataStore.createReference(projectsD,  closedProject, "abstracts", "abstracted by"); 
+  _dataStore.createReference(projectsD,  projectFileD, "abstracts", "abstracted by"); 
+  _dataStore.createReference(projectsD,  directoryD, "abstracts", "abstracted by"); 
+  _dataStore.createReference(projectsD,  fileD, "abstracts", "abstracted by"); 
 
-    createReference(pContainersD, projectD);
-    createReference(pContainersD, closedProject);
-    createReference(pContainersD, directoryD);
+  _dataStore.createReference(pContainersD, projectD, "abstracts", "abstracted by");
+  _dataStore.createReference(pContainersD, closedProject, "abstracts", "abstracted by");
+  _dataStore.createReference(pContainersD, directoryD, "abstracts", "abstracted by");
     
 
     createReference(workspaceD, projectsD);
