@@ -104,7 +104,7 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
 			  {
 			      if (element.isExpanded())
 				  {
-				      if (element.getNestedSize() > 0)
+				      if (element.getNestedSize() > 0 && element.depth() > 1)
 					  {
 					      return true;
 					  }

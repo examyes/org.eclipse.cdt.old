@@ -874,7 +874,7 @@ public class DataElementTableViewer extends TableViewer
 			// compute widths
 			columns = table.getColumns();
 			Rectangle clientA = table.getClientArea();
-			int totalWidth = clientA.width;
+			int totalWidth = clientA.width - 5;
 			int averageWidth = totalWidth / columns.length;
 			int firstWidth = averageWidth;
 			if (averageWidth < 150)

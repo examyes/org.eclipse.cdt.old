@@ -70,10 +70,30 @@ public class DataElementSorter extends ViewerSorter
 	      element2 = getAttributeInstance(element2, _attribute);	      
 	  }
 
-      if (element1 == null || element2 == null)
+      // handle null cases
+      if (element1 == null)
 	  {
-	      return 0;
+	      if (element2 == null)
+		  {
+		      return 0;
+		  }
+	      else
+		  {
+		      return _reverseSort ? 1 : -1;
+		  }
 	  }
+      else if (element2 == null)
+	  {
+	      if (element1 == null)
+		  {
+		      return 0;
+		  }
+	      else
+		  {
+		      return _reverseSort ? -1 : 1;
+		  }
+	  }
+
 
       String name1 = element1.getAttribute(_property);    
       String name2 = element2.getAttribute(_property);
@@ -89,48 +109,94 @@ public class DataElementSorter extends ViewerSorter
 		      n2 = name1;
 		  }
 
+
 	      // check for integers
-	      if (isInteger(n1) && isInteger(n2))
-	      {
-		  Integer int1 = null;
-		  Integer int2 = null;
-		  try
-		      {
-			  int1 = new Integer(n1);
-			  int2 = new Integer(n2);
-			  return int1.compareTo(int2); 
-		      }
-		  catch (NumberFormatException e)
-		      {
-		      }
-	      }
-	      else if (isFloat(n1) && isFloat(n2))
-		  {		  
-		      // check for float
-		      Float float1 = null;
-		      Float float2 = null;
-		      try
-			  {
-			      float1 = new Float(n1);
-			      float2 = new Float(n2);
-			      return float1.compareTo(float2); 
-			  }
-		      catch (NumberFormatException e)
-			  {
-			  }
+	      DataElement descriptor = element1.getDescriptor();
+	      if (hasFormat(descriptor, "Integer"))
+		  {
+		      return compareIntegers(n1, n2);
+		  }
+	      else if (hasFormat(descriptor, "Float"))
+		  {		 
+		      return compareFloats(n1, n2);
+		  }
+	      else if (hasFormat(descriptor, "Date"))
+		  {		 
+		      return compareFloats(n1, n2);
+		  }
+	      else if (hasFormat(descriptor, "String"))
+		  {
+		      return compareStrings(n1, n2);
 		  }
 	      else
 		  {
-		      return collator.compare(n1, n2);
+		      return compareStrings(n1, n2);
 		  }
-
-	      return 0;
 	  }
       catch (Exception e)
 	  {
 	      return 0;
 	  }
   }
+
+    private boolean hasFormat(DataElement descriptor, String format)
+    {
+	ArrayList attributes = descriptor.getAssociated("attributes");
+	if (attributes.size() > 0)
+	    {
+		DataElement attribute = (DataElement)attributes.get(0);
+		return (attribute.getName().equals(format));
+	    }
+
+	return false;
+    }
+
+
+    private int compareStrings(String str1, String str2)
+    {
+	return collator.compare(str1, str2);
+    }
+
+    private int compareDates(String date1, String date2)
+    {
+	return compareIntegers(date1, date2);
+    }
+
+    private int compareIntegers(String n1, String n2)
+    {
+	Integer int1 = null;
+	Integer int2 = null;
+	try
+	    {
+		int1 = new Integer(n1);
+		int2 = new Integer(n2);
+		return int1.compareTo(int2); 
+	    }
+	catch (NumberFormatException e)
+	    {
+	    }
+
+	return 0;
+    }
+
+    private int compareFloats(String n1, String n2)
+    {
+	// check for float
+	Float float1 = null;
+	Float float2 = null;
+	try
+	    {
+		float1 = new Float(n1);
+		float2 = new Float(n2);
+		return float1.compareTo(float2); 
+	    }
+	catch (NumberFormatException e)
+	    {
+	    }
+
+	return 0;
+    }
+
 
     private DataElement getAttributeInstance(DataElement root, DataElement descriptor)
     {

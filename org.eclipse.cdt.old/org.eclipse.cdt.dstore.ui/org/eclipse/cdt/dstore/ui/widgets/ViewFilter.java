@@ -98,6 +98,11 @@ public class ViewFilter extends ViewerFilter
 		    {
 			
 			dataElement = dataElement.dereference();
+			if (dataElement.depth() == 0)
+			    {
+				return false;
+			    }
+
 			if (!_root.contains(dataElement) && _enableContents)
 			    {
 				return true;
