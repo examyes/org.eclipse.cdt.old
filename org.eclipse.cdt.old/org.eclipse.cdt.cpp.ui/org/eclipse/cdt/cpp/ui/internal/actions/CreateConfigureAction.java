@@ -85,8 +85,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
     public void run()
 	{
 		boolean execute = true;
-		int createUpdate = 0; // 0 == ok, 1 == no update , 2 == cancel action
-		boolean noConfigfilesExist = true;
+		int createUpdate = 0; // 0 == ok do update, 1 == no update , 2 == cancel action
+		boolean configfilesExist = false;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		
@@ -95,111 +95,96 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 		{
 			String str1;
 			String message;
-			
-			ArrayList showDialogCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show Dialog Create");
-			if (!showDialogCreate.isEmpty())
-			{
-				String preference = (String)showDialogCreate.get(0);
-				if (preference.equals("Yes"))
-					enableCreateDialog = true;
-				else
-					enableCreateDialog=false;
-			}
-			
+			String preferenceKey = "Show Dialog Create";
+
 			// checking if automatic updating is enabled from the autoconf preferences page
 			ArrayList autoUpdateCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Auto Update Create");
 			if(!autoUpdateCreate.isEmpty())
 			{
 				String preference = (String)autoUpdateCreate.get(0);
 				if (preference.equals("Yes"))
-				{
 					enableCreateUpdate = true;
-				}
 				else
-				{
-					enableCreateUpdate = false;;		
-				}
-			
+					enableCreateUpdate = false;
 			}
-			
 			
 			if(doesAutoconfSupportExist())
 			{
-				if(enableCreateDialog)
+				configfilesExist = true;
+				if(enableCreateUpdate)
 				{
-					if(enableCreateUpdate)
-					{
-						noConfigfilesExist = false;
-						str1 = new String("\nWould you like the system to update and generate missing configuration files?");
-						message = new String("\nGenerating project configuration files"+str1);
-						String[] extraLabel = new String[]{"Do not show this Dialog again"};
-						box = new CustomMessageDialog(
-									shell,
-									"Creating configure.in and Makefile.am's ",
-									null,
-									message,
-									3,
-									new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL},
-									0,
-									extraLabel,
-									this);
-						createUpdate = box.open();
-					}
+					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
+					message = new String("\nGenerating project configuration files"+str1);
+					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					box = new CustomMessageDialog(
+								shell,
+								"Creating configure.in and Makefile.am",
+								null,
+								message,
+								3,
+								new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL},
+								0,
+								extraLabel,
+								this);
+					int result = box.open(preferenceKey);
+					if(result!= -1)
+						createUpdate= result;
 					else
-					{
-						message = new String("\nUsing existing configuration files to generate the configure script");
-						String[] extraLabel = new String[]{"Do not show this Dialog again"};
-						box = new CustomMessageDialog(
-										shell,
-										"Generating configure script",
-										null,
-										message,
-										2,
-										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
-										0,
-										extraLabel,
-										this);
-						createUpdate = box.open();
-						// 0 is equiv to 1 ie run with no update , 
-						//and 1 is equiv to 2 which is to cancel the action so we need to increment
-						createUpdate++; 
-					}
-						
+						createUpdate = 0;
+					
 				}
 				else
 				{
-					if(enableCreateUpdate)
-						createUpdate = 0;
+					message = new String("\nUsing existing configuration files to generate the configure script");
+					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					box = new CustomMessageDialog(
+									shell,
+									"Generating configure script",
+									null,
+									message,
+									2,
+									new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+									0,
+									extraLabel,
+									this);
+					int result = box.open(preferenceKey);
+					if(result!= -1)
+						createUpdate= result+1;
 					else
-						createUpdate=1;
+						createUpdate = 1;
+					// 0 is equiv to 1 ie run with no update , 
+					//and 1 is equiv to 2 which is to cancel the action so we need to increment
 				}
 			}
 			else
 			{
-				noConfigfilesExist = true;
-				str1 = "";
-				message = new String("\nGenerating project configuration files"+str1);
+				configfilesExist = false;
+				message = new String("\nGenerating configuration files to generate the configure script");
 				String[] extraLabel = new String[]{"Do not show this Dialog again"};
 				box = new CustomMessageDialog(
-										shell,
-										"Creating configure.in and Makefile.am's ",
-										null,
-										message,
-										2,
-										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
-										0,
-										extraLabel,
-										this);
-				createUpdate = box.open();
-				if(createUpdate == 1)
-					createUpdate++;
+								shell,
+								"Generating configure script",
+								null,
+								message,
+								2,
+								new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+								0,
+								extraLabel,
+								this);
+				int result = box.open(preferenceKey);
+				if(result!= -1)
+					if(result==1)
+						createUpdate= result+1;
+				else
+					createUpdate = 0;
+				
 			}
 		}
 
 
 		if(execute)
 		{	
-			if(createUpdate==1 && !noConfigfilesExist)
+			if(createUpdate==1 && configfilesExist)
 			{
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -209,7 +194,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else if(createUpdate==0&&enableCreateUpdate)
+			else if(createUpdate==0)
 			{
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -289,9 +274,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 		Widget source = e.widget;
 		int buttonId = ((Integer)e.widget.getData()).intValue();
 		boolean selection = box.extraButtons[buttonId].getSelection();
-		System.out.println("\n 3 = "+selection);
 		ArrayList list = new ArrayList();
-		System.out.println("\n 4 = "+list);
 		if(buttonId == 0)
 		{
 			// persist this value for thos project
