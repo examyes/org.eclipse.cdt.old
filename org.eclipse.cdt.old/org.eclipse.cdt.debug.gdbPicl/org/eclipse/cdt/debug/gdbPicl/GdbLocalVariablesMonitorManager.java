@@ -22,6 +22,7 @@ public class GdbLocalVariablesMonitorManager extends LocalVariablesMonitorManage
    GdbVariableMonitorManager  vmm = null;
    GetGdbLocals _getGdbLocals = null;
    int  _exprID = 0;
+   private String _currentFunctionName = "";
 
    public GdbLocalVariablesMonitorManager(GdbDebugSession debugSession)
    {
@@ -147,9 +148,10 @@ public class GdbLocalVariablesMonitorManager extends LocalVariablesMonitorManage
 
 				// If we've stepped into a function or file or number of locals have changed, wipe
 				// our list clean.
+				
+				boolean delete = true;
 
-               if (currentPartID != stackInfo.getpartID() ||
-				   currentEntryID != stackInfo.getentryID() ||
+               if (!_currentFunctionName.equals(((GdbDebugSession)_debugSession).getCurrentFunctionName()) ||
 				   numLocals != stackInfo.getnumLocals())					//HC
 				{
 					// Remove all variables being monitored for this thread
@@ -162,14 +164,14 @@ public class GdbLocalVariablesMonitorManager extends LocalVariablesMonitorManage
 						vmm.deleteMonitor(exprID.intValue(), true);
 					}
 					stackInfo.getexprIDs().clear();
+					_currentFunctionName = ((GdbDebugSession)_debugSession).getCurrentFunctionName();
+					delete = false;
 				}
 
 				// Remember where we are now.
 				stackInfo.setpartID(currentPartID); //HC
 				stackInfo.setentryID(currentEntryID); //HC
 				stackInfo.setnumLocals(numLocals); //HC
-				
-				boolean delete = true;
 
 				// Add them as Local monitored variables
 				for (j = 0; j < locals.length; j++) {
@@ -192,26 +194,46 @@ public class GdbLocalVariablesMonitorManager extends LocalVariablesMonitorManage
 					}
 					if (!stackInfo.getexprIDs().containsKey(varName)) {
 						
-						
-						int nodeID = 1;
-						String varType =
-							GdbVariableMonitor.getExpressionType((GdbDebugSession) _debugSession, varName);
-						GdbVariable monVar =
-							GdbVariable.createVariable(_debugSession, varName, varType, varValue, nodeID);
-//						monVar.setScalarValue(varValue);
-						exprID =
-							new Integer(
-								vmm.addVariableMonitor(
-									(short) EPDC.MonTypeLocal,
-									monVar,
-									context,
-									stackInfo.getDU()));
-						stackInfo.getexprIDs().put(varName, exprID);
-						if (Gdb.traceLogger.DBG)
-							Gdb.traceLogger.dbg(
-								1,
-								"Adding local variable " + varName + " exprID=" + exprID);
-					}
+						// if there is a new variable, in the middle of updating locals,
+						// we must have changed scope, delete all and start all over again
+						if (delete && j > 0)
+						{
+							// Remove all variables being monitored for this thread
+							Enumeration elements = stackInfo.getexprIDs().elements();
+							while (elements.hasMoreElements()) 
+							{
+								exprID = (Integer) elements.nextElement();						
+								if (Gdb.traceLogger.DBG)
+									Gdb.traceLogger.dbg(1, "Removing local variable " + exprID);
+								vmm.deleteMonitor(exprID.intValue(), true);
+							}					
+							stackInfo.getexprIDs().clear();
+							
+							// equals -1... so it starts with 0 when it gets to the top of the for loop
+							j = -1;
+							delete = false;	
+						}
+						else
+						{
+							int nodeID = 1;
+							String varType =
+								GdbVariableMonitor.getExpressionType((GdbDebugSession) _debugSession, varName);
+							GdbVariable monVar =
+								GdbVariable.createVariable(_debugSession, varName, varType, varValue, nodeID);
+							exprID =
+								new Integer(
+									vmm.addVariableMonitor(
+										(short) EPDC.MonTypeLocal,
+										monVar,
+										context,
+										stackInfo.getDU()));
+							stackInfo.getexprIDs().put(varName, exprID);
+							if (Gdb.traceLogger.DBG)
+								Gdb.traceLogger.dbg(
+									1,
+									"Adding local variable " + varName + " exprID=" + exprID);
+						}
+					}					
 					else
 					{
 						Integer id = (Integer) stackInfo.getexprIDs().get(varName);
