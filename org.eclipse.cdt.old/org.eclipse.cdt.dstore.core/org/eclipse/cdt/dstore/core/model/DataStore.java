@@ -407,10 +407,13 @@ public class DataStore
   {
     _root        = createObject(null, getLocalizedString("model.root"),
 				_dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_NAME),
-				_dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_PATH));
+				_dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_PATH),
+				"rootID");
 
-    _descriptorRoot = createObject(_root, DE.T_OBJECT_DESCRIPTOR, getLocalizedString("model.descriptors"));
-    _ticket = createObject(_root, getLocalizedString("model.ticket"), "null");
+    _descriptorRoot = createObject(_root, DE.T_OBJECT_DESCRIPTOR, getLocalizedString("model.descriptors"),
+    		"", "schemaID");
+    		
+    _ticket = createObject(_root, getLocalizedString("model.ticket"), "null", "", "ticketID");
 
     createRoots();
     initializeDescriptors();
@@ -418,15 +421,18 @@ public class DataStore
 
   public void createRoots()
   {
-      _tempRoot = createObject(_root, "temp", "Temp Root");
-      _logRoot     = createObject(_root, getLocalizedString("model.log"), getLocalizedString("model.Log_Root"));
-      _minerRoot   = createObject(_root, getLocalizedString("model.miners"), getLocalizedString("model.Tool_Root"));
+      _tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
+      
+      _logRoot     = createObject(_root, getLocalizedString("model.log"), getLocalizedString("model.Log_Root"), "", "logID");
+ 
+      
+      _minerRoot   = createObject(_root, getLocalizedString("model.miners"), getLocalizedString("model.Tool_Root"), "", "minersID");
       
       _hostRoot = createObject(_root,  getLocalizedString("model.host"),
 			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
-			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH));
+			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH), "hostID");
 
-      _status = createObject(_root, getLocalizedString("model.status"), "okay");
+      _status = createObject(_root, getLocalizedString("model.status"), "okay", "", "statusID");
   }
 
 
@@ -754,42 +760,42 @@ public class DataStore
 
     public DataElement createAbstractObjectDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core");
+	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
     public DataElement createAbstractObjectDescriptor(DataElement parent, String name, String source)
     {
-	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, source);
+	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, source, name);
     }   
 
     public DataElement createObjectDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core");
+	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
     public DataElement createObjectDescriptor(DataElement parent, String name, String source)
     {
-	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, source);
+	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, source, name);
     }   
 
     public DataElement createAbstractRelationDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core");
+	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
     public DataElement createAbstractRelationDescriptor(DataElement parent, String name, String source)
     {
-	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, source);
+	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, source, name);
     }   
 
     public DataElement createRelationDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core");
+	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
     public DataElement createRelationDescriptor(DataElement parent, String name, String source)
     {
-	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, source);
+	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, source, name);
     }   
 
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name)
@@ -799,44 +805,44 @@ public class DataStore
 
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name, String value)
     {
-	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core");
+	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core", name);
         cmd.setAttribute(DE.A_VALUE, value);        
 	return cmd;
     }   
 
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name, String source, String value)
     {
-	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, source);
+	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, source, name);
         cmd.setAttribute(DE.A_VALUE, value);        
 	return cmd;
     }   
 
     public DataElement createCommandDescriptor(DataElement parent, String name)
     {
-	return createCommandDescriptor(parent, name, name);
-    }
+	return createCommandDescriptor(parent, name, name); 
+    } 
 
     public DataElement createCommandDescriptor(DataElement parent, String name, String value)
     {
-	DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core");
+		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core", name);
         cmd.setAttribute(DE.A_VALUE, value);        
-	return cmd;
+		return cmd;
     }   
 
     public DataElement createCommandDescriptor(DataElement parent, String name, String source, String value)
     {
-	DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source);
+		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source, name);
         cmd.setAttribute(DE.A_VALUE, value);        
-	return cmd;
+		return cmd;
     }   
 
     public DataElement createCommandDescriptor(DataElement parent, String name, String source, String value, boolean visible)
     {
-	DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source);
+		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source, name);
         cmd.setAttribute(DE.A_VALUE, value);        
-	if (!visible)
+		if (!visible)
 	    {
-		cmd.setDepth(0);
+			cmd.setDepth(0);
 	    }
 
 	return cmd;
@@ -952,8 +958,8 @@ public class DataStore
     private String generateId(DataElement parent, String type, String name)
       {
 	  // by default, name will be the id
-	  return name;
-	  //return generateId();
+	  //return name;
+	  return generateId();
       }
 
     public String generateId()
@@ -994,7 +1000,15 @@ public class DataStore
 
   public void refresh(DataElement element)
     {
-	refresh(element, false);	
+    	if (element != null)
+    	{
+    		if (element.isReference()) 
+    		{
+    			refresh(element.dereference(), true);
+    		}
+    	
+			refresh(element, false);	
+    	}
     }
 
   public void refresh(DataElement element, boolean immediate)
@@ -1820,13 +1834,14 @@ public DataElement command(DataElement commandDescriptor,
 	  
           File newFile = new File(fileName);
           FileOutputStream fileStream = new FileOutputStream(newFile);
-	  PrintStream writer = new PrintStream(fileStream);
+	  	  PrintStream writer = new PrintStream(fileStream);
 
           XMLgenerator generator = new XMLgenerator();
+          generator.setIgnoreDeleted(true);
           generator.setWriter(writer);
           generator.setBufferSize(1000);
-	  generator.generate(root, depth);
-	  generator.flush();
+	      generator.generate(root, depth);
+	  	  generator.flush();
 	  
           fileStream.close();
         }
