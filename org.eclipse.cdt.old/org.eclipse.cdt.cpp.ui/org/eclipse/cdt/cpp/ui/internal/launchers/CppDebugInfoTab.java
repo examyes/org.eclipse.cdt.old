@@ -227,7 +227,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy config)
    {
-
+     System.out.println("CppDebugInfoTab:setDefaults() entry; this = " + this);
      IProject project;
      IStructuredSelection selection = getSelection();
      if(selection == null)
@@ -307,6 +307,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
 	 */
 	public void initializeFrom(ILaunchConfiguration config) {
+      System.out.println("CppDebugInfoTab:initializeFrom() entry this = " + this);
 		updateExecutableFromConfig(config);
 	}
 
