@@ -351,6 +351,15 @@
 	      class="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"	
 	      enablesFor="1">
 	   </action>
+	   <action
+              id="convert"
+	      label="Convert to C/C++ Project"
+	      icon="icons/project.gif"
+	      path="additions"
+	class="com.ibm.cpp.ui.internal.actions.ConvertToCppProject"	
+	      enablesFor="1">
+	   </action>
+
 	</objectContribution>
   </extension>
 
