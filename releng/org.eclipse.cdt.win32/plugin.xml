@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="org.eclipse.cdt.linux.motif"
+   id="org.eclipse.cdt.win32"
    name="%pluginName"
    version="1.0.1"
    provider-name="%providerName">

@@ -7,7 +7,6 @@
       os="win32"
       ws="win32"
       nl="en_US"
-      arch="x86"
       image="eclipse_update_120.jpg">
 
    <description>
@@ -30,7 +29,7 @@
 
    <requires>
       <import plugin="org.eclipse.platform" version="2.0.0" match="compatible"/>
-      <import plugin="org.eclipse.cdt"  version="1.0.1" match="equivalent"/>
+      <import plugin="org.eclipse.cdt" version="1.0.1" match="equivalent"/>
    </requires>
 
    <plugin
@@ -39,6 +38,13 @@
          install-size="0"
          version="1.0.1"
          fragment="true">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.win32"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
    </plugin>
 
 </feature>

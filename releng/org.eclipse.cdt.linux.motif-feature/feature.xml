@@ -7,7 +7,6 @@
       os="linux"
       ws="motif"
       nl="en_US"
-      arch="x86"
       image="eclipse_update_120.jpg">
 
    <description>
@@ -39,6 +38,13 @@
          install-size="0"
          version="1.0.1"
          fragment="true">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.linux.motif"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
    </plugin>
 
 </feature>
