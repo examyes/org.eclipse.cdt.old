@@ -34,7 +34,7 @@
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy file="${build.result.folder}/cdt_solaris.jar" todir="${destination.temp.folder}/${full.name}"/>
 		<copy todir="${destination.temp.folder}/${full.name}">
-			<fileset dir="${basedir}" includes="fragment.xml,os/,fragment.properties,about.html"/>
+			<fileset dir="${basedir}" includes="fragment.xml,fragment.properties,about.html,os/ "/>
 		</copy>
 	</target>
 
@@ -79,8 +79,8 @@
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy file="${build.result.folder}/cdt_solarissrc.zip" todir="${destination.temp.folder}/${full.name}"/>
 		<copy todir="${destination.temp.folder}/${full.name}">
-            <fileset dir="${basedir}" includes="about.html"/>
-        </copy>
+			<fileset dir="${basedir}" includes="fragment.xml,fragment.properties,about.html,os/                "/>
+		</copy>
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">

@@ -47,6 +47,9 @@
 	</target>
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
+		<copy todir="${destination.temp.folder}/${full.name}">
+			<fileset dir="${basedir}" includes="about.html,about.ini,about.mappings,about.properties,eclipse32.gif,plugin.properties,plugin.xml,welcome.xml,cpl-v10.html,notice.html		"/>
+		</copy>
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">
