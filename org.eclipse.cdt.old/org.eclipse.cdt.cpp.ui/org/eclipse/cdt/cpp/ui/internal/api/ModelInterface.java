@@ -54,17 +54,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  DataStore dataStore = _plugin.getDataStore();
 
 	  DataElement projectMinerProject = null;
+	  DataElement projectWorkspace = null;
 	  if (_project instanceof Repository)
 	      {
 		  dataStore = ((Repository)_project).getDataStore();
 		
-		  DataElement workspace = findWorkspaceElement(dataStore);
-		  if (workspace != null)
+		  projectWorkspace = findWorkspaceElement(dataStore);
+		  if (projectWorkspace != null)
 		      {
-			  projectMinerProject = dataStore.createObject(workspace, "Project",
+			  projectMinerProject = dataStore.createObject(projectWorkspace, "Project",
 								       _project.getName(),
 								       _project.getLocation().toString());
-			  dataStore.setObject(workspace, false);
+			  dataStore.setObject(projectWorkspace, false);
 			  dataStore.setObject(projectMinerProject);
 		      }	
 	      }
@@ -102,9 +103,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		
 		  if (_project instanceof Repository)
 		      {
-			  DataElement rworkspace = findWorkspaceElement(dataStore);
-			  projectMinerProject = dataStore.find(rworkspace, DE.A_NAME, _project.getName(), 1);
-			
 			  DataElement localWorkspace = findWorkspaceElement();		
 			  if (localWorkspace != null && projectMinerProject != null)
 			      {
@@ -116,9 +114,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					  ((Repository)_project).setClosedElement(null);
 				      }
 				
-				  localDataStore.createReference(localWorkspace, projectMinerProject);		
-				  projectMinerProject.setParent(rworkspace);
-				
+				  localDataStore.createReference(localWorkspace, projectMinerProject);
 				  localDataStore.refresh(localWorkspace);
 			      }
 		      }
@@ -564,9 +560,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement portObj    = dataStore.createObject(null, "port", port);
 	DataElement keyObj     = dataStore.createObject(null, "key", key);
 	
-	dataStore.setObject(hostObj);
-	dataStore.setObject(portObj);
-	dataStore.setObject(keyObj);
+	dataStore.setObject(dataStore.getTempRoot());
 
 
 	DataElement debugDescriptor = dataStore.localDescriptorQuery(dirObject.getDescriptor(), "C_DEBUG");
@@ -1220,7 +1214,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				//System.out.println("couldn't find workspace");
 			    }
 		    }
-		
+	       
 		if (workspaceObj != null)
 		    {
 			if (dataStore == _plugin.getDataStore())

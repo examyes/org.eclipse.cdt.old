@@ -80,7 +80,6 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 		    } 
 		_viewer.setInput(null);
 	    }
-	
     }
     
 

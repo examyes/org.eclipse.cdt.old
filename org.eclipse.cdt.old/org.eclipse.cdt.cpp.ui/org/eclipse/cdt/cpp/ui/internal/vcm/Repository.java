@@ -110,7 +110,7 @@ public class Repository extends Project
 		    _root.addNestedData(_remoteRoot.getNestedData(), false);
 		    _root.setDataStore(_remoteRoot.getDataStore());
 		    
-		    
+ 		    
 		    // create directory for project
 		    String rootPath = _plugin.getStateLocation().
 			append(".repositories").toOSString();

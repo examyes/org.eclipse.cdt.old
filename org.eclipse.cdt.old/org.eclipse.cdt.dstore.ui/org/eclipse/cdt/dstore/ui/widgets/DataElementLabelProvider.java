@@ -312,7 +312,6 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 			
 				for (int i = 0; i < attributes.size(); i++)
 				    {
-					//	if (i != columnIndex - 1)
 					    {
 						attribute = (DataElement)attributes.get(i);
 						if (attribute.getDescriptor() == attributeDescriptor)

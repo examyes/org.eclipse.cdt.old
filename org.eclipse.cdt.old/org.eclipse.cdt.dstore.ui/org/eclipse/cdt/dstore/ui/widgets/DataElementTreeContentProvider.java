@@ -100,7 +100,7 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
 	  }
 
       DataElement element = ((DataElement)object).dereference();
-      if (element.isDeleted())
+      if (element.isDeleted() || element.depth() < 2)
 	  {
 	      return false;
 	  }
