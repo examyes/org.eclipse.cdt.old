@@ -397,7 +397,7 @@ public class FileSystemMiner extends Miner
 		 }
 	     else
 		 {
-		     System.out.println("Delete failed!");
+		     //System.out.println("Delete failed!");
 		 }
        	    
 	     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
