@@ -292,7 +292,7 @@ public class ViewMenu implements IMenuListener
         _toolBar.layout(true);
         _toolBar.redraw();
 
-	if (showFilter)
+	//	if (showFilter)
 	    {
 		_parent.getViewer().refreshView(_relationSelected, _filterSelected);
 	    }
