@@ -6,8 +6,11 @@ package org.eclipse.cdt.cpp.ui.internal.dialogs;
  */
 
 import java.util.ArrayList;
+
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.actions.AdvancedConfigureAction;
 import org.eclipse.cdt.dstore.ui.actions.CustomAction;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -37,13 +40,14 @@ public class CustomMessageDialog extends MessageDialog{
 	private int defaultButtonIndex;
 	public Button [] extraButtons;
 	private SelectionListener actionListener;
+	private String globalSettingKey = "Is_Global_Setting_Enabled";
 	private String preferenceKey;
 	private int customButtonType;
-	private String propertyKey;
+	private IResource project;
 	
 	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
-							int dialogImageType, String[] dialogButtonLabels,
-							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener, String preferenceKey) 
+							int dialogImageType, String[] dialogButtonLabels,int defaultIndex, String[] extraButtonLabels,
+							SelectionListener actionListener, String preferenceKey) 
 	{
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex);
 		this.buttonLabels = dialogButtonLabels;
@@ -54,8 +58,21 @@ public class CustomMessageDialog extends MessageDialog{
 		this.customButtonType = DEFAULT_BUTTON_TYPE;
 	}
 	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
+							int dialogImageType, String[] dialogButtonLabels,int defaultIndex, String[] extraButtonLabels,
+							SelectionListener actionListener, String preferenceKey, IResource resource) 
+	{
+		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex);
+		this.buttonLabels = dialogButtonLabels;
+		if(extraButtonLabels!= null)
+			this.extraButtonLabels = extraButtonLabels;
+		this.actionListener = actionListener;
+		this.preferenceKey = preferenceKey;
+		this.customButtonType = DEFAULT_BUTTON_TYPE;
+		this.project = resource;
+	}
+	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
 							int dialogImageType, String[] dialogButtonLabels,int buttonType,
-							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener, String propertyKey) 
+							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener, String preferenceKey) 
 	{
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex);
 		this.buttonLabels = dialogButtonLabels;
@@ -63,7 +80,7 @@ public class CustomMessageDialog extends MessageDialog{
 			this.extraButtonLabels = extraButtonLabels;
 		this.actionListener = actionListener;
 		this.preferenceKey="";
-		this.propertyKey = propertyKey;
+		//this.propertyKey = propertyKey;
 		this.customButtonType = buttonType;
 	}
 	
@@ -196,25 +213,54 @@ public class CustomMessageDialog extends MessageDialog{
 	}
 	public int open()
     {
-		if(showDialog(preferenceKey))
+		if(showDialog(preferenceKey,project))
 			return super.open();
 		return -1;
 
     }
-    private boolean showDialog(String preferenceKey)
+    private boolean showDialog(String preferenceKey, IResource project)
     {
-    	ArrayList list = new ArrayList();
-    	if(preferenceKey!="")
-    		list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(preferenceKey);
-		if (!list.isEmpty())
-		{
-			String preference = (String)list.get(0);
-			if (preference.equals("Yes"))
-				return true;
-			else
-				return false;
-		}
-		return true;
-		
+    	ArrayList preferenceList = new ArrayList();
+    	ArrayList propertyList = new ArrayList();
+    	ArrayList global = new ArrayList();
+    	
+    	// check wethere to use preference seting- global - or to use the properties settings
+    	global = CppPlugin.readProperty(project,globalSettingKey);
+    	if(!global.isEmpty())
+    	{
+    	
+    		if(global.get(0).equals("Yes"))
+    		{
+    			preferenceList = CppPlugin.readProperty(preferenceKey);
+    			String preference = (String)preferenceList.get(0);
+				if (preference.equals("Yes"))
+					return true;
+				else
+					return false;
+    		}
+    		else
+    		{
+    			propertyList = CppPlugin.readProperty(project, preferenceKey);
+    			String preference = (String)propertyList.get(0);
+				if (preference.equals("Yes"))
+					return true;
+				else
+					return false;
+    		}
+    	}
+    	else
+    	{
+    		preferenceList = CppPlugin.readProperty(preferenceKey);
+    		if(preferenceList.isEmpty())
+    			return true;
+    		else
+    		{
+    			String preference = (String)preferenceList.get(0);
+				if (preference.equals("Yes"))
+					return true;
+				else
+					return false;
+    		}
+    	}
     }
 }

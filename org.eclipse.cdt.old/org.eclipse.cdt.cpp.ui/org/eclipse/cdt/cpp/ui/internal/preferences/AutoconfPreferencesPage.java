@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.builder.ParsePathControl;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -20,6 +23,7 @@ public class AutoconfPreferencesPage
 	private AutoconfControl _autoconfControl;
     
     String configureDialogKey = "Show_Configure_Dialog";
+	String globalSettingKey = "Is_Global_Setting_Enabled";
 	String configureUpdateKey = "Update_When_Configure";
     
     String createDialogKey = "Show_Create_Dialog";
@@ -214,9 +218,7 @@ public class AutoconfPreferencesPage
 				_autoconfControl.setUpdateConfigureInButtonSelection(false);
 			}
 		}
-
-
-
+		
 		ArrayList makefileAmlist = plugin.readProperty(updateMakefileAmKey);
 		if (makefileAmlist.isEmpty())
 		{
@@ -236,9 +238,6 @@ public class AutoconfPreferencesPage
 				_autoconfControl.setUpdateMakefileAmButtonSelection(false);
 			}
 		}
-
-
-
     }
 
     public boolean performOk()
@@ -246,129 +245,99 @@ public class AutoconfPreferencesPage
 		CppPlugin plugin      = CppPlugin.getDefault();
 		
 		// auto update when configure
-		ArrayList autoConfigureUpdate = new ArrayList();
-		if (_autoconfControl.getAutoConfigureUpdateSelection())
-		{
-			autoConfigureUpdate.add("Yes");		
-		}
-		else
-		{
-			autoConfigureUpdate.add("No");		
-		}		
-
+		ArrayList autoConfigureUpdate = getProjectProperty(_autoconfControl.getAutoConfigureUpdateSelection());
 		plugin.writeProperty(configureUpdateKey, autoConfigureUpdate);	
-		
-		
-		// auto update when run configure
-		ArrayList autoRunUpdate = new ArrayList();
-		if (_autoconfControl.getAutoRunUpdateSelection())
-		{
-			autoRunUpdate.add("Yes");		
-		}
-		else
-		{
-			autoRunUpdate.add("No");		
-		}
 	
-		
+		// auto update when run configure
+		ArrayList autoRunUpdate = getProjectProperty(_autoconfControl.getAutoRunUpdateSelection());
 		plugin.writeProperty(runUpdateKey, autoRunUpdate);			
 
 		// auto update when create configure
-		ArrayList autoCreateUpdate = new ArrayList();
-		if (_autoconfControl.getAutoCreateUpdateSelection())
-		{
-			autoCreateUpdate.add("Yes");		
-		}
-		else
-		{
-			autoCreateUpdate.add("No");		
-		}		
+		ArrayList autoCreateUpdate = getProjectProperty(_autoconfControl.getAutoCreateUpdateSelection());
 		plugin.writeProperty(createUpdateKey, autoCreateUpdate);	
 		
-			// show dialog when configure
-		ArrayList showConfigureDialog = new ArrayList();
-		if (_autoconfControl.getShowConfigureDialogSelection())
-		{
-			showConfigureDialog.add("Yes");		
-		}
-		else
-		{
-			showConfigureDialog.add("No");		
-		}	
-
-		//plugin      = CppPlugin.getDefault();
+		// show dialog when configure
+		ArrayList showConfigureDialog = getProjectProperty(_autoconfControl.getShowConfigureDialogSelection());
 		plugin.writeProperty(configureDialogKey, showConfigureDialog);	
 	
 		// show dialog when run configure
-		ArrayList showRunDialog = new ArrayList();
-		if (_autoconfControl.getShowRunDialogSelection())
-		{
-			showRunDialog.add("Yes");		
-		}
-		else
-		{
-			showRunDialog.add("No");		
-		}	
-
-		//plugin      = CppPlugin.getDefault();
+		ArrayList showRunDialog = getProjectProperty(_autoconfControl.getShowRunDialogSelection());
 		plugin.writeProperty(runDialogKey, showRunDialog);	
 
-
 		// show dialog when create configure
-		ArrayList showCreateDialog = new ArrayList();
-		if (_autoconfControl.getShowCreateDialogSelection())
-		{
-			showCreateDialog.add("Yes");		
-		}
-		else
-		{
-			showCreateDialog.add("No");		
-		}	
-
+		ArrayList showCreateDialog = getProjectProperty(_autoconfControl.getShowCreateDialogSelection());
 		plugin.writeProperty(createDialogKey, showCreateDialog);	
 		
-		
 		// update all dialog
-		ArrayList udateAllDialog = new ArrayList();
-		if (_autoconfControl.getUpdateAllButtonSelection())
-		{
-			udateAllDialog.add("Yes");		
-		}
-		else
-		{
-			udateAllDialog.add("No");		
-		}	
-
+		ArrayList udateAllDialog = getProjectProperty(_autoconfControl.getUpdateAllButtonSelection());
 		plugin.writeProperty(updateAllDialogKey, udateAllDialog);
 		
 		// update configureIn dialog
-		ArrayList updateConfigureInDialog = new ArrayList();
-		if (_autoconfControl.getUpdateConfigureInButtonSelection())
-		{
-			updateConfigureInDialog.add("Yes");		
-		}
-		else
-		{
-			updateConfigureInDialog.add("No");		
-		}	
-
+		ArrayList updateConfigureInDialog = getProjectProperty(_autoconfControl.getUpdateConfigureInButtonSelection());
 		plugin.writeProperty(updateConfigureInKey, updateConfigureInDialog);		
 		
 		// update makefileAm dialog
-		ArrayList updateMakefileAmDialog = new ArrayList();
-		if (_autoconfControl.getUpdateMakefileAmButtonSelection())
-		{
-			updateMakefileAmDialog.add("Yes");		
-		}
-		else
-		{
-			updateMakefileAmDialog.add("No");		
-		}	
-
+		ArrayList updateMakefileAmDialog = getProjectProperty(_autoconfControl.getUpdateMakefileAmButtonSelection());
 		plugin.writeProperty(updateMakefileAmKey, updateMakefileAmDialog);		
 						
+		// check if you need to modify project properties - then do modify if needed
+		updateLocalPropertyPages();
+		
+		
 		return true;
    	}
+   	
+   	
+   	public void updateLocalPropertyPages()
+   	{
+   		// new code for checking project property pages
+		IProject[] projects = getworkspaceProjects();
+		// iterate through projects and get their autoconf propertyPages
+		if(projects!=null)
+		{
+			// setting for show configure dialog property
+			for(int i = 0; i < projects.length; i++)
+			{				
+				ArrayList setProp = CppPlugin.readProperty(projects[i],globalSettingKey);
+				if(!setProp.isEmpty())
+				{
+					if(setProp.get(0).equals("Yes"))
+					{
+						// setting for show configure dialog property
+						CppPlugin.writeProperty(projects[i],configureDialogKey,getProjectProperty(_autoconfControl.getShowConfigureDialogSelection()));
+						// setting for show create configure dialog property
+						CppPlugin.writeProperty(projects[i],createDialogKey,getProjectProperty(_autoconfControl.getShowCreateDialogSelection()));
+						// setting for show run configure dialog property
+						CppPlugin.writeProperty(projects[i],runDialogKey,getProjectProperty(_autoconfControl.getShowRunDialogSelection()));
+						// setting for show update All dialog property
+						CppPlugin.writeProperty(projects[i],updateAllDialogKey,getProjectProperty(_autoconfControl.getUpdateAllButtonSelection()));
+						// setting for show update configure.in dialog property
+						CppPlugin.writeProperty(projects[i],updateConfigureInKey,getProjectProperty(_autoconfControl.getUpdateConfigureInButtonSelection()));
+						// setting for show update Makefile.am dialog property
+						CppPlugin.writeProperty(projects[i],updateMakefileAmKey,getProjectProperty(_autoconfControl.getUpdateMakefileAmButtonSelection()));
+					}
+				}
+		
+			}
+		}
+		// end new code
+   	}
+   	
+   	private ArrayList getProjectProperty(boolean selection)
+   	{
+		ArrayList list = new ArrayList();
+		if (selection)
+			list.add("Yes");		
+		else
+			list.add("No");		
+   		return list;
+   	}
+   	private IProject[] getworkspaceProjects()
+	{
+		//return (IProject)getElement();
+		IProject[] workSpaceProjects = CppPlugin.getPluginWorkspace().getRoot().getProjects();
+		return workSpaceProjects;
+	}
 
 }
 

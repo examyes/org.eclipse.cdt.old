@@ -10,6 +10,7 @@ import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.CustomMessageDialog;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.PreventableMessageBox;
 import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
@@ -21,10 +22,11 @@ import org.eclipse.jface.action.*;
 
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.*;
+//import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.ui.*;
@@ -50,7 +52,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	String configueDialogPrefernceKey = "Show_Configure_Dialog";
 	String configureUpdatePreferenceKey = "Update_When_Configure";
 	String targetKey = "Target_Type";
-	
+
 	private int dialogButtonPushed = -1;
 	
 	private final int DEFAULT = 0;
@@ -60,6 +62,11 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	private int targetType = DEFAULT;	
 	
 	boolean dialogHas2Buttons = false;
+	
+	CppPlugin _plugin = CppPlugin.getDefault();
+	IProject project;
+	
+	String globalSettingKey = "Is_Global_Setting_Enabled";
 	
 	public class RunThread extends Handler
 	{
@@ -120,7 +127,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					message,
 					3,
 					new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
-					1<<4,0,
+					1<<4,
+					0,
 					extraLabel,
 					this,
 					targetKey);
@@ -134,6 +142,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			String message;
 			String[] extraLabel = new String[]{"Do not show this dialog again"};
 			String title = "Generating and running configure script";
+			ModelInterface api = _plugin.getModelInterface();
+			project = (IProject)api.findResource(_subject);
 
 			// checking if automatic updating is enabled from the autoconf preferences page
 			ArrayList autoUpdateConfigure = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(configureUpdatePreferenceKey);
@@ -181,7 +191,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 								0,
 								extraLabel,
 								this,
-								configueDialogPrefernceKey);
+								configueDialogPrefernceKey,
+								project);
 					int result = box.open();
 					if(result!= -1)
 						if(dialogHas2Buttons)
@@ -205,7 +216,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 									0,
 									extraLabel,
 									this,
-									configueDialogPrefernceKey);
+									configueDialogPrefernceKey,
+									project);
 					int result = box.open();
 					if(result!= -1)
 						configureUpdate= result+1;
@@ -219,6 +231,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			{
 				configFilesExist = false;
 				message = new String("\nGenerating and running configure script");
+				
+				
 				box = new CustomMessageDialog(
 								shell,
 								title,
@@ -229,7 +243,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 								0,
 								extraLabel,
 								this,
-								configueDialogPrefernceKey);
+								configueDialogPrefernceKey,
+								project);
 				int result = box.open();
 				if(result!= -1)
 					if(result==1)
@@ -429,19 +444,22 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				if(selection)
 				{
 					list.add("No");
+					// force using the project property settings for autoconf
+					CppPlugin.writeProperty(project,globalSettingKey,list);
 				}
 				else
 				{
 					list.add("Yes");
 				}
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(configueDialogPrefernceKey,list);
+				CppPlugin.writeProperty(project,configueDialogPrefernceKey,list);
+				
 			}
 			
 			// set default project target to Default - needed for Autoconf Manager
 			targetType = DEFAULT;
 			list = new ArrayList();
 			list.add("Default");
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
+			CppPlugin.writeProperty(targetKey,list);
 
 		}
 		// the 100+ numbering scheme means that this button is not the one responsibe for show/hide the dialog 
@@ -453,19 +471,19 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			targetType = PROGRAM_TARGET;
 			// default target
 			list.add("Program");
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
+			CppPlugin.writeProperty(targetKey,list);
 		}
 		if(buttonId == 101)
 		{
 			targetType = STATIC_TARGET;
 			list.add("Static");
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
+			CppPlugin.writeProperty(targetKey,list);
 		}
 		if(buttonId == 102)
 		{
 			targetType = SHARED_TARGET;
 			list.add("Shared");
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
+			CppPlugin.writeProperty(targetKey,list);
 		}
     }
 }
