@@ -28,7 +28,6 @@ Minimally you will need the following environment variables set.
 --Set the JAVA_HOME environment variable to the root of your JDK installation.
 --Set the ANT_HOME environment variable to the root of your Ant installation.
 --(Windows 98) Set the HOME environment variable to c:
---(Windows 98) Increase the default environment space as specified here.
 
 
 1) Install a clean installation of Eclipse 2.0.1
@@ -42,15 +41,13 @@ Minimally you will need the following environment variables set.
 2) Navigate to the plugins and features directories
     Remove the version number from all plugin and feature directory names
 
-3) Obtain the build scripts from CVS
+3) Checkout the contents of the cdt-home/cdt-home/buildscripts directory into the eclipse install directory
 
-4) Checkout the contents of the cdt-home/cdt-home/buildscripts directory into the eclipse install directory
-
-5) Edit the startCDT-<os><win>build.bat files
+4) Edit the startCDT-<os><win>build.bat files
     build -os win32 -ws win32 -install "C:\eclipse"
       e.g. rename -install <installDir> to point to your clean Eclipse installation directory
 
-6)run the startCDT-<os><win>build.bat file of your choice
+5) Run the startCDT-<os><win>build.bat file of your choice
 
-7) The resulting distribution.zip and source zips will reside in
+6) The resulting distribution.zip and source zips will reside in
     <installDir>/features/org.eclipse.cdt-feature/
