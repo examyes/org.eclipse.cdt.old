@@ -49,21 +49,42 @@ public class OpenFileAction extends CustomAction
       {	
         super(subject, label, command, dataStore);
 
-	if (subject.getType().equals("file"))
+		if (subject.getType().equals("file"))
 	    {
-		setEnabled(true);
+			setEnabled(true);
 	    }
-	else
+		else
 	    {
-		setEnabled(false);
+			setEnabled(false);
 	    }
       }
+      
+    public OpenFileAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+    {
+    	super(subjects, label, command, dataStore);
+    	
+    	for (int i = 0; i < subjects.size(); i++)
+    	{
+    		DataElement subject = (DataElement)subjects.get(i);
+    		String type = subject.getType();
+    		if (!type.equals("file"))
+    		{
+    			setEnabled(false);
+    			return;
+    		}
+    	}
+    }  
 
     public void run()
     { 
-	IActionLoader loader = CppActionLoader.getInstance();
-	IOpenAction openAction = loader.getOpenAction();
-	openAction.setSelected(_subject);
-	openAction.run();
+		IActionLoader loader = CppActionLoader.getInstance();
+		IOpenAction openAction = loader.getOpenAction();
+		
+		for (int i = 0; i < _subjects.size(); i++)
+		{
+			DataElement subject = (DataElement)_subjects.get(i);
+			openAction.setSelected(subject);
+			openAction.run();
+		}
     }
 }
