@@ -188,9 +188,9 @@ public class AutoconfManager {
 	private void createConfigureScript(DataElement project, DataElement status)
 	{
 		if(getOS().equals("Linux"))
-			runCommand(project, status, "./bootstrap.sc&&"+"touch -m configure");
-		else
-			runCommand(project, status, cygwinPrefix+"bootstrap.sc&&"+cygwinPrefix+"touch -m configure");
+			runCommand(project, status, "./bootstrap.sc"+"&&"+"touch -m configure");
+		else 
+			runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"\'touch -m configure\'");
 	}
 	public void runConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
@@ -202,11 +202,11 @@ public class AutoconfManager {
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure&&"+"touch -m "+
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+
 				configure.getName());
 			else
-			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure&&"+
-			cygwinPrefix+"touch -m "+configure.getName());
+			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
+			cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
 		}
 		else
 		{ 
@@ -215,9 +215,9 @@ public class AutoconfManager {
 			{
 				// setting time stamp to all Makefile.am abd Makefiles.in if cuorrupted when imported
 				if(getOS().equals("Linux"))
-					runCommand(project, status, "./configure&&"+"touch -m "+configure.getName());
+					runCommand(project, status, "./configure"+"&&"+"touch -m "+configure.getName());
 				else
-					runCommand(project, status, cygwinPrefix+"configure&&"+cygwinPrefix+"touch -m "+configure.getName());
+					runCommand(project, status, cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
 			}
 			else
 			{
@@ -230,9 +230,9 @@ public class AutoconfManager {
 				}
 				
 				if(getOS().equals("Linux"))
-					runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure&&"+"touch -m "+configure.getName());
+					runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+configure.getName());
 				else
-					runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure&&"+cygwinPrefix+"touch -m "+configure.getName());
+					runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
 			}
 		}
 	} 
