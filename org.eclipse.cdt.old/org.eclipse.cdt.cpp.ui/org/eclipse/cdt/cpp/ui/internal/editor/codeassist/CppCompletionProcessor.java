@@ -226,8 +226,12 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			     {
 			     case '_':
 			     case '.':
-			     case '-':
 				 isValid = true;
+				 break;
+			     case '-':
+				 char nc = text.charAt(column + 1);
+				 if (nc == '>')
+				     isValid = true;
 				 break;
 			     default:
 				 isValid = false;
