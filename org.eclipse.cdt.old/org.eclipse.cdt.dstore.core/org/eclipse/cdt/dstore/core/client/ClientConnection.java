@@ -500,11 +500,22 @@ public class ClientConnection
     	try
     	{
    			BufferedReader reader  = new BufferedReader(new InputStreamReader(_theSocket.getInputStream()));          
+
+	
+			try
+		    {
+				Thread.currentThread().sleep(200);
+		    }
+			catch (InterruptedException e)
+		    {
+				System.out.println(e);
+		    }
 		
-		
+			
 			if (reader.ready())
 			{
-				String handshake = reader.readLine();  
+				String handshake = reader.readLine(); 
+
 				if  (handshake.equals("DataStore"))
 				{
 					return true;	
@@ -516,7 +527,6 @@ public class ClientConnection
     		}
     		else
     		{
-    			System.out.println("not ready");	
     		}
     	}
    	 	catch (Exception e)
