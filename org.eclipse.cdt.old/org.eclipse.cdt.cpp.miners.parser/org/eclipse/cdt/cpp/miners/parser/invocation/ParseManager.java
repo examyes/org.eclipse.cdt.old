@@ -106,7 +106,7 @@ public class ParseManager
     catch (IOException e) {continue;}
     if (theElementPath.startsWith(thePath))
     {
-     _dataStore.deleteObject(_parsedFiles, theElement);
+     _dataStore.deleteObject(theParsedFiles, theElement);
      deletedSomething = true;
     }
    }
