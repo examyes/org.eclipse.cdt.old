@@ -64,6 +64,7 @@ public class NameLookup
     return null;
   }
   theElement.setAttribute(DE.A_SOURCE, foundFunction.getSource());
+  theElement.setAttribute(DE.A_SOURCE_LOCATION, foundFunction.getAttribute(DE.A_SOURCE_LOCATION));
   theElement.getDataStore().update(theElement);
   return status;
  }
