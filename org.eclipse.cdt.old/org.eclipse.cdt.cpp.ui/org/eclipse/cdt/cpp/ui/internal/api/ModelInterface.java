@@ -1590,7 +1590,63 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
 
 
-	
+ public DataElement findParseFiles(DataElement theProjectFile)
+    {
+	DataStore dataStore = theProjectFile.getDataStore();
+	ArrayList parseRef = theProjectFile.getAssociated("Parse Reference");
+	if (parseRef != null && parseRef.size() > 0)
+	    {
+		DataElement parseProject = ((DataElement)(parseRef.get(0))).dereference();
+		DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
+		return projectObjects;
+	    }
+	else
+	    {
+		return null;
+	    }
+    }
+
+ public DataElement findParseFile(DataElement theProjectFile)
+ {
+  String projectFileSource1 = theProjectFile.getSource().replace('\\','/');
+  String projectFileSource2 = theProjectFile.getSource().replace('/','\\');
+  DataStore dataStore = theProjectFile.getDataStore();
+
+  
+  while (!(theProjectFile = theProjectFile.getParent()).getType().equals("Project")) 
+      {
+      }
+
+     DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
+     DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
+     DataElement theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource1, 1);
+     if (theParseFile == null)
+	 {
+	     theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource2, 1);
+	 }
+     
+     if (theParseFile == null)
+	 {
+	     DataElement dummyInput = dataStore.find(dataStore.getTempRoot(), DE.A_NAME, "Non-Parsed File", 1);
+	     if (dummyInput != null)
+		 {
+		     theParseFile = dummyInput;
+		     DataElement theMessage = ((DataElement)(theParseFile.getNestedData().get(0)));
+		     theMessage.setAttribute(DE.A_VALUE,projectFileSource1  + " has not been parsed.");
+		     dataStore.refresh(theMessage);
+		 }
+	     else
+		 {
+		     theParseFile = dataStore.createObject(dataStore.getTempRoot(), "Output", "Non-Parsed File");
+		     dataStore.createObject(theParseFile, "warning", projectFileSource1 + " has not been parsed.");
+		 }
+	 }
+     
+     
+     return theParseFile;
+ }
+ 
+ 	
     public DataElement getProjectFor(DataElement resource)
     {
 	String type = resource.getType();
@@ -1660,10 +1716,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		for (int i = 0; (i < parent.getNestedSize()) && !needsRefresh; i++)
 		    {
 			DataElement child = parent.get(i);
-			IResource match = container.findMember(child.getName());
+			if (!child.isDeleted() && !child.isReference())
+			{
+				IResource match = container.findMember(child.getName());
 			
-			needsRefresh = (match == null);
-		    }
+				needsRefresh = (match == null);
+				if (needsRefresh)
+				{
+						parseFile(child);
+				}
+			}			
+		}
 		
 		// compare resources to elements in case deleted
 		if (!needsRefresh)
@@ -1673,12 +1736,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				IResource[] members = container.members();
 				for (int i = 0; (i < members.length) && !needsRefresh; i++)
 				    {
-					IResource member = members[i];
-					DataElement match = parent.getDataStore().find(parent, 
+						IResource member = members[i];
+						DataStore dataStore = parent.getDataStore();
+						DataElement match = dataStore.find(parent, 
 										       DE.A_NAME, 
 										       member.getName(), 
 										       1);
-					needsRefresh = ((match == null) || match.isDeleted());
+						needsRefresh = ((match == null) || match.isDeleted());					
+						if (needsRefresh)
+						{
+												
+						}
 				    }
 			    }
 			catch (CoreException e)
@@ -1728,6 +1796,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    {				
 					resource = findResource(parent);
 				    }
+			
 				if (resource != null)
 				    {
 					synchronizeWithNavigator(resource, parent);
@@ -1853,6 +1922,49 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
  	}
  }
 
+   
+    private void removeParseInfo(DataElement element)
+    {
+    	DataStore dataStore = element.getDataStore();
+    	
+    	DataElement parsedFile = null;
+    	if (element.getType().equals("Parsed Source"))
+    	{
+    		parsedFile = element;
+    	}
+    	else
+    	{
+		 	parsedFile = findParseFile(element);
+    	}
+		if (parsedFile != null)
+		{
+			DataElement rmParseInfo = dataStore.localDescriptorQuery(element.getDescriptor(), "C_REMOVE_PARSE", 3);
+			if (rmParseInfo != null)
+			{
+				DataElement projectElement = getProjectFor(element);
+				ArrayList args = new ArrayList();
+				args.add(projectElement);
+				DataElement status = dataStore.command(rmParseInfo, args, parsedFile);
+				monitorStatus(status);				
+			}									
+		}    	
+    }
+    
+    
+    private void parseFile(DataElement element)
+    {
+			DataStore dataStore = element.getDataStore();
+			DataElement parseD = dataStore.localDescriptorQuery(element.getDescriptor(), "C_PARSE", 3);
+			if (parseD != null)
+			{
+				DataElement projectElement = getProjectFor(element);
+				ArrayList args = new ArrayList();
+				args.add(projectElement);
+				DataElement status = dataStore.command(parseD, args, element);
+				monitorStatus(status);
+			}						 			
+    }
+
     private void resourceChanged(IResource resource)
     {
 	if (resource != null)
@@ -1877,8 +1989,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    }		
 	    }
     }
-
-
+ 
     private void traverseDelta(IResourceDelta delta)
     {
 	int kind  = delta.getKind();
@@ -1946,13 +2057,55 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					if (oldRes != null && newRes != null)
 						 {
 						    // this is a rename
-						 	if ((oldRes instanceof IProject) && (newRes instanceof IProject))
+						 	if ((oldRes instanceof IResource) && (newRes instanceof IResource))
 						 	{
-						 		DataElement element = findProjectElement((IProject)oldRes);
-
-						 		element.setAttribute(DE.A_NAME, newRes.getName());
-						 		element.setAttribute(DE.A_SOURCE, newRes.getLocation().toString()); 
-						 		element.getDataStore().refresh(element.getParent());
+						 		DataElement element = findResourceElement((IResource)oldRes);
+						 		if (element != null)
+						 		{						 
+						 			DataStore dataStore = element.getDataStore();
+ 						 	
+									// remove parse information here 
+									removeParseInfo(element);
+								
+									element.setAttribute(DE.A_NAME, newRes.getName());
+						 			element.setAttribute(DE.A_SOURCE, newRes.getLocation().toString()); 
+						 		
+						 			// reparse
+						 			parseFile(element);
+						 													 		
+						 			dataStore.refresh(element.getParent());
+						 		}
+						 		else
+						 		{
+									String memberSource = oldRes.getLocation().toString().replace('\\', '/');
+									String memberSource2 = oldRes.getLocation().toString().replace('/', '\\');
+									System.out.println("remove " + memberSource);
+									IProject project = oldRes.getProject();
+							
+									DataElement projectElement = findProjectElement(project);	
+									if (projectElement != null)
+									{
+										DataStore dataStore = projectElement.getDataStore(); 							
+										DataElement parseProject = ((DataElement)(projectElement.getAssociated("Parse Reference").get(0))).dereference();
+     									if (parseProject != null)
+     									{
+		     								DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
+     										DataElement theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, memberSource, 1);
+     										
+     										if (theParseFile == null)
+     										{
+     											theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, memberSource2, 1);     											
+     										}
+     								
+     										if (theParseFile != null)
+     										{
+     											System.out.println("remove parse");
+     											removeParseInfo(theParseFile);
+     										}
+     									}	
+									}	
+     					 		}
+						 	
 						 		return;
 						 	}
 						 }
@@ -2151,11 +2304,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
         DataElement parseMenuD = dataStore.createObject(fileD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
 	
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse",
+        DataElement parseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
+        			"Begin Parse",
 			       "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Save Parse Information",
+				       
+				     
+	    DataElement saveParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
+	    			"Save Parse Information",
 			       "com.ibm.cpp.ui.internal.actions.ProjectSaveParseAction");
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information",
+
+	    DataElement removeParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
+        			"Remove Parse Information",
 			       "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
 
 
