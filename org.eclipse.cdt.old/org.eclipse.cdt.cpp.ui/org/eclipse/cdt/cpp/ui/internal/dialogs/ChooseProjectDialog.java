@@ -69,7 +69,14 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 
     public List getSelected()
     {
-	return _selection.toList();
+	if (_selection != null)
+	    {
+		return _selection.toList();
+	    }
+	else
+	    {
+		return null;
+	    }
     }
 
 
@@ -89,6 +96,8 @@ public class ChooseProjectDialog extends org.eclipse.jface.dialogs.Dialog
 	DataStore dataStore = _input.getDataStore();
 	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), null);	
 	_viewer.setInput(_input);
+	_viewer.fixateOnRelationType("contents");
+	_viewer.fixateOnObjectType("Project Containers");
 
 	GridLayout layout= new GridLayout();
 	layout.numColumns = 1;

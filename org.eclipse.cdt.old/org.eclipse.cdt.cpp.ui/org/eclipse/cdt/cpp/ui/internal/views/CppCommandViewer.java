@@ -6,6 +6,7 @@ package com.ibm.cpp.ui.internal.views;
  * the Common Public License which accompanies this distribution.
  */
 
+import com.ibm.cpp.ui.internal.dialogs.*;
 import com.ibm.cpp.ui.internal.vcm.*;
 
 import com.ibm.dstore.hosts.views.*;
@@ -106,6 +107,39 @@ public class CppCommandViewer extends CommandViewer
 	if (_resourceInput != null)
 	    {
 		_plugin.writeProperty(_resourceInput, _plugin.getLocalizedString("CommandViewer.Command_History"), _history);
+	    }
+    }
+
+    public void widgetSelected(SelectionEvent e)
+    {
+	Widget source = e.widget;
+	
+	if (source == _browseButton)
+	    {
+		IWorkspace workbench = _plugin.getPluginWorkspace();	
+
+		ModelInterface api = _plugin.getModelInterface();
+		DataElement input = api.findWorkspaceElement();
+	
+		ChooseProjectDialog dialog = new ChooseProjectDialog("Select Directory", input);
+		dialog.open();
+		if (dialog.getReturnCode() == dialog.OK)
+		    {
+			java.util.List result = dialog.getSelected();  
+			if (result != null && result.size() > 0)
+			    {
+				DataElement selected = (DataElement)result.get(0);
+				if (selected != null)
+				    {
+					setInput(selected);
+				    }
+			    }
+		    }
+		
+	    }
+	else
+	    {
+		super.widgetSelected(e);
 	    }
     }
 

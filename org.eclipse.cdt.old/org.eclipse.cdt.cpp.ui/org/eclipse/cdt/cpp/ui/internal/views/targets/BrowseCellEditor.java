@@ -18,7 +18,13 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.ui.dialogs.*;
 
+
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.dialogs.*;
+import com.ibm.dstore.ui.widgets.*;
+
+import com.ibm.dstore.core.model.*;
 
 public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor {
 	
@@ -108,7 +114,8 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 	{
 		 // to  initialize target container root
 		IContainer containerRoot = (IContainer)NavigatorSelection.selection;
-	
+
+		/****	
 		dialog = new TargetSelectionDialog(cellEditorWindow.getShell(),containerRoot,true,pluginInstance.getLocalizedString(DIALOG_TITLE));
 		dialog.open();
 	
@@ -128,7 +135,23 @@ public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor
 				return path;
 			}
 		return fText.getText(); // return existing working directory value
+		***/
+		CppPlugin plugin = CppPlugin.getDefault();
+		ModelInterface api = plugin.getModelInterface();
+		DataElement input = api.findWorkspaceElement();
+
+		ChooseProjectDialog dlg = new ChooseProjectDialog("Select Working Directory", input);
+		dlg.open();
+
+		java.util.List selected = dlg.getSelected();
+		if (selected != null && selected.size() > 0)
+		    {
+			DataElement output = (DataElement)selected.get(0);
+			return output.getSource();
+		    }
+		return null;
 	}
+
 	protected void updateContents(Object value) {
 		if(value!=null)
 			fText.setText(value.toString());
