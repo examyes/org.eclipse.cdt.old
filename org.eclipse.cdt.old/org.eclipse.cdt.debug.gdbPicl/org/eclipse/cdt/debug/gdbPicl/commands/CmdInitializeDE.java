@@ -182,9 +182,6 @@ public class CmdInitializeDE extends Command
       _EPDCSession._debugEnginePlatformID = EPDC.PLATFORM_ID_AIX;
 
       _EPDCSession._defaultSettings       = EPDC.DebuggerBusyBoxEnable;
-      _EPDCSession._PMDebuggingAction     = EPDC.NoPaint;
-      _EPDCSession._PMDebuggingColor      = EPDC.Black;
-      _EPDCSession._PMDebuggingMode       = EPDC.Synchronous;
       _EPDCSession._processDetachAction   = EPDC.ProcessRelease;
 
 // ***************************************************************************
