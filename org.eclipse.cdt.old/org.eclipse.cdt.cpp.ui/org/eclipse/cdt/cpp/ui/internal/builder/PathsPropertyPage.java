@@ -98,7 +98,7 @@ public class PathsPropertyPage extends PropertyPage
         plugin.writeProperty(project, "External Source", externalSourcePath);
         plugin.writeProperty(project, "Libraries", libraries);
 
-	plugin.getModelInterface().setParseIncludePath(project);
+	plugin.getModelInterface().setPaths(project);
 	return true;
     }
 

@@ -148,6 +148,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
       public void run()
       {
+	  setPaths(_project);
 	  setParseIncludePath(_project);	
 	  setParseQuality(_project);	
 	  setEnvironment(_project);
@@ -1061,6 +1062,58 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   }
  }
 
+ public void setPaths(IProject project)
+ {
+     DataStore dataStore = _plugin.getDataStore();	
+     if (project instanceof Repository)
+	 dataStore = ((Repository)project).getDataStore();	
+     
+     DataElement projectObj = findProjectElement(project, "Project");
+     if (projectObj != null)
+	 {
+	     // include paths
+	     DataElement includeElement = dataStore.createObject(null, "path", "Include Path");	
+	     ArrayList includePaths = _plugin.readProperty(project, "Include Path");
+	     for (int i = 0; i < includePaths.size(); i++)
+		 {
+		     dataStore.createObject(includeElement, "path", 
+					    (String)includePaths.get(i), (String)includePaths.get(i));
+		 }
+
+	     // external source paths
+	     DataElement externalElement = dataStore.createObject(null, "path", "External Source");	
+	     ArrayList externalPaths = _plugin.readProperty(project, "External Source");
+	     for (int i = 0; i < externalPaths.size(); i++)
+		 {
+		     dataStore.createObject(externalElement, "path", 
+					    (String)externalPaths.get(i), (String)externalPaths.get(i));
+		 }
+
+	     // libraries
+	     DataElement libraryElement = dataStore.createObject(null, "path", "Libraries");	
+	     ArrayList libraryPaths = _plugin.readProperty(project, "Libraries");
+	     for (int i = 0; i < libraryPaths.size(); i++)
+		 {
+		     dataStore.createObject(libraryElement, "file", 
+					    (String)libraryPaths.get(i), (String)libraryPaths.get(i));
+		 }
+
+	     DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_PATHS");
+	     if (setD != null)
+	      {
+		  dataStore.setObject(includeElement);
+		  dataStore.setObject(externalElement);
+		  dataStore.setObject(libraryElement);
+
+		  ArrayList args = new ArrayList();
+		  args.add(includeElement);	
+		  args.add(externalElement);	
+		  args.add(libraryElement);	
+		  dataStore.command(setD, args, projectObj);
+	      }
+	 }
+ }
+    
  public void setParseIncludePath(IProject project)
  {
   DataStore dataStore = _plugin.getDataStore();	
@@ -2258,7 +2311,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     private void parseFile(DataElement element)
     {
 			DataStore dataStore = element.getDataStore();
-					
+				       
 			DataElement notifyD = dataStore.localDescriptorQuery(dataStore.getRoot().getDescriptor(), "C_NOTIFICATION", 1);
 			if (notifyD != null)
 			{

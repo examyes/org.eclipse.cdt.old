@@ -35,7 +35,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.ui.part.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.events.*;
-
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
 import org.eclipse.ui.internal.*;
@@ -200,7 +200,8 @@ public class CppOutputViewPart
 	}
 
 	protected CppPlugin _plugin;
-	private Combo _inputEntry;
+    //private Combo _inputEntry;
+    private StyledText _inputEntry;
 	private Button _sendButton;
 	private CancelAction _cancelAction;
 	private ShellAction _shellAction;
@@ -254,7 +255,9 @@ public class CppOutputViewPart
 		Label label = new Label(inputContainer, SWT.NONE);
 		label.setText("Standard Input");
 
-		_inputEntry = new Combo(inputContainer, SWT.SINGLE | SWT.BORDER);
+		_inputEntry = new StyledText(inputContainer, SWT.SINGLE | SWT.BORDER);
+		//_inputEntry = new Combo(inputContainer, SWT.SINGLE | SWT.BORDER);
+
 		_inputEntry.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		_inputEntry.addModifyListener(new ModifyListener()
 		{
@@ -279,6 +282,15 @@ public class CppOutputViewPart
 				}
 			}
 		});
+		_inputEntry.addListener(SWT.KeyUp, new Listener() 
+		    {
+			public void handleEvent(Event e) {
+			    if (e.character == '\r') // "enter" key
+				{
+				    sendInput();
+				} 
+			}
+		});
 
 		_sendButton = new Button(inputContainer, SWT.PUSH);
 		_sendButton.setText("Send");
@@ -301,7 +313,7 @@ public class CppOutputViewPart
 		getSite().setSelectionProvider(_viewer);
 
 		ISelectionService selectionService =
-			getSite().getWorkbenchWindow().getSelectionService();
+		    getSite().getWorkbenchWindow().getSelectionService();
 		selectionService.addSelectionListener(this);
 
 		fillLocalToolBar();
@@ -503,7 +515,7 @@ public class CppOutputViewPart
 			args.add(in);
 
 			dataStore.command(commandDescriptor, args, command);
-			_inputEntry.add(stdIn);
+			//**_inputEntry.add(stdIn);
 		}
 	}
 

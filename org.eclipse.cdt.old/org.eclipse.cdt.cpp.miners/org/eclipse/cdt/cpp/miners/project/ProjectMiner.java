@@ -38,14 +38,20 @@ public class ProjectMiner extends Miner
  
     public void extendSchema(DataElement schemaRoot)
     {
-	DataElement markersD      = createObjectDescriptor(schemaRoot, getLocalizedString("project.markers"));
-	createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.error")));
-	createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.warning")));
-	createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.informational")));
-	
+	DataElement containerObjectD = findDescriptor(getLocalizedString("model.Container_Object"));
+	DataElement contentsD        = findDescriptor(getLocalizedString("model.contents"));
+	DataElement allD             = findDescriptor(getLocalizedString("model.all"));
 	DataElement fsObjectD      = findDescriptor(getLocalizedString("project.FileSystemObjects"));
 	DataElement directoryD     = findDescriptor(getLocalizedString("model.directory"));
 	DataElement fileD          = findDescriptor(getLocalizedString("model.file"));
+
+
+
+	DataElement markersD      = createObjectDescriptor(schemaRoot, getLocalizedString("project.markers"));
+	createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.error")));
+	createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.warning")));
+	createReference(markersD,   createObjectDescriptor(schemaRoot, getLocalizedString("project.informational")));	
+
 	DataElement workspaceD     = createObjectDescriptor(schemaRoot, getLocalizedString("project.Workspace"));
 	DataElement projectD       = createObjectDescriptor(schemaRoot, getLocalizedString("project.Project"));
 	DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
@@ -53,11 +59,15 @@ public class ProjectMiner extends Miner
 	DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
 	DataElement oprojectsD      = createAbstractObjectDescriptor(schemaRoot, "Open Projects");
 	DataElement pContainersD   = createAbstractObjectDescriptor(schemaRoot, "Project Containers");
-	DataElement containerObjectD = findDescriptor(getLocalizedString("model.Container_Object"));
+
+	DataElement propertiesRootD  = createObjectDescriptor(schemaRoot, getLocalizedString("project.Properties_Root"));
+	DataElement propertiesD  = createRelationDescriptor(schemaRoot, getLocalizedString("project.properties"));
+	DataElement pathD     = createObjectDescriptor(schemaRoot, getLocalizedString("project.path"));
 	
+		
 	projectsD.setDepth(100);
 	projectD.setDepth(100);
-	 	
+			
 	DataElement closeD = createCommandDescriptor(projectD, "Close Project", "C_CLOSE_PROJECT");
 	closeD.setDepth(0);
 	closeD.setAttribute(DE.A_SOURCE, "*");
@@ -67,14 +77,21 @@ public class ProjectMiner extends Miner
 	closeAllD.setAttribute(DE.A_SOURCE, "*");
 
 	
-	createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
-	
-	createCommandDescriptor(closedProject, "Delete Project", "C_DELETE_PROJECT").setDepth(0);
-	DataElement openD = createCommandDescriptor(closedProject, "Open Project", "C_OPEN");
-	openD.setDepth(0);
+	createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT", false);	
+	createCommandDescriptor(closedProject, "Delete Project", "C_DELETE_PROJECT", false);
+	DataElement openD = createCommandDescriptor(closedProject, "Open Project", "C_OPEN", false);
 	openD.setAttribute(DE.A_SOURCE, "*");
-	
-	
+
+	createCommandDescriptor(projectD, "Set Paths", "C_SET_PATHS", false);
+	_dataStore.createReference(projectD, propertiesD, contentsD);
+	_dataStore.createReference(projectD, propertiesRootD, propertiesD);
+	_dataStore.createReference(propertiesRootD, contentsD, contentsD);
+	_dataStore.createReference(propertiesRootD, pathD, contentsD);
+	_dataStore.createReference(pathD, contentsD, contentsD);
+	_dataStore.createReference(pathD, pathD, contentsD);
+	_dataStore.createReference(pathD, fileD, contentsD);
+	_dataStore.createReference(pathD, allD, contentsD);
+		
 	createAbstractRelationship(fsObjectD, projectD);
 	_dataStore.createReference(containerObjectD, workspaceD, "abstracts", "abstracted by");
 	
@@ -94,6 +111,7 @@ public class ProjectMiner extends Miner
 	_dataStore.createReference(pContainersD, directoryD, "abstracts", "abstracted by");
 	
 	
+	_dataStore.createReference(workspaceD, contentsD, contentsD);
 	createReference(workspaceD, projectsD);
 	createReference(workspaceD, oprojectsD);
 	
@@ -116,6 +134,12 @@ public class ProjectMiner extends Miner
 	    handleDeleteProject(subject, status);
 	else if (name.equals("C_REFRESH"))
 	    handleRefreshProject(subject, status);
+	else if (name.equals("C_SET_PATHS"))
+	    handleSetPaths(subject, 
+			   getCommandArgument(theCommand, 1),
+			   getCommandArgument(theCommand, 2),
+			   getCommandArgument(theCommand, 3),
+			   status);
 	else 
 	    return status;
 	
@@ -167,6 +191,35 @@ public class ProjectMiner extends Miner
     {
     } 
     
+
+    private void handleSetPaths(DataElement project, DataElement includePath, 
+				DataElement externalSource, DataElement libraries, DataElement status)
+    {
+	DataElement propertiesRoot = null; 
+	ArrayList properties = project.getAssociated(getLocalizedString("project.properties"));
+	if (properties != null && properties.size() > 0)
+	    {
+		propertiesRoot = (DataElement)properties.get(0);
+	    }
+	else
+	    {
+		// create properties root
+		propertiesRoot = _dataStore.createObject(null, getLocalizedString("project.Properties_Root"), "Project Properties");
+		_dataStore.createReference(project, propertiesRoot, getLocalizedString("project.properties"));
+	    }
+	
+	// find old path properties
+	DataElement oldIncludePath = _dataStore.find(propertiesRoot, DE.A_NAME, "Include Path", 1);
+	DataElement oldExternalSource = _dataStore.find(propertiesRoot, DE.A_NAME, "External Source", 1);
+	DataElement oldLibraries = _dataStore.find(propertiesRoot, DE.A_NAME, "Libraries", 1);
+
+       	_dataStore.deleteObjects(propertiesRoot);
+	propertiesRoot.addNestedData(includePath, false);
+	propertiesRoot.addNestedData(externalSource, false);
+	propertiesRoot.addNestedData(libraries, false);
+	
+	_dataStore.refresh(propertiesRoot);
+    }
     
     public ResourceBundle getResourceBundle()  
     {

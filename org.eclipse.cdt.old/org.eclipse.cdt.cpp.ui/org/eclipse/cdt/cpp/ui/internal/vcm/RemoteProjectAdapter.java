@@ -21,22 +21,24 @@ import org.eclipse.cdt.dstore.ui.resource.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 
-public class RemoteProjectAdapter extends ResourceElement
+public class RemoteProjectAdapter //extends ResourceElement
 {
     private PlatformVCMProvider _provider;
     static private RemoteProjectAdapter _instance;
-
-  public RemoteProjectAdapter(DataElement root)
+    
+  public RemoteProjectAdapter()
   {
-    super(root, null, null);    
-
     _provider = PlatformVCMProvider.getInstance();
-
     _instance = this;
   }
 
     static public RemoteProjectAdapter getInstance()
     {
+	if (_instance == null)
+	    {
+		new RemoteProjectAdapter();
+	    }
+
 	return _instance;
     }  
 

@@ -23,7 +23,7 @@ public class ExternalSourceControl extends PathControl
 {
     public ExternalSourceControl(Composite cnr, int style)
     {
-	super(cnr, style, "Parsed Source");
+	super(cnr, style, "External Source");
     }
 	
     public void handleEvent(Event e)

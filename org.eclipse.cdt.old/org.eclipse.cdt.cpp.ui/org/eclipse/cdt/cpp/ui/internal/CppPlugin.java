@@ -282,7 +282,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 			_interface.initializeProject(project);		
 		    }
 	    }
-	RemoteProjectAdapter adapter = new RemoteProjectAdapter(dataStore.getRoot());
+	RemoteProjectAdapter adapter = new RemoteProjectAdapter();
 	adapter.setChildren(rmtProjects);	
     }
 

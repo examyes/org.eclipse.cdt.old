@@ -37,7 +37,6 @@ public class MonitorStatusThread extends Handler
 	public void handle()
 	{	
 	    String statusValue = _status.getName();
-	    _status.getDataStore().trace("monitor status = " + _status.getId() + " " + _status.getName());
 	    if (_timesHandled > _threshold)
 		{
 		    if ((_project == null) ||  (!_project.isOpen()))

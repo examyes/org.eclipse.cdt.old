@@ -55,7 +55,6 @@ public class OpenPropertiesAction extends CustomAction
 
     public void run()
     {
-	PropertyPageManager pageManager = new PropertyPageManager();
 	String title = "";//$NON-NLS-1$
 
 	// get selection
@@ -65,6 +64,8 @@ public class OpenPropertiesAction extends CustomAction
 	if (resource != null)
 	    {
 		Shell shell = api.getDummyShell();
+
+		PropertyPageManager pageManager = new PropertyPageManager();
 		
 		// load pages for the selection
 		// fill the manager with contributions from the matching contributors
@@ -88,12 +89,12 @@ public class OpenPropertiesAction extends CustomAction
 		    }
 		
 		
-		
 		PropertyDialog propertyDialog = new PropertyDialog(shell, pageManager, new StructuredSelection(resource)); 
 		propertyDialog.create();
 		propertyDialog.getShell().setText(title);
-		WorkbenchHelp.setHelp(propertyDialog.getShell(), new Object[]{IHelpContextIds.PROPERTY_DIALOG});
+		WorkbenchHelp.setHelp(propertyDialog.getShell(), IHelpContextIds.PROPERTY_DIALOG);
 		propertyDialog.open();
+
 	    }
 	else
 	    {
