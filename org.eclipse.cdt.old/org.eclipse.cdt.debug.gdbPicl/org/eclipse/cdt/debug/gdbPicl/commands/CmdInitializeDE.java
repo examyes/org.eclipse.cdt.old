@@ -119,32 +119,14 @@ public class CmdInitializeDE extends Command
 // ***************************************************************************
       _EPDCSession._repInfo = new ERepTypesNumGet();
 
-      short[] reps1 = { Gdb.REPINDEX_UNICODE, Gdb.REPINDEX_DECIMAL,
-                        Gdb.REPINDEX_HEXADECIMAL, Gdb.REPINDEX_ASCII };
-
+      short[] reps = { 	Gdb.REPINDEX_DEFAULT, 
+      						Gdb.REPINDEX_DECIMAL,
+      						Gdb.REPINDEX_HEXADECIMAL,
+      						Gdb.REPINDEX_OCTAL,
+      						Gdb.REPINDEX_BINARY};
       _EPDCSession._repInfo.addTypesAndReps(
-         new ERepTypesAndRepsGetNext(Gdb.TYPEINDEX_CHARACTER,
-           _debugSession.getResourceString("TYPENAME_CHARACTER_TEXT"),
-               Gdb.REPINDEX_ASCII,reps1));
-
-      short[] reps2 = { Gdb.REPINDEX_IEEEFLOAT, Gdb.REPINDEX_FLOATINGPOINT };
-
-      _EPDCSession._repInfo.addTypesAndReps(
-         new ERepTypesAndRepsGetNext(Gdb.TYPEINDEX_FLOAT,
-           _debugSession.getResourceString("TYPENAME_FLOAT_TEXT")
-               ,Gdb.REPINDEX_FLOATINGPOINT,reps2));
-
-      short[] reps3 = { Gdb.REPINDEX_IEEEFLOAT, Gdb.REPINDEX_FLOATINGPOINT };
-      _EPDCSession._repInfo.addTypesAndReps(
-         new ERepTypesAndRepsGetNext(Gdb.TYPEINDEX_DOUBLE,
-           _debugSession.getResourceString("TYPENAME_DOUBLE_TEXT"),
-               Gdb.REPINDEX_FLOATINGPOINT,reps3));
-
-      short[] reps4 = { Gdb.REPINDEX_DECIMAL, Gdb.REPINDEX_HEXADECIMAL};
-      _EPDCSession._repInfo.addTypesAndReps(
-         new ERepTypesAndRepsGetNext(Gdb.TYPEINDEX_INTEGER,
-           _debugSession.getResourceString("TYPENAME_INTEGER_TEXT"),
-               Gdb.REPINDEX_DECIMAL,reps4));
+         new ERepTypesAndRepsGetNext(Gdb.TYPEINDEX_DEFAULT, "Default_Type",
+               Gdb.REPINDEX_DEFAULT,reps));
 
       // Should also add the following types some time in the future
       // "Class Reference"
@@ -155,17 +137,13 @@ public class CmdInitializeDE extends Command
 //    Data representations.
 // ***************************************************************************
 
-      _repNames = new String[10];
+      _repNames = new String[6];
 
-      _repNames[Gdb.REPINDEX_DECIMAL]       =_debugSession.getResourceString("REPNAME_DECIMAL_TEXT");
-      _repNames[Gdb.REPINDEX_HEXADECIMAL]   =_debugSession.getResourceString("REPNAME_HEXADECIMAL_TEXT");
-      _repNames[Gdb.REPINDEX_BOOLEAN]       =_debugSession.getResourceString("REPNAME_BOOLEAN_TEXT");
-      _repNames[Gdb.REPINDEX_ASCII]         =_debugSession.getResourceString("REPNAME_ASCII_TEXT");
-      _repNames[Gdb.REPINDEX_UNICODE]       =_debugSession.getResourceString("REPNAME_UNICODE_TEXT");
-      _repNames[Gdb.REPINDEX_STRING]        =_debugSession.getResourceString("REPNAME_STRING_TEXT");
-      _repNames[Gdb.REPINDEX_FLOATINGPOINT] =_debugSession.getResourceString("REPNAME_FLOATINGPOINT_TEXT");
-      _repNames[Gdb.REPINDEX_ARRAY]         =_debugSession.getResourceString("REPNAME_ARRAY_TEXT");
-      _repNames[Gdb.REPINDEX_IEEEFLOAT]     =_debugSession.getResourceString("REPNAME_IEEEFLOAT_TEXT");
+      _repNames[Gdb.REPINDEX_DEFAULT]       ="Default";
+      _repNames[Gdb.REPINDEX_DECIMAL]       ="Decimal";
+      _repNames[Gdb.REPINDEX_HEXADECIMAL]   ="Hex";
+      _repNames[Gdb.REPINDEX_OCTAL]         ="Octal";
+      _repNames[Gdb.REPINDEX_BINARY]        ="Binary";
 
       _EPDCSession._languageInfo = new ERepGetLanguages[1];
       _EPDCSession._languageInfo[0] =

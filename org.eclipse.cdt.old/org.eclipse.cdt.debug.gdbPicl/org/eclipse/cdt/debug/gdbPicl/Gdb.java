@@ -687,36 +687,18 @@ public class Gdb
 // ***************************************************************************
 //  Type Indices
 // ***************************************************************************
-    public static final int TYPEINDEX_CHARACTER = 0;
-    public static final int TYPEINDEX_FLOAT     = 1;
-    public static final int TYPEINDEX_DOUBLE    = 2;
-    public static final int TYPEINDEX_INTEGER   = 3;
+
+    public static final int TYPEINDEX_DEFAULT   = 0;
 
 // ***************************************************************************
 //  Representation Indices
 // ***************************************************************************
-    public static final short REPINDEX_DECIMAL_0       = 0;
-    public static final short REPINDEX_HEXADECIMAL_0   = 1;
-    public static final short REPINDEX_BOOLEAN_0       = 2;
-    public static final short REPINDEX_ASCII_0         = 3;
-    public static final short REPINDEX_UNICODE_0       = 4;
-    public static final short REPINDEX_STRING_0        = 5;
-    public static final short REPINDEX_FLOATINGPOINT_0 = 6;
-    public static final short REPINDEX_ARRAY_0         = 7;
-    public static final short REPINDEX_IEEEFLOAT_0     = 8;
 
-// ***************************************************************************
-//  Representation Indices
-// ***************************************************************************
-    public static final short REPINDEX_DECIMAL       = 1;
-    public static final short REPINDEX_HEXADECIMAL   = 2;
-    public static final short REPINDEX_BOOLEAN       = 3;
-    public static final short REPINDEX_ASCII         = 4;
-    public static final short REPINDEX_UNICODE       = 5;
-    public static final short REPINDEX_STRING        = 6;
-    public static final short REPINDEX_FLOATINGPOINT = 7;
-    public static final short REPINDEX_ARRAY         = 8;
-    public static final short REPINDEX_IEEEFLOAT     = 9;
+    public static final short REPINDEX_DEFAULT       = 1;
+    public static final short REPINDEX_DECIMAL   	= 2;
+    public static final short REPINDEX_HEXADECIMAL   = 3;
+    public static final short REPINDEX_OCTAL         = 4;
+    public static final short REPINDEX_BINARY        = 5;
 
 // ***************************************************************************
 // Miscellaneous Constants

@@ -116,6 +116,8 @@ public class GdbArrayVariable extends GdbVariable {
 	 * @see GdbVariable#setRepresentation(int, int)
 	 */
 	public void setRepresentation(int nodeID, int rep) {
+		GdbVariable var = getNode(nodeID);
+		var.setRepresentation(nodeID, rep);
 	}
 	
 	

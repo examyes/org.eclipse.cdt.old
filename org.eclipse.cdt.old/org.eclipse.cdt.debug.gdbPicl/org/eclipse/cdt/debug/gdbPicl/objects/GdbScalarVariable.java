@@ -24,24 +24,8 @@ class GdbScalarVariable extends GdbVariable
    {   	
      super(debugSession, name, type, nodeID);
       
-      int typ = Gdb.TYPEINDEX_INTEGER;
-           if(type.equals("float"))   typ = Gdb.TYPEINDEX_FLOAT;
-      else if(type.equals("double"))  typ = Gdb.TYPEINDEX_DOUBLE;
-      else if(type.equals("char"))    typ = Gdb.TYPEINDEX_CHARACTER;
-      else if(type.equals("int"))     typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.equals("short"))   typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.equals("long"))    typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.startsWith("float *")) typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.startsWith("double *"))typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.startsWith("char *"))  typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.startsWith("int "))   typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.startsWith("long "))  typ = Gdb.TYPEINDEX_INTEGER;
-      else if(type.startsWith("short ")) typ = Gdb.TYPEINDEX_INTEGER;
-      else
-      {
-         if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(2,"GdbScalarVariable ctor unknown type="+type+" defaultRepresentation=int");
-      }
+      int typ = Gdb.TYPEINDEX_DEFAULT;
+      
       _rep     = _debugEngine.getSession()._repInfo.defaultRepresentation(typ);
       //_intVar  = intVar;
       _value   = value;
@@ -176,46 +160,32 @@ class GdbScalarVariable extends GdbVariable
    EStdScalarItem getScalarItem()
    {
 
-//      short[] scalarReps = 
-//         _debugEngine.getSession()._repInfo.repsForType(Gdb.TYPEINDEX_INTEGER);
-      short[] scalarReps = new short[0];
-      if(_debugEngine==null)
-      {
-		  if (Gdb.traceLogger.ERR) 
-              Gdb.traceLogger.err(1,"### GdbScalarVariable.getScalarItem _debugEngine==NULL" );
-          return null;
-      }
-      EPDC_EngineSession epdcSession = _debugEngine.getSession();
-      if(epdcSession==null)
-      {
-		  if (Gdb.traceLogger.ERR) 
-              Gdb.traceLogger.err(1,"### GdbScalarVariable.getScalarItem epdcSession==NULL" );
-      }else
-      {
-         ERepTypesNumGet typesNum = epdcSession._repInfo;
-         if(typesNum==null)
-         {
-		  if (Gdb.traceLogger.ERR) 
-              Gdb.traceLogger.err(1,"### GdbScalarVariable.getScalarItem typesNum==NULL" );
-         }else
-         {
-            scalarReps = typesNum.repsForType(Gdb.TYPEINDEX_INTEGER);
-         }
-      }
+      short[] scalarReps = 
+         _debugEngine.getSession()._repInfo.repsForType(Gdb.TYPEINDEX_DEFAULT);
+
       String scalarValue = _value; //null;
-/*
-      // if not in scope return an EStdScalarItem object saying so
-      if (!inScope())
-         return new EStdScalarItem(_name, "int",
-            _debugEngine.getResourceString("NOT_ALLOCATED_MSG"),
-               scalarReps, (short)(_rep+1));
-      if (scalarReps[_rep] == Gdb.REPINDEX_DECIMAL)
-         scalarValue = Integer.toString(_value);
-      else if (scalarReps[_rep] == Gdb.REPINDEX_HEXADECIMAL)
-         scalarValue = getHexString();
-      else
-         scalarValue = _debugEngine.getResourceString("REPNAME_UNKNOWN_TEXT");
-*/
+      
+      // retrieve value with specified representation
+      if (_rep+1 != Gdb.REPINDEX_DEFAULT)
+      {
+      	String name = _fullName;
+      	
+      	if (name.equals(""))
+      		name = _name;
+		String cmd = "print" + _repArgument[_rep] + name;
+		boolean ok = ((GdbDebugSession)_debugSession).executeGdbCommand(cmd);
+
+		if (ok)
+		{
+			String[] lines = ((GdbDebugSession)_debugSession).getTextResponseLines();
+			
+			if (lines.length > 1)
+			{
+				scalarValue = lines[1];
+			}
+		}
+      }
+      
 
       return new EStdScalarItem(_name, _type+PAD, scalarValue, scalarReps, (short)(_rep+1));
    }
@@ -233,4 +203,8 @@ class GdbScalarVariable extends GdbVariable
    protected String   _value;
    protected String   PAD = "  ";
    // data members
+ 
+ 	// gdb printing argument:  default, decimal, hex, octal, binary  
+   private static final String _repArgument[] = {" ", " /d ", " /x ", " /o ", " /t "};
+   
 }
