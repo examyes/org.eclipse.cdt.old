@@ -89,96 +89,82 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 			_autoconfControl.setGlobalSettingsSelection(true);
 			_autoconfControl.enableLocalActions(false);
 			
-	//	}
-		// if global setting is not empty
-		// check its value - if yes then use the global settings
-	//	else
-//		{
+			// get the configure settings from the global setup and apply it
+			propertyList = plugin.readProperty(configureDialogKey);
+			// apply Global Settings
+			// 1 - configure dialog
+			applyConfigureDialogSettings(propertyList);
 			
-//			if(globalSettingsKeyProp.get(0).equals("Yes"))
-//			{
-				_autoconfControl.setGlobalSettingsSelection(true);
-				_autoconfControl.enableLocalActions(false);
+			// get the create configure settings from the global setup and apply it
+			propertyList = plugin.readProperty(createDialogKey);
+			// apply Global Settings
+			// 2 - create configure dialog
+			applyCreateConfigureDialogSettings(propertyList);				
+			
+			// get the run configure settings from the global setup and apply it
+			propertyList = plugin.readProperty(runDialogKey);
+			// apply Global Settings
+			// 3 - run configure dialog
+			applyRunConfigureDialogSettings(propertyList);			
+			
+			// get the update all settings from the global setup and apply it
+			propertyList = plugin.readProperty(updateAllDialogKey);
+			// apply Global Settings
+			// 4 - update all dialog
+			applyUpdateAllDialogSettings(propertyList);			
 				
-				// get the configure settings from the global setup and apply it
-				propertyList = plugin.readProperty(configureDialogKey);
-				// apply Global Settings
-				// 1 - configure dialog
-				applyConfigureDialogSettings(propertyList);
-				
-				// get the create configure settings from the global setup and apply it
-				propertyList = plugin.readProperty(createDialogKey);
-				// apply Global Settings
-				// 2 - create configure dialog
-				applyCreateConfigureDialogSettings(propertyList);				
-				
-				// get the run configure settings from the global setup and apply it
-				propertyList = plugin.readProperty(runDialogKey);
-				// apply Global Settings
-				// 3 - run configure dialog
-				applyRunConfigureDialogSettings(propertyList);			
-				
-				// get the update all settings from the global setup and apply it
-				propertyList = plugin.readProperty(updateAllDialogKey);
-				// apply Global Settings
-				// 4 - update all dialog
-				applyUpdateAllDialogSettings(propertyList);			
-				
-				// get the update configure.in settings from the global setup and apply it
-				propertyList = plugin.readProperty(updateConfigureInKey);
-				// apply Global Settings
-				// 5 - update configure.in dialog
-				applyUpdateConfigureInDialogSettings(propertyList);			
-				
-				// get update Makefile.am settings from the global setup and apply it
-				propertyList = plugin.readProperty(updateMakefileAmKey);
-				// apply Global Settings
-				// 6 - update Makefile.am dialog
-				applyUpdateMakefileAmDialogSettings(propertyList);			
-				
-			}
-			else // if no then use local settings
-			{
-				_autoconfControl.setGlobalSettingsSelection(false); 
-				_autoconfControl.enableLocalActions(true);
-
+			// get the update configure.in settings from the global setup and apply it
+			propertyList = plugin.readProperty(updateConfigureInKey);
+			// apply Global Settings
+			// 5 - update configure.in dialog
+			applyUpdateConfigureInDialogSettings(propertyList);			
+			
+			// get update Makefile.am settings from the global setup and apply it
+			propertyList = plugin.readProperty(updateMakefileAmKey);
+			// apply Global Settings
+			// 6 - update Makefile.am dialog
+			applyUpdateMakefileAmDialogSettings(propertyList);			
+			
+		}
+		else // if no then use local settings
+		{
+			_autoconfControl.setGlobalSettingsSelection(false); 
+			_autoconfControl.enableLocalActions(true);
 				propertyList = plugin.readProperty(project,configureDialogKey);
-				// apply local Settings
-				// 1 - configure dialog
-				applyConfigureDialogSettings(propertyList);
-				
-				// get the create configure settings from the global setup and apply it
-				propertyList = plugin.readProperty(project,createDialogKey);
-				// apply Global Settings
-				// 2 - create configure dialog
-				applyCreateConfigureDialogSettings(propertyList);				
-				
-				// get the run configure settings from the global setup and apply it
-				propertyList = plugin.readProperty(project,runDialogKey);
-				// apply Global Settings
-				// 3 - run configure dialog
-				applyRunConfigureDialogSettings(propertyList);			
-				
-				// get the update all settings from the global setup and apply it
-				propertyList = plugin.readProperty(project,updateAllDialogKey);
-				// apply Global Settings
-				// 4 - update all dialog
-				applyUpdateAllDialogSettings(propertyList);			
-				
-				// get the update configure.in settings from the global setup and apply it
-				propertyList = plugin.readProperty(project,updateConfigureInKey);
-				// apply Global Settings
-				// 5 - update configure.in dialog
-				applyUpdateConfigureInDialogSettings(propertyList);			
-				
-				// get update Makefile.am settings from the global setup and apply it
-				propertyList = plugin.readProperty(project,updateMakefileAmKey);
-				// apply Global Settings
-				// 6 - update Makefile.am dialog
-				applyUpdateMakefileAmDialogSettings(propertyList);			
-			}
-	//	}
-		
+			// apply local Settings
+			// 1 - configure dialog
+			applyConfigureDialogSettings(propertyList);
+			
+			// get the create configure settings from the global setup and apply it
+			propertyList = plugin.readProperty(project,createDialogKey);
+			// apply Global Settings
+			// 2 - create configure dialog
+			applyCreateConfigureDialogSettings(propertyList);				
+			
+			// get the run configure settings from the global setup and apply it
+			propertyList = plugin.readProperty(project,runDialogKey);
+			// apply Global Settings
+			// 3 - run configure dialog
+			applyRunConfigureDialogSettings(propertyList);			
+			
+			// get the update all settings from the global setup and apply it
+			propertyList = plugin.readProperty(project,updateAllDialogKey);
+			// apply Global Settings
+			// 4 - update all dialog
+			applyUpdateAllDialogSettings(propertyList);			
+			
+			// get the update configure.in settings from the global setup and apply it
+			propertyList = plugin.readProperty(project,updateConfigureInKey);
+			// apply Global Settings
+			// 5 - update configure.in dialog
+			applyUpdateConfigureInDialogSettings(propertyList);			
+			
+			// get update Makefile.am settings from the global setup and apply it
+			propertyList = plugin.readProperty(project,updateMakefileAmKey);
+			// apply Global Settings
+			// 6 - update Makefile.am dialog
+			applyUpdateMakefileAmDialogSettings(propertyList);			
+		}	
 	}
 	protected void performDefaults()
 	{

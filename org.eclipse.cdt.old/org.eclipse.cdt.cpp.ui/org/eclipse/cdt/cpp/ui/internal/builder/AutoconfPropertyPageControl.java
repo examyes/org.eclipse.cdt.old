@@ -53,50 +53,107 @@ public class AutoconfPropertyPageControl extends Composite
     private Button _updateConfigureInButton;
     private Button _updateMakefileAmButton;
     
+    private Group _configureGroup;
+    private Group _advancedGroup;
+    private Group _advancedConfigureGroup;
+    
     protected Button globalSettingsButton;
     
     // labels
     private Label configureDialogSetup;
     private Label advancedSetup;
     
+    private CppPlugin _plugin;
 
     public AutoconfPropertyPageControl(Composite cnr, int style)
     {
 		super(cnr, style);
 		
-		configureDialogSetup = new Label(this,SWT.LEFT);
-    	configureDialogSetup.setText("Autoconf actions message dialog behaviour setup:");
-
-		_showConfigureDialogtButton = new Button(this, SWT.CHECK);
-		_showConfigureDialogtButton.setText("Show configure dialog before execution");
+		_plugin = CppPlugin.getDefault();
 		
-		new Label(this,SWT.NONE);
-	   	advancedSetup = new Label(this,SWT.LEFT);
-    	advancedSetup.setText("Advanced actions' message dialog behaviour setup:");
-    	
-		_updateAllButton = new Button(this, SWT.CHECK);
+		GridLayout layout = new GridLayout();
+	   	layout.numColumns = 1;
+	   	
+	   	
+		// group #1 - configure group
+		
+		_configureGroup = new Group(this,SWT.NONE);
+		_configureGroup.setText("configure dialog behaviour setup:");
+		GridLayout g1Layout = new GridLayout();
+	   	g1Layout.numColumns = 1;
+	   	
+		_configureGroup.setLayout(g1Layout);
+		_configureGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		//_configureGroup.setText(_plugin.getLocalizedString("AutoconfPoperties.Configure_Group_Title"));
+		
+		Composite configureComp = new Composite(_configureGroup,SWT.NONE);
+		
+		GridLayout c1Layout = new GridLayout();
+	   	c1Layout.numColumns = 1;
+		configureComp.setLayout(c1Layout);
+
+
+		_showConfigureDialogtButton = new Button(configureComp, SWT.CHECK);
+		_showConfigureDialogtButton.setText("Show dialog before configure is executed");
+		
+	   	
+	   	// group #2 - advanced autoconf files group
+	   	
+	   	_advancedGroup = new Group(this,SWT.NONE);
+	   	//_advancedGroup.setText(_plugin.getLocalizedString("AutoconfPoperties.Advanced_Group_Title"));
+		_advancedGroup.setText("Advanced actions' message dialog setup:");
+		
+		GridLayout g2Layout = new GridLayout();
+	   	g2Layout.numColumns = 1;
+		
+		_advancedGroup.setLayout(g2Layout);
+		_advancedGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+	   	   
+	   	Composite advancedComp = new Composite(_advancedGroup,SWT.NONE);
+	   	GridLayout c2Layout = new GridLayout();
+	   	c2Layout.numColumns = 1;
+	   	advancedComp.setLayout(c2Layout);
+	   	advancedComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+	   	
+		_updateAllButton = new Button(advancedComp, SWT.CHECK);
 		_updateAllButton.setText("Show \"Generate/Update all automake files\" dialog before execution");
 	
-		_updateConfigureInButton = new Button(this, SWT.CHECK);
+		_updateConfigureInButton = new Button(advancedComp, SWT.CHECK);
 		_updateConfigureInButton.setText("Show \"Update configure.in\" dialog before execution");
 
-		_updateMakefileAmButton = new Button(this, SWT.CHECK);
+		_updateMakefileAmButton = new Button(advancedComp, SWT.CHECK);
 		_updateMakefileAmButton.setText("Show \"Update Makefile.am\" dialog before execution");
 		
-		_showCreateDialogtButton = new Button(this, SWT.CHECK);
+		// group #3 - advanced configure group
+		
+		_advancedConfigureGroup = new Group(this,SWT.NONE);
+		_advancedConfigureGroup.setText("Advanced configure Actions:");
+		
+		GridLayout g3Layout = new GridLayout();
+	   	g3Layout.numColumns = 1;
+		
+		
+		_advancedConfigureGroup.setLayout(g3Layout);
+		_advancedConfigureGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		
+		Composite advConfComp = new Composite(_advancedConfigureGroup,SWT.NONE);
+		GridLayout c3Layout = new GridLayout();
+	   	c3Layout.numColumns = 1;
+		advConfComp.setLayout(c3Layout);
+		advConfComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		
+		_showCreateDialogtButton = new Button(advConfComp, SWT.CHECK);
 		_showCreateDialogtButton.setText("Show \"generate configure\" dialog before execution");
 		
-		_showRunDialogtButton = new Button(this, SWT.CHECK);
+		_showRunDialogtButton = new Button(advConfComp, SWT.CHECK);
 		_showRunDialogtButton.setText("Show \"run configure\" dialog before execution");
 
-		
 		new Label(this,SWT.LEFT);
 		new Label(this,SWT.LEFT);
 		globalSettingsButton = new Button(this, SWT.CHECK);
 		globalSettingsButton.setText("Apply preference's page settings");
-		
 
-		setLayout(new GridLayout());
+		setLayout(layout);
     }
 
 	// gets
@@ -174,8 +231,10 @@ public class AutoconfPropertyPageControl extends Composite
     
     public void enableLocalActions(boolean flg)
     {
-    	this.advancedSetup.setEnabled(flg);
-    	this.configureDialogSetup.setEnabled(flg);
+
+    	this._configureGroup.setEnabled(flg);
+    	this._advancedGroup.setEnabled(flg);
+    	this._advancedConfigureGroup.setEnabled(flg);
     	//////////////
     	this._showConfigureDialogtButton.setEnabled(flg);
     	this._showCreateDialogtButton.setEnabled(flg);
