@@ -9,7 +9,7 @@ public class ProjectStructureManager {
 
 	File project;
 	private Vector files = new Vector(5,5);
-	private Vector subdirs = new Vector(5,5);
+	private Vector subdirs = new Vector(5,5); 
 	private Vector subdirs_depth = new Vector(5,5);
 	int depth;
 	

@@ -20,7 +20,7 @@ public class DebugMiner extends Miner
     public void extendSchema(DataElement schemaRoot)
     {
 	DataElement dirD      = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
-	DataElement cmdD      = createCommandDescriptor(dirD, "Debug", "C_DEBUG");
+	DataElement cmdD      = createCommandDescriptor(dirD, "Debug", "C_DEBUG", false);
     }
     
     public DataElement handleCommand(DataElement theCommand)
