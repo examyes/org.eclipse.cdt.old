@@ -60,7 +60,6 @@ public class ConnectionManager
 
           Connection con = new Connection(name, host, port, "root",  dir, dialog.isLocal(), dialog.isUsingDaemon(), _input);
           _connections.add(con);
-          _input.getDataStore().refresh(_input);
         }
   }
   

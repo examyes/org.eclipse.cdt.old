@@ -171,7 +171,7 @@ public class Connection implements IDomainListener
 		    monitor.worked(10);		    
 		    monitor.subTask(_plugin.getLocalizedString("connection.Connected_to") + " "  + host);
 		    dataStore.getDomainNotifier().enable(true);
-
+		    _element.setDepth(2);
 		}
 	    
 	    return result;
@@ -208,7 +208,7 @@ public class Connection implements IDomainListener
     public Connection(String name, ArrayList args, DataElement parent)
     {
         _name = name;
-        _type = (String)args.get(0);
+	_type = (String)args.get(0);
         _host = (String)args.get(1);
         _port = (String)args.get(2);
         _dir  = (String)args.get(3);
@@ -241,8 +241,11 @@ public class Connection implements IDomainListener
 		_isUsingDaemon = true;
 	    }
 
-        _element = parent.getDataStore().createObject(parent, _type, _name, _dir);
-        parent.getDataStore().refresh(parent);
+	
+	DataElement externalRoot= parent.getDataStore().getExternalRoot();
+	_element = externalRoot.getDataStore().createObject(externalRoot, _type, _name, _dir);	
+	_element.setDepth(1);
+	externalRoot.getDataStore().refresh(externalRoot);
 	_plugin = DataStoreUIPlugin.getDefault();
     }        
     
@@ -268,8 +271,10 @@ public class Connection implements IDomainListener
         setIsLocal(isLocal);
 	setIsUsingDaemon(isUsingDaemon);
 	
-        _element = parent.getDataStore().createObject(parent, _type, _name, _dir);
-        parent.getDataStore().update(parent);
+	DataElement externalRoot = parent.getDataStore().getExternalRoot();
+        _element = parent.getDataStore().createObject(externalRoot, _type, _name, _dir);
+	_element.setDepth(1);
+        parent.getDataStore().refresh(externalRoot);
 	_plugin = DataStoreUIPlugin.getDefault();
     }
     
@@ -293,6 +298,7 @@ public class Connection implements IDomainListener
         _type     = element.getAttribute(DE.A_TYPE);
         _dir      = element.getAttribute(DE.A_SOURCE);
 	_plugin = DataStoreUIPlugin.getDefault();
+	_element.setDepth(1);
     }
         
     public void setHost(String host)
@@ -379,7 +385,10 @@ public class Connection implements IDomainListener
 	    {
 		return _client.getDataStore();    
 	    }
-	return null;
+	else
+	    {
+		return _parent.getDataStore();
+	    }
     }
 
     public boolean isUsingDaemon()
