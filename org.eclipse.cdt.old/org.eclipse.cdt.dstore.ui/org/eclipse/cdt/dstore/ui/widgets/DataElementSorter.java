@@ -17,12 +17,32 @@ import java.text.Collator;
 
 public class DataElementSorter extends ViewerSorter
 {
-  private String _property;
+  private int _property;
 
     public DataElementSorter(String property)
     {
 	super();
-	_property = property;  
+	
+	 if (property.equals(DE.P_NAME))
+	 {
+	 	_property = DE.A_NAME;
+	 }
+	 else if (property.equals(DE.P_VALUE))
+	 {
+	 	_property = DE.A_VALUE;
+	 }	
+	 else if (property.equals(DE.P_TYPE))
+	 {
+	 	_property = DE.A_TYPE;
+	 }
+	 else if (property.equals(DE.P_SOURCE))
+	 {
+	 	_property = DE.A_SOURCE;
+	 }
+	 else
+	 {
+		_property = DE.A_NAME;  
+	 }
     }
     
     public boolean isSorterProperty(java.lang.Object element, java.lang.Object property)
@@ -39,9 +59,9 @@ public class DataElementSorter extends ViewerSorter
   {
       DataElement element1 = (DataElement)e1;
       DataElement element2 = (DataElement)e2;
-    
-      String name1 = (String)element1.getElementProperty(_property);    
-      String name2 = (String)element2.getElementProperty(_property);
+     	
+      String name1 = element1.getAttribute(_property);    
+      String name2 = element2.getAttribute(_property);
       
       try
 	  {

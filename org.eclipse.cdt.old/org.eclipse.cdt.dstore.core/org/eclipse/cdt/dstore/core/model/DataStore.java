@@ -1734,7 +1734,8 @@ public DataElement command(DataElement commandDescriptor,
 	      
               if (!nestedObject.isReference() && (compareName != null))
               {
-                if (name.compareToIgnoreCase(compareName) == 0)
+              
+                if (name.compareTo(compareName) == 0)
                 {
                   return nestedObject;		
                 }

@@ -91,6 +91,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    return _property;
 	}
 	
+	
 	public DataElementSorter getSorter()
 	{
 	    return _sorter;
