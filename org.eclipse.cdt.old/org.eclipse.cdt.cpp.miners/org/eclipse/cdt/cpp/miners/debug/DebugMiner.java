@@ -22,7 +22,7 @@ public class DebugMiner extends Miner
       String ps = System.getProperty("path.separator");
       String fs = "/";
       _debugJarPath =       gdbPiclPath + fs + "epdc.jar";
-      _debugJarPath += ps + gdbPiclPath + fs + "debug_gdbPicl.jar";
+      _debugJarPath += ps + gdbPiclPath + fs + "gdbPicl.jar";
       _debugJarPath += ps + gdbPiclPath;
        _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdbPicl.Gdb ";
     }
