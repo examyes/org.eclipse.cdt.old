@@ -79,8 +79,12 @@ class ParserThread extends Thread {
 	  parser.notifyAll();
 	}
       }
-    } catch (IOException e) {
-	e.printStackTrace();
+    } catch (IOException e) { 
+	/* A write to the pipeOut by the HTMLParser will throw an IOException if the 
+	   lucene.index.DocumentWriter closes the pipeIn when more than 
+	   lucene.index.IndexWriter.maxFieldLength terms have already been indexed 
+	   for a file. */
+	//e.printStackTrace();
     }
   }
 }
