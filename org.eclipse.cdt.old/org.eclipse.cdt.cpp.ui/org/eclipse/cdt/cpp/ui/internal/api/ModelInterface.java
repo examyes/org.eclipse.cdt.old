@@ -1225,26 +1225,30 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
 	else
 	    {
+	    	if (root.getType().equals("Workspace") || path.startsWith(root.getSource()))
+	    	{
 	    	ArrayList children = root.getAssociated("contents");
-		for (int i = 0; i < children.size(); i++)
-		    {
-		    	
-			DataElement child = (DataElement)children.get(i);
-			if (child != null && !child.isDeleted())
+			for (int i = 0; i < children.size(); i++)
+		    {		    	
+				DataElement child = (DataElement)children.get(i);
+				if (child != null && !child.isDeleted())
 			    {
-				if (child.getType().equals("file")  ||
-				    child.getType().equals("directory") ||
-				    child.getType().equals("Project")
-				    )
-				    {
-					found = findResourceElement(child, path);
-					if (found != null)
-					    {
-						return found;
+					if (child.getType().equals("file")  ||
+					    child.getType().equals("directory") ||
+					    child.getType().equals("Project")
+					    )
+					    {	
+					   
+								found = findResourceElement(child, path);
+								if (found != null)
+							    {
+									return found;
+							    }
+					 
 					    }
-				    }
 			    }
 		    }
+	    	}
 	    }
 
 	return found;
@@ -1603,17 +1607,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public boolean compareFileNames(String file1, String file2)
     {
-	try
+    	if (file1.equals(file2))
+    	{
+    		return true;	
+    	}
+    	else
+    	{
+		try
 	    {
-		java.io.File f1 = new java.io.File(file1);
-		java.io.File f2 = new java.io.File(file2);
+			java.io.File f1 = new java.io.File(file1);
+			java.io.File f2 = new java.io.File(file2);
 
-		boolean match =  f1.getCanonicalPath().compareTo(f2.getCanonicalPath()) == 0;
-		return match;
+			boolean match =  f1.getAbsolutePath().compareTo(f2.getAbsolutePath()) == 0;
+			return match;
 	    }
-	catch (Exception e)
+		catch (Exception e)
 	    {
 	    }
+    	}
 
 	return false;
     }
