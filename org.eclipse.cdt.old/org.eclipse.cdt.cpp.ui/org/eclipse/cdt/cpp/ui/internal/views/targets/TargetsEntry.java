@@ -3,8 +3,11 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
+ 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.graphics.Image;
@@ -16,39 +19,13 @@ import org.eclipse.jface.util.ListenerList;
 import java.text.Collator;
 
 /**
- * <code>PropertySheetEntry</code> is an implementation of
- * <code>IPropertySheetEntry</code> which uses <code>IPropertySource</code>
- * and <code>IPropertyDescriptor</code> to interact with domain model objects.
- * <p>
- * Every property sheet entry has a single descriptor (except the root entry
- * which has none). This descriptor determines what property
- * of its objects it will display/edit.
- * </p>
- * <p>
- * Entries do not listen for changes in their objects. Since there is no
- * restriction on properties being independent, a change in one property
- * may affect other properties. The value of a parent's property may also
- * change. As a result we are forced to refresh the entire entry tree
- * when a property changes value.
- * </p>
+ 
  */
-/*package*/class TargetsEntry implements IPropertySheetEntry {
+class TargetsEntry implements IPropertySheetEntry {
 
-	/**
-	* The values we are displaying/editing.
-	* These objects repesent the value of one of the
-	* properties of the values of our parent entry.
-	* Except for the root entry where they represent the
-	* input (selected) objects.
-	*/
+
 	protected Object[] values = new Object[0];
 
-	/**
-	 * The value of this entry is defined as the the first object
-	 * in its value array or, if that object is an 
-	 * <code>IPropertySource</code>, the value it returns when sent
-	 * <code>getEditableValue</code>
-	 */
 	private Object editValue;
 
 	protected TargetsEntry parent;
@@ -264,8 +241,8 @@ public IPropertySheetEntry[] getChildEntries() {
 	return childEntries;
 }
 /**
- * Return the description of the property sheet entry.  This
- * description is displayed in the status area of the property sheet.
+ * Return the description of the targets entry.  This
+ * description is displayed in the status area of the targets.
  */
 public String getDescription() {
 	return descriptor.getDescription();
@@ -351,8 +328,7 @@ public Image getImage() {
 	return provider.getImage(editValue);
 }
 /*
- * Return the parent. This can be another <code>PropertySheetEntry</code>
- * or the <code>PropertySheetRoot</code>.
+ * Return the parent. 
  */
 private TargetsEntry getParent() {
 	return parent;
@@ -534,8 +510,7 @@ private void setErrorText(String newErrorText) {
 	fireErrorMessageChanged();
 }
 /**
- * Set the parent of the entry. This can be another <code>PropertySheetEntry</code>
- * or the <code>PropertySheetRoot</code>.
+ * Set the parent of the entry. 
  */
 protected void setParent(TargetsEntry p){
 	parent = p;
@@ -551,14 +526,6 @@ public void setPropertySourceProvider(IPropertySourceProvider provider) {
 }
 /**
  * Set the value for this entry.
- * <p>
- * We set the given value as the value for all our value objects.
- * We then call our parent to update the property we represent
- * with the given value.
- * We then trigger a model refresh.
- * <p>
- *
- * @param newValue the new value
  */
 private void setValue(Object newValue) {
 	// Set the value
@@ -573,15 +540,6 @@ private void setValue(Object newValue) {
 	refreshFromRoot();	
 }
 /** 
- * The <code>PropertySheetEntry</code> implmentation of this
- * method declared on<code>IPropertySheetEntry</code> will
- * obtain an editable value for the given objects and update
- * the child entries.
- * <p>
- * Updating the child entries will typically call this method
- * on the child entries and thus the entire entry tree is updated
- * </p>
- * @param objects the new values for this entry
  */
 public void setValues(Object[] objects) {
 	values = objects;
@@ -608,15 +566,6 @@ public void setValues(Object[] objects) {
 /**
  * The value of the given child entry has changed.
  * Therefore we must set this change into our value objects.
- * <p>
- * We must inform our parent so that it can update its value objects
- * </p>
- * <p>
- * Subclasses may override to set the property value in some
- * custom way.
- * </p>
- *
- * @param the child entry that changed its value
  */
 protected void valueChanged(TargetsEntry child) {
 	for (int i = 0; i < values.length; i++) {

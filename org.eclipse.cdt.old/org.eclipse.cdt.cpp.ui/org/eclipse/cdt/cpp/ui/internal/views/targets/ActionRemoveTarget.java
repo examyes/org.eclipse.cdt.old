@@ -3,7 +3,9 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
@@ -37,7 +39,6 @@ private void removeDescriptor( int x, RootElement root)
 		int index = 0;
 		for(int i =0; i < root.getPropertyDescriptors().length; i++)
 		{
-			// evaluate the remainder of the property descriptor namw
 			int numberExtension = x+root.MAX_TARGETS;
 			if(!((PropertyDescriptor)root.getPropertyDescriptors()[i]).getId().equals("Target"+numberExtension))
 				vec.add(root.getPropertyDescriptors()[index++]);
@@ -69,7 +70,7 @@ private void removeTarget( String key, RootElement root)
 		
 }
 /**
- * Delete the marker selection.
+ * 
  */
 public void run() {
 

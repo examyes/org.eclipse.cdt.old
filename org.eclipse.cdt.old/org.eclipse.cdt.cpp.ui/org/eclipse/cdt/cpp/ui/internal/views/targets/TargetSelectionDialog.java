@@ -3,8 +3,11 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
+ 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
@@ -21,22 +24,6 @@ import org.eclipse.ui.dialogs.ISelectionValidator;
 
 import com.ibm.cpp.ui.internal.*;
 
-/**
- * A standard selection dialog which solicits a container resource from the user.
- * The <code>getResult</code> method returns the selected container resource.
- * <p>
- * This class may be instantiated; it is not intended to be subclassed.
- * </p>
- * <p>
- * Example:
- * <pre>
- * ContainerSelectionDialog dialog =
- *    new ContainerSelectionDialog(getShell(), initialSelection, allowNewContainerName(), msg);
- *	dialog.open();
- *	Object[] result = dialog.getResult();
- * </pre> 	
- * </p>
- */
 public class TargetSelectionDialog extends SelectionDialog {
 	// the widget group;
 	private TargetSelectionGroup group;
@@ -61,20 +48,7 @@ public class TargetSelectionDialog extends SelectionDialog {
 	private CppPlugin pluginInstance = CppPlugin.getPlugin();
 	private String TITLE = "TargetsViewer.Selection_Dialog.Title";
 	private String MESSAGE = "TargetsViewer.Selection_Dialog.Message";
-/**
- * Creates a resource container selection dialog rooted at the given resource.
- * All selections are considered valid. Equivalent to
- * <code>new ContainerSelectionDialog(initialRoot,allowNewContainerName,message,null)</code>.
- *
- * @param parentShell the parent shell
- * @param initialRoot the root resource to populate the resource viewer
- *  with
- * @param allowNewContainerName <code>true</code> to enable the user to type in
- *  a new container name, and <code>false</code> to restrict the user to just
- *  selecting from existing ones
- * @param message the message to be displayed at the top of this dialog, or
- *    <code>null</code> to display a default message
- */
+
 public TargetSelectionDialog(Shell parentShell, IContainer initialRoot, boolean allowNewContainerName, String message) {
 	super(parentShell);
 	setTitle(pluginInstance.getLocalizedString(TITLE));
@@ -86,9 +60,6 @@ public TargetSelectionDialog(Shell parentShell, IContainer initialRoot, boolean 
 	else
 		setMessage(pluginInstance.getLocalizedString(MESSAGE));
 }
-/* (non-Javadoc)
- * Method declared on Dialog.
- */
 protected Control createDialogArea(Composite parent) {
 	// create composite 
 	Composite dialogArea = (Composite)super.createDialogArea(parent);
@@ -124,11 +95,7 @@ protected IContainer getResource()
 {
 	return initialSelection;
 }
-/**
- * The <code>ContainerSelectionDialog</code> implementation of this 
- * <code>Dialog</code> method builds a list of the selected resource containers
- * for later retrieval by the client and closes this dialog.
- */
+
 protected void okPressed() {
 	List chosenContainerPathList = new ArrayList();
 		chosenContainerPathList.add(group.getContainerFullPath());

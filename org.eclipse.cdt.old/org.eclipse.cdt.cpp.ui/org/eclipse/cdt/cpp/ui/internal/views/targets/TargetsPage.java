@@ -1,9 +1,13 @@
 package com.ibm.cpp.ui.internal.views.targets;
 
-/* Licensed Materials - Property of IBM,
+/*
+ * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
+ 
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.cpp.ui.internal.*;
@@ -21,44 +25,12 @@ import org.eclipse.ui.part.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.swt.widgets.*;
 
-/**
- * The standard implementation of property sheet page which presents
- * a table of property names and values obtained from the current selection
- * in the active workbench part.
- * <p>
- * This page obtains the information about what to properties display from 
- * the current selection (which it tracks). 
- * </p>
- * <p>
- * The model for this page is a hierarchy of <code>IPropertySheetEntry</code>.
- * The page may be configured with a custom model by setting the root entry.
- * <p>
- * If no root entry is set then a default model is created which uses the
- * <code>IPropertySource</code> interface to obtain the properties of
- * the current slection. This requires that the selected objects provide an
- * <code>IPropertySource</code> adapter (or implement 
- * <code>IPropertySource</code> directly). This restiction can be overcome
- * by providing this page with an <code>IPropertySourceProvider</code>. If
- * supplied, this provider will be used by the default model to obtain a
- * property source for the current selection 
- * </p>
- * <p>
- * This class may be instantiated; it is not intended to be subclassed.
- * </p>
- *
- * @see IPropertySource
- */
 public class TargetsPage extends Page implements IPropertySheetPage {
 	
 	private TargetsViewer viewer;
 	private IPropertySheetEntry rootEntry;
 	private IPropertySourceProvider provider;
 	
-
-		/**
-	 * Help context id 
-	 * (value <code>"com.ibm.eclipse.ui.property_sheet_page_help_context"</code>).
-	 */
 	public static final String HELP_CONTEXT_TARGETS_PAGE = "com.ibm.eclipse.ui.target_page_help_context";
 
 	protected ActionBuildTarget buildAction;
@@ -79,15 +51,12 @@ public class TargetsPage extends Page implements IPropertySheetPage {
 	private final String HOVER_BUILD_ACTION_KEY = "TargetsViewer.Hover.Build_Target";
 	private final String HOVER_REMOVE_ACTION_KEY = "TargetsViewer.Hover.Remove_Target";
 	private final String HOVER_REMOVE_ALL_ACTION_KEY = "TargetsViewer.Hover.Remove_All_Targets";
-/**
- * Insert the method's description here.
- * Creation date: (3/21/01 10:21:29 AM)
- */
+
 public TargetsPage() {
 	super();
 }
 /**
- * Creates and configures the <code>PropertySheetViewer</code> 
+ * Creates and configures the TargetsViewer 
  * for this page
  **/
 public void createControl(Composite parent) {
@@ -146,9 +115,7 @@ private ImageDescriptor getImageDescriptor(String relativePath) {
 		return null;
 	}
 }
-/*
-* Author: Yasser
-*/
+
 protected int getRootIndex(Object root)  {
 	for(int i = 0; i< targetStore.projectList.size(); i++)
 	{
@@ -160,7 +127,7 @@ protected int getRootIndex(Object root)  {
 	return -1;
 }
 /*
-* Author: Yasser
+
 */
 private Vector getTargetsList(Object root) {
  	return null;
@@ -174,7 +141,6 @@ public TargetsViewer getViewer() {
 	return this.viewer;
 }
 /*
-* Author: Yasser
 */
 private void initTargetsStore(TargetsStore store) {
 	store.projectList.removeAllElements();
@@ -196,22 +162,8 @@ private void initTargetsStore(TargetsStore store) {
 			root.setProprtyDescriptor();
 			target.setParent(root);
 			root.add(target);
-
-			//System.out.println("\n Persisting......"+ savedList.get(z));
 		}
 	}
-
-	// removing project list if the project has been deleted
-/*	if(projects.length==0)
-	{
-		store.projectList.removeAllElements();
-		viewer.setInput(new ArrayList().toArray()); 
-		removeAction.setEnabled(false);
-		buildAction.setEnabled(false);
-		removeAllAction.setEnabled(false);
-		newAction.setEnabled(false);
-		return;
-	}*/
 }
 /**
  * Make action objects.
@@ -219,12 +171,10 @@ private void initTargetsStore(TargetsStore store) {
 private void makeActions() {
 		
 	// new
-
 	newAction.setText(pluginInstance.getLocalizedString(NEW_ACTION_KEY));
 	newAction.setToolTipText(pluginInstance.getLocalizedString(HOVER_NEW_ACTION_KEY));
 	newAction.setImageDescriptor(CppPluginImages.DESC_ELCL_TRG_ADD);
 	newAction.setEnabled(false);
-
 
 	// remove
 
@@ -306,7 +256,7 @@ public void refresh() {
 	viewer.setInput(viewer.getInput());
 }
 /*
-* Author: Yasser
+
 */
 protected boolean rootExists(Object root)  {
 	for(int i = 0; i< targetStore.projectList.size(); i++)
@@ -320,9 +270,6 @@ protected boolean rootExists(Object root)  {
 }
 /**
  * Notify the viewer that selection has changed.
- *
- * @deprecated This method was replaced by selectionChanged(IWorkbenchPart, ISelection)
- * @since 0.016
  */
 public final void selectionChanged(IWorkbenchPart part, ISelection sel) {
 	if(sel!=null && sel instanceof IStructuredSelection)
@@ -359,18 +306,11 @@ public final void selectionChanged(IWorkbenchPart part, ISelection sel) {
 	if (viewer == null)
 		return;
 
-	// change the viewer input since the workbench selection has changed.
-	//if (selection instanceof IStructuredSelection) {
-		//viewer.setInput(((IStructuredSelection)selection).toArray());
-	//}
 	// populate the viewer with existing projects
 	// this code is for populating the viewer with existing targets
 	// to be moved in a separte method
 	
 	updateTargetsStore(targetStore); // new
-
-	//if(navigatorSelection!=null)
-		//newAction.setLastNavigatorSelection(newAction.getCurrentNavigatorSelection()); // needed to set the selectio in the targets wizard
 	
 	if(NavigatorSelection.structuredSelection!=null && 
 		(NavigatorSelection.selection instanceof IProject || NavigatorSelection.selection instanceof IFolder || NavigatorSelection.selection instanceof IFile))
@@ -411,7 +351,6 @@ public void setFocus() {
 	viewer.getControl().setFocus();
 }
 /**
- * Author :	aysser
  * sets the navigator selection fot the tagets view
  */
 public void setNavigatorSelection(ISelection sel) {
@@ -453,7 +392,6 @@ public void setRootEntry(IPropertySheetEntry entry) {
 		viewer.setRootEntry(rootEntry); 
 }
 /*
-* Author: Yasser
 */
 private void updateTargetsStore(TargetsStore oldStore) {
 

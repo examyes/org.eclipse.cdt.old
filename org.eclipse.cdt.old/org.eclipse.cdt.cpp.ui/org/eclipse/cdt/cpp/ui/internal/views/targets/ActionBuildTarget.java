@@ -3,13 +3,14 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.dstore.core.model.*;
-
 import org.eclipse.swt.custom.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
@@ -17,8 +18,6 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.actions.*;
 import org.eclipse.jface.viewers.*;
 import java.util.*;
-
-
 import org.eclipse.swt.widgets.*;
 
 /**
@@ -41,7 +40,7 @@ public class ActionBuildTarget extends ActionTarget
 	page = targetsPage;
   }          
 /**
- * Implementation of method defined on <code>IAction</code>.
+ * 
  */
 public  void run(){
 	

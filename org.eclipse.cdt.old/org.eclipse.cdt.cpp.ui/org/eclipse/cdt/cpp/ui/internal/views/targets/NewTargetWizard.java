@@ -3,7 +3,9 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 
 import com.ibm.cpp.ui.internal.*;
@@ -21,7 +23,7 @@ import org.eclipse.ui.views.navigator.*;
 import org.eclipse.jface.wizard.Wizard;
 
 /**
- *  This is the default folder creation wizard
+ *  This is target creation wizard
  */
 public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements INewWizard {
 	private IWorkbench workbench;
@@ -71,7 +73,6 @@ public void init(IWorkbench aWorkbench,IStructuredSelection currentSelection) {
 	else
 		selection = currentSelection;
 	setDefaultPageImageDescriptor(CppPluginImages.DESC_WIZBAN_NEWTARGET_WIZ);
-	//return this;
 }
 /**
  *	Completes processing of the wizard. If this method returns true,

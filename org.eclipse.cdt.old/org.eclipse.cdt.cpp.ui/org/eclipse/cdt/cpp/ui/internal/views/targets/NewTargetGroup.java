@@ -3,7 +3,9 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
@@ -15,10 +17,7 @@ import org.eclipse.swt.widgets.*;
 import com.ibm.cpp.ui.internal.*;
 
 /**
- * Workbench-level composite for resource and container specification by the user.
- * Services such as field validation are performed by the group.
- * The group can be configured to accept existing resources, or only
- * new resources.
+ *
  */
 public class NewTargetGroup implements Listener {
 	// the client to notify of changes
@@ -48,9 +47,7 @@ public class NewTargetGroup implements Listener {
 	private String PROBLEM_MESSAGE_TARGET_INVOCATION = "TargetsViewer.Container.GroupProblem.Target_Invocation";
 	private String PROBLEM_MESSAGE_TARGET_NAME = "TargetsViewer.Container.GroupProblem.Target_Name";
 /**
- * NewResourceWithContainerGroup constructor comment.
- * @param parent com.ibm.swt.widgets.Composite
- * @param client com.ibm.swt.widgets.Listener
+ *
  */
 public NewTargetGroup(Composite parent,Listener client,String resourceLabelString) {
 	super();
@@ -277,9 +274,7 @@ protected boolean validateFullResourcePath(IPath resourcePath) {
  *
  * @return <code>boolean</code> indicating validity of the resource name
  */
- /**
- * *yasser
- */
+
 protected boolean validateInvocation() {
 	String invocation = invocationNameField.getText();
 

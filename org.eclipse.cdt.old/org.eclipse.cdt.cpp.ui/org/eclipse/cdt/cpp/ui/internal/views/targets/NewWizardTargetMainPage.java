@@ -3,7 +3,9 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 
 import com.ibm.cpp.ui.internal.CppPlugin;
@@ -23,7 +25,7 @@ import org.eclipse.swt.widgets.*;
 import java.util.*;
 
 /**
- *	This is the default folder creation page 1
+ *	This is the Target creation page 
  */
 class NewWizardTargetMainPage extends WizardPage implements Listener {
 	private IStructuredSelection currentSelection;
@@ -70,12 +72,7 @@ public void createControl(Composite parent) {
 	setControl(composite);
 }
 /**
- * Creates a concrete folder resource from a folder handle.  Returns a
- * <code>boolean</code> indicating success.
  *
- * @param folderHandle the folder handle to create a folder resource with
- * @param monitor the progress monitor to show visual progress with
- * @exception com.ibm.eclipse.core.runtime.CoreException
  */
 protected void createFolder(IFolder folderHandle,IProgressMonitor monitor) throws CoreException {
 	folderHandle.create(false,true,monitor);
@@ -84,39 +81,19 @@ protected void createFolder(IFolder folderHandle,IProgressMonitor monitor) throw
 		throw new OperationCanceledException();
 }
 /**
- * Creates a folder resource handle with a specified path.  The folder resource
- * should <b>not</b> be created concretely here; this step is subsequently
- * performed by <code>createFolder(IFolder)</code>.
- *
- * @param folderPath the path of the folder resource to create a handle for
- * @return the new folder resource handle
- * @see #createFolder(com.ibm.eclipse.core.resources.IFolder)
+ * 
  */
 protected IFolder createFolderHandle(IPath folderPath) {
 	return CppPlugin.getPluginWorkspace().getRoot().getFolder(folderPath);
 }
 /**
- *	It is assumed that if the Finish button was enabled (thus allowing invocation
- *	of this method) that the folder resource and container info supplied is valid.
- *	Answer a boolean indicating whether self was able to create the appropriate
- *	new folder resource
+ *
  */
 public boolean finish() {
 	return getNewTarget() != null;
 }
 /**
- * Returns a new folder resource which is created according to the current
- * values of this page's visual components, or <code>null</code> if there was
- * an error creating this folder.  This method should be invoked after the
- * user has pressed Finish on the parent wizard, since the enablement of this
- * button implies that all visual components on this page currently contain
- * valid values.
- * <p>
- * Note that this page caches the new folder once it has been successfully
- * created, so subsequent invocations of this method will answer the same
- * folder resource.
- * </p>
- * @return the created folder resource
+ * Returns a new Target  which is created according to the current
  */
 public TargetElement getNewTarget() {
 	if (newTarget != null)

@@ -3,7 +3,9 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 import org.eclipse.jface.viewers.*;
 import java.util.*;
@@ -36,12 +38,7 @@ public class RootElement extends BaseElement {
 	
 
 /**
- * Constructor. Default visibility only called from createSubGroup()
- * Creates a new GroupElement within the passed parent GroupElement,
- * gives it the passed name property, sets Icon.
- * Note: parent GroupElement must be notified to register this as one of it sub entries
- * @param name java.lang.String
- * @param parent com.itp.ui.test.propertysheet.GroupElement
+ * Constructor. 
  */
 public RootElement(IResource root, RootElement parent) {
 	super(root.getName(), parent);
@@ -50,9 +47,7 @@ public RootElement(IResource root, RootElement parent) {
 	P_TARGETS = new String[MAX_TARGETS];
 }
 /**
- * Adds a OrganizationElement to this GroupElement. Fires DomainEvent to
- * notify all listening viewers (thru DomainModel) to update view.
- * @param newGroup com.ibm.itp.ui.test.propertysheet.Group
+ *
  */
 public void add(TargetElement obj) {
 
@@ -60,30 +55,22 @@ public void add(TargetElement obj) {
 	{
 		obj.setID(key);
 		getTargets().add(obj);
-		// synchronizes backpointer of userGroup: defensive
 		obj.setParent(this);
 
 	}
 
 }
 /**
- * Deletes a OrganizationElement from this GroupElement. Fires DomainEvent to
- * notify all listening viewers (thru DomainModel) to update view. Called by
- * OrganizationElement.delete()
- * @param newGroup com.ibm.itp.ui.test.propertysheet.Group
+ *
  */
 public void delete(BaseElement element) {
 
 	if (element.isTarget()) {
 		getTargets().remove(element);
-		// synchronizes backpointer of userGroup: defensive
 	}
 }
 /**
- * Returns the children of this object.  When this object
- * is displayed in a tree, the returned objects will be this
- * element's children.  Returns an empty enumeration if this
- * object has no children.
+
  */
 public Object[] getChildren(Object o) {
 	return getContents().toArray();
@@ -93,10 +80,7 @@ private Vector getContents() {
 		fTargets = new Vector();
 	return fTargets;
 }
-/**
- * Overrides Hook in OrganizationElement
- * @see OrganizationElement#isGroup()
- */
+
 public int getCounter() {
 	return counter;
 }
@@ -111,10 +95,7 @@ public Object getEditableValue() {
 public String getErrorMessage() {
 	return null;
 }
-/* Implemented as part of IPropertySource,
- * returns Vector set of PropertyDescriptors defining availible properties in this IProperty.
- * @see IPropertySource#getPropertyDescriptors()
- * @return java.util.Vector
+/** 
 */
 
 public IPropertyDescriptor[] getPropertyDescriptors()
@@ -122,12 +103,7 @@ public IPropertyDescriptor[] getPropertyDescriptors()
 	return (IPropertyDescriptor[])(getDescriptors().toArray(new IPropertyDescriptor[getDescriptors().size()]));
 }
 /**
- * Hook implementation as part of IPropertySource, it defines
- * 	1) P_NAME returns String, name of this element
- *  this property keys are defined in IBasicPropertyConstants
  *
- * @param  propKey java.lang.Object
- * @return java.lang.Object associated property
  **/
 
 public Object getPropertyValue(String propKey)
@@ -149,21 +125,15 @@ public Vector getTargets() {
 		fTargets = new Vector();
 	return fTargets;
 }
-/**
- * Overrides Hook in OrganizationElement
- * @see OrganizationElement#isGroup()
- */
 public boolean isRoot() {
 	return true;
 }
 /**
- * author: yasser
  */
 public void resetCounter(int val) {
 	counter = val;
 }
 /**
- * author: yasser
  */
 public void setDescriptors(Vector desc) {
 	descriptors.removeAllElements();
@@ -171,9 +141,7 @@ public void setDescriptors(Vector desc) {
 		descriptors.add(i,desc.elementAt(i));
 }
 /**
- * Insert the method's description here.
- * Creation date: (2/6/01 4:42:45 PM)
- * @param descriptor java.lang.String
+ *
  */
 protected void setProprtyDescriptor() {
 
@@ -193,9 +161,7 @@ protected void setProprtyDescriptor() {
 	//if(descriptors.size() == 100)
 		//counter =0;
 }
-/**
- * author: yasser
- */
+
 public void setTargets(Vector targets) {
 	fTargets.removeAllElements();
 	for(int i=0; i < targets.size(); i++)

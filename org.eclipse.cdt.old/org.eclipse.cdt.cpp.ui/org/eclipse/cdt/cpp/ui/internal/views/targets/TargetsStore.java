@@ -1,10 +1,14 @@
 package com.ibm.cpp.ui.internal.views.targets;
 
+/*
+ * Licensed Materials - Property of IBM,
+ * WebSphere Studio Workbench
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 import java.util.*;
 /**
- * Insert the type's description here.
- * Creation date: (2/15/01 10:16:09 AM)
- * @author: Administrator
  */
 public class TargetsStore {
 

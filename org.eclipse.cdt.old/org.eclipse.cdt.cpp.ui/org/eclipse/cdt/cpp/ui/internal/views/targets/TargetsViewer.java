@@ -3,7 +3,9 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
 
 import com.ibm.dstore.core.model.*;
@@ -21,16 +23,7 @@ import org.eclipse.swt.*;
 import java.util.List;
 import org.eclipse.swt.custom.*;
 import org.eclipse.jface.action.IStatusLineManager;
-/**
- * The PropertySheetViewer displays the properties of objects.
- * The model for the viewer consists of a hierarchy of 
- * <code>IPropertySheetEntry</code>. 
- * <p>
- * This viewer also supports the optional catogorization of the first level
- * <code>IPropertySheetEntry</code>s by using instances of
- * <code>PropertySheetCategory</code>. 
- * 
- */
+
 public class TargetsViewer extends Viewer implements ISelectionChangedListener, IDomainListener
 {
 	// Input objects for the viewer
@@ -70,34 +63,7 @@ public class TargetsViewer extends Viewer implements ISelectionChangedListener, 
 	// host page
 	private TargetsPage hostPage;
 
-	
-/*
-	// The input element(s)
-	private Vector inputElements = new Vector(1);
-	// The container for the TableTree and description area
-	protected Composite contents;
 
-	// The root of the Property Sheet representing one or more IElements selected
-	// in some other viewer.
-	protected IPropertySheetRoot rootEntry;
-	// Actions
-	protected ActionBuildTarget buildAction;
-	private AdaptableList list;
-	private MenuManager mgr;
-	// selection mechanism
-	static public Object navigatorSelection = new Object();
-	protected ActionNewTarget newAction;
-	protected ActionRemoveTarget removeAction;
-	// Persistance
-	public TargetsStore targetStore = new TargetsStore(); // should be populated from persistance mechanism
-	protected ActionRemoveAllTarget removeAllAction;*/
-
-/**
- * Creates a property sheet viewer on a newly-created table tree control
- * under the given parent. The viewer has no input, and no root entry.
- *
- * @param parent the parent control
- */
 public TargetsViewer(Composite parent, TargetsPage host) {
 
 	hostPage = host;
@@ -175,7 +141,7 @@ protected void activateCellEditor(TableTreeItem item) {
 	cellEditor.setFocus();
 }
 /**
- * Add columns to the Property Sheet (TableTree)
+ * Add columns to  (TableTree)
  * and set up the layout manager accordingly.
  */
 private void addColumns() {
@@ -221,7 +187,7 @@ private void applyEditorValue() {
 	entry.applyEditorValue();
 }
 /**
- * Clear the entire PropertySheetViewer display and contents.
+ * Clear the entire TargetsViewer display and contents.
  *
  */
 protected void clearAll() {
@@ -266,7 +232,7 @@ private void createChildren(Widget widget) {
 	}
 }
 /** 
- * Creates a new property sheet entry listener.
+ 
  */
 private void createEntryListener() {
 	entryListener = new IPropertySheetEntryListener() {
@@ -335,7 +301,6 @@ private void createItem(Object node, Widget parent, int i) {
 	// clear any error message from the editor
 	setErrorMessage(null);
 }
-  /***/
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();  
@@ -385,7 +350,7 @@ private void createItem(Object node, Widget parent, int i) {
 	  }
   }  
 /**
- * Return a table tree item in the property sheet that has 
+ * Return a table tree item in the targets view that has 
  * the same entry in its user data field as the supplied
  * entry. Return <code>null</code> if there is no such item.
  *
@@ -403,10 +368,7 @@ private TableTreeItem findItem(IPropertySheetEntry entry) {
 	return null;
 }
 /**
- * Return a table tree item in the property sheet that has 
- * the same entry in its user data field as the supplied
- * entry. Return <code>null</code> if there is no such item.
- *
+
  * @param entry the entry to search for
  * @param item the item look in
  */
@@ -429,7 +391,6 @@ private TableTreeItem findItem(IPropertySheetEntry entry, TableTreeItem item) {
  * Returns the child entries of the given entry
  *
  * @return the children of the given entry
- *  (element type <code>IPropertySheetEntry</code>) 
  */
 private List getChildren(IPropertySheetEntry entry) {
 	// if the entry is the root and we are showing categories,
@@ -444,7 +405,6 @@ private List getChildren(IPropertySheetEntry entry) {
  * Returns the child entries of the given category
  *
  * @return the children of the given category
- *  (element type <code>IPropertySheetEntry</code>)
  */
 private List getChildren(PropertySheetCategory category) {
 	return getFilteredEntries(category.getChildEntries());
@@ -454,8 +414,6 @@ private List getChildren(PropertySheetCategory category) {
  *
  * @node a category or entry
  * @return the children of the given category or entry
- *  (element type <code>IPropertySheetEntry</code> or 
- *  <code>PropertySheetCategory</code>)
  */
 private List getChildren(Object node) {
 	// cast the entry or category	
@@ -485,8 +443,6 @@ public Control getControl() {
  * Returns the entries which match the current filter.
  *
  * @entries the entries to filter
- * @return the entries which match the current filter
- *  (element type <code>IPropertySheetEntry</code>)
  */
 private List getFilteredEntries(IPropertySheetEntry[] entires) {
 	// if no filter just return all entries
@@ -520,7 +476,7 @@ public Object getInput() {
 	return input;
 }
 /**
- * Returns the root entry for this property sheet viewer.
+ * Returns the root entry for this targets viewer
  * The root entry is not visible in the viewer.
  * 
  * @return the root entry or <code>null</code>.
@@ -529,13 +485,7 @@ public IPropertySheetEntry getRootEntry() {
 	return rootEntry;
 }
 /**
- * The <code>PropertySheetViewer</code> implementation of this 
- * <code>ISelectionProvider</code> method
- * returns the result as a <code>StructuredSelection</code>.
- * <p>
- * Note that this method only includes <code>IPropertySheetEntry</code>
- * in the selection (no categories).
- * </p>
+ 
  */
 public ISelection getSelection() {
 	if (tableTree.getSelectionCount() == 0)
@@ -604,7 +554,7 @@ private void handleSelect(SelectionEvent event) {
 	}
 }
 /**
- * The expand icon for a node in the PropertySheetViewer has been
+ * The expand icon for a node in the TargetsVieweer has been
  * selected to collapse the subtree. Remember that the node
  * is collapsed.
  */
@@ -615,7 +565,7 @@ private void handleTreeCollapse(TreeEvent event) {
 	}
 }
 /**
- * The expand icon for a node in the PropertySheetViewer has been
+ * The expand icon for a node in the TargetsViewer has been
  * selected to expand the subtree. Create the children 1 level deep.
  *
  */
@@ -720,7 +670,7 @@ public void inputChanged(Object obj, Object oldobj) {
  * Updates all of the items in the tree.
  * <p>
  * Note that this means ensuring that the tree items reflect the state
- * of the model (entry tree) it does not mean telling the model to update 
+ * of the model  it does not mean telling the model to update 
  * itself.
  * </p>
  */
@@ -756,7 +706,7 @@ public void resetProperties() {
 		 ((IPropertySheetEntry) enum.next()).resetPropertyValue();
 }
 /*
-* Author: Yasser
+
 */
 public void selectionChanged(SelectionChangedEvent evt){
 	Vector vec = new Vector();
@@ -785,13 +735,7 @@ private void setErrorMessage(String errorMessage) {
 		statusLineManager.setErrorMessage(errorMessage);
 }
 /**
- * The <code>PropertySheetViewer</code> implementation of this
- * method declared on <code>Viewer</code> method sets the objects 
- * for which the viewer is currently showing properties. 
- * <p>
- * The input must be an <code>Object[]</code> or <code>null</code>.
- * </p>
- * @param input the input of this viewer, or <code>null</code> if none
+ 
  */
 public void setInput(Object newInput) {
 	// deactivate our cell editor
@@ -821,7 +765,7 @@ private void setMessage(String message) {
 		statusLineManager.setMessage(message);
 }
 /**
- * Sets the root entry for this property sheet viewer.
+ * Sets the root entry for this targets viewer.
  * The root entry is not visible in the viewer.
  * 
  * @param root the root entry
@@ -844,8 +788,6 @@ public void setRootEntry(IPropertySheetEntry root) {
 	setInput(input);
 }
 /**
- * The <code>PropertySheetViewer</code> implementation of this 
- * <code>Viewer</code> method does nothing.
  */
 public void setSelection(ISelection selection, boolean reveal) {
 	
@@ -872,9 +814,7 @@ public void showExpert() {
 	isShowingExpertProperties = true;
 	refresh();
 }
-/*
-* Author: Yasser
-*/
+
 protected boolean targetHasBeenBuilt(Vector vec, int index)  {
 	for(int i = 0; i < vec.size(); i++)
 	{
@@ -963,8 +903,6 @@ private void updateCategories(){
 /**
  * Update the category (but not its parent or children).
  *
- * @param node the category to update
- * @param item the tree item for the given entry
  */
 private void updateCategory(PropertySheetCategory category, TableTreeItem item) {
 	// ensure that backpointer is correct

@@ -3,8 +3,11 @@ package com.ibm.cpp.ui.internal.views.targets;
 /*
  * Licensed Materials - Property of IBM,
  * WebSphere Studio Workbench
- * (c) Copyright IBM Corp 1999, 2000
+ * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
  */
+ 
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.eclipse.swt.graphics.Image;
@@ -18,12 +21,12 @@ public class CppPluginImages {
 
 	private static URL fgIconLocation;
 
-	static {
-		try {
+	static 
+	{
+		try
+		{
 			fgIconLocation= new URL(com.ibm.cpp.ui.internal.CppPlugin.getDefault().getDescriptor().getInstallURL(), "icons/");
-		} catch (MalformedURLException ex) {
-			//ExceptionHandler.handle(ex, com.ibm.cpp.ui.CppPlugin.getResourceBundle(), "Search.Error.incorrectIconLocation.");
-		}
+		} catch (MalformedURLException ex) {}
 	}
 
 	// The plugin registry
@@ -63,10 +66,10 @@ public class CppPluginImages {
 	private static URL makeIconFileURL(String prefix, String name) {
 		StringBuffer buffer= new StringBuffer(prefix);
 		buffer.append(name);
-		try {
+		try 
+		{
 			return new URL(fgIconLocation, buffer.toString());
 		} catch (MalformedURLException ex) {
-			//ExceptionHandler.handle(ex, SearchPlugin.getResourceBundle(), "Search.Error.incorrectIconLocation.");
 			return null;
 		}
 	}
