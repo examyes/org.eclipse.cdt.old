@@ -60,7 +60,7 @@ import java.io.*;
 /** An efficient implementation of JavaCC's CharStream interface.  <p>Note that
  * this does not do line-number counting, but instead keeps track of the
  * character position of the token in the input, as required by Lucene's {@link
- * org.apache.lucene.analysis.Token} API. */
+ * com.ibm.linux.help.util..lucene.analysis.Token} API. */
 public final class FastCharStream implements CharStream {
   char[] buffer = null;
 
