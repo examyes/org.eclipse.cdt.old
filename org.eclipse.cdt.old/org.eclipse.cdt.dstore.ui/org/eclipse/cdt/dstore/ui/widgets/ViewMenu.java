@@ -32,6 +32,7 @@ public class ViewMenu implements IMenuListener
     private Composite   _toolBar;
     
     private ToolBar     _viewToolBar;
+    private ToolBar     _viewToolBar2;
     private ToolItem   _relationLabel, _filterLabel;
     
     private ArrayList      _filterItems, _relationItems;
@@ -151,7 +152,8 @@ public class ViewMenu implements IMenuListener
           int x2 = x3 - menuWidth1;
           int x1 = x2 - iconSize;
 
-	  _viewToolBar     .setBounds(x4, y1, width, viewHeight);
+	  _viewToolBar     .setBounds(x4, y1, width / 2, viewHeight);
+	  _viewToolBar2     .setBounds(x4, y1 + width / 2, width / 2, viewHeight);
         }
   }
 
@@ -201,7 +203,8 @@ public class ViewMenu implements IMenuListener
 						}
 					    );
 	
-        _filterLabel = new ToolItem(_viewToolBar, SWT.DROP_DOWN, 1);
+        _viewToolBar2 = new ToolBar(toolBar, SWT.FLAT);
+        _filterLabel = new ToolItem(_viewToolBar2, SWT.DROP_DOWN, 0);
 	if (plugin != null)
 	    {
 		_filterLabel.setImage(plugin.getImage(_filGif));
@@ -223,6 +226,7 @@ public class ViewMenu implements IMenuListener
 	
         toolBar.setLayout(new FillLayout());
 	_viewToolBar.setLayout(new GridLayout());
+	_viewToolBar2.setLayout(new GridLayout());
 	
         
         _menuMgr = new MenuManager("#ViewMenu");
@@ -428,10 +432,20 @@ public class ViewMenu implements IMenuListener
 		  _relationLabel.setToolTipText(property);
 		  _relationLabel.setEnabled(true);
 		  _viewToolBar.redraw();		  
+		  _viewToolBar2.redraw();		  
 	      }
 	  else
 	      {
 		  _relationLabel.setText(property);
+	      }
+
+	  if (_relationItems.size() == 1)
+	      {
+ 		  _viewToolBar.setVisible(false);
+	      }
+	  else
+	      {
+ 		  _viewToolBar.setVisible(true);
 	      }
       }
 
@@ -480,6 +494,15 @@ public class ViewMenu implements IMenuListener
 	    {
 		_filterLabel.setText(filter);
 	    }
+
+	  if (_filterItems.size() == 1)
+	      {
+		  _viewToolBar2.setVisible(false);
+	      }
+	  else
+	      {
+		  _viewToolBar2.setVisible(true);
+	      }
       }
     
 
@@ -505,10 +528,9 @@ public class ViewMenu implements IMenuListener
 				    }
 			    }
 		    }
-		
 	    }
 	  _relationItems = Sorter.sort(_relationItems);
-
+	  
       }
 
 
