@@ -14,28 +14,19 @@ import com.ibm.cpp.ui.internal.api.*;
 
 public abstract class ProjectAction extends CustomAction
 {
- DataStore       _dataStore;
- DataElement     _subject;
- DataElement     _project;
  ModelInterface  _api;
  
  public ProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
  {	
   super(subject, label, command, dataStore);
-  _dataStore = dataStore;
-  _subject   = subject;
   _api       = CppPlugin.getModelInterface();
-  _project   = getProjectFor(subject);
- }
+  }
  
- private DataElement getProjectFor(DataElement theElement)
- {
-  // DataElement parent = theElement;
-  //while ( (parent != null) && (!parent.getType().equals("Project")) && (!parent.getType().equals("data")))
-  // parent = theElement.getParent();
-  //if ( (parent == null) || (!parent.getType().equals("Project")))
-   return theElement;
-   //return parent;
- }
+ public ProjectAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+ {	
+  super(subjects, label, command, dataStore);
+  _api       = CppPlugin.getModelInterface();
+  }
+ 
 }
 
