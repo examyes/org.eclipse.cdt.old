@@ -106,8 +106,9 @@ public class DataStoreSchema
         DataElement containerObjectD = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Container_Object"));
         _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY", false);
 
-      // file objects
+	// file objects
 	_dataStore.createReference(hostD, containsD, containsD);	
+
 
         DataElement deviceD  = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.device"), 
 						      "com.ibm.dstore.miners");
@@ -178,6 +179,15 @@ public class DataStoreSchema
         DataElement logInfo = _dataStore.createAbstractObjectDescriptor(rootD, getLocalizedString("model.Logged_Commands"));
         _dataStore.createReference(logInfo, logD, containsD);
         _dataStore.createReference(logInfo, commandDescriptor, containsD);
+
+	// containers
+	_dataStore.createReference(containerObjectD, rootD, abstracts, abstractedBy);	
+	_dataStore.createReference(containerObjectD, hostD, abstracts, abstractedBy);	
+	_dataStore.createReference(containerObjectD, logD, abstracts, abstractedBy);	
+	_dataStore.createReference(containerObjectD, minersD, abstracts, abstractedBy);	
+	_dataStore.createReference(containerObjectD, minerD, abstracts, abstractedBy);	
+	_dataStore.createReference(containerObjectD, dataD, abstracts, abstractedBy);	
+
 
         // basic commands
 	_dataStore.createCommandDescriptor(cancellable, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
