@@ -337,13 +337,10 @@ private void createItem(Object node, Widget parent, int i) {
 	    DataElement status = subChild.getStatus();
 	    if (status == parent)
 	    {
-	   
-		clearAll();///////////////////////////////////////////////////////////
-		
-		ArrayList list = new ArrayList();
-		list.add(obj);
-		
-		setInput(list.toArray());
+		Table table = tableTree.getTable();
+		TableItem item = table.getItem(j);
+		item.setText(2, status.getName());
+
 		return;
 	      }	    
 	  }	
@@ -656,7 +653,7 @@ public void inputChanged(Object obj, Object oldobj) {
 					{
 						String status = new String(((TargetElement)(rootElement.getTargets().elementAt(targetCounter++))).getStatus().getValue());
 						if(status.equals("name")) // has to be changed - discuss with Dave
-							table.getItem(i).setText(2," ");
+							table.getItem(i).setText(2,"unused");
 						else
 							table.getItem(i).setText(2,status); // update from targetelement
 					}

@@ -40,6 +40,109 @@ import java.net.*;
 
 public class ModelInterface implements IDomainListener, IResourceChangeListener
 {
+  private class OpenProjectAction implements Runnable
+  {
+    private class OpenMonitor extends Handler
+    {
+	private DataElement _status;
+	private DataElement _projectElement = null;
+	
+	public OpenMonitor(DataElement status, DataElement project)
+	{
+	    _status = status;
+	    _projectElement = project;
+	}
+	
+	public void handle()
+	{
+	    if (_status.getName().equals("done"))
+		{
+		    _projectElement.refresh(false);
+		    finish();
+		}
+	}	
+    }
+
+
+
+   private IProject _project;
+   public OpenProjectAction(IProject project)
+   {
+    _project = project;
+   }
+   
+   public void run()
+    {
+     DataStore dataStore = _plugin.getDataStore();
+     
+     DataElement projectMinerProject = null;
+     if (_project instanceof Repository)
+	 {
+	     dataStore = ((Repository)_project).getDataStore();
+	     
+	     DataElement workspace = findWorkspaceElement(dataStore);
+	     if (workspace != null)
+		 {
+		     projectMinerProject = dataStore.createObject(workspace, "Project", 
+								  _project.getName(),
+								  _project.getLocation().toString());
+		     dataStore.setObject(workspace, false);
+		     dataStore.setObject(projectMinerProject);
+		 }	  
+	 }
+     else
+	 {
+	     projectMinerProject =  findProjectElement(_project, "Closed Project");
+	     if (projectMinerProject == null)
+		 {
+		     System.out.println("can't find project miner element for " + _project);
+		     return;
+		 }
+	 }
+
+     if (projectMinerProject != null)
+	 {
+	     DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
+	     if (oDescriptor != null)
+		 {
+		     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
+		     projectMinerProject.refresh(true);
+		 }
+	     
+	     setParseIncludePath(_project);	
+	     setParseQuality(_project);	
+	     setEnvironment(_project);
+	     
+	     if (_project instanceof Repository)
+		 {
+		     DataElement rworkspace = findWorkspaceElement(dataStore);
+		     projectMinerProject = dataStore.find(rworkspace, DE.A_NAME, _project.getName(), 1);
+		     
+		     DataElement localWorkspace = findWorkspaceElement();		    
+		     if (localWorkspace != null && projectMinerProject != null)
+			 {
+			     DataStore localDataStore = _plugin.getDataStore();
+			     DataElement localRemoteProject = localDataStore.find(localWorkspace, 
+											  DE.A_SOURCE, 
+											  projectMinerProject.getSource(), 
+											  1);
+			     if (localRemoteProject != null)
+				 {
+				     localDataStore.deleteObject(localWorkspace, localRemoteProject);
+				 }
+			     
+			     localDataStore.createReference(localWorkspace, projectMinerProject);		    
+			     localDataStore.refresh(localWorkspace);
+			 }
+		 }
+
+	     CppProjectNotifier notifier = getProjectNotifier();
+	     notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
+	 }
+    } 
+  }
+ 
+
     public class MonitorStatusThread extends Handler
     {
 	private DataElement _status;
@@ -562,85 +665,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }   
     }
 
-  private class OpenProjectAction implements Runnable
-  {
-   private IProject _project;
-   public OpenProjectAction(IProject project)
-   {
-    _project = project;
-   }
-   
-   public void run()
-    {
-     DataStore dataStore = _plugin.getDataStore();
-     
-     DataElement projectMinerProject = null;
-     if (_project instanceof Repository)
-	 {
-	     dataStore = ((Repository)_project).getDataStore();
-	     
-	     DataElement workspace = findWorkspaceElement(dataStore);
-	     if (workspace != null)
-		 {
-		     projectMinerProject = dataStore.createObject(workspace, "Project", 
-								  _project.getName(),
-								  _project.getLocation().toString());
-		     dataStore.setObject(workspace, false);
-		     dataStore.setObject(projectMinerProject);
-		 }	  
-	 }
-     else
-	 {
-	     projectMinerProject =  findProjectElement(_project, "Closed Project");
-	     if (projectMinerProject == null)
-		 {
-		     System.out.println("can't find project miner element for " + _project);
-		     return;
-		 }
-	 }
-
-     if (projectMinerProject != null)
-	 {
-	     DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
-	     if (oDescriptor != null)
-		 {
-		     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
-		     projectMinerProject.refresh(true);
-		 }
-	     
-	     setParseIncludePath(_project);	
-	     setParseQuality(_project);	
-	     setEnvironment(_project);
-	     
-	     if (_project instanceof Repository)
-		 {
-		     DataElement rworkspace = findWorkspaceElement(dataStore);
-		     projectMinerProject = dataStore.find(rworkspace, DE.A_NAME, _project.getName(), 1);
-		     
-		     DataElement localWorkspace = findWorkspaceElement();		    
-		     if (localWorkspace != null && projectMinerProject != null)
-			 {
-			     DataStore localDataStore = _plugin.getDataStore();
-			     DataElement localRemoteProject = localDataStore.find(localWorkspace, 
-											  DE.A_SOURCE, 
-											  projectMinerProject.getSource(), 
-											  1);
-			     if (localRemoteProject != null)
-				 {
-				     localDataStore.deleteObject(localWorkspace, localRemoteProject);
-				 }
-			     
-			     localDataStore.createReference(localWorkspace, projectMinerProject);		    
-			     localDataStore.refresh(localWorkspace);
-			 }
-		 }
-
-	     CppProjectNotifier notifier = getProjectNotifier();
-	     notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
-	 }
-    } 
-  }
- 
  
     private class CloseEditorAction implements Runnable
     {
