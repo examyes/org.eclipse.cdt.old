@@ -180,10 +180,13 @@ public class CppActionLoader extends GenericActionLoader
 		    }
 		
 		// add browse perspective action
-		menu.add(new Separator("Perspectives"));			
-		MenuManager browseCascade = new MenuManager("Browse", "Browse");
-		browseCascade.add(new BrowseProjectAction("Project", input));			
-		menu.add(browseCascade);
+		if (input.isOfType("Project"))
+		    {
+			menu.add(new Separator("Perspectives"));			
+			MenuManager browseCascade = new MenuManager("Browse", "Browse");
+			browseCascade.add(new BrowseProjectAction("Project", input));			
+			menu.add(browseCascade);
+		    }
 	    }			
     }
     
