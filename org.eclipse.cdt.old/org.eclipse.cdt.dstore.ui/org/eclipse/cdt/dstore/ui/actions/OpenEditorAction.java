@@ -10,7 +10,6 @@ import com.ibm.dstore.ui.*;
 import com.ibm.dstore.ui.resource.*;
 import com.ibm.dstore.core.model.*;
 
-/***/
 import org.eclipse.ui.internal.*;
 import org.eclipse.core.internal.resources.*;
 
@@ -30,6 +29,7 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
+  private DataElement _previousElement;
   private DataElement _element;
   public OpenEditorAction(DataElement element)
       {
@@ -37,9 +37,15 @@ public class OpenEditorAction extends Action implements IOpenAction
         _element = element;
       }
   
+    public void resetSelection() 
+    {
+	_element = _previousElement;
+    }
+
   public void setSelected(DataElement selected)
   {
-    _element = selected;
+      _previousElement = _element;
+      _element = selected;
   }  
 
   public void run()

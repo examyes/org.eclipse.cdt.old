@@ -10,8 +10,9 @@ import com.ibm.dstore.core.model.*;
 
 import org.eclipse.jface.action.*;
 
-public interface IOpenAction
+public interface IOpenAction 
 { 
+    public void resetSelection();
     public void setSelected(DataElement selected);
     public void performGoto(boolean flag);
     public void run();
