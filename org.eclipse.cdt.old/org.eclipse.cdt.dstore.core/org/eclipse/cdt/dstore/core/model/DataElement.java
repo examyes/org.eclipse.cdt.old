@@ -833,7 +833,7 @@ public final class DataElement implements Serializable, IDataElement
 									    }
 								    }
 							    }
-							else if (type.equals(_dataStore.getLocalizedString("model.contents")))
+							else if (type.equals("contents"))
 							    {
 								if (nestedObject == object)
 								    {
@@ -1079,13 +1079,16 @@ public final class DataElement implements Serializable, IDataElement
   {    
       if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
       {	  
-        DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
-        if (queryDescriptor != null)
-        {	
-          _dataStore.command(queryDescriptor, this);
-          _isExpanded = true;
-          _isUpdated = false;
-        }
+      	if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
+      	{
+        	DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
+        	if (queryDescriptor != null)
+        	{	
+        	  _dataStore.command(queryDescriptor, this);
+        	  _isExpanded = true;
+        	  _isUpdated = false;
+        	}
+      	}
       }
   }
 
@@ -1094,21 +1097,24 @@ public final class DataElement implements Serializable, IDataElement
 	DataElement status = null;
 	if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
 	    {
-		DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
-		if (queryDescriptor != null)
-		    {	
-			if (isSynchronized)
-			    {
-				status = _dataStore.synchronizedCommand(queryDescriptor, this);		  
-			    }
-			else
-			    {		  
-				status = _dataStore.command(queryDescriptor, this);
-			    }
+	    	if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
+	    	{
+				DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
+				if (queryDescriptor != null)
+			    {	
+					if (isSynchronized)
+				    {
+						status = _dataStore.synchronizedCommand(queryDescriptor, this);		  
+				    }
+					else
+			 	   {		  
+						status = _dataStore.command(queryDescriptor, this);
+			  	  	}
 			
-			_isExpanded = true;
-			_isUpdated = false;
-		    }
+				_isExpanded = true;
+				_isUpdated = false;
+		    	}
+	    	}
 	    }
 	return status;
     }
