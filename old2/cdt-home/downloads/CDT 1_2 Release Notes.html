@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Eclipse Project Release Notes 2.1.1</title>
+<style>
+<!--
+h3           { list-style-type: decimal }
+-->
+</style>
+</head>
+
+<body>
+
+<h1>CDT Project Release Notes</h1>
+<p>Release 1.2<br>
+Last revised Oct 16, 2003</p>
+<p align="left"><strong>This software is OSI Certified Open Source Software.<br>
+OSI Certified is a certification mark of the Open Source Initiative.&nbsp;</strong></p>
+<h2><font face="Arial">1. <a name="KnownIssues"></a> Known Issues</font></h2>
+<p>&nbsp;&nbsp;&nbsp; <a href="#1.1">1.1&nbsp;&nbsp;&nbsp;&nbsp; Spaces in 
+workspace cause dependent managed projects to fail build</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.2">1.2&nbsp;&nbsp;&nbsp;&nbsp; Main cannot be 
+found when debugging if Eclipse is started using the -data option and the 
+workspace path provided contains a symbolic link</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.3">1.3&nbsp;&nbsp;&nbsp;&nbsp; Cannot change 
+Build properties after renaming project</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.4">1.4&nbsp;&nbsp;&nbsp;&nbsp; Debugger finds 
+wrong source files</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.5">1.5&nbsp;&nbsp;&nbsp;&nbsp; Search does not 
+handle relative search paths</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.6">1.6&nbsp;&nbsp;&nbsp;&nbsp; Cannot Create a 
+Managed Make Project when only CDT core +Managed Build components are installed</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.7">1.7&nbsp;&nbsp;&nbsp; Search cannot find 
+things in stdio.h</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.8">1.8&nbsp;&nbsp;&nbsp; Importing a project 
+created with CDT version 1.1 doesn't upgrade it</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.9">1.9&nbsp;&nbsp;&nbsp; Managed Make: Circular 
+project dependencies cause endless &quot;Building...&quot; loop</a><br>
+&nbsp;&nbsp;&nbsp; <a href="#1.10">1.10&nbsp;&nbsp;&nbsp; Dependencies are not 
+properly updated (in managed make C++ project) if the including file is saved 
+before the included file</a></p>
+<p>&nbsp;</p>
+<p><font face="Arial">Note: Bug numbers refer to the Eclipse project bug database at <a href="http://dev.eclipse.org/bugs/">http://dev.eclipse.org/bugs/</a></font></p>
+<h3>&nbsp;</h3>
+<h3><font face="Arial"><a name="1.1"></a>1.1&nbsp;&nbsp;</font>&nbsp;&nbsp;
+<font face="Arial">Spaces in workspace cause dependent managed projects to fail build</font></h3>
+<p><font face="Arial">The managed build system does not generate a valid makefile for projects that 
+have a space in their path. The solution is to use a workspace in a location 
+where the path does not contain any spaces, and create your project there. (bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=44128">44128</a>)</font></p>
+<h3>&nbsp;</h3>
+<h3><font face="Arial"><a name="1.2"></a>1.2&nbsp;&nbsp;&nbsp;&nbsp; Main cannot be found when debugging if Eclipse 
+is started using the -data option and the workspace path provided contains a 
+symbolic link</font></h3>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">In a Managed 
+C/C++ project on windows or linux where eclipse has been started with a link in 
+the path passed to the -data option, for instance:</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt; 
+ln -s expanded/path linkdir</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+&gt;eclipse -data /some/path/with/linkdir</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">&nbsp;then debugging 
+won't expand the path properly and will not find ../main.cpp. This could happen 
+frequently in environments where the /home directory is automounted on a network 
+directory.</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">&nbsp;There are two 
+possible workarounds: </span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">1. Add a source 
+path in the debug configuration one directory below the directory containing 
+main eg Debug;</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-family: Helv; color: black">2. or better, 
+exit eclipse, restart eclipse with the -data option pointing to the full path 
+(or relative path) that does not contain a symbolic link. The project should be 
+closed and reopened to reindex previously linked dependencies (see known issue 
+for defect #44500). </span>(bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=43372">43372</a>)</font></p>
+<h3>&nbsp;</h3>
+<h3><font face="Arial"><a name="1.3"></a>1.3&nbsp;&nbsp;&nbsp;&nbsp; Cannot change Build properties after renaming project</font></h3>
+<p><span style="font-size: 12.0pt; font-family: Arial">If you rename 
+your project and open the build settings, the dialog will be empty. It’s OK; all 
+your settings are still there. The managed build system uses the name of the 
+project as its key to finding the build settings associated with a project and 
+the key just changed. The work-around is to restart Eclipse and all your 
+settings will be restored, visible, and editable. Another work-around which may 
+be less time consuming is to close and reopen the project. </span>
+<font face="Arial">(bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=44159">44159</a>)</font></p>
+<h3>&nbsp;</h3>
+<h3><font face="Arial"><a name="1.4"></a>1.4&nbsp;&nbsp;&nbsp;&nbsp; Debugger finds wrong source files</font></h3>
+<p><span style="font-size: 12pt; font-family: Arial; color: black">The 
+debugger could fail to find a correct source file if there is more than one file 
+with the same name in the project. The workaround is to build the project using 
+full or relative paths. </span><font face="Arial">(bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=35960">35960</a>)</font></p>
+<p>&nbsp;</p>
+<h3><font face="Arial"><a name="1.5"></a>1.5&nbsp;&nbsp;&nbsp;&nbsp; Search does not handle relative search paths</font></h3>
+<p><font face="Arial">The parser does not contain enough information to be able to translate a 
+relative path into an absolute path that it can use to find an included file.
+<span style="font-size: 12pt; font-family: Helv; color: black">In a Managed Make 
+project, relative paths should be specified to be relative to the build 
+directory, and the managed make builder can translate the paths to absolute 
+paths before providing them to the parser.&nbsp; In a Standard make project, the 
+builder does not translate the paths, so only absolute paths should be used.
+</span>(bug <a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=43051">43051</a>)</font></p>
+<p>&nbsp;</p>
+<h3><font face="Arial"><a name="1.6"></a>1.6&nbsp;&nbsp;&nbsp;&nbsp; Cannot Create a Managed Make Project when only 
+CDT core +Managed Build components are installed</font></h3>
+<p><font face="Arial">There is a dependency between the new managed build project 
+wizard and the standard build system. If the user has installed the CDT core and 
+the managed build system, but has not installed the standard build system, they 
+will see the following error when running the new managed build project wizard: 
+&quot;Project cannot be created. Reason: Invalid CDTProject Owner ID&quot;. The solution 
+is to install the standard build system from the update site. (bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=43815">43815</a>)</font></p>
+<p class="MsoNormal">&nbsp;</p>
+<h3><font face="Arial"><a name="1.7"></a>1.7&nbsp;&nbsp;&nbsp; Search cannot find things in stdio.h</font></h3>
+<p style="line-height: 12.0pt; text-autospace: none">
+<span style="font-size: 12pt; font-family: Arial; color: black">CDT 
+Parser clients (like Code Assist and Search) require a significant amount of 
+setup from the user side in order to work properly.&nbsp; If your project contains 
+source external to your workspace, it is necessary to setup include paths 
+appropriately.&nbsp; </span></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<span style="font-size: 12pt; font-family: Arial; color: black">
+However, even with all the inclusion paths apparently properly configured (as it 
+builds in the project's Makefile), things still may not work due to the internal 
+compiler configuration, as most compilers augment the user include paths with 
+built-in internal include paths.&nbsp; Most compilers also have built-in internal 
+macros, which affect the C/C++ preprocessor.&nbsp; For example, the GNU compiler will 
+output its internal configuration when given the '-V' option.&nbsp; </span></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<span style="font-size: 12pt; font-family: Arial; color: black">If 
+Code Assist or Search don't seem to be working properly for you, check out the 
+log file @ .metadata\.plugins\org.eclipse.cdt.core\.log for an indication of 
+what files do not parse due to an irrecoverable preprocessor error.&nbsp; The log 
+entries look something like: </span></p>
+<blockquote>
+  <p style="line-height: 12.0pt; text-autospace: none">
+  <span style="font-size: 12pt; font-family: Arial; color: black">
+  ENTRY org.eclipse.cdt.core 4 4 Oct 14, 2003 23:19:29.937</span></p>
+  <p style="line-height: 12.0pt; text-autospace: none">
+  <span style="font-size: 12pt; font-family: Arial; color: black">
+  MESSAGE Scanner Exception: Inclusion not found: badinclusion.h</span></p>
+</blockquote>
+<p style="line-height: 12.0pt; text-autospace: none">
+<span style="font-size: 12pt; font-family: Arial; color: black">&nbsp;This 
+way you can debug what is wrong and enter the correct include path/macro 
+information for the parser to retrieve.&nbsp; If the log file does not have any new 
+entries in it and these features are still not working as you would expect, 
+please raise a defect in bugzilla @ <a href="http://bugs.eclipse.org">
+http://bugs.eclipse.org</a>. </span><font face="Arial">(bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=43021">43021</a>)</font></p>
+<h3>&nbsp;</h3>
+<h3><font face="Arial"><a name="1.8"></a>1.8&nbsp;&nbsp;&nbsp; Importing a project created with CDT version 1.1 
+doesn't upgrade it</font></h3>
+<p style="line-height: 12.0pt; text-autospace: none">
+<span style="font-size: 12pt; font-family: Arial; color: black">&quot;When 
+you upgrade to CDT 1.2 and then import an old CDT 1.1 Make project, it will not 
+get automatically updated. You must restart Eclipse and then click Yes on the 
+dialog to update old Make projects, or update a chosen set of projects by 
+clicking the Update Make Projects toolbar button. </span></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<span style="font-size: 12pt; font-family: Arial; color: black">To 
+show this button, enable Window-&gt;Customize Perspective-&gt;Other-&gt;Update Make 
+Projects.&quot;&nbsp; </span><font face="Arial">(bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=44464">44464</a>)</font></p>
+<p style="line-height: 12.0pt; text-autospace: none">&nbsp;</p>
+<h3 style="line-height: 12.0pt; text-autospace: none"><font face="Arial">
+<a name="1.9"></a>1.9&nbsp;&nbsp;&nbsp; 
+Managed Make: Circular project dependencies cause endless &quot;Building...&quot; loop</font></h3>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-size: 12pt; font-family: Helv; color: black">If you add 
+project dependencies to Managed Make projects carelessly, you may end up causing 
+an endless loop between generated project Makefiles when building.&nbsp; The solution 
+is to remove the project dependency or dependencies that cause a loop.&nbsp;</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-size: 12pt; font-family: Helv; color: black">Unfortunately, if 
+you shut-down Eclipse before removing the dependency loop, and if auto-build is 
+enabled, then the next Eclipse session will re-enter the endless loop with no 
+way of cancelling, and you will need to shut down Eclipse again.&nbsp; In such a 
+case, to disable auto-build from outside an Eclipse session, you can edit (or 
+create) workspace/.metadata/.plugins/org.eclipse.core.resources/pref_store.ini 
+and add the following line:</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none">
+<font face="Arial">
+<span style="font-size: 12pt; font-family: Helv; color: black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+description.autobuilding=false</span></font></p>
+<p style="line-height: 12.0pt; text-autospace: none"><font face="Arial">(bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=44675">44675</a>)</font></p>
+<p style="line-height: 12.0pt; text-autospace: none">&nbsp;</p>
+<h3><font face="Arial"><a name="1.10"></a>1.10&nbsp;&nbsp;&nbsp; Dependencies are not properly updated (in managed 
+make C++ project) if the including file is saved before the included file.</font></h3>
+<font FACE="Arial" size="3">
+<p>Dependencies for Managed Make projects are calculated whenever a source file 
+is saved, or whenever a header file depended on by a source file is saved. If a 
+source file containing an #include is saved before the included file is created, 
+the dependency on the included file will not be tracked. As a result, the 
+included file will not be listed in the Makefile's dependency lists even once 
+the header file is saved and the source file compiles cleanly.</p>
+<p>This situation is likely if:</p>
+<p>- you are using the New Class Wizard (which creates and saves the source file 
+before creating the header file),</p>
+<p>- you copy a source file from another directory, then copy the required 
+header file(s).</p>
+<p>- you create and save an #include statement before creating the included 
+file.</p>
+<p>This problem is resolved by re-saving the source file.</p>
+</font>
+<p><font face="Arial">&nbsp; (bug
+<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=44154">44154</a>)</font></p>
+<p style="line-height: 12.0pt; text-autospace: none">&nbsp;</p>
+<hr>
+<p>Java and all Java-based trademarks are trademarks of Sun Microsystems, Inc.
+in the United States, other countries, or both.</p>
+<p>IBM is a trademark of International Business Machines Corporation in the
+United States, other countries, or both.</p>
+<p>Microsoft, Windows, Windows NT, and the Windows logo are trademarks of
+Microsoft Corporation in the United States, other countries, or both.</p>
+<p>Apple and Mac OS are trademarks of Apple Computer, Inc., registered in the
+U.S. and other countries.</p>
+<p>QNX, Neutrino, and Photon are trademarks or registered trademarks of QNX
+Software Systems Ltd.</p>
+<p>Other company, product, and service names may be trademarks or service marks
+of others.</p>
+<p>(c) Copyright IBM Corp. and others 2003</p>
+
+</body>
+
+</html>
