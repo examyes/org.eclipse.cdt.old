@@ -287,8 +287,7 @@
 <extension
       point="org.eclipse.ui.popupMenus">
    <objectContribution
-         objectClass="org.eclipse.core.resources.IFile"
-         id="org.eclipse.cdt.cpp.ui.internal.menu">
+	objectClass="org.eclipse.core.resources.IFile" id="org.eclipse.cdt.cpp.ui.internal.menu" adaptable="true">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Makefile___"
@@ -321,8 +320,7 @@
       </action>
    </objectContribution>
    <objectContribution
-         objectClass="org.eclipse.core.resources.IFolder"
-         id="org.eclipse.cdt.cpp.ui.internal.menu4">
+         objectClass="org.eclipse.core.resources.IFolder" id="org.eclipse.cdt.cpp.ui.internal.menu4" adaptable="true">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
 
       <menu
@@ -342,8 +340,7 @@
       </action>
    </objectContribution>
    <objectContribution
-         objectClass="org.eclipse.core.resources.IFile"
-         id="org.eclipse.cdt.cpp.ui.internal.menu5">
+         objectClass="org.eclipse.core.resources.IFile" id="org.eclipse.cdt.cpp.ui.internal.menu5" adaptable="true">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Parse"
@@ -382,8 +379,8 @@
       </action>
    </objectContribution>
    <objectContribution
-         objectClass="org.eclipse.core.resources.IProject"
-         id="org.eclipse.cdt.cpp.ui.internal.menu7">
+         objectClass="org.eclipse.core.resources.IProject" 
+	 id="org.eclipse.cdt.cpp.ui.internal.menu7">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Parse___"
