@@ -793,7 +793,13 @@ void asm_definition() :
 void function_definition(String theTypes) :
 {String name;}
 {
- {isConstructor = (theTypes.indexOf(" ") == -1);}
+ //To determine if something is a constructor we do a hacky thing:  Look for spaces in the type specifiers for 
+ //the function...If there is no space, that means that there is only the function name (no return type), so 
+ //we know it is a constructor...Addtionally we check for the case of "inline A::A() {...}, by just making 
+ //sure there is only the inline specifier...
+ {isConstructor = (   (theTypes.indexOf(" ") == -1) 
+                   || ( (theTypes.lastIndexOf(" ") == theTypes.indexOf(" ")) && (theTypes.startsWith("inline")))
+                  );}
   (  LOOKAHEAD(2) "~" constructor_destructor_definition(theTypes, ParserSchema.Destructor)
    | LOOKAHEAD({isConstructor}) constructor_destructor_definition(theTypes, ParserSchema.Constructor)
    | 
@@ -1153,7 +1159,13 @@ void constructor_destructor_definition(String name, String objectType) :
 {String fullName = empty; int startLine = getToken(1).beginLine;}
 {
   [name = identifier()]
-  (LOOKAHEAD(2) "(" ")" | "(" fullName = parameter_list(true) ")") {fullName = name + "(" + fullName + ")";}
+  (LOOKAHEAD(2) "(" ")" | "(" fullName = parameter_list(true) ")") 
+  {
+   //Weed out the inline specifier if it exists:
+   if (name.startsWith("inline "))
+    name = name.substring(7,name.length());
+   fullName = name + "(" + fullName + ")";
+  }
   [LOOKAHEAD(2) exception_spec()]
   {
    DataElement theConstructor = null;
