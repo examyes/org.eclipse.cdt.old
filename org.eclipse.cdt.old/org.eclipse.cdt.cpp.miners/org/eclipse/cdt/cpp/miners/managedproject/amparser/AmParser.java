@@ -67,38 +67,43 @@ public class AmParser
 	//root.removeNestedData(project);
   }
   
-  
-  _project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
-  _curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
-  _project.setAttribute(DE.A_SOURCE, root.getSource() + "/" + subdir + "/");
+  if(root != null)
+  { 
+  	_project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
+  	_curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
+  	_project.setAttribute(DE.A_SOURCE, root.getSource() + "/" + subdir + "/");		
 
-  File theFile = new File(_curFile);
-  if (theFile.exists())
-      {
-	  try 
+	  File theFile = new File(_curFile);
+	  if (theFile.exists())
 	      {
-		  _theFileReader = new BufferedReader(new FileReader(theFile));
-	      }
-	  catch (Throwable e)
-	      {
-		  System.out.println("Problem opening " + _curFile);
-	      }
-      }  
+		  try 
+		      {
+			  _theFileReader = new BufferedReader(new FileReader(theFile));
+		      }
+		  catch (Throwable e)
+		      {
+			  System.out.println("Problem opening " + _curFile);
+		      }
+	      }  
+  }
  }
  
  private DataElement findExistingManagedProject(DataElement workspace, String name)
  {
- 	for (int i = 0; i < workspace.getNestedSize(); i++)
+ 	if(workspace!=null)
  	{
- 		DataElement child = workspace.get(i);
- 		if (child.getType().equals(Am.MANAGED_PROJECT))
+ 		for (int i = 0; i < workspace.getNestedSize(); i++)
  		{
- 			if (child.getName().equals(name))
+ 			DataElement child = workspace.get(i);
+ 			if (child.getType().equals(Am.MANAGED_PROJECT))
  			{
- 				return child;
- 			}
- 			
- 		}	
+ 				if (child.getName().equals(name))
+ 				{
+ 					return child;
+ 				}
+ 				
+ 			}	
+ 		}
  	}
  	return null;
  }
