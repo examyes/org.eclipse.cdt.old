@@ -159,6 +159,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 
 	long time = System.currentTimeMillis();
 	setModificationStamp(time);
+
 	/*
 	ResourceInfo info = getResourceInfo(false, true);
 	info.incrementContentId();

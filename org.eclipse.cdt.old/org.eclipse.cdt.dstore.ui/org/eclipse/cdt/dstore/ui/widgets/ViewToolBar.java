@@ -264,6 +264,11 @@ public class ViewToolBar extends Viewer implements IDomainListener
         _viewMenu.fixateOnObjectType(objectType);
     }
     
+    public void enable(boolean flag)
+    {
+	_viewMenu.enable(flag);
+    }
+
     public void setInput(Object input)
     {
         if (_outLink != null)

@@ -54,6 +54,8 @@ public class ViewMenu implements IMenuListener
     
     private String      _fixatedRelationType, _fixatedObjectType;
     private String      _relGif, _filGif;
+
+    private boolean     _isEnabled;
     
     public class MenuSelectFilterAction extends Action
     {
@@ -157,6 +159,7 @@ public class ViewMenu implements IMenuListener
         _parent = parent;
 	_dataStore = parent.getDataStore();
         _toolBar = toolBar;
+	_isEnabled = true;
 
         GridData textData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | 
                                          GridData.GRAB_HORIZONTAL);
@@ -618,6 +621,13 @@ public class ViewMenu implements IMenuListener
 			    }
 		    }
 	    }
+    }
+
+    public void enable(boolean flag)
+    {
+	_isEnabled = flag;
+	_filterLabel.setEnabled(flag);
+	_relationLabel.setEnabled(flag);
     }
 }
 
