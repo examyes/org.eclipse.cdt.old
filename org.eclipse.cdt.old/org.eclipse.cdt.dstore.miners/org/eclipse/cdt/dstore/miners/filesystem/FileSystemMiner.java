@@ -273,11 +273,13 @@ public class FileSystemMiner extends Miner
      }
      else if (name.equals("C_OPEN"))
 	 {
-	     if  (!subject.getDescriptor().isOfType(_fsystemObjectDescriptor))
+	     String type = subject.getType();
+	     DataElement des = subject.getDescriptor();
+	     if  (type.equals("file"))
 		 {
 		     status = handleOpen(subject.dereference(), status);
 		 }
-	     else
+	     else if (des.isOfType(_fsystemObjectDescriptor, true))
 		 {
 		     status = handleQueryAll(subject, status);
 		 }
