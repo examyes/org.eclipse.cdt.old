@@ -588,13 +588,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void initializeProject(IProject project)
     {
-	DataStore dataStore = _plugin.getDataStore();
-	DataElement workspace = findWorkspaceElement(dataStore);
-	if (workspace != null)
+	if (_plugin.isCppProject(project))
 	    {
-		dataStore.createObject(workspace, "Closed Project",
-				       project.getName(),
-				       project.getLocation().toString());
+		DataStore dataStore = _plugin.getDataStore();
+		DataElement workspace = findWorkspaceElement(dataStore);
+		if (workspace != null)
+		    {
+			dataStore.createObject(workspace, "Closed Project",
+					       project.getName(),
+					       project.getLocation().toString());
+		    }
 	    }
     }
 
@@ -1161,6 +1164,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public DataElement findProjectElement(IProject project, String type)
   {
+      if (!_plugin.isCppProject(project))
+	  {
+	      return null;
+	  }
       if (project == null)
 	  return null;
 
@@ -1724,6 +1731,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    if (resource instanceof IProject)
 				{
 				    System.out.println("added " + resource);
+				    initializeProject((IProject)resource);
 				}
 			    else
 				{
