@@ -11,8 +11,6 @@
    provider-name="International Business Machines Corp."
    class="com.ibm.lpex.alef.LpexPlugin">
 
-   <description>%pluginDescription</description>
-
    <requires>
      <import plugin="org.eclipse.ui"/>
      <import plugin="org.eclipse.core.resources"/>
@@ -25,6 +23,11 @@
      </library>
      <library name="./"/>
    </runtime>
+
+   <!-- define extension point for plugins that extend LPEX -->
+   <!-- with user profile, commands, actions, and parsers:  -->
+   <!-- LPEX must record their class loaders to run these   -->
+   <extension-point name="preload" id="preload"/>
 
    <!-- context-sensitive help -->
    <extension point="org.eclipse.help.contexts">
