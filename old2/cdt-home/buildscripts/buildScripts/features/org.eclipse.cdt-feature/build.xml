@@ -116,8 +116,8 @@
         <delete file="${feature.destination}/${feature.full.name}.jar"/>
         <delete file="${feature.destination}/${feature.full.name}.log.zip"/>
         <delete>
-            <fileset dir="${feature.destination}" includes="**/*.src.zip"/>
-            <fileset dir="${feature.destination}" includes="**/*.bin.dist.zip"/>
+            <fileset dir="${feature.destination}" includes="**/*_${os}-${ws}${feature.version.suffix}.src.zip"/>
+            <fileset dir="${feature.destination}" includes="**/*_${os}-${ws}${feature.version.suffix}.bin.dist.zip"/>
         </delete>
 
         <delete dir="${feature.temp.folder}"/>
