@@ -42,14 +42,12 @@ public class OutputPattern
 
  public ParsedOutput matchLine(String theLine, PatternMatcher matcher)
  {
-  if (!matcher.matches(theLine, _pattern))
-   return null;
-
   MatchResult result = null;
-  
   try
   {
-   result = matcher.getMatch(); 
+  if (!matcher.matches(theLine, _pattern))
+   return null;
+  result = matcher.getMatch(); 
   }
   catch (StringIndexOutOfBoundsException e)
   {
