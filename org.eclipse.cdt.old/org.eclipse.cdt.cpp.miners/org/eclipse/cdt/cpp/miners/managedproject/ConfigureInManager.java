@@ -93,8 +93,10 @@ public class ConfigureInManager {
 		// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
 		// the rest of the file will be te same
 		File configure_in = new File (project.getSource(),"configure.in");
-		//&&timeStamp==configure_in.lastModified()
-		if(configure_in.exists()&&doesStampExist(configure_in))
+		//&&doesStampExist(configure_in)&&timeStamp==configure_in.lastModified()
+		//update anyway even if the file is imported from outside the tool
+		// updating envolves only the AC_OUTPUT macro
+		if(configure_in.exists())
 		{
 			Runtime rt = Runtime.getRuntime();
 			// copy the old configure.in to configure.in.old
