@@ -81,8 +81,6 @@ public class TargetAction extends CustomAction
 		
 		File parent = _subject.getFileObject().getParentFile();
 		File Makefile = new File(parent,"Makefile");
-		System.out.println("\nTest\n"+_subject);
-		System.out.println("\nParent \n"+parent.getAbsolutePath());
 		if(!Makefile.exists())
 			dialog.openWarning(shell,"Generating Autoconf Support Files ",message);
 		else
