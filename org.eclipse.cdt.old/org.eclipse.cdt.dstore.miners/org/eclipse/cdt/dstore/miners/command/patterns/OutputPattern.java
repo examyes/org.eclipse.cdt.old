@@ -74,6 +74,7 @@ public class OutputPattern
    line = Integer.parseInt(lineString);
   }
   catch (NumberFormatException e) {}
+ 
   return new ParsedOutput(_objType, theLine, fileString, line, 1);
  }
 

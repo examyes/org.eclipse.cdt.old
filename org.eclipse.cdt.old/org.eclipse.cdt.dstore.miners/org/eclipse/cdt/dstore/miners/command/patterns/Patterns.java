@@ -116,7 +116,8 @@ public class Patterns
    return;
   }
  }
-
+ 
+ 
  public ParsedOutput matchLine(String theLine)
  {
   CommandPattern curCommand;

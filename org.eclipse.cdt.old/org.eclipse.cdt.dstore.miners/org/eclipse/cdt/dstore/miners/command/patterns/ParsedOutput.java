@@ -22,7 +22,7 @@ public class ParsedOutput
  {
   type = theType;
   text = theText; 
-  file = theFile; 
+  file = theFile;
   line = theLine; 
   col  = theColumn;
  }

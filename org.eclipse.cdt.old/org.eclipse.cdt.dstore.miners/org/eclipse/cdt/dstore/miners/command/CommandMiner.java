@@ -464,11 +464,15 @@ class CommandMinerThread extends MinerThread
   ParsedOutput parsedMsg = _patterns.matchLine(removeWhitespace(line));
   if ((parsedMsg == null))
    createObject("stdout", line); 
+  
   else
   {
    try
    {
-    createObject(parsedMsg.type, line, parsedMsg.file, new Integer(parsedMsg.line), new Integer(parsedMsg.col));
+    String fileName = parsedMsg.file;
+    if (fileName.equals("PATTERNS.DAT"))
+     fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat";
+    createObject(parsedMsg.type, line, fileName, new Integer(parsedMsg.line), new Integer(parsedMsg.col));
    }
    catch (NumberFormatException e) 
        {

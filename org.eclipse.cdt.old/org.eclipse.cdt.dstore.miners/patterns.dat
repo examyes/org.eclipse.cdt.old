@@ -1,8 +1,11 @@
-#patterns.dat - This file contains the formats that will be used to 
+#patterns.dat - This file contains the patterns that will be used to 
 #               parse command line output.    
+#
+# CLICK THIS LINE TO EDIT THIS FILE (PATTERNS.DAT). (When viewing from the Output view)
 
 command: grep -Hn.*
 	 grep          file line         pattern =([\w,.]*):(\d*):.*   
+
 
 command: nmake.*
 	 error                           pattern=NMAKE : .*
@@ -31,6 +34,9 @@ command: xl.*
 	 error         file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
 	 warning       file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(W\).*
 	 informational file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
+
+command: cat.*patterns.*
+	 informational file 		 pattern=.*(PATTERNS.DAT).*
 
 
 # How Patterns Work
