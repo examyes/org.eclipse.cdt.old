@@ -573,6 +573,10 @@ class CommandMinerThread extends MinerThread
 
     public void cleanupThread()
     {
+    	if (_isShell)
+    	{
+    		sendInput("exit");
+    	}
 	try
 	    {
 		_status.setAttribute(DE.A_NAME, "done");
