@@ -12,7 +12,7 @@ import java.io.*;
 import java.lang.*;
 
 public final class Parser implements ParserConstants {
- private SymbolTable  symtab;
+ private SymbolTable  symtab; 
  private boolean      isConstructor;
  private String       empty = "";
  public Parser() {}

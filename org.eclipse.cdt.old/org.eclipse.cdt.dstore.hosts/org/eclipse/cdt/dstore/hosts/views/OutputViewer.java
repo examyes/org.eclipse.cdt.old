@@ -165,18 +165,6 @@ public class OutputViewer extends TableViewer
 
     DataElement type = _selected.getDescriptor();
     boolean isContainer = false;
-    if (type != null)
-	{
-	    ArrayList contents = type.getAssociated("contents");
-	    for (int i = 0; (i < contents.size()) && !isContainer; i++)
-		{
-		    DataElement contained = (DataElement)contents.get(i);
-		    if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
-			{
-			    isContainer = true;
-			}		
-		}
-	}
 
     if (isContainer)
 	{

@@ -222,10 +222,7 @@ public class ManagedProjectMiner extends Miner
 			theManagedProject = theParser.parse();
 			_dataStore.refresh(theManagedProject);
 		}
-
-
-
-		return theManagedProject;
+	    return null;
 	}
 
 }

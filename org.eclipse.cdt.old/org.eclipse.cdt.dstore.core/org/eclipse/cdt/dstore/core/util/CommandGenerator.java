@@ -32,6 +32,8 @@ public class CommandGenerator
 
   public DataElement logCommand(DataElement commandObject)
   {
+      try
+	  {
     // prevent duplicate queries
     String name = commandObject.getAttribute(DE.A_NAME);
     if (name.equals("C_QUERY"))
@@ -100,6 +102,13 @@ public class CommandGenerator
     }
 
     _log.addNestedData(commandObject, false);
+
+	  }
+      catch (Exception e)
+	  {
+	      e.printStackTrace();
+	  }
+
     return commandObject;
   }
 

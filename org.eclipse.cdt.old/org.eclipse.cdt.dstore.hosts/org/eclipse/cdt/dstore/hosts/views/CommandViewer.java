@@ -166,12 +166,10 @@ public class CommandViewer extends Viewer implements SelectionListener
 	DataElement descriptor = input.getDescriptor();
 	if (type.equals("file") || (descriptor != null && input.getDescriptor().isOfType("file")))
 	{
-		_input = input;
-		DataElement element = _input;
-		
 		if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
 		    {
-			String directory = element.getSource();				
+			_input = input;
+			String directory = input.getSource();				
 			if ((directory != null) && (_directoryText != null))
 			    {		
 				try
@@ -184,9 +182,9 @@ public class CommandViewer extends Viewer implements SelectionListener
 				    }
 			    }			
 		    }
-		else if (element.getType().equals("file"))
+		else if (input.getType().equals("file"))
 		    {
-			setElementInput(element.getParent());
+			setElementInput(input.getParent());
 		    }
 		if (_history != null)
 		    {
