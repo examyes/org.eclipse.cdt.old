@@ -65,15 +65,15 @@ public class CmdExpression extends Command
       // For deferred expressions, build context information
       if (_req.isDeferred()) {
 	// Extract these separately as they may be null
-	EStdString partNameES = _req.getPartName();
-	EStdString moduleNameES = _req.getModuleName();
+	String partNameES = _req.getPartName();
+	String moduleNameES = _req.getModuleName();
 	
 	// Determine part ID by looking up module and part name
         String partName = "";
 
 	if (moduleNameES != null)
         { 
-           String moduleName = moduleNameES.string();
+           String moduleName = moduleNameES;
 
 //           if (moduleName != null && moduleName.length() != 0 &&
 //               !moduleName.equals(_debugEngine.getResourceString(
@@ -82,20 +82,20 @@ public class CmdExpression extends Command
         }
 
 	if (partNameES != null) {
-	  partName = partName + partNameES.string();
+	  partName = partName + partNameES;
 
-    int moduleID = ((GdbModuleManager)_debugSession.getModuleManager()).getModuleID(moduleNameES.string()); //GDB
+    int moduleID = ((GdbModuleManager)_debugSession.getModuleManager()).getModuleID(moduleNameES); //GDB
 
 	  short ppid = 
 //	    (short) _debugEngine.getClassManager().getPartID(partName);
 	    (short) ((GdbModuleManager)_debugSession.getModuleManager()).getPartID(moduleID,partName); //GDB
 
      if(ppid<=0)
-     {   Part part = _debugSession.isPartInModule(partName, moduleNameES.string());
+     {   Part part = _debugSession.isPartInModule(partName, moduleNameES);
          if(part!=null)
          {    ppid = (short) ((GdbModuleManager)_debugSession.getModuleManager()).getPartID(moduleID,partName);
               if (Gdb.traceLogger.EVT) 
-                  Gdb.traceLogger.evt(2,"CmdExpression.execute added part for monitor, moduleName="+moduleNameES.string()+" partName="+partName+" partID="+ppid+", expr="+exprString  );
+                  Gdb.traceLogger.evt(2,"CmdExpression.execute added part for monitor, moduleName="+moduleNameES+" partName="+partName+" partID="+ppid+", expr="+exprString  );
               if(context!=null)
               {
                  context.setPPID(ppid);
@@ -103,7 +103,7 @@ public class CmdExpression extends Command
          }
          else
          {    if (Gdb.traceLogger.ERR) 
-                  Gdb.traceLogger.err(2,"CmdExpression.execute FAILED to find part for monitor(MUST ADD DEFER CAPABILITY), moduleName="+moduleNameES.string()+" partName="+partName+" partID="+ppid+", expr="+exprString  );
+                  Gdb.traceLogger.err(2,"CmdExpression.execute FAILED to find part for monitor(MUST ADD DEFER CAPABILITY), moduleName="+moduleNameES+" partName="+partName+" partID="+ppid+", expr="+exprString  );
          }
      }
 

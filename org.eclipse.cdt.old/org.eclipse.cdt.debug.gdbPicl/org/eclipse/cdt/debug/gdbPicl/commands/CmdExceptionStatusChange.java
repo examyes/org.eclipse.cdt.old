@@ -40,11 +40,11 @@ public class CmdExceptionStatusChange extends Command
                   +" _exceptionStatusFlags[i]="+ _exceptionStatusFlags[i] );
             if (_exceptionStatusFlags[i] == 1)
             {
-               _debugSession.catchException(i,EPDCSession._exceptionsInfo[i].exceptionName().string());
+               _debugSession.catchException(i,EPDCSession._exceptionsInfo[i].exceptionName());
                EPDCSession._exceptionsInfo[i].setExceptionStatus(1);
             }else
             {
-               _debugSession.ignoreException(i,EPDCSession._exceptionsInfo[i].exceptionName().string());
+               _debugSession.ignoreException(i,EPDCSession._exceptionsInfo[i].exceptionName());
                EPDCSession._exceptionsInfo[i].setExceptionStatus(0);
             }
          }
