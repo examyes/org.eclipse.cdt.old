@@ -44,11 +44,11 @@
 		class="com.ibm.dstore.hosts.views.HostsViewPart">
 	</view>
 	<view
-		id="com.ibm.dstore.ui.views.DetailsViewPart"
+		id="com.ibm.dstore.hosts.views.HostsDetailsViewPart"
 		name="Host Details"
 		category="com.ibm.dstore.hosts"
 		icon="icons/host.gif"
-		class="com.ibm.dstore.ui.views.DetailsViewPart">
+		class="com.ibm.dstore.hosts.views.HostsDetailsViewPart">
 	</view>
 	<view
 		id="com.ibm.dstore.hosts.views.OutputViewPart"
