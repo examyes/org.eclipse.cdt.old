@@ -2095,7 +2095,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 										args.add(dummyOldName);
 										
 										DataElement renameD = dataStore.createObject(null, "dummy command", "C_RENAME");
-										dataStore.synchronizedCommand(notifyD, args, renameD); 
+										dataStore.command(notifyD, args, renameD); 
 									}
 								
 								}

@@ -125,7 +125,7 @@ public class ParseMiner extends Miner
  		}
  		else if (subject.isOfType("directory"))
  		{ 	
- 			if (removeParseInfo(subjectArg))
+ 			if (removeParseInfo(subjectArg, project))
  			{
  				handleFileParse(subject, project, status);
  			}
@@ -182,6 +182,7 @@ public class ParseMiner extends Miner
  			type = theProject.getType();
  		}
  	}
+ 	
  	
  	return theProject;
  }
@@ -453,6 +454,11 @@ public class ParseMiner extends Miner
  }
  
  private boolean removeParseInfo(DataElement theFile)
+ {
+ 	return removeParseInfo(theFile, null);	
+ }
+ 
+ private boolean removeParseInfo(DataElement theFile, DataElement project)
  {  
      if (theFile.getType().equals("Project"/*ParserSchema.Project*/))
   {
@@ -466,6 +472,8 @@ public class ParseMiner extends Miner
    
 
    DataElement theProject = getParseProject(theFile);
+
+	
    _dataStore.deleteObjects(getProjectElement(theProject, ParserSchema.ProjectObjects));
    _dataStore.deleteObjects(getProjectElement(theProject, ParserSchema.SystemObjects));
    _dataStore.deleteObjects(getProjectElement(theProject, ParserSchema.ParsedFiles));
@@ -479,10 +487,13 @@ public class ParseMiner extends Miner
   }
   else
   {
-   DataElement theProject = getProjectFor(theFile);
-   if (theProject != null)
+  	if (project == null)
+  	{
+   		project = getProjectFor(theFile);
+  	}
+   if (project != null)
     {
-   return _parseManager.removeParseInformation(theFile, getParseProject(theProject));
+   return _parseManager.removeParseInformation(theFile, getParseProject(project));
     }
   }
      return false;
