@@ -1,0 +1,1656 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<style>
+<!--
+<style type="text/css">
+
+.verify		{ color: blue; font-weight: bold; }
+.indextop   { font-size: x-large; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold}
+.indexsub   { font-size: xx-small; font-family: Arial, Helvetica, sans-serif; color: #8080FF}
+.section    { font-size: 16pt; padding-left: 3pt; background: #0080C0; color: white; font-weight: bold;
+              width: 100%; }
+.subsection { font-size: 12pt; padding-left: 3pt; background: #999999; color: white; font-weight: bold;
+              width: 100%; }
+.myTable	{ font-family: Arial; font-size: 10pt; }
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<base target="_self">
+</head>
+
+<body bgcolor="#FFFFFF">
+
+
+<font face="arial" size="2">
+
+<TABLE cellPadding=2 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD align=left width="72%"><b><span style='font-size:24.0pt;font-family:Verdana'>
+    CDT 2.0 Globalization Interim Report</span></b><br>
+    &nbsp;<span style='font-size:7.5pt;font-family:Arial;color:#8080FF'>CDT
+      Globalization report<br>&nbsp;May 11, 2004<br>&nbsp;Tanya Wolff </span></TD>
+    <TD width="28%"><IMG height=86 alt="" 
+      src="http://dev.eclipse.org/images/Idea.jpg" 
+width=120></TD></TR></TBODY></TABLE>
+
+<div class="section">Summary</div>
+
+</font>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">Globalization of the CDT is progressing... the
+three stages being internationalization, localization and finally globalization:
+The internationalization is the designer’s business: ensuring the code is
+ready for translation. After localization (translation &amp; country
+requirements), no more design work should be necessary, for a given user in a
+given country. The globalization bit is to ensure that all localization packs
+can play together in one executable.&nbsp;</span></font></p>
+<p><font face="Arial" size="2"><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">I<b>nternationalization
+Phase 1: String Externalization </b></span></font></p>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">Previously I sent a count of all the strings
+that before externalization were hard coded and needed to be externalized or
+marked as non-translatable. The string and file counts resulting from this
+process are shown below. This phase was complete March 26, with a second drop of
+strings shipping May 7 to be translated.<o:p>
+</o:p>
+</span></font></p>
+<p><font face="Arial" size="2"><b><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">Internationalization
+Phase 2: P</span></b><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA"><b>seudo Translation</b></span></font></p>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">At the same time I created a pseudo translation
+build and tested the GUI for expanded strings. This phase is in parallel with
+phase 1 since it helps to reveal internalized strings.</span> This was also
+completed March 30, however, with the new batch of strings, a rerun of the
+pseudo translation is forthcoming.</font></p>
+<p><font face="Arial" size="2"><b><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">Internationalization
+Phase 3:</span></b><span lang="EN-CA" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-CA"><b> Enablement Testing</b>&nbsp;</span></font></p>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">This phase completed April 30 and ensured that
+CDT works for input and correct display of characters in the native codepage of
+many languages, more than just those requiring translation. These tests were
+performed by Japan, Taiwan, China, and the countries with bidirectional
+languages, Arabic and Hebrew. To see the tests, </span>Click <a href="file://medusa/HOME/pdgwm/site.pdg-ottawa/htdocs/projects/tsp/CDT_Project/Supporting_Files/CDTQETracker/CDT2.0/Testcases/TestingTypes/I18N%20Tests/CDTWSWBTestsVersion1.1.zip">here</a>.</font></p>
+<p><font face="Arial" size="2"><b><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">Internationalization
+Phase 4:</span></b><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA"><b> Cultural Formatting</b> </span></font></p>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">The last phase of internationalization testing
+is about to begin: verifying the correct cultural formatting of the display
+text.<span style="mso-spacerun: yes">&nbsp; </span>The format is triggered by
+the locale setting: no further tweaking should be necessary to display numbers,
+times, dates, and sort orders as expected by any given country, as long as the
+correct formatting APIs are used. These include locale-sensitive comparators,
+NumberFormat, DateFormat. For instance, a number with commas and decimals in the
+US has the commas and decimals reversed in France. Date and time preferences
+differ in the use of 12 or 24-hour clock, month following day, day following
+month, etc. Sorting has different levels of priorities whether or not accents
+and capitalization is involved. For instance, ‘a’ with umlaut could be an
+‘a’ with an accent in one country, so it would sort with the ‘a’s, while
+in another country it would be a completely different letter found after
+‘z’.<o:p>
+</o:p>
+</span></font></p>
+<p><font face="Arial" size="2"><b><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">Localization</span></b><span lang="EN-CA" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-CA">&nbsp;</span></font></p>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">For localization, the translators are the
+busiest. Designers may only need to clarify what the noun would be in text
+that’s missing sentence parts to help the translator conjugate the verb
+correctly, or to identify whether an html tag is to be translated or not. I have
+checked that all the properties and htm and xml files have the correct syntax,
+encoding tags, line endings, and translation is under way. No worries here, bast
+relaxen, vatch das stoffa komoudt. When we have the translated bits, I’ll
+create a fragment for each plugin to hold them. CDT won’t need to be
+recompiled, just unzip the fragments and go! Translation Verification Testing (TVT)
+for this part will ensure that the GUI handles the expanded strings, and that
+the translations make sense. </span></font></p>
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA"><o:p>
+</o:p>
+</span></font></p>
+
+
+<div class="section">
+
+
+<font face="arial" size="4">
+
+What's Next</font>
+</div>
+
+<ul>
+  <li>
+    <p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA"><o:p>I18N Phase 4: any day now.</span></font></li>
+  <li>
+    <p><font face="Arial" size="2"><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">I18N
+    Phase 2 pseudo translation should be run again, or else they'll catch it in
+    TVT.</span></font></li>
+  <li>
+    <p><font face="Arial" size="2"><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">L12N:
+    Localization NL packs created end of May.</span></font></li>
+  <li>
+    <p><font face="Arial" size="2"><span style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA" lang="EN-CA">L12N:
+    TVT (Translation Verification Testing): begins June 1, for which I'm busy writing test cases now.</span></font></li>
+</ul>
+
+
+<div class="section">
+
+
+<font face="arial" size="4">
+
+Contents</font>
+</div>
+
+<p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">&nbsp;This report contains </span></font></p>
+<ul>
+  <li>
+    <p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">I18N Phase 1: a count of new strings showing up
+    in properties files that will hand off for a smaller drop to translate</span></font></li>
+  <li>
+    <p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">I18N Phase 2: the UI defects that came from the
+    pseudo translation tests</span></font></li>
+  <li>
+    <p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">I18N Phase 3: the list of remaining unresolved
+    defects that came from the enablement tests</span></font></li>
+  <li>
+    <p><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">I18N Phase 4: and a list of areas that will be
+    tested for cultural formatting.<span style="mso-spacerun: yes">&nbsp; </span><o:p>
+    </span></font><span lang="EN-CA" style="font-size:11.0pt;mso-bidi-font-size:
+12.0pt;mso-ansi-language:EN-CA">
+    </o:p>
+    </span></li>
+</ul>
+
+
+<font face="arial" size="2">
+
+<div class="section">Phase 1. String Externalization</div>
+
+&nbsp;
+
+</font>
+<p><span style="font-family:Arial"><b>Properties files</b></span><span lang="EN-CA" style="font-family:Arial;mso-ansi-language:EN-CA"><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" align="left"><span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:
+12.0pt;font-family:Arial;mso-ansi-language:EN-CA">Before the first drop of files
+was sent for translation March 26, we used the Externalize Strings wizard to see
+if the drop was complete. We had a few strings in the source to be dealt with:<o:p>
+</o:p>
+</span></p>
+<table border="1" width="335" height="390">
+  <tr>
+    <td width="282" height="16">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; font-family: Arial; mso-ansi-language: EN-CA" lang="EN-CA"><b>Plugin</b></span></td>
+    <td width="124" height="16">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:Arial;
+mso-ansi-language:EN-CA"><b>Count<span style="mso-tab-count:
+1">&nbsp;&nbsp; </span></b></span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">debug.mi.core</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">986<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="18">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">debug.mi.u</span></td>
+    <td width="123" height="18">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">65<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">debug.ui</span></td>
+    <td width="202" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black"><span style="mso-tab-count: 1">376</span><o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">launch</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">151<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">core</span></td>
+    <td width="202" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="mso-tab-count: 1; font-size: 10.0pt; font-family: Arial; color: black">1038</span><span style="font-size:10.0pt;
+font-family:Arial;color:black"><o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">core.aix</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">3<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">core.linux</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">3<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">core.solaris</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">4<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">core.win32</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">3<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">make.core</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">183<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">make.ui</span></td>
+    <td width="202" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="mso-tab-count: 1; font-size: 10.0pt; font-family: Arial; color: black">129</span><span style="font-size:10.0pt;
+font-family:Arial;color:black"><o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">managedbuilder.core</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">158<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">managedbuilder.ui</span></td>
+    <td width="123" height="19">
+      <p class="MsoNormal" style="line-height: 12.0pt; tab-stops: 0in .5in 1.0in 1.5in 2.0in 2.5in 3.0in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">35<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="16">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">cdt.ui</span></td>
+    <td width="123" height="16">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">945<o:p>
+      </o:p>
+      </span></td>
+  </tr>
+  <tr>
+    <td width="282" height="16">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="font-size:10.0pt;
+font-family:Arial;color:black">Total:<span style="mso-tab-count:1">&nbsp;&nbsp; </span></span></td>
+    <td width="202" height="16">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0" align="left"><span style="mso-tab-count: 1; font-size: 10.0pt; font-family: Arial; color: black">4079</span></td>
+  </tr>
+</table>
+<p class="MsoNormal"><span style="font-size:10.0pt;font-family:Arial;color:black">After
+externalizing or marking these strings non-translatable, the properties files were
+checked for translatability: valid key/value separators, correct comments, and correct syntax.&nbsp;
+</span></p>
+<pre style="line-height: 100%; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; font-family: Arial; mso-ansi-language: EN-CA" lang="EN-CA">Congratulations designers! With the heap of new strings since March 26, the Externalize Strings wizard found one internalized string that was translatable.</span></pre>
+<pre style="line-height: 100%; margin-top: 0; margin-bottom: 0">&nbsp;</pre>
+<p><span style="font-family:Arial"><b>HTML Files</b><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal"><span style="font-size:10.0pt;font-family:Arial;color:black">Along
+with checking property files for translatability, the 128 html files were also checked
+for correct encoding tag “UTF-8”, and valid translatable
+text. Nothing needed fixing, but there wasn't a doc drop sent out then.<o:p>
+ Now that we have Dave Williams for doc, he has checked the files, currently
+totaling 155, and fixed any errors affecting translation in the new files. All
+current files are shipped May 7 for the doc drop 0 translation.</o:p>
+</span></p>
+<p><span style="font-family:Arial"><b>XML Files</b><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal"><font face="Arial" size="2">Before the drop 1 shipment on March 26, the 51 xml files were checked for correct encoding tag
+“UTF-8” and valid translatable text. The plugin.xml files uses the %key
+framework to externalize strings while other xml files are translated in-line.
+Tag attributes that look like they should be translated were externalized using
+&amp;key; framework with values within ENTITY fields in the same file. Several
+patches were created here. Only the non-plugin.xml files are included in the CDT
+drops 1 &amp; 2 for translation.</font></p>
+<p><b><font face="Arial">Shipment Tallies</font></b></p>
+
+
+<table border="1" width="66%">
+  <tr>
+    <td width="21%"><b><font face="Arial" size="2">Date shipped</font></b></td>
+    <td width="28%"><b><font face="Arial" size="2">Number of files</font></b></td>
+    <td width="26%"><b><font face="Arial" size="2">Number of strings</font></b></td>
+  </tr>
+  <tr>
+    <td width="21%"><font face="Arial" size="2">March 26 (drop 1)</font></td>
+    <td width="28%"><font face="Arial" size="2">65 (<span style="mso-tab-count:1">53 properties files, 12
+      xml files)&nbsp;</span></font></td>
+    <td width="26%"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA"><font face="Arial" size="2">4485 (properties only)</font></span></td>
+  </tr>
+  <tr>
+    <td width="21%"><font face="Arial" size="2">May 7 (drop 2)</font></td>
+    <td width="28%"><font face="Arial" size="2">90 (79 properties files, 11 xml files)</font></td>
+    <td width="26%"><font face="Arial" size="2">6119 (properties only)</font></td>
+  </tr>
+  <tr>
+    <td width="21%"><font face="Arial" size="2">May 11(doc drop 0)</font></td>
+    <td width="28%"><font face="Arial" size="2">155 html files</font></td>
+    <td width="26%">&nbsp;</td>
+  </tr>
+</table>
+
+
+<font face="arial" size="2">
+<p/>
+<div class="section">
+  <p style="margin-top: 12">Phase 2. Pseudo Translation</div>
+
+</font>
+<p><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt"><font face="Arial">The pseudo translation build found defects for both
+externalizing strings and chopped GUI parts resulting from expanded text. Here is
+the list of expanded text defects. Also included are relevant accessibility
+defects which focus on expanded text as well, and will affect a translated
+build.<o:p>
+</o:p>
+<o:p>These should be targeted before the TVT (Translation Verification Testing)
+in June.</font></span></p>
+<table border="1" width="972">
+  <tr>
+    <td width="95" nowrap valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial"><b>Number</b></span>
+    </td>
+    <td width="154" nowrap valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS"><b>State</b></span>
+    </td>
+    <td width="117" valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 12.0pt; font-family: Arial"><b>Sev/Pri</b></span>
+    </td>
+    <td width="578" valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS"><b>Summary</b></span>
+    </td>
+  </tr>
+  <tr>
+    <td width="95" nowrap valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">51479</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="154" nowrap valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial">NEW</span><span style="font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="117" valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS">nor/P2</span>
+    </td>
+    <td width="578" valign="bottom" style="height: 12.75pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:12.0pt;
+  font-family:Arial">I18N: Managed c/c++ project wizard very wide</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="95" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">51482</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="154" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial">NEW</span><span style="font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="117" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS">nor/P2</span>
+    </td>
+    <td width="578" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial">[Code Templates] I18N: Code templates preferences page
+      chops text on buttons</span><span style="font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="95" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">54148</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="154" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial">NEW</span><span style="font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="117" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS; color: black">nor/P2</span>
+    </td>
+    <td width="578" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial;color:black">[Accessibility] Buttons on &quot;Paths and
+      Symbols&quot; tab of New Standard Make Project get stomped on in High
+      Contrast mode</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;;color:black"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="95" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">54158</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="154" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial">NEW</span><span style="font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="117" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS; color: black">nor/P2</span>
+    </td>
+    <td width="578" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial;color:black">[Accessibility] Controls on &quot;Source&quot;
+      tab of Debug dialog are cut-off in High Contrast mode.</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;;color:black"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="95" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">54285</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="154" nowrap valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial">NEW</span><span style="font-size:9.0pt;mso-bidi-font-size:
+  10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="117" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; font-family: Arial; mso-fareast-font-family: Arial Unicode MS; color: black">nor/P2</span>
+    </td>
+    <td width="578" valign="bottom" style="height: 25.5pt; padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in">
+      <p class="MsoNormal"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+  font-family:Arial;color:black">[Accessibility] Preferences pages are not
+      accessible in High Contrast mode ** lots of work to do here.</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;;color:black"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+</table>
+<p/>
+
+<font face="arial" size="2">
+
+<div class="section" style="width: 1045; height: 34">
+  <p style="margin-top: 12">Phase 3. Enablement Results</div>
+
+</font>
+<p><font face="Arial" size="2">The highlighted defects are the MUST FIX ones. The
+unresolved ones are highlighted with star/red.<o:p>
+&nbsp;</font>
+</p>
+<p class="MsoNormal"><b>Japan</b>
+</p>
+<table border="1" width="972">
+  <tr>
+    <td width="171"><b>Number</b></td>
+    <td width="227"><b>State</b></td>
+    <td width="78"><b>Sev/Pri</b></td>
+    <td width="468"><b>Summary</b></td>
+  </tr>
+  <tr>
+    <td width="171" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59593</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="227" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">RESO
+      DUPL 57082 AIX</span></p>
+    </td>
+    <td width="78" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    min/P3
+    </td>
+    <td width="468" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      NullPointerException occurs after creating C++ Project</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="171" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59613</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="227" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">CLOSED</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="78" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    nor/P3
+    </td>
+    <td width="468" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">File
+      changed dialog pop up although just creating new C++ class.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="171" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59616</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="227" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">CLOSED
+      DUPL</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>&nbsp;
+      57082 AIX</o:p>
+      </span></p>
+    </td>
+    <td width="78" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    nor/P3
+    </td>
+    <td width="468" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">cannot
+      create Managed Make C++ Project</span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="171" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">60225</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="227" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">CLOSED
+      INVAL (dup 58634)</o:p>
+      </span></p>
+    </td>
+    <td width="78" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    nor/P3
+    </td>
+    <td width="468" valign="bottom" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Content
+      Assist list does not show constructor.</span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+</table>
+<p class="MsoNormal">
+</o:p><b>Taiwan</b>
+</p>
+<table border="1" width="978">
+  <tr>
+    <td width="175"><b>Number</b></td>
+    <td width="228"><b>State</b></td>
+    <td width="77"><b>Sev/Pri</b></td>
+    <td width="470"><b>Summary</b></td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59387</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">CLOSED</span></p>
+    </td>
+    <td width="77" valign="bottom" height="19" bgcolor="#C0C0C0">
+    maj/P3
+    </td>
+    <td width="470" valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      Can not launch DBCS C/C++ compiler path<span style="mso-spacerun: yes">&nbsp;
+      </span></span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58232</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">CLOSED
+      FIXED </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19" bgcolor="#C0C0C0">
+      maj/P3
+    </td>
+    <td width="470" valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:Context
+      search on System failed in C++ Search<span style="mso-spacerun: yes">&nbsp;
+      </span></span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:
+  &quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58130</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">REOP</span><span style="font-size:9.0pt;font-family:Arial">
+      (dup </span><span style="font-size: 9.0pt; font-family: Arial">60502</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:
+  &quot;Arial Unicode MS&quot;"><o:p></o:p>)
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    maj/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      The &lt;NLartifact&gt;.exe can not run susccessfully in Debug view</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58131</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">RESO
+      DUP</span><span style="font-size:9.0pt;font-family:Arial">&nbsp; (</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:
+  &quot;Arial Unicode MS&quot;">60502) </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    maj/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:Can
+      not compile DBCS C/C++ project name.</span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59898</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">CLOS
+      FIXE</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    maj/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Error
+      message box when open with C Editor<span style="mso-spacerun: yes">&nbsp; </span></span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="32">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">57863</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="32">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      Position of DBCS Targets in &quot;Build Targets&quot; panel shows not
+      properly.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:
+  &quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">57864</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">CLOSED
+      FIXE</span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      Can not make Target of DBCS file name<span style="mso-spacerun: yes">&nbsp;
+      </span></span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">57866</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      Wrong result showed in Search View<span style="mso-spacerun: yes">&nbsp; </span></span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">57867</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">CLOS
+      FIXE</span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:
+      Search NLmethod can not work well in C/C++ Search.<span style="mso-spacerun:
+  yes">&nbsp; </span></span><span style="font-size:9.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58128</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">REOP</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      (dup 60502)</o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:Can
+      not launch to debug perspective when debug DBCS file</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58229</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:Context
+      search &lt;NLclass&gt; can't work well in C/C++ Search</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="32">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59195</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">RESO
+      DUPL (58118)</span></p>
+    </td>
+    <td width="77" valign="bottom" height="32">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">[Code
+      Templates] The Code Templates panel can not show properly in C/C++ Code
+      Templates</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:
+  &quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="32">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59389</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="32">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Error
+      logs when New a C/C++ project with &quot;PE Windows Parser&quot; selected.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="33">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59410</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="33">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">CLOSED
+      FIXE (in I20040427)</span><span style="font-size:9.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="33">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="33">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:Error
+      log is displayed when you built the SC in CDT</span><span style="font-size:
+  9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="32">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58118</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="228" nowrap valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="77" valign="bottom" height="32">
+    min/P3
+    </td>
+    <td width="470" valign="bottom" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">[Code
+      Templates] of preference panel shows not properly on the default size.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+</table>
+<p><b>Bidi Hebrew</b></p>
+<table border="1" width="976">
+  <tr>
+    <td width="175"><b>Number</b></td>
+    <td width="198"><b>State</b></td>
+    <td width="105"><b>Sev/Pri</b></td>
+    <td width="470"><b>Summary</b></td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="33" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58320</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="198" nowrap valign="bottom" height="33" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">RESO
+      for windows (dup 52533)</span></p>
+    </td>
+    <td width="105" valign="bottom" height="33" bgcolor="#C0C0C0">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="33" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Build
+      is failed when project name consists BIDI characters<span style="mso-spacerun:
+  yes">&nbsp; </span></span><span style="font-size:9.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="23">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58231</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="198" nowrap valign="bottom" height="23">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="105" valign="bottom" height="23">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="23">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">DBCS:Include
+      &quot;external.h&quot; can't be built in *.cpp file </span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="bottom" height="23" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58634</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="198" nowrap valign="bottom" height="23" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">RESO
+      INVAL (dup 60225)</o:p>
+      </span></p>
+    </td>
+    <td width="105" valign="bottom" height="23" bgcolor="#C0C0C0">
+    nor/P3
+    </td>
+    <td width="470" valign="bottom" height="23" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Content
+      Assist doesn't show all methods which contains BIDI characters</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" align="center" height="32" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:10.0pt;font-family:Arial">*
+      58689</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="198" nowrap valign="top" height="32" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">New</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="105" valign="top" height="32" bgcolor="#FF0000">
+    nor/P3
+    </td>
+    <td width="470" valign="top" height="32" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Classes/Methods
+      which contains BIDI text, cause for errors while compilation </span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" align="center" height="32" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:10.0pt;font-family:Arial">*
+      58695</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="198" nowrap valign="top" height="32" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">New</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="105" valign="top" height="32" bgcolor="#FF0000">
+    nor/P3
+    </td>
+    <td width="470" valign="top" height="32" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">Problems
+      view and the Build output view display the .o file incorrectly if the file
+      doesn't exist.</span><span style="font-size:9.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+</table>
+<p><b>Bidi Arabic</b></p>
+<table border="1" width="977">
+  <tr>
+    <td width="174"><b>Number</b></td>
+    <td width="196"><b>State</b></td>
+    <td width="110"><b>Sev/Pri</b></td>
+    <td width="469"><b>Summary</b></td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59412</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">RESOLVED<span style="font-size: 9.0pt; font-family: Arial">
+      WORKS</span><span style="mso-spacerun: yes">&nbsp;&nbsp; </span></span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="19" bgcolor="#C0C0C0">
+    cri/P3
+    </td>
+    <td width="469" valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI: C/C++ search is not working with Arabic keywords<span style="mso-spacerun:
+  yes">&nbsp; </span></span><span style="font-size:9.0pt;font-family:Arial;
+  mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59419</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">RESO
+      INVAL </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="19" bgcolor="#C0C0C0">
+    maj/P3
+    </td>
+    <td width="469" valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI:
+      Cannot add Arabic variables to the inspect view </span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="32" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58272</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="32" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">RESO
+      FIXED (SWT)</o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="32" bgcolor="#C0C0C0">
+    maj/P3
+    </td>
+    <td width="469" valign="bottom" height="32" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI:
+      The C/ C++ editor doesn't preserve the keyboard language after pressing
+      sapce bar</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59233</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">RES-DUP
+      52533</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:
+  &quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="19" bgcolor="#C0C0C0">
+    maj/P3
+    </td>
+    <td width="469" valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI:
+      Cannot build Arabic C++ projects </span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="19" bgcolor="#FF0000">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">*
+      59230</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="19" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">REOP</span><span style="mso-spacerun: yes">&nbsp;&nbsp;
+      </span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="19" bgcolor="#FF0000">
+    maj/P3
+    </td>
+    <td width="469" valign="bottom" height="19" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI:
+      Arabic paths are not diplsyed in the Paths and Symbols tab</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59408</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">RESO
+      FIXED </span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="19" bgcolor="#C0C0C0">
+    nor/P3
+    </td>
+    <td width="469" valign="bottom" height="19" bgcolor="#C0C0C0">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI:
+      Build error when using Arabic named source folders </span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="174" nowrap valign="bottom" height="19" bgcolor="#FF0000">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">*
+      59416</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="196" nowrap valign="bottom" height="19" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW<span style="mso-spacerun: yes">&nbsp;&nbsp;
+      </span></span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="bottom" height="19" bgcolor="#FF0000">
+    nor/P3
+    </td>
+    <td width="469" valign="bottom" height="19" bgcolor="#FF0000">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">BIDI:
+      Content Assist is not working with Arabic class names </span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+</table>
+<p><b>China</b></p>
+<table border="1" width="978">
+  <tr>
+    <td width="175"><b>Number</b></td>
+    <td width="195"><b>State</b></td>
+    <td width="110"><b>Sev/Pri</b></td>
+    <td width="470"><b>Summary</b></td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58612</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="195" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">CLOSED
+      INVAL </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">GB18030:
+      Include paths can't be displayed in &quot;Paths and Symbols&quot; tab.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="26">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58613</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="195" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="26">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">CLOSED</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="26">
+    nor/P3
+    </td>
+    <td width="470" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="26">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">GB18030:
+      No &quot;Manage Include files&quot; tab exists in &quot;C/C++ Make
+      Project&quot; properties.</span><span style="font-size:9.0pt;font-family:
+  Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58614</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="195" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size: 9.0pt; font-family: Arial">CLOSED
+      (dup 52553)</span></p>
+    </td>
+    <td width="110" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">GB18030:
+      Can't build project which include GB18030 characters.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58775</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="195" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+    nor/P3
+    </td>
+    <td width="470" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">GB18030:
+      Selection search can't find method name which include GB18030 characters.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">58776</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="195" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">NEW</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+    nor/P3
+    </td>
+    <td width="470" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="32">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">GB18030:
+      Selection search can't find context name which include GB18030 characters.</span><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="175" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal" align="center" style="text-align:center"><span style="font-size:10.0pt;font-family:Arial">59035</span><span style="font-size:10.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+    <td width="195" nowrap valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;">CLOS
+      INVAL </o:p>
+      </span></p>
+    </td>
+    <td width="110" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+    nor/P3
+    </td>
+    <td width="470" valign="top" style="padding-left: .75pt; padding-right: .75pt; padding-top: .75pt; padding-bottom: 0in" height="19">
+      <p class="MsoNormal"><span style="font-size:9.0pt;font-family:Arial">GB18030:
+      [CTRL+SPACE] doesn't work for prompt.</span><span style="font-size:9.0pt;
+  font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+      </o:p>
+      </span></p>
+    </td>
+  </tr>
+</table>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+
+
+<font face="arial" size="2">
+
+<div class="section">Phase 4. Cultural Formatting</div>
+
+</font>
+<p><font face="Arial" size="2">Have a look as these potential areas for problems as defects may come eventually if
+users see the UI presented in a locale-insensitive format, or cannot input
+numbers/dates, as they would expect. This isn’t an exhaustive list; just a
+heads up. We'll be testing these towards the end of May.</font></p>
+<ol start="1" type="1">
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo5;tab-stops:list .5in"><font face="Arial" size="2">Display Dates<span style="font-size:10.0pt;
+     font-family:Arial;mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+    </o:p>
+    </span></font></li>
+  <ol start="1" type="1">
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Project properties: Info page; Last modified date <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">CProjectsView
+      context menu -&gt; file properties dialog: Last modified date<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Properties
+      View for file: last modified<o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Debug
+      view application start time.<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Configuration
+      details page<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">CDT
+      Console
+      run/debug start time.<o:p>
+      </o:p>
+      </font></li>
+  </ol>
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo5;tab-stops:list .5in"><font face="Arial" size="2">Sort Orders <o:p>
+    </o:p>
+    </font></li>
+  <ol start="1" type="1">
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C-projects
+      view: project names, filenames, symbol names <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Outline
+      View: each type sorted in its group<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Outline
+      View: Press sort button: sorts whole list<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Makefile
+      Outline View <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      search results<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Variables
+      view<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Breakpoint
+      view<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Class
+      Browser: Members view<o:p>
+      </o:p>
+      </font></li>
+  </ol>
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo5;tab-stops:list .5in"><font face="Arial" size="2">Search <o:p>
+    </o:p>
+    </font></li>
+  <ol start="1" type="1">
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Search: Using 0x35 (\ = yen sign in Japan)<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Search: Using ignorable characters (space, -) <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Search: Strength of search (case &amp; accents) <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Search: Decomposition of search (é &#8800;
+      e+acute in FULL decomposition) <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Content
+      Assist: results matching at TERTIARY level (exact matches: case and
+      accent) <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Content
+      Assist: matching at PRIMARY level (inexact matches, ignores accents and
+      case) <o:p>
+      </o:p>
+      </font></li>
+  </ol>
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo5;tab-stops:list .5in"><font face="Arial" size="2">Numbers Displayed <o:p>
+    </o:p>
+    </font></li>
+  <ol start="1" type="1">
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Search
+      results for &gt; 1000 results<o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Editor
+      line numbers at bottom right of Eclipse<span lang="EN-CA" style="font-size:10.0pt;
+      mso-bidi-font-size:12.0pt;font-family:Arial;mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Any
+      number if Arabic numbers are chosen for display<span lang="EN-CA" style="font-size:10.0pt;
+      mso-bidi-font-size:12.0pt;font-family:Arial;mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Build Console Preferences: Valid range error for limit console output and
+      tab width<span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:
+      Arial;mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">CProjectsView
+      context menu -&gt; file properties dialog: Size<span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:Arial;
+      mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Properties
+      View for file: size<span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:
+      Arial;mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+  </ol>
+  <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo5;tab-stops:list .5in"><font face="Arial" size="2">Numbers Input <o:p>
+    </o:p>
+    </font></li>
+  <ol start="1" type="1">
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">Accept
+      Hindi numbers as input when using a locale that recognizes both Arabic and
+      Hindi numbers. E.g. Arabic (Egypt). <o:p>
+      </o:p>
+      </font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">GDB
+      MI debug preferences: timeouts<span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:
+      12.0pt;font-family:Arial;mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Build Console Preferences: limit console output <span lang="EN-CA" style="font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:Arial;
+      mso-ansi-language:EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+    <li class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
+      auto;mso-list:l1 level2 lfo5;tab-stops:list 1.0in"><font face="Arial" size="2">C/C++
+      Build Console Preferences: display tab width<span lang="EN-CA" style="font-size:
+      10.0pt;mso-bidi-font-size:12.0pt;font-family:Arial;mso-ansi-language:
+      EN-CA"><o:p>
+      </o:p>
+      </span></font></li>
+  </ol>
+</ol>
+<p style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">&nbsp;</span></font></p>
+
+
+<div class="section">
+
+
+<font face="arial" size="2">
+
+Cheers!
+
+</font>
+</div>
+
+<p style="margin-top: 0; margin-bottom: 0"><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">Any questions or concerns please do not hesitate
+to contact me.&nbsp;<o:p>
+</o:p>
+</span></font></p>
+<p style="margin-top: 0; margin-bottom: 0"><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">Tanya</span></font></p>
+<p style="margin-top: 0; margin-bottom: 0"><font face="Arial" size="2"><span lang="EN-CA" style="mso-bidi-font-size: 12.0pt; mso-ansi-language: EN-CA">twolff@ca.ibm.com</span></font></p>
+</body>
+
+</html>

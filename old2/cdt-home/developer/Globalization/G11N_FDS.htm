@@ -1,0 +1,1529 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Globalization for CDT 2.0</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+<!-- Document Header -->
+<table cellpadding="2" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td align="left" width="72%"> <font class="indextop">Globalization Feature
+        Development Specification in </font><span class="indextop"><font class="indextop">CDT 2.0 </font></span><br>
+        <font class="indexsub">Internationalization, Localization and
+        Globalization Feature Design Specification.</font> </td>
+      <td width="28%"><img height="86"
+ src="http://dev.eclipse.org/images/Idea.jpg" width="120" alt=""></td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <tbody>
+    <tr>
+      <td>Author</td>
+      <td> : <a href="mailto:twolff@ca.ibm.com">Tanya Wolff
+      </a></td>
+    </tr>
+    <tr>
+      <td>Revision Date</td>
+      <td> : 29/01/2004 - Version: 0.2.0</td>
+    </tr>
+    <tr>
+      <td>Creation Date</td>
+      <td> : 19/01/2004 - Version: 0.1.0</td>
+    </tr>
+
+    <tr>
+      <td>Change History</td>
+      <td> : 0.1.0 - Initial Draft</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td> : 0.2.0 - Comments from Review</td>
+    </tr>
+
+  </tbody>
+</table>
+<br>
+<!-- End of Document Header -->
+<!-- Table of Contents -->
+<div class="section">Table of Contents</div>
+<br>
+<div class="indent">
+  <p style="margin-bottom: 0">
+  <a href="#intro">1. Introduction</a><br>
+  <a href="#tasks">2. Design Tasks</a><br>
+  &nbsp;&nbsp;&nbsp; <a href="#externalize strings">2.1 Externalize Strings</a><p style="margin-left: .25; margin-right: 0; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;
+  <a href="#Externalize Non-Text Objects">2.2 Externalize Non-Text Objects</a><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#unicode support">2.3 Unicode Support</a><br>
+  &nbsp;&nbsp;&nbsp; <a href="#gui components">2.4 GUI Components</a><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#bidi algorithm">2.5 Bidi Algorithm</a><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sorting">2.6 Sorting</a><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#searching">2.7.Searching</a><br>
+  &nbsp;&nbsp;&nbsp; <a href="#text files">2.8 Text Files</a><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#formatting">2.9 Formatting</a><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<a href="#packaging">2.10 Packaging</a><br>
+  <a href="#risks">3. Risks</a><p style="margin-top: 0; margin-bottom: 0"><a href="#glossary">4.
+  Glossary</a><p style="margin-top: 0; margin-bottom: 0"><a href="#references">5.
+  References</a><p style="margin-top: 0; margin-bottom: 0"><a href="#appendix a">Appendix
+  A BiDi Test</a><p style="margin-top: 0; margin-bottom: 0"><a href="#appendix b">Appendix
+  B I18N Search</a>&nbsp;<br>
+
+  
+</div>
+<br>
+<br>
+<!-- End of Table of Contents -->
+<!-- Introduction -->
+<div class="section"><a name="intro"> 1. Introduction</a></div>
+<p><span style="mso-bidi-font-size: 10.0pt; color: black">Globalization (G11N)
+of a product occurs only when Internationalization (I18N) has been achieved by development,
+localization (L10N) completed by translation centers, and packaged as a single executable ready to be used in any
+Baseline Requirement language in any Basic Support country with any Basic
+Support locale setting. In essence, G11N = I18N + L10N + Multilingual Support.</span>
+</p>
+<p>Internationalization is the responsibility of developers, regardless
+of whether the product will be translated. Users in different countries, or in
+general, may have different preferences in how numbers and text are displayed,
+what code pages of text they type in, different IMEs (Input Method Editors),
+different printers they use, how they expect output to be sorted, equivalent
+strings in searches, including ignorable or equivalent characters in different
+code sets. These preferences have a default setting in the locale installed with
+the operating system, but users may also change this locale preference through
+the control panel’s regional settings.<span style="mso-bidi-font-size:10.0pt;color:black"><o:p>
+</o:p>
+ I18N goes far beyond just preparing strings for translation. Externalizing
+strings from the executable code is part of the process of creating a
+localization pack: requirement 5 of the 8 Globalization Architectural
+Imperatives (GAI) requirements, where GAI is one of
+the 5 Baseline Requirements outlined in the Globalization White Paper.&nbsp;</span>
+</p>
+&nbsp;
+<div class="section"><a name="tasks">2. Design Tasks</a></div>
+&nbsp;
+<p style="margin-top: 0; margin-bottom: 0">This section describes the development tasks for internationalization of
+CDT. Every item is P1 since without these, globalization cannot be achieved.</p>
+<p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<div class="subsection" style="width: 8844161; height: 56">
+  <p style="margin-top: 0; margin-bottom: 0"><a name="externalize strings">2.1<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>Externalize Strings
+  </a></div>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">In order for a product to be translated, all visible
+strings must be extracted from the executable code and collected into resource
+bundles. In java we use &lt;bundle&gt;.properties to collect the English
+strings. Later, the translated strings go into &lt;bundle&gt;_xx.properties
+where xx is the language code. A localization pack is a collection of all the
+&lt;bundle&gt;_xx.properties files for a particular language, as well as any
+images, colors and sounds. The requirement to make the localization pack
+pluggable implies it can be built and installed without rebuilding/installing
+the base product, and is not bound to the base product until runtime. Also,
+localization packs for multiple languages can coexist and be used by the base
+product in any region.</p>
+<p class="MsoNormal"><b>Action Items<o:p>
+&nbsp;
+</b></p>
+<p class="MsoNormal">Content that must be extracted can be in XML files and
+software. Perform the following actions to ensure extraction is complete.<b></o:p>
+</b></p>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in">1.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>If there are any visible strings in the plugin.xml file, create a
+plugin.properties file containing each string and a key to identify it. Replace
+the string in the plugin.xml with %&lt;key&gt;.</p>
+<p style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><font size="2">E.g.</font></p>
+<p style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><font size="2">plugin.properties:</font></p>
+<blockquote>
+  <p align="left" style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="mso-bidi-font-size: 12.0pt"><font size="2">myplugin.name
+  = “Managed Build”<o:p>
+  </o:p>
+  </font></span></p>
+</blockquote>
+<p style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><font size="2">plugin.xml:</font></p>
+<blockquote>
+  <p align="left" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .25in; margin-top: 0; margin-bottom: 0"><font size="2"><span style="mso-fareast-font-family: Times New Roman; background-color: white; background-repeat: repeat; background-attachment: scroll; mso-highlight: white; background-position: 0%">&lt;wizard
+  name=&quot;%myplugin.name&quot;</span><span style="mso-fareast-font-family: Times New Roman">/&gt;</span></font><span style="font-size:10.0pt;mso-fareast-font-family:
+&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span><span style="font-size:10.0pt;mso-bidi-font-size:12.0pt"><o:p>
+  </o:p>
+  </span></p>
+</blockquote>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in;mso-layout-grid-align:none;text-autospace:none">2.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Externalize strings in java source either using Eclipse’s “find
+strings to externalize” source tool at the plugin level by right clicking on
+the plugin in the navigator, and select source-&gt;find strings to externalize,
+or at the file level by right clicking on the file in the navigator and
+selecting source-&gt;externalize strings. Alternatively, this task can be done or manually as
+follows:</p>
+<p class="MsoNormal" style="margin-left:.75in;text-indent:-.25in;mso-list:l34 level2 lfo66;
+tab-stops:list .75in;mso-layout-grid-align:none;text-autospace:none">a.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>For each plugin, create property files organized according to GUI
+categories. Invent logical key names for each string with dot separated category
+prefixes. The convention is &lt;classname&gt;.&lt;qualifier&gt;. Do not use
+computed key names. The property files are loaded into memory as needed and remain as an
+instance of a ResourceBundle, so the initial loading takes time and space
+directly proportional to the size of the property file.</p>
+<p class="MsoNormal" style="margin-left:.75in;text-indent:-.25in;mso-list:l34 level2 lfo66;
+tab-stops:list .75in;mso-layout-grid-align:none;text-autospace:none">b.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Create a dedicated accessor class to the Resource Bundle which includes
+getString and getFormattedString as static methods.</p>
+<blockquote>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><i>ContextIds.java:</i></span></p>
+  <blockquote>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">public</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;;
+background:white;mso-highlight:white">  class ContextIds {</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>private static final String BUNDLE_NAME = &quot;org.eclipse.cdt.myplugin.contextIds&quot;;
+  //$NON-NLS-1$</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>private static final ResourceBundle
+  RESOURCE_BUNDLE =</span><span style="font-size:9.0pt;mso-bidi-font-size:
+10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>ResourceBundle.getBundle(BUNDLE_NAME);</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="text-indent: .25in; mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:
+10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:
+white">private</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">
+  contextIds() {</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>}</span><span style="font-size:9.0pt;
+mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>public static String getString(String key) {</span><span style="font-size:9.0pt;mso-bidi-font-size:
+10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>try {</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:
+&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>return RESOURCE_BUNDLE.getString(key);</span><span style="font-size:9.0pt;mso-bidi-font-size:
+10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>} catch (MissingResourceException e) {</span><span style="font-size:9.0pt;
+mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>return '!' + key + '!';</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>}</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>}</span><span style="font-size:9.0pt;
+mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="text-indent: .25in; mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:
+10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:
+white">public</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">
+  static String getFormattedString(String key, Object[] args) {</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>try {</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:
+&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>return MessageFormat.format(RESOURCE_BUNDLE.getString(key), args);</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>} catch (MissingResourceException e) {</span><span style="font-size:9.0pt;
+mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>return '!' + key + '!';</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>}</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="mso-layout-grid-align: none; text-autospace: none; margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>}</span><span style="font-size:9.0pt;
+mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  <p class="MsoNormal" style="text-indent: .25in; mso-layout-grid-align: none; text-autospace: none; margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">}</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </o:p>
+  </span></p>
+  </blockquote>
+</blockquote>
+<p class="MsoNormal" style="margin-left:.75in;mso-layout-grid-align:none;
+text-autospace:none">The getFormattedString method allows you to get a
+single pattern string in the properties file, instead concatenating several
+string parts which leads to errors after translation. This method is not
+automatically created by the externalize strings wizard, but should be added
+manually if there are many formatted strings.</p>
+<blockquote>
+<p class="MsoNormal" style="margin-left: .75in; margin-top: 0; margin-bottom: 0"><i>contextIds.properties:</i></p>
+<p class="MsoNormal" style="margin-left: .75in; margin-top: 0; margin-bottom: 0">&nbsp;<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style="font-size:9.0pt;mso-bidi-font-size:12.0pt">contextKey.searchResult
+= The search found {0} files containing “{1}” on disk {2}. <o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-left: .75in; margin-top: 0; margin-bottom: 0">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="margin-left: .75in; margin-top: 0; margin-bottom: 0"><i>contextIds_de.properties:</i></p>
+<p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;
+mso-bidi-font-size:12.0pt">contextKey.searchResult = Es gibt {0} Dateien auf
+Platte {2}, die </span><span style="font-size:9.0pt;mso-bidi-font-size:13.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;">„</span><span style="font-size:9.0pt;
+mso-bidi-font-size:12.0pt">{1}</span><span style="font-size:9.0pt;mso-bidi-font-size:
+13.0pt;mso-fareast-font-family:&quot;Times New Roman&quot;">“</span><span style="font-size:9.0pt;mso-bidi-font-size:12.0pt">
+enthalthen.<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-left: .75in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;
+mso-bidi-font-size:12.0pt">&nbsp;<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-left: .75in; margin-top: 0; margin-bottom: 0"><i>MyUI.java:</i></p>
+<p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;
+mso-bidi-font-size:12.0pt">ContextIds.getFormattedString(&quot;contextKey.searchResult&quot;,
+new Object[] {23, “classA”, “C:\dev”});<o:p>
+</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">//$NON-NLS-1$</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+ //</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">$NON-NLS-2$</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </span><span style="font-size: 9.0pt; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: Times New Roman">//</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">$NON-NLS-3$</span><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;"><o:p>
+  </span><span style="font-size:9.0pt;
+mso-bidi-font-size:12.0pt">
+</o:p>
+</span></p>
+</blockquote>
+<p class="MsoNormal" style="margin-left:.75in;mso-layout-grid-align:none;
+text-autospace:none"><span style="mso-bidi-font-size:10.0pt;mso-fareast-font-family:
+&quot;Times New Roman&quot;;color:black">&nbsp;Alternatively, following some
+current CDT plugins, create</span> these methods in an existing class, where the
+constructor sets the RESOURCE_BUNDLE and a shared instance of the plugin. The
+getString method would then return the static instance’s RESOURCE_BUNDLE.</p>
+<blockquote>
+  <p class="MsoNormal">&nbsp;c.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>Tag any non-translatable strings with // $NON-NLS-n$ on the same line
+  in the java code, where n is the nth non-translatable string on the line.</p>
+</blockquote>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25"><span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;</span>3.&nbsp;&nbsp;&nbsp;Search for keys in property files which are not referenced anywhere in the java
+source code and plugin.xml files and remove them. There is no easy way to do
+this. For new plugins following key guidelines as above, a file search can be
+used but this may not work for existing plugins. As a rule, keys should not be
+computed, but if old code contains computed keys, it may be impossible to
+determine whether a key is no longer in use.</p>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25">4.&nbsp;
+Inspect strings in property files from a translator perspective. If the subject
+is implied, add a comment so that the verb and adjective forms can be derived
+during translation. If there is a limit on the width of a text field or table
+column, or unwrappable or unscrollable text area, identify the maximum number of
+characters in a comment in the property files.</p>
+<h3 style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in"><span style="font-style: normal; font-variant: normal"><b><a name="Externalize Non-Text Objects">2.2
+Externalize Non-Text Objects</a></b></span></h3>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in"><b>Action Items<o:p>
+&nbsp;
+</b></p>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in">1. Separate presentation-dependent parameters, such as default fonts dependent on
+the OS, or size or layout constraints.</p>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25; margin-top: 0; margin-bottom: 0"><i>&nbsp;&nbsp;&nbsp;</i>
+For example,&nbsp;</p>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;<i>&nbsp;
+message.properties:</i></p>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+default.tableWidth = 80</p>
+<p class="MsoNormal" style="text-indent: -.25; margin-left: .25; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l34 level1 lfo66; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;<i>
+font.properties:</i></p>
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l34 level1 lfo66; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+org.eclipse.jface.defaultfont.0=MS Sans Serif-regular-8</p>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in">2. Images, Colors and AudioClips <span style="mso-fareast-language:
+JA">should also be externalized</span> to be sent to translation centers to
+review. Although these are not usually translated, this allows the countries to verify
+that they are within government standards/cultural acceptance and/or to exchange them with their own
+preferences.</p>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in">3. For Images, specific action items are as follows:</p>
+<blockquote>
+  <p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l34 level1 lfo66;
+tab-stops:list .25in">1. Put all icon and image file resources into an icons/
+  folder under the plugin directory.</p>
+  <p class="MsoNormal" style="text-indent: -.25in; mso-list: l34 level1 lfo66; tab-stops: list .25in; margin-left: .25in">2.
+  Create a dedicated accessor class as a source file called &lt;plugin&gt;Images.java.
+  Create a static ImageRegistry object, an ImageDescriptor for each icon or
+  image, and put each ImageDescriptor into the imageRegistry.</p>
+  <blockquote>
+    <p class="MsoNormal" style="text-indent: -.25in; mso-list: l34 level1 lfo66; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0"><b>private</b>
+    <b>static</b> ImageRegistry fgImageRegistry = <b>new</b> ImageRegistry();</p>
+    <p style="margin-top: 0; margin-bottom: 0">imageURL =&nbsp; <b>new</b> URL(
+    Plugin.getDescriptor().getInstallURL(), &quot;icons/&quot; ) + imageFile;</p>
+    <p style="margin-top: 0; margin-bottom: 0">ImageDescriptor result =
+    ImageDescriptor.createFromURL( imageURL );</p>
+    <p style="margin-top: 0; margin-bottom: 0">fgImageRegistry.put( key, result
+    );</p>
+    <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+  </blockquote>
+  <p style="margin-top: 0; margin-bottom: 0">3. Create a static accessor method
+  for the images.</p>
+  <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+  <b>
+  <blockquote>
+    <p style="margin-top: 0; margin-bottom: 0"><font SIZE="2">public</font></b><font SIZE="2">
+    </font><b><font SIZE="2">static</font></b><font SIZE="2"> Image get(String
+    key) {</p>
+    <p style="margin-top: 0; margin-bottom: 0"></font><b><font SIZE="2">&nbsp;&nbsp;&nbsp;
+    return</font></b><font SIZE="2"> imageRegistry.get(key);</p>
+    <p style="margin-top: 0; margin-bottom: 0">}</p>
+  </blockquote>
+  </blockquote>
+</font>
+<p style="margin-top: 0; margin-bottom: 0">4. Alternatively, we could adopt an
+inheritance strategy as Aurora does with a ResourceManager handling all the
+accessor methods for strings, fonts, and images. An abstract ResourceManager
+class exists with static members already set and each plugin extends this class,
+adding its own Images to its implementation.</p>
+<font SIZE="2">
+</font>
+<p class="MsoNormal">&nbsp;<o:p>
+</o:p>
+</p>
+<h3><a name="unicode support">2.3 Unicode Support</a></h3>
+<p class="MsoNormal">Unicode is not only a coded character set which covers
+every character and glyph in the world. It is also comprised of standard
+encoding forms, each of which has a mapping from the coded character set to an
+integer representation. In addition, Unicode sets standards for locale-sensitive functions such
+as representing data, sorting data, parsing strings not limited to the Latin-1
+character set.&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal">Unicode's coded character set comprises the first 16 planes of the first group of
+IS0-10646-1 characters and cover the coded characters in the range 0000 to
+10FFFF. The characters above FFFF are mapped to surrogate pairs in the encoding
+form, UTF-16, which
+first had characters in Java 1.4.1. UTF-16 is the preferable form of Unicode
+because all characters are represented as 16 bits (or 2 units for surrogate
+pairs, whose range of values don’t conflict with single unit encoding). UTF-8
+will be slower for DBCS processing, and UTF-32 will take up a huge amount of
+memory.</p>
+<p class="MsoNormal">The following are I18N APIs which are locale-sensitive in
+that they demonstrate encapsulation of the Unicode algorithms. The APIs listed
+are drawn from the Java 1.4.1 documentation. Some of these support Unicode 3.0 or 2.0
+algorithms only.
+</p>
+<table border="0" cellspacing="0" cellpadding="0" style="margin-left:.5in;border-collapse:
+ collapse;mso-padding-alt:0in 5.4pt 0in 5.4pt">
+  <tr>
+    <td width="295" valign="top" style="width:221.4pt;padding:0in 5.4pt 0in 5.4pt">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><b><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Java.Text<o:p>
+      </o:p>
+      </span></b></p>
+      <p class="MsoNormal" style="text-indent: .5in; margin-left: .5in; margin-top: 0; margin-bottom: 0"><b><span style="font-size:10.0pt;mso-bidi-font-size:12.0pt">Strings<o:p>
+      </o:p>
+      </span></b></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">CharacterIterator<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">BreakIterator<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">StringCharacterIterator<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">&nbsp;<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><b><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Format &amp; Parsing<o:p>
+      </o:p>
+      </span></b></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Format<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">FieldPosition <o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">ParsePosition<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">NumberFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">DecimalFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">RuleBasedNUmberFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">DecimalFormatSymbols<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">DateFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">SimpleDateFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">DateFormatSymbols<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">MessageFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">ChoiceFormat<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">&nbsp;<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><b><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Collation<o:p>
+      </o:p>
+      </span></b></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Collator<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">RuleBasedCollator<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">CollationKey<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">CollationElementIterator<b><o:p>
+      </o:p>
+      </b></span></p>
+    </td>
+    <td width="295" valign="top" style="width:221.4pt;padding:0in 5.4pt 0in 5.4pt">
+      <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><b><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Java.Util<o:p>
+      </o:p>
+      </span></b></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Calendar<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">GregorianCalendar<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">Locale<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="margin-left: 1.0in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+  mso-bidi-font-size:12.0pt">ResourceBundle<o:p>
+      </o:p>
+      </span></p>
+      <p class="MsoNormal" style="text-indent: .5in; margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;mso-bidi-font-size:12.0pt">SimpleTimeZone</span></p>
+      <p class="MsoNormal">&nbsp;<b><span style="font-size:10.0pt;mso-bidi-font-size:12.0pt"><o:p>
+      </o:p>
+      </span></b></p>
+    </td>
+  </tr>
+</table>
+<p class="MsoNormal"><b>Action Items<o:p>
+&nbsp;
+</b></p>
+<ol>
+  <li>
+    <p class="MsoNormal">Use JRE since it supports Unicode. Character and String types are
+represented internally using Unicode, so anything entered via different
+keyboards, the system tools character map, or different IMEs are valid input to
+the application. In parsing strings, remember that each character is more than
+one byte, and each word is not necessarily delimited by whitespace and converting a
+string to upper or lower case may expand or collapse
+the length.&nbsp;</li>
+<li>
+<p class="MsoNormal">
+When displaying strings, numbers, dates, etc., remember they have different
+representations depending on the locale. Use the above Format classes which
+provide locale-sensitive
+algorithms, and abstracts the details of these algorithms, so that developers
+won’t have to implement locale-sensitive code themselves. More on formatting
+messages can be found in the <a href="#formatting">Formatting</a> section.</li>
+<li>
+<p class="MsoNormal">
+<span style="mso-fareast-language:JA">Case
+Conversion: Use a StringBuffer object to convert case of strings in case it
+contains an expandable/collapsable character. Avoid using the toUpperCase() and
+toLowerCase() methods on the Character object since there is not always a 1-1 mapping from a lower case character
+to an upper case character: Eg German ‘ß’ character becomes SS when
+String.toUppercase() is invoked. A Character.toUpperCase() may return false for
+some DBCS if there isn’t a 1-1 mapping to an uppercase character.<o:p>
+&nbsp;
+</span></li>
+</ol>
+<h3><a name="gui components">2.4&nbsp;<span style="font:7.0pt &quot;Times New Roman&quot;">
+</span>GUI Components</a></h3>
+
+<p class="MsoNormal"><span style="mso-fareast-language:
+JA">When text is translated, or system font size is changed, or vision-impaired
+users turn on High Contrast, the text may take up more space. The UI components
+should grow or shrink to accommodate the new text size, without truncation.<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal"><b>Action Items<o:p>
+</b></p>
+<ol>
+  <li>
+    <p class="MsoNormal"> Ensure all components are resizable.&nbsp;
+</li>
+  <li>
+    <p class="MsoNormal"> Ensure no text fonts are hard coded. These will be
+    externalized into a font.properties file as mentioned in the section, &quot;<a href="#Externalize Non-Text Objects">Externalize
+    Non-Text Objects</a>&quot;.
+</li>
+</ol>
+<h3><span style="mso-bookmark:_Toc58146548"><a name="bidi algorithm">2.5<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Bidi Algorithm</a></span></h3>
+<p class="MsoNormal">Regardless of whether CDT is translated to bidirectional
+languages (Arabic, Urdu, Farsi, Hebrew, and Yiddish), internationalization
+includes presentation of data in any character set. Bidirectional languages display character<span style="mso-fareast-language:JA">s</span>
+in right to left (RTL) sequence, but numbers and English (or French) insertions are
+displayed left to right (LTR). Bahrain, Egypt, Jordan, Kuwait, Lebanon, Oman,
+Qatar, Saudi Arabia, Syria, United Arab Emirates and Yemen are the Arabic
+Speaking countries using English as an additional language. Algeria, Morocco and
+Tunisia are Arabic Speaking countries using French as an additional language.&nbsp;
+Text is stored and processed in <b> logical</b> order to
+make processing feasible, such as copy&amp;paste. Sorting and searching in text
+rely on the storage of text in logical order. For displaying, it must be
+reordered. The Unicode standard specifies an algorithm for this
+logical-to-visual reordering.<b> Avoid Data Loss</b>: Data should not be reordered from
+logical to visual order except for display and printing. Logical-to-visual
+reordering is a many-to-one function. Bidirectional data should be converted to
+Unicode and reordered to logical order only once to avoid roundtrip losses.</p>
+<p class="MsoNormal"><b>Action Items</b></p>
+<ol>
+  <li>
+    <p class="MsoNormal">All text input should undergo a check if it requires
+Bidi before storing and if so, create a Bidi object. There are three cases of
+input to be considered to determine if physical-to-logical reordering is
+necessary.
+    <ol>
+      <li>If
+    each character is stored as it is typed: Here the text is stored correctly,
+    in logical order. Only for redisplaying should a Bidi object be created.</li>
+      <li>If
+    input is received through a Component’s getText() method, the text is
+        stored in logical order (as it was typed). Processing can be done on it,
+        but in order to display it, it must be reordered. Note: JDT does this
+        nicely in M5. System.out.println displays differently in eclipse console
+        than in windows command console. See <a href="#appendix A">Appendix A</a>
+        for a test to make sure the display is correct.</li>
+      <li>Input
+    received through an InputStream: Must determine how it was sent.</li>
+    </ol>
+  </li>
+</ol>
+<blockquote>
+  <blockquote>
+    <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+mso-bidi-font-size:12.0pt">If (Bidi.requiresBidi(text, start, limit) {<o:p>
+</o:p>
+</span></p>
+    <p class="MsoNormal" style="text-indent: .5in; margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;mso-bidi-font-size:12.0pt">Bidi
+newText = new Bidi(…);<o:p>
+</o:p>
+</span></p>
+    <p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+mso-bidi-font-size:12.0pt">}<o:p>
+    &nbsp;
+</span></p>
+  </blockquote>
+</blockquote>
+<ol start="2">
+  <li> All Bidi objects should be reordered for visual display.
+This includes determining the number of nested runs of RTL text and LTR text,
+and possible overridings. Eg. Some numbers can be forced to print RTL, instead
+of the default LTR.</li>
+</ol>
+<h3><a name="sorting">2.6 <span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Sorting</a></h3>
+<p class="MsoNormal">Users can expect sorted output to be sorted according to a
+particular locale setting. How the presented data is sorted varies between
+languages. Issues concerning accents, conjoined letters and ignorable
+punctuation are important as the priorities for these preferences vary from
+country to country. For instance, French requires that letters sorted with
+accents at the end of the string be sorted ahead of accents in the beginning of
+the string. For example, the word &quot;côte&quot; sorts before &quot;coté&quot;
+because the acute accent on the final &quot;e&quot; is more significant than the
+circumflex on the &quot;o&quot;. String.compareTo() and String.indexOf() are not
+locale-sensitive and should be avoided whenever lists to sort may contain
+non-Latin-1 characters.</p>
+<p class="MsoNormal">Case should always be sorted using a Collator, because even
+hex-based sorting won’t work: here all capitals come before lowercase, and
+this is not desired even in English.</p>
+<p class="MsoNormal">C/C++ standards indicate that identifiers as well as string
+literals can be made up of universal characters if they are represented as \uxxxx
+or \Uxxxxxxxx.&nbsp;Gnu compiler doesn't support universal character names in
+identifiers, but Visual Studio 6.0 does.</p>
+<p class="MsoNormal"><b>Action Items</b>
+</p>
+<ol>
+  <li>
+    <p class="MsoBodyText2" style="margin-left:.25in;text-indent:-.25in;mso-list:
+l50 level1 lfo65;tab-stops:list .25in">Choose either Collator or CollationKey for
+    the comparison object. For a
+single comparison or sorting a list of 10 strings or less, use a Collator to
+    compare Strings a and b or sort a list:</li>
+</ol>
+    <p class="MsoBodyText2" style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    Collator coll= Collator.getInstance();
+<blockquote>
+  <p class="MsoBodyText2" style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  if (coll.compare(a, b) == 0) ... ;
+  <p class="MsoBodyText2" style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;
+</blockquote>
+<p class="MsoBodyText2" style="margin-left:.25in;text-indent:-.25in;mso-list:
+l50 level1 lfo65;tab-stops:list .25in">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    For longer lists, convert all strings to
+CollationKeys first. CollationKeys to be compared must be created by the same
+Collator object.
+<blockquote>
+  <p style="margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+  <p style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+mso-bidi-font-size:12.0pt">Collator coll = Collator.getInstance();<o:p>
+</o:p>
+</span></p>
+  <p style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt;
+mso-bidi-font-size:12.0pt">CollationKey aKey = coll.getCollationKey(a);<o:p>
+</o:p>
+</span></p>
+  <p style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt">i</span><span style="font-size:10.0pt;
+mso-bidi-font-size:12.0pt">f (aKey.compare(coll.getCollationKey(b) == 0) … ; </o:p>
+</span></p>
+</blockquote>
+<ol start="2">
+  <li>
+    <p class="MsoBodyText2" style="margin-left:.25in;text-indent:-.25in;mso-list:
+l50 level1 lfo65;tab-stops:list .25in">Set the strength of the comparison. By
+    default, the Collator's strength is TERTIARY, so it finds PRIMARY, SECONDARY
+    and TERTIARY differences.&nbsp;</li>
+</ol>
+<blockquote>
+<blockquote>
+  <blockquote>
+    <p style="text-indent: -1in; margin-left: 1in; margin-top: 0; margin-bottom: 0">PRIMARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    finds primary differences only such as different letters. Ignores case and
+    accents. Note that in French, e and é are considered the same in primary
+    strength, but in Danish, a and å are different letters.</p>
+<p style="text-indent: -1in; margin-left: 1in; margin-top: 0; margin-bottom: 0">SECONDARY&nbsp;&nbsp;
+finds primary and secondary differences. In English and French, accents are
+secondary differences. Here 'e' and 'é' are considered different in both English
+and French, but 'e' and 'E' are still the same under secondary strength.</p>
+<p style="text-indent: -1in; margin-left: 1in; margin-top: 0; margin-bottom: 0">TERTIARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+finds primary, secondary and tertiary differences. Case differences are
+considered tertiary differences. E and e are different in tertiary strength.</p>
+<p style="text-indent: -1in; margin-left: 1in; margin-top: 0; margin-bottom: 0">IDENTICAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+finds all differences, even if 2 characters look the same. Eg. An accented
+character such as &quot;\u00C0&quot; (A-grave) and combining accents such as
+&quot;A\u0300&quot; (A, combining-grave) are different. Note these are only
+different if the composition is set at the default, NO_DECOMPOSITION. If
+decomposition were set higher, then &quot;\u00C0&quot; (A-grave) would be
+decomposed before comparison, and then no differences would be found.</p>
+<p style="text-indent: -1in; margin-left: 1in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+  </blockquote>
+</blockquote>
+<p style="text-indent: -1in; margin-left: 1in; margin-top: 0; margin-bottom: 0">E.g.</p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0">Collator
+coll = Collator.getInstance();</p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; color: windowtext">c</span><span style="font-size:10.0pt;
+mso-bidi-font-size:12.0pt;color:windowtext">oll.setStrength(Collator.PRIMARY);</span></p>
+<p style="text-indent: 0; margin-left: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p style="text-indent: 0; margin-left: 0; margin-top: 0; margin-bottom: 0"><b>Ignorable
+characters</b>. In Java 1.4.1, certain ignorable characters are ignored only
+when the strength of the comparison is set to PRIMARY. For instance,
+    &quot;black-bird&quot;, &quot;blackbird&quot; and &quot;black bird&quot; are
+considered the same at the PRIMARY level, but different at the SECONDARY level.
+In the future, Java will incorporate the Unicode Collation Algorithm version 4
+which contains a&nbsp; QUATERNARY level. This will find differences in ignorable characters
+at the Quaternary level, but they won't be found in the primary, secondary or
+    tertiary levels.</p>
+<p style="text-indent: 0; margin-left: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p style="text-indent: 0; margin-left: 0; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; color: windowtext">To
+add a rule to the collator so that space and '-' are not ignored, but still
+treated as secondary differences, retrieve the collator's rules and replace the
+first compare operator with a '&lt;' since every character in the ruleset up to
+the first '&lt;' is ignored.&nbsp;</span></p>
+<p style="text-indent: 0; margin-left: 0; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p style="text-indent: 0; margin-left: 0; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; color: windowtext">E.g.</span></p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; color: windowtext">RuleBasedCollator
+coll = (RuleBasedCollator)Collator.getInstance();</span></p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; color: windowtext">String
+oldRules = coll.getRules();</span></p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt; mso-bidi-font-size: 12.0pt; color: windowtext">coll
+= new RuleBasedCollator(&quot;&lt;&quot;+oldRules.substring(1));</span></p>
+<p class="MsoBodyText2" style="margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+</blockquote>
+<ol start="3">
+  <li>
+    <p class="MsoBodyText2" style="margin-left:.25in;text-indent:-.25in;mso-list:
+l50 level1 lfo65;tab-stops:list .25in">Set the decomposition level of the Collator.</li>
+</ol>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">NO_DECOMPOSITION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      This is the default and is the fastest, but won’t return the correct
+      result for characters with accents.</p>
+      <p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">CANONICAL_DECOMPOSITION&nbsp;&nbsp;&nbsp;&nbsp;
+      This is recommended, as composed characters are converted to 2 Unicode
+      characters: the base and the accent. This would return the correct result
+      when comparing two identical characters with accents from different
+      codesets.</p>
+      <p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">FULL_DECOMPOSITION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      For Japanese comparisons,&nbsp; this will
+recognize that half width and full width variants of the same letter are
+      different.</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt">E.g.&nbsp;&nbsp;&nbsp;&nbsp;
+</span></p>
+<p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt">&nbsp;&nbsp;&nbsp;
+coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION)<o:p>
+</o:p>
+</span></p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;
+4.&nbsp;&nbsp;&nbsp;&nbsp; Sort the list. Sorting a list requires passing the Collator object to the
+sort function.</p>
+<p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+  <p class="MsoBodyText2" style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  E.g.
+  <p class="MsoBodyText2" style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;
+<blockquote>
+  <p class="MsoBodyText2" style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Collections.sort(mylist, coll).
+</blockquote>
+<p class="MsoNormal" style="text-indent: -2.2in; margin-left: 2.2in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<h3 style="text-indent: -.25in; mso-list: l50 level1 lfo65; tab-stops: list .25in;>
+    CDT PII which must be sorted include online glossaries, indexes, lists,
+projects, search results by name, parent name or path, outline view.
+Collate.compareTo is fine for a single comparison or sorting an list of 10
+strings or less. This method converts each string internally to a CollationKey
+for bitwise comparison. A larger list can be sorted much quicker by first
+converting the list to contain CollationKey elements explicitly.</li>
+</ol>
+<h3><a name=" searching">2&nbsp;&nbsp;&nbsp;<a name="searching">2.7 Searching</a></h3>
+<p class="MsoNormal">CDT Search feature must respond to searches of identifiers
+in different character sets, as well as ordering the results according the
+preferred locale. Issues in language-sensitive sorting are also applicable to
+text searching. This includes locale-sensitive priorities on accents, conjoined
+letters, and ignorable punctuation. For instance, English searches can ignore
+accents, whereas some French accents are more important than others. Danish
+searches treat<span style="mso-spacerun: yes">&nbsp; </span>'å' (\u00e5) and 'aa'
+as equal. Conjoined letters can be collapsed as well as expanded. E.g. Spanish
+‘ch’ is to be treated as one letter between ‘c’ and ‘d’. (In java
+1.4.1 the Collator supports this particular collapse only in the Catalan
+locale). As well, searching for “blackbird” could return “black-bird”.</p>
+<p class="MsoNormal">String.indexOf won’t handle these cases properly. When
+comparing using Collation, each character is converted to a key containing 4
+components: alphanumeric, diacritic, case and special subkeys. After that, a
+weight is put on each component according to the locale.&nbsp;<o:p>
+</o:p>See <a href="#appendix b"> Appendix B</a> for a national language index function.<span style="font-size:10.0pt;mso-bidi-font-size:12.0pt"></o:p>
+</span>
+</p>
+<p class="MsoNormal" style="text-indent: .5in; margin-top: 0; margin-bottom: 0">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal"><b>Action Items</b></p>
+<p class="MsoNormal">1. Create a Collator object as you would for sorting (see
+the previous section). It must be the RuleBasedCollator type for the next step.</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span style="mso-bidi-font-size:10.0pt">2.
+Create an iterator
+for searching in a string:<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span style="mso-bidi-font-size:10.0pt">&nbsp;<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size:10.0pt">RuleBasedCollator
+rbc = (RuleBasedCollator) Collator.getInstance();<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-left: .5in; margin-top: 0; margin-bottom: 0"><span style="font-size: 10.0pt">r</span><span style="font-size:10.0pt">bc.getCollationElementIterator();</span><span style="mso-bidi-font-size:10.0pt"><o:p>
+&nbsp;
+</span></p>
+<p class="MsoNormal">3.&nbsp;Find the index of the substring by iterating
+through the string. The internationalized indexOf code is included in <a href="#appendix b">Appendix
+B</a>.</p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto">&nbsp;</p>
+<h3><a name="text files">2.8<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Text Files</a></h3>
+<p class="MsoNormal">Reading and writing text files (and importing source files)
+require consideration that the local character encoding may not be in ASCII or
+Unicode. For instance on a Chinese operating system, the Notepad uses GB or BIG5
+encoding. Java contains APIs which read and write a particular encoding to/from
+Unicode. These are not locale-sensitive, just platform sensitive, and this is a
+known limitation.</p>
+<p class="MsoNormal">Native2ascii is a jdk tool that can convert from the local
+character set directly to ascii, if the Editor’s display mode is ascii.</p>
+<p class="MsoNormal">&nbsp;</o:p>
+</p>
+<p class="MsoNormal">Java is required to support the following encoding schemes:
+</p>
+<blockquote>
+  <ul>
+    <li>
+      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">US-ASCII
+      Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the
+      Unicode character set&nbsp;</li>
+    <li>
+      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">ISO-8859-1
+      ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1&nbsp;</li>
+    <li>
+      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">UTF-8
+      Eight-bit Unicode Transformation Format&nbsp;</li>
+    <li>
+      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">UTF-16BE
+      Sixteen-bit Unicode Transformation Format, big-endian byte order&nbsp;</li>
+    <li>
+      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">UTF-16LE
+      Sixteen-bit Unicode Transformation Format, little-endian byte order&nbsp;</li>
+    <li>
+      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">UTF-16
+      Sixteen-bit Unicode Transformation Format, byte order specified by a
+      mandatory initial byte-order mark (either order accepted on input,
+      big-endian used on output)</li>
+  </ul>
+</blockquote>
+<p class="MsoNormal">Other encodings are subject to an
+UnsupportedEncodingException.<o:p>
+</o:p>
+</p>
+<p class="MsoNormal">&nbsp;</p>
+<p class="MsoNormal"><b>Action Items</b>
+</p>
+<p class="MsoNormal">1. Do not use InputStream and OutputStream as these cannot
+read or write Unicode characters.
+</p>
+<p class="MsoNormal">2. When reading a file (not created by Eclipse), use
+InputStreamReader to convert from the default code page to Unicode. An optional
+encoding parameter for the InputStreamReader constructor is a String following
+the naming standards set by the IANA Character Registry. If no encoding is
+specified in the constructor, then the platform's default code page is
+assumed.&nbsp;&nbsp;
+</p>
+<p>E.g.
+</p>
+<blockquote>
+  <p>public Reader readArabic(String file) throws IOException {<br>
+  &nbsp;&nbsp;&nbsp; InputStream fileIn = new FileInputStream(file);<br>
+  &nbsp;&nbsp;&nbsp; return new InputStreamReader(fileIn,
+  &quot;iso-8859-6&quot;);<br>
+  }<br>
+  </p>
+</blockquote>
+  <p>3. When reading a Unicode file in UTF-16 encoding, there may exist a Byte Order Mark
+  (BOM) at the beginning which must be removed before processing the file.&nbsp;
+  It is either FEFF for BigEndian or FFFE
+for LittleEndian.
+  </p>
+<p class="MsoNormal">4. When writing to a file, use OutputStreamWriter which converts Unicode to the local character encoding.
+Unicode characters in the range above FFFF are mapped to a double 16-bit unit
+encoding called surrogates and resulting in the range \uD800 - \uDFFF. It is
+illegal to attempt to write a character stream containing malformed surrogate
+elements, a character with a missing surrogate, so ensure that a Unicode
+character requiring surrogates is not split.
+</p>
+<p class="MsoNormal">If the output is intended for the C-compiler and the local
+character encoding is not ANSI compliant (7 or 8 bit), then OutputStreamWriter can also be used to
+convert to a specified encoding using the required charset’s canonical name
+found in the IANA Character Registry.
+</p>
+<p class="MsoNormal">E.g.&nbsp;
+</p>
+<blockquote>
+<p class="MsoNormal"></o:p>public Writer writeForCompiler(String file) throws
+IOException {<br>
+&nbsp;&nbsp;&nbsp; OutputStream fileOut = new FileOutputStream(file);<br>
+&nbsp;&nbsp;&nbsp; return new OutputStreamWriter(fileOut,
+&quot;iso-8859-1&quot;);<br>
+}
+</p>
+</blockquote>
+<p class="MsoNormal">Keep in mind that this produces a folded character of '?'
+if the character is beyond \u00ff. Convert it first to a string of &quot;\uxxxx&quot;.
+</p>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><span style="font-size:10.0pt;font-family:Verdana;color:black"><o:p>
+</o:p>
+</span></p>
+<h3><a name="formatting">2.9&nbsp;<span style="font:7.0pt &quot;Times New Roman&quot;">
+</span>Formatting</a></h3>
+<p class="MsoNormal">An internationalized application is sensitive to a
+country's preference in how their numbers, dates, and times are displayed.&nbsp;
+For example, the number 12345.67 is
+&quot;12,345.67&quot; in the US, &quot;12 345,67&quot; in France and
+&quot;12.345,67&quot; in Germany. Most format classes have getInstance methods
+which retrieve a singleton based on either the locale provided as an argument,
+or the default locale, if none provided. MessageFormat is also locale-sensitive
+and is instantiated with a pattern and locale, or uses the default locale if not
+specified. MessageFormat can also use a static method for formatting based on
+the default locale. ChoiceFormat must be instantiated with a pattern and is not
+locale-sensitive. &nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal"><b>Action Items</b></p>
+<p class="MsoNormal">Use the APIs listed in the <a href="#unicode support"> Unicode
+Support</a> Section for formatting
+in the following areas:</p>
+<p class="MsoNormal">1. Number display: All numbers displayed either in the
+application or written to non-c/c++ source files require the use of NumberFormat
+class.&nbsp;</p>
+<blockquote>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">NumberFormat nf =
+NumberFormat.getInstance();</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">System.out.println(nf.format(10123));</p>
+</blockquote>
+<p class="MsoNormal">Plurals in messages often combine ChoiceFormat with
+NumberFormat. Although ChoiceFormat is not a locale sensitive object, it can be
+used in conjunction with MessageFormat in retrieving resource bundles. A
+ChoiceFormat object is instantiated with either a pattern or two arrays: one
+containing the limits and one containing the formats. Here is an example where a
+pattern is used:</p>
+<blockquote>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">ChoiceFormat myform
+= new ChoiceFormat (&quot;0#no files|1#one file|2#many files&quot;);</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">for (int i = -5; i&lt;10;
+i++) {System.out.println(&quot;number of files: &quot;+myform.format(i));}</p>
+</blockquote>
+<p class="MsoNormal">2. Dates and Times: In error log timestamps, or
+configuration details pages, times and dates should be displayed using
+DateFormat.&nbsp;</p>
+<blockquote>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">DateFormat theDate
+= DateFormat.getDateInstance(DateFormat.LONG);</p>
+  <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">DateFormat
+  theTime = DateFormat.getTimeInstance(DateFormat.SHORT);</p>
+  <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Date d = new
+  Date();</p>
+  <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">System.out.println(&quot;The
+  time is &quot;+theTime.format(d)+&quot; on &quot;+theDate.format(d));</p>
+</blockquote>
+<p class="MsoNormal" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:auto"><span style="mso-fareast-language:JA">
+</o:p>
+</span></p>
+<p class="MsoNormal">3. Messages: If strings are to be displayed containing
+parts which are undetermined until runtime use MessageFormat to format and
+arrange the undetermined arguments according to locale by retrieving the
+resource bundle as described in the <a href="#externalize strings">Externalize
+Strings</a> section. MessageFormat can use the results of formatting
+NumberFormat and DateFormat objects by specifying a pattern either in the static
+format method or in the MessageFormat constructor. This example shows the common
+use of the static format method.</p>
+<blockquote>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Date date = new
+Date();</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Integer num = new
+Integer(12345678);</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Object[] args =
+{date, classname, filename, num);</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span style="font-size:9.0pt;mso-bidi-font-size:10.0pt;
+mso-fareast-font-family:&quot;Times New Roman&quot;;background:white;mso-highlight:white">MessageFormat.format(&quot;At
+time {0,time} on {0, date}, the number of occurrences of Class {1} found in file
+{2} is {3,number,integer} &quot;, args);</span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+</blockquote>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Messages should not assume
+that sentence parts remain in the same order as English when translated and thus cannot be put together by concatenating strings.
+Use getFormattedString explained in the <a href="#externalize strings"> Externalize Strings</a> section.</p>
+<h3><a name="packaging">2.10<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Packaging</a></h3>
+<p class="MsoNormal">This activity occurs after a product is internationalized
+and localized (translated). A national language fragment is created per plugin
+and named after its plugin.&nbsp; Fragments do not require a build of the base
+code and thus are loaded into the application at run-time by its plugin, just as
+Eclipse loads all its plugins at runtime.&nbsp;
+</p>
+<p class="MsoNormal"><b>Action Items</b></o:p>
+</p>
+<p class="MsoNormal">Create fragments destined for single zip file to
+be unzipped in the eclipse/fragments directory as described in the Eclipse
+Article, How to Internationalize your Eclipse Plug-In, Step 5: Create initial
+translated plug-in fragment. The details for only one plugin's fragment are
+summarized as follows:</p>
+<p class="MsoNormal">1. Create a fragment with the new fragment wizard: File
+&gt; New &gt; Project..., select Plugin Development category, then Fragment
+Project type. Call the project, &lt;pluginid&gt;_nl1, which will become the
+fragment ID. The default settings will set nl1.jar as the first runtime library,
+and NL1 Fragment/ as the source folder. The nl1.jar will contain all the
+translations of the plugin's property files, when they are added to the project
+in step 4. The fragment.xml manifest will be automatically created.</p>
+<p class="MsoNormal">2. Add the $nl/$ folder to the fragment manifest's runtime
+information under runtime libraries. Here is where resource files that don't
+have the language in its name are stored, such as welcome.xml, translated
+proprietary files, html files, xml files, doc.zip files. Manually add a
+directory for each language to nl/, whose name is specified by the same standard
+as the property files' locale names. E.g. de/, fr/, jp/. Manually put the
+translated&nbsp; non-property files in the appropriate directory.&nbsp;</p>
+<p class="MsoNormal">3. For each translated properties file, if it has non
+ISO-8859-1 characters (non Latin-1), run the native2ascii on the file passing in
+the source's codepage as a parameter (otherwise, it will take the local
+machine's codepage).&nbsp; This will substitute double byte characters to \uxxxx
+so that java's ResourceBundle class can read these resources.</p>
+<p class="MsoNormal">4. Rename the translated property files for the target
+plugin according to their locale (ie messages_fr.properties) and add them to the
+NL1 Fragments directory. Right click on the fragment.xml file in the PDE
+perspective and select &quot;Create Fragment JARs&quot;.&nbsp;
+</p>
+<p class="MsoNormal">5. Deposit the source jar, the nl/ directory, and the
+fragment.xml into the &lt;pluginid&gt;_nl1 directory under the eclipse/fragments
+directory, and your fragment is complete. Continue creating fragments for all
+other plugins.
+</p>
+<span style="font-weight: bold;"><br>
+</span>
+<div class="section"><a name="risks">3. Deviations</a></div>
+&nbsp;
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in"><span style="mso-fareast-font-family:
+&quot;Arial Unicode MS&quot;">1.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>Although C and C++ standards indicate that identifiers can be from
+any codeset, the CDT compilers will accept the universal characters in
+identifiers as ASCII strings in the form “\uxxxx” or “\Uxxxxxxxx” only,
+and it may not be feasible to convert UTF identifiers to ASCII before each call
+to make.&nbsp; <span style="mso-fareast-font-family:&quot;Arial Unicode MS&quot;"></o:p>
+</span></p>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in"><span style="mso-fareast-font-family:
+&quot;Arial Unicode MS&quot;">2.<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>CDT will not fully implement Unicode 3.1 algorithms as Java APIs
+currently support only Unicode 3.0. The JRE level used for CDT is minimally 1.4.1
+and does not contain the ICU4J expansion for the most current Unicode
+algorithms. The following Java classes will support a lower level Unicode,
+affecting character input, sorting &amp; searching, and bidirectional text
+requirements.</p>
+<ul>
+  <li>
+    <p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in">Character: Unicode 3.0.&nbsp;</li>
+  <li>
+    <p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in">Collator: supports searching based
+    on Unicode 2.0 algorithms.</li>
+  <li>
+    <p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in">Bidi: Unicode 3.0.&nbsp;</li>
+</ul>
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in">3.&nbsp;&nbsp; CDT will not allow characters in the range
+\uD800 to \uDFFF to be entered in the source file editor, because the c/c++
+coding standards reveal that universal
+character names exclude characters in these regions. Also, due to deviation #2,
+these characters cannot be recognized in dialogs and settings either. Unicode
+3.1 support must exist for Character APIs since this is the first population of
+characters in the surrogate zone region of UTF-16, and Character supports
+Unicode 3.0 only.
+<p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in"><span style="mso-fareast-font-family:&quot;Arial Unicode MS&quot;"><o:p>
+</o:p>
+</span><span style="mso-fareast-font-family:
+&quot;Arial Unicode MS&quot;"><o:p>
+</o:p>
+</span></p>
+<span style="font-weight: bold;"><br>
+</span>
+<div class="section"><a name="glossary">4. Glossary</a></div>
+&nbsp;
+<p style="margin-top: 0; margin-bottom: 0"><b>CodePoint: </b><span style="mso-bidi-font-size:14.0pt">Hex
+that is used to represent a character<o:p>
+</o:p>
+</span></p>
+<p style="margin-top: 0; margin-bottom: 0">UNIX:ISO 8859-x, (SBCS) EUC (DBCS)</p>
+<p style="margin-top: 0; margin-bottom: 0">Windows: Cp1252 (USEnglish), Cp932 (Japanese-New JIS)</p>
+<p style="margin-top: 0; margin-bottom: 0">DOS, OS/2, FAT: IBMPC code pages eg 819 (Latin-1), 943
+(Japanese)</p>
+<p style="margin-top: 0; margin-bottom: 0">Universal Character Set – contains encoding for all
+characters</p>
+<p style="margin-top: 0; margin-bottom: 0"><span lang="FR" style="mso-ansi-language:FR">Eg:
+Unicode—256x256x16planes ISO-10646-1 256x256x256planesx128groups<o:p>
+</o:p>
+</span></p>
+<p style="margin-top: 0; margin-bottom: 0"><span lang="FR" style="mso-bidi-font-size:14.0pt;mso-ansi-language:
+FR">Eg: Unicode code points</span><span lang="FR" style="mso-bidi-font-size:14.0pt;
+font-family:&quot;Arial Unicode MS&quot;;mso-ansi-language:FR"><o:p>
+</o:p>
+</span></p>
+<p style="margin-top: 0; margin-bottom: 0"><span style="mso-bidi-font-size:14.0pt">Latin-1 0000-00FF,
+Hiragana 3040-309f, Katakana 30a0-30ff, Arabic 0600-06ff, CJK 4e00-9faf<o:p>
+</o:p>
+</span></p>
+<p style="margin-top: 0; margin-bottom: 0"><b>&nbsp;<o:p>
+</o:p>
+</b></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><b>Globalization (G11N)</b>: I18N &amp; L12N &amp;
+multicultural support (support any custumer anywhere anytime anypace with one
+single executable)<span style="font-family:&quot;Arial Unicode MS&quot;"><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span class="doccontent1"><b><span style="mso-ansi-font-size:
+12.0pt;mso-bidi-font-size:12.0pt;mso-ascii-font-family:&quot;Times New Roman&quot;;
+mso-hansi-font-family:&quot;Times New Roman&quot;;color:windowtext">&nbsp;<o:p>
+</o:p>
+</span></b></span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span class="doccontent1"><b><span style="mso-ansi-font-size:
+12.0pt;mso-bidi-font-size:12.0pt;mso-ascii-font-family:&quot;Times New Roman&quot;;
+mso-hansi-font-family:&quot;Times New Roman&quot;;color:windowtext">Globalization
+White Paper</span></b><span style="font-size:10.0pt;
+font-family:Verdana"> </span></span>. Lists requirements for flagship products,
+key products and components. Included are the languages where Basic Support is
+required and languages for translation.</p>
+<p class="MsoBodyTextIndent3" style="margin-top: 0; margin-bottom: 0"><span style="mso-bidi-font-size:10.0pt;color:black">&nbsp;<o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><b>Internationalization (I18N)</b>: The process of
+designing a program from the ground up so that it can be changed to reflect the
+expectations of a new user community without having to modify its executable
+code. Development resonsibility.<span style="font-family:&quot;Arial Unicode MS&quot;;
+color:#FFFFCC;display:none;mso-hide:all"><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><b>Localization
+(L10N) </b>: The process of translating
+text, converting images, etc so that the program conforms to a particular
+country’s expectations. <span style="display:none;mso-hide:all"><o:p>
+</o:p>
+</span></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Includes translation, altering pictures…. What the
+Translation team does. Translation Center’s responsibility.</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><b>&nbsp;<o:p>
+</o:p>
+</b></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><b>MRI</b> Machine Readable Information. All the language-
+and culturally sensitive information exchanged between the product and its
+users. MRI includes messages, dialog boxes, online manuals, audio output,
+animations, windows, help text, tutorials, diagnostics, clip art, icons, and any
+presentation control that is necessary to convey information to users. MRI comes
+as PII or non-PII.</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">&nbsp;<o:p>
+</o:p>
+</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><b>PCI</b> The <em>presentation control information</em> (PCI)
+is the invisible set of controls that determine the presentation attributes of
+the information, such as, color, intensity, loudness, and window size.</p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">&nbsp;<o:p>
+</o:p>
+</p>
+<div class="section"><a name="references">5. References</a></div>
+&nbsp;
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">Globalization Central <a href="http://eou5.austin.ibm.com/global/global_int.nsf/Publish/982" target="_parent"><span style="mso-bidi-font-size:10.0pt;color:windowtext">http://eou5.austin.ibm.com/global/global_int.nsf/Publish/982</span></a></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">ICU4J home <a href="http://oss.software.ibm.com/icu4j/index.html" target="_parent"><span style="mso-bidi-font-size:10.0pt;color:windowtext">http://oss.software.ibm.com/icu4j/index.html</span></a></p>
+<p class="MsoNormal" style="margin-top: 0; margin-bottom: 0">Unicode home <a href="http://www.unicode.org/" target="_parent"><span style="mso-bidi-font-size:10.0pt;color:windowtext">http://www.unicode.org/</span></a></p>
+<p style="margin-top: 0; margin-bottom: 0">
+<span lang="FR" style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;mso-fareast-font-family:
+&quot;MS Mincho&quot;;mso-ansi-language:FR;mso-fareast-language:EN-US;mso-bidi-language:
+AR-SA">ICU 2.8 classes <a href="http://oss.software.ibm.com/icu/apiref/annotated.html">http://oss.software.ibm.com/icu/apiref/annotated.html</a></span>
+<p style="margin-top: 0; margin-bottom: 0">
+&nbsp;
+<div class="section"><a name="appendix a">Appendix A BiDi Test</a></div>
+&nbsp;
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">A
+simaaaple java test shows that JDT displays Bidi output correctly in the Eclipse
+console view:</p>
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">Run
+the Testbidi application below from Eclipse.&nbsp;</p>
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">Enter
+&quot;<font size="3">&#1589;&#1579;&#1602;&#1601;123&#1582;&#1581;</font><font size="3">&quot;</font><font SIZE="4">
+</font><font size="2">in the Testbidi application (from the 101 USEnglish
+keyboard, type &quot;wert123op&quot;).</font></p>
+<p class="MsoNormal" style="text-indent: 0; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: 0; margin-top: 0; margin-bottom: 0">Note
+that the visual left-to-right order for the &quot;text&quot; string in Eclipse
+is 2 Arabic characters followed by 3 digits, then 4 Arabic characters. If this
+is not the case, then your browser does not support BiDi text properly. The
+following is displayed in Eclipse, which shows a different visual order than the logical
+order. &nbsp;</p>
+<font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text:<font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1589;&#1579;&#1602;&#1601;</font>123<font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1582;&#1581;</font></font></p>
+<font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(0): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1589;</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(1): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1579;</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(2): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1602;</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(3): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1601;</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(4): 1</p>
+<p style="margin-top: 0; margin-bottom: 0">text(5): 2</p>
+<p style="margin-top: 0; margin-bottom: 0">text(6): 3</p>
+<p style="margin-top: 0; margin-bottom: 0">text(7): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1582;</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(8): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">&#1581;</p>
+</font><p class="MsoNormal" style="margin-left:.25in;text-indent:-.25in;mso-list:l56 level1 lfo53;
+tab-stops:list .25in">Whereas when run from windows command line, the following
+output (besides the fact that fonts are wrong) shows that the storage is correct
+(handled by JRE) but the display of the complete string is incorrectly in the
+same order as the storage.</p>
+<font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text:????123</font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">??</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(0): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">?</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(1): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">?</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(2): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">?</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(3): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">?</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(4): 1</p>
+<p style="margin-top: 0; margin-bottom: 0">text(5): 2</p>
+<p style="margin-top: 0; margin-bottom: 0">text(6): 3</p>
+<p style="margin-top: 0; margin-bottom: 0">text(7): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">?</p>
+</font><font SIZE="2" COLOR="#0000ff">
+<p style="margin-top: 0; margin-bottom: 0">text(8): </font><font FACE="Courier New" SIZE="2" COLOR="#0000ff">?</p>
+</font><p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<b><font SIZE="2" COLOR="#7f0055">
+<p style="margin-top: 0; margin-bottom: 0">Testbidi.java:</p>
+<blockquote>
+  <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+  <p style="margin-top: 0; margin-bottom: 0">public</font></b><font SIZE="2"> </font><b><font SIZE="2" COLOR="#7f0055">class</font></b><font SIZE="2">
+Testbidi </font><b><font SIZE="2" COLOR="#7f0055">extends</font></b><font SIZE="2">
+JFrame{</p>
+<p style="margin-top: 0; margin-bottom: 0"></font>&nbsp;&nbsp;&nbsp;<b><font size="2" color="#7f0055">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+public</font></b><font SIZE="2"> </font><b><font SIZE="2" COLOR="#7f0055">static</font></b><font SIZE="2">
+</font><b><font SIZE="2" COLOR="#7f0055">void</font></b><font SIZE="2">
+main(String[] args) {</p>
+<blockquote>
+  <blockquote>
+    <p style="margin-top: 0; margin-bottom: 0">JFrame j = </font><b><font SIZE="2" COLOR="#7f0055">new</font></b><font SIZE="2">
+    JFrame(</font><font SIZE="2" COLOR="#2a00ff">&quot;hello&quot;</font><font SIZE="2">);</p>
+  </font><b><font SIZE="2" COLOR="#7f0055">
+  <p style="margin-top: 0; margin-bottom: 0">new</font></b><font SIZE="2">
+  Testbidi(j);</p>
+  <p style="margin-top: 0; margin-bottom: 0">j.pack();</p>
+  <p style="margin-top: 0; margin-bottom: 0">j.show();</p>
+  </blockquote>
+  <p style="margin-top: 0; margin-bottom: 0">}</p>
+  <p style="margin-top: 0; margin-bottom: 0">JFrame frame;</p>
+  <p style="margin-top: 0; margin-bottom: 0">JTextField t;</p>
+  <p style="margin-top: 0; margin-bottom: 0"></font><b><font SIZE="2" COLOR="#7f0055">public</font></b><font SIZE="2">
+  Testbidi(JFrame j) {</p>
+  <blockquote>
+    <p style="margin-top: 0; margin-bottom: 0">frame = j;</p>
+    <p style="margin-top: 0; margin-bottom: 0">t = </font><b><font SIZE="2" COLOR="#7f0055">new</font></b><font SIZE="2">
+    JTextField(30);</p>
+    <p style="margin-top: 0; margin-bottom: 0">JPanel p = </font><b><font SIZE="2" COLOR="#7f0055">new</font></b><font SIZE="2">
+    JPanel();</p>
+    <p style="margin-top: 0; margin-bottom: 0">p.add(t);</p>
+    <p style="margin-top: 0; margin-bottom: 0">JButton b = </font><b><font SIZE="2" COLOR="#7f0055">new</font></b><font SIZE="2">
+    JButton (</font><font SIZE="2" COLOR="#2a00ff">&quot;display&quot;</font><font SIZE="2">);</p>
+    <p style="margin-top: 0; margin-bottom: 0">b.addActionListener(</font><b><font SIZE="2" COLOR="#7f0055">new</font></b><font SIZE="2">
+    ActionListener() {</p>
+    <blockquote>
+      <p style="margin-top: 0; margin-bottom: 0"></font><b><font SIZE="2" COLOR="#7f0055">public</font></b><font SIZE="2">
+      </font><b><font SIZE="2" COLOR="#7f0055">void</font></b><font SIZE="2">
+      actionPerformed(ActionEvent e){</p>
+      <p style="margin-top: 0; margin-bottom: 0">String s = t.getText();</p>
+      <p style="margin-top: 0; margin-bottom: 0">System.out.println(</font><font SIZE="2" COLOR="#2a00ff">&quot;text:&quot;</font><font SIZE="2">+s);</p>
+      <p style="margin-top: 0; margin-bottom: 0"></font><b><font SIZE="2" COLOR="#7f0055">for</font></b><font SIZE="2">
+      (</font><b><font SIZE="2" COLOR="#7f0055">int</font></b><font SIZE="2"> i
+      = 0; i&lt; s.length(); i++)</p>
+      <p style="margin-top: 0; margin-bottom: 0">System.out.println(</font><font SIZE="2" COLOR="#2a00ff">&quot;text(&quot;</font><font SIZE="2">+i+</font><font SIZE="2" COLOR="#2a00ff">&quot;):
+      &quot;</font><font SIZE="2">+s.charAt(i));</p>
+    </blockquote>
+  </blockquote>
+  <p style="margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  }});</p>
+  <blockquote>
+    <p style="margin-top: 0; margin-bottom: 0">p.add(b);</p>
+    <p style="margin-top: 0; margin-bottom: 0">frame.getContentPane().add(p);</p>
+  </blockquote>
+  <p style="margin-top: 0; margin-bottom: 0">}</p>
+</blockquote>
+<p style="margin-top: 0; margin-bottom: 0">}</p>
+</blockquote>
+<p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<div class="section" style="width: 1005; height: 24"><a name="appendix b">Appendix B</a>
+  I18N Search</div>
+&nbsp;<p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">This
+algorithm should be used when the correct index of a Unicode sensitive substring
+is required.</p>
+<p class="MsoNormal" style="text-indent: -.25in; mso-list: l56 level1 lfo53; tab-stops: list .25in; margin-left: .25in; margin-top: 0; margin-bottom: 0">&nbsp;</p>
+<font SIZE="2" COLOR="#7f0055">
+<b>
+<p style="margin-top: 0; margin-bottom: 0">TestSearch.java:</p>
+</b>
+</font>
+<blockquote>
+  <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">public int
+  nlIndexOf(String a, String b) {</p>
+  <blockquote>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">String searchFor
+    = b;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">String searchIn
+    = a;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">int start=-1;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">boolean
+    started=false;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">RuleBasedCollator
+    rbc = (RuleBasedCollator)coll;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">CollationElementIterator
+    p = rbc.getCollationElementIterator(searchIn);</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">CollationElementIterator
+    q =</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">&nbsp;&nbsp;&nbsp;
+    rbc.getCollationElementIterator(searchFor);</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">int e1 =
+    q.next();</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">int e2 =
+    p.next();</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">boolean
+    triedOnce = false;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">while (e1 !=
+    CollationElementIterator.NULLORDER
+</font>
+    <font SIZE="2">&amp;&amp; e2 != CollationElementIterator.NULLORDER) {</p>
+    <blockquote>
+      <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">if (e1 == e2)
+      {</p>
+      <blockquote>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">if
+        (!started) {</p>
+        <blockquote>
+          <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">started=true;</p>
+          <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">start=p.getOffset();</p>
+        </blockquote>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">}</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">e1 =
+        q.next();</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">e2 =
+        p.next();</p>
+      </blockquote>
+      <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">} else if
+      (!triedOnce) {</p>
+      <blockquote>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">q.reset();</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">e1=q.next();</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">started=false;</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">start=-1;</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">triedOnce =
+        true;</p>
+      </blockquote>
+      <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">} else {</p>
+      <blockquote>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">e2 =
+        p.next();</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">triedOnce =
+        false;</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">started=false;</p>
+        <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">start=-1;</p>
+      </blockquote>
+      <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">}</p>
+    </blockquote>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">}</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">if (e1 ==
+    CollationElementIterator.NULLORDER &amp;&amp; start!=-1) {</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">return start-1;</p>
+    <p style="margin-right: 0; margin-top: 0; margin-bottom: 0">} else</p>
+    <p style="line-height: 100%; margin: 0"><font face="Arial">return -1;</font></p>
+  </blockquote>
+  <p style="line-height: 100%; margin: 0"><font face="Arial">}</font></p>
+  <font SIZE="2" COLOR="#7f0055">
+<b>
+  <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+</b>
+</font>
+</font>
+</blockquote>
+<p style="margin-top: 0; margin-bottom: 0">
+<br>
+
+
+<center><i>Last Modified January 29, 2004</i></center>
+</p>
+</body>
+</html>
