@@ -94,7 +94,8 @@ public class CppEditor extends LpexTextEditor
                                         "ContentAssistProposal.",
                                         this,
                                         ISourceViewer.CONTENTASSIST_PROPOSALS));
-        ((TextOperationAction)getAction("ContentAssistProposal")).setText("Code assist@Ctrl+SPACE");
+
+	((TextOperationAction)getAction("ContentAssistProposal")).setText("Code assist@Ctrl+SPACE");
 
         setAction("ManageBreakpoints",
                 new BreakpointRulerAction(_plugin.getResourceBundle(),
@@ -110,11 +111,8 @@ public class CppEditor extends LpexTextEditor
       {
         super.editorContextMenuAboutToShow(menu);
         addAction(menu, "ContentAssistProposal");
-	/***/
-	MenuManager findCascade = new MenuManager("Find", "Find");
-	findCascade.add(new FindObjectAction("Declaration@Ctrl+X", this, true));
-	menu.add(findCascade);
-	/***/
+
+	menu.add(new FindObjectAction("Find Selected@Ctrl+X", this, true));
       }
 
 
