@@ -72,6 +72,7 @@ public class XMLparser
 		    }
 		catch (IOException e)
 		    {
+			e.printStackTrace();
 			handlePanic(e);
 		    }
 	    }
@@ -130,6 +131,7 @@ public class XMLparser
 	}
 	catch (IOException e)
 	{
+	    e.printStackTrace();
 			done = true; 
 
 			handlePanic(e);
@@ -147,6 +149,7 @@ public class XMLparser
 		}
 		catch (IOException e)
 		{
+		    e.printStackTrace();
 		}
 		return result; 
 	    }
@@ -160,6 +163,7 @@ public class XMLparser
 
     private void handlePanic(Exception e)
     {
+	System.out.println("handling panic for " + e);
 	_panic = true;			
 	_panicException = e;
     }	
@@ -194,7 +198,6 @@ public class XMLparser
 			      {
 				  String trimmedTag = xmlTag.trim();
 				  
-
 				  if (!_tagStack.empty())
 				      {
 					  matchTag = (String)_tagStack.peek();
@@ -299,6 +302,7 @@ public class XMLparser
 
 
 		DataElement result = _rootDataElement;
+
 		_rootDataElement = null;
 		return result;
        }

@@ -63,11 +63,12 @@ public class Sender implements ISender
         {
         	try
         	{
-		      _outData.write(document, 0, document.length());
-              _outData.flush();
+		    _outData.write(document, 0, document.length());
+		    _outData.flush();
         	}
         	catch (IOException e)
         	{
+		    e.printStackTrace();
         	}        	
         }
       }
@@ -94,27 +95,27 @@ public class Sender implements ISender
 
   public void sendAppendFile(DataElement objectRoot, byte[] bytes, int size)
       {
-		synchronized(_outFile)
-        {
-          _xmlGenerator.empty();	  
-          _xmlGenerator.generate(objectRoot, bytes, size, true);
-         _xmlGenerator.flushData();
-        }
-      }
-
-  public void sendDocument(DataElement objectRoot, int depth)
-      {
-		  synchronized(_outData)
+	  synchronized(_outFile)
 	      {
-			  _xmlGenerator.empty();	  
-			  _xmlGenerator.generate(objectRoot, depth);
-			  _xmlGenerator.flushData();
+		  _xmlGenerator.empty();	  
+		  _xmlGenerator.generate(objectRoot, bytes, size, true);
+		  _xmlGenerator.flushData();
 	      }
-	      
-	      if (objectRoot.getParent() != null)
-	  	    objectRoot.getDataStore().deleteObject(objectRoot.getParent(), objectRoot);	      
       }
-
+    
+    public void sendDocument(DataElement objectRoot, int depth)
+    {
+	synchronized(_outData)
+	    {
+		_xmlGenerator.empty();	  
+		_xmlGenerator.generate(objectRoot, depth);
+		_xmlGenerator.flushData();
+	    }
+	
+	if (objectRoot.getParent() != null)
+	    objectRoot.getDataStore().deleteObject(objectRoot.getParent(), objectRoot);	      
+    }
+    
 }
 
 

@@ -112,7 +112,7 @@ public class XMLgenerator
 				e.printStackTrace();
 				System.out.println(e);
 				
-				_dataWriter = null;
+			       _dataWriter = null;
 			}
 		}
 	}
@@ -251,7 +251,7 @@ public class XMLgenerator
 					written += read;
 				}
 
-				boolean binary = false;
+				boolean binary = true;
 				if (binary)
 				{
 					// send everything across
@@ -267,6 +267,7 @@ public class XMLgenerator
 					}
 					catch (IOException e)
 					{
+					    e.printStackTrace();
 					}
 				}
 			
@@ -303,7 +304,7 @@ public class XMLgenerator
 			flushData();
 
 			// send everything across
-			boolean binary = false;
+			boolean binary = true;
 			if (binary)
 			{
 				_fileWriter.write(bytes, 0, size);
@@ -318,6 +319,7 @@ public class XMLgenerator
 				}
 				catch (IOException e)
 				{
+				    e.printStackTrace();
 				}
 			}
 		}
