@@ -46,11 +46,127 @@ public class CppOutputViewPart extends OutputViewPart
     		IDomainListener, ISelectionListener
 
 {
+    
+  public class CancelAction extends Action
+  {
+    public CancelAction(String name, ImageDescriptor image)
+    {
+      super(name, image);
+  	  setToolTipText(name);
+    }
 
+      public void run()
+      {
+	  DataElement input = _viewer.getCurrentInput();
+	  if (input != null)
+	      {
+		  DataElement command = input.getParent();
+		  cancel(command);
+	      }
+      }
+
+      public void cancel(DataElement command)
+      {
+	  DataStore dataStore = command.getDataStore();
+	  DataElement commandDescriptor = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Cancel");
+	  if (commandDescriptor != null)
+	      {	
+		  dataStore.command(commandDescriptor, command, false, true);
+	      }
+      }
+  }
+
+  public class ShellAction extends Action
+  {
+  	public ShellAction(String name, ImageDescriptor image)
+  	{
+  		super(name, image);
+  		setToolTipText(name);
+  	}
+  	
+  	public void run()
+  	{
+  		CppPlugin plugin = CppPlugin.getDefault();
+  		ModelInterface api = plugin.getModelInterface();
+  		IProject project = plugin.getCurrentProject();
+  		if (project != null)
+  		{
+  			DataElement projectElement = api.findProjectElement(project);			
+  			if (projectElement != null)
+  			{
+  				DataStore dataStore = projectElement.getDataStore();
+  				DataElement shellD = dataStore.localDescriptorQuery(projectElement.getDescriptor(), "C_SHELL", 2);
+  				if (shellD != null)
+				{
+	  				DataElement status = dataStore.command(shellD, projectElement);
+	  				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+				}
+  			}
+  		}
+  	}
+  }	
+
+  public class HistoryAction extends Action
+  {
+    private DataElement _status;
+    private int         _increment;
+
+    public HistoryAction(String name, ImageDescriptor image, int increment)
+    {
+      super(name, image);
+      _increment = increment;
+       setToolTipText(name);
+    }
+
+      public void run()
+    {
+      DataElement status = _viewer.getCurrentInput();
+      if (status != null)
+      {
+        DataElement command = status.getParent();
+
+        DataStore dataStore = command.getDataStore();
+        DataElement logRoot = dataStore.getLogRoot();
+
+        ArrayList commands = logRoot.getNestedData();
+        int thisIndex = commands.indexOf(command);
+
+        DataElement newStatus = null;
+        int newIndex = thisIndex + _increment;
+        boolean found = false;
+        while (!found && (newIndex > -1) && (newIndex < commands.size()))
+        {
+          DataElement newCommand = (DataElement)commands.get(newIndex);	
+	  String commandName = newCommand.getName();
+
+	  if (commandName.equals("C_COMMAND") ||
+	      commandName.equals("C_SEARCH") ||
+	      commandName.equals("C_SEARCH_REGEX"))
+	    {	
+	      newStatus  = newCommand.get(newCommand.getNestedSize() - 1);
+	      if (newStatus != null)
+		{	
+		  found = (newStatus.getNestedSize() > 1);
+		}	
+	    }
+	  newIndex += _increment;
+	}
+	
+        if (found && newStatus != null)
+        {
+          setInput(newStatus);
+        }
+      }
+    }
+  }
 
     protected CppPlugin         _plugin;  
 	private Combo 				_inputEntry;
 	private Button 				_sendButton;
+    private CancelAction 	 	  _cancelAction;
+    private ShellAction			  _shellAction;
+    private HistoryAction	      _backAction;
+    private HistoryAction         _forwardAction;
 
 	public CppOutputViewPart()
 	{
@@ -97,21 +213,22 @@ public class CppOutputViewPart extends OutputViewPart
                                          public void modifyText(ModifyEvent e)
                                              {
                                              	DataElement input = _viewer.getCurrentInput();
-                                             	if (input != null && !input.getName().equals("done"))
-                                             	{
-                                               if (_inputEntry.getText().length() > 0)
-                                               {
-                                                 _sendButton.setEnabled(true);						
-                                               }
-                                               else
-                                               {
-                                                 _sendButton.setEnabled(false);
-                                               }
-                                             	}
-                                             	else
-                                             	{
-                                             	 _inputEntry.setEnabled(false);	
-                                             	}
+                                             	
+                                                if (input != null && !input.getName().equals("done"))
+                                                {
+                                               		if (_inputEntry.getText().length() > 0)
+                                               		{
+                                                 	_sendButton.setEnabled(true);						
+                                               		}
+                                               		else
+                                               		{
+                                                	 _sendButton.setEnabled(false);
+                                               		}
+                                                }
+                                                else
+                                                {
+                                                	_inputEntry.setEnabled(false);
+                                                }
                                              }
                                        }
                                        );
@@ -145,7 +262,11 @@ public class CppOutputViewPart extends OutputViewPart
 	
     }
     
-	
+    public void fillLocalToolBar()
+    {
+	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+	fillLocalToolBar(toolBarManager);
+    }
 
     public void updateViewForeground()
     {
@@ -193,7 +314,7 @@ public class CppOutputViewPart extends OutputViewPart
     
     public void selectionChanged(IWorkbenchPart p, ISelection s)
     {
-    	_viewer.enableActions();
+    	enableActions();
     }
 
     public void projectChanged(CppProjectEvent event)
@@ -276,37 +397,98 @@ public class CppOutputViewPart extends OutputViewPart
 
     public void domainChanged(DomainEvent ev)
     {
-		DataElement parent = (DataElement)ev.getParent();
-		if (!parent.getName().equals("done"))
-		{
-			_inputEntry.setEnabled(true);
+		enableActions();
+    }
+    
+    private void enableActions()
+    {
+    	DataElement input = _viewer.getCurrentInput();
+      	if (input != null && !input.getName().equals("done"))
+      	{
+      		_inputEntry.setEnabled(true);
 			if (_inputEntry.getText().length() > 0)
 			{
 				_sendButton.setEnabled(true);
 			} 
 			
-			_viewer.enableActions();
-		}
-		else
-		{
-			_inputEntry.setEnabled(false);
+			enableToolActions();
+      	}
+      	else
+      	{
+      		_inputEntry.setEnabled(false);
 			_sendButton.setEnabled(false);
-			_viewer.enableActions();
-		}
+			enableToolActions();	
+      	}
     }
     
     public void setInput(DataElement element)
-    {
+    { 
     	DomainNotifier notifier = element.getDataStore().getDomainNotifier();
 		notifier.addDomainListener(_viewer);	
 		notifier.addDomainListener(this);
 		_viewer.setInput(element);		
-		_viewer.enableActions();
+		enableActions();
     }
     
     public Shell getShell()
     {
 	return _sendButton.getShell();
     }
+    
+  public void fillLocalToolBar(IToolBarManager toolBarManager)
+  {
+  	CppPlugin plugin = CppPlugin.getDefault();
+  	
+  	_shellAction = new ShellAction("Launch Shell",plugin.getImageDescriptor("command"));
+    toolBarManager.add(_shellAction);
+ 
+  	_backAction  = new HistoryAction(plugin.getLocalizedString("OutputViewer.back"),
+					 plugin.getImageDescriptor("back"), -1);
+    toolBarManager.add(_backAction);
+    
+    _forwardAction = new HistoryAction(plugin.getLocalizedString("OutputViewer.forward"),
+					 plugin.getImageDescriptor("forward"), 1);
+    toolBarManager.add(_forwardAction);
+    
+    _cancelAction = new CancelAction(plugin.getLocalizedString("OutputViewer.Cancel"),
+					plugin.getImageDescriptor("cancel"));
+    toolBarManager.add(_cancelAction);
+
+
+    enableActions();
+  } 
+    
+  private void enableToolActions()
+  {
+  	if (_cancelAction == null)
+  	{
+  		fillLocalToolBar();	
+  	}
+  	
+  	DataElement input = _viewer.getCurrentInput();
+  	if (input != null && !input.getName().equals("done"))
+		{		
+			_cancelAction.setEnabled(true);  	
+		}
+	else
+		{
+			_cancelAction.setEnabled(false);
+		}
+	
+	DataElement currentInput = _viewer.getCurrentInput();
+	_backAction.setEnabled(currentInput != null);
+	_forwardAction.setEnabled(currentInput != null);
+	
+	CppPlugin plugin = CppPlugin.getDefault();
+	IProject project = plugin.getCurrentProject();
+	if (project != null && project.isOpen())
+	{
+		_shellAction.setEnabled(true);
+	}
+	else
+	{
+		_shellAction.setEnabled(false);
+	}
+  }
     
 }
