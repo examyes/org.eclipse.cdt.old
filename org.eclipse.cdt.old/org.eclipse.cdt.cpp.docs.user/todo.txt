@@ -41,6 +41,16 @@ Work that we are planning or considering doing:
      - Performance Improvements (there are *lots* of areas where 
        performance can be improved)
      - Populate and make use of a database to store/retrieve parse information
+ 
+9. Makefile.am Parser
+	- to derive a view from it and user can actually easily navigate through
+	  the Makefile.am
+
+10. Project Management using autovonf and automake  
+	- In the current release it has a limited ability for updating Makefile.am 
+	  variables - meaning that a subset of these variables get updated
+	
+
 
 Work that you may consider interesting or worthwhile
  

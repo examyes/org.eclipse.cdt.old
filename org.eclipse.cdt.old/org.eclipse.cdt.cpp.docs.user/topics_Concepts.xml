@@ -38,8 +38,6 @@
 
  <topic label="Project Management">
   <topic label="Project Management"     href="concepts/projectmanagement/projectmanagement.htm"/>
-  <topic label="Automated Configuration files Generation"     href="concepts/projectmanagement/generation/automaticgeneration.htm"/>
-  <topic label="Maintaining Exixting Configuration"     href="concepts/projectmanagement/maintaining/maintainingexistingconf.htm"/>
  </topic>
 
  <topic label="Commands">
