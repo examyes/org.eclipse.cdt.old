@@ -38,8 +38,8 @@ public class ConfigureInManager {
 		try{// initializing Package Version and Subdir fields
 			BufferedReader in = new BufferedReader(new FileReader(configure_in));
 			BufferedWriter out= new BufferedWriter(new FileWriter(modFile));
-			out.write(getGeneratedStamp());
-			out.newLine();
+			//out.write(getGeneratedStamp());
+			//out.newLine();
 			while((line=in.readLine())!=null)
 			{
 				if(line.indexOf(amKey)!=-1)

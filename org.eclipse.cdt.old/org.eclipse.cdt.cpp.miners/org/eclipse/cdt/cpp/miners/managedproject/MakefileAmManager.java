@@ -133,8 +133,8 @@ public class MakefileAmManager {
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
 				if(stampit)
 				{
-					out.write(getGeneratedStamp());
-					out.newLine();
+					//out.write(getGeneratedStamp());
+					//out.newLine();
 				}
 				while((line=in.readLine())!=null)
 				{
@@ -176,8 +176,8 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-				out.write(getGeneratedStamp());
-				out.newLine();
+				//out.write(getGeneratedStamp());
+				//out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					// searching for the bin_PROGRAMS line
@@ -252,8 +252,8 @@ public class MakefileAmManager {
 			{
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-				out.write(getGeneratedStamp());
-				out.newLine();
+				//out.write(getGeneratedStamp());
+				//out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					if(line.indexOf(_a_SOURCES)!=-1)
@@ -316,8 +316,8 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-				out.write(getGeneratedStamp());
-				out.newLine();
+				//out.write(getGeneratedStamp());
+				//out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					// searching for the bin_PROGRAMS line
