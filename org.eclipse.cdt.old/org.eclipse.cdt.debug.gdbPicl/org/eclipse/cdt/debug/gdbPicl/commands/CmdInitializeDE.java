@@ -315,7 +315,8 @@ public class CmdInitializeDE extends Command
 //         EPDC.FCT_STORAGE_ENABLE_TOGGLE      | // support storage monitor enable/disable
 //         EPDC.FCT_STORAGE_EXPR_ENABLE_TOGGLE | // support storage monitor expr enable/disable
 //         EPDC.FCT_STORAGE_CONTENT_ASCII      | // support ASCII
-         EPDC.FCT_STORAGE_CONTENT_CHAR       | // support character (native code page, DBCS, etc)
+//         EPDC.FCT_STORAGE_CONTENT_CHAR       | // support character (native code page, DBCS, etc)
+		   EPDC.FCT_STORAGE_CONTENT_HEX_CHAR   |
 //         EPDC.FCT_STORAGE_CONTENT_16INT      | // support 16-bit int
 //         EPDC.FCT_STORAGE_CONTENT_16UINT     | // support 16-bit uint
 //         EPDC.FCT_STORAGE_CONTENT_32INT      | // support 32-bit int
@@ -382,7 +383,7 @@ public class CmdInitializeDE extends Command
          EPDC.FCT_EXCEPTION_EXAMINE |  // support examine-retry
 //         EPDC.FCT_EXCEPTION_FILTER  |  // support exception filtering
 //         EPDC.FCT_EXCEPTION_STEP    |  // support step exception
-//         EPDC.FCT_EXCEPTION_RUN     |  // support run exception
+         EPDC.FCT_EXCEPTION_RUN     |  // support run exception
          0,
 
          // Stack Options
