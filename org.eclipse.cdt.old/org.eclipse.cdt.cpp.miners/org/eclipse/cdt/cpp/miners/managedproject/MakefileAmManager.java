@@ -882,10 +882,8 @@ public class MakefileAmManager {
 		ArrayList list = new ArrayList();
 		int counter = 0;
 		//find the first level parent
-		System.out.println("\n Workspace location = "+_workspaceLocation);
 		while(!dir.getParentFile().getAbsolutePath().equals(_workspaceLocation))
 		{
-			System.out.println("\n location"+counter+" = "+dir.getParentFile().getAbsolutePath());
 			list.add(counter++,dir);
 			dir = dir.getParentFile();
 		}
@@ -893,7 +891,6 @@ public class MakefileAmManager {
 		{
 			// update might be needed
 			File parentDir = ((File)list.get(counter-1));
-			System.out.println("\n Dir name = "+parentDir.getName());
 			File parent_Makefile_am = new File(parentDir,"Makefile.am");
 			int parentClass = classifier.classify(parent_Makefile_am);
 			File Makefile_am = new File(parent,"Makefile.am");
@@ -930,7 +927,6 @@ public class MakefileAmManager {
 	private String updateDependenciesLine(String line,File Makefile_am)
 	{
 		StringBuffer modLine = new StringBuffer();
-		System.out.println("\n Affected line = "+line);
 		StringTokenizer tokenizer = new StringTokenizer(line);
 		int classification = classifier.classify(Makefile_am);
 		while (tokenizer.hasMoreTokens())
@@ -950,7 +946,6 @@ public class MakefileAmManager {
 			}
 			modLine.append(token+" ");
 		}
-		System.out.println("\n modLine line = "+modLine);
 		return modLine.toString();
 	}
 	private boolean isRightTokenToModify(String dir, String tok)

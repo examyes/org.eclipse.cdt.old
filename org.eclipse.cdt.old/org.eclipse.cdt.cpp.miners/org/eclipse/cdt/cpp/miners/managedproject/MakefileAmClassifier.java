@@ -285,7 +285,7 @@ public class MakefileAmClassifier {
 			}
 			in.close();
 		}catch(IOException e){System.out.println(e);}
-		print(profile);
+		//print(profile);
 		return profile;
 	}
 	private void print(Vector vec)
