@@ -361,12 +361,13 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setLocationBreakpoint(int, org.eclipse.cdt.debug.core.cdi.ICDILocation, org.eclipse.cdt.debug.core.cdi.ICDICondition, java.lang.String, boolean)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setLocationBreakpoint(int, org.eclipse.cdt.debug.core.cdi.ICDILocation, org.eclipse.cdt.debug.core.cdi.ICDICondition, boolean)
 	 */
-	public ICDILocationBreakpoint setLocationBreakpoint(int type, ICDILocation location, ICDICondition condition, String threadId, boolean deferred) throws CDIException {
+	public ICDILocationBreakpoint setLocationBreakpoint(int type, ICDILocation location, ICDICondition condition, boolean deferred) throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setWatchpoint(int, int, java.lang.String, org.eclipse.cdt.debug.core.cdi.ICDICondition)
@@ -396,6 +397,13 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createCondition(int, java.lang.String)
 	 */
 	public ICDICondition createCondition(int ignoreCount, String expression) {
+		return createCondition(ignoreCount, expression, null);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createCondition(int, java.lang.String, java.lang.String[])
+	 */
+	public ICDICondition createCondition(int ignoreCount, String expression, String[] threadIds) {
 		// TODO Auto-generated method stub
 		return null;
 	}
