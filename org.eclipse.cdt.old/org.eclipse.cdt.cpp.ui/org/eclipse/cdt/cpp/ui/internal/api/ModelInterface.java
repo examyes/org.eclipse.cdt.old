@@ -83,12 +83,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  if (oDescriptor != null)
 		      {
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
-			  //***projectMinerProject.refresh(true);
+			  projectMinerProject.refresh(true);
 		      }
 		
-		  setParseIncludePath(_project);	
-		  setParseQuality(_project);	
-		  setEnvironment(_project);
+		  setPreferences(_project);
 		
 		  if (_project instanceof Repository)
 		      {
@@ -117,8 +115,30 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
 	      }
       }
+
+      private void setPreferences(IProject project)
+      {
+	  Display d= getDummyShell().getDisplay();
+	  d.asyncExec(new SetPreferencesAction(project));
+      }
   }
 
+  public class SetPreferencesAction implements Runnable
+  {
+      private IProject _project;
+
+    public SetPreferencesAction(IProject project)
+    {
+      _project = project;
+    }
+
+      public void run()
+      {
+	  setParseIncludePath(_project);	
+	  setParseQuality(_project);	
+	  setEnvironment(_project);
+      }
+  }
 
     public class MonitorStatusThread extends Handler
     {
