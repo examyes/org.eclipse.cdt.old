@@ -176,6 +176,9 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
             _debugSession.cmdResponses.removeAllElements();
          }
          updateMonitors();
+         
+         // update registers in case user has changed the registers in Monitors View.
+         _debugSession.getRegisterManager().updateRegisters();
 //         _debugSession._storageManager.updateStorage();
       }
    }
