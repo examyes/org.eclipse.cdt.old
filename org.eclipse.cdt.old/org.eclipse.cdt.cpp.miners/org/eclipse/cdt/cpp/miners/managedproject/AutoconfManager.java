@@ -57,13 +57,13 @@ public class AutoconfManager {
 	}
 	protected void generateAutoconfFiles(DataElement status, boolean actionIsManagedProject)
 	{
-		configureInManager.generateConfigureIn(actionIsManagedProject);
-		makefileAmManager.manageMakefileAm(actionIsManagedProject);
+		configureInManager.generateConfigureIn();
+		makefileAmManager.generateMakefileAm();
 	}
 	protected void updateAutoconfFiles(DataElement status, boolean actionIsManagedProject)
 	{
 		configureInManager.updateConfigureIn(actionIsManagedProject);
-		//makefileAmManager.updateMakefileAm(actionIsManagedProject);
+		makefileAmManager.updateMakefileAm(actionIsManagedProject);
 	}
 	protected void runSupportScript(DataElement status)
 	{
