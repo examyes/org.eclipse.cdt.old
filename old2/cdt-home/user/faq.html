@@ -72,6 +72,7 @@
     <ol>
       <li><a href="#install_10">Which CDT build should I download?</a></li>
       <li><a href="#install_20">Which operating systems does the CDT support?</a></li>
+      <li><a href="#install_25">Why isn't the XXX operating system supported by CDT? (XXX usually == Windows, but may take on other values)</a></li>
       <li><a href="#install_30">I can't find the CDT download for Windows, isn't there one?</a></li>
       <li><a href="#install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></li>
       <li><a href="#install_50">What must I install on another machine to enable "Remote Projects"?</a></li>
@@ -284,10 +285,42 @@
  
  <li><b><a name="install_20">Which operating systems does the CDT support?</a></b>
   <p>
-
+   Since the CDT can be used to remotely develop C/C++ applications, this question can be interpreted in 2 ways:<br>
+   1) What operating systems does the CDT run on?<br>
+   2) What operating systems does the CDT support C/C++ Development On.
   </p>
+  
    <hr size="1">
   </li>
+ 
+  <li><b><a name="install_25">Why isn't the XXX operating system supported by CDT? (XXX usually == Windows, but may take on other values)</a></b>
+  <p>
+   "Supported" has a particular meaning to us.   It means that on that platform we have a good level of 
+   confidence that CDT works correctly and that its function is appropriate and complete.   That means
+   <ul>
+    <li>someone has ensured that the function addesses the important use cases</li>
+    <li>the function is exercised by regular execution of a test plan</li>
+    <li>identified problems are tracked to resolution</li>
+    <li>there is a recipient for user feedback</li>
+    <li>code patches are developed as necessary to correct or extend CDT on that platform </li>
+   </ul>
+   To make this all happen a platform has an Owner - someone who accepts the responsibility to make sure 
+   those things all happen.
+  </p>
+  <p>
+    The IBM CDT team owns Linux support but doesn't have the capacity to own other platforms.
+    That doesn't mean we don't care about them.  It certainly doesn't mean we won't accept
+    code changes for them - it is already the case that much of CDT will work outside of Linux
+    and there is non-Linux code in CDT to accomplish that.<br>
+    It does mean that we can't "own" those platforms, and without an owner we don't have the necessary 
+    confidence to claim support.
+  </p>
+  <p>
+   If this answer makes you want to volunteer to own a platform, that is the reaction we were 
+   hoping for!
+  </p>  
+  <hr size="1">
+  </li>  
 
  <li><b><a name="install_30">I can't find the CDT download for Windows, isn't there one?</a></b>
   <p>
