@@ -36,7 +36,7 @@ public class PAPlugin extends AbstractUIPlugin implements ISchemaProvider
   private        ResourceBundle         _resourceBundle;
   private        ISchemaRegistry        _schemaRegistry;
   private        ISchemaExtender        _schemaExtender;
-    
+     
 
   // Constructor  
   public PAPlugin(IPluginDescriptor descriptor)
