@@ -83,7 +83,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  if (oDescriptor != null)
 		      {
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
-			  projectMinerProject.refresh(true);
+			  //***projectMinerProject.refresh(true);
 		      }
 		
 		  setParseIncludePath(_project);	
