@@ -1702,7 +1702,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    {
 				if (resource instanceof IProject)
 				    {
-					openProject((IProject)resource);
+					IProject project = (IProject)resource;
+					if (_plugin.isCppProject(project))
+					    {
+						openProject(project);
+					    }
 					return;
 				    }
 			    }	
@@ -1710,8 +1714,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    case IResourceDelta.ADDED:
 		    case IResourceDelta.REMOVED:
 			{
-			    resourceChanged(resource.getParent());
-			    resourceChanged(resource);
+			    if (resource instanceof IProject)
+				{
+				}
+			    else
+				{
+				    resourceChanged(resource.getParent());
+				    resourceChanged(resource);
+				}
 			    return;
 			}
 		    default:
