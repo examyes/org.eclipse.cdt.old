@@ -42,7 +42,7 @@ public class CppPerspective implements IPerspectiveFactory
 						  editorArea);
     topRight.addView(IPageLayout.ID_OUTLINE);
 
-
+	factory.addActionSet("org.eclipse.cdt.cpp.ui.CppActionSet");
     factory.addActionSet(IDebugUIConstants.LAUNCH_ACTION_SET);
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
 		

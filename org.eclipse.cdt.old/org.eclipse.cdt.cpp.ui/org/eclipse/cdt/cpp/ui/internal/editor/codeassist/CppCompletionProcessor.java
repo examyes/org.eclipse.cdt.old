@@ -127,6 +127,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			    }
 		    }
 			
+			/*
 		if (results == null || results.size() == 0)
 		    {
 
@@ -149,6 +150,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 				    }
 			    }
 		    }
+		    */
 		
 		if (results != null && results.size() > 0)
 		    {
@@ -159,20 +161,20 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 				String text     = found.getAttribute(DE.A_VALUE);
 
 				// extract out '(' and ')'
-				//text = extractParams(text);
+				String replace = extractParams(text);
 
 				String imageStr = CppActionLoader.getInstance().getImageString(found);
 				Image image     = _plugin.getImage(imageStr);
 				
-				ContextInformation info = null;
-				//ContextInformation info = new ContextInformation(image, text, text);
+				//ContextInformation info = null;
+				ContextInformation info = new ContextInformation(image, text, text);
 				int len = currentString.length();
 				
 				if (text.regionMatches(0, currentString, 0, len))
 				    {
-					result[i] = new CompletionProposal(text,               // replacement string
+					result[i] = new CompletionProposal(replace,               // replacement string
 									   -len,               // replacement offset
-									   text.length(),      // replacement length
+									   replace.length(),      // replacement length
 									   0,                  // cursor position
 									   image,
 									   text, 
@@ -192,9 +194,9 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 					
 					if (lastIndex == -1 || (lastIndex == len-1))
 					    {
-						result[i] = new CompletionProposal(text,              // replacement string
+						result[i] = new CompletionProposal(replace,              // replacement string
 										   0,                 // replacement offset
-										   text.length(),     // replacement length
+										   replace.length(),     // replacement length
 										   0,                 // cursor position
 										   image,
 										   text, 
@@ -205,9 +207,9 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 					    {
 						lastIndex++;
 						String after = currentString.substring(lastIndex);
-						result[i] = new CompletionProposal(text,
+						result[i] = new CompletionProposal(replace,
 										   -after.length(),
-										   text.length(),
+										   replace.length(),
 										   0,
 										   image,
 										   text, 
@@ -226,28 +228,30 @@ public class CppCompletionProcessor implements IContentAssistProcessor
     private String extractParams(String text)
     {
 	String result = new String("");
+	boolean paramName = false;
 	for (int i = 0; i< text.length(); i++)
 	    {
-		boolean paramName = false;
+
 		char c = text.charAt(i);
 		switch (c)
 		    {
 		    case '(':
-			paramName = true;
-			result += c;
-			break;
-		    case ')':
-			paramName = false;
-			result += c;
-		    case ',':
-			result += c;
-		    default:
-			if (paramName)
-			    {
-			    }
-			else
-			    {
+				paramName = true;
 				result += c;
+				break;
+		    case ')':
+				paramName = false;
+				result += ' ';
+				result += c;
+				break;
+		    case ',':
+		        result += ' ';
+				result += c;
+				break;
+		    default:
+				if (!paramName)		
+			    {
+					result += c;
 			    }
 		    }
 	    }

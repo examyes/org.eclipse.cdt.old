@@ -40,7 +40,8 @@ public class CppBrowsePerspective implements IPerspectiveFactory
     // search
     factory.addShowViewShortcut(SearchUI.SEARCH_RESULT_VIEW_ID);
     
-    
+    factory.addActionSet("org.eclipse.cdt.cpp.ui.CppActionSet");
+
     // new actions - c++ project creation wizard
     factory.addNewWizardShortcut("org.eclipse.cdt.cpp.ui.wizards.CppNewProjectResourceWizard"); //$NON-NLS-1$
   }
