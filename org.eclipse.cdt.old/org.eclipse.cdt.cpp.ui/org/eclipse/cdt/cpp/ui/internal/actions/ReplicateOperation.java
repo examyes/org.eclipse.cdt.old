@@ -63,7 +63,7 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
     public void complete()
     {
 	IResource subP = _api.findResource(_subject); 
-	/*
+	/* CAUSES HANG ON LINUX
 	if (subP instanceof Repository)
 	    {
 	    }
@@ -100,7 +100,6 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
 	    }
 	*/
 
-	System.out.println("DONE");
 	_pm.done();
     }
     

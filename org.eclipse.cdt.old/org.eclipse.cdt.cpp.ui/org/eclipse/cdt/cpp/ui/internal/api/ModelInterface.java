@@ -51,7 +51,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       public void run()
       {
 	  DataStore dataStore = _plugin.getDataStore();
-	
+
 	  DataElement projectMinerProject = null;
 	  if (_project instanceof Repository)
 	      {
@@ -79,11 +79,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	  if (projectMinerProject != null)
 	      {
-		  DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
+		  DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), 
+									   "C_OPEN", 4);
 		  if (oDescriptor != null)
 		      {
+			  // open closed project
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
-			  projectMinerProject.refresh(true);
+
+			  // open opened project - recursive query
+			  dataStore.command(oDescriptor, projectMinerProject); 
 		      }
 		
 		  setPreferences(_project);
@@ -671,6 +675,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    {
 				findProjectElement(project, "Closed Project");
 			    }
+			
 			OpenProjectAction openAction = new OpenProjectAction(project);
 			openAction.start();
 		    }
