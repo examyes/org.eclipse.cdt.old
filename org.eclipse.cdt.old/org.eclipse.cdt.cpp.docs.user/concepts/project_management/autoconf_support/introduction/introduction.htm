@@ -18,7 +18,7 @@
 </table>
 ----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-<caption>&nbsp;
+<caption><font size=+4></font>&nbsp;<font size=+4></font>
 <p><!---------->
 <br><!---------->
 <br><!---------->
@@ -27,8 +27,8 @@
 <tr>
 <td>
 <h1>
-Introduction to Project Management support using GNU autoconf and automake
-tools</h1>
+<font size=+4>Project Management support using GNU autoconf and automake
+tools</font></h1>
 <!----- 
      <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
         Command View</font></b></td>
@@ -51,7 +51,7 @@ the user will deal with a much simpler files named Makefile.am.</font></dd>
 suggest to visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;</font></dd>
 
 <dd>
-</dd>
+<font size=+1></font></dd>
 
 <dd>
 <font size=+1>Support for Project Management, which is provided by the
@@ -62,14 +62,13 @@ category is when you import a software package that has already autoconf
 and automake configuration files.&nbsp;</font></dd>
 
 <dd>
-<font size=+1></font></dd>
-
-<dd>
 <font size=+1>Before we dive in and explain how to accomplish that tasks
 for managing your project, let us explain some of the terminology that
 will be used in this section</font></dd>
 
-<p><br><b><font size=+3>Terminology and Definitions</font></b>
+<br>&nbsp;
+<p>&nbsp;
+<p><b><font size=+3>Terminology and Definitions</font></b>
 <br>&nbsp;
 <ul>
 <li>
@@ -88,14 +87,52 @@ files.</font></li>
 <li>
 <font size=+1>Project Structure: The way the structure is organized with
 regard to its directories and their Makefile.am's.</font></li>
-</ul>
 
-<p><br><b><font size=+2>Generating Project Configuration Files</font></b>
+<li>
+<font size=+1>Top Level Directory: Usually it is the project directory
+and it is recommended that this directory does not contain any source files
+as most of the configuration files will be generated in this directory.&nbsp;</font></li>
+
+<li>
+<font size=+1>Program Directory: A directory that contains Makefile.am
+which is a Program target</font></li>
+
+<li>
+<font size=+1>Recommended Project Structure: If you don't want to manage
+any of the configuration files yourself- Makefile.am and configure.in and
+their updates-&nbsp; and let the tool do this task for you, you may organize
+your project as follows:</font></li>
+
+<ol>
+<li>
+<font size=+1>Top Level directory with no source files</font></li>
+
+<li>
+<font size=+1>Programs directory in the next level&nbsp; - one can have
+multiple targets as any directory in this level will be treated as a&nbsp;
+Program target</font></li>
+
+<li>
+<font size=+1>all the children of this Programs directory will be initially
+assumed to be static library targets, but the user has the flexibility
+to alter this option to a different type target.</font></li>
+</ol>
+<font size=+1></font>
+<p><br><font size=+1>We should emphasize here that this is not enforcing
+any Project structure ,but rather the tool is designed to give all the
+flexibility to the developer depended on how he/she is able&nbsp; to control
+the generating, modifying and updating of the configuration files.&nbsp;
+Also, the tool is providing a simple update mechanism in this release and
+it will get more sophisticated in later releases taking a bigger share
+in managing the configuration files.</font></ul>
+
+<p><br><b><font size=+2>Automatic Generation for Project Configuration
+Files</font></b>
 <p><font size=+1>Whether it is a newly created C/C++ project or a project
 that was imported with no configuration files, that task to generate the
 support is the as follows:</font>
-<br><font size=+1>1-&nbsp;</font>
-<p><b><font size=+2>Maintaining Project Configuration Files</font></b>
+<br><font size=+1>1-&nbsp; Make sure that you</font>
+<p><b><font size=+2>Maintaining Existing Project Configuration Files</font></b>
 <br>&nbsp;
 <br>&nbsp;
 <br>&nbsp;
