@@ -43,6 +43,7 @@ public class SystemObjectsViewPart extends ProjectViewPart
   
   //Finally just set the input and the title
   _viewer.setInput(systemObjects);	    
+  _viewer.selectRelationship("contents");
   setTitle(projectParseInformation.getName() + "System-Objects");   
  }
 }
