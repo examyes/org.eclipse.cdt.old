@@ -33,14 +33,12 @@ public class ConfigureInManager {
 			getConfigureInTemplateFile(project);
 			initializeConfigureIn(new File(project.getSource(),"configure.in"));
 		}
-		else
+		else // it does exist
 		{
 			Runtime rt = Runtime.getRuntime();
 			// copy the old configure.in to configure.in.old
 			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("cp configure.in configure.in.old ", null, project.getFileObject());
+				Process p = rt.exec("cp configure.in configure.in.old ", null, project.getFileObject());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -134,7 +132,6 @@ public class ConfigureInManager {
 			}
 			else
 			{
-				
 				delimPosition[loc++] = i++;
 				while(originalLine[i]!=delim)
 					i++;
@@ -199,9 +196,7 @@ public class ConfigureInManager {
 		{
 			// add configure.in template files only if not exist
 			try{
-				Process p;
-				// check if exist then
-				p = rt.exec(
+				Process p = rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/configure.in "
 						+project.getSource());
 				p.waitFor();
