@@ -33,8 +33,15 @@ import java.lang.reflect.*;
 
 public class CppActionLoader extends GenericActionLoader
 {
+    private static CppActionLoader _instance = new CppActionLoader();
+
     public CppActionLoader()
     {
+    }
+    
+    public static CppActionLoader getInstance()
+    {
+	return _instance;
     }
 
     public IOpenAction getOpenAction()

@@ -150,7 +150,9 @@ public void createControl(Composite parent) {
 	
 	setControl(result);
 }
-private Control createExpression(Composite parent) {
+
+private Control createExpression(Composite parent) 
+{
 	Group result= new Group(parent, SWT.NONE);
 	result.setText(pluginInstance.getLocalizedString(EXP_TITLE));
 	GridLayout layout= new GridLayout();
@@ -343,12 +345,14 @@ private Object getNavigatorSelection() {
 	    StructuredSelection ss = new StructuredSelection(selection); 
 	    Object root = ss.getFirstElement();
 	    
-	    if(root instanceof IProject)
-	      return root;
-	    if(root instanceof IFolder)
-	      return root;
-	    if(root instanceof IFile)
-	      return root;	    
+	    if(root instanceof IResource)
+		{
+		    return root;
+		}
+	    else if (root instanceof DataElement)
+		{
+		    return root;
+		}
 	  }
 	
 	return null;

@@ -161,6 +161,7 @@ public class CppEditor extends LpexTextEditor
          IFile file = ((IFileEditorInput)input).getFile();
          String fileName = file.getLocation().toOSString();
 
+	 /***
        	if (!_isParsed)
 	      {
             _isParsed = true;
@@ -183,6 +184,7 @@ public class CppEditor extends LpexTextEditor
       	else
       	{
       	}
+	 ***/
       }
     }
 

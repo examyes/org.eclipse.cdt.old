@@ -111,21 +111,29 @@ public class ParseMiner extends Miner
      theProject = theProject.dereference();
      if (theProject.getType().equals("Project"))
 	 {
-	     _dataStore.update(_minerData);
-	     DataElement parseProject = _dataStore.createObject(_minerData, 
-								ParserSchema.Project, 
-								theProject.getName(), 
-								theProject.getSource(),
-								theProject.getId() + ".parse");
-	     
-	     _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    ParserSchema.ParsedFiles);
-	     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.SystemObjects);
-	     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.ProjectObjects);
-	     _dataStore.createObject(parseProject,ParserSchema.Preferences, ParserSchema.Preferences);
-	     
-	     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
-	     
-	     return parseProject;
+	     ArrayList parseRefs = theProject.getAssociated(ParserSchema.ParseReference);	     
+	     if (parseRefs.size() == 0)
+		 {
+		     _dataStore.update(_minerData);
+		     DataElement parseProject = _dataStore.createObject(_minerData, 
+									ParserSchema.Project, 
+									theProject.getName(), 
+									theProject.getSource(),
+									theProject.getId() + ".parse");
+		     
+		     _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    ParserSchema.ParsedFiles);
+		     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.SystemObjects);
+		     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, ParserSchema.ProjectObjects);
+		     _dataStore.createObject(parseProject,ParserSchema.Preferences, ParserSchema.Preferences);
+		     
+		     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
+		     
+		     return parseProject;
+		 }
+	     else
+		 {
+		     return (DataElement)parseRefs.get(0);
+		 }
 	 }
      else
 	 {

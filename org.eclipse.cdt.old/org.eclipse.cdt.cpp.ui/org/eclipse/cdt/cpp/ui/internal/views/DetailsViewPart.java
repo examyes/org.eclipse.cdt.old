@@ -36,7 +36,7 @@ public class DetailsViewPart extends ObjectsViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, false);
+	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), CppActionLoader.getInstance(), false);
     }
 
    

@@ -12,6 +12,7 @@ import com.ibm.dstore.ui.views.*;
 
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.views.*;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.ILinkable;
@@ -47,7 +48,7 @@ public class SelectedObjectViewPart extends GenericViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	ObjectWindow viewer =  new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), this, false);
+	ObjectWindow viewer =  new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), CppActionLoader.getInstance(), false);
     
 	return viewer;
     }
