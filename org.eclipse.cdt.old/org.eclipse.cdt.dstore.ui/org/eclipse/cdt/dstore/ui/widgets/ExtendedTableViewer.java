@@ -264,6 +264,8 @@ public class ExtendedTableViewer extends TableViewer
 	    {
 		Table table = getTable();
 		
+		Object[] sorted = getSortedChildren(parent);		
+
 		// remove those that are gone		
 		ArrayList associated = parent.getAssociated(_property);
 
@@ -298,37 +300,41 @@ public class ExtendedTableViewer extends TableViewer
 		    }
 				
 		// add new or modified
-		for (int i = 0; i < associated.size(); i++)
+		TableItem[] items = table.getItems();
+		int numMissing = sorted.length - items.length;
+		if (numMissing > 0)
 		    {
-			DataElement child = (DataElement)associated.get(i);			
+			for (int n = 0; n < numMissing; n++)
+			    {
+				newItem(table, SWT.NONE, items.length + n);
+			    }
+		    }
+
+		items = table.getItems();
+		for (int i = 0; i < sorted.length; i++)
+		    {
+			DataElement child = (DataElement)sorted[i];			
 			synchronized(child)
 			    {
 				if (_viewFilter.select(this, child, null))
 				    {
-					
-					Item item = findItemFor(table, child);
-					if (item != null)
-					    {
-						//if (!child.getValue().equals(item.getText()))
-						    {
-							updateItem(item, child);
-						    }
-						
-						
-					    }
-					else
-					    {
-						item = newItem(table, SWT.NONE, i);
-						updateItem(item, child);
-					    }
+					updateItem(items[i], child);
 				    }
 			    }		
 		    }
+
+
+		if (table.getItemCount() == 0) 
+		    {
+			table.removeAll();
+		    }
+
 		table.setRedraw(true);
 
 	    }
 	catch (Exception e)
 	    {
+		e.printStackTrace();
 		System.out.println(e);
 	    }				
     }    
