@@ -185,17 +185,20 @@ System.out.println("#### DisassemblyView.verifyView(STRING) sourceFileName="+sou
    * Process a line of disassembly into a format suitable for front-end viewing.  The
    * line number is prepended to the disassembly line, tabs are converted into spaced
    * and newlines/carriage returns are filtered out. 
+   * 
+   * Bugzilla Defect #7: Do not display line number in disassembly view
+   * Line Number is ignored.
    */
    private String processViewLine(int lineNum, String srcLine)
    {
 System.out.println("#### DisassemblyView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
       StringBuffer processedLine;
-
+/*
       // create the prefix
       processedLine = new StringBuffer(Integer.toString(lineNum));
       while (processedLine.length() < _prefixl)
          processedLine.insert(0, ' ');
-
+*/
        // Strip off possible new line character at end
       if (srcLine.length() > 0 && srcLine.charAt(srcLine.length()-1) == '\n')
          srcLine = srcLine.substring(0, srcLine.length()-1);
@@ -204,7 +207,9 @@ System.out.println("#### DisassemblyView.processViewLine lineNum="+lineNum +" sr
       if (srcLine.length() > 0 && srcLine.charAt(srcLine.length()-1) == '\r')
          srcLine = srcLine.substring(0, srcLine.length()-1);
 
-      processedLine.append(srcLine);
+//      processedLine.append(srcLine);
+
+	  processedLine = new StringBuffer(srcLine);
 
       // change tab characters into spaces (mod8)
       for (int i=0; i<processedLine.length(); i++) 
