@@ -10,11 +10,13 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 import org.eclipse.cdt.pa.ui.*;
+import org.eclipse.cdt.pa.ui.views.*;
+import org.eclipse.cdt.pa.ui.actions.*;
 
 import org.eclipse.ui.*;
-import org.eclipse.ui.plugin.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.swt.widgets.*; 
@@ -43,6 +45,40 @@ public class PAModelInterface implements IDomainListener
    }
    
  }
+
+ public class ShowViewAction implements Runnable
+ {
+
+    private String      _id;
+    private DataElement _input;
+
+    public ShowViewAction(String id, DataElement input)
+    {
+      _id = id;
+      _input = input;
+    }
+
+    public void run()
+    {
+      IWorkbench desktop = PlatformUI.getWorkbench();
+      IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+
+      IWorkbenchPage persp= win.getActivePage();
+      IViewPart viewPart = persp.findView(_id);
+
+      if (viewPart != null && viewPart instanceof ILinkable)
+	  {	
+	    persp.bringToTop(viewPart);
+
+	    ILinkable linkablePart = (ILinkable)viewPart;
+	    {
+		if (_input != null)
+		    linkablePart.setInput(_input);	
+	    }
+	  } 
+    }
+    
+ }
  
  
  private static PAModelInterface _instance;
@@ -53,7 +89,7 @@ public class PAModelInterface implements IDomainListener
  private CppProjectNotifier		 _cppNotifier;
  private DataStore       		 _dataStore; 
  private HashMap 				 _statuses;
- 
+ private String					 _outputViewId;
  private HashMap			 	 _projectsRootMap;
  private HashMap				 _traceFilesRootMap;
  
@@ -63,8 +99,12 @@ public class PAModelInterface implements IDomainListener
  private DataElement 			 _dummyElement;
  
  private boolean     			 _isShowAll;
- private boolean				 _addTraceFilePending;
  
+ // Flags for pending operations
+ private boolean				 _addTraceFilePending;
+ private boolean				 _analyzeOperationPending;
+ private boolean				 _performGotoPending;
+ private boolean				 _isRunningTraceProgram;
  
  // Constructor
  public PAModelInterface(DataStore dataStore) {
@@ -87,13 +127,16 @@ public class PAModelInterface implements IDomainListener
   _statuses		     = new HashMap();
   _projectsRootMap   = new HashMap();
   _traceFilesRootMap = new HashMap();
-  
+  _outputViewId 	 = "org.eclipse.cdt.cpp.ui.CppOutputViewPart";
   _localProjectsRoot   = null;
   _localTraceFilesRoot = null;
   _dummyElement        = null;
     
-  _isShowAll      = false;
-  _addTraceFilePending = false;
+  _isShowAll      		 = false;
+  _addTraceFilePending 	 = false;
+  _performGotoPending	 = false;
+  _analyzeOperationPending = false;
+  _isRunningTraceProgram = false;
   
  }
  
@@ -148,6 +191,13 @@ public class PAModelInterface implements IDomainListener
   */
  public void setSelection(DataElement selection) {
    _selection = selection;
+ }
+ 
+ /**
+  * Are we currently running a trace program?
+  */
+ public boolean isRunningTraceProgram() {
+   return _isRunningTraceProgram;
  }
  
  
@@ -352,6 +402,30 @@ public class PAModelInterface implements IDomainListener
          PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_PARSED, traceElement);
          _notifier.fireTraceChanged(traceEvent);
        }
+       
+       // Post handling after running a trace program
+       else if (commandValue.equals("C_COMMAND"))
+       {
+         _isRunningTraceProgram = false;
+        
+         if (_analyzeOperationPending)
+         {
+           _analyzeOperationPending = false;
+           analyzeTraceProgram(traceElement);
+         }
+       }
+       
+       // Post handling after querying the source location of a trace function
+       else if (commandValue.equals("C_PROVIDE_SOURCE_FOR"))
+       {
+         if (_performGotoPending)
+         {
+           _performGotoPending = false;
+           
+           PAOpenAction openAction = (PAOpenAction)PAActionLoader.getInstance().getOpenAction();
+           openAction.gotoSourceLocation();
+         }
+       }
   	  
      }
 	 
@@ -361,11 +435,25 @@ public class PAModelInterface implements IDomainListener
  /**
   * Monitor the command status
   */
- public void monitorStatus(DataElement status, DataElement traceElement, boolean updateStatus)
+ public void monitorStatus(DataElement status, DataElement traceElement)
  {
    if (status != null && !_statuses.containsKey(status))
    {
-     status.getDataStore().setUpdateWaitTime(500);
+     _statuses.put(status, traceElement);     			
+   }
+ }
+
+
+ /**
+  * Monitor the command status.
+  * This version can display the progress indicator in the status line and
+  * set the update wait time.
+  */
+ public void monitorStatus(DataElement status, DataElement traceElement, boolean updateStatus, int updateInterval)
+ {
+   if (status != null && !_statuses.containsKey(status))
+   {
+     status.getDataStore().setUpdateWaitTime(updateInterval);
      _statuses.put(status, traceElement);
      
      // Start a status monitor thread if we want to see the progress monitor.
@@ -553,7 +641,7 @@ public class PAModelInterface implements IDomainListener
  /**
   * Return the referenced file element for a given trace element
   */
- public DataElement findReferencedFile(DataElement traceElement) {
+ public DataElement getReferencedFile(DataElement traceElement) {
  
   ArrayList references = traceElement.getAssociated("referenced file");
   
@@ -567,7 +655,7 @@ public class PAModelInterface implements IDomainListener
  /**
   * Return the referenced project for a given trace element
   */
- public DataElement findReferencedProject(DataElement traceElement) {
+ public DataElement getReferencedProject(DataElement traceElement) {
  
   ArrayList references = traceElement.getAssociated("referenced project");
   
@@ -629,7 +717,7 @@ public class PAModelInterface implements IDomainListener
  /**
   * Add a trace file with the given format
   */
- public void addTraceFile(DataElement fileElement, String traceFormat) {
+ public DataElement addTraceFile(DataElement fileElement, String traceFormat) {
 
    DataStore dataStore = fileElement.getDataStore();
   
@@ -683,33 +771,35 @@ public class PAModelInterface implements IDomainListener
    DataElement status = dataStore.command(parseCommand, traceFile);
    
    // Monitor the parse status
-   monitorStatus(status, traceFile, true);
+   monitorStatus(status, traceFile, true, 500);
    
+   return traceFile;
  }
 
  
  /**
   * Remove a trace file or program.
   */
- public void removeTraceTarget(DataElement fileElement) {
+ public void removeTraceTarget(DataElement traceTarget) {
    
-   if (fileElement.isOfType("trace program") && fileElement.getValue().equals("trace functions root")) {
-    fileElement = fileElement.getParent();
+   if (traceTarget.isOfType("trace program") && traceTarget.getValue().equals("trace functions root")) {
+    traceTarget = traceTarget.getParent();
    }
       
-   DataStore dataStore = fileElement.getDataStore();
+   DataStore dataStore = traceTarget.getDataStore();
    
-   PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_DELETED, fileElement);
+   PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_DELETED, traceTarget);
    _notifier.fireTraceChanged(traceEvent);
    
-   dataStore.deleteObject(fileElement.getParent(), fileElement);
+   DataElement removeCommand = dataStore.localDescriptorQuery(traceTarget.getDescriptor(), "C_REMOVE_TRACE_TARGET");
+   dataStore.command(removeCommand, traceTarget);
    
  }
  
  /**
   * Add a trace program with the given trace format and arguments
   */
- public void addTraceProgram(DataElement progElement, String traceFormat, String arguments) {
+ public DataElement addTraceProgram(DataElement progElement, String traceFormat, String arguments) {
 
    // Display an error message if the element is not a binary executable.
    if (!progElement.isOfType("binary executable")) {
@@ -717,7 +807,7 @@ public class PAModelInterface implements IDomainListener
      Display d = getShell().getDisplay();
 	 d.asyncExec(new showMessageAction("Invalid Trace Program", 
 	             "Not a platform executable:\n" + progElement.getSource()));
-	 return;
+	 return null;
    
    }
    
@@ -775,6 +865,7 @@ public class PAModelInterface implements IDomainListener
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceProgram);
    _notifier.fireTraceChanged(traceEvent);
    
+   return traceProgram;
  }
   
  /**
@@ -789,7 +880,17 @@ public class PAModelInterface implements IDomainListener
    
    DataElement exeElement = (DataElement)traceProgram.getAssociated("referenced file").get(0);
    DataStore dataStore = exeElement.getDataStore();
-   return runCommand(dataStore, exeElement.getParent(), traceProgram.getName());
+   
+   _isRunningTraceProgram = true;
+   DataElement cmdStatus = runCommand(dataStore, exeElement.getParent(), traceProgram.getName());
+   
+   monitorStatus(cmdStatus, traceProgram);
+   
+   Display d = getShell().getDisplay();
+   ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
+   d.asyncExec(action);		
+   
+   return cmdStatus;
  }
  
  
@@ -812,7 +913,20 @@ public class PAModelInterface implements IDomainListener
    DataElement status = dataStore.command(analyzeCommand, traceProgram);
    
    // Monitor the parse status.
-   monitorStatus(status, traceProgram, true);
+   monitorStatus(status, traceProgram, true, 500);
+   
+ }
+ 
+ 
+ /**
+  * Run the executable to produce the trace output. 
+  * Then analyze the trace result.
+  */
+ public void runAndAnalyzeTraceProgram(DataElement traceProgram) {
+
+   _analyzeOperationPending = true;
+   
+   DataElement cmdStatus = runTraceProgram(traceProgram);
    
  }
  
@@ -826,7 +940,7 @@ public class PAModelInterface implements IDomainListener
    DataElement queryTraceCommand = dataStore.localDescriptorQuery(fileElement.getDescriptor(), "C_QUERY_TRACE_FILE_FORMAT");
    DataElement status = dataStore.command(queryTraceCommand, fileElement);
    
-   monitorStatus(status, fileElement, false);
+   monitorStatus(status, fileElement);
  }
  
  
@@ -842,11 +956,49 @@ public class PAModelInterface implements IDomainListener
     DataElement queryTraceCommand = dataStore.localDescriptorQuery(progElement.getDescriptor(), "C_QUERY_TRACE_PROGRAM_FORMAT");
     DataElement status = dataStore.command(queryTraceCommand, progElement);
     
-    monitorStatus(status, progElement, false);     
+    monitorStatus(status, progElement);     
    }
    
- }  
+ }
+ 
+ /**
+  * Find the source location of a trace function by querying the parser
+  */
+ public DataElement findTraceSourceLocation(DataElement traceFunctionElement, boolean hasPendingGoto) {
 
+   DataStore dataStore = traceFunctionElement.getDataStore();
+   DataElement cppObjD = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Cpp Object", 1);
+   if (cppObjD == null) {
+    System.out.println("Cannot find the Cpp Object for dataStore: " + dataStore);
+    return null;
+   }
+   
+   DataElement result = null;
+   DataElement provideSourceForD = dataStore.localDescriptorQuery(cppObjD, "C_PROVIDE_SOURCE_FOR", 1);
+
+   if (provideSourceForD != null) {     
+
+     DataElement traceFile = getContainingTraceFile(traceFunctionElement);
+     DataElement projectElement = getReferencedProject(traceFile);
+   
+     if (projectElement != null) {
+       
+       ArrayList args = new ArrayList();
+       args.add(projectElement);
+       result = dataStore.command(provideSourceForD, args, traceFunctionElement, false);
+       
+       if (hasPendingGoto) {
+         _performGotoPending = true;
+         monitorStatus(result, traceFunctionElement);
+       }
+     }
+   }
+   
+   return result;
+ 
+ }
+ 
+ 
   /**
    * Open the PA perspective
    */

@@ -43,7 +43,7 @@ public class PASchemaExtender implements ISchemaExtender
 	DataElement traceFileD    = dataStore.find(schemaRoot, DE.A_NAME, "trace file", 1);
 	DataElement traceProgramD = dataStore.find(schemaRoot, DE.A_NAME, "trace program", 1);
 	
-	dataStore.createObject(executableD,   DE.T_UI_COMMAND_DESCRIPTOR, "Analyze...", "org.eclipse.cdt.pa.ui.actions.AddTraceProgramAction");      
+	// dataStore.createObject(executableD,   DE.T_UI_COMMAND_DESCRIPTOR, "Analyze...", "org.eclipse.cdt.pa.ui.actions.AddTraceProgramAction");      
 	dataStore.createObject(traceFileD,    DE.T_UI_COMMAND_DESCRIPTOR, "Remove", "org.eclipse.cdt.pa.ui.actions.RemoveTraceTargetAction");
 	dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove", "org.eclipse.cdt.pa.ui.actions.RemoveTraceTargetAction");
 	dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Run", "org.eclipse.cdt.pa.ui.actions.RunTraceProgramAction");

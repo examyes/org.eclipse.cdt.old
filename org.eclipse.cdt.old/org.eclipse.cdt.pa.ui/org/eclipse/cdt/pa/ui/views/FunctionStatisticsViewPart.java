@@ -64,7 +64,7 @@ public class FunctionStatisticsViewPart extends PAObjectsViewPart {
        if (traceFileElement != _currentTraceFile) 
        {
         _currentTraceFile = traceFileElement;
-        _currentProject = _api.findReferencedProject(traceFileElement);
+        _currentProject = _api.getReferencedProject(traceFileElement);
         _viewer.setInput(_api.getTraceFuctionsRoot(traceFileElement));
        }
       }
@@ -112,7 +112,7 @@ public class FunctionStatisticsViewPart extends PAObjectsViewPart {
         
         // System.out.println("trace file: " + traceFile);
         _currentTraceFile = traceObject;
-        _currentProject = _api.findReferencedProject(traceObject);
+        _currentProject = _api.getReferencedProject(traceObject);
         _viewer.setInput(_api.getTraceFuctionsRoot(traceObject));
 	    break;
       

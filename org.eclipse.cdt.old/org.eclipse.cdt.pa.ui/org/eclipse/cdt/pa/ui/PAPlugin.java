@@ -182,7 +182,7 @@ public class PAPlugin extends AbstractUIPlugin implements ISchemaProvider
   }
     
   
-  public static org.eclipse.ui.IWorkbenchWindow getActiveWorkbenchWindow()
+  public static IWorkbenchWindow getActiveWorkbenchWindow()
   {
     return _instance.getWorkbench().getActiveWorkbenchWindow();
   }
@@ -190,18 +190,18 @@ public class PAPlugin extends AbstractUIPlugin implements ISchemaProvider
  
   public ResourceBundle getResourceBundle()
   {
-   return _resourceBundle;
+    return _resourceBundle;
   }
 
-    public ISchemaRegistry getSchemaRegistry()
-    {
+  public ISchemaRegistry getSchemaRegistry()
+  {
 	return _schemaRegistry;
-    }
+  }
 
-    public ISchemaExtender getSchemaExtender()
-    {
+  public ISchemaExtender getSchemaExtender()
+  {
 	return _schemaExtender;
-    }
+  }
 
 
 }

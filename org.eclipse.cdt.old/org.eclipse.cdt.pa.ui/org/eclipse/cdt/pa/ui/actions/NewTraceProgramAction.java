@@ -50,9 +50,18 @@ public class NewTraceProgramAction extends Action implements IWorkbenchWindowAct
         
         if (dlg.getReturnCode() == dlg.OK)
         {
-	      _api.addTraceProgram(selection, dlg.getTraceFormat(), dlg.getArgument());
-	      _api.openPerspective();	             
-        }
+	      DataElement traceProgram = _api.addTraceProgram(selection, dlg.getTraceFormat(), dlg.getArgument());
+	    
+	      _api.openPerspective();
+
+	      if (traceProgram != null )
+	      {
+	        if (dlg.getPostActionId() == AddTraceProgramDialog.ACTION_ANALYZE)
+	          _api.analyzeTraceProgram(traceProgram);
+	        else if (dlg.getPostActionId() == AddTraceProgramDialog.ACTION_RUN_AND_ANALYZE)
+	          _api.runAndAnalyzeTraceProgram(traceProgram);
+	      }
+		}
       }
     }
 

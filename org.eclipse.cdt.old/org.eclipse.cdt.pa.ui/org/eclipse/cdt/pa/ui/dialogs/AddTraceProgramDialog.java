@@ -25,12 +25,22 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
     private String       _title;
     private Button		 _gprofFormatRadio;
     private Button		 _fcFormatRadio;
+    private Button		 _nothingRadio;
+    private Button		 _analyzeRadio;
+    private Button		 _runAndAnalyzeRadio;
     private String		 _traceFormat;
     private Text		 _argumentField;
     private String		 _argument;
     
     private static String GPROF_FORMAT = "gprof";
     private static String FC_FORMAT    = "functioncheck";
+    
+    public static int ACTION_NOTHING = 0;
+    public static int ACTION_ANALYZE = 1;
+    public static int ACTION_RUN_AND_ANALYZE = 2;
+    
+    private int _actionId = ACTION_NOTHING;
+    
 
     // Constructor
     public AddTraceProgramDialog(String title, DataElement input)
@@ -67,14 +77,18 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
       return _argument;
     }
     
+    public int getPostActionId()
+    {
+      return _actionId;
+    }
 
     public Control createDialogArea(Composite parent)
     {
 	  Composite c = (Composite)super.createDialogArea(parent);
 	  
-      	  Label traceFormatLabel = createBoldLabel(c, "Select the trace format:");
+      Label traceFormatLabel = createBoldLabel(c, "Select the trace format:");
       
-      	  Composite traceFormatGroup = new Composite(c, SWT.NONE);
+      Composite traceFormatGroup = new Composite(c, SWT.NONE);
 	  GridLayout layout= new GridLayout();
 	  layout.numColumns = 1;
 	  traceFormatGroup.setLayout(layout);
@@ -105,20 +119,49 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  _argumentField.setLayoutData(data);
 	  
 	  // Create the description text
-	  Text description = new Text(c, SWT.WRAP | SWT.MULTI | SWT.READ_ONLY);
+	  Label description = new Label(c, SWT.NONE);
 	  description.setText("Note: The executable will be added to the Trace Files view.\n" +
-	  		"You can select the appropriate actions from that view to do the run and analysis.");
+	  		"You can select an action to perform after the file is added.");
 	  
-	  data = new GridData(GridData.FILL_BOTH);
-	  data.horizontalIndent = 8;
-	  data.widthHint  = 360;
-	  data.heightHint = 45;
+	  data = new GridData(GridData.FILL_HORIZONTAL);
+	  data.widthHint = 360;
+	  data.heightHint = 30;
 	  description.setLayoutData(data);
 	  
+	  createPostActionsGroup(c);
+	  
 	  _gprofFormatRadio.setSelection(true);
-      	  getShell().setText(_title);
+      getShell().setText(_title);
       
 	  return c;
+    }
+    
+    
+    private void createPostActionsGroup(Composite parent)
+    {
+    
+      createBoldLabel(parent, "Actions:");
+      Composite postActionsGroup = new Composite(parent, SWT.NONE);
+
+	  GridLayout layout= new GridLayout();
+	  layout.numColumns = 1;
+	  postActionsGroup.setLayout(layout);
+	  postActionsGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+      
+      _nothingRadio = new Button(postActionsGroup, SWT.RADIO);
+      _nothingRadio.setText("Nothing");
+      _nothingRadio.addListener(SWT.Selection, this);
+       
+      _analyzeRadio = new Button(postActionsGroup, SWT.RADIO);
+      _analyzeRadio.setText("Analyze");
+      _analyzeRadio.addListener(SWT.Selection, this);
+
+      _runAndAnalyzeRadio = new Button(postActionsGroup, SWT.RADIO);
+      _runAndAnalyzeRadio.setText("Run and Analyze");
+      _runAndAnalyzeRadio.addListener(SWT.Selection, this);
+      
+      _nothingRadio.setSelection(true);
+
     }
     
 
@@ -151,7 +194,16 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  else if (source == _argumentField) {
 	   _argument = _argumentField.getText();
 	  }
-      
+	  else if (source == _nothingRadio && _nothingRadio.getSelection()) {
+	   _actionId = ACTION_NOTHING;
+	  }
+ 	  else if (source == _analyzeRadio && _analyzeRadio.getSelection()) {
+	   _actionId = ACTION_ANALYZE;
+	  }
+	  else if (source == _runAndAnalyzeRadio && _runAndAnalyzeRadio.getSelection()) {
+	   _actionId = ACTION_RUN_AND_ANALYZE;
+	  }
+     
     }
     
 }
