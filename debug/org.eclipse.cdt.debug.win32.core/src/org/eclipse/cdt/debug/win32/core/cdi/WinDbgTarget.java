@@ -22,6 +22,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
@@ -435,7 +436,12 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		}
 		return runtimeOptions;
 	}
-	
 
-
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#evaluateExpressionToString(org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame, java.lang.String)
+	 */
+	public String evaluateExpressionToString( ICDIStackFrame context, String expressionText ) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
