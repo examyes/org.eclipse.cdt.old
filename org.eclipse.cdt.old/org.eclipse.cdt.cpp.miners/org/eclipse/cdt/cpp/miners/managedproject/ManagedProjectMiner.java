@@ -289,7 +289,7 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.makefileAmManager.setExtradistExtensions(extensionList,project,"C_INIT_EXTRA_DIST_EXTENSIONS");
 				
 			}
-			// new : to havdle delete notification
+			// new : to handle delete notification
  			else if (name.equals("C_NOTIFICATION"))
 			{
  				DataElement anotherArg = getCommandArgument(project, 2);
