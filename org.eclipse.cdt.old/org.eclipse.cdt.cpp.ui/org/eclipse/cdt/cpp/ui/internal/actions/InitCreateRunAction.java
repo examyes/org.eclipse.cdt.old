@@ -88,11 +88,13 @@ public class InitCreateRunAction extends CustomAction
 		super(subject, label, command, dataStore);
 		if (!subject.getType().equals("Project"))	
 				setEnabled(false);
+		if(_command.getValue().equals("INIT_CREATE_RUN")&& !projectHasSubdir())
+				setEnabled(false);		
 	}
     public void run()
 	{
 		String overwrite = "";
-		if(doesAutoconfSupportExists())
+		if(doesAutoconfSupportExist())
 			overwrite = "\nAll existing Autoconf related files will be overwritten";
 		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
 		String message = new String("This action will generate all the files needed for Autoconf Support"
@@ -111,8 +113,55 @@ public class InitCreateRunAction extends CustomAction
 			thread.start();
 		}
 	}
-	private boolean doesAutoconfSupportExists()
+    private boolean projectHasSubdir()
+    {
+    	return projectHasSubdirHelper(_subject);
+    }    
+    private boolean projectHasSubdirHelper(DataElement root)
 	{
+		for (int i = 0; i < root.getNestedSize(); i++)
+		{
+			DataElement child = root.get(i).dereference();
+			String type = child.getType();
+			if (type.equals("Project") || type.equals("directory"))
+				return true;
+		}
+		return false;
+	}
+	
+	private boolean doesAutoconfSupportExist()
+    {
+	return doesAutoconfSupportExistHelper(_subject);
+    }
+    
+    private boolean doesAutoconfSupportExistHelper(DataElement root)
+	{
+		for (int i = 0; i < root.getNestedSize(); i++)
+		    {
+			DataElement child = root.get(i).dereference();
+			String type = child.getType();
+			if (type.equals("file"))
+			    {
+				if (!child.isDeleted())
+				    {
+					String name = child.getName();
+					if (name.equals("Makefile") ||
+					    name.equals("Makefile.am") ||
+					    name.equals("configure.in"))
+					    {
+							return true;
+					    }
+				    }
+			    }
+			else if (type.equals("Project") || type.equals("directory"))
+			    {
+				return doesAutoconfSupportExistHelper(child);
+			    }
+		    }
+		return false;
+
+		/*
+
 		File project = _subject.getFileObject();
 		ProjectStructureManager structure = new ProjectStructureManager(project);
 		File[]fileList = structure.getFiles();
@@ -121,5 +170,6 @@ public class InitCreateRunAction extends CustomAction
 			if(fileList[i].getName().equals("Makefile")||fileList[i].getName().equals("Makefile.am")||fileList[i].getName().equals("Configure.in"))
 				return true;
 		return false;
+		*/
 	}
 }

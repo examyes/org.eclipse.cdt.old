@@ -76,9 +76,13 @@ public class ConfigureAction extends CustomAction
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
 		//enable disable based on object files
-		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")	&& !doesAutoconfSupportExists())
+		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")	&& !doesAutoconfSupportExist())
 				setEnabled(false);
 		//enable disable based on object files
+		
+		
+		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES")&& !projectHasSubdir())
+				setEnabled(false);		
 		
 		if((_command.getValue().equals("UPDATE_MAKEFILE_AM")&&!doesFileExists("Makefile.am")))
 				setEnabled(false);
@@ -102,7 +106,7 @@ public class ConfigureAction extends CustomAction
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES"))
 		{
-			if(doesAutoconfSupportExists())
+			if(doesAutoconfSupportExist())
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String("This action will generate all the files needed for Autoconf Support"+
@@ -115,7 +119,7 @@ public class ConfigureAction extends CustomAction
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
-			if(doesAutoconfSupportExists())
+			if(doesAutoconfSupportExist())
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
@@ -170,13 +174,28 @@ public class ConfigureAction extends CustomAction
 		    }
 		return false;
 	}
-    
-    private boolean doesAutoconfSupportExists()
+    private boolean projectHasSubdir()
     {
-	return doesAutoconfSupportExistsHelper(_subject);
+    	return projectHasSubdirHelper(_subject);
+    }    
+    private boolean projectHasSubdirHelper(DataElement root)
+	{
+		for (int i = 0; i < root.getNestedSize(); i++)
+		{
+			DataElement child = root.get(i).dereference();
+			String type = child.getType();
+			if (type.equals("Project") || type.equals("directory"))
+				return true;
+		}
+		return false;
+	}
+
+
+    private boolean doesAutoconfSupportExist()
+    {
+	return doesAutoconfSupportExistHelper(_subject);
     }
-    
-    private boolean doesAutoconfSupportExistsHelper(DataElement root)
+    private boolean doesAutoconfSupportExistHelper(DataElement root)
 	{
 		for (int i = 0; i < root.getNestedSize(); i++)
 		    {
@@ -197,7 +216,7 @@ public class ConfigureAction extends CustomAction
 			    }
 			else if (type.equals("Project") || type.equals("directory"))
 			    {
-				return doesAutoconfSupportExistsHelper(child);
+				return doesAutoconfSupportExistHelper(child);
 			    }
 		    }
 		return false;
