@@ -1038,7 +1038,8 @@ System.out.println("????????????????? GdbDebugSession.remoteDetach "+processInde
      if(!ok)
          return _whyStop;
  
-     _whyStop = WS_BkptHit;
+     //_whyStop = WS_BkptHit;
+     _whyStop = WS_UserBkptHit;
      checkResponseForException();
 //     addChangesToUiMessages();
 
