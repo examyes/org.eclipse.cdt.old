@@ -69,15 +69,25 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
    	}
    	else
    	{
-   		if (descriptor.isOfType(getContainerDescriptor(descriptor), true))
+	    if (descriptor.isOfType(getContainerDescriptor(descriptor), true))
    		{
-   			_containerTypes.add(descriptor);
-   			return true;
+		    _containerTypes.add(descriptor);
+		    return true;
    		}
-   		else
+	    else
    		{
-   			_nonContainerTypes.add(descriptor);
-   			return false;
+		    // can this type contain things?
+		    ArrayList relations = descriptor.getDataStore().getRelationItems(descriptor, "contents");
+		    if (relations.size() > 0)
+			{
+			    _containerTypes.add(descriptor);
+			    return true;
+			}
+		    else
+			{
+			    _nonContainerTypes.add(descriptor);
+			    return false;
+			}
    		}
    	}
    }

@@ -526,17 +526,17 @@ public class ViewMenu extends Composite
 
   public void getRelationItems()
       {
-        DataElement descriptor = _inputDescriptor;
-	_relationItems.clear();
-	if (descriptor != null)
-	    {
-		ArrayList items = descriptor.getDataStore().getRelationItems(descriptor, _fixatedRelationType);
-		for (int i = 0; i < items.size(); i++)
-		    {
-			DataElement item = (DataElement)items.get(i);
-			if (item != null)
-			    {
-				int depth = item.depth();
+	  DataElement descriptor = _inputDescriptor;
+	  _relationItems.clear();
+	  if (descriptor != null)
+	      {
+		  ArrayList items = descriptor.getDataStore().getRelationItems(descriptor, _fixatedRelationType);
+		  for (int i = 0; i < items.size(); i++)
+		      {
+			  DataElement item = (DataElement)items.get(i);
+			  if (item != null)
+			      {
+				  int depth = item.depth();
 				if (depth > 0 || _fixatedRelationType != null)
 				    {
 					if (!_relationItems.contains(item))
@@ -544,10 +544,12 @@ public class ViewMenu extends Composite
 						_relationItems.add(item);
 					    }
 				    }
-			    }
-		    }
-	    }
-	  _relationItems = Sorter.sort(_relationItems);
+			      }
+		      }
+	      }
+	  
+	  if (_relationItems != null && _relationItems.size() > 0)
+	      _relationItems = Sorter.sort(_relationItems);
 	  
       }
 
@@ -591,7 +593,8 @@ public class ViewMenu extends Composite
 		      }
 	      }
 
-	  _filterItems = Sorter.sort(_filterItems);
+	  if (_filterItems != null && _filterItems.size() > 0)
+	      _filterItems = Sorter.sort(_filterItems);
       }
 
 
