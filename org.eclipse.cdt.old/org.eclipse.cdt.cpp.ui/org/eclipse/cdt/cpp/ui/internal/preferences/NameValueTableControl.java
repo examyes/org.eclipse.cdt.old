@@ -62,8 +62,11 @@ public class NameValueTableControl extends Composite implements Listener
 	protected void buttonPressed(int buttonId)
 	{
 	    setReturnCode(buttonId);
+	    if (buttonId == OK)
+	    {
 	    _nameStr = _name.getText();
 	    _valueStr = _value.getText();
+	    }
 	    close();
 	}
 
@@ -129,7 +132,7 @@ public class NameValueTableControl extends Composite implements Listener
 		    _name.setText("");
 		}
 	    _name.setLayoutData(textData);
-	    
+	  
 	    GridLayout uLayout = new GridLayout();
 	    uLayout.numColumns = 3;
 	    uLayout.marginHeight = 1;
@@ -203,11 +206,14 @@ public class NameValueTableControl extends Composite implements Listener
 	_table = new Table(group, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);	
 	_table.setHeaderVisible(true);
 	_table.setLinesVisible(true);
+	
 
 	//	GridLayout tlayout = new GridLayout();
 	TableLayout tlayout = new TableLayout();
 	//tlayout.numColumns = 1;
 	_table.setLayout(tlayout);
+	_table.addListener(SWT.Selection, this);
+
 
 	GridData tgrid = new GridData(GridData.FILL_BOTH);
 	tgrid.heightHint = 80;
@@ -256,8 +262,12 @@ public class NameValueTableControl extends Composite implements Listener
 		GridData bp3 = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);	
 		buttonCanvas.setLayout(blayout);
 		buttonCanvas.setLayoutData(bp3);
+		
+		_removeButton.setEnabled(false);
+		_editButton.setEnabled(false);
 	    }
 
+	
 	setLayout(new GridLayout());
 	setLayoutData(new GridData(GridData.FILL_BOTH));
     }
@@ -266,16 +276,35 @@ public class NameValueTableControl extends Composite implements Listener
   {
     Widget source = e.widget;
 
-    if (source == _addButton)
+	if (source == _table)
+	{
+		_addButton.setEnabled(false);
+
+       for (int i = 0; i < _table.getItemCount(); i++)
+       {
+          if (_table.isSelected(i))
+          {
+             _removeButton.setEnabled(true);
+			 _editButton.setEnabled(true);
+           	 break;
+          }
+       }
+	}
+    else if (source == _addButton)
 	{
 	    EditNameValueDialog dialog = new EditNameValueDialog("Add Variable");
-	    dialog.open();
-	    String name  = dialog.getName();
-	    String value = dialog.getValue();
+	    if (dialog.open() == dialog.OK)
+	    {
+		    String name  = dialog.getName();
+		    if (name != null && name.length() > 0)
+		    {
+		    	String value = dialog.getValue();
 	    
-	    TableItem newItem = new TableItem(_table, SWT.NONE);		
-	    newItem.setText(0, name);
-	    newItem.setText(1, value);
+		  	  TableItem newItem = new TableItem(_table, SWT.NONE);		
+		  	  newItem.setText(0, name);
+		  	  newItem.setText(1, value);
+		    }
+	    }
 	}
     else if (source == _editButton)
 	{	    
@@ -293,16 +322,20 @@ public class NameValueTableControl extends Composite implements Listener
 		    String name1  = editItem.getText(0);
 		    String value1 = editItem.getText(1);
 		    
-		    EditNameValueDialog dialog = new EditNameValueDialog("Edit Name Value Pair");
+		    EditNameValueDialog dialog = new EditNameValueDialog("Edit Variable");
 		    dialog.setName(name1);
 		    dialog.setValue(value1);
-		    dialog.open();
+		    if (dialog.open() == dialog.OK)
+			{ 
+		 	   String name2  = dialog.getName();
+		 	   if (name2 != null && name2.length() > 0)
+		 	   {
+		  	 	  String value2 = dialog.getValue();
 		    
-		    String name2  = dialog.getName();
-		    String value2 = dialog.getValue();
-		    
-		    editItem.setText(0, name2);
-		    editItem.setText(1, value2);
+		    	   editItem.setText(0, name2);
+		     	  editItem.setText(1, value2);
+		 	   }
+			}
 		}
 	}
     else if (source == _removeButton)
