@@ -392,13 +392,11 @@ public class ViewToolBar extends Viewer implements IDomainListener
     public void fixateOnRelationType(String relationType)
     {
         _viewMenu.fixateOnRelationType(relationType);
-	_toolBarContainer.setVisible(false);
     }
     
     public void fixateOnObjectType(String objectType)
     {
         _viewMenu.fixateOnObjectType(objectType);
-	_toolBarContainer.setVisible(false);
     }
 
     public DataElement getSelectedRelationship()
