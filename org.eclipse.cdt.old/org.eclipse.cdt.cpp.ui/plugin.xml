@@ -210,7 +210,7 @@
 -->
 	<view
 		id="com.ibm.cpp.ui.Targets"
-		name="%Targets"
+		name="%Run_Specifications"
 		category="com.ibm.cpp.ui.cpp"
 		icon="icons/objects.gif"
 		class="com.ibm.cpp.ui.internal.views.targets.Targets">
@@ -345,7 +345,7 @@
            objectClass="org.eclipse.core.resources.IProject">
 	   <action
               id="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"
-	      label="%Create_Target"
+	      label="Create Specification"
 	      path="additions"
 	      class="com.ibm.cpp.ui.internal.views.targets.CreateTargetAction"	
 	      enablesFor="1">
