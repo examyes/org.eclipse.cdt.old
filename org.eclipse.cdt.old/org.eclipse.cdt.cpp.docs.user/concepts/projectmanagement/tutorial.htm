@@ -46,7 +46,7 @@ and select "New -> Directory"</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Create a new cpp file by RMC the source
-directory that you have created and select New - > File, then enter tha
+directory that you have created and select New - > File, then enter the
 file name to be "HelloWorld.C"</font></font></li>
 
 <li>
@@ -86,8 +86,8 @@ Files and Creating the Configure Script</font></font></b>
 <blockquote><font color="#000000"><font size=+1>In order to use automake
 and autoconf to generate the configure script, certain files has to exist
 first. The CDT creates and maintains these file on your behalf.&nbsp; Two
-types of these files are maintanined by&nbsp; the CDT tools, the configure.in
-and makefile.am. For each proejct there is only one configure.in and one
+types of these files are maintained by&nbsp; the CDT tools, the configure.in
+and makefile.am. For each project there is only one configure.in and one
 or more Makefile.am's. Let us learn how to use the CDT tool to generate
 and maintain these files:</font></font></blockquote>
 
@@ -95,7 +95,8 @@ and maintain these files:</font></font></blockquote>
 <li>
 <font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
 project view</font><font color="#000000">, RMC the hello project </font>(top
-level dirctory)<font color="#000000"> and select Autoconf -> Generate configure.</font></font></li>
+level directory)<font color="#000000"> and select Autoconf -> Generate
+configure.</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Click the OK button from the message
@@ -103,10 +104,10 @@ dialog.</font></font></li>
 
 <li>
 <font size=+1><font color="#000000">Make sure that the command has completed
-successfully -&nbsp;</font> you can monitor the comand outpout from the
+successfully -&nbsp;</font> you can monitor the command output from the
 <font color="#FF6666">output
-view</font> <font color="#000000">, then examin your project directory.
-You should now see all the files that automake and autoconf have cretaed
+view</font> <font color="#000000">, then examine your project directory.
+You should now see all the files that automake and autoconf have created
 to generate the configure script together with the configure script. This
 is one good reason why you might not want to put any files you want to
 work with in the top level directory as it will be cluttered with the autoconf
@@ -142,12 +143,12 @@ the next step would be running the script and building our program&nbsp;</font><
 <ul>
 <li>
 <font size=+1>&nbsp;From the <font color="#FF0000">C/C++ project</font>,
-RMC the project (top level dirctory) folder and select Autoconf -> run
+RMC the project (top level directory) folder and select Autoconf -> run
 configure</font></li>
 
 <li>
-<font size=+1>Make sure that the command has completed succefully- you
-can monitor the command outpout from the <font color="#FF0000">output view</font>,
+<font size=+1>Make sure that the command has completed successfully- you
+can monitor the command output from the <font color="#FF0000">output view</font>,
 and&nbsp;&nbsp; also by making sure that there is Makefile in your source
 directory.</font></li>
 </ul>
@@ -158,18 +159,18 @@ directory.</font></li>
 the hello project and select Build Project</font></li>
 
 <li>
-<font size=+1>Afetr successful completion, check the source dirctory and
+<font size=+1>After successful completion, check the source directory and
 make sure that the source target has been created - we will change the
 target name to be more meaningful later.</font></li>
 
 <li>
-<font size=+1>From <font color="#FF0000">Comand specification view</font>,
+<font size=+1>From <font color="#FF0000">Command specification view</font>,
 create a new command - Make sure that the command container being the "source"
 directory, enter the name of the command to be&nbsp; "run hello" and the
 invocation to be "./source"</font></li>
 
 <li>
-<font size=+1>Fro the command Specificatio view, RMC the command and select
+<font size=+1>Fro the command Specification view, RMC the command and select
 execute - you can use the view's local tool bar instead.</font></li>
 
 <li>
@@ -192,7 +193,7 @@ that the CDT provide in supporting the GNU automake and autoconf.</font>
 <li>
 <font size=+1>We will continue with our example that we have created earlier.
 As you might already now, the name of&nbsp; the target was set to be "source"
-- the nake of the source file directory -&nbsp; which might not be the
+- the name of the source file directory -&nbsp; which might not be the
 name that you were thinking of for your target. When the system tries to
 set a value for the bin_PROGRAMS variable, which exists in the /hello/source/Makefile.am,
 it sets the variable's value to be the name of its parent directory. That
@@ -219,26 +220,26 @@ following variables:</font></li>
 are related to the target name as well. The following are the variables
 that need to be changed:</font></li>
 
-<br><font size=+1>*_SOURCE, *_LDADD,&nbsp; and *_LDFLAGS, to be hello_SOURCES,
+<br><font size=+1>*_SOURCES, *_LDADD,&nbsp; and *_LDFLAGS, to be hello_SOURCES,
 hello_LDADD, hello_LDFLAGS</font>
 <li>
-<font size=+1>Save the changes to the Makfile.am and now you need to regenerate
+<font size=+1>Save the changes to the Makefile.am and now you need to regenerate
 the configure script</font></li>
 
 <li>
-<font size=+1>RMC the hello project(top level directory) and select Autoconf
+<font size=+1>RMC the hello project (top level directory) and select Autoconf
 -> Generate configure&nbsp;</font></li>
 
 <li>
 <font size=+1>Click yes on the message dialog box and make sure that the
-command has completed succeffuly</font></li>
+command has completed successfully</font></li>
 
 <li>
 <font size=+1>RMC the hello project and select Autoconf -> Run configure.&nbsp;</font></li>
 
 <li>
-<font size=+1>Ater executing the run configure commande succefuly, RMC&nbsp;the
-hello project and select buiuld Project to build the new target</font></li>
+<font size=+1>After executing the run configure command successfully, RMC&nbsp;the
+hello project and select build Project to build the new target</font></li>
 
 <li>
 <font size=+1>You should now find that the hello target has been created
@@ -249,7 +250,7 @@ under the source directory</font></li>
 you have created in the command specifications view. By editing the invocation
 field and change the entry field to be "./hello" instead of "./source"
 and then execute the command either from the local tool bar and select
-the Execute command icn or by RMC the taregt and select Execute command
+the Execute command icon or by RMC the target and select Execute command
 action from the context menu.</font></li>
 </ol>
 </ul>
@@ -257,14 +258,18 @@ action from the context menu.</font></li>
 
 <ul><font size=+1></font>&nbsp;
 <li>
-<b><font size=+1>Adding a static lib to your program</font></b></li>
-
+<b><font size=+1>Expanding and Working with Hello Project</font></b></li>
+<font size=+1></font>
+<p><br><font size=+1>Let us now expand our sample Hello project to include
+source files in a sub directory of the "sources" directory.&nbsp;</font>
 <br><font size=+1></font>&nbsp;
-<p>&nbsp;
-<br>&nbsp;<font size=+1></font>
-<br><font size=+1></font>&nbsp;
+<ul>
 <li>
-<b><font size=+1>Changing a staic library to shared library</font></b></li>
+<font size=+1>create a&nbsp;</font></li>
+</ul>
+<font size=+1></font>
+<li>
+<b><font size=+1>Changing a static library to a shared library</font></b></li>
 
 <li>
 <b><font size=+1>Modifying libraries names</font></b></li>
