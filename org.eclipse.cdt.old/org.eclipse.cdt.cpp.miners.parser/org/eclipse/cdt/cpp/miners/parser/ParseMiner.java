@@ -61,7 +61,15 @@ public class ParseMiner extends Miner
   }
   else if (name.equals("C_NOTIFICATION"))
   {
-  	handleNotification(subject, getCommandArgument(theElement, 1), status);
+  	DataElement anotherArg = getCommandArgument(theElement, 2);
+  	if (anotherArg != status)
+  	{  		
+  		handleNotification(subject, getCommandArgument(theElement, 1), anotherArg, status);
+  	}
+  	else
+  	{
+  		handleNotification(subject, getCommandArgument(theElement, 1), null, status);
+  	}
   }
   else if (name.equals("C_QUERY"))
    handleObjectParse(subject, status);
@@ -93,16 +101,43 @@ public class ParseMiner extends Miner
    return status;
  }
 
- private void handleNotification(DataElement cmd, DataElement subject, DataElement status)
+
+ private void handleNotification(DataElement cmd, DataElement subject, DataElement subjectArg, DataElement status)
  {
  	String cmdStr = cmd.getValue();
  	DataElement project = getProjectFor(subject);
- 	if (cmdStr.equals("C_DELETE"))
- 	{ 
- 		String type = subject.getType();
+ 	if (cmdStr.equals("C_RENAME"))
+ 	{
+ 		System.out.println("rename " + subjectArg.getName() + " to " + subject.getName());
+  		String type = subject.getType();
  		if (type.equals("file"))
  		{
- 			DataElement parsedFile = getParseFileFor(subject);
+ 			DataElement parsedFile = getParseFileFor(project, subjectArg);
+ 			if (parsedFile != null)
+ 			{
+ 				removeParseInfo(parsedFile);
+ 			
+ 				if (subjectArg != null)
+ 				{
+ 					handleFileParse(subject, project, status);
+ 				} 					 		
+			}
+ 		}
+ 		else if (subject.isOfType("directory"))
+ 		{ 	
+ 			if (removeParseInfo(subjectArg))
+ 			{
+ 				handleFileParse(subject, project, status);
+ 			}
+
+ 		} 		
+ 	} 	
+ 	else if (cmdStr.equals("C_DELETE"))
+ 	{ 
+  		String type = subject.getType();
+ 		if (type.equals("file"))
+ 		{
+ 			DataElement parsedFile = getParseFileFor(project, subject);
  			if (parsedFile != null)
  			{
  				removeParseInfo(parsedFile);
@@ -120,7 +155,7 @@ public class ParseMiner extends Miner
  				DataElement file = subject.get(i);
  				if (!file.isReference())
  				{
- 					handleNotification(cmd, file, status);
+ 					handleNotification(cmd, file, null, status);
  				}
  			}
  		}
@@ -148,10 +183,8 @@ public class ParseMiner extends Miner
  	return theProject;
  }
  
- private DataElement getParseFileFor(DataElement file)
+ private DataElement getParseFileFor(DataElement theProject, DataElement file)
  {
- 	DataElement theProject = getProjectFor(file);
- 	
  	if (theProject != null)
  	{
  		theProject = getParseProject(theProject);
@@ -416,7 +449,7 @@ public class ParseMiner extends Miner
    return null;
  }
  
- private DataElement removeParseInfo(DataElement theFile)
+ private boolean removeParseInfo(DataElement theFile)
  {  
      if (theFile.getType().equals("Project"/*ParserSchema.Project*/))
   {
@@ -439,14 +472,12 @@ public class ParseMiner extends Miner
    systemObjs.delete();
    projectObjs.delete();
    metadata.delete();
+   return true;
   }
   else
   {
-   DataElement result = _parseManager.removeParseInformation(theFile);
-   _dataStore.refresh(theFile.getParent());
- 
+   return _parseManager.removeParseInformation(theFile);
   }
-  return theFile;
  }
 
 
