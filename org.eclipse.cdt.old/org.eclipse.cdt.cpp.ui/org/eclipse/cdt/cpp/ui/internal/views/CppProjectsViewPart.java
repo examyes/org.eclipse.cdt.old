@@ -64,7 +64,6 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 			
 			if (rootElement != null)
 			    {
-				System.out.println("in = " + rootElement);
 				_viewer.setInput(rootElement);
 				_viewer.setSorter(DE.P_NAME);
 
