@@ -94,9 +94,9 @@ public class ManageProjectAction extends CustomAction
 		"\nAll existing Autoconf related files will be overwritten"+
 		"\nDo you wish to continue?");
 		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
+		
 		if(dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
 		{
-		
 			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
 			DataElement status = _dataStore.command(manageProjectCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();

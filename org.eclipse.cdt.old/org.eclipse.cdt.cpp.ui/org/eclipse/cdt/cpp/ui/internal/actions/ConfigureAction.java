@@ -39,7 +39,8 @@ import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
 import org.eclipse.swt.widgets.*;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.*;
+
 
 public class ConfigureAction extends CustomAction
 { 
@@ -72,9 +73,10 @@ public class ConfigureAction extends CustomAction
 	{
 	
 		boolean execute = true;
+	
+		Shell shell = _dataStore.getDomainNotifier().findShell();
 		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES"))
 		{
-			Shell shell = _dataStore.getDomainNotifier().findShell();
 			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 			String message = new String("This action will generate all the files needed for Autoconf Support"+
 				"\nExisting configure.in and Makefile.am's will be overwritten"+
@@ -87,21 +89,23 @@ public class ConfigureAction extends CustomAction
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
-			Shell shell = _dataStore.getDomainNotifier().findShell();
 			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 			String message = new String
 			("Trying to update existing configure.in and makefile.am's"+
 				"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
 			dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
-		}		
+		}	
+		
 		if(execute)
-		{
-			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
+		{			
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 			DataElement status = _dataStore.command(configureCmd, _subject);
-			
 			ModelInterface api = ModelInterface.getInstance();
+			System.out.println("status = " + status);
+			api.monitorStatus(status);			
+
 			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
-			api.monitorStatus(status);
+
 			
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
