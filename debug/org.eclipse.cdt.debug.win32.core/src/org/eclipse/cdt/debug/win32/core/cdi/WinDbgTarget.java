@@ -558,22 +558,6 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#createMemoryBlock(java.lang.String, int)
-	 */
-	public ICDIMemoryBlock createMemoryBlock(String address, int length) throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#createMemoryBlock(java.math.BigInteger, int)
-	 */
-	public ICDIMemoryBlock createMemoryBlock(BigInteger address, int length) throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlockManagement#removeBlocks(org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock[])
 	 */
 	public void removeBlocks(ICDIMemoryBlock[] memoryBlocks) throws CDIException {
@@ -626,5 +610,10 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 */
 	public ICDITargetConfiguration getConfiguration() {
 		return configuration;
+	}
+
+	public ICDIMemoryBlock createMemoryBlock(String address, int length, int wordSize) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
