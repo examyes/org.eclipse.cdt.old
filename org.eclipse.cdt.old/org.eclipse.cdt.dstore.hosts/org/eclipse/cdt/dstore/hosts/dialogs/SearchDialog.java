@@ -114,6 +114,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	lvgrid.horizontalSpan = 4;
 	_resultViewer.setLayoutData(lvgrid);
 
+	_search.setFocus();
 	getShell().setText(_title);
 	return c;
     }
