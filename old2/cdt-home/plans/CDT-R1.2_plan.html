@@ -1,0 +1,288 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Sebastien Marineau">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>C/C++ Development Tools 1.2 Plan</title>
+   <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+</head>
+
+<body>
+<h1>
+<b>C/C++ Development Tools 1.2 Plan</b><b></b></h1>
+
+<p>
+<table BORDER=0 CELLSPACING =0 CELLPADDING=0 WIDTH="30%">
+<tr>
+<td>First edition</td><td>June 20, 2003</td>
+</tr>
+</table><p>
+
+This document lays out the plan for the next major release of the C/C++
+Development Tools (CDT) Project, designated release 1.2. The two main goals
+of the 1.2 release will be to round out the editing, searching and indexing
+capabilities of the CDT, and to round out the CDT debugger.<br>
+<b>Note: The CDT 1.2 release will only run on Eclipse R2.1.</b>
+<p>This plan serves as an important input to the planning processes of
+the various customers of the CDT Project. It tells them what to expect
+(or what not to expect) in the next release so that they can plan their
+projects accordingly.
+<p>Plans are rarely completely unchanging over the life cycle of a release,
+and this project is no exception. We will update this document as required
+to reflect any changes to the plan. We reserve the right to add items to this
+list. The <a href="http://www.eclipse.org/mail/index.html" target="_top">developer
+mailing list archives</a> contain further, in-depth information about how
+a component is changing. Particular problem reports being worked on for
+this release can be tracked through the Eclipse <a href="http://dev.eclipse.org/bugs/">bug
+database</a>; the "Target Date" field reflects when a work item will
+become available in the main development stream.</p>
+
+<br>&nbsp;<b></b>
+<p><b>Editing Capabilities</b>
+<br>&nbsp;
+<ul>
+<li>
+Content/Code assist &amp; complete</li>
+
+<ul>
+<li>
+Completion (with &amp; without user invocation) of C++ language constructs
+(eg if statements, for loops, etc.)</li>
+</ul>
+
+<li>
+Search for references</li>
+
+<ul>
+<li>
+Allows the user to search for different kinds of references to a specific
+variable/function/object/method. Types of matches to look for could include
+(Declarations, Implementers, References, All Occurrences, etc.)</li>
+</ul>
+
+<li>
+Text hover</li>
+
+<ul>
+<li>
+Present the declaration and documentation (in bubble help format) for a
+given identifier (variables, functions, class names) when the mouse hovers
+over it.</li>
+</ul>
+
+<li>
+New Class Creation Wizard</li>
+
+<ul>
+<li>
+A wizard to automate the creating of a new class</li>
+</ul>
+
+<li>
+Navigation Assistance</li>
+
+<ul>
+<li>
+C/C++ Outline View</li>
+
+<ul>
+<li>
+Filters to show/hide things like static members, non-public members, fields,
+etc.</li>
+
+<li>
+Open symbol’s source (open the header/cpp file where this source is “defined”)</li>
+
+<li>
+Open header file referenced by a #include (may require build system support
+to determine inclusion paths)</li>
+</ul>
+
+<li>
+C/C++ Projects view</li>
+
+<li>
+General cleanup to bring in line with Eclipse 2.1 Navigator functionality</li>
+</ul>
+
+<li>
+Code Formatting</li>
+
+<ul>
+<li>
+A C/C++ equivalent of the JDT code formatting preferences page.</li>
+</ul>
+
+<li>
+User settable file name extensions (via preferences)</li>
+</ul>
+<b></b>
+<p><br><b>Build Capabilities</b>
+<ul>
+<li>
+Continue progress on Managed Make Builder</li>
+
+<ul>
+<li>
+Build a project using automatically generated makefile(s)</li>
+</ul>
+</ul>
+<b></b>
+<p><br><b>Debug Capabilities</b>
+<ul>
+<li>
+Breakpoints</li>
+
+<ul>
+<li>
+Defered Breakpoint(If the underlying debugger supports shared library loading
+notification).</li>
+
+<li>
+Investigate action to set breakpoint for specific thread(if the underlying
+debugger supports it) and session.</li>
+
+<li>
+Setting breakpoints on external sources with persistency on the project.</li>
+</ul>
+</ul>
+
+<ul>
+<li>
+Presentation</li>
+
+<ul>
+<li>
+Formating values (hex, octal, ...)</li>
+
+<li>
+Detail panel for Variable view.</li>
+
+<li>
+Casting variables to different types in the Variable view.</li>
+
+<li>
+Investigate a way to make static variables available even when not in the
+context of the stackframe.</li>
+</ul>
+
+<li>
+Debug protocol</li>
+
+<ul>
+<li>
+Support for GDB/MI 2 (still support GDB/MI 1). This will allow using the
+new MI2 features which will be found in gdb 6.0.</li>
+
+<li>
+Investigate variables book-keeping.&nbsp; The rationale; on some embedded
+boards probing the variables at every step can be to intrusive and sometimes
+destructive for example, accessing a volatile.</li>
+</ul>
+
+<li>
+CDI</li>
+
+<ul>
+<li>
+Documentation for the C/C++ Debug Interface(CDI)</li>
+
+<li>
+Commit the cdi-spy plugin as an example, the cdi-spy resembles jdt-spy,
+it listens to all debug events(breakpoint, dll loading etc ..) and presents
+the informaiton in a nice Treeview.</li>
+</ul>
+</ul>
+
+<p><br><b>Documentation</b>
+<ul>
+<li>
+Create a user's guide for the CDT as it stands today (release 1.1) and
+begin documenting the capabilities being added in 1.2 as time permits.</li>
+
+<li>
+Update the user FAQs and HOWTOs on the web site.</li>
+</ul>
+
+<p><br><b>Testing</b>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The IBM/Rational team will
+be dedicating some resources to test all of their contributions to version
+1.2 of&nbsp; the CDT. In addition to that, we will continue broadening
+of CDT testing to address areas that have not yet received any real test
+coverage. Finally, an area of focus will also include CDT scalability with
+large projects.
+<br>&nbsp;
+<p><b>Work Items</b><b></b>
+<p>Note that fixing bugs, improving test coverage, documentation, examples,
+etc. are considered routine ongoing maintenance activities and are not
+included in this plan unless they would also involve significant changes
+to the plugin.
+<br>&nbsp;
+<p><b>Timeframe</b>
+<p>The timeframe for the CDT 1.2 release is mid-september. The feature
+complete, freeze and GA target dates are
+<br>as follows:
+<br>&nbsp;
+<ul>
+<li>
+Milestone 1 (M1) :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+August 15, 2003</li>
+
+<li>
+Freeze 1 (F1):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+September 5, 2003</li>
+
+<li>
+Release Candidate 1 (RC1):&nbsp;&nbsp; September 16, 2003</li>
+
+<li>
+General Availability (GA):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; September
+19, 2003</li>
+</ul>
+The CDT 2.0 release will be the next major release following the CDT 1.2
+release. It is currently planned for the first quarter of 2004.
+<br>Major features targetted for CDT 2.0 are outlined below.
+<br>&nbsp;
+<p><b>Compatibility with Previous Release</b>
+<p>API Contract Compatibility: The architecture for the CDT 1.2 is a little
+different than the architecture of the previous releases. As a result,
+there will be some
+<br>API incompatibilitie with previous versions. As we work through integrations
+with a wider variety of tools and round out the CDT functionality, these
+APIs will freeze; this is one of the CDT 2.0 objectives.
+<p>&nbsp;
+<p><b>CDT 2.0 release</b><b></b>
+<p>The CDT 2.0 release is planned for Q1/2004, and will focus on the following
+areas:
+<ul>
+<li>
+Refactoring - the ability to make system-wide code changes, optionally
+previewing the changes that will result from the refactoring operation.</li>
+
+<li>
+Writable DOM - this will be required in order to support user-level capabilities
+like refactoring.</li>
+
+<li>
+Managed Make System and build model - further work to firm up the build
+model APIs, as well as complete the native CDT builder.</li>
+
+<li>
+Investigate and possibly develop a non-MI debugger back-end, for example
+a native WIN32 debugger implementation.</li>
+
+<li>
+Investigate integration of the CDT and JDT debug capabilities, t provide
+seamless debugging of mixed C/Java apps.</li>
+
+<li>
+Freeze the CDT integration APIs, ensuring compatibility between future
+versions of CDT and other integrated tools.</li>
+</ul>
+
+<center><I>
+Last Modified on Wednesday, June 26, 2003
+</I></center>
+</body>
+</html>
