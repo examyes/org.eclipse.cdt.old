@@ -23,7 +23,7 @@
    <library name=".">
       <export name="*"/>
    </library>
-   <library name="pa.jar">
+   <library name="pa_ui.jar">
       <export name="*"/>
    </library>
 </runtime>
