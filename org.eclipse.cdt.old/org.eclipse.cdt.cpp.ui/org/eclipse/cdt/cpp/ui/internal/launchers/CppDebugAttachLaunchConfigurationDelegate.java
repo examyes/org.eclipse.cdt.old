@@ -16,12 +16,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.ibm.debug.daemon.CoreDaemon;
-import com.ibm.debug.internal.pdt.PICLDebugTarget;
 import com.ibm.debug.pdt.launch.PICLAttachInfo;
+import com.ibm.debug.pdt.launch.PICLLaunchUtils;
 
 /**
  * Launches a debug attach session.
@@ -102,7 +103,7 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
       }
   		_dataElementDirectory = _executable.getParent();
 	
-   	PICLDebugTarget target = new  PICLDebugTarget(attachInfo, attachInfo.getEngineConnectionInfo());
+   	IDebugTarget target = PICLLaunchUtils.getDebugTarget(attachInfo);
    	int key = CoreDaemon.generateKey();
    	CoreDaemon.storeDebugTarget(target, key);
         int port = CoreDaemon.getCurrentPort();

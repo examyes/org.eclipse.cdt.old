@@ -8,20 +8,15 @@ package org.eclipse.cdt.cpp.ui.internal.editor;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
-import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.swt.widgets.Shell;
@@ -29,7 +24,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import com.ibm.debug.internal.pdt.PICLUtils;
 import com.ibm.debug.pdt.breakpoints.PICLLineBreakpoint;
 import com.ibm.lpex.alef.LpexAbstractTextEditor;
 import com.ibm.lpex.alef.LpexMarkerRulerAction;
@@ -153,55 +147,63 @@ public class BreakpointRulerAction extends LpexMarkerRulerAction {
       IResource resource = getResource();
       _resource = resource;
 
-      IWorkspaceRunnable body = new IWorkspaceRunnable()
-      {
-         public void run(IProgressMonitor monitor) throws CoreException
-         {
-
-            try
-            {
-					PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
-               IMarker breakpointMarker = _resource.createMarker("com.ibm.debug.PICLLineBreakpoint");
-
-               IBreakpointManager breakpointManager=
-                                               DebugPlugin.getDefault().getBreakpointManager();
-               //breakpointManager.configureLineBreakpoint(breakpoint,
-               //            "com.ibm.debug.internal.picl" , true, _rulerLine + 1, -1, -1);
-                  //         "com.ibm.debug.internal.picl" , true, _rulerLine + 1, _start, _end);  revisit - Adrian
-                  // in case of multiple statements on same line, hence multiple breakpoints
-					breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
-                                              new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), new Integer(_rulerLine + 1), new Integer(-1), new Integer(-1)});
-					breakpoint.setMarker(breakpointMarker);
-
-               Map map= breakpointMarker.getAttributes();
-               map.put(IMarker.MESSAGE, "cpp");
-               breakpointMarker.setAttributes(map);
-
-               try
-               {
-                  breakpointManager.addBreakpoint(breakpoint);
-               }
-               catch (DebugException de)
-               {
-                  System.out.println("BreakpointRulerAction: de" +de);
-               }
-            }
-            catch (CoreException ce)
-            {
-                  System.out.println("BreakpointRulerAction: ce" +ce);
-            }
-
-         }
-      };
-
-      try
-      {
-         _workspace.run(body, null);
-      }
-      catch (CoreException ce)
-      {
-         System.out.println("BreakpointRulerAction invoke run() : ce" +ce);
-      }
+	  if (resource != null) 
+	  {
+	  	// default the char start and end to -1 
+	  	new PICLLineBreakpoint(resource, null, _rulerLine+1, -1, -1);
+	  }
+	  	
+//
+//
+//      IWorkspaceRunnable body = new IWorkspaceRunnable()
+//      {
+//         public void run(IProgressMonitor monitor) throws CoreException
+//         {
+//
+//            try
+//            {
+//					PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
+//               IMarker breakpointMarker = _resource.createMarker("com.ibm.debug.PICLLineBreakpoint");
+//
+//               IBreakpointManager breakpointManager=
+//                                               DebugPlugin.getDefault().getBreakpointManager();
+//               //breakpointManager.configureLineBreakpoint(breakpoint,
+//               //            "com.ibm.debug.internal.picl" , true, _rulerLine + 1, -1, -1);
+//                  //         "com.ibm.debug.internal.picl" , true, _rulerLine + 1, _start, _end);  revisit - Adrian
+//                  // in case of multiple statements on same line, hence multiple breakpoints
+//					breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
+//                                              new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), new Integer(_rulerLine + 1), new Integer(-1), new Integer(-1)});
+//					breakpoint.setMarker(breakpointMarker);
+//
+//               Map map= breakpointMarker.getAttributes();
+//               map.put(IMarker.MESSAGE, "cpp");
+//               breakpointMarker.setAttributes(map);
+//
+//               try
+//               {
+//                  breakpointManager.addBreakpoint(breakpoint);
+//               }
+//               catch (DebugException de)
+//               {
+//                  System.out.println("BreakpointRulerAction: de" +de);
+//               }
+//            }
+//            catch (CoreException ce)
+//            {
+//                  System.out.println("BreakpointRulerAction: ce" +ce);
+//            }
+//
+//         }
+//      };
+//
+//      try
+//      {
+//         _workspace.run(body, null);
+//      }
+//      catch (CoreException ce)
+//      {
+//         System.out.println("BreakpointRulerAction invoke run() : ce" +ce);
+//      }
 	}
 	
 	/**
