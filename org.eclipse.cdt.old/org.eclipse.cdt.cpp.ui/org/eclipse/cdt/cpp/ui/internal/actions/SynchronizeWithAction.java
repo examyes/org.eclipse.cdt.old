@@ -83,7 +83,7 @@ public class SynchronizeWithAction extends CustomAction
 			    for (int k = 0; k < project2.getNestedSize(); k++)
 				{
 				    DataElement source = project2.get(k);
-				    if (!source.isReference() && source.isOfType("file"))
+				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))
 					{
 					    TransferFiles transferAction = new TransferFiles("transfer", source, 
 											     project1, null);

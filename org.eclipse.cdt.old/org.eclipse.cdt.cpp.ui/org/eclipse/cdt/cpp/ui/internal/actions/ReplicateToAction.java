@@ -63,7 +63,7 @@ public class ReplicateToAction extends CustomAction
 			    for (int j = 0; j < _subject.getNestedSize(); j++)
 				{
 				    DataElement source = _subject.get(j);
-				    if (!source.isReference() && source.isOfType("file"))
+				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))
 					{
 					    TransferFiles transferAction = new TransferFiles("transfer", source, 
 											     targetProject, null);
