@@ -1649,15 +1649,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
  	
     public DataElement getProjectFor(DataElement resource)
     {
-	String type = resource.getType();
-	if (type.equals("file") || type.equals("directory") || type.equals("Project"))
+	String rtype = resource.getType();
+	if (rtype.equals("file") || rtype.equals("directory") || rtype.equals("Project"))
 	    {
 		DataElement parent = resource;
-		while (parent != null &&
-		       !parent.getType().equals("Project") &&
-		       !parent.getType().equals("Closed Project"))
-		    {
-			parent = parent.getParent();
+		String type = parent.getType();
+		while (parent != null &&			   
+		       !type.equals("Project") &&
+		       !type.equals("Closed Project"))
+		    {		
+			if (!type.equals("temp") || !type.equals("Root"))
+			{
+				parent = null;
+			}
+			else
+			{   
+			 	parent = parent.getParent();
+			}
+
 		    }
 		return parent;
 	    }
