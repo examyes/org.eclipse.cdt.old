@@ -189,11 +189,14 @@ public class PAMiner extends Miner {
     
   DataElement callRootD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.CallRoot"));
   createReference(callRootD, callsD);
-    
+  
+  DataElement fileD = findDescriptor("file");
+  
   // command descriptors
   createCommandDescriptor(traceFileD,    getLocalizedString("pa.Parse"), "C_PARSE_TRACE").setDepth(0);
   createCommandDescriptor(traceProgramD, getLocalizedString("pa.Analyze"), "C_ANALYZE_PROGRAM").setDepth(0);
   createCommandDescriptor(traceFunctionD, "Query", "C_QUERY");
+  createCommandDescriptor(fileD, "quey trace", "C_QUERY_TRACE_FORMAT");
   
   makeTransient(gprofTraceFunctionD);
   makeTransient(fcTraceFunctionD);
@@ -220,6 +223,10 @@ public class PAMiner extends Miner {
   {
    handleTraceProgramAnalyze(subject, getCommandArgument(theElement, 1), status);
   }
+  else if (name.equals("C_QUERY_TRACE_FORMAT"))
+  {
+   handleQueryTraceFormat(subject, status);
+  }
 
   return status;
    
@@ -236,6 +243,44 @@ public class PAMiner extends Miner {
    }
    
  }
+ 
+ /**
+  * Query the trace file format
+  */
+ public void handleQueryTraceFormat(DataElement fileElement, DataElement status) {
+ 
+   File file = fileElement.getFileObject(false);
+   int traceFormat = -1;
+   try {
+    traceFormat = PAAdaptor.queryTraceFileFormat(file);
+   }
+   catch (Exception e) { }
+   
+   String formatStr = null;
+   switch (traceFormat) {
+   
+     case PAAdaptor.GPROF_GNU:
+      formatStr = "GNU gprof";
+      break;
+      
+     case PAAdaptor.GPROF_BSD:
+      formatStr = "BSD gprof";
+      break;
+     
+     case PAAdaptor.FUNCTIONCHECK:
+      formatStr = "functioncheck";
+      break;
+     
+     default:
+      formatStr = "error";
+      break;
+     
+   }
+   
+   status.setAttribute(DE.A_NAME, "done");
+   status.setAttribute(DE.A_VALUE, formatStr);
+ }
+ 
  
  /**
   * Parse the given trace file and use the parsed result to populate the datastore 

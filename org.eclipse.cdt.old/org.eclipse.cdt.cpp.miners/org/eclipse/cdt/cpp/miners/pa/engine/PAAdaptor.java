@@ -12,10 +12,11 @@ public class PAAdaptor {
  private static PAAdaptor _instance = new PAAdaptor();
  
  // Trace file format constants
- public static int AUTO = 0;
- public static int GPROF_GNU = 1;
- public static int GPROF_BSD = 2;
- public static int FUNCTIONCHECK = 3;
+ public static final int AUTO = 0;
+ public static final int GPROF_GNU = 1;
+ public static final int GPROF_BSD = 2;
+ public static final int FUNCTIONCHECK = 3;
+ public static final int INVALID = -1;
  
  // The default trace file format is AUTO
  private static int _traceFileFormat = AUTO;
@@ -172,12 +173,12 @@ public class PAAdaptor {
   firstLine = firstLine.trim();
   if (firstLine.startsWith("Flat profile:"))
    return GPROF_GNU;
-  else if (firstLine.startsWith("ngranularity:"))
+  else if (firstLine.startsWith("ngranularity:") || firstLine.startsWith("granularity:"))
    return GPROF_BSD;
   else if (firstLine.startsWith("FunctionCheck"))
    return FUNCTIONCHECK;
   else
-   return -1;
+   return INVALID;
   
  }
  
