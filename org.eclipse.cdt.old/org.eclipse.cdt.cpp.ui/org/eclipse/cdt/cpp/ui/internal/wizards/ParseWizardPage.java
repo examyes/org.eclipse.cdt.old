@@ -7,6 +7,7 @@ package org.eclipse.cdt.cpp.ui.internal.wizards;
  */
 
 import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.widgets.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.events.*;
@@ -45,9 +46,8 @@ public class ParseWizardPage extends WizardPage
 	Composite composite = new Composite(parent, SWT.NONE);
 
 	TabFolder folder = new TabFolder(composite, SWT.NONE);
-	folder.setLayout(new GridLayout());
-	GridData gdFolder= new GridData(GridData.FILL_HORIZONTAL);
-	folder.setLayoutData(gdFolder);
+	folder.setLayout(new TabFolderLayout());	
+	folder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 	//page 1
 	TabItem item1;

@@ -35,6 +35,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
     private IStructuredSelection            _selection;
     private CppWizardNewProjectCreationPage _mainPage;
     private ProjectInfoWizardPage           _fProjectInfoWizardPage;
+    private PathWizardPage                  _pathWizardPage;
     private ParseWizardPage                 _parserWizardPage;
     private CppPlugin                       _plugin = CppPlugin.getDefault();
 
@@ -49,6 +50,9 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	
 	_fProjectInfoWizardPage = new ProjectInfoWizardPage(this);
  	this.addPage(_fProjectInfoWizardPage);	
+	
+	_pathWizardPage = new PathWizardPage(this);
+ 	this.addPage(_pathWizardPage);	
 
 	_parserWizardPage = new ParseWizardPage(this);
  	this.addPage(_parserWizardPage);	
