@@ -527,9 +527,20 @@ public class DataStore
 	  }
   }
 
+  public DataElement createObject(DataElement parent, DataElement type, String name)
+      {
+        return createObject(parent, type, name, "");
+      }
+
   public DataElement createObject(DataElement parent, String type, String name)
       {
         return createObject(parent, type, name, "");
+      }
+
+  public DataElement createObject(DataElement parent, DataElement type, String name, String source)
+      {
+        String id = generateId();
+        return createObject(parent, type, name, source, id);
       }
 
   public DataElement createObject(DataElement parent, String type, String name, String source)
@@ -543,10 +554,37 @@ public class DataStore
         return createObject(parent, type, name, source, id);
       }
 
+  public DataElement createObject(DataElement parent, DataElement type, String name, String source, String sugId)
+      {
+	  return createObject(parent, type, name, source, sugId, "false");
+      }
+
   public DataElement createObject(DataElement parent, String type, String name, String source, String sugId)
       {
 	  return createObject(parent, type, name, source, sugId, "false");
       }
+
+  public DataElement createObject(DataElement parent, DataElement type, String name, 
+				  String source, String sugId, String isReference)
+    {
+        String id = makeIdUnique(sugId);
+	
+	DataElement newObject = createElement();
+	if (parent == null)
+	    {
+		parent = _tempRoot;
+	    }
+	
+	newObject.reInit(this, parent, type, id, name, source, isReference); 
+
+        if (parent != null)
+	    {
+		parent.addNestedData(newObject, false);
+	    }
+
+        _hashMap.put(id, newObject);
+        return newObject;
+    }
 
   public DataElement createObject(DataElement parent, String type, String name, String 
 				  source, String sugId, String isReference)

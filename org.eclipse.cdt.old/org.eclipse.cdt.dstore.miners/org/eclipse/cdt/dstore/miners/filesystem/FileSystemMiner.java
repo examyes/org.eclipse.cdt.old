@@ -15,6 +15,13 @@ import java.util.*;
 
 public class FileSystemMiner extends Miner
 {
+    private DataElement _fsystemObjectDescriptor;
+    private DataElement _fileDescriptor;
+    private DataElement _directoryDescriptor;
+    private DataElement _deviceDescriptor;
+    private DataElement _hostDescriptor;
+    private DataElement _containsDescriptor;
+
   public FileSystemMiner ()
       {
 	super();
@@ -142,52 +149,56 @@ public class FileSystemMiner extends Miner
 
   public void extendSchema(DataElement schemaRoot)
       {
-        DataElement fsObject  = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-        DataElement deviceD   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.device"), 1);
-     
-	DataElement dirD      = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.directory"), 1);
-        DataElement hostD     = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.host"), 1);
-        DataElement fileD     = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
-	DataElement rootD     = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.root"), 1);
-	DataElement projectD  = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.project"), 1);
-	DataElement containsD = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
-	DataElement parentD   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.parent"), 1);	
+	  _fsystemObjectDescriptor  = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+	  _deviceDescriptor         = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.device"), 1);    
+	  _directoryDescriptor      = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.directory"), 1);
+	  _hostDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.host"), 1);
+	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
+	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
- 	DataElement dirQuery  = createCommandDescriptor(fsObject, getLocalizedString("model.Query"), "C_QUERY", false);
-	DataElement refresh   = createCommandDescriptor(fsObject, getLocalizedString("model.Refresh"), "C_REFRESH");
+	  DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
+							  getLocalizedString("model.Query"), "C_QUERY", false);
+	  DataElement refresh   = createCommandDescriptor(_fsystemObjectDescriptor, 
+							  getLocalizedString("model.Refresh"), "C_REFRESH");
+	  DataElement fileQuery  = createCommandDescriptor(_fileDescriptor,    
+							   getLocalizedString("model.Query"), "C_QUERY", false);
+	  fileQuery.setAttribute(DE.A_SOURCE, "-");
 
- 	DataElement fileQuery  = createCommandDescriptor(fileD,    getLocalizedString("model.Query"), "C_QUERY", false);
-	fileQuery.setAttribute(DE.A_SOURCE, "-");
-	DataElement fileRefresh   = createCommandDescriptor(fileD, getLocalizedString("model.Refresh"), "C_REFRESH", false);
-	fileRefresh.setAttribute(DE.A_SOURCE, "-");
+	  DataElement fileRefresh   = createCommandDescriptor(_fileDescriptor, 
+							      getLocalizedString("model.Refresh"), "C_REFRESH", false);
+	  fileRefresh.setAttribute(DE.A_SOURCE, "-");
 
-	//      DataElement createD   = createCommandDescriptor(dirD, "Create", "C_CREATE", false);
- 	DataElement fdateD    = createCommandDescriptor(fsObject, "Get Date", "C_DATE", false);
- 	DataElement setDateD  = createCommandDescriptor(fsObject,  "Set Date", "C_SET_DATE", false);
+	  DataElement fdateD    = createCommandDescriptor(_fsystemObjectDescriptor, "Get Date", "C_DATE", false);
+	  DataElement setDateD  = createCommandDescriptor(_fsystemObjectDescriptor,  "Set Date", "C_SET_DATE", false);
+	  
+	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), "C_OPEN");
+	  DataElement move      = createCommandDescriptor(_fsystemObjectDescriptor, 
+							  getLocalizedString("model.Move"), "C_MOVE", false);
+	  
+	  //renaming files and dirs
+	  DataElement renF = createCommandDescriptor(_fsystemObjectDescriptor, 
+						     getLocalizedString("model.Rename"), "C_RENAME");
+	  renF.setDepth(1);
 
-       	DataElement open      = createCommandDescriptor(fileD, getLocalizedString("model.Open"), "C_OPEN");
-        DataElement move      = createCommandDescriptor(fsObject, getLocalizedString("model.Move"), "C_MOVE", false);
-	//        DataElement delete    = createCommandDescriptor(fsObject, getLocalizedString("model.Delete"), "C_DELETE");        
-      	///////////////////////////
-	//renaming files and dirs
-	DataElement renF = createCommandDescriptor(fsObject, getLocalizedString("model.Rename"), "C_RENAME");
-	renF.setDepth(1);
-	DataElement inRenF = _dataStore.createObject(renF,"input", "Enter the New Name");
+	  DataElement inRenF = _dataStore.createObject(renF,"input", "Enter the New Name");
+	  
+	  DataElement findD = createCommandDescriptor(_directoryDescriptor, "Find", "C_FIND_FILE", false);
 
-	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", false);
-
-	//deleting files and dirs
-	DataElement del = createCommandDescriptor(fsObject,getLocalizedString("model.Delete"),"C_DELETE");
-
-	//creating new files and dirs
-	DataElement newFD=createAbstractCommandDescriptor(dirD,getLocalizedString("model.Create"),"C_NEW");
-
-       	DataElement newF = createCommandDescriptor(newFD, getLocalizedString("model.File___"),"C_CREATE_FILE");
-       	DataElement inNewF = _dataStore.createObject(newF, "input", "Enter Name for New file");
-
-       	DataElement newD = createCommandDescriptor(newFD,getLocalizedString("model.Directory___"),"C_CREATE_DIR");
-	DataElement inNewD = _dataStore.createObject(newD, "input", "Enter Name for New Directory");
-	//////////////////////////
+	  //deleting files and dirs
+	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,getLocalizedString("model.Delete"),
+						    "C_DELETE");	  
+	  //creating new files and dirs
+	  DataElement newFD=createAbstractCommandDescriptor(_directoryDescriptor,getLocalizedString("model.Create"),
+							    "C_NEW");
+	  
+	  DataElement newF = createCommandDescriptor(newFD, getLocalizedString("model.File___"),
+						     "C_CREATE_FILE");
+	  DataElement inNewF = _dataStore.createObject(newF, "input", 
+						       "Enter Name for New file");
+	  DataElement newD = createCommandDescriptor(newFD,getLocalizedString("model.Directory___"),
+						     "C_CREATE_DIR");
+	  DataElement inNewD = _dataStore.createObject(newD, "input", 
+						       "Enter Name for New Directory");
 
       }
 
@@ -384,9 +395,10 @@ public class FileSystemMiner extends Miner
 			   return status;  			     			   
 			 }
 		     
-		     String objType  = new String(getLocalizedString("model.file"));
 		     String objName = newName.getName();
-		     DataElement newObject = _dataStore.createObject(subject,objType,objName,newFileName.toString());
+		     DataElement newObject = _dataStore.createObject(subject, _fileDescriptor,
+								     objName, newFileName.toString());
+		     
 		     newObject.setDepth(1);// the new file has no children
 		     subject.setDepth(2);// my parent directory has the new file as its child
 		     _dataStore.update(subject);
@@ -408,9 +420,10 @@ public class FileSystemMiner extends Miner
 			     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
 			     return status;			    
 			 }
-		     String objType = new String(getLocalizedString("model.directory"));
+
 		     String objName = newName.getName();
-		     DataElement newObject=_dataStore.createObject(subject,objType,objName,newDirName.toString());
+		     DataElement newObject=_dataStore.createObject(subject, _directoryDescriptor,
+								   objName, newDirName.toString());
 		     newObject.setDepth(1);//new directory is empty so it does not have any children(i.e.depth=1)
 		     subject.setDepth(2);// the parent directory now has the new directory as its child.
 		     _dataStore.update(subject);
@@ -565,24 +578,29 @@ public class FileSystemMiner extends Miner
 			  String[] list= theFile.list();
 			  if (list != null)
 			      {
-				  String objType  = new String(getLocalizedString("model.directory"));
 				  for (int i= 0; i < list.length; i++)
 				      {
 					  String filePath = path.toString() + list[i];
 					  String objName = list[i];
 					  
-					  DataElement newObject = _dataStore.createObject (theElement, objType, objName, filePath);
+					  DataElement objType = _directoryDescriptor;
 					  File f = new File (filePath);
 					  if (!f.isDirectory())
 					      {
-						  newObject.setAttribute(DE.A_TYPE, getLocalizedString("model.file"));
+						  objType  = _fileDescriptor;
+					      }
+
+					  DataElement newObject = _dataStore.createObject (theElement, objType, 
+											   objName, filePath);
+					  if (!f.isDirectory())
+					      {
 						  newObject.setDepth(1);
 					      }		      
 				      }
-
+				  
 				  _dataStore.refresh(theElement);
 			      }
-
+			  
 		      }	
 		  catch (Exception e)
 		      {
@@ -590,11 +608,11 @@ public class FileSystemMiner extends Miner
 			  e.printStackTrace();
 		      }
 	      }
-
+	  
 	  if (status != null)
 	      status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));	 
-
-        return status;
+	  
+	  return status;
       }
 
     public DataElement handleRefresh(DataElement theElement, DataElement status)
@@ -620,13 +638,12 @@ public class FileSystemMiner extends Miner
 				_dataStore.deleteObject(theElement, child);
 			    }
 		    }
-
-
+		
+		
 		// query
 		String[] list= theFile.list();
 		if (list != null)
 		    {
-			String objType  = new String(getLocalizedString("model.directory"));
 			for (int i= 0; i < list.length; i++)
 			    {
 				String filePath = path.toString() + list[i];
@@ -635,12 +652,17 @@ public class FileSystemMiner extends Miner
 				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
 				if (newObject == null || newObject.isDeleted())
 				    {
-					newObject = _dataStore.createObject (theElement, objType, 
-											 objName, filePath);
+					DataElement objType = _directoryDescriptor;
 					File f = new File (filePath);
 					if (!f.isDirectory())
 					    {
-						newObject.setAttribute(DE.A_TYPE, getLocalizedString("model.file"));
+						objType = _fileDescriptor;
+					    }
+
+					newObject = _dataStore.createObject (theElement, objType, 
+									     objName, filePath);
+					if (!f.isDirectory())
+					    {
 						newObject.setDepth(1);
 					    }		      
 				    }
@@ -681,7 +703,7 @@ public class FileSystemMiner extends Miner
     {
 	if (compareString(patternStr, root.getName(), true))
 	    {
-		_dataStore.createReference(status, root, "contents");
+		_dataStore.createReference(status, root, _containsDescriptor);
 		_dataStore.refresh(root);
 		_dataStore.refresh(status);
 	    }
