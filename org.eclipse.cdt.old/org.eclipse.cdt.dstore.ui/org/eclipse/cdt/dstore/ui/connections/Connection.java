@@ -44,9 +44,11 @@ public class Connection implements IDomainListener
     public class ConnectOperation implements IRunnableWithProgress
     {
 	private ConnectionStatus _connectStatus;
+	private String _minersFile;
 
-	public ConnectOperation()
+	public ConnectOperation(String minersFile)
 	{
+	    _minersFile = minersFile;
 	}    
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException
@@ -71,8 +73,18 @@ public class Connection implements IDomainListener
 	    if (_connectStatus.isConnected())
 	    {
 		pm.beginTask(_plugin.getLocalizedString("connection.Initializing_DataStore"), 100);
-
-		if (getSchema(_connectStatus, _element.getDataStore().getMinersLocation(), pm))
+		ArrayList minersLocations = null;
+		if (_minersFile != null)
+		    {
+			minersLocations = new ArrayList();
+			minersLocations.add(_minersFile);
+		    }
+		else
+		    {
+			minersLocations = _element.getDataStore().getMinersLocation();
+		    }
+		
+		if (getSchema(_connectStatus, minersLocations, pm))
 		    {
 			_element.getDataStore().createReferences(_element, _client.getDataStore().getRoot().getNestedData(), "contents");
 			_element.getDataStore().refresh(_element);
@@ -401,6 +413,11 @@ public class Connection implements IDomainListener
     
     public ConnectionStatus connect(DomainNotifier notifier)
     {
+	return connect(notifier, null);
+    }
+
+    public ConnectionStatus connect(DomainNotifier notifier, String minersFile)
+    {
 	_notifier = notifier;
 	if (_client == null)
 	    {	 
@@ -434,7 +451,7 @@ public class Connection implements IDomainListener
 	
 	
 	Shell shell = notifier.findShell();
-	ConnectOperation op = new ConnectOperation();
+	ConnectOperation op = new ConnectOperation(minersFile);
 	ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(shell);
 	try
 	    {
