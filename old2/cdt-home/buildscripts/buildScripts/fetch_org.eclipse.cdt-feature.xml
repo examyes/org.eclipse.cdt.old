@@ -14,6 +14,7 @@
         <cvs cvsRoot="${repository}" dest="${install}/features" package="org.eclipse.cdt.source-feature" tag="${CVS.TAG}" quiet="${quiet}"/>
         <mkdir dir="${install}/plugins"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.${platformId}" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core.${os}" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.core" tag="${CVS.TAG}" quiet="${quiet}"/>
