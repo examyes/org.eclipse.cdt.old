@@ -174,6 +174,7 @@ public class MenuHandler
 		{
 		    _loader.loadCustomActions(menu, selected, descriptor); 
 		    	
+		   	menu.add(new Separator("additions"));
 
 		    /*** DKM - no need for this anymore
 		    if (_openPerspectiveAction == null)
