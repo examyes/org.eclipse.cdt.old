@@ -1,5 +1,6 @@
 package org.eclipse.cdt.cpp.ui.internal.dialogs;
 
+import java.util.ArrayList;
 import org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction;
 import org.eclipse.cdt.dstore.ui.actions.CustomAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -30,7 +31,6 @@ public class CustomMessageDialog extends MessageDialog{
 	private int defaultButtonIndex;
 	public Button [] extraButtons;
 	private SelectionListener actionListener;
-
 	
 	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
 							int dialogImageType, String[] dialogButtonLabels,
@@ -42,6 +42,7 @@ public class CustomMessageDialog extends MessageDialog{
 			this.extraButtonLabels = extraButtonLabels;
 		this.actionListener = actionListener;
 	}
+	
 	protected Control createButtonBar(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);	
 
@@ -61,7 +62,7 @@ public class CustomMessageDialog extends MessageDialog{
 		
 		// create a layout with spacing and margins appropriate for the font size.
 		GridLayout leftPaneLayout = new GridLayout();
-		leftPaneLayout.numColumns = 1;// this is incremented by createExtraButton
+		leftPaneLayout.numColumns = 1;
 		leftPaneLayout.makeColumnsEqualWidth = true;
 		leftPaneLayout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
 		leftPaneLayout.marginHeight = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
@@ -164,4 +165,25 @@ public class CustomMessageDialog extends MessageDialog{
 		button.setFont(parent.getFont());
 		return button;
 	}
+	public int open(String preferenceKey)
+    {
+		if(showDialog(preferenceKey))
+			return super.open();
+		return -1;
+
+    }
+    private boolean showDialog(String preferenceKey)
+    {
+    	ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(preferenceKey);
+		if (!list.isEmpty())
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+				return true;
+			else
+				return false;
+		}
+		return true;
+		
+    }
 }

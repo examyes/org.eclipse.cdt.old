@@ -47,6 +47,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 	String[] extraLabels;
 	boolean enableCreateDialog = true;
 	boolean enableCreateUpdate = true;
+	String preferenceKey = "Show_Create_Dialog";
+	
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -95,7 +97,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 		{
 			String str1;
 			String message;
-			String preferenceKey = "Show Dialog Create";
+			String[] extraLabel = new String[]{"Do not show this dialog again"};
+			String title = "Creating configure script";
 
 			// checking if automatic updating is enabled from the autoconf preferences page
 			ArrayList autoUpdateCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Auto Update Create");
@@ -114,11 +117,10 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				if(enableCreateUpdate)
 				{
 					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
-					message = new String("\nGenerating project configuration files"+str1);
-					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					message = new String("\nCreating project configuration script"+str1);
 					box = new CustomMessageDialog(
 								shell,
-								"Creating configure.in and Makefile.am",
+								title,
 								null,
 								message,
 								3,
@@ -135,11 +137,10 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 				}
 				else
 				{
-					message = new String("\nUsing existing configuration files to generate the configure script");
-					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					message = new String("\nUsing existing configuration files to create the configure script");
 					box = new CustomMessageDialog(
 									shell,
-									"Generating configure script",
+									title,
 									null,
 									message,
 									2,
@@ -159,11 +160,10 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			else
 			{
 				configfilesExist = false;
-				message = new String("\nGenerating configuration files to generate the configure script");
-				String[] extraLabel = new String[]{"Do not show this Dialog again"};
+				message = new String("\nCreating configuration files to generate configure script");
 				box = new CustomMessageDialog(
 								shell,
-								"Generating configure script",
+								title,
 								null,
 								message,
 								2,
@@ -286,7 +286,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			{
 				list.add("Yes");
 			}
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show Dialog Create",list);
+			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(preferenceKey,list);
 		}
     }
 }

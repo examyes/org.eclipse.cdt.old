@@ -101,12 +101,12 @@ public class AutoconfPreferencesPage
 			}
 		}
 
-		ArrayList showDialogCreate = plugin.readProperty("Show Dialog Create");
+		ArrayList showDialogCreate = plugin.readProperty("Show_Create_Dialog");
 		if (showDialogCreate.isEmpty())
 		{
 			showDialogCreate.add("Yes");
 			_autoconfControl.setShowCreateDialogSelection(true);
-			plugin.writeProperty("Show Dialog Create",showDialogCreate);
+			plugin.writeProperty("Show_Create_Dialog",showDialogCreate);
 		}
 		else
 		{
@@ -246,7 +246,7 @@ public class AutoconfPreferencesPage
 			showCreateDialog.add("No");		
 		}	
 
-		plugin.writeProperty("Show Dialog Create", showCreateDialog);	
+		plugin.writeProperty("Show_Create_Dialog", showCreateDialog);	
 		
 		
 		// update all dialog
