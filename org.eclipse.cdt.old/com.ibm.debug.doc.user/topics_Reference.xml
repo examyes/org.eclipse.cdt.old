@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for the Reference -->
+<!-- ========================== -->
+<toc label="Debugging" link_to="../org.eclipse.cdt.cpp.docs.user/toc.xml#debug_reference">
+  <topic id="CPPDebugReference" label="C/C++ Debugger Reference" href="folder.htm">
+
+<!--
+	<topic label="%topic_reference_views" href="/org.eclipse.jdt.doc.user/reference/ref-9.htm">
+		<topic label="%topic_reference_processes_view" href="/org.eclipse.jdt.doc.user/reference/ref-66.htm"></topic>
+		<topic label="%topic_reference_debug_view" href="/org.eclipse.jdt.doc.user/reference/ref-51.htm"></topic>
+		<topic label="%topic_reference_breakpoints_view" href="/org.eclipse.jdt.doc.user/reference/ref-35.htm">
+			<topic label="%topic_reference_remove_selected_breakpoint" href="/org.eclipse.jdt.doc.user/reference/ref-36.htm"></topic>
+			<topic label="%topic_reference_remove_all_breakpoints" href="/org.eclipse.jdt.doc.user/reference/ref-37.htm"></topic>
+			<topic label="%topic_reference_go_to_file_breakpoint" href="/org.eclipse.jdt.doc.user/reference/ref-38.htm"></topic>
+			<topic label="%topic_reference_show_qualified_names" href="/org.eclipse.jdt.doc.user/reference/ref-39.htm"></topic>
+-->
+	<topic label="Debug views" href="/org.eclipse.jdt.doc.user/reference/ref-9.htm">
+		<topic label="Processes view" href="/org.eclipse.jdt.doc.user/reference/ref-66.htm"></topic>
+		<topic label="Debug view" href="/org.eclipse.jdt.doc.user/reference/ref-51.htm"></topic>
+		<topic label="Breakpoints view" href="/org.eclipse.jdt.doc.user/reference/ref-35.htm">
+			<topic label="Remove selected breakpoint" href="/org.eclipse.jdt.doc.user/reference/ref-36.htm"></topic>
+			<topic label="Remove all breakpoints" href="/org.eclipse.jdt.doc.user/reference/ref-37.htm"></topic>
+			<topic label="Go to file for breakpoint" href="/org.eclipse.jdt.doc.user/reference/ref-38.htm"></topic>
+			<topic label="Show-hide qualified names" href="/org.eclipse.jdt.doc.user/reference/ref-39.htm"></topic>
+
+			<!-- Java-only <topic label="%topic_reference_add_java_exception" href="/org.eclipse.jdt.doc.user/reference/ref-40.htm"></topic>-->
+
+<!--
+			<topic label="%topic_reference_uncaught" href="/org.eclipse.jdt.doc.user/reference/ref-41.htm"></topic>
+			<topic label="%topic_reference_caught" href="/org.eclipse.jdt.doc.user/reference/ref-42.htm"></topic>
+			<topic label="%topic_reference_hit_count" href="/org.eclipse.jdt.doc.user/reference/ref-43.htm"></topic>
+			<topic label="%topic_reference_enable_disable" href="/org.eclipse.jdt.doc.user/reference/ref-44.htm"></topic>
+			<topic label="%topic_reference_show_qualified_names_two" href="/org.eclipse.jdt.doc.user/reference/ref-58.htm"></topic>
+-->
+			<topic label="Uncaught" href="/org.eclipse.jdt.doc.user/reference/ref-41.htm"></topic>
+			<topic label="Caught" href="/org.eclipse.jdt.doc.user/reference/ref-42.htm"></topic>
+			<topic label="Hit count" href="/org.eclipse.jdt.doc.user/reference/ref-43.htm"></topic>
+			<topic label="Enable-disable" href="/org.eclipse.jdt.doc.user/reference/ref-44.htm"></topic>
+			<topic label="Show-hide qualified names" href="/org.eclipse.jdt.doc.user/reference/ref-58.htm"></topic>
+
+
+			<!-- Java-only <topic label="%topic_reference_show_qualified_names_three" href="/org.eclipse.jdt.doc.user/reference/ref-76.htm"></topic>-->
+		</topic>
+<!--
+		<topic label="%topic_reference_inspector_view" href="/org.eclipse.jdt.doc.user/reference/ref-56.htm"></topic>
+		<topic label="%topic_reference_variables_view" href="/org.eclipse.jdt.doc.user/reference/ref-74.htm"></topic>
+		<topic label="%topic_reference_display_view" href="/org.eclipse.jdt.doc.user/reference/ref-52.htm"></topic>
+	</topic>
+	<topic label="%topic_reference_cpp_view" href="ref/rbviews.htm"></topic>
+	<topic label="%topic_reference_run_debug_actions" href="/org.eclipse.jdt.doc.user/reference/ref-4.htm"></topic>
+	<topic label="%topic_reference_step_commands" href="/org.eclipse.jdt.doc.user/reference/ref-150.htm"></topic>
+	<topic label="%topic_reference_other_commands" href="folder.htm">
+		<topic label="%topic_reference_show_hex_values" href="/org.eclipse.jdt.doc.user/reference/ref-77.htm"></topic>		
+		<topic label="%topic_reference_show_static_fields" href="/org.eclipse.jdt.doc.user/reference/ref-78.htm"></topic>
+		<topic label="%topic_reference_show_final_variables" href="/org.eclipse.jdt.doc.user/reference/ref-79.htm"></topic>
+		<topic label="%topic_reference_inspect" href="/org.eclipse.jdt.doc.user/reference/ref-80.htm"></topic>
+		<topic label="%topic_reference_change_variable_value" href="/org.eclipse.jdt.doc.user/reference/ref-81.htm"></topic>
+		<topic label="%topic_reference_preferences_debug" href="/org.eclipse.jdt.doc.user/reference/ref-11.htm"></topic>
+		<topic label="%topic_reference_debug_menu" href="/org.eclipse.jdt.doc.user/reference/ref-149.htm"></topic>
+		<topic label="%topic_reference_relaunch_last" href="/org.eclipse.jdt.doc.user/reference/ref-151.htm"></topic>
+		<topic label="%topic_reference_debugging_commands" href="/org.eclipse.jdt.doc.user/reference/ref-30.htm"></topic>
+		<topic label="%topic_reference_show_type_names" href="/org.eclipse.jdt.doc.user/reference/ref-75.htm"></topic>
+-->
+		<topic label="Inspector view" href="/org.eclipse.jdt.doc.user/reference/ref-56.htm"></topic>
+		<topic label="Variables view" href="/org.eclipse.jdt.doc.user/reference/ref-74.htm"></topic>
+		<topic label="Display view" href="/org.eclipse.jdt.doc.user/reference/ref-52.htm"></topic>
+	</topic>
+	<topic label="C and C++ debugging views" href="ref/rbviews.htm"></topic>
+	<topic label="Run-debug actions" href="/org.eclipse.jdt.doc.user/reference/ref-4.htm"></topic>
+	<topic label="Step commands" href="/org.eclipse.jdt.doc.user/reference/ref-150.htm"></topic>
+	<topic label="Other debug commands" href="folder.htm">
+		<topic label="Show-hide hexadecimal values" href="/org.eclipse.jdt.doc.user/reference/ref-77.htm"></topic>		
+		<topic label="Show-hide static fields" href="/org.eclipse.jdt.doc.user/reference/ref-78.htm"></topic>
+		<topic label="Show-hide final variables" href="/org.eclipse.jdt.doc.user/reference/ref-79.htm"></topic>
+		<topic label="Inspect" href="/org.eclipse.jdt.doc.user/reference/ref-80.htm"></topic>
+		<topic label="Change variable value" href="/org.eclipse.jdt.doc.user/reference/ref-81.htm"></topic>
+		<topic label="Debug preferences" href="/org.eclipse.jdt.doc.user/reference/ref-11.htm"></topic>
+		<topic label="Debug menu" href="/org.eclipse.jdt.doc.user/reference/ref-149.htm"></topic>
+		<topic label="Relaunch last" href="/org.eclipse.jdt.doc.user/reference/ref-151.htm"></topic>
+		<topic label="Debugging commands" href="/org.eclipse.jdt.doc.user/reference/ref-30.htm"></topic>
+		<topic label="Show-hide type names" href="/org.eclipse.jdt.doc.user/reference/ref-75.htm"></topic>
+
+		<!-- Java-only <topic label="%topic_reference_launch_java" href="/org.eclipse.jdt.doc.user/tasks/tasks-130.htm"></topic>-->
+	</topic>
+	<!-- unsupported <topic label="%topic_reference_optional_breakpoint_parameters" href="ref/rbbpparm.htm"></topic>-->
+	<!-- unsupported <topic label="%topic_reference_program_profiles" href="ref/rbcdbpro.htm"></topic>-->
+	<!-- Java-only <topic label="%topic_reference_jvm_arguments" href="ref/rbcjvmar.htm"></topic>-->
+
+<!--
+	<topic label="%topic_reference_supported_expressions" href="folder.htm">
+		<topic label="%topic_reference_supported_data_types" href="ref/rbcsupdt.htm"></topic>
+		<topic label="%topic_reference_supported_expression_operands" href="ref/rbcsupxn.htm"></topic>
+		<topic label="%topic_reference_supported_expression_operators" href="ref/rbcsupxo.htm"></topic>
+		<topic label="%topic_reference_unix_compiler_options" href="ref/rbcopunx.htm"></topic>
+	</topic>
+-->
+	<topic label="C/C++ expressions supported" href="folder.htm">
+		<topic label="C/C++ supported data types" href="ref/rbcsupdt.htm"></topic>
+		<topic label="C/C++ supported expression operands" href="ref/rbcsupxn.htm"></topic>
+		<topic label="C/C++ supported expression operators" href="ref/rbcsupxo.htm"></topic>
+		<topic label="C/C++ compiler options on workstation UNIX platforms" href="ref/rbcopunx.htm"></topic>
+	</topic>
+
+	<!-- Java-only <topic label="%topic_reference_supported_java_data_types" href="ref/rbsjdtyp.htm"></topic>-->
+<!--
+	<topic label="%topic_reference_remote_limitations" href="ref/rbremlmt.htm"></topic>
+-->
+	<topic label="Remote debug limitations" href="ref/rbremlmt.htm"></topic>
+
+  </topic>
+
+</toc>

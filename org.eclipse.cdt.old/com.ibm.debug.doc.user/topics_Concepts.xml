@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for the Concepts -->
+<!-- ========================== -->
+<toc label="Debugging" link_to="../org.eclipse.cdt.cpp.docs.user/topics_Concepts.xml#debug_concepts">
+   <topic label="C/C++ Debugger" href="folder.htm">
+<!--
+	<topic label="%topic_concepts_overview" href="../org.eclipse.jdt.doc.user/concepts/concepts-10.htm">
+-->
+	<topic label="Debugger overview" href="../org.eclipse.jdt.doc.user/concepts/concepts-10.htm">
+
+		<!-- unsupported <topic label="%topic_concepts_cpp_overview" href="concepts/cbovrvw.htm"></topic>
+		<topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+	</topic>
+<!--
+	<topic label="%topic_concepts_source_views" href="concepts/cbsource.htm"></topic>
+	<topic label="%topic_concepts_attach" href="concepts/cbwhatt.htm"></topic>
+	<topic label="%topic_concepts_optimized_code" href="concepts/cbdoptc.htm"></topic>
+	<topic label="%topic_concepts_recursion" href="concepts/cbcrecur.htm"></topic>
+	<topic label="%topic_concepts_heap_errors" href="concepts/cbheaper.htm"></topic>
+-->
+	<topic label="Editor source views" href="concepts/cbsource.htm"></topic>
+	<topic label="When to attach" href="concepts/cbwhatt.htm"></topic>
+	<topic label="Optimized code debugging" href="concepts/cbdoptc.htm"></topic>
+	<topic label="Recursion and debugging" href="concepts/cbcrecur.htm"></topic>
+	<topic label="Heap errors" href="concepts/cbheaper.htm"></topic>
+
+	<!-- unsupported <topic label="%topic_concepts_exception_handling" href="concepts/cbexcptn.htm"></topic>-->
+
+<!--
+	<topic label="%topic_concepts_UNIX_calls" href="folder.htm">
+		<topic label="%topic_concepts_fork_handling" href="concepts/cbfork.htm"></topic>
+		<topic label="%topic_concepts_exec_handling" href="concepts/cbexec.htm"></topic>
+	</topic>
+-->
+	<topic label="UNIX call handling during debugging" href="folder.htm">
+		<topic label="fork() handling" href="concepts/cbfork.htm"></topic>
+		<topic label="exec() handling" href="concepts/cbexec.htm"></topic>
+	</topic>
+
+	<!-- unsupported <topic label="%topic_concepts_separate_debug_info" href="concepts/cbwsepdb.htm"></topic>-->
+   </topic>
+</toc>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for the Tasks -->
+<!-- ========================== -->
+<toc label="Debugging" link_to="../org.eclipse.cdt.cpp.docs.user/topics_Tasks.xml#debug_tasks">
+  <topic label="C/C++ Debugger" id="CPPDebugTasks" href="folder.htm">
+
+<!--
+	<topic label="%topic_tasks_debug_preparation" href="/org.eclipse.jdt.doc.user/tasks/tasks-133.htm">
+		<topic label="%topic_tasks_writing_for_debug" href="tasks/tbpwrite.htm"></topic>
+		<topic label="%topic_tasks_compiling_for_debug" href="tasks/tbpcompl.htm"></topic>
+	</topic>
+	<topic label="%topic_tasks_starting_debugger" href="folder.htm">
+		<topic label="%topic_tasks_local_debug" href="/org.eclipse.jdt.doc.user/tasks/tasks-132.htm"></topic>
+		<topic label="%topic_tasks_remote_debug" href="tasks/tboremot.htm">Remote debugging</topic>
+-->
+	<topic label="Debugging preparations" href="/org.eclipse.jdt.doc.user/tasks/tasks-133.htm">
+		<topic label="Writing a program for debugging" href="tasks/tbpwrite.htm"></topic>
+		<topic label="Compiling a program for debugging" href="tasks/tbpcompl.htm"></topic>
+	</topic>
+	<topic label="Starting to debug" href="folder.htm">
+		<topic label="Debugging locally" href="/org.eclipse.jdt.doc.user/tasks/tasks-132.htm"></topic>
+		<topic label="Remote debugging" href="tasks/tboremot.htm">Remote debugging</topic>
+
+		<!-- Java-only <topic label="%topic_tasks_remote_debug" href="/org.eclipse.jdt.doc.user/tasks/tasks-140.htm">
+			<topic label="%topic_tasks_remote_JVM_connect" href="/org.eclipse.jdt.doc.user/tasks/tasks-141.htm"></topic>
+			<topic label="%topic_tasks_disconnect_JVM" href="/org.eclipse.jdt.doc.user/tasks/tasks-142.htm"></topic>
+		</topic>-->
+
+<!--
+		<topic label="%topic_tasks_compiled_launchers" href="tasks/tbolanch.htm"></topic>
+		<topic label="%topic_tasks_starting" href="folder.htm">
+			<topic label="%topic_tasks_start_compiled" href="tasks/tbostart.htm"></topic>
+			<topic label="%topic_tasks_attach_local_process" href="tasks/tboattch.htm"></topic>
+			<topic label="%topic_tasks_listening" href="tasks/tbolsten.htm"></topic>
+-->
+		<topic label="Using compiled language launchers" href="tasks/tbolanch.htm"></topic>
+		<topic label="Starting" href="folder.htm">
+			<topic label="Debugging compiled languages" href="tasks/tbostart.htm"></topic>
+			<topic label="Attaching to compiled languages" href="tasks/tboattch.htm"></topic>
+			<topic label="Listening for debug engines" href="tasks/tbolsten.htm"></topic>
+
+			<!-- Java-only <topic label="%topic_tasks_set_launcher" href="/org.eclipse.jdt.doc.user/tasks/tasks-128.htm"></topic>-->
+		</topic>
+	</topic>
+
+<!--
+	<topic label="%topic_tasks_control_and_breakpoints" href="folder.htm">
+		<topic label="%topic_tasks_using_breakpoints" href="/org.eclipse.jdt.doc.user/tasks/tasks-143.htm">
+			<topic label="%topic_tasks_viewing_breakpoints" href="tasks/tbbview.htm"></topic>
+		</topic>
+		<topic label="%topic_tasks_setting_breakpoints" href="folder.htm">
+			<topic label="%topic_tasks_line_breakpoints" href="/org.eclipse.jdt.doc.user/tasks/tasks-144.htm"></topic>
+			<topic label="%topic_tasks_method_entry_breakpoints" href="/org.eclipse.jdt.doc.user/tasks/tasks-145.htm">
+-->
+	<topic label="Controlling program execution and working with breakpoints" href="folder.htm">
+		<topic label="Using breakpoints" href="/org.eclipse.jdt.doc.user/tasks/tasks-143.htm">
+			<topic label="Viewing set breakpoints in C/C++ applications" href="tasks/tbbview.htm"></topic>
+		</topic>
+		<topic label="Setting breakpoints" href="folder.htm">
+			<topic label="Setting a line breakpoint" href="/org.eclipse.jdt.doc.user/tasks/tasks-144.htm"></topic>
+			<topic label="Setting a method entry breakpoint" href="/org.eclipse.jdt.doc.user/tasks/tasks-145.htm">
+
+				<!-- unsupported <topic label="%topic_tasks_entry_breakpoints" href="tasks/tbbentry.htm"></topic>-->
+			</topic>
+			<!-- unsupported <topic label="%topic_tasks_address_breakpoints" href="tasks/tbbaddrs.htm"></topic>-->
+			<!-- unsupported <topic label="%topic_tasks_storage_change_breakpoints" href="tasks/tbcsetwa.htm"></topic>-->
+			<!-- unsupported <topic label="%topic_tasks_watchpoints" href="tasks/tbbwatch.htm"></topic>
+			<topic label="%topic_tasks_load_breakpoints" href="tasks/tbbload.htm"></topic>
+			<topic label="%topic_tasks_deferred_breakpoints" href="tasks/tbbdefer.htm"></topic>
+			<topic label="%topic_tasks_conditional_breakpoints" href="tasks/tbbcond.htm"></topic>-->
+			<!-- obsolete <topic label="%topic_tasks_multiple_breakpoints" href="tasks/tbcbplst.htm"></topic>-->
+		</topic>
+
+<!--
+		<topic label="%topic_tasks_hit_counts" href="/org.eclipse.jdt.doc.user/tasks/tasks-146.htm"></topic>
+-->
+		<topic label="Hit counts" href="/org.eclipse.jdt.doc.user/tasks/tasks-146.htm"></topic>
+
+		<!-- unsupported <topic label="%topic_tasks_compiled_exceptions" href="tasks/tbbexcpt.htm"></topic>-->
+		<!-- Java-only <topic label="%topic_tasks_catching_exceptions" href="/org.eclipse.jdt.doc.user/tasks/tasks-147.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_modifying_breakpoints" href="tasks/tbbedit.htm"></topic>-->
+		<!-- covered in JDT <topic label="%topic_tasks_enable_breakpoints" href="tasks/tbcbpead.htm"></topic>-->
+
+<!--
+		<topic label="%topic_tasks_deleting_breakpoints" href="tasks/tbbdelet.htm"></topic>
+		<topic label="%topic_tasks_run_program" href="tasks/tboruncp.htm"></topic>
+-->
+		<topic label="Removing breakpoints" href="tasks/tbbdelet.htm"></topic>
+		<topic label="Running a C/C++ application" href="tasks/tboruncp.htm"></topic>
+
+		<!-- Java-only <topic label="%topic_tasks_run_and_debug" href="/org.eclipse.jdt.doc.user/tasks/tasks-126.htm"></topic>-->
+		<!-- Java-only <topic label="%topic_tasks_run_java_program" href="/org.eclipse.jdt.doc.user/tasks/tasks-127.htm"></topic>-->
+
+<!--
+		<topic label="%topic_tasks_stepping" href="/org.eclipse.jdt.doc.user/tasks/tasks-136.htm">
+			<topic label="%topic_tasks_stepping_through_program" href="tasks/tbostep.htm"></topic>
+		</topic>
+		<topic label="%topic_tasks_jumping_over" href="tasks/tbojump.htm"></topic>
+		<topic label="%topic_tasks_relaunching" href="/org.eclipse.jdt.doc.user/tasks/tasks-131.htm"></topic>
+-->
+		<topic label="Stepping through a program" href="/org.eclipse.jdt.doc.user/tasks/tasks-136.htm">
+			<topic label="Stepping through a compiled language application" href="tasks/tbostep.htm"></topic>
+		</topic>
+		<topic label="Jumping over sections of a program" href="tasks/tbojump.htm"></topic>
+		<topic label="Relaunching a previously-launched program" href="/org.eclipse.jdt.doc.user/tasks/tasks-131.htm"></topic>
+
+			<!-- obsolete <topic label="%topic_tasks_restarting" href="tasks/tbwrestr.htm"></topic>-->
+
+<!--
+		<topic label="%topic_tasks_suspending" href="/org.eclipse.jdt.doc.user/tasks/tasks-134.htm"></topic>
+		<topic label="%topic_tasks_resuming" href="/org.eclipse.jdt.doc.user/tasks/tasks-135.htm"></topic>
+		<topic label="%topic_tasks_evaluating_expressions" href="/org.eclipse.jdt.doc.user/tasks/tasks-138.htm"></topic>
+	</topic>
+	<topic label="%topic_tasks_inspecting_data" href="folder.htm">
+		<topic label="%topic_tasks_inspecting_values" href="/org.eclipse.jdt.doc.user/tasks/tasks-137.htm"></topic>
+		<topic label="%topic_tasks_inspecting_variables" href="folder.htm">
+			<topic label="%topic_tasks_adding_variable" href="tasks/tbiaddvar.htm"></topic>
+			<topic label="%topic_tasks_viewing_variable" href="tasks/tbivarvu.htm"></topic>
+			<topic label="%topic_tasks_changing_variable" href="tasks/tbivrcnt.htm"></topic>
+			<topic label="%topic_tasks_removing_variable" href="tasks/tbivarrm.htm"></topic>
+		</topic>
+		<topic label="%topic_tasks_inspecting_registers" href="folder.htm">
+			<topic label="%topic_tasks_viewing_register" href="tasks/tbiregvu.htm"></topic>
+			<topic label="%topic_tasks_viewing_floatpoint_register" href="tasks/tbiregfp.htm"></topic>
+-->
+		<topic label="Suspending threads" href="/org.eclipse.jdt.doc.user/tasks/tasks-134.htm"></topic>
+		<topic label="Resuming suspended threads" href="/org.eclipse.jdt.doc.user/tasks/tasks-135.htm"></topic>
+		<topic label="Evaluating expressions" href="/org.eclipse.jdt.doc.user/tasks/tasks-138.htm"></topic>
+	</topic>
+	<topic label="Inspecting data" href="folder.htm">
+		<topic label="Inspecting values" href="/org.eclipse.jdt.doc.user/tasks/tasks-137.htm"></topic>
+		<topic label="Inspecting variables in the Monitors view" href="folder.htm">
+			<topic label="Adding a variable or expression to the Monitors view" href="tasks/tbiaddvar.htm"></topic>
+			<topic label="Viewing the contents of a variable or expression"></topic>
+			<topic label="Changing the contents of a variable" href="tasks/tbivrcnt.htm"></topic>
+			<topic label="Removing a monitored expression" href="tasks/tbivarrm.htm"></topic>
+		</topic>
+		<topic label="Inspecting registers" href="folder.htm">
+			<topic label="Viewing the contents of a register" href="tasks/tbiregvu.htm"></topic>
+			<topic label="Viewing the contents of a floating-point register" href="tasks/tbiregfp.htm"></topic>
+
+			<!-- unsupported <topic label="%topic_tasks_changing_register" href="tasks/tbirgcnt.htm"></topic>
+			<topic label="%topic_tasks_adding_register" href="tasks/tbiaddreg.htm"></topic>-->
+		</topic>
+
+<!--
+		<topic label="%topic_tasks_inspecting_storage" href="folder.htm">
+			<topic label="%topic_tasks_viewing_storage" href="tasks/tbistrvu.htm"></topic>
+-->
+		<topic label="Inspecting storage" href="folder.htm">
+			<topic label="Viewing a location in storage" href="tasks/tbistrvu.htm"></topic>
+
+			<!-- replaced by tbimoned.htm <topic label="%topic_tasks_changing_storage_representation" href="tasks/tbpcrstr.htm"></topic>-->
+
+<!--
+			<topic label="%topic_tasks_changing_storage_contents" href="tasks/tbistcnt.htm"></topic>
+			<topic label="%topic_tasks_adding_new_storage" href="tasks/tbistadd.htm"></topic>
+			<topic label="%topic_tasks_removing_storage_monitor" href="tasks/tbistrem.htm"></topic>
+		</topic>
+		<topic label="%topic_tasks_enable_monitored_expression" href="tasks/tbimoned.htm"></topic>
+		<topic label="%topic_tasks_value_hovering" href="/org.eclipse.jdt.doc.user/tasks/tasks-139.htm"></topic>
+-->
+			<topic label="Changing the contents of a storage location" href="tasks/tbistcnt.htm"></topic>
+			<topic label="Adding an expression to the Storage view" href="tasks/tbistadd.htm"></topic>
+			<topic label="Removing a Storage monitor" href="tasks/tbistrem.htm"></topic>
+		</topic>
+		<topic label="Enabling and disabling a monitored expression" href="tasks/tbimoned.htm"></topic>
+		<topic label="Value hovering" href="/org.eclipse.jdt.doc.user/tasks/tasks-139.htm"></topic>
+
+		<!-- covered in JDT <topic label="%topic_tasks_enable_hovering" href="tasks/tbcflyov.htm"></topic>-->
+
+<!--
+		<topic label="%topic_tasks_changing_monitor_representation" href="tasks/tbichrep.htm"></topic>
+	</topic>
+	<topic label="%topic_tasks_changing_source_view" href="tasks/tbosourc.htm"></topic>
+-->
+		<topic label="Changing the representation of monitor contents" href="tasks/tbichrep.htm"></topic>
+	</topic>
+	<topic label="Changing the Editor source view" href="tasks/tbosourc.htm"></topic>
+
+  </topic>
+</toc>
