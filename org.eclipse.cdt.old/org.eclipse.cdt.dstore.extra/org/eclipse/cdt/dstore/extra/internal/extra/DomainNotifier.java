@@ -90,10 +90,16 @@ public class DomainNotifier implements IDomainNotifier
 	IDomainListener listener = (IDomainListener)_listeners.get(i);
 	if (listener != null)
 	    {
-		Shell shell = listener.getShell();
-		if ((shell != null) && !shell.isDisposed())
+		try
 		    {
-			return shell;
+			Shell shell = listener.getShell();
+			if ((shell != null) && !shell.isDisposed())
+			    {
+				return shell;
+			    }
+		    }
+		catch (org.eclipse.swt.SWTException e)
+		    {
 		    }
 	    }
       }   
