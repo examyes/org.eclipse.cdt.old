@@ -216,8 +216,6 @@ public class ObjectsViewPart extends GenericViewPart
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
    	if ((part instanceof ResourceNavigator) || 
-	    (part instanceof RemoteProjectViewPart) ||
-	    (part instanceof RemoteProjectNavigator) ||
             (part instanceof CppProjectsViewPart)
 	    )
 	    {

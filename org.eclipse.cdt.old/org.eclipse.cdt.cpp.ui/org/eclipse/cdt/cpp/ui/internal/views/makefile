@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: CppCommandViewPart.class RemoteProjectViewPart.class ObjectsViewPart.class CppViewer.class DataStoreViewPart.class ParsedSourceViewPart.class MinersPerspective.class MinersViewPart.class ProjectViewPart.class SystemObjectsViewPart.class RemoteProjectNavigator.class LogViewPart.class SchemaViewPart.class SelectionUtil.class SuperDetailsViewPart.class CppProjectsViewPart.class DetailsViewPart.class ProjectObjectsViewPart.class CppOutputViewer.class CppCommandViewer.class CppPerspective.class CppOutputViewPart.class targets_dir search_dir
+all: CppCommandViewPart.class ObjectsViewPart.class CppViewer.class DataStoreViewPart.class ParsedSourceViewPart.class MinersPerspective.class MinersViewPart.class ProjectViewPart.class SystemObjectsViewPart.class LogViewPart.class SchemaViewPart.class SelectionUtil.class SuperDetailsViewPart.class CppProjectsViewPart.class DetailsViewPart.class ProjectObjectsViewPart.class CppOutputViewer.class CppCommandViewer.class CppPerspective.class CppOutputViewPart.class targets_dir search_dir
 
 # Class Targets
 CppCommandViewPart.class: CppCommandViewPart.java
