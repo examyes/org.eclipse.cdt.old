@@ -65,6 +65,11 @@ public class GenericActionLoader implements IActionLoader
 	    }
 	return _openAction;
     }
+
+    public Class forName(String source) throws ClassNotFoundException
+    {
+	return Class.forName(source);
+    }
     
     public CustomAction loadAction(String source, String name)
     {
@@ -72,7 +77,7 @@ public class GenericActionLoader implements IActionLoader
 	try
 	    {
 		Object[] args = { name};
-		Class actionClass = Class.forName(source);
+		Class actionClass = forName(source);
 		Constructor constructor = actionClass.getConstructors()[0];
 		newAction = (CustomAction)constructor.newInstance(args);
 	    }
@@ -103,7 +108,7 @@ public class GenericActionLoader implements IActionLoader
 	    CustomAction newAction = null; 
 	    try
 		{         
-		    Class actionClass = Class.forName(source);
+		    Class actionClass = forName(source);
 
 		    Object[] args = {objects, 
 		        					name, 
@@ -164,7 +169,7 @@ public class GenericActionLoader implements IActionLoader
         CustomAction newAction = null; 
         try
 	    {         
-      		Class actionClass = Class.forName(source);
+      		Class actionClass = forName(source);
       		Object[] args = {object, name, descriptor, object.getDataStore()};
 	
 		    Class[] parameterTypes = { object.getClass(), 
