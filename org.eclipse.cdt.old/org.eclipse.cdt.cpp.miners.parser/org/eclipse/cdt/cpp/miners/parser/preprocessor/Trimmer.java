@@ -83,7 +83,7 @@ public class Trimmer
     }
    }
   }
-  catch (IOException e) { _reader.close(); _reader=null; return null; }
+  catch (IOException e) { try {_reader.close();}catch(IOException f){} _reader=null; return null; }
   return continuedLine;
   
  }
