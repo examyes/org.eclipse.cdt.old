@@ -3,7 +3,6 @@ package org.eclipse.cdt.cpp.ui.internal.preferences;
 import java.util.ArrayList;
 
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
-import org.eclipse.cdt.cpp.ui.internal.builder.ParsePathControl;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
