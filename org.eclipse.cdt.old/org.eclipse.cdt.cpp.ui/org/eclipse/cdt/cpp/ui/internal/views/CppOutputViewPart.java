@@ -29,7 +29,7 @@ import org.eclipse.ui.part.*;
 
 import java.util.*;
 
-public class CppOutputViewPart extends OutputViewPart
+public class CppOutputViewPart extends OutputViewPart 
 {
     public void createPartControl(Composite container)
     {

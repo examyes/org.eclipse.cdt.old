@@ -78,6 +78,13 @@
 		class="com.ibm.cpp.ui.internal.views.CppCommandViewPart">
 	</view>
 	<view
+		id="com.ibm.cpp.ui.internal.views.CppOutputViewPart"
+		name="%C/C++ Output"
+		category="com.ibm.cpp.ui"
+		icon="icons/output.gif"
+		class="com.ibm.cpp.ui.internal.views.CppOutputViewPart">
+	</view>
+	<view
 		id="com.ibm.cpp.ui.internal.views.ProjectObjectsViewPart"
 		name="%Project_Objects"
 		category="com.ibm.cpp.ui"
