@@ -84,6 +84,23 @@ which can be opened from the toolbar icon <img SRC="../../images/searchdocssetti
 <p>Since the contents of files are indexed as words, you can only do a search in the html documentation in <code>Exact</code> mode(no substring, no regular expressions). You can only create an index if you have <code>"Html"</code> selected in the <b>Scope</b>. <br><br>
 <center><img SRC="../../images/searchdocsindex.gif"></center>
 
+<h3>Filtering search results</h3>
+<p>You can avoid having some search results displayed in the view with the Filter mechanism.</p>
+<ol>
+<li>Click on the button <img src="../../images/filtericon.gif"> in the view toolbar to bring up the <code>Filter Patterns</code> dialog box.</li>
+<li>In the dialog box write a <i>regular expression pattern</i> that would match the <code>"Name"</code> column of those search result you do NOT want displayed.</li>
+<li>Click on the <code>Add</code> button to add it to the list of patterns.</li>
+<li> Once you are done adding patterns, click <code>OK</code> and notice how the search results are automatically updated to avoid displaying any result whose <code>"Name"</code> column matches any of the specified patterns.
+</li>
+</ol>
+<p>e.g. Run a search with no filter<br>
+<center><img src="../../images/filterbefore.gif"></center><br>
+Now specify "Tcl.*" as one of the patterns to filter
+<center><img src="../../images/filterpatterndialog.gif"></center><br>
+Note that Search results that start with <code>"Tcl"</code> are not displayed.
+<center><img src="../../images/filterafter.gif"></center><br><br>     
+NOTE: Any pattern added to the Filter Patterns dialog box is remembered. Thus, any future search would also apply those filters to the search results before displaying them. 
+
 <h3>Limitations</h3>
 <ul>
 <li><p>It is possible that the 'whatis' file used for searching man pages may be incomplete. It can be recreated with the 'makewhatis' comand. e.g to recreate the 'whatis' from the man pages in 2 directories(<code>/usr/share/man</code> and <code>/usr/X11R6/man</code>) a user would typically run:<br><br>
