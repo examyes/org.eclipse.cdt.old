@@ -27,15 +27,16 @@ public class OutputHandler extends Handler
     }
 
 
-    public void handle()
+    public synchronized void handle()
     {
-	synchronized(_currentProcesses)
+	// read top whitespace
+	try
 	    {
-		// read top whitespace
-		String line = readLine();
-		try
+		if (_reader.ready())
 		    {
-			while (_reader.ready() && (line = readLine()) != null)
+			String line = _reader.readLine();
+			_currentProcesses.clear();
+			while (_reader.ready() && (line = _reader.readLine()) != null)
 			    {
 				if (line != null)
 				    {
@@ -46,64 +47,23 @@ public class OutputHandler extends Handler
 					break;
 				    }
 			    }
-		    }
-		catch (IOException e)
-		    {
-		    }
-		
-		// find all non-updated elements
-		for (int i = _processRoot.getNestedSize() - 1; i >= 0; i--)
-		    {
-			DataElement process = _processRoot.get(i);
-			if (!_currentProcesses.contains(process))
+			
+			// find all non-updated elements
+			for (int i = _processRoot.getNestedSize() - 1; i >= 0; i--)
 			    {
-				_dataStore.deleteObject(_processRoot, process);
-			    }
-		    }		
+				DataElement process = _processRoot.get(i);
+				if (!_currentProcesses.contains(process))
+				    {
+					_dataStore.deleteObject(_processRoot, process);
+				    }
+			    }		
+		    }
 	    }
+	catch (IOException e)
+	    {
+	    }		
     }
     
-    private String readLine ()
-    {	    
-	StringBuffer theLine = new StringBuffer();
-	int ch;
-	boolean done = false;
-	while(!done && !isFinished())
-	    {
-		try
-		    {
-			ch = _reader.read();
-			switch (ch)
-			    {
-			    case -1    : if (theLine.length() == 0)       //End of Reader 
-				return null; 
-				done = true; 
-				break;                  
-			    case 65535 : if (theLine.length() == 0)       //Check why I keep getting this!!! 
-				return null; 
-				done = true; 
-				break;                     
-			    case 10    : done = true;                     //Newline
-				break;           
-			    case 9     : theLine.append("     ");         //Tab
-				break; 
-			    case 13    : break;                          //Carriage Return
-			    default    : theLine.append((char)ch);             //Any other character
-			    }
-			
-			//Check to see if the BufferedReader is still ready which means there are more characters 
-			//in the Buffer...If not, then we assume it is waiting for input.
-			if (!_reader.ready())
-			    done = true;
-                    }  
-		catch (IOException e)
-		    {
-			return null;
-		    }
-	    }
-	return theLine.toString();
-    }
-
 
     private void parseProcessLine(String processLine)
     {
@@ -131,6 +91,14 @@ public class OutputHandler extends Handler
 			    {
 				attribute = _dataStore.createObject(process, attributeType, nextToken);
 				_dataStore.createReference(process, attribute, "attributes");
+				if (attributeType.getName().equals("PPID") && 
+				    (!nextToken.equals("1") && !nextToken.equals("0")))
+				    {
+					if (process.getAttribute(DE.A_TYPE).equals("Process"))
+					    {
+						process.setAttribute(DE.A_TYPE, "Child Process");
+					    }
+				    }			       
 			    }
 			else
 			    {

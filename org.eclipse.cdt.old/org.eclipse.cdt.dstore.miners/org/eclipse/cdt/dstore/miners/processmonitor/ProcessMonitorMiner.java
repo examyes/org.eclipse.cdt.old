@@ -16,7 +16,7 @@ import java.io.*;
 public class ProcessMonitorMiner extends Miner
 {
     private ProcessMonitor _monitor;
-    private String         _psCommand = "ps --format pid,ucomm,%cpu,%mem,user -a";
+    private String         _psCommand;
     private Process        _theProcess;
     private BufferedReader _reader;
     private BufferedWriter _writer;
@@ -33,41 +33,49 @@ public class ProcessMonitorMiner extends Miner
 	_dataStore.createReference(hostD, processesD);
 	_dataStore.createReference(processesD, processD);
 
+	DataElement cprocessD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Child Process");	
+	_dataStore.createReference(processD, cprocessD, "abstracts", "abstracted by");
+
 	DataElement killD = createCommandDescriptor(processD, "Kill", "C_KILL");
 
 	String theOS = System.getProperty("os.name");
-	if (theOS.toLowerCase().equals("linux"))
+	if (theOS.toLowerCase().startsWith("win"))
 	    {
-		// run ps to get column formats
+		_psCommand = "ps -Ws";
+	    }
+	else 
+	    {
+		_psCommand = "ps --format pid,ucomm,%cpu,%mem,ppid -a";
+	    }
+	
+	// run ps to get column formats
+	try
+	    {
+		_theProcess = Runtime.getRuntime().exec("sh");	
+		_reader = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
+		_writer = new BufferedWriter(new OutputStreamWriter(_theProcess.getOutputStream()));
+		
 		try
-		    {
-			_theProcess = Runtime.getRuntime().exec("sh");	
-			_reader = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
-			_writer = new BufferedWriter(new OutputStreamWriter(_theProcess.getOutputStream()));
-			
-			try
-			    {  
-				_writer.write(_psCommand);
-				_writer.write('\n');
-				_writer.flush();   			
-			    }
-			catch (IOException e)
-			    {
-				System.out.println(e);
-			    }	
-			
-			
-			String headers = _reader.readLine();
-			if (headers != null)
-			    {
-				defineProcessSchema(schemaRoot, processD, headers);
-			    }
-
+		    {  
+			_writer.write(_psCommand);
+			_writer.write('\n');
+			_writer.flush();   			
 		    }
 		catch (IOException e)
 		    {
-			e.printStackTrace();
-		    }
+			System.out.println(e);
+		    }	
+		
+		
+		String headers = _reader.readLine();
+		if (headers != null)
+		    {
+			defineProcessSchema(schemaRoot, processD, headers);
+		    }		
+	    }
+	catch (IOException e)
+	    {
+		e.printStackTrace();
 	    }
     }
 
@@ -95,7 +103,6 @@ public class ProcessMonitorMiner extends Miner
 		    {
 			_dataStore.createReference(attributeD, stringD, "attributes");
 		    }
-
 	    }
     }
     
@@ -105,18 +112,30 @@ public class ProcessMonitorMiner extends Miner
 	DataElement hostObject = _dataStore.getHostRoot();
 	
 	String theOS = System.getProperty("os.name");
-	if (theOS.toLowerCase().equals("linux"))
-	    {	
-		DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
-		_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
-		_monitor.setWaitTime(3000);
-		_monitor.setDataStore(_dataStore);
-		_monitor.start();
-	    }
+	DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
+	_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
+	_monitor.setWaitTime(3000);
+	_monitor.setDataStore(_dataStore);
+	_monitor.start();
     }
     
     public void finish()
     {
+	_monitor.finish();
+	try
+	    {  
+		_writer.write("exit");
+		_writer.write('\n');
+		_writer.flush();   			
+
+		_writer.close();
+		_reader.close();
+	    }
+	catch (IOException e)
+	    {
+		System.out.println(e);
+	    }	
+	
 	super.finish();
     }
     

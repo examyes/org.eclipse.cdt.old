@@ -32,20 +32,14 @@ public class ProcessMonitor extends Handler
 	_writer = writer;
     }
 
-    public void handle()
-    {
-	// run ps
-	synchronized(_currentProcesses)
-	    {
-		_currentProcesses.clear();
-	    }
-	
+    public synchronized void handle()
+    {	
 	try
 	    {  
 		_writer.write(_psCommand);
 		_writer.write('\n');
 		_writer.flush();
-
+		
 		_outputHandler.handle();
 	    }
 	catch (IOException e)
