@@ -452,7 +452,7 @@ public class CmdExecute extends Command
          }
 
 //GDB    classManager.updateClasses();
-         variableMonitorManager.updateMonitors();
+//         variableMonitorManager.updateMonitors();
       }
         
       return false;

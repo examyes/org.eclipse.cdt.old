@@ -534,13 +534,15 @@ public class GdbDebugSession extends DebugSession {
 			_rep.addLogChangePacket(cp);
 			return _whyStop;
 		}
+		
+		updateAllViews();
 
-		updateBreakpoints();
-		updateMonitors();
-		updateRegisters();
-		updateStorage();		
-		getCurrentFileLineModule();
-		this._threadManager.updateThreads();
+//		updateBreakpoints();
+//		updateMonitors();
+//		updateRegisters();
+//		updateStorage();		
+//		getCurrentFileLineModule();
+//		this._threadManager.updateThreads();
 
 		return 1;
 	}
@@ -1273,11 +1275,13 @@ public class GdbDebugSession extends DebugSession {
 		_whyStop = WS_BkptHit;
 
 		checkResponseForException();
-		//      addChangesToUiMessages();
-		updateMonitors();
-		updateRegisters();
-		updateStorage();
-		getCurrentFileLineModule();
+		updateAllViews();
+		
+//		getCurrentFileLineModule();
+//		updateMonitors();
+//		updateRegisters();
+//		updateStorage();
+
 		return _whyStop;
 	}
 
@@ -1314,10 +1318,11 @@ public class GdbDebugSession extends DebugSession {
 		}
 		while (!tc.isDebuggable() && wasSystemEvent());
 		checkResponseForException();
-		updateMonitors();
-		updateRegisters();
-		updateStorage();
-		getCurrentFileLineModule();
+		updateAllViews();
+//		updateMonitors();
+//		updateRegisters();
+//		updateStorage();
+//		getCurrentFileLineModule();
 
 		return _whyStop;
 	}
@@ -1440,10 +1445,13 @@ public class GdbDebugSession extends DebugSession {
 		checkResponseForException();
 		//     addChangesToUiMessages();
 
-		updateMonitors();
-		updateRegisters();
-		updateStorage();
-		getCurrentFileLineModule();
+//		updateMonitors();
+//		updateRegisters();
+//		updateStorage();
+//		getCurrentFileLineModule();
+
+		updateAllViews();
+
 		return _whyStop;
 	}
 	
@@ -1542,11 +1550,12 @@ public class GdbDebugSession extends DebugSession {
 		//     getGdbResponseLines();
 		_whyStop = WS_BkptHit;
 		checkResponseForException();
-		//     addChangesToUiMessages();
-		updateMonitors();
-		updateRegisters();
-		updateStorage();
-		getCurrentFileLineModule();
+
+		updateAllViews();
+//		updateMonitors();
+//		updateRegisters();
+//		updateStorage();
+//		getCurrentFileLineModule();
 		return _whyStop;
 	}
 
@@ -1997,6 +2006,16 @@ public class GdbDebugSession extends DebugSession {
 				 os.equals("Linux") ||
 				 os.equals("UnixWare") ||
 				 os.equals("HP-UX"));
+	}
+	
+	private void updateAllViews()
+	{
+		getCurrentFileLineModule();
+		_threadManager.updateThreads();
+		updateMonitors();
+		updateRegisters();
+		updateStorage();
+		updateBreakpoints();
 	}
 
 	// data members
