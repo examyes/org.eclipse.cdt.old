@@ -609,6 +609,12 @@
          id="org.eclipse.cdt.cpp.ui.internal.preferences.DefaultBuildPreferencePage">
    </page>
    <page
+         name="Default Paths"
+         category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="org.eclipse.cdt.cpp.ui.internal.preferences.PathsPreferencePage"
+         id="org.eclipse.cdt.cpp.ui.internal.preferences.PathsPreferencePage">
+   </page>
+   <page
          name="%Parser"
          category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
          class="org.eclipse.cdt.cpp.ui.internal.preferences.ParserPreferencePage"
