@@ -1458,9 +1458,9 @@ public class MakefileAmManager {
 		extradistExtensions = new ArrayList();
 		for(int i = 0; i < extensionList.size(); i ++)
 					extradistExtensions.add(((DataElement)extensionList.get(i)).getName());
-		System.out.println("\n setExtradistExtensions()");
+		//System.out.println("\n setExtradistExtensions()");
 		for(int j = 0; j < extradistExtensions.size(); j++)
-			System.out.println("\n extension  = "+extradistExtensions.get(j));
+			//System.out.println("\n extension  = "+extradistExtensions.get(j));
 					
 	}
 	private boolean foundInExtraList(String name)
