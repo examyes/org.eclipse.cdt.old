@@ -545,21 +545,7 @@ public String removeWhitespace(String theLine)
 	       qfile = new File(_subject.getSource() + "/" + file);
 	       if (!qfile.exists())
 		   {
-		       //For now, let's strip all path info from the file, before we try to find it:
-		       int lastFwdSlash = file.lastIndexOf("/");
-		       int lastBckSlash = file.lastIndexOf("\\");
-		       if (lastFwdSlash > lastBckSlash)
-			   file = file.substring(lastFwdSlash+1,file.length());
-		       else if (lastBckSlash > lastFwdSlash)
-			   file = file.substring(lastBckSlash+1,file.length());
-
-		       DataElement subStatus = _dataStore.createObject(null, "status", "start");
-		       _fileMiner.findFile(_subject, file, subStatus);
-		       DataElement theFile = subStatus.get(0);
-		       if (theFile != null) 
-			   {
-			       file = theFile.getSource();
-			   }
+		       file = "";
 		   }
 	       else
 		   {
