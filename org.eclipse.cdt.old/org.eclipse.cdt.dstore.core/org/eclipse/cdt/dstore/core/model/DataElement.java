@@ -662,9 +662,12 @@ public final class DataElement implements Serializable, IDataElement
 	if (descriptor != null && !descriptor.isDeleted())
 	    {
 		String typeType = type.getType();
+		String typeName = type.getName();
 		if (typeType.equals(DE.T_OBJECT_DESCRIPTOR))
 		    {
-			if ((descriptor == type) || (type.getName().equals(_dataStore.getLocalizedString("model.all"))))
+			if ((descriptor == type) || 
+			    descriptor.getName().equals(typeName) ||
+			    (typeName.equals("all")))
 			    {
 				result = true;
 				return result;
@@ -673,6 +676,7 @@ public final class DataElement implements Serializable, IDataElement
 		
 		DataElement relationship = getAbstractsRelationship();
 		ArrayList abstracted = null;
+		
 		if (relationship != null)
 		    {
 			abstracted = type.getAssociated(relationship);
