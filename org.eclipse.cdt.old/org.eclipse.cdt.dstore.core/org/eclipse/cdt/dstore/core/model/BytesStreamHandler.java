@@ -19,11 +19,11 @@ import java.io.*;
 // this will be the new class for abstracting out file read and write
 
 
-public class FileHandler
+public class BytesStreamHandler
 {
 	private DataStore _dataStore;
 	
-	public FileHandler(DataStore dataStore)
+	public BytesStreamHandler(DataStore dataStore)
 	{
 		_dataStore = dataStore;
 	}
@@ -35,7 +35,7 @@ public class FileHandler
      * @param localPath the path where to save the file
      * @param file the file to save
      */         
-    public void saveFile(String localPath, File file)
+    public void receiveBytes(String localPath, File file)
     {
 	File newFile = new File(localPath);
 	if (!newFile.exists())
@@ -97,7 +97,7 @@ public class FileHandler
      * @param remotePath the path where to save the file
      * @param buffer the buffer to save in the file
      */         
-    public void saveFile(String remotePath, byte[] buffer, int size)
+    public void receiveBytes(String remotePath, byte[] buffer, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = _dataStore.mapToLocalPath(remotePath);
@@ -136,7 +136,7 @@ public class FileHandler
      * @param remotePath the path where to save the file
      * @param buffer the buffer to append into the file
      */         
-    public void appendToFile(String remotePath, byte[] buffer, int size)
+    public void receiveAppendedBytes(String remotePath, byte[] buffer, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = _dataStore.mapToLocalPath(remotePath);
@@ -212,5 +212,95 @@ public class FileHandler
     }   
 
 
+	public void sendBytes(String path)
+	{
+		File file = new File(path);
+		try
+		{
+		 file = file.getCanonicalFile();
+		}
+		catch (IOException e)
+		{
+		}
+		if (!file.isDirectory() && file.exists())
+	    {
+		int maxSize = 5000000;
+		int size = (int)file.length();
+		try
+		    {
+			FileInputStream inFile = new FileInputStream(file);
+			int written = 0;
+
+			int bufferSize = (size > maxSize) ? maxSize : size;
+			if (bufferSize == 0)
+			    {
+				bufferSize = 1;
+			    }
+
+			byte[] subBuffer = new byte[bufferSize];
+
+			while (written < size)
+			    {
+				int subWritten = 0;
+
+				while (written < size && subWritten < bufferSize)
+				    {
+					int available = inFile.available();
+					available = (bufferSize > available) ? available : bufferSize;
+					int read = inFile.read(subBuffer, subWritten, available);
+					subWritten += read;
+					written += subWritten;
+				    }
+				
+				if (written <= maxSize)
+				    {
+				    	internalSendBytes(path, subBuffer, subWritten);
+				    }
+				else
+				    {
+						internalSendAppendBytes(path, subBuffer, subWritten);
+				    }
+			    }
+			// special case for empty files
+			if (written == 0)
+			    {
+					subBuffer[0] = ' ';
+					internalSendBytes(path, subBuffer, 1);
+			    }
+
+			
+			inFile.close();
+		    }
+			catch (IOException e)
+		    {
+				System.out.println(e);
+                e.printStackTrace();			
+		    }
+	    }
+	}
+	
+	protected void internalSendBytes(String path, byte[] bytes, int size)
+	{
+		if (_dataStore.isVirtual())
+		{
+			_dataStore.replaceFile(path, bytes, size);
+		}
+		else	
+		{
+			_dataStore.updateFile(path, bytes, size);		
+		}
+	}	
+	
+	protected void internalSendAppendBytes(String path, byte[] bytes, int size)
+	{
+		if (_dataStore.isVirtual())
+		{
+			_dataStore.replaceAppendFile(path, bytes, size);
+		}
+		else
+		{
+			_dataStore.updateAppendFile(path, bytes, size);		
+		}
+	}
 	
 }

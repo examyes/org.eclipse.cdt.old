@@ -47,7 +47,7 @@ public final class DataStore
     private DataStoreSchema     _dataStoreSchema;    
     private CommandHandler      _commandHandler;
     private UpdateHandler       _updateHandler;
-    private FileHandler         _fileHandler;
+    private BytesStreamHandler         _byteStreamHandler;
     
     private DomainNotifier      _domainNotifier;
 
@@ -1447,7 +1447,7 @@ public final class DataStore
     }
 
     /**
-     * Transfers a file from a server to a client.  The should only be called from
+     * Transfers a file from a server to a client.  This should only be called from
      * a miner on a different machine from the client.  If a file exists on the client
      * side that the server file maps to then the existing client file will be replaced.
      *
@@ -1466,7 +1466,7 @@ public final class DataStore
       }
 
     /**
-     * Transfers and appends a file from a server to a client.  The should only be called from
+     * Transfers and appends a file from a server to a client.  This should only be called from
      * a miner on a different machine from the client.  If a file exists on the client
      * side that the server file maps to then the existing client file will be appended to
      *
@@ -1535,10 +1535,16 @@ public final class DataStore
      */
     public void replaceAppendFile(String remotePath, byte[] bytes, int size)
     {
-	remotePath = new String(remotePath.replace('\\', '/'));
+		remotePath = new String(remotePath.replace('\\', '/'));
 	
-	_commandHandler.sendAppendFile(remotePath, bytes, size);  	
+		_commandHandler.sendAppendFile(remotePath, bytes, size);  	
     }
+
+
+	public void sendFile(String remotePath)
+	{
+		_byteStreamHandler.sendBytes(remotePath);		
+	}
 
     /**
      * Makes a given client element available on the server
@@ -2593,7 +2599,7 @@ public final class DataStore
      */         
     public void saveFile(String localPath, File file)
     {
-    	_fileHandler.saveFile(localPath, file);
+    	_byteStreamHandler.receiveBytes(localPath, file);
     }
 	
     /**
@@ -2604,7 +2610,7 @@ public final class DataStore
      */         
     public void saveFile(String remotePath, byte[] buffer, int size)
     {
-    	_fileHandler.saveFile(remotePath, buffer, size);   
+    	_byteStreamHandler.receiveBytes(remotePath, buffer, size);   
     }   
 
     /**
@@ -2615,7 +2621,7 @@ public final class DataStore
      */         
     public void appendToFile(String remotePath, byte[] buffer, int size)
     {
-    	_fileHandler.appendToFile(remotePath, buffer, size);
+    	_byteStreamHandler.receiveAppendedBytes(remotePath, buffer, size);
     }   
 
     
@@ -2789,7 +2795,7 @@ public final class DataStore
 
     private void initialize()
     {
-    _fileHandler = new FileHandler(this);	
+    _byteStreamHandler = new BytesStreamHandler(this);	
 	_minersLocation = "org.eclipse.cdt.dstore.core";
 	_random = new Random(System.currentTimeMillis());
 
