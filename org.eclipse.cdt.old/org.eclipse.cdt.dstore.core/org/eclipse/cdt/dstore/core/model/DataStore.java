@@ -2235,6 +2235,7 @@ public final class DataStore
 				for (int i = 0; i < searchList.size(); i++)
 				    {
 					DataElement child = (DataElement)searchList.get(i);
+					if (child != null)
 					{
 					    synchronized(child)
 						{
