@@ -39,7 +39,7 @@ public class PAOpenAction extends OpenEditorAction
 	  }
 		  
 	  _api.analyzeTraceProgram(_traceProgram);
-	      
+	  _openOperationPending = false;    
     }
     
   }
@@ -47,6 +47,7 @@ public class PAOpenAction extends OpenEditorAction
   
 	private PAModelInterface _paApi;
 	private String           _outputViewId;
+	private boolean			 _openOperationPending;
 	
 	
 	public PAOpenAction(DataElement element)
@@ -55,6 +56,7 @@ public class PAOpenAction extends OpenEditorAction
 	  
 	  _paApi = PAModelInterface.getInstance();
 	  _outputViewId = "org.eclipse.cdt.cpp.ui.CppOutputViewPart";
+	  _openOperationPending = false;
 	}
 	    
     
@@ -63,16 +65,18 @@ public class PAOpenAction extends OpenEditorAction
       
       if (flag && _element.isOfType("trace program"))
       {
-       runAndAnalyzeTraceProgram();
+        if (!_openOperationPending)
+          runAndAnalyzeTraceProgram();
       }
       else
-       super.performGoto(flag);
+        super.performGoto(flag);
     }
     
     
     private void runAndAnalyzeTraceProgram()
     {
-            
+      _openOperationPending = true;
+      
       DataElement cmdStatus = _paApi.runTraceProgram(_element);
     
       AnalyzeTraceProgramThread analyzeThread = new AnalyzeTraceProgramThread(cmdStatus, _element);

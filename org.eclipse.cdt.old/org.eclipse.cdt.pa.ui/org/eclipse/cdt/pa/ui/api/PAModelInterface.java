@@ -46,36 +46,40 @@ public class PAModelInterface implements IDomainListener
  
  
  private static PAModelInterface _instance;
+ 
  private PAPlugin				 _plugin;
  private ModelInterface  		 _cppApi;
  private PATraceNotifier 		 _notifier;
  private CppProjectNotifier		 _cppNotifier;
- private PAProjectAdaptor        _projectAdaptor;
  private DataStore       		 _dataStore; 
  private HashMap 				 _statuses;
  
  private HashMap			 	 _projectsRootMap;
  private HashMap				 _traceFilesRootMap;
  
- private DataElement _selection;
- private DataElement _localProjectsRoot;
- private DataElement _localTraceFilesRoot;
- private DataElement _dummyElement;
- private boolean     _isShowAll;
+ private DataElement 			 _selection;
+ private DataElement 			 _localProjectsRoot;
+ private DataElement 			 _localTraceFilesRoot;
+ private DataElement 			 _dummyElement;
+ 
+ private boolean     			 _isShowAll;
+ private boolean				 _addTraceFilePending;
+ 
  
  // Constructor
  public PAModelInterface(DataStore dataStore) {
   
-  _dataStore = dataStore;
-  _plugin   = PAPlugin.getDefault();
-  _notifier = new PATraceNotifier(this);
-  _notifier.enable(true);
   _instance = this;
+  
+  _dataStore = dataStore;
+  _plugin    = PAPlugin.getDefault();
+  _notifier  = new PATraceNotifier(this);
+  _notifier.enable(true);
+  
   _cppApi = CppPlugin.getDefault().getModelInterface();
   
-  _projectAdaptor = PAProjectAdaptor.getInstance();
   _cppNotifier = _cppApi.getProjectNotifier();
-  _cppNotifier.addProjectListener(_projectAdaptor);
+  _cppNotifier.addProjectListener(PAProjectAdaptor.getInstance());
   
   dataStore.getDomainNotifier().addDomainListener(this);
   
@@ -89,8 +93,8 @@ public class PAModelInterface implements IDomainListener
   _dummyElement        = null;
     
   _isShowAll      = false;
+  _addTraceFilePending = false;
   
-  _instance = this;
  }
  
  /**
@@ -322,9 +326,30 @@ public class PAModelInterface implements IDomainListener
              
        if (commandValue.equals("C_QUERY_TRACE_FILE_FORMAT") 
           || commandValue.equals("C_QUERY_TRACE_PROGRAM_FORMAT"))
-       {	  
-          PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FORMAT_CHANGED, object, traceElement);
-         _notifier.fireTraceChanged(traceEvent);
+       {
+         if (_addTraceFilePending)
+         {
+            _addTraceFilePending = false;
+            
+     		String traceFormat = new String(object.getValue());
+          
+     		// Display a message if it is not a valid trace file.
+     		if (traceFormat.equals("invalid trace file")) 
+     		{       
+       		  Display d = getShell().getDisplay();
+	   		  d.asyncExec(new showMessageAction("Invalid Trace File", "Not a valid trace file:\n" + traceElement.getSource()));
+       		  return;
+     		}
+     		else
+     		{
+     		  addTraceFile(traceElement, traceFormat);
+     		}
+          }
+          else 
+          {
+            PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FORMAT_CHANGED, object, traceElement);
+            _notifier.fireTraceChanged(traceEvent);
+          }
        }
        else if (commandValue.equals("C_PARSE_TRACE") || commandValue.equals("C_ANALYZE_PROGRAM"))
        {  
@@ -600,14 +625,25 @@ public class PAModelInterface implements IDomainListener
   return dataStore.find(traceFile, DE.A_TYPE, "call root", 1);
  }
  
+ 
+  /**
+   * Auto detect the trace file format and add it to the trace files view
+   */
+  public void addAutoTraceFile(DataElement fileElement) {
+
+    _addTraceFilePending = true;
+    queryTraceFileFormat(fileElement);
+  }
+  
+  
  /**
   * Add a new trace file
   */
  public void addTraceFile(DataElement fileElement, String traceFormat) {
 
-   String realTraceFormat = traceFormat;
    DataStore dataStore = fileElement.getDataStore();
    
+   /*
    // Detect the real trace format if the designated format string is "auto".
    if (traceFormat.equals("auto")) {
      
@@ -634,23 +670,27 @@ public class PAModelInterface implements IDomainListener
        return;
      }
    }
-
+   */
+   
    // Set the type of the trace file
    String type = null;
-   if (realTraceFormat.indexOf("gprof") >= 0)
+   if (traceFormat.indexOf("gprof") >= 0)
      type = "gprof trace file";
-   else if (realTraceFormat.indexOf("functioncheck") >= 0)
+   else if (traceFormat.indexOf("functioncheck") >= 0)
      type = "functioncheck trace file";
+   else
+     return;
    
    DataElement traceProject = findOrCreateTraceProjectElement(fileElement);
+   
+   DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
+   if (dataStore != getDataStore()) {
+    dataStore.setObject(traceFormatElement);    
+   }
       
    // Create the trace file element
    DataElement traceFile = dataStore.createObject(traceProject, type, fileElement.getName(), fileElement.getSource());
-   DataElement traceFormatElement = dataStore.createObject(null, "data", realTraceFormat);
-   
-   // Create a reference to the trace file from the local trace files root
-   getDataStore().createReference(getLocalTraceFilesRoot(), traceFile);
-   
+      
    // Create references to the original file and project
    dataStore.createReference(traceFile, fileElement, "referenced file");
    dataStore.createReference(traceFile, _cppApi.getProjectFor(fileElement), "referenced project");
@@ -663,9 +703,11 @@ public class PAModelInterface implements IDomainListener
    DataElement callTreeRoot = dataStore.createObject(traceFile, "call root", traceFile.getName());
       
    if (dataStore != getDataStore()) {
-    dataStore.setObject(traceFormatElement);
     dataStore.setObject(traceFile);
    }
+
+   // Create a reference to the trace file from the local trace files root
+   getDataStore().createReference(getLocalTraceFilesRoot(), traceFile);
    
    // Fire file created event
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceFile);
@@ -725,10 +767,13 @@ public class PAModelInterface implements IDomainListener
    else
     type = "unknown trace program";
    
+   DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
+   if (dataStore != getDataStore()) {
+     dataStore.setObject(traceFormatElement);   
+   }
+   
    // Create the trace program element
    DataElement traceProgram = dataStore.createObject(traceProject, type, progElement.getName(), progElement.getSource());
-   DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
-   getDataStore().createReference(getLocalTraceFilesRoot(), traceProgram);
    
    // Create references to the original file and project
    dataStore.createReference(traceProgram, progElement, "referenced file");
@@ -742,9 +787,11 @@ public class PAModelInterface implements IDomainListener
    DataElement callTreeRoot = dataStore.createObject(traceProgram, "call root", traceProgram.getName());
    
    if (dataStore != getDataStore()) {
-     dataStore.setObject(traceFormatElement);
      dataStore.setObject(traceProgram);
    }
+   
+   // Create a reference from local trace files root to the trace program
+   getDataStore().createReference(getLocalTraceFilesRoot(), traceProgram);
    
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceProgram);
    _notifier.fireTraceChanged(traceEvent);

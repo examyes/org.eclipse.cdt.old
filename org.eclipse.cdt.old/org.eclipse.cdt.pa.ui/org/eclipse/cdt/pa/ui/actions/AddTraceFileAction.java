@@ -33,7 +33,7 @@ public class AddTraceFileAction extends CustomAction
    
   public void run()
   {
-    _api.addTraceFile(_subject, "auto");    
+    _api.addAutoTraceFile(_subject);    
   }
   
 }
