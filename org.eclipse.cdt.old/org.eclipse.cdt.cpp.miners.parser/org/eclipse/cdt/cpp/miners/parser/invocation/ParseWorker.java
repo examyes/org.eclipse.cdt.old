@@ -301,7 +301,8 @@ public class ParseWorker extends Thread
 
  private void update(DataElement theObject)
  {
-  _dataStore.update(theObject); 
+  if (theObject != null)
+   _dataStore.update(theObject); 
  }
 
  private DataElement getFileFromQueue()
