@@ -1,6 +1,8 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Copyright (C)  1995, 2001 International Business Machines Corporation and others. All Rights Reserved.
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 1995, 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 
 package com.ibm.debug.gdbPicl;
 
@@ -445,7 +447,11 @@ public class Gdb
       }
 
 // ***************************************************************************
-//    Copyright
+/*
+ * Copyright (c) 1995, 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
 // ***************************************************************************
       Gdb.msgOutput("");
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
@@ -468,7 +474,11 @@ public class Gdb
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
       // Gdb.msgOutput(getConsoleResourceString("COPYRIGHT_MSG"));
       // ** TEMPORARILY REMOVED UNTIL CONSOLE TRANSLATION ISSUES RESOLVED **
-      Gdb.msgOutput("(c) Copyright IBM Corp 1995, 2001  All Rights Reserved");
+/*
+ * Copyright (c) 1995, 2001 International Business Machines Corporation. All rights reserved.
+ * This program and the accompanying materials are made available under the terms of
+ * the Common Public License which accompanies this distribution.
+ */
       Gdb.msgOutput("US Government Users Restricted Rights - Use, duplication or disclosure");
       Gdb.msgOutput("restricted by GSA ADP Schedule Contract with IBM Corp.");
       Gdb.msgOutput("");
