@@ -380,6 +380,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
          DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
    		directory = directory.getParent();
 	   	DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", /*_directory*/directory, true);
+		dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
    		dialog.open();
 	   	if (dialog.getReturnCode() == dialog.OK)
    	   {
