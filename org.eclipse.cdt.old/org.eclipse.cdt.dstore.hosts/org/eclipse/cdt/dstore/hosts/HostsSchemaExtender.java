@@ -72,11 +72,14 @@ public class HostsSchemaExtender implements ISchemaExtender
 						       _plugin.getLocalizedString("model.Find_Files"), 
 						       "org.eclipse.cdt.dstore.hosts.actions.FindFileAction");
 	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");
-	
+
+	/*
 	  DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							      _plugin.getLocalizedString("model.Dictionary_Search"), 
 							      "org.eclipse.cdt.dstore.hosts.actions.SearchDictionaryAction");
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
+	*/
+
 	DataElement newD = dataStore.find(fsD, DE.A_VALUE, "C_NEW", 1);
 	DataElement newFile = dataStore.createObject(newD, DE.T_UI_COMMAND_DESCRIPTOR,
 						     _plugin.getLocalizedString("model.New_File"),

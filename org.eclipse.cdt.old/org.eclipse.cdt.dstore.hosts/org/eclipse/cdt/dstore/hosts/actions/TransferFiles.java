@@ -140,11 +140,13 @@ public class TransferFiles extends Thread
 	boolean scratchUpdate = false;
 
 	String type = source.getType();
+	boolean isFile = source.isOfType("file");
+
 
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
 	    {	 		
-	    	if (type.equals("file"))
+	    	if (isFile)
 	    	{
 	    		copiedSource = targetDataStore.createObject(null, type, source.getName(), newSourceStr);
 	    		needsUpdate = true;
@@ -165,18 +167,18 @@ public class TransferFiles extends Thread
 	    	}
 	    	scratchUpdate = true;
 	    }
-	else if (type.equals("file"))
+	else if (isFile)
 		{
-			// compare dates
-			if (_checkTimestamps)
+		    // compare dates
+		    if (_checkTimestamps)
 			{
-				needsUpdate = compareDates(source, copiedSource);
+			    needsUpdate = compareDates(source, copiedSource);
 			}
-			else
+		    else
 			{
-				needsUpdate = true;
-		    }
-	    }
+			    needsUpdate = true;
+			}
+		}
 	
 
 	// both projects on same machine
@@ -317,24 +319,24 @@ public class TransferFiles extends Thread
 	    }
 	}
 	
-	if ((type.equals("directory") || type.equals("Project"))) // hack
+	if (!isFile && source.isOfType("directory"))
 	    {	
 		if (_checkTimestamps)
-		{
+		    {
 			queryDates(source);	
 			
 			if (!scratchUpdate)
-			{		
-			  queryDates(copiedSource);
-			}
-		}
-	
-	    ArrayList children = source.getAssociated("contents");
+			    {		
+				queryDates(copiedSource);
+			    }
+		    }
+		
+		ArrayList children = source.getAssociated("contents");
 		for (int i = 0; i < children.size(); i++)
 		    {
 			DataElement child = (DataElement)children.get(i);
 			String ctype = child.getType();
-			if (ctype.equals("directory") || ctype.equals("file"))
+			if (ctype.equals("directory") || ctype.equals("file") || child.isOfType("file"))
 			    {	
 				transfer(child, copiedSource);				
 			    }
