@@ -1,28 +1,17 @@
 lib_LTLIBRARIES =
-libpayroll_la_SOURCES =
+lib!TARGET!_la_SOURCES =
 SUBDIRS =
 EXTRA_DIST =
-# Suggested
+
 SOMAJOR = 1
 SOMINOR = 0
 SOSUBMINOR = 0
-# here you should add all header files, which contains the functionality
-# of your shared lib (published for the users)
+
 include_HEADERS =
-# here you should add all header files, which shouldn´t be installed
 noinst_HEADERS =
-libpayroll_la_LDFLAGS = $(all_libraries) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) $(LDFLAGS)
-# add here the libraries which have to be include
-# for building the shared lib
-#
-# please consider also the usage of the make environment variables
-# like
-# $(LIB_KDEUI), $(LIB_QT), $(LIB_HTML), etc.
-# instead of the hardcoded entries, which have placed
-# in here.
-# The following line is only a suggestion!
-#
-libpayroll_la_LIBADD =
+
+lib!TARGET!_la_LDFLAGS = $(all_libraries) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) $(LDFLAGS)
+lib!TARGET!_la_LIBADD =
 
 
 
