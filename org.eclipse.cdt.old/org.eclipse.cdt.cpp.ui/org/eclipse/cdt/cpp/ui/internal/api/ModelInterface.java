@@ -1993,21 +1993,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		boolean needsRefresh = false;
 		IContainer container = (IContainer)resource;
 		
-		// compare elements to resources				
-		for (int i = 0; (i < parent.getNestedSize()); i++)
+		// compare elements to resources	
+		synchronized(parent)
 		    {
-			DataElement child = parent.get(i);
-			if (!child.isDeleted() && !child.isReference())
-			{
-				IResource match = container.findMember(child.getName());
-			
-				needsRefresh = (match == null);
-				if (needsRefresh)
-				{
-				//		parseFile(child);
-				}
-			}			
-		}
+			for (int i = 0; (i < parent.getNestedSize()); i++)
+			    {
+				DataElement child = parent.get(i);
+				if (child != null && !child.isDeleted() && !child.isReference())
+				    {
+					IResource match = container.findMember(child.getName());
+					
+					needsRefresh = (match == null);
+				    }			
+			    }
+		    }
 		
 		// compare resources to elements in case deleted
 		if (!needsRefresh)
