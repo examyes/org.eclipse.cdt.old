@@ -120,6 +120,7 @@ public class OutputViewer extends TableViewer
     private int                   _charWidth;
     private OpenEditorAction      _openEditorAction;
     private OpenPerspectiveAction _openPerspectiveAction;
+    private MenuHandler           _menuHandler;
     
     private HostsPlugin           _plugin;
 
@@ -131,6 +132,8 @@ public class OutputViewer extends TableViewer
         setContentProvider(new TableContentProvider());
 	setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry()));
        	addSelectionChangedListener(this);
+
+	_menuHandler = new MenuHandler(_plugin.getActionLoader());
 
 	_maxWidth = 100;	
 
@@ -213,8 +216,6 @@ public class OutputViewer extends TableViewer
 		  TableColumn column = getTable().getColumn(0);
 		  column.setText(value);			  
 	      }
-
-        internalRefilter();
       }
   }
 
@@ -228,7 +229,8 @@ public class OutputViewer extends TableViewer
   public void fillContextMenu(IMenuManager menu)
       {
 	DataElement selected = ConvertUtility.convert(getSelection());
-        fillContextMenuHelper(menu, selected);
+        //***fillContextMenuHelper(menu, selected);
+	_menuHandler.fillContextMenu(menu, _currentInput, selected);
       }
 
 
@@ -315,14 +317,14 @@ public class OutputViewer extends TableViewer
         for (int i = 0; i < children.size(); i++)
         {
           DataElement child = ((DataElement)children.get(i)).dereference();
-          if ((child != null) /*&& !child.isUpdated()*/)
+          if ((child != null) && !child.isUpdated())
           {
             child.setUpdated(true);
 	    if (doFindItem(child) == null)	
 	      {		
-		TableItem newItem = new TableItem(table, SWT.NONE, index);		
-		updateItem(newItem, child);
-                index++;
+		  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
+		  updateItem(newItem, child);
+		  index++;
 
 		/***
 		int charLen = ((String)child.getElementProperty(DE.P_NAME)).length();		
@@ -336,19 +338,16 @@ public class OutputViewer extends TableViewer
 
       }
 
-  protected void internalRefilter()
-      {
-        getTable().removeAll();
-	_maxWidth = 100;
-	
-        if (_currentInput != null)
-          updateChildren(_currentInput.getNestedData());
-      }
+    protected Item newItem(Widget parent, int flags, int ix)  
+    {
+	if (parent instanceof Table)
+	    {
+		return new TableItem((Table) parent, flags);
+	    }
 
-  protected void internalRefresh(Object element)
-      {
-        internalRefilter();
-      }
+	return null;
+    }
+
 
   public void fillLocalToolBar(IToolBarManager toolBarManager)
   {

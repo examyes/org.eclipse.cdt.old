@@ -115,95 +115,95 @@ public class OpenEditorAction extends Action implements IOpenAction
             Integer location = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));            
 	    
 	    if (!elementType.equals("directory") && !elementType.equals("device"))
-	      {		
-		IFile file = getNewFile(fileName);
-		if (file == null)
-		  {          
-		    DataElement fileElement = null;	
-		    if (elementType.equals("file"))
-		      {
-			fileElement = _element;			
-		      }
-		    else
-		      {
-			String name = fileName;
-			
-			int indexOfSlash = fileName.lastIndexOf(java.io.File.separator);
-			if (indexOfSlash > 0)
-			  {
-			    name = fileName.substring(indexOfSlash + 1, fileName.length());
-			    fileElement = _element.getDataStore().createObject(null, "file", name, fileName);
-			  }
-		      }
-		   
-		    if (fileElement != null)
-			{
-			    file = new FileResourceElement(fileElement, null);
+		{		
+		    IFile file = getNewFile(fileName);
+		    if (file == null)
+			{          
+			    DataElement fileElement = null;	
+			    if (elementType.equals("file"))
+				{
+				    fileElement = _element;			
+				}
+			    else
+				{
+				    String name = fileName;
+				    
+				    int indexOfSlash = fileName.lastIndexOf(java.io.File.separator);
+				    if (indexOfSlash > 0)
+					{
+					    name = fileName.substring(indexOfSlash + 1, fileName.length());
+					    fileElement = _element.getDataStore().createObject(null, "file", name, fileName);
+					}
+				}
+			    
+			    if (fileElement != null)
+				{
+				    file = new FileResourceElement(fileElement, null);
+				}
+			    
 			}
 		    
-		  }
-		
-		if (file != null)
-		  {	  
-		    int loc = location.intValue();
-		    
-		    if (WorkbenchPlugin.getDefault() != null)
-		      {
-			IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
-			IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
-			
-			IEditorPart editor = null;
-			
-			IEditorPart [] editors = persp.getEditors();
-			for (int i = 0; i < editors.length; i++)
-			  {
-			      IEditorInput einput = editors[i].getEditorInput();
-			      if (einput instanceof IFileEditorInput)
-				  {
-				      IFileEditorInput input = (IFileEditorInput)einput;
-				      if ((input != null) 
-					  && input.getName().equals(file.getName()))
-					  {
-					      editor = editors[i];		      
-					      persp.bringToTop(editor);		      
-					  }
-				  }
-			  }
-			
-			if (editor == null)
-			  {
-			    if (!openEditor)
-			      {
-				return;		      
-			      }
+		    if (file != null)
+			{	  
+			    int loc = location.intValue();
 			    
-			    try
+			    if (WorkbenchPlugin.getDefault() != null)
 				{
-				    persp.openEditor(file);
+				    IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+				    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
+				    
+				    IEditorPart editor = null;
+				    
+				    IEditorPart [] editors = persp.getEditors();
+				    for (int i = 0; i < editors.length; i++)
+					{
+					    IEditorInput einput = editors[i].getEditorInput();
+					    if (einput instanceof IFileEditorInput)
+						{
+						    IFileEditorInput input = (IFileEditorInput)einput;
+						    if ((input != null) 
+							&& input.getName().equals(file.getName()))
+							{
+							    editor = editors[i];		      
+							    persp.bringToTop(editor);		      
+							}
+						}
+					}
+				    
+				    if (editor == null)
+					{
+					    if (!openEditor)
+						{
+						    return;		      
+						}
+					    
+					    try
+						{
+						    persp.openEditor(file);
+						}
+					    catch (org.eclipse.ui.PartInitException e)
+						{
+						}
+					    
+					    editor = persp.getActiveEditor();
+					}
+				    
+				    if ((loc > 0) && (editor != null))
+					{	
+					    try
+						{
+						    IMarker marker = file.createMarker(IMarker.TEXT);
+						    marker.setAttribute(IMarker.LINE_NUMBER, loc);
+						    
+						    editor.gotoMarker(marker);
+						}
+					    catch (CoreException e)
+						{
+						}
+					}
 				}
-			    catch (org.eclipse.ui.PartInitException e)
-				{
-				}
-
-			    editor = persp.getActiveEditor();
-			  }
-			
-			if ((loc > 0) && (editor != null))
-			    {	
-				try
-				    {
-					IMarker marker = file.createMarker(IMarker.TEXT);
-					marker.setAttribute(IMarker.LINE_NUMBER, loc);
-					
-					editor.gotoMarker(marker);
-				    }
-				catch (CoreException e)
-				    {
-				    }
-			  }
-		      }
-		  }
-	      }	
+			}
+		}	
 	  }
 	}	
       }
