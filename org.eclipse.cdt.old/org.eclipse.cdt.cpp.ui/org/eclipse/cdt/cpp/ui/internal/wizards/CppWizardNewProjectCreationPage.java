@@ -334,61 +334,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 				    _projectHandle.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				}
 			    break;
-			
-			    /****
-			case CppProjectAttributes.LOCATION_URL:
-				 selectedRemoteDirectory = remoteURLNameField.getText();
-
-				 URL                           location = null;
-				 // PushPullTarget                target;
-				 //IResourceMapping              mapping = null;
-				
-
-				 QualifiedName qName = new QualifiedName(CppProjectAttributes.NAME_QUALIFIER, "dav");
-				 String urlName = selectedRemoteDirectory;
-				 //System.out.println("CppWizardNewProjectCreationPage: URL is " +urlName);
-				 try
-				 {
-				 location = new URL(urlName);
-				 }
-				 catch (MalformedURLException e)
-				 {
-				 System.out.println("CppWizardNewProjectCreationPage: A URL exception happened setting up the target.");
-				 }
-				
-				 target = new PushPullTarget();
-				 target.setLocation(location);
-				 target.setQualifiedName(qName);
-				 // Create a mapping so there is a content location on the target.
-				 //System.out.println("MapAction calling getMapping");
-				 //             mapping = ((Target) target).getMapping(project, IResource.PROJECT_ROOT);
-				 mapping = ((Target) target).getMapping(_projectHandle, IResource.PROJECT_ROOT);
-				 if (mapping == null)
-				 {
-				 //System.out.println("MapAction: mapping is null, calling newMapping");
-				 mapping = _projectHandle.newMapping(IResource.PROJECT_ROOT, null);
-				 }
-				 //System.out.println("MapAction: calling setLocation");
-				 mapping.setLocation(new Path(location.getFile()));
-				 //System.out.println("MapAction calling addMapping");
-				
-				 ((Target) target).addMapping(_projectHandleHandle, mapping);
-				 //System.out.println("MapAction after addMapping");
-				 // Register the target with the workspace synchronizer.
-				 _projectHandle.getWorkspace().getSynchronizer().add(target);
-				 try
-				 {
-				 QualifiedName qURLName = new QualifiedName(CppProjectAttributes.NAME_QUALIFIER, "URL");
-				 target.refresh(_projectHandleHandle, IResource.DEPTH_INFINITE, null);
-				 target.deploy(_projectHandleHandle, IResource.DEPTH_INFINITE, null);
-				 _projectHandle.setPersistentProperty(qURLName, urlName);
-				 }
-				 catch (CoreException e)
-				 {
-				 System.out.println("An error occurred during refresh" +e.toString());
-				 }
-			    break;
-			    ***/
+		
 			
 			case CppProjectAttributes.LOCATION_HOST:
 			    break;
@@ -628,7 +574,8 @@ protected String getDirectoryName() {
 		if (_sourceLocation == CppProjectAttributes.LOCATION_HOST)
 		    {
 			String hostName = remoteHostNameField.getText();
-			if (hostName.length() == 0)
+			String hostDir  = remoteHostDirectoryField.getText();
+			if (hostName.length() == 0 || hostDir.length() == 0)
 			    {
 				return false;
 			    }
