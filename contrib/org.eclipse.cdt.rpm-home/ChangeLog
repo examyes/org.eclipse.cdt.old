@@ -1,3 +1,10 @@
+2005-01-04  Jeremy Handcock  <handcock@redhat.com>
+
+	* developer/structure.html: Update status.
+	* planning/*: New files.
+	* index.html: Add News entry, links to mailing list and development
+	plans.
+
 2004-10-21  Jeremy Handcock  <jbh@ualberta.ca>
 
 	* developer/structure.html: Change my status to independent.
