@@ -301,7 +301,7 @@ public class ParseWorker extends Thread
 
  private void update(DataElement theObject)
  {
-  if (theObject != null)
+  if (( _dataStore != null) && (theObject != null))
    _dataStore.update(theObject); 
  }
 
