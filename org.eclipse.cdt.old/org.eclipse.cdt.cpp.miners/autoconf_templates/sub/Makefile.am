@@ -8,6 +8,6 @@ SUBDIRS =
 
 EXTRA_DIST = 
 
-INCLUDES= $(all_includes)
+INCLUDES= 
 
-!TARGET!_LDFLAGS = $(all_libraries)
+!TARGET!_LDFLAGS = 
