@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.custom.StyledText;
 
 import org.eclipse.swt.events.*;
 
@@ -318,7 +319,8 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
     private Table _table;
     private Color _tablecolor;
 
-    private Text _expression;
+//    private Text _expression; 
+    private StyledText _expression;//needed to get <Enter> key event
     private Color _expressionColor;
     private Button _findButton;
     
@@ -365,13 +367,25 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
        	
 	new Label(helpInfo,SWT.NULL).setText(_plugin.getLocalizedString(IHelpNLConstants.VIEW_FINDDOCS_PROMPT));
 
-	_expression = new Text(helpInfo,SWT.SINGLE|SWT.BORDER);
+//	_expression = new Text(helpInfo,SWT.SINGLE|SWT.BORDER);
+	_expression = new StyledText(helpInfo,SWT.SINGLE|SWT.BORDER);
 	_expressionColor=new Color(_expression.getDisplay(),255,255,255);
 	_expression.setBackground(_expressionColor);
 	gridData = new GridData(GridData.FILL_HORIZONTAL);
 	gridData.horizontalSpan=2;
 	_expression.setLayoutData(gridData);
-	
+	_expression.addKeyListener(new KeyAdapter(){
+		public void keyReleased(KeyEvent e)
+		    {
+			if(e.character=='\r')
+			{
+			    String theKey = _expression.getText();
+			    LaunchSearch.getDefault().doSearch(theKey,null);
+			}
+		    }
+	    });
+
+
 	_findButton = new Button(helpInfo,SWT.PUSH);	
 	_findButton.setText(_plugin.getLocalizedString(IHelpNLConstants.VIEW_FINDDOCS_FIND));
 	_findButton.addSelectionListener(new SelectionAdapter(){
@@ -381,7 +395,6 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
 		    LaunchSearch.getDefault().doSearch(theKey,null);
 		}
 	    });
-      	
 
 	_table = new Table(container,SWT.SINGLE|SWT.FULL_SELECTION);
 	gridData = new GridData(GridData.FILL_HORIZONTAL| GridData.FILL_VERTICAL);
