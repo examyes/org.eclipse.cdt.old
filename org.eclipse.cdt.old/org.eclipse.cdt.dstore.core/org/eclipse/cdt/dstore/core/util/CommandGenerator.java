@@ -145,9 +145,11 @@ public class CommandGenerator
       DataElement commandObject = createCommand(commandDescriptor);
       if (commandObject != null)
 	  {
+	  	  DataElement tempRoot = _dataStore.getTempRoot();
+	   
 	      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
 	      
-	      if (refArg)
+	      if (refArg && dataObject.getParent() != tempRoot)
 		  {
 		      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
 		  }
@@ -158,8 +160,6 @@ public class CommandGenerator
 	      
 	      if (arguments != null)
 		  {
-		      DataElement tempRoot = _dataStore.getTempRoot();
-
 		      for (int i = 0; i < arguments.size(); i++)
 			  {
 			      DataElement arg = (DataElement)arguments.get(i);
@@ -167,7 +167,7 @@ public class CommandGenerator
 				  {
 				      if (!arg.isExpanded() || (arg.getParent() == tempRoot))
 					  {
-					      commandObject.addNestedData(arguments, false);
+					      commandObject.addNestedData(arg, false); 
 					  }
 				      else
 					  {
