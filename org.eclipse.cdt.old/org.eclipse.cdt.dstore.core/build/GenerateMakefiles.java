@@ -4,7 +4,7 @@
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-
+package build;
 import java.io.*;
 import java.util.*;
 
@@ -194,20 +194,13 @@ class GenerateMakefiles
   return jarNames;
  }
  
+ //Here we assume that GenerateMakefiles is run from org.eclipse.cdt.dstore.core
  private static String getPluginsDirectory()
  {
   String pwd = System.getProperty("user.dir");
-  try
-  { 
-   pwd = new File(pwd).getCanonicalPath();
-  }
-  catch (IOException e) { return ""; }
-  pwd = pwd.replace('\\','/');
-  int last = pwd.lastIndexOf('/');
-  if(last == pwd.length()-1)
-  	last = pwd.lastIndexOf('/', last-1);
-  last = pwd.lastIndexOf('/', last-1);
-  return pwd.substring(0, last);
+  File dstorecore = new File(pwd);
+  String plugins = dstorecore.getParent();
+  return plugins.replace('\\','/');
  } 
 
  private static String getBasePluginsDirectory()

@@ -18,7 +18,7 @@
 SHELL=sh
 # Grab Absolute Path to Plugin Directory...We do this by launching GenerateMakefiles with no arguments,
 # which uses java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
-pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
+pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && cd .. && java -cp . build.GenerateMakefiles)
 
 ifdef ECLIPSE
 eclipseLocation := $(ECLIPSE)
@@ -115,7 +115,7 @@ generateBuildEnvironment: unzipBuildPlugins
 ifneq "$(ECLIPSE)" ""
 	@echo $(eclipseLocation) >.eclipse
 endif
-	@cd build && java -cp . -DECLIPSE=$(eclipseLocation) GenerateMakefiles $(buildPlugins) || (echo '***' Error: Usage: make ECLIPSE=eclipse_directory targets && false)
+	java -cp $(pluginsDirectory)/org.eclipse.cdt.dstore.core -DECLIPSE=$(eclipseLocation) build.GenerateMakefiles $(buildPlugins) || (echo '***' Error: Usage: make ECLIPSE=eclipse_directory targets && false)
 
 unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 
