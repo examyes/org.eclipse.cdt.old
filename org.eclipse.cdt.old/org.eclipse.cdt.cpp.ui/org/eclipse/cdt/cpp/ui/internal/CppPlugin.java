@@ -328,35 +328,33 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
   public boolean setCurrentProject(IResource obj)
   {
     boolean changed = false;
-
     DataStore dataStore = null;
-
     IProject project = null;
 
     if (obj instanceof Repository)
-      {
-	dataStore = ((Repository)obj).getDataStore();		
-	project = (IProject)obj;
-      }
+	{
+	    dataStore = ((Repository)obj).getDataStore();		
+	    project = (IProject)obj;
+	}
     else if (obj instanceof ResourceElement)
-      {
-	dataStore = ((ResourceElement)obj).getDataStore();		
-	project = _interface.getProjectFor(obj);	
-      }
+	{
+	    dataStore = ((ResourceElement)obj).getDataStore();		
+	    project = _interface.getProjectFor(obj);	
+	}
     else if (obj instanceof IResource)
-      {
-	dataStore = getDataStore();	
-	if (obj instanceof IProject)
-	    {
-		project = (IProject)obj;
-	    }
-	else
-	    {
-		project  = _interface.getProjectFor(obj);
-	    }
-      }
+	{
+	    dataStore = getDataStore();	
+	    if (obj instanceof IProject)
+		{
+		    project = (IProject)obj;
+		}
+	    else
+		{
+		    project  = _interface.getProjectFor(obj);
+		}
+	}
 
-    if (project != _currentProject)
+    if (project != null && project != _currentProject)
       {	
 	_currentProject = project;	
 	setCurrentDataStore(dataStore);

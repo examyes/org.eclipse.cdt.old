@@ -7,6 +7,7 @@ package com.ibm.cpp.ui.internal.actions;
  */
 
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.vcm.*;
 import com.ibm.cpp.ui.internal.editor.*;
@@ -46,11 +47,13 @@ public class OpenEditorAction extends Action implements IOpenAction
     private IEditorPart _editor;
 
     private CppPlugin   _plugin = CppPlugin.getDefault();
+    private ModelInterface   _api;
 
   public OpenEditorAction(DataElement element)
       {
         super("Open Action");
         _element = element;
+	_api = ModelInterface.getInstance();
       }
 
     public void resetSelection()
@@ -97,16 +100,15 @@ public class OpenEditorAction extends Action implements IOpenAction
 
   public IFile findFile(String fileName)
   {
-      com.ibm.cpp.ui.internal.api.ModelInterface api = _plugin.getModelInterface();
       if (_file != null)
 	  {
-	      if (api.compareFileNames(_file.getLocation().toString(), fileName))
+	      if (_api.compareFileNames(_file.getLocation().toString(), fileName))
 		  {
 		      return _file;
 		  }
 	  }
 
-      IResource resource =  api.findFile(fileName);
+      IResource resource =  _api.findFile(fileName);
       if (resource instanceof IFile)
 	  {
 	      return (IFile)resource;
@@ -119,8 +121,21 @@ public class OpenEditorAction extends Action implements IOpenAction
 
     public void addNewFile(IFile file)
     {
-	com.ibm.cpp.ui.internal.api.ModelInterface api = _plugin.getModelInterface();
-	api.addNewFile(file);
+	_api.addNewFile(file);
+    }
+
+    public DataElement getResourceFor(DataElement element)
+    {
+	String fileName   = (String)(element.getElementProperty(DE.P_SOURCE_NAME));
+	DataElement resource = _api.findResourceElement(element.getDataStore(), fileName);
+	if (resource == null)
+	    {
+		return element;
+	    }
+	else
+	    {
+		return resource;
+	    }
     }
     
     public void performGoto(boolean openEditor)
@@ -128,8 +143,13 @@ public class OpenEditorAction extends Action implements IOpenAction
         if (_element != null)
         {
 	    DataStore dataStore = _element.getDataStore();
+
 	    if (_element.getParent() != dataStore.getDescriptorRoot())
 		{
+		    DataElement resourceElement = getResourceFor(_element);
+		    DataElement projectElement = _api.getProjectFor(resourceElement);
+		    IProject project = _api.findProjectResource(projectElement);
+
 		    String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
 		    fileName = fileName.replace('\\', '/');
 		    
@@ -138,9 +158,10 @@ public class OpenEditorAction extends Action implements IOpenAction
 		    if ((fileName != null) && (fileName.length() > 0))
 			{
 			    java.io.File realFile = new java.io.File(fileName);
-			    if ( !realFile.isDirectory())
+			    if (!realFile.exists() || !realFile.isDirectory())
 				{		
 				    IFile file = findFile(fileName);
+				    
 				    if (file == null && openEditor)
 					{
 					    DataElement fileElement = null;	
@@ -166,8 +187,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 							}
 						}
 					    
-					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, 
-												      _plugin.getCurrentProject());
+					    file = new FileResourceElement(fileElement, project);
 					    addNewFile(file);
 					}
 				    

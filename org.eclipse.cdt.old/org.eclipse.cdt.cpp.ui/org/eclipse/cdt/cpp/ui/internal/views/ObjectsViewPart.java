@@ -147,29 +147,19 @@ public class ObjectsViewPart extends GenericViewPart
 		    {
 			boolean changed = false;
 			boolean dataElement = false;
-			
-			if (object instanceof IDataElementContainer)
-			    {
-				if (object instanceof Repository)
-				    {		    
-					changed = _plugin.setCurrentProject((Repository)object);		
-				    }
-				else if (object instanceof ResourceElement)
-				    {
-					ResourceElement theElement = (ResourceElement)object;
-					changed = _plugin.setCurrentProject(theElement);
-				    }	
-			    }	    
-			else if (object instanceof IResource)
+
+			DataStore dataStore = _plugin.getCurrentDataStore();
+			if (object instanceof IResource)
 			    {		
 				if (object instanceof ResourceElement)
 				    {		    
 					ResourceElement theElement = (ResourceElement)object;
+					dataStore = ((ResourceElement)object).getDataStore();		
 					changed = _plugin.setCurrentProject(theElement);		
 				    }
 				else if (object instanceof Repository)
 				    {
-					DataStore dataStore = ((Repository)object).getDataStore();		
+					dataStore = ((Repository)object).getDataStore();		
 					changed = _plugin.setCurrentProject((Repository)object);	
 				    }	    
 				else 
@@ -180,37 +170,31 @@ public class ObjectsViewPart extends GenericViewPart
                         else if (object instanceof DataElement)
 			 {
                           DataElement theObject = (DataElement)object;
-			  DataElement theParent = theObject;
-			  while ((theParent != null) 
-				 && (!theParent.getType().equals("Project")) 
-				 && (!theParent.getType().equals("directory"))  
-				 && (!theParent.getType().equals("data")))
-			      theParent = theParent.getParent();
+			  DataElement theParent = _api.getProjectFor(theObject);
 
-			  if ( (theParent != null) && (!theParent.getType().equals("data")))
+			  if (theParent != null)
 			      {
-				  DataStore dataStore = theParent.getDataStore();
-				  _plugin.setCurrentDataStore(dataStore);
-				  if (theParent.getType().equals("Project"))
+				  IProject project = _api.findProjectResource(theParent);
+				  if (project != null)
 				      {
-					  changed = _plugin.setCurrentProject(theParent);
+					  dataStore = theParent.getDataStore();
+					  changed = _plugin.setCurrentProject(project);					  
+					  dataElement = true;
 				      }
-
-				  initDataElementInput(theParent);
-				  dataElement = true;
 			      }
 			  
                          }
 			
 			if (changed)
 			    {	
-				DataStore dataStore = _plugin.getCurrentDataStore();
 				if (dataStore != null)
-				    dataStore.getDomainNotifier().enable(true);
+				    {
+					_plugin.setCurrentDataStore(dataStore);					  
+					dataStore.getDomainNotifier().enable(true);
+				    }
+				initInput(dataStore);		
 			    }	    
-
-			if(!dataElement)
-			 initInput(_plugin.getCurrentDataStore());		
+			
 		    }	
 	    }
     }

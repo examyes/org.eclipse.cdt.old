@@ -44,14 +44,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public class MonitorStatusThread extends Handler
     {
 	private DataElement _status;
+	private IProject    _project;
 	
-	public MonitorStatusThread(DataElement status)
+	public MonitorStatusThread(DataElement status, IProject project)
 	{
 	    _status = status;
+	    _project = project;
 	    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
 								    CppProjectEvent.START, 
 								    _status,
-								    _plugin.getCurrentProject()));
+								    _project));
 	}
 	
 	public void handle()
@@ -63,7 +65,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
 									    CppProjectEvent.DONE,
 									    _status,
-									    _plugin.getCurrentProject()));
+									    _project));
 		    finish();
 		}
 	    else
@@ -71,7 +73,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
 									    CppProjectEvent.WORKING,
 									    _status,
-									    _plugin.getCurrentProject()));
+									    _project));
 		}
 	}
     }
@@ -355,8 +357,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		if (!_statuses.contains(status))
 		    {
 			_statuses.add(status);
-			
-			MonitorStatusThread monitor = new MonitorStatusThread(status);
+			IProject project = _plugin.getCurrentProject();
+			MonitorStatusThread monitor = new MonitorStatusThread(status, project);
 			monitor.setWaitTime(1000);
 			monitor.start();
 		    }
@@ -654,36 +656,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	}
     }
 
-    private void closeEditors()
-    {
-	IProject[] projects = _workbench.getRoot().getProjects();
-
-	for (int i = 0; i < projects.length; i++)
-	    {	
-		if (_plugin.isCppProject(projects[i]))
-		  {
-		      closeEditors(projects[i]);
-		  }
-	    }
-
-	RemoteProjectAdapter rmtAdapter = RemoteProjectAdapter.getInstance();
-	if (rmtAdapter != null)
-	    {
-		IProject[] rprojects = rmtAdapter.getProjects();
-		
-		if (rprojects != null)
-		    {
-			for (int j = 0; j < rprojects.length; j++)
-			    {	
-				if (_plugin.isCppProject(rprojects[j]))
-				    {
-					closeEditors(rprojects[j]);
-				    }
-			    }
-		    }
-	    }
-    }
-
     public boolean isBeingEdited(IResource resource)
     {
 	IWorkbench desktop = CppPlugin.getDefault().getWorkbench();
@@ -718,14 +690,44 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return false;
     }
 
+    private void closeEditors()
+    {
+	IProject[] projects = _workbench.getRoot().getProjects();
+
+	for (int i = 0; i < projects.length; i++)
+	    {	
+		if (_plugin.isCppProject(projects[i]))
+		  {
+		      closeEditors(projects[i]);
+		  }
+	    }
+
+	RemoteProjectAdapter rmtAdapter = RemoteProjectAdapter.getInstance();
+	if (rmtAdapter != null)
+	    {
+		IProject[] rprojects = rmtAdapter.getProjects();
+		
+		if (rprojects != null)
+		    {
+			for (int j = 0; j < rprojects.length; j++)
+			    {	
+				if (_plugin.isCppProject(rprojects[j]))
+				    {
+					closeEditors(rprojects[j]);
+				    }
+			    }
+		    }
+	    }
+    }
+
+    
     private void closeEditors(IProject project)
     {
 	IWorkbench desktop = CppPlugin.getDefault().getWorkbench();
 
 	IWorkbenchWindow[] windows = desktop.getWorkbenchWindows();
 	for (int a = 0; a < windows.length; a++)
-	    {
-	      
+	    {	      
 		IWorkbenchWindow window = windows[a];
 		IWorkbenchPage[] pages = window.getPages();
 		for (int b = 0; b < pages.length; b++)
@@ -741,21 +743,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    if (input != null)
 				      {
 					IFile file = input.getFile();
-						
-						if (file instanceof ResourceElement)
-						    {
-							if (getProjectFor(file) == project)
-							    {
-								Display d= getDummyShell().getDisplay();
-								d.asyncExec(new CloseEditorAction(page, editor));
-							    }
-						    }
+					
+					if (file.getProject().getLocation() == project.getLocation())
+					    {
+						Display d= getDummyShell().getDisplay(); 
+						d.asyncExec(new CloseEditorAction(page, editor));
 					    }
-				    }
-			    } 
-
-		    }
-	    }	
+				      }
+				  } 
+			    }
+		    }	
+	    }
     }
 
     public void shutdown()
@@ -797,7 +795,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public void closeProject(IProject project)
   {
-    closeEditors(project);
+      // close editors
+      closeEditors(project);
+      
+      // remote temp information
+      for (int i = 0; i < _tempFiles.size(); i++)
+	  {
+	      IFile file = (IFile)_tempFiles.get(i);
+	      if (file.getProject() == project)
+		  {
+		      _tempFiles.remove(file);
+		      file = null;
+		      i--;
+		  }
+	  }
 
     DataStore dataStore = _plugin.getDataStore();	
     if (project instanceof Repository)
@@ -1087,7 +1098,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return result;
     }  
 
-    private DataElement findResourceElement(DataElement root, String path)
+    public DataElement findResourceElement(DataStore dataStore, String path)
+    {
+	return findResourceElement(findWorkspaceElement(dataStore),  path);
+    }
+
+    public DataElement findResourceElement(DataElement root, String path)
     {
 	DataElement found = null;
 	if (compareFileNames(root.getSource(), path))
@@ -1143,7 +1159,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       if (projectObj == null)
 	  {
 	      projectObj = dataStore.createObject(workspace, type, project.getName(), project.getLocation().toString());
-	      dataStore.setObject(workspace);
+
+	      if (dataStore != _plugin.getDataStore())
+		  {
+		      dataStore.setObject(workspace);
+		  }
 	  } 
 
       return projectObj;
