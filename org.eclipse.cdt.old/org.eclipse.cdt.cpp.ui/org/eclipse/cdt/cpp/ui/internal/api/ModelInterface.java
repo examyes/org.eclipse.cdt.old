@@ -622,7 +622,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void initializeProject(IProject project)
     {
-	if (_plugin.isCppProject(project))
+	if (project != null && _plugin.isCppProject(project))
 	    {
 		DataStore dataStore = _plugin.getDataStore();
 		DataElement workspace = findWorkspaceElement(dataStore);
@@ -1161,11 +1161,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
 	else
 	    {
-	    	if (!root.isExpanded())
-	    	{
-	    		root.expandChildren(true);	
-	    	}
-	    	
 	    	ArrayList children = root.getAssociated("contents");
 		for (int i = 0; i < children.size(); i++)
 		    {
