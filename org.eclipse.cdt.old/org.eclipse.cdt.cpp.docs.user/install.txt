@@ -4,30 +4,22 @@ Upgrading
 ---------
 
 If you have a previous version of the CDT installed, you should remove it before
-installing the 20020116 driver.  To do this, remove the CDT plugins from your 
+installing the 20020208 driver.  To do this, remove the CDT plugins from your 
 eclipse/plugins directory if you are sure that you have not installed any other
-plugins whose names begin with "com.ibm".  
+plugins whose names begin with "com.ibm" or "org.eclipse.cdt".  
 
-		rm -rf <some_dir>/eclipse/plugins/com.ibm*
+		rm -rf <some_dir>/eclipse/plugins/com.ibm* <some_dir>/eclipse/plugins/org.eclipse.cdt*
 
 If you have installed some other plugins whose names may also start with 
-"com.ibm", or if you are not sure, then only delete the following plugins:
+"com.ibm", or if you are not sure, then only delete the following plugins (if
+they exist):
 
-org.eclipse.cdt.cpp.docs.user
-org.eclipse.cdt.cpp.miners
-org.eclipse.cdt.cpp.miners.parser
-org.eclipse.cdt.cpp.ui
-com.ibm.debug
-com.ibm.debug.doc.user
-org.eclipse.cdt.debug.gdbPicl
-org.eclipse.cdt.dstore.core
-org.eclipse.cdt.dstore.extra
-org.eclipse.cdt.dstore.extra.server
-org.eclipse.cdt.dstore.hosts
-org.eclipse.cdt.dstore.miners
-org.eclipse.cdt.dstore.ui
-com.ibm.linux.help
+com.ibm.cpp.*
+com.ibm.dstore.*
+com.ibm.debug.*
 com.ibm.lpex
+com.ibm.linux.help
+org.eclipse.cdt.*
 
 We will be providing an installer that will take care of this for you in future 
 releases.
@@ -51,13 +43,13 @@ loaded try the following:
 
 Installation
 ------------
-To install the plugin for regular use, simply unzip cdt-eclipse-20020116-local.zip 
+To install the plugin for regular use, simply unzip cdt-eclipse-20020208-local.zip 
 into the eclipse/plugins directory:
-     unzip cdt-eclipse-20020116-local.zip -d <...>/eclipse/plugins
+     unzip cdt-eclipse-20020208-local.zip -d <...>/eclipse/plugins
 Once you have unzipped the CDT plugins into the eclipse/plugins directory,
 the CDT should be ready for use.
 
-To work with remote projects, you will need to install cdt-eclipse-20020116-server.zip
+To work with remote projects, you will need to install cdt-eclipse-20020208-server.zip
 on the remote machine.  Refer to org.eclipse.cdt.cpp.docs.user/tasks/remote/server.htm
 for details.
 
@@ -67,7 +59,7 @@ Building
 
 To generate a build environment (which is not necessary to run the CDT) for the CDT 
 plugins, perform the following:
- 1. Ensure that the cdt-eclipse-20020116-local.zip has been unzipped in your 
+ 1. Ensure that the cdt-eclipse-20020208-local.zip has been unzipped in your 
     eclipse/plugins directory
  2. Goto the .../eclipse/plugins/org.eclipse.cdt.dstore.core directory
  3. Type make dev
