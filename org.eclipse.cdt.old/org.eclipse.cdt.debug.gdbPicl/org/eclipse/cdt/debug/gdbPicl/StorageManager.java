@@ -28,7 +28,7 @@ public class StorageManager extends ComponentManager      //HC
     * Adds change packets for this component to a reply packet
     */
    public void addChangesToReply(EPDC_Reply rep)
-   { 
+   {    	
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"................ StorageManager.addChangesToReply _changedStorage.size="+_changedStorage.size() );
 
@@ -256,6 +256,9 @@ public class StorageManager extends ComponentManager      //HC
       // Only add this StorageMonitor if it has changed since last update
       if (monitor.hasChanged() && !_changedStorage.contains(monitor))
          _changedStorage.addElement(monitor);
+         
+      // check for changed variables   
+      _debugSession._variableMonitorManager.updateMonitors();
    }
  
    /**

@@ -143,26 +143,11 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
          boolean ok = _debugSession.executeGdbCommand(cmd);
          if( ok )
          {
-//            _debugSession.getGdbResponseLines();
             _debugSession.addCmdResponsesToUiMessages();
             _debugSession.cmdResponses.removeAllElements();
-            cmd = "display ";
-            ok = _debugSession.executeGdbCommand(cmd);
-            if( ok )
-            {
-//               _debugSession.getGdbResponseLines();
-               _debugSession.addCmdResponsesToUiMessages();
-               _debugSession.cmdResponses.removeAllElements();
-            }
          }
          updateMonitors();
-/*
-         monitor.getMonitoredVariable().setScalarValue(exprValue);
-         monitor.modifyMonitorValue();
-         monitor.updateVariable();
-         if (!_changedMonitors.contains(monitor))
-            _changedMonitors.addElement(monitor);
-*/
+//         _debugSession._storageManager.updateStorage();
       }
    }
 
@@ -189,15 +174,9 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
          {
             _debugSession.addCmdResponsesToUiMessages();
             _debugSession.cmdResponses.removeAllElements();
-            cmd = "display ";
-            ok = _debugSession.executeGdbCommand(cmd);
-            if( ok )
-            {
-               _debugSession.addCmdResponsesToUiMessages();
-               _debugSession.cmdResponses.removeAllElements();
-            }
          }
          updateMonitors();
+//         _debugSession._storageManager.updateStorage();
       }
    }
 
@@ -278,6 +257,16 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
 
       int length = _debugSession.monitorChangedID.size();
       
+		if (length == 0) {
+			String cmd = "display ";
+			boolean ok = _debugSession.executeGdbCommand(cmd);
+			if (ok) {
+				_debugSession.addCmdResponsesToUiMessages();
+				_debugSession.cmdResponses.removeAllElements();
+			}
+			length = _debugSession.monitorChangedID.size();
+		}
+      
       if (length !=0 )
       {
          Enumeration elements = _monitors.elements();
@@ -332,7 +321,7 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
          }
       }
 
-     _debugSession.monitorChangedID.removeAllElements();
+     _debugSession.monitorChangedID.removeAllElements();    
      _debugSession.monitorChangedName.removeAllElements();
      _debugSession.monitorChangedValue.removeAllElements();
    }
@@ -404,6 +393,10 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
           if (Gdb.traceLogger.ERR)
               Gdb.traceLogger.err(2,"$$$$$$$$$$$$$$$$ GdbVariableMonitorManager.addExpression evalInfo.expressionFailed || isDeferred");
       }
+      
+    _debugSession.monitorChangedID.removeAllElements();
+    _debugSession.monitorChangedName.removeAllElements();
+    _debugSession.monitorChangedValue.removeAllElements();
 
       return evalInfo;
    }
