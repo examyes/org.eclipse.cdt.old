@@ -10,7 +10,7 @@ public class ConfigureInManager {
 	String amKey = new String("AM_INIT_AUTOMAKE");
 	String acKey = new String("AC_OUTPUT");
 	String pack = new String("@PACKAGE@");
-	String makefile = new String("/Makefile ");// note the space @ the end
+	String makefile = new String("/Makefile");
 	int[] delimPosition = {-1,-1,-1};
 	char delim = '@';
 	String[] subdirs;
@@ -191,10 +191,10 @@ public class ConfigureInManager {
 	{
 		line = line.substring(0,line.indexOf('('));
 		StringBuffer buff = new StringBuffer(line);
-		buff.append("( Makefile");
+		buff.append("(Makefile"+" ");
 		for(int j = 0; j< subdirs.length; j++)
 			if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
-				buff.append(subdirs[j]).append(makefile).append('\\');
+				buff.append(" "+subdirs[j]).append(makefile);
 		buff.append(')');	
 		return buff.toString();
 	}
