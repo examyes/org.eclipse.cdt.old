@@ -124,7 +124,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	   if (_instance == null)
 	       {	
 		   _instance = this;
-		   initDefaultBuildPreference();
+		   initDefaultPreferences();
 		   initDataStore();
 	       }
 	   super.startup();
@@ -139,7 +139,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
       	manager.registerAdapters(new ResourceAdapterFactory(_interface), IResource.class);	  
       }
 
-    public void initDefaultBuildPreference()
+    private void initDefaultPreferences()
     {
 	ArrayList history = readProperty("DefaultBuildInvocation");
 	if ((history == null) || (history.size() == 0))
@@ -148,6 +148,13 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 		ArrayList list = new ArrayList();
 		list.add(defaultBuild);
 		writeProperty("DefaultBuildInvocation", list);
+	    }
+	ArrayList includePath = readProperty("DefaultIncludePath");
+	if (includePath == null || includePath.size() == 0)
+	    {
+		ArrayList list = new ArrayList();
+		list.add("/usr/include");
+		writeProperty("DefaultIncludePath", list);
 	    }
     }
 
