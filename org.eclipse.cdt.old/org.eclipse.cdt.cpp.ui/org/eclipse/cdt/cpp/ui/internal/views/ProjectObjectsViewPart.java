@@ -42,8 +42,6 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	provider.addPTDescriptor(parsedSourceD);
        	provider.addPTDescriptor(includedSourceD); 
 	provider.addPTDescriptor(parsedFilesD);
-       	provider.addPTDescriptor(builtInD);
-       	provider.addPTDescriptor(unresolvedD);
 
 
 	return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader, provider);
