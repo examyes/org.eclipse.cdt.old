@@ -321,8 +321,9 @@ public class Connection
     public void delete()
     {
         disconnect();
-        _parent.removeNestedData(_element);
+	//        _parent.removeNestedData(_element);
         DataStore ds = _parent.getDataStore();
+	ds.deleteObject(_parent, _element);
         ds.refresh(_parent);
     }
     

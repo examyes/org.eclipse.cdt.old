@@ -245,16 +245,8 @@ public class ExtendedTreeViewer extends TreeViewer
 				Tree tree = getTree();
 				tree.setRedraw(false);
 
-				/***/
-				Item item = findItemFor(tree, parent);
-				if (item != null)
-				    {
-					updateItem(item, parent);
-					updateChildren(item, parent, parent.getAssociated(_property).toArray());
-				    }
-				/****/
 				
-				//internalRefresh(parent);					  
+				internalRefresh(parent);					  
 				getTree().setRedraw(true);
 			    }
 			catch (Exception e)
