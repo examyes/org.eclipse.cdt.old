@@ -409,7 +409,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	monitorStatus(status);
 	
-	showView("com.ibm.dstore.hosts.views.OutputViewPart", _status);
+	showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
 	return status;	
       }
 
@@ -942,7 +942,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       // needed because eclipse doesn't support remote files
       if (dataStore != _plugin.getDataStore())
 	  {
-	      showView("com.ibm.dstore.hosts.views.OutputViewPart", _status);
+	      showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
 	  }
     }
   }
