@@ -123,7 +123,7 @@ public abstract class RegistersMonitor
 	            int groupID = 1;
 	            char delimiter = '\u0009';
 	            
-		        if (z > genValues.length)
+		        if (z >= genValues.length)
 	            	break;
 	            
 	       		int x = genValues[z].indexOf(delimiter);
