@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.ui.*;
 
+import java.util.*;
+
 public class ProjectObjectsViewPart extends ProjectViewPart
 {
     public ProjectObjectsViewPart()
@@ -133,9 +135,28 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      DataElement theInput = null;
      if (theElement.getType().equals("file"))
 	 {
-	     theInput = findParseFile(theElement);
+	     boolean scopeView = false;
+	     ArrayList scope = _plugin.readProperty("ScopeProjectObjectsView");
+	     if (scope.size() > 0)
+		 {
+		     String pref = (String)scope.get(0);
+		     if (pref.equals("Yes"))
+			 {
+			     scopeView = true;
+			 }
+		 }
+
+	     if (scopeView)
+		 {
+		     theInput = findParseFile(theElement);
+		 }
+	     else
+		 {
+		     theElement = _api.getProjectFor(theElement);
+		 }
 	 }
-     else if (theElement.getType().equals("Project"))
+     
+     if (theElement.getType().equals("Project"))
 	 {
 	     theInput = findParseFiles(theElement);
 	 }

@@ -500,6 +500,11 @@
 		class="com.ibm.cpp.ui.internal.preferences.GenericViewPreferencePage"
 		category= "com.ibm.cpp.ui.internal.preferences.ViewPreferencePage">
 	</page>	
+	<page name="%Project_Objects_View"
+		id="com.ibm.cpp.ui.internal.preferences.ProjectObjectsViewPreferencePage"
+		class="com.ibm.cpp.ui.internal.preferences.ProjectObjectsViewPreferencePage"
+		category= "com.ibm.cpp.ui.internal.preferences.ViewPreferencePage">
+	</page>	
 	<page name="%Output_View"
 		id="com.ibm.cpp.ui.internal.preferences.OutputViewPreferencePage"
 		class="com.ibm.cpp.ui.internal.preferences.OutputViewPreferencePage"
