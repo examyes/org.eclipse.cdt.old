@@ -156,53 +156,53 @@ public class ViewMenu implements IMenuListener
   }
 
   public ViewMenu(ViewToolBar parent, Composite toolBar, IActionLoader loader)
-      {
+    {
         _parent = parent;
-		_dataStore = parent.getDataStore();
+	_dataStore = parent.getDataStore();
         _toolBar = toolBar;
         _loader = loader;
-		_isEnabled = true;
-
+	_isEnabled = true;
+	
         GridData textData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | 
                                          GridData.GRAB_HORIZONTAL);
-
+	
 	_pluginPath = parent.getPluginPath() + java.io.File.separator;
 	
 	if (_loader != null)
-	{
-	_relGif = _loader.getImageString("relation");
-	_filGif = _loader.getImageString("filter");
-	}
+	    {
+		_relGif = _loader.getImageString("relation");
+		_filGif = _loader.getImageString("filter");
+	    }
 	
-    _filterItems = new ArrayList();
-    _relationItems = new ArrayList();
-
+	_filterItems = new ArrayList();
+	_relationItems = new ArrayList();
+	
 	
         // relation graphics
         _viewToolBar = new ToolBar(toolBar, SWT.FLAT);
         _relationLabel = new ToolItem(_viewToolBar, SWT.DROP_DOWN, 0);
-		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		if (plugin != null)
+	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+	if (plugin != null)
 	    {
-			_relationLabel.setImage(plugin.getImage(_relGif));
+		_relationLabel.setImage(plugin.getImage(_relGif));
 	    }
-		else
+	else
 	    {
-			_relationLabel.setText(_dataStore.getLocalizedString("model.contents"));
+		_relationLabel.setText(_dataStore.getLocalizedString("model.contents"));
 	    }
-
-		_relationLabel.addSelectionListener(
-                                     new SelectionAdapter()
-				     {
-                                       public void widgetSelected(SelectionEvent e) 
-                                           {
-                                             showRelationMenu();
-                                           }
-				     }
-				   );
-  
+	
+	_relationLabel.addSelectionListener(
+					    new SelectionAdapter()
+						{
+						    public void widgetSelected(SelectionEvent e) 
+						    {
+							showRelationMenu();
+						    }
+						}
+					    );
+	
         _filterLabel = new ToolItem(_viewToolBar, SWT.DROP_DOWN, 1);
-		if (plugin != null)
+	if (plugin != null)
 	    {
 		_filterLabel.setImage(plugin.getImage(_filGif));
 	    }
@@ -210,27 +210,27 @@ public class ViewMenu implements IMenuListener
 	    {
 		_filterLabel.setText(_dataStore.getLocalizedString("model.all"));
 	    }
-
+	
 	_filterLabel.addSelectionListener(
                                           new SelectionAdapter()
-                                          {
-                                            public void widgetSelected(SelectionEvent e) 
-                                                {
-                                                  showFilterMenu();
-                                                }
-                                          }
+					      {
+						  public void widgetSelected(SelectionEvent e) 
+						  {
+						      showFilterMenu();
+						  }
+					      }
                                           );
-
+	
         toolBar.setLayout(new FillLayout());
 	_viewToolBar.setLayout(new GridLayout());
-
+	
         
         _menuMgr = new MenuManager("#ViewMenu");
 	_menuMgr.setRemoveAllWhenShown(true);
 	
 	_menuMgr.addMenuListener(this);
-
-      }
+	
+    }
       
  
  
@@ -489,14 +489,14 @@ public class ViewMenu implements IMenuListener
 	_relationItems.clear();
 	if (descriptor != null)
 	    {
-		ArrayList items = descriptor.getDataStore().getRelationItems(descriptor, _fixatedObjectType);
+		ArrayList items = descriptor.getDataStore().getRelationItems(descriptor, _fixatedRelationType);
 		for (int i = 0; i < items.size(); i++)
 		    {
 			DataElement item = (DataElement)items.get(i);
 			if (item != null)
 			    {
 				int depth = item.depth();
-				if (depth > 0)
+				if (depth > 0 || _fixatedRelationType != null)
 				    {
 					if (!_relationItems.contains(item))
 					    {
@@ -517,12 +517,12 @@ public class ViewMenu implements IMenuListener
 	  DataStore dataStore = _input.getDataStore();
 	  DataElement descriptor = _inputDescriptor;
 	  _filterItems.clear();
-	  ArrayList items = dataStore.getFilterItems(descriptor, null, _relationSelected);
+	  ArrayList items = dataStore.getFilterItems(descriptor, _fixatedObjectType, _relationSelected);
 	  for (int i = 0; i < items.size(); i++)
 	      {
 		  DataElement item = (DataElement)items.get(i);
 		  int depth = item.depth();
-		  if (depth > 0)
+		  if (depth > 0 || _fixatedObjectType != null)
 		      {
 			  if (!_filterItems.contains(item))
 			      {
