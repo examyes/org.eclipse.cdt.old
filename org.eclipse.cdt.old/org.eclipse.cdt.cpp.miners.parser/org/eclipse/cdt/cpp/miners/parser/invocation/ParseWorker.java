@@ -166,20 +166,21 @@ public class ParseWorker extends Thread
  private void beginObjectParse(DataElement theObject)
  {
   String theType = theObject.getType();
+  String theName = theObject.getName();
   done = false;
   partiallyDone = false;
   errorCount = 0;
  
   //Parse Based on the appropriate type mapping.
   if (theType == null) return;
-  else if (theType.equals(ParserSchema.Struct))         parseClass(theType);
+  else if (theType.equals(ParserSchema.Struct))         parseClass(theType, theName);
   else if (theType.equals(ParserSchema.Function))       parseFunction(theType); 
-  else if (theType.equals(ParserSchema.Class))          parseClass(theType);
+  else if (theType.equals(ParserSchema.Class))          parseClass(theType, theName);
   else if (theType.equals(ParserSchema.Constructor))    parseFunction(theType);
   else if (theType.equals(ParserSchema.Enum))           parseEnum(theType);
-  else if (theType.equals(ParserSchema.Namespace))      parseClass(theType);
+  else if (theType.equals(ParserSchema.Namespace))      parseClass(theType, theName);
   else if (theType.equals(ParserSchema.Destructor))     parseFunction(theType);
-  else if (theType.equals(ParserSchema.Union))          parseClass(theType);
+  else if (theType.equals(ParserSchema.Union))          parseClass(theType, theName);
   else if (theType.equals(ParserSchema.MainFunction))   parseFunction(theType);
   else if (theType.equals(ParserSchema.Namespace))      parseNamespace(theType);
  }
@@ -203,16 +204,16 @@ public class ParseWorker extends Thread
   }
  } 
 
- private void parseClass(String theType)
+ private void parseClass(String theType, String theName)
  {
   while (!done)
   {
    try 
    { 
     if (partiallyDone)
-     _theParser.member_declaration_list();
+     _theParser.member_declaration_list(theName);
     else
-     _theParser.class_body(); 
+     _theParser.class_body(theName); 
     done = true;
    }
    catch (Throwable e) 

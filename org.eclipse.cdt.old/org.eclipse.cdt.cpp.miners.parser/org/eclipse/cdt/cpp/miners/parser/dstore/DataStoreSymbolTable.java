@@ -203,12 +203,15 @@ public class DataStoreSymbolTable implements SymbolTable
   if (objType.getName().equals(ParserSchema.Variable)) 
    objName = parseObjectName(objName.trim());
     
-  if (_isTypedef)
+  if (_isTypedef && objType == ParserSchema.dVariable)
+  {
    objType = ParserSchema.dTypedef;
+   _isTypedef = false;
+  }  
    
   _curObj.object = _dataStore.createObject(_root, objType, objName, _currentSource + ":" + beginLine);//, "" + _idCounter++);
   _curObj.object.setAttribute(DE.A_VALUE,objName);
-   
+  
   if (isScope) 
    _root = _curObj.object;
   
@@ -219,82 +222,72 @@ public class DataStoreSymbolTable implements SymbolTable
   
 
  if (    objType.getName().equals(ParserSchema.Function) 
+      || objType.getName().equals(ParserSchema.MainFunction)
       || objType.getName().equals(ParserSchema.Constructor) 
       || objType.getName().equals(ParserSchema.Destructor)
     )
    _curObj.createFunctionReferences();
  
    _curObj.reset();
-  _isTypedef = false;
+  
   return _curObj.object;
  } 
  
- //Very inefficient use of Strings here...fix this
+ 
  public String parseObjectName(String name)
  {
   //Find a [ character as in const char *c [3] [5], and remove everything after it.
+  int firstIndex = 0;
+  int lastIndex = name.length() - 1;
   int suffixes = name.indexOf("[");
-  String suffixString = "";
   if (suffixes > 0)
   {
-   suffixString = name.substring(suffixes, name.length());
-   name = name.substring(0,suffixes).trim();
+   lastIndex = suffixes - 1;
+   while(lastIndex >=0 && Character.isWhitespace(name.charAt(lastIndex)))
+    lastIndex--;
   }
-  if (name.charAt(name.length()-1) == ')')
+   
+  if (name.charAt(lastIndex) == ')')
   {
-   suffixes = name.lastIndexOf("(");
+   suffixes = name.lastIndexOf("(", lastIndex);
    if (suffixes > 0)
    { 
-    suffixString = name.substring(suffixes, name.length()) + " " + suffixString;
-    name = name.substring(0,suffixes).trim();
+    lastIndex = suffixes - 1;
+    while(lastIndex >=0 && Character.isWhitespace(name.charAt(lastIndex))) 
+     lastIndex--;    
    }
   }
-  
-  
+   
   //Now find the last name
-  int lastSpace = name.lastIndexOf(" ");
-  String nameString = name;
+  int lastSpace = name.lastIndexOf(" ", lastIndex);
   if (lastSpace > 0)
   {
-   nameString = name.substring(lastSpace+1, name.length());
-   name = name.substring(0, lastSpace);
-  }
-
-  //Now add the suffixes to the remaining types, and add them all to the the currentObject
-  name = name + " " + suffixString;
-  name = name.trim();
-  int startFrom = 0;
-  boolean done = false;
-  while (!done)
-  {
-   int nextSpace = name.indexOf(" ", startFrom);
-   if (nextSpace < 0)
-    done = true;
-   else
-   {
-    //Here we need to handle the case for function pointer types, which may contain spaces, but need
-    //to be processed as one type...So we match parentheses: (e.g. (*)(int *, double))
-    if (name.charAt(startFrom) == '(')
-     {
-      int parens = 1;
-      nextSpace = startFrom + 1;
-      while ((nextSpace < name.length()) && ( (parens > 0) || (name.charAt(nextSpace)!=' ')) )
-      {
-       if (name.charAt(nextSpace) == ')')
-        parens--;
-       else if (name.charAt(nextSpace) == '(')
-        parens++;
-       nextSpace++;
-      }
-     }
-    
-    _curObj.addVariableType(lookupTypeElement(name.substring(startFrom, nextSpace)));
-    startFrom = nextSpace + 1;
+   firstIndex = lastSpace + 1;
+   //Find the bitfield declarator ":"
+   int lastColon = name.indexOf(':', lastSpace);
+   if (lastColon > 0 && lastColon < lastIndex)
+   {    
+    lastIndex = lastColon - 1;
    }
   }
-  if (startFrom < name.length())
-   _curObj.addVariableType(lookupTypeElement(name.substring(startFrom, name.length())));
- 
+
+  String nameString = name.substring(firstIndex, lastIndex+1);
+  String typeString = name.substring(0, firstIndex) + name.substring(lastIndex+1);
+  
+  //In the case of a function pointer, we want to represent the type as 
+  // a single string.
+  if (typeString.indexOf("(*)") >= 0)
+  {
+   _curObj.addVariableType(lookupTypeElement(typeString));
+   return nameString;
+  }
+  
+  StringTokenizer tokenizer = new StringTokenizer(typeString);
+  while (tokenizer.hasMoreTokens())
+  {
+    _curObj.addVariableType(lookupTypeElement(tokenizer.nextToken()));  
+  }
+   
   return nameString;
  }
  
@@ -380,7 +373,7 @@ public class DataStoreSymbolTable implements SymbolTable
   DataElement theObj = null;
   
   //First lookup types in the builtins...
-  if ( (theObj = (DataElement)_builtinTypes.get(theType)) != null)
+  if ( (theObj = (DataElement)_builtinTypes.get(theType)) != null) 
    return theObj;
   
   //Now do a regular name lookup...
