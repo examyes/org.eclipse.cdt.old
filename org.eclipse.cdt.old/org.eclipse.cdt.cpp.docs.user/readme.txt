@@ -46,6 +46,13 @@ Here are some of the most common known problems:
 - There are several known issues with UI responsiveness during a large parse job.  
   For now, once a large parse has been started, it is best to wait until the status
   bar has disappeared before trying to access the parse information in the UI.
+  The status bar actually disappears when a "first-level" parse of all files has
+  been completed.  There is still more work being done by the parser at this point.
+  For some very large parse jobs, UI responsiveness may not return to normal until 
+  the parser is completely finished.  Currently the only way to know when the 
+  parser is completely finished is to check the CPU usage for the java vm used
+  to start eclipse, and verify that it is near 0.   The performance of the parser
+  is is one of the key areas that will be addressed in future releases of the CDT.
  
 - When parsing a large project, there is a potential to use a large amount 
   of memory. If you encounter memory problems create a batch\script 
