@@ -6,25 +6,8 @@ package org.eclipse.cdt.dstore.extra.internal.extra;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.ui.*;
-import org.eclipse.ui.part.*;
 
-import org.eclipse.jface.viewers.*; 
-import org.eclipse.jface.action.*; 
-
-import org.eclipse.core.runtime.*; 
-import org.eclipse.core.resources.*;
-
-import org.eclipse.swt.events.*;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.swt.graphics.*;
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.resource.*;
-
-import java.util.*;
- 
-
-public class DataElementActionFilter implements IActionFilter 
+public class DataElementActionFilter implements org.eclipse.ui.IActionFilter
 {
     private static String                  _type = "type";
     private static DataElementActionFilter _instance;
@@ -41,17 +24,21 @@ public class DataElementActionFilter implements IActionFilter
      */
     public boolean testAttribute(Object target, String name, String value) 
     {
-	if (name.equals(_type)) 
-	    {
+	if (name.equals(_type) && target instanceof IDataElement) 
+	    {	    	
 		IDataElement le = (IDataElement)target;
-		return le.getType().equals(value);
+		if (le.getType().equals(value) || le.isOfType(value))
+		    {
+			return true;
+		    }
 	    }       
 	
 	return false;
     }
 
     public static boolean matches(Class aClass)
-    {
-	return (aClass == org.eclipse.ui.IActionFilter.class);    
+    {	
+    	return (aClass == org.eclipse.ui.IActionFilter.class);    
     }
+
 }

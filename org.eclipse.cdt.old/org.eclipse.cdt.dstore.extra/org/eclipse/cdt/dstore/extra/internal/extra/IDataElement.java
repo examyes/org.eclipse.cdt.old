@@ -16,7 +16,7 @@ public interface IDataElement extends IElement
     ArrayList getNestedData();
     int getNestedSize();
     
-    void expandChildren();
+    void expandChildren(); 
     IDataElement expandChildren(boolean b);
 
     Object getElementProperty(Object obj);
