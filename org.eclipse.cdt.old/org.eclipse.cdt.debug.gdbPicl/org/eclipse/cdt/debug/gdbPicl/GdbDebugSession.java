@@ -837,7 +837,7 @@ public class GdbDebugSession extends DebugSession {
 		_debuggeeProcessID = "";
 		for (int i = 0; i < lines.length; i++) {
 			ix = lines[i].indexOf(process);
-			if (ix != 0) {
+			if (ix > 0) {
 				dot = lines[i].indexOf(".");
 				_debuggeeProcessID = lines[i].substring(ix + process.length(), dot);
 				if (Gdb.traceLogger.DBG)
@@ -845,6 +845,24 @@ public class GdbDebugSession extends DebugSession {
 						1,
 						"GdbDebugSession.runToMain() _debuggeeProcessID: " + _debuggeeProcessID);
 				break;
+			}
+			else
+			{
+				process = "(LWP ";
+				ix = lines[i].indexOf(process);
+				if (ix > 0)
+				{
+					int bracket = lines[i].lastIndexOf(")");
+					if (bracket > 0)
+						_debuggeeProcessID = lines[i].substring(ix + process.length(), bracket);
+					else
+						_debuggeeProcessID = lines[i].substring(ix + process.length(), ix + process.length()+5);					
+					if (Gdb.traceLogger.DBG)
+						Gdb.traceLogger.dbg(
+							1,
+							"GdbDebugSession.runToMain() _debuggeeProcessID: " + _debuggeeProcessID);
+					break;						
+				}				
 			}
 		}
 
