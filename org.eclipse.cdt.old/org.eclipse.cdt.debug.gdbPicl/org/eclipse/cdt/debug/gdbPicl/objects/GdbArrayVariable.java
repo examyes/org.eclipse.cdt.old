@@ -207,11 +207,23 @@ public class GdbArrayVariable extends GdbVariable {
 		String fieldValue;
 		String fieldName;
 		String fieldType = _type;
-		int comma = parseStr.indexOf(",");
+		String delimiter;
+		short  adjustment = 0;
+
+		if (parseStr.startsWith("\""))
+		{
+			delimiter = "\",";
+			adjustment = 1;
+		}			
+		else
+			delimiter = ",";
+		
+		
+		int comma = parseStr.indexOf(delimiter) + adjustment;
 		int counter = 0;
 		
 		// tokenize by "," and get the values
-		while (comma != -1)
+		while (comma-adjustment != -1)
 		{
 			// construct name
 			fieldName = _name + "[" + counter + "]";
@@ -220,7 +232,7 @@ public class GdbArrayVariable extends GdbVariable {
 			fieldValue = parseStr.substring(0, comma);
 			parseStr = parseStr.substring(comma+2);
 
-			comma = parseStr.indexOf(",");			
+			comma = parseStr.indexOf(delimiter) + adjustment;			
 
 			// create element 			
 	    	GdbScalarVariable newElement  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
@@ -231,7 +243,7 @@ public class GdbArrayVariable extends GdbVariable {
 			_numNodes++;
 			
 			// if comma == -1, last element
-			if (comma == -1)
+			if (comma-adjustment == -1)
 			{
 				fieldValue = parseStr;
 				fieldName = _name + "[" + counter + "]";

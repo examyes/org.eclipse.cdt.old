@@ -276,7 +276,23 @@ public class GdbObjectVariable extends GdbVariable {
 				if (comma != -1)
 				{
 					comma++;	// skip the quote
+					
+					// in case of editing monitors
+					// when a string is changed and it doesn't fill up the whole buffer
+					// possible output from gdb: "abcde", '\000' <repeats # times>,
+					if (parseStr.charAt(comma+2) == '\'')
+					{
+						int newComma = parseStr.indexOf(">,");
+						
+						if (newComma != -1)
+							comma = newComma+1;
+					}
 					fieldValue = parseStr.substring(equal+2, comma);
+				}
+				else
+				{
+					// something different, just take the next comma
+					comma = parseStr.indexOf(",");
 				}
 			}
 			

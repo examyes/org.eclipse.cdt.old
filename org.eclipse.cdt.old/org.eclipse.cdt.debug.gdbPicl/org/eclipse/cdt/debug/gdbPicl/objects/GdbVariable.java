@@ -54,6 +54,16 @@ public abstract class GdbVariable  extends Variable
    			int equal = testStr.indexOf("=");
    			if (equal != -1)
    			{
+   				
+   				int lastBrace = testStr.lastIndexOf("{");
+   				
+   				if (testStr.charAt(lastBrace+1) == '\"' && equal>lastBrace)
+ 				{
+ 					// array
+ 					// even it has an equal sign.... it starts with quote, so it's a string
+ 					return new GdbArrayVariable(debugSession, varName, type, value, varName, nodeID);
+ 				}
+   				
    				if (!testStr.startsWith("{{"))
  				{
 	   				// object
