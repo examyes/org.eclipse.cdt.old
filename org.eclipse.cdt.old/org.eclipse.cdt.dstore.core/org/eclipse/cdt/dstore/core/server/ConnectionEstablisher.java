@@ -15,131 +15,103 @@ import java.lang.*;
 import java.net.*;
 import java.io.*;
 
+/**
+ * ConnectionEstablisher is responsible for managing the server DataStore and 
+ * facilitating the communication between client and server DataStores.
+ *
+ */
 public class ConnectionEstablisher 
-    //extends Thread
 {
-  private ServerSocket          _serverSocket;
-  private static boolean        _continue;
-
-  private ArrayList             _receivers;
-
-  private ServerCommandHandler  _commandHandler;
-  private ServerUpdateHandler   _updateHandler;
- 
-  private ServerAttributes      _serverAttributes = new ServerAttributes();
-  private DataStore             _dataStore;
-
-  private int                   _maxConnections;
-  private int                   _timeout;
+    private ServerSocket          _serverSocket;
+    private static boolean        _continue;
+    
+    private ArrayList             _receivers;
+    
+    private ServerCommandHandler  _commandHandler;
+    private ServerUpdateHandler   _updateHandler;
+    
+    private ServerAttributes      _serverAttributes = new ServerAttributes();
+    private DataStore             _dataStore;
+    
+    private int                   _maxConnections;
+    private int                   _timeout;
+    
+    /**
+     * Creates the default ConnectionEstablisher.  Communication occurs
+     * on a default port, there is no timeout and no ticket is required
+     * for a client to work with the DataStore.
+     * 
+     */
+    public ConnectionEstablisher()
+    {
+	String port = _serverAttributes.getAttribute(ServerAttributes.A_HOST_PORT);
+	setup(port, null, null);
+    }
+    
+    /**
+     * Creates a ConnectionEstablisher.  Communication occurs
+     * on the specified port, there is no timeout and no ticket is required
+     * for a client to work with the DataStore.
+     * 
+     * @param port the number of the socket port
+     */
+    public ConnectionEstablisher(String port)
+    {
+	setup(port, null, null);
+    }
+    
+    /**
+     * Creates a ConnectionEstablisher.  Communication occurs
+     * on the specified port, a timeout value indicates the idle wait
+     * time before shutting down, and no ticket is required
+     * for a client to work with the DataStore.
+     * 
+     * @param port the number of the socket port
+     * @param timeout the idle duration to wait before shutting down
+     */
+    public ConnectionEstablisher(String port, String timeout)
+    {
+	setup(port, timeout, null);
+    }
   
-  public ConnectionEstablisher()
-  {
-    String port = _serverAttributes.getAttribute(ServerAttributes.A_HOST_PORT);
-    setup(port, null, null);
-  }
-  
-  public ConnectionEstablisher(String port)
-  {
-    setup(port, null, null);
-  }
-  
-  public ConnectionEstablisher(String port, String timeout)
-  {
-  	
-   setup(port, timeout, null);
-  }
-  
-  public ConnectionEstablisher(String port, String timeout, String ticket)
-  {
-   setup(port, timeout, ticket);
-  }
-
-
-  public void setup(String portStr, String timeoutStr, String ticketStr)
-      {
-      _maxConnections = 1; 
-
- 
- 	  // port	
-      int port = Integer.parseInt(portStr);
-      
-      // timeout
-      if (timeoutStr != null)
-      {
-      	_timeout = Integer.parseInt(timeoutStr);
-      }
-      else
-      {
-      	_timeout = 120000;
-      }
-
-      _commandHandler = new ServerCommandHandler(new Loader());
-      _updateHandler = new ServerUpdateHandler();
-
-      _dataStore = new DataStore(_serverAttributes, _commandHandler, _updateHandler, null);
-      DataElement ticket = _dataStore.getTicket();
-      ticket.setAttribute(DE.A_NAME, ticketStr);
-
-      _updateHandler.setDataStore(_dataStore);
-      _commandHandler.setDataStore(_dataStore);
-
-      _receivers = new ArrayList();
-      _continue = true;
-
-      try
-          {
-            // create server socket from port
-            _serverSocket = new ServerSocket(port);
-            
-            if (_timeout > 0)
-            {
-            	_serverSocket.setSoTimeout(_timeout);
-            }
-	    
-	    	System.err.println(ServerReturnCodes.RC_SUCCESS);
-	    	System.err.println(_serverSocket.getLocalPort());
-            System.out.println("Server running on: " + InetAddress.getLocalHost().getHostName());
-          }
-      catch (UnknownHostException e)
-          {
-	      System.err.println(ServerReturnCodes.RC_UNKNOWN_HOST_ERROR);
-	      _continue = false;
-          }         
-      catch (BindException e)
-	  {
-	      System.err.println(ServerReturnCodes.RC_BIND_ERROR);
-	      _continue = false;
-	  }      
-      catch (IOException e)
-          {
-	      System.err.println(ServerReturnCodes.RC_GENERAL_IO_ERROR);
-	      _continue = false;
-          }
-      catch (SecurityException e)
-	  {
-	      System.err.println(ServerReturnCodes.RC_SECURITY_ERROR);
-	      _continue = false;
-	  }
-      }
-
+    /**
+     * Creates a ConnectionEstablisher.  Communication occurs
+     * on the specified port, a timeout value indicates the idle wait
+     * time before shutting down, and ticket specified the required
+     * ticket for a client to present in order to work with the DataStore.
+     *
+     * @param port the number of the socket port
+     * @param timeout the idle duration to wait before shutting down
+     * @param ticket validation id required by the client to access the DataStore
+     */
+    public ConnectionEstablisher(String port, String timeout, String ticket)
+    {
+	setup(port, timeout, ticket);
+    }
+    
+    
+    /**
+     * Starts the run loop for the ConnectionEstablisher.
+     */
     public void start()
     {
 	run();
     }
-
-    public void run()
+    
+    /**
+     * Returns the DataStore.
+     *
+     * @return the DataStore
+     */
+    public DataStore getDataStore()
     {
-      waitForConnections();
+	return _dataStore;
     }
 
-  public DataStore dataStore()
-      {
-        return _dataStore;
-      }
-
-
-
-  public void finished(ServerReceiver receiver)
+    /**
+     * Tells the connection establisher to clean up and shutdown
+     */
+    public void finished(ServerReceiver receiver)
       {
         _updateHandler.removeSenderWith(receiver.socket());
         _receivers.remove(receiver);
@@ -153,7 +125,7 @@ public class ConnectionEstablisher
         }
       }
 
-  public void waitForConnections()
+    private void waitForConnections()
     {
       while (_continue == true)
       {
@@ -167,30 +139,109 @@ public class ConnectionEstablisher
               // add this connection to list of elements
               _receivers.add(receiver);
               _updateHandler.addSender(sender);
-
+	      
               receiver.start();
-
+	      
               if (_receivers.size() == 1)
               {
-                _updateHandler.start();
-                _commandHandler.start();
+		  _updateHandler.start();
+		  _commandHandler.start();
               }
-
+	      
 	      if (_receivers.size() == _maxConnections)
 		  {
-		    _continue = false;
- 			_serverSocket.close();
-		  
+		      _continue = false;
+		      _serverSocket.close();
+		      
 		  }
             }
-
+	
         catch (IOException ioe)
             {
 		System.err.println(ServerReturnCodes.RC_CONNECTION_ERROR);
 		System.err.println("Server: error initializing socket: " + ioe);
 		_continue = false;
             }
+      }      
+    }
+    
+
+    /**
+     * Create the DataStore and initializes it's handlers and communications.
+     *
+     * @param portStr the number of the socket port
+     * @param timeoutStr the idle duration to wait before shutting down
+     * @param ticketStr validation id required by the client to access the DataStore
+     */
+    private void setup(String portStr, String timeoutStr, String ticketStr)
+      {
+	  _maxConnections = 1; 
+	  
+ 	  // port	
+	  int port = Integer.parseInt(portStr);
+	  
+	  // timeout
+	  if (timeoutStr != null)
+	      {
+		  _timeout = Integer.parseInt(timeoutStr);
+	      }
+	  else
+	      {
+		  _timeout = 120000;
+	      }
+	  
+	  _commandHandler = new ServerCommandHandler(new Loader());
+	  _updateHandler = new ServerUpdateHandler();
+	  
+	  _dataStore = new DataStore(_serverAttributes, _commandHandler, _updateHandler, null);
+	  DataElement ticket = _dataStore.getTicket();
+	  ticket.setAttribute(DE.A_NAME, ticketStr);
+	  
+	  _updateHandler.setDataStore(_dataStore);
+	  _commandHandler.setDataStore(_dataStore);
+	  
+	  _receivers = new ArrayList();
+	  _continue = true;
+	  
+	  try
+	      {
+		  // create server socket from port
+		  _serverSocket = new ServerSocket(port);
+		  
+		  if (_timeout > 0)
+		      {
+			  _serverSocket.setSoTimeout(_timeout);
+		      }
+		  
+		  System.err.println(ServerReturnCodes.RC_SUCCESS);
+		  System.err.println(_serverSocket.getLocalPort());
+		  System.out.println("Server running on: " + InetAddress.getLocalHost().getHostName());
+	      }
+	  catch (UnknownHostException e)
+	      {
+		  System.err.println(ServerReturnCodes.RC_UNKNOWN_HOST_ERROR);
+		  _continue = false;
+	      }         
+	  catch (BindException e)
+	      {
+		  System.err.println(ServerReturnCodes.RC_BIND_ERROR);
+		  _continue = false;
+	      }      
+	  catch (IOException e)
+	      {
+		  System.err.println(ServerReturnCodes.RC_GENERAL_IO_ERROR);
+		  _continue = false;
+	      }
+	  catch (SecurityException e)
+	      {
+		  System.err.println(ServerReturnCodes.RC_SECURITY_ERROR);
+		  _continue = false;
+	      }
       }
+
+    private void run()
+    {
+	waitForConnections();
     }
 }
 
