@@ -30,7 +30,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -50,10 +49,8 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 
     // widgets
     private Text                             _programNameField;
-//    private Text                             programParametersField;
-    private Combo                             programParametersField;
-    protected Combo	                        sourceNameField;
-    protected Combo		                     _workingDirectoryField;
+    private Text                             programParametersField;
+    protected Text		                     _workingDirectoryField;
     protected Button                         workingDirectoryBrowseButton;
 
     // constants
@@ -156,7 +153,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
     	
 
     	// new parameters name entry field
-    	programParametersField = new Combo(parametersGroup, SWT.BORDER);
+    	programParametersField = new Text(parametersGroup, SWT.BORDER);
     	//programParametersField.addListener(SWT.Modify, this);
     	data = new GridData(GridData.FILL_HORIZONTAL);
     	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
@@ -168,34 +165,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 			}
 		});
     	programParametersField.setEnabled(true);
-     /*
-   	// source name entry field
-   	sourceNameField = new Combo(sourceContainerGroup,SWT.BORDER);
-   	sourceNameField.addListener(SWT.Modify,this);
-   	sourceNameField.addListener(SWT.Selection,this);
-   	_history = _plugin.readProperty(CppProjectAttributes.LOCATION_LOCAL);
-   	int size = _history.size();
-   	for (int i = 0; i < size; i++)
-   	    {
-   		String item = (String)_history.get(size - i - 1);
-   		if (item != null)
-   		    {
-   			sourceNameField.add(item, i);
-   		    }
-   		
-   		if (i == 0)
-   		    {	
-   			sourceNameField.setText(item);
-   		    }
-   	    }
-
-   	GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-   	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
-   	sourceNameField.setLayoutData(data);
-    */
-
-
-    	
+         	
     	if (initialParametersFieldValue != null)
     	    programParametersField.setText(initialParametersFieldValue);
 
@@ -228,7 +198,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	workingDirectoryGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
    	
    	// Directory name entry field
-   	_workingDirectoryField = new Combo(workingDirectoryGroup,SWT.BORDER);
+   	_workingDirectoryField = new Text(workingDirectoryGroup,SWT.BORDER);
    	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
    	data.horizontalSpan = 1;
    	_workingDirectoryField.setLayoutData(data);
