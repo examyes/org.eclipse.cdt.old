@@ -623,7 +623,7 @@ void declaration() :
    | "namespace" namespace_definition()
    | "using" ("namespace" using_directive() | using_declaration())
    | "asm" asm_definition()
-   | ";" {symtab.setCurrentDeclaration(null);}
+   | ";" {symtab.setCurrentDeclaration(null); symtab.setObjectTypedef(false);}
    | theTypes = declaration_specifiers()
      {
       if (theTypes == null)
@@ -850,6 +850,7 @@ void function_definition(String theTypes, String className) :
          name = "()" + name + " " + theTypes;
        }
        symtab.addObject(ParserSchema.dVariable, name, getToken(0).beginLine, false);
+       symtab.setObjectTypedef(false);
       }
       else
       {
@@ -1112,7 +1113,7 @@ void member_declaration(String className) :
   | "using" using_declaration()
   | "export" "template" "<" template_declaration()
   | "template" "<" template_declaration()
-  | ";" {symtab.setCurrentDeclaration(null);}
+  | ";" {symtab.setCurrentDeclaration(null); symtab.setObjectTypedef(false);}
   | LOOKAHEAD("~") function_definition("", className)
   | theTypes = declaration_specifiers()
     {
