@@ -344,17 +344,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void monitorStatus(DataElement status)
     {
-	if (!_statuses.contains(status))
+	if (status != null)
 	    {
-		_statuses.add(status);
-
-		MonitorStatusThread monitor = new MonitorStatusThread(status);
-		monitor.setWaitTime(1000);
-		monitor.start();
-	    }
-	else if (status.getName().equals("done"))
-	    {
-		_statuses.remove(status);
+		if (!_statuses.contains(status))
+		    {
+			_statuses.add(status);
+			
+			MonitorStatusThread monitor = new MonitorStatusThread(status);
+			monitor.setWaitTime(1000);
+			monitor.start();
+		    }
+		else if (status.getName().equals("done"))
+		    {
+			_statuses.remove(status);
+		    }
 	    }
     }
     

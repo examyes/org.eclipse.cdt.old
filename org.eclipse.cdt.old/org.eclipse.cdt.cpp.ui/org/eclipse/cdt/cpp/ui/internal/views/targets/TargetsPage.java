@@ -7,6 +7,7 @@ package com.ibm.cpp.ui.internal.views.targets;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
@@ -328,13 +329,27 @@ public final void selectionChanged(IWorkbenchPart part, ISelection sel) {
 	{
 		NavigatorSelection.structuredSelection = (IStructuredSelection)sel;
 		Object root = ((IStructuredSelection)sel).getFirstElement();
-			if(root instanceof IProject)
-				NavigatorSelection.selection = (IResource)root;
-			else if (root instanceof IFolder)
-				NavigatorSelection.selection = ((IFolder)root).getProject();
-			else if (root instanceof IFile)
-				NavigatorSelection.selection = ((IFile)root).getProject();
-
+		if(root instanceof IProject)
+		    {
+			NavigatorSelection.selection = (IResource)root;
+		    }
+		else if (root instanceof IFolder)
+		    {
+			NavigatorSelection.selection = ((IFolder)root).getProject();
+		    }
+		else if (root instanceof IFile)
+		    {
+			NavigatorSelection.selection = ((IFile)root).getProject();
+		    }
+		else if (root instanceof DataElement)
+		    {
+			ModelInterface api = ModelInterface.getInstance();
+			IResource theResource = api.findResource((DataElement)root);
+			if (theResource != null)
+			    {
+				NavigatorSelection.selection = theResource.getProject();
+			    }
+		    }		
 	}
 
 	

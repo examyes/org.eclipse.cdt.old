@@ -44,7 +44,7 @@ public class ConfigureAction extends CustomAction
 	}
     public void run()
 	{
-		DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(),_command.getValue());
+		DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(configureCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);

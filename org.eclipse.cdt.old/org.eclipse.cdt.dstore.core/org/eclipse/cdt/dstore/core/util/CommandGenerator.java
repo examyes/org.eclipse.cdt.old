@@ -103,10 +103,17 @@ public class CommandGenerator
 
     public DataElement createCommand(DataElement commandDescriptor)
     {
-      return _dataStore.createObject(null,
-				commandDescriptor.getName(),
-				commandDescriptor.getValue(),
-				commandDescriptor.getSource());	
+	if (commandDescriptor != null)
+	    {
+		return _dataStore.createObject(null,
+					       commandDescriptor.getName(),
+					       commandDescriptor.getValue(),
+					       commandDescriptor.getSource());
+	    }
+	else
+	    {
+		return null;
+	    }
     }  
 
   public DataElement generateCommand(DataElement commandDescriptor,
@@ -115,37 +122,44 @@ public class CommandGenerator
 				     boolean refArg)
     {
       DataElement commandObject = createCommand(commandDescriptor);
-      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
-
-      if (refArg)
+      if (commandObject != null)
 	  {
-	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
+	      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
+	      
+	      if (refArg)
+		  {
+		      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
+		  }
+	      else
+		  {
+		      commandObject.addNestedData(dataObject, false);
+		  }
+	      
+	      if (arguments != null)
+		  {
+		      for (int i = 0; i < arguments.size(); i++)
+			  {
+			      DataElement arg = (DataElement)arguments.get(i);
+			      if (arg != null)
+				  {
+				      if (!arg.isExpanded() || (arg.getParent() == null))
+					  {
+					      commandObject.addNestedData(arguments, false);
+					  }
+				      else
+					  {
+					      _dataStore.createReference(commandObject, arg, "argument");
+					  }
+				  }
+			  }
+		  }
+	      
+	      return logCommand(commandObject);
 	  }
       else
 	  {
-	      commandObject.addNestedData(dataObject, false);
+	      return null;
 	  }
-
-      if (arguments != null)
-      {
-	  for (int i = 0; i < arguments.size(); i++)
-	      {
-		  DataElement arg = (DataElement)arguments.get(i);
-		  if (arg != null)
-		      {
-			  if (!arg.isExpanded() || (arg.getParent() == null))
-			      {
-				  commandObject.addNestedData(arguments, false);
-			      }
-			  else
-			      {
-				  _dataStore.createReference(commandObject, arg, "argument");
-			      }
-		      }
-	      }
-      }
-
-      return logCommand(commandObject);
     }
 
   public DataElement generateCommand(DataElement commandDescriptor,
@@ -156,20 +170,27 @@ public class CommandGenerator
       String id = _log.getId() + "." + _id++;
       
       DataElement commandObject = createCommand(commandDescriptor);
-      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
-
-      if (refArg)
+      if (commandObject != null)
 	  {
-	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
+	      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
+	      
+	      if (refArg)
+		  {
+		      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
+		  }
+	      else
+		  {
+		      commandObject.addNestedData(dataObject, false);
+		  }
+	      
+	      commandObject.addNestedData(objectDescriptor, false);
+	      
+	      return logCommand(commandObject);
 	  }
       else
 	  {
-	      commandObject.addNestedData(dataObject, false);
+	      return null;
 	  }
-
-      commandObject.addNestedData(objectDescriptor, false);
-
-      return logCommand(commandObject);
     }
 
   public DataElement generateCommand(DataElement commandDescriptor, DataElement dataObject, boolean refArg)
@@ -177,18 +198,25 @@ public class CommandGenerator
       String id = _log.getId() + "." + _id++;
 
       DataElement commandObject = createCommand(commandDescriptor);
-      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
-
-      if (refArg)
+      if (commandObject != null)
 	  {
-	      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.arguments"));
+	      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
+	      
+	      if (refArg)
+		  {
+		      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.arguments"));
+		  }
+	      else
+		  {
+		      commandObject.addNestedData(dataObject, false);
+		  }
+	      
+	      return logCommand(commandObject);
 	  }
       else
 	  {
-	      commandObject.addNestedData(dataObject, false);
+	      return null;
 	  }
-
-      return logCommand(commandObject);
     }
 
 
