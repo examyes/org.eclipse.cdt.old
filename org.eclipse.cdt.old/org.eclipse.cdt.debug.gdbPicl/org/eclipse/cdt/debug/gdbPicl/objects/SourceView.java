@@ -487,6 +487,9 @@ abstract class SourceView extends View
 		String[] lines = gdbDebugSession._getGdbFile.getSourceLines(filename);	  
 		if (lines == null)
 			return false;
+			
+		if (lines[0].startsWith("No source"))	
+			return false;
 	
 		String srcLine;		
 		int maxLength=0;

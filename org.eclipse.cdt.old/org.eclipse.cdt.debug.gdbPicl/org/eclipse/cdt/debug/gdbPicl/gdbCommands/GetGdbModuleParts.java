@@ -268,14 +268,6 @@ public class GetGdbModuleParts
      String currentModuleName = "";
      int    currentPartID = -1;
 
-    /*
-     String[] lines2 = _gdbProcess.readAllLines();
-     for(int i=0; i<lines2.length; i++)
-     {  String str2 = lines2[i];
-       	System.out.println("****** GetGdbModuleParts.java str2:  *******" + str2);
-     }
-*/
-
      String cmd = "info stack 1 ";
      _debugSession.addLineToUiMessages(_debugSession.prefix);
      _debugSession.addLineToUiMessages(_debugSession.prefix+cmd);
@@ -293,13 +285,13 @@ public class GetGdbModuleParts
      String FUNCTION_keyword    = _gdbProcess.MARKER+"frame-function-name";
      String FRAME_START_keyword = _gdbProcess.MARKER+"frame-begin";
      String FRAME_END_keyword   = _gdbProcess.MARKER+"frame-end";
-//     String frame = "";
+     String FRAME_SOURCE_WHERE   = _gdbProcess.MARKER+"frame-where";
+     String FRAME_SOURCE_FROM    =                    "from ";
 
      StringBuffer frame = new StringBuffer(lines.length);
 
     //System.out.println("RW ===== GetGdbModuleParts.java -info stack 1- lines.length: " + lines.length);
      for(int i=0; i<lines.length; i++)
-//     for(int i=0; i<10; i++)
      {  String str = lines[i];
         if (Gdb.traceLogger.DBG)
             Gdb.traceLogger.dbg(3,". . . . . . . .  GetGdbModuleParts.getCurrentFileLineModule str["+i+"]="+str );
@@ -358,6 +350,19 @@ public class GetGdbModuleParts
             {
                 currentLineNumber = lines[i+1];
             }
+            else if( str.equals(FRAME_SOURCE_WHERE) )
+           {
+              str = lines[++i];
+              int from = str.indexOf(FRAME_SOURCE_FROM);
+              if(from>=0)
+              {   str = str.substring(from+FRAME_SOURCE_FROM.length());
+                  currentFileName = str;
+                  int slash = currentFileName.lastIndexOf("/");
+                  if(slash>=0)
+                     currentFileName = currentFileName.substring(slash+1);
+                  currentLineNumber = "0";
+              }
+           }
             else
             {
                 if( !str.startsWith(_gdbProcess.MARKER) )
@@ -441,7 +446,11 @@ public class GetGdbModuleParts
              {
              	// find current part name, add part if it does not already
              	// exists in current module.
-                part = checkCurrentPart(currentModuleID);
+
+				_moduleManager.checkPart(currentModuleID, currentFileName);
+				int id = _moduleManager.getPartID(currentModuleID, currentFileName);
+				part = _moduleManager.getPart(id);
+				
                 if (part != null)
                 	currentPartID = part.getPartID();
              }
