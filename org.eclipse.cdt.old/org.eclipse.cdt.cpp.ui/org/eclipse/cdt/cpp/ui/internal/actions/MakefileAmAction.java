@@ -45,14 +45,62 @@ public class MakefileAmAction extends CustomAction {
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
+		if(_command.getValue().equals("COMPILER_FLAGS")&&!doesFileExist("Makefile.am"))	
+			setEnabled(false);
 	}
 	public void run()
 	{
+		/*
+		// open dialog to set Makefile.am compiler flags
+		if(_command.getValue().equals("COMPILER_FLAGS"))
+		{
+			com.ibm.dstore.hosts.dialogs.CompilerFlagDialog cfd = new com.ibm.dstore.hosts.dialogs.CompilerFlagDialog(_subject);
+			// populate if found any C or CXX flag def
+			String existingDef = getExistingDef(_subject);
+			//cfd.setDefinition(existingDef);
+			cfd.open();
+			System.out.println("\n ysuuhsa = "+cfd._definitionArea.getText());
+			//get the user input
+			//String newDef = cfd.getDefinitionInput();
+			// insert this def in Makefile.am
+			// modify Makefile.am
+		}
+		*/
 		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(makefileAmCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
+    private String getExistingDef(DataElement parent)
+    {
+    	File MakefileAm = new File(_subject.getSource(),"Makefile.am");
+		String line;
+		boolean found = false;
+		try
+		{
+			// searching for FLAGS line
+			BufferedReader in = new BufferedReader(new FileReader(MakefileAm));
+			while((line=in.readLine())!=null)
+			{
+				if(line.indexOf("CFLAGS")!=-1||line.indexOf("CXXFLAGS")!=-1
+					||line.indexOf("CPPFLAGS")!=-1)
+					return line;
+			}
+			in.close();
+		}catch(IOException e){System.out.println(e);}  	
+    	return "FLAG DEF";
+    }
+	private boolean doesFileExist(String fileName)
+	{
+		for (int i = 0; i < _subject.getNestedSize(); i++)
+		{
+			DataElement child = _subject.get(i).dereference();
+			if (!child.isDeleted() && child.getName().equals(fileName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
-

@@ -132,7 +132,7 @@ public class AutoconfManager {
 	}
 	private void modifyAclocalArgument(File script, File dir)
 	{
-		File mod = new File(script.getParent(),"mod");// this is the tope level Makefile.am
+		File mod = new File(script.getParent(),"mod");
 		String line;
 		boolean found = false;
 		try
@@ -178,6 +178,20 @@ public class AutoconfManager {
 			runCommand(project, status, "make distclean");
 		else
 			runCommand(project, status, cygwinPrefix+"make distclean");
+	}	
+	public void install(DataElement project, DataElement status)
+	{
+		if(getOS().equals("Linux"))
+			runCommand(project, status, "make install");
+		else
+			runCommand(project, status, cygwinPrefix+"make install");
+	}	
+	public void maintainerClean(DataElement project, DataElement status)
+	{
+		if(getOS().equals("Linux"))
+			runCommand(project, status, "make maintainer-clean");
+		else
+			runCommand(project, status, cygwinPrefix+"make maintainer-clean");
 	}	
 	public void runCommand(DataElement project,DataElement status, String invocation)
 	{

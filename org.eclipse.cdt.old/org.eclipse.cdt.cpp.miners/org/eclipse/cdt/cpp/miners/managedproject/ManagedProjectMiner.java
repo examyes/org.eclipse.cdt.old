@@ -72,7 +72,9 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Create configure", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Initialize configure.in & Makefile.am's and createte & run configure", "C_INIT_CREATE_RUN", false);
-		createCommandDescriptor(projectD, "DistClean", "C_DIST_CLEAN", false);
+		createCommandDescriptor(projectD, "distclean", "C_DIST_CLEAN", false);
+		createCommandDescriptor(projectD, "maintainer-clean", "C_MAINTAINER_CLEAN", false);
+		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
 		
 		//
 		createCommandDescriptor(fsObjectD,"Add/Change to TopLevel Makefile.am","C_TOPLEVEL_MAKEFILE_AM",false);
@@ -80,6 +82,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(fsObjectD,"Add/Change to StaticLib Makefile.am","C_SWITCH_TO_STATIC_LIB",false);
 		createCommandDescriptor(fsObjectD,"Add/Change to SharedLib Makefile.am","C_SWITCH_TO_SHARED_LIB",false);		
 		createCommandDescriptor(fsObjectD,"Add configure.in file","C_INSERT_CONFIGURE_IN",false);
+		createCommandDescriptor(fsObjectD,"Define Compiler Flags","C_COMPILER_FLAGS",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);
 		//
 		createCommandDescriptor(managedProjectD,"TopLevel","C_TOPLEVEL_MAKEFILE_AM",false);
@@ -123,10 +126,6 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.manageProject(project, status);
 				//parseAmFile(project); 
 			}
-			else if (name.equals("C_DIST_CLEAN"))
-			{
-				autoconfManager.distClean(project,status);
-			}
 			else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.generateAutoconfFiles(project, status,false);
@@ -150,6 +149,19 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.runConfigureScript(project, status);
 			}
+			else if (name.equals("C_DIST_CLEAN"))
+			{
+				autoconfManager.distClean(project,status);
+			}
+			else if (name.equals("C_INSTALL"))
+			{
+				autoconfManager.install(project,status);
+			}
+			else if (name.equals("C_MAINTAINER_CLEAN"))
+			{
+				autoconfManager.maintainerClean(project,status);
+			}
+
 		}
 		
 		
@@ -195,6 +207,10 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.configureInManager.generateConfigureIn(subject);
 			}
+		/*	else if (name.equals("C_COMPILER_FLAGS"))
+			{
+				autoconfManager.makefileAmManager.defineCompilerFlags(subject);
+			}*/
 		}
 		
 		if (subject.getType().equals("Project Target"))
