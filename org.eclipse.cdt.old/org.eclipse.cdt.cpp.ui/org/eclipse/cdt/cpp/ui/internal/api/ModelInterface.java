@@ -365,6 +365,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
 	DataElement dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);	
+	dataStore.setObject(dirObject);
+	debug(dirObject, port, key);
+    }
+
+    public void debug(DataElement dirObject, String port, String key)
+    {
+	DataStore dataStore = dirObject.getDataStore();
 
 	String hostName = "localHost";
 	try
@@ -379,12 +386,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement portObj    = dataStore.createObject(null, "port", port);
 	DataElement keyObj     = dataStore.createObject(null, "key", key);
 	
-	dataStore.setObject(dirObject);
 	dataStore.setObject(hostObj);
 	dataStore.setObject(portObj);
 	dataStore.setObject(keyObj);
 
+
 	DataElement debugDescriptor = dataStore.localDescriptorQuery(dirObject.getDescriptor(), "C_DEBUG");
+
 	if (debugDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
@@ -1409,7 +1417,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 
 	    
-
+    public DataElement getProjectFor(DataElement resource)
+    {  
+	DataElement parent = resource;
+	while (parent != null && 
+	       !parent.getType().equals("Project") &&
+	       !parent.getType().equals("Closed Project"))
+	    {
+		parent = parent.getParent();
+	    }
+	return parent;
+    }
 
   public IProject getProjectFor(IResource resource)
   {

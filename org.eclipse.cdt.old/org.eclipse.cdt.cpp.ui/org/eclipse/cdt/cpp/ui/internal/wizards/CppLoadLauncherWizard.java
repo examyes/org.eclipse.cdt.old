@@ -7,6 +7,7 @@ package com.ibm.cpp.ui.internal.wizards;
 import com.ibm.cpp.ui.internal.launchers.*;
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.dstore.ui.resource.*;
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
@@ -33,7 +34,6 @@ import org.eclipse.ui.part.*;
 public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 {
     private ILauncher                       _launcher;
-    private IStructuredSelection            _selection;
     private Object                          _element;
     private CppLoadLauncherWizardMainPage   _mainPage;
     private ProjectInfoWizardPage           _fProjectInfoWizardPage;
@@ -42,18 +42,22 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     private IProject                        _project;
     private String                          _currentSelectionName;
 
+    private ModelInterface                  _api;
 
     public void addPages()
     {
-	   super.addPages();
+	super.addPages();
 	
+   	_plugin = CppPlugin.getDefault();
+
    	_mainPage = new CppLoadLauncherWizardMainPage(_plugin.getLocalizedString("debugLauncher"), _currentSelectionName);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("debugLauncher.Description"));
-   	this.addPage(_mainPage);
-	
-    }
+   	this.addPage(_mainPage);	
 
+	_api = _plugin.getModelInterface();
+    }
+    
     public CppLoadLauncherWizardMainPage getMainPage()
     {
    	return _mainPage;
@@ -63,73 +67,84 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     {
    	return _mainPage.debugInitialization();
     }
-
+    
     public String getParameters()
     {
    	return _mainPage.getParameters();
     }
-
+    
     public boolean performFinish()
     {
-   	_plugin = CppPlugin.getDefault();
-
+	
    	_mainPage.finish();
-      boolean debugInitialization = debugInitialization();
+	boolean debugInitialization = debugInitialization();
     	String parameters = getParameters();
+	
+	PICLLoadInfo loadInfo = new PICLLoadInfo();
 
-         /**/
-      PICLLoadInfo loadInfo = new PICLLoadInfo();
+	if (_element instanceof DataElement)
+	    {
+		IFile file = _api.getNewFile(((DataElement)_element).getSource());
+		if (file == null)
+		    {
+			DataElement projectElement = _api.getProjectFor((DataElement)_element);
+			IProject project = _api.findProjectResource(projectElement);
+			file = new FileResourceElement((DataElement)_element, project);
+			_api.addNewFile(file);			
+		    }
 
-      loadInfo.setResource(_element); // this doesn't seem to do anything
-      loadInfo.setLauncher(_launcher);
-      loadInfo.setProgramName(_currentSelectionName);
-      loadInfo.setProgramParms(parameters);
+		loadInfo.setResource(file);
+	    }
+	else
+	    {
+		loadInfo.setResource(_element); // this doesn't seem to do anything
+	    }
 
-      int startupBehaviour;
-
-      if (debugInitialization)
-      {
-         startupBehaviour = loadInfo.DEBUG_INITIALIZATION;
-      }
-      else
-      {
-         startupBehaviour = loadInfo.RUN_TO_MAIN;
-      }
-
-      loadInfo.setStartupBehaviour(startupBehaviour);
-
-
-      getLauncher().doLaunch(loadInfo);
-         /**/
+	loadInfo.setLauncher(_launcher);
+	loadInfo.setProgramName(_currentSelectionName);
+	loadInfo.setProgramParms(parameters);
+	
+	int startupBehaviour;
+	
+	if (debugInitialization)
+	    {
+		startupBehaviour = loadInfo.DEBUG_INITIALIZATION;
+	    }
+	else
+	    {
+		startupBehaviour = loadInfo.RUN_TO_MAIN;
+	    }
+	
+	loadInfo.setStartupBehaviour(startupBehaviour);
+	
+	
+	getLauncher().doLaunch(loadInfo);
 
       return true;		
     }
 
 
-	protected CppLoadLauncher getLauncher() {
-		return (CppLoadLauncher) _launcher.getDelegate();
-	}
+    protected CppLoadLauncher getLauncher() 
+    {
+	return (CppLoadLauncher) _launcher.getDelegate();
+    }
 
-    /**
-     *	@param selection org.eclipse.jface.viewer.IStructuredSelection
-     */
-    public void init(ILauncher launcher, String mode, IStructuredSelection currentSelection) {
+    public void init(ILauncher launcher, String mode, IStructuredSelection selection) 
+    {
+	if (selection.getFirstElement() instanceof DataElement)
+	    {
+		init(launcher, mode, (DataElement)selection.getFirstElement());		
+	    }
+    }
+
+    public void init(ILauncher launcher, String mode, DataElement resource) 
+    {
    	_launcher = launcher;
-   	_selection = currentSelection;
-	_element = _selection.getFirstElement();
- 
-	if (_element instanceof DataElement)
-	    {
-		ModelInterface api = ModelInterface.getInstance();
-		_element = api.findResource((DataElement)_element);
-	    }
+	_element = resource;
+	
+	_currentSelectionName = ((DataElement)_element).getName();
 
-	if (_element instanceof IResource)
-	    {
-		_currentSelectionName = ((IResource)_element).getName();
-		System.out.println("CppLoadLauncherWizard - curentSelectionName = " + _currentSelectionName);
-		_project = ((IResource)_element).getProject();
-	    }
+	System.out.println("CppLoadLauncherWizard - curentSelectionName = " + _currentSelectionName);
 
     }
 }

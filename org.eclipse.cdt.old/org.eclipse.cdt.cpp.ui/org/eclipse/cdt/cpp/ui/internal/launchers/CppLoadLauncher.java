@@ -33,45 +33,52 @@ import com.ibm.cpp.ui.internal.wizards.*;
 import java.io.IOException;
 
 
-public class CppLoadLauncher implements ILauncherDelegate {
+public class CppLoadLauncher implements ILauncherDelegate 
+{
+    private static DataElement _directory;
+    private static DataElement _executable;
+    private static ModelInterface _api;
 
-    private static String _directory = "";
+    public CppLoadLauncher()
+    {
+	_api = ModelInterface.getInstance();
+    }
 
-    /**
-     * @see ILauncherDelegate#launch(Object[], String, ILauncher)
-     */
-    public boolean launch(Object[] elements, String mode, ILauncher launcher) {
-
+    public boolean launch(Object[] elements, String mode, ILauncher launcher) 
+    {
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
-        if(selection == null) {
-           System.out.println("CppLoadLauncher.launch() error = selection is null");
-            return false;
-        }
+        if(selection == null) 
+	    {
+		System.out.println("CppLoadLauncher.launch() error = selection is null");
+		return false;
+	    }
+
         Object element = selection.getFirstElement();
-	
+
 	if (element instanceof DataElement)
 	    {
-		ModelInterface api = ModelInterface.getInstance();
-		element = api.findResource((DataElement)element);
+		_executable = (DataElement)element;
+		_directory = _executable.getParent();
+	    }	
+        else if (element instanceof IProject || element instanceof IResource) 
+	    {
+		_executable = _api.findResourceElement((IResource)element);
+		_directory = _executable.getParent();
 	    }
-	
-        if(!(element instanceof IProject || element instanceof IResource)) {
-           System.out.println("CppLoadLauncher.launch() error = selection is not an IProject or an IResource");
-            return false;
-        }
-        IPath location = ((IResource)element).getLocation();
-        IPath directory = location.removeLastSegments(1);
-        _directory = directory.toString();
-        System.out.println("CppLoadLauncher.launch() _directory = " + _directory);
-
-        IProject project = ((IResource)element).getProject();
+	else
+	    {
+		_executable = null;
+		_directory = null;
+		return false;
+	    }
 
         // display the wizard
         CppLoadLauncherWizard w= new CppLoadLauncherWizard();
-        w.init(launcher, ILaunchManager.DEBUG_MODE, selection);
-        WizardDialog wd= new WizardDialog(CppPlugin.getActiveWorkbenchWindow().getShell(), w);
+        w.init(launcher, ILaunchManager.DEBUG_MODE, _executable);
 
+        WizardDialog wd= new WizardDialog(CppPlugin.getActiveWorkbenchWindow().getShell(), w);
+	
         int rc = wd.open();
 
         if (rc == wd.OK) {
@@ -80,55 +87,34 @@ public class CppLoadLauncher implements ILauncherDelegate {
             return false;
     }
 
-    public void doLaunch(PICLLoadInfo loadInfo) {
-
-        WorkspaceSourceLocator sourceLocator = new WorkspaceSourceLocator();
-
-           System.out.println("CppLoadLauncher.doLaunch()");
-
-        // If we can get a project from the selection, tell source locator
-        Object resource = loadInfo.getResource();
-        if(resource != null) {
-            IProject curProject = null;
-            if(resource instanceof IProject)
-                curProject = (IProject)resource;
-            else if(resource instanceof IResource)
-                curProject = ((IResource)resource).getProject();
-
-	    if (curProject != null)
-		sourceLocator.setHomeProject(curProject);
-        }
-
-	loadInfo.setWorkspaceSourceLocator(sourceLocator);
-
+    public void doLaunch(PICLLoadInfo loadInfo) 
+    {
+        CppSourceLocator sourceLocator = null;
+	
+	if (_executable != null)
+	    {
+		DataElement projectElement = _api.getProjectFor(_executable);
+		if (projectElement != null)
+		    {
+			sourceLocator = new CppSourceLocator(projectElement);
+			loadInfo.setWorkspaceSourceLocator(sourceLocator);
+		    }
+	    }
+	
+	
         PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
         if(daemonInfo == null)
             return;
-
+	
         launchEngine(daemonInfo);
     }
 
-
-
-/*
-        String command = "java com.ibm.debug.gdb.Gdb -qhost=localhost -quiport=" +
-                         (new Integer(daemonInfo.getPort())).toString() +
-                           " -startupKey=" +
-                         (new Integer(daemonInfo.getKey())).toString();
-
-        ModelInterface api = ModelInterface.getInstance();
-        String path = _directory;
-
-        api.command(path, command, false);
-*/
-
     protected void launchEngine(PICLDaemonInfo daemonInfo)
     {
-	ModelInterface api = ModelInterface.getInstance();
 	String port = new Integer(daemonInfo.getPort()).toString();
 	String key  = new Integer(daemonInfo.getKey()).toString();
 
-	api.debug(_directory, port, key);
+	_api.debug(_directory, port, key);
     }
 
 }
