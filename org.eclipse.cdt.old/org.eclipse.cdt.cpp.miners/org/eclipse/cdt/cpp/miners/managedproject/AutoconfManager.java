@@ -65,10 +65,10 @@ public class AutoconfManager {
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
 	}*/
-	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject,MakefileAmClassifier classifier)
+	protected void updateAutoconfFiles(DataElement project, DataElement status,MakefileAmClassifier classifier)
 	{
 		configureInManager.updateConfigureIn(project,true);
-		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject,classifier);
+		makefileAmManager.updateAllMakefileAm(project,classifier);
 	}
 	
 	protected void configure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
@@ -79,8 +79,9 @@ public class AutoconfManager {
 		//in the Makefile.am's and configure.in
 		if(update)
 		{
+		
 			configureInManager.updateConfigureIn(project,true);
-			makefileAmManager.updateAllMakefileAm(project,true,classifier);
+			makefileAmManager.updateAllMakefileAm(project,classifier);
 		}
 		// it will check if configure exists and if not runConfigure will generate it
 		generateAndRunConfigure(project,status,update,classifier);
@@ -103,7 +104,14 @@ public class AutoconfManager {
 			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
 		}
-		else
+		else if(configureIsUptodate(project))
+		{
+			if(getOS().equals("Linux"))
+				runCommand(project, status,"./configure"+"&&"+"touch -m "+configure.getName());
+			else
+				runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
+		}
+		else 
 		{
 			if(getOS().equals("Linux"))
 				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+configure.getName());
@@ -111,6 +119,27 @@ public class AutoconfManager {
 				runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+configure.getName()+"\'");
 		}
 	} 	
+
+	protected void configureTarget(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier, int projectTarget)
+	{		
+		getAutoconfScript(project);
+		
+		// perform an update in case user has not updated the dependencies 
+		//in the Makefile.am's and configure.in
+		if(update)
+		{
+			configureInManager.updateConfigureIn(project,true);
+			makefileAmManager.updateAllMakefileAm(project,classifier,projectTarget);
+		}
+		// it will check if configure exists and if not runConfigure will generate it
+		generateAndRunConfigure(project,status,update,classifier);
+	}
+
+
+
+
+
+
 	protected void createConfigure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
 		getAutoconfScript(project);
@@ -120,7 +149,7 @@ public class AutoconfManager {
 		if(update)
 		{
 			configureInManager.updateConfigureIn(project,true);
-			makefileAmManager.updateAllMakefileAm(project,true,classifier);
+			makefileAmManager.updateAllMakefileAm(project,classifier);
 		}
 		
 		createConfigureScript(project,status);
@@ -264,7 +293,7 @@ public class AutoconfManager {
 				if(update)
 				{
 					configureInManager.updateConfigureIn(project,true);
-					makefileAmManager.updateAllMakefileAm(project,true,classifier);
+					makefileAmManager.updateAllMakefileAm(project,classifier);
 				}
 				
 				if(getOS().equals("Linux"))
@@ -313,26 +342,19 @@ public class AutoconfManager {
 	{
 		return makefileAmManager;
 	}
-/*	private boolean configureIsUptodate(DataElement project)
+	private boolean configureIsUptodate(DataElement root)
 	{
-		long configureTimeStamp = -1;
-		structureManager = new ProjectStructureManager(project.getFileObject());
-		File[] list = structureManager.getFiles();
-		
-		// as we are sure that configure exists then we can safely get its last modified time stamp
-		
-		File configure = new File(project.getSource(),"configure");
-		configureTimeStamp = configure.lastModified();	
-		//System.out.println("\nconfigure stamp = "+configureTimeStamp);
-		//System.out.println("=========================================");	
-		for(int i = 0; i < list.length; i++)
-			if(list[i].getName().equals("Makefile.am")||list[i].getName().equals("Makefile.in")||list[i].getName().equals("configure.in"))
-			{
-				//System.out.println("\n"+list[i].getName()+" = "+list[i].lastModified());
-				if(configureTimeStamp<list[i].lastModified())
-					return false;
-			}
-		return true;
-	}*/
+		DataElement cmdD = root.getDataStore().localDescriptorQuery(root.getDescriptor(), "C_CHECK_UPDATE_STATE", 4);
+	
+		if (cmdD != null)
+		{
+			DataElement status = root.getDataStore().synchronizedCommand(cmdD, root);		
+			DataElement updateState = (DataElement)status.get(0);
+		    String state = updateState.getName();
+		    if(state.equals("uptodate"))
+		    	return true;
+		}
+		return false;
+	}
 }
 

@@ -50,12 +50,16 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	String configueDialogPrefernceKey = "Show_Configure_Dialog";
 	String configureUpdatePreferenceKey = "Update_When_Configure";
 	String targetKey = "Target_Type";
-
+	
+	private int dialogButtonPushed = -1;
+	
 	private final int DEFAULT = 0;
 	private final int PROGRAM_TARGET = 100;	
 	private final int STATIC_TARGET = 101;	
 	private final int SHARED_TARGET = 102;
 	private int targetType = DEFAULT;	
+	
+	boolean dialogHas2Buttons = false;
 	
 	public class RunThread extends Handler
 	{
@@ -91,7 +95,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	{
 		//boolean execute = true;
 		int configureUpdate = 0; // 0 == ok do update, 1 == no update , 2 == cancel action
-		//int targetSelection = 0; // 0 == ok do update, 1 == cancel action
 		boolean configFilesExist = false;
 		boolean sourceExistInTopLevelDir = false;
 		
@@ -121,14 +124,8 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					extraLabel,
 					this,
 					targetKey);
-			int result = box.open();
-	/*		if(result!= -1)
-			{
-				targetSelectionstatus = result;
-			}
-			else
-				targetSelectionstatus = 0;*/
-			
+					
+			dialogButtonPushed = box.open();
 		}
 		
 		else if(_command.getValue().equals("CONFIGURE"))
@@ -152,6 +149,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			if(doesAutoconfSupportExist())
 			{
 				configFilesExist = true;
+				String[] buttonTitles = new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL};
 				if(enableConfigureUpdate)
 				{
 					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
@@ -161,7 +159,11 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 						if(!configureIsUptodate(_subject))
 							message = new String("\nRegenerating and running configure script - configure is not up to date "+str1);
 						else
+						{
+							dialogHas2Buttons = true;
+							buttonTitles = new String[]{IDialogConstants.YES_LABEL,IDialogConstants.CANCEL_LABEL};
 							message = new String("\nRunning configure script - configure is up to date");
+						}
 					}
 					else
 						message = new String("\nGenerating and running configure script"+str1);
@@ -172,7 +174,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 								null,
 								message,
 								3,
-								new String[]{IDialogConstants.YES_LABEL,IDialogConstants.NO_LABEL,IDialogConstants.CANCEL_LABEL},
+								buttonTitles,
 								0,
 								extraLabel,
 								this,
@@ -234,13 +236,16 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 
 		if(configureUpdate==1 && configFilesExist)
 		{
-			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
-			DataElement status = _dataStore.command(configureCmd, _subject);
-			ModelInterface api = ModelInterface.getInstance();
-			api.monitorStatus(status);			
-			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
-			RunThread thread = new RunThread(_subject, status);
-			thread.start();
+			if(!dialogHas2Buttons)
+			{
+				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
+				DataElement status = _dataStore.command(configureCmd, _subject);
+				ModelInterface api = ModelInterface.getInstance();
+				api.monitorStatus(status);			
+				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+				RunThread thread = new RunThread(_subject, status);
+				thread.start();
+			}
 		}
 		else if(configureUpdate==0 && targetType==DEFAULT) 
 		// targetSelection 0 means no selection was made and it will default to program
@@ -254,7 +259,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			thread.start();
 		}	
 		// "Progarm" target
-		else if(configureUpdate==0 && targetType==PROGRAM_TARGET) 
+		else if(configureUpdate==0 && targetType==PROGRAM_TARGET && dialogButtonPushed!=1) 
 		// targetSelection 0 means no selection was made and it will default to program
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_PROGRAM");			
@@ -267,7 +272,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		}	
 		
 		// Static Target
-		else if(configureUpdate==0 && targetType==STATIC_TARGET)
+		else if(configureUpdate==0 && targetType==STATIC_TARGET && dialogButtonPushed!=1)
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_STATIC");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
@@ -277,7 +282,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
 		}	
-		else if(configureUpdate==0 && targetType==SHARED_TARGET)
+		else if(configureUpdate==0 && targetType==SHARED_TARGET & dialogButtonPushed!=1)
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_SHARED");			
 			DataElement status = _dataStore.command(configureCmd, _subject);

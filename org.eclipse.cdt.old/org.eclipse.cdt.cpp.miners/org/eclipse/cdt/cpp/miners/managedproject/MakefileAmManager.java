@@ -411,7 +411,72 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	protected void updateAllMakefileAm(DataElement project,boolean actionIsManageProject, MakefileAmClassifier classifier)
+	protected void updateAllMakefileAm(DataElement project,MakefileAmClassifier classifier, int projectType)
+	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		String[] subdirs = structureManager.getSubdirWorkspacePath();
+
+		Object[][] projectStucture = structureManager.getProjectStructure();
+		if(projectType == 0) // i.e  a program target
+		{
+			for(int i =0; i < projectStucture.length; i++)
+			{
+				File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
+				Integer level = new Integer((String)projectStucture[i][1]);
+				switch (level.intValue())
+				{
+					case (0):
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						 	"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeProgramsMakefileAm((File)projectStucture[i][0]);
+					break;
+					default:
+						copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/static/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
+					break;
+				}
+			}
+		}
+		if(projectType == 1) // i.e a static target
+		{
+			for(int i =0; i < projectStucture.length; i++)
+			{
+				File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
+				Integer level = new Integer((String)projectStucture[i][1]);
+				switch (level.intValue())
+				{
+					default:
+						copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/static/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
+					break;
+				}
+			}
+		}
+		if(projectType == 2) // i.e  a shared target
+		{
+			for(int i =0; i < projectStucture.length; i++)
+			{
+				File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
+				Integer level = new Integer((String)projectStucture[i][1]);
+				switch (level.intValue())
+				{
+					case (0):
+					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						 	"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/shared/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeProgramsMakefileAm((File)projectStucture[i][0]);
+					break;
+					default:
+						copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/static/",Makefile_am.getParentFile().getAbsolutePath());
+					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
+					break;
+				}
+			}
+		}
+	}
+	protected void updateAllMakefileAm(DataElement project,MakefileAmClassifier classifier)
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
 		String[] subdirs = structureManager.getSubdirWorkspacePath();

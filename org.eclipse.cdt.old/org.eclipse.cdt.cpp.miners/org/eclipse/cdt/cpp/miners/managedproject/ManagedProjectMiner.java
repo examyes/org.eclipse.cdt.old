@@ -148,7 +148,7 @@ public class ManagedProjectMiner extends Miner
 			}
 			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 			{
-				autoconfManager.updateAutoconfFiles(project, status,false,classifier);
+				autoconfManager.updateAutoconfFiles(project, status,classifier);
 				project.refresh(false);
 				//parseAmFile(project); 
 			}
@@ -172,30 +172,27 @@ public class ManagedProjectMiner extends Miner
 			// new : automake and autoconf action
 			else if (name.equals("C_CONFIGURE"))
 			{
-				autoconfManager.configure(project, status,true,classifier);
+				autoconfManager.configure(project,status,true,classifier);
 				project.refresh(false);
 			}
 			else if (name.equals("C_CONFIGURE_NO_UPDATE"))
 			{
-				autoconfManager.configure(project, status,false,classifier);
+				autoconfManager.configure(project,status,false,classifier);
 				project.refresh(false);
 			}
 			else if (name.equals("C_CONFIGURE_PROGRAM"))
 			{
-				System.out.println("\n Excecuting Program");
-				//autoconfManager.configure(project, status,true,classifier);
+				autoconfManager.configureTarget(project, status,true,classifier,0);
 				//project.refresh(false);
 			}
 			else if (name.equals("C_CONFIGURE_STATIC"))
 			{
-				System.out.println("\n Excecuting Static");
-				//autoconfManager.configure(project, status,true,classifier);
+				autoconfManager.configureTarget(project, status,true,classifier,1);
 				//project.refresh(false);
 			}
 			else if (name.equals("C_CONFIGURE_SHARED"))
 			{
-				System.out.println("\n Excecuting Shared");
-				//autoconfManager.configure(project, status,true,classifier);
+				autoconfManager.configureTarget(project, status,true,classifier,2);
 				//project.refresh(false);
 			}
 
