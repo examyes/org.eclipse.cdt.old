@@ -36,50 +36,31 @@ echo "" >>$netrc
 ftp goose
 rm $netrc
 
-#Send mail if errors file is large, also set the status to PASS or FAIL and update mainLatestNightly.html
+#Send mail if errors file is large, also set the status to PASS or FAIL and update mainLatestNightly.html if the build was successful
 theSize=`ls -l errors | awk '{print $5}'`
-if [ $theSize -gt 900 ] 
+if [ $theSize -gt 900 ] ;
  then
   theStatus=FAIL
   cat $rootDir/cdt-home/downloads/ErrorsMessage.txt errors | mail -s "POSSIBLE ERRORS IN CDT NIGHTLY BUILD" turnham@ca.ibm.com weisz@ca.ibm.com chanskw@ca.ibm.com dmcknigh@ca.ibm.com
- elif
+ else
   theStatus=PASS
   mln=mainLatestNightly.html
   echo "<tr>" > mln
   echo "<td><a href=\"http://download.eclipse.org/eclipse/downloads/build_types.html\">Nightly</a></td>" >> mln
   echo `date +%Y/%m/%d` >> mln
-  echo "<td><a href=\"$eclipseVhttp://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php">F1</a></td>
-  <td><a href="http://download.eclipse.org/tools/cdt/downloads/nightly/20020530/cdt-eclipse-R2-20020530.zip">
-   cdt-eclipse-R2-20020530.zip</a>
-  </td>
- </tr>
-
+  echo "  <td><a href=\"$eclipseLink\">$eclipseVersion</a>" >> mln
+  echo "  </td>" >> mln
+  echo " <td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a>" >> mln
+  echo " </td>" >> mln
+  echo "</tr>" >> mln
 fi
 
-#Update Create nightly.html (nb = newbuild)
-echo "<tr align=center>" > nb
-echo "<td>$theDate</td>" >> nb
-echo "<td>" >> nbD
-<tr>
-  <td><a href="http://download.eclipse.org/eclipse/downloads/build_types.html">Nightly</a></td>
-  <td>2002/05/30</td>
-  <td><a href="http://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php">F1</a></td>
-  <td><a href="http://download.eclipse.org/tools/cdt/downloads/nightly/20020530/cdt-eclipse-R2-20020530.zip">
-   cdt-eclipse-R2-20020530.zip</a>
-  </td>
- </tr>
-
-
-echo " <a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/errors\">Error Log</a>" >> nb
-echo " <img src=\"http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/$theStatus.gif?cvsroot=Tools_Project\">" >> nb
-echo "</td>" >> nb
-echo "<td>" >> nb
-echo " <a href=\"$eclipseLink\">$eclipseVersion</a>" >> nb
-echo "</td>" >> nb
-echo "<td>" >> nb
-echo " <a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a>" >> nb
-echo "</td>" >> nb
-echo "</tr>" >> nb
+#Now just put the pieces together
+cat mainTop.html            > main.html
+cat mainLatestNightly.html >> main.html
+cat mainRelease.html       >> main.html
+cat mainStable.html        >> main.html
+cat mainNightly.hmtl       >> main.html
 
 cat nightlyBuilds >> nb
 mv nb nightlyBuilds 
@@ -113,4 +94,4 @@ rm errors
 rm cdt-eclipse-R2-$theDate.zip
 
 #Commit changes
-cvs commit -m "Automated update"
+#cvs commit -m "Automated update"
