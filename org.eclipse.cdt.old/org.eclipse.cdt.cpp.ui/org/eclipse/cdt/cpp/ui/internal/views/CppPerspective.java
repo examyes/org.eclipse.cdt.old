@@ -56,6 +56,7 @@ public class CppPerspective implements IPerspectiveFactory
     factory.addShowViewShortcut("com.ibm.cpp.ui.CppOutputViewPart");
     factory.addShowViewShortcut("com.ibm.cpp.ui.SuperDetailsViewPart");    
     factory.addShowViewShortcut("com.ibm.cpp.ui.Targets");
+    factory.addShowViewShortcut("com.ibm.linux.help.views.ResultsViewPart");
 
     // search
     factory.addShowViewShortcut(SearchUI.SEARCH_RESULT_VIEW_ID);
