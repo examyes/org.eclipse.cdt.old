@@ -465,11 +465,9 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 			      	DataElement des = object.getDescriptor();
 			      	if (des != null)
 			      	{
-				    System.out.println("setting input " + object);
 			          	ArrayList relationships = _dataStore.getRelationItems(des, null);	
 				      	if (relationships.size() == 0)
 				      	{
-					    System.out.println("no rel");
 				      		return;
 				      	}
 				      	else
@@ -486,7 +484,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 				      		
 				      		if (visible == false)
 				      		{
-						    System.out.println("no vis rel");
 
 				      			return;	
 				      		}
