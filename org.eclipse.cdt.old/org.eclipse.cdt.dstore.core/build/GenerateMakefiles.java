@@ -39,12 +39,13 @@ class GenerateMakefiles
  {
   String theMakefile = theDirectory + "/makefile";
   String fileContents = "include " + theEnvMakefile + "\ninclude " + _theRulesMakefile;
-  if (theDirectory.getPath().indexOf("com.ibm.dstore.core") < 0)
+  if (!theDirectory.getName().equals("com.ibm.dstore.core"))
    writeFile(theMakefile, fileContents);
  
   File[] subdirs = theDirectory.listFiles();
   for (int i=0; i<subdirs.length; i++)
   {
+    
    File theSubdir = subdirs[i];
    if ( theSubdir.isDirectory() && (!theSubdir.getName().equals("CVS")) && (!theSubdir.getName().equals("build")))
     recursiveCreateMakefiles(theSubdir, theEnvMakefile);

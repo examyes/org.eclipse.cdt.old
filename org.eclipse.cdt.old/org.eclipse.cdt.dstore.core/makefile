@@ -45,7 +45,7 @@ allPlugins += com.ibm.debug.doc.user
 # plugin, we accomplish this by appending some text like "_buildPlugin" to every plugin name, 
 # and then provide the actual rules for these pseudo-prerequisites below.
 all:
-	 allCommands = cd com ; ${MAKE} ${MAKEFLAGS} ; cd ..
+	cd com ; ${MAKE} ${MAKEFLAGS} ; cd ..
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars source-zips createTar
