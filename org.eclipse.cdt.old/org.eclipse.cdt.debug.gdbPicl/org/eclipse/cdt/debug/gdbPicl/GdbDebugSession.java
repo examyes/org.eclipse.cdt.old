@@ -808,13 +808,7 @@ public class GdbDebugSession extends DebugSession {
                    }
                 }
 		
-                cmd = "handle SIGUSR2 nostop";  // if attaching to java process, don't stop on garbage collector signals
-                ok = executeGdbCommand(cmd);
-                cmd = "handle SIG32 nostop";    // if attaching to java process, don't stop on SIG32		
-
-                ok = executeGdbCommand(cmd);
-
-		checkCurrentPart(_currentModuleID);
+                checkCurrentPart(_currentModuleID);
 
 		updateSharedLibraries();
 		updateAllParts();
