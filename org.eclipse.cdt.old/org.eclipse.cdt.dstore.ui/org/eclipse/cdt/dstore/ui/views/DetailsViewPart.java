@@ -49,7 +49,6 @@ public class DetailsViewPart extends GenericViewPart
     public void createPartControl(Composite parent)
     {
 	super.createPartControl(parent);  
-	fillLocalToolBar();
     }
 
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
@@ -78,9 +77,9 @@ public class DetailsViewPart extends GenericViewPart
 
     public void fillLocalToolBar() 
     {
-	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-	toolBarManager.add(new ZoomAction("Zoom Out", DataStoreCorePlugin.getInstance().getImageDescriptor("up.gif")));
 	super.fillLocalToolBar();
+       	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+	toolBarManager.add(new ZoomAction("Zoom Out", DataStoreCorePlugin.getInstance().getImageDescriptor("up.gif")));
     }
     
 }
