@@ -34,11 +34,13 @@ public class PANewTraceResourceWizard extends Wizard implements INewWizard {
 	 _mainPage.setImageDescriptor(_plugin.getImageDescriptor("newproject"));
 	 this.addPage(_mainPage);
 	
-	 PATracePreferenceWizardPage fileLocationPage = new PATracePreferenceWizardPage("PA TracePreferencePage");
-	 fileLocationPage.setTitle("Trace Preferences");
-	 fileLocationPage.setDescription("Set the trace preferences");
-	 fileLocationPage.setImageDescriptor(_plugin.getImageDescriptor("newproject"));
-	 this.addPage(fileLocationPage);
+	 /*
+	 PATracePreferenceWizardPage preferencePage = new PATracePreferenceWizardPage("PA TracePreferencePage");
+	 preferencePage.setTitle("Trace Preferences");
+	 preferencePage.setDescription("Set the trace preferences");
+	 preferencePage.setImageDescriptor(_plugin.getImageDescriptor("newproject"));
+	 this.addPage(preferencePage);
+	 */
 	 
     }
 

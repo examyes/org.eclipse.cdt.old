@@ -17,7 +17,7 @@ public class NewTraceFileAction extends Action implements IWorkbenchWindowAction
 	// constructor
 	public NewTraceFileAction()
 	{
-		super("Add Trace File", PAPlugin.getDefault().getImageDescriptor("trace_file"));
+		super("Parse Trace File", PAPlugin.getDefault().getImageDescriptor("trace_file"));
 		
 		_api = PAModelInterface.getInstance();
 	}

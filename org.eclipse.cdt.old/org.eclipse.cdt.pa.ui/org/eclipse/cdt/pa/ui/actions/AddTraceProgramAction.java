@@ -33,7 +33,8 @@ public class AddTraceProgramAction extends CustomAction
         
         if (dlg.getReturnCode() == dlg.OK)
         {
-	      _api.addTraceProgram(_subject, dlg.getTraceFormat());
+	      _api.addTraceProgram(_subject, dlg.getTraceFormat(), dlg.getArgument());
+	      _api.openPerspective();
         }
   }
   

@@ -37,11 +37,13 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
    private Button	 _fcFormatRadio;
    private Text		 _targetPathField;
    private Button	 _targetPathBrowseButton;
+   private Text		 _argumentField;
    
    private int       _traceType;
    private String  	 _traceFormat;
    private String	 _realTraceFormat;
    private String	 _detectedTraceFormat;
+   private String	 _argument;
    private DataElement _traceElement;
    
    private static String AUTO_FORMAT  = "auto";
@@ -65,6 +67,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	 _realTraceFormat = AUTO_FORMAT;
 	 _detectedTraceFormat = null;
 	 _traceElement = null;
+	 _argument = null;
 	 setPageComplete(false);
    }
 
@@ -182,6 +185,17 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	_targetPathBrowseButton.addListener(SWT.Selection, this);
 	_targetPathBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 	
+	new Label(targetPathGroup, SWT.NONE).setText("Arguments:");
+	
+	_argumentField = new Text(targetPathGroup, SWT.BORDER);
+	_argumentField.addListener(SWT.Modify, this);
+	
+	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+	data.horizontalSpan = 2;
+	_argumentField.setLayoutData(data);
+	
+	_argumentField.setEditable(false);
+	
    }
    
  
@@ -206,6 +220,8 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
            setErrorMessage("Not a valid trace program: " + argument.getSource());
            _detectedTraceFormat = null;
            setPageComplete(false);
+           if (!_argumentField.isDisposed())
+            _argumentField.setEditable(false);
          }
          else {
            setErrorMessage(null);
@@ -213,6 +229,12 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
            _realTraceFormat = format;
            _detectedTraceFormat = format;
            setPageComplete(true);
+           
+           if (_traceType == PAResource.TRACE_PROGRAM) {
+             if (!_argumentField.isDisposed())
+              _argumentField.setEditable(true);
+           }
+           
          }         
          break;
          
@@ -244,7 +266,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
        _api.addTraceFile(_traceElement, _realTraceFormat);
      }
      else {
-      _api.addTraceProgram(_traceElement, _realTraceFormat);
+      _api.addTraceProgram(_traceElement, _realTraceFormat, _argument);
      }
                
      return true;
@@ -292,6 +314,9 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	else if (source == _targetPathBrowseButton) {
 	 handleTargetPathBrowseButtonPressed();
 	}
+	else if (source == _argumentField) {
+	 _argument = _argumentField.getText();
+	}
 	
    }
    
@@ -337,7 +362,9 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
    protected void handleTargetPathChanged() {
        
     if (_traceType == PAResource.TRACE_FILE) { 
-     
+      
+      _argumentField.setEditable(false);
+      
       if (_traceFormat.equals(AUTO_FORMAT)) {
         _api.queryTraceFileFormat(_traceElement);
         setMessage("Detecting trace format...");
@@ -363,6 +390,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
         else {
          setErrorMessage(null);
          setPageComplete(true);
+         _argumentField.setEditable(true);
          
          if (!match(_detectedTraceFormat, _traceFormat)) {
           setMessage("Be warned that you might encounter a parse problem if the trace format is not correct");
@@ -373,7 +401,8 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
       else {
         _detectedTraceFormat = null;
         setErrorMessage("Not a platform executable: " + _traceElement.getSource());
-        setPageComplete(false);        
+        setPageComplete(false);
+        _argumentField.setEditable(false);
       }
     }
         

@@ -226,7 +226,7 @@ public class PAModelInterface implements IDomainListener
    if (_dummyElement == null) {
     DataElement projectsRoot = getLocalProjectsRoot();
     if (projectsRoot != null) {
-     _dummyElement = _dataStore.createObject(projectsRoot, "data", "no input");
+     _dummyElement = _dataStore.createObject(projectsRoot, "data", "No input");
     }
    }
    
@@ -239,14 +239,16 @@ public class PAModelInterface implements IDomainListener
  public void extendSchema(DataElement schemaRoot) {
  
   // System.out.println("extend schema");
+  
+  // DataElement fileD         = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
+  // dataStore.createObject(fileD,         DE.T_UI_COMMAND_DESCRIPTOR, "Add trace file", "org.eclipse.cdt.pa.ui.actions.AddTraceFileAction");    
+  
   DataStore   dataStore 	= schemaRoot.getDataStore();
-  DataElement fileD         = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
   DataElement executableD	= dataStore.find(schemaRoot, DE.A_NAME, "binary executable",1);
   DataElement traceFileD    = dataStore.find(schemaRoot, DE.A_NAME, "trace file", 1);
   DataElement traceProgramD = dataStore.find(schemaRoot, DE.A_NAME, "trace program", 1);
     
-  dataStore.createObject(fileD,         DE.T_UI_COMMAND_DESCRIPTOR, "Add trace file", "org.eclipse.cdt.pa.ui.actions.AddTraceFileAction");    
-  dataStore.createObject(executableD,   DE.T_UI_COMMAND_DESCRIPTOR, "Add trace program", "org.eclipse.cdt.pa.ui.actions.AddTraceProgramAction");      
+  dataStore.createObject(executableD,   DE.T_UI_COMMAND_DESCRIPTOR, "Analyze...", "org.eclipse.cdt.pa.ui.actions.AddTraceProgramAction");      
   dataStore.createObject(traceFileD,    DE.T_UI_COMMAND_DESCRIPTOR, "Remove", "org.eclipse.cdt.pa.ui.actions.RemoveTraceTargetAction");
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove", "org.eclipse.cdt.pa.ui.actions.RemoveTraceTargetAction");
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Run", "org.eclipse.cdt.pa.ui.actions.RunTraceProgramAction");
@@ -451,49 +453,6 @@ public class PAModelInterface implements IDomainListener
  
  }
  
-
- /**
-  * Return the attribute value associated with a given data element
-  */
- public String getAttribute(DataElement element, String name) {
-  
-  ArrayList attributes = element.getAssociated("attributes");
-  for (int i=0; i < attributes.size(); i++) {
-   DataElement anAttr = (DataElement)attributes.get(i);
-   if (anAttr.getType().equals(name))
-    return anAttr.getName();
-  }
-  
-  return null;
- }
-
- /**
-  * Set the attribute to a given value for a data element
-  */
- public DataElement setAttribute(DataElement element, String name, String value) {
-  
-  DataStore dataStore = element.getDataStore();
-  DataElement attributeElement = null;
-  ArrayList attributes = element.getAssociated("attributes");
-  for (int i=0; i < attributes.size(); i++) {
-   DataElement anAttr = (DataElement)attributes.get(i);
-   if (anAttr.getType().equals(name))
-    attributeElement = anAttr;
-  }
-  
-  if (attributeElement != null) {
-   attributeElement.setAttribute(DE.A_NAME, value);
-  }
-  else {
-   attributeElement = dataStore.createObject(null, name, value);
-   dataStore.createReference(element, attributeElement, "attributes");
-   if (dataStore != _dataStore)
-    dataStore.setObject(attributeElement);
-    dataStore.setObject(element);
-  }
-
-  return attributeElement;
- }
  
  /**
   * Return the corresponding project element under the PA root
@@ -714,7 +673,7 @@ public class PAModelInterface implements IDomainListener
  /**
   * Add a trace program
   */
- public void addTraceProgram(DataElement progElement, String traceFormat) {
+ public void addTraceProgram(DataElement progElement, String traceFormat, String arguments) {
 
    if (!progElement.isOfType("binary executable")) {
      
@@ -745,6 +704,9 @@ public class PAModelInterface implements IDomainListener
    
    // Create the trace program element
    DataElement traceProgram = dataStore.createObject(traceProject, type, progElement.getName(), progElement.getSource());
+   if (arguments != null && arguments.trim().length() > 0) {
+     traceProgram.setAttribute(DE.A_VALUE, progElement.getName() + " " + arguments);
+   }
    
    // Create references to the original file and project
    dataStore.createReference(traceProgram, progElement, "referenced file");
@@ -780,7 +742,7 @@ public class PAModelInterface implements IDomainListener
    
    DataElement exeElement = (DataElement)traceProgram.getAssociated("referenced file").get(0);
    DataStore dataStore = exeElement.getDataStore();
-   return runCommand(dataStore, exeElement.getParent(), exeElement.getName());
+   return runCommand(dataStore, exeElement.getParent(), traceProgram.getValue());
  }
  
  /**
@@ -837,37 +799,17 @@ public class PAModelInterface implements IDomainListener
    */
   public void openPerspective()
   {
-      IWorkbench workbench = _plugin.getWorkbench();
-      IWorkspace workspace = _plugin.getPluginWorkspace();
-      IWorkbenchWindow dw  = workbench.getActiveWorkbenchWindow();
-      IWorkbenchPage persp = null;
-      
-      IWorkbenchPage[] perspectives = dw.getPages();
-      
-      try
-	  {
-	      for (int i = 0; i < perspectives.length; i++)
-		  {
-		      IWorkbenchPage aPersp = perspectives[i];
-		      String layoutId = aPersp.getLabel();
-		      
-		      // System.out.println("perspective: " + layoutId);
-		      if (layoutId.equals("Workspace - Performance Trace"))
-			  {
-			      persp = aPersp;	
-			      dw.setActivePage(persp);
-			      break;
-			  }	
-		  }
-	      
-	      if (persp == null)
-		  {
-		      persp = workbench.showPerspective("org.eclipse.cdt.pa.ui.PAPerspective", dw, workspace.getRoot());
-		  }
-	  }
-      catch (WorkbenchException e)
-	  {
-	  }
+     IWorkbench workbench = _plugin.getWorkbench();
+	 IWorkbenchWindow dw  = workbench.getActiveWorkbenchWindow();
+	
+	 try 
+	 {
+	   workbench.showPerspective("org.eclipse.cdt.pa.ui.PAPerspective", dw);
+	 }
+     catch (WorkbenchException e)
+	 {
+	 }
+	 
   }
     
 }

@@ -24,7 +24,7 @@ public class PAPerspective implements IPerspectiveFactory
     IFolderLayout topRight = factory.createFolder("topRight", IPageLayout.TOP, (float)0.55,
 						      editorArea);
 	topRight.addView("org.eclipse.cdt.pa.ui.FunctionStatisticsViewPart");
-    topRight.addView("org.eclipse.cdt.pa.ui.ClassStatisticsViewPart");
+    // topRight.addView("org.eclipse.cdt.pa.ui.ClassStatisticsViewPart");
     
     IFolderLayout topCenter = factory.createFolder("topCenter", IPageLayout.LEFT, (float)0.45,
 					     "topRight");

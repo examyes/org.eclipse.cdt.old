@@ -18,7 +18,7 @@ public class NewTraceProgramAction extends Action implements IWorkbenchWindowAct
 	// constructor
 	public NewTraceProgramAction()
 	{
-	  super("Add Trace Program", PAPlugin.getDefault().getImageDescriptor("trace_program"));
+	  super("Analyze C/C++ Application", PAPlugin.getDefault().getImageDescriptor("trace_program"));
 	  
 	  _api = PAModelInterface.getInstance();
 	}
@@ -44,7 +44,7 @@ public class NewTraceProgramAction extends Action implements IWorkbenchWindowAct
         
         if (dlg.getReturnCode() == dlg.OK)
         {
-	      _api.addTraceProgram(selection, dlg.getTraceFormat());
+	      _api.addTraceProgram(selection, dlg.getTraceFormat(), dlg.getArgument());
 	      _api.openPerspective();	             
         }
       }

@@ -26,6 +26,8 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
     private Button		 _gprofFormatRadio;
     private Button		 _fcFormatRadio;
     private String		 _traceFormat;
+    private Text		 _argumentField;
+    private String		 _argument;
     
     private static String GPROF_FORMAT = "gprof";
     private static String FC_FORMAT    = "functioncheck";
@@ -37,6 +39,7 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  _input = input;
 	  _title = title;
 	  _traceFormat = GPROF_FORMAT;
+	  _argument = null;
     }
 
     protected void buttonPressed(int buttonId)
@@ -59,6 +62,11 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
       return _traceFormat;
     }
     
+    public String getArgument()
+    {
+      return _argument;
+    }
+    
 
     public Control createDialogArea(Composite parent)
     {
@@ -71,7 +79,8 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  layout.numColumns = 1;
 	  traceFormatGroup.setLayout(layout);
 	  traceFormatGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			
+	
+	  // Create the two format radio buttons
 	  _gprofFormatRadio = new Button(traceFormatGroup, SWT.RADIO);
 	  _gprofFormatRadio.setText("gprof");
 	  _gprofFormatRadio.addListener(SWT.Selection, this);
@@ -79,7 +88,31 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  _fcFormatRadio = new Button(traceFormatGroup, SWT.RADIO);
 	  _fcFormatRadio.setText("functioncheck");
 	  _fcFormatRadio.addListener(SWT.Selection, this);
-
+	  
+	  // Create the arguments group
+	  Composite argumentGroup = new Composite(c, SWT.NONE);
+	  
+	  layout = new GridLayout();
+	  layout.numColumns = 2;
+	  argumentGroup.setLayout(layout);
+	  
+	  new Label(argumentGroup, SWT.NONE).setText("Arguments:");
+	  _argumentField = new Text(argumentGroup, SWT.BORDER);
+	  _argumentField.addListener(SWT.Modify, this);
+	  
+	  GridData data = new GridData(GridData.FILL_HORIZONTAL);
+	  data.widthHint = 220;
+	  _argumentField.setLayoutData(data);
+	  
+	  // Create the description text
+	  Label description = new Label(c, SWT.NONE);
+	  description.setText("Note: The executable will be added to the Trace Files view.\n" +
+	  		"You can select the appropriate actions from that view to do\n the run and analysis.");
+	  
+	  data = new GridData();
+	  data.horizontalIndent = 8;
+	  description.setLayoutData(data);
+	  
       getShell().setText(_title);
       
 	  return c;
@@ -111,6 +144,9 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  }
 	  else if (source == _fcFormatRadio && _fcFormatRadio.getSelection()) {
 	   _traceFormat = FC_FORMAT;
+	  }
+	  else if (source == _argumentField) {
+	   _argument = _argumentField.getText();
 	  }
       
     }
