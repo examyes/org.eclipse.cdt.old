@@ -323,7 +323,7 @@
    <ol>
    <li>Check out the project (i.e. org.eclipse.cdt.debug.core) from dev.eclipse.org
         with cvsroot /home/tools</li>
-    <li>Ensure that you have JavaDoc installed and configured (go to preferences->Java->Javadoc
+    <li>Ensure that you have JavaDoc installed and configured (go to preferences-&gt;Java-&gt;Javadoc
         and set the location for the javadoc command </li>
     <li>Select the project in the package explorer, right-click Export,
         select Javadoc and follow the wizard instructions. It will generate the
@@ -457,14 +457,14 @@
         <li> Enter a name for the new project and select Finish.
              Note: you can determine the "Build Settings" from this dialog,
              but we will do so later, in the <a href="#build" >build</a> section.</li>
-        <li> In the C/C++ Projects View right click and select "New" > "Simple" > "File".
+        <li> In the C/C++ Projects View right click and select "New" &gt; "Simple" &gt; "File".
               Name your file hello.cpp</li>
         <li>Repeat the previous step and name the second new file "makefile".</li>
         <li>Copy the following text into the "hello.cpp" file: <br>
 
             <blockquote><pre>
-#include &ltiostream.h&gt
-#include &ltstdlib.h&gt
+#include &lt;iostream.h&gt;
+#include &lt;stdlib.h&gt;
 
 int main()
 {
@@ -476,7 +476,7 @@ int main()
 }           </blockquote></pre>
             Now, save the file. </li>
         <li>Copy the following text into the "makefile" file: <br>
-        Remember that makefiles require indented lines be a &lttab&gt character and not spaces <br>
+        Remember that makefiles require indented lines be a &lt;tab&gt; character and not spaces <br>
 
             <blockquote><pre>
 objects = hello.o
@@ -564,7 +564,7 @@ location you will have to modify the example "makefile" to look for the librarie
    In the C/C++ Projects View, select your new C/C++ project, right click and select
    "Rebuild Project"     </li>
     <li> You will have two additional files. "hello.o" and "hello.exe"</li>
-    <li> Double click on "hello.exe" or right click and select "Open With" > "Default Editor" to launch your simple program.</li>
+    <li> Double click on "hello.exe" or right click and select "Open With" &gt; "Default Editor" to launch your simple program.</li>
 </ol>
 <p>
 <hr size="1">
