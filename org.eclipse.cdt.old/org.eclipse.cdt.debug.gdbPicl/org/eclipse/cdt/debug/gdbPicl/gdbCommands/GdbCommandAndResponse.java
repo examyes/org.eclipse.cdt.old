@@ -134,7 +134,7 @@ public class GdbCommandAndResponse
                    lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword))
                {
                   j++;
-                  while (!lines[j].equals("}"))         
+                  while (!lines[j].equals("}") || (lines[j].equals("}") && lines[j+1].startsWith(FIELD_END_keyword)))    
                   {
                  	 classObject.append(lines[j]);
                  	 j++;
@@ -153,7 +153,7 @@ public class GdbCommandAndResponse
                    Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines Object = "+ classObject.toString());
                _debugSession.cmdResponses.addElement(classObject.toString());
               
-//               System.out.println("RW ===== GdbCommandAndResponse.java classObject: " + classObject.toString());
+               System.out.println("RW ===== GdbCommandAndResponse.java classObject: " + classObject.toString());
                classObject.setLength(0);
            }
            else if ( lines[i].equals(PRE_PROMPT_keyword) )
