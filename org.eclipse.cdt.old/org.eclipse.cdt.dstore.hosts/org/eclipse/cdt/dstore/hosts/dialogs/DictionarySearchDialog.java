@@ -40,11 +40,8 @@ public class DictionarySearchDialog extends SearchDialog
 	super(title, null, "Pattern", "Find");
     }
 
-    public void handleEvent(Event e)
+    protected void handleSearch()
     {
-	super.handleEvent(e);
-	Widget widget = e.widget;
-	if (widget == _search)
 	    {
 		DataStore dataStore = _plugin.getDataStore();
 		DataElement dictionaryData =  dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.dictionary.DictionaryMiner");

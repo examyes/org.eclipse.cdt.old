@@ -44,18 +44,14 @@ public class FindFileDialog extends SearchDialog
 	_width = 350;
     }
 
-
-    public void handleEvent(Event e)
-    {
-	super.handleEvent(e);
 	
-	Widget widget = e.widget;
-
-	if (widget == _search)
+	
+	protected void handleSearch()
+	{ 
 	    {
 		DataStore dataStore = _root.getDataStore();
 		DataElement searchCmd  = dataStore.localDescriptorQuery(_root.getDescriptor(), "C_FIND_FILE", 4);
-		DataElement pattern = dataStore.createObject(null, "pattern", _searchEntry.getText());
+		DataElement pattern = dataStore.createObject(null, "pattern", _searchText);
 
 		if (searchCmd != null)
 		    {	       
@@ -63,6 +59,7 @@ public class FindFileDialog extends SearchDialog
 			_resultViewer.setViewer(DE.P_SOURCE_NAME);
 			_resultViewer.setInput(status);
 		    }
+		    
 	    }
     }
 

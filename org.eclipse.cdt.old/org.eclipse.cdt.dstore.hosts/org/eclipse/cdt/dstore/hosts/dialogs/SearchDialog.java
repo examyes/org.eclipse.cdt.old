@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.*;
 import org.eclipse.swt.events.*;
 
 import org.eclipse.jface.viewers.*;
@@ -36,7 +37,7 @@ import org.eclipse.jface.dialogs.*;
 public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog 
     implements Listener
 {
-    protected Text         _searchEntry;
+    protected StyledText    _searchEntry;
 
     protected Button       _search;
     protected Button       _cancel;
@@ -54,6 +55,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 
     protected IActionLoader _actionLoader;
 
+	protected String        _searchText;
 
     public SearchDialog(String title, DataElement root, String patternLabel, String actionLabel)
     {
@@ -98,7 +100,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	Label searchLabel = new Label(c, SWT.NONE);
 	searchLabel.setText(_patternLabel);
 
-	_searchEntry = new Text(c, SWT.BORDER);
+	_searchEntry = new StyledText(c, SWT.BORDER | SWT.SINGLE);
 	GridData egrid = new GridData(GridData.FILL_HORIZONTAL);
 	egrid.widthHint = 100;
 	_searchEntry.setLayoutData(egrid);
@@ -131,6 +133,17 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	_resultViewer.setLayoutData(lvgrid);
 
 	_searchEntry.setFocus();
+	_searchEntry.addListener(SWT.KeyUp, new Listener() 
+		    {
+			public void handleEvent(Event e) 
+			{
+			    if (e.character == '\r') // "enter" key
+				{
+					_searchText = _searchEntry.getText();
+				   handleSearch();
+				} 
+			}
+		});
 	getShell().setText(_title);
 	return c;
     }
@@ -149,6 +162,11 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 			dataStore.command(cancelCmd, cmd);
 		    }
 	    }
+	  else if (widget == _search)
+	  {
+	  	_searchText = new String(_searchEntry.getText());
+	  	handleSearch();	
+	  }
     }
     
     public boolean close()
@@ -156,4 +174,6 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
     	_resultViewer.dispose();
     	return super.close();
     }
+    
+    protected abstract void handleSearch();
 }
