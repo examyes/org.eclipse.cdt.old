@@ -115,7 +115,7 @@ public class ManagedProjectMiner extends Miner
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
   		DataElement  subject = getCommandArgument(theCommand, 0);
-  		
+  			
 		if (subject.getType().equals("Project") || subject.getType().equals("Closed Project"))
 		{
 			DataElement project = subject;
@@ -267,6 +267,12 @@ public class ManagedProjectMiner extends Miner
 					state.setAttribute(DE.A_NAME, "2");
 					_dataStore.refresh(state);
 				}
+				else
+				{
+					DataElement state = _dataStore.createObject(null, "classification", "2");
+					_dataStore.createReference(subject, state, "class type");	
+				}
+				
 				subject.refresh(false);
 			}
 			else if (name.equals("C_STATICLIB_MAKEFILE_AM"))
@@ -277,9 +283,15 @@ public class ManagedProjectMiner extends Miner
 				if (updated.size() > 0)
 				{
 					DataElement state = (DataElement)updated.get(0);	
-					state.setAttribute(DE.A_NAME, "4");
+					state.setAttribute(DE.A_NAME, "3");
 					_dataStore.refresh(state);
 				}
+					else
+				{
+					DataElement state = _dataStore.createObject(null, "classification", "3");
+					_dataStore.createReference(subject, state, "class type");	
+				}
+			
 			
 				subject.refresh(false);
 			}
@@ -293,6 +305,12 @@ public class ManagedProjectMiner extends Miner
 					state.setAttribute(DE.A_NAME, "1");
 					_dataStore.refresh(state);
 				}
+				else
+				{
+					DataElement state = _dataStore.createObject(null, "classification", "1");
+					_dataStore.createReference(subject, state, "class type");	
+				}
+			
 				
 				subject.refresh(false);
 			}
@@ -304,9 +322,15 @@ public class ManagedProjectMiner extends Miner
 				if (updated.size() > 0)
 				{
 					DataElement state = (DataElement)updated.get(0);	
-					state.setAttribute(DE.A_NAME, "3");
+					state.setAttribute(DE.A_NAME, "4");
 					_dataStore.refresh(state);
 				}
+				else
+				{
+					DataElement state = _dataStore.createObject(null, "classification", "4");
+					_dataStore.createReference(subject, state, "class type");	
+				}
+			
 				subject.refresh(false);
 			}
 			else if (name.equals("C_INSERT_CONFIGURE_IN"))
