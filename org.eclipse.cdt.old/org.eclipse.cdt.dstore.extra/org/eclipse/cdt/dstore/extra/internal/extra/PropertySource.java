@@ -23,10 +23,22 @@ public class PropertySource implements IPropertySource
     _descriptors = new ArrayList();
     _descriptors.add(new TextPropertyDescriptor("type", "type"));
     _descriptors.add(new TextPropertyDescriptor("name", "name"));
+
+
+    IDataElement descriptor = (IDataElement)element.getElementProperty("descriptor");
+    ArrayList attributes = descriptor.getAssociated("attributes");
+    for (int i = 0; i < attributes.size(); i++)
+	{
+	    IDataElement attribute = (IDataElement)attributes.get(i);	    
+	    _descriptors.add(new TextPropertyDescriptor(attribute.getName(), attribute.getName()));
+	}
+    
+    /*
     _descriptors.add(new TextPropertyDescriptor("value", "value"));
     _descriptors.add(new TextPropertyDescriptor("id", "id"));
     _descriptors.add(new TextPropertyDescriptor("source", "sourcefile"));
     _descriptors.add(new TextPropertyDescriptor("dataStore", "dataStore"));
+    */
   }
 
   public static boolean matches(Class aClass)
@@ -62,7 +74,23 @@ public class PropertySource implements IPropertySource
 
   public Object getPropertyValue(String name)
   {
-    return _dataElement.getElementProperty(name);
+      Object result = null;
+      // find the appropriate attribute
+      ArrayList attributes = _dataElement.getAssociated("attributes");
+      for (int i = 0; i < attributes.size(); i++)
+	  {
+	      IDataElement attribute = (IDataElement)attributes.get(i);
+	      if (attribute.getType().equals(name))
+		  {
+		      result = attribute.getElementProperty("value");
+		  }
+	  }
+      if (result == null)
+	  { 
+	      result = _dataElement.getElementProperty(name);
+	  }
+
+      return result;
   }
 
   public boolean isPropertySet(Object property)

@@ -11,10 +11,11 @@ import java.util.*;
 public interface IDataElement extends IElement
 {
     String getName();
+    String getType();
     String getId();
     ArrayList getNestedData();
     int getNestedSize();
-
+    
     void expandChildren();
     IDataElement expandChildren(boolean b);
 
