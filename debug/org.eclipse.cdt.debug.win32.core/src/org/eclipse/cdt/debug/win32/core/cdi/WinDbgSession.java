@@ -13,7 +13,6 @@ package org.eclipse.cdt.debug.win32.core.cdi;
 import java.io.IOException;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.ICDIBreakpointManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIConfiguration;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIExpressionManager;
@@ -94,7 +93,7 @@ public class WinDbgSession implements ICDISession {
 		return null;
 	}
 
-	public ICDIBreakpointManager getBreakpointManager() {
+	public WinDbgBreakpointManager getBreakpointManager() {
 		return breakpointManager;
 	}
 	
