@@ -753,21 +753,14 @@ void namespace_definition() :
   (    name = identifier() ["=" next = id_expression()] 
     | {name = UnnamedTypeManager.instance().getNextUnnamedType("namespace");}
   )
-  {
   // DataElement theNamespace = symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true); 
-  }
-  (";" {/*symtab.closeScope();*/} | namespace_body()) //"{" skip_object_body(theNamespace))
+  namespace_body()
 }
 
 void namespace_body():
 {}
 { 
-  (  <EOF>
-   | "{" [translation_unit()] "}"
-  )
-  {
-   symtab.closeScope();
-  }
+  ( ";" | "{" (declaration())* "}" )
 }
 
 //The "using namespace" keywords have already been matched when we get here:
