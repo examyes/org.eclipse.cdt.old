@@ -25,10 +25,8 @@
    <includes
          id="org.eclipse.cdt"
          version="1.0.1"
-         name="%featureName"
          match="equivalent">
    </includes>
-
    <requires>
       <import plugin="org.eclipse.cdt" version="1.0.1" match="compatible"/>
    </requires>
