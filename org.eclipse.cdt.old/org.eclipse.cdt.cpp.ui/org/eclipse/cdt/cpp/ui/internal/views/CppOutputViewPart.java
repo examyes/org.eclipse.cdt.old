@@ -140,6 +140,7 @@ public class CppOutputViewPart extends OutputViewPart
 	  String commandName = newCommand.getName();
 
 	  if (commandName.equals("C_COMMAND") ||
+	      commandName.equals("C_SHELL") ||
 	      commandName.equals("C_SEARCH") ||
 	      commandName.equals("C_SEARCH_REGEX"))
 	    {	
