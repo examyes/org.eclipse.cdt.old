@@ -4,7 +4,7 @@
    id="org.eclipse.cdt.cpp.ui"
    name="%pluginName"
    version="2.0.0"
-   vendor-name = "International Business Machines Corp." 
+   vendor-name = "International Business Machines Corp."
    class="org.eclipse.cdt.cpp.ui.internal.CppPlugin">
 <requires>
    <import plugin="org.eclipse.ui"/>
@@ -50,34 +50,68 @@
       </run>
    </runtime>
 </extension>
-<!-- Launchers -->
-<extension
-      point="org.eclipse.debug.core.launchers">
-   <launcher
-         label="Start a C/C++ Application"
-         description="C/C++ debug program launcher"
-         modes="debug"
-         class="org.eclipse.cdt.cpp.ui.internal.launchers.CppLoadLauncher"
-         public="true"
-         id="org.eclipse.cdt.cpp.ui.launchers.CppLoadLauncher">
-   </launcher>
-   <launcher
-         label="C/C++ Application"
-         description="C/C++ run program launcher"
-         modes="run"
-         class="org.eclipse.cdt.cpp.ui.internal.launchers.CppRunLauncher"
-         public="true"
-         id="org.eclipse.cdt.cpp.ui.launchers.CppRunLauncher">
-   </launcher>
-   <launcher
-         label="Attach to C/C++ Application"
-         description="C/C++ attach to program launcher"
-         modes="debug"
-         class="org.eclipse.cdt.cpp.ui.internal.launchers.CppAttachLauncher"
-         public="true"
-         id="org.eclipse.cdt.cpp.ui.launchers.CppAttachLauncher">
-   </launcher>
-</extension>
+
+<!-- C++ launch configurations   -->
+	
+	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
+   		<launchConfigurationType
+   	   		id="org.eclipse.cdt.run.launchconfig"
+	   		name="C/C++ Application"
+	   		delegate="org.eclipse.cdt.cpp.ui.internal.launchers.CppRunLaunchConfigurationDelegate"
+	   		modes= "run">
+   		</launchConfigurationType>
+	</extension>
+	
+	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
+   		<launchConfigurationType
+   	   		id="org.eclipse.cdt.debugload.launchconfig"
+	   		name="C/C++ Debug Application"
+	   		delegate="org.eclipse.cdt.cpp.ui.internal.launchers.CppDebugLoadLaunchConfigurationDelegate"
+	   		modes= "debug">
+   		</launchConfigurationType>
+	</extension>
+	
+	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
+   		<launchConfigurationType
+   	   		id="org.eclipse.cdt.debugattach.launchconfig"
+	   		name="C/C++ Debug Attach to Application"
+	   		delegate="org.eclipse.cdt.cpp.ui.internal.launchers.CppDebugAttachLaunchConfigurationDelegate"
+	   		modes= "debug">
+   		</launchConfigurationType>
+	</extension>
+
+	<extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+		<launchConfigurationTypeImage
+			id="org.eclipse.cdt.launchimage"
+			configTypeID="org.eclipse.cdt.launchconfig"
+			icon="icons/full/clcl16/run_exe.gif">
+		</launchConfigurationTypeImage>	
+	</extension>
+
+       <extension point = "org.eclipse.debug.ui.launchConfigurationTabGroups">
+       	<launchConfigurationTabGroup
+       		id="org.eclipse.cdt.cpp.ui.internal.launchers.launchConfigurationTabGroup.CppDebugLoad"
+       		type ="org.eclipse.cdt.debugload.launchconfig"
+       		class="org.eclipse.cdt.cpp.ui.internal.launchers.CppDebugLoadTabGroup">
+       	</launchConfigurationTabGroup>
+       </extension>
+
+       <extension point = "org.eclipse.debug.ui.launchConfigurationTabGroups">
+       	<launchConfigurationTabGroup
+       		id="org.eclipse.cdt.cpp.ui.internal.launchers.launchConfigurationTabGroup.CppDebugAttach"
+       		type ="org.eclipse.cdt.debugattach.launchconfig"
+       		class="org.eclipse.cdt.cpp.ui.internal.launchers.CppDebugAttachTabGroup">
+       	</launchConfigurationTabGroup>
+       </extension>
+
+       <extension point = "org.eclipse.debug.ui.launchConfigurationTabGroups">
+       	<launchConfigurationTabGroup
+       		id="org.eclipse.cdt.cpp.ui.internal.launchers.launchConfigurationTabGroup.CppRun"
+       		type ="org.eclipse.cdt.run.launchconfig"
+       		class="org.eclipse.cdt.cpp.ui.internal.launchers.CppRunTabGroup">
+       	</launchConfigurationTabGroup>
+       </extension>
+	
 <extension
       point="org.eclipse.ui.perspectives">
    <perspective
@@ -98,7 +132,7 @@
          class="org.eclipse.cdt.cpp.ui.internal.views.CppObjectPerspective"
          id="org.eclipse.cdt.cpp.ui.CppObjectPerspective">
    </perspective>
-  
+
 </extension>
 <extension
       point="org.eclipse.ui.perspectiveExtensions">
@@ -290,7 +324,7 @@
          objectClass="org.eclipse.core.resources.IFolder"
          id="org.eclipse.cdt.cpp.ui.internal.menu4">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
-    
+
       <menu
             label="%Issue_Command___"
             path="additions"
@@ -330,7 +364,7 @@
    <objectContribution
          objectClass="org.eclipse.core.resources.IFolder"
          id="org.eclipse.cdt.cpp.ui.internal.menu6">
-      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/> 
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Parse___"
             path="additions"
@@ -404,8 +438,8 @@
             id="convert">
       </action>
    </objectContribution>
-   
-</extension>     
+
+</extension>
 <extension
       point="org.eclipse.ui.editors">
    <editor
@@ -519,7 +553,7 @@
             name="nature"
             value="org.eclipse.cdt.cpp.ui.cppnature">
       </filter>
-      
+
    </page>
     <page
          objectClass="org.eclipse.core.resources.IProject"
@@ -531,9 +565,9 @@
             name="nature"
             value="org.eclipse.cdt.cpp.ui.cppnature">
       </filter>
-      
+
    </page>
-   
+
 </extension>
 <extension
       point="org.eclipse.search.searchPages">
