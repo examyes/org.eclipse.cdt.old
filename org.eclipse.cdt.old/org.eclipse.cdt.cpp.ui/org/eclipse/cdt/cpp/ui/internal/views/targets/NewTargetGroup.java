@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 
 import com.ibm.cpp.ui.internal.*;
+import org.eclipse.ui.internal.misc.ContainerSelectionGroup;
 
 /**
  *
@@ -30,7 +31,7 @@ public class NewTargetGroup implements Listener {
 	private String				problemMessage = "";
 
 	// widgets
-	private org.eclipse.ui.internal.misc.ContainerSelectionGroup containerGroup;
+	protected ContainerSelectionGroup containerGroup;
 	//private TargetSelectionGroup containerGroup; 
 	//private Button				browseButton;
 	private Text				targetNameField;
@@ -78,8 +79,8 @@ protected void createContents(Composite parent,String resourceLabelString) {
 	composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	
 	// container group
-	containerGroup = new org.eclipse.ui.internal.misc.ContainerSelectionGroup(composite, this,true, pluginInstance.getLocalizedString(GROUP_TITLE));
-
+	containerGroup = new ContainerSelectionGroup(composite, this,true, pluginInstance.getLocalizedString(GROUP_TITLE));
+	//containerGroup = new TargetSelectionGroup(composite, this,true, pluginInstance.getLocalizedString(GROUP_TITLE));
 	// resource name group
 	Composite nameGroup = new Composite(composite,SWT.NONE);
 	layout = new GridLayout();
@@ -123,8 +124,25 @@ public String getContainerFullPath() {
 	//} else {
 	//	return "";
 	//}
-	return containerGroup.getContainerFullPath().toString();
-
+	/****/
+			 // to  initialize target container root
+	String selFromDialog = containerGroup.getContainerFullPath().toString();
+				int b = selFromDialog.indexOf('/',1);
+				int e = selFromDialog.length();
+				String endPath = new String("");
+				if( b < 1 ) // means no '/'
+					endPath = new String("");
+				else
+					endPath = selFromDialog.substring(b,e);		 
+			 
+	
+	IContainer containerRoot = (IContainer)NavigatorSelection.selection;
+	
+	//return containerRoot.getLocation().toString()+containerGroup.getContainerFullPath().toString();
+	return containerRoot.getLocation().toString()+endPath;
+	
+	
+	//return containerGroup.getContainerFullPath().toString();
 }
 /**
  * Returns a string that is the path of the currently selected
