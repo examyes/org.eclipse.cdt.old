@@ -1,0 +1,5 @@
+2004-10-13  Jeremy Handcock  <handcock@redhat.com>
+
+	* index.html: Correct path to stylesheet.
+	* developer/docs.html: Correct link to design document.
+
