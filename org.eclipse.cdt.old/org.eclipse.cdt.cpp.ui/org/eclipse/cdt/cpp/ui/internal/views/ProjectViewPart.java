@@ -309,6 +309,8 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  
   public void updateActionStates()
   {
+   if (_homeAction == null)
+    fillLocalToolBar();
  	_homeAction.checkEnabledState();
  	_forwardAction.checkEnabledState();
  	_backAction.checkEnabledState();
