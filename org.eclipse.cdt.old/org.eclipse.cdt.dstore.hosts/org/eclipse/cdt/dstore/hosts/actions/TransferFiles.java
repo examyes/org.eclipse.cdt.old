@@ -147,20 +147,21 @@ public class TransferFiles extends Thread
 	    	if (type.equals("file"))
 	    	{
 	    		copiedSource = targetDataStore.createObject(null, type, source.getName(), newSourceStr);
-
 	    		needsUpdate = true;
 	    	}	    
 	    	else 
 	    	{
 	    		copiedSource = targetDataStore.createObject(null, type, source.getName(), newSourceStr);
+
 	    		DataElement mkdir = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_DIR", 3);
 	    		if (mkdir != null)
 	    		{
 
 	    			ArrayList args = new ArrayList();
 	    			args.add(copiedSource); 
-	    			targetDataStore.synchronizedCommand(mkdir, args, target);
-	    		}	    		
+	    			targetDataStore.command(mkdir, args, target);
+	    		}
+	    		   		
 	    	}
 	    	scratchUpdate = true;
 	    }
@@ -240,50 +241,56 @@ public class TransferFiles extends Thread
 
 			// make sure we have a local copy of the file
 			File theFile = source.getFileObject();
-			
+
 			try
 			{ 
 				FileInputStream input = new FileInputStream(theFile);
-				long totalSize = theFile.length();
+				long size = theFile.length();
 				boolean firstAppend = true;
-				int bufferSize = 50000;
+				int bufferSize = 500000;
 				byte[] buffer = new byte[bufferSize];
-				int totalRead = 0;
-				while (totalRead < totalSize)
+
+				int written = 0;
+				while (written < size)
 				{ 
-					int available = input.available();
-					available = (bufferSize > available) ? available : bufferSize;
-				
-					int bytesRead = input.read(buffer, 0, available);
-					if (bytesRead == -1)
-						break;
-						
-					if (firstAppend) 
+					int subWritten = 0;
+					while (written < size && subWritten < bufferSize)
+				    {
+						int available = input.available();
+						available = (bufferSize > available) ? available : bufferSize;
+						int read = input.read(buffer, subWritten, available);
+						subWritten += read;
+						written += subWritten;
+				    }
+	
+				    	
+					if (written <= bufferSize) 
 					{ 
-						firstAppend = false;
-						targetDataStore.replaceFile(newSourceStr, buffer, bytesRead);				
+						targetDataStore.replaceFile(newSourceStr, buffer, subWritten);				
 					}
 					else
-					{
-						targetDataStore.replaceAppendFile(newSourceStr, buffer, bytesRead);
+					{		
+						targetDataStore.replaceAppendFile(newSourceStr, buffer, subWritten);					
 					}
 					
-					totalRead += bytesRead;
 					
 				if (_pm != null)
 		  		  {
 		  		  	String msg = "Writing " + newSourceStr;
-		  		  	if (totalRead != totalSize)
+		  		  	//if (written < size)
 		  		  	{
-		  		  	  msg = "Writing " + newSourceStr + " (" + totalRead / 1000 + "K of " + totalSize / 1000 + "K bytes)";
+		  		  	  msg = "Writing " + newSourceStr + " (" + written / 1000 + "K of " + size / 1000 + "K bytes)";
 		  		  	}
+		  		  	
 					_pm.subTask(msg);
 		  		  }
 				}
 			}
 			catch (IOException e)
 			{
+				e.printStackTrace();
 			}
+
 			
 			if (_checkTimestamps)
 			{
@@ -313,11 +320,6 @@ public class TransferFiles extends Thread
 			if (ctype.equals("directory") || ctype.equals("file"))
 			    {	
 				transfer(child, copiedSource);				
-			    }
-
-			if (_pm != null)
-			    {
-				_pm.worked(1);
 			    }
 		    }
 	    }	
@@ -386,4 +388,8 @@ public class TransferFiles extends Thread
 		    }
 	    }
     }
+    
+
+	
+
 }

@@ -67,38 +67,36 @@ public class SynchronizeWithAction extends CustomAction
 		    
 		    if (project2 != null && project1 != project2)
 			{
+				
+				ArrayList files = project1.getAssociated("contents");
+				
 			    _pm.beginTask("Synchronizing " + 
 					  project1.getName() + " with " + project2.getName() + "...", 
-					  project1.getNestedSize());
+					  files.size());
 
 			    // transfer from project1 to project2
-			    for (int j = 0; j < project1.getNestedSize() && !pm.isCanceled(); j++)
+			    for (int j = 0; j < files.size() && !pm.isCanceled(); j++)
 				{
-				    DataElement source = project1.get(j);
-				    if (!source.isReference())
-					{
-					    TransferFiles transferAction = new TransferFiles("transfer", source, 
+				    DataElement source = (DataElement)files.get(j);
+					TransferFiles transferAction = new TransferFiles("transfer", source, 
 											     project2, null);
-					    transferAction.run(pm);
-					}
+					transferAction.run(pm);
 				    _pm.worked(1);
 				}
 
+				ArrayList files2 = project2.getAssociated("contents");
 			    _pm.beginTask("Synchronizing " + 
 					  project2.getName() + " with " + project1.getName() + "...", 
-					  project2.getNestedSize());
+					  files2.size());
 			    
 
 			    // transfer from project2 to project1
-			    for (int k = 0; k < project2.getNestedSize() && !pm.isCanceled(); k++)
+			    for (int k = 0; k < files2.size() && !pm.isCanceled(); k++)
 				{
-				    DataElement source = project2.get(k);
-				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))
-					{
-					    TransferFiles transferAction = new TransferFiles("transfer", source, 
+				    DataElement source = (DataElement)files2.get(k);
+					TransferFiles transferAction = new TransferFiles("transfer", source, 
 											     project1, null);					     
-					    transferAction.run(pm);
-					}
+					transferAction.run(pm);
 				    _pm.worked(1);
 				}				
 			}

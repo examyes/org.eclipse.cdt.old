@@ -74,18 +74,18 @@ public class ReplicateFromAction extends CustomAction
 
 		    if (sourceProject != null && sourceProject != _subject)
 			{
-			    _pm.beginTask("Replicating files from " + sourceProject.getName() + "...", sourceProject.getNestedSize());
+				ArrayList files = sourceProject.getAssociated("contents");
+				
+			    _pm.beginTask("Replicating files from " + sourceProject.getName() + "...", 
+			    		files.size());
 
 			    // do transfer files
-			    for (int j = 0; j < sourceProject.getNestedSize() && !pm.isCanceled(); j++)
+			    for (int j = 0; j < files.size() && !pm.isCanceled(); j++)
 				{
-				    DataElement source = sourceProject.get(j);
-				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))
-					{					    
-					    TransferFiles transferAction = new TransferFiles("transfer", source, 
+				    DataElement source = (DataElement)files.get(j);					    
+					TransferFiles transferAction = new TransferFiles("transfer", source, 
 											     _subject, null);					    
-					    transferAction.run(pm);
-					}
+					transferAction.run(pm);
 				    _pm.worked(1);
 				}
 			}
