@@ -447,8 +447,11 @@ public class ViewMenu implements IMenuListener
 		for (int i = 0; i < items.size(); i++)
 		    {
 			DataElement item = (DataElement)items.get(i);
-			if (!_relationItems.contains(item))
-			    _relationItems.add(item);
+			if (item.depth() > 0)
+			    {
+				if (!_relationItems.contains(item))
+				    _relationItems.add(item);
+			    }
 		    }
 	    }
       }
@@ -463,8 +466,11 @@ public class ViewMenu implements IMenuListener
 	  for (int i = 0; i < items.size(); i++)
 	      {
 		  DataElement item = (DataElement)items.get(i);
-		  if (!_filterItems.contains(item))
-		      _filterItems.add(item);
+		  if (item.depth() > 0)
+		      {
+			  if (!_filterItems.contains(item))
+			      _filterItems.add(item);
+		      }
 	      }	
 	  
 	    DataElement allD = dataStore.findObjectDescriptor(_dataStore.getLocalizedString("model.all"));
@@ -534,6 +540,30 @@ public class ViewMenu implements IMenuListener
 	      }
         }        
       }
+
+    public void selectRelationship(String relationship)
+    {
+	for (int i = 0; i < _relationItems.size(); i++)
+	    {
+		DataElement object = (DataElement)_relationItems.get(i);
+		if (object.getName().equals(relationship))
+		    {
+			setRelation(object);
+		    }
+	    }
+    }
+    
+    public void selectFilter(String filter)
+    {
+	for (int i = 0; i < _filterItems.size(); i++)
+	    {
+		DataElement object = (DataElement)_filterItems.get(i);
+		if (object.getName().equals(filter))
+		    {
+			setFilter(object);
+		    }
+	    }
+    }
 }
 
 

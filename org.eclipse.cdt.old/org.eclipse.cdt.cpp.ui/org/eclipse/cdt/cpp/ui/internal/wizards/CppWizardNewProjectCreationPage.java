@@ -587,7 +587,7 @@ protected String getDirectoryName() {
 		String selected = browse.getSelected();
 		if (selected != null)
 		    {
-			remoteHostDirectoryField.setText(selected);
+			remoteHostDirectoryField.setText(selected + File.separator);
 		    }
 	    }
 

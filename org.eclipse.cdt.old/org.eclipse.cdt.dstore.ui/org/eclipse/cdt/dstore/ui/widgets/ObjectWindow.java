@@ -223,13 +223,20 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     public void setSorter(String property)
     {
-	for (int i = 0; i < _sortByAction.length; i++)
+	if (property.equals("null"))
 	    {
-		if (_sortByAction[i].getProperty().equals(property))
+		_noSort.run();
+	    }
+	else
+	    {
+		for (int i = 0; i < _sortByAction.length; i++)
 		    {
-			_sortByAction[i].run();
-		    }
-	    }	
+			if (_sortByAction[i].getProperty().equals(property))
+			    {
+				_sortByAction[i].run();
+			    }
+		    }	
+	    }
     }
 
     public void setSorter(DataElementSorter sorter)
@@ -408,6 +415,17 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
       {
         _toolBar.fixateOnObjectType(objectType);
       }
+
+    public void selectRelationship(String relationship)
+    {
+	_toolBar.selectRelationship(relationship);
+    }
+
+    public void selectFilter(String filter)
+    {
+	_toolBar.selectFilter(filter);
+    }
+
 
   public void resetView()
       {

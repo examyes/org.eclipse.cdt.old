@@ -197,7 +197,6 @@ public class ViewToolBar extends Viewer implements IDomainListener
 
     public void setSelection(ISelection sel, boolean flag)
     {
-
     }
 
     public void refresh()
@@ -346,5 +345,15 @@ public class ViewToolBar extends Viewer implements IDomainListener
     public IDataElementViewer getViewer()
     {
 	return _outLink; 
+    }
+
+    public void selectRelationship(String relationship)
+    {
+	_viewMenu.selectRelationship(relationship);
+    }
+
+    public void selectFilter(String filter)
+    {
+	_viewMenu.selectFilter(filter);
     }
 }
