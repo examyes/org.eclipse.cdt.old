@@ -343,7 +343,7 @@ public class NameLookup
   DataElement theElement; 
   while (line >=0)
   {
-   theElement = _dataStore.find(theFile, DE.A_SOURCE, (path + ":" + line),3);
+   theElement = _dataStore.find(theFile, DE.A_SOURCE_LOCATION, "" + line,3);
    if (theElement!=null)
     return theElement;
    line--;
