@@ -41,6 +41,8 @@ import java.util.*;
 
 public class ParserPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
 {
+    private Button _autoParseButton;
+
     public ParserPreferencePage() 
     {
     }
@@ -52,15 +54,54 @@ public class ParserPreferencePage extends PreferencePage implements IWorkbenchPr
     public Control createContents(Composite parent) 
     {	
 	Composite control = new Composite(parent, SWT.NONE);
+
+	_autoParseButton = new Button(control, SWT.CHECK);
+	_autoParseButton.setText("Perform parse automatically on resource modification");
+	performDefaults();
+	
+	control.setLayout(new GridLayout());
+
 	return control;
     }	
     
     public void performDefaults() 
     {
+	CppPlugin plugin      = CppPlugin.getDefault();
+	ArrayList preferences = plugin.readProperty("AutoParse");
+	if (preferences.isEmpty())
+	    {
+		_autoParseButton.setSelection(false);
+	    }
+	else
+	    {
+		String preference = (String)preferences.get(0);
+		if (preference.equals("Yes"))
+		    {
+			_autoParseButton.setSelection(true);
+		    }
+		else
+		    {
+			_autoParseButton.setSelection(false);
+		    }
+	    }
     }
 
     public boolean performOk()
     {
+	ArrayList preferences = new ArrayList();
+	if (_autoParseButton.getSelection())
+	    {
+		preferences.add("Yes");		
+	    }
+	else
+	    {
+		preferences.add("No");		
+	    }
+
+	CppPlugin plugin      = CppPlugin.getDefault();
+	plugin.writeProperty("AutoParse", preferences);	
+
 	return true;
     }
+
 }

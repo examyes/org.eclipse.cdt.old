@@ -1575,8 +1575,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	if (resource != null) 
 	    {
-	
-	    	{
 		IProject project = resource.getProject();
 		DataElement cProject = findProjectElement(project);
 		
@@ -1594,7 +1592,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			System.out.println("no project " + project);     					
 		    }
 	    }
-    }
     }
 
     public void resourceChanged(IResourceChangeEvent event)
@@ -1727,10 +1724,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						    "com.ibm.dstore.ui.connections.DeleteAction");	 
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");
 
-
         
               
-        DataElement parseMenuD = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
+        DataElement parseMenuD = dataStore.createObject(fileD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
 	
         dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse", 
 			       "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
@@ -1739,8 +1735,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
         dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information", 
 			       "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
         
-        dataStore.createReference(fileD, parseMenuD);
-	dataStore.createReference(dirD, parseMenuD);
          
        
 	// replicated project actions

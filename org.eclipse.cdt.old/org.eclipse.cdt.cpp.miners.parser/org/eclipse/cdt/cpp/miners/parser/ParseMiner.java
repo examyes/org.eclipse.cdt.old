@@ -53,8 +53,11 @@ public class ParseMiner extends Miner
    
   
   statusProgress(status);
+
   if (name.equals("C_PARSE"))
    handleParse(subject, getCommandArgument(theElement, 1));
+  else if (name.equals("C_REFRESH"))
+    handleRefresh(subject, getCommandArgument(theElement, 1));
   else if (name.equals("C_QUERY"))
    handleObjectParse(subject);
   else if (name.equals("C_CODE_ASSIST"))
@@ -79,8 +82,14 @@ public class ParseMiner extends Miner
    handleSetPreferences(subject, getCommandArgument(theElement, 1));
   return statusDone(status);
  }
- 
- private DataElement handleOpenProject(DataElement theProject)
+
+  private void handleRefresh(DataElement theSubject, DataElement prj)
+    {
+	// if we do auto parse
+	//***handleParse(theSubject, prj);	
+    }
+
+  private DataElement handleOpenProject(DataElement theProject)
  {  
      theProject = theProject.dereference();
      if (theProject.getType().equals("Project"))
