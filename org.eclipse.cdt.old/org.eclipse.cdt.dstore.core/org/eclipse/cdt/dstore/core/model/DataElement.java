@@ -12,7 +12,7 @@ import org.eclipse.cdt.dstore.core.util.*;
 
 import java.io.*;
 import java.util.*;
-
+ 
 /**
  * <code>DataElement</code> is the unit of information for the <code>DataStore</code>.  All objects including
  * schema descriptors, commands and instance objects are represented by <code>DataElement</code>s.

@@ -20,6 +20,7 @@ public class MinerLoader implements ISchemaRegistry
     private DataStore            _dataStore;
     private ArrayList            _miners;
     private ArrayList            _minerList;
+    private ArrayList            _minerFileList;
     private ArrayList            _loaders;
     
     public MinerLoader(DataStore dataStore, ArrayList loaders)
@@ -28,6 +29,7 @@ public class MinerLoader implements ISchemaRegistry
 	_loaders = loaders;
 	_miners = new ArrayList();
 	_minerList = new ArrayList();
+	_minerFileList = new ArrayList();
     }
 
     public void loadMiners()
@@ -48,9 +50,12 @@ public class MinerLoader implements ISchemaRegistry
 		    {
 			minerFile = pluginDir + File.separator + minersDir + File.separator + "minerFile.dat";
 		    }
-		_dataStore.trace("load miners for " + minerFile);
-		
-		loadMiners(minerFile);
+		//_dataStore.trace("load miners for " + minerFile);
+		if (!_minerFileList.contains(minerFile))
+		{
+			loadMiners(minerFile);
+			_minerFileList.add(minerFile);
+		}
 	    }
     }
 
