@@ -10,11 +10,13 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.pa.ui.*;
 
+import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.jface.dialogs.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.*; 
 import java.util.*;
 
 
@@ -42,7 +44,8 @@ public class PAModelInterface implements IDomainListener
  }
  
  
- private static PAModelInterface _instance; 
+ private static PAModelInterface _instance;
+ private PAPlugin				 _plugin;
  private ModelInterface  		 _cppApi;
  private PATraceNotifier 		 _notifier;
  private CppProjectNotifier		 _cppNotifier;
@@ -63,6 +66,7 @@ public class PAModelInterface implements IDomainListener
  public PAModelInterface(DataStore dataStore) {
   
   _dataStore = dataStore;
+  _plugin   = PAPlugin.getDefault();
   _notifier = new PATraceNotifier(this);
   _notifier.enable(true);
   _instance = this;
@@ -652,5 +656,44 @@ public class PAModelInterface implements IDomainListener
    }
    
  }  
- 
+
+  /**
+   * Open the PA perspective
+   */
+  public void openPerspective()
+  {
+     IWorkbench workbench = _plugin.getWorkbench();
+     IWorkspace workspace = _plugin.getPluginWorkspace();
+	 IWorkbenchWindow dw  = workbench.getActiveWorkbenchWindow();
+	 IWorkbenchPage persp = null;
+	
+	 IWorkbenchPage[] perspectives = dw.getPages();
+	
+	 try
+	 {
+		for (int i = 0; i < perspectives.length; i++)
+		{
+			IWorkbenchPage aPersp = perspectives[i];
+			String layoutId = aPersp.getLabel();
+			
+			// System.out.println("perspective: " + layoutId);
+			if (layoutId.equals("Workspace - Performance Trace"))
+			{
+			  persp = aPersp;	
+			  dw.setActivePage(persp);
+			  break;
+			}	
+		}
+		
+		if (persp == null)
+		{
+		  persp = workbench.openPage("org.eclipse.cdt.pa.ui.PAPerspective", workspace.getRoot(), 0);
+		}
+	 }
+     catch (WorkbenchException e)
+	 {
+	 }
+	 
+  }
+    
 }

@@ -42,6 +42,7 @@ public class NewTraceFileAction extends Action implements IWorkbenchWindowAction
       if (selection != null && selection.isOfType("file")) {
         
         _api.addTraceFile(selection, "auto");
+        _api.openPerspective();
       }
 	}
     

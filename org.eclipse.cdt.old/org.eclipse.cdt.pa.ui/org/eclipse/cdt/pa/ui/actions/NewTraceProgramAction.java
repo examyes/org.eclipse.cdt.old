@@ -39,7 +39,7 @@ public class NewTraceProgramAction extends Action implements IWorkbenchWindowAct
       
       if (selection != null && selection.isOfType("executable"))
 	   _api.addTraceProgram(selection, "gprof");
-	   
+	   _api.openPerspective();	   
     }
 
 	public void run(IAction action)
