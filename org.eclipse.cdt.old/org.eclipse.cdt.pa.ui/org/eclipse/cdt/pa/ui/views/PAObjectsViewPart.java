@@ -86,7 +86,6 @@ public class PAObjectsViewPart extends ObjectsViewPart implements IPATraceListen
 	  }
     }
     
-    
     public void traceChanged(PATraceEvent event)
     {      
     }    

@@ -81,7 +81,7 @@ public class TraceFilesViewPart extends PAObjectsViewPart
   }
   
   
-  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+  protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel) 
   {
    
    if (!_api.isShowAll() && part instanceof PAProjectsViewPart && sel instanceof IStructuredSelection) {
@@ -96,8 +96,9 @@ public class TraceFilesViewPart extends PAObjectsViewPart
        _viewer.setInput(traceProjectElement);
      }
      
-    }    
-   }   
+    } 
+    }
+ 
   }
 
   /**

@@ -52,7 +52,7 @@ public class CallTreeViewPart extends PAObjectsViewPart
   }
 
   
-  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+  protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel) 
   {
    
    if (part != this && sel instanceof IStructuredSelection) {

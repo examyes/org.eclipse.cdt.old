@@ -53,7 +53,7 @@ public class FunctionStatisticsViewPart extends PAObjectsViewPart {
     }
   
     
-    public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+    protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel) 
     {
           
      if (part instanceof TraceFilesViewPart && sel instanceof IStructuredSelection) {
