@@ -281,6 +281,7 @@ class CommandMinerThread extends MinerThread
 		if (_invocation.equals(">"))
 		{
 			_invocation = theShell;
+			_isShell = true;
 		}
 
 
