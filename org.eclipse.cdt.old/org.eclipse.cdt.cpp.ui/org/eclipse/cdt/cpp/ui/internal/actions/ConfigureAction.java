@@ -7,6 +7,7 @@ package com.ibm.cpp.ui.internal.actions;
  */
 
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.dialogs.PreventableMessageBox;
 import com.ibm.cpp.ui.internal.*;
 
 import com.ibm.dstore.ui.actions.*;
@@ -39,7 +40,10 @@ import org.eclipse.jface.dialogs.*;
 
 public class ConfigureAction extends CustomAction
 { 
-//	ProjectStructureManager structureManager;
+
+	private PreventableMessageBox box  = 
+			new PreventableMessageBox(null,null,null,null,0,null,0);
+		
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -92,8 +96,8 @@ public class ConfigureAction extends CustomAction
     public void run()
 	{
 		boolean execute = true;
-		boolean runUpdate = true;
-		boolean createUpdate = true;
+		int runUpdate = 0;// 0 == ok, 1 == no, 2 == cancel
+		int updating = 0; // 0 == ok, 1 == no, 2 == cancel
 		boolean noConffilesExist = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
@@ -104,10 +108,8 @@ public class ConfigureAction extends CustomAction
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
-				("Attempting to update existing configure.in and makefile.am's "+
-				"\nconfigure.in and or Makefile.am Files will be generated if missing"
-					+"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
-				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+				("Attempting to update existing & generating missing configure.in and makefile.am's "
+					+"\nUpdated files will be renamed *.old");
 				execute = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
 			}
 		}	
@@ -119,7 +121,6 @@ public class ConfigureAction extends CustomAction
 				String message = new String
 				("Attempting to update existing makefile.am's"+
 					"\nIf updated then old Makefile.am's will be renamed *.old");
-				//dialog.openInformation(shell,"Updating Makefile.am's ",message);
 				execute = dialog.openConfirm(shell,"Updating Makefile.am's ",message);
 			}
 		}	
@@ -131,31 +132,29 @@ public class ConfigureAction extends CustomAction
 				String message = new String
 				("Attempting to update existing configure.in "+
 					"\nIf updated then old configure.in shall be renamed *.old");
-				//dialog.openInformation(shell,"Updating configure.in",message);
 				execute = dialog.openConfirm(shell,"Updating configure.in",message);
 			}
 		}	
 		
 		if(_command.getValue().equals("CREATE_CONFIGURE"))
 		{
-			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 			String str1,str2;
 			if(doesAutoconfSupportExist())
 			{
 				noConffilesExist = false;
 				str1 = new String(
-				"Attempting to update existing configure.in and makefile.am's "+
-				"\nconfigure.in and or Makefile.am Files will be generated if missing"+
-				"\nOld existing configuration files will be renamed *.old if updated");
-				str2 = new String("\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
+				"Would you like the system to update and generate missing configuration files?");
 			}
 			else
 			{
 				noConffilesExist = true;
 				str1 = "";str2="";
 			}
-			String message = new String(str1+"\nGenerating project configuration files"+str2);
-			createUpdate = dialog.openConfirm(shell,"Creating configure.in and Makefile.am's ",message);
+			String message = new String("\nGenerating project configuration files"+str1);		
+			updating = box.openYesNoCancel(
+				shell,
+				"Creating configure.in and Makefile.am's ",
+				message);
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
@@ -164,21 +163,21 @@ public class ConfigureAction extends CustomAction
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
 				("\nThe system detects that configure script is not up to date"+
-				"\nUpdating project configuration files and regenerating configure may be needed"+
-				"\nOld existing configuration files will be renamed *.old if updated"+
-				"\nPress OK to update project configuration files, or "+
-				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
-				runUpdate = dialog.openConfirm(shell,"Updating configure.in, Makefile.am's and generating configure ",message);
+				"\nWould you like to update and generate missing configuration files before running configure?");
+				runUpdate = box.openYesNoCancel(
+				shell,
+				"Running configure script",
+				message);
 			}
 			else
 			{
-				runUpdate = false;
+				runUpdate = 1;
 			}
 		}
 			
 		if(execute)
 		{	
-			if(!createUpdate&&!noConffilesExist)
+			if(updating==1 && !noConffilesExist)
 			{
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -188,7 +187,7 @@ public class ConfigureAction extends CustomAction
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else if(!runUpdate)
+			else if(runUpdate==1)
 			{
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -198,7 +197,7 @@ public class ConfigureAction extends CustomAction
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else if(createUpdate&&runUpdate)
+			else if(updating==0&&runUpdate==0)
 			{		
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 				DataElement status = _dataStore.command(configureCmd, _subject);
