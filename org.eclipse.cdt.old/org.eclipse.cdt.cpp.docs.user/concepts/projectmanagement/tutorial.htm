@@ -43,8 +43,7 @@ project and select "New -> Directory"</font></font></li>
 <font color="#000000"><font size=+1>Enter the name of the directory&nbsp;
 "src" and press OK</font></font></li>
 </ol>
-<font color="#000000"><font size=+1></font></font><font color="#000000"><font size=+1></font></font>
-<p>&nbsp;&nbsp;<img SRC="images/newdir.gif" NOSAVE height=406 width=438>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img SRC="images/dirEntry.gif" NOSAVE height=140 width=220>
+<img SRC="images/newdir.gif" NOSAVE height=406 width=438><img SRC="images/dirEntry.gif" NOSAVE height=140 width=220>
 <br>&nbsp;
 <br>&nbsp;
 <li>
@@ -52,8 +51,8 @@ project and select "New -> Directory"</font></font></li>
 directory that you have created and select New - > File, then enter the
 file name to be "main.cc"</font></font></li>
 </ul>
-<font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img SRC="newfile.gif" height=221 width=412>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font></font><img SRC="fileEntry.gif" height=140 width=220>
-<br><font color="#000000"><font size=+1></font></font>&nbsp;
+<img SRC="images/newfile.gif" NOSAVE height=221 width=412><img SRC="images/fileEntry.gif" NOSAVE height=140 width=220>
+<br>&nbsp;
 <ul>
 <li>
 <font color="#000000"><font size=+1>Now we need to write main.cc:</font></font></li>
@@ -115,12 +114,9 @@ void display();</font></font></font>
 <br>&nbsp;</ul>
 <font color="#000000"><font size=+1>Before we move to the next part make
 sure that you have the following project structure:</font></font>
-<p><font color="#000000"><font size=+1>HelloAutoconf</font></font>
-<ul><font color="#000000"><font size=+1>src</font></font>
-<ul><font color="#000000"><font size=+1>hello.cc</font></font>
-<br><font color="#000000"><font size=+1>hello.h</font></font>
-<br><font color="#000000"><font size=+1>main.cc</font></font></ul>
-</ul>
+<ul>
+<ul>&nbsp;</ul>
+<img SRC="images/sourcesview1.gif" NOSAVE height=597 width=806></ul>
 </ul>
 <b><font color="#000000"><font size=+2>2- Creating Project Configuration
 Files and Creating the Configure Script</font></font></b>
@@ -140,9 +136,15 @@ project view</font><font color="#000000">, RMC the HelloAutoconf project
 level directory)<font color="#000000"> and select Autoconf -> Generate
 configure.</font></font></li>
 
+<ul>&nbsp;
+<br><img SRC="images/generateconfigure.gif" NOSAVE height=407 width=483></ul>
+
 <li>
 <font color="#000000"><font size=+1>Click the OK button in the message
 dialog.</font></font></li>
+
+<br>&nbsp;
+<ul><img SRC="configureDialog1.gif" height=157 width=522></ul>
 
 <li>
 <font size=+1><font color="#000000">Make sure that the command has completed
@@ -154,6 +156,11 @@ generate the configure script together with the configure script. This
 is one good reason as to why it is a good practice to leave the top level
 directory for the autoconf and automake generated files.&nbsp;</font></font></li>
 
+<br>&nbsp;
+<p>&nbsp;
+<p><img SRC="images/configurationfiles.gif" NOSAVE height=640 width=896>
+<br>&nbsp;
+<br>&nbsp;
 <li>
 <font color="#000000"><font size=+1>Following the previous steps, the system
 will assign the name of your project to be your package name - if you want
@@ -184,6 +191,9 @@ the next step would be running the script and building our program&nbsp;</font><
 RMC the project (top level directory) folder and select Autoconf -> run
 configure</font></li>
 
+<ul>&nbsp;</ul>
+<img SRC="images/runconfigure1.gif" NOSAVE height=420 width=753>
+<br>&nbsp;
 <li>
 <font size=+1>Make sure that the command has completed successfully- you
 can monitor the command output from the <font color="#FF0000">output view</font>,
@@ -191,10 +201,14 @@ and&nbsp;&nbsp; also by making sure that there is Makefile in your source
 directory.</font></li>
 </ul>
 <b><font size=+2>4- Building and Running HelloAutoconf Program</font></b>
-<blockquote>
+<ul>
 <li>
 <font size=+1>From the <font color="#FF0000">C/C++ project view </font>RMC
 the HelloAutoconf project and select Build Project</font></li>
+
+<ul>&nbsp;</ul>
+<img SRC="images/buildProject.gif" NOSAVE height=252 width=559>
+<ul>&nbsp;</ul>
 
 <li>
 <font size=+1>After successful completion, check the source directory and
@@ -206,7 +220,9 @@ name later.</font></li>
 create a new command - Make sure that the command container being the "src"
 directory, enter the name of the command to be&nbsp; "run HelloAutoconf"
 and the invocation to be "./src"</font></li>
-
+<font size=+1></font>
+<p><br><img SRC="images/createcommand.gif" NOSAVE height=531 width=778>
+<br><font size=+1></font>&nbsp;
 <li>
 <font size=+1>From the command Specification view, RMC the command and
 select execute - you can use the view's local tool bar as well.</font></li>
@@ -214,7 +230,9 @@ select execute - you can use the view's local tool bar as well.</font></li>
 <li>
 <font size=+1>Once the command has been finished, you should see Hello
 World! in the <font color="#FF0000">output view</font></font></li>
-</blockquote>
+
+<p><br><img SRC="images/hellooutput.gif" NOSAVE height=640 width=896>
+<br>&nbsp;</ul>
 
 <p><br><b><font size=+2>5- Modifying and Updating Configuration Files (configure.in
 and Makefile.am)</font></b>
@@ -248,7 +266,10 @@ the way to update configuration file.&nbsp;</font></li>
 <li>
 <font size=+1>Open HelloAutoconf/src/Makefile.am and change the value for
 the following variables:</font></li>
-
+<font size=+1></font>
+<p><br><img SRC="images/programValue.gif" NOSAVE height=346 width=842>
+<br>&nbsp;
+<br>&nbsp;
 <ol>
 <li>
 <font size=+1>Set the bin_PROGRAMS variable to be equal to "hello"</font></li>
@@ -270,7 +291,7 @@ the configure script</font></li>
 
 <li>
 <font size=+1>Click yes on the message dialog box and make sure that the
-command has completed successfully</font></li>
+command has completed successfully</font><img SRC="images/configureDialog2.gif" NOSAVE height=157 width=593></li>
 
 <li>
 <font size=+1>RMC the hello project and select Autoconf -> Run configure.&nbsp;</font></li>
@@ -298,16 +319,8 @@ from the context menu.</font></li>
 <li>
 <b><font size=+1>Expanding HelloAutoconf Project</font></b></li>
 
-<br>&nbsp;
-<p>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<p><font size=+1>Let us now expand our sample HelloAutoconf project to
-include source files in a sub directories of the "src" directory.&nbsp;
+<p><br><font size=+1>Let us now expand our sample HelloAutoconf project
+to include source files in a sub directories of the "src" directory.&nbsp;
 As the project now has several levels of sub folders, it is called a deep
 projects.&nbsp; The tool is designed - this the default option - to allow
 the user to build code in sub directories into temporary non-installing
@@ -393,7 +406,7 @@ were made to the configuration files and configure now is not up to date</font><
 
 <li>
 <font size=+1>Click Yes if prompted by the message pop up dialog as you&nbsp;
-want the tool to update and generate you configuration files</font></li>
+want the tool to update and generate you configuration files&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><img SRC="images/configureDialog2.gif" NOSAVE height=157 width=593></li>
 
 <li>
 <font size=+1>Once the command is completed successfully, RMC on the project
@@ -415,7 +428,7 @@ you have already done that before</font></li>
 <font size=+1>You should now see the changes that we have added to our
 HulloAutoconf program displayed in the output view</font></li>
 </ol>
-</ul>
+<font size=+1></font></ul>
 
 <li>
 <b><font size=+1>Modifying libraries names</font></b></li>
