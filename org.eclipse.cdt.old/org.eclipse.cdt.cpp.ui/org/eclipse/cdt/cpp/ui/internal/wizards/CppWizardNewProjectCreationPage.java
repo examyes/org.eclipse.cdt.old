@@ -615,7 +615,22 @@ protected String getDirectoryName() {
      */
     protected boolean validatePage() 
     {
-	return validateProjectNameGroup();
+	if (validateProjectNameGroup())
+	    {
+		if (_sourceLocation == CppProjectAttributes.LOCATION_LOCAL)
+		    {
+			String dir = sourceNameField.getText();
+			java.io.File testFile = new java.io.File(dir);
+			if (!testFile.exists())
+			    {
+				return false;
+			    }			
+		    }
+
+		return true;
+	    }
+
+	return false;
     }
     
     /**

@@ -78,6 +78,8 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	    {
 		// add C++ project indicator
 		IPath newPath = project.getFullPath();
+
+
 		QualifiedName indicatorFile = new QualifiedName("C++ Project", newPath.toString());
 		try
 		    {
@@ -85,7 +87,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		    }
 		catch (CoreException ce)
 		    {
-			System.out.println("CppNewProjectResourceWizard setPersistentProperty C++ Project CoreException: " +ce);
+			
 		    }
 		
 		// add parse paths
