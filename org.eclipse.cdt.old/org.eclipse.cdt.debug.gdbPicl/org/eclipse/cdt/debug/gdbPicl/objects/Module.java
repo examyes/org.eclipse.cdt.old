@@ -147,9 +147,9 @@ public class Module
       ERepNextModuleEntry m = new ERepNextModuleEntry(_moduleID, _moduleName,
             _moduleName, flags);
 
-      Enumeration en = _parts.keys();
-      while (en.hasMoreElements())
-         m.addPartID(((Integer) en.nextElement()).intValue());
+//      Enumeration en = _parts.keys();
+//      while (en.hasMoreElements())
+//         m.addPartID(((Integer) en.nextElement()).intValue());
 
       _moduleEntryNew = false;
       _moduleEntryChanged = false;
