@@ -97,6 +97,14 @@ public class XMLparser
 		try
 		    {
 			int in = reader.read();
+			if (in == -1)
+			{
+				done = true;
+				Exception e = new Exception("The connection to the server has been lost.");
+				handlePanic(e);				
+			}
+			else
+			{
 			byte aByte = (byte)in;			
 			if ((in <= 0) ||
 			    (aByte == '\n') || (aByte == '\0') || (aByte == '\r'))
@@ -114,6 +122,7 @@ public class XMLparser
 				_byteBuffer[offset] = aByte;
 				offset++;
 			    }
+			}
 		    }
 		catch (IOException e)
 		    {
@@ -142,7 +151,7 @@ public class XMLparser
     {
 	_panic = true;			
 	_panicException = e;
-    }
+    }	
     
     public Exception getPanicException()
     {
