@@ -119,7 +119,7 @@ public class MakefileAmManager {
 			{
 				case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
-					initTopLevelMakefileAm((File)projectStucture[i][0],structureManager);
+					initTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
@@ -137,7 +137,7 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	private void initTopLevelMakefileAm(File parent, ProjectStructureManager structureManager)
+	private void initTopLevelMakefileAm(File parent, ProjectStructureManager structureManager, boolean stampit)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
@@ -150,8 +150,11 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-				out.write(getGeneratedStamp());
-				out.newLine();
+				if(stampit)
+				{
+					out.write(getGeneratedStamp());
+					out.newLine();
+				}
 				while((line=in.readLine())!=null)
 				{
 					if(line.indexOf(SUBDIRS)!=-1)
@@ -395,21 +398,25 @@ public class MakefileAmManager {
 					case (TOPLEVEL):
 					createDotOldFileFor(Makefile_am);
 					updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
+					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (PROGRAMS):
 					createDotOldFileFor(Makefile_am);
 					updateProgramsMakefileAm(Makefile_am.getParentFile());
+					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (STATICLIB):
 					createDotOldFileFor(Makefile_am);
 					updateStaticLibMakefileAm(Makefile_am.getParentFile());
+					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (SHAREDLIB):
 					createDotOldFileFor(Makefile_am);
 					updateSharedLibMakefileAm(Makefile_am.getParentFile());
+					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					default:
@@ -420,7 +427,7 @@ public class MakefileAmManager {
 	}
 	private void updateTopLevelMakefileAm(File parent, ProjectStructureManager structureManager)
 	{
-		initTopLevelMakefileAm(parent,structureManager);
+		initTopLevelMakefileAm(parent,structureManager,false);
 	}
 
 	private void updateProgramsMakefileAm(File parent)
@@ -433,8 +440,6 @@ public class MakefileAmManager {
 			// searching for the subdir line
 			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 			BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-			out.write(getGeneratedStamp());
-			out.newLine();
 			while((line=in.readLine())!=null)
 			{
 				if(line.indexOf(_SOURCES)!=-1)
@@ -491,14 +496,17 @@ public class MakefileAmManager {
 
 	private String updateExtraDistLine(String line, File parent)
 	{
+		String files = new String("");
 		// add files to the EXTRA_DIST variable
 		for(int i = 0; i <parent.listFiles().length; i++)
 		{
 			String name = parent.listFiles()[i].getName();
 			if(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") 
 			||name.endsWith(".H") || name.endsWith(".C")||name.endsWith(".hpp"))
-				line = line.concat(" "+name);
+				files = files.concat(" "+name);
 		}
+		String variableName = line.substring(0,line.lastIndexOf("="))+"= ";
+		line = variableName+files;
 		return line;
 	}
 	private String updateSubdirsLine(String line, File parent)
@@ -724,7 +732,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initTopLevelMakefileAm(parent,structureManager);
+		initTopLevelMakefileAm(parent,structureManager,true);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
@@ -754,6 +762,37 @@ public class MakefileAmManager {
 		Enumeration enum = timeStamps.elements();
 		while(enum.hasMoreElements())
 			System.out.println(""+enum.nextElement());
+	}
+	private void compareOldAndNew(File parent)
+	{
+		File _new = new File(parent,"Makefile.am");
+		File _old = new File(parent,"Makefile.am.old");
+		String updatedLine;
+		String oldLine;
+		boolean remove = true; 
+		try
+		{
+			// searching for the subdir line
+			BufferedReader updated = new BufferedReader(new FileReader(_new));
+			BufferedReader old= new BufferedReader(new FileReader(_old));
+			oldLine = old.readLine();
+			updatedLine = updated.readLine();
+			while(updatedLine!=null || oldLine!=null)
+			{
+				if(!updatedLine.equals(oldLine))
+				{
+					remove = false;
+					break;
+				}
+				oldLine = old.readLine();
+				updatedLine = updated.readLine();
+			}
+			updated.close();
+			old.close();
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
+		if(remove)
+			_old.delete();		
 	}
 	private void createDotOldFileFor(File aFile)
 	{
