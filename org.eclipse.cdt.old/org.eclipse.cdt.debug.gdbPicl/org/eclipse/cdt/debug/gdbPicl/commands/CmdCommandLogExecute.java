@@ -34,21 +34,28 @@ public class CmdCommandLogExecute extends Command
       if(Gdb.traceLogger.EVT) 
          Gdb.traceLogger.evt(1,"===>>> CmdCommandLogExecute _commandString="+commandString );
       int whyStopXX = EPDC.Why_none;
-      int dU = 1234;
-      _rep = new ERepCommandLogExecute(dU, whyStopXX);
+      //int dU = 1234;
+      
+      ThreadManager threadManager = _debugSession.getThreadManager();
+      int dU= threadManager.getThreadDU(_debugSession.stopThreadName());
+      
+      if (dU> 0)
+      {
+	      _rep = new ERepCommandLogExecute(dU, whyStopXX);
 //      //_rep.setMessage( null );  //"GDB..GDB..GDB..GDB" );
 //    ((ERepCommandLogExecute)_rep).setExceptionMsg( null ); //"GDB..EXCEPTION..GDB" );
 //    ((ERepCommandLogExecute)_rep).addResponseLine("Response Line #1" );
 //    ((ERepCommandLogExecute)_rep).addResponseLine("Response Line #2" );
 //            debugSession.setLastUserCmd(DebugSession.CommandLogExecute,0);
             ((GdbDebugSession)_debugSession).cmdCommandLogExecute( commandString, (ERepCommandLogExecute)_rep );
+      }   
 
       if(true) return false;//////////////////////////////////////////////////////////////////////////////////////
 
       // Note: Front end will send 0 if EPDC.Exec_Run was selected
       int DU = 0; //BCS _req.getDU();
 
-      ThreadManager                threadManager                = _debugSession.getThreadManager();
+//      ThreadManager                threadManager                = _debugSession.getThreadManager();
       ModuleManager                classManager                 = _debugSession.getModuleManager();
       BreakpointManager            breakpointManager            = _debugSession.getBreakpointManager();
       VariableMonitorManager       variableMonitorManager       = _debugSession.getVariableMonitorManager();
