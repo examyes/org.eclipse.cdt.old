@@ -69,7 +69,7 @@ public class AutoconfManager {
 	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
 	{
 		configureInManager.updateConfigureIn(project,actionIsManagedProject);
-		makefileAmManager.updateMakefileAm(project,actionIsManagedProject);
+		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject);
 	}
 	protected void runSupportScript(DataElement project,DataElement status)
 	{
@@ -93,19 +93,20 @@ public class AutoconfManager {
 		if(!script.exists())
 		{
 			Runtime rt = Runtime.getRuntime();
-			//check the project structure
 			File projectFile = project.getFileObject();
 			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			{
-				
-				// add configure.in template files only if not exist
-				try{
+				try{// add script.batch only if not exist
 					Process p;	
 					p = rt.exec(
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
 						"/com.ibm.cpp.miners/autoconf_templates/script.batch "+project.getSource());
 					p.waitFor();
-					//System.out.println("\n p3 exit value = "+p3.exitValue());
+					p = rt.exec(
+						"chmod +x"+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
+						"/com.ibm.cpp.miners/autoconf_templates/script.batch ");
+					p.waitFor();
+
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	
 			}

@@ -370,8 +370,51 @@ public class MakefileAmManager {
 				//insertSourcesLine(Makefile_am,parent);
 
 		}
-	}	
+	}
 	protected void updateMakefileAm(DataElement project,boolean actionIsManageProject)
+	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		File Makefile_am = new File(project.getFileObject(),MAKEFILE_AM);
+			
+		if(Makefile_am.exists()&&!project.getFileObject().getName().startsWith("."))
+		{
+			int classification = classifier.classify(Makefile_am);
+			switch (classification)
+			{
+				case (TOPLEVEL):
+				createDotOldFileFor(Makefile_am);
+				updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
+				updateMakefileAmDependency(Makefile_am.getParentFile());
+				compareOldAndNew(Makefile_am.getParentFile());
+				break;
+				
+				case (PROGRAMS):
+				createDotOldFileFor(Makefile_am);
+				updateProgramsMakefileAm(Makefile_am.getParentFile());
+				updateMakefileAmDependency(Makefile_am.getParentFile());
+				compareOldAndNew(Makefile_am.getParentFile());
+				break;
+				
+				case (STATICLIB):
+				createDotOldFileFor(Makefile_am);
+				updateStaticLibMakefileAm(Makefile_am.getParentFile());
+				updateMakefileAmDependency(Makefile_am.getParentFile());
+				compareOldAndNew(Makefile_am.getParentFile());
+				break;
+					
+				case (SHAREDLIB):
+				createDotOldFileFor(Makefile_am);
+				updateSharedLibMakefileAm(Makefile_am.getParentFile());
+				updateMakefileAmDependency(Makefile_am.getParentFile());
+				compareOldAndNew(Makefile_am.getParentFile());
+				break;
+					
+				default:
+				break;
+			}
+		}
+	}
+	protected void updateAllMakefileAm(DataElement project,boolean actionIsManageProject)
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
 		String[] subdirs = structureManager.getSubdirWorkspacePath();
