@@ -1704,17 +1704,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 		DataElement buildCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Build");
 	DataElement generateAutoconfFilesCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Generate Autoconf/Automake support", 
+							  "Generate Autoconf/Automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "C_GENERATE_SUPPORT");
+	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");
 	DataElement createConfigureeCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	createConfigureeCmd.setAttribute(DE.A_VALUE,"C_CREATE_CONFIGURE");
+	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
 	DataElement configureCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Run configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	configureCmd.setAttribute(DE.A_VALUE,"C_RUN_CONFIGURE");
+	configureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
 							  
 	DataElement mngCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Manage Project", 
