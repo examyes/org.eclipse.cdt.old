@@ -179,13 +179,18 @@ public class ViewToolBar extends Viewer implements IDomainListener
     
     public void domainChanged(DomainEvent ev)
     {
-        DataElement parent = (DataElement)ev.getParent();   
-	String name = _currentInput.getName();	  
-	if (!name.equals(_viewName))
-	{
-	    _viewName = name;
-	    _inputTextLabel.setText(name);
-	}
+        DataElement parent = (DataElement)ev.getParent();    
+		String name = _currentInput.getName();	  
+		if (!name.equals(_viewName))
+		{
+	    	_viewName = name;
+	    	_inputTextLabel.setText(name);
+		}
+		if (_currentDescriptor != parent.getDescriptor())
+		{
+		  _currentDescriptor = parent.getDescriptor();
+		  _viewMenu.setInput(parent);
+		}
     }
     
 
@@ -328,6 +333,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	else if (_currentInput != object)
 	    {
 		_currentInput = (DataElement)object;	
+		_currentDescriptor = _currentInput.getDescriptor();
 
 		if (_currentInput != null && !_currentInput.isDeleted())
 		  {	

@@ -287,10 +287,11 @@ public class ViewMenu extends Composite
   public synchronized void setInput(DataElement object)
       {
         _input = object;
+
 	
 	if (_dataStore != object.getDataStore() ||
 	    (_inputDescriptor == null) || (object.getDescriptor() == null) ||
-	    (!object.getDescriptor().getName().equals(_inputDescriptor.getName())))
+	    (!object.getDescriptor().getName().equals(_inputDescriptor.getName())))	
 	    {
 		_dataStore = _input.getDataStore();
 		_inputDescriptor = object.getDescriptor();          

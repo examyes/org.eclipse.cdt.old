@@ -83,6 +83,7 @@ public class DataElementTableViewer extends TableViewer
     private   DataElement  _selected;
     private   DataElement  _expanded;    
     private   DataElement  _property;
+   
     
     private   IOpenAction  _openEditorAction;
     
@@ -229,13 +230,14 @@ public class DataElementTableViewer extends TableViewer
     
     public boolean listeningTo(DomainEvent ev)
     {
-    	if (!getTable().isDisposed())
+    	if (_currentInput != null && !getTable().isDisposed())
     	{
 	DataElement parent = (DataElement)ev.getParent();
 	
 	if ((parent == _selected) || 
 	    (parent == _currentInput) || 
-	    (parent == _expanded) 
+	    (parent == _expanded) /*||	    
+	    _currentInput.contains(parent, 1)*/
 	    )
 	    {
 		return true;
@@ -297,6 +299,12 @@ public class DataElementTableViewer extends TableViewer
 	    }
 	else if (_currentInput == parent)
 	    {
+
+	    	if (_currentInput.getDescriptor() != _currentDescriptor)
+	    	{
+	    	  _currentDescriptor = _currentInput.getDescriptor();
+	    	  computeLayout();
+	    	}
 	    		
 		internalRefresh(parent);
 
@@ -554,17 +562,20 @@ public class DataElementTableViewer extends TableViewer
 	boolean selectionListening = _listener.isEnabled();
 	if (selectionListening)
 	    {
-		if (_currentInput != object)
+		  if (_currentInput != object)
 		    {
 			if (_currentInput == null)
 			    {
 				setVisibility(true);				
 			    }
-			
+		
 			boolean newType = _currentInput == null || 
 			    (_currentInput.getDescriptor() != ((DataElement)object).getDescriptor());
+			 
+			    
 			_currentInput = (DataElement)object;
-			
+			_currentDescriptor = _currentInput.getDescriptor();
+				 
 			if (newType)
 			    {
 				computeLayout();
