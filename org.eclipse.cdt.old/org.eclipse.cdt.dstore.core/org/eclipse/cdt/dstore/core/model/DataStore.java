@@ -2460,7 +2460,7 @@ public final class DataStore
         {
           depth--;
 
-          if (StringCompare.compare(name, root.getAttribute(attribute), true))
+          if (StringCompare.compare(name, root.getAttribute(attribute), false))
           {
             return root;
           }
