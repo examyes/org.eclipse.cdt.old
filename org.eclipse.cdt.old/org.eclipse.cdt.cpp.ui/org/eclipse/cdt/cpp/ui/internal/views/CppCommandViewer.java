@@ -91,7 +91,8 @@ public class CppCommandViewer extends CommandViewer
 		    {
 			DataElement element = null;
 
-			element = api.findResourceElement(_resourceInput);
+			
+			element = api.findResourceElement((IResource)input);
 			super.setElementInput(element);
 			_resourceInput = (IResource)input;
 		    }
