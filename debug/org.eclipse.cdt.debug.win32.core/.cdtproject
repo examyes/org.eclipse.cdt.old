@@ -11,6 +11,8 @@
 <item id="org.eclipse.cdt.core.pathentry">
 <pathentry kind="inc" path="" include="C:/Program Files/Microsoft SDK/include"/>
 <pathentry kind="inc" path="" include="C:/Program Files/Microsoft Visual C++ Toolkit 2003/include"/>
+<pathentry kind="inc" path="" include="C:/Java/j2sdk1.4.2_06/include"/>
+<pathentry kind="inc" path="" include="C:/Java/j2sdk1.4.2_06/include/win32"/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 </item>
