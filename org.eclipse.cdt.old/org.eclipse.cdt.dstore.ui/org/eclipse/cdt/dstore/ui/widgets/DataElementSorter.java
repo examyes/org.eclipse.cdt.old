@@ -241,6 +241,12 @@ public class DataElementSorter extends ViewerSorter
 		_reverseSort = false;
 	    }
 	_attribute = attributeDescriptor;
+	if (attributeDescriptor == null)
+	    {
+		_sortFormat = STRING;
+		return;
+	    }
+
 	ArrayList format = attributeDescriptor.getAssociated("attributes");
 	if (format.size() > 0)
 	    {

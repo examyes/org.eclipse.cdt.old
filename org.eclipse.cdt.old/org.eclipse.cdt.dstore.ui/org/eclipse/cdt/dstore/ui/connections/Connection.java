@@ -431,16 +431,16 @@ public class Connection implements IDomainListener
 	if (_client == null)
 	    {	 
 		_client = new ClientConnection(_name, notifier);
-		_client.setLoaders(_element.getDataStore().getLoaders());
-		
+		_client.setLoaders(_element.getDataStore().getLoaders());		
 	    }
-
+	
 	_client.setHost(_host);
 	_client.setPort(_port);
 	_client.setHostDirectory(_dir);
 	
 	DataStore parentDS = _element.getDataStore();	
 	DataStore newDS =_client.getDataStore();
+	
 	newDS.setAttribute(DataStoreAttributes.A_PLUGIN_PATH, parentDS.getAttribute(DataStoreAttributes.A_PLUGIN_PATH));
 
 	ConnectionStatus connectStatus = null;
