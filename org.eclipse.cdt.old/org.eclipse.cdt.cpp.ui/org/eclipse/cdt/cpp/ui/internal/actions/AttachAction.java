@@ -57,8 +57,6 @@ public class AttachAction extends CustomAction
 
     public void run()
     {	
-   	// fill in details here
-   	System.out.println("not implemented yet!");
    	//org.eclipse.debug.ui.actions.DebugAction dbg = new org.eclipse.debug.ui.actions.DebugAction();
    	//dbg.runWithEvent(null, null);
       IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
@@ -71,6 +69,7 @@ public class AttachAction extends CustomAction
 	      ILaunchConfigurationType configType = lm.getLaunchConfigurationType("org.eclipse.cdt.debugattach.launchconfig");		
 
          DebugUITools.openLaunchConfigurationDialog(shell, new StructuredSelection(configType), ILaunchManager.DEBUG_MODE);
+         // RW - add some code in CppAttachInfoTab:setDefaults() to try and initialize the PID with the one available from this view.
       }
     }
 }
