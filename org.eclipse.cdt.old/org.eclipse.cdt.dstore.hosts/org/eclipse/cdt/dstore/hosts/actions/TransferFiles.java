@@ -82,6 +82,8 @@ public class TransferFiles extends Thread
 	    _source.getType().equals("Project"); // hack 
 	if (validSource)
 	    {
+			recursiveQuery(_source);
+			recursiveQuery(_target);
 			
 		transfer(_source, _target);
 		if (_listener != null)
@@ -92,6 +94,18 @@ public class TransferFiles extends Thread
 	
 
     }
+
+	private void recursiveQuery(DataElement source)
+	{
+		DataStore dataStore = source.getDataStore();
+		DataElement oDescriptor = dataStore.localDescriptorQuery(source.getDescriptor(), "C_OPEN", 4);
+		if (oDescriptor != null)
+		{	
+			// open opened project - recursive query
+			dataStore.command(oDescriptor, source);
+		}				
+	}
+
 
     private void transfer(DataElement source, DataElement target)
     {
