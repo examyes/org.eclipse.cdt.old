@@ -36,7 +36,7 @@ import org.eclipse.ui.internal.*;
 
 import org.eclipse.ui.dialogs.*;
 
-public class CommandViewer extends Viewer implements Listener, KeyListener
+public class CommandViewer extends Viewer implements SelectionListener
 {  	
   public class ShowViewAction implements Runnable
   {
@@ -59,13 +59,13 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 
       if (viewPart != null)
 	{	
-	  try
+	    //	  try
 	    {
 		if (_input != null)
 		    viewPart.setInput(_input);	
-		persp.showView(_id);
+		//persp.showView(_id);	       
 	    }
-	  catch (PartInitException e)
+	    //	  catch (PartInitException e)
 	      {
 	      }
 	} 
@@ -250,7 +250,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
         _browseButton = new Button(directoryContainer, SWT.TOGGLE);
 	_browseButton.setLayoutData(buttonData);
         _browseButton.setText(_plugin.getLocalizedString("CommandViewer.Browse..."));
-	_browseButton.addListener(SWT.Selection, this);
+	_browseButton.addSelectionListener(this);
 	
 	GridLayout layout2 = new GridLayout();
 	layout2.numColumns = 3;
@@ -288,12 +288,11 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
                                        }
                                        );
 	
-	_commandText.addListener(SWT.KeyDown, this);
 
        	_runButton = new Button(commandContainer, SWT.PUSH);
 	_runButton.setLayoutData(buttonData);
         _runButton.setText(_plugin.getLocalizedString("CommandViewer.Run"));
-	_runButton.addListener(SWT.Selection, this);
+	_runButton.addSelectionListener(this);
 	
 	GridLayout layout3 = new GridLayout();
 	layout3.numColumns = 3;
@@ -319,47 +318,38 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
         return c;
       }
 
-  public void handleEvent(Event e)
-  {
-    if (_hasFocus || _runButton.isFocusControl() || _browseButton.isFocusControl())
-    {	
-       Widget source = e.widget;
-       IContainer containerSelected = null;
-
-       if (source == _browseButton)
-	    {
-	       IWorkspace workbench = _plugin.getPluginWorkspace();	
-
-	       DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", _input);
-	       dialog.open();
-	       if (dialog.getReturnCode() == dialog.OK)
-		   {
-		       DataElement selected = dialog.getSelected();
-		       if (selected != null)
-			   {
-			       setInput(selected);
-			   }
-		   }
-
-	       _browseButton.setSelection(false);
-	    }
-       else if (source == _runButton)
-	   {
-	       String command = _commandText.getText();
-	       setCommand(command);
-	       executeCommand();	
-	       _runButton.setSelection(false);	
-	   }
+    public void widgetDefaultSelected(SelectionEvent e)
+    {
+	widgetSelected(e);
     }
-    else
-	{
-	    // we should try to throw the event out for
-	    // others to process
-	    
-	}
-  }
-    
-    
+
+    public void widgetSelected(SelectionEvent e)
+    {
+	Widget source = e.widget;
+	
+	if (source == _browseButton)
+	    {
+		IWorkspace workbench = _plugin.getPluginWorkspace();	
+		
+		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", _input);
+		dialog.open();
+		if (dialog.getReturnCode() == dialog.OK)
+		    {
+			DataElement selected = dialog.getSelected();
+			if (selected != null)
+			    {
+				setInput(selected);
+			    }
+		    }		
+	    }
+	else if (source == _runButton)
+	    {
+		String command = _commandText.getText();
+		setCommand(command);
+		executeCommand();	
+	    }	
+    }
+        
     public String getWorkingDirectory()
     {
         return _directoryText.getText();
@@ -406,37 +396,26 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 			ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
 			d.asyncExec(action);		
 		    }
+
 	    }
     }
 
     public Shell getShell()
     {
-	return _runButton.getShell();
+	return _browseButton.getShell();
     }
     
-    public void keyPressed(KeyEvent e)
-    {
-    }
-    
-    public void keyReleased(KeyEvent e)
-    {
-    }
     
     public void enable(boolean on)
     {
-        _runButton.setEnabled(on);
-        _browseButton.setEnabled(on);
-        _commandText.setEnabled(on);
     }
 
     public ArrayList readHistory()
     {
-	//return _plugin.readProperty(_input, "Command History");
 	return null;
     }
     
     public void writeHistory()
     {
-	//_plugin.writeProperty(_input, _plugin.getLocalizedString("CommandViewer.Command_History"), _history);
     }
 }
