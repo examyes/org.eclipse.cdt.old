@@ -272,22 +272,25 @@ public class MakefileAmClassifier {
 	private Vector getProfile(File Makefile_am)
 	{
 		Vector profile = new Vector(3,3);
-		String line;
-		try
+		if(Makefile_am.exists())
 		{
-			// searching for the subdir line
-			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
-			while((line=in.readLine())!=null)
+			String line;
+			try
 			{
-				if(line.indexOf(SUBDIRS)!=-1||line.indexOf(AUTOMAKE_OPTIONS)!=-1||line.indexOf(_PROGRAMS)!=-1
-				||line.indexOf(_SOURCES)!=-1||line.indexOf(_LDADD)!=-1||line.indexOf(EXTRA_DIST)!=-1
-				||line.indexOf(INCLUDES)!=-1||line.indexOf(_LDFLAGS)!=-1||line.indexOf(_LIBRARIES)!=-1
-				||line.indexOf(_a_SOURCES)!=-1||line.indexOf(_LTLIBRARIES)!=-1||line.indexOf(_la_SOURCES)!=-1
-				||line.indexOf(_la_LDFLAGS)!=-1||line.indexOf(_la_LIBADD)!=-1||line.indexOf(_HEADERS)!=-1)
-					profile.addElement(line);
-			}
-			in.close();
-		}catch(IOException e){System.out.println(e);}
+				// searching for the subdir line
+				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+				while((line=in.readLine())!=null)
+				{
+					if(line.indexOf(SUBDIRS)!=-1||line.indexOf(AUTOMAKE_OPTIONS)!=-1||line.indexOf(_PROGRAMS)!=-1
+					||line.indexOf(_SOURCES)!=-1||line.indexOf(_LDADD)!=-1||line.indexOf(EXTRA_DIST)!=-1
+					||line.indexOf(INCLUDES)!=-1||line.indexOf(_LDFLAGS)!=-1||line.indexOf(_LIBRARIES)!=-1
+					||line.indexOf(_a_SOURCES)!=-1||line.indexOf(_LTLIBRARIES)!=-1||line.indexOf(_la_SOURCES)!=-1
+					||line.indexOf(_la_LDFLAGS)!=-1||line.indexOf(_la_LIBADD)!=-1||line.indexOf(_HEADERS)!=-1)
+						profile.addElement(line);
+				}
+				in.close();
+			}catch(IOException e){System.out.println(e);}
+		}
 		//print(profile);
 		return profile;
 	}

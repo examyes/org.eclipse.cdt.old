@@ -1140,10 +1140,7 @@ public class MakefileAmManager {
 		
 		while(dir != null &&  path != null && !path.equals(wpath))
 		{
-			
-				
 			list.add(counter,dir);counter++;
-			try{
 			dir = dir.getParentFile();
 			
 			if (dir != null)
@@ -1154,14 +1151,13 @@ public class MakefileAmManager {
 					path = path.replace('\\', '/');
 				}
 			}
-			}catch(Exception e){System.out.println("");}// to be fixed later
 		}
 		//boolean found = false;
 		for(int i = 0; i < list.size(); i++)
 		{
 			File parent_Makefile_am = new File((File)list.get(i),"Makefile.am");
 			int parentClass = classifier.classify(parent_Makefile_am);
-			
+		
 			if(parentClass==PROGRAMS)
 			{
 				File Makefile_am = new File(parent,"Makefile.am");
@@ -1184,7 +1180,6 @@ public class MakefileAmManager {
 					File abstractPath = new File(parent_Makefile_am.getAbsolutePath());
 					parent_Makefile_am.delete();
 					modMakefile_am.renameTo(abstractPath);
-					//modMakefile_am.renameTo(Makefile_am);
 				}catch(FileNotFoundException e){System.out.println(e);}
 				catch(IOException e){System.out.println(e);}
 			}
