@@ -298,34 +298,42 @@ to create tools that interact with the CDT and each other.</li>
 Experience</h3>
 <h4>Committed Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Eclipse
-3.0 support.</span> Aligning with Eclipse 3.0 is the main task for this
-release. This means more than just getting the CDT to compile and run
-on
-Eclipse 3.0. It also means ensuring the CDT provides the same look at
-feel and supports a number of the new features that are being provided
-by the Eclipse Platform.</p>
+3.0 support - </span><b>Compatibility. </b>Aligning with Eclipse 3.0 is one of 
+the main tasks for this release. We need to ensure that the CDT works properly 
+on top of the Eclipse 3.0 framework.
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47523">(47523)</a></p>
 
-<p style="margin-left: 40px;"><span style="font-weight: bold;">Internationalization
-and Accessibility. </span>Normally, these capabilities should be
-designed into features as they have been developed. Areas where this
-hasn't be done will be addressed in this release. The objective is to allow translation of the CDT to different languages and to comply with government standards on accessibility.</p>
-<h4>Proposed Items</h4>
-<P style="margin-left: 40px"><SPAN style="font-weight: bold">Rename
-refactoring.</SPAN> This feature represents our first foray into the
-world of refactoring. This includes bringing in a refactoring framework
-that is very similar to the JDT's refactoring framework. The focus is
-then on rename refactoring which will leverage off and make improvements
-to the C/C++ Search feature to correctly refactor the references. (<A
-	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
-spec</A>)</P>
-<P style="margin-left: 40px"><SPAN style="font-weight: bold">Content
+<p style="margin-left: 40px;"><SPAN style="font-weight: bold">Content
 assist enhancements.</SPAN> The code completion part of the contents
 assist feature will be enhanced for performance, handling of C
 visibility rules, and for the handling of C++ code completion on
 members. &nbsp;The majority of this work will be to make more use of the
-parser to provide accurate and speedy competion proposals. (<A
+parser to provide accurate and speedy competion proposals. 
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47428">(47428)</a>&nbsp; (<A
 	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/contentassist.html?cvsroot=Tools_Project">feature
-spec</A>)</P>
+spec</A>) </p>
+
+<p style="margin-left: 40px;"><span style="font-weight: bold;">Internationalization
+and Accessibility. </span>Normally, these capabilities should be
+designed into features as they have been developed. Areas where this
+hasn't be done will be addressed in this release. The objective is to allow translation of the CDT to different languages and to comply with government standards on accessibility.&nbsp;
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47529">(47529)</a></p>
+<h4>Proposed Items<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </b></h4>
+<blockquote>
+<p><b>Eclipse 3.0 Support - Enhancements. </b>Changes to ensure that the CDT 
+provides the same look at feel and supports a number of the new features that 
+are being provided by the Eclipse Platform in the 3.0 release.&nbsp;
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47527">(47527)</a></p>
+<p><SPAN style="font-weight: bold">Rename
+refactoring.</SPAN> This feature represents our first foray into the
+world of refactoring. This includes bringing in a refactoring framework
+that is very similar to the JDT's refactoring framework. The focus is
+then on rename refactoring which will leverage off and make improvements
+to the C/C++ Search feature to correctly refactor the references. 
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47439">(47439)</a>&nbsp; (<A
+	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
+spec</A>)</p>
+</blockquote>
 <P style="margin-left: 40px"><SPAN style="font-weight: bold">Managed
 Build enhancements.</SPAN> The managed build feature will be enhanced
 for usability and for flexibility to support a large variety of build
@@ -333,37 +341,41 @@ target environments as well as to better support multiple configurations
 of tool and tool settings. Support will also be added for handling
 different variety of underlying tools including different make
 utilities, as well as support for different file types (like lex/yacc).
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47435">(47435)</a>&nbsp;
 (<A
 	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/managedmake.html?cvsroot=Tools_Project">feature
 spec</A>)</P>
 <P style="margin-left: 40px"><SPAN style="font-weight: bold">User
-Documentation enhancements.</SPAN> The user documentation will be
+Documentation enhancements.</SPAN> The user documentation should be
 expanded on to ensure the success of new and experienced users of the
-CDT.</P>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
-Parser enhancements.</span> The C/C++ parser is not externally visible
-but it provides essential services to a number of CDT features
-including the outline and C/C++ project views, C/C++ search, and
-content assist (andmaybe one day text hover). For the parser to work
-correctly, information about the target build environment is required.
-This feature will provide the framework for more of this information to
-be provided (than the previous release) by the build systems. The
-objective is to minimize the information the user must enter for these
-features to work.</p>
+CDT.&nbsp; <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47520">(47520)</a></P>
+<p style="margin-left: 40px;"><span style="font-weight: 700">CDT Usability - 
+Environment Set-up</span><span style="font-weight: bold;">.</span>
+<font FACE="Arial" SIZE="2">CDT features such as search and content assist 
+require environment information (include paths, libraries, #defines, etc.) in 
+order to work properly. Currently, when working with existing code, the user 
+must set up all of that information manually, which in addition to being time 
+consuming is also very prone to error. Some enhancements are needed so that the 
+required environment information can be extracted from existing source code with 
+minimal input from the user.
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47465">(47465)</a></p>
+</font>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
 Search enhancements.</span>
 This feature will be enhanced to add the capability of selecting a name
 in the editor and searching for declarations, definitions, and
 references to that name. The parser will be used to determine
 accurately the appropriate C/C++ definition of the name to be used in
-the search.</p>
+the search.&nbsp; <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47438">
+(47438)</a></p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C++
 Class Browser/C++ Hierarchy View.</span>&nbsp;
 A view dedicated to the navigation of C++ class hierarchies associated
 with objects or classes defined in a project. This include the ability
 to see class members, their specifications (public, private, protected,
 virtual, etc), their overrides, and the inheritance structure (both
-inherited from and inherited by).</p>
+inherited from and inherited by).
+<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=47441">(47441)</a></p>
 <h4>Deferred Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Quick
 Fix.</span>&nbsp; Do something like the Quick Fix feature in Java.</p>
