@@ -250,20 +250,8 @@ public class DataElementTableViewer extends TableViewer
 		    }
 		else
 		    {
-			synchronized(parent)
-			    {
-				try
-				    {
-					getTable().setRedraw(false);
-					remove(parent);
-					getTable().setRedraw(true);				      
-				    }
-				catch (Exception e)
-				    {
-					e.printStackTrace();
-					System.out.println(e);
-				    }
-			    }
+			setSelectionToWidget((ISelection)null, false);
+			internalRefresh(_currentInput);
 		    }
 	    }
 	else if (_currentInput == null)
