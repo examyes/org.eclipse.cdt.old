@@ -886,6 +886,16 @@ public class FileSystemMiner extends Miner
 						newObject.setDepth(1);
 					    }
 				    }
+				else
+				    {
+					if (refresh)
+					    {
+						if (!newObject.isOfType(_directoryDescriptor))
+						    {
+							classifyExecutable(newObject);
+						    }
+					    }
+				    }
 			    }
 		    }
 		catch (IOException e)
@@ -1013,6 +1023,17 @@ public class FileSystemMiner extends Miner
 								
 								handleSize(newObject, status);
 								handleDate(newObject, status);
+							    }
+						    }
+					    }
+					else
+					    {
+						// reclassify files on refresh
+						if (refresh)
+						    {
+							if (!newObject.isOfType(_directoryDescriptor))
+							    {
+								winClassifyFile(newObject);								
 							    }
 						    }
 					    }
