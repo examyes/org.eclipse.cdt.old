@@ -923,6 +923,7 @@ public class FileSystemMiner extends Miner
 	    }
 	else
 	    {
+		/** instead use this for doing the query on unix
 		// use 'ls -F' command
 		String cmd = "ls -F " + theFile.getSource();
 		try
@@ -938,6 +939,7 @@ public class FileSystemMiner extends Miner
 		catch (IOException e)
 		    {
 		    }
+		*/
 	    }	
     }
 
