@@ -37,6 +37,7 @@ buildPlugins += org.eclipse.cdt.dstore.ui
 buildPlugins += org.eclipse.cdt.cpp.ui
 buildPlugins += org.eclipse.cdt.dstore.miners
 buildPlugins += org.eclipse.cdt.cpp.miners
+buildPlugins += org.eclipse.cdt.pa.ui
 
 
 
