@@ -113,7 +113,9 @@ class MacroManager
       endIndex = closeParen+1;
      }
     }
-     
+    else
+     endIndex--;
+         
     String theExpansion = theMacro.expand(params);
     
     if (theExpansion == null || theExpansion.startsWith("%%"))
