@@ -745,9 +745,14 @@ public class PAModelInterface implements IDomainListener
    
    // Store the arguments in the VALUE attribute of the trace program element.
    if (arguments != null && arguments.trim().length() > 0) {
-     traceProgram.setAttribute(DE.A_VALUE, progElement.getName() + " " + arguments);
+     traceProgram.setAttribute(DE.A_NAME, progElement.getSource() + " " + arguments);
+   }
+   else {
+     traceProgram.setAttribute(DE.A_NAME, progElement.getSource());
    }
    
+   traceProgram.setAttribute(DE.A_VALUE, progElement.getName());
+  
    // Create references to the original file and project
    dataStore.createReference(traceProgram, progElement, "referenced file");
    dataStore.createReference(traceProgram, _cppApi.getProjectFor(progElement), "referenced project");
@@ -784,7 +789,7 @@ public class PAModelInterface implements IDomainListener
    
    DataElement exeElement = (DataElement)traceProgram.getAssociated("referenced file").get(0);
    DataStore dataStore = exeElement.getDataStore();
-   return runCommand(dataStore, exeElement.getParent(), traceProgram.getValue());
+   return runCommand(dataStore, exeElement.getParent(), traceProgram.getName());
  }
  
  
