@@ -58,6 +58,7 @@ public class PAMiner extends Miner {
  public void extendSchema(DataElement schemaRoot)
  {
  
+  // Find the descriptors we are going to use.
   DataElement containerD          = findDescriptor("Container Object");
   DataElement attributesD         = findDescriptor("attributes");
   DataElement integerD			  = findDescriptor("Integer");
@@ -67,53 +68,55 @@ public class PAMiner extends Miner {
   
   // Attributes for trace objects
   //
-  // general trace file attributes
+  // Common trace file attributes (trace format, total execution time, number of trace functions and 
+  // number of call graph entries).
   DataElement traceFormatD       = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TraceFormat"));
   DataElement fileTotalTimeD     = createObjectDescriptor(schemaRoot, getLocalizedString("pa.totalExecutionTime"));
   DataElement numTraceFunctionsD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numTraceFunctions"));
   DataElement numCallEntriesD    = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numCallGraphEntries"));
   
-  // Set attribute types
-  createReference(fileTotalTimeD, floatD, attributesD);
-  createReference(numTraceFunctionsD, integerD, attributesD);
-  createReference(numCallEntriesD, integerD, attributesD);
+  // Set the types of the attributes (integer or float).
+  createReference(fileTotalTimeD, 		floatD, 	attributesD);
+  createReference(numTraceFunctionsD, 	integerD, 	attributesD);
+  createReference(numCallEntriesD, 		integerD, 	attributesD);
   
-  // additional attribute for gprof trace files
+  // Additional attribute for gprof trace files (sampling rate).
   DataElement samplingRateD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SamplingRate"));
   createReference(samplingRateD, floatD, attributesD);
   
-  // additional attributes for functioncheck trace files
+  // Additional attributes for functioncheck trace files (time mode, profile mode, process id and program name).
   DataElement timeModeD          = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TimeMode"));
   DataElement profileModeD       = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ProfileMode"));
   DataElement processIdD         = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ProcessId"));
   DataElement programNameD       = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ProgramName"));
   
-  // general trace function attributes
-  DataElement totalPercentD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalPercentage"));  
+  // Common trace function attributes (%time, #calls, total time, self time, children time, 
+  // total ms/call and self ms/call).
+  DataElement timePercentD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TimePercentage"));  
   DataElement numCallsD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numCalls"));
-  DataElement totalTimeD     = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTime"));
   DataElement selfTimeD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTime"));
+  DataElement totalTimeD     = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTime"));
   DataElement childrenTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ChildrenTime"));
-  DataElement totalPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTimePerCall"));
   DataElement selfPerCallD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTimePerCall"));
+  DataElement totalPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTimePerCall"));
   
-  // set attribute types
-  createReference(totalPercentD, floatD,   attributesD);
+  // set the types of the attributes
+  createReference(timePercentD,  floatD,   attributesD);
   createReference(numCallsD, 	 integerD, attributesD);
-  createReference(totalTimeD, 	 floatD,   attributesD);
   createReference(selfTimeD, 	 floatD,   attributesD);
+  createReference(totalTimeD, 	 floatD,   attributesD);
   createReference(childrenTimeD, floatD,   attributesD);
-  createReference(totalPerCallD, floatD,   attributesD);
   createReference(selfPerCallD,  floatD,   attributesD);
+  createReference(totalPerCallD, floatD,   attributesD);
   
   
-  // additional attributes for functioncheck trace functions
+  // Additional attributes for functioncheck trace functions
   DataElement minTotalTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MinTotalTime"));
   DataElement maxTotalTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MaxTotalTime"));
   DataElement minSelfTimeD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MinSelfTime"));
   DataElement maxSelfTimeD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MaxSelfTime"));
   
-  // set attribute types
+  // set the types of the attributes
   createReference(minTotalTimeD, floatD,   attributesD);
   createReference(maxTotalTimeD, floatD,   attributesD);
   createReference(minSelfTimeD,  floatD,   attributesD);
@@ -123,72 +126,91 @@ public class PAMiner extends Miner {
   
   DataElement traceTargetD   = createAbstractDerivativeDescriptor(containerD, getLocalizedString("pa.TraceTarget"));
 
-  // set up the attributes for all trace files
+  // set the attributes for all trace files
   createReference(traceTargetD, traceFormatD, 		attributesD);
   createReference(traceTargetD, fileTotalTimeD, 	attributesD);
   createReference(traceTargetD, numTraceFunctionsD, attributesD);
   createReference(traceTargetD, numCallEntriesD, 	attributesD);
   
-  // Create object descriptors for trace file and trace program
+  // Create intermediate  object descriptors.
+  // The intermediate descriptors are used to model the common characteristics of the more concrete 
+  // descriptors. 
+  // 
+  // Descriptor hierarchy:
+  //
+  // TraceProgramD --> gprofTraceProgramD  <--- gprofTraceTargetD
+  //              |--> fcTraceProgramD     <-----|-----
+  //                                             |    |
+  // TraceFileD    --> gprofTraceFileD  <--------     |
+  //              |--> fcTraceFileD     <------- fcTraceTargetD
+  //                                            
   DataElement traceProgramD      = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.TraceProgram"));
   DataElement traceFileD         = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.TraceFile"));
   DataElement gprofTraceTargetD  = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.gprofTraceTarget"));
   DataElement fcTraceTargetD     = createAbstractDerivativeDescriptor(traceTargetD, getLocalizedString("pa.fcTraceTarget"));
 
-  // set up additional attributes for gprof trace files
+  // set additional attributes for gprof trace targets
   createReference(gprofTraceTargetD, samplingRateD, attributesD);
   
-  // set up additional attributes for functioncheck trace files
+  // set additional attributes for functioncheck trace targets
   createReference(fcTraceTargetD, timeModeD, 	attributesD);
   createReference(fcTraceTargetD, profileModeD, attributesD);
   createReference(fcTraceTargetD, processIdD, 	attributesD);
   createReference(fcTraceTargetD, programNameD, attributesD);
    
-  // Descriptors for trace files
+  // Concrete descriptors for trace files.
+  // gprofTraceFileD inherits from both gprofTraceTargetD and traceFileD.
   DataElement gprofTraceFileD = createDerivativeDescriptor(gprofTraceTargetD, getLocalizedString("pa.gprofTraceFile"));
   DataElement fcTraceFileD    = createDerivativeDescriptor(fcTraceTargetD,    getLocalizedString("pa.fcTraceFile"));
   createAbstractRelationship(traceFileD, gprofTraceFileD);
   createAbstractRelationship(traceFileD, fcTraceFileD);
   
-  // Descriptors for trace programs
+  // Concrete descriptors for trace programs
+  // gprofTraceProgramD inherits from both gprofTraceTargetD and traceProgramD.
   DataElement gprofTraceProgramD   = createDerivativeDescriptor(gprofTraceTargetD, getLocalizedString("pa.gprofTraceProgram"));
   DataElement fcTraceProgramD      = createDerivativeDescriptor(fcTraceTargetD,    getLocalizedString("pa.fcTraceProgram"));
   createAbstractRelationship(traceProgramD, gprofTraceProgramD);
   createAbstractRelationship(traceProgramD, fcTraceProgramD); 
   
-  // Descriptors for trace functions
+  // Abstract descriptor for trace functions
   DataElement traceFunctionD       = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("pa.TraceFunction"));
   
-  // set up the attributes for trace functions
-  createReference(traceFunctionD, totalPercentD, attributesD);
-  
-  createReference(totalPercentD, floatD, attributesD);
-  
-  createReference(traceFunctionD, numCallsD, 	 attributesD);
-  createReference(traceFunctionD, totalTimeD, 	 attributesD);
-  createReference(traceFunctionD, selfTimeD, 	 attributesD);
-  createReference(traceFunctionD, totalPerCallD, attributesD);
-  createReference(traceFunctionD, selfPerCallD,  attributesD);
-
-  // Descriptors for gprof trace functions
+  // Descriptor for gprof trace functions
   DataElement gprofTraceFunctionD  = createDerivativeDescriptor(traceFunctionD, 	 getLocalizedString("pa.gprofTraceFunction"));
+
+  // set the attributes for gprof trace functions
+  createReference(gprofTraceFunctionD, timePercentD,  attributesD);  
+  createReference(gprofTraceFunctionD, numCallsD, 	  attributesD);
+  createReference(gprofTraceFunctionD, selfTimeD, 	  attributesD);
+  createReference(gprofTraceFunctionD, totalTimeD, 	  attributesD);
+  createReference(gprofTraceFunctionD, selfPerCallD,  attributesD);
+  createReference(gprofTraceFunctionD, totalPerCallD, attributesD);
+
+  // Descriptor for gprof cyclic trace functions
   DataElement gprofCyclicTrcFuncD  = createDerivativeDescriptor(gprofTraceFunctionD, getLocalizedString("pa.gprofCyclicTraceFunction"));
   
-  // Descriptors for functioncheck trace functions
+  // Descriptor for functioncheck trace functions
   DataElement fcTraceFunctionD     = createDerivativeDescriptor(traceFunctionD, getLocalizedString("pa.fcTraceFunction"));
   
-  // set up the additional attributes for functioncheck trace functions
-  createReference(fcTraceFunctionD, minTotalTimeD, attributesD);
-  createReference(fcTraceFunctionD, maxTotalTimeD, attributesD);
+  // set the attributes for functioncheck trace functions
+  createReference(fcTraceFunctionD, timePercentD,  attributesD);  
+  createReference(fcTraceFunctionD, numCallsD, 	   attributesD);
+  createReference(fcTraceFunctionD, selfTimeD, 	   attributesD);
+  createReference(fcTraceFunctionD, totalTimeD,    attributesD);
+  createReference(fcTraceFunctionD, selfPerCallD,  attributesD);
+  createReference(fcTraceFunctionD, totalPerCallD, attributesD);
   createReference(fcTraceFunctionD, minSelfTimeD,  attributesD);
   createReference(fcTraceFunctionD, maxSelfTimeD,  attributesD);
+  createReference(fcTraceFunctionD, minTotalTimeD, attributesD);
+  createReference(fcTraceFunctionD, maxTotalTimeD, attributesD);
   
+  // Descriptor for functioncheck cyclic trace functions
   DataElement fcCyclicTrcFuncD     = createDerivativeDescriptor(fcTraceFunctionD, getLocalizedString("pa.fcCyclicTraceFunction"));
   
   // Descriptors for call arcs
   DataElement callArcD             = createObjectDescriptor(schemaRoot, getLocalizedString("pa.CallArc"));
 
-  // set up the attributes for call arcs
+  // set the attributes for call arcs (#calls, self time and children time).
   createReference(callArcD, numCallsD, 		attributesD);
   createReference(callArcD, selfTimeD, 		attributesD);
   createReference(callArcD, childrenTimeD,  attributesD);
@@ -210,7 +232,9 @@ public class PAMiner extends Miner {
   referencedFileD.setDepth(0);
   referencedProjectD.setDepth(0);
     
-  // Set up the relation between trace targets and trace functions
+  // Set up the relation between trace targets and trace functions.
+  // This models the fact that a gprof trace file or program can contain 
+  // a list of gprof trace functions.
   createReference(gprofTraceTargetD, gprofTraceFunctionD);
   createReference(fcTraceTargetD, fcTraceFunctionD);
   
@@ -224,13 +248,15 @@ public class PAMiner extends Miner {
   createReference(fcTraceFunctionD, 	callArcD, 			 callerArcD);
   createReference(fcTraceFunctionD, 	callArcD, 			 calleeArcD);
     
+  // Descriptor for call root
   DataElement callRootD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.CallRoot"));
   createReference(callRootD, callsD);
   
+  // Find the descriptors for file and executable.
   DataElement fileD = findDescriptor("file");
   DataElement executableD = findDescriptor("executable");
   
-  // command descriptors
+  // Create command descriptors
   createCommandDescriptor(traceFileD,    getLocalizedString("pa.Parse"), "C_PARSE_TRACE").setDepth(0);
   createCommandDescriptor(traceProgramD, getLocalizedString("pa.Analyze"), "C_ANALYZE_PROGRAM").setDepth(0);
   createCommandDescriptor(traceFunctionD, "Query", "C_QUERY");
@@ -382,6 +408,8 @@ public class PAMiner extends Miner {
     _dataStore.refresh(status, false);
     return;
    }
+   
+   // System.out.println("parse done");
    
    // Reset the type of the trace element after the parsing
    traceElement.setAttribute(DE.A_TYPE, PADataStoreAdaptor.getTraceFileFormat(traceFile));

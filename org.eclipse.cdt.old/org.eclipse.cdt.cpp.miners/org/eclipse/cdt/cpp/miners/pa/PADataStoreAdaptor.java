@@ -238,18 +238,19 @@ public class PADataStoreAdaptor {
    _attributesRoot = _dataStore.createObject(fileElement, getLocalizedString("pa.data"), getLocalizedString("pa.AttributesRoot"));
    _callArcsRoot   = _dataStore.createObject(fileElement, getLocalizedString("pa.data"), getLocalizedString("pa.CallArcsRoot"));
 
-   // set the trace file attributes
-   createTraceFileSummary(fileElement, traceFile);
+   // Set the trace file attributes
+   createTraceFileAttributes(fileElement, traceFile);
       
    // Process each trace function
    Iterator it = traceFile.getTraceFunctions().iterator();
    
+   int i = 0;
    while (it.hasNext()) {
     PATraceFunction trcFunc = (PATraceFunction)it.next();
     DataElement trcFuncElement = createTraceFunction(_traceFunctionsRoot, trcFunc);
     
-    // set trace function attributes
-    createTraceFunctionSummary(trcFuncElement, trcFunc);
+    // set the attributes for the trace function
+    createTraceFunctionAttributes(trcFuncElement, trcFunc);
     
     _elementToTraceFuncMap.put(trcFuncElement, trcFunc);
     _traceFuncToElementMap.put(trcFunc, trcFuncElement);
@@ -262,7 +263,11 @@ public class PADataStoreAdaptor {
     
    }
   
+   // System.out.println("Create trace functions done");
+   
    createCallNestingRelations(_traceFunctionsRoot);
+   
+   // System.out.println("createCallNestingRelations done");
  }
  
  /**
@@ -276,11 +281,11 @@ public class PADataStoreAdaptor {
  }
  
  /**
-  * Create summary information for a trace file element
+  * Create attributes for a trace file element
   */
- private void createTraceFileSummary(DataElement fileElement, PATraceFile traceFile) {
+ private void createTraceFileAttributes(DataElement fileElement, PATraceFile traceFile) {
  
-  
+  // Create common trace file attributes
   createAttribute(fileElement, getLocalizedString("pa.TraceFormat"),  		 traceFile.getTraceFormat());
   createAttribute(fileElement, getLocalizedString("pa.totalExecutionTime"),  String.valueOf(traceFile.getTotalExecutionTime()));
   createAttribute(fileElement, getLocalizedString("pa.numTraceFunctions"),   String.valueOf(traceFile.getNumberOfTraceFunctions()));
@@ -302,42 +307,51 @@ public class PADataStoreAdaptor {
  }
  
  /**
-  * Create summary information for a trace function element
+  * Create attributes for a trace function element
   */
- private void createTraceFunctionSummary(DataElement funcElement, PATraceFunction trcFunc) {
+ private void createTraceFunctionAttributes(DataElement funcElement, PATraceFunction trcFunc) {
  
-  createAttribute(funcElement, getLocalizedString("pa.TotalPercentage"),  String.valueOf(trcFunc.getTotalPercentage()));
-  createAttribute(funcElement, getLocalizedString("pa.numCalls"), 		  String.valueOf(trcFunc.getCallNumber()));
-
-  if (trcFunc instanceof FunctionCheckTraceFunction) {
-   createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	  String.valueOf(trcFunc.getTotalSeconds()));
-  }
-  else {
-   createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	  roundDouble(trcFunc.getTotalSeconds()));
-  }
-  
-  createAttribute(funcElement, getLocalizedString("pa.SelfTime"), 		  String.valueOf(trcFunc.getSelfSeconds()));
-  
-  if (trcFunc instanceof FunctionCheckTraceFunction) {
-   createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), roundDouble(trcFunc.getTotalMsPerCall()));
-   createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  roundDouble(trcFunc.getSelfMsPerCall()));  
-  }
-  else {
-   createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), String.valueOf(trcFunc.getTotalMsPerCall()));
-   createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  String.valueOf(trcFunc.getSelfMsPerCall()));
-  }
-  
-  // create additional attributes for functioncheck trace functions
-  if (trcFunc instanceof FunctionCheckTraceFunction) {
-   FunctionCheckTraceFunction fcTrcFunc = (FunctionCheckTraceFunction)trcFunc;
-   createAttribute(funcElement, getLocalizedString("pa.MinTotalTime"), String.valueOf(fcTrcFunc.getMinTotalTime())); 
-   createAttribute(funcElement, getLocalizedString("pa.MaxTotalTime"), String.valueOf(fcTrcFunc.getMaxTotalTime()));
-   createAttribute(funcElement, getLocalizedString("pa.MinSelfTime"),  String.valueOf(fcTrcFunc.getMinLocalTime()));
-   createAttribute(funcElement, getLocalizedString("pa.MaxSelfTime"),  String.valueOf(fcTrcFunc.getMaxLocalTime()));
-  }
-  
+  if (trcFunc instanceof FunctionCheckTraceFunction)
+   createFunctionCheckTraceFunctionAttributes(funcElement, (FunctionCheckTraceFunction)trcFunc);
+  else 
+   createGprofTraceFunctionAttributes(funcElement, trcFunc);
  }
  
+ 
+ /**
+  * Create attributes for a gprof trace function
+  */
+ private void createGprofTraceFunctionAttributes(DataElement funcElement, PATraceFunction trcFunc) {
+
+  createAttribute(funcElement, getLocalizedString("pa.TimePercentage"),   String.valueOf(trcFunc.getTotalPercentage()));
+  createAttribute(funcElement, getLocalizedString("pa.numCalls"), 		  String.valueOf(trcFunc.getCallNumber()));
+  createAttribute(funcElement, getLocalizedString("pa.SelfTime"), 		  String.valueOf(trcFunc.getSelfSeconds()));
+  createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	      roundDouble(trcFunc.getTotalSeconds()));  
+  createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  String.valueOf(trcFunc.getSelfMsPerCall()));
+  createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), String.valueOf(trcFunc.getTotalMsPerCall()));
+ 
+ }
+ 
+ 
+ /**
+  * Create attributes for a functioncheck trace function
+  */
+ private void createFunctionCheckTraceFunctionAttributes(DataElement funcElement, FunctionCheckTraceFunction trcFunc) {
+
+  createAttribute(funcElement, getLocalizedString("pa.TimePercentage"),   String.valueOf(trcFunc.getTotalPercentage()));
+  createAttribute(funcElement, getLocalizedString("pa.numCalls"), 		  String.valueOf(trcFunc.getCallNumber()));
+  createAttribute(funcElement, getLocalizedString("pa.SelfTime"), 		  String.valueOf(trcFunc.getSelfSeconds()));
+  createAttribute(funcElement, getLocalizedString("pa.TotalTime"), 	      String.valueOf(trcFunc.getTotalSeconds()));  
+  createAttribute(funcElement, getLocalizedString("pa.SelfTimePerCall"),  roundDouble(trcFunc.getSelfMsPerCall()));  
+  createAttribute(funcElement, getLocalizedString("pa.TotalTimePerCall"), roundDouble(trcFunc.getTotalMsPerCall()));
+  createAttribute(funcElement, getLocalizedString("pa.MinSelfTime"),  	  String.valueOf(trcFunc.getMinLocalTime()));
+  createAttribute(funcElement, getLocalizedString("pa.MaxSelfTime"),  	  String.valueOf(trcFunc.getMaxLocalTime()));
+  createAttribute(funcElement, getLocalizedString("pa.MinTotalTime"), 	  String.valueOf(trcFunc.getMinTotalTime())); 
+  createAttribute(funcElement, getLocalizedString("pa.MaxTotalTime"), 	  String.valueOf(trcFunc.getMaxTotalTime()));
+  
+ }
+
+
   /**
    * Create a trace function object in the datastore
    */
