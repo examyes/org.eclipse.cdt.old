@@ -24,6 +24,7 @@ public abstract class GdbVariable  extends Variable
       _nodeID      = nodeID;
       _inScope     = true;
       _changed     = true;
+      _fullName    = "";
    }
 
    /**
@@ -194,11 +195,30 @@ public abstract class GdbVariable  extends Variable
       _treeStructChanged = false;
       return treeStructChanged;
    }
-
+   
    /**
     * Return the number of nodes required by this variable to construct its tree
     */
    public abstract int numNodes();
+   
+   	/**
+	 * Gets the fullName
+	 * @return Returns a String
+	 */
+	public String getFullName() {
+		
+		if (_fullName == "")
+			return _name;
+		
+		return _fullName;
+	}
+	/**
+	 * Sets the fullName
+	 * @param fullName The fullName to set
+	 */
+	public void setFullName(String fullName) {
+		_fullName = fullName;
+	}
 
    /**
     * Get the EStdTreeNode for this variable
@@ -207,6 +227,10 @@ public abstract class GdbVariable  extends Variable
 
    public abstract String getScalarValue();
    public abstract void setScalarValue(String s);
-   
+   public abstract GdbVariable getNode(int nodeID);
+
    private static boolean _allowTreeStructure=true;
+   private String _fullName;
+
+
 }

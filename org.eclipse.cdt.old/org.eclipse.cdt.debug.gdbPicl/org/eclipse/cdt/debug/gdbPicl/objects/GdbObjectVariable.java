@@ -245,11 +245,11 @@ public class GdbObjectVariable extends GdbVariable {
 			
 			// get type name for this field		
 			fieldName = fieldName.trim();			
+			fullFieldName = _prefix + "." + fieldName;
 	   		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
 	   		{
-				fullFieldName = _prefix + "." + fieldName;
 	    		prefix = fullFieldName;
-				fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    								
+				fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fieldName);		    								
 	   		}	   		
 	   		else			    		
 	   		{
@@ -353,6 +353,7 @@ public class GdbObjectVariable extends GdbVariable {
 				// this is a scalar		
 				GdbScalarVariable newField;
 				newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
+				newField.setFullName(_prefix + "." + fieldName);
 				_fields.add(newField);
 				_numNodes++;
 				
@@ -368,6 +369,21 @@ public class GdbObjectVariable extends GdbVariable {
 		    	parseStr = parseStr.substring(comma + 2);
 			}
 		} // while
+	}
+	
+	public GdbVariable getNode(int nodeID)
+	{
+		GdbVariable node = null;
+		
+		for (int i=0; i<_fields.size(); i++)
+		{
+			node = ((GdbVariable)_fields.elementAt(i)).getNode(nodeID);
+			
+			if(node != null)
+				break;
+		}
+		
+		return node;
 	}
 		
     private int _rep;

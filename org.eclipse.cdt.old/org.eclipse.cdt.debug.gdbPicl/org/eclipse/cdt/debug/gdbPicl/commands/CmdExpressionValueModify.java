@@ -37,7 +37,7 @@ public class CmdExpressionValueModify extends Command
           if (Gdb.traceLogger.DBG) 
               Gdb.traceLogger.dbg(1,"CmdExpressionValueModify.execute exprID="+_req.exprID()
                  +" exprTreeNode="+_req.exprTreeNode() +" newValue="+_req.reqNewNodeValue() );
-          vmm.modifyMonitor(_req.exprID(), _req.reqNewNodeValue() );
+          vmm.modifyMonitor(_req.exprID(), _req.reqNewNodeValue(), _req.exprTreeNode() );
 /*
           evalInfo = vmm.setValue(_req.exprID(), 
                                   _req.exprTreeNode(), 

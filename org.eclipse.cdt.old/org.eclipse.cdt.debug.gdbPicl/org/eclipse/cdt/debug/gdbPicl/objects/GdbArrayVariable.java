@@ -376,6 +376,21 @@ public class GdbArrayVariable extends GdbVariable {
 		return endLocation;
 	}
 	
+	public GdbVariable getNode(int nodeID)
+	{
+		GdbVariable node = null;
+		
+		for (int i=0; i<_elements.size(); i++)
+		{
+			node = ((GdbVariable)_elements.elementAt(i)).getNode(nodeID);
+			
+			if(node != null)
+				break;
+		}
+		
+		return node;
+	}
+	
 	private Vector _elements;
 	private String _gdbData;
 	private int _numNodes;

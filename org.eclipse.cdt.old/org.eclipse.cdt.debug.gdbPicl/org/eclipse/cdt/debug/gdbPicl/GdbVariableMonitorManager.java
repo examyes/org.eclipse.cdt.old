@@ -166,6 +166,40 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
       }
    }
 
+   /**
+    * Modify a variable monitor
+    */
+   public void modifyMonitor(short exprID, String exprValue, int nodeID)
+   {
+      GdbVariableMonitor monitor = (GdbVariableMonitor) _monitors.get(new Integer(exprID));
+      if (monitor != null)
+      {
+         if (monitor.isMonDeleted() || !monitor.isMonEnabled())
+            return;
+
+         ERepGetNextMonitorExpr e = monitor.getMonitorChangeInfo();
+         String ID = String.valueOf(exprID);
+         
+         GdbVariable rootVar = monitor.getMonitoredVariable();        
+         
+         String exprName = rootVar.getNode(nodeID).getFullName();
+         String cmd = "set variable "+exprName+"="+exprValue;
+         boolean ok = _debugSession.executeGdbCommand(cmd);
+         if( ok )
+         {
+            _debugSession.addCmdResponsesToUiMessages();
+            _debugSession.cmdResponses.removeAllElements();
+            cmd = "display ";
+            ok = _debugSession.executeGdbCommand(cmd);
+            if( ok )
+            {
+               _debugSession.addCmdResponsesToUiMessages();
+               _debugSession.cmdResponses.removeAllElements();
+            }
+         }
+         updateMonitors();
+      }
+   }
 
 
    /**

@@ -215,6 +215,15 @@ class GdbScalarVariable extends GdbVariable
 
       return new EStdScalarItem(_name, _type+PAD, scalarValue, scalarReps, (short)(_rep+1));
    }
+   
+   public GdbVariable getNode(int nodeID)
+   {
+   		if (nodeID == _nodeID)
+	   		return (GdbVariable)this; 		
+		else
+			return null;	   		
+   }   
+   
    // data fields
    protected int      _rep;       // the current representation
    protected String   _value;
