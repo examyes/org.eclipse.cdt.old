@@ -32,11 +32,14 @@ public class Sorter
 	for (int i = 0; i < list.size(); i++)
 	    {
 		DataElement item = (DataElement)list.get(i);
-		int depth = item.depth();
-		if ((result == null) || (depth > result.depth()))
+		if (item != null)
 		    {
-			result = item;
-		    }			
+			int depth = item.depth();
+			if ((result == null) || (depth > result.depth()))
+			    {
+				result = item;
+			    }			
+		    }
 	    }
 	
 	list.remove(result);
