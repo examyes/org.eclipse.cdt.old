@@ -158,7 +158,7 @@ public class ParserSchema
   dClassesStructs     = createAbstractDerivativeDescriptor(dContCppObject,   ClassesStructs);
   dFunctions          = createAbstractDerivativeDescriptor(dContCppObject,   Functions);
   dVariables          = createAbstractDerivativeDescriptor(dUsableCppObject, Variables);
-  dStatements         = createAbstractDerivativeDescriptor(dContCppObject,   Statements);
+  dStatements         = createAbstractDerivativeDescriptor(dCppObject,   Statements);
   dAll                = createAbstractDerivativeDescriptor(dContCppObject,   All);
   dAll.setDepth(200); 
 
@@ -210,9 +210,9 @@ public class ParserSchema
 */
 
   //Create the actual Cpp Objects (non-abstract):
-  dStatement         = createDerivativeDescriptor(dUsableCppObject, Statement);
+  dStatement         = createDerivativeDescriptor(dStatements,      Statement);
   dCompoundStatement = createDerivativeDescriptor(dStatements,      CompoundStatement);
-  createReference(dStatements, dStatement);
+  schemaRoot.getDataStore().createReference(dContObject, dCompoundStatement, "abstracts", "abstracted by");
   dMacro             = createDerivativeDescriptor(dUsableCppObject, Macro);
   dConstructor       = createDerivativeDescriptor(dFunctions,       Constructor);
   dDestructor        = createDerivativeDescriptor(dFunctions,       Destructor);
