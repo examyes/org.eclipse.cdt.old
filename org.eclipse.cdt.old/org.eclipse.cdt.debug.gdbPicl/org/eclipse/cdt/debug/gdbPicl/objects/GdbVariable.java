@@ -50,10 +50,37 @@ public abstract class GdbVariable  extends Variable
    				return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
    			}
    			
-   			if (testStr.indexOf("=") != -1 && !testStr.startsWith("{{"))
+   			int equal = testStr.indexOf("=");
+   			if (equal != -1)
    			{
-   				// object
-				return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+   				if (!testStr.startsWith("{{"))
+ 				{
+	   				// object
+					return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+ 				}
+ 				else
+ 				{
+ 					// there is an equal sign
+ 					// starts with {{
+ 					// could be an array of object or an object that starts with an union
+ 					// if this is an array of object, then we will see the same field name again
+ 					// try to extract the field name
+ 					
+ 					int brace = testStr.lastIndexOf("{");
+ 					String fieldName = testStr.substring(brace+1, equal);
+ 					fieldName = fieldName.trim();
+ 					
+ 					if (value.indexOf(fieldName, comma) != -1)
+ 					{
+ 						// this is an array
+ 						return new GdbArrayVariable(debugSession, varName, type, value, nodeID);
+ 					}				
+ 					else
+ 					{
+ 						// this is an object that starts with an union
+ 						return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+ 					}
+ 				}					
    			}
    			else
    			{
