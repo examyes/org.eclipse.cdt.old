@@ -130,15 +130,18 @@ public class OpenEditorAction extends Action implements IOpenAction
 
     public DataElement getResourceFor(DataElement element)
     {
-	DataElement des = element.getDescriptor();
-	if (des != null && des.isOfType("directory"))
-	    {
-		return null;
-	    }  
-	if (des != null && des.isOfType("file"))
-	{
-		return element;
-	}
+		DataElement des = element.getDescriptor();
+		if (des != null && des.isOfType("file"))
+		{		
+			if (!element.getType().equals("file"))
+	    	{
+				return null;
+	    	}  
+			else
+			{
+				return element;
+			}
+		}
 
 	String fileName   = (String)(element.getElementProperty(DE.P_SOURCE_NAME));
 	DataElement resource = _api.findResourceElement(element.getDataStore(), fileName);
@@ -169,8 +172,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 
 		    DataElement resourceElement = getResourceFor(_element);
 
-		    //DKM
-		    if (resourceElement == null && !resourceElement.getType().equals("file"))
+		    
+		    if (resourceElement == null)
 			{
 			    return;
 			}
@@ -185,7 +188,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 			if (project == null)
 			{
 			    project = _plugin.getCurrentProject();		
-			}
+			} 
 			
 
 
@@ -193,7 +196,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 		    fileName = fileName.replace('\\', '/');
 
 		    
-		    String elementType = (String)(resourceElement.getElementProperty(DE.P_TYPE));
+		    String elementType = resourceElement.getType();
 		    
 		    if ((fileName != null) && (fileName.length() > 0))
 			{
