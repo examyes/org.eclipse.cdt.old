@@ -1444,7 +1444,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
-	  
+
+	/*
 	  // example of adding an action to a element
 	DataElement statementBreakpoint  = dataStore.createObject(statement, DE.T_UI_COMMAND_DESCRIPTOR, 
 								  _plugin.getLocalizedString("model.Add_Breakpoint"), 
@@ -1460,7 +1461,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							      _plugin.getLocalizedString("model.Add_Breakpoint"), 
 							      "com.ibm.cpp.ui.internal.actions.AddClassBreakpoint");	 
 	classBreakpoint.setAttribute(DE.A_VALUE, "C_ADD_CLASS_BREAKPOINT");		
-	
+	*/
 	
 	
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 

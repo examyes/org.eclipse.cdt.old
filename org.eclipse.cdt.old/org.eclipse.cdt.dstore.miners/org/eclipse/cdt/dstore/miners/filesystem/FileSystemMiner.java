@@ -175,10 +175,10 @@ public class FileSystemMiner extends Miner
 	//creating new files and dirs
 	DataElement newFD=createAbstractCommandDescriptor(dirD,getLocalizedString("model.Create"),"C_NEW");
 
-       	DataElement newF = createCommandDescriptor(newFD, getLocalizedString("model.Create_File"),"C_CREATE_FILE");
+       	DataElement newF = createCommandDescriptor(newFD, getLocalizedString("model.File___"),"C_CREATE_FILE");
        	DataElement inNewF = _dataStore.createObject(newF, "input", "Enter Name for New file");
 
-       	DataElement newD = createCommandDescriptor(newFD,getLocalizedString("model.Create_Directory"),"C_CREATE_DIR");
+       	DataElement newD = createCommandDescriptor(newFD,getLocalizedString("model.Directory___"),"C_CREATE_DIR");
 	DataElement inNewD = _dataStore.createObject(newD, "input", "Enter Name for New Directory");
 	//////////////////////////
 
@@ -623,7 +623,7 @@ public class FileSystemMiner extends Miner
 				String filePath = path.toString() + list[i];
 				String objName = list[i];
 				
-				DataElement newObject = _dataStore.find(theElement, DE.A_NAME, objName, 1);
+				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
 				if (newObject == null || newObject.isDeleted())
 				    {
 					newObject = _dataStore.createObject (theElement, objType, 

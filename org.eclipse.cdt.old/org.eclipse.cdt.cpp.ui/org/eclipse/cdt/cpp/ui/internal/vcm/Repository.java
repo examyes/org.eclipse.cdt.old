@@ -975,6 +975,17 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
 	_children.remove(child);
     }
 
+    public String toString()
+    {
+	return "Repository:" + _root.getType() + ":" + _root.getName();
+    }
+
+    public void update()
+    {
+	internalGetChildren(_remoteRoot, true);
+    }
+
+
     
 }
 

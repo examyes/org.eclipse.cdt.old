@@ -89,7 +89,7 @@ public class RemoteProjectNavigator extends TreeViewer
 
     public boolean listeningTo(DomainEvent ev)
     {
-	DataElement parent = (DataElement)ev.getParent();
+	DataElement parent = ((DataElement)ev.getParent()).dereference();
 	DataStore dataStore = parent.getDataStore();
 
 	String type = parent.getType();
@@ -103,13 +103,15 @@ public class RemoteProjectNavigator extends TreeViewer
 			if (repository != null)
 			    {			
 				DataElement repositoryElement = repository.getRemoteElement();
-				if (repositoryElement == parent)
+				if (repositoryElement == parent || parent == repository.getElement())
 				    {
 					return true;
 				    }
-				else
+				else if (repositoryElement != null)
 				    {
-					if (repositoryElement != null && repositoryElement.contains(parent, 5))
+					String rootLocation = repositoryElement.getSource();
+					String location = parent.getSource();
+					if (location.startsWith(location))
 					    {
 						return true;
 					    }
@@ -121,14 +123,43 @@ public class RemoteProjectNavigator extends TreeViewer
 	return false;
     }
 
+
+    private Item findItemFor(Widget widget, Object res)
+    {
+	Item[] items  = getChildren(widget);
+	if (items != null) 
+	    {
+		for (int i= 0; i < items.length; i++) 
+		    {
+			Item child = items[i];
+			Object data = child.getData();
+			if (data == res)
+			    {
+				return child;
+			    }
+			else
+			    {
+				Item result = findItemFor(child, res);
+				if (result != null)
+				    {
+					return result;
+				    }
+			    }
+		    }
+	    }
+	
+	return null;
+    }
+
   public void domainChanged(DomainEvent ev)
       {
-	  DataElement parent = (DataElement)ev.getParent();
+	  DataElement parent = ((DataElement)ev.getParent()).dereference();
 	  if (parent.isDeleted())
 	      {
 		  parent = parent.getParent();
 	      }
-
+	  
+	  Tree tree = getTree();
 	  IProject[] projects = _currentInput.getProjects();
 	  for (int i = 0; i < projects.length; i++)	    
 	    {
@@ -136,17 +167,21 @@ public class RemoteProjectNavigator extends TreeViewer
 		DataElement repositoryElement = repository.getRemoteElement();
 		if (repositoryElement == parent)
 		    {
-			Tree tree = getTree();
 			if (!tree.isDisposed())
 			    {
 				tree.setRedraw(false);
-				internalRefresh(_currentInput);
-				//internalRefresh(repository);
+				Item item = findItemFor(tree, repository);
+				if (item != null)
+				    {
+					repository.update();
+					updateItem(item, repository);
+					updateChildren(item, repository, repository.getChildren(null));
+				    }
 				
-				reveal(repository);
-				expandToLevel(_currentInput, 2);
+				//expandToLevel(_currentInput, 2);
 				
 				tree.setRedraw(true);				
+				reveal(repository);
 				return;
 			    }
 		    }
@@ -155,11 +190,16 @@ public class RemoteProjectNavigator extends TreeViewer
 			ResourceElement resource = repository.findResource(parent);
 			if (resource != null)
 			    {				
-				Tree tree = getTree();
 				tree.setRedraw(false);
-				internalRefresh(resource);
-				reveal(resource);
+				Item item = findItemFor(tree, resource);
+				if (item != null)
+				    {
+					resource.update();
+					updateItem(item, resource);
+					updateChildren(item, resource, resource.getChildren(null));
+				    }
 				tree.setRedraw(true);	
+				reveal(resource);
 				return;
 			    }
 		    }
@@ -198,7 +238,6 @@ public class RemoteProjectNavigator extends TreeViewer
 	  setSelected((DataElement)obj);
       }
   }
-
 
   protected Item newItem(Widget parent, int flags, int ix) 
       {

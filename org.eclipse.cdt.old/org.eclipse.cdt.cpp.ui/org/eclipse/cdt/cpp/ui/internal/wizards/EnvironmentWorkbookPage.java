@@ -60,18 +60,21 @@ public class EnvironmentWorkbookPage
 	_variableControl.setVariables(variables);
 
 	    {
-		DataStore dataStore = plugin.getCurrentDataStore();
+		DataStore dataStore = plugin.getDataStore();
 		DataElement systemInfo = dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");
-		DataElement systemEnvironment = systemInfo.get(0);	
-		
-		ArrayList svariables = new ArrayList();
-		for (int i = 0; i < systemEnvironment.getNestedSize(); i++)
+		if (systemInfo != null)
 		    {
-			DataElement var = (DataElement)systemEnvironment.get(i);
-			svariables.add(var.getName());
+			DataElement systemEnvironment = systemInfo.get(0);	
+			
+			ArrayList svariables = new ArrayList();
+			for (int i = 0; i < systemEnvironment.getNestedSize(); i++)
+			    {
+				DataElement var = (DataElement)systemEnvironment.get(i);
+				svariables.add(var.getName());
+			    }
+			
+			_systemVariableControl.setVariables(svariables);
 		    }
-		
-		_systemVariableControl.setVariables(svariables);
 	    }
     }
 

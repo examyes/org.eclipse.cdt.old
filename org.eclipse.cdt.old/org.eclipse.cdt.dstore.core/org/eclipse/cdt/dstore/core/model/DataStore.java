@@ -22,6 +22,8 @@ public class DataStore
     private DataElement         _logRoot;
     private DataElement         _hostRoot;
     private DataElement         _minerRoot;
+    private DataElement         _tempRoot;
+
     private DataElement         _ticket;  
     
     private CommandHandler      _commandHandler;
@@ -83,7 +85,7 @@ public class DataStore
 	_recycled = new ArrayList();
 	initElements(4000);
 
-	_timeout = 100000;
+	_timeout = 10000;
 	try
 	    {
 		_resourceBundle = ResourceBundle.getBundle("com.ibm.dstore.core.model.DataStoreResources");
@@ -343,12 +345,13 @@ public class DataStore
 
   public void createRoots()
   {
-    _logRoot     = createObject(_root, getLocalizedString("model.log"), getLocalizedString("model.Log_Root"));
-    _minerRoot   = createObject(_root, getLocalizedString("model.miners"), getLocalizedString("model.Tool_Root"));
-    
-    _hostRoot = createObject(_root,  getLocalizedString("model.host"),
-			     _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
-			     _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH));
+      _tempRoot = createObject(_root, "temp", "Temp Root");
+      _logRoot     = createObject(_root, getLocalizedString("model.log"), getLocalizedString("model.Log_Root"));
+      _minerRoot   = createObject(_root, getLocalizedString("model.miners"), getLocalizedString("model.Tool_Root"));
+      
+      _hostRoot = createObject(_root,  getLocalizedString("model.host"),
+			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
+			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH));
   }
 
 
@@ -455,6 +458,11 @@ public class DataStore
         String id = makeIdUnique(sugId);
 
 	DataElement newObject = createElement();
+	if (parent == null)
+	    {
+		parent = _tempRoot;
+	    }
+
 	newObject.reInit(this, parent, type, id, name, source, isReference); 
         if (parent != null)
         {
@@ -467,7 +475,13 @@ public class DataStore
   public DataElement createObject(DataElement parent, String attributes[])
       {
 	  DataElement newObject = createElement();
+
+	  if (parent == null)
+	      {
+		  parent = _tempRoot;
+	      }
 	  newObject.reInit(this, parent, attributes);
+
 	  if (parent != null)
 	      {
 		  parent.addNestedData(newObject, false);
@@ -890,7 +904,7 @@ public class DataStore
           System.out.println(e);
         }
         
-        timeWaited = timeWaited * 2;
+        timeWaited += timeWaited;
       }
 
     if (timedOut)
@@ -1041,11 +1055,20 @@ public DataElement command(DataElement commandDescriptor,
 		for (int i = 0; i < descriptor.getNestedSize(); i++)
 		    {
 			DataElement subDescriptor = (DataElement)descriptor.get(i);
-			if (subDescriptor.getType().equals(DE.T_COMMAND_DESCRIPTOR))
+			String type = subDescriptor.getType();
+			if (type.equals(DE.T_COMMAND_DESCRIPTOR))
 			    {
 				if (keyName.equals(subDescriptor.getValue()))
 				    {
 					return subDescriptor;		
+				    }
+			    }
+			else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
+			    {
+				DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
+				if (result != null)
+				    {
+					return result;
 				    }
 			    }
 		    }

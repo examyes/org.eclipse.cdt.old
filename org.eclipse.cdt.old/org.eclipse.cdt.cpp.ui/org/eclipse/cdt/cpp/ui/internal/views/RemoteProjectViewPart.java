@@ -88,10 +88,10 @@ public class RemoteProjectViewPart extends ViewPart
     private CloseResourceAction closeResourceAction;
     private CopyResourceAction copyResourceAction;
     
-    private CreateFolderAction createFolderAction;
-    private CreateFileAction createFileAction;
-    
+    private ResourceElementAction createFolderAction;
+    private ResourceElementAction createFileAction;
     private ResourceElementAction renameResourceAction;
+
     private DeleteResourceAction deleteResourceAction;
     
     
@@ -249,10 +249,8 @@ void makeActions()
   newWizardAction = new NewWizardAction();
   
   //we know these will be in a sub-folder called "New" so we can shorten the name
-  createFolderAction = new CreateFolderAction(shell);
-  createFolderAction.setText("&Folder");
-  createFileAction = new CreateFileAction(shell);
-  createFileAction.setText("Fil&e");
+  createFolderAction = new ResourceElementAction("Folder...", "C_CREATE_DIR");
+  createFileAction = new ResourceElementAction("File...", "C_CREATE_FILE");
 
   IActionBars actionBars = getViewSite().getActionBars();
   actionBars.setGlobalActionHandler(IWorkbenchActionConstants.DELETE, deleteResourceAction);
@@ -301,7 +299,6 @@ void fillFileMenu(IMenuManager menu, IStructuredSelection selection)
 		menu.add(new Separator());
 	    }
 
-	/*	
 	MenuManager newMenu = new MenuManager("Ne&w");
 	menu.add(newMenu);
 
@@ -311,6 +308,7 @@ void fillFileMenu(IMenuManager menu, IStructuredSelection selection)
 		newMenu.add(createFileAction);
 		}
 
+	/*
 	newMenu.add(new Separator());
 	newMenu.add(newWizardAction);
 	*/
@@ -408,8 +406,6 @@ void updateActions(IStructuredSelection selection) {
 	rebuildAllAction.selectionChanged(selection);
 	closeResourceAction.selectionChanged(selection);
 	copyResourceAction.selectionChanged(selection);
-	createFolderAction.selectionChanged(selection);
-	createFileAction.selectionChanged(selection);
 	localRefreshAction.selectionChanged(selection);
 	openResourceAction.selectionChanged(selection);
 	openFileAction.selectionChanged(selection);

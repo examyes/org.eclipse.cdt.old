@@ -555,6 +555,16 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 		    }
 	    }  
     }
+
+    public String toString()
+    {
+	return "ResourceElement:" + _element.getType() + ":" + _element.getName();
+    }
+
+    public void update()
+    {
+	getChildren(_element, true);
+    }
 }
 
 
