@@ -4,8 +4,8 @@
 
 options 
 {
- //DEBUG_PARSER=true;
- // DEBUG_LOOKAHEAD=true;
+    //DEBUG_PARSER=true;
+    //DEBUG_LOOKAHEAD=true;
   //DEBUG_TOKEN_MANAGER=true;
   //USER_CHAR_STREAM=true;
   static=false;
@@ -1621,8 +1621,8 @@ String postfix_expression() :
 String primary_expression() :
 {String name = empty; String next = empty;}
 {  
- ( "this" {name = "this";}
-  | name = constant()
+ ( 
+    name = constant()
   | <STRING> {name = getToken(0).image;} (LOOKAHEAD(2) <STRING> {name += getToken(0).image + " ";})*
   | "(" name = expression()  ")" {name = "(" + name + ")";}
   | LOOKAHEAD( ("::")? "new") name = new_expression() 
@@ -1745,7 +1745,7 @@ String id_expression() :
 String identifier() :
 {}
 {
-   <ID>
+    (<ID> | "this") //"this" can act like an identifier ->   int foo(A *this) {}
    {
     String name = getToken(0).image;
     symtab.addObjectUse(name);
