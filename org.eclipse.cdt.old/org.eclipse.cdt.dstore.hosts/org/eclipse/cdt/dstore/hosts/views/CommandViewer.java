@@ -124,39 +124,35 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     {
 	if (input != null && input != _input)	
 	    {
+		if (input instanceof IResource)
+		    {
+			DataStore dataStore = DataStoreCorePlugin.getInstance().getCurrentDataStore();
+			if (dataStore != null)
+			    {
+				IResource resource = (IResource)input;
+				if (resource instanceof IFile)
+				    {
+					resource = resource.getParent();
+				    }
+				
+				input = dataStore.createObject(null, "directory", 
+							       resource.getName(), 
+							       resource.getLocation().toString());
+			    }
+		    }
 		if (input instanceof DataElement)
 		    {
-			_input = (DataElement)input;
-		    }
-		else
-		    {
-			if (input instanceof IResource)
-			    {
-				DataStore dataStore = DataStoreCorePlugin.getInstance().getCurrentDataStore();
-				if (dataStore != null)
-				    {
-					IResource resource = (IResource)input;
-					if (resource instanceof IFile)
-					    {
-						resource = resource.getParent();
-					    }
-				
-					_input = dataStore.createObject(null, "directory", 
-									resource.getName(), 
-									resource.getLocation().toString());
-				    }
-			    }
+			setElementInput((DataElement)input);
 		    }
 	    }	
 
-	if (_input != null)
-	    {
-		setInput(_input);
-	    }
     }
 
-    public void setInput(DataElement input)
+    private void setElementInput(DataElement input)
     {
+	String type = input.getType();
+	if (type.equals("directory") || type.equals("project") || type.equals("host") || type.equals("device"))
+	    {
 	_input = input;
 	DataElement element = _input;
 
@@ -187,7 +183,9 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 		    }
 		
 		updateCombo();	
-	    }	
+	    }
+	    }
+		
     }
 
     protected void updateCombo()
