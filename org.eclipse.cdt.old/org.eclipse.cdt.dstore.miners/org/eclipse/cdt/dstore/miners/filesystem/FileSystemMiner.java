@@ -542,71 +542,7 @@ public class FileSystemMiner extends Miner
 	   	 sourceString = sourceString.substring(0, indexOfLocation);
 	  	}
  
-		File file = new File(sourceString);
-		try
-		{
-		 file = file.getCanonicalFile();
-		}
-		catch (IOException e)
-		{
-		}
-		if (!file.isDirectory() && file.exists())
-	    {
-		int maxSize = 5000000;
-		int size = (int)file.length();
-		try
-		    {
-			FileInputStream inFile = new FileInputStream(file);
-			int written = 0;
-
-			int bufferSize = (size > maxSize) ? maxSize : size;
-			if (bufferSize == 0)
-			    {
-				bufferSize = 1;
-			    }
-
-			byte[] subBuffer = new byte[bufferSize];
-
-			while (written < size)
-			    {
-				int subWritten = 0;
-
-				while (written < size && subWritten < bufferSize)
-				    {
-					int available = inFile.available();
-					available = (bufferSize > available) ? available : bufferSize;
-					int read = inFile.read(subBuffer, subWritten, available);
-					subWritten += read;
-					written += subWritten;
-				    }
-				
-				if (written <= maxSize)
-				    {
-					_dataStore.updateFile(sourceString, subBuffer, subWritten);
-				    }
-				else
-				    {
-					_dataStore.updateAppendFile(sourceString, subBuffer, subWritten);
-				    }
-			    }
-			// special case for empty files
-			if (written == 0)
-			    {
-				subBuffer[0] = ' ';
-				_dataStore.updateFile(sourceString, subBuffer, 1);
-			    }
-
-			
-			inFile.close();
-		    }
-		catch (IOException e)
-		    {
-			System.out.println(e);
-                        e.printStackTrace();
-			
-		    }
-	    }
-
+ 		_dataStore.sendFile(sourceString);	
         status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
         return status;        
       }
