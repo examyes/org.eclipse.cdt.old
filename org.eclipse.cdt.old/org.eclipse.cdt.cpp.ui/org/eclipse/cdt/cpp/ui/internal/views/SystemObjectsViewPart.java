@@ -39,39 +39,93 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	setTitle("System-Objects");
     }
 
+    public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+    {
+	if (part instanceof CppProjectsViewPart)
+	    {
+		try
+		    {
+			Object object = ((IStructuredSelection)sel).getFirstElement();
+			if (object instanceof DataElement)
+			    doSpecificInput((DataElement)object);
+		    }
+		catch (ClassCastException e)
+		    {
+		    }	
+	    } 
+	else if (part instanceof org.eclipse.ui.views.navigator.ResourceNavigator)
+	    {
+		
+		try
+		 {
+		     Object object = ((IStructuredSelection)sel).getFirstElement();
+		     if (object instanceof IResource)
+			 {
+			     IResource res = (IResource)object;
+			     DataElement element = _api.findResourceElement(res);
+			     if (element != null)
+				 {
+				     doSpecificInput(element);
+				 }
+			 }
+		 }
+		catch (ClassCastException e)
+		    {
+		    }			
+	    }	
+    }
+
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
 
 	DataElement includedSourceD = dataStore.findObjectDescriptor("Included Source");
+	DataElement parsedSourceD = dataStore.findObjectDescriptor("Parsed Source");
 
 	PTDataElementTableContentProvider provider = new PTDataElementTableContentProvider();
 
 	// pass thru these
        	provider.addPTDescriptor(includedSourceD); 
-
+       	provider.addPTDescriptor(parsedSourceD); 
 
 	return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader, provider);
     }
 
-    public void doSpecificInput(DataElement projectParseInformation)
+    DataElement findParseFiles(DataElement theProjectFile)
     {
-	//Find the System Objects Object under the projectParseInformation
-	DataElement systemObjects = projectParseInformation.getDataStore().find(projectParseInformation, DE.A_NAME, "System Objects", 1);
-	if (systemObjects == null)
+	DataStore dataStore = theProjectFile.getDataStore();
+	DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
+	DataElement sprojectObjects = dataStore.find(parseProject, DE.A_NAME, "System Objects", 1);
+	return sprojectObjects;
+    }
+
+    public void doSpecificInput(DataElement theElement)
+    {
+	DataElement theInput = null;
+	if (theElement.getType().equals("file"))
+	    {
+		theInput = _api.getProjectFor(theElement);		
+	    }
+
+	if (theElement.getType().equals("Project"))
+	    {
+		theInput = findParseFiles(theElement);
+	    }
+
+	if (theInput == null)
 	    return;
 	
 	
 	//Finally just set the input and the title
-	if (_viewer.getInput() == systemObjects)
+	if (_viewer.getInput() == theInput)
 	    {
 		_viewer.resetView();
 	    }
 	else
 	    {
-		_viewer.setInput(systemObjects);	
+		_viewer.setInput(theInput);	
 		_viewer.selectRelationship("contents");
-		setTitle(projectParseInformation.getName() + " System-Objects");   
+		setTitle(theElement.getName() + " System-Objects");   
 	    }
 	
  }

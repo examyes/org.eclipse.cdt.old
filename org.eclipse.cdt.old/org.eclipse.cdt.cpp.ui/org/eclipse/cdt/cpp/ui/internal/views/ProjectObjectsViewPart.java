@@ -139,10 +139,6 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	     theInput = findParseFiles(theElement);
 	 }
 
-     /*
-     if (theElement.getType().equals("Namespace"))
-	 theInput = theElement.getDataStore().find(theElement, DE.A_NAME, "Project Objects", 1);
-     */
 
      if (theInput == null)
 	 return;
@@ -154,7 +150,6 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	 {
 	     _viewer.setInput(theInput);	
 	     _viewer.selectRelationship("contents");
-	     //setTitle(theInput.getName() + " Objects");   
 	 }
  }
 
@@ -162,8 +157,6 @@ public class ProjectObjectsViewPart extends ProjectViewPart
     {
 	DataStore dataStore = theProjectFile.getDataStore();
 	DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
-	//DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
-	//return parsedFiles;
 	DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
 	return projectObjects;
     }
