@@ -108,14 +108,13 @@ public class ParseMiner extends Miner
  	DataElement project = getProjectFor(subject);
  	if (cmdStr.equals("C_RENAME"))
  	{
- 		System.out.println("rename " + subjectArg.getName() + " to " + subject.getName());
   		String type = subject.getType();
  		if (type.equals("file"))
  		{
  			DataElement parsedFile = getParseFileFor(project, subjectArg);
  			if (parsedFile != null)
  			{
- 				removeParseInfo(parsedFile);
+ 				removeParseInfo(parsedFile, project);
  			
  				if (subjectArg != null)
  				{
@@ -138,9 +137,10 @@ public class ParseMiner extends Miner
  		if (type.equals("file"))
  		{
  			DataElement parsedFile = getParseFileFor(project, subject);
+
  			if (parsedFile != null)
  			{
- 				removeParseInfo(parsedFile);
+ 				removeParseInfo(parsedFile, project);
  			
  				DataElement theProject = getParseProject(project);
  				DataElement projectObjects = getProjectElement(theProject, ParserSchema.ProjectObjects);
@@ -150,14 +150,8 @@ public class ParseMiner extends Miner
  		}
  		else if (subject.isOfType("directory"))
  		{
- 			for (int i = 0; i < subject.getNestedSize(); i++)
- 			{
- 				DataElement file = subject.get(i);
- 				if (!file.isReference())
- 				{
- 					handleNotification(cmd, file, null, status);
- 				}
- 			}
+ 			removeParseInfo(subject);
+ 			
  		}
  	}
  	else if (cmdStr.equals("C_ADD"))
@@ -489,7 +483,14 @@ public class ParseMiner extends Miner
   {
   	if (project == null)
   	{
-   		project = getProjectFor(theFile);
+  		if (theFile.getType().equals("directory") || theFile.getType().equals("file"))
+  		{ 
+   			project = getProjectFor(theFile);
+  		}
+  		else
+  		{
+  			project = theFile.getParent().getParent();
+  		}
   	}
    if (project != null)
     {
