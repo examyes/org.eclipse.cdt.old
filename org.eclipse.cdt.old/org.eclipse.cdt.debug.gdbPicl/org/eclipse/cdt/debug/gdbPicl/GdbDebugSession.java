@@ -943,7 +943,7 @@ public class GdbDebugSession extends DebugSession {
 		return _getGdbModuleParts.updateMainSegment();
 	}
 
-	private void updateSharedLibraries() {
+	public void updateSharedLibraries() {
 		if (Gdb.traceLogger.EVT)
 			Gdb.traceLogger.evt(
 				1,

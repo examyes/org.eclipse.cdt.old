@@ -168,16 +168,29 @@ public class GdbCommandAndResponse
            else if (lines[i].startsWith(FRAME_INVALID_keyword))
            {
 				if (lines[i+1].startsWith("Stopped due to shared library event"))
-           		{
+           		{           			      			           			
+		           if (Gdb.traceLogger.DBG)
+		               Gdb.traceLogger.dbg(1, " ...... GdbDebugSession.getGdbResponseLines - Stopped by Shared Library Event" );               
 		   		    _debugSession.cmdResponses.removeAllElements();
+		   		    ((GdbDebugSession)_debugSession).updateSharedLibraries();
 		   		    _debugSession.enableDeferredBreakpoints();
+		   		    
+	   		    if(((GdbBreakpointManager)(_debugSession.getBreakpointManager())).getNumDeferredBkpt() == 0)
+		   		    {
+		 	           if (Gdb.traceLogger.DBG)
+		    	            Gdb.traceLogger.dbg(1, " ...... GdbDebugSession.getGdbResponseLines - unset stop-on-solib-events" );               
+	   		    		_gdbProcess.setStopOnSharedLibEvents(false);
+		   		    }	   		    			   		    	   		    	
+		   		    
 					boolean ok = _gdbProcess.writeLine("cont");
 					if(ok)
        	            {
        	            	i = 0;
        	            	lines = _gdbProcess.readAllLines();
+       	            	length = lines.length;
        	            	continue;
        	            }
+       	            
            		}
            }
            else if( lines[i].startsWith(FRAME_BEGIN_keyword) || lines[i].startsWith(BP_HEADERS_keyword)

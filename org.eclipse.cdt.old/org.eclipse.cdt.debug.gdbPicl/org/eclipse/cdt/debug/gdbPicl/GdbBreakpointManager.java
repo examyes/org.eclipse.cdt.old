@@ -129,7 +129,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
                                  EStdExpression2 conditionalExpr)
    {
       if (Gdb.traceLogger.ERR) 
-          Gdb.traceLogger.err(2,"######## GdbBreakpointManager.setDeferredLineBreakpoint -- why not use BASE BreakpointManager instead of override ??????" );
+          Gdb.traceLogger.err(2,"######## GdbBreakpointManager.setDeferredLineBreakpoint -- why not use BASE BreakpointManager instead of override ??????" );                    
 
      for (int i=0; i<_breakpoints.size(); i++)
      {
@@ -159,40 +159,16 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
      DebugSession session = _debugEngine.getDebugSession();
 
-     // If the part for this line breakpoint request is already loaded,
-     // then set this as a regular line breakpoint vs. a deferred
-     // line breakpoint.
-     if (partName != null)
-     {
-         String[] partsList = session.getPartsList(partName);
+     // Try setting a regular breakpoint vs deferred
+     // if successful, don't have to set deferred breakpoint
+	int gdbBkId = super.setLineBreakpoint(fileName,lineNumber,true,conditionalExpr);
+	
+	if (gdbBkId == 0)
+	{
+		return 0;
+	}
 
-        if (partsList != null && partsList.length != 0)
-        {
-            int partID = 0;
-            for (int i = 0; i < partsList.length; i++)
-            {
-                 partID = _debugSession.getModuleManager().getPartID(partsList[i]);
-                 // If the class name includes the package name of this
-                 // breakpoint request, then just set the line breakpoint
-                 // for the class of this package only.
-                 if (pkgName != null && 
-                     (partsList[i].startsWith(pkgName) ||
-                      pkgName.equals(_debugSession.getResourceString("DEFAULT_PACKAGE_TEXT"))))
-                 {
-                     setLineBreakpoint(partID, 1, Part.VIEW_SOURCE,
-                                       lineNumber, enabled, conditionalExpr);
-                     break;
-                 }
-
-                 setLineBreakpoint(partID, 1, Part.VIEW_SOURCE, lineNumber,
-                                   enabled, conditionalExpr);
-            }
-            return 0;
-        }
-     }
-
-     int bkpID = _breakpoints.size()+1;
-//     int bkpID = _breakpoints.size();
+    int bkpID = _breakpoints.size()+1;
 
      LineBreakpoint bkp = new LineBreakpoint(_debugSession, bkpID, 0, pkgName,
                                              partName, fileName, attr,
@@ -217,9 +193,8 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
      else
          _changedBreakpoints.addElement(bkp);
 
-     // Set up the method load filter pattern based on the
-     // breakpoint information
-//     session.prepareDeferredBreakpointMethodFilter(bkp);
+	  _numDeferredBkpt++;
+	  ((GdbDebugSession)session).getGdbProcess().setStopOnSharedLibEvents(true);
 
      return 0;
    }
@@ -988,9 +963,8 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 	    {
         	 _changedBreakpoints.addElement(bkp);
 	    }
-         
-         // remove the orginal deferred breakpoint
-		 //removeBreakpoint(lineBkp);
+
+		_numDeferredBkpt--;         
      }
      /*
       * Method breakpoints are not fixed at the moment.  Need to re-visit this code
@@ -1086,5 +1060,25 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 	   		}
    		}
    }
+   
+   /**
+	 * Gets the numPendingBkpt.
+	 * @return Returns a int
+	 */
+	public int getNumDeferredBkpt() {
+		return _numDeferredBkpt;
+	}
+	
+	/**
+	 * Sets the numPendingBkpt.
+	 * @param numPendingBkpt The numPendingBkpt to set
+	 */
+	public void setNumDeferredBkpt(int numDeferredBkpt) {
+		_numDeferredBkpt = numDeferredBkpt;
+	}
+   
+   private int _numDeferredBkpt = 0;
+
+
 
 }

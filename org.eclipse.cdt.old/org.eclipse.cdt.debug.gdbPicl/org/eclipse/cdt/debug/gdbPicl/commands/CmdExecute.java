@@ -36,6 +36,7 @@ public class CmdExecute extends Command
       BreakpointManager            breakpointManager            = _debugSession.getBreakpointManager();
       VariableMonitorManager       variableMonitorManager       = _debugSession.getVariableMonitorManager();
       LocalVariablesMonitorManager localVariablesMonitorManager = _debugSession.getLocalVariablesMonitorManager();
+     int gdbID = 0;
 
       if (DU > 0)
       {
@@ -52,6 +53,7 @@ public class CmdExecute extends Command
       EStdView view = _req.getViewInfo();
       int partID = view.getPPID();
       int lineNum = view.getLineNum();
+      int line;
 
       try
       {
@@ -84,21 +86,120 @@ public class CmdExecute extends Command
                break;
 
             case EPDC.Exec_StepOver:
-               _debugSession.setLastUserCmd(DebugSession.CmdStepOver, threadManager.getCallStackSize(DU));
-               _debugSession.cmdStep(threadManager.getThreadName(DU), true);
-               break;
+               _debugSession.setLastUserCmd(DebugSession.CmdStepOver, threadManager.getCallStackSize(DU));               
+               
+			  String filename = ((GdbDebugSession)_debugSession).getCurrentFileName();
+			  line =  Integer.parseInt(((GdbDebugSession)_debugSession).getCurrentLineNumber());
+			  line ++;
+			  boolean needClear = false;
+			  boolean needReset = false;
+               
+			  if (Gdb.supportDeferredBreakpoint && ((GdbDebugSession)_debugSession).getGdbProcess().stopOnSharedLibEvents())
+			  {
+			  	// set line breakpoint
+			  	gdbID = ((GdbDebugSession)_debugSession).setLineBreakpoint(filename, line);
+			  	
+			  	if (gdbID > 0)
+			  	{
+			  		needClear = true;			  		
+			  	}
+			  	else
+			 	{
+			 		// breakpoint not successfully set
+			 		// should unset stop at shared lib event, otherwise, bad results
+			   		// the side effect of this is that some deferred breakpoints may not be set 
+			   		// manually try to enable the breakpoints if an error occurs
+			   		
+   		      if (Gdb.traceLogger.EVT) 
+				          Gdb.traceLogger.evt(1,"+++ Error setting bkpt at: " + filename + "," + line + " - unset solib event");
+			 		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
+			 		needReset = true;
+			 	}
+			  }
+               
+			   _debugSession.cmdStep(threadManager.getThreadName(DU), true);
+			   
+			   if (Gdb.supportDeferredBreakpoint && needClear)
+			   {
+			   	((GdbDebugSession)_debugSession).executeGdbCommand("delete " + gdbID);
+			   }
+			   
+			   if (Gdb.supportDeferredBreakpoint && needReset)
+			   {
+			   		// reset for other step over
+			   		
+    		      if (Gdb.traceLogger.EVT) 
+				          Gdb.traceLogger.evt(1,"+++ Reset solib event");
 
-            case EPDC.Exec_Step:
+			   		
+			 		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(true);
+			 		((GdbDebugSession)_debugSession).enableDeferredBreakpoints();
+			   }
+			   
+              break;
+
+          case EPDC.Exec_Step:
                _debugSession.setLastUserCmd(DebugSession.CmdStepDebug, threadManager.getCallStackSize(DU));
                _debugSession.cmdStepDebug(threadManager.getThreadName(DU));
                break;
 
-            case EPDC.Exec_StepReturn:
+          case EPDC.Exec_StepReturn:
                _debugSession.setLastUserCmd(DebugSession.CmdStepReturn, threadManager.getCallStackSize(DU));
-               _debugSession.cmdStepReturn_User(threadManager.getThreadName(DU));
-               break;
 
-            case EPDC.Exec_RunToCursor:
+			  String returnFile = "";
+			  line = 0;
+			  needClear = false;
+			  needReset = false;
+			  
+			  if (Gdb.supportDeferredBreakpoint && ((GdbDebugSession)_debugSession).getGdbProcess().stopOnSharedLibEvents())
+			  {
+               ThreadComponent tc = threadManager.getThreadComponent(DU);
+               GdbStackFrame[] callStack = ((GdbThreadComponent)tc).getCallStack();
+               
+               returnFile = callStack[1].getFileName();
+               line = callStack[1].getLineNumber() + 1;
+               
+               // set breakpint
+				gdbID = ((GdbDebugSession)_debugSession).setLineBreakpoint(returnFile, line);
+			  	
+			  	if (gdbID > 0)
+			  	{
+			  		needClear = true;			  		
+			  	}
+			  	else
+			 	{
+			 		// breakpoint not successfully set
+			 		// should unset stop at shared lib event, otherwise, bad results
+			   		// the side effect of this is that some deferred breakpoints may not be set 
+			   		// manually try to enable the breakpoints if an error occurs
+   		      if (Gdb.traceLogger.EVT) 
+				          Gdb.traceLogger.evt(1,"+++ Error setting bkpt at: " + returnFile + "," + line + " - unset solib event");
+			   		
+			 		((GdbDebugSession)_debugSession).getGdbProcess().setStopOnSharedLibEvents(false);
+			 		needReset = true;
+			 	}
+               
+   			  }
+               _debugSession.cmdStepReturn_User(threadManager.getThreadName(DU));
+               
+				if (Gdb.supportDeferredBreakpoint && needClear) {
+					((GdbDebugSession) _debugSession).executeGdbCommand(
+						"delete " + gdbID);
+				}
+	
+				if (Gdb.supportDeferredBreakpoint && needReset) {
+					// reset for other step over
+    		      if (Gdb.traceLogger.EVT) 
+				          Gdb.traceLogger.evt(1,"+++ Reset solib event");
+										
+					((GdbDebugSession) _debugSession).getGdbProcess().setStopOnSharedLibEvents(true);
+			 		((GdbDebugSession)_debugSession).enableDeferredBreakpoints();						
+				}
+
+               
+             break;
+
+          case EPDC.Exec_RunToCursor:
                _debugSession.setLastUserCmd(DebugSession.CmdRun, threadManager.getCallStackSize(DU));
                // if a breakpoint already exists at the run-to location,
                // then just do a normal execute otherwise, create the

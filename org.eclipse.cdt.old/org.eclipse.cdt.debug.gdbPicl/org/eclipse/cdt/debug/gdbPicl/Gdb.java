@@ -729,7 +729,7 @@ public class Gdb
    private static ResourceBundle _messagesBundle;
 
    public static TraceLogger traceLogger  = new TraceLogger("GdbPicl");;
-   public static boolean supportDeferredBreakpoint = false;
+   public static boolean supportDeferredBreakpoint = true;
    private static boolean showDebugOutput         = false;
    private static boolean hideInformationalOutput = false;
    protected static PrintWriter _dbgLog = null;

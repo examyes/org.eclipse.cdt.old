@@ -97,6 +97,8 @@ public class GdbProcess {
 	public static final String MARKER = new String(PMPT);
 	private static String PROMPT = MARKER + "prompt"; // set annotate 2
 	private boolean _annotated = false;
+	private boolean _stopOnSharedLibEvents = false;
+	
 	public boolean getAnnotated() {
 		return _annotated;
 	}
@@ -168,21 +170,25 @@ public class GdbProcess {
 			cmd = "set print null-stop";
 			ok = writeLine(cmd);
 		}
-		
+/*		
 		if (Gdb.supportDeferredBreakpoint)
 		{		
 			if (ok)
 			{
+	           if (Gdb.traceLogger.DBG)
+    	            Gdb.traceLogger.dbg(1, " GdbProcess - set stop-on-solib-events" );               
 				cmd = "set stop-on-solib-events 1";
 				ok = writeLine(cmd);
 			}
 		}
-		
+*/		
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
-				Gdb.traceLogger.err(2, "GdbProcess failed to writeLine=" + cmd);
+				Gdb.traceLogger.err(2, "GdbProcess failed to writeLine=" + cmd);				
 			return;
 		}
+		
+		_stopOnSharedLibEvents = true;
 	}
 
 	public boolean writeLine(String cmd) {
@@ -335,5 +341,51 @@ public class GdbProcess {
 			}
 			wtr = null;
 		}
+	}	
+	
+	/**
+	 * Gets the stopOnSharedLibEvents.
+	 * @return Returns a boolean
+	 */
+	public boolean stopOnSharedLibEvents() {
+		return _stopOnSharedLibEvents;
 	}
+
+	/**
+	 * Sets the stopOnSharedLibEvents.
+	 * @param stopOnSharedLibEvents The stopOnSharedLibEvents to set
+	 * if stopOnSharedLibEvents = true - set stop-on-solib-events 1
+	 * else - set stop-on-solib-events 0
+	 * if an error occurs, _stopOnSharedLibEvents will be left unchanged
+	 */
+	public void setStopOnSharedLibEvents(boolean stopOnSharedLibEvents) {
+		
+		boolean ok;
+		String cmd;
+		boolean backup = _stopOnSharedLibEvents;
+		
+		if (Gdb.traceLogger.DBG)
+				Gdb.traceLogger.dbg(1, "GdbProcess.setStopOnSharedLibEvents:  " + stopOnSharedLibEvents);
+
+		_stopOnSharedLibEvents = stopOnSharedLibEvents;
+		
+		if (_stopOnSharedLibEvents)
+		{
+			cmd = "set stop-on-solib-events 1";
+			ok = writeLine(cmd);
+		}
+		else
+		{
+			cmd = "set stop-on-solib-events 0";
+			ok = writeLine(cmd);
+		}		
+		
+		if (!ok)
+		{			
+			if (Gdb.traceLogger.EVT)
+					Gdb.traceLogger.evt(1, "**************** GdbProcess.setStopSharedLibEvents FAILED. _stopOnSharedLibEvents unchanged - " + backup);
+			_stopOnSharedLibEvents = backup;
+		}
+	}
+
 }

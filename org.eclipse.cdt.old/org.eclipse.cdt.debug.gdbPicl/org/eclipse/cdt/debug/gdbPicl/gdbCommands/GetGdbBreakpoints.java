@@ -70,8 +70,15 @@ public class GetGdbBreakpoints  //extends ThreadManager
       }
 
       String str = lines[0];
+      
+	  if (str.startsWith("Note:") && lines.length > 1)
+      {
+      	str = lines[1];
+      }
+      
       if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(2,"GetGdbBreakpoints lines[0]="+str );
+          Gdb.traceLogger.dbg(2,"GetGdbBreakpoints lines[0]="+str );                    
+          
       if(str==null || str.equals("") )
       {   if (Gdb.traceLogger.ERR) 
               Gdb.traceLogger.err(2,"GetGdbBreakpoints.breakpointCommand cmd="+cmd+" responseLines[0]==null" );

@@ -143,9 +143,9 @@ public class CmdBreakpointLocation extends Command
          {
             // ########### LINE BREAKPOINT ####################################
             case EPDC.LineBkpType:
-              if (isDeferred)      // UNIMPLEMENTED ########################
+              if (isDeferred)     
               {
-                  if (_req.bkpAction() == EPDC.ReplaceBkp)
+                if (_req.bkpAction() == EPDC.ReplaceBkp)   // UNIMPLEMENTED ########################
                   {
                       ret = bm.modifyDeferredLineBreakpoint(_req.bkpID(), moduleName, partName, sourceName, _req.bkpAttr(), bkpContext.getLineNum(), _req.getConditionalExpression());
                       if (ret > 0)
