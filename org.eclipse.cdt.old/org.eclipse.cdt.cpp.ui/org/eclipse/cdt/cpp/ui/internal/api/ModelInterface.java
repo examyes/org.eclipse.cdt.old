@@ -1120,6 +1120,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public IProject findProjectResource(DataElement projectElement)
     {
+    	if (projectElement == null)
+    	  return null;
+    	  
 	// first search local projects
 	IProject[] projects = _workbench.getRoot().getProjects();
 	DataStore ldataStore = _plugin.getDataStore();
