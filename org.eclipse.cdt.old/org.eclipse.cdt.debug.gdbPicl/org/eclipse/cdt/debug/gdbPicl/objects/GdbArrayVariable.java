@@ -26,7 +26,7 @@ public class GdbArrayVariable extends GdbVariable {
 		
 		_elements = new Vector();
 		
-		value.trim();
+		value = value.trim();
 		_gdbData = value;	
 		_numNodes = 1;
 				
@@ -56,7 +56,7 @@ public class GdbArrayVariable extends GdbVariable {
 			_elements.removeAllElements();
 		
 			String parseStr = s;		
-			parseStr.trim();
+			parseStr = parseStr.trim();
 			
 			createTree(parseStr);
 			_changed = true;

@@ -33,7 +33,7 @@ public class GdbObjectVariable extends GdbVariable {
        	_prefix = prefix;
        	_numNodes = 1;
 	    
-	    value.trim();
+	    value = value.trim();
     	    
 		createTree(value);    	    
 
@@ -191,6 +191,9 @@ public class GdbObjectVariable extends GdbVariable {
 		{a = {1, 2, 3, 4}, b = 4, d = 5}
 		{a = {{x = 1, y = 2, z = 3}, {...}}, b = 3}
 		
+		in case of an union
+		{a = { ... }, b = x, {s = ..., t = ...}, abc = ... }
+		
 	*/
 	private void createTree(String parseStr)
 	{
@@ -210,7 +213,30 @@ public class GdbObjectVariable extends GdbVariable {
 		
 		
 		while (parseStr != "" && parseStr != null)
-		{	
+		{
+			// if parseStr starts with {, this is an union
+			if (parseStr.startsWith("{"))
+			{
+				int endClass = findMatchingEnd(parseStr);
+				fieldName = "union";
+				prefix = _prefix;
+				fieldType = "";
+				fieldValue = parseStr.substring(0, endClass+1);
+
+	    		GdbObjectVariable newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID + _numNodes);
+	    		_fields.add(newField);
+	    		_numNodes += newField.numNodes();
+			    		
+	    		if (endClass+3 > parseStr.length())
+	    		{
+	    			// done!
+	    			break;
+	    		}
+  		
+	    		parseStr = parseStr.substring(endClass+3);
+	    		continue;
+			}	
+			
 			// delimite by comma to get the first token
 			int comma = parseStr.indexOf(",");
 			
