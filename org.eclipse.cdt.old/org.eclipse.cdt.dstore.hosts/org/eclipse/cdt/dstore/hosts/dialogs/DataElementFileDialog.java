@@ -114,7 +114,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	DataStore dataStore = _input.getDataStore();
 	_viewer = new ObjectWindow(c, ObjectWindow.TREE, dataStore, _plugin.getImageRegistry(), _plugin.getDialogActionLoader());
 	
-	if (_input.getDescriptor().isOfType("Filesystem Objects"))
+	if (_input.getDescriptor().isOfType("Filesystem Objects") || _input.getType().equals("data"))
 	    {
 		_viewer.setInput(_input);
 	    }
