@@ -29,12 +29,8 @@ public class PAMiner extends Miner {
 
  public void load()
  {
-  _adaptor = new PADataStoreAdaptor(this);
-  
-  DataElement projectsRoot = _dataStore.createObject(_minerData, getLocalizedString("model.data"), getLocalizedString("pa.ProjectsRoot"));
-  
-  _dataStore.createObject(_minerData, getLocalizedString("model.data"), getLocalizedString("pa.TraceFilesRoot"));
-  _dataStore.createObject(projectsRoot, getLocalizedString("model.data"), "no input");
+  // System.out.println("Calling PAMiner.load");
+  _adaptor = new PADataStoreAdaptor(this);  
  }
 
  // Return the datastore
@@ -196,7 +192,7 @@ public class PAMiner extends Miner {
   createCommandDescriptor(traceFileD,    getLocalizedString("pa.Parse"), "C_PARSE_TRACE").setDepth(0);
   createCommandDescriptor(traceProgramD, getLocalizedString("pa.Analyze"), "C_ANALYZE_PROGRAM").setDepth(0);
   createCommandDescriptor(traceFunctionD, "Query", "C_QUERY");
-  createCommandDescriptor(fileD, "quey trace", "C_QUERY_TRACE_FORMAT");
+  createCommandDescriptor(fileD, "quey trace", "C_QUERY_TRACE_FORMAT").setDepth(0);
   
   makeTransient(gprofTraceFunctionD);
   makeTransient(fcTraceFunctionD);
@@ -260,11 +256,11 @@ public class PAMiner extends Miner {
    switch (traceFormat) {
    
      case PAAdaptor.GPROF_GNU:
-      formatStr = "GNU gprof";
+      formatStr = "gprof_gnu";
       break;
       
      case PAAdaptor.GPROF_BSD:
-      formatStr = "BSD gprof";
+      formatStr = "gprof_bsd";
       break;
      
      case PAAdaptor.FUNCTIONCHECK:
