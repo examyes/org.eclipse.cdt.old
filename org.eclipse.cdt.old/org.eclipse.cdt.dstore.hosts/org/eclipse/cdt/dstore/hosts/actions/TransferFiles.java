@@ -101,7 +101,11 @@ public class TransferFiles extends Thread
 	DataStore sourceDataStore = source.getDataStore();
 
 	String targetStr = target.getSource();
-	String newSourceStr = targetStr + "/" + source.getName();
+	if (targetStr.charAt(targetStr.length() - 1) != '/')
+	{
+		targetStr = targetStr + "/";
+	} 
+	String newSourceStr = targetStr + source.getName();
 	
 	boolean needsUpdate = false;
 
@@ -352,10 +356,11 @@ public class TransferFiles extends Thread
     {
 	if (fileElement != null)
 	    {
+	    	DataElement dateObj = null;
 		ArrayList timeArray = fileElement.getAssociated("modified at");
 		if (timeArray.size() > 0)
 		    {
-			DataElement dateObj = (DataElement)timeArray.get(0); 
+			dateObj = (DataElement)timeArray.get(0); 
 			dateObj.setAttribute(DE.A_NAME, "" + newDate);
 		    }
 		
@@ -365,7 +370,11 @@ public class TransferFiles extends Thread
 		if (dateDescriptor != null)
 		    {
 			ArrayList args = new ArrayList();
-			args.add(dataStore.createObject(null, "date", "" + newDate));
+			if (dateObj == null)
+			{
+				dateObj = dataStore.createObject(null, "date", "" + newDate);
+			}
+			args.add(dateObj);
 			dataStore.command(dateDescriptor, args, fileElement);
 		    }
 	    }

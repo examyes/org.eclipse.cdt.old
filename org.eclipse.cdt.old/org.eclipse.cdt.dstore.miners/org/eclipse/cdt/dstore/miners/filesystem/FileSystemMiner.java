@@ -596,9 +596,10 @@ public class FileSystemMiner extends Miner
     private DataElement handleDates(DataElement theDirectory, DataElement status)
     {
 	handleDate(theDirectory, status);
-	for (int i = 0; i < theDirectory.getNestedSize(); i++)
+	ArrayList contents = theDirectory.getAssociated(_containsDescriptor);
+	for (int i = 0; i < contents.size(); i++)
 	    {
-		handleDate(theDirectory.get(i), status);
+		handleDate((DataElement)contents.get(i), status);
 	    }
 
 	_dataStore.refresh(theDirectory);
@@ -679,8 +680,21 @@ public class FileSystemMiner extends Miner
 				    {
 					file.setLastModified(date);
 				    }
-				_dataStore.createReference(theFile, newDate, 
-							   _modifiedAtDescriptor);
+				    
+				ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
+				DataElement dateObj = null;
+				if (dateInfo.size() != 0)
+	    		{
+					dateObj = (DataElement)dateInfo.get(0);		
+	    		}
+	    		if (dateObj == null)
+				{
+					_dataStore.createReference(theFile, newDate, _modifiedAtDescriptor);
+				}
+				else
+				{
+					dateObj.setAttribute(DE.A_NAME, newDate.getName());
+				}
 			    }
 			catch (Exception e)
 			    {
