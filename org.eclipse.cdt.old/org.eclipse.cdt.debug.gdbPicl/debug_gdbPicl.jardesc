@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jardesc>
+    <jar path="/ship/org.eclipse.cdt.debug.gdbPicl/debug_gdbPicl.jar"/>
+    <options buildIfNeeded="true" compress="true"
+        descriptionLocation="/org.eclipse.cdt.debug.gdbPicl/debug_gdbPicl.jardesc"
+        exportErrors="true" exportWarnings="true" logErrors="true"
+        logWarnings="true" overwrite="false" saveDescription="true" useSourceFolders="false"/>
+    <manifest generateManifest="true" manifestLocation=""
+        manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false">
+        <javaElement handleIdentifier="=org.eclipse.cdt.debug.gdbPicl/&lt;org.eclipse.cdt.debug.gdbPicl.gdbCommands"/>
+        <javaElement handleIdentifier="=org.eclipse.cdt.debug.gdbPicl/&lt;org.eclipse.cdt.debug.gdbPicl.commands"/>
+        <javaElement handleIdentifier="=org.eclipse.cdt.debug.gdbPicl/&lt;org.eclipse.cdt.debug.gdbPicl"/>
+        <javaElement handleIdentifier="=org.eclipse.cdt.debug.gdbPicl/&lt;org.eclipse.cdt.debug.gdbPicl.objects"/>
+    </selectedElements>
+</jardesc>
