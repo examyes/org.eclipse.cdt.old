@@ -38,13 +38,11 @@ public class CppPerspective implements IPerspectiveFactory
     IFolderLayout topLeftRight = factory.createFolder("topLeftRight", IPageLayout.RIGHT, (float)0.45,
 						      "topLeft");
     topLeftRight.addView("com.ibm.cpp.ui.ProjectObjectsViewPart");
-    topLeftRight.addView("com.ibm.cpp.ui.SystemObjectsViewPart");
     topLeftRight.addView("com.ibm.cpp.ui.ParsedSourceViewPart");
 
     IFolderLayout bbottomRight = factory.createFolder("bbottomRight", IPageLayout.BOTTOM, (float)0.70,
 						      editorArea);
     bbottomRight.addView("com.ibm.cpp.ui.CppOutputViewPart");
-    bbottomRight.addView("com.ibm.cpp.ui.SuperDetailsViewPart");
 
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
 		

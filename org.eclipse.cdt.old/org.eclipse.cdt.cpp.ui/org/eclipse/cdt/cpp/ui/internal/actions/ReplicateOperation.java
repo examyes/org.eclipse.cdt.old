@@ -8,6 +8,7 @@ package com.ibm.cpp.ui.internal.actions;
 
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.vcm.*;
 import com.ibm.cpp.ui.internal.dialogs.*;
 
 import com.ibm.dstore.ui.actions.*;
@@ -65,28 +66,40 @@ public abstract class ReplicateOperation implements IRunnableWithProgress, ITran
 	if (updateString.equals("Ready"))
 	    {
 		IProject subP = _api.findProjectResource(_subject); 
-		try
+		if (subP instanceof Repository)
 		    {
-			subP.refreshLocal(subP.DEPTH_INFINITE, _pm);
 		    }
-		catch (CoreException e)
+		else
 		    {
-			System.out.println(e);
-		    }	
-		
-		    for (int i = 0; i < _projects.size(); i++)
-			{
-			    DataElement project = (DataElement)_projects.get(i); 
-			    IProject tarP = _api.findProjectResource(project); 
-			    try
-				{
-				    tarP.refreshLocal(tarP.DEPTH_INFINITE, _pm);
-				}
-			    catch (CoreException e)
-				{
-				    System.out.println(e);
-				}	
-			}
+			try
+			    {
+				subP.refreshLocal(subP.DEPTH_INFINITE, _pm);
+			    }
+			catch (CoreException e)
+			    {
+				System.out.println(e);
+			    }	
+		    }
+
+		for (int i = 0; i < _projects.size(); i++)
+		    {
+			DataElement project = (DataElement)_projects.get(i); 
+			IProject tarP = _api.findProjectResource(project); 
+			if (tarP instanceof Repository)
+			    {
+			    }
+			else
+			    {
+				try
+				    {
+					tarP.refreshLocal(tarP.DEPTH_INFINITE, _pm);
+				    }
+				catch (CoreException e)
+				    {
+					System.out.println(e);
+				    }	
+			    }
+		    }
 	    }    
     }
     
