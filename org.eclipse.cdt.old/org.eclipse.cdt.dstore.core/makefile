@@ -197,7 +197,7 @@ createEmptyServerZip:
 zipServerPlugins: $(patsubst %,%_zipServerPlugin,$(serverPlugins))
 
 %_zipServerPlugin:
-	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x org *org\/* *makefile* *setenv.mk* com *com\/* *CVS*
+	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x org *org\/* *makefile* *setenv.mk* com *com\/* *CVS* *help\/helpwebapp\/servlet\/* *build\/*.class
 
 # Targets specific to org.eclipse.cdt.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
 jarFile=dstore_core.jar
