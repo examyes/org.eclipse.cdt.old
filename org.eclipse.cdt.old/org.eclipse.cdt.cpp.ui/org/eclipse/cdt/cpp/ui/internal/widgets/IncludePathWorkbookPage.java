@@ -27,9 +27,6 @@ public class IncludePathWorkbookPage
     {
 	_pathControl = new IncludePathControl(parent, SWT.NONE);	
 
-	ArrayList paths = CppPlugin.readProperty("DefaultParseIncludePath");
-	_pathControl.setPaths(paths);
-
        	GridLayout layout = new GridLayout();	
 	GridData dData = new GridData(GridData.GRAB_HORIZONTAL
 				      |GridData.FILL_BOTH);
@@ -50,4 +47,15 @@ public class IncludePathWorkbookPage
     {
 	return _pathControl;
     }
+
+    public void setPaths(ArrayList paths)
+    {
+	_pathControl.setPaths(paths);
+    }
+
+    public ArrayList getPaths()
+    {
+	return _pathControl.getPaths();
+    }
+
 }

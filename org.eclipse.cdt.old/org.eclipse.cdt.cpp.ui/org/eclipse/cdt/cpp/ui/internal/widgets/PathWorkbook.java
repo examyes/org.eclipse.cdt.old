@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.graphics.Image;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-
+import java.util.*;
 
 public class PathWorkbook extends Composite 
 {
@@ -75,6 +75,36 @@ public class PathWorkbook extends Composite
     {
 	//setPageComplete(true);
 	//_workbookPageParsePath.setRemote(_wizard.isRemote());
+    }
+
+    public ArrayList getIncludePath()
+    {
+	return _includePathPage.getPaths();
+    }
+
+    public ArrayList getExternalSourcePath()
+    {
+	return _externalSourcePage.getPaths();
+    }
+    
+    public ArrayList getLibraries()
+    {
+	return _libraryPage.getPaths();
+    }
+
+    public void setIncludePath(ArrayList paths)
+    {
+	_includePathPage.setPaths(paths);
+    }
+
+    public void setExternalSourcePath(ArrayList paths)
+    {
+	_externalSourcePage.setPaths(paths);
+    }
+    
+    public void setLibraries(ArrayList paths)
+    {
+	_libraryPage.setPaths(paths);
     }
 
 }
