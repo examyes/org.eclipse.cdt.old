@@ -1,5 +1,5 @@
 
-all:  CppProjectAttributes.class CppPlugin.class actions dialogs vcm api views builder editor wizards preferences
+all:  CppProjectAttributes.class CppPlugin.class actions dialogs vcm api views builder editor wizards preferences launchers
 
 CppProjectAttributes.class: CppProjectAttributes.java
 	javac $(FLAGS) CppProjectAttributes.java
@@ -49,6 +49,11 @@ editor:
 
 vcm:
 	cd vcm
+	nmake all
+	cd ..
+
+launchers:
+	cd launchers
 	nmake all
 	cd ..
 

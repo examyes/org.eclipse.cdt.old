@@ -10,6 +10,7 @@
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.ibm.lpex"/>
+      <import plugin="com.ibm.debug"/>
       <import plugin="org.eclipse.search"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.debug.ui"/>
@@ -28,6 +29,17 @@
        	<export name="*" />
      </library>
    </runtime>
+
+<!-- Launchers -->
+
+<extension point="org.eclipse.debug.core.launchers">
+	<launcher  id="com.ibm.cpp.ui.launchers.CppLoadLauncher"
+	   	   class="com.ibm.cpp.ui.internal.launchers.CppLoadLauncher"
+	  	   modes="debug"
+ 	  	   label= "Start a C/C++ Application"
+ 	  	   public= "true"
+ 	  	   description= "C/C++ debug program launcher" />
+</extension>
 
 <extension
 	point="org.eclipse.ui.perspectives">

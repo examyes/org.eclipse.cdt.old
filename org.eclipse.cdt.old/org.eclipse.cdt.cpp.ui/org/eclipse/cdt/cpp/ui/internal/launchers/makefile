@@ -1,8 +1,8 @@
 #Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
-all: CppLauncher.class
+all: CppLoadLauncher.class
 
-CppLauncher.class: CppLauncher.java
-	javac CppLauncher.java
+CppLoadLauncher.class: CppLoadLauncher.java
+	javac CppLoadLauncher.java
 
 clean:
 	del *.class
