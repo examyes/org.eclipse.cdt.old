@@ -37,8 +37,6 @@ public class CppPerspective implements IPerspectiveFactory
     IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.LEFT, (float)0.20,
     					  editorArea);
     topLeft.addView("org.eclipse.cdt.cpp.ui.CppProjectsViewPart");
-    topLeft.addView(IPageLayout.ID_RES_NAV);
-
 
     IFolderLayout topRight = factory.createFolder("topRight", IPageLayout.RIGHT, (float)0.75,
 						  editorArea);
@@ -56,7 +54,6 @@ public class CppPerspective implements IPerspectiveFactory
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.ParsedSourceViewPart");
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppCommandViewPart");
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppOutputViewPart");
-    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.SuperDetailsViewPart");    
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.Targets");
     factory.addShowViewShortcut("org.eclipse.cdt.linux.help.views.ResultsViewPart");
 
