@@ -33,7 +33,7 @@ public class DebugMiner extends Miner
     }
 
     public void load()
-    { 
+    {
 	_debugOptions = getLocalizedString("debug_options");
 	
 	_gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
@@ -60,24 +60,28 @@ public class DebugMiner extends Miner
 
 	if (name.equals("C_DEBUG"))
 	    {
-	String invocationStr = _debugInvocation + "-qhost=" + hostName.getName() +
-                                              " -quiport=" + port.getName() +
-                                              " -startupKey=" + key.getName();
-
-	if (System.getProperty("os.name").equals("Linux"))
-	{
-	    invocationStr += " -gdbPath=" + _gdbPiclPath;
-	}
-	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
-
-	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
-	if (cmdDescriptor != null)
-	    {
-		ArrayList args = new ArrayList();
-		args.add(invocation);
-		args.add(status);
-		_dataStore.command(cmdDescriptor, args, directory);
+		DataElement jre = getCommandArgument(theCommand, 4);
+		if (jre != status)
+		    {
+			handleDebug(subject,
+				    getCommandArgument(theCommand, 1),
+				    getCommandArgument(theCommand, 2),
+				    getCommandArgument(theCommand, 3),			
+				    jre,
+				    status);
+		    }
+		else
+		    {
+			handleDebug(subject,
+ 				    getCommandArgument(theCommand, 1),
+				    getCommandArgument(theCommand, 2),
+				    getCommandArgument(theCommand, 3),			
+				    status);
+		    }
 	    }
+
+	status.setAttribute(DE.A_NAME, "done");
+	return status;
     }
 
     public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
@@ -120,8 +124,5 @@ public class DebugMiner extends Miner
 		_dataStore.command(cmdDescriptor, args, directory);
 	    }
     }
-}
-
-
 }
 
