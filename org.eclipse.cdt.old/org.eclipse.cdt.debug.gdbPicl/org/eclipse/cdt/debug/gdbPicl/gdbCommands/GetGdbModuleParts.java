@@ -275,6 +275,14 @@ public class GetGdbModuleParts
 
  	 // get currentModuleName and currentPartID now for debugSession       
      currentModuleName = _moduleManager.getModuleName(currentModuleID);
+     
+     // in case there is directory info in the filename, get rid of it
+     int lastSlash = currentFileName.lastIndexOf("/");
+     if (lastSlash != -1)
+     {
+     	currentFileName = currentFileName.substring(lastSlash+1);
+     }
+     
      currentPartID = _moduleManager.getPartID(currentModuleID, currentFileName);   
      
      String lastFunctionName = _debugSession.getCurrentFunctionName();     
@@ -754,8 +762,25 @@ public class GetGdbModuleParts
      Part part = _moduleManager.addPart(moduleID, fileName, fileName);
 */
 
-	_moduleManager.checkPart(moduleID, fileName);
-	int id = _moduleManager.getPartID(moduleID, fileName);
+	int lastSlash = fileName.lastIndexOf("/");
+	String partName;
+	if (lastSlash != -1)
+	{
+		partName = fileName.substring(lastSlash+1);
+	}
+	else
+	{
+		partName = fileName;
+	}
+
+
+	_moduleManager.checkPart(moduleID, partName);
+	
+	// fileName may contain directory info
+	// but the parts are identified with just the filename in _moduleManager
+	// so, create partName and search for it
+	
+	int id = _moduleManager.getPartID(moduleID, partName);
 	Part part = _moduleManager.getPart(id);
 
      str = "";

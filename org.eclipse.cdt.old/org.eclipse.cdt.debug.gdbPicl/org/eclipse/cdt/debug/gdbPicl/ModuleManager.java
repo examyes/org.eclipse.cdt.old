@@ -505,7 +505,18 @@ public class ModuleManager extends ComponentManager
 
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"ModuleManager.checkPart BLINDLY Adding part " + partName + " moduleID="+ moduleID );
-         Part part = addPart(moduleID, partName, partName);
+             
+         int lastSlash = partName.lastIndexOf("/");    
+         String shortName;
+         if (lastSlash != -1)
+         {
+         	shortName = partName.substring(lastSlash+1);
+         }
+         else
+         {
+         	shortName = partName;
+         }
+         Part part = addPart(moduleID, shortName, partName);
       }
    }
 

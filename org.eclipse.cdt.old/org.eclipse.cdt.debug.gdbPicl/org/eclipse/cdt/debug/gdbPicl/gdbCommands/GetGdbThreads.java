@@ -126,16 +126,22 @@ public class GetGdbThreads
                         _debugSession.setCurrentThreadID(intThreadID);
                  }
                  GdbThread gdbThread = null;
-                 if(!_gdbThreads.isEmpty() && _gdbThreads.elementAt(intThreadID)!=null)
-                     gdbThread = (GdbThread)_gdbThreads.elementAt(intThreadID);
-                 if(gdbThread==null)
+                 
+                 // intThreadID could still be less than 0 here
+                 if (intThreadID > 0)
                  {
-                    gdbThread = new GdbThread(_debugSession, b,intThreadID, "systemTID "+systemTID,systemTID,functionName,fileName,frameAddress,fileLine, moduleID);
-                    _gdbThreads.setElementAt(gdbThread,intThreadID);
-                 }
-                 else
-                 {
-                     gdbThread.update(systemTID,functionName,fileName,frameAddress,fileLine, moduleID );
+	                 if(!_gdbThreads.isEmpty() && _gdbThreads.elementAt(intThreadID)!=null)
+	                     gdbThread = (GdbThread)_gdbThreads.elementAt(intThreadID);
+ 
+	                 if(gdbThread==null)
+	                 {
+	                    gdbThread = new GdbThread(_debugSession, b,intThreadID, "systemTID "+systemTID,systemTID,functionName,fileName,frameAddress,fileLine, moduleID);
+	                    _gdbThreads.setElementAt(gdbThread,intThreadID);
+	                 }
+	                 else
+	                 {
+	                     gdbThread.update(systemTID,functionName,fileName,frameAddress,fileLine, moduleID );
+	                 }
                  }
               }
               current = " ";
