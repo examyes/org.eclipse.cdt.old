@@ -73,9 +73,13 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 				if (_viewer != null)
 				{
 					TreeViewer treeViewer = (TreeViewer)_viewer.getViewer();
-					if (!treeViewer.getSelection().equals(newSelection)) 
+					if (treeViewer != null) 
 					{
-						treeViewer.setSelection(newSelection);
+						Object selection = treeViewer.getSelection();
+						if (selection != newSelection)
+						{
+							treeViewer.setSelection(newSelection);
+						}
 					}
 				}
 			}
