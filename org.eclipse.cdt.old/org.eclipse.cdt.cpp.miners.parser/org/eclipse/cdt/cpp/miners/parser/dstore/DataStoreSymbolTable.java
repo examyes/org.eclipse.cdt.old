@@ -452,7 +452,7 @@ public class DataStoreSymbolTable implements SymbolTable
  
  public void gotoGlobalScope()
  {
-  while( (!_root.getType().equals(ParserSchema.ParsedSource)) && (_root.getParent() != null))
+  while( (!_root.getType().equals(ParserSchema.ParsedSource)) && (!_root.getType().equals(ParserSchema.IncludedSource)) && (_root.getParent() != null))
    _root = _root.getParent();
  }
  
