@@ -1676,7 +1676,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			else
 			{   
 			 	parent = parent.getParent();
-			 	type = parent.getType();
+			 	if (parent != null)
+			 	{
+				 	type = parent.getType();
+			 	}
 			}
 
 		    }
