@@ -16,18 +16,17 @@
 <td>
 <h1>
 <font size=+4>Autoconf Tutorial</font></h1>
-<b><font size=+3>Managing Project Using Autoconf Support</font></b><font size=+1></font>
+<b><font size=+3>Managing Project Using Autoconf Support</font></b>
 <p><font size=+1>The following is a tutorial that shows how to use the
 CDT support for the GNU autoconf and automake tools to manage a newly created
-C/C++ project. We will use a&nbsp; simple project - hello -&nbsp; in this
+C/C++ project. We will use a&nbsp; simple project - Hello -&nbsp; in this
 tutorial as the focus is to explain the various feature that CDT provides.</font>
 <p><b><font size=+2>1- Creating C++ Project</font></b>
-<br>&nbsp;
 <ul>
 <li>
 <font size=+1>The first step is to successfully <font color="#FF0000">create
-a new cpp project </font><font color="#000000">and set the name to be "hello"
-and&nbsp; its location to be the default location.</font></font></li>
+a new cpp project </font><font color="#000000">and set the name to be "HelloAutoconf"
+and set its location to be the default location.</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Create a subdir which will include
@@ -41,44 +40,79 @@ and select "New -> Directory"</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Enter the name of the directory&nbsp;
-"source" and press OK</font></font></li>
+"src" and press OK</font></font></li>
 </ol>
 
 <li>
 <font color="#000000"><font size=+1>Create a new cpp file by RMC the source
 directory that you have created and select New - > File, then enter the
-file name to be "HelloWorld.C"</font></font></li>
+file name to be "main.cc"</font></font></li>
 
 <li>
-<font color="#000000"><font size=+1>Now we need to write the HelloWorld.C:</font></font></li>
+<font color="#000000"><font size=+1>Now we need to write main.cc:</font></font></li>
 
-<br><font size=+1></font>&nbsp;
-<p>&nbsp;
-<br>&nbsp;<font size=+1></font>
-<br><font size=+1></font>&nbsp;<font size=+1></font>
-<p><font color="#000000"><font size=+1>You can simply copy and paste the
-following code to your file in the Eclipse workspace or type the following:</font></font>
-<br><font size=+1></font>&nbsp;
-<ul><font color="#000000"><font size=+1><font face="Times New Roman,Times">/</font><font face="Arial,Helvetica">/include
-this file for cout</font></font></font>
-<br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>#include
-&lt;iostream.h></font></font></font><font size=+1></font>
-<p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>int
-main()&nbsp;</font></font></font>
-<br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>{&nbsp;</font></font></font><font size=+1></font>
-<p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
-//print out the text string, "Hello World!"</font></font></font>
-<br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
-cout &lt;&lt; "Hello World!" &lt;&lt; endl;&nbsp;</font></font></font><font size=+1></font>
-<p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
-return 0;&nbsp;</font></font></font>
-<br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>}</font></font></font></ul>
-<font size=+1></font>
-<p><br><font color="#000000"><font size=+1>Before we move to the next part
-make sure that you have the following project structure:</font></font><font size=+1></font>
-<p><font color="#000000"><font size=+1>hello</font></font>
-<ul><font color="#000000"><font size=+1>source</font></font>
-<ul><font color="#000000"><font size=+1>HelloWorld.C</font></font></ul>
+<p><br><font color="#000000"><font size=+1>You can simply copy and paste
+the following code to your file in the Eclipse workspace or type the following:</font></font>
+<ul><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;
+<br><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>main.cc</font></font></font></u><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#ifdef
+HAVE_CONFIG_H</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
+&lt;config.h></font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#endif</font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
+"hello.h"</font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>main()</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
+CHello helloAutoconf;</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
+helloAutoconf.display();</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>}</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;</ul>
+
+<li>
+<font face="Times New Roman,Times"><font color="#000000"><font size=+1>Also,
+we need to write the following hello.cc and hello.h files</font></font></font></li>
+
+<ul><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;
+<br><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>hello.cc</font></font></font></u><u><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font></u>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
+"hello.h"</font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>void
+CHello::display()</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+//Helloworld:</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
+std::string strHello;</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
+strHello = "Hello World! \n";</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
+std::cout &lt;&lt; strHello;</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>}</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;<font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><u><font face="Times New Roman,Times"><font color="#3366FF"><font size=+1>hello.h</font></font></font></u><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
+&lt;iostream></font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>#include
+&lt;string></font></font></font><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>
+<p><font face="Times New Roman,Times"><font color="#000000"><font size=+1>class
+CHello</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>{</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>public:</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp;
+void display();</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1>};</font></font></font>
+<br><font face="Times New Roman,Times"><font color="#000000"><font size=+1></font></font></font>&nbsp;</ul>
+<font color="#000000"><font size=+1>Before we move to the next part make
+sure that you have the following project structure:</font></font>
+<p><font color="#000000"><font size=+1>HelloAutoconf</font></font>
+<ul><font color="#000000"><font size=+1>src</font></font>
+<ul><font color="#000000"><font size=+1>hello.cc</font></font>
+<br><font color="#000000"><font size=+1>hello.h</font></font>
+<br><font color="#000000"><font size=+1>main.cc</font></font>
+<br><font color="#000000"><font size=+1></font></font>&nbsp;</ul>
 </ul>
 </ul>
 <b><font color="#000000"><font size=+2>2- Creating Project Configuration
@@ -94,12 +128,12 @@ and maintain these files:</font></font></blockquote>
 <ul>
 <li>
 <font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
-project view</font><font color="#000000">, RMC the hello project </font>(top
-level directory)<font color="#000000"> and select Autoconf -> Generate
-configure.</font></font></li>
+project view</font><font color="#000000">, RMC the HelloAutoconf project
+</font>(top level directory)<font color="#000000"> and select Autoconf
+-> Generate configure.</font></font></li>
 
 <li>
-<font color="#000000"><font size=+1>Click the OK button from the message
+<font color="#000000"><font size=+1>Click the OK button in the message
 dialog.</font></font></li>
 
 <li>
@@ -109,12 +143,11 @@ successfully -&nbsp;</font> you can monitor the command output from the
 view</font> <font color="#000000">, then examine your project directory.
 You should now see all the files that automake and autoconf have created
 to generate the configure script together with the configure script. This
-is one good reason why you might not want to put any files you want to
-work with in the top level directory as it will be cluttered with the autoconf
-and automake generated files.&nbsp; Take note of the following files as
-you may want to be familiar with, in&nbsp; the case when you need to modify
-the way you want to manage your project. These files are configure.in and
-Makefile.am.</font></font></li>
+is one good reason as to why it is a good practice to leave the top level
+directory for the autoconf and automake generated files.&nbsp; Take note
+of the following files as you may want to be familiar with, in&nbsp; the
+case when you need to modify the way you manage your project. The files
+are configure.in and Makefile.am.</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Following the previous steps, the system
@@ -156,28 +189,28 @@ directory.</font></li>
 <blockquote>
 <li>
 <font size=+1>From the <font color="#FF0000">C/C++ project view </font>RMC
-the hello project and select Build Project</font></li>
+the HelloAutoconf project and select Build Project</font></li>
 
 <li>
 <font size=+1>After successful completion, check the source directory and
-make sure that the source target has been created - we will change the
-target name to be more meaningful later.</font></li>
+make sure that the "src" target has been created - we will change the target
+name later.</font></li>
 
 <li>
 <font size=+1>From <font color="#FF0000">Command specification view</font>,
-create a new command - Make sure that the command container being the "source"
-directory, enter the name of the command to be&nbsp; "run hello" and the
-invocation to be "./source"</font></li>
+create a new command - Make sure that the command container being the "src"
+directory, enter the name of the command to be&nbsp; "run HelloAutoconf"
+and the invocation to be "./src"</font></li>
 
 <li>
-<font size=+1>Fro the command Specification view, RMC the command and select
-execute - you can use the view's local tool bar instead.</font></li>
+<font size=+1>From the command Specification view, RMC the command and
+select execute - you can use the view's local tool bar as well.</font></li>
 
 <li>
-<font size=+1>Once the command has been finished, you should see Hello,
+<font size=+1>Once the command has been finished, you should see Hello
 World! in the <font color="#FF0000">output view</font></font></li>
 </blockquote>
-<font size=+2></font>
+
 <p><br><b><font size=+2>5- Modifying and Updating Configuration Files (configure.in
 and Makefile.am)</font></b>
 <br>&nbsp;
@@ -185,31 +218,31 @@ and Makefile.am)</font></b>
 some modifications and updates to your configuration files, below is some
 of these scenarios. The scenarios are selected to show the capabilities
 that the CDT provide in supporting the GNU automake and autoconf.</font>
-<br><font size=+1></font>&nbsp;
+<br>&nbsp;
 <li>
 <b><font size=+1>Modifying the value for the _PROGRAMS variables (Makefile.am)</font></b></li>
 
-<ul><b><font size=+1></font></b>&nbsp;
+<ul>&nbsp;
 <li>
 <font size=+1>We will continue with our example that we have created earlier.
-As you might already now, the name of&nbsp; the target was set to be "source"
-- the name of the source file directory -&nbsp; which might not be the
-name that you were thinking of for your target. When the system tries to
-set a value for the bin_PROGRAMS variable, which exists in the /hello/source/Makefile.am,
-it sets the variable's value to be the name of its parent directory. That
-been said, then you might change the name of the directory to be your target
-name and regenerate the configuration files and you are all set. But in
-the cases that you would like to keep your directory name as it is, you
-can still change target name to be whatever value you want to use.</font></li>
+As you might already noticed, the name of&nbsp; the target was set to be
+"src" - the name of the source file directory . When the system tries to
+set a value for the bin_PROGRAMS variable, which exists in the /HelloAutoconf/src/Makefile.am,
+it sets the variable's value to be the name of its parent directory.&nbsp;&nbsp;
+Now, if you want to change the program name, you may either&nbsp; change
+the name of the directory to be your target name and regenerate the configuration
+files and you are all set, or ,in the case that you would like to keep
+your directory name as it is, you can edit the Makefile.am and set the
+target name to be whatever value you want to use.</font></li>
 
 <li>
-<font size=+1>For now, all the updates to Makefile.am's will be done manually.
-In future releases, the CDT tool will facilitate the way to update configuration
-file.&nbsp;</font></li>
+<font size=+1>For now, all the updates to Makefile.am's will be done manually
+by direct editing of the file. In future releases, the CDT tool will facilitate
+the way to update configuration file.&nbsp;</font></li>
 
 <li>
-<font size=+1>Open hello/sources/Makefile.am and change the value for the
-following variables:</font></li>
+<font size=+1>Open HelloAutoconf/src/Makefile.am and change the value for
+the following variables:</font></li>
 
 <ol>
 <li>
@@ -238,8 +271,8 @@ command has completed successfully</font></li>
 <font size=+1>RMC the hello project and select Autoconf -> Run configure.&nbsp;</font></li>
 
 <li>
-<font size=+1>After executing the run configure command successfully, RMC&nbsp;the
-hello project and select build Project to build the new target</font></li>
+<font size=+1>After executing the run configure command successfully, RMC
+the hello project and select build Project to build the new target</font></li>
 
 <li>
 <font size=+1>You should now find that the hello target has been created
@@ -248,37 +281,40 @@ under the source directory</font></li>
 <li>
 <font size=+1>In order to run hello target, you can reuse the command that
 you have created in the command specifications view. By editing the invocation
-field and change the entry field to be "./hello" instead of "./source"
-and then execute the command either from the local tool bar and select
-the Execute command icon or by RMC the target and select Execute command
-action from the context menu.</font></li>
+field and change the entry field to be "./hello" instead of "./src" and
+then execute the command either from the local tool bar and select the
+Execute command icon or by RMC the target and select Execute command action
+from the context menu.</font></li>
 </ol>
 </ul>
 </ul>
 
-<ul><font size=+1></font>&nbsp;
+<ul>&nbsp;
 <li>
-<b><font size=+1>Expanding and Working with Hello Project</font></b></li>
-<font size=+1></font>
-<p><br><font size=+1>Let us now expand our sample Hello project to include
+<b><font size=+1>Expanding and Working with HelloAutoconf Project</font></b></li>
+
+<br>&nbsp;
+<p>&nbsp;
+<p><font size=+1>Let us now expand our sample Hello project to include
 source files in a sub directory of the "sources" directory.&nbsp;</font>
-<br><font size=+1></font>&nbsp;
+<br>&nbsp;
 <ul>
 <li>
 <font size=+1>create a&nbsp;</font></li>
 </ul>
-<font size=+1></font>
+
 <li>
-<b><font size=+1>Changing a static library to a shared library</font></b></li>
+<b><font size=+1>Changing a static library to a shared library and vise
+cersa</font></b></li>
 
 <li>
 <b><font size=+1>Modifying libraries names</font></b></li>
 </ul>
-<b><font size=+1></font></b>
+
 <p><br><b><font size=+3>Managing Imported Project with Existing Configuration
 Files</font></b>
-<br><b><font size=+1></font></b>&nbsp;
-<br><b><font size=+1></font></b>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <caption>&nbsp;</caption>
 
