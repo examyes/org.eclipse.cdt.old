@@ -44,6 +44,7 @@ public class ProcessMonitorMiner extends Miner
 	DataElement processesD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Processes");	
 	_dataStore.createReference(processesD, containerD, "abstracted by", "abstracts"); 
 	
+
 	DataElement processD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Process");	
 	_dataStore.createReference(hostD, processesD);
 	_dataStore.createReference(processesD, processD);
