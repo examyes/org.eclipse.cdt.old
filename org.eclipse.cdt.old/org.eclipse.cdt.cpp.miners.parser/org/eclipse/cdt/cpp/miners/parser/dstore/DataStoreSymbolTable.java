@@ -445,7 +445,7 @@ public class DataStoreSymbolTable implements SymbolTable
  
  public void closeScope ()
  {
-  if ((_root == null) || (_root.getType().equals(ParserSchema.ParsedSource)))
+  if ((_root == null) || (_root.getType().equals(ParserSchema.ParsedSource)) || (_root.getType().equals(ParserSchema.IncludedSource)))
    return;
   _root = _root.getParent();
  }
