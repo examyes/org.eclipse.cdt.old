@@ -29,18 +29,20 @@ public class AmParser
   	workspace.removeNestedData(project);
   }
   
-  _project   = _dataStore.createObject(workspace, Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
-  _curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
+   _curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
   File theFile = new File(_curFile);
   if (theFile.exists())
       {
 	  try 
 	      {
 		  _theFileReader = new BufferedReader(new FileReader(theFile));
+                  _project   = _dataStore.createObject(workspace, Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
 	      }
 	  catch (Throwable e)
 	      {
 	       _theFileReader = null;
+	       _project = null;
+	       
 	      }
       }
  }
