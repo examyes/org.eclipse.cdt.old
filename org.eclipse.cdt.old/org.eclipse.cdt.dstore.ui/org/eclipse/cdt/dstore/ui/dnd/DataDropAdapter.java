@@ -88,16 +88,18 @@ public class DataDropAdapter extends ViewerDropAdapter
 
   public DataElement getCommand(int operation, DataElement dropTarget)
       {
+      	/*
         switch (operation)
         {
-        case DND.DROP_MOVE:
+        	
+        case DND.DROP_MOVE: 
           return dropTarget.getCommandFor("C_MOVE");            
         case DND.DROP_COPY:
           return dropTarget.getCommandFor("C_COPY");                      
         default:
           break;
         }
-
+*/
         return null;
       }
 
