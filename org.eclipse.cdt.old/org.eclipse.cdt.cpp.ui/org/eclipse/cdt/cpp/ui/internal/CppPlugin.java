@@ -136,9 +136,13 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
           IAdapterManager manager = Platform.getAdapterManager();
            manager.registerAdapters(new DataElementAdapterFactory(), IFile.class);
 
-	  initDefaultBuildPreference();
-          initDataStore();
-          super.startup();
+	   if (_instance == null)
+	       {	
+		   _instance = this;
+		   initDefaultBuildPreference();
+		   initDataStore();
+	       }
+	   super.startup();
         }
         catch (CoreException e)
         {}
@@ -158,8 +162,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
   public void initDataStore()
     {
-    if (_instance == null)
-      {	
  	_clientConnection = new ClientConnection("C/C++", 20000);
 	_clientConnection.setLoader(new MinerClassLoader());	
         DataStore dataStore = _clientConnection.getDataStore();
@@ -178,15 +180,11 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_clientConnection.setHostDirectory(rootPath.toString());	
 	_clientConnection.localConnect();
 
-	_instance = this;
-
 	_interface = new ModelInterface(dataStore);	
 	_interface.getDummyShell();
        	_interface.loadSchema();
 
-
 	initializeProjects();
-      }
   }
 
     private void initializeProjects()
