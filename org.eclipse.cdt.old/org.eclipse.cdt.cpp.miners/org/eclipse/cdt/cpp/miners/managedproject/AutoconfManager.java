@@ -15,7 +15,7 @@ import java.util.*;
 public class AutoconfManager {
 	String autoconf = new String("autoconf");
 	String automake = new String("automake");
-	String aclocal = new String("aclocal");
+	String ACLOCAL = new String("aclocal");
 	String autoheader = new String("autoheader");
 	String autoscan = new String ("autoscan");
 	ProjectStructureManager structureManager;
@@ -95,28 +95,67 @@ public class AutoconfManager {
 	}
 	protected void getAutoconfScript(DataElement project)
 	{
+		File projectFile = project.getFileObject();
+		Process p;	
+		Runtime rt = Runtime.getRuntime();
 		// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
 		File script = new File (project.getSource(),"script.batch");
 		if(!script.exists())
 		{
-			Runtime rt = Runtime.getRuntime();
-			File projectFile = project.getFileObject();
 			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			{
 				try{// add script.batch only if not exist
-					Process p;	
 					p = rt.exec(
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
 						"/com.ibm.cpp.miners/autoconf_templates/script.batch "+project.getSource());
 					p.waitFor();
-					p = rt.exec(
-						"chmod +x "+project.getSource()+"/script.batch ");
-					p.waitFor();
-
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	
 			}
-		}	
+		}
+		modifyScript(script,projectFile);
+		try
+		{
+			p = rt.exec("chmod +x "+project.getSource()+"/script.batch ");
+			p.waitFor();	
+		}catch(IOException e){System.out.println(e);}
+		catch(InterruptedException e){System.out.println(e);}	
+	}
+	private void modifyScript(File script, File parent)
+	{
+		//check for macros or m4 and point to it
+		structureManager = new ProjectStructureManager(parent);
+		File [] dirs = structureManager.getSubdirs();
+		for(int i = 0;i<dirs.length; i++ )
+			if(dirs[i].getName().equals("macros")||dirs[i].getName().equals("m4"))
+				modifyAclocalArgument(script, dirs[i]);
+	}
+	private void modifyAclocalArgument(File script, File dir)
+	{
+		File mod = new File(script.getParent(),"mod");// this is the tope level Makefile.am
+		String line;
+		boolean found = false;
+		try
+		{
+			// searching for the a clocal line
+			BufferedReader in = new BufferedReader(new FileReader(script));
+			BufferedWriter out= new BufferedWriter(new FileWriter(mod));
+			while((line=in.readLine())!=null)
+			{
+				if(line.indexOf(ACLOCAL)!=-1)
+					if(line.indexOf(dir.getName())==-1)
+						line = line+ " -I "+dir.getPath();
+					
+				out.write(line);
+				out.newLine();
+			}
+			in.close();
+			out.close();
+			File abstractPath = new File(script.getAbsolutePath());
+			script.delete();
+			mod.renameTo(abstractPath);
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
 	}
 	private void createConfigureScript(DataElement project, DataElement status)
 	{
