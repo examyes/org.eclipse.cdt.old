@@ -25,6 +25,7 @@ import org.eclipse.ui.*;
 public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionListener, ICppProjectListener
 { 
     private boolean _inputed = false;
+    private DataElement _lastSelected = null;
 
     public CppProjectsViewPart()
     {
@@ -93,15 +94,23 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     {
 	if (part == this && (sel instanceof IStructuredSelection))
 	    {
-		// hack to clear cache that maps elements to resources
-		ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
-		manager.flushLookup();
 
 		IStructuredSelection ssel = (IStructuredSelection)sel;
 		Object object = ssel.getFirstElement();
 		if (object instanceof DataElement)
 		    {
 			DataElement theObject = (DataElement)object;
+			
+			if (_lastSelected != null && 
+			    theObject != _lastSelected && 
+			    !_lastSelected.getType().equals(theObject.getType()))
+			    {
+				// hack to clear cache that maps elements to resources
+				ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
+				manager.flushLookup();
+			    }
+			_lastSelected = theObject;
+			
 			DataElement theParent = _api.getProjectFor(theObject);
 			
 			if (theParent != null)
