@@ -44,6 +44,8 @@ public class PAMiner extends Miner {
  
   DataElement containerD          = findDescriptor("Container Object");
   DataElement attributesD         = findDescriptor("attributes");
+  DataElement integerD			  = findDescriptor("Integer");
+  DataElement floatD			  = findDescriptor("Float");
   
   DataElement traceProjectD       = createDerivativeDescriptor(containerD, getLocalizedString("pa.TraceProject"));
   
@@ -55,8 +57,14 @@ public class PAMiner extends Miner {
   DataElement numTraceFunctionsD = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numTraceFunctions"));
   DataElement numCallEntriesD    = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numCallGraphEntries"));
   
+  // Set attribute types
+  createReference(fileTotalTimeD, floatD, attributesD);
+  createReference(numTraceFunctionsD, integerD, attributesD);
+  createReference(numCallEntriesD, integerD, attributesD);
+  
   // additional attribute for gprof trace files
   DataElement samplingRateD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SamplingRate"));
+  createReference(samplingRateD, floatD, attributesD);
   
   // additional attributes for functioncheck trace files
   DataElement timeModeD          = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TimeMode"));
@@ -65,7 +73,7 @@ public class PAMiner extends Miner {
   DataElement programNameD       = createObjectDescriptor(schemaRoot, getLocalizedString("pa.ProgramName"));
   
   // general trace function attributes
-  DataElement totalPercentD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalPercentage"));
+  DataElement totalPercentD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalPercentage"));  
   DataElement numCallsD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.numCalls"));
   DataElement totalTimeD     = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTime"));
   DataElement selfTimeD      = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTime"));
@@ -73,11 +81,27 @@ public class PAMiner extends Miner {
   DataElement totalPerCallD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.TotalTimePerCall"));
   DataElement selfPerCallD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.SelfTimePerCall"));
   
+  // set attribute types
+  createReference(totalPercentD, floatD,   attributesD);
+  createReference(numCallsD, 	 integerD, attributesD);
+  createReference(totalTimeD, 	 floatD,   attributesD);
+  createReference(selfTimeD, 	 floatD,   attributesD);
+  createReference(childrenTimeD, floatD,   attributesD);
+  createReference(totalPerCallD, floatD,   attributesD);
+  createReference(selfPerCallD,  floatD,   attributesD);
+  
+  
   // additional attributes for functioncheck trace functions
   DataElement minTotalTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MinTotalTime"));
   DataElement maxTotalTimeD  = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MaxTotalTime"));
   DataElement minSelfTimeD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MinSelfTime"));
   DataElement maxSelfTimeD   = createObjectDescriptor(schemaRoot, getLocalizedString("pa.MaxSelfTime"));
+  
+  // set attribute types
+  createReference(minTotalTimeD, floatD,   attributesD);
+  createReference(maxTotalTimeD, floatD,   attributesD);
+  createReference(minSelfTimeD,  floatD,   attributesD);
+  createReference(maxSelfTimeD,  floatD,   attributesD);
   
   // Abstract descriptors for trace targets
   
@@ -121,6 +145,9 @@ public class PAMiner extends Miner {
   
   // set up the attributes for trace functions
   createReference(traceFunctionD, totalPercentD, attributesD);
+  
+  createReference(totalPercentD, floatD, attributesD);
+  
   createReference(traceFunctionD, numCallsD, 	 attributesD);
   createReference(traceFunctionD, totalTimeD, 	 attributesD);
   createReference(traceFunctionD, selfTimeD, 	 attributesD);
@@ -166,8 +193,6 @@ public class PAMiner extends Miner {
   calleeArcD.setDepth(0);
   referencedFileD.setDepth(0);
   referencedProjectD.setDepth(0);
-  callsD.setDepth(120);
-  calledByD.setDepth(110);
     
   // Set up the relation between trace targets and trace functions
   createReference(gprofTraceTargetD, gprofTraceFunctionD);
@@ -245,7 +270,9 @@ public class PAMiner extends Miner {
   */
  public void handleQueryTraceFormat(DataElement fileElement, DataElement status) {
  
-   File file = fileElement.getFileObject(false);
+   System.out.println("fileElement: " + fileElement);
+   File file = fileElement.getFileObject(true);
+   System.out.println("java file: " + file);
    int traceFormat = -1;
    try {
     traceFormat = PAAdaptor.queryTraceFileFormat(file);
@@ -288,7 +315,7 @@ public class PAMiner extends Miner {
    ArrayList references = traceElement.getAssociated(getLocalizedString("pa.ReferencedFile"));
    DataElement fileElement = (DataElement)references.get(0);
    
-   File file = fileElement.getFileObject(false);
+   File file = fileElement.getFileObject(true);
    
    String traceFormat = _adaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
    
