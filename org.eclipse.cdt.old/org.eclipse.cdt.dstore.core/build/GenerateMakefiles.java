@@ -87,9 +87,6 @@ class GenerateMakefiles
   */
  private static String getJarFileName(String thePlugin)
  {
-  if (thePlugin.indexOf("extra") >= 0)
-   thePlugin = thePlugin + "_client";
-
   StringTokenizer strtok = new StringTokenizer(thePlugin,".");
   ArrayList namePieces = new ArrayList();
   while (strtok.hasMoreTokens())

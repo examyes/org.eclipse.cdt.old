@@ -20,6 +20,7 @@ pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp
 
 # List of Plugins that we build
 buildPlugins += com.ibm.dstore.extra
+buildPlugins += com.ibm.dstore.extra.server
 buildPlugins += com.ibm.dstore.core
 buildPlugins += com.ibm.debug
 buildPlugins += com.ibm.cpp.miners.parser
@@ -83,7 +84,7 @@ prod            : production
 %_cleanMakefiles:
 	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) -$(MAKEFLAGS) clean-makefiles 
 
-generateBuildEnvironment: unzipBuildPlugins setUpExtraPlugin
+generateBuildEnvironment: unzipBuildPlugins
 	@cd build && java -cp . GenerateMakefiles $(buildPlugins)
 
 unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
@@ -124,19 +125,3 @@ source-zip:
 clean:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	find . -name '*.class' |xargs rm -f
-
-setUpExtraPlugin:
-	@echo Generating Build Environment for All Plugins
-	@-cd $(pluginsDirectory)/com.ibm.dstore.extra/com/ibm/dstore/extra/internal;\
-	rm -rf extra;\
-	cp -r extra.Server extra;\
-	cd extra;\
-	javac -classpath $(pluginsDirectory)/com.ibm.dstore.core *.java;\
-	cd $(pluginsDirectory)/com.ibm.dstore.extra;\
-	rm -f dstore_extra_server.jar;\
-	touch -f dstore_extra_server.jar;\
-	find . -name '*.class' |xargs jar -uf dstore_extra_server.jar;\
-	cd $(pluginsDirectory)/com.ibm.dstore.extra/com/ibm/dstore/extra/internal;\
-	rm -rf extra;\
-	cp -r extra.Client extra;
-

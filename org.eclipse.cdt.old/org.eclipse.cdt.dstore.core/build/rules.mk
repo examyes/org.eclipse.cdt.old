@@ -17,9 +17,8 @@ endef
 define get-directories
 $(patsubst %, %_dir,\
 $(filter-out build,\
-$(filter-out %extra.Client,\
-$(filter-out %extra.Server,\
 $(filter-out %CVS,\
+$(filter-out %cvs,\
 $(filter-out %icons,\
 $(shell find * -type d -maxdepth 0)))))))
 endef
