@@ -112,12 +112,25 @@ public class OpenEditorAction extends Action implements IOpenAction
 							    FileResourceElement fileElement = (FileResourceElement)file;
 							    if (fileElement.getMountedFile() == null)
 								{
-								    String mountedFileName = mountPoint + 
-									java.io.File.separator +
-									fileElement.getName();
+								    StringBuffer mFName = new StringBuffer();
+								    IResource resource = fileElement;
+								    while (!(resource instanceof Repository))
+									{
+									    mFName.insert(0, resource.getName());
+									    resource = resource.getParent();
+									    mFName.insert(0, java.io.File.separator);
+									}
+								    
+								    mFName.insert(0, mountPoint);
 
+								    String mountedFileName = mFName.toString();
+								    
+								    System.out.println("opening mounted " + mountedFileName);
 								    java.io.File mountedFile = new java.io.File(mountedFileName);
-								    fileElement.setMountedFile(mountedFile);
+								    if (mountedFile.exists())
+									{
+									    fileElement.setMountedFile(mountedFile);
+									}
 								}
 							}
 						}
