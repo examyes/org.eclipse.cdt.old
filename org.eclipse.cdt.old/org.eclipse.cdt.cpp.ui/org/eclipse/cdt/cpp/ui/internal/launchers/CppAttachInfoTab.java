@@ -200,9 +200,24 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
         _executable = (DataElement)element;
 	 if (!_executable.isOfType("executable"))
         {
-           _executable = null;
-           _directory = null;
-           displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
+
+	   if (_executable.isOfType("Process"))
+	       {
+		   _processIDField.setText(_executable.getName());
+		   _processID = _executable.getName();
+	       }
+	   else
+	       {
+		   displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
+	       }
+	   
+	   _executable = null;
+
+	   project = CppPlugin.getDefault().getCurrentProject();
+	   if (project != null)
+	       {
+		   _directory = _api.findProjectElement(project);
+	       }
    	     return;
         }
 
@@ -267,32 +282,37 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 		updateExecutableFromConfig(config);
 	}
 
-	protected void updateExecutableFromConfig(ILaunchConfiguration config) {
-		String executableName = "";
-		String processID = "";
+     protected void updateExecutableFromConfig(ILaunchConfiguration config) 
+     {
+	 String executableName = "";
+	 String processID = "";
 
-		try
-      {
-			executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-         if (executableName == "")
-         {
-            if (_executable != null)
-            {
-               _programNameField.setText(_executable.getSource());
-            }
-            else
-            {
-               return;
-            }
+	 try
+	     {
+		 executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+		 if (executableName == "")
+		     {
+			 if (_executable != null)
+			     {
+				 _programNameField.setText(_executable.getSource());
+			     }
+			 else
+			     {
+				 return;
+			     }
+			 
+		     }
+		 else
+		     {
+			 _programNameField.setText(executableName);		
+			 IResource resource  = _api.findFile(executableName);
+			 _executable = _api.findResourceElement(resource);
+		     }
 
-         }
-         else
-         {
-      		_programNameField.setText(executableName);		
-         	IResource resource  = _api.findFile(executableName);
-         	_executable = _api.findResourceElement(resource);
-         }
-  			_directory = _executable.getParent();
+		 if (_executable != null)
+		     {
+			 _directory = _executable.getParent();
+		     }
 
 			processID = config.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
          if (processID == "")
@@ -320,7 +340,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
       String processID = (String)_processIDField.getText();
       if (_directory == null)
-          return;
+	  return;
       if (isValidProcessID(processID))
    		config.setAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, processID);
 	}

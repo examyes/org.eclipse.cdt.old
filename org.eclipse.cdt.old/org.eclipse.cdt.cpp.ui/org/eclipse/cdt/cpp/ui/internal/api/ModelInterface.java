@@ -1606,7 +1606,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	      {
 		  for (int i = 0; i < _tempFiles.size(); i++)
 		      {
-			  FileResourceElement tempFile = (FileResourceElement)_tempFiles.get(i);
+			  ResourceElement tempFile = (ResourceElement)_tempFiles.get(i);
 			  String tempFileName = tempFile.getLocalLocation().toString();
 			  if (compareFileNames(tempFileName, fileName))
 			      {

@@ -157,8 +157,8 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
       if (workingDirectory != "")
       {
          IResource resource = _api.getResource(workingDirectory);
-	
          DataElement deDirectory = _api.findResourceElement(resource);
+
        	_api.debug(deDirectory, port, key);
       }
       else
