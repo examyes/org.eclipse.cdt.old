@@ -37,7 +37,7 @@ public class DebugMiner extends Miner
 	_debugOptions = getLocalizedString("debug_options");
 	
 	_gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "org.eclipse.cdt.debug.gdbPicl";
-	String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug";
+	String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.pdt";
 	String ps = System.getProperty("path.separator");
 	String fs = "/";
         _debugJarPath =  debugPath;
@@ -46,6 +46,7 @@ public class DebugMiner extends Miner
         _debugJarPath += ps + _gdbPiclPath;
 	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " org.eclipse.cdt.debug.gdbPicl.Gdb ";
+        System.out.println("DebugMiner:load()");
     }
 
     public void extendSchema(DataElement schemaRoot)
@@ -111,10 +112,11 @@ public class DebugMiner extends Miner
 	    }
 	**/
 
-	//System.out.println("invocation = " + invocationStr);
+	System.out.println("DebugMiner:handleDebug() invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
-
+        System.out.println("DebugMiner:handleDebug() 2");
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
+        System.out.println("DebugMiner:handleDebug() 3");
 	if (cmdDescriptor != null)
 	    {
 		//		File dir = new File(directory.getName());
@@ -123,7 +125,15 @@ public class DebugMiner extends Miner
 		ArrayList args = new ArrayList();
 		args.add(invocation);
 		args.add(status);
-		_dataStore.command(cmdDescriptor, args, directory);
+                try
+                {
+		   _dataStore.command(cmdDescriptor, args, directory);
+                }
+                catch (Exception e)
+                {
+                  e.printStackTrace();
+                }
+               
 	    }
     }
 }
