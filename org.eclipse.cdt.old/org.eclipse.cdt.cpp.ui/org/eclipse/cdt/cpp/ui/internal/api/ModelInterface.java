@@ -72,7 +72,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  projectMinerProject =  findProjectElement(_project, "Closed Project");
 		  if (projectMinerProject == null)
 		      {
-			  System.out.println("can't find project miner element for " + _project);
+			  //System.out.println("can't find project miner element for " + _project);
 			  return;
 		      }
 	      }
@@ -101,10 +101,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  if (localWorkspace != null && projectMinerProject != null)
 			      {
 				  DataStore localDataStore = _plugin.getDataStore();
-				  DataElement localRemoteProject = localDataStore.find(localWorkspace,
-										       DE.A_SOURCE,
-										       projectMinerProject.getSource(),
-										       1);
+				  DataElement localRemoteProject = ((Repository)_project).getClosedElement();
 				  if (localRemoteProject != null)
 				      {
 					  localDataStore.deleteObject(localWorkspace, localRemoteProject);
@@ -1056,14 +1053,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
 		if (projectInfo == null)
 		    {
-			System.out.println("couldn't find project miner");
+			//System.out.println("couldn't find project miner");
 		    }
 		else
 		    {
 			workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
 			if (workspaceObj == null)
 			    {
-				System.out.println("couldn't find workspace");
+				//System.out.println("couldn't find workspace");
 			    }
 		    }
 		
