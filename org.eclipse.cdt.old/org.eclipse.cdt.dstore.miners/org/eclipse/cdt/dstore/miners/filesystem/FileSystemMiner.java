@@ -671,6 +671,10 @@ public class FileSystemMiner extends Miner
 						newObject.setDepth(1);
 					    }
 				    }
+				else
+				    {
+					newObject.refresh(false);
+				    }
 			    }			
 		    }
 		
