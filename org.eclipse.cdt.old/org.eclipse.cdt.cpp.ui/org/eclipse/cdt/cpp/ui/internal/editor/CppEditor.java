@@ -145,10 +145,18 @@ public class CppEditor extends LpexTextEditor
       IEditorInput input = getEditorInput();
       if (input instanceof IFileEditorInput)
       {
+         ModelInterface api = ModelInterface.getInstance();	 	  
          IFile file = ((IFileEditorInput)input).getFile();
+	 if (file instanceof ResourceElement)
+	     {
+		 DataElement fileElement = ((ResourceElement)file).getElement();
+		 api.parse(fileElement, false);
+	     }
+	 else
+	     {
+		 api.parse(file, false);
+	     }
          _isParsed = true;
-         ModelInterface api = ModelInterface.getInstance();	 
-         api.parse(file, false);
       }
    }
 
