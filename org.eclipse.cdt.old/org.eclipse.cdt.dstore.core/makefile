@@ -175,7 +175,7 @@ jar:
 	@cd $(pluginsDirectory)/$(pluginName);\
 	rm -f $(jarFile);\
 	touch $(jarFile);\
-	find . -name '*.class' -o -name '*.properties' | xargs jar uf $(jarFile)
+	find . -name '*.class' -or -name '*.properties' | xargs jar uf $(jarFile)
 	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
 
 source-zip:
