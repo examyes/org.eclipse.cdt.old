@@ -380,5 +380,15 @@ public class OutputViewer extends TableViewer
     public void enableActions()
     {
     }
+    
+ 	public void dispose()
+ 	{
+ 		Table table = getTable();
+ 		if (table != null)
+ 		{
+ 			table.dispose();	
+ 		}
+ 	}
+ 
 }
 

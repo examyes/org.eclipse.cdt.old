@@ -25,7 +25,7 @@ import org.eclipse.cdt.dstore.ui.resource.*;
 
 import org.eclipse.cdt.dstore.ui.views.*;
 
-import org.eclipse.help.*;
+//import org.eclipse.help.*;
 import org.eclipse.ui.help.ViewContextComputer;
 import org.eclipse.ui.help.WorkbenchHelp;
 
@@ -326,7 +326,8 @@ public class ObjectsViewPart extends GenericViewPart
     {
 	IStatusLineManager mgr = getViewSite().getActionBars().getStatusLineManager();
 	IProgressMonitor pm = mgr.getProgressMonitor(); 
-	
+	try
+	{
 	if (event.getType() == CppProjectEvent.COMMAND)
 	    {
 		DataElement commandStatus = event.getObject();
@@ -356,6 +357,12 @@ public class ObjectsViewPart extends GenericViewPart
 		    }
 		    }
 	    }   
+	}
+	catch (Exception e)
+	{
+	  //System.out.println(e);
+	  	
+	}
     }
     
      public void fillLocalToolBar() 

@@ -462,12 +462,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   }
 
   public void showView(String id, DataElement input)
-      {
-	Display d= getDummyShell().getDisplay();
-	
-	ShowViewAction action = new ShowViewAction(id, input);
-	d.syncExec(action);
-      }
+  {
+  	Shell dummy = getDummyShell();
+  	if (dummy != null && !dummy.isDisposed())
+  	{
+  		Display d= dummy.getDisplay();
+		ShowViewAction action = new ShowViewAction(id, input);
+		d.syncExec(action);
+  	}
+  }
 
     public void monitorStatus(DataElement status)
     {
@@ -607,7 +610,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	deleteAssociatedMarkers(currentProject);
 
-       	
+  	
 	DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_COMMAND");
 	DataElement status = dataStore.command(commandDescriptor, args, pathElement, true);
 	if (status != null)
@@ -822,13 +825,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void shutdown()
     {
-	_projectNotifier.enable(false);
+		_projectNotifier.enable(false);
 
-	DataStore dataStore = _plugin.getCurrentDataStore();
+		DataStore dataStore = _plugin.getCurrentDataStore();
 
-	_workbench.removeResourceChangeListener(this);
+		_workbench.removeResourceChangeListener(this);
 
-        dataStore.getDomainNotifier().removeDomainListener(this);		
+		DomainNotifier domainNotifier = dataStore.getDomainNotifier();
+		
+        domainNotifier.removeDomainListener(this);		
 	try
 	    {
 		SearchPlugin.getWorkspace().getRoot().deleteMarkers(SearchUI.SEARCH_MARKER, true, IResource.DEPTH_INFINITE);
@@ -2252,18 +2257,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 	    case IResourceChangeEvent.POST_CHANGE:
 		{		
-		    traverseDelta(delta);
+		    traverseDelta(delta); 
 		}
-		break;
+		break; 
 	    case IResourceChangeEvent.PRE_CLOSE:
 		{
+		
 		    if (resource instanceof IProject)
 			{
 			    closeProject((IProject)resource);
 			    _plugin.setCurrentDataStore(_plugin.getDataStore());
 			    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.CLOSE, (IProject)resource));
 			}
-
+			
 		}
 		break;
 	    case IResourceChangeEvent.PRE_DELETE:

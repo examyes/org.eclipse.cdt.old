@@ -122,10 +122,10 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	  {
 	      if ((event.getStatus() == CppProjectEvent.START) || (event.getStatus() == CppProjectEvent.DONE))
 		  {
-		      doInput(project);
+		      doInput(project); 
 		  }
 	  }	  
-	  super.projectChanged(event);
+
 	  break;
       default:
 	  super.projectChanged(event);

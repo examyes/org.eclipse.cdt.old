@@ -334,6 +334,7 @@ public class CppOutputViewPart extends OutputViewPart
 		
 	    default:
 	    {
+	    	if (_viewer != null)
 	    	_viewer.enableActions();
 	    }
 		break;
@@ -342,9 +343,27 @@ public class CppOutputViewPart extends OutputViewPart
     
     public void dispose()
     {
+    	DataElement currentInput = _viewer.getCurrentInput();
+    	if (currentInput != null)
+    	{
+    		DomainNotifier notifier = currentInput.getDataStore().getDomainNotifier();
+			notifier.removeDomainListener(_viewer);
+			notifier.removeDomainListener(this);	
+    	}	
+    	
         IWorkbench aWorkbench = _plugin.getWorkbench();
         IWorkbenchWindow win= aWorkbench.getActiveWorkbenchWindow();
         win.getSelectionService().removeSelectionListener(this);
+        
+        _cancelAction = null;
+        _shellAction = null;
+        _backAction = null;
+        _forwardAction = null;
+        
+        _viewer.dispose();
+        _sendButton.dispose();
+        _inputEntry.dispose();
+        _viewer = null;
     }
 	
  	public void widgetDefaultSelected(SelectionEvent e) 
@@ -355,7 +374,7 @@ public class CppOutputViewPart extends OutputViewPart
     public void widgetSelected(SelectionEvent e)
     {
   	 Widget source = e.widget;
-	
+	 
 	  if (source == _sendButton)
 	    {
 			sendInput();
@@ -383,16 +402,19 @@ public class CppOutputViewPart extends OutputViewPart
    
     public boolean listeningTo(DomainEvent ev)
     {
+    	if (_viewer != null && !_viewer.getTable().isDisposed())
+    	{
       DataElement input = _viewer.getCurrentInput();
       if (input != null)
       {
       	DataElement parent = (DataElement)ev.getParent();
       	if (input == parent)
-      	{
+      	{      		
       		return true;
       	}	
       }
-      
+    	}
+    	
       return false; 
     }
 
@@ -403,6 +425,8 @@ public class CppOutputViewPart extends OutputViewPart
     
     private void enableActions()
     {
+    	if (_viewer != null)
+    	{	
     	DataElement input = _viewer.getCurrentInput();
       	if (input != null && !input.getName().equals("done"))
       	{
@@ -420,22 +444,24 @@ public class CppOutputViewPart extends OutputViewPart
 			_sendButton.setEnabled(false);
 			enableToolActions();	
       	}
+    	}
     }
     
     public void setInput(DataElement element)
     { 
+    	if (_viewer != null && !_viewer.getTable().isDisposed())
+    	{
     	DomainNotifier notifier = element.getDataStore().getDomainNotifier();
 		notifier.addDomainListener(_viewer);	
 		notifier.addDomainListener(this);
 		_viewer.setInput(element);		
 		enableActions();
+    	}
     }
     
-    public Shell getShell()
-    {
-	return _sendButton.getShell();
-    }
-    
+ 
+
+
   public void fillLocalToolBar(IToolBarManager toolBarManager)
   {
   	CppPlugin plugin = CppPlugin.getDefault();
