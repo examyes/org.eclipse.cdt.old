@@ -87,7 +87,6 @@ public class CppCompletionProcessor implements IContentAssistProcessor
         ICompletionProposal[] result = null;
         LpexTextViewer lview = (LpexTextViewer)viewer;
         String currentString = getCurrentText(lview);
-
         if (currentString != null
             && currentString.length() > 0)
 	{
@@ -130,6 +129,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			
 		if (results == null || results.size() == 0)
 		    {
+
 			dataStore = _plugin.getHostDataStore();
 			DataElement dictionaryData =  dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.dictionary.DictionaryMiner");
 
@@ -156,11 +156,16 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			for (int i = 0; i < results.size(); i++)
 			    {
 				DataElement found = ((DataElement)results.get(i)).dereference();
-				String text     = (String)found.getElementProperty(DE.P_VALUE);
+				String text     = found.getAttribute(DE.A_VALUE);
+
+				// extract out '(' and ')'
+				//text = extractParams(text);
+
 				String imageStr = CppActionLoader.getInstance().getImageString(found);
 				Image image     = _plugin.getImage(imageStr);
 				
-				ContextInformation info = new ContextInformation(image, text, text);
+				ContextInformation info = null;
+				//ContextInformation info = new ContextInformation(image, text, text);
 				int len = currentString.length();
 				
 				if (text.regionMatches(0, currentString, 0, len))
@@ -217,6 +222,37 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 
 	return result;
       }
+
+    private String extractParams(String text)
+    {
+	String result = new String("");
+	for (int i = 0; i< text.length(); i++)
+	    {
+		boolean paramName = false;
+		char c = text.charAt(i);
+		switch (c)
+		    {
+		    case '(':
+			paramName = true;
+			result += c;
+			break;
+		    case ')':
+			paramName = false;
+			result += c;
+		    case ',':
+			result += c;
+		    default:
+			if (paramName)
+			    {
+			    }
+			else
+			    {
+				result += c;
+			    }
+		    }
+	    }
+	return result;
+    }
 
     private String getCurrentText(LpexTextViewer viewer)
     {

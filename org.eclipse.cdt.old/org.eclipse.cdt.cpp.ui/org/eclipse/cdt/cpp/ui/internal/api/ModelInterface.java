@@ -687,15 +687,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			IPath location = project.getLocation();
 			if (location != null)
 			    {
+				
 				DataElement closedProject = dataStore.createObject(workspace, "Closed Project",
 										   project.getName(),
 										   location.toString());
-
 
 				if (project instanceof Repository)
 				    {
 					// we need to distinguish it's host from others
 					((Repository)project).setClosedElement(closedProject);
+					dataStore.refresh(workspace);
 				    }
 
 				fireProjectChanged(CppProjectEvent.REFRESH, project);			
@@ -2565,16 +2566,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		break;
 	    case IResourceChangeEvent.PRE_DELETE:
 		{
+		    DataStore dataStore = _plugin.getCurrentDataStore();
 		    if (resource instanceof IProject)
-			{
+		    {
 			    closeProject((IProject)resource);
-			    DataStore dataStore = _plugin.getCurrentDataStore();
 			    if (dataStore != _plugin.getDataStore())
 				{
 				    _plugin.setCurrentDataStore(_plugin.getDataStore());
 				}
 
-			    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.DELETE, (IProject)resource));
 
 			    // need to delete our representation of a project
 			    DataElement cProject = findProjectElement((IProject)resource);
@@ -2586,9 +2586,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					{		
 					    dataStore.command(commandDescriptor, cProject);	
 					}				
-				}
+				}			    
+			    fireProjectChanged(CppProjectEvent.DELETE, (IProject)resource);
+			    
 			}
-		
+
 		    resourceChanged(resource);
 		}
 		break;

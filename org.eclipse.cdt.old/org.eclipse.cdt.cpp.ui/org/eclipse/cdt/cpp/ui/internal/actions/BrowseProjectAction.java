@@ -56,7 +56,7 @@ public class BrowseProjectAction extends Action
 		openPerspective(_subject);
 		
 		ModelInterface api = ModelInterface.getInstance();
-		api.parse(_subject, false, false);
+		api.parse(_subject, false, true);
 	    }
     }
     

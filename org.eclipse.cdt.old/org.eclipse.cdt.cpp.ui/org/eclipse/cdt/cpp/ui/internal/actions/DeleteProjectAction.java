@@ -96,6 +96,7 @@ public class DeleteProjectAction extends CustomAction
 	    try
 		{		    
 		    _project.delete(_deleteContents, true, pm);
+		    
 		}
 	    catch(CoreException e)
 		{
