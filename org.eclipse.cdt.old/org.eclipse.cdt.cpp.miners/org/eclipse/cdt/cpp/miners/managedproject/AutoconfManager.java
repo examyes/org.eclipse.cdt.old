@@ -216,8 +216,8 @@ public class AutoconfManager {
 		}
 		else
 		{ 
-			// chck that configure is up to date
-			if(configureIsUptodate(project))
+			// check that configure is up to date
+			if(!update)
 			{
 				// setting time stamp to all Makefile.am abd Makefiles.in if cuorrupted when imported
 				if(getOS().equals("Linux"))

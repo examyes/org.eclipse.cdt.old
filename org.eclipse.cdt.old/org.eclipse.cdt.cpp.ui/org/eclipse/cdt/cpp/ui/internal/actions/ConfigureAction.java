@@ -157,19 +157,26 @@ public class ConfigureAction extends CustomAction
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
-			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-			String message = new String
-			("\n Before running configure, a check to update configure might be needed"+
-			"\n If you would like to skip updates press cancel, otherwise press OK");
-			//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
-			runUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+			if(!configureIsUptodate(_subject))
+			{
+				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+				String message = new String
+				("\nThe system detects that configure script is outdated"+
+				"\nUpdating automake and autoconf files then generating configure is needed"+
+				"\nPress OK to update cofigure script, or cancel to skip updating configure.");
+				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+				runUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+			}
+			else
+			{
+				runUpdate = false;
+			}
 		}
 			
 		if(execute)
 		{	
 			if(!createUpdate)
 			{
-				System.out.println("\nSkipping update............generating configure");
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
@@ -178,9 +185,9 @@ public class ConfigureAction extends CustomAction
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else if(!createUpdate)
+			else if(!runUpdate)
 			{
-				System.out.println("\nSkipping update............running configure");
+				//System.out.println("\nSkipping update............running configure");
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
@@ -259,7 +266,7 @@ public class ConfigureAction extends CustomAction
 		}
 		return false;
 	}
-		private boolean configureIsUptodate(DataElement project)
+	private boolean configureIsUptodate(DataElement project)
 	{
 		long configureTimeStamp = -1;
 		structureManager = new ProjectStructureManager(project.getFileObject());
