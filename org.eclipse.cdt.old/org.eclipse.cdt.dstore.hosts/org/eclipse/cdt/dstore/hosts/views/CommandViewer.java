@@ -96,7 +96,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     {
 	super();
 	doCreateControl(parent);
-	_outputViewId = "com.ibm.dstore.hosts.views.OutputViewePart";
+	_outputViewId = "com.ibm.dstore.hosts.views.OutputViewPart";
     }
     
     public void setOutputId(String outputId)

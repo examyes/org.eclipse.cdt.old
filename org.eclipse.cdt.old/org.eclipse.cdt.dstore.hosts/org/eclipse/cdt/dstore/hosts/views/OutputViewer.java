@@ -135,7 +135,8 @@ public class OutputViewer extends TableViewer
 
 	_menuHandler = new MenuHandler(_plugin.getActionLoader());
 
-	_maxWidth = 100;	
+	_maxWidth = 200;	
+	_charWidth = 5;
 
 	Table table = getTable();
 
@@ -201,7 +202,7 @@ public class OutputViewer extends TableViewer
       {
 	  _currentInput = input;
 	  DataStore dataStore = _currentInput.getDataStore();	
-	  
+
 	  if (_currentInput.getType().equals("status"))
 	      {
 		  DataElement commandInstance = _currentInput.getParent();
@@ -230,22 +231,7 @@ public class OutputViewer extends TableViewer
   public void fillContextMenu(IMenuManager menu)
       {
 	DataElement selected = ConvertUtility.convert(getSelection());
-        //***fillContextMenuHelper(menu, selected);
 	_menuHandler.fillContextMenu(menu, _currentInput, selected);
-      }
-
-
-  public void fillContextMenuHelper(IMenuManager menu, DataElement object)
-      {
-	if (object != null)
-	  {    	
-	      if (_openPerspectiveAction == null)
-		  {
-		      _openPerspectiveAction = new OpenPerspectiveAction(_plugin.getLocalizedString("Open Perspective On"));
-		  }
-	      _openPerspectiveAction.setSubject(object);
-	      menu.add(_openPerspectiveAction);
-	  } 
       }
 
 
@@ -280,26 +266,25 @@ public class OutputViewer extends TableViewer
     
     public void domainChanged(DomainEvent ev)
     {
-        if (listeningTo(ev))
+	DataElement parent = (DataElement)ev.getParent();
+	ArrayList children = ev.getChildren();
+	if (children != null)
 	    {
-		DataElement parent = (DataElement)ev.getParent();
-		ArrayList children = ev.getChildren();
-		if (children != null)
+		Table table = getTable();
+		if (table != null && !table.isDisposed())
 		    {
-			Table table = getTable();
-			if (table != null && !table.isDisposed())
+			table.setRedraw(false);	
+			updateChildren(children);
+			TableColumn column = table.getColumn(0);
+
+			if (column.getWidth() < _maxWidth)
 			    {
-				table.setRedraw(false);	
-				updateChildren(children);
-				TableColumn column = table.getColumn(0);
-				if (column.getWidth() < _maxWidth)
-				    {
-					column.setWidth(_maxWidth);		
-				    }
-				table.setRedraw(true);				
-			    }	
-		    }
+				column.setWidth(_maxWidth);		
+			    }
+			table.setRedraw(true);				
+		    }	
 	    }
+
     }
 
   public Shell getShell()
@@ -327,16 +312,14 @@ public class OutputViewer extends TableViewer
 		  updateItem(newItem, child);
 		  index++;
 
-		/***
-		int charLen = ((String)child.getElementProperty(DE.P_NAME)).length();		
-		int itemWidth = charLen * _charWidth;
+		  int charLen = child.getName().length();		
+		  int itemWidth = charLen * _charWidth;
 		
-		if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
-		***/
+		  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
+
 	      }	
           }
         }
-
       }
 
     protected Item newItem(Widget parent, int flags, int ix)  

@@ -81,20 +81,23 @@ public class DataElementAdapter
 
     DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
 
-    String prName = project.getName().replace('\\', '/');
-    DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
-   
-    if (projectObj != null)
+    if (project != null)
 	{
-	    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
-	    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
-
-	    if (pathElement != null)
+	    String prName = project.getName().replace('\\', '/');
+	    DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
+	    
+	    if (projectObj != null)
 		{
-		    api.parse(e);
+		    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
+		    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
+		    
+		    if (pathElement != null)
+			{
+			    api.parse(e);
+			}
+		    
+		    return pathElement;
 		}
-
-	    return pathElement;
 	}
     return null;
   }

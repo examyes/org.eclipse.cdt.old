@@ -510,15 +510,15 @@ public String removeWhitespace(String theLine)
     file = file.substring(lastFwdSlash+1,file.length());
    else if (lastBckSlash > lastFwdSlash)
     file = file.substring(lastBckSlash+1,file.length());
-  
+
    DataElement subStatus = _dataStore.createObject(null, "status", "start");
    _fileMiner.findFile(_subject, file, subStatus);
    DataElement theFile = subStatus.get(0);
-
    if (theFile != null) 
    {
     file = theFile.getSource();
    }
+
    
        if (line == null || (line.intValue() == 1))
 	 return _dataStore.createObject(_status, type, text, file);
