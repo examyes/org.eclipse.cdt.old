@@ -780,8 +780,16 @@ public class GetGdbModuleParts
 
      str = "";
      int partID = 0;
-     if(part!=null)
-     {   str=part.getName();
+	 if(part!=null)     
+     {   
+     	 String directory="./";
+     	 slash = fullFileName.lastIndexOf("/");
+     	 if (slash != -1)
+     	 	directory = fullFileName.substring(0, slash+1);
+     	 	
+     	 part.setFilePath(directory);
+     	 	
+     	 str=part.getName();
          partID = part.getPartID();
      }
      if (Gdb.traceLogger.EVT)

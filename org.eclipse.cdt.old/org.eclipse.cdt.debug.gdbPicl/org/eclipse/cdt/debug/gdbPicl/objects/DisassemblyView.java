@@ -163,6 +163,10 @@ abstract class DisassemblyView extends View
       
       GdbThreadManager threadManager = (GdbThreadManager) gdbDebugSession.getThreadManager();
       
+     int slash = sourceFileName.lastIndexOf("/");
+     if (slash != -1)
+      	sourceFileName = sourceFileName.substring(slash+1);
+      
       Vector partThreadComponents = threadManager.getThreadComponentsforPart(sourceFileName);
       
       if (partThreadComponents.size() == 0)

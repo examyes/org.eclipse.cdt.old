@@ -27,6 +27,7 @@ public class GdbPart extends Part
       _moduleID      = moduleID;
       _partName     = partName;
       _fullPartName = fullPartName;
+      _filePath = "./";					// default to current directory
 
       getTotalLines(_partName);
       if(_totalLines>0) _SymbolTbl = true;

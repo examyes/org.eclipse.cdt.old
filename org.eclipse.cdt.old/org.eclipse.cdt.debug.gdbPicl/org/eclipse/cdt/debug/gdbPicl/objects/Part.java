@@ -404,6 +404,7 @@ public abstract class Part
    protected View[]      _views;
    protected String      _startAddress;
    protected String      _endAddress;
+   protected String      _filePath;
 
    // Part attributes
    protected boolean _InUse;
@@ -439,5 +440,22 @@ public abstract class Part
 	public void setPartVerified(boolean partVerified) {
 		_PartVerified = partVerified;
 	}
+	
+		/**
+	 * Gets the filePath
+	 * @return Returns a String
+	 */
+	public String getFilePath() {
+		return _filePath;
+	}
+	/**
+	 * Sets the filePath
+	 * @param filePath The filePath to set
+	 */
+	public void setFilePath(String filePath) {
+		_filePath = filePath;
+	}
+
+
 
 }

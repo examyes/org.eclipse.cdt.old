@@ -88,6 +88,7 @@ abstract class SourceView extends View
          return true;
       }
 
+	  sourceFileName = _parentPart.getFilePath() + sourceFileName;
       file = new File(sourceFileName);
       if (!file.exists() || file.isDirectory())
       {
