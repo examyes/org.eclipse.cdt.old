@@ -18,10 +18,10 @@
             </and>
         </condition>
         
-		<property name="feature" value="eclipse-cdt"/>
+		<property name="feature" value="org.eclipse.cdt.source"/>
 		<property name="feature.version.suffix" value="_1.0.1"/>
 		<property name="feature.full.name" value="${feature}${feature.version.suffix}"/>
-        <property name="feature.dated.name" value="${feature}-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
+        <property name="feature.dated.filename" value="org.eclipse.cdt-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
 		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
 		<property name="feature.destination" value="${basedir}"/>
 	</target>
@@ -79,7 +79,7 @@
 			<param name="target" value="gather.sources"/>
 			<param name="destination.temp.folder" value="${feature.temp.folder}/plugins/"/>
 		</antcall>
-		<zip zipfile="${feature.destination}/${feature.dated.name}.src.zip" basedir="${feature.temp.folder}" filesonly="true"/>
+		<zip zipfile="${feature.destination}/${feature.dated.filename}.src.zip" basedir="${feature.temp.folder}" filesonly="true"/>
 		<delete dir="${feature.temp.folder}"/>
 	</target>
 

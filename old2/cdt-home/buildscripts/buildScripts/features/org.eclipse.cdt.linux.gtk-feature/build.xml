@@ -18,10 +18,10 @@
             </and>
         </condition>
         
- 		<property name="feature" value="eclipse-CDT"/>
+ 		<property name="feature" value="org.eclipse.cdt.linux.gtk"/>
 		<property name="feature.version.suffix" value="_1.0.1"/>
 		<property name="feature.full.name" value="${feature}${feature.version.suffix}"/>
-        <property name="feature.dated.name" value="${feature}-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
+        <property name="feature.dated.filename" value="org.eclipse.cdt-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
 		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
 		<property name="feature.destination" value="${basedir}"/>
 	</target>
@@ -84,13 +84,13 @@
 	<target name="zip.distribution" depends="init">
 		<delete dir="${feature.temp.folder}"/>
 		<mkdir dir="${feature.temp.folder}"/>
-		<unzip src="../org.eclipse.cdt-feature/eclipse-cdt${feature.version.suffix}.bin.dist.zip" dest="${feature.temp.folder}"/>
+		<unzip src="../org.eclipse.cdt-feature/org.eclipse.cdt${feature.version.suffix}.bin.dist.zip" dest="${feature.temp.folder}"/>
 		
 		<antcall target="gather.bin.parts">
 			<param name="feature.base" value="${feature.temp.folder}"/>
 			<param name="include.children" value="true"/>
 		</antcall>
-        <zip zipfile="${feature.destination}/${feature.dated.name}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
+        <zip zipfile="${feature.destination}/${feature.dated.filename}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
 		<delete dir="${feature.temp.folder}"/>
 	</target>
 

@@ -18,10 +18,10 @@
             </and>
         </condition>
         
-		<property name="feature" value="eclipse-cdt-testing"/>
+		<property name="feature" value="org.eclipse.cdt.testing"/>
 		<property name="feature.version.suffix" value="_1.0.1"/>
 		<property name="feature.full.name" value="${feature}${feature.version.suffix}"/>
-        <property name="feature.dated.name" value="${feature}-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
+        <property name="feature.dated.filename" value="org.eclipse.cdt.testing-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
 		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
 		<property name="feature.destination" value="${basedir}"/>
 	</target>
@@ -89,7 +89,7 @@
 			<param name="feature.base" value="${feature.temp.folder}"/>
 			<param name="include.children" value="true"/>
 		</antcall>
-		<zip zipfile="${feature.destination}/${feature.dated.name}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
+		<zip zipfile="${feature.destination}/${feature.dated.filename}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
 		<delete dir="${feature.temp.folder}"/>
 	</target>
 
