@@ -118,10 +118,7 @@
      <ul>
        <li>org.eclipse.cdt
        <li>org.eclipse.cdt.core
-       <li>org.eclipse.cdt.core.linux
-       <li>org.eclipse.cdt.core.qnx
-       <li>org.eclipse.cdt.core.solaris
-       <li>org.eclipse.cdt.core.win32
+       <li>org.eclipse.cdt.core.${os}
        <li>org.eclipse.cdt.debug.core
        <li>org.eclipse.cdt.debug.mi.core
        <li>org.eclipse.cdt.debug.mi.ui
@@ -129,6 +126,7 @@
        <li>org.eclipse.cdt.launch
        <li>org.eclipse.cdt.ui
        <li>org.eclipse.cdt-feature 
+       <li>org.eclipse.cdt.${platformID}-feature
        <li>Optional:<br>
 		The "org.eclipse.cdt.*.tests" packages can also be checked out.
 		In which case you will also need to import the org.junit package (and others
@@ -160,6 +158,7 @@
 			  <li>org.eclipse.debug.ui
 			  <li>org.eclipse.help
 			  <li>org.eclipse.help.ui
+			  <li>org.eclipse.pde.core
 			  <li>org.eclipse.platform
 			  <li>org.eclipse.search
 			  <li>org.eclipse.swt
@@ -186,9 +185,11 @@
   <ol>
 	<li>Browse to the org.eclipse.cdt package directory
 	<li>Edit the "about.mappings" file to indicate the build number <br>
+    This example uses the format: yyyymmdd
 	<pre>
     #e.g. "0=&ltyear&gt&ltmonth&gt&ltdate&gt"
     0=20020926 </pre></li>
+    
     <li>Browse to the org.eclipse.cdt-feature package directory
     <li>Open the "feature.xml" file
     <li>Select the "Package" button from the Overview Page
@@ -201,19 +202,20 @@
     	 <li>build.update.jar
     	 <li>build.zips
     	 <li>zip.distribution
-    	 <li>build.sources
-    	 <li>zip.sources
-    	</ol>
-    	Note items 7 & 8 are optional and are only required if you want to package 
-    	the sources. They also take a fairly large amount of time.  
+    	</ol> 
     	</li>
-	<li>When the build is complete there will be a binary
-		distribution zip file and (optionally) a sources zip file
+	<li>When the build is complete look in the appropriate feature directory and 
+		you will find a binary distribution zip file or a sources zip file (if you ran the source feature)
 		<pre>
   e.g.
     org.eclipse.cdt_20020926_1.0.0.bin.dist.zip  ... zipped features and plugins
     org.eclipse.cdt_20020926_1.0.0.src.zip       ... zipped sources
 		</pre></li>
+		
+	<li>Repeat the steps 1 thru 6 using the org.eclipse.cdt.${platformID}-feature <br>
+		The CDT has been structured to be created in two aprts. The first is the platform independent org.eclipse.cdt-feature 
+		and the org.eclipse.cdt.${platformID}-feature, which contains platform specific fragments required by the install.
+	</li>
 	</ol>
 </p>
 
@@ -269,7 +271,7 @@
 		  <li>Set the ANT_HOME environment variable to the root of your Ant installation.</li>
 		  <li>(Windows 98) Set the HOME environment variable to c:</li>	
 		</ol>  
-		<li>Install a clean installation of Eclipse 2.0.1<br>
+		<li>Install a clean installation of Eclipse 2.0.x or 2.1 (which ever is compatible with the source you are building)<br>
    			--You will need all the plugins and features
     		for all platforms that you want to build--
 			<br>
@@ -283,44 +285,38 @@
 		<li>
 		   Checkout the contents of the cdt-home/cdt-home/buildscripts/ directory into the eclipse install directory
 		</li>	
-		<li> You will only have to do the following steps the first time you set up as long as you never delete the 
-		     org.eclipse.cdt.* directories from the eclipse/features and eclipse/plugins directory.
-		  <ul>
-			
-			<li>
-			   Copy the contents of the buildscripts/buildscripts/plugins directory to the eclipse/plugins directory.
-			</li>
-			<li>
-			   Copy the contents of the buildscripts/buildscripts/features directory to the eclipse/features directory.
-			</li>
-			<li>
-			   Delete the contents of the org.eclipse.cdt.* directories you copied to the eclipse/plugins and eclipse/features 
-			   directories in the previous two steps.
-			</li>
-		  </ul>
-		</li>
 		<li>
 			Edit the startCDT-&ltos&gt&ltwin&gtbuild.bat files<br>
     		build -os win32 -ws win32 -install "C:\eclipse"<br>
       		e.g. <br> 
-      			rename -install <installDir> to point to your clean Eclipse installation directory
+      			rename -install <installDir> to point to your clean Eclipse installation directory<br>
+      			and rename the -os and -ws options to the appropriate combination supported by the org.eclipse.cdt.${platformID}-feature you are working with.
 		</li>
 		<li>
 			Run the startCDT-&ltos&gt&ltwin&gtbuild.bat file of your choice
 		</li>
 		<li>
-		  The resulting distribution.zip and source zips will reside in
-    		<installDir>/features/org.eclipse.cdt-feature/
+		  The resulting distribution.zip or source zips will reside in
+    		<installDir>/features/org.eclipse.cdt.${platformID}-feature/ <br>
+    		<b>Note:</b> ${platformID} will be one of the following:
+    		<ul>
+    			<li>win32
+    			<li>qnx.photon
+    			<li>linux.motif
+    			<li>linux.gtk
+    			<li>solaris.motif
+    		</ul> 
 		</li>
 	  </li>
      </ol>
    </li>	
-   <li>Note: <br>
+   <li><b>Note: </b><br>
    	   The scripted CVS checkout sometimes leaves old files around and does not remove
        them when they have been removed from the CVS repository.<br>
-       You may have to remove the contents of the org.eclipse.cdt.* 
-       directories from the eclipse/plugins and eclipse/features directories.
-       Then recopy the contents from the same directories in the buildscripts directory.
+       It is highly recommended that you remove the contents of the org.eclipse.cdt.* 
+       directories from the eclipse/plugins and eclipse/features directories.<br>
+       This will ensure a clean build.
+       
    </li>
   <ul>
 </p>
@@ -334,7 +330,7 @@
 </tr>
 </table>
 <center><I>
-Last Modified on Monday, October 04, 2002
+Last Modified on Friday, January 03, 2003
 </I></center>
 
 </body>
