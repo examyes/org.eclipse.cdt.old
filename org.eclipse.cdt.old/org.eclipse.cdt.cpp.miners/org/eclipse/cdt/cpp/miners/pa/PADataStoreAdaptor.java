@@ -89,48 +89,7 @@ public class PADataStoreAdaptor {
    return cmdStatus;
  
  }
- 
- /**
-  * Return the attribute value associated with a given data element
-  */
- public static String getAttribute(DataElement element, String name) {
   
-  ArrayList attributes = element.getAssociated(getLocalizedString("pa.Attributes"));
-  for (int i=0; i < attributes.size(); i++) {
-   DataElement anAttr = (DataElement)attributes.get(i);
-   if (!anAttr.isDeleted() && anAttr.getType().equals(name)) {
-    return anAttr.getName();
-   }
-  }
-  
-  return null;
- }
-
- /**
-  * Set the attribute to a given value for a data element
-  */
- public static DataElement setAttribute(DataElement element, String name, String value) {
-  
-  DataElement attributeElement = null;
-  ArrayList attributes = element.getAssociated(getLocalizedString("pa.Attributes"));
-  for (int i=0; i < attributes.size(); i++) {
-   DataElement anAttr = (DataElement)attributes.get(i);
-   if (anAttr.getType().equals(name))
-    attributeElement = anAttr;
-  }
-  
-  if (attributeElement != null) {
-   attributeElement.setAttribute(DE.A_NAME, value);
-  }
-  else {
-   DataStore dataStore = element.getDataStore();
-   attributeElement = dataStore.createObject(null, name, value);
-   dataStore.createReference(element, attributeElement, getLocalizedString("pa.Attributes"));
-  }
-
-  return attributeElement;  
- }
- 
  /**
   * Return the trace file format as a String
   */
