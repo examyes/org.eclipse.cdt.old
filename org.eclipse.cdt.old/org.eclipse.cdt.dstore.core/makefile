@@ -125,7 +125,7 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
 	(cd org 2>/dev/null || cd com 2>/dev/null) || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -qo *src.zip)
 
-zipFile=cdt-eclipse-0.5.0-local.zip
+zipFile=cdt-eclipse-R2-20020408-local.zip
 createZip: createEmptyZip zipUpPlugins
 	@echo Created $(pluginsDirectory)/$(zipFile)
 
@@ -138,7 +138,7 @@ zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x org *org\/* com *makefile* *setenv.mk* *com\/* *CVS*
 
 tempDir=cdt
-finalZip=cdt-eclipse-0.5.0.zip
+finalZip=cdt-eclipse-R2-20020408.zip
 
 createFinalPackage: createServerZip createFinalZip
 	@echo Created $(pluginsDirectory)/$(finalZip)
@@ -148,12 +148,13 @@ createFinalZip:
 	cp org.eclipse.cdt.cpp.docs.user/readme.txt $(tempDir);\
 	cp org.eclipse.cdt.cpp.docs.user/install.txt $(tempDir);\
 	cp org.eclipse.cdt.cpp.docs.user/todo.txt $(tempDir);\
+	cp org.eclipse.cdt.cpp.docs.user/install-cdt $(tempDir);\
 	cp $(zipFile) $(tempDir);\
 	cp $(serverZipFile) $(tempDir);\
 	zip -qr $(finalZip) $(tempDir);\
 	rm -r $(tempDir)
 
-serverZipFile=cdt-eclipse-0.5.0-server.zip
+serverZipFile=cdt-eclipse-R2-20020408-server.zip
 
 createServerZip: createEmptyServerZip zipServerPlugins
 	@echo Created $(pluginsDirectory)/$(serverZipFile)
