@@ -65,7 +65,14 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
 	if (OK == buttonId)
 	    {	
 		setReturnCode(OK);
-		_selection =_viewer.getSelected();
+		if (_viewer != null)
+		    {
+			_selection =_viewer.getSelected();
+		    }
+		else
+		    {
+			_selection = null;
+		    }
 	    }
 	else if (CANCEL == buttonId)
 	    setReturnCode(CANCEL);
@@ -97,20 +104,37 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
 	GridData cgrid = new GridData(GridData.FILL_BOTH);
 	c.setLayoutData(cgrid);
 
-	DataStore dataStore = _input.getDataStore();
-	_viewer = new ObjectWindow(c, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), CppActionLoader.getInstance());	
-	_viewer.setInput(_input);
+	if (_input != null)
+	    {
+		DataStore dataStore = _input.getDataStore();	
+		_viewer = new ObjectWindow(c, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), CppActionLoader.getInstance());	
+		_viewer.setInput(_input);
 	
-	GridLayout layout= new GridLayout();
-	layout.numColumns = 1;
-	layout.marginHeight = 2;
-	layout.marginWidth = 2;
-	_viewer.setLayout(layout);
+		GridLayout layout= new GridLayout();
+		layout.numColumns = 1;
+		layout.marginHeight = 2;
+		layout.marginWidth = 2;
+		_viewer.setLayout(layout);
+		
+		GridData tgrid = new GridData(GridData.FILL_BOTH);
+		tgrid.heightHint = 200;
+		tgrid.widthHint = 500;
+		_viewer.setLayoutData(tgrid);
+	    }
+	else
+	    {
+	
+		GridLayout layout= new GridLayout();
+		layout.numColumns = 1;
+		layout.marginHeight = 2;
+		layout.marginWidth = 2;
 
-	GridData tgrid = new GridData(GridData.FILL_BOTH);
-	tgrid.heightHint = 200;
-	tgrid.widthHint = 500;
-	_viewer.setLayoutData(tgrid);
+		Composite cnr = new Composite(c, SWT.NONE);
+		Label label = new Label(cnr, SWT.NULL);
+		label.setText("Unable to obtain process list");
+		cnr.setLayout(layout);
+		cnr.setLayoutData(new GridData(GridData.FILL_BOTH));
+	    }
 	
 	getShell().setText(_title);
 
@@ -119,7 +143,10 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
     
     public boolean close()
     {
-    	_viewer.dispose();
+	if (_viewer != null)
+	    {
+		_viewer.dispose();
+	    }
     	return super.close();
     }
 
