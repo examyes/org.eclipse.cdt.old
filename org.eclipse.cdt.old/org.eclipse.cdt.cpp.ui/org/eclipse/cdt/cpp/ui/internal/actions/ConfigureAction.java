@@ -175,9 +175,14 @@ public class ConfigureAction extends CustomAction
 			if (true)//if(!configureIsUptodate(_subject))
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-				String message = new String
+			/*	String message = new String
 				("\nThe system detects that the configure script is not up to date"+
 				"\nUpdating project configuration files and regenerating configure may be needed"+
+				"\nOld existing configuration files will be renamed *.old if updated"+
+				"\nPress OK to update project configuration files, or "+
+				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");*/
+				String message = new String
+				("\nUpdating project configuration files and regenerating configure may be needed"+
 				"\nOld existing configuration files will be renamed *.old if updated"+
 				"\nPress OK to update project configuration files, or "+
 				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
