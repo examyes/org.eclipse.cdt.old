@@ -25,10 +25,10 @@ eclipseLocation := $(shell test -r .eclipse && cat .eclipse)
 endif
 
 # List of Plugins that we build
+buildPlugins += com.ibm.debug
 buildPlugins += com.ibm.dstore.extra
 buildPlugins += com.ibm.dstore.extra.server
 buildPlugins += com.ibm.dstore.core
-buildPlugins += com.ibm.debug
 buildPlugins += com.ibm.cpp.miners.parser
 buildPlugins += com.ibm.dstore.hosts
 buildPlugins += com.ibm.dstore.ui
