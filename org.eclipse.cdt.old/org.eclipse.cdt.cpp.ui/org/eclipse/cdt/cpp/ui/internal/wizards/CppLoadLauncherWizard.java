@@ -48,6 +48,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 
     private ModelInterface                  _api;
     private boolean                         _projectIsClosed = false;
+    private boolean                         _noSelection = false;
 
     public void addPages()
     {
@@ -57,6 +58,12 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
             displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
             return;
         }
+        if (_noSelection)
+        {
+            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.noSelection"));
+            return;
+        }
+
 	
    	_mainPage = new CppLoadLauncherWizardMainPage(_plugin.getLocalizedString("debugLauncher"), _currentSelectionName, _directory);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugLauncher.Title"));
@@ -153,6 +160,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
         DataElement dataElement = null;
         Object element = selection.getFirstElement();
         IProject project;
+        _noSelection = false;
 
         _plugin = CppPlugin.getDefault();
         _api = _plugin.getModelInterface();
@@ -165,9 +173,9 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
            if (!project.isOpen())
            {
               _projectIsClosed = true;
-              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
               return;
-           } 		
+           }
+           init(launcher, mode, dataElement);	
         }
         else if (element instanceof IProject || element instanceof IResource)
         {
@@ -176,16 +184,15 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
            if (!project.isOpen())
            {
               _projectIsClosed = true;
-              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
               return;
            }
-        }
-	
-        if (dataElement != null)
-        {
            init(launcher, mode, dataElement);	
         }
-
+	else
+        {
+           _noSelection = true;
+           return;
+        }
     }
 
     public void init(ILauncher launcher, String mode, DataElement resource)

@@ -46,12 +46,21 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
 
     private ModelInterface                  _api;
     private boolean                         _projectIsClosed = false;
+    private boolean                         _noSelection = false;
 
     public void addPages()
     {
 	super.addPages();
         if (_projectIsClosed)
+        {
+            displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.projectClosed"));
             return;
+        }
+        if (_noSelection)
+        {
+           displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.noSelection"));
+           return;
+        }
 	
    	_mainPage = new CppAttachLauncherWizardMainPage(_plugin.getLocalizedString("debugAttachLauncher"), _currentSelectionName);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugAttachLauncher.Title"));
@@ -120,6 +129,7 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
         IProject project;
         Object element = selection.getFirstElement();
 
+        _noSelection = false;
         _plugin = CppPlugin.getDefault();
         _api = _plugin.getModelInterface();
 
@@ -131,9 +141,9 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
            if (!project.isOpen())
            {
               _projectIsClosed = true;
-              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
               return;
-           } 				
+           }
+           init(launcher, mode, dataElement);
 	}
         else if (element instanceof IProject || element instanceof IResource)
         {
@@ -142,12 +152,15 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
            if (!project.isOpen())
            {
               _projectIsClosed = true;
-              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
               return;
            }
-        }
-        if (dataElement != null)
            init(launcher, mode, dataElement);
+        }
+        else
+        {
+           _noSelection = true;
+           return;
+        }
     }
 
     public void init(ILauncher launcher, String mode, DataElement resource)
@@ -164,6 +177,6 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
      */
     protected void displayMessageDialog(String message)
     {
-	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("attachLauncher.Error.Title"),message);
     }
 }

@@ -71,6 +71,8 @@ public class CppAttachLauncher implements ILauncherDelegate, IOldDaemonSupport
     public boolean launch(Object[] elements, String mode, ILauncher launcher)
     {
         _elements = elements;
+        IProject project;
+
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
         if(selection == null)
@@ -91,15 +93,28 @@ public class CppAttachLauncher implements ILauncherDelegate, IOldDaemonSupport
          displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.notExecutable"));
 			return false;
 		    }
+            DataElement projectElement = _api.getProjectFor(_executable);
+            project = _api.findProjectResource(projectElement);
+            if (!project.isOpen())
+            {
+               displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+               return false;
+            }
 
 		_directory = _executable.getParent();
 	    }
 	else if (element instanceof IProject || element instanceof IResource)
 	{
+      project = ((IResource)element).getProject();
+      if (!project.isOpen())
+      {
+          displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+          return false;
+      }
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
       {
-         IProject project = ((IResource)element).getProject();
+
          if (_plugin.isCppProject(project))
          {
    			IResource resource = (IResource)element;
@@ -114,18 +129,19 @@ public class CppAttachLauncher implements ILauncherDelegate, IOldDaemonSupport
 	      }
      		else
 	      {
-            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notCppProject"));
-            return false;
-         }
-
-	   }
-   	else
-      {
-			_directory = _executable.getParent();
-	   }
-	}
+                displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.notCppProject"));
+                return false;
+             }
+			
+ 		    }
+      	else
+  		    {
+      		_directory = _executable.getParent();
+  		    }
+	    }
 	else
-	{
+	    {
+                displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.notExecutable"));
 		_executable = null;
 		_directory = null;
 		return false;
@@ -205,7 +221,6 @@ public class CppAttachLauncher implements ILauncherDelegate, IOldDaemonSupport
    	_api.debug(_directory, port, key);
     }
 
-
     /**
      *	Display an error dialog with the specified message.
      *
@@ -213,7 +228,7 @@ public class CppAttachLauncher implements ILauncherDelegate, IOldDaemonSupport
      */
     protected void displayMessageDialog(String message)
     {
-	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("attachLauncher.Error.Title"),message);
     }
 
 

@@ -64,6 +64,7 @@ public String getLaunchMemento(Object obj)
     public boolean launch(Object[] elements, String mode, ILauncher launcher)
     {
         IProject project;
+
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
         if(selection == null)
@@ -135,7 +136,6 @@ public String getLaunchMemento(Object obj)
 		_directory = null;
 		return false;
 	}
-
         // display the wizard
         CppRunLauncherWizard w= new CppRunLauncherWizard();
         w.init(launcher, ILaunchManager.RUN_MODE, _executable);

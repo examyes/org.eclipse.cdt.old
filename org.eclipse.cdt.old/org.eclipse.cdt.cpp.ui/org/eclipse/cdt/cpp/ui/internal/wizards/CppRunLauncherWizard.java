@@ -43,7 +43,7 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     private DataElement                     _directory;
     private ModelInterface                  _api;
     private boolean                         _projectIsClosed = false;
-
+    private boolean                         _noSelection = false;
 
     public void addPages()
     {
@@ -53,7 +53,11 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
             displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
             return;
         }
-	
+        if (_noSelection)
+        {
+            displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.noSelection"));
+            return;
+        }
    	_mainPage = new CppRunLauncherWizardMainPage(_plugin.getLocalizedString("runLauncher"), _programInvocation, _directory);
     	_mainPage.setTitle(_plugin.getLocalizedString("runLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("runLauncher.Description"));
@@ -99,6 +103,7 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
         DataElement dataElement = null;
         Object element = selection.getFirstElement();
         IProject project;
+        _noSelection = false;
 
         _plugin = CppPlugin.getDefault();
         _api = _plugin.getModelInterface();
@@ -111,9 +116,9 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
            if (!project.isOpen())
            {
               _projectIsClosed = true;
-              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
               return;
-           } 		
+           }
+           init(launcher, mode, dataElement);
       	}
         else if (element instanceof IProject || element instanceof IResource)
         {
@@ -122,14 +127,14 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
            if (!project.isOpen())
            {
               _projectIsClosed = true;
-              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
               return;
-           } 		
-        }
-
-        if (dataElement != null)
-        {
+           }
            init(launcher, mode, dataElement);
+        }
+        else
+        {
+           _noSelection = true;
+           return;
         }
 
     }
@@ -138,7 +143,6 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     {
    	_launcher = launcher;
    	_element = resource;
-   	//_programInvocation = ((DataElement)_element).getName();
    	_programInvocation = ((DataElement)_element).getSource();
    	_directory = ((DataElement)_element).getParent();
     }
@@ -149,6 +153,6 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
      */
     protected void displayMessageDialog(String message)
     {
-	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("runLauncher.Error.Title"),message);
     }
 }
