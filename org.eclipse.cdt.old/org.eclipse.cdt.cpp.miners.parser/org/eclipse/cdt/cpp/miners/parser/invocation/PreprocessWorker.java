@@ -28,31 +28,40 @@ public class PreprocessWorker extends Thread
  public PreprocessWorker()
  {
   _theParseWorker  = new ParseWorker();
+  _theParseWorker.setEnabled(false);
   _fileQueue       = new ArrayList();
   _thePreprocessor = new Preprocessor(this);
  }
  
- public void setParsedFiles(DataElement theParsedFiles, DataElement status)
+ public void setParsedFiles(DataElement theParsedFiles)
  {
   _dataStore   = theParsedFiles.getDataStore();
   _parsedFiles = theParsedFiles;
-  _theParseWorker.setParsedFiles(_parsedFiles, status);
+  _theParseWorker.setParsedFiles(_parsedFiles);
   _projectObjects = _dataStore.find(_parsedFiles.getParent(), DE.A_NAME, ParserSchema.ProjectObjects, 1);
   _systemObjects  = _dataStore.find(_parsedFiles.getParent(), DE.A_NAME, ParserSchema.SystemObjects, 1);
   try{_projectCanonicalPath = (new File (_parsedFiles.getParent().getSource())).getCanonicalPath();} catch (IOException e){}
   updateParseExtensions(); 
  }
  
- public void preprocessFile(String fileName)
+ public void preprocessFile(String fileName, DataElement status)
  {
+  if (status != null)
+   _theParseWorker.setMasterStatus(status);
   File theFile = new File(fileName);
   if (theFile.exists() && (theFile.isDirectory() || isCorCPPFile(fileName)))
    _fileQueue.add(new File(fileName));
  }
 
- public void parseObjectNow(DataElement theObject)
+ public void closeProjects()
+ {
+  _fileQueue.clear();
+  _theParseWorker.closeProjects();
+ }
+ 
+ public void parseObjectNow(DataElement theObject, DataElement status)
  { 
-  _theParseWorker.parseObjectNow(theObject);
+  _theParseWorker.parseObjectNow(theObject, status);
  }
 
  public void run()
@@ -158,7 +167,7 @@ public class PreprocessWorker extends Thread
  {
   theFileElement.setBuffer(_thePreprocessor.preprocess().insert(0,"1:"));
   _dataStore.update(theFileElement);
-  _theParseWorker.parseFile(theFileElement);
+  _theParseWorker.parseFile(theFileElement, null);
  }
  
  private void initializePreprocessor(File theFile)
@@ -185,7 +194,7 @@ public class PreprocessWorker extends Thread
     {
      try
      {
-      preprocessFile(theFiles[i].getCanonicalPath());
+      preprocessFile(theFiles[i].getCanonicalPath(), null);
      }
      catch (IOException e) {}
     } 

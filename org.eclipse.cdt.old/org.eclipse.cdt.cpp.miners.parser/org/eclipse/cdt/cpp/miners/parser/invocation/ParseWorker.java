@@ -25,8 +25,8 @@ public class ParseWorker extends Thread
  private boolean               _enabled;
  private DataElement           _projectObjects;
  private DataStore             _dataStore;
- private DataElement           _status;
-
+ private DataElement           _masterStatus;
+ 
  public ParseWorker()
  {
   _objectQueue           = new ArrayList();
@@ -37,25 +37,35 @@ public class ParseWorker extends Thread
   _theCharStream         = new SimpleCharStream(new StringReader("default"), 1, 1, 16);
   _theParserTokenManager = new ParserTokenManager(_theCharStream);
  }
+
+ public void closeProjects()
+ {
+  _objectQueue.clear();
+  _fileQueue.clear();
+ }
   
- public void parseObject(DataElement theObject)
+ public void setMasterStatus(DataElement status)
  {
-  _objectQueue.add(theObject);
+  _masterStatus = status;
+ }
+ 
+ public void parseObject(DataElement theObject, DataElement status)
+ {
+  _objectQueue.add(new DataElement[]{theObject,status});
  }
 
- public void parseObjectNow(DataElement theObject)
+ public void parseObjectNow(DataElement theObject, DataElement status)
  {
-  _immediateObjectQueue.add(theObject);
+  _immediateObjectQueue.add(new DataElement[]{theObject,status});
  }
 
- public void parseFile(DataElement theFile)
+ public void parseFile(DataElement theFile, DataElement status)
  {
-  _fileQueue.add(theFile);
+  _fileQueue.add(new DataElement[]{theFile,status});
  }
 
- public void setParsedFiles(DataElement parsedFiles, DataElement status)
+ public void setParsedFiles(DataElement parsedFiles)
  {
-  _status = status;
   _dataStore = parsedFiles.getDataStore();
   _projectObjects = _dataStore.find(parsedFiles.getParent(), DE.A_NAME, ParserSchema.ProjectObjects,1);
    _theSymbolTable.setParsedFiles(parsedFiles);
@@ -99,13 +109,14 @@ public class ParseWorker extends Thread
  //Start of private methods:
  private void parseObjectsInQueue()
  {
-  DataElement theObject = null;
+  DataElement[] theObject = null;
   while ((!_objectQueue.isEmpty()) || (!_immediateObjectQueue.isEmpty()))
   { 
    theObject = getObjectFromQueue();
-   if (initializeParser(theObject))
-    beginObjectParse(theObject);
-   update(theObject); 
+   if (initializeParser(theObject[0]))
+    beginObjectParse(theObject[0]);
+   update(theObject[0]);
+   statusDone(theObject[1]);
   }
   if (theObject != null)
    update(_projectObjects);
@@ -113,19 +124,23 @@ public class ParseWorker extends Thread
 
  private void parseFilesInQueue()
  {
-  DataElement theFile = null;
+  DataElement[] theFile = null;
   while(!_fileQueue.isEmpty())
   {
    theFile = getFileFromQueue();
-   if (initializeParser(theFile))
-    beginFileParse(theFile);
-   update(theFile);
+   if (initializeParser(theFile[0]))
+    beginFileParse(theFile[0]);
+   update(theFile[0]);
+   //statusDone(theFile[1]);
   }
   if (theFile != null)
   { 
-   _status.setAttribute(DE.A_NAME, "done");
-   update(_status);
    update(_projectObjects);
+  }
+  if (_masterStatus != null)
+  {
+   statusDone(_masterStatus);
+   _masterStatus = null;
   }
  }
 
@@ -308,22 +323,30 @@ public class ParseWorker extends Thread
    _dataStore.update(theObject); 
  }
 
- private DataElement getFileFromQueue()
+ private void statusDone(DataElement theStatus)
  {
-  DataElement theFile = (DataElement)_fileQueue.get(0);
+  if (( _dataStore == null) || (theStatus == null))
+   return;
+  theStatus.setAttribute(DE.A_NAME, "done");
+   _dataStore.update(theStatus);
+ }
+
+ private DataElement[] getFileFromQueue()
+ {
+  DataElement[] theFile = (DataElement[])_fileQueue.get(0);
   _fileQueue.remove(0);
   return theFile;
  }
  
- private DataElement getObjectFromQueue()
+ private DataElement[] getObjectFromQueue()
  {
   if (!_immediateObjectQueue.isEmpty())
   {
-   DataElement theObject = (DataElement)_immediateObjectQueue.get(0);
+   DataElement[] theObject = (DataElement[])_immediateObjectQueue.get(0);
    _immediateObjectQueue.remove(0);
    return theObject;
   }
-  DataElement theObject = (DataElement)_objectQueue.get(0);
+  DataElement theObject[] = (DataElement[])_objectQueue.get(0);
   _objectQueue.remove(0);
   return theObject;
  }

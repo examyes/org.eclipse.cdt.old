@@ -60,7 +60,7 @@ public class ParseMiner extends Miner
    return status;
   }
   else if (name.equals("C_QUERY"))
-   handleObjectParse(subject);
+   handleObjectParse(subject, status);
   else if (name.equals("C_CANCEL"))
    handleCancelCommand(subject, getCommandArgument(theElement, 1));
   else if (name.equals("C_REFRESH"))
@@ -162,7 +162,7 @@ public class ParseMiner extends Miner
  private DataElement handleCloseProject(DataElement theSubject)
  {
      DataElement theProject = getParseProject(theSubject);
-     
+     _parseManager.closeProjects();
      DataElement currentPreferences = getProjectElement(theProject, ParserSchema.Preferences);
      DataElement autoPersist = _dataStore.find(currentPreferences, DE.A_NAME, "autopersist", 1);  
      if ((autoPersist != null) && autoPersist.getValue().equals("Yes") )
@@ -352,9 +352,10 @@ public class ParseMiner extends Miner
   return theFile;
  }
 
- private void handleObjectParse(DataElement theElement)
+
+ private void handleObjectParse(DataElement theElement, DataElement status)
  {
-  _parseManager.parseObject(theElement);
+  _parseManager.parseObject(theElement, status);
  }
 
  private void handleFileParse(DataElement theElement, DataElement theProject, DataElement status)
@@ -364,6 +365,7 @@ public class ParseMiner extends Miner
  
  private void handleCancelCommand(DataElement hmm, DataElement hmm2)
  {
+  _parseManager.closeProjects();
   _parseManager.cancelParse();
  }
  

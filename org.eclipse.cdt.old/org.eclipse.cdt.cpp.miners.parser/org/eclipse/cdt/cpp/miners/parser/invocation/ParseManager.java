@@ -19,7 +19,7 @@ public class ParseManager
  private DataStore            _dataStore = null;
  private PreprocessWorker     _thePreprocessWorker;
  private DataElement          _parsedFiles;
- 
+
  public ParseManager(DataStore ds)
  {
   _dataStore = ds;
@@ -36,16 +36,21 @@ public class ParseManager
   UnnamedTypeManager.instance().reset();
  }
  
- public void parseObject(DataElement theObject)
+ public void closeProjects()
  {
-  _thePreprocessWorker.parseObjectNow(theObject);
+  _thePreprocessWorker.closeProjects();
+ }
+ 
+ public void parseObject(DataElement theObject, DataElement status)
+ {
+  _thePreprocessWorker.parseObjectNow(theObject, status);
  }
 
  public void parseFile(DataElement theFile, DataElement theProject, DataElement status)
  {
   DataElement theParsedFiles = _dataStore.find(theProject,DE.A_NAME, ParserSchema.ParsedFiles,1);
-  _thePreprocessWorker.setParsedFiles(theParsedFiles, status);
-  _thePreprocessWorker.preprocessFile(theFile.getSource());
+  _thePreprocessWorker.setParsedFiles(theParsedFiles);
+  _thePreprocessWorker.preprocessFile(theFile.getSource(), status);
  }
 
  public void cancelParse()
