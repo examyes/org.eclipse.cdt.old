@@ -8,6 +8,18 @@
      to="com.ibm.cpp.docs.user.Concepts" 
      as="child"/>
  <insert 
+     from="com.ibm.debug.doc.user.CPPDebugConcepts" 
+     to="com.ibm.cpp.docs.user.Concepts" 
+     as="child"/>
+ <insert 
+     from="com.ibm.debug.doc.user.CPPDebugTasks" 
+     to="com.ibm.cpp.docs.user.Tasks" 
+     as="child"/>
+ <insert 
+     from="com.ibm.debug.doc.user.reference" 
+     to="com.ibm.cpp.docs.user.Tasks" 
+     as="next-sib"/>
+ <insert 
      from="com.ibm.cpp.docs.user.topics_Tasks" 
      to="com.ibm.cpp.docs.user.Tasks" 
      as="child"/>
