@@ -36,8 +36,10 @@ command: xl.*
 	 informational file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
 
 command: cat.*patterns.*
-	 informational file 		 pattern=.*(PATTERNS.DAT).*
-
+	 warning file 		 pattern=# .*(PATTERNS.DAT).*
+	 Output 			         pattern=command: .*
+	 #statement 			         pattern=#.*
+	 statement                   pattern=.* pattern.*=.*
 
 # How Patterns Work
 # -----------------

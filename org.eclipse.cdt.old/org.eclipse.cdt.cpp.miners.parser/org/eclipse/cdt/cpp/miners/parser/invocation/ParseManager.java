@@ -299,7 +299,7 @@ public class ParseManager
  
  public DataElement removeParseInformation(DataElement theFile)
  {
-  String fileName = theFile.getName();
+  String fileName = theFile.getSource();
   DataElement obj;
   
   //Remove Project Objects from the given file 
@@ -307,11 +307,15 @@ public class ParseManager
   {
    if ( (obj = _projectObjects.get(i)) != null)
    {
-    String source = (String)obj.getElementProperty(DE.P_SOURCE_NAME);
-    if (source != null)
-     if (source.equals(fileName))
-     _dataStore.deleteObject(_projectObjects,obj);
-   }
+    String source = (String)obj.dereference().getElementProperty(DE.P_SOURCE_NAME);
+    try
+    {
+     if (source != null)
+     {
+      if (new File(source).getCanonicalPath().equals(new File (fileName).getCanonicalPath()))
+      _dataStore.deleteObject(_projectObjects,obj);
+     } 
+    }catch (IOException e) {} }
   }
   _dataStore.update(_projectObjects);
 

@@ -66,7 +66,9 @@ public class ParserSchema
  public static String Types              = getLocalizedString("parser.Types");
  public static String FileSystemObjects  = getLocalizedString("parser.FileSystemObjects");
  public static String ContainerObject    = getLocalizedString("parser.ContainerObject");
+ public static String ObjectDescriptor   = getLocalizedString("parser.ObjectDescriptor");
  public static String CppObject          = getLocalizedString("parser.CppObject");
+ public static String ContCppObject      = getLocalizedString("parser.ContCppObject");
  public static String UsableCppObject    = getLocalizedString("parser.UsableCppObject");
  public static String Functions          = getLocalizedString("parser.Functions");
  public static String ClassesStructs     = getLocalizedString("parser.ClassesStructs");
@@ -118,6 +120,7 @@ public class ParserSchema
  public static DataElement dProjectObjects;
  public static DataElement dPreferences;
  public static DataElement dCppObject;
+ public static DataElement dContCppObject;
  public static DataElement dUsableCppObject;
  public static DataElement dClassesStructs;
  public static DataElement dVariables;
@@ -128,10 +131,11 @@ public class ParserSchema
  public static DataElement dTimeStamp;
  public static DataElement dContents;
  public static DataElement dAll;
- 
+ public static DataElement dObject; 
  
  public ParserSchema(DataElement schemaRoot)
  {
+  dObject     = findDescriptor(ObjectDescriptor, schemaRoot.getDataStore());
   dFsObjects  = findDescriptor(FileSystemObjects,schemaRoot.getDataStore());
   dContObject = findDescriptor(ContainerObject, schemaRoot.getDataStore());  	
   dContObject.setDepth(0);
@@ -142,11 +146,13 @@ public class ParserSchema
   
   
   //Set up the abstract object descriptors:
-  dCppObject          = createAbstractDerivativeDescriptor(dContObject,      CppObject);
+  dCppObject          = createAbstractDerivativeDescriptor(dObject,          CppObject);
+  dContCppObject      = createAbstractDerivativeDescriptor(dContObject,      ContCppObject);
+  schemaRoot.getDataStore().createReference(dCppObject, dContCppObject, "abstracts", "abstracted by");
   dUsableCppObject    = createAbstractDerivativeDescriptor(dCppObject,       UsableCppObject);
-  dClassesStructs     = createAbstractDerivativeDescriptor(dCppObject,       ClassesStructs);
+  dClassesStructs     = createAbstractDerivativeDescriptor(dContCppObject,   ClassesStructs);
   dVariables          = createAbstractDerivativeDescriptor(dUsableCppObject, Variables);
-  dFunctions          = createAbstractDerivativeDescriptor(dCppObject,       Functions);
+  dFunctions          = createAbstractDerivativeDescriptor(dContCppObject,   Functions);
 
 
   //Set up the relations and commands for the above objects:

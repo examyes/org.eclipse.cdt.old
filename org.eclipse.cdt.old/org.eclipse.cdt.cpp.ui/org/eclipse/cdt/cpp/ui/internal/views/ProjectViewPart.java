@@ -144,7 +144,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 		break;
 
 	    default:
-		super.projectChanged(event);
+		//super.projectChanged(event);
 		break;
 	    }
     }

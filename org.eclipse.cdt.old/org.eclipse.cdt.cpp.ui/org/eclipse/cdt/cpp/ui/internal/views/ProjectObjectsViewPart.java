@@ -9,6 +9,9 @@ package com.ibm.cpp.ui.internal.views;
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
 
+import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.widgets.*;
+
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.jface.action.*;
@@ -24,7 +27,25 @@ public class ProjectObjectsViewPart extends ProjectViewPart
  {
   super();
  }
+ 
+    /*public ObjectWindow createViewer(Composite parent, IActionLoader loader)
+    {
+	DataStore dataStore = _plugin.getCurrentDataStore();
+	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, false);
+    }
+    */
 
+ public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+ {
+  try
+  {
+   Object object = ((IStructuredSelection)sel).getFirstElement();
+   if (object instanceof DataElement)
+    doSpecificInput((DataElement)object);
+  }
+  catch (ClassCastException e){}
+ }
+  
  protected String getF1HelpId()
  {
   return CppHelpContextIds.PROJECT_OBJECTS_VIEW;
@@ -34,31 +55,98 @@ public class ProjectObjectsViewPart extends ProjectViewPart
  {
   _viewer.setInput(null);
   _viewer.clearView();
-  setTitle("Project-Objects");
+  setTitle("C/C++ Objects");
  }
 
- public void doSpecificInput(DataElement projectParseInformation)
+ public void projectChanged(CppProjectEvent event)
  {
-  //Find the Project Objects Object under the projectParseInformation
-  DataElement projectObjects = projectParseInformation.getDataStore().find(projectParseInformation, DE.A_NAME, "Project Objects", 1);
-  if (projectObjects == null)
+  int type = event.getType();
+  IProject project = event.getProject();
+
+  switch (type)
+  {
+   case CppProjectEvent.OPEN:
+   {
+     doInput(project);
+   }
+   break;
+   case CppProjectEvent.CLOSE:
+   case CppProjectEvent.DELETE:
+   {
+    doClear();
+   }
+   break;
+   case CppProjectEvent.COMMAND:
+   {
+    if ((event.getStatus() == CppProjectEvent.START) || (event.getStatus() == CppProjectEvent.DONE))
+    {
+     doInput(project);
+    }
+   }
+   super.projectChanged(event);
+   break;
+   default:
+   break;
+  }
+ }
+
+
+
+ public void doSpecificInput(DataElement theElement)
+ {
+  DataElement theInput = null;
+  if (theElement.getType().equals("file"))
+   theInput = findParseFile(theElement);
+  else if (theElement.getType().equals("Project"))
+   theElement = ((DataElement)(theElement.getAssociated("Parse Reference").get(0))).dereference();
+  if (theElement.getType().equals("Namespace"))
+   theInput = theElement.getDataStore().find(theElement, DE.A_NAME, "Project Objects", 1);
+  
+  if (theInput == null)
    return;
   
   //Finally just set the input and the title
-  if (_viewer.getInput() == projectObjects)
-      {
-	  _viewer.resetView();
-      }
+  if (_viewer.getInput() == theInput)
+   _viewer.resetView();
   else
-      {
-	  _viewer.setInput(projectObjects);	
-	  _viewer.selectRelationship("contents");
-	  setTitle(projectParseInformation.getName() + " Project-Objects");   
-      }
+  {
+   _viewer.setInput(theInput);	
+   _viewer.selectRelationship("contents");
+   //setTitle(theInput.getName() + " Objects");   
+  }
+ }
+
+ DataElement findParseFile(DataElement theProjectFile)
+ {
+  String projectFileSource1 = theProjectFile.getSource().replace('\\','/');
+  String projectFileSource2 = theProjectFile.getSource().replace('/','\\');
+  DataStore dataStore = theProjectFile.getDataStore();
+  
+  while (!(theProjectFile = theProjectFile.getParent()).getType().equals("Project")) {}
+  DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
+  DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
+  DataElement theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource1, 1);
+  if (theParseFile == null)
+   theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource2, 1);
+  if (theParseFile == null)
+  {
+   DataElement dummyInput = dataStore.find(dataStore.getTempRoot(),DE.A_NAME,"Non-Parsed File");
+   if (dummyInput != null)
+   {
+    theParseFile = dummyInput;
+    DataElement theMessage = ((DataElement)(theParseFile.getNestedData().get(0)));
+    theMessage.setAttribute(DE.A_VALUE,projectFileSource1  + " has not been parsed.");
+    dataStore.refresh(theMessage);
+   }
+   else
+   {
+    theParseFile = dataStore.createObject(dataStore.getTempRoot(), "Output", "Non-Parsed File");
+    dataStore.createObject(theParseFile, "warning", projectFileSource1 + " has not been parsed.");
+   }
+  }
+  return theParseFile;
  }
 }
-
-
 
 
 
