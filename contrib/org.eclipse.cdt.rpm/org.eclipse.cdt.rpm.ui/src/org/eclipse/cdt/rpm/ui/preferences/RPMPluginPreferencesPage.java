@@ -190,7 +190,7 @@ public class RPMPluginPreferencesPage extends PreferencePage
 	store.setDefault("IRpmConstants.RPMBUILD_CMD", "/usr/bin/rpmbuild"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.CHMOD_CMD", "/bin/chmod"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.CP_CMD", "/bin/cp"); //$NON-NLS-1$ //$NON-NLS-2$
-	store.setDefault("IRpmConstants.DIFF_CMD", "diff"); //$NON-NLS-1$ //$NON-NLS-2$
+	store.setDefault("IRpmConstants.DIFF_CMD", "/usr/bin/diff"); //$NON-NLS-1$ //$NON-NLS-2$
 	store.setDefault("IRpmConstants.TAR_CMD", "/bin/tar"); //$NON-NLS-1$ //$NON-NLS-2$
    }
    

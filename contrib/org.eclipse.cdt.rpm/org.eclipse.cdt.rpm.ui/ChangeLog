@@ -1,4 +1,10 @@
-2005-01-18  aluchko  <aluchko@tomaluk.toronto.redhat.com>
+2005-01-18  Aaron Luchko  <aluchko@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/preferences/RPMPluginPreferencesPage.java 
+	(initializeDefaultPreferences): Changed path to diff from "diff" to 
+	"/usr/bin/diff" --  bz#83150
+
+2005-01-18  Aaron Luchko  <aluchko@redhat.com>
 
 	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java (): bz# 83135
 	  Can import into a new project using New Project Wizard
