@@ -64,51 +64,51 @@ public class ManagedProjectMiner extends Miner
   		DataElement  project = getCommandArgument(theCommand, 0);
   	
   		
-  		AutoconfManager manager = new AutoconfManager(project);
+  		AutoconfManager autoconfManager = new AutoconfManager(project);
   		//if (!project.getType().equals("project"))  // refer to jeff regarding  this line
    			//return status;
 		if (name.equals("C_UNMANAGE_PROJECT"))
  	 		_dataStore.deleteObject(project.getParent(), project);
 		else if (name.equals("C_MANAGE_PROJECT"))
 		{
-			manager.manageProject(status);
+			autoconfManager.manageProject(status);
 			project.refresh(false);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
-			manager.generateSupportFile(status);
+			autoconfManager.generateSupportFile(status);
 			project.refresh(false);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_CREATE_CONFIGURE"))
 		{
-			manager.runSupportScript(status);
+			autoconfManager.runSupportScript(status);
 			project.refresh(false);
 		}
 		else if (name.equals("C_RUN_CONFIGURE"))
 		{
-			manager.runConfigureScript(status);
+			autoconfManager.runConfigureScript(status);
 			project.refresh(false);
 		}
 		else if (name.equals("C_DEFAULT_MAKEFILE_AM"))
 		{
-			manager.getMakeFileAmManager().setMakefileAmToDefault(project.getFileObject(),status);
+			autoconfManager.getMakeFileAmManager().setMakefileAmToDefault(project.getFileObject(),status);
 			project.refresh(false);
 		}
 		else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
 		{
-			manager.getMakeFileAmManager().setMakefileAmToStaticLib(project.getFileObject(),status);
+			autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(project.getFileObject(),status);
 			project.refresh(false);
 		}
 		else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 		{
-			manager.getMakeFileAmManager().setMakefileAmToTopLevel(project.getFileObject(),status);
+			autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(project.getFileObject(),status);
 			project.refresh(false);
 		}
 		else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
 		{
-			manager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
+			autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
 			project.refresh(false);
 		}
 		else if (name.equals("C_REFRESH"))
