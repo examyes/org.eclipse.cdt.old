@@ -1,31 +1,31 @@
 #patterns.dat - This file contains the formats that will be used to 
 #               parse command line output.    
-#
 
 command: grep -Hn.*
-	 grep         file line          pattern =([\w,.]*):(\d*):.*   
+	 grep          file line         pattern =([\w,.]*):(\d*):.*   
 
 command: nmake.*
 	 error                           pattern=NMAKE : .*
-	 error        file line          pattern =([\w,.,\\,:]*)\((\d*):(\d*)\) : error EDC.*
-	 error        file               pattern =[\w,.,\\,:]*\(([\w,.]*)\) : error LNK.*
-	 error        file line          pattern=([\w,.]*):(\d*):\d*\) : error .*
-	 warning      file line          pattern=([\w,.]*)\((\d*):\d*\) : warning .*
-	 informational file line          pattern=([\w,.]*)\((\d*):\d*\) : informational .* 
+	 error         file line         pattern =([\w,.,\\,:]*)\((\d*):(\d*)\) : error EDC.*
+	 error         file              pattern =[\w,.,\\,:]*\(([\w,.]*)\) : error LNK.*
+	 error         file line         pattern=([\w,.]*):(\d*):\d*\) : error .*
+	 warning       file line         pattern=([\w,.]*)\((\d*):\d*\) : warning .*
+	 informational file line         pattern=([\w,.]*)\((\d*):\d*\) : informational .* 
 
 command: .*make.*
-	 warning      file line          pattern =([\w,.]*):(\d*): warning: .*
-	 error        file line          pattern =([\w,.]*):(\d*):.*   
+	 warning       file line         pattern =([\w,.]*):(\d*): warning: .*
+	 error         file line         pattern =([\w,.]*):(\d*):.*   
 	 informational file              pattern =([\w,.]*):.*   
 	 informational file line         pattern =In file included from ([\w,.]*):(\d*):
 
 
 command: dir.*
-	 directory    file               pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s<DIR>\s([\w,.]*).*
-	 file         file               pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s[\d,,]*\s([\w,.]*).*
+	 directory     file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s<DIR>\s([\w,.]*).*
+	 file          file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s[\d,,]*\s([\w,.]*).*
 
 command: ls.*
-	 file         file               pattern=.*\d{2}:\d{2} ([\w,.]*)
+	 file          file              pattern=.*\d{2}:\d{2} ([\w,.]*)
+	 file          file              pattern=.* \d{4} ([\w,.]*)
 
 command: xl.*
 	 error         file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
@@ -33,9 +33,105 @@ command: xl.*
 	 informational file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
 
 
-# Notes:
-# 1.  The patterns are checked against command output and EXACT matches are 
-#     looked for.  If an exact match is not found, the line output is not 
-#     processed.  So if you forget the .* (match everything) at the end of 
-#     a pattern, the match will fail if there are characters in the output
-#     not accounted for by the pattern
+# How Patterns Work
+# -----------------
+# 
+# Patterns are used by the Output View to allow lines that contain file names and 
+# perhaps line numbers to be clicked to cause the file location to be opened in an Editor. 
+# A line in this file can be 1 of 3 things:
+#	1.  An empty line or a comment line (denoted by a # in column 1)
+#	2.  The start of a command description (denoted by a 'command:' at the beginning of the line)
+#	3.  A pattern description.
+# A formal description of the syntax of this file is included at the bottom of this file.
+#
+#
+# Command Descriptions
+# --------------------
+#
+# A Command Description consists of 2 things: A regular expression that describes the
+# command invocation, and a list of Pattern Descriptions.  The regular expression 
+# is used to determine what set of Pattern Descriptons to use when parsing command output.
+# For example, if you type the command 'gmake clean', the Command Descriptions are checked and
+# .*make.* would match that command.   Therefore the Pattern Descriptions for .*make.* would 
+# be used to parse the output of the 'gmake clean'.  
+# Note: The first Command Description that is found to match the command is used, so make
+# sure you put the most specific patterns first.  For example, if the nmake.* Command 
+# Description appeared after .*make.*, then 'nmake install' would be matched by the .*make.*
+# Command Descripton, which is probably not what was intended.
+#
+#
+# Pattern Descriptions
+# --------------------
+# 
+# A Pattern Description has the following form:
+#	<obj-name> <match-info> "pattern="<reg-ex>
+# 
+# where:
+# 	<obj-name>:	The type of object that will be created in the Output View if
+#			a line of output matches this pattern.  If you have put an 
+#			icon called "<object-name>.gif" in the com.ibm.dstore.core/icons
+#			directory, then the icon will be displayed in the view.
+#	
+# 	<match-info>:	This is some combination of the words "file" and "line" or nothing
+#			at all.  This is used to define how the backreferences in the 
+#			regular expression are to be interpreted.  So "file line" means 
+#			that the first back-reference is a file, and the second is a 
+#			line number.  This may seem unnecessary, but we added this capability
+#			in the event that future releases support other types of information
+#			that may be useful, such as column info (once we support it).
+#	
+# 	<reg-ex>: 	A regular expression that describes a line of output. Backreferences 
+#			are used to store (instead of just match) the filename and line 
+#			number.  To store a filename use the backreference ([\w,.]*), and 
+#			to store a line number, use (\d*) 
+#
+#
+# Note: The patterns are checked against command output and only exact matches are dealt with
+#       So as an example, if you forget the .* (match everything) at the end of a pattern,
+#       the match will fail if there are trailing characters in the output not accounted for by 
+#       the pattern
+#
+#
+#  Pattern File Syntax
+#  -------------------
+#   
+#  The pattern file syntax should be easy to grasp by looking at the ones
+#  above, but for those of you who like formal grammars, here it is:
+#   
+#  patterns-file: 
+#	commands
+#
+#  commands: 
+#	command
+#	commands new-line command
+#
+#  command:
+#	"command:" reg-ex new-line patterns
+#
+#  patterns:
+#	pattern
+#	patterns new-line pattern
+#
+#  pattern:
+#	command-name match-list "pattern=" reg-ex
+#
+#  command-name:
+#	String that denotes what type of object will be created if some output matches this pattern
+#
+#  match-list:
+#	file-or-line
+#	match-list space file-or-line
+#
+#  file-or-line:
+#	"file" | "line"
+#
+#  reg-ex:
+#	A regular expression
+#
+#  new-line:
+#	The new-line character \n
+#
+#  space:
+#	The space character
+
+
