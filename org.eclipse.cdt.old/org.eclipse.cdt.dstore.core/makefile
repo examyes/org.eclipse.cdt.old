@@ -19,9 +19,9 @@
 pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
 
 # List of Plugins that we build
+buildPlugins += com.ibm.dstore.core
 buildPlugins += com.ibm.dstore.extra
 buildPlugins += com.ibm.dstore.extra.server
-buildPlugins += com.ibm.dstore.core
 buildPlugins += com.ibm.debug
 buildPlugins += com.ibm.cpp.miners.parser
 buildPlugins += com.ibm.dstore.hosts

@@ -20,7 +20,7 @@ $(filter-out build,\
 $(filter-out %CVS,\
 $(filter-out %cvs,\
 $(filter-out %icons,\
-$(shell find * -type d -maxdepth 0)))))))
+$(shell find * -type d -maxdepth 0))))))
 endef
 
 # Determine the system path separator
