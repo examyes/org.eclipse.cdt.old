@@ -9,6 +9,7 @@ eclipseVersion=F1
 eclipseLink=http://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php
 netrc=$HOME/.netrc
 theDate=`date +%Y%m%d`
+theDate2=`date +%Y/%m/%d`
 
 #Goto the CVS downloads directory and do a CVS update (so that the subsequent commit won't complain)
 cd $rootDir/cdt-home/downloads
@@ -47,21 +48,25 @@ if [ $theSize -gt 900 ] ;
   mln=mainLatestNightly.html
   echo "<tr>" > $mln
   echo "<td><a href=\"http://download.eclipse.org/eclipse/downloads/build_types.html\">Nightly</a></td>" >> $mln
-  echo "<td>" `date +%Y/%m/%d` "</td>" >> $mln
+  echo "<td>$theDate2</td>" >> $mln
   echo "<td><a href=\"$eclipseLink\">$eclipseVersion</a></td>" >> $mln
   echo "<td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a></td>" >> $mln
   echo "</tr>" >> $mln
 fi
 
 #Add the nightly build to mainNightly.html
-mn=mainNightly.html
+mn=mainNightly.new
 echo "<tr>" >> $mn
-echo "<td>" `date +%Y/%m%d` "</td>" >> $mn
+echo "<td>$theDate2</td>" >> $mn
 echo "<td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/errors\">Error Log</a>" >> $mn
 echo " <img alt=\"\" src=\"http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/$theStatus.gif?cvsroot=Tools_Project\"></td>" >> $mn
 echo "<td><a href=\"$eclipseLink\">$eclipseVersion</a></td>" >> $mn
 echo "<td><a href=\"http://download.eclipse.org/tools/cdt/downloads/nightly/$theDate/cdt-eclipse-R2-$theDate.zip\">cdt-eclipse-R2-$theDate.zip</a></td>" >> $mn
 echo "</tr>" >> $mn
+mv mainNightly.html mainNightly.old
+cat $mn mainNightly.old > mainNightly.html
+rm -f $mn
+
 
 #Now just put the pieces together
 cat mainTop.html            > main.html
