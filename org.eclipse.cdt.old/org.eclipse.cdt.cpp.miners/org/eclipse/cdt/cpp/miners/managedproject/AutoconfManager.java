@@ -97,12 +97,13 @@ public class AutoconfManager {
 			File projectFile = project.getFileObject();
 			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			{
+				
 				// add configure.in template files only if not exist
 				try{
 					Process p;	
 					p = rt.exec(
-						"cp workspace/com.ibm.cpp.miners/autoconf_templates/script.batch "
-							+project.getSource());
+						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
+						"/com.ibm.cpp.miners/autoconf_templates/script.batch "+project.getSource());
 					p.waitFor();
 					//System.out.println("\n p3 exit value = "+p3.exitValue());
 				}catch(IOException e){System.out.println(e);}

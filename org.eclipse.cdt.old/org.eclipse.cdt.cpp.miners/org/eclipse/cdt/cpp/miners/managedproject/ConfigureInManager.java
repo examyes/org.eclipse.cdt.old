@@ -64,12 +64,6 @@ public class ConfigureInManager {
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
 	}
-/*	private long getConfigureInStamp()
-	{
-		// get time stamp
-		File configure_in = new File (project.getSource(),"configure.in");
-		return configure_in.lastModified();
-	}*/
 	private String getGeneratedStamp()
 	{
 		String stamp = new String(

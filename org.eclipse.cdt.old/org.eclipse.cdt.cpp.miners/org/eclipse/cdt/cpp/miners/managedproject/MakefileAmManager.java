@@ -18,7 +18,6 @@ public class MakefileAmManager {
 	private final int STATICLIB = 3;
 	private final int SHAREDLIB = 4;
 
-	public static Hashtable timeStamps = new Hashtable();
 	private final String MAKEFILE_AM = "Makefile.am";
 	
 	// Member Variables which can be defined in Makefile.am
@@ -103,19 +102,16 @@ public class MakefileAmManager {
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
 					initializeTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
-					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				case (1):
 					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
 					initializeProgramsMakefileAm((File)projectStucture[i][0]);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
-					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				default:
 				// initialize all other files in the subdirs
 					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
-					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 			}
 		}
 	}
@@ -837,8 +833,7 @@ public class MakefileAmManager {
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/static/",parent.getAbsolutePath());
-		initializeStaticLibMakefileAm(parent);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
+		initializeStaticLibMakefileAm(parent);	
 		updateMakefileAmDependency(parent);
 	}
 	protected void setMakefileAmToPrograms(File parent ,DataElement status)
@@ -851,7 +846,6 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/",parent.getAbsolutePath());
 		initializeProgramsMakefileAm(parent);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
 		updateMakefileAmDependency(parent);				
 	}
 	protected void setMakefileAmToTopLevel(DataElement project,DataElement status)
@@ -868,7 +862,6 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
 		initializeTopLevelMakefileAm(parent,structureManager,true);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
 		updateMakefileAmDependency(parent);	
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
@@ -881,7 +874,6 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/shared/",parent.getAbsolutePath());
 		initializeSharedLibMakefileAm(parent);
-		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
 		updateMakefileAmDependency(parent);	
 	}
 	private void updateMakefileAmDependency(File parent)
@@ -940,21 +932,13 @@ public class MakefileAmManager {
 		StringBuffer modLine = new StringBuffer();
 		System.out.println("\n Affected line = "+line);
 		StringTokenizer tokenizer = new StringTokenizer(line);
-		//File old = new File(Makefile_am.getParentFile(),"Makefile.am.old");
 		int classification = classifier.classify(Makefile_am);
-		
-		//if(!old.exists())
-			//old = Makefile_am;
-		
-		//String libName = getLibName(old,"LIBRARIES"); // has to be mod - if user save > am.old = am
-		
 		while (tokenizer.hasMoreTokens())
 		{
 			String token = tokenizer.nextToken();
 			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1)
 			{
 				if(isRightTokenToModify(Makefile_am.getParentFile().getName(),token) )
-			//if(token.indexOf(Makefile_am.getParentFile().getName())!=-1 && token.indexOf(libName)!=-1)
 				{
 					if(classification==STATICLIB)
 						token = getModifiedLibString(token,getLibName(Makefile_am,_LIBRARIES));
@@ -1003,12 +987,6 @@ public class MakefileAmManager {
 		for(int i = 0; i< ( counter-1); i++)
 			mod.append(tokenizer.nextToken()).append("/");
 		return mod.append(target).toString();
-	}
-	private void displayHassTableContents()
-	{
-		Enumeration enum = timeStamps.elements();
-		while(enum.hasMoreElements())
-			System.out.println(""+enum.nextElement());
 	}
 	private void compareOldAndNew(File parent)
 	{
