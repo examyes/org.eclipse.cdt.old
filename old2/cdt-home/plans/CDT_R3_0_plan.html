@@ -1,0 +1,402 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="Derrick Keefe" content="CDT Project">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>CDT  DRAFT 3.0 Plan</title>
+<link rel="stylesheet" href="../../default_style.css" type="text/css">
+</head>
+
+<body>
+<h1>CDT Project<br>
+  3.0 Plan (Draft template)</h1>
+<p>Initial Document December 20, 2004 <br>
+<br>
+<i>&nbsp;&nbsp;&nbsp; Please send comments about this draft plan to the </i><a href="mailto:dev-cdt-dev@eclipse.org">cdt-dev@eclipse.org</a>
+<i>developer mailing list.</i></p>
+<p>This document lays out the feature and API set for the next feature release 
+  of CDT after 2.1, designated release 3.0 
+<ul>
+  <li><a href="#Deliverables">Release deliverables</a></li>
+  <li><a href="#Milestones">Release milestones</a></li>
+  <li><a href="#TargetOperatingEnvironments">Target operating environments</a></li>
+  <li><a href="#Compatibility">Compatibility with previous releases</a></li>
+  <li><a href="#Platform">CDT subprojects (if applicable)</a></li>
+</ul>
+
+<p>Plans do not materialize out of nowhere, nor are they entirely static. To
+ensure the planning process is transparent and open to the entire Eclipse
+community, we (the CDT Project) post plans in an embryonic form and revise them
+throughout the release cycle.
+
+<p>The first part of the plan deals with the important matters of release
+deliverables, release milestones, target operating environments, and
+release-to-release compatibility. These are all things that need to be clear for
+any release, even if no features were to change.&nbsp;
+
+<p>The remainder of the plan consists of plan items for the CDT Project.
+ Each plan item covers a feature or API that is to be added to
+CDT. Each plan item has
+its own entry in the Eclipse bugzilla database, with a title and a concise
+summary (usually a single paragraph) that explains the work item at a suitably
+high enough level so that everyone can readily understand what the work item is
+without having to understand the nitty-gritty detail.
+
+<p>Not all plan items represent the same amount of work; some may be quite
+large, others, quite small. Some plan items may involve work that is localized
+to a single component; others may involve coordinated changes to
+several components; other may pervade the entire CDT Project. Although some plan
+items are for work that is more pressing than others, the plan items appear in
+no particular order.
+
+<p>With the previous release as the starting point, this is the plan for how we
+will enhance and improve it. Fixing bugs, improving test coverage,
+documentation, examples, performance, usability, etc. are considered routine
+ongoing maintenance activities and are not included in this plan unless they
+would also involve a significant change to the API or feature set, or involve a
+significant amount of work. All interesting feature work is accounted for in
+this plan.
+
+<p>The current status of each plan item is noted:
+<ul>
+  <li><b>Committed</b> plan item - A committed plan item is one that we have decided 
+    to address for the release.</li>
+  <li><b>Proposed</b> plan item - A proposed plan item is one that we are
+    considering addressing for the release. Although we are actively
+    investigating it, we are not yet in a position to commit to it, or to say
+    that we won't be able to address it. After due consideration, a proposal
+    will either be committed, deferred, or rejected.</li>
+  <li><b>Deferred</b> plan item - A reasonable proposal that will not make it in
+    to this release for some reason is marked as deferred with a brief note as
+    to why it was deferred. Deferred plan items may resurface as committed plan
+    items at a later point.</li>
+  <li><b>Rejected</b> plan item - Plan items that were proposed but judged
+    unworkable are marked as rejected plan items, with an accompanying summary
+    of why they were dismissed. Keeping track of rejected items avoids repeating
+    the discussion.</li>
+</ul>
+
+<h2><a name="Deliverables"></a>Release deliverables</h2>
+<p>The release deliverables: 
+<ul>
+  <li>Source code release for CDT Project, available as versions tagged 
+      &quot;CDT_30&quot; 
+    in the CDT Project <a href="http://dev.cdt.org/viewcvs/">CVS repository</a>.</li>
+  <li> CDT Project (downloadable).</li>
+  <li>CDT runtime binary distribution (downloadable).</li>
+</ul>
+
+<h2><a name="Milestones"></a>Release milestones</h2>
+
+<p>Release milestone occurring at regular intervals (~4 weeks) exist to facilitate 
+  coarse-grained planning and staging. 
+
+<br><b>Synchronization Expectations</b><br>
+
+Once an Eclipse platform 3.1 milestone build is released, it will be vetted for 
+use by a subset of the CDT development team.  Once approved as stable, all CDT 
+3.0 development must move to that release of the Eclipse platform.
+
+Once a CDT milestone build is complete, developers performing large scale 
+CDT integration will be expected to move forward to using that build for
+development.  Every effort will be made to ensure that the CDT milestone
+builds are stable platforms for performing CDT integration, though perhaps 
+not suitable for large scale C/C++ development.
+
+<p>The milestones are:
+<ul>
+ <i>Eclipse 3.1 M4 based builds</i>
+ <li>Friday Jan. 7,2005 - Milestone 1 (3.0 M1) - initial tool and process spin up
+ <li>Friday Feb. 4,2005 - Milestone 2 (3.0 M2) - stable build reflecting progress
+</ul>
+<ul>
+ <i>Eclipse 3.1 M5 Feb 18,2005</i>
+ <li>Friday Mar. 4,2005 - Milestone 3 (3.0 M3) - stable build reflecting progress
+ <li>Friday Apr. 1,2005 - Milestone 4 (3.0 M4) - initial API freeze for breaking changes
+</ul>
+<ul>
+ <i>Eclipse 3.1 M6 Apr 1, 2005</i>
+ <li>Friday May  6,2005 - Milestone 5 (3.0 M5) - API freeze, stable build focus on clearing
+                                             bug backlog
+ <li>Friday Jun. 3,2005 - Milestone 6 (3.0 M6) - stable build, feature complete, RC0
+</ul>
+
+<p>Lock down and external testing begins with M6 and progresses through a series of 
+test-fix phases against candidate releases.  Release candidate builds are planned
+as follows (M6 is RC0)</p>
+
+<ul>
+ <i>Note these dates are conditional on Eclipse 3.1 schedule</i>
+
+ <li>Wednesday Jun. 15,2005 - Release Candidate 1 (3.0 RC1)
+ <li>Friday Jun. 24, 2005 - Release Candidate 2 (3.0 RC2)
+ <li>Friday Jul. 1, 2005 - Release Candidate 3 (3.0 RC3)
+</ul>
+<ul> 
+ <i>Eclipse 3.1 GA expected ~July 1</i>
+
+ <li>Wednesday Jul. 13, 2005 - Release Candate 4 (3.0 RC4) 
+</ul>
+
+<p> Depending on the circumstances, and on the stability of Eclipse 3.1, we may add 
+  additional release candidate builds 
+  or fine-tune the schedule. The 3.0 release is targeted for the week of July 
+  13, 2005. All release deliverables will be available for download as soon as 
+  the release has been tested and validated in the target operating configurations 
+  listed below.</p>
+
+
+<h3>Compatibility of Release 3.0 with 2.1</h3>
+
+<p>CDT will be forward compatible with CDT 2.1. 
+  The nature and scope of some of the key plan items are such that the only feasible 
+  solutions would break compatibility. Since breaking 
+  changes are a disruption to the CDT community they cannot be taken lightly. 
+  We will have an open discussion with the community before approving a proposed 
+  breaking change for inclusion in 3.0. We aim to minimize the effort required 
+  to port an existing product to the 3.0 APIs. We will provide a comprehensive 
+  <a href="http://???"><em>CDT 3.0 Porting Guide</em></a> that covers the areas 
+  of breaking API changes, and describes how to port existing 2.1 extensions to 
+  3.0. Up-to-date drafts of the 
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.platform.doc.isv/porting/eclipse_3_0_porting_guide.html" target="_top"><em>CDT 
+  3.0 Porting Guide</em></a> will be included with milestone builds so that it's 
+  possible to climb aboard the 3.0 release wagon at the early stages, or to estimate 
+  the amount of effort that will be involved in eventually porting existing extensions 
+  to 3.0.</p>
+
+<p><b>API Contract Compatibility:</b> CDT 3.0 will be upwards contract-compatible 
+  with CDT 2.1 except in those areas noted in the <a href="???"><em>CDT 3.0 Porting 
+  Guide</em></a>. Programs that use affected APIs and extension points will need 
+  to be ported to CDT 3.0 APIs. Downward contract compatibility is not supported. 
+  There is no guarantee that compliance with CDT 3.0 APIs would ensure compliance 
+  with CDT 2.1 APIs. Refer to general Eclipse document on Evolving APIs
+  for a discussion of the kinds of API changes that maintain contract compatibility.</p>
+
+<p><b>Binary (plug-in) Compatibility:</b> CDT 3.0 will be upwards binary-compatible 
+  with CDT 2.1 except in those areas noted in the <a href="????"><em>CDT 3.0 Porting 
+  Guide</em></a>. CDT 3.0 will include additional runtime compatibility mechanisms 
+  to provide effective binary API compatibility. Downward plug-in compatibility 
+  is not supported. Plug-ins/Extensions for CDT 3.0 will not be usable in CDT 
+  2.1. Refer to <i><a href="?????">Evolving CDT APIs</a></i> for a discussion 
+  of the kinds of API changes that maintain binary compatibility. 
+
+<p><b>Source Compatibility:</b> CDT 3.0 will be upwards source-compatible with 
+  Eclipse SDK 3.1 except in the areas noted in the 
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/org.eclipse.platform.doc.isv/porting/eclipse_3_0_porting_guide.html" target="_top"><em>CDT 
+  3.0 Porting Guide</em></a>.
+
+<p><b>Workspace Compatibility:</b> Workspaces containing CDT 2.0 and CDT 2.1 projects
+  will be forward migrated.
+
+<p><b>Non-compliant usage of API's</b>: All non-API methods and classes, and certainly 
+  everything in a package with &quot;internal&quot; in its name, are considered 
+  implementation details which may vary between operating environment and are 
+  subject to change without notice. Client plug-ins that directly depend on anything 
+  other than what is specified in the CDT API are inherently unsupportable and 
+  receive no guarantees about compatibility within a single release much less 
+  with an earlier releases.
+
+<h2><a name="Platform">CDT Project</a> Themes &amp; Priorities</h2>
+<p> Plan items reflect new features of CDT, or areas where existing features will 
+  be significantly reworked. Many of the changes under consideration for the next 
+  release of the CDT address two (2) major themes. Since each theme has 
+  a number of items, the committed, proposed, and deferred plan items are grouped 
+  in sections by theme:</p>
+
+<ul>
+  <li><a href="#ThemePerformance">Theme 1: Performance and Scalability</a>  - 
+  Work focusing on making the CDT more reactive.</li>
+
+  <li><a href="#ThemeParserCorrectness">Theme 2: Parser Correctness</a>  - 
+  Work focusing on making the CDT parser more accurate and complete.</li>
+  
+  <li><a href="#ThemeAST">Theme 3: AST/DOM</a>  - 
+  Work focusing on producing an Abstract syntax tree/DOM for C++.</li>
+  
+  <li><a href="#ThemeUserExperience">Theme 4: User Experience</a> - 
+  Work focusing on making the CDT easier to use.</li>
+</ul>
+
+<p>In addition, there are important CDT improvements that do not naturally fit 
+  into any of the above themes.</p>
+<ul>
+  <li><a href="#OtherPlatform">Other CDT items</a></li>
+</ul>
+
+<h3><a name="ThemePerformance">Theme 1: Performance and Scalability</a></h3>
+
+<p>Working with C/C++ source offers a number of unique challenges.  Work is 
+underway to improve the scalability of the underlying source code model
+to provide more rapid responses (for searching and cross referencing) and 
+more accurate results (for refactoring and outlining).</p>
+
+<h4>Committed Items </h4>
+<blockquote> 
+<!--
+  <p><b>??short description of item n??.</b> ??longer description of item n?? 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> status (eg in progress, completed, 
+    hold) </em>]</p>
+-->  
+<p>&nbsp;</p>
+</blockquote>
+
+<h4>Proposed Items (Eclipse Platform subproject, Performance theme)</h4>
+<blockquote> 
+
+  <p><b>Reduce indexing time and cost.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>  <p><b>Reduce search time and cost.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    
+  <p><b>Error parser re-design.</b> Work to specifically improve the performance of the 
+    error parsers and to improve their programatic interface. 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+</blockquote>
+
+<h3><a name="ThemeParserCorrectness">Theme 2: Parser Correctness</a></h3>
+<h4>Committed Items </h4>
+<blockquote>
+</blockquote>
+<h4>Proposed Items (Eclipse Platform subproject, Parser Correctness theme)</h4>
+<blockquote>
+ <p><b>Parser/Scanner language extensions.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+  <p><b>C/C++ Language Variants.</b> This work would add the possibility to add new
+    compiler/language specific capabilities into the parser (ie GNU extensions) 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    
+  <p><b>K&R C/C++ Language Support.</b>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    
+  <p><b>Parser/Scanner Environment Discovery.</b> 
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/scannerconf_correctness_3.0_fds.html?cvsroot=Tools_Project">
+    Requirements Doc</a>
+    bugzilla ref. (
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=67491">67491</a>, 
+   		<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=72975">72975</a>, 
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73606">73606</a>, 
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73607">73607</a>, 
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=74474">74474</a>
+    ) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    
+ </blockquote>   
+<h3><a name="ThemeAST">Theme 3: AST/DOM</a></h3>
+<h4>Committed Items </h4>
+<blockquote>
+</blockquote>
+<h4>Proposed Items (Eclipse Platform subproject, AST theme)</h4>
+<blockquote>
+  <p><b>CDT AST/DOM creation.</b> 
+  <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/dom/index.html?cvsroot=Tools_Project">
+  Doc</a>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+</blockquote>
+<h3><a name="ThemeUserExperience">Theme 4: User Experience</a></h3>
+
+<p>A continued goal for the CDT development team is enabling C/C++ developers
+to simply start developing without requiring an enormous amount of set-up and
+configuration where avoidable.  There is much work in this area, specifically
+around the Managed Build System.</p>
+
+<h4>Committed Items </h4>
+<blockquote> 
+<!--
+  <p><b>??short description of item n??.</b> ??longer description of item n?? 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> status (eg in progress, completed, 
+    hold) </em>]</p>
+-->  
+<p>&nbsp;</p>
+</blockquote>
+
+<h4>Proposed Items (Eclipse Platform subproject, User Experience theme)</h4>
+<blockquote> 
+
+  <p><b>Remote system (was target) model definition.</b> The CDT is heavily used by
+    embedded developers and various OEM/VARs.  One common theme that each group must
+    re-invent is the concept of their remote system.  This activity proposes to unify that 
+    interface.
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  <p><b>Managed build system.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  <p><b>Debugger specialization for gdb embedded.</b> Further GDB specific enhancements to
+    facilitate working with embedded targets.
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  <p><b>Debugger memory view.</b> Synchronization of the debugger's memory view with
+    the platform generic memory view.
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  <p><b>Launch configuration UI adjustment.</b> A simplification of the CDT launch 
+    configuration panels to simplify and speed-up the time from code to debug. 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  <p><b>Template extension point for new projects.</b> Initial extension point used to 
+    create code template stubs for new projects (ie KDE/GNOME/Win32 application, command 
+    line application, shared library etc)
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+  <p><b>Better support for nested projects and linked resources.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+</blockquote>
+
+
+
+<h3><a name="OtherPlatform">Other CDT Items</a></h3>
+
+<h4>Committed Items (no theme)</h4>
+<blockquote> 
+<!--
+  <p><strong>??short description n ?? .</strong> ?? longer description?? bugzilla 
+    ref.(####) <em><img src="ok.gif" width="12" height="12"> status</em></p>
+  </blockquote>
+-->
+
+<h4>Proposed Items ( no theme)</h4>
+<blockquote> 
+
+  <p><b>Pervasive use of workspace variables.</b> This helps developers create location
+    independant projects and all paths/symbols created in the CDT should be "variable" aware.
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+  <p><b>Enhanced refactoring.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+  <p><b>Source based hover help.</b> Using the comments within the source and headers to
+    provide content dynamic hover help and content assist help.
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+  <p><b>Java based C/C++ code formatter.</b> A java native (ie portable) based code formatter.
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+  <p><b>Improved ISV documentation.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+
+</blockquote>
+</body>
+
+</html>
