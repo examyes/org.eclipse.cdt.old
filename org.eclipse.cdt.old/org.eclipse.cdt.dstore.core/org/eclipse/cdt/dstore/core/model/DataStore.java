@@ -1519,18 +1519,9 @@ public final class DataStore
     public void replaceFile(String remotePath, byte[] bytes, int size)
     {
 	remotePath = new String(remotePath.replace('\\', '/'));
-   	String fileName = mapToLocalPath(remotePath);
-	
-	String dsName = getName();
-	if (!dsName.equals("local"))
-	    {
-		_commandHandler.sendFile(remotePath, bytes, size);
-	    }
-	else
-	    {
-		saveFile(remotePath, bytes, size);
-	    }  	  	
-    }
+
+	_commandHandler.sendFile(remotePath, bytes, size);
+   }
   
     /**
      * Transfers a file from a client to a server.  The should only be called from
@@ -1544,17 +1535,8 @@ public final class DataStore
     public void replaceAppendFile(String remotePath, byte[] bytes, int size)
     {
 	remotePath = new String(remotePath.replace('\\', '/'));
-   	String fileName = mapToLocalPath(remotePath);
 	
-	String dsName = getName();
-	if (!dsName.equals("local"))
-	    {
-		_commandHandler.sendAppendFile(remotePath, bytes, size);
-	    }
-	else
-	    {
-		appendToFile(remotePath, bytes, size);
-	    }  	  	
+	_commandHandler.sendAppendFile(remotePath, bytes, size);  	
     }
 
     /**
@@ -1714,6 +1696,11 @@ public final class DataStore
      */
     public void waitUntil(DataElement status, String state)
     {
+    	waitUntil(status, state, _timeout); 
+    }
+    
+    public void waitUntil(DataElement status, String state, int timeout)   
+    {
 	int timeWaited = 20;
 	boolean timedOut = false;
 	boolean notificationEnabled = _domainNotifier.isEnabled();
@@ -1725,10 +1712,11 @@ public final class DataStore
 	while ((status != null) 
 	       && (_status == null || _status.getName().equals("okay"))
 	       && !status.getName().equals(state) 
+	       && !status.getValue().equals(state)
 	       && !status.getName().equals(getLocalizedString("model.incomplete")) 
 	       && !timedOut)
 	    {	
-		if ((_timeout != -1) && (timeWaited > _timeout))
+		if ((timeout != -1) && (timeWaited > timeout))
 		    {
 			// waited too long!
 			timedOut = true;

@@ -33,18 +33,44 @@ public class ServerCommandHandler extends CommandHandler
       super.setDataStore(dataStore);
   }
     
-    public void loadMiners()
-    {
+  public void loadMiners()
+  {
 	if (_dataStore != null)
-	    {
+	{
 		MinerLoader minerLoader = new MinerLoader(_dataStore, _loader);
 		
 		// load the miners
 		_miners = minerLoader.loadMiners();
-	    } 
-    }
+	} 
+  }
     
+  public ArrayList getMiners()
+  {
+    return _miners;
+  }
 
+  public Miner getMiners(String name)
+  {
+    for (int i = 0; i < _miners.size(); i++)
+      {
+	Miner miner = (Miner)_miners.get(i);
+	if (miner.getClass().getName().equals(name))
+	  {
+	    return miner;	
+	  }	
+      }
+
+    return null;
+  }
+
+  public void finishMiner(String name)
+  {
+    Miner miner = getMiners(name);
+    miner.finish();
+
+    _miners.remove(miner);
+  }
+  
   public void finish()
   {
     for (int i = 0; i < _miners.size(); i++)
@@ -155,18 +181,13 @@ public class ServerCommandHandler extends CommandHandler
 				      
 				      if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
 					  {
-					      // System.out.println(commandName);
-					      //System.out.println(miner.getName());
-
-					      status = miner.command(command);
+						  status = miner.command(command);
 					      
 					      if ((status != null) && 
 						  status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
 						  {
 						      failure = true;
 						  }
-
-					      //System.out.println("done");
 					  }		
 
 				  }
@@ -175,49 +196,28 @@ public class ServerCommandHandler extends CommandHandler
 	_dataStore.refresh(status);
 	
 	}
-    }	
-
-    public ArrayList getMiners()
-  {
-    return _miners;
-  }
-
-  public Miner getMiners(String name)
-  {
-    for (int i = 0; i < _miners.size(); i++)
-      {
-	Miner miner = (Miner)_miners.get(i);
-	if (miner.getClass().getName().equals(name))
-	  {
-	    return miner;	
-	  }	
-      }
-
-    return null;
-  }
-
-  public void finishMiner(String name)
-  {
-    Miner miner = getMiners(name);
-    miner.finish();
-
-    _miners.remove(miner);
-  }
-
+  }	
 
   public void sendFile(String fileName, File file)
   {
+	// look for a file handler before defaulting to datastore	  	
+	  		
+  	
   	_dataStore.saveFile(fileName, file);
   }
       
       
   public void sendFile(String fileName, byte[] bytes, int size)
-  {  	
+  {  
+  	// look for a file handler before defaulting to datastore
+  		
   	_dataStore.saveFile(fileName, bytes, size);
   }
   
   public void sendAppendFile(String fileName, byte[] bytes, int size)
   {
+  	// look for a file handler before defaulting to datastore
   	_dataStore.appendToFile(fileName, bytes, size);
   }
+  
 }

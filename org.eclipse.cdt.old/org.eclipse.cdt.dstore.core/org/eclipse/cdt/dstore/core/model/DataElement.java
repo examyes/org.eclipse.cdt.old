@@ -1410,7 +1410,8 @@ public final class DataElement implements Serializable, IDataElement
 						{
 						    if (doSynchronize)
 							{
-							    DataElement status = _dataStore.synchronizedCommand(openDescriptor, this);
+							    DataElement status = _dataStore.command(openDescriptor, this);
+							    _dataStore.waitUntil(status, "done");
 						      
 							    if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.done")))
 							  {

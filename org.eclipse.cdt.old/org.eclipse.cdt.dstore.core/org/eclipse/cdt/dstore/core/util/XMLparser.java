@@ -68,7 +68,7 @@ public class XMLparser
 		try
 		    { 		   		
 				int read = reader.read(buffer, written, size - written);	
-			written += read;
+				written += read;
 		    }
 		catch (IOException e)
 		    {
@@ -78,11 +78,11 @@ public class XMLparser
 
 	if (_tagType.equals("File.Append"))
 	    {
-		_dataStore.appendToFile(path, buffer, size);
+		_dataStore.replaceAppendFile(path, buffer, size);
 	    }
 	else
 	    {
-		_dataStore.saveFile(path, buffer, size);
+		_dataStore.replaceFile(path, buffer, size);
 	    }
     }
 
@@ -90,18 +90,7 @@ public class XMLparser
     {
 	boolean done = false;
 	int offset = 0;
-	/*
-	try
-	{
-		return reader.readLine();
-	}
-	catch (IOException e)
-	{
-		
-	}
 	
-	return null;
-	*/
 	
 	try
 	{
@@ -203,6 +192,8 @@ public class XMLparser
 			  if (xmlTag != null)
 			      {
 				  String trimmedTag = xmlTag.trim();
+				  
+
 				  if (!_tagStack.empty())
 				      {
 					  matchTag = (String)_tagStack.peek();
