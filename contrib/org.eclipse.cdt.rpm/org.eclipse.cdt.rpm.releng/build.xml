@@ -43,32 +43,4 @@
 	</target>
 
 
-	<target name="allPlugins">
- 		<antcall target="${target}">
- 			<param name="type" value="plugin"/>
- 			<param name="dir" value="plugins"/>
- 			<param name="id" value="org.eclipse.cdt.rpm.core"/>
- 		</antcall>
-		<antcall target="${target}">
-		 	<param name="type" value="plugin"/>
-		 	<param name="dir" value="plugins"/>
-		 	<param name="id" value="org.eclipse.cdt.rpm.ui"/>
-		 </antcall>
- 		<antcall target="${target}">
- 			<param name="type" value="plugin"/>
- 			<param name="dir" value="plugins"/>
- 			<param name="id" value="org.eclipse.cdt.rpm.doc"/>
- 		</antcall>
-	</target>
-
- 	<target name="allElements">
-		<antcall target="allPlugins"/>
- 		<antcall target="${target}">
- 			<param name="type" value="feature"/>
- 			<param name="dir" value="features"/>
- 			<param name="id" value="org.eclipse.cdt.rpm-feature"/>
- 		</antcall>
- 		
-  	</target>
-
 </project>
