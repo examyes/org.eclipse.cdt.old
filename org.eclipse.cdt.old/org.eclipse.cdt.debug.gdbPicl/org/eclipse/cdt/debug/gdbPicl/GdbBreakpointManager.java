@@ -5,10 +5,22 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl;
-import  org.eclipse.cdt.debug.gdbPicl.objects.*;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import com.ibm.debug.epdc.*;
-import java.util.*;
+import org.eclipse.cdt.debug.gdbPicl.objects.Breakpoint;
+import org.eclipse.cdt.debug.gdbPicl.objects.ExprEvalInfo;
+import org.eclipse.cdt.debug.gdbPicl.objects.LineBreakpoint;
+import org.eclipse.cdt.debug.gdbPicl.objects.LoadBreakpoint;
+import org.eclipse.cdt.debug.gdbPicl.objects.LocationBreakpoint;
+import org.eclipse.cdt.debug.gdbPicl.objects.MethodBreakpoint;
+import org.eclipse.cdt.debug.gdbPicl.objects.Part;
+import org.eclipse.cdt.debug.gdbPicl.objects.WatchBreakpoint;
+
+import com.ibm.debug.epdc.EPDC;
+import com.ibm.debug.epdc.EPDC_Reply;
+import com.ibm.debug.epdc.EStdExpression2;
+import com.ibm.debug.epdc.EStdView;
 
 /**
  * Manages the breakpoint table
@@ -1209,6 +1221,177 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 			_changedBreakpoints.addElement(bkp);
  
 		return 0;		
+	}
+
+	/*
+	 * Handle following actions for breakpoints
+	 * - add
+	 * - remove
+	 * 
+	 * This function is not used yet.  Still have to check for enable/disable.
+	 * Breakpoints change packets not being handled by UI.
+	 * */	
+	public void updateBreakpoints()
+	{
+      String cmd = "info breakpoints ";
+      boolean ok = ((GdbDebugSession)_debugSession).executeGdbCommand(cmd);
+      String gdbId;
+      int gdbIdi;
+      int index;
+      boolean match = false;
+
+      String[] lines = ((GdbDebugSession)_debugSession).getTextResponseLines();
+
+	  // any item left after trying to match are removed breakpoint
+	  // we have to remove them
+      Vector breakpoints = new Vector(_breakpoints.size());
+      
+      for (int x = 0; x < _breakpoints.size(); x++)
+      {
+      	breakpoints.add(_breakpoints.elementAt(x));
+      }
+            
+      // try to match results from "info breakpoints" with those stored in _breakpoints      
+      if (lines != null && lines.length > 1)
+      {
+      	if (lines[0].startsWith("No breakpoints or watchpoints"));
+      	{
+      		for (int i = 1; i<lines.length; i++)      		
+      		{
+				StringTokenizer tokenStr = new StringTokenizer(lines[i]);
+				String tmp;
+				int tokenCnt=1;
+				
+				// breakpoint attributes
+				String id = "";
+				String type = "";
+				String disp = "";
+				String enable = "";
+				String bkpAddress = "";
+				String function = "";
+				String file = "";
+				String line = "";
+
+				int lineNum;
+				
+				//"4   breakpoint     keep y   0x08049292 in main at payroll.cpp:72"
+				while (tokenStr.hasMoreTokens())
+				{
+					tmp = tokenStr.nextToken();
+					System.out.println("Token is " + tmp);
+					
+					switch (tokenCnt)
+					{
+						case 1:
+							id = tmp;
+							break;
+						case 2:
+							type = tmp;
+							break;
+						case 3:
+							disp = tmp;
+							break;
+						case 4:
+							enable = tmp;
+							break;
+						case 5:
+							bkpAddress = tmp;
+							break;
+						case 6:
+							break;
+						case 7:
+							function = tmp;
+							break;
+						case 8:
+							break;
+						case 9:
+							int idx = tmp.indexOf(":");
+							file = tmp.substring(0, idx);
+							line = tmp.substring(idx+1);
+							break;	
+						default:
+							break;
+					}
+					
+					tokenCnt++;					
+				} // while
+				
+				if (type.equals("breakpoint"))
+				{
+					try {
+						gdbIdi = Integer.parseInt(id);
+						lineNum = Integer.parseInt(line);
+						match = false;
+						for(int j=0; j<_breakpoints.size(); j++)
+						{
+							Breakpoint obj = (Breakpoint)_breakpoints.elementAt(j);
+							if (obj instanceof LocationBreakpoint)
+							{
+								if (obj.getGdbBkID() == gdbIdi)
+								{
+									match = true;
+									breakpoints.remove(obj);
+									break;
+								}
+							}
+						}
+					} catch(NumberFormatException e) {
+						continue;
+					}
+					if (!match)
+					{
+						ModuleManager cm = _debugSession.getModuleManager();
+      					cm.checkPart(1, file);     
+      
+				        int partID = cm.getPartID(1, file); 
+				        int bkpID = _breakpoints.size() + 1;
+				        
+				        LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, gdbIdi, 0, partID, 1,
+                                                  Part.VIEW_SOURCE, lineNum, null);
+
+						lineBkp.setBkpAddress(bkpAddress);
+	   			  	  	_breakpoints.addElement(lineBkp);
+
+         				_changedBreakpoints.addElement(lineBkp);
+
+						
+						System.out.println("New Breakpoint added:  " + gdbIdi + " " + file + " " + lineNum + " " + bkpAddress);
+					}
+				}
+      		}
+      	}
+      }
+
+	  // remove breakpoint if they are extra from results of "info breakpoints"      
+      for (int x=0; x<breakpoints.size(); x++)
+      {
+      	if (breakpoints.elementAt(x) != null)
+      	{
+		   	Breakpoint bkp = null;
+		   	int bkpID=0;
+	      	
+	      	// find breakpoint from _breakpoint 
+	      	for (int i=0; i<_breakpoints.size(); i++)
+	      	{
+	      		if (_breakpoints.elementAt(i) != null)
+	      		{
+		      		if (((Breakpoint)_breakpoints.elementAt(i)).bkpID() == ((Breakpoint)breakpoints.elementAt(x)).bkpID())
+		      		{
+		      			bkp = (Breakpoint)_breakpoints.elementAt(i);
+		      			bkpID = bkp.bkpID();
+		      		}
+	      		}
+	      	}
+	      	
+	      	if (bkp != null && bkpID != 0)
+	      	{
+				removeBreakpoint(bkp);
+				bkp.deleteBreakpoint();
+				_changedBreakpoints.addElement(bkp);
+				_breakpoints.setElementAt(null, bkpID-1);
+	      	}
+      	}
+      }      
 	}
    
    private int _numDeferredBkpt = 0;
