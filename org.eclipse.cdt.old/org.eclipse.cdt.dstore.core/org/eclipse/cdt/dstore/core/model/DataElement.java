@@ -883,7 +883,7 @@ public final class DataElement implements Serializable, IDataElement
 	    {
 		String typeType = type.getType();
 		String typeName = type.getName();
-		if (typeType.equals(DE.T_OBJECT_DESCRIPTOR))
+		if (typeType.equals(DE.T_OBJECT_DESCRIPTOR) || typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 		    {
 			if (descriptor.getName().equals(typeName) ||
 			    (typeName.equals("all")))
