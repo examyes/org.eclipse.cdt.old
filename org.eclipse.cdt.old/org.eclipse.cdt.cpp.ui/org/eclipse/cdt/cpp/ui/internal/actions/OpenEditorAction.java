@@ -140,8 +140,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 							    
 							    try
 								{
-								    System.out.println("opening "+ file);
-
 								    persp.openEditor(file);
 								}
 							    catch (org.eclipse.ui.PartInitException e)

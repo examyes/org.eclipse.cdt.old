@@ -1017,7 +1017,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		String resString = resource.getLocation().toString();
 		result = findResourceElement(workspace, resString);
-		System.out.println(resString + " maps to " + result);
 	    }
 
 	return result;

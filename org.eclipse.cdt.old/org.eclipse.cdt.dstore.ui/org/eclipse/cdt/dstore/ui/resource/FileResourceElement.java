@@ -181,7 +181,6 @@ public class FileResourceElement extends ResourceElement implements IFile
 	      try
 		  {	
 		      java.io.File theFile = new java.io.File(localPath);    
-		      System.out.println("saving "+ theFile);
 		      FileOutputStream output = new FileOutputStream(theFile);
 		      transferStreams(in, output, monitor);
 		      updateRemoteFile(theFile);

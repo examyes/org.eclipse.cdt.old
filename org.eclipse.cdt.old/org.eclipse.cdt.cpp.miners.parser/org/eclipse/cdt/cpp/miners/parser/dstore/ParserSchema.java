@@ -147,7 +147,6 @@ public class ParserSchema
 
   //Set up the relations and commands for the above objects:
   dC_QUERY            = findDescriptor(Query, schemaRoot.getDataStore());
-  dC_PARSE            = createCommandDescriptor(dFsObjects, Parse,                  "C_PARSE", false);
   dC_REMOVE_PARSE     = createCommandDescriptor(dFsObjects, RemoveParseInformation, "C_REMOVE_PARSE", false);
   dC_SAVE_PARSE       = createCommandDescriptor(dFsObjects, SaveParseInformation,   "C_SAVE_PARSE", false);
   dC_CODE_ASSIST      = createCommandDescriptor(dFsObjects, CodeAssist,             "C_CODE_ASSIST");
@@ -160,7 +159,8 @@ public class ParserSchema
   dC_SET_PREFERENCES.setDepth(0);
   
   DataElement dFile   = findDescriptor("file", schemaRoot.getDataStore());
-  createCommandDescriptor(dFile, Parse, "C_PARSE").setDepth(0);
+  dC_PARSE = createCommandDescriptor(dFile, Parse, "C_PARSE");
+  dC_PARSE.setDepth(0);
   createCommandDescriptor(dFile, RemoveParseInformation, "C_REMOVE_PARSE").setDepth(0);
   
   dUses            = createRelationDescriptor(dUsableCppObject, Uses);

@@ -68,8 +68,8 @@ public class ParseMiner extends Miner
    removeParseInfo(subject);
   else if (name.equals("C_SAVE_PARSE"))
    handleSaveProject(subject); 
-  else if (name.equals("C_OPEN")/* && subject.getType().equals(ParserSchema.Project)*/)
-   handleOpenProject(subject);
+  else if (name.equals("C_OPEN") && (subject.getType().equals("Project") || (subject.getType().equals("Closed Project"))))
+    handleOpenProject(subject);
   else if (name.equals("C_CLOSE_PROJECTS"))
    handleCloseProjects(subject);
   else if (name.equals("C_CLOSE_PROJECT"))
@@ -164,14 +164,22 @@ public class ParseMiner extends Miner
   //
   // saveProject(projectsRoot.get(i));
   //_dataStore.deleteObjects(projectsRoot);  
+
+     for (int i = 0; i < projectsRoot.getNestedSize(); i++)
+	 {
+	     DataElement project = projectsRoot.get(i);
+	     handleCloseProject(project);
+	 }
      return null;
  }
  
- private DataElement handleCloseProject(DataElement theProject)
+ private DataElement handleCloseProject(DataElement theSubject)
  {
-   //  saveProject(theProject);
-  _dataStore.deleteObject(theProject.getParent(), theProject);
-  return null;
+     DataElement theProject = getParseProject(theSubject);
+     //saveProject(theProject);
+
+     _dataStore.deleteObject(theProject.getParent(), theProject);
+     return null;
  }
 
   private DataElement handleSaveProject(DataElement theProject)

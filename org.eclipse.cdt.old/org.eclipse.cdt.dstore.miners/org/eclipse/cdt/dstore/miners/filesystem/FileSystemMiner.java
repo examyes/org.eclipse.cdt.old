@@ -17,7 +17,9 @@ public class FileSystemMiner extends Miner
 {
     private DataElement _fsystemObjectDescriptor;
     private DataElement _fileDescriptor;
+    private DataElement _hiddenFileDescriptor;
     private DataElement _directoryDescriptor;
+    private DataElement _hiddenDirectoryDescriptor;
     private DataElement _deviceDescriptor;
     private DataElement _hostDescriptor;
     private DataElement _containsDescriptor;
@@ -167,7 +169,14 @@ public class FileSystemMiner extends Miner
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
+	  _hiddenFileDescriptor     = createObjectDescriptor(schemaRoot, "hidden file");
+	  _dataStore.createReference(_fileDescriptor, _hiddenFileDescriptor, "abstracts", "abstracted by"); 
+	  //_dataStore.createReference(_fsystemObjectDescriptor, _hiddenFileDescriptor, _containsDescriptor);
 
+	  _hiddenDirectoryDescriptor     = createObjectDescriptor(schemaRoot, "hidden directory");
+	  _dataStore.createReference(_directoryDescriptor, _hiddenDirectoryDescriptor, "abstracts", "abstracted by"); 
+	  //	  _dataStore.createReference(_fsystemObjectDescriptor, _hiddenDirectoryDescriptor, _containsDescriptor);
+	  
 	  DataElement fdateD    = createCommandDescriptor(_fileDescriptor, "Get Date", "C_DATE", false);
 	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
 	  
@@ -599,6 +608,18 @@ public class FileSystemMiner extends Miner
 					  if (!f.isDirectory())
 					      {
 						  objType  = _fileDescriptor;
+
+						  if (f.isHidden() || objName.charAt(0) == '.')
+						      {
+							  objType = _hiddenFileDescriptor;
+						      }
+					      }
+					  else
+					      {
+						  if (f.isHidden() || objName.charAt(0) == '.')
+						      {
+							  objType = _hiddenDirectoryDescriptor;
+						      }
 					      }
 
 					  DataElement newObject = _dataStore.createObject (theElement, objType, 
@@ -607,9 +628,7 @@ public class FileSystemMiner extends Miner
 					      {
 						  newObject.setDepth(1);
 					      }		      
-				      }
-				  
-				  _dataStore.refresh(theElement);
+				      }				  
 			      }
 			  
 		      }	
@@ -669,8 +688,20 @@ public class FileSystemMiner extends Miner
 					if (!f.isDirectory())
 					    {
 						objType = _fileDescriptor;
+						
+						if (f.isHidden()  || objName.charAt(0) == '.')
+						    {
+							objType = _hiddenFileDescriptor;
+						    }
 					    }
-
+					else
+					    {
+						if (f.isHidden() || objName.charAt(0) == '.')
+						    {
+							objType = _hiddenDirectoryDescriptor;
+						    }
+					    }
+						
 					newObject = _dataStore.createObject (theElement, objType, 
 									     objName, filePath);
 					if (!f.isDirectory())
@@ -681,7 +712,6 @@ public class FileSystemMiner extends Miner
 				else
 				    {
 					handleRefresh(newObject, status);
-					//newObject.refresh(false);
 				    }
 			    }			
 		    }
