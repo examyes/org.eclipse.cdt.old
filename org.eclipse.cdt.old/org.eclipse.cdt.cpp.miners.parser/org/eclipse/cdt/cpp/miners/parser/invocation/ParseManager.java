@@ -166,7 +166,7 @@ public class ParseManager
   long theTimeStamp = theFile.lastModified();
   
   //Look for the file DataElement, and check to make sure the time stamps are not equal before deleting it.
-  DataElement theFileElement = _dataStore.find(_parsedFiles, DE.A_NAME, fileName, 1);
+  DataElement theFileElement = findParsedFile(theFile);
   if (theFileElement != null)
   {
    //If the current Time Stamp is the same as the saved one, return null (which means don't bother parsing)
@@ -190,6 +190,25 @@ public class ParseManager
   return theFileElement;
  }
  
+ private DataElement findParsedFile(File theFile)
+ {
+  try
+  {
+   ArrayList parsedFiles = _parsedFiles.getAssociated("contents");
+   DataElement currentFile = null;
+   String theFilePath=theFile.getCanonicalPath();
+   for (int i = 0; i<parsedFiles.size(); i++)
+   {   
+    currentFile = (DataElement)parsedFiles.get(i);
+    File tempFile = new File(currentFile.getSource());
+    if (tempFile.getCanonicalPath().equals(theFilePath))
+     return currentFile;
+   }
+  }
+  catch (IOException e) {}
+  return null;
+ }
+
  public DataElement parse(String fileName, boolean isIncludeFile)
  {
   DataElement theFileElement = getElementForFile(fileName);
