@@ -1,0 +1,18 @@
+#!/usr/bin/perl -w
+
+$dir= $ENV{PWD};
+print("path $dir");
+
+$plugins_dir=substr($dir,0,rindex($dir,"/"));
+
+$ENV{A_PLUGIN_PATH}="$plugins_dir/";
+
+$oldClasspath = $ENV{CLASSPATH};
+
+$ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra/dstore_extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$oldClasspath";
+
+
+system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.Server");
+
+$ENV{CLASSPATH}=$oldClasspath;
+

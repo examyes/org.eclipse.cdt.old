@@ -1,0 +1,11 @@
+#This file tells the parser what files to consider as C or C++ Source
+#This function will eventually be integrated into the UI ;-)
+.c
+.C
+.cpp
+.CPP
+.h
+.H
+.hpp
+.HPP
+.cxx
