@@ -8,7 +8,7 @@ package org.eclipse.cdt.cpp.miners.parser.namelookup;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import java.util.*;
-
+import java.io.*;
 
 public class NameLookup
 {
@@ -177,8 +177,20 @@ public class NameLookup
   String path = src.substring(0,col);
   String foo  = src.substring(col+1, src.length());
   int    line = Integer.parseInt(foo);
-  
+
+  //Make sure we canonize the path before searching the Parsed files
+  try
+  { 
+   File theActualPath = new File(path);
+   if (!theActualPath.exists())
+    return null;
+   path = theActualPath.getCanonicalPath(); 
+  }
+  catch (IOException e) {return null;}
+
   DataElement theFile = _dataStore.find(_parsedFiles, DE.A_SOURCE, path,1);
+ 
+
   if (theFile == null)
    return null;
  

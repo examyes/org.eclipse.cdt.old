@@ -322,8 +322,10 @@ public class DataStoreSymbolTable implements SymbolTable
  {
   if (!isSet(USES)) 
    return;
-  
-  _curObj.addUse(_nameLookup.nameLookup(theUse, _curObj.object));
+  DataElement startObject = _curObj.object; 
+  if (startObject == null)
+   startObject = _root;
+  _curObj.addUse(_nameLookup.nameLookup(theUse, startObject));
  }
 
  public void addFunctionCall(String name, String params)
@@ -397,13 +399,16 @@ public class DataStoreSymbolTable implements SymbolTable
  private DataElement lookupTypeElement(String theType)
  {
   DataElement theObj = null;
-  
+  DataElement startObject = _curObj.object;
+  if (startObject == null)
+   startObject = _root;
+
   //First lookup types in the builtins...
   if ( (theObj = (DataElement)_builtinTypes.get(theType)) != null) 
    return theObj;
   
   //Now do a regular name lookup...
-  if ( (theObj = _nameLookup.valueLookup(theType, _curObj.object)) != null)
+  if ( (theObj = _nameLookup.valueLookup(theType, startObject)) != null)
    return theObj;
 
   //Now do a lookup in the unresolved Types
@@ -413,7 +418,6 @@ public class DataStoreSymbolTable implements SymbolTable
   //If we get here, we haven't found the type anywhere, so create it as an unresolved type.
   
   theObj = _dataStore.createObject((DataElement)_unresolvedTypes.get("UNRESOLVEDTYPESROOT"), ParserSchema.Types, theType);
-  
   
   _unresolvedTypes.put(theType, theObj);
   return theObj;

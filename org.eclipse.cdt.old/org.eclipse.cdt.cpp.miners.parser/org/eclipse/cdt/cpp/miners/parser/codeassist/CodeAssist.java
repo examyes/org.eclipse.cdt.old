@@ -63,19 +63,12 @@ public class CodeAssist
 
  public DataElement doCodeAssist(DataElement theProject, DataElement patternElement,DataElement status)
  { 
-  ArrayList results = new ArrayList();
-   
-  String      path           = (String)patternElement.getElementProperty(DE.P_SOURCE_NAME);
-  int         line           = ((Integer)patternElement.getElementProperty(DE.P_SOURCE_LOCATION)).intValue();
-  String      sourceLocation = patternElement.getAttribute(DE.A_SOURCE);
-  DataElement fileElement    = _dataStore.find(theProject, DE.A_NAME, path, 2);
-  String      pattern        = patternElement.getName();
-  DataElement startElement   = _nameLookup.getClosestObject(path + ":" + line);
+  ArrayList   results = new ArrayList();
   
+  DataElement startElement   = _nameLookup.getClosestObject(patternElement.getAttribute(DE.A_SOURCE));
+  ArrayList   identifiers    = splitPattern(patternElement.getName());
  
-  ArrayList identifiers = splitPattern(pattern);
- 
-   //For now, we only handle a.b or a->b  not a.b.c
+  //For now, we only handle a.b or a->b  not a.b.c
   if ( (identifiers == null) || (startElement == null) || (identifiers.size() == 0) || (identifiers.size() > 2))
   {
    status.addNestedData(results,true);
