@@ -21,9 +21,7 @@
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.launch" tag="${CVS.TAG}" quiet="${quiet}"/>
         <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
     </target>
-</project>
-
-<target name="init">
+    <target name="init">
         <condition property="platformId" value="${os}.${ws}">
             <not>
                 <equals arg1="${os}" arg2="${ws}" />
@@ -34,4 +32,7 @@
                 <equals arg1="${os}" arg2="${ws}" />
             </and>
         </condition>
-</target>
+	</target>
+</project>
+
+
