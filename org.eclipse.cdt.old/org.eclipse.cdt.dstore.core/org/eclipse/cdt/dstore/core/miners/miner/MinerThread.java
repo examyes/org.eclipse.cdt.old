@@ -14,6 +14,7 @@ public abstract class MinerThread extends Thread
   notify();
  }
  
+
  public void run() 
  {
   Thread thisThread = Thread.currentThread();
