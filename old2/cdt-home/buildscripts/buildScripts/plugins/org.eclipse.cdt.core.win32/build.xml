@@ -78,6 +78,9 @@
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy file="${build.result.folder}/cdt_win32src.zip" todir="${destination.temp.folder}/${full.name}"/>
+		<copy todir="${destination.temp.folder}/${full.name}">
+            <fileset dir="${basedir}" includes="about.html"/>
+        </copy>
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">
