@@ -16,25 +16,22 @@ public class CVSMiner extends Miner
  }
     
  public void extendSchema(DataElement schemaRoot)
- {
-  DataElement fsD         = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-  DataElement dirD         = _dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
-  commandD = _dataStore.find(dirD, DE.A_VALUE, "C_COMMAND");
+    {
+	DataElement fsD         = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+	commandD = _dataStore.find(fsD, DE.A_VALUE, "C_COMMAND");
   
-  DataElement fileD        = _dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
+	DataElement fileD        = _dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
 	
-  DataElement cvsD      = createAbstractCommandDescriptor(fsD, "CVS", "C_CVS");
-  DataElement updateD   = createCommandDescriptor(cvsD, "update",   "C_CVS_UPDATE");	
-  DataElement checkoutD = createCommandDescriptor(cvsD, "checkout", "C_CVS_CHECKOUT");	
-  _dataStore.createObject(checkoutD, "input", "Enter argument: ");
-	
+	DataElement cvsD      = createAbstractCommandDescriptor(fsD, "CVS", "C_CVS");
 
-  DataElement commitD   = createCommandDescriptor(cvsD, "commit",   "C_CVS_COMMIT");	
-  createReference(fileD, cvsD);
-  DataElement loginD    = createCommandDescriptor(cvsD, "login",    "C_CVS_LOGIN");	
-  DataElement linputD   = _dataStore.createObject(loginD, "input", "Enter Password");	
- }
- 
+	DataElement updateD   = createCommandDescriptor(cvsD, "update",   "C_CVS_UPDATE", false);	
+	DataElement checkoutD = createCommandDescriptor(cvsD, "checkout", "C_CVS_CHECKOUT", false);	
+	DataElement commitD   = createCommandDescriptor(cvsD, "commit",   "C_CVS_COMMIT", false);	
+	createReference(fileD, cvsD);
+	DataElement loginD    = createCommandDescriptor(cvsD, "login",    "C_CVS_LOGIN");	
+	DataElement linputD   = _dataStore.createObject(loginD, "input", "Enter Password");	
+    }
+    
    public DataElement handleCommand(DataElement theCommand)
     {
      String name          = getCommandName(theCommand);
@@ -49,7 +46,7 @@ public class CVSMiner extends Miner
 	 }
      else if (name.equals("C_CVS_CHECKOUT"))
 	 {
-	     handleCheckout(subject, arg1, status);
+	     handleCheckout(subject, status);
 	 }
      else if (name.equals("C_CVS_UPDATE"))
 	 {
@@ -75,38 +72,43 @@ public class CVSMiner extends Miner
 	return args;
     }
 
-    public void handleLogin(DataElement subject, DataElement password, DataElement status)
+    private DataElement getParentDirectory(DataElement resource)
     {
-	execute("cvs login", subject);
+	File file = new File(resource.getSource());
+	String parentStr = file.getParent();
+
+	DataElement parent = _dataStore.createObject(null, "directory", parentStr, parentStr);
+	return parent;
     }
 
- public void handleCheckout(DataElement subject, DataElement arg1, DataElement status)
- {
-  execute("cvs checkout " + arg1.getName(), subject);
- }
-
-    public void handleUpdate(DataElement subject, DataElement status)
+    public void handleLogin(DataElement subject, DataElement password, DataElement status)
     {
-	String args = getArgument(subject);
-	execute("cvs update " + args, subject);
+	execute("cvs login", subject, status);
+    }
+
+    public void handleCheckout(DataElement subject, DataElement status)
+    {
+	execute("cvs checkout " +  getArgument(subject), getParentDirectory(subject), status);
+    }
+    
+    public void handleUpdate(DataElement subject, DataElement status)
+    {	
+	execute("cvs update " + getArgument(subject), getParentDirectory(subject), status);
     }
 
     public void handleCommit(DataElement subject, DataElement status)
     {
 	String args = getArgument(subject);
-	execute("cvs commit -m \"test\" " + args, subject);
+	execute("cvs commit -m \"test\" " + args, subject, status);
     }
     
-    private void execute(String theCommand, DataElement theSubject)
+    private void execute(String theCommand, DataElement theSubject, DataElement status)
     {
      ArrayList args = new ArrayList();
      args.add(_dataStore.createObject(null, "invocation", theCommand));
      args.add(theSubject);  
-         
-     DataElement status = _dataStore.command(commandD, args, theSubject, true);
-     //while (!status.getValue().equals("done"))
-      System.out.println("STATUS => " + status.getValue());
-     theSubject.refresh(true);
+     args.add(status);         
+     _dataStore.command(commandD, args, theSubject);     
     }
 }
 

@@ -143,38 +143,33 @@ public class ServerCommandHandler extends CommandHandler
 	      }
 	  else if (_dataStore.validTicket())
 	      {
-		  String statusValue = status.getAttribute(DE.A_NAME);
-		  //		  if (!statusValue.equals(_dataStore.getLocalizedString("model.done")))
-		  {
-		   
-		      boolean failure = false;
-
-
-			  for (int j = 0; (j < _miners.size()) && !failure; j++)
-		   {
-				  Miner miner = (Miner)_miners.get(j);
-				 
-				  
-				  if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
-				      {
-					  status = miner.command(command);
-					  
-                                          if ((status != null) && 
-					      status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
-					      {
-						  failure = true;
-					      }
-				      }		
-			      }
+		  if (status != null)
+		      {
+			      boolean failure = false;
+			      for (int j = 0; (j < _miners.size()) && !failure; j++)
+				  {
+				      Miner miner = (Miner)_miners.get(j);
+				      
+				      
+				      if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
+					  {
+					      status = miner.command(command);
+					      
+					      if ((status != null) && 
+						  status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
+						  {
+						      failure = true;
+						  }
+					  }		
+				  }
 		      }
 	      }
-
-          _dataStore.refresh(status);
-	  
-        }
+	_dataStore.refresh(status);
+	
+	}
     }	
-    
-  public ArrayList getMiners()
+
+    public ArrayList getMiners()
   {
     return _miners;
   }
