@@ -247,7 +247,7 @@ public class ConnectionEstablisher
     }
      
     private void doHandShake(Socket socket)
-    {
+    { /*
     	try
     	{
     		 PrintWriter writer = new PrintWriter(socket.getOutputStream());
@@ -258,6 +258,7 @@ public class ConnectionEstablisher
     	{
     		System.out.println(e);
     	}
+    	*/
     }
 }
 

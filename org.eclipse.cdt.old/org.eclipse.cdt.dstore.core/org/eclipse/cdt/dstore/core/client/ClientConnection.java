@@ -497,6 +497,7 @@ public class ClientConnection
       
     private boolean doHandShake()
     {
+    	/*
     	try
     	{
    			BufferedReader reader  = new BufferedReader(new InputStreamReader(_theSocket.getInputStream()));          
@@ -536,6 +537,8 @@ public class ClientConnection
 
     		
     	return false;
+    	*/
+    	return true;
     }
 
 }
