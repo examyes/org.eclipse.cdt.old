@@ -637,6 +637,7 @@ Thread.currentThread().dumpStack();
             Gdb.traceLogger.err(1,getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID")+processIndex );
 
      }
+     _mainProgram = programName;
      addCmdResponsesToUiMessages();
 
      checkCurrentPart(_currentModuleID);
