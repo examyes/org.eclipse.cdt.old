@@ -187,7 +187,7 @@ public class MenuHandler
 
 	    if (_loader != null)
 		{
-		    _loader.loadCustomActions(menu, input, selected); 
+		    _loader.loadCustomActions(menu, selected, descriptor); 
 		}
 	  }
 	
