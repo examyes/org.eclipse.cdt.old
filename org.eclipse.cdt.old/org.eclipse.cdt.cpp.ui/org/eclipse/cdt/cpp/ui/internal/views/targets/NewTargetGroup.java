@@ -30,8 +30,8 @@ public class NewTargetGroup implements Listener {
 	private String				problemMessage = "";
 
 	// widgets
-	//private ContainerSelectionGroup containerGroup;
-	private TargetSelectionGroup containerGroup;
+	private org.eclipse.ui.internal.misc.ContainerSelectionGroup containerGroup;
+	//private TargetSelectionGroup containerGroup; 
 	//private Button				browseButton;
 	private Text				targetNameField;
 	private Text				invocationNameField;
@@ -78,7 +78,7 @@ protected void createContents(Composite parent,String resourceLabelString) {
 	composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	
 	// container group
-	containerGroup = new TargetSelectionGroup(composite, this,true, pluginInstance.getLocalizedString(GROUP_TITLE));
+	containerGroup = new org.eclipse.ui.internal.misc.ContainerSelectionGroup(composite, this,true, pluginInstance.getLocalizedString(GROUP_TITLE));
 
 	// resource name group
 	Composite nameGroup = new Composite(composite,SWT.NONE);
@@ -116,13 +116,14 @@ protected void createContents(Composite parent,String resourceLabelString) {
  */
 public String getContainerFullPath() {
 	//return containerGroup.getContainerFullPath();
-	IResource resource = containerGroup.getResource();
-	if (resource != null) {
-		return resource.getLocation().toString();
+	//IResource resource = containerGroup.getResource();
+	//if (resource != null) {
+		//return resource.getLocation().toString();
 	//return resource.getFullPath().toString();
-	} else {
-		return "";
-	}
+	//} else {
+	//	return "";
+	//}
+	return containerGroup.getContainerFullPath().toString();
 
 }
 /**

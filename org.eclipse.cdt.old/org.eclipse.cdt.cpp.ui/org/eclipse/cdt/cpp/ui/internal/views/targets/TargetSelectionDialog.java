@@ -21,12 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionValidator;
+import org.eclipse.ui.internal.misc.ContainerSelectionGroup;
 
 import com.ibm.cpp.ui.internal.*;
 
 public class TargetSelectionDialog extends SelectionDialog {
 	// the widget group;
-	private TargetSelectionGroup group;
+	private ContainerSelectionGroup group;
 
 	// the root resource to populate the viewer with
 	private IContainer initialSelection;
@@ -81,7 +82,7 @@ protected Control createDialogArea(Composite parent) {
 	};
 	
 	// container selection group
-	group = new TargetSelectionGroup(dialogArea, listener, allowNewContainerName, getMessage());
+	group = new ContainerSelectionGroup(dialogArea, listener, allowNewContainerName, getMessage());
 	if (initialSelection != null) {
 		group.setSelectedContainer(initialSelection);
 	}
