@@ -266,15 +266,7 @@ public class DataElementTableViewer extends TableViewer
     {
 	if (flag)
 	    {
-		Table table = getTable();
-		table.setRedraw(false);
-		ScrollBar scrollBar = table.getVerticalBar();
-		scrollBar.setEnabled(false);
-		
 		internalRefresh(_currentInput);
-		
-		scrollBar.setEnabled(true);
-		table.setRedraw(true);
 	    }
     }
 
@@ -311,23 +303,29 @@ public class DataElementTableViewer extends TableViewer
 			    }
 			
 			
-			table.setRedraw(false);
-			
+			ScrollBar vBar = table.getVerticalBar();
+			ScrollBar hBar = table.getHorizontalBar();
+
+			if (_listener.isEnabled())
+			    {
+				vBar.setEnabled(false);
+				hBar.setEnabled(false);
+				table.setRedraw(false);
+			    }
 			
 			updateItems(table, associated, toRemove);
 
-			
 			if (_listener.isEnabled())
 			    {
-				//refresh();
+				vBar.setEnabled(true);
+				hBar.setEnabled(true);
+				table.setRedraw(true);
 			    }
 			
 			if (table.getItemCount() == 0) 
 			    {
 				table.removeAll();
 			    }
-			
-			table.setRedraw(true);
 		    }
 	    }
 	catch (Exception e)
@@ -339,14 +337,16 @@ public class DataElementTableViewer extends TableViewer
 
     private void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
-	int maxAdd = 100;
+	int maxAdd = 50;
 	int numAdded = 0;
+	int totalItems = table.getItemCount();
 	
-	synchronized(_currentInput)
 	    {
 		for (int i = 0; i < elements.size(); i++)
 		    {
 			DataElement child = (DataElement)elements.get(i);			
+			synchronized(child)
+
 			{
 			    TableItem item = (TableItem)findItemFor(table, child);
 			    if (item != null)
@@ -368,7 +368,7 @@ public class DataElementTableViewer extends TableViewer
 							}
 						    else
 							{
-							    item = (TableItem)newItem(table, SWT.NONE, i);
+							    item = (TableItem)newItem(table, SWT.NONE,totalItems +  numAdded);
 							    numAdded++;
 							}
 						    
@@ -390,19 +390,26 @@ public class DataElementTableViewer extends TableViewer
 	
 	if (recycled.size() > 0)
 	    {
+			
+		table.setRedraw(false);
+
 		for (int i = 0; i < recycled.size(); i++)
 		    {
 			TableItem item = (TableItem)recycled.get(i);
 			item.dispose();
 			item = null;
 		    }
+
+		table.setRedraw(true);
+
+		recycled.clear();
 	    }
 
     }
    
     protected Item newItem(Widget parent, int flags, int ix)  
     {
-	return new TableItem((Table)parent, flags);
+	return new TableItem((Table)parent, flags, ix);
     }
     
     public void doExpand(DataElement obj)
@@ -501,23 +508,18 @@ public class DataElementTableViewer extends TableViewer
 			Control table = getTable();
 			if (table != null)
 			    {
-				synchronized(table)
+				try
 				    {
-					try
-					    {
-						table.setRedraw(false);
-						internalRefresh(parent);
-						table.setRedraw(true);
-
-						DataElement selected = getSelected();
-						select(selected);
-					    }
-					catch (Exception e)
-					    {
-						System.out.println(e);
-						setInput(_currentInput);
-					    }
-				    }				
+					internalRefresh(parent);
+					
+					DataElement selected = getSelected();
+					select(selected);
+				    }
+				catch (Exception e)
+				    {
+					System.out.println(e);
+					setInput(_currentInput);
+				    }
 			    }
 		    }
 	    }
@@ -533,22 +535,17 @@ public class DataElementTableViewer extends TableViewer
 		    Control table = getTable();
 		    if (table != null)
 			{
-			    synchronized (table)
+			    try
 				{
-				    try
-					{
-					    table.setRedraw(false);
-					    internalRefresh(_currentInput);
-					    table.setRedraw(true);
-					    DataElement selected = getSelected();
-					    select(selected);
-
-					}
-				    catch (Exception e)
-					{
-					    System.out.println(e);
-					    setInput(_currentInput);
-					}
+				    internalRefresh(_currentInput);
+				    DataElement selected = getSelected();
+				    select(selected);
+				    
+				}
+			    catch (Exception e)
+				{
+				    System.out.println(e);
+				    setInput(_currentInput);
 				}
 			}
 		}
