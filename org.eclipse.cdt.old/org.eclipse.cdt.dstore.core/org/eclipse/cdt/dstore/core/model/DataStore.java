@@ -2326,7 +2326,6 @@ public final class DataStore
 	    {
 		result.add(containsD);
 	    }
-*/
 	DataElement parentD   = findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.parent"));	
 	if (!result.contains(parentD))
 	    {
@@ -2339,7 +2338,7 @@ public final class DataStore
 		result.add(descriptorD);
 	    }
 
-
+*/
 	return result;
     }
 
