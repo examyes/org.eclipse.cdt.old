@@ -45,71 +45,86 @@ public class FindObjectAction extends Action
     public FindObjectAction(String title, CppEditor editor, boolean findDeclaration)
     {
 	super(title);
-	_editor     = editor;
-	_lpexViewer = editor.getLpexView();
 	_findDeclaration = findDeclaration;
+	_editor = editor;
+	if (_editor != null)
+	    {
+		_lpexViewer = editor.getLpexView();
+	    }
+    }
+    
+    public void setEditor(CppEditor editor)
+    {
+	_editor = editor;
+	if (_editor != null)
+	    {
+		_lpexViewer = editor.getLpexView();
+	    }
     }
     
     public void run()
     {
-	String str = getCurrentText(_lpexViewer);
-
-	int line = _lpexViewer.currentElement();
-	
-	String path = null;
-	IEditorInput input = _editor.getEditorInput();
-	if (input instanceof IFileEditorInput)
+	if (_lpexViewer != null)
 	    {
-		IFile file = ((IFileEditorInput)input).getFile();
-		path = new String(file.getLocation().toOSString());
-	
-		IProject project    = file.getProject();
+		String str = getCurrentText(_lpexViewer);
 		
-		CppPlugin plugin   = CppPlugin.getDefault();
-		ModelInterface api  = plugin.getModelInterface();
-				
-		DataElement projectRoot = api.findProjectElement(project);
-		if (projectRoot != null)
+		int line = _lpexViewer.currentElement();
+		
+		String path = null;
+		IEditorInput input = _editor.getEditorInput();
+		if (input instanceof IFileEditorInput)
 		    {
-			DataStore dataStore = projectRoot.getDataStore();
-			DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
-										       "C_FIND_DECLARATION");
-			if (commandDescriptor != null)
-			    {				
-				DataElement patternLoc = dataStore.createObject(null, "source", str, path+":"+line);
-				
-				ArrayList args = new ArrayList();
-				args.add(patternLoc);
-				DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);
-				
-				if (status.getNestedSize() > 0)
-				    {
-					IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
-					IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+			IFile file = ((IFileEditorInput)input).getFile();
+			path = new String(file.getLocation().toOSString());
+			
+			IProject project    = file.getProject();
+			
+			CppPlugin plugin   = CppPlugin.getDefault();
+			ModelInterface api  = plugin.getModelInterface();
+			
+			DataElement projectRoot = api.findProjectElement(project);
+			if (projectRoot != null)
+			    {
+				DataStore dataStore = projectRoot.getDataStore();
+				DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
+											       "C_FIND_DECLARATION");
+				if (commandDescriptor != null)
+				    {				
+					DataElement patternLoc = dataStore.createObject(null, "source", str, path+":"+line);
 					
-					IWorkbenchPage persp= win.getActivePage();
-					ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+					ArrayList args = new ArrayList();
+					args.add(patternLoc);
+					DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);
 					
-					if (viewPart == null)
+					if (status.getNestedSize() > 0)
 					    {
-						try
+						IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+						IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+						
+						IWorkbenchPage persp= win.getActivePage();
+						ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+						
+						if (viewPart == null)
 						    {
-							persp.showView("com.ibm.cpp.ui.SelectedObjectViewPart");
-							viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
-							
+							try
+							    {
+								persp.showView("com.ibm.cpp.ui.SelectedObjectViewPart");
+								viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+								
+							    }
+							catch (PartInitException e)
+							    {
+								System.out.println(e);
+							    }
 						    }
-						catch (PartInitException e)
+						
+						if (viewPart != null)
 						    {
-							System.out.println(e);
+							viewPart.setInput(status.get(0));
 						    }
 					    }
-					
-					if (viewPart != null)
-					    {
-						viewPart.setInput(status.get(0));
-					    }
-				    }
-			    }		
+				    }		
+			    }
 		    }
 	    }
     }

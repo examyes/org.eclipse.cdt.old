@@ -27,6 +27,7 @@ import java.util.*;
 public class CppEditorContextContributor extends LpexContextContributor
 {
     private TextOperationAction _caAction;
+    private FindObjectAction _fAction;
     private IEditorPart _part;
 
 
@@ -43,11 +44,13 @@ public void contributeToMenu(IMenuManager mbm)
     ResourceBundle bundle = LpexPlugin.getDefault().getResourceBundle();
     _caAction = new TextOperationAction(bundle, "ContentAssistProposal.", (ITextEditor)_part, ISourceViewer.CONTENTASSIST_PROPOSALS);
     _caAction.setText("Code assist@Ctrl+SPACE");
-
     
+    _fAction = new FindObjectAction("Find Selected@F4", ( CppEditor)_part, true);
+    _fAction.setText("Find Selected@F4");
 
     IMenuManager m = mbm.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);
     m.add(_caAction);
+    m.add(_fAction);
 }
 
 public void contributeToToolBar(IToolBarManager tbm)
@@ -66,15 +69,12 @@ public void setActiveEditor(IEditorPart part)
 		    _caAction.setEditor((ITextEditor)_part);
 		    _caAction.update();
 		}
+	    if (_fAction != null)
+		{
+		    _fAction.setEditor((CppEditor)_part);
+		}
 	}
 }
-
-  /***
-public void init(com.ibm.eclipse.tests.internal.core.watson.IActionBars b)
-{
-    super.init(b);
-}
-***/
 }
 
 

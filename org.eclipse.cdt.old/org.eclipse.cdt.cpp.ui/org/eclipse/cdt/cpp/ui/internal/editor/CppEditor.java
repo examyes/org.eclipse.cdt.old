@@ -96,14 +96,6 @@ public class CppEditor extends LpexTextEditor
   protected void createActions()
       {
         super.createActions();
-        setAction("ContentAssistProposal",
-                new TextOperationAction(getResourceBundle(),
-                                        "ContentAssistProposal.",
-                                        this,
-                                        ISourceViewer.CONTENTASSIST_PROPOSALS));
-
-	((TextOperationAction)getAction("ContentAssistProposal")).setText("Code assist@Ctrl+SPACE");
-
         setAction("ManageBreakpoints",
                 new BreakpointRulerAction(_plugin.getResourceBundle(),
                                           "ManageBreakpoints.",
@@ -118,11 +110,12 @@ public class CppEditor extends LpexTextEditor
   public void editorContextMenuAboutToShow(IMenuManager menu)
       {
         super.editorContextMenuAboutToShow(menu);
-        addAction(menu, "ContentAssistProposal");
 
+	/*
 	FindObjectAction action = new FindObjectAction("Find Selected@F4", this, true);
 	menu.add(action);
 	setAction(ITextEditorActionConstants.FIND, action);
+	*/
       }
 
 
