@@ -202,6 +202,8 @@ public class FileSystemMiner extends Miner
 	  DataElement fdateD    = createCommandDescriptor(_fileDescriptor, "Get Date", "C_DATE", false);
 	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
 	  
+	  DataElement permissionsD = createCommandDescriptor(_fileDescriptor, "Get Permissions", "C_PERMISSIONS", false);
+	  
 	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), 
 							  "C_OPEN", false);
 
@@ -253,6 +255,10 @@ public class FileSystemMiner extends Miner
      else if (name.equals("C_DATE"))
 	 {
 	     status = handleDate(subject, status);
+	 }
+	 else if (name.equals("C_PERMISSIONS"))
+	 {
+	 	status = handlePermissions(subject, status);	
 	 }
      else if (name.equals("C_SET_DATE"))
 	 {
@@ -592,6 +598,21 @@ public class FileSystemMiner extends Miner
         status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
         return status;        
       }
+
+	private DataElement handlePermissions(DataElement theFile, DataElement status)
+	{
+		File file = new File(theFile.getSource());
+		if (file.canWrite())
+		{
+			_dataStore.createObject(status, "permissions", "readwrite");	
+		}
+		else
+		{
+			_dataStore.createObject(status, "permissions", "readonly");	
+		}	
+		
+		return status;
+	}
 
     private DataElement handleDates(DataElement theDirectory, DataElement status)
     {

@@ -48,6 +48,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     protected DataStore _dataStore;
   
     protected long  _modificationStamp;
+    protected boolean _isReadOnly;
 
   public ResourceElement (DataElement e, IProject project)
   {
@@ -61,6 +62,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     _dataStore = _element.getDataStore();
     _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1); 
     _modificationStamp = 0;
+    _isReadOnly = false;
   }
 
   public ResourceElement (DataElement e, Object parent, IProject project)
@@ -75,6 +77,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     _dataStore = _element.getDataStore();
     _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1);    
     _modificationStamp = 0;
+    _isReadOnly = false;
   }
 
   public void contributeActions(MenuManager menu, Object element, IStructuredSelection selection) 
@@ -358,11 +361,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     {
     }
 
-    public boolean isReadOnly()
-    {
-	return false;
-    }
-
+  
     private void deleteLocalFile()
     {
 	java.io.File fileObject = _element.getFileObject();
@@ -420,6 +419,26 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	IMarker result = new ElementMarker(this, type);
 
 	return result;
+    }
+    
+    
+  	public boolean isReadOnly()
+    {
+		DataElement permissionObj = null;
+		DataElement status = _element.doCommandOn("C_PERMISSIONS", true);
+
+		if (status != null && status.getNestedSize() > 0)
+		{
+			permissionObj = status.get(0);
+			System.out.println(permissionObj);
+			if (permissionObj.getName().equals("readonly"))
+			{
+				return true;	
+			}
+		}
+		    
+		
+		return false;
     }
 
     public void setModificationStamp(long stamp)
