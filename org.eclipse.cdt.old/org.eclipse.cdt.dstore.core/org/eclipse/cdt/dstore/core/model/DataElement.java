@@ -232,15 +232,11 @@ public final class DataElement implements IDataElement
 	  _isExpanded = true;
       }
 
-    public synchronized boolean isDeleted()
+    public boolean isDeleted()
     {    
 	String depthAttribute = getAttribute(DE.A_DEPTH);
-	String valueAttribute = getAttribute(DE.A_DEPTH);
-	if ((depthAttribute == null) || (valueAttribute == null))
-	    {
-		return true;
-	    }
-
+	String valueAttribute = getAttribute(DE.A_VALUE);
+	
 	if (_depth == -1 || depthAttribute.equals("-1"))
 	    {
 		return true;

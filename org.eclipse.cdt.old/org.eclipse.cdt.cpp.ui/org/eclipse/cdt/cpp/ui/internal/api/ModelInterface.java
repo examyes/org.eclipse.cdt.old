@@ -457,7 +457,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
      if (projectMinerProject == null)
        return;
      DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
-     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
+     if (oDescriptor != null)
+	 {
+	     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
+	 }
      setParseIncludePath(_project);	
      setParseQuality(_project);	
      setEnvironment(_project);

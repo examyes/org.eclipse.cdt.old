@@ -167,6 +167,33 @@ public class ExtendedTreeViewer extends TreeViewer
 
 	return false;
     }   
+
+    private Item findItemFor(Widget widget, Object res)
+    {
+	Item[] items  = getChildren(widget);
+	if (items != null) 
+	    {
+		for (int i= 0; i < items.length; i++) 
+		    {
+			Item child = items[i];
+			Object data = child.getData();
+			if (data == res)
+			    {
+				return child;
+			    }
+			else
+			    {
+				Item result = findItemFor(child, res);
+				if (result != null)
+				    {
+					return result;
+				    }
+			    }
+		    }
+	    }
+	
+	return null;
+    }
     
     public void domainChanged(DomainEvent ev)
     {
@@ -215,8 +242,19 @@ public class ExtendedTreeViewer extends TreeViewer
 			
 			try
 			    {
-				getTree().setRedraw(false);
-				internalRefresh(parent);					  
+				Tree tree = getTree();
+				tree.setRedraw(false);
+
+				/***/
+				Item item = findItemFor(tree, parent);
+				if (item != null)
+				    {
+					updateItem(item, parent);
+					updateChildren(item, parent, parent.getAssociated(_property).toArray());
+				    }
+				/****/
+				
+				//internalRefresh(parent);					  
 				getTree().setRedraw(true);
 			    }
 			catch (Exception e)
@@ -392,7 +430,7 @@ public void doExpand(DataElement obj)
     {
 	if ((_selected != null) && _selected.isDeleted())
 	    {
-		_selected = findElement(_selected);
+		//_selected = findElement(_selected);
 	    }
 
 	return _selected;
@@ -402,7 +440,7 @@ public void doExpand(DataElement obj)
     {
 	if ((_currentInput != null) && _currentInput.isDeleted())
 	    {
-		_currentInput = findElement(_currentInput);
+		//_currentInput = findElement(_currentInput);
 
 	    }
 	

@@ -141,7 +141,7 @@ public class ExtendedTableViewer extends TableViewer
 	if ((parent == _selected) || 
 	    (parent == _currentInput) || 
 	    (parent == _expanded) ||
-	    ((_currentInput != null) && (_currentInput.contains(parent, 1)))
+	    ((_currentInput != null) && (_currentInput.contains(parent, _property)))
 	    )
 	    {
 		if ((getTable() != null) && !getTable().isDisposed())
@@ -150,6 +150,26 @@ public class ExtendedTableViewer extends TableViewer
 
 	return false;
     }   
+
+    private Item findItemFor(Table widget, Object res)
+    {
+	Item[] items  = widget.getItems();
+	if (items != null) 
+	    {
+		for (int i= 0; i < items.length; i++) 
+		    {
+			Item child = items[i];
+			Object data = child.getData();
+			if (data == res)
+			    {
+				return child;
+			    }
+		    }
+	    }
+	
+	return null;
+    }
+
     
     public void domainChanged(DomainEvent ev)
     {
@@ -192,6 +212,12 @@ public class ExtendedTableViewer extends TableViewer
 		_currentInput = null;
 		setInput(null);
 	    }
+	else if (_currentInput == parent)
+	    {
+		getTable().setRedraw(false);
+		internalRefresh(parent);
+		getTable().setRedraw(true);				      
+	    }
 	else		     
 	    {
 		synchronized(parent)
@@ -199,9 +225,17 @@ public class ExtendedTableViewer extends TableViewer
 			
 			try
 			    {
-				getTable().setRedraw(false);
-				internalRefresh(parent);					  
-				getTable().setRedraw(true);
+				Table table = getTable();
+				table.setRedraw(false);
+				/***/
+				Item item = findItemFor(table, parent);
+				if (item != null)
+				    {
+					updateItem(item, parent);
+				    }
+				/****/
+				//				internalRefresh(parent);					  
+				table.setRedraw(true);
 			    }
 			catch (Exception e)
 			    {
@@ -368,7 +402,7 @@ public void doExpand(DataElement obj)
     {
 	if ((_selected != null) && _selected.isDeleted())
 	    {
-		_selected = findElement(_selected);
+		//		_selected = findElement(_selected);
 	    }
 
 	return _selected;
@@ -378,7 +412,7 @@ public void doExpand(DataElement obj)
     {
 	if ((_currentInput != null) && _currentInput.isDeleted())
 	    {
-		_currentInput = findElement(_currentInput);
+		//		_currentInput = findElement(_currentInput);
 
 	    }
 	
