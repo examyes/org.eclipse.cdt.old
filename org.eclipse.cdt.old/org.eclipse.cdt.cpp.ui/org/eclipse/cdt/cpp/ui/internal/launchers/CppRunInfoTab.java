@@ -93,11 +93,13 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
    	
+   	createSpacer(composite);
    	createProgramNameGroup(composite);
+
+   	createSpacer(composite);
    	createProgramParametersGroup(composite);
 
    	createSpacer(composite);
-
    	createWorkingDirectoryGroup(composite);
    	
    	programParametersField.setFocus();
@@ -116,6 +118,12 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
      */
     protected final void createProgramNameGroup(Composite parent)
     {
+   	// new program label
+   	Label programLabel = new Label(parent,SWT.NONE);
+   	programLabel.setText(_plugin.getLocalizedString("debugLauncherMain.ProgramName"));
+      GridData data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+   	programLabel.setLayoutData(data);
+   	
    	// project specification group
    	Composite programGroup = new Composite(parent,SWT.NONE);
    	GridLayout layout = new GridLayout();
@@ -123,13 +131,9 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	programGroup.setLayout(layout);
    	programGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
    	
-   	// new program label
-   	Label programLabel = new Label(programGroup,SWT.NONE);
-   	programLabel.setText(_plugin.getLocalizedString("debugLauncherMain.ProgramName"));
-   	
    	// new program name entry field
    	_programNameField = new Text(programGroup, SWT.BORDER);
-   	GridData data = new GridData(GridData.FILL_HORIZONTAL);
+   	data = new GridData(GridData.FILL_HORIZONTAL);
    	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 //      _programNameField.setText(_programName);
    	_programNameField.setLayoutData(data);
@@ -151,6 +155,12 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
      */
     protected final void createProgramParametersGroup(Composite parent)
     {
+    	// new parameters label
+    	Label parametersLabel = new Label(parent,SWT.NONE);
+    	parametersLabel.setText(_plugin.getLocalizedString("debugLauncherMain.ProgramParameters"));
+      GridData data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+   	parametersLabel.setLayoutData(data);
+
     	// project specification group
     	Composite parametersGroup = new Composite(parent,SWT.NONE);
     	GridLayout layout = new GridLayout();
@@ -158,14 +168,11 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
     	parametersGroup.setLayout(layout);
     	parametersGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
     	
-    	// new parameters label
-    	Label parametersLabel = new Label(parametersGroup,SWT.NONE);
-    	parametersLabel.setText(_plugin.getLocalizedString("debugLauncherMain.ProgramParameters"));
-    	
+
     	// new parameters name entry field
     	programParametersField = new Combo(parametersGroup, SWT.BORDER);
     	//programParametersField.addListener(SWT.Modify, this);
-    	GridData data = new GridData(GridData.FILL_HORIZONTAL);
+    	data = new GridData(GridData.FILL_HORIZONTAL);
     	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
     	programParametersField.setLayoutData(data);
 
@@ -221,26 +228,22 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
      */
     protected final void createWorkingDirectoryGroup(Composite parent)
     {
+   	// working directory name label
+   	Label directoryLabel = new Label(parent,SWT.NONE);
+   	directoryLabel.setText(_plugin.getLocalizedString("debugLauncherMain.WorkingDirectory"));
+      GridData data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+   	directoryLabel.setLayoutData(data);
+
    	// working directory specification group
    	Composite workingDirectoryGroup = new Composite(parent,SWT.NONE);
    	GridLayout layout = new GridLayout();
-   	layout.numColumns = 3;
+   	layout.numColumns = 2;
    	workingDirectoryGroup.setLayout(layout);
    	workingDirectoryGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.FILL_HORIZONTAL));
    	
-   	// working directory name label
-   	Label directoryLabel = new Label(workingDirectoryGroup,SWT.NONE);
-   	directoryLabel.setText(_plugin.getLocalizedString("debugLauncherMain.WorkingDirectory"));
-
-      GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-   	//data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-   	directoryLabel.setLayoutData(data);
-
-
    	// Directory name entry field
    	_workingDirectoryField = new Combo(workingDirectoryGroup,SWT.BORDER);
    	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-   	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
    	data.horizontalSpan = 1;
    	_workingDirectoryField.setLayoutData(data);
 
@@ -260,10 +263,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 			}
 		});
 
-   	workingDirectoryBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
-
-   	
-   	
+   	workingDirectoryBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));	
     }
 
 	/**
@@ -364,6 +364,8 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
          {
             if (_executable != null)
               _programNameField.setText(_executable.getSource());
+            else
+               return;
          }
          else
          {
@@ -440,16 +442,25 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	/**
 	 * @see ILaunchConfigurationTab#isPageComplete()
 	 */
-	public boolean isValid()
-  {
+    public boolean isValid()
+    {
 		setErrorMessage(null);
 		setMessage(null);
-      if (_programNameField.getText() == "" || _workingDirectoryField.getText() == "")
+
+      if (_programNameField.getText() == "")
+      {
+         setErrorMessage(_plugin.getLocalizedString("missingProgramName"));
          return false;
+      }
+      elseif (_workingDirectoryField.getText() == "")
+      {
+         setErrorMessage(_plugin.getLocalizedString("missingWorkingDirectory"));
+         return false;
+      }
       else
   	   	return true;
 		
-	}
+    }
 	
 	/**
 	 * @see ILaunchConfigurationTab#getName()
