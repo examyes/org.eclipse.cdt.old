@@ -32,27 +32,62 @@
 
 	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
+		<copy file="${build.result.folder}/cdt_solaris.jar" todir="${destination.temp.folder}/${full.name}"/>
 		<copy todir="${destination.temp.folder}/${full.name}">
 			<fileset dir="${basedir}" includes="fragment.xml,os/"/>
 		</copy>
 	</target>
 
+	<target name="cdt_solaris.jar" depends="init" unless="cdt_solaris.jar">
+		<property name="destdir" value="${temp.folder}/cdt_solaris.jar.bin"/>
+		<delete dir="${temp.folder}/cdt_solaris.jar.bin"/>
+		<mkdir dir="${temp.folder}/cdt_solaris.jar.bin"/>
+		<!-- compile the source code -->
+		<javac destdir="${temp.folder}/cdt_solaris.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.search/search.jar;../org.eclipse.core.resources/resources.jar;../org.eclipse.debug.core/bin;../org.eclipse.core.resources/bin;../org.apache.xerces/xercesImpl.jar;../org.eclipse.debug.core/dtcore.jar;../org.apache.xerces/bin;../org.eclipse.core.runtime/bin;../org.eclipse.core.boot/boot.jar;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.compare/compare.jar;../org.eclipse.search/bin;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.compare/bin;../org.apache.xerces/xmlParserAPIs.jar;../org.eclipse.core.boot/bin">
+			<src path="src/"/>
+		</javac>
+		<!-- copy necessary resources -->
+		<copy todir="${temp.folder}/cdt_solaris.jar.bin">
+			<fileset dir="src/" excludes="**/*.java"/>
+		</copy>
+		<mkdir dir="${build.result.folder}"/>
+		<jar jarfile="${build.result.folder}/cdt_solaris.jar" basedir="${temp.folder}/cdt_solaris.jar.bin"/>
+		<delete dir="${temp.folder}/cdt_solaris.jar.bin"/>
+	</target>
+
+	<target name="cdt_solarissrc.zip" depends="init" unless="cdt_solarissrc.zip">
+		<mkdir dir="${build.result.folder}"/>
+		<zip zipfile="${build.result.folder}/cdt_solarissrc.zip" filesonly="false">
+			<fileset dir="src/" includes="**/*.java"/>
+		</zip>
+	</target>
+
 	<target name="build.jars" depends="init">
+		<available property="cdt_solaris.jar" file="${build.result.folder}/cdt_solaris.jar"/>
+		<antcall target="cdt_solaris.jar"/>
 	</target>
 
 	<target name="build.sources" depends="init">
+		<available property="cdt_solarissrc.zip" file="${build.result.folder}/cdt_solarissrc.zip"/>
+		<antcall target="cdt_solarissrc.zip"/>
 	</target>
 
 	<target name="build.zips" depends="init">
 	</target>
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/${full.name}"/>
+		<copy file="${build.result.folder}/cdt_solarissrc.zip" todir="${destination.temp.folder}/${full.name}"/>
 	</target>
 
 	<target name="gather.logs" depends="init" if="destination.temp.folder">
+		<mkdir dir="${destination.temp.folder}/${full.name}"/>
+		<copy file="${temp.folder}/cdt_solaris.jar.bin.log" todir="${destination.temp.folder}/${full.name}"/>
 	</target>
 
 	<target name="clean" depends="init">
+		<delete file="${build.result.folder}/cdt_solaris.jar"/>
+		<delete file="${build.result.folder}/cdt_solarissrc.zip"/>
 		<delete file="${plugin.destination}/${full.name}.jar"/>
 		<delete file="${plugin.destination}/${full.name}.zip"/>
 		<delete dir="${temp.folder}"/>
