@@ -58,7 +58,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	IResource resource  = _api.findFile(executableName);
 	IProject project = resource.getProject();
 	
-	DataElement _executable = _api.findResourceElement(resource);
+	_executable = _api.findResourceElement(resource);
 	DataElement projectElement = _api.getProjectFor(_executable);
 	if (!project.isOpen())
 	    {
@@ -138,6 +138,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 		if (projectElement != null)
 		    {
 			sourceLocator = new CppSourceLocator(projectElement);
+                    System.out.println("CppDebugLoadLaunchConfigurationDelegate:doLaunch() calling loadInfo.setWorkspaceSourceLocator() ");
 			loadInfo.setWorkspaceSourceLocator(sourceLocator);
 		    }
 		_dataElementDirectory = _executable.getParent();
