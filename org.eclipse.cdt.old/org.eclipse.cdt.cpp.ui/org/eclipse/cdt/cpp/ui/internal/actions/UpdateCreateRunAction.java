@@ -94,7 +94,7 @@ public class UpdateCreateRunAction extends CustomAction
     public void run()
 	{
 		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
-		String message = new String("Updating and or generating all the files needed by Autoconf"
+		String message = new String("Updating and or generating all the files needed by Automake and Autoconf"
 				+"\nDo you wish to continue?");
 				
 		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
