@@ -27,9 +27,9 @@ public class FileSystemMiner extends Miner
     private DataElement _hostDescriptor;
     private DataElement _containsDescriptor;
     private DataElement _dateDescriptor;
-    private DataElement _permissionsDescriptor;
     private DataElement _sizeDescriptor;
     private DataElement _attributesDescriptor;
+    private DataElement _permissionsDescriptor;
 
   public FileSystemMiner ()
       {
@@ -195,26 +195,28 @@ public class FileSystemMiner extends Miner
 	  _attributesDescriptor     = _dataStore.find(schemaRoot, DE.A_NAME, "attributes", 1);
 
 
+	  DataElement intD          = _dataStore.find(schemaRoot, DE.A_NAME, "Integer", 1);
+	  DataElement dateD         = _dataStore.find(schemaRoot, DE.A_NAME, "Date", 1);
+	  
+
 	  _sizeDescriptor           = createObjectDescriptor(schemaRoot, "size");
 	  _dateDescriptor           = createObjectDescriptor(schemaRoot, "date");
-	  _permissionsDescriptor    = createObjectDescriptor(schemaRoot, "permissions");
+	  _permissionsDescriptor     = createObjectDescriptor(schemaRoot, "permissions");
+	  
+	  _dataStore.createReference(_sizeDescriptor, intD, _attributesDescriptor);
+	  _dataStore.createReference(_dateDescriptor, dateD, _attributesDescriptor);
 
 	  _dataStore.createReference(_fileDescriptor, _sizeDescriptor, _attributesDescriptor);	  
 	  _dataStore.createReference(_fileDescriptor, _dateDescriptor, _attributesDescriptor);	  
-	  _dataStore.createReference(_fileDescriptor, _permissionsDescriptor, _attributesDescriptor);	  
 
 	  _dataStore.createReference(_directoryDescriptor, _sizeDescriptor, _attributesDescriptor);	  
 	  _dataStore.createReference(_directoryDescriptor, _dateDescriptor, _attributesDescriptor);	  
-	  _dataStore.createReference(_directoryDescriptor, _permissionsDescriptor, _attributesDescriptor);	  
 	  
-
-
 	  _hiddenFileDescriptor     = createObjectDescriptor(schemaRoot, "hidden file");
 	  _dataStore.createReference(_fileDescriptor, _hiddenFileDescriptor, "abstracts", "abstracted by"); 
-
+ 
 	  _hiddenDirectoryDescriptor     = createObjectDescriptor(schemaRoot, "hidden directory");
 	  _dataStore.createReference(_directoryDescriptor, _hiddenDirectoryDescriptor, "abstracts", "abstracted by"); 
-
 	  
 	  DataElement queryAllD   = createCommandDescriptor(_fsystemObjectDescriptor, "Query All", "C_QUERY_ALL", false);
 
@@ -787,92 +789,112 @@ public class FileSystemMiner extends Miner
 	for (int i = 0; i < theElement.getNestedSize(); i++)
 	    {
 		DataElement child = theElement.get(i);
-		handleQueryAll(child, status);
+		if (!child.isReference())
+		    {
+			handleQueryAll(child, status);
+		    }
 	    }
 
 	return status;
     }   
 
-  private DataElement handleQuery (DataElement theElement, DataElement status)
+    private DataElement handleQuery (DataElement theElement, DataElement status)
     {
 	return handleQuery(theElement, status, false);
     }
 
-  private DataElement handleQuery (DataElement theElement, DataElement status, boolean force)
-      {
-	  theElement = theElement.dereference();
-	  if (theElement.getDescriptor() == null || 
-	      theElement.getDescriptor().isOfType(_fsystemObjectDescriptor, true))
-	      {
-		  // DKM - this prevents refresh when we create projects 
-		  //	  if (force  || (!theElement.isExpanded() || (theElement.getNestedSize() == 0)))
-	      {
-		  try
-		      {
-
-			  String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
-			  File theFile = new File (theElement.getSource());
-			  StringBuffer path = new StringBuffer (theFile.getPath());
-			  
-			  if (!type.equals("device"))
-			      {
-				  path.append("/");
-			      }
-			  
-			  
-			  File[] list= theFile.listFiles();
-			  if (list != null)
-			      {
-				  for (int i= 0; i < list.length; i++)
-				      {
+    private DataElement handleQuery (DataElement theElement, DataElement status, boolean force)
+    {
+	theElement = theElement.dereference();
+	if (theElement.getDescriptor() == null || 
+	    theElement.isOfType(_fsystemObjectDescriptor))
+	    {
+		try
+		    {
+			
+			String type = theElement.getAttribute(DE.A_TYPE);	   
+			File theFile = new File (theElement.getSource());
+			StringBuffer path = new StringBuffer (theFile.getPath());
+			
+			if (!type.equals("device"))
+			    {
+				path.append("/");
+			    }
+			
+			
+			File[] list= theFile.listFiles();
+			if (list != null)
+			    {
+				for (int i= 0; i < list.length; i++)
+				    {
 				      	File f = list[i];
-					  String filePath = f.getAbsolutePath().replace('\\', '/');			
-					  String objName = f.getName();
+					String filePath = f.getAbsolutePath().replace('\\', '/');			
+					String objName = f.getName();
+					
+					DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
+					if (newObject == null || newObject.isDeleted())
+					    {
+						DataElement objType = _directoryDescriptor;
+						boolean hidden = f.isHidden()  || objName.charAt(0) == '.';
 
-					  DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
-					  if (newObject == null || newObject.isDeleted())
-					      {
-						  DataElement objType = _directoryDescriptor;
-						  if (!f.isDirectory())
-						      {
-							  objType  = _fileDescriptor;
-							  
-							  if (f.isHidden() || objName.charAt(0) == '.')
-							      {
-								  objType = _hiddenFileDescriptor;
-							      }
-						      }
-						  else
-						      {
-							  if (f.isHidden() || objName.charAt(0) == '.')
-							      {
-								  objType = _hiddenDirectoryDescriptor;
-							      }
-						      }
-						  
-						  newObject = _dataStore.createObject (theElement, objType, 
-												   objName, filePath);
-						  if (!f.isDirectory())
-						      {
-							  newObject.setDepth(1);
-						      }		      
-					      }
-					  if (newObject != null)
-					      {
-						  handleSize(newObject, status);
-						  handleDate(newObject, status);
-						  handlePermissions(newObject, status);
-					      }
-				      }
-			      }
-		      }	
-		  catch (Exception e)
-		      {
-			  System.out.println(e);
-			  e.printStackTrace();
-		      }
-	      }
-	  }
+						if (!f.isDirectory())
+						    {
+							objType  = _fileDescriptor;
+							
+							if (hidden)
+							    {
+								objType = _hiddenFileDescriptor;
+							    }
+						    }
+						else
+						    {
+							if (hidden)
+							    {
+								objType = _hiddenDirectoryDescriptor;
+							    }
+						    }
+						
+						newObject = _dataStore.createObject (theElement, objType, 
+										     objName, filePath);
+
+						if (hidden)
+						    {
+							newObject.setDepth(0);
+						    }
+						else
+						    {
+							if (!f.isDirectory())
+							    {
+								newObject.setDepth(1);
+							    }		      
+							else
+							    {
+								File[] slist = f.listFiles();
+								if (slist.length == 0)
+								    {
+									newObject.setDepth(1);
+								    }
+								
+								
+								handleSize(newObject, status);
+								handleDate(newObject, status);
+							    }
+						    }
+					    }
+				    }
+			    }
+		    }	
+		catch (Exception e)
+		    {
+			System.out.println(e);
+			e.printStackTrace();
+		    }
+	    }
+	else if (theElement.isOfType(_fileDescriptor))
+	    {
+		handleSize(theElement, status);
+		handleDate(theElement, status);
+	    }
 	  
 	  if (status != null)
 	      status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));	 
@@ -882,103 +904,126 @@ public class FileSystemMiner extends Miner
 
     public DataElement handleRefresh(DataElement theElement, DataElement status)
     {
+	theElement = theElement.dereference();
     	boolean changed = false;
-	try
-	    {		
-		String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
-		File theFile = new File (theElement.getSource());
-		StringBuffer path = new StringBuffer (theFile.getPath());
-		
-		if (!type.equals("device"))
-		    {
-			path.append("/");
-		    }
-		
-		// check for deleted
-		for (int i = 0; i < theElement.getNestedSize(); i++)
-		    {
-			DataElement child = theElement.get(i);
-			if (child != null && !child.isDeleted())
+	if (theElement == null ||
+	    theElement.isOfType(_fsystemObjectDescriptor))
+	    {
+		try
+		    {		
+			String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
+			File theFile = new File (theElement.getSource());
+			StringBuffer path = new StringBuffer (theFile.getPath());
+			
+			if (!type.equals("device"))
 			    {
-			    	if (child.getType().equals("file") || child.getType().equals("directory"))
-			    	{
-				String src = child.getSource();
-				if (src != null)
+				path.append("/");
+			    }
+			
+			// check for deleted
+			for (int i = 0; i < theElement.getNestedSize(); i++)
+			    {
+				DataElement child = theElement.get(i);
+				if (child != null && !child.isDeleted())
 				    {
-					File childFile = new File(src);
-					if (!childFile.exists())
+					if (child.getType().equals("file") || child.getType().equals("directory"))
 					    {
-						_dataStore.deleteObject(theElement, child);
+						String src = child.getSource();
+						if (src != null)
+						    {
+							File childFile = new File(src);
+							if (!childFile.exists())
+							    {
+								_dataStore.deleteObject(theElement, child);
+							    }
+						    }
 					    }
 				    }
-			    	}
 			    }
-		    }
-		
-		
-		// query
-		File[] list = theFile.listFiles();
-		if (list != null)
-		    {
-			for (int i= 0; i < list.length; i++)
-			    {				
-			    	File f= list[i];
+			
+			
+			// query
+			File[] list = theFile.listFiles();
+			if (list != null)
+			    {
+				for (int i= 0; i < list.length; i++)
+				    {				
+					File f= list[i];
 					String filePath = f.getAbsolutePath().replace('\\', '/');				
 					String objName = f.getName();
-									  
-				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
-				if (newObject == null || newObject.isDeleted())
-				    {
-					DataElement objType = _directoryDescriptor;
-					if (!f.isDirectory())
+					
+					DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
+					if (newObject == null || newObject.isDeleted())
 					    {
-						objType = _fileDescriptor;
-						
-						if (f.isHidden()  || objName.charAt(0) == '.')
+						DataElement objType = _directoryDescriptor;
+						boolean hidden = f.isHidden()  || objName.charAt(0) == '.';
+						if (!f.isDirectory())
 						    {
-							objType = _hiddenFileDescriptor;
+							objType = _fileDescriptor;
+							if (hidden)
+							    {
+								objType = _hiddenFileDescriptor;
+							    }
+						    }
+						else
+						    {							
+							if (hidden)
+							    {
+								objType = _hiddenDirectoryDescriptor;
+							    }
+						    }
+						
+						newObject = _dataStore.createObject (theElement, objType, 
+										     objName, filePath);
+						changed = true;				
+
+						if (hidden)
+						    {
+							newObject.setDepth(0);
+						    }
+						else
+						    {
+							if (!f.isDirectory())
+							    {						
+								newObject.setDepth(1);
+							    }
+							else
+							    {
+								File[] slist = f.listFiles();
+								if (slist.length == 0)
+								    {
+									newObject.setDepth(1);
+								    }
+								
+								handleSize(newObject, status);
+								handleDate(newObject, status);
+							    }
 						    }
 					    }
 					else
 					    {
-						if (f.isHidden() || objName.charAt(0) == '.')
-						    {
-							objType = _hiddenDirectoryDescriptor;
-						    }
+						handleRefresh(newObject, status);
 					    }
-									
-					newObject = _dataStore.createObject (theElement, objType, 
-									     objName, filePath);
-					changed = true;				     
-					if (!f.isDirectory())
-					    {						
-						newObject.setDepth(1);
-					    }
-				    }
-				else
-				    {
-					handleRefresh(newObject, status);
-				    }
-				if (newObject != null)
-				    {
-					handleSize(newObject, status);
-					handleDate(newObject, status);
-					handlePermissions(newObject, status);
-				    }
-			    }			
+				    }			
+			    }
+			
+		    }	
+		catch (Exception e)
+		    {
+			System.out.println(e);
+			e.printStackTrace();
 		    }
-		
-	    }	
-	catch (Exception e)
+	    }
+	else if (theElement.isOfType(_fileDescriptor))
 	    {
-		System.out.println(e);
-		e.printStackTrace();
+		handleSize(theElement, status);
+		handleDate(theElement, status);
 	    }
 	
 	if (changed)
-	{
+	    {
 		_dataStore.refresh(theElement);
-	}
+	    }
 	
 	status.setAttribute(DE.A_NAME, "done");
 	return status;

@@ -105,8 +105,7 @@ public class CommandMiner extends Miner
    CommandMinerThread theThread = (CommandMinerThread)_threads.get(threadName);
    if ( (theThread == null) || (!theThread.isAlive())) 
    {
-    _threads.remove(threadName);
-    
+    _threads.remove(threadName);    
    }
   }
   CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, _patterns);
@@ -409,7 +408,7 @@ class CommandMinerThread extends MinerThread
   //Walk up until we find an element with an inhabits relationship.
   DataElement theProject = theSubject;
   ArrayList projectEnvReference = null;
-  while (!theProject.getValue().equals("Data"))
+  while (theProject != null && !theProject.getValue().equals("Data"))
   {
    projectEnvReference = theProject.getAssociated("inhabits");
    if (projectEnvReference.size() > 0)

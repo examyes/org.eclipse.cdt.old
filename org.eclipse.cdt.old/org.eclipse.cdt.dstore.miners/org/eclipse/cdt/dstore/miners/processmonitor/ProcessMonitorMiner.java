@@ -121,7 +121,6 @@ public class ProcessMonitorMiner extends Miner
     
     public void finish()
     {
-	_monitor.finish();
 	try
 	    {  
 		_writer.write("exit");
@@ -136,6 +135,7 @@ public class ProcessMonitorMiner extends Miner
 		System.out.println(e);
 	    }	
 	
+	_monitor.finish();
 	super.finish();
     }
     
