@@ -261,25 +261,26 @@ public class ViewMenu implements IMenuListener
   public synchronized void setInput(DataElement object)
       {
         _input = object;
-	_dataStore = _input.getDataStore();
 	
-	if ((_inputDescriptor == null) || (object.getDescriptor() == null) ||
+	if (_dataStore != object.getDataStore() ||
+	    (_inputDescriptor == null) || (object.getDescriptor() == null) ||
 	    (!object.getDescriptor().getName().equals(_inputDescriptor.getName())))
-        {
-          _inputDescriptor = object.getDescriptor();          
-          getRelationItems();
-          setDefaultRelation();          
-
-	  getFilterItems();    
-	  if (object.getDescriptor() != _inputDescriptor)
-	      {
-		  setDefaultFilter();
-	      }
-
-	  updateVisibility();
-        }
+	    {
+		_dataStore = _input.getDataStore();
+		_inputDescriptor = object.getDescriptor();          
+		getRelationItems();
+		setDefaultRelation();          
+		
+		getFilterItems();    
+		if (object.getDescriptor() != _inputDescriptor)
+		    {
+			setDefaultFilter();
+		    }
+		
+		updateVisibility();
+	    }
       }
-
+    
     public void updateVisibility()
     {
         boolean showRelation = _relationItems.size() > 1;

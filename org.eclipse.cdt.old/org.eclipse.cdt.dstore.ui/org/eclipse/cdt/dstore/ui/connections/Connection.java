@@ -229,6 +229,11 @@ public class Connection
 	_name = name;
         _host = host;
         _port = port;
+	if (port == null || port.length() == 0)
+	    {
+		_port = "0";
+	    }
+
         _dir = dir;
 	_type = type;
 	
@@ -245,6 +250,11 @@ public class Connection
     {
         _host     = connection._host;
         _port     = connection._port;
+
+	if (_port == null || _port.length() == 0)
+	    {
+		_port = "0";
+	    }
 
 	setIsLocal(connection._isLocal);
 	setIsUsingDaemon(connection._isUsingDaemon);
