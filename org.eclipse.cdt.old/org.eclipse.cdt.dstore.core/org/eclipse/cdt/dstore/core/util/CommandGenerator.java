@@ -141,6 +141,7 @@ public class CommandGenerator
 				     DataElement dataObject,
 				     boolean refArg)
     {
+
       DataElement commandObject = createCommand(commandDescriptor);
       if (commandObject != null)
 	  {
@@ -157,12 +158,14 @@ public class CommandGenerator
 	      
 	      if (arguments != null)
 		  {
+		      DataElement tempRoot = _dataStore.getTempRoot();
+
 		      for (int i = 0; i < arguments.size(); i++)
 			  {
 			      DataElement arg = (DataElement)arguments.get(i);
 			      if (arg != null)
 				  {
-				      if (!arg.isExpanded() || (arg.getParent() == null))
+				      if (!arg.isExpanded() || (arg.getParent() == tempRoot))
 					  {
 					      commandObject.addNestedData(arguments, false);
 					  }

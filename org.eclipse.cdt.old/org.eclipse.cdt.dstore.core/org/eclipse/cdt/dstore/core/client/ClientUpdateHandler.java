@@ -71,7 +71,12 @@ public class ClientUpdateHandler extends UpdateHandler
   public void notify(DataElement object)
       {    
 	  DataElement parent = object;
-	  object.setUpdated(true);
+
+	  if (object.isExpanded())
+	      {
+		  object.setUpdated(true);
+	      }
+
 	  object.setExpanded(true);
 	  
         IDomainNotifier notifier = _dataStore.getDomainNotifier();
