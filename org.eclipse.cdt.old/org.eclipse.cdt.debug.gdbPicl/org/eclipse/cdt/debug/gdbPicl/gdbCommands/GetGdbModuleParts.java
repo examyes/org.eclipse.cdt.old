@@ -703,6 +703,8 @@ public class GetGdbModuleParts
      str = str.substring( keyword.length() );
      String fullFileName = str;
 
+// SAM:  not sure what it is doing here... this does not make sense
+/*
      //Gdb on Windows allows list mainFile as the current file, regardless of step-into module location.
      Part mainPart = _moduleManager.getModule(1).getPart(1);
      if(mainPart!=null)
@@ -719,6 +721,11 @@ public class GetGdbModuleParts
      if (Gdb.traceLogger.ERR)
          Gdb.traceLogger.err(3,"???????????????? GetGdbModuleParts.checkCurrentPart ?????? IGNORING fullPartName="+fullFileName+" ???????????????????????????" );
      Part part = _moduleManager.addPart(moduleID, fileName, fileName);
+*/
+
+	_moduleManager.checkPart(moduleID, fileName);
+	int id = _moduleManager.getPartID(moduleID, fileName);
+	Part part = _moduleManager.getPart(id);
 
      str = "";
      int partID = 0;

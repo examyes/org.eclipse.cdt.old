@@ -168,8 +168,7 @@ public class Module
 
    /**
     * Get the part ID for a part name
-    * @return 0 if the part ID is not registered and is "dummy"
-    * @return dummy's part id for all other parts
+    * @return 0 if the part ID is not registered
     */
    public int getPartID(String partName)
    {

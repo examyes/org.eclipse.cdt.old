@@ -197,7 +197,7 @@ public class CmdBreakpointLocation extends Command
                      else
                      {
                      	 // don't have a valid part id... try to set with just partName and line number
-                     	 ret = bm.setLineBreakpoint(partName, lineNum, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? true : false, _req.getConditionalExpression());
+                     	 ret = bm.setLineBreakpoint(sourceName, lineNum, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? true : false, _req.getConditionalExpression());
 						 
 						 if (ret < 0)
 						 {
