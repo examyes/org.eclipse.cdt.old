@@ -17,7 +17,7 @@ public class DebugMiner extends Miner
     private String _debugInvocation = null;
     private String _debugOptions = null;
 
-    public ResourceBundle getResourceBundle()  
+    public ResourceBundle getResourceBundle()
     {
 	ResourceBundle resourceBundle = null;
 	// setup resource bundle
@@ -41,7 +41,7 @@ public class DebugMiner extends Miner
 	String ps = System.getProperty("path.separator");
 	String fs = "/";
         _debugJarPath =  debugPath;
-	_debugJarPath += ps + debugPath + fs + "ibm_debug.jar";
+	_debugJarPath += ps + debugPath + fs + "ibmdebug.jar";
         _debugJarPath += ps + _gdbPiclPath;
 	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " org.eclipse.cdt.debug.gdbPicl.Gdb ";
