@@ -1,3 +1,7 @@
+2004-11-11  Rick Moseley  <rmoseley@redhat.com>
+
+	* plugin.xml: change version to 1.2
+
 2004-11-09  Rick Moseley  <rmoseley@redhat.com>
 
 	* RPM_Plugin.htm: updated with new screenshot for Prefs Page, added verbage
