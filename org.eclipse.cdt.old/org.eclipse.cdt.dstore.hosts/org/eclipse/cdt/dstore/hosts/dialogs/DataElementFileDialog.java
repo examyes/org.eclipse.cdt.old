@@ -126,7 +126,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	_viewer.fixateOnRelationType("contents");
 	if (_onlyDirectories)
 	{
-		_viewer.fixateOnObjectType("directory");
+		_viewer.fixateOnObjectType("Directories");
 	}
 
 	GridLayout layout= new GridLayout();
@@ -162,6 +162,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 				if (parentD != null && parentD.isOfType("Filesystem Objects"))
 				    {
 					_viewer.setInput(parent);
+			
 				    }
 			    }
 		    }
@@ -175,6 +176,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 			if (inputD != null && inputD.isOfType("Filesystem Objects"))
 			    {
 				_viewer.setInput(input);
+				
 			    }
 		    }
 	    }

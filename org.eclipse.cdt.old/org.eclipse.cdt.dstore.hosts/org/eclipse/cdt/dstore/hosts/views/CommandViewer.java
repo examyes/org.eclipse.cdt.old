@@ -340,7 +340,7 @@ public class CommandViewer extends Viewer implements SelectionListener
 			dlgInput = host;
 		}
 		
-		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", dlgInput);
+		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", dlgInput, true);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
 		    {

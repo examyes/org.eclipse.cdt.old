@@ -392,7 +392,9 @@ public String getProgramFieldValue() {
     protected void handleWorkingDirectoryBrowseButtonPressed()
     {
 
-		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", _directory, true);
+		DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
+		directory = directory.getParent();
+		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", /*_directory*/directory, true);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
 	   {
