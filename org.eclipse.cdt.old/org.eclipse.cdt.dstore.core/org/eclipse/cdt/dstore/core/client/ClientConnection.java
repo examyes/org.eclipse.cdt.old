@@ -144,8 +144,6 @@ public class ClientConnection
 
 	_commandHandler.finish();
 
-	_dataStore.flush();
-
 	try
 	    {
 		Thread.currentThread().sleep(200);
@@ -156,6 +154,8 @@ public class ClientConnection
 	    }
 	
 	_updateHandler.finish();
+	_dataStore.flush();
+
 	_isConnected = false;
       }
   }

@@ -367,6 +367,11 @@ public class XMLparser
 		      }
 	      } 
 
+	  if (result.isDeleted())
+	      {
+		  _dataStore.deleteObject(parent, result);
+	      }
+
 	  return result;
 	}	
 	
