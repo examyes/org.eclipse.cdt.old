@@ -21,11 +21,11 @@ import java.util.*;
 
 public class LibraryWorkbookPage 
 {
-    public PathControl _pathControl;
+    public LibraryPathControl _pathControl;
     
     public LibraryWorkbookPage(Composite parent) 
     {
-	_pathControl = new PathControl(parent, SWT.NONE);	
+	_pathControl = new LibraryPathControl(parent, SWT.NONE);	
 
 	ArrayList paths = CppPlugin.readProperty("DefaultParseIncludePath");
 	_pathControl.setPaths(paths);

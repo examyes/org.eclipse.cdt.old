@@ -21,11 +21,11 @@ import java.util.*;
 
 public class ExternalSourceWorkbookPage 
 {
-    public PathControl _pathControl;
+    public ExternalSourceControl _pathControl;
     
     public ExternalSourceWorkbookPage(Composite parent) 
     {
-	_pathControl = new PathControl(parent, SWT.NONE);	
+	_pathControl = new ExternalSourceControl(parent, SWT.NONE);	
 
 	ArrayList paths = CppPlugin.readProperty("DefaultParseIncludePath");
 	_pathControl.setPaths(paths);
