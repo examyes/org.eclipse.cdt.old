@@ -5,70 +5,135 @@ package org.eclipse.cdt.cpp.ui.internal.launchers;
  * All Rights Reserved.
  */
 
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.ui.resource.FileResourceElement;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
+import org.eclipse.jface.dialogs.MessageDialog;
+
+import com.ibm.debug.daemon.CoreDaemon;
+import com.ibm.debug.internal.pdt.PICLDebugTarget;
+import com.ibm.debug.pdt.launch.PICLAttachInfo;
 
 /**
  * Launches a debug attach session.
  */
-public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigurationDelegate 
-{
+public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
+
+    private CppPlugin                       _plugin;
+    private ModelInterface                  _api;
+    private DataElement                     _executable;
+    private DataElement                     _dataElementDirectory;
+
 	/**
 	 * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
 	 */
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException
+	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
+  throws CoreException
    {
 		System.out.println("CppDebugAttachLaunchConfigurationDelegate:launch() ");
-      /*
-		String mainTypeName = verifyMainTypeName(configuration);
+      _plugin = CppPlugin.getDefault();
+      _api = ModelInterface.getInstance();
 
-		IVMInstall vm = verifyVMInstall(configuration);
-
-		IVMRunner runner = vm.getVMRunner(mode);
-		if (runner == null) {
-			abort(MessageFormat.format("Internal error: JRE {0} does not specify a VM Runner.", new String[]{vm.getId()}), null, IJavaLaunchConfigurationConstants.ERR_VM_RUNNER_DOES_NOT_EXIST);
+		String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+    	String processID = configuration.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
+      IResource resource  = _api.findFile(executableName);
+   	IProject project = resource.getProject();
+	
+	   _executable = _api.findResourceElement(resource);
+   	DataElement projectElement = _api.getProjectFor(_executable);
+      if (!project.isOpen())
+      {
+         displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+      	return;
 		}
 
-		File workingDir = verifyWorkingDirectory(configuration);
-		String workingDirName = null;
-		if (workingDir != null) {
-			workingDirName = workingDir.getAbsolutePath();
-		}
-		
-		// Program & VM args
-		String pgmArgs = getProgramArguments(configuration);
-		String vmArgs = getVMArguments(configuration);
-		ExecutionArguments execArgs = new ExecutionArguments(vmArgs, pgmArgs);
-		
-		// Classpath
-		String[] classpath = getClasspath(configuration);
-		
-		// Create VM config
-		VMRunnerConfiguration runConfig = new VMRunnerConfiguration(mainTypeName, classpath);
-		runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
-		runConfig.setVMArguments(execArgs.getVMArgumentsArray());
-		runConfig.setWorkingDirectory(workingDirName);
+      PICLAttachInfo attachInfo = new PICLAttachInfo();
+   	String qualifiedFileName = "";
+	
+   	qualifiedFileName = _executable.getSource();
+   	System.out.println("CppDebugAttachLaunchConfigurationDelegate:launch() - qualifiedFileName = " + qualifiedFileName);
+   	IFile file = (IFile)_api.findFile(qualifiedFileName);
+   	if (file == null)
+      {
+	   	projectElement = _api.getProjectFor(_executable);
+   		project = _api.findProjectResource(projectElement);
+   		file = new FileResourceElement(_executable, project);
+	   	_api.addNewFile(file);			
+      }
+	
+      attachInfo.setProcessID(processID);
+      attachInfo.setProcessPath(qualifiedFileName);
+      attachInfo.setStartupBehaviour(attachInfo.STOP);
+		attachInfo.setLaunchConfig(configuration);
 
-		// Bootpath
-		String[] bootpath = getBootpath(configuration);
-		runConfig.setBootClassPath(bootpath);
-		
-		// Launch the configuration
-		runner.run(runConfig, launch, monitor);		
-		*/
-		//  set default source locator if none specified
-		if (launch.getSourceLocator() == null) {
-			String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
-			if (id == null) {
-			//	IJavaProject javaProject = JavaLaunchConfigurationUtils.getJavaProject(configuration);
-			//	ISourceLocator sourceLocator = new JavaSourceLocator(javaProject);
-			//	launch.setSourceLocator(sourceLocator);
-			}
-		}
-	}	
+   	doLaunch(attachInfo, launch);
+    }	
+
+    public void doLaunch(PICLAttachInfo attachInfo, ILaunch launch)
+    {
+       CppSourceLocator sourceLocator = null;
+	
+	
+        //ensure the daemon is listening
+	//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
+       boolean ok = CoreDaemon.startListening();
+       if (ok == true)
+  	    {
+   		int port = CoreDaemon.getCurrentPort();
+	   	if (port < 0)
+         return;
+	    }
+       else
+	      return;
+	
+	
+  	   DataElement projectElement = _api.getProjectFor(_executable);
+     	if (projectElement != null)
+  	   {
+		   sourceLocator = new CppSourceLocator(projectElement);
+         System.out.println("CppDebugAttachLaunchConfigurationDelegate:doLaunch() calling attachInfo.setWorkspaceSourceLocator() ");
+  			attachInfo.setWorkspaceSourceLocator(sourceLocator);
+      }
+  		_dataElementDirectory = _executable.getParent();
+	
+   	PICLDebugTarget target = new  PICLDebugTarget(attachInfo, attachInfo.getEngineConnectionInfo());
+   	int key = CoreDaemon.generateKey();
+   	CoreDaemon.storeDebugTarget(target, key);
+        int port = CoreDaemon.getCurrentPort();
+	
+      launch.addDebugTarget(target);
+   	launch.setSourceLocator(attachInfo.getWorkspaceSourceLocator());
+
+   	launchEngine(new Integer(port).toString(), new Integer(key).toString());
+    }
+
+    protected void launchEngine(String port, String key)
+    {
+
+      System.out.println("CppDebugAttachLaunchConfigurationDelegate:launchEngine() ");
+     	_api.debug(_dataElementDirectory, port, key);
+    }
+
+
+   /**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("runLauncher.Error.Title"),message);
+    }
+	
 			
 }
 
