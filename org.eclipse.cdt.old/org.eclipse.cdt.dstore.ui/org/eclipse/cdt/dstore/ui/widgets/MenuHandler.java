@@ -226,7 +226,8 @@ public class MenuHandler
 			      if (_loader != null)
 				  {
 				  		CustomAction action = null;
-				  		if (objects.size() == 1)
+				  		int size = objects.size();
+				  		if (size == 1)
 				  		{
 				  		  action = _loader.loadAction((DataElement)objects.get(0), subDescriptor);
 				  		}
@@ -235,7 +236,16 @@ public class MenuHandler
 				      	 action = _loader.loadAction(objects, subDescriptor);
 				  		}
 				      if (action != null)
-					  menu.add(action);
+				      {
+				      	if (size > 1 && !action.supportsMultiple())
+				      	{
+				      		// don't add action
+				      	}
+				      	else
+				      	{
+					  		menu.add(action);
+				      	}
+				      }
 				  }
 			  }
 		  }

@@ -27,6 +27,7 @@ public class CustomAction extends Action
     protected DataElement        _command;
     protected DataElement        _subject;
     protected List               _subjects;
+    private   boolean            _supportsMultiple;
 
   public CustomAction(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
@@ -34,8 +35,9 @@ public class CustomAction extends Action
         _dataStore = dataStore;
         _command = command;
         _subject = subject; 
-	_subjects = new ArrayList();
-	_subjects.add(_subject);
+		_subjects = new ArrayList();
+		_subjects.add(_subject);
+		_supportsMultiple = false;
       }
 
   public CustomAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
@@ -45,6 +47,7 @@ public class CustomAction extends Action
         _command = command;
 	    _subjects = subjects;
         _subject = (DataElement)_subjects.get(0); 
+        _supportsMultiple = true;
       }
 
   public CustomAction(String label) 
@@ -54,7 +57,13 @@ public class CustomAction extends Action
         _command = null;
         _subject = null; 
         _subjects = null; 
+        _supportsMultiple = false;
       }
+      
+    public boolean supportsMultiple()
+    {
+    	return _supportsMultiple;
+    }
   
     public void setSubject(DataElement subject)
     {
