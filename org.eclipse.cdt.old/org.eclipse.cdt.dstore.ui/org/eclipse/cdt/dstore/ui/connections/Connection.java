@@ -370,6 +370,7 @@ public class Connection
 		
 		// get schema
 		dataStore.getSchema();
+
 		
 		// get content
 		String host = _client.getHost();
@@ -381,7 +382,7 @@ public class Connection
 			hostRoot.setAttribute(DE.A_SOURCE, hostDirectory);
 			dataStore.setHost(hostRoot);
 		    }
-		
+
 		// initialize miners
 		DataElement status = dataStore.initMiners();
 		if (!status.getName().equals("done"))

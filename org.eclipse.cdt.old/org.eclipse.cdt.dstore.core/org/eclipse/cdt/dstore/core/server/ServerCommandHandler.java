@@ -131,8 +131,7 @@ public class ServerCommandHandler extends CommandHandler
 	      {
 		  if (_miners.size() == 0)
 		      {
-
-			  loadMiners(); /***/
+			  loadMiners(); 
 		      }
 		  
 		  DataElement schemaRoot = _dataStore.getDescriptorRoot();
@@ -140,9 +139,9 @@ public class ServerCommandHandler extends CommandHandler
 		  // update all descriptor objects
 		  _dataStore.refresh(schemaRoot);		  
 		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));
+		  _dataStore.refresh(status);
 	      }
-	  
-	  if (_dataStore.validTicket())
+	  else if (_dataStore.validTicket())
 	      {
 		  String statusValue = status.getAttribute(DE.A_NAME);
 		  //		  if (!statusValue.equals(_dataStore.getLocalizedString("model.done")))

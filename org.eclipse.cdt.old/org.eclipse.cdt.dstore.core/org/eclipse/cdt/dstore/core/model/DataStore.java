@@ -982,8 +982,10 @@ public class DataStore
     
     public void getSchema()
     {
+	System.out.println("get schema...");
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SCHEMA", 1);
 	synchronizedCommand(cmd, _descriptorRoot);
+	System.out.println("...get schema");
     }
     
     public DataElement initMiners()

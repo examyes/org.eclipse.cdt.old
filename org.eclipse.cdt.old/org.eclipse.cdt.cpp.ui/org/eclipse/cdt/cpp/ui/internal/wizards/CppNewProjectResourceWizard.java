@@ -183,26 +183,32 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	    }
 
 	
-	String navID = IPageLayout.ID_RES_NAV;
+	//String navID = IPageLayout.ID_RES_NAV;
+	String navID = "com.ibm.cpp.ui.internal.views.CppProjectsViewPart";
+	/*
 	if (project instanceof Repository)
 	    {
 		navID = "com.ibm.cpp.ui.internal.views.RemoteProjectViewPart";
 		((Repository)project).refresh();
 	    }
+	*/
 
 	final IViewPart viewPart = persp.findView(navID);
-	if (viewPart != null &&
-	    viewPart instanceof ISetSelectionTarget)
+	if (viewPart != null)
 	    {
 		persp.bringToTop(viewPart);
-		final ISelection selection = new StructuredSelection(project);
-		getShell().getDisplay().asyncExec(new Runnable()
+
+		if (viewPart instanceof ISetSelectionTarget)
 		    {
-			public void run()
-			{
-			    ((ISetSelectionTarget)viewPart).selectReveal(selection);
-			}
-		    });
+			final ISelection selection = new StructuredSelection(project);
+			getShell().getDisplay().asyncExec(new Runnable()
+			    {
+				public void run()
+				{
+				    ((ISetSelectionTarget)viewPart).selectReveal(selection);
+				}
+			    });
+		    }
 	    }
     }
     

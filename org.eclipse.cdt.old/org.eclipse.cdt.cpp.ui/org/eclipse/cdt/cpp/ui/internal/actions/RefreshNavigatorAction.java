@@ -64,7 +64,11 @@ public class RefreshNavigatorAction extends Action
 
   public void run()
       {
-	  RemoteProjectViewPart.getInstance().resetView();		  
+	  RemoteProjectViewPart instance = RemoteProjectViewPart.getInstance();
+	  if (instance != null)
+	      {
+		  instance.resetView();		  
+	      }
       }
 }
 
