@@ -146,17 +146,17 @@ public class FileResourceElement extends ResourceElement implements IFile
 		      FileOutputStream output = new FileOutputStream(theFile);
 		      		
 		      // remote?		
-			  boolean doRemote = false;
-        	  localPath = localPath.replace('\\', '/');
-        	  String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
-        	  remotePath = remotePath.replace('\\', '/');
-
-			  File remoteFile = new File(remotePath);
-			  if (!remoteFile.exists() &&(!remotePath.equals(localPath)))
-		      {	
-	 	     	doRemote = true;
-	    	  }
-	      		      		      
+		      boolean doRemote = false;
+		      localPath = localPath.replace('\\', '/');
+		      String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
+		      remotePath = remotePath.replace('\\', '/');
+		      
+		      File remoteFile = new File(remotePath);
+		      if (_dataStore.isVirtual() || (!remoteFile.exists() &&(!remotePath.equals(localPath))))
+			  {	
+			      doRemote = true;
+			  }
+		      
 		      transferStreams(in, output, doRemote, remotePath, monitor);
 		  }
 	      catch (IOException e)

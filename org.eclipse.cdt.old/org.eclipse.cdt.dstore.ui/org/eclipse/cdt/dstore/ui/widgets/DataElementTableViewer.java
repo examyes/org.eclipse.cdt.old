@@ -504,10 +504,12 @@ public class DataElementTableViewer extends TableViewer
 	    }	
     }
     */
+    /*
     protected Item newItem(Widget parent, int flags, int ix)  
     {
 	return new TableItem((Table)parent, flags, ix);
     }
+    */
     
     public void doExpand(DataElement obj)
     {
