@@ -1821,6 +1821,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				}
 			    else
 				{
+				    DataElement resourceElement = findResourceElement(resource);
+				    if (resourceElement == null)
+					{
+					    IResource parent = resource.getParent();
+					    DataElement parentElement = findResourceElement(parent);		
+					    if (parentElement != null)
+						{
+						    parentElement.refresh(false);
+						}
+					}
+
+
 				    /* THIS CAUSES A HANG WHEN IMPORTING LARGE NUMBERS OF FILES
 				    System.out.println("added " + resource);
 				    resourceChanged(resource.getParent());
