@@ -124,6 +124,7 @@ public class TransferFiles extends Thread
 				ArrayList args = new ArrayList();
 				args.add(invocationElement);
 				targetDataStore.command(cmd, args, target);
+				setDate(copiedSource, getDate(source));
 			    }
 		    }
 	    }
@@ -135,6 +136,7 @@ public class TransferFiles extends Thread
 			File theFile = source.getFileObject();
 			
 			targetDataStore.replaceFile(newSourceStr, theFile);
+			setDate(copiedSource, getDate(source));
 		    }
 	    }
 	
@@ -160,15 +162,47 @@ public class TransferFiles extends Thread
 
     private long getDate(DataElement fileElement)
     {
-	DataElement status = fileElement.doCommandOn("C_DATE", true);	
-	if (status != null && status.getNestedSize() > 0)
+	DataElement dateObj = null;
+	ArrayList timeArray = fileElement.getAssociated("modified at");
+	if (timeArray.size() > 0)
 	    {
-		DataElement dateObj = status.get(0);
+		dateObj = (DataElement)timeArray.get(0); 
+	    }
+	else
+	    {
+		DataElement status = fileElement.doCommandOn("C_DATE", true);	
+		if (status != null && status.getNestedSize() > 0)
+		    {
+			dateObj = status.get(0);			
+		    }	
+	    }
 
+	if (dateObj != null)
+	    {
 		Long date = new Long(dateObj.getName());
 		return date.longValue(); 
-	    }	
+	    }
 
 	return -1;
+    }
+
+    private void setDate(DataElement fileElement, long newDate)
+    {
+	ArrayList timeArray = fileElement.getAssociated("modified at");
+	if (timeArray.size() > 0)
+	    {
+		DataElement dateObj = (DataElement)timeArray.get(0); 
+		dateObj.setAttribute(DE.A_NAME, "" + newDate);
+	    }
+	
+	DataStore dataStore = fileElement.getDataStore();
+	DataElement dateDescriptor = dataStore.localDescriptorQuery(fileElement.getDescriptor(), 
+								    "C_SET_DATE");
+	if (dateDescriptor != null)
+	    {
+		ArrayList args = new ArrayList();
+		args.add(dataStore.createObject(null, "date", "" + newDate));
+		dataStore.command(dateDescriptor, args, fileElement);
+	    }
     }
 }

@@ -160,8 +160,8 @@ public class FileSystemMiner extends Miner
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
 
-	  DataElement fdateD    = createCommandDescriptor(_fsystemObjectDescriptor, "Get Date", "C_DATE", false);
-	  DataElement setDateD  = createCommandDescriptor(_fsystemObjectDescriptor,  "Set Date", "C_SET_DATE", false);
+	  DataElement fdateD    = createCommandDescriptor(_fileDescriptor, "Get Date", "C_DATE", false);
+	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
 	  
 	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), "C_OPEN");
 	  DataElement move      = createCommandDescriptor(_fsystemObjectDescriptor, 

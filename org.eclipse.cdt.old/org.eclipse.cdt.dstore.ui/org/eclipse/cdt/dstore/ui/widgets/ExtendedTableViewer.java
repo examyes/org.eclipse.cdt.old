@@ -512,14 +512,17 @@ public void doExpand(DataElement obj)
 	    {
 		DataElement type = _selected.getDescriptor();
 		boolean isContainer = false;
-		ArrayList contents = type.getAssociated("contents");
-		for (int i = 0; (i < contents.size()) && !isContainer; i++)
+		if (type != null)
 		    {
-			DataElement contained = (DataElement)contents.get(i);
-			if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
+			ArrayList contents = type.getAssociated("contents");
+			for (int i = 0; (i < contents.size()) && !isContainer; i++)
 			    {
-				isContainer = true;
-			    }		    
+				DataElement contained = (DataElement)contents.get(i);
+				if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
+				    {
+					isContainer = true;
+				    }		    
+			    }
 		    }
 		
 		if (isContainer)
