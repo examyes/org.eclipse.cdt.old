@@ -67,7 +67,7 @@ public class CommandMiner extends Miner
 		    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/org.eclipse.cdt.dstore.miners/patterns.dat";
 		   launchCommand(subject, invocation, status);
   
-		  }
+		  } 
                   return status;
 	      }
 	  else
@@ -275,22 +275,31 @@ class CommandMinerThread extends MinerThread
 
 	    if (theShell == null)
 		{
-		    theShell = "sh";
+		    if (_invocation.equals(">"))
+			{
+				_invocation = "sh";
+				_isShell = true;
+			}
+			String args[] = new String[1];
+			args[0] = _invocation;
+			_theProcess = Runtime.getRuntime().exec(args[0], env, theDirectory);
 		}
-
-		if (_invocation.equals(">"))
+		else
 		{
-			_invocation = theShell;
-			_isShell = true;
-		}
+			if (_invocation.equals(">"))
+			{
+				_invocation = theShell;
+				_isShell = true;
+			}
 
 
-	    String args[] = new String[3];
-	    args[0] = theShell;
-	    args[1] = "-c";
-	    args[2] = _invocation;
+		    String args[] = new String[3];
+		    args[0] = theShell;
+		    args[1] = "-c";
+		    args[2] = _invocation;
 
-	    _theProcess = Runtime.getRuntime().exec(args, env, theDirectory); 
+		    _theProcess = Runtime.getRuntime().exec(args, env, theDirectory);
+		} 
 	}
     else
 	{
@@ -311,8 +320,9 @@ class CommandMinerThread extends MinerThread
    catch (IOException e) 
    {
     _theProcess = null;
-    e.printStackTrace();
-    System.out.println(e.getMessage());
+   
+    createObject("command", e.getMessage());
+    status.setAttribute(DE.A_NAME, "done");
     return;
    }
    
@@ -617,16 +627,17 @@ class CommandMinerThread extends MinerThread
 				//e.printStackTrace();
 				exitcode = -1;
 				_theProcess.destroy();
-			    }			
-			    _theProcess = null;
+			    }		
+			    _theProcess = null;	
 		    }		
 	    }
 	catch (IOException e) 
 	    {
 		e.printStackTrace();
 	    }
+	    
+	    
     }
-
 
 
  
