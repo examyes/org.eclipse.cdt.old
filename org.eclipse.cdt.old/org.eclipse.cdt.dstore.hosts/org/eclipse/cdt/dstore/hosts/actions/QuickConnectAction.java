@@ -92,7 +92,7 @@ public class QuickConnectAction implements Runnable
 		DataStore rmtDataStore = tempConnection.getDataStore();
 		
 		DataElement host = rmtDataStore.getHostRoot();
-		
+		 
 		DataElement input = host.get(0).dereference();
 		input.expandChildren();
 		DataElementFileDialog dialog = new DataElementFileDialog(_plugin.getLocalizedString("actions.Select_Directory"), 

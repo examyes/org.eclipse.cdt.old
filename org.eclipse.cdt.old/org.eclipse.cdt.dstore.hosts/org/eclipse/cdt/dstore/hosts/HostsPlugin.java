@@ -124,7 +124,7 @@ public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 								loadScope);
 		
 		_clientConnection = new ClientConnection("Hosts", 2000); 
-		_clientConnection.setLoader(hostsLoader);	
+		_clientConnection.addLoader(hostsLoader);	
 		_dataStore = _clientConnection.getDataStore();
 		String install = _corePath;
 		
