@@ -105,15 +105,13 @@ public class TraceFilesViewPart extends PAObjectsViewPart
    */
   public void traceChanged(PATraceEvent event) {
   
-   // System.out.println("traceChanged called");
+   //System.out.println("traceChanged called");
    DataElement traceObject = event.getObject();
    int type = event.getType();
    switch (type) {
    
     case PATraceEvent.FILE_CREATED:
-      
-      // System.out.println("trace file created");
-      
+            
       if (!_api.isShowAll()) {
        DataElement traceProject = traceObject.getParent();
        if (traceProject != null) {
@@ -131,7 +129,7 @@ public class TraceFilesViewPart extends PAObjectsViewPart
     
     case PATraceEvent.FILE_PARSED:
     
-      _viewer.setSelected(traceObject, false);
+      //_viewer.setSelected(traceObject, false);
       break;
       
     case PATraceEvent.FILE_DELETED:

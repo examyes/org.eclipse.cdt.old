@@ -31,7 +31,7 @@ public class RemoveTraceTargetAction extends CustomAction
    
   public void run()
   {
-    _api.removeTraceFile(_subject);
+    _api.removeTraceTarget(_subject);
   }
 
 

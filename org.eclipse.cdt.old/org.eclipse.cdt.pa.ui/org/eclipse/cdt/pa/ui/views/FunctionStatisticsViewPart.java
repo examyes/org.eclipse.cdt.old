@@ -118,8 +118,7 @@ public class FunctionStatisticsViewPart extends PAObjectsViewPart {
       
       case PATraceEvent.FILE_PARSED:
       
-        _viewer.setInput(null);
-        _viewer.setInput(_api.getTraceFuctionsRoot(traceObject));
+        _viewer.resetView();
         break;
         
       case PATraceEvent.FILE_DELETED:

@@ -42,7 +42,13 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
    
    private int       _traceType;
    private String  	 _traceFormat;
+   private String	 _realTraceFormat;
+   private String	 _detectedTraceFormat;
    private DataElement _traceElement;
+   
+   private static String AUTO_FORMAT  = "auto";
+   private static String GPROF_FORMAT = "gprof";
+   private static String FC_FORMAT    = "functioncheck";
    
    private static final int SIZING_TEXT_FIELD_WIDTH = 150;
    
@@ -57,7 +63,9 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	 _api.getTraceNotifier().addTraceListener(this);
 	 
 	 _traceType = PAResource.TRACE_FILE;
-	 _traceFormat = "auto";
+	 _traceFormat = AUTO_FORMAT;
+	 _realTraceFormat = AUTO_FORMAT;
+	 _detectedTraceFormat = null;
 	 _traceElement = null;
 	 setPageComplete(false);
    }
@@ -101,12 +109,29 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	_traceFileRadio = new Button(traceTypeGroup, SWT.RADIO);
 	_traceFileRadio.setText("Trace file");
 	_traceFileRadio.addListener(SWT.Selection, this);
+
+	createTextGroup(traceTypeGroup, "Select this option if you want to parse the profile output saved in a text file.");
 	
 	_traceProgramRadio = new Button(traceTypeGroup, SWT.RADIO);
 	_traceProgramRadio.setText("Trace program");
 	_traceProgramRadio.addListener(SWT.Selection, this);
+
+	createTextGroup(traceTypeGroup, "Select this option if you want to analyze an executable.");
 	
 	_traceFileRadio.setSelection(true);
+   }
+   
+   
+   private void createTextGroup(Composite parent, String text) {
+   
+	Composite textGroup = new Composite(parent,SWT.NONE);
+	GridLayout layout = new GridLayout();
+	layout.numColumns = 1;
+	textGroup.setLayout(layout);
+	textGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    
+    Label textLabel = new Label(textGroup, SWT.NONE);
+    textLabel.setText(text);
    }
    
    
@@ -176,16 +201,19 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
          String format = object.getValue();
          if (format.equals("invalid trace file")) {
            setErrorMessage("Not a valid trace file: " + argument.getSource());
+           _detectedTraceFormat = null;
            setPageComplete(false);
          }
          else if (format.equals("invalid trace program")) {
            setErrorMessage("Not a valid trace program: " + argument.getSource());
+           _detectedTraceFormat = null;
            setPageComplete(false);
          }
          else {
            setErrorMessage(null);
            setMessage("Detected trace format: " + format);
-           _traceFormat = format;
+           _realTraceFormat = format;
+           _detectedTraceFormat = format;
            setPageComplete(true);
          }         
          break;
@@ -203,7 +231,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
    
    
    public String getTraceFormat() {
-     return _traceFormat;
+     return _realTraceFormat;
    }
    
    
@@ -215,10 +243,10 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
    public boolean finish() {
    
      if (_traceType == PAResource.TRACE_FILE) {
-       _api.addTraceFile(_traceElement, _traceFormat);
+       _api.addTraceFile(_traceElement, _realTraceFormat);
      }
      else {
-      _api.addTraceProgram(_traceElement, _traceFormat);
+      _api.addTraceProgram(_traceElement, _realTraceFormat);
      }
                
      return true;
@@ -245,19 +273,19 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	Widget source = ev.widget;
 	
 	if (source == _traceFileRadio && _traceFileRadio.getSelection()) {
-	 _traceType = PAResource.TRACE_FILE;
+	 handleTraceTypeChanged(PAResource.TRACE_FILE);
 	}
 	else if (source == _traceProgramRadio && _traceProgramRadio.getSelection()) {
-	 _traceType = PAResource.TRACE_PROGRAM;
+	 handleTraceTypeChanged(PAResource.TRACE_PROGRAM);
 	}
 	else if (source == _autoFormatRadio && _autoFormatRadio.getSelection()) {
-	 _traceFormat = "auto";
+	 handleTraceFormatChanged(AUTO_FORMAT);
 	}
 	else if (source == _gprofFormatRadio && _gprofFormatRadio.getSelection()) {
-	 _traceFormat = "gprof";
+	 handleTraceFormatChanged(GPROF_FORMAT);
 	}
 	else if (source == _fcFormatRadio && _fcFormatRadio.getSelection()) {
-	 _traceFormat = "functioncheck";
+	 handleTraceFormatChanged(FC_FORMAT);
 	}
 	else if (source == _targetPathField) {
 	 // System.out.println("Text field modified");
@@ -270,20 +298,82 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
    }
    
    
-   protected void handleTargetPathChanged() {
+   private void handleTraceTypeChanged(int newTraceType) {
    
-    if (_traceType == PAResource.TRACE_FILE) {    
-      _api.queryTraceFileFormat(_traceElement);      
+    _traceType = newTraceType;
+    
+    String targetName = _targetPathField.getText();
+    if (targetName != null && targetName.trim().length() > 0) {     
+      handleTargetPathChanged();
+    }
+    
+   }
+   
+   
+   private boolean match(String detectedFormat, String newFormat) {
+   
+    if (newFormat.equals(AUTO_FORMAT))
+     return false;
+    else if (detectedFormat == null)
+     return false;
+    else if (detectedFormat.indexOf("gprof") >= 0 && newFormat.indexOf("gprof") >= 0)
+     return true;
+    else
+     return detectedFormat.equals(newFormat);
+     
+   }
+   
+   private void handleTraceFormatChanged(String newFormat) {
+       
+    _traceFormat     = newFormat;
+    _realTraceFormat = newFormat;
+
+    String targetName = _targetPathField.getText();
+    if (targetName != null && targetName.trim().length() > 0) {     
+      handleTargetPathChanged();
+    }
+    
+   }
+   
+   
+   protected void handleTargetPathChanged() {
+       
+    if (_traceType == PAResource.TRACE_FILE) { 
+     
+      if (_traceFormat.equals(AUTO_FORMAT)) {
+        _api.queryTraceFileFormat(_traceElement);
+        setMessage("Detecting trace format...");
+      }
+      else {
+        setErrorMessage(null);
+        setPageComplete(true);
+        
+        if (!match(_detectedTraceFormat, _traceFormat)) {
+         setMessage("Be warned that you might encounter a parse problem if the trace format is not correct");
+        
+        }
+      }
+      
     }
     else if (_traceType == PAResource.TRACE_PROGRAM ) {
     
       if (_traceElement.isOfType("binary executable")) {
-        if (_traceFormat.equals("auto"))
+        if (_traceFormat.equals(AUTO_FORMAT)) {
          _api.queryTraceProgramFormat(_traceElement);
-        else
+         setMessage("Detecting trace format...");
+        }
+        else {
+         setErrorMessage(null);
          setPageComplete(true);
+         
+         if (!match(_detectedTraceFormat, _traceFormat)) {
+          setMessage("Be warned that you might encounter a parse problem if the trace format is not correct");
+         }
+         
+        }
       }
       else {
+        _detectedTraceFormat = null;
         setErrorMessage("Not a platform executable: " + _traceElement.getSource());
         setPageComplete(false);        
       }
