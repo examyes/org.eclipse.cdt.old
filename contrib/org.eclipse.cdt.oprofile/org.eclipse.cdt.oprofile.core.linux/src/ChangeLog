@@ -1,3 +1,33 @@
+2005-02-04  Jeremy Handcock  <handcock@redhat.com>
+
+	* imageheader.cc: Update license header.
+	* imageheader.h: Likewise.
+	* opinfo.cc: Likewise.
+	* opinfo.h: Likewise.
+	* oprofiledb.cc: Likewise.
+	* oprofiledb.h: Likewise.
+	* opxml.cc: Likewise.
+	* oxmlstream.h: Likewise.
+	* profileimage.cc: Likewise.
+	* sample.cc: Likewise.
+	* sample.h: Likewise.
+	* samplefile.cc: Likewise.
+	* samplefile.h: Likewise.
+	* session.cc: Likewise.
+	* session.h: Likewise.
+	* sevent.cc: Likewise.
+	* sevent.h: Likewise.
+	* stable.cc: Likewise.
+	* stable.h: Likewise.
+	* symbol.cc: Likewise.
+	* symble.h: Likewise.
+	* xmlbuf.cc: Likewise.
+	* xmlbuf.h: Likewise.
+	* xmlfmt.cc: Likewise.
+	* xmlfmt.h: Likewise.
+	* xmltag.cc: Likewise.
+	* xmltag.h: Likewise.
+
 2005-02-04  Keith Seitz  <keiths@redhat.com>
 
 	* Makefile: Update dependencies and remove util.h and util.cc.
