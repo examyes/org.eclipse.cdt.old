@@ -51,7 +51,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
     private Text                             programNameField;
     private Text                             programParametersField;
     protected Combo	                        sourceNameField;
-    protected Button                         debugInitialization;
+//    protected Button                         debugInitialization;
 
     // constants
     private static final int SIZING_TEXT_FIELD_WIDTH = 300;
@@ -60,7 +60,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
 
     private  String        _programName;
     private  String        _parameters;
-    private  boolean       _debugInitialization;
+//    private  boolean       _debugInitialization;
 
     /**
      * Creates a <code>WizardNewProjectCreationPage</code> instance.
@@ -207,7 +207,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
 
 
     }
-
+/*
     protected void createDebugInitializationGroup(Composite parent)
     {
    	Composite debugInitializationGroup = new Composite(parent,SWT.NONE);
@@ -235,7 +235,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
    	//resetSelection();
    	
     }
-
+ */
 
 
     /**
@@ -263,6 +263,8 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
      */
     public boolean finish()
     {
+
+      /*
       if (debugInitialization.getSelection())
       {
          _debugInitialization = true;
@@ -271,6 +273,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
       {
          _debugInitialization = false;
       }
+      */
 
       _parameters = programParametersField.getText();
 
@@ -282,12 +285,12 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
 		return _parameters;
     }
 
-
+    /*
     public boolean debugInitialization()
     {
       return _debugInitialization;
     }
-
+    */
 /**
  * Returns the current contents of the project name field, or
  * its set initial value if it does not exist yet (which could
@@ -320,6 +323,7 @@ public String getProgramFieldValue() {
 	    {
 		//resetSelection();
 	    }
+   /*
 	else if (source == debugInitialization)
             {
             	//resetSelection();
@@ -327,6 +331,7 @@ public String getProgramFieldValue() {
             	//remoteHostNameField.setFocus();
              	//sourceNameField.setEnabled(false);
             }
+    */
 
 	this.setPageComplete(this.validatePage());
     }

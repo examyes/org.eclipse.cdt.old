@@ -64,11 +64,12 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     {
    	return _mainPage;
     }
-
+/*
     public boolean debugInitialization()
     {
    	return _mainPage.debugInitialization();
     }
+*/
 
     public String getParameters()
     {
@@ -79,7 +80,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     {
 	
    	_mainPage.finish();
-	boolean debugInitialization = debugInitialization();
+      //	boolean debugInitialization = debugInitialization();
     	String parameters = getParameters();
 	
 	PICLLoadInfo loadInfo = new PICLLoadInfo();
@@ -108,14 +109,14 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	
 	int startupBehaviour;
 	
-	if (debugInitialization)
-	    {
-		startupBehaviour = loadInfo.DEBUG_INITIALIZATION;
-	    }
-	else
-	    {
+//	if (debugInitialization)
+//	    {
+//		startupBehaviour = loadInfo.DEBUG_INITIALIZATION;
+//	    }
+//	else
+//	    {
 		startupBehaviour = loadInfo.RUN_TO_MAIN;
-	    }
+//	    }
 	
 	loadInfo.setStartupBehaviour(startupBehaviour);
 	
