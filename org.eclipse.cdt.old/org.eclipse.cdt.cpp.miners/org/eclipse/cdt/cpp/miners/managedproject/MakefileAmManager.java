@@ -647,8 +647,8 @@ public class MakefileAmManager {
 			{
 				String name = parent.listFiles()[i].getName();
 				if(!name.endsWith(".c")&& !name.endsWith(".C")&&!name.endsWith(".cpp")&&!name.endsWith(".cc") 
-				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")
-				&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")
+				&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.startsWith(".")
+				&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")&&!name.endsWith(".old")
 				&&!name.equals("Makefile") && !name.equals("makefile")&&!name.equals("configur"))
 				{
 					out.write(" "+"\\");

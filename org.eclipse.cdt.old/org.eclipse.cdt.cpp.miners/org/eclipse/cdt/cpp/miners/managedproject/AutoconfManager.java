@@ -190,10 +190,22 @@ public class AutoconfManager {
 	}
 	public void runConfigureScript(DataElement project, DataElement status)
 	{
-		if(getOS().equals("Linux"))
-			runCommand(project, status, "./configure");
+		// if configure is not found then create it first
+		File conf = new File (project.getSource(),"configure");
+		if(!conf.exists())
+		{
+			if(getOS().equals("Linux"))
+				runCommand(project, status,"./autogen.sh;./configure");
+			else
+			runCommand(project, status,cygwinPrefix+"autogen.sh;" +cygwinPrefix+"configure");
+		}
 		else
-			runCommand(project, status, cygwinPrefix+"configure");
+		{ 
+			if(getOS().equals("Linux"))
+				runCommand(project, status, "./configure");
+			else
+				runCommand(project, status, cygwinPrefix+"configure");
+		}
 	} 
 	public void distClean(DataElement project, DataElement status)
 	{
