@@ -569,7 +569,7 @@ public class ViewMenu implements IMenuListener
 			      }
 		      }
 
-		  if (!containsAll)
+		  if (!containsAll || _filterItems.size() > 0)
 		      {
 			  _filterItems.add(allD);
 		      }
