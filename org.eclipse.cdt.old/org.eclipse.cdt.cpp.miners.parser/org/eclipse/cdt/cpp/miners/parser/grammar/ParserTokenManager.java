@@ -21,7 +21,7 @@ public class ParserTokenManager implements ParserConstants
   StringBuffer objectBody = new StringBuffer();
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the ASCII_CharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
    //probably more characters ahead of what the Parser thinks is the current token (the '{').
    //So first, we'll back the input_stream up to the curToken.
 
@@ -68,7 +68,7 @@ public class ParserTokenManager implements ParserConstants
  {
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the ASCII_CharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
    //probably more characters ahead of what the Parser thinks is the current token (the '{').
    //So first, we'll back the input_stream up to the curToken.
 
@@ -113,7 +113,7 @@ public class ParserTokenManager implements ParserConstants
  {
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the ASCII_CharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
    //probably more characters ahead of what the Parser thinks is the current token.
    //So first, we'll back the input_stream up to the curToken.
 
@@ -153,7 +153,7 @@ public class ParserTokenManager implements ParserConstants
  {
   Token t = null;
   int charsTried = 0;
-  while (++charsTried < 3)
+  while (++charsTried < 10)
   {
    try
    {
