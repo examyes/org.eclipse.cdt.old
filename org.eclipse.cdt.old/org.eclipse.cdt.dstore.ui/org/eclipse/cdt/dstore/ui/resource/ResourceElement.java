@@ -420,7 +420,13 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 
     public IMarker createMarker(String type) throws CoreException
     {
+	MarkerInfo info = new MarkerInfo();
+	info.setType(type);
 	IMarker result = new ElementMarker(this, type);
+
+	//Workspace workspace = (Workspace)getWorkspace();
+	//	workspace.getMarkerManager().add(this, new MarkerInfo[] { info });
+
 	return result;
     }
 

@@ -36,12 +36,10 @@ public class ElementMarker implements IMarker
 
     public void delete() throws CoreException
     {
-	System.out.println("delete");
     }
 
     public boolean equals(Object object)
     {
-	System.out.println("equals");
 	return (this == object);
     }
     
@@ -114,7 +112,6 @@ public class ElementMarker implements IMarker
     
     public IResource getResource()
     {
-	System.out.println("get resource");
 	return _resource;
     }
     
