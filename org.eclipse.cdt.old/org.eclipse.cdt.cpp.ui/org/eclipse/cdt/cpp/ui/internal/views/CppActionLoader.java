@@ -107,6 +107,15 @@ public class CppActionLoader extends GenericActionLoader
 	    {
 		loadBrowseActions(menu, input);
 	    }
+
+	// add additions item
+	menu.add(new Separator("additions"));
+
+	menu.add(new Separator("Properties"));
+	if (input.isOfType("file"))
+	    {
+		menu.add(new OpenPropertiesAction(input, "Properties...", null, input.getDataStore()));
+	    }
     }
 
     private void loadCustomResourceActions(IMenuManager menu, DataElement input)
@@ -175,7 +184,7 @@ public class CppActionLoader extends GenericActionLoader
 		MenuManager browseCascade = new MenuManager("Browse", "Browse");
 		browseCascade.add(new BrowseProjectAction("Project", input));			
 		menu.add(browseCascade);
-	    }		
+	    }			
     }
     
     private void loadBrowseActions(IMenuManager menu, DataElement input)

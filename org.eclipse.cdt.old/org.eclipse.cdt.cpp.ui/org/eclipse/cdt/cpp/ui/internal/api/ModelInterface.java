@@ -175,6 +175,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	public void handle()
 	{	
 	    String statusValue = _status.getName();
+	    _status.getDataStore().trace("monitor status = " + _status.getId() + " " + _status.getName());
 	    if (_timesHandled > _threshold)
 		{
 		    if ((_project == null) ||  (!_project.isOpen()))
@@ -2486,15 +2487,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	synchronizeWith.setAttribute(DE.A_VALUE, "C_SYNCHRONIZE_WITH");
 
 
-	DataElement propertyDialogAction = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
-								  "Properties...",
-								  "org.eclipse.cdt.cpp.ui.internal.actions.OpenPropertiesAction");
-	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
-
-	DataElement propertyDialogAction2 = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
-								  "Properties...",
-								  "org.eclipse.cdt.cpp.ui.internal.actions.OpenPropertiesAction");
-	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
 
 	//*********************************************
 	

@@ -60,19 +60,19 @@ public class OpenPropertiesAction extends CustomAction
 
 	// get selection
 	ModelInterface api = ModelInterface.getInstance();
-	IProject project = api.findProjectResource(_subject);
+	IResource resource = api.findResource(_subject);
 	
-	if (project != null)
+	if (resource != null)
 	    {
 		Shell shell = api.getDummyShell();
 		
 		// load pages for the selection
 		// fill the manager with contributions from the matching contributors
-		PropertyPageContributorManager.getManager().contribute(pageManager, project);
+		PropertyPageContributorManager.getManager().contribute(pageManager, resource);
 		
 		// testing if there are pages in the manager
 		Iterator pages = pageManager.getElements(PreferenceManager.PRE_ORDER).iterator();
-		String name = project.getName();
+		String name = resource.getName();
 		
 		if (!pages.hasNext()) 
 		    {
@@ -89,7 +89,7 @@ public class OpenPropertiesAction extends CustomAction
 		
 		
 		
-		PropertyDialog propertyDialog = new PropertyDialog(shell, pageManager, new StructuredSelection(project)); 
+		PropertyDialog propertyDialog = new PropertyDialog(shell, pageManager, new StructuredSelection(resource)); 
 		propertyDialog.create();
 		propertyDialog.getShell().setText(title);
 		WorkbenchHelp.setHelp(propertyDialog.getShell(), new Object[]{IHelpContextIds.PROPERTY_DIALOG});
@@ -97,7 +97,7 @@ public class OpenPropertiesAction extends CustomAction
 	    }
 	else
 	    {
-		System.out.println("project is null");
+		//System.out.println("project is null");
 	    }
     }
 }
