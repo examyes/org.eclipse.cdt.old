@@ -687,6 +687,7 @@ public class DataStore
 	      }
 	  
 	  _hashMap.put(attributes[DE.A_ID], newObject);
+	  //***refresh(parent);
 	  return newObject;
       }
 
@@ -1292,7 +1293,7 @@ public DataElement command(DataElement commandDescriptor,
 	  {	
 	      for (int i = 0; i < descriptor.getNestedSize(); i++)
 		  {
-		      DataElement subDescriptor = (DataElement)descriptor.get(i);
+		      DataElement subDescriptor = (DataElement)descriptor.get(i).dereference();
 		      String type = subDescriptor.getType();
 		      if (type == null)
 			  {
