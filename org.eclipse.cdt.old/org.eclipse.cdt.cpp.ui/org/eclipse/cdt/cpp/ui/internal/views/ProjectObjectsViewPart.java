@@ -153,7 +153,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 
 	     if (scopeView)
 		 {
-		     theInput = findParseFile(theElement);
+		     theInput = _api.findParseFile(theElement);
 		 }
 	     else
 		 {
@@ -163,7 +163,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      
      if (theElement.getType().equals("Project"))
 	 {
-	     theInput = findParseFiles(theElement);
+	     theInput = _api.findParseFiles(theElement);
 	 }
 
 
@@ -197,63 +197,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	 return theInput;
  }
 
- DataElement findParseFiles(DataElement theProjectFile)
-    {
-	DataStore dataStore = theProjectFile.getDataStore();
-	ArrayList parseRef = theProjectFile.getAssociated("Parse Reference");
-	if (parseRef != null && parseRef.size() > 0)
-	    {
-		DataElement parseProject = ((DataElement)(parseRef.get(0))).dereference();
-		DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
-		return projectObjects;
-	    }
-	else
-	    {
-		return null;
-	    }
-    }
 
- DataElement findParseFile(DataElement theProjectFile)
- {
-  String projectFileSource1 = theProjectFile.getSource().replace('\\','/');
-  String projectFileSource2 = theProjectFile.getSource().replace('/','\\');
-  DataStore dataStore = theProjectFile.getDataStore();
-
-  
-  while (!(theProjectFile = theProjectFile.getParent()).getType().equals("Project")) 
-      {
-      }
-
-     DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
-     DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
-     DataElement theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource1, 1);
-     if (theParseFile == null)
-	 {
-	     theParseFile = dataStore.find(parsedFiles, DE.A_SOURCE, projectFileSource2, 1);
-	 }
-     
-     if (theParseFile == null)
-	 {
-	     DataElement dummyInput = dataStore.find(dataStore.getTempRoot(), DE.A_NAME, "Non-Parsed File", 1);
-	     if (dummyInput != null)
-		 {
-		     theParseFile = dummyInput;
-		     DataElement theMessage = ((DataElement)(theParseFile.getNestedData().get(0)));
-		     theMessage.setAttribute(DE.A_VALUE,projectFileSource1  + " has not been parsed.");
-		     dataStore.refresh(theMessage);
-		 }
-	     else
-		 {
-		     theParseFile = dataStore.createObject(dataStore.getTempRoot(), "Output", "Non-Parsed File");
-		     dataStore.createObject(theParseFile, "warning", projectFileSource1 + " has not been parsed.");
-		 }
-	 }
-     
-     
-     return theParseFile;
- }
- 
- 
 }
 
 
