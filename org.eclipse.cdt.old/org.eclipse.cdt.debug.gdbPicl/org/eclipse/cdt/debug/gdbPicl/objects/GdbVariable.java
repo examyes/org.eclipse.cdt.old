@@ -78,18 +78,43 @@ public abstract class GdbVariable  extends Variable
  					// try to extract the field name
  					
  					int brace = testStr.lastIndexOf("{");
- 					String fieldName = testStr.substring(brace+1, equal);
- 					fieldName = fieldName.trim();
- 					
- 					if (value.indexOf(fieldName, comma) != -1)
+ 					if (brace+1 < equal)
  					{
- 						// this is an array
- 						return new GdbArrayVariable(debugSession, varName, type, value, varName, nodeID);
- 					}				
+	 					String fieldName = testStr.substring(brace+1, equal);
+	 					fieldName = fieldName.trim();
+ 					
+	 					if (value.indexOf(fieldName, comma) != -1)
+	 					{
+	 						// this is an array
+	 						return new GdbArrayVariable(debugSession, varName, type, value, varName, nodeID);
+	 					}				
+	 					else
+	 					{
+	 						// this is an object that starts with an union
+	 						return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+	 					}
+ 					}
  					else
  					{
- 						// this is an object that starts with an union
- 						return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+ 						testStr = testStr.substring(0, equal-1);
+ 						// use another method to find the field name
+ 						while (testStr.startsWith("{"))
+ 						{
+ 							testStr = testStr.substring(1);
+ 						}
+ 						String fieldName = testStr;
+ 						
+ 						 					
+	 					if (value.indexOf(fieldName, comma) != -1)
+	 					{
+	 						// this is an array
+	 						return new GdbArrayVariable(debugSession, varName, type, value, varName, nodeID);
+	 					}				
+	 					else
+	 					{
+	 						// this is an object that starts with an union
+	 						return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+	 					} 						
  					}
  				}					
    			}

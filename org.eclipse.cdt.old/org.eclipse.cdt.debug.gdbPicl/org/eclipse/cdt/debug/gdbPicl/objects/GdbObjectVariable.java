@@ -148,17 +148,24 @@ public class GdbObjectVariable extends GdbVariable {
 
 		int start=0;
 		int end=0;
+		
+		boolean quote = false;
 			
 		
 		for (int i=0; i<str.length(); i++)
 		{
-			if (str.charAt(i) == '{')
+			if (str.charAt(i) == '\"')
+			{
+				quote = !quote;
+			}
+			
+			if (str.charAt(i) == '{' && !quote)
 			{			
 				start++;
 				startLocation = i;						
 			}
 			
-			if (str.charAt(i) == '}')
+			if (str.charAt(i) == '}' && !quote)
 			{
 				end++;
 				endLocation = i;
