@@ -84,7 +84,7 @@ public class TargetAction extends CustomAction
 		"\nYou may want to create and or run configure before performing this action");
 		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 		
-		File parent = _subject.getFileObject().getParentFile();
+		File parent = _subject.getFileObject();
 		File Makefile = new File(parent,"Makefile");
 		if(!Makefile.exists())
 			dialog.openWarning(shell,"Building "+_subject.getName(),message);

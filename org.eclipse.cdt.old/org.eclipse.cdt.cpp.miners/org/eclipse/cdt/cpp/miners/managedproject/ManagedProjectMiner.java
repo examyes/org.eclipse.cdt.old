@@ -220,6 +220,7 @@ public class ManagedProjectMiner extends Miner
 		{
 			theParser = new AmParser(theUnmanagedProject);
 			theManagedProject = theParser.parse();
+			//_dataStore.refresh(theManagedProject);
 		}
 		else if (theUnmanagedProject.getType().equals("directory"))
 		{
