@@ -57,6 +57,7 @@
    	   		id="org.eclipse.cdt.run.launchconfig"
 	   		name="C/C++ Application"
 	   		delegate="org.eclipse.cdt.cpp.ui.internal.launchers.CppRunLaunchConfigurationDelegate"
+       		label="Debug C load"
 	   		modes= "run">
    		</launchConfigurationType>
 	</extension>
@@ -110,6 +111,33 @@
        		class="org.eclipse.cdt.cpp.ui.internal.launchers.CppRunTabGroup">
        	</launchConfigurationTabGroup>
        </extension>
+
+	<extension point = "org.eclipse.debug.ui.launchConfigurationShortcuts">
+		<shortcut
+			id="org.eclipse.cdt.cpp.debugattachLaunchConfigShortcut"
+			configTypeID="org.eclipse.cdt.debugattach.launchconfig">
+         		<perspective id="org.eclipse.debug.ui.DebugPerspective"/>
+			<perspective id="org.eclipse.cdt.cpp.ui.CppPerspective"/>
+		</shortcut>
+	</extension>
+
+	<extension point = "org.eclipse.debug.ui.launchConfigurationShortcuts">
+		<shortcut
+			id="org.eclipse.cdt.cpp.debugLaunchConfigShortcut"
+			configTypeID="org.eclipse.cdt.debugload.launchconfig">
+         		<perspective id="org.eclipse.debug.ui.DebugPerspective"/>
+			<perspective id="org.eclipse.cdt.cpp.ui.CppPerspective"/>
+		</shortcut>
+	</extension>
+
+	<extension point = "org.eclipse.debug.ui.launchConfigurationShortcuts">
+		<shortcut
+			id="org.eclipse.cdt.cpp.runLaunchConfigShortcut"
+			configTypeID="org.eclipse.cdt.run.launchconfig">
+         		<perspective id="org.eclipse.debug.ui.DebugPerspective"/>
+			<perspective id="org.eclipse.cdt.cpp.ui.CppPerspective"/>
+		</shortcut>
+	</extension>
 	
 <extension
       point="org.eclipse.ui.perspectives">
@@ -286,8 +314,8 @@
 <extension
       point="org.eclipse.ui.popupMenus">
    <objectContribution
-	objectClass="org.eclipse.core.resources.IFile" 
-	id="org.eclipse.cdt.cpp.ui.internal.menu" 
+	objectClass="org.eclipse.core.resources.IFile"
+	id="org.eclipse.cdt.cpp.ui.internal.menu"
 	adaptable="true">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
@@ -380,7 +408,7 @@
       </action>
    </objectContribution>
    <objectContribution
-         objectClass="org.eclipse.core.resources.IProject" 
+         objectClass="org.eclipse.core.resources.IProject"
 	 id="org.eclipse.cdt.cpp.ui.internal.menu7">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
@@ -416,18 +444,18 @@
      <objectContribution
          objectClass="org.eclipse.core.resources.IProject"
          id="org.eclipse.cdt.cpp.ui.internal.menu9">
-      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>    
+      <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <action
             label="Create Specification"
             class="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction"
             path="additions"
             enablesFor="1"
-            id="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction">            
+            id="org.eclipse.cdt.cpp.ui.internal.views.targets.CreateTargetAction">
       </action>
   </objectContribution>
   <objectContribution
          objectClass="org.eclipse.core.resources.IProject"
-         id="org.eclipse.cdt.cpp.ui.internal.menu10">   
+         id="org.eclipse.cdt.cpp.ui.internal.menu10">
       <action
             label="Support C/C++"
             class="org.eclipse.cdt.cpp.ui.internal.actions.ConvertToCppProject"
