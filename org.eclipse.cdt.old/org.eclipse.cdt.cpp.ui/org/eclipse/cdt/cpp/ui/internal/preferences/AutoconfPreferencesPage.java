@@ -273,7 +273,6 @@ public class AutoconfPreferencesPage
 		
 		plugin.writeProperty(runUpdateKey, autoRunUpdate);			
 
-
 		// auto update when create configure
 		ArrayList autoCreateUpdate = new ArrayList();
 		if (_autoconfControl.getAutoCreateUpdateSelection())
@@ -284,9 +283,21 @@ public class AutoconfPreferencesPage
 		{
 			autoCreateUpdate.add("No");		
 		}		
-
 		plugin.writeProperty(createUpdateKey, autoCreateUpdate);	
 		
+			// show dialog when configure
+		ArrayList showConfigureDialog = new ArrayList();
+		if (_autoconfControl.getShowConfigureDialogSelection())
+		{
+			showConfigureDialog.add("Yes");		
+		}
+		else
+		{
+			showConfigureDialog.add("No");		
+		}	
+
+		//plugin      = CppPlugin.getDefault();
+		plugin.writeProperty(configureDialogKey, showConfigureDialog);	
 	
 		// show dialog when run configure
 		ArrayList showRunDialog = new ArrayList();
@@ -299,7 +310,7 @@ public class AutoconfPreferencesPage
 			showRunDialog.add("No");		
 		}	
 
-		plugin      = CppPlugin.getDefault();
+		//plugin      = CppPlugin.getDefault();
 		plugin.writeProperty(runDialogKey, showRunDialog);	
 
 
