@@ -285,7 +285,7 @@ public class CmdInitializeDE extends Command
          //FCT_EXCEPTION_EXAMINE bit must be disabled until this functionality
          //is supported. 
          EPDC.FCT_EXCEPTION_EXAMINE |  // support examine-retry
-//         EPDC.FCT_EXCEPTION_FILTER  |  // support exception filtering
+         EPDC.FCT_EXCEPTION_FILTER  |  // support exception filtering
 //         EPDC.FCT_EXCEPTION_STEP    |  // support step exception
          EPDC.FCT_EXCEPTION_RUN     |  // support run exception
          0,
