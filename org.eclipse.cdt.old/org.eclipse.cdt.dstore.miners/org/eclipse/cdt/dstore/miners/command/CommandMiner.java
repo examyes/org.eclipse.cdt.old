@@ -257,7 +257,7 @@ class CommandMinerThread extends MinerThread
   _patterns = thePatterns;
   _patterns.refresh(_invocation);
   ServerCommandHandler sch = (ServerCommandHandler)(_dataStore.getCommandHandler());
-  _fileMiner = (FileSystemMiner)(sch.getMiners("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner"));
+  _fileMiner = (FileSystemMiner)(sch.getMiner("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner"));
   
   
      
