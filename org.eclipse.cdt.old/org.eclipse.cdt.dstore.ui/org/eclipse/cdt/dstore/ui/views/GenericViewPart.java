@@ -58,11 +58,13 @@ public class GenericViewPart extends ViewPart
     protected   boolean          _isLinked;
     protected   IOpenAction      _openAction;
     protected   LockViewAction   _lockAction;
+    private     boolean          _isLocked;
 
     public GenericViewPart()
     {
 	super();
 	_isLinked = true;
+	_isLocked = false;
     }
     
     public ISelection getSelection() 
@@ -210,16 +212,19 @@ public class GenericViewPart extends ViewPart
 
     public void fillLocalToolBar() 
     {
-	IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
-
-	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-	String path = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.ui" + java.io.File.separator;
-	String imageStr = path + "icons" + java.io.File.separator + "lock.gif";
-	ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
-
-	_lockAction = new LockViewAction("Lock View", image);
-	_lockAction.setChecked(_viewer.isLocked());
-	toolBarManager.add(_lockAction);
+	if (!_isLocked)
+	    {
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		
+		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+		String path = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.ui" + java.io.File.separator;
+		String imageStr = path + "icons" + java.io.File.separator + "lock.gif";
+		ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
+		
+		_lockAction = new LockViewAction("Lock View", image);
+		_lockAction.setChecked(_viewer.isLocked());
+		toolBarManager.add(_lockAction);
+	    }
     }
 
     public void lock(boolean flag)
@@ -227,6 +232,16 @@ public class GenericViewPart extends ViewPart
 	if (_viewer.isLocked() != flag)
 	    {
 		_viewer.toggleLock();
+
+		if (flag == true)
+		    {
+			if (_lockAction != null)
+			    {
+				IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+				toolBarManager.removeAll();
+			    }
+			_isLocked = flag;
+		    }
 	    }
     }
     
