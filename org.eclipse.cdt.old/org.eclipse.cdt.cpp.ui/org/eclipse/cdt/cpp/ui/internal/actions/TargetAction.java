@@ -38,8 +38,13 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
+
+import org.eclipse.swt.widgets.*;
+import org.eclipse.jface.dialogs.*;
+
 public class TargetAction extends CustomAction 
 {
+	DataElement _subject;
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -64,17 +69,33 @@ public class TargetAction extends CustomAction
 	public TargetAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
+		_subject = subject;
 	}
 	public void run()
 	{
-		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
-		DataElement status = _dataStore.command(makefileAmCmd, _subject);
-		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
-		api.monitorStatus(status);
+		Shell shell = _dataStore.getDomainNotifier().findShell();
+		String message = new String("No Makefile has been found in this directory"+
+		"\nYou may want to create and or run configure before performing this action");
+		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 		
-		RunThread monitor = new RunThread(_subject, status);
-		monitor.start();
+		
+		File parent = _subject.getFileObject().getParentFile();
+		File Makefile = new File(parent,"Makefile");
+		System.out.println("\nTest\n"+_subject);
+		System.out.println("\nParent \n"+parent.getAbsolutePath());
+		if(!Makefile.exists())
+			dialog.openWarning(shell,"Generating Autoconf Support Files ",message);
+		else
+		{
+			DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
+			DataElement status = _dataStore.command(makefileAmCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+			api.monitorStatus(status);
+		
+			RunThread monitor = new RunThread(_subject, status);
+			monitor.start();
+		}
     }
 }
 

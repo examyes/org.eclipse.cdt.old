@@ -22,62 +22,30 @@ public class TargetManager {
 	public void buildTarget(DataElement target, DataElement status,AutoconfManager autoconfmanager)
 	{
 		File parent = target.getFileObject().getParentFile();
-		/*
-		DataElement parentData = target.getParent();
-		int i =0;
-		while(!parent.getAbsolutePath().equals(autoconfmanager.getWorkSpaceLocation()))
+		File Makefile = new File(parent,"Makefile");
+		/*if(!Makefile.exists())
 		{
-				if(i>0)
-					parentData = parentData.getParent();
-				parent = parent.getParentFile();
-				i++;
-		}
-		System.out.println(parentData);
-		autoconfmanager.runSupportScript(parentData,status);
-		autoconfmanager.runConfigureScript(parentData,status);
-		*/
+			DataElement parentData = target.getParent();
+			int i =0;
+			while(!parent.getAbsolutePath().equals(autoconfmanager.getWorkSpaceLocation()))
+			{
+					if(i>0)
+						parentData = parentData.getParent();
+					parent = parent.getParentFile();
+					i++;
+			}
+			autoconfmanager.getAutoconfScript(parentData);
+			//if(getOS().equals("Linux"))
+				//runCommand(parentData,status,"./script.batch;./configure");
+			//else
+				//runCommand(parentData, status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
+			autoconfmanager.runConfigureScript(parentData,status);
+			autoconfmanager.runSupportScript(parentData,status);
+		}*/
 		DataElement dirElement = target.getDataStore().createObject(null, "directory", 
 			parent.getName(),
 			parent.getAbsolutePath());
-		runCommand(dirElement, status, "gmake " + target.getName());
-		
-		/*
-		// here the only file that might be available is the Makefile.am
-		File parent = dir.getFileObject().getParentFile();
-		System.out.println("\n Dir = "+ parent.getName());
-		File Makefile = new File(parent,"Makefile");
-		if(Makefile.exists())
-		{
-			// if no Makefile then we should cretae configure
-			// and then run configure
-			if(getOS().equals("Linux"))
-				runCommand(dir.getParent(), status, "make");
-			else
-				runCommand(dir.getParent(), status, cygwinPrefix+"make");
-			// check if there is a configure script - then run it
-		}
-		else
-		{
-			int i = 0;
-			File file = parent;
-			while(!file.getAbsolutePath().equals(autoconfmanager.getWorkSpaceLocation()))
-			{
-				if(i>0)
-					parent = parent.getParentFile();
-				file = file.getParentFile();
-				i++;
-			}
-			// now parnet is the project
-			File configure = new File(parent,"configure");
-			DataElement project = new DataElement();
-			if(configure.exists())
-				autoconfmanager.runConfigureScript(project,status);
-			else
-			{
-				autoconfmanager.runSupportScript(project,status);
-				autoconfmanager.runConfigureScript(project,status);
-			}		
-		}*/
+		runCommand(dirElement, status, "make " +target.getName());
 	}
 	public void executeTarget(DataElement target, DataElement status,String workSpacePath)
 	{
@@ -103,7 +71,6 @@ public class TargetManager {
 	{
 		DataStore ds = status.getDataStore();
 		DataElement invocationElement = ds.createObject(null,"invocation",invocation);
-		System.out.println("\n Descriptor = "+ project.getDescriptor());
 		DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(),"C_COMMAND");
 		if(cmdD!=null)
 		{
