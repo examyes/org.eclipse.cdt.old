@@ -156,10 +156,6 @@ public class FileSystemMiner extends Miner
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
-	  //DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
-	  //u					  getLocalizedString("model.Query"), "C_QUERY", false);
-	  //DataElement refresh   = createCommandDescriptor(_fsystemObjectDescriptor, 
-	  //						  getLocalizedString("model.Refresh"), "C_REFRESH");
 	  DataElement fileQuery  = createCommandDescriptor(_fileDescriptor,    
 							   getLocalizedString("model.Query"), "C_QUERY", false);
 	  fileQuery.setAttribute(DE.A_SOURCE, "-");
@@ -181,12 +177,21 @@ public class FileSystemMiner extends Miner
 	  renF.setDepth(1);
 
 	  DataElement inRenF = _dataStore.createObject(renF,"input", "Enter the New Name");
+
+	  DataElement renFile = createCommandDescriptor(_fileDescriptor, 
+							getLocalizedString("model.Rename"), "C_RENAME");
+	  renFile.setDepth(1);
+	  
+	  DataElement inRenFile = _dataStore.createObject(renFile,"input", "Enter the New Name");
 	  
 	  DataElement findD = createCommandDescriptor(_directoryDescriptor, "Find", "C_FIND_FILE", false);
 
-	  //deleting files and dirs
+	  //deleting dirs
 	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,getLocalizedString("model.Delete"),
 						    "C_DELETE");	  
+
+	  DataElement delFile = createCommandDescriptor(_fileDescriptor,getLocalizedString("model.Delete"),
+							"C_DELETE");	  
 	  //creating new files and dirs
 	  DataElement newFD=createAbstractCommandDescriptor(_directoryDescriptor,getLocalizedString("model.Create"),
 							    "C_NEW");
