@@ -62,8 +62,9 @@ public class ManagedProjectMiner extends Miner
    parseAmFile(project);
   else if (name.equals("C_REFRESH"))
    refreshProject(project);
-  
-  status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
+  else
+   return status;
+   status.setAttribute(DE.A_NAME, "done");
   return status;
  }
 

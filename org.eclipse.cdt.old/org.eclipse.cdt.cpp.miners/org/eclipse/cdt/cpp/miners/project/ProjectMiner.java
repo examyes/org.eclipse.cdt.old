@@ -53,23 +53,23 @@ public class ProjectMiner extends Miner
   String          name = getCommandName(theCommand);
   DataElement   status = getCommandStatus(theCommand);
   DataElement  subject = getCommandArgument(theCommand, 0);
-	
+ 
+  System.out.println(theCommand + " " + subject);
+  
   if (!subject.getType().equals(getLocalizedString("project.Project")))
    if (!subject.getType().equals(getLocalizedString("project.Workspace")))
     return status;
   
-  if (name.equals("C_OPEN_PROJECT"))
-   handleOpenProject(subject, status);
-  else if (name.equals("C_OPEN"))
-      {
-	  handleOpenProject(subject, status);
-      }
-  else if (name.equals("C_CLOSE_PROJECT"))
+  if (name.equals("C_OPEN"))
+   handleOpenProject(subject, getCommandArgument(theCommand, 1), status);
+  else if (name.equals("C_CLOSE"))
    handleCloseProject(subject, status);
-  else if (name.equals("C_REFRESH_PROJECT"))
+  else if (name.equals("C_REFRESH"))
    handleRefreshProject(subject, status);
-   
-  status.setAttribute(DE.A_NAME, getLocalizedString("project.done"));
+  else 
+   return status;
+  
+  status.setAttribute(DE.A_NAME, "done");
   return status;
  }
     

@@ -24,7 +24,7 @@ public class FileSystemMiner extends Miner
 
   public FileSystemMiner ()
       {
-	super();
+       super();
       };
 
 
@@ -156,10 +156,10 @@ public class FileSystemMiner extends Miner
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
-	  DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
-							  getLocalizedString("model.Query"), "C_QUERY", false);
-	  DataElement refresh   = createCommandDescriptor(_fsystemObjectDescriptor, 
-							  getLocalizedString("model.Refresh"), "C_REFRESH");
+	  //  DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
+	  //					  getLocalizedString("model.Query"), "C_QUERY", false);
+	  //DataElement refresh   = createCommandDescriptor(_fsystemObjectDescriptor, 
+	  //						  getLocalizedString("model.Refresh"), "C_REFRESH");
 	  DataElement fileQuery  = createCommandDescriptor(_fileDescriptor,    
 							   getLocalizedString("model.Query"), "C_QUERY", false);
 	  fileQuery.setAttribute(DE.A_SOURCE, "-");
@@ -569,8 +569,8 @@ public class FileSystemMiner extends Miner
 			  String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
 			  File theFile = new File (theElement.getSource());
 			  StringBuffer path = new StringBuffer (theFile.getPath());
-
-			  if (!type.equals("device"))
+                          			  
+			  if ((type != null) && (!type.equals("device")))
 			      {
 				  path.append(File.separator);
 			      }

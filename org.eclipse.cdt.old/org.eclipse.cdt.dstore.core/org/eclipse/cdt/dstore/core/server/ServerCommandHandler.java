@@ -145,15 +145,19 @@ public class ServerCommandHandler extends CommandHandler
 	      {
 		  if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.start")))
 		  {
+		   
 		      boolean failure = false;
 			  for (int j = 0; (j < _miners.size()) && !failure; j++)
-			      {
+		   {
 				  Miner miner = (Miner)_miners.get(j);
+				 
 				  
 				  if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
 				      {
+				      
+				       
 					  status = miner.command(command);
-                                          		  
+                                 
                                           if ((status != null) && 
 					      status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
 					      {

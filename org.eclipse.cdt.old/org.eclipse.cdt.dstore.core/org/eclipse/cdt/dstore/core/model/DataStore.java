@@ -838,7 +838,7 @@ public class DataStore
 	String newId = String.valueOf(_random.nextInt());
 	while (_hashMap.containsKey(newId))
 	    {	    
-		newId = String.valueOf(_random.nextInt());
+	    	newId = String.valueOf(_random.nextInt());
 	    }
 	
 	return newId;
@@ -2111,9 +2111,12 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement containsD     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents"));
 	DataElement parentD       = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.parent"));	
 	DataElement argsD         = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.arguments"));	
-	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));	
+	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));
+        abstracts.setDepth(0);
+	
 	DataElement abstractedBy  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracted_by"));	
-
+	abstractedBy.setDepth(0);
+	
 	DataElement caRelations = createAbstractRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents&arguments"));
 	createReference(caRelations, containsD, containsD);
 	createReference(caRelations, argsD, containsD); 
@@ -2153,13 +2156,11 @@ public DataElement command(DataElement commandDescriptor,
 
 	 //Base Container Object
         DataElement containerObjectD = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Container_Object"));
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY");
+        //createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE");
-	createReference(containerObjectD, containsD, containsD);
-        createReference(containerObjectD, parentD, containsD); 
-       
+        createReference(objectDescriptor, containerObjectD, abstracts, abstractedBy);
 
       // file objects
 	createReference(hostD, containsD, containsD);	
@@ -2237,7 +2238,7 @@ public DataElement command(DataElement commandDescriptor,
 
         // basic commands
 	DataElement cancel = createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
- 	DataElement oQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "-", "C_QUERY");
+ 	DataElement oQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "*", "C_QUERY");
 
 	DataElement set = createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET"); 
 

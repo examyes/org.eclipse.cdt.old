@@ -791,99 +791,50 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     parse(resource, isSynchronized, false);
   }
 
+ private DataElement getPathElement(IResource resource)
+ {
+  if (resource instanceof ResourceElement)
+   return ((ResourceElement)resource).getElement();	
+  if (resource instanceof Repository)
+   return ((Repository)resource).getElement();	    	    	
+  return ConvertUtility.convert(_plugin.getDataStore(), _plugin.getDataStore().getHostRoot(), resource);
+ }
+
+ 
   public void parse(IResource resource, boolean isSynchronized, boolean showView)
   {
-   DataStore dataStore = null;
-   DataElement pathElement = null;
-	
-   if (resource instanceof ResourceElement)
-   {
-    ResourceElement myResource = (ResourceElement)resource;	
-    dataStore = myResource.getDataStore();	
-    pathElement = myResource.getElement();	
-   }
-   else if (resource instanceof Repository)
-   {
-    Repository myRes = (Repository)resource;	
-    dataStore = myRes.getDataStore();	
-    pathElement = myRes.getElement();	    	    	
-   }
-   else
-   {
-    dataStore = _plugin.getCurrentDataStore();	
-    pathElement = ConvertUtility.convert(dataStore, dataStore.getHostRoot(), resource);
-   }
-    
-   IProject theProject = getProjectFor(resource);
+   DataElement pathElement = getPathElement(resource);
+   DataStore   dataStore   = pathElement.getDataStore();
+   IProject    theProject  = getProjectFor(resource);
+  
+   if (theProject == null)
+    return;
+  
+   String      name = new String(theProject.getName());
+   DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
+   DataElement projectsRoot = findWorkspaceElement(dataStore);		
+   DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
    
-   if (theProject != null)
-   {	    
-    String name = new String(theProject.getName());
-    DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
-
-    DataElement projectsRoot = findWorkspaceElement(dataStore);		
-    DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
-
-    if (commandDescriptor != null && projectRoot != null)
-    {	
-     projectRoot.setAttribute(DE.A_SOURCE, theProject.getLocation().toString());	
-     if (theProject != null)
-     {
-      boolean changed = false;
-      DataElement includeElement = dataStore.find(projectRoot, DE.A_NAME, "Include Path", 1);
-      if (includeElement == null)
-      {
-       includeElement = dataStore.createObject(projectRoot, "environment", "Include Path");
-       changed = true;
-      }
-      ArrayList includePaths = _plugin.readProperty(theProject, "Include Path");
-      for (int i = 0; i < includePaths.size(); i++)
-      {
-       DataElement aPath = dataStore.find(includeElement, DE.A_NAME, (String)includePaths.get(i), 1);
-       if (aPath == null)
-       {		
-	dataStore.createObject(includeElement, "directory", (String)includePaths.get(i), (String)includePaths.get(i));
-	changed = true;
-       }
-      }
-
-      // refresh remote
-      if (changed)
-      {
-	  dataStore.setObject(projectRoot);
-	  dataStore.setObject(includeElement);	
-      }
-     }
-     ArrayList args = new ArrayList();	
-     args.add(projectRoot);
-     dataStore.getDomainNotifier().addDomainListener(this);	
-
-     DataElement status = null;
-     if (isSynchronized == false)
-     {	
-      if (pathElement.getSource().equals(projectRoot.getSource()))
-      {
-       status = dataStore.command(commandDescriptor, args, projectRoot, false);		
-      }
-      else
-      {
-       status = dataStore.command(commandDescriptor, args, pathElement, false);		
-      }
-      monitorStatus(status);
-     }
-     else
-     {
-      status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);			
-     }
-     _status = status;
-    if (showView)
-    {		
-     showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
-     showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
-    }		
+   if ((commandDescriptor == null) || (projectRoot == null))
+    return;
+     
+   ArrayList args = new ArrayList();	
+   args.add(projectRoot);
+   dataStore.getDomainNotifier().addDomainListener(this);
+   
+   DataElement status = null;
+   if (isSynchronized)
+    status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);	
+   else
+    status = dataStore.command(commandDescriptor, args, pathElement, false);		
+   monitorStatus(status);
+   _status = status;
+   if (showView)
+   {		
+    showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
+    showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
    }
   }	
- }
 
 
   public synchronized void search(String pattern, ArrayList types, ArrayList relations, 
