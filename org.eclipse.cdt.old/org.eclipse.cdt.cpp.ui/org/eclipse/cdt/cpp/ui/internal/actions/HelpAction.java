@@ -24,7 +24,7 @@ public class HelpAction extends CustomAction
 	String theKey = getKey(_subject.getName());
 	if (theKey != null)
 	    {
-		HelpPlugin.getDefault().showMatches(theKey); //find the docs
+		HelpPlugin.getDefault().showMatches(theKey,IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT); //find the docs
 	    }
     }
     
