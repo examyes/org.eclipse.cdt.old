@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.expressionevaluator;
+package org.eclipse.cdt.cpp.miners.parser.expressionevaluator;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

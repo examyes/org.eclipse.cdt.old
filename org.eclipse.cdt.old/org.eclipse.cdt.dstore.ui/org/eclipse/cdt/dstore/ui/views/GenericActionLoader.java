@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.views;
+package org.eclipse.cdt.dstore.ui.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,15 +6,15 @@ package com.ibm.dstore.ui.views;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
 
-import com.ibm.dstore.core.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*; 
-import com.ibm.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.core.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*; 
+import org.eclipse.cdt.dstore.ui.resource.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
@@ -51,7 +51,7 @@ public class GenericActionLoader implements IActionLoader
     {
 	if (_openPerspectiveAction == null)
 	    {
-		_openPerspectiveAction = loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
+		_openPerspectiveAction = loadAction("org.eclipse.cdt.dstore.ui.actions.OpenPerspectiveAction", 
 						    "Open Perspective On");
 	    }
 	return _openPerspectiveAction;

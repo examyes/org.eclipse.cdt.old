@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.builder;
+package org.eclipse.cdt.cpp.ui.internal.builder;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.cpp.ui.internal.builder;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.wizards.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.wizards.*;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;

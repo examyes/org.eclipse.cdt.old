@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1

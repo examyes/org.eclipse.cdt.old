@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.perl;
+package org.eclipse.cdt.dstore.core.util.regex.text.perl;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -58,9 +58,9 @@ package com.ibm.dstore.core.util.regex.text.perl;
  */
 
 import java.util.*;
-import com.ibm.dstore.core.util.regex.text.regex.*;
-import com.ibm.dstore.core.util.regex.text.*;
-import com.ibm.dstore.core.util.regex.util.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.*;
+import org.eclipse.cdt.dstore.core.util.regex.util.*;
 
 /**
  * This is a utility class implementing the 3 most common Perl5 operations
@@ -148,7 +148,7 @@ import com.ibm.dstore.core.util.regex.util.*;
  * (or even a split, but this isn't particularly useful).
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Perl5Util.java,v 1.2 2001/08/31 00:04:18 dmcknigh Exp $
+ @version $Id: Perl5Util.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see MalformedPerl5PatternException
  * @see com.ibm.cpp.core.util.regex.text.PatternCache

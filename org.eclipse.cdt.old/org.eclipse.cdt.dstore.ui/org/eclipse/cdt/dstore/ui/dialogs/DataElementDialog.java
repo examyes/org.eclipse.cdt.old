@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.dialogs;
+package org.eclipse.cdt.dstore.ui.dialogs;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.dstore.ui.dialogs;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.views.*;
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
 
 import org.eclipse.swt.widgets.*;
 
@@ -32,7 +32,7 @@ import org.eclipse.jface.resource.ImageRegistry;
 import java.util.*;
 import java.lang.reflect.*;
 
-import com.ibm.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
 
 public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implements IActionLoader
 {
@@ -207,7 +207,7 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
 		    }
 		else
 		    {
-			iconPath.append("com.ibm.dstore.core");
+			iconPath.append("org.eclipse.cdt.dstore.core");
 		    }
             }
 	else
@@ -222,12 +222,12 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
 			    }
 			else
 			    {
-				iconPath.append("com.ibm.dstore.core");
+				iconPath.append("org.eclipse.cdt.dstore.core");
 			    }
 		    }
 		else
 		    {
-			iconPath.append("com.ibm.dstore.ui");
+			iconPath.append("org.eclipse.cdt.dstore.ui");
 		    }
             }
 

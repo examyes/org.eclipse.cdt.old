@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal;
+package org.eclipse.cdt.cpp.ui.internal;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -8,7 +8,7 @@ package com.ibm.cpp.ui.internal;
 
 public interface CppHelpContextIds 
 {
- public static final String PREFIX= "com.ibm.cpp.ui.";
+ public static final String PREFIX= "org.eclipse.cdt.cpp.ui.";
 
  // view parts
  public static final String DEFAULT_OBJECTS_VIEW = PREFIX + "default_objects_view_context";

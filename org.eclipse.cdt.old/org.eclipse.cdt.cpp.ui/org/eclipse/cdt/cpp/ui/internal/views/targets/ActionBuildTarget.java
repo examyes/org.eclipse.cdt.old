@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -8,9 +8,9 @@ package com.ibm.cpp.ui.internal.views.targets;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;

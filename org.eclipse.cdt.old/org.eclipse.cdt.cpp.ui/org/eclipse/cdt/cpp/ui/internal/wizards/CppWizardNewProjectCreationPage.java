@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.wizards;
+package org.eclipse.cdt.cpp.ui.internal.wizards;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.cpp.ui.internal.wizards;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.CppProjectAttributes;
-import com.ibm.cpp.ui.internal.CppPlugin;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.CppProjectAttributes;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
-import com.ibm.dstore.ui.connections.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.HelpEvent;
@@ -478,7 +478,7 @@ protected IProject getProjectHandle()
 	    DataElement root = ds.getRoot();
 	    Connection con = new Connection(name, args, root);
 
-	    com.ibm.cpp.ui.internal.vcm.PlatformVCMProvider provider = com.ibm.cpp.ui.internal.vcm.PlatformVCMProvider.getInstance();
+	    org.eclipse.cdt.cpp.ui.internal.vcm.PlatformVCMProvider provider = org.eclipse.cdt.cpp.ui.internal.vcm.PlatformVCMProvider.getInstance();
 	    IProject newPrj = (IProject)provider.createRepository(con, con.getRoot());	   	
 
 	    return newPrj;
@@ -582,8 +582,8 @@ protected String getDirectoryName() {
             }
 	else if (source == remoteHostBrowseButton)
 	    {
-		com.ibm.dstore.hosts.actions.QuickConnectAction browse =
-		    new com.ibm.dstore.hosts.actions.QuickConnectAction(remoteHostNameField.getText(),
+		org.eclipse.cdt.dstore.hosts.actions.QuickConnectAction browse =
+		    new org.eclipse.cdt.dstore.hosts.actions.QuickConnectAction(remoteHostNameField.getText(),
 									remoteHostPortNumberField.getText(),
 									remoteHostDirectoryField.getText(),
 									remoteHostUseDaemon.getSelection());

@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts;
+package org.eclipse.cdt.dstore.hosts;
 
 
 /*
@@ -7,21 +7,21 @@ package com.ibm.dstore.hosts;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.ui.connections.*;
-import com.ibm.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.ui.views.*;
 
-import com.ibm.dstore.hosts.actions.*;
+import org.eclipse.cdt.dstore.hosts.actions.*;
 
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
-import com.ibm.dstore.core.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.server.*;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
@@ -99,13 +99,13 @@ public class HostsPlugin extends AbstractUIPlugin
     public HostsPlugin(IPluginDescriptor descriptor)
     {
 	super(descriptor);
-	_corePlugin = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin();
-	_corePath = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();	
+	_corePlugin = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin();
+	_corePath = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();	
 	_actionLoader = new HostsActionLoader();
 	_dialogActionLoader = new DialogActionLoader();
 	try
 	    {
-		_resourceBundle = ResourceBundle.getBundle("com.ibm.dstore.hosts.PluginResources");
+		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.hosts.PluginResources");
 	    }
 	catch (MissingResourceException mre)
 	    {
@@ -178,7 +178,7 @@ public class HostsPlugin extends AbstractUIPlugin
         hostRoot.setAttribute(DE.A_SOURCE, rootDirectory);
 
        	_clientConnection.setHostDirectory(rootDirectory);	
-	_dataStore.setMinersLocation("com.ibm.dstore.miners");
+	_dataStore.setMinersLocation("org.eclipse.cdt.dstore.miners");
 	_clientConnection.localConnect();
 
 	// load schema
@@ -206,7 +206,7 @@ public class HostsPlugin extends AbstractUIPlugin
 	URL baseURL = org.eclipse.core.boot.BootLoader.getInstallURL();
 	String path = baseURL.getFile();
 	
-	String location = path + "/plugins/com.ibm.dstore.hosts/";
+	String location = path + "/plugins/org.eclipse.cdt.dstore.hosts/";
 	return location;
     }
     
@@ -336,54 +336,54 @@ public class HostsPlugin extends AbstractUIPlugin
 		
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						     dataStore.getLocalizedString("model.Connect_to"), 
-						     "com.ibm.dstore.hosts.actions.HostConnectAction");
+						     "org.eclipse.cdt.dstore.hosts.actions.HostConnectAction");
         connect.setAttribute(DE.A_VALUE, "C_CONNECT");
 	
 	DataElement disconnect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 							dataStore.getLocalizedString("model.Disconnect_from"), 
-							"com.ibm.dstore.ui.connections.DisconnectAction");	 
+							"org.eclipse.cdt.dstore.ui.connections.DisconnectAction");	 
         disconnect.setAttribute(DE.A_VALUE, "C_DISCONNECT");
 	
 	DataElement editConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						  "Edit Connection", 
-						  "com.ibm.dstore.ui.connections.EditConnectionAction");	 
+						  "org.eclipse.cdt.dstore.ui.connections.EditConnectionAction");	 
         editConnection.setAttribute(DE.A_VALUE, "C_EDIT");
 
 	DataElement removeConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
 						    dataStore.getLocalizedString("model.Delete_Connection"), 
-						    "com.ibm.dstore.ui.connections.DeleteAction");	 
+						    "org.eclipse.cdt.dstore.ui.connections.DeleteAction");	 
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");	
 
 	DataElement selectFile = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							"File Dialog", 
-							"com.ibm.dstore.hosts.actions.SelectFileAction");
+							"org.eclipse.cdt.dstore.hosts.actions.SelectFileAction");
 	selectFile.setAttribute(DE.A_VALUE, "C_SELECT");
 
 	DataElement fileTransfer = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "File Transfer", 
-							  "com.ibm.dstore.hosts.actions.FileTransferAction");
+							  "org.eclipse.cdt.dstore.hosts.actions.FileTransferAction");
 
 	DataElement findFiles = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
 						       "Find Files", 
-						       "com.ibm.dstore.hosts.actions.FindFileAction");
+						       "org.eclipse.cdt.dstore.hosts.actions.FindFileAction");
 	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");
 
 	/*
 	DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
 							      "Dictionary Search", 
-							      "com.ibm.dstore.hosts.actions.SearchDictionaryAction");
+							      "org.eclipse.cdt.dstore.hosts.actions.SearchDictionaryAction");
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
 	*/
 
 	DataElement renameResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							    "Rename Resource",
-							    "com.ibm.dstore.hosts.actions.RenameResource");
+							    "org.eclipse.cdt.dstore.hosts.actions.RenameResource");
 
 	renameResource.setAttribute(DE.A_VALUE, "RENAME");
 
 	DataElement deleteResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							    "Delete Resource",
-							    "com.ibm.dstore.hosts.actions.DeleteResource");
+							    "org.eclipse.cdt.dstore.hosts.actions.DeleteResource");
 
 	deleteResource.setAttribute(DE.A_VALUE, "DELETE");
 

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <plugin
    name = "Cpp ParseMiner Plugin"
-   id = "com.ibm.cpp.miners.parser"
+   id = "org.eclipse.cdt.cpp.miners.parser"
    version = "0.5.0"
    vendor-name = "International Business Machines Corp.">
    <requires>
-     <import plugin="com.ibm.cpp.miners"/> 
-     <import plugin="com.ibm.dstore.core"/>
+     <import plugin="org.eclipse.cdt.cpp.miners"/> 
+     <import plugin="org.eclipse.cdt.dstore.core"/>
    </requires>
    <runtime>
     <library name=".">

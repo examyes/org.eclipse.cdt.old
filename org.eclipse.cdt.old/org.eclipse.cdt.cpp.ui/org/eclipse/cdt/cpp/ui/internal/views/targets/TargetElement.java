@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -11,11 +11,11 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
  
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.jface.viewers.*;
 import java.util.*;
 import org.eclipse.swt.graphics.RGB;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 public class TargetElement extends BaseElement {
 

@@ -1,3 +1,3 @@
-com.ibm.dstore.miners.environment.EnvironmentMiner
-com.ibm.dstore.miners.filesystem.FileSystemMiner
-com.ibm.dstore.miners.command.CommandMiner
+org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner
+org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner
+org.eclipse.cdt.dstore.miners.command.CommandMiner

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.actions;
+package org.eclipse.cdt.cpp.ui.internal.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import java.io.*; 
 import java.util.*;
@@ -141,7 +141,7 @@ public class MakefileAmAction extends CustomAction {
 		// open dialog to set Makefile.am compiler flags
 		if(_command.getValue().equals("COMPILER_FLAGS"))
 		{
-			com.ibm.dstore.hosts.dialogs.CompilerFlagDialog cfd = new com.ibm.dstore.hosts.dialogs.CompilerFlagDialog(_subject);
+			org.eclipse.cdt.dstore.hosts.dialogs.CompilerFlagDialog cfd = new org.eclipse.cdt.dstore.hosts.dialogs.CompilerFlagDialog(_subject);
 			// populate if found any C or CXX flag def
 			String existingDef = getExistingDef(_subject);
 			//cfd.setDefinition(existingDef);
@@ -157,7 +157,7 @@ public class MakefileAmAction extends CustomAction {
 		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(makefileAmCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+		api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
     /*

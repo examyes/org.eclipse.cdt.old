@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.perl;
+package org.eclipse.cdt.dstore.core.util.regex.text.perl;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -57,11 +57,11 @@ package com.ibm.dstore.core.util.regex.text.perl;
  * by Daniel F. Savarese. We appreciate his contributions.
  */
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
  /**
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: ParsedSubstitutionEntry.java,v 1.2 2001/08/31 00:04:18 dmcknigh Exp $
+ @version $Id: ParsedSubstitutionEntry.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
  */
 final class ParsedSubstitutionEntry {
   int _numSubstitutions;

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,7 +55,7 @@ package com.ibm.linux.help.util.lucene.search;
  */
 
 import java.io.IOException;
-import com.ibm.linux.help.util.lucene.index.Term;
+import org.eclipse.cdt.linux.help.util.lucene.index.Term;
 
 /** Internal class used for scoring.
  * <p>Public only so that the indexing code can compute and store the

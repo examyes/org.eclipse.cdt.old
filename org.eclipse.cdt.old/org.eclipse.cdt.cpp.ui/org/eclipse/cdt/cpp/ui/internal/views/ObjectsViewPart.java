@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,24 +6,24 @@ package com.ibm.cpp.ui.internal.views;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.hosts.views.OutputViewer;
+import org.eclipse.cdt.dstore.hosts.views.OutputViewer;
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.actions.*; 
-import com.ibm.cpp.ui.internal.vcm.*;
-import com.ibm.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.actions.*; 
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.ObjectWindow;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.actions.CustomAction;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.ObjectWindow;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.actions.CustomAction;
 
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
 
-import com.ibm.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.views.*;
 
 import org.eclipse.help.*;
 import org.eclipse.ui.help.ViewContextComputer;
@@ -84,7 +84,7 @@ public class ObjectsViewPart extends GenericViewPart
     
     protected String getF1HelpId()
     {
-     return "com.ibm.cpp.ui.objects_view_context";
+     return "org.eclipse.cdt.cpp.ui.objects_view_context";
     }
  
     public void updateViewForeground()

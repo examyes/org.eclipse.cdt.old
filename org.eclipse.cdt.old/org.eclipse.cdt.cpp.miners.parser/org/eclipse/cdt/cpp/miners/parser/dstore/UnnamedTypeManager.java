@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.dstore;
+package org.eclipse.cdt.cpp.miners.parser.dstore;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.editor.contributor;
+package org.eclipse.cdt.cpp.ui.internal.editor.contributor;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.cpp.ui.internal.editor.contributor;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.editor.*;
-import com.ibm.cpp.ui.internal.actions.*;
+import org.eclipse.cdt.cpp.ui.internal.editor.*;
+import org.eclipse.cdt.cpp.ui.internal.actions.*;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.*;

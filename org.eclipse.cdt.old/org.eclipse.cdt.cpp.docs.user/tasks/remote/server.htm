@@ -32,13 +32,13 @@
        <h4>Server: Installation </h4>
        <ul>
        <li>If you downloaded the full version of the CppPlugin, then make sure that the following directories exist in your <code>plugins</code> directory.<br><br>       
-       <code>/home/user/eclipse/plugins/com.ibm.dstore.extra.server</code><br>
-       <code>/home/user/eclipse/plugins/com.ibm.dstore.core</code><br>
-       <code>/home/user/eclipse/plugins/com.ibm.dstore.miners</code><br>
-       <code>/home/user/eclipse/plugins/com.ibm.cpp.miners</code><br> 
-       <code>/home/user/eclipse/plugins/com.ibm.cpp.miners.parser</code><br> 
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.extra.server</code><br>
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.core</code><br>
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.miners</code><br>
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.cpp.miners</code><br> 
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.cpp.miners.parser</code><br> 
        <code>/home/user/eclipse/plugins/com.ibm.debug</code><br> 
-       <code>/home/user/eclipse/plugins/com.ibm.debug.gdbPicl</code><br> 
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.debug.gdbPicl</code><br> 
        </li><br>
        <li>If you only downloaded the server version  then:<br>
        <ol>
@@ -47,29 +47,29 @@
        <pre>/home/user/dstore/</pre></li>
        <li>copy the zip file to the server machine in the chosen location</li>
        <li>After you unzip the server package, you should have the following directories:<br>
-       <code>/home/user/dstore/com.ibm.dstore.extra.server</code><br>
-       <code>/home/user/dstore/com.ibm.dstore.core</code><br>
-       <code>/home/user/dstore/com.ibm.dstore.miners</code><br>
-       <code>/home/user/dstore/com.ibm.cpp.miners</code><br>
-       <code>/home/user/dstore/com.ibm.cpp.miners.parser</code><br> 
+       <code>/home/user/dstore/org.eclipse.cdt.dstore.extra.server</code><br>
+       <code>/home/user/dstore/org.eclipse.cdt.dstore.core</code><br>
+       <code>/home/user/dstore/org.eclipse.cdt.dstore.miners</code><br>
+       <code>/home/user/dstore/org.eclipse.cdt.cpp.miners</code><br>
+       <code>/home/user/dstore/org.eclipse.cdt.cpp.miners.parser</code><br> 
        <code>/home/user/dstore/com.ibm.debug</code><br> 
-       <code>/home/user/dstore/com.ibm.debug.gdbPicl</code><br> 
+       <code>/home/user/dstore/org.eclipse.cdt.debug.gdbPicl</code><br> 
        </li></ol></li>
        </ul>
 <br>
 
        <h4>Running a DSTORE SERVER</h4>
        <ul>
-       <li>You need to run the script "<code>server.linux</code>" which is located in the directory <code>com.ibm.dstore.core</code>. So, if you have the full version of the CppPlugin:
+       <li>You need to run the script "<code>server.linux</code>" which is located in the directory <code>org.eclipse.cdt.dstore.core</code>. So, if you have the full version of the CppPlugin:
         <pre>
-	cd /home/user/eclipse/plugins/com.ibm.dstore.core
+	cd /home/user/eclipse/plugins/org.eclipse.cdt.dstore.core
 	./server.linux
 	</pre>	
 	</li>
 	<li> 
 	If you only have the server version then:
 	 <pre>
-	 cd /home/user/dstore/com.ibm.dstore.core
+	 cd /home/user/dstore/org.eclipse.cdt.dstore.core
 	 ./server.linux
 	 </pre>
 	 </li>
@@ -78,9 +78,9 @@
        <h4>Running a DSTORE DAEMON</h4>
         <ul>
 	<li> Make sure that you are running as <b>root</b>.  If the daemon is not run under root, it will be unable to authenticate connecting users.</li><br><br>
-       <li>You need to run the script "<code>daemon.linux</code>" which is located in the directory <code>com.ibm.dstore.core</code>. So, if you have the full version the CppPlugin:
+       <li>You need to run the script "<code>daemon.linux</code>" which is located in the directory <code>org.eclipse.cdt.dstore.core</code>. So, if you have the full version the CppPlugin:
         <pre>
-	cd /home/user/eclipse/plugins/com.ibm.dstore.core
+	cd /home/user/eclipse/plugins/org.eclipse.cdt.dstore.core
 	./daemon.linux
 	</pre>	
 	</li>
@@ -88,7 +88,7 @@
 	<li> 
 	If you only have the server version then:
 	 <pre>
-	 cd /home/user/dstore/com.ibm.dstore.core
+	 cd /home/user/dstore/org.eclipse.cdt.dstore.core
 	 ./daemon.linux
 	 </pre>
 	 </li>
@@ -103,33 +103,33 @@ The following assumes you downloaded the  full CppPlugin. If you instead downloa
        <h4 color='blue'>Server: Installation </h4>
        <ol>
        <li>Make sure that the following directories exist in your <code>plugins</code> directory.<br>
-       <code>/home/user/eclipse/plugins/com.ibm.dstore.extra.server</code><br>
-       <code>/home/user/eclipse/plugins/com.ibm.dstore.core</code><br>
-       <code>/home/user/eclipse/plugins/com.ibm.dstore.miners</code><br>
-       <code>/home/user/eclipse/plugins/com.ibm.cpp.miners</code>    
-       <code>/home/user/eclipse/plugins/com.ibm.cpp.miners.parser</code><br> 
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.extra.server</code><br>
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.core</code><br>
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.miners</code><br>
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.cpp.miners</code>    
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.cpp.miners.parser</code><br> 
        <code>/home/user/eclipse/plugins/com.ibm.debug</code><br> 
-       <code>/home/user/eclipse/plugins/com.ibm.debug.gdbPicl</code><br> 
+       <code>/home/user/eclipse/plugins/org.eclipse.cdt.debug.gdbPicl</code><br> 
        </li><br><br>
        <li>Define the environment variable <code>A_PLUGIN_PATH</code> as follows:<br>
        <pre>export A_PLUGIN_PATH=/home/user/eclipse/plugins</pre>
        </li>
        <li>Set your CLASSPATH as follows:
         <pre>
-export CLASSPATH=/home/user/eclipse/plugins/com.ibm.dstore.extra.server/
-extra_server.jar:/home/user/eclipse/plugins/com.ibm.dstore.core/dstore_c
-ore.jar:/home/user/eclipse/plugins/com.ibm.dstore.miners/dstore_miners.j
-ar:/home/user/eclipse/plugins/com.ibm.cpp.miners/cpp_miners.jar:/home/us
-er/eclipse/plugins/com.ibm.cpp.miners.parser/miners_parser.jar:$CLASSPATH
+export CLASSPATH=/home/user/eclipse/plugins/org.eclipse.cdt.dstore.extra.server/
+extra_server.jar:/home/user/eclipse/plugins/org.eclipse.cdt.dstore.core/dstore_c
+ore.jar:/home/user/eclipse/plugins/org.eclipse.cdt.dstore.miners/dstore_miners.j
+ar:/home/user/eclipse/plugins/org.eclipse.cdt.cpp.miners/cpp_miners.jar:/home/us
+er/eclipse/plugins/org.eclipse.cdt.cpp.miners.parser/miners_parser.jar:$CLASSPATH
         </pre>      
        </li>
        </ol>
 
        <h4 color='blue'>Running a DStore Server </h4>
        <ol>
-       <li>Change directory to <pre>/home/user/eclipse/plugins/com.ibm.dstore.core</pre> </li>
+       <li>Change directory to <pre>/home/user/eclipse/plugins/org.eclipse.cdt.dstore.core</pre> </li>
        <li>Type the following to start a DStore Server:<br>
-	<pre>java -DA_PLUGIN_PATH=$A_PLUGIN_PATH com.ibm.dstore.core.server.Server [port]</pre><br>
+	<pre>java -DA_PLUGIN_PATH=$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.Server [port]</pre><br>
 
 	NOTE: By default the port is 4033.  
        </li>
@@ -139,7 +139,7 @@ er/eclipse/plugins/com.ibm.cpp.miners.parser/miners_parser.jar:$CLASSPATH
        <ol>
        <li> Make sure that you are running as <b>root</b>.  If the daemon is not run under root, it will be unable to authenticate connecting users.</li><br><br>
        <li>Type the following to start a DStore Daemon:<br>
-	<pre>java -DA_PLUGIN_PATH=$A_PLUGIN_PATH com.ibm.dstore.core.server.ServerLauncher</pre><br>
+	<pre>java -DA_PLUGIN_PATH=$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.ServerLauncher</pre><br>
        </ol>
 
      </td>

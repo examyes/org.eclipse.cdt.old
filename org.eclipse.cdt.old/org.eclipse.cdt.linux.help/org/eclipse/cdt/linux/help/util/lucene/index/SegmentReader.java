@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,11 +59,11 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.ibm.linux.help.util.lucene.util.BitVector;
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.Lock;
-import com.ibm.linux.help.util.lucene.store.InputStream;
-import com.ibm.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.util.BitVector;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.Lock;
+import org.eclipse.cdt.linux.help.util.lucene.store.InputStream;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
 
 final class SegmentReader extends IndexReader {
   Directory directory;

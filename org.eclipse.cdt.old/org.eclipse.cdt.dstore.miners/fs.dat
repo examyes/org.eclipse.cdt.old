@@ -1,1 +1,1 @@
-com.ibm.dstore.miners.filesystem.FileSystemMiner
+org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner

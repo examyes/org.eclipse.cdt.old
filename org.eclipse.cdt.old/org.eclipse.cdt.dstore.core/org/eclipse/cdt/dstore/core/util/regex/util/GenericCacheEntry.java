@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.util;
+package org.eclipse.cdt.dstore.core.util.regex.util;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -63,7 +63,7 @@ package com.ibm.dstore.core.util.regex.util;
  * package.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: GenericCacheEntry.java,v 1.2 2001/08/31 00:04:21 dmcknigh Exp $
+ @version $Id: GenericCacheEntry.java,v 1.1.1.1 2001/09/10 22:18:41 dmcknigh Exp $
  */
 final class GenericCacheEntry implements java.io.Serializable {
   /** The cache array index of the entry. */

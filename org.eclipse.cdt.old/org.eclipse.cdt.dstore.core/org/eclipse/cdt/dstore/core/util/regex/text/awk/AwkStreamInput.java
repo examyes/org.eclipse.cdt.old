@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.awk;
+package org.eclipse.cdt.dstore.core.util.regex.text.awk;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -58,7 +58,7 @@ package com.ibm.dstore.core.util.regex.text.awk;
  */
 
 import java.io.*;
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 /**
  * The AwkStreamInput class is used to look for pattern matches in an
@@ -85,7 +85,7 @@ import com.ibm.dstore.core.util.regex.text.regex.*;
  * having to read a stream more than once for whatever reason.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: AwkStreamInput.java,v 1.2 2001/08/31 00:04:17 dmcknigh Exp $
+ @version $Id: AwkStreamInput.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see AwkMatcher
  */

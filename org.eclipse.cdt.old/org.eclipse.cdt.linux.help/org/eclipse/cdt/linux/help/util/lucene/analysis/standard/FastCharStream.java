@@ -1,5 +1,5 @@
 // FastCharStream.java
-package com.ibm.linux.help.util.lucene.analysis.standard;
+package org.eclipse.cdt.linux.help.util.lucene.analysis.standard;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -60,7 +60,7 @@ import java.io.*;
 /** An efficient implementation of JavaCC's CharStream interface.  <p>Note that
  * this does not do line-number counting, but instead keeps track of the
  * character position of the token in the input, as required by Lucene's {@link
- * com.ibm.linux.help.util..lucene.analysis.Token} API. */
+ * org.eclipse.cdt.linux.help.util..lucene.analysis.Token} API. */
 public final class FastCharStream implements CharStream {
   char[] buffer = null;
 

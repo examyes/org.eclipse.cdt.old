@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -75,7 +75,7 @@ public abstract class HitCollector {
    * <p>Note: This is called in an inner search loop.  For good search
    * performance, implementations of this method should not call {@link
    * Searcher#doc(int)} or {@link
-   * com.ibm.linux.help.util.lucene.index.IndexReader#document(int)} on every document
+   * org.eclipse.cdt.linux.help.util.lucene.index.IndexReader#document(int)} on every document
    * number encountered.  Doing so can slow searches by an order of magnitude
    * or more. */
   public abstract void collect(int doc, float score);

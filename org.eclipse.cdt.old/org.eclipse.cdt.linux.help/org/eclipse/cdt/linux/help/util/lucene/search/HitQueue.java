@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,7 +54,7 @@ package com.ibm.linux.help.util.lucene.search;
  * <http://www.apache.org/>.
  */
 
-import com.ibm.linux.help.util.lucene.util.PriorityQueue;
+import org.eclipse.cdt.linux.help.util.lucene.util.PriorityQueue;
 
 final class HitQueue extends PriorityQueue {
   HitQueue(int size) {

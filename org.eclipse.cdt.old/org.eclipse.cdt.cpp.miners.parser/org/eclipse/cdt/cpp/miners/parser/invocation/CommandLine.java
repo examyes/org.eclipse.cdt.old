@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.invocation;
+package org.eclipse.cdt.cpp.miners.parser.invocation;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -8,10 +8,10 @@ package com.ibm.cpp.miners.parser.invocation;
 
 import java.lang.*;
 import java.io.*;
-import com.ibm.cpp.miners.parser.preprocessor.*;
-import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.cpp.miners.parser.invocation.*;
-import com.ibm.cpp.miners.parser.grammar.*;
+import org.eclipse.cdt.cpp.miners.parser.preprocessor.*;
+import org.eclipse.cdt.cpp.miners.parser.dstore.*;
+import org.eclipse.cdt.cpp.miners.parser.invocation.*;
+import org.eclipse.cdt.cpp.miners.parser.grammar.*;
 
 class CommandLine
 {

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.listeners;
+package org.eclipse.cdt.linux.help.listeners;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -10,7 +10,7 @@ import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.HelpEvent;
 import com.ibm.lpex.core.LpexView;
 
-import com.ibm.linux.help.HelpPlugin;
+import org.eclipse.cdt.linux.help.HelpPlugin;
 
 import java.io.*;
 

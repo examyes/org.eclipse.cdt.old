@@ -1,14 +1,14 @@
-package com.ibm.cpp.ui.builder;
+package org.eclipse.cdt.cpp.ui.builder;
 
 import java.util.*;
 
 import java.io.*;
 import java.util.*;
 
-import com.ibm.cpp.ui.api.*;
-import com.ibm.cpp.ui.dialogs.*;
+import org.eclipse.cdt.cpp.ui.api.*;
+import org.eclipse.cdt.cpp.ui.dialogs.*;
 import com.ibm.eclipse.internal.ui.dialogs.*;
-import com.ibm.cpp.ui.*;
+import org.eclipse.cdt.cpp.ui.*;
 
 import com.ibm.eclipse.core.resources.*;
 import com.ibm.eclipse.core.runtime.*;

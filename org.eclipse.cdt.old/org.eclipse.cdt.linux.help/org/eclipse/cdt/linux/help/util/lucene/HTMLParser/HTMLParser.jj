@@ -63,7 +63,7 @@ options {
 
 PARSER_BEGIN(HTMLParser)
 
-package com.ibm.linux.help.util.lucene.HTMLParser;
+package org.eclipse.cdt.linux.help.util.lucene.HTMLParser;
 
 import java.io.*;
 

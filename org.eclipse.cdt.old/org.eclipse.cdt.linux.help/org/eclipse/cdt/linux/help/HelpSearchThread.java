@@ -1,4 +1,4 @@
-package com.ibm.linux.help;
+package org.eclipse.cdt.linux.help;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.linux.help;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.linux.help.views.ResultsViewPart;
-import com.ibm.linux.help.filter.HelpFilter;
+import org.eclipse.cdt.linux.help.views.ResultsViewPart;
+import org.eclipse.cdt.linux.help.filter.HelpFilter;
 import java.lang.*;
 import java.util.*;
 import org.eclipse.swt.widgets.Display;

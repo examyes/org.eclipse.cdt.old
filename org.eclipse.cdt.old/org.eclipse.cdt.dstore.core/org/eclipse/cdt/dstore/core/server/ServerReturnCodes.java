@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.server;
+package org.eclipse.cdt.dstore.core.server;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

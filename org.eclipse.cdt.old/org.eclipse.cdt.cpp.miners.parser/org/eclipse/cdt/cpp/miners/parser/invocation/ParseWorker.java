@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.invocation;
+package org.eclipse.cdt.cpp.miners.parser.invocation;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -9,9 +9,9 @@ package com.ibm.cpp.miners.parser.invocation;
 import java.util.*;
 import java.io.*;
 
-import com.ibm.cpp.miners.parser.grammar.*;
-import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.cpp.miners.parser.grammar.*;
+import org.eclipse.cdt.cpp.miners.parser.dstore.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 public class ParseWorker extends Thread
 {

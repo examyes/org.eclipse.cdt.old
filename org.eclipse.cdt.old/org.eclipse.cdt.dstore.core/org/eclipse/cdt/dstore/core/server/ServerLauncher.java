@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.server;
+package org.eclipse.cdt.dstore.core.server;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.dstore.core.server;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.server.*;
 
 import java.util.*;
 import java.lang.*;
@@ -145,7 +145,7 @@ public class ServerLauncher extends Thread
 			    			    
 			    if (theOS.toLowerCase().startsWith("linux"))
 				{
-				    String authStr = _path + File.separator + "com.ibm.dstore.core" + 
+				    String authStr = _path + File.separator + "org.eclipse.cdt.dstore.core" + 
 					File.separator + "auth.pl ";
 				    String authString = authStr + 
 						user + " " + password + " " + _path + " " + 
@@ -165,7 +165,7 @@ public class ServerLauncher extends Thread
 				    // launch new server
 				    String[] cmdArray = {"java", 
 							 "-DA_PLUGIN_PATH=" + _path,
-							 "com.ibm.dstore.core.server.Server", 
+							 "org.eclipse.cdt.dstore.core.server.Server", 
 							 _port,
 							 timeout,
 							 ticket

@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts;
+package org.eclipse.cdt.dstore.hosts;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,21 +6,21 @@ package com.ibm.dstore.hosts;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.ui.connections.*;
-import com.ibm.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.ui.views.*;
 
-import com.ibm.dstore.hosts.actions.*;
+import org.eclipse.cdt.dstore.hosts.actions.*;
 
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
-import com.ibm.dstore.core.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.server.*;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
@@ -55,7 +55,7 @@ public class HostsActionLoader extends GenericActionLoader
 
 		try
     	{
-      	 	_iconBundle = ResourceBundle.getBundle("com.ibm.dstore.hosts.IconResources");
+      	 	_iconBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.hosts.IconResources");
     	}
     	catch (MissingResourceException mre)
     	{
@@ -75,7 +75,7 @@ public class HostsActionLoader extends GenericActionLoader
     {
 		if (_openPerspectiveAction == null)
 	    {
-		_openPerspectiveAction = loadAction("com.ibm.dstore.hosts.actions.OpenPerspectiveAction", 
+		_openPerspectiveAction = loadAction("org.eclipse.cdt.dstore.hosts.actions.OpenPerspectiveAction", 
 						    "Open Perspective On");
 	    }
 		return _openPerspectiveAction;
@@ -247,7 +247,7 @@ public class HostsActionLoader extends GenericActionLoader
     	{    	
     		if (_baseDir == null)
     		{	   	    
-    			_baseDir = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();
+    			_baseDir = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();
    
     		}
 		
@@ -278,7 +278,7 @@ public class HostsActionLoader extends GenericActionLoader
          	// use default
          	if (_defaultIcon == null)
          	{
-         		_defaultIcon = "com.ibm.dstore.hosts/icons/full/clcl16/blank_misc.gif";
+         		_defaultIcon = "org.eclipse.cdt.dstore.hosts/icons/full/clcl16/blank_misc.gif";
          	}
          	
          	iconStr = _defaultIcon;

@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui;
+package org.eclipse.cdt.dstore.ui;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,10 +6,10 @@ package com.ibm.dstore.ui;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.core.client.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.client.*;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
@@ -74,7 +74,7 @@ public class DataStoreUIPlugin extends AbstractUIPlugin
     URL baseURL = org.eclipse.core.boot.BootLoader.getInstallURL();
     String path = baseURL.getFile();
 
-    String location = path + "/plugins/com.ibm.dstore.ui/";
+    String location = path + "/plugins/org.eclipse.cdt.dstore.ui/";
     return location;
   }
 

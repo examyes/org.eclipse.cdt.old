@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text;
+package org.eclipse.cdt.dstore.core.util.regex.text;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -60,7 +60,7 @@ package com.ibm.dstore.core.util.regex.text;
 import java.io.*;
 import java.util.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*; 
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*; 
 
 /**
  * The MatchActionProcessor class provides AWK-like line by line filtering
@@ -133,7 +133,7 @@ import com.ibm.dstore.core.util.regex.text.regex.*;
  * </pre>
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: MatchActionProcessor.java,v 1.2 2001/08/31 00:04:16 dmcknigh Exp $
+ @version $Id: MatchActionProcessor.java,v 1.1.1.1 2001/09/10 22:18:41 dmcknigh Exp $
 
  * @see MatchAction
  * @see MatchActionInfo

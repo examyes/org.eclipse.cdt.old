@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.dialogs;
+package org.eclipse.cdt.cpp.ui.internal.dialogs;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,16 +6,16 @@ package com.ibm.cpp.ui.internal.dialogs;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
-import com.ibm.cpp.ui.internal.views.*;
-import com.ibm.dstore.hosts.*;
+import org.eclipse.cdt.cpp.ui.internal.views.*;
+import org.eclipse.cdt.dstore.hosts.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.views.*;
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
 
 import org.eclipse.swt.widgets.*;
 

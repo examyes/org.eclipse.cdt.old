@@ -1,4 +1,4 @@
-package com.ibm.dstore.miners.command.patterns;
+package org.eclipse.cdt.dstore.miners.command.patterns;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.dstore.miners.command.patterns;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 import java.util.*;
 import java.lang.*;
@@ -46,7 +46,7 @@ public class Patterns
   File thePatternsFile;
   if (_dataStore == null)
    return;
-  thePatternsFile = new File(_dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat");
+  thePatternsFile = new File(_dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/org.eclipse.cdt.dstore.miners/patterns.dat");
   
   long newTimeStamp = 0;
   if (!thePatternsFile.exists() || ((newTimeStamp = thePatternsFile.lastModified()) == _timeStamp))

@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.connections;
+package org.eclipse.cdt.dstore.ui.connections;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,15 +6,15 @@ package com.ibm.dstore.ui.connections;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.ConvertUtility;
-import com.ibm.dstore.ui.actions.RemoteOperation;
-import com.ibm.dstore.ui.dialogs.*;
-import com.ibm.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.ConvertUtility;
+import org.eclipse.cdt.dstore.ui.actions.RemoteOperation;
+import org.eclipse.cdt.dstore.ui.dialogs.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
 
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
@@ -177,7 +177,7 @@ public class ConnectionManager
     public String getConnectionFile()
     {
 	return new String(_input.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + 
-			  "com.ibm.dstore.ui" +
+			  "org.eclipse.cdt.dstore.ui" +
 			  File.separator + 
 			  "connections.dat");        
     }   

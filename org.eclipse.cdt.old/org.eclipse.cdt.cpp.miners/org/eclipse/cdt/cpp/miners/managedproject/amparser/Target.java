@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.managedproject.amparser;
+package org.eclipse.cdt.cpp.miners.managedproject.amparser;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

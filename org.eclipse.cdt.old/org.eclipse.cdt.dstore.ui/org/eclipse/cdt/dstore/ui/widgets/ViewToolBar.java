@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.widgets;
+package org.eclipse.cdt.dstore.ui.widgets;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.dstore.ui.widgets;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.DataStoreCorePlugin;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import java.util.*;
 import java.lang.reflect.*;
@@ -249,7 +249,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	if (_pluginPath == null)
 	    {
 		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-		_pluginPath = plugin.getInstallLocation() + java.io.File.separator + "com.ibm.dstore.core";
+		_pluginPath = plugin.getInstallLocation() + java.io.File.separator + "org.eclipse.cdt.dstore.core";
 	    }
 
 	return _pluginPath; 

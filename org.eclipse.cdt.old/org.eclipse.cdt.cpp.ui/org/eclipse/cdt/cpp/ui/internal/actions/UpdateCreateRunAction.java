@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.actions;
+package org.eclipse.cdt.cpp.ui.internal.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.miners.managedproject.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.miners.managedproject.*;
 
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import java.io.*; 
 import java.util.*;
@@ -97,7 +97,7 @@ public class UpdateCreateRunAction extends CustomAction
 			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_UPDATE_CREATE_RUN");
 			DataElement status = _dataStore.command(manageProjectCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
-			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 			api.monitorStatus(status);
 			
 			RunThread thread = new RunThread(_subject, status);

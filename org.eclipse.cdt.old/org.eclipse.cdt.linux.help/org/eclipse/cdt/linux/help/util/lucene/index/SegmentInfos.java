@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -56,9 +56,9 @@ package com.ibm.linux.help.util.lucene.index;
 
 import java.util.Vector;
 import java.io.IOException;
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.InputStream;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.InputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
 
 final class SegmentInfos extends Vector {
   public int counter = 0;			  // used to name new segments

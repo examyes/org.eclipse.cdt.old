@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.regex;
+package org.eclipse.cdt.dstore.core.util.regex.text.regex;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -73,7 +73,7 @@ import java.io.*;
  * saved to disk if desired.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Perl5Pattern.java,v 1.2 2001/08/31 00:04:20 dmcknigh Exp $
+ @version $Id: Perl5Pattern.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see Perl5Compiler
  * @see Perl5Matcher

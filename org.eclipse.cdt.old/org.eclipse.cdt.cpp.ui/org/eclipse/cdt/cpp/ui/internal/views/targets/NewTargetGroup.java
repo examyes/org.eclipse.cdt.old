@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -14,12 +14,12 @@ import org.eclipse.swt.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.ui.internal.misc.ContainerSelectionGroup;
 
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 public class NewTargetGroup implements Listener 
 {
@@ -88,7 +88,7 @@ public class NewTargetGroup implements Listener
 	ModelInterface api = plugin.getModelInterface();
 	DataElement input = api.findWorkspaceElement();
 	DataStore dataStore = plugin.getDataStore();
-	_viewer = new ObjectWindow(composite, ObjectWindow.TREE, dataStore, plugin.getImageRegistry(), com.ibm.cpp.ui.internal.views.CppActionLoader.getInstance());	
+	_viewer = new ObjectWindow(composite, ObjectWindow.TREE, dataStore, plugin.getImageRegistry(), org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());	
 	_viewer.setInput(input);
 	_viewer.fixateOnRelationType("contents");
 	_viewer.fixateOnObjectType("Project Containers");

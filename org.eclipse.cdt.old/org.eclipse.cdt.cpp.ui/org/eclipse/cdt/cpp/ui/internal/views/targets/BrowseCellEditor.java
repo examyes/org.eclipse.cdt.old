@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -19,12 +19,12 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.ui.dialogs.*;
 
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.dialogs.*;
-import com.ibm.dstore.ui.widgets.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
 
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 public class BrowseCellEditor extends org.eclipse.jface.viewers.DialogCellEditor {
 	

@@ -11,7 +11,7 @@ $ENV{A_PLUGIN_PATH}="$plugins_dir/";
 
 $oldClasspath = $ENV{CLASSPATH};
 
-$ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/:$plugins_dir/com.ibm.dstore.core/:$plugins_dir/com.ibm.dstore.miners/:$plugins_dir/com.ibm.cpp.miners/:$plugins_dir/com.ibm.cpp.miners.parser/:$plugins_dir/com.ibm.dstore.extra.server/extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$plugins_dir/com.ibm.cpp.miners.parser/miners_parser.jar:$oldClasspath";
+$ENV{"CLASSPATH"}="$plugins_dir/org.eclipse.cdt.dstore.extra.server/:$plugins_dir/org.eclipse.cdt.dstore.core/:$plugins_dir/org.eclipse.cdt.dstore.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/:$plugins_dir/org.eclipse.cdt.dstore.extra.server/extra_server.jar:$plugins_dir/org.eclipse.cdt.dstore.core/dstore_core.jar:$plugins_dir/org.eclipse.cdt.dstore.miners/dstore_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners/cpp_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/miners_parser.jar:$oldClasspath";
 
 
 
@@ -20,11 +20,11 @@ while (1)
 
     if (defined($port))
       {
-	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.Server $port");
+	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.Server $port");
       }
     else
       {
-	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.Server");
+	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.Server");
       }
 
     if ($signo &= 127)

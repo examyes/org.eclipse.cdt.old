@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,8 +55,8 @@ package com.ibm.linux.help.util.lucene.index;
  */
 
 import java.io.IOException;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
-import com.ibm.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
 
 /** This stores a monotonically increasing set of <Term, TermInfo> pairs in a
   Directory.  A TermInfos can be written once, in order.  */

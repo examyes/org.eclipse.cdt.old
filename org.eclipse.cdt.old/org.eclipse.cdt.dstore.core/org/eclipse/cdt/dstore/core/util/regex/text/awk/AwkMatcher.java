@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.awk;
+package org.eclipse.cdt.dstore.core.util.regex.text.awk;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,7 +59,7 @@ package com.ibm.dstore.core.util.regex.text.awk;
 
 import java.io.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 /**
  * The AwkMatcher class is used to match regular expressions
@@ -75,7 +75,7 @@ import com.ibm.dstore.core.util.regex.text.regex.*;
  * saved in a MatchResult produced by AwkMatcher will always be 1.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: AwkMatcher.java,v 1.2 2001/08/31 00:04:17 dmcknigh Exp $
+ @version $Id: AwkMatcher.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see org.apache.oro.text.regex.PatternMatcher
  * @see AwkCompiler

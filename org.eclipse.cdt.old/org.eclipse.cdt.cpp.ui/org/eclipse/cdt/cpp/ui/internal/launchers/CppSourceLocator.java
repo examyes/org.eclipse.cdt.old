@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.launchers;
+package org.eclipse.cdt.cpp.ui.internal.launchers;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,9 +6,9 @@ package com.ibm.cpp.ui.internal.launchers;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.dstore.ui.resource.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.analysis;
+package org.eclipse.cdt.linux.help.util.lucene.analysis;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1

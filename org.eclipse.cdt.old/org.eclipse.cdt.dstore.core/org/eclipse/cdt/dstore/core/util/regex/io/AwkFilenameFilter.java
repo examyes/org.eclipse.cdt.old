@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.io;
+package org.eclipse.cdt.dstore.core.util.regex.io;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,9 +59,9 @@ package com.ibm.dstore.core.util.regex.io;
 
 import java.io.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
-import com.ibm.dstore.core.util.regex.text.awk.*;
-import com.ibm.dstore.core.util.regex.text.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.awk.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.*;
 
 /**
  * AwkFilenameFilter is a RegexFilenameFilter subclass that filters on Awk
@@ -69,7 +69,7 @@ import com.ibm.dstore.core.util.regex.text.*;
  * which is required to use this class.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: AwkFilenameFilter.java,v 1.2 2001/08/31 00:04:15 dmcknigh Exp $
+ @version $Id: AwkFilenameFilter.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see RegexFilenameFilter
  * @see Perl5FilenameFilter

@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.awk;
+package org.eclipse.cdt.dstore.core.util.regex.text.awk;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -57,7 +57,7 @@ package com.ibm.dstore.core.util.regex.text.awk;
  * by Daniel F. Savarese. We appreciate his contributions.
  */
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 /**
  * A class used to store and access the results of an AwkPattern match.
@@ -66,9 +66,9 @@ import com.ibm.dstore.core.util.regex.text.regex.*;
  * saved in an AwkMatchResult will always be 1.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: AwkMatchResult.java,v 1.2 2001/08/31 00:04:17 dmcknigh Exp $
+ @version $Id: AwkMatchResult.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
- * @see com.ibm.dstore.core.util.regex.text.regex.PatternMatcher
+ * @see org.eclipse.cdt.dstore.core.util.regex.text.regex.PatternMatcher
  * @see AwkMatcher
  * @see AwkCompiler
  */

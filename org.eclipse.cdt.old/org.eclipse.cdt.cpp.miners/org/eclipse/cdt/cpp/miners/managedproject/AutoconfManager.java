@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.managedproject;
+package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
@@ -6,7 +6,7 @@ package com.ibm.cpp.miners.managedproject;
  */
 
 
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import java.io.*;
 import java.lang.Runtime;
@@ -110,7 +110,7 @@ public class AutoconfManager {
 				try{// add autogen.sh only if not exist
 					p = rt.exec(
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
-						"/com.ibm.cpp.miners/autoconf_templates/autogen.sh "+project.getSource());
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/autogen.sh "+project.getSource());
 					p.waitFor();
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	

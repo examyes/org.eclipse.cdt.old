@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.client;
+package org.eclipse.cdt.dstore.core.client;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -8,9 +8,9 @@ package com.ibm.dstore.core.client;
 
 import java.io.*;
 
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 public class ClientCommandHandler extends CommandHandler
 {

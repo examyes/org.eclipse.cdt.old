@@ -1,11 +1,11 @@
-package com.ibm.cpp.miners.debug;
+package org.eclipse.cdt.cpp.miners.debug;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
 
 import java.io.*;
 import java.util.*;
@@ -36,7 +36,7 @@ public class DebugMiner extends Miner
     {
 	_debugOptions = getLocalizedString("debug_options");
 	
-	_gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
+	_gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "org.eclipse.cdt.debug.gdbPicl";
 	String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug";
 	String ps = System.getProperty("path.separator");
 	String fs = "/";
@@ -44,7 +44,7 @@ public class DebugMiner extends Miner
 	_debugJarPath += ps + debugPath + fs + "ibm_debug.jar";
         _debugJarPath += ps + _gdbPiclPath;
 	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
-	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " com.ibm.debug.gdbPicl.Gdb ";
+	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " org.eclipse.cdt.debug.gdbPicl.Gdb ";
     }
 
     public void extendSchema(DataElement schemaRoot)

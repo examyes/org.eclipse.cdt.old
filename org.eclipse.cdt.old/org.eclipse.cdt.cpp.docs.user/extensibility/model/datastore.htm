@@ -45,11 +45,11 @@ We are not using the host root subtree since our users will not be directly navi
 <h5>Miner Root</h5>
 <p>The file <code>minerFile.dat</code> stores a list of all miners the DataStore should load and use at runtime.  Each line of this text file specifies the class name for a miner to be loaded.  For example:
 <pre>
-com.ibm.dstore.miners.filesystem.FileSystemMiner
-com.ibm.dstore.miners.command.CommandMiner
-com.ibm.cpp.miners.search.SearchMiner
-com.ibm.cpp.miners.parser.ParseMiner
-com.ibm.dstore.miners.test.TestMiner</pre>
+org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner
+org.eclipse.cdt.dstore.miners.command.CommandMiner
+org.eclipse.cdt.cpp.miners.search.SearchMiner
+org.eclipse.cdt.cpp.miners.parser.ParseMiner
+org.eclipse.cdt.dstore.miners.test.TestMiner</pre>
 For each Miner loaded by the DataStore, a unique miner element is created under the miner root.  In turn each miner element has three children; data, state and transient. All data objects created by the Miner (or created by the front-end on behalf of the Miner) should only be created in the Miner s data subtree.  The specific layout of this subtree may be unique for each Miner and is outlined in the Miners documentation.      
        
 <h5>Unique Identifiers</h5>

@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.project;
+package org.eclipse.cdt.cpp.miners.project;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.cpp.miners.project;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
 
 import java.util.*;
 import java.io.*;

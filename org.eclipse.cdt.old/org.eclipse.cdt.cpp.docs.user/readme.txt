@@ -137,7 +137,7 @@ Debugger issues
 
 1. When trying to attach an existing process, the following error message may be shown, even 
    though the debug engine has been started successfully:
-       Client startup failed (missing gdb, com.ibm.debug.gdbPicl/gdb script 
+       Client startup failed (missing gdb, org.eclipse.cdt.debug.gdbPicl/gdb script 
        not executable, gdb command failed, etc.)
    This error message can be safely ignored (and will be removed in the next driver).
 For other debugger issues, see the accompanying "todo.txt"

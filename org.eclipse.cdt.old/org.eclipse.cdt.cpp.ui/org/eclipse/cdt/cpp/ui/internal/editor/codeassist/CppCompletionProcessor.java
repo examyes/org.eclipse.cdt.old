@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.editor.codeassist;
+package org.eclipse.cdt.cpp.ui.internal.editor.codeassist;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.cpp.ui.internal.editor.codeassist;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.views.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.views.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
 
 import java.util.*;
 import org.eclipse.swt.graphics.*;
@@ -127,7 +127,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		if (results == null || results.size() == 0)
 		    {
 			dataStore = _plugin.getHostDataStore();
-			DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
+			DataElement dictionaryData =  dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.dictionary.DictionaryMiner");
 
 			String language = "english";
 			DataElement root = dataStore.find(dictionaryData, DE.A_NAME, language, 1);

@@ -1,4 +1,4 @@
-package com.ibm.dstore.extra.internal.extra;
+package org.eclipse.cdt.dstore.extra.internal.extra;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

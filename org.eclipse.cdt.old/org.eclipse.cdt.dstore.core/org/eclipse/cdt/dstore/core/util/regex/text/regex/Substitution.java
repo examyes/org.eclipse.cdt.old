@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.regex;
+package org.eclipse.cdt.dstore.core.util.regex.text.regex;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -68,7 +68,7 @@ package com.ibm.dstore.core.util.regex.text.regex;
  * to make a substitution a function of a match.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Substitution.java,v 1.2 2001/08/31 00:04:20 dmcknigh Exp $
+ @version $Id: Substitution.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see Util
  * @see Util#substitute

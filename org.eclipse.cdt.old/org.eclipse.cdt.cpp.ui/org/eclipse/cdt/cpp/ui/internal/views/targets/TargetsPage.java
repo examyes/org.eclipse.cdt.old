@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -12,11 +12,11 @@ import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
 import org.eclipse.ui.views.properties.IPropertySheetPage; 
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
  
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
@@ -200,7 +200,7 @@ public class TargetsPage extends Page implements IPropertySheetPage {
 		IProject project = root.getRoot();
 
 		// look for that root in the persistence store and if found do update
-		java.util.ArrayList savedList = com.ibm.cpp.ui.internal.CppPlugin.readProperty(project, root.getName());
+		java.util.ArrayList savedList = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(project, root.getName());
 		for(int z = 0; z < savedList.size(); z++)
 		{
 			TargetElement target = new TargetElement(savedList.get(z++).toString(),
@@ -326,7 +326,7 @@ public void makeContributions(
      */
     public final void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {	
-	if (part instanceof com.ibm.cpp.ui.internal.views.CppProjectsViewPart || 
+	if (part instanceof org.eclipse.cdt.cpp.ui.internal.views.CppProjectsViewPart || 
 	    part instanceof org.eclipse.ui.views.navigator.ResourceNavigator)
 	    {
 		if (viewer == null)

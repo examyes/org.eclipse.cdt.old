@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.builder;
+package org.eclipse.cdt.cpp.ui.internal.builder;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.cpp.ui.internal.builder;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.preferences.*;
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.preferences.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
@@ -86,7 +86,7 @@ public class EnvironmentPropertyPage extends PropertyPage
 		  dataStore = ((Repository)project).getDataStore();
 	      }
 
-	DataElement systemInfo = dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");
+	DataElement systemInfo = dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner");
 	DataElement systemEnvironment = systemInfo.get(0);
 	
 	ArrayList svariables = new ArrayList();

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -23,7 +23,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionValidator;
 import org.eclipse.ui.internal.misc.ContainerSelectionGroup;
 
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 public class TargetSelectionDialog extends SelectionDialog {
 	// the widget group;

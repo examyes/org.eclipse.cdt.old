@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.actions;
+package org.eclipse.cdt.cpp.ui.internal.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.dialogs.PreventableMessageBox;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.dialogs.PreventableMessageBox;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import java.io.*; 
 import java.util.*;
@@ -198,7 +198,7 @@ public class ConfigureAction extends CustomAction
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
 				api.monitorStatus(status);			
-				api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
@@ -208,7 +208,7 @@ public class ConfigureAction extends CustomAction
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
 				api.monitorStatus(status);			
-				api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
@@ -218,7 +218,7 @@ public class ConfigureAction extends CustomAction
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
 				api.monitorStatus(status);			
-				api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.search;
+package org.eclipse.cdt.cpp.ui.internal.views.search;
 
 /*
  * Licensed Materials - Property of IBM,

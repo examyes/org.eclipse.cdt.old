@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.util;
+package org.eclipse.cdt.linux.help.util.lucene.util;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,9 +55,9 @@ package com.ibm.linux.help.util.lucene.util;
  */
 
 import java.io.IOException;
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.InputStream;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.InputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
 
 /** Optimized implementation of a vector of bits.  This is more-or-less like
   java.util.BitSet, but also includes the following:

@@ -1,13 +1,13 @@
-package com.ibm.cpp.miners.managedproject;
+package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.cpp.miners.managedproject.amparser.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.cpp.miners.managedproject.amparser.*;
 
 import java.util.*;
 import java.io.*;

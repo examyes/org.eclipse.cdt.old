@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.actions;
+package org.eclipse.cdt.cpp.ui.internal.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
-import com.ibm.linux.help.*;
+import org.eclipse.cdt.linux.help.*;
 
 public class HelpAction extends CustomAction
 { 

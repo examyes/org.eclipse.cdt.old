@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts.views;
+package org.eclipse.cdt.dstore.hosts.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -23,16 +23,16 @@ public class HostsPerspective implements IPerspectiveFactory
       String editorArea = factory.getEditorArea();
 
       IFolderLayout a = factory.createFolder("a", IPageLayout.LEFT, (float)0.60, editorArea);
-      a.addView("com.ibm.dstore.hosts.views.CommandViewPart");
+      a.addView("org.eclipse.cdt.dstore.hosts.views.CommandViewPart");
 
       IFolderLayout b = factory.createFolder("b", IPageLayout.BOTTOM, (float)0.80, "a");
-      b.addView("com.ibm.dstore.hosts.views.OutputViewPart");
+      b.addView("org.eclipse.cdt.dstore.hosts.views.OutputViewPart");
 
       IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.TOP, (float)0.70, "a");
-      topLeft.addView("com.ibm.dstore.hosts.views.HostsViewPart");
+      topLeft.addView("org.eclipse.cdt.dstore.hosts.views.HostsViewPart");
 
       IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.RIGHT, (float)0.60, "topLeft");
-      bottomLeft.addView("com.ibm.dstore.hosts.views.HostsDetailsViewPart");
+      bottomLeft.addView("org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart");
 
 
   }

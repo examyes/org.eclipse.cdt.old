@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.dstore;
+package org.eclipse.cdt.cpp.miners.parser.dstore;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.cpp.miners.parser.dstore;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.cpp.miners.parser.namelookup.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.cpp.miners.parser.namelookup.*;
 import java.lang.*;
 import java.util.*;
 import java.io.*;

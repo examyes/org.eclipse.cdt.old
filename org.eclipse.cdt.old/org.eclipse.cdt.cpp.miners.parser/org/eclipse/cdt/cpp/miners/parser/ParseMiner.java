@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser;
+package org.eclipse.cdt.cpp.miners.parser;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -10,11 +10,11 @@ import java.lang.*;
 import java.io.*;
 import java.util.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.cpp.miners.parser.invocation.*;
-import com.ibm.cpp.miners.parser.codeassist.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.cpp.miners.parser.dstore.*;
+import org.eclipse.cdt.cpp.miners.parser.invocation.*;
+import org.eclipse.cdt.cpp.miners.parser.codeassist.*;
 
 public class ParseMiner extends Miner
 {

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,7 +54,7 @@ package com.ibm.linux.help.util.lucene.index;
  * <http://www.apache.org/>.
  */
 
-import com.ibm.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
 
 final class SegmentInfo {
   public String name;				  // unique name in dir

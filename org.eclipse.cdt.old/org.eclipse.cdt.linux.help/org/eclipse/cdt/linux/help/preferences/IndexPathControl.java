@@ -1,4 +1,4 @@
-package com.ibm.linux.help.preferences;
+package org.eclipse.cdt.linux.help.preferences;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.linux.help.preferences;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.linux.help.*;
-import com.ibm.linux.help.search.*;
+import org.eclipse.cdt.linux.help.*;
+import org.eclipse.cdt.linux.help.search.*;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;

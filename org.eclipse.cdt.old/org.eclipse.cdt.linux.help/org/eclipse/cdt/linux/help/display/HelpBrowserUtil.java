@@ -1,4 +1,4 @@
-package com.ibm.linux.help.display;
+package org.eclipse.cdt.linux.help.display;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

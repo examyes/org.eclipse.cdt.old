@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -60,14 +60,14 @@ import java.io.StringReader;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
-import com.ibm.linux.help.util.lucene.document.Document;
-import com.ibm.linux.help.util.lucene.document.Field;
-import com.ibm.linux.help.util.lucene.analysis.Analyzer;
-import com.ibm.linux.help.util.lucene.analysis.TokenStream;
-import com.ibm.linux.help.util.lucene.analysis.Token;
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
-import com.ibm.linux.help.util.lucene.search.Similarity;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.document.Field;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.Analyzer;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.TokenStream;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.Token;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.search.Similarity;
 
 final class DocumentWriter {
   private Analyzer analyzer;

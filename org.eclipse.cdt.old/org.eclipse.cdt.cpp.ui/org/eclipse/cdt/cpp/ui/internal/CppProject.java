@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal;
+package org.eclipse.cdt.cpp.ui.internal;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -31,7 +31,7 @@ public class CppProject implements IProjectNature
         // Add nature-specific information
         // for the project, such as adding a builder
         // to a project's build spec.
-	String builderName = "com.ibm.cpp.ui.cppbuilder";
+	String builderName = "org.eclipse.cdt.cpp.ui.cppbuilder";
 	IProjectDescription projectDescription =  _project.getDescription();
 	
 	ICommand command = projectDescription.newCommand();

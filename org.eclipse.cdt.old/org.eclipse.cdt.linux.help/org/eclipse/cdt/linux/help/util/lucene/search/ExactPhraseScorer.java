@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -56,8 +56,8 @@ package com.ibm.linux.help.util.lucene.search;
 
 import java.io.IOException;
 import java.util.Vector;
-import com.ibm.linux.help.util.lucene.util.*;
-import com.ibm.linux.help.util.lucene.index.*;
+import org.eclipse.cdt.linux.help.util.lucene.util.*;
+import org.eclipse.cdt.linux.help.util.lucene.index.*;
 
 final class ExactPhraseScorer extends PhraseScorer {
 

@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.managedproject;
+package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of

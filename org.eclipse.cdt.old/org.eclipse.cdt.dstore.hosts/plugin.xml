@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <plugin
    name = "%pluginName"
-   id = "com.ibm.dstore.hosts"
+   id = "org.eclipse.cdt.dstore.hosts"
    version = "0.5.0"
    vendor-name = "International Business Machines Corp."
-   class="com.ibm.dstore.hosts.HostsPlugin">
+   class="org.eclipse.cdt.dstore.hosts.HostsPlugin">
 
    <requires>
       <import plugin="org.eclipse.ui"/>
@@ -12,10 +12,10 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.boot"/>
-      <import plugin="com.ibm.dstore.extra"/>
-      <import plugin="com.ibm.dstore.core"/>
-      <import plugin="com.ibm.dstore.ui"/>
-      <import plugin="com.ibm.dstore.miners"/>
+      <import plugin="org.eclipse.cdt.dstore.extra"/>
+      <import plugin="org.eclipse.cdt.dstore.core"/>
+      <import plugin="org.eclipse.cdt.dstore.ui"/>
+      <import plugin="org.eclipse.cdt.dstore.miners"/>
    </requires>
 
    <runtime>
@@ -30,10 +30,10 @@
 <extension
 	point="org.eclipse.ui.perspectives">
    <perspective
-	id="com.ibm.dstore.hosts.views.HostsPerspective"
+	id="org.eclipse.cdt.dstore.hosts.views.HostsPerspective"
 	icon="icons/full/cview16/host_perspective.gif"
 	name="%Hosts"
-	class="com.ibm.dstore.hosts.views.HostsPerspective">
+	class="org.eclipse.cdt.dstore.hosts.views.HostsPerspective">
 	</perspective>
 	
   </extension>
@@ -41,36 +41,36 @@
 <extension
 	point="org.eclipse.ui.views">
 	<category
-	   id="com.ibm.dstore.hosts"
+	   id="org.eclipse.cdt.dstore.hosts"
 	   name="&amp;Hosts">
 	</category>
 	<view
-		id="com.ibm.dstore.hosts.views.HostsViewPart"
+		id="org.eclipse.cdt.dstore.hosts.views.HostsViewPart"
 		name="%Hosts"
-		category="com.ibm.dstore.hosts"
+		category="org.eclipse.cdt.dstore.hosts"
 		icon="icons/full/cview16/hosts_view.gif"
-		class="com.ibm.dstore.hosts.views.HostsViewPart">
+		class="org.eclipse.cdt.dstore.hosts.views.HostsViewPart">
 	</view>
 	<view
-		id="com.ibm.dstore.hosts.views.HostsDetailsViewPart"
+		id="org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart"
 		name="%Host_Details"
-		category="com.ibm.dstore.hosts"
+		category="org.eclipse.cdt.dstore.hosts"
 		icon="icons/full/cview16/hostdetail_view.gif"
-		class="com.ibm.dstore.hosts.views.HostsDetailsViewPart">
+		class="org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart">
 	</view>
 	<view
-		id="com.ibm.dstore.hosts.views.OutputViewPart"
+		id="org.eclipse.cdt.dstore.hosts.views.OutputViewPart"
 		name="%Output"
-		category="com.ibm.dstore.hosts"
+		category="org.eclipse.cdt.dstore.hosts"
 		icon="icons/full/cview16/outgoing_view.gif"
-		class="com.ibm.dstore.hosts.views.OutputViewPart">
+		class="org.eclipse.cdt.dstore.hosts.views.OutputViewPart">
 	</view>
 	<view
-		id="com.ibm.dstore.hosts.views.CommandViewPart"
+		id="org.eclipse.cdt.dstore.hosts.views.CommandViewPart"
 		name="%Command"
-		category="com.ibm.dstore.hosts"
+		category="org.eclipse.cdt.dstore.hosts"
 		icon="icons/full/cview16/command_view.gif"
-		class="com.ibm.dstore.hosts.views.CommandViewPart">
+		class="org.eclipse.cdt.dstore.hosts.views.CommandViewPart">
 	</view>
 </extension>
 

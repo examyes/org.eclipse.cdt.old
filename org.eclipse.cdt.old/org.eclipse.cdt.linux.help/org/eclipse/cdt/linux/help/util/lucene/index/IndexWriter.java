@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,14 +59,14 @@ import java.io.File;
 import java.io.PrintStream;
 import java.util.Vector;
 
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.RAMDirectory;
-import com.ibm.linux.help.util.lucene.store.FSDirectory;
-import com.ibm.linux.help.util.lucene.store.Lock;
-import com.ibm.linux.help.util.lucene.store.InputStream;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
-import com.ibm.linux.help.util.lucene.document.Document;
-import com.ibm.linux.help.util.lucene.analysis.Analyzer;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.RAMDirectory;
+import org.eclipse.cdt.linux.help.util.lucene.store.FSDirectory;
+import org.eclipse.cdt.linux.help.util.lucene.store.Lock;
+import org.eclipse.cdt.linux.help.util.lucene.store.InputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.Analyzer;
 
 /**
   An IndexWriter creates and maintains an index.

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -55,8 +55,8 @@ package com.ibm.linux.help.util.lucene.search;
  */
 
 import java.io.IOException;
-import com.ibm.linux.help.util.lucene.document.Document;
-import com.ibm.linux.help.util.lucene.index.Term;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.index.Term;
 
 /** The abstract base class for search implementations.
   <p>Subclasses implement search over a single index, over multiple indices,

@@ -1,4 +1,4 @@
-package com.ibm.dstore.miners.dictionary;
+package org.eclipse.cdt.dstore.miners.dictionary;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,10 +6,10 @@ package com.ibm.dstore.miners.dictionary;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
@@ -30,10 +30,10 @@ public class DictionaryMiner extends Miner
    public void extendSchema(DataElement schemaRoot)
     {
 	_containsDescriptor  = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.contents"));
-	_dictionaryDescriptor = createObjectDescriptor(schemaRoot, "dictionary", "com.ibm.dstore.miners");
-	_categoryDescriptor   = createObjectDescriptor(schemaRoot, "category", "com.ibm.dstore.miners");
-	_wordDescriptor       = createObjectDescriptor(schemaRoot, "word", "com.ibm.dstore.miners");
-	_nameDescriptor       = createObjectDescriptor(schemaRoot, "name", "com.ibm.dstore.miners");
+	_dictionaryDescriptor = createObjectDescriptor(schemaRoot, "dictionary", "org.eclipse.cdt.dstore.miners");
+	_categoryDescriptor   = createObjectDescriptor(schemaRoot, "category", "org.eclipse.cdt.dstore.miners");
+	_wordDescriptor       = createObjectDescriptor(schemaRoot, "word", "org.eclipse.cdt.dstore.miners");
+	_nameDescriptor       = createObjectDescriptor(schemaRoot, "name", "org.eclipse.cdt.dstore.miners");
 
 
 	DataElement dictQuery  = createCommandDescriptor(_dictionaryDescriptor, 
@@ -51,7 +51,7 @@ public class DictionaryMiner extends Miner
    public void load()
     {
 	String fileLocation = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-	_dictionary = fileLocation + File.separator + "com.ibm.dstore.miners" + File.separator + "dictionary";	
+	_dictionary = fileLocation + File.separator + "org.eclipse.cdt.dstore.miners" + File.separator + "dictionary";	
 	_languageRoot = _dataStore.createObject(_minerData, _dictionaryDescriptor, "english"); 
     }
 

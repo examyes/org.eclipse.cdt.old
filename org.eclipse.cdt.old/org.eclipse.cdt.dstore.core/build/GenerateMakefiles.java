@@ -23,7 +23,7 @@ class GenerateMakefiles
    System.exit(0);
   }
   _basePluginsDir = getBasePluginsDirectory();
-  _theRulesMakefile = _pluginsDir + "/com.ibm.dstore.core/build/rules.mk";
+  _theRulesMakefile = _pluginsDir + "/org.eclipse.cdt.dstore.core/build/rules.mk";
   for (int i=0; i<args.length; i++)
    generateBuildMakefilesFor(args[i]);
   System.exit(0);
@@ -42,7 +42,7 @@ class GenerateMakefiles
  {
   String theMakefile = theDirectory + "/makefile";
   String fileContents = "include " + theEnvMakefile + "\ninclude " + _theRulesMakefile;
-  if (!theDirectory.getName().equals("com.ibm.dstore.core"))
+  if (!theDirectory.getName().equals("org.eclipse.cdt.dstore.core"))
    writeFile(theMakefile, fileContents);
  
   File[] subdirs = theDirectory.listFiles();
@@ -87,7 +87,7 @@ class GenerateMakefiles
  
  /* Very specific method to generate a jar file name...
   * Currently we just take the last 2 parts of the plugin name and separate them by a _,
-  * so com.ibm.dstore.core becomes dstore_core.jar
+  * so org.eclipse.cdt.dstore.core becomes dstore_core.jar
   */
  private static String getJarFileName(String thePlugin)
  {

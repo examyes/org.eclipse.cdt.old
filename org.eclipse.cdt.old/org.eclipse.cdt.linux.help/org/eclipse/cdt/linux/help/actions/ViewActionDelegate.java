@@ -1,4 +1,4 @@
-package com.ibm.linux.help.actions;
+package org.eclipse.cdt.linux.help.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.linux.help.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.linux.help.preferences.*;
+import org.eclipse.cdt.linux.help.preferences.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.jface.dialogs.*;

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal;
+package org.eclipse.cdt.cpp.ui.internal;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -15,6 +15,6 @@ public class CppProjectAttributes
   public static final int LOCATION_HOST      = 3;
 
 
-  public static final String NAME_QUALIFIER   = "com.ibm.cpp.ui.internal";
+  public static final String NAME_QUALIFIER   = "org.eclipse.cdt.cpp.ui.internal";
 
 }

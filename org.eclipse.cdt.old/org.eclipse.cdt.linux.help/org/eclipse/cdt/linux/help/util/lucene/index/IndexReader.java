@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -56,10 +56,10 @@ package com.ibm.linux.help.util.lucene.index;
 
 import java.io.IOException;
 import java.io.File;
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.FSDirectory;
-import com.ibm.linux.help.util.lucene.store.Lock;
-import com.ibm.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.FSDirectory;
+import org.eclipse.cdt.linux.help.util.lucene.store.Lock;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
 
 /** IndexReader is an abstract class, providing an interface for accessing an
   index.  Search of an index is done entirely through this abstract interface,
@@ -139,7 +139,7 @@ abstract public class IndexReader {
 
   /** Returns the byte-encoded normalization factor for the named field of
     every document.  This is used by the search code to score documents.
-    @see com.ibm.linux.help.util.lucene.search.Similarity#norm
+    @see org.eclipse.cdt.linux.help.util.lucene.search.Similarity#norm
     */
   abstract public byte[] norms(String field) throws IOException;
 

@@ -13,19 +13,19 @@ plugins whose names begin with "com.ibm".
 If you have installed some other plugins whose names may also start with 
 "com.ibm", or if you are not sure, then only delete the following plugins:
 
-com.ibm.cpp.docs.user
-com.ibm.cpp.miners
-com.ibm.cpp.miners.parser
-com.ibm.cpp.ui
+org.eclipse.cdt.cpp.docs.user
+org.eclipse.cdt.cpp.miners
+org.eclipse.cdt.cpp.miners.parser
+org.eclipse.cdt.cpp.ui
 com.ibm.debug
 com.ibm.debug.doc.user
-com.ibm.debug.gdbPicl
-com.ibm.dstore.core
-com.ibm.dstore.extra
-com.ibm.dstore.extra.server
-com.ibm.dstore.hosts
-com.ibm.dstore.miners
-com.ibm.dstore.ui
+org.eclipse.cdt.debug.gdbPicl
+org.eclipse.cdt.dstore.core
+org.eclipse.cdt.dstore.extra
+org.eclipse.cdt.dstore.extra.server
+org.eclipse.cdt.dstore.hosts
+org.eclipse.cdt.dstore.miners
+org.eclipse.cdt.dstore.ui
 com.ibm.linux.help
 com.ibm.lpex
 
@@ -58,7 +58,7 @@ Once you have unzipped the CDT plugins into the eclipse/plugins directory,
 the CDT should be ready for use.
 
 To work with remote projects, you will need to install cdt-eclipse-20020116-server.zip
-on the remote machine.  Refer to com.ibm.cpp.docs.user/tasks/remote/server.htm
+on the remote machine.  Refer to org.eclipse.cdt.cpp.docs.user/tasks/remote/server.htm
 for details.
 
 
@@ -69,7 +69,7 @@ To generate a build environment (which is not necessary to run the CDT) for the 
 plugins, perform the following:
  1. Ensure that the cdt-eclipse-20020116-local.zip has been unzipped in your 
     eclipse/plugins directory
- 2. Goto the .../eclipse/plugins/com.ibm.dstore.core directory
+ 2. Goto the .../eclipse/plugins/org.eclipse.cdt.dstore.core directory
  3. Type make dev
 
 Instructions will be provided later for working with CDT as Eclipse Plugin 

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.editor;
+package org.eclipse.cdt.cpp.ui.internal.editor;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.cpp.ui.internal.editor;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 import com.ibm.lpex.core.*;
 import com.ibm.lpex.alef.*;

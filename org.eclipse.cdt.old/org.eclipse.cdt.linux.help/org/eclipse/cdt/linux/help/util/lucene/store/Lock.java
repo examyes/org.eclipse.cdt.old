@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.store;
+package org.eclipse.cdt.linux.help.util.lucene.store;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1

@@ -1,10 +1,10 @@
-package com.ibm.cpp.miners.managedproject;
+package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 import java.io.*;
 
 public class ConfigureInManager {
@@ -248,10 +248,10 @@ public class ConfigureInManager {
 			try{
 				Process p;
 				p = rt.exec("cp "+ project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
-					"/com.ibm.cpp.miners/autoconf_templates/configure.in "+project.getSource());
+					"/org.eclipse.cdt.cpp.miners/autoconf_templates/configure.in "+project.getSource());
 				p.waitFor();
 				p = rt.exec("cp "+ project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
-						"/com.ibm.cpp.miners/autoconf_templates/acconfig.h "+project.getSource());
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/acconfig.h "+project.getSource());
 					p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	

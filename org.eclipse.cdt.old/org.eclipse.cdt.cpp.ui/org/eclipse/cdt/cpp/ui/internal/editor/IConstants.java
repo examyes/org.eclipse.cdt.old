@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.editor;
+package org.eclipse.cdt.cpp.ui.internal.editor;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -8,7 +8,7 @@ package com.ibm.cpp.ui.internal.editor;
 
 public interface IConstants {
 	
-	public static final String PLUGIN_ID ="com.ibm.cpp.ui.editor";
+	public static final String PLUGIN_ID ="org.eclipse.cdt.cpp.ui.editor";
 	public static final String PREFIX = PLUGIN_ID+".";
 
 	/*

@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.invocation;
+package org.eclipse.cdt.cpp.miners.parser.invocation;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,10 +6,10 @@ package com.ibm.cpp.miners.parser.invocation;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.miners.parser.grammar.*;
-import com.ibm.cpp.miners.parser.preprocessor.*;
-import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.cpp.miners.parser.grammar.*;
+import org.eclipse.cdt.cpp.miners.parser.preprocessor.*;
+import org.eclipse.cdt.cpp.miners.parser.dstore.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import java.util.*;
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui;
+package org.eclipse.cdt.dstore.ui;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,8 +6,8 @@ package com.ibm.dstore.ui;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.jface.action.*;
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.widgets;
+package org.eclipse.cdt.dstore.ui.widgets;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.dstore.ui.widgets;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.DataStoreCorePlugin;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
-import com.ibm.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.*;
 
 import java.util.*;
 import java.io.*;

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.editor;
+package org.eclipse.cdt.cpp.ui.internal.editor;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -23,7 +23,7 @@ import org.eclipse.debug.ui.*;
 import org.eclipse.swt.graphics.Image;
 
 import org.eclipse.ui.*;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 public class CppMarkerAnnotation extends MarkerAnnotation {		
 	Image _breakpointImage;

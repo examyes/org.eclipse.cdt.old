@@ -13,15 +13,15 @@ options
 
 PARSER_BEGIN(Parser)
 
-package com.ibm.cpp.miners.parser.grammar;
+package org.eclipse.cdt.cpp.miners.parser.grammar;
 
 /*
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.cpp.miners.parser.invocation.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.cpp.miners.parser.dstore.*;
+import org.eclipse.cdt.cpp.miners.parser.invocation.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;

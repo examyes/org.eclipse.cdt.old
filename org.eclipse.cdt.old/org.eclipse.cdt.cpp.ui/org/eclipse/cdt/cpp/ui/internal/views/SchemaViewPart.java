@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,10 +6,10 @@ package com.ibm.cpp.ui.internal.views;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.ui.ConvertUtility;
+import org.eclipse.cdt.dstore.ui.ConvertUtility;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.ui.views.navigator.*;

@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.dstore;
+package org.eclipse.cdt.cpp.miners.parser.dstore;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -10,8 +10,8 @@ import java.lang.*;
 import java.io.*;
 import java.util.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.cpp.miners.parser.dstore.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.cpp.miners.parser.dstore.*;
 
 public class ParserSchema
 {
@@ -296,7 +296,7 @@ public class ParserSchema
    if (key == null)
     return "";
    if (_resourceBundle == null)
-    _resourceBundle = ResourceBundle.getBundle("com.ibm.cpp.miners.parser.dstore.ParserSchema");
+    _resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.cpp.miners.parser.dstore.ParserSchema");
    String value = _resourceBundle.getString(key);
    if ((value == null) || (value.length() == 0))
     System.out.println("ParserSchema problem finding " + key);
@@ -335,7 +335,7 @@ public class ParserSchema
 
  private DataElement createCommandDescriptor(DataElement descriptor, String name, String value, boolean visible)
  {
-  DataElement cmdD = descriptor.getDataStore().createCommandDescriptor(descriptor, name, "com.ibm.cpp.miners.parser.ParseMiner", value);
+  DataElement cmdD = descriptor.getDataStore().createCommandDescriptor(descriptor, name, "org.eclipse.cdt.cpp.miners.parser.ParseMiner", value);
   if (!visible)
    cmdD.setDepth(0);
   return cmdD;

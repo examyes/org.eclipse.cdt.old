@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.vcm;
+package org.eclipse.cdt.cpp.ui.internal.vcm;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,17 +6,17 @@ package com.ibm.cpp.ui.internal.vcm;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.hosts.views.OutputViewer;
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.dstore.hosts.views.OutputViewer;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
-import com.ibm.dstore.ui.ILinkable;
-import com.ibm.dstore.ui.ConvertUtility;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.ui.ILinkable;
+import org.eclipse.cdt.dstore.ui.ConvertUtility;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
 
 import org.eclipse.vcm.internal.core.base.*;
 import org.eclipse.core.resources.*;

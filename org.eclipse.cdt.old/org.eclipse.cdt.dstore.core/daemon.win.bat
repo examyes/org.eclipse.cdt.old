@@ -1,2 +1,2 @@
-java -DA_PLUGIN_PATH=%A_PLUGIN_PATH% com.ibm.dstore.core.server.ServerLauncher
+java -DA_PLUGIN_PATH=%A_PLUGIN_PATH% org.eclipse.cdt.dstore.core.server.ServerLauncher
 

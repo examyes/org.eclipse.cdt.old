@@ -1,4 +1,4 @@
-package com.ibm.dstore.miners.command;
+package org.eclipse.cdt.dstore.miners.command;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.dstore.miners.command;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.server.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.miners.filesystem.*;
-import com.ibm.dstore.miners.environment.*;
-import com.ibm.dstore.miners.command.patterns.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.miners.filesystem.*;
+import org.eclipse.cdt.dstore.miners.environment.*;
+import org.eclipse.cdt.dstore.miners.command.patterns.*;
 
 import java.io.*;
 import java.util.*;
@@ -40,7 +40,7 @@ public class CommandMiner extends Miner
 
      DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
      DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");
-     _dataStore.createObject(schemaRoot, "stdout", "stdout","com.ibm.dstore.miners");
+     _dataStore.createObject(schemaRoot, "stdout", "stdout","org.eclipse.cdt.dstore.miners");
  }
 
  public DataElement handleCommand (DataElement theElement)
@@ -61,7 +61,7 @@ public class CommandMiner extends Miner
 		  if (invocation.trim().length() > 0)
 		  {
 		   if (invocation.equals("?") || invocation.equals("help"))
-		    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat";
+		    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/org.eclipse.cdt.dstore.miners/patterns.dat";
 		   launchCommand(subject, invocation, status);
   
 		  }
@@ -215,7 +215,7 @@ class CommandMinerThread extends MinerThread
   _patterns = thePatterns;
   _patterns.refresh(_invocation);
   ServerCommandHandler sch = (ServerCommandHandler)(_dataStore.getCommandHandler());
-  _fileMiner = (FileSystemMiner)(sch.getMiners("com.ibm.dstore.miners.filesystem.FileSystemMiner"));
+  _fileMiner = (FileSystemMiner)(sch.getMiners("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner"));
   
   //This dataElement is where the handleQuerys from FileSystem Miner get put during a find file
   createObject("command", "> " + _invocation);
@@ -289,7 +289,7 @@ class CommandMinerThread extends MinerThread
  private String[] getEnvironment(DataElement theSubject)
  {
   //Grab the system environment:
-  DataElement envMiner  = _dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");
+  DataElement envMiner  = _dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner");
   DataElement systemEnv = _dataStore.find(envMiner, DE.A_NAME, "System Environment", 1);
   
   //Grab the project environment
@@ -627,7 +627,7 @@ class CommandMinerThread extends MinerThread
    {
     String fileName = parsedMsg.file;
     if (fileName.equals("PATTERNS.DAT"))
-     fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat";
+     fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/org.eclipse.cdt.dstore.miners/patterns.dat";
     createObject(parsedMsg.type, line, fileName, new Integer(parsedMsg.line), new Integer(parsedMsg.col));
    }
    catch (NumberFormatException e) 

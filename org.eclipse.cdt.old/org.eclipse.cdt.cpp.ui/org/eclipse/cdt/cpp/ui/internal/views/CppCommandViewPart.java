@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,14 +6,14 @@ package com.ibm.cpp.ui.internal.views;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.hosts.views.*;
+import org.eclipse.cdt.dstore.hosts.views.*;
 
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -26,12 +26,12 @@ public class CppObjectPerspective implements IPerspectiveFactory
                                                  , (float)0.60
                                                  , editorArea
                                                  );
-    topLeft.addView("com.ibm.cpp.ui.SelectedObjectViewPart");
+    topLeft.addView("org.eclipse.cdt.cpp.ui.SelectedObjectViewPart");
     
     // Bottom left.
     IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.BOTTOM, (float)0.60,
 					     "topLeft");
-    bottomLeft.addView("com.ibm.cpp.ui.SuperDetailsViewPart");
+    bottomLeft.addView("org.eclipse.cdt.cpp.ui.SuperDetailsViewPart");
   }
 }
 

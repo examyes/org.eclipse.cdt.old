@@ -1,4 +1,4 @@
-package com.ibm.linux.help.filter;
+package org.eclipse.cdt.linux.help.filter;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -10,9 +10,9 @@ import java.util.*;
 
 import org.eclipse.jface.dialogs.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
-import com.ibm.linux.help.*;
-import com.ibm.linux.help.ItemElement;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.linux.help.*;
+import org.eclipse.cdt.linux.help.ItemElement;
 
 public class HelpFilter
 {

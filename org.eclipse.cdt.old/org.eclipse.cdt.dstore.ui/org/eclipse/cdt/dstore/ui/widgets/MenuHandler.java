@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.widgets;
+package org.eclipse.cdt.dstore.ui.widgets;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,16 +6,16 @@ package com.ibm.dstore.ui.widgets;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.dialogs.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.ui.dnd.*; 
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.dialogs.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.dnd.*; 
 
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import org.eclipse.jface.resource.*;
 
@@ -48,7 +48,7 @@ public class MenuHandler
 	// setup resource bundle
 	try
 	    {
-		_resourceBundle = ResourceBundle.getBundle("com.ibm.dstore.ui.UIResources");
+		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.ui.UIResources");
 	    }
 	catch (MissingResourceException mre)
 	    {

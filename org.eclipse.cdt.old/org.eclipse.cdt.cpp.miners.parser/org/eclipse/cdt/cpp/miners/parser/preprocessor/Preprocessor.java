@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.preprocessor;
+package org.eclipse.cdt.cpp.miners.parser.preprocessor;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -23,8 +23,8 @@ Preprocessor.java:
 import java.io.*;
 import java.lang.*;
 import java.util.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.cpp.miners.parser.invocation.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.cpp.miners.parser.invocation.*;
 
 public class Preprocessor
 {

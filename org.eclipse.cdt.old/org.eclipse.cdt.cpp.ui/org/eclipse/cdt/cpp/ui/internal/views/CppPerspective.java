@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -26,37 +26,37 @@ public class CppPerspective implements IPerspectiveFactory
 
     IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.LEFT, (float)0.50,
 					     editorArea);
-    bottomLeft.addView("com.ibm.cpp.ui.Targets");
-    bottomLeft.addView("com.ibm.cpp.ui.CppCommandViewPart");
-    bottomLeft.addView("com.ibm.cpp.ui.DetailsViewPart");
+    bottomLeft.addView("org.eclipse.cdt.cpp.ui.Targets");
+    bottomLeft.addView("org.eclipse.cdt.cpp.ui.CppCommandViewPart");
+    bottomLeft.addView("org.eclipse.cdt.cpp.ui.DetailsViewPart");
 
     IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.TOP, (float)0.60,
     					  "bottomLeft");
     topLeft.addView(IPageLayout.ID_RES_NAV);
-    topLeft.addView("com.ibm.cpp.ui.CppProjectsViewPart");
+    topLeft.addView("org.eclipse.cdt.cpp.ui.CppProjectsViewPart");
 
     IFolderLayout topLeftRight = factory.createFolder("topLeftRight", IPageLayout.RIGHT, (float)0.45,
 						      "topLeft");
-    topLeftRight.addView("com.ibm.cpp.ui.ProjectObjectsViewPart");
-    topLeftRight.addView("com.ibm.cpp.ui.ParsedSourceViewPart");
+    topLeftRight.addView("org.eclipse.cdt.cpp.ui.ProjectObjectsViewPart");
+    topLeftRight.addView("org.eclipse.cdt.cpp.ui.ParsedSourceViewPart");
 
     IFolderLayout bbottomRight = factory.createFolder("bbottomRight", IPageLayout.BOTTOM, (float)0.70,
 						      editorArea);
-    bbottomRight.addView("com.ibm.cpp.ui.CppOutputViewPart");
+    bbottomRight.addView("org.eclipse.cdt.cpp.ui.CppOutputViewPart");
 
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
 		
     // views - c++
-    factory.addShowViewShortcut("com.ibm.cpp.ui.CppProjectsViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.DetailsViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.ProjectObjectsViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.SystemObjectsViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.ParsedSourceViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.CppCommandViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.CppOutputViewPart");
-    factory.addShowViewShortcut("com.ibm.cpp.ui.SuperDetailsViewPart");    
-    factory.addShowViewShortcut("com.ibm.cpp.ui.Targets");
-    factory.addShowViewShortcut("com.ibm.linux.help.views.ResultsViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppProjectsViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.DetailsViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.ProjectObjectsViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.SystemObjectsViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.ParsedSourceViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppCommandViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppOutputViewPart");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.SuperDetailsViewPart");    
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.Targets");
+    factory.addShowViewShortcut("org.eclipse.cdt.linux.help.views.ResultsViewPart");
 
     // search
     factory.addShowViewShortcut(SearchUI.SEARCH_RESULT_VIEW_ID);
@@ -68,7 +68,7 @@ public class CppPerspective implements IPerspectiveFactory
     factory.addShowViewShortcut(IPageLayout.ID_PROP_SHEET); 
     
     // new actions - c++ project creation wizard
-    factory.addNewWizardShortcut("com.ibm.cpp.ui.wizards.CppNewProjectResourceWizard"); //$NON-NLS-1$
+    factory.addNewWizardShortcut("org.eclipse.cdt.cpp.ui.wizards.CppNewProjectResourceWizard"); //$NON-NLS-1$
   }
 }
 

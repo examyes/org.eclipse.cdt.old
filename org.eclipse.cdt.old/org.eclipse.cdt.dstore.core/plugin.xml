@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
   name="DataStore Core Plugin"
-   id = "com.ibm.dstore.core"
+   id = "org.eclipse.cdt.dstore.core"
   version="0.5.0"
   provider-name="International Business Machines Corp."
-  class="com.ibm.dstore.core.DataStoreCorePlugin">
+  class="org.eclipse.cdt.dstore.core.DataStoreCorePlugin">
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="com.ibm.dstore.extra"/>
+      <import plugin="org.eclipse.cdt.dstore.extra"/>
    </requires>
 
   <runtime>

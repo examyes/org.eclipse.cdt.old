@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.managedproject;
+package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
@@ -20,7 +20,7 @@ public class MakefileAmClassifier {
 	private Vector sharedlAm = new Vector(5,5);
 	
 	private final String MAKEFILE_AM = "Makefile.am";
-	//private String templateLocation = "workspace/com.ibm.cpp.miners/autoconf_templates/";
+	//private String templateLocation = "workspace/org.eclipse.cdt.cpp.miners/autoconf_templates/";
 	private static String _templateLocation = "";
 	// Member Variables which can be defined in Makefile.am
 	final String _PROGRAMS = new String ("_PROGRAMS");
@@ -46,7 +46,7 @@ public class MakefileAmClassifier {
 	
 	public MakefileAmClassifier(String location)
 	{
-		_templateLocation = location+"/com.ibm.cpp.miners/autoconf_templates/";
+		_templateLocation = location+"/org.eclipse.cdt.cpp.miners/autoconf_templates/";
 		//System.out.println("\n Template Location = "+_templateLocation);
 		generateMakefileAmLayout();
 	}

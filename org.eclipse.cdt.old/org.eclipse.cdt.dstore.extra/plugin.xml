@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
   name="DataStore Extra Plugin"
-   id = "com.ibm.dstore.extra"
+   id = "org.eclipse.cdt.dstore.extra"
   version="0.5.0"
   provider-name="International Business Machines Corp.">
    <requires>

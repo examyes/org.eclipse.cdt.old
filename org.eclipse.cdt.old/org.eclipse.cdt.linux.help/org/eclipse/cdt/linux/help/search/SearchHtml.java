@@ -1,4 +1,4 @@
-package com.ibm.linux.help.search;
+package org.eclipse.cdt.linux.help.search;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.linux.help.search;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.linux.help.*;
+import org.eclipse.cdt.linux.help.*;
 
 import java.io.*;
 import java.util.*;
@@ -15,14 +15,14 @@ import java.util.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
 
-import com.ibm.linux.help.util.lucene.index.IndexWriter;
-import com.ibm.linux.help.util.lucene.analysis.*;
-import com.ibm.linux.help.util.lucene.document.*;
+import org.eclipse.cdt.linux.help.util.lucene.index.IndexWriter;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.*;
+import org.eclipse.cdt.linux.help.util.lucene.document.*;
 
-import com.ibm.linux.help.util.lucene.HTMLParser.*;
+import org.eclipse.cdt.linux.help.util.lucene.HTMLParser.*;
 
-import com.ibm.linux.help.util.lucene.search.*;
-import com.ibm.linux.help.util.lucene.queryParser.*;
+import org.eclipse.cdt.linux.help.util.lucene.search.*;
+import org.eclipse.cdt.linux.help.util.lucene.queryParser.*;
 
 public class SearchHtml
 {

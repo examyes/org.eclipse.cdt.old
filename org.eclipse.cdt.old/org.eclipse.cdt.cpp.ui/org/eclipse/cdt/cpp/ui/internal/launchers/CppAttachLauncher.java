@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.launchers;
+package org.eclipse.cdt.cpp.ui.internal.launchers;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -7,7 +7,7 @@ package com.ibm.cpp.ui.internal.launchers;
  */
 
 
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -27,9 +27,9 @@ import com.ibm.debug.WorkspaceSourceLocator;
 import com.ibm.debug.launch.PICLDaemonInfo;
 import com.ibm.debug.launch.PICLAttachInfo;
 
-import com.ibm.cpp.ui.internal.CppPlugin;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.wizards.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.wizards.*;
 
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.actions;
+package org.eclipse.cdt.cpp.ui.internal.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,9 +6,9 @@ package com.ibm.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.dialogs.*;
-import com.ibm.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 
 import org.eclipse.ui.*;
 
@@ -80,7 +80,7 @@ public class ConvertToCppProject implements IActionDelegate, ISelectionChangedLi
 	try 
 	    { 
 		// add build spec
-		String builderName = "com.ibm.cpp.ui.cppbuilder";
+		String builderName = "org.eclipse.cdt.cpp.ui.cppbuilder";
 		IProjectDescription projectDescription =  _project.getDescription();
 		
 		ICommand command = projectDescription.newCommand();
@@ -96,7 +96,7 @@ public class ConvertToCppProject implements IActionDelegate, ISelectionChangedLi
 		String[] natures = projectDescription.getNatureIds();
 		String[] newNatures = new String[natures.length + 1];
 		System.arraycopy(natures, 0, newNatures, 0, natures.length);
-		newNatures[natures.length] = "com.ibm.cpp.ui.cppnature";
+		newNatures[natures.length] = "org.eclipse.cdt.cpp.ui.cppnature";
 		projectDescription.setNatureIds(newNatures);
 		_project.setDescription(projectDescription, null);
 	    } 

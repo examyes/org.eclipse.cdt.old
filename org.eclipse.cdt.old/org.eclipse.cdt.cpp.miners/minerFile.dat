@@ -1,10 +1,10 @@
-com.ibm.dstore.miners.filesystem.FileSystemMiner
-com.ibm.dstore.miners.environment.EnvironmentMiner
-com.ibm.dstore.miners.command.CommandMiner
-com.ibm.cpp.miners.project.ProjectMiner
-com.ibm.cpp.miners.parser.ParseMiner
-com.ibm.cpp.miners.search.SearchMiner
-com.ibm.cpp.miners.managedproject.ManagedProjectMiner
-#com.ibm.dstore.miners.cvstest.CVSMiner
-com.ibm.cpp.miners.debug.DebugMiner
+org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner
+org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner
+org.eclipse.cdt.dstore.miners.command.CommandMiner
+org.eclipse.cdt.cpp.miners.project.ProjectMiner
+org.eclipse.cdt.cpp.miners.parser.ParseMiner
+org.eclipse.cdt.cpp.miners.search.SearchMiner
+org.eclipse.cdt.cpp.miners.managedproject.ManagedProjectMiner
+#org.eclipse.cdt.dstore.miners.cvstest.CVSMiner
+org.eclipse.cdt.cpp.miners.debug.DebugMiner
 

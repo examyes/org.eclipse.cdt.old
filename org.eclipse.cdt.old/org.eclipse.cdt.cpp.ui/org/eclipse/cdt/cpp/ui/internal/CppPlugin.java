@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal;
+package org.eclipse.cdt.cpp.ui.internal;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,23 +6,23 @@ package com.ibm.cpp.ui.internal;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.ui.resource.ResourceElement;
-import com.ibm.dstore.hosts.*;
+import org.eclipse.cdt.dstore.ui.resource.ResourceElement;
+import org.eclipse.cdt.dstore.hosts.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.server.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.ui.connections.*;
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.core.DataStoreCorePlugin;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
 
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.views.*;
-import com.ibm.cpp.ui.internal.editor.*;
-import com.ibm.cpp.ui.internal.wizards.*;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.views.*;
+import org.eclipse.cdt.cpp.ui.internal.editor.*;
+import org.eclipse.cdt.cpp.ui.internal.wizards.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
 import java.io.*;
 
@@ -96,13 +96,13 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
     _pluginPath = getInstallLocation();
 
-    _hostDataStore = com.ibm.dstore.hosts.HostsPlugin.getPlugin().getDataStore();
-    _corePlugin = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin();
-    _corePath = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();
+    _hostDataStore = org.eclipse.cdt.dstore.hosts.HostsPlugin.getPlugin().getDataStore();
+    _corePlugin = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin();
+    _corePath = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();
 
     try
     {
-       _resourceBundle = ResourceBundle.getBundle("com.ibm.cpp.ui.internal.PluginResources");
+       _resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.cpp.ui.internal.PluginResources");
     }
     catch (MissingResourceException mre)
     {
@@ -167,7 +167,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
  	_clientConnection = new ClientConnection("C/C++", 20000);
 	_clientConnection.setLoader(new MinerClassLoader());	
         DataStore dataStore = _clientConnection.getDataStore();
-	dataStore.setMinersLocation("com.ibm.cpp.miners");
+	dataStore.setMinersLocation("org.eclipse.cdt.cpp.miners");
         _corePlugin.setRootDataStore(dataStore);
 
 	String install = _corePath;
@@ -411,7 +411,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 			IProjectNature nature = null;
 			try
 			    {
-				nature = resource.getNature("com.ibm.cpp.ui.cppnature");
+				nature = resource.getNature("org.eclipse.cdt.cpp.ui.cppnature");
 			    }
 			catch (CoreException e)
 			    {
@@ -437,7 +437,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
   public static ArrayList readProperty(IResource resource)
       {
-        String property = new String("com.ibm.cpp.ui");
+        String property = new String("org.eclipse.cdt.cpp.ui");
         return readProperty(resource, property);
       }
 
@@ -471,7 +471,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
   public static void writeProperty(IResource resource, ArrayList property)
       {
-        String qualifier = new String("com.ibm.cpp.ui");
+        String qualifier = new String("org.eclipse.cdt.cpp.ui");
         writeProperty(resource, qualifier, property);
       }
 

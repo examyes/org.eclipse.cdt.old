@@ -1,19 +1,19 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
-import com.ibm.cpp.ui.internal.actions.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.views.targets.*;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.actions.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.views.targets.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.views.*;
-import com.ibm.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
 
-import com.ibm.dstore.core.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*; 
-import com.ibm.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.core.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*; 
+import org.eclipse.cdt.dstore.ui.resource.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.part.*;
@@ -50,7 +50,7 @@ public class CppActionLoader extends GenericActionLoader
 
 		try
     	{
-      	 	_iconBundle = ResourceBundle.getBundle("com.ibm.cpp.ui.internal.IconResources");
+      	 	_iconBundle = ResourceBundle.getBundle("org.eclipse.cdt.cpp.ui.internal.IconResources");
     	}
     	catch (MissingResourceException mre)
     	{
@@ -73,7 +73,7 @@ public class CppActionLoader extends GenericActionLoader
     {
 		if (_openPerspectiveAction == null)
 	    {
-		_openPerspectiveAction = loadAction("com.ibm.cpp.ui.internal.actions.OpenPerspectiveAction", 
+		_openPerspectiveAction = loadAction("org.eclipse.cdt.cpp.ui.internal.actions.OpenPerspectiveAction", 
 						    "Open Perspective On");
 	    }
 		return _openPerspectiveAction;
@@ -83,7 +83,7 @@ public class CppActionLoader extends GenericActionLoader
     {
 	if (_openAction == null)
 	    {
-		_openAction = new com.ibm.cpp.ui.internal.actions.OpenEditorAction(null);
+		_openAction = new org.eclipse.cdt.cpp.ui.internal.actions.OpenEditorAction(null);
 	    }
 	return _openAction;
     }
@@ -355,7 +355,7 @@ public class CppActionLoader extends GenericActionLoader
          	// use default
          	if (_defaultIcon == null)
          	{
-         		_defaultIcon = "com.ibm.cpp.ui/icons/full/clcl16/blank_misc.gif";
+         		_defaultIcon = "org.eclipse.cdt.cpp.ui/icons/full/clcl16/blank_misc.gif";
          	}
          	
          	iconStr = _defaultIcon;

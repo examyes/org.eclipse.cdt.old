@@ -1,4 +1,4 @@
-package com.ibm.linux.help;
+package org.eclipse.cdt.linux.help;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

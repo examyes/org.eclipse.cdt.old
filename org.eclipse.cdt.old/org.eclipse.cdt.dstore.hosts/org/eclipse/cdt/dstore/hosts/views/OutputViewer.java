@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts.views;
+package org.eclipse.cdt.dstore.hosts.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,14 +6,14 @@ package com.ibm.dstore.hosts.views;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.hosts.*;
+import org.eclipse.cdt.dstore.hosts.*;
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.hosts.actions.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.hosts.actions.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import java.util.*;
 

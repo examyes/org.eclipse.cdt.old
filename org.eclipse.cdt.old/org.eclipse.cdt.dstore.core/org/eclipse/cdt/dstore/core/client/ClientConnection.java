@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.client;
+package org.eclipse.cdt.dstore.core.client;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.dstore.core.client;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.server.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
  
 import java.net.*;
 import java.io.*;

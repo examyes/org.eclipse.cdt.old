@@ -1,5 +1,5 @@
 
-package com.ibm.dstore.core.model;
+package org.eclipse.cdt.dstore.core.model;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -7,10 +7,10 @@ package com.ibm.dstore.core.model;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*; 
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.core.server.ILoader;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*; 
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.server.ILoader;
 
 import java.util.*;
 import java.lang.*;
@@ -110,13 +110,13 @@ public class DataStoreSchema
 
 
         DataElement deviceD  = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.device"), 
-						      "com.ibm.dstore.miners");
+						      "org.eclipse.cdt.dstore.miners");
         DataElement fileD    = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.file"), 
-						      "com.ibm.dstore.miners");
+						      "org.eclipse.cdt.dstore.miners");
         DataElement dirD     = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.directory"), 
-						      "com.ibm.dstore.miners");
+						      "org.eclipse.cdt.dstore.miners");
 
-        DataElement fsObject = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
+        DataElement fsObject = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Filesystem_Objects"), "org.eclipse.cdt.dstore.miners");
 
         _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
         _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
@@ -137,7 +137,7 @@ public class DataStoreSchema
 	_dataStore.createReference(dirD,     fileD, containsD);
 
 	DataElement hostDirectories  = _dataStore.createAbstractObjectDescriptor(hostD, getLocalizedString("model.Directories"),
-								      "com.ibm.dstore.miners");	
+								      "org.eclipse.cdt.dstore.miners");	
 	_dataStore.createReference(hostDirectories, dirD, containsD);
 	_dataStore.createReference(hostDirectories, deviceD, containsD);
 

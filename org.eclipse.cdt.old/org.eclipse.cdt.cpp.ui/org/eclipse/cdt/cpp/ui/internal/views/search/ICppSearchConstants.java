@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.search;
+package org.eclipse.cdt.cpp.ui.internal.views.search;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

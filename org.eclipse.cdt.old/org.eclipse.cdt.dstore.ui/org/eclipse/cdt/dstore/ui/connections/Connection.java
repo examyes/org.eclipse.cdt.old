@@ -1,4 +1,4 @@
-package com.ibm.dstore.ui.connections;
+package org.eclipse.cdt.dstore.ui.connections;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,12 +6,12 @@ package com.ibm.dstore.ui.connections;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.ConvertUtility;
-import com.ibm.dstore.ui.dialogs.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.ConvertUtility;
+import org.eclipse.cdt.dstore.ui.dialogs.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.window.*;
@@ -395,7 +395,7 @@ public class Connection implements IDomainListener
     
     public ConnectionStatus connect(DomainNotifier notifier)
     {
-	return connect(notifier, "com.ibm.dstore.miners");
+	return connect(notifier, "org.eclipse.cdt.dstore.miners");
     }
 
     public ConnectionStatus connect(DomainNotifier notifier, String minersLocation)

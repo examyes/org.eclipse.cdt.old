@@ -1,4 +1,4 @@
-package com.ibm.dstore.miners.filesystem;
+package org.eclipse.cdt.dstore.miners.filesystem;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -7,9 +7,9 @@ package com.ibm.dstore.miners.filesystem;
  */
 
 
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 
 import java.lang.*;
 import java.io.*;

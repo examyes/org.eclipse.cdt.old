@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.actions;
+package org.eclipse.cdt.cpp.ui.internal.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,19 +6,19 @@ package com.ibm.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.editor.*;
-import com.ibm.cpp.ui.internal.views.*;
-import com.ibm.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.editor.*;
+import org.eclipse.cdt.cpp.ui.internal.views.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
 
 import org.eclipse.ui.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.resource.*;
-import com.ibm.dstore.ui.dialogs.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.ui.dialogs.*;
 
 import java.util.*;
 import org.eclipse.swt.graphics.*;
@@ -101,14 +101,14 @@ public class FindObjectAction extends Action
 						IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 						
 						IWorkbenchPage persp= win.getActivePage();
-						ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+						ILinkable viewPart = (ILinkable)persp.findView("org.eclipse.cdt.cpp.ui.SelectedObjectViewPart");
 						
 						if (viewPart == null)
 						    {
 							try
 							    {
-								persp.showView("com.ibm.cpp.ui.SelectedObjectViewPart");
-								viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+								persp.showView("org.eclipse.cdt.cpp.ui.SelectedObjectViewPart");
+								viewPart = (ILinkable)persp.findView("org.eclipse.cdt.cpp.ui.SelectedObjectViewPart");
 								
 							    }
 							catch (PartInitException e)

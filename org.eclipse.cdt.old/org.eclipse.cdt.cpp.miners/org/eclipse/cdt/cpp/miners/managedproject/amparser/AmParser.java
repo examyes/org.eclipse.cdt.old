@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.managedproject.amparser;
+package org.eclipse.cdt.cpp.miners.managedproject.amparser;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -8,7 +8,7 @@ package com.ibm.cpp.miners.managedproject.amparser;
 
 import java.io.*;
 import java.util.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 public class AmParser
 {

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.analysis.standard;
+package org.eclipse.cdt.linux.help.util.lucene.analysis.standard;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,7 +54,7 @@ package com.ibm.linux.help.util.lucene.analysis.standard;
  * <http://www.apache.org/>.
  */
 
-import com.ibm.linux.help.util.lucene.analysis.*;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.*;
 
 /** Normalizes tokens extracted with {@link StandardTokenizer}. */
 
@@ -74,8 +74,8 @@ public final class StandardFilter extends TokenFilter
    * <p>Removes <tt>'s</tt> from the end of words.
    * <p>Removes dots from acronyms.
    */
-  public final com.ibm.linux.help.util.lucene.analysis.Token next() throws java.io.IOException {
-    com.ibm.linux.help.util.lucene.analysis.Token t = input.next();
+  public final org.eclipse.cdt.linux.help.util.lucene.analysis.Token next() throws java.io.IOException {
+    org.eclipse.cdt.linux.help.util.lucene.analysis.Token t = input.next();
 
     if (t == null)
       return null;
@@ -85,7 +85,7 @@ public final class StandardFilter extends TokenFilter
 
     if (type == APOSTROPHE_TYPE &&		  // remove 's
 	(text.endsWith("'s") || text.endsWith("'S"))) {
-      return new com.ibm.linux.help.util.lucene.analysis.Token
+      return new org.eclipse.cdt.linux.help.util.lucene.analysis.Token
 	(text.substring(0,text.length()-2),
 	 t.startOffset(), t.endOffset(), type);
 
@@ -96,7 +96,7 @@ public final class StandardFilter extends TokenFilter
 	if (c != '.')
 	  trimmed.append(c);
       }
-      return new com.ibm.linux.help.util.lucene.analysis.Token
+      return new org.eclipse.cdt.linux.help.util.lucene.analysis.Token
 	(trimmed.toString(), t.startOffset(), t.endOffset(), type);
 
     } else {

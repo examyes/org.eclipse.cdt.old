@@ -1,43 +1,43 @@
-<actions infoview="com.ibm.cpp.docs.user.view_Contents"> 
+<actions infoview="org.eclipse.cdt.cpp.docs.user.view_Contents"> 
   <insert 
-     from="com.ibm.cpp.docs.user.topics_GettingStarted" 
-     to="com.ibm.cpp.docs.user.GettingStartedRoot" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_GettingStarted" 
+     to="org.eclipse.cdt.cpp.docs.user.GettingStartedRoot" 
      as="child"/>
  <insert 
-     from="com.ibm.cpp.docs.user.topics_Concepts" 
-     to="com.ibm.cpp.docs.user.Concepts" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_Concepts" 
+     to="org.eclipse.cdt.cpp.docs.user.Concepts" 
      as="child"/>
  <insert 
      from="com.ibm.debug.doc.user.CPPDebugConcepts" 
-     to="com.ibm.cpp.docs.user.Concepts" 
+     to="org.eclipse.cdt.cpp.docs.user.Concepts" 
      as="child"/>
  <insert 
      from="com.ibm.debug.doc.user.CPPDebugTasks" 
-     to="com.ibm.cpp.docs.user.Tasks" 
+     to="org.eclipse.cdt.cpp.docs.user.Tasks" 
      as="child"/>
  <insert 
      from="com.ibm.debug.doc.user.reference" 
-     to="com.ibm.cpp.docs.user.Tasks" 
+     to="org.eclipse.cdt.cpp.docs.user.Tasks" 
      as="next-sib"/>
  <insert 
-     from="com.ibm.cpp.docs.user.topics_Tasks" 
-     to="com.ibm.cpp.docs.user.Tasks" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_Tasks" 
+     to="org.eclipse.cdt.cpp.docs.user.Tasks" 
      as="child"/>
  <insert 
-     from="com.ibm.cpp.docs.user.topics_Tutorial" 
-     to="com.ibm.cpp.docs.user.Tutorial" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_Tutorial" 
+     to="org.eclipse.cdt.cpp.docs.user.Tutorial" 
      as="child"/>
  <insert 
-     from="com.ibm.cpp.docs.user.topics_Troubleshooting" 
-     to="com.ibm.cpp.docs.user.Troubleshooting" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_Troubleshooting" 
+     to="org.eclipse.cdt.cpp.docs.user.Troubleshooting" 
      as="child"/>
 <insert 
-     from="com.ibm.cpp.docs.user.topics_Extensibility" 
-     to="com.ibm.cpp.docs.user.Extensibility" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_Extensibility" 
+     to="org.eclipse.cdt.cpp.docs.user.Extensibility" 
      as="child"/>
 <insert 
-     from="com.ibm.cpp.docs.user.topics_Disclaimer" 
-     to="com.ibm.cpp.docs.user.Disclaimer" 
+     from="org.eclipse.cdt.cpp.docs.user.topics_Disclaimer" 
+     to="org.eclipse.cdt.cpp.docs.user.Disclaimer" 
      as="child"/>
 </actions> 
  

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -25,16 +25,16 @@ public class CppPluginImages {
 	{
 		try
 		{
-			fgIconLocation= new URL(com.ibm.cpp.ui.internal.CppPlugin.getDefault().getDescriptor().getInstallURL(), "icons/");
+			fgIconLocation= new URL(org.eclipse.cdt.cpp.ui.internal.CppPlugin.getDefault().getDescriptor().getInstallURL(), "icons/");
 		} catch (MalformedURLException ex) {}
 	}
 
 	// The plugin registry
-	private final static ImageRegistry PLUGIN_REGISTRY= com.ibm.cpp.ui.internal.CppPlugin.getDefault().getImageRegistry();
+	private final static ImageRegistry PLUGIN_REGISTRY= org.eclipse.cdt.cpp.ui.internal.CppPlugin.getDefault().getImageRegistry();
 	private static final String T_WIZBAN= "full/wizban/";
 	private static final String T_ELCL= "full/clcl16/";
 
-	private static final String NAME_PREFIX= "com.ibm.cpp.ui";
+	private static final String NAME_PREFIX= "org.eclipse.cdt.cpp.ui";
 	private static final int    NAME_PREFIX_LENGTH= NAME_PREFIX.length();
 
 	// Define image names

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.analysis.standard;
+package org.eclipse.cdt.linux.help.util.lucene.analysis.standard;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -54,7 +54,7 @@ package com.ibm.linux.help.util.lucene.analysis.standard;
  * <http://www.apache.org/>.
  */
 
-import com.ibm.linux.help.util.lucene.analysis.*;
+import org.eclipse.cdt.linux.help.util.lucene.analysis.*;
 import java.io.Reader;
 import java.util.Hashtable;
 

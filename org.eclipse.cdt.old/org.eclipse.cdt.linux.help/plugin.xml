@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
   name="Linux Help Plugin"
-  id = "com.ibm.cpp.linux.help"
+  id = "org.eclipse.cdt.linux.help"
   version="0.5.0"
   provider-name="International Business Machines Corp."
-  class="com.ibm.linux.help.HelpPlugin">
+  class="org.eclipse.cdt.linux.help.HelpPlugin">
 
   <requires>
          <import plugin="org.eclipse.core.runtime"/>
          <import plugin="org.eclipse.core.resources"/>
          <import plugin="org.eclipse.swt"/>
 	 <import plugin="org.eclipse.ui"/>
-         <import plugin="com.ibm.dstore.core"/>
+         <import plugin="org.eclipse.cdt.dstore.core"/>
 	 <import plugin="com.ibm.lpex"/>
   </requires>
 
@@ -27,36 +27,36 @@
   <extension
 	point="org.eclipse.ui.views">		
 	<view
-		id="com.ibm.linux.help.views.ResultsViewPart"
+		id="org.eclipse.cdt.linux.help.views.ResultsViewPart"
 		name="%View.Title.HelpResults"
-		category="com.ibm.cpp.ui.cpp"
+		category="org.eclipse.cdt.cpp.ui.cpp"
 		icon="icons/results.gif"
-		class="com.ibm.linux.help.views.ResultsViewPart">
+		class="org.eclipse.cdt.linux.help.views.ResultsViewPart">
 	</view>	
   </extension>
 
   <extension
     point = "org.eclipse.ui.viewActions">
       <viewContribution 
-         id="com.ibm.linux.help.actions.vc1" 
-         targetID="com.ibm.linux.help.views.ResultsViewPart">        
-	 <action id="com.ibm.linux.help.actions.va1" 
+         id="org.eclipse.cdt.linux.help.actions.vc1" 
+         targetID="org.eclipse.cdt.linux.help.views.ResultsViewPart">        
+	 <action id="org.eclipse.cdt.linux.help.actions.va1" 
               label="%PopupMenu.ResultsView.label" 
 	      menubarPath="additions"
               toolbarPath="additions" 
               icon="icons/sections.gif" 
               tooltip="%PopupMenu.ResultsView.tooltip" 
    	     
-              class="com.ibm.linux.help.actions.ViewActionDelegate" 
+              class="org.eclipse.cdt.linux.help.actions.ViewActionDelegate" 
               > 			   
 	</action>
-        <action id="com.ibm.linux.help.actions.va2"
+        <action id="org.eclipse.cdt.linux.help.actions.va2"
 		label="%PopupMenu.ResultsView.AddFilter.label"
 		menubarPath="additions"
 		toolbarPath="additions"
 		icon="icons/filter.gif"
 		tooltip="%PopupMenu.ResultsView.AddFilter.tooltip"
-		class="com.ibm.linux.help.actions.FilterActionDelegate"
+		class="org.eclipse.cdt.linux.help.actions.FilterActionDelegate"
 		>              
         </action>
 

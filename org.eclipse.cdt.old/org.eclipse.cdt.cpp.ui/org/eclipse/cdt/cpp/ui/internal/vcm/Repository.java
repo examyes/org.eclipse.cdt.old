@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.vcm;
+package org.eclipse.cdt.cpp.ui.internal.vcm;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,18 +6,18 @@ package com.ibm.cpp.ui.internal.vcm;
  * the Common Public License which accompanies this distribution.
  */ 
  
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.actions.*; 
-import com.ibm.cpp.ui.internal.dialogs.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.builder.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.actions.*; 
+import org.eclipse.cdt.cpp.ui.internal.dialogs.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.builder.*;
 
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.DataStoreCorePlugin;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.ui.resource.*;
-import com.ibm.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
 
 
 import org.eclipse.core.resources.IResource;
@@ -94,14 +94,14 @@ public class Repository extends Project
 	public void run()
 	{
 	    DomainNotifier notifier = _dataStore.getDomainNotifier();
-	    ConnectionStatus status = _connection.connect(notifier, "com.ibm.cpp.miners");	
+	    ConnectionStatus status = _connection.connect(notifier, "org.eclipse.cdt.cpp.miners");	
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
 
 		    DataElement hostRoot = _dataStore.getHostRoot();
 		    
-		    DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
+		    DataElement fsMinerData = _dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner");
 		    _remoteRoot = hostRoot.get(0).dereference();
 
 		    
@@ -179,7 +179,7 @@ public class Repository extends Project
 	
 	_workspace = (Workspace)ResourcesPlugin.getWorkspace();
 	_dataStore = CppPlugin.getDefault().getCurrentDataStore();
-	DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
+	DataElement fsMinerData = _dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner");
 	_root = fsMinerData.get(0);  
 	_path = new Path(_root.getAttribute(DE.A_SOURCE));
 	_connection = connection;
@@ -433,7 +433,7 @@ public class Repository extends Project
     
     public boolean testAttribute(Object target, String name, String value)
     {
-	if (value.equals("com.ibm.cpp.ui.cppnature"))
+	if (value.equals("org.eclipse.cdt.cpp.ui.cppnature"))
 	    {
 		return true;
 	    }

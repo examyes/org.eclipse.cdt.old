@@ -1,4 +1,4 @@
-package com.ibm.linux.help.search;
+package org.eclipse.cdt.linux.help.search;
 
 import java.util.*;
 import org.eclipse.core.runtime.*;

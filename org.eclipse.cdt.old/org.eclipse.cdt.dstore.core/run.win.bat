@@ -1,1 +1,1 @@
-java -DA_PLUGIN_PATH=%A_PLUGIN_PATH% com.ibm.dstore.core.server.Server 4033 120000
+java -DA_PLUGIN_PATH=%A_PLUGIN_PATH% org.eclipse.cdt.dstore.core.server.Server 4033 120000

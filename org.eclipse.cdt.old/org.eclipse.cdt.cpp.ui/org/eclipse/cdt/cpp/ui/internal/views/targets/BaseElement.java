@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -22,7 +22,7 @@ import org.eclipse.jface.resource.*;
 import org.eclipse.jface.*;
 import org.eclipse.core.runtime.*;
 import java.util.*;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 public abstract class BaseElement implements IAdaptable, IPropertySource,IWorkbenchAdapter {
 	//

@@ -1,4 +1,4 @@
-package com.ibm.dstore.miners.command.patterns;
+package org.eclipse.cdt.dstore.miners.command.patterns;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

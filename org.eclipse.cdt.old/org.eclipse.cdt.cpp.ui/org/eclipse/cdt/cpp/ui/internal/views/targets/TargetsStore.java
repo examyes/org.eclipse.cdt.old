@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -42,10 +42,10 @@ public class TargetsStore
 			list.add(listCounter++,target.getMakeInvocation());
 		    }
 
-		com.ibm.cpp.ui.internal.CppPlugin.writeProperty(root.getRoot(),root.getName(),list);
+		org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(root.getRoot(),root.getName(),list);
 		
 		// check if persistence has been worked properly 
-		//java.util.ArrayList savedList = com.ibm.cpp.ui.internal.CppPlugin.readProperty(root.getRoot(),root.getName());
+		//java.util.ArrayList savedList = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(root.getRoot(),root.getName());
 	    }
     }
 

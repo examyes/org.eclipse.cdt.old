@@ -1,4 +1,4 @@
-package com.ibm.linux.help;
+package org.eclipse.cdt.linux.help;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,9 +6,9 @@ package com.ibm.linux.help;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.linux.help.search.*;
+import org.eclipse.cdt.linux.help.search.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 import org.eclipse.jface.dialogs.*;
 
 import java.lang.String;

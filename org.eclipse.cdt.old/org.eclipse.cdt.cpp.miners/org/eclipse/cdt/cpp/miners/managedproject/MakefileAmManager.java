@@ -1,10 +1,10 @@
-package com.ibm.cpp.miners.managedproject;
+package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
@@ -70,7 +70,7 @@ public class MakefileAmManager {
 		File projectFile = project.getFileObject();
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-			"/com.ibm.cpp.miners/autoconf_templates/",project.getSource());
+			"/org.eclipse.cdt.cpp.miners/autoconf_templates/",project.getSource());
 		// provide one makefile.am in each subdiectory
 		for(int i =0; i < subdirs.length ; i++)
 		{
@@ -79,10 +79,10 @@ public class MakefileAmManager {
 				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
 				if (token.countTokens()==1)
 					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-					 "/com.ibm.cpp.miners/autoconf_templates/sub/",project.getSource()+"/"+subdirs[i]);
+					 "/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/",project.getSource()+"/"+subdirs[i]);
 				else
 					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-					 "/com.ibm.cpp.miners/autoconf_templates/sub/static/",project.getSource()+"/"+subdirs[i]);
+					 "/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/static/",project.getSource()+"/"+subdirs[i]);
 			}
 		}
 	}
@@ -466,17 +466,17 @@ public class MakefileAmManager {
 				{
 					case (0):
 					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-						"/com.ibm.cpp.miners/autoconf_templates/",project.getSource());
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/",project.getSource());
 					initializeTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
 					break;
 					case (1):
 					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-					 	"/com.ibm.cpp.miners/autoconf_templates/sub/",Makefile_am.getParentFile().getAbsolutePath());
+					 	"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/",Makefile_am.getParentFile().getAbsolutePath());
 					initializeProgramsMakefileAm((File)projectStucture[i][0]);
 					break;
 					default:
 					copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-						"/com.ibm.cpp.miners/autoconf_templates/sub/static/",Makefile_am.getParentFile().getAbsolutePath());
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/static/",Makefile_am.getParentFile().getAbsolutePath());
 					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
 					break;
 				}
@@ -1081,7 +1081,7 @@ public class MakefileAmManager {
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-			"/com.ibm.cpp.miners/autoconf_templates/sub/static/",parent.getAbsolutePath());
+			"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/static/",parent.getAbsolutePath());
 		initializeStaticLibMakefileAm(parent);	
 		updateMakefileAmDependency(parent,classifier);
 	}
@@ -1093,7 +1093,7 @@ public class MakefileAmManager {
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-			"/com.ibm.cpp.miners/autoconf_templates/sub/",parent.getAbsolutePath());
+			"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/",parent.getAbsolutePath());
 		initializeProgramsMakefileAm(parent);
 		updateMakefileAmDependency(parent,classifier);				
 	}
@@ -1109,7 +1109,7 @@ public class MakefileAmManager {
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-			"/com.ibm.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
+			"/org.eclipse.cdt.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
 		initializeTopLevelMakefileAm(parent,structureManager,true);
 		updateMakefileAmDependency(parent,classifier);	
 	}
@@ -1121,7 +1121,7 @@ public class MakefileAmManager {
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
-			"/com.ibm.cpp.miners/autoconf_templates/sub/shared/",parent.getAbsolutePath());
+			"/org.eclipse.cdt.cpp.miners/autoconf_templates/sub/shared/",parent.getAbsolutePath());
 		initializeSharedLibMakefileAm(parent);
 		updateMakefileAmDependency(parent,classifier);	
 	}

@@ -1,4 +1,4 @@
-package com.ibm.linux.help;
+package org.eclipse.cdt.linux.help;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -14,8 +14,8 @@ import java.io.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
-import com.ibm.linux.help.views.ResultsViewPart;
-import com.ibm.linux.help.filter.HelpFilter;
+import org.eclipse.cdt.linux.help.views.ResultsViewPart;
+import org.eclipse.cdt.linux.help.filter.HelpFilter;
 
 import org.eclipse.jface.resource.*;
 import org.eclipse.swt.graphics.*;
@@ -44,7 +44,7 @@ public class HelpPlugin extends AbstractUIPlugin
 
 	try
 	    {
-		_resourceBundle = ResourceBundle.getBundle("com.ibm.linux.help.PluginResources");
+		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.linux.help.PluginResources");
 	    }
 	catch(MissingResourceException mre)
 	    {
@@ -116,12 +116,12 @@ public class HelpPlugin extends AbstractUIPlugin
 	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 	IWorkbenchPage persp= win.getActivePage();	
 	try{
-	    persp.showView("com.ibm.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
+	    persp.showView("org.eclipse.cdt.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
 	}catch(PartInitException pie){
 	    pie.printStackTrace();
 	}	
 	
-	ResultsViewPart theView=(ResultsViewPart)persp.findView("com.ibm.linux.help.views.ResultsViewPart");
+	ResultsViewPart theView=(ResultsViewPart)persp.findView("org.eclipse.cdt.linux.help.views.ResultsViewPart");
 	
 	workerThread=new HelpSearchThread(key,theView);
 	workerThread.start();
@@ -132,7 +132,7 @@ public class HelpPlugin extends AbstractUIPlugin
 	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
 	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 	IWorkbenchPage persp= win.getActivePage();
-	return (ResultsViewPart)persp.findView("com.ibm.linux.help.views.ResultsViewPart");
+	return (ResultsViewPart)persp.findView("org.eclipse.cdt.linux.help.views.ResultsViewPart");
     }
 
     public HelpFilter getFilter()

@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts.dialogs;
+package org.eclipse.cdt.dstore.hosts.dialogs;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,14 +6,14 @@ package com.ibm.dstore.hosts.dialogs;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.hosts.*;
-import com.ibm.dstore.hosts.actions.*;
+import org.eclipse.cdt.dstore.hosts.*;
+import org.eclipse.cdt.dstore.hosts.actions.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.views.*;
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.widgets.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
 
 import org.eclipse.swt.widgets.*;
 

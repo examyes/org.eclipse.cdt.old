@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -56,8 +56,8 @@ package com.ibm.linux.help.util.lucene.search;
 
 import java.io.IOException;
 import java.util.Hashtable;
-import com.ibm.linux.help.util.lucene.document.Document;
-import com.ibm.linux.help.util.lucene.index.IndexReader;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.index.IndexReader;
 
 /** The abstract base class for queries.
   <p>Instantiable subclasses are:

@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts.actions;
+package org.eclipse.cdt.dstore.hosts.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,22 +6,22 @@ package com.ibm.dstore.hosts.actions;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.ui.connections.*;
 
-import com.ibm.dstore.hosts.actions.*;
+import org.eclipse.cdt.dstore.hosts.actions.*;
 
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.hosts.dialogs.*;
-import com.ibm.dstore.hosts.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.hosts.dialogs.*;
+import org.eclipse.cdt.dstore.hosts.*;
 
-import com.ibm.dstore.core.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*;
-import com.ibm.dstore.core.client.*;
-import com.ibm.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
+import org.eclipse.cdt.dstore.core.client.*;
+import org.eclipse.cdt.dstore.core.server.*;
 
 import org.eclipse.ui.plugin.*;
 import org.eclipse.core.runtime.*;
@@ -79,7 +79,7 @@ public class QuickConnectAction implements Runnable
 						   temp);
 
 
-	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
+	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "org.eclipse.cdt.dstore.miners/fs.dat");
 	if (status == null)
 	    {
 		// command cancelled

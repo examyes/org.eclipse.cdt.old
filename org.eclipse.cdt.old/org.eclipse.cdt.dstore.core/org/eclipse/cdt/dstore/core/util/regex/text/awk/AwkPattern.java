@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.awk;
+package org.eclipse.cdt.dstore.core.util.regex.text.awk;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -60,7 +60,7 @@ package com.ibm.dstore.core.util.regex.text.awk;
 import java.io.Serializable;
 import java.util.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 
 final class DFAState {
@@ -86,7 +86,7 @@ final class DFAState {
  * AwkCompiler instance's compile() methods
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: AwkPattern.java,v 1.2 2001/08/31 00:04:17 dmcknigh Exp $
+ @version $Id: AwkPattern.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see AwkCompiler
  * @see AwkMatcher

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.wizards;
+package org.eclipse.cdt.cpp.ui.internal.wizards;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,10 +6,10 @@ package com.ibm.cpp.ui.internal.wizards;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.vcm.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.wizard.*;
@@ -136,7 +136,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			try
 			    {
 				// add build spec
-				String builderName = "com.ibm.cpp.ui.cppbuilder";
+				String builderName = "org.eclipse.cdt.cpp.ui.cppbuilder";
 				IProjectDescription projectDescription =  project.getDescription();
 				
 				ICommand command = projectDescription.newCommand();
@@ -149,7 +149,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 				String[] natures = projectDescription.getNatureIds();
 				String[] newNatures = new String[natures.length + 1];
 				System.arraycopy(natures, 0, newNatures, 0, natures.length);
-				newNatures[natures.length] = "com.ibm.cpp.ui.cppnature";
+				newNatures[natures.length] = "org.eclipse.cdt.cpp.ui.cppnature";
 				projectDescription.setNatureIds(newNatures);
 				project.setDescription(projectDescription, null);
 
@@ -194,7 +194,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		
 		if (persp == null)
 		    {
-			persp = dw.openPage("com.ibm.cpp.ui.CppPerspective", workspace.getRoot());
+			persp = dw.openPage("org.eclipse.cdt.cpp.ui.CppPerspective", workspace.getRoot());
 		    }
 	    }
         catch (WorkbenchException e)
@@ -202,7 +202,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	    }
 
 	
-	String navID = "com.ibm.cpp.ui.CppProjectsViewPart";
+	String navID = "org.eclipse.cdt.cpp.ui.CppProjectsViewPart";
 	final IViewPart viewPart = persp.findView(navID);
 	if (viewPart != null)
 	    {

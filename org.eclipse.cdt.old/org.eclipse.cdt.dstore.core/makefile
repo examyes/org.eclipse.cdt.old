@@ -28,32 +28,32 @@ endif
 
 # List of Plugins that we build
 buildPlugins += com.ibm.debug
-buildPlugins += com.ibm.dstore.extra
-buildPlugins += com.ibm.dstore.extra.server
-buildPlugins += com.ibm.dstore.core
-buildPlugins += com.ibm.cpp.miners.parser
-buildPlugins += com.ibm.dstore.hosts
-buildPlugins += com.ibm.dstore.ui
-buildPlugins += com.ibm.cpp.ui
-buildPlugins += com.ibm.dstore.miners
-buildPlugins += com.ibm.cpp.miners
-buildPlugins += com.ibm.debug.gdbPicl
-buildPlugins += com.ibm.cpp.linux.help	
+buildPlugins += org.eclipse.cdt.dstore.extra
+buildPlugins += org.eclipse.cdt.dstore.extra.server
+buildPlugins += org.eclipse.cdt.dstore.core
+buildPlugins += org.eclipse.cdt.cpp.miners.parser
+buildPlugins += org.eclipse.cdt.dstore.hosts
+buildPlugins += org.eclipse.cdt.dstore.ui
+buildPlugins += org.eclipse.cdt.cpp.ui
+buildPlugins += org.eclipse.cdt.dstore.miners
+buildPlugins += org.eclipse.cdt.cpp.miners
+buildPlugins += org.eclipse.cdt.debug.gdbPicl
+buildPlugins += org.eclipse.cdt.linux.help	
 
 # List of All Plugins Used in C/C++ Deliverable (e.g buildPlugins plus the ones we don't build)
 allPlugins = $(buildPlugins)
-allPlugins += com.ibm.cpp.docs.user
+allPlugins += org.eclipse.cdt.cpp.docs.user
 allPlugins += com.ibm.lpex
 allPlugins += com.ibm.debug.doc.user
 
 # List of Plugins needed for the Serverside Zip
-serverPlugins =  com.ibm.dstore.core
-serverPlugins += com.ibm.dstore.extra.server
-serverPlugins += com.ibm.dstore.miners
-serverPlugins += com.ibm.cpp.miners
-serverPlugins += com.ibm.cpp.miners.parser
+serverPlugins =  org.eclipse.cdt.dstore.core
+serverPlugins += org.eclipse.cdt.dstore.extra.server
+serverPlugins += org.eclipse.cdt.dstore.miners
+serverPlugins += org.eclipse.cdt.cpp.miners
+serverPlugins += org.eclipse.cdt.cpp.miners.parser
 serverPlugins += com.ibm.debug
-serverPlugins += com.ibm.debug.gdbPicl
+serverPlugins += org.eclipse.cdt.debug.gdbPicl
 
 # PUBLIC TARGETS
 # --------------
@@ -63,7 +63,7 @@ serverPlugins += com.ibm.debug.gdbPicl
 # plugin, we accomplish this by appending some text like "_buildPlugin" to every plugin name, 
 # and then provide the actual rules for these pseudo-prerequisites below.
 all:
-	@cd com 2>/dev/null && (${MAKE} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
+	@cd org 2>/dev/null && (${MAKE} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars javadocs source-zips createZip createFinalPackage
@@ -121,14 +121,14 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 
 %_unzipPlugin:
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
-	cd com 2>/dev/null || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -qo *src.zip)
+	(cd org 2>/dev/null || cd com 2>/dev/null) || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -qo *src.zip)
 
 zipFile=cdt-eclipse-0.5.0-local.zip
 createZip: createEmptyZip zipUpPlugins
 	@echo Created $(pluginsDirectory)/$(zipFile)
 
 createEmptyZip: 
-	@-cd $(pluginsDirectory) && rm -f $(zipFile) && zip -q $(zipFile) com.ibm.dstore.core/makefile
+	@-cd $(pluginsDirectory) && rm -f $(zipFile) && zip -q $(zipFile) org.eclipse.cdt.dstore.core/makefile
 
 zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 
@@ -143,9 +143,9 @@ createFinalPackage: createServerZip createFinalZip
 
 createFinalZip:
 	@-cd $(pluginsDirectory) && mkdir $(tempDir);\
-	cp com.ibm.cpp.docs.user/readme.txt $(tempDir);\
-	cp com.ibm.cpp.docs.user/install.txt $(tempDir);\
-	cp com.ibm.cpp.docs.user/todo.txt $(tempDir);\
+	cp org.eclipse.cdt.cpp.docs.user/readme.txt $(tempDir);\
+	cp org.eclipse.cdt.cpp.docs.user/install.txt $(tempDir);\
+	cp org.eclipse.cdt.cpp.docs.user/todo.txt $(tempDir);\
 	cp $(zipFile) $(tempDir);\
 	cp $(serverZipFile) $(tempDir);\
 	zip -qr $(finalZip) $(tempDir);\
@@ -158,16 +158,16 @@ createServerZip: createEmptyServerZip zipServerPlugins
 
 #Not sure how to create an empty zip (without priming it with something)...so I just add the parser directory by default
 createEmptyServerZip:
-	@-cd $(pluginsDirectory) && rm -f $(serverZipFile) && zip -q $(serverZipFile) com.ibm.dstore.core/makefile
+	@-cd $(pluginsDirectory) && rm -f $(serverZipFile) && zip -q $(serverZipFile) org.eclipse.cdt.dstore.core/makefile
 
 zipServerPlugins: $(patsubst %,%_zipServerPlugin,$(serverPlugins))
 
 %_zipServerPlugin:
 	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x makefile setenv.mk com *com\/* *CVS*
 
-# Targets specific to com.ibm.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
+# Targets specific to org.eclipse.cdt.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
 jarFile=dstore_core.jar
-pluginName=com.ibm.dstore.core
+pluginName=org.eclipse.cdt.dstore.core
 
 jar:
 	@cd $(pluginsDirectory)/$(pluginName);\

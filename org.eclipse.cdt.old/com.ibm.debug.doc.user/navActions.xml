@@ -8,10 +8,10 @@
      // Version 1.2 (last modified 11/21/01 17:57:08)
      //////////////////////////////////////////////////////////////////////////////// -->
 
-<actions infoview="com.ibm.cpp.docs.user.view_Contents">
+<actions infoview="org.eclipse.cdt.cpp.docs.user.view_Contents">
 
-  <insert from="com.ibm.debug.doc.user.CPPDebugConcepts" to="com.ibm.cpp.docs.user.Concepts" as="child" />
-  <insert from="com.ibm.debug.doc.user.CPPDebugTasks" to="com.ibm.cpp.docs.user.Tasks" as="child" />
-  <insert from="com.ibm.debug.doc.user.reference" to="com.ibm.cpp.docs.user.Tasks" as="next-sib" />
+  <insert from="com.ibm.debug.doc.user.CPPDebugConcepts" to="org.eclipse.cdt.cpp.docs.user.Concepts" as="child" />
+  <insert from="com.ibm.debug.doc.user.CPPDebugTasks" to="org.eclipse.cdt.cpp.docs.user.Tasks" as="child" />
+  <insert from="com.ibm.debug.doc.user.reference" to="org.eclipse.cdt.cpp.docs.user.Tasks" as="next-sib" />
 
 </actions>

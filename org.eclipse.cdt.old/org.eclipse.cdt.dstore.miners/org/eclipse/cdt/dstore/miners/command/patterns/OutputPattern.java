@@ -1,4 +1,4 @@
-package com.ibm.dstore.miners.command.patterns;
+package org.eclipse.cdt.dstore.miners.command.patterns;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.dstore.miners.command.patterns;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 import java.util.*;
 
 public class OutputPattern

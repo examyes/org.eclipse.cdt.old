@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.wizards;
+package org.eclipse.cdt.cpp.ui.internal.wizards;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.cpp.ui.internal.wizards;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.cpp.ui.internal.preferences.NameValueTableControl;
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.preferences.NameValueTableControl;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.swt.layout.*;
@@ -63,7 +63,7 @@ public class EnvironmentWorkbookPage
 
 	    {
 		DataStore dataStore = plugin.getDataStore();
-		DataElement systemInfo = dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");
+		DataElement systemInfo = dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner");
 		if (systemInfo != null)
 		    {
 			DataElement systemEnvironment = systemInfo.get(0);	

@@ -1,5 +1,5 @@
-com.ibm.dstore.miners.environment.EnvironmentMiner
-com.ibm.cpp.miners.parser.ParseMiner
-com.ibm.dstore.miners.filesystem.FileSystemMiner
-com.ibm.dstore.miners.command.CommandMiner
-com.ibm.cpp.miners.search.SearchMiner
+org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner
+org.eclipse.cdt.cpp.miners.parser.ParseMiner
+org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner
+org.eclipse.cdt.dstore.miners.command.CommandMiner
+org.eclipse.cdt.cpp.miners.search.SearchMiner

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.store;
+package org.eclipse.cdt.linux.help.util.lucene.store;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,9 +59,9 @@ import java.util.Vector;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.InputStream;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.InputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
 
 final public class RAMDirectory extends Directory {
   Hashtable files = new Hashtable();

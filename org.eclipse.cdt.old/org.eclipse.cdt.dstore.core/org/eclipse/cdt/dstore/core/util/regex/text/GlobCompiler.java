@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text;
+package org.eclipse.cdt.dstore.core.util.regex.text;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -57,7 +57,7 @@ package com.ibm.dstore.core.util.regex.text;
  * by Daniel F. Savarese. We appreciate his contributions.
  */
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 /**
  * The GlobCompiler class will compile a glob expression into a Perl5Pattern
@@ -108,7 +108,7 @@ import com.ibm.dstore.core.util.regex.text.regex.*;
  * expression.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: GlobCompiler.java,v 1.2 2001/08/31 00:04:16 dmcknigh Exp $
+ @version $Id: GlobCompiler.java,v 1.1.1.1 2001/09/10 22:18:41 dmcknigh Exp $
 
  * @see org.apache.oro.text.regex.PatternCompiler
  * @see org.apache.oro.text.regex.Perl5Matcher

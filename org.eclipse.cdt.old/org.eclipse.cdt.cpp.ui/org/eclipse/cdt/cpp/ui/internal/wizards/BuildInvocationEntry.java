@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.wizards;
+package org.eclipse.cdt.cpp.ui.internal.wizards;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -8,9 +8,9 @@ package com.ibm.cpp.ui.internal.views.targets;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.jface.window.*;
@@ -25,7 +25,7 @@ import org.eclipse.ui.views.navigator.*;
 import org.eclipse.jface.wizard.Wizard;
 
 
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 /**
  *  This is target creation wizard
@@ -112,7 +112,7 @@ public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements 
 		// here put the code to open up the make targets view and show the new created target	
 		try 
 		    {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("com.ibm.cpp.ui.Targets");
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.cdt.cpp.ui.Targets");
 		    } 
 		catch (PartInitException e) 
 		    {
@@ -120,7 +120,7 @@ public class NewTargetWizard extends org.eclipse.jface.wizard.Wizard implements 
 		    }
 
 		// add the new target to the page
-		targetsPart = (Targets)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.ibm.cpp.ui.Targets");
+		targetsPart = (Targets)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("org.eclipse.cdt.cpp.ui.Targets");
 		final TargetsPage targetsPage = targetsPart.getTargetsPage();
 
 

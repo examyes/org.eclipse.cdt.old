@@ -27,20 +27,20 @@ else
     
     if ($packaged_as == "jar")
     {
-	$ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$plugins_dir/com.ibm.cpp.miners.parser/miners_parser.jar:$oldClasspath";
+	$ENV{"CLASSPATH"}="$plugins_dir/org.eclipse.cdt.dstore.extra.server/extra_server.jar:$plugins_dir/org.eclipse.cdt.dstore.core/dstore_core.jar:$plugins_dir/org.eclipse.cdt.dstore.miners/dstore_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners/cpp_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/miners_parser.jar:$oldClasspath";
     }
     
     if ($packaged_as == "src")
     {
-	$ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/:$plugins_dir/com.ibm.dstore.core/:$plugins_dir/com.ibm.dstore.miners/:$plugins_dir/com.ibm.cpp.miners/:$plugins_dir/com.ibm.cpp.miners.parser/:$oldClasspath";
+	$ENV{"CLASSPATH"}="$plugins_dir/org.eclipse.cdt.dstore.extra.server/:$plugins_dir/org.eclipse.cdt.dstore.core/:$plugins_dir/org.eclipse.cdt.dstore.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/:$oldClasspath";
     }
     
     if (!defined($packaged_as)) 
     {
-	$ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/:$plugins_dir/com.ibm.dstore.core/:$plugins_dir/com.ibm.dstore.miners/:$plugins_dir/com.ibm.cpp.miners/:$plugins_dir/com.ibm.cpp.miners.parser/:$plugins_dir/com.ibm.dstore.extra.server/extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$plugins_dir/com.ibm.cpp.miners.parser/miners_parser.jar:$oldClasspath";
+	$ENV{"CLASSPATH"}="$plugins_dir/org.eclipse.cdt.dstore.extra.server/:$plugins_dir/org.eclipse.cdt.dstore.core/:$plugins_dir/org.eclipse.cdt.dstore.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/:$plugins_dir/org.eclipse.cdt.dstore.extra.server/extra_server.jar:$plugins_dir/org.eclipse.cdt.dstore.core/dstore_core.jar:$plugins_dir/org.eclipse.cdt.dstore.miners/dstore_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners/cpp_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/miners_parser.jar:$oldClasspath";
     }
     
-    system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.ServerLauncher");
+    system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.ServerLauncher");
     $ENV{CLASSPATH}=$oldClasspath;
     
 }

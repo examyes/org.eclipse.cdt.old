@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.HTMLParser;
+package org.eclipse.cdt.linux.help.util.lucene.HTMLParser;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1

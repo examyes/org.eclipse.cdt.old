@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.search;
+package org.eclipse.cdt.cpp.ui.internal.views.search;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -7,9 +7,9 @@ package com.ibm.cpp.ui.internal.views.search;
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.ui.dialogs.*;
@@ -30,7 +30,7 @@ import org.eclipse.jface.util.Assert;
 
 public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearchConstants{
 
-	public static final String EXTENSION_POINT_ID= "com.ibm.cpp.ui.internal.views.search.CppSearchPage";
+	public static final String EXTENSION_POINT_ID= "org.eclipse.cdt.cpp.ui.internal.views.search.CppSearchPage";
 
 	private static List fgPreviousSearchPatterns= new ArrayList(20);
 

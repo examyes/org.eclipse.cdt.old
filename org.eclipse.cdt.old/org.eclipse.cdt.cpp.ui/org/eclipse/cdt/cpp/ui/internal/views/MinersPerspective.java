@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views;
+package org.eclipse.cdt.cpp.ui.internal.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -26,14 +26,14 @@ public class MinersPerspective implements IPerspectiveFactory
                                                  , (float)0.60
                                                  , editorArea
                                                  );
-    topLeft.addView("com.ibm.cpp.ui.SchemaViewPart");
-    topLeft.addView("com.ibm.cpp.ui.MinersViewPart");
-    topLeft.addView("com.ibm.cpp.ui.LogViewPart");
+    topLeft.addView("org.eclipse.cdt.cpp.ui.SchemaViewPart");
+    topLeft.addView("org.eclipse.cdt.cpp.ui.MinersViewPart");
+    topLeft.addView("org.eclipse.cdt.cpp.ui.LogViewPart");
      
     // Bottom left.
     IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.BOTTOM, (float)0.60,
 					     "topLeft");
-    bottomLeft.addView("com.ibm.cpp.ui.DetailsViewPart");
+    bottomLeft.addView("org.eclipse.cdt.cpp.ui.DetailsViewPart");
   }
 }
 

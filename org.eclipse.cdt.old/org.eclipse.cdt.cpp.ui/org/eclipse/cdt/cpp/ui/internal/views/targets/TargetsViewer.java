@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -12,9 +12,9 @@ import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
 //import org.eclipse.ui.views.properties.PropertySheetCategory;
 
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.events.*;
@@ -95,7 +95,7 @@ public TargetsViewer(Composite parent, TargetsPage host) {
 	createEntryListener();
 
 
-	com.ibm.cpp.ui.internal.CppPlugin.getPlugin().getCurrentDataStore().getDomainNotifier().addDomainListener(this);
+	org.eclipse.cdt.cpp.ui.internal.CppPlugin.getPlugin().getCurrentDataStore().getDomainNotifier().addDomainListener(this);
 	// filling tool bar action menu 
 	
 }

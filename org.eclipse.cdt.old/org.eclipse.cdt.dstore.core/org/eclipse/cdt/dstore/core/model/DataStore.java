@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.model;
+package org.eclipse.cdt.dstore.core.model;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,10 +6,10 @@ package com.ibm.dstore.core.model;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.util.*; 
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.core.server.ILoader;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*; 
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.server.ILoader;
 
 import java.util.*;
 import java.lang.*;
@@ -147,7 +147,7 @@ public final class DataStore
 
     private void initialize()
     {
-	_minersLocation = "com.ibm.dstore.core";
+	_minersLocation = "org.eclipse.cdt.dstore.core";
 	_random = new Random(System.currentTimeMillis());
 
         _hashMap = new HashMap(2 * _initialSize);
@@ -157,7 +157,7 @@ public final class DataStore
 	_timeout = 10000;
 	try
 	    {
-		_resourceBundle = ResourceBundle.getBundle("com.ibm.dstore.core.model.DataStoreResources");
+		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.core.model.DataStoreResources");
 	    }
 	catch (MissingResourceException mre)
 	    {
@@ -317,7 +317,7 @@ public final class DataStore
      */
     public boolean isVirtual()
     {
-	if (_commandHandler instanceof com.ibm.dstore.core.client.ClientCommandHandler)
+	if (_commandHandler instanceof org.eclipse.cdt.dstore.core.client.ClientCommandHandler)
 	    {
 		return true;
 	    }
@@ -1141,7 +1141,7 @@ public final class DataStore
      */
     public DataElement createAbstractObjectDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core", name);
+	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, "org.eclipse.cdt.dstore.core", name);
     }   
 
     /**
@@ -1166,7 +1166,7 @@ public final class DataStore
      */
     public DataElement createObjectDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core", name);
+	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, "org.eclipse.cdt.dstore.core", name);
     }   
 
     /**
@@ -1191,7 +1191,7 @@ public final class DataStore
      */
     public DataElement createAbstractRelationDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core", name);
+	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, "org.eclipse.cdt.dstore.core", name);
     }   
 
     /**
@@ -1216,7 +1216,7 @@ public final class DataStore
      */
     public DataElement createRelationDescriptor(DataElement parent, String name)
     {
-	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core", name);
+	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, "org.eclipse.cdt.dstore.core", name);
     }   
 
     /**
@@ -1254,7 +1254,7 @@ public final class DataStore
      */
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name, String value)
     {
-	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core", name);
+	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, "org.eclipse.cdt.dstore.core", name);
         cmd.setAttribute(DE.A_VALUE, value);        
 	return cmd;
     }   
@@ -1297,7 +1297,7 @@ public final class DataStore
      */
     public DataElement createCommandDescriptor(DataElement parent, String name, String value)
     {
-		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core", name);
+		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, "org.eclipse.cdt.dstore.core", name);
         cmd.setAttribute(DE.A_VALUE, value);        
 		return cmd;
     }   

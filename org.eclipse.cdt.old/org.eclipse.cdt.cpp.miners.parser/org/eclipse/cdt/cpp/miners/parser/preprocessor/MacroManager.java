@@ -1,4 +1,4 @@
-package com.ibm.cpp.miners.parser.preprocessor;
+package org.eclipse.cdt.cpp.miners.parser.preprocessor;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -7,7 +7,7 @@ package com.ibm.cpp.miners.parser.preprocessor;
  */
 
 import java.util.*;
-import com.ibm.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.model.*;
 
 class MacroManager
 {

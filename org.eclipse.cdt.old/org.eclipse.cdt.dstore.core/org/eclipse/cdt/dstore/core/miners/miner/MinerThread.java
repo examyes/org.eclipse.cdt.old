@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.miners.miner;
+package org.eclipse.cdt.dstore.core.miners.miner;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.

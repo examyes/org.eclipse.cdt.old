@@ -1,4 +1,4 @@
-package com.ibm.linux.help.views;
+package org.eclipse.cdt.linux.help.views;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.linux.help.views;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.linux.help.*;
+import org.eclipse.cdt.linux.help.*;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.Composite;
@@ -32,8 +32,8 @@ import org.eclipse.ui.internal.*;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.DialogSettings;
 
-import com.ibm.linux.help.display.*;
-import com.ibm.linux.help.preferences.*;
+import org.eclipse.cdt.linux.help.display.*;
+import org.eclipse.cdt.linux.help.preferences.*;
 
 public class ResultsViewPart extends ViewPart
 {
@@ -321,7 +321,7 @@ public class ResultsViewPart extends ViewPart
 	IWorkbenchPage persp= win.getActivePage();
 	
 	try{
-	    persp.showView("com.ibm.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
+	    persp.showView("org.eclipse.cdt.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
 	}catch(PartInitException e){
 	    e.printStackTrace();
 	}

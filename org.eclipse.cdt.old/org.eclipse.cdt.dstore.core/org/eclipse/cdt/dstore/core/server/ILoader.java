@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.server;
+package org.eclipse.cdt.dstore.core.server;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,7 +6,7 @@ package com.ibm.dstore.core.server;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
 
 import java.io.*;
 import java.util.*;

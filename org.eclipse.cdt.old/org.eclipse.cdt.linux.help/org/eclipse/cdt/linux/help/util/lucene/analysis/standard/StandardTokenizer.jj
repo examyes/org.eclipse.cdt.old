@@ -63,7 +63,7 @@ options {
 }
 PARSER_BEGIN(StandardTokenizer)
 
-package com.ibm.linux.help.util.lucene.analysis.standard;
+package org.eclipse.cdt.linux.help.util.lucene.analysis.standard;
 
 import java.io.*;
 
@@ -75,7 +75,7 @@ import java.io.*;
  * not suit your application, please consider copying this source code
  * directory to your project and maintaining your own grammar-based tokenizer.
  */
-public class StandardTokenizer extends com.ibm.linux.help.util.lucene.analysis.Tokenizer {
+public class StandardTokenizer extends org.eclipse.cdt.linux.help.util.lucene.analysis.Tokenizer {
 
   /** Constructs a tokenizer for this Reader. */
   public StandardTokenizer(Reader reader) {
@@ -170,7 +170,7 @@ SKIP : {					  // skip unrecognized chars
  * <p>The returned token's type is set to an element of {@link
  * StandardTokenizerConstants#tokenImage}.
  */
-com.ibm.linux.help.util.lucene.analysis.Token next() throws IOException :
+org.eclipse.cdt.linux.help.util.lucene.analysis.Token next() throws IOException :
 {
   Token token = null;
 }
@@ -189,7 +189,7 @@ com.ibm.linux.help.util.lucene.analysis.Token next() throws IOException :
 	return null;
       } else {
 	return
-	  new com.ibm.linux.help.util.lucene.analysis.Token(token.image,
+	  new org.eclipse.cdt.linux.help.util.lucene.analysis.Token(token.image,
 					token.beginColumn,token.endColumn,
 					tokenImage[token.kind]);
       }

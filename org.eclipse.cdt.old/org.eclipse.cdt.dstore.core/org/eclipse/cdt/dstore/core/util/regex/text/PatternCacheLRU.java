@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text;
+package org.eclipse.cdt.dstore.core.util.regex.text;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,8 +59,8 @@ package com.ibm.dstore.core.util.regex.text;
 
 import java.util.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
-import com.ibm.dstore.core.util.regex.util.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.util.*;
 
 /**
  * This class is a GenericPatternCache subclass implementing an LRU
@@ -71,7 +71,7 @@ import com.ibm.dstore.core.util.regex.util.*;
  * the best general purpose pattern cache replacement policy.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: PatternCacheLRU.java,v 1.2 2001/08/31 00:04:16 dmcknigh Exp $
+ @version $Id: PatternCacheLRU.java,v 1.1.1.1 2001/09/10 22:18:41 dmcknigh Exp $
 
  * @see GenericPatternCache
  */

@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.text.regex;
+package org.eclipse.cdt.dstore.core.util.regex.text.regex;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -70,7 +70,7 @@ package com.ibm.dstore.core.util.regex.text.regex;
  * will define what other classes a Pattern can interact with.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: Pattern.java,v 1.2 2001/08/31 00:04:19 dmcknigh Exp $
+ @version $Id: Pattern.java,v 1.1.1.1 2001/09/10 22:18:41 dmcknigh Exp $
 
  * @see PatternCompiler
  * @see PatternMatcher

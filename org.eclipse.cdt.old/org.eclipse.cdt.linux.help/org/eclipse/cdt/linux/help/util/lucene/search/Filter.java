@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.search;
+package org.eclipse.cdt.linux.help.util.lucene.search;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -56,7 +56,7 @@ package com.ibm.linux.help.util.lucene.search;
 
 import java.util.BitSet;
 import java.io.IOException;
-import com.ibm.linux.help.util.lucene.index.IndexReader;
+import org.eclipse.cdt.linux.help.util.lucene.index.IndexReader;
 
 /** Abstract base class providing a mechanism to restrict searches to a subset
  of an index. */

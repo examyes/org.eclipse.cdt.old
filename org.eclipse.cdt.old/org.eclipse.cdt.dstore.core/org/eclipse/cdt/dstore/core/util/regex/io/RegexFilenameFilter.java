@@ -1,4 +1,4 @@
-package com.ibm.dstore.core.util.regex.io;
+package org.eclipse.cdt.dstore.core.util.regex.io;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -59,15 +59,15 @@ package com.ibm.dstore.core.util.regex.io;
 
 import java.io.*;
 
-import com.ibm.dstore.core.util.regex.text.regex.*;
-import com.ibm.dstore.core.util.regex.text.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.util.regex.text.*;
 
 /**
  * RegexFilenameFilter is the base class for a set of FilenameFilter
  * implementations that filter based on a regular expression.
 
  @author <a href="mailto:oro-dev@jakarta.apache.org">Daniel F. Savarese</a>
- @version $Id: RegexFilenameFilter.java,v 1.2 2001/08/31 00:04:15 dmcknigh Exp $
+ @version $Id: RegexFilenameFilter.java,v 1.1.1.1 2001/09/10 22:18:42 dmcknigh Exp $
 
  * @see Perl5FilenameFilter
  * @see AwkFilenameFilter

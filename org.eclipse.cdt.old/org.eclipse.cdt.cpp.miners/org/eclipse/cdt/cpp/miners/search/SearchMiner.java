@@ -1,13 +1,13 @@
-package com.ibm.cpp.miners.search;
+package org.eclipse.cdt.cpp.miners.search;
 /*
  * Copyright (c) 2000,2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.core.miners.miner.*;
-import com.ibm.dstore.core.util.StringCompare;
-import com.ibm.dstore.core.util.regex.text.regex.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.miners.miner.*;
+import org.eclipse.cdt.dstore.core.util.StringCompare;
+import org.eclipse.cdt.dstore.core.util.regex.text.regex.*;
 
 
 import java.util.*;

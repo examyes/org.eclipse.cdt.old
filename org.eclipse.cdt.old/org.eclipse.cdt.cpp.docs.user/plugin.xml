@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <plugin 
   name="C/C++ Plugin User Guide"
-  id="com.ibm.cpp.docs.user"
+  id="org.eclipse.cdt.cpp.docs.user"
   version="0.5.0"
   provider-name="International Business Machines Corp." 
 >
@@ -24,6 +24,6 @@
  </extension> 
  
  <extension point="org.eclipse.help.contexts"> 
-  <contexts name="contexts_CPP.xml" plugin="com.ibm.cpp.ui"/> 
+  <contexts name="contexts_CPP.xml" plugin="org.eclipse.cdt.cpp.ui"/> 
  </extension>
 </plugin>

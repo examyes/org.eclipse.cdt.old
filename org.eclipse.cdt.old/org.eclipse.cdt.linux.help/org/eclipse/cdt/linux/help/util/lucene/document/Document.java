@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.document;
+package org.eclipse.cdt.linux.help.util.lucene.document;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1

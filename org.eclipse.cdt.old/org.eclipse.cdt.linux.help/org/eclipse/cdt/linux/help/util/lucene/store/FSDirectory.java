@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.store;
+package org.eclipse.cdt.linux.help.util.lucene.store;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -60,7 +60,7 @@ import java.io.RandomAccessFile;
 import java.io.FileNotFoundException;
 import java.util.Hashtable;
 
-import com.ibm.linux.help.util.lucene.util.Constants;
+import org.eclipse.cdt.linux.help.util.lucene.util.Constants;
 
 /**
   Straightforward implementation of Directory as a directory of files.

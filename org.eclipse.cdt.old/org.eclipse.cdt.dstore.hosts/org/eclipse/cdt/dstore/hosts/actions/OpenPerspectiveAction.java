@@ -1,4 +1,4 @@
-package com.ibm.dstore.hosts.actions;
+package org.eclipse.cdt.dstore.hosts.actions;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,11 +6,11 @@ package com.ibm.dstore.hosts.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.ui.views.*;
+import org.eclipse.cdt.dstore.ui.views.*;
 
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.*;
-import com.ibm.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.*;
+import org.eclipse.cdt.dstore.ui.actions.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
@@ -52,7 +52,7 @@ public class OpenPerspectiveAction extends CustomAction
 
 	try
 	    {
-		persp = dw.openPage("com.ibm.dstore.hosts.views.HostsPerspective", input);
+		persp = dw.openPage("org.eclipse.cdt.dstore.hosts.views.HostsPerspective", input);
 	    }
         catch (WorkbenchException e)
 	    {

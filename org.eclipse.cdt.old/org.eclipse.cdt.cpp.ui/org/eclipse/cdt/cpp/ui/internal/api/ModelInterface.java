@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.api;
+package org.eclipse.cdt.cpp.ui.internal.api;
 
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
@@ -6,18 +6,18 @@ package com.ibm.cpp.ui.internal.api;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.views.*;
-import com.ibm.cpp.ui.internal.vcm.*;
-import com.ibm.cpp.ui.internal.actions.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.views.*;
+import org.eclipse.cdt.cpp.ui.internal.vcm.*;
+import org.eclipse.cdt.cpp.ui.internal.actions.*;
 
-import com.ibm.dstore.ui.ConvertUtility;
-import com.ibm.dstore.ui.ILinkable;
-import com.ibm.dstore.ui.actions.*;
-import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.resource.*;
-import com.ibm.dstore.extra.internal.extra.*;
-import com.ibm.dstore.hosts.*;
+import org.eclipse.cdt.dstore.ui.ConvertUtility;
+import org.eclipse.cdt.dstore.ui.ILinkable;
+import org.eclipse.cdt.dstore.ui.actions.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.ui.resource.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.hosts.*;
 
 import java.util.*;
 
@@ -543,7 +543,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 		_status = dataStore.command(debugDescriptor, args, dirObject);
 		monitorStatus(_status);
-		showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
+		showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", _status);
 	    }
     }
 
@@ -616,7 +616,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	monitorStatus(status);
 	
-	showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
+	showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", _status);
 	return status;	
       }
 
@@ -1060,7 +1060,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	//if (_workspaceElement == null)
 	    {
 		DataElement workspaceObj = null;
-		DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
+		DataElement projectInfo = dataStore.findMinerInformation("org.eclipse.cdt.cpp.miners.project.ProjectMiner");
 		if (projectInfo == null)
 		    {
 			//System.out.println("couldn't find project miner");
@@ -1402,7 +1402,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  }
 
 	      _searchResultsView.searchStarted(
-					       "com.ibm.cpp.ui.CppSearchPage",
+					       "org.eclipse.cdt.cpp.ui.CppSearchPage",
 					       patternStr.toString(),
 					       CppPlugin.getDefault().getImageDescriptor("details.gif"),//null,
 					       null,
@@ -1435,7 +1435,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       // needed because eclipse doesn't support remote files
       if (dataStore != _plugin.getDataStore())
 	  {
-	      showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
+	      showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", _status);
 	  }
     }
   }
@@ -2303,26 +2303,26 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Open Project",
-							 "com.ibm.cpp.ui.internal.actions.OpenProjectAction");
+							 "org.eclipse.cdt.cpp.ui.internal.actions.OpenProjectAction");
 
 	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 						   "Build Project",
-						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+						   "org.eclipse.cdt.cpp.ui.internal.actions.BuildAction");
 	build.setAttribute(DE.A_VALUE, "BUILD");
 
 	DataElement clean = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 						   "Clean Project",
-						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+						   "org.eclipse.cdt.cpp.ui.internal.actions.BuildAction");
 	clean.setAttribute(DE.A_VALUE, "CLEAN");
 
 
 	DataElement closeProject = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Close Project",
-							 "com.ibm.cpp.ui.internal.actions.CloseProjectAction");
+							 "org.eclipse.cdt.cpp.ui.internal.actions.CloseProjectAction");
 
 	DataElement deleteProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Delete Project",
-							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
+							 "org.eclipse.cdt.cpp.ui.internal.actions.DeleteProjectAction");
 	dataStore.createReference(projectD, deleteProject);
 
 
@@ -2330,7 +2330,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	DataElement openFile = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Open File",
-							 "com.ibm.cpp.ui.internal.actions.OpenFileAction");
+							 "org.eclipse.cdt.cpp.ui.internal.actions.OpenFileAction");
 
 
 
@@ -2339,23 +2339,23 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	// connection actions
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
 						     dataStore.getLocalizedString("model.Connect_to"),
-						     "com.ibm.dstore.ui.connections.ConnectAction");
+						     "org.eclipse.cdt.dstore.ui.connections.ConnectAction");
         connect.setAttribute(DE.A_VALUE, "C_CONNECT");
 
 	
 	DataElement disconnect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
 							dataStore.getLocalizedString("model.Disconnect_from"),
-							"com.ibm.dstore.ui.connections.DisconnectAction");	
+							"org.eclipse.cdt.dstore.ui.connections.DisconnectAction");	
         disconnect.setAttribute(DE.A_VALUE, "C_DISCONNECT");
 	
 	DataElement editConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
 						  "Edit Connection",
-						  "com.ibm.dstore.ui.connections.EditConnectionAction");	
+						  "org.eclipse.cdt.dstore.ui.connections.EditConnectionAction");	
         editConnection.setAttribute(DE.A_VALUE, "C_EDIT");
 
 	DataElement removeConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
 						    dataStore.getLocalizedString("model.Delete_Connection"),
-						    "com.ibm.dstore.ui.connections.DeleteAction");	
+						    "org.eclipse.cdt.dstore.ui.connections.DeleteAction");	
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");
 
 
@@ -2364,22 +2364,22 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
         DataElement parseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
         			"Begin Parse",
-			       "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
+			       "org.eclipse.cdt.cpp.ui.internal.actions.ProjectParseAction");
 				       
 				     
 	    DataElement saveParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
 	    			"Save Parse Information",
-			       "com.ibm.cpp.ui.internal.actions.ProjectSaveParseAction");
+			       "org.eclipse.cdt.cpp.ui.internal.actions.ProjectSaveParseAction");
 
 	    DataElement removeParseD = dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, 
         			"Remove Parse Information",
-			       "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
+			       "org.eclipse.cdt.cpp.ui.internal.actions.ProjectRemoveParseAction");
 
 
 
 	// copy project actions
 	DataElement copy = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR, "Copy to...",
-						  "com.ibm.cpp.ui.internal.actions.CopyAction");
+						  "org.eclipse.cdt.cpp.ui.internal.actions.CopyAction");
 	
 
 	// replicate project actions
@@ -2388,28 +2388,28 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement replicateFrom = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR,
 							   "from...",
-							   "com.ibm.cpp.ui.internal.actions.ReplicateFromAction");
+							   "org.eclipse.cdt.cpp.ui.internal.actions.ReplicateFromAction");
 	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_FROM");
 
 	DataElement replicateTo = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR,
 							   "to...",
-							   "com.ibm.cpp.ui.internal.actions.ReplicateToAction");
+							   "org.eclipse.cdt.cpp.ui.internal.actions.ReplicateToAction");
 	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_TO");
 
 	DataElement synchronizeWith = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR,
 							     "with...",
-							     "com.ibm.cpp.ui.internal.actions.SynchronizeWithAction");
+							     "org.eclipse.cdt.cpp.ui.internal.actions.SynchronizeWithAction");
 	synchronizeWith.setAttribute(DE.A_VALUE, "C_SYNCHRONIZE_WITH");
 
 
 	DataElement propertyDialogAction = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 								  "Properties...",
-								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
+								  "org.eclipse.cdt.cpp.ui.internal.actions.OpenPropertiesAction");
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
 
 	DataElement propertyDialogAction2 = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 								  "Properties...",
-								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
+								  "org.eclipse.cdt.cpp.ui.internal.actions.OpenPropertiesAction");
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
 
 
@@ -2417,17 +2417,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	// target Actions
 	DataElement buildCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Build",
-							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.TargetAction");
 	buildCmd.setAttribute(DE.A_VALUE, "BUILD_TARGET");
 	DataElement executeCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Execute",
-							  "com.ibm.cpp.ui.internal.actions.ExecuteAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.ExecuteAction");
 	executeCmd.setAttribute(DE.A_VALUE, "EXECUTE_TARGET");
 	// autoconf
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	/*DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Initialize autoconf files",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");*/
 //////////////////////////////////
 
@@ -2437,12 +2437,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 								 "Generate configure",
-								 "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+								 "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
 
 	DataElement configureCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Run configure",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	configureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
 	
 	dataStore.createReference(configureCmds, autoconfCmds, "abstracts", "abstracted by");
@@ -2451,7 +2451,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create/Update,Generate,Run",
-							  "com.ibm.cpp.ui.internal.actions.UpdateCreateRunAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.UpdateCreateRunAction");
 	mngCmd.setAttribute(DE.A_VALUE,"UPDATE_CREATE_RUN");
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");*/
 	
@@ -2467,18 +2467,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		
 	DataElement updateAutoconfFilesCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create/Update all automake files",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
 	
 	
 	DataElement updateMakefileAmCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Update Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	updateMakefileAmCmd.setAttribute(DE.A_VALUE, "UPDATE_MAKEFILE_AM");
 	
 	DataElement updateConfigureInCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Update configure.in",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
 	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
 	
 	dataStore.createReference(updatesCmds, advancedCmds, "abstracts", "abstracted by");
@@ -2488,24 +2488,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	DataElement toStatLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create StaticLib Makfile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toStatLibCmd.setAttribute(DE.A_VALUE,"STATICLIB_MAKEFILE_AM");
 	
 	DataElement toSharedLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create SharedLib Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toSharedLibCmd.setAttribute(DE.A_VALUE,"SHAREDLIB_MAKEFILE_AM");
 
 	dataStore.createReference(libCmds, makefileCmds, "abstracts", "abstracted by");
 	
 	DataElement toTopLevelCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create TopLevel Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
 	
 	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create Programs Makefile.am",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toProgCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
 	
 	//
@@ -2513,7 +2513,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement confInCmd = dataStore.createObject(confInCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create configure.in",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");	
 	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						
 	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
 	//	
@@ -2531,17 +2531,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						
 	DataElement distCleanCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "distclean",
-							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.TargetAction");
 	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");
 			
 	DataElement maintainerCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "maintainer-clean",
-							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.TargetAction");
 	maintainerCmd.setAttribute(DE.A_VALUE,"MAINTAINER_CLEAN");	
 		
 	DataElement installCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "make-install",
-							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.TargetAction");
 	installCmd.setAttribute(DE.A_VALUE,"INSTALL");		
 
 	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
@@ -2555,7 +2555,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement compilerCmd = dataStore.createObject(missCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Define Compiler Flags",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");	
 	compilerCmd.setAttribute(DE.A_VALUE,"COMPILER_FLAGS");						
 	dataStore.createReference(missCmds, makefileCmds, "abstracts", "abstracted by");
 	*/	
@@ -2568,19 +2568,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	DataElement toStatLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "StaticLib",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"STATICLIB_MAKEFILE_AM");
 	
 	DataElement toSharedLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "SharedLib",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SHAREDLIB_MAKEFILE_AM");
 
 	dataStore.createReference(libTargetCmds, makefileTargetCmds, "abstracts", "abstracted by");
 
 	DataElement toProgTargetCmd = dataStore.createObject(makefileTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "bin Programs",
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
 	toProgTargetCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
 	//***********************************
 
@@ -2590,11 +2590,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	// Find help for functions
 	DataElement functionHelp = dataStore.createObject(function, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Find Help",
-							  "com.ibm.cpp.ui.internal.actions.HelpAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.HelpAction");
 	// Find help for classes
 	DataElement classHelp = dataStore.createObject(classD, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Find Help",
-							  "com.ibm.cpp.ui.internal.actions.HelpAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.HelpAction");
 	//-------------------------------
 	
 

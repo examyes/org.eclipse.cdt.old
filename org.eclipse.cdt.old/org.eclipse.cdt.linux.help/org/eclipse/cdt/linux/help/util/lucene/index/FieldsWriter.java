@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -58,10 +58,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.io.IOException;
 
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
-import com.ibm.linux.help.util.lucene.document.Document;
-import com.ibm.linux.help.util.lucene.document.Field;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.document.Field;
 
 final class FieldsWriter {
   private FieldInfos fieldInfos;

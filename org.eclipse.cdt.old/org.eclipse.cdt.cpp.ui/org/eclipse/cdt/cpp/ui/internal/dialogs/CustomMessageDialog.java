@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.dialogs;
+package org.eclipse.cdt.cpp.ui.internal.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.index;
+package org.eclipse.cdt.linux.help.util.lucene.index;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -57,12 +57,12 @@ package com.ibm.linux.help.util.lucene.index;
 import java.util.Vector;
 import java.io.IOException;
 
-import com.ibm.linux.help.util.lucene.store.Directory;
-import com.ibm.linux.help.util.lucene.store.OutputStream;
-import com.ibm.linux.help.util.lucene.store.InputStream;
-import com.ibm.linux.help.util.lucene.document.Document;
-import com.ibm.linux.help.util.lucene.util.PriorityQueue;
-import com.ibm.linux.help.util.lucene.util.BitVector;
+import org.eclipse.cdt.linux.help.util.lucene.store.Directory;
+import org.eclipse.cdt.linux.help.util.lucene.store.OutputStream;
+import org.eclipse.cdt.linux.help.util.lucene.store.InputStream;
+import org.eclipse.cdt.linux.help.util.lucene.document.Document;
+import org.eclipse.cdt.linux.help.util.lucene.util.PriorityQueue;
+import org.eclipse.cdt.linux.help.util.lucene.util.BitVector;
 
 final class SegmentMerger {
   private Directory directory;

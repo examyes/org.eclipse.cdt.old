@@ -1,4 +1,4 @@
-package com.ibm.cpp.ui.internal.views.targets;
+package org.eclipse.cdt.cpp.ui.internal.views.targets;
 
 /*
  * Licensed Materials - Property of IBM,
@@ -7,7 +7,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import com.ibm.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.ui.IActionDelegate;
 import org.eclipse.jface.action.*;

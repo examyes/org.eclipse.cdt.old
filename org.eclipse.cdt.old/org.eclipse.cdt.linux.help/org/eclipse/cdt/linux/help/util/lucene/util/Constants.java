@@ -1,4 +1,4 @@
-package com.ibm.linux.help.util.lucene.util;
+package org.eclipse.cdt.linux.help.util.lucene.util;
 
 /* ====================================================================
  * The Apache Software License, Version 1.1
@@ -58,7 +58,7 @@ package com.ibm.linux.help.util.lucene.util;
  * Some useful constants.
  *
  * @author  Doug Cutting
- * @version $Id: Constants.java,v 1.1 2001/10/10 16:13:41 cutting Exp $
+ * @version $Id: Constants.java,v 1.1.1.1 2001/11/19 20:36:47 enriquev Exp $
  **/
 
 public final class Constants {
