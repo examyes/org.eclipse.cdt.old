@@ -74,7 +74,7 @@ public class ProjectMiner extends Miner
  }
     
     
- private void handleOpenProject(DataElement project, DataElement status)
+ private void handleOpenProject(DataElement project, DataElement hmm, DataElement status)
  {
      project.setParent(_workspace);
      _workspace.addNestedData(project, true);
