@@ -916,8 +916,11 @@ public class FileSystemMiner extends Miner
 			    }
 		    }
 	    }
-	
-	status.setAttribute(DE.A_NAME, "done");
+
+	if (status != null)
+	    {
+		status.setAttribute(DE.A_NAME, "done");
+	    }
 	return status;
     }
 
