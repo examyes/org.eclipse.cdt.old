@@ -154,7 +154,7 @@ public class PADataStoreAdaptor {
    }
    
  }
- 
+  
  /**
   * Create a trace function object in the datastore
   */
@@ -172,7 +172,7 @@ public class PADataStoreAdaptor {
   * Populate the datastore using the information from the PA trace file.
   */
  public void populateDataStore(DataElement fileElement, PATraceFile traceFile) {
-    
+                   
    // set the trace file attributes
    createTraceFileSummary(fileElement, traceFile);
    
@@ -184,7 +184,7 @@ public class PADataStoreAdaptor {
    _attributesRoot = _dataStore.createObject(fileElement, getLocalizedString("pa.data"), getLocalizedString("pa.AttributesRoot"));
    _callArcsRoot   = _dataStore.createObject(fileElement, getLocalizedString("pa.data"), getLocalizedString("pa.CallArcsRoot"));
    
-   setAttribute(fileElement, getLocalizedString("pa.TraceFormat"), getTraceFileFormat(traceFile));
+   // setAttribute(fileElement, getLocalizedString("pa.TraceFormat"), getTraceFileFormat(traceFile));
    
    // Process each trace function
    Iterator it = traceFile.getTraceFunctions().iterator();

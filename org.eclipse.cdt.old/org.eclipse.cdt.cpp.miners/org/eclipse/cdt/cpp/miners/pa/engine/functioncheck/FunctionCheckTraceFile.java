@@ -103,7 +103,7 @@ public class FunctionCheckTraceFile extends PATraceFile {
     _foundFlatProfileHeader2 = true;
    }
    else if (_foundFlatProfileHeader2 &&
-   			FunctionCheckUtility.isFlatProfileHeader3(line)) {
+   	    FunctionCheckUtility.isFlatProfileHeader3(line)) {
     _status.setFlatProfileStatus(PAParseStatus.PARSING);
    }
    else if (FunctionCheckUtility.isCallGraphHeader(line)) {

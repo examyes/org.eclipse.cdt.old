@@ -332,7 +332,6 @@ public class PAMiner extends Miner {
     return;
   }
   
-  
   _adaptor.populateDataStore(traceElement, traceFile);
   status.setAttribute(DE.A_NAME, "done");
   
