@@ -207,6 +207,8 @@ class CommandMinerThread extends MinerThread
    try
    {
     File theDirectory = new File(theElement.getSource().trim());
+    if (!theDirectory.isDirectory())
+	theDirectory = theDirectory.getParentFile();
     String theOS = System.getProperty("os.name");
     String theShell;    
     if (!theOS.toLowerCase().startsWith("win"))
