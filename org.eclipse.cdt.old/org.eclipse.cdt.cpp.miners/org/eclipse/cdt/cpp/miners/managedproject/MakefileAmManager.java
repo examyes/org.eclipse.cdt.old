@@ -402,12 +402,14 @@ public class MakefileAmManager {
 					case (STATICLIB):
 					createDotOldFileFor(Makefile_am);
 					updateStaticLibMakefileAm(Makefile_am.getParentFile());
+					updateMakefileAmDependency(Makefile_am.getParentFile());
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (SHAREDLIB):
 					createDotOldFileFor(Makefile_am);
 					updateSharedLibMakefileAm(Makefile_am.getParentFile());
+					updateMakefileAmDependency(Makefile_am.getParentFile());
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
@@ -669,7 +671,7 @@ public class MakefileAmManager {
 	}
 	private String updateLdaddLine(String line, File parent)
 	{
-		line = line.substring(0,line.lastIndexOf("=")+1);
+	/*	line = line.substring(0,line.lastIndexOf("=")+1);
 		// add libs to the _LDADD variable
 		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
 		String[] subNames = dir_structure.getSubdirWorkspacePath();
@@ -685,7 +687,7 @@ public class MakefileAmManager {
 				modName = modName.concat(modTok);
 				line = line.concat(" "+modName);
 			}
-		}
+		}*/
 		return line;
 	}			
 	private String getLastToken(String aName)
@@ -881,7 +883,7 @@ public class MakefileAmManager {
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));
 		updateMakefileAmDependency(parent);	
 	}
-	private void updateMakefileAmDependency(File parent)//,int classification
+	private void updateMakefileAmDependency(File parent)
 	{
 		File dir = parent;
 		ArrayList list = new ArrayList();
@@ -894,7 +896,7 @@ public class MakefileAmManager {
 			list.add(counter++,dir);
 			dir = dir.getParentFile();
 		}
-		if(counter>1)
+		if(counter>0)
 		{
 			// update might be needed
 			File parentDir = ((File)list.get(counter-1));
@@ -938,10 +940,14 @@ public class MakefileAmManager {
 		System.out.println("\n Affected line = "+line);
 		StringTokenizer tokenizer = new StringTokenizer(line);
 		File old = new File(Makefile_am.getParentFile(),"Makefile.am.old");
+		int classification = classifier.classify(Makefile_am);
+		if(!old.exists())
+			old = Makefile_am;
+		
 		while (tokenizer.hasMoreTokens())
 		{
 			String token = tokenizer.nextToken();
-			int classification = classifier.classify(Makefile_am);
+			
 			
 			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1 && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
 			{
