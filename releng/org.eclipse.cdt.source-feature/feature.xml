@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.cdt.source"
+      label="%featureName"
+      version="1.0.1"
+      provider-name="%providerName"
+      image="eclipse_update_120.jpg">
+
+   <description>
+      %description
+   </description>
+
+   <license>
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://update.eclipse.org/updates"/>
+   </url>
+
+   <plugin
+         id="org.eclipse.cdt.source"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.core.linux"
+         download-size="0"
+         install-size="0"
+         version="1.0.1"
+         fragment="true">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.core.qnx"
+         download-size="0"
+         install-size="0"
+         version="1.0.1"
+         fragment="true">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.core.solaris"
+         download-size="0"
+         install-size="0"
+         version="1.0.1"
+         fragment="true">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.core.win32"
+         download-size="0"
+         install-size="0"
+         version="1.0.1"
+         fragment="true">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.core"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.debug.core"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.debug.mi.core"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.debug.mi.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.debug.ui.tests"
+         download-size="0"
+         install-size="0"
+         version="1.0.0">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.debug.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.launch"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.ui.tests"
+         download-size="0"
+         install-size="0"
+         version="1.0.0">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt.ui"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+   <plugin
+         id="org.eclipse.cdt"
+         download-size="0"
+         install-size="0"
+         version="1.0.1">
+   </plugin>
+
+</feature>
