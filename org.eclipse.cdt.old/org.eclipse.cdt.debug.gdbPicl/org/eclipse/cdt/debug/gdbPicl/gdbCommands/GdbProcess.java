@@ -136,10 +136,12 @@ public class GdbProcess {
 			setAnnotated(true);
 		} catch (SecurityException excp) {
 			if (Gdb.traceLogger.ERR)
-				Gdb.traceLogger.err(2, "GdbProcess SecurityException=" + excp);
+				Gdb.traceLogger.err(1, "GdbProcess SecurityException=" + excp);		
+			System.exit(-1);
 		} catch (java.io.IOException excp) {
 			if (Gdb.traceLogger.ERR)
-				Gdb.traceLogger.err(2, "GdbProcess IOException=" + excp);
+				Gdb.traceLogger.err(1, "GdbProcess IOException=" + excp);
+			System.exit(-1);
 		}
 
 		String cmd = "set annotate 2";
