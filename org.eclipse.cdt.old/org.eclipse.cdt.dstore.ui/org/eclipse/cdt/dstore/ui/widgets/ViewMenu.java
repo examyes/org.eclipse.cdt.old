@@ -405,47 +405,45 @@ public class ViewMenu implements IMenuListener
           }
         }
         
-	String filter = _dataStore.getLocalizedString("model.all");
+	String filter = null;
         if (object != null)
-        {
-          _filterSelected = object.dereference();
-
-          filter = (String)_filterSelected.getElementProperty(DE.P_NAME);
-
-          _parent.getViewer().refreshView(_relationSelected, _filterSelected);
-        }
+	    {
+		_filterSelected = object.dereference();
+		filter = _filterSelected.getName();
+		_parent.getViewer().refreshView(_relationSelected, _filterSelected);
+	    }
         else
-        {
-          _filterSelected = _defaultFilter;
-        }
-
-	  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-	  if (plugin != null)
-	      {
-		  String imageStr = DataElementLabelProvider.getImageString(_filterSelected);
-
-		  if (!_filterLabel.isDisposed())
-		      {
-			  _filterLabel.setEnabled(false);
-		      }
-
-		  Image image = plugin.getImage(imageStr);
-		  if (image == null)
-		      {
-			  imageStr = _filGif;
-			  image = plugin.getImage(imageStr);
-		      }
-		  _filterLabel.setImage(image);
-		  _filterLabel.setToolTipText(filter);
-		  _filterLabel.setEnabled(true);
-		  _viewToolBar.redraw();
-	      }
-	  else
-	      {
-		  _filterLabel.setText(filter);
-	      }
+	    {
+		_filterSelected = _defaultFilter;
+	    }
+	
+	DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+	if (plugin != null)
+	    {
+		String imageStr = DataElementLabelProvider.getImageString(_filterSelected);
+		
+		if (!_filterLabel.isDisposed())
+		    {
+			_filterLabel.setEnabled(false);
+		    }
+		
+		Image image = plugin.getImage(imageStr);
+		if (image == null)
+		    {
+			imageStr = _filGif;
+			image = plugin.getImage(imageStr);
+		    }
+		_filterLabel.setImage(image);
+		_filterLabel.setToolTipText(filter);
+		_filterLabel.setEnabled(true);
+		//***_viewToolBar.redraw();
+	    }
+	else
+	    {
+		_filterLabel.setText(filter);
+	    }
       }
-
+    
 
   public void getRelationItems()
       {
