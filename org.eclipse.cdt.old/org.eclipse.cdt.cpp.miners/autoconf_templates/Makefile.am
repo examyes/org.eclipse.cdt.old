@@ -1,6 +1,5 @@
 SUBDIRS =
-# not a GNU package. You can remove this line, if
-# have all needed files, that a GNU package needs
+# setting the strictness for GNU packages
 AUTOMAKE_OPTIONS = foreign 1.4
 
 
