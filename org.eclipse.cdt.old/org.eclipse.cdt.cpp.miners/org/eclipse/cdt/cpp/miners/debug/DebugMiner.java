@@ -42,6 +42,7 @@ public class DebugMiner extends Miner
 	String fs = "/";
         _debugJarPath =  debugPath;
 	_debugJarPath += ps + debugPath + fs + "ibmdebug.jar";
+        _debugJarPath += ps + debugPath + fs + "epdc.jar";
         _debugJarPath += ps + _gdbPiclPath;
 	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " org.eclipse.cdt.debug.gdbPicl.Gdb ";
@@ -110,7 +111,7 @@ public class DebugMiner extends Miner
 	    }
 	**/
 
-	System.out.println("invocation = " + invocationStr);
+	//System.out.println("invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
 
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
@@ -118,7 +119,7 @@ public class DebugMiner extends Miner
 	    {
 		//		File dir = new File(directory.getName());
 		//	directory.setAttribute(DE.A_SOURCE, dir.getAbsolutePath());
-		System.out.println("launching engine in " + directory.getSource());
+		//System.out.println("launching engine in " + directory.getSource());
 		ArrayList args = new ArrayList();
 		args.add(invocation);
 		args.add(status);
