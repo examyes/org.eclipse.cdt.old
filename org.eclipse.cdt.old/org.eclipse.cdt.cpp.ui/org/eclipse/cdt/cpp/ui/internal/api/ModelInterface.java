@@ -796,8 +796,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    if (input != null)
 				      {
 					IFile file = input.getFile();
-					
-					if (file.getProject().getLocation() == project.getLocation())
+					IProject fProject = file.getProject();					
+					if (fProject == null || 
+					    fProject == project ||
+					    fProject.getLocation() == project.getLocation())
 					    {
 						Display d= getDummyShell().getDisplay();
 						d.asyncExec(new CloseEditorAction(page, editor));
