@@ -48,17 +48,17 @@ import org.eclipse.vcm.internal.core.*;
  * of its general project-creation facilities.
  */
 
-public class CppWizardNewProjectCreationPage extends WizardPage implements Listener 
+public class CppWizardNewProjectCreationPage extends WizardPage implements Listener
 {
-    
+
     // cache of newly-created project
     private FileSystemElement	root;
     private FileSystemElement       selectedResource;
-    
+
     // initial value stores
     private String initialProjectFieldValue;
     private IProject[] referencedProjects;
-    
+
     // widgets
     private Text projectNameField;
     protected Button                        defaultMappingRadio;
@@ -83,7 +83,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
     protected String                        selectedHostDirectory="";
     protected String                        selectedHostMount="";
     private   CheckboxTableViewer           referenceProjectsViewer;
-    
+
     // constants
     private static final int SIZING_TEXT_FIELD_WIDTH = 150;
     private static final int SIZING_INDENTATION_WIDTH = 10;
@@ -115,14 +115,14 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
      * @see org.eclipse.swt.widgets.Composite
      * @see org.eclipse.swt.widgets.Control
      */
-    public void createControl(Composite parent) 
+    public void createControl(Composite parent)
     {
 	Composite composite = new Composite(parent, SWT.NULL);
 	
 	
-	composite.addHelpListener(new HelpListener() 
+	composite.addHelpListener(new HelpListener()
 	    {
-		public void helpRequested(HelpEvent event) 
+		public void helpRequested(HelpEvent event)
 		{
 		    performHelp();
 		}
@@ -151,8 +151,8 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
      * @exception com.ibm.itp.core.api.resources.CoreException
      */
     //protected void createProject(IProject projectHandle,IProgressMonitor monitor) throws CoreException {
-    private void createProject(IProjectDescription description, 
-			       IProject projectHandle, IProgressMonitor monitor) 
+    private void createProject(IProjectDescription description,
+			       IProject projectHandle, IProgressMonitor monitor)
 	throws CoreException, OperationCanceledException
     {
 	try
@@ -183,7 +183,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
      *     of this group's collection of visual components
      * @see org.eclipse.swt.widgets.Composite
      */
-    protected final void createProjectNameGroup(Composite parent) 
+    protected final void createProjectNameGroup(Composite parent)
     {
 	// project specification group
 	Composite projectGroup = new Composite(parent,SWT.NONE);
@@ -214,7 +214,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
      *     of this group's collection of visual components
      * @see org.eclipse.swt.widgets.Composite
      */
-    protected final void createReferencedProjectsGroup(Composite parent) 
+    protected final void createReferencedProjectsGroup(Composite parent)
     {
 	//only create this group if there are already projects in the workspace
 	if (ResourcesPlugin.getWorkspace().getRoot().getProjects().length == 0) {
@@ -243,7 +243,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
      *     and <code>Wizard.FINISH</code>.
      * @see org.eclipse.jface.wizard.Wizard
      */
-    protected void enter(int direction) 
+    protected void enter(int direction)
     {
 	setPageComplete(validatePage());
     }
@@ -257,13 +257,13 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
      *
      * @return <code>boolean</code> indicating successful completion of this page's finish code
      */
-    public boolean finish() 
+    public boolean finish()
     {
 	if (isRemote())
 	    {
 		setDefaults("DefaultRemoteHostName",      remoteHostNameField);
 		setDefaults("DefaultRemoteHostPort",      remoteHostPortNumberField);
-		setDefaults("DefaultRemoteHostDirectory", remoteHostDirectoryField);			    
+		setDefaults("DefaultRemoteHostDirectory", remoteHostDirectoryField);			
 		setDefaults("DefaultRemoteHostMount",     remoteHostMountField);
 	    }
 
@@ -311,7 +311,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 		{
 		    IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		    final IProjectDescription description = workspace.newProjectDescription(_projectHandle.getName());
-		    
+		
 		    switch (_sourceLocation)
 			{
 			case CppProjectAttributes.LOCATION_LOCAL:
@@ -325,7 +325,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 			    if (!directory.equals(""))
 				{
 				    IPath localPath = new Path(directory);
-				    
+				
 				    // get a project descriptor
 				    IPath defaultPath = Platform.getLocation();
 				    if (defaultPath.equals(localPath))
@@ -335,7 +335,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 				    _projectHandle.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				}
 			    break;
-			    
+			
 			    /****
 			case CppProjectAttributes.LOCATION_URL:
 				 selectedRemoteDirectory = remoteURLNameField.getText();
@@ -343,7 +343,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 				 URL                           location = null;
 				 // PushPullTarget                target;
 				 //IResourceMapping              mapping = null;
-				 
+				
 
 				 QualifiedName qName = new QualifiedName(CppProjectAttributes.NAME_QUALIFIER, "dav");
 				 String urlName = selectedRemoteDirectory;
@@ -356,7 +356,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 				 {
 				 System.out.println("CppWizardNewProjectCreationPage: A URL exception happened setting up the target.");
 				 }
-				 
+				
 				 target = new PushPullTarget();
 				 target.setLocation(location);
 				 target.setQualifiedName(qName);
@@ -372,7 +372,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 				 //System.out.println("MapAction: calling setLocation");
 				 mapping.setLocation(new Path(location.getFile()));
 				 //System.out.println("MapAction calling addMapping");
-				 
+				
 				 ((Target) target).addMapping(_projectHandleHandle, mapping);
 				 //System.out.println("MapAction after addMapping");
 				 // Register the target with the workspace synchronizer.
@@ -390,10 +390,10 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 				 }
 			    break;
 			    ***/
-			    
+			
 			case CppProjectAttributes.LOCATION_HOST:
 			    break;
-			    
+			
 			case CppProjectAttributes.LOCATION_WORKBENCH:
 			    description.setLocation(null);
 			    createProject(description, _projectHandle, monitor);
@@ -403,22 +403,22 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 		}
 	    };
 	
-	try 
+	try
 	    {
 		getWizard().getContainer().run(true, true, op);
-	    } 
-	catch (OperationCanceledException e) 
+	    }
+	catch (OperationCanceledException e)
 	    {
 		return null;
-	    } 
+	    }
 	catch (InterruptedException e)
 	    {
 		return null;
 	    }	
-	catch (InvocationTargetException e) 
+	catch (InvocationTargetException e)
 	    {
 		// ie.- one of the steps resulted in a core exception
-		if (e.getTargetException() instanceof CoreException) 
+		if (e.getTargetException() instanceof CoreException)
 		    {
 			ErrorDialog.openError(
 					      null,
@@ -426,7 +426,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 					      null,	// no special message
 					      ((CoreException) e.getTargetException()).getStatus());
 		    }
-		else 
+		else
 		    {
 			// CoreExceptions are handled above, but unexpected runtime exceptions and errors may still occur.
 			MessageDialog.openError(getShell(),
@@ -460,8 +460,8 @@ public String getProjectFieldValue() {
  * @return the new project handle
  * @see #createProject(com.ibm.itp.core.api.resources.IProject,com.ibm.itp.common.IProgressMonitor)
  */
-protected IProject getProjectHandle() 
-{    
+protected IProject getProjectHandle()
+{
     if (remoteHostRadio.getSelection())
 	{
 	    String name = getProjectFieldValue();
@@ -473,13 +473,13 @@ protected IProject getProjectHandle()
 	    args.add(selectedHostDirectory);
 	    args.add("false");
 	    args.add(remoteHostUseDaemon.getSelection() ? "true" : "false");
-	    
-	    DataStore ds = CppPlugin.getDefault().getDataStore();	    
+	
+	    DataStore ds = CppPlugin.getDefault().getDataStore();	
 	    DataElement root = ds.getRoot();
 	    Connection con = new Connection(name, args, root);
 
 	    com.ibm.cpp.ui.internal.vcm.PlatformVCMProvider provider = com.ibm.cpp.ui.internal.vcm.PlatformVCMProvider.getInstance();
-	    IProject newPrj = (IProject)provider.createRepository(con, con.getRoot());	   	    
+	    IProject newPrj = (IProject)provider.createRepository(con, con.getRoot());	   	
 
 	    return newPrj;
 	}
@@ -526,7 +526,7 @@ protected String getDirectoryName() {
      *
      * @param ev the visual component event
      */
-    public void handleEvent(Event ev) 
+    public void handleEvent(Event ev)
     {
 	Widget source = ev.widget;
 	
@@ -582,14 +582,14 @@ protected String getDirectoryName() {
             }
 	else if (source == remoteHostBrowseButton)
 	    {
-		com.ibm.dstore.hosts.actions.QuickConnectAction browse = 
-		    new com.ibm.dstore.hosts.actions.QuickConnectAction(remoteHostNameField.getText(), 
+		com.ibm.dstore.hosts.actions.QuickConnectAction browse =
+		    new com.ibm.dstore.hosts.actions.QuickConnectAction(remoteHostNameField.getText(),
 									remoteHostPortNumberField.getText(),
 									remoteHostDirectoryField.getText(),
 									remoteHostUseDaemon.getSelection());
 
 		
-	        Display d = remoteHostBrowseButton.getShell().getDisplay(); 
+	        Display d = remoteHostBrowseButton.getShell().getDisplay();
 		d.syncExec(browse);
 
 		String selected = browse.getSelected();
@@ -601,7 +601,7 @@ protected String getDirectoryName() {
 
 	this.setPageComplete(this.validatePage());
     }
-    
+
     public void performHelp()
     {
 	// System.out.println("HELP");
@@ -613,7 +613,7 @@ protected String getDirectoryName() {
      *
      * @return <code>boolean</code> indicating validity of all visual components on this page
      */
-    protected boolean validatePage() 
+    protected boolean validatePage()
     {
 	if (validateProjectNameGroup())
 	    {
@@ -639,17 +639,17 @@ protected String getDirectoryName() {
 
 	return false;
     }
-    
+
     /**
      *	Display an error dialog with the specified message.
      *
      *	@param message java.lang.String
      */
-    protected void displayErrorDialog(String message) 
+    protected void displayErrorDialog(String message)
     {
 	//***	MessageDialog.openError(getShell(),"Export Problems",message);
     }
-    
+
     /**
      * Returns a <code>boolean</code> indicating whether this page's project name
      * specification group's visual components currently all contain valid values.
@@ -657,7 +657,7 @@ protected String getDirectoryName() {
      * @return <code>boolean</code> indicating validity of all visual components
      *     in the project name specification group
      */
-    protected boolean validateProjectNameGroup() 
+    protected boolean validateProjectNameGroup()
     {
 	IWorkspace workspace = _plugin.getPluginWorkspace();
 
@@ -667,12 +667,12 @@ protected String getDirectoryName() {
 	    return false;
 	
 	IStatus result = workspace.validateName(projectFieldContents,IResource.PROJECT);
-	if (!result.isOK()) 
+	if (!result.isOK())
 	    {
 		//**displayErrorMessage("Invalid project name: " + result.getMessage());
 		return false;
 	    }
-	else 
+	else
 	    {
 		// check for duplicate project names
 
@@ -708,7 +708,7 @@ protected String getDirectoryName() {
 		    }
 	    }
 	
-	if ((_projectHandle != null) && _projectHandle.exists()) 
+	if ((_projectHandle != null) && _projectHandle.exists())
 	    {
 		//	displayErrorMessage("Project already exists.");
 		return false;
@@ -717,8 +717,8 @@ protected String getDirectoryName() {
 	return true;
     }
     /*=== dealing with choosing directory location dialog - for local or remote mapping ===*/
-    
-    protected void createSourceDirectoryGroup(Composite parent) 
+
+    protected void createSourceDirectoryGroup(Composite parent)
     {
 	Label label = createBoldLabel(parent, _plugin.getLocalizedString("createProjectWizard.location"));
 	
@@ -800,7 +800,7 @@ protected String getDirectoryName() {
 	// remote Host selection group
 	// specify remote Host location radio button
 	remoteHostRadio = new Button(projectMappingSelectionGroup,SWT.RADIO);
-	remoteHostRadio.setText("Host");
+	remoteHostRadio.setText(_plugin.getLocalizedString("createProjectWizard.Host"));
 	remoteHostRadio.addListener(SWT.Selection,this);
 	data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 	data.horizontalSpan = 3;
@@ -808,7 +808,7 @@ protected String getDirectoryName() {
 	
 	// Host name label
 	Label hostNameLabel = new Label(projectMappingSelectionGroup,SWT.NONE);
-	hostNameLabel.setText("Name:");
+	hostNameLabel.setText(_plugin.getLocalizedString("createProjectWizard.Name"));
 	data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 	data.horizontalIndent = 30;
 	hostNameLabel.setLayoutData(data);
@@ -825,7 +825,7 @@ protected String getDirectoryName() {
 	
 	// port number label
 	Label portNumberLabel = new Label(projectMappingSelectionGroup,SWT.NONE);
-	portNumberLabel.setText("Port Number:");
+	portNumberLabel.setText(_plugin.getLocalizedString("createProjectWizard.Port"));
 	data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 	data.horizontalIndent = 30;
 	portNumberLabel.setLayoutData(data);
@@ -843,7 +843,7 @@ protected String getDirectoryName() {
 
 	// host directory name label
 	Label directoryLabel = new Label(projectMappingSelectionGroup,SWT.NONE);
-	directoryLabel.setText("Directory:");
+	directoryLabel.setText(_plugin.getLocalizedString("createProjectWizard.Directory"));
 	data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 	data.horizontalIndent = 30;
 	directoryLabel.setLayoutData(data);
@@ -860,12 +860,12 @@ protected String getDirectoryName() {
 
 	// browse button
 	remoteHostBrowseButton = new Button(projectMappingSelectionGroup, SWT.PUSH);
-	remoteHostBrowseButton.setText("Browse...");
+	remoteHostBrowseButton.setText(_plugin.getLocalizedString("BrowseButton"));
 	remoteHostBrowseButton.addListener(SWT.Selection,this);
 	remoteHostBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
 
 	remoteHostUseDaemon = new Button(projectMappingSelectionGroup, SWT.CHECK);
-	remoteHostUseDaemon.setText("Connect to using daemon");
+	remoteHostUseDaemon.setText(_plugin.getLocalizedString("createProjectWizard.UsingDaemon"));
 	remoteHostUseDaemon.setSelection(true);
 	GridData dD = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	dD.horizontalIndent = 30;
@@ -875,7 +875,7 @@ protected String getDirectoryName() {
 
 	// mounted directory name label
 	Label mountedDirectoryLabel = new Label(projectMappingSelectionGroup,SWT.NONE);
-	mountedDirectoryLabel.setText("Local Mount Point (Optional):");
+	mountedDirectoryLabel.setText(_plugin.getLocalizedString("createProjectWizard.LocalMountPoint"));
 	data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 	data.horizontalIndent = 30;
 	mountedDirectoryLabel.setLayoutData(data);
@@ -917,7 +917,7 @@ protected String getDirectoryName() {
 	resetSelection();
 	
     }
-    
+
 
     private void getDefaults(String attribute, Combo control)
     {
@@ -933,7 +933,7 @@ protected String getDirectoryName() {
 		
 		if (i == 0)
 		    {	
-			control.setText(item); 
+			control.setText(item);
 		    }
 	    }
     }
@@ -952,7 +952,7 @@ protected String getDirectoryName() {
 	_plugin.writeProperty(attribute, history);
     }
 
-    
+
     /**
      *	Answer the directory name specified as being the import source.
      *	Note that if it ends with a separator then the separator is first
@@ -960,7 +960,7 @@ protected String getDirectoryName() {
      *
      *	@return java.lang.String
      */
-    private String getSourceDirectoryName() 
+    private String getSourceDirectoryName()
     {
 	//System.out.println("CppWizardNewProjectCreationPage: getSourceDirectoryName ");
 	IPath result = new Path(sourceNameField.getText().trim());
@@ -977,23 +977,23 @@ protected String getDirectoryName() {
     {
 	return selectedHostMount;
     }
-    
+
     /**
      *	Reset the selected resources collection and update the ui appropriately
      */
-    protected void resetSelection() 
+    protected void resetSelection()
     {
 	selectedResource = null;
 	root = null;
     }
-    
+
     /**
      *	Respond to the user selecting/deselecting items in the
      *	extensions list
      *
      *	@param selection ISelection
      */
-    public void selectionChanged(SelectionChangedEvent event) 
+    public void selectionChanged(SelectionChangedEvent event)
     {
 	if (localMappingRadio.getSelection())
 	    resetSelection();
@@ -1003,7 +1003,7 @@ protected String getDirectoryName() {
      *	Open an appropriate source browser so that the user can specify a source
      *	to import from
      */
-    protected void handleSourceBrowseButtonPressed() 
+    protected void handleSourceBrowseButtonPressed()
     {
 	//System.out.println("CppWizardNewProjectCreationPage: handleSourceBrowseButtonPressed ");
 	DirectoryDialog dialog = new DirectoryDialog(sourceNameField.getShell(),SWT.SAVE);
@@ -1018,11 +1018,11 @@ protected String getDirectoryName() {
 		}
 	}
     }	
-    
+
     /**
      * Creates a horizontal spacer line that fills the width of its container.
      */
-    protected void createSpacer(Composite parent) 
+    protected void createSpacer(Composite parent)
     {
 	//	Label spacer = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_OUT);
 	Label spacer = new Label(parent, SWT.NONE);
@@ -1035,7 +1035,7 @@ protected String getDirectoryName() {
     /**
      * Creates a new label with a bold font.
      */
-    protected Label createBoldLabel(Composite parent, String text) 
+    protected Label createBoldLabel(Composite parent, String text)
     {
 	Label label = new Label(parent, SWT.NONE);
 	label.setFont(JFaceResources.getBannerFont());
@@ -1052,11 +1052,11 @@ protected String getDirectoryName() {
      *	and is valid
      *
      *	@return boolean
-     protected boolean ensureSourceIsValid() 
+     protected boolean ensureSourceIsValid()
      {
      if (new File(getSourceDirectoryName()).isDirectory())
      return true;
-     
+
      displayErrorDialog("Source directory is not valid or has not been specified.");
      sourceNameField.setFocus();
      return false;

@@ -29,7 +29,7 @@ import org.eclipse.ui.part.*;
 /**
  *	This is the Workbench's default project creation Wizard
  */
-public class CppNewProjectResourceWizard extends Wizard implements INewWizard 
+public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 {
     private IWorkbench                      _desktop;
     private IStructuredSelection            _selection;
@@ -38,12 +38,12 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
     private ParseWizardPage                 _parserWizardPage;
     private CppPlugin                       _plugin = CppPlugin.getDefault();
 
-    public void addPages() 
+    public void addPages()
     {
 	super.addPages();
 	_mainPage = new CppWizardNewProjectCreationPage("C/C++ NewProjectPage");
-	_mainPage.setTitle("C/C++ Project");
-	_mainPage.setDescription("Create a new project resource.");
+	_mainPage.setTitle(_plugin.getLocalizedString("createProjectWizard.Title"));
+	_mainPage.setDescription(_plugin.getLocalizedString("createProjectWizard.Description"));
 	_mainPage.setImageDescriptor(_plugin.getImageDescriptor("newproject"));
 	this.addPage(_mainPage);
 	
@@ -71,7 +71,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
     public boolean performFinish()
     {
- 
+
       _mainPage.finish();
 
 	IProject project = getProject();
@@ -97,14 +97,14 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		
 		// add parse behaviour
 		ArrayList autoParse = _parserWizardPage._workbookPageParseBehaviour.getAutoParse();
-		_plugin.writeProperty(project, "AutoParse", autoParse);      
+		_plugin.writeProperty(project, "AutoParse", autoParse);
 
 		ArrayList autoPersist = _parserWizardPage._workbookPageParseBehaviour.getAutoPersist();
-		_plugin.writeProperty(project, "AutoPersist", autoPersist);      
+		_plugin.writeProperty(project, "AutoPersist", autoPersist);
 
 		// add parse quality
 		ArrayList preferences = _parserWizardPage._workbookPageParseQuality.getQuality();
-		_plugin.writeProperty(project, "ParseQuality", preferences);      
+		_plugin.writeProperty(project, "ParseQuality", preferences);
 		
 		// add build history
 		ArrayList builds = _fProjectInfoWizardPage._workbookPageBuildInvocation.getBuildInvocations();
@@ -133,8 +133,8 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		    }
 		else
 		    {
-			try 
-			    { 
+			try
+			    {
 				// add build spec
 				String builderName = "com.ibm.cpp.ui.cppbuilder";
 				IProjectDescription projectDescription =  project.getDescription();
@@ -153,8 +153,8 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 				projectDescription.setNatureIds(newNatures);
 				project.setDescription(projectDescription, null);
 
-			    } 
-			catch (CoreException e)  
+			    }
+			catch (CoreException e)
 			    {
 				System.out.println(e);
 			    }
@@ -162,14 +162,14 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
 		// refresh view
 		openPerspective(project);
-		api.openProject(project, getShell());	       
+		api.openProject(project, getShell());	
 		
 		return true;
 	    }
 	return false;
     }
-    
-    
+
+
     private void openPerspective(IProject project)
     {
         IWorkspace workspace = _plugin.getPluginWorkspace();
@@ -221,12 +221,12 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		    }
 	    }
     }
-    
-    public IDialogSettings getDialogSettings() 
+
+    public IDialogSettings getDialogSettings()
     {
 	return _plugin.getDialogSettings();
     }
-    
+
     /**
      *	Answer self's Wizard, optionally utilizing the passed
      *	Workbench and current resource selection.  Since in this case

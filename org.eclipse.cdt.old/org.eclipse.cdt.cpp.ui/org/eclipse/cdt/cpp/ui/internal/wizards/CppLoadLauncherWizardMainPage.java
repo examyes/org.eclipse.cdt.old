@@ -238,7 +238,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
    	
    	// working directory name label
    	Label directoryLabel = new Label(workingDirectoryGroup,SWT.NONE);
-   	directoryLabel.setText("Working Directory:");
+   	directoryLabel.setText(_plugin.getLocalizedString("debugLauncherMain.WorkingDirectory"));
 
       GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
    	//data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
@@ -257,7 +257,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
 
    	// browse button
    	workingDirectoryBrowseButton = new Button(workingDirectoryGroup, SWT.PUSH);
-   	workingDirectoryBrowseButton.setText("Browse...");
+   	workingDirectoryBrowseButton.setText(_plugin.getLocalizedString("debugLauncherMain.Browse"));
    	workingDirectoryBrowseButton.addListener(SWT.Selection,this);
    	workingDirectoryBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
 

@@ -96,7 +96,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	if (_element instanceof DataElement)
 	    {
          qualifiedFileName = ((DataElement)_element).getSource();
-         System.out.println("CppLoadLauncherWizard:performFinish() - qualifiedFileName = " + qualifiedFileName);
+         //System.out.println("CppLoadLauncherWizard:performFinish() - qualifiedFileName = " + qualifiedFileName);
 		IFile file = (IFile)_api.findFile(((DataElement)_element).getSource());
 		if (file == null)
 		    {
@@ -116,7 +116,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	loadInfo.setLauncher(_launcher);
 //	loadInfo.setProgramName(_currentSelectionName);
 	loadInfo.setProgramName(qualifiedFileName);
-   System.out.println("CppLoadLauncherWizard:performFinish() - _currentSelectionName = " + _currentSelectionName);
+   //System.out.println("CppLoadLauncherWizard:performFinish() - _currentSelectionName = " + _currentSelectionName);
 	loadInfo.setProgramParms(parameters);
 	
 	int startupBehaviour;

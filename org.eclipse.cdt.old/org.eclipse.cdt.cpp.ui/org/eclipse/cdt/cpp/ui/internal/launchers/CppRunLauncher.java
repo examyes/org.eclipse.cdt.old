@@ -115,9 +115,6 @@ public class CppRunLauncher implements ILauncherDelegate
 
     public void doLaunch(String program, String parameters, String workingDirectory)
     {
-
-        System.out.println("CppRunLauncher.doLaunch()");
-
         ModelInterface api = ModelInterface.getInstance();
 
         String command = program + " " + parameters;
