@@ -5,6 +5,6 @@
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.runtime_2.0.0/runtime.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.core.resources_2.0.0/resources.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui_2.0.0/workbench.jar"/>
-    <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.win32_2.0.0/ws/win32/swt.jar"/>
+    <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.motif_2.0.0/ws/motif/swt.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
