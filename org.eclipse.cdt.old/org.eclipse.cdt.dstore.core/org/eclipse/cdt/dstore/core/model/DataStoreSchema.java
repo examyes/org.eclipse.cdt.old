@@ -68,6 +68,8 @@ public class DataStoreSchema
 		containsD.setDepth(100);
 
 		DataElement descriptorForD  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.descriptor_for"));	
+		
+		descriptorForD.setDepth(0);
 		DataElement parentD       = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.parent"));	
 		DataElement argsD         = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.arguments"));	
 		DataElement abstracts     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.abstracts"));
@@ -130,7 +132,7 @@ public class DataStoreSchema
         _dataStore.createReference(fsObject, fileD,    containsD);
         _dataStore.createReference(fsObject, dirD,     containsD);
 		_dataStore.createReference(fsObject, fsObject, containsD);
-		_dataStore.createReference(hostD,    fsObject, containsD);
+		_dataStore.createReference(hostD,    fsObject, containsD); 
 		_dataStore.createReference(deviceD,  dirD, containsD);
 		_dataStore.createReference(deviceD,  fileD, containsD);
 		_dataStore.createReference(dirD,     dirD, containsD);
