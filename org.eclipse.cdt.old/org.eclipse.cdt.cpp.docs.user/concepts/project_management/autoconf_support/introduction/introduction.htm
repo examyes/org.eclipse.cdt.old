@@ -18,7 +18,8 @@
 </table>
 ----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-<caption><!---------->
+<caption>&nbsp;
+<p><!---------->
 <br><!---------->
 <br><!---------->
 <br><!----------></caption>
@@ -26,7 +27,8 @@
 <tr>
 <td>
 <h1>
-Project Management using autoconf and automake</h1>
+Introduction to Project Management support using GNU autoconf and automake
+tools</h1>
 <!----- 
      <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
         Command View</font></b></td>
@@ -34,59 +36,77 @@ Project Management using autoconf and automake</h1>
 </tr>
 
 <tr>
-<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">The Command View is used to launch
-commands that user could normally launch from a Windows shell. Two pieces
-of information are used to launch the command: the working directory, and
-the command itself.
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">
+<dd>
+<font size=+1>The C/C++ IDE provides support for using GNU automake and
+autoconf tools.&nbsp; These tools are used to manage C/C++ projects under
+UNIX like systems. Using these tools has many advantages. The&nbsp; first
+is solving the project portability problems, when software packages are
+required to run on multi - UNIX like platforms. In addition, these tools
+takes away the burden of creating and maintaining Makefiles and instead,
+the user will deal with a much simpler files named Makefile.am.</font></dd>
+
+<dd>
+<font size=+1>For more information regarding automake and autoconf, we
+suggest to visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;</font></dd>
+
+<dd>
+</dd>
+
+<dd>
+<font size=+1>Support for Project Management, which is provided by the
+C/C++ IDE, can be defined in two categories.&nbsp; The first category is
+generating support for project that either newly created or imported to
+the tool without being managed by automake and autoconf before. The second
+category is when you import a software package that has already autoconf
+and automake configuration files.&nbsp;</font></dd>
+
+<dd>
+<font size=+1></font></dd>
+
+<dd>
+<font size=+1>Before we dive in and explain how to accomplish that tasks
+for managing your project, let us explain some of the terminology that
+will be used in this section</font></dd>
+
+<p><br><b><font size=+3>Terminology and Definitions</font></b>
 <br>&nbsp;
-<br>&nbsp;</td>
+<ul>
+<li>
+<font size=+1>Configuration files: Any files that are either input or output&nbsp;
+to automake and autoconf&nbsp; - Makefile.am,&nbsp; Makefile.in, configure.in
+, configure and some other auxiliary files.</font></li>
+
+<li>
+<font size=+1>Managed Project:&nbsp; A project that has all the configuration
+files mentioned above.</font></li>
+
+<li>
+<font size=+1>Unmanaged Project: A project that does not have any configuration
+files.</font></li>
+
+<li>
+<font size=+1>Project Structure: The way the structure is organized with
+regard to its directories and their Makefile.am's.</font></li>
+</ul>
+
+<p><br><b><font size=+2>Generating Project Configuration Files</font></b>
+<p><font size=+1>Whether it is a newly created C/C++ project or a project
+that was imported with no configuration files, that task to generate the
+support is the as follows:</font>
+<br><font size=+1>1-&nbsp;</font>
+<p><b><font size=+2>Maintaining Project Configuration Files</font></b>
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<p>&nbsp;</td>
 </tr>
 
 <tr>
-<td ALIGN=LEFT VALIGN=TOP COLSPAN="2"><b>The Working Directory</b>
-<br>Specifying a working directory has the effect of changing to that directory
-before running the command.&nbsp;
-<p>As you manoeuvre through your files in the Navigator View, the working
-directory will be updated. If you need to explicitly change the working
-directory the <b>Browse</b> button will bring up a dialog to help you.</td>
-</tr>
-
-<tr>
-<td ALIGN=LEFT VALIGN=TOP COLSPAN="2"><b>The Command Line</b>
-<br>Simply type a command in the entryfield and click <b>Run</b> to launch
-the command. You will be automatically taken to the Output View where you
-can view the output of the command as well as Cancel the command.</td>
-</tr>
-
-<tr>
-<td ALIGN=LEFT VALIGN=TOP COLSPAN="2"><b>Important Notes about Environment:</b>
-<ol>
-<li>
-Each command is executed as a new process, so any changes to environment
-will not be persistent. For example, if you launch the command <b>set PATH=some/new/path;%PATH%</b>,
-the change to the PATH variable will be lost.&nbsp;</li>
-
-<li>
-Due to the way that the Java Virtual Machine works, the environment in
-which you start the Websphere Studio Workbench is NOT inherited by this
-plugin. Therefore any environment variables you may set in the same session
-and just prior to bringing up the Desktop, are not "seen" by any commands
-you will launch.&nbsp;</li>
-
-<li>
-If you need to change environment variables before executing a command,
-create a batch file that does this and then launches your command. For
-example you could write a file <i>doIt.bat</i> that looked like:&nbsp;</li>
-
-<pre><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set PATH=some/new/path;%PATH%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set DEBUG=1
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %1
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></pre>
-The <b>%1</b> at the end of the file just launches whatever command was
-specified as a parameter to <i>doIt.bat</i>. If you wanted to run <i>myCommand</i>,
-you would then launch the command <b>doIt myCommand</b>, and you would
-get the proper environment set before the <i>myCommand</i> was launched.</ol>
-</td>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2"></td>
 </tr>
 </table>
 <!----------------------------------------------------------------------------------->
