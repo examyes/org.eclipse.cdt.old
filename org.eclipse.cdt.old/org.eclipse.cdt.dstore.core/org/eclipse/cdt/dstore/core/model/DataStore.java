@@ -447,7 +447,7 @@ public class DataStore
 		  String sugId = reference.getId();
 		  _hashMap.put(sugId, reference);
 		  
-		  //***refresh(parent);
+		  refresh(parent);
 		  
 		  return reference;
 	      }
@@ -479,7 +479,7 @@ public class DataStore
 		  String sugId = reference.getId();
 		  _hashMap.put(sugId, reference);
 
-		  //***refresh(parent);
+		  refresh(parent);
 		  
 		  return reference;
 	      }
@@ -539,7 +539,7 @@ public class DataStore
 		String fromId = fromReference.getId();
 		_hashMap.put(fromId, fromReference);
 		
-		//***refresh(parent);
+		refresh(parent);
 		
 		return toReference;
 	    }
@@ -586,7 +586,7 @@ public class DataStore
 		
 		String fromId = fromReference.getId();
 		_hashMap.put(fromId, fromReference);
-		//***refresh(parent);
+		refresh(parent);
  	
 		return toReference;
 	    }
@@ -853,7 +853,7 @@ public class DataStore
 		  for (int i = 0; i < from.getNestedSize(); i++)
 		      {
 			  DataElement deletee = from.get(i);
-			  deleteObjectHelper(from, deletee, 2);		  
+			  deleteObjectHelper(from, deletee, 5);		  
 		      }
 		  
 		  refresh(from);
