@@ -340,7 +340,7 @@ public class GetGdbModuleParts
      int moduleID = _moduleManager.getModuleID(moduleName);
      if(moduleID<=0)
      {   if (Gdb.traceLogger.ERR)
-             Gdb.traceLogger.err(1,"ERROR: GetGdbModuleParts.isPartInModule invalid moduleID==0 for moduleName="+moduleName );
+             Gdb.traceLogger.err(2,"ERROR: GetGdbModuleParts.isPartInModule invalid moduleID==0 for moduleName="+moduleName );
          return part;
      }
      int partID = _moduleManager.getPartID(moduleID,partName);
