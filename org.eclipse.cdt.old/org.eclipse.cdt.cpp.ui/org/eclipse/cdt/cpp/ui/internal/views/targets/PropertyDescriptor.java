@@ -5,6 +5,9 @@ package com.ibm.cpp.ui.internal.views.targets;
  * WebSphere Studio Workbench
  * (c) Copyright IBM Corp 2000
  */
+ 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+ 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.swt.widgets.Composite;
@@ -44,7 +47,7 @@ public class PropertyDescriptor implements IPropertyDescriptor{
 	/**
 	 * The property id.
 	 */
-	private String id;
+	private Object id;
 
 	/**
 	 * The name to display for the property.
@@ -176,7 +179,7 @@ public Object getHelpContextIds() {
  * <code>IPropertyDescriptor</code> method returns the value supplied
  * on the constructor.
  */
-public String getId() {
+public Object getId() {
 	return id;
 }
 /**
@@ -213,9 +216,9 @@ public boolean isCompatibleWith(IPropertyDescriptor anotherProperty) {
 		return false;
 
 	// Compoare id		
-	String id1 = getId();
-	String id2 = anotherProperty.getId();
-	if (!id1.equals(id2))
+	Object id1 = getId();
+	Object id2 = anotherProperty.getId();
+	if (id1!=id2)
 		return true;
 
 	// Compare Category (may be null)

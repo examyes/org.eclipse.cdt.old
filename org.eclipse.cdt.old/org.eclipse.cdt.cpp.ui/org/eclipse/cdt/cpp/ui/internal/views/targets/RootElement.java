@@ -8,6 +8,8 @@ package com.ibm.cpp.ui.internal.views.targets;
  * the Common Public License which accompanies this distribution.
  */
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+
 
 import org.eclipse.jface.viewers.*;
 import java.util.*;
@@ -108,11 +110,11 @@ public IPropertyDescriptor[] getPropertyDescriptors()
  *
  **/
 
-public Object getPropertyValue(String propKey)
+public Object getPropertyValue(Object propKey)
 {
 	for(int i =0; i< getTargets().size(); i++)
 	{
-		if (propKey.equals(P_ID_TARGETS[i]))
+		if (((String)propKey).equals(P_ID_TARGETS[i]))
 			return getTargets().elementAt(i);
 			
 	}

@@ -10,6 +10,7 @@ package com.ibm.cpp.ui.internal.views.targets;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 public class BrowsePropertyDescriptor extends PropertyDescriptor {
 	String title;

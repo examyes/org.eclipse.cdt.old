@@ -10,7 +10,7 @@ package com.ibm.cpp.ui.internal.views.targets;
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
 import org.eclipse.ui.views.properties.IPropertySheetPage; 
-//import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.eclipse.ui.views.properties.IPropertySourceProvider;
  
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.extra.internal.extra.*;

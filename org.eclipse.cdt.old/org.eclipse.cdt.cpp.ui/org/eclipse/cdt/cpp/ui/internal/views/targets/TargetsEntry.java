@@ -9,8 +9,9 @@ package com.ibm.cpp.ui.internal.views.targets;
  */
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
-//import org.eclipse.ui.views.properties.IPropertySourceProvider;
-//import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
  
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.*;
@@ -129,7 +130,7 @@ private List computeMergedPropertyDescriptors() {
 		Collator coll = Collator.getInstance(Locale.getDefault());
 		public int compare(Object a, Object b) {
 			IPropertyDescriptor d1, d2;
-			String dname1, dname2;
+			Object dname1, dname2;
 			d1 = (IPropertyDescriptor) a;
 			//dname1 = d1.getDisplayName();
 			dname1 = d1.getId();

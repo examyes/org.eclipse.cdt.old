@@ -5,7 +5,8 @@ package com.ibm.cpp.ui.internal.views.targets;
  * WebSphere Studio Workbench
  * (c) Copyright IBM Corp 2000
  */
-//import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import org.eclipse.jface.viewers.*;
 import java.util.*;
@@ -110,9 +111,9 @@ public IPropertyDescriptor[] getPropertyDescriptors()
  * @return java.lang.Object associated property
 */
 
-public Object getPropertyValue(String propKey)
+public Object getPropertyValue(Object propKey)
 {
-	if (propKey.equals(IBasicPropertyConstants.P_TEXT))
+	if (((String)propKey).equals(IBasicPropertyConstants.P_TEXT))
 		return getName();
 	return null;
 }
@@ -123,7 +124,7 @@ public Object getPropertyValue(String propKey)
  * @param property Object
  * @return boolean
  */
-public boolean isPropertySet(String property) {
+public boolean isPropertySet(Object property) {
 	return false;
 }
 /**
@@ -146,7 +147,7 @@ public boolean isTarget() {
  * @see IPropertySource#resetPropertyValue
  * @param property Object
  */
-public void resetPropertyValue(String property){}
+public void resetPropertyValue(Object property){}
 void setImageDescriptor(ImageDescriptor desc)
 {	imageDescriptor = desc;
 }
@@ -173,8 +174,8 @@ void setParent(RootElement newParent)
  * @param	name 	The name of the Property being set
  * @param	value 	The new value of the property
  */
-public void setPropertyValue(String name, Object value) {
-	if (name.equals(IBasicPropertyConstants.P_TEXT)) {
+public void setPropertyValue(Object name, Object value) {
+	if (((String)name).equals(IBasicPropertyConstants.P_TEXT)) {
 		setName((String) value);
 		return;
 	}

@@ -8,6 +8,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  * the Common Public License which accompanies this distribution.
  */
 import org.eclipse.ui.views.properties.IPropertySource; 
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
  
 import com.ibm.dstore.core.model.*;
 import org.eclipse.jface.viewers.*;
@@ -106,12 +107,12 @@ public IPropertyDescriptor[] getPropertyDescriptors()
 /**
 *
 */
-public Object getPropertyValue(String propKey) {
-	if (propKey.equals(P_ID_NAME))
+public Object getPropertyValue(Object propKey) {
+	if (((String)propKey).equals(P_ID_NAME))
 		return getTargetName();
-	if (propKey.equals(P_ID_WORKING_DIR))
+	if (((String)propKey).equals(P_ID_WORKING_DIR))
 		return fWorkingDirectory;
-	if (propKey.equals(P_ID_MAKE_INV))
+	if (((String)propKey).equals(P_ID_MAKE_INV))
 		return fMakeInvocation;
 
 	return super.getPropertyValue(propKey);
@@ -157,8 +158,8 @@ public void setInvocation(String invocation) {
  * @param	name 	The name of the Property being set
  * @param	value 	The new value of the property
  */
-public void setPropertyValue(String name, Object value) {
-	if (name.equals(P_ID_NAME)) {
+public void setPropertyValue(Object name, Object value) {
+	if (((String)name).equals(P_ID_NAME)) {
 		setTargetName((String)value);
 	}
 	if (name.equals(P_ID_MAKE_INV)) {

@@ -6,6 +6,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  * (c) Copyright IBM Corp 2000
  */
 //import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.views.properties.*;
