@@ -77,30 +77,6 @@ public class Repository extends Project
     }    
   }
 
-    private class RefreshResourcesAction implements Runnable
-    {
-	private Repository _repository;
-
-	public RefreshResourcesAction()
-	{
-	}
-
-	public void run()
-	{
-	    DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_remoteRoot.getDescriptor(), "C_REFRESH");
-	    if (refreshDescriptor != null)
-		{	
-		    _dataStore.synchronizedCommand(refreshDescriptor, _remoteRoot);
-		    Object[] children = internalGetChildren(_remoteRoot, true);
-		    for (int i = 0; i < children.length; i++)
-			{
-			    ResourceElement child = (ResourceElement)children[i];
-			    child.refreshLocal(1, null);
-			}
-		} 
-	}
-    }
-
     private class OpenConnectionAction implements Runnable
     {
 	private Repository _repository;
@@ -150,7 +126,6 @@ public class Repository extends Project
 		    api.openProject(_repository);
 
 		    
-		    _refreshAction.run(); 
 
 		}
 	    else
@@ -186,8 +161,6 @@ public class Repository extends Project
     private Connection _connection;
     protected Vector  _children;
 
-    private RefreshNavigatorAction _refreshAction;
-    private RefreshResourcesAction _refreshResourcesAction;
 
     private ArrayList _persistentProperties;
     private CppPlugin _plugin;
@@ -227,8 +200,6 @@ public class Repository extends Project
   public void initialize()
   {
     _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1); 
-    _refreshAction = new RefreshNavigatorAction("refresh");
-    _refreshResourcesAction = new RefreshResourcesAction();
 
     _plugin = CppPlugin.getDefault();
     _persistentProperties = new ArrayList();
@@ -525,16 +496,10 @@ public class Repository extends Project
 
     public void refresh()
     {
-	if (_refreshAction != null)
-	    {
-		_refreshAction.run();
-	    }
     }
 
     public void refreshLocal(int depth, IProgressMonitor monitor)
     {
-	Display d= ModelInterface.getInstance().getDummyShell().getDisplay();
-	d.asyncExec(_refreshResourcesAction);
     }  
 
   public String getPropertyPath()
@@ -640,7 +605,6 @@ public class Repository extends Project
 	    workingPath.delete();	     
 	}
      
-    _refreshAction.run();
   }
 
   private String getInvocation()
