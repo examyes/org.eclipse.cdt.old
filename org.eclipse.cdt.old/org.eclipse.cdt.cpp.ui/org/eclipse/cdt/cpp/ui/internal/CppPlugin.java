@@ -399,25 +399,25 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    {
 		if (resource.isOpen())
 		    {
-		IProjectNature nature = null;
-		try
-		    {
-			nature = resource.getNature("com.ibm.cpp.ui.cppnature");
-		    }
-		catch (CoreException e)
-		    {
-			//System.out.println(e);
-		    }
-		
-		if (nature != null)
-		    {
-			//System.out.println("nature for " + resource.getName() + " is " + nature);
-			return true;
-		    }
-		else
-		    {
-			return false;
-		    }
+			IProjectNature nature = null;
+			try
+			    {
+				nature = resource.getNature("com.ibm.cpp.ui.cppnature");
+			    }
+			catch (CoreException e)
+			    {
+				//System.out.println(e);
+			    }
+			
+			if (nature != null)
+			    {
+				//System.out.println("nature for " + resource.getName() + " is " + nature);
+				return true;
+			    }
+			else
+			    {
+				return false;
+			    }
 		    }
 		else
 		    {

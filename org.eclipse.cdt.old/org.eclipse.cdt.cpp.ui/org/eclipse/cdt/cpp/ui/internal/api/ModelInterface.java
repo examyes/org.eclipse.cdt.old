@@ -533,7 +533,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void openProject(IProject project)
     {
-    	if (project.isOpen())
+    	if (project.isOpen() && _plugin.isCppProject(project))
 	    {	     
 		OpenProjectAction openAction = new OpenProjectAction(project);
 		Shell shell = getDummyShell();
