@@ -93,8 +93,15 @@ public class OpenProjectAction extends CustomAction
 		_projects = new ArrayList();
 		
 		IProject project = _api.findProjectResource(subject);
-        setEnabled(!project.isOpen());
-        _projects.add(project);
+		if (project == null)
+		{
+			setEnabled(false);
+		}
+		else
+		{
+   	     	setEnabled(!project.isOpen());
+        	_projects.add(project);
+		}
       }
 
   public OpenProjectAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
