@@ -78,7 +78,9 @@ public class ProjectMiner extends Miner
      _workspace.addNestedData(project, true);
      
      project.expandChildren();
-     _dataStore.refresh(_workspace);     
+     DataElement refreshD = _dataStore.localDescriptorQuery(project.getDescriptor(), "C_REFRESH");
+     _dataStore.command(refreshD, project);_dataStore.refresh(project);
+     _dataStore.refresh(_workspace); 
  }
     
  private void handleCloseProject(DataElement project, DataElement status)
@@ -90,8 +92,8 @@ public class ProjectMiner extends Miner
 
  private void handleRefreshProject(DataElement project, DataElement status)
  {
-  DataElement refreshD = _dataStore.localDescriptorQuery(project.getDescriptor(), "C_REFRESH");
-  _dataStore.command(refreshD, project);
+  //DataElement refreshD = _dataStore.localDescriptorQuery(project.getDescriptor(), "C_REFRESH");
+  // _dataStore.command(refreshD, project);
  } 
 
 

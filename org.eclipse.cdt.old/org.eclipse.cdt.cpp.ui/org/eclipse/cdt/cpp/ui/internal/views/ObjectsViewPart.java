@@ -129,6 +129,11 @@ public class ObjectsViewPart extends GenericViewPart
     {
 	_viewer.setInput((getSite().getPage().getInput()));      
     } 
+   
+   public void initDataElementInput(DataElement de)
+   {
+   }
+ 
     
     private void handleSelection(IStructuredSelection es)
     {
@@ -139,6 +144,7 @@ public class ObjectsViewPart extends GenericViewPart
 		if (object != null)
 		    {
 			boolean changed = false;
+			boolean dataElement = false;
 			
 			if (object instanceof IDataElementContainer)
 			    {
@@ -169,21 +175,36 @@ public class ObjectsViewPart extends GenericViewPart
 					changed = _plugin.setCurrentProject((IResource)object);
 				    }  
 			    }
+                        else if (object instanceof DataElement)
+			 {
+                          DataElement theObject = (DataElement)object;
+			  DataElement theParent = theObject;
+			  while ((theParent != null) && (!theParent.getType().equals("Project")) && (!theParent.getType().equals("data")))
+                           theParent = theParent.getParent();
+			  if (theParent.getType().equals("Project"))
+                          {
+                           initDataElementInput(theParent);
+			   dataElement = true;
+			  }
+			  
+                         }
+			
 			if (changed)
 			    {		
 				_plugin.getCurrentDataStore().getDomainNotifier().enable(true);
 			    }	    
-			
-			initInput(_plugin.getCurrentDataStore());		
+			if(!dataElement)
+			 initInput(_plugin.getCurrentDataStore());		
 		    }	
 	    }
     }
 
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
-	if ((part instanceof ResourceNavigator) || 
+   	if ((part instanceof ResourceNavigator) || 
 	    (part instanceof RemoteProjectViewPart) ||
-	    (part instanceof RemoteProjectNavigator)
+	    (part instanceof RemoteProjectNavigator) ||
+            (part instanceof CppProjectsViewPart)
 	    )
 	    {
 		if (sel instanceof IStructuredSelection)

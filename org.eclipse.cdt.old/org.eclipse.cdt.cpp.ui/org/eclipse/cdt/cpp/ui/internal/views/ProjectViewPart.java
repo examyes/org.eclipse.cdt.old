@@ -56,13 +56,25 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	      }
 	    } 
     }  
-    
+ public void initDataElementInput(DataElement theProject)
+ {
+  ArrayList parseReferences = theProject.getAssociated("Parse Reference");
+  if (parseReferences.size() < 1)
+   return;
+  
+  DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
+  if (projectParseInformation == null)
+   return;
+  doSpecificInput(projectParseInformation);
+ }
+ 
     public abstract void doClear();
  
-   public void doInput(IProject project)
+  public void doInput(IProject project)
   {
       //Grab the project DataElement
       DataElement projectObj = _plugin.getModelInterface().findProjectElement(project);
+      
       if (projectObj == null)
 	  { 
 	      return;
@@ -122,6 +134,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	    }
     }
 
+ 
 }
 
 
