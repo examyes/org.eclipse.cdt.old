@@ -161,9 +161,7 @@ public class DataStoreSchema
         _dataStore.createReference(minerObjects, minersD, abstracts, abstractedBy);
         _dataStore.createReference(minerObjects, minerD, abstracts, abstractedBy);
         _dataStore.createReference(minerObjects, dataD, abstracts, abstractedBy);
-
-	
-	
+		
 	// containers
 	_dataStore.createReference(containerObjectD, rootD, abstracts, abstractedBy);	
 	_dataStore.createReference(containerObjectD, hostD, abstracts, abstractedBy);	
@@ -188,7 +186,7 @@ public class DataStoreSchema
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET", false); 
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST", false);
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Init_Miners"), "*", "C_INIT_MINERS", false);
-	_dataStore.createCommandDescriptor(rootD, "Set Miners", "-", "C_SET_MINERS", false);
+	_dataStore.createCommandDescriptor(rootD, "Add Miners", "-", "C_ADD_MINERS", false);
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Show_Ticket"), "-", "C_VALIDATE_TICKET", false);	
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Get_Schema"), "*", "C_SCHEMA", false);	
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT", false);

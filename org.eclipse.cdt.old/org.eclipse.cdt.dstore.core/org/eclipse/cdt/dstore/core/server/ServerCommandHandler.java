@@ -17,70 +17,55 @@ import java.lang.*;
 
 public class ServerCommandHandler extends CommandHandler
 {
-    private ArrayList            _miners;
     private ArrayList            _loaders;
+    private MinerLoader          _minerLoader;
     
-  public ServerCommandHandler(ArrayList loaders)
+    public ServerCommandHandler(ArrayList loaders)
     {
-      super();
-      _loaders = loaders;
-      _miners = new ArrayList();
+	super();
+	_loaders = loaders;
     }
-
-
-  public void setDataStore(DataStore dataStore)
-  { 
-      super.setDataStore(dataStore);
-  }
+        
+    public void setDataStore(DataStore dataStore)
+    { 
+	super.setDataStore(dataStore);
+    }
     
-  public void loadMiners()
-  {
+    public void loadMiners()
+    {
 	if (_dataStore != null)
-	{
-		MinerLoader minerLoader = new MinerLoader(_dataStore, _loaders);
-		
+	    {
+		if (_minerLoader == null)
+		    {
+			_minerLoader = new MinerLoader(_dataStore, _loaders);
+		    }		
 		// load the miners
-		_miners = minerLoader.loadMiners();
-	} 
-  }
+		_minerLoader.loadMiners();
+
+
+	    } 
+    }
     
-  public ArrayList getMiners()
-  {
-    return _miners;
-  }
-
-  public Miner getMiners(String name)
-  {
-    for (int i = 0; i < _miners.size(); i++)
-      {
-	Miner miner = (Miner)_miners.get(i);
-	if (miner.getClass().getName().equals(name))
-	  {
-	    return miner;	
-	  }	
-      }
-
-    return null;
-  }
-
-  public void finishMiner(String name)
-  {
-    Miner miner = getMiners(name);
-    miner.finish();
-
-    _miners.remove(miner);
-  }
-  
-  public void finish()
-  {
-    for (int i = 0; i < _miners.size(); i++)
-      {
-	  Miner miner = (Miner)_miners.get(i);
-	  miner.finish();	
-      }
-
-    super.finish();
-  }
+    public ArrayList getMiners()
+    {
+	return _minerLoader.getMiners();
+    }
+    
+    public Miner getMiner(String name) 
+    {
+	return _minerLoader.getMiner(name);
+    }
+    
+    public void finishMiner(String name)
+    {
+	_minerLoader.finishMiner(name);
+    }
+    
+    public void finish()
+    {
+	_minerLoader.finishMiners();
+	super.finish();
+    }
 
   public void sendCommands()
     {
@@ -148,65 +133,59 @@ public class ServerCommandHandler extends CommandHandler
 		  _dataStore.setAttribute(DataStoreAttributes.A_HOST_PATH, dataObject.getSource());
 		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));		
 	      }
-	  else if (commandName.equals("C_SET_MINERS"))
+	  else if (commandName.equals("C_ADD_MINERS"))
 	      {
 		  DataElement location = (DataElement)command.get(1);
-		  _dataStore.setMinersLocation(location);
+		  _dataStore.addMinersLocation(location);
 		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));	
-		  _dataStore.refresh(status);
 	      }
           else if (commandName.equals("C_SCHEMA"))
 	      {
-		  if (_miners.size() == 0)
-		      {
-			  loadMiners(); 
-		      }
+		  loadMiners(); 	  
 		  
 		  DataElement schemaRoot = _dataStore.getDescriptorRoot();
 		  
 		  // update all descriptor objects
 		  _dataStore.refresh(schemaRoot);		  
 		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));
-		  _dataStore.refresh(status);
 	      }
 	  else if (_dataStore.validTicket())
 	      {
 		  if (status != null)
 		      {
-			      boolean failure = false;
-			      for (int j = 0; (j < _miners.size()) && !failure; j++)
-				  {
-				      Miner miner = (Miner)_miners.get(j);
-				      
-				      
-				      if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
-					  {
-						  status = miner.command(command);
-					      
-					      if ((status != null) && 
+			  boolean failure = false;
+			  ArrayList miners = _minerLoader.getMiners();
+			  for (int j = 0; (j < miners.size()) && !failure; j++)
+			      {
+				  Miner miner = (Miner)miners.get(j);
+				  
+				  
+				  if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
+				      {
+					  status = miner.command(command);
+					  
+					  if ((status != null) && 
 						  status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
-						  {
-						      failure = true;
-						  }
-					  }		
-
-				  }
+					      {
+						  failure = true;
+					      }
+				      }		
+				  
+			      }
 		      }
 	      }
-
+	  
 	  _dataStore.refresh(status);
-	
+	  
 	}
-  }	
-
-  public void sendFile(String fileName, File file)
-  {
+    }	
+    
+    public void sendFile(String fileName, File file)
+    {
 	// look for a file handler before defaulting to datastore	  	
-	  		
-  	
   	_dataStore.saveFile(fileName, file);
-  }
-      
+    }
+    
       
   public void sendFile(String fileName, byte[] bytes, int size, boolean binary)
   {  

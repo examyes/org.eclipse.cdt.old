@@ -51,7 +51,7 @@ public final class DataStore
     private DomainNotifier      _domainNotifier;
 
     private ArrayList           _loaders;
-    private String              _minersLocation;
+    private ArrayList           _minersLocations;
     
     private boolean             _isConnected;
     private boolean             _logTimes;
@@ -200,27 +200,46 @@ public final class DataStore
      *
      * @param minersLocation a string representing the location of the miners
      */
-    public DataElement setMinersLocation(String minersLocation)
+    public DataElement addMinersLocation(String minersLocation)
     {
-	_minersLocation = minersLocation;
-	DataElement location = createObject(_tempRoot, "location", _minersLocation);
-	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_MINERS", 1);  
-	ArrayList args = new ArrayList();
-	args.add(location);
-	//synchronizedCommand(cmd, args, _root);
-	return command(cmd, args, _root);
+	if (_minersLocations == null)
+	    {
+		_minersLocations = new ArrayList();
+	    }
+	if (!_minersLocations.contains(minersLocation))
+	    {
+		_minersLocations.add(minersLocation);
+
+		if (isVirtual())
+		    {
+			DataElement location = createObject(_tempRoot, "location", minersLocation);
+			DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_ADD_MINERS", 1);  
+			ArrayList args = new ArrayList();
+			args.add(location);
+			return command(cmd, args, _root);
+		    }
+	    }
+
+	return null;
     }
+
 
     /**
      * Tells the <code>DataStore</code> where to find the miners which it needs to load. 
      *
      * @param minersLocation a <code>DataElement</code> representing the location of the miners
      */
-    public void setMinersLocation(DataElement location)
+    public void addMinersLocation(DataElement location)
     {
-	if (_minersLocation != location.getName())
+	String name = location.getName();
+	if (_minersLocations == null)
 	    {
-		_minersLocation = location.getName();
+		_minersLocations = new ArrayList();
+	    }
+
+	if (!_minersLocations.contains(name))
+	    {
+		_minersLocations.add(name);
 	    }
     }
   
@@ -538,10 +557,10 @@ public final class DataStore
      *
      * @return the location of the miners
      */
-    public String getMinersLocation()
-    {
-	return _minersLocation;
-    }
+    public ArrayList getMinersLocation()
+	{
+	    return _minersLocations;
+	}
 
     /**
      * Returns the domain notifier.
@@ -2845,7 +2864,7 @@ public final class DataStore
 
     private void initialize()
     {
-	_minersLocation = "org.eclipse.cdt.dstore.core";
+	_minersLocations = new ArrayList();
 	_random = new Random(System.currentTimeMillis());
 	
 

@@ -19,31 +19,43 @@ public class MinerLoader implements ISchemaRegistry
 {
     private DataStore            _dataStore;
     private ArrayList            _miners;
+    private ArrayList            _minerList;
     private ArrayList            _loaders;
-
+    
     public MinerLoader(DataStore dataStore, ArrayList loaders)
     {
 	_dataStore = dataStore;
 	_loaders = loaders;
 	_miners = new ArrayList();
+	_minerList = new ArrayList();
     }
 
-    public ArrayList loadMiners()
+    public void loadMiners()
     {
 	// load the miners
 	String pluginDir = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-	String minersDir = _dataStore.getMinersLocation();
-
-	String minerFile = null;
-	if (minersDir.endsWith(".dat"))
+	ArrayList minerLocations = _dataStore.getMinersLocation();
+	
+	for (int i = 0; i < minerLocations.size(); i++)
 	    {
-		minerFile = pluginDir + File.separator + minersDir;		
+		String minersDir = (String)minerLocations.get(i);		
+		String minerFile = null;
+		if (minersDir.endsWith(".dat"))
+		    {
+			minerFile = pluginDir + File.separator + minersDir;		
+		    }
+		else
+		    {
+			minerFile = pluginDir + File.separator + minersDir + File.separator + "minerFile.dat";
+		    }
+		_dataStore.trace("load miners for " + minerFile);
+		
+		loadMiners(minerFile);
 	    }
-	else
-	    {
-		minerFile = pluginDir + File.separator + minersDir + File.separator + "minerFile.dat";
-	    }
+    }
 
+    public ArrayList loadMiners(String minerFile)
+    {
 	// load the miners
 	ArrayList unconnectedMiners = new ArrayList();
 	File file = new File(minerFile);	
@@ -63,28 +75,37 @@ public class MinerLoader implements ISchemaRegistry
 			    (name.length() > 5))
 
 			    {
-				try
+				if (!_minerList.contains(name))
 				    {
-					ExternalLoader loader = getLoaderFor(name);
-					if (loader != null)
+					// only load new miners 
+					try
 					    {
-						Class theClass = loader.loadClass(name);
-						Miner miner = (Miner)theClass.newInstance();
-						if (miner != null)
+						ExternalLoader loader = getLoaderFor(name);
+						if (loader != null)
 						    {
-							unconnectedMiners.add(miner);
-							miner.setExternalLoader(loader);
+							Class theClass = loader.loadClass(name);
+							Miner miner = (Miner)theClass.newInstance();
+							if (miner != null)
+							    {
+								unconnectedMiners.add(miner);
+								miner.setExternalLoader(loader);
+								_minerList.add(name);
+							    }
 						    }
 					    }
+					catch (ClassNotFoundException e)
+					    {
+					    }
+					catch (InstantiationException e)
+					    {
+					    }
+					catch (IllegalAccessException e)
+					    {
+					    }
 				    }
-				catch (ClassNotFoundException e)
+				else
 				    {
-				    }
-				catch (InstantiationException e)
-				    {
-				    }
-				catch (IllegalAccessException e)
-				    {
+					//System.out.println("already have " + name);
 				    }
 			    }
 		    }
@@ -100,7 +121,7 @@ public class MinerLoader implements ISchemaRegistry
 	
 	
 	connectMiners(unconnectedMiners);
-	extendSchema(_dataStore);
+	//extendSchema(_dataStore);
 	return _miners;
     }
 
@@ -143,6 +164,7 @@ public class MinerLoader implements ISchemaRegistry
 	    {
 		// set the datastore for the miner 
 		miner.setDataStore(_dataStore);
+		miner.extendSchema(_dataStore.getDescriptorRoot());
 	    }
 	return canConnect;
     }
@@ -180,4 +202,38 @@ public class MinerLoader implements ISchemaRegistry
 	return null;
     }
 
+    public ArrayList getMiners()
+    {
+	return _miners;
+    }
+
+    public Miner getMiner(String name) 
+    {
+	for (int i = 0; i < _miners.size(); i++)
+	    {
+		Miner miner = (Miner)_miners.get(i);
+		if (miner.getClass().getName().equals(name))
+		    {
+			return miner;	
+		    }	
+	    }
+	
+	return null;
+    }
+
+    public void finishMiner(String name)
+    {
+	Miner miner = getMiner(name);
+	miner.finish();
+	_miners.remove(miner);
+    }
+
+    public void finishMiners()
+    {
+	for (int i = 0; i < _miners.size(); i++)
+	    {
+		Miner miner = (Miner)_miners.get(i);
+		miner.finish();	
+	    }
+    }
 }

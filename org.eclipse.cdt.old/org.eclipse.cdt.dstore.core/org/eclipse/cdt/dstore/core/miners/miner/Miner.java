@@ -270,11 +270,6 @@ public abstract class Miner implements ISchemaExtender
 	_minerData      = _dataStore.createObject(_minerElement, getLocalizedString("model.data"), getLocalizedString("model.Data"), name);
 	_minerTransient = _dataStore.createObject(_minerElement, getLocalizedString("model.transient"), getLocalizedString("model.Transient_Objects"), name);
 
-	
-	// extend schema
-	DataElement schemaRoot = _dataStore.getDescriptorRoot();
-	extendSchema(schemaRoot);
-
 	_dataStore.refresh(root, true);		
 	_dataStore.refresh(_minerElement);	
 
