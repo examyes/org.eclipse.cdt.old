@@ -44,7 +44,7 @@ import org.eclipse.jface.dialogs.*;
 public class ConfigureAction extends CustomAction implements SelectionListener
 { 
 	CustomMessageDialog dialog;
-	String[] extraLabels;
+	String[] extraLabels = new String[]{"Do not show this Dialog again"};
 	
 	String updateAllDialogKey = "Show_Update_All_Dialog";
 	String updateMakefileAmKey = "Show_Update_MakefileAm_Dialog";
@@ -105,8 +105,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					String message = new String
 						("Attempting to update existing and/or generating configure.in and makefile.am's "
 							+"\nOld files will be renamed *.old");
-					//execute = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
-					String[] extraLabel = new String[]{"Do not show this Dialog again"};
 					dialog = new CustomMessageDialog(
 										shell,
 										"Updating configure.in and Makefile.am ",
@@ -115,7 +113,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										2,
 										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 										0,
-										extraLabel,
+										extraLabels,
 										this);
 					int result = dialog.open(updateAllDialogKey);
 					if(result!=-1)
@@ -131,8 +129,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					String message = new String
 							("Attempting to update existing makefile.am's"+
 							"\nIf updated then old Makefile.am's will be renamed *.old");
-					//execute = dialog.openConfirm(shell,"Updating Makefile.am's ",message);
-					String[] extraLabel = new String[]{"Do not show this Dialog again"};
 					dialog = new CustomMessageDialog(
 										shell,
 										"Updating Makefile.am ",
@@ -141,7 +137,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										2,
 										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 										0,
-										extraLabel,
+										extraLabels,
 										this);
 					int result = dialog.open(updateMakefileAmKey);
 					if(result!=-1)
@@ -157,8 +153,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					String message = new String
 						("Attempting to update existing configure.in "+
 						"\nIf updated then old configure.in shall be renamed *.old");
-					//execute = dialog.openConfirm(shell,"Updating configure.in",message);
-					String[] extraLabel = new String[]{"Do not show this Dialog again"};
 					dialog = new CustomMessageDialog(
 										shell,
 										"Updating configure.in",
@@ -167,7 +161,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										2,
 										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
 										0,
-										extraLabel,
+										extraLabels,
 										this);
 					int result = dialog.open(updateConfigureInKey);
 					if(result!=-1)
