@@ -81,9 +81,6 @@ public class GdbProcess {
 				close();
 			}
 			private void close() {
-				if (TraceLogger.TRACE.EVT)
-					TraceLogger.TRACE.evt(2, "NotifyingLineInputStreamReader CLOSING");
-				//stop();
 				if (rdr != null)
 					try {
 						rdr.close();
