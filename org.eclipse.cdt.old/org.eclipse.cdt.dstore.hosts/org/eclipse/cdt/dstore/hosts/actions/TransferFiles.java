@@ -251,6 +251,7 @@ public class TransferFiles extends Thread
 				byte[] buffer = new byte[bufferSize];
 				
 				int written = 0;
+				boolean binary = false;
 				while (written < size)
 				    { 
 					int subWritten = 0;
@@ -263,14 +264,30 @@ public class TransferFiles extends Thread
 						written += subWritten;
 					    }
 					
+					if (!binary)
+					    {
+						// hack to find out if this is binary or not!
+						try 
+						    {
+							String dummy = new String(buffer, "UTF-8");
+							if (dummy.length() != subWritten)
+							    {
+								binary = true;
+							    }
+						    }
+						catch (Exception e)
+						    {
+							binary = true;
+						    }
+					    }
 				    	
 					if (written <= bufferSize) 
 					    { 
-						targetDataStore.replaceFile(newSourceStr, buffer, subWritten);
+						targetDataStore.replaceFile(newSourceStr, buffer, subWritten, binary);
 					    }
 					else
 					    {		
-						targetDataStore.replaceAppendFile(newSourceStr, buffer, subWritten);					
+						targetDataStore.replaceAppendFile(newSourceStr, buffer, subWritten, binary);					
 					    }
 					
 					
