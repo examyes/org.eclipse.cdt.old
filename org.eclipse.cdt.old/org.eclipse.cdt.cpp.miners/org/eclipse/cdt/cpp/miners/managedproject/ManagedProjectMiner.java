@@ -101,7 +101,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(managedProjectD,"SharedLib","C_SHAREDLIB_MAKEFILE_AM",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);		
 		
-					
+		 createRelationDescriptor(schemaRoot, "update state");			
 	}
 	
 	public DataElement getWorkspace()
@@ -214,11 +214,30 @@ public class ManagedProjectMiner extends Miner
 			{
 				File makefileAm = getMakefileAm(subject.getFileObject());
 				if(makefileAm!=null)
-				{			
-					String classification = getMakefileClassification(makefileAm);
-					status.setAttribute(DE.A_NAME, "done");
-					DataElement state = _dataStore.createObject(status, "classification", classification);
+				{	
+					String classification = getMakefileClassification(makefileAm);		
+					//DataElement state = _dataStore.createObject(status, "classification", classification);
+					//_dataStore.refresh(status);
+					
+					
+					DataElement state = null;
+					ArrayList updated = subject.getAssociated("update state");
+					if (updated.size() > 0)
+					{
+						state = (DataElement)updated.get(0);	
+						state.setAttribute(DE.A_NAME, classification);
+					}
+					else
+					{							
+						state = _dataStore.createObject(null, "classification", classification);
+						_dataStore.createReference(subject, state, "update state");	
+					}
+
+
 					_dataStore.refresh(status);
+					_dataStore.refresh(subject);
+					status.setAttribute(DE.A_NAME, "done");
+					
 				}	
 			}
 			
@@ -231,21 +250,54 @@ public class ManagedProjectMiner extends Miner
 			if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status,classifier);
+				
+				ArrayList updated = subject.getAssociated("update state");
+				if (updated.size() > 0)
+				{
+					DataElement state = (DataElement)updated.get(0);	
+					state.setAttribute(DE.A_NAME, "2");
+					_dataStore.refresh(state);
+				}
 				subject.refresh(false);
 			}
 			else if (name.equals("C_STATICLIB_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status,classifier);
+			
+					ArrayList updated = subject.getAssociated("update state");
+				if (updated.size() > 0)
+				{
+					DataElement state = (DataElement)updated.get(0);	
+					state.setAttribute(DE.A_NAME, "4");
+					_dataStore.refresh(state);
+				}
+			
 				subject.refresh(false);
 			}
 			else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status,classifier);
+				ArrayList updated = subject.getAssociated("update state");
+				if (updated.size() > 0)
+				{
+					DataElement state = (DataElement)updated.get(0);	
+					state.setAttribute(DE.A_NAME, "1");
+					_dataStore.refresh(state);
+				}
+				
 				subject.refresh(false);
 			}
 			else if (name.equals("C_SHAREDLIB_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status,classifier);
+				
+				ArrayList updated = subject.getAssociated("update state");
+				if (updated.size() > 0)
+				{
+					DataElement state = (DataElement)updated.get(0);	
+					state.setAttribute(DE.A_NAME, "3");
+					_dataStore.refresh(state);
+				}
 				subject.refresh(false);
 			}
 			else if (name.equals("C_INSERT_CONFIGURE_IN"))
