@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
- <title>Building the CDT</title>
+ <title>Developing the CDT</title>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
  <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
 </head>
@@ -13,99 +13,225 @@
  <TBODY>
   <TR>
    <TD align=left width="72%">
-    <FONT class=indextop>Building the CDT</FONT><BR>
-    <FONT class=indexsub>steps to build the CDT from source</FONT>
+    <FONT class=indextop>Developing the CDT</FONT><BR>
+    <FONT class=indexsub>information for how to build/run/debug the CDT from source</FONT>
    </TD>
    <TD width="28%"><IMG height=86 src="http://dev.eclipse.org/images/Idea.jpg" width=120 alt=""></TD>
   </TR>
  </TBODY>
 </TABLE>
-<table>
- <tbody>
-  <tr><td>Author</td><td>         : <a href="turnham@ca.ibm.com">Jeff Turnham</a></td></tr>
-  <tr><td>Revision Date</td><td>  : 05/23/2002 - Version: 1.0.0</td></tr>
-  <tr><td>Change History</td><td> : 1.0.0 - Document Creation</td></tr>
- </tbody>
-</table>
 <br>
 <!-- End of Document Header -->
 
 <!-- Table of Contents -->
 <div class=section>Table of Contents</div>
 <br>
-<div class=indent><a href="#intro">       1. Introduction</a>
- <div class=indent><a href="#prereqs">     1.1 Prerequisites</a></div>
-</div>
-<div class=indent><a href="#downloaded">  2. Building from source included with downloaded builds</a></div>
-<div class=indent><a href="#commandline"> 3. Building from CVS at the command line</a></div>
-<div class=indent><a href="#eclipse">     4. Building from CVS within Eclipse (PDE)</a></div>
+<div class=indent><a href="#intro">       1. Introduction</a></div>
+<div class=indent><a href="#eclipse">     2. Developing the CDT within Eclipse</a>
+ <div class=indent><a href="#pdeBuild">     2.1 Building CDT with Eclipse</a></div>
+ <div class=indent><a href="#pdeRun">       2.2 Running CDT with Eclipse</a></div>
+ <div class=indent><a href="#pdeDebug">     2.3 Debugging CDT with Eclipse</a></div>
+</div> 
+<div class=indent><a href="#commandline"> 3. Developing the CDT outside Eclipse</a></div>
 <br><br>
 <!-- End of Table of Contents -->
 
 
 <div class=section><a name="intro"> 1. Introduction</a></div>
 <p>
-
-</p>
+ This document describes the process of building, running and debugging the CDT both within Eclipse and from 
+ the command line.  The specific information such as screen shots or the detailed steps for some action, may 
+ differ from your experience depending on what Eclipse build you are using.  
+ We will try to keep this document up-to-date with the behaviour of the latest builds. 
+</p> 
 </div>
 
-<div class=subsection><a name="prereqs"> 1.1 Prerequisites</a></div>
+<div class=section><a name="eclipse"> 2. Developing CDT within Eclipse</a></div>
 <p>
- The CDT is written in java and depends on many parts of the Eclipse base, so the following must be on your 
- system before building the CDT:
+ While the Eclipse Platform is a powerful integration platform, the combination of the
+ <a href="http://www.eclipse.org/jdt">JDT</a> (Java Development Tools) and 
+ <a href="http://www.eclipse.org/pde">PDE</a> (Plugin Development Environment) that are included 
+ which are included in the Eclipse SDK provide a powerful Environment to develop Eclipse Plug-ins.  The 
+ basic development cycle tasks such as build, run, and debug are described below.
+</p>
+
+<div class=subsection><a name="pdeBuild"> 2.1 Building CDT with Eclipse</a></div>
+
+<p>
+ To build the CDT inside Eclipse you will need a build of eclipse from the 
+ <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>.  We recommend that you choose a 
+ recent Stable Build.  In addition, you will need a Java Runtime Environment (JRE) of at least Version 1.3 or 
+ greater.  Once you have Eclipse properly installed, the CDT CVS Respository can be accessed and the CDT 
+ plugins checked-out and built.  
+ <b>Note</b>: The exact steps may vary depending on what Eclipse build you use.
+
+<ol>
+ <li>Open the "<b>CVS Repository Exploring</b>" Perspective</li>
+ <li>Right-Click in the "<b>CVS Repositories</b>" view and select 
+     "<b>New</b> -> <b>Anonymous Repository Location to dev.eclipse.org...</b>"</li>
+ <li>From the "<b>Add CVS Repository</b>" dialog, perform the following:
+  <ul>
+   <li>Change the value of <b>Repository path</b> to <font color=red>/home/tools</font></li>
+   <li>The rest of the default values should be fine, but just to make sure, you can verify:
+    <table>
+     <tr>
+      <td align=right><b>Host: </b></td>
+      <td><font color=red> dev.eclipse.org</font></td>
+     </tr>
+     <tr>
+      <td align=right><b>User: </b></td>
+      <td><font color=red> anonymous</font></td>
+     </tr>
+     <tr>
+      <td align=right><b>Password: </b></td>
+      <td><font color=red><i> you can leave this blank</i></font></td>
+     </tr>
+     <tr>
+      <td align=right><b>Connection Type: </b></td>
+      <td><font color=red> pserver</font></td>
+     </tr>
+     <tr>
+      <td align=right><b>Use Default Port: </b></td>
+      <td><font color=red><i>  selected</i></font></td>
+     </tr>
+     <tr>
+      <td align=right><b>Validate Connection on Finish: </b></td>
+      <td><font color=red><i>  selected</i></font></td>
+     </tr>
+     </table>
+   </li>
+  </ul>
+ </li>
+ <li>Select "Finish" (this should create a new repository in the CVS Repositories View called 
+     <font color=red>:pserver:anonymous@dev.eclipse.org:/home/tools</font>)</li>
+ <li>Expand the interactor for your new repository</li>
+ <li>Expand the interactor for HEAD</li>
+ <li>Hold down the &lt;Ctrl&gt; key and select all the plugins you wish to build.  The complete list for the 
+     CDT are those that match <b><i>org.eclipse.cdt.*</i></b> and <b><i>com.ibm.*</i></b>, however you may wish 
+     to select only a subset.  Of course you may have to return to this step if you have checked out a subset 
+     and are missing some dependencies.
+ </li>
+ <li>Once you have selected your plugins, right-click on the selected list and choose <b>"Check Out as Project"</b>.  This 
+     should start checking out all the selected plugins and subsequently build them.  If all goes well you will hopefully 
+     have no build errors.</li>
+</ol>
+</p>
+<div class=subsection><a name="pdeRun"> 2.2 Running CDT with Eclipse</a></div>
+<p>
+ After successfully building the CDT inside Eclipse, one typically wants to run an instance of Eclipse with the 
+ freshly built plugins (perhaps after making some changes to the source code).  This is very easy to do in the 
+ PDE.  Here are the steps:
  <ol>
-  <li><b>JDK version 1.3 or greater</b>
-   <ul>
-    <li>Find a JDK for your system 
-        <a href="http://download.eclipse.org/downloads/drops/S-F1-200205211339/java-runtimes.html">here</a>
-    </li>
-   </ul>
-  </li>
-  <li><b>A version of Eclipse that matches the level of CDT you intend to check out of cvs</b>
-   <ul>
-    <li>Find out what Eclipse version you need 
-     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/status.html?cvsroot=Tools_Project">here</a>
-    </li>
-   </ul>
-  </li>
-  <li><b>Linux\Unix System Tools</b>
-   <ul>
-    <li>
-     The makefile-based build process uses the following Linux\Unix System Tools:<br>
-     - make, find, test, cat, rm, xargs, and others<br>  
-     These tools should be standard on most Linux\Unix systems.  On Windows these tools can be obtained 
-     by installing <a href="http://www.redhat.com/software/tools/cygwin/">Cygwin</a>
-    </li>
-   </ul>
-  </li>
+  <li>Open the "<b>Plug-in Development</b>" perspective (you may have to goto "Others" to find it).</li>
+  <li>Select the menu action <b>Run</b> -> <b>Run As...</b> -> <b>Run-time workbench</b>. This should cause 
+      the <b>Launch Configurations</b> dialog to appear.</li>
+  <li>Enter a name for your new Launch Configuration.</li>
+  <li>Switch to the "<b>Plug-ins and Fragments</b>" tab.</li>
+  <li>Select the box beside "<b>External Plugins</b>" to make all base Eclipse plugins visible to the Run-time Workbench.</li>
+  <li>Choose <b>Apply</b> to save your changes and verify that no error messages are shown.</li>
+  <li>Choose <b>Run</b>.</li>
  </ol>
- <B>OPTIONAL</b>
+</p>
+
+<div class=subsection><a name="pdeDebug"> 2.3 Debugging CDT with Eclipse</a></div>
+<p>
+ Launching a Debug Session of CDT is nearly identical to the steps described above for running the CDT:  
+
  <ol>
-  <li><b>JavaCC - only required if you intend to make changes to and regenerate the C/C++ Parser)</b>
-   <ul>
-    <li>Get the latest version of JavaCC <a href="http://www.webgain.com/products/java_cc">here</a>
-    </li>
-   </ul>
-  </li>
+  <li>Open the "<b>Plug-in Development</b>" perspective (you may have to goto "Others" to find it).</li>
+  <li>Select the menu action <b>Run</b> -> <b>Debug As...</b> -> <b>Run-time workbench</b>. This should cause 
+      the <b>Launch Configurations</b> dialog to appear.</li>
+  <li>Enter a name for your new Launch Configuration.</li>
+  <li>Switch to the "<b>Plug-ins and Fragments</b>" tab.</li>
+  <li>Select the box beside "<b>External Plugins</b>" to make all base Eclipse plugins visible to the Run-time Workbench.</li>
+  <li>Choose <b>Apply</b> to save your changes and verify that no error messages are shown.</li>
+  <li>Choose <b>Debug</b>.</li>
  </ol>
+ 
 </p>
 
-<div class=section><a name="downloaded"> 2. Building from source included with downloaded builds</a></div>
+<div class=section><a name="commandline"> 3. Developing the CDT outside Eclipse</a></div>
 <p>
-Intro goes here
-</p>
-
-<div class=section><a name="commandline"> 3. Building from CVS at the command line</a></div>
+ The CDT internal nightly build is done from the command line using makefiles.  Eventually this will be migrated
+ to an Ant-based build, but in the meantime we describe the steps necessary to build the CDT from the command line here.
 <p>
-Intro goes here
-</p>
+<div class=subsection>1. The first thing to do is make sure your system has the dependencies installed:</div>
+  <ul>
+   <li><b>JDK version 1.3 or greater</b>
+    <ul>
+     <li>Find a JDK for your system 
+      <a href="http://download.eclipse.org/downloads/drops/S-F1-200205211339/java-runtimes.html">here</a>
+     </li>
+    </ul>
+   </li>
+   <li><b>A version of Eclipse that matches the level of CDT you intend to check out of cvs</b>
+    <ul>
+     <li>If you are going to be checking out from the HEAD, then the latest Stable Eclipse build is typically
+         the right choice.  Check the 
+         <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">Download page</a>
+         to see which Eclipse Build the latest nightly CDT builds are using.
+     </li>
+    </ul>
+   </li>
+   <li><b>Linux\Unix System Tools</b>
+    <ul>
+     <li>
+      The makefile-based build process uses the following Linux\Unix System Tools:<br>
+      - make, find, test, cat, rm, xargs, and others<br>  
+      These tools should be standard on most Linux\Unix systems.  On Windows these tools can be obtained 
+      by installing <a href="http://www.redhat.com/software/tools/cygwin/">Cygwin</a>
+     </li>
+    </ul>
+   </li>
+   <li><B>OPTIONAL</b>: <b>JavaCC - only required if you intend to make changes to and regenerate the C/C++ Parser</b>
+    <ul>
+     <li>Get the latest version of JavaCC <a href="http://www.webgain.com/products/java_cc">here</a><br><br></li>
+    </ul>
+   </li>
+  </ul>
+ <div class=subsection>2. Once you have installed the dependencies, check-out the CDT code from CVS:</div>
+  <ul>
+   <li><b>Set the CVSROOT environment variable as follows:</b>
+    <div class=indent>export CVSROOT=:pserver:anonymous@dev.eclipse.org:/home/tools</div>
+   </li>
+   <li><b>Move the Eclipse Plugins directory:</b>
+    <div class=indent>cd &lt;some directory&gt;/eclipse/plugins</div>
+   </li>
+   <li><b>Check out the CDT:</b>
+    <div class=indent>cvs checkout cdt<br><br></div>
+   </li>
+  </ul>
+ <div class=subsection>3. Once the CDT code has been completely checked-out, you can start a build:</div>
+  <ul>
+   <li><b>Goto the org.eclipse.cdt.dstore.core directory:</b>
+    <div class=indent>cd org.eclipse.cdt.dstore.core</div>
+   </li>
+   <li><b>Run make (and use the "dev" or "development" target):</b>
+    <div class=indent>make -s dev</div>
+   </li>
+   <li><b>The "dev" target does 2 things:</b>
+    <ol>
+     <li>It generates simple makefiles in all CDT sub-directories.  This enables you to be in any CDT plug-in directory, 
+         make a change to some source, and type <b>make</b> to build from just the current directory.</li>
+     <li>It then builds the entire CDT source tree.</li>
+    </ol>
+   </li>
+  </ul>
+<div class=subsection>4. If the build finished with no errors you can then verify that the CDT load and runs:</div>
+  <ul>
+   <li><b>The simplest way to make sure the CDT Support is being properly loaded is to try to create a C/C++ Project:</b>
+    <ul>
+     <li>Start Eclipse</li>
+     <li>Select <b>File</b> -> <b>New</b> -> <b>Project</b></li>
+     <li>Verify that <b>C/C++</b> appears in the list of available Wizards.</li>
+   </li>
+  <ul>
 
-<div class=section><a name="eclipse"> 4. Building from CVS within Eclipse (PDE)</a></div>
+
+
+</p>
 <p>
- This scenario is currently being "worked on".  We should be able to include various files in our cvs such as 
- <b>.project</b>, <b>.classpath</b>, and <b>build.xml</b> that simplify the steps necessary to import the CDT 
- code into the Eclipse PDE (Plugin Development Environment).  Stay tuned...
-</p>
 
+</p>
 </body>
 </html>
