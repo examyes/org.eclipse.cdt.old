@@ -1621,7 +1621,7 @@ public final class DataStore
     public void setObject(DataElement localObject, boolean noRef)
     {
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
-	DataElement status = synchronizedCommand(cmd, localObject, noRef);
+	DataElement status = command(cmd, localObject, noRef);
     }
 
     public void modifyObject(DataElement localObject)
@@ -2223,6 +2223,7 @@ public final class DataStore
 		return results;
 	    }
     
+
 
     /**
      * Finds all relationship descriptor types that can be applied to a particular element.  
