@@ -7,7 +7,6 @@ This list is not complete, please refer to the CDT Bugzilla database
 at http://bugs.eclipse.org for a comprehensive and up-to-date list of known defects.
 
 
-
 Project Issues (Local and Remote)
 ---------------------------------
 

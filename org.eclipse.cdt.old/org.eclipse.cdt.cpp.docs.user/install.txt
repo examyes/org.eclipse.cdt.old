@@ -48,6 +48,7 @@ loaded try the following:
    still exist then open a bug at http://bugs.eclipse.org
 
 
+
 Installation
 ------------
 To install the plugin for regular use, simply unzip cdt-eclipse-20020116-local.zip 
