@@ -185,7 +185,7 @@ public class BreakpointRulerAction extends LpexMarkerRulerAction {
                   //         "com.ibm.debug.internal.picl" , true, _rulerLine + 1, _start, _end);  revisit - Adrian
                   // in case of multiple statements on same line, hence multiple breakpoints
 					breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
-                                              new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), new Integer(_rulerLine), new Integer(-1), new Integer(-1)});
+                                              new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), new Integer(_rulerLine + 1), new Integer(-1), new Integer(-1)});
 					breakpoint.setMarker(breakpointMarker);
 
                Map map= breakpointMarker.getAttributes();
