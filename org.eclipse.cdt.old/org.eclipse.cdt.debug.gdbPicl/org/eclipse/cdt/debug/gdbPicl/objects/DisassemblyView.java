@@ -281,11 +281,9 @@ abstract class DisassemblyView extends View
 		      	 {
 			      	 address = srcLine.substring(0,9);
 		      	 }	      	 
-		         srcLine = processViewLine(lineNum+1, " "+srcLine);		         
-		         
+		         srcLine = processViewLine(lineNum+1, " "+srcLine);		         		         
 		         dispNumLines++;
-		
-		         _viewLines.addElement(srcLine);      
+//		         _viewLines.addElement(srcLine);      
 		         
 		         /*
 		         This hashtable keeps track of the addresses and their associated line numbers
@@ -336,10 +334,12 @@ abstract class DisassemblyView extends View
 					}
 					
 				  }
-		         				  
 		                  
 		         if (srcLine.length() > maxLength)
 		            maxLength = srcLine.length();
+		            
+		          srcLine = this.removeFileInfo(srcLine);
+   		         _viewLines.addElement(srcLine);         
 		
 		         lineNum++;
 		      }      
@@ -399,8 +399,6 @@ abstract class DisassemblyView extends View
          srcLine = processViewLine(lineNum+1, " "+srcLine);
 		         
          dispNumLines++;
-		
-         _viewLines.addElement(srcLine);      
 		         
          /*
          This hashtable keeps track of the addresses and their associated line numbers
@@ -445,6 +443,9 @@ abstract class DisassemblyView extends View
 			{
 			}
 		  }
+
+		  srcLine = this.removeFileInfo(srcLine);
+          _viewLines.addElement(srcLine);      
 		                  
 		 if (srcLine.length() > maxLength)
 		 	maxLength = srcLine.length();
@@ -483,32 +484,6 @@ abstract class DisassemblyView extends View
       if (srcLine.length() > 0 && srcLine.charAt(srcLine.length()-1) == '\r')
          srcLine = srcLine.substring(0, srcLine.length()-1);
 
-/*
- *    DISABLE THIS CODE FOR NOW.... 
-	  //    0x8049393 <main+283 at payroll.cpp:73>: sub    $0x8,%esp
-	  // remove " at payroll.cpp:73"
-	  
-	  String line = srcLine;
-	  
-	  int idx = line.indexOf(" at ");
-	  if (idx > -1)
-	  {
-	  	line = line.substring(0, idx);
-	  	processedLine = new StringBuffer(line);
-	  	
-	  	idx = srcLine.indexOf(">:");
-	  	if (idx > -1)
-	  	{
-	  		line = srcLine.substring(idx);
-	  		processedLine.append(line);
-	  	}	  	
-	  }
-	  else
-	  {	
-		  processedLine = new StringBuffer(srcLine);
-	  }
-*/
-
 	  processedLine = new StringBuffer(srcLine);
 
       // change tab characters into spaces (mod8)
@@ -532,6 +507,36 @@ abstract class DisassemblyView extends View
          }
       }
       return processedLine.toString();
+   }
+   
+   private String removeFileInfo(String line)
+   {
+   	
+	  //    0x8049393 <main+283 at payroll.cpp:73>: sub    $0x8,%esp
+	  // remove " at payroll.cpp:73"
+	  StringBuffer processedLine;
+	  String tempLine;
+	  
+	  int idx = line.indexOf(" at ");
+	  if (idx > -1)
+	  {
+	  	tempLine = line.substring(0, idx);
+	  	processedLine = new StringBuffer(tempLine);
+	  	
+	  	idx = line.indexOf(">:");
+	  	if (idx > -1)
+	  	{
+	  		tempLine = line.substring(idx);
+	  		processedLine.append(tempLine);
+	  	}	  	
+	  }
+	  else
+	  {	
+		  processedLine = new StringBuffer(line);
+	  }
+	  
+	  return processedLine.toString();
+   	
    }
 
    /**
