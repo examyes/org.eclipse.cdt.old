@@ -42,23 +42,21 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
     private ProjectInfoWizardPage           _fProjectInfoWizardPage;
     private ParseWizardPage                 _parserWizardPage;
     private CppPlugin                       _plugin;
-    private IProject                        _project;
     private String                          _currentSelectionName;
 
     private ModelInterface                  _api;
+    private boolean                         _projectIsClosed = false;
 
     public void addPages()
     {
 	super.addPages();
+        if (_projectIsClosed)
+            return;
 	
-	_plugin = CppPlugin.getDefault();
-
    	_mainPage = new CppAttachLauncherWizardMainPage(_plugin.getLocalizedString("debugAttachLauncher"), _currentSelectionName);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugAttachLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("debugAttachLauncher.Description"));
    	this.addPage(_mainPage);
-	
-	_api = _plugin.getModelInterface();
     }
 
     public CppAttachLauncherWizardMainPage getMainPage()
@@ -74,6 +72,7 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
     public boolean performFinish()
     {
    	_plugin = CppPlugin.getDefault();
+   	_api = _plugin.getModelInterface();
 
    	_mainPage.finish();
     	String processID = getProcessID();
@@ -103,7 +102,7 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
       attachInfo.setProcessPath(_currentSelectionName);
 
       getLauncher().doLaunch(attachInfo);
-
+      _projectIsClosed = false;
       return true;		
     }
 
@@ -117,10 +116,38 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
      */
     public void init(ILauncher launcher, String mode, IStructuredSelection selection)
     {
-	if (selection.getFirstElement() instanceof DataElement)
-	    {
-		init(launcher, mode, (DataElement)selection.getFirstElement());
-	    }
+        DataElement dataElement = null;
+        IProject project;
+        Object element = selection.getFirstElement();
+
+        _plugin = CppPlugin.getDefault();
+        _api = _plugin.getModelInterface();
+
+	if (element instanceof DataElement)
+	{
+	   dataElement = (DataElement)element;
+           DataElement projectElement = _api.getProjectFor(dataElement);
+           project = _api.findProjectResource(projectElement);
+           if (!project.isOpen())
+           {
+              _projectIsClosed = true;
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return;
+           } 				
+	}
+        else if (element instanceof IProject || element instanceof IResource)
+        {
+           dataElement = _api.findResourceElement((IResource)element);
+           project = ((IResource)element).getProject();
+           if (!project.isOpen())
+           {
+              _projectIsClosed = true;
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return;
+           }
+        }
+        if (dataElement != null)
+           init(launcher, mode, dataElement);
     }
 
     public void init(ILauncher launcher, String mode, DataElement resource)
@@ -129,7 +156,14 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
 	_element = resource;
 
 	_currentSelectionName = ((DataElement)_element).getName();
-
-	System.out.println("CppAttachLauncherWizard - currentSelection = " + _currentSelectionName);
+    }
+/**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
     }
 }

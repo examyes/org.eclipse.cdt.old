@@ -40,11 +40,15 @@ public class CppRunLauncher implements ILauncherDelegate
     private static DataElement _directory;
     private static DataElement _executable;
     private static ModelInterface _api;
+    private static CppPlugin   _plugin;
+
 
     public CppRunLauncher()
     {
+        _plugin = CppPlugin.getDefault();
 	_api = ModelInterface.getInstance();
     }
+
 public String getLaunchMemento(Object obj)
 	{
 		return null;	
@@ -57,12 +61,14 @@ public String getLaunchMemento(Object obj)
     /**
      * @see ILauncherDelegate#launch(Object[], String, ILauncher)
      */
-    public boolean launch(Object[] elements, String mode, ILauncher launcher) {
-
+    public boolean launch(Object[] elements, String mode, ILauncher launcher)
+    {
+        IProject project;
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
-        if(selection == null) {
-           System.out.println("CppRunLauncher.launch() error = selection is null");
+        if(selection == null)
+        {
+            displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.noSelection"));
             return false;
         }
         Object element = selection.getFirstElement();
@@ -74,43 +80,66 @@ public String getLaunchMemento(Object obj)
 		    {
 			_executable = null;
 			_directory = null;
+         displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.notExecutable"));
+			return false;
+		    }
+            DataElement projectElement = _api.getProjectFor(_executable);
+            project = _api.findProjectResource(projectElement);
+            if (!project.isOpen())
+            {
+               displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
 			return false;
 		    }
 		_directory = _executable.getParent();
 	    }	
         else if (element instanceof IProject || element instanceof IResource)
 	    {
+           project = ((IResource)element).getProject();
+           if (!project.isOpen())
+           {
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return false;
+           }
+
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
 		    {
-			IResource resource = (IResource)element;
-			IResource parentRes = resource.getParent();
+              if (_plugin.isCppProject(project))
+              {
+         			IResource resource = (IResource)element;
+			         IResource parentRes = resource.getParent();
 			
-			CppPlugin plugin = CppPlugin.getDefault();
-			DataStore dataStore = plugin.getCurrentDataStore();
+               	DataStore dataStore = _plugin.getCurrentDataStore();
+	         		_directory = dataStore.createObject(null, "directory", parentRes.getName(),
+				      			    parentRes.getLocation().toString());
 
-			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
-							    parentRes.getLocation().toString());
-
-			_executable = dataStore.createObject(_directory, "file", resource.getName(),
-							     resource.getLocation().toString());
-			
+         			_executable = dataStore.createObject(_directory, "file", resource.getName(),
+			      				     resource.getLocation().toString());
+              }
+              else
+              {
+                 displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notCppProject"));
+                 return false;
+              }
+      			
 		    }
 		else
 		    {
 			_directory = _executable.getParent();
 		    }
-	    }
-	else
-	    {
-		_executable = null;
+   }
+   else
+   {
+      displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.notExecutable"));
+   	_executable = null;
 		_directory = null;
 		return false;
-	    }
+	}
 
         // display the wizard
         CppRunLauncherWizard w= new CppRunLauncherWizard();
         w.init(launcher, ILaunchManager.RUN_MODE, _executable);
+
         WizardDialog wd= new WizardDialog(CppPlugin.getActiveWorkbenchWindow().getShell(), w);
 
         int rc = wd.open();
@@ -129,15 +158,22 @@ public String getLaunchMemento(Object obj)
 
         if (workingDirectory != "")
         {
-            System.out.println("CppRunLauncher:doLaunch() - workingDirectory = " + workingDirectory);
          	_api.invoke(workingDirectory, command, false);
         }
         else
         {
-           System.out.println("CppLoadLauncher:doLaunch() - _directory = " + _directory);
             _api.invoke(_directory, command, false);
         }
-
+   }
+   /**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("runLauncher.Error.Title"),message);
     }
+
 
 }
