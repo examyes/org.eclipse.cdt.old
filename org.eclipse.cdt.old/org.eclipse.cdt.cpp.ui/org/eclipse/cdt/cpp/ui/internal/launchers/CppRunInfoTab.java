@@ -57,14 +57,8 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
     private static final int SIZING_TEXT_FIELD_WIDTH = 300;
     protected CppPlugin    _plugin = CppPlugin.getPlugin();
     protected ModelInterface	_api = ModelInterface.getInstance();
-    protected ArrayList    _history;
 
-    private  String        _programName;
-    private  DataElement   _directory;
     private  String        _parameters;
-
-    private  DataElement   _executable;
-				
 
 	/**
 	 * @see ILaunchConfigurationTab#createControl(TabItem)
@@ -118,7 +112,6 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	_programNameField = new Text(programGroup, SWT.BORDER);
    	data = new GridData(GridData.FILL_HORIZONTAL);
    	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
-//      _programNameField.setText(_programName);
    	_programNameField.setLayoutData(data);
 
 		_programNameField.addModifyListener(new ModifyListener() {
@@ -227,6 +220,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	public void setDefaults(ILaunchConfigurationWorkingCopy config)
    {
      IProject project;
+     DataElement executable, directory;
      IStructuredSelection selection = getSelection();
      if(selection == null)
      {
@@ -238,23 +232,21 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 
      if (element instanceof DataElement)
      {	
-   		_executable = (DataElement)element;
-	   	if (!_executable.isOfType("executable"))
+   		executable = (DataElement)element;
+	   	if (!executable.isOfType("executable"))
 	      {
-		   	_executable = null;
-			   _directory = null;
             displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
    			return;
 	      }
 
-         DataElement projectElement = _api.getProjectFor(_executable);
+         DataElement projectElement = _api.getProjectFor(executable);
          project = _api.findProjectResource(projectElement);
          if (!project.isOpen())
          {
             displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
             return;
          }
-	   	_directory = _executable.getParent();
+	   	directory = executable.getParent();
       }	
       else if (element instanceof IProject || element instanceof IResource)
       {
@@ -265,8 +257,8 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
             return;
          }
 
-		   _executable = _api.findResourceElement((IResource)element);
-   		if (_executable == null)
+		   executable = _api.findResourceElement((IResource)element);
+   		if (executable == null)
 	      {
             if (_plugin.isCppProject(project))
             {
@@ -274,10 +266,10 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	      		IResource parentRes = resource.getParent();
 			
       			DataStore dataStore = _plugin.getCurrentDataStore();
-	      		_directory = dataStore.createObject(null, "directory", parentRes.getName(),
+	      		directory = dataStore.createObject(null, "directory", parentRes.getName(),
  	  	   					    parentRes.getLocation().toString());
 
-	   	   	_executable = dataStore.createObject(_directory, "executable", resource.getName(),
+	   	   	executable = dataStore.createObject(directory, "executable", resource.getName(),
 				   			     resource.getLocation().toString());
             }
             else
@@ -289,19 +281,17 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	      }
       	else
          {
-    			_directory = _executable.getParent();
+    			directory = executable.getParent();
   	      }
    	}
 	   else
    	{
          displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
-   		_executable = null;
-	   	_directory = null;
    		return;
 	   }
 
-      config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, _executable.getSource());
-      config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, _directory.getSource());
+      config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, executable.getSource());
+      config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, directory.getSource());
 	}
 	
 	/**
@@ -347,6 +337,19 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void performApply(ILaunchConfigurationWorkingCopy config)
    {
+      setErrorMessage(null);
+      setMessage(null);
+
+      if (_programNameField.getText().length() == 0)
+      {
+         setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingProgramName"));
+      }
+
+      if (_workingDirectoryField.getText().length() == 0)
+      {
+         setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingWorkingDirectory"));
+      }
+
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, (String)_parametersField.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, (String)_workingDirectoryField.getText());
@@ -367,22 +370,20 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	
     protected void handleWorkingDirectoryBrowseButtonPressed()
     {
-      if (_directory != null)
-      {
-         DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
-   		directory = directory.getParent();
-	   	DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", /*_directory*/directory, true);
-   		dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
-   		dialog.open();
-	   	if (dialog.getReturnCode() == dialog.OK)
-   	   {
-      		DataElement selected = dialog.getSelected();
-	  	   	if (selected != null)
-   	      {
-      	      _workingDirectoryField.setText(selected.getSource());
-  		      }
-   	   }
-      }
+      DataElement rootDirectory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
+      DataElement directory = rootDirectory.getDataStore().getHostRoot().get(0).dereference();
+		directory = directory.getParent();
+   	DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", directory, true);
+  		dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
+  		dialog.open();
+   	if (dialog.getReturnCode() == dialog.OK)
+  	   {
+     		DataElement selected = dialog.getSelected();
+  	   	if (selected != null)
+  	      {
+     	      _workingDirectoryField.setText(selected.getSource());
+	      }
+  	   }
     }	
 
 	/**
@@ -391,31 +392,6 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	private IWorkspaceRoot getWorkspaceRoot() {
 		return ResourcesPlugin.getWorkspace().getRoot();
 	}
-	
-	/**
-	 * @see ILaunchConfigurationTab#isPageComplete()
-	 */
-   public boolean isValid()
-   {
-	setErrorMessage(null);
-	setMessage(null);
-
-        if (_programNameField.getText().length() == 0)
-        {
-            setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingProgramName"));
-            return false;
-         }
-
-         if (_workingDirectoryField.getText().length() == 0)
-         {
-            setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingWorkingDirectory"));
-            return false;
-         }
-         else
-         {
-            return true;
-         }
-    }
 	
 	/**
 	 * @see ILaunchConfigurationTab#getName()
