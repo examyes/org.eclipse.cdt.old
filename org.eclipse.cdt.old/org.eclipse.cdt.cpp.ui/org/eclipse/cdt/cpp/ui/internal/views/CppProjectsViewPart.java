@@ -56,9 +56,10 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 		if (rootElement != null)
 		    {
 			_viewer.setInput(rootElement);
-			return;
 		    }
 		
+		lock(true);
+		return;
 	    }
 	_viewer.setInput(null);
     }

@@ -1835,6 +1835,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
 
 
+	/*
 	// cvs actions
 	DataElement cvsD = dataStore.find(fsD, DE.A_NAME, "CVS", 1); 
 	DataElement cvsUpdate     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
@@ -1851,7 +1852,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							     "commit", 
 							     "com.ibm.cpp.ui.internal.actions.CVSAction");
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
-	
+	*/
+
 	
 	DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
