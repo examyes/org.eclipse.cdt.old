@@ -43,6 +43,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     private CppPlugin                       _plugin;
     private IProject                        _project;
     private String                          _currentSelectionName;
+    private DataElement                     _directory;
 
     private ModelInterface                  _api;
 
@@ -52,7 +53,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	
    	_plugin = CppPlugin.getDefault();
 
-   	_mainPage = new CppLoadLauncherWizardMainPage(_plugin.getLocalizedString("debugLauncher"), _currentSelectionName);
+   	_mainPage = new CppLoadLauncherWizardMainPage(_plugin.getLocalizedString("debugLauncher"), _currentSelectionName, _directory);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("debugLauncher.Description"));
    	this.addPage(_mainPage);	
@@ -76,17 +77,26 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
    	return _mainPage.getParameters();
     }
 
+    public String getWorkingDirectory()
+    {
+   	return _mainPage.getWorkingDirectory();
+    }
+
     public boolean performFinish()
     {
 	
    	_mainPage.finish();
       //	boolean debugInitialization = debugInitialization();
     	String parameters = getParameters();
+    	String workingDirectory = getWorkingDirectory();
 	
 	PICLLoadInfo loadInfo = new PICLLoadInfo();
+   String qualifiedFileName = "";
 
 	if (_element instanceof DataElement)
 	    {
+         qualifiedFileName = ((DataElement)_element).getSource();
+         System.out.println("CppLoadLauncherWizard:performFinish() - qualifiedFileName = " + qualifiedFileName);
 		IFile file = (IFile)_api.findFile(((DataElement)_element).getSource());
 		if (file == null)
 		    {
@@ -104,7 +114,9 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	    }
 
 	loadInfo.setLauncher(_launcher);
-	loadInfo.setProgramName(_currentSelectionName);
+//	loadInfo.setProgramName(_currentSelectionName);
+	loadInfo.setProgramName(qualifiedFileName);
+   System.out.println("CppLoadLauncherWizard:performFinish() - _currentSelectionName = " + _currentSelectionName);
 	loadInfo.setProgramParms(parameters);
 	
 	int startupBehaviour;
@@ -121,7 +133,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	loadInfo.setStartupBehaviour(startupBehaviour);
 	
 	
-	getLauncher().doLaunch(loadInfo);
+	getLauncher().doLaunch(loadInfo, workingDirectory);
 
       return true;		
     }
@@ -143,9 +155,9 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     public void init(ILauncher launcher, String mode, DataElement resource)
     {
    	_launcher = launcher;
-	_element = resource;
+   	_element = resource;
 	
-	_currentSelectionName = ((DataElement)_element).getName();
-
+   	_currentSelectionName = ((DataElement)_element).getName();
+   	_directory = ((DataElement)_element).getParent();
     }
 }
