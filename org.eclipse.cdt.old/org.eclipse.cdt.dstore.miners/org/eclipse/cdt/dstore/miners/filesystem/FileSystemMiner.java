@@ -171,7 +171,7 @@ public class FileSystemMiner extends Miner
 	DataElement renD= createCommandDescriptor(dirD, getLocalizedString("model.Rename"), "C_RENAME_DIR");
 	DataElement inrenD = _dataStore.createObject(renD,"input", "Enter the New Name");
 
-	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", false);
+	DataElement findD = createCommandDescriptor(dirD, "Find", "C_FIND_FILE", true);
 
 	//deleting files and dirs
 	DataElement delF = createCommandDescriptor(fileD,getLocalizedString("model.Delete"),"C_DELETE_FILE");
@@ -608,7 +608,8 @@ public class FileSystemMiner extends Miner
     {
 	if (compareString(patternStr, root.getName(), true))
 	    {
-		_dataStore.createReference(status, root);
+		_dataStore.createReference(status, root, "contents");
+		_dataStore.refresh(root);
 		_dataStore.refresh(status);
 	    }
 	
