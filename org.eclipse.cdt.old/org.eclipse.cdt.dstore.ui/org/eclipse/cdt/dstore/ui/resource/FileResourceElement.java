@@ -49,7 +49,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 
     public void initializePath(IProject project)
     {
-	if (project != null)
+       	if (project != null)
 	    {
 		IPath newPath = project.getFullPath();
 		QualifiedName propertyQName = new QualifiedName("Mount Point", newPath.toString());
@@ -78,7 +78,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 		    {
 		    }
 		
-		if (mountPoint != null)
+		if (mountPoint != null && mountPoint.length() > 0)
 		    {
 			StringBuffer mFName = new StringBuffer();
 			IResource resource = this;
@@ -289,21 +289,24 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
   public InputStream getContents(boolean force) throws CoreException 
   {
     InputStream result = null;
+    java.io.File fileObject = _mountedFile;
 
     try
     {
-	java.io.File fileObject = _mountedFile;
 	if (fileObject == null)
 	    {
 		fileObject = _element.getFileObject();
+		String fileName = fileObject.getAbsolutePath();
+
+		if (!_path.toOSString().equals(fileName))
+		    {
+			_path = new Path(fileName);	  
+		    }		
 	    }
 
       if (fileObject != null && fileObject.exists())
 	{
-	  String fileName = fileObject.getAbsolutePath();
-	  
-	   
-	  result = new FileInputStream(fileName); 	
+	  result = new FileInputStream(fileObject); 	
 	}
     }
     catch (FileNotFoundException e)

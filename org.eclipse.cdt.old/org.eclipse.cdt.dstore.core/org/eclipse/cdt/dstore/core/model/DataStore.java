@@ -1649,7 +1649,7 @@ public DataElement command(DataElement commandDescriptor,
 	      }
 	  else if (remotePath.startsWith(remoteRoot))
 	      {
-		  result = new String(localRoot + remotePath.substring(remoteRoot.length(), remotePath.length()));
+		  result = new String(localRoot + slash + remotePath.substring(remoteRoot.length(), remotePath.length()));
 	      }
 	  else
 	      {

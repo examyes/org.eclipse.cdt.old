@@ -289,7 +289,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 
   public String getFileName()
   {
-    return _path.toOSString();    
+    return _path.toString();    
   }
 
   public Object getParent(Object o) 
