@@ -95,7 +95,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
-			
 			if(doesAutoconfSupportExist())
 			{
 					String message = new String
@@ -117,6 +116,28 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 						execute = result ==0;
 					else
 						execute = true;
+			}
+			else
+			{
+				String message = new String
+						("Generating autoconf and automake configuration files ");
+					dialog = new CustomMessageDialog(
+										shell,
+										"Generating configuration files ",
+										null,
+										message,
+										2,
+										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+										0,
+										extraLabels,
+										this,
+										updateAllDialogKey);
+					int result = dialog.open();
+					if(result!=-1)
+						execute = result ==0;
+					else
+						execute = true;
+				
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
