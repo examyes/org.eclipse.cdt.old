@@ -126,7 +126,8 @@ public class ConfigureInManager {
 				{
 					// delete all the lines which belong to ACOUTPUT if any
 					String deleteLine = new String(line);
-					if(deleteLine.indexOf("\\")!=-1 && deleteLine.indexOf(")")==-1)
+					//deleteLine.indexOf("\\")!=-1 && 
+					if(deleteLine.indexOf(")")==-1)
 					{
 						deleteLine = in.readLine();
 						while(deleteLine.indexOf(")") ==-1 )
@@ -231,7 +232,7 @@ public class ConfigureInManager {
 					}
 				}
 			}catch(IOException e){System.out.println("Erroe: "+e);};
-			return "\n\t"+")";
+			return "\t"+")";
 		}
 		else
 		return "\n\t"+")";
