@@ -580,25 +580,44 @@ public class FileSystemMiner extends Miner
     private DataElement handleDate(DataElement theFile, DataElement status)
     {
 	ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
-	if (dateInfo.size() == 0)
+	DataElement dateObj = null;
+	if (dateInfo.size() != 0)
 	    {
-		File file = new File(theFile.getSource());
-		if (file.exists())
+		dateObj = (DataElement)dateInfo.get(0);		
+	    }
+	
+	File file = new File(theFile.getSource());
+	if (file.exists())
+	    {
+		long date = file.lastModified();
+		
+		if (dateObj == null)
 		    {
-			long date = file.lastModified();
-			DataElement dateObj = _dataStore.createObject(status, _dateDescriptor, "" + date);
+			dateObj = _dataStore.createObject(status, _dateDescriptor, "" + date);
 			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);
 		    }
 		else
 		    {
-			DataElement dateObj = _dataStore.createObject(status, _dateDescriptor, "-1");
-			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
+			dateObj.setAttribute(DE.A_NAME, "" + date);
 		    }
 
-		_dataStore.refresh(status);
-		_dataStore.refresh(theFile);
+	    }
+	else
+	    {
+		if (dateObj == null)
+		    {
+			dateObj = _dataStore.createObject(status, _dateDescriptor, "-1");
+			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
+		    }
+		else
+		    {
+			dateObj.setAttribute(DE.A_NAME, "-1");
+		    }
+
 	    }
 	
+	_dataStore.refresh(dateObj.getParent());
+	_dataStore.refresh(theFile);
 
 	return status;
     }
