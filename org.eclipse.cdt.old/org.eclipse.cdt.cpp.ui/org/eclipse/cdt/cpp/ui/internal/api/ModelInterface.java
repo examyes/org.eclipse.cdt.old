@@ -531,8 +531,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	String hostName = "localHost";
 	try
 	    {
-		hostName = InetAddress.getLocalHost().getHostName();
-	    }
+		//hostName = InetAddress.getLocalHost().getHostName();
+                // instead get the IP address, and make this less dependent on DNS
+                hostName = InetAddress.getLocalHost().getHostAddress(); 
+            }
 	catch (Exception e)
 	    {
 	    }
