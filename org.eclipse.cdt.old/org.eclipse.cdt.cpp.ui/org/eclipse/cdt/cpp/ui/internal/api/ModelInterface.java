@@ -1560,7 +1560,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   }
 
 
-    public void addNewFile(IFile file)
+    public void addNewFile(IResource file)
     {
 	_tempFiles.add(file);
     }
@@ -1664,7 +1664,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			{
 			    result = new org.eclipse.cdt.dstore.ui.resource.FileResourceElement(child, project);
 			}
-			addNewFile((IFile)result);
+			addNewFile((IResource)result);
 			return result;
 		    }	
 		else if (child.isOfType("directory"))
