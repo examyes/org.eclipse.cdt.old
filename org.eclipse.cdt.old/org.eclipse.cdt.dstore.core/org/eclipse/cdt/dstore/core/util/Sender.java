@@ -98,7 +98,7 @@ public class Sender implements ISender
         {
           _xmlGenerator.empty();	  
           _xmlGenerator.generate(objectRoot, bytes, size, true);
-         // _xmlGenerator.flushData();
+         _xmlGenerator.flushData();
         }
       }
 
