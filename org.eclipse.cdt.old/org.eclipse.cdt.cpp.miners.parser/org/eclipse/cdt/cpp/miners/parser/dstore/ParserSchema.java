@@ -195,8 +195,13 @@ public class ParserSchema
   dDeclVariables   = createRelationDescriptor(dClassesStructs,  DeclVariables);
   dTypes           = createRelationDescriptor(dVariables,       Types);
   
+  //Make a few of these relationships invisible:
+  dReturnType.setDepth(0);
+  dParameters.setDepth(0);
+  dDeclVariables.setDepth(0);
+  dTypes.setDepth(0);
   /*
-  DataElement dC_QUERY = createCommandDescriptor(dFunctions, "Query", "C_QUERY");
+  DataElement dC_QUERY = crevateCommandDescriptor(dFunctions, "Query", "C_QUERY");
   createReference(dClassesStructs, dC_QUERY);
   createReference(dUsableCppObject, dC_QUERY);
 */
