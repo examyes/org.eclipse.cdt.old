@@ -288,16 +288,18 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
     public void enableSelection(boolean enable)
     {
+	_selectionListener.enable(enable);
+	_toolBar.enable(enable);
+	_viewer.enable(enable);
 	if (enable)
 	    {
+
 		DataElement selected = _viewer.getSelected();
 		if (selected != null)
 		    {
-			_viewer.select(selected);
+			_viewer.select(selected);			
 		    }		
 	    }
-	_selectionListener.enable(enable);
-	_toolBar.enable(enable);
     }
 
     public void setSelected(DataElement element, boolean permiate)

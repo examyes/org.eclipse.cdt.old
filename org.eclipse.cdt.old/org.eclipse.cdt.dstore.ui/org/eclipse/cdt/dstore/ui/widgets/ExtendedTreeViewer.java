@@ -280,6 +280,13 @@ public class ExtendedTreeViewer extends TreeViewer
 	    }
     }	
 
+    public void enable(boolean flag)
+    {
+	if (flag)
+	    {	       
+		//refresh();
+	    }
+    }
     
   protected Item newItem(Widget parent, int flags, int ix)  
       {
@@ -292,6 +299,7 @@ public class ExtendedTreeViewer extends TreeViewer
 		  return new TreeItem((TreeItem) parent, flags);
 	      }
 	}
+
 
 public void doExpand(DataElement obj)
       {

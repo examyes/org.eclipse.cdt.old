@@ -258,22 +258,31 @@ public class ExtendedTableViewer extends TableViewer
 	    }
     }	
 
+    public void enable(boolean flag)
+    {
+	if (flag)
+	    {
+		Table table = getTable();
+		table.setRedraw(false);
+		refresh();
+		table.setRedraw(true);
+	    }
+    }
+
     private void internalRefresh(DataElement parent)
     {
 	try
 	    {
 		Table table = getTable();
 		
-		Object[] sorted = getSortedChildren(parent);		
-
 		// remove those that are gone		
 		ArrayList associated = parent.getAssociated(_property);
 
-		TableItem[] children = table.getItems();
+		TableItem[] items = table.getItems();
 		ArrayList toRemove = new ArrayList();
-		for (int i = 0; i < children.length; i++) 
+		for (int i = 0; i < items.length; i++) 
 		    {
-			TableItem item = children[i];
+			TableItem item = items[i];
 			if (item != null)
 			    {
 				DataElement data = (DataElement)item.getData();
@@ -298,31 +307,13 @@ public class ExtendedTableViewer extends TableViewer
 			removee.dispose();
 			removee = null;
 		    }
-				
-		// add new or modified
-		TableItem[] items = table.getItems();
-		int numMissing = sorted.length - items.length;
-		if (numMissing > 0)
-		    {
-			for (int n = 0; n < numMissing; n++)
-			    {
-				newItem(table, SWT.NONE, items.length + n);
-			    }
-		    }
+		
+		updateItems(table, associated.toArray());
 
-		items = table.getItems();
-		for (int i = 0; i < sorted.length; i++)
+	       	if (_listener.isEnabled())
 		    {
-			DataElement child = (DataElement)sorted[i];			
-			synchronized(child)
-			    {
-				if (_viewFilter.select(this, child, null))
-				    {
-					updateItem(items[i], child);
-				    }
-			    }		
+			refresh();
 		    }
-
 
 		if (table.getItemCount() == 0) 
 		    {
@@ -338,6 +329,45 @@ public class ExtendedTableViewer extends TableViewer
 		System.out.println(e);
 	    }				
     }    
+
+    private void updateItems(TableItem[] items, Object[] elements)
+    {
+	for (int i = 0; i < elements.length; i++)
+	    {
+		DataElement child = (DataElement)elements[i];			
+		synchronized(child)
+		    {
+			if (_viewFilter.select(this, child, null))
+			    {
+				updateItem(items[i], child);
+			    }
+		    }		
+	    }
+    }
+   
+    private void updateItems(Table table, Object[] elements)
+    {
+	for (int i = 0; i < elements.length; i++)
+	    {
+		DataElement child = (DataElement)elements[i];			
+		synchronized(child)
+		    {
+			if (_viewFilter.select(this, child, null))
+			    { 
+				Item item = findItemFor(table, child);
+				if (item != null)
+				    {
+					updateItem(item, child);
+				    }
+				else
+				    {
+					item = newItem(table, SWT.NONE, i);
+					updateItem(item, child); 
+				    }
+			    }
+		    }		
+	    }
+    }
    
     protected Item newItem(Widget parent, int flags, int ix)  
     {
@@ -496,22 +526,11 @@ public void doExpand(DataElement obj)
     
     public DataElement getSelected()
     {
-	if ((_selected != null) && _selected.isDeleted())
-	    {
-		//		_selected = findElement(_selected);
-	    }
-
 	return _selected;
     }
 
     public Object getInput()
     {
-	if ((_currentInput != null) && _currentInput.isDeleted())
-	    {
-		//		_currentInput = findElement(_currentInput);
-
-	    }
-	
 	return _currentInput;
     }
 
