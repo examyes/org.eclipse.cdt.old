@@ -62,6 +62,7 @@ import org.eclipse.ui.part.*;
 		  DataElement selected = ConvertUtility.convert(e);
 		  if (selected != null)
 		      {
+			  selected.expandChildren();
 			  DataElement root = selected.dereference();			  
 			  _window.setSelected(root, true);		
 			  if (_gotoAction != null)
