@@ -186,14 +186,18 @@ public abstract class StorageMonitor
       }
 
       _maxLines = _getGdbStorage.getMaxLines();
+      int flags = EPDC.MonStorEnabled | EPDC.MonStorContentsChanged | EPDC.MonStorAddressChanged;
 
       if(_maxLines<=0)
       {
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(1,"StorageMonitor.updateStorage returned lines="+_maxLines ); 
+             
+         _maxLines = 1;
+         _storageChanged = true;
+         _changedStorage.addElement( new ChangedStorage(_id, 0, "00000000", "?storage error?", flags) );
          return;
-      }
-      int flags = EPDC.MonStorEnabled | EPDC.MonStorContentsChanged | EPDC.MonStorAddressChanged;
+      }      
 
       if (_storageAddresses==null)
       {  
@@ -232,95 +236,168 @@ public abstract class StorageMonitor
     * Get the REpGetNextStorageId item for this storage.  If the thread 
     * associated with this storage is no longer active, null is returned.
     */
-   public ERepGetNextMonitorStorageId getStorageChangeInfo(EPDC_Reply rep)
-   {
+	public ERepGetNextMonitorStorageId getStorageChangeInfo(EPDC_Reply rep) {
+	
+		if (Gdb.traceLogger.DBG)
+			Gdb.traceLogger.dbg(
+				1,
+				"StorageMonitor.getRegisterChangeInfo _changedStorage.size="
+					+ _changedStorage.size());
+	
+		ERepGetNextMonitorStorageId changeInfo = null;
+		int size = _changedStorage.size();
+		int requestedSize = (_endLine - _startLine) + 1;
+	
+		int startLineOffset = _startLine;
+		int endLineOffset = _endLine; // 81 lines * 4 cols/line = 324 total columns
+	
+		String baseAddress = _baseAddress;
+		int lineOffset = 0;
+		int unitOffset = 0;
+		EStdStorageLocation location =
+			new EStdStorageLocation(baseAddress, lineOffset, unitOffset);
+		EStdExpression2 expr = _expr;
+		//         short unitStyle=EPDC.StorageStyle32BitIntHex;
+		short unitStyle = EPDC.StorageStyleByteHexCharacter;
+		int unitCount = 16; // 4 columns
+		short addressStyle = 1; // flat
+		// Line Offsets:
+		int firstAddress = 0x01;
+		int secondAddress = 0x0A;
+		int firstContents = 0x0B;
+		int secondContents = 0x2C;
+		int attributeIndex = 0x2D;
+		ERepGetNextMonitorStorageLine[] lines = new ERepGetNextMonitorStorageLine[requestedSize];
+	
+		String attributes = "\5\5\5\5"; //4=allocated, 2=changed, 1=editable
+		short flags = 0;
+		short id = 0;
+	
+		//???????? StorageMonitor.getStorageChangeInfo should use z+_startLine instead of z ????????????
+		for (int z = 0; z < size; z++) {
+			ChangedStorage s = (ChangedStorage) _changedStorage.elementAt(z);
+			if (s == null)
+			{
+				continue;
+			}
+				
+			if (s.contents.startsWith("?storage error?")				)
+			{
+				String contents = "????????????????????????????????" + "\0" + "................" + "\0" + attributes;
+				String address = "000000" + "\0";
+				int lineNum = s.lineNum;
+				flags = (short) s.flag;
+				id = s.id;
+				ERepGetNextMonitorStorageLine storageLine =	
+				new ERepGetNextMonitorStorageLine(lineNum, address, contents);
+				lines[z] = storageLine;
+				continue;
+			}
+	
+			String contents = s.contents;
+			String address = s.address + "\0";
+			int lineNum = s.lineNum;
+			flags = (short) s.flag;
+	
+			id = s.id;
+	
+			String translatedText = getTranlsatedText(contents);
+	
+			contents = contents + "\0" + translatedText + "\0" + attributes;
+			if (Gdb.traceLogger.DBG)
+				Gdb.traceLogger.dbg(
+					1,
+					"StorageMonitor.getStorageChangeInfo line="
+						+ z
+						+ " address="
+						+ address
+						+ " flags="
+						+ Integer.toHexString(flags)
+						+ " contents="
+						+ contents);
+	
+			ERepGetNextMonitorStorageLine storageLine =
+				new ERepGetNextMonitorStorageLine(lineNum, address, contents);
+			if (Gdb.traceLogger.DBG)
+				Gdb.traceLogger.dbg(
+					1,
+					"StorageMonitor.getStorageChangeInfo getLineNumber="
+						+ storageLine.getLineNumber()
+						+ " getAddress="
+						+ storageLine.getAddress()
+						+ " getStorage="
+						+ storageLine.getStorage()[0]);
+			lines[z] = storageLine;
+	
+			//    0x00 0x33 -- bytes in line (decimal 51)
+			//    0x00 -- end-of-bytes
+			//01  0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 character 1st address
+			//    0x00 -- end-of-1st-address
+			//         -- 2nd Address unused
+			//0A  0x00 -- end-of-2nd-address
+			//0B  0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 1st word
+			//    0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 2nd word
+			//    0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 3rd word
+			//    0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 4th word
+			//    0x00 -- end-of-1st-Contents
+			//         -- 2nd Contents unused (could be Ascii Chars if used
+			//2C  0x00 -- end-of-2nd-Contents
+			//2D  0x00 0x00 0x00 0x00 -- 4 attributes
+		}
+		
+		if (size < requestedSize) {
+			
+			if (Gdb.traceLogger.DBG)
+				Gdb.traceLogger.dbg(1, "Cannot access memory, fill up rest of change packet");
 
-      if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(1,"StorageMonitor.getRegisterChangeInfo _changedStorage.size="+_changedStorage.size() );
-
-      ERepGetNextMonitorStorageId changeInfo = null;
-      int size = _changedStorage.size();
-
-         int startLineOffset = _startLine; 
-         int endLineOffset = _endLine;  // 81 lines * 4 cols/line = 324 total columns
-         EStdStorageRange range= new EStdStorageRange(startLineOffset,endLineOffset);
-         String baseAddress = _baseAddress;
-         int lineOffset = 0;
-         int unitOffset = 0;
-         EStdStorageLocation location = new EStdStorageLocation(baseAddress, lineOffset, unitOffset);
-         EStdExpression2 expr= _expr;
-//         short unitStyle=EPDC.StorageStyle32BitIntHex;
-         short unitStyle=EPDC.StorageStyleByteHexCharacter;
-         int unitCount=16; // 4 columns
-         short addressStyle=1;  // flat
-         // Line Offsets:
-         int firstAddress   = 0x01;
-         int secondAddress  = 0x0A;
-         int firstContents  = 0x0B;
-         int secondContents = 0x2C;
-         int attributeIndex = 0x2D;
-      ERepGetNextMonitorStorageLine[] lines = new ERepGetNextMonitorStorageLine[size];
-
-      String attributes = "\5\5\5\5";  //4=allocated, 2=changed, 1=editable
-      short flags = 0;
-      short  id   = 0;  
-           
-      //???????? StorageMonitor.getStorageChangeInfo should use z+_startLine instead of z ????????????
-      for(int z=0; z<size; z++)
-      {
-         ChangedStorage s = (ChangedStorage)_changedStorage.elementAt(z);
-         if(s==null) continue;
-
-         String contents = s.contents;
-         String address = s.address +"\0";
-         int lineNum = s.lineNum;
-         flags = (short)s.flag;
-                          
-         id   = s.id;  
-
-		 String translatedText = getTranlsatedText(contents);
-
-         contents = contents  + "\0" + translatedText + "\0"+ attributes;
-         if (Gdb.traceLogger.DBG) 
-             Gdb.traceLogger.dbg(3,"StorageMonitor.getStorageChangeInfo line="+z+" address="+address+" flags="+Integer.toHexString(flags)+" contents="+contents );
-
-         ERepGetNextMonitorStorageLine storageLine = new ERepGetNextMonitorStorageLine(lineNum,address,contents);
-         if (Gdb.traceLogger.DBG) 
-             Gdb.traceLogger.dbg(1,"StorageMonitor.getStorageChangeInfo getLineNumber="+storageLine.getLineNumber()
-                    +" getAddress="+storageLine.getAddress()+" getStorage="+storageLine.getStorage()[0] );
-         lines[z] = storageLine;
-    
-//    0x00 0x33 -- bytes in line (decimal 51)
-//    0x00 -- end-of-bytes
-//01  0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 character 1st address
-//    0x00 -- end-of-1st-address
-//         -- 2nd Address unused
-//0A  0x00 -- end-of-2nd-address
-//0B  0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 1st word
-//    0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 2nd word
-//    0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 3rd word
-//    0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 -- 8 characters, 4th word
-//    0x00 -- end-of-1st-Contents
-//         -- 2nd Contents unused (could be Ascii Chars if used
-//2C  0x00 -- end-of-2nd-Contents
-//2D  0x00 0x00 0x00 0x00 -- 4 attributes
-      }
-
-         if(getStorageDeleted())
-         {
-         	id = getID();
-         	flags = (short)EPDC.MonStorDeleted;
-         }
-
-ERepGetNextMonitorStorageId storage = new ERepGetNextMonitorStorageId(
-            id, range, location, expr, unitStyle, unitCount, addressStyle, 
-            firstAddress, secondAddress, firstContents, secondContents, attributeIndex, flags, lines);
-      changeInfo = storage;
-      _storageChanged = false;
-      _changedStorage.removeAllElements();
-
-      return changeInfo; 
-   }
+			
+			for (int i = size; i<requestedSize; i++)
+			{
+				String contents = "????????????????????????????????";
+				String translatedText = "................";
+				String address = "00000000" + "\0";
+				int lineNum = i;
+				flags = EPDC.MonStorEnabled | EPDC.MonStorContentsChanged | EPDC.MonStorAddressChanged;
+		
+		
+				contents = contents + "\0" + translatedText + "\0" + attributes;
+		
+				ERepGetNextMonitorStorageLine storageLine =
+					new ERepGetNextMonitorStorageLine(lineNum, address, contents);
+				lines[i] = storageLine;
+				
+			}
+		}
+		
+		if (getStorageDeleted()) {
+			id = getID();
+			flags = (short) EPDC.MonStorDeleted;
+		}
+			
+		EStdStorageRange range = new EStdStorageRange(startLineOffset, endLineOffset);
+	
+		ERepGetNextMonitorStorageId storage =
+			new ERepGetNextMonitorStorageId(
+				id,
+				range,
+				location,
+				expr,
+				unitStyle,
+				unitCount,
+				addressStyle,
+				firstAddress,
+				secondAddress,
+				firstContents,
+				secondContents,
+				attributeIndex,
+				flags,
+				lines);
+		changeInfo = storage;
+		_storageChanged = false;
+		_changedStorage.removeAllElements();
+	
+		return changeInfo;
+	}
    
    /*
    		Translate raw data from storage monitor to character representation

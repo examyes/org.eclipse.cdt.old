@@ -118,7 +118,16 @@ public class GetGdbStorage
 //        {
 //	        _storageContents[i/2] = "?storage_error?";
 //        }	        
-       _storageContents[i] = "?storage_error?";
+       
+       _storageContents[i] = "?storage error?";
+       _storageAddresses[i] = "00000000";
+       
+       if (str.startsWith("Cannot access memory at address"))
+       {
+       		_maxLines--;
+       		continue;
+       }
+       
         if(str!=null && !str.equals("") )
         {
         	if (Gdb.traceLogger.DBG) 
@@ -165,7 +174,10 @@ public class GetGdbStorage
                 if(hex<0)
                 {  if (Gdb.traceLogger.ERR) 
                        Gdb.traceLogger.err(2,"GetGdbStorage no '0x' in storage str: "+data );
-                   lastEvaluationError += str;
+                       // return with whatever we have... do not set lastEvaluationError
+//                   lastEvaluationError += str;
+					_maxLines--;
+				   lastEvaluationError = null;
                    return;
                 }
                 hex += 2;
