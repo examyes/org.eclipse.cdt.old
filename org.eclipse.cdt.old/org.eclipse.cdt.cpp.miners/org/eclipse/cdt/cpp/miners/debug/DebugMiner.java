@@ -8,6 +8,7 @@ import java.util.*;
 
 public class DebugMiner extends Miner
 {
+    private String _gdbPluginPath = null;
     private String _debugJarPath = null;
     private String _debugInvocation = null;
 
@@ -15,8 +16,9 @@ public class DebugMiner extends Miner
     {
        String pluginPath = null;
        pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
+       _gdbPluginPath = pluginPath + "com.ibm.debug.gdb/";
 
-       String osString = System.getProperty("os.name");			    
+       String osString = System.getProperty("os.name");			
        if (osString.equals("win32"))
 	   {			
 	       _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar;" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ";" on Windows
@@ -48,16 +50,16 @@ public class DebugMiner extends Miner
 			handleDebug(subject,
 				    getCommandArgument(theCommand, 1),
 				    getCommandArgument(theCommand, 2),
-				    getCommandArgument(theCommand, 3),			    
+				    getCommandArgument(theCommand, 3),			
 				    jre,
 				    status);
 		    }
 		else
 		    {
 			handleDebug(subject,
-				    getCommandArgument(theCommand, 1),
+ 				    getCommandArgument(theCommand, 1),
 				    getCommandArgument(theCommand, 2),
-				    getCommandArgument(theCommand, 3),			    
+				    getCommandArgument(theCommand, 3),			
 				    status);
 		    }
 	    }
@@ -66,17 +68,19 @@ public class DebugMiner extends Miner
 	return status;
     }
 
-    public void handleDebug(DataElement directory, DataElement hostName, DataElement port, 
+    public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
 			    DataElement key, DataElement status)
     {
 	handleDebug(directory, hostName, port, key, status, null);
     }
 
-    public void handleDebug(DataElement directory, DataElement hostName, DataElement port, 
+    public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
 			    DataElement key, DataElement jre, DataElement status)
     {
-	String invocationStr = _debugInvocation + "-qhost=" +
-	    hostName.getName() + " -quiport=" + port.getName() + " -startupKey=" + key.getName();
+	String invocationStr = _debugInvocation + "-qhost=" + hostName.getName() +
+                                              " -quiport=" + port.getName() +
+                                              " -startupKey=" + key.getName() +
+                                              " -gdbPath=" + _gdbPluginPath;
 
 	if (jre != null)
 	    {
@@ -85,7 +89,6 @@ public class DebugMiner extends Miner
 
 	System.out.println("invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
-       
 
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
 	if (cmdDescriptor != null)
