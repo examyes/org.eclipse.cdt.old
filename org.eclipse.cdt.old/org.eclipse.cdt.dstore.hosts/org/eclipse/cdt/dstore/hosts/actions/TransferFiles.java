@@ -71,7 +71,9 @@ public class TransferFiles extends Thread
 	DataStore targetDataStore = _target.getDataStore();
 
 
-	boolean validSource = _source.getType().equals("file") || _source.getType().equals("directory"); 
+	boolean validSource = _source.getType().equals("file") || 
+	    _source.getType().equals("directory") ||
+	    _source.getType().equals("Project"); // hack 
 	if (validSource)
 	    {
 		if (_source.isOfType("directory"))
@@ -101,7 +103,6 @@ public class TransferFiles extends Thread
     {
 	target.setExpanded(true);
 
-	System.out.println(source.getName() + " -> " + target.getName());
 	DataStore targetDataStore = target.getDataStore();
 	DataStore sourceDataStore = source.getDataStore();
 
@@ -243,7 +244,6 @@ public class TransferFiles extends Thread
 	
 	if (type.equals("directory") && copiedSource != null)
 	    {
-		System.out.println("\tsubdir");
 		if (_pm != null)
 		    {
 			_pm.beginTask("Transfering files from " + source.getName() + "...", source.getNestedSize());
@@ -266,6 +266,7 @@ public class TransferFiles extends Thread
 					queryDates(copiedSource);
 				    }
 				
+
 				transfer(child, copiedSource);
 				targetDataStore.refresh(target);
 			    }
