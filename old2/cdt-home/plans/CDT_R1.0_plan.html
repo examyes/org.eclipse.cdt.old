@@ -10,16 +10,30 @@
 <h1>
 C/C++ Development Tools - CDT Project<br>
 R1.0 Updated Plan</h1><p>
-First edition July 10, 2002<br>
-Second edition July 25, 2002<br>
-Third edition September 4, 2002<br>
-Fourth Edition October 22, 2002<p>
+<table BORDER=0 CELLSPACING =0 CELLPADDING=0 WIDTH="30%">
+<tr>
+<td>First edition</td><td>July 10, 2002</td>
+</tr>
+<tr>
+<td>Second edition</td><td>July 25, 2002</td>
+</tr>
+<tr>
+<td>Third edition</td><td>September 4, 2002</td>
+</tr>
+<tr>
+<td>Fourth edition</td><td>October 22, 2002</td>
+</tr>
+<tr>
+<td>Fourth edition</td><td>October 29, 2002</td>
+</tr>
+
+</table><p>
 
 This document lays out the plan for the next major release of the C/C++
-Development Tools (CDT) Project, designated release 2.0. The two main goals
+Development Tools (CDT) Project, designated release 1.0. The two main goals
 of the 1.0 release will be to enable CDT to run on Eclipse R2.0.1, and to define 
-and implement a fully extensible framework.  <b>Note
-that the CDT 1.0 release will only run on Eclipse R2.0.1 or later.</b>
+and implement a fully extensible framework.  <br>
+<b>Note: The CDT 1.0 release will only run on Eclipse R2.0.1.</b>
 <p>This plan serves as an important input to the planning processes of
 the various customers of the CDT Project. It tells them what to expect
 (or what not to expect) in the next release so that they can plan their
@@ -33,6 +47,11 @@ a component is changing. Particular problem reports being worked on for
 this release can be tracked through the Eclipse <a href="http://dev.eclipse.org/bugs/">bug
 database</a>; the "Target Date" field reflects when a work item will
 become available in the main development stream.</p>
+
+<p>
+<b>Note:Version 1.0 APIs are NOT frozen</b>. They are expected to evolve over the next 6-9 months. 
+Every effort is made to allow for backward compatibility, but backward compatibily cannot be guaranteed.
+</p>
 
 <table BORDER=0 CELLSPACING =10 CELLPADDING=10 WIDTH="100%">
 <tr>
@@ -660,13 +679,15 @@ be available for download as soon as the release has been tested and validated.
 Compatibility with Previous Release</h2>
 
 <p><br><b>API Contract Compatibility:</b> The architecture for the CDT 1.0 is completely different than
-the architecture of the CDT 1.0 release. As a result, there will be no compatibility supported, between IBM version 1.0 and the new version 1.0.
+the architecture of the previous (prior to July 2002) CDT 1.0 release. 
+As a result, there will be no compatibility supported, between previous version 1.0 and the new version 1.0.
 </p>
 <p>
-Future releases will strive to be contract compatibile built upon the 1.0 contracts.
-This means that programs in full compliance with contracts specified in the CDT 1.0 APIs will automatically
-be in full compliance with the CDT 2.0 APIs. Downward contract compatibility
-is not supported. There is no guarantee that compliance with the CDT 2.0
+Future releases will strive to be contract compatibile built upon the new 1.0 contracts.
+Given that the 1.0 API contracts are not frozen, full contract compatibility is not guaranteed between 1.0 and 2.0 releases.
+This means that programs in full compliance with contracts specified in the CDT 1.0 APIs as frozen, will automatically
+be in full compliance with the CDT 2.0 APIs. Contracts for API that are not listed as frozen will not be guaranteed.<br>
+Downward contract compatibility is not supported. There is no guarantee that compliance with the CDT 2.0
 APIs would ensure compliance with the CDT 1.0 APIs.
 <br>&nbsp;
 <h2>
@@ -685,7 +706,7 @@ to the plugin.<p>
 </tr>
 </table>
 <center><I>
-Last Modified on Tuesday, October 22, 2002
+Last Modified on Tuesday, October 29, 2002
 </I></center>
 
 </body>
