@@ -2052,9 +2052,12 @@ public final class DataStore
     public ArrayList findObjectsOfType(DataElement root, DataElement type)
     {
 	ArrayList results = new ArrayList();
-	for (int i = 0; i < root.getNestedSize(); i++)
+	ArrayList searchList = root.getAssociated("contents");
+	if (searchList != null)
+	{
+		for (int i = 0; i < searchList.size(); i++)
 	    {
-		DataElement child = root.get(i);
+		DataElement child = (DataElement)searchList.get(i);
 		if (child.isOfType(type))
 		    {
 			results.add(child);
@@ -2066,6 +2069,7 @@ public final class DataStore
 			results.add(subResults.get(j));
 		    }
 	    }
+		}
 
 	return results;
     }
@@ -2599,6 +2603,16 @@ public final class DataStore
     public void saveFile(String localPath, File file)
     {
 	File newFile = new File(localPath);
+	if (!newFile.exists())
+	{
+		try
+		{
+		newFile.createNewFile();
+		}
+		catch (IOException e)
+		{
+		}
+	}
 
 	try
 	    {
