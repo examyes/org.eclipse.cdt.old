@@ -30,8 +30,8 @@ public class ServerReceiver extends Receiver
       {
         DataElement rootOutput = (DataElement)documentObject.get(a);
 
-	DataElement log = _dataStore.getLogRoot();
-	log.addNestedData(rootOutput, false);	
+		DataElement log = _dataStore.getLogRoot();
+		log.addNestedData(rootOutput, false);	
 	
         if (rootOutput.getName().equals("C_EXIT"))
         {
@@ -50,9 +50,8 @@ public class ServerReceiver extends Receiver
      */
     public void handleError(Exception e) 
     {
-	e.printStackTrace();
-
-	_connection.finished(this);
+		e.printStackTrace();
+		_connection.finished(this);
     }
 
 }

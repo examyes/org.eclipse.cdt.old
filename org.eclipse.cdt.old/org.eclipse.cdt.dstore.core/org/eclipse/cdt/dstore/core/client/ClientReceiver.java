@@ -15,6 +15,8 @@ import java.io.*;
 
 public class ClientReceiver extends Receiver
 {
+  private boolean _receivedHandshake = false;
+  
   public ClientReceiver(Socket socket, DataStore dataStore)
       {
         super(socket, dataStore);
@@ -25,27 +27,38 @@ public class ClientReceiver extends Receiver
       if (documentObject.getName().equals("exit"))
       {
         _canExit = true;
+        _receivedHandshake = false;
+      }
+      else if (documentObject.getName().equals("accept"))
+      {
+      	_receivedHandshake = true;	
       }
       else
       {        
-	  synchronized(documentObject)
+      	if (_receivedHandshake)
+      	{
+		  synchronized(documentObject)
 	      {
-		  for (int i = 0; i < documentObject.getNestedSize(); i++)
+			  for (int i = 0; i < documentObject.getNestedSize(); i++)
 		      {
-			  DataElement rootOutput = documentObject.get(i);
-			  _dataStore.refresh(rootOutput);
+				  DataElement rootOutput = documentObject.get(i);
+				  _dataStore.refresh(rootOutput);
 		      }
 		     documentObject.removeNestedData();
 		     _dataStore.deleteObject(documentObject.getParent(), documentObject);
 	      }
+      	}
+      	else
+      	{      	
+      		_canExit = true;
+      	}	
       }
     }
     
     public void handleError(Exception e) 
     {
-	//e.printStackTrace();
-	DataElement status = _dataStore.getStatus();
-	status.setAttribute(DE.A_NAME, e.getMessage());
-	_dataStore.refresh(status);
+		DataElement status = _dataStore.getStatus();
+		status.setAttribute(DE.A_NAME, e.getMessage());
+		_dataStore.refresh(status);
     }
 }

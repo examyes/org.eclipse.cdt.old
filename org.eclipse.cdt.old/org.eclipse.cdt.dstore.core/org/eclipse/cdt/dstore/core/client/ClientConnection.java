@@ -456,7 +456,7 @@ public class ClientConnection
 
     private void init()
     {
-	init(10000);
+		init(10000);
     }
 
     private void init(int initialSize)
@@ -466,7 +466,7 @@ public class ClientConnection
 	
         _dataStore = new DataStore(_clientAttributes, initialSize);
         _dataStore.setDomainNotifier(_domainNotifier);
-	_dataStore.createRoot();
+		_dataStore.createRoot();
 	
         _host = _clientAttributes.getAttribute(ClientAttributes.A_HOST_NAME);
         _hostDirectory = _clientAttributes.getAttribute(ClientAttributes.A_HOST_PATH);

@@ -139,13 +139,14 @@ public class ConnectionEstablisher
               // add this connection to list of elements
               _receivers.add(receiver);
               _updateHandler.addSender(sender);
+              _updateHandler.accept(newSocket);
 	      
               receiver.start();
 	      
               if (_receivers.size() == 1)
               {
-		  _updateHandler.start();
-		  _commandHandler.start();
+				  _updateHandler.start();
+				  _commandHandler.start();
               }
 	      
 	      if (_receivers.size() == _maxConnections)
@@ -154,14 +155,14 @@ public class ConnectionEstablisher
 		      _serverSocket.close();
 		      
 		  }
-            }
+         }
 	
         catch (IOException ioe)
-            {
-		System.err.println(ServerReturnCodes.RC_CONNECTION_ERROR);
-		System.err.println("Server: error initializing socket: " + ioe);
-		_continue = false;
-            }
+        {
+			System.err.println(ServerReturnCodes.RC_CONNECTION_ERROR);
+			System.err.println("Server: error initializing socket: " + ioe);
+			_continue = false;
+        }
       }      
     }
     
