@@ -873,9 +873,9 @@ public class DataElementTableViewer extends TableViewer
 				firstWidth = 200;
 				averageWidth -= difference / columns.length;
 
-				if (averageWidth < 100)
+				if (averageWidth < 50)
 				    {
-					averageWidth = 100;
+					averageWidth = 50;
 				    }
 			    }
 			
