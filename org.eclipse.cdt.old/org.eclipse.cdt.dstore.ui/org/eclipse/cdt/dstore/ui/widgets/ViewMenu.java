@@ -601,6 +601,7 @@ public class ViewMenu implements IMenuListener
 			if (object != _relationSelected)
 			    {
 				setRelation(object);
+				updateVisibility();
 			    }
 		    }
 	    }
@@ -616,6 +617,7 @@ public class ViewMenu implements IMenuListener
 			if (object != _filterSelected)
 			    {
 				setFilter(object);
+				updateVisibility();
 			    }
 		    }
 	    }

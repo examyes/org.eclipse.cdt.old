@@ -174,6 +174,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 							}
 						}
 					    
+					    fileElement.getFileObject(false);
 					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, null);
 					}
 				    		    

@@ -341,7 +341,6 @@ public class DataElementTableViewer extends TableViewer
 	int maxAdd = 80;
 	int numAdded = 0;
 
-	
 	// first update existing ones
 	for (int i = (elements.size() - 1); i >= 0; i--)
 	    {
@@ -359,10 +358,10 @@ public class DataElementTableViewer extends TableViewer
 		    }
 	    }
 
-	
+
 
        	int totalItems = table.getItemCount();	  
-	
+
 	// then create new ones
 	for (int i = 0; (i < elements.size()) && (numAdded < maxAdd); i++)
 	    {		
@@ -385,6 +384,7 @@ public class DataElementTableViewer extends TableViewer
 		    }
 	    }
   
+
 	
 	if (recycled.size() > 0)
 	    {		
