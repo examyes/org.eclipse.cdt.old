@@ -5,8 +5,8 @@
 #Path to the cdt-home
 rootDir=/home/turnham/cdtweb
 #Change the next 2 lines when we change the build that CDT is being built with
-eclipseVersion=F1
-eclipseLink=http://download.eclipse.org/downloads/drops/S-F1-200205211339/index.php
+eclipseVersion=F2
+eclipseLink=http://download.eclipse.org/downloads/drops/S-F2-200206020843/index.php
 netrc=$HOME/.netrc
 theDate=`date +%Y%m%d`
 theDate2=`date +%Y/%m/%d`
@@ -101,9 +101,5 @@ rm cdt-eclipse-R2-$theDate.zip
 
 #Commit changes
 cvs commit -m 'Automated update' main.html mainNightly.html mainLatestNightly.html
-
-
-
-
-
-
+echo "All done"
+echo `date`
