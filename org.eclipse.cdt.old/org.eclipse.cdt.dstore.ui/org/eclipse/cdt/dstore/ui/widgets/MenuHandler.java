@@ -174,7 +174,8 @@ public class MenuHandler
 		{
 		    _loader.loadCustomActions(menu, selected, descriptor); 
 		    	
-		
+
+		    /*** DKM - no need for this anymore
 		    if (_openPerspectiveAction == null)
 			{
 				_openPerspectiveAction = _loader.getOpenPerspectiveAction();
@@ -187,6 +188,7 @@ public class MenuHandler
 		      menu.add(new Separator("Perspective Actions"));
 		      menu.add(_openPerspectiveAction);
 		  	}
+		    ****/
 		}
 	  }
 	
