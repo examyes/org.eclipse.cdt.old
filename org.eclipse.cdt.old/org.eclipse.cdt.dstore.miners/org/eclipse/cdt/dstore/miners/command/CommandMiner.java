@@ -124,6 +124,8 @@ public class CommandMiner extends Miner
    	  	 	output.write(intoout, 0, len);
    	  	 	output.write('\n');
    	  	 	output.flush();
+   	  	 	
+   	  	 	theThread.createObject("command", input);
    	  	 }
    	  	 catch (IOException e)
    	  	 {
@@ -717,7 +719,7 @@ public String removeWhitespace(String theLine)
     private void createObject (String,String)
     Create a simple object with no source information
  *************************************************************************************************/
- private DataElement createObject (String type, String text)
+ public DataElement createObject (String type, String text)
  {
    return _dataStore.createObject(_status, type, text, "");
  }
