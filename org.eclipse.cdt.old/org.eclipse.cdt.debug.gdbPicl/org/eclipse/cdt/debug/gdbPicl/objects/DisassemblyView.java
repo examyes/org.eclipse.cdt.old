@@ -107,7 +107,7 @@ abstract class DisassemblyView extends View
 	  else
 	  {
 	  	// first line in disassembly if we can't map
-		lineNum = "1";
+		lineNum = "0";
 	  }
 
       return lineNum;
@@ -163,7 +163,28 @@ abstract class DisassemblyView extends View
       
       GdbThreadManager threadManager = (GdbThreadManager) gdbDebugSession.getThreadManager();
       
-	  Vector locations = threadManager.getLineNumforPart(sourceFileName);
+      Vector partThreadComponents = threadManager.getThreadComponentsforPart(sourceFileName);
+      
+      if (partThreadComponents.size() == 0)
+      {
+      	 _parentPart.setPartChanged(true);
+      	 _fakeNoSource = true;
+      }
+      
+      for (int i=0; i< partThreadComponents.size(); i++)
+      {
+      	// force to update call stack info during reply
+      	// Since disassembly view is generated dynamically, disassembly view may
+      	// not be availabe at the time when the call stack info was generated.
+      	// As a result, we need to update the threads and make sure that the call
+      	// stack info is valid for the new disassembly view.
+		((GdbThreadComponent)partThreadComponents.elementAt(i)).setChanged();
+      }
+
+	  // update threads forces new call stacks to be included in EPDC reply      
+      threadManager.updateThreads();
+      
+	  Vector locations = threadManager.getStackFramesforPart(sourceFileName);
 	  
 	  if (locations.size() == 0)
 	  {
@@ -175,7 +196,19 @@ abstract class DisassemblyView extends View
        
 	  for (int i=0; i<locations.size(); i++)
 	  {
-	  	  String disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, ((Integer)locations.elementAt(i)).toString());
+	  	  Integer line = new Integer(((GdbStackFrame)locations.elementAt(i)).getLineNumber());
+	  	  String disAddress;
+	  	  
+	  	  if (line.intValue() > 0)
+	  	  {
+	  	  	disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, line.toString());
+	  	  }
+	  	  else
+	  	  {
+	  	  	disAddress = ((GdbStackFrame)locations.elementAt(i)).getFrameAddress();
+	  	  }
+	  	
+//	  	  String disAddress = gdbDebugSession._getGdbFile.convertSourceLineToAddress(sourceFileName, ((Integer)locations.elementAt(i)).toString());
 	  	  
 	  	  // ignore this location if address is null
 	  	  if (disAddress == null)
