@@ -376,5 +376,9 @@ public class OutputViewer extends TableViewer
     {	
 	getTable().setFont(font);
     }
+    
+    public void enableActions()
+    {
+    }
 }
 

@@ -8,6 +8,8 @@ package org.eclipse.cdt.cpp.ui.internal.views;
 
 import org.eclipse.cdt.cpp.ui.internal.actions.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
+
 import org.eclipse.cdt.dstore.hosts.*;
 import org.eclipse.cdt.dstore.hosts.views.*;
 
@@ -36,6 +38,10 @@ import org.eclipse.swt.widgets.*;
 public class CppOutputViewer extends OutputViewer
 {
     private OpenEditorAction      _cppOpenEditorAction;
+    private CancelAction 	 	  _cancelAction;
+    private ShellAction			  _shellAction;
+    private HistoryAction	      _backAction;
+    private HistoryAction         _forwardAction;
     
   public class CancelAction extends Action
   {
@@ -65,6 +71,29 @@ public class CppOutputViewer extends OutputViewer
 	      }
       }
   }
+
+  public class ShellAction extends Action
+  {
+  	public ShellAction(String name, ImageDescriptor image)
+  	{
+  		super(name, image);
+  	}
+  	
+  	public void run()
+  	{
+  		CppPlugin plugin = CppPlugin.getDefault();
+  		ModelInterface api = plugin.getModelInterface();
+  		IProject project = plugin.getCurrentProject();
+  		if (project != null)
+  		{
+  			DataElement projectElement = api.findProjectElement(project);
+  			if (projectElement != null)
+  			{
+  				api.invoke(projectElement, "sh", true);
+  			}
+  		}
+  	}
+  }	
 
   public class HistoryAction extends Action
   {
@@ -142,12 +171,50 @@ public class CppOutputViewer extends OutputViewer
   public void fillLocalToolBar(IToolBarManager toolBarManager)
   {
   	CppPlugin plugin = CppPlugin.getDefault();
-    toolBarManager.add(new HistoryAction(plugin.getLocalizedString("OutputViewer.back"),
-					 plugin.getImageDescriptor("back"), -1));
-    toolBarManager.add(new HistoryAction(plugin.getLocalizedString("OutputViewer.forward"),
-					 plugin.getImageDescriptor("forward"), 1));
-    toolBarManager.add(new CancelAction(plugin.getLocalizedString("OutputViewer.Cancel"),
-					plugin.getImageDescriptor("cancel")));
+  	
+  	_shellAction = new ShellAction("Launch Shell",plugin.getImageDescriptor("command"));
+    toolBarManager.add(_shellAction);
+ 
+  	_backAction  = new HistoryAction(plugin.getLocalizedString("OutputViewer.back"),
+					 plugin.getImageDescriptor("back"), -1);
+    toolBarManager.add(_backAction);
+    
+    _forwardAction = new HistoryAction(plugin.getLocalizedString("OutputViewer.forward"),
+					 plugin.getImageDescriptor("forward"), 1);
+    toolBarManager.add(_forwardAction);
+    
+    _cancelAction = new CancelAction(plugin.getLocalizedString("OutputViewer.Cancel"),
+					plugin.getImageDescriptor("cancel"));
+    toolBarManager.add(_cancelAction);
+
+
+    enableActions();
   } 
     
+  public void enableActions()
+  {
+  	DataElement input = getCurrentInput();
+  	if (input != null && !input.getName().equals("done"))
+		{		
+			_cancelAction.setEnabled(true);  	
+		}
+	else
+		{
+			_cancelAction.setEnabled(false);
+		}
+	
+	_backAction.setEnabled(_currentInput != null);
+	_forwardAction.setEnabled(_currentInput != null);
+	
+	CppPlugin plugin = CppPlugin.getDefault();
+	IProject project = plugin.getCurrentProject();
+	if (project != null && project.isOpen())
+	{
+		_shellAction.setEnabled(true);
+	}
+	else
+	{
+		_shellAction.setEnabled(false);
+	}
+  }
 }

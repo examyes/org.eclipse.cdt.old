@@ -43,7 +43,7 @@ import java.util.*;
 
 public class CppOutputViewPart extends OutputViewPart 
     implements ICppProjectListener, SelectionListener, 
-    		IDomainListener
+    		IDomainListener, ISelectionListener
 
 {
 
@@ -128,9 +128,16 @@ public class CppOutputViewPart extends OutputViewPart
 	updateViewFont();
 	
 	getSite().setSelectionProvider(_viewer);
+
+	ISelectionService selectionService = getSite().getWorkbenchWindow().getSelectionService();
+	selectionService.addSelectionListener(this);
+
+	
 	fillLocalToolBar();
 	
     }
+    
+	
 
     public void updateViewForeground()
     {
@@ -175,6 +182,11 @@ public class CppOutputViewPart extends OutputViewPart
 	      
 	  }
     }
+    
+    public void selectionChanged(IWorkbenchPart p, ISelection s)
+    {
+    	_viewer.enableActions();
+    }
 
     public void projectChanged(CppProjectEvent event)
     {
@@ -191,11 +203,20 @@ public class CppOutputViewPart extends OutputViewPart
 		
 		
 	    default:
+	    {
+	    	_viewer.enableActions();
+	    }
 		break;
 	    }
     }
     
-    
+    public void dispose()
+    {
+        IWorkbench aWorkbench = _plugin.getWorkbench();
+        IWorkbenchWindow win= aWorkbench.getActiveWorkbenchWindow();
+        win.getSelectionService().removeSelectionListener(this);
+    }
+	
  	public void widgetDefaultSelected(SelectionEvent e) 
     {
 	  widgetSelected(e);
@@ -242,7 +263,7 @@ public class CppOutputViewPart extends OutputViewPart
       	}	
       }
       
-      return false;
+      return false; 
     }
 
     public void domainChanged(DomainEvent ev)
@@ -254,12 +275,15 @@ public class CppOutputViewPart extends OutputViewPart
 			if (_inputEntry.getText().length() > 0)
 			{
 				_sendButton.setEnabled(true);
-			}
+			} 
+			
+			_viewer.enableActions();
 		}
 		else
 		{
 			_inputEntry.setEnabled(false);
 			_sendButton.setEnabled(false);
+			_viewer.enableActions();
 		}
     }
     
@@ -269,6 +293,7 @@ public class CppOutputViewPart extends OutputViewPart
 		notifier.addDomainListener(_viewer);	
 		notifier.addDomainListener(this);
 		_viewer.setInput(element);		
+		_viewer.enableActions();
     }
     
     public Shell getShell()
