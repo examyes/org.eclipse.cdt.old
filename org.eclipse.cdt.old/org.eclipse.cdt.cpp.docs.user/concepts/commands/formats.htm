@@ -1,10 +1,13 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-<meta http-equiv="Content-Language" content="en-us">
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>Formats</title>
-</head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
+   <title>Formats</title>
+<link rel="stylesheet" type="text/css" href="/org.eclipse.help/html/default.css">
 <!----------------------------------------------------------------------------------->
+</head>
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
 <!-----------------------------------------------------------------------------------
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
@@ -16,51 +19,57 @@
 </table>
 ----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr> 
-<h1>Formats</h1>
+<caption><!----------></caption>
+
+<tr>
+<td>
+<h1>
+Formats</h1>
 <!----
      <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
         Formats</font></b></td>
----->
-  </tr>
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2"> 
-        <p>Formats control how the output from a command is parsed.  The most important reason 
-           for parsing output is to determine which lines of output contain references to files.
-           This allows for clicking on that line to cause the editor to open that reference.
-           Formats can also be useful when the output does not contain file references.
-           For example, formats can help "mark" portions of the output so it is easier to read.
-        <p>In the following simple example, lines of output from a <i>ls -l</i> command are
-           shown as both raw and parsed output.
-        <p><center><img src = "../../images/rawdiroutput.gif"></center>
-        <p>If we add these two simple format instructions to <b>&lt;<i>...</i>&gt;:\eclipse\plugins\com.ibm.dstore.miners\patterns.dat</b>:
-        <pre>
-           <b>command: ls.*</b>
-           <b>         file   file    pattern=.*\d{2}:\d{2} ([\w,.]*)</b>
-        </pre>
-        <p>and we create the icon for each object, <img src="../../images/file.gif">
-           ("file.gif"), when we run the command again we get:<br><br>
-           <center><img src = "../../images/parseddiroutput.gif"></center>
-        <p>For details on how to create your own formats check out
-           <a href="../../tasks/commands/formats.htm">Creating Formats</a>. 
-     </td>
-  </tr> 
+----></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">Formats control how the output from
+a command is parsed. The most important reason for parsing output is to
+determine which lines of output contain references to files. This allows
+for clicking on that line to cause the editor to open that reference. Formats
+can also be useful when the output does not contain file references. For
+example, formats can help "mark" portions of the output so it is easier
+to read.&nbsp;
+<p>In the following simple example, lines of output from a <i>ls -l</i>
+command are shown as both raw and parsed output.&nbsp;
+<center>
+<p><img SRC="rawdiroutput.gif" ></center>
+
+<p>If we add these two simple format instructions to <b>&lt;<i>...</i>>:\eclipse\plugins\com.ibm.dstore.miners\patterns.dat</b>:&nbsp;
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>command: ls.*
+</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; file&nbsp;&nbsp; file&nbsp;&nbsp;&nbsp; pattern=.*\d{2}:\d{2} ([\w,.]*)
+</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</pre>
+each output line matching the pattern will have this icon&nbsp;<img SRC="file.gif" >
+prepended.&nbsp; When we run the command again we get:
+<center>
+<p><img SRC="parseddiroutput.gif" ></center>
+
+<p>For details on how to create your own formats check out <a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/tasks/commands/formats.htm">Creating
+Formats</a>.&nbsp;</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-<!----
+<caption><!----
   <tr> 
     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
        Contact Us</font></b></td>
   </tr>
----->
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">
-     <p><a href = "../../frames/contact.htm">Contact Us</a>
-     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
-  </td>  
+----><!----------></caption>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2"><a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/frames/contact.htm">Contact
+Us</a>
+<p><a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/hglegal.htm"><img SRC="ngibmcpy.gif" BORDER=0 height=12 width=195></a></td>
 </tr>
 </table>
 <!----------------------------------------------------------------------------------->
