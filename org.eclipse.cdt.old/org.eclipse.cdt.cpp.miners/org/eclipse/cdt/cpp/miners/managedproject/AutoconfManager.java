@@ -79,11 +79,21 @@ public class AutoconfManager {
 		configureInManager.updateConfigureIn(project,true);
 		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject);
 	}
-	protected void runSupportScript(DataElement project,DataElement status)
+	protected void createConfigure(DataElement project,DataElement status, boolean update)
 	{
 		getAutoconfScript(project);
+		
+		// perform an update in case user has not updated the dependencies 
+		//in the Makefile.am's and configure.in
+		if(update)
+		{
+			configureInManager.updateConfigureIn(project,true);
+			makefileAmManager.updateAllMakefileAm(project,true);
+		}
+		
 		createConfigureScript(project,status);
 	}
+
 	protected String getOS()
 	{
 		String OS = new String(System.getProperty("os.name")); 
@@ -183,13 +193,12 @@ public class AutoconfManager {
 	}
 	private void createConfigureScript(DataElement project, DataElement status)
 	{
-		
 		if(getOS().equals("Linux"))
-			runCommand(project, status, "./autogen.sh");
+			runCommand(project, status, "./autogen.sh;"+"touch -m configure");
 		else
-			runCommand(project, status, cygwinPrefix+"autogen.sh");
+			runCommand(project, status, cygwinPrefix+"autogen.sh;"+cygwinPrefix+"touch -m configure");
 	}
-	public void runConfigureScript(DataElement project, DataElement status)
+	public void runConfigure(DataElement project, DataElement status, boolean update)
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
@@ -218,6 +227,14 @@ public class AutoconfManager {
 			}
 			else
 			{
+				// perform an update in case user has not updated the dependencies 
+				//in the Makefile.am's and configure.in
+				if(update)
+				{
+					configureInManager.updateConfigureIn(project,true);
+					makefileAmManager.updateAllMakefileAm(project,true);
+				}
+				
 				if(getOS().equals("Linux"))
 					runCommand(project, status,"./autogen.sh;./configure;"+"touch -m "+configure.getName());
 				else

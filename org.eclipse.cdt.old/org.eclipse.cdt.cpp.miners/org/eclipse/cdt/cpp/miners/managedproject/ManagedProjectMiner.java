@@ -70,8 +70,10 @@ public class ManagedProjectMiner extends Miner
 		//
 		
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
+		createCommandDescriptor(projectD, "Creating configure without updating", "C_CREATE_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Running configure script - creating configure if needed", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Updating configure.in & Makefile.am's and creating & running configure", "C_UPDATE_CREATE_RUN", false);
+		createCommandDescriptor(projectD, "Running configure script - creating configure if needed without updating", "C_RUN_CONFIGURE_NO_UPDATE",false);
+		//createCommandDescriptor(projectD, "Updating configure.in & Makefile.am's and creating & running configure", "C_UPDATE_CREATE_RUN", false);
 		createCommandDescriptor(projectD, "Cleaning package for distribution", "C_DIST_CLEAN", false);
 		createCommandDescriptor(projectD, "maintainer-clean - recommended for package developer", "C_MAINTAINER_CLEAN", false);
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
@@ -121,12 +123,13 @@ public class ManagedProjectMiner extends Miner
  	 			_dataStore.deleteObject(project.getParent(), project);
  	 			//project.getParent().removeNestedData();
 			}
-			else if (name.equals("C_UPDATE_CREATE_RUN"))
+		/*	else if (name.equals("C_UPDATE_CREATE_RUN"))
 			{
 				autoconfManager.manageProject(project, status);
 				project.refresh(false);
 				//parseAmFile(project); 
 			}
+			*/
 		/*	else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.generateAutoconfFiles(project, status,false);
@@ -146,12 +149,22 @@ public class ManagedProjectMiner extends Miner
 			}		
 			else if (name.equals("C_CREATE_CONFIGURE"))
 			{
-				autoconfManager.runSupportScript(project, status);
+				autoconfManager.createConfigure(project, status,true);
+				project.refresh(false);
+			}
+			else if (name.equals("C_CREATE_CONFIGURE_NO_UPDATE"))
+			{
+				autoconfManager.createConfigure(project, status,false);
 				project.refresh(false);
 			}
 			else if (name.equals("C_RUN_CONFIGURE"))
 			{
-				autoconfManager.runConfigureScript(project, status);
+				autoconfManager.runConfigure(project, status,true);
+				project.refresh(false);
+			}
+			else if (name.equals("C_RUN_CONFIGURE_NO_UPDATE"))
+			{
+				autoconfManager.runConfigure(project, status,false);
 				project.refresh(false);
 			}
 			else if (name.equals("C_DIST_CLEAN"))

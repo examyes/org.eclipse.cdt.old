@@ -45,6 +45,7 @@ import org.eclipse.jface.dialogs.*;
 
 public class ConfigureAction extends CustomAction
 { 
+	ProjectStructureManager structureManager;
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -87,8 +88,11 @@ public class ConfigureAction extends CustomAction
 			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExists("configure.in")))
 				setEnabled(false);
 				
-		if(_command.getValue().equals("CREATE_CONFIGURE")
-			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.in")))
+	/*	if(_command.getValue().equals("CREATE_CONFIGURE")
+			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
+			setEnabled(false);*/
+		if(_command.getValue().equals("CREATE_CONFIGURE")&&
+			doesFileExists("configure")&&configureIsUptodate(_subject))
 				setEnabled(false);
 						
 		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure") )
@@ -98,6 +102,8 @@ public class ConfigureAction extends CustomAction
     public void run()
 	{
 		boolean execute = true;
+		boolean runUpdate = true;
+		boolean createUpdate = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		
@@ -138,15 +144,61 @@ public class ConfigureAction extends CustomAction
 				execute = dialog.openConfirm(shell,"Updating configure.in",message);
 			}
 		}	
+		
+		if(_command.getValue().equals("CREATE_CONFIGURE"))
+		{
+			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+			String message = new String
+			("Trying to update existing configure.in and makefile.am's "+
+			"\nconfigure.in and or Makefile.am Files will be generated if missing"
+				+"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
+			//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+			createUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+		}
+		if(_command.getValue().equals("RUN_CONFIGURE"))
+		{
+			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+			String message = new String
+			("\n Before running configure, a check to update configure might be needed"+
+			"\n If you would like to skip updates press cancel, otherwise press OK");
+			//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+			runUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+		}
+			
 		if(execute)
-		{			
-			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
-			DataElement status = _dataStore.command(configureCmd, _subject);
-			ModelInterface api = ModelInterface.getInstance();
-			api.monitorStatus(status);			
-			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
-			RunThread thread = new RunThread(_subject, status);
-			thread.start();
+		{	
+			if(!createUpdate)
+			{
+				System.out.println("\nSkipping update............generating configure");
+				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
+				DataElement status = _dataStore.command(configureCmd, _subject);
+				ModelInterface api = ModelInterface.getInstance();
+				api.monitorStatus(status);			
+				api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+				RunThread thread = new RunThread(_subject, status);
+				thread.start();
+			}
+			else if(!createUpdate)
+			{
+				System.out.println("\nSkipping update............running configure");
+				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
+				DataElement status = _dataStore.command(configureCmd, _subject);
+				ModelInterface api = ModelInterface.getInstance();
+				api.monitorStatus(status);			
+				api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+				RunThread thread = new RunThread(_subject, status);
+				thread.start();
+			}
+			else
+			{		
+				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
+				DataElement status = _dataStore.command(configureCmd, _subject);
+				ModelInterface api = ModelInterface.getInstance();
+				api.monitorStatus(status);			
+				api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+				RunThread thread = new RunThread(_subject, status);
+				thread.start();
+			}
 		}
 	}
 	private boolean doesFileExists(String fileName)
@@ -206,6 +258,27 @@ public class ConfigureAction extends CustomAction
 			}
 		}
 		return false;
+	}
+		private boolean configureIsUptodate(DataElement project)
+	{
+		long configureTimeStamp = -1;
+		structureManager = new ProjectStructureManager(project.getFileObject());
+		File[] list = structureManager.getFiles();
+		
+		// as we are sure that configure exists then we can safely get its last modified time stamp
+		
+		File configure = new File(project.getSource(),"configure");
+		configureTimeStamp = configure.lastModified();	
+		//System.out.println("\nconfigure stamp = "+configureTimeStamp);
+		//System.out.println("=========================================");	
+		for(int i = 0; i < list.length; i++)
+			if(list[i].getName().equals("Makefile.am")||list[i].getName().equals("Makefile.in")||list[i].getName().equals("configure.in"))
+			{
+				//System.out.println("\n"+list[i].getName()+" = "+list[i].lastModified());
+				if(configureTimeStamp<list[i].lastModified())
+					return false;
+			}
+		return true;
 	}
 }
 

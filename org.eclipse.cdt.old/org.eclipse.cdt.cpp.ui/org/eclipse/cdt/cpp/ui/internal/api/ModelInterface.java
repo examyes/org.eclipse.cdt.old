@@ -2062,11 +2062,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	//dataStore.createReference(startupCmds, autoconfCmds, "abstracts", "abstracted by");
 ///////////////
 	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
-	
-	DataElement updateAutoconfFilesCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Create/Update all automake files",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
+
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 								 "Generate configure",
 								 "com.ibm.cpp.ui.internal.actions.ConfigureAction");
@@ -2079,13 +2075,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	dataStore.createReference(configureCmds, autoconfCmds, "abstracts", "abstracted by");
 
-	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
+/*	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
 						
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create/Update,Generate,Run",
 							  "com.ibm.cpp.ui.internal.actions.UpdateCreateRunAction");
 	mngCmd.setAttribute(DE.A_VALUE,"UPDATE_CREATE_RUN");
-	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
+	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");*/
 	
 	//****************************
 	DataElement dummy =  dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Dummy");
@@ -2096,6 +2092,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		
 	
 	DataElement updatesCmds = dataStore.createObject(advancedCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
+		
+	DataElement updateAutoconfFilesCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Create/Update all automake files",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
+	
 	
 	DataElement updateMakefileAmCmd = dataStore.createObject(updatesCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Update Makefile.am",
