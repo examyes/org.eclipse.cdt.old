@@ -1,4 +1,7 @@
 package com.ibm.cpp.miners.managedproject;
+/*
+ * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
+ */
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.ui.internal.*;
@@ -23,7 +26,7 @@ public class AutoconfManager {
 	String version = new String("@VERSION@");
 	String pack = new String("@PACKAGE@");
 	String subdir = new String ("@SUBDIR@");
-	int[] pos = {-1,-1,-1,-1};
+	int[] delimPosition = {-1,-1,-1,-1};
 	char delim = '@';
 	
 	protected void manageProject(DataElement proj)
@@ -34,36 +37,20 @@ public class AutoconfManager {
 		{
 			String path = project.getSource().toString();
 
-				//check if he tools are available	autolocal, autoheader, automake & autoconf
-				if(!areAllNeededPackagesAvailable())
-				{
-					// should be a popup dialog
-					System.out.println("neede package is missing to manage the project"
-					+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
-				}
-				else
-				{
-					// running autoconf support
-					// add all the necessary needed template files
-					getAutoconfSupprotFiles(project);
-					initializeAutoconfSupprotFiles(project);
-					/*try
-					{	
-						// creating configure.in 
-						//File configure_in = new File(path,"configure.in");
-						//FileWriter out = new FileWriter(configure_in);
-						//out.write("");
-						//out.close();
-						// check for support packages
-						// if existe then proceed
-						//Runtime rt = Runtime.getRuntime();
-						//Process pro = rt.exec("autoscan",null,new File(path));
-						//pro.destroy();
-					
-					}catch(IOException e){System.out.println(e.toString());}*/
-				}
-		
-		}
+			//check if he tools are available	autolocal, autoheader, automake & autoconf
+			if(!areAllNeededPackagesAvailable())
+			{
+				// should be a popup dialog
+				System.out.println("neede package is missing to manage the project"
+				+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
+			}
+			else
+			{
+				// running autoconf support
+				// add all the necessary needed template files
+				getAutoconfSupprotFiles(project);
+				initializeAutoconfSupprotFiles(project);
+			}
 			//ModelInterface api = CppPlugin.getModelInterface();	
 			//DataElement status = api.command(project.getSource(), autoconf);
 				// autoloca
@@ -71,6 +58,7 @@ public class AutoconfManager {
 				// automake
 				// autoconf
 			// else notify the user with the missed packages
+		}
 	}
 	protected String getOS()
 	{
@@ -120,6 +108,7 @@ public class AutoconfManager {
 	{
 		//udpdate configure.in
 		updateConfigure_in(new File(project.getSource(),"configure.in"));
+		// update Makefile.am
 	}
 	protected void updateConfigure_in(File configure_in)
 	{
@@ -134,13 +123,19 @@ public class AutoconfManager {
 			{
 				if(line.indexOf(pack)!=-1)
 				{
-					// replace this line with the new values
-					line = modifyPackageLine(line);
-					//line = new String("***********************************");
+					line = trimTargetLine(line);// replace this line with the new values
+					line = insertPackageName(line.toCharArray(),delimPosition[0]);
+					line = insertVersionName(line.toCharArray(),delimPosition[1]);
 				}
-				out.write(line+"\n");
-				//System.out.println(line);
-				//System.out.println("\nPackage Index is = "+line.indexOf(pack));
+				
+				if(line.indexOf(subdir)!=-1)
+				{
+					line = trimTargetLine(line);
+					line = insertSubdirs(line.toCharArray(),delimPosition[0]);
+					
+				}
+				// needed at the end of each line when writing  the modified file
+				out.write(line+"\n"); 
 			}
 			in.close();
 			out.close();
@@ -149,7 +144,7 @@ public class AutoconfManager {
 		catch(IOException e){System.out.println(e);}
 		
 	}
-	private String modifyPackageLine(String line)
+	private String trimTargetLine(String line)
 	{
 		char[] originalLine = line.toCharArray();
 		char[] modLine= new char[line.length()];
@@ -166,17 +161,15 @@ public class AutoconfManager {
 			else
 			{
 				
-				pos[loc++] = i++;
-				System.out.println("\n pos = "+pos[loc-1]);
+				delimPosition[loc++] = i++;
+				System.out.println("\n pos = "+delimPosition[loc-1]);
 				while(originalLine[i]!=delim)
 					i++;
 			}
 		}
-		modLine = insertPackageName(modLine,pos[0]);
-		modLine = insertVersionName(modLine,pos[1]);
 		return new String(modLine);
 	}
-	private char[] insertPackageName(char[] line, int position)
+	private String insertPackageName(char[] line, int position)
 	{
 		int k=0;
 		int counetrForModLine = 0;
@@ -191,11 +184,11 @@ public class AutoconfManager {
 			modLine[counetrForModLine++]=line[i];
 			i++;
 		}
-		int extra_chars = pos[1] - pos[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
-		pos[1] = position+project.getName().toCharArray().length+extra_chars;
-		return modLine;
+		int extra_chars = delimPosition[1] - delimPosition[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
+		delimPosition[1] = position+project.getName().toCharArray().length+extra_chars;
+		return new String(modLine);
 	}
-	private char[] insertVersionName(char[] line, int pos)
+	private String insertVersionName(char[] line, int pos)
 	{
 		System.out.println("\n line length = "+line.length);
 		String version = new String("0.1");
@@ -211,7 +204,27 @@ public class AutoconfManager {
 			modLine[counetrForModLine++]=line[i];
 			i++;
 		}
-		return modLine;
+		return new String(modLine);
 	}
+	private String insertSubdirs(char[] line, int position)
+	{
+		int k=0;
+		int counetrForModLine = 0;
+		char[] modLine = new char[256];
+		System.out.println("\n line length = "+line.length);
+		int i = 0;
+		while(line[i]!= '\0')
+		{
+			if(i == position)
+				for(int j=0; j<project.getName().toCharArray().length; j++)
+					modLine[counetrForModLine++]=project.getName().toCharArray()[j];
+			modLine[counetrForModLine++]=line[i];
+			i++;
+		}
+		int extra_chars = delimPosition[1] - delimPosition[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
+		delimPosition[1] = position+project.getName().toCharArray().length+extra_chars;
+		return new String(modLine);
+	}	
+	
 }
 
