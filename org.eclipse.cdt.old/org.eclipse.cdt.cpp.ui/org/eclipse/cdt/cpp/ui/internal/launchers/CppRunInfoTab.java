@@ -425,8 +425,10 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	/**
 	 * @see ILaunchConfigurationTab#getName()
 	 */
-	public String getName() {
-		return "&DebugCpp";
+	public String getName()
+        {
+           String Name = "&" + _plugin.getLocalizedString("runLaunchTab.Title");
+           return Name;
 	}
 
     /**
