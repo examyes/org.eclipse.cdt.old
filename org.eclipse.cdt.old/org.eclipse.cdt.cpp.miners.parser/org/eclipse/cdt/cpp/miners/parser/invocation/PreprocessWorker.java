@@ -55,10 +55,15 @@ public class PreprocessWorker extends Thread
   _monitorStatus = true;
  }
 
+ public void parseObjectNow(DataElement theObject)
+ { 
+  _theParseWorker.parseObjectNow(theObject);
+ }
+
  public void run()
  {
   _theParseWorker.start(); 
-  //setPriority(getPriority()+1);
+  //setPriority(getPriority()+3);
   try
   {
    while(true)

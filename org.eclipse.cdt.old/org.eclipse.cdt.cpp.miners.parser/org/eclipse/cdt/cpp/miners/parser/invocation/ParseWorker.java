@@ -16,6 +16,7 @@ import com.ibm.dstore.core.model.*;
 public class ParseWorker extends Thread
 {
  private ArrayList             _objectQueue;
+ private ArrayList             _immediateObjectQueue;
  private ArrayList             _fileQueue;
  private Parser                _theParser;
  private SimpleCharStream      _theCharStream;
@@ -27,6 +28,7 @@ public class ParseWorker extends Thread
  {
   _objectQueue           = new ArrayList();
   _fileQueue             = new ArrayList();
+  _immediateObjectQueue  = new ArrayList();
   _theParser             = new Parser(this);
   _theSymbolTable        = new DataStoreSymbolTable();
   _theCharStream         = new SimpleCharStream(new StringReader("default"), 1, 1, 16);
@@ -36,6 +38,11 @@ public class ParseWorker extends Thread
  public void parseObject(DataElement theObject)
  {
   _objectQueue.add(theObject);
+ }
+
+ public void parseObjectNow(DataElement theObject)
+ {
+  _immediateObjectQueue.add(theObject);
  }
 
  public void parseFile(DataElement theFile)
@@ -55,7 +62,7 @@ public class ParseWorker extends Thread
 
  public void run()
  {
-  // setPriority(getPriority()+3);
+     //setPriority(getPriority()+3);
   try
   {
    while (true)
@@ -80,7 +87,7 @@ public class ParseWorker extends Thread
  private void parseObjectsInQueue()
  {
   DataElement theObject;
-  while (!_objectQueue.isEmpty())
+  while ((!_objectQueue.isEmpty()) || (!_immediateObjectQueue.isEmpty()))
   { 
    theObject = getObjectFromQueue();
    if (initializeParser(theObject))
@@ -290,6 +297,12 @@ public class ParseWorker extends Thread
  
  private DataElement getObjectFromQueue()
  {
+  if (!_immediateObjectQueue.isEmpty())
+  {
+   DataElement theObject = (DataElement)_immediateObjectQueue.get(0);
+   _immediateObjectQueue.remove(0);
+   return theObject;
+  }
   DataElement theObject = (DataElement)_objectQueue.get(0);
   _objectQueue.remove(0);
   return theObject;

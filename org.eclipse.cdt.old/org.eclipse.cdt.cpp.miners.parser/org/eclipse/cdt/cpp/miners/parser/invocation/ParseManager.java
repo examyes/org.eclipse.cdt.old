@@ -38,7 +38,7 @@ public class ParseManager
  
  public void parseObject(DataElement theObject)
  {
-  //_theParseWorker.parseObject(theObject);
+  _thePreprocessWorker.parseObjectNow(theObject);
  }
 
  public void parseFile(DataElement theFile, DataElement theProject, DataElement status)
