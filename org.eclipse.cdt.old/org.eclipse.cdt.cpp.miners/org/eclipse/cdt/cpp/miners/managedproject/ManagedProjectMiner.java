@@ -77,18 +77,18 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
 		
 		//
-		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to TopLevel Makefile.am","C_TOPLEVEL_MAKEFILE_AM",false);
-		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to Programs Makefile.am ","C_PROGRAMS_MAKEFILE_AM",false);		
-		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to StaticLib Makefile.am","C_SWITCH_TO_STATIC_LIB",false);
-		createCommandDescriptor(fsObjectD,"Adding or Changing Makefile.am to SharedLib Makefile.am","C_SWITCH_TO_SHARED_LIB",false);		
+		createCommandDescriptor(fsObjectD,"Creating TopLevel Makefile.am - existing file will be renamed *.old","C_TOPLEVEL_MAKEFILE_AM",false);
+		createCommandDescriptor(fsObjectD,"Creating Programs Makefile.am - existing file will be renamed *.old","C_PROGRAMS_MAKEFILE_AM",false);		
+		createCommandDescriptor(fsObjectD,"Creating StaticLib Makefile.am - existing file will be renamed *.old","C_STATICLIB_MAKEFILE_AM",false);
+		createCommandDescriptor(fsObjectD,"Creating SharedLib Makefile.am - existing file will be renamed *.old","C_SHAREDLIB_MAKEFILE_AM",false);		
 		createCommandDescriptor(fsObjectD,"Adding configure.in file","C_INSERT_CONFIGURE_IN",false);
 		createCommandDescriptor(fsObjectD,"Defining Compiler Flags","C_COMPILER_FLAGS",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);
 		//
 		createCommandDescriptor(managedProjectD,"TopLevel","C_TOPLEVEL_MAKEFILE_AM",false);
 		createCommandDescriptor(managedProjectD,"Programs","C_PROGRAMS_MAKEFILE_AM",false);		
-		createCommandDescriptor(managedProjectD,"StaticLib","C_SWITCH_TO_STATIC_LIB",false);
-		createCommandDescriptor(managedProjectD,"SharedLib","C_SWITCH_TO_SHARED_LIB",false);
+		createCommandDescriptor(managedProjectD,"StaticLib","C_STATICLIB_MAKEFILE_AM",false);
+		createCommandDescriptor(managedProjectD,"SharedLib","C_SHAREDLIB_MAKEFILE_AM",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);		
 		
 					
@@ -191,7 +191,7 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status);
 			}
-			else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
+			else if (name.equals("C_STATICLIB_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status);
 			}
@@ -199,7 +199,7 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status);
 			}
-			else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
+			else if (name.equals("C_SHAREDLIB_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status);
 			}

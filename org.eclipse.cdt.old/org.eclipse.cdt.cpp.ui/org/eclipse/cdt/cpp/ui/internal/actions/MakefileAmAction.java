@@ -38,7 +38,17 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
+import com.ibm.cpp.miners.managedproject.MakefileAmClassifier;
+
 public class MakefileAmAction extends CustomAction {
+	
+	// to identify Makefile.am identity
+	private static MakefileAmClassifier classifier = new MakefileAmClassifier();
+	private final int TOPLEVEL = 1;
+	private final int PROGRAMS = 2;
+	private final int STATICLIB = 3;
+	private final int SHAREDLIB = 4;
+	
 	public MakefileAmAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
@@ -47,6 +57,40 @@ public class MakefileAmAction extends CustomAction {
 				setEnabled(false);
 		if(_command.getValue().equals("COMPILER_FLAGS")&&!doesFileExist("Makefile.am"))	
 			setEnabled(false);
+		//	
+		if(_command.getValue().equals("INSERT_CONFIGURE_IN")&&doesFileExist("configure.in"))	
+				setEnabled(false);
+		// classifying Makefile.am
+		if(doesFileExist("Makefile.am"))
+		{
+			File Makefile_am = new File(_subject.getSource(),"Makefile.am");
+			int classification = classifier.classify(Makefile_am);
+			switch (classification)
+			{
+				case (TOPLEVEL):
+				if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
+					setEnabled(false);
+				break;
+				
+				case (PROGRAMS):
+				if(_command.getValue().equals("PROGRAMS_MAKEFILE_AM"))
+					setEnabled(false);
+				break;
+				
+				case (STATICLIB):
+				if(_command.getValue().equals("STATICLIB_MAKEFILE_AM"))
+					setEnabled(false);
+				break;
+				
+				case (SHAREDLIB):
+				if(_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
+					setEnabled(false);
+				break;
+											
+				default:
+				break;
+			}
+		}
 	}
 	public void run()
 	{

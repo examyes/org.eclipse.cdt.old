@@ -2115,12 +2115,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement toStatLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create StaticLib Makfile.am",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toStatLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
+	toStatLibCmd.setAttribute(DE.A_VALUE,"STATICLIB_MAKEFILE_AM");
 	
 	DataElement toSharedLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create SharedLib Makefile.am",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toSharedLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
+	toSharedLibCmd.setAttribute(DE.A_VALUE,"SHAREDLIB_MAKEFILE_AM");
 
 	dataStore.createReference(libCmds, makefileCmds, "abstracts", "abstracted by");
 	
@@ -2195,12 +2195,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement toStatLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "StaticLib",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
+	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"STATICLIB_MAKEFILE_AM");
 	
 	DataElement toSharedLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "SharedLib",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
+	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SHAREDLIB_MAKEFILE_AM");
 
 	dataStore.createReference(libTargetCmds, makefileTargetCmds, "abstracts", "abstracted by");
 

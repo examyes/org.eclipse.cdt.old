@@ -87,9 +87,13 @@ public class ConfigureAction extends CustomAction
 			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExists("configure.in")))
 				setEnabled(false);
 				
-		if((_command.getValue().equals("CREATE_CONFIGURE")||_command.getValue().equals("RUN_CONFIGURE"))
-			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
+		if(_command.getValue().equals("CREATE_CONFIGURE")
+			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.in")))
+				setEnabled(false);
+						
+		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure") )
 				setEnabled(false);		
+		
 	}
     public void run()
 	{
@@ -152,7 +156,7 @@ public class ConfigureAction extends CustomAction
 			DataElement child = _subject.get(i).dereference();
 			if (!child.isDeleted() && child.getName().equals(fileName))
 			    {
-				return true;
+					return true;
 			    }
 		    }
 		return false;
