@@ -76,14 +76,16 @@ public class TransferFiles extends Thread
 	    _source.getType().equals("Project"); // hack 
 	if (validSource)
 	    {
-		if (_source.isOfType("directory"))
+		if (_source.isOfType("directory") || _source.isOfType("Project"))
 		    {
-			_source.expandChildren(true);
+			if (!_source.isExpanded())
+			    _source.expandChildren(true);
 			queryDates(_source);
 		    }
-		if (_target.isOfType("directory"))
+		if (_target.isOfType("directory") || _target.isOfType("Project"))
 		    {
-			_target.expandChildren(true);
+			if (!_target.isExpanded())
+			    _target.expandChildren(true);
 			queryDates(_target);
 		    }
 		
@@ -257,12 +259,14 @@ public class TransferFiles extends Thread
 			    {
 				if (ctype.equals("directory"))
 				    {
-					child.expandChildren();
+					if (!child.isExpanded())
+					    child.expandChildren();
 					queryDates(child);
 				    }
 				if (type.equals("directory"))
 				    {
-					copiedSource.expandChildren();
+					if (!copiedSource.isExpanded())
+					    copiedSource.expandChildren();
 					queryDates(copiedSource);
 				    }
 				
