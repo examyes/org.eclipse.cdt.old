@@ -16,91 +16,110 @@
   </tr>
 </table>
 ----------------------------------------------------------------------------------->
-<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr> 
-<h1>Changing Parse Formats</h1>
-<!----
-     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
-        Changing Parse Formats</font></b></td>
----->
-  </tr>
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2"> 
-        <p>The formats that are used to parse command line output are stored in a file called 
-           <i>patterns.dat</i> which is located in 
-           <b>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.dstore.miners</b> directory.
-           There are 3 types of lines allowed in the patterns.dat file:
-        <ol>
-           <li><b>Comments</b> - These lines begin with a pound sign (#) as in:<br>
-               <pre>     #This is a comment</pre>
-           <li><b>Logging</b> - This feature has been temporarily disabled in this version of our plugin
-               <i>This line toggles logging to <i>formats.log</i> on or off.
-               The format is very strict : LOGGING={ON|OFF}, as in:
-               <pre>     LOGGING=OFF</pre> </i>
-               
-           <li><b>Format</b> - These lines are the meat of the file, and are discussed below.
-        </ol>
-     </td>
-  </tr> 
-</table>
-<!----------------------------------------------------------------------------------->
-<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr>
-<h2>Format Syntax</h2> 
-<!----
-     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
-        Format Syntax</font></b></td>
----->
-  </tr>
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">
-        <p>The syntax for a format is very simple:  <i><b>objName</i> = <i>pattern</i></b>,
-           where <b><i>objName</b></i> is the type of object (ie error, warning, grep etc)
-           that you want to create in the IDE when a line of output matches <b><i>pattern</b></i>.
-           As an example, let's assume that we perform some command (like a build) and the output
-           looks like the following:<br>
-        <pre>
-        employee.cpp(4,10) Missing Semicolon
-        manager.hpp(315,15) Undefined symbol 'x'
-        </pre>
-           Here is the format in the default <i>formats.dat</i> that is able to parse this output
-           (explanation to follow):<br><b>error =FILE(LINE,COL) TEXT</b><br><br>
-        <p>So in this case we are going to create <b>error</b> objects in the Command Output View,
-           when we find that line of output contains the pattern: <b>FILE(LINE:COL) TEXT</b>.
-           Currently patterns are NOT regular expressions... they are much more limited.
-           Wildcards (*) will NOT work... see Note at the bottom of this page.  There are four types
-           of information that can be "plucked" from a line of output:<br>
-        <pre>
-        TEXT => Any Character including Whitespace 
-        FILE => String representing the file
-        LINE => Integer denoting the line number
-        COL  => Integer denoting the column
-        </pre>
-        <p>There are a few restrictions on how these flags can be used:  Since a Column makes no
-           sense without knowing what line number you're on, you can't use COL unless you use LINE.
-           Likewise since a line number is useless without knowing what file it's referring to, you
-           can't used LINE unless you use FILE.  You do not have to have a FILE tag in your pattern,
-           but if output is matched, you obviously will not be able to double click on that line and
-           get taken to a Source View.
-       <p>The <i>formats.dat</i> can be updated while you are running the Websphere Studio Workbench.
-          Any changes you make will be seen immediately when you run your next command.  This is handy
-          for quick trial-and-error pattern construction.
-       <p>If you are creating custom objects instead of errors, warnings or informationals, you'll need
-          to make sure that a .gif with same name exists in the 
-          <b>&lt;<i>...</i>&gt;:\eclipse\plugins\com.ibm.dstore.core\icons</b>
-          directory. For example you change the example pattern above to: 
-          <br><b>stupiderror =FILE(LINE,COL) TEXT</b><br><br>then as long as you had a
-          stupiderror.gif file in the icons directory the parsed output would who stupiderror objects.
-       <p>If you have any problems, check out 
-          <a href="../../troubleshooting/commands.htm">Troubleshooting Commands</a>.
-       <p><b>NOTE</b>: This Formats feature is not intended to make it into any future releases.  Instead, the 
-          parsing of command output should be handled by "real" regular-expressions and should be configurable
-          from within the C/C++ Perspective. 
-     </td>
-  </tr> 
-</table>
+<h1>How Patterns Work</h1>
+<br>
+Patterns are used by the Output View to allow lines that contain file names and
+perhaps line numbers to be clicked to cause the file location to be opened in an Editor.
+A line in this file can be 1 of 3 things:
+<ol>
+<li>An empty line or a comment line (denoted by a # in column 1)
+<li>The start of a command description (denoted by a 'command:' at the beginning of the line)
+<li>A pattern description.
+</ol>
+A formal description of the syntax of this file is included at the bottom of this file.
+
+
+<h2>Command Descriptions</h2>
+
+
+A Command Description consists of 2 things: A regular expression that describes the
+command invocation, and a list of Pattern Descriptions.  The regular expression
+is used to determine what set of Pattern Descriptons to use when parsing command output.
+For example, if you type the command 'gmake clean', the Command Descriptions are checked and
+.*make.* would match that command.   Therefore the Pattern Descriptions for .*make.* would
+be used to parse the output of the 'gmake clean'.
+<br>
+ Note: The first Command Description that is found to match the command is used, so make
+ sure you put the most specific patterns first.  For example, if the nmake.* Command
+ Description appeared after .*make.*, then 'nmake install' would be matched by the .*make.*
+ Command Descripton, which is probably not what was intended.
+
+
+<h2>Pattern Descriptions</h2>
+A Pattern Description has the following form:
+<br><b>"obj-name" "match-info" "pattern=" "reg-ex"</b>
+<br>
+where:
+<pre>
+ 	"obj-name":	The type of object that will be created in the Output View if
+			a line of output matches this pattern.  If you have put an
+			icon called "<object-name>.gif" in the com.ibm.dstore.core/icons
+			directory, then the icon will be displayed in the view.
+	
+ 	"match-info":	This is some combination of the words "file" and "line" or nothing
+			at all.  This is used to define how the backreferences in the
+			regular expression are to be interpreted.  So "file line" means
+			that the first back-reference is a file, and the second is a
+			line number.  This may seem unnecessary, but we added this capability
+			in the event that future releases support other types of information
+			that may be useful, such as column info (once we support it).
+
+ 	"reg-ex": 	A regular expression that describes a line of output. Backreferences
+			are used to store (instead of just match) the filename and line
+			number.  To store a filename use the backreference ([\w,.,/,\\]*), and
+			to store a line number, use (\d*)
+
+</pre>
+ Note: The patterns are checked against command output and only exact matches are dealt with
+      So as an example, if you forget the .* (match everything) at the end of a pattern,
+       the match will fail if there are trailing characters in the output not accounted for by
+      the pattern
+
+
+<h2>Pattern File Syntax</h2>
+
+The pattern file syntax should be easy to grasp by looking at the ones
+above, but for those of you who like formal grammars, here it is:
+
+<pre>
+  patterns-file:
+	commands
+
+  commands:
+	command
+	commands new-line command
+
+  command:
+	"command:" reg-ex new-line patterns
+
+  patterns:
+	pattern
+	patterns new-line pattern
+
+  pattern:
+	command-name match-list "pattern=" reg-ex
+
+  command-name:
+	String that denotes what type of object will be created if some output matches this pattern
+
+  match-list:
+	file-or-line
+	match-list space file-or-line
+
+  file-or-line:
+	"file" | "line"
+
+  reg-ex:
+	A regular expression
+
+  new-line:
+	The new-line character \n
+
+  space:
+	The space character
+</pre>
+
+
 <!----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <!----
