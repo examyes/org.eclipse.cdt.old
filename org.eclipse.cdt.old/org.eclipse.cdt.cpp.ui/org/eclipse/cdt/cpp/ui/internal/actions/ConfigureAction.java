@@ -68,6 +68,11 @@ public class ConfigureAction extends CustomAction
 	public ConfigureAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
+		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES")||_command.getValue().equals("CREATE_CONFIGURE")
+			||_command.getValue().equals("RUN_CONFIGURE")||_command.getValue().equals("UPDATE_AUTOCONF_FILES")
+			||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
+			if (!subject.getType().equals("Project"))	
+				setEnabled(false);
 	}
     public void run()
 	{

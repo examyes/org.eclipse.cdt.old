@@ -52,11 +52,16 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(targetD, "Remove Target", "C_REMOVE_TARGET");
 		
 		// autoconf	
-		createCommandDescriptor(projectD, "Generate Autoconf/Automake files", "C_GENERATE_AUTOCONF_FILES", false);
-		createCommandDescriptor(projectD, "Update Autoconf/Automake files", "C_UPDATE_AUTOCONF_FILES", false);
+		createCommandDescriptor(projectD, "Initialize Autoconf", "C_GENERATE_AUTOCONF_FILES", false);
+		createCommandDescriptor(projectD, "All - configure.in and Makefile.am's", "C_UPDATE_AUTOCONF_FILES", false);
+		//
+		createCommandDescriptor(projectD,"Makefile.am","C_UPDATE_MAKEFILE_AM",false);
+		createCommandDescriptor(projectD,"configure.in","C_UPDATE_CONFIGURE_IN",false);		
+		//
+		
 		createCommandDescriptor(projectD, "Create configure ", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", false);
+		createCommandDescriptor(projectD, "Generate All", "C_MANAGE_PROJECT", false);
 		
 		//DataElement makefileCmds = _dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customconf");
 
@@ -66,6 +71,8 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD,"Add/Change to SharedLib Makefile.am","C_SWITCH_TO_SHARED_LIB",false);		
 		createCommandDescriptor(projectD,"Add configure.in file","C_INSERT_CONFIGURE_IN",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);
+		
+		
 					
 	}
 	
@@ -103,6 +110,7 @@ public class ManagedProjectMiner extends Miner
 		}
 		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
+			//try{Thread.currentThread().sleep(1000);}catch(Exception e){}
 			autoconfManager.generateAutoconfFiles(project, status,false);
 			refresh(project);
 			parseAmFile(project); 
@@ -113,6 +121,18 @@ public class ManagedProjectMiner extends Miner
 			refresh(project);
 			parseAmFile(project); 
 		}
+		else if (name.equals("C_UPDATE_MAKEFILE_AM"))
+		{
+			autoconfManager.makefileAmManager.updateMakefileAm(project,false);
+			refresh(project);
+			parseAmFile(project); 
+		}
+		else if (name.equals("C_UPDATE_CONFIGURE_IN"))
+		{
+			autoconfManager.configureInManager.updateConfigureIn(project,false);
+			refresh(project);
+			parseAmFile(project); 
+		}		
 		else if (name.equals("C_CREATE_CONFIGURE"))
 		{
 			autoconfManager.runSupportScript(project, status);
@@ -130,6 +150,7 @@ public class ManagedProjectMiner extends Miner
 		}
 		else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
 		{
+			//try{Thread.currentThread().sleep(1000);}catch(Exception e){}
 			autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(project.getFileObject(),status);
 			refresh(project);
 		}

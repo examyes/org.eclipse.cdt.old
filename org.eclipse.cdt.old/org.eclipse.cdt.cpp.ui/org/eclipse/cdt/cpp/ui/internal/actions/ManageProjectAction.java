@@ -85,6 +85,8 @@ public class ManageProjectAction extends CustomAction
 	public ManageProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
+		if (!subject.getType().equals("Project"))	
+				setEnabled(false);
 	}
     public void run()
 	{

@@ -1913,17 +1913,33 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
 	*/
 
-	
-	DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
+	//DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
+	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add-Init Autoconf Automake files",
+							  "Initialize Autoconf",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");
-	DataElement updateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Update Autoconf Automake files",
+	
+	DataElement updateCmd = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Update...");
+	
+	DataElement updateAutoconfFilesCmd = dataStore.createObject(updateCmd, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "All - configure.in and Makefile.am's",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
+	
+	DataElement updateCmds = dataStore.createObject(updateCmd, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Update Cmds");
+	
+	DataElement updateMakefileAmCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Makefile.am",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateMakefileAmCmd.setAttribute(DE.A_VALUE, "UPDATE_MAKEFILE_AM");
+	
+	DataElement updateConfigureInCmd = dataStore.createObject(updateCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "configure.in",
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	updateConfigureInCmd.setAttribute(DE.A_VALUE, "UPDATE_CONFIGURE_IN");
 
+	dataStore.createReference(updateCmds, updateCmd, "abstracts", "abstracted by");
 
 
 	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
@@ -1943,8 +1959,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
 						  
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Generate Autoconf Automake Support", 
+							  "Generate All", 
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
+	mngCmd.setAttribute(DE.A_VALUE,"MANAGE_PROJECT");						  
 	
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 //
@@ -1982,7 +1999,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
 	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						  
 	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
-
 
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
