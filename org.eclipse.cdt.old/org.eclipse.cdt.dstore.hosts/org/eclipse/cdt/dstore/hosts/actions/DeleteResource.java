@@ -67,11 +67,11 @@ public class DeleteResource extends CustomAction
 	
 	for (int i = 0; i < _subjects.size(); i++)
 		{
-			if (i != 0)
+			if (i > 0)
 			{
-				msg += ",";
+				msg += "\t\t";
 			}
-			msg += " " + ((DataElement)_subjects.get(i)).getName();	
+			msg += ((DataElement)_subjects.get(i)).getName() + "\n";	
 		} 
 
 	
