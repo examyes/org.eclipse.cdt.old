@@ -9,8 +9,6 @@ package com.ibm.dstore.ui.connections;
 import com.ibm.dstore.ui.*;
 import com.ibm.dstore.ui.ConvertUtility;
 import com.ibm.dstore.ui.actions.RemoteOperation;
-import com.ibm.dstore.ui.actions.CloseSectionAction;
-import com.ibm.dstore.ui.actions.OpenSectionAction;
 import com.ibm.dstore.ui.dialogs.*;
 import com.ibm.dstore.ui.connections.*;
 
