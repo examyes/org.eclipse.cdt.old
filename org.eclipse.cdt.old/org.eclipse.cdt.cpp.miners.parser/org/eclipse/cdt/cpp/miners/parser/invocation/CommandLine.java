@@ -26,8 +26,8 @@ class CommandLine
   }
   
   CommandLineSymbolTable  _theSymbolTable  = new CommandLineSymbolTable();
-  Preprocessor            _thePreprocessor = new Preprocessor();
-  Parser                  _theParser       = new Parser();
+  //Preprocessor            _thePreprocessor = null; // new Preprocessor(null);
+  Parser                  _theParser         = null; // new Parser(null);
 
   _theParser.setSymbolTable(_theSymbolTable); 
   
