@@ -15,6 +15,8 @@
 #  "javadocs"              -> Generate Javadocs for every Plugin
 #
 SHELL=sh
+DATE=`date +%Y%m%d`
+
 # Grab Absolute Path to Plugin Directory...We do this by launching GenerateMakefiles with no arguments,
 # which uses java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
 pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && cd .. && java -cp . build.GenerateMakefiles)
@@ -123,7 +125,7 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
 	(cd org 2>/dev/null || cd com 2>/dev/null) || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -qo *src.zip)
 
-zipFile=cdt-eclipse-R2-20020508-local.zip
+zipFile=cdt-eclipse-R2-$(DATE)-local.zip
 createZip: createEmptyZip zipUpPlugins
 	@echo Created $(pluginsDirectory)/$(zipFile)
 
@@ -137,7 +139,7 @@ zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x org *org\/* com *makefile* *setenv.mk* *com\/* *CVS*
 
 tempDir=cdt
-finalZip=cdt-eclipse-R2-20020508.zip
+finalZip=cdt-eclipse-R2-$(DATE).zip
 
 createFinalPackage: createServerZip createFinalZip
 	@echo Created $(pluginsDirectory)/$(finalZip)
@@ -153,7 +155,7 @@ createFinalZip:
 	zip -qr $(finalZip) $(tempDir);\
 	rm -r $(tempDir)
 
-serverZipFile=cdt-eclipse-R2-20020508-server.zip
+serverZipFile=cdt-eclipse-R2-$(DATE)-server.zip
 
 createServerZip: createEmptyServerZip zipServerPlugins
 	@echo Created $(pluginsDirectory)/$(serverZipFile)
