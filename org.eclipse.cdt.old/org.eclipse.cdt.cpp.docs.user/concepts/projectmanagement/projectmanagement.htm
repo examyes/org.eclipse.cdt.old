@@ -52,13 +52,18 @@ will be used in this section</font></dd>
 <p>&nbsp;
 <br>&nbsp;
 <br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
 <p><b><font size=+3>Terminology and Definitions</font></b>
 <br>&nbsp;
 <ul>
 <li>
 <font size=+1>Configuration files: Any files that are either input or output&nbsp;
 to automake and autoconf&nbsp; - Makefile.am,&nbsp; Makefile.in, configure.in
-, configure and some other auxiliary files.</font></li>
+, configure and some other auxiliary files. Makefile.am and configure.in
+can be updated by the user. The tool does not enforce any defined layout
+for the makefile.am's. Although, when that tool detects that these files
+are different than the tool has gen erated, no updates will occur</font></li>
 
 <li>
 <font size=+1>Managed Project:&nbsp; A project that has all the configuration
@@ -166,6 +171,7 @@ generate and update all the configuration files and generate configure
 for you</font></li>
 </ol>
 <b><font size=+3>Implicit Updating Configuration files</font></b>
+<br>&nbsp;
 <p><font size=+1>If any of the configuration files has been updated , configure
 will be not up to date and regenerating configure is needed. so invoking
 generate configure and run configure will perform an update.</font>
