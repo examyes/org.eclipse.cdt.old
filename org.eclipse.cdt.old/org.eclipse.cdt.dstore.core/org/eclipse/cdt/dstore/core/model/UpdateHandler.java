@@ -54,8 +54,10 @@ public abstract class UpdateHandler extends Handler
 				DataElement parent = child.getParent();
 	
 		 		 child.clear();						
-			    
-			  	 parent.removeNestedData(child);
+				 if (parent != null)
+				     {
+					 parent.removeNestedData(child);
+				     }
 		    }
 	    }
 	    
