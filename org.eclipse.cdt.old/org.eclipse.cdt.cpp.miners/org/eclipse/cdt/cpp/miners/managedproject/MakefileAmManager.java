@@ -1129,15 +1129,17 @@ public class MakefileAmManager {
 		}
 		String wpath = _workspaceLocation.replace('\\', '/');
 		
-		while(path != null && !path.equals(wpath))
+		while(dir != null &&  path != null && !path.equals(wpath))
 		{
 			list.add(counter,dir);counter++;
 			dir = dir.getParentFile();
-			
-			path = dir.getAbsolutePath();
-			if (path != null)
-			{
-				path = path.replace('\\', '/');
+			if (dir != null)
+			{		
+				path = dir.getAbsolutePath();
+				if (path != null)
+				{
+					path = path.replace('\\', '/');
+				}
 			}
 		}
 		//boolean found = false;
