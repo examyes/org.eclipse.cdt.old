@@ -399,25 +399,28 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	/**
 	 * @see ILaunchConfigurationTab#isPageComplete()
 	 */
-	public boolean isValid() {
+      public boolean isValid()
+     {
+	setErrorMessage(null);
+	setMessage(null);
+        String processID = _processIDField.getText();
 
-		setErrorMessage(null);
-		setMessage(null);
-      String processID = _processIDField.getText();
+        if (_directory == null)
+           return true;
 
-      if (_directory == null)
-         return true;
-
-      if (_programNameField.getText() == "" || processID == "")
-         return false;
-      else
-      {
-         if (isValidProcessID(processID))
+        if (_programNameField.getText() == "" || processID == "")
+           return false;
+        else
+        {
+           if (isValidProcessID(processID))
    	   	return true;
-         else
+           else
+           {
+                setErrorMessage(_plugin.getLocalizedString("attachLauncher.Error.invalidProcessID"));
       		return false;
+           }
+        }
       }
-	}
 	
 	/**
 	 * @see ILaunchConfigurationTab#getName()
