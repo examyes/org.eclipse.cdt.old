@@ -21,11 +21,11 @@ public class ClientUpdateHandler extends UpdateHandler
         _waitIncrement = 100;
       }
 
-    public void updateFile(String path, byte[] bytes, int size)
+    public void updateFile(String path, byte[] bytes, int size, boolean binary)
     {
     }
 
-    public void updateAppendFile(String path, byte[] bytes, int size)
+    public void updateAppendFile(String path, byte[] bytes, int size, boolean binary)
     {
     }
 

@@ -85,22 +85,22 @@ public class Sender implements ISender
         }
       }
 
-  public void sendFile(DataElement objectRoot, byte[] bytes, int size)
+  public void sendFile(DataElement objectRoot, byte[] bytes, int size, boolean binary)
       {
     	synchronized(_outData)
         {
           _xmlGenerator.empty();	  
-          _xmlGenerator.generate(objectRoot, bytes, size);
+          _xmlGenerator.generate(objectRoot, bytes, size, false, binary);
           _xmlGenerator.flushData();
         }
       }
 
-  public void sendAppendFile(DataElement objectRoot, byte[] bytes, int size)
+  public void sendAppendFile(DataElement objectRoot, byte[] bytes, int size, boolean binary)
       {
 	  synchronized(_outFile)
 	      {
 		  _xmlGenerator.empty();	  
-		  _xmlGenerator.generate(objectRoot, bytes, size, true);
+		  _xmlGenerator.generate(objectRoot, bytes, size, true, binary);
 		  _xmlGenerator.flushData();
 	      }
       }

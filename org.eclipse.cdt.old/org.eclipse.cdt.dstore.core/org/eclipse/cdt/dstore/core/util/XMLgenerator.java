@@ -222,7 +222,7 @@ public class XMLgenerator
 
 	}
 
-	private void addFile(File file, int size)
+	private void addFile(File file, int size, boolean binary)
 	{
 		if (_state == OPEN)
 			{
@@ -250,7 +250,6 @@ public class XMLgenerator
 					written += read;
 				}
 
-				boolean binary = false;
 				if (binary)
 				{
 					// send everything across
@@ -288,7 +287,7 @@ public class XMLgenerator
 				}
 	}
 
-	private void addFile(byte[] bytes, int size)
+	private void addFile(byte[] bytes, int size, boolean binary)
 	{
 		if (_state == OPEN)
 			{
@@ -302,7 +301,6 @@ public class XMLgenerator
 			flushData();
 
 			// send everything across
-			boolean binary = false;
 			if (binary)
 			{
 				_fileWriter.write(bytes, 0, size);
@@ -458,20 +456,20 @@ public class XMLgenerator
 
 	public synchronized void generate(DataElement object, byte[] bytes, int size)
 	{
-		generate(object, bytes, size, false);
+		generate(object, bytes, size, false, false);
 	}
 
-	public synchronized void generate(
-		DataElement object,
-		byte[] bytes,
-		int size,
-		boolean isAppend)
+	public synchronized void generate(DataElement object, byte[] bytes, int size, boolean isAppend, boolean binary)
 	{
 		String tagType = "File";
 		if (isAppend)
-			{
+		    {
 			tagType += ".Append";
-		}
+		    }
+		if (binary)
+		    {
+			tagType += ".Binary";
+		    }
 
 		if (object != null)
 			{
@@ -492,7 +490,7 @@ public class XMLgenerator
 			}
 
 			addAttribute(DE.P_DEPTH, "" + size);
-			addFile(bytes, size);
+			addFile(bytes, size, binary);
 
 			endTag(tagType);
 		}
@@ -543,7 +541,7 @@ public class XMLgenerator
 						{
 						long length = file.length();
 						addAttribute(DE.P_DEPTH, "" + length);
-						addFile(file, (int) length);
+						addFile(file, (int) length, false);
 					}
 					else
 						{

@@ -29,16 +29,16 @@ public class ClientCommandHandler extends CommandHandler
 	  _sender.sendFile(document, file, 1);
       }
       
-  public synchronized void sendFile(String fileName, byte[] bytes, int size)
+  public synchronized void sendFile(String fileName, byte[] bytes, int size, boolean binary)
   {
 	  DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
-	  _sender.sendFile(document, bytes, size);  	
+	  _sender.sendFile(document, bytes, size, binary);  	
   }
    
-  public synchronized void sendAppendFile(String fileName, byte[] bytes, int size)
+  public synchronized void sendAppendFile(String fileName, byte[] bytes, int size, boolean binary)
   {
   	DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
-  	_sender.sendAppendFile(document, bytes, size);
+  	_sender.sendAppendFile(document, bytes, size, binary);
   }
 
   public synchronized void sendCommands()

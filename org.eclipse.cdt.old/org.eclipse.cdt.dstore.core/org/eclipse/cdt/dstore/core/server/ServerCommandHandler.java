@@ -208,17 +208,17 @@ public class ServerCommandHandler extends CommandHandler
   }
       
       
-  public void sendFile(String fileName, byte[] bytes, int size)
+  public void sendFile(String fileName, byte[] bytes, int size, boolean binary)
   {  
   	// look for a file handler before defaulting to datastore
   		
-  	_dataStore.saveFile(fileName, bytes, size);
+  	_dataStore.saveFile(fileName, bytes, size, binary);
   }
   
-  public void sendAppendFile(String fileName, byte[] bytes, int size)
+  public void sendAppendFile(String fileName, byte[] bytes, int size, boolean binary)
   {
   	// look for a file handler before defaulting to datastore
-  	_dataStore.appendToFile(fileName, bytes, size);
+  	_dataStore.appendToFile(fileName, bytes, size, binary);
   }
   
 }

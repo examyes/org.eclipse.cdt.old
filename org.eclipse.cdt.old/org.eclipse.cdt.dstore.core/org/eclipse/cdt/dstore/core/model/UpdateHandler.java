@@ -93,6 +93,6 @@ public abstract class UpdateHandler extends Handler
     // implemented by derived
     public abstract void sendUpdates();
     public abstract void updateFile(File file, DataElement associatedElement);
-    public abstract void updateFile(String path, byte[] bytes, int size);
-    public abstract void updateAppendFile(String path, byte[] bytes, int size);
+    public abstract void updateFile(String path, byte[] bytes, int size, boolean binary);
+    public abstract void updateAppendFile(String path, byte[] bytes, int size, boolean binary);
 }

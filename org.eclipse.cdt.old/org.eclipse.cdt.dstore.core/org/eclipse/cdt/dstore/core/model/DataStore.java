@@ -1460,13 +1460,13 @@ public final class DataStore
      * @param bytes an array of bytes representing a file 
      * @param size the number of bytes to transfer
      */
-    public void updateFile(String remotePath, byte[] bytes, int size)
+    public void updateFile(String remotePath, byte[] bytes, int size, boolean binary)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
         if (fileName != null)
         {
-	    _updateHandler.updateFile(remotePath, bytes, size);
+	    _updateHandler.updateFile(remotePath, bytes, size, binary);
         }
       }
 
@@ -1479,13 +1479,13 @@ public final class DataStore
      * @param bytes an array of bytes representing a file 
      * @param size the number of bytes to transfer
      */
-    public void updateAppendFile(String remotePath, byte[] bytes, int size)
+    public void updateAppendFile(String remotePath, byte[] bytes, int size, boolean binary)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
         if (fileName != null)
         {
-	    _updateHandler.updateAppendFile(remotePath, bytes, size);
+	    _updateHandler.updateAppendFile(remotePath, bytes, size, binary);
         }	
     }
 
@@ -1517,16 +1517,16 @@ public final class DataStore
      * Transfers a file from a client to a server.  The should only be called from
      * a client on a different machine from the server.  If a file exists on the server
      * side that the client file maps to then the existing server file will be replaced.
-     *
+    *
      * @param remotePath the path of the file on the server side 
      * @param bytes an array of bytes representing a file 
      * @param size the number of bytes to transfer
      */
-    public void replaceFile(String remotePath, byte[] bytes, int size)
+    public void replaceFile(String remotePath, byte[] bytes, int size, boolean binary)
     {
 	remotePath = new String(remotePath.replace('\\', '/'));
 
-	_commandHandler.sendFile(remotePath, bytes, size);
+	_commandHandler.sendFile(remotePath, bytes, size, binary);
    }
   
     /**
@@ -1538,11 +1538,11 @@ public final class DataStore
      * @param bytes an array of bytes representing a file 
      * @param size the number of bytes to transfer
      */
-    public void replaceAppendFile(String remotePath, byte[] bytes, int size)
+    public void replaceAppendFile(String remotePath, byte[] bytes, int size, boolean binary)
     {
 		remotePath = new String(remotePath.replace('\\', '/'));
 	
-		_commandHandler.sendAppendFile(remotePath, bytes, size);  	
+		_commandHandler.sendAppendFile(remotePath, bytes, size, binary);  	
     }
 
 
@@ -2607,9 +2607,9 @@ public final class DataStore
      * @param remotePath the path where to save the file
      * @param buffer the buffer to save in the file
      */         
-    public void saveFile(String remotePath, byte[] buffer, int size)
+    public void saveFile(String remotePath, byte[] buffer, int size, boolean binary)
     {
-    	_byteStreamHandler.receiveBytes(remotePath, buffer, size);   
+    	_byteStreamHandler.receiveBytes(remotePath, buffer, size, binary);   
     }   
 
     /**
@@ -2618,9 +2618,9 @@ public final class DataStore
      * @param remotePath the path where to save the file
      * @param buffer the buffer to append into the file
      */         
-    public void appendToFile(String remotePath, byte[] buffer, int size)
+    public void appendToFile(String remotePath, byte[] buffer, int size, boolean binary)
     {
-    	_byteStreamHandler.receiveAppendedBytes(remotePath, buffer, size);
+    	_byteStreamHandler.receiveAppendedBytes(remotePath, buffer, size, binary);
     }   
 
     
@@ -2814,7 +2814,7 @@ public final class DataStore
 
 	_dataStoreSchema = new DataStoreSchema(this);
 	_traceFileHandle = new File(".dstoreTrace");
-	_tracingOn = false;
+	_tracingOn = true;
 	try
 	    {
 		_traceFile = new RandomAccessFile(_traceFileHandle, "rw");		

@@ -78,56 +78,57 @@ public class XMLparser
 	    }
 
 
-	if (_tagType.equals("File.Append"))
+	if (_tagType.startsWith("File.Append"))
 	    {
-		_dataStore.appendToFile(path, buffer, size);
+		boolean binary = _tagType.equals("File.Append.Binary");
+		_dataStore.appendToFile(path, buffer, size, binary);
 	    }
 	else
 	    {
-		_dataStore.saveFile(path, buffer, size);
+		boolean binary = _tagType.equals("File.Binary");
+		_dataStore.saveFile(path, buffer, size, binary);
 	    }
     }
-
+    
     public String readLine(BufferedInputStream reader)
     {
 	boolean done = false;
 	int offset = 0;
-	
-	
+		
 	try
-	{
-	while (!done)
 	    {
-
+		while (!done)
+		    {
+			
 			int in = reader.read();
-
+			
 			if (in == -1)
-			{
+			    {
 				done = true;
 				Exception e = new Exception("The connection to the server has been lost.");
 				handlePanic(e);				
-			}
-			else
-			{
-			byte aByte = (byte)in;			
-			if ((in <= 0) ||
-			    (aByte == '\n') || (aByte == '\0') || (aByte == '\r'))
-			    {
-				done = true;
 			    }
 			else
 			    {
-				if (offset >= _maxBuffer)
+				byte aByte = (byte)in;			
+				if ((in <= 0) ||
+				    (aByte == '\n') || (aByte == '\0') || (aByte == '\r'))
 				    {
-					System.out.println("BUFFER OVERFLOW");
 					done = true;
-				    }
-
-				_byteBuffer[offset] = aByte;
-				offset++;
 			    }
-			}
-	    }
+				else
+				    {
+					if (offset >= _maxBuffer)
+					    {
+						System.out.println("BUFFER OVERFLOW");
+						done = true;
+					    }
+					
+					_byteBuffer[offset] = aByte;
+					offset++;
+				    }
+			    }
+		    }
 	}
 	catch (IOException e)
 	{
@@ -319,17 +320,15 @@ public class XMLparser
 
           // tag type
           String tagType = fullTag.substring(0, nextSpace);
-          if (tagType.equals("File"))
+          if (tagType.equals("File") || 
+	      tagType.equals("File.Append") ||
+	      tagType.equals("File.Binary") ||
+	      tagType.equals("File.Append.Binary"))
 	      {
-			  _isFile = true;
-			  _tagType = tagType;
+		  _isFile = true;
+		  _tagType = tagType;
 	      }
-		  else if (tagType.equals("File.Append"))
-	      {
-			  _isFile = true;
-			  _tagType = tagType;		  
-	      }
-
+	  
           int index = 0;
           int nextQuote = 0;
           int nextnextQuote = nextSpace;

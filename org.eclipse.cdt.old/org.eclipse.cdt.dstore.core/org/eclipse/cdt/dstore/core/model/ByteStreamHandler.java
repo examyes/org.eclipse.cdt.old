@@ -97,7 +97,7 @@ public class ByteStreamHandler
      * @param remotePath the path where to save the file
      * @param buffer the buffer to save in the file
      */         
-    public void receiveBytes(String remotePath, byte[] buffer, int size)
+    public void receiveBytes(String remotePath, byte[] buffer, int size, boolean binary)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = _dataStore.mapToLocalPath(remotePath);
@@ -118,9 +118,9 @@ public class ByteStreamHandler
             }
 
             File newFile = new File(fileName);
-	        FileOutputStream fileStream = new FileOutputStream(newFile);
+	    FileOutputStream fileStream = new FileOutputStream(newFile);
             
-            boolean binary = false;
+            //boolean binary = false;
             if (binary)
             {
 	            fileStream.write(buffer, 0, size);
@@ -128,28 +128,28 @@ public class ByteStreamHandler
             else
             {
             	String bufferString = new String(buffer, 0,size, "UTF-8");			
-			
-	 			OutputStreamWriter writer = new OutputStreamWriter(fileStream);
-	 			writer.write(bufferString, 0, size);
-	 			writer.flush();
+		
+		OutputStreamWriter writer = new OutputStreamWriter(fileStream);
+		writer.write(bufferString, 0, size);
+		writer.flush();
             }
             
-	        fileStream.close();
+	    fileStream.close();
           }
           catch (IOException e)
-          {
-            System.out.println(e);
-          }
+	      {
+		  System.out.println(e);
+	      }
         }
     }   
-
+    
     /**
      * Append a file to the specified location   
      *
      * @param remotePath the path where to save the file
      * @param buffer the buffer to append into the file
      */         
-    public void receiveAppendedBytes(String remotePath, byte[] buffer, int size)
+    public void receiveAppendedBytes(String remotePath, byte[] buffer, int size, boolean binary)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
       
@@ -169,7 +169,7 @@ public class ByteStreamHandler
 		    File newFile = new File(fileName);
 		    FileOutputStream fileStream = new FileOutputStream(newFile);
 		    
-		    boolean binary = false;
+		    //boolean binary = false;
 		    if (binary)
 			{
 			    fileStream.write(buffer, 0, size);
@@ -223,7 +223,7 @@ public class ByteStreamHandler
 			    oldFileStream.close();		    		    
 
 			    // write new buffer to new file
-			    boolean binary = false;
+			    //boolean binary = false;
 			    if (binary)
 				{
 				    newFileStream.write(buffer, 0, size);
@@ -266,6 +266,7 @@ public class ByteStreamHandler
 		}
 		if (!file.isDirectory() && file.exists())
 	    {
+
 		int maxSize = 5000000;
 		int size = (int)file.length();
 		try
@@ -281,6 +282,7 @@ public class ByteStreamHandler
 
 			byte[] subBuffer = new byte[bufferSize];
 
+			boolean binary = false; 
 			while (written < size)
 			    {
 				int subWritten = 0;
@@ -294,54 +296,72 @@ public class ByteStreamHandler
 					written += subWritten;
 				    }
 				
+				if (!binary)
+				    {
+					// hack to find out if this is binary or not!
+					try 
+					    {
+						String dummy = new String(subBuffer, "UTF-8");
+						if (dummy.length() != subWritten)
+						    {
+							binary = true;
+						    }
+					    }
+					catch (Exception e)
+					    {
+						binary = true;
+					    }
+				    }
+
+				System.out.println("binary = "+ binary);
 				if (written <= maxSize)
 				    {
-				    	internalSendBytes(path, subBuffer, subWritten);
+				    	internalSendBytes(path, subBuffer, subWritten, binary);
 				    }
 				else
 				    {
-						internalSendAppendBytes(path, subBuffer, subWritten);
+					internalSendAppendBytes(path, subBuffer, subWritten, binary);
 				    }
 			    }
 			// special case for empty files
 			if (written == 0)
 			    {
 					subBuffer[0] = ' ';
-					internalSendBytes(path, subBuffer, 1);
+					internalSendBytes(path, subBuffer, 1, true);
 			    }
 
 			
 			inFile.close();
 		    }
-			catch (IOException e)
+		catch (IOException e)
 		    {
-				System.out.println(e);
-                e.printStackTrace();			
+			System.out.println(e);
+			e.printStackTrace();			
 		    }
 	    }
 	}
 	
-	protected void internalSendBytes(String path, byte[] bytes, int size)
+	protected void internalSendBytes(String path, byte[] bytes, int size, boolean binary)
 	{
 		if (_dataStore.isVirtual())
 		{
-			_dataStore.replaceFile(path, bytes, size);
+			_dataStore.replaceFile(path, bytes, size, binary);
 		}
 		else	
 		{
-			_dataStore.updateFile(path, bytes, size);		
+			_dataStore.updateFile(path, bytes, size, binary);		
 		}
 	}	
 	
-	protected void internalSendAppendBytes(String path, byte[] bytes, int size)
+	protected void internalSendAppendBytes(String path, byte[] bytes, int size, boolean binary)
 	{
 		if (_dataStore.isVirtual())
 		{
-			_dataStore.replaceAppendFile(path, bytes, size);
+			_dataStore.replaceAppendFile(path, bytes, size, binary);
 		}
 		else
 		{
-			_dataStore.updateAppendFile(path, bytes, size);		
+			_dataStore.updateAppendFile(path, bytes, size, binary);		
 		}
 	}
 	

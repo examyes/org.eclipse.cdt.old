@@ -47,25 +47,25 @@ public class ServerUpdateHandler extends UpdateHandler
       }
     }
 
-  public synchronized void updateFile(String path, byte[] bytes, int size)
+  public synchronized void updateFile(String path, byte[] bytes, int size, boolean binary)
     {
 	DataElement document = _dataStore.createObject(null, "FILE", path, path, path);
 	  
 	for (int j = 0; j < _senders.size(); j++)
 	    { 
 		Sender sender = (Sender)_senders.get(j);
-		sender.sendFile(document, bytes, size);
+		sender.sendFile(document, bytes, size, binary);
 	    }	
     }
 
-    public synchronized void updateAppendFile(String path, byte[] bytes, int size)
+    public synchronized void updateAppendFile(String path, byte[] bytes, int size, boolean binary)
     {
 	DataElement document = _dataStore.createObject(null, "FILE", path, path, path);
 	
 	for (int j = 0; j < _senders.size(); j++)
 	    { 
 		Sender sender = (Sender)_senders.get(j);
-		sender.sendAppendFile(document, bytes, size);
+		sender.sendAppendFile(document, bytes, size, binary);
 	    }	
     }
 
