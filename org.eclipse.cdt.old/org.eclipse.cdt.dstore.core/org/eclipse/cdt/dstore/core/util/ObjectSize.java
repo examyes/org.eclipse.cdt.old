@@ -18,7 +18,7 @@ public class ObjectSize implements Serializable
   return _os;
  }
  
- public int getSize(Object theObject)
+ private int getSize(Object theObject)
  {
   try
   {
@@ -31,20 +31,54 @@ public class ObjectSize implements Serializable
   catch (Throwable e) {e.printStackTrace();}
   return -1;
  }
-
- public int test(Object theObject, int iterations)
+ 
+ public int testSingle(Object theObject)
  {
-  return getSize(new Dummy(theObject, iterations));
+  return getSize(new Dummy(theObject, 1, true));
+ }
+ 
+
+ public int testCopies(Object theObject, int iterations)
+ {
+  return getSize(new Dummy(theObject, iterations, false));
  }
 
+ public int testInstances(Object theObject, int iterations)
+ {
+  return getSize(new Dummy(theObject, iterations, true));
+ }
+ 
  public class Dummy implements Serializable
  {
   ArrayList theList;
-  public Dummy (Object theObject, int iterations)
+  public Dummy (Object theObject, int iterations, boolean newInstances)
   {
    theList = new ArrayList();
+   try
+   {
    for (int i=0; i<iterations; i++)
-    theList.add(theObject);
+    if (newInstances)
+     theList.add(theObject.getClass().newInstance());
+    else
+     theList.add(theObject);
+   }
+   catch (Throwable e)
+   {}
   }
  }
+ 
+
+
+ public static void main(String args[])
+ {
+  String obj = new String();
+  System.out.println("Single Object    => " + ObjectSize.getInstance().testSingle(obj));
+  System.out.println("100000 Copies    => " + ObjectSize.getInstance().testCopies(obj,100000));
+  System.out.println("100000 Instances => " + ObjectSize.getInstance().testInstances(obj,100000));
+ }
+ 
+
+
 }
+
+
