@@ -1,16 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <link rel="stylesheet"
+  <link type="text/css"
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
- type="text/css">
+ rel="stylesheet">
   <title>Eclipse CDT Draft 2.0 Plan</title>
 </head>
 <body>
 <h1>Eclipse CDT DRAFT 2.0 Plan</h1>
 <p style="font-weight: bold;">Revision History:</p>
-<table style="text-align: left; width: 100%;" border="1" cellspacing="2"
- cellpadding="2">
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 100%;">
   <tbody>
     <tr>
       <td style="vertical-align: top; font-weight: bold;">Date</td>
@@ -157,7 +157,7 @@ environments listed in the <a
  href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#TargetOperatingEnvironments">Eclipse
 3.0 Project Plan</a>. This list is as follows:<br>
 </p>
-<table width="95%" border="1">
+<table border="1" width="95%">
   <tbody>
     <tr>
       <td width="20%"><b>Operating system</b></td>
@@ -313,7 +313,9 @@ world of refactoring. This includes bringing in a refactoring framework
 that is very similar to the JDT's refactoring framework. The focus is
 then on rename refactoring which will leverage off and make
 improvements to the C/C++ Search
-feature to correctly refactor the references.<br>
+feature to correctly refactor the references. (<a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
+spec</a>)<br>
 </p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Content
 assist enhancements.</span>
@@ -344,6 +346,17 @@ designed into features as they have been developed. Areas where this
 hasn't be done will be addressed in this release.<br>
 </p>
 <h4>Proposed Items</h4>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
+Parser enhancements.</span> The C/C++ parser is not externally visible
+but it provides essential services to a number of CDT features
+including the outline and C/C++ project views, C/C++ search, and
+content assist (andmaybe one day text hover). For the parser to work
+correctly, information about the target build environment is required.
+This feature will provide the framework for more of this information to
+be provided (than the previous release) by the build systems. The
+objective is to minimize the information the user must enter for these
+features to work.<br>
+</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
 Search enhancements.</span>
 This feature will be enhanced to add the capability of selecting a name

@@ -2,10 +2,12 @@
 <html>
 <head>
   <title>CDT Refactoring Feature Spec</title>
-  <meta content="Doug Schaefer" name="author">
+  <meta name="author" content="Doug Schaefer">
 </head>
 <body>
-<h1>CDT Refactoring Feature Spec</h1>
+<h1>CDT Refactoring Feature Spec<br>
+<small>For CDT Release 2.0</small><br>
+</h1>
 <p>Refactoring has been popularized by a number of text books and by
 the implementation of a number of refactorings in the Eclipse JDT.
 Refactoring is seen as a great productivity enhancer in support of
@@ -15,17 +17,37 @@ editing the source files in a project.<br>
 edit function. It often involves edits in multiple locations in a file
 and across multiple files.<br>
 </p>
-<h2>Requirements</h2>
-<p>Refactoring as implemented in the JDT is a complicated beast. Since
-no refactoring functionality exists in the CDT and since there is no
-common refactoring engine that we can take advantage, we will need to
-take a slow and steady approach and implement only enough of an engine
-to support basic functionality in the first release. In future
-releases, as the complexity of refactorings grow, the engine can grow
-with it.<br>
+<h2>Requirements<br>
+<small style="font-weight: normal; font-style: italic;"><small>What
+does the feature do?</small></small><br>
+</h2>
+<p>This feature can be described with two areas. First there is a set
+of different refactoring operations that can be performed. Second there
+is a common set of requirements that all operations need to include.<br>
 </p>
-<p>The refactoring engine requirements are as follows with priorities
-assigned:<br>
+<p>The following refactorings shall be supported (priorities in square
+brackets):<br>
+</p>
+<ul>
+  <li>[P1] Rename of C Model Elements - the ability to change the name
+of a C Model Element and have all references to that identifier updated
+to reflect the new name.</li>
+  <li>[P3] Rename of identifiers selected in the editor - the ability
+to run the rename refactor from the editor based on selection.<br>
+  </li>
+  <li>[P2] Move of C Model Elements owned by Files - this basically
+means moving top level elements from one file to another using the
+C/C++ Projects View or Outline View.</li>
+  <ul>
+    <li>[P3] Update the inclusions to the references if necessary to
+ensure successful build.</li>
+    <li>[P4] Update project references for cross project moves.<br>
+    </li>
+  </ul>
+  <li>[P3] Move of Type Members - the ability to move members, e.g.
+member variables and member functions, from one type to another.</li>
+</ul>
+<p>The common refactoring requirements are as follows:<br>
 </p>
 <ul>
   <li>[P1] Undo - it shall be possible to undo a refactor operation.
@@ -39,26 +61,30 @@ option shall be provided to preview the changes that will be carried
 out by that operation. The option to cancel or edit the result of the
 operation shall then be provided. This is similar (if not identical) to
 the preview functionality in the JDT.</li>
-  <li>[P1] Refactor menu item on C/C++ Projects View and Outline View.
-In particular, the refactoring is carried out on elements in the C
-Model.</li>
-  <li>[P2] Refactor menu in C Editor. In particular, the refactoring is
-carried out on elements in context at the cursor position.<br>
-  </li>
-</ul>
-<p>The following refactorings shall be supported:<br>
-</p>
-<ul>
-  <li>[P1] Rename of C Model Elements - the ability to change the name
-of a C Model Element and have all references to that identifier updated
-to reflect the new name.</li>
-  <li>[P2] Move of C Model Elements owned by Files - this basically
-means moving top level elements from one file to another.</li>
-  <li>[P2] Move of Type Members - the ability to move members, e.g.
-member variables and member functions, from one type to another.</li>
 </ul>
 <p>That should be enough for the first release and give us the ability
 to test out the refactoring engine.<br>
 </p>
+<h2>Architecture Notes<br>
+<small style="font-weight: normal; font-style: italic;"><small>Guidelines
+the design should follow</small></small><br>
+</h2>
+<p>Refactoring already has an implementation in the JDT. The
+rafactoring engine there is large and not all of it may be necessary in
+the first release.&nbsp; However, it is certainly a good source of
+ideas, if not code.<br>
+</p>
+<p>Rename refactoring is probably best implemented reusing the C/C++
+Search feature to find references that need to be updated. To ensure
+valid results, the accuracy of the search, indexer, and parser is
+critical.<br>
+</p>
+<h2>Design Notes<br>
+<small style="font-weight: normal; font-style: italic;"><small>How is
+the feature implemented</small></small><br>
+</h2>
+<p>None at this time.<br>
+</p>
+<br>
 </body>
 </html>
