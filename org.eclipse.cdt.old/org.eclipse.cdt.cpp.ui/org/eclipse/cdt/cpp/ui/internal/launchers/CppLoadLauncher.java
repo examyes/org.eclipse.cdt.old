@@ -35,7 +35,7 @@ import com.ibm.cpp.ui.internal.wizards.*;
 import java.io.IOException;
 
 
-public class CppLoadLauncher implements ILauncherDelegate 
+public class CppLoadLauncher implements ILauncherDelegate
 {
     private static DataElement _directory;
     private static DataElement _executable;
@@ -46,11 +46,11 @@ public class CppLoadLauncher implements ILauncherDelegate
 	_api = ModelInterface.getInstance();
     }
 
-    public boolean launch(Object[] elements, String mode, ILauncher launcher) 
+    public boolean launch(Object[] elements, String mode, ILauncher launcher)
     {
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
-        if(selection == null) 
+        if(selection == null)
 	    {
 		System.out.println("CppLoadLauncher.launch() error = selection is null");
 		return false;
@@ -59,7 +59,7 @@ public class CppLoadLauncher implements ILauncherDelegate
         Object element = selection.getFirstElement();
 
 	if (element instanceof DataElement)
-	    {	       
+	    {	
 		_executable = (DataElement)element;
 		if (!_executable.getType().equals("file"))
 		    {
@@ -70,7 +70,7 @@ public class CppLoadLauncher implements ILauncherDelegate
 
 		_directory = _executable.getParent();
 	    }	
-        else if (element instanceof IProject || element instanceof IResource) 
+        else if (element instanceof IProject || element instanceof IResource)
 	    {
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
@@ -80,10 +80,10 @@ public class CppLoadLauncher implements ILauncherDelegate
 			
 			CppPlugin plugin = CppPlugin.getDefault();
 			DataStore dataStore = plugin.getCurrentDataStore();
-			_directory = dataStore.createObject(null, "directory", parentRes.getName(), 
+			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
 							    parentRes.getLocation().toString());
 
-			_executable = dataStore.createObject(_directory, "file", resource.getName(), 
+			_executable = dataStore.createObject(_directory, "file", resource.getName(),
 							     resource.getLocation().toString());
 			
 		    }
@@ -113,7 +113,7 @@ public class CppLoadLauncher implements ILauncherDelegate
             return false;
     }
 
-    public void doLaunch(PICLLoadInfo loadInfo) 
+    public void doLaunch(PICLLoadInfo loadInfo, String workingDirectory)
     {
         CppSourceLocator sourceLocator = null;
 	
@@ -132,15 +132,25 @@ public class CppLoadLauncher implements ILauncherDelegate
         if(daemonInfo == null)
             return;
 	
-        launchEngine(daemonInfo);
+        launchEngine(daemonInfo, workingDirectory);
     }
 
-    protected void launchEngine(PICLDaemonInfo daemonInfo)
+    protected void launchEngine(PICLDaemonInfo daemonInfo, String workingDirectory)
     {
 	String port = new Integer(daemonInfo.getPort()).toString();
 	String key  = new Integer(daemonInfo.getKey()).toString();
 
-	_api.debug(_directory, port, key);
+
+      if (workingDirectory != "")
+      {
+      System.out.println("CppLoadLauncher:launchEngine() - workingDirectory = " + workingDirectory);
+       	_api.debug(workingDirectory, port, key);
+      }
+      else
+      {
+         System.out.println("CppLoadLauncher:launchEngine() - _directory = " + _directory);
+       	_api.debug(_directory, port, key);
+      }
     }
 
 
