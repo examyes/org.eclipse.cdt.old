@@ -340,6 +340,8 @@ public class CommandViewer extends Viewer implements SelectionListener
 			dlgInput = host;
 		}
 		
+		if (dlgInput != null) 
+		{
 		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", dlgInput, true);
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
@@ -350,6 +352,7 @@ public class CommandViewer extends Viewer implements SelectionListener
 				setInput(selected);
 			    }
 		    }		
+	    }
 	    }
 	else if (source == _runButton)
 	    {
