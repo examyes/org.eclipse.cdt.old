@@ -1826,13 +1826,23 @@ public DataElement command(DataElement commandDescriptor,
         {
           // need to create directories as well
           File file = new File(fileName);
+		  try
+		  {	
+     	     file = file.getCanonicalFile();
+		  }
+		  catch (IOException e)
+		  {
+		  }
+		  
           if (!file.exists())
           {
             File dir = new File(file.getParent());
             dir.mkdirs();
           }
 	  
-          File newFile = new File(fileName);
+          File newFile = new File(file.getCanonicalPath());
+          if (newFile.canWrite())
+          {
           FileOutputStream fileStream = new FileOutputStream(newFile);
 	  	  PrintStream writer = new PrintStream(fileStream);
 
@@ -1844,6 +1854,7 @@ public DataElement command(DataElement commandDescriptor,
 	  	  generator.flush();
 	  
           fileStream.close();
+          }
         }
         catch (IOException e)
         {
