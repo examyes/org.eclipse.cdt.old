@@ -2,18 +2,11 @@
 <feature
       id="org.eclipse.cdt.aix"
       label="%featureName"
-      version="1.2.0"
+      version="2.0.0"
       provider-name="%providerName"
       os="aix"
       arch="ppc"
       image="eclipse_update_120.jpg">
-
-   <plugin
-         id="org.eclipse.cdt.core.aix"
-         download-size="0"
-         install-size="0"
-         version="1.1.0"
-         fragment="true"/>
 
    <description>
       %description
@@ -33,20 +26,20 @@
          match="equivalent"/>
 
    <requires>
-      <import plugin="org.eclipse.cdt" version="1.2.0" match="compatible"/>
+      <import feature="org.eclipse.cdt" version="2.0.0"/>
    </requires>
 
    <plugin
          id="org.eclipse.cdt.core.aix"
          download-size="0"
          install-size="0"
-         version="1.2.0"
+         version="2.0.0"
          fragment="true"/>
 
    <plugin
          id="org.eclipse.cdt.aix"
          download-size="0"
          install-size="0"
-         version="1.2.0"/>
+         version="2.0.0"/>
 
 </feature>

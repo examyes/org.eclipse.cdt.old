@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.source"
       label="%featureName"
-      version="1.2.0"
+      version="2.0.0"
       provider-name="%providerName"
       image="eclipse_update_120.jpg">
 
@@ -18,10 +18,20 @@
       <update label="%updateSiteName" url="http://update.eclipse.org/tools/cdt/updates/release"/>
    </url>
 
+   <requires>
+      <import plugin="org.eclipse.cdt.core"/>
+      <import plugin="org.eclipse.cdt.debug.core"/>
+      <import plugin="org.eclipse.cdt.debug.mi.core"/>
+      <import plugin="org.eclipse.cdt.debug.mi.ui"/>
+      <import plugin="org.eclipse.cdt.debug.ui"/>
+      <import plugin="org.eclipse.cdt.launch"/>
+      <import plugin="org.eclipse.cdt.ui"/>
+   </requires>
+
    <plugin
          id="org.eclipse.cdt.source"
          download-size="0"
          install-size="0"
-         version="1.2.0"/>
+         version="2.0.0"/>
 
 </feature>
