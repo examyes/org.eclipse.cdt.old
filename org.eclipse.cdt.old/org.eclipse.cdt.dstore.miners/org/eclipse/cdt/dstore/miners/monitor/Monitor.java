@@ -47,7 +47,7 @@ public class Monitor extends Handler
 
     public Monitor()
     {
-	_sizeThreshold = 10000;
+	_sizeThreshold = 1000;
 	_metrics = new HashMap();
     }
 
@@ -57,7 +57,6 @@ public class Monitor extends Handler
 		
 	if (size > _sizeThreshold)
 	    {		
-		//		System.out.println("monitor: size = " + size);
 		//		System.out.println("deleting log");
 		System.gc();
 	    }

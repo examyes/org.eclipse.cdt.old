@@ -5,4 +5,4 @@ e l root 127.0.0.1 4033 e:/ true
 test1 root 127.0.0.1 4033 e:/IBMCPPW/SAMPLES false true
 dmcknigh2 root 9.26.150.243 4033 d:/ false true
 goose root goose 4033 /home/ftp false true
-dmcknigh2-linux root 9.26.151.121 1555 /home/ false true
+dmcknigh2-linux root dmcknigh2 1555 / false true

@@ -113,6 +113,12 @@ public class ServerCommandHandler extends CommandHandler
 		  _dataStore.setAttribute(DataStoreAttributes.A_HOST_PATH, dataObject.getSource());
 		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));		
 	      }
+	  else if (commandName.equals("C_SET_MINERS"))
+	      {
+		  DataElement location = (DataElement)command.get(1);
+		  _dataStore.setMinersLocation(location);
+		  status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.done"));		
+	      }
           else if (commandName.equals("C_SCHEMA"))
 	      {
 		  DataElement schemaRoot = _dataStore.getDescriptorRoot();

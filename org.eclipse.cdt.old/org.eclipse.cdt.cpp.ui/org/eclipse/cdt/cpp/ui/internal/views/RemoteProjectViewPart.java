@@ -520,5 +520,13 @@ void handleDoubleClick(DoubleClickEvent event)
 		    _viewer.setFont(fontData);
 		}
 	}
+
+    public void dispose()
+    {
+	_plugin.getDataStore().getDomainNotifier().removeDomainListener(_viewer);	
+	CppProjectNotifier notifier = ModelInterface.getInstance().getProjectNotifier();
+	notifier.removeProjectListener(this);
+        super.dispose();	
+    }
     
 }

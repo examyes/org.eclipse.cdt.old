@@ -114,7 +114,23 @@ public class DataStore
 
     public void setMinersLocation(String minersLocation)
     {
-	_minersLocation = minersLocation;
+	if (_minersLocation != minersLocation)
+	    {
+		_minersLocation = minersLocation;
+		DataElement location = createObject(null, "location", _minersLocation);
+		DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_MINERS", 1);  
+		ArrayList args = new ArrayList();
+		args.add(location);
+		synchronizedCommand(cmd, args, _root);
+	    }
+    }
+
+    public void setMinersLocation(DataElement location)
+    {
+	if (_minersLocation != location.getName())
+	    {
+		_minersLocation = location.getName();
+	    }
     }
   
   public void setConnected(boolean isConnected)
@@ -2018,6 +2034,7 @@ public DataElement command(DataElement commandDescriptor,
 
 	DataElement set = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Set"), "-", "C_SET"); 
 	DataElement setHost = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST");
+	DataElement setMiners = createCommandDescriptor(rootD, "Set Miners", "-", "C_SET_MINERS");
 
 	DataElement oExit = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Exit"), "*", "C_EXIT");	 
 

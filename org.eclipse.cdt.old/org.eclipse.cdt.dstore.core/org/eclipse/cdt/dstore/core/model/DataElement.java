@@ -11,7 +11,7 @@ import com.ibm.dstore.core.util.*;
 import java.io.*;
 import java.util.*;
 
-public class DataElement implements IDataElement 
+public final class DataElement implements IDataElement 
 {
 
   private String              _attributes[];

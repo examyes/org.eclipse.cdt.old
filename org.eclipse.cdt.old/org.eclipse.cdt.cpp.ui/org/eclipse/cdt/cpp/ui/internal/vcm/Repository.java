@@ -116,6 +116,8 @@ public class Repository extends Project
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
+		    _dataStore.setMinersLocation("com.ibm.cpp.miners");
+
 		    DataElement hostRoot = _dataStore.getHostRoot();
 
 		    DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
@@ -493,7 +495,7 @@ public class Repository extends Project
 
 
       _connection.disconnect();  
-      _dataStore = _remoteRoot.getDataStore();	
+      _dataStore = _root.getDataStore();	
       _refreshAction.run();
       saveProperties();
 

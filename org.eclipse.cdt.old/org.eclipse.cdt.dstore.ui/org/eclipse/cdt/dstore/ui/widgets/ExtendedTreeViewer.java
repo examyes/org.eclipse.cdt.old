@@ -459,7 +459,7 @@ public void doExpand(DataElement obj)
 	    {
 		String type = object.getType();
 		String name = object.getName();
-		reveal(object);
+		//***reveal(object);
 		Widget widget = findItem(object);		
 
 		if (widget != null)

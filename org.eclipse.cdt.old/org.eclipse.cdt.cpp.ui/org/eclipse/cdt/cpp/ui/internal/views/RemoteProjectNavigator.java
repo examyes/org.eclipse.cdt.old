@@ -137,15 +137,18 @@ public class RemoteProjectNavigator extends TreeViewer
 		if (repositoryElement == parent)
 		    {
 			Tree tree = getTree();
-			tree.setRedraw(false);
-			internalRefresh(_currentInput);
-			//internalRefresh(repository);
-
-			reveal(repository);
-			expandToLevel(_currentInput, 2);
-
-			tree.setRedraw(true);				
-			return;
+			if (!tree.isDisposed())
+			    {
+				tree.setRedraw(false);
+				internalRefresh(_currentInput);
+				//internalRefresh(repository);
+				
+				reveal(repository);
+				expandToLevel(_currentInput, 2);
+				
+				tree.setRedraw(true);				
+				return;
+			    }
 		    }
 		else 
 		    {

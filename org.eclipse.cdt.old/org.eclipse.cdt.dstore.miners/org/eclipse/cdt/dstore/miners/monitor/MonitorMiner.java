@@ -23,7 +23,7 @@ public class MonitorMiner extends Miner
     {
 	_monitor = new Monitor();
 	_monitor.setDataStore(_dataStore);
-	_monitor.setWaitTime(100000);
+	_monitor.setWaitTime(10000);
 	_monitor.start();
     }
 
