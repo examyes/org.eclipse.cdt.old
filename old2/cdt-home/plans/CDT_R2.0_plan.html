@@ -1,0 +1,263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+<h1>Eclipse CDT<br>
+DRAFT 2.0 Plan</h1>
+<p>Last revised Monday, September 29, 2003<br>
+<br>
+<i>&nbsp;&nbsp;&nbsp; Please send comments about this draft plan to the
+</i><a href="mailto:eclipse-dev@eclipse.org">cdt-dev@eclipse.org</a> <i>developer
+mailing list.</i><br>
+</p>
+<p>This document lays out the feature and API set for the next feature
+release of the CDT after 1.2, designated release 2.0.</p>
+<ul>
+  <li><a href="#deliverables">Release deliverables</a></li>
+  <li>Release milestones</li>
+  <li>Target operating environments</li>
+  <li>Compatibility with previous releases</li>
+  <li>Feature content</li>
+</ul>
+<p>Plans do not materialize out of nowhere, nor are they entirely
+static. To ensure the planning process is transparent and open to the
+entire Eclipse community, we (the Eclipse PMC) post plans in an
+embryonic form and revise them throughout the release cycle. </p>
+<p>The first part of the plan deals with the important matters of
+release deliverables, release milestones, target operating
+environments, and release-to-release compatibility. These are all
+things that need to be clear for any release, even if no features were
+to change.&nbsp; </p>
+<p>The remainder of the plan consists of plan items for the various
+Eclipse subprojects. Each plan item covers a feature or API that is to
+be added to Eclipse, or some aspect of Eclipse that is to be improved.
+Each plan item has its own entry in the Eclipse bugzilla database, with
+a title and a concise summary (usually a single paragraph) that
+explains the work item at a suitably high enough level so that everyone
+can readily understand what the work item is without having to
+understand the nitty-gritty detail. </p>
+<p>Not all plan items represent the same amount of work; some may be
+quite large, others, quite small. Some plan items may involve work that
+is localized to a single Platform component; others may involve
+coordinated changes to several components; other may pervade the entire
+Platform. Although some plan items are for work that is more pressing
+that others, the plan items appear in no particular order. </p>
+<p>With the previous release as the starting point, this is the plan
+for how we will enhance and improve it. Fixing bugs, improving test
+coverage, documentation, examples, performance, usability, etc. are
+considered routine ongoing maintenance activities and are not included
+in this plan unless they would also involve a significant change to the
+API or feature set, or involve a significant amount of work. All
+interesting feature work is accounted for in this plan. </p>
+<p>The current status of each plan item is noted: </p>
+<ul>
+  <li><b>Committed</b> plan item - A committed plan item is one that we
+have decided to address for the release. </li>
+  <li><b>Proposed</b> plan item - A proposed plan item is one that we
+are considering addressing for the release. Although we are actively
+investigating it, we are not yet in a position to commit to it, or to
+say that we won't be able to address it. After due consideration, a
+proposal will either be committed, deferred, or rejected. </li>
+  <li><b>Deferred</b> plan item - A reasonable proposal that will not
+make it in to this release for some reason is marked as deferred with a
+brief note as to why it was deferred. Deferred plan items may resurface
+as committed plan items at a later point. </li>
+  <li><b>Rejected</b> plan item - Plan items that were proposed but
+judged unworkable are marked as rejected plan items, with an
+accompanying summary of why they were dismissed. Keeping track of
+rejected items avoids repeating the discussion. </li>
+</ul>
+<h2><a name="deliverables"></a>Release Deliverables</h2>
+<p>The release deliverables include the following:<br>
+</p>
+<ul>
+  <li>Source code release for CDT available as versions tagged
+"CDT_R2_0" in the Eclipse Tools <a
+ href="http://dev.eclipse.org/viewcvs">CVS Repository</a></li>
+  <li>Various CDT features released on the Eclipse Update Site as well
+as distribution zips.<br>
+  </li>
+</ul>
+<h2>Release Milestones</h2>
+<p>Release milestones occuring at roughly 6 week intervals exist to
+facilitate course-grained planning and staging.&nbsp; These milestones
+are intended to line up with equivalent milestones in the <a
+ href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#Milestones">Eclipse
+3.0 Project Plan</a>.<br>
+</p>
+<ul>
+  <li>Friday, November 21, 2003 - Milestone 1 (2.0 M1) - stable build
+reflecting progress. Runs on Eclipse 3.0 M5.</li>
+  <li>Friday, January 16, 2004 - Milestone 2 (2.0 M2) - stable build
+reflecting progress. Runs on Eclipse 3.0 M6.</li>
+  <li>Friday, February 27, 2004 - Milestone 3/Release Candidate 0 (2.0
+RC0) - freeze date, only high priority defects allowed going forward.</li>
+  <li>Friday, April 23, 2004 - General Availability (2.0 GA) - release
+deliverables available for download (8 weeks after RC0)<br>
+  </li>
+</ul>
+<p>Currently, the Eclipse 3.0 plan only sets out M6. This plan assumes
+the next milestone will be RC0. If this is not the case, the CDT plan
+will be changed to line up with the Eclipse 3.0 plan.<br>
+</p>
+<h2>Target Operating Environments</h2>
+<p>The objective is to support the CDT on all target operating
+environments listed in the <a
+ href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#TargetOperatingEnvironments">Eclipse
+3.0 Project Plan</a>. This list is as follows:<br>
+</p>
+<table width="95%" border="1">
+  <tbody>
+    <tr>
+      <td width="20%"><b>Operating system</b></td>
+      <td width="8%"><b>Processor architecture</b></td>
+      <td width="6%"><b>Window system</b></td>
+      <td width="66%"><b>Java 2 Platform</b></td>
+    </tr>
+    <tr>
+      <td>Microsoft Windows XP</td>
+      <td>Intel x86</td>
+      <td>Win32</td>
+      <td>Sun
+Java 2 SDK, Standard Edition, version 1.4.2 for Microsoft Windows</td>
+    </tr>
+    <tr>
+      <td>Microsoft Windows XP</td>
+      <td>Intel x86</td>
+      <td>Win32</td>
+      <td>IBM
+32-bit SDK for Windows, Java 2 Technology Edition, Version 1.4.1 </td>
+    </tr>
+    <tr>
+      <td>RedHat Linux 9 Professional</td>
+      <td>Intel x86</td>
+      <td>GTK</td>
+      <td>Sun
+Java 2 SDK, Standard Edition, 1.4.2 for Linux x86</td>
+    </tr>
+    <tr>
+      <td>RedHat Linux 9 Professional</td>
+      <td>Intel x86</td>
+      <td>GTK</td>
+      <td>IBM
+32-bit SDK for Linux on Intel architecture, Java 2 Technology Edition,
+Version 1.4.1</td>
+    </tr>
+    <tr>
+      <td>SuSE Linux 8.2</td>
+      <td>Intel x86</td>
+      <td>GTK</td>
+      <td>Sun
+Java 2 SDK, Standard Edition, 1.4.2 for Linux x86</td>
+    </tr>
+    <tr>
+      <td>SuSE Linux 8.2</td>
+      <td>Intel x86</td>
+      <td>GTK</td>
+      <td>IBM
+32-bit SDK for Linux on Intel architecture, Java 2 Technology Edition,
+Version 1.4.1</td>
+    </tr>
+    <tr>
+      <td>Sun Solaris 8</td>
+      <td>SPARC</td>
+      <td>Motif</td>
+      <td>Sun
+Java 2 SDK, Standard Edition, 1.4.2 for Solaris SPARC</td>
+    </tr>
+    <tr>
+      <td>HP HP-UX 11i</td>
+      <td>hp9000<br>
+PA-RISC</td>
+      <td>Motif</td>
+      <td>HP-UX SDK for the Java 2 platform, version 1.4.1.03 for
+hp9000 PA-RISC</td>
+    </tr>
+    <tr>
+      <td>IBM AIX 5.1</td>
+      <td>PowerPC</td>
+      <td>Motif</td>
+      <td>IBM
+32-bit SDK for AIX, Java 2 Technology Edition, Version 1.4.1</td>
+    </tr>
+    <tr>
+      <td>Apple Mac OS X 10.2</td>
+      <td>PowerPC</td>
+      <td>Carbon</td>
+      <td>Java 2 Standard Edition 1.4.1 for Mac OS X</td>
+    </tr>
+    <tr>
+      <td>QNX Neutrino RTOS <i>[version TDB]</i></td>
+      <td>Intel x86</td>
+      <td>Photon</td>
+      <td>IBM J9 VM for QNX <i>[version TDB]</i></td>
+    </tr>
+  </tbody>
+</table>
+<h4>Internationalization</h4>
+<p>The CDT is designed as the basis for internationalized products. The
+user interface elements provided by the CDT, including dialogs and
+error messages, are externalized. The English strings are provided as
+the default resource bundles.<br>
+</p>
+<p>Latin-1 locales are supported by the CDT on all of the above
+operating environments; DBCS locales are supported by the Eclipse SDK
+on the Windows, GTK, and Motif window systems; BIDI locales are
+supported by the Eclipse SDK only on Windows operating environments.<br>
+</p>
+<p><span style="font-style: italic;">Specific notes on different
+languages? Details on BIDI support</span><br>
+</p>
+<h2>Compatibility with Previous Releases</h2>
+<p>One of the main themes for this release of the CDT will be
+solidifying and documenting the APIs to various functions in the CDT.
+As such, no committment is made to maintain compatibility with previous
+releases. Every effort will be made to maximize compatibility, and area
+that do require change will be documented and communicated to the
+community.<br>
+</p>
+<h2>Component Plans</h2>
+<p>For the purposes of this plan, the CDT is considered to consist of 4
+components:<br>
+</p>
+<ul>
+  <li><a href="#CDTPlatform">CDT Platform component</a></li>
+  <li>CDT Debug component</li>
+  <li>CDT Standard Make component</li>
+  <li>CDT Managed Make component<br>
+  </li>
+</ul>
+<p>For each component, the items listed reflect new features of the
+CDT, or areas where existing features will be significantly reworked.
+Numbers in parentheses link to bugzilla problem reports for that plan
+item (<a
+ href="http://bugs.eclipse.org/bugs/buglist.cgi?product=JDT&amp;product=PDE&amp;product=Platform&amp;keywords=plan&amp;target_milestone=3.0&amp;target_milestone=3.0+M1&amp;target_milestone=3.0+M2&amp;target_milestone=3.0+M3&amp;target_milestone=3.0+M4&amp;target_milestone=3.0+M5">query
+bugzilla for all 3.0 plan items</a>).<br>
+</p>
+<h3><a name="CDTPlatform"></a>CDT Platform component</h3>
+<p>The CDT Platform provides the foundation for tooling used for C/C++
+development. Included in the platform are things like the C/C++ editor,
+resource management for C/C++ projects, fundamental build pieces shared
+by builders, the C/C++ search engine, the C/C++ parser used by the
+editor (outline view), the search engine, and others.<br>
+</p>
+<p>The following work items reflect new features of CDT, or areas where
+existing features will be significantly reworked. The kinds of changes
+under consideration for the next release of CDT address two general
+themes. The committed, proposed, and deferred plan items are grouped in
+sections by theme:<br>
+</p>
+<ul>
+  <li>User Experience - improve the experience of the user writing
+C/C++ code.</li>
+  <li>ISV Enablement - improve the ability for ISVs and other
+developers to create tools that interact with the CDT and eachother.</li>
+  <li><br>
+  </li>
+</ul>
+</body>
+</html>
