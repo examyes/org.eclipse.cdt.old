@@ -3,7 +3,7 @@ body        { font-size: 10pt; background: white; font-family: arial, helvetica,
 table,td,th { font-size: 10pt; font-family: arial, helvetica, geneva;}
 .indextop   { font-size: x-large; font-family: Verdana, Arial, Helvetica, sans-serif; font-weight: bold}
 .indexsub   { font-size: xx-small; font-family: Arial, Helvetica, sans-serif; color: #8080FF}
-.section    { font-size: 16pt; padding-left: 3; background: "#0080C0"; color: white; font-weight: bold; }
+.section    { font-size: 16pt; padding-left: 3pt; background: #0080C0; color: white; font-weight: bold; }
 .subsection { font-size: 14pt; font-weight: bold;}
 .code       { margin-left: 3%; margin-top: 3%; margin-right 3%; font-family: Courier; }
 .indent     { margin-left: 1%;}
