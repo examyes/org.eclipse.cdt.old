@@ -51,7 +51,8 @@ public class ProjectMiner extends Miner
   closeD.setDepth(0);
   closeD.setAttribute(DE.A_SOURCE, "*");
 
-  createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
+
+ createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
 
   createCommandDescriptor(closedProject, "Delete Project", "C_DELETE_PROJECT").setDepth(0);
   DataElement openD = createCommandDescriptor(closedProject, "Open Project", "C_OPEN");
@@ -124,7 +125,7 @@ public class ProjectMiner extends Miner
    _workspace.addNestedData(project, true);
   }
 
-  
+
   
    status.setAttribute(DE.A_NAME, "done");
    _dataStore.refresh(status);

@@ -25,6 +25,7 @@ public class PropertySource implements IPropertySource
     _descriptors.add(new TextPropertyDescriptor("name", "name"));
     _descriptors.add(new TextPropertyDescriptor("value", "value"));
     _descriptors.add(new TextPropertyDescriptor("id", "id"));
+       _descriptors.add(new TextPropertyDescriptor("source", "source"));
   }
 
   public static boolean matches(Class aClass)
