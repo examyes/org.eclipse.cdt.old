@@ -39,7 +39,7 @@ rm $netrc
 
 #Send mail if errors file is large, also set the status to PASS or FAIL and update mainLatestNightly.html if the build was successful
 theSize=`ls -l errors | awk '{print $5}'`
-if [ $theSize -gt 900 ] ;
+if [ $theSize -gt 910 ] ;
  then
   theStatus=FAIL
   cat $rootDir/cdt-home/downloads/ErrorsMessage.txt errors | mail -s "POSSIBLE ERRORS IN CDT NIGHTLY BUILD" turnham@ca.ibm.com weisz@ca.ibm.com chanskw@ca.ibm.com dmcknigh@ca.ibm.com
