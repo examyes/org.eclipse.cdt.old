@@ -14,6 +14,7 @@
    <import plugin="org.eclipse.core.boot"/>
    <import plugin="com.ibm.lpex"/>
    <import plugin="com.ibm.debug"/>
+   <import plugin="com.ibm.debug.daemon"/>
    <import plugin="org.eclipse.search"/>
    <import plugin="org.eclipse.help"/>
    <import plugin="org.eclipse.debug.core"/>
