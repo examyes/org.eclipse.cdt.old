@@ -143,19 +143,21 @@ public class ClientConnection
 	  }
 
 	_commandHandler.finish();
+
+	_dataStore.flush();
+
+	try
+	    {
+		Thread.currentThread().sleep(200);
+	    }
+	catch (InterruptedException e)
+	    {
+		System.out.println(e);
+	    }
+	
 	_updateHandler.finish();
 	_isConnected = false;
-	_dataStore.flush();
       }
-
-    try
-    {
-      Thread.currentThread().sleep(100);
-    }
-    catch (InterruptedException e)
-    {
-      System.out.println(e);
-    }
   }
 
   public ConnectionStatus localConnect()

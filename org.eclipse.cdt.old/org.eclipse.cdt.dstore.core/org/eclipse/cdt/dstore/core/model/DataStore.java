@@ -1302,10 +1302,11 @@ public DataElement command(DataElement commandDescriptor,
  
   public void flush()
   {
-    // flush the whole thing
-    flush(_logRoot);
-   flush(_hostRoot);
-    flush(_minerRoot);
+      // flush the whole thing
+      flush(_logRoot);
+      flush(_hostRoot);
+      flush(_minerRoot);
+      flush(_tempRoot);
   }
   
 

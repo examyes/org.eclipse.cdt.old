@@ -65,7 +65,7 @@ public final class DataElement implements Serializable, IDataElement
 		_dataStore   = originalObject.getDataStore();
 		_parent = parent;
 
-		_attributes                  = new String[DE.A_SIZE];
+		_attributes                  = getAttributes();
 		_attributes[DE.A_TYPE]       = refType.getName();		
 		_attributes[DE.A_ID]         = parent.getId() + refType.getName() + originalObject.getId();
 		_attributes[DE.A_NAME]       = originalObject.getId();
@@ -87,7 +87,7 @@ public final class DataElement implements Serializable, IDataElement
 		_dataStore   = originalObject.getDataStore();
 		_parent = parent;
 
-		_attributes                  = new String[DE.A_SIZE];
+		_attributes                  = getAttributes();
 		_attributes[DE.A_TYPE]       = refType;		
 		_attributes[DE.A_ID]         = parent.getId() + refType + originalObject.getId();
 		
@@ -107,7 +107,7 @@ public final class DataElement implements Serializable, IDataElement
 	  _dataStore   = dataStore;
 	  _parent      = parent;
 
-	  _attributes = new String[DE.A_SIZE];
+	  _attributes = getAttributes();
 	  _attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
           _attributes[DE.A_ID]         = id;
           _attributes[DE.A_NAME]       = name;
@@ -122,7 +122,7 @@ public final class DataElement implements Serializable, IDataElement
 	  _dataStore   = dataStore;
 	  _parent      = parent;
 
-	  _attributes = new String[DE.A_SIZE];
+	  _attributes = getAttributes();
 	  _attributes[DE.A_TYPE]       = type;
           _attributes[DE.A_ID]         = id;
           _attributes[DE.A_NAME]       = name;
@@ -137,7 +137,7 @@ public final class DataElement implements Serializable, IDataElement
           _dataStore = dataStore;
           _parent = parent;
 
-	  _attributes = new String[DE.A_SIZE];
+	  _attributes = getAttributes();
 	  _attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
           _attributes[DE.A_ID]         = id;
           _attributes[DE.A_NAME]       = name;
@@ -154,7 +154,7 @@ public final class DataElement implements Serializable, IDataElement
           _dataStore = dataStore;
           _parent = parent;
 
-	  _attributes = new String[DE.A_SIZE];
+	  _attributes = getAttributes();
 	  _attributes[DE.A_TYPE]       = type;
           _attributes[DE.A_ID]         = id;
           _attributes[DE.A_NAME]       = name;
@@ -233,13 +233,44 @@ public final class DataElement implements Serializable, IDataElement
 	      _nestedData.clear();
       }
 
+
+
+    public synchronized void clear()
+    {
+	if (_attributes != null)
+	    {
+		for (int i = 0; i < _attributes.length; i++)
+		    {
+			String att = _attributes[i];
+			if (att != null)
+			    {
+				att = null;
+			    }
+		    }		
+	    }
+
+	if (_nestedData != null)
+	    {
+		_nestedData.clear();
+	    }
+
+	_parent = null;
+	_descriptor = null;	
+	_referencedObject = null;
+
+	_buffer = null;
+    }
+
+
   public synchronized void delete()
       {
 	  // set delete attribute
 	  setAttribute(DE.A_SOURCE, "deleted");
 	  setAttribute(DE.A_VALUE, "deleted");
+
 	  _isUpdated = false;	 
 	  _isExpanded = true;
+	  _buffer = null;
       }
 
     public boolean isDeleted()
@@ -356,10 +387,14 @@ public final class DataElement implements Serializable, IDataElement
 	  return _attributes[attributeIndex];
       }
 
-  public String[] getAttributes()
-      {
-        return _attributes;
-      }
+    public String[] getAttributes()
+    {
+	if (_attributes == null)
+	    {
+		return new String[DE.A_SIZE];
+	    }
+	return _attributes;		
+    }
 
   public String getType()
       {
