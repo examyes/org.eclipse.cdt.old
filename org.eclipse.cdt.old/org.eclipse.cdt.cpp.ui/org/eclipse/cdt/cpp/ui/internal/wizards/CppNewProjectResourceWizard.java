@@ -187,10 +187,9 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			    }	
 		    }
 		
-		
 		if (persp == null)
 		    {
-			persp = dw.openPage("com.ibm.cpp.ui.internal.views.CppPerspective", workspace.getRoot());
+			persp = dw.openPage("com.ibm.cpp.ui.CppPerspective", workspace.getRoot());
 		    }
 	    }
         catch (WorkbenchException e)
@@ -199,7 +198,6 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 
 	
 	String navID = "com.ibm.cpp.ui.CppProjectsViewPart";
-
 	final IViewPart viewPart = persp.findView(navID);
 	if (viewPart != null)
 	    {
