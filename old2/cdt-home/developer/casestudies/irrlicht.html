@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+<body>
+<h1>Irrlicht Tutorials - A CDT Case Study</h1>
+<address>CDT 2.0 Final - July 7, 2004<br>
+</address>
+<p>The Irrlicht game engine is an open source game engine (<a
+ href="http://irrclicht.sourceforge.net">irrlicht.sourceforge.net</a>)
+written in C++. It takes advantage of C++ encapsulation and
+polymorphism for extensibility. It also takes advantage of C++
+templates to allow different data types to be used to specify vertices,
+colors, etc. The engine supports both Linux and Windows and supports
+both gnu and MSVC environments on Windows.</p>
+<p>This case study walks through setting up irrlicht version 0.6 with
+the mingw toolchain in a Standard Make project and then build and debug
+the HelloWorld tutorial as a Managed Make project.<br>
+</p>
+<h2>The Irrlicht Engine</h2>
+<p>The source code for the Irrlicht Engine is contained in a zip file
+include with the distribution in the 'source' folder in 'source.zip'.
+This source includes the source to the engine itself along with the
+jpeglib and zlib libraries needed by the engine. To take advantage of
+the build system that ships with the engine, we first create a C++
+standard make project called irrlicht-0.6. Since we are running on
+Windows we must set the binary parser to PE Windows <span
+ style="color: rgb(255, 0, 0);">(shouldn't this be the default when
+creating a project on Windows)</span>. Also, once we import the source
+for the engine, the index will be pretty useless until the discovery
+feature can gather enough information. So we turn off indexing for now.<br>
+</p>
+<p>Once the project is created, the first thing we notice is that
+Eclipse tried to build it. To prevent future long builds at inopportune
+times, we turn of&nbsp; Ecilpse's build automatically feature <span
+ style="color: rgb(255, 0, 0);">(we really need to work with the
+platform guys to define build behavior that would be suitable for both
+Java and C/C++ projects)</span>. We can then use Eclipse's import zip
+file feature to unzip the source.zip file into our project.<br>
+</p>
+<p>We now need to build the two included libraries. Jpeglib is
+configure based so we need to open a shell on that directory using msys
+and execute the configure command <span style="color: rgb(255, 0, 0);">(now
+here's an obvious enhancement request, make this a menu item on the
+configure file that pops up a dialog that lets you specify options to
+the configure command)</span>. We then go back to Eclipse and refresh
+the jpeglib to get at the newly generated Makefile. To build using this
+makefile, we select it and execute the Create Make Target command
+accepting the default target 'all'. We can now build this library with
+Build Make Target.<br>
+</p>
+<p>We now turn our focus to the zlib library. It has a pretty innocuous
+makefile that we can use. First, however, we need to change the CC make
+variable to point to 'gcc' since mingw doesn't create a 'cc. Then we
+can Create Make Target and Build Make Target to get the library built.<br>
+</p>
+<p>The engine itself has two makefiles as well as project files for
+Visual Studio and Dev-C++. The default Makefile is for building on
+Linux and there is a Makefile.win which is generated from Dev-C++. The
+Makefile.win is closes to what we need for building with mingw so we
+rename Makefile to Makefile.linux and rename Makefile.win to Makefile.
+The LIBS variable points to Dev-C++ directories so we change them to
+point to the jpeglib and zlib directories in our project. We also
+change the INCS and CXXINCS variable to point to the include directory
+in our project and we add a space after the use of these variables in
+the CFLAGS and CXXFLAGS variables respectively.<br>
+</p>
+<p>When we first attempt to build the engine, we get a compile error in
+CImageLoaderJPG.cpp. I'm not sure why, but it's there. Switching to the
+Problems's view, we can see the error: "invalid conversion from 'u8" <span
+ style="color: rgb(255, 0, 0);">(this is a multi-line error with some
+important info missing)</span>. We can double click on this error and
+get to the offending line in the file. We see that we are trying to
+assign one of our functions to a structure in the jpeglib library. We
+can select 'fill_input_buffer' and hit F3 to find where we declare it. <span
+ style="color: rgb(255, 0, 0);">(actually selecting the
+fill_input_buffer field of the jsrc variable brought us to our
+fill_input_buffer instead of the jpeglib one I had expected)</span>.
+Going up a few lines we see the definition of jsrc <span
+ style="color: rgb(255, 0, 0);">(selecting jsrc and hitting F3 should
+have done this for us)</span>. Selecting jpeg_source_mgr and hitting F3
+shows us that we should be using boolean, not u8. We can now go do our
+declaration and change it, run the build again and fix the declaration
+of our function to return boolean as well <span
+ style="color: rgb(255, 0, 0);">(change return type would be a good
+refactoring)</span>.<br>
+</p>
+<p>Now that we can build, we can turn on the indexing.<span
+ style="color: rgb(255, 0, 0);"> (again, this takes a very long time
+given that we don't really have around 450 files). (Searching for
+references and declarations of fill_input_buffer never found the
+definition of this function. This would have been handy when fixing the
+compile error).<br>
+<span style="font-weight: bold;"></span></span></p>
+<h2>Hello World Tutorial</h2>
+<p>Now that the engine is built, we can try our hand at the tutorials.
+We create a C++ Managed Make project called HelloWorld, for the
+HelloWorld tutorial, and add the dependency on the irrlicht project.
+Once created, we go to the properties on our new project and change the
+include directories to point to the irrlicht/include directory <span
+ style="color: rgb(255, 0, 0);">(right now this has to be done using an
+absolute path)</span> <span style="color: rgb(255, 0, 0);">(if you
+forget to put the "include" in the path, and try to edit the entry
+later, there is now Browse button)</span>. We then also add the
+irrlicht directory to the library paths <span
+ style="color: rgb(255, 0, 0);">(again, absolute path)</span> and the
+'Irrlicht' to our libraries list.<br>
+</p>
+<p>We now create a helloWorld.cpp file and enter the code from the
+tutorial into it. We can take advantage of content assist on every
+identifier if we so chose. We can also build as we go to check for
+errors <span style="color: rgb(255, 0, 0);">(turn off -Wall, it is
+unreasonable to expect libraries to be clear of errors. It is a great
+test of the error parsing, though)</span> <span
+ style="color: rgb(255, 0, 0);">(the build console doesn't clear
+between builds) (code completion doesn't complete things in nested
+namespaces, e.g. irr::video::EDT_SOFTWARE, it completes fine if no
+namespaces thanks to the usings). (Content assist is too slow - it
+completes under 3 seconds but just) (Indexer causes the tools to
+stammer a bit while running - likely due to gc). (There is too much
+verbage in the build console. It's hard to see the commands I've run).</span><br>
+</p>
+<p>When specifying the paths to the sydney.md2 and sydney.bmp file,
+simply specify them without a path. Then copy the files from the media
+folder in the distribution to the project folder in Eclipse. When we
+launch in the debugger, we'll be running in the project directory.<br>
+</p>
+<p>Once everything is set up, we can try out the executable we've
+built. First we need to copy the irrlicht.dll from it's project
+directory to the HelloWorld directory. This is necessary for Windows to
+be able to find the DLL <span style="color: rgb(255, 0, 0);">(There
+should be a way to specify this in the launch config so that we don't
+need to copy). </span>Create a launch configuration for the resulting
+executable and watch the animation.<br>
+</p>
+Next, we want to debug the application and step into the game engine
+code to see what it is doing. We debug the same launch configuration we
+just created and the debugger stops at the first line in main. We can
+try to step into the createDevice function to see what it does. It
+doesn't because we haven't build the library with debug symbols. We go
+back to the Makefile in the library project and add the -g flag to
+CFLAGS and CXXFLAGS and to the DLLWRAP command. In the outline view of
+the Makefile, we can find the 'clean' target and create a make target
+for it. <span style="color: rgb(255, 0, 0);">(When you do Add Make
+Target in the outline view, it creates the target and pops up a dialog.
+If you like the defaults, you have to select Cancel, which is not
+intuitive).</span> Run the clean target <span
+ style="color: rgb(255, 0, 0);">(After the clean, the CPU maxes out for
+a minute or so.)</span> then run the all target <span
+ style="color: rgb(255, 0, 0);">(Again, the CPU maxed)</span>. Now we
+have to copy the dll over to our tutorial project to get the right one <span
+ style="color: rgb(255, 0, 0);">(Again, error prone)</span>. Now start
+up the debugger again and step into the createDevice method. Now step
+into the constructor for CIrrDeviceWin32 method <span
+ style="color: rgb(255, 0, 0);">(I get an NPE when I do this and the
+file 'include\irrstring.h' can not be found).</span> If we keep
+stepping, we'll eventually get there and we can step through the
+constructor. Try using F3 on the windows.h methods to find their
+declaration. <span style="color: rgb(255, 0, 0);">(Things like
+CreateWindow could not be found although HINSTANCE could).</span><br>
+<br>
+We stop there.<br>
+</body>
+</html>
