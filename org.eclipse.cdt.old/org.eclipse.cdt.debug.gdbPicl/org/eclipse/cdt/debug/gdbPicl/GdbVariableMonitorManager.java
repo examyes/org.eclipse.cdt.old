@@ -246,6 +246,40 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
          }
       }
    }
+   
+   public boolean dereference(short exprID, int nodeID)
+   {
+   	  GdbVariableMonitor monitor = (GdbVariableMonitor) _monitors.get(new Integer(exprID));
+      if (monitor != null)
+      {
+         if (monitor.isMonDeleted() || !monitor.isMonEnabled())
+            return false;
+         
+         GdbVariable rootVar = monitor.getMonitoredVariable();                 
+         GdbVariable nodeVar = rootVar.getNode(nodeID);
+         
+         int monType = monitor.getMonitorType();
+         String exprName = nodeVar.getFullName();
+         exprName = "*" + exprName;
+         EStdView context = monitor.getContext();
+         int du = monitor.getDU();
+         boolean isDeferred = false;
+         
+         ExprEvalInfo evalInfo = null;
+         evalInfo = addExpression((short)monType, exprName, context, du, isDeferred);
+         
+         if (evalInfo == null)
+         	return false;
+         else
+         {
+         	return true;
+         }
+      }	
+      else
+      {
+      	return false;
+      }
+   }
 
    /**
     * Update monitors
@@ -367,6 +401,11 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
    {
       if (Gdb.traceLogger.DBG)
           Gdb.traceLogger.dbg(2,"GdbVariableMonitorManager.addExpression exprString="+exprString +" monType="+monType );
+          
+      if (exprString.startsWith("*"))
+      {
+      	exprString = "(" + exprString + ")";
+      }    
 
       GdbExprEvalInfo evalInfo = null;
       evalInfo = GdbVariableMonitor.evaluateExpression(_debugSession, exprString, context, du);

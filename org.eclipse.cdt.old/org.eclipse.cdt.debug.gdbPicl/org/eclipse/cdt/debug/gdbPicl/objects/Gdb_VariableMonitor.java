@@ -174,7 +174,23 @@ public abstract class Gdb_VariableMonitor
    {
       return _monitoredVar;
    }
-
+   
+   /**
+	 * Gets the _context.
+	 * @return Returns a EStdView
+	 */
+	public EStdView getContext() {
+		return _context;
+	}
+	
+	/**
+	 * Gets the _DU.
+	 * @return Returns a int
+	 */
+	public int getDU() {
+		return _DU;
+	}
+	
    // data fields
    protected GdbDebugSession _debugSession;
    protected GdbVariable    _monitoredVar;
@@ -196,4 +212,10 @@ public abstract class Gdb_VariableMonitor
    protected boolean _monNew;
    protected boolean _monValuesChanged;
    protected boolean _monTreeStructChanged;
+
+
+
+
+
+
 }

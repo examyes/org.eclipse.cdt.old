@@ -43,6 +43,7 @@ import org.eclipse.cdt.debug.gdbPicl.commands.CmdLocalVariableFree;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdPartGet;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdPartOpen;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdPartSet;
+import org.eclipse.cdt.debug.gdbPicl.commands.CmdPointerDeref;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdPreparePgm;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdProcessAttach;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdProcessAttach2;
@@ -107,6 +108,7 @@ import com.ibm.debug.epdc.EReqLocalVariableFree;
 import com.ibm.debug.epdc.EReqPartGet;
 import com.ibm.debug.epdc.EReqPartOpen;
 import com.ibm.debug.epdc.EReqPartSet;
+import com.ibm.debug.epdc.EReqPointerDeref;
 import com.ibm.debug.epdc.EReqPreparePgm;
 import com.ibm.debug.epdc.EReqProcessAttach;
 import com.ibm.debug.epdc.EReqProcessAttach2;
@@ -503,6 +505,11 @@ public class DebugEngine extends Thread
             if (Gdb.traceLogger.EVT) 
                 Gdb.traceLogger.evt(1,"EPDC_CMD> Part open \n");
             return new CmdPartOpen(_debugSession, (EReqPartOpen) req);
+            
+         case EPDC.Remote_PointerDeref:
+            if (Gdb.traceLogger.EVT) 
+                Gdb.traceLogger.evt(1,"EPDC_CMD> Pointer Dereference \n");
+            return new CmdPointerDeref(_debugSession, (EReqPointerDeref) req);            
 
          case EPDC.Remote_PartSet:
             if (Gdb.traceLogger.EVT) 

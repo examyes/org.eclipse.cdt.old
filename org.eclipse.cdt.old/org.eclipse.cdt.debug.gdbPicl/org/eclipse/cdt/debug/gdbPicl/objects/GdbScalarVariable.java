@@ -73,8 +73,14 @@ class GdbScalarVariable extends GdbVariable
     */
    public EStdTreeNode getTreeNode()
    {
-//      return new EStdTreeNode(_nodeID, getScalarItem());
-      return new EStdTreeNode(_nodeID, getPointerItem());
+   	  if (this._type.indexOf("*") == -1)
+   	  {
+      	return new EStdTreeNode(_nodeID, getScalarItem());
+   	  }
+   	  else
+   	  {
+	    return new EStdTreeNode(_nodeID, getPointerItem());
+   	  }
    }
 
    /**
@@ -239,7 +245,7 @@ class GdbScalarVariable extends GdbVariable
    // data fields
    protected int      _rep;       // the current representation
    protected String   _value;
-   protected String   PAD = "  ";
+   protected String   PAD = "";
    // data members
  
  	// gdb printing argument:  default, decimal, hex, octal, binary  
