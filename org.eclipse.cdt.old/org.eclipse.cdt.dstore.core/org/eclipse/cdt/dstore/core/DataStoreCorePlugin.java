@@ -102,7 +102,7 @@ public class DataStoreCorePlugin extends AbstractUIPlugin
 	  {
 	      String location = ((PluginDescriptor)getDescriptor()).getInstallURLInternal().getPath();
 	      File file = new File(location);
-	      _installLocation = file.getParent() + "/";
+	      _installLocation = file.getParentFile().getAbsolutePath() + "/";
 	      _installLocation = _installLocation.replace('\\', '/'); 
 	  }
 
