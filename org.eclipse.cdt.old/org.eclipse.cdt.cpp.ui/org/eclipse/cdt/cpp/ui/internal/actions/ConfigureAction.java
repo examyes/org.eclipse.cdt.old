@@ -50,8 +50,11 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	String configueDialogPrefernceKey = "Show_Configure_Dialog";
 	String configureUpdatePreferenceKey = "Update_When_Configure";
 	String targetKey = "Target_Type";
-	
-	private static int tempcount = 0;
+
+	private final int PROGRAM_TARGET = 100;	
+	private final int STATIC_TARGET = 101;	
+	private final int SHARED_TARGET = 102;
+	private int targetType = 100;	
 	
 	public class RunThread extends Handler
 	{
@@ -81,19 +84,14 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		if(_command.getValue().equals("CONFIGURE"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-				
-		//enable disable based on object files
-			
-		//if(_command.getValue().equals("CONFIGURE")&& doesFileExist("configure")&& configureIsUptodate(_subject))
-		//		setEnabled(false);
-						
+										
 	}
     public void run()
 	{
 		//boolean execute = true;
 		int configureUpdate = 0; // 0 == ok do update, 1 == no update , 2 == cancel action
-		int targetSelectionstatus = 0; // 0 == ok do update, 1 == cancel action
-		boolean configfilesExist = false;
+		//int targetSelection = 0; // 0 == ok do update, 1 == cancel action
+		boolean configFilesExist = false;
 		boolean sourceExistInTopLevelDir = false;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
@@ -123,12 +121,12 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					this,
 					targetKey);
 			int result = box.open();
-			if(result!= -1)
+	/*		if(result!= -1)
 			{
 				targetSelectionstatus = result;
 			}
 			else
-				targetSelectionstatus = 0;
+				targetSelectionstatus = 0;*/
 			
 		}
 		
@@ -152,7 +150,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			
 			if(doesAutoconfSupportExist())
 			{
-				configfilesExist = true;
+				configFilesExist = true;
 				if(enableConfigureUpdate)
 				{
 					str1 = new String("\nWould you like the system to update and generate missing configuration files?");
@@ -210,7 +208,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			}
 			else
 			{
-				configfilesExist = false;
+				configFilesExist = false;
 				message = new String("\nGenerating and running configure script");
 				box = new CustomMessageDialog(
 								shell,
@@ -233,7 +231,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			}
 		}
 
-		if(configureUpdate==1 && configfilesExist)
+		if(configureUpdate==1 && configFilesExist)
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
@@ -243,7 +241,9 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
 		}
-		else if(configureUpdate==0 && targetSelectionstatus==0)
+		// default "Progarm" target
+		else if(configureUpdate==0 && targetType==PROGRAM_TARGET) 
+		// targetSelection 0 means no selection was made and it will default to program
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 			DataElement status = _dataStore.command(configureCmd, _subject);
@@ -253,6 +253,29 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
 		}	
+		
+		// Static Target
+		else if(configureUpdate==0 && targetType==STATIC_TARGET)
+		{
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_STATIC");			
+			DataElement status = _dataStore.command(configureCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.monitorStatus(status);			
+			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
+		}	
+		else if(configureUpdate==0 && targetType==SHARED_TARGET)
+		{
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_SHARED");			
+			DataElement status = _dataStore.command(configureCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.monitorStatus(status);			
+			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
+		}	
+	
 	
 	}
 	private boolean doesFileExist(String fileName)
@@ -375,9 +398,17 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				}
 				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(configueDialogPrefernceKey,list);
 			}
+			
+			// set default project target to Program - needed for Autoconf Manager
+			list = new ArrayList();
+			list.add("Program");
+			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
 
 		}
 		// the 100+ numbering scheme means that this button is not the one responsibe for show/hide the dialog 
+		// default will be Program
+		
+		
 		if(buttonId == 100)
 		{
 			// default target
@@ -386,11 +417,13 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		}
 		if(buttonId == 101)
 		{
+			targetType = STATIC_TARGET;
 			list.add("Static");
 			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
 		}
 		if(buttonId == 102)
 		{
+			targetType = SHARED_TARGET;
 			list.add("Shared");
 			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
 		}

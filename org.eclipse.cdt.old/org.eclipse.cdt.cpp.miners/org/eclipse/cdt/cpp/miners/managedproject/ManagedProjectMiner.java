@@ -82,6 +82,11 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Generating and running configure script","C_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Generating and running configure script using existing configuration","C_CONFIGURE_NO_UPDATE",false);
 		
+		//
+		createCommandDescriptor(projectD, "Generating and running configure script - static target","C_CONFIGURE_STATIC",false);
+		createCommandDescriptor(projectD, "Generating and running configure script - shared target","C_CONFIGURE_SHARED",false);
+		//
+		
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Creating configure using existing configuration files", "C_CREATE_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Creating and running configure script", "C_RUN_CONFIGURE",false);
@@ -174,6 +179,19 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.configure(project, status,false,classifier);
 				project.refresh(false);
 			}
+			else if (name.equals("C_CONFIGURE_STATIC"))
+			{
+				System.out.println("\n Excecuting Static");
+				//autoconfManager.configure(project, status,true,classifier);
+				//project.refresh(false);
+			}
+			else if (name.equals("C_CONFIGURE_SHARED"))
+			{
+				System.out.println("\n Excecuting Shared");
+				//autoconfManager.configure(project, status,true,classifier);
+				//project.refresh(false);
+			}
+
 			// end new : automake and autoconf action
 			else if (name.equals("C_CREATE_CONFIGURE"))
 			{

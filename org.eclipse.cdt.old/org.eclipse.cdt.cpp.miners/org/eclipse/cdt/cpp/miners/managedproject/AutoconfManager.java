@@ -25,6 +25,8 @@ public class AutoconfManager {
 	MakefileAmManager makefileAmManager; 
 	static Object O = new Object();
 	String cygwinPrefix = new String("sh -c ");
+	
+	String targetKey = "Target_Type";
 
 	public AutoconfManager()
 	{
@@ -37,7 +39,7 @@ public class AutoconfManager {
 		makefileAmManager.setWorkspaceLocation(location);
 	}
 	
-	protected void manageProject(DataElement project, DataElement status,MakefileAmClassifier classifier)
+/*	protected void manageProject(DataElement project, DataElement status,MakefileAmClassifier classifier)
 	{
 
 		String path = project.getSource().toString();
@@ -62,7 +64,7 @@ public class AutoconfManager {
 		}
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
-	}
+	}*/
 	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject,MakefileAmClassifier classifier)
 	{
 		configureInManager.updateConfigureIn(project,true);
@@ -70,7 +72,7 @@ public class AutoconfManager {
 	}
 	
 	protected void configure(DataElement project,DataElement status, boolean update,MakefileAmClassifier classifier)
-	{
+	{		
 		getAutoconfScript(project);
 		
 		// perform an update in case user has not updated the dependencies 
