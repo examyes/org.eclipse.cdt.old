@@ -1617,60 +1617,70 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	if (resource != null) 
 	    {
-		IProject project = resource.getProject();
-		DataElement cProject = findProjectElement(project);
+		DataElement resourceElement = findResourceElement(resource);
 		
-		if (cProject != null) 
+		if (resourceElement != null) 
 		    {
-			DataStore dataStore = cProject.getDataStore();
-			DataElement refreshD = dataStore.localDescriptorQuery(cProject.getDescriptor(), "C_REFRESH");
+			DataStore dataStore = resourceElement.getDataStore();
+			DataElement refreshD = dataStore.localDescriptorQuery(resourceElement.getDescriptor(), 
+									      "C_REFRESH");
 			if (refreshD != null)
 			    {
-				dataStore.command(refreshD, cProject);
+				dataStore.command(refreshD, resourceElement);
 			    }
 		    }		
 	    }
     }
 
+
+    private void traverseDelta(IResourceDelta delta)
+    {
+	int kind  = delta.getKind();
+	int flags = delta.getFlags();
+	IResource resource = delta.getResource();
+
+	if (resource != null)
+	    {
+		switch (kind)		    
+		    {
+		    case IResourceDelta.CHANGED:			
+			if ((flags & IResourceDelta.CONTENT) != 0)
+			    {
+				resourceChanged(resource);
+			    }
+			else if ((flags & IResourceDelta.OPEN) != 0)
+			    {
+				if (resource instanceof IProject)
+				    openProject((IProject)resource);
+			    }			
+			break;
+		    case IResourceDelta.ADDED:
+		    case IResourceDelta.REMOVED:
+			resourceChanged(resource.getParent());
+			break;
+		    default:
+			break;
+		    }
+	    }
+
+	IResourceDelta[] aff = delta.getAffectedChildren();
+	for (int i = 0; i < aff.length; i++)
+	    {
+		traverseDelta(aff[i]);
+	    }
+    }
+    
     public void resourceChanged(IResourceChangeEvent event)
     {
 	int type = event.getType();
 	IResourceDelta delta = event.getDelta();
-	IResource resource = event.getResource();
+  	IResource resource = event.getResource();
+
 	switch (type)
 	    {
 	    case IResourceChangeEvent.POST_CHANGE:
 		{		
-		    if (resource instanceof IProject)
-			{
-			    openProjects();
-			}
-		    if (resource == null)
-			{
-			    IResourceDelta[] changes = delta.getAffectedChildren(IResourceDelta.CHANGED | 
-										 IResourceDelta.ADDED | 
-										 IResourceDelta.REMOVED);
-			    for (int i = 0; i < changes.length; i++)
-				{
-				    IResourceDelta change = changes[i];
-				    int flags = change.getFlags();		
-				    if ((flags & IResourceDelta.CONTENT) != 0)
-					{
-					    resource = change.getResource();
-					    resourceChanged(resource);
-					}
-				    else if ((flags & IResourceDelta.OPEN) != 0)
-					{
-					    resource = change.getResource();
-					    if (resource instanceof IProject)
-						openProject((IProject)resource);
-					}
-				}
-			}
-		    else
-			{
-			    resourceChanged(resource);
-			}
+		    traverseDelta(delta);
 		}
 		break;
 	    case IResourceChangeEvent.PRE_CLOSE:

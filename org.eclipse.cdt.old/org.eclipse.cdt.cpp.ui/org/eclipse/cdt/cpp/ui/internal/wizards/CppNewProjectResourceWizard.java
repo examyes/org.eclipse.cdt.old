@@ -133,28 +133,18 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			// add build spec
 			try 
 			    { 
-				String builderName = "com.ibm.cpp.ui.cppbuilder";
-				IProjectDescription projectDescription =  project.getDescription();
-
-				ICommand command = projectDescription.newCommand();
-				command.setBuilderName(builderName);
-				ICommand[] newCommands = new ICommand[1];
-				newCommands[0] = command;
-				projectDescription.setBuildSpec(newCommands);
-
 				// specify nature
+				IProjectDescription projectDescription =  project.getDescription();
 				String[] natures = projectDescription.getNatureIds();
 				String[] newNatures = new String[natures.length + 1];
 				System.arraycopy(natures, 0, newNatures, 0, natures.length);
 				newNatures[natures.length] = "com.ibm.cpp.ui.cppnature";
 				projectDescription.setNatureIds(newNatures);
-
 				project.setDescription(projectDescription, null);
 			    } 
 			catch (CoreException e)  
 			    {
 				System.out.println(e);
-				// Something went wrong
 			    }
 		    }
 

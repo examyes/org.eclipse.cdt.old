@@ -31,6 +31,14 @@ public class CppProject implements IProjectNature
         // Add nature-specific information
         // for the project, such as adding a builder
         // to a project's build spec.
+	String builderName = "com.ibm.cpp.ui.cppbuilder";
+	IProjectDescription projectDescription =  _project.getDescription();
+	
+	ICommand command = projectDescription.newCommand();
+	command.setBuilderName(builderName);
+	ICommand[] newCommands = new ICommand[1];
+	newCommands[0] = command;
+	projectDescription.setBuildSpec(newCommands);	
     }
 
     public void deconfigure() throws CoreException 
