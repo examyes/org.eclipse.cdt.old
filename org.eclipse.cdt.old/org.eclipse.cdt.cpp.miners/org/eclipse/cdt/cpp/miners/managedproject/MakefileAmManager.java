@@ -50,13 +50,6 @@ public class MakefileAmManager {
 	/**
 	 * Constructor for MakefileAmManager
 	 */
-	public MakefileAmManager(DataElement project) {
-         
-		//this.project = project;
-		//structureManager = new ProjectStructureManager( project.getFileObject());
-		//subdirs = structureManager.getSubdirWorkspacePath();
-		
-	}
 	public MakefileAmManager() 
 	{
 	}

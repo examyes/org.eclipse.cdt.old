@@ -45,10 +45,10 @@ public class MakefileAmClassifier {
 	public MakefileAmClassifier()
 	{
 		generateMakefileAmLayout();
-		//print(toplevelAm);
-		//print(programsAm);
-		//print(staticlAm);
-		//print(sharedlAm);
+		print(toplevelAm);
+		print(programsAm);
+		print(staticlAm);
+		print(sharedlAm);
 	}
 	protected void generateMakefileAmLayout()
 	{
@@ -261,11 +261,11 @@ public class MakefileAmClassifier {
 		if(classification==TOPLEVEL&& (profileLength>=topLevelLenght-1&&profileLength<=topLevelLenght+1))
 			return TOPLEVEL;
 		if(classification==PROGRAMS&& (profileLength>=programsLength-1&&profileLength<=programsLength+1))
-			return TOPLEVEL;
+			return PROGRAMS;
 		if(classification==STATICLIB&& (profileLength>=staticLenght-1&&profileLength<=staticLenght+1))
-			return TOPLEVEL;
+			return STATICLIB;
 		if(classification==SHAREDLIB&& (profileLength>=sharedLength-1&&profileLength<=sharedLength+1))
-			return TOPLEVEL;				
+			return SHAREDLIB;				
 		return 0;
 	}
 	private Vector getProfile(File Makefile_am)
@@ -287,6 +287,7 @@ public class MakefileAmClassifier {
 			}
 			in.close();
 		}catch(IOException e){System.out.println(e);}
+		print(profile);
 		return profile;
 	}
 	private void print(Vector vec)
