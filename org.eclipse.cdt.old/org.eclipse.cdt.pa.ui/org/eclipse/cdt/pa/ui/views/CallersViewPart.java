@@ -37,7 +37,7 @@ public class CallersViewPart extends PAObjectsViewPart
   {
     super.createPartControl(parent);
     _viewer.fixateOnRelationType("caller arc");
-    //_viewer.getViewer().getLabelProvider().setLabelProperty(DE.P_NAME);
+    ((DataElementLabelProvider)_viewer.getViewer().getLabelProvider()).setLabelProperty(DE.P_NAME);
   }
  
   public ObjectWindow createViewer(Composite parent, IActionLoader loader)
