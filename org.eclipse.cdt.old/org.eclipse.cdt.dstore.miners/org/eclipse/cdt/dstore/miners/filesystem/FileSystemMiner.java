@@ -646,7 +646,7 @@ public class FileSystemMiner extends Miner
 			File childFile = new File(child.getSource());
 			if (!childFile.exists())
 			    {
-				_dataStore.deleteObject(theElement, child);
+				//***_dataStore.deleteObject(theElement, child);
 			    }
 		    }
 		
