@@ -27,4 +27,7 @@
     <topic label="Running the Server"       href="tasks/remote/server.htm"/>
     <topic label="Running the Client"       href="tasks/remote/client.htm"/>
   </topic>
+
+  <anchor id="debug_tasks"/>
+
 </toc>

@@ -20,7 +20,7 @@
   <topic label="System-Objects"               href="concepts/views/systemobjects.htm"/>
   <topic label="Command Specifications"       href="concepts/views/commandspecs.htm"/>
   <topic label="View Content Controls">
-   <topic label="View Content"                href="concepts/views/content.htm"/>
+    <topic label="View Content"               href="concepts/views/content.htm"/>
   </topic>
  </topic>
 
@@ -48,6 +48,8 @@
   <topic label="Commands"                     href="concepts/commands/commands.htm"/>
   <topic label="Formats"                      href="concepts/commands/formats.htm"/>
  </topic>
+
+ <anchor id="debug_concepts"/>
 
 </toc>
 

@@ -13,6 +13,7 @@
 	<topic label="Tasks">
 		<link toc="topics_Tasks.xml" />
 	</topic>
+        <anchor id="debug_reference"/>
         <topic label="Tutorial">
 		<link toc="topics_Tutorial.xml" />
 	</topic>
