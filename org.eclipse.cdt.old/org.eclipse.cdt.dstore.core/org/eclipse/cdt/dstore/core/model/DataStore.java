@@ -2569,6 +2569,7 @@ public final class DataStore
           }
 	  
           File newFile = new File(file.getCanonicalPath());
+          
           if (newFile.canWrite())
           {
    		  	FileOutputStream fileStream = new FileOutputStream(newFile);

@@ -21,7 +21,7 @@ import java.io.*;
 
 public class ByteStreamHandler
 {
-	private DataStore _dataStore;
+	protected DataStore _dataStore;
 	
 	public ByteStreamHandler(DataStore dataStore)
 	{
@@ -110,18 +110,31 @@ public class ByteStreamHandler
             File file = new File(fileName);
             if (!file.exists())
             {
-	      File parent = new File(file.getParent());	      
-	      parent.mkdirs();
+		      File parent = new File(file.getParent());	      
+		      parent.mkdirs();
             }
             else
             {
             }
 
             File newFile = new File(fileName);
-            FileOutputStream fileStream = new FileOutputStream(newFile);
-            //fileStream.write(buffer);
-            fileStream.write(buffer, 0, size);
-            fileStream.close();
+	        FileOutputStream fileStream = new FileOutputStream(newFile);
+            
+            boolean binary = false;
+            if (binary)
+            {
+	            fileStream.write(buffer, 0, size);
+            }    
+            else
+            {
+            	String bufferString = new String(buffer, 0,size, "UTF-8");			
+			
+	 			OutputStreamWriter writer = new OutputStreamWriter(fileStream);
+	 			writer.write(bufferString, 0, size);
+	 			writer.flush();
+            }
+            
+	        fileStream.close();
           }
           catch (IOException e)
           {
@@ -139,6 +152,7 @@ public class ByteStreamHandler
     public void receiveAppendedBytes(String remotePath, byte[] buffer, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
+      
         String fileName = _dataStore.mapToLocalPath(remotePath);
 	
         if (fileName != null)
@@ -148,61 +162,89 @@ public class ByteStreamHandler
             // need to create directories as well
             File file = new File(fileName);
             if (!file.exists())
-		{
-		    File parent = new File(file.getParent());	      
-		    parent.mkdirs();
+			{	
+			    File parent = new File(file.getParent());	      
+			    parent.mkdirs();
 
-		    File newFile = new File(fileName);
-		    FileOutputStream fileStream = new FileOutputStream(newFile);
-		    fileStream.write(buffer, 0, size);
-		    fileStream.close();
-		}
-	    else
-		{
-		    // need to reorganize this so that we don't use up all the memory
-		    // divide appendedBuffer into chunks
-		    // at > 50M this kills Eclipse
-		    File oldFile = new File(fileName);
-		    File newFile = new File(fileName + ".new");
-
-		    FileInputStream  oldFileStream = new FileInputStream(oldFile);            
-		    FileOutputStream newFileStream = new FileOutputStream(newFile);
-
-		    // write old file to new file
-		    int maxSize = 5000000;
-		    int written = 0;
-		    int oldSize = (int)oldFile.length();		    
-		    int bufferSize = (oldSize > maxSize) ? maxSize : oldSize;
-		    byte[] subBuffer = new byte[bufferSize];
-
-		    while (written < oldSize)
-			{
-			    int subWritten = 0;
+			    File newFile = new File(fileName);
+			    FileOutputStream fileStream = new FileOutputStream(newFile);
 			    
-			    while (written < oldSize && subWritten < bufferSize)
-				{
-				    int available = oldFileStream.available();
-				    available = (bufferSize > available) ? available : bufferSize;
-				    int read = oldFileStream.read(subBuffer, subWritten, available);
-				    subWritten += read;
-				    written += subWritten;
-				}
-			    
-			    newFileStream.write(subBuffer, 0, subWritten);
+			    boolean binary = false;
+     	        if (binary)
+            	{
+	            	fileStream.write(buffer, 0, size);
+            	}    
+            	else
+            	{
+            		String bufferString = new String(buffer, 0,size, "UTF-8");			
+			
+	 				OutputStreamWriter writer = new OutputStreamWriter(fileStream);
+	 				writer.write(bufferString, 0, size);
+	 				writer.flush();
+    	        }
+
+			    fileStream.close();
 			}
+		    else
+			{
+			    // need to reorganize this so that we don't use up all the memory
+			    // divide appendedBuffer into chunks
+			    // at > 50M this kills Eclipse
+			    File oldFile = new File(fileName);
+			    File newFile = new File(fileName + ".new");
+			    newFile.createNewFile();
+	
+			    FileInputStream  oldFileStream = new FileInputStream(oldFile);            
+			    FileOutputStream newFileStream = new FileOutputStream(newFile);
+
+			    // write old file to new file
+			    int maxSize = 5000000;
+			    int written = 0;
+			    int oldSize = (int)oldFile.length();		    
+			    int bufferSize = (oldSize > maxSize) ? maxSize : oldSize;
+			    byte[] subBuffer = new byte[bufferSize];
+
+			    while (written < oldSize)
+				{
+				    int subWritten = 0;
+			    
+				    while (written < oldSize && subWritten < bufferSize)
+					{
+					    int available = oldFileStream.available();
+					    available = (bufferSize > available) ? available : bufferSize;
+					    int read = oldFileStream.read(subBuffer, subWritten, available);
+					    subWritten += read;
+				 	   written += subWritten;
+					}
+			    
+			    	newFileStream.write(subBuffer, 0, subWritten);
+				}
 		    
-		    oldFileStream.close();		    		    
+			    oldFileStream.close();		    		    
 
-		    // write new buffer to new file
-		    newFileStream.write(buffer, 0, size);
-		    newFileStream.close();
+			    // write new buffer to new file
+			    boolean binary = false;
+     	        if (binary)
+            	{
+	            	newFileStream.write(buffer, 0, size);
+            	}    
+            	else
+            	{
+            		String bufferString = new String(buffer, 0,size, "UTF-8");			
+			
+	 				OutputStreamWriter writer = new OutputStreamWriter(newFileStream);
+	 				writer.write(bufferString, 0, size);
+	 				writer.flush();
+    	        }
 
-		    // remote old file
-		    oldFile.delete();
+			    newFileStream.close();
 
-		    // rename new file 
-		    newFile.renameTo(oldFile);
-		} 
+			    // remote old file
+			    oldFile.delete();
+
+			    // rename new file 
+			    newFile.renameTo(oldFile);
+			} 
           }
           catch (IOException e)
           {

@@ -375,15 +375,16 @@ class CommandMinerThread extends MinerThread
  {
  	if (!_isDone)
  	{
- 	byte[] intoout = input.getBytes();
- 	 
-	 OutputStream output = _theProcess.getOutputStream();
+	 byte[] intoout = input.getBytes();
+ 	 OutputStream output = _theProcess.getOutputStream();
+	 
+	 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output));
+
    	 try
-   		{   	  	 	
-   	  	 	output.write(intoout, 0, input.length());
-   	  	 	output.write('\n');
-   	  	 	output.flush();
-   	  	 	
+   		{  
+   			writer.write(input);
+   			writer.write('\n');
+   			writer.flush();   			
    	  	 	createObject("command", input);
    	  	 	
    	  	 	if (_isShell)

@@ -97,7 +97,7 @@ public class XMLgenerator
 
 	public void flushData()
 	{
-		if (_document.length() > 0)
+		if (_document.length() > 0 && _dataWriter != null)
 			{
 			try
 				{
@@ -108,8 +108,10 @@ public class XMLgenerator
 			}
 			catch (Exception e)
 				{
+			
 				e.printStackTrace();
 				System.out.println(e);
+				
 				_dataWriter = null;
 			}
 		}
@@ -249,9 +251,24 @@ public class XMLgenerator
 					written += read;
 				}
 
+				/****
 				// send everything across
 				_fileWriter.write(buffer, 0, size);
 				_fileWriter.flush();
+				
+				****/
+				
+				/// TEST!
+				try
+				{
+					_dataWriter.write(new String(buffer), 0, size);
+					_dataWriter.flush();
+				}
+				catch (IOException e)
+				{
+				}
+			
+				// TEST!
 
 				inFile.close();
 			}
@@ -285,8 +302,23 @@ public class XMLgenerator
 			flushData();
 
 			// send everything across
-			_fileWriter.write(bytes, 0, size);
-			_fileWriter.flush();
+			boolean binary = false;
+			if (binary)
+			{
+				_fileWriter.write(bytes, 0, size);
+				_fileWriter.flush();
+			}
+			else
+			{
+				try
+				{
+					_dataWriter.write(new String(bytes), 0, size);
+					_dataWriter.flush();
+				}
+				catch (IOException e)
+				{
+				}
+			}
 		}
 		else
 			if (_state == EMPTY)
