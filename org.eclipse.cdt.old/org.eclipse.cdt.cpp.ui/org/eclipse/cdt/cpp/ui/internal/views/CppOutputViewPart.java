@@ -69,23 +69,26 @@ public class CppOutputViewPart
 		dialog.setFilterPath("*.*");
 		
 		String selectedFile = dialog.open();
-		java.io.File logFile = new java.io.File(selectedFile);
-		
-		try
+		if (selectedFile != null)
 		    {
-			java.io.RandomAccessFile outputLog = new java.io.RandomAccessFile(logFile, "rw");		
+			java.io.File logFile = new java.io.File(selectedFile);
 			
-			// for each element 
-			for (int i = 0; i < status.getNestedSize(); i++)
+			try
 			    {
-				outputLog.writeBytes(((DataElement)status.get(i)).getValue());		
-				outputLog.writeBytes(System.getProperty("line.separator"));
-			    }
+				java.io.RandomAccessFile outputLog = new java.io.RandomAccessFile(logFile, "rw");		
 			
-			outputLog.close();
-		    }
-		catch (java.io.IOException e)
-		    {
+				// for each element 
+				for (int i = 0; i < status.getNestedSize(); i++)
+				    {
+					outputLog.writeBytes(((DataElement)status.get(i)).getValue());		
+					outputLog.writeBytes(System.getProperty("line.separator"));
+				    }
+				
+				outputLog.close();
+			    }
+			catch (java.io.IOException e)
+			    {
+			    }
 		    }
 	    }
 	}
