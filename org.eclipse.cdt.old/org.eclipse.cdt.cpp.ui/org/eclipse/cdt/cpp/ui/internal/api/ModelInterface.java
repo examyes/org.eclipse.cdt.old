@@ -999,11 +999,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
       if (projectObj == null)
 	  {
-	      /**
 	      System.out.println("no project obj for " + project.getName());
 	      projectObj = dataStore.createObject(workspace, "Project", project.getName(), project.getLocation().toString());
 	      dataStore.setObject(workspace);
-	      **/
 	  } 
 
       return projectObj;
