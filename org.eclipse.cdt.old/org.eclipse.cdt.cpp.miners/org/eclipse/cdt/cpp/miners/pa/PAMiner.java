@@ -201,11 +201,8 @@ public class PAMiner extends Miner {
   String name         = getCommandName(theElement);
   DataElement status  = getCommandStatus(theElement);
   DataElement subject = getCommandArgument(theElement, 0);
-  
-  status.setAttribute(DE.A_NAME, "progress");
-  _dataStore.update(status);
-  
-  if (name.equals("C_QUERY"))
+    
+  if (name.equals("C_QUERY") && subject.isOfType("trace function"))
   {
    provideSourceFor(subject);
   }
