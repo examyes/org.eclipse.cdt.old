@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ==========================================================================	-->
-<!-- This plugin provides a debug engine listener.                              -->
-<!-- (c) Copyright IBM Corp. 2002. All Rights Reserved.                                                              -->
-<!-- ==========================================================================	-->
-
 <plugin
    id="com.ibm.debug.daemon"
    name="%PluginName"
    version="2.0.0"
    provider-name="%Provider"
-   class="com.ibm.debug.daemon.DebugDaemonPlugin">
+   class="com.ibm.debug.internal.daemon.DebugDaemonPlugin">
 
    <runtime>
-      <library name=".">
-         <export name="*"/>
-      </library>
       <library name="daemon.jar">
          <export name="*"/>
       </library>
    </runtime>
    <requires>
+      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.swt"/>
    </requires>
 
 
@@ -34,12 +28,12 @@
             name="%Preferences.title1"
             helpContextId="debug_daemon_preference_page"
             category="org.eclipse.debug.ui.DebugPreferencePage"
-            class="com.ibm.debug.daemon.DebugDaemonPreferencePage"
+            class="com.ibm.debug.internal.daemon.DebugDaemonPreferencePage"
             id="com.ibm.debug.daemon.DebugDaemonPreferencePage">
       </page>
    </extension>
-<!-- True would be the ideal default state, but it has to be false due to the tooltip behaviour. -->
 <!-- View Actions -->
+<!-- True would be the ideal default state, but it has to be false due to the tooltip behaviour. -->
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
@@ -50,7 +44,7 @@
                icon="icons/full/clcl16/connectionlistener_tsk.gif"
                tooltip="%ListenAction.tooltip"
                state="false"
-               class="com.ibm.debug.daemon.ListenActionDelegate"
+               class="com.ibm.debug.internal.daemon.ListenActionDelegate"
                toolbarPath="DaemonGroup"
                id="com.ibm.debug.daemon.ListenActionDelegate">
          </action>
