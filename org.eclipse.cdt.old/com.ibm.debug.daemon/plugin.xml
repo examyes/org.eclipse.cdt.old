@@ -19,18 +19,8 @@
    <library name="daemon.jar">
       <export name="*"/>
    </library>
-</runtime> 
+</runtime>
 
-<!-- Launchers -->
-<extension
-      point="org.eclipse.debug.core.launchers">
-   <launcher
-         label="%Launchers.engineListener"
-         modes="debug"
-         class="com.ibm.debug.daemon.DaemonLauncherDelegate"
-         id="com.ibm.debug.daemon.DaemonLauncherDelegate">
-   </launcher>
-</extension> 
 <!-- Preference Pages -->
 <extension
       point="org.eclipse.ui.preferencePages">
@@ -41,5 +31,23 @@
          class="com.ibm.debug.daemon.DebugDaemonPreferencePage"
          id="com.ibm.debug.daemon.DebugDaemonPreferencePage">
    </page>
-</extension> 
+</extension>
+
+<!-- View Actions -->
+<!-- True would be the ideal default state, but it has to be false due to the tooltip behaviour. -->
+<extension point = "org.eclipse.ui.viewActions">
+	<viewContribution
+		id="com.ibm.debug.wsa.DebugViewActions"
+		targetID="org.eclipse.debug.ui.DebugView">
+		<action id="com.ibm.debug.daemon.ListenActionDelegate"
+			label="%debugDaemon"
+			toolbarPath="DaemonGroup"
+            icon="registergroup_obj.gif"
+			tooltip="%ListenAction.tooltip"
+            state="false"
+            class="com.ibm.debug.daemon.ListenActionDelegate">
+        </action>		
+	</viewContribution>
+</extension>
+
 </plugin>
