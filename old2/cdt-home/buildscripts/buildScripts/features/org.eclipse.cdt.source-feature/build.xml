@@ -52,9 +52,6 @@
 	</target>
 
 	<target name="build.jars" depends="init">
-		<antcall target="all.children">
-			<param name="target" value="build.jars"/>
-		</antcall>
 	</target>
 
 	<target name="build.sources" depends="init">
@@ -64,47 +61,15 @@
 	</target>
 
 	<target name="build.zips" depends="init">
-		<antcall target="all.children">
-			<param name="target" value="build.zips"/>
-		</antcall>
 	</target>
 
 	<target name="build.update.jar" depends="init">
-		<antcall target="all.children">
-			<param name="target" value="build.update.jar"/>
-		</antcall>
-		<property name="feature.base" value="${feature.temp.folder}"/>
-		<delete dir="${feature.temp.folder}"/>
-		<mkdir dir="${feature.temp.folder}"/>
-		<antcall target="gather.bin.parts" inheritAll="false">
-			<param name="feature.base" value="${feature.temp.folder}"/>
-		</antcall>
-		<jar jarfile="${feature.destination}/${feature.full.name}.jar" basedir="${feature.temp.folder}/features/${feature.full.name}"/>
-		<delete dir="${feature.temp.folder}"/>
 	</target>
 
 	<target name="gather.bin.parts" depends="init" if="feature.base">
-		<antcall target="children">
-			<param name="target" value="gather.bin.parts"/>
-			<param name="destination.temp.folder" value="${feature.base}/plugins"/>
-		</antcall>
-		<mkdir dir="${feature.base}/features/${feature.full.name}"/>
-		<copy todir="${feature.base}/features/${feature.full.name}">
-			<fileset dir="${basedir}" includes="cpl-v10.html,feature.xml,feature.properties,eclipse_update_120.jpg,license.html,about.html"/>
-		</copy>
 	</target>
 
 	<target name="zip.distribution" depends="init">
-		<delete dir="${feature.temp.folder}"/>
-		<mkdir dir="${feature.temp.folder}"/>
-		<unzip src="../org.eclipse.cdt-feature/org.eclipse.cdt${feature.version.suffix}.bin.dist.zip" dest="${feature.temp.folder}"/>
-		
-		<antcall target="gather.bin.parts">
-			<param name="feature.base" value="${feature.temp.folder}"/>
-			<param name="include.children" value="true"/>
-		</antcall>
-		<zip zipfile="${feature.destination}/${feature.dated.name}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
-		<delete dir="${feature.temp.folder}"/>
 	</target>
 
 	<target name="zip.sources" depends="init">
@@ -119,22 +84,12 @@
 	</target>
 
 	<target name="zip.logs" depends="init">
-		<delete dir="${feature.temp.folder}"/>
-		<mkdir dir="${feature.temp.folder}"/>
-		<antcall target="all.children" inheritAll="false">
-			<param name="target" value="gather.logs"/>
-			<param name="destination.temp.folder" value="${feature.temp.folder}/plugins"/>
-		</antcall>
-		<zip zipfile="${feature.destination}/${feature.full.name}.log.zip" basedir="${feature.temp.folder}" filesonly="true"/>
-		<delete dir="${feature.temp.folder}"/>
 	</target>
 
 	<target name="clean" depends="init">
 		<delete file="${feature.destination}/${feature.full.name}.jar"/>
-		<delete file="${feature.destination}/${feature.full.name}.log.zip"/>
         <delete>
             <fileset dir="${feature.destination}" includes="**/*-${platformId}${feature.version.suffix}.src.zip"/>
-            <fileset dir="${feature.destination}" includes="**/*-${platformId}${feature.version.suffix}.bin.dist.zip"/>
         </delete>
 
 		<delete dir="${feature.temp.folder}"/>
