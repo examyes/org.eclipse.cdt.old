@@ -262,7 +262,7 @@ public class TransferFiles extends Thread
 					
 				if (_pm != null)
 		  		  {
-		  		  	String msg = "Writing " + newSourceStr + "(" + totalRead / 1000 + "k)";
+		  		  	String msg = "Writing " + newSourceStr + "(" + totalRead / 1000 + "k of " + totalSize / 1000 + "k)";
 					_pm.subTask(msg);
 		  		  }
 				}
