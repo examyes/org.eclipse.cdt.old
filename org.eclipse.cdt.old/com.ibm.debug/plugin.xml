@@ -1,0 +1,339 @@
+<?xml version="1.0"?>
+
+<!-- ==========================================================================	-->
+<!-- This plugin provides compiled language debug capability to the debug core.	-->
+<!-- (c) Copyright IBM Corp. 1997, 2001. All Rights Reserved.                   -->
+<!-- ==========================================================================	-->
+
+<plugin
+    name = "PICLDebugPlugin"
+    id = "com.ibm.debug"
+    version = "1.0.0"
+    vendor-name = "International Business Machines Corp."
+    class = "com.ibm.debug.PICLDebugPlugin">
+
+<runtime>
+  <library name=".">
+      <export name="*" />
+  </library>
+  <library name="ibm_debug.jar">
+      <export name="*" />
+  </library>
+</runtime>
+
+
+<requires>
+  <import plugin="org.eclipse.core.resources" version="1.0.0" />
+  <import plugin="org.eclipse.core.runtime" version="1.0.0" />
+  <import plugin="org.eclipse.swt" version="1.0.0" />
+  <import plugin="org.eclipse.debug.core" version="1.0.0" />
+  <import plugin="org.apache.xerces" version="3.2.1" />
+  <import plugin="org.eclipse.ui" version="1.0.0" />
+  <import plugin="org.eclipse.debug.ui" version="1.0.0" />
+  <!-- BGS - lpex plugin should be removed once getVerticalRuler() problem resolved -->
+  <import plugin="com.ibm.lpex" version="1.0.0" />
+</requires>
+
+<!-- Preference Pages -->
+
+<extension point="org.eclipse.ui.preferencePages">
+	<page name="%Preferences.title1"
+		category="org.eclipse.debug.ui.DebugPreferencePage" 
+		id="com.ibm.debug.internal.pdt.ui.preferences.PICLDebugPreferencePage"		
+		class="com.ibm.debug.internal.pdt.ui.preferences.PICLDebugPreferencePage"
+		helpContextId="picl_debug_preference_page">
+	</page>
+</extension>
+
+<!-- Presentation services -->
+
+<extension point = "org.eclipse.debug.ui.debugModelPresentations">
+         <debugModelPresentation
+             class = "com.ibm.debug.internal.picl.PICLModelPresentation"
+             id = "com.ibm.debug.internal.picl">
+          </debugModelPresentation>
+</extension>
+
+<!-- This base breakpoint defines attributes common to all of the PICL breakpoints -->
+
+<extension id="PICLBreakpoint" point="org.eclipse.core.resources.markers">
+	<super type="org.eclipse.debug.core.lineBreakpoint"/>
+  	<attribute name="editable" />
+  	<attribute name="thread" />
+  	<attribute name="everyValue" />
+  	<attribute name="toValue" />
+  	<attribute name="fromValue" />
+  	<attribute name="error" />
+  	<attribute name="errorMsgText" />
+  	<attribute name="errorAttribute" />
+  	<attribute name="installCount" />
+  	<attribute name="engineID" />
+</extension>
+
+<extension id="PICLLocationBreakpoint" point="org.eclipse.core.resources.markers">
+	<super type="com.ibm.debug.PICLBreakpoint"/>
+  	<attribute name="moduleName" />
+  	<attribute name="objectName" />
+  	<attribute name="sourceFileName" />
+    <attribute name="conditionalExpression" />
+    <attribute name="deferred" />
+</extension>
+
+<extension id="PICLEventBreakpoint" point="org.eclipse.core.resources.markers">
+	<super type="com.ibm.debug.PICLBreakpoint"/>
+</extension>
+
+<!-- The following are specialized breakpoints -->
+
+<extension id="PICLLineBreakpoint" point="org.eclipse.core.resources.markers" name="%PICLLineBreakpoint">
+    <super type="com.ibm.debug.PICLLocationBreakpoint" />
+    <persistent value="true" />
+ <!-- Line number is stored in base marker -->
+</extension>
+
+<extension id="PICLEntryBreakpoint" point="org.eclipse.core.resources.markers" name="%PICLEntryBreakpoint">
+    <super type="com.ibm.debug.PICLLocationBreakpoint" />
+    <persistent value="true" />
+    <attribute name="functionName" />
+    <attribute name="caseSensitive" />
+</extension>
+
+<extension id="PICLAddressBreakpoint" point="org.eclipse.core.resources.markers" name="%PICLAddressBreakpoint">
+    <super type="com.ibm.debug.PICLLocationBreakpoint" />
+    <persistent value="true" />
+    <attribute name="addressExpression" />
+</extension>
+
+<extension id="PICLWatchBreakpoint" point="org.eclipse.core.resources.markers" name="%PICLWatchBreakpoint">
+    <super type="com.ibm.debug.PICLEventBreakpoint" />
+    <persistent value="true" />
+    <attribute name="numBytesMonitored" />
+    <attribute name="addressExpression" />
+</extension>
+
+<extension id="PILCLoadBreakpoint" point="org.eclipse.core.resources.markers" name="%PICLLoadBreakpoint">
+    <super type="com.ibm.debug.PICLEventBreakpoint" />
+    <persistent value="true" />
+  	<attribute name="moduleName" />
+</extension>
+
+<!-- Create the Register view -->
+<extension point = "org.eclipse.ui.views">
+	<view
+		name="%RegistersView.title"
+		icon="icons/full/cview16/register_view.gif"
+		category="org.eclipse.debug.ui"
+		class="com.ibm.debug.internal.pdt.ui.views.RegisterView"
+		id="com.ibm.debug.pdt.ui.RegisterView"
+		helpContextId="register_view">
+	</view>
+</extension>
+<!-- Stack the Register view on top of the Breakpoint view -->
+<extension point="org.eclipse.ui.perspectiveExtensions">
+	<perspectiveExtension
+       targetID="org.eclipse.debug.ui.DebugPerspective">
+	<view id="com.ibm.debug.pdt.ui.RegisterView"
+ 		relative="org.eclipse.debug.ui.BreakpointView"
+		relationship="stack"/>
+	</perspectiveExtension>
+</extension>
+
+<!-- Toolbar items for Register view -->
+<extension point="org.eclipse.ui.viewActions">
+	<viewContribution
+           id="com.ibm.debug.pdt.ui.actions.RegisterToolbarActions"
+           targetID="com.ibm.debug.pdt.ui.RegisterView">
+		<action
+				  id="com.ibm.debug.pdt.ui.CollapseAllAction"
+				  label="%CollapseAllAction.label"
+				  toolbarPath="emptyRegisterGroup"
+				  icon="icons/full/clcl16/collapseall_tsk.gif"
+				  tooltip="%CollapseAllAction.tooltip"
+				  class="com.ibm.debug.internal.pdt.ui.actions.CollapseAllAction"
+				  enablesFor="*">
+  	  	</action>
+      	<action
+				  id="com.ibm.debug.pdt.ui.ExpandAllAction"
+				  label="%ExpandAllAction.label"
+				  toolbarPath="emptyRegisterGroup"
+				  icon="icons/full/clcl16/expandall_tsk.gif"
+				  tooltip="%ExpandAllAction.tooltip"
+				  class="com.ibm.debug.internal.pdt.ui.actions.ExpandAllAction"
+				  enablesFor="*">
+  	  	</action>
+  	  </viewContribution>
+</extension>
+
+<extension point="org.eclipse.ui.popupMenus">
+    <viewerContribution
+           id="com.ibm.debug.EditorActions"
+           targetID="#TextEditorContext">
+        <action
+				  id="com.ibm.debug.pdt.ui.actions.JumpToLocationAction"
+				  label="%JumpToLocationAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.JumpToLocationAction"
+				  helpContextId="jump_to_location_action">
+		</action>
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.RunToLocationAction"
+				  label="%RunToLocationAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.RunToLocationAction"
+				  helpContextId="run_to_location_action">
+		</action>
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.AddSnippetToMonitorAction"
+				  label="%AddSnippetToMonitorAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.AddSnippetToMonitorAction"
+				  helpContextId="add_snippet_to_monitor_action">
+		</action>
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.AddSnippetToStorageMonitorAction"
+				  label="%AddSnippetToStorageMonitorAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.AddSnippetToStorageMonitorAction"
+				  helpContextId="add_snippet_to_storage_monitor_action">
+		</action>
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.AddBreakpoint"
+				  label="%AddBreakpointContextMenuAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.AddEditorBreakpointAction"
+				  helpContextId="add_editor_breakpoint_action">
+		</action>
+
+  </viewerContribution>
+
+  <viewerContribution
+           id="com.ibm.debug.EditorRulerActions"
+           targetID="#TextRulerContext">
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.JumpToLocationRulerAction"
+				  label="%JumpToLocationAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.JumpToLocationRulerAction"
+				  helpContextId="jump_to_location_ruler_action">
+		</action>
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.RunToLocationRulerAction"
+				  label="%RunToLocationAction.label"
+				  menubarPath="additions"
+				  class="com.ibm.debug.internal.pdt.ui.actions.RunToLocationRulerAction"
+				  helpContextId="run_to_location_ruler_action">
+		</action>
+  </viewerContribution>
+
+  <viewerContribution
+           id="com.ibm.debug.DebugViewActions"
+           targetID="org.eclipse.debug.ui.DebugView">
+		<action
+				  id="com.ibm.debug.pdt.ui.actions.ShowStoppingThreadAction"
+				  label="%ShowStoppingThreadAction.label"
+				  menubarPath="emptyDebugGroup"
+				  class="com.ibm.debug.internal.pdt.ui.actions.ShowStoppingThreadAction"
+				  enablesFor="0"
+				  helpContextId="show_stopping_thread_action">
+		</action>
+  </viewerContribution>
+ </extension>
+
+
+ <extension point="org.eclipse.ui.viewActions">
+  <viewContribution
+           id="com.ibm.debug.DebugViewToolbarActions"
+           targetID="org.eclipse.debug.ui.DebugView">
+    <action
+				  id="com.ibm.debug.pdt.ui.actions.SetPreferredView"
+				  label="%SetPreferredView.label"
+				  menubarPath="PreferredView"
+				  tooltip="%SetPreferredView.tooltip"
+				  class="com.ibm.debug.internal.pdt.ui.actions.SetPreferredViewAction"
+				  enablesFor="0">
+	</action>
+
+  </viewContribution>
+  </extension>
+
+
+<!-- Monitors view -->
+
+<extension
+      point="org.eclipse.ui.views">
+   <view
+         name="%MonitorView.title"
+         icon="icons/full/cview16/monitor_view.gif"
+         category="org.eclipse.debug.ui"
+         class="com.ibm.debug.internal.pdt.ui.views.MonitorView"
+         id="com.ibm.debug.pdt.ui.MonitorView"
+         helpContextId="monitor_view">
+   </view>
+</extension>
+<!-- Stack the Monitor view on top of the Breakpoint view -->
+<extension point="org.eclipse.ui.perspectiveExtensions">
+	<perspectiveExtension
+       targetID="org.eclipse.debug.ui.DebugPerspective">
+	<view id="com.ibm.debug.pdt.ui.MonitorView"
+ 		relative="org.eclipse.debug.ui.BreakpointView"
+		relationship="stack"/>
+	</perspectiveExtension>
+</extension>
+
+
+ <extension
+      point = "org.eclipse.ui.editors">
+	<editor
+  	   id = "com.ibm.debug.pdt.editor.DebuggerEditor"
+  	   name="Debugger Editor"
+       icon="icons/full/cview16/source_view.gif"
+       class="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditor"
+       contributorClass="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditorContextContributor"
+       extensions="text-1"
+       helpContextId="debugger_editor">
+   </editor>
+ </extension>
+
+<!-- Storage view -->
+
+<extension
+      point="org.eclipse.ui.views">
+   <view
+         name="%StorageView.title"
+         icon="icons/full/cview16/storage_view.gif"
+         category="org.eclipse.debug.ui"
+         class="com.ibm.debug.internal.pdt.ui.views.StorageView"
+         id="com.ibm.debug.pdt.ui.StorageView"
+         helpContextId="storage_view">
+   </view>
+</extension>
+<!-- Stack the Storage view on top of the Breakpoint view -->
+<extension point="org.eclipse.ui.perspectiveExtensions">
+	<perspectiveExtension
+       targetID="org.eclipse.debug.ui.DebugPerspective">
+	<view id="com.ibm.debug.pdt.ui.StorageView"
+ 		relative="org.eclipse.debug.ui.BreakpointView"
+		relationship="stack"/>
+	</perspectiveExtension>
+</extension>
+
+
+<!-- Infopop enablement -->
+
+	<extension point="org.eclipse.help.contexts">
+		<contexts name="contexts_CPPDebug.xml" plugin="com.ibm.debug"/>
+	</extension>
+
+<!-- GdbView  -->
+<extension
+   point="org.eclipse.ui.views">
+   <view
+         name="%GdbView.title"
+         icon="icons/full/cview16/gdbView.gif"
+         category="org.eclipse.debug.ui"
+         class="com.ibm.debug.internal.pdt.ui.views.GdbView"
+         id="com.ibm.debug.pdt.ui.GdbView">
+   </view>
+</extension>
+
+</plugin>

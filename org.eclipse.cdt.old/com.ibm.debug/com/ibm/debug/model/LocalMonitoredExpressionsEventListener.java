@@ -1,0 +1,36 @@
+package com.ibm.debug.model;
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 1997, 2001, 2002 International Business Machines Corporation. All rights reserved.
+// This program and the accompanying materials are made available under the terms of
+// the Common Public License which accompanies this distribution.
+//
+// com/ibm/debug/model/LocalMonitoredExpressionsEventListener.java, java-model, eclipse-dev, 20011128
+// Version 1.1.1.2 (last modified 11/28/01 16:12:35)
+////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Note: This class/interface is part of an interim API that is still under
+ * development and expected to change significantly before reaching stability.
+ * It is being made available at this early stage to solicit feedback from
+ * pioneering adopters on the understanding that any code that uses this API
+ * will almost certainly be broken (repeatedly) as the API evolves.
+ */
+
+public interface LocalMonitoredExpressionsEventListener extends ModelEventListener
+{
+   /**
+    * This method will be called when a new monitored expression has just
+    * been added to the local monitor.
+    * @param event The event for adding a monitored expression
+    */
+   public void monitoredExpressionAdded(MonitoredExpressionAddedEvent event);
+
+   /**
+    * This method will be called when the monitor for local monitored
+    * expressions has been removed.
+    * @param event The event for removing the local monitor
+    */
+   public void localExpressionsMonitorEnded(LocalMonitoredExpressionsEndedEvent event);
+}
