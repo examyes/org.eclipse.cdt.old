@@ -112,7 +112,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private ViewToolBar         _toolBar;
     private DataStore           _dataStore;
     private ImageRegistry       _imageRegistry;
-    private TestUI              _workbook;
     private ArrayList           _outLinks;
     private boolean             _isLinked;
     private IActionLoader       _loader;
@@ -325,11 +324,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    }
     }
 
-  public void setWorkbook(TestUI ui)
-  {
-    _workbook = ui;
-  }
-  
 
   public DataStore getDataStore()
       {
@@ -498,13 +492,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     return _outLinks; 
   }
   
-  public void openSection(DataElement element)
-  {
-    if (_workbook != null)
-    {
-      _workbook.openSection(element);   
-    }
-  }
 
   
   protected Control createContents() 
