@@ -59,7 +59,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     private Group _optionGroup;
     private Table _fileExtensionList;
  
-	private ArrayList extensionList = new ArrayList();
+	//private ArrayList extensionList = new ArrayList();
 	
 	
     public AutoconfBuilderPropertyPageControl(Composite cnr, int style)
@@ -176,24 +176,21 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		
 		// Create the new type and insert it
 		FileEditorMapping resourceType = new FileEditorMapping(name, extension);
-		TableItem item = newResourceTableItem(resourceType,true);
+		TableItem item = newResourceTableItem(_fileExtensionList, resourceType,true);
 		_fileExtensionList.setFocus();
 		_fileExtensionList.showItem(item);
-		
-		extensionList.add(extension);
-		
 		
 		}
 	}
 
-	protected TableItem newResourceTableItem(IFileEditorMapping mapping, boolean selected) 
+	protected TableItem newResourceTableItem(Table extList,IFileEditorMapping mapping, boolean selected) 
 	{
 		Image image = mapping.getImageDescriptor().createImage(false);
 	//if (image != null)
 	//	imagesToDispose.add(image);
 	
 	//TableItem item = new TableItem(_fileExtensionList, SWT.NULL, index);
-		TableItem item = new TableItem(_fileExtensionList, SWT.NULL);
+		TableItem item = new TableItem(extList, SWT.NULL);
 		if (image != null) {
 			item.setImage(image);
 		}
@@ -217,7 +214,14 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     }
     public ArrayList getExtensionList()
     {
-    	return extensionList;
+    	
+    	ArrayList list = new ArrayList();
+    	TableItem[] items = _fileExtensionList.getItems();
+    	for(int i = 0; i < items.length; i++ )
+    	{
+    		list.add(items[i].getText());
+    	}
+    	return list;
     }
     
     // sets
@@ -237,10 +241,11 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     	for(int i = 0; i < list.size(); i++)
     	{
     		String extension = (String)list.get(i);
+    		extension = extension.substring(extension.indexOf(".")+1);
 
 			// Create the new type and insert it
-			FileEditorMapping resourceType = new FileEditorMapping("*", extension);
-			TableItem item = newResourceTableItem(resourceType,true);
+			FileEditorMapping resourceType = new FileEditorMapping("*",extension);
+			TableItem item = newResourceTableItem(_fileExtensionList,resourceType,true);
 			_fileExtensionList.showItem(item);
     	}
     }

@@ -135,10 +135,10 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 
 		}
 		
-		if(!_autoconfBuildControl.getExtensionList().isEmpty())
-		{
+		//if(!_autoconfBuildControl.getExtensionList().isEmpty())
+	//	{
 			plugin.writeProperty(project,extensionKey,_autoconfBuildControl.getExtensionList());
-		}
+//		}
 	}
 	
 	public boolean performOk()

@@ -67,7 +67,26 @@ public class ManagedProjectMiner extends Miner
 		_dataStore.createReference(managedProjectsD, targetOptionD);
   
 		//******_dataStore.createReference(workspaceD, managedProjectsD); // disable this for now
+		
+		////////////////new
+		
+		DataElement extVar = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "ExtraDist File Extensions");
+		_dataStore.createReference(extVar, _dataStore.createObject(schemaRoot, DE.T_RELATION_DESCRIPTOR, "Parent Extension"));
+		DataElement containerObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object", 1);
+		_dataStore.createReference(containerObjectD, extVar, "abstracts", "abstracted by");
+  
+		createCommandDescriptor(containerObjectD,"set ExtraDist Extensions","C_SET_EXTRA_DIST_EXTENSIONS",false);
+		
+/*		DataElement fsObj = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+		DataElement inhabits = _dataStore.createRelationDescriptor(schemaRoot, "inhabits");
+		DataElement sustains = _dataStore.createRelationDescriptor(schemaRoot, "sustains");
+		inhabits.setDepth(0);
+		sustains.setDepth(0);
 
+		_dataStore.createReference(envVar, sustains);
+		_dataStore.createReference(fsObj, inhabits);*/
+		//////////////// end new
+				
 		//createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
 		createCommandDescriptor(targetD, "Build", "C_BUILD_TARGET", false);
 		createCommandDescriptor(targetD, "Execute", "C_EXECUTE_TARGET", false);
@@ -114,7 +133,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Optimized","C_OPTIMIZED_OPTION",false);
 		createCommandDescriptor(projectD, "Debuggable","C_DEBUG_OPTION",false);
 		
-		createCommandDescriptor(projectD,"ExtraDist Extensions","C_SET_EXTRA_DIST_EXTENSIONS",false);
+		
 		
 		
 		 createRelationDescriptor(schemaRoot, "class type");			
@@ -256,7 +275,7 @@ public class ManagedProjectMiner extends Miner
 			else if(name.equals("C_SET_EXTRA_DIST_EXTENSIONS"))
 			{
 				//handleSetExtensions(subject, args);
-				System.out.println("\n extran dist action"+"\n"+args);
+				//System.out.println("\n extran dist action"+"\n"+args);
 				
 			}
 			// new : to havdle delete notification
