@@ -131,7 +131,12 @@ Project Management Issues - autoconf and automake
    In order to do that you can select Autoconf -> Advanced->create Programs Makefile.am action 
    to have the Progaram target.
 
-2-  
+2- When invoking Generate Configure and Run Configure action, a pop dialog will warn you of 
+   outdated configure, and infact sometimes it will be up to date. So, if you are sure that configure 
+   is up to date and no need to update the configuration files, you may press the cancel button
+   
+3- In the above point, pressing cancel does not mean to cancel the action, but tcanceling the 
+   updates actions only 
 
 
 
