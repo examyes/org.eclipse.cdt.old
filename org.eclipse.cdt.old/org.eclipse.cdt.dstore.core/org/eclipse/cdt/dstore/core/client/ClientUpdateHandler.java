@@ -58,7 +58,7 @@ public class ClientUpdateHandler extends UpdateHandler
 		  if ((object != null) )
 		      {	 
 			  clean(object);
-			  if (!object.isUpdated())
+			  if (!object.isUpdated() && !object.isDeleted())
 			      {
 				  notify(object);
 			      }
@@ -78,6 +78,7 @@ public class ClientUpdateHandler extends UpdateHandler
 	      }
 
 	  object.setExpanded(true);
+
 	  
         IDomainNotifier notifier = _dataStore.getDomainNotifier();
 
