@@ -1,0 +1,11 @@
+#!/bin/sh
+
+#This script should only be used on LINUX
+
+#export PATH=$ORIG_PATH:$PATH
+#unset LD_LIBRARY_PATH
+unset LD_ASSUME_KERNEL
+
+/usr/bin/gdb "$@"  
+
+echo "All Done."
