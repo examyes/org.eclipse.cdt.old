@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Eclipse Tools - CDT December Project Meeting Minutes</title>
+<title>Eclipse Tools - CDT February Project Meeting Minutes</title>
 <LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
 </head>
 
@@ -11,7 +11,7 @@
 <table BORDER=0 CELLPADDING=2 WIDTH="100%" >
  <tr> 
   <td ALIGN=LEFT width="60%"><font class=indextop>CDT </font><br>
-   <font class=indexsub>December Project Meeting Minutes</font>
+   <font class=indexsub>February Project Meeting Minutes</font>
   </td>
   <td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
  </tr>
@@ -24,40 +24,29 @@
 </tr>
 </table>
 <p>
- <b> <i>09 December 2002, Ottawa Canada</i> <p>
+ <b> <i>5 February 2003, Ottawa Canada</i> <p>
     </b><p>
   Phone in meeting of Eclipse CDT stakeholders. Review progress to date and map out the future direction for the Eclipse CDT Project.
  
  <p>
 
-1:30 to 4PM EST on Monday 9 December 2002<p>
+11:00 to 1PM EST on Wednesday 5 February 2003<p>
 
- <b> View the <a <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/12-2002/12-2002-notice.html?cvsroot=Tools_Project"> Agenda </a></b><p>
+ <b> View the <a <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/02-2003/02-2003-notice.html?cvsroot=Tools_Project"> Agenda </a></b><p>
  <b> Minutes</b><p>
  
-<i>Present:</i><br>
+<p>
+
+Here are the minutes of the CDT conference call.
+Sebastien also had an opportunity to talk with John Duimovich,
+and has added follow-up comments on CPPUnit, testing and
+automatic cvs patch generation.
+</p>
+
+<b>
+Present:</b>
+
 <table ALIGN=CENTER VALIGN=TOP COLSPAN="3">
-<tr><td WIDTH="33%" VALIGN=TOP>
-Macraigor
-<ul>
-   <li>Jim Macraigor
-</ul>  
-</td>
-<td WIDTH="33%" VALIGN=TOP>
-Montavista:
-<ul>
-   <li>Lee Courtney
-   <li>Joe Green
-   <li>Brian Eliot
-   <li>Brian Moyle
-</ul>
-</td>
-<td WIDTH="33%" VALIGN=TOP>
-Programming Research
-<ul>
-   <li>Mark Langan
-</ul>
-</td></tr>
 <tr><td WIDTH="33%" VALIGN=TOP>
 QNX
 <ul>
@@ -68,316 +57,266 @@ QNX
    <li>Alain Magloire
    <li>Mikhail Khodjaiants
    <li>Peter Graves
-   <li>Shelley Bryen
-</ul> 
+</ul>
 </td>
 <td WIDTH="33%" VALIGN=TOP>
 Rational
 <ul>
    <li>Sky Matthews
    <li>John Camelon
-   <li>Cory Bialowas
+   <li>Michel Paquet
    <li>Sean Evoy
    <li>Doug Schaefer
    <li>Hoda Amer
+   <li>Andrew Niefer
+   <li>Martin Lescuyer
 </ul>
 </td>
 <td WIDTH="33%" VALIGN=TOP>
-   
+
 Redhat
 <ul>
-   <li>Tom Tromey
-   <li>Don Howard
+   <li>John Healy
+   <li>Elena Zannoni
+   <li>Michael Behm
    <li>Phil Muldoon
    <li>Rick Moseley
-</ul> 
+</ul>
 </td>
 </tr>
 <tr>
 <td WIDTH="33%" VALIGN=TOP>
-SAS
-<ul>
-   <li>Ed Burnette
-</ul> 
-</td>
-<td WIDTH="33%" VALIGN=TOP>
 Tensilica
 <ul>
    <li>Chris Songer
-   <li>Peter Macliesh
 </ul>
 </td>
 <td>
 Timesys
 <ul>
-   <li>Manas Saksena
-   <li>Gene Sally
    <li>Omar Naseer
    <li>Sam Robb
 </ul>
 </td>
-<tr><td WIDTH="33%" VALIGN=TOP>
-Wasabi
+<td>
+Exor Intl.
 <ul>
-   <li>Ross Harvey
-</ul> 
-</td> 
+   <li>Mike Charles
+</ul>
+</td>
 
 </table><p>
 
- <p>
-<table BORDER=0 CELLPADDING=2 WIDTH="100%">
-<tr>
- <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
- </td>
-</tr>
-</table>
+The following was discussed:<br>
 
-<b>Agenda</b>
 <ol>
-<li>State of the CDT
-<li>Update from CDT participants
-<li>New participants
-<li>Project infrastructure
-<li>Planning (6 month goals/prios)
-<li>Varia
-<li>Follow-up
+
+<li> <b>CDT 1.0.1 status:</b><p>
+The CDT 1.0.1 bugfix release went GA mid-January. All of the features
+outlines in the december conf. call were rolled in, with the exception
+of disassembly breakpoints.</p>
+<p>
+Alain mentionned that he has merged some critical fixes from the CDT
+head branch into the 1.0.1 CVS branch (post 1.0.1 GA release).
+This might be useful for OEM's wanting to ship on CDT 1.0.1.
+</p>
+</li>
+
+<li> <b>Update from participants:</b>
+  <ul>
+  <li> Mike Charles from Exor mentionned that his company's interest
+was in potentially using Eclipse and CDT as the basis for an
+IDE for their embedded panels.</li>
+
+  <li> Michel Paquet presented the Rational CDT team to the group.
+Rational has geared up quite a significant team to work on CDT.
+The slide set has been mailed to the CDT mailing list, and will
+be posted on the web site.</li>
+
+ <li>Redhat talked about their Eclipse activities; this includes
+building an RPM plugin/spec file editor, a profiler project,
+as well as ongoing work to make a compiled version of Eclipse.</li>
+
+ <li> Timesys just release a beta of their Timestorm IDE for Linux.
+This is based on Eclipse 2.0.1, along with CDT 1.0.</li>
+
+ <li> QNX is now releasing their latest version of Momentics,
+based on Eclipse 2.0.1 and CDT 1.0.1.</li>
+  </ul><br>
+</li>
+
+<li><b>Technical discussions -- CDT core components</b><p>
+There were two main thrusts to thsi discussion. First, Michel
+presented the details of Rational's plans for CDT (see his
+slide set). This includes deliverables for the parser, cmodel,
+CDOM, indexer, refactoring etc. He also offered help on the
+build model, class browser etc. Rational's deliverables are split
+between two major milestones, Aug. 2003 and Dec. 2003. This is in line
+with internal project milestones. Everyone was very excited about
+Rational's plans and contribution -- this will really help push
+the CDT to the next level.</p>
+<p>
+As part of the discussion, Thomas brought up the point that QNX
+was likely going to contribute to the class browser and class utilities.
+</p><p>
+The discussion then veered off to CPPUnit. CPPUnit is a test automation
+framework for C/C++ (a port of JUnit to C++), and Rational is planning
+an Eclipse plugin for this. A proposal has been made to put this
+as part of the CDT project. The discussion centered on whether this
+should be part of CDT, a separate project under the Eclipse tools
+umbrella, or a separate project hosted somewhere else, but pulled in to
+CDT as a convenience (note that JUnit does the latter).
+I discussed this with John D., but did not come to a conclusion.
+I will discuss this with Martin separately.
+</p><p>
+Sam Robb then discussed his build model proposal. The proposal is posted
+on a web site, and the URL has been sent to the list. His proposal includes
+Javadoc API's. Sam's build model has a reference implementation for a GNU
+toolchain,
+and his prototype has support for the initial "high-runner" toolchain
+options.
+</p><p>
+The one remaining hurdle for Sam to contribute his code is to have his
+management approve the donation. Sam was going to discuss this with his VP
+and
+get back to the group this week.
+</p><p>
+Everyone felt that the build model was very important, and the participants
+agreed
+to review Sam's proposal. Rational also emphasized that they could provide
+additional help with the review and implementation if needed.
+</p><p>
+Afterwards, other topics relating to CDT core were discssed: this included
+UI
+enhancements and usability-related updates. The proposal was again made that
+these
+be put up in a "projects" section on the website for people to take on.
+</p>
+</li>
+
+<li> <b>CDT debug:</b><p>
+
+This seems to be progressing well. Alain gave a quick overview of the CDT
+debug
+plan, as posted to the mailing list. A lot of items on the list have already
+been
+implemented, with the balance being scheduled for completion by mid-march.
+</p><p>
+There was some discussion of unimplemented MI commands, which Alain will
+post as
+bugs to the gdb project. There was also a discussion on supported gdb
+version;
+which still look to be 5.2.1 and 5.3. Elena mentionned that 5.4 was not
+branched
+yet, and would likely not be out before our next minor release of CDT.
+</p><p>
+What was not discussed was the debugger roadmap beyond the 2-3 month window.
+One
+possibility, which was discussed after the call ended, was to tackle C/C++
+and Java
+debugging integration (JNI/Java integrated debugging).
+</p>
+</li>
+
+<li> <b>Documentation and testing:</b><p>
+
+Documentation was discssed. The lack of a CDT user's manual is still
+a significant gap, and the contributing companies are all spending time
+writing their own user documentation. A lot of us have raw content to
+provide, but the project still lacks the resources to move forward on this.
+QNX and Rational have had discussions on this, and Tensilica has also
+offered to help out.
+</p><p>
+The issue of documentation format was also brough up as a barier, as most
+companies provide documentation in their own format, and having this
+intermixed with Eclipse-style docs is not very seamless.
+</p><p>
+The testing/verification aspect was heavily discussed, along two main
+thrusts: JUnit unit-testing for the API's and functionality, and automated
+UI testing.
+</p><p>
+On the JUnit topic, Rational mentionned that they were going to implement
+not
+only the features (parser/CDOM/etc), but also the verification suite (JUnit
+tests) for those features. This will improve our test coverage. QNX will
+also keep providing resources in this area (Peter Graves). Peter recently
+finished automating the running of the CDT testsuite from the CDT build, and
+will now be focussing on testcases. However, the challenge of retro-fitting
+testing to the large existing codebase will remain.
+</p><p>
+The discussion then moved to automated UI testing. There was concensus that
+this was sorely needed, especially given the fact that, as opposed to the
+eclipse base platform, the CDT is not really used self-hosted, so it
+receives
+less implicit testing.
+</p><p>
+Chris (and others) felt strongly that we needed to start building a
+testsuite.
+The issue with using commercial tools for CDT UI testing was discussed
+again,
+namely reconciling this with the open-source nature of CDT. The issue of
+host coverage (Windows, Solaris, Linux, QNX etc) was also brought up;
+unfortunately, Windows has the widest choice of UI testing tools, but also
+has the best Eclipse SWT support; having coverage on the other hosts would
+be
+highly desirable.
+</p><p>
+Redhat proposed that idea that some of the contributing companies
+provide remote server access to run UI testsuites using commercial tools,
+although it was not clear if the licenses for those tools would allow
+this scenario.
+</p><p>
+I discussed this aspect with John D. last Friday, and his feeling was
+this it would probably be acceptable to use commercial tools for CDT
+testing. We would check into CDT CVS the test scripts for the UI
+test tools, and a few of the participants would sign up to running the
+tests. The major conflict-of-interest potential John saw would
+be to use a commercial tools sold by one of the CDT contributors
+(for example, Rational) unless those were made available openly to the
+CDT community.
+</p><p>
+The tools that QNX uses internally is called Winrunner (from a
+company called Mercury Interactive). They also sell a product
+called XRunner, which automates UI testing on
+Linux and Solaris. We can discuss this further on the mailing list.
+</p></li>
+
+<li> <b>Release strategy:</b><p>
+
+In light of Rational's August and December milestones, the CDT release
+strategy and timing was revisited. The agreement was to stick to the course
+outlined in the december call, and have frequent releases of smaller scope,
+to address the features and stability needed by the community. Thus, we are
+still aiming for an April CDT 1.1 release, which would include the debugger
+enhancements, as well as a prototype build model.
+As the build model is one of the central points of integration in the CDT,
+it was felt that having a prototype out as soon as possible (to gather as
+much feedback as we can) would be preferable to having a more polished build
+model later in the year.
+</p><p>
+Everyone also seemed in agreement with an Aug/Sept release that would
+include the Rational contributions with parsing/CModel/etc. This would still keep
+us on a ~4 month release schedule.
+</p></li>
+
+<li><b>Varia:</b><p>
+
+- The CDT conference calls will be scheduled the first Wednesday of
+every month; thus, the next CDT call will be March 5th from 11 to 1.
+</p><p>
+- I discussed the issue of having the Eclipse CVS server automatically
+generate patches from checkins, using the scripts Tom Tromey had send, with John D.
+John will revisit this issue with the Eclipse infrastructure group. As the Eclipse
+source/web site is hosted on IBM corporate hardware, the CVS server is in a more
+controlled environment than most other projects.
+</p>
+</li>
 </ol>
 
-<ol>
+Any comments, additions, corrections etc. welcome!
 
-<li>State of the CDT
-<p>
-Slides are posted on the web site that outline the CDT activities
-over the last 6 months. These include the setting up of the project
-infrastructure, updating of the debugger, and the CDT 1.0 release.
-Please see the following <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/12-2002/cdt-state-dec.ppt?cvsroot=Tools_Project"> URL</a>
-</p>
-</li>
+As always, many thanks to everyone for your ongoing support.
 
-<li>Update from participants
-
-<p>Lee Courtney gave an update on the work that Montavista has been doing
-with Eclipse and the CDT. Unfortunately, due to other commitments,
-Montavista has not been able to commit as much time to the CDT as originally planned. 
-They are hoping to have more time to dedicate to the project in the new
-year.</p>
-
-<p>Tom Tromey gave an update on the activities at Redhat. Redhat has been
-helping with the debugger on the gdb side, as well as with testing of the CDT. They
-also have work underway for build and packaging of Eclipse, some Linux-specific
-plugins and are looking into performance issues (again on Linux hosts).</p>
-
-<p>
-Doug Schaefer presented slides on Rational's direction. The slides can
-be found on the CDT <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/12-2002/rational-cdt.ppt?cvsroot=Tools_Project"> website</a>.
-
-Rational is gearing up with resources and will drive the development of the build model and CDOM.
-</p>
-<p>
-Thomas Fletcher talked about QNX's activities. On top of being the main
-commiters to the CDT, QNX has been working on integrating the CDT into their next
-commercial release of Momentics.</p>
-</li>
-
-<li> New participants
-<p>
-Chris Songer from Tensilica prepared some slides giving background on
-Tensilica as well as outlining their work with Eclipse and the CDT. The slides are on
-the CDT <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/12-2002/tensilica-cdt.ppt?cvsroot=Tools_Project"> web site</a>.
-</p>
-<p>
-Timesys has been moving all of their tools to Eclipse. They are currently
-migrating to the CDT, and have interest in helping with the builder and 
-launcher.
-</p>
-<p>
-Programming Research builds static analysis tools for C/C++ and Java. Their
-interest in the CDT is to possibly integrate their analysis tools with
-the CDT. Mark also mentioned that they have a lot of experience with C/C++
-parsing, so they will probably be most involved with the CDOM/parser
-discussions.
-</p>
-<p>
-SAS builds products that use a variety of programming languages. They are
-interested
-in deploying Eclipse tools and the CDT internally, as well as investigate if
-Eclipse could easily be used for their other programming languages. Ed
-Burnette also brought
-up the issue that the current CDT versioning is confusing for Eclipse users.
-</p>
-<p>
-Macraigor builds emulators (JTAG/BDM) probes for a variety of processors.
-They
-have integration with gdb and are looking at leveraging that to provide
-integration
-with the CDT
-</p>
-<p>
-Wasabi provides a commercial version of NetBSD. They are looking at Eclipse
-and the CDT
-as a possible development environment for NetBSD.
-</p>
-</li>
-
-<li>Project infrastructure
-
-<p>A couple of slides were presented on the updates to the project
-infrastructure. See slides 3-5 of the "cdt-plan-dec.ppt" PowerPoint
-<a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/news/12-2002/cdt-plan-dec.ppt?cvsroot=Tools_Project"> file</a>.
-</p>
-<p>
-Main discussion points include
-the need to better communicate activities (which everyone involved in the
-CDT will have to make a conscious effort to do), as well as schedule monthly
-conference calls.
-</p>
-</li>
-
-<li>Planning
-
-<p>Again, see the slide set called "cdt-plan-dec.ppt". Two main topics were
-discussed, with a brief refresher on the goals of the CDT as an introduction.
-</p>
-<p>
-First, the proposal for a CDT 1.0.1 release was presented. The CDT 1.0.1
-release is essentially a maintenance release to address some issues with CDT 1.0 (bugfixes) as well
-as round out the feature set. The proposed timeframe is to have a 1.0.1 candidate by the
-middle of December, with a GA date by end of month. The 1.0.1 release would work with
-Eclipse 2.0.2.
-</p>
-<p>
-Interoperability with the 2.1 Eclipse stream will be investigated and if
-possible, the CDT team will make the 1.0.1 release work with 2.1.
-Everyone seemed in agreement with the 1.0.1 scope and timelines.
-</p>
-<p>
-We then discussed development plans for the next 6 months. On top of minor
-feature enhancements and bugfixes, some areas generated a lot of discussion and
-interest. These include the builder, the CDOM/parser, target abstraction and launching, the
-debugger, Cygwin, UI usability issues, user documentation, testing and GNUDE. The
-approach that the CDT has chosen to take is to form teams from the interested participants
-in those areas, start some discussions and formulate the feature/development
-plans for those subsystems. The goal is to have a preliminary plan of action at
-the next conference call in January.
-</p>
-
-<p>
-Participants on the call expressed interest in the various areas, as
-follows:</p>
-<p>
-
-<b>Builder and build model team</b>
-<ul>
-<li>Timesys
-<li>Phil (Redhat)
-<li>Chris (Tensilica)
-<li>Brian Moyle (Montavista)
-<li>Sean and Doug (Rational)
-<li>Alain and Dave (QNX)
-<li>Ed Burnette (SAS)
-</ul>
-
-<b>CDOM/parser team</b>
-<ul>
-<li>Doug and John (Rational)
-<li>Alain (QNX)
-<li>Mark (Programming Research)
-<li>Tom (Redhat)
-<li>Sam (Timesys)
-</ul>
-
-<b>Target abstraction and launching team</b>
-<ul>
-<li>Thomas (QNX)
-<li>Brian Moyle (Montavista)
-<li>Chris (Tensilica)
-<li>Sam (Timesys)
-<li>Tom (Redhat)
-<li>Martin (Rational)
-<li>Jim (Macraigor)
-</ul>
-
-<b>Debugger and GDB versioning</b>
-<ul>
-<li>Mikhail and Alain (QNX)
-<li>Tom/Elena (Redhat) 
-</ul>
-
-<b>Cygwin and UI usability</b>
-<ul>
-<li>TBD (Judy and Chris have expressed interest in the usability issues)
-</ul>
-
-
-<b>User documentation</b>
-<ul>
-<li>Rational
-<li>Chris (Tensilica)
-<li>Brian (Montavista)
-<li>Thomas (QNX)
-<li>Redhat
-</ul>
-
-<b>Testing</b>
-<ul>
-<li>QNX
-<li>Rational
-<li>Sam Robb (Timesys)
-<li>Tom (Redhat)
-</ul>
-
-<b>GNUDE (Linux/GNU development environment)</b>
-<ul>
-<li>Phil (Redhat)
-<li>Tom (Redhat)
-<li>Timesys
-<li>Montavista
-<li>Wasabi
-</ul>
-</p><p>
-In most cases, I'll be looking for someone to drive those discussions (team
-lead).
-If you want to volunteer, please let me know; in some cases, someone's
-already
-driving those activities (e.g. Doug and John at Rational are working on
-CDOM).
-We probably will also create specific areas on the web site to outline the 
-plans and progress in these specific areas.
-</p>
-</li>
-
-<li> Varia
-<p>
-A few more points were discussed during the meeting. <br>
-This includes:
-<ul>
-<li>the hurdles faced by new participants (ISV's) to the CDT, which have a
-hard time
-figuring out where to start in doing integration. The overall architecture
-of the CDT
-needs to be documented better, and we need a document that covers how ISV's
-would
-integrate with the CDT. Thomas volunteered to start such a document.
-<li>the CDT should probably also publish some "how-to"'s on the common 
-integration/extensions that ISV's want to do, e.g. how to launch with your
-own version
-of gdb, how to extend the builder and so on. This would probably go a long
-way
-in helping with CDT integration.
-<li>It was also suggested that we ask folks to write "how-to's" for the CDT
-(maybe we
-could offer some free T-shirts as reward).
-</ul>
-</p>
-</li>
-</ol><p>
-
-Again, I want to thank everyone for attending the call, and appreciate
-everyone's
-continued support.
-
-Sebastien
 
   
 <!-- Footer -->
@@ -389,7 +328,7 @@ Sebastien
 </tr>
 </table>
 <center><I>
-Last Modified on Thursday, January 02, 2003
+Last Modified on Wednesday, February 19, 2003
 </I></center>
 
 </body>
