@@ -685,7 +685,8 @@ Thread.currentThread().dumpStack();
         {
            dot = lines[i].indexOf(".");
            _debuggeeProcessID = lines[i].substring(ix + process.length(), dot);
-           System.out.println("RW _debuggeeProcessID: "+ _debuggeeProcessID);
+           if (Gdb.traceLogger.DBG)
+              Gdb.traceLogger.dbg(1, "GdbDebugSession.runToMain() _debuggeeProcessID: "+ _debuggeeProcessID);
            break;
         }
      }
