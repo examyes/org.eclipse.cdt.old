@@ -50,12 +50,12 @@ public class ReplicateToAction extends CustomAction
 	if (targetProject != null && sourceProject != targetProject)
 	    {
 		// do transfer files
-		for (int i = 0; i < targetProject.getNestedSize(); i++)
+		for (int i = 0; i < sourceProject.getNestedSize(); i++)
 		    {
-			DataElement target = targetProject.get(i);
-			if (!target.isReference())
+			DataElement source = sourceProject.get(i);
+			if (!source.isReference())
 			    {
-				TransferFiles transferAction = new TransferFiles("transfer", sourceProject, target, null);
+				TransferFiles transferAction = new TransferFiles("transfer", source, targetProject, null);
 				transferAction.start();
 			    }
 		    }

@@ -63,8 +63,7 @@ public class TransferFiles extends Thread
 	transfer(_source, _target);
 
 	if (targetDataStore == sourceDataStore)
-	    {
-		
+	    {		
 	    }
 	else if ((targetDataStore == _plugin.getDataStore()))
 	    {
@@ -78,7 +77,7 @@ public class TransferFiles extends Thread
 		    }
 	    }
 
-	targetDataStore.refresh(_target);
+	targetDataStore.refresh(_target.getParent());
 
 	if (_listener != null)
 	    {

@@ -339,7 +339,6 @@ public class FileSystemMiner extends Miner
      	     boolean success = deleteHelper(subject.getSource());// recursively delete all files rooted at 'subject'	
 	     if (success)
 		 { 		    
-		     System.out.println("deleting " + subject.getName());
 		     subject.setUpdated(false);
 		     _dataStore.deleteObject(parent, subject);		     		   
 		 }

@@ -2176,13 +2176,6 @@ public DataElement command(DataElement commandDescriptor,
 	createReference(commandDescriptor, argsD, containsD);	
 	createReference(commandDescriptor, containsD, containsD);	
 
-        DataElement desDetails = createAbstractObjectDescriptor(objectDescriptor, getLocalizedString("model.details"));
-        createReference(desDetails, objectDescriptor, containsD);
-        createReference(desDetails, commandDescriptor, containsD);
-        createReference(desDetails, abstractObjectDescriptor, containsD);
-        createReference(desDetails, abstractCommandDescriptor, containsD);
-        createReference(desDetails, abstractRelationDescriptor, containsD);
-        createReference(desDetails, uiCmdD, containsD);
 
         DataElement logDetails = createAbstractObjectDescriptor(logD, getLocalizedString("model.Commands"));
         createReference(logDetails, commandDescriptor, containsD);
