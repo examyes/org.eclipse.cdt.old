@@ -12,7 +12,7 @@ import org.eclipse.cdt.cpp.ui.internal.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
-import java.io.*; 
+import java.io.*;
 import java.util.*;
 
 import org.eclipse.jface.action.*;
@@ -24,6 +24,11 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.jface.viewers.StructuredSelection;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
@@ -36,7 +41,7 @@ import org.eclipse.ui.texteditor.MarkerRulerAction;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.dialogs.*;
 
-public class AttachAction extends CustomAction 
+public class AttachAction extends CustomAction
 {
     private String _invocation;
 
@@ -44,18 +49,29 @@ public class AttachAction extends CustomAction
     {	
         super(subject, label, command, dataStore);
     }
-    
+
     public AttachAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
     {	
         super(subjects, label, command, dataStore);
     }
-    
+
     public void run()
-    {	    
-	// fill in details here
-	System.out.println("not implemented yet!");
-	org.eclipse.debug.ui.actions.DebugAction dbg = new org.eclipse.debug.ui.actions.DebugAction();
-	dbg.runWithEvent(null, null);
+    {	
+   	// fill in details here
+   	System.out.println("not implemented yet!");
+   	//org.eclipse.debug.ui.actions.DebugAction dbg = new org.eclipse.debug.ui.actions.DebugAction();
+   	//dbg.runWithEvent(null, null);
+      IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
+      IWorkbenchWindow[] windows= workbench.getWorkbenchWindows();
+      if (windows != null && windows.length > 0)
+      {
+   		final Shell shell= windows[0].getShell();
+
+   		ILaunchManager lm = DebugPlugin.getDefault().getLaunchManager();
+	      ILaunchConfigurationType configType = lm.getLaunchConfigurationType("org.eclipse.cdt.debugattach.launchconfig");		
+
+         DebugUITools.openLaunchConfigurationDialog(shell, new StructuredSelection(configType), ILaunchManager.DEBUG_MODE);
+      }
     }
 }
 
