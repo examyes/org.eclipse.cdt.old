@@ -504,7 +504,7 @@
 	point="org.eclipse.ui.actionSets">
 	<actionSet 
 		id="com.ibm.cpp.ui.CppActionSet"
-		label="C/C++ Action Set"
+		label="C/C++"
 		visible="true"
 		description="C/C++ Action Set">
 		<action id="com.ibm.cpp.ui.ParseAction"
@@ -520,6 +520,7 @@
 			icon="icons/cancel.gif"
 			class="com.ibm.cpp.ui.internal.actions.CancelAction"/>
 	</actionSet>
+
 </extension>
 	
 

@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 
 import org.eclipse.ui.*;
 import org.eclipse.debug.ui.IDebugUIConstants;
+import org.eclipse.search.ui.SearchUI;
 
 public class CppPerspective implements IPerspectiveFactory
 {
@@ -44,6 +45,28 @@ public class CppPerspective implements IPerspectiveFactory
     bbottomRight.addView("com.ibm.cpp.ui.SuperDetailsViewPart");
 
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
+		
+    // views - c++
+    factory.addShowViewShortcut("com.ibm.cpp.ui.CppProjectsViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.DetailsViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.ProjectObjectsViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.SystemObjectsViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.ParsedSourceViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.CppCommandViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.CppOutputViewPart");
+    factory.addShowViewShortcut("com.ibm.cpp.ui.SuperDetailsViewPart");    
+    factory.addShowViewShortcut("com.ibm.cpp.ui.Targets");
+
+    // search
+    factory.addShowViewShortcut(SearchUI.SEARCH_RESULT_VIEW_ID);
+    
+    // views - standard workbench
+    factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
+    factory.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
+    factory.addShowViewShortcut(IPageLayout.ID_RES_NAV);
+    
+    // new actions - c++ project creation wizard
+    factory.addNewWizardShortcut("com.ibm.cpp.ui.wizards.CppNewProjectResourceWizard"); //$NON-NLS-1$
   }
 }
 
