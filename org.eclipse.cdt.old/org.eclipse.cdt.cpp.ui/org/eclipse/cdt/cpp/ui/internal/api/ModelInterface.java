@@ -2653,6 +2653,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "org.eclipse.cdt.cpp.ui.internal.actions.HelpAction");
 	//-------------------------------
 
+	/***
 	// breakpoint actions
 	dataStore.createObject(classD, DE.T_UI_COMMAND_DESCRIPTOR,
 			       "Set Class Breakpoint",
@@ -2663,7 +2664,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.createObject(statement, DE.T_UI_COMMAND_DESCRIPTOR,
 			       "Set Breakpoint",
 			       "org.eclipse.cdt.cpp.ui.internal.actions.AddStatementBreakpoint");
-	
+	***/
 
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
