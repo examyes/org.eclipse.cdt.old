@@ -89,8 +89,18 @@ public class GdbThreadComponent extends ThreadComponent
             EPDCThread.setWhereStopped(Part.VIEW_SOURCE, 1, lineNumber(0));
             if (Gdb.traceLogger.ERR) 
                 Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
-                		
-            EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  convertLineNum(lineNumber(0), _partID)); 
+                
+			int location = convertLineNum(lineNumber(0), _partID);
+			if (location < 1)
+			{
+				location = convertLineNum(frameAddress(0), _partID);                				
+				if (location < 1)
+					location = 1;	
+			}			
+			            		
+//	        EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  convertLineNum(lineNumber(0), _partID)); 
+	        EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  location); 
+
             if (Part.MIXED_VIEW_ENABLED)
 	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
          }
@@ -532,8 +542,22 @@ public class GdbThreadComponent extends ThreadComponent
                (short)partID, 1, lineNumber(i));
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
-         entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
-               (short)partID, 1, convertLineNum(lineNumber(i), partID));
+             
+		 int location = convertLineNum(lineNumber(i), partID);
+		 		 
+		 if (location < 1)
+		 {
+		 	location = convertLineNum(frameAddress(i), partID);
+		 	if (location < 1)
+		 		location = 1;
+		 }             
+
+// 	        entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
+//             (short)partID, 1, convertLineNum(frameAddress(i), partID));
+
+ 	        entry.setStackEntryViewInfo((short) Part.VIEW_DISASSEMBLY,
+             (short)partID, 1, location);
+
          
          if (Part.MIXED_VIEW_ENABLED)               
          {
@@ -566,40 +590,4 @@ public class GdbThreadComponent extends ThreadComponent
     {
        _lineNumber = i; 
     }
-    
-/*    
-    private int convertLineNum(int line, int partID)
-    {
-        // convert to correct disassembly line number
-		ModuleManager moduleManager = _debugSession.getModuleManager();            
-		GdbPart part = (GdbPart)moduleManager.getPart(partID);
-		int disNum;
-
-		if (part != null)
-		{			
-			String partName = part.getName();           
-			GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
-			String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(partName,String.valueOf(line));
-			String disLineNum = null;
-			
-			if (address != null)
-				disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
-			
-			if (disLineNum != null)
-			{
-				disNum = Integer.parseInt(disLineNum);
-			}
-			else
-			{
-				disNum = line;
-			}
-		}
-		else
-		{
-			disNum = 0;
-		}
-		
-		return disNum;
-    }
-    */
 }

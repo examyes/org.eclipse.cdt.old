@@ -222,12 +222,17 @@ public class GdbThread
               while( !str.equals(FRAME_SOURCE_BEGIN) && !str.equals(FRAME_END_keyword) && i<lines.length )
               {
                  str = lines[++i];
+                 
                  if ( !str.startsWith(_gdbProcess.MARKER) )
                  {
                     //args += str;
                     args.append(str);
                   	//System.out.println("RW ===== GdbThread.java -info stack- i: " + i);
                   	//System.out.println("RW ===== GdbThread.java -info stack- args: " + args.toString());
+                  	
+   	                // you may get no argument for this frame
+	                if (str.equals(" ()"))
+ 	                	break;
                  }
               }
               if(str.equals(FRAME_SOURCE_BEGIN) || str.equals(FRAME_END_keyword))
@@ -251,7 +256,7 @@ public class GdbThread
                   int slash = fileName.lastIndexOf("/");
                   if(slash>=0)
                      fileName = fileName.substring(slash+1);
-                  fileLine = "-1";
+                  fileLine = "0";
               }
            }
            else if( str.equals(FRAME_SOURCE_LINE) )
