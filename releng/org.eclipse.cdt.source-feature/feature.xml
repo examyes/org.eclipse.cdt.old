@@ -48,16 +48,6 @@
          version="2.0.0"
          name="%featureName"/>
 
-   <requires>
-      <import plugin="org.eclipse.cdt.core"/>
-      <import plugin="org.eclipse.cdt.debug.core"/>
-      <import plugin="org.eclipse.cdt.debug.mi.core"/>
-      <import plugin="org.eclipse.cdt.debug.mi.ui"/>
-      <import plugin="org.eclipse.cdt.debug.ui"/>
-      <import plugin="org.eclipse.cdt.launch"/>
-      <import plugin="org.eclipse.cdt.ui"/>
-   </requires>
-
    <plugin
          id="org.eclipse.cdt.source"
          download-size="0"
