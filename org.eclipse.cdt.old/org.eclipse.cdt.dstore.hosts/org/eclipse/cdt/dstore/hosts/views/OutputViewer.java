@@ -80,6 +80,7 @@ public class OutputViewer extends TableViewer
 	Display display = table.getDisplay();
 	table.setBackground(new Color(display, 255, 255, 255));
 
+		table.setVisible(false);
       }
 
   protected void handleDoubleSelect(SelectionEvent event)
@@ -114,13 +115,31 @@ public class OutputViewer extends TableViewer
 	  setInput((DataElement)input);
       }
 
+  private void clearInput()
+  {
+  	Table table = getTable();
+  	table.setRedraw(false);
+	table.removeAll();
+	table.setRedraw(true);
+
+	TableColumn column = table.getColumn(0);
+	column.setText("");
+	table.setVisible(false);
+		
+  }
+
   public void setInput(DataElement input)
   {
       super.setInput((IElement)input);
     if (input != null)
       {
-	  _currentInput = input;
-	  DataStore dataStore = _currentInput.getDataStore();	
+      	if (_currentInput == null)
+      	{
+			getTable().setVisible(true);
+      	}
+		  _currentInput = input;
+		  
+		  DataStore dataStore = _currentInput.getDataStore();	
 
 	  if (_currentInput.getType().equals("status"))
 	      {
@@ -182,39 +201,50 @@ public class OutputViewer extends TableViewer
 
     public boolean listeningTo(DomainEvent ev)
     {
-       DataElement parent = (DataElement)ev.getParent();
-       if (parent == _currentInput)
-	   {
-	       return true;
-	   }
+       if (_currentInput == null || _currentInput.isDeleted())
+       {
+       	_currentInput = null;
+       	clearInput();
+       	return false;
+       }
        else
-	   {
+       {
+       	DataElement parent = (DataElement)ev.getParent();
+       	if (parent == _currentInput)
+	   	{
+	       return true;
+	   	}
+    	   else
+	   	{
 	       return false;
-	   }
+	   	}
+       }
     }
 
     public void domainChanged(DomainEvent ev)
     {
-	DataElement parent = (DataElement)ev.getParent();
-	ArrayList children = ev.getChildren();
-	if (children != null)
-	    {
-		Table table = getTable();
-		if (table != null && !table.isDisposed())
+
+    	{
+			DataElement parent = (DataElement)ev.getParent();
+			ArrayList children = ev.getChildren();
+			if (children != null)
 		    {
-			updateChildren(children);
-
-			TableColumn column = table.getColumn(0);
-
-			if (column.getWidth() < _maxWidth)
+				Table table = getTable();
+				if (table != null && !table.isDisposed())
 			    {
-				table.setRedraw(false);
-				column.setWidth(_maxWidth);		 
-				table.setRedraw(true);
-			    }
-		    }	
-	    }
+					updateChildren(children);
+	
+					TableColumn column = table.getColumn(0);
 
+					if (column.getWidth() < _maxWidth)
+				    {
+						table.setRedraw(false);
+						column.setWidth(_maxWidth);		 
+						table.setRedraw(true);
+			 		}
+		    	}	
+	    	}
+    	}
     }
 
   public Shell getShell()
