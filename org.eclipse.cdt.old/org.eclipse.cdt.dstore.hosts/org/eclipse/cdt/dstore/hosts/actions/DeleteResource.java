@@ -98,9 +98,10 @@ public class DeleteResource extends CustomAction
 		    		DataElement notifyD = _dataStore.localDescriptorQuery(_dataStore.getRoot().getDescriptor(), "C_NOTIFICATION", 1);
 		    		if (notifyD != null)
 		    		{
+		    			DataElement dummyD = _dataStore.createObject(null, "dummy", "C_DELETE");
 		    			ArrayList args = new ArrayList();
 		    			args.add(subject);
-		    			_dataStore.command(notifyD, args, cmdDescriptor);
+		    			_dataStore.command(notifyD, args, dummyD);
 		    		}
 		    		
 					_dataStore.command(cmdDescriptor, subject);									 
