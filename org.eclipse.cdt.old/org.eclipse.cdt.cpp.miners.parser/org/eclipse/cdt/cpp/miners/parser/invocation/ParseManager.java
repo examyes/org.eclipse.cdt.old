@@ -62,6 +62,9 @@ public class ParseManager
  
  public boolean removeParseInformation(DataElement theFile)
  {
+  if (_parsedFiles == null)
+   return false;
+
   ArrayList theFiles = _parsedFiles.getAssociated("contents");
   boolean deletedSomething = false;
   
