@@ -7,6 +7,8 @@ package com.ibm.cpp.ui.internal.views.targets;
  */
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+
 
 import org.eclipse.jface.viewers.*;
 import java.util.*;
