@@ -16,7 +16,6 @@ import org.eclipse.ui.texteditor.MarkerUtilities;
 
 import org.eclipse.search.ui.SearchUI;
 
-import org.eclipse.debug.core.IDebugConstants;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.ui.*;
@@ -24,6 +23,8 @@ import org.eclipse.swt.graphics.Image;
 
 import org.eclipse.ui.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
+import com.ibm.debug.internal.picl.IPICLDebugConstants;
+import com.ibm.debug.internal.picl.PICLModelPresentation;
 
 public class CppMarkerAnnotation extends MarkerAnnotation {		
 	Image _breakpointImage;
@@ -51,10 +52,11 @@ public class CppMarkerAnnotation extends MarkerAnnotation {
 			String type= breakpoint.getType();
 			
 //			if (MarkerUtilities.isMarkerType(getMarker(), IDebugConstants.BREAKPOINT_MARKER)) {
-			if (MarkerUtilities.isMarkerType(getMarker(), "com.ibm.debug.PICLLineBreakpoint"))
+//			if (MarkerUtilities.isMarkerType(getMarker(), "com.ibm.debug.PICLLineBreakpoint"))
+			if (MarkerUtilities.isMarkerType(getMarker(), IPICLDebugConstants.PICL_LINE_BREAKPOINT))
          {
 				setLayer(2);
-
+          /*  gone with R2
           	IBreakpointManager breakpointManager= DebugPlugin.getDefault().getBreakpointManager();
       		if (!breakpointManager.isEnabled(breakpoint))
             {
@@ -66,6 +68,11 @@ public class CppMarkerAnnotation extends MarkerAnnotation {
             }
 
 				setImage(_breakpointImage);
+           */
+
+				PICLModelPresentation model = new PICLModelPresentation();
+    			Image breakpointImage = model.getImage(breakpoint);
+				setImage(breakpointImage);
 				return;						
 			} else if (MarkerUtilities.isMarkerType(getMarker(), SearchUI.SEARCH_MARKER)) {
 				setLayer(2);

@@ -46,8 +46,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
-import org.eclipse.debug.core.IDebugConstants;
+import org.eclipse.debug.core.model.IBreakpoint;
 
+import com.ibm.debug.internal.picl.PICLLineBreakpoint;  // temporary to compile for R2
+import com.ibm.debug.internal.picl.PICLUtils;
 
 
 /**
@@ -173,19 +175,22 @@ public class BreakpointRulerAction extends LpexMarkerRulerAction {
 
             try
             {
-               //IMarker breakpoint = _resource.createMarker(IDebugConstants.LINE_BREAKPOINT_MARKER);
-               IMarker breakpoint = _resource.createMarker("com.ibm.debug.PICLLineBreakpoint");
+					PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();  // R2 - create our own CDTLineBreakpoint?
+               IMarker breakpointMarker = _resource.createMarker("com.ibm.debug.PICLLineBreakpoint");
 
                IBreakpointManager breakpointManager=
                                                DebugPlugin.getDefault().getBreakpointManager();
-               breakpointManager.configureLineBreakpoint(breakpoint,
-                           "com.ibm.debug.internal.picl" , true, _rulerLine + 1, -1, -1);
+               //breakpointManager.configureLineBreakpoint(breakpoint,
+               //            "com.ibm.debug.internal.picl" , true, _rulerLine + 1, -1, -1);
                   //         "com.ibm.debug.internal.picl" , true, _rulerLine + 1, _start, _end);  revisit - Adrian
                   // in case of multiple statements on same line, hence multiple breakpoints
+					breakpointMarker.setAttributes(new String[] {IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END},
+                                              new Object[] {new String(PICLUtils.getModelIdentifier()), new Boolean(true), new Integer(_rulerLine), new Integer(-1), new Integer(-1)});
+					breakpoint.setMarker(breakpointMarker);
 
-               Map map= breakpoint.getAttributes();
+               Map map= breakpointMarker.getAttributes();
                map.put(IMarker.MESSAGE, "cpp");
-               breakpoint.setAttributes(map);
+               breakpointMarker.setAttributes(map);
 
                try
                {
@@ -222,8 +227,10 @@ public class BreakpointRulerAction extends LpexMarkerRulerAction {
 		try {
 			
 			Iterator e= markers.iterator();
+			PICLLineBreakpoint breakpoint = new PICLLineBreakpoint();
 			while (e.hasNext()) {
-				breakpointManager.removeBreakpoint((IMarker) e.next(), true);
+				breakpoint.setMarker((IMarker)e.next());
+				breakpointManager.removeBreakpoint(breakpoint, true);
 			}
 			
 		} catch (CoreException e) {
