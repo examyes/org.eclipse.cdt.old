@@ -353,6 +353,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		args.add(keyObj);
 
 		_status = dataStore.command(debugDescriptor, args, dirObject);
+		monitorStatus(_status);
 		showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
 	    }
     }  
