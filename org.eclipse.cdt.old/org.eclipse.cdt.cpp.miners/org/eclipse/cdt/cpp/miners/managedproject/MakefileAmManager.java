@@ -887,7 +887,7 @@ public class MakefileAmManager {
 			list.add(counter++,dir);
 			dir = dir.getParentFile();
 		}
-		if(counter>0)
+		if(counter>1)
 		{
 			// update might be needed
 			File parentDir = ((File)list.get(counter-1));
@@ -929,6 +929,7 @@ public class MakefileAmManager {
 		StringBuffer modLine = new StringBuffer();
 		StringTokenizer tokenizer = new StringTokenizer(line);
 		int classification = classifier.classify(Makefile_am);
+		boolean found = false;
 		while (tokenizer.hasMoreTokens())
 		{
 			String token = tokenizer.nextToken();
@@ -936,6 +937,7 @@ public class MakefileAmManager {
 			{
 				if(isRightTokenToModify(Makefile_am.getParentFile().getName(),token) )
 				{
+					found = true;
 					if(classification==STATICLIB)
 						token = getModifiedLibString(token,getLibName(Makefile_am,_LIBRARIES));
 					else if (classification==SHAREDLIB)
@@ -945,6 +947,10 @@ public class MakefileAmManager {
 				}
 			}
 			modLine.append(token+" ");
+		}
+		if(!found)
+		{
+			modLine.append(" ./newValue/should/be/added.la");
 		}
 		return modLine.toString();
 	}
