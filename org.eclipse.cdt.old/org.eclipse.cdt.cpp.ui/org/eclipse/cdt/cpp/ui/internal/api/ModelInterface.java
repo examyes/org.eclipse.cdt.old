@@ -1913,7 +1913,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
 	*/
 
-	//DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Initialize Autoconf",
