@@ -208,7 +208,8 @@ public class ExtendedTreeViewer extends TreeViewer
 	DataElement parent = (DataElement)ev.getParent();   
 
 	if (parent.isDeleted())
-	    {		
+	    {
+		
 		if (parent == _currentInput)
 		    {
 			clearView();
@@ -220,7 +221,7 @@ public class ExtendedTreeViewer extends TreeViewer
 				try
 				    {
 					getTree().setRedraw(false);
-					remove(parent);
+					internalRefresh(parent.getParent());					  
 					getTree().setRedraw(true);				      
 				    }
 				catch (Exception e)
@@ -243,16 +244,12 @@ public class ExtendedTreeViewer extends TreeViewer
 			try
 			    {
 				Tree tree = getTree();
-				tree.setRedraw(false);
-
-				
+				tree.setRedraw(false);				
 				internalRefresh(parent);					  
 				getTree().setRedraw(true);
 			    }
 			catch (Exception e)
 			    {
-				//System.out.println(e);
-				//setInput(_currentInput);
 			    }
 			
 			
