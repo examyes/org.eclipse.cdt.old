@@ -28,10 +28,6 @@
          match="equivalent">
    </includes>
 
-   <requires>
-      <import plugin="org.eclipse.cdt" version="1.0.1" match="compatible"/>
-   </requires>
-
    <plugin
          id="org.eclipse.cdt.core.linux"
          download-size="0"
