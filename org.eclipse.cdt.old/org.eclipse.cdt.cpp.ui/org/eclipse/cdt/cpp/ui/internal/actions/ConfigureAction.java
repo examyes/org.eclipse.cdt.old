@@ -43,11 +43,12 @@ import org.eclipse.jface.dialogs.*;
 
 public class ConfigureAction extends CustomAction implements SelectionListener
 { 
-	private MessageDialog dialog = new MessageDialog(null,null,null,null,0,null,0);
-	CustomMessageDialog xbox;
+	//private MessageDialog dialog = new MessageDialog(null,null,null,null,0,null,0);
+	CustomMessageDialog dialog;
 	String[] extraLabels;
-	boolean enableRunDialog = true;
-	boolean enableRunUpdate = true;
+	boolean enableUpdateConfigureInDialog = true;
+	boolean enableUpdateAllDialg = true;
+	boolean enableUpdateMakefileAmDialog = true;
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -73,8 +74,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	{	
 		super(subject, label, command, dataStore);
 		
-		if(_command.getValue().equals("CREATE_CONFIGURE")||_command.getValue().equals("RUN_CONFIGURE")||
-		_command.getValue().equals("UPDATE_AUTOCONF_FILES")||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
+		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
 				
@@ -88,220 +88,153 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		if (subject.getType().equals("Project"))	
 			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExist("configure.in")))
 				setEnabled(false);
-			
-		if(_command.getValue().equals("CREATE_CONFIGURE")&& doesFileExist("configure")&& configureIsUptodate(_subject))
-				setEnabled(false);
-				
-						
-		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExist("configure") )
-				setEnabled(false);		
-		
 	}
     public void run()
 	{
 		boolean execute = true;
-		int runUpdate = 0;// 0 == ok, 1 == no, 2 == cancel
-		int createUpdate = 0; // 0 == ok, 1 == no, 2 == cancel
 		boolean noConfigfilesExist = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
+			/////////////////////
+						
+			ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show_Update_All_Dialog");
+			if (!list.isEmpty())
+			{
+				String preference = (String)list.get(0);
+				if (preference.equals("Yes"))
+					enableUpdateAllDialg = true;
+				else
+					enableUpdateAllDialg =false;
+			}
+			//////////////////////
+			
+			
+			
 			if(doesAutoconfSupportExist())
 			{
-				String message = new String
-				("Attempting to update existing and/or generating configure.in and makefile.am's "
-					+"\nOld files will be renamed *.old");
-				execute = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+				if(enableUpdateAllDialg)
+				{
+					String message = new String
+						("Attempting to update existing and/or generating configure.in and makefile.am's "
+							+"\nOld files will be renamed *.old");
+					//execute = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					dialog = new CustomMessageDialog(
+										shell,
+										"Updating configure.in and Makefile.am's ",
+										null,
+										message,
+										2,
+										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+										0,
+										extraLabel,
+										this);
+					execute = dialog.open()==0;
+				}
+				else
+				{
+					enableUpdateAllDialg = true;
+				}
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
 		{
 			if(doesFileExist("Makefile.am"))
 			{
-				String message = new String
-				("Attempting to update existing makefile.am's"+
-					"\nIf updated then old Makefile.am's will be renamed *.old");
-				execute = dialog.openConfirm(shell,"Updating Makefile.am's ",message);
+				/////////////////////
+						
+				ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show_Update_MakefileAm_Dialog");
+				if (!list.isEmpty())
+				{
+					String preference = (String)list.get(0);
+					if (preference.equals("Yes"))
+						enableUpdateMakefileAmDialog = true;
+					else
+						enableUpdateMakefileAmDialog =false;
+				}
+				//////////////////////
+			
+				if(enableUpdateMakefileAmDialog)
+				{
+					String message = new String
+							("Attempting to update existing makefile.am's"+
+							"\nIf updated then old Makefile.am's will be renamed *.old");
+					//execute = dialog.openConfirm(shell,"Updating Makefile.am's ",message);
+					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					dialog = new CustomMessageDialog(
+										shell,
+										"Updating Makefile.am's ",
+										null,
+										message,
+										2,
+										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+										0,
+										extraLabel,
+										this);
+					execute = dialog.open()==0;
+				}
+				else
+				{
+					enableUpdateMakefileAmDialog = true;
+				}
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 		{
 			if(doesFileExist("configure.in"))
 			{
-				String message = new String
-				("Attempting to update existing configure.in "+
-					"\nIf updated then old configure.in shall be renamed *.old");
-				execute = dialog.openConfirm(shell,"Updating configure.in",message);
+				/////////////////////
+						
+				ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show_Update_ConfigureIn_Dialog");
+				if (!list.isEmpty())
+				{
+					String preference = (String)list.get(0);
+					if (preference.equals("Yes"))
+						enableUpdateConfigureInDialog = true;
+					else
+						enableUpdateConfigureInDialog =false;
+				}
+				//////////////////////
+				if(enableUpdateConfigureInDialog)
+				{
+					String message = new String
+						("Attempting to update existing configure.in "+
+						"\nIf updated then old configure.in shall be renamed *.old");
+					//execute = dialog.openConfirm(shell,"Updating configure.in",message);
+					String[] extraLabel = new String[]{"Do not show this Dialog again"};
+					dialog = new CustomMessageDialog(
+										shell,
+										"Updating configure.in",
+										null,
+										message,
+										2,
+										new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL},
+										0,
+										extraLabel,
+										this);
+					execute = dialog.open()==0;
+				}
+				else
+				{
+					execute = true;
+				}
+			
 			}
 		}	
 		
-		if(_command.getValue().equals("CREATE_CONFIGURE"))
-		{
-			String str1;
-			String message;
-			
-			if(doesAutoconfSupportExist())
-			{
-				noConfigfilesExist = false;
-				str1 = new String("\nWould you like the system to update and generate missing configuration files?");
-				message = new String("\nGenerating project configuration files"+str1);
-				CustomMessageDialog box = new CustomMessageDialog(shell,
-										"Creating configure.in and Makefile.am's ",
-										null,
-										message,3,new String[]{
-									  	IDialogConstants.YES_LABEL,
-									  	IDialogConstants.NO_LABEL, 
-										IDialogConstants.CANCEL_LABEL},
-										0,
-										new String[]{"Do not show this Dialog again"},
-										this);
-				createUpdate = box.open();
-			}
-			else
-			{
-				noConfigfilesExist = true;
-				str1 = "";
-				message = new String("\nGenerating project configuration files"+str1);
-				PreventableMessageBox box = new PreventableMessageBox(shell,
-										"Creating configure.in and Makefile.am's ",
-										null,
-										message,2,new String[]{
-									  	IDialogConstants.OK_LABEL, 
-										IDialogConstants.CANCEL_LABEL},0);
-				createUpdate = box.open();
-			}
-		}
-		if(_command.getValue().equals("RUN_CONFIGURE"))
-		{
-			ArrayList showDialogRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show Dialog Run");
-			if (!showDialogRun.isEmpty())
-			{
-				String preference = (String)showDialogRun.get(0);
-				if (preference.equals("Yes"))
-					enableRunDialog = true;
-				else
-					enableRunDialog=false;
-			}
-			
-			// checking if automatic updating is enabled from the autoconf preferences page
-			ArrayList autoUpdateRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Auto Update Run");
-			if(!autoUpdateRun.isEmpty())
-			{
-				String preference = (String)autoUpdateRun.get(0);
-				if (preference.equals("Yes"))
-				{
-					enableRunUpdate = true;
-				}
-				else
-				{
-					enableRunUpdate = false;;		
-				}
-			}
-			if(!configureIsUptodate(_subject))
-			{
-				if(enableRunDialog)
-				{
-					if(enableRunUpdate)
-					{
-						String message = new String
-						("\nThe system detects that configure script is not up to date"+
-						"\nWould you like to update and generate missing configuration files before running configure?");
-						extraLabels = new String[]{"Do not show this dialog again"};
-						xbox = new CustomMessageDialog(shell,
-												"Running configure script ",
-												null,
-												message,3,
-												new String[]{
-											  	IDialogConstants.YES_LABEL,
-											  	IDialogConstants.NO_LABEL, 
-													IDialogConstants.CANCEL_LABEL},
-												0,
-												extraLabels,
-												this
-												);
-						// open	the xbox		
-						runUpdate = xbox.open();
-					}
-					else
-					{
-						String message = new String
-						("\nRunning existing configure script" 
-						+"\nAutomatic update is turned off - You can use autoconf preferences page to turn it on");
-						extraLabels = new String[]{"Do not show this dialog again"};
-						xbox = new CustomMessageDialog(shell,
-												"Running configure script ",
-												null,
-												message,2,
-												new String[]{
-											  	IDialogConstants.OK_LABEL,
-											  	IDialogConstants.CANCEL_LABEL},
-												0,
-												extraLabels,
-												this
-												);
-						// open	the xbox		
-						runUpdate = xbox.open(); 
-						// 0 is equiv to 1 ie run with no update , 
-						//and 1 is equiv to 2 which is to cancel the action so we need to increment
-						runUpdate++; // this just to reflect what the user request
-						System.out.println("\n run Updatetetet = "+runUpdate);
-						
-					}
-				}
-				else
-				{ 
-					if(enableRunUpdate)
-					{
-						runUpdate = 0;
-					}
-					else
-						runUpdate=1;
-				}
-			}
-			else
-			{
-				runUpdate = 1;
-			}
-		
 
-		}
 		if(execute)
 		{	
-			if(createUpdate==1 && !noConfigfilesExist)
-			{
-				System.out.println("\n 1");
-				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
-				DataElement status = _dataStore.command(configureCmd, _subject);
-				ModelInterface api = ModelInterface.getInstance();
-				api.monitorStatus(status);			
-				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
-				RunThread thread = new RunThread(_subject, status);
-				thread.start();
-			}
-			else if(runUpdate==1)
-			{
-				System.out.println("\n 2");
-				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
-				DataElement status = _dataStore.command(configureCmd, _subject);
-				ModelInterface api = ModelInterface.getInstance();
-				api.monitorStatus(status);			
-				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
-				RunThread thread = new RunThread(_subject, status);
-				thread.start();
-			}
-			else if(createUpdate==0&&runUpdate==0&&enableRunUpdate)
-			{
-				System.out.println("\n 3");		
-				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
-				DataElement status = _dataStore.command(configureCmd, _subject);
-				ModelInterface api = ModelInterface.getInstance();
-				api.monitorStatus(status);			
-				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
-				RunThread thread = new RunThread(_subject, status);
-				thread.start();
-			}	
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
+			DataElement status = _dataStore.command(configureCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.monitorStatus(status);			
+			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
 		}
 	}
 	private boolean doesFileExist(String fileName)
@@ -363,20 +296,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		return false;
 	}
 	
-	private boolean configureIsUptodate(DataElement root)
-	{
-		DataElement cmdD = _dataStore.localDescriptorQuery(root.getDescriptor(), "C_CHECK_UPDATE_STATE", 4);
-	
-		if (cmdD != null)
-		{
-			DataElement status = _dataStore.synchronizedCommand(cmdD, root);		
-			DataElement updateState = (DataElement)status.get(0);
-		    String state = updateState.getName();
-		    if(state.equals("uptodate"))
-		    	return true;
-		}
-		return false;
-	}
 	public void widgetDefaultSelected(SelectionEvent e)
     {
 		widgetSelected(e);
@@ -386,7 +305,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
     {
 		Widget source = e.widget;
 		int buttonId = ((Integer)e.widget.getData()).intValue();
-		boolean selection = xbox.extraButtons[buttonId].getSelection();
+		boolean selection = dialog.extraButtons[buttonId].getSelection();
 		ArrayList list = new ArrayList();
 		if(buttonId == 0)
 		{
@@ -401,7 +320,13 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				//enableRunDialog = true;
 				list.add("Yes");
 			}
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show Dialog Run",list);
+			if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show_Update_All_Dialog",list);
+			if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show_Update_ConfigureIn_Dialog",list);
+			if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show_Update_MakefileAm_Dialog",list);
+
 		}
     }
 }

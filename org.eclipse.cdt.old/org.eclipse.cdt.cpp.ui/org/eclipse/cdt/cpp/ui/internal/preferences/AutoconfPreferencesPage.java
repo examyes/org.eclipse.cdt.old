@@ -122,71 +122,174 @@ public class AutoconfPreferencesPage
 		}
 
 
+		ArrayList list = plugin.readProperty("Show_Update_All_Dialog");
+		if (list.isEmpty())
+		{
+			list.add("Yes");
+			_autoconfControl.setUpdateAllButtonSelection(true);
+			plugin.writeProperty("Show_Update_All_Dialog",list);	
+		}
+		else
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setUpdateAllButtonSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setUpdateAllButtonSelection(false);
+			}
+		}
+
+
+		ArrayList updateConflist = plugin.readProperty("Show_Update_ConfigureIn_Dialog");
+		if (updateConflist.isEmpty())
+		{
+			updateConflist.add("Yes");
+			_autoconfControl.setUpdateConfigureInButtonSelection(true);
+			plugin.writeProperty("Show_Update_ConfigureIn_Dialog",list);	
+		}
+		else
+		{
+			String preference = (String)updateConflist.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setUpdateConfigureInButtonSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setUpdateConfigureInButtonSelection(false);
+			}
+		}
+
+
+
+		ArrayList makefileAmlist = plugin.readProperty("Show_Update_MakefileAm_Dialog");
+		if (makefileAmlist.isEmpty())
+		{
+			makefileAmlist.add("Yes");
+			_autoconfControl.setUpdateMakefileAmButtonSelection(true);
+			plugin.writeProperty("Show_Update_MakefileAm_Dialog",list);	
+		}
+		else
+		{
+			String preference = (String)makefileAmlist.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setUpdateMakefileAmButtonSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setUpdateMakefileAmButtonSelection(false);
+			}
+		}
+
+
+
     }
 
     public boolean performOk()
-    {
-	// auto update when run configure
-	ArrayList autoRunUpdate = new ArrayList();
-	if (_autoconfControl.getAutoRunUpdateSelection())
-	    {
-		autoRunUpdate.add("Yes");		
-	    }
-	else
-	    {
-		autoRunUpdate.add("No");		
-	    }
-
-	CppPlugin plugin      = CppPlugin.getDefault();
-	plugin.writeProperty("Auto Update Run", autoRunUpdate);	
-
-
-	// auto update when create configure
-	ArrayList autoCreateUpdate = new ArrayList();
-	if (_autoconfControl.getAutoCreateUpdateSelection())
-	    {
-		autoCreateUpdate.add("Yes");		
-	    }
-	else
-	    {
-		autoCreateUpdate.add("No");		
-	    }
-
-	plugin.writeProperty("Auto Update Create", autoCreateUpdate);	
+	{
+		// auto update when run configure
+		ArrayList autoRunUpdate = new ArrayList();
+		if (_autoconfControl.getAutoRunUpdateSelection())
+		{
+			autoRunUpdate.add("Yes");		
+		}
+		else
+		{
+			autoRunUpdate.add("No");		
+		}
 	
+		CppPlugin plugin      = CppPlugin.getDefault();
+		plugin.writeProperty("Auto Update Run", autoRunUpdate);			
+
+
+		// auto update when create configure
+		ArrayList autoCreateUpdate = new ArrayList();
+		if (_autoconfControl.getAutoCreateUpdateSelection())
+		{
+			autoCreateUpdate.add("Yes");		
+		}
+		else
+		{
+			autoCreateUpdate.add("No");		
+		}		
+
+		plugin.writeProperty("Auto Update Create", autoCreateUpdate);	
+		
 	
-	// show dialog when run configure
-	ArrayList showRunDialog = new ArrayList();
-	if (_autoconfControl.getShowRunDialogSelection())
-	    {
-		showRunDialog.add("Yes");		
-	    }
-	else
-	    {
-		showRunDialog.add("No");		
-	    }
+		// show dialog when run configure
+		ArrayList showRunDialog = new ArrayList();
+		if (_autoconfControl.getShowRunDialogSelection())
+		{
+			showRunDialog.add("Yes");		
+		}
+		else
+		{
+			showRunDialog.add("No");		
+		}	
 
-	plugin      = CppPlugin.getDefault();
-	plugin.writeProperty("Show Dialog Run", showRunDialog);	
+		plugin      = CppPlugin.getDefault();
+		plugin.writeProperty("Show Dialog Run", showRunDialog);	
 
 
-	// show dialog when create configure
-	ArrayList showCreateDialog = new ArrayList();
-	if (_autoconfControl.getShowCreateDialogSelection())
-	    {
-		showCreateDialog.add("Yes");		
-	    }
-	else
-	    {
-		showCreateDialog.add("No");		
-	    }
+		// show dialog when create configure
+		ArrayList showCreateDialog = new ArrayList();
+		if (_autoconfControl.getShowCreateDialogSelection())
+		{
+			showCreateDialog.add("Yes");		
+		}
+		else
+		{
+			showCreateDialog.add("No");		
+		}	
 
-	plugin.writeProperty("Show Dialog Create", showCreateDialog);	
+		plugin.writeProperty("Show Dialog Create", showCreateDialog);	
+		
+		
+		// update all dialog
+		ArrayList udateAllDialog = new ArrayList();
+		if (_autoconfControl.getUpdateAllButtonSelection())
+		{
+			udateAllDialog.add("Yes");		
+		}
+		else
+		{
+			udateAllDialog.add("No");		
+		}	
 
-	
+		plugin.writeProperty("Show_Update_All_Dialog", udateAllDialog);
+		
+		// update configureIn dialog
+		ArrayList udateConfigureInDialog = new ArrayList();
+		if (_autoconfControl.getUpdateConfigureInButtonSelection())
+		{
+			udateConfigureInDialog.add("Yes");		
+		}
+		else
+		{
+			udateConfigureInDialog.add("No");		
+		}	
 
-	return true;
-    }
+		plugin.writeProperty("Show_Update_ConfigureIn_Dialog", udateConfigureInDialog);		
+		
+		// update makefileAm dialog
+		ArrayList updateMakefileAmDialog = new ArrayList();
+		if (_autoconfControl.getUpdateMakefileAmButtonSelection())
+		{
+			updateMakefileAmDialog.add("Yes");		
+		}
+		else
+		{
+			updateMakefileAmDialog.add("No");		
+		}	
+
+		plugin.writeProperty("Show_Update_MakefileAm_Dialog", updateMakefileAmDialog);		
+						
+		return true;
+   	}
 
 }
 
