@@ -104,6 +104,7 @@ public class ConfigureAction extends CustomAction
 		boolean execute = true;
 		boolean runUpdate = true;
 		boolean createUpdate = true;
+		boolean noConffilesExist = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		
@@ -148,14 +149,24 @@ public class ConfigureAction extends CustomAction
 		if(_command.getValue().equals("CREATE_CONFIGURE"))
 		{
 			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+			String str1,str2;
+			if(doesAutoconfSupportExist())
+			{
+				noConffilesExist = false;
+				str1 = new String(
+				"Trying to update existing configure.in and makefile.am's "+
+				"\nconfigure.in and or Makefile.am Files will be generated if missing"+
+				"\nOld existing configuration files will be renamed *.old if updated");
+				str2 = new String("\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
+			}
+			else
+			{
+				noConffilesExist = true;
+				str1 = "";str2="";
+			}
 			String message = new String
-			("Trying to update existing configure.in and makefile.am's "+
-			"\nconfigure.in and or Makefile.am Files will be generated if missing"+
-			"\nOld existing configuration files will be renamed *.old if updated"+
-			"\nPress OK to update project configuration files, or "+
-			"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
-			//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
-			createUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
+			(str1+"\nGenerating project configuration files"+str2);
+			createUpdate = dialog.openConfirm(shell,"Creating configure.in and Makefile.am's ",message);
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
@@ -179,7 +190,7 @@ public class ConfigureAction extends CustomAction
 			
 		if(execute)
 		{	
-			if(!createUpdate)
+			if(!createUpdate&&!noConffilesExist)
 			{
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -200,7 +211,7 @@ public class ConfigureAction extends CustomAction
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else
+			else if(createUpdate&&runUpdate)
 			{		
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -257,7 +268,7 @@ public class ConfigureAction extends CustomAction
 				{
 					String name = child.getName();
 					if (name.equals("Makefile")||name.equals("Makefile.am")
-						||name.equals("configure.in"))
+						||name.equals("Makefile.in")||name.equals("configure.in"))
 					{
 						return true;
 					}
