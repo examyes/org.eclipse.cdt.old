@@ -62,7 +62,8 @@ public class ModuleManager extends ComponentManager
     */
    public int getModuleID(String moduleName)
    {
-      int moduleID = -1;
+   	  // default to 1 to prevent infinite loop
+      int moduleID = 1;
       if(moduleName==null)
       {
          if (Gdb.traceLogger.ERR) 
@@ -111,14 +112,14 @@ public class ModuleManager extends ComponentManager
       {
             int partID = getPartID( moduleIDs[j], partName ); 
             if (partID<=0)
-                return -1;
+                return 1;
 
             Part part = getModule(moduleIDs[j]).getPart(partID);
             if(part==null)
             {
                 if (Gdb.traceLogger.ERR) 
                     Gdb.traceLogger.err(2,"ModuleManager.getModuleID part==NULL for moduleID="+moduleIDs[j] +" partID="+partID );
-                return -1;
+                return 1;
             }
 
             if(!part.getSourceFileName().equals(fullPartName) )
@@ -132,7 +133,7 @@ public class ModuleManager extends ComponentManager
       }
       if (Gdb.traceLogger.ERR) 
           Gdb.traceLogger.err(2,"ModuleManager.getModuleID could not find partName="+partName +" fullPartName="+fullPartName );
-      return -1;
+      return 1;
    }
 
    /**
