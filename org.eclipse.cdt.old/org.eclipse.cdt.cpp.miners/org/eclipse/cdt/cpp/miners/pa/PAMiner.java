@@ -332,7 +332,7 @@ public class PAMiner extends Miner {
   // Create command descriptors
   createCommandDescriptor(traceFileD,    getLocalizedString("pa.Parse"), "C_PARSE_TRACE").setDepth(0);
   createCommandDescriptor(traceProgramD, getLocalizedString("pa.Analyze"), "C_ANALYZE_PROGRAM").setDepth(0);
-  createCommandDescriptor(traceFunctionD, "Query", "C_QUERY");
+  createCommandDescriptor(traceTargetD,  getLocalizedString("pa.Remove"), "C_REMOVE_TRACE_TARGET").setDepth(0);
   createCommandDescriptor(fileD, "quey trace format", "C_QUERY_TRACE_FILE_FORMAT").setDepth(0);
   createCommandDescriptor(executableD, "query trace format", "C_QUERY_TRACE_PROGRAM_FORMAT").setDepth(0);
   
@@ -349,12 +349,7 @@ public class PAMiner extends Miner {
   DataElement status  = getCommandStatus(theElement);
   DataElement subject = getCommandArgument(theElement, 0);
     
-  if (name.equals("C_QUERY"))
-  {
-   if (subject != null && subject.isOfType(getLocalizedString("pa.TraceFunction")))
-     provideSourceFor(subject);
-  }
-  else if (name.equals("C_PARSE_TRACE"))
+  if (name.equals("C_PARSE_TRACE"))
   {
    handleTraceFileParse(subject, status);
   }
@@ -369,25 +364,26 @@ public class PAMiner extends Miner {
   else if (name.equals("C_QUERY_TRACE_PROGRAM_FORMAT"))
   {
    handleQueryTraceProgramFormat(subject, status);
-  }  
-
+  }
+  else if (name.equals("C_REMOVE_TRACE_TARGET"))
+  {
+   handleRemoveTraceTarget(subject, status);
+  }
+  
   return status;
    
  }
  
-
+ 
  /**
-  * Find the source location for a trace function
+  * Remove the given trace target
   */
- public void provideSourceFor(DataElement traceFuncElement) {
-
-   if (traceFuncElement.getSource() == null || traceFuncElement.getSource().length() == 0) {
-     PADataStoreAdaptor.provideSourceFor(traceFuncElement);
-   }
-   
-   // System.out.println("source: " + traceFuncElement.getSource());
-
+ public void handleRemoveTraceTarget(DataElement traceTarget, DataElement status) {
+ 
+   _dataStore.deleteObject(traceTarget.getParent(), traceTarget);
+   status.setAttribute(DE.A_NAME, "done");
  }
+ 
  
  /**
   * Query the trace file format

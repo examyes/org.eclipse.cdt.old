@@ -311,34 +311,7 @@ public class PADataStoreAdaptor {
    }
    
  }
- 
- 
- /**
-  * Find out the source location for a trace function
-  */
- public static void provideSourceFor(DataElement traceFuncElement) {
-
-   if (_provideSourceForD != null) {     
-
-     DataElement traceFile = traceFuncElement.getParent().getParent();
-     ArrayList projects = traceFile.getAssociated(getLocalizedString("pa.ReferencedProject"));
-   
-     DataElement projectElement = null; 
-     if (projects.size() > 0) {
-       
-       projectElement = (DataElement)projects.get(0);
-       
-       ArrayList args = new ArrayList();
-       args.add(projectElement);
-       _dataStore.command(_provideSourceForD, args, traceFuncElement, false);
-     }
-     else {
-       System.out.println("Cannot find the containing project for trace function: " + traceFuncElement.getName());
-     }   
-   }
- 
- }
- 
+  
  
  /**
   * Remove the trace information for the given trace element
