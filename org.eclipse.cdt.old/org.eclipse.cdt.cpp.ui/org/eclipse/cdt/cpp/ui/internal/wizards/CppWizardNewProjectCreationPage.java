@@ -626,7 +626,14 @@ protected String getDirectoryName() {
 				return false;
 			    }			
 		    }
-
+		if (_sourceLocation == CppProjectAttributes.LOCATION_HOST)
+		    {
+			String hostName = remoteHostNameField.getText();
+			if (hostName.length() == 0)
+			    {
+				return false;
+			    }
+		    }
 		return true;
 	    }
 
@@ -653,15 +660,53 @@ protected String getDirectoryName() {
     protected boolean validateProjectNameGroup() 
     {
 	IWorkspace workspace = _plugin.getPluginWorkspace();
+
+	
 	String projectFieldContents = projectNameField.getText();
 	if (projectFieldContents.equals(""))
 	    return false;
 	
 	IStatus result = workspace.validateName(projectFieldContents,IResource.PROJECT);
-	if (!result.isOK()) {
-	    //**displayErrorMessage("Invalid project name: " + result.getMessage());
-	    return false;
-	}
+	if (!result.isOK()) 
+	    {
+		//**displayErrorMessage("Invalid project name: " + result.getMessage());
+		return false;
+	    }
+	else 
+	    {
+		// check for duplicate project names
+
+		// compare with local projects
+		IProject[] lprojects = workspace.getRoot().getProjects();
+		
+		for (int i = 0; i < lprojects.length; i++)
+		    {	
+			IProject lproject = lprojects[i];
+			if (lproject.getName().equals(projectFieldContents))
+			    {
+				return false;
+			    }
+		    }
+		
+		// compare with remote projects
+		RemoteProjectAdapter rmtAdapter = RemoteProjectAdapter.getInstance();
+		if (rmtAdapter != null)
+		    {
+			IProject[] rprojects = rmtAdapter.getProjects();
+			
+			if (rprojects != null)
+			    {
+				for (int j = 0; j < rprojects.length; j++)
+				    {	
+					IProject rproject = rprojects[j];
+					if (rproject.getName().equals(projectFieldContents))
+					    {
+						return false;
+					    }
+				    }
+			    }
+		    }
+	    }
 	
 	if ((_projectHandle != null) && _projectHandle.exists()) 
 	    {
