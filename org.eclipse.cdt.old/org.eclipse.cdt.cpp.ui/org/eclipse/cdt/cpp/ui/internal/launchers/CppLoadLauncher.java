@@ -66,7 +66,24 @@ public class CppLoadLauncher implements ILauncherDelegate
         else if (element instanceof IProject || element instanceof IResource) 
 	    {
 		_executable = _api.findResourceElement((IResource)element);
-		_directory = _executable.getParent();
+		if (_executable == null)
+		    {
+			IResource resource = (IResource)element;
+			IResource parentRes = resource.getParent();
+			
+			CppPlugin plugin = CppPlugin.getDefault();
+			DataStore dataStore = plugin.getCurrentDataStore();
+			_directory = dataStore.createObject(null, "directory", parentRes.getName(), 
+							    parentRes.getLocation().toString());
+
+			_executable = dataStore.createObject(_directory, "file", resource.getName(), 
+							     resource.getLocation().toString());
+			
+		    }
+		else
+		    {
+			_directory = _executable.getParent();
+		    }
 	    }
 	else
 	    {
