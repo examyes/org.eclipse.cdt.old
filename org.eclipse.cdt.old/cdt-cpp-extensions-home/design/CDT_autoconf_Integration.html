@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>CDT Integration of GNU Project Management Tools</title>
+<STYLE>
+<!--
+.section
+{ 
+  padding-left: 3;
+  background: "#0080C0";
+  color: white;
+  font-weight: bold;
+}
+.code
+{
+  margin-left: 10%;
+  margin-top: 3;
+  margin-right 10%; 
+  font-family: Courier;
+}
+-->
+</STYLE>
+
+
+
+</head>
+
+<body>
+<h1>GNU Project Management Tools Integration Specifications</h1>
+<pre>
+Author         : <a href="mailto:eyasser@ca.ibm.com">Yasser Elmankabady</a>
+Revision Date  : 04/30/2002 - Version: 0.1.0
+Change History : 0.1.0 - Document Creation
+</pre>
+
+<div class=section>Table of Contents</div>
+<br>
+&nbsp;&nbsp;<a href="#intro">1. Introduction</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#over">1.1 Overview</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#goals">1.2 Integration Goals</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#const">1.3 Constraints</a><br>
+
+&nbsp;&nbsp;<a href="#concept">2. System Model - Concepts and Requirements</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#desc">2.1 System Description </a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#back">2.1.1 Background</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#setting">2.1.2 Project Management Settings</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#flex">2.1.3 Flexibility and Maintenance</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#infostruct">2.2 Information Structure Representation</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#templates">2.2.1 Project Templates</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#infoflow">2.3 Information Flow and Content </a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#autoflow">2.3.1 Auto Initialization and Updates of Project Configuration Files</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#userflow">2.3.2 User Initialization and Updates of Project Configuration Files</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#execflow">2.3.3 Execution Flow</a><br>
+
+
+&nbsp;&nbsp;<a href="#funcdesc1">3. Functional description</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#funcpart">3.1 Functional Partitioning </a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#autoconf1">3.1.1 Automatic Configuration</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#custconf1">3.1.2 Custom Configuration</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#funcdesc2">3.2 Functional Description</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#autoconf2">3.2.1 Automatic configuration</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#createinit">3.2.1.1 Creation and initialization of autoconf and automake files</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#init">3.2.1.2 Configure.in and Makefil.am Initialization</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#confinit">3.2.1.2.1 Configure.in Initialization</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#makeinit">3.2.1.2.2 Makefile.am Initialization</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#update">3.2.1.3 Configure.in and Makefile.am Updates</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#confupdate">3.2.1.3.1 Configure.in Updates</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#makeupdate">3.2.1.3.2 Makefile.am Updates</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#custconf2">3.2.2 Custom Configuration</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#initconf">3.2.2.1 Creation and initialization of autoconf and automake files</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#makeview">3.2.2.1.1 Makefile.am View</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#ppage">3.2.2.1.2 Project Property Page</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#custinit">3.2.2.2 Configure.in and Makefil.am Initialization</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#custupdate">3.2.2.3 Configure.in and Makefil.am Updates</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#runconf">3.2.3 Running configure</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#build">3.2.4 Building C/C++ project</a><br>
+
+&nbsp;&nbsp;<a href="#valid">4. Validation Criteria</a><br>
+&nbsp;&nbsp;<a href="#gloss">5. Glossary</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#terms">5.1 Terms</a><br>
+&nbsp;&nbsp;<a href="#appndx">6. Appendix</a><br>
+
+<br><br>
+
+
+<!-- Introduction -->
+<div class=section><a name="intro">1. Introduction</a></div>
+<!--overview-->
+<div class=section><a name="over">1.1 Overview</a></div>
+<br>
+<p>
+Integrating GNU's Project Management Tools with CDT is aimd to simplify the process of building software packages and 
+to make them more portable. By integrating GNUtools, the creation and the maintenance of the files needed to build 
+your software has bee eleminated and developers can allocate more time on the software development. 
+</p>
+<p>
+Having this in mind, and the popularity of the GNU project management tools, A decision to integrate 
+these tools within CDT has been made. These tools include autoconf, automake, libtool,...etc.
+</p>
+
+<!-- Integration Goals -->
+<div class=section><a name="goals">1.2 Integration Goals</a></div>
+<br>
+<p>
+The goal of integrating GNU tools with CDT is not to merely provide the functionality that these tools 
+provide but rather to facilitate and automate the creation of the support files which are needed by the 
+GNU project management tools. Among these tools are autoconf, automake, aclocal, autoheader and libtool. 
+As an example, autoconf needs an input file called configure.in (autoconf version 2.5 and above, it is 
+called configure.ac) while automake needs an input file named Makefile.am file to do their jobs.
+</p>
+<p>
+The focus in this design document is on two tools - autoconf and automake and their requirements. 
+Automating and facilitating the creation of the support files for these tools have to be designed 
+in a way that is intuitive, simple and to provide the greatest flexibility possible to the developers 
+in structuring and managing their projects.
+</p>
+
+<!-- Constraints -->
+<div class=section><a name="const">1.3 Constraints</a></div>
+<br>
+<p>
+Given our objectives, we foresee and acknowledge that the system will be limited in managing imported packages 
+that are already configured by GNU management tools. A notification mechanism will be designed to notify the 
+user whether the system will be capable of updating and maintaining the imported configuration file or not.
+</p>
+
+<!-- System Model- Concepts and Requirements -->
+<div class=section><a name="concept">2. System Model- Concepts and Requirements</a></div>
+
+<!-- 2.1 System Description -->
+<div class=section><a name="desc">2.1 System Description</a></div>
+<div class=section><a name="back">2.1.1 background</a></div>
+<br><b>Autoconf</b>
+<p>
+Autoconf needs an input file called configure.in. This file can be created manually from scratch or can 
+be created with the use of a tool called autoscan. Autoscan creates a file called configure.scan which 
+may need to be  manully restructured/shuffled before renaming it to configure.in. You can visit the GNU
+website to get more information regarding autoconf. 
+</p>
+<b>Automake</b>
+<p>
+Automake - a tool that takes care of creating and maintaing Makefiles - need a file called Makefile.am 
+which is created manually by the developer. This file is much more simpler than regular makefiles. 
+You can also visit the GNU website and get more information regarding automake.
+</p>
+
+<div class=section><a name="setting">2.1.2 Project Management Settings</a></div>
+<p>
+After the creation of a C/C++ project, users can select to manage the project in the way they prefer. 
+CDT shall not enforce certain scenario, but rather the users who select the way hey want to manage 
+their project. Users can simply choose to manage the project themselves or to delegate this task to CDT. 
+CDT integrates GNU project management tools - autoconf, automake, aclocal, libtool ...-  and it facilitates
+the creation/maintenance of the project management files - these files include Makefile.am(s), a 
+configure.in which creates the project Makefile(s). 
+</p>
+<p>
+Once the user decides to let CDT manages his/her project, CDT, with the help of template configuration files, 
+initializes and updates these files which are needed for autoconf and automake tools to run. These template files 
+include configure.in and Makefile.am(s)
+</p>
+<div class=section><a name="flex">2.1.3 Flexibility and Maintenance</a></div>
+<p>
+Flexibility is needed for the user to customize the package when it is impossible or non practical 
+for CDT to provide this kind of customization to the configure script. CDT task then, is to facilitate 
+the customization and maintenance processes for the user by providing views and properties that represent 
+the configuration files - configure.in and Makefile.am. Users then can update, customize and modify these 
+files through these views and property pages.
+</p>
+
+<!-- 2.2 Information Structure -->
+<div class=section><a name="infostruct">2.2 Information Structure</a></div>
+<div class=section><a name="templates">2.2.1 Project Template files</a></div>
+<p>
+As mentioned above, CDT initializes and updates the project management template files needed by 
+autoconf and automake to create the configure script which then creates the project Makefile(s). 
+</p>
+<p>
+The templates are to be designed to provide the user with the ability to create any types of C/C++ 
+applications in the Linux environment. C/C++ applications include terminal, GNOME, KDE, QT,..etc. 
+This will depend greatly on the configure.in template file. 
+</p>
+<p>
+Although CDT is maintaining the template files, it provides the user with some flexibility. 
+Users are able to modify and add to the template files in the case they need to customize 
+their applications.
+</p>
+
+<!-- 2.3 Information Flow and Contents -->
+<div class=section><a name="infoflow">2.3 Information Flow and Contents </a></div>
+<div class=section><a name="autoflow">2.3.1 Auto Initialization and Updates of Project Configuration Files</a></div>
+<br>
+<b>Newly Created Project</b>
+<p>
+Once the user have created a project and decided to let CDT automatically manages the application, 
+CDT will insert and initialize the template files in the application workspace. These file are the 
+configure.in and Makefile.am files. CDT shall be responsible of updating and maintaining the 
+configurations files.
+</p>
+<center>
+<img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-cpp-extensions-home/specs/images/autoflow.jpg?cvsroot=Tools_Project">
+</center>
+<br>
+<b>Imported Projects</b>
+<p>
+In this case the user has imported a project which already has configuration files and wanted the tool 
+to manage the project. CDT shall try to classify the configuration files and try to update them accordingly. 
+In the case which CDT fails in recognizing these files, a notification shall be sent to the user and CDT 
+shall not update the configuration files. It will be the user's responsibility to manage the configuration 
+files in this case. 
+</p>
+
+<div class=section><a name="userflow">2.3.2 User Initialization and Updates of Project Configuration Files</a></div>
+<p> 
+Users will be able to manage the configuration files on their own. CDT to facilitate the users task by providing 
+actions, views and property pages where the user can find it easier to manage the configuration files with 
+the help of these tools. 
+</p>
+<p>
+CDT recognizes that working with Makefile.am will be easier if there was a view of 
+this file. Through this view, users will be able to add/modify to the content of the Makefile.am without 
+having deep knowledge about the making of the Makefile.am 
+</p>
+<center>
+<img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-cpp-extensions-home/specs/images/customflow.jpg?cvsroot=Tools_Project">
+</center>
+<br>
+<div class=section><a name="execflow">2.3.3 Execution Flow</a></div>
+<p>
+After the user has created the configuration files, He/she would be able to build and run the package. 
+Once the user invoke the build command, CDT will validate the  configuration files. In the case that 
+CDT detects that these files are outdated, CDT will reconfigure the project and then issue a build.
+</p>
+<center>
+<img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-cpp-extensions-home/specs/images/execflow.jpg?cvsroot=Tools_Project">
+</center>
+<br>
+
+<!-- 3. Functional Description -->
+<div class=section><a name="funcdesc1">3. Functional Description</a></div>
+<!-- 3.1 Functional Partitioning -->
+<div class=section><a name="funcpart">3.1 Functional Partitioning</a></div>
+
+<div class=section><a name="autoconf1">3.1.1 Automatic Configuration</a></div>
+<br>
+<center>
+ <img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-cpp-extensions-home/specs/images/autoconf.jpg?cvsroot=Tools_Project">
+</center><center><p>Auto Configuration Flow Diagram</p></center>
+<br><br>
+<div class=section><a name="custconf1">3.1.2 Custom Configuration</a></div>
+<br>
+<center>
+ <img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-cpp-extensions-home/specs/images/customconf.jpg?cvsroot=Tools_Project">
+</center><center><p>Custom Configuration Flow Diagram</p></center>
+<br><br>
+<!-- 3.2 Functional Description -->
+<div class=section><a name="funcdesc2">3.2 Functional Description</a></div>
+
+<div class=section><a name="autoconf2">3.2.1 Automatic Configuration</a></div>
+<div class=section><a name="createinit">3.2.1.1 Creation and initialization of autoconf and automake files</a></div>
+
+<p>
+Once the user has created / imported a project, and then choose to let CDT manages the project 
+using autoconf and automake - the GNU project management tools -, CDT will check the project structure. 
+If the project structure is complying with the GNU recommended project structure then CDT will create 
+and initialize the project configuration files which are needed to create the configure script. 
+</p>
+
+<p>
+CDT, by default, shall create and insert - using automake and autoconf - all the auxiliary files in the top level 
+(level 1) directory together with the project configure.in (.ac) file and a top level Makefile.am. 
+CDT then creates a Makefile.am which then creates a program target in the level 2 directories. 
+In any subsequent directory (level 3 and deeper), CDT will create a Makefile.am which then 
+creates static library target. CDT shall also provide a mechanism for the user to customize 
+this default behavior.
+</p>
+
+<p>
+In the case that the tool detects that the project structure is not complying with 
+GNU recommendations - this is simply means that it will detect source file(s) in the top level 
+directory -, CDT will prompt the user to select the type of project target the user wants to create.
+</p>
+ 
+<div class=section><a name="init">3.2.1.2 Configure.in and Makefil.am Initialization</a></div>
+<p> 
+CDT shall be responsible of maintaining 2 types of files needed by GNU tools to manage the software package 
+currently under development. These files are the configure.in and Makefile.am(s). There is only one 
+configure.in per package while there is one Makefile.am in each directory / subdirectory in the project.
+</p>
+
+<div class=section><a name="confinit">3.2.1.2.1 Configure.in Initialization</a></div>
+<p> 
+CDT will initialize configure.in template by providing a package name and version number to it. It will 
+also initializes the macro which tells the configure script where to generated Makefile(s) in the project 
+directory structure.
+</p>
+
+<div class=section><a name="makeinit">3.2.1.2.2 Makefile.am Initializations</a></div>
+<p>
+CDT shall insert a target Makefile.am in each and every directory in the project directory structure. Then, 
+depending on the targets that each Makefile.am represents, CDT shall initialize the variables in each Makefile.am.
+</p>
+
+<div class=section><a name="update">3.2.1.3 Configure.in and Makefil.am Updates</a></div>
+<p>
+CDT shall be responsible of maintaining 2 types of files needed by GNU tools to manage the software package 
+currently under development. These files are the configure.in and Makefile.am(s). There is only one configure.in 
+per package while there is one Makefile.am in each directory / subdirectory in the project.
+</p>
+
+<div class=section><a name="confupdate">3.2.1.3.1 Configure.in Updates</a></div>
+<p>
+Automatic updates to configure.in will reflect the addition or deletion of project directories. Once a 
+directory has been added, configure.in will be updated so that it instructs the configure script to generate 
+a new Makefile in this new directory.
+</p>
+
+<div class=section><a name="makeupdate">3.2.1.3.2 Makefile.am Updates</a></div>
+<p>
+CDT will provide automatic updates to the project Makfile.am(s) to reflect the changes of the project 
+state while in the development phase. These updates includes adding new Makefile.am as needed. As an 
+example is when the user adds a new directory to the project workspace.
+</p>
+
+<div class=section><a name="custconf2">3.2.2 Custom configuration</a></div>
+
+<div class=section><a name="initconf">3.2.2.1 Creation and initialization of autoconf and automake files</a></div>
+<p>
+The same as automatic configuration, see section 3.2.1.1 
+in addition to the following capabilities 
+</p>
+<div class=section><a name="makeview">3.2.2.1.1 Makefile.am View</a></div>
+<p>
+Makefile.am view is a visual representation of the Makefile.am and aimed to facilitate the process of customizing 
+Makefile.am(s) and hence the project configuration files and the configure script. The goal is to make it easy 
+for users that has a minimum knowledge about GNU autoconf and automake tools to do the updates in a simple 
+intuitive way.
+</p>
+<p>
+Makefile.am view shall provide actions which will allow the users to manipulate the Makefile.am format. 
+Users will be able to switch from a Makefile.am template to another. Users will be able to locate and update 
+variables, build and maybe execute the targets they create in the view.
+</p>
+
+<div class=section><a name="ppage">3.2.2.1.2 Project Properly Pages</a></div>
+<p>
+Through a project property page, users will be able to customize configuration files to suite the course 
+of execution. This is an alternate way for the user to customize configuration files. One should mention 
+that not all the variables can be defined through the property page, but a subset of it and mainly the set 
+that the user most often will work with.
+</p>   
+
+<div class=section><a name="custinit">3.2.2.2 Configure.in and Makefil.am Initialization</a></div>
+<p>
+User will be able to customize configure.in and Makefile.am(s).
+</p>
+<div class=section><a name="custupdate">3.2.2.3 Configure.in and Makefil.am Updates</a></div>
+<p>
+Users will have the choice either to maintain and update the configuration files manually or 
+delegate this task to CDT and obviously there will be limitation when going in that route. These 
+limitations are addressed in the Constraints section (1.3).
+</p>
+
+<div class=section><a name="runconf">3.2.3 Running configure</a></div>
+<p>
+CDT shall provide the user with an action to run the generated  configure script. It will 
+also, provide a dialog where the user inputs configure options and arguments.
+</p>
+<div class=section><a name="build">3.2.4 Building C/C++ project</a></div>
+<p>
+After running the configure script, Makefile(s) will be generated in the proper locations. Users 
+then can build, generate and execute project targets. CDT will detect whether the configure script is 
+up to date or not. If it is not up to date then CDT will regenerate the configure script before any 
+subsequent builds. 
+</p>
+
+<!-- 4. Validation Criteria -->
+<div class=section><a name="valid">4. Validation Criteria</a></div>
+<p>
+to be added later...
+</p>
+
+<!-- 5. Glossary -->
+<div class=section><a name="gloss"> 5. Glossary</a></div>
+
+<!-- 5.1 Terms -->
+<div class=section><a name="terms"> 5.1 Terms</a></div>
+<br>
+<li><b>Managed Projects</b></li>
+<p>
+A project that is managed by the CDT tool where no need for user intervention. CDT uses GNU project management 
+tools like autoconf and automake.
+</p>
+
+<!-- 6. Appendix -->
+<div class=section><a name="appndx">6. Appendix</a></div>
+<p>
+to be added later...
+</p>
+
+<div class=section>Comments</div>
+<p>
+Please Send Comments To : <a href="mailto:eyasser@ca.ibm.com">Yasser Elmankabady</a>.
+</p>
+</body>
+</html>
