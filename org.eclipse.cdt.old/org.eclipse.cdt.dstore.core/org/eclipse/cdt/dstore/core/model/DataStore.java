@@ -585,7 +585,7 @@ public final class DataStore
     {
 	for (int i = 0; i < size; i++)
 	    {
-		_recycled.add(new DataElement());
+		_recycled.add(new DataElement(this));
 	    }
     }
   
@@ -618,7 +618,7 @@ public final class DataStore
 	    }
 	else
 	    {
-		newObject = new DataElement();
+		newObject = new DataElement(this);
 	    }
 
 	newObject.setUpdated(false);
@@ -1041,7 +1041,7 @@ public final class DataStore
 		parent = _tempRoot;
 	    }
 	
-	newObject.reInit(this, parent, type, id, name, source, isReference); 
+	newObject.reInit(parent, type, id, name, source, isReference); 
 	
         if (parent != null)
 	    {
@@ -1080,11 +1080,11 @@ public final class DataStore
 	DataElement descriptor = findDescriptor(DE.T_OBJECT_DESCRIPTOR, type);
 	if (descriptor != null  && (parent != _descriptorRoot))
 	    {
-		newObject.reInit(this, parent, descriptor, id, name, source, isReference); 
+		newObject.reInit(parent, descriptor, id, name, source, isReference); 
 	    }
 	else
 	    {
-		newObject.reInit(this, parent, type, id, name, source, isReference); 
+		newObject.reInit(parent, type, id, name, source, isReference); 
 	    }
 
         if (parent != null)
@@ -1116,11 +1116,11 @@ public final class DataStore
 	  DataElement descriptor = findDescriptor(DE.T_OBJECT_DESCRIPTOR, attributes[DE.A_TYPE]);
 	  if (descriptor != null  && (parent != _descriptorRoot))
 	      {
-		  newObject.reInit(this, parent, descriptor, attributes);
+		  newObject.reInit(parent, descriptor, attributes);
 	      }
 	  else
 	      {
-		  newObject.reInit(this, parent, attributes);
+		  newObject.reInit(parent, attributes);
 	      }
 
 	  if (parent != null)
