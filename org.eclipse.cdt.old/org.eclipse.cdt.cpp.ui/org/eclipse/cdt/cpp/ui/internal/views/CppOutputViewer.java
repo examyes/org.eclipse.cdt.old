@@ -89,7 +89,7 @@ public class CppOutputViewer extends OutputViewer
   			DataElement projectElement = api.findProjectElement(project);
   			if (projectElement != null)
   			{
-  				api.invoke(projectElement, "sh", true);
+  				api.invoke(projectElement, ">", true);
   			}
   		}
   	}
