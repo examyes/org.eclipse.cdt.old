@@ -18,15 +18,9 @@ public class DebugMiner extends Miner
        pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
        _gdbPluginPath = pluginPath + "com.ibm.debug.gdb/";
 
-       String osString = System.getProperty("os.name");			
-       if (osString.equals("win32"))
-	   {			
-	       _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar;" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ";" on Windows
-	   }
-       else
-	   {
-	       _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar:" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ":" on Linux
-	   }
+       String ps = System.getProperty("path.separator");
+       String fs = System.getProperty("file.separator");
+       _debugJarPath = pluginPath + "com.ibm.debug.gdb" + fs + "epdc.jar" + ps + pluginPath + "com.ibm.debug.gdb" + fs + "gdbPicl.jar";
        _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb ";
     }
 
