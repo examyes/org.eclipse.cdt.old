@@ -31,6 +31,7 @@ public class FileSystemMiner extends Miner
     private DataElement _attributesDescriptor;
     private DataElement _permissionsDescriptor;
     private DataElement _exeDescriptor;
+    private DataElement _binexeDescriptor;
 
   public FileSystemMiner ()
       {
@@ -197,6 +198,8 @@ public class FileSystemMiner extends Miner
 
 	  _exeDescriptor            = createObjectDescriptor(schemaRoot, "executable");
 	  _dataStore.createReference(_fileDescriptor, _exeDescriptor, "abstracts", "abstracted by");
+	  _binexeDescriptor         = createObjectDescriptor(schemaRoot, "binary executable");
+	  _dataStore.createReference(_exeDescriptor, _binexeDescriptor, "abstracts", "abstracted by");
 
 	  DataElement intD          = _dataStore.find(schemaRoot, DE.A_NAME, "Integer", 1);
 	  DataElement dateD         = _dataStore.find(schemaRoot, DE.A_NAME, "Date", 1);
@@ -810,7 +813,8 @@ public class FileSystemMiner extends Miner
     {
 	String theOS = System.getProperty("os.name");
 	if (!theOS.startsWith("Win"))
-	    {
+	    //if (true)  
+	{
 		return internalHandleLSQuery(theElement, status, refresh);
 	    }
 	else
@@ -891,6 +895,26 @@ public class FileSystemMiner extends Miner
 	    {
 		handleSize(theElement, status);
 		handleDate(theElement, status);
+
+		if (theElement.isOfType(_exeDescriptor))
+		    {
+			try
+			    {
+				// next level query using "file"?
+				// find out if binary exe
+				Process theProcess = Runtime.getRuntime().exec("file " + theElement.getSource());	
+				BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
+				String line = reader.readLine();
+				if (line.indexOf("executable") > 0)
+				    {
+					theElement.setAttribute(DE.A_TYPE, "binary executable");
+					_dataStore.refresh(theElement);
+				    }
+			    }
+			catch (IOException e)
+			    {
+			    }
+		    }
 	    }
 	
 	status.setAttribute(DE.A_NAME, "done");
