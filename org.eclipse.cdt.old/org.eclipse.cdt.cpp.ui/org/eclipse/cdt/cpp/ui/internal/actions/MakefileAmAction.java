@@ -6,34 +6,14 @@ package org.eclipse.cdt.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
+import java.util.ArrayList;
 
-import org.eclipse.cdt.dstore.ui.actions.*;
-import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.dstore.extra.internal.extra.*;
-
-import java.io.*; 
-import java.util.*;
-
-import org.eclipse.jface.action.*;
-
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.CoreException;
-
-import org.eclipse.ui.*;
-import org.eclipse.ui.internal.*;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.MarkerRulerAction;
-
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStore;
+import org.eclipse.cdt.dstore.extra.internal.extra.DomainEvent;
+import org.eclipse.cdt.dstore.extra.internal.extra.IDomainListener;
+import org.eclipse.cdt.dstore.ui.actions.CustomAction;
 import org.eclipse.swt.widgets.Shell;
 
 public class MakefileAmAction extends CustomAction implements IDomainListener 
@@ -53,25 +33,22 @@ public class MakefileAmAction extends CustomAction implements IDomainListener
 	
 		String value = _command.getValue();
 			
-		if(value.equals("INSERT_CONFIGURE_IN")||
-			value.equals("TOPLEVEL_MAKEFILE_AM"))
-			{
+		if(value.equals("INSERT_CONFIGURE_IN")|| value.equals("TOPLEVEL_MAKEFILE_AM"))
+		{
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-				return;
-			}
+			return;
+		}
 						
 		if(value.equals("INSERT_CONFIGURE_IN") && doesFileExist("configure.in"))	
 		{
-				setEnabled(false);
-				return;
+			setEnabled(false);
+			return;
 		}
 
-		if(value.equals("TOPLEVEL_MAKEFILE_AM") ||
-			value.equals("PROGRAMS_MAKEFILE_AM") ||
-		 	value.equals("STATICLIB_MAKEFILE_AM") ||
-		 	value.equals("SHAREDLIB_MAKEFILE_AM"))
-		 {
+		if(value.equals("TOPLEVEL_MAKEFILE_AM") || value.equals("PROGRAMS_MAKEFILE_AM") ||
+		 	value.equals("STATICLIB_MAKEFILE_AM") || value.equals("SHAREDLIB_MAKEFILE_AM"))
+		{
 			DataElement cmdD = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CLASSIFY_MAKEFILE_AM");
 			if (cmdD != null)
 			{
@@ -226,45 +203,46 @@ public class MakefileAmAction extends CustomAction implements IDomainListener
     // to handle enable state
     public Shell getShell()
     {
-	ModelInterface api = ModelInterface.getInstance();
-	return api.getDummyShell();
+		ModelInterface api = ModelInterface.getInstance();
+		return api.getDummyShell();
     }
     
 
     public boolean listeningTo(DomainEvent e)
     {
-	DataElement parent = (DataElement)e.getParent();
-	if (parent == _cmdStatus)
+		DataElement parent = (DataElement)e.getParent();
+		if (parent == _cmdStatus)
 	    {
-		if (parent.getName().equals("done"))
-		    {
-			return true;
-		    }
-	    }
+			if (parent.getName().equals("done"))
+			{
+				return true;
+			}
+		}
 
-	return false;
+		return false;
     }
 
     public void domainChanged(DomainEvent e)
     {
-	DataElement classifier = null;
-	ArrayList updated = _subject.getAssociated("class type");
-	if (updated.size() > 0)
-	    {
-		classifier = (DataElement)updated.get(0);			
-	    }
+		DataElement classifier = null;
+		ArrayList updated = _subject.getAssociated("class type");
+		if (updated.size() > 0)
+		{
+			classifier = (DataElement)updated.get(0);			
+		}
 	
-	String type = null;		
-	if (classifier != null)
+		String type = null;		
+		if (classifier != null)
 	    {
-		type = classifier.getName();		
+			type = classifier.getName();		
 	    } 				
-	else
+		else
 	    {
-		type = "0";	
+			type = "0";	
 	    }
 
-	_cmdStatus = null;
-	_dataStore.getDomainNotifier().removeDomainListener(this);
+		_cmdStatus = null;
+		_dataStore.getDomainNotifier().removeDomainListener(this);
+		setEnabledState(type);
     }
 }

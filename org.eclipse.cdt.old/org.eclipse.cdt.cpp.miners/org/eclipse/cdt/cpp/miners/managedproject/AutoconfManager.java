@@ -8,11 +8,19 @@ package org.eclipse.cdt.cpp.miners.managedproject;
 /*
  * comment
  * */
-import org.eclipse.cdt.dstore.core.model.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
-import java.io.*;
-import java.lang.Runtime;
-import java.util.*;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStore;
+import org.eclipse.cdt.dstore.core.model.DataStoreAttributes;
 
 public class AutoconfManager {
 	final String AUTOCONF = new String("autoconf");
