@@ -4,9 +4,18 @@ package org.eclipse.cdt.cpp.miners.managedproject;
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
-import org.eclipse.cdt.dstore.core.model.*;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStoreAttributes;
 
 public class MakefileAmManager {
 
@@ -1458,22 +1467,22 @@ public class MakefileAmManager {
 		extradistExtensions = new ArrayList();
 		for(int i = 0; i < extensionList.size(); i ++)
 					extradistExtensions.add(((DataElement)extensionList.get(i)).getName());
-		//System.out.println("\n setExtradistExtensions()");
+		System.out.println("\n setExtradistExtensions()");
 		for(int j = 0; j < extradistExtensions.size(); j++)
-			//System.out.println("\n extension  = "+extradistExtensions.get(j));
+			System.out.println("\n extension  = "+extradistExtensions.get(j));
 					
 	}
 	private boolean foundInExtraList(String name)
 	{
-		//System.out.println("\n foundInExtraList()");
+		System.out.println("\n foundInExtraList()");
 		for(int j = 0; j < extradistExtensions.size(); j++)
-			//System.out.println("\n extension  = "+extradistExtensions.get(j));
+			System.out.println("\n extension  = "+extradistExtensions.get(j));
 
 		for(int i= 0; i < extradistExtensions.size(); i++)
 		{
 			String item = (String)extradistExtensions.get(i);
 			String ext = item.substring(item.indexOf("."));
-			//System.out.println("\n name = "+name+"\n > ext = "+ext);
+			System.out.println("\n name = "+name+"\n > ext = "+ext);
 			if(name.endsWith(ext)||name.equals(item))
 				return true;
 		}
