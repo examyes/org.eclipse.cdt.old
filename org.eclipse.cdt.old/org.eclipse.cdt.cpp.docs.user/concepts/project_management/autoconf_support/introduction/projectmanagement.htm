@@ -18,7 +18,7 @@
 </table>
 ----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-<caption><font size=+4></font>&nbsp;<font size=+4></font>
+<caption>&nbsp;
 <p><!---------->
 <br><!---------->
 <br><!---------->
@@ -56,10 +56,12 @@ suggest to visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;</font
 <dd>
 <font size=+1>Support for Project Management, which is provided by the
 C/C++ IDE, can be defined in two categories.&nbsp; The first category is
-generating support for project that either newly created or imported to
-the tool without being managed by automake and autoconf before. The second
-category is when you import a software package that has already autoconf
-and automake configuration files.&nbsp;</font></dd>
+<a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/project_management/autoconf_support/creating_managed_project/creatingManagedProject.htm">automatic
+generation</a> of configuration files&nbsp; for projects that are either
+newly created or imported to the tool without configuration files. The
+second category is<a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/project_management/autoconf_support/creating_managed_project/creatingManagedProject.htm">
+maintaining existing </a>when importing a software package that has already
+autoconf and automake configuration files.&nbsp;</font></dd>
 
 <dd>
 <font size=+1>Before we dive in and explain how to accomplish that tasks
@@ -113,11 +115,11 @@ multiple targets as any directory in this level will be treated as a&nbsp;
 Program target</font></li>
 
 <li>
-<font size=+1>all the children of this Programs directory will be initially
+<font size=+1>all the children of the Programs directory will be initially
 assumed to be static library targets, but the user has the flexibility
 to alter this option to a different type target.</font></li>
 </ol>
-<font size=+1></font>
+
 <p><br><font size=+1>We should emphasize here that this is not enforcing
 any Project structure ,but rather the tool is designed to give all the
 flexibility to the developer depended on how he/she is able&nbsp; to control
@@ -131,7 +133,9 @@ Files</font></b>
 <p><font size=+1>Whether it is a newly created C/C++ project or a project
 that was imported with no configuration files, that task to generate the
 support is the as follows:</font>
-<br><font size=+1>1-&nbsp; Make sure that you</font>
+<br><font size=+1>1-&nbsp; Make sure that your project structure is organized
+as the recommended project structure defined above</font>
+<br><font size=+1>2-&nbsp; From the C/C++ view Right mouse click on&nbsp;</font>
 <p><b><font size=+2>Maintaining Existing Project Configuration Files</font></b>
 <br>&nbsp;
 <br>&nbsp;

@@ -37,9 +37,9 @@
  </topic>
 
  <topic label="Project Management">
-  <topic label="Introduction"     href="concepts/project_management/autoconf_support/introduction/introduction.htm"/>
-  <topic label="Creating Managed Project"     href="concepts/project_management/autoconf_support/creating_managed_project/creatingManagedProject.htm"/>
-  <topic label="Importing Managed Project"     href="concepts/project_management/autoconf_support/importing_managed_project/importingManagedProject.htm"/>
+  <topic label="Project Management"     href="concepts/project_management/autoconf_support/introduction/projectmanagement.htm"/>
+  <topic label="Automated Configuration files Generation"     href="concepts/project_management/autoconf_support/creating_managed_project/automaticgeneration.htm"/>
+  <topic label="Maintaining Exixting Configuration"     href="concepts/project_management/autoconf_support/importing_managed_project/maintainingexistingconf.htm"/>
  </topic>
 
  <topic label="Commands">
