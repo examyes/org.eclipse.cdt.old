@@ -173,6 +173,15 @@ public class DataStoreSchema
 	_dataStore.createReference(containerObjectD, minersD, abstracts, abstractedBy);	
 	_dataStore.createReference(containerObjectD, minerD, abstracts, abstractedBy);	
 	_dataStore.createReference(containerObjectD, dataD, abstracts, abstractedBy);	
+
+	// type descriptors
+        _dataStore.createObjectDescriptor(schemaRoot, "String");
+
+        DataElement numberD  = _dataStore.createAbstractObjectDescriptor(schemaRoot, "Number");
+        DataElement integerD = _dataStore.createObjectDescriptor(schemaRoot, "Integer");
+        DataElement floatD   = _dataStore.createObjectDescriptor(schemaRoot, "Float");
+	_dataStore.createReference(numberD, integerD, abstracts, abstractedBy);
+	_dataStore.createReference(numberD, floatD, abstracts, abstractedBy);
 	
 	
         // basic commands
