@@ -61,6 +61,10 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 				IResource resource = (IResource)input;
 				rootElement = _api.findResourceElement(resource);
 			    }
+			else if (input instanceof DataElement)
+			    {
+				rootElement = (DataElement)input;
+			    }
 			
 			if (rootElement != null)
 			    {

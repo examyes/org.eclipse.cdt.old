@@ -14,13 +14,14 @@ import java.util.*;
 public class CppProjectEvent 
 {
     // type
-    public static final int CREATE   = 0;
-    public static final int OPEN     = 1; 
-    public static final int CLOSE    = 2;
-    public static final int DELETE   = 3;
-    public static final int COMMAND  = 4;
-    public static final int VIEW_CHANGE = 5;
-    public static final int REFRESH  = 6;
+    public static final int CREATE                   = 0;
+    public static final int OPEN                     = 1; 
+    public static final int CLOSE                    = 2;
+    public static final int DELETE                   = 3;
+    public static final int COMMAND                  = 4;
+    public static final int VIEW_CHANGE              = 5;
+    public static final int REFRESH                  = 6;
+    public static final int SELECTED_PROJECT_CHANGED = 7;
     
     public static final int START    = 0;
     public static final int WORKING  = 1;

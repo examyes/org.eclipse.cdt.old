@@ -12,6 +12,7 @@ import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.*;
 import org.eclipse.cdt.dstore.core.client.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*; 
 import org.eclipse.cdt.dstore.ui.resource.*;
 
@@ -100,69 +101,104 @@ public class CppActionLoader extends GenericActionLoader
 	String type = input.getType();
 	if (type.equals("directory") || type.equals("Project"))
 	    {
+		loadCustomResourceActions(menu, input);
+	    }
+	else
+	    {
+		loadBrowseActions(menu, input);
+	    }
+    }
+
+    private void loadCustomResourceActions(IMenuManager menu, DataElement input)
+    {
+	CppPlugin plugin = CppPlugin.getDefault();
+	ModelInterface api = plugin.getModelInterface();
+	IResource res = api.findResource(input);
+	if (res != null)
+	    {
 		// add command history
-		CppPlugin plugin = CppPlugin.getDefault();
-		ModelInterface api = plugin.getModelInterface();
-		IResource res = api.findResource(input);
-		if (res != null)
+		menu.add(new Separator("Command History"));
+		MenuManager historyCascade = new MenuManager("Command History", "Command History");
+		
+		ArrayList cmds = plugin.readProperty(res, "Command History");
+		for (int i = 0; i < cmds.size(); i++)
 		    {
-			menu.add(new Separator("Command History"));
-			MenuManager historyCascade = new MenuManager("Command History", "Command History");
-
-			ArrayList cmds = plugin.readProperty(res, "Command History");
-			for (int i = 0; i < cmds.size(); i++)
-			    {
-				String str = (String)cmds.get(i);
-				historyCascade.add(new InvocationAction(input, str));				
-			    }
-
-			menu.add(historyCascade);
-		    }
-
-		// add targets
-		if (res != null)
-		    {
-			IProject project = res.getProject();
-			if (project != null)
-			    {
-				menu.add(new Separator("Targets"));
-				MenuManager targetsCascade = new MenuManager("Command Specifications", 
-									     "Command Specifications");
-				
-				TargetsStore targetsStore = TargetsStore.getInstance();
-				
-				Vector projectList = targetsStore.getProjectList();
-				for(int i = 0; i < projectList.size(); i++)
-				    {
-					RootElement root = (RootElement)projectList.elementAt(i);
-					IProject rProject = root.getRoot();
-					
-					if(project.getName().equals(rProject.getName()))
-					    {
-						// we found matching root for this project
-						Vector targets = root.getTargets();
-						for (int t = 0; t < targets.size(); t++)
-						    {
-							TargetElement target = (TargetElement)targets.get(t);
-							String name       = (String)target.getTargetName();
-							String workingDir = (String)target.getWorkingDirectory();
-							String invocation = (String)target.getMakeInvocation();
-					
-							if (workingDir.equals(input.getSource()))
-							    {
-								targetsCascade.add(new InvocationAction(input, name, invocation));
-							    }		
-
-						    }
-
-					    }
-				    }
-
-				menu.add(targetsCascade);
-			    }
+			String str = (String)cmds.get(i);
+			historyCascade.add(new InvocationAction(input, str));				
 		    }
 		
+		menu.add(historyCascade);
+		
+		
+		// add targets
+		IProject project = res.getProject();
+		if (project != null)
+		    {
+			menu.add(new Separator("Targets"));
+			MenuManager targetsCascade = new MenuManager("Command Specifications", 
+								     "Command Specifications");
+			
+			TargetsStore targetsStore = TargetsStore.getInstance();
+			
+			Vector projectList = targetsStore.getProjectList();
+			for(int i = 0; i < projectList.size(); i++)
+			    {
+				RootElement root = (RootElement)projectList.elementAt(i);
+				IProject rProject = root.getRoot();
+				
+				if(project.getName().equals(rProject.getName()))
+				    {
+						// we found matching root for this project
+					Vector targets = root.getTargets();
+					for (int t = 0; t < targets.size(); t++)
+					    {
+						TargetElement target = (TargetElement)targets.get(t);
+						String name       = (String)target.getTargetName();
+						String workingDir = (String)target.getWorkingDirectory();
+						String invocation = (String)target.getMakeInvocation();
+						
+						if (workingDir.equals(input.getSource()))
+						    {
+							targetsCascade.add(new InvocationAction(input, name, invocation));
+						    }		
+						
+					    }
+					
+				    }
+			    }
+			
+			menu.add(targetsCascade);
+		    }
+		
+		// add browse perspective action
+		menu.add(new Separator("Perspectives"));			
+		MenuManager browseCascade = new MenuManager("Browse", "Browse");
+		browseCascade.add(new BrowseProjectAction("Project", input));			
+		menu.add(browseCascade);
+	    }		
+    }
+    
+    private void loadBrowseActions(IMenuManager menu, DataElement input)
+    {
+	// add browse perspective action
+	menu.add(new Separator("Perspectives"));			
+	MenuManager browseCascade = new MenuManager("Browse", "Browse");			
+	
+	DataElement descriptor = input.getDescriptor();
+	ArrayList relationships = descriptor.getDataStore().getRelationItems(descriptor, null);
+	relationships = Sorter.sort(relationships);
+
+	for (int i = 0; i < relationships.size(); i++)
+	    {
+		DataElement des = (DataElement)relationships.get(i);
+		if (des.depth() > 0)
+		    {
+			browseCascade.add(new BrowseObjectAction(des, input, 
+								 "org.eclipse.cdt.cpp.ui.SuperDetailsViewPart"));
+		    }
 	    }
+	
+	menu.add(browseCascade);			
     }
  
     public String getImageString(DataElement object)

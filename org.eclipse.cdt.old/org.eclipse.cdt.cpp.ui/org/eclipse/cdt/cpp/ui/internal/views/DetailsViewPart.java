@@ -21,6 +21,19 @@ import org.eclipse.jface.viewers.*;
 
 import org.eclipse.ui.*;
 
+import org.eclipse.jface.window.*;
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.viewers.*;
+
+import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.graphics.*;
+
+import org.eclipse.search.ui.*;
+import org.eclipse.search.internal.ui.*;
+
+import org.eclipse.ui.*;
+import org.eclipse.ui.internal.*;
+
 public class DetailsViewPart extends ObjectsViewPart
 {
   public DetailsViewPart()
@@ -63,7 +76,11 @@ public class DetailsViewPart extends ObjectsViewPart
   {
     if (part != this && part instanceof ILinkable)
     {
-	if  (part.getSite().getPage() == getSite().getPage())
+	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();	
+	IWorkbenchPage persp= win.getActivePage();
+
+	if  (persp == getSite().getPage())
 	    {
 		((ILinkable)part).linkTo(this);	
 		setLinked(true);

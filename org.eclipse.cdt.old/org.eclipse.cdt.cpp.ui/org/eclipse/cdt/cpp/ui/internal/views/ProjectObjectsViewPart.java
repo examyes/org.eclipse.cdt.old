@@ -185,7 +185,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      	}
      	
      	doClear();
-	 	return null;
+	return null;
      }
      
      DataElement oldInput = _viewer.getInput();
@@ -198,23 +198,23 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	 }
      else
 	 {
-	 	 if (!_browseHistory.contains(theInput))
-	 	{
-	     _viewer.setInput(theInput);	
-	     _viewer.selectRelationship("contents");
-	     setTitle(theElement.getName() + " Project-Objects");   
-	     
-	 	      _browseHistory.clear();
-     		  _browseHistory.add(theInput);
-     	      _browsePosition = 0;
-     	      updateActionStates();
-	 	}
+	     if (!_browseHistory.contains(theInput))
+		 {
+		     _viewer.setInput(theInput);	
+		     _viewer.selectRelationship("contents");		     
+
+		     setTitle(theElement.getName() + " Project-Objects");   
+		     
+		     _browseHistory.clear();
+		     _browseHistory.add(theInput);
+		     _browsePosition = 0;
+		     updateActionStates();
+
+		 }
 	 }
-	 
-	 return theInput;
+     
+     return theInput;
  }
-
-
 }
 
 

@@ -150,9 +150,8 @@ public class ObjectsViewPart extends GenericViewPart
 	CppProjectNotifier notifier = _api.getProjectNotifier();
 	notifier.addProjectListener(this);
 	
-		initInput(null);
+	initInput(null);
         WorkbenchHelp.setHelp(_viewer.getViewer().getControl(), new ViewContextComputer(this, getF1HelpId()));
- 
     }
     
     public void initInput(DataStore dataStore)
