@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
-   id="org.eclipse.cdt.pa"
+   id="org.eclipse.cdt.pa.ui"
    name="%pluginName"
-   version="1.0.0"
+   version="2.0.0"
    provider-name="International Business Machines Corp."
    class="org.eclipse.cdt.pa.ui.PAPlugin">
 <requires>
