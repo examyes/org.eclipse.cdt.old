@@ -23,8 +23,8 @@
 
 using namespace std;
 
-imageheader::imageheader (const opd_header* header)
-  : _header (header)
+imageheader::imageheader (const samplefile* sfile)
+  : _sfile (sfile)
 {
 }
 
@@ -32,7 +32,7 @@ ostream&
 operator<< (ostream& os, const imageheader* ihdr)
 {
   return os << startt ("header")
-	    << startt ("cpu_type") << op_get_cpu_type_str (ihdr->get_cpu_type ()) << endt
+	    << startt ("cpu_type") << ihdr->get_cpu () << endt
 	    << startt ("count") << ihdr->get_count () << endt
             << startt ("event") << ihdr->get_event () << endt
 	    << startt ("unit-mask") << ihdr->get_unit_mask () << endt

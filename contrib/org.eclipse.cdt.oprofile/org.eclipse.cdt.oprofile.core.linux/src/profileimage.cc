@@ -70,7 +70,7 @@ profileimage::get_name (void) const
 long
 profileimage::get_count (void) const
 {
-  return _samplefile->get_count ();
+  return _samplefile->get_sample_count ();
 }
 
 profileimage::sampleslist_t
@@ -109,7 +109,7 @@ profileimage::get_header (void)
 	    }
 	}
 
-      _header = new imageheader (sfile->get_header ());
+      _header = new imageheader (sfile);
     }
 
   return _header;

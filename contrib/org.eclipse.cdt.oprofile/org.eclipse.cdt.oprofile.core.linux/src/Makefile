@@ -17,7 +17,7 @@ OPXML = 		opxml
 OPXML_OBJS =		opxml.o
 OPROFILE_LIB_OBJS =	stable.o oprofiledb.o symbol.o sample.o \
 			session.o samplefile.o imageheader.o opinfo.o \
-			xmlfmt.o xmlbuf.o xmltag.o util.o \
+			xmlfmt.o xmlbuf.o xmltag.o \
 			sevent.o profileimage.o
 
 
@@ -36,7 +36,7 @@ clean:
 opxml.o: oxmlstream.h opinfo.h session.h sample.h sevent.h opxml.cc
 
 imageheader.o: xmlfmt.h imageheader.h imageheader.cc
-imageheader.h:
+imageheader.h: samplefile.h
 
 opinfo.o: opinfo.h opinfo.cc
 opinfo.h: 
@@ -53,7 +53,7 @@ sample.o: xmlfmt.h sample.h sample.cc
 sample.h: symbol.h
 
 samplefile.o: sample.h stable.h xmlfmt.h samplefile.h samplefile.cc
-samplefile.h: oprofiledb.h util.h
+samplefile.h: oprofiledb.h
 
 session.o: sevent.h opinfo.h xmlfmt.h session.h session.cc
 session.h: samplefile.h
@@ -66,9 +66,6 @@ stable.h:
 
 symbol.o: xmlfmt.h symbol.h symbol.cc
 symbol.h: 
-
-util.o: util.h util.cc
-util.h: 
 
 xmlbuf.o: xmltag.h xmlbuf.h xmlbuf.cc
 xmlbuf.h: 

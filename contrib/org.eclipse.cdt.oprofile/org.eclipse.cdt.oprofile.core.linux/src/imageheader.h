@@ -20,35 +20,35 @@
 
 #ifndef _IMAGEHEADER_H
 #define _IMAGEHEADER_H
-#include <op_types.h>
-#include <op_cpu_type.h>
-#include <op_sample_file.h>
 #include <ostream>
+#include <string>
+
+#include "samplefile.h"
 
 class imageheader
 {
  public:
   // Constructor - pass in the oprofile header
-  imageheader (const opd_header* header);
+  imageheader (const samplefile* sfile);
 
   // Returns the cpu type
-  inline op_cpu get_cpu_type (void) const { return static_cast<op_cpu> (_header->cpu_type); };
+  inline std::string get_cpu (void) const { return _sfile->get_cpu (); };
 
   // Returns the event collected
-  inline u32 get_event (void) const { return _header->ctr_event; };
+  inline std::string get_event (void) const { return _sfile->get_event (); };
 
   // Returns the count
-  inline u32 get_count (void) const { return _header->ctr_count; };
+  inline std::string get_count (void) const { return _sfile->get_count (); };
 
   // Returns the unit mask used during collection
-  inline u32 get_unit_mask (void) const { return _header->ctr_um; };
+  inline std::string get_unit_mask (void) const { return _sfile->get_unit_mask (); };
 
   // Returns an approx cpu speed
-  inline double get_cpu_speed (void) const { return _header->cpu_speed; };
+  // FIXME: SUCK?
+  inline double get_cpu_speed (void) const { return 0.00; };
 
  private:
-  // The oprofile header
-  const opd_header* _header;
+  const samplefile* _sfile;
 };
 
 std::ostream& operator<< (std::ostream& os, const imageheader* ihdr);

@@ -34,7 +34,7 @@ class sessionevent
 {
  public:
   // Constructor -- pass in session and event name
-  sessionevent (const session* session, std::string& event);
+  sessionevent (const session* session, std::string event);
 
   // Desctructor
   ~sessionevent ();

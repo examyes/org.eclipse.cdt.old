@@ -25,9 +25,6 @@
 
 using namespace std;
 
-// Defined in op_cpufreq.h
-extern "C" double op_cpu_frequency (void);
-
 // Forward declaration
 static void __output_unit_mask_info (ostream& os, const opinfo::event_t* e);
 
@@ -59,13 +56,6 @@ opinfo::get_events (eventlist_t& list, int ctr) const
     }
 }
 
-// Returns cpu frequency
-double
-opinfo::get_cpu_frequency (void) const
-{
-  return op_cpu_frequency ();
-}
-
 // Checks whether the given CTR, EVENT, and MASK are valid
 opinfo::eventcheck
 opinfo::check (int ctr, int event, int mask) const
@@ -74,28 +64,6 @@ opinfo::check (int ctr, int event, int mask) const
     static_cast<eventcheck::result_t> (op_check_events (ctr, event, mask, _cpu_type));
   return eventcheck (result);
 }
-
-#if defined (OP_MIN_BUF_SIZE) && defined (OP_MAX_BUF_SIZE) && defined (OP_DEFAULT_BUF_SIZE)
-// Returns buffer size defaults
-void
-opinfo::get_buf_defaults (int& min, int& max, int& default)
-{
-  min = OP_MIN_BUF_SIZE;
-  max = OP_MAX_BUF_SIZE;
-  default = OP_DEFAULT_BUF_SIZE;
-}
-#endif
-
-#if defined (OP_MIN_NOTE_TABLE_SIZE) && defined (OP_MAX_NOTE_TABLE_SIZE) && defined (OP_DEFAULT_NOTE_TABLE_SIZE)
-// Returns note table size defaults
-void
-opinfo::get_note_defaults (int& min, int& max, int& default)
-{
-  min = OP_MIN_NOTE_TABLE_SIZE;
-  max = OP_MAX_NOTE_TABLE_SIZE;
-  default = OP_DEFAULT_NOTE_TABLE_SIZE;
-}
-#endif
 
 // Converts the given string into a corresponding op_cpu (CPU_NO_GOOD if invalid)
 op_cpu
@@ -118,36 +86,13 @@ operator<< (ostream& os, const opinfo& info)
   os << startt ("info");
 
   // Output out number of counters and defaults
-  os << startt ("num-counters")
-     << startt ("counters") << info.get_nr_counters () << endt
-     << endt
-     << startt ("cpu-frequency") << info.get_cpu_frequency () << endt
+  os << startt ("num-counters") << info.get_nr_counters () << endt
      << startt ("defaults")
      << startt ("sample-dir") << opinfo::get_default_samples_dir () << endt
      << startt ("lock-file") << opinfo::get_default_lock_file () << endt
      << startt ("log-file") << opinfo::get_default_log_file () << endt
-     << startt ("dump-status") << opinfo::get_default_dump_status () << endt;
-
-  // Output conditional defaults
-  int min, max, def;
-#if defined (OP_MIN_BUF_SIZE) && defined (OP_MAX_BUF_SIZE) && defined (OP_DEFAULT_BUF_SIZE)
-  opinfo::get_buf_defaults (min, max, def);
-  os << startt ("buffer-size")
-     << startt ("min") << min << endt
-     << startt ("max") << max << endt
-     << startt ("default") << def << endt
+     << startt ("dump-status") << opinfo::get_default_dump_status () << endt
      << endt;
-#endif
-
-#if defined (OP_MIN_NOTE_TABLE_SIZE) && defined (OP_MAX_NOTE_TABLE_SIZE) && defined (OP_DEFAULT_NOTE_TABLE_SIZE)
-  get_note_defaults (min, max, def);
-  os << startt ("note-size")
-     << startt ("min") << min << endt
-     << startt ("max") << max << endt
-     << startt ("default") << def << endt
-     << endt;  
-#endif
-  os << endt;
 
   // Output event list
   for (int ctr = 0; ctr < info.get_nr_counters (); ++ctr)

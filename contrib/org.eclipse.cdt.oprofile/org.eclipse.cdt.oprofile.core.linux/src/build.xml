@@ -24,7 +24,6 @@
 		sevent.cc
                 stable.cc
                 symbol.cc
-		util.cc
                 xmlbuf.cc
                 xmlfmt.cc
                 xmltag.cc" />

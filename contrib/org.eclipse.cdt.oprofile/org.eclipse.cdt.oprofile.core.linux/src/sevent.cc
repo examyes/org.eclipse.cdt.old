@@ -27,7 +27,7 @@
 
 using namespace std;
 
-sessionevent::sessionevent (const session* session, string& event)
+sessionevent::sessionevent (const session* session, string event)
   : _session (session), _event_name (event)
 {
   _files = new profileimages_t;
@@ -69,7 +69,7 @@ sessionevent::add_sample_file (samplefile* sfile)
 	  // This does happen!! We got no samples in a profileimage,
 	  // but we DID get samples in a dependency. Create a new
 	  // "fake" profileimage and add this as a dependency.
-	  profileimage* img = new profileimage (new samplefile (NULL));
+	  profileimage* img = new profileimage (new samplefile (""));
 	  img->add_dependency (new profileimage (sfile));
 	  _files->push_back (img);
 	}

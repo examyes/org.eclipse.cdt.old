@@ -89,7 +89,7 @@ sessionevent*
 session::get_event (string event_name)
 {
   list<string> filelist;
-  get_sample_file_list (filelist, get_base_directory ());
+  samplefile::get_sample_file_list (filelist, get_base_directory ());
 
   // Loop through all sample files, create & populate sessionevents
   // with sample file lists
@@ -98,17 +98,16 @@ session::get_event (string event_name)
   list<string>::iterator fit = filelist.begin ();
   for (; fit != filelist.end (); ++fit)
     {
-      parsed_filename* parsed = parse_filename (*fit);
-      if (parsed != NULL && parsed->event == event_name)
+      if (samplefile::event_for_filename (*fit) == event_name)
 	{
-	  samplefile* sfile = new samplefile (parsed);
+	  samplefile* sfile = new samplefile (*fit);
 	  if (!sfile->is_dependency ())
 	    {
 	      // main image
 	      if (the_sevent == NULL)
 		{
 		  // found the desired event -- create it
-		  the_sevent = new sessionevent (this, parsed->event); 
+		  the_sevent = new sessionevent (this, event_name); 
 		}
 
 	      // Add this sample file to the sessionevent
@@ -140,7 +139,7 @@ session::seventlist_t
 session::get_events ()
 {
   list<string> filelist;
-  get_sample_file_list (filelist, get_base_directory ());
+  samplefile::get_sample_file_list (filelist, get_base_directory ());
 
   // Loop through all sample files, create & populate sessionevents
   // with sample file lists
@@ -150,22 +149,21 @@ session::get_events ()
   list<string>::iterator fit = filelist.begin ();
   for (; fit != filelist.end (); ++fit)
     {
-      parsed_filename* parsed = parse_filename (*fit);
-      if (parsed != NULL && !parsed->event.empty ())
+      if (samplefile::event_for_filename (*fit) != "")
 	{
-	  samplefile* sfile = new samplefile (parsed);
+	  samplefile* sfile = new samplefile (*fit);
 	  if (!sfile->is_dependency ())
 	    {
 	      // main image
 	      map<string, sessionevent*>::iterator item;
-	      item = emap.find (parsed->event);
+	      item = emap.find (sfile->get_event ());
 	      if (item == emap.end ())
 		{
 		  // new event -- create sessionevent
-		  sessionevent* se = new sessionevent (this, parsed->event); 
+		  sessionevent* se = new sessionevent (this, sfile->get_event ()); 
 
 		  // Save this sessionevent in the event map
-		  emap.insert (make_pair<string, sessionevent*> (parsed->event, se));
+		  emap.insert (make_pair<string, sessionevent*> (sfile->get_event (), se));
 
 		  // Add this sample file to the list
 		  se->add_sample_file (sfile);

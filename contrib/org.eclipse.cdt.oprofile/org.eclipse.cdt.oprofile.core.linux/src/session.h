@@ -22,7 +22,6 @@
 #define _SESSION_H
 #include <string>
 #include <list>
-#include <op_cpu_type.h>
 
 #include "samplefile.h"
 

@@ -59,16 +59,6 @@ class opinfo
     result_t _ec;
   };
 
-#if defined (OP_MIN_BUF_SIZE) && defined (OP_MAX_BUF_SIZE) && defined (OP_DEFAULT_BUF_SIZE)
-  // Get the buffer size defaults
-  static void get_buf_defaults (int& min, int& max, int& default);
-#endif
-
-#if defined (OP_MIN_NOTE_TABLE_SIZE) && defined (OP_MAX_NOTE_TABLE_SIZE) && defined (OP_DEFAULT_NOTE_TABLE_SIZE)
-  // Get the note table defaults
-  static void get_note_defaults (int& min, int& max, int& default);
-#endif
-
   // Get the default sample directory
   inline static const char* get_default_samples_dir (void) { return OP_SAMPLES_DIR; };
 
@@ -92,9 +82,6 @@ class opinfo
 
   // Returns a list of valid events for the given counter on this cpu type
   void get_events (eventlist_t& list, int ctr) const;
-
-  // Returns the CPU frequency in MHz
-  double get_cpu_frequency (void) const;
 
   // Returns the samples directory in use
   inline const std::string& get_samples_directory (void) const { return _dir; };

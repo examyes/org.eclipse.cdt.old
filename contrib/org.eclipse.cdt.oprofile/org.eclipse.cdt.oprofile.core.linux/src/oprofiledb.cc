@@ -159,14 +159,3 @@ oprofile_db::_get_count_callback (odb_key_t key, odb_value_t info, void* data)
   *count += info;
 }
 
-const struct opd_header*
-oprofile_db::get_header (void)
-{
-  _open_db ();
-  struct opd_header* header = static_cast<struct opd_header*> (_tree->base_memory);
-
-  // We can't do this, but fortunately, it doesn't matter. Opxml
-  // immediately destroys it. If this ever changes, we must make a copy!
-  //_close_db ();
-  return header;
-}

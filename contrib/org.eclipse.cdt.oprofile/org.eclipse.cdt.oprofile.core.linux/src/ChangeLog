@@ -1,3 +1,81 @@
+2005-02-04  Keith Seitz  <keiths@redhat.com>
+
+	* Makefile: Update dependencies and remove util.h and util.cc.
+	* build.xml: Remove util.cc from build objects.
+	* utl.h: Remove.
+	* util.cc: Remove.
+	* imageheader.h (imageheader): Take samplefile* parameter for constructor.
+	(get_cpu_type): Rename to ...
+	(get_cpu): ... this. Returns a string instead of OProfile's internal type.
+	(get_event): Return string instead of u32.
+	(get_count): Likewise.
+	(get_unit_mask): Likewise.
+	(get_cpu_speed): Remove dependency on OProfile internal data. For now,
+	always returns zero until we can get a safer way to obtain this information.
+	(_header): Remove variable.
+	(_sfile): New variable.
+	* imageheader.cc (imageheader): Now takes samplefile* as parameter.
+	(operator<<): Use imageheader::get_cpu.
+	* opinfo.h: Remove "optional" configury for older versions of OProfile. That
+	dream is gone.
+	(get_cpu_frequency): Remove. This would never make sense if we could do this
+	analyze files from a remote system.
+	* opinfo.cc: Remove "optional" configury, too.
+	(get_cpu_frequency): Likewise.
+	(operation<<): Make num-counters a single line. Now matches spec.
+	Don't output old defaults or frequency.
+	* oprofiledb.h (get_header): Remove.
+	* oprofiledb.cc (get_header): Likewise.
+	* profileimage.cc (get_count): Return samplefile::get_sample_count instead
+	of get_count, which has been hijacked for another use.
+	(get_header): Pass samplefile to imageheader.
+	* samplefile.h (samplefile): Constructor now takes string filename.
+	(has_samplefile): Get rid of _parsed_filename.
+	(is_dependency): Likewise.
+	(get_sample_count): "New" method.
+	(get_sample_file_name): Get rid of _parsed_filename.
+	(get_image): Likewise.
+	(get_lib_image): Likewise.
+	(get_name): Likewise.
+	(get_event): Likewise.
+	(get_count): HIJACKED! Returns the reset count used in the file. Use get_sample_count
+	for previous behavior.
+	(get_unit_mask): New method.
+	(get_tgid): Likewise.
+	(get_tid): Likewise.
+	(get_cpu): Likewise.
+	(get_callgraph): Likewise.
+	(get_header): Remove.
+	(get_sample_file_list): "New" static method. Used to be in util.cc.
+	(event_for_filename): New static method.
+	(_tokenize): New private method.
+	(_get_info_from_filename): New private method.
+	(_parsed_filename): Bye bye.
+	(_filename, _image, _lib_image, _event, _count, _unit_mask, _tgid, _tid,
+	_cpu, _callgraph): New variables.
+	* samplefile.cc (samplefile): Now takes filename as parameter.
+	Call _get_info_from_filename to initialize state.
+	(_get_info_from_filename): New method.
+	(event_for_filename): New method.
+	(is_dependency): Move to header.
+	(get_image): Ditto.
+	(get_lib_image): Ditto.
+	(get_name): Ditto.
+	(get_count): Ditto -- and rename get_sample_count.
+	(get_event): Ditto the move part.
+	(get_header): Remove.
+	(~samplefile): Whack all the _parsed_filename stuff.
+	(get_sample_file_list): Make it part of this class and public.
+	* session.h: Remove op_cpu_type.h.
+	* session.cc (get_event): No more parsed_filename. Use samplefile::event_for_filename
+	and pass the filename to samplefile.
+	(get_events): Likewise.
+	* sevent.h (sessionevent): Don't pass event name as reference.
+	* sevent.cc (sessionevent): Likewise.
+	Pass empty string to profileimage instead of NULL for "fake" images.
+	* util.h: Remove.
+	* util.cc: Likewise.
+
 2005-01-26  Keith Seitz  <keiths@redhat.com>
 
 	* stable.cc (_open_bfd): Get rid of BFD for ELF file inspection.

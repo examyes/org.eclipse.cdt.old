@@ -65,9 +65,6 @@ class oprofile_db
   // Get the total number of samples in this samplefile
   long get_count (void);
 
-  // Retrieves the oprofile header of this sample file.
-  const struct opd_header* get_header (void);
-
   // Walks the samples with the given callback
   void walk_samples (callback_t callback, void* data);
 
