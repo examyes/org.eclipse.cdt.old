@@ -423,8 +423,49 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
       }
       return result;
 */
+	}
+
+   /**
+    * Expand a variable monitor's subtree
+    * @param exprID the expression ID of the monitor to expand
+    * @param rootNodeID the root node ID to expand
+    * @param startChild the start child of the subtree
+    * @param endChild the end child of the subtree
+    */
+   public void expandSubTree(int exprID, int rootNodeID, int startChild, int endChild)
+   {
+      GdbVariableMonitor monitor = (GdbVariableMonitor) _monitors.get(new Integer(exprID));
+
+      if (monitor != null)
+      {
+         monitor.expandSubTree(rootNodeID, startChild, endChild);
+         // update the variable monitor
+         monitor.updateVariable();
+         if (!_changedMonitors.contains(monitor))
+            _changedMonitors.addElement(monitor);
+      }
+   }
+   
+      /**
+    * Collapse a variable monitor's subtree
+    * @param exprID the expression ID of the monitor to collapse
+    * @param rootNodeID the root node ID to collapse
+    * @param startChild the start child of the subtree
+    * @param endChild the end child of the subtree
+    */
+   public void collapseSubTree(int exprID, int rootNodeID, int startChild, int endChild)
+   {
+      GdbVariableMonitor monitor = (GdbVariableMonitor) _monitors.get(new Integer(exprID));
+
+      if (monitor != null)
+      {
+         monitor.collapseSubTree(rootNodeID, startChild, endChild);
+         // update the variable monitor
+         monitor.updateVariable();
+         if (!_changedMonitors.contains(monitor))
+            _changedMonitors.addElement(monitor);
+      }
    }
 
-
- }
+}
 

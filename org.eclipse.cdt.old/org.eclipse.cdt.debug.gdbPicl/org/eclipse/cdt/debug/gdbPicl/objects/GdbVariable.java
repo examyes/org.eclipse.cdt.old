@@ -31,7 +31,14 @@ public abstract class GdbVariable  extends Variable
     */
    public static GdbVariable createVariable(DebugSession debugSession, String varName, String type, String value, int nodeID) 
    {
-         return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
+   		if (value.indexOf("= {") != -1)
+   		{		
+	         return new GdbObjectVariable(debugSession, varName, type, value, nodeID);
+   		}
+   		else
+   		{
+	         return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
+   		}
    }
 
    /**

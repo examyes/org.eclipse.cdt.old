@@ -148,14 +148,14 @@ abstract class Gdb_VariableMonitor
    /**
     * Expand the subtree of this variable monitor
     */
-   void expandSubTree(int rootNodeID, int startChild, int endChild) {
+   public void expandSubTree(int rootNodeID, int startChild, int endChild) {
       _monitoredVar.expandSubTree(rootNodeID, startChild, endChild);
    }
 
    /**
     * Expand the subtree of this variable monitor
     */
-   void collapseSubTree(int rootNodeID, int startChild, int endChild) {
+   public void collapseSubTree(int rootNodeID, int startChild, int endChild) {
       _monitoredVar.collapseSubTree(rootNodeID, startChild, endChild);
    }
 
