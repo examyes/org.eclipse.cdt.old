@@ -37,8 +37,14 @@ public class DictionaryMiner extends Miner
 		while ((line = in.readLine()) != null)
 		    {
 			char firstChar = line.charAt(0);
-			DataElement parent = _dataStore.find(dictionaryRoot, DE.A_NAME, new String("" + firstChar), 1);
-			_dataStore.createObject(parent, "word", line);
+			DataElement parent = _dataStore.find(dictionaryRoot, DE.A_NAME, 
+							     new String("" + Character.toLowerCase(firstChar)), 1);				
+			String type = "word";
+			if (!Character.isLowerCase(firstChar))
+			    {
+				type = "name";
+			    }
+			_dataStore.createObject(parent, type, line);
 		    }
 		
 		inFile.close();
@@ -51,13 +57,16 @@ public class DictionaryMiner extends Miner
 
    public void extendSchema(DataElement schemaRoot)
     {
-	DataElement dictionary = createObjectDescriptor(schemaRoot, "dictionary");
-	DataElement category = createObjectDescriptor(schemaRoot, "category");
-	DataElement word = createObjectDescriptor(schemaRoot, "word");
+	DataElement dictionary = createObjectDescriptor(schemaRoot, "dictionary", "com.ibm.dstore.miners");
+	DataElement category = createObjectDescriptor(schemaRoot, "category", "com.ibm.dstore.miners");
+	DataElement word = createObjectDescriptor(schemaRoot, "word", "com.ibm.dstore.miners");
+	DataElement name = createObjectDescriptor(schemaRoot, "name", "com.ibm.dstore.miners");
 
 	_dataStore.createReference(dictionary, category);
 	_dataStore.createReference(dictionary, word);
+	_dataStore.createReference(dictionary, name);
 	_dataStore.createReference(category, word);
+	_dataStore.createReference(category, name);
 
 	DataElement cmd = createCommandDescriptor(dictionary, "Search Dictionary", "C_SEARCH_DICTIONARY");
 	
@@ -117,7 +126,9 @@ public class DictionaryMiner extends Miner
 	      {
 		  DataElement child = dictionary.get(i);
 		  
-		  if (!child.isReference() && matcher.matches(child.getName(), pattern)) 
+		  if (!child.isReference() && 
+		      (child.getType().equals("word") || child.getType().equals("name")) && 
+		      matcher.matches(child.getName(), pattern)) 
 		      {
 			  _dataStore.createReference(status, child, "contents");
 		      }

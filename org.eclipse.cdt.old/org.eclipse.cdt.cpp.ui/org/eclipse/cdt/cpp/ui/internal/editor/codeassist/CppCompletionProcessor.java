@@ -111,64 +111,82 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			
 			args.add(patternLoc);
 			
-			DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);		
-
+			DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);	   
 			ArrayList results = status.getNestedData();
-			result= new ICompletionProposal[results.size()];
-			for (int i = 0; i < results.size(); i++)
+
+			if (results.size() == 0)
 			    {
-   				DataElement found = (DataElement)results.get(i);
-   				String text     = (String)found.getElementProperty(DE.P_VALUE);
-   				String imageStr = com.ibm.dstore.ui.widgets.DataElementLabelProvider.getImageString(found);
-   				Image image     = _plugin.getImage(imageStr);
+				DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
+				DataElement root = dictionaryData.get(0);
+				DataElement pattern = dataStore.createObject(null, "pattern", currentString + ".*");
+				DataElement search = dataStore.localDescriptorQuery(
+										    root.getDescriptor(),
+										    "C_SEARCH_DICTIONARY", 1);
+				if (search != null)
+				    {	
+					ArrayList sargs = new ArrayList();
+					sargs.add(pattern);
+					status = dataStore.synchronizedCommand(search, sargs, root);
+					results = status.getNestedData();
+				    }
+			    }
+			
+			if (results.size() > 0)
+			    {
+				result= new ICompletionProposal[results.size()];
+				for (int i = 0; i < results.size(); i++)
+				    {
+					DataElement found = ((DataElement)results.get(i)).dereference();
+					String text     = (String)found.getElementProperty(DE.P_VALUE);
+					String imageStr = com.ibm.dstore.ui.widgets.DataElementLabelProvider.getImageString(found);
+					Image image     = _plugin.getImage(imageStr);
 
-               int len = currentString.length();
-
-               if (text.regionMatches(0, currentString, 0, len))
-               {
-        		result[i] = new CompletionProposal(text,               // replacement string
-        						   -len,               // replacement offset
-         						   text.length(),      // replacement length
-         						   0,                  // cursor position
-         						   image,
-         						   null, null, null);
-               }
-               else
-               {
-                  int lastDotIndex = currentString.lastIndexOf(".");
-                  int lastPointerIndex = currentString.lastIndexOf("->");
-                  int lastIndex = 0;
-
-                  if (lastDotIndex == -1 && lastPointerIndex == -1)
-                      lastIndex = -1;
-                  else
-                      lastIndex = Math.max(lastDotIndex, lastPointerIndex);
-
-                  if (lastIndex == -1 || (lastIndex == len-1))
-                  {
-          				result[i] = new CompletionProposal(text,              // replacement string
-          								   0,                 // replacement offset
-    	      							           text.length(),     // replacement length
-      		      						           0,                 // cursor position
-                        						   image,
-   				      				           null, null, null);
-                  }
-                  else
-                  {
-                     lastIndex++;
-                     String after = currentString.substring(lastIndex);
-            			result[i] = new CompletionProposal(text,
-            							   -after.length(),
-            							   text.length(),
-                                                                   0,
-         	   						   image,
-         		   					   null, null, null);
-                  }
-
-
-               }
-	    }
-	  }
+					int len = currentString.length();
+					
+					if (text.regionMatches(0, currentString, 0, len))
+					    {
+						result[i] = new CompletionProposal(text,               // replacement string
+										   -len,               // replacement offset
+										   text.length(),      // replacement length
+										   0,                  // cursor position
+										   image,
+										   null, null, null);
+					    }
+					else
+					    {
+						int lastDotIndex = currentString.lastIndexOf(".");
+						int lastPointerIndex = currentString.lastIndexOf("->");
+						int lastIndex = 0;
+						
+						if (lastDotIndex == -1 && lastPointerIndex == -1)
+						    lastIndex = -1;
+						else
+						    lastIndex = Math.max(lastDotIndex, lastPointerIndex);
+						
+						if (lastIndex == -1 || (lastIndex == len-1))
+						    {
+							result[i] = new CompletionProposal(text,              // replacement string
+											   0,                 // replacement offset
+											   text.length(),     // replacement length
+											   0,                 // cursor position
+											   image,
+											   null, null, null);
+						    }
+						else
+						    {
+							lastIndex++;
+							String after = currentString.substring(lastIndex);
+							result[i] = new CompletionProposal(text,
+											   -after.length(),
+											   text.length(),
+											   0,
+											   image,
+											   null, null, null);
+						    }
+					    }					
+				    }
+			    }
+		    }
 	}
         return result;
       }
