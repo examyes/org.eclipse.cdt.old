@@ -317,31 +317,17 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 		String workingDirectory = "";
 		try
       {
-	 executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-         if (executableName.length() == 0)
-         {
-            if (_executable != null)
-              _programNameField.setText(_executable.getSource());
-            else
-               return;
-         }
-         else
+       	executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+         if (executableName.length() != 0)
          {
       		_programNameField.setText(executableName);		
          }
 
 			workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
-         if (workingDirectory.length() == 0)
-         {
-            if (_directory != null)
-               _workingDirectoryField.setText(_directory.getSource());
-         }
-         else
+         if (workingDirectory.length() != 0)
          {
       		_workingDirectoryField.setText(workingDirectory);		
          }
-
-
 		}
       catch (CoreException ce)
       {			
