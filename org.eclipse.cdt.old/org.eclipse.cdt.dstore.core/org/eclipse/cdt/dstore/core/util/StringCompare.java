@@ -40,13 +40,12 @@ public class StringCompare
 	char p = pattern.charAt(iPattern++);
 	if (p == '*')
 	  {
-	    currentMatch = new String("");
 	    
 	    if (iPattern >= patternLen)
 	      {
 		while (iText < len)
 		  {		    
-		    currentMatch += compareStr.charAt(iText++);
+		      iText++;
 		  }
 		return true;		
 	      }
@@ -79,7 +78,6 @@ public class StringCompare
 		  }
 		else
 		  {
-		    currentMatch += t;		
 		    if (lastStar == 0)
 		      {
 			return false;			
