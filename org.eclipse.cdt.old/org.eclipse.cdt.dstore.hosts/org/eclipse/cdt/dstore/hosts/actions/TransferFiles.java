@@ -243,21 +243,24 @@ public class TransferFiles extends Thread
 
     private void setDate(DataElement fileElement, long newDate)
     {
-	ArrayList timeArray = fileElement.getAssociated("modified at");
-	if (timeArray.size() > 0)
+	if (fileElement != null)
 	    {
-		DataElement dateObj = (DataElement)timeArray.get(0); 
-		dateObj.setAttribute(DE.A_NAME, "" + newDate);
-	    }
-	
-	DataStore dataStore = fileElement.getDataStore();
-	DataElement dateDescriptor = dataStore.localDescriptorQuery(fileElement.getDescriptor(), 
-								    "C_SET_DATE");
-	if (dateDescriptor != null)
-	    {
-		ArrayList args = new ArrayList();
-		args.add(dataStore.createObject(null, "date", "" + newDate));
-		dataStore.command(dateDescriptor, args, fileElement);
+		ArrayList timeArray = fileElement.getAssociated("modified at");
+		if (timeArray.size() > 0)
+		    {
+			DataElement dateObj = (DataElement)timeArray.get(0); 
+			dateObj.setAttribute(DE.A_NAME, "" + newDate);
+		    }
+		
+		DataStore dataStore = fileElement.getDataStore();
+		DataElement dateDescriptor = dataStore.localDescriptorQuery(fileElement.getDescriptor(), 
+									    "C_SET_DATE");
+		if (dateDescriptor != null)
+		    {
+			ArrayList args = new ArrayList();
+			args.add(dataStore.createObject(null, "date", "" + newDate));
+			dataStore.command(dateDescriptor, args, fileElement);
+		    }
 	    }
     }
 }

@@ -181,6 +181,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 	      try
 		  {	
 		      java.io.File theFile = new java.io.File(localPath);    
+		      System.out.println("saving "+ theFile);
 		      FileOutputStream output = new FileOutputStream(theFile);
 		      transferStreams(in, output, monitor);
 		      updateRemoteFile(theFile);
@@ -205,10 +206,11 @@ public class FileResourceElement extends ResourceElement implements IFile
   private void updateRemoteFile(java.io.File theFile)
       {
         // now update remote file
-        String localPath = getFullPath().toOSString();
+        String localPath = getFullPath().toString();
+        localPath = localPath.replace('\\', '/');
         String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
         remotePath = remotePath.replace('\\', '/');
-        
+
         if (!remotePath.equals(localPath))
 	{		  
 	  _element.getDataStore().replaceFile(remotePath, theFile);

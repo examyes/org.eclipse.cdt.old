@@ -126,7 +126,6 @@ class CommandMinerThread extends MinerThread
 	    
 	    if (line != null)
 		{
-		    //		    line.trim();
 		    if (_qualifier != null)
 			{
 			    line = _qualifier + ": " + line;
@@ -170,7 +169,6 @@ class CommandMinerThread extends MinerThread
 			}
 		    catch (IOException e)
 			{
-			    e.printStackTrace();
 			    return null;
 			}
 		}
