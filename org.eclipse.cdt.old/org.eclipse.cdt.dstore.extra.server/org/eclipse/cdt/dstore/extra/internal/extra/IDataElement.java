@@ -11,6 +11,7 @@ import java.util.*;
 public interface IDataElement extends IElement
 {
     String getName();
+    String getType();
     String getId();
     ArrayList getNestedData();
     int getNestedSize();
