@@ -14,7 +14,7 @@ import java.util.*;
 public class PropertySource implements IPropertySource
 {
   private IDataElement   _dataElement;
-  private static ArrayList _descriptors;
+  private ArrayList      _descriptors;
   
   public PropertySource(IDataElement element)
   {
@@ -24,7 +24,7 @@ public class PropertySource implements IPropertySource
     _descriptors.add(new TextPropertyDescriptor("type", "type"));
     _descriptors.add(new TextPropertyDescriptor("name", "name"));
 
-
+    
     IDataElement descriptor = (IDataElement)element.getElementProperty("descriptor");
     ArrayList attributes = descriptor.getAssociated("attributes");
     for (int i = 0; i < attributes.size(); i++)
