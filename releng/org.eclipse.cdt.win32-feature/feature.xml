@@ -6,7 +6,6 @@
       provider-name="%providerName"
       os="win32"
       ws="win32"
-      nl="en_US"
       arch="x86"
       image="eclipse_update_120.jpg">
 

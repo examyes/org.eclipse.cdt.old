@@ -6,7 +6,6 @@
       provider-name="%providerName"
       os="solaris"
       ws="motif"
-      nl="en_US"
       arch="sparc"
       image="eclipse_update_120.jpg">
 
