@@ -30,8 +30,15 @@ import org.eclipse.ui.dialogs.*;
 public class AutoconfSettingsPropertyPage extends PropertyPage implements SelectionListener
 {	
 	private AutoconfPropertyPageControl _autoconfControl;
-	String configureDialogKey = "Show_Configure_Dialog";
 	String globalSettingKey = "Is_Global_Setting_Enabled";
+	// items in the project property page
+	String configureDialogKey = "Show_Configure_Dialog"; // done
+	String updateAllDialogKey = "Show_Update_All_Dialog";
+	String updateMakefileAmKey = "Show_Update_MakefileAm_Dialog";
+	String updateConfigureInKey = "Show_Update_ConfigureIn_Dialog";
+	String createDialogKey = "Show_Create_Dialog";
+	String runDialogKey = "Show_Run_Dialg";
+
 	IProject project;
 
 	public AutoconfSettingsPropertyPage()
@@ -85,26 +92,88 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 		// check its value - if yes then use the global settings
 		else
 		{
-			ArrayList showDialogConfigure;
+			ArrayList propertyList;
 			if(globalSettingsKeyProp.get(0).equals("Yes"))
 			{
-				// get the configure settings from the global setup and apply it
-				showDialogConfigure = plugin.readProperty(configureDialogKey);
 				_autoconfControl.setGlobalSettingsSelection(true);
 				_autoconfControl.enableLocalActions(false);
+				
+				// get the configure settings from the global setup and apply it
+				propertyList = plugin.readProperty(configureDialogKey);
 				// apply Global Settings
 				// 1 - configure dialog
-				applySettings(showDialogConfigure);
+				applyConfigureDialogSettings(propertyList);
+				
+				// get the create configure settings from the global setup and apply it
+				propertyList = plugin.readProperty(createDialogKey);
+				// apply Global Settings
+				// 2 - create configure dialog
+				applyCreateConfigureDialogSettings(propertyList);				
+				
+				// get the run configure settings from the global setup and apply it
+				propertyList = plugin.readProperty(runDialogKey);
+				// apply Global Settings
+				// 3 - run configure dialog
+				applyRunConfigureDialogSettings(propertyList);			
+				
+				// get the update all settings from the global setup and apply it
+				propertyList = plugin.readProperty(updateAllDialogKey);
+				// apply Global Settings
+				// 4 - update all dialog
+				applyUpdateAllDialogSettings(propertyList);			
+				
+				// get the update configure.in settings from the global setup and apply it
+				propertyList = plugin.readProperty(updateConfigureInKey);
+				// apply Global Settings
+				// 5 - update configure.in dialog
+				applyUpdateConfigureInDialogSettings(propertyList);			
+				
+				// get update Makefile.am settings from the global setup and apply it
+				propertyList = plugin.readProperty(updateMakefileAmKey);
+				// apply Global Settings
+				// 6 - update Makefile.am dialog
+				applyUpdateMakefileAmDialogSettings(propertyList);			
+				
 			}
 			else // if no then use local settings
 			{
-				showDialogConfigure = plugin.readProperty(project,configureDialogKey);
 				_autoconfControl.setGlobalSettingsSelection(false); 
 				_autoconfControl.enableLocalActions(true);
+
+				propertyList = plugin.readProperty(project,configureDialogKey);
 				// apply local Settings
 				// 1 - configure dialog
-				applySettings(showDialogConfigure);
+				applyConfigureDialogSettings(propertyList);
 				
+				// get the create configure settings from the global setup and apply it
+				propertyList = plugin.readProperty(project,createDialogKey);
+				// apply Global Settings
+				// 2 - create configure dialog
+				applyCreateConfigureDialogSettings(propertyList);				
+				
+				// get the run configure settings from the global setup and apply it
+				propertyList = plugin.readProperty(project,runDialogKey);
+				// apply Global Settings
+				// 3 - run configure dialog
+				applyRunConfigureDialogSettings(propertyList);			
+				
+				// get the update all settings from the global setup and apply it
+				propertyList = plugin.readProperty(project,updateAllDialogKey);
+				// apply Global Settings
+				// 4 - update all dialog
+				applyUpdateAllDialogSettings(propertyList);			
+				
+				// get the update configure.in settings from the global setup and apply it
+				propertyList = plugin.readProperty(project,updateConfigureInKey);
+				// apply Global Settings
+				// 5 - update configure.in dialog
+				applyUpdateConfigureInDialogSettings(propertyList);			
+				
+				// get update Makefile.am settings from the global setup and apply it
+				propertyList = plugin.readProperty(project,updateMakefileAmKey);
+				// apply Global Settings
+				// 6 - update Makefile.am dialog
+				applyUpdateMakefileAmDialogSettings(propertyList);			
 			}
 		}
 		
@@ -194,7 +263,7 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 	{
 		return (IProject)getElement();
 	}
-    public void applySettings(ArrayList list)
+    public void applyConfigureDialogSettings(ArrayList list)
     {
     	CppPlugin plugin      = CppPlugin.getDefault();
     	// begin  - checking configure diaolg set up
@@ -218,6 +287,132 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 		}
 		// end configure dialog setup
     }
+    public void applyCreateConfigureDialogSettings(ArrayList list)
+    {
+    	CppPlugin plugin      = CppPlugin.getDefault();
+    	// begin  - checking configure diaolg set up
+		if (list.isEmpty())
+		{
+			list.add("Yes");
+			_autoconfControl.setShowCreateDialogSelection(true);
+			plugin.writeProperty(project,createDialogKey,list);
+		}
+		else
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setShowCreateDialogSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setShowCreateDialogSelection(false);
+			}
+		}
+		// end configure dialog setup
+    }
+    
+    
+    public void applyRunConfigureDialogSettings(ArrayList list)
+    {
+    	CppPlugin plugin      = CppPlugin.getDefault();
+    	// begin  - checking configure diaolg set up
+		if (list.isEmpty())
+		{
+			list.add("Yes");
+			_autoconfControl.setShowRunDialogSelection(true);
+			plugin.writeProperty(project,runDialogKey,list);
+		}
+		else
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setShowRunDialogSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setShowRunDialogSelection(false);
+			}
+		}
+		// end configure dialog setup
+    }  
+    
+    public void applyUpdateAllDialogSettings(ArrayList list)
+    {
+    	CppPlugin plugin      = CppPlugin.getDefault();
+    	// begin  - checking configure diaolg set up
+		if (list.isEmpty())
+		{
+			list.add("Yes");
+			_autoconfControl.setUpdateAllButtonSelection(true);
+			plugin.writeProperty(project,updateAllDialogKey,list);
+		}
+		else
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setUpdateAllButtonSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setUpdateAllButtonSelection(false);
+			}
+		}
+		// end configure dialog setup
+    }   
+    
+    public void applyUpdateConfigureInDialogSettings(ArrayList list)
+    {
+    	CppPlugin plugin      = CppPlugin.getDefault();
+    	// begin  - checking configure diaolg set up
+		if (list.isEmpty())
+		{
+			list.add("Yes");
+			_autoconfControl.setUpdateConfigureInButtonSelection(true);
+			plugin.writeProperty(project,updateConfigureInKey,list);
+		}
+		else
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setUpdateConfigureInButtonSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setUpdateConfigureInButtonSelection(false);
+			}
+		}
+		// end configure dialog setup
+    }   
+    
+     public void applyUpdateMakefileAmDialogSettings(ArrayList list)
+    {
+    	CppPlugin plugin      = CppPlugin.getDefault();
+    	// begin  - checking configure diaolg set up
+		if (list.isEmpty())
+		{
+			list.add("Yes");
+			_autoconfControl.setUpdateMakefileAmButtonSelection(true);
+			plugin.writeProperty(project,updateMakefileAmKey,list);
+		}
+		else
+		{
+			String preference = (String)list.get(0);
+			if (preference.equals("Yes"))
+			{
+				_autoconfControl.setUpdateMakefileAmButtonSelection(true);
+			}
+			else
+			{
+				_autoconfControl.setUpdateMakefileAmButtonSelection(false);
+			}
+		}
+		// end configure dialog setup
+    }      
+    
 	public void widgetDefaultSelected(SelectionEvent e)
     {
 		widgetSelected(e);
