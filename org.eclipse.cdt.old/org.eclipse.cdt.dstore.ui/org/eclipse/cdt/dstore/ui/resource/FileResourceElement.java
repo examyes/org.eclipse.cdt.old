@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 public class FileResourceElement extends ResourceElement implements IFile				     
 {  
     private java.io.File _mountedFile = null;
+    private java.io.File _currentFile = null;
 
   public FileResourceElement (DataElement e, IProject project)
   {
@@ -300,6 +301,11 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
   {
     InputStream result = null;
     java.io.File fileObject = _mountedFile;
+    if (fileObject == null)
+	{
+	    // **** DKM - we should check timestamps here to decide whether to redownload the file
+	    fileObject = _currentFile;
+	}
 
     try
     {
@@ -308,6 +314,7 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 		fileObject = _element.getFileObject();
 		if (fileObject != null)
 		    {
+			_currentFile = fileObject;
 			String fileName = fileObject.getAbsolutePath();
 			
 			if (!_path.toString().equals(fileName))
