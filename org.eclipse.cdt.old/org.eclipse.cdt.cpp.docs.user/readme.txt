@@ -1,4 +1,4 @@
-Stable Build - Friday Feb 8, 2002 - for eclipse R2
+Stable Build - Monday Apr 8, 2002 - for eclipse R2 (20020321 driver)
 
 This document is intended to point out issues or problems with the current
 release of the product.(You may also want to see the accompanying "todo.txt")
@@ -6,34 +6,28 @@ release of the product.(You may also want to see the accompanying "todo.txt")
 This list is not complete, please refer to the CDT Bugzilla database 
 at http://bugs.eclipse.org for a comprehensive and up-to-date list of known defects.
 
+
 Debugger issues
 ---------------
 
-1. When terminating a debugee a hang may occur and your metadata may become
-   corrupt requiring workspace/.metadata to be removed.  As a workaround Run 
-   the debuggee to completion instead of terminating.
-2. When stepping into a function into a dll for which debug information is 
-   available, debug engine is not able to locate the source for the function.
-   Build path information is not preserved correctly in the engine.  
-   For detailed information about this problem, please refer to Bug 9253.
-3. When attempting to step a program too quickly, user may receive the 
-   following error message:
-      Exceptions occurred attempting to step over the frame.
-      Reason:
-        Step over failed.
-   This message can be ignored.
-4. Disassembly view and mixed view are unstable at the moment.  
-5. User may get the following error message upon terminate and remove even 
-   though the debug session is terminated successfully:
-      Exceptions occurred attempting to terminate and remove.
-      Reason:
-        Terminate and remove failed.
-6. When trying to attach an existing process, the following error message may 
-   be shown, even though the debug engine has been started successfully:
-       Client startup failed (missing gdb, org.eclipse.cdt.debug.gdbPicl/gdb script 
-       not executable, gdb command failed, etc.)
-   This error message can be safely ignored.
-For other debugger issues, see the accompanying "todo.txt"
+1. When starting debug session make sure that an executable is selected.  Then, click on the
+   right-side of the Debug toolbar button and select "Start C/C++ Application". A debug 
+   session will only be started properly if an executable is selected.
+2. There are major problems with the Disassembly View and Mixed View, that will be addressed
+   in the next driver.
+3. When stepping into source that is not in your project, the Source View may not be updated
+   properly or at all.
+4. Scrolling down the Storage Monitor View may cause the following exception:
+	An internal error has occurred.
+	String index out of range:  ####
+	See error log for more details.
+	Exit Workspace?
+   Although you cannot continue scrolling in the Storage View, other views should still 
+   function properly.  You do not have to exit the workspace to continue.
+5. Currently, breakpoints cannot be added by double clicking the left-hand column of the 
+   Editor View. To add a breakpoint from the Editor View, right mouse click and select 
+   "Add/Remove Breakpoint".
+6. When performing "Jump To Location" the program may not jump to the correct location.
 
 Project Issues (Local and Remote)
 ---------------------------------
@@ -160,9 +154,6 @@ Platform issues
    - With remote Linux projects, Windows Eclipse should support most features.
 
 
-
-
-
 Project Management Issues - autoconf and automake
 -------------------------------------------------
 
@@ -185,5 +176,3 @@ Project Management Issues - autoconf and automake
    configure file is valid and you don't want to regenerate it,
    press the cancel button.  This cancels the regeneration, but proceeds
    to run configure.
-
-
