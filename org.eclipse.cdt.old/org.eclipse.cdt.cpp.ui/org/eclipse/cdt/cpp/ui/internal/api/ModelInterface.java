@@ -188,6 +188,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
   }
 
+  public class SearchContextMenuContributor implements IContextMenuContributor
+  {
+      public void fill(IMenuManager menu, IInputSelectionProvider inputProvider)
+      {
+      }
+  }
+
   public class ShowMarkerAction extends Action
   {
     public ShowMarkerAction()
@@ -1534,19 +1541,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			      if (i < types.size()) patternStr.append(", ");
 			  }
                       
-                      /* JEFF: Commenting this out to get the build to work...This method is now reported to 
-                               be amigious.  A similar signature must have been added to ISearchResultView
 		      _searchResultsView.searchStarted(
 					       "org.eclipse.cdt.cpp.ui.CppSearchPage",
 					       patternStr.toString(),
 					       patternStr.toString(),
-					       CppPlugin.getDefault().getImageDescriptor("details.gif"),//null,
-					       null,
+					       CppPlugin.getDefault().getImageDescriptor("details.gif"),
+					       new SearchContextMenuContributor(),
 					       SearchLabelProvider.getInstance(),
 					       new ShowMarkerAction(),
 					       new GroupByKeyComputer(),
 					       null);
-		      */		
 		  }
 	
 	      Display d = getDummyShell().getDisplay();
