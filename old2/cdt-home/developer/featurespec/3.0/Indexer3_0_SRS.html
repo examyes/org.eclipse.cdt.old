@@ -2,24 +2,25 @@
 <html>
 <head>
   <title>Indexer 3.0</title>
-  <meta content="text/html; charset=iso-8859-1"
- http-equiv="Content-Type">
-  <link type="text/css"
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet"
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
- rel="stylesheet">
+ type="text/css">
 </head>
 <body>
 <!-- Document Header -->
-<table cellpadding="2" border="0" style="width: 100%;">
+<table style="width: 100%;" border="0" cellpadding="2">
   <tbody>
     <tr>
       <td style="text-align: left; width: 70%;"> <font class="indextop">Indexer
-SRS for 3.0<br>
+Requirements for 3.0<br>
       </font> <span class="indexsub"><font class="indexsub">This
 document describes the proposed work items for the indexer for the CDT
 3.0 release.</font></span> </td>
-      <td style="width: 30%;"><img width="120" height="86" alt=""
- src="http://dev.eclipse.org/images/Idea.jpg"></td>
+      <td style="width: 30%;"><img
+ src="http://dev.eclipse.org/images/Idea.jpg" alt="" height="86"
+ width="120"></td>
     </tr>
   </tbody>
 </table>
@@ -35,8 +36,20 @@ document describes the proposed work items for the indexer for the CDT
       <td> : 11/29/2004 - Version: 0.1.0</td>
     </tr>
     <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">: 01/10/2005 - Version: 0.1.1<br>
+      </td>
+    </tr>
+    <tr>
       <td>Change History</td>
       <td> : 0.1.0 - Document Creation</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">: 0.1.1 - Revision<br>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -75,8 +88,8 @@ with mechanisms to extend the index framework.<br>
 3.0.<br>
 </p>
 <h2>1.0 Definitions</h2>
-<table cellspacing="2" cellpadding="2" border="1"
- style="text-align: left; width: 100%;">
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; width: 80pt;">Resource<br>
@@ -153,8 +166,8 @@ Include Block<br>
 </ul>
 <p></p>
 <h2>1.1 Constraints</h2>
-<table cellspacing="2" cellpadding="2" border="1"
- style="text-align: left; width: 100%;">
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
@@ -167,11 +180,13 @@ Include Block<br>
  style="font-weight: bold;">C1</span><br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Multiple
-indexer profiles not possible until similar build profile notion appears</span><br>
+indexer profiles not possible until similar build configuration notion
+appears</span><br>
       <br>
 In order to get an accurate index the indexer depends on being able to
 pass on the relevant includes/symbols to the parser.&nbsp; As long as
-there is no standard representation for build profiles in all build
+there is no standard representation for build configurations in the
+core model for all build
 types (both standard and managed), it isn't possible to enable index
 profiles.<br>
       <br>
@@ -191,8 +206,8 @@ categories:
 </p>
 <h2>2.1 Index Management Requirements<br>
 </h2>
-<table cellspacing="2" cellpadding="2" border="1"
- style="text-align: left; width: 100%;">
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
@@ -224,16 +239,20 @@ complete and those who just want the absolute bare minimum index) we
 need to offer the following indexer options:<br>
       <br>
       <ol>
-        <li>Full Index: this is the "regular" index mode; everything
+        <li>Full Index: this is the "regular" index mode which uses the
+CDT parser (include paths and symbol definitions need to be setup
+properly); everything
 gets indexed</li>
-        <li>Minimal Index with Path/Symbol setup: this will make use of
-the quickest parser setting available</li>
         <li>Quick Index with no setup: this will result in a "best
-effort" bare bones index that should enable some navigation/search.<br>
+effort" bare bones index that should enable some navigation/search<br>
         </li>
       </ol>
-      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69078"><br>
-Bug 69078: C/C++ indexer too slow</a><br>
+      <br>
+These indexer options are per project - so it is possible to have
+different indexers for different projects.<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69078">Bug
+69078: C/C++ indexer too slow</a><br>
       </td>
     </tr>
     <tr>
@@ -287,15 +306,15 @@ that need a long time to index. <br>
  style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
-should be able to work in a hierarchical manner<br>
+should be able to merge indexes <br>
       <br>
       </span>With all of the new options for indexing, it is
 conceivable that any project might have several sources to look at for
-a single index. The indexer should be able to work with multiple index
-sources, with any order preference specified by the user settings.<span
- style="font-weight: bold;"><br>
+a single index. The indexer should be able to merge new index
+information into an existing index (through a user action), provided
+that both index formats are alike.<br>
       <br>
-      </span><a
+      <span style="font-weight: bold;"> </span><a
  href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=52126">Bug 52126:
 Indexer should maintain per project indices</a><br>
       <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74433">Bug
@@ -310,7 +329,7 @@ Indexer should maintain per project indices</a><br>
  style="vertical-align: top; text-align: center; font-weight: bold;">P2<br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
-should allow user to specify global indexer settings </span><br>
+should allow user to specify indexer settings </span><br>
       <br>
 Currently the indexer uses the same settings for all projects. This
 might not suit all users. Indexer settings that should be customizable
@@ -321,59 +340,27 @@ include:<br>
         </li>
         <ul>
           <li>normal (always up to date)</li>
-          <li>idle time (index on idle time; will require us to keep
-track of changes received in between indexes)</li>
           <li>manual (index only when manually requested)</li>
           <li>static (don't update current index)</li>
+          <li>after build (don't index until build)<br>
+          </li>
         </ul>
       </ul>
       <ul>
         <li>Index Progress Bar displayed: (Checkbox, default displayed)</li>
       </ul>
       <ul>
-        <li>Refresh behaviour for file types: (Checkboxes)<br>
+        <li>Indexer default setting for new projects:<br>
         </li>
         <ul>
-          <li>Upon addition/deletion of new file types(s), immediately
-add/remove all new file type(s) to the index</li>
-          <li>Upon addition/deletion of new file type(s), wait until
-next time the folder gets indexed</li>
+          <li>Currently the indexer is always on when creating a new
+project. This should be changed to allow users to set the default index
+behaviour when creating a new project</li>
         </ul>
-      </ul>
-      <ul>
-        <li>Refresh behaviour for new paths</li>
-        <ul>
-          <li>Upon addition/deletion of new paths/symbols, immediately
-index files affected by the changes<br>
-          </li>
-          <li>Upon addition/deletion of new file type(s), wait until
-next time the folder gets indexed<br>
-          </li>
-        </ul>
-      </ul>
-      <ul>
-        <li>Index Hierarchy order: The user can set the order that the
-indexer should look at various index contributors. The options are:</li>
-        <ul>
-          <li>Offline Indexer (this will be a complete index using the
-CDT parser)<br>
-          </li>
-          <li>Local Index (this will be an index of the local workspace
-using the CDT parser)<br>
-          </li>
-          <li>Any additional Indexer Extension Point indexes</li>
-        </ul>
-      </ul>
-      <ul>
-        <li>Indexer Thread priority: The user could specify what
-priority the indexer should run at.<br>
-        </li>
       </ul>
       <br>
       <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=75884">Bug
 75884: Allow C/C++ Indexing to be set on or off as a default setting</a><br>
-      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=60084">Bug
-60084: Indexer should reduce its priority when running in background</a><br>
       </td>
     </tr>
     <tr>
@@ -395,6 +382,10 @@ needs to be added to individual job requests about the event that
 created the job in order to enable the index manager to make smart
 choices about how to best schedule the jobs. <br>
       <br>
+The index manager should also run at the minimum priority.<br>
+      <br>
+      <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=60084">Bug
+60084: Indexer should reduce its priority when running in background</a><br>
       </td>
     </tr>
     <tr>
@@ -413,9 +404,7 @@ is updated. In the event of a crash, all work that has been merged to
 disk<span style="font-weight: bold;"><span style="font-weight: bold;"><span
  style="font-weight: bold;"> </span></span></span>shall be considered
 as sane and the indexer will restart on the remaining files on the next
-startup. (It will ask the user if they want to continue with the old
-index or if they can get rid&nbsp; By doing this we can avoid losing
-all the indexing job <span style="font-weight: bold;"><br>
+startup. <span style="font-weight: bold;"><br>
       </span><a
  href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=62366"><br>
 Bug 62366: [Index] Need ability to read a partial index and resume</a><span
@@ -462,7 +451,7 @@ scalable solution.<br>
  style="vertical-align: top; font-weight: bold; text-align: center;">R10<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">P2<br>
+ style="vertical-align: top; font-weight: bold; text-align: center;">P4<br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Resources
 can be added manually to the index</span><br>
@@ -498,7 +487,7 @@ Bug 72396: The indexer is not aware of the File Type (ResolverModel)</a><br>
  style="font-weight: bold;">R12</span><br>
       </td>
       <td style="vertical-align: top; text-align: center;"><span
- style="font-weight: bold;">P2</span><br>
+ style="font-weight: bold;">P1</span><br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Indexer
 Extension point</span><br>
@@ -516,7 +505,7 @@ as normal.<br>
  style="vertical-align: top; font-weight: bold; text-align: center;">R13<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">P3<br>
+ style="vertical-align: top; font-weight: bold; text-align: center;">P4<br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Index
 Manager should allow for ongoing search while indexing</span> <br>
@@ -537,7 +526,7 @@ set</a><br>
  style="vertical-align: top; font-weight: bold; text-align: center;">R14<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">P2<br>
+ style="vertical-align: top; font-weight: bold; text-align: center;">P1<br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Index
 should provide an interface to allow clients to determine what features
@@ -556,8 +545,8 @@ if they wish to schedule a new index.<br>
 </table>
 <h2>2.2 Index Content Requirements<br>
 </h2>
-<table cellspacing="2" cellpadding="2" border="1"
- style="text-align: left; width: 100%;">
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
   <tbody>
     <tr>
       <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
@@ -619,7 +608,7 @@ belongs to the specified declaration</a><br>
  style="vertical-align: top; text-align: center; font-weight: bold;">R17<br>
       </td>
       <td
- style="vertical-align: top; text-align: center; font-weight: bold;">P?<br>
+ style="vertical-align: top; text-align: center; font-weight: bold;">P1<br>
       </td>
       <td style="vertical-align: top; font-weight: bold;">New Indexer
 needs to be written for new AST<br>
@@ -638,8 +627,8 @@ information from the AST.</span><br>
 <h2>2.3 Problem Markers<br>
 </h2>
 <br>
-<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
- cellspacing="2">
+<table cellspacing="2" cellpadding="2" border="1"
+ style="text-align: left; width: 100%;">
   <tbody>
     <tr>
       <td style="vertical-align: top; text-align: left; width: 35pt;">Number<br>
@@ -654,7 +643,7 @@ information from the AST.</span><br>
  style="vertical-align: top; font-weight: bold; text-align: center;">&nbsp;R18<br>
       </td>
       <td
- style="vertical-align: top; font-weight: bold; text-align: center;">&nbsp;P1<br>
+ style="vertical-align: top; font-weight: bold; text-align: center;">&nbsp;P2<br>
       </td>
       <td style="vertical-align: top;"><span style="font-weight: bold;">Problem
 Markers should be able to be removed manually<br>
@@ -682,13 +671,13 @@ is excluded</a><br>
 <h2>3.1 UI enhancements</h2>
 Following UI enhancements are planned to support the feature:<br>
 <br>
-<table cellspacing="2" cellpadding="2" border="1"
- style="text-align: left; width: 100%;">
+<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+ cellspacing="2">
   <tbody>
     <tr>
       <td style="width: 35px; vertical-align: top;">Number<br>
       </td>
-      <td style="vertical-align: top;" rowspan="1" colspan="1">Description<br>
+      <td colspan="1" rowspan="1" style="vertical-align: top;">Description<br>
       </td>
     </tr>
     <tr>
@@ -699,20 +688,17 @@ Options Preference Page<br>
       <br>
       </span>This page will allow users to make changes to the Indexer
 that affect the entire workspace:<span style="font-weight: bold;"><br>
-      <br>
-      </span>
+      </span><br>
       <ul>
-        <li>Indexer to use: if a number of indexers are available (ie.
-SourceIndexer, SourceIndexer2, CTagsIndexer) , users can specify which
-indexer should be used for the entire workspace</li>
         <li>Index Progress Bar displayed</li>
-        <li>Indexer Thread Priority<br>
+        <li>Indexer New Project Default Setting<br>
         </li>
       </ul>
       <span style="font-weight: bold;"></span></td>
     </tr>
     <tr>
-      <td style="vertical-align: top; font-weight: bold;">UE2<br>
+      <td
+ style="vertical-align: top; font-weight: bold; text-align: center;">UE2<br>
       </td>
       <td style="vertical-align: top; font-weight: bold;">Indexer
 Project Properties Page<br>
@@ -720,10 +706,10 @@ Project Properties Page<br>
       <span style="font-weight: normal;">This page will allow users to
 set indexer settings per project:</span><br style="font-weight: normal;">
       <ul style="font-weight: normal;">
-        <li>Indexing policy</li>
-        <li>Refresh behaviour for new File Types</li>
-        <li>Refresh behaviour for new Symbols/Includes</li>
-        <li>Index Hierarchy order</li>
+        <li>Indexer to use: if a number of indexers are available (ie.
+SourceIndexer, SourceIndexer2, CTagsIndexer) , users can specify which
+indexer should be used for the entire workspace.</li>
+        <li>Indexing policy to use</li>
       </ul>
       <br>
       </td>
@@ -738,16 +724,16 @@ set indexer settings per project:</span><br style="font-weight: normal;">
   <li> Scanner Config Correctness Enhancement FDS </li>
 </ol>
 <p>
-<table width="100%" cellpadding="2" border="0">
+<table border="0" cellpadding="2" width="100%">
   <tbody>
     <tr>
-      <td valign="top" bgcolor="#0080c0" align="left" colspan="2"><br>
+      <td colspan="2" align="left" bgcolor="#0080c0" valign="top"><br>
       </td>
     </tr>
   </tbody>
 </table>
 </p>
-<center><i>Last Modified on Monday, November 29, 2004
+<center><i>Last Modified on Monday, January 10, 2005
 </i></center>
 </body>
 </html>

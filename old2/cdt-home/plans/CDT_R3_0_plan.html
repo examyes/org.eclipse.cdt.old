@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <meta name="Derrick Keefe" content="CDT Project">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <title>CDT  DRAFT 3.0 Plan</title>
 <link rel="stylesheet" href="../../default_style.css" type="text/css">
@@ -137,7 +137,8 @@ as follows (M6 is RC0)</p>
  <li>Friday Jul. 1, 2005 - Release Candidate 3 (3.0 RC3)
 </ul>
 <ul> 
- <i>Eclipse 3.1 GA expected ~July 1</i>
+ <i>Eclipse 3.1 GA expected ~July 1
+</i>
 
  <li>Wednesday Jul. 13, 2005 - Release Candate 4 (3.0 RC4) 
 </ul>
@@ -242,28 +243,86 @@ more accurate results (for refactoring and outlining).</p>
     <em><img src="ok.gif" width="12" height="12"> status (eg in progress, completed, 
     hold) </em>]</p>
 -->  
+<p><b>Reduce indexing time and cost.</b> The CDT relies heavily on having a valid index. 
+We will add the ability to allow the index generation to be customized.&nbsp; 
+One initial example will be the addition of a ctags indexer (which will not be 
+as functional as the internal parser based indexer).&nbsp; We will also be 
+restructuring the contents of the index to provide more and &quot;cheaper&quot; 
+information to the index clients.&nbsp;
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/Indexer3_0_SRS.html?cvsroot=Tools_Project">
+      Requirements</a>.&nbsp; Design Doc (coming soon). </p>
+<p>bugzilla refs:<pre>      
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=25682">Bug 25682: Indexer Profiles</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=52126">Bug 52126: Indexer should maintain per project indices</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=53792">Bug 53792: [Scalability] Prioritizing the indexing when searching a working set</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=60084">Bug 60084: Indexer should reduce its priority when running in background</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=62366">Bug 62366: [Index] Need ability to read a partial index and resume</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69078">Bug 69078: C/C++ indexer too slow</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69606">Bug 69606: [Search] Match locator has to make sure that the reference belongs to the specified declaration</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=71821">Bug 71821: Action on the indexer to parse file/folder</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74284">Bug 74284: [IProblem] All Problem markers removed for project when one file is excluded</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=72396">Bug 72396: The indexer is not aware of the File Type (ResolverModel)</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=72803">Bug 72803: [Performance][Usability][Indexer/Search] Waiting policy for index results</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74427">Bug 74427: Indexer needs to store more info</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=74433">Bug 74433: Offline Indexing/Index Hierarchy</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=75884">Bug 75884: Allow C/C++ Indexing to be set on or off as a default setting</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79518">Bug 79518: Path/Variable Manager support service in the core(string substitution)</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79661">Bug 79661: All Index Entries should make use of Path Variables</a>
+</pre>
+<p> 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 <p>&nbsp;</p>
 </blockquote>
 
 <h4>Proposed Items (Eclipse Platform subproject, Performance theme)</h4>
 <blockquote> 
 
-  <p><b>Reduce indexing time and cost.</b> 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>  <p><b>Reduce search time and cost.</b> 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+  <p><b>Reduce search time and cost.</b>
+  <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/Search3_0_SRS.html?cvsroot=Tools_Project">Requirements</a>. </p>
+    
+<p>bugzilla refs:<pre>      
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=79406">Bug 79406: Search needs to do away with second parse</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45015">Bug
+45015: Search only work on perfect code</a>
+	<a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=49783">Bug
+49783: Parsing C files requires communication w/client on unresolved
+references</a>
+	<a
+ href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=69013">Bug 69013:
+[C/C++ Search]: Search for Namespace definition and declaration give
+the same results.</a></pre>
+
+  <p> 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
     
   <p><b>Error parser re-design.</b> Work to specifically improve the performance of the 
     error parsers and to improve their programatic interface. 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
 </blockquote>
 
 <h3><a name="ThemeParserCorrectness">Theme 2: Parser Correctness</a></h3>
 <h4>Committed Items </h4>
-<blockquote>
-</blockquote>
+  <blockquote>  
+  <p><b>K&R C Language Support.</b>
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
+    <em><img src="ok.gif" width="12" height="12"> Complete</em></p>
+    
+  <p><b>Parser/Scanner Environment Discovery.</b>
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/scannerconf_correctness_3.0_fds.html?cvsroot=Tools_Project">feature
+spec</a>
+    bugzilla ref. (
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=67491">67491</a>, 
+   		<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=72975">72975</a>, 
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73606">73606</a>, 
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73607">73607</a>, 
+    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=74474">74474</a>
+    ) 
+    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    </blockquote>
+
+
 <h4>Proposed Items (Eclipse Platform subproject, Parser Correctness theme)</h4>
 <blockquote>
  <p><b>Parser/Scanner language extensions.</b> 
@@ -273,22 +332,6 @@ more accurate results (for refactoring and outlining).</p>
   <p><b>C/C++ Language Variants.</b> This work would add the possibility to add new
     compiler/language specific capabilities into the parser (ie GNU extensions) 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
-    
-  <p><b>K&R C/C++ Language Support.</b>
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
-    
-  <p><b>Parser/Scanner Environment Discovery.</b> 
-    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/scannerconf_correctness_3.0_fds.html?cvsroot=Tools_Project">
-    Requirements Doc</a>
-    bugzilla ref. (
-    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=67491">67491</a>, 
-   		<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=72975">72975</a>, 
-    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73606">73606</a>, 
-    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=73607">73607</a>, 
-    	<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=74474">74474</a>
-    ) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
     
  </blockquote>   
@@ -319,7 +362,6 @@ around the Managed Build System.</p>
     <em><img src="ok.gif" width="12" height="12"> status (eg in progress, completed, 
     hold) </em>]</p>
 -->  
-<p>&nbsp;</p>
 </blockquote>
 
 <h4>Proposed Items (Eclipse Platform subproject, User Experience theme)</h4>
@@ -331,30 +373,41 @@ around the Managed Build System.</p>
     interface.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
-  <p><b>Managed build system.</b> 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>) 
+
+  <p><b>Managed build system.</b>
+        <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/featurespec/3.0/MBS_3_0_Proposal.html.html?cvsroot=Tools_Project">Design spec </a> &nbsp;bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=81450">81450</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
   <p><b>Debugger specialization for gdb embedded.</b> Further GDB specific enhancements to
     facilitate working with embedded targets.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
   <p><b>Debugger memory view.</b> Synchronization of the debugger's memory view with
     the platform generic memory view.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
   <p><b>Launch configuration UI adjustment.</b> A simplification of the CDT launch 
     configuration panels to simplify and speed-up the time from code to debug. 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
-  <p><b>Template extension point for new projects.</b> Initial extension point used to 
+
+  <p><b>Template extension point for new projects
+.</b> Initial extension point used to 
     create code template stubs for new projects (ie KDE/GNOME/Win32 application, command 
     line application, shared library etc)
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-  <p><b>Better support for nested projects and linked resources.</b> 
+
+  <p><b>Better support for nested projects and linked resources
+
+.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
+
 
 </blockquote>
 
@@ -373,27 +426,42 @@ around the Managed Build System.</p>
 <h4>Proposed Items ( no theme)</h4>
 <blockquote> 
 
-  <p><b>Pervasive use of workspace variables.</b> This helps developers create location
+  <p><b>Pervasive use of workspace variables
+
+.</b> This helps developers create location
     independant projects and all paths/symbols created in the CDT should be "variable" aware.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-  <p><b>Enhanced refactoring.</b> 
+
+  <p><b>Enhanced refactoring
+
+.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-  <p><b>Source based hover help.</b> Using the comments within the source and headers to
+
+  <p><b>Source based hover help
+
+.</b> Using the comments within the source and headers to
     provide content dynamic hover help and content assist help.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-  <p><b>Java based C/C++ code formatter.</b> A java native (ie portable) based code formatter.
+
+  <p><b>Java based C/C++ code formatter
+
+.</b> A java native (ie portable) based code formatter.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-  <p><b>Improved ISV documentation.</b> 
+
+  <p><b>Improved ISV documentation
+
+.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+
 
 
 </blockquote>
