@@ -357,7 +357,7 @@ public final class DataElement implements Serializable, IDataElement
       {
 	  if (_nestedData != null)
 	      {
-		  synchronized(_nestedData)
+		 // synchronized(_nestedData)
 		      {
 			  _nestedData.remove(object);
 		      }
@@ -1753,7 +1753,10 @@ public final class DataElement implements Serializable, IDataElement
 	_parent = null;
 	_descriptor = null;	
 	_referencedObject = null;
-
+     
+    _propertySource = null;
+    _abstractedby = null;
+    _containerDescriptor = null;
 	_buffer = null;
     }
 
@@ -1768,7 +1771,8 @@ public final class DataElement implements Serializable, IDataElement
 	setAttribute(DE.A_SOURCE, "deleted");
 	setAttribute(DE.A_SOURCE_LOCATION,   "deleted");
 	setAttribute(DE.A_VALUE,  "deleted");
-	
+	setAttribute(DE.A_TYPE,   "deleted");
+
 	_isUpdated = false;	 
 	_isExpanded = true;
 	_buffer = null;

@@ -17,6 +17,7 @@ public abstract class UpdateHandler extends Handler
 {
   protected  ArrayList    _dataObjects;
 
+
   public UpdateHandler()
       {
         _dataObjects = new ArrayList();
@@ -30,32 +31,38 @@ public abstract class UpdateHandler extends Handler
           }
       }
     
-    protected void clean(DataElement object)
+    protected void clean(DataElement object)    
     {
-	clean(object, 3);
+        if (_dataObjects.size() == 0)
+        {
+		 clean(object, 2);
+		}
     } 
     
     protected void clean(DataElement object, int depth)
     {	
-	if ((depth > 0) && (object != null))
+	 
+	if ((depth > 0) && (object != null) && object.getNestedSize() > 0)
 	    {
-		for (int i = 0; i < object.getNestedSize(); i++)
+		ArrayList deletedList = _dataStore.findDeleted(object);
+
+		for (int i = 0; i < deletedList.size(); i++)
 		    {
-			DataElement child = object.get(i);			
-			clean(child, depth - 1);
+			DataElement child = (DataElement)object.get(i);	
 			if (child != null)
-			    {
-				if (child.isDeleted())
-				    {
-					synchronized(object)
-					    {
-						object.removeNestedData(child);
-						child.clear();
-					    }
-				    }						
-			    }
+			{
+				DataElement parent = child.getParent();
+	
+		 		 child.clear();						
+			    
+			  	 parent.removeNestedData(child);
 		    }
 	    }
+	    
+	    deletedList.clear();
+	    deletedList = null;
+
+	   }
     }
 
   public void update(ArrayList objects)

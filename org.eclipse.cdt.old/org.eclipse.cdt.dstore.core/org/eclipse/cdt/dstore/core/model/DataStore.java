@@ -592,7 +592,16 @@ public final class DataStore
     {
 	return _hashMap.size();    
     }
-
+ 
+ 	/**
+     * Returns the number of recycled elements in the <code>DataStore</code>.
+     *
+     * @return the number of recycled elements
+     */
+    public int getNumRecycled()
+    {
+	return _recycled.size();    
+    }
     /**
      * Returns the table of live elements in the <code>DataStore</code>.
      *
@@ -1340,6 +1349,7 @@ public final class DataStore
 				  deleteObjectHelper(from, deletee, 5);		  
 			      }
 		      }
+		  
 		  
 		  refresh(from);
 	      }
@@ -2131,6 +2141,89 @@ public final class DataStore
 
 	return results;
     }
+    
+    /**
+	     * Finds all the elements that are of a given type from a specified element.  
+	     *
+	     * @param root where to search from 
+	     * @param type the descriptor representing the type of the objects to search for 
+	     * @return a list of elements
+	     */     
+	    public ArrayList findObjectsOfType(DataElement root, String type)
+	    {
+		ArrayList results = new ArrayList();
+		ArrayList searchList = root.getAssociated("contents");
+		if (searchList != null)
+		{
+			for (int i = 0; i < searchList.size(); i++)
+		    {
+			DataElement child = (DataElement)searchList.get(i);
+			if (child.getType().equals(type) || child.isOfType(type))
+			    {
+				results.add(child);
+			    }
+	
+			ArrayList subResults = findObjectsOfType(child, type);
+			for (int j = 0; j < subResults.size(); j++)
+			    {
+				results.add(subResults.get(j));
+			    }
+		    }
+			}
+	
+		return results;
+	    }
+	    
+        /**
+	     * Finds all the deleted elements
+	     *
+	     * @param root where to search from 
+	     * @param type the descriptor representing the type of the objects to search for 
+	     * @return a list of elements
+	     */     
+	    public ArrayList findDeleted(DataElement root)
+	    {	       
+	        ArrayList results = new ArrayList();
+			results = findDeleted(root, results);
+			return results;
+		}
+
+      
+	    private ArrayList findDeleted(DataElement root, ArrayList results)
+	    {	   
+	     synchronized(root)
+	     {
+		  if (root != null)
+	     	{		     	
+				ArrayList searchList = root.getNestedData();
+				
+				if (searchList != null)
+				{
+					for (int i = 0; i < searchList.size(); i++)
+				    {
+						DataElement child = (DataElement)searchList.get(i);
+						if (!child.isReference())
+						{
+					
+						if (child.isDeleted())
+					    {					    
+					    
+						    results.add(child);				
+					    }
+	
+						if (!child.isReference())
+						{
+							results = findDeleted(child, results);	
+							
+						}
+						}
+				    }
+				}
+			}
+			}	
+			return results;
+	    }
+
 
     /**
      * Finds all relationship descriptor types that can be applied to a particular element.  
@@ -2952,7 +3045,8 @@ public final class DataStore
 		    }
 		*/
 
-		newObject = (DataElement)_recycled.remove(0);
+		newObject = (DataElement)_recycled.remove(_recycled.size() - 1);
+		newObject.clear();
 	    }
 	else
 	    {
