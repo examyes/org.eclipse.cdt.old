@@ -3127,7 +3127,7 @@ public final class DataStore
 
     private void internalTrace(String message)
     {
-	if (_tracingOn && _traceFile != null)
+	if (_tracingOn && _traceFile != null && message != null)
 	    {		
 		try
 		    {
