@@ -88,6 +88,11 @@ abstract class SourceView extends View
          return true;
       }
 
+      // if directory info exists for sourceFileName
+      int lastSlash = sourceFileName.lastIndexOf("/");
+      if (lastSlash != -1)
+      	sourceFileName = sourceFileName.substring(lastSlash+1);
+
 	  String filename = sourceFileName;
 	  sourceFileName = _parentPart.getFilePath() + sourceFileName;
       file = new File(sourceFileName);
