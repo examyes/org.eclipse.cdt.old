@@ -63,8 +63,11 @@ public class DetailsViewPart extends ObjectsViewPart
   {
     if (part != this && part instanceof ILinkable)
     {
-      ((ILinkable)part).linkTo(this);	
-      setLinked(true);
+	if  (part.getSite().getPage() == getSite().getPage())
+	    {
+		((ILinkable)part).linkTo(this);	
+		setLinked(true);
+	    }
     }
   }
 

@@ -89,6 +89,8 @@ public class SelectedObjectViewPart extends GenericViewPart
     {    
 	_viewer.setInput(element);     
 
+	setTitle(element.getName() + " View");   
+
 	// open editor
 	IActionLoader loader = getActionLoader();
 	IOpenAction openAction = loader.getOpenAction();

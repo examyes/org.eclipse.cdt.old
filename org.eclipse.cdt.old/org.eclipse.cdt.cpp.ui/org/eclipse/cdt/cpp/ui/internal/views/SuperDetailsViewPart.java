@@ -118,6 +118,26 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 	    }
     }
 
+
+    public void setInput(DataElement element)
+    {    
+	_viewer.setInput(element);     
+
+	// create new title
+	String objectType = element.getType();
+	if (_viewer.isSpecialized())
+	    {
+		DataElement relationship = _viewer.getSelectedRelationship();
+		
+		String relationName = relationship.getName();
+		
+		setTitle(objectType + " " + relationName);
+	    }
+	else
+	    {
+		setTitle(objectType + " details");
+	    }
+    }
 }
 
 

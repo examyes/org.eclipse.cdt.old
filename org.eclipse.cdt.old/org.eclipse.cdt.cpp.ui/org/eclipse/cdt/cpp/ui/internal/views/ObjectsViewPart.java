@@ -233,11 +233,14 @@ public class ObjectsViewPart extends GenericViewPart
             (part instanceof CppProjectsViewPart)
 	    )
 	    {
-		if (sel instanceof IStructuredSelection)
+		if  (part.getSite().getPage() == getSite().getPage())
 		    {
-			IStructuredSelection es= (IStructuredSelection) sel;
-			handleSelection(es);
-		    }  
+			if (sel instanceof IStructuredSelection)
+			    {
+				IStructuredSelection es= (IStructuredSelection) sel;
+				handleSelection(es);
+			    }  
+		    }
 	    }
     }
     
