@@ -106,7 +106,7 @@ public class CppLoadLauncherWizardMainPage extends WizardPage implements Listene
 
    	createSpacer(composite);
 
-   	createDebugInitializationGroup(composite);
+   	//createDebugInitializationGroup(composite);  not supported
    	
    	//createSourceDirectoryGroup(composite);
    	

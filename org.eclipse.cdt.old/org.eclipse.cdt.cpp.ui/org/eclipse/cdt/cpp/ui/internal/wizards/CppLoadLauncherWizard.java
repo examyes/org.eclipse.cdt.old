@@ -13,14 +13,14 @@ import com.ibm.dstore.ui.resource.*;
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
-import org.eclipse.jface.wizard.*; 
+import org.eclipse.jface.wizard.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.dialogs.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.debug.core.ILauncher;
 import org.eclipse.debug.ui.ILaunchWizard;
 
-import com.ibm.debug.launch.PICLLoadInfo;     
+import com.ibm.debug.launch.PICLLoadInfo;
 
 
 import org.eclipse.core.runtime.*;
@@ -59,7 +59,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 
 	_api = _plugin.getModelInterface();
     }
-    
+
     public CppLoadLauncherWizardMainPage getMainPage()
     {
    	return _mainPage;
@@ -69,12 +69,12 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     {
    	return _mainPage.debugInitialization();
     }
-    
+
     public String getParameters()
     {
    	return _mainPage.getParameters();
     }
-    
+
     public boolean performFinish()
     {
 	
@@ -126,12 +126,12 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     }
 
 
-    protected CppLoadLauncher getLauncher() 
+    protected CppLoadLauncher getLauncher()
     {
 	return (CppLoadLauncher) _launcher.getDelegate();
     }
 
-    public void init(ILauncher launcher, String mode, IStructuredSelection selection) 
+    public void init(ILauncher launcher, String mode, IStructuredSelection selection)
     {
 	if (selection.getFirstElement() instanceof DataElement)
 	    {
@@ -139,14 +139,12 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 	    }
     }
 
-    public void init(ILauncher launcher, String mode, DataElement resource) 
+    public void init(ILauncher launcher, String mode, DataElement resource)
     {
    	_launcher = launcher;
 	_element = resource;
 	
 	_currentSelectionName = ((DataElement)_element).getName();
-
-	System.out.println("CppLoadLauncherWizard - curentSelectionName = " + _currentSelectionName);
 
     }
 }
