@@ -235,8 +235,10 @@ BOOL CALLBACK findLineAddress(PSTR moduleName, DWORD64 baseOfDll, PVOID userCont
 
 	IMAGEHLP_MODULE64 modinfo;
 	ZeroMemory(&modinfo, sizeof(modinfo));
-	modinfo.SizeOfStruct = sizeof(modinfo);
-	
+	// modinfo.SizeOfStruct = sizeof(modinfo);
+	// TODO - setting size to zero seems to make things work better, not sure why
+	modinfo.SizeOfStruct = 0;
+
 	if (!SymGetModuleInfo64(data->process, baseOfDll, &modinfo)) {
 		reportError(L"modinfo");
 	}
