@@ -186,7 +186,7 @@ public class FileSystemMiner extends Miner
 	  DataElement delFile = createCommandDescriptor(_fileDescriptor,getLocalizedString("model.Delete"),
 							"C_DELETE");	  
 	  //creating new files and dirs
-	  DataElement newFD=createAbstractCommandDescriptor(_directoryDescriptor,getLocalizedString("model.Create"),
+	  DataElement newFD=createAbstractCommandDescriptor(_fsystemObjectDescriptor,getLocalizedString("model.Create"),
 							    "C_NEW");
 	  
 	  DataElement newF = createCommandDescriptor(newFD, getLocalizedString("model.File___"),
