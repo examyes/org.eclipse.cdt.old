@@ -29,7 +29,8 @@ command: dir.*
 command: ls -l.*
 	 file          file              pattern=-.*\d{2}:\d{2} ([\w,.,/,\\]*)
 	 file          file              pattern=-.* \d{4} ([\w,.,/,\\]*)
-         directory     file              pattern=d.*\d{2}:\d{2} ([\w,.,/,\\]*)
+     directory     file              pattern=d.*\d{2}:\d{2} ([\w,.,/,\\]*)
+     directory     file              pattern=d.*\d{4} ([\w,.,/,\\]*)
 
 command: ls
          file          file              pattern=([\w]*\.[\w]*)
