@@ -83,7 +83,7 @@
 		</antcall>
 		<mkdir dir="${feature.base}/features/${feature.full.name}"/>
 		<copy todir="${feature.base}/features/${feature.full.name}">
-			<fileset dir="${basedir}" includes="cpl-v10.html,feature.xml,feature.properties,eclipse_update_120.jpg,license.html"/>
+			<fileset dir="${basedir}" includes="cpl-v10.html,feature.xml,feature.properties,eclipse_update_120.jpg,license.html,about.ini,about.properties"/>
 		</copy>
 	</target>
 
