@@ -279,6 +279,11 @@ public class GetGdbStorage
          str = str + lines[1];
       if(!str.startsWith("$"))
       {   
+		  String registerAdd = evaluateAddressOfRegister(expr);
+		  
+		  if (registerAdd != null)
+		  	return registerAdd;
+      	
           if (Gdb.traceLogger.ERR) 
               Gdb.traceLogger.err(2,"GetGdbStorage.evaluateAddressOfExpression="+expr+" returned error message="+str );
           lastEvaluationError = str;
@@ -304,9 +309,15 @@ public class GetGdbStorage
       if (hex != -1)
       {
       	  if (hex+10 <= str.length())
+      	  {
 		      str = str.substring(hex, hex+10);
+      	  }		      
 		  else
+		  {
 		  	  str = str.substring(hex);
+		  }
+		  
+	      str = str.trim();
 	      return str;
       }	      
       
@@ -339,4 +350,55 @@ public class GetGdbStorage
           Gdb.traceLogger.evt(1,"GetGdbStorage.evaluateAddressOfExpression str="+str );
       return str;
    }
+   
+   public String evaluateAddressOfRegister(String expr)
+   {
+		String str;
+		
+		if (Gdb.traceLogger.DBG) 
+	       Gdb.traceLogger.dbg(2,"******************* GetGdbStorage evaluateAddressOfRegister expr="+expr  );
+	
+	    lastEvaluationError = null;
+	    String cmd = "info register "+expr;
+	    boolean ok = _debugSession.executeGdbCommand(cmd);
+	    if(!ok)
+	        return null;
+	 
+	
+	    String[] lines = _debugSession.getTextResponseLines();
+	    if(lines.length<=0)
+	    {   if (Gdb.traceLogger.ERR) 
+	           Gdb.traceLogger.err(2,"GetGdbStorage.evaluateAddressOfRegister lines==null" );
+	        return null;                       
+	    }
+	
+		str = lines[0];
+	    if(lines.length>1)
+	       str = str + lines[1];
+	    if(str.indexOf("invalid register") != -1)
+	    {   
+			if (Gdb.traceLogger.ERR) 
+				Gdb.traceLogger.err(2,"GetGdbStorage.evaluateAddressOfRegister="+expr+" returned error message="+str );
+			lastEvaluationError = str;
+			return null;
+		}
+		
+		String tab = "\u0009";
+		String hex = "0x";
+		
+		int hexIndex = str.indexOf(hex);
+		int lastTab = str.lastIndexOf(tab);
+		
+		if (hexIndex > 0 && lastTab > 0 && lastTab > hexIndex)
+		{
+			str = str.substring(hexIndex, lastTab);
+		}
+		else
+		{
+			str = null;
+		}			
+		
+		return str;
+	}
 }
+

@@ -124,6 +124,10 @@ public class StorageManager extends ComponentManager      //HC
       int charsPerColumn = 2*bytesPerColumn;
              _baseAddress = "0x"+Long.toHexString(address);
       long     startAddress = address +(rangeStart*columnsPerLine*4); //d 4bytes per column
+      
+      if (startAddress < 0)
+      	startAddress = 0;
+      	
              _startAddress = "0x"+Long.toHexString(startAddress);
              
 /*
