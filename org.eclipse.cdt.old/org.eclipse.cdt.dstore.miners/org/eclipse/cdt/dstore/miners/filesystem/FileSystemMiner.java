@@ -180,7 +180,8 @@ public class FileSystemMiner extends Miner
 	  DataElement fdateD    = createCommandDescriptor(_fileDescriptor, "Get Date", "C_DATE", false);
 	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
 	  
-	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), "C_OPEN");
+	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), 
+							  "C_OPEN", false);
 
 	  DataElement move      = createCommandDescriptor(_fsystemObjectDescriptor, 
 							  getLocalizedString("model.Move"), "C_MOVE", false);
