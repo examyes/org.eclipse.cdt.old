@@ -36,8 +36,9 @@ import com.ibm.debug.internal.picl.PICLDebugTarget;
 /**
  * Launches a local VM.
  */
-public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
-
+public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigurationDelegate 
+{
+    
     private CppPlugin                       _plugin;
     private ModelInterface                  _api;
     private DataElement                     _executable;
@@ -46,119 +47,116 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	/**
 	 * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
 	 */
-	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException
-   {
-		System.out.println("CppDebugLoadLaunchConfigurationDelegate:launch() ");
-      _plugin = CppPlugin.getDefault();
-      _api = ModelInterface.getInstance();
+    public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) 
+	throws CoreException
+    {
+	System.out.println("CppDebugLoadLaunchConfigurationDelegate:launch() ");
+	_plugin = CppPlugin.getDefault();
+	_api = ModelInterface.getInstance();
 
-		String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-      IResource resource  = _api.findFile(executableName);
-      DataElement _executable = _api.findResourceElement(resource);
-      DataElement projectElement = _api.getProjectFor(_executable);
-      IProject project = _api.findProjectResource(projectElement);
-      if (!project.isOpen())
-      {
-         displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
-      	return;
-		}
-		String workingDirectory = configuration.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
-		//  set default source locator if none specified
-		if (launch.getSourceLocator() == null) {
-			String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
-			if (id == null) {
-			//	IJavaProject javaProject = JavaLaunchConfigurationUtils.getJavaProject(configuration);
-			//	ISourceLocator sourceLocator = new JavaSourceLocator(javaProject);
-			//	launch.setSourceLocator(sourceLocator);
-			}
-		}
+	String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+	IResource resource  = _api.findFile(executableName);
+	IProject project = resource.getProject();
+	
+	DataElement _executable = _api.findResourceElement(resource);
+	DataElement projectElement = _api.getProjectFor(_executable);
+	if (!project.isOpen())
+	    {
+		displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+		return;
+	    }
+	String workingDirectory = configuration.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
+	//  set default source locator if none specified
+	if (launch.getSourceLocator() == null) {
+	    String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
+	    if (id == null) {
+		//	IJavaProject javaProject = JavaLaunchConfigurationUtils.getJavaProject(configuration);
+		//	ISourceLocator sourceLocator = new JavaSourceLocator(javaProject);
+		//	launch.setSourceLocator(sourceLocator);
+	    }
+	}
 
    	PICLLoadInfo loadInfo = new PICLLoadInfo();
-      String qualifiedFileName = "";
-
-      qualifiedFileName = _executable.getSource();
-      System.out.println("CppDebugLoadLaunchConfigurationDelegate:launch() - qualifiedFileName = " + qualifiedFileName);
- 		IFile file = (IFile)_api.findFile(qualifiedFileName);
+	String qualifiedFileName = "";
+	
+	qualifiedFileName = _executable.getSource();
+	System.out.println("CppDebugLoadLaunchConfigurationDelegate:launch() - qualifiedFileName = " + qualifiedFileName);
+	IFile file = (IFile)_api.findFile(qualifiedFileName);
    	if (file == null)
-      {
+	    {
 	   	projectElement = _api.getProjectFor(_executable);
-  			project = _api.findProjectResource(projectElement);
+		project = _api.findProjectResource(projectElement);
    		file = new FileResourceElement(_executable, project);
 	   	_api.addNewFile(file);			
-      }
-
-  		//  loadInfo.setResource(file);  RW  gone??
-
+	    }
+	
+	//  loadInfo.setResource(file);  RW  gone??
+	
    	//loadInfo.setLauncher(_launcher);
    	loadInfo.setProgramName(qualifiedFileName);
    	//loadInfo.setProgramParms(parameters);  RW - todo
 	
-	   int startupBehaviour;
+	int startupBehaviour;
 	
-//	if (debugInitialization)
-//	    {
-//		startupBehaviour = loadInfo.DEBUG_INITIALIZATION;
-//	    }
-//	else
-//	    {
-   		startupBehaviour = loadInfo.RUN_TO_MAIN;
-//	    }
+	//	if (debugInitialization)
+	//	    {
+	//		startupBehaviour = loadInfo.DEBUG_INITIALIZATION;
+	//	    }
+	//	else
+	//	    {
+	startupBehaviour = loadInfo.RUN_TO_MAIN;
+	//	    }
 	
-	   loadInfo.setStartupBehaviour(startupBehaviour);
-
-
-      doLaunch(loadInfo, workingDirectory);
-
-	}	
-
+	loadInfo.setStartupBehaviour(startupBehaviour);
+	
+	
+	doLaunch(loadInfo, workingDirectory);
+	
+    }	
+    
     public void doLaunch(PICLLoadInfo loadInfo, String workingDirectory)
     {
         CppSourceLocator sourceLocator = null;
-
-
+	
+	
         //ensure the daemon is listening
-//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
+	//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
         boolean ok = CoreDaemon.startListening();
         if (ok == true)
-        {
-          int port = CoreDaemon.getCurrentPort();
-          if (port < 0)
-            return;
-        }
+	    {
+		int port = CoreDaemon.getCurrentPort();
+		if (port < 0)
+		    return;
+	    }
         else
-           return;
-
+	    return;
+	
 	
 	if (_executable != null)
-   {
-	   DataElement projectElement = _api.getProjectFor(_executable);
+	    {
+		DataElement projectElement = _api.getProjectFor(_executable);
 		if (projectElement != null)
-      {
+		    {
 			sourceLocator = new CppSourceLocator(projectElement);
 			loadInfo.setWorkspaceSourceLocator(sourceLocator);
-      }
+		    }
 		_dataElementDirectory = _executable.getParent();
-   }
+	    }
 	
-      PICLDebugTarget target = new  PICLDebugTarget(loadInfo, loadInfo.getEngineConnectionInfo());
-      int key = CoreDaemon.generateKey();
-      CoreDaemon.storeDebugTarget(target, key);
-
-//      PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
-      PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
-                                      new Integer(loadInfo.getEngineConnectionInfo().getConduit()).intValue());
+	PICLDebugTarget target = new  PICLDebugTarget(loadInfo, loadInfo.getEngineConnectionInfo());
+	int key = CoreDaemon.generateKey();
+	CoreDaemon.storeDebugTarget(target, key);
 	
-      if(daemonInfo == null)
-         return;
+	//      PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
+	PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
+						       new Integer(loadInfo.getEngineConnectionInfo().getConduit()).intValue());
 	
-      launchEngine(daemonInfo, workingDirectory);
+	if(daemonInfo == null)
+	    return;
+	
+	launchEngine(daemonInfo, workingDirectory);
     }
-
-
-
-
-
-
+    
     protected void launchEngine(PICLDaemonInfo daemonInfo, String workingDirectory)
     {
 	String port = new Integer(daemonInfo.getPort()).toString();
@@ -168,6 +166,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
       if (workingDirectory != "")
       {
          IResource resource = _api.getResource(workingDirectory);
+	 
          DataElement deDirectory = _api.findResourceElement(resource);
        	_api.debug(deDirectory, port, key);
       }

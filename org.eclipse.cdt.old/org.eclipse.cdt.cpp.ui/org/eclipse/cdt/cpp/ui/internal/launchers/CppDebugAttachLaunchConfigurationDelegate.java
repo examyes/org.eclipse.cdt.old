@@ -24,8 +24,8 @@ import org.eclipse.debug.core.model.ISourceLocator;
 /**
  * Launches a debug attach session.
  */
-public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigurationDelegate {
-
+public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigurationDelegate 
+{
 	/**
 	 * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
 	 */

@@ -8,6 +8,7 @@ package org.eclipse.cdt.cpp.ui.internal;
 
 import org.eclipse.cdt.dstore.ui.resource.ResourceElement;
 import org.eclipse.cdt.dstore.hosts.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.core.util.*;
@@ -32,6 +33,7 @@ import org.eclipse.core.resources.*;
 import org.eclipse.jface.resource.*;
 
 import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.*;
@@ -41,6 +43,7 @@ import java.io.*;
 import java.util.ResourceBundle;
 
 public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
+    implements IDomainListener
 {
     public class MinerClassLoader implements ILoader
     {
@@ -195,8 +198,35 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_interface.getDummyShell();
        	_interface.loadSchema();
 
+	dataStore.getDomainNotifier().addDomainListener(this);
+    }
+
+    public Shell getShell()
+    {
+	return _interface.getDummyShell();
+    }
+    
+    public boolean listeningTo(DomainEvent ev)
+    {
+	DataElement parent = (DataElement)ev.getParent();
+	if (parent.getType().equals("Workspace"))
+	    {
+		return true;
+	    }
+	else 
+	    {
+		return false;
+	    }
+    }
+
+    public void domainChanged(DomainEvent ev)
+    {
+	DataElement element = (DataElement)ev.getParent();
+
+	// do this only once
 	initializeProjects();
-  }
+	element.getDataStore().getDomainNotifier().removeDomainListener(this);
+    }
 
     private void initializeProjects()
     {

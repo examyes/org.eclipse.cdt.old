@@ -1104,8 +1104,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
 			if (workspaceObj == null)
 			    {
-				//System.out.println("couldn't find workspace");
-					findWorkspaceElement();
+				System.out.println("couldn't find workspace");
 			    }
 		    }
 		
@@ -1227,8 +1226,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement result = null;
 	if (workspace != null)
 	    {
-		String resString = resource.getLocation().toString();
-		result = findResourceElement(workspace, resString);
+		if (resource != null)
+		    {
+			String resString = resource.getLocation().toString();
+			result = findResourceElement(workspace, resString);
+		    }
 	    }
 	
 	return result;
@@ -1528,12 +1530,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
 
   public IResource findFile(String fileName)
+    {
+	java.io.File theFile = new java.io.File(fileName);
+	return findFile(theFile);
+    }
+
+  public IResource findFile(java.io.File fileName)
   {
     IResource file = null;
 
     if (fileName != null)
       {		
-      	fileName = fileName.replace('\\', '/');
 	  IWorkspace ws = _plugin.getPluginWorkspace();
 	  IWorkspaceRoot root = ws.getRoot();
 
@@ -1566,7 +1573,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     return file;
   }
 
-    public IResource findFile(RemoteProjectAdapter root, String fileName)
+    public IResource findFile(RemoteProjectAdapter root, java.io.File fileName)
     {
 	IProject projects[] = root.getProjects();
 	if (projects != null)
@@ -1582,7 +1589,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
-    public IResource findFile(IWorkspaceRoot root, String fileName)
+    public IResource findFile(IWorkspaceRoot root, java.io.File fileName)
     {
 	IProject projects[] = root.getProjects();
 	for (int i = 0; i < projects.length; i++)
@@ -1595,10 +1602,21 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
-    public IResource findFile(IContainer root, String fileName)
+    public IResource findFile(IContainer root, java.io.File fileName)
     {
 	try
 	    {
+		if (root instanceof IResource)
+		    {
+			IResource container = (IResource)root;
+			String rpath = container.getLocation().toString();
+			if (compareFileNames(fileName, rpath))
+			    {
+				return container;
+			    }
+		    }
+
+
 		IResource resources[] = root.members();
 		if (resources != null)
 		    {
@@ -1617,16 +1635,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    }
 				
 
-				// normalize paths
-				path = path.replace('\\', '/');
-				fileName = fileName.replace('\\', '/');
-				
 				if (compareFileNames(path, fileName))
 				    {
 					    return resource;
 				    }
 				
-				if (fileName.startsWith(path) && resource instanceof IContainer)
+				//if (fileName.startsWith(path) && resource instanceof IContainer)
+				if (resource instanceof IContainer)
 				    {
 					IResource result = findFile((IContainer)resource, fileName);
 					if (result != null)
@@ -1642,28 +1657,23 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
+    public boolean compareFileNames(java.io.File f1, String file2)
+    {
+	java.io.File f2 = new java.io.File(file2);
+	return (f1.compareTo(f2) == 0);
+    }
+
+    public boolean compareFileNames(String file1, java.io.File f2)
+    {
+	java.io.File f1 = new java.io.File(file1);
+	return (f1.compareTo(f2) == 0);
+    }
+
     public boolean compareFileNames(String file1, String file2)
     {
-    	if (file1.equals(file2))
-    	{
-    		return true;	
-    	}
-    	else
-    	{
-		try
-	    {
-			java.io.File f1 = new java.io.File(file1);
-			java.io.File f2 = new java.io.File(file2);
-
-			boolean match =  f1.getAbsolutePath().compareTo(f2.getAbsolutePath()) == 0;
-			return match;
-	    }
-		catch (Exception e)
-	    {
-	    }
-    	}
-
-	return false;
+	java.io.File f1 = new java.io.File(file1);
+	java.io.File f2 = new java.io.File(file2);
+	return (f1.compareTo(f2) == 0);
     }
 
  public DataElement findParseFiles(DataElement theProjectFile)

@@ -38,49 +38,48 @@ public class CppRunLaunchConfigurationDelegate implements ILaunchConfigurationDe
     private static ModelInterface _api;
     private static CppPlugin   _plugin;
 
-	/**
-	 * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
-	 */
-	public void launch(ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException
-   {
-	   //System.out.println("CppRunLaunchConfigurationDelegate:launch() ");
-
-      _plugin = CppPlugin.getDefault();
-      _api = ModelInterface.getInstance();
-
-		String executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-      IResource file  = _api.findFile(executableName);
-      DataElement _executable = _api.findResourceElement(file);
-      DataElement projectElement = _api.getProjectFor(_executable);
-      IProject project = _api.findProjectResource(projectElement);
-      if (!project.isOpen())
-      {
-         displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
-      	return;
-		}
-		//_directory = _executable.getParent();
+     /**
+      * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
+      */
+     public void launch(ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException
+     {
+	 //System.out.println("CppRunLaunchConfigurationDelegate:launch() ");
+	 
+	 _plugin = CppPlugin.getDefault();
+	 _api = ModelInterface.getInstance();
+	 
+	 String executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+	 IResource file  = _api.findFile(executableName);
+	 IProject project = file.getProject();
+	 DataElement _executable = _api.findResourceElement(file);
+	 if (!project.isOpen())
+	     {
+		 displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+		 return;
+	     }
+	 //_directory = _executable.getParent();
     	String workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
-//      String command = executableName + " " + parameters;
-      String command = executableName;
-
-	   //System.out.println("CppRunLaunchConfigurationDelegate:launch() command = " +command);
-	   //System.out.println("CppRunLaunchConfigurationDelegate:launch() workingDirectory = " +workingDirectory);
-
+	//      String command = executableName + " " + parameters;
+	String command = executableName;
+	
+	//System.out.println("CppRunLaunchConfigurationDelegate:launch() command = " +command);
+	//System.out.println("CppRunLaunchConfigurationDelegate:launch() workingDirectory = " +workingDirectory);
+	
      	_api.invoke(workingDirectory, command, false);
+	
 
-
-      /*
-		String mainTypeName = verifyMainTypeName(configuration);
-
-		IVMInstall vm = verifyVMInstall(configuration);
-
-		IVMRunner runner = vm.getVMRunner(mode);
-		if (runner == null) {
+	/*
+	  String mainTypeName = verifyMainTypeName(configuration);
+	  
+	  IVMInstall vm = verifyVMInstall(configuration);
+	  
+	  IVMRunner runner = vm.getVMRunner(mode);
+	  if (runner == null) {
 			abort(MessageFormat.format("Internal error: JRE {0} does not specify a VM Runner.", new String[]{vm.getId()}), null, IJavaLaunchConfigurationConstants.ERR_VM_RUNNER_DOES_NOT_EXIST);
-		}
-
-		File workingDir = verifyWorkingDirectory(configuration);
-		String workingDirName = null;
+			}
+			
+			File workingDir = verifyWorkingDirectory(configuration);
+			String workingDirName = null;
 		if (workingDir != null) {
 			workingDirName = workingDir.getAbsolutePath();
 		}
