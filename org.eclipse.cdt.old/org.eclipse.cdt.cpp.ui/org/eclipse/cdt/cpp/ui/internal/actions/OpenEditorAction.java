@@ -135,7 +135,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 	    {
 		return null;
 	    }  
-	if (des.isOfType("file"))
+	if (des != null && des.isOfType("file"))
 	{
 		return element;
 	}
