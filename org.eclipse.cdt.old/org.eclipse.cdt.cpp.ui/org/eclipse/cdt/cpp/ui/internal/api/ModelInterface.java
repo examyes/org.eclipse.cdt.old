@@ -818,6 +818,47 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return workspaceObj;
     }  
     
+  public IProject findProjectResource(DataElement projectElement)
+    {
+	// first search local projects
+	IProject[] projects = _workbench.getRoot().getProjects();
+	for (int i = 0; i < projects.length; i++)
+	    {	
+		IProject project = projects[i];
+		if (_plugin.isCppProject(project))
+		    {
+			if (compareFileNames(project.getLocation().toString(), projectElement.getSource()))
+			    {
+				return project;  
+			    }
+		    }
+	    }			    	
+
+	// next search remote projects
+	RemoteProjectAdapter rmtAdapter = RemoteProjectAdapter.getInstance();
+	if (rmtAdapter != null)
+	    {
+		IProject[] rprojects = rmtAdapter.getProjects();		
+		if (rprojects != null)
+		    {
+			for (int j = 0; j < rprojects.length; j++)
+			    {	
+				IProject project = rprojects[j];
+				if (_plugin.isCppProject(project))
+				    {
+					if (compareFileNames(project.getLocation().toString(), 
+							     projectElement.getSource()))
+					    {
+						return project;  
+					    }
+				    }
+			    }
+		    }
+	    }
+	
+	return null;
+    }
+    
   public DataElement findProjectElement(IProject project)
   {
    if (project == null)
@@ -1435,11 +1476,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	synchronizeWith.setAttribute(DE.A_VALUE, "C_SYNCHRONIZE_WITH");
 
 
-	DataElement configureCmd = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "configure", 
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
-	
-
+	DataElement propertyDialogAction = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+								  "Properties...",
+								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
+	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
     }
         
 }
