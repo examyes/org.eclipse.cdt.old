@@ -30,18 +30,21 @@ endif
 buildPlugins += org.eclipse.cdt.dstore.extra
 buildPlugins += org.eclipse.cdt.dstore.extra.server
 buildPlugins += org.eclipse.cdt.dstore.core
+buildPlugins += org.eclipse.cdt.linux.help	
 buildPlugins += org.eclipse.cdt.cpp.miners.parser
+buildPlugins += org.eclipse.cdt.debug.gdbPicl
 buildPlugins += org.eclipse.cdt.dstore.hosts
 buildPlugins += org.eclipse.cdt.dstore.ui
 buildPlugins += org.eclipse.cdt.cpp.ui
 buildPlugins += org.eclipse.cdt.dstore.miners
 buildPlugins += org.eclipse.cdt.cpp.miners
-buildPlugins += org.eclipse.cdt.debug.gdbPicl
-buildPlugins += org.eclipse.cdt.linux.help	
+
+
 
 # List of All Plugins Used in C/C++ Deliverable (e.g buildPlugins plus the ones we don't build)
 allPlugins = $(buildPlugins)
 allPlugins += org.eclipse.cdt.cpp.docs.user
+allPlugins += com.ibm.debug
 allPlugins += com.ibm.lpex
 #allPlugins += com.ibm.lpex.doc.user
 #allPlugius += com.ibm.lpex.doc.isv
