@@ -246,8 +246,6 @@
   </p>
   <hr size="1">
   </li>
-
-
 </ol>
 
 <!-- Installation Header -->
@@ -294,9 +292,38 @@
 
   <li><b><a name="install_50">How do I uninstall CDT?</a></b>
   <p>
-   ?
+   We do not currently ship an uninstaller.  Once we have moved up to the latest "Update" support in Eclipse this 
+   should be taken care of.  In the meantime you can uninstall the CDT in 2 manual steps: 
   </p>
-   <hr size="1">
+
+  <ol>
+   <li>Remove the CDT plugins
+    <ul>
+     <li>Navigate to the directory where the CDT plugins are installed (typically eclipse/plugins)</li>
+     <li>Remove the following plugins:
+      <ul>
+       <li>org.eclipse.cdt.*</li>
+       <li>com.ibm.debug*</li>
+       <li>com.ibm.lpex*</li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+
+   <li>Remove the CDT metadata
+    <ul>
+     <li>Navigate to the workspace/.metadata/.plugins directory</li>
+     <li>Remove the following directories (if they exist):
+      <ul>
+       <li>org.eclipse.cdt.*</li>
+       <li>com.ibm.debug*</li>
+       <li>com.ibm.lpex*</li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+  </ol>
+  <hr size="1">
   </li>
 </ol>
 
