@@ -562,6 +562,12 @@
          class="org.eclipse.cdt.cpp.ui.internal.preferences.OutputViewPreferencePage"
          id="org.eclipse.cdt.cpp.ui.internal.preferences.OutputViewPreferencePage">
    </page>
+     <page
+         name="%Autoconf"
+         category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
+         class="org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfPreferencePage"
+         id="org.eclipse.cdt.cpp.ui.internal.preferences.AutoconfPreferencePage">
+   </page>
 </extension>
 <extension
       point="org.eclipse.ui.actionSets">

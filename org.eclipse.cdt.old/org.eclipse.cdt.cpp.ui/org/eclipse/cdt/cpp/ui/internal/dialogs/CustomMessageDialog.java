@@ -1,5 +1,7 @@
 package org.eclipse.cdt.cpp.ui.internal.dialogs;
 
+import org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction;
+import org.eclipse.cdt.dstore.ui.actions.CustomAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -18,29 +20,27 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 
 /**
- * A dialog for showing messages to the user.
- * <p>
- * This concete dialog class can be instantiated as is, 
- * or further subclassed as required.
- * </p>
+ *
  */
-public class CustomMessageDialog extends MessageDialog  implements SelectionListener{
+public class CustomMessageDialog extends MessageDialog{
 	
-	Button[] buttons;
-	String[] buttonLabels;
-	String[] extraButtonLabels;
-	int defaultButtonIndex;
-	boolean preventFromShow = false;
-	boolean addCheckBox = false;
-	boolean customAction = false;
+	private Button[] buttons;
+	private String[] buttonLabels;
+	private String[] extraButtonLabels;
+	private int defaultButtonIndex;
+	public Button [] extraButtons;
+	private SelectionListener actionListener;
+
 	
 	public CustomMessageDialog(Shell parentShell, String dialogTitle, Image dialogTitleImage, String dialogMessage, 
 							int dialogImageType, String[] dialogButtonLabels,
-							int defaultIndex, String[] extraButtonLabels) 
+							int defaultIndex, String[] extraButtonLabels, SelectionListener actionListener) 
 	{
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels, defaultIndex);
 		this.buttonLabels = dialogButtonLabels;
-		this.extraButtonLabels = extraButtonLabels;
+		if(extraButtonLabels!= null)
+			this.extraButtonLabels = extraButtonLabels;
+		this.actionListener = actionListener;
 	}
 	protected Control createButtonBar(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);	
@@ -61,7 +61,7 @@ public class CustomMessageDialog extends MessageDialog  implements SelectionList
 		
 		// create a layout with spacing and margins appropriate for the font size.
 		GridLayout leftPaneLayout = new GridLayout();
-		leftPaneLayout.numColumns = 0;// this is incremented by createExtraButton
+		leftPaneLayout.numColumns = 1;// this is incremented by createExtraButton
 		leftPaneLayout.makeColumnsEqualWidth = true;
 		leftPaneLayout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
 		leftPaneLayout.marginHeight = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
@@ -76,11 +76,8 @@ public class CustomMessageDialog extends MessageDialog  implements SelectionList
 		leftPane.setLayoutData(leftPanedata);		
 
 		// Add a check box if needed
-		/*if(addCheckBox)
-		{
-			createExtraButton(leftPane,-1,"Do not show this dialog again",SWT.CHECK);
-		}*/
-		createExtraButtonsForButtonBar(leftPane);
+		if(extraButtonLabels!= null )
+			createExtraButtonsForButtonBar(leftPane);
 		// create composite to hold the butons
 		Composite rightPane = new Composite(composite,SWT.NONE);
 		
@@ -114,11 +111,11 @@ public class CustomMessageDialog extends MessageDialog  implements SelectionList
 	}
 		protected void createExtraButtonsForButtonBar(Composite parent) {
 		
-		buttons = new Button[extraButtonLabels.length];
+		extraButtons = new Button[extraButtonLabels.length];
 		for (int i = 0; i < extraButtonLabels.length; i++) {
 			String label = extraButtonLabels[i];
-			Button button = createExtraButton(parent,0,label,SWT.CHECK);
-			buttons[i] = button;
+			Button button = createExtraButton(parent,i,label,SWT.CHECK);
+			extraButtons[i] = button;
 		}
 	}
 	
@@ -151,8 +148,6 @@ public class CustomMessageDialog extends MessageDialog  implements SelectionList
 		return button;
 	}
 	protected Button createExtraButton(Composite parent, int id, String label, int type) {
-		// increment the number of columns in the button bar
-		((GridLayout)parent.getLayout()).numColumns++;
 		Button button;
 		button = new Button(parent, type);
 
@@ -165,26 +160,8 @@ public class CustomMessageDialog extends MessageDialog  implements SelectionList
 		
 		button.setData(new Integer(id));
 		button.setSelection(false);
-		button.addSelectionListener(this);
+		button.addSelectionListener(actionListener);
 		button.setFont(parent.getFont());
 		return button;
 	}
-	public void widgetDefaultSelected(SelectionEvent e)
-    {
-	widgetSelected(e);
-    }
-
-    public void widgetSelected(SelectionEvent e)
-    {
-	Widget source = e.widget;
-	
-	/*if (source == _preventButton)
-	    {
-		if (!_preventButton.getSelection())
-		    {
-			setShowAgain(false);
-		    }
-	    }*/
-    }
-
 }
