@@ -44,18 +44,27 @@ public class MakefileAmAction extends CustomAction {
 	public MakefileAmAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
-		
-		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
+	
+		String value = _command.getValue();
+			
+		if(value.equals("INSERT_CONFIGURE_IN")||
+			value.equals("TOPLEVEL_MAKEFILE_AM"))
+			{
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-	//	if(_command.getValue().equals("COMPILER_FLAGS") && !doesFileExist("Makefile.am"))	
-	//		setEnabled(false);
-			
-		if(_command.getValue().equals("INSERT_CONFIGURE_IN") && doesFileExist("configure.in"))	
+				return;
+			}
+						
+		if(value.equals("INSERT_CONFIGURE_IN") && doesFileExist("configure.in"))	
+		{
 				setEnabled(false);
+				return;
+		}
 
-		if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM")||_command.getValue().equals("PROGRAMS_MAKEFILE_AM")
-		 	||_command.getValue().equals("STATICLIB_MAKEFILE_AM")||_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
+		if(value.equals("TOPLEVEL_MAKEFILE_AM") ||
+			value.equals("PROGRAMS_MAKEFILE_AM") ||
+		 	value.equals("STATICLIB_MAKEFILE_AM") ||
+		 	value.equals("SHAREDLIB_MAKEFILE_AM"))
 		 {
 			DataElement cmdD = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CLASSIFY_MAKEFILE_AM");
 			if (cmdD != null)
@@ -114,6 +123,8 @@ public class MakefileAmAction extends CustomAction {
 					default:
 					break;
 				}
+				
+				return;
 			}
 		}
 	}
