@@ -51,6 +51,9 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 	
 	String runDialogKey = "Show_Run_Dialg";
 	String runUpdateKey = "Update_When_Run";
+
+	CppPlugin _plugin = CppPlugin.getDefault();
+	IProject project;
 	
 	public class RunThread extends Handler
 	
@@ -94,7 +97,8 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 		boolean noConfigfilesExist = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
-		
+		ModelInterface pluginApi = _plugin.getModelInterface();
+		project = (IProject)pluginApi.findResource(_subject);
 
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
@@ -130,8 +134,8 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 											0,
 											extraLabels,
 											this,
-											runDialogKey
-											);
+											runDialogKey,
+											project);
 					// open	the xbox		
 					int result = box.open();
 					if(result != -1)
@@ -154,7 +158,8 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 											0,
 											extraLabels,
 											this,
-											runDialogKey);
+											runDialogKey,
+											project);
 					// open	the xbox		
 					int result = box.open(); 
 					if(result!=-1)
@@ -244,7 +249,7 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 				//enableRunDialog = true;
 				list.add("Yes");
 			}
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(runDialogKey,list);
+			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(project,runDialogKey,list);
 		}
     }
 }

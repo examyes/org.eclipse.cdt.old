@@ -10,6 +10,7 @@ import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.CustomMessageDialog;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.PreventableMessageBox;
 import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
@@ -49,6 +50,9 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 	boolean enableCreateUpdate = true;
 	String dialogPrefernceKey = "Show_Create_Dialog";
 	String updatePreferenceKey = "Update_When_Create";
+
+	CppPlugin _plugin = CppPlugin.getDefault();
+	IProject project;
 	
 	public class RunThread extends Handler
 	{
@@ -93,7 +97,9 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		
-	
+		ModelInterface pluginApi = _plugin.getModelInterface();
+		project = (IProject)pluginApi.findResource(_subject);
+				
 		if(_command.getValue().equals("CREATE_CONFIGURE"))
 		{
 			String str1;
@@ -132,7 +138,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								0,
 								extraLabel,
 								this,
-								dialogPrefernceKey);
+								dialogPrefernceKey,
+								project);
 					int result = box.open();
 					if(result!= -1)
 						createUpdate= result;
@@ -153,7 +160,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 									0,
 									extraLabel,
 									this,
-									dialogPrefernceKey);
+									dialogPrefernceKey,
+									project);
 					int result = box.open();
 					if(result!= -1)
 						createUpdate= result+1;
@@ -177,7 +185,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								0,
 								extraLabel,
 								this,
-								dialogPrefernceKey);
+								dialogPrefernceKey,
+								project);
 				int result = box.open();
 				if(result!= -1)
 					if(result==1)
@@ -293,7 +302,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			{
 				list.add("Yes");
 			}
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(dialogPrefernceKey,list);
+			CppPlugin.writeProperty(project,dialogPrefernceKey,list);
 		}
     }
 }
