@@ -83,12 +83,21 @@ public class ConfigureAction extends CustomAction
 			String message = new String("This action will generate all the files needed for Autoconf Support"+
 				"\nExisting configure.in and Makefile.am's will be overwritten"+
 				"\nDo you wish to continue?");
-			if(!dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
+			if(!dialog.openConfirm(shell,"Generating configure.in and Makefile.am's ",message))
 			{			
 				execute = false;
 			}
 		}
 		
+		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
+		{
+			Shell shell = _dataStore.getDomainNotifier().findShell();
+			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+			String message = new String
+			("Trying to update existing configure.in and makefile.am's"+
+				"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
+			dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
+		}		
 		if(execute)
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
