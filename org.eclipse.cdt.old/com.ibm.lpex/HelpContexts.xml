@@ -1,476 +1,485 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?NLS TYPE="org.eclipse.help.toc"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
 <contexts>
+
 	<context id="pref_001">
-		<description>%pref_001</description>
+		<description>Select a different color palette and font for displaying text in the LPEX Editor pane. </description>
 	</context>
 	<context id="pref_002">
-		<description>%pref_002</description>
+		<description>Use the selection list in this preference group to specify the default text selection mode for the editor. </description>
 	</context>
 	<context id="pref_003">
-		<description>%pref_003</description>
+		<description>Differences in character case are ignored in comparisons. </description>
 	</context>
 	<context id="pref_004">
-		<description>%pref_004</description>
+		<description>Leading blanks at the start of a line are ignored in comparisons. </description>
 	</context>
 	<context id="pref_005">
-		<description>%pref_005</description>
+		<description>Trailing blanks at the end of a line are ignored in comparisons. </description>
 	</context>
 	<context id="pref_006">
-		<description>%pref_006</description>
+		<description>All blanks are ignored in comparisons. </description>
 	</context>
 	<context id="pref_007">
-		<description>%pref_007</description>
+		<description>Displays a status line below the Editor title bar showing: &#x0A; 1. Your cursor row and column location &#x0A; 2. Whether you are in insert or replace mode &#x0A; 3. The number of changes you have made to file since your last save </description>
 	</context>
 	<context id="pref_008">
-		<description>%pref_008</description>
+		<description>Displays a format line area below the status line in the Editor pane. </description>
 	</context>
 	<context id="pref_009">
-		<description>%pref_009</description>
+		<description>Displays a message line area below the editing area in the Editor pane. </description>
 	</context>
 	<context id="pref_010">
-		<description>%pref_010</description>
+		<description>Displays an editor command entry area at the bottom of the Editor pane. </description>
 	</context>
 	<context id="pref_011">
-		<description>%pref_011</description>
+		<description>The prefix area is displayed to the left of the text area. </description>
 	</context>
 	<context id="pref_012">
-		<description>%pref_012</description>
+		<description>Sequence numbers are hidden. This option has effect only for those files that already
+		have had sequence number areas defined. </description>
 	</context>
 	<context id="pref_013">
-		<description>%pref_013</description>
+		<description>Shows a plus symbol whenever a filter or find operation causes a group of lines that do not match the filter or find criteria to be hidden from view. </description>
 	</context>
 	<context id="pref_014">
-		<description>%pref_014</description>
+		<description>Specifies whether the find feature respects or ignores character case. </description>
 	</context>
 	<context id="pref_015">
-		<description>%pref_015</description>
+		<description>Find operations will look for the search item only in the marked text selection of the current file view. If no text is selected, the find operation tries to find the search item in the current file view. </description>
 	</context>
 	<context id="pref_016">
-		<description>%pref_016</description>
+		<description>Found text is highlighted. </description>
 	</context>
 	<context id="pref_017">
-		<description>%pref_017</description>
+		<description>Found text becomes a selected block of text. </description>
 	</context>
 	<context id="pref_018">
-		<description>%pref_018</description>
+		<description>The search string will be treated as a regular expression pattern. </description>
 	</context>
 	<context id="pref_019">
-		<description>%pref_019</description>
+		<description>Searches all text in the current file, including that preceding the cursor position. If you do not select this option, text is searched, depending on search direction, only until the beginning or end of file. </description>
 	</context>
 	<context id="pref_020">
-		<description>%pref_020</description>
+		<description>Restricts the scope of your search to certain columns only. </description>
 	</context>
 	<context id="pref_021">
-		<description>%pref_021</description>
+		<description>Specifies the first column to which search operations apply. </description>
 	</context>
 	<context id="pref_022">
-		<description>%pref_022</description>
+		<description>Specifies the last column to which search operations apply. </description>
 	</context>
 	<context id="pref_023">
-		<description>%pref_023</description>
+		<description>Specifies a default text string to search for. </description>
 	</context>
 	<context id="pref_024">
-		<description>%pref_024</description>
+		<description>Specifies a default text string with which to replace found text. </description>
 	</context>
 	<context id="pref_025">
-		<description>%pref_025</description>
+		<description>This table shows current file extension and document parser name associations defined to the editor. To modify an existing entry, click any part of an entry's line. The current values of the table entry will be placed in the File extension and Parser fields where you can edit them. </description>
 	</context>
 	<context id="pref_026">
-		<description>%pref_026</description>
+		<description>Enter a new file extension to associate a document parser name, or edit an existing file extension in this field. </description>
 	</context>
 	<context id="pref_027">
-		<description>%pref_027</description>
+		<description>Enter the name of a document parser to associate a file extension, or edit an existing parser name in this field. </description>
 	</context>
 	<context id="pref_028">
-		<description>%pref_028</description>
+		<description>This table shows current parser name and parser class associations defined to the editor. To modify an existing entry, click any part of an entry's line. The current values of the table entry will be placed in the Name and Class name fields where they can be edited as required. </description>
 	</context>
 	<context id="pref_029">
-		<description>%pref_029</description>
+		<description>Enter a parser name to associate a parser class, or edit an existing parser name in this field. </description>
 	</context>
 	<context id="pref_030">
-		<description>%pref_030</description>
+		<description>Enter a name of a parser class to associate a parser name, or edit an existing parser class name in this field. </description>
 	</context>
 	<context id="pref_031">
-		<description>%pref_031</description>
+		<description>Line numbers are added before each line when a file is printed from the editor. </description>
 	</context>
 	<context id="pref_032">
-		<description>%pref_032</description>
+		<description>Highlighting effects used by the document parser to display language elements are sent to the printer. </description>
 	</context>
 	<context id="pref_033">
-		<description>%pref_033</description>
+		<description>Enter an integer to increase or decrease the size of the top margin when printing text. </description>
 	</context>
 	<context id="pref_034">
-		<description>%pref_034</description>
+		<description>Enter an integer to increase or decrease the size of the bottom margin when printing text. </description>
 	</context>
 	<context id="pref_035">
-		<description>%pref_035</description>
+		<description>Enter an integer to increase or decrease the size of the left margin when printing text. </description>
 	</context>
 	<context id="pref_036">
-		<description>%pref_036</description>
+		<description>Enter an integer to increase or decrease the size of the right margin when printing text. </description>
 	</context>
 	<context id="pref_037">
-		<description>%pref_037</description>
+		<description>If selected, the editor trims off extra blanks from the end of each line before saving the file. </description>
 	</context>
 	<context id="pref_038">
-		<description>%pref_038</description>
+		<description>Enter an integer value to specify a maximum length for each line. Characters beyond the specified length are truncated and lost when the file is saved. If a value of 0 is specified, line length is limited only by system restrictions. </description>
 	</context>
 	<context id="pref_039">
-		<description>%pref_039</description>
+		<description>Enter one or more positive integers, each separated by a space, to specify tab stop positions on each line. For example, entering 1 2 5 9 will place tabs stops at columns 1, 2, 5, and 9. </description>
 	</context>
 	<context id="pref_040">
-		<description>%pref_040</description>
+		<description>Enter a positive integer to specify the interval between tab stops following the last tab stop specified in Tab stops above. For example, if you specify an interval of 8 in conjunction with a Tab stops setting of 1 2 5 9, tabs stops are placed at columns 1, 2, 5, 9, 17, 25, 33, and so on. </description>
 	</context>
 	<context id="pref_041">
-		<description>%pref_041</description>
+		<description>Tab characters are expanded by replacing them with the appropriate number of space characters in the file. </description>
 	</context>
 	<context id="pref_042">
-		<description>%pref_042</description>
+		<description>This table shows current action name and action class associations defined to the editor. To modify an existing entry, click any part of an entry's line. The current values of the table entry will be placed in the Name and Class name fields where they can be edited as required. </description>
 	</context>
 	<context id="pref_043">
-		<description>%pref_043</description>
+		<description>Enter an action name to associate an action class, or edit an existing action name in this field. </description>
 	</context>
 	<context id="pref_044">
-		<description>%pref_044</description>
+		<description>Enter a name of an action class to associate an action name, or edit an existing action class name in this field. </description>
 	</context>
 	<context id="pref_045">
-		<description>%pref_045</description>
+		<description>This table shows current key and action associations defined to the editor. To modify an existing entry, click any part of an entry's line. The current values of the table entry will be placed in the Key and Action fields where they can be edited as required. </description>
 	</context>
 	<context id="pref_046">
-		<description>%pref_046</description>
+		<description>Displays the name of a key to which you want to associate an action. For example, c-t is the name for the Ctrl+T key combination. You can modify the key name for an existing menu entry or enter a new key name. </description>
 	</context>
 	<context id="pref_047">
-		<description>%pref_047</description>
+		<description>Displays the editor action or user-defined action associated with an existing menu entry. You can modify an action for an existing key or enter a new action for a new key. </description>
 	</context>
 	<context id="pref_048">
-		<description>%pref_048</description>
+		<description>This table shows current mouse event and action associations defined to the editor. To modify an existing entry, click any part of an entry's line. The current values of the table entry will be placed in the Mouse event and Action fields where they can be edited as required. </description>
 	</context>
 	<context id="pref_049">
-		<description>%pref_049</description>
+		<description>Displays the name of a mouse event to associate an action. For example if you want to specify an action for double clicking mouse button 1 with the Ctrl and Alt keys pressed, you can specify c-a-1-clicked.2.  You can modify the mouse event name for an existing menu entry or enter a new mouse event name. </description>
 	</context>
 	<context id="pref_050">
-		<description>%pref_050</description>
+		<description>Displays the editor action or user-defined action associated with an existing mouse event entry. You can modify an action for an existing mouse event or enter a new action for a new mouse event. </description>
 	</context>
 	<context id="pref_051">
-		<description>%pref_051</description>
+		<description>Displays the name of the user profile class currently in effect. To change the profile, type the name of the replacement profile into this field. </description>
 	</context>
 	<context id="pref_052">
-		<description>%pref_052</description>
+		<description>This table shows the current command name and command class associations defined to the editor. To modify an existing entry, click any part of an entry's line. The current values of the table entry will be placed in the Name and Class name fields where they can be edited as required. </description>
 	</context>
 	<context id="pref_053">
-		<description>%pref_053</description>
+		<description>Enter a command name to associate with a command class, or edit an existing command name in this field. </description>
 	</context>
 	<context id="pref_054">
-		<description>%pref_054</description>
+		<description>Enter the name of a command class to associate with a command name, or edit an existing command class name in this field. </description>
 	</context>
 	<context id="pref_055">
-		<description>%pref_055</description>
+		<description>Select the the editor profile that you want to use. This will define the keyboard and command personalities associated with the editor. </description>
 	</context>
 	<context id="pref_056">
-		<description>%pref_056</description>
+		<description>Select this to turn off document parsers. Functions provided by the parsers, such as syntax highlighting and other content-sensitive features, will not be available. </description>
 	</context>
 	<context id="pref_057">
-		<description>%pref_057</description>
+		<description>Displays the current document parser. Select another entry in the list to change the parser. </description>
 	</context>
 	<context id="pref_058">
-		<description>%pref_058</description>
+		<description>Sets the size, type, and location of the sequence numbers for the file. </description>
 	</context>
 	<context id="pref_059">
-		<description>%pref_059</description>
+		<description>Defines the character encoding of the file on its original platform. This allows the editor to consider and emulate various characteristics of the original file, such as displaying the Shift-in and Shift-out control characters for DBCS EBCDIC files originating on an iSeries host. </description>
 	</context>
 	<context id="menu_001">
-		<description>%menu_001</description>
+		<description>Opens the Get dialog. Use this selection to choose a file to insert into the current file. The contents of the chosen file will be inserted at the line below the current cursor position. The Get operation will not load any new profiles with the file being inserted. Profiles already loaded remain in effect and are applied to the file being inserted. </description>
 	</context>
 	<context id="menu_002">
-		<description>%menu_002</description>
+		<description>Finds the next occurrence (after the current cursor position) of the current find item. </description>
 	</context>
 	<context id="menu_003">
-		<description>%menu_003</description>
+		<description>Finds the previous occurrence (before the current cursor position) of the current find item. </description>
 	</context>
 	<context id="menu_004">
-		<description>%menu_004</description>
+		<description>Opens a cascaded menu that allows you to find selected text, a selected block of text, move the cursor to the end position of your last change, move the cursor to the current quick-mark location, or open the Find mark input area. </description>
 	</context>
 	<context id="menu_005">
-		<description>%menu_005</description>
+		<description>Finds the next occurrence of selected text in the current file. The find action starts at the first character position following the cursor and continues until a match is found. If text is found, the cursor moves to the start of the found text. This selection is enabled only if text is selected. </description>
 	</context>
 	<context id="menu_006">
-		<description>%menu_006</description>
+		<description>Moves the cursor to the beginning of the selected block of text. This selection is enabled only if text is selected. </description>
 	</context>
 	<context id="menu_007">
-		<description>%menu_007</description>
+		<description>Moves the cursor to the end of the selected block of text. This selection is enabled only if text is selected. </description>
 	</context>
 	<context id="menu_008">
-		<description>%menu_008</description>
+		<description>Moves the cursor to the end position of the last change to the current file. This selection is enabled only if a change has already been made to the file. </description>
 	</context>
 	<context id="menu_009">
-		<description>%menu_009</description>
+		<description>Moves the cursor to the current quick-mark location. This selection is enabled only if a quick-mark has been defined for the current file. </description>
 	</context>
 	<context id="menu_010">
-		<description>%menu_010</description>
+		<description>Opens the Find Mark input area at the bottom of the Editor pane. Use the up and down arrow keys in this input area to scroll through the list of location marks defined for the current file, then press the Enter key to move the cursor to that location. This selection is enabled only if a named mark or quick-mark has been defined for the current file. </description>
 	</context>
 	<context id="menu_011">
-		<description>%menu_011</description>
+		<description>Finds and displays only those lines in the current file that contain the selected text. Other lines are hidden from view. </description>
 	</context>
 	<context id="menu_012">
-		<description>%menu_012</description>
+		<description>Excludes those lines in the current file that contain the selected text. </description>
 	</context>
 	<context id="menu_013">
-		<description>%menu_013</description>
+		<description>Displays all lines in the current file. Use this selection to cancel the effects of filter, find, and exclude operations that hide parts of the current file from view. </description>
 	</context>
 	<context id="menu_014">
-		<description>%menu_014</description>
+		<description>Opens a cascaded menu that allows you to select the entire line on which the cursor is located, all text from the first character selected and the current location of the cursor, or select all text in a designated rectangular area. </description>
 	</context>
 	<context id="menu_015">
-		<description>%menu_015</description>
+		<description>Selects the entire line on which the cursor is located. Subsequent use of this action selects all lines from the first line selected and the current location of the cursor. </description>
 	</context>
 	<context id="menu_016">
-		<description>%menu_016</description>
+		<description>Selects the character at the current cursor position. Subsequent use of this action selects all text from the first character selected and the current location of the cursor. </description>
 	</context>
 	<context id="menu_017">
-		<description>%menu_017</description>
+		<description>Selects the character at the current cursor position. Subsequent use of this action selects all text in the rectangular area bounded by the first character selected and the current location of the cursor. </description>
 	</context>
 	<context id="menu_018">
-		<description>%menu_018</description>
+		<description>Manipulates selected text using available choices. </description>
 	</context>
 	<context id="menu_019">
-		<description>%menu_019</description>
+		<description>Copies selected text to the current cursor position. Selected text is not erased from its original position. </description>
 	</context>
 	<context id="menu_020">
-		<description>%menu_020</description>
+		<description>Copies selected text to the current cursor position, replacing existing text at that location as needed to fit the selected text. </description>
 	</context>
 	<context id="menu_021">
-		<description>%menu_021</description>
+		<description>Moves selected text to the current cursor position. </description>
 	</context>
 	<context id="menu_022">
-		<description>%menu_022</description>
+		<description>Deletes the selected text. The remaining text shifts to fill the gap that is created. </description>
 	</context>
 	<context id="menu_023">
-		<description>%menu_023</description>
+		<description>Changes all characters in the selected text to upper-case characters. </description>
 	</context>
 	<context id="menu_024">
-		<description>%menu_024</description>
+		<description>Changes all characters in the selected text to lower-case characters. </description>
 	</context>
 	<context id="menu_025">
-		<description>%menu_025</description>
+		<description>Shifts text selected with the Edit->Select->Line or Edit->Select->Rectangle actions one character position to the left. Characters shifted left from column 1 are discarded. </description>
 	</context>
 	<context id="menu_026">
-		<description>%menu_026</description>
+		<description>Shifts text selected with the Edit->Select->Line or Edit->Select->Rectangle actions one character position to the right. Blanks are used to pad empty space to the left of the shifted text selection. </description>
 	</context>
 	<context id="menu_027">
-		<description>%menu_027</description>
+		<description>Deselects selected text. </description>
 	</context>
 	<context id="menu_028">
-		<description>%menu_028</description>
+		<description>Opens a cascaded menu so you can create a quick-mark in the current file at the current cursor location, or open the Name Mark input area at the bottom of the Editor pane. </description>
 	</context>
 	<context id="menu_029">
-		<description>%menu_029</description>
+		<description>Creates a quick-mark in the current file at the current cursor location. This mark is called @QUICK in the list of location marks. You can define only one quick-mark per editing view. Defining a new quick-mark replaces the previous quick-mark. </description>
 	</context>
 	<context id="menu_030">
-		<description>%menu_030</description>
+		<description>Opens the Name Mark input area at the bottom of the Editor pane. To create and name a location mark in the current file at the current cursor location, type a name for the location mark and press the Enter key. </description>
 	</context>
 	<context id="menu_031">
-		<description>%menu_031</description>
+		<description>Opens a cascaded menu so you can select a file to compare with the current file. You can also move the cursor to the next and previous mismatches, refresh the compare, and clear the display in the Editor pane. </description>
 	</context>
 	<context id="menu_032">
-		<description>%menu_032</description>
+		<description>Opens the Compare dialog. Use this dialog to select a file to compare with the current file. The compare operation takes place in the current Editor pane. Where lines between the two files files differ, the editor displays the lines of the current file with a yellow background and the second file with a red background. Lines that match are shown using the normal Editor pane colors. </description>
 	</context>
 	<context id="menu_033">
-		<description>%menu_033</description>
+		<description>Moves the cursor to the next mismatch if one exists. </description>
 	</context>
 	<context id="menu_034">
-		<description>%menu_034</description>
+		<description>Moves the cursor to the previous mismatch if one exists. </description>
 	</context>
 	<context id="menu_035">
-		<description>%menu_035</description>
+		<description>Refreshes the compare display to incorporate changes made to either the current file or the file chosen in the Compare dialog. Changes made to the file chosen in the Compare dialog will be reflected in the compare display only if that file is saved prior to refreshing. </description>
 	</context>
 	<context id="menu_036">
-		<description>%menu_036</description>
+		<description>Clears the compare display in the Editor pane so that only the current file, with any changes made to that file during the compare action, is displayed. </description>
 	</context>
 	<context id="menu_037">
-		<description>%menu_037</description>
+		<description>Opens a cascaded menu so you can start, stop, and replay your keystrokes. </description>
 	</context>
 	<context id="menu_038">
-		<description>%menu_038</description>
+		<description>Starts recording your keystrokes. Previously recorded keystroke sequences are overwritten. </description>
 	</context>
 	<context id="menu_039">
-		<description>%menu_039</description>
+		<description>Stops recording your keystrokes. </description>
 	</context>
 	<context id="menu_040">
-		<description>%menu_040</description>
+		<description>Replays keystroke sequences recorded earlier. </description>
 	</context>
 	<context id="tool_001">
-		<description>%tool_001</description>
+		<description>Reverses your most recent editing action. </description>
 	</context>
 	<context id="tool_002">
-		<description>%tool_002</description>
+		<description>Repeats your most recent editing action. </description>
 	</context>
 	<context id="tool_003">
-		<description>%tool_003</description>
+		<description>Starts recording your keystrokes. Previously recorded keystroke sequences are overwritten. </description>
 	</context>
 	<context id="tool_004">
-		<description>%tool_004</description>
+		<description>Stops recording your keystrokes. </description>
 	</context>
 	<context id="tool_005">
-		<description>%tool_005</description>
+		<description>Replays keystroke sequences recorded earlier. </description>
 	</context>
 	<context id="tool_006">
-		<description>%tool_006</description>
+		<description>Opens the Compare dialog. Use this dialog to select a file to compare with the current file. The compare operation takes place in the current Editor pane. Where lines between the two files files differ, the editor displays the lines of the current file with a yellow background and the second file with a red background. Lines that match are shown using the normal Editor pane colors. </description>
 	</context>
 	<context id="gui_001">
-		<description>%gui_001</description>
+		<description>Use this input area to enter editor commands to perform editing actions or modify the settings of editor parameters. </description>
 	</context>
 	<context id="gui_002">
-		<description>%gui_002</description>
+		<description>The format line displays the column positions in the editing area, and the current cursor position. </description>
 	</context>
 	<context id="gui_003">
-		<description>%gui_003</description>
+		<description>The message line displays information and error messages. </description>
 	</context>
 
 	<context id="popup_cut_context">
-		<description>%popup_cut_context</description>
+		<description>Cut the selected text to the clipboard. </description>
 	</context>
 	<context id="popup_copy_context">
-		<description>%popup_copy_context</description>
+		<description>Copy the selection to the clipboard. </description>
 	</context>
 	<context id="popup_paste_context">
-		<description>%popup_paste_context</description>
+		<description>Paste the contents of the clipboard at the current cursor position. </description>
 	</context>
 	<context id="popup_findSelection_context">
-		<description>%popup_findSelection_context</description>
+		<description>Find the next occurrence of the selected text. </description>
 	</context>
 	<context id="popup_blockMarkLine_context">
-		<description>%popup_blockMarkLine_context</description>
+		<description>Set or extend the line selection. </description>
 	</context>
 	<context id="popup_blockMarkCharacter_context">
-		<description>%popup_blockMarkCharacter_context</description>
+		<description>Set or extend the character selection. </description>
 	</context>
 	<context id="popup_blockMarkRectangle_context">
-		<description>%popup_blockMarkRectangle_context</description>
+		<description>Set or extend the rectangle selection. </description>
 	</context>
 	<context id="popup_blockUnmark_context">
-		<description>%popup_blockUnmark_context</description>
+		<description>Unselects the selected text. </description>
 	</context>
 	<context id="popup_blockCopy_context">
-		<description>%popup_blockCopy_context</description>
+		<description>Copy the selected text. </description>
 	</context>
 	<context id="popup_blockOverlay_context">
-		<description>%popup_blockOverlay_context</description>
+		<description>Overlay with the selected text. </description>
 	</context>
 	<context id="popup_blockMove_context">
-		<description>%popup_blockMove_context</description>
+		<description>Move the selected text. </description>
 	</context>
 	<context id="popup_blockDelete_context">
-		<description>%popup_blockDelete_context</description>
+		<description>Delete the selected text. </description>
 	</context>
 
 	<context id="popup_excludeSelection_context">
-		<description>%popup_excludeSelection_context</description>
+		<description>Exclude those lines that contain the selected text. </description>
 	</context>
 	<context id="popup_filterSelection_context">
-		<description>%popup_filterSelection_context</description>
+		<description>Display only those lines that contain the selected text. </description>
 	</context>
 	<context id="popup_showAll_context">
-		<description>%popup_showAll_context</description>
+		<description>Display all the lines in the current file. </description>
 	</context>
 
 	<context id="popup_document_context">
-		<description>%popup_document_context</description>
+		<description>Create and insert a comment block. </description>
 	</context>
 
 	<context id="popup_save_context">
-		<description>%popup_save_context</description>
+		<description>Save the resource that is currently active in the editor. </description>
 	</context>
 
 	<context id="popup_trace_context">
-		<description>%popup_trace_context</description>
+		<description>Create and insert a trace statement. </description>
 	</context>
 
 	<context id="popup_errors_context">
-		<description>%popup_errors_context</description>
+		<description>Display all lines that are in error. </description>
 	</context>
 
 	<context id="CPP_popup_functions_context">
-		<description>%CPP_popup_functions_context</description>
+		<description>Display all function definition headers. </description>
 	</context>
 	<context id="CPP_popup_outline_context">
-		<description>%CPP_popup_outline_context</description>
+		<description>Display a logic outline of the code. </description>
 	</context>
 	<context id="CPP_popup_sql_context">
-		<description>%CPP_popup_sql_context</description>
+		<description>Display embedded SQL statements. </description>
 	</context>
 	<context id="CPP_popup_cics_context">
-		<description>%CPP_popup_cics_context</description>
+		<description>Display embedded CICS statements. </description>
+	</context>
+
+	<context id="Fortran_popup_functions_context">
+		<description>Display all functions/subroutines. </description>
+	</context>
+	<context id="Fortran_popup_outline_context">
+		<description>Display an outline of the code. </description>
 	</context>
 
 	<context id="Java_popup_methods_context">
-		<description>%Java_popup_methods_context</description>
+		<description>Display all method definition headers. </description>
 	</context>
 	<context id="Java_popup_outline_context">
-		<description>%Java_popup_outline_context</description>
+		<description>Display a logic outline of the code. </description>
 	</context>
 	<context id="Java_popup_sql_context">
-		<description>%Java_popup_sql_context</description>
+		<description>Display embedded SQL statements. </description>
 	</context>
 
 	<context id="HLASM_popup_asmInstructions_context">
-		<description>%HLASM_popup_asmInstructions_context</description>
+		<description>Display all assembler instructions. </description>
 	</context>
 	<context id="HLASM_popup_branches_context">
-		<description>%HLASM_popup_branches_context</description>
+		<description>Display all branch instructions and labels. </description>
 	</context>
 	<context id="HLASM_popup_tpfMacros_context">
-		<description>%HLASM_popup_tpfMacros_context</description>
+		<description>Display all TPF macros. </description>
 	</context>
 	<context id="HLASM_popup_comments_context">
-		<description>%HLASM_popup_comments_context</description>
+		<description>Display all comment lines. </description>
 	</context>
 
 	<context id="JCL_popup_jobs_context">
-		<description>%JCL_popup_jobs_context</description>
+		<description>Display all JOB statements. </description>
 	</context>
 	<context id="JCL_popup_execs_context">
-		<description>%JCL_popup_execs_context</description>
+		<description>Display all EXEC statements. </description>
 	</context>
 	<context id="JCL_popup_dds_context">
-		<description>%JCL_popup_dds_context</description>
+		<description>Display all DD statements. </description>
 	</context>
 	<context id="JCL_popup_procs_context">
-		<description>%JCL_popup_procs_context</description>
+		<description>Display all PROC statements. </description>
 	</context>
 
 	<context id="PLI_popup_procedures_context">
-		<description>%PLI_popup_procedures_context</description>
+		<description>Display all lines that contain PL/I procedure keywords and labels. </description>
 	</context>
 	<context id="PLI_popup_outline_context">
-		<description>%PLI_popup_outline_context</description>
+		<description>Display all lines that contain PL/I control-flow statements. </description>
 	</context>
 	<context id="PLI_popup_preproc_context">
-		<description>%PLI_popup_preproc_context</description>
+		<description>Display all lines that contain preprocessor statements. </description>
 	</context>
 	<context id="PLI_popup_includes_context">
-		<description>%PLI_popup_includes_context</description>
+		<description>Display all PL/I INCLUDE statements. </description>
 	</context>
 	<context id="PLI_popup_extensions_context">
-		<description>%PLI_popup_extensions_context</description>
+		<description>Display all PL/I statements that contain extension keywords. </description>
 	</context>
 	<context id="PLI_popup_sqlCics_context">
-		<description>%PLI_popup_sqlCics_context</description>
+		<description>Display embedded SQL and CICS statements. </description>
 	</context>
 
 	<context id="REXX_popup_labels_context">
-		<description>%REXX_popup_labels_context</description>
+		<description>Display all REXX labels. </description>
 	</context>
 
 	<context id="COBOL_popup_comments_context">
-		<description>%COBOL_popup_comments_context</description>
+		<description>Display all COBOL comment lines. </description>
 	</context>
 	<context id="COBOL_popup_divisions_context">
-		<description>%COBOL_popup_divisions_context</description>
+		<description>Display all lines containing the keywords DIVISION or SECTION. </description>
 	</context>
 	<context id="COBOL_popup_areaA_context">
-		<description>%COBOL_popup_areaA_context</description>
+		<description>Display all lines which start in Area A. This will show the outline of the COBOL program. </description>
 	</context>
 	<context id="COBOL_popup_preprocessor_context">
-		<description>%COBOL_popup_preprocessor_context</description>
+		<description>Display embedded SQL and CICS statements. </description>
 	</context>
 </contexts>
