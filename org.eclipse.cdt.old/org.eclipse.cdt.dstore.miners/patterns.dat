@@ -16,6 +16,9 @@ command: nmake.*
 	 informational file line         pattern=([\w,.,/,\\]*)\((\d*):\d*\) : informational .*
 
 command: .*make.*
+         error         file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
+	 warning       file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(W\).*
+	 informational file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
 	 warning       file line         pattern =([\w,.,/,\\]*):(\d*): warning: .*
 	 error         file line         pattern =([\w,.,/,\\]*):(\d*):.*
 	 informational file              pattern =([\w,.,/,\\]*):.*
