@@ -62,13 +62,13 @@ public class FileExtensionDialog extends TitleAreaDialog {
 		contents.setLayoutData(new GridData(GridData.FILL_BOTH));
 		contents.setFont(parentComposite.getFont());
 
-		setTitle("Dialog Title");
-		setMessage("file Type Message");
+		setTitle("Define a new file extension");
+		setMessage("Enter file extension to add (example: .doc, .help)");
 		
 		// begin the layout
 
 		Label label = new Label(contents, SWT.LEFT);
-		label.setText("file Type Label");
+		label.setText("File extension:");
 		//$NON-NLS-1$
 		GridData data = new GridData();
 		data.horizontalAlignment = GridData.FILL;

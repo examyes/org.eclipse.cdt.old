@@ -116,22 +116,15 @@ public class AutoconfBuilderPropertyPageControl extends Composite
  
    		// widgets
    		Label typeLbl = new Label(distComp,SWT.NONE);
-   		typeLbl.setText("File types:");
+   		typeLbl.setText("File extensions:");
    		
    		new Label(distComp,SWT.NONE);
    		   		   		
    		_fileExtensionList = new Table(distComp,SWT.BORDER|SWT.MULTI|SWT.H_SCROLL|SWT.V_SCROLL|SWT.FULL_SELECTION);
-   //		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		GridData data = new GridData(GridData.FILL_BOTH);
-		data.heightHint = _fileExtensionList.getItemHeight()*12;
+		data.heightHint = _fileExtensionList.getItemHeight()*5;
 		_fileExtensionList.setLayoutData(data);
 		
-		
-		
-	//	gd.verticalAlignment = gd.FILL;
-	//	gd.grabExcessHorizontalSpace = false;
-	//	_fileExtensionList.setLayoutData(gd);
-   		
 		// button composite
 		
 		Composite buttonComp = new Composite(distComp,SWT.NONE);
@@ -139,6 +132,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 
    		_addButton = new Button(buttonComp,SWT.PUSH);
    		_addButton.setText("Add...");
+   		_addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
    		
    		/* Add the listeners */
 		SelectionListener addSelectionListener = new SelectionAdapter() {
@@ -150,6 +144,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
    		
    		_removeButton = new Button(buttonComp,SWT.PUSH);
    		_removeButton.setText("Remove");
+   		_removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
    		
    		/* Add the listeners */
 		SelectionListener removeSelectionListener = new SelectionAdapter() {
@@ -169,8 +164,9 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     {
      		if(_fileExtensionList.getSelectionIndices().length>1)
     			_fileExtensionList.remove(_fileExtensionList.getSelectionIndices());
-    		else if(_fileExtensionList.getSelectionIndex()!=-1)
-    		_fileExtensionList.remove(_fileExtensionList.getSelectionIndex());
+    		else 
+    			if(_fileExtensionList.getSelectionIndex()!=-1)
+    				_fileExtensionList.remove(_fileExtensionList.getSelectionIndex());
     	
     		
     }
