@@ -13,7 +13,7 @@ import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.views.*;
 
 import org.eclipse.cdt.pa.ui.PAPlugin;
-import org.eclipse.cdt.pa.ui.api.*;
+import org.eclipse.cdt.pa.ui.api.*; 
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.viewers.*;

@@ -50,17 +50,6 @@ public class PAProjectAdaptor implements ICppProjectListener {
   	IProject project = event.getProject();
   	switch (type)
   	{
-  	
-	  case CppProjectEvent.OPEN:
-      {		    
-		 if (project instanceof Repository)
-		 {
-			Repository rep = (Repository)project;		      
-			_api.extendSchema(rep.getDataStore().getDescriptorRoot());
-		 }
-	  }
-	  break;
-	  
 	  case CppProjectEvent.CLOSE:
   	  case CppProjectEvent.DELETE:
   	  {

@@ -24,7 +24,8 @@ import org.eclipse.cdt.pa.ui.views.PAActionLoader;
 import java.util.*;
 
 
-public class PAPlugin extends AbstractUIPlugin {
+public class PAPlugin extends AbstractUIPlugin implements ISchemaProvider
+{
     
   // Plugin attributes  
   private static PAPlugin               _instance;
@@ -33,6 +34,8 @@ public class PAPlugin extends AbstractUIPlugin {
     
   private        String                 _pluginPath;
   private        ResourceBundle         _resourceBundle;
+  private        ISchemaRegistry        _schemaRegistry;
+  private        ISchemaExtender        _schemaExtender;
     
 
   // Constructor  
@@ -78,19 +81,23 @@ public class PAPlugin extends AbstractUIPlugin {
   }
 
 
-  public void startup() throws CoreException {
-  
+  public void startup() throws CoreException 
+    {  
 	if (_instance == null) {	
 	 _instance = this;
 	}
 	
 	super.startup();
+
+	DataStore dataStore = getDataStore();
+	_interface = new PAModelInterface(dataStore);	
 	
-	_interface = new PAModelInterface(getDataStore());
-	_interface.extendSchema(getDataStore().getDescriptorRoot());
-	CppPlugin.getDefault().provideExternalLoader(new ExternalLoader(getDescriptor().getPluginClassLoader(),
-							   "org.eclipse.cdt.pa.ui.*"));
-	
+	// register own schema with CDT schema
+	_schemaRegistry = CppPlugin.getDefault().getSchemaRegistry();
+	_schemaExtender = new PASchemaExtender();	
+	_schemaRegistry.registerSchemaExtender(_schemaExtender);
+
+	new PAActionLoader();
   }
 
 
@@ -185,6 +192,17 @@ public class PAPlugin extends AbstractUIPlugin {
   {
    return _resourceBundle;
   }
+
+    public ISchemaRegistry getSchemaRegistry()
+    {
+	return _schemaRegistry;
+    }
+
+    public ISchemaExtender getSchemaExtender()
+    {
+	return _schemaExtender;
+    }
+
 
 }
 

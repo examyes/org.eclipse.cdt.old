@@ -23,29 +23,27 @@ import org.eclipse.ui.*;
 
 import java.util.*;
 
-public class PAActionLoader extends CppActionLoader {
-
-    private static PAActionLoader _instance = new PAActionLoader();
-	private ResourceBundle _paIconBundle;
-	private IOpenAction _openAction;
+public class PAActionLoader extends CppActionLoader 
+{
+    private static PAActionLoader _instance;
+    private ResourceBundle _paIconBundle;
+    private IOpenAction _openAction;
 	
 	
     // Constructor
     public PAActionLoader()
     {
-	  super();
+	super(PAPlugin.getDefault());
 	  
 	  try 
-	  {
-      	_paIconBundle = ResourceBundle.getBundle("org.eclipse.cdt.pa.ui.IconResources");
-      }
-      catch (MissingResourceException mre)
-      {
-       	_paIconBundle = null;
-      }
-
-	  provideExternalLoader(new ExternalLoader(PAPlugin.getDefault().getDescriptor().getPluginClassLoader(),
-						   "org.eclipse.cdt.pa.ui.*"));
+	      {
+		  _paIconBundle = ResourceBundle.getBundle("org.eclipse.cdt.pa.ui.IconResources");
+	      }
+	  catch (MissingResourceException mre)
+	      {
+		  _paIconBundle = null;
+	      }	  
+	  _instance = this;
     }
  
  
@@ -53,13 +51,6 @@ public class PAActionLoader extends CppActionLoader {
     {
 	 return _instance;
     }
-    
-    /*
-    public Class forName(String source) throws ClassNotFoundException 
-    {
-     return Class.forName(source);
-    }
-    */
     
     
     public IOpenAction getOpenAction()
