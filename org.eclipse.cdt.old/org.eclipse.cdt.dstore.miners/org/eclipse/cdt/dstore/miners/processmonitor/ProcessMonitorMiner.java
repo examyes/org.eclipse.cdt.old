@@ -126,9 +126,6 @@ public class ProcessMonitorMiner extends Miner
 		_writer.write("exit");
 		_writer.write('\n');
 		_writer.flush();   			
-
-		_writer.close();
-		_reader.close();
 	    }
 	catch (IOException e)
 	    {
