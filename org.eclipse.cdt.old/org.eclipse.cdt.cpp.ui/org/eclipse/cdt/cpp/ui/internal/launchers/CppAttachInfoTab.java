@@ -65,7 +65,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     private  String        _processID;
 
     private static DataElement _executable;
-    private  DataElement   _directory;
+    private  DataElement   _directory = null;
 
 				
 	/**
@@ -332,6 +332,8 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    {
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
       String processID = (String)_processIDField.getText();
+      if (_directory == null)
+          return;
       if (isValidProcessID(processID))
    		config.setAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, processID);
 	}
@@ -402,6 +404,9 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 		setErrorMessage(null);
 		setMessage(null);
       String processID = _processIDField.getText();
+
+      if (_directory == null)
+         return true;
 
       if (_programNameField.getText() == "" || processID == "")
          return false;
