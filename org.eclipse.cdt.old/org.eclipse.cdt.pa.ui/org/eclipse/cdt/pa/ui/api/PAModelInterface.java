@@ -350,7 +350,7 @@ public class PAModelInterface implements IDomainListener
      
 	   IProject project = CppPlugin.getDefault().getCurrentProject();
 	   MonitorStatusThread monitor = new MonitorStatusThread(status, project);
-	   monitor.setWaitTime(1000);
+	   monitor.setWaitTime(400);
 	   monitor.start(); 
 	 }
 			
