@@ -59,15 +59,12 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     private Group _optionGroup;
     private Table _fileExtensionList;
  
-    private CppPlugin _plugin;
-
+	private ArrayList extensionList = new ArrayList();
+	
+	
     public AutoconfBuilderPropertyPageControl(Composite cnr, int style)
     {
 		super(cnr, style);
-		
-		
-		
-		_plugin = CppPlugin.getDefault();
 		
 		GridLayout layout = new GridLayout();
 	   	layout.numColumns = 1;
@@ -182,27 +179,32 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		TableItem item = newResourceTableItem(resourceType,true);
 		_fileExtensionList.setFocus();
 		_fileExtensionList.showItem(item);
+		
+		extensionList.add(extension);
+		
+		
 		}
 	}
 
-	protected TableItem newResourceTableItem(IFileEditorMapping mapping, boolean selected) {
-	Image image = mapping.getImageDescriptor().createImage(false);
+	protected TableItem newResourceTableItem(IFileEditorMapping mapping, boolean selected) 
+	{
+		Image image = mapping.getImageDescriptor().createImage(false);
 	//if (image != null)
 	//	imagesToDispose.add(image);
 	
 	//TableItem item = new TableItem(_fileExtensionList, SWT.NULL, index);
-	TableItem item = new TableItem(_fileExtensionList, SWT.NULL);
-	if (image != null) {
-		item.setImage(image);
-	}
-	item.setText(mapping.getLabel());
-	item.setData(mapping);
+		TableItem item = new TableItem(_fileExtensionList, SWT.NULL);
+		if (image != null) {
+			item.setImage(image);
+		}
+		item.setText(mapping.getLabel());
+		item.setData(mapping);
 //	if (selected) {
 //		_fileExtensionList.setSelection(index);
 	//}
 
-	return item;
-}
+		return item;
+	}
 	// gets
      
     public boolean getDebugButtonSelection()
@@ -212,6 +214,10 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     public boolean getOptimizedButtonSelection()
     {
 		return _optimizedButton.getSelection();
+    }
+    public ArrayList getExtensionList()
+    {
+    	return extensionList;
     }
     
     // sets
@@ -225,6 +231,18 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     public void setOptimizedButtonSelection(boolean flag)
     {
 		_optimizedButton.setSelection(flag);
+    }
+    public void setTableItems(ArrayList list)
+    {
+    	for(int i = 0; i < list.size(); i++)
+    	{
+    		String extension = (String)list.get(i);
+
+			// Create the new type and insert it
+			FileEditorMapping resourceType = new FileEditorMapping("*", extension);
+			TableItem item = newResourceTableItem(resourceType,true);
+			_fileExtensionList.showItem(item);
+    	}
     }
     
 }

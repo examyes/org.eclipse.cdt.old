@@ -33,7 +33,8 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 
 	// items in the project property page
 	String optionKey = "Executable_Type";
-	String compKey="Compiler_Type"; 
+	String compKey="Compiler_Type";
+	String extensionKey = "Extra_Dist_Extensions"; 
 
 	IProject project;
 
@@ -71,6 +72,9 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 	protected void performInit()
 	{
 		CppPlugin plugin      = CppPlugin.getDefault();
+		
+		// optimnization options
+		
 		ArrayList options = plugin.readProperty(project,optionKey);
 		if (options.isEmpty())
 		{
@@ -93,6 +97,14 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 				_autoconfBuildControl.setOptimizedButtonSelection(true);
 				_autoconfBuildControl.setDebugButtonSelection(false);
 			}
+		}
+		
+		// extra_dist file extensions
+		
+		ArrayList extensions = plugin.readProperty(project,extensionKey);
+		if(!extensions.isEmpty())
+		{
+			_autoconfBuildControl.setTableItems(extensions);
 		}
 
 	}
@@ -121,6 +133,11 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 			DataElement optimizedCmd = plugin.getDataStore().localDescriptorQuery(api.findProjectElement(project).getDescriptor(), "C_DEBUG_OPTION");			
 			DataElement status = plugin.getDataStore().command(optimizedCmd, api.findProjectElement(project));
 
+		}
+		
+		if(!_autoconfBuildControl.getExtensionList().isEmpty())
+		{
+			plugin.writeProperty(project,extensionKey,_autoconfBuildControl.getExtensionList());
 		}
 	}
 	
