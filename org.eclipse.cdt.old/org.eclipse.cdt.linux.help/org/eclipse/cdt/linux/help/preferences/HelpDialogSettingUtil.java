@@ -64,6 +64,16 @@ public class HelpDialogSettingUtil
     public static void setDefaultSettings()
     {
 	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
+	
+	// WINDOWS specific
+	String theOs = System.getProperty("os.name");
+	if (theOs.toLowerCase().startsWith("window"))
+	    {
+		//Only html(i.e exact) with Windows. 	
+		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT, true);
+		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML, true);
+	    }
+
 	if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP) ) )

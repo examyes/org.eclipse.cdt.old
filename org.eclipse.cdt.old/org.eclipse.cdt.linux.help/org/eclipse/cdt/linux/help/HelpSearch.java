@@ -309,7 +309,7 @@ public class HelpSearch
     }
     
     static public boolean finishLoading()
-    {
+    {      	
 	return (_mandone && _infodone);
     }
 
@@ -338,13 +338,22 @@ public class HelpSearch
 	long begin=System.currentTimeMillis();
 	ArrayList result=new ArrayList();	
 
+	// WINDOWS specific
+	String theOs = System.getProperty("os.name");
+	if (theOs.toLowerCase().startsWith("window"))
+	    {
+		//Only html(i.e exact) with Windows. 
+		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT, true);
+		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML, true);
+	    }
+
 	//check whether default settings exist. If not, set some defaults
 	if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP) ) )
-	    {
+	    {			
 		// Set default search MODE to SUBSTRING.
-		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS, true);
+		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS, true);    
 	    }
 	if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN) ||

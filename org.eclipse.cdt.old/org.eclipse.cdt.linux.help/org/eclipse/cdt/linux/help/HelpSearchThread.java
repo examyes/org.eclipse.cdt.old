@@ -26,11 +26,17 @@ public class HelpSearchThread extends Thread
 
     public void run()
     {
-	while(!HelpSearch.finishLoading())
-	    {		
-		//Thread.sleep(50);
-		yield();
-	    }	
+	// Always return FALSE for Windows
+	String theOs = System.getProperty("os.name");
+	if (!theOs.toLowerCase().startsWith("window"))
+	    {
+		while(!HelpSearch.finishLoading())
+		    {		
+			//Thread.sleep(100);
+			yield();
+		    }
+	    }
+
 	result= HelpPlugin.getListElements(theKey);
 	if (result==null)
 	    return;// no results	

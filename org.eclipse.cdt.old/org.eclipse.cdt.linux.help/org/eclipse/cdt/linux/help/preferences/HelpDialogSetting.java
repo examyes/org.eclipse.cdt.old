@@ -229,6 +229,20 @@ public class HelpDialogSetting extends Dialog implements SelectionListener
 		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL, checkBox1.getSelection());
 		checkBox1.setEnabled(false);
 	    }	
+
+	String theOs = System.getProperty("os.name");
+	if (theOs.toLowerCase().startsWith("window"))
+	    {	
+		if(radioButton1.getSelection())
+		    {
+			radioButton2.setEnabled(false);
+			radioButton3.setEnabled(false);
+			checkBox1.setEnabled(false);
+			checkBox2.setEnabled(false);
+			checkBox3.setEnabled(false);
+		    }	
+	    }	
+
     }
 
     private Button createRadioButton(Composite parent, String label)
@@ -253,6 +267,17 @@ public class HelpDialogSetting extends Dialog implements SelectionListener
 
     public void widgetSelected(SelectionEvent e)
     {	
+	// WiNDOWS specific
+	String theOs = System.getProperty("os.name");
+	if (theOs.toLowerCase().startsWith("window"))
+	    {
+		if(radioButton1==(Button)e.getSource())
+		    {
+			return ;
+		    }
+	    }
+
+
 	if (radioButton1==(Button)e.getSource())
 	    {
 		if(radioButton1.getSelection())
@@ -404,15 +429,24 @@ public class HelpDialogSetting extends Dialog implements SelectionListener
     private void checkDefaultSettings()
     {	
 	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
+
+	// WINDOWS specific
+	String theOs = System.getProperty("os.name");
+	if (theOs.toLowerCase().startsWith("window"))
+	    {
+		//Only html(i.e exact) with Windows. 		
+		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT, true);
+		settings.put(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML, true);
+	    }
+	
 	//set the default search TYPE if appropriate
 	if ( !(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS) ||
 	      settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP) ) )
-	    {
+	    {		
 		// Set default search TYPE to SUBSTRING.
 		radioButton2.setSelection(true);
 		settings.put(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS, true);
-
 	    }
 	
 	//set the default search SCOPE if appropriate

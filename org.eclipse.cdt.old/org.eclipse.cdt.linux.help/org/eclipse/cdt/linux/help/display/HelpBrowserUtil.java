@@ -13,6 +13,13 @@ public class HelpBrowserUtil
 {
     public static boolean existsCommand(String command)
     {
+
+	// Always return FALSE for Windows
+	String theOs = System.getProperty("os.name");
+	if (theOs.toLowerCase().startsWith("window"))
+	    return false;
+
+
 	String[] arg=new String[3];
 	arg[0]="sh";
 	arg[1]="-c";
