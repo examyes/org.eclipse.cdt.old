@@ -129,6 +129,12 @@ public class MinerLoader implements ISchemaRegistry
     private void connectMiners(ArrayList unconnectedMiners)
     {
 	ArrayList connectedList = new ArrayList();
+	// init list
+	for (int i = 0; i < _miners.size(); i++)
+	    {
+		connectedList.add(((Miner)_miners.get(i)).getName());
+	    }
+
 	while (unconnectedMiners.size() > 0)
 	    {
 		Miner miner = (Miner)unconnectedMiners.get(0);
