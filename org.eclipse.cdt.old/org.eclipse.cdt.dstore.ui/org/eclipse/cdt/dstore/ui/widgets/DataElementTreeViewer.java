@@ -557,11 +557,12 @@ public void doExpand(DataElement obj)
 
     public void select(DataElement object)
     {
+    	/*
 	if (object != null && (_currentInput != null))
 	    {
 		String type = object.getType();
 		String name = object.getName();
-		//***reveal(object);
+		//reveal(object);
 		Widget widget = findItem(object);		
 
 		if (widget != null)
@@ -584,6 +585,7 @@ public void doExpand(DataElement obj)
 			    }
 		    }
 	    }
+	    */
     }
 
     public void setFilter(DataElement type)
