@@ -189,7 +189,7 @@ public class TransferFiles extends Thread
 	    }
 
 	// both projects on same machine
-	if (targetDataStore == sourceDataStore)
+	if ((targetDataStore == sourceDataStore) || !targetDataStore.isVirtual())
 	    {
 		// files on the same system
 		if (needsUpdate)
@@ -207,26 +207,6 @@ public class TransferFiles extends Thread
 				targetDataStore.synchronizedCommand(cmd, args, target);
 				setDate(copiedSource, getDate(source));
 			    }
-		    }
-	    }
-	else if (targetDataStore == _plugin.getDataStore())
-	    {
-		// if the target is local
-		if (needsUpdate)
-		    {
-			source.getFileObject();
-			
-			String sourceMapping = sourceDataStore.mapToLocalPath(source.getSource());
-			java.io.File newSource = new java.io.File(sourceMapping);
-			if (newSource != null && newSource.exists())
-			    {
-				newSource.renameTo(new java.io.File(newSourceStr));
-			    }
-		    }
-		else if (type.equals("directory"))
-		    {
-			java.io.File targetDir = new java.io.File(newSourceStr);
-			targetDir.mkdir();
 		    }
 	    }
 	else

@@ -45,7 +45,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
     private Button       _localHome;
     private Button       _remoteHome;
     
-    private Button       _localBack;
+    private Button       _localBack; 
     private Button       _remoteBack;
 
     private Button       _sendRemote;
