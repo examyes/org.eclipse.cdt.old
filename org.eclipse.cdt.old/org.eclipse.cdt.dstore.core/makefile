@@ -27,12 +27,12 @@ eclipseLocation := $(shell test -r .eclipse && cat .eclipse)
 endif
 
 # List of Plugins that we build
+buildPlugins += org.eclipse.cdt.debug.gdbPicl
 buildPlugins += org.eclipse.cdt.dstore.extra
 buildPlugins += org.eclipse.cdt.dstore.extra.server
 buildPlugins += org.eclipse.cdt.dstore.core
 buildPlugins += org.eclipse.cdt.linux.help	
 buildPlugins += org.eclipse.cdt.cpp.miners.parser
-buildPlugins += org.eclipse.cdt.debug.gdbPicl
 buildPlugins += org.eclipse.cdt.dstore.hosts
 buildPlugins += org.eclipse.cdt.dstore.ui
 buildPlugins += org.eclipse.cdt.cpp.ui
@@ -44,12 +44,13 @@ buildPlugins += org.eclipse.cdt.cpp.miners
 # List of All Plugins Used in C/C++ Deliverable (e.g buildPlugins plus the ones we don't build)
 allPlugins = $(buildPlugins)
 allPlugins += org.eclipse.cdt.cpp.docs.user
-allPlugins += com.ibm.debug
 allPlugins += com.ibm.lpex
 #allPlugins += com.ibm.lpex.doc.user
 #allPlugius += com.ibm.lpex.doc.isv
 allPlugins += com.ibm.debug.doc.user
 allPlugins += com.ibm.debug
+allPlugins += com.ibm.debug.daemon
+
 
 # List of Plugins needed for the Serverside Zip
 serverPlugins =  org.eclipse.cdt.dstore.core
@@ -58,6 +59,7 @@ serverPlugins += org.eclipse.cdt.dstore.miners
 serverPlugins += org.eclipse.cdt.cpp.miners
 serverPlugins += org.eclipse.cdt.cpp.miners.parser
 serverPlugins += com.ibm.debug
+serverPlugins += com.ibm.debug.daemon
 serverPlugins += org.eclipse.cdt.debug.gdbPicl
 
 # PUBLIC TARGETS
