@@ -160,22 +160,7 @@ public class MenuHandler
 
 	if (selected != null)
 	  {	    
-	      if (_openPerspectiveAction == null)
-		  {
-		      if (_loader != null)
-			  {
-
-			      _openPerspectiveAction = _loader.getOpenPerspectiveAction();
-			  }
-		  }
-	      
-	      if (_openPerspectiveAction != null)
-		  {
-		      _openPerspectiveAction.setSubject(selected);
-		      menu.add(_openPerspectiveAction);
-		  }
-
-
+	
 	    menu.add(new Separator(getLocalizedString("ui.Object_Actions")));	    
 	    DataElement descriptor = selected.getDescriptor();
 
@@ -188,6 +173,20 @@ public class MenuHandler
 	    if (_loader != null)
 		{
 		    _loader.loadCustomActions(menu, selected, descriptor); 
+		    	
+		
+		    if (_openPerspectiveAction == null)
+			{
+				_openPerspectiveAction = _loader.getOpenPerspectiveAction();
+		  	}
+	      
+	      	if (_openPerspectiveAction != null)
+		  	{
+		      _openPerspectiveAction.setSubject(selected);
+		      
+		      menu.add(new Separator("Perspective Actions"));
+		      menu.add(_openPerspectiveAction);
+		  	}
 		}
 	  }
 	
