@@ -91,6 +91,7 @@ public class FileSystemMiner extends Miner
 			  if (currentDirectory != null)
 			      {
 				  DataElement ref = _dataStore.createReference(host,currentDirectory);
+				  //host.addNestedData(currentDirectory, true);
 			      }
 		      }
 	      }
@@ -128,6 +129,7 @@ public class FileSystemMiner extends Miner
 
     private DataElement findFile(DataElement root, File path)
     {	
+	_dataStore.trace("find " + path + " in " + root.getName());
 	DataElement result = root;
 	if (root.getType().equals("data"))
 	    {
@@ -155,21 +157,25 @@ public class FileSystemMiner extends Miner
 		for (int i = 0; i < root.getNestedSize(); i++)
 		    {
 			DataElement directory = root.get(i);					
-
-			String path_dir = path.getPath().replace('\\', '/');
-			String directory_source = directory.getSource();
-			if (directory_source.equals(path_dir))
+			String type = directory.getType();
+			if (type.equals("directory") || type.equals("device"))
 			    {
-				return directory;
+				String path_dir = path.getPath().replace('\\', '/');
+				String directory_source = directory.getSource();
+				if (directory_source.equals(path_dir))
+				    {
+					_dataStore.trace("found " + directory.getName() + " for " + path);
+					return directory;
+				    }
+				
+				if (path_dir.startsWith(directory_source))
+				    {			
+					DataElement tempstatus=_dataStore.createObject(null,"status","start");
+					handleQuery(directory,tempstatus);				
+					result= findFile(directory,path);
+					break;
+				    }			
 			    }
-
-			if (path_dir.startsWith(directory_source))
-			    {			
-				DataElement tempstatus=_dataStore.createObject(null,"status","start");
-				handleQuery(directory,tempstatus);				
-				result= findFile(directory,path);
-				break;
-			    }			
 		    }
 	    }
 	
@@ -798,7 +804,6 @@ public class FileSystemMiner extends Miner
 	  if (theElement.getDescriptor() == null || 
 	      theElement.getDescriptor().isOfType(_fsystemObjectDescriptor, true))
 	      {
-	      
 		  // DKM - this prevents refresh when we create projects 
 		  //	  if (force  || (!theElement.isExpanded() || (theElement.getNestedSize() == 0)))
 	      {
