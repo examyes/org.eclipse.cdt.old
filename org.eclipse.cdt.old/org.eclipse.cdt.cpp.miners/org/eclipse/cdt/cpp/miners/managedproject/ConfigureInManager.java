@@ -24,7 +24,7 @@ public class ConfigureInManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void manageConfigureIn()
+	protected void manageConfigureIn( boolean actionIsManageProject)
 	{
 		// check if there is an existing configure.in
 		File configure_in = new File (project.getSource(),"configure.in");
@@ -35,6 +35,14 @@ public class ConfigureInManager {
 		}
 		else // it does exist
 		{
+			// if the action was mangeProject then
+			if(actionIsManageProject)
+			{
+				System.out.println("\n configure.in will be updated"+ 
+					"\nexisting file will be named configure.in.old");
+			}
+			// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
+			// the rest of the file will be te same
 			Runtime rt = Runtime.getRuntime();
 			// copy the old configure.in to configure.in.old
 			try{

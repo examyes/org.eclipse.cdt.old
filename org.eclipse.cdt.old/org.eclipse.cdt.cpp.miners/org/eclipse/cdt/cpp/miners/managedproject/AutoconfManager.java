@@ -45,7 +45,7 @@ public class AutoconfManager {
 		}
 		else
 		{	
-			generateAutoconfFile(status);
+			generateAutoconfFile(status,true);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
 				runCommand(status,"./script.batch;./configure");
@@ -55,10 +55,10 @@ public class AutoconfManager {
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
 	}
-	protected void generateAutoconfFile(DataElement status)
+	protected void generateAutoconfFile(DataElement status, boolean actionIsManagedProject)
 	{
-		configureInManager.manageConfigureIn();
-		makefileAmManager.manageMakefileAm();
+		configureInManager.manageConfigureIn(actionIsManagedProject);
+		makefileAmManager.manageMakefileAm(actionIsManagedProject);
 	}
 	protected void runSupportScript(DataElement status)
 	{
