@@ -114,6 +114,8 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Optimized","C_OPTIMIZED_OPTION",false);
 		createCommandDescriptor(projectD, "Debuggable","C_DEBUG_OPTION",false);
 		
+		createCommandDescriptor(projectD,"ExtraDist Extensions","C_SET_EXTRA_DIST_EXTENSIONS",false);
+		
 		
 		 createRelationDescriptor(schemaRoot, "class type");			
 	}
@@ -128,6 +130,7 @@ public class ManagedProjectMiner extends Miner
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
   		DataElement  subject = getCommandArgument(theCommand, 0);
+  		DataElement args = getCommandArgument(theCommand,1);
   			
 		if (subject.getType().equals("Project") || subject.getType().equals("Closed Project"))
 		{
@@ -250,6 +253,12 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.makefileAmManager.setCompilerFlag(project,"-g");
 			}
 			
+			else if(name.equals("C_SET_EXTRA_DIST_EXTENSIONS"))
+			{
+				//handleSetExtensions(subject, args);
+				System.out.println("\n extran dist action"+"\n"+args);
+				
+			}
 			// new : to havdle delete notification
  			else if (name.equals("C_NOTIFICATION"))
 			{

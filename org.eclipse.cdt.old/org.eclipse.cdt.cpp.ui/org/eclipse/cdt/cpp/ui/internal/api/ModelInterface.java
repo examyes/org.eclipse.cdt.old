@@ -148,6 +148,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  setParseIncludePath(_project);	
 	  setParseQuality(_project);	
 	  setEnvironment(_project);
+	  setDistributionExtensions(_project);
       }
   }
 
@@ -970,6 +971,33 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    }	
 	    }
     }
+
+	public void setDistributionExtensions(IProject project)
+	{
+		DataStore dataStore = _plugin.getDataStore();	
+		if (project instanceof Repository)
+			dataStore = ((Repository)project).getDataStore();
+				
+		DataElement extensionElement = dataStore.createObject(null, "ExtraDist File Extensions", project.getName());
+		ArrayList extensions = _plugin.readProperty(project, "Extra_Dist_Extensions");
+		for (int i = 0; i < extensions.size(); i++)
+			dataStore.createObject(extensionElement, "ExtraDist File Extensions", (String)extensions.get(i), (String)extensions.get(i));
+
+		setDistributionExtensions(findProjectElement(project), extensionElement);
+	}
+	public void setDistributionExtensions(DataElement theObject, DataElement theExtensions)
+	{
+		if ((theObject == null) || (theExtensions == null))
+			return;
+		theExtensions.setAttribute(DE.A_NAME, theObject.getId());
+		DataStore dataStore = theObject.getDataStore();
+		//DataElement contObj = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Container Object", 1);
+		DataElement setD = dataStore.localDescriptorQuery(theObject, "C_SET_EXTRA_DIST_EXTENSIONS");
+		if (setD != null)
+		{
+			dataStore.command(setD, theExtensions, theObject, true);
+		}
+	}
 
   public void setEnvironment(IProject project)
   {
