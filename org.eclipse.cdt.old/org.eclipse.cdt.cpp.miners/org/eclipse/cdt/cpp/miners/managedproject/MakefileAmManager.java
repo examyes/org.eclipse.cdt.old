@@ -6,7 +6,6 @@ package org.eclipse.cdt.cpp.miners.managedproject;
  */
 import org.eclipse.cdt.dstore.core.model.*;
 import java.io.*;
-import java.lang.*;
 import java.util.*;
 
 public class MakefileAmManager {
@@ -845,30 +844,16 @@ public class MakefileAmManager {
 				line = line.concat(" "+modName);
 			}
 		}
-		return line.trim();
+		return line.trim()+" "; // space is needed for matching purposes
 	}
 	private String updateLdaddLine(String line, File parent,MakefileAmClassifier classifier)
 	{
-		line = line.substring(0,line.lastIndexOf("=")+1);
+		String libName = new String();
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
 		{
 			// add libs to the _LDADD variable
 			ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
-			/*String[] subNames = dir_structure.getSubdirWorkspacePath();
-			for(int i = 0; i <subNames.length; i++)
-			{
-				// check if the directory starts with "."
-				if(subNames[i].indexOf(".")==-1)
-				{
-					String tok = getLastToken(subNames[i]);
-					String modTok = new String();
-					String modName = new String("./").concat(subNames[i]).concat("/");
-					modTok = modTok.concat("lib").concat(tok).concat(targetSuffix).concat(".a");
-					modName = modName.concat(modTok);
-					line = line.concat(" "+modName);
-				}
-			}*/
 			File[] subdirs = dir_structure.getSubdirs();
 			for(int i = 0; i < subdirs.length; i++)
 			{
@@ -885,12 +870,19 @@ public class MakefileAmManager {
 						String path= loc.substring(0,loc.lastIndexOf("Makefile.am"));
 						if(fileClass == STATICLIB)
 						{
-							
-							line = line+" "+"."+path+getLibName(MakefileAm,_LIBRARIES);
+							libName = "." + path + getLibName(MakefileAm,_LIBRARIES);
+							libName = libName.replace('\\', '/');
+							// check if this value already defined before adding it to the _LDADD variable definition
+							if(line.indexOf(" "+libName+" ")==-1)
+								line = line+" "+libName+" ";
 						}
 						if(fileClass == SHAREDLIB)
 						{
-							line = line+" "+"."+path+getLibName(MakefileAm,_LTLIBRARIES);
+							libName = "."+path+getLibName(MakefileAm,_LTLIBRARIES);
+							libName = libName.replace('\\', '/');
+							// check if this value already defined before adding it to the _LDADD variable definition
+							if(line.indexOf(" "+libName+" ")==-1)
+								line = line+" "+libName+" ";
 						}
 					}
 				}
