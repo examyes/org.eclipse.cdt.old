@@ -324,8 +324,14 @@ public void transferStreams(InputStream source, OutputStream destination,
     java.io.File fileObject = _mountedFile;
     if (fileObject == null)
 	{
-	    // **** DKM - we should check timestamps here to decide whether to redownload the file
-	    fileObject = _currentFile;
+		if (_currentFile != null && _currentFile.exists())
+		{
+		    fileObject = _currentFile;
+		}
+		else
+		{
+			_currentFile = null;
+		}
 	}
 
     try
