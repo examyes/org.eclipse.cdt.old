@@ -71,6 +71,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
     protected Combo		                remoteHostNameField;
     protected Combo		                remoteHostPortNumberField;
     protected Combo		                remoteHostDirectoryField;
+    protected Button                            remoteHostBrowseButton;
     protected Button                            remoteHostUseDaemon;
 
     protected String                        selectedRemoteDirectory="http://weisz/itp_index";
@@ -542,6 +543,7 @@ protected String getDirectoryName() {
 		remoteHostUseDaemon.setEnabled(false);
             	remoteHostPortNumberField.setEnabled(false);
             	remoteHostDirectoryField.setEnabled(false);
+            	remoteHostBrowseButton.setEnabled(false);
 		_sourceLocation = CppProjectAttributes.LOCATION_WORKBENCH;
             }
 	else if (source == localMappingRadio)
@@ -552,7 +554,8 @@ protected String getDirectoryName() {
 		sourceBrowseButton.setEnabled(true);
             	remoteHostNameField.setEnabled(false);
             	remoteHostPortNumberField.setEnabled(false);
-            	remoteHostDirectoryField.setEnabled(false);
+		remoteHostDirectoryField.setEnabled(false);
+		remoteHostBrowseButton.setEnabled(false);
 		remoteHostUseDaemon.setEnabled(false);
 		_sourceLocation = CppProjectAttributes.LOCATION_LOCAL;
             }
@@ -562,12 +565,30 @@ protected String getDirectoryName() {
 		remoteHostNameField.setEnabled(true);
             	remoteHostPortNumberField.setEnabled(true);
             	remoteHostDirectoryField.setEnabled(true);
+		remoteHostBrowseButton.setEnabled(true);
 		remoteHostUseDaemon.setEnabled(true);
             	remoteHostNameField.setFocus();
              	sourceNameField.setEnabled(false);
 		sourceBrowseButton.setEnabled(false);
 		_sourceLocation = CppProjectAttributes.LOCATION_HOST;
             }
+	else if (source == remoteHostBrowseButton)
+	    {
+		com.ibm.dstore.hosts.actions.QuickConnectAction browse = 
+		    new com.ibm.dstore.hosts.actions.QuickConnectAction(remoteHostNameField.getText(), 
+									remoteHostPortNumberField.getText());
+
+		
+	        Display d = remoteHostBrowseButton.getShell().getDisplay(); 
+		d.syncExec(browse);
+		//	browse.run();
+
+		String selected = browse.getSelected();
+		if (selected != null)
+		    {
+			remoteHostDirectoryField.setText(selected);
+		    }
+	    }
 
 	//***	this.clearErrorMessage();
 	this.setPageComplete(this.validatePage());
@@ -767,8 +788,14 @@ protected String getDirectoryName() {
 	remoteHostDirectoryField.addListener(SWT.Selection,this);
 	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
-	data.horizontalSpan = 2;
+	data.horizontalSpan = 1;
 	remoteHostDirectoryField.setLayoutData(data);
+
+	// browse button
+	remoteHostBrowseButton = new Button(projectMappingSelectionGroup, SWT.PUSH);
+	remoteHostBrowseButton.setText("Browse...");
+	remoteHostBrowseButton.addListener(SWT.Selection,this);
+	remoteHostBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));	
 
 	remoteHostUseDaemon = new Button(projectMappingSelectionGroup, SWT.CHECK);
 	remoteHostUseDaemon.setText("Connect to using daemon");
@@ -784,6 +811,7 @@ protected String getDirectoryName() {
 	remoteHostNameField.setEnabled(false);
 	remoteHostPortNumberField.setEnabled(false);
 	remoteHostDirectoryField.setEnabled(false);
+	remoteHostBrowseButton.setEnabled(false);
 	remoteHostUseDaemon.setEnabled(false);
 
 	getDefaults("DefaultRemoteHostName",      remoteHostNameField);
