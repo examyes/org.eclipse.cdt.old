@@ -375,6 +375,7 @@ public void doExpand(DataElement obj)
 
 			super.inputChanged(object, oldInput);
 			_isShowing = true;
+			_viewFilter.reset();
 		    }
 	    }
     }

@@ -106,10 +106,19 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 		File file = new File(imageStr);
 		if (file.exists())
 		    {
-			image = ImageDescriptor.createFromFile(null, imageStr).createImage();
-			_registry.put(imageStr, image);
-			
-			image = _registry.get(imageStr);
+			try
+			    {
+				image = ImageDescriptor.createFromFile(null, imageStr).createImage();
+				_registry.put(imageStr, image);
+				
+				image = _registry.get(imageStr);
+			    }
+			catch (org.eclipse.swt.SWTException e)
+			    {
+				//System.out.println(e);
+				System.out.println("invalid image: " + imageStr);
+				return _default;
+			    }
 		    }
 		else
 		    {

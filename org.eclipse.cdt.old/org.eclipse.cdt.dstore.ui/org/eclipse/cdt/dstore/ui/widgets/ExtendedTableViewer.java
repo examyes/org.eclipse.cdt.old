@@ -451,6 +451,7 @@ public void doExpand(DataElement obj)
 
 			_currentInput = (DataElement)object;
 			_currentInput.expandChildren();
+			_viewFilter.reset();
 
 			super.inputChanged(object, oldInput);
 			internalRefresh(_currentInput);

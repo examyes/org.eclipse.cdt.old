@@ -57,14 +57,13 @@ import org.eclipse.ui.part.*;
 	  return _isEnabled;
       }
       
-      public synchronized void selectionChanged(SelectionChangedEvent e)
+      public void selectionChanged(SelectionChangedEvent e)
       {
 	  if (_isEnabled)
 	      {
 		  DataElement selected = ConvertUtility.convert(e);
 		  if (selected != null)
 		      {
-			  selected.expandChildren();
 			  DataElement root = selected.dereference();			  
 			  _window.setSelected(root, true);		
 			  if (_gotoAction != null)

@@ -84,7 +84,7 @@ public class ViewFilter extends ViewerFilter
 	DataElement dataElement = (DataElement)element;	
 	if (dataElement != null)
 	    {	
-		if (_type != null)
+		if (_type != null) 
 		    {
 			dataElement = dataElement.dereference();
 			boolean result =  doesExist(_type, dataElement, _depth);
@@ -119,7 +119,7 @@ public class ViewFilter extends ViewerFilter
 			  {
 			      return true;
 			  }
-		      else if (!_notCache.contains(elementDescriptor))
+		      else if (elementDescriptor == null || !_notCache.contains(elementDescriptor))
 			  {	      
 			      String dataType  = dataElement.getType();
 			      String typeName  = descriptor.getName();
