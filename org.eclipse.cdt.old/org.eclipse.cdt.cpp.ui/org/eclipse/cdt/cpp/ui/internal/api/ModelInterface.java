@@ -1815,7 +1815,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    {
 			try
 			    {
-				resource.refreshLocal(resource.DEPTH_ONE, null);
+				resource.refreshLocal(2, null);
 			    }
 			catch (CoreException e)
 			    {
