@@ -16,7 +16,6 @@ public class MakefileAmManager {
 	
 	//DataElement project;
 	//ProjectStructureManager structureManager;
-	
 	public static Hashtable timeStamps = new Hashtable();
 	private final String MAKEFILE_AM = "Makefile.am";
 	
@@ -25,7 +24,7 @@ public class MakefileAmManager {
 	final String bin_PROGRAMS = new String ("bin_PROGRAMS");
 	final String _LDADD = new String("_LDADD");
 	final String _SOURCES = new String("_SOURCES");
-	final String EXTRA_DIST = new String("EXTA_DIST");
+	final String EXTRA_DIST = new String("EXTRA_DIST");
 	final String INCLUDES = new String("INCLUDES");
 	final String _LDFLAGS= new String("_LDFLAGS");
 	
@@ -495,7 +494,7 @@ public class MakefileAmManager {
 		{
 			String name = parent.listFiles()[i].getName();
 			if(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") 
-			||name.endsWith(".H") || name.endsWith(".C"))
+			||name.endsWith(".H") || name.endsWith(".C")||name.endsWith(".hpp"))
 				line = line.concat(" "+name);
 		}
 		return line;
