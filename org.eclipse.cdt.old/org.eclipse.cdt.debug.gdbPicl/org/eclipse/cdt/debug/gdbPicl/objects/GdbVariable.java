@@ -47,7 +47,7 @@ public abstract class GdbVariable  extends Variable
    			}
    			else
    			{
-   				return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
+   				return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
    			}
    			
    			if (testStr.indexOf("=") != -1 && !testStr.startsWith("{{"))
@@ -181,5 +181,5 @@ public abstract class GdbVariable  extends Variable
    public abstract String getScalarValue();
    public abstract void setScalarValue(String s);
    
-   private static boolean _allowTreeStructure=false;
+   private static boolean _allowTreeStructure=true;
 }
