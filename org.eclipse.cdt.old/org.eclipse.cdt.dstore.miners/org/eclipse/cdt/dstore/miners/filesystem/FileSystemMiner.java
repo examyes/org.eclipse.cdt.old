@@ -391,7 +391,7 @@ public class FileSystemMiner extends Miner
 		 { 		    
 		     //***subject.setUpdated(false);
 		     _dataStore.deleteObject(parent, subject);
-		     _dataStore.refresh(subject);
+		     _dataStore.refresh(parent);
 		 }
 	     else
 		 {
