@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<topics id="mt_topics">
+<topic label="Concepts" id="lpex_concepts">
+    	<topic label="Terminology conventions" href="concepts/cllterms.htm" id="lpex_cllterms" /> 
+	<topic label="Editor customization" href="concepts/clcusted.htm" id="lpex_clcusted" />  
+	<topic label="Editor commands, actions, and parameters" href="concepts/clcommds.htm" id="lpex_clcommds" />  
+	<topic label="Alternate editor profiles" href="concepts/clprefix.htm" id="lpex_clprefix" />  
+	<topic label="Parsers" href="concepts/clcnpars.htm" id="lpex_clcnpars" />
+	<topic label="Notices" href="concepts/cllnotic.htm" id="lpex_cllnotic" />
+</topic>
+<topic label="Tasks" id="lpex_tasks">
+    	<topic label="Entering and editing text" href="tasks/tlenrtxt.htm" id="lpex_tlenrtxt" />
+	<topic label="Marking blocks of text" href="tasks/tlmarkt.htm" id="lpex_tlmarkt" />
+	<topic label="Unmarking a block of text" href="tasks/tlunmark.htm" id="lpex_tlunmark" />
+	<topic label="Manipulating blocks of text" href="tasks/tlmanipt.htm" id="lpex_tlmanipt" />
+	<topic label="Changing the default marking mode" href="tasks/tlchdfmd.htm" id="lpex_tlchdfmd" />
+    	<topic label="Using location marks in a file" href="tasks/tlusemrk.htm" id="lpex_tlusemrk" />
+	<topic label="Finding a specific line in a file" href="tasks/tlfndlin.htm" id="lpex_tlfndlin" /> 
+	<topic label="Finding a mark" href="tasks/tlusemrk.htm#findnamedmark" id="lpex_tlusemrk" />  
+	<topic label="Finding and replacing text" href="tasks/tlfnrptx.htm" id="lpex_tlfnrptx" />              
+	<topic label="Opening an existing file" href="tasks/tlopnfil.htm" id="lpex_tlopnfil" />   
+	<topic label="Opening an existing file" href="tasks/tlopnfil.htm" id="lpex_tlopnfil" />           
+    	<topic label="Embedding another file into the current document" href="tasks/tlembed.htm" id="lpex_tlembed" /> 
+	<topic label="Issuing editor commands" href="tasks/tlcommds.htm" id="lpex_tlcommds" />  
+	<topic label="Changing editor tab settings" href="tasks/tlchtab.htm" id="lpex_tlchtab" />
+    	<topic label="Customizing the keyboard" href="tasks/tlcuskey.htm" id="lpex_tlcuskey" />
+  	<topic label="Changing background color and font" href="tasks/tlchtxtb.htm" id="lpex_tlchtxtb" />
+   </topic>
+  <topic label="Reference" id="mt_ref">
+    	<topic label="Preferences" href="ui/ulprefer.htm" id="lpex_ulprefer">
+		<topic label="Appearance" href="ui/ulappear.htm" id="lpex_ulappear"> </topic>
+		<topic label="Block" href="ui/ulblock.htm" id="lpex_ulblock"> </topic>
+		<topic label="Compare" href="ui/ulcompare.htm" id="lpex_ulcompare"> </topic>
+		<topic label="Controls" href="ui/ulcontrols.htm" id="lpex_ulcontrols"> </topic>
+		<topic label="Find Text " href="ui/ulfndtext.htm" id="lpex_ulfndtext"> </topic>
+		<topic label="Parser Associations" href="ui/ulparass.htm" id="lpex_ulparass"> </topic>
+		<topic label="Parsers" href="ui/ulparsers.htm" id="lpex_ulparsers"> </topic>
+		<topic label="Print" href="ui/ulprint.htm" id="lpex_ulprint"> </topic>
+		<topic label="Save" href="ui/ulsave.htm" id="lpex_ulsave"> </topic>
+		<topic label="Tabs" href="ui/ultabs.htm" id="lpex_ultabs"> </topic>
+		<topic label="User Actions" href="ui/ulusract.htm" id="lpex_ulusract"> </topic>
+		<topic label="User Commands" href="ui/ulusrcmd.htm" id="lpex_ulusrcmd"> </topic>
+		<topic label="User Key Actions" href="ui/ulusrkeyact.htm" id="lpex_ulusrkeyact"> </topic>
+		<topic label="User Mouse Actions" href="ui/ulusrmsect.htm" id="lpex_ulusrmsect"> </topic>
+		<topic label="User Profile" href="ui/ulusrprof.htm" id="lpex_ulusrprof"> </topic>
+	</topic>
+	<topic label="Menu" id="lpex_menu">	
+		<topic label="File Menu" href="ui/ulpfile.htm" id="lpex_ulpfile"> </topic>
+		<topic label="Edit Menu" href="ui/ulpedit.htm" id="lpex_ulpedit"> </topic>
+		<topic label="Perspective Menu" href="ui/ulperspective.htm" id="lpex_ulperspective"> </topic>
+		<topic label="Project Menu" href="ui/ulcontrols.htm" id="lpex_ulcontrols"> </topic>
+		<topic label="Find Text " href="ui/ulfndtext.htm" id="lpex_ulfndtext"> </topic>
+		<topic label="Parser Associations" href="ui/ulparass.htm" id="lpex_ulparass"> </topic>
+		<topic label="Parsers" href="ui/ulparsers.htm" id="lpex_ulparsers"> </topic>
+		<topic label="Print" href="ui/ulprint.htm" id="lpex_ulprint"> </topic>
+		<topic label="Save" href="ui/ulsave.htm" id="lpex_ulsave"> </topic>
+		<topic label="Tabs" href="ui/ultabs.htm" id="lpex_ultabs"> </topic>
+		<topic label="User Actions" href="ui/ulusract.htm" id="lpex_ulusract"> </topic>
+		<topic label="User Commands" href="ui/ulusrcmd.htm" id="lpex_ulusrcmd"> </topic>
+		<topic label="User Key Actions" href="ui/ulusrkeyact.htm" id="lpex_ulusrkeyact"> </topic>
+		<topic label="User Mouse Actions" href="ui/ulusrmsect.htm" id="lpex_ulusrmsect"> </topic>
+		<topic label="User Profile" href="ui/ulusrprof.htm" id="lpex_ulusrprof"> </topic>
+	</topic>
+	<topic label="Default editor commands" href="ref/rlscmds.htm" id="lpex_rlscmds" />
+	<topic label="Editor parameters" href="ref/rlsparam.htm" id="lpex_rlsparam" />
+	<topic label="Default editor actions" href="ref/rlsdfact.htm" id="lpex_rlsdfact" />
+	<topic label="brief base profile" href="ref/rlbbrief.htm" id="lpex_rlbbrief" />
+	<topic label="emacs base profile" href="ref/rlbemacs.htm" id="lpex_rlbemacs" />
+	<topic label="epm base profile" href="ref/rlbepm.htm" id="lpex_rlbepm" />
+	<topic label="ispf base profile" href="ref/rlbispf.htm" id="lpex_rlbispf" />
+	<topic label="lpex base profile" href="ref/rlblpex.htm" id="lpex_rlblpex" />
+	<topic label="seu base profile" href="ref/rlbseu.htm" id="lpex_rlbseu" />
+	<topic label="vi base profile" href="ref/rlbvi.htm" id="lpex_rlbvi" />
+	<topic label="xedit base profile" href="ref/rlbxedit.htm" id="lpex_rlbxedit" />    
+   </topic>
+</topics>
+
