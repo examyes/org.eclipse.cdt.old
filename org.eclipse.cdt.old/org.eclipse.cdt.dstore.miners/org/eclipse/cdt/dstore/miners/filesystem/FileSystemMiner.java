@@ -865,12 +865,13 @@ public class FileSystemMiner extends Miner
 						    {
 							if (!f.isDirectory())
 							    {
+								newObject.expandChildren();
 								newObject.setDepth(1);
 							    }		      
 							else
 							    {
 								File[] slist = f.listFiles();
-								if (slist.length == 0)
+								if (slist == null || slist.length == 0)
 								    {
 									newObject.setDepth(1);
 								    }
@@ -984,13 +985,14 @@ public class FileSystemMiner extends Miner
 						else
 						    {
 							if (!f.isDirectory())
-							    {						
+							    {				
+								newObject.expandChildren();		
 								newObject.setDepth(1);
 							    }
 							else
 							    {
 								File[] slist = f.listFiles();
-								if (slist.length == 0)
+								if (slist == null || slist.length == 0)
 								    {
 									newObject.setDepth(1);
 								    }
