@@ -76,7 +76,7 @@ public class CommandMiner extends Miner
   {
   	DataElement input = getCommandArgument(theElement, 1);
   	DataElement de = (DataElement)subject.dereference().get(1);
-  	sendInputToCommand(de.getName().trim(), input.getName(), getCommandStatus(subject));
+  	sendInputToCommand(de.getName().trim(), input.getName());
   }
   else if (name.equals("C_CANCEL"))
       {
@@ -102,13 +102,13 @@ public class CommandMiner extends Miner
    }
   }
   CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, _patterns);
-  _threads.put(/*invocation*/status.getAttribute(DE.A_ID), newCommand);
+  _threads.put(invocation, newCommand);
   newCommand.start();
  }
 
- private void sendInputToCommand(String theCommand, String input, DataElement status)
+ private void sendInputToCommand(String theCommand, String input)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(status.getAttribute(DE.A_ID));
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
 
      
    if (theThread != null)
@@ -124,8 +124,6 @@ public class CommandMiner extends Miner
    	  	 	output.write(intoout, 0, len);
    	  	 	output.write('\n');
    	  	 	output.flush();
-   	  	 	
-   	  	 	theThread.createObject("command", input);
    	  	 }
    	  	 catch (IOException e)
    	  	 {
@@ -138,7 +136,7 @@ public class CommandMiner extends Miner
 
  private void cancelCommand (String theCommand, DataElement status)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(/*theCommand*/ status.getAttribute(DE.A_ID));
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
 
   if (theThread != null)
   { 	
@@ -719,7 +717,7 @@ public String removeWhitespace(String theLine)
     private void createObject (String,String)
     Create a simple object with no source information
  *************************************************************************************************/
- public DataElement createObject (String type, String text)
+ private DataElement createObject (String type, String text)
  {
    return _dataStore.createObject(_status, type, text, "");
  }
