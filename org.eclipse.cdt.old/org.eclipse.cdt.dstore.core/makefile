@@ -117,7 +117,7 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
 	cd com 2>/dev/null || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -q *src.zip)
 
-zipFile=c4eclipse.zip
+zipFile=cdt-eclipse-0.5.0-all.zip
 createZip: createEmptyZip zipUpPlugins
 	@echo Created $(pluginsDirectory)/$(zipFile)
 
