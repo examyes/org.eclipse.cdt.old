@@ -168,7 +168,8 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 		
 		if (element != null)
 		    {
-			if (element.getDescriptor().isOfType("Filesystem Objects"))
+			DataElement descriptor = element.getDescriptor();
+			if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
 			{
 			    String directory = element.getSource();				
 				if ((directory != null) && (_directoryText != null))
