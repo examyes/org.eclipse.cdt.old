@@ -235,6 +235,12 @@ public class XMLparser
 						      }
 
 						  DataElement result = parseTag(xmlTag, parent);
+						 
+						  if (_panic)
+						  {
+						  	return null;	
+						  }
+						 
 						  if (parent == null && _rootDataElement == null)
 						      {
 							  _rootDataElement = result;
@@ -286,20 +292,19 @@ public class XMLparser
         int nextSpace = fullTag.indexOf(' ');
         if (nextSpace > 0)
         {
-
           String[] attributes = new String[DE.A_SIZE];
 
           // tag type
           String tagType = fullTag.substring(0, nextSpace);
           if (tagType.equals("File"))
 	      {
-		  _isFile = true;
-		  _tagType = tagType;
+			  _isFile = true;
+			  _tagType = tagType;
 	      }
-	  else if (tagType.equals("File.Append"))
+		  else if (tagType.equals("File.Append"))
 	      {
-		  _isFile = true;
-		  _tagType = tagType;		  
+			  _isFile = true;
+			  _tagType = tagType;		  
 	      }
 
           int index = 0;
@@ -312,24 +317,30 @@ public class XMLparser
 
             if ((nextQuote >= 0) && (nextnextQuote > nextQuote) && (fullTag.length() > nextnextQuote))
             {
-	      String attribute = fullTag.substring(nextQuote + 1, nextnextQuote);	      
+		     String attribute = fullTag.substring(nextQuote + 1, nextnextQuote);	      
 
-	      attributes[index] = convertStringFromXML(attribute);  
+		      attributes[index] = convertStringFromXML(attribute);  
               index++;
             }
           }
 
-	  DataElement result = null;
-	  if (attributes.length == DE.A_SIZE)
+		  DataElement result = null;
+		  if (attributes.length == DE.A_SIZE)
 	      {
-		  if (_isFile)
+			  if (_isFile)
 		      {
-			  result = _dataStore.createObject(parent, attributes);		
+				  result = _dataStore.createObject(parent, attributes);		
 		      }
-		  else
+		  	  else
 		      {	      
-			  String id = attributes[DE.A_ID]; 
-			  if (parent != null && _dataStore.contains(id))
+			  	String id = attributes[DE.A_ID]; 
+			  	if (id == null)
+			  	{
+			  		handlePanic(new Exception(fullTag));
+			  		return null;	
+			  	}
+			  	
+			  	if (parent != null && _dataStore.contains(id))
 			      {
 				  result = _dataStore.find(id);      
 				  result.setAttributes(attributes);

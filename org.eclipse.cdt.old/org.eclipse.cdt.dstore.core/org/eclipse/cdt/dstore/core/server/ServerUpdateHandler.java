@@ -122,18 +122,5 @@ public class ServerUpdateHandler extends UpdateHandler
         }
       }
     }
-    
- public void accept(Socket socket)
- {
-      for (int i = 0; i < _senders.size(); i++)
-      {
-        Sender sender = (Sender)_senders.get(i);
-        if (sender.socket() == socket)
-        {
-          // sender sends last ack before death
-		    DataElement document = _dataStore.createObject(null, "DOCUMENT", "accept", "accpet");
-		    sender.sendDocument(document, 2);
-        }
-      }	
- }   
+  
 }

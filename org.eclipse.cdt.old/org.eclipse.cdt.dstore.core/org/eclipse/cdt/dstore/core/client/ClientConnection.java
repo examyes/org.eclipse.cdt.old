@@ -6,7 +6,6 @@ package org.eclipse.cdt.dstore.core.client;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.dstore.core.client.*;
 import org.eclipse.cdt.dstore.core.server.*;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.core.util.*;
@@ -14,8 +13,9 @@ import org.eclipse.cdt.dstore.extra.internal.extra.*;
  
 import java.net.*;
 import java.io.*;
-import java.lang.*;
 import java.util.*;
+
+
 
 /**
  * ClientConnection is the standard means of creating a new connection to
@@ -332,28 +332,37 @@ public class ClientConnection
 		
 		_theSocket = new Socket(_host, port);
 		
-		_sender    = new Sender(_theSocket);
-		_updateHandler = new ClientUpdateHandler();
-		_updateHandler.start(); 
+		if (doHandShake())
+		{		
+			_sender    = new Sender(_theSocket);
+			_updateHandler = new ClientUpdateHandler();
+			_updateHandler.start(); 
 		
-		_commandHandler = new ClientCommandHandler(_sender);
-		_commandHandler.start();
+			_commandHandler = new ClientCommandHandler(_sender);
+			_commandHandler.start();
 		
-		_dataStore.setCommandHandler(_commandHandler);
-		_dataStore.setUpdateHandler(_updateHandler);
-		_dataStore.setConnected(true);
-		_dataStore.getDomainNotifier().enable(true);
+			_dataStore.setCommandHandler(_commandHandler);
+			_dataStore.setUpdateHandler(_updateHandler);
+			_dataStore.setConnected(true);
+			_dataStore.getDomainNotifier().enable(true);
 		
-		_commandHandler.setDataStore(_dataStore);
-		_updateHandler.setDataStore(_dataStore);
+			_commandHandler.setDataStore(_dataStore);
+			_updateHandler.setDataStore(_dataStore);
 		
-		_receiver  = new ClientReceiver(_theSocket, _dataStore);
-		_receiver.start();
+			_receiver  = new ClientReceiver(_theSocket, _dataStore);
+			_receiver.start();
 		
-		_isConnected = true;
-		_isRemote = true;
-		result = new ConnectionStatus(_isConnected);	  
-		result.setTicket(ticket);
+			_isConnected = true;
+			_isRemote = true;
+			result = new ConnectionStatus(_isConnected);	  
+			result.setTicket(ticket);		
+	    }
+	    else
+	    {
+	    	String msg = "Invalid Protocol.";
+	    	msg += "\nThe server running on " + _host + " under port " + _port + " is not a valid DataStore server.";
+	    	result = new ConnectionStatus(false, msg);	
+	    }
 	    }
 	catch (java.net.ConnectException e)
 	    {
@@ -485,6 +494,39 @@ public class ClientConnection
         _dataStore.flush(_dataStore.getDescriptorRoot());
         _dataStore.createRoot();
       }
+      
+    private boolean doHandShake()
+    {
+    	try
+    	{
+   			BufferedReader reader  = new BufferedReader(new InputStreamReader(_theSocket.getInputStream()));          
+		
+		
+			if (reader.ready())
+			{
+				String handshake = reader.readLine();  
+				if  (handshake.equals("DataStore"))
+				{
+					return true;	
+				}		
+				else
+				{
+					return false;	
+				}
+    		}
+    		else
+    		{
+    			System.out.println("not ready");	
+    		}
+    	}
+   	 	catch (Exception e)
+    	{
+    		return false;	
+    	}
+
+    		
+    	return false;
+    }
 
 }
 

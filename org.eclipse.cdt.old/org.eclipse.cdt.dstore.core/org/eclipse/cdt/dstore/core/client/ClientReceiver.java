@@ -15,7 +15,6 @@ import java.io.*;
 
 public class ClientReceiver extends Receiver
 {
-  private boolean _receivedHandshake = false;
   
   public ClientReceiver(Socket socket, DataStore dataStore)
       {
@@ -27,16 +26,9 @@ public class ClientReceiver extends Receiver
       if (documentObject.getName().equals("exit"))
       {
         _canExit = true;
-        _receivedHandshake = false;
-      }
-      else if (documentObject.getName().equals("accept"))
-      {
-      	_receivedHandshake = true;	
-      }
+      }      
       else
       {        
-      	if (_receivedHandshake)
-      	{
 		  synchronized(documentObject)
 	      {
 			  for (int i = 0; i < documentObject.getNestedSize(); i++)
@@ -47,11 +39,6 @@ public class ClientReceiver extends Receiver
 		     documentObject.removeNestedData();
 		     _dataStore.deleteObject(documentObject.getParent(), documentObject);
 	      }
-      	}
-      	else
-      	{      	
-      		_canExit = true;
-      	}	
       }
     }
     

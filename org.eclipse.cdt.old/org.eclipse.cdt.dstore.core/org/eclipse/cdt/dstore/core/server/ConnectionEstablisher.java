@@ -133,13 +133,14 @@ public class ConnectionEstablisher
             {
               // wait for connection
               Socket newSocket        = _serverSocket.accept();
+			  doHandShake(newSocket);
+
               ServerReceiver receiver = new ServerReceiver(newSocket, this);
               Sender sender           = new Sender(newSocket);
 
               // add this connection to list of elements
               _receivers.add(receiver);
               _updateHandler.addSender(sender);
-              _updateHandler.accept(newSocket);
 	      
               receiver.start();
 	      
@@ -242,7 +243,21 @@ public class ConnectionEstablisher
 
     private void run()
     {
-	waitForConnections();
+		waitForConnections();
+    }
+     
+    private void doHandShake(Socket socket)
+    {
+    	try
+    	{
+    		 PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			 writer.println("DataStore");
+			 writer.flush();
+    	}
+    	catch (IOException e)
+    	{
+    		System.out.println(e);
+    	}
     }
 }
 

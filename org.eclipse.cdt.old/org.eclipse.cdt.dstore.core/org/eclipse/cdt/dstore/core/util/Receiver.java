@@ -22,7 +22,8 @@ public abstract class Receiver extends Thread
   private XMLparser           _xmlParser;
   private BufferedInputStream _in;
 
-  protected boolean           _canExit;
+  protected boolean          _canExit;
+ 
 
   public Receiver(Socket socket, DataStore dataStore)
       {
@@ -75,6 +76,8 @@ public abstract class Receiver extends Thread
 
     public void handleInput()
       {
+   
+      	
         try
         {
 	    // wait on the socket
