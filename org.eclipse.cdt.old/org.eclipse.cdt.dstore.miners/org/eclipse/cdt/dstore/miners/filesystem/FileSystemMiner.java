@@ -293,7 +293,7 @@ public class FileSystemMiner extends Miner
 	 }
      else if (name.equals("C_REFRESH"))
      {
-	 status = handleRefresh(subject, status);
+	 status = handleQuery(subject, status, true);
      }
      else if (name.equals("C_FIND_FILE"))
        {
@@ -806,7 +806,116 @@ public class FileSystemMiner extends Miner
 	return handleQuery(theElement, status, false);
     }
 
-    private DataElement handleQuery (DataElement theElement, DataElement status, boolean force)
+    private DataElement handleQuery (DataElement theElement, DataElement status, boolean refresh)
+    {
+	String theOS = System.getProperty("os.name");
+	if (!theOS.startsWith("Win"))
+	    {
+		return internalHandleLSQuery(theElement, status, refresh);
+	    }
+	else
+	    {
+		return internalHandleQuery(theElement, status, refresh);
+	    }
+    }
+
+
+    private DataElement internalHandleLSQuery (DataElement theElement, DataElement status, boolean refresh)
+    {
+	theElement = theElement.dereference();
+	if (theElement.isOfType(_fsystemObjectDescriptor))
+	    {
+
+		// check for deleted
+		if (refresh)
+		    {
+			for (int i = 0; i < theElement.getNestedSize(); i++)
+			    {
+				DataElement child = theElement.get(i);
+				if (child != null && !child.isDeleted())
+				    {
+					if (child.getType().equals("file") || child.getType().equals("directory"))
+					    {
+						String src = child.getSource();
+						if (src != null)
+						    {
+							File childFile = new File(src);
+							if (!childFile.exists())
+								    {
+									_dataStore.deleteObject(theElement, child);
+								    }
+						    }
+					    }
+				    }
+			    }
+		    }
+		
+		// use 'ls -F' command
+		String cmd = "ls -F";
+		try
+		    {
+			String rootSource = theElement.getSource();
+			if (!theElement.getType().equals("device"))
+			    {
+				rootSource += "/";
+			    }
+
+			Process theProcess = Runtime.getRuntime().exec(cmd,null, new File(rootSource));	
+			BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
+			
+			String line = null;
+			while ((line = reader.readLine()) != null)
+			    {
+				DataElement type = _fileDescriptor;
+				String name = line;
+				
+				int length = line.length();
+				if (line.charAt(length - 1) == '/')
+				    {
+					type = _directoryDescriptor;
+					name = line.substring(0, length - 1);
+				    }
+				else if (line.charAt(length - 1) == '*')
+				    {
+					type = _exeDescriptor;
+					name = line.substring(0, length - 1);
+				    }
+				
+				String filePath = rootSource + name;
+				
+				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
+				if (newObject == null || newObject.isDeleted())
+				    {
+					newObject = _dataStore.createObject(theElement, type, name, filePath);
+					
+					if (type == _directoryDescriptor)
+					    {
+						handleSize(newObject, status);
+						handleDate(newObject, status);
+					    }
+					else
+					    {
+						newObject.expandChildren();
+						newObject.setDepth(1);
+					    }
+				    }
+			    }
+		    }
+		catch (IOException e)
+		    {
+		    }
+	    }
+	else if (theElement.isOfType(_fileDescriptor))
+	    {
+		handleSize(theElement, status);
+		handleDate(theElement, status);
+	    }
+	
+	status.setAttribute(DE.A_NAME, "done");
+	return status;
+    }
+
+    private DataElement internalHandleQuery (DataElement theElement, DataElement status, boolean refresh)
     {
 	theElement = theElement.dereference();
 	if (theElement.getDescriptor() == null || 
@@ -822,6 +931,30 @@ public class FileSystemMiner extends Miner
 			if (!type.equals("device"))
 			    {
 				path.append("/");
+			    }
+			
+			// check for deleted
+			if (refresh)
+			    {
+				for (int i = 0; i < theElement.getNestedSize(); i++)
+				    {
+					DataElement child = theElement.get(i);
+					if (child != null && !child.isDeleted())
+					    {
+						if (child.getType().equals("file") || child.getType().equals("directory"))
+						    {
+							String src = child.getSource();
+							if (src != null)
+							    {
+								File childFile = new File(src);
+								if (!childFile.exists())
+								    {
+									_dataStore.deleteObject(theElement, child);
+								    }
+							    }
+						    }
+					    }
+				    }
 			    }
 			
 			
@@ -872,7 +1005,7 @@ public class FileSystemMiner extends Miner
 								newObject.setDepth(1);
 
 								// classify
-								classifyFile(newObject);
+								winClassifyFile(newObject);
 							    }		      
 							else
 							    {
@@ -909,168 +1042,17 @@ public class FileSystemMiner extends Miner
 	  return status;
       }
 
-    private void classifyFile(DataElement theFile)
+    // hack for windows
+    private void winClassifyFile(DataElement theFile)
     {
-	String theOS = System.getProperty("os.name");
-	if (theOS.startsWith("Win"))
+	// use 'exe' extension
+	String name = theFile.getName();
+	if (name.endsWith(".exe"))
 	    {
-		// use 'exe' extension
-		String name = theFile.getName();
-		if (name.endsWith(".exe"))
-		    {
-			theFile.setAttribute(DE.A_TYPE, "executable");
-		    }
+		theFile.setAttribute(DE.A_TYPE, "executable");
 	    }
-	else
-	    {
-		/** instead use this for doing the query on unix
-		// use 'ls -F' command
-		String cmd = "ls -F " + theFile.getSource();
-		try
-		    {
-			Process theProcess = Runtime.getRuntime().exec(cmd);	
-			BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
-			String out = reader.readLine();
-			if (out.endsWith("*"))
-			    {
-				theFile.setAttribute(DE.A_TYPE, "executable");			
-			    }
-		    }
-		catch (IOException e)
-		    {
-		    }
-		*/
-	    }	
     }
 
-    public DataElement handleRefresh(DataElement theElement, DataElement status)
-    {
-	theElement = theElement.dereference();
-    	boolean changed = false;
-	if (theElement == null ||
-	    theElement.isOfType(_fsystemObjectDescriptor))
-	    {
-		try
-		    {		
-			String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
-			File theFile = new File (theElement.getSource());
-			StringBuffer path = new StringBuffer (theFile.getPath());
-			
-			if (!type.equals("device"))
-			    {
-				path.append("/");
-			    }
-			
-			// check for deleted
-			for (int i = 0; i < theElement.getNestedSize(); i++)
-			    {
-				DataElement child = theElement.get(i);
-				if (child != null && !child.isDeleted())
-				    {
-					if (child.getType().equals("file") || child.getType().equals("directory"))
-					    {
-						String src = child.getSource();
-						if (src != null)
-						    {
-							File childFile = new File(src);
-							if (!childFile.exists())
-							    {
-								_dataStore.deleteObject(theElement, child);
-							    }
-						    }
-					    }
-				    }
-			    }
-			
-			
-			// query
-			File[] list = theFile.listFiles();
-			if (list != null)
-			    {
-				for (int i= 0; i < list.length; i++)
-				    {				
-					File f= list[i];
-					String filePath = f.getAbsolutePath().replace('\\', '/');				
-					String objName = f.getName();
-					
-					DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
-					if (newObject == null || newObject.isDeleted())
-					    {
-						DataElement objType = _directoryDescriptor;
-						boolean hidden = f.isHidden()  || objName.charAt(0) == '.';
-						if (!f.isDirectory())
-						    {
-							objType = _fileDescriptor;
-							if (hidden)
-							    {
-								objType = _hiddenFileDescriptor;
-							    }
-						    }
-						else
-						    {							
-							if (hidden)
-							    {
-								objType = _hiddenDirectoryDescriptor;
-							    }
-						    }
-						
-						newObject = _dataStore.createObject (theElement, objType, 
-										     objName, filePath);
-						changed = true;				
-
-						if (hidden)
-						    {
-							newObject.setDepth(0);
-						    }
-						else
-						    {
-							if (!f.isDirectory())
-							    {				
-								newObject.expandChildren();		
-								newObject.setDepth(1);
-								classifyFile(newObject);
-							    }
-							else
-							    {
-								File[] slist = f.listFiles();
-								if (slist == null || slist.length == 0)
-								    {
-									newObject.setDepth(1);
-								    }
-								
-								handleSize(newObject, status);
-								handleDate(newObject, status);
-							    }
-						    }
-					    }
-					else
-					    {
-						handleRefresh(newObject, status);
-					    }
-				    }			
-			    }
-			
-		    }	
-		catch (Exception e)
-		    {
-			System.out.println(e);
-			e.printStackTrace();
-		    }
-	    }
-	else if (theElement.isOfType(_fileDescriptor))
-	    {
-		handleSize(theElement, status);
-		handleDate(theElement, status);
-	    }
-	
-	if (changed)
-	    {
-		_dataStore.refresh(theElement);
-	    }
-	
-	status.setAttribute(DE.A_NAME, "done");
-	return status;
-    }
 
     public DataElement findFile (DataElement root, String matchStr, DataElement status)
     {
@@ -1116,6 +1098,9 @@ public class FileSystemMiner extends Miner
     {
 	return StringCompare.compare(patternStr, compareStr, ignoreCase);
     }
+
+
+
 }
 
 
