@@ -48,7 +48,7 @@ allPlugins += com.ibm.lpex
 #allPlugins += com.ibm.lpex.doc.user
 #allPlugius += com.ibm.lpex.doc.isv
 allPlugins += com.ibm.debug.doc.user
-allPlugins += com.ibm.debug
+allPlugins += com.ibm.debug.pdt
 allPlugins += com.ibm.debug.daemon
 
 
@@ -58,7 +58,7 @@ serverPlugins += org.eclipse.cdt.dstore.extra.server
 serverPlugins += org.eclipse.cdt.dstore.miners
 serverPlugins += org.eclipse.cdt.cpp.miners
 serverPlugins += org.eclipse.cdt.cpp.miners.parser
-serverPlugins += com.ibm.debug
+serverPlugins += com.ibm.debug.pdt
 serverPlugins += com.ibm.debug.daemon
 serverPlugins += org.eclipse.cdt.debug.gdbPicl
 
