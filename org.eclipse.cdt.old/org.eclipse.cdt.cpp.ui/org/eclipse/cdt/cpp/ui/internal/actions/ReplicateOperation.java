@@ -65,7 +65,7 @@ public abstract class ReplicateOperation implements IRunnableWithProgress, ITran
 	
 	if (updateString.equals("Ready"))
 	    {
-		IProject subP = _api.findProjectResource(_subject); 
+		IResource subP = _api.findResource(_subject); 
 		if (subP instanceof Repository)
 		    {
 		    }
@@ -84,7 +84,7 @@ public abstract class ReplicateOperation implements IRunnableWithProgress, ITran
 		for (int i = 0; i < _projects.size(); i++)
 		    {
 			DataElement project = (DataElement)_projects.get(i); 
-			IProject tarP = _api.findProjectResource(project); 
+			IResource tarP = _api.findResource(project); 
 			if (tarP instanceof Repository)
 			    {
 			    }
