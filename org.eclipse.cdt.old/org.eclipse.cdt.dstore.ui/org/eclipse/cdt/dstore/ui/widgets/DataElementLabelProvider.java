@@ -34,9 +34,8 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
         _labelProperty = DE.P_VALUE;
 	
         _registry = registry;
-		String baseDir        = DataStoreCorePlugin.getRootDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH); 
-        String imageStr = baseDir + "com.ibm.dstore.ui" + 
-	    java.io.File.separator + "icons" + java.io.File.separator + "default.gif";
+	String baseDir        = DataStoreUIPlugin.getInstance().getInstallLocation(); 
+        String imageStr = baseDir + java.io.File.separator + "icons" + java.io.File.separator + "default.gif";
 	
         Image image = _registry.get(imageStr); 
         if (image == null)
