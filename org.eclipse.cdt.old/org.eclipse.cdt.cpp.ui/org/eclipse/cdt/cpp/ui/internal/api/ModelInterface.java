@@ -1567,8 +1567,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public IResource findFile(String fileName)
     {
+	IResource result = null;
 	java.io.File theFile = new java.io.File(fileName);
-	return findFile(theFile);
+	result = findFile(theFile);
+
+	// search remote files
+	if (result == null)
+	    {		
+		RemoteProjectAdapter rmt = RemoteProjectAdapter.getInstance();		
+		if (rmt != null)
+		    result = findFile(rmt, fileName);
+	    }
+	
+
+	return result;
     }
 
   public IResource findFile(java.io.File fileName)
@@ -1581,14 +1593,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	  // search workspace files
 	  file = findFile(root, fileName);
-
-	  // search remote files
-	  if (file == null)
-	      {		
-		  RemoteProjectAdapter rmt = RemoteProjectAdapter.getInstance();		
-		  if (rmt != null)
-		      file = findFile(rmt, fileName);
-	      }
 
 	  // search temporary files
 	  if (file == null)
@@ -1608,8 +1612,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     return file;
   }
 
-    public IResource findFile(RemoteProjectAdapter root, java.io.File fileName)
+    public IResource findFile(RemoteProjectAdapter root, String fileName)
     {
+	IResource result = null;
 	IProject projects[] = root.getProjects();
 	if (projects != null)
 	    {		
@@ -1618,15 +1623,58 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			IProject project = projects[i];
 			if (project.isOpen())
 			    {
-				IResource result = findFile(project, fileName);
-				if (result != null)
-				    return result;
+				DataElement rootElement = findProjectElement(project);
+				String source = rootElement.getSource();
+				if (compareFileNames(source,fileName))
+				    {
+					return project;
+				    }
+				else
+				    {
+					result = findFile(project, rootElement, fileName);
+					if (result != null)
+					    {
+						return result;
+					    }
+				    }
 			    }
 		    }
 	    }
 	
 	return null;
     }
+
+    public IResource findFile(IProject project, DataElement root, String fileName)
+    {
+	IResource result = null;
+	ArrayList contents = root.getAssociated("contents");
+	for (int i = 0; i < contents.size(); i++)
+	    {
+		DataElement child = (DataElement)contents.get(i);
+		String source = child.getSource();
+
+		// compare source to filename
+		if (source.equals(fileName))
+		    {
+			result = new org.eclipse.cdt.dstore.ui.resource.FileResourceElement(child, project);
+			return result;
+		    }	
+		else if (child.isOfType("directory"))
+		    {
+			if (fileName.startsWith(source))
+			    {
+				result = findFile(project, child, fileName);
+				if (result != null)
+				    {
+					return result;
+				    }
+			    }
+		    }
+	    }
+
+	return result;
+    }
+
 
     public IResource findFile(IWorkspaceRoot root, java.io.File fileName)
     {
@@ -1659,35 +1707,38 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    }
 		    }
 		
-		IResource resources[] = root.members();
-		if (resources != null)
 		    {
- 			for (int i = 0; i < resources.length; i++)
+			IResource resources[] = root.members();
+			if (resources != null)
 			    {
-				IResource resource = resources[i];
-				String path = null;
-				if (resource instanceof FileResourceElement)
+				for (int i = 0; i < resources.length; i++)
 				    {
-					FileResourceElement res = (FileResourceElement)resource;
-					path = res.getElement().getSource();
-				    }
-				else
-				    {
-					path = resource.getLocation().toString();
-				    }
-				
-
-				if (compareFileNames(path, fileName))
-				    {
-					    return resource;
-				    }
-				
-				//if (fileName.startsWith(path) && resource instanceof IContainer)
-				if (resource instanceof IContainer)
-				    {
-					IResource result = findFile((IContainer)resource, fileName);
-					if (result != null)
-					    return result;
+					IResource resource = resources[i];
+					
+					String path = null;
+					if (resource instanceof FileResourceElement)
+					    {
+						FileResourceElement res = (FileResourceElement)resource;
+						path = res.getElement().getSource();
+					    }
+					else
+					    {
+						path = resource.getLocation().toString();
+					    }
+					
+					
+					if (compareFileNames(path, fileName))
+					    {
+						return resource;
+					    }
+					
+					//if (fileName.startsWith(path) && resource instanceof IContainer)
+					if (resource instanceof IContainer)
+					    {
+						IResource result = findFile((IContainer)resource, fileName);
+						if (result != null)
+						    return result;
+					    }
 				    }
 			    }
 		    }
