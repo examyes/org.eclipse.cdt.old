@@ -48,7 +48,7 @@ public class CppOutputViewer extends OutputViewer
     public CancelAction(String name, ImageDescriptor image)
     {
       super(name, image);
-
+  	  setToolTipText(name);
     }
 
       public void run()
@@ -77,6 +77,7 @@ public class CppOutputViewer extends OutputViewer
   	public ShellAction(String name, ImageDescriptor image)
   	{
   		super(name, image);
+  		setToolTipText(name);
   	}
   	
   	public void run()
@@ -110,6 +111,7 @@ public class CppOutputViewer extends OutputViewer
     {
       super(name, image);
       _increment = increment;
+       setToolTipText(name);
     }
 
       public void run()

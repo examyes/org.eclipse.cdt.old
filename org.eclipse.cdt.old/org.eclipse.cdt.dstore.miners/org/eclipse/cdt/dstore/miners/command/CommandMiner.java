@@ -77,8 +77,7 @@ public class CommandMiner extends Miner
       }
   else if (name.equals("C_SHELL"))
   {
-  	System.out.println("launching shell");
-  	String invocation = ">";
+   	String invocation = ">";
   	launchCommand(subject, invocation, status);
   }
   else if (name.equals("C_SEND_INPUT"))
