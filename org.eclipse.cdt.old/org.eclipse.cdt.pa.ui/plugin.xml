@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="org.eclipse.cdt.pa"
+   name="%pluginName"
+   version="1.0.0"
+   provider-name="International Business Machines Corp."
+   class="org.eclipse.cdt.pa.ui.PAPlugin">
+<requires>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.swt"/>
+   <import plugin="org.eclipse.core.runtime"/>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.core.boot"/>
+   <import plugin="com.ibm.lpex"/>
+   <import plugin="org.eclipse.cdt.dstore.core"/>
+   <import plugin="org.eclipse.cdt.dstore.extra"/>
+   <import plugin="org.eclipse.cdt.dstore.ui"/>
+   <import plugin="org.eclipse.cdt.dstore.hosts"/>
+   <import plugin="org.eclipse.cdt.cpp.ui"/>
+</requires>
+
+<runtime>
+   <library name=".">
+      <export name="*"/>
+   </library>
+   <library name="pa.jar">
+      <export name="*"/>
+   </library>
+</runtime>
+
+<!-- PA Perspective -->
+<extension
+      point="org.eclipse.ui.perspectives">
+   <perspective
+         name="Performance Trace"
+         icon="icons/full/cview16/trace_persp.gif"
+         class="org.eclipse.cdt.pa.ui.views.PAPerspective"
+         id="org.eclipse.cdt.pa.ui.PAPerspective">
+   </perspective>
+</extension>
+
+<!-- PA Perspective Extensions -->
+<extension
+      point="org.eclipse.ui.perspectiveExtensions">
+   <perspectiveExtension
+         targetID="org.eclipse.cdt.cpp.ui.CppPerspective">
+      <perspectiveShortcut
+            id="org.eclipse.cdt.pa.ui.PAPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+
+   <perspectiveExtension
+         targetID="org.eclipse.debug.ui.DebugPerspective">
+      <perspectiveShortcut
+            id="org.eclipse.cdt.pa.ui.PAPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+
+   <perspectiveExtension
+         targetID="org.eclipse.cdt.pa.ui.PAPerspective">
+      <perspectiveShortcut
+            id="org.eclipse.cdt.cpp.ui.CppPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+
+   <perspectiveExtension
+         targetID="org.eclipse.cdt.pa.ui.PAPerspective">
+      <perspectiveShortcut
+            id="org.eclipse.debug.ui.DebugPerspective">
+      </perspectiveShortcut>
+   </perspectiveExtension>
+
+</extension>
+
+<!-- PA Views -->
+<extension
+      point="org.eclipse.ui.views">
+   <category
+         name="&amp;Trace"
+         id="org.eclipse.cdt.pa.ui.pa">
+   </category>
+
+   <view
+         name="Projects"
+         icon="icons/full/cview16/trace_files_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.PAProjectsViewPart"
+         id="org.eclipse.cdt.pa.ui.PAProjectsViewPart">
+   </view>
+
+   <view
+         name="Trace Files"
+         icon="icons/full/cview16/trace_files_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.TraceFilesViewPart"
+         id="org.eclipse.cdt.pa.ui.TraceFilesViewPart">
+   </view>
+
+   <view
+         name="Function Statistics"
+         icon="icons/full/cview16/func_stat_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.FunctionStatisticsViewPart"
+         id="org.eclipse.cdt.pa.ui.FunctionStatisticsViewPart">
+   </view>
+
+   <view
+         name="Class Statistics"
+         icon="icons/full/cview16/class_stat_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.ClassStatisticsViewPart"
+         id="org.eclipse.cdt.pa.ui.ClassStatisticsViewPart">
+   </view>
+
+   <view
+         name="Call Tree"
+         icon="icons/full/cview16/call_tree_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.CallTreeViewPart"
+         id="org.eclipse.cdt.pa.ui.CallTreeViewPart">
+   </view>
+
+   <view
+         name="Callers"
+         icon="icons/full/cview16/callers_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.CallersViewPart"
+         id="org.eclipse.cdt.pa.ui.CallersViewPart">
+   </view>
+
+   <view
+         name="Callees"
+         icon="icons/full/cview16/callees_view.gif"
+         category="org.eclipse.cdt.pa.ui.pa"
+         class="org.eclipse.cdt.pa.ui.views.CalleesViewPart"
+         id="org.eclipse.cdt.pa.ui.CalleesViewPart">
+   </view>
+
+</extension>
+
+<!-- Wizards -->
+<extension
+
+      point="org.eclipse.ui.newWizards">
+
+   <category
+
+         name="Trace"
+
+         id="org.eclipse.cdt.pa.ui.pa">
+
+   </category>
+
+   <wizard
+
+         availableAsShortcut="true"
+
+         name="Trace Target"
+
+         icon="icons/full/cview16/new_trace_resource_wiz.gif"
+
+         category="org.eclipse.cdt.pa.ui.pa"
+
+         class="org.eclipse.cdt.pa.ui.wizards.PANewTraceResourceWizard"
+
+         project="true"
+
+         finalPerspective="org.eclipse.cdt.pa.ui.PAPerspective"
+
+         id="org.eclipse.cdt.pa.ui.wizards.PANewTraceResourceWizard">
+
+      <description>
+
+         Create a Trace Target
+
+      </description>
+
+   </wizard>
+
+</extension>
+
+</plugin>
+
+
