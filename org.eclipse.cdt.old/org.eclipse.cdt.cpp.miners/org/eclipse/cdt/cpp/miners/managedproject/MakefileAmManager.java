@@ -26,7 +26,7 @@ public class MakefileAmManager {
 	
 	//for lib files
 	String _LIBRARIES = new String("_LIBRARIES");
-	String _a_SOURCES = new String("_a_SOURCES");
+	String _a_SOURCES = new String("_a_SOURCES"); // static lib
 	
 	// updating data
 	String TARGET = new String("!TARGET!");
@@ -73,19 +73,19 @@ public class MakefileAmManager {
 			{
 				case (0):
 					// update top level Makefile.am - basically updating the SUBDIR variable definition
-					updateTopLevelMakefile_am(new File(project.getSource(),"Makefile.am"));
+					updateTopLevelMakefile_am(project.getFileObject());
 					break;
 				case (1):
 					// update First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
-					updateFirstLevelMakefile_am((File)projectStucture[i][0]);
+					updateDefaultMakefile_am((File)projectStucture[i][0]);
 					break;
 				default:
 				// update all other files in the subdirs
-					updateMakefile_am((File)projectStucture[i][0]);
+					updateStaticLibMakefile_am((File)projectStucture[i][0]);
 			}
 		}
 	}
-	private void updateFirstLevelMakefile_am(File parent)
+	private void updateDefaultMakefile_am(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -245,8 +245,9 @@ public class MakefileAmManager {
 		return last_dir_name;
 		
 	}		
-	private void updateTopLevelMakefile_am(File Makefile_am)
+	private void updateTopLevelMakefile_am(File parent)
 	{
+		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
 		{
 			File modMakefile_am = new File(project.getSource(),"mod_Makefile.am");// this is the tope level Makefile.am
@@ -311,7 +312,7 @@ public class MakefileAmManager {
 		String line=new String (SUBDIRS+" ="+childrenOfTopDir);
 		return line;
 	}
-	private void updateMakefile_am(File parent)
+	private void updateStaticLibMakefile_am(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -416,6 +417,138 @@ public class MakefileAmManager {
 			}
 		}
 		return (new String(modLine)).trim();
+	}
+	protected void setMakefileAmToStaticLib(File parent ,DataElement status)
+	{
+		Runtime rt = Runtime.getRuntime();
+		// get the static lib template file
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		//check the project structure
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add Makefile.am template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		updateStaticLibMakefile_am(parent);
+			
+	}
+	protected void setMakefileAmToDefault(File parent ,DataElement status)
+	{
+		Runtime rt = Runtime.getRuntime();
+		// get the static lib template file
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		//check the project structure
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add Makefile.am template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		updateDefaultMakefile_am(parent);
+			
+	}
+	protected void setMakefileAmToTopLevel(File parent ,DataElement status)
+	{
+		Runtime rt = Runtime.getRuntime();
+		// get the static lib template file
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		//check the project structure
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add Makefile.am template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		updateTopLevelMakefile_am(parent);
+			
+	}
+	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
+	{
+		Runtime rt = Runtime.getRuntime();
+		// get the static lib template file
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		//check the project structure
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add Makefile.am template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		updateStaticLibMakefile_am(parent);
+			
 	}
 	protected void getMakefileAmTemplateFiles(DataElement project)
 	{

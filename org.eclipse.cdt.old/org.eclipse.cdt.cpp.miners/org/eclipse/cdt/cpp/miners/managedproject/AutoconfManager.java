@@ -27,14 +27,15 @@ public class AutoconfManager {
 	public AutoconfManager(DataElement aProject)
 	{
 		this.project = aProject;
-	}
-	protected void manageProject(DataElement status)
-	{
-		//manage configure.in
+				//manage configure.in
 		configure_in_manager = new ConfigureInManager(project);
 		// manage Makefile.am
 		makefile_am_manager = new MakefileAmManager(project);
 		// check if it is a unix like system
+	}
+	protected void manageProject(DataElement status)
+	{
+
 		if(getOS().equals("Linux")) // to be modified
 		{
 			String path = project.getSource().toString();
@@ -130,6 +131,10 @@ public class AutoconfManager {
 			args.add(status);
 			ds.command(cmdD,args,project);
 		}	
+	}
+	public MakefileAmManager getMakeFileAmManager()
+	{
+		return makefile_am_manager;
 	}
 }
 

@@ -155,6 +155,10 @@ public class ConfigureInManager {
 							modLine[counetrForModLine++]=subdirs[j].toCharArray()[k];
 						for(int l=0; l< makefile.length(); l++)
 							modLine[counetrForModLine++]=makefile.toCharArray()[l];
+						// for portability issues add this '\' character
+						modLine[counetrForModLine++]='\\';
+						modLine[counetrForModLine++]='\n';
+						
 					}
 				}
 				

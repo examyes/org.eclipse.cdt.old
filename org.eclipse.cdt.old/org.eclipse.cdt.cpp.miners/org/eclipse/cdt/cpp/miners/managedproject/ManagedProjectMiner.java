@@ -20,9 +20,14 @@ public class ManagedProjectMiner extends Miner
 	{
 		DataElement projectD = _dataStore.find(schemaRoot, DE.A_NAME, "Project");
 		DataElement fsObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects");
+	
 		
-		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", true);
+		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", false);
 		createCommandDescriptor(projectD, "configure", "C_CONFIGURE",false);
+		createCommandDescriptor(projectD,"Switch to static_lib Makefile.am","C_SWITCH_TO_STATIC_LIB", false);
+		createCommandDescriptor(fsObjectD,"Switch to shared_lib Makefile.am","C_SWITCH_TO_SHARED_LIB", false);
+		createCommandDescriptor(projectD,"Switch to default Makefile.am","C_DEFAULT_MAKEFILE_AM",false);
+		createCommandDescriptor(projectD,"Switch to top level Makefile.am","C_TOPLEVEL_MAKEFILE_AM",false);
     
 		DataElement managedProjectD  = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.MANAGED_PROJECT);
 		createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
@@ -55,7 +60,6 @@ public class ManagedProjectMiner extends Miner
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
   		DataElement  project = getCommandArgument(theCommand, 0);
-  		// Yasser
   		AutoconfManager manager = new AutoconfManager(project);
   		  
   		//if (!project.getType().equals("project"))  // refer to jeff regarding  this line
@@ -70,6 +74,22 @@ public class ManagedProjectMiner extends Miner
 		else if (name.equals("C_CONFIGURE"))
 		{
 			manager.runConfigureScript(status);
+		}
+		else if (name.equals("C_DEFAULT_MAKEFILE_AM"))
+		{
+			manager.getMakeFileAmManager().setMakefileAmToDefault(project.getFileObject(),status);
+		}
+		else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
+		{
+			manager.getMakeFileAmManager().setMakefileAmToStaticLib(project.getFileObject(),status);
+		}
+		else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
+		{
+			manager.getMakeFileAmManager().setMakefileAmToTopLevel(project.getFileObject(),status);
+		}
+		else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
+		{
+			manager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
 		}
 		else if (name.equals("C_REFRESH"))
   			refreshProject(project);
