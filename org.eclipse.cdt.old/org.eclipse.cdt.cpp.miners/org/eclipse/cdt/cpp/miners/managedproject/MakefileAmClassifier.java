@@ -45,10 +45,6 @@ public class MakefileAmClassifier {
 	public MakefileAmClassifier()
 	{
 		generateMakefileAmLayout();
-		print(toplevelAm);
-		print(programsAm);
-		print(staticlAm);
-		print(sharedlAm);
 	}
 	protected void generateMakefileAmLayout()
 	{

@@ -105,15 +105,9 @@ public class ConfigureInManager {
 		// updating envolves only the AC_OUTPUT macro
 		if(configure_in.exists())
 		{
-			Runtime rt = Runtime.getRuntime();
-			// copy the old configure.in to configure.in.old
-			try{
-				Process p = rt.exec("cp configure.in configure.in.old ", null, project.getFileObject());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-			// update configure.in
+			createDotOldFileFor(configure_in);
 			updateConfigureIn(project,configure_in);
+			compareOldAndNew(configure_in.getParentFile());
 		}
 	}
 	private void updateConfigureIn(DataElement project,File configure_in)
@@ -241,6 +235,49 @@ public class ConfigureInManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
+	}
+	private void compareOldAndNew(File parent)
+	{
+		File _new = new File(parent,"configure.in");
+		File _old = new File(parent,"configure.in.old");
+		String updatedLine;
+		String oldLine;
+		boolean remove = true; 
+		try
+		{
+			// searching for the subdir line
+			BufferedReader updated = new BufferedReader(new FileReader(_new));
+			BufferedReader old= new BufferedReader(new FileReader(_old));
+			oldLine = old.readLine();
+			updatedLine = updated.readLine();
+			while(updatedLine!=null || oldLine!=null)
+			{
+				if(!updatedLine.equals(oldLine))
+				{
+					remove = false;
+					break;
+				}
+				oldLine = old.readLine();
+				updatedLine = updated.readLine();
+			}
+			updated.close();
+			old.close();
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
+		if(remove)
+			_old.delete();		
+	}
+	private void createDotOldFileFor(File aFile)
+	{
+		Runtime rt = Runtime.getRuntime();
+		// rename the existing Makefile.am if exists
+		try{
+			Process p;
+			// check if exist then
+			p= rt.exec("cp "+aFile.getName()+" "+aFile.getName()+".old ", null, aFile.getParentFile());
+			p.waitFor();
+		}catch(IOException e){System.out.println(e);}
+		catch(InterruptedException e){System.out.println(e);}	
 	}
 }
 
