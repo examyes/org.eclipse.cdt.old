@@ -28,7 +28,10 @@
 <br>
 <div class=indent><a href="#intro">       1. Introduction</a></div>
 <div class=indent><a href="#eclipse">     2. Developing the CDT within Eclipse</a>
- <div class=indent><a href="#pdeBuild">     2.1 Building CDT with Eclipse</a></div>
+ <div class=indent><a href="#pdeBuild">     2.1 Building CDT with Eclipse</a>
+ 	<div class=indent><a href="#pdeBuildFeature">     2.1.1 Using Features to Build the CDT Distribution</a></div>
+ 	</div>
+ 
  <div class=indent><a href="#pdeRun">       2.2 Running CDT with Eclipse</a></div>
  <div class=indent><a href="#pdeDebug">     2.3 Debugging CDT with Eclipse</a></div>
 </div> 
@@ -173,6 +176,44 @@
  <li>You can also select each plugin and right-click then choose "Update Classpath", but this should not be necessary. </li>
 </ol>
 </p>
+
+<div class=subsection><a name="pdeBuildFeature"> 2.1.1 Using Features to Build the CDT Distribution</a></div>
+<p>
+ In order to build a distribution zip and/or sources for the CDT the following steps must be completed.
+  <ol>
+	<li>Browse to the org.eclipse.cdt package directory
+	<li>Edit the "about.mappings" file to indicate the build number <br>
+	<pre>
+    #e.g. "0=&ltyear&gt&ltmonth&gt&ltdate&gt"
+    0=20020926 </pre></li>
+    <li>Browse to the org.eclipse.cdt-feature package directory
+    <li>Open the "feature.xml" file
+    <li>Select the "Package" button from the Overview Page
+    <li>From the dialog that is presented select the following IN ORDER. 
+    	Notice the numbers that appear beside the selected items. They should be as follows:
+    	<ol>
+    	 <li>clean
+    	 <li>init
+    	 <li>build.jars
+    	 <li>build.update.jar
+    	 <li>build.zips
+    	 <li>zip.distribution
+    	 <li>build.sources
+    	 <li>zip.sources
+    	</ol>
+    	Note items 7 & 8 are optional and are only required if you want to package 
+    	the sources. They also take a fairly large amount of time.  
+    	</li>
+	<li>When the build is complete there will be a binary
+		distribution zip file and (optionally) a sources zip file
+		<pre>
+  e.g.
+    org.eclipse.cdt_20020926_1.0.0.bin.dist.zip  ... zipped features and plugins
+    org.eclipse.cdt_20020926_1.0.0.src.zip       ... zipped sources
+		</pre></li>
+	</ol>
+</p>
+
 <div class=subsection><a name="pdeRun"> 2.2 Running CDT with Eclipse</a></div>
 <p>
  After successfully building the CDT inside Eclipse, one typically wants to run an instance of Eclipse with the 
