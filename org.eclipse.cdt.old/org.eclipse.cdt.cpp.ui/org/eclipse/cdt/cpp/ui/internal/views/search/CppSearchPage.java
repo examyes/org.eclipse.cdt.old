@@ -493,7 +493,7 @@ public boolean performAction() {
 	String searchText = data.pattern;
 	ModelInterface api = CppPlugin.getModelInterface();
 	api.search(getScopeInput(), searchText, getSearchTypes(), getSearchRelations(),
-		   fFilters[0].getSelection(), fFilters[1].getSelection());	
+		   fFilters[0].getSelection(), !fFilters[1].getSelection());	
 	return true;  // disposes the dialog
 }
 /*
