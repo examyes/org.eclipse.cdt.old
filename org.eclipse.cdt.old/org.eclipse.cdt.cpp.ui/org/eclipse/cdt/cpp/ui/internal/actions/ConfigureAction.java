@@ -186,12 +186,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					int result = box.open();
 					if(result!= -1)
 						if(dialogHas2Buttons)
-						{
-							if(result==0)
-								configureUpdate= result;
-							else
-								configureUpdate= result+1;
-						}
+							configureUpdate= result+1;
 						else
 							configureUpdate = result;
 					else
