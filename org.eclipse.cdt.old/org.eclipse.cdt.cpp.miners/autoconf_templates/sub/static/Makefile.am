@@ -1,9 +1,7 @@
 noinst_LIBRARIES =
-
 lib!TARGET!_a_SOURCES =
 
 SUBDIRS =
-
 EXTRA_DIST = 
 
 
