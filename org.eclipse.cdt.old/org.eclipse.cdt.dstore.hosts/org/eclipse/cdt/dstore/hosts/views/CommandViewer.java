@@ -84,8 +84,8 @@ public class CommandViewer extends Viewer implements SelectionListener
   private Combo              _commandText;
   private Text               _directoryText;
 
-  private Button             _runButton;
-  private Button             _browseButton;
+  protected Button             _runButton;
+  protected Button             _browseButton;
 
   private boolean            _hasFocus;
     private String           _outputViewId;
