@@ -84,22 +84,20 @@ public class SearchMiner extends Miner
       DataElement type = (DataElement)pattern.get(0).dereference();
 
       // find all matching types
-      /****/
       if (subject.getType().equals("Workspace"))
 	  {
 	      for (int i = 0; i < subject.getNestedSize(); i++)
 		  {
 		      DataElement project = subject.get(i);
-		      for (int j = 0; j < project.getNestedSize(); j++)
+		      ArrayList parseRef = project.getAssociated("Parse Reference");
+		      if (parseRef != null && parseRef.size() > 0)
 			  {
-			      DataElement child = project.get(j);
-			      if (child.isReference() && child.getType().equals("Parse Reference"))
-				  {
-				      ArrayList matches = _dataStore.findObjectsOfType(child.dereference(), type);
-				      
-				      // find matches
-				      compare(pattern.getName(), matches, status);
-				  }
+			      DataElement parseProject = (DataElement)parseRef.get(0);
+			      DataElement parsedFiles  = _dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
+			      ArrayList matches = _dataStore.findObjectsOfType(parsedFiles, type);
+			      
+			      // find matches
+			      compare(pattern.getName(), matches, status);
 			  }
 		  }
 	  }
@@ -128,18 +126,18 @@ public class SearchMiner extends Miner
 
 	  if (root.getType().equals("Workspace"))
 	      {
-		  for (int i = 0; i < root.getNestedSize(); i++)
-		      {
-			  DataElement project = root.get(i);
-			  for (int j = 0; j < project.getNestedSize(); j++)
-			      {
-				  DataElement child = project.get(j);
-				  if (child.isReference() && child.getType().equals("Parse Reference"))
-				      {
-					  compareRegex(matcher, pattern, type, child.dereference(), status);
-				      }
-			      }
-		      }
+	      for (int i = 0; i < root.getNestedSize(); i++)
+		  {
+		      DataElement project = root.get(i);
+		      ArrayList parseRef = project.getAssociated("Parse Reference");
+		      if (parseRef != null && parseRef.size() > 0)
+			  {
+			      DataElement parseProject = (DataElement)parseRef.get(0);
+			      
+			      // find matches
+			      compareRegex(matcher, pattern, type, parseProject, status);
+			  }
+		  }
 	      }
 	  else
 	      {
@@ -175,7 +173,6 @@ public class SearchMiner extends Miner
 		      {		
 			  if (compareString(pattern, match.getValue(), false))
 			      {
-				  
 				  _dataStore.createReference(status, match, getLocalizedString("model.contents"));
 			      }
 		      }

@@ -233,6 +233,7 @@ public class ManagedProjectMiner extends Miner
 
 	private DataElement parseAmFile(DataElement theUnmanagedProject)
 	{
+	    /*
 		DataElement theManagedProject = null;
 		AmParser theParser = null;
 		if (theUnmanagedProject.getType().equals("Project"))
@@ -247,6 +248,7 @@ public class ManagedProjectMiner extends Miner
 			theManagedProject = theParser.parse();
 			_dataStore.refresh(theManagedProject);
 		}
+	    */
 	    return null;
 	}
 }
