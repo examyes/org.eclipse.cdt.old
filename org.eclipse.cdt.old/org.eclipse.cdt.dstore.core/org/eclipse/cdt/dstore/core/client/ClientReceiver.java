@@ -35,6 +35,8 @@ public class ClientReceiver extends Receiver
 			  DataElement rootOutput = documentObject.get(i);
 			  _dataStore.refresh(rootOutput);
 		      }
+		     documentObject.removeNestedData();
+		     _dataStore.deleteObject(documentObject.getParent(), documentObject);
 	      }
       }
     }
