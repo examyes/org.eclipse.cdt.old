@@ -66,6 +66,7 @@
       <li><a href="#general_70">How do I ask questions?</a></li>
       <li><a href="#general_80">How do I report a bug or request a feature?</a></li> 
       <li><a href="#general_90">What is this .log file I hear so much about?</a></li> 
+      <li><a href="#general_100">How do I generate JavaDocs?</a></li> 
    </ol>
   </li>
   <!-- Installation subheader -->
@@ -284,8 +285,27 @@
   <p>
    The .log file is located in the workspace/.metadata directory (or sometimes just in the .metadata directory).
   </p>
+  <hr size="1">  
+  </li>  
+  
+  <li><b><a name="general_100">How do I generate JavaDocs?</a></b>
+  <p>
+   The following steps can be used to create JavaDocs for any CDT project.
+  </p>
+  <p>
+   <ol>
+   <li>Check out the project (i.e. org.eclipse.cdt.debug.core) from dev.eclipse.org 
+	    with cvsroot /home/tools</li>
+    <li>Ensure that you have JavaDoc installed and configured (go to preferences->Java->Javadoc 
+    	and set the location for the javadoc command </li>
+    <li>Select the project in the package explorer, right-click Export, 
+    	select Javadoc and follow the wizard instructions. It will generate the 
+    	Javadoc html in a doc directory for that plugin </li>
+   </ol>
+   The result will be a complete JavaDoc hierarchy of all the public APIs for the selected plugin.
+  </p>
   <hr size="1">
-  </li>
+  </li>  
 </ol>
 
 <!-- Installation Header -->
