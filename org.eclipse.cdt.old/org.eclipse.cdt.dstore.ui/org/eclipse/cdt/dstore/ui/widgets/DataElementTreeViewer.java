@@ -355,6 +355,7 @@ public void doExpand(DataElement obj)
     
     public void setInput(DataElement object)
     {
+	System.out.println("set input " + object);
 	inputChanged(object, _currentInput);
     }
     
