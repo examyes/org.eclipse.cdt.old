@@ -1416,7 +1416,7 @@ public final class DataStore
     /**
      * Replaces a deleted object
      */
-    private DataElement replaceDeleted(DataElement deletedObject)
+    public DataElement replaceDeleted(DataElement deletedObject)
     {
 	if (deletedObject != null)
 	    {
