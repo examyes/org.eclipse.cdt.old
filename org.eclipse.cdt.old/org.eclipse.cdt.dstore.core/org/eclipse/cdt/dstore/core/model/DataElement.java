@@ -946,11 +946,16 @@ public final class DataElement implements Serializable, IDataElement
      * @param depth how deep to search for the specified element 
      * @return whether the element is found
      */       
-    public boolean contains(DataElement object, DataElement property, int depth)
+    public synchronized boolean contains(DataElement object, DataElement property, int depth)
     {
 	if (depth > 0)
 	    {
 		depth--;
+		
+		if (object == null)
+		{
+			return false;
+		}
 
 		if (property == null)
 		    {
