@@ -73,7 +73,7 @@ public abstract class Receiver extends Thread
         }
       }
 
-  public void handleInput()
+    public synchronized void handleInput()
       {
         try
         {

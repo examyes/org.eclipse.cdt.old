@@ -48,15 +48,19 @@ public class XMLparser
 	try
 	    {
 		// hack to deal with platform inconsistencies
-		int first = reader.read();
-		if (first != 10)
+		synchronized(reader)
 		    {
-			written = 1;
-			buffer[0] = (byte)first;
+			int first = reader.read();
+			if (first != 10)
+			    {
+				written = 1;
+				buffer[0] = (byte)first;
+			    }
 		    }
 	    }
 	catch (IOException e)
 	    {
+		System.out.println(e);
 	    }
 	
 	while (written < size)
