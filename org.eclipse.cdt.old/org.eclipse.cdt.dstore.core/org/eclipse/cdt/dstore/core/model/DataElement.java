@@ -695,14 +695,18 @@ public final class DataElement implements Serializable, IDataElement
     {
         if (attribute != null)
 	    {
-			if ((attributeIndex == DE.A_NAME) && (getAttribute(DE.A_NAME).equals(getAttribute(DE.A_VALUE))))
+		if ((attributeIndex == DE.A_NAME) && (getAttribute(DE.A_NAME).equals(getAttribute(DE.A_VALUE))))
 		    {
 			_attributes[DE.A_VALUE] = attribute;						
 		    }
-		 	if (attributeIndex == DE.A_DEPTH)
-		 	{
-		 		_depth = Integer.parseInt(attribute);
-		 	}   
+		else if (attributeIndex == DE.A_DEPTH)
+		    {
+			_depth = Integer.parseInt(attribute);
+		    }
+		else if (attributeIndex == DE.A_TYPE)
+		    {
+			_descriptor = null;
+		    }
 		
 		_attributes[attributeIndex] = attribute;
 		_isUpdated = false;

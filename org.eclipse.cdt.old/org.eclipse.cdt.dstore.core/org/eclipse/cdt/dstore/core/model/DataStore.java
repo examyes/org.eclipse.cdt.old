@@ -2823,7 +2823,7 @@ public final class DataStore
 
 	_dataStoreSchema = new DataStoreSchema(this);
 	_traceFileHandle = new File(".dstoreTrace");
-	_tracingOn = false;
+	_tracingOn = true;
 	try
 	    {
 		_traceFile = new RandomAccessFile(_traceFileHandle, "rw");		
