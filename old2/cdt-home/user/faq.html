@@ -4,16 +4,20 @@
  <link rel="stylesheet" href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css">
  <title>cdt user FAQ</title>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
+ <style>
+<!--
+		H3 { color: #000000 }
+-->
+ </style>
+ </head>
  <body>
 
 <!-- Title -->
-
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
  <tbody>
   <tr>
    <td align="Left" width="54%">
-   <p><font class="indextop"> 7cdt user<br>FAQ</font><br>
+   <p><font class="indextop"> CDT  FAQ</font><br>
        <font class="indexsub"> frequently asked question and answers</font></p>
    </td>
    <td width="46%"><img src="http://dev.eclipse.org/images/howto_banner.jpg" height="111" width="272" align="Center"></td>
@@ -22,7 +26,6 @@
 </table>
 
 <!-- Introduction -->
-
 <table border="0" cellspacing="5" cellpadding="2" width="100%">
    <tbody>
     <tr>
@@ -31,26 +34,20 @@
    </tr>
    <tr>
       <td><font size="-1" face="arial,helvetica,geneva">
-      <p>The following is the official CDT User FAQ.  This document is, very much, a work in progress.</p>
+      <p>The following is the official CDT FAQ. This document is a work in progress 
+      -- feedback is appreciated.&nbsp; </p>
       </font></td>
    </tr>
-
   </tbody>
 </table>
- <br>
+ 
+<br>
 
 <!-- Table of contents header -->
-
 <table border="0" cellspacing="0" cellpadding="2" width="100%" bgcolor="#cccccc">
-   <tbody>
-    <tr>
-      <td>
-        <b><font face="Arial,Helvetica" color="#000000" size="+1"><a name="toc">
+   <tbody> <tr> <td> <b><font face="Arial,Helvetica" color="#000000" size="+1"><a name="toc">
             Table of contents:
-        </a></font></b>
-      </td>
-   </tr>
-  </tbody>
+   </a></font></b></td></tr></tbody>
 </table>
 
 <ul>
@@ -61,78 +58,137 @@
       <li><a href="#general_20">How is the CDT licensed?</a></li>
       <li><a href="#general_30">How is the CDT Project organized?</a></li>
       <li><a href="#general_40">How do I find out about future releases of the CDT?</a></li>
-      <li><a href="#general_50">What is the default 
-      configuration supported by the CDT?</a></li>
+      <li><a href="#general_50">What is the default configuration supported by the CDT?</a></li>
       <li><a href="#general_60">Which operating systems does the CDT support?</a></li>
       <li><a href="#general_70">Why isn't the XXX operating system supported by CDT?</a></li>
       <li><a href="#general_80">How do I ask questions?</a></li>
       <li><a href="#general_90">How do I report a bug or request a feature?</a></li>
       <li><a href="#general_100">What is this .log file I hear so much about?</a></li>
-      <li><a href="#general_110">How do I generate JavaDocs?</a></li>
-   </ol>
-  </li>
-  <!-- Installation subheader -->
-  <li> <b><a href="#install">Download & Installation:</a></b>
-    <ol>
-      <li><a href="#install_10">Which CDT build should I download?</a></li>
-      <li><a href="#install_20">I can't find the CDT download for XXX?</a></li>
-      <li><a href="#install_30">How do I build or debug the CDT itself?</a></li>
-      <li><a href="#install_40">How do I uninstall CDT?</a></li>
-      <li><a href="#install_50">I just installed Eclipse 
-      and the CDT. However, CDT does not recognize the existing toolchain [ie 
-      Visual Studio, Borland, Watcom, Cygwin, MinGW, GCC, etc]. How do I make 
-      the CDT recognize these tools?</a></li>
+      <li><a href="#general_110">How do I update this FAQ</a></li>
+      <li><a href="#general_120">Where do I find more information about CDT</a></li>
+      <li><a href="#general_130">Where do I find the CDT Documentation</a></li>
     </ol>
-  </li>
-  <!-- Project Creations subheader -->
+   </li>
+
+   <!-- Installation subheader -->
+   <br>
+   <li> <b><a href="#install">Download & Installation:</a></b>
+     <ol>
+      <li><a href="#install_10">Which CDT build should I download?</a></li>
+      <li><a href="#install_20">How do I download and install the CDT</li>
+      <li><a href="#install_30">I can't find the CDT download for XXX?</a></li>
+      <li><a href="#install_40">How do I uninstall CDT?</a></li>
+     </ol>
+   </li>
+
+  <!-- Project Creation subheader -->
+  <br>
   <li> <b><a href="#create">C/C++ Project Creation:</a></b>
     <ol>
-    <li> <a href="#create_10">Creating a simple C++ Project -- "Hello World" on a Windows Platform</a></li>
-    <li> <a href="#create_20">Creating a simple C++ Project -- "Hello World" on a Linux Platform</a></li>
-    <li> <a href="#create_30">Creating a simple C++ Project -- "Hello World" on a Solaris Platform</a></li>
-    <li> <a href="#create_40">Creating a simple C++ Project -- "Hello World" on a QNX Neutrino Platform</a></li>
+      <li><a href="#create_10">Creating a simple C++ Project -- "Hello World" on a Windows Platform</a></li>
+      <li><a href="#create_20">How do I create a new project using a directory full of existing source?</a></li>
+      <li><a href="#create_30">How do I create a new project using CVS?</a></li>
+      <li><a href="#create_40">How do I Import existing code into an existing project?</a></li>
     </ol>
   </li>
-   <!-- Building,Browsing subheader -->
-  <li> <b><a href="#build">Building C/C++ Projects:</a></b>
-    <ol>
-    <li> <a href="#build_10">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></li>
-    <li> <a href="#build_20">Building a simple C++ Project -- "Hello World" on a Linux Platform</a></li>
-    <li> <a href="#build_30">Building a simple C++ Project -- "Hello World" on a Solaris Platform</a></li>
-    <li> <a href="#build_40">Building a simple C++ Project -- "Hello World" on a QNX Neutrino Platform</a></li>
-    <li> <a href="#build_50">Can I see the raw compiler 
-    output? Where is this information placed?</a></li>
-    </ol>
-  <li><b><a href="#editing">Editing C/C++ Projects</a>:</b></li>
-</ul>
-<blockquote>
+  
+  <!-- Editing subheader -->
+  <br>
+  <li><b><a href="#editing">Editing C/C++ Projects</a>:</b>
   <ol>
-    <li><a href="#editing_10">I'd like to use the code 
-    assist functionality, but it doesn't seem to work for me. I don't get 
-    anything showing up when I select CTRL+SPACE in a C/C++ source file.</a></li>
+    <li><a href="#editing_10">I'd like to use the code assist functionality, but it doesn't seem to work for me. 
+    	I don't get anything showing up when I select CTRL+SPACE in a C/C++ source file.</a></li>
+    <li><a href="#editing_20">Search is broken!</a></li>
+    <li><a href="#editing_30">I am having problems with the outline view!</a></li>
+    <li><a href="#editing_50">How can I add another extension to CDT so that files other than c/cpp/cc/h 
+    	files are recognized as source files? My compiler needs the file extension 
+    	to be &quot;xyz&quot;, and when I open xyz files there is no syntax highlighting.</a></li>
   </ol>
-</blockquote>
-<ul>
-  <li> <b><a href="#debug">Debugging C/C++ Projects:</a></b></li>
-</ul>
-<blockquote>
-  <ol>
-    <li><a href="#debug_10">I'm missing some basic C/C++ 
-    debugging functionality, where is it hidden?</a></li>
-    <li><a href="#debug_20">Is it possible to see global 
-    variables? The Variables view shows only local variables...</a></li>
-    <li><a href="#debug_30">Can I debug remote targets?</a></li>
-    <li><a href="#debug_40">Since the debugger is gdb, can 
-    I simply access the gdb console?</a></li>
-    <li><a href="#debug_50">Can I see/log all of the 
-    commands which are being driven to gdb?</a></li>
-  </ol>
-  </blockquote>
 
-<ul>
-  <li> <b><a href="#profile">Profiling C/C++ Projects:</a></b>
-    <ol>
+  <!-- Compilers subheader -->
+  <br>
+  <li><b><a href="#compilers">Compilers and other 3rd party tools:</a></b></li>
+  <ol>
+     <li><a href="#compilers_5">What tools do I need to run the CDT?</a></li>
+
+    <li><a href="#compilers_10">I just installed Eclipse 
+      and the CDT. However, CDT does not recognize the existing toolchain [i.e. 
+      Visual Studio, Borland, Watcom, Cygwin, MinGW, GCC, etc]. How do I make 
+      the CDT recognize these tools?</a></li>
+    <li><a href="#compilers_20">How do I add support for my toolchain via the managed build feature.</a></li>
+    <li><a href="#compilers_30">Are there C++ libraries included in the CDT (or elsewhere in Eclipse)?</a></li>
+  </ol>
+  </li>
+   
+  <!-- Building subheader -->
+  <br>
+  <li> <b><a href="#build">Building C/C++ Projects:</a></b>
+  <ol>
+    <li> <a href="#build_10">When do I use the standard make feature?</a></li>
+    <li> <a href="#build_20">When do I use the managed make feature?</a></li>
+    <li> <a href="#build_30">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></li>
+    <li> <a href="#build_40">Can I see the raw compiler output? Where is this information placed?</a></li>
+    <li> <a href="#build_50">I get the error<br>
+       &nbsp;&nbsp;&nbsp;Build error<br>
+       &nbsp;&nbsp;&nbsp;(Exec error: Launching failed)</a>
+ 	</li>
+    <li> <a href="#build_70">My Compiler errors seem to be truncated or split.&nbsp; What is going on? </a></li>
+    <li> <a href="#build_80">What causes the message<br>
+		&nbsp;&nbsp;&nbsp; make (e=2): The system cannot find the file specified?</a></li>
     </ol>
+
+  <!-- Debugging subheader -->
+  <br>
+  <li><b><a href="#debug">Debugging C/C++ Projects:</a></b></li>
+  <ol>
+    <li><a href="#debug_10">I'm missing some basic C/C++ debugging functionality, where is it hidden?</a></li>
+    <li><a href="#debug_20">Is it possible to see global variables? The Variables view shows only local variables.</a></li>
+    <li><a href="#debug_30">Can I debug remote targets?</a></li>
+    <li><a href="#debug_40">Since the debugger is gdb, can I simply access the gdb console?</a></li>
+    <li><a href="#debug_50">Can I see/log all of the commands which are being driven to gdb?</a></li>
+    <li><a href="#debug_60">Why can't I see the source in the debugger?</a></li>
+    <li><a href="#debug_70">Can I debug Java and C++ at the same time?</a></li>
+    <li><a href="#debug_80">Can I set a breakpoint in a DLL?</a></li>
+    <li><a href="#debug_90">When I want to debug my &quot;Hello World&quot; program, I have this error :<br>
+    	&nbsp;&nbsp;&nbsp;Failed Launching CDI Debugger : Error creating session: gdb: unrecognized<br>
+    	&nbsp;&nbsp;&nbsp;option '-i'.</a></li>
+    <li><a href="#debug_100">Why is my executable not listed in the debug dialog?</a></li>
+    <li><a href="#debug_110">When I launch debug, I get two suspended threads and a command window 
+    	that doesn't show up anything. If I do Run/Resume, I get an error message:<br>
+  	  	Resume failed.<br>
+   		Reason:<br>
+  	  	Exceptions occurred attempting to resume.<br>
+    	Details: Target request failed: Target is not responding (timed out)<br>
+    	<br>
+    What is wrong?</a></li>
+    <li><a href="#debug_120">Is there any way of using the dbx debugger from the CDT?</a></li>
+  </ol>
+
+  <!-- Troubleshooting subheader -->
+  <br>
+  <li><b><a href="#troubleshooting">Miscellaneous Troubleshooting</b></a></li>
+  <ol>
+      <li><a href="#troubleshooting_10">CDT tells me that I keep running out of memory, but I have 
+      XXX GB of 
+      		memory. What is wrong?</a></li>
+      <li><a href="#troubleshooting_20">Whenever I build the project, the eclipse hangs (gets &quot;stuck&quot;). 
+      		I need to kill a process named: &quot;c++ filt&quot; to restart it.&nbsp; Why?</a></li>
+  </ol>
+
+  <!-- Working On CDT subheader -->
+  <br>
+  <li><b><a href="#developing">Working ON the CDT</a></b>
+  <ol>
+      <li><a href="#developing_10">How do I get access to the CDT source code?</a></li>
+      <li><a href="#developing_15">How do I use eclipse to develop for eclipse?</a></li>
+      <li><a href="#developing_20">How do I modify the CDT source code?</a></li>
+      <li><a href="#developing_30">How do I run with my changes?</a></li>
+      <li><a href="#developing_40">How do I submit a fix for a bug?</a></li>
+      <li><a href="#developing_50">How do I distribute my changes to my customers?</a></li>
+      <li><a href="#developing_60">How do I generate JavaDocs?</a></li>
+      <li><a href="#developing_70">What are some areas that are not complete?</a></li>
+      <li><a href="#developing_80">In addition to submitting fixes, how else can I contribute to the CDT Project?</a></li>
+     </ol>
   </li>
 
 </ul>
@@ -151,13 +207,30 @@
 </table>
 
 <!-- General contents -->
-<ol>
+  <ol>
   <li><b><a name="general_10">What is the CDT?</a></b>
-    <p>
-     The CDT (C/C++ Development Tools) Project is working towards providing a fully functional C/C++ Integrated
-     Development Environment (IDE). Our focus is on designing and developing a fully extensible framework,
-     together with a full-featured default implementation. We are always interested in participation
-     from others who would like to extend our work.  </p>
+    <p>The CDT (C/C++ Development Tools) Project is working towards providing a 
+    fully functional C and C++ Integrated Development Environment (IDE) for the 
+    Eclipse platform.&nbsp; </p>
+    <p>There are a number of groups contributing to the CDT; We strongly 
+    encourage interested parties to extend our work, thereby making the Eclipse 
+    CDT project a richer set of freely available resources. We are looking for 
+    contributions from the open source community in the areas of test, 
+    development, documentation, and general users who can help us ensure that 
+    the C/C++ tools work well on all the Eclipse platforms.&nbsp;&nbsp;&nbsp; </p>
+  <p>Our current release function includes:<ul>
+    <li>C/C++ Editor (basic functionality, syntax highlighting, code completion 
+    etc.) </li>
+    <li>C/C++ Debugger (APIs &amp; Default implementation, using GDB) </li>
+    <li>C/C++ Launcher (APIs &amp; Default implementation, launches and external 
+    application) </li>
+    <li>Parser</li>
+    <li>Search Engine</li>
+    <li>Content Assist Provider</li>
+    <li>Makefile generator</li>
+  </ul>
+    <p>Default implementations of all interfaces and extension points will be 
+    supplied for various platforms. </p>
      <p>
      The CDT is fully open-source and implemented purely in java as a set of plugins to the
      <a href="http://www.eclipse.org">Eclipse</a> platform.  To learn more visit the
@@ -177,21 +250,30 @@
   </li>
 
   <li><b><a name="general_30">How is the CDT Project organized?</a></b>
-   <p>
-    The CDT was the first approved subproject of the Eclipse Tools Project hosted at
-    <a href="http://www.eclipse.org/tools">www.eclipse.org/tools</a>.  To learn more about
-    the organization of the Eclipse Tools Project, read the
-    <a href="http://www.eclipse.org/tools/eclipsetools-charter.html">Eclipse Tools Charter</a>.
-   </p>
-   <p>
-    The CDT project itself is organized into autonomous
-    <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/main.html?cvsroot=Tools_Project#components">components</a>
-    each with its own set of committers, bug categories and mailing lists.
-   </p>
-   <hr size="1">
+   <p>Visit
+   <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/Project%20Structure.html?cvsroot=Tools_Project">
+   CDT Project Structure</a> to find out more about the organization of CDT 
+   (History, participants, and project structure).</p>
   </li>
 
+   <hr size="1">
+
   <li><b><a name="general_40">How do I find out about future releases of the CDT?</a></b>
+    <p>The official CDT Development plans are here:<ul>
+    <li>
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_project_management.html?cvsroot=Tools_Project">
+    Plans</a> -- this is the page that contains all the new plans and meeting 
+    minutes, and</li>
+    <li>
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_R2.0_plan.html?cvsroot=Tools_Project">
+    CDT 2.0 Plan</a> - This plan is a description of the ongoing development on 
+    CDT 2.0.&nbsp; It is subject to change. </li>
+  </ul>
+  <p>If you wish to contribute to the development of the CDT, we welcome the 
+  opportunity to work with you. The plans will be updated to reflect the 
+  commitments made by contributors to this projects.&nbsp; See
+  <a href="#developing">Working on the CDT</a> for information on how to get 
+  started.</p>
     <p>
      Release Milestones (which represent planned availability dates for Stable CDT builds) are noted in the CDT Plan
      Documents which can be found on the
@@ -203,12 +285,11 @@
     <hr size="1">
   </li>
 
-<li><b><a name="general_50">What is the default 
-configuration supported by the CDT?</a></b><p class="MsoPlainText">
-This is a bit of a moving target, but currently the 
-compiler supported (from an error parsing point of view) is gcc, the debugger 
-interface will work with gdb 5.2.1 and the default build command is GNU &quot;make&quot;.</p>
-<p>&nbsp;</li>
+<li><b><a name="general_50">What is the default configuration supported by the CDT?</a></b><p class="MsoPlainText">
+	This is a bit of a moving target, but currently the compiler supported (from an error parsing point of view) 
+	is gcc, the debugger interface will work with gdb 5.2.1 and the default build command is GNU &quot;make&quot;.</p>
+    <hr size="1">
+    </li>
 
 <li><a name="general_60"><b>Which operating systems does the CDT support?</b>
 </a>
@@ -227,6 +308,138 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
     Which platforms are fully supported will ultimately depend on the needs of the community,
     as expressed by the participation in developing, and testing for each platform.
     </p>
+
+    <p>
+    The core plugins are written in Java with no native code and thus may be 
+    ported to any platform supported by Eclipse. However, some default 
+    implementations may require that other software or tools, licensed under 
+    GNU, may be required.</p>
+
+    <p>
+    In general there is some version of Linux and some version of windows used 
+    by the developers on the CDT.&nbsp; For an exact list of supported platforms 
+    see the <a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">Downloads</a> page</p>
+  <h2>Eclipse Target Operating Environments</h2>
+<p>The objective is to support the CDT on all target operating environments 
+listed in the
+<a href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#TargetOperatingEnvironments">
+Eclipse 3.0 Project Plan</a>. </p>
+<p>Eclipse SDK 3.0 is tested and validated on the following reference platforms 
+(this list is updated over the course of the release cycle):</p>
+<table width="821" border="1">
+  <tr bgColor="#cccccc">
+    <th colSpan="4">
+    <div align="center">
+      <b><font size="+1">Eclipse Reference Platforms</font></b>
+    </div>
+    </th>
+  </tr>
+  <tr>
+    <td width="205"><b>Operating system</b></td>
+    <td width="76"><b>Processor architecture</b></td>
+    <td width="59"><b>Window system</b></td>
+    <td width="453"><b>Java 2 Platform</b></td>
+  </tr>
+  <tr>
+    <td width="205">Microsoft Windows XP</td>
+    <td width="76">Intel x86</td>
+    <td width="59">Win32</td>
+    <td width="453">
+    * 
+    Sun Java 2 SDK, Standard Edition, version 1.4.2_03 for Microsoft Windows</td>
+  </tr>
+  <tr>
+    <td width="205">Microsoft Windows XP</td>
+    <td width="76">Intel x86</td>
+    <td width="59">Win32</td>
+    <td width="453">IBM 32-bit SDK for Windows, Java 2 Technology Edition, 
+    Version 1.4.1</td>
+  </tr>
+  <tr>
+    <td width="205">
+    * 
+    Red Hat Enterprise Linux WS 3</td>
+    <td width="76">Intel x86</td>
+    <td width="59">GTK</td>
+    <td width="453">
+    * 
+    Sun Java 2 SDK, Standard Edition, 1.4.2_03 for Linux x86</td>
+  </tr>
+  <tr>
+    <td width="205">
+    * 
+    Red Hat Enterprise Linux WS 3</td>
+    <td width="76">Intel x86</td>
+    <td width="59">GTK</td>
+    <td width="453">IBM 32-bit SDK for Linux on Intel architecture, Java 2 
+    Technology Edition, Version 1.4.1</td>
+  </tr>
+  <tr>
+    <td width="205">SuSE Linux 8.2</td>
+    <td width="76">Intel x86</td>
+    <td width="59">GTK</td>
+    <td width="453">
+    * 
+    Sun Java 2 SDK, Standard Edition, 1.4.2_03 for Linux x86</td>
+  </tr>
+  <tr>
+    <td width="205">SuSE Linux 8.2</td>
+    <td width="76">Intel x86</td>
+    <td width="59">GTK</td>
+    <td width="453">IBM 32-bit SDK for Linux on Intel architecture, Java 2 
+    Technology Edition, Version 1.4.1</td>
+  </tr>
+  <tr>
+    <td width="205">Sun Solaris 8</td>
+    <td width="76">SPARC</td>
+    <td width="59">Motif</td>
+    <td width="453">
+    * 
+    Sun Java 2 SDK, Standard Edition, 1.4.2_03 for Solaris SPARC</td>
+  </tr>
+  <tr>
+    <td width="205">HP HP-UX 11i</td>
+    <td width="76">hp9000<br>
+    PA-RISC</td>
+    <td width="59">Motif</td>
+    <td width="453">
+    *
+    <span class="header">HP-UX SDK for the Java 2 platform, version 1.4.2.00 for 
+    hp9000 PA-RISC</span></td>
+  </tr>
+  <tr>
+    <td width="205" height="21">
+    * 
+    IBM AIX 5L Version 5.2</td>
+    <td width="76">PowerPC</td>
+    <td width="59">Motif</td>
+    <td width="453">IBM 32-bit SDK for AIX, Java 2 Technology Edition, Version 
+    1.4.1</td>
+  </tr>
+  <tr>
+    <td width="205">
+    * 
+    Apple Mac OS X 10.3</td>
+    <td width="76">PowerPC</td>
+    <td width="59">Carbon</td>
+    <td width="453">Java 2 Standard Edition 1.4.1 for Mac OS X</td>
+  </tr>
+  <tr>
+    <td width="205">QNX Neutrino RTOS <i>[version TBD]</i></td>
+    <td width="76">Intel x86</td>
+    <td width="59">Photon</td>
+    <td width="453">IBM J9 VM for QNX <i>[version TBD]</i></td>
+  </tr>
+</table>
+<p>
+* 
+Although untested, Eclipse should work fine on other OSes that support the same 
+window system. For Win32: Windows 98, ME, NT, 2000, and Server 2003; SWT HTML 
+viewer requires Internet Explorer 5 (or higher). For GTK on other Linux systems: 
+version 2.2.1 of the GTK+ widget toolkit and associated libraries (GLib, Pango); 
+SWT HTML viewer requires Mozilla 1.4GTK2. For Motif on other Linux systems: Open 
+Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
   </p>
    <hr size="1">
   </li>
@@ -254,17 +467,16 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
     <table border="0" cellspacing="5" cellpadding="2" width="100%">
     <tr><td><b>Platform </b></td><td> <b>Company</b></td></tr>
     <tr><td>QNX Neutrino</td><td>QNX Software Systems Ltd.</td></tr>
-    <tr><td>Linux</td><td>Red Hat</td></tr>
-    <tr><td>Windows</td><td>MontaVista with initial support from QNX</td></tr>
-    <tr><td>Solaris</td><td><!--Rational (tentative)--></td></tr>
+    <tr><td>Linux</td><td>IBM, Red Hat</td></tr>
+    <tr><td>Windows</td><td>IBM, MontaVista with initial support from QNX</td></tr>
     </table>
 
   </p>
   <p>
    If you have a favorite platform we highly encourage you to get involved and
    volunteer to own a feature that does not currently have an implementation that
-   works on your platform of choice.
-  </p>
+   works on your platform of choice.&nbsp;&nbsp; See <a href="#developing">
+   Working on the CDT</a> for more information.</p>
   <hr size="1">
   </li>
 
@@ -287,15 +499,28 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
    <p>
     Keep in mind that these newsgroups are public, so do not include any confidential information in your questions.
     You should also read
-    <a href="http://www.tuxedo.org/%7Eesr/faqs/smart-questions.html">How to ask questions the smart way</a>
+    <a href="http://www.catb.org/~esr/faqs/smart-questions.html" target="_top">
+    &quot;How to ask questions the smart way&quot;</a>
     by Eric Raymond before participating in the newsgroups.
     NOTE: Please submit bugs to <a href="http://dev.eclipse.org/bugs">bugzilla</a>, not to the newsgroups.
     See the <a href="#general_70">How do I report a bug or request a feature?</a> section of this document.
    </p>
+
+
+
+   <p>
+    People will still come into a newsgroup asking questions that have
+    been answered before and often will not provide any information about
+    what versions they have installed, and what the problem is.&nbsp; You will 
+    be much more likely to get help if you provide enough information to 
+    reproduce the problem.&nbsp; The section on <a href="#general_90">how to 
+    report a bug</a> gives a list of some information which could be useful.</p>
+
    <hr size="1">
   </li>
+    <li><b><a name="general_90">How do I report a bug or request a feature?</a></b>
+    </li>
 
-  <li><b><a name="general_90">How do I report a bug or request a feature?</a></b>
    <p>
     The CDT Project (like the Eclipse Project) uses
     <a href="http://www.bugzilla.org/">bugzilla</a> as its bug and feature tracking system. Entering a
@@ -320,60 +545,72 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
    </p>
    <p>
     To make your bug report more helpful include the following in your bug reports:
-    <ol>
-      <li>The build level of both the CDT and Eclipse that you are using.
-       For example, "cdt 20020704 with Eclipse 2.0 Build"</li>
-      <li>Your computer's specifications (OS + level, memory, other pertinent info)</li>
+    <p>
+    <i>Environmental settings</i>:<ol>
+      <li>The build level of  Eclipse that you are using.
+       For example, "Eclipse 3.0M6&quot;</li>
+      <li>The build level of CDT that you are using.
+       For example, "CDT build 2.0.0.0026&quot;</li>
+      <li>Your computer's specifications (OS version + patch level, memory, other pertinent info)</li>
       <li>The contents of your .log file (or lack thereof).  This is especially
       important if you get a dialog that reports an internal error.  See
       <a href="#general_80">What is this .log file I hear so much about?</a> for information on
-      on finding your .log file.</li>
+      <span lang="en-us"></span>finding your .log file.</li>
       <li>The Java runtime or development kit you are using to run eclipse (use
         java -version or java -fullversion)</li>
-      <li>A description of what you were doing when you encountered the bug</li>
+     </ol>
+    <p><i>Problem Description:</i><ol>
+      <li>A description of what you were doing,</li>
+      <li>A description of what behavior that you observed, and</li>
       <li>An explanation of how the observed behavior differs from the expected
         behavior</li>
      </ol>
     </p>
    <hr size="1">
-  </li>
 
-  <li><b><a name="general_100">What is this .log file I hear so much about?</a></b>
-  <p>
-   The .log file is used by the Eclipse Platform to log runtime errors.  It is invaluable when debugging both
-   problems with plugins not starting, as well as any exceptions they may throw once loaded.  A .log file
-   should always be included when opening a bug against the CDT or Eclipse (or if there is no .log file, that
-   fact should be mentioned in the bug).
-  </p>
-  <p>
-   The .log file is located in the workspace/.metadata directory (or sometimes just in the .metadata directory).
-  </p>
-  <hr size="1">
-  </li>
-
-  <li><b><a name="general_110">How do I generate JavaDocs?</a></b>
-  <p>
-   The following steps can be used to create JavaDocs for any CDT project.
-  </p>
-  <p>
-   <ol>
-   <li>Check out the project (i.e. org.eclipse.cdt.debug.core) from dev.eclipse.org
-        with cvsroot /home/tools</li>
-    <li>Ensure that you have JavaDoc installed and configured (go to preferences-&gt;Java-&gt;Javadoc
-        and set the location for the javadoc command </li>
-    <li>Select the project in the package explorer, right-click Export,
-        select Javadoc and follow the wizard instructions. It will generate the
-        Javadoc html in a doc directory for that plugin </li>
-   </ol></p>
+   <li>
+     <b><a name="general_100">Where is this .log file that I hear so much about?</a></b>
+     <p>The .log file is located in the workspace/.metadata directory.</p>
+     <p>The .log file is used by the Eclipse Platform to log runtime errors. It 
+     is useful to include it in bug reports because it contains stack traces that 
+     occur in plug-ins. When you report a bug, make sure to include your .log 
+     file!
+   <hr size="1">
+    </li>
+   <li><b><a name="general_110">How do I update this FAQ?</a></b>
+   <p>Feedback sent do the cdt-dev
+   <a href="http://www.eclipse.org/mail/index.html">developer mailing list</a> 
+   will be incorporated into future version of this FAQ.</p>
    <p>
-   The result will be a complete JavaDoc hierarchy of all the public APIs for the selected plugin.
-  </p>
+   </p>
+   <hr size="1">
+   </li>
+   
+   <li><b><a name="general_120">Where do I find more information about the CDT?</a></b>
+   <p><a href="#general_130">Online manuals and tutorial</a></p>
+   <p>
+   <a href="http://www.eclipse.org/cdt">CDT Project website</a></p>
+   <p>
+   <a href="#general_80">CDT Newsgroup</a></p>
+   <p>
+   <a href="http://www.eclipse.org/mail/index.html">Developer mailing list</a></p>
+   <p>
+   <a href="http://www.eclipse.org/eclipse/faq/eclipse-faq.html">Eclipse Project 
+   FAQ</a></p>
+   <hr size="1">
+  </li>
+   <li>
+   <b><a name="general_130">Where do I find the CDT documentation?</a></b>
+     <p>The CDT Manuals are part of the CDT install.&nbsp;&nbsp; To view the books open Help Contents from the Help menu and then 
+         select a book from the combo box. </p>
+     <p>There is also some
+     <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/docs.html?cvsroot=Tools_Project">
+     designer documentation</a> on the CDT website.</p>
   <hr size="1">
   </li>
-</ol>
+  </ol>
 
-<!-- Installation Header -->
-<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
+  <p>&nbsp;<!-- Installation Header --><!-- Installation Header --><table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
     <td width="90%"> <a name="install"><b><font color="#000000" size="+1"> Download and Installation </font></b></a> </td>
     <td align="right">
@@ -387,62 +624,165 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
 <!-- Installation Content -->
 <ol>
  <li><b><a name="install_10">Which CDT build should I download?</a></b>
-  <p>
-   There are currently 3 versions of the CDT:<br>
-   &nbsp;&nbsp;<b>C1</b> - New architecture, for use with the Eclipse Release <a href="http://download.eclipse.org/downloads/" target="_top">R2.0</a>.<br>
-   &nbsp;&nbsp;<b>R1</b> - Previous architecture, for use with the Eclipse Release <a href="http://download.eclipse.org/downloads/" target="_top">R1.0</a>.<br>
-   &nbsp;&nbsp;<b>R2</b> - Previous architecture, for use with specific Eclipse <b>Stable</b> Pre - R2.0 Builds.
-  </p>
-  So,<br>
-  If you are using a Eclipse Release R2.0, then check the
-    <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
-    CDT Download Page</a> for information on which CDT Build to use.</li>
-  <br>
+    <p>Check the <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
+    CDT Download Page</a> for information on which CDT Build to use. Currently 
+    the following builds are available there:<p>CDT 1.2
+   <ul>
+      <li>The CDT 1.2 stream is now in maintenance mode. A new release, 1.2.1 is 
+         expected in the first quarter of 2004. The 1.2 stream runs against versions 
+         2.1.x of Eclipse. It does not run against Eclipse 3.0 builds.
+      </li>
+      <li><b>CDT 1.2 Note:</b> For CDT 1.2, the standard make project type and the 
+         new managed make project type have been separated out from the CDT 
+         &quot;Platform&quot;.&nbsp; When using the update site, please install the CDT feature as 
+         well as the Standard Build feature and optionally the Managed Make feature, 
+         in that order, or optionally selecting them and installing them at the same 
+         time (Process All). Other release notes for CDT 1.2 are available
+         <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/downloads/CDT_1_2_Release_Notes.html?cvsroot=Tools_Project">
+         here.</a>
+      </li>
+   </ul>
+   <p>CDT 2.0
+   <ul>
+       <li>The CDT 2.0 stream is currently under development. The objective of this 
+           stream is to keep up with the Eclipse 3.0 development and is targeted at 
+           release in sync with Eclipse 3.0, i.e. June 2004.
+       </li>
+   </ul>
+   <p>CDT 1.0
+   <ul>
+      <li>CDT 1.0 is the first release of CDT.&nbsp;&nbsp; It is not recommended</li>
+   </ul>
+ 
+   <p>CDT 1.1
+   <ul>
+     <li>CDT 1.1 is <span lang="en-us"></span>the second release of CDT.&nbsp; It is not recommended.</li>
+   </ul>
+ <hr size="1">
+ </li>
+
+
+ <li><b><a name="install_20">How do I download the CDT?</a></b>
+ <p>The best place to look for instructions is the <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
+    CDT Download Page</a>.&nbsp;&nbsp; However, here is a summary (which is 
+ probably out of date):</p>
+ <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="73%" id="AutoNumber1">
+   <tr>
+     <td width="6%"><b>CDT 1.2</b><p><b>(must have Eclipse 2.1.X installed)</b></td>
+     <td width="94%" colspan="2">CDT release builds are made available on the CDT release 
+     update site. Use the following URL in a Site Bookmark in the update 
+     manager:<p style="MARGIN-LEFT: 0.32in">
+     <a href="http://update.eclipse.org/tools/cdt/updates/release">
+     http://update.eclipse.org/tools/cdt/updates/release</a></p>
+     <p>To access the Update Manager, select Software Updates-&gt;Update Manager 
+     from the Help menu. To access an update site, select New-&gt;Site Bookmark 
+     from the context menu in the Feature Updates view. In the New Site Bookmark 
+     dialog, enter a name for the site (any name) and enter the URL for the 
+     update site. You can then expand the site bookmark in the Feature Updates 
+     view to reveal the available downloads.</p>
+     <p>Currently, CDT releases 1.2 and 1.1 are available as well as releases of 
+     CDT/CPPUnit Integration. As new releases are made and new features are 
+     added, they will appear in this update site.</p>
+     <p>For those who need the flexibility of the old zip distributions, they 
+     are available
+     <a href="http://dev.eclipse.org/viewcvs/3.0/cdt/cdt-home/downloads/main.html#zips">
+     here</a>. </p>
+     <p>&nbsp;</td>
+   </tr>
+   <tr>
+     <td width="6%" rowspan="4"><b>CDT 2.0</b><p><b>(Requires some form of 
+     Eclipse 3.0)</b></td>
+     <td width="10%">General Instructions</td>
+     <td width="84%"><b>The CDT 2.0 stream is currently under development. The 
+     objective of this stream is to keep up with the Eclipse 3.0 development and 
+     is targeted at release in sync with Eclipse 3.0, i.e. June 2004.</b><p>To 
+     install the update in Eclipse 3.0, first uninstall any CDT version you 
+     happen to have currently installed. Then from the menu bar, </p>
+     <ul>
+       <li>select Help-&gt;Software Updates-&gt;Find and Install..., </li>
+       <li>select “Search for new features to install”, </li>
+       <li>add the update site with the above URL, </li>
+       <li>and proceed through the rest of the wizard. </li>
+     </ul>
+     <p>As with 1.2, please make sure you install one or both builders to ensure 
+     you can create a C/C++ project (clicking on Select All works nicely).</p>
+     <p>&nbsp;</td>
+   </tr>
+   <tr>
+     <td width="10%">CDT 2.0 Development Stream</td>
+     <td width="84%">The CDT 2.0 M6 build is available from the following update 
+     site:<p style="MARGIN-LEFT: 0.79in">
+     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0">
+     http://update.eclipse.org/tools/cdt/updates/builds/2.0</a></p>
+     <p>
+     The builds are all created from the head stream;&nbsp; They will usually 
+     work with the latest milestone build of Eclipse -- your mileage may vary.</p>
+     </td>
+   </tr>
+   <tr>
+     <td width="10%">CDT 2.0 M6</td>
+     <td width="84%">The CDT 2.0 M6 build is available from the following update 
+     site:<p style="MARGIN-LEFT: 0.79in">
+     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0M6">
+     http://update.eclipse.org/tools/cdt/updates/builds/2.0M6</a></p>
+     <p>There is a zip file available
+     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0M6/cdt.zip">
+     http://update.eclipse.org/tools/cdt/updates/builds/2.0M6/cdt.zip</a>.&nbsp;
+     Note that CDT 2.0 M6 will only run against 
+     Eclipse 3.0 M6 and later. This should hopefully be the last Eclipse 3.0 
+     milestone release where 
+     platform API changes blow us out of the water.</td>
+   </tr>
+   <tr>
+     <td width="10%">CDT 2.0 M7</td>
+     <td width="84%">The CDT 2.0 M7 build is available from the following update 
+     site:<p style="MARGIN-LEFT: 0.79in">
+     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0M7">
+     http://update.eclipse.org/tools/cdt/updates/builds/2.0M7</a></p>
+     <p>
+     Use the update manager mechanisms described in &quot;CDT 2.0&quot;.&nbsp; If you are 
+     redistributing the CDT or are having trouble with the Update Site, a zip 
+     file containing the entire CDT distribution is available
+     <a href="http://download.eclipse.org/tools/cdt/updates/builds/2.0M7/cdt.zip">
+     here</a>.&nbsp; Note that CDT 2.0 M7 will run against Eclipse 3.0 M6 and 
+     later (but not earlier).</p>
+     </td>
+   </tr>
+ </table>
+ <p>&nbsp;</p>
    <hr size="1">
  </li>
 
 
- <li><b><a name="install_20">I can't find the CDT download for the XXX operating system?</a></b>
+ <li><b><a name="install_30">I can't find the CDT download for the XXX operating system?</a></b>
   <p>
-   The CDT is supported on the platforms specified on the download page. The downloads are structured and naemd to indicate, which
-   OS and windowing system it runs on. If you do not see your os windowing system combination please contact us. 
-   We are always looking for volunteers to test and support platforms.<br>
+   The CDT is supported on the platforms specified on the download page. The downloads are structured and 
+   named to indicate, which
+   OS and windowing system it runs on. If you do not see your OS/windowing system combination please contact us. 
+   We are always looking for volunteers to test and support platforms.</p>
+  <p>
    Much of the CDT default functionality uses applications that are available on most operating systems.  The CDT
-   leverages some default system tools such as gdb(debugging), make(building).
+   leverages some default system tools such as gdb (debugging), make (building).
    These tools are available for many platforms and if they exist on your system, there is
-   a good chance that the default functionality will work.
-  </p>
-  <p>
-   For example, on Windows you can install the <a href="http://www.redhat.com/download/cygwin.html">Cygwin toolkit</a>
-   which is a Unix environment for Windows and includes automake and gdb.<br>
-   Note: <br>
-  The CDT currently uses GDB version 5.2.1 as the default. If you are using Cygwin the default version they currently install is too old. 
-  You need gdb 5.2.1, which should be in the gdb package dated 20020718-1 
-  </p>
+   a good chance that the default functionality will work.&nbsp; See
+   <a href="#compilers">Compilers and other 3rd party tools </a>for more 
+   information</p>
   <p>
    The caveat is that the operation of the CDT on some operating systems has not been fully tested and we
    cannot commit time to fixing platform specific problems found on these platforms.
-   However, code submissions from developers wanting to improve the CDT will always be gratefully accepted.
-  </p>
+   However, code submissions from developers wanting to improve the CDT will always be gratefully accepted.&nbsp; See 
+   <a href="#developing">Working ON the CDT</a> for more information.</p>
    <hr size="1">
-  </li>
-
-  <li><b><a name="install_30">How do I build or debug the CDT itself?</a></b>
-  <p>Are you Interested in playing with the CDT source and perhaps fixing a bug or adding a feature?
-     See the
-     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/faq.html?cvsroot=Tools_Project">Developer FAQ</a>
-     for general information.  For specific information on how to build or debug the CDT see the document
-     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/developingCDT.html?cvsroot=Tools_Project">Developing with the CDT</a>.
-  </p>
-  <hr size="1">
   </li>
 
   <li><b><a name="install_40">How do I uninstall CDT?</a></b>
   <p>
-   We do not currently ship an uninstaller. You can uninstall the CDT in 2 manual steps:
+   We do not currently ship an uninstaller. You can uninstall the CDT manually:
   </p>
 
   <ol>
+   <li>Shutdown the eclipse shell that is running CDT</li>
+
    <li>Remove the CDT plugins
     <ul>
      <li>Navigate to the directory where the CDT plugins are installed (typically eclipse/plugins)</li>
@@ -464,30 +804,11 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
      </li>
     </ul>
    </li>
+   <li>Restart Eclipse</li>
   </ol>
   <hr size="1">
   </li>
- <li><b><a name="install_50">I just installed Eclipse and 
- the CDT. However, CDT does not recognize the existing toolchain [ie Visual 
- Studio, Borland, Watcom, Cygwin, MinGW, GCC, etc]. How do I get the CDT to 
- recognize these tools?</a></b></li>
 </ol>
-
-<blockquote>
-  <p>The current CDT doesn't integrate with a specific 
-  toolchain, but rather integrates with a build command, such as make, nmake, 
-  jam ant etc and this build command drives the toolchain. The default build 
-  command is make, but can be configured via the project properties:</p>
-  <ol>
-    <li>Select a project in the navigator pane and open 
-    its properties</li>
-    <li>Clear the &quot;use default&quot; check box and type in the 
-    desired build command. Note that you must provide a real executable for the 
-    build command, batch files won't work.<b><br>
-&nbsp;</b></li>
-  </ol>
-</blockquote>
-
 <!-- Create Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
@@ -501,7 +822,39 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
 </table>
 
 <ol>
-    <li><b><a name="create_10"> Creating a simple C++ Project -- "Hello World on a Windows Platform"</a></b>
+    <li><b><a name="create_10"> Creating a simple Managed C++ Project -- "Hello World on a Windows Platform"</a></b>
+    <p>This section will use an example to create the familiar "Hello World!" C++ program.
+    First, ensure that you have the CDT installed within Eclipse, as described <a href="#install"> above</a>.
+    Open a C/C++ Perspective and complete the following steps: </p>
+     <p>
+     <ol>
+        <li> In the C/C++ Projects View right click and select "New Project ..." </li>
+        <li> Select "C++" in the left pane and the select "Managed Make C++ Project"</li>
+        <li> Enter a name for the new project and select Finish.
+             Note: you can determine the "Build Settings" from this dialog,
+             but we will do so later, in the <a href="#build" >build</a> section.</li>
+        <li> In the C/C++ Projects View right click and select "New" &gt; "Simple" &gt; "File".
+              Name your file hello.cpp</li>
+        <li>Copy the following text into the "hello.cpp" file: 
+			<pre>              
+#include &lt;stdio.h&gt;
+int main()
+{
+    printf(&quot;Hello World\n&quot;);
+                    
+    //block until user types something
+    fgetc(stdin);
+    return 0;
+} 
+              </pre>
+              <p>Now, save the file. <br>
+            &nbsp;</li>
+     </ol>
+    <p></p>
+     <hr size="1">
+    </li>
+    
+    <li><b><a name="create_10"> Creating a simple Standard C++ Project -- "Hello World on a Windows Platform"</a></b>
     <p>This section will use an example to create the familiar "Hello World!" C++ program.
     First, ensure that you have the CDT installed within Eclipse, as described <a href="#install"> above</a>.
     Open a C/C++ Perspective and complete the following steps: </p>
@@ -515,255 +868,671 @@ interface will work with gdb 5.2.1 and the default build command is GNU &quot;ma
         <li> In the C/C++ Projects View right click and select "New" &gt; "Simple" &gt; "File".
               Name your file hello.cpp</li>
         <li>Repeat the previous step and name the second new file "makefile".</li>
-        <li>Copy the following text into the "hello.cpp" file: <br>
-
-            <blockquote><pre>#include &lt;iostream.h&gt;
-#include &lt;stdlib.h&gt;
-
+        <li>Copy the following text into the "hello.cpp" file: 
+        
+<pre>#include &lt;stdio.h&gt;
 int main()
 {
-  char buff[128];
-
-  cout << "Hello World!\n";
-  cin >> buff;
-  return (0);
-}           </blockquote></pre>
-            Now, save the file. </li>
+    printf(&quot;Hello World\n&quot;);
+                    
+    //block until user types something
+    fgetc(stdin);
+    return 0;
+} 
+</pre> 
+              <p>Now, save the file. </li>
         <li>Copy the following text into the "makefile" file: <br>
-        Remember that makefiles require indented lines be a &lt;tab&gt; character and not spaces <br>
+        Remember that makefile requires that indented lines use a &lt;tab&gt; character and not spaces <br>
 
-            <blockquote><pre>objects = hello.o
+<pre>hello.exe : hello.o
+	g++ -o hello.exe hello.o
 
-hello : $(objects)
-    gcc -o hello $(objects) -L C:/MinGW/lib/gcc-lib/mingw32/2.95.3-5/ -lstdc++
-
-$(objects) : hello.cpp
-    gcc -c hello.cpp
-
-all :
-    ${MAKE} hello
-
-.PHONY : clean
+hello.o : hello.cpp
+	g++ -c hello.cpp
+	
+all : hello.exe
 clean :
-    -del hello.exe $(objects)
-            </blockquote></pre>
-            Now, save the file. <br>
-            Note: the entry "C:/MinGW/lib/gcc-lib/mingw32/2.95.3-5/ "
-            will depend entirely on the, your platform, installation location and which GNU tools you have installed</li>
-     </ol></p>
-     <hr size="1">
+	-rm hello.exe hello.o
+         </pre><p>Now, save the file. </li></ol><p></p><hr size="1">
     </li>
-
-    <li><b><a name="create_20"> Creating a simple C++ Project -- "Hello World, on a Linux Platform"</a></b>
-    <p><hr size="1">
-    </li>
-
-    <li><b><a name="create_30"> Creating a simple C++ Project -- "Hello World, on a Solaris Platform"</a></b>
-    <p><hr size="1">
-    </li>
-
-    <li><b><a name="create_40"> Creating a simple C++ Project -- "Hello World, on a QNX Neutrino Platform"</a></b>
-    <p><hr size="1">
-    </li>
-
-</ol>
-
-
-<!-- Build Header -->
-<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
-  <tr>
-    <td width="90%"> <a name="build"><b><font color="#000000" size="+1"> Building C/C++ Projects </font></b></a> </td>
-    <td align="right">
-        <a href="#toc">
-            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-        </a>
-    </td>
-  </tr>
-</table>
-
-<ol>
-<li><b><a name="build_10">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></b></li>
-<p>There are several tools that can help you run GNU Tools on Windows.
-<ul>
-  <li> <a href="http://www.redhat.com/software/tools/cygwin/"> Cygwin </a>
-  <li> <a href="http://www.mingw.org/"> MinGW.</a> <br>
-        Note: MinGW also works on top of a CygWin installation.
-</ul>
-Both of these tools offer a selection of GNU tools such as gcc, gdb and make.<p>
-
-	Note: The CDT requires version  5.2.1 of the GDB. 
-		If you are using Cygwin the default version 
-		they currently install is too old. 
-		You need gdb 5.2.1, which should be in the gdb package 
-		dated 20020718-1         
-<p>
-The following example uses an installation of MinGW,
-installed into the directory C:\MinGW. If your installation has the GNU tools and libraries in a different
-location you will have to modify the example "makefile" to look for the libraries in the correct location.
-<ol>
-  <li>Follow the instructions, on the respective web site, to install your GNU tools. </li>
-  <li>In the C/C++ Projects View, select your new C/C++ project, right click and select Properties </li>
-  <li>In the properties dialog  select "C/C++ Project".</li>
-  <li>Then select the  "Build Settings" tab.</li>
-  <li>Deselect the "Use Default" checkbox </li>
-  <li>Enter the following in the "Build Command" text box <br>
-
-  <blockquote><pre>  make -f makefile
-  </blockquote></pre>
-
-   </li>
-   <li>Now you are ready to build your first CDT C/C++ project. <br>
-   In the C/C++ Projects View, select your new C/C++ project, right click and select
-   "Rebuild Project"     </li>
-    <li> You will have two additional files. "hello.o" and "hello.exe"</li>
-    <li> Double click on "hello.exe" or right click and select "Open With" &gt; "Default Editor" to launch your simple program.</li>
-</ol>
-<p>
-<hr size="1">
-
-    <li><b><a name="build_20"> Building a simple C++ Project -- "Hello World, on a Linux Platform"</a></b>
-    <p><hr size="1">
-    </li>
-
-    <li><b><a name="build_30"> Building a simple C++ Project -- "Hello World, on a Solaris Platform"</a></b>
-    <p><hr size="1">
-    </li>
-
-    <li><a name="build_40"><b>Building a simple C++ Project -- "Hello World, on a QNX Neutrino Platform"</b>
-    </a><hr color="#C0C0C0" size="1">
-    </li>
-
-<li><b><a name="build_50">Can I see the raw compiler 
-output? Where is this information placed?</a></b><p class="MsoPlainText">
-The C-Build view is a console which shows all of the 
-activity which occurs once a project's build command is executed.</p>
-<hr color="#C0C0C0" size="1">
-    <p></li>
-
-</ol>
+    
+	<li><b><a name="create_20">How do I create a new project using a directory full of existing source?</a></b> <p>
+    If the source is accessible to the user from their desktop using the 
+    command line then it is possible to simply make the root directories 
+    containing that source as Eclipse projects. This is accomplished by invoking 
+    the New Project Wizard, selecting C or C++ and then Standard Make Project as 
+    the project type. On the next page, enter a name for the project, the 
+    deselect the &quot;Use Default Location&quot; checkbox. This will let you Browse to 
+    the root folder of the source tree. After setting other information and 
+    clicking on Finish, the project will be created in the root of the source 
+    folder you have selected.<br>
+	</p>
     <p>
-<p>
-</p>
+    The resource for the project are maintained in the remote location 
+    specified, not in the workspace folder for eclipse. Meta data for the 
+    project, such as the index for the project and the &quot;link&quot; to the project, is 
+    stored in the metadata directory in the workspace folder.<br>
+	</p>
+	<hr size="1">
+	</li>
+	
+	<li> <b><a name="create_30">How do I create a new project using CVS?</a></b> <p>
+	If the existing source tree 
+    is managed in CVS, it is possible to use the CVS Repository perspective to 
+    &quot;Checkout As Project&quot; any folder in the repository. The first time this is 
+    done, a Simple Project is created for the folder. To access the features of 
+    the CDT for this project, the project must be converted to a C or C++ 
+    project using the &quot;Convert to a C or C++ Project&quot; project type in the New 
+    Wizard. </p>
+    <p>
+    This does a CVS checkout of the project into the project's location (usually in the workspace). </p>
+
+	<hr size="1">
+	</li>
+	
+	<li> <b><a name="create_40">How do I Import existing code into an existing project?</a></b> <p>
+    Another approach would be to create the C/C++ Project and then do an 
+    &quot;Import&quot;-&gt;&quot;File System&quot;. This will make a copy of the files from the 
+    selected location into the selected folder in the project. With the copy, 
+    this approach is more wasteful and detaches the source from any control 
+    mechanism that existed in the originally file location (e.g. a ClearCase view) </p>
+	<hr size="1">
+	</li>
+</ol>
 
 
-
-<!-- Debug Header -->
+<!-- Editing Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
     <td width="90%"> <b><a name="editing"><font color="#000000" size="+1"> 
-    Editing C/C++ Projects </font></a></b> </td>
+    Editing C/C++ Projects </font></a></b></td>
     <td align="right">
         <a href="#toc">
-            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-        </a>
-    </td>
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top </a></td>
   </tr>
 </table>
 
 <ol>
-  <li><a name="editing_10">I'd like to use the code assist 
+  <li><b><a name="editing_10">I'd like to use the code assist 
   functionality, but it doesn't seem to work for me. I don't get anything 
-  showing up when I select CTRL+SPACE in a C/C++ source file.</a></li>
-</ol>
-<blockquote>
-  <p class="MsoPlainText">Code assist is a work in 
-  progress.&nbsp; Currently for this capability to work, you must enable indexing of 
-  the project (which may or may not require the ctags utility).&nbsp; Once indexing 
-  is enabled, the only code completion which is available (other than code 
-  templates) is function completion.&nbsp; As we improve and further develop the CDT, 
+  showing up when I select CTRL+SPACE in a C/C++ source file.</a></b> <p>
+  Content Assist is a work in Progress. For CDT 2.0 you should be able to ask 
+  for code completion anywhere in your source file. If you fail to find a 
+  completion you expect to find, most probably this is because of a failure in 
+  parsing your source file. In this case, check that you have added the correct 
+  set of include paths to the project containing your source file. </p>
+  <p>
+  For example in the following code: </p>
+  <p class="code">int main() {<br>
+  &nbsp;&nbsp;&nbsp; pr<br>
+  }</p>
+  <p>You should not expect &quot;pr&quot; to provide &quot;printf&quot; as a completion unless:</p>
+  <ol>
+    <li>You have an #include &lt;stdio.h&gt;&nbsp; in the file</li>
+    <li>the include path to stdio.h is available in the project</li>
+    <li>any macro's necessary to read stdio.h are set (often a missing macro 
+    will cause a system header to encounter a #error in the header file -- for 
+    example on windows using cygwin, the defining the symbol __i386__ will allow stdio.h to be understood)</li>
+  </ol>
+  <p class="MsoPlainText">As we improve and further develop the CDT, 
   this function will get better and better.</p>
   <hr size="1">
+  </li>
+  
+  	<li><b><a name="editing_20">Search is broken!</a></b> <p>Often when search is not behaving as expected, it is due to the CDT not 
+    having enough information available to parse the source files.&nbsp; For 
+    example, if you include a header file, but do not tell CDT about the 
+    directory where that header file exists, then it is unlikely that CDT will 
+    understand the contents of your source file.</p>
+ 	<p>
+  	</p>
+  	<hr size="1">
+  	</li>
+  
+    <li><b><a name="editing_30">I am having problems with the outline view!</a></b> <p>The outline view does not respect macros and header contents.&nbsp; It is 
+    simply a file view.&nbsp; This may not be what you desire.</p>
+    <p>
+    </p>
+  	<hr size="1">
+    </li>
+ 
+    <li><b><a name="editing_50">How can I add another extension to CDT so that files other than c/cpp/cc/h 
+    	files are recognized as source files? My compiler needs the file extension 
+    	to be &quot;xyz&quot;, and when I open xyz files there is no syntax highlighting.</a></b> <p>
+    	Go to<br>
+    	&nbsp;&nbsp;&nbsp; Preferences -&gt; Workbench -&gt; Editors -&gt; File Associations<br>
+      	and add a new File Association xyz</p></li>
+    <hr size="1">
+  	</li>
+</ol>
+
+<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
+  <tr>
+    <td width="90%"> <a name="compilers"><font size="+1"><b>Compilers and other 
+    3rd party tools</b></font></a></td>
+    <td align="right">
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top </a></td>
+  </tr>
+</table>
+
+<ol>
+  <li><a name="compilers_5">What tools do I need to run CDT?</a></li>
+  <p>
+  In order to build your C++ code and debug your C++ executable, you will need to get a compiler, 
+  a make program and a debugger.
+  </p>
+  <p>There are several tools that can help you run GNU Tools on Windows. 
+      <ul>
+     <li> <a href="http://www.redhat.com/software/tools/cygwin/"> Cygwin </a>
+     <li> <a href="http://www.mingw.org/"> MinGW.</a> <br>
+        Note: MinGW also works on top of a CygWin installation. 
+     </ul>
+  <p>Both of these tools offer a selection of GNU tools such as gcc, gdb and make.</p>
+
+    <p>
+
+   For example, on Windows you can install the <a href="http://www.redhat.com/download/cygwin.html">Cygwin toolkit</a> which is a Unix environment for Windows and includes automake and gdb.<br>
+   Note:
+   The CDT currently uses GDB version 5.2.1 and later. 
+   <hr size="1">
+  </li>
+    <li><b><a name="compilers_10">I just installed Eclipse and 
+ the CDT. However, CDT does not recognize the existing toolchain [i.e. Visual 
+ Studio, Borland, Watcom, Cygwin, MinGW, GCC, etc]. How do I get the CDT to 
+ recognize these tools?</a></b><p>The current CDT doesn't integrate with a specific toolchain, but rather integrates with a build command, such as make, nmake, 
+  jam ant etc and this build command drives the toolchain. The default build 
+  command is make, but can be configured via the project properties:</p>
+  <ol>
+    <li>Select a project in the navigator pane and open 
+    its properties</li>
+    <li>Clear the &quot;use default&quot; check box and type in the 
+    desired build command. Note that you must provide a real executable for the 
+    build command, batch files won't work.</li>
+  </ol>
+
+
+    <p>CDT however, will generate a makefile for you (if you want it to).&nbsp; 
+    See <a href="#build_20">When do I use the managed make feature</a>.&nbsp; 
+    Currently the default toolchain for this feature is g++, make, and gdb.&nbsp; 
+    See <a href="#compilers_20">How do I add support for my toolchain 
+    via the managed build feature</a> for information on adding other toolchains 
+    to this feature.</p>
+
+
+  <hr size="1">
+
+      <li><b><a name="compilers_20">How do I add support for my toolchain via the managed build feature?</a></b> 
+      <p>There is documentation available as
+      <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/Managed_Build_Extensibility.html?cvsroot=Tools_Project">
+      Managed Build Extensibility Reference Document</a>.&nbsp; Please feel free 
+      to provide feedback on this doc to the cdt-dev mailing list.</p>
+      <p>
+      </p>
+      <hr size="1">
+      </li>
+      
+      <li><b><a name="compilers_30">Are there C++ libraries included in the CDT (or elsewhere in Eclipse)?</a></b> <p>
+      No. CDT is only the IDE part of Eclipse. It doesn't provide 
+      any compiler toolchain nor C++ libraries, as these are part of the 
+      compilers and the operating system etc. </p>
+	  <hr size="1">
+      </li>
+  </ol>
+  
+<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
+  <tr>
+    <td width="90%"> <a name="build"><b><font color="#000000" size="+1"> Building C/C++ Projects </font></b></a></td>
+    <td align="right">
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top </a></td>
+  </tr>
+</table>
+
+<ol>
+    <li> <b><a name="build_10">When do I use the standard make feature</a></b> <p>When you already have a makefile and you wish to use it.</p><p>
+    </p>
+    <hr size="1">
+    </li>
+    
+    <li> <b><a name="build_20">When do I use the managed make feature</a></b> <p>When you do not have a makefile, and do not want to write one, the managed make feature will be able to generate one for you.   Note that the current CDT (1.2.1 and 2.0) generates makefiles that use GNU gcc and g++.   If you are not using this compiler, (and you do not have a managed make plugin for your compiler), then you will need to use the standard make feature.</p><p>
+    </p>
+    <hr size="1">
+    </li>
+    
+	<li><b><a name="build_30">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></b> <ol>
+ 		<li>Follow the instructions, on the respective web site, to install your GNU tools. </li>
+ 		<li>Create a <a href="#create">new C++ project</a></li>
+
+    <li>In the C/C++ Projects View, select your new C/C++ project, right click and select
+   			"Rebuild Project"</li>
+
+    	<li> You will have two additional files. "hello.o" and "hello.exe"</li>
+    	<li> Double click on "hello.exe" or right click and select "Open With" &gt; "Default Editor" to launch your simple program.</li>
+    	</ol>
+    <hr size="1">
+    </li>
+    
+    <li><b><a name="build_40">Can I see the raw compiler output? Where is 
+    this information placed?</a></b> <p>
+    The C-Build view is a console which shows all of the activity which occurs once a project's build command is executed. </p>
+    <hr size="1">
+    </li>
+    
+    <li><b><a name="build_50">I get the error
+           &nbsp;&nbsp;&nbsp;Build error<br>
+       &nbsp;&nbsp;&nbsp;(Exec error: Launching failed)</a></b><p>This usually 
+    indicates that &quot;make&quot; is not on your path.&nbsp;&nbsp; Open a command window 
+    and type &quot;make&quot;.&nbsp;&nbsp; If you receive the equivalent of &quot;command not 
+    found&quot; then you will need to ensure that the location of the make executable 
+    is on your path.&nbsp; (If you have changed your build command to something 
+    else, like &quot;mingw32-make -f makefile&quot; then this something else needs to be 
+    on your path.)</p>
+    <p>Note that the managed build project will always use &quot;make.exe&quot;.&nbsp; If make.exe does not exist it will not work.</p>
+    <p>
+    </p>
+    <p>
+    </p>
+    <hr size="1">
+	</li>
+	
+    <li> <b><a name="build_70">My Compiler errors seem to be truncated or split. What is going on?</a></b> <br>
+    <br>
+    When using GCC toolchain, you need to add to each compile/link line the
+    following (either in Makefile, add this to CFLAGS/CXXFLAGS/LDFLAGS, or
+    when using managed builds, add this in each configuration to the misc-sections):<br>
+    <br>
+    -fmessage-length=0<br>
+    <br>
+    This will disable the line breaks in the compiler and linker error messages. </li><hr size="1">
+
+    <li><b><a name="build_80">What causes the message<br>
+		&nbsp;&nbsp;&nbsp; make (e=2): The system cannot find the file specified?</a></b> <p>This message usually indicates that the a tool called from inside the makefile is not found (on the path).&nbsp; If the error looks like the 
+    following, then &quot;gcc&quot; could not be found:</p>
+	<p>gcc -c hello.c<br>
+    Process begin: CreateProcess((null), gcc -c hello.c, ...) failed.<br>
+    make (e=2): The system cannot find the file specified. </p>
+	<p>You will need to ensure that the path to the executable &quot;gcc&quot; is on your 
+    path.</p>
+	<hr size="1">
+	</li>
+</ol>
+
+<!-- Debug Header -->
+<blockquote>
     </blockquote>
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
-    <td width="90%"> <a name="debug"><b><font color="#000000" size="+1"> Debugging C/C++ Projects </font></b></a> </td>
+    <td width="90%"> <a name="debug"><b><font color="#000000" size="+1"> Debugging C/C++ Projects </font></b></a></td>
     <td align="right">
         <a href="#toc">
-            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-        </a>
-    </td>
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top </a></td>
+  </tr>
+</table>
+
+  <ol>
+  <li><b><a name="debug_10">I'm missing some basic C/C++ debugging functionality, where 
+  is it hidden?</a></b> <p>
+  		You have to customize your debug perspective to see all C/C++ actions. In the Debug 
+  		perspective open &quot;Window&quot;--&gt;&quot;Customize perspective&quot;--&gt;&quot;Other&quot; and check the 
+  		&quot;C/C++ Debug&quot; box. In the latest version it is checked by default. To 
+  		customize your views open &quot;Window&quot;--&gt;&quot;Preferences&quot;--&gt;&quot;Debug&quot;--&gt;&quot;Debug Action 
+ 		groups&quot; and check/uncheck the &quot;C/C++ Debug&quot; and &quot;Java Debug&quot; boxes. </p>
+  <hr size="1">
+  </li>
+  
+  <li><b><a name="debug_20">Is it possible to see global 
+  variables? The Variables view shows only local variables.</a></b> <p>
+  		The &quot;Variables&quot; view displays only local variables and 
+  		arguments for the selected stack frame. You can use the &quot;Add Expression 
+  		(C/C++)&quot; option to add a global variable to the &quot;Expressions&quot; view. </p>
+  <hr size="1">
+  </li>
+  
+  <li><b><a name="debug_30">Can I debug remote targets?</a></b> <p>
+  		Yes; when you enter the debug window you can select GdbServer as debugger. Then the 
+  		window information changes and you can enter the TCP-IP address and port of 
+  		your target debug server or select the serial line. </p>
+  <hr size="1">
+  </li>
+  
+  <li><b><a name="debug_40">Since the debugger is gdb, can I simply access the gdb console?</a></b> <p>
+  		Yes, partially. The console can be flipped into gdb mode (see the &quot;Show Debugger 
+  		Console&quot; button in the debugger view which does this) and you can type in 
+  		commands at that point. Doing this can possibly de-synchronize the IDE with gdb, so you should be careful to what extent you drive the debugger using this 
+  		interface. </p>
+  <hr size="1">
+  </li>
+  
+  <li><b><a name="debug_50">Can I see/log all of the commands which are being driven to gdb?</a></b> <p>
+  		Yes, you can turn on tracing for the debug plugin and it will show you all of the information about what commands are being 
+    	sent to gdb. To run with tracing: <ol>
+      		<li>Create a file (for example, .options)</li>
+     		<li>Add the following line to it:<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; org.eclipse.cdt.debug.mi.core/debug=true</li>
+    		<li>Start Eclipse with:<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -debug &quot;file:&lt;full path&gt;/.options&quot;</li>
+     	 </ol>
+  </p>   	 
+  <hr size="1">
+  </li>
+
+  <li><b><a name="debug_60">Why can't I see the source in the debugger?</a></b> <p>I use some classes in standard c++ library and I'd like to view the source of it in debugging mode, just like viewing the source of my own cpp files when I stepped into some method.&nbsp;&nbsp; I've tried to add the path of gcc source (extracted from gcc tar ball) into the &quot;Additional Source Locations&quot; of the Source Tab in the debugging configuration for project. Could anybody tell me how to configure CDT to do this?</p>
+  <p>Check:<br>
+  - if your library contains the debug information,<br>
+  - if the library symbols are loaded when you try to step into a library
+  function (use the Shared Libraries view or set the &quot;Load shared library
+  symbols automatically&quot; options of the launch configuration),
+  If your library is built in a different location you should use the
+  &quot;Associate with&quot; option of the &quot;Add Directory Source Location&quot; dialog.<br></p>
+    </li>
+    <hr size="1">
+
+
+    <li><b><a name="debug_70">Can I debug Java and C++ at the same time?</a></b> <p>If you can get this to work, please let the cdt-dev mailing list know!</p>
+    <p>
+    </p>
+    <hr size="1">
+    </li>
+    
+    <li><b><a name="debug_80">Can I set a breakpoint in a DLL?</a></b> <p>
+    	A breakpoint in DLL can be set if the symbol information of DLL is loaded in gdb. On Windows this happens when DLL is loaded.
+    	The CDT uses the &quot;stop-on-solib-events&quot; command of gdb to catch the moment
+    	when DLL is loaded and tries to plant the breakpoints that belong the
+   	 	project or the reference projects. This all is transparent for user.
+  	  	As far as I know (but I am not 100% sure) this option
+    	(&quot;stop-on-solib-events&quot;) is not supported by gdb on Windows.
+    	What you can do is to stop after your DLL is loaded and then set a
+    	breakpoint in it. </p>
+    <hr size="1">
+    </li>
+    
+    <li><b><a name="debug_90">When I want to debug my &quot;Hello World&quot; program, I have this error :<br>
+    	&quot;Failed Launching CDI Debugger : Error creating session: gdb: unrecognized<br>
+   		option '-i'&quot</a></b> <p>The GDB debugger interface in CDT requires version 5.2.1 or later of gdb.&nbsp; 
+    Your version of gdb is older than this,&nbsp; you will need to upgrade to 
+    use gdb and CDT together.</p>
+    <p>
+    </p>
+    <hr size="1">
+    </li>
+    
+    <li><b><a name="debug_100">Why is my executable not listed in the debug dialog?</a></b> <p>
+    	Problem is that all the files including exe are not getting proper
+    	icon (All icons are text editor icons).
+    	Also when we try to debug the exe is not listed in the dialog so that we
+   	 	can select the exe from the list. </p>
+    <p>
+    	This is usually caused by having the wrong binary parser selected.&nbsp; 
+        Change the binary parser (from the properties on the project).</p>
+    <hr size="1">
+    </li> 
+    
+    <li><b><a name="debug_110">When I launch debug, I get two suspended threads and a command window 
+    that doesn't show up anything. If I do Run/Resume, I get an error message: <p class="code">
+    Resume failed.<br>
+    Reason:<br>
+    Exceptions occurred attempting to resume.<br>
+    Details: Target request failed: Target is not responding (timed out)</p>
+    What is wrong?</a></b> <p>
+    Your version&nbsp; of gdb (2003-09-02-cvs cygwin-special?) had problems with
+    &quot;data-list-changed-registers&quot;. Disabling the updating the Registers view
+    option (Windows-&gt;Preferences-&gt;Debug-&gt;Registers view) and unchecking the
+    &quot;Auto-Refresh by default&quot; option will take&nbsp; care of the problem.</p>
+    <hr size="1">
+    </li>
+    
+    <li><b><a name="debug_120">Is there any way of using the dbx debugger from the CDT?</a></b> 
+    <p>There is currently no integration with the dbx debugger.</p>
+    <p>
+    </p>
+    <hr size="1">
+    </li>
+</ol>
+
+<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
+  <tr>
+    <td width="90%"> <a name="troubleshooting"><font size="+1"><b>Miscellaneous 
+    Troubleshooting</b></font><b><font color="#000000" size="+1"> </font></b></a></td>
+    <td align="right">
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top </a></td>
   </tr>
 </table>
 
 <ol>
-  <li>
-  <span style="font-size: 10.0pt; font-family: Arial; font-weight: 700">
-  <a name="debug_10">I'm missing some basic C/C++ debugging functionality, where 
-  is it hidden?</a></span><p class="MsoPlainText">You have 
-  to customize your debug perspective to see all C/C++ actions. In the Debug 
-  perspective open &quot;Window&quot;--&gt;&quot;Customize perspective&quot;--&gt;&quot;Other&quot; and check the 
-  &quot;C/C++ Debug&quot; box. In the latest version it is checked by default. To 
-  customize your views open &quot;Window&quot;--&gt;&quot;Preferences&quot;--&gt;&quot;Debug&quot;--&gt;&quot;Debug Action 
-  groups&quot; and check/uncheck the &quot;C/C++ Debug&quot; and &quot;Java Debug&quot; boxes.</p>
-  <hr size="1">
+    <li><b><a name="troubleshooting_10">CDT tells me that I keep running out of memory, but I have 
+    XXX GB of 
+    memory.  What is wrong?</a></b> <p>
+    You should try starting Eclipse using the -vmargs -Xmx512m parameter 
+    after the -vm argument. This will increase the Java heap size to 512MB. E.g.<br>
+    &nbsp;&nbsp;&nbsp;./eclipse &lt;other eclipse arguments&gt; -vm ~/jdk/bin/java -vmargs -Xmx512m </p>
+    <p>
+    To see more on the command line arguments of eclipse, see <a href="http://help.eclipse.org/help21/topic/org.eclipse.platform.doc.user/tasks/running_eclipse.htm">Running Eclipse section of the &quot;Workbench User Guide&quot;</a></p>
+    <hr size="1">
+	</li>
+	
+    <li><b><a name="troubleshooting_20">Whenever I build the project, the eclipse hangs (gets &quot;stuck&quot;). I need to kill a 
+    process named: &quot;c++ filt&quot; to restart it.&nbsp; Why?</a></b> <p>
+    There was a bug in the old version of c++filt that did not flush
+    its output when it finishes (this same problem happens with addr2line). CDT 
+    is waiting
+    for the answer from c++filt.&nbsp; You need get a new version of c++filt to 
+    fix the problem.<p>
+    </p>
+    <hr size="1">
     </li>
-  <li><b><a name="debug_20">Is it possible to see global 
-  variables? The Variables view shows only local variables...</a></b><p class="MsoPlainText">
-  The &quot;Variables&quot; view displays only local variables and 
-  arguments for the selected stack frame. You can use the &quot;Add Expression 
-  (C/C++)&quot; option to add a global variable to the &quot;Expressions&quot; view.</p>
-  <hr size="1">
-    </li>
-  <li><b><a name="debug_30">Can I debug remote 
-  targets?</a></b><p class="MsoPlainText">Yes; when 
-  you enter the debug window you can select GdbServer as debugger. Then the 
-  window information changes and you can enter the TCP-IP address and port of 
-  your target debug server or select the serial line.</p>
-  <hr size="1">
-    </li>
-  <li><b><a name="debug_40">Since the debugger is gdb, can 
-  I simply access the gdb console?</a></b><p>Yes, 
-  partially. The console can be flipped into gdb mode (see the &quot;Show Debugger 
-  Console&quot; button in the debugger view which does this) and you can type in 
-  commands at that point. Doing this can possibly de-synchronize the IDE with 
-  gdb, so you should be careful to what extent you drive the debugger using this 
-  interface. </p>
-<hr size="1">
+</ol>
 
-    </li>
-  <li><b><a name="debug_50">Can I see/log all of the 
-  commands which are being driven to gdb?</a></b></li>
-  </ol>
-  <blockquote>
-    <p>Yes, you can turn on tracing for the debug plugin 
-    and it will show you all of the information about what commands are being 
-    sent to gdb. To run with tracing:<ol>
-      <li>Create a file (for example, .options)</li>
-      <li>Add the following line to it:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; org.eclipse.cdt.debug.mi.core/debug=true</li>
-      <li>Start Eclipse with:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -debug &quot;file:&lt;full path&gt;/.options&quot;</li>
-      </ol>
-      </blockquote>
-    <p>&nbsp;</p>
-  <blockquote>
-    <p>
-    <p align="left">
-    <p align="left">
-      </blockquote>
-    <p>
-    <p>
-    <p>
-    <p>
-    <p>
-    <p>
-    <p>
-    <p>
-    <p>
-    <p>
-
-<!-- Profiling Header -->
+<!-- Working On CDT subheader -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
-    <td width="90%"> <a name="profile"><b><font color="#000000" size="+1"> Profiling C/C++ Projects </font></b></a> </td>
+    <td width="90%"> <a name="developing"><b><font color="#000000" size="+1">Working ON the CDT </font></b></a></td>
     <td align="right">
         <a href="#toc">
-            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-        </a>
-    </td>
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top </a></td>
   </tr>
 </table>
+<ol>
+  <li><b><a name="developing_10">How do I get access to the CDT source code?</a></b> <p>
+  This document describes the process of building, running and debugging the 
+  CDT within Eclipse. We will try to keep this document up-to-date 
+  with the behavior of the latest builds.</p>
+  <p>To build the CDT inside Eclipse you will need a build of eclipse from the <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>. Once you have Eclipse properly installed, the CDT CVS 
+  Repository can 
+  be accessed and the CDT plugins checked-out and built. <b>Note</b>: The exact 
+  steps may vary depending on what Eclipse build you use. 
+<ol>
+  <li>Set up CVS<ol type="a">
+  <li>Open the &quot;<b>CVS Repository Exploring</b>&quot; Perspective </li>
+  <li>Right-Click in the &quot;<b>CVS Repositories</b>&quot; view and select &quot;<b>New</b> -&gt;<b>Repository Location</b>&quot;
+  </li>
+  <li>From the &quot;<b>Add CVS Repository</b>&quot; dialog, perform the following: <ul>
+      <li>Change the values to: <table>
+        <tr>
+          <td align="right"><b>Host: </b></td>
+          <td><font color="red">dev.eclipse.org</font></td>
+        </tr>
+        <tr>
+          <td align="right"><b>Repository Path:</b></td>
+          <td><font color="#FF0000">/home/tools</font></td>
+        </tr>
+        <tr>
+          <td align="right"><b>User: </b></td>
+          <td><font color="red">anonymous</font></td>
+        </tr>
+        <tr>
+          <td align="right"><b>Password: </b></td>
+          <td><font color="red"><i>you can leave this blank</i></font></td>
+        </tr>
+        <tr>
+          <td align="right"><b>Connection Type: </b></td>
+          <td><font color="red">pserver</font></td>
+        </tr>
+        <tr>
+          <td align="right"><b>Use Default Port: </b></td>
+          <td><font color="red"><i>selected</i></font></td>
+        </tr>
+        <tr>
+          <td align="right"><b>Validate Connection on Finish: </b></td>
+          <td><font color="red"><i>selected</i></font></td>
+        </tr>
+      </table>
+      </li>
+    </ul>
+    </li>
+  <li>Select &quot;Finish&quot; (this should create a new repository in the CVS 
+    Repositories View called <font color="red">:pserver:anonymous@dev.eclipse.org:/home/tools</font>)
+  </li>
 
+ </ol>
+  </li>
+    <li>Get Appropriate Source Files<ol type="a">
+  <li>Expand  your new repository </li>
+  <li>Expand the  HEAD </li>
+  <li>Hold down the &lt;Ctrl&gt; key and select all the plugins you wish to build. 
+    The complete list for the CDT are those that match <b><i>org.eclipse.cdt.*</i></b> , however you may wish to select only a subset. Of course you may have to 
+    return to this step if you have checked out a subset and are missing some 
+    dependencies.&nbsp;&nbsp; <b>Recommendation:&nbsp; select all the cdt 
+  plugins</b></li>
+  <li>Once you have selected your plugins, right-click on the selected list 
+    and choose <b>&quot;Check Out&quot;</b>. This should start checking out all 
+    the selected plugins and subsequently build them. </li>
+
+ </ol>
+  </li>
+
+ </ol>
+  <hr size="1">
+    <li><b><a name="developing_15">How do I use eclipse to develop eclipse?</a></b> <p>The <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/pde-ui-home/selfhosting/selfhosting.html">self-hosting</a> instructions explain how to use eclipse to develop eclipse.<ul>
+      <li>If you want to work with the current version of the eclipse code, you 
+      will need to connect to the <a href="http://dev.eclipse.org/viewcvs/">Eclipse Project CVS repository</a>. To connect to the Eclipse Project CVS 
+      repository, open the CVS repositories view (Perspective-&gt;Show 
+      View-&gt;Other...-&gt;CVS-&gt;CVS Repositories) and create a new CVS repository 
+      location (right click-&gt;New-&gt;CVS Repository Location. Enter the following 
+      information into the &quot;Add CVS Repository&quot; dialog. <ul>
+        <p>Connection type: pserver </p>
+      </ul>
+      <ul>
+        <p>User name: anonymous </p>
+      </ul>
+      <ul>
+        <p>Password: &lt;leave empty&gt; </p>
+      </ul>
+      <ul>
+        <p>Host name: dev.eclipse.org </p>
+      </ul>
+      <ul>
+        <p>Repository path: /home/eclipse </p>
+      </ul>
+      </li>
+    </ul>
+    <p>NOTE: When you are connected as anonymous you will have read rights to 
+    the repository, but you will not be able to commit any code.</p>
+    <hr SIZE="1">
+    </li>
+ 
+  </li>
+  
+    <li><b><a name="developing_20">How do I modify the code</a></b> 
+    <p>Change any file you want.&nbsp; When you save it, it will be built.</p>
+    <p>
+	</p>
+    <hr size="1">
+    </li>
+    
+	<li><b><a name="developing_30">How do I run with my changes?</b></a> <p>
+ 		After successfully building the CDT inside Eclipse, one typically wants to 
+ 		run an instance of Eclipse with the freshly built plugins (perhaps after 
+  		making some changes to the source code). This is very easy to do in the PDE. 
+  		Here are the steps: <ol>
+  		<li>Open the &quot;<b>Plug-in Development</b>&quot; perspective (you may have to 
+        go to &quot;Others&quot; to find it). </li>
+  		<li>Select the menu action <b>Run</b> -&gt; <b>Run As...</b> -&gt; <b>Run-time 
+  			workbench</b>. </li>
+  		<li>You may also use the drop down on the debug icon, select&nbsp; <b>Run-time 
+  			workbench</b></li>
+		</ol>
+	</p>
+  	<hr size="1">
+  	</li>
+  	
+	<li><b><a name="developing_40">How do I submit a fix for a bug?</a></b> <p>While using the Eclipse SDK to develop your plug-in, you found a bug in 
+    CDT. You submitted a bug report, but need the fix now. You've debugged the 
+    problem, and there is a simple fix. So you figured out how to use eclipse to 
+    develop eclipse and have written a fix for the bug you found. Now you want 
+    to release the fix to the eclipse community. How do you do this?</p>
+    <p>First, create a patch. You can create a patch by using the Team patch 
+    creation facility. <ol>
+      <li>Select the project you have patched. It must be connected to the CDT 
+      CVS repository. </li>
+      <li>Right click-&gt;Team-&gt;Create Patch... </li>
+      <li>The Create Patch wizard will prompt you for a file name. You should 
+      name your patch with the bugzilla bug report id. </li>
+    </ol>
+    <p>Now you can submit the patch to the appropriate component <a href="http://www.eclipse.org/mail/index.html">developer mailing list</a>. 
+    Be sure to include information about what your patch fixes. The committers 
+    for the component will evaluate your patch to see if it fixes the bug and is 
+    acceptable. If your patch is accepted, it will be released by the component 
+    team into the repository.</p>
+	<p>
+	</p>
+	<hr size="1">
+  	</li>
+  	
+	<li><b><a name="developing_50">How do I distribute my changes to my customers?</a></b> <p>
+    Anyway that you see fit!&nbsp;&nbsp; Actually, if anybody has suggestions 
+    for this answer, please send them to the cdt-dev mailing list.</p>
+	<hr size="1">
+  	</li>
+  	
+	<li><b><a name="developing_60">How do I generate JavaDocs?</a></b> <p>
+   		The following steps can be used to create JavaDocs for any CDT project. </p>
+  	<p>
+   <ol>
+   <li>Check out the project (i.e. org.eclipse.cdt.debug.core) from dev.eclipse.org with cvsroot /home/tools</li>
+    <li>Ensure that you have JavaDoc installed and configured (go to preferences-&gt;Java-&gt;Javadoc and set the location for the javadoc command </li>
+    <li>Select the project in the package explorer, right-click Export,
+        select Javadoc and follow the wizard instructions. It will generate the Javadoc html in a doc directory for that plugin </li>
+   </ol>
+   <p>
+   The result will be a complete JavaDoc hierarchy of all the public APIs for the selected plugin. </p>
+  <hr size="1">
+  </li>
+
+  <li><b><a name="developing_70">What are some areas that are not complete</a></b> <p>This is an endless list, but here are a few examples:</p>
+  <ul>
+  <li>Source code formatting</li>
+  <li>Integration with profiler</li>
+  <li>Refactoring engine</li>
+  <li>Full DOM read/write</li>
+  </ul>
+  <hr size="1">
+  </li>
+  <li>
+  <p><b><a name="developing_80">In addition to submitting fixes, how else can I 
+  contribute to the CDT Project?</a></b> </p>
+  <p>One initially thinks of submitting patches and enhancing components as the 
+  best way to contribute. However, there are many other valuable ways to get 
+  involved and help. <ul>
+    <li>You can participate in the newsgroups. There are many questions that 
+    arise on the newsgroup; you can use your eclipse experience to help others. </li>
+    <li>You can report bugs. </li>
+    <li>You can develop your own plug-ins and provide feedback based on your 
+    experience. </li>
+    <li>You can write <a href="http://www.eclipse.org/arg/index.html">articles</a>. </li>
+    <li>But the most important contribution you can make to the success of 
+    CDT (or eclipse)&nbsp; is to build real, useful tool plugins for CDT (or eclipse) that solve real 
+    problems for users - either as commercial products or open source projects. 
+    Take a look at
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/Commitment.html?cvsroot=Tools_Project">
+    committing to CDT development</a> to learn more about what's involved in 
+    contributing on a deeper level.</li>
+  </ul>
+  <hr SIZE="1">
+  </li>
+
+ </ol>
 <!-- Footer -->
 <p>
 
@@ -774,7 +1543,6 @@ activity which occurs once a project's build command is executed.</p>
 </tr>
 </table>
 <center><I>
-Last Modified on Monday, October 7, 2002
-</I></center>
+Last Modified on Wednesday Feb 17, 2004 </I></center>
 </body>
 </html>

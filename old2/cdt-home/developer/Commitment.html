@@ -1,0 +1,166 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Eclipse Tools - CDT News</title>
+<LINK rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css"> 
+<style>
+<!--
+h1
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:Arial;
+	}
+h2
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic}
+-->
+</style>
+</head>
+
+<body>
+&nbsp; 
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+ <tr> 
+  <td ALIGN=LEFT width="60%"><font class=indextop>What does it mean to Commit to 
+  CDT Development?</font><br>
+   <font class=indexsub>C/C++ Development Tools</font>
+  </td>
+  <td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
+ </tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Introduction</font></b></td>
+</tr>
+</table>
+
+ 
+<p class="MsoNormal">People often ask “what does it take to get involved with 
+the development of the CDT?” There are many ways to get involved. On the 
+lightweight end of scale, there is involvement by using the CDT and providing 
+feedback and sharing your experiences on the Eclipse and CDT newsgroups. Beyond 
+that, you can report problems that you discover, so that they may be addressed 
+in future releases. A deeper level of involvement would be to actually solve 
+some of the problems that you or others have uncovered by modifying/writing the 
+necessary code and creating patches that can applied by the project committers. 
+The final, and most beneficial way to get involved is to take responsibility for 
+a significant piece of development work, whether it’s enhancing a particular 
+area of the tool or creating new functionality. </p>
+<p class="MsoNormal">The purpose of this document is to help people and 
+organizations understand what it means to “commit” to CDT Development at this 
+highest level. Basically, it involves a commitment to describe, develop, test 
+and document your contributions.</p>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Commitment to Development</font></b></td>
+</tr>
+</table>
+
+ 
+<h2>Communicating Your Desires/Intentions</h2>
+<p class="MsoNormal">The first step involves letting the CDT user community and 
+other CDT development team members what you propose. The mechanism for this is 
+to create Bugzilla entries to describe the enhancements or new capabilities you 
+propose to do. Bugzilla is the open source change management system used by 
+Eclipse projects. To set these Bugzilla entries apart from other problem 
+reports, the word “plan” should be used in the keywords field, and the severity 
+of the entry should be set to “enhancement”. Following these guidelines will 
+ensure that all of these proposals get picked up by the appropriate query and 
+recorded in the plan for the upcoming release. </p>
+<p class="MsoNormal">Feature specifications (what your code will do) and design 
+specifications (how it will do it) are an important aspect of the development 
+effort. These specifications will allow the CDT community and the rest of the 
+CDT development team to understand what you are doing and to provide feedback. 
+The format of these documents is not important, the content is.</p>
+<h2>Delivering the Code</h2>
+<p class="MsoNormal">Once the feature and design documents have been floated to 
+the rest of the CDT community and feedback has been harvested, its time to start 
+pushing the code changes into the development stream. For those that have 
+committer privileges, these changes can be pushed directly into the stream. 
+Those without committer privileges create patches that get reviewed and applied 
+by committers. Patch requests are communicated via the ‘cdt-patch@eclipse.org’ 
+mailing list. Being a committer entails certain responsibilities on its own 
+which won’t be discussed here. For more information in what it means to be an 
+Eclipse project or sub-project committer, see the
+<a href="http://www.eclipse.org/eclipse/eclipse-charter.html">Eclipse Project 
+Charter</a>.&nbsp; We should point out that 
+creating and submitting quality patches is the best way to obtain committer 
+privileges for future work.</p>
+<h1>Commitment To Testing</h1>
+<p class="MsoNormal">Everyone that contributes content to Eclipse projects is 
+expected to test their contributions. When contributing a significant 
+enhancement or feature, that commitment means more than just assuring the 
+community that the code has been tested. It means documenting a test plan and 
+committing to execute that testing on release candidate builds. The Eclipse way 
+of generating releases is to generate a series of release candidate builds after 
+all of the development has been completed. Each release candidate goes through a 
+test-fix cycle where everyone tests their contributions and communicates their 
+findings. A collective decision is made as to which problems will get fixed for 
+the next release candidate, and the process is repeated. Fewer and fewer fixes 
+will be “blessed” as we progress through the release candidates. </p>
+<p class="MsoNormal">So, committing to contribute significant code to the CDT 
+also means committing to participate in the test-fix cycles by executing your 
+test plans against the release candidates build leading up to the final release 
+build.</p>
+<h1>Commitment to Documentation</h1>
+<p class="MsoNormal">An important part of any enhancement or addition to the CDT 
+is making sure that the on-line help of the tool stays current with the changes. 
+The responsibility for updating/modifying/writing the on-line help content that 
+is associated with some part of the tool lies with the contributors of the code. 
+Unless the contributors have commit privileges, the on-line documentation 
+content would get submitted as a patch, much the same as code. And, like code, 
+producing and submitting quality documentation patches is the way to obtain 
+documentation committer privileges.</p>
+<p class="MsoNormal">The 
+<a style="color: blue; text-decoration: underline; text-underline: single" href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/docs.html?cvsroot=Tools_Project">
+CDT Documentation Style Guide</a>&nbsp; has been 
+created to help maintain a constant look and feel for documentation originating 
+from different contributors. There also a couple of links that take you to 
+additional information on how to contribute help content for Eclipse projects.</p>
+<p class="MsoNormal">So, finally, committing to contribute code to the CDT also 
+means committing to contributing the associated on-line documentation content 
+for the part of the tool that is being enhanced or created.</p>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr> 
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b>
+ <font face="Arial,Helvetica" color="#FFFFFF">Examples</font></b></td>
+</tr>
+</table>
+<p>
+
+Examples of committed plan items can be seen in the
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_R2.0_plan.html?cvsroot=Tools_Project#Plan_Items">
+CDT 2.0 development plan</a>.<p>
+
+A sample test plan is available at
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project">
+System Tests</a>. <p>
+
+&nbsp;<p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
+<center><I>
+Last Modified on Wednesday, Feb 18, 2004</I></center>
+
+</body>
+</html>
