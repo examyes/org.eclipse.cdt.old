@@ -2,7 +2,7 @@
 <plugin
    name = "Cpp ParseMiner Plugin"
    id = "com.ibm.cpp.miners.parser"
-   version = "1.2.1"
+   version = "1.0.0"
    vendor-name = "International Business Machines Corp.">
    <requires>
      <import plugin="com.ibm.cpp.miners"/> 

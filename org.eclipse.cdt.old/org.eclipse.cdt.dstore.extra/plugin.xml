@@ -2,7 +2,7 @@
 <plugin
   name="DataStore Extra Plugin"
    id = "com.ibm.dstore.extra"
-  version="1.2.1"
+  version="1.0.0"
   provider-name="International Business Machines Corp.">
    <requires>
       <import plugin="org.eclipse.ui"/>

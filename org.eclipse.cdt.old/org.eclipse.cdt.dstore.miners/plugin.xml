@@ -2,7 +2,7 @@
 <plugin
    name = "DataStore Miners Plugin"
    id = "com.ibm.dstore.miners"
-   version = "1.2.1"
+   version = "1.0.0"
    vendor-name = "International Business Machines Corp.">
 
    <requires>
