@@ -38,7 +38,7 @@ public class OutputHandler extends Handler
 			_currentProcesses.clear();
 			while (_reader.ready() && (line = _reader.readLine()) != null)
 			    {
-				if (line != null)
+				if (line != null && line.length() > 0)
 				    {
 					parseProcessLine(line);				
 				    }
@@ -67,62 +67,68 @@ public class OutputHandler extends Handler
 
     private void parseProcessLine(String processLine)
     {
-	DataElement processD = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "Process", 1);
-	StringTokenizer tokenizer = new StringTokenizer(processLine);
-	if (tokenizer.hasMoreTokens())
+	try
 	    {
-		String processName = tokenizer.nextToken();
-		DataElement process = _dataStore.find(_processRoot, DE.A_NAME, processName, 1);
-		if (process == null)
+		DataElement processD = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "Process", 1);
+		StringTokenizer tokenizer = new StringTokenizer(processLine);
+		if (processD != null && tokenizer.hasMoreTokens())
 		    {
-			process = _dataStore.createObject(_processRoot, processD, processName);
-		    }
-		
-		_currentProcesses.add(process);
-		
-		int i = 0;
-		ArrayList attributes = processD.getAssociated("attributes");
-		while(tokenizer.hasMoreTokens() && i < attributes.size())
-		    {
-			DataElement attributeType = (DataElement)attributes.get(i);
-
-			String nextToken = tokenizer.nextToken();
-			if (attributeType.getName().equals("STIME"))
+			String processName = tokenizer.nextToken();
+			DataElement process = _dataStore.find(_processRoot, DE.A_NAME, processName, 1);
+			if (process == null)
 			    {
-				//*** hack for windows ***//
-				if (Character.isLetter(nextToken.charAt(0)))
-				    {
-					nextToken += " " + tokenizer.nextToken();
-				    }
+				process = _dataStore.createObject(_processRoot, processD, processName);
 			    }
-
-			DataElement attribute = _dataStore.find(process, DE.A_TYPE, attributeType.getName(), 1);
-			if (attribute == null)
+			
+			_currentProcesses.add(process);
+		
+			int i = 0;
+			ArrayList attributes = processD.getAssociated("attributes");
+			while(tokenizer.hasMoreTokens() && i < attributes.size())
 			    {
-				if (attributeType.getName().equals("PPID") && 
-				    (!nextToken.equals("1") && !nextToken.equals("0")))
-				    {
-					if (process.getAttribute(DE.A_TYPE).equals("Process"))
-					    {
-						process.setAttribute(DE.A_TYPE, "Child Process");
-					    }
-				    }			       
+				DataElement attributeType = (DataElement)attributes.get(i);
 				
-				attribute = _dataStore.createObject(process, attributeType, nextToken);
-				_dataStore.createReference(process, attribute, "attributes");
-
-			    }
-			else
-			    {
-				String curName = attribute.getAttribute(DE.A_NAME);
-				if (!curName.equals(nextToken))
+				String nextToken = tokenizer.nextToken();
+				if (attributeType.getName().equals("STIME"))
 				    {
-					attribute.setAttribute(DE.A_NAME, nextToken);
-					_dataStore.refresh(attribute);
+					//*** hack for windows ***//
+					if (Character.isLetter(nextToken.charAt(0)))
+					    {
+						nextToken += " " + tokenizer.nextToken();
+					    }
 				    }
+				
+				DataElement attribute = _dataStore.find(process, DE.A_TYPE, attributeType.getName(), 1);
+				if (attribute == null)
+				    {
+					if (attributeType.getName().equals("PPID") && 
+					    (!nextToken.equals("1") && !nextToken.equals("0")))
+					    {
+						if (process.getAttribute(DE.A_TYPE).equals("Process"))
+						    {
+							process.setAttribute(DE.A_TYPE, "Child Process");
+						    }
+					    }			       
+					
+					attribute = _dataStore.createObject(process, attributeType, nextToken);
+					_dataStore.createReference(process, attribute, "attributes");
+					
+				    }
+				else
+				    {
+					String curName = attribute.getAttribute(DE.A_NAME);
+					if (!curName.equals(nextToken))
+					    {
+						attribute.setAttribute(DE.A_NAME, nextToken);
+						_dataStore.refresh(attribute);
+					    }
+				    }
+				i++;
 			    }
-			i++;
 		    }
+	    }    
+	catch (Exception e)
+	    {
 	    }
-    }    
+    }
 }
