@@ -52,8 +52,13 @@ public class CommandMiner extends Miner
 		  
 		  //Remove all extra whitespace from the command
 		  if (invocation.trim().length() > 0)
-		      launchCommand(subject, invocation, status);
-		  return status;
+		  {
+		   if (invocation.equals("?") || invocation.equals("help"))
+		    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat";
+		   
+                   launchCommand(subject, invocation, status);
+		  }
+                  return status;
 	      }
 	  else
 	      {

@@ -24,6 +24,11 @@ command: dir.*
 command: ls.*
 	 file         file               pattern=.*\d{2}:\d{2} ([\w,.]*)
 
+command: xl.*
+	 error         file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
+	 warning       file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(W\).*
+	 informational file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
+
 
 # Notes:
 # 1.  The patterns are checked against command output and EXACT matches are 

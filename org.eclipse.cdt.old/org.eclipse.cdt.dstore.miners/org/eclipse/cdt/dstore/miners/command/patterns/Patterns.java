@@ -19,7 +19,7 @@ public class Patterns
  private PatternCompiler   _compiler;
  private PatternMatcher    _matcher;
  private String            _currentCommand;
- 
+ private long              _timeStamp = 0;
  public Patterns(DataStore ds)
  { 
   _dataStore   = ds;
@@ -29,7 +29,7 @@ public class Patterns
   parsePatternsFile();
  }
  
- private long timeStamp = 0;
+ 
 
  public void refresh(String theCommand)
  {
@@ -43,14 +43,13 @@ public class Patterns
   
   File thePatternsFile;
   if (_dataStore == null)
-   thePatternsFile = new File("e:\\eclipse\\plugins\\com.ibm.dstore.miners\\patterns.dat");
-  else
-   thePatternsFile = new File(_dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
-			      + "com.ibm.dstore.miners" + File.separator+ "patterns.dat");
-  long newTimeStamp = 0;
-  if (!thePatternsFile.exists() || ((newTimeStamp = thePatternsFile.lastModified()) == timeStamp))
    return;
-  timeStamp = newTimeStamp;
+  thePatternsFile = new File(_dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat");
+  
+  long newTimeStamp = 0;
+  if (!thePatternsFile.exists() || ((newTimeStamp = thePatternsFile.lastModified()) == _timeStamp))
+   return;
+  _timeStamp = newTimeStamp;
   
   //If we get here, we are actually going to read\parse the file. 
   BufferedReader reader = null;
