@@ -51,7 +51,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
     private Text                             _programNameField;
     private   Text                           _parametersField;
     protected Text		                     _workingDirectoryField;
-    protected Button                         workingDirectoryBrowseButton;
 
     // constants
     private static final int SIZING_TEXT_FIELD_WIDTH = 300;
@@ -122,6 +121,18 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 		});
    	_programNameField.setEnabled(true);
    	
+   	// browse button
+   	Button programBrowseButton = new Button(programGroup, SWT.PUSH);
+   	programBrowseButton.setText(_plugin.getLocalizedString("debugLauncherMain.Browse"));
+
+		programBrowseButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent evt) {
+				handleProgramBrowseButtonPressed();
+			}
+		});
+
+   	programBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));	
+
     }
 
     /**
@@ -200,7 +211,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 		});
 
    	// browse button
-   	workingDirectoryBrowseButton = new Button(workingDirectoryGroup, SWT.PUSH);
+   	Button workingDirectoryBrowseButton = new Button(workingDirectoryGroup, SWT.PUSH);
    	workingDirectoryBrowseButton.setText(_plugin.getLocalizedString("debugLauncherMain.Browse"));
 
 		workingDirectoryBrowseButton.addSelectionListener(new SelectionAdapter() {
@@ -337,6 +348,24 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
         displayMessageDialog(_plugin.getLocalizedString("CppDebugInfoTab.Exception") + ce.toString());
 		}
 	}
+
+    protected void handleProgramBrowseButtonPressed()
+    {
+      DataElement rootDirectory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
+      DataElement directory = rootDirectory.getDataStore().getHostRoot().get(0).dereference();
+  		directory = directory.getParent();
+     	DataElementFileDialog dialog = new DataElementFileDialog("Select Executable Program", directory, true);
+     	dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
+  		dialog.open();
+     	if (dialog.getReturnCode() == dialog.OK)
+  	   {
+     		DataElement selected = dialog.getSelected();
+    	   	if (selected != null)
+  	      {
+     	      _programNameField.setText(selected.getSource());
+ 		   }
+  	   }
+    }	
 
     protected void handleWorkingDirectoryBrowseButtonPressed()
     {
