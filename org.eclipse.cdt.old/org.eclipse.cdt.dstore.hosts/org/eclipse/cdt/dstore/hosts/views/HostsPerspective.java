@@ -22,17 +22,17 @@ public class HostsPerspective implements IPerspectiveFactory
   {
       String editorArea = factory.getEditorArea();
 
-      IFolderLayout a = factory.createFolder("a", IPageLayout.LEFT, (float)0.60, editorArea);
+      IFolderLayout topright = factory.createFolder("topright", IPageLayout.TOP, (float)0.50, editorArea);
+      topright.addView("org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart");
+      
+      IFolderLayout topleft = factory.createFolder("topLeft", IPageLayout.LEFT, (float)0.40, "topright");
+      topleft.addView("org.eclipse.cdt.dstore.hosts.views.HostsViewPart");
+
+      IFolderLayout a = factory.createFolder("a", IPageLayout.LEFT, (float)0.50, editorArea);
       a.addView("org.eclipse.cdt.dstore.hosts.views.CommandViewPart");
 
-      IFolderLayout b = factory.createFolder("b", IPageLayout.BOTTOM, (float)0.80, "a");
+      IFolderLayout b = factory.createFolder("b", IPageLayout.BOTTOM, (float)0.40, "a");
       b.addView("org.eclipse.cdt.dstore.hosts.views.OutputViewPart");
-
-      IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.TOP, (float)0.70, "a");
-      topLeft.addView("org.eclipse.cdt.dstore.hosts.views.HostsViewPart");
-
-      IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.RIGHT, (float)0.60, "topLeft");
-      bottomLeft.addView("org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart");
 
 
   }
