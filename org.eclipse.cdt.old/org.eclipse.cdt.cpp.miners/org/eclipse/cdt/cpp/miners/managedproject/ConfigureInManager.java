@@ -105,8 +105,6 @@ public class ConfigureInManager {
 			catch(InterruptedException e){System.out.println(e);}	
 			// update configure.in
 			updateConfigureIn(configure_in);
-			// get time stamp
-			timeStamp = getConfigureInStamp();
 		}
 	}
 	private boolean doesStampExist(File configureIn)
