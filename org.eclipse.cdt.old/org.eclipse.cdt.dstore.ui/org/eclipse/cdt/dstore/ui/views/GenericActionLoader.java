@@ -48,8 +48,6 @@ public class GenericActionLoader implements IActionLoader
     {	
 	_schemaRegistry = schemaProvider.getSchemaRegistry();
 	_plugin = DataStoreUIPlugin.getInstance();
-
-	System.out.println("schema reg = " + _schemaRegistry);
     }
 
     public CustomAction getOpenPerspectiveAction()
