@@ -7,6 +7,8 @@ package org.eclipse.cdt.linux.help.views;
  */
 
 import org.eclipse.cdt.linux.help.*;
+import org.eclipse.cdt.linux.help.convert.*;
+
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.Composite;
@@ -25,6 +27,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import java.util.*;
 import java.lang.*;
 import java.io.*;
+import java.net.*;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.internal.*;
@@ -35,46 +38,34 @@ import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.cdt.linux.help.display.*;
 import org.eclipse.cdt.linux.help.preferences.*;
 
-public class ResultsViewPart extends ViewPart
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
+import org.eclipse.cdt.dstore.core.model.*;
+
+import org.eclipse.help.internal.ui.WorkbenchHelpPlugin;
+import org.eclipse.help.ui.browser.IBrowser;
+
+import org.eclipse.cdt.dstore.core.*;
+
+import org.eclipse.cdt.cpp.ui.internal.help.IHelpInput;
+import org.eclipse.cdt.cpp.ui.internal.help.LaunchSearch;
+import org.eclipse.help.AppServer;
+
+public class ResultsViewPart extends ViewPart implements IDomainListener , IHelpInput  
 {
     private void showItem()    
     {
-	/******
-	Rectangle tablesize=_table.getClientArea();	
-	TableColumn tc=_table.getColumn(0);
-	System.out.println("showItem:width="+tablesize.width);
-	tc.setWidth(tablesize.width-250);
-	*****/
-
 	int index=_table.getSelectionIndex();	
 
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
+	HelpSettings settings = new HelpSettings(_remoteContentsInView);
+	settings.read();	
 
-	//Pick a default Browser if none selected
-	boolean kdeBrowserExists=HelpBrowserUtil.existsCommand("konqueror");
-	boolean gnomeBrowserExists=HelpBrowserUtil.existsCommand("gnome-help-browser");		
-	if (!(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_KONQUEROR) ||
-	     settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_GNOMEHELPBROWSER)))
-	    {		
-		if(kdeBrowserExists)
-		    {
-			settings.put(IHelpSearchConstants.HELP_SEARCH_BROWSER_KONQUEROR,true);
-		    }
-		else if(gnomeBrowserExists)
-		    {			
-			settings.put(IHelpSearchConstants.HELP_SEARCH_BROWSER_GNOMEHELPBROWSER,true);
-		    }				
-	    }
-	
-	//ItemElement element = HelpSearch.getItemElement(index);
 	ItemElement element = _plugin.getFilter().getItem(index);
-	
 
 	if(element.getType().equals(ItemElement.MAN_TYPE))
 	    {		
 		String name= element.getName();
-		String section= HelpSearch.getManSection(name);
-		StringBuffer theCommand = new StringBuffer(HelpSearch.getManInvocation(name));
+		String section= getManSection(name);
+		StringBuffer theCommand = new StringBuffer(getManInvocation(name));
 
 		if (settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_GNOMEHELPBROWSER) &&
 		    HelpBrowserUtil.existsCommand("gnome-help-browser"))
@@ -113,9 +104,15 @@ public class ResultsViewPart extends ViewPart
 			catch(Exception e)
 			    {e.printStackTrace();}
 		    }
-		else
+		else if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_DEFAULT))
 		    {
-			//Bring a dialog box telling the user he needs to have either KDE or GNOME installed
+			try{
+			    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
+			    String url = getLocalUrl(element);
+			    browser.displayURL(url);
+			}
+			catch(Exception e)
+			    {e.printStackTrace();}
 		    }
 	    }
 	else if (element.getType().equals(ItemElement.INFO_TYPE))
@@ -126,7 +123,6 @@ public class ResultsViewPart extends ViewPart
 		    {
 			try
 			    {				
-				//String invocation=HelpSearch.getInvocation(index);
 				String invocation = element.getInvocation();
 				StringBuffer thecommand = new StringBuffer(invocation);
 				int i=invocation.lastIndexOf('/');
@@ -150,9 +146,15 @@ public class ResultsViewPart extends ViewPart
 			catch(Exception e)
 			    {e.printStackTrace();}
 		    }
-		else
+		else if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_DEFAULT))
 		    {
-			//Bring a dialog box telling the user he needs to have either KDE or GNOME installed
+			try{
+			    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
+			    String url = getLocalUrl(element);
+			    browser.displayURL(url);
+			}
+			catch(Exception e)
+			    {e.printStackTrace();}
 		    }
 		
 	    }
@@ -181,29 +183,134 @@ public class ResultsViewPart extends ViewPart
 			catch(Exception e)
 			    {e.printStackTrace();}
 		    }
-		else
+		else if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_DEFAULT))
 		    {
-			//Bring a dialog box telling the user he needs to have either KDE or GNOME installed
+			try{
+			    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
+			    String url = getLocalUrl(element);
+			    browser.displayURL(url);
+			}
+			catch(Exception e)
+			    {e.printStackTrace();}
 		    }
-
 	    }
     }
-    
+
+    private void showRemoteItem()
+    {      
+	int index=_table.getSelectionIndex();	
+	ItemElement element = _plugin.getFilter().getItem(index);
+	
+	HelpSettings settings = new HelpSettings(_remoteContentsInView);
+	settings.read();
+	int port = Integer.parseInt(settings.get(IHelpSearchConstants.HELP_TOMCAT_PORT));
+	String url = getRemoteUrl(_hostname,port,element);	
+	/**	
+	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_GNOMEHELPBROWSER) &&
+	   HelpBrowserUtil.existsCommand("gnome-help-browser"))
+	    {
+		try
+		    {				
+			runHelpBrowser gbrowser = new runHelpBrowser(url);
+			gbrowser.start();			    			   
+		    }
+		catch(Exception e)
+		    {e.printStackTrace();}
+		
+	    }
+	else if (settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_KONQUEROR) &&
+		 HelpBrowserUtil.existsCommand("konqueror"))
+	    {
+		try
+		    {				
+			runKonq konq = new runKonq(url);
+			konq.start();			    			   
+		    }
+		catch(Exception e)
+		    {e.printStackTrace();}
+	    }
+	    else if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_BROWSER_DEFAULT))
+	**/
+	    {
+		try{
+		    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
+		    browser.displayURL(url);
+		}
+		catch(Exception e)
+		    {e.printStackTrace();}
+	    }
+    }
+
+    private String getRemoteUrl(String hostname,int port, ItemElement element)
+    {
+	StringBuffer url = new StringBuffer("http://");
+	url.append(hostname);
+	url.append(":"+port);
+	url.append("/cdthelp/Help");
+
+	String type = element.getType();
+	url.append("?type="+element.getType());
+	
+	if(type.equals(ItemElement.MAN_TYPE))
+	    {
+		url.append("&section="+element.getSection());
+		url.append("&invocation="+element.getInvocation());
+	    }
+	else if(type.equals(ItemElement.INFO_TYPE))
+	    {//FIXME: may need to convert other non-alphanumeric characters to %XX (i.e XX is ascii value in hex)
+		url.append("&invocation="+element.getInvocation().replace(' ','+')); 
+	    }
+	else if(type.equals(ItemElement.HTML_TYPE))
+	    {
+		url.append("&name="+element.getName().trim());
+	    }
+	return url.toString();
+    }
+
+    private String getLocalUrl(ItemElement element)
+    {
+	StringBuffer url=new StringBuffer("http://");
+	url.append(AppServer.getHost());
+	url.append(":"+AppServer.getPort());
+	url.append("/cdthelp/Help");
+	url.append("?type="+element.getType());
+
+	String type = element.getType();
+	if(type.equals(ItemElement.MAN_TYPE))
+	    {
+		url.append("&section="+element.getSection());
+		url.append("&invocation="+element.getInvocation());
+	    }
+	else if(type.equals(ItemElement.INFO_TYPE))
+	    {//FIXME: may need to convert other non-alphanumeric characters to %XX (i.e XX is ascii value in hex)
+		url.append("&invocation="+element.getInvocation().replace(' ','+')); 
+	    }
+	else if(type.equals(ItemElement.HTML_TYPE))
+	    {
+		url.append("&name="+element.getName().trim());
+	    }
+	return url.toString();
+	
+    }
     
     public class ResultsViewListener extends MouseAdapter
     {
 	public void mouseDoubleClick(MouseEvent me)
 	{
-	    showItem();
-	    /*
-	    Rectangle tablesize=_table.getClientArea();
-	    System.out.println("table width="+tablesize.width);
-	    */	    
+	    HelpSettings settings = new HelpSettings(_remoteContentsInView);
+	    settings.read();
+	    
+	    if(_remoteContentsInView)
+		{
+		    showRemoteItem();
+		}
+	    else
+		{
+		    showItem();
+		}
 	}
-	
     }
     
-    //  private ResultsViewer _viewer;
     private HelpPlugin _plugin;
     private Table _table;
     private Color _tablecolor;
@@ -214,18 +321,19 @@ public class ResultsViewPart extends ViewPart
     
     private Label _settings;
 
-    //--------------    
     private Button addFilterAction;
 
+    private DataElementMapper _mapper;
+    private DataElement _input;
+    private boolean _remoteContentsInView=false;
+    private String _hostname="localhost";
 
     public ResultsViewPart()
     {
 	super();
 	_plugin = HelpPlugin.getDefault();
     }
-    
-
-   
+       
     public void setExpression(String key)
     {
 	_expression.setText(key);
@@ -266,8 +374,8 @@ public class ResultsViewPart extends ViewPart
 	_findButton.addSelectionListener(new SelectionAdapter(){
 		public void widgetSelected(SelectionEvent e)
 		{
-		    String theKey = _expression.getText();
-		    _plugin.showMatches(theKey); 		    
+		    String theKey = _expression.getText();			
+		    LaunchSearch.getDefault().doSearch(theKey,null);
 		}
 	    });
       	
@@ -275,9 +383,6 @@ public class ResultsViewPart extends ViewPart
 	_table = new Table(container,SWT.SINGLE|SWT.FULL_SELECTION);
 	gridData = new GridData(GridData.FILL_HORIZONTAL| GridData.FILL_VERTICAL);
 	_table.setLayoutData(gridData);
-		//	gridData.horizontalSpan=3;
-	//_table = new Table(bottomHalf_container,SWT.SINGLE|SWT.FULL_SELECTION);
-	
 
 	TableColumn tc1= new TableColumn(_table,SWT.NULL);
 	tc1.setWidth(20);	
@@ -290,42 +395,25 @@ public class ResultsViewPart extends ViewPart
 	tc3.setWidth(250);	
 	tc3.setText(_plugin.getLocalizedString(IHelpNLConstants.VIEW_TABLE_DESCRIPTIONCOLUMN));
 
-	//Point tablesize=_table.getSize();
-	//System.out.println("size="+tablesize.x);
-	//tc2.setWidth(tablesize.x-250);
-	
-
 	//change the default 'grey' background color of the table to 'white'
 	_tablecolor=new Color(_table.getDisplay(),255,255,255);
 	_table.setBackground(_tablecolor);
 
+	/*
 	_table.addSelectionListener(new SelectionAdapter(){
 		public void widgetSelected(SelectionEvent e)
 		{
 		    //showItem();
 		}
 	    });
-
+	*/
 	_table.addMouseListener(new ResultsViewListener());
 	_table.setHeaderVisible(true);
 
+	/*
 	_settings=new Label(container,SWT.NULL);
 	_settings.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-
-	HelpDialogSettingUtil.setDefaultSettings();
-	_settings.setText(getSettingsToDisplay());
-	/*
-	 HelpDialogSettingUtil.updateDisplayedSettings(); //show some default settings
-	
-	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
-	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
-	IWorkbenchPage persp= win.getActivePage();
-	
-	try{
-	    persp.showView("org.eclipse.cdt.linux.help.views.ResultsViewPart"); //FIXME hardcoded view id
-	}catch(PartInitException e){
-	    e.printStackTrace();
-	}
+	_settings.setText(getSettingsToDisplay());       
 	*/
     }   
 
@@ -346,22 +434,19 @@ public class ResultsViewPart extends ViewPart
 		ItemElement theItem=(ItemElement)list.get(i);		
 		String type = theItem.getType();
 		
-		if (type == ItemElement.MAN_TYPE)
+		if (type.equals(ItemElement.MAN_TYPE))
 		    {
 			ti.setImage(0,_plugin.getImage("full/obj16/manual_obj.gif"));
-       			//ti.setText(0,manType);
 			ti.setText(1,theItem.getName());			
 		    }
-		else if (type == ItemElement.INFO_TYPE)
+		else if (type.equals(ItemElement.INFO_TYPE))
 		    {	
 			ti.setImage(0,_plugin.getImage("full/obj16/infopage_obj.gif"));
-			//ti.setText(0,infoType);
 			ti.setText(1,theItem.getKey());
 		    }
-		else if (type == ItemElement.HTML_TYPE)
+		else if (type.equals(ItemElement.HTML_TYPE))
 		    {
 			ti.setImage(0,_plugin.getImage("full/obj16/htmlpage_obj.gif"));
-			//ti.setText(0,htmlType);
 			String filename = theItem.getName();
 			ti.setText(1,filename.substring(filename.lastIndexOf(File.separator)+1));
 		    }
@@ -370,24 +455,38 @@ public class ResultsViewPart extends ViewPart
 	    }
 	
 	//Default:show the first item
-	if (list.size()>=1)
+	/*	if (list.size()>=1)
 	    {
 		_table.deselectAll();
 		_table.select(0);
-		showItem();		
+		
+		if(_remoteContentsInView)
+		    {
+			showRemoteItem();
+		    }
+		else
+		    {
+			showItem();
+		    }
 	    }
-
+	*/
     }
 
     public void setFocus()
     {
-	//_viewer.getTable().setFocus();
 	_expression.setFocus();
     }
 
     public void dispose()
     {
 	super.dispose();
+
+	if(_input!=null)
+	    {
+		DomainNotifier notifier= _input.getDataStore().getDomainNotifier();
+		notifier.removeDomainListener(this);
+	    }
+
 	if(_expressionColor!=null)
 	    _expressionColor.dispose();
 	if(_tablecolor!=null)
@@ -402,10 +501,107 @@ public class ResultsViewPart extends ViewPart
 	    _settings.dispose();
     }
 
+
+
+    ////////////methods for IDomainListener////////    
+    public void domainChanged(DomainEvent ev)
+    {
+	DataElement parent =(DataElement)ev.getParent();
+	
+	if(_input==null)
+	    {
+		return;
+	    }
+
+	if(!_input.getName().equals("done"))
+	    {
+		//FIXME:display some progress dialog?
+	    }
+	else
+	    {
+		//FIXME: new Thread?
+		ArrayList dataElementList = _input.getAssociated("contents");
+	
+		DataElement DminerKey = (DataElement)dataElementList.get(dataElementList.size()-1);
+		String keyword;
+		if(DminerKey.getType().equals("key"))
+		    keyword = DminerKey.getValue();
+		else
+		    keyword = "";//should never get here
+		dataElementList.remove(dataElementList.size()-1);
+		setExpression(keyword);
+
+		DataElement DminerHostname = (DataElement)dataElementList.get(dataElementList.size()-1);
+      		String minerHostname;
+		if(DminerHostname.getType().equals("hostname"))
+		    minerHostname= DminerHostname.getName();
+		else
+		    minerHostname="localhost";// should never get here
+		dataElementList.remove(dataElementList.size()-1);
+
+		_hostname = minerHostname;
+
+		ArrayList itemElementList = DataElementMapper.convertToItemElement(dataElementList);
+
+		//FIXME: wait until get complete list of results
+   
+		HelpPlugin.getDefault().setList(itemElementList);
+
+		//filter unwanted elements
+		HelpPlugin.getDefault().getFilter().updateIndexList(itemElementList);
+		ArrayList filteredResults = HelpPlugin.getDefault().getFilter().getFilteredResults();
+		
+		String hostname;
+		try
+		    {
+			hostname= InetAddress.getLocalHost().getHostName();
+			boolean isRemote = !hostname.equals(minerHostname);
+			setRemoteContents(isRemote);
+		    }
+		catch(UnknownHostException e)
+		    {
+			e.printStackTrace();
+			setRemoteContents(false); // mark it as LOCAL project
+		    }
+
+		//display in view
+		populate(filteredResults);
+	    }
+    }
+
+    public boolean listeningTo(DomainEvent ev)
+    {
+	DataElement parent = (DataElement)ev.getParent();
+	if(_input == parent)
+	    {
+		return true;
+	    }
+	return false;
+    }
+
+    public Shell getShell()
+    {
+	return getViewSite().getShell();
+    }
+
+    public void setInput(DataElement status)
+    {
+	DomainNotifier notifier = status.getDataStore().getDomainNotifier();
+	notifier.addDomainListener(this);
+	_input = status;
+    }
+
+    public void setRemoteContents(boolean remoteContents)
+    {
+	_remoteContentsInView = remoteContents;
+    }
+    
     private String getSettingsToDisplay()
     {
 	StringBuffer displayedSettings= new StringBuffer();
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
+	HelpSettings settings = new HelpSettings(_remoteContentsInView);
+	settings.read();
+
 	displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_LOOKUPMODE_TITLE)+":");
 
 	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT))
@@ -446,6 +642,39 @@ public class ResultsViewPart extends ViewPart
 		    }
 	    }
 	return displayedSettings.toString();
+    }
+
+    private String getManSection(String name)
+    {
+	int begin,end;
+	begin=name.lastIndexOf('(');
+	end=name.lastIndexOf(')');
+	if (begin==-1 || end==-1)
+	    {
+		return null; // no section
+	    }
+	else	    
+	    {		
+		return name.substring(begin+1,end);
+	    }
+    }
+    
+    private String getManInvocation(String name)
+    {	
+	int keybegin,keyend;
+	keybegin=name.indexOf('[');
+	keyend= name.indexOf(']');	
+	if (keybegin==-1 || keyend==-1)
+	    {
+		keyend=name.indexOf(" ");
+		if (keyend == -1)
+		    return name;
+		else
+		    return name.substring(0,keyend);		
+	    }
+	else
+	    return name.substring(keybegin+1,keyend);	    
+	    
     }
 
 } 

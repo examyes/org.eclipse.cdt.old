@@ -7,7 +7,7 @@ package org.eclipse.cdt.linux.help.preferences;
  */
 
 import org.eclipse.cdt.linux.help.*;
-import org.eclipse.cdt.linux.help.search.*;
+import org.eclipse.cdt.linux.help.preferences.*;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
@@ -178,15 +178,20 @@ public class FilterControl extends Composite implements Listener
     
     private ArrayList readFilters()
     {
-	ArrayList pathList = new ArrayList();
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
+	ArrayList pathList = new ArrayList();	
+
+	HelpSettings settings = new HelpSettings();
+	settings.read();
+
 	String paths = settings.get(IHelpSearchConstants.HELP_FILTER_PATTERNS);	
 
 	//remember the initial paths
 	//originalPaths = paths;
 
-	if(paths==null) return null;
-	StringTokenizer tokenizer = new StringTokenizer(paths,"|");
+	if (paths==null|| paths.equals("")) 
+	    return null;
+
+	StringTokenizer tokenizer = new StringTokenizer(paths,"##");
 	while(tokenizer.hasMoreTokens())
 	    {
 		pathList.add(tokenizer.nextToken());
@@ -206,15 +211,22 @@ public class FilterControl extends Composite implements Listener
 	StringBuffer listToSave = new StringBuffer();
 	for(int i=0;i<list.size();i++)
 	    {
-		listToSave.append((String)list.get(i) + "|");		
+		listToSave.append((String)list.get(i) + "##");		
 	    }
 	return listToSave.toString();
     }
 
     private void saveFilters(ArrayList list)
     {
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();		
-	settings.put(IHelpSearchConstants.HELP_FILTER_PATTERNS, getStringToSave(list));
+	HelpSettings settings = new HelpSettings();
+	settings.read();
+	String filters= getStringToSave(list);
+	if(filters.equals(""))
+	    settings.put(IHelpSearchConstants.HELP_FILTER_PATTERNS,null);
+	else
+	    settings.put(IHelpSearchConstants.HELP_FILTER_PATTERNS,filters);
+	
+	settings.write();
     }   
 
     private void addFilter(String path)

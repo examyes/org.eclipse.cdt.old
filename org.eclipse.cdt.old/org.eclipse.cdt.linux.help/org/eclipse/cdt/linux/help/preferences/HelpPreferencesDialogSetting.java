@@ -8,11 +8,7 @@ package org.eclipse.cdt.linux.help.preferences;
 
 import org.eclipse.cdt.linux.help.*;
 
-import org.eclipse.cdt.linux.help.display.HelpBrowserUtil;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.*;
 
 import org.eclipse.swt.SWT;
@@ -22,13 +18,15 @@ import org.eclipse.swt.events.*;
 
 import java.util.*;
 
-public class FilterDialogSetting extends Dialog 
+public class HelpPreferencesDialogSetting extends Dialog 
 {
     private HelpPlugin _plugin;
 
-    public FilterControl _filterControl;
-   
-    public FilterDialogSetting(Shell parentShell)
+    public HelpWorkbook _workbookControl;
+    //private Button _performDefaultsButton;
+    
+
+    public HelpPreferencesDialogSetting(Shell parentShell)
     {
 	super(parentShell);
 	_plugin=HelpPlugin.getDefault();
@@ -37,7 +35,7 @@ public class FilterDialogSetting extends Dialog
     protected void configureShell(Shell newShell)
     {
 	super.configureShell(newShell);	
-	newShell.setText(_plugin.getLocalizedString(IHelpNLConstants.FILTER_TITLE));
+	newShell.setText(_plugin.getLocalizedString(IHelpNLConstants.SETTINGS_TITLE));
 
 	//FIXME:configure help here
 	// Workbench.setHelp(newShell,new String[] {"stuff"});
@@ -50,39 +48,31 @@ public class FilterDialogSetting extends Dialog
 	GridLayout compositeLayout = new GridLayout();	
 	composite.setLayout(compositeLayout);		
 		
-	_filterControl = new FilterControl(composite,SWT.NONE);
+	_workbookControl = new HelpWorkbook(composite,SWT.NONE);
 	GridLayout dlayout = new GridLayout();	
 	GridData dData = new GridData(GridData.GRAB_HORIZONTAL
 				      |GridData.FILL_BOTH);	
-	_filterControl.setLayout(dlayout);
-	_filterControl.setLayoutData(dData);		
+	_workbookControl.setLayout(dlayout);
+	_workbookControl.setLayoutData(dData);		
 
 	return composite;
     }    
+    /*
+    protected void createButtonsForButtonBar(Composite parent)
+    {
+	super.createButtonsForButtonBar(parent);
+    }
+    */
      
     public void okPressed()
     {		
-	//store all settings
-	_filterControl.storeSettings();
-	
-	//	ArrayList unfilteredList= HelpSearch.getList(); // Get unfiltered list
-	ArrayList unfilteredList = _plugin.getList(); // Get unfiltered list
-	if (unfilteredList != null)
-	    {
-		_plugin.getFilter().updateIndexList(unfilteredList); //Filter the indexes
-		
-		//map filtered indexes to ItemElements
-		ArrayList filteredList = _plugin.getFilter().getFilteredResults();
-		_plugin.getView().populate(filteredList);
-	    }	
-	
+	_workbookControl.performOk();
 	super.okPressed();
     }   
 
     protected void cancelPressed()
     {
 	//FIXME: ADD stuff here
-
 	super.cancelPressed();
     }
 

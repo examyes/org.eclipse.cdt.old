@@ -7,7 +7,14 @@ package org.eclipse.cdt.linux.help.preferences;
  */
 
 import org.eclipse.cdt.linux.help.*;
-import org.eclipse.cdt.linux.help.search.*;
+
+import org.eclipse.cdt.linux.help.preferences.*;
+
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.vcm.Repository;
+import org.eclipse.cdt.dstore.hosts.dialogs.DataElementFileDialog;
 
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
@@ -19,6 +26,9 @@ import org.eclipse.core.resources.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+
+import org.eclipse.ui.internal.*;
+import org.eclipse.core.internal.plugins.*;
 
 public class IndexPathControl extends Composite implements Listener
 {
@@ -36,13 +46,21 @@ public class IndexPathControl extends Composite implements Listener
     private String originalPaths;
 
     private HelpPlugin plugin;
-    
-    public IndexPathControl(Composite cnr, int style)
+    private boolean _isRemote;
+
+    DataElement _input;
+
+    HelpSettings _settings = null;
+
+    public IndexPathControl(Composite cnr, int style, boolean isRemote)
     {
 	super(cnr, style);
+	plugin = HelpPlugin.getDefault();
+	_isRemote = isRemote;
 
-	plugin= HelpPlugin.getDefault();
-	
+	_settings = new HelpSettings(_isRemote);
+	_settings.read();
+
 	group = new Group(this, SWT.NULL);
 	group.setText(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_TITLE));
 	group.setLayout(new GridLayout());
@@ -134,13 +152,36 @@ public class IndexPathControl extends Composite implements Listener
 	if (source == _browseButton)
 	    {
 		String selectedDirectory = null;
-		
-		DirectoryDialog dialog = new DirectoryDialog(this.getShell(), SWT.SAVE);
-		dialog.setMessage(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_BROWSEDIRMESSAGE));
-		dialog.setFilterPath("*.*");
-		
-		selectedDirectory = dialog.open();
-		
+		//FIXME : need to connect to server for a remote  project
+		if(_isRemote)		
+		    {
+			IProject project = CppPlugin.getCurrentProject();
+			if(project!=null && project instanceof Repository)
+			    {
+				DataElement dirInput = ((Repository)project).getRemoteElement();
+				if(dirInput!=null)
+				    {
+					DataElementFileDialog dialog = new DataElementFileDialog("Select Directory to Index", dirInput);
+					dialog.open();
+					if (dialog.getReturnCode() == dialog.OK)
+					    {
+						DataElement selected = dialog.getSelected();
+						if (selected != null)
+						    {
+							selectedDirectory = selected.getSource();
+						    }
+					    }
+				    }
+			    }
+		    }
+		else
+		    {
+			DirectoryDialog dialog = new DirectoryDialog(this.getShell(), SWT.SAVE);
+			dialog.setMessage(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_BROWSEDIRMESSAGE));
+			dialog.setFilterPath("*.*");
+			
+			selectedDirectory = dialog.open();
+		    }
 
 		if (selectedDirectory != null)
 		    {
@@ -260,7 +301,8 @@ public class IndexPathControl extends Composite implements Listener
     {
 	if(!checkIndexCreation())
 	    {
-		boolean confirmation = MessageDialog.openConfirm(HelpPlugin.getDefault().getView().getSite().getShell(), plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CONFIRMATION),plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CONFIRMATIONMESSAGE));
+		Shell shell = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+		boolean confirmation =  MessageDialog.openConfirm(shell, plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CONFIRMATION),plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_CONFIRMATIONMESSAGE));
 		if(confirmation)
 		    {
 			if(createIndex()) //attempt to create the index
@@ -274,12 +316,12 @@ public class IndexPathControl extends Composite implements Listener
     public boolean checkIndexCreation()
     {
 	boolean needIndexing;
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
-	needIndexing = settings.getBoolean(IHelpSearchConstants.HELP_SETTINGS_PATHSMODIFIED);
+
+	needIndexing = _settings.getBoolean(IHelpSearchConstants.HELP_SETTINGS_PATHSMODIFIED);
 	if(needIndexing) // do we need to update the index?
 	    {
-		// ask user confirmation to create index
-	        boolean createIndex = MessageDialog.openQuestion(HelpPlugin.getDefault().getView().getSite().getShell(), plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_QUESTION),plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_QUESTIONMESSAGE));
+		Shell shell = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+		boolean createIndex = MessageDialog.openQuestion(shell, plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_QUESTION),plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_QUESTIONMESSAGE));
 		if(createIndex)
 		    {			
 			if(createIndex()) //attempt to create the index
@@ -287,7 +329,6 @@ public class IndexPathControl extends Composite implements Listener
 				setPathsModifiedFlag(false);//indicate indexing was successful.
 			    }			
 		    }
-		
 	    }
 	return needIndexing; 
     }    
@@ -295,59 +336,73 @@ public class IndexPathControl extends Composite implements Listener
     public boolean createIndex()
     {	
 	boolean success=false;
-	String indexPathName;
-	File statePath = HelpPlugin.getDefault().getStateLocation().toFile();
-	File indexPath = new File(statePath,IHelpSearchConstants.HELP_SETTINGS_INDEXLOCATION);
-	if(!indexPath.exists())
-	    {
-		if(!indexPath.mkdir())
-		    return false;
-	    }	
-	
-	try{
-	    indexPathName = indexPath.getCanonicalPath();
-	}catch(Exception e){e.printStackTrace();return false;}
+	String indexPathName;	
 
-	ArrayList pathList = readPathsToIndex();
-	//FIXME:add check that pathList is valid list of directories/files 
-	if(pathList==null || pathList.size()==0)return false;
-	//SearchHtml indexBox = new SearchHtml();
-	//success = indexBox.createIndex(indexPathName,pathList);
-	
-	IRunnableWithProgress searchWithProgress = new SearchHtmlWithProgress(indexPathName,pathList);
-	ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(HelpPlugin.getDefault().getView().getSite().getShell());
-	progressDialog.setCancelable(false);	
-	try 
-	    {		
-		progressDialog.run(true,false,searchWithProgress);
-	    }
-	catch(Exception e)
+	//	if(HelpPlugin.getDefault().isRemote())
 	    {
-		e.printStackTrace();
-	    }
-	success=true;////
+		DataStore dataStore;
+		if(_isRemote)
+		    dataStore= DataStoreCorePlugin.getDefault().getCurrentDataStore();
+		else
+		    dataStore= DataStoreCorePlugin.getDefault().getRootDataStore();
 
-	if(success)
-	    {   
-		//indicate an index has been created
-		IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
-		settings.put(IHelpSearchConstants.HELP_SETTINGS_INDEXEXISTS,"true");
+		DataElement indexObject = dataStore.createObject(null,"Project","linuxhelp_command");
+	   
+		DataStore ids = indexObject.getDataStore();
+
+		String helpSettings = _settings.settingsToString();
+		DataElement argSettings = dataStore.createObject(null,"help_settings", helpSettings);
+		
+		DataElement descriptor = dataStore.localDescriptorQuery(indexObject.getDescriptor(), 	
+								       "C_HELPCREATEINDEX");
+		
+		DataElement status;
+		if(descriptor!=null)
+		    {
+			ArrayList args = new ArrayList();
+			args.add(argSettings);
+			status = dataStore.command(descriptor,args,indexObject);
+
+			HelpMonitor helpMonitor = new HelpMonitor("Index In Progress...",status);
+			Shell shell = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(shell);
+			progressDialog.setCancelable(false);	
+			try 
+			    {		
+				progressDialog.run(true,false,helpMonitor);
+			    }
+			catch(Exception e)
+			    {
+				e.printStackTrace();
+			    }
+			
+
+			while(!status.getName().equals("done"))
+			    {
+				try{Thread.sleep(200);}catch(Exception e){e.printStackTrace();}
+      				Thread.yield();
+			    }
+
+			//indicate an index was created 
+			_settings.read();
+			_settings.put(IHelpSearchConstants.HELP_SETTINGS_INDEXEXISTS,true);
+			_settings.write();//commit 
+		    }
+		return true;
 	    }
-	return success;
     }
-
     
     private ArrayList readPathsToIndex()
     {
 	ArrayList pathList = new ArrayList();
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
-	String paths = settings.get(IHelpSearchConstants.HELP_SETTINGS_PATHSTOINDEX);	
+		
+	String paths = _settings.get(IHelpSearchConstants.HELP_SETTINGS_PATHSTOINDEX);	
 
 	//remember the initial paths
 	originalPaths = paths;
 
 	if(paths==null) return null;
-	StringTokenizer tokenizer = new StringTokenizer(paths,"|");
+	StringTokenizer tokenizer = new StringTokenizer(paths,"##");
 	while(tokenizer.hasMoreTokens())
 	    {
 		pathList.add(tokenizer.nextToken());
@@ -357,8 +412,9 @@ public class IndexPathControl extends Composite implements Listener
 
     private void setPathsModifiedFlag(boolean flag)
     {
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();	
-	settings.put(IHelpSearchConstants.HELP_SETTINGS_PATHSMODIFIED,flag);
+	_settings.read();
+	_settings.put(IHelpSearchConstants.HELP_SETTINGS_PATHSMODIFIED,flag);
+	_settings.write();
     }
 
     private void loadSettingsToWidget()
@@ -373,15 +429,24 @@ public class IndexPathControl extends Composite implements Listener
 	StringBuffer listToSave = new StringBuffer();
 	for(int i=0;i<list.size();i++)
 	    {
-		listToSave.append((String)list.get(i) + "|");		
+		listToSave.append((String)list.get(i) + "##");		
 	    }
 	return listToSave.toString();
     }
 
     private void savePaths(ArrayList list)
     {
-	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();		
-	settings.put(IHelpSearchConstants.HELP_SETTINGS_PATHSTOINDEX, getStringToSave(list));
+	_settings.read();
+	String paths=getStringToSave(list);
+	if(paths.equals(""))
+	    {
+		_settings.put(IHelpSearchConstants.HELP_SETTINGS_PATHSTOINDEX, null);
+	    }
+	else
+	    {
+		_settings.put(IHelpSearchConstants.HELP_SETTINGS_PATHSTOINDEX, paths);
+	    }
+	_settings.write();
     }   
 
     public void addPath(String path)
@@ -414,5 +479,4 @@ public class IndexPathControl extends Composite implements Listener
 	else
 	    return false;
     }
-
 }
