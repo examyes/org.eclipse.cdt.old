@@ -798,13 +798,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    IProject theProject = getProjectFor(resource);
    
    if (theProject != null)
-   {	
-    
-    
+   {	    
     String name = new String(theProject.getName());
     DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
     DataElement projectsRoot = findWorkspaceElement(dataStore);		
     DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
+
     if (projectRoot != null)
     {	
      projectRoot.setAttribute(DE.A_SOURCE, theProject.getLocation().toString());	
@@ -831,8 +830,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       // refresh remote
       if (changed)
       {
-       dataStore.setObject(projectRoot);
-       dataStore.setObject(includeElement);	
+	  dataStore.setObject(projectRoot);
+	  dataStore.setObject(includeElement);	
       }
      }
      ArrayList args = new ArrayList();	
@@ -1271,7 +1270,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		DataStore dataStore = cProject.getDataStore();
 		DataElement refreshD = dataStore.localDescriptorQuery(cProject.getDescriptor(), "C_REFRESH_PROJECT");
-		dataStore.command(refreshD, cProject);
+		if (refreshD != null)
+		    dataStore.command(refreshD, cProject);
 	    }
     }
 
