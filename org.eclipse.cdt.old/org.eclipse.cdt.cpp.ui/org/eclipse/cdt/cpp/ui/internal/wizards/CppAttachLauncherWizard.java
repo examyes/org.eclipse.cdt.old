@@ -43,9 +43,8 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
     private ParseWizardPage                 _parserWizardPage;
     private CppPlugin                       _plugin;
     private IProject                        _project;
-    private String                          _programInvocation;
     private String                          _currentSelectionName;
-    
+
     private ModelInterface                  _api;
 
     public void addPages()
@@ -54,7 +53,7 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
 	
 	_plugin = CppPlugin.getDefault();
 
-   	_mainPage = new CppAttachLauncherWizardMainPage(_plugin.getLocalizedString("debugAttachLauncher"), _programInvocation);
+   	_mainPage = new CppAttachLauncherWizardMainPage(_plugin.getLocalizedString("debugAttachLauncher"), _currentSelectionName);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugAttachLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("debugAttachLauncher.Description"));
    	this.addPage(_mainPage);
@@ -91,14 +90,14 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
 		      file = new FileResourceElement((DataElement)_element, project);
 		      _api.addNewFile(file);			
 		  }
-	      
+	
 	      attachInfo.setResource(file);
 	  }
       else
 	  {
 	      attachInfo.setResource(_element);
 	  }
-      
+
       attachInfo.setLauncher(_launcher);
       attachInfo.setProcessID(processID);
 
@@ -115,7 +114,7 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
     /**
      *	@param selection org.eclipse.jface.viewer.IStructuredSelection
      */
-    public void init(ILauncher launcher, String mode, IStructuredSelection selection) 
+    public void init(ILauncher launcher, String mode, IStructuredSelection selection)
     {
 	if (selection.getFirstElement() instanceof DataElement)
 	    {
@@ -123,13 +122,13 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
 	    }
     }
 
-    public void init(ILauncher launcher, String mode, DataElement resource) 
+    public void init(ILauncher launcher, String mode, DataElement resource)
     {
    	_launcher = launcher;
 	_element = resource;
 
 	_currentSelectionName = ((DataElement)_element).getName();
 
-	System.out.println("CppAttachLauncherWizard - programInvocation = " + _currentSelectionName);
+	System.out.println("CppAttachLauncherWizard - currentSelection = " + _currentSelectionName);
     }
 }
