@@ -58,10 +58,14 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", false);
 		
-		createCommandDescriptor(managedProjectD,"Static lib","C_SWITCH_TO_STATIC_LIB", false);
-		createCommandDescriptor(managedProjectD,"Shared lib ","C_SWITCH_TO_SHARED_LIB", false);
-		createCommandDescriptor(managedProjectD,"Top level","C_TOPLEVEL_MAKEFILE_AM",false);
-		createCommandDescriptor(managedProjectD,"Programs ","C_PROGRAMS_MAKEFILE_AM",false);  			
+		DataElement makefileCmds = _dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change target to");
+
+		createCommandDescriptor(makefileCmds,"Static lib","C_SWITCH_TO_STATIC_LIB");
+		createCommandDescriptor(makefileCmds,"Shared lib ","C_SWITCH_TO_SHARED_LIB");
+		createCommandDescriptor(makefileCmds,"Top level","C_TOPLEVEL_MAKEFILE_AM");
+		createCommandDescriptor(makefileCmds,"Programs ","C_PROGRAMS_MAKEFILE_AM");
+		 _dataStore.createReference(fsObjectD, makefileCmds);
+					
 	}
 	
 	private void refresh(DataElement object)

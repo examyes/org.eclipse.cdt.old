@@ -1875,6 +1875,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 	
 	DataElement managedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Managed Project", 1);
+	
+	/*
 	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change target to");
 	
 	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
@@ -1895,6 +1897,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Top level", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
+	*/
 
  	
     }
