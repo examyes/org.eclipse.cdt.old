@@ -226,11 +226,22 @@ public class IndexPathControl extends Composite implements Listener
     {
 	//write the paths to a dialog setting
 	savePaths(getPaths());		
-
-	if((originalPaths != null) && (!originalPaths.equals(getStringToSave(getPaths()))))
+	
+	if (originalPaths==null)
+	    {  
+		if(getStringToSave(getPaths()).length() != 0)
+		    {
+			//indicate paths were modified
+			setPathsModifiedFlag(true);
+		    }
+	    }
+	else
 	    {
-		//indicate paths were modified
-		setPathsModifiedFlag(true);
+		if (!originalPaths.equals(getStringToSave(getPaths())))
+		    {
+			//indicate paths were modified
+			setPathsModifiedFlag(true);
+		    }
 	    }
     }
 
