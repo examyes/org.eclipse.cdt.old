@@ -36,7 +36,9 @@ public class MakefileAmManager {
 	final String _a_SOURCES = new String("_a_SOURCES");
 	//for shared lib files
 	final String _LTLIBRARIES = new String("_LTLIBRARIES");
-	final String _la_SOURCES = new String("_la_SOURCES"); 	
+	final String _la_SOURCES = new String("_la_SOURCES");
+	final String _la_LDFLAGS = new String("_la_LDFLAGS");
+	final String _la_LIBADD = new String("_la_LIBADD"); 	
 	// updating data
 	final String TARGET = new String("!TARGET!");
 	final char delim = '!';
@@ -391,18 +393,22 @@ public class MakefileAmManager {
 				switch (classification)
 				{
 					case (TOPLEVEL):
+					createDotOldFileFor(Makefile_am);
 					updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
 					break;
 					
 					case (PROGRAMS):
+					createDotOldFileFor(Makefile_am);
 					updateProgramsMakefileAm(Makefile_am.getParentFile());
 					break;
 					
 					case (STATICLIB):
+					createDotOldFileFor(Makefile_am);
 					updateStaticLibMakefileAm(Makefile_am.getParentFile());
 					break;
 					
 					case (SHAREDLIB):
+					createDotOldFileFor(Makefile_am);
 					updateSharedLibMakefileAm(Makefile_am.getParentFile());
 					break;
 					
@@ -568,7 +574,6 @@ public class MakefileAmManager {
 		while(token.hasMoreTokens())
 			last_dir_name = token.nextToken();
 		return last_dir_name;
-		
 	}		
 	private String insertSubdirValueDef(ProjectStructureManager structureManager)
 	{
@@ -654,21 +659,13 @@ public class MakefileAmManager {
 	}
 	protected void setMakefileAmToStaticLib(File parent ,DataElement status)
 	{
-		Runtime rt = Runtime.getRuntime();
+		File Makefile_am = new File(parent,"Makefile.am");
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			// rename the existing Maekfile.am if exists
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			createDotOldFileFor(Makefile_am);
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
+			Runtime rt = Runtime.getRuntime();
 			// add proper Makefile.am template files 
 			try{
 				Process p;
@@ -684,21 +681,13 @@ public class MakefileAmManager {
 	}
 	protected void setMakefileAmToPrograms(File parent ,DataElement status)
 	{
-		Runtime rt = Runtime.getRuntime();
+		File Makefile_am = new File(parent,"Makefile.am");
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			// rename the existing Maekfile.am if exists
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			createDotOldFileFor(Makefile_am);
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
+			Runtime rt = Runtime.getRuntime();
 			// add proper Makefile.am template files 
 			try{
 				Process p;
@@ -716,21 +705,15 @@ public class MakefileAmManager {
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
 		File parent = project.getFileObject();
-		Runtime rt = Runtime.getRuntime();
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
-			// rename the existing Maekfile.am if exists
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
+			File Makefile_am = new File(parent,"Makefile.am");
+			createDotOldFileFor(Makefile_am);
 		}
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
+			Runtime rt = Runtime.getRuntime();
 			// add proper Makefile.am template files 
 			try{
 				Process p;
@@ -746,21 +729,13 @@ public class MakefileAmManager {
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
 	{
-		Runtime rt = Runtime.getRuntime();
+		File Makefile_am = new File(parent,"Makefile.am");
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
-		{
-			// rename the existing Makefile.am if exists
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
+			createDotOldFileFor(Makefile_am);
 		//check the project structure
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
+			Runtime rt = Runtime.getRuntime();
 			// add proper Makefile.am template files 
 			try{
 				Process p;
@@ -779,6 +754,18 @@ public class MakefileAmManager {
 		Enumeration enum = timeStamps.elements();
 		while(enum.hasMoreElements())
 			System.out.println(""+enum.nextElement());
+	}
+	private void createDotOldFileFor(File aFile)
+	{
+		Runtime rt = Runtime.getRuntime();
+		// rename the existing Makefile.am if exists
+		try{
+			Process p;
+			// check if exist then
+			p= rt.exec("mv "+aFile.getName()+" "+aFile.getName()+".old ", null, aFile.getParentFile());
+			p.waitFor();
+		}catch(IOException e){System.out.println(e);}
+		catch(InterruptedException e){System.out.println(e);}	
 	}
 }
 
