@@ -23,6 +23,7 @@ public class PAResource {
   public static final int GPROF_ALL = 3;
   public static final int FUNCTIONCHECK = 4;
   public static final int INVALID = -1;
+  public static final int NOT_EXECUTABLE = -2;
   
   // constructor
   private PAResource() { }
@@ -46,10 +47,14 @@ public class PAResource {
        formatStr = "gprof_bsd";
        break;
        
+      case GPROF_ALL:
+       formatStr = "gprof";
+       break;
+       
       case FUNCTIONCHECK:
        formatStr = "functioncheck";
        break;
-       
+      
       default:
        formatStr = "auto";
        break;

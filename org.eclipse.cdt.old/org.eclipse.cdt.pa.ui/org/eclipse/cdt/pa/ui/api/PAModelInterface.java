@@ -155,7 +155,7 @@ public class PAModelInterface {
  /**
   * Run the command util it is done
   */
- public DataElement runCommandUtilDone(DataStore dataStore, DataElement workingDir, String command) {
+ public DataElement runSynchronizedCommand(DataStore dataStore, DataElement workingDir, String command) {
   
    DataElement status = runCommand(dataStore, workingDir, command);
    while (!status.getName().equals("done")) {
@@ -182,7 +182,7 @@ public class PAModelInterface {
  /**
   * Run a given command and return the result as an array of Strings
   */
- public String[] getCommandResult(DataStore dataStore, DataElement workingDir, String command) {
+ public ArrayList getCommandResult(DataStore dataStore, DataElement workingDir, String command) {
  
   DataElement status = runCommand(dataStore, workingDir, command);
   while (!status.getAttribute(DE.A_VALUE).equals("done")) {
@@ -191,12 +191,15 @@ public class PAModelInterface {
   }
   
   ArrayList outputList = status.getAssociated("contents");
-  String[] results = new String[outputList.size()];
-  for (int i=0; i < outputList.size(); i++) {
-   results[i] = ((DataElement)outputList.get(i)).getName();
-  }
+  ArrayList result = new ArrayList();
   
-  return results;
+  for (int i=0; i < outputList.size(); i++) {
+   String line = ((DataElement)outputList.get(i)).getName();
+   if (!line.startsWith("> ") && line.trim().length() > 0)
+    result.add(line);
+  }
+     
+  return result;
  }
 
  /**
@@ -418,6 +421,9 @@ public class PAModelInterface {
    
  }
  
+ /**
+  * Return the working directory for a file element
+  */
  public DataElement getWorkingDirectory(DataElement fileElement) {
  
    DataElement parent = fileElement.getParent();
@@ -453,21 +459,28 @@ public class PAModelInterface {
    DataElement exeElement = (DataElement)traceProgram.getAssociated("referenced file").get(0);
    DataElement workingDir = getWorkingDirectory(exeElement);
    DataStore dataStore = exeElement.getDataStore();
-   String command = "gprof -b " + exeElement.getName();
    
-   DataElement status = runCommandUtilDone(dataStore, workingDir, command);
+   String gprofCommand = "gprof -b " + exeElement.getName();
+   String functionCheckCommand = "fcdump -demangle-params " + exeElement.getName();
    
-   // System.out.println("run command: " + command);
+   String traceFormat = getAttribute(traceProgram, "trace format");
+   // System.out.println("trace format: " + traceFormat);
+   
+   String command = null;
+   if (traceFormat.indexOf("gprof") >= 0)
+    command = gprofCommand;
+   else if (traceFormat.equals("functioncheck"))
+    command = functionCheckCommand;
+    
+   DataElement status = runSynchronizedCommand(dataStore, workingDir, command);
+   
    /*
-   DataElement status = runCommand(dataStore, workingDir, command);
-   while (!status.getName().equals("done")) {
-     try {
-       Thread.sleep(20);
-     }
-     catch (InterruptedException e) { }
+   ArrayList results = status.getAssociated("contents");
+   for (int i=0; i < results.size(); i++) {
+    System.out.println(((DataElement)results.get(i)).getName());
    }
    */
-   
+        
    DataElement analyzeCommand = _dataStore.localDescriptorQuery(traceProgram.getDescriptor(), "C_ANALYZE_PROGRAM");
    ArrayList args = new ArrayList();
    args.add(status);
@@ -534,10 +547,12 @@ public class PAModelInterface {
      
    }
    else {
-    return PAResource.INVALID;
+    // System.out.println("Not a platform executable");
+    return PAResource.NOT_EXECUTABLE;
    }
    
  }
+ 
  
  /**
   * Check whether the given file is a platform executable.
@@ -547,9 +562,9 @@ public class PAModelInterface {
    String fileCommand = "file" + " " + fileElement.getSource();
    DataStore dataStore = fileElement.getDataStore();
    DataElement workingDir = getWorkingDirectory(fileElement);
-   String[] results = getCommandResult(dataStore,  workingDir, fileCommand);
-   
-   if (results.length > 0 && results[0].indexOf("executable") >= 0)
+   Object[] results = getCommandResult(dataStore,  workingDir, fileCommand).toArray();
+      
+   if (results.length > 0 && ((String)results[0]).indexOf("executable") >= 0)
     return true;
    else
     return false;
@@ -561,12 +576,12 @@ public class PAModelInterface {
   */
  public boolean isGprofExecutable(DataElement fileElement) {
  
-   String nmCommand = "nm" + " " + fileElement.getSource() + "| grep mcount | grep \" T \"";
+   String nmCommand = "nm" + " " + fileElement.getSource() + "| grep mcount";
    DataStore dataStore = fileElement.getDataStore();
    DataElement workingDir = getWorkingDirectory(fileElement);
-   String[] results = getCommandResult(dataStore,  workingDir, nmCommand);
-   
-   if (results.length > 0 && results[0].indexOf("mcount") >= 0)
+   Object[] results = getCommandResult(dataStore,  workingDir, nmCommand).toArray();
+     
+   if (results.length > 0 && ((String)results[0]).indexOf("mcount") >= 0)
     return true;
    else
     return false;
@@ -582,9 +597,9 @@ public class PAModelInterface {
    String nmCommand = "nm" + " " + fileElement.getSource() + "|grep cyg_profile_func_enter";
    DataStore dataStore = fileElement.getDataStore();
    DataElement workingDir = getWorkingDirectory(fileElement);
-   String[] results = getCommandResult(dataStore,  workingDir, nmCommand);
+   Object[] results = getCommandResult(dataStore,  workingDir, nmCommand).toArray();
    
-   if (results.length > 0 && results[0].indexOf("cyg_profile_func_enter") >= 0)
+   if (results.length > 0 && ((String)results[0]).indexOf("cyg_profile_func_enter") >= 0)
     return true;
    else
     return false;

@@ -177,6 +177,8 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
       result = _api.addTraceFile(_traceElement, PAResource.traceFormatToString(_traceFormat));
      }
      else {
+      // System.out.println("_traceFormat = " + String.valueOf(_traceFormat));
+      // System.out.println(PAResource.traceFormatToString(_traceFormat));
       _api.addTraceProgram(_traceElement, PAResource.traceFormatToString(_traceFormat));
      }
           
@@ -229,7 +231,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
 	}
 	else if (source == _gprofFormatRadio && _gprofFormatRadio.getSelection()) {
 	 _traceFormat = PAResource.GPROF_GNU;
-	 System.out.println("gprof format: " + getTraceFormat());
+	 // System.out.println("gprof format: " + getTraceFormat());
 	}
 	else if (source == _fcFormatRadio && _fcFormatRadio.getSelection()) {
 	 _traceFormat = PAResource.FUNCTIONCHECK;
@@ -255,8 +257,12 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
       realTraceFormat = _api.queryTraceProgramFormat(_traceElement);      
     }
     
-    if (realTraceFormat < 0) {
-     System.out.println("Invalid trace file/program: " + _traceElement.getSource());
+    if (realTraceFormat == PAResource.NOT_EXECUTABLE) {
+     
+     setErrorMessage("Not a platform executable: " + _traceElement.getSource());
+     setPageComplete(false);
+    }
+    else if (realTraceFormat == PAResource.INVALID) {
      
      if (_traceType == PAResource.TRACE_FILE) {
       setErrorMessage("Not a valid trace file: " + _traceElement.getSource());
@@ -283,6 +289,8 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener {
      return "gprof_gnu";
     else if (traceFormat == PAResource.GPROF_BSD)
      return "gprof_bsd";
+    else if (traceFormat == PAResource.GPROF_ALL)
+     return "gprof";
     else if (traceFormat == PAResource.FUNCTIONCHECK)
      return "functioncheck";
     else
