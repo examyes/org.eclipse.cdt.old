@@ -29,7 +29,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.events.*;
 
 public class DataElementTableViewer extends TableViewer 
-    implements ISelected, Listener, IDataElementViewer, SelectionListener
+    implements ISelected, Listener, IDataElementViewer, SelectionListener, ControlListener
 {
     private class DelayedRefresher extends Thread
     {
@@ -120,8 +120,29 @@ public class DataElementTableViewer extends TableViewer
 	_attributeColumns = new ArrayList();
 
 	setVisibility(false);
+
+	table.addControlListener(this);
     }
 
+    /**
+     * Sent when the location (x, y) of a control changes relative
+     * to its parent (or relative to the display, for <code>Shell</code>s).
+     *
+     * @param e an event containing information about the move
+     */
+    public void controlMoved(ControlEvent e)
+    {
+    }
+    
+    /**
+     * Sent when the size (width, height) of a control changes.
+     *
+     * @param e an event containing information about the resize
+     */
+    public void controlResized(ControlEvent e)
+    {
+	computeLayout();
+    }
     
     
     public void setFocus()
