@@ -1,0 +1,13 @@
+<!-- ////////////////////////////////////////////////////////////////////////////////
+     //
+     // Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+     // This program and the accompanying materials are made available under the terms of
+     // the Common Public License which accompanies this distribution.
+     //
+     // com.ibm.debug.doc.user/infoset_CPPDebug.xml, help.eclipse, eclipse-dev, 20011129a
+     // Version 1.6 (last modified 11/27/01 18:04:23)
+     //////////////////////////////////////////////////////////////////////////////// -->
+
+<infoset id="debugInfoset" label="C/C++ Debugger Help" standalone="true"> 
+	<infoview label="Contents" id="debug_view" /> 
+</infoset>

@@ -1,0 +1,356 @@
+<!-- ////////////////////////////////////////////////////////////////////////////////
+     //
+     // Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
+     // This program and the accompanying materials are made available under the terms of
+     // the Common Public License which accompanies this distribution.
+     //
+     // com.ibm.debug.doc.user/contexts_CPPDebug.xml, help.eclipse, eclipse-dev, 20011129a
+     // Version 1.11 (last modified 11/28/01 16:20:08)
+     //////////////////////////////////////////////////////////////////////////////// -->
+
+<contexts>
+<!-- Views -->
+	<context  id="register_view" >
+		<description>%context_desc_dbg_register_view</description>
+		<topic label="%topic_reference_cpp_view" href="ref/rbviews.htm"></topic>
+		<topic label="%topic_tasks_viewing_register" href="tasks/tbiregvu.htm"></topic>
+		<!-- unsupported <topic label="%topic_tasks_changing_register" href="tasks/tbirgcnt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_adding_register" href="tasks/tbiaddreg.htm"></topic>-->
+	</context>
+	<context  id="monitor_view" >
+		<description>%context_desc_dbg_monitor_view</description>
+		<topic label="%topic_reference_cpp_view" href="ref/rbviews.htm"></topic>
+		<topic label="%topic_tasks_adding_variable" href="tasks/tbiaddvar.htm"></topic>
+		<!-- unsupported <topic label="%topic_tasks_adding_register" href="tasks/tbiaddreg.htm"></topic>-->
+	</context>
+	<context  id="modules_view" >
+		<description>%context_desc_dbg_modules_view</description>
+		<topic label="%topic_reference_cpp_view" href="ref/rbviews.htm"></topic>
+	</context>
+	<context  id="storage_view" >
+		<description>%context_desc_dbg_storage_view</description>
+		<topic label="%topic_reference_cpp_view" href="ref/rbviews.htm"></topic>
+		<topic label="%topic_tasks_viewing_storage" href="tasks/tbistrvu.htm"></topic>
+		<topic label="%topic_tasks_changing_storage_contents" href="tasks/tbistcnt.htm"></topic>
+		<topic label="%topic_tasks_removing_storage_monitor" href="tasks/tbistrem.htm"></topic>
+	</context>
+
+<!-- Actions -->
+	<context  id="edit_value_action" >
+		<description>%context_desc_dbg_edit_value_action</description>
+		<!-- unsupported <topic label="%topic_tasks_changing_register" href="tasks/tbirgcnt.htm"></topic>-->
+		<topic label="%topic_tasks_changing_variable" href="tasks/tbivrcnt.htm"></topic>
+	</context>
+	<context  id="change_representation_action" >
+		<description>%context_desc_dbg_change_representation_action</description>
+		<topic label="%topic_tasks_changing_monitor_representation" href="tasks/tbichrep.htm"></topic>
+	</context>
+	<context  id="copy_view_to_clipboard_action" >
+		<description>%context_desc_dbg_copy_view_to_clipboard_action</description>
+	</context>
+	<context  id="disable_storage_monitor_action" >
+		<description>%context_desc_dbg_disable_storage_monitor_action</description>
+	</context>
+	<context  id="disable_variable_monitor_action" >
+		<description>%context_desc_dbg_disable_variable_monitor_action</description>
+		<topic label="%topic_tasks_enable_monitored_expression" href="tasks/tbimoned.htm"></topic>
+		<topic label="%topic_tasks_removing_variable" href="tasks/tbivarrm.htm"></topic>
+	</context>
+	<context  id="monitor_expression_action" >
+		<description>%context_desc_dbg_monitor_expression_action</description>
+		<topic label="%topic_tasks_enable_monitored_expression" href="tasks/tbimoned.htm"></topic>
+	</context>
+	<context  id="print_view_action" >
+		<description>%context_desc_dbg_print_view_action</description>
+	</context>
+	<context  id="remove_storage_monitor_action" >
+		<description>%context_desc_dbg_remove_storage_monitor_action</description>
+	</context>
+	<context  id="remove_variable_from_monitor_action" >
+		<description>%context_desc_dbg_remove_variable_from_monitor_action</description>
+		<topic label="%topic_tasks_removing_variable" href="tasks/tbivarrm.htm"></topic>
+	</context>
+	<context  id="reset_storage_monitor_action" >
+		<description>%context_desc_dbg_reset_storage_monitor_action</description>
+	</context>
+	<!-- Set in plugin.xml - Breakpoint -->
+	<context  id="edit_breakpoint_action" >
+		<description>%context_desc_dbg_edit_breakpoint_action</description>
+		<!-- unsupported <topic label="%topic_tasks_modifying_breakpoints" href="tasks/tbbedit.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+	</context>
+	<context  id="add_address_breakpoint_action" >
+		<description>%context_desc_dbg_add_address</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_address_breakpoints" href="tasks/tbbaddrs.htm"></topic>-->
+	</context>
+	<context  id="add_entry_breakpoint_action" >
+		<description>%context_desc_dbg_add_entry</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_entry_breakpoints" href="tasks/tbbentry.htm"></topic>-->
+	</context>
+	<context  id="add_watch_breakpoint_action" >
+		<description>%context_desc_dbg_add_watch</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_watchpoints" href="tasks/tbbwatch.htm"></topic>-->
+	</context>
+	<context  id="add_load_breakpoint_action" >
+		<description>%context_desc_dbg_add_load</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_load_breakpoints" href="tasks/tbbload.htm"></topic>-->
+	</context>
+	<context  id="add_register_monitor_action" >
+		<description>%context_desc_dbg_add_register_monitor_action</description>
+		<!-- unsupported <topic label="%topic_tasks_adding_register" href="tasks/tbiaddreg.htm"></topic>-->
+	</context>
+	<context  id="add_register_storage_monitor_action" >
+		<description>%context_desc_dbg_add_register_storage_monitor_action</description>
+		<!-- unsupported <topic label="%topic_tasks_adding_register" href="tasks/tbiaddreg.htm"></topic>-->
+	</context>
+
+<!-- Dialogs -->
+	<context  id="add_exception_dialog" >
+		<description>%context_desc_dbg_add_exception_dialog</description>
+		<!-- unsupported <topic label="%topic_concepts_exception_handling" href="concepts/cbexcptn.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_compiled_exceptions" href="tasks/tbbexcpt.htm"></topic>-->
+	</context>
+	<context  id="fork_dialog" >
+		<description>%context_desc_dbg_fork_dialog</description>
+		<topic label="%topic_concepts_fork_handling" href="concepts/cbfork.htm"></topic>
+	</context>
+	<context  id="exception_dialog" >
+		<description>%context_desc_dbg_exception_dialog</description>
+		<!-- unsupported <topic label="%topic_concepts_exception_handling" href="concepts/cbexcptn.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_compiled_exceptions" href="tasks/tbbexcpt.htm"></topic>-->
+	</context>
+	<context  id="new_process_dialog" >
+		<description>%context_desc_dbg_new_process_dialog</description>
+		<topic label="%topic_concepts_exec_handling" href="concepts/cbexec.htm"></topic>
+	</context>
+	<context  id="overloaded_dialog" >
+		<description>%context_desc_dbg_overloaded_dialog</description>
+	</context>
+	<context  id="monitor_expression_dialog" >
+		<description>%context_desc_dbg_monitor_expression_dialog</description>
+		<topic label="%topic_tasks_enable_monitored_expression" href="tasks/tbimoned.htm"></topic>
+	</context>
+	<context  id="preferred_source_dialog" >
+		<description>%context_desc_dbg_preferred_source_dialog</description>
+		<topic label="%topic_concepts_source_views" href="concepts/cbsource.htm"></topic>
+		<topic label="%topic_tasks_changing_source_view" href="tasks/tbosourc.htm"></topic>
+	</context>
+<!-- Wizards -->
+	<!-- Conditional breakpoint / optional debug parameters -->
+	<context  id="cond_bp_wizard" >
+		<description>%context_desc_dbg_cond_bp_wizard</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_conditional_breakpoints" href="tasks/tbbcond.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_reference_optional_breakpoint_parameters" href="ref/rbbpparm.htm"></topic>-->
+	</context>
+	<context  id="cond_bp_wizard_thread_field" >
+		<description>%context_desc_dbg_cond_bp_wizard_thread_field</description>
+		<!-- links to topics will be inherited from cond_bp_wizard -->
+	</context>
+	<context  id="cond_bp_wizard_to_field" >
+		<description>%context_desc_dbg_cond_bp_wizard_to_field</description>
+		<!-- links to topics will be inherited from cond_bp_wizard -->
+	</context>
+	<context  id="cond_bp_wizard_from_field" >
+		<description>%context_desc_dbg_cond_bp_wizard_from_field</description>
+		<!-- links to topics will be inherited from cond_bp_wizard -->
+	</context>
+	<context  id="cond_bp_wizard_every_field" >
+		<description>%context_desc_dbg_cond_bp_wizard_every_field</description>
+		<!-- links to topics will be inherited from cond_bp_wizard -->
+	</context>
+	<context  id="cond_bp_wizard_expression_field" >
+		<description>%context_desc_dbg_cond_bp_wizard_expression_field</description>
+		<!-- links to topics will be inherited from cond_bp_wizard -->
+	</context>
+	<!-- Entry breakpoint -->
+	<context  id="entry_bp_wizard" >
+		<description>%context_desc_dbg_entry_bp_wizard</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_entry_breakpoints" href="tasks/tbbentry.htm"></topic>-->
+	</context>
+	<context  id="entry_bp_wizard_project_field" >
+		<description>%context_desc_dbg_entry_bp_wizard_project_field</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_project_browse" >
+		<description>%context_desc_dbg_entry_bp_wizard_project_browse</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_source_field" >
+		<description>%context_desc_dbg_entry_bp_wizard_source_field</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_source_browse" >
+		<description>%context_desc_dbg_entry_bp_wizard_source_browse</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_entry_field" >
+		<description>%context_desc_dbg_entry_bp_wizard_entry_field</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_entry_browse" >
+		<description>%context_desc_dbg_entry_bp_wizard_entry_browse</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_defer_checkbox" >
+		<description>%context_desc_dbg_entry_bp_wizard_defer_checkbox</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<context  id="entry_bp_wizard_case_checkbox" >
+		<description>%context_desc_dbg_entry_bp_wizard_case_checkbox</description>
+		<!-- links to topics will be inherited from entry_bp_wizard -->
+	</context>
+	<!-- Line breakpoint -->
+	<context  id="line_bp_wizard" >
+		<description>%context_desc_dbg_line_bp_wizard</description>
+		<!-- unsupported <topic label="%topic_tasks_modifying_breakpoints" href="tasks/tbbedit.htm"></topic>-->
+	</context>
+	<context  id="line_bp_wizard_project_field" >
+		<description>%context_desc_dbg_line_bp_wizard_project_field</description>
+	</context>
+	<context  id="line_bp_wizard_project_browse" >
+		<description>%context_desc_dbg_line_bp_wizard_project_browse</description>
+	</context>
+	<context  id="line_bp_wizard_source_field" >
+		<description>%context_desc_dbg_line_bp_wizard_source_field</description>
+	</context>
+	<context  id="line_bp_wizard_source_browse" >
+		<description>%context_desc_dbg_line_bp_wizard_source_browse</description>
+	</context>
+	<context  id="line_bp_wizard_line_field" >
+		<description>%context_desc_dbg_line_bp_wizard_line_field</description>
+	</context>
+	<context  id="line_bp_wizard_defer_checkbox" >
+		<description>%context_desc_dbg_line_bp_wizard_defer_checkbox</description>
+	</context>
+	<!-- Address breakpoint -->
+	<context  id="address_bp_wizard" >
+		<description>%context_desc_dbg_address_bp_wizard</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_address_breakpoints" href="tasks/tbbaddrs.htm"></topic>-->
+	</context>
+	<context  id="address_bp_wizard_project_field" >
+		<description>%context_desc_dbg_address_bp_wizard_project_field</description>
+		<!-- links to topics will be inherited from address_bp_wizard -->
+	</context>
+	<context  id="address_bp_wizard_project_browse" >
+		<description>%context_desc_dbg_address_bp_wizard_project_browse</description>
+		<!-- links to topics will be inherited from address_bp_wizard -->
+	</context>
+	<context  id="address_bp_wizard_address_field" >
+		<description>%context_desc_dbg_address_bp_wizard_address_field</description>
+		<!-- links to topics will be inherited from address_bp_wizard -->
+	</context>
+	<context  id="address_bp_wizard_defer_checkbox" >
+		<description>%context_desc_dbg_address_bp_wizard_defer_checkbox</description>
+		<!-- links to topics will be inherited from address_bp_wizard -->
+	</context>
+	<!-- Load breakpoint -->
+	<context  id="load_bp_wizard" >
+		<description>%context_desc_dbg_load_bp_wizard</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_load_breakpoints" href="tasks/tbbload.htm"></topic>-->
+	</context>
+	<context  id="load_bp_wizard_project_field" >
+		<description>%context_desc_dbg_load_bp_wizard_project_field</description>
+		<!-- links to topics will be inherited from load_bp_wizard -->
+	</context>
+	<context  id="load_bp_wizard_project_browse" >
+		<description>%context_desc_dbg_load_bp_wizard_project_browse</description>
+		<!-- links to topics will be inherited from load_bp_wizard -->
+	</context>
+	<context  id="load_bp_wizard_dll_field" >
+		<description>%context_desc_dbg_load_bp_wizard_dll_field</description>
+		<!-- links to topics will be inherited from load_bp_wizard -->
+	</context>
+	
+	<!-- Watch breakpoint -->
+	<context  id="watch_bp_wizard" >
+		<description>%context_desc_dbg_watch_bp_wizard</description>
+		<!-- unsupported <topic label="%topic_concepts_breakpoints" href="concepts/cbbrkpt.htm"></topic>-->
+		<!-- unsupported <topic label="%topic_tasks_watchpoints" href="tasks/tbbwatch.htm"></topic>-->
+	</context>
+	<context  id="watch_bp_wizard_project_field" >
+		<description>%context_desc_dbg_watch_bp_wizard_project_field</description>
+		<!-- links to topics will be inherited from watch_bp_wizard -->
+	</context>
+	<context  id="watch_bp_wizard_project_browse" >
+		<description>%context_desc_dbg_watch_bp_wizard_project_browse</description>
+		<!-- links to topics will be inherited from watch_bp_wizard -->
+	</context>
+	<context  id="watch_bp_wizard_address_field" >
+		<description>%context_desc_dbg_watch_bp_wizard_address_field</description>
+		<!-- links to topics will be inherited from watch_bp_wizard -->
+	</context>
+	<context  id="watch_bp_wizard_num_bytes_field" >
+		<description>%context_desc_dbg_watch_bp_wizard_num_bytes_field</description>
+		<!-- links to topics will be inherited from watch_bp_wizard -->
+	</context>
+
+<!-- Editor IDs -->
+	<context  id="debugger_editor" >
+		<description>%context_desc_dbg_debugger_editor</description>
+		<topic label="%topic_concepts_source_views" href="concepts/cbsource.htm"></topic>
+		<topic label="%topic_tasks_changing_source_view" href="tasks/tbosourc.htm"></topic>
+	</context>
+	<context  id="jump_to_location_action" >
+		<description>%context_desc_dbg_jump_to_location_action</description>
+		<topic label="%topic_tasks_jumping_over" href="tasks/tbojump.htm"></topic>
+		<topic label="%topic_tasks_run_program" href="tasks/tboruncp.htm"></topic>
+	</context>
+	<context  id="jump_to_location_ruler_action" >
+		<description>%context_desc_dbg_jump_to_location_ruler_action</description>
+		<topic label="%topic_tasks_jumping_over" href="tasks/tbojump.htm"></topic>
+		<topic label="%topic_tasks_run_program" href="tasks/tboruncp.htm"></topic>
+	</context>
+	<context  id="run_to_location_action" >
+		<description>%context_desc_dbg_run_to_location_action</description>
+		<topic label="%topic_tasks_run_program" href="tasks/tboruncp.htm"></topic>
+		<topic label="%topic_tasks_jumping_over" href="tasks/tbojump.htm"></topic>
+	</context>
+	<context  id="run_to_location_ruler_action" >
+		<description>%context_desc_dbg_run_to_location_ruler_action</description>
+		<topic label="%topic_tasks_run_program" href="tasks/tboruncp.htm"></topic>
+		<topic label="%topic_tasks_jumping_over" href="tasks/tbojump.htm"></topic>
+	</context>
+	<context  id="add_editor_breakpoint_action" >
+		<description>%context_desc_dbg_add_editor_breakpoint_action</description>
+		<topic label="%topic_tasks_line_breakpoints" href="/org.eclipse.jdt.doc.user/tasks/tasks-144.htm"></topic>
+		<!-- unsupported <topic label="%topic_tasks_address_breakpoints" href="tasks/tbbaddrs.htm"></topic>-->
+		<topic label="%topic_concepts_source_views" href="concepts/cbsource.htm"></topic>
+	</context>
+	<context  id="add_snippet_to_monitor_action" >
+		<description>%context_desc_dbg_add_snippet_to_monitor_action</description>
+		<topic label="%topic_tasks_adding_variable" href="tasks/tbiaddvar.htm"></topic>
+	</context>
+	<context  id="add_snippet_to_storage_monitor_action" >
+		<description>%context_desc_dbg_add_snippet_to_storage_monitor_action</description>
+		<topic label="%topic_tasks_adding_new_storage" href="tasks/tbistadd.htm"></topic>
+	</context>
+
+<!-- Temporary -->
+	<context  id="no_help" >
+		<description>%context_desc_dbg_no_help</description>
+	</context>
+
+<!-- TBD -->
+	<!-- Debug View -->	
+	<context  id="show_stopping_thread_action" >
+		<description>%context_desc_dbg_show_stopping_thread_action</description>
+	</context>
+	<!-- Preference pages -->
+	<context  id="picl_debug_preference_page" >
+		<description>%context_desc_dbg_picl_debug_preference_page</description>
+	</context>
+	<!-- Launchers -->
+	<!-- Debug -->
+	<context  id="picl_load_launcher" >
+		<description>%context_picl_load_launcher</description>
+	</context>
+
+</contexts>
