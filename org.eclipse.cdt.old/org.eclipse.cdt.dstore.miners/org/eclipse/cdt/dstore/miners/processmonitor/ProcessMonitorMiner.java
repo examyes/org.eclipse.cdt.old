@@ -97,17 +97,6 @@ public class ProcessMonitorMiner extends Miner
 		e.printStackTrace();
 	    }
 
-	if (_validPS)
-	    {
-		// get host object
-		DataElement hostObject = _dataStore.getHostRoot();
-		
-		DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
-		_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
-		_monitor.setWaitTime(3000);
-		_monitor.setDataStore(_dataStore);
-		_monitor.start();
-	    }
     }
 
     public void extendSchema(DataElement schemaRoot)
@@ -127,6 +116,7 @@ public class ProcessMonitorMiner extends Miner
 	_dataStore.createReference(processD, cprocessD, "abstracts", "abstracted by");
 
 	DataElement killD = createCommandDescriptor(processD, "Kill", "C_KILL");
+	createCommandDescriptor(processesD, "Query", "C_QUERY");
 
 	String theOS = System.getProperty("os.name").replace(' ', '_');
 	_psCommand = getLocalizedString(theOS + "_ps");
@@ -200,6 +190,20 @@ public class ProcessMonitorMiner extends Miner
 		    }
 		catch (IOException e)
 		    {
+		    }
+	    }
+	else if (name.equals("C_QUERY"))
+	    {
+		if (_validPS)
+		    {
+			// get host object
+			DataElement hostObject = _dataStore.getHostRoot();
+			
+			DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
+			_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
+			_monitor.setWaitTime(3000);
+			_monitor.setDataStore(_dataStore);
+			_monitor.start();
 		    }
 	    }
 
