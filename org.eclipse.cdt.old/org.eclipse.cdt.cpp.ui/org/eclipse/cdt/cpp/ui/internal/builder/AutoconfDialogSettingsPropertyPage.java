@@ -27,7 +27,7 @@ import java.util.*;
 
 import org.eclipse.ui.dialogs.*;
 
-public class AutoconfSettingsPropertyPage extends PropertyPage implements SelectionListener
+public class AutoconfDialogSettingsPropertyPage extends PropertyPage implements SelectionListener
 {	
 	private AutoconfDialogPropertyPageControl _autoconfControl;
 	String globalSettingKey = "Is_Global_Setting_Enabled";
@@ -41,7 +41,7 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 
 	IProject project;
 
-	public AutoconfSettingsPropertyPage()
+	public AutoconfDialogSettingsPropertyPage()
 	{
     	super();
 	}
