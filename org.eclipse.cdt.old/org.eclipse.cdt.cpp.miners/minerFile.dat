@@ -5,6 +5,6 @@ com.ibm.cpp.miners.project.ProjectMiner
 com.ibm.cpp.miners.parser.ParseMiner
 com.ibm.cpp.miners.search.SearchMiner
 com.ibm.cpp.miners.managedproject.ManagedProjectMiner
-com.ibm.dstore.miners.cvstest.CVSMiner
+#com.ibm.dstore.miners.cvstest.CVSMiner
 com.ibm.cpp.miners.debug.DebugMiner
 
