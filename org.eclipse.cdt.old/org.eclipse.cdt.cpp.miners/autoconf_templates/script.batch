@@ -1,0 +1,5 @@
+aclocal
+autoheader
+autoconf
+touch README AUTHORS NEWS ChangeLog
+automake --add-missing

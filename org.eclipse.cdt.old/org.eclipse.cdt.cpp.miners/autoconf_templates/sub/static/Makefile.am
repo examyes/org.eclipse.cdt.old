@@ -1,0 +1,9 @@
+noinst_LIBRARIES =
+
+lib!TARGET!_a_SOURCES =
+
+SUBDIRS =
+
+EXTA_DIST = 
+
+
