@@ -651,8 +651,9 @@ public class MakefileAmManager {
 					&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".HPP")
 					&&!name.endsWith(".hh")&&!name.endsWith(".HH")&&!name.endsWith(".hxx")&&!name.endsWith(".HXX")
 					&&!name.endsWith(".h++")&&!name.endsWith(".H++")
-					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")
-					&&!name.endsWith(".old")&&!name.equals("Makefile") &&!name.equals("makefile")&&!name.equals("configur"))
+					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&& (name.indexOf(".")!=-1)
+					&&!name.endsWith(".o")&&!name.endsWith(".old")&&!name.equals("Makefile")
+					&&!name.equals("makefile")&&!name.equals("configur"))
 					{
 						out.write(" "+"\\");
 						out.newLine();
@@ -683,8 +684,9 @@ public class MakefileAmManager {
 					&&!name.endsWith(".h") && !name.endsWith(".H")&&!name.endsWith(".hpp")&&!name.endsWith(".HPP")
 					&&!name.endsWith(".hh")&&!name.endsWith(".HH")&&!name.endsWith(".hxx")&&!name.endsWith(".HXX")
 					&&!name.endsWith(".h++")&&!name.endsWith(".H++")
-					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&!name.endsWith(".o")
-					&&!name.endsWith(".old")&&!name.equals("Makefile") &&!name.equals("makefile")&&!name.equals("configur"))
+					&&!name.startsWith(".")&&!name.endsWith(".am") && !name.endsWith(".in")&&(name.indexOf(".")!=-1)
+					&&!name.endsWith(".o")&&!name.endsWith(".old")&&!name.equals("Makefile") &&!name.equals("makefile")
+					&&!name.equals("configur"))
 					{
 						update = true;
 						out.write(" "+"\\");
