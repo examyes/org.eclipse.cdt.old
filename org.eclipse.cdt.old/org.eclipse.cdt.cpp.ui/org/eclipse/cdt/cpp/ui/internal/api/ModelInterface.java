@@ -12,7 +12,7 @@ import org.eclipse.cdt.cpp.ui.internal.vcm.*;
 import org.eclipse.cdt.cpp.ui.internal.actions.*;
 
 import org.eclipse.cdt.dstore.ui.ConvertUtility;
-import org.eclipse.cdt.dstore.ui.ILinkable;
+import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.resource.*;
@@ -262,16 +262,34 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void show(IMarker marker)
     {
 	IResource resource= marker.getResource();
+ 	IWorkbenchPage perspective= SearchPlugin.getActivePage();
 	if (resource == null || !(resource instanceof IFile))
-	    return;
-
-	IWorkbenchPage perspective= SearchPlugin.getActivePage();
-	try {
-	    perspective.openEditor(marker);
-	}
-	catch (PartInitException e) {
-	    SearchPlugin.beep();
-	}	
+	    {
+		try
+		    {
+			Object de = marker.getAttribute("DataElementID");
+			if (de != null && de instanceof DataElement)
+			    {
+				IOpenAction openA = CppActionLoader.getInstance().getOpenAction();
+				openA.setSelected((DataElement)de);
+				openA.run();
+			    }
+		    }
+		catch (CoreException e)
+		    {
+		    }
+	    }
+	else
+	    {
+		try 
+		    {
+			perspective.openEditor(marker);
+		    }
+		catch (PartInitException e) 
+		    {
+			SearchPlugin.beep();
+		    }	
+	    }
     }
   }
 
@@ -316,17 +334,28 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    int loc = location.intValue();
 		
 		    file = findFile(fileName);
-		
+	
 		    if (file == null)
 			{
 			    DataElement fileElement = output.getDataStore().createObject(null, "file", fileName, fileName);
 			    file = new FileResourceElement(fileElement, (IProject)CppPlugin.getCurrentProject());
+			    addNewFile(file);
 			}
 		    if (file != null)
 			{
 			    try
 				{
-				    IMarker searchMarker = file.createMarker(SearchUI.SEARCH_MARKER);		
+				    IMarker searchMarker = null;
+				    if (file instanceof FileResourceElement)
+					{
+					    IWorkspaceRoot workspaceRoot = _workspace.getRoot();
+					    searchMarker = workspaceRoot.createMarker(SearchUI.SEARCH_MARKER);
+					}
+				    else
+					{
+					    searchMarker = file.createMarker(SearchUI.SEARCH_MARKER);		
+					}
+
 				    String message = output.getName();				
 				    HashMap attributes = new HashMap(5);
 				    attributes.put(IMarker.MESSAGE, message);
@@ -354,10 +383,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   private CppPlugin      _plugin;
   private DataElement    _markersDescriptor;
-  private IWorkspace     _workbench;
+  private IWorkspace     _workspace;
     private DataElement  _workspaceElement = null;
 
-  private String         _workbenchDirectory;
+  private String         _workspaceDirectory;
 
   private ArrayList      _statuses;
   private ArrayList      _viewers;
@@ -377,11 +406,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public ModelInterface(DataStore dataStore)
   {
-    _workbench = WorkbenchPlugin.getPluginWorkspace();
-    _workbench.addResourceChangeListener(this);
+    _workspace = WorkbenchPlugin.getPluginWorkspace();
+    _workspace.addResourceChangeListener(this);
 
     Path workbenchPath = (Path)Platform.getLocation();
-    _workbenchDirectory = workbenchPath.toString();
+    _workspaceDirectory = workbenchPath.toString();
 
     _plugin = CppPlugin.getDefault();
 
@@ -405,6 +434,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
       return _projectNotifier;
   }
+
+    public IWorkspace getWorkspace()
+    {
+	return _workspace;
+    }
 
   public void loadSchema()
       {
@@ -697,7 +731,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void openProjects()
     {
 	// open all local projects
-	IProject[] projects = _workbench.getRoot().getProjects();
+	IProject[] projects = _workspace.getRoot().getProjects();
 	for (int i = 0; i < projects.length; i++)
 	    {	
 		IProject project = projects[i];
@@ -796,7 +830,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     private void closeEditors()
     {
-	IProject[] projects = _workbench.getRoot().getProjects();
+	IProject[] projects = _workspace.getRoot().getProjects();
 
 	for (int i = 0; i < projects.length; i++)
 	    {	
@@ -868,7 +902,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 		DataStore dataStore = _plugin.getCurrentDataStore();
 
-		_workbench.removeResourceChangeListener(this);
+		_workspace.removeResourceChangeListener(this);
 
 		DomainNotifier domainNotifier = dataStore.getDomainNotifier();
 		
@@ -1157,7 +1191,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    {
 			if (dataStore == _plugin.getDataStore())
 			    {
-				workspaceObj.setAttribute(DE.A_SOURCE, _workbenchDirectory);	
+				workspaceObj.setAttribute(DE.A_SOURCE, _workspaceDirectory);	
 			    }
 		    }
 		_workspaceElement = workspaceObj;
@@ -1190,7 +1224,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     	  return null;
     	
 	// first search local projects
-	IProject[] projects = _workbench.getRoot().getProjects();
+	IProject[] projects = _workspace.getRoot().getProjects();
 	DataStore ldataStore = _plugin.getDataStore();
 	for (int i = 0; i < projects.length; i++)
 	    {	
@@ -1490,15 +1524,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       for (int i = 0; i < types.size(); i++)
       {
 		String type = (String)types.get(i);
+                if (type.equals("type"))
+                {
+                        type = "class"; 
+                } 
 		DataElement objDescriptor = dataStore.findObjectDescriptor(type);
 		if (objDescriptor != null)
-	    {
+		    {
 			dataStore.createReference(patternElement, objDescriptor);
-	    }
+		    }		        
       }
 
 
-      if (dataStore == _plugin.getDataStore())
 	  {
 	  			
 		  SearchUI.activateSearchResultView();
@@ -1544,12 +1581,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       DataElement status = dataStore.command(searchDescriptor, args, subject, true);
       _status = status;
       monitorStatus(_status);
-
-      // needed because eclipse doesn't support remote files
-      if (dataStore != _plugin.getDataStore())
-	  {
-	      showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", _status);
-	  }
     }
   }
 
@@ -2073,7 +2104,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			      {
 				  if (commandName.equals("C_SEARCH") || commandName.equals("C_SEARCH_REGEX"))
 				      {
-					  if (object.getDataStore() == _plugin.getDataStore())
 					      {
 						  Display d = getDummyShell().getDisplay();
 						  d.asyncExec(new CreateSearchMarkersAction(children));

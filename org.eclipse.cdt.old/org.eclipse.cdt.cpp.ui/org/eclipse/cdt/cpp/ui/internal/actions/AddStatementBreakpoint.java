@@ -12,6 +12,7 @@ import org.eclipse.cdt.dstore.core.model.DE;
 import org.eclipse.cdt.dstore.core.model.DataElement;
 import org.eclipse.cdt.dstore.core.model.DataStore;
 import org.eclipse.cdt.dstore.ui.actions.CustomAction;
+import org.eclipse.cdt.dstore.ui.resource.*;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 
@@ -39,7 +40,15 @@ public class AddStatementBreakpoint extends CustomAction
 	IResource file =  api.findFile(fileName);
 	if (file != null)
 	{
-		new PICLLineBreakpoint(file,line);
+	    if (file instanceof FileResourceElement)
+		{
+		    IResource root = _workspace.getRoot();
+		    new PICLLineBreakpoint(root, fileName, line);
+		}
+	    else
+		{
+		    new PICLLineBreakpoint(file,line);
+		}
 	}	
     }
     
