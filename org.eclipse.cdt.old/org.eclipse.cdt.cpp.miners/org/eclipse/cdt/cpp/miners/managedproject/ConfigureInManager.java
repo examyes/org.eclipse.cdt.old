@@ -26,15 +26,26 @@ public class ConfigureInManager {
 	}
 	protected void manageConfigure_in()
 	{
-		updateConfigure_in(new File(project.getSource(),"configure.in"));
+		// check if there is an existing configure.in
+		File configure_in = new File (project.getSource(),"configure.in");
+		if(!configure_in.exists())
+		{
+			getConfigureInTemplateFile(project);
+			initializeConfigure_in(new File(project.getSource(),"configure.in"));
+		}
+		else
+		{
+			System.out.println("\n exist");
+			// if there is then
+			//updateConfigure_in(new File(project.getSource(),"configure.in"));
+		}
 	}
-	private void updateConfigure_in(File configure_in)
+	private void initializeConfigure_in(File configure_in)
 	{
 		File modFile = new File(project.getSource(),"mod_configure.in");
 		// reading configure.in
 		String line;
-		try{
-			// initializing Package Version and Subdir fields
+		try{// initializing Package Version and Subdir fields
 			BufferedReader in = new BufferedReader(new FileReader(configure_in));
 			BufferedWriter out= new BufferedWriter(new FileWriter(modFile));
 			while((line=in.readLine())!=null)
@@ -45,17 +56,14 @@ public class ConfigureInManager {
 					line = insertPackageName(line.toCharArray(),delimPosition[0]);
 					line = insertVersionName(line.toCharArray(),delimPosition[1]);
 				}
-				
 				if(line.indexOf(subdir)!=-1)
 				{
-					
 					if(subdirs.length>0)
 					{
 						line = trimTargetLine(line);
 						line = insertSubdirs(line.toCharArray(),delimPosition[0]);
 					}
 				}
-				
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
 			}
@@ -64,7 +72,6 @@ public class ConfigureInManager {
 			modFile.renameTo(configure_in);
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
-		
 	}
 	private String trimTargetLine(String line)
 	{
@@ -157,7 +164,26 @@ public class ConfigureInManager {
 		}
 		String subdirs = (new String(modLine)).trim();
 		return subdirs;
-	}		
+	}
+	protected void getConfigureInTemplateFile(DataElement project)
+	{
+		Runtime rt = Runtime.getRuntime();
+		//check the project structure
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p = rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/configure.in "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+	}
 }
 
 

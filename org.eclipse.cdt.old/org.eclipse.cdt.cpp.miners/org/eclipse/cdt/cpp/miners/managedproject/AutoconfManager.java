@@ -21,22 +21,23 @@ public class AutoconfManager {
 	String autoheader = new String("autoheader");
 	String autoscan = new String ("autoscan");
 	ProjectStructureManager structureManager;
-	String[] subdirs;
-	
+	ConfigureInManager configure_in_manager;
+	MakefileAmManager makefile_am_manager; 
+
 	public AutoconfManager(DataElement aProject)
 	{
 		this.project = aProject;
-		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
-		subdirs = structureManager.getSubdirWorkspacePath();
 	}
-	
 	protected void manageProject(DataElement status)
 	{
+		//manage configure.in
+		configure_in_manager = new ConfigureInManager(project);
+		// manage Makefile.am
+		makefile_am_manager = new MakefileAmManager(project);
 		// check if it is a unix like system
 		if(getOS().equals("Linux")) // to be modified
 		{
 			String path = project.getSource().toString();
-
 			//check if he tools are available	autolocal, autoheader, automake & autoconf
 			if(!areAllNeededPackagesAvailable())
 			{
@@ -45,19 +46,15 @@ public class AutoconfManager {
 				+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
 			}
 			else
-			{
-				// running autoconf support
-				// add all the necessary needed template files
-				getAutoconfSupportFiles(project);
-				initializeAutoconfSupportFiles(project);
+			{	// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
+				File script = new File (project.getSource(),"script.batch");
+				if(!script.exists())
+					getAutoconfScript(project);
+				configure_in_manager.manageConfigure_in();
+				makefile_am_manager.manageMakefile_am();
 				createConfigureScript(status);
-				
 			}
-				// autoloca
-				// autoheader
-				// automake
-				// autoconf
-			// else notify the user with the missed packages
+			//check // autoloca	// autoheader // automake // autoconf // else notify the user with the missed packages
 		}
 	}
 	protected String getOS()
@@ -67,13 +64,10 @@ public class AutoconfManager {
 	}
 	protected boolean areAllNeededPackagesAvailable()
 	{
-		// check for autoconf
-		// check for automake
-		// check for aclocal
-		// check for autoheader
+		// check for autoconf  // check for automake // check for aclocal	// check for autoheader
 		return true;
 	}
-	protected void getAutoconfSupportFiles(DataElement project)
+	protected void getAutoconfScript(DataElement project)
 	{
 		Runtime rt = Runtime.getRuntime();
 		//check the project structure
@@ -82,66 +76,17 @@ public class AutoconfManager {
 		{
 			// add configure.in template files only if not exist
 			try{
-				Process p1,p2,p3;
-				// check if exist then
-				p1 = rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/configure.in "
+				Process p;	
+				p = rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/script.batch "
 						+project.getSource());
-				p1.waitFor();
-				//System.out.println("\n p1 exit value = "+p1.exitValue());
-				// check if exist then
-				p2= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
-						+project.getSource());
-				p2.waitFor();
-				//System.out.println("\n p2 exit value = "+p2.exitValue());
-				// check if exist then
-				p3 = rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/support.dist "
-						+project.getSource());
-				p3.waitFor();
+				p.waitFor();
 				//System.out.println("\n p3 exit value = "+p3.exitValue());
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
-		}
-		// provide one makefile.am in each subdiectory
-		for(int i =0; i < subdirs.length ; i++)
-		{
-			if(subdirs[i].indexOf(".")==-1)
-			{
-				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
-				if (token.countTokens()==1)
-				{
-					try{
-						Process p = 	rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
-						p.waitFor();
-					}catch(IOException e){System.out.println(e);}
-					catch(InterruptedException e){System.out.println(e);}
-				}
-				else
-				{
-					try{
-						Process p= rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
-						p.waitFor();
-					}catch(IOException e){System.out.println(e);}
-					catch(InterruptedException e){System.out.println(e);}
-				}
-			}
-		}
+		}	
 	}
-	protected void initializeAutoconfSupportFiles(DataElement project)
-	{
-		//udpdate configure.in
-		ConfigureInManager configure_in_manager = new ConfigureInManager(project);
-		configure_in_manager.manageConfigure_in();
-		// update Makefile.am
-		MakefileAmManager makefile_am_manager = new MakefileAmManager(project);
-		makefile_am_manager.manageMakefile_am();
-	}
+
 /*	private void createConfigureScript()
 	{
 		Runtime rt = Runtime.getRuntime();
@@ -175,7 +120,7 @@ public class AutoconfManager {
 	private void createConfigureScript(DataElement status)
 	{
 		DataStore ds = status.getDataStore();
-		String invocation = new String("./support.dist");
+		String invocation = new String("./script.batch");
 		DataElement invocationElement = ds.createObject(null,"invocation",invocation);
 		DataElement cmdD = ds.localDescriptorQuery(project.getDescriptor(),"C_COMMAND");
 		if(cmdD!=null)

@@ -5,6 +5,7 @@ package com.ibm.cpp.miners.managedproject;
 import com.ibm.dstore.core.model.*;
 import java.io.*;
 import java.lang.*;
+import java.util.*;
 
 public class MakefileAmManager {
 
@@ -20,6 +21,9 @@ public class MakefileAmManager {
 	String INCLUDES = new String("INCLUDES");
 	String _LDFLAGS= new String("_LDFLAGS");
 	
+	// needed to for creating Makefile.am's
+	String[] subdirs;
+	
 	//for lib files
 	String _LIBRARIES = new String("_LIBRARIES");
 	String _a_SOURCES = new String("_a_SOURCES");
@@ -28,6 +32,9 @@ public class MakefileAmManager {
 	String TARGET = new String("!TARGET!");
 	char delim = '!';
 	
+	// default values in Makefile.am
+	String targetSuffix = new String("_target");
+	
 	/**
 	 * Constructor for MakefileAmManager
 	 */
@@ -35,11 +42,29 @@ public class MakefileAmManager {
 		
 		this.project = aProject;
 		structureManager = new ProjectStructureManager( project.getFileObject());
+		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
 	protected void manageMakefile_am()
 	{
-		
+		// check if there is an existing makefile.am in top level dir - sufficient to check if the user has autoconf/automake support
+		File makefile_am = new File (project.getSource(),"Makefile.am");
+		if(!makefile_am.exists())
+		{
+			System.out.println("\n does not exist");
+			// if not 
+			getMakefileAmTemplateFiles(project);
+			initializeMakeFile_am();
+		}
+		else
+		{
+			System.out.println("\n exist");
+			// if there is then
+			//updateConfigure_in(new File(project.getSource(),"configure.in"));
+		}
+	}
+	private void initializeMakeFile_am()
+	{
 		Object[][] projectStucture = structureManager.getProjectStructure();
 		for(int i =0; i < projectStucture.length; i++)
 		{
@@ -120,7 +145,6 @@ public class MakefileAmManager {
 				modMakefile_am.renameTo(Makefile_am);
 			}catch(FileNotFoundException e){System.out.println(e);}
 			catch(IOException e){System.out.println(e);}
-			
 			//if(!found_SUBDIRS)
 				//insertSubdirsLine(Makefile_am);
 			//if(!found_bin_PROGRAMS)
@@ -133,7 +157,6 @@ public class MakefileAmManager {
 				//insertIncludesLine(Makefile_am);
 			//if(!found_LDFLAGS)
 				//insertLdflagsLine(Makefile_am);*/
-
 		}
 	}
 	private String updateExtraDistLine(String line, File parent)
@@ -162,14 +185,14 @@ public class MakefileAmManager {
 	{
 		// add the target name at the begining of the "_SOURCES"
 		String mod = line.substring(line.lastIndexOf(_LDFLAGS));
-		return line = parent.getName().concat(mod);
+		return line = parent.getName().concat(targetSuffix).concat(mod);
 	}
 	private String updateBinProgramsLine(String line, File parent)
 	{
 		if(line.indexOf(TARGET)!=-1)
 		{
 			line = new String(trimTargetLine(line));
-			line = line.concat(" ").concat(parent.getName());
+			line = line.concat(" ").concat(parent.getName()).concat(targetSuffix);
 		}
 		return line;
 	}
@@ -177,7 +200,7 @@ public class MakefileAmManager {
 	{
 		// add the target name at the begining of the "_SOURCES"
 		String mod = line.substring(line.lastIndexOf(_SOURCES));
-		line = parent.getName().concat(mod);
+		line = parent.getName().concat(targetSuffix).concat(mod);
 		// add files to the _SOURCES variable
 		for(int i = 0; i <parent.listFiles().length; i++)
 			if(!parent.listFiles()[i].isDirectory())
@@ -194,7 +217,7 @@ public class MakefileAmManager {
 	{
 		// add the target name at the begining of the "_LDADD"
 		String mod = line.substring(line.lastIndexOf(_LDADD));
-		line = parent.getName().concat(mod);
+		line = parent.getName().concat(targetSuffix).concat(mod);
 		// add libs to the _LDADD variable
 		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
 		String[] subNames = dir_structure.getSubdirWorkspacePath();
@@ -206,7 +229,7 @@ public class MakefileAmManager {
 				String tok = getLastToken(subNames[i]);
 				String modTok = new String();
 				String modName = new String("./").concat(subNames[i]).concat("/");
-				modTok = modTok.concat("lib").concat(tok).concat(".a");
+				modTok = modTok.concat("lib").concat(tok).concat(targetSuffix).concat(".a");
 				modName = modName.concat(modTok);
 				line = line.concat(" "+modName);
 			}
@@ -353,7 +376,7 @@ public class MakefileAmManager {
 		// add the target name at the begining of the "_SOURCES"
 		String mod = line.substring(line.lastIndexOf(_a_SOURCES));
 		String lib = new String("lib");
-		line = lib.concat(parent.getName()).concat(mod);
+		line = lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
 		// add files to the _SOURCES variable
 		for(int i = 0; i <parent.listFiles().length; i++)
 			if(!parent.listFiles()[i].isDirectory())
@@ -370,7 +393,7 @@ public class MakefileAmManager {
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
-		return line = line.concat(libName).concat(parent.getName()).concat(".a");
+		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a");
 	}
 	private String trimTargetLine(String line)
 	{
@@ -394,6 +417,53 @@ public class MakefileAmManager {
 			}
 		}
 		return (new String(modLine)).trim();
+	}
+	protected void getMakefileAmTemplateFiles(DataElement project)
+	{
+		Runtime rt = Runtime.getRuntime();
+		//check the project structure
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		// provide one makefile.am in each subdiectory
+		for(int i =0; i < subdirs.length ; i++)
+		{
+			if(subdirs[i].indexOf(".")==-1)
+			{
+				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
+				if (token.countTokens()==1)
+				{
+					try{
+						Process p = 	rt.exec(
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
+							+project.getSource()+"/"+subdirs[i]);
+						p.waitFor();
+					}catch(IOException e){System.out.println(e);}
+					catch(InterruptedException e){System.out.println(e);}
+				}
+				else
+				{
+					try{
+						Process p= rt.exec(
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
+							+project.getSource()+"/"+subdirs[i]);
+						p.waitFor();
+					}catch(IOException e){System.out.println(e);}
+					catch(InterruptedException e){System.out.println(e);}
+				}
+			}
+		}
 	}
 }
 
