@@ -18,13 +18,12 @@ public class DebugMiner extends Miner
 
     public void load()
     {
-       String pluginPath = null;
-       pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-
-       String ps = System.getProperty("path.separator");
-       String fs = "/";
-       _gdbPluginPath = pluginPath + "com.ibm.debug.gdbPicl" + fs;
-       _debugJarPath = pluginPath + "com.ibm.debug.gdbPicl" + fs + "epdc.jar" + ps + pluginPath + "com.ibm.debug.gdbPicl" + fs + "debug_gdbPicl.jar" + ps + pluginPath + "com.ibm.debug.gdbPicl";
+      String gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
+      String ps = System.getProperty("path.separator");
+      String fs = "/";
+      _debugJarPath =       gdbPiclPath + fs + "epdc.jar";
+      _debugJarPath += ps + gdbPiclPath + fs + "debug_gdbPicl.jar";
+      _debugJarPath += ps + gdbPiclPath;
        _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdbPicl.Gdb ";
     }
 
