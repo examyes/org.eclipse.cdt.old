@@ -1,0 +1,109 @@
+package com.ibm.cpp.ui.internal.views;
+
+/*
+ * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
+ */
+
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.*;
+
+import com.ibm.dstore.ui.widgets.*;
+import com.ibm.dstore.ui.*;
+
+import com.ibm.dstore.core.model.*;
+
+import org.eclipse.jface.action.*;
+import org.eclipse.core.resources.*;
+import org.eclipse.swt.widgets.*;
+
+import org.eclipse.jface.viewers.*; 
+import org.eclipse.ui.*;
+
+public abstract class ProjectViewPart extends ObjectsViewPart implements ISelectionListener
+{
+    private IProject _input = null;
+
+    public ProjectViewPart()
+    {
+	super();
+    }
+    
+    public void createPartControl(Composite parent)
+    {
+	super.createPartControl(parent);   
+    }
+    
+    public ObjectWindow createViewer(Composite parent, IActionLoader loader)
+    {
+	DataStore dataStore = _plugin.getCurrentDataStore();
+	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), this, true);
+    }
+    
+    public void initInput(DataStore dataStore)
+    {
+	IProject project = _plugin.getCurrentProject();
+	if (project != null)
+	    {	
+		if (project.isOpen() && _input != project)	  
+		    {
+			doInput(project);
+		    }
+		else if (!project.isOpen())
+		    {
+			doClear();
+	      }
+	    } 
+    }  
+    
+    public abstract void doClear();
+    public abstract void doInput(IProject project);
+ 
+    public void projectChanged(CppProjectEvent event)
+    {
+	int type = event.getType();
+	IProject project = event.getProject();
+	switch (type)
+	    {
+	    case CppProjectEvent.OPEN:
+		{
+		    doInput(project);
+		}
+		break;
+	    case CppProjectEvent.CLOSE:
+	    case CppProjectEvent.DELETE:
+		{
+		    doClear();
+		}
+		break;
+		
+	    case CppProjectEvent.COMMAND:
+		{
+		    if (event.getStatus() == CppProjectEvent.START 
+			/*|| 
+			event.getStatus() == CppProjectEvent.DONE
+			*/
+			)
+			{
+			    doInput(project);
+			}
+		}
+		super.projectChanged(event);
+		break;
+
+	    default:
+		super.projectChanged(event);
+		break;
+	    }
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
