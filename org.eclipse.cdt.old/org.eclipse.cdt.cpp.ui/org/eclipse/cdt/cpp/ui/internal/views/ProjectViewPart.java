@@ -80,7 +80,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  
   public void doInput(IProject project)
   {
-      if (project.isOpen())
+      if (project != null && project.isOpen())
 	  {
 	      //Grab the project DataElement
 	      DataElement projectObj = _plugin.getModelInterface().findProjectElement(project);

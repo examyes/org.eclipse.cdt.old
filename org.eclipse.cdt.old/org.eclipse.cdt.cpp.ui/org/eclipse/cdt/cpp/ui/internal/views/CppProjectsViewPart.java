@@ -86,6 +86,8 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 		}
 		break;
 		
+	    case CppProjectEvent.COMMAND:
+		break;
 	    default:
 		super.projectChanged(event);
 		break;

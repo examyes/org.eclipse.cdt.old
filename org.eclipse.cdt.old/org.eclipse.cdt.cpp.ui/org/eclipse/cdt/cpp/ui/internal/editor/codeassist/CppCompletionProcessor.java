@@ -214,9 +214,12 @@ public class CppCompletionProcessor implements IContentAssistProcessor
       // ZERO-based column preceding cursor's
       int column = lpexView.currentPosition() - 2;
 
-      if (text != null && text.length() > column) {
+      if (text != null && text.length() > column) 
+	  {
+	      char lastChar = ' ';
+	      
          while (column >= 0) 
-	     {
+	     {		 
 		 char c = text.charAt(column);
 		 
 		 boolean isValid = Character.isLetterOrDigit(c);
@@ -229,12 +232,8 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 				 isValid = true;
 				 break;
 			     case '-':
-				 if (text.length() > column + 1)
-				     {
-					 char nc = text.charAt(column + 1);
-					 if (nc == '>')
-					     isValid = true;
-				     }
+				 if (lastChar == '>')
+				     isValid = true;
 				 break;
 			     default:
 				 isValid = false;
@@ -248,6 +247,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		     }
 
 		 currentText.insert(0, c);
+		 lastChar = c;
 		 column--;
 	     }
       }
