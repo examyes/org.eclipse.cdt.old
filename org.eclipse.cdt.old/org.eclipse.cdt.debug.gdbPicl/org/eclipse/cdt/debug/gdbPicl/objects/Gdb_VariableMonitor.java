@@ -43,7 +43,15 @@ abstract class Gdb_VariableMonitor
    {
       return _monValuesChanged | _monEnablementChanged | _monTreeStructChanged;
    }
-
+   
+   /**
+    * Return this monitor's type
+    */
+   public int getMonitorType()
+   {
+      return _monType;
+   }
+   
    /**
     * Set the representation for this monitored variable.
     * @param nodeID the variable's tree node ID.
