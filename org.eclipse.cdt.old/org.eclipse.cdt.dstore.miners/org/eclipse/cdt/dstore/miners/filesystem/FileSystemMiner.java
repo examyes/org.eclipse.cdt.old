@@ -235,7 +235,7 @@ public class FileSystemMiner extends Miner
 	 DataElement subElement2 = getCommandArgument(theElement, 1);
 	 status = handleImport(subElement1.dereference(), subElement2, status);	 
      }
-     else if (name.equals("C_OPEN"))
+     else if (name.equals("C_OPEN") && (!subject.getType().equals("Project")))
        {
 	 status = handleOpen(subject, status);
        }
@@ -435,7 +435,7 @@ public class FileSystemMiner extends Miner
 
   private DataElement handleOpen(DataElement theElement, DataElement status)
       {
-	String sourceString = theElement.getSource();
+        String sourceString = theElement.getSource();
 	int indexOfLocation = sourceString.lastIndexOf(":");
 	if (indexOfLocation > 1)
 	  {	
@@ -482,6 +482,8 @@ public class FileSystemMiner extends Miner
 		catch (IOException e)
 		    {
 			System.out.println(e);
+                        e.printStackTrace();
+			
 		    }
 	    }
 
