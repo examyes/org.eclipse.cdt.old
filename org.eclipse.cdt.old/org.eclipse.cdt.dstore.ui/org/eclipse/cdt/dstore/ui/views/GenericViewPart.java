@@ -32,9 +32,9 @@ import java.lang.reflect.*;
  
 
 public class GenericViewPart extends ViewPart 
-    implements ILinkable, ISelectionListener, IActionLoader
+    implements ILinkable, ISelectionListener
 {
-    public class LockViewAction extends Action
+    class LockViewAction extends Action
     {
 	public LockViewAction(String label, ImageDescriptor image)
 	{
@@ -51,7 +51,6 @@ public class GenericViewPart extends ViewPart
     protected ObjectWindow       _viewer;
     protected   boolean          _isLinked;
     protected   IOpenAction      _openAction;
-
 
     public GenericViewPart()
     {
@@ -76,7 +75,7 @@ public class GenericViewPart extends ViewPart
         
     public void createPartControl(Composite parent)
     {
-	_viewer = createViewer(parent, this);       
+	_viewer = createViewer(parent, getActionLoader());       
 	_viewer.setSorter("name");
 	
 	getSite().setSelectionProvider((ISelectionProvider)_viewer.getViewer());
@@ -102,7 +101,12 @@ public class GenericViewPart extends ViewPart
     
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
-	return new ObjectWindow(parent, 0, null, new ImageRegistry(), this);
+	return new ObjectWindow(parent, 0, null, new ImageRegistry(), loader);
+    }
+    
+    public IActionLoader getActionLoader()
+    {
+	return new GenericActionLoader();
     }
 
     public void initInput(DataStore dataStore)
@@ -179,82 +183,6 @@ public class GenericViewPart extends ViewPart
 	_viewer.setFocus();
     }  
     
-    public IOpenAction getOpenAction()
-    {
-	if (_openAction == null)
-	    {
-		_openAction = new OpenEditorAction(null);
-	    }
-	return _openAction;
-    }
-    
-    public CustomAction loadAction(String source, String name)
-    {
-	CustomAction newAction = null;
-	try
-	    {
-		Object[] args = { name};
-		Class actionClass = Class.forName(source);
-		Constructor constructor = actionClass.getConstructors()[0];
-		newAction = (CustomAction)constructor.newInstance(args);
-	    }
-	catch (ClassNotFoundException e)
-	    {
-		System.out.println(e);
-	    }
-	catch (InstantiationException e)
-	    { 
-		System.out.println(e);
-	    }
-	catch (IllegalAccessException e)
-	    {
-		System.out.println(e);	
-	    }
-	catch (InvocationTargetException e)
-	    {
-		System.out.println(e);
-	    }
-	
-        return newAction;
-    }
-    
-    public CustomAction loadAction(java.util.List objects, DataElement descriptor)
-    {
-	return loadAction((DataElement)objects.get(0), descriptor);
-    }
-
-    public CustomAction loadAction(DataElement object, DataElement descriptor)
-    {
-        String name = descriptor.getName();
-        String source = descriptor.getSource();
-        
-        CustomAction newAction = null; 
-        try
-	    {         
-		Object[] args = {object, name, descriptor, object.getDataStore()};
-		Class actionClass = Class.forName(source);
-		Constructor constructor = actionClass.getConstructors()[0];
-		newAction = (CustomAction)constructor.newInstance(args);
-	    }
-        catch (ClassNotFoundException e)
-	    {
-		System.out.println(e);
-	    }
-        catch (InstantiationException e)
-	    {
-		System.out.println(e);
-	    }
-        catch (IllegalAccessException e)
-	    {
-		System.out.println(e);
-	    }
-        catch (InvocationTargetException e)
-	    {
-		System.out.println(e);
-	    }
-	
-        return newAction;
-    }
         
     protected void handleSelectionChanged(SelectionChangedEvent event)
     {
