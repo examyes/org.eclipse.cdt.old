@@ -49,7 +49,14 @@ public void run(IAction action) {
    _input = input;
 
    LpexView lpexView = ((LpexAbstractTextEditor)editor).getLpexView();
-   int line = lpexView.currentElement();   //  not enough - Adrian
+   if (lpexView == null)
+      return;
+
+   // retrieve document line for the cursored element (may be a show line), if any
+   int line = lpexView.lineOfElement(lpexView.currentElement());
+   if (line == 0)
+      return;
+
    _line = line;
 
 	if (file != null)
@@ -69,7 +76,8 @@ public void run(IAction action) {
           		   IMarker breakpoint = resource.createMarker("com.ibm.debug.PICLLineBreakpoint");
           			
           			IBreakpointManager breakpointManager= DebugPlugin.getDefault().getBreakpointManager();
-          			breakpointManager.configureLineBreakpoint(breakpoint, "com.ibm.debug.internal.picl" , true, _line, -1, -1);  // revisit - Adrian
+          			breakpointManager.configureLineBreakpoint(breakpoint, "com.ibm.debug.internal.picl" , true,
+                                                            _line, -1, -1);  // to revisit, just a line breakpoint for now! - Adrian
                   // since it should match with BreakpointRulerAction in case of multiple statements on same line, hence multiple breakpoints
           			
           			Map map= breakpoint.getAttributes();
