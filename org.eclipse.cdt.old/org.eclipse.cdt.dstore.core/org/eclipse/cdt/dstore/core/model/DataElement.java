@@ -43,6 +43,16 @@ public final class DataElement implements Serializable, IDataElement
 
     // convenience
     private DataElement         _abstracts = null;
+
+  /**
+     * Creates a new DataElement without initializing it.
+     *
+     */
+	public DataElement()
+	{
+		_dataStore = null;
+		_parent = null;
+	}
   
     /**
      * Creates a new DataElement without initializing it.
