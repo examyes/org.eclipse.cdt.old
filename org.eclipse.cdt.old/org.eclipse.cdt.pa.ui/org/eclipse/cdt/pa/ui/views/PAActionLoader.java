@@ -27,6 +27,7 @@ public class PAActionLoader extends CppActionLoader {
 
     private static PAActionLoader _instance = new PAActionLoader();
 	private ResourceBundle _paIconBundle;
+	private IOpenAction _openAction;
 	
 	
     // Constructor
@@ -57,6 +58,16 @@ public class PAActionLoader extends CppActionLoader {
      return Class.forName(source);
     }
     
+    
+    public IOpenAction getOpenAction()
+    {
+	  if (_openAction == null)
+	  {
+		_openAction = new org.eclipse.cdt.pa.ui.actions.PAOpenAction(null);
+	  }
+	  return _openAction;
+    }
+
 
  	protected String getPropertyString(String obj)
     {
