@@ -67,10 +67,12 @@ public class DataStoreSchema
 		DataElement containsD     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.contents"));
 		containsD.setDepth(100);
 
-		DataElement descriptorForD  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.descriptor_for"));	
-		
+		DataElement descriptorForD  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.descriptor_for"));
 		descriptorForD.setDepth(0);
+			
 		DataElement parentD       = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.parent"));	
+		parentD.setDepth(0);
+		
 		DataElement argsD         = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.arguments"));	
 		DataElement abstracts     = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.abstracts"));
 	
@@ -154,6 +156,7 @@ public class DataStoreSchema
 		DataElement transientD   = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.transient"));
 		DataElement stateD       = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.state"));
         
+       
 		
         DataElement hostsDetails = _dataStore.createAbstractObjectDescriptor(rootD, getLocalizedString("model.Hosts"));	
 		_dataStore.createReference(hostsDetails, rootD, abstracts, abstractedBy);	
