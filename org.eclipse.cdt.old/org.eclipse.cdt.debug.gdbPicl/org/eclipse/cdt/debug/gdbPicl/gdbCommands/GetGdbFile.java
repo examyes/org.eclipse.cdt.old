@@ -217,9 +217,12 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
       if (end >0)
       		return null;
       		
-	  keyword = "in " + filename;
+	  keyword = "1\tin ";
 	  end = str.indexOf(keyword);
-	  if (end > 0)
+	  
+	  int file = str.indexOf(filename);
+	  
+	  if (end==0 && file>0)
 	  	return null;      		          
       
 	  return lines;

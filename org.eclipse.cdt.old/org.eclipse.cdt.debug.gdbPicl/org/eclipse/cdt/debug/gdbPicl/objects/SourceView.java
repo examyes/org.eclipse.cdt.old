@@ -87,17 +87,30 @@ abstract class SourceView extends View
          
          return true;
       }
-
-      // if directory info exists for sourceFileName
-      int lastSlash = sourceFileName.lastIndexOf("/");
-      if (lastSlash != -1)
-      	sourceFileName = sourceFileName.substring(lastSlash+1);
-
+           
+	  int lastSlash = sourceFileName.lastIndexOf("/");
 	  String filename = sourceFileName;
-	  sourceFileName = _parentPart.getFilePath() + sourceFileName;
-      file = new File(sourceFileName);
+      if (lastSlash != -1)
+	  {
+		filename = sourceFileName.substring(lastSlash+1);
+	  }
+
+	  // try the sourceFileName provided
+   	  file = new File(sourceFileName);   	  
       if (!file.exists() || file.isDirectory())
       {
+			sourceFileName = _parentPart.getFilePath() + filename;
+			file = null;
+			file = new File(sourceFileName);
+      }
+	  
+	  if (Gdb.traceLogger.DBG) 
+         Gdb.traceLogger.dbg(1,"#### SourceView.verifyView(STRING) isFile sourceFileName="+sourceFileName  );
+	  
+	  // try again with getFilePath + filename
+      if (!file.exists() || file.isDirectory())
+      {
+      	 // try to get from gdb
       	 boolean ok = getSourceFromGdb(filename);
       	 
       	 if (!ok)
