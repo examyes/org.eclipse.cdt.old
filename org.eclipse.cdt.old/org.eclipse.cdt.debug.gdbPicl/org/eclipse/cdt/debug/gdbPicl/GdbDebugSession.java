@@ -608,6 +608,15 @@ public class GdbDebugSession extends DebugSession {
 					+ " parms="
 					+ parms);
 		_mainProgram = programName;
+		
+		if (_mainProgram.indexOf("/") != -1)
+		{
+			int last = _mainProgram.lastIndexOf("/");
+			if (last != -1)
+			{
+				_mainProgram = _mainProgram.substring(last+1);
+			}
+		}
 
 		if (programName == null || programName.equals("")) {
 			if (Gdb.traceLogger.EVT)
@@ -757,6 +766,16 @@ public class GdbDebugSession extends DebugSession {
 
 		}
 		_mainProgram = programName;
+		
+		if (_mainProgram.indexOf("/") != -1)
+		{
+			int last = _mainProgram.lastIndexOf("/");
+			if (last != -1)
+			{
+				_mainProgram = _mainProgram.substring(last+1);
+			}
+		}
+		
 		_attachedProcessID = processIndex;
 		_debuggeeProcessID = (new Integer(_attachedProcessID)).toString();
 

@@ -94,7 +94,17 @@ public class CmdExecute extends Command
 					String lineInfo = viewInfo.getViewLine(lineNum);
 					String address = null;
 					
-					lineInfo = lineInfo.trim();
+					if (lineInfo != null)
+					{
+						lineInfo = lineInfo.trim();
+					}
+					else
+					{
+			            _rep = new ERepExecute(0, 0);
+			            _rep.setReturnCode(EPDC.ExecRc_BadAddress);
+			            _rep.setMessage(_debugSession.getResourceString("FAILED_TO_JUMP_TO_LOCATION"));
+			            return false;			       
+					}
 					
 					// get address from view
 					if (lineInfo.startsWith("0x"))
@@ -328,7 +338,17 @@ public class CmdExecute extends Command
 					String lineInfo = viewInfo.getViewLine(lineNum);
 					String address = null;
 					
-					lineInfo = lineInfo.trim();
+					if (lineInfo != null)
+					{
+						lineInfo = lineInfo.trim();
+					}
+					else
+					{
+			            _rep = new ERepExecute(0, 0);
+			            _rep.setReturnCode(EPDC.ExecRc_BadAddress);
+			            _rep.setMessage(_debugSession.getResourceString("FAILED_TO_JUMP_TO_LOCATION"));
+			            return false;			       
+					}
 					
 					// get address from view
 					if (lineInfo.startsWith("0x"))
