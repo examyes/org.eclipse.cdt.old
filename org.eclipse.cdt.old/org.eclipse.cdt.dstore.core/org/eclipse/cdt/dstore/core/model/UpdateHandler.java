@@ -35,7 +35,7 @@ public abstract class UpdateHandler extends Handler
 	clean(object, 3);
     } 
     
-    protected synchronized void clean(DataElement object, int depth)
+    protected void clean(DataElement object, int depth)
     {
 	if ((depth > 0) && (object != null))
 	    {
