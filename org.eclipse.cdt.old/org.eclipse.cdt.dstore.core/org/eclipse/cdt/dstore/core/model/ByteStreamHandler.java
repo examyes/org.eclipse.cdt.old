@@ -8,8 +8,6 @@ package org.eclipse.cdt.dstore.core.model;
  
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.core.util.*; 
-import org.eclipse.cdt.dstore.extra.internal.extra.*;
-import org.eclipse.cdt.dstore.core.server.ILoader;
 
 import java.util.*;
 import java.lang.*;
