@@ -39,6 +39,8 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	_viewer.setInput(null);
 	_viewer.clearView();
 	setTitle("System-Objects");
+	if (_browseHistory != null)
+		_browseHistory.clear();
     }
 
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
@@ -111,23 +113,29 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	DataElement theInput = null;
 	if (theElement == null)
 	{
+		doClear();
 		return null;	
 	}
 		
 	String type = theElement.getType();	
-	if (type.equals("file"))
+	if (type.equals("file") || type.equals("directory"))
 	    {
 		theElement = _api.getProjectFor(theElement);		
 	    }
 
-	if (theElement != null && theElement.getType().equals("Project"))
+	if (theElement != null && (theElement.getType().equals("Project") || theElement.getType().equals("Namespace")))
 	    {
 		theInput = findParseFiles(theElement);
 	    }
 
 	if (theInput == null)
+	{
+		if (!isApplicable(theElement))
+		{
+			doClear();
+		}
 	    return null;
-	
+	}
 	
 	//Finally just set the input and the title
 	if (_viewer.getInput() == theInput)

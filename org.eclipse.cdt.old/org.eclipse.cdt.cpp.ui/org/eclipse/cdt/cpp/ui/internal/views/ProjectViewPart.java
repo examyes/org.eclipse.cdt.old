@@ -67,7 +67,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 		    {
 			doInput(project);
 		    }
-		else if (!project.isOpen() && _input == project)
+		else if (!project.isOpen() /*&& _input == project*/)
 		    {
 			doClear();
 		    }
@@ -88,6 +88,28 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  }
     
     public abstract void doClear();
+    
+  public boolean isApplicable(DataElement element)
+  {
+  	if (element == null)
+  	{
+  		return false;	
+  	}
+  	
+  	String type = element.getType();
+  	if (type.equals("Project") ||
+  		type.equals("file")    ||
+  		type.equals("Namespace") ||
+  		type.equals("directory")
+  		)
+  		{
+  			return true;
+  		}
+  	else
+  	{
+  		return false;
+  	}
+  }  
  
   public void doInput(IProject project)
   {

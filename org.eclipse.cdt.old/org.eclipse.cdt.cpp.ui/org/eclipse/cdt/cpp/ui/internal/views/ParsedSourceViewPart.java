@@ -42,6 +42,8 @@ public class ParsedSourceViewPart extends ProjectViewPart
      _viewer.setInput(null);	
      _viewer.clearView();
      setTitle("Parsed-Files");
+     if (_browseHistory != null)
+     	_browseHistory.clear();
  }
     
  public DataElement doSpecificInput(DataElement projectParseInformation)
@@ -50,7 +52,10 @@ public class ParsedSourceViewPart extends ProjectViewPart
   DataElement parsedSource = projectParseInformation.getDataStore().find(projectParseInformation, 
 									 DE.A_NAME, "Parsed Files", 1);
   if (parsedSource == null)
-   return null;
+  {
+  	doClear();
+   	return null;
+  }
   
   //Finally just set the input and the title 
   if (_viewer.getInput() == parsedSource)

@@ -98,6 +98,10 @@ public class ProjectObjectsViewPart extends ProjectViewPart
   _viewer.setInput(null);
   _viewer.clearView();
   setTitle("C/C++ Objects");
+  
+  if (_browseHistory != null)
+	  _browseHistory.clear();
+  
  }
 
  public void projectChanged(CppProjectEvent event)
@@ -138,7 +142,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
  public DataElement doSpecificInput(DataElement theElement)
  {
      DataElement theInput = null;
-     if (theElement.getType().equals("file"))
+     if (theElement.getType().equals("file") || theElement.getType().equals("directory"))
 	 {
 	     boolean scopeView = false;
 	     ArrayList scope = _plugin.readProperty("ScopeProjectObjectsView");
@@ -173,6 +177,8 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      	{
      		setTitle(theElement.getName() + " Project-Objects");   
      	}
+     	
+     	doClear();
 	 	return null;
      }
      
