@@ -2,7 +2,7 @@
 <plugin 
   name="C/C++ Plugin User Guide"
   id="com.ibm.cpp.docs.user"
-  version="1.0"
+  version="0.5.0"
   provider-name="International Business Machines Corp." 
 >
  <extension point="org.eclipse.help.contributions">

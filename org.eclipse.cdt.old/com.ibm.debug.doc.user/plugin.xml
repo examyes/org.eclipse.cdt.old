@@ -8,7 +8,7 @@
 <plugin 
    name = "C/C++ Debugger Help"
    id = "com.ibm.debug.doc.user"
-   version = "1.0.0"
+   version = "0.5.0"
    provider-name = "International Business Machines Corp.">
 
 <!-- ============================================================================= -->
