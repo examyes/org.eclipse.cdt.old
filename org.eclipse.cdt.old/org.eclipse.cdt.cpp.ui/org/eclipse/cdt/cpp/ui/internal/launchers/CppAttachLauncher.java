@@ -37,11 +37,16 @@ import java.io.IOException;
 
 public class CppAttachLauncher implements ILauncherDelegate {
 
-    private static String _directory = "";
+    private static DataElement _directory;
+    private static DataElement _executable;
+    private static ModelInterface _api;
 
-    /**
-     * @see ILauncherDelegate#launch(Object[], String, ILauncher)
-     */
+
+    public CppAttachLauncher()
+    {
+	_api = ModelInterface.getInstance();
+    }
+
     public boolean launch(Object[] elements, String mode, ILauncher launcher) {
 
         // Get the selection and check if valid
@@ -54,24 +59,24 @@ public class CppAttachLauncher implements ILauncherDelegate {
 	
 	if (element instanceof DataElement)
 	    {
-		ModelInterface api = ModelInterface.getInstance();
-		element = api.findResource((DataElement)element);
+		_executable = (DataElement)element;
+		_directory = _executable.getParent();
+	    }	
+        else if (element instanceof IProject || element instanceof IResource) 
+	    {
+		_executable = _api.findResourceElement((IResource)element);
+		_directory = _executable.getParent();
 	    }
-	
-        if(!(element instanceof IProject || element instanceof IResource)) {
-           System.out.println("CppAttachLauncher.launch() error = selection is not an IProject or an IResource");
-            return false;
-        }
-        IPath location = ((IResource)element).getLocation();
-        IPath directory = location.removeLastSegments(1);
-        _directory = directory.toString();
-        System.out.println("CppAttachLauncher.launch() _directory = " + _directory);
-
-        IProject project = ((IResource)element).getProject();
+	else
+	    {
+		_executable = null;
+		_directory = null;
+		return false;
+	    }
 
         // display the wizard
         CppAttachLauncherWizard w= new CppAttachLauncherWizard();
-        w.init(launcher, ILaunchManager.DEBUG_MODE, selection);
+        w.init(launcher, ILaunchManager.DEBUG_MODE, _executable);
         WizardDialog wd= new WizardDialog(CppPlugin.getActiveWorkbenchWindow().getShell(), w);
 
         int rc = wd.open();
@@ -84,24 +89,19 @@ public class CppAttachLauncher implements ILauncherDelegate {
 
     public void doLaunch(PICLAttachInfo attachInfo) {
 
-        WorkspaceSourceLocator sourceLocator = new WorkspaceSourceLocator();
-
-           System.out.println("CppAttachLauncher.doLaunch()");
-
-        // If we can get a project from the selection, tell source locator
-        Object resource = attachInfo.getResource();
-        if(resource != null) {
-            IProject curProject = null;
-            if(resource instanceof IProject)
-                curProject = (IProject)resource;
-            else if(resource instanceof IResource)
-                curProject = ((IResource)resource).getProject();
-
-	    if (curProject != null)
-		sourceLocator.setHomeProject(curProject);
-        }
-
-	attachInfo.setWorkspaceSourceLocator(sourceLocator);
+	CppSourceLocator sourceLocator = null;
+	
+	if (_executable != null)
+	    {
+		DataElement projectElement = _api.getProjectFor(_executable);
+		if (projectElement != null)
+		    {
+			sourceLocator = new CppSourceLocator(projectElement);
+			// loader automatically sets home project
+			attachInfo.setWorkspaceSourceLocator(sourceLocator);
+		    }
+	    }
+	
 
         PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(attachInfo);
         if(daemonInfo == null)
@@ -112,25 +112,12 @@ public class CppAttachLauncher implements ILauncherDelegate {
 
 
 
-/*
-        String command = "java com.ibm.debug.gdb.Gdb -qhost=localhost -quiport=" +
-                         (new Integer(daemonInfo.getPort())).toString() +
-                           " -startupKey=" +
-                         (new Integer(daemonInfo.getKey())).toString();
-
-        ModelInterface api = ModelInterface.getInstance();
-        String path = _directory;
-
-        api.command(path, command, false);
-*/
-
     protected void launchEngine(PICLDaemonInfo daemonInfo)
     {
-	ModelInterface api = ModelInterface.getInstance();
 	String port = new Integer(daemonInfo.getPort()).toString();
 	String key  = new Integer(daemonInfo.getKey()).toString();
 
-	api.debug(_directory, port, key);
+	_api.debug(_directory, port, key);
     }
 
 }

@@ -28,26 +28,25 @@ import com.ibm.debug.model.ViewInformation;
 
 import com.ibm.debug.*;
 
-public class CppSourceLocator extends WorkspaceSourceLocator
+public class CppSourceLocator extends WorkspaceSourceLocator 
 {
     private static ModelInterface _api;
     private DataElement _projectElement = null;
-    private IProject    _project = null;
+    private IProject    _projectResource = null;
 
-    public CppSourceLocator(DataElement projectElement)
+    public CppSourceLocator(DataElement projectElement) 
     {
-	super();
+	super();  
 	_api = ModelInterface.getInstance();
 	_projectElement = projectElement;
-	   _project = _api.findProjectResource(_projectElement);
-      setHomeProject(_project);
+	_projectResource = _api.findProjectResource(projectElement);
+	setHomeProject(_projectResource);
     }
 	   	
 
-    public IFile findFile(String fileName)
+    public IFile findFile(String fileName) 
     {
 	IFile file = null;
-
 	DataStore dataStore = _projectElement.getDataStore();		
 	DataElement found = dataStore.find(_projectElement, DE.A_NAME, fileName);
 	if (found != null)
@@ -55,7 +54,7 @@ public class CppSourceLocator extends WorkspaceSourceLocator
 		file = (IFile)_api.findFile(found.getSource());
 		if (file == null)
 		    {
-			file = new FileResourceElement(found, _project);
+			file = new FileResourceElement(found, _projectResource);
 			_api.addNewFile(file);
 			
 		    }
@@ -63,6 +62,6 @@ public class CppSourceLocator extends WorkspaceSourceLocator
 
 	return file;
     }
-
+    
 
 }

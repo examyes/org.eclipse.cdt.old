@@ -8,6 +8,8 @@ package com.ibm.cpp.ui.internal.wizards;
 
 import com.ibm.cpp.ui.internal.launchers.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.dstore.ui.resource.*;
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
@@ -36,23 +38,28 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
     private ILauncher                       _launcher;
     private IStructuredSelection            _selection;
     private Object                          _element;
-    private CppAttachLauncherWizardMainPage   _mainPage;
+    private CppAttachLauncherWizardMainPage _mainPage;
     private ProjectInfoWizardPage           _fProjectInfoWizardPage;
     private ParseWizardPage                 _parserWizardPage;
     private CppPlugin                       _plugin;
     private IProject                        _project;
     private String                          _programInvocation;
-
+    private String                          _currentSelectionName;
+    
+    private ModelInterface                  _api;
 
     public void addPages()
     {
-	   super.addPages();
+	super.addPages();
 	
+	_plugin = CppPlugin.getDefault();
+
    	_mainPage = new CppAttachLauncherWizardMainPage(_plugin.getLocalizedString("debugAttachLauncher"), _programInvocation);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugAttachLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("debugAttachLauncher.Description"));
    	this.addPage(_mainPage);
 	
+	_api = _plugin.getModelInterface();
     }
 
     public CppAttachLauncherWizardMainPage getMainPage()
@@ -72,16 +79,30 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
    	_mainPage.finish();
     	String processID = getProcessID();
 
-         /**/
       PICLAttachInfo attachInfo = new PICLAttachInfo();
 
-      attachInfo.setResource(_element); // this doesn't seem to do anything
+      if (_element instanceof DataElement)
+	  {
+	      IFile file = (IFile)_api.findFile(((DataElement)_element).getSource());
+	      if (file == null)
+		  {
+		      DataElement projectElement = _api.getProjectFor((DataElement)_element);
+		      IProject project = _api.findProjectResource(projectElement);
+		      file = new FileResourceElement((DataElement)_element, project);
+		      _api.addNewFile(file);			
+		  }
+	      
+	      attachInfo.setResource(file);
+	  }
+      else
+	  {
+	      attachInfo.setResource(_element);
+	  }
+      
       attachInfo.setLauncher(_launcher);
-      System.out.println("CppAttachLauncherWizard - processID in attachInfo = " + processID);
       attachInfo.setProcessID(processID);
 
       getLauncher().doLaunch(attachInfo);
-         /**/
 
       return true;		
     }
@@ -94,24 +115,21 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
     /**
      *	@param selection org.eclipse.jface.viewer.IStructuredSelection
      */
-    public void init(ILauncher launcher, String mode, IStructuredSelection currentSelection) {
+    public void init(ILauncher launcher, String mode, IStructuredSelection selection) 
+    {
+	if (selection.getFirstElement() instanceof DataElement)
+	    {
+		init(launcher, mode, (DataElement)selection.getFirstElement());
+	    }
+    }
+
+    public void init(ILauncher launcher, String mode, DataElement resource) 
+    {
    	_launcher = launcher;
-   	_selection = currentSelection;
-      _element = _selection.getFirstElement();
+	_element = resource;
 
-      String currentSelectionName = ((IResource)_element).getName();
-      String extension = ((IResource)_element).getFileExtension();
-      if (extension != null)
-      {
-   		int indexOfExtension = currentSelectionName.lastIndexOf(extension);
-   		_programInvocation = currentSelectionName.substring(0, indexOfExtension - 1);
-      }
-      else
-      {
-   		_programInvocation = currentSelectionName;		      		
-      }
+	_currentSelectionName = ((DataElement)_element).getName();
 
-      System.out.println("CppAttachLauncherWizard - programInvocation = " + _programInvocation);
-      _project = ((IResource)_element).getProject();
+	System.out.println("CppAttachLauncherWizard - programInvocation = " + _currentSelectionName);
     }
 }
