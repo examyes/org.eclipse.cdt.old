@@ -1790,8 +1790,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement statement = dataStore.find(schemaRoot, DE.A_NAME, "statement", 1);
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
+	DataElement targetD = dataStore.find(schemaRoot,DE.A_NAME, "Project Target",1);
  
 
+	
+
+	
+	
 	// project actions
 
 	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
@@ -1913,6 +1918,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
 	*/
 
+	
+	// target Actions
+	DataElement buildCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Build",
+							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+	buildCmd.setAttribute(DE.A_VALUE, "BUILD_TARGET");
+	DataElement executeCmd = dataStore.createObject(targetD,DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Execute",
+							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+	executeCmd.setAttribute(DE.A_VALUE, "EXECUTE_TARGET");
+	// autoconf
 	DataElement autoconfCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Initialize Autoconf",
@@ -1960,7 +1976,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Generate All", 
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
-	mngCmd.setAttribute(DE.A_VALUE,"MANAGE_PROJECT");						  
+	mngCmd.setAttribute(DE.A_VALUE,"MANAGE_PROJECT");
+						  
+	DataElement distCleanCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Clean - distclean", 
+							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");		
 	
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 //

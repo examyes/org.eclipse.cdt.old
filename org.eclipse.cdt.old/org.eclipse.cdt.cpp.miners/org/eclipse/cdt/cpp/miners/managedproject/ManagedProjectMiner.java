@@ -14,11 +14,13 @@ import java.io.*;
 
 public class ManagedProjectMiner extends Miner
 {	private AutoconfManager autoconfManager;
+	private TargetManager targetManager;
 	private DataElement _workspace = null;
 	
 	public void load() 
 	{
 		autoconfManager = new AutoconfManager();
+		targetManager = new TargetManager();
 	}
 	public void extendSchema(DataElement schemaRoot)
 	{
@@ -46,10 +48,9 @@ public class ManagedProjectMiner extends Miner
   
 		_dataStore.createReference(workspaceD, managedProjectsD);
 
-		createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
-		createCommandDescriptor(targetD, "Build Target", "C_BUILD_TARGET");
-		createCommandDescriptor(targetD, "Modify Target", "C_MODIFY_TARGET");
-		createCommandDescriptor(targetD, "Remove Target", "C_REMOVE_TARGET");
+		//createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
+		createCommandDescriptor(targetD, "Build", "C_BUILD_TARGET",false);
+		createCommandDescriptor(targetD, "Execute", "C_EXECUTE_TARGET",false);
 		
 		// autoconf	
 		createCommandDescriptor(projectD, "Initialize Autoconf", "C_GENERATE_AUTOCONF_FILES", false);
@@ -62,6 +63,8 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Create configure ", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Generate All", "C_MANAGE_PROJECT", false);
+		createCommandDescriptor(projectD, "DistClean", "C_DIST_CLEAN", false);
+		
 		//
 		createCommandDescriptor(fsObjectD,"Add/Change to TopLevel Makefile.am","C_TOPLEVEL_MAKEFILE_AM",false);
 		createCommandDescriptor(fsObjectD,"Add/Change to Programs Makefile.am ","C_PROGRAMS_MAKEFILE_AM",false);		
@@ -110,6 +113,11 @@ public class ManagedProjectMiner extends Miner
 			autoconfManager.manageProject(project, status);
 			refresh(project);
 			parseAmFile(project); 
+		}
+		else if (name.equals("C_DIST_CLEAN"))
+		{
+			autoconfManager.distClean(project,status);
+			refresh(project);
 		}
 		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
@@ -172,8 +180,18 @@ public class ManagedProjectMiner extends Miner
 			autoconfManager.configureInManager.generateConfigureIn(project);
 			refresh(project);
 		}
-		else if (name.equals("C_REFRESH"))
+		else if (name.equals("C_BUILD_TARGET"))
 		{
+			targetManager.buildTarget(project,status,autoconfManager);
+			refresh(project);
+		}
+		else if (name.equals("C_EXECUTE_TARGET"))
+		{
+			targetManager.executeTarget(project,status,_workspace.getSource());
+			refresh(project);
+		}
+		else if (name.equals("C_REFRESH"))
+        {
 		 	refreshProject(project);
   			parseAmFile(project); 
 		}
@@ -189,6 +207,7 @@ public class ManagedProjectMiner extends Miner
 	}
 	private DataElement refreshProject(DataElement theUnmanagedProject)
 	{
+
 		return null;
 	}
 }

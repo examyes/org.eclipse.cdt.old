@@ -84,15 +84,6 @@ public class ConfigureInManager {
 	}	
 	protected void updateConfigureIn(DataElement project,boolean actionIsManageProject)
 	{
-		// if the action was mangeProject then
-		if(actionIsManageProject)
-		{
-			System.out.println("\n************************************************"+
-								"\n* configure.in will be updated"+ 
-								"\n* existing file will be named configure.in.old"+
-								"\n* Never prompt me again! - check box"+
-								"\n***********************************************");
-		}
 		// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
 		// the rest of the file will be te same
 		File configure_in = new File (project.getSource(),"configure.in");

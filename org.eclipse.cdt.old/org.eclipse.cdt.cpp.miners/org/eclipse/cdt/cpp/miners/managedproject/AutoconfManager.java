@@ -23,6 +23,7 @@ public class AutoconfManager {
 	MakefileAmManager makefileAmManager; 
 	static Object O = new Object();
 	String cygwinPrefix = new String("sh ");
+	String workSpaceLocation = "";
 
 	public AutoconfManager()
 	{
@@ -33,6 +34,12 @@ public class AutoconfManager {
 	void setWorkspaceLocation(String location)
 	{
 			makefileAmManager.setWorkspaceLocation(location);
+			workSpaceLocation = location;
+			
+	}
+	String getWorkSpaceLocation()
+	{
+		return workSpaceLocation;
 	}
 		
 
@@ -126,7 +133,13 @@ public class AutoconfManager {
 		else
 			runCommand(project, status, cygwinPrefix+"configure");
 	} 
-	
+	public void distClean(DataElement project, DataElement status)
+	{
+		if(getOS().equals("Linux"))
+			runCommand(project, status, "make distclean");
+		else
+			runCommand(project, status, cygwinPrefix+"make distclean");
+	}	
 	public void runCommand(DataElement project,DataElement status, String invocation)
 	{
 		DataStore ds = status.getDataStore();
