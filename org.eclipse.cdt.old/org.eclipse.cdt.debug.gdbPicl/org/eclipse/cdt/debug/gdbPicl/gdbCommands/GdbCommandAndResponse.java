@@ -122,13 +122,14 @@ public class GdbCommandAndResponse
                   )
                {
                   j++;
-                  while (!lines[j].equals("}") || (lines[j].equals("}") && lines[j+1].startsWith(FIELD_END_keyword)))    
+                  while (!lines[j].equals("}") || (lines[j].equals("}") && (lines[j+1].startsWith(FIELD_END_keyword) || lines[j+1].startsWith(ARRAY_ELEMENT_keyword)) ))    
                   {
                  	 classObject.append(lines[j]);
                  	 j++;
                  	 if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
                          lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
-                         lines[j].startsWith(ARRAY_ELEMENT_keyword) || lines[j].startsWith(ARRAY_SECTION_END_keyword)
+                         lines[j].startsWith(ARRAY_ELEMENT_keyword) || lines[j].startsWith(ARRAY_SECTION_BEGIN_keyword) ||
+                         lines[j].startsWith(ARRAY_SECTION_END_keyword)
                         )
                      {
                         j++;
