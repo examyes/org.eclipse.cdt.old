@@ -233,53 +233,100 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
       StartEnd startEnd = null;
       String startAddress = null;
       String endAddress = null;
-
+ 	  String cmd;
+ 	  String[] lines;
+ 	  String str;
+ 	  boolean ok;
+ 	  String keyword;
+ 	  int address;
+ 	  int end;
+ 	  
+	  // in case there is extra carriage returns in the file
+	  // we will get this as a response when querying the last
+	  // line of the file:
+	  // Line number ### is out of range for "filename.cpp"
+	  // We should loop until we get a valid address.
+	  
+	  for (int lineNum = totalLines; lineNum >= 1; lineNum--)
+	  {
+	      // find end address of file
+	      cmd = "info line "+fileName+":"+(lineNum-1);
+	      if (Gdb.traceLogger.DBG) 
+	          Gdb.traceLogger.dbg(3,"GetGdbFile.getTotalLines cmd="+cmd );
+	      ok = _debugSession.executeGdbCommand(cmd);
+	      if(!ok)
+	         return startEnd;
+ 
+	      lines = _debugSession.getTextResponseLines();
+	      if(lines.length==0)
+	          return startEnd;
+	      str = lines[0];
+	      if (Gdb.traceLogger.DBG) 
+	          Gdb.traceLogger.dbg(2,"GetGdbFile.getStartEnd end str="+str );
+	          
+		  if (str.indexOf("is out of range for") >= 0)
+		  {
+		  	continue;
+		  }
+		  	          
+	      //Line nn of "FileName" starts at address 0xHHHHHH <fcnMane+nnnn> and ends at 0xHHHHHH <fcnName+nnnn>.
+	      keyword = " and ends at 0x";
+	      address = str.indexOf(keyword);
+	      if(address<0)
+	          return startEnd;
+	      str = str.substring(address+keyword.length()-2);  // include '0x' in address
+	      end = str.indexOf(" ");
+	      endAddress = str.substring(0,end);
+	      
+	      if (endAddress != null)
+	      	break;
+	  }
+	  
+	  // loop until the first executable line is found
+	  // if line is not executable, will get following response from gdb:
+	  // Line ## of "filename.cpp" is at address 0xfffffff <fn_mangled_named> but contains no code.
+	  // Start address should be at the first executable line of this file rather than blindly
+	  // setting it to 1.
+	  
       // find start address of file
-      String cmd = "info line "+fileName+":1";
-      if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(3,"GetGdbFile.getStartEnd cmd="+cmd );
-      boolean ok = _debugSession.executeGdbCommand(cmd);
-      if(!ok)
-         return startEnd;
+      
+      for (int lineNum=1; lineNum <= totalLines; lineNum++)
+      {
+	      cmd = "info line "+fileName+":"+lineNum;
+	      if (Gdb.traceLogger.DBG) 
+	          Gdb.traceLogger.dbg(3,"GetGdbFile.getStartEnd cmd="+cmd );
+	      ok = _debugSession.executeGdbCommand(cmd);
+	      if(!ok)
+	         return startEnd;
  
-      String[] lines = _debugSession.getTextResponseLines();
-      if(lines.length==0)
-          return startEnd;
-      String str = lines[0];
-      if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(2,"GetGdbFile.getStartEnd start str="+str );
-      //Line nn of "FileName" starts at address 0xHHHHHH <fcnMane+nnnn> and ends at 0xHHHHHH <fcnName+nnnn>.
-      String keyword = " at address 0x";
-      int address = str.indexOf(keyword);
-      if(address<0)
-          return startEnd;
-      str = str.substring(address+keyword.length()-2);  // include '0x' in address
-      int end = str.indexOf(" ");
-      startAddress = str.substring(0,end);
-
-      // find end address of file
-      cmd = "info line "+fileName+":"+(totalLines-1);
-      if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(3,"GetGdbFile.getTotalLines cmd="+cmd );
-      ok = _debugSession.executeGdbCommand(cmd);
-      if(!ok)
-         return startEnd;
- 
-      lines = _debugSession.getTextResponseLines();
-      if(lines.length==0)
-          return startEnd;
-      str = lines[0];
-      if (Gdb.traceLogger.DBG) 
-          Gdb.traceLogger.dbg(2,"GetGdbFile.getStartEnd end str="+str );
-      //Line nn of "FileName" starts at address 0xHHHHHH <fcnMane+nnnn> and ends at 0xHHHHHH <fcnName+nnnn>.
-      keyword = " and ends at 0x";
-      address = str.indexOf(keyword);
-      if(address<0)
-          return startEnd;
-      str = str.substring(address+keyword.length()-2);  // include '0x' in address
-      end = str.indexOf(" ");
-      endAddress = str.substring(0,end);
-
+	      lines = _debugSession.getTextResponseLines();
+	      if(lines.length==0)
+	          return startEnd;
+	      str = lines[0];
+	      if (Gdb.traceLogger.DBG) 
+	          Gdb.traceLogger.dbg(2,"GetGdbFile.getStartEnd start str="+str );
+	          
+	      if (str.indexOf("contains no code") >= 0)
+	      	continue;
+	          
+	      //Line nn of "FileName" starts at address 0xHHHHHH <fcnMane+nnnn> and ends at 0xHHHHHH <fcnName+nnnn>.
+	      keyword = " at address 0x";
+	      address = str.indexOf(keyword);
+	      if(address<0)
+	          return startEnd;
+	      str = str.substring(address+keyword.length()-2);  // include '0x' in address
+	      end = str.indexOf(" ");
+	      startAddress = str.substring(0,end);
+	      
+	      Integer s = Integer.decode(startAddress);
+	      Integer e = Integer.decode(endAddress);	      
+	      int startAdd = s.intValue();
+	      int endAdd = e.intValue();
+	      	      
+	      if (startAddress != null && startAdd < endAdd)
+	      	break;
+      }
+	  
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"GetGdbFile.getStartEnd start="+startAddress+" end="+endAddress );
       startEnd = new StartEnd(startAddress,endAddress);
