@@ -406,8 +406,17 @@ class CommandMinerThread extends MinerThread
   DataElement envMiner  = _dataStore.findMinerInformation("org.eclipse.cdt.dstore.miners.environment.EnvironmentMiner");
   DataElement systemEnv = _dataStore.find(envMiner, DE.A_NAME, "System Environment", 1);
   
-  //Grab the project environment
-  ArrayList projectEnvReference = theSubject.getAssociated("inhabits");
+  //Walk up until we find an element with an inhabits relationship.
+  DataElement theProject = theSubject;
+  ArrayList projectEnvReference = null;
+  while (!theProject.getValue().equals("Data"))
+  {
+   projectEnvReference = theProject.getAssociated("inhabits");
+   if (projectEnvReference.size() > 0)
+    break;
+   theProject = theProject.getParent();
+  }
+
   DataElement projectEnv = null;
   if (projectEnvReference != null && (projectEnvReference.size() > 0))
    projectEnv = (DataElement)projectEnvReference.get(0);
