@@ -111,20 +111,23 @@ public class ParseMiner extends Miner
    ArrayList parseRefs = theProject.getAssociated(ParserSchema.ParseReference);	     
    if (parseRefs.size() == 0)
    {
-    _dataStore.update(_minerData);
+    _dataStore.refresh(_minerData);
+
+    String projectName = theProject.getName();
+
     DataElement parseProject = _dataStore.createObject(_minerData, ParserSchema.Project, 
 								   theProject.getName(), 
 								   theProject.getSource(),
 								   theProject.getId() + ".parse");
 		     
     _dataStore.createObject(parseProject,ParserSchema.ParsedFiles,    
-			    ParserSchema.ParsedFiles, "", ParserSchema.ParsedFiles + "ID");
+			    ParserSchema.ParsedFiles, "", projectName + ParserSchema.ParsedFiles);
     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, 
-			    ParserSchema.SystemObjects, "", ParserSchema.SystemObjects + "ID");
+			    ParserSchema.SystemObjects, "", projectName + ParserSchema.SystemObjects);
     _dataStore.createObject(parseProject,ParserSchema.ProjectObjects, 
-			    ParserSchema.ProjectObjects, "", ParserSchema.ProjectObjects + "ID");
+			    ParserSchema.ProjectObjects, "", projectName + ParserSchema.ProjectObjects);
     _dataStore.createObject(parseProject,ParserSchema.Preferences, 
-			    ParserSchema.Preferences, "", ParserSchema.Preferences + "ID");
+			    ParserSchema.Preferences, "", projectName + ParserSchema.Preferences);
     _dataStore.createReference(theProject, parseProject, ParserSchema.ParseReference, ParserSchema.ParseReference);
     _dataStore.refresh(theProject);
     _dataStore.refresh(parseProject);
