@@ -509,7 +509,6 @@ public class ViewMenu implements IMenuListener
     {
 	public static ArrayList sort(ArrayList list)
 	    {
-		/*
 		ArrayList sortedList = new ArrayList(list.size());
 		while (list.size() > 0)
 		    {
@@ -518,8 +517,6 @@ public class ViewMenu implements IMenuListener
 		    }
 
 		return sortedList;
-		*/
-		return list;
 	    }
 
 

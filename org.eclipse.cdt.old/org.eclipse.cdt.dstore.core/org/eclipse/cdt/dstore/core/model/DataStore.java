@@ -2103,6 +2103,8 @@ public DataElement command(DataElement commandDescriptor,
 
 	// misc
         DataElement allD      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.all"));
+	allD.setDepth(100);
+
 	DataElement invokeD   = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.invocation"));	
 	DataElement patternD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.pattern"));	
 
