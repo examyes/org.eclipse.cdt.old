@@ -1715,11 +1715,6 @@ public final class DataStore
     {
 	int timeWaited = 20;
 	boolean timedOut = false;
-	boolean notificationEnabled = _domainNotifier.isEnabled();
-	if (notificationEnabled)
-	    {
-		_domainNotifier.enable(false);
-	    }
 	
 	while ((status != null) 
 	       && (_status == null || _status.getName().equals("okay"))
@@ -1751,10 +1746,6 @@ public final class DataStore
 		status.setAttribute(DE.A_NAME, getLocalizedString("model.timeout"));
 	    }
 	
-	if (notificationEnabled)
-	    {
-		_domainNotifier.enable(true);
-	    }
     }
 
     public void cleanBadReferences(DataElement root)
