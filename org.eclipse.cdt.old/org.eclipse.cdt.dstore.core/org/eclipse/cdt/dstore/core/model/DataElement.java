@@ -442,6 +442,14 @@ public final class DataElement implements Serializable, IDataElement
         return _parent;
       }
 
+ public void setDescriptor(DataElement theDescriptor)
+ {
+  _descriptor = theDescriptor;
+  
+
+
+ }
+ 
   public DataElement getDescriptor()
       {
 	  if (isDeleted())
