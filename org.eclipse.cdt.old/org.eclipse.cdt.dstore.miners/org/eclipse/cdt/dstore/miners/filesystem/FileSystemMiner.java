@@ -75,10 +75,7 @@ public class FileSystemMiner extends Miner
 	      }
 	  else
 	      {
-		  /*
-		    status.setAttribute(DE.A_NAME, getLocalizedString("model.incomplete"));
-		    _dataStore.createObject(status, "message", "Specified host directory does not exist.  Please correct the specification and reconnect.");
-		  */
+		  _dataStore.createReference(host, _minerData.get(0));
 	      }
       }
 

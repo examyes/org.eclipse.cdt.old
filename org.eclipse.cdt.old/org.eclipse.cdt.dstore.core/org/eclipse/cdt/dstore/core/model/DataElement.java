@@ -1021,7 +1021,7 @@ public final class DataElement implements Serializable, IDataElement
         if (source.length() > 0)
         {
           int locationIndex = source.lastIndexOf(":");
-          if (locationIndex > 1)
+          if (locationIndex > 2)
           {
             source = source.substring(0, locationIndex);
           }
@@ -1031,6 +1031,7 @@ public final class DataElement implements Serializable, IDataElement
 	      (getParent() != _dataStore.getDescriptorRoot()))
           {	
             String localPath = _dataStore.mapToLocalPath(source);
+	    System.out.println("open " + localPath); 
             
             if (localPath != null)
             {

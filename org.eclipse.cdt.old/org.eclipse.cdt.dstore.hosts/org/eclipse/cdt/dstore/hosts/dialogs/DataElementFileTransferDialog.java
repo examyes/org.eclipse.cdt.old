@@ -49,6 +49,8 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
     private Button       _sendRemote;
     private Button       _sendLocal;
 
+    private Button       _synchronize;
+
     private HostsPlugin  _plugin;
     private String       _title;
 
@@ -152,6 +154,14 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 	_sendLocal = new Button(controlPanel, SWT.ARROW | SWT.LEFT | SWT.FLAT);
 	_sendLocal.setLayoutData(buttonGrid2);
 	_sendLocal.addListener(SWT.Selection, this);
+
+	GridData buttonGrid3 = new GridData();
+	buttonGrid3.heightHint = 20;
+	buttonGrid3.widthHint = 20;
+
+	_synchronize = new Button(controlPanel, SWT.ARROW | SWT.CENTER | SWT.FLAT);
+	_synchronize.setLayoutData(buttonGrid3);
+	_synchronize.addListener(SWT.Selection, this);
 
 	GridLayout playout= new GridLayout();
 	playout.numColumns = 1;
@@ -262,6 +272,36 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 			DataElement source = (DataElement)list.get(i);			
 			TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
 			transferAction.start();
+		    }
+	    }
+	else if (widget == _synchronize)
+	    {
+		DataElement project1 = _localViewer.getInput();
+		DataElement project2 = _remoteViewer.getInput();
+		
+		if (project2 != null && project1 != project2)
+		    {
+			// transfer from project1 to project2
+			for (int i = 0; i < project1.getNestedSize(); i++)
+			    {
+				DataElement source = project1.get(i);
+				if (!source.isReference())
+				    {
+					TransferFiles transferAction = new TransferFiles("transfer", source, project2, this);
+					transferAction.start();
+				    }
+			    }
+			
+			// transfer from project2 to project1
+			for (int i = 0; i < project2.getNestedSize(); i++)
+			    {
+				DataElement source = project2.get(i);
+				if (!source.isReference())
+				    {
+					TransferFiles transferAction = new TransferFiles("transfer", source, project1, this);
+					transferAction.start();
+				    }
+			    }
 		    }
 	    }
 	else if (widget == _localBack)

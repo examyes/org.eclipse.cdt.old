@@ -87,7 +87,7 @@ public class TransferFiles extends Thread
 	    }
 
 
-	boolean needsUpdate = true;
+	boolean needsUpdate = false;
 
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
@@ -98,6 +98,10 @@ public class TransferFiles extends Thread
 							     newSourceStr);
 		// transfer to remote
 		targetDataStore.setObject(target);
+		if (source.getType().equals("file"))
+		    {
+			needsUpdate = true;
+		    }
 	    }
 	else
 	    {
@@ -128,13 +132,35 @@ public class TransferFiles extends Thread
 			    }
 		    }
 	    }
+	else if (targetDataStore == _plugin.getDataStore())
+	    {
+		// if the target is local
+		if (needsUpdate)
+		    {
+			source.getFileObject();
+			
+			String sourceMapping = sourceDataStore.mapToLocalPath(source.getSource());
+			java.io.File newSource = new java.io.File(sourceMapping);
+			if (newSource != null && newSource.exists())
+			    {
+				String targetMapping = target.getSource() + "/" + source.getName();
+				newSource.renameTo(new java.io.File(targetMapping));
+			    }
+		    }
+		else if (source.getType().equals("directory"))
+		    {
+			String newDir = target.getSource() + "/" + source.getName();
+			java.io.File targetDir = new java.io.File(newDir);
+			targetDir.mkdir();
+		    }
+	    }
 	else
 	    {	
 		if (needsUpdate)
 		    {
 			// make sure we have a local copy of the file
 			File theFile = source.getFileObject();
-			
+
 			targetDataStore.replaceFile(newSourceStr, theFile);
 			setDate(copiedSource, getDate(source));
 		    }
@@ -142,6 +168,7 @@ public class TransferFiles extends Thread
 	
 	if (source.getType().equals("directory"))
 	    {
+		
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {
 			DataElement child = source.get(i);
@@ -177,7 +204,7 @@ public class TransferFiles extends Thread
 		    }	
 	    }
 
-	if (dateObj != null)
+	if (dateObj != null && dateObj.getType().equals("date"))
 	    {
 		Long date = new Long(dateObj.getName());
 		return date.longValue(); 

@@ -2206,11 +2206,10 @@ public DataElement command(DataElement commandDescriptor,
         DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
 
 	createReference(containerObjectD, fsObject, abstracts, abstractedBy);
-	createReference(containerObjectD, hostD, abstracts, abstractedBy);	
+	//createReference(containerObjectD, hostD, abstracts, abstractedBy);	
 	createReference(fsObject, deviceD,  abstracts, abstractedBy);
 
 	 createReference(fsObject, dirD, abstracts, abstractedBy);
-	 //***        createReference(fsObject, fileD, abstracts, abstractedBy);
         createReference(fsObject, fileD,    containsD);
         createReference(fsObject, dirD,     containsD);
 	createReference(fsObject, fsObject, containsD);
