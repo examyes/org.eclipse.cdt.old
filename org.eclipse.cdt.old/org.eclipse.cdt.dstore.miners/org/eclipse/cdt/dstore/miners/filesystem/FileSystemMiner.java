@@ -606,6 +606,13 @@ public class FileSystemMiner extends Miner
 	    }
 	
 	File file = new File(theFile.getSource());
+	try 
+	{
+		file = file.getCanonicalFile();
+	}
+	catch(IOException e)
+	{
+	}
 	if (file.exists())
 	    {
 		long date = file.lastModified();
