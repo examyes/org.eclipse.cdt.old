@@ -33,12 +33,24 @@ public class RenameResource extends CustomAction
     {	
 	 super(subject, label, command, dataStore);
 	
-	 String type = subject.getType();
-	 if (!type.equals("directory") && !type.equals("file"))
-	    {
-		setEnabled(false);
-	    }
+	 isValid(subject);	
     }
+    
+    private boolean isValid(DataElement subject)
+	{
+		String type = subject.getType();
+		if (!type.equals("directory") && !type.equals("file"))
+		{
+			DataElement des = subject.getDescriptor();
+			
+			if (des == null || !des.isOfType("file"))
+		    {
+		    	setEnabled(false);	
+		    	return false;
+		    }
+		}	
+	    return true;
+	}
 
     public void run()
     {

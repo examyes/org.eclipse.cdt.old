@@ -39,12 +39,11 @@ public class DeleteResource extends CustomAction
     public DeleteResource(DataElement subject, String label, DataElement command, DataStore dataStore)
     {	
 		super(subject, label, command, dataStore);
-	
-		String type = subject.getType();
-		if (!type.equals("directory") && !type.equals("file"))
-	    {
-			setEnabled(false);
-	    }
+
+		if (!isValid(subject))
+		{
+			return;	
+		}	
     }
 
 	public DeleteResource(java.util.List subjects, String label, DataElement command, DataStore dataStore)
@@ -53,16 +52,29 @@ public class DeleteResource extends CustomAction
 		
 		for (int i = 0; i < subjects.size(); i++)
 		{
-			DataElement sub = (DataElement)subjects.get(i);	
-			String type = sub.getType();
-			if (!type.equals("directory") && !type.equals("file"))
-	    	{
-				setEnabled(false);
+			DataElement sub = (DataElement)subjects.get(i);			
+			if (!isValid(sub))
+			{
 				return;
 	    	}
 		}		
 	}
 	
+	private boolean isValid(DataElement subject)
+	{
+		String type = subject.getType();
+		if (!type.equals("directory") && !type.equals("file"))
+		{
+			DataElement des = subject.getDescriptor();
+			
+			if (des == null || !des.isOfType("file"))
+		    {
+		    	setEnabled(false);	
+		    	return false;
+		    }
+		}	
+	    return true;
+	}
 
     public void run()
     {
