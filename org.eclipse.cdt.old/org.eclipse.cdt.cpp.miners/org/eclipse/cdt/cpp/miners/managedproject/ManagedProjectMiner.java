@@ -13,7 +13,8 @@ import java.util.*;
 import java.io.*;
 
 public class ManagedProjectMiner extends Miner
-{	private AutoconfManager autoconfManager;
+{	
+	private AutoconfManager autoconfManager;
 	private TargetManager targetManager;
 	private DataElement _workspace = null;
 	// classification constants
@@ -144,9 +145,13 @@ public class ManagedProjectMiner extends Miner
 			}
 			else if (name.equals("C_CHECK_UPDATE_STATE"))
 			{
-				// do whatever it takes to figure out whether we're updated or not
+				String state = "";
+				if(configureIsUptodate(subject))
+					state = "uptodate";	
+				else
+					state = "outdated";
 				status.setAttribute(DE.A_NAME, "done");
-				DataElement state = _dataStore.createObject(status, "state", "uptodate");
+				DataElement stateObj = _dataStore.createObject(status, "state", state);
 				_dataStore.refresh(status);	
 			}
 			else if (name.equals("C_UPDATE_CONFIGURE_IN"))
@@ -212,7 +217,7 @@ public class ManagedProjectMiner extends Miner
 			}
 			else if (name.equals("C_CLASSIFY_MAKEFILE_AM"))
 			{
-				File makefileAm = getMakefileAm(subject.getFileObject());
+				File makefileAm = getfile(subject.getFileObject(),"Makefile.am");
 				if(makefileAm!=null)
 				{	
 					String classification = getMakefileClassification(makefileAm);		
@@ -346,11 +351,11 @@ public class ManagedProjectMiner extends Miner
 		}
 	    return null;
 	}
-	private File getMakefileAm(File dir)
+	private File getfile(File dir,String name)
 	{
 		File[] list = dir.listFiles();
 		for(int i = 0; i < list.length; i++)
-			if(list[i].getName().equals("Makefile.am"))
+			if(list[i].getName().equals(name))
 				return list[i];
 		return null;
 	}
@@ -359,6 +364,21 @@ public class ManagedProjectMiner extends Miner
 		int classification = classifier.classify(makefileAm);
 		Integer classifier = new Integer(classification);
 		return new String(classifier.toString());
+	}
+	private boolean configureIsUptodate(DataElement subject)
+	{
+		File configure = getfile(subject.getFileObject(),"configure");
+		long configureTimeStamp = configure.lastModified();
+		
+		File rootObject = subject.getFileObject();
+		ProjectStructureManager manager = new ProjectStructureManager(rootObject);
+		
+		File[] list = manager.getFiles();
+		for(int i = 0; i < list.length; i++)
+			if(!list[i].getName().equals("configure"))
+				if(list[i].lastModified()>configureTimeStamp)
+					return false;
+		return true;
 	}
 }
 

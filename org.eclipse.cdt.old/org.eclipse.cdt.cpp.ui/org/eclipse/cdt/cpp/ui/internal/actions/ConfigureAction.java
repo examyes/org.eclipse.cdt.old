@@ -8,7 +8,6 @@ package com.ibm.cpp.ui.internal.actions;
 
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.miners.managedproject.*;
 
 import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.core.model.*;
@@ -34,15 +33,13 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
-
-
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.dialogs.*;
 
 
 public class ConfigureAction extends CustomAction
 { 
-	ProjectStructureManager structureManager;
+//	ProjectStructureManager structureManager;
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -72,29 +69,23 @@ public class ConfigureAction extends CustomAction
 		_command.getValue().equals("UPDATE_AUTOCONF_FILES")||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
+				
 		//enable disable based on object files
-		
-		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")&& !projectHasSubdir())
 				setEnabled(false);		
 		
-		if((_command.getValue().equals("UPDATE_MAKEFILE_AM")&&!doesFileExists("Makefile.am")))
+		if((_command.getValue().equals("UPDATE_MAKEFILE_AM")&&!doesFileExist("Makefile.am")))
 				setEnabled(false);
 				
 		if (subject.getType().equals("Project"))	
-			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExists("configure.in")))
+			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExist("configure.in")))
+				setEnabled(false);
+			
+		if(_command.getValue().equals("CREATE_CONFIGURE")&& doesFileExist("configure")&& configureIsUptodate(_subject))
 				setEnabled(false);
 				
-	/*	if(_command.getValue().equals("CREATE_CONFIGURE")
-			&&(!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
-			setEnabled(false);*/
-			/*
-		if(_command.getValue().equals("CREATE_CONFIGURE")&&
-			doesFileExists("configure")  &&configureIsUptodate(_subject))
-				setEnabled(false);
-				*/
 						
-		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure") )
+		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExist("configure") )
 				setEnabled(false);		
 		
 	}
@@ -113,7 +104,7 @@ public class ConfigureAction extends CustomAction
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
-				("Trying to update existing configure.in and makefile.am's "+
+				("Attempting to update existing configure.in and makefile.am's "+
 				"\nconfigure.in and or Makefile.am Files will be generated if missing"
 					+"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
 				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
@@ -122,11 +113,11 @@ public class ConfigureAction extends CustomAction
 		}	
 		if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
 		{
-			if(doesFileExists("Makefile.am"))
+			if(doesFileExist("Makefile.am"))
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
-				("Trying to update existing makefile.am's"+
+				("Attempting to update existing makefile.am's"+
 					"\nIf updated then old Makefile.am's will be renamed *.old");
 				//dialog.openInformation(shell,"Updating Makefile.am's ",message);
 				execute = dialog.openConfirm(shell,"Updating Makefile.am's ",message);
@@ -134,11 +125,11 @@ public class ConfigureAction extends CustomAction
 		}	
 		if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 		{
-			if(doesFileExists("configure.in"))
+			if(doesFileExist("configure.in"))
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
-				("Trying to update existing configure.in "+
+				("Attempting to update existing configure.in "+
 					"\nIf updated then old configure.in shall be renamed *.old");
 				//dialog.openInformation(shell,"Updating configure.in",message);
 				execute = dialog.openConfirm(shell,"Updating configure.in",message);
@@ -153,7 +144,7 @@ public class ConfigureAction extends CustomAction
 			{
 				noConffilesExist = false;
 				str1 = new String(
-				"Trying to update existing configure.in and makefile.am's "+
+				"Attempting to update existing configure.in and makefile.am's "+
 				"\nconfigure.in and or Makefile.am Files will be generated if missing"+
 				"\nOld existing configuration files will be renamed *.old if updated");
 				str2 = new String("\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
@@ -169,21 +160,15 @@ public class ConfigureAction extends CustomAction
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
-			if (true)//if(!configureIsUptodate(_subject))
+			if(!configureIsUptodate(_subject))
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-			/*	String message = new String
-				("\nThe system detects that the configure script is not up to date"+
+				String message = new String
+				("\nThe system detects that configure script is not up to date"+
 				"\nUpdating project configuration files and regenerating configure may be needed"+
 				"\nOld existing configuration files will be renamed *.old if updated"+
 				"\nPress OK to update project configuration files, or "+
-				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");*/
-				String message = new String
-				("\nUpdating project configuration files and regenerating configure may be needed"+
-				"\nOld existing configuration files will be renamed *.old if updated"+
-				"\nPress OK to update project configuration files, or "+
 				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
-				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
 				runUpdate = dialog.openConfirm(shell,"Updating configure.in, Makefile.am's and generating configure ",message);
 			}
 			else
@@ -206,7 +191,6 @@ public class ConfigureAction extends CustomAction
 			}
 			else if(!runUpdate)
 			{
-				//System.out.println("\nSkipping update............running configure");
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
@@ -227,7 +211,7 @@ public class ConfigureAction extends CustomAction
 			}
 		}
 	}
-	private boolean doesFileExists(String fileName)
+	private boolean doesFileExist(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
 		    {
@@ -285,33 +269,21 @@ public class ConfigureAction extends CustomAction
 		}
 		return false;
 	}
-	private boolean configureIsUptodate(DataElement project)
+	
+	private boolean configureIsUptodate(DataElement root)
 	{
-		long configureTimeStamp = -1;
-		structureManager = new ProjectStructureManager(project.getFileObject());
-		File[] list = structureManager.getFiles();
-		File[] dirList = structureManager.getSubdirs();
-		
-		// as we are sure that configure exists then we can safely get its last modified time stamp
-		
-		File configure = new File(project.getSource(),"configure");
-		configureTimeStamp = configure.lastModified();	
-		//System.out.println("\nconfigure stamp = "+configureTimeStamp);
-		//System.out.println("=========================================");	
-		for(int i = 0; i < list.length; i++)
-			//if(list[i].getName().equals("Makefile.am")||list[i].getName().equals("Makefile.in")||list[i].getName().equals("configure.in"))
-			//{
-				//System.out.println("\n"+list[i].getName()+" = "+list[i].lastModified());
-				if(configureTimeStamp<list[i].lastModified())
-					return false;
-			//}
-		for(int i = 0; i < dirList.length; i++)
-			if(!dirList[i].getName().startsWith("."))
-			//{
-				if(configureTimeStamp<dirList[i].lastModified())
-					return false;
-			//}
-		return true;
+		DataElement cmdD = _dataStore.localDescriptorQuery(root.getDescriptor(), "C_CHECK_UPDATE_STATE", 4);
+	
+		if (cmdD != null)
+		{
+			DataElement status = _dataStore.synchronizedCommand(cmdD, root);		
+			DataElement updateState = (DataElement)status.get(0);
+		    String state = updateState.getName();
+		    System.out.println("state = " + state);
+		    if(state.equals("uptodate"))
+		    	return true;
+		}
+		return false;
 	}
 }
 
