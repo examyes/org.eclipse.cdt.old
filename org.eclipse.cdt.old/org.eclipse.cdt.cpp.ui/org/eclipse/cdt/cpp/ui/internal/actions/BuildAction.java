@@ -30,21 +30,33 @@ public class BuildAction extends CustomAction
         super(subject, label, command, dataStore);
       }
 
+ public BuildAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+      {	
+        super(subjects, label, command, dataStore);
+      }
+
+
     public void run()
     {
-	ModelInterface api = ModelInterface.getInstance();
-	IProject project = api.findProjectResource(_subject);
-	if (project != null)
-	    {
-		if (_command.getValue().equals("BUILD"))
+		ModelInterface api = ModelInterface.getInstance();
+	
+		for (int i = 0; i < _subjects.size(); i++)
+		{
+			DataElement subject = (DataElement)_subjects.get(i);
+			IProject project = api.findProjectResource(subject);
+			if (project != null)
+	    	{
+			if (_command.getValue().equals("BUILD"))
 		    {
-			CppBuilder.getInstance().doBuild(project);
+				CppBuilder.getInstance().doBuild(project);
 		    }
-		else
+			else
 		    {
-			CppBuilder.getInstance().doBuild(project, false);
+				CppBuilder.getInstance().doBuild(project, false);
 		    }
+	    	}
 	    }
+	    
     }
 
 }
