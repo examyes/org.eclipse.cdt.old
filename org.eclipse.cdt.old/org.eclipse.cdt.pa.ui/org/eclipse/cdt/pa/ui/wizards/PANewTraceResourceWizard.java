@@ -51,7 +51,44 @@ public class PANewTraceResourceWizard extends Wizard implements INewWizard {
     public boolean performFinish()
     {
       _mainPage.finish();
-      return true;
+      openPerspective();
+	  return true;
+    }
+
+    private void openPerspective()
+    {
+     IWorkbench workbench = _plugin.getWorkbench();
+     IWorkspace workspace = _plugin.getPluginWorkspace();
+	 IWorkbenchWindow dw  = workbench.getActiveWorkbenchWindow();
+	 IWorkbenchPage persp = null;
+	
+	 IWorkbenchPage[] perspectives = dw.getPages();
+	
+	 try
+	 {
+		for (int i = 0; i < perspectives.length; i++)
+		{
+			IWorkbenchPage aPersp = perspectives[i];
+			String layoutId = aPersp.getLabel();
+			
+			// System.out.println("perspective: " + layoutId);
+			if (layoutId.equals("Workspace - Performance Trace"))
+			{
+			  persp = aPersp;	
+			  dw.setActivePage(persp);
+			  break;
+			}	
+		}
+		
+		if (persp == null)
+		{
+		  persp = workbench.openPage("org.eclipse.cdt.pa.ui.PAPerspective", workspace.getRoot(), 0);
+		}
+	 }
+     catch (WorkbenchException e)
+	 {
+	 }
+	 
     }
     
 

@@ -177,6 +177,12 @@ public class PAPlugin extends AbstractUIPlugin {
   }
 
 
+  public IWorkbench getWorkbench()
+  {
+    return _cppPlugin.getWorkbench();
+  }
+    
+  
   public static org.eclipse.ui.IWorkbenchWindow getActiveWorkbenchWindow()
   {
     return _instance.getWorkbench().getActiveWorkbenchWindow();
