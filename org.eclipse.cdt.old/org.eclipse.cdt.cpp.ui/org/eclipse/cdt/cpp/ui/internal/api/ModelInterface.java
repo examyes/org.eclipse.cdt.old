@@ -1180,7 +1180,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				
 				if (compareFileNames(path, fileName))
 				    {
-					return (IFile)resource;
+					if (resource instanceof IFile)
+					    return (IFile)resource;
 				    }
 				
 				if (fileName.startsWith(path) && resource instanceof IContainer)
