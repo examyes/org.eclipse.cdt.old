@@ -464,10 +464,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
  {
   DataStore  dataStore = rep.getDataStore();
   DataElement     repE = rep.getElement();
-   
+
+  /***   This causes hang
   DataElement  project = dataStore.createObject(null, "Closed Remote Project", repE.getName(), repE.getSource());
   DataElement  createD = dataStore.createCommandDescriptor(null, "C_CREATE_REMOTE", "com.ibm.cpp.miners.project.ProjectMiner", "C_CREATE_REMOTE");
   dataStore.synchronizedCommand(createD, project);
+  ****/
+  // temporary
+  openProject(rep);
  }
  
     public void openProjects()
@@ -508,8 +512,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
      
      if (_project instanceof Repository)
       {
+	  /*** Currently this hangs
        createProject((Repository)_project);
        return;
+	  ***/
+	  dataStore = ((Repository)_project).getDataStore();
       }
        
      DataElement projectMinerProject =  findProjectElement(_project);
@@ -1059,6 +1066,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   }
 
 
+    public void addNewFile(IFile file)
+    {
+	_tempFiles.add(file);
+    }
 
   public IFile getNewFile(String fileName)
   {
@@ -1083,8 +1094,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  // search temporary files
 	  if (file == null)
 	      {
-
-
+		  for (int i = 0; i < _tempFiles.size(); i++)
+		      {
+			  FileResourceElement tempFile = (FileResourceElement)_tempFiles.get(i);
+			  String tempFileName = tempFile.getLocation().toString(); 
+			  if (compareFileNames(tempFileName, fileName))
+			      {
+				  return tempFile;
+			      }
+		      }
 	      }
       }
 

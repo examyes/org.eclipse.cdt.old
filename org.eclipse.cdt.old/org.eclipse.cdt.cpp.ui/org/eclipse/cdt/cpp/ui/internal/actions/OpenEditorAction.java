@@ -54,6 +54,12 @@ public class OpenEditorAction extends Action implements IOpenAction
       return api.getNewFile(fileName);
   }
 
+    public void addNewFile(IFile file)
+    {
+	com.ibm.cpp.ui.internal.api.ModelInterface api = _plugin.getModelInterface();
+	api.addNewFile(file);
+    }
+
   public void performGoto(boolean openEditor)
       {
         if (_element != null)
@@ -72,7 +78,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 			    if ( !realFile.isDirectory())
 				{		
 				    IFile file = getNewFile(fileName);
-				    if (file == null)
+				    if (file == null && openEditor)
 					{
 					    DataElement fileElement = null;	
 					    if (elementType.equals("file"))
@@ -99,6 +105,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 					    
 					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, 
 												      _plugin.getCurrentProject());
+					    addNewFile(file);
 					}
 				    
 				    if (file != null)

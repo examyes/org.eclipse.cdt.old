@@ -250,6 +250,7 @@ public class HostsPlugin extends AbstractUIPlugin
 
 	DataElement hostRoot = _dataStore.getHostRoot();
         hostRoot.setAttribute(DE.A_SOURCE, rootDirectory);
+
        	_clientConnection.setHostDirectory(rootDirectory);	
 	_dataStore.setMinersLocation("com.ibm.dstore.miners");
 	_clientConnection.localConnect();

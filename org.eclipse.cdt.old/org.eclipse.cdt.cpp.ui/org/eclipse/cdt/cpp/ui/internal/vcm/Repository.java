@@ -121,12 +121,12 @@ public class Repository extends Project
 
 		    DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
 		    _remoteRoot = hostRoot.get(0).dereference();
+
 		    
 		    _remoteRoot.expandChildren(true);
 		    _root.addNestedData(_remoteRoot.getNestedData(), false);
 		    _root.setDataStore(_remoteRoot.getDataStore());
 		    
-		    //readProperties();
 		    
 		    // create directory for project
 		    Path rootPath = (Path)Platform.getLocation();
@@ -264,7 +264,7 @@ public class Repository extends Project
   public Object getParent(Object o) 
   {
     return null;
-  }
+  } 
 
   public void contributeActions(MenuManager menu, Object element, IStructuredSelection selection) 
   {

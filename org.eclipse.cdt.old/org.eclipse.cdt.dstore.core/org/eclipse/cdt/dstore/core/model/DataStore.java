@@ -1646,10 +1646,10 @@ public DataElement command(DataElement commandDescriptor,
       {
 	  String result = null;
 
-	  char slash = File.separator.charAt(0);
-	  String remotePath = aPath.replace('\\', slash).replace('/', slash);
-	  String localRoot = _dataStoreAttributes.getAttribute(DataStoreAttributes.A_LOCAL_PATH).replace('\\', slash).replace('/', slash);
-	  String remoteRoot = getHostRoot().getSource().replace('\\', slash).replace('/', slash);
+	  char slash = '/';
+	  String remotePath = aPath.replace('\\', slash);
+	  String localRoot = _dataStoreAttributes.getAttribute(DataStoreAttributes.A_LOCAL_PATH).replace('\\', slash);
+	  String remoteRoot = getHostRoot().getSource().replace('\\', slash);
 
 	  if (localRoot.equals(remoteRoot))
 	      {

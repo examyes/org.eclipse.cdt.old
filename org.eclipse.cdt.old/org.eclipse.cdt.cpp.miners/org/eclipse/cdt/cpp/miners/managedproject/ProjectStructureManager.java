@@ -58,7 +58,6 @@ public class ProjectStructureManager {
 		for(int i =0; i < subdirs.size(); i++)
 		{
 			subDirsList[i]=(File)subdirs.elementAt(i);
-			System.out.println("\ndirs and subdirs = "+subDirsList[i].getPath());
 		}
 		return subDirsList;
 	}
@@ -72,7 +71,6 @@ public class ProjectStructureManager {
 		for(int i =0; i < files.size(); i++)
 		{
 			filesList[i]=(File)files.elementAt(i);
-			System.out.println("\nfiles = "+filesList[i].getName());
 		}
 		return filesList;
 	}
@@ -91,7 +89,6 @@ public class ProjectStructureManager {
 		for(int i = 0; i < subdirs.size(); i ++)
 		{
 			locations[i]= ((File)subdirs.elementAt(i)).getPath().substring(getProjectLocation().length()+1);
-			System.out.println("\n location = "+locations[i]);
 		}
 		return locations;
 	}

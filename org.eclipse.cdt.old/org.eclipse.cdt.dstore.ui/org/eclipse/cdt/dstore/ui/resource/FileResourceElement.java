@@ -298,7 +298,7 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 		fileObject = _element.getFileObject();
 		String fileName = fileObject.getAbsolutePath();
 
-		if (!_path.toOSString().equals(fileName))
+		if (!_path.toString().equals(fileName))
 		    {
 			_path = new Path(fileName);	  
 		    }		

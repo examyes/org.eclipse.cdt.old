@@ -185,13 +185,13 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	
 	//String navID = IPageLayout.ID_RES_NAV;
 	String navID = "com.ibm.cpp.ui.internal.views.CppProjectsViewPart";
-	/*
+
+	// eventually this will be gone
 	if (project instanceof Repository)
 	    {
 		navID = "com.ibm.cpp.ui.internal.views.RemoteProjectViewPart";
 		((Repository)project).refresh();
 	    }
-	*/
 
 	final IViewPart viewPart = persp.findView(navID);
 	if (viewPart != null)

@@ -1020,23 +1020,30 @@ public final class DataElement implements Serializable, IDataElement
         String source = new String(getAttribute(DE.A_SOURCE));
         if (source.length() > 0)
         {
-          int locationIndex = source.lastIndexOf(":");
-          if (locationIndex > 2)
-          {
-            source = source.substring(0, locationIndex);
-          }
+	    int locationIndex = source.lastIndexOf(":");
+	    if (locationIndex > 3)
+		{
+		    source = source.substring(0, locationIndex);
+		}
           
 	  String type = getType();
           if (!type.equals(_dataStore.getLocalizedString("model.directory")) &&
 	      (getParent() != _dataStore.getDescriptorRoot()))
           {	
-            String localPath = _dataStore.mapToLocalPath(source);
-            
-            if (localPath != null)
-            {
-	      File result = new File(localPath);
-	      if (!result.exists())
-		{		  
+	      
+	      File result = new File(source);
+	      if (result.exists())
+		  {
+		      return result;
+		  }
+
+	      String localPath = _dataStore.mapToLocalPath(source);
+	      
+	      if (localPath != null)
+		  {
+		      result = new File(localPath);
+		      if (!result.exists())
+			  {		  
 		  // initiate query
 		    DataElement fileDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(),
 								 DE.A_NAME,

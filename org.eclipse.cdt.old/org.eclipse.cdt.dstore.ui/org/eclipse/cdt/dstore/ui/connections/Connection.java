@@ -27,13 +27,137 @@ import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.*;
 import org.eclipse.jface.text.*;
-import org.eclipse.jface.text.source.*; 
+import org.eclipse.jface.dialogs.*;
 
 import org.eclipse.ui.internal.*;
 import org.eclipse.ui.internal.misc.*;
 
+import org.eclipse.core.runtime.*;
+import org.eclipse.jface.operation.*;
+import java.lang.reflect.InvocationTargetException;
+
 public class Connection
 {
+    public class ConnectOperation implements IRunnableWithProgress
+    {
+	private ConnectionStatus _connectStatus;
+	private String           _minersLocation;
+
+	public ConnectOperation(String minersLocation)
+	{
+	    _minersLocation = minersLocation;
+	}    
+
+	public void run(IProgressMonitor monitor) throws InvocationTargetException
+	{
+	    execute(monitor);
+	}
+
+	protected void execute(IProgressMonitor pm) 
+	{
+	    pm.beginTask("Connecting...", 100);
+	    if (_isLocal) 
+		{
+		    _connectStatus = _client.localConnect();
+		}
+	    else 
+		{  
+		    _connectStatus = _client.connect(_isUsingDaemon, _user, _password);
+		}
+
+	    pm.worked(100);
+
+	    if (_connectStatus.isConnected())
+	    {
+		pm.beginTask("Getting Schema...", 100);
+
+		if (getSchema(_connectStatus, _minersLocation, pm))
+		    {
+			_element.getDataStore().createReferences(_element, _client.getDataStore().getRoot().getNestedData(), "contents");
+			_element.getDataStore().refresh(_element);
+		    }		
+
+	    }
+
+	    pm.done();
+	}
+	
+	public boolean getSchema(ConnectionStatus connectionStatus, String minersLocation, IProgressMonitor monitor)
+	{
+	    String ticketStr = connectionStatus.getTicket();
+	    boolean result = false;
+	    DataStore dataStore = _client.getDataStore();
+	    DataElement hostRoot = dataStore.getHostRoot();         
+	    
+	    monitor.subTask("Showing Ticket...");
+	    // show ticket	
+	    if (dataStore.showTicket(ticketStr))
+		{
+		    monitor.worked(10);
+
+		    monitor.subTask("Setting Miners Location...");
+		    dataStore.setMinersLocation(minersLocation);
+		    monitor.worked(10);
+		    
+		    // get schema
+		    monitor.subTask("Getting Schema...");
+		    dataStore.getSchema();
+		    monitor.worked(10);
+		    
+		    
+		    // get content
+		    String host = _client.getHost();
+		    String hostDirectory = _client.getHostDirectory();
+		    
+		    monitor.subTask("Setting Host...");
+		    if (!host.equals(hostRoot.getName()) || !hostDirectory.equals(hostRoot.getSource()))
+			{
+			    hostRoot.setAttribute(DE.A_NAME, host);
+			    hostRoot.setAttribute(DE.A_SOURCE, hostDirectory);
+			    dataStore.setHost(hostRoot);
+			}
+		    monitor.worked(10);
+		    
+		    // initialize miners
+		    monitor.subTask("Initializing Miners...");
+		    DataElement status = dataStore.initMiners();
+		    monitor.worked(20);
+
+		    monitor.subTask("Setting Status...");
+		    if (!status.getName().equals("done"))
+			{
+			    disconnect();
+			    connectionStatus.setConnected(false);
+			    if (status.get(0) != null)
+				{
+				    String msg = status.get(0).getName();
+				    connectionStatus.setMessage(msg);
+				}
+			    else
+				{
+				    connectionStatus.setMessage("Couldn't Connect");
+				}
+			    result = false;
+			}
+		    else
+			{
+			    result = true;
+			    dataStore.getDomainNotifier().enable(true);
+			}
+
+		    monitor.worked(10);		    
+		    monitor.subTask("Connected to " + host);
+		}
+	    
+	    return result;
+	}
+	
+	public ConnectionStatus getStatus()
+	{
+	    return _connectStatus;
+	}
+    }
+
     public String  _name;
     public String  _type;
     public String  _host;
@@ -50,6 +174,9 @@ public class Connection
     public DataElement _element;
     public DataElement _parent;
     
+    private String _user = null;
+    private String _password = null;
+
     public Connection(String name, ArrayList args, DataElement parent)
     {
         _name = name;
@@ -256,53 +383,46 @@ public class Connection
 		_client.setLoader(_element.getDataStore().getLoader());
 		
 	    }
-	
+
 	_client.setHost(_host);
 	_client.setPort(_port);
 	_client.setHostDirectory(_dir);
 	
 	DataStore parentDS = _element.getDataStore();	
 	DataStore newDS =_client.getDataStore();
-	newDS.setAttribute(DataStoreAttributes.A_PLUGIN_PATH, parentDS.getAttribute(DataStoreAttributes.A_PLUGIN_PATH));	        
+	newDS.setAttribute(DataStoreAttributes.A_PLUGIN_PATH, parentDS.getAttribute(DataStoreAttributes.A_PLUGIN_PATH));
+
 	ConnectionStatus connectStatus = null;
-	if (_isLocal) 
-	    {
-		connectStatus = _client.localConnect();
-	    }
-	else 
+	if (!_isLocal) 
 	    {  
-		String user = "";
-		String password = "";
 		if (_isUsingDaemon)
 		    {
+			Shell shell = parentDS.getDomainNotifier().findShell();
 			LoginDialog ldialog = new LoginDialog();
 			ldialog.open();
 			if (ldialog.getReturnCode() != ldialog.OK)
 			    return null;
-			user = ldialog.getUser();
-			password = ldialog.getPassword();
+			_user = ldialog.getUser();
+			_password = ldialog.getPassword();
 		    }
-		
-		connectStatus = _client.connect(_isUsingDaemon, user, password);
 	    }
 	
-	if (connectStatus.isConnected())
+	
+	Shell shell = notifier.findShell();
+	ConnectOperation op = new ConnectOperation(minersLocation);
+	ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(shell);
+	try
 	    {
-		if (getSchema(connectStatus, minersLocation))
-		    {
-			_element.getDataStore().createReferences(_element, _client.getDataStore().getRoot().getNestedData(), "contents");
-			_element.getDataStore().refresh(_element);
-			return connectStatus;
-		    }		
-		else
-		    {
-			return connectStatus;
-		    }
+		progressDlg.run(true, true, op);
 	    }
-	else
+	catch (InterruptedException e) 
 	    {
-		return connectStatus;
+	    } 
+	catch (InvocationTargetException e) 
+	    {
 	    }
+	
+	return op.getStatus();
     }
     
     public void disconnect()
@@ -321,7 +441,6 @@ public class Connection
     public void delete()
     {
         disconnect();
-	//        _parent.removeNestedData(_element);
         DataStore ds = _parent.getDataStore();
 	ds.deleteObject(_parent, _element);
         ds.refresh(_parent);
@@ -351,65 +470,6 @@ public class Connection
 	
     }
     
-    public boolean getSchema(ConnectionStatus connectionStatus)
-    {
-	return getSchema(connectionStatus, "com.ibm.dstore.miners");
-    }
-
-    public boolean getSchema(ConnectionStatus connectionStatus, String minersLocation)
-    {
-	String ticketStr = connectionStatus.getTicket();
-	boolean result = false;
-        DataStore dataStore = _client.getDataStore();
-	DataElement hostRoot = dataStore.getHostRoot();         
-	
-	// show ticket	
-	if (dataStore.showTicket(ticketStr))
-	    {
-		dataStore.setMinersLocation(minersLocation);
-		
-		// get schema
-		dataStore.getSchema();
-
-		
-		// get content
-		String host = _client.getHost();
-		String hostDirectory = _client.getHostDirectory();
-		
-		if (!host.equals(hostRoot.getName()) || !hostDirectory.equals(hostRoot.getSource()))
-		    {
-			hostRoot.setAttribute(DE.A_NAME, host);
-			hostRoot.setAttribute(DE.A_SOURCE, hostDirectory);
-			dataStore.setHost(hostRoot);
-		    }
-
-		// initialize miners
-		DataElement status = dataStore.initMiners();
-		if (!status.getName().equals("done"))
-		    {
-			disconnect();
-			connectionStatus.setConnected(false);
-			if (status.get(0) != null)
-			    {
-				String msg = status.get(0).getName();
-				connectionStatus.setMessage(msg);
-			    }
-			else
-			    {
-				connectionStatus.setMessage("Couldn't Connect");
-			    }
-			result = false;
-		    }
-		else
-		    {
-			result = true;
-			dataStore.getDomainNotifier().enable(true);
-		    }
-
-	    }
-
-	return result;
-    }
 }
 
 

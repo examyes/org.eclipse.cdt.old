@@ -510,6 +510,7 @@ public void doExpand(DataElement obj)
 	
 	if (_selected != null)
 	    {
+		/*
 		DataElement type = _selected.getDescriptor();
 		boolean isContainer = false;
 		if (type != null)
@@ -530,6 +531,7 @@ public void doExpand(DataElement obj)
 			_selected.expandChildren();
 			_parent.setInput(_selected);
 		    }
+		*/
 
 		_openEditorAction.setSelected(_selected);
 		_openEditorAction.run();

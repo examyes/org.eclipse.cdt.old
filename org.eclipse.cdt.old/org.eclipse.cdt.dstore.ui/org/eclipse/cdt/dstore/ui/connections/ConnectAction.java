@@ -34,9 +34,8 @@ public class ConnectAction extends CustomAction
     
     public void run()
     {
-        DataElement selected = _subject;
-	
-        ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier());
+	DataElement selected = _subject;
+	ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier());
 	if (status != null)
 	    {
 		String msg = status.getMessage();
@@ -52,7 +51,11 @@ public class ConnectAction extends CustomAction
 			
 			failD.openInformation(new Shell(), "Connection Failure", msg);          
 		    }
+		else
+		    {
+		    }
 	    }
-    }  
+    }
+	
 }
 
