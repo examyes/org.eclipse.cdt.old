@@ -64,16 +64,14 @@ public class BrowseProjectAction extends Action
     {
         IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
 	IWorkbenchPage persp = null;
-	
-        /* JEFF: Commenting this section out due to IWorkbench removing this api
+	IWorkbenchWindow dw = workbench.getActiveWorkbenchWindow();
 	try 
 	    {
-		persp = workbench.openPage(_perspective, input, 0);
+		persp = workbench.showPerspective(_perspective, dw, input);
 	    }
         catch (WorkbenchException e)
 	    {
 	    }		    
-	*/
     }
 
 }

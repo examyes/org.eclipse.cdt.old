@@ -47,19 +47,15 @@ public class OpenPerspectiveAction extends CustomAction
     private void openPerspective(DataElement input)
     {
         IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
-		IWorkbenchPage persp = null;
-
-       /* JEFF: Commenting this part out to get build to work...IWorkbench API has changed -> openPage is gone.
-		try 
+	IWorkbenchWindow dw = workbench.getActiveWorkbenchWindow();
+	IWorkbenchPage persp = null;	
+	try 
 	    {
-			persp = workbench.openPage("org.eclipse.cdt.cpp.ui.CppObjectPerspective", input, 0);
+		persp = workbench.showPerspective("org.eclipse.cdt.cpp.ui.CppObjectPerspective", dw, input);
 	    }
         catch (WorkbenchException e)
 	    {
 	    }
-       */
-
-	    
     }
 
 }

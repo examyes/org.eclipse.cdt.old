@@ -195,7 +195,6 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	
 	IWorkbenchPage[] perspectives = dw.getPages();
 	
-	/*JEFF: Commenting out this section since it uses an IWorkbench.openPage call that is now gone
 	try
 	    {
 		for (int i = 0; i < perspectives.length; i++)
@@ -212,14 +211,13 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		
 		if (persp == null)
 		    {
-			persp = workbench.openPage("org.eclipse.cdt.cpp.ui.CppPerspective", workspace.getRoot(), 0);
+			persp = workbench.showPerspective("org.eclipse.cdt.cpp.ui.CppPerspective", dw);
 		    }
 	    }
         catch (WorkbenchException e)
 	    {
 	    }
 
-	*/
 	String navID = "org.eclipse.cdt.cpp.ui.CppProjectsViewPart";
 	final IViewPart viewPart = persp.findView(navID);
 	if (viewPart != null)
