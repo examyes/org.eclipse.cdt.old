@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.cdt"
+      id="org.eclipse.cdt.win32"
       label="%featureName"
       version="1.0.1"
       provider-name="%providerName"
@@ -22,58 +22,16 @@
       <update label="%updateSiteName" url="http://update.eclipse.org/updates"/>
    </url>
 
+   <includes
+         id="org.eclipse.cdt"
+         version="1.0.1"
+         name="%featureName">
+   </includes>
+
    <requires>
       <import plugin="org.eclipse.platform" version="2.0.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt"  version="1.0.1" match="equivalent"/>
    </requires>
-
-   <plugin
-         id="org.eclipse.cdt.core"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt.ui"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt.debug.core"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt.debug.mi.core"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt.debug.ui"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt.launch"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
-   </plugin>
 
    <plugin
          id="org.eclipse.cdt.core.win32"
@@ -81,13 +39,6 @@
          install-size="0"
          version="1.0.1"
          fragment="true">
-   </plugin>
-
-   <plugin
-         id="org.eclipse.cdt.debug.mi.ui"
-         download-size="0"
-         install-size="0"
-         version="1.0.1">
    </plugin>
 
 </feature>
