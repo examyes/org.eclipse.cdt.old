@@ -47,7 +47,7 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.*;
 
-public class ManageProjectAction extends CustomAction
+public class InitCreateRunAction extends CustomAction
 { 
 	public class RunThread extends Handler
 	{
@@ -83,7 +83,7 @@ public class ManageProjectAction extends CustomAction
 		}
 	}
 	
-	public ManageProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
+	public InitCreateRunAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
 		if (!subject.getType().equals("Project"))	
@@ -101,7 +101,7 @@ public class ManageProjectAction extends CustomAction
 		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
 		if(dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
 		{
-			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
+			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_INIT_CREATE_RUN");
 			DataElement status = _dataStore.command(manageProjectCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
 			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
