@@ -325,23 +325,112 @@ class CommandMinerThread extends MinerThread
   varTable.putAll(mapVars(sysVars));
   
   //Now for every project variable, check to see if it already exists, and if the value contains other variables:
-  Hashtable theVars = mapVars(prjVars);
-  for (Enumeration e = theVars.keys() ; e.hasMoreElements() ;) 
+  for (int i = 0; i < prjVars.size(); i++)
   {
-   String theKey = (String)e.nextElement();   
-   String theValue = (String)theVars.get(theKey);
+   DataElement envElement = (DataElement)prjVars.get(i);
+   if (!envElement.getType().equals("Environment Variable"))
+    continue;
+   String theVariable = envElement.getName();
+   String theKey      = getKey(theVariable);
+   String theValue    = getValue(theVariable);
    theValue = calculateValue(theValue, varTable);
    varTable.put(theKey, theValue);
   }
   return tableToArray(varTable);
  }
  
- private String calculateValue(String theValue, Hashtable theTable)
+ //This method is responsible for replacing variable references with their values.
+ //We support 3 methods of referencing a variable (assume we are referencing a variable called FOO):
+ // 1. $FOO     - common to most shells (must be followed by a non-alphanumeric or nothing...in other words, we
+ //               always construct the longest name after the $)
+ // 2. ${FOO}   - used when you want do something like ${FOO}bar, since $FOObar means a variable named FOObar not 
+ //               the value of FOO followed by "bar". 
+ // 3. %FOO%    - Windows command interpreter
+ private String calculateValue(String value, Hashtable theTable)
  {
-  return theValue;
+  StringBuffer theValue = new StringBuffer(value); 
+  try
+  {
+   int index = 0;
+   char c;
+   while (index < theValue.length())
+   {  
+    c = theValue.charAt(index);
+    //If the current char is a $, then look for a { or just match alphanumerics
+    if (c == '$')
+    {
+     int nextIndex = index + 1;
+     if (nextIndex < theValue.length())
+     {
+      c = theValue.charAt(nextIndex);
+       //If there is a { then we just look for the closing }, and replace the span with the variable value
+      if (c == '{')
+      {
+       int next = theValue.toString().indexOf("}",nextIndex);
+       if (next > 0)
+       {
+        String replacementValue = findValue(theValue.substring(nextIndex+1, next), theTable);
+        theValue.replace(index, next+1, replacementValue);
+        index += replacementValue.length() - 1;
+       }
+      }
+      //If there is no { then we just keep matching alphanumerics to construct the longest possible variable name
+      else
+      {
+       if (Character.isJavaIdentifierStart(c))
+       {
+        while ((nextIndex < theValue.length()) && (Character.isJavaIdentifierPart(c)))
+         c = theValue.charAt(++nextIndex);
+        String replacementValue = findValue(theValue.substring(index+1, nextIndex),theTable);
+        theValue.replace(index, nextIndex, replacementValue);
+        index += replacementValue.length() - 1;
+       }
+      }
+     } 
+    }
+    //If the current char is a %, then simply look for a matching %
+    else if (c == '%')
+    {
+     int next = theValue.toString().indexOf("%",index+1);
+     if (next > 0)
+     {
+      String replacementValue = findValue(theValue.substring(index+1, next), theTable);
+      theValue.replace(index, next+1, replacementValue);
+      index += replacementValue.length() - 1;
+     }
+    }
+    index++; 
+   }
+  }
+  catch (Throwable e) {e.printStackTrace();}  
+  return theValue.toString();
  }
 
+ private String findValue(String key, Hashtable theTable)
+ {
+  Object theValue = theTable.get(key);
+  if (theValue == null)
+   return "";
+  return (String)theValue;
+ } 
 
+ private String getKey(String var)
+ {
+  int index = var.indexOf("=");
+  if (index < 0)
+   return var;
+  return var.substring(0,index);
+ }
+
+ private String getValue(String var)
+ {
+  int index     = var.indexOf("=") + 1;
+  int varLength = var.length();
+  if ( (index < 1) || (index == var.length()))
+   return "";
+  return var.substring(index, varLength);
+ }
+ 
  private Hashtable mapVars(ArrayList theVars)
  {
   Hashtable theTable = new Hashtable();
@@ -349,9 +438,7 @@ class CommandMinerThread extends MinerThread
   for (int i = 0; i < theSize; i++)
   {
    String theVar = ((DataElement)theVars.get(i)).getName();
-   int equalsIndex = theVar.indexOf("=");
-   if (equalsIndex > 0)
-    theTable.put(theVar.substring(0,equalsIndex), theVar.substring(equalsIndex, theVar.length()));
+   theTable.put(getKey(theVar), getValue(theVar));
   }
   return theTable;
  }
