@@ -826,7 +826,6 @@ public class DataElementTableViewer extends TableViewer
 			DataElementLabelProvider provider = (DataElementLabelProvider)getLabelProvider();
 
 			tc.setText(provider.getText(col1Type));
-			//tc.setImage(provider.getImage(col1Type));
 
 			_attributeColumns.add(col1Type);
 			
@@ -844,14 +843,13 @@ public class DataElementTableViewer extends TableViewer
 				else
 				    {
 					_layout.addColumnData(new ColumnWeightData(100));
-					atc = new TableColumn(table, SWT.NONE, i + 1);
+					atc = new TableColumn(table, SWT.RIGHT, i + 1);
 					atc.addSelectionListener(this);
 				    }
 				
 				_attributeColumns.add(attributeType);
 
 				atc.setText(provider.getText(attributeType));
-				//atc.setImage(provider.getImage(attributeType));
 			    }
 
 			while (attributeTypes.size() + 1 < numColumns)
