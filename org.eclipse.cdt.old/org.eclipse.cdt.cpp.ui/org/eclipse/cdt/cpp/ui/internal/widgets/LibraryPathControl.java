@@ -33,29 +33,26 @@ public class LibraryPathControl extends PathControl
 	if (source == _browseButton)
 	    {
 		String selectedDirectory = null;
-		if (_project != null)
+		if (_project != null && _project instanceof Repository)
 		    {
-			if (_project instanceof Repository)
+			DataElement currentDir = ((Repository)_project).getRemoteElement();
+			DataElement input = currentDir;
+			if (currentDir.getParent() != null)
 			    {
-				DataElement currentDir = ((Repository)_project).getRemoteElement();
-				DataElement input = currentDir;
-				if (currentDir.getParent() != null)
+				input = currentDir.getParent();	
+			    }
+			
+			DataElementFileDialog dialog = new DataElementFileDialog("Select Library", input);
+			dialog.open();
+			if (dialog.getReturnCode() == dialog.OK)
+			    {
+				DataElement selected = dialog.getSelected();
+				if (selected != null)
 				    {
-					input = currentDir.getParent();	
+					selectedDirectory = selected.getSource();
 				    }
-				
-				DataElementFileDialog dialog = new DataElementFileDialog("Select Library", input);
-				dialog.open();
-				if (dialog.getReturnCode() == dialog.OK)
-				    {
-					DataElement selected = dialog.getSelected();
-					if (selected != null)
-					    {
-						selectedDirectory = selected.getSource();
-					    }
-				    }
-			    }		
-		    }
+			    }
+		    }		
 		else
 		    {
 			FileDialog dialog = new FileDialog(this.getShell(), SWT.OPEN);
