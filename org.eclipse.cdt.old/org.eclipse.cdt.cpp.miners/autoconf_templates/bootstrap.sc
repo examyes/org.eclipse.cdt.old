@@ -1,3 +1,4 @@
+#!/bin/sh
 # Run this program (./bootstrap.sc) after changing any of
 # the files that will affect the generation of the configure script
 
