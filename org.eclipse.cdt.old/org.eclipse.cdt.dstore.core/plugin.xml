@@ -2,7 +2,7 @@
 <plugin
   name="DataStore Core Plugin"
    id = "com.ibm.dstore.core"
-  version="1.0.0"
+  version="0.5.0"
   provider-name="International Business Machines Corp."
   class="com.ibm.dstore.core.DataStoreCorePlugin">
    <requires>
