@@ -74,8 +74,8 @@
     <ol>
       <li><a href="#install_10">Which CDT build should I download?</a></li>
       <li><a href="#install_30">I can't find the CDT download for XXX?</a></li>
-      <li><a href="#install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></li>
-      <li><a href="#install_50">What must I install on another machine to enable "Remote Projects"?</a></li>
+<!--      <li><a href="#install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></li>
+-->
       <li><a href="#install_60">How do I uninstall CDT?</a></li>
     </ol>
   </li>
@@ -328,8 +328,8 @@
  
  <li><b><a name="install_30">I can't find the CDT download for the XXX operating system?</a></b>
   <p>
-   There is no special CDT download for any particular operating system.  While the CDT is only "supported" on 
-   Linux (<a href="#general_60">why</a>?) much of the CDT function will work on other operating systems.  The CDT
+   There is no special CDT download for any particular operating system.  While the CDT is only 
+   <a href="#general_60">supported</a> on Linux, much of the CDT function will work on other operating systems.  The CDT
    leverages some Linux system tools such as gdb(debugging), autoconf(packaging/build support), and 
    gprof(profiling).  These tools are available for many platforms and if they exist on your system, there is 
    a good chance that the function will work.  
@@ -345,20 +345,18 @@
   </p>
    <hr size="1">
   </li>
- 
+
+<!-- 
  <li><b><a name="install_40">I have installed the CDT but I don't see any C/C++ Support in Eclipse</a></b>
   <p>
-   ?
+   With the CDT properly installed, you should see "C/C++" as a choice when creating a new project or when 
+   opening a new perspective.  If not, then either the CDT is not properly installed or there was some runtime
+   exception that prevented the CDT from loading.  Use the following check-list to troubleshoot your problem:
+ 
   </p>
    <hr size="1">
   </li>
-
- <li><b><a name="install_50">What must I install on another machine to enable "Remote Projects"?</a></b>
-  <p>
-   ?
-  </p>
-   <hr size="1">
-  </li>
+-->
 
   <li><b><a name="install_60">How do I uninstall CDT?</a></b>
   <p>
