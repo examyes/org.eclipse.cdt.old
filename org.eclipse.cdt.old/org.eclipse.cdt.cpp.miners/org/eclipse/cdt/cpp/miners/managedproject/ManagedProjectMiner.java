@@ -356,10 +356,6 @@ public class ManagedProjectMiner extends Miner
 	}
 	private String getMakefileClassification(File makefileAm)
 	{
-		// classifying Makefile.am
-		//String location = _workspace.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
-		//System.out.println("\n Template Location from Managed Project = "+location);
-		//classifier = new MakefileAmClassifier(location);
 		int classification = classifier.classify(makefileAm);
 		Integer classifier = new Integer(classification);
 		return new String(classifier.toString());

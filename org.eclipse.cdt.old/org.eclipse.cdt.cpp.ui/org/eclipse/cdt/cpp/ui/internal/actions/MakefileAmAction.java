@@ -50,8 +50,8 @@ public class MakefileAmAction extends CustomAction {
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-		if(_command.getValue().equals("COMPILER_FLAGS") && !doesFileExist("Makefile.am"))	
-			setEnabled(false);
+	//	if(_command.getValue().equals("COMPILER_FLAGS") && !doesFileExist("Makefile.am"))	
+	//		setEnabled(false);
 			
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN") && doesFileExist("configure.in"))	
 				setEnabled(false);
@@ -62,9 +62,32 @@ public class MakefileAmAction extends CustomAction {
 			DataElement cmdD = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CLASSIFY_MAKEFILE_AM");
 			if (cmdD != null)
 			{
-				DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);	
-				DataElement classifier = (DataElement)status.get(0);
-				String type = classifier.getName();
+				// to be removed
+				//DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);	
+				//DataElement classifier = (DataElement)status.get(0);
+				//String type = classifier.getName();
+				// end of to be removed
+				DataElement classifier = null;
+				ArrayList updated = _subject.getAssociated("update state");
+				if (updated.size() > 0)
+				{
+					classifier = (DataElement)updated.get(0);			
+				}
+				
+				String type = null;		
+				if (classifier != null)
+				{
+					type = classifier.getName();		
+				}
+				else
+				{		
+			
+					DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);								
+								
+					updated = _subject.getAssociated("update state");								
+					classifier = (DataElement)updated.get(0);
+					type = classifier.getName();
+				}
 				
 				int classification = (new Integer(type)).intValue();
 				
@@ -114,14 +137,17 @@ public class MakefileAmAction extends CustomAction {
 			// modify Makefile.am
 		}
 		*/
+		
 		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(makefileAmCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
+    /*
     private String getExistingDef(DataElement parent)
     {
+    	
     	File MakefileAm = new File(_subject.getSource(),"Makefile.am");
 		String line;
 		boolean found = false;
@@ -137,8 +163,10 @@ public class MakefileAmAction extends CustomAction {
 			}
 			in.close();
 		}catch(IOException e){System.out.println(e);}  	
+		
     	return "FLAG DEF";
     }
+    */
  	private boolean doesFileExist(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
