@@ -72,8 +72,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Creating configure script", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Creating configure without updating", "C_CREATE_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Running configure script - creating configure if needed", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Running configure script - creating configure if needed without updating", "C_RUN_CONFIGURE_NO_UPDATE",false);
-		//createCommandDescriptor(projectD, "Updating configure.in & Makefile.am's and creating & running configure", "C_UPDATE_CREATE_RUN", false);
+		createCommandDescriptor(projectD, "Running configure script without updating", "C_RUN_CONFIGURE_NO_UPDATE",false);
 		createCommandDescriptor(projectD, "Cleaning package for distribution", "C_DIST_CLEAN", false);
 		createCommandDescriptor(projectD, "maintainer-clean - recommended for package developer", "C_MAINTAINER_CLEAN", false);
 		createCommandDescriptor(projectD, "make-install", "C_INSTALL", false);
