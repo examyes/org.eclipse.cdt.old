@@ -6,50 +6,35 @@ package org.eclipse.cdt.cpp.ui.internal.editor;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.*;
-
-import com.ibm.lpex.core.*;
-import com.ibm.lpex.alef.*;
-
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.source.IVerticalRuler;
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.viewers.*;
-
-import org.eclipse.core.runtime.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
-
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.MarkerRulerAction;
-import org.eclipse.ui.IEditorPart;
-
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.texteditor.ITextEditor;
 
-import com.ibm.debug.breakpoints.*;
-import com.ibm.debug.internal.picl.PICLUtils;
+import com.ibm.debug.internal.pdt.PICLUtils;
+import com.ibm.debug.pdt.breakpoints.PICLLineBreakpoint;
+import com.ibm.lpex.alef.LpexAbstractTextEditor;
+import com.ibm.lpex.alef.LpexMarkerRulerAction;
+import com.ibm.lpex.core.LpexDocumentLocation;
+import com.ibm.lpex.core.LpexView;
 
 
 /**

@@ -6,57 +6,34 @@ package org.eclipse.cdt.cpp.ui.internal.editor;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.*;
-import org.eclipse.cdt.cpp.ui.internal.actions.*;
-import org.eclipse.cdt.cpp.ui.internal.views.*;
-import org.eclipse.cdt.cpp.ui.internal.editor.contentoutliner.*;
-import org.eclipse.cdt.cpp.ui.internal.editor.codeassist.*;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.dstore.ui.*;
-import org.eclipse.cdt.dstore.ui.resource.*;
+import java.util.ResourceBundle;
 
-import org.eclipse.core.resources.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.cpp.ui.internal.editor.codeassist.CppSourceViewerConfiguration;
+import org.eclipse.cdt.cpp.ui.internal.editor.contentoutliner.CppContentOutlinePage;
+import org.eclipse.cdt.dstore.core.model.DE;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStore;
+import org.eclipse.cdt.dstore.ui.resource.ResourceElement;
+import org.eclipse.cdt.linux.help.listeners.CppeditorHelpListener;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+
+import com.ibm.debug.pdt.DebugEditorActionContributor;
+import com.ibm.lpex.alef.LpexPlugin;
+import com.ibm.lpex.alef.LpexSourceViewer;
 import com.ibm.lpex.alef.LpexTextEditor;
 import com.ibm.lpex.core.LpexView;
 import com.ibm.lpex.core.LpexWindow;
-import com.ibm.lpex.core.LpexConstants;
-import com.ibm.lpex.alef.*;
-
-import org.eclipse.jface.action.IMenuListener;
-
-import org.eclipse.core.resources.*;
-import org.eclipse.ui.views.navigator.*;
-import org.eclipse.jface.text.source.*;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.*;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.ui.*;
-import org.eclipse.ui.views.contentoutline.*;
-import org.eclipse.ui.texteditor.*;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
-
-import org.eclipse.swt.events.*;
-import org.eclipse.swt.widgets.*;
-
-import java.util.ResourceBundle;
-import java.util.ArrayList;
-
-import org.eclipse.cdt.linux.help.listeners.CppeditorHelpListener;
-import com.ibm.lpex.core.LpexWindow;
-import com.ibm.lpex.core.LpexView;
-
-import com.ibm.debug.DebugEditorActionContributor;
 
 public class CppEditor extends LpexTextEditor
 {

@@ -5,26 +5,16 @@ package org.eclipse.cdt.cpp.ui.internal.launchers;
  * All Rights Reserved.
  */
 
-import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-
-import java.io.File;
-import java.text.MessageFormat;
-import java.util.List;
-
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DataElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 /**

@@ -5,21 +5,11 @@ package org.eclipse.cdt.cpp.ui.internal.launchers;
  * All Rights Reserved.
  */
 
-import java.io.File;
-import java.text.MessageFormat;
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.Launch;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.debug.core.model.ISourceLocator;
 
 /**
  * Launches a debug attach session.

@@ -10,21 +10,13 @@ package org.eclipse.cdt.cpp.ui.internal.editor;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
-
+import org.eclipse.search.ui.SearchUI;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 
-import org.eclipse.search.ui.SearchUI;
-
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IBreakpointManager;
-import org.eclipse.debug.ui.*;
-import org.eclipse.swt.graphics.Image;
-
-import org.eclipse.ui.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
-import com.ibm.debug.internal.picl.IPICLDebugConstants;
-import com.ibm.debug.PICLModelPresentation;
+import com.ibm.debug.internal.pdt.IPICLDebugConstants;
+import com.ibm.debug.pdt.PICLModelPresentation;
 
 public class CppMarkerAnnotation extends MarkerAnnotation {		
 	Image _breakpointImage;

@@ -6,40 +6,27 @@ package org.eclipse.cdt.cpp.ui.internal.actions;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.cpp.ui.internal.*;
+import java.util.Map;
 
-import org.eclipse.cdt.dstore.ui.actions.*;
-import org.eclipse.cdt.dstore.core.model.*;
-
-import java.io.*; 
-import java.util.*;
-
-import org.eclipse.jface.action.*;
-
-import org.eclipse.core.runtime.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DE;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStore;
+import org.eclipse.cdt.dstore.ui.actions.CustomAction;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
-
-import org.eclipse.ui.*;
-import org.eclipse.ui.internal.*;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.ui.texteditor.MarkerRulerAction;
-
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.model.IBreakpoint;
 
-import com.ibm.debug.breakpoints.*;
-import com.ibm.debug.internal.picl.PICLUtils;
+import com.ibm.debug.internal.pdt.PICLUtils;
+import com.ibm.debug.pdt.breakpoints.PICLLineBreakpoint;
 
 public class AddStatementBreakpoint extends CustomAction
 { 

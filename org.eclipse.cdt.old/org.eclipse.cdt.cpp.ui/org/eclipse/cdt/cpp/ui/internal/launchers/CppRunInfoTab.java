@@ -6,55 +6,25 @@ package org.eclipse.cdt.cpp.ui.internal.launchers;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.CppProjectAttributes;
-import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-
-import org.eclipse.cdt.dstore.core.model.*;
-import org.eclipse.cdt.dstore.hosts.dialogs.*;
-
-import org.eclipse.swt.events.HelpListener;
-import org.eclipse.swt.events.HelpEvent;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.*;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.dialogs.*;
-//import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.*;
-
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.io.*;
-import java.net.URL;
-import java.net.*;
-
-import org.eclipse.ui.*;
-import org.eclipse.ui.dialogs.*;
-import org.eclipse.ui.model.*;
-import org.eclipse.ui.actions.*;
-
-//  from java
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStore;
+import org.eclipse.cdt.dstore.hosts.dialogs.DataElementFileDialog;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.ui.IDebugUIConstants;
-import org.eclipse.debug.ui.ILaunchConfigurationDialog;
-import org.eclipse.debug.ui.ILaunchConfigurationTab;
-
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.HelpEvent;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -64,17 +34,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.jface.viewers.ILabelProvider;
-
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.dialogs.SelectionDialog;
-import org.eclipse.jface.viewers.StructuredSelection;
 
 
 /**

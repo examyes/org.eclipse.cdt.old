@@ -6,27 +6,15 @@ package org.eclipse.cdt.cpp.ui.internal.launchers;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.cpp.ui.internal.api.*;
-import org.eclipse.cdt.dstore.ui.resource.*;
-import org.eclipse.cdt.dstore.core.model.*;
-
-import org.eclipse.core.resources.IContainer;
+import org.eclipse.cdt.cpp.ui.internal.api.ModelInterface;
+import org.eclipse.cdt.dstore.core.model.DE;
+import org.eclipse.cdt.dstore.core.model.DataElement;
+import org.eclipse.cdt.dstore.core.model.DataStore;
+import org.eclipse.cdt.dstore.ui.resource.FileResourceElement;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.core.model.ISourceLocator;
-import org.eclipse.debug.core.model.IStackFrame;
 
-import com.ibm.debug.internal.picl.PICLDebugTarget;
-import com.ibm.debug.internal.picl.PICLStackFrame;
-import com.ibm.debug.model.ViewInformation;
-
-import com.ibm.debug.*;
+import com.ibm.debug.pdt.WorkspaceSourceLocator;
 
 public class CppSourceLocator extends WorkspaceSourceLocator 
 {
