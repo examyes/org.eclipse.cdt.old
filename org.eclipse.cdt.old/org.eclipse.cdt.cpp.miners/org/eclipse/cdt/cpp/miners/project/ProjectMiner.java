@@ -43,11 +43,13 @@ public class ProjectMiner extends Miner
   DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
 
  
-  createCommandDescriptor(projectD, "Close Project", "C_CLOSE");
+  createCommandDescriptor(projectD, "Close Project", "C_CLOSE_PROJECT");
   createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
+
+  createCommandDescriptor(closedProject, "Delete Project", "C_DELETE_PROJECT").setDepth(0);
   createCommandDescriptor(closedProject, "Open Project", "C_OPEN");
   //eateCommandDescriptor(closedRemoteProjectD, "Open Remote Project", "C_OPEN_REMOTE");
-  
+   
   
   createAbstractRelationship(fsObjectD, projectD);
   createAbstractRelationship(fsObjectD, workspaceD);
@@ -72,8 +74,10 @@ public class ProjectMiner extends Miner
   
   if (name.equals("C_OPEN"))
    handleOpenProject(subject, status);
-  else if (name.equals("C_CLOSE"))
+  else if (name.equals("C_CLOSE_PROJECT"))
    handleCloseProject(subject, status);
+  else if (name.equals("C_DELETE_PROJECT"))
+      handleDeleteProject(subject, status);
   else if (name.equals("C_REFRESH"))
    handleRefreshProject(subject, status);
   else if (name.equals("C_CREATE_REMOTE"))
@@ -148,6 +152,13 @@ public class ProjectMiner extends Miner
   _dataStore.refresh(project);
   _dataStore.refresh(workspace);
  }
+
+    private void handleDeleteProject(DataElement project, DataElement status)
+    {
+	DataElement workspace = project.getParent();
+	_dataStore.deleteObject(workspace, project);
+	_dataStore.refresh(workspace);
+    }
 
  private void handleRefreshProject(DataElement project, DataElement status)
  {

@@ -525,7 +525,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	     return;
 	 }
 
-     System.out.println("opening " + _project);
      DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
      if (oDescriptor != null)
 	 {
@@ -1393,7 +1392,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		DataStore dataStore = cProject.getDataStore();
 		DataElement refreshD = dataStore.localDescriptorQuery(cProject.getDescriptor(), "C_REFRESH_PROJECT");
 		if (refreshD != null)
-		    dataStore.command(refreshD, cProject);
+		    {
+			System.out.println("refreshing project " + project);
+			dataStore.command(refreshD, cProject);
+		    }
 	    }
     }
 
@@ -1432,8 +1434,22 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    if (resource instanceof IProject)
 			{
 			    closeProject((IProject)resource);
-			    _plugin.setCurrentDataStore(_plugin.getDataStore());
+			    DataStore dataStore = _plugin.getCurrentDataStore();
+			    if (dataStore != _plugin.getDataStore())
+				{
+				    _plugin.setCurrentDataStore(_plugin.getDataStore());
+				}
+
 			    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.DELETE, (IProject)resource));
+
+			    // need to delete our representation of a project
+			    DataElement cProject = findProjectElement((IProject)resource);
+			    DataElement commandDescriptor = dataStore.localDescriptorQuery(cProject.getDescriptor(), 
+											   "C_DELETE_PROJECT");
+			    if (commandDescriptor != null)
+				{		
+				    dataStore.command(commandDescriptor, cProject);	
+				}				    
 			}
 
 		    resourceChanged(resource);
