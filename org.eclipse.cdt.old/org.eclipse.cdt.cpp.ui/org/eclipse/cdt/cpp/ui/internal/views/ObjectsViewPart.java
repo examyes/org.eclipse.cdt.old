@@ -290,7 +290,6 @@ public class ObjectsViewPart extends GenericViewPart
 		
 	    case CppProjectEvent.COMMAND:
 		{
-		    updateStatusLine(event);
 		    updateSelectionStatus(event);
 		}
 		break;
@@ -324,48 +323,6 @@ public class ObjectsViewPart extends GenericViewPart
 	    } 
     }
     
-    protected void updateStatusLine(CppProjectEvent event)
-    {
-	IStatusLineManager mgr = getViewSite().getActionBars().getStatusLineManager();
-	IProgressMonitor pm = mgr.getProgressMonitor(); 
-	try
-	{
-	if (event.getType() == CppProjectEvent.COMMAND)
-	    {
-		DataElement commandStatus = event.getObject();
-		if (commandStatus != null)
-		    {
-		DataElement commandObject = commandStatus.getParent();
-		
-		if ((commandObject != null) && (event.getProject() != null))
-		    {
-			if (event.getStatus() == CppProjectEvent.DONE)
-			    {
-				pm.done();
-
-				String commandStr = commandObject.getValue() + " running on " + 
-				    event.getProject().getName();
-				commandStr += " is complete";
-				mgr.setMessage(commandStr);
-
-			    }
-			else if (event.getStatus() == CppProjectEvent.START)
-			    {
-				String commandStr = commandObject.getValue() + " running on " + event.getProject().getName();
-				mgr.setMessage(commandStr);
-
-				pm.beginTask(commandStr, IProgressMonitor.UNKNOWN);
-			    }
-		    }
-		    }
-	    }   
-	}
-	catch (Exception e)
-	{
-	  //System.out.println(e);
-	  	
-	}
-    }
     
      public void fillLocalToolBar() 
   	{

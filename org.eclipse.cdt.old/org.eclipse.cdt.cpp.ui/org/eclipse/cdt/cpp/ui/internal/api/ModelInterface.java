@@ -154,57 +154,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       }
   }
 
-    public class MonitorStatusThread extends Handler
-    {
-	private DataElement _status;
-	private IProject    _project;
-	private int         _threshold;
-	private int         _timesHandled;
-
-	public MonitorStatusThread(DataElement status, IProject project)
-	{
-	    super();
-	    setWaitTime(500);
-	    _threshold = 100;
-	    _timesHandled = 0;
-	    _status = status;
-	    _project = project;
-	    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
-								    CppProjectEvent.START,
-								    _status,
-								    _project));
-	}
-	
-	public void handle()
-	{	
-	    String statusValue = _status.getName();
-	    if (_timesHandled > _threshold)
-		{
-		    if ((_project == null) ||  (!_project.isOpen()))
-			{
-			    statusValue = "done";
-			}
-		}
-	
-	    if (statusValue.equals("done") || statusValue.equals("timeout"))
-		{
-		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
-									    CppProjectEvent.DONE,
-									    _status,
-									    _project));
-		    finish();
-		}
-	    else
-		{
-		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
-									    CppProjectEvent.WORKING,
-									    _status,
-									    _project));
-		    _timesHandled++;
-		}
-	}
-    }
-
   public class ShowViewAction implements Runnable
   {
     private String      _id;
@@ -421,6 +370,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     _projectNotifier = new CppProjectNotifier(this);
     _projectNotifier.enable(true);
+    
+    _projectNotifier.addProjectListener(StatusLineUpdater.getInstance());
 
     _instance = this;
   }
