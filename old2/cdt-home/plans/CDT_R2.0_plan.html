@@ -14,54 +14,39 @@
   <tbody>
     <tr>
       <td style="vertical-align: top; font-weight: bold;">Date</td>
-      <td style="vertical-align: top; font-weight: bold;">Author<br>
-      </td>
-      <td style="vertical-align: top; font-weight: bold;">Reason<br>
-      </td>
+      <td style="vertical-align: top; font-weight: bold;" width="121">Author</td>
+      <td style="vertical-align: top; font-weight: bold;" width="576">Reason</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Sept 29, 2003<br>
-      </td>
-      <td style="vertical-align: top;">Doug Schaefer<br>
-      </td>
-      <td style="vertical-align: top;">Original proposal for layout of
-plan<br>
-      </td>
+      <td style="vertical-align: top;">Sept 29, 2003</td>
+      <td style="vertical-align: top;" width="121">Doug Schaefer</td>
+      <td style="vertical-align: top;" width="576">Original proposal for layout of
+plan</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Oct 14, 2003<br>
-      </td>
-      <td style="vertical-align: top;">Doug Schaefer</td>
-      <td style="vertical-align: top;">First cut at content under
-consideration by IBM<br>
-      </td>
+      <td style="vertical-align: top;">Oct 14, 2003</td>
+      <td style="vertical-align: top;" width="121">Doug Schaefer</td>
+      <td style="vertical-align: top;" width="576">First cut at content under
+consideration by IBM</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Oct 16, 2003<br>
-      </td>
-      <td style="vertical-align: top;">Doug Schaefer<br>
-      </td>
-      <td style="vertical-align: top;">Added content from QNX and more
-from IBM<br>
-      </td>
+      <td style="vertical-align: top;">Oct 16, 2003</td>
+      <td style="vertical-align: top;" width="121">Doug Schaefer</td>
+      <td style="vertical-align: top;" width="576">Added content from QNX and more
+from IBM</td>
     </tr>
     <tr>
-      <td style="vertical-align: top;">Oct 20, 2003<br>
-      </td>
-      <td style="vertical-align: top;">Doug Schaefer<br>
-      </td>
-      <td style="vertical-align: top;">Added links to feature specs,
-updated compatibility section,<br>
-parser enhancment feature.<br>
-      </td>
+      <td style="vertical-align: top;">Oct 20, 2003</td>
+      <td style="vertical-align: top;" width="121">Doug Schaefer</td>
+      <td style="vertical-align: top;" width="576">Added links to feature specs,
+updated compatibility section, parser enhancment feature.</td>
     </tr>
   </tbody>
 </table>
 <p><i>Please send comments about this draft plan to
 the </i><a href="mailto:eclipse-dev@eclipse.org">cdt-dev@eclipse.org</a>
 <i>developer
-mailing list.</i><br>
-</p>
+mailing list.</i></p>
 <p>This document lays out the feature and API set for the next feature
 release designated release 2.0.</p>
 <ul>
@@ -71,8 +56,7 @@ release designated release 2.0.</p>
 environments</a></li>
   <li><a href="#Compatibility_with_Previous_Releases">Compatibility
 with previous releases</a></li>
-  <li><a href="#Plan_Items">Plan Items</a><br>
-  </li>
+  <li><a href="#Plan_Items">Plan Items</a></li>
 </ul>
 <p>Plans do not materialize out of nowhere, nor are they entirely
 static. To ensure the planning process is transparent and open to the
@@ -126,47 +110,40 @@ accompanying summary of why they were dismissed. Keeping track of
 rejected items avoids repeating the discussion. </li>
 </ul>
 <h2><a name="Release_Deliverables"></a>Release Deliverables</h2>
-<p>The release deliverables include the following:<br>
-</p>
+<p>The release deliverables include the following:</p>
 <ul>
   <li>Source code release for CDT available as versions tagged
 "CDT_R2_0" in the Eclipse Tools <a
  href="http://dev.eclipse.org/viewcvs">CVS
 Repository</a></li>
   <li>Various CDT features released on the Eclipse Update Site as well
-as distribution zips.<br>
-  </li>
+as distribution zips.</li>
 </ul>
 <h2><a name="Release_Milestones"></a>Release Milestones</h2>
 <p>Release milestones occuring at roughly 6 week intervals exist to
 facilitate course-grained planning and staging.&nbsp; These milestones
 are intended to line up with equivalent milestones in the <a
  href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#Milestones">Eclipse
-3.0 Project Plan</a>.<br>
-</p>
-<ul>
-  <li>Friday, November 21, 2003 - Milestone 1 (2.0 M1) - stable build
-reflecting progress. Runs on Eclipse 3.0 M5.</li>
-  <li>Friday, January 16, 2004 - Milestone 2 (2.0 M2) - stable build
-reflecting progress. Runs on Eclipse 3.0 M6.</li>
-  <li>Friday, February 27, 2004 - Milestone 3/Release Candidate 0 (2.0
-RC0) - freeze date, only high priority defects allowed going forward.</li>
-  <li>Friday, April 23, 2004 - General Availability (2.0 GA) - release
-deliverables available for download (8 weeks after RC0)<br>
-  </li>
+3.0 Project Plan</a> and will use the same name. The objective of each milestone is to deliver a subset of new CDT functionality for testing and to get feedback on the usability of these features.</p>
+<ul><LI>Friday November 21, 2003 - Milestone 5 (3.0 M5) -  stable build reflecting progress, support for running in Eclipse 3.0, last support for Eclipse 2.1.x.</LI><LI> Friday
+	December 19, 2003 - Milestone 6 (3.0 M6) - stable build reflecting progress, support for running in Eclipse 3.0 only</LI>
+	<LI> Friday
+	February 13, 2004 - Milestone 7 (3.0 M7) - stable build reflecting
+	progress</LI>
+	<LI> Friday March
+	26, 2004 - Milestone 8 (3.0 M8) - stable build reflecting progress</LI>
+	<LI> Friday May 7,
+	2004 - Milestone 9 (3.0 M9) - stable build - feature complete -
+	development freeze - lock down and testing begins</LI>
 </ul>
-<p><i><b>Currently, the Eclipse 3.0 plan only sets out M6. This plan
-assumes the next milestone will be RC0. If this is not the case, the
-CDT
-plan will be changed to line up with the Eclipse 3.0 plan.</b></i><br>
+<p><i><b></b></i>The target GA is the end of June.
 </p>
 <h2><a name="Target_Operating_Environments"></a>Target Operating
 Environments</h2>
 <p>The objective is to support the CDT on all target operating
 environments listed in the <a
  href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#TargetOperatingEnvironments">Eclipse
-3.0 Project Plan</a>. This list is as follows:<br>
-</p>
+3.0 Project Plan</a>. This list is as follows:</p>
 <table width="95%" border="1">
   <tbody>
     <tr>
@@ -255,17 +232,14 @@ hp9000 PA-RISC</td>
 user interface elements provided by the CDT, including dialogs and
 error
 messages, are externalized. The English strings are provided as the
-default resource bundles.<br>
-</p>
+default resource bundles.</p>
 <p>Latin-1 locales are supported by the CDT on all of the above
 operating environments; DBCS locales are supported by the Eclipse SDK
 on
 the Windows, GTK, and Motif window systems; BIDI locales are supported
-by the Eclipse SDK only on Windows operating environments.<br>
-</p>
+by the Eclipse SDK only on Windows operating environments.</p>
 <p><span style="font-style: italic;">Specific notes on different
-languages? Details on BIDI support</span><br>
-</p>
+languages? Details on BIDI support</span></p>
 <h2><a name="Compatibility_with_Previous_Releases"></a>Compatibility
 with Previous Releases</h2>
 <p>One of the main themes for this release of the CDT will be
@@ -275,12 +249,10 @@ such, no committment is made to maintain compatibility with previous
 releases. Every effort will be made to maximize compatibility, and
 areas
 that do require change will be documented and communicated to the
-community.<br>
-</p>
+community.</p>
 <p>Compatability of project description files must be maintained or
 automated upgrade mechanisms put in place to ensure that users of
-previous CDT releases can move seemlessly to CDT 2.0.<br>
-</p>
+previous CDT releases can move seemlessly to CDT 2.0.</p>
 <h2><a name="Plan_Items"></a>Plan Items</h2>
 <p>The plan items listed in this section reflect new features of the
 CDT, or areas where existing features will be significantly reworked.
@@ -330,8 +302,7 @@ then on rename refactoring which will leverage off and make
 improvements to the C/C++ Search
 feature to correctly refactor the references. (<a
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
-spec</a>)<br>
-</p>
+spec</a>)</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Content
 assist enhancements.</span>
 The
@@ -342,8 +313,7 @@ C++ code completion on members.
 &nbsp;The majority of this work will be to make more use of the parser
 to provide accurate and speedy competion proposals. (<a
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/contentassist.html?cvsroot=Tools_Project">feature
-spec</a>)<br>
-</p>
+spec</a>)</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Managed
 Build enhancements.</span> The managed build feature will be enhanced
 for usability and for flexibility to support a large variety of build
@@ -353,18 +323,15 @@ for handling different variety of underlying tools including different
 make utilities, as well as support for different file types (like
 lex/yacc). (<a
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/managedmake.html?cvsroot=Tools_Project">feature
-spec</a>)<br>
-</p>
+spec</a>)</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">User
 Documentation enhancements.</span> The user documentation will be
 expanded on to ensure the success of new and experienced users of the
-CDT.<br>
-</p>
+CDT.</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Internationalization
 and Accessibility. </span>Normally, these capabilities should be
 designed into features as they have been developed. Areas where this
-hasn't be done will be addressed in this release.<br>
-</p>
+hasn't be done will be addressed in this release.</p>
 <h4>Proposed Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
 Parser enhancements.</span> The C/C++ parser is not externally visible
@@ -375,36 +342,30 @@ correctly, information about the target build environment is required.
 This feature will provide the framework for more of this information to
 be provided (than the previous release) by the build systems. The
 objective is to minimize the information the user must enter for these
-features to work.<br>
-</p>
+features to work.</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
 Search enhancements.</span>
 This feature will be enhanced to add the capability of selecting a name
 in the editor and searching for declarations, definitions, and
 references to that name. The parser will be used to determine
 accurately the appropriate C/C++ definition of the name to be used in
-the search.<br>
-</p>
+the search.</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C++
 Class Browser/C++ Hierarchy View.</span>&nbsp;
 A view dedicated to the navigation of C++ class hierarchies associated
 with objects or classes defined in a project. This include the ability
 to see class members, their specifications (public, private, protected,
 virtual, etc), their overrides, and the inheritance structure (both
-inherited from and inherited by).<br>
-</p>
+inherited from and inherited by).</p>
 <h4>Deferred Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Quick
-Fix.</span>&nbsp; Do something like the Quick Fix feature in Java.<br>
-</p>
+Fix.</span>&nbsp; Do something like the Quick Fix feature in Java.</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Mixed
 Java/C/C++ Development.</span>&nbsp; Support the writing, building, and
 debugging of native methods in a mixed Java/C/C++ environment. If we
 want to get real good, support the debugging of an embedded JVM in a
-C/C++ application. Java calling C, C calling Java...<br>
-</p>
-<h4>Rejected Items<br>
-</h4>
+C/C++ application. Java calling C, C calling Java...</p>
+<h4>Rejected Items</h4>
 <p style="margin-left: 40px;">None at this time.</p>
 <h3><a name="CDT Platform Theme - ISV Enablement"></a>Theme: ISV
 Enablement</h3>
@@ -413,8 +374,7 @@ Enablement</h3>
 documentation.</span> A new help plugin will be created that will
 provide documentation that will help ISVs who wish to integrate with
 different aspects of the CDT. This document will provide a reference
-section<br>
-</p>
+section</p>
 <h4>Proposed Items</h4>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Parser
 extensibility.</span> To
@@ -429,13 +389,10 @@ different tools for different tasks, a model describing these tools
 (sometimes called a Target model) is required. This model would provide
 such information as command name and available options. It would also
 provide information for specific parts of the CDT such as providing a
-mechanism to provide default symbols and inclusion paths for a compiler.<br>
-</p>
+mechanism to provide default symbols and inclusion paths for a compiler.</p>
 <h4>Deferred Items</h4>
 <p style="margin-left: 40px;">None at this time.</p>
 <h4>Rejected Items</h4>
-<p style="margin-left: 40px;">None at this time.<br>
-</p>
-<br>
+<p style="margin-left: 40px;">None at this time.</p>
 </body>
 </html>
