@@ -121,19 +121,16 @@ public class ProcessMonitorMiner extends Miner
     
     public void finish()
     {
-	synchronized (_writer)
-	    {
-		try
-		    {  
-			_writer.write("exit");
-			_writer.write('\n');
-			_writer.flush();   			
-		    }
-		catch (IOException e)
-		    {
-			//	System.out.println(e);
-		    }	
+	try
+	    {  
+		_writer.write("exit");
+		_writer.write('\n');
+		_writer.flush();   			
 	    }
+	catch (IOException e)
+	    {
+		//	System.out.println(e);
+	    }	
 	
 	_monitor.finish();
 	super.finish();
