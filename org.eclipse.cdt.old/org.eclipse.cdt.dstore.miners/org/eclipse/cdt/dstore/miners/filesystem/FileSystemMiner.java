@@ -572,6 +572,8 @@ public class FileSystemMiner extends Miner
 	    {
 		handleDate(theDirectory.get(i), status);
 	    }
+
+	_dataStore.refresh(theDirectory);
 	return status;
     }
 
