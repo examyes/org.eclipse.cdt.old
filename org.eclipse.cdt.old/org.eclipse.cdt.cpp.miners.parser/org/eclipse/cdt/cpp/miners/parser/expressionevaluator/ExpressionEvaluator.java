@@ -101,7 +101,7 @@ public class ExpressionEvaluator
   while (!stack.isEmpty())
   { 
    t = tokenizer.getNextToken();
-   System.out.println(t);
+   //System.out.println(t);
    
    if ((t == null) || (t.kind == ExprToken.CLOSEPAREN))
    { 
@@ -135,7 +135,7 @@ public class ExpressionEvaluator
     return null;
    }
   }
-  System.out.println(postfix);
+  //System.out.println(postfix);
   
   return postfix;
  }
@@ -143,7 +143,7 @@ public class ExpressionEvaluator
  private static void main (String args[])
  {
   ExpressionEvaluator eval = new ExpressionEvaluator();
-  System.out.println(eval.evaluate(args[0]));
+  //System.out.println(eval.evaluate(args[0]));
  }
 }
  

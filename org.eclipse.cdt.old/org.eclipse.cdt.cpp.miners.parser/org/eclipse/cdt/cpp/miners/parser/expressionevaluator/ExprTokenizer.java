@@ -14,7 +14,6 @@ public class ExprTokenizer
  
  public ExprTokenizer(String theExpression)
  {
-  System.out.println("expression = " + theExpression);
   _expression = theExpression;
   _index = 0;
  }
