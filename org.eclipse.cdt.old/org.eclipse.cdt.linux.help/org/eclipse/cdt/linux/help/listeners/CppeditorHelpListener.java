@@ -12,6 +12,7 @@ import com.ibm.lpex.core.LpexView;
 
 import com.ibm.linux.help.HelpPlugin;
 
+import java.io.*;
 
 public class CppeditorHelpListener implements HelpListener
 {
@@ -25,17 +26,21 @@ public class CppeditorHelpListener implements HelpListener
     }
 
     public void helpRequested(HelpEvent e)
-    {
-	
+    {	
 	String line = _lpexView.elementText(_lpexView.currentElement());
 	
 	StringBuffer keyword = new StringBuffer();
 
-	int column = _lpexView.currentPosition()-2;
+	int column = _lpexView.currentPosition()-2;	
+
+	if(column>=line.length())
+	    {
+		return; //Do nothing when cursor is *beyond* the end of line
+	    }
 
 	for(int i=column;i>=0;i--)
-	    {
-		char letter = line.charAt(i);
+	    {		
+		char letter = line.charAt(i);		
 		if(!isValidIdentifier(letter))
 		    break;
 		else
@@ -50,7 +55,11 @@ public class CppeditorHelpListener implements HelpListener
 		else
 		    keyword.append(letter);
 	    }
-	_plugin.showMatches(keyword.toString());	
+
+	if(keyword.length()!=0)
+	    {
+		_plugin.showMatches(keyword.toString());
+	    }		
     }   
     private boolean isValidIdentifier(char c)
     {
