@@ -90,45 +90,41 @@ public class DataElementSorter extends ViewerSorter
 		  }
 
 	      // check for integers
-	      Integer int1 = null;
-	      Integer int2 = null;
-	      try
-		  {
-		      int1 = new Integer(n1);
-		      int2 = new Integer(n2);
-		  }
-	      catch (NumberFormatException e)
-		  {
-		      int1 = null;
-		      int2 = null;
-		  }
-
-	      // check for float
-	      Float float1 = null;
-	      Float float2 = null;
-	      try
-		  {
-		      float1 = new Float(n1);
-		      float2 = new Float(n2);
-		  }
-	      catch (NumberFormatException e)
-		  {
-		      float1 = null;
-		      float2 = null;
-		  }
-
-	      if (int1 != null && int2 != null)
-		  {
-		      return int1.compareTo(int2); 
-		  }
-	      else if (float1 != null && float2 != null)
-		  {
-		      return float1.compareTo(float2); 
+	      if (isInteger(n1) && isInteger(n2))
+	      {
+		  Integer int1 = null;
+		  Integer int2 = null;
+		  try
+		      {
+			  int1 = new Integer(n1);
+			  int2 = new Integer(n2);
+			  return int1.compareTo(int2); 
+		      }
+		  catch (NumberFormatException e)
+		      {
+		      }
+	      }
+	      else if (isFloat(n1) && isFloat(n2))
+		  {		  
+		      // check for float
+		      Float float1 = null;
+		      Float float2 = null;
+		      try
+			  {
+			      float1 = new Float(n1);
+			      float2 = new Float(n2);
+			      return float1.compareTo(float2); 
+			  }
+		      catch (NumberFormatException e)
+			  {
+			  }
 		  }
 	      else
 		  {
 		      return collator.compare(n1, n2);
 		  }
+
+	      return 0;
 	  }
       catch (Exception e)
 	  {
@@ -163,4 +159,49 @@ public class DataElementSorter extends ViewerSorter
 	    }
 	_attribute = attributeDescriptor;
     }  
+
+
+    private boolean isInteger(String str)
+    {
+	for (int i = 0; i < str.length(); i++)
+	    {
+		char c = str.charAt(i);
+		if (!Character.isDigit(c))
+		    {
+			if (i == 0 && c == '-')
+			    {
+			    }
+			else
+			    {
+				return false;
+			    }
+		    }
+	    }
+
+	return true;
+    }
+
+    private boolean isFloat(String str)
+    {
+	for (int i = 0; i < str.length(); i++)
+	    {
+		char c = str.charAt(i);
+		if (!Character.isDigit(c))
+		    {
+			if (i == 0 && c == '-')
+			    {
+			    }
+			else if (i == '.')
+			    {
+			    }
+			else
+			    {
+				return false;
+			    }
+		    }
+	    }
+
+	return true;
+    }
+
 }
