@@ -12,18 +12,19 @@ import java.util.*;
 
 public class DebugMiner extends Miner
 {
-    private String _gdbPluginPath = null;
+    private String _gdbPiclPath = null;
     private String _debugJarPath = null;
     private String _debugInvocation = null;
 
     public void load()
     {
-      String gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
+      _gdbPiclPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.gdbPicl";
+      String debugPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug";
       String ps = System.getProperty("path.separator");
       String fs = "/";
-      _debugJarPath =       gdbPiclPath + fs + "epdc.jar";
-      _debugJarPath += ps + gdbPiclPath + fs + "debug_gdbPicl.jar";
-      _debugJarPath += ps + gdbPiclPath;
+      _debugJarPath =       debugPath + fs + "epdc.jar";
+      _debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
+      _debugJarPath += ps + _gdbPiclPath;
        _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdbPicl.Gdb ";
     }
 
@@ -80,7 +81,7 @@ public class DebugMiner extends Miner
 
 	if (System.getProperty("os.name").equals("Linux"))
 	{
-	    invocationStr += " -gdbPath=" + _gdbPluginPath;
+	    invocationStr += " -gdbPath=" + _gdbPiclPath;
 	}
 
 	/**
