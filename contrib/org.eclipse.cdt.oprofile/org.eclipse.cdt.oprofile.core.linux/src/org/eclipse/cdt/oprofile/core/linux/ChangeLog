@@ -1,0 +1,14 @@
+2004-07-13  Keith Seitz  <keiths@redhat.com>
+
+	* LinuxOpcontrolProvider.java (_OPCONTROL_PROGRAM): Call _findOpcontrol.
+	(_findOpcontrol): New method.
+	* OpxmlRunner.java (_OPXML_PROGRAM): New constant.
+	(run): Use XMLReaderFactory.createXMLReader again.
+	(_findOpxml): New method.
+
+2004-04-20  Keith Seitz  <keiths@redhat.com>
+
+	* LinuxOpcontrolProvider.java: New file.
+	* LinuxOpxmlProvider.java: New file.
+	* OpxmlRunner.java: New file.
+

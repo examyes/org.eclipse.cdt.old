@@ -1,0 +1,224 @@
+2004-08-10  Keith Seitz  <keiths@redhat.com>
+
+	* oprofiledb.cc (walk_samples): Call _close_db.
+	(get_count): Use walk_samples.
+	(get_header): Add important comment about _open-/_close_db.
+	* samplefile.cc (samplefile): Initialize header to NULL. Delay
+	processing of that until...
+	(get_header): ... here.
+	* samplefile.h (get_header): Remove inline definition.
+	* stable.cc (read_symbols): Call _close_bfd.
+
+2004-07-14  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml: Use "basearch" instead of "arch" since this is
+	already a pre-defined build variable in the pde builder scripts.
+
+2004-04-05  Keith Seitz  <keiths@redhat.com>
+
+	From Tom Tromey  <tromey@redhat.com>:
+	* build.xml (destination): Use ${arch}.
+
+2003-11-14  Keith Seitz  <keiths@redhat.com>
+
+	* sfheader.h (samplefile_header (const samplefile_header*)): New
+	constructor.
+	(~samplefile_header): New destructor.
+	(_alloced): New private variable
+	* sfheader.cc (samplefile_header (const samplefile_header*)): New
+	constructor.
+	(~sample_fileheader): New destructor.
+	
+	* session.cc (get_samplefiles): Use counter argument
+	properly.
+	Filter out separate sample files, but make sure that
+	we make "fake" parents when necessary.
+	(operator<<): Sample count should be long, not int.
+	Add in separate samplfile counts, too.
+
+	* samplefile.h (get_parent_name): New static method.
+	(samplefile): Add "fake" parameter.
+	(_is_fake): New private variable.
+	* samplefile.cc (samplefile): Add fake parameter.
+	Initialize _header to first separate sample file's header
+	if this samplefile is fake.
+	(~samplefile): Test if objects are non-NULL before deleting.
+	(get_samples): Only look for samples in this file if it
+	is not "fake".
+	(get_count): If fake, return 0.
+	(has_samples): If fake, return true.
+	(get_parent_name): New method.
+
+	* opxml.cc (args_help): Add counter argument for samples
+	command.
+	(class event_sorter): New class.
+	(session_sorter::operator()): Change parameters to
+	data_t types instead of sessions.
+	(samples): Now take a mandatory counter number and
+	optional session name.
+	Pass counter number to session::get_samplefiles.
+	(sessions): Instantiate event_sorter to insert events
+	alphabetically.
+	Convert map to store a list of counter and list of sessions
+	indexed by event. Adjust output to use new map.
+
+2003-10-24    <keiths@valrhona.uglyboxes.com>
+
+	* opxml.cc (sessions): Sort sessions before output. Just
+	more convenient to do it here than in the Java UI.
+	(session_sorter): New functor.
+
+2003-10-24  Keith Seitz  <keiths@redhat.com>
+
+	* opxml.cc (args_help): Correct usage for debug-info option.
+	(main): Use POSIXLY_CORRECT option to getopt_long_only.
+	(check-events): Output correct argv's for options in error messages.
+	error messages.
+	Simplify get_integer error messages.
+	(get_integer): On error return negative errno.
+
+2003-10-20  Keith Seitz  <keiths@redhat.com>
+
+	* opinfo.h (get_cpu_frequency): New method.
+	* opinfo.cc (get_cpu_frequency): New method.
+	(operator<<(ostream&,opinfo&)): Output cpu frequency.
+
+2003-10-15  Keith Seitz  <keiths@redhat.com>
+
+	* opinfo.h: New file.
+	* opinfo.cc: New file.
+	* oxmlstream.h: New file.
+	* samplefile.h: New file.
+	* samplefile.cc: New file.
+	* session.h: New file.
+	* session.cc: New file.
+	* sfheader.h: New file.
+	* sfheader.cc: New file.
+	* util.h: New file.
+	* util.cc: New file.
+	* xmlbuf.h: New file.
+	* xmlbuf.cc: New file.
+	* xmlfmt.h: New file.
+	* xmlfmt.cc: New file.
+	* xmltag.h: New file.
+	* xmltag.cc: New file.
+	* Makefile: Update for new targets.
+	* build.xml (oprofile-lib-srcs): Add util.cc.
+	* oprofiledb.h: GNU-ify coding and naming of classes and variables.
+	(has_samples(void)): New method.
+	(has_samples(bool)): New method.
+	(walk_samples): New method.
+	(get_count): New method.
+	(_has_samples_callback): New method.
+	(_get_count_callback): New method.
+	(_has_samples): New variable.
+	(_callback): New variable.
+	* oprofiledb.cc: GNU-ify coding and naming of classes and variables.
+	(~oprofile_db): Don't free _filename: it's now a string.
+	(walk_samples): New method.
+	(get_samples): Use walk_samples.
+	(has_samples): New method.
+	(get_count): New method.
+	(_has_samples_callback): New method.
+	(_get_count_callback): New method.
+	* opxml.cc: Rewrite.
+	* sample.h: GNU-ify coding and naming of classes and variables.
+	(count): Rename to ...
+	(get_count): ... this for consistency.
+	(get_symbol): Declare return value const.
+	(operator<<): New function.
+	* sample.cc: GNU-ify coding and naming of classes and variables.
+	(operator<<): New function.
+	* stable.h: GNU-ify coding and naming of classes and variables.
+	(get_bfd_symbol_table): New method.
+	* stable.cc: GNU-ify coding and naming of classes and variables.
+	(read_symbols): Use size_t instead of int for vector size type.
+	Remove unused variable "keep".
+	* symbol.h: GNU-ify coding and naming of classes and variables.
+	(operator<<): New function.
+	* symbol.cc: GNU-ify coding and naming of classes and variables.
+	(operator<<): New function.
+
+2003-07-15  Keith Seitz  <keiths@redhat.com>
+
+	* opxml.cc (options): It's "check-events" not "check-event".
+	(check_event): Rename to check_events.
+	(main): Rename check_event.
+	(check_events): Fix off-by-one error with argv. Event is in
+	argv[2] not argv[1].
+	Propogated to umask in argv[3].
+	Output tag is "check-events" not "check-event".
+
+2003-07-02  Keith Seitz  <keiths@redhat.com>
+
+	* oprofile.h: Remove.
+	* opunitmask.h: Remove.
+
+	Merge from branch:
+	2003-06-30  Keith Seitz  <keiths@redhat.com>
+	* sample.h (NAME_FOR_SYMBOLLESS): Remove. No longer needed.
+	(name): Return NULL when no symbol is associated with this sample.
+	(demangled_name): Likewise.
+
+	2003-06-27  Keith Seitz  <keiths@redhat.com>
+	* oprofile.cc: Remove.
+	* opxml.cc: New file.
+	* build.xml: Change from building liboprofile.so to opxml program.
+
+2003-05-23  Keith Seitz  <keiths@redhat.com>
+
+	* oprofile.cc (op_events_desc.h): Don't include -- it's no longer
+	in oprofile.
+	(lookup_event_by_name): "New" function.
+	(lookup_event_index): Removed.
+	(Java_com_redhat_eclipse_oprofile_core_Oprofile__1get_1events): Use
+	lookup_event_by_name.
+	(Java_com_redhat_eclipse_oprofile_core_Oprofile_get_1event_1description): Ditto.
+	(Java_com_redhat_eclipse_oprofile_core_Oprofile_get_1min_1count): Ditto.
+	(Java_com_redhat_eclipse_oprofile_core_Oprofile_get_1unit_1mask_1info): Ditto.
+	(Java_com_redhat_eclipse_oprofile_core_Oprofile_get_1event_1number): Ditto.
+	
+	* build.xml: Add oprofile's liboputil.a to extra-oprofile-libs.
+	* Makefile (OPROFILE_LIBUTIL): Ditto.
+
+2003-05-08  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml (build): Add "other-libs" to final link.
+
+2003-05-07  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml (cleanup): Remove.
+	(build): Use fileset of any objs in object directory to produce
+	a list of target files to pass to linker. Apparently ANT cannot
+	do this.
+	Copy library file to destination instead of moving it.
+	(clean): Remove the library from the installation directory, too.
+
+2003-05-01  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml: New file. This is the official way to build this
+	library. You may find the Makefile easier for just day-to-day
+	work, though.
+
+2003-04-14  Keith Seitz  <keiths@redhat.com>
+
+	* Makefile (CHECK_DIR): New target to create output directory
+	if it doesn't exist.
+
+2003-04-04  Keith Seitz  <keiths@redhat.com>
+
+	* Makefile: New file.
+	* oprofiledb.cc: New file.
+	* oprofiledb.h: New file.
+	* oprofile.h: New file.
+	* oprofile.cc: New file.
+	* opunitmask.h: New file.
+	* sample.h: New file.
+	* sample.cc: New file.
+	* stable.h: New file.
+	* stable.cc: New file.
+	* symbol.h: New file.
+	* symbol.cc: New file.
+	* elf/common.h: New file.
+	* elf/internal.h: New file.
+

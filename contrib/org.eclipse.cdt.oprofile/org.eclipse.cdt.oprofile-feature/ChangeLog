@@ -1,0 +1,47 @@
+2004-07-16  Keith Seitz  <keiths@redhat.com>
+
+	* feature.xml: Bump versions to 1.1.0.
+
+2004-07-16  Keith Seitz  <keiths@redhat.com>
+
+	* build.properties: Add feature.properties.
+
+2004-07-15  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml: Remove. No longer needed.
+
+2004-07-13  Keith Seitz  <keiths@redhat.com>
+
+	* .classpath: New file.
+	* build.xml: Regenerate.
+	* feature.xml: Recompute dependencies.
+
+2004-07-13  Keith Seitz  <keiths@redhat.com>
+
+	* build.properties: New file.
+
+2003-09-08  Tom Tromey  <tromey@redhat.com>
+
+	* feature.xml (id, label): Updated.
+	* feature.properties: New file.
+
+2003-08-28  Phil Muldoon  <pmuldoon@redhat.com>
+
+	* build.xml(all.plugins): Added com.redhat.eclipse.oprofile.doc
+	* feature.xml: Added com.redhat.eclipse.oprofile.doc
+
+2003-05-07  Keith Seitz  <keiths@redhat.com>
+
+	* build.xml (all.plugins): Fix broken classpaths.
+	(all.fragments): Likewise.
+
+2003-05-07  Keith Seitz  <keiths@redhat.com>
+
+	* features.xml: Correct UI and Launch plugin IDs.
+
+2003-04-30  Keith Seitz  <keiths@redhat.com>
+
+	* features.xml: New file.
+	* .project: New file.
+	* build.xml: Generated. New file.
+	
