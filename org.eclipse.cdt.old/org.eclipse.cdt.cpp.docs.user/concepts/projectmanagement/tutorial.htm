@@ -296,12 +296,78 @@ from the context menu.</font></li>
 
 <br>&nbsp;
 <p>&nbsp;
-<p><font size=+1>Let us now expand our sample Hello project to include
-source files in a sub directory of the "sources" directory.&nbsp;</font>
+<p><font size=+1>Let us now expand our sample HelloAutoconf project to
+include source files in a sub directories of the "sources" directory. Usually
+these typr of project are designated as deep projects.&nbsp;&nbsp;</font>
 <br>&nbsp;
 <ul>
 <li>
-<font size=+1>create a&nbsp;</font></li>
+<font size=+1>Create a new subdirectory and set the name to be decorations</font></li>
+
+<li>
+<font size=+1>Create the following two files. frame.cc and frame.h.</font></li>
+</ul>
+<u><font color="#3366FF"><font size=+1></font></font></u>
+<ul>
+<ul><u><font color="#3366FF"><font size=+1>frame.cc</font></font></u><font size=+1></font>
+<p><font size=+1>#include "frame.h"</font></ul>
+</ul>
+<font size=+1></font>
+<ul>
+<ul><font size=+1>int CFrame::getSize()</font>
+<br><font size=+1>{</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp; return 16;</font>
+<br><font size=+1>}</font><font size=+1></font>
+<p><u><font color="#3366FF"><font size=+1>frame.h</font></font></u></ul>
+</ul>
+<font size=+1></font>
+<ul>
+<ul><font size=+1>class CFrame</font>
+<br><font size=+1>{</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public:</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int getSize();</font>
+<br><font size=+1>};</font>
+<br><font size=+1></font>&nbsp;</ul>
+
+<li>
+<font size=+1>Also, modify main.cc to include the following code - added
+code is in red</font></li>
+
+<ul><font size=+1></font>&nbsp;
+<br><u><font color="#3366FF"><font size=+1>main.cc</font></font></u><font size=+1></font>
+<p><font size=+1>#include "hello.h"</font><font size=+1></font>
+<p><font size=+1>void CHello::display()</font>
+<br><font size=+1>{</font>
+<br><font size=+1>&nbsp;<font color="#CC0000">&nbsp;&nbsp; //Decorations:</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; CFrame frame;</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; int frameSize
+= frame.getSize();</font></font><font color="#CC0000"><font size=+1></font></font>
+<p><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; for(int i = 0;
+i &lt;frameSize; i++)</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; {</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+std::cout &lt;&lt; "*";</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt;
+"\n";</font></font><font color="#CC0000"><font size=+1></font></font>
+<p><font size=+1>&nbsp;&nbsp;&nbsp; //Helloworld:</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp; std::string strHello;</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp; strHello = "* Hello World! *\n";</font>
+<br><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt; strHello;</font><font size=+1></font>
+<p><font size=+1>&nbsp;&nbsp;&nbsp;<font color="#CC0000"> for(int i = 0;
+i &lt;frameSize; i++)</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; {</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+std::cout &lt;&lt; "*";</font></font>
+<br><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; }</font></font><font color="#CC0000"><font size=+1></font></font>
+<p><font color="#CC0000"><font size=+1>&nbsp;&nbsp;&nbsp; std::cout &lt;&lt;
+"\n";</font></font>
+<br><font color="#CC0000"><font size=+1>}</font></font>
+<br><font color="#CC0000"><font size=+1></font></font>&nbsp;
+<br><font size=+1></font>&nbsp;
+<br><font size=+1></font>&nbsp;
+<br><font size=+1></font>&nbsp;
+<br><font size=+1></font>&nbsp;</ul>
 </ul>
 
 <li>
