@@ -43,7 +43,7 @@
 		<delete dir="${temp.folder}/cdtui.jar.bin"/>
 		<mkdir dir="${temp.folder}/cdtui.jar.bin"/>
 		<!-- compile the source code -->
-        <javac destdir="${temp.folder}/cdtui.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.swt/bin;../org.eclipse.core.resources/bin;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.apache.xerces/xercesImpl.jar;../org.eclipse.ui/workbench.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.debug.core/dtcore.jar;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.eclipse.core.runtime/bin;../org.apache.xerces/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.compare/compare.jar;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.core.boot/bin;../org.eclipse.debug.ui/bin;../org.eclipse.search/search.jar;../org.eclipse.core.resources/resources.jar;../org.eclipse.cdt.core/bin;../org.eclipse.debug.core/bin;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.debug.ui/dtui.jar;../org.eclipse.core.boot/boot.jar;../org.eclipse.search/bin;../org.eclipse.swt.${ws}/ws/${ws}/swt.jar;../org.apache.xerces/xmlParserAPIs.jar;../org.eclipse.compare/bin">
+		<javac destdir="${temp.folder}/cdtui.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.text/text.jar;../org.eclipse.swt/bin;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.apache.xerces/xercesImpl.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.ui.workbench.texteditor/bin;../org.apache.xerces/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.ui.views/bin;../org.eclipse.jface.text/bin;../org.eclipse.compare/compare.jar;../org.eclipse.ui.views/views.jar;../org.eclipse.debug.core/bin;../org.eclipse.cdt.core/bin;../org.eclipse.debug.ui/dtui.jar;../org.eclipse.text/bin;../org.eclipse.jface.text/jfacetext.jar;../org.eclipse.swt.${ws}/ws/${ws}/swt.jar;../org.eclipse.ui.workbench/workbench.jar;../org.eclipse.compare/bin;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.core.resources/bin;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.eclipse.debug.core/dtcore.jar;../org.eclipse.core.runtime/bin;../org.eclipse.jface/jface.jar;../org.eclipse.ui.editors/bin;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.core.boot/bin;../org.eclipse.debug.ui/bin;../org.eclipse.ui/ui.jar;../org.eclipse.search/search.jar;../org.eclipse.core.resources/resources.jar;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.ui.workbench.texteditor/texteditor.jar;../org.eclipse.ui.editors/editors.jar;../org.eclipse.ui.workbench/bin;../org.eclipse.jface/bin;../org.eclipse.core.boot/boot.jar;../org.eclipse.search/bin;../org.apache.xerces/xmlParserAPIs.jar">
 			<src path="src/"/>
 			<src path="utils.ui/"/>
 		</javac>
@@ -75,8 +75,8 @@
 		<antcall target="cdtuisrc.zip"/>
 	</target>
 
-	<target name="build.zips" depends="init">
-	</target>
+		<target name="build.zips" depends="init">
+		</target>
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
