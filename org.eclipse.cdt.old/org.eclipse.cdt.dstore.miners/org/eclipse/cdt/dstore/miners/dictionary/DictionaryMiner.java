@@ -84,52 +84,55 @@ public class DictionaryMiner extends Miner
 	    }
 		
 	String languageFile = _dictionary + File.separator + languageRoot.getName() + File.separator + "words";
-	int offset = Character.digit('a', Character.MAX_RADIX);
-
-	DataElement categories[] = new DataElement[26];
-	for (int i = 0; i < 26; i++)
+	File wordsFile = new File(languageFile);
+	if (wordsFile.exists())
 	    {
-		char letter = Character.forDigit(i + offset, Character.MAX_RADIX);
-		Character theLetter = new Character(letter);
-		DataElement category = _dataStore.createObject(languageRoot, _categoryDescriptor, theLetter.toString()); 
-		categories[i] = category;
-	    }
-	try
-	    {
-		File wordsFile = new File(languageFile);
-		FileInputStream inFile = new FileInputStream(wordsFile);
-		BufferedReader in= new BufferedReader(new InputStreamReader(inFile));
+		int offset = Character.digit('a', Character.MAX_RADIX);
 		
-		String line = null;
-		while ((line = in.readLine()) != null)
+		DataElement categories[] = new DataElement[26];
+		for (int i = 0; i < 26; i++)
 		    {
-			char firstChar = Character.toLowerCase(line.charAt(0));
-			int index = Character.digit(firstChar, Character.MAX_RADIX) - offset;
-
-			if ((index >= 0)  && (index < categories.length))
+			char letter = Character.forDigit(i + offset, Character.MAX_RADIX);
+			Character theLetter = new Character(letter);
+			DataElement category = _dataStore.createObject(languageRoot, _categoryDescriptor, theLetter.toString()); 
+			categories[i] = category;
+		    }
+		try
+		    {
+			FileInputStream inFile = new FileInputStream(wordsFile);
+			BufferedReader in= new BufferedReader(new InputStreamReader(inFile));
+			
+			String line = null;
+			while ((line = in.readLine()) != null)
 			    {
-				DataElement parent = categories[index];
-				if (parent != null)
+				char firstChar = Character.toLowerCase(line.charAt(0));
+				int index = Character.digit(firstChar, Character.MAX_RADIX) - offset;
+				
+				if ((index >= 0)  && (index < categories.length))
 				    {
-					DataElement typeObject = _wordDescriptor;
-					if (!Character.isLowerCase(firstChar))
+					DataElement parent = categories[index];
+					if (parent != null)
 					    {
-						typeObject = _nameDescriptor; 
+						DataElement typeObject = _wordDescriptor;
+						if (!Character.isLowerCase(firstChar))
+						    {
+							typeObject = _nameDescriptor; 
+						    }
+						
+						_dataStore.createObject(parent, typeObject, line);
 					    }
-					
-					_dataStore.createObject(parent, typeObject, line);
 				    }
 			    }
+			
+			inFile.close();
+		    }
+		catch (IOException e)
+		    {
+			System.out.println(e);
 		    }
 		
-		inFile.close();
+		_dataStore.refresh(languageRoot);
 	    }
-	catch (IOException e)
-	    {
-		System.out.println(e);
-	    }
-
-	_dataStore.refresh(languageRoot);
     }
     
  
