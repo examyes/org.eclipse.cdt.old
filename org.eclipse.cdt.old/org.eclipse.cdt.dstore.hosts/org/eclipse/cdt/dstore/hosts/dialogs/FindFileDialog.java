@@ -44,12 +44,15 @@ public class FindFileDialog extends SearchDialog
     public void handleEvent(Event e)
     {
 	super.handleEvent(e);
+	
 	Widget widget = e.widget;
+
 	if (widget == _search)
 	    {
 		DataStore dataStore = _root.getDataStore();
-		DataElement searchCmd  = dataStore.localDescriptorQuery(_root.getDescriptor(), "C_FIND_FILE", 1);
+		DataElement searchCmd  = dataStore.localDescriptorQuery(_root.getDescriptor(), "C_FIND_FILE", 4);
 		DataElement pattern = dataStore.createObject(null, "pattern", _searchEntry.getText());
+
 		if (searchCmd != null)
 		    {	       
 			DataElement status = dataStore.command(searchCmd, pattern, _root);		
