@@ -1355,44 +1355,44 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }	
 
   public synchronized void search(String pattern, ArrayList types, ArrayList relations,
-				  boolean ignoreCase, boolean regex)
+				  boolean regex, boolean respectCase)
   {
   	  // search of current project
       IProject project = _plugin.getCurrentProject();
       DataElement subject = findProjectElement(project);
 
       //DataElement subject = findWorkspaceElement(_plugin.getCurrentDataStore());
-      search(subject, pattern, types, relations, ignoreCase, regex);
+      search(subject, pattern, types, relations, regex, respectCase);
   }
 
   public synchronized void search(Object input, String pattern, ArrayList types, ArrayList relations,
-				  boolean ignoreCase, boolean regex)
+				  boolean regex, boolean respectCase)
   {
     if (input instanceof DataElement)
       {
-		search((DataElement)input, pattern, types, relations, ignoreCase, regex);	
+		search((DataElement)input, pattern, types, relations, regex, respectCase);	
       }
     else if (input instanceof IContainer)
     {
     	if (input instanceof IWorkspace)
     	{
     		DataElement subject = findWorkspaceElement();
-    		search(subject, pattern, types, relations, ignoreCase, regex);
+    		search(subject, pattern, types, relations, regex, respectCase);
     	}
     	else if (input instanceof IProject)
     	{
     		DataElement subject = findProjectElement((IProject)input);
-    		search(subject, pattern, types, relations, ignoreCase, regex);	
+    		search(subject, pattern, types, relations, regex, respectCase);	
     	}
     }
     else
       {
-		search(pattern, types, relations, ignoreCase, regex);	
+		search(pattern, types, relations, regex, respectCase);	
       }
   }
 
   public synchronized void search(DataElement subject, String pattern, ArrayList types, ArrayList relations,
-				  boolean ignoreCase, boolean regex)
+				  boolean regex, boolean respectCase)
   {      
   	  if (subject == null)
   	  {
@@ -1405,11 +1405,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
       if (regex)
 	  {
-	      searchDescriptor = dataStore.localDescriptorQuery(subject.getDescriptor(), "C_SEARCH");
+	      searchDescriptor = dataStore.localDescriptorQuery(subject.getDescriptor(), "C_SEARCH_REGEX");
 	  }
       else
 	  {
-	      searchDescriptor = dataStore.localDescriptorQuery(subject.getDescriptor(), "C_SEARCH_REGEX");
+	      searchDescriptor = dataStore.localDescriptorQuery(subject.getDescriptor(), "C_SEARCH");
 	  }
 
     if (searchDescriptor == null)
@@ -1421,7 +1421,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       ArrayList args = new ArrayList();
       DataElement patternElement = dataStore.createObject(null, "pattern", pattern);
 
-      patternElement.setAttribute(DE.A_VALUE, ignoreCase ? "ignore_case" : "check_case" );
+      patternElement.setAttribute(DE.A_VALUE, respectCase ? "check_case" : "ignore_case");
       args.add(patternElement);
 
       for (int i = 0; i < types.size(); i++)

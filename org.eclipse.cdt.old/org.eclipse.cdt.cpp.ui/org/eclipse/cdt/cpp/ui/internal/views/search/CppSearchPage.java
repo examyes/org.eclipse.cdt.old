@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
-import org.eclipse.search.internal.workingsets.WorkingSet;
 import org.eclipse.search.ui.*;
 import org.eclipse.ui.model.*;
 import org.eclipse.jface.text.*;
@@ -41,8 +40,7 @@ public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearc
 	private String fInitialPattern;
 	private boolean fFirstTime= true;
 
-	protected IResource[] scopeInputResources; 
-	//protected Object scopeInput;
+	protected Object scopeInput; 
 
 	// NL enablement
 	private static CppPlugin pluginInstance = CppPlugin.getPlugin();
@@ -86,9 +84,9 @@ public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearc
 	private String[] fLimitToText= { pluginInstance.getLocalizedString(LIMIT_TO_REF),
 		pluginInstance.getLocalizedString(LIMIT_TO_DECL),
 		pluginInstance.getLocalizedString(LIMIT_TO_BOTH) };
-	private String[] fFiltersText= { pluginInstance.getLocalizedString(FILTER_CASE),
-
-		pluginInstance.getLocalizedString(FILTER_REGULAR) };
+	private String[] fFiltersText= { pluginInstance.getLocalizedString(FILTER_REGULAR), 
+                                         pluginInstance.getLocalizedString(FILTER_CASE) 
+                                       };
 	private static class SearchPatternData {
 		public SearchPatternData(int s, int l, String p){
 			searchFor= s;
@@ -106,7 +104,7 @@ public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearc
 /**
  * Attaches the given layout specification to the <code>component</code>
  */
-/*private void browseButtonSelected(){
+private void browseButtonSelected(){
 	
 	ContainerSelectionDialog dialog = new ContainerSelectionDialog(scopeField.getShell(),null,false,pluginInstance.getLocalizedString(SELEC_SCOPE_TITLE));
 	dialog.open();
@@ -122,7 +120,7 @@ public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearc
 			}
 		}
 	}
-}*/
+}
 //---- Widget creation ------------------------------------------------
 /**
 * Creates the page's content.
@@ -148,7 +146,7 @@ public void createControl(Composite parent) {
 	layouter.perform(createExpression(result));
 	layouter.perform(createSearchFor(result), createLimitTo(result), -1);
 	// new code
-	//layouter.perform(createScope(result));
+	layouter.perform(createScope(result));
 	layouter.perform(createFilters(result));
 	
 	// end new code
@@ -205,19 +203,28 @@ private Control createFilters(Composite parent) {
 	GridLayout layout= new GridLayout();
 	layout.numColumns= 2;
 	result.setLayout(layout);
-		fFilters= new Button[fFiltersText.length];
-	for (int i= 0; i < fFiltersText.length; i++) {
-		Button button= new Button(result, SWT.CHECK);
-		button.setText(fFiltersText[i]);
-		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		if(i==1)
-		    {
-			button.setSelection(true);
-		    }
-		 
-		fFilters[i]= button;
-	}
-	return result;		
+	
+        Button regexButton = new Button(result, SWT.CHECK);
+	regexButton.setText(fFiltersText[0]);
+	regexButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	regexButton.setSelection(true);
+
+        final Button caseButton = new Button(result, SWT.CHECK);
+	caseButton.setText(fFiltersText[1]);
+	caseButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+	caseButton.setSelection(false);
+        caseButton.setEnabled(false);
+	regexButton.addSelectionListener(new SelectionAdapter() {
+		public void widgetSelected(SelectionEvent event) {
+			boolean state= ((Button)event.widget).getSelection();
+			caseButton.setEnabled(!state);
+			
+		}
+	});
+        fFilters = new Button[2];
+        fFilters[0]=regexButton;
+        fFilters[1]=caseButton;
+       	return result;		
 }
 private Control createLimitTo(Composite parent) {
 	Group result= new Group(parent, SWT.NONE);
@@ -234,7 +241,7 @@ private Control createLimitTo(Composite parent) {
 	}
 	return result;		
 }
-/*private Control createScope(Composite parent) {
+private Control createScope(Composite parent) {
 	Group result= new Group(parent, SWT.NONE);
 	result.setText(pluginInstance.getLocalizedString(SCOPE_TITLE));
 	GridLayout layout= new GridLayout();
@@ -289,7 +296,7 @@ private Control createLimitTo(Composite parent) {
 	});
 		
 	return result;		
-}*/
+}
 private Control createSearchFor(Composite parent) {
 	Group result= new Group(parent, SWT.NONE);
 	result.setText(pluginInstance.getLocalizedString(SEARCH_FOR_TITLE));
@@ -396,33 +403,9 @@ private String[] getPreviousSearchPatterns()
 /**
  * Attaches the given layout specification to the <code>component</code>
  */
-/*protected Object  getScopeInput()
+protected Object  getScopeInput()
 {
-	IWorkingSet[] set = WorkingSet.getWorkingSets();
-	for(int i = 0; i < set.length ; i++)
-	{
-		System.out.println("\n set name = "+set[i].getName());
-		IResource[] resources = set[i].getResources();
-		for(int j = 0;j < resources.length; j++)
-		{
-			System.out.println("\n resource name = "+resources[j].getName());
-		}
-	}
 	return scopeInput;
-}*/
-protected IResource[]  getScopeInput()
-{
-	IWorkingSet[] scopeInput = WorkingSet.getWorkingSets();
-	for(int i = 0; i < scopeInput.length ; i++)
-	{
-		//System.out.println("\n set name = "+scopeInput[i].getName());
-		scopeInputResources = scopeInput[i].getResources();
-		//for(int j = 0;j < scopeInputResources.length; j++)
-	//	{
-			//System.out.println("\n resource name = "+scopeInputResources[j].getName());
-	//	}
-	}
-	return scopeInputResources;
 }
   private int getSearchFor() {
 		for (int i= 0; i < fSearchFor.length; i++) {
@@ -510,7 +493,7 @@ public boolean performAction() {
 	String searchText = data.pattern;
 	ModelInterface api = CppPlugin.getModelInterface();
 	api.search(getScopeInput(), searchText, getSearchTypes(), getSearchRelations(),
-		   !fFilters[0].getSelection(), !fFilters[1].getSelection());	
+		   fFilters[0].getSelection(), fFilters[1].getSelection());	
 	return true;  // disposes the dialog
 }
 /*
@@ -522,10 +505,10 @@ public void setContainer(ISearchPageContainer container) {
 /**
  * Attaches the given layout specification to the <code>component</code>
  */
-/*protected void  setScopeInput(Object input)
+protected void  setScopeInput(Object input)
   {
 	scopeInput = input;
-  }  */
+  }  
 /**
  * This method is called whenever this page becomes visible (e.g. is selected). 
  */
