@@ -87,7 +87,13 @@
          id="org.eclipse.cdt.cpp.ui.CppPerspective">
    </perspective>
    <perspective
-         name="C/C++ Objects"
+         name="%CppBrowsePerspective"
+         icon="icons/full/cview16/c_perspective.gif"
+         class="org.eclipse.cdt.cpp.ui.internal.views.CppBrowsePerspective"
+         id="org.eclipse.cdt.cpp.ui.CppBrowsePerspective">
+   </perspective>
+   <perspective
+         name="%CppObjectPerspective"
          icon="icons/full/cview16/c_perspective.gif"
          class="org.eclipse.cdt.cpp.ui.internal.views.CppObjectPerspective"
          id="org.eclipse.cdt.cpp.ui.CppObjectPerspective">
