@@ -1050,6 +1050,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public DataElement findWorkspaceElement(DataStore dataStore)
     {
+   
+    	if (_workspaceElement != null && _workspaceElement.getDataStore() == dataStore)
+    	{
+    		return _workspaceElement;
+    	}
+    	
+    	
 	//if (_workspaceElement == null)
 	    {
 		DataElement workspaceObj = null;
