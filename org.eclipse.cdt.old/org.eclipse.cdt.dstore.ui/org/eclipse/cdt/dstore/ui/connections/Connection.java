@@ -17,9 +17,6 @@ import org.eclipse.jface.action.*;
 import org.eclipse.jface.window.*;
 import org.eclipse.jface.dialogs.*;
 
-import java.util.*;
-import java.io.*;
-
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.events.*;
@@ -37,6 +34,10 @@ import org.eclipse.ui.internal.misc.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
 import java.lang.reflect.InvocationTargetException;
+
+
+import java.util.*;
+import java.io.*;
 
 public class Connection implements IDomainListener
 {
@@ -406,9 +407,9 @@ public class Connection implements IDomainListener
     {
 	_notifier = notifier;
 	if (_client == null)
-	    {	
+	    {	 
 		_client = new ClientConnection(_name, notifier);
-		_client.setLoader(_element.getDataStore().getLoader());
+		_client.setLoaders(_element.getDataStore().getLoaders());
 		
 	    }
 
