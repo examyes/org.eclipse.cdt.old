@@ -556,7 +556,6 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 			DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_element.getDescriptor(), "C_REFRESH");
 			if (refreshDescriptor != null)
 			    {	
-				System.out.println("doing refresh on " + _element);
 				_dataStore.synchronizedCommand(refreshDescriptor, _element);	    
 				
 				Object[] children = getChildren(_element, true);
