@@ -49,6 +49,8 @@
 			<src path="model/"/>
 			<src path="src/"/>
 			<src path="utils/"/>
+			<src path="parser"/>
+			<src path="dom/"/>
 		</javac>
 		<!-- copy necessary resources -->
 		<copy todir="${temp.folder}/cdtcore.jar.bin">
