@@ -325,12 +325,8 @@ public class ObjectsViewPart extends GenericViewPart
 			    }
 			else if (event.getStatus() == CppProjectEvent.START)
 			    {
-				pm.beginTask(commandStr, 100);
+				pm.beginTask(commandStr, IProgressMonitor.UNKNOWN);
 			    }
-			else
-			    {
-				pm.worked(5);
-			    }		 
 		    }
 		    }
 	    }   

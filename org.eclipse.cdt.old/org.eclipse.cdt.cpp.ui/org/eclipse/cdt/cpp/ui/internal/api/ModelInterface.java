@@ -1778,7 +1778,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			{
 			    if (resource instanceof IProject)
 				{
-				    System.out.println("added " + resource);
 				    initializeProject((IProject)resource);
 				}
 			    else
