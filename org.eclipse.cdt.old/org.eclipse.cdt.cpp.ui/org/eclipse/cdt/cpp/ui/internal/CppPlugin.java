@@ -177,7 +177,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	DataElement hostRoot = dataStore.getHostRoot();
         hostRoot.setAttribute(DE.A_SOURCE, rootPath.toString());
 	_clientConnection.setHostDirectory(rootPath.toString());	
-	_clientConnection.localConnect();
+	_clientConnection.localConnect(); 
 
 	_interface = new ModelInterface(dataStore);	
 	_interface.getDummyShell();
@@ -191,16 +191,10 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_schemaRegistry.registerSchemaExtender(HostsPlugin.getDefault().getSchemaExtender());
 	_schemaRegistry.extendSchema(dataStore);
 
-	/* Example miner loader mech
-	DataStore hdstore = HostsPlugin.getDefault().getDataStore();
-	hdstore.addLoader(cppLoader);
-	hdstore.addMinersLocation("org.eclipse.cdt.cpp.miners");
-	hdstore.getSchema();
-	*/
 
 	// create action loader
-	new CppActionLoader();  
-	
+	CppActionLoader loader = new CppActionLoader();  
+	HostsPlugin.setActionLoader(loader);
 
 	DataElement workspace = _interface.findWorkspaceElement(dataStore);
 	if (workspace == null)
