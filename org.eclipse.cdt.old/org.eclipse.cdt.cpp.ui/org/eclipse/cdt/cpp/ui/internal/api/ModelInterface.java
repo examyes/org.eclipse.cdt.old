@@ -1894,13 +1894,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					      }
 				      }
 				
-				  else
+				  else if (commandName.equals("C_COMMAND"))
 				      {
 					  for (int i = 0; i < size; i++)
 					      {		
 						  DataElement output = (DataElement)children.get(i);
-						  if (commandName.equals("C_COMMAND")) // handle batch command markers
-						      {			
+						  	      {			
 							  if (output.getDataStore().filter(_markersDescriptor, output))
 							      {			
 								  String type  = (String)(output.getElementProperty(DE.P_TYPE));
@@ -1955,7 +1954,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
  private void deleteAssociatedMarkers(IProject project)
  {
- 	for (int i = 0; i < _markedFiles.size(); i++)
+
+ 	for (int i = _markedFiles.size() - 1; i >= 0; i--)
  	{
  		IFile file = (IFile)_markedFiles.get(i);
  		if (file.getProject().equals(project))
@@ -1963,6 +1963,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
  			try
 	    	{
 				file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);	
+				
 	    	}
 			catch (CoreException e)
 	    	{
@@ -1971,6 +1972,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    	_markedFiles.remove(file);
  		}
  	}
+
  }
 
    
