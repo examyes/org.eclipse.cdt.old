@@ -80,16 +80,19 @@ abstract class SourceView extends View
       // put up a source not available message.  We tell the user we are
       // verified.
       _fakeNoSource = false;
-      if (sourceFileName == null || sourceFileName.length() == 0 || sourceFileName.equals("dummy"))
+      if (sourceFileName == null || sourceFileName.length() == 0)
       {
          _parentPart.setPartChanged(true);
          _fakeNoSource = true;
+         
          return true;
       }
 
       file = new File(sourceFileName);
       if (!file.exists() || file.isDirectory())
       {
+      	 _parentPart.setPartChanged(true);
+      	 _fakeNoSource = true;
          return false;
       }
 
