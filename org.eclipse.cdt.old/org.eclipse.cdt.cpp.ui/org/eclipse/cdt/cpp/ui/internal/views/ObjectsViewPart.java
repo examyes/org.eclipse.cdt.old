@@ -233,39 +233,49 @@ public class ObjectsViewPart extends GenericViewPart
 	    }
     }
 
-    public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+    public final void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
-	if (sel instanceof IStructuredSelection)
-	    {
-		IStructuredSelection es= (IStructuredSelection) sel;
-		if (((part instanceof ResourceNavigator) || 
-		     (part instanceof CppProjectsViewPart)) &&
-		    (part != this)
-		    )
+    	if (sel instanceof IStructuredSelection)
 		    {
-			if  (part.getSite().getPage() == getSite().getPage())
+				IStructuredSelection es= (IStructuredSelection) sel;
+				if (part == this)
 			    {
-				handleSelection(es);
-			    }  
-		    }
-		else if (part == this)
-		    {
-			Object object = es.getFirstElement();
-			if (object instanceof DataElement)
-			    {
-				DataElement element = (DataElement)object;
-				if (_lastSelected == null || 
-				    (element != _lastSelected && 
-				    !_lastSelected.getType().equals(element.getType())))
+					Object object = es.getFirstElement();
+					if (object instanceof DataElement)
 				    {
-					// hack to clear cache that maps elements to resources
-					ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
-					manager.flushLookup();
+						DataElement element = (DataElement)object;
+						if (_lastSelected == null || 
+						    (element != _lastSelected && 
+						    !_lastSelected.getType().equals(element.getType())))
+						{
+							// hack to clear cache that maps elements to resources
+							ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
+							manager.flushLookup();
+					    }
+						_lastSelected = element;				
 				    }
-				_lastSelected = element;				
 			    }
-		    }
-	    }
+			  }  
+			    
+		internalSelectionChanged(part, sel);
+    }
+    
+    protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel)
+    {
+    	if (sel instanceof IStructuredSelection)
+		    {
+			IStructuredSelection es= (IStructuredSelection) sel;
+			if (((part instanceof ResourceNavigator) || 
+			     (part instanceof CppProjectsViewPart)) &&
+			    (part != this)
+			    )
+			    {
+					if  (part.getSite().getPage() == getSite().getPage())
+				    {
+						handleSelection(es);
+				    }  
+			    }	
+	    	}
     }
 	
 	public void dispose()

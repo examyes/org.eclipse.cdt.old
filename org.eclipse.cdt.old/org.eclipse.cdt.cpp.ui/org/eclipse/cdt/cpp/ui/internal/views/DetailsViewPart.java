@@ -72,7 +72,7 @@ public class DetailsViewPart extends ObjectsViewPart
       _viewer.setFocus(); 
   }
 
-  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+  protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel) 
   {
     if (part != this && part instanceof ILinkable)
     {

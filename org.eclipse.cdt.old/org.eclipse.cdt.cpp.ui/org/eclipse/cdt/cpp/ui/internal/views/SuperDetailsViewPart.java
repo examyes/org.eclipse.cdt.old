@@ -53,7 +53,7 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 	// this view doesn't link to others
     }
 
-  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+  protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel) 
   {
     if (part != this && part instanceof ILinkable)
     {

@@ -86,7 +86,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 
 
 
-    public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+    protected void internalSelectionChanged(IWorkbenchPart part, ISelection sel) 
     {
 	if (part == this && (sel instanceof IStructuredSelection))
 	    {
@@ -97,15 +97,6 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 		    {
 			DataElement theObject = (DataElement)object;
 			
-			if (_lastSelected != null && 
-			    theObject != _lastSelected && 
-			    !_lastSelected.getType().equals(theObject.getType()))
-			    {
-				// hack to clear cache that maps elements to resources
-				ObjectActionContributorManager manager = ObjectActionContributorManager.getManager();
-				manager.flushLookup();
-			    }
-			_lastSelected = theObject;
 			
 			DataElement theParent = _api.getProjectFor(theObject);
 			
