@@ -8,6 +8,7 @@ package com.ibm.cpp.ui.internal.editor.contentoutliner;
 
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.views.*;
 
 import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.ui.widgets.*;
@@ -29,16 +30,29 @@ import org.eclipse.ui.views.contentoutline.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
 
+import org.eclipse.swt.*;
+import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.dnd.*;
+
+import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
+import org.eclipse.jface.window.*;
 
 
-public class CppContentOutlinePage extends ContentOutlinePage implements IDomainListener, Listener
+import org.eclipse.jface.viewers.*;
+import org.eclipse.swt.widgets.*;
+
+
+public class CppContentOutlinePage extends ContentOutlinePage implements IDomainListener, Listener, IMenuListener
 {
     protected IFile input;
-    protected DataElement _dataStore;
-    protected IAdaptable _elementRoot;
+    protected DataElement _elementRoot;
     protected DataElementAdapter _adapter;
     protected DataElement _expanded;
+    private MenuHandler         _menuHandler;
+
     private CppPlugin   _plugin = CppPlugin.getDefault();
     
 
@@ -47,6 +61,8 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	super();
 	this.input = input;
 	_adapter = (DataElementAdapter)input.getAdapter(DataElementAdapter.class);
+
+	_menuHandler = new MenuHandler(new CppActionLoader());
     }
     
     public void createControl(Composite parent) 
@@ -54,12 +70,24 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	super.createControl(parent);
 	CppPlugin plugin = CppPlugin.getDefault();
 	DataStore ds = plugin.getCurrentDataStore();
-	getTreeViewer().setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry()));
-	getTreeViewer().setContentProvider(new TreeContentProvider());
+
+	TreeViewer treeViewer = getTreeViewer();
+	treeViewer.setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry()));
+	treeViewer.setContentProvider(new TreeContentProvider());
 	
-	getTreeViewer().setInput(getContentOutline(input));
-	getTreeViewer().getTree().addListener(SWT.Expand, this);
+	treeViewer.setInput(getContentOutline(input));
+	treeViewer.getTree().addListener(SWT.Expand, this);
 	ds.getDomainNotifier().addDomainListener(this);
+
+
+	// menu
+	// add menu handling
+        MenuManager menuMgr = new MenuManager("#PopupMenu");
+	menuMgr.setRemoveAllWhenShown(true);
+	menuMgr.addMenuListener(this);
+        Menu menu = menuMgr.createContextMenu(treeViewer.getTree());
+        treeViewer.getTree().setMenu(menu);
+
     }
 
     public void dispose()
@@ -115,7 +143,7 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 			if ((loc > 0) && (editor != null))
 			    {	
 				((com.ibm.cpp.ui.internal.editor.CppEditor)editor).gotoLine(loc);
-			    }
+			    } 
 		    }
 	    }	
     }
@@ -124,13 +152,15 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
     {
 	DataElement parent = (DataElement)ev.getParent();
 	DataStore dataStore = parent.getDataStore();
-	
-	_elementRoot = _adapter.getElementRoot((IFile)input);	
+
+	if (_elementRoot == null)
+	    {
+		_elementRoot = _adapter.getElementRoot((IFile)input);	
+	    }
 	
 	if (_elementRoot != null)
 	    {	
-		if (parent == _elementRoot ||
-		    parent.contains((DataElement)_elementRoot))
+		if (parent == _elementRoot || parent.contains((DataElement)_elementRoot))
 		    {
 			return true;
 		    }
@@ -171,6 +201,23 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 
       return null;
   }
+
+  public void menuAboutToShow(IMenuManager menu) 
+      {
+	  IStructuredSelection es= (IStructuredSelection) getTreeViewer().getSelection();
+	  if (es.size() > 1)
+	      {
+		  _menuHandler.multiFillContextMenu(menu, es);
+	      }
+	  else
+	      {
+		  DataElement selected = (DataElement)es.getFirstElement();
+		  if (_elementRoot != null )
+		      {
+			  _menuHandler.fillContextMenu(menu, (DataElement)_elementRoot, selected);
+		      }
+	      }
+      }
 
   public void handleEvent(Event e)
       {

@@ -108,7 +108,7 @@ public class ObjectsViewPart extends GenericViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), this);
+	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader);
     }
     
   public void createPartControl(Composite parent)
@@ -253,84 +253,6 @@ public class ObjectsViewPart extends GenericViewPart
 	super.setFocus();
     }  
     
-    public IOpenAction getOpenAction()
-    {
-	if (_openAction == null)
-	    {
-		_openAction = new com.ibm.cpp.ui.internal.actions.OpenEditorAction(null);
-	    }
-	return _openAction;
-    }
-    
-    public CustomAction loadAction(String source, String name)
-    {
-	CustomAction newAction = null;
-	try
-	    {
-		Object[] args = { name};
-		Class actionClass = Class.forName(source);
-		Constructor constructor = actionClass.getConstructors()[0];
-		newAction = (CustomAction)constructor.newInstance(args);
-	    }
-	catch (ClassNotFoundException e)
-	    {
-		System.out.println(e);
-	    }
-	catch (InstantiationException e)
-	    { 
-		System.out.println(e);
-	    }
-	catch (IllegalAccessException e)
-	    {
-		System.out.println(e);	
-	    }
-	catch (InvocationTargetException e)
-	    {
-		System.out.println(e);
-	    }
-	
-        return newAction;
-    }
-    
-    public CustomAction loadAction(java.util.List objects, DataElement descriptor)
-    {
-	return loadAction((DataElement)objects.get(0), descriptor);
-    }
-
-    public CustomAction loadAction(DataElement object, DataElement descriptor)
-    {
-        String name = descriptor.getName();
-        String source = descriptor.getSource();
-        
-        CustomAction newAction = null; 
-        try
-	    {         
-	        Object[] args = {object, name, descriptor, object.getDataStore()};
-	
-         	Class actionClass = Class.forName(source);
-		Constructor constructor = actionClass.getConstructors()[0];
-                newAction = (CustomAction)constructor.newInstance(args);
-	    }
-        catch (ClassNotFoundException e)
-	    {
-		System.out.println(e);
-	    }
-        catch (InstantiationException e)
-	    {
-		System.out.println(e);
-	    }
-        catch (IllegalAccessException e)
-	    {
-		System.out.println(e);
-	    }
-        catch (InvocationTargetException e)
-	    {
-		System.out.println(e);
-	    }
-	
-        return newAction;
-    }
-    
     public void projectChanged(CppProjectEvent event)
     {
 	int type = event.getType();
@@ -383,7 +305,7 @@ public class ObjectsViewPart extends GenericViewPart
 		    {
 			_viewer.enableSelection(false);			
 		    }
-	    }
+	    } 
     }
     
     protected void updateStatusLine(CppProjectEvent event)
