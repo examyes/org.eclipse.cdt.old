@@ -64,7 +64,7 @@ public class ASTManager {
                 return (IASTFileLocation) loc;
             }
         }
-        return null;
+        return node.getTranslationUnit().flattenLocationsToFile(locs);
     }
     
     /**
