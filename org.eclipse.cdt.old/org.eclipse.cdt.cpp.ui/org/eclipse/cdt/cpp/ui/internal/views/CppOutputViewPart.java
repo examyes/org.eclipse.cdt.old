@@ -96,6 +96,9 @@ public class CppOutputViewPart extends OutputViewPart
                                        {
                                          public void modifyText(ModifyEvent e)
                                              {
+                                             	DataElement input = _viewer.getCurrentInput();
+                                             	if (input != null && !input.getName().equals("done"))
+                                             	{
                                                if (_inputEntry.getText().length() > 0)
                                                {
                                                  _sendButton.setEnabled(true);						
@@ -104,6 +107,7 @@ public class CppOutputViewPart extends OutputViewPart
                                                {
                                                  _sendButton.setEnabled(false);
                                                }
+                                             	}
                                              }
                                        }
                                        );
