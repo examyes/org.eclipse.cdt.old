@@ -309,8 +309,12 @@ public class ExtendedTableViewer extends TableViewer
 					Item item = findItemFor(table, child);
 					if (item != null)
 					    {
-						if (!child.getValue().equals(item.getText()))
-						    updateItem(item, child);
+						//if (!child.getValue().equals(item.getText()))
+						    {
+							updateItem(item, child);
+						    }
+						
+						
 					    }
 					else
 					    {

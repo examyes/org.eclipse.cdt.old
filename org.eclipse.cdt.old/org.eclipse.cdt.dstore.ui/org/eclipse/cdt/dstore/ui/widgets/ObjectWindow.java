@@ -632,8 +632,15 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		  _selectionListener = null;
 	      }
 
-	  _toolBar.dispose();
-	  _viewer.dispose();
+	  if (_toolBar != null)
+	      {
+		  _toolBar.dispose();
+	      }
+	  
+	  if (_viewer != null)
+	      {
+		  _viewer.dispose();
+	      }
 
 	  _toolBar = null;
 	  _viewer = null;
