@@ -1070,7 +1070,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		
 		if (workspaceObj != null)
 		    {
-			workspaceObj.setAttribute(DE.A_SOURCE, _workbenchDirectory);	
+			if (dataStore == _plugin.getDataStore())
+			    {
+				workspaceObj.setAttribute(DE.A_SOURCE, _workbenchDirectory);	
+			    }
 		    }
 		_workspaceElement = workspaceObj;
 	    }
@@ -1199,7 +1202,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		return null;
 	    }
-	
+
 	if (compareFileNames(root.getSource(), path))
 	    {
 		found = root;
@@ -1565,9 +1568,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public boolean compareFileNames(String file1, String file2)
     {
-	String f1 = file1.replace('\\', '/');
-	String f2 = file2.replace('\\', '/');
-	return f1.equalsIgnoreCase(f2);
+	try
+	    {
+		java.io.File f1 = new java.io.File(file1);
+		java.io.File f2 = new java.io.File(file2);
+
+		boolean match =  f1.getCanonicalPath().compareTo(f2.getCanonicalPath()) == 0;
+		return match;
+	    }
+	catch (Exception e)
+	    {
+	    }
+
+	return false;
     }
 
 
