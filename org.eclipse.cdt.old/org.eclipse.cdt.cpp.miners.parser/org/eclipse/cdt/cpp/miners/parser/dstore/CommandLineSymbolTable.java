@@ -68,7 +68,8 @@ public class CommandLineSymbolTable implements SymbolTable
   
  //Get rid of this...it is currently need in the declaration() production..but it is a crappy way of doing it!!!!!
  public boolean doBodies()  { return false; }
- public void objectIsTypedef() {}
+ public void setObjectTypedef(boolean isTypedef) {}
+ public boolean isObjectTypedef() {return false;}
  public void setCurrentDeclaration(DataElement type) {}
  
  private void emit(String s)

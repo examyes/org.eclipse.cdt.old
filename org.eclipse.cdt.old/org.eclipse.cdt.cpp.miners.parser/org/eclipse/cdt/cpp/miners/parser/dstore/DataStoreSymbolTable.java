@@ -132,14 +132,19 @@ public class DataStoreSymbolTable implements SymbolTable
   return _nameLookup;
  }
 
- public void objectIsTypedef()
+ public void setObjectTypedef(boolean isTypedef)
  {
-  _isTypedef = true;
+  _isTypedef = isTypedef;
  }
  
  public void setCurrentDeclaration(DataElement type)
  {
   _currentDeclaration = type;
+ }
+ 
+ public boolean isObjectTypedef()
+ {
+  return _isTypedef;
  }
  
  public boolean doBodies()
@@ -284,7 +289,7 @@ public class DataStoreSymbolTable implements SymbolTable
   
   //In the case of a function pointer, we want to represent the type as 
   // a single string.
-  if (typeString.indexOf("(*)") >= 0)
+  if (typeString.indexOf("(*)") >= 0 || typeString.indexOf("()") >= 0)
   {
    _curObj.addVariableType(lookupTypeElement(typeString));
    return nameString;

@@ -367,7 +367,7 @@ SKIP :
 
 <LINE_DIRECTIVE_SPACES> SKIP:
 {
-   < ([" ", "\t"])* > : LINE_DIRECTIVE_FILE
+   < ([" ", "\t"])* > : LINE_DIRECTIVE_END
 }
 
 <LINE_DIRECTIVE_FILE> SKIP:
@@ -637,7 +637,7 @@ void declaration() :
 void function_pointer_without_return_type() :
 {String name = empty; String type = empty;}
 {
- "(" "*" name = identifier() ")" "(" type = parameter_list(false) ")" ";"
+ "(" "*" name = extended_identifier() ")" "(" type = parameter_list(false) ")" ";"
  {
   name = "(*)(" + type + ")" + " " + name;
   symtab.addObject(ParserSchema.dVariable, name, getToken(0).beginLine, false);
@@ -703,7 +703,7 @@ String declaration_specifier() :
    | "explicit"
    //Others
    | "friend"
-   | "typedef"  {symtab.objectIsTypedef(); name = empty;}
+   | "typedef"  {symtab.setObjectTypedef(true); name = empty;}
    | "typename"
    | "*"
    | "&"
@@ -735,7 +735,7 @@ void member_function_definition_lookahead() :
 void function_definition_lookahead() :
 {}
 {
-   (LOOKAHEAD(2) ptr_operator())* (id_expression())?
+   (LOOKAHEAD(2) ptr_operator())* (LOOKAHEAD(2) id_expression())? (LOOKAHEAD(2) extended_identifier())?
    "(" (")" | LOOKAHEAD(3) parameter_list(false) ")" | expression() ")")
    //Don't match a ";" below since we want A B(); to be matched as a variable declaration;
    ( ":" | "{" | "try" | "=" | ";" | declaration_specifier() )
@@ -812,7 +812,7 @@ void asm_definition() :
 
 //The declaration_specifiers have already been matched when we get here:
 void function_definition(String theTypes, String className) :
-{String name;}
+{String name, next=null;}
 {
   // Determine whether this function is a constructor
   {
@@ -833,16 +833,37 @@ void function_definition(String theTypes, String className) :
   }
   (  LOOKAHEAD(2) "~" constructor_destructor_definition(theTypes, ParserSchema.Destructor)
    | LOOKAHEAD({isConstructor}) constructor_destructor_definition(theTypes, ParserSchema.Constructor)
-   |
+   | [LOOKAHEAD(3) next = extended_identifier()]
      name = declarator(ParserSchema.Function)
      {
-      String [] names = parseDeclaration(theTypes, true);
-      symtab.addFunctionReturnTypes(names[1]);
-      name = names[0] + name;
-      DataElement funcType = ParserSchema.dFunction;
-      if (names[0].equals("main"))
-       funcType = ParserSchema.dMainFunction;
-      DataElement theFunction = symtab.addObject(funcType, names[0], name, getToken(0).beginLine, true);
+      DataElement theFunction = null;
+      if (symtab.isObjectTypedef())
+      {
+       if (next != null)
+        name = theTypes + " ()" + name + " " + next;
+       else
+       {
+        int lastSpace = theTypes.lastIndexOf(' ');
+        if (lastSpace > 0)
+         name = theTypes.substring(0, lastSpace) + " ()" + name + " " + theTypes.substring(lastSpace+1);
+        else
+         name = "()" + name + " " + theTypes;
+       }
+       symtab.addObject(ParserSchema.dVariable, name, getToken(0).beginLine, false);
+      }
+      else
+      {
+       if (next !=null)
+        theTypes  += " " + next;
+       
+       String [] names = parseDeclaration(theTypes, true);
+       symtab.addFunctionReturnTypes(names[1]);
+       name = names[0] + name;
+       DataElement funcType = ParserSchema.dFunction;
+       if (names[0].equals("main"))
+        funcType = ParserSchema.dMainFunction;
+       theFunction = symtab.addObject(funcType, names[0], name, getToken(0).beginLine, true);
+      }
      }
      (
          LOOKAHEAD(2) ";" {symtab.closeScope();}
@@ -1803,6 +1824,16 @@ String id_expression() :
  (
     name = qualified_id()
   | name = unqualified_id()
+ )
+ {return name;}
+}
+
+String extended_identifier() :
+{String name;}
+{
+ ( 
+   "(" name = extended_identifier() ")"
+  | name = identifier()
  )
  {return name;}
 }
