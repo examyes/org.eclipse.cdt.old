@@ -120,7 +120,7 @@ public class MakefileAmClassifier {
 					{
 						programsAm.addElement(line);
 					}
-					if(line.indexOf(_LDFLAGS)!=-1)
+					if(line.indexOf(_LDFLAGS)!=-1 && line.indexOf(_la_LDFLAGS)==-1 )
 					{
 						programsAm.addElement(line);
 					}
@@ -146,7 +146,7 @@ public class MakefileAmClassifier {
 					{
 						staticlAm.addElement(line);
 					}
-					if(line.indexOf(_a_SOURCES)!=-1 && line.indexOf(_SOURCES)==-1)
+					if(line.indexOf(_a_SOURCES)!=-1)
 					{
 						staticlAm.addElement(line);
 					}
@@ -179,7 +179,7 @@ public class MakefileAmClassifier {
 					{
 						sharedlAm.addElement(line);
 					}
-					if(line.indexOf(_la_SOURCES)!=-1 && line.indexOf(_SOURCES)==-1)
+					if(line.indexOf(_la_SOURCES)!=-1)
 					{
 						sharedlAm.addElement(line);
 					}
@@ -195,7 +195,7 @@ public class MakefileAmClassifier {
 					{
 						sharedlAm.addElement(line);
 					}
-					if(line.indexOf(_la_LDFLAGS)!=-1 && line.indexOf(_LDFLAGS)==-1)
+					if(line.indexOf(_la_LDFLAGS)!=-1)
 					{
 						sharedlAm.addElement(line);
 					}
