@@ -140,21 +140,24 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    int col  = columnLocation.intValue();	
 						    if ((line > 0) && (editor != null))
 							{	
-							      try
-								  {
-								      IMarker marker = file.createMarker(IMarker.TEXT);
-								      marker.setAttribute(IMarker.LINE_NUMBER, line);
-								      marker.setAttribute(IMarker.CHAR_START, col);
-								      
-								      editor.gotoMarker(marker);
-								  }
-							      catch (CoreException e)
-								  {
-								      if (editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
-									  {
-									      ((com.ibm.cpp.ui.internal.editor.CppEditor)editor).gotoLine(line);
-									  }
-								  }
+							    if (editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
+								{
+								    ((com.ibm.cpp.ui.internal.editor.CppEditor)editor).gotoLine(line);
+								}
+							    else
+								{
+								    try
+									{
+									    IMarker marker = file.createMarker(IMarker.TEXT);
+									    marker.setAttribute(IMarker.LINE_NUMBER, line);
+									    marker.setAttribute(IMarker.CHAR_START, col);
+									    
+									    editor.gotoMarker(marker);
+									}
+								    catch (CoreException e)
+									{
+									}
+								}
 							}
 						}
 					}
