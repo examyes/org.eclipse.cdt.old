@@ -49,13 +49,24 @@ public class GdbArrayVariable extends GdbVariable {
 	 * @see GdbVariable#setScalarValue(String)
 	 */
 	public void setScalarValue(String s) {
+
+		if (!s.equals(_gdbData))
+		{
+			_elements.removeAllElements();
+		
+			String parseStr = s;		
+			parseStr.trim();
+			
+			createTree(parseStr);
+			_changed = true;
+		}
 	}
 
 	/**
 	 * @see GdbVariable#getScalarValue()
 	 */
 	public String getScalarValue() {
-		return null;
+		return _gdbData;
 	}
 
 	/**
@@ -82,7 +93,7 @@ public class GdbArrayVariable extends GdbVariable {
 	 * @see GdbVariable#numNodes()
 	 */
 	public int numNodes() {
-		return 0;
+		return _elements.size();
 	}
 
 	/**
@@ -135,12 +146,27 @@ public class GdbArrayVariable extends GdbVariable {
 		if (comma == -1)
 		{
 			// take the string and pretend we only have one element
-			String fieldName = _name+"[0]";
-			String fieldValue = parseStr;
-			String fieldType = _type;
-			GdbScalarVariable element = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
-			_elements.add(element);
-			return;
+			
+			if (parseStr.indexOf("=") == -1)
+			{
+				// scalar
+				String fieldName = _name+"[0]";
+				String fieldValue = parseStr;
+				String fieldType = _type;
+				GdbScalarVariable element = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+				_elements.add(element);
+				return;
+			}
+			else
+			{
+				// object
+				String fieldName = _name+"[0]";
+				String fieldValue = parseStr;
+				String fieldType = _type;
+				GdbObjectVariable element = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, fieldName, _nodeID);
+				_elements.add(element);
+				return;
+			}
 		}
 		
 		String testStr = parseStr.substring(0, comma);
