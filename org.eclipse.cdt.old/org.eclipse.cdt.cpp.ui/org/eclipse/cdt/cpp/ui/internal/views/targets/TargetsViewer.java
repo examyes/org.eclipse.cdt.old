@@ -9,6 +9,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  */
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
+//import org.eclipse.ui.views.properties.PropertySheetCategory;
 
 
 import com.ibm.dstore.core.model.*;
