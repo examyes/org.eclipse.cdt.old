@@ -181,9 +181,17 @@ public class ProjectObjectsViewPart extends ProjectViewPart
  DataElement findParseFiles(DataElement theProjectFile)
     {
 	DataStore dataStore = theProjectFile.getDataStore();
-	DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
-	DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
-	return projectObjects;
+	ArrayList parseRef = theProjectFile.getAssociated("Parse Reference");
+	if (parseRef != null && parseRef.size() > 0)
+	    {
+		DataElement parseProject = ((DataElement)(parseRef.get(0))).dereference();
+		DataElement projectObjects = dataStore.find(parseProject, DE.A_NAME, "Project Objects", 1);
+		return projectObjects;
+	    }
+	else
+	    {
+		return null;
+	    }
     }
 
  DataElement findParseFile(DataElement theProjectFile)

@@ -47,7 +47,8 @@ public class ParsedSourceViewPart extends ProjectViewPart
  public void doSpecificInput(DataElement projectParseInformation)
  {
   //Find the Parsed Source Object under the projectParseInformation
-  DataElement parsedSource = projectParseInformation.getDataStore().find(projectParseInformation, DE.A_NAME, "Parsed Files", 1);
+  DataElement parsedSource = projectParseInformation.getDataStore().find(projectParseInformation, 
+									 DE.A_NAME, "Parsed Files", 1);
   if (parsedSource == null)
    return;
   

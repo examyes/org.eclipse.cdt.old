@@ -20,8 +20,12 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import java.util.*;
 import java.util.List;
+
 import org.eclipse.ui.internal.misc.UIHackFinder;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.dstore.ui.widgets.*;
+import com.ibm.dstore.core.model.*;
 
 /**
  * Workbench-level composite for choosing a container.
@@ -136,31 +140,61 @@ public void createContents(String message) {
  *
  */
 protected void createTreeViewer() {
+   
 	// Create drill down.
-	DrillDownComposite drillDown = new DrillDownComposite(this, SWT.BORDER);
+    /*
+    DrillDownComposite drillDown = new DrillDownComposite(this, SWT.BORDER);
+    Composite drillDown = new Composite(this, SWT.BORDER);
+   
 	GridData spec = new GridData(
 		GridData.VERTICAL_ALIGN_FILL | GridData.HORIZONTAL_ALIGN_FILL |
 		GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL);
 	spec.widthHint = SIZING_SELECTION_PANE_WIDTH;
 	spec.heightHint = SIZING_SELECTION_PANE_HEIGHT;
-	drillDown.setLayoutData(spec);
 
+    */
+    /*
 	// Create tree viewer inside drill down.
-	treeViewer = new TreeViewer(drillDown, SWT.NONE);
-	drillDown.setChildTree(treeViewer);
-	treeViewer.setContentProvider(new org.eclipse.ui.model.WorkbenchContentProvider());
-	treeViewer.setLabelProvider(new WorkbenchLabelProvider());
+	treeViewer = new TreeViewer(drillDown, SWT.NULL);
+       	//drillDown.setChildTree(treeViewer);
+
+	CppPlugin plugin = CppPlugin.getDefault();
+	treeViewer.setContentProvider(new DataElementTreeContentProvider());
+	treeViewer.setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry()));
+
 	treeViewer.addSelectionChangedListener(
 		new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event) {
-				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				containerSelectionChanged((IContainer) selection.getFirstElement()); // allow null
+			public void selectionChanged(SelectionChangedEvent event) 
+			{
+			    IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+			    containerSelectionChanged((IContainer) selection.getFirstElement()); // allow null
 			}
 		});
 
 
 	// This has to be done after the viewer has been laid out
-	treeViewer.setInput(ResourcesPlugin.getWorkspace());
+	//treeViewer.setInput(ResourcesPlugin.getWorkspace());
+	*/
+    
+	CppPlugin plugin = CppPlugin.getDefault();
+	ModelInterface api = ModelInterface.getInstance();
+	DataElement workspace = api.findWorkspaceElement();
+	ObjectWindow treeViewer = new ObjectWindow(this, ObjectWindow.TREE, 
+						   workspace.getDataStore(), 
+						   plugin.getImageRegistry(),
+						   null);
+	treeViewer.setInput(workspace);
+	treeViewer.getViewer().addSelectionChangedListener(
+					       new ISelectionChangedListener() 
+						   {
+						       public void selectionChanged(SelectionChangedEvent event) 
+						       {
+							   IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+							   containerSelectionChanged((IContainer) 
+										     selection.getFirstElement()); // allow null
+						       }
+						   });
+	
 }
 /**
  * Returns the currently entered container name.

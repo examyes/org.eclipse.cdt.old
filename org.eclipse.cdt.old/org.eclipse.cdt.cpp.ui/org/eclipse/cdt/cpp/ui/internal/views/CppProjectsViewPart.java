@@ -51,7 +51,12 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 		    {
 			DataElement rootElement = null;
 			IAdaptable input = getSite().getPage().getInput();
-			if (input instanceof IResource)
+
+			if (input instanceof IWorkspace)
+			    {
+				rootElement = _api.findWorkspaceElement(dataStore);
+			    }
+			else if (input instanceof IResource)
 			    {
 				IResource resource = (IResource)input;
 				rootElement = _api.findResourceElement(resource);
@@ -59,6 +64,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 			
 			if (rootElement != null)
 			    {
+				System.out.println("in = " + rootElement);
 				_viewer.setInput(rootElement);
 				_viewer.setSorter(DE.P_NAME);
 

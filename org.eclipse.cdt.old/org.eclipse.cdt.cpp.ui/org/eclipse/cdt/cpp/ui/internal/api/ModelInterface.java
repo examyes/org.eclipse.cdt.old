@@ -342,6 +342,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   private CppPlugin      _plugin;
   private DataElement    _markersDescriptor;
   private IWorkspace     _workbench;
+    private DataElement  _workspaceElement = null;
 
   private String         _workbenchDirectory;
 
@@ -1040,27 +1041,31 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public DataElement findWorkspaceElement(DataStore dataStore)
     {
-	DataElement workspaceObj = null;
-	DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
-	if (projectInfo == null)
+	if (_workspaceElement == null)
 	    {
-		System.out.println("couldn't find project miner");
-	    }
-	else
-	    {
-		workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
-		if (workspaceObj == null)
+		DataElement workspaceObj = null;
+		DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
+		if (projectInfo == null)
 		    {
-			System.out.println("couldn't find workspace");
+			System.out.println("couldn't find project miner");
 		    }
+		else
+		    {
+			workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
+			if (workspaceObj == null)
+			    {
+				System.out.println("couldn't find workspace");
+			    }
+		    }
+		
+		if (workspaceObj != null)
+		    {
+			workspaceObj.setAttribute(DE.A_SOURCE, _workbenchDirectory);	
+		    }
+		_workspaceElement = workspaceObj;
 	    }
 
-	if (workspaceObj != null)
-	{
-		workspaceObj.setAttribute(DE.A_SOURCE, _workbenchDirectory);	
-	}
-	
-	return workspaceObj;
+	return _workspaceElement;
     }
 
     public IResource findResource(DataElement resourceElement)

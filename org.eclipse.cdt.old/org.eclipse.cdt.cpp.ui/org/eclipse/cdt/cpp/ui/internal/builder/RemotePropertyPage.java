@@ -30,6 +30,7 @@ public class RemotePropertyPage extends PropertyPage
     private Text _remoteHostPortNumberField;
     private Text _remoteHostDirectoryField;
     private Text _remoteHostMountField;
+    private Button _remoteHostDaemonButton;
 
     private static final int SIZING_TEXT_FIELD_WIDTH = 100;
     private static final int SIZING_INDENTATION_WIDTH = 10;
@@ -93,6 +94,10 @@ public class RemotePropertyPage extends PropertyPage
 		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
 		_remoteHostMountField.setLayoutData(data);
 
+		// is daemon
+		_remoteHostDaemonButton = new Button(properties, SWT.CHECK);
+		_remoteHostDaemonButton.setText("Connect to using daemon");
+
 		performDefaults();
 		return properties;
 	    }
@@ -115,6 +120,7 @@ public class RemotePropertyPage extends PropertyPage
 	  _remoteHostNameField.setText(connection.getHost());
 	  _remoteHostPortNumberField.setText(connection.getPort());
 	  _remoteHostDirectoryField.setText(connection.getDir());
+	  _remoteHostDaemonButton.setSelection(connection.isUsingDaemon());
 
 	  ArrayList mountPoints = CppPlugin.readProperty(project, "Mount Point");
 	  if (mountPoints != null && mountPoints.size() > 0)
@@ -131,6 +137,7 @@ public class RemotePropertyPage extends PropertyPage
 	  connection.setHost(_remoteHostNameField.getText());
 	  connection.setPort(_remoteHostPortNumberField.getText());
 	  connection.setDir(_remoteHostDirectoryField.getText());
+	  connection.setIsUsingDaemon(_remoteHostDaemonButton.getSelection());
 	  
 	  ArrayList mountPoints = new ArrayList();
 	  mountPoints.add(new String(_remoteHostMountField.getText()));
