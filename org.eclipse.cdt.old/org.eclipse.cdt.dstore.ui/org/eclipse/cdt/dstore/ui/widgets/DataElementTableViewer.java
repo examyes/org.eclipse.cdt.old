@@ -236,8 +236,8 @@ public class DataElementTableViewer extends TableViewer
 	
 	if ((parent == _selected) || 
 	    (parent == _currentInput) || 
-	    (parent == _expanded) /*||	    
-	    _currentInput.contains(parent, 1)*/
+	    (parent == _expanded)/* ||	    
+				    _currentInput.contains(parent, 1)*/
 	    )
 	    {
 		return true;

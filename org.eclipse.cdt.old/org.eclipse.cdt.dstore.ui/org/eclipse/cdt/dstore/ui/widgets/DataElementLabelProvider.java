@@ -287,7 +287,7 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	   	DataStore dataStore = data.getDataStore();
 	   	if (_attributesD == null || _attributesD.getDataStore() != dataStore)
 	   	{
-	   	  _attributesD = dataStore.findObjectDescriptor("attributes");
+	   	  _attributesD = dataStore.getAttributesRelation();
 	   	}
 	   	
 	   	
@@ -311,18 +311,18 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 				}
 			
 				for (int i = 0; i < attributes.size(); i++)
-			    {
-			    	if (i != columnIndex - 1)
-			    	{
+				    {
+					//	if (i != columnIndex - 1)
+					    {
 						attribute = (DataElement)attributes.get(i);
 						if (attribute.getDescriptor() == attributeDescriptor)
-				    	{
+						    {
 							return getText(attribute);
-				    	}
+						    }
+					    }
 				    }
-			    }
 			}
-	
+
 			// get attribute attributes
 			ArrayList format = attributeDescriptor.getAssociated(_attributesD);
 			if (format != null && format.size() > 0)
@@ -342,6 +342,7 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 				    {
 					return "";
 				    }		
+
 			    }
 			
 		    }
