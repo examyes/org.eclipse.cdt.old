@@ -127,22 +127,11 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 	if (element != null)
 	    {
 		String objectType = element.getType();
-		if (_viewer.isSpecialized())
-		    {
-			DataElement relationship = _viewer.getSelectedRelationship();
-			
-			String relationName = relationship.getName();
-			
-			setTitle(objectType + " " + relationName);
-		    }
-		else
-		    {
-			setTitle(objectType + " details");
-		    }
+		setViewDescription(objectType + " details");
 	    }
 	else
 	    {
-		setTitle("No Input");
+		setViewDescription("No Input");
 	    }
     }
 }

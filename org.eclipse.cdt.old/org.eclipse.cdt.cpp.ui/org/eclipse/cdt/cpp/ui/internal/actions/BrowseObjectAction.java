@@ -79,7 +79,10 @@ public class BrowseObjectAction extends Action
 	      if (viewPart instanceof GenericViewPart)
 		  {
 		      GenericViewPart gvp = (GenericViewPart)viewPart;
-		      gvp.fixateOnRelationType(_relationship.getName());			  
+		      gvp.fixateOnRelationType(_relationship.getName());
+
+		      
+		      gvp.setViewDescription(_relationship.getName() + " of " + _subject.getType());
 		  }
 	  }
 
