@@ -14,9 +14,9 @@ import org.eclipse.cdt.cpp.miners.pa.engine.*;
 public class GprofTraceFile extends PATraceFile {
 
   private GprofCallGraphEntry _currentCallGraphEntry = null;
-  private double _samplingRate = 0;
-  private double _cumulativeTime = 0;
-  private boolean _foundCallGraphPrimaryLine = false;
+  private double 			  _samplingRate = 0;
+  private double 			  _cumulativeTime = 0;
+  private boolean 			  _foundCallGraphPrimaryLine = false;
 
   // constructor
   public GprofTraceFile(String filename) throws PAException {
@@ -29,7 +29,7 @@ public class GprofTraceFile extends PATraceFile {
    super(file);   
   }
   
-  public GprofTraceFile(ITraceReader reader) {
+  public GprofTraceFile(BufferedReader reader) {
   
    super(reader);
   }

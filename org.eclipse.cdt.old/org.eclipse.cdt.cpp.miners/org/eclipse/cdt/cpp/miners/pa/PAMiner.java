@@ -13,9 +13,6 @@ import org.eclipse.cdt.cpp.miners.pa.engine.*;
 public class PAMiner extends Miner { 
  
  
- private PADataStoreAdaptor _adaptor;
- 
- 
  // Constructor
  public PAMiner ()
  {
@@ -30,7 +27,14 @@ public class PAMiner extends Miner {
  public void load()
  {
   // System.out.println("Calling PAMiner.load");
-  _adaptor = new PADataStoreAdaptor(this);  
+  PADataStoreAdaptor.setMiner(this);
+  
+  DataElement paRoot = _dataStore.findMinerInformation("org.eclipse.cdt.cpp.miners.pa.PAMiner");
+
+  _dataStore.createObject(paRoot, getLocalizedString("model.data"), "projects root");
+  
+  _dataStore.createObject(paRoot, getLocalizedString("pa.TraceFile"), "All Trace Files");
+  
  }
 
  // Return the datastore
@@ -212,12 +216,14 @@ public class PAMiner extends Miner {
   createReference(callRootD, callsD);
   
   DataElement fileD = findDescriptor("file");
+  DataElement executableD = findDescriptor("executable");
   
   // command descriptors
   createCommandDescriptor(traceFileD,    getLocalizedString("pa.Parse"), "C_PARSE_TRACE").setDepth(0);
   createCommandDescriptor(traceProgramD, getLocalizedString("pa.Analyze"), "C_ANALYZE_PROGRAM").setDepth(0);
   createCommandDescriptor(traceFunctionD, "Query", "C_QUERY");
-  createCommandDescriptor(fileD, "quey trace", "C_QUERY_TRACE_FORMAT").setDepth(0);
+  createCommandDescriptor(fileD, "quey trace format", "C_QUERY_TRACE_FILE_FORMAT").setDepth(0);
+  createCommandDescriptor(executableD, "query trace format", "C_QUERY_TRACE_PROGRAM_FORMAT").setDepth(0);
   
   makeTransient(gprofTraceFunctionD);
   makeTransient(fcTraceFunctionD);
@@ -242,12 +248,16 @@ public class PAMiner extends Miner {
   }
   else if (name.equals("C_ANALYZE_PROGRAM"))
   {
-   handleTraceProgramAnalyze(subject, getCommandArgument(theElement, 1), status);
+   handleTraceProgramAnalyze(subject, status);
   }
-  else if (name.equals("C_QUERY_TRACE_FORMAT"))
+  else if (name.equals("C_QUERY_TRACE_FILE_FORMAT"))
   {
-   handleQueryTraceFormat(subject, status);
+   handleQueryTraceFileFormat(subject, status);
   }
+  else if (name.equals("C_QUERY_TRACE_PROGRAM_FORMAT"))
+  {
+   handleQueryTraceProgramFormat(subject, status);
+  }  
 
   return status;
    
@@ -260,7 +270,7 @@ public class PAMiner extends Miner {
  public void provideSourceFor(DataElement traceFuncElement) {
 
    if (traceFuncElement.getSource() == null || traceFuncElement.getSource().length() == 0) {
-     _adaptor.provideSourceFor(traceFuncElement);
+     PADataStoreAdaptor.provideSourceFor(traceFuncElement);
    }
    
  }
@@ -268,9 +278,9 @@ public class PAMiner extends Miner {
  /**
   * Query the trace file format
   */
- public void handleQueryTraceFormat(DataElement fileElement, DataElement status) {
+ public void handleQueryTraceFileFormat(DataElement fileElement, DataElement status) {
  
-   File file = fileElement.getFileObject(true);
+   File file = fileElement.getFileObject(false);
    int traceFormat = -1;
    try {
     traceFormat = PAAdaptor.queryTraceFileFormat(file);
@@ -293,7 +303,7 @@ public class PAMiner extends Miner {
       break;
      
      default:
-      formatStr = "error";
+      formatStr = "invalid trace file";
       break;
      
    }
@@ -302,7 +312,37 @@ public class PAMiner extends Miner {
    status.setAttribute(DE.A_VALUE, formatStr);
  }
  
- 
+
+ /**
+  * Query the trace program format
+  */
+ public void handleQueryTraceProgramFormat(DataElement fileElement, DataElement status) {
+   
+   File file = new File(fileElement.getSource());
+   
+   String formatStr = null;
+   String gprofQueryCommand = "nm" + " " + file.getName() + "| grep mcount";
+   String fcQueryCommand = "nm" + " " + file.getName() + "| grep cyg_profile_func_enter";
+   
+   String line = PADataStoreAdaptor.getFirstCommandOutputLine(file.getParentFile(), gprofQueryCommand);
+   if (line.indexOf("mcount") >= 0)
+     formatStr = "gprof";
+   else {
+     line = PADataStoreAdaptor.getFirstCommandOutputLine(file.getParentFile(), fcQueryCommand);
+     if (line.indexOf("cyg_profile_func_enter") >= 0) {
+       formatStr = "functioncheck";
+     }
+     else {
+       formatStr = "invalid trace program";
+     }
+   }
+   
+   status.setAttribute(DE.A_NAME, "done");
+   status.setAttribute(DE.A_VALUE, formatStr);   
+   
+ }
+
+
  /**
   * Parse the given trace file and use the parsed result to populate the datastore 
   */
@@ -313,9 +353,11 @@ public class PAMiner extends Miner {
    ArrayList references = traceElement.getAssociated(getLocalizedString("pa.ReferencedFile"));
    DataElement fileElement = (DataElement)references.get(0);
    
-   File file = fileElement.getFileObject(true);
+   File file = fileElement.getFileObject(false);
    
-   String traceFormat = _adaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
+   PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
+   
+   String traceFormat = adaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
    
    // System.out.println("trace format: " + traceFormat);
    
@@ -329,23 +371,60 @@ public class PAMiner extends Miner {
     return;
    }
    
-   traceElement.setAttribute(DE.A_TYPE, _adaptor.getTraceFileFormat(traceFile));
-   _adaptor.populateDataStore(traceElement, traceFile);
+   traceElement.setAttribute(DE.A_TYPE, PADataStoreAdaptor.getTraceFileFormat(traceFile));
+   adaptor.populateDataStore(traceElement, traceFile);
    status.setAttribute(DE.A_NAME, "done");
  }
  
  /**
-  * Run the trace program, collect trace
+  * Run the profiler command and analyze the result
   */
- public void handleTraceProgramAnalyze(DataElement traceElement, DataElement result, DataElement status) {
-
-  // System.out.println("analyze result: " + result);
+ public void handleTraceProgramAnalyze(DataElement traceElement, DataElement status) {
   
-  String traceFormat = _adaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
+  String traceFormat = PADataStoreAdaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
   
   // System.out.println("trace format: " + traceFormat);
   
-  ITraceReader reader = new PACommandOutputReader(result);
+  // Create profile command according to the trace format
+  String profileCommand = null;
+  if (traceFormat.indexOf("gprof") >= 0) {
+   profileCommand = "gprof -b";
+  }
+  else if (traceFormat.equals("functioncheck")) {
+   profileCommand = "fcdump -demangle-params";
+  }
+  else {
+   System.out.println("Invalid trace format: " + traceFormat);
+   status.setAttribute(DE.A_NAME, "error");
+   return;
+  }
+  
+  // Test whether the trace program exists
+  File file = new File(traceElement.getSource());
+  if (!file.exists()) {
+   System.out.println("Trace program does not exist: " + traceElement.getSource());
+   status.setAttribute(DE.A_NAME, "error");
+   return;   
+  }
+  
+  profileCommand = profileCommand + " " + file.getName();
+  
+  // System.out.println("running profile command: " + profileCommand);
+  // System.out.println("current dir: " + file.getParentFile().getAbsolutePath());
+  
+  // Run the profile command
+  Process process = null;
+  try {
+   process = Runtime.getRuntime().exec(profileCommand, null, file.getParentFile());
+  }
+  catch (Exception e) {
+   System.out.println("Error running the profile command: " + profileCommand);
+   status.setAttribute(DE.A_NAME, "error");
+   return;
+  }
+    
+  // Parse the trace output
+  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
   PATraceFile traceFile = null;
   
   try {
@@ -356,11 +435,13 @@ public class PAMiner extends Miner {
     status.setAttribute(DE.A_NAME, "error");
     return;
   }
-  
-  _adaptor.populateDataStore(traceElement, traceFile);
+    
+  PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
+  adaptor.populateDataStore(traceElement, traceFile);
   status.setAttribute(DE.A_NAME, "done");
   
  }
+ 
  
  /**
   * Create a derivative descriptor from a given base descriptor

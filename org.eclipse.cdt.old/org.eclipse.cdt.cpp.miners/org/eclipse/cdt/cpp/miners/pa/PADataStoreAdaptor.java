@@ -14,13 +14,15 @@ import org.eclipse.cdt.cpp.miners.pa.engine.functioncheck.*;
 public class PADataStoreAdaptor {
 
  // attributes
- private PAMiner     _miner;
- private DataStore   _dataStore;
+ private static PAMiner		_miner;
+ private static DataStore   _dataStore;
+ private static DataElement _provideSourceForD;
+ 	
+ private DataElement _traceElement;
  private DataElement _traceFunctionsRoot;
  private DataElement _callTreeRoot;
  private DataElement _attributesRoot;
  private DataElement _callArcsRoot;
- private DataElement _provideSourceForD;
  
  // maps between PA trace functions and their corresponding data elements
  private HashMap _elementToTraceFuncMap;
@@ -28,13 +30,22 @@ public class PADataStoreAdaptor {
  
  
  // Constructors
- public PADataStoreAdaptor(PAMiner miner) {
+ public PADataStoreAdaptor(DataElement traceElement) {
   
-   _miner = miner;
-   _dataStore = miner.getDataStore();
+   _traceElement = traceElement;
    _elementToTraceFuncMap = new HashMap();
    _traceFuncToElementMap = new HashMap();
 
+ } 
+ 
+ /**
+  * Set the PA miner
+  */
+ public static void setMiner(PAMiner miner) {
+ 
+   _miner = miner;
+   _dataStore = miner.getDataStore();
+   
    // Find the provideSourceFor command descriptor
    DataElement cppObjD = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "Cpp Object", 1);
    if (cppObjD == null) {
@@ -43,19 +54,115 @@ public class PADataStoreAdaptor {
    }
    
    _provideSourceForD = _dataStore.localDescriptorQuery(cppObjD, "C_PROVIDE_SOURCE_FOR", 1);    
- } 
+ }
  
  /**
   * Return the localized string from a given key
   */
- public String getLocalizedString(String key) {
+ public static String getLocalizedString(String key) {
    return _miner.getLocalizedString(key);
  }
  
  /**
+  * Run the given command and retrieve the command output
+  */
+ public static ArrayList getCommandResult(File workingDir, String command) {
+ 
+  // Run the given command
+  Process process = null;
+  try {
+   process = Runtime.getRuntime().exec(getShell() + command, null, workingDir);
+  }
+  catch (Exception e) {
+   System.out.println("Error running the command: " + command);
+   return null;
+  }
+    
+  // Parse the command output
+  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+  
+  ArrayList results = new ArrayList();
+  String line = null;
+  try {
+    while ((line = reader.readLine()) != null) {
+     results.add(line);
+    }
+    reader.close();
+  }
+  catch (IOException e) {
+   System.out.println(e);
+  }
+  
+  return results;
+ }
+ 
+ /**
+  * Return the shell command for a particular OS
+  */
+ private static String getShell() {
+ 
+   String theOS = System.getProperty("os.name");
+   String theShell = null;
+   
+   if (!theOS.toLowerCase().startsWith("win")) {
+    theShell = "sh -c ";
+   }
+   else {
+   
+    if ((theOS.indexOf("95")>=0) ||
+        (theOS.indexOf("98")>=0) ||
+        (theOS.indexOf("ME")>=0)) 
+    {
+	   theShell = "start /B ";
+    }
+    else
+    {
+	  theShell = "cmd /C ";
+    }
+   }
+   
+   return theShell;
+ }
+ 
+ 
+ /**
+  * Return the first non-empty output line for a command
+  */
+ public static String getFirstCommandOutputLine(File workingDir, String command) {
+   
+  // Run the given command
+  Process process = null;
+  try {
+   process = Runtime.getRuntime().exec(getShell() + command, null, workingDir);
+  }
+  catch (Exception e) {
+   System.out.println("Error running the command: " + command);
+   return null;
+  }
+     
+  // Parse the command output
+  BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+  
+  String line = null;
+  try {
+    while ((line = reader.readLine()) != null) {
+     if (line.trim().length() > 0)
+      break;
+    }
+    reader.close();
+  }
+  catch (IOException e) {
+   System.out.println(e);
+  }
+  
+  return line;
+ }
+ 
+ 
+ /**
   * Return the attribute value associated with a given data element
   */
- public String getAttribute(DataElement element, String name) {
+ public static String getAttribute(DataElement element, String name) {
   
   ArrayList attributes = element.getAssociated(getLocalizedString("pa.Attributes"));
   for (int i=0; i < attributes.size(); i++) {
@@ -70,7 +177,7 @@ public class PADataStoreAdaptor {
  /**
   * Set the attribute to a given value for a data element
   */
- public DataElement setAttribute(DataElement element, String name, String value) {
+ public static DataElement setAttribute(DataElement element, String name, String value) {
   
   DataElement attributeElement = null;
   ArrayList attributes = element.getAssociated(getLocalizedString("pa.Attributes"));
@@ -95,7 +202,7 @@ public class PADataStoreAdaptor {
  /**
   * Return the trace file format as a String
   */
- public String getTraceFileFormat(PATraceFile traceFile) {
+ public static String getTraceFileFormat(PATraceFile traceFile) {
  
    if (traceFile instanceof GprofTraceFile)
     return getLocalizedString("pa.gprofTraceFile");
@@ -109,7 +216,7 @@ public class PADataStoreAdaptor {
  /**
   * Return the trace file format as a String
   */
- public String getTraceFunctionFormat(PATraceFunction traceFunction) {
+ public static String getTraceFunctionFormat(PATraceFunction traceFunction) {
  
   String type = null;
   
@@ -134,7 +241,7 @@ public class PADataStoreAdaptor {
  /**
   * Find out the source location for a trace function
   */
- public void provideSourceFor(DataElement traceFuncElement) {
+ public static void provideSourceFor(DataElement traceFuncElement) {
        
    if (_provideSourceForD != null) {
      DataElement traceFileElement = traceFuncElement.getParent().getParent();

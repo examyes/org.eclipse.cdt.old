@@ -16,30 +16,30 @@ public abstract class PATraceFile {
   // Time units are used in the flat profile for the self/total 
   // time per call information.
   // M: 1E6 	T: 1E9		P: 1E12
-  public static double TIME_UNIT_M = 1.0e6;
-  public static double TIME_UNIT_T = 1.0e9;
-  public static double TIME_UNIT_P = 1.0e12;
+  public static double 		TIME_UNIT_M = 1.0e6;
+  public static double 		TIME_UNIT_T = 1.0e9;
+  public static double 		TIME_UNIT_P = 1.0e12;
 
   // Trace file name
-  protected String _traceFileName;
-  protected ITraceReader _reader;
+  protected String 			_traceFileName;
+  protected BufferedReader  _reader;
   
   // The table to store all trace functions
-  protected HashMap _traceFunctionTable;
+  protected HashMap 		_traceFunctionTable;
   
   // The property map
-  protected HashMap _properties;
+  protected HashMap 		_properties;
   
   // The trace file parse status
-  protected PAParseStatus _status;
+  protected PAParseStatus 	_status;
   
   // Trace file attributes
-  protected int _numberOfCallGraphEntries;  
-  private double _timeUnit;
-  private double _totalExecutionTime;
+  protected int 			_numberOfCallGraphEntries;  
+  private   double 			_timeUnit;
+  private   double 			_totalExecutionTime;
   
   // The list of call cycles
-  private ArrayList _callCycles;
+  private 	ArrayList 		_callCycles;
   
   
   /**
@@ -63,10 +63,7 @@ public abstract class PATraceFile {
    */
   public PATraceFile(String traceFileName) throws PAException {
    
-   this();
-   _traceFileName = traceFileName;
-   
-   _reader = new PATraceFileReader(traceFileName);
+   this(new File(traceFileName));
    
   }
  
@@ -76,18 +73,24 @@ public abstract class PATraceFile {
    public PATraceFile(File file) throws PAException {
     
     this();
+    
     _traceFileName = file.getAbsolutePath();
     
-    _reader = new PATraceFileReader(file);
-    
+    try {
+     _reader = new BufferedReader(new FileReader(file));
+    }
+    catch (FileNotFoundException e) {
+     throw new PAException("Cannot find the trace file: " + _traceFileName);
+    }    
   }
   
   /**
    * Create a PA trace file from a trace reader
    */
-  public PATraceFile(ITraceReader reader) {
+  public PATraceFile(BufferedReader reader) {
    
    this();
+   
    _reader = reader;
   }
   
@@ -96,9 +99,14 @@ public abstract class PATraceFile {
    */
   public void setTraceFileName(String traceFileName) throws PAException {
   
-   _traceFileName = traceFileName;   
-   _reader = new PATraceFileReader(traceFileName);
-   
+    _traceFileName = traceFileName;   
+    
+    try {
+     _reader = new BufferedReader(new FileReader(traceFileName));
+    }
+    catch (FileNotFoundException e) {
+     throw new PAException("Cannot find the trace file: " + traceFileName);
+    }   
   }
 
   /**

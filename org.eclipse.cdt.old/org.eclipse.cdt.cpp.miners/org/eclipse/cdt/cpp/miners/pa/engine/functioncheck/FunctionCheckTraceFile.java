@@ -40,7 +40,7 @@ public class FunctionCheckTraceFile extends PATraceFile {
    super(file);   
   }
   
-  public FunctionCheckTraceFile(ITraceReader reader) {
+  public FunctionCheckTraceFile(BufferedReader reader) {
   
    super(reader);
   }

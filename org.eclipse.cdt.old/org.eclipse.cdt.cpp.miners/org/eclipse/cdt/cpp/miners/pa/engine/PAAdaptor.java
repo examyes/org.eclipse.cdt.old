@@ -100,7 +100,7 @@ public class PAAdaptor {
  /**
   * Create a PA trace file from a given trace reader
   */
- public static PATraceFile createTraceFile(ITraceReader reader, String formatString) throws Exception {
+ public static PATraceFile createTraceFile(BufferedReader reader, String formatString) throws Exception {
  
   if (formatString == null || formatString.toLowerCase().equals("gprof_gnu"))
    return createTraceFile(reader, GPROF_GNU);
@@ -118,7 +118,7 @@ public class PAAdaptor {
   /**
    * Create a PA trace file from a given trace reader
    */
-  public static PATraceFile createTraceFile(ITraceReader reader, int format) throws Exception {
+  public static PATraceFile createTraceFile(BufferedReader reader, int format) throws Exception {
      
    PATraceFile traceFile = null;
    if (format == GPROF_GNU || format == GPROF_ALL) {
