@@ -4,7 +4,7 @@
 <!-- ========================== -->
 <toc label="GettingStarted"> 
   <topic label="Introduction"> 
-    <topic label="About This Plugin"    href="gettingstarted/introduction/about.htm"/>
+    <topic label="About This Plugin"    href="about.html"/>
     <topic label="Contact Us"           href="frames/contact.htm"/> 
   </topic> 
   <topic label="Installation"> 
