@@ -12,9 +12,10 @@ import java.util.*;
  */
 public class TargetsStore 
 {
+    static private TargetsStore _instance = new TargetsStore();
 
-    Vector projectList;
-
+    public Vector projectList;
+    
     /**
      * TargetsStore constructor comment.
      */
@@ -22,5 +23,16 @@ public class TargetsStore
     {
 	super();
 	projectList = new Vector();
+    }
+
+
+    static public TargetsStore getInstance()
+    {
+	return _instance;
+    }
+
+    public Vector getProjectList()
+    {
+	return projectList;
     }
 }

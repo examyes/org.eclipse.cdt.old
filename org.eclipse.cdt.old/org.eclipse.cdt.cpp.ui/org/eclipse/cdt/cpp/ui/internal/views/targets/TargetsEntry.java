@@ -88,10 +88,11 @@ public void applyEditorValue() {
 	// Set the editor value
 	if (changed) 
 	    {
-		System.out.println("value changed " + newValue);
 		setValue(newValue);	
 	    }
 }
+
+	
 /**
  * Return the sorted intersection of all the <code>IPropertyDescriptor</code>s 
  * for the objects.

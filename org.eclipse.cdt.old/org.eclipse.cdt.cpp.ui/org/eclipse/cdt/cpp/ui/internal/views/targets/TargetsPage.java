@@ -44,8 +44,7 @@ public class TargetsPage extends Page implements IPropertySheetPage {
 	protected ActionRemoveTarget removeAction;
 
 	// persistance
-	public TargetsStore targetStore = new TargetsStore();
-	
+	public TargetsStore targetStore;	
 	//NL Enablement
 	private CppPlugin pluginInstance = CppPlugin.getPlugin();
 	private final String NEW_ACTION_KEY = "TargetsViewer.Action.New_Target";
@@ -57,9 +56,11 @@ public class TargetsPage extends Page implements IPropertySheetPage {
 	private final String HOVER_REMOVE_ACTION_KEY = "TargetsViewer.Hover.Remove_Target";
 	private final String HOVER_REMOVE_ALL_ACTION_KEY = "TargetsViewer.Hover.Remove_All_Targets";
 
-public TargetsPage() {
+    public TargetsPage() 
+    {
 	super();
-}
+	targetStore = TargetsStore.getInstance();	
+    }
 
     /**
      * Creates and configures the TargetsViewer 
