@@ -26,8 +26,15 @@ public class HostsDetailsViewPart extends DetailsViewPart
 {
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
-	return new ObjectWindow(parent, 0, null, new ImageRegistry(), HostsPlugin.getInstance().getActionLoader(), true);
+	return new ObjectWindow(parent, 0, null, new ImageRegistry(), loader, true);
     }
+    
+    public IActionLoader getActionLoader()
+    {
+	IActionLoader loader = HostsPlugin.getInstance().getActionLoader();
+	return loader;
+    }
+
 }
 
 

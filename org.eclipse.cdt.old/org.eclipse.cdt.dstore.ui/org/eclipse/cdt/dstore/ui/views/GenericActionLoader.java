@@ -39,20 +39,14 @@ import java.lang.reflect.*;
 
 public class GenericActionLoader implements IActionLoader
 {
-    protected static IActionLoader       _instance;
     protected   IOpenAction            _openAction;
     protected   CustomAction           _openPerspectiveAction;
     
 
     public GenericActionLoader()	
     {	
-	_instance = this;
     }
 
-    public static IActionLoader getInstance()
-    {
-	return _instance;
-    }
     
     public CustomAction getOpenPerspectiveAction()
     {

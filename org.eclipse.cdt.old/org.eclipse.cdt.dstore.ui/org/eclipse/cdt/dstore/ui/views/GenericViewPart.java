@@ -95,7 +95,7 @@ public class GenericViewPart extends ViewPart
 		    handleSelectionChanged(event);
 		}
 	    });
-	 
+	  
 	ISelectionService selectionService = getSite().getWorkbenchWindow().getSelectionService();
 	selectionService.addSelectionListener(this);
 
@@ -115,7 +115,7 @@ public class GenericViewPart extends ViewPart
      
     public IActionLoader getActionLoader()
     {
-	return GenericActionLoader.getInstance();
+	return new GenericActionLoader();
     }
 
     public void setActionLoader(IActionLoader loader)

@@ -33,9 +33,16 @@ import java.lang.reflect.*;
 
 public class CppActionLoader extends GenericActionLoader
 {
+    private static CppActionLoader _instance = new CppActionLoader();
+
     public CppActionLoader()
     {
 	super();
+    }
+
+    public static IActionLoader getInstance()
+    {
+	return _instance;
     }
     
     public CustomAction getOpenPerspectiveAction()

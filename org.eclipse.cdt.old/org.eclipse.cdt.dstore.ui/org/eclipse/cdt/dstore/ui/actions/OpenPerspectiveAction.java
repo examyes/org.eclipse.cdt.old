@@ -30,7 +30,7 @@ import org.eclipse.ui.internal.*;
 public class OpenPerspectiveAction extends CustomAction 
 {
   public OpenPerspectiveAction(String label)
-      {	
+      {	 
         super(label);
       }
      

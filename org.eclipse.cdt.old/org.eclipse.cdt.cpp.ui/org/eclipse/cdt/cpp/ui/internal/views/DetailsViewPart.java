@@ -7,7 +7,7 @@ package com.ibm.cpp.ui.internal.views;
  */
 
 import com.ibm.dstore.ui.widgets.*;
-import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.*; 
 
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;

@@ -232,8 +232,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	adapter.setChildren(rmtProjects);	
 
 
-	// init action loader
-	new CppActionLoader();
     }
 
   public String getInstallLocation()

@@ -43,7 +43,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	return new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, true);
     }
     
-    public IActionLoader getActionLoader()
+    public IActionLoader getActionLoader() 
     {
 	return CppActionLoader.getInstance();
     }

@@ -52,7 +52,7 @@ public class OpenPerspectiveAction extends CustomAction
 	
 	IWorkbenchPage[] perspectives = dw.getPages();
 
-	try
+	try 
 	    {
 		persp = dw.openPage("com.ibm.dstore.ui.views.ObjectsPerspective", input);
 	    }
