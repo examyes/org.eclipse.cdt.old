@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<plugin
+   name = "Cpp Miners Plugin"
+   id = "com.ibm.cpp.miners"
+   version = "1.2.1"
+   vendor-name = "IBM">
+
+   <requires>
+      <import plugin="com.ibm.dstore.core"/>
+   </requires>
+
+   <runtime>
+    <library name=".">
+       	<export name="*" />      
+     </library> 
+   </runtime>
+
+</plugin>
+
+
+
+
+
+
+

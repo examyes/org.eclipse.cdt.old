@@ -1,0 +1,7 @@
+com.ibm.dstore.miners.environment.EnvironmentMiner
+com.ibm.cpp.miners.parser.ParseMiner
+com.ibm.dstore.miners.filesystem.FileSystemMiner
+com.ibm.dstore.miners.command.CommandMiner
+com.ibm.cpp.miners.search.SearchMiner
+com.ibm.cpp.miners.project.ProjectMiner
+com.ibm.cpp.miners.managedproject.ManagedProjectMiner
