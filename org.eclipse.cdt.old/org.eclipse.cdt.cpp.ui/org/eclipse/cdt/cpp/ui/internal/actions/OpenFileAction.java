@@ -61,7 +61,8 @@ public class OpenFileAction extends CustomAction
 
     public void run()
     { 
-	IOpenAction openAction = CppActionLoader.getInstance().getOpenAction();
+	IActionLoader loader = CppActionLoader.getInstance();
+	IOpenAction openAction = loader.getOpenAction();
 	openAction.setSelected(_subject);
 	openAction.run();
     }

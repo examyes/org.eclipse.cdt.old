@@ -64,7 +64,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 		_file = _previousFile;	
 		_previousFile = prevFile;
 		
-		int prevLine  = _line; 
+		int prevLine  = _line;  
 		_line = _previousLine;
 		_previousLine = prevLine;
 		
