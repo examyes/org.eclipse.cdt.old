@@ -99,7 +99,8 @@ public class ProcessMonitorMiner extends Miner
 	    }
 	catch (IOException e)
 	    {
-		e.printStackTrace();
+	//		e.printStackTrace();
+	_validPS = false;
 	    }
 
     }
