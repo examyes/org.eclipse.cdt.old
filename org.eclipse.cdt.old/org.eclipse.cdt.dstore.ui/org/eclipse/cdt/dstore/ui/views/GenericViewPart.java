@@ -112,10 +112,18 @@ public class GenericViewPart extends ViewPart
     {
 	return new ObjectWindow(parent, 0, null, new ImageRegistry(), loader);
     }
-    
+     
     public IActionLoader getActionLoader()
     {
-	return new GenericActionLoader();
+	return GenericActionLoader.getInstance();
+    }
+
+    public void setActionLoader(IActionLoader loader)
+    {
+	if (_viewer != null)
+	    {
+		_viewer.setActionLoader(loader);
+	    }
     }
 
     public void initInput(DataStore dataStore)
@@ -226,7 +234,7 @@ public class GenericViewPart extends ViewPart
 		toolBarManager.add(_lockAction);
 	    }
     }
-
+    
     public void lock(boolean flag)
     {
 	if (_viewer.isLocked() != flag)

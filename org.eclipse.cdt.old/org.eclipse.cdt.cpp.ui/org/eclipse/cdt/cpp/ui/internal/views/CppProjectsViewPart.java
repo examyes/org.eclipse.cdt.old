@@ -60,7 +60,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 		
 		lock(true);
 		return;
-	    }
+	    } 
 	_viewer.setInput(null);
     }
     

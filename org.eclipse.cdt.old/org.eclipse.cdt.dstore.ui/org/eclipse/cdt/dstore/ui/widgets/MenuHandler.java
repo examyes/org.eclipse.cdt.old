@@ -56,6 +56,11 @@ public class MenuHandler
 	    }
     }
 
+    public void setActionLoader(IActionLoader loader)
+    {
+	_loader = loader;
+    }
+
     public String getLocalizedString(String key)
     {
 	try
@@ -159,9 +164,8 @@ public class MenuHandler
 		  {
 		      if (_loader != null)
 			  {
-			      _openPerspectiveAction = _loader.loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
-									  getLocalizedString("ui.Open_Perspective_On"));
-		  
+
+			      _openPerspectiveAction = _loader.getOpenPerspectiveAction();
 			  }
 		  }
 	      

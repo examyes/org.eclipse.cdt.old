@@ -11,6 +11,7 @@ import com.ibm.cpp.ui.internal.views.*;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.views.*;
 import com.ibm.dstore.ui.actions.*;
 
 import org.eclipse.core.resources.*;
@@ -59,10 +60,13 @@ public class OpenPerspectiveAction extends CustomAction
 	    {
 	    }
 	
-	final IViewPart viewPart = persp.findView("com.ibm.dstore.ui.views.ObjectsViewPart");
+	final IViewPart viewPart = persp.findView("com.ibm.dstore.ui.views.GenericViewPart");
 	if (viewPart != null)
 	    {
 		persp.bringToTop(viewPart);
+
+		GenericViewPart gviewPart = (GenericViewPart)viewPart; 
+		gviewPart.setActionLoader(CppActionLoader.getInstance());  
 	    }
     }
 

@@ -33,15 +33,19 @@ import java.lang.reflect.*;
 
 public class CppActionLoader extends GenericActionLoader
 {
-    private static CppActionLoader _instance = new CppActionLoader();
-
     public CppActionLoader()
     {
+	super();
     }
     
-    public static CppActionLoader getInstance()
+    public CustomAction getOpenPerspectiveAction()
     {
-	return _instance;
+	if (_openPerspectiveAction == null)
+	    {
+		_openPerspectiveAction = loadAction("com.ibm.cpp.ui.internal.actions.OpenPerspectiveAction", 
+						    "Open Perspective On");
+	    }
+	return _openPerspectiveAction;
     }
 
     public IOpenAction getOpenAction()

@@ -17,6 +17,7 @@ import com.ibm.dstore.ui.connections.*;
 import com.ibm.dstore.core.DataStoreCorePlugin;
 
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.editor.*;
 import com.ibm.cpp.ui.internal.wizards.*;
 import com.ibm.cpp.ui.internal.vcm.*;
@@ -229,6 +230,10 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    }
 	RemoteProjectAdapter adapter = new RemoteProjectAdapter(dataStore.getRoot());
 	adapter.setChildren(rmtProjects);	
+
+
+	// init action loader
+	new CppActionLoader();
     }
 
   public String getInstallLocation()

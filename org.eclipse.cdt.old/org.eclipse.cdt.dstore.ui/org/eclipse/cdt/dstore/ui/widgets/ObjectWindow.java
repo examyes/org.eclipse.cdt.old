@@ -178,6 +178,13 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	initialize(isTable);
     }
 
+
+    public void setActionLoader(IActionLoader loader)
+    {
+	_loader = loader;
+	_menuHandler.setActionLoader(loader);
+    }
+
     public void initialize(boolean isTable)
     {
 	_menuHandler = new MenuHandler(_loader);

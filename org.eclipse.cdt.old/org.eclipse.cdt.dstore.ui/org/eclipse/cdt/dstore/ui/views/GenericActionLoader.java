@@ -39,10 +39,29 @@ import java.lang.reflect.*;
 
 public class GenericActionLoader implements IActionLoader
 {
-    protected   IOpenAction      _openAction;
+    protected static IActionLoader       _instance;
+    protected   IOpenAction            _openAction;
+    protected   CustomAction           _openPerspectiveAction;
+    
 
-    public GenericActionLoader()
+    public GenericActionLoader()	
+    {	
+	_instance = this;
+    }
+
+    public static IActionLoader getInstance()
     {
+	return _instance;
+    }
+    
+    public CustomAction getOpenPerspectiveAction()
+    {
+	if (_openPerspectiveAction == null)
+	    {
+		_openPerspectiveAction = loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
+						    "Open Perspective On");
+	    }
+	return _openPerspectiveAction;
     }
 
     public IOpenAction getOpenAction()
@@ -66,19 +85,19 @@ public class GenericActionLoader implements IActionLoader
 	    }
 	catch (ClassNotFoundException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	catch (InstantiationException e)
 	    { 
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	catch (IllegalAccessException e)
 	    {
-		System.out.println(e);	
+		//System.out.println(e);	
 	    }
 	catch (InvocationTargetException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	
         return newAction;
@@ -104,19 +123,19 @@ public class GenericActionLoader implements IActionLoader
 	    }
         catch (ClassNotFoundException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
         catch (InstantiationException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
         catch (IllegalAccessException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
         catch (InvocationTargetException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	
         return newAction;

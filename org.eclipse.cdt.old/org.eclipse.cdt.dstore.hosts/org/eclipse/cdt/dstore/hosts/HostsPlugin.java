@@ -70,7 +70,18 @@ public class HostsPlugin extends AbstractUIPlugin
 
     public class HostsActionLoader implements IActionLoader
     {
-	private IOpenAction _openAction;
+	private IOpenAction   _openAction;
+	private CustomAction  _openPerspectiveAction;
+
+	public CustomAction getOpenPerspectiveAction()
+	{
+	    if (_openPerspectiveAction == null)
+		{
+		    _openPerspectiveAction = loadAction("com.ibm.dstore.ui.actions.OpenPerspectiveAction", 
+							"Open Perspective On");
+		}
+	    return _openPerspectiveAction;
+	}
 
 	public IOpenAction getOpenAction()
 	{

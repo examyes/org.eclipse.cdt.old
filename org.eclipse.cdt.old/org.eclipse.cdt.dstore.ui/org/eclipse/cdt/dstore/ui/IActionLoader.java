@@ -14,6 +14,7 @@ import java.util.*;
 public interface IActionLoader
 {
     public IOpenAction getOpenAction();
+    public CustomAction getOpenPerspectiveAction();
     public CustomAction loadAction(String source, String name);
     public CustomAction loadAction(DataElement object, DataElement descriptor);
     public CustomAction loadAction(List objects, DataElement descriptor);

@@ -48,10 +48,17 @@ public class SelectedObjectViewPart extends GenericViewPart
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
-	ObjectWindow viewer =  new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), CppActionLoader.getInstance(), false);
+	ObjectWindow viewer =  new ObjectWindow(parent, 0, dataStore, _plugin.getImageRegistry(), loader, false);
     
 	return viewer;
     }
+
+
+    public IActionLoader getActionLoader()
+    {
+	return CppActionLoader.getInstance();
+    }
+
 
     public void createPartControl(Composite parent)
     {	
@@ -74,7 +81,7 @@ public class SelectedObjectViewPart extends GenericViewPart
 	_viewer.setInput(element);     
 
 	// open editor
-	CppActionLoader loader = CppActionLoader.getInstance();
+	IActionLoader loader = getActionLoader();
 	IOpenAction openAction = loader.getOpenAction();
 	openAction.setSelected(element);
 	openAction.run();
