@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
    id="com.ibm.debug.pdt"
-   name="IBM Remote Debug"
+   name="%PluginName"
    version="2.0.0"
    provider-name="%Provider"
-   class="com.ibm.debug.pdt.PICLDebugPlugin">
+   class="com.ibm.debug.internal.pdt.PICLDebugPlugin">
 
    <runtime>
       <library name="ibmdebug.jar">
@@ -27,23 +27,11 @@
    </requires>
 
 
-<!-- Launch Configuration -->
-<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
-   <launchConfigurationType
-   	   id="com.ibm.debug.OldDaemonDefaultLaunchConfiguration"
-	   name=" "	 
-	   public = "false"
-	   delegate="com.ibm.debug.pdt.launch.OldDaemonDefaultLaunchConfigurationDelegate"
-	   modes= "debug">	   
-	<!--   <fileExtension extension="*" default="false"/> -->
-   </launchConfigurationType>
-</extension> 
-
 <!-- Presentation services -->
    <extension
          point="org.eclipse.debug.ui.debugModelPresentations">
       <debugModelPresentation
-            class="com.ibm.debug.pdt.PICLModelPresentation"
+            class="com.ibm.debug.internal.pdt.PDTModelPresentation"
             id="com.ibm.debug.pdt">
       </debugModelPresentation>
    </extension>
@@ -481,6 +469,69 @@
             name="contextsDebug.xml"
             plugin="com.ibm.debug.pdt">
       </contexts>
+   </extension>
+<!-- Launch Configurations -->
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            name=" "
+            delegate="com.ibm.debug.pdt.launch.OldDaemonDefaultLaunchConfigurationDelegate"
+            modes="debug"
+            public="false"
+            id="com.ibm.debug.OldDaemonDefaultLaunchConfiguration">
+      </launchConfigurationType>
+      <launchConfigurationType
+            name="%loadPICLApplication"
+            delegate="com.ibm.debug.pdt.launchconfig.PICLLoadLaunchConfigurationDelegate"
+            modes="debug"
+            id="com.ibm.debug.loadPICLApplication">
+      </launchConfigurationType>
+      <launchConfigurationType
+            name="%attachPICLApplication"
+            delegate="com.ibm.debug.pdt.launchconfig.PICLAttachLaunchConfigurationDelegate"
+            modes="debug"
+            id="com.ibm.debug.attachPICLApplication">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            icon="icons/full/obj16/loadconfig_obj.gif"
+            configTypeID="com.ibm.debug.loadPICLApplication"
+            id="com.ibm.debug.launchConfigurationTypeImage.PICLLoadApplicationImage">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            icon="icons/full/obj16/attachconfig_obj.gif"
+            configTypeID="com.ibm.debug.attachPICLApplication"
+            id="com.ibm.debug.launchConfigurationTypeImage.PICLAttachApplicationImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <launchConfigurationTab
+            name="%AttachConfig.tab1"
+            type="com.ibm.debug.attachPICLApplication"
+            class="com.ibm.debug.pdt.launchconfig.PICLAttachMainTab"
+            id="com.ibm.debug.launchConfigurationTab.AttachMain">
+      </launchConfigurationTab>
+      <launchConfigurationTab
+            name="%AttachConfig.tab2"
+            type="com.ibm.debug.attachPICLApplication"
+            class="com.ibm.debug.pdt.launchconfig.PICLAttachAdvancedTab"
+            id="com.ibm.debug.launchConfigurationTab.AttachAdvanced">
+      </launchConfigurationTab>
+      <launchConfigurationTab
+            name="%LoadConfig.tab1"
+            type="com.ibm.debug.loadPICLApplication"
+            class="com.ibm.debug.pdt.launchconfig.PICLLoadMainTab"
+            id="com.ibm.debug.launchConfigurationTab.LoadMain">
+      </launchConfigurationTab>
+      <launchConfigurationTab
+            name="%LoadConfig.tab2"
+            type="com.ibm.debug.loadPICLApplication"
+            class="com.ibm.debug.pdt.launchconfig.PICLLoadAdvancedTab"
+            id="com.ibm.debug.launchConfigurationTab.LoadAdvanced">
+      </launchConfigurationTab>
    </extension>
 
 </plugin>
