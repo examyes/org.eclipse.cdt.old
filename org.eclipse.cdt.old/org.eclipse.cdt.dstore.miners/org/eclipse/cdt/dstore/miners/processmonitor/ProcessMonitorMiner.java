@@ -21,6 +21,21 @@ public class ProcessMonitorMiner extends Miner
     private BufferedReader _reader;
     private BufferedWriter _writer;
 
+    public ResourceBundle getResourceBundle()
+    {
+	ResourceBundle resourceBundle = null;
+	// setup resource bundle
+	try
+	    {
+		resourceBundle = ResourceBundle.getBundle(getName());
+	    }
+	catch (MissingResourceException mre)
+	    {
+	    }	  	
+
+	return resourceBundle;
+    }
+
     public void extendSchema(DataElement schemaRoot)
     {
 	DataElement hostD = _dataStore.find(schemaRoot, DE.A_NAME, "host", 1);
@@ -41,11 +56,11 @@ public class ProcessMonitorMiner extends Miner
 	String theOS = System.getProperty("os.name");
 	if (theOS.toLowerCase().startsWith("win"))
 	    {
-		_psCommand = "ps -Ws";
+		_psCommand = getLocalizedString("cygwin_ps");
 	    }
 	else 
 	    {
-		_psCommand = "ps --format pid,ucomm,%cpu,%mem,ppid -a";
+		_psCommand = getLocalizedString("linux_ps");
 	    }
 	
 	// run ps to get column formats
