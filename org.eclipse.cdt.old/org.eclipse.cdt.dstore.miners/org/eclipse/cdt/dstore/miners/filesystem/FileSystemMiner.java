@@ -58,37 +58,38 @@ public class FileSystemMiner extends Miner
       {
 	  // load persisted information
 	  DataElement host =  _dataStore.getHostRoot();
-	  DataElement minerRoot = null;
-
 	  	 
-	  String dir = host.getSource();	  	
+	  String dir = host.getSource();	  
+
+
 	  File[] deviceList = File.listRoots();
 	  for(int i=0;i<deviceList.length;i++)
 	      {		  
 		  String devicePath = deviceList[i].getPath().replace('\\', '/');
-		  DataElement temp=_dataStore.createObject(_minerData, 
-							   getLocalizedString("model.device"),
-							   devicePath,
-							   devicePath);
 
-		  if (dir.length() == 0)
-		      {
-			  dir = devicePath; 
-		      }
+		  _dataStore.createObject(_minerData, 
+					  getLocalizedString("model.device"),
+					  devicePath,
+					  devicePath);
 	      }	 
-	  
 
-	  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
-	  File hostFile = new File(dir2);
-	  
-	  DataElement currentDirectory = findFile(_minerData, hostFile);
-	  if (currentDirectory != null)
+	  if (dir.length() == 0)
 	      {
-		  DataElement ref = _dataStore.createReference(host,currentDirectory);
+		  _dataStore.createReference(host, _minerData);
 	      }
 	  else
 	      {
-		  _dataStore.createReference(host, _minerData.get(0));
+		  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
+		  
+		  File hostFile = new File(dir2);
+		  if (hostFile.exists())
+		      {
+			  DataElement currentDirectory = findFile(_minerData, hostFile);
+			  if (currentDirectory != null)
+			      {
+				  DataElement ref = _dataStore.createReference(host,currentDirectory);
+			      }
+		      }
 	      }
       }
 
@@ -100,9 +101,13 @@ public class FileSystemMiner extends Miner
 	DataElement cwdRef = host.get(0);
 	if (cwdRef != null)
 	    {
-		DataElement theElement = cwdRef.dereference();
 		_dataStore.refresh(_minerData);
-		refreshFrom(theElement);
+
+		DataElement theElement = cwdRef.dereference();
+		if (theElement != _minerData)
+		    {
+			refreshFrom(theElement);
+		    }
 	    }
     }
 
