@@ -71,10 +71,12 @@ public class TargetAction extends CustomAction
 		super(subject, label, command, dataStore);
 		_subject = subject;
 		
-		if(_command.getValue().equals("DIST_CLEAN"))
+		if(_command.getValue().equals("DIST_CLEAN")||_command.getValue().equals("MAINTAINER_CLEAN")||
+		_command.getValue().equals("INSTALL"))
 			if (!subject.getType().equals("Project"))
 				setEnabled(false);
-		if(_command.getValue().equals("DIST_CLEAN")&&!doesFileExists("Makefile"))
+		if((_command.getValue().equals("DIST_CLEAN")||_command.getValue().equals("MAINTAINER_CLEAN")||
+		_command.getValue().equals("INSTALL"))&&!doesFileExist("Makefile"))
 			setEnabled(false);		
 	}
 	public void run()
@@ -102,7 +104,7 @@ public class TargetAction extends CustomAction
 			monitor.start();
 		}
     }
-	private boolean doesFileExists(String fileName)
+	private boolean doesFileExist(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
 		{

@@ -1260,5 +1260,8 @@ public class MakefileAmManager {
 			}catch (IOException e){}
 		}
 	}
+	public void defineCompilerFlags(DataElement subject)
+	{
+	}
 }
 

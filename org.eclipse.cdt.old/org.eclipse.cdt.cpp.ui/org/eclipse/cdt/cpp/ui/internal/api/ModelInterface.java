@@ -2061,9 +2061,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement defCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Default Cmds");
 						
 	DataElement distCleanCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Distclean",
+							  "distclean",
 							  "com.ibm.cpp.ui.internal.actions.TargetAction");
-	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");		
+	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");
+			
+	DataElement maintainerCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "maintainer-clean",
+							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+	maintainerCmd.setAttribute(DE.A_VALUE,"MAINTAINER_CLEAN");	
+		
+	DataElement installCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "make-install",
+							  "com.ibm.cpp.ui.internal.actions.TargetAction");
+	installCmd.setAttribute(DE.A_VALUE,"INSTALL");		
+
 	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
 	
 	
@@ -2102,7 +2113,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
 	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						
 	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
-	
+	//
+	/*DataElement missCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "ConfigureIn Cmds");
+
+	DataElement compilerCmd = dataStore.createObject(missCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Define Compiler Flags",
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
+	compilerCmd.setAttribute(DE.A_VALUE,"COMPILER_FLAGS");						
+	dataStore.createReference(missCmds, makefileCmds, "abstracts", "abstracted by");
+	*/	
 	
 	//***********************************
 	DataElement managedProjectD = dataStore.find(schemaRoot,DE.A_NAME,"Managed Project",1);
