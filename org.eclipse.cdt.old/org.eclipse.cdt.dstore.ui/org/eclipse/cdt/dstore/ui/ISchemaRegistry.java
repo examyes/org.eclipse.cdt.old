@@ -6,9 +6,9 @@ package org.eclipse.cdt.dstore.ui;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
-import org.eclipse.jface.action.*;
+import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 import java.util.*;
 
 public interface ISchemaRegistry

@@ -6,7 +6,7 @@ package org.eclipse.cdt.dstore.core.server;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.util.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.cdt.dstore.core.miners.miner.*;
@@ -19,9 +19,9 @@ public class MinerLoader
 {
     private ArrayList            _miners;
     private DataStore            _dataStore;
-    private ILoader              _loader;
+    private ExternalLoader       _loader;
 
-    public MinerLoader(DataStore dataStore, ILoader loader)
+    public MinerLoader(DataStore dataStore, ExternalLoader loader)
     {
 	_dataStore = dataStore;
 	_loader = loader;
@@ -63,10 +63,23 @@ public class MinerLoader
 			    (name.length() > 5))
 
 			    {
-				Miner miner = _loader.loadMiner(name);
-				if (miner != null)
+				try
 				    {
-					unconnectedMiners.add(miner);
+					Class theClass = _loader.loadClass(name);
+					Miner miner = (Miner)theClass.newInstance();
+					if (miner != null)
+					    {
+						unconnectedMiners.add(miner);
+					    }
+				    }
+				catch (ClassNotFoundException e)
+				    {
+				    }
+				catch (InstantiationException e)
+				    {
+				    }
+				catch (IllegalAccessException e)
+				    {
 				    }
 			    }
 		    }

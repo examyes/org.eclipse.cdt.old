@@ -45,32 +45,6 @@ import java.util.ResourceBundle;
 public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     implements IDomainListener, ISchemaProvider
 {
-    public class MinerClassLoader implements ILoader
-    {
-	public Miner loadMiner(String name)
-	    {
-		Miner miner = null;
-		try
-		    {					
-			miner = (Miner)Class.forName(name).newInstance();
-		    }
-		catch (ClassNotFoundException e)
-		    {
-			System.out.println(e);
-		    }
-		catch (InstantiationException e)
-		    {
-			System.out.println(e);
-		    }
-		catch (IllegalAccessException e)
-		    {
-			System.out.println(e);
-		    }
-		
-		return miner;
-	    }
-    }
-
     private static CppPlugin              _instance;
     private static DataStoreCorePlugin    _corePlugin;
 
@@ -179,8 +153,16 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
   public void initDataStore()
     {
+	ArrayList loadScope = new ArrayList();
+	loadScope.add("org.eclipse.cdt.cpp.ui.*");
+	loadScope.add("org.eclipse.cdt.dstore.miners.*");
+	loadScope.add("org.eclipse.cdt.cpp.miners.*");
+
+	ExternalLoader cppLoader = new ExternalLoader(getDescriptor().getPluginClassLoader(), 
+						      loadScope);
+	
  	_clientConnection = new ClientConnection("C/C++", 20000);
-	_clientConnection.setLoader(new MinerClassLoader());	
+	_clientConnection.setLoader(cppLoader);	
         DataStore dataStore = _clientConnection.getDataStore();
 	dataStore.setMinersLocation("org.eclipse.cdt.cpp.miners");
         _corePlugin.setRootDataStore(dataStore);
@@ -204,7 +186,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
 	// set up UI schema
 	_schemaRegistry = new SchemaRegistry();
-	_schemaExtender = new CppSchemaExtender();
+	_schemaExtender = new CppSchemaExtender(cppLoader);
     
 	_schemaRegistry.registerSchemaExtender(_schemaExtender);
 	_schemaRegistry.registerSchemaExtender(HostsPlugin.getDefault().getSchemaExtender());

@@ -56,7 +56,7 @@ public class ClientConnection
     private String                _port;
     private String                _hostDirectory;
     
-    private ILoader             _loader;  
+    private ExternalLoader        _loader;  
     
     /**
      * Creates a new ClientConnection instance
@@ -116,7 +116,7 @@ public class ClientConnection
      *
      * @param loader the loader 
      */
-    public void setLoader(ILoader loader)
+    public void setLoader(ExternalLoader loader)
     {
 	_loader = loader;	
     }
@@ -250,7 +250,7 @@ public class ClientConnection
 	    }
 	else
 	    {
-		_commandHandler = new ServerCommandHandler(new Loader());
+		_commandHandler = new ServerCommandHandler(new ExternalLoader(getClass().getClassLoader(), "*"));
 	    }
 	
 	_commandHandler.start();

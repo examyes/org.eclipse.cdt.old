@@ -11,6 +11,7 @@ import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.ui.widgets.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import java.util.*;

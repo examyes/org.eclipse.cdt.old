@@ -9,6 +9,7 @@ package org.eclipse.cdt.dstore.hosts;
  
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 
 import java.io.*;
 import java.util.*;
@@ -21,6 +22,12 @@ public class HostsSchemaExtender implements ISchemaExtender
 {
     private ExternalLoader _loader;
     private HostsPlugin    _plugin;
+
+    public HostsSchemaExtender(ExternalLoader loader)
+    {
+	_loader = loader ;
+	_plugin = HostsPlugin.getInstance();
+    }
 
     public HostsSchemaExtender()
     {

@@ -9,6 +9,7 @@ package org.eclipse.cdt.cpp.ui.internal.api;
 import org.eclipse.cdt.cpp.ui.internal.*;
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.core.util.*;
 
 import java.util.*;
 
@@ -21,6 +22,11 @@ public class CppSchemaExtender implements ISchemaExtender
     {
 	_loader = new ExternalLoader(CppPlugin.getDefault().getDescriptor().getPluginClassLoader(), 
 				     "org.eclipse.cdt.cpp.ui.*");
+    }
+
+    public CppSchemaExtender(ExternalLoader loader)
+    {
+	_loader = loader;
     }
 
     public ExternalLoader getExternalLoader()

@@ -9,7 +9,6 @@ package org.eclipse.cdt.dstore.core.model;
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.core.util.*; 
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
-import org.eclipse.cdt.dstore.core.server.ILoader;
 
 import java.util.*;
 import java.lang.*;
@@ -51,7 +50,7 @@ public final class DataStore
     
     private DomainNotifier      _domainNotifier;
 
-    private ILoader             _loader;
+    private ExternalLoader      _loader;
     private String              _minersLocation;
     
     private boolean             _isConnected;
@@ -177,7 +176,7 @@ public final class DataStore
      *
      * @param loader the loader for the miners this <code>DataStore</code> will be using
      */
-    public void setLoader(ILoader loader)
+    public void setLoader(ExternalLoader loader)
     {
 	_loader         = loader;
     }
@@ -515,7 +514,7 @@ public final class DataStore
      *
      * @return the loader
      */
-    public ILoader getLoader()
+    public ExternalLoader getLoader()
     {
 	return _loader;
     }

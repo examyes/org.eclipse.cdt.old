@@ -41,37 +41,6 @@ import org.eclipse.jface.action.*;
 
 public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 {
-    public class MinerClassLoader implements ILoader
-    {
-	public Miner loadMiner(String name)
-	    {
-		Miner miner = null;
-		try
-		    {					
-			miner = (Miner)Class.forName(name).newInstance();
-		    }
-		catch (ClassNotFoundException e)
-		    {
-			System.out.println(e);
-		    }
-		catch (InstantiationException e)
-		    {
-			System.out.println(e);
-		    }
-		catch (IllegalAccessException e)
-		    {
-			System.out.println(e);
-		    }
-		catch (Exception e)
-		    {
-			System.out.println(e);
-		    }
-
-		return miner;
-	    }
-    }
-
-
     private static HostsPlugin         _instance;
     
     private static ClientConnection    _clientConnection;
@@ -143,53 +112,60 @@ public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
         {}
       }
 
-  public void initDataStore()
+    public void initDataStore()
     {
-    if (_instance == null)
-      {	
-	_clientConnection = new ClientConnection("Hosts", 2000); 
-      	_clientConnection.setLoader(new MinerClassLoader());	
-        _dataStore = _clientConnection.getDataStore();
-	String install = _corePath;
+	if (_instance == null)
+	    {	
+		ArrayList loadScope = new ArrayList();
+		loadScope.add("org.eclipse.cdt.dstore.hosts.*");
+		loadScope.add("org.eclipse.cdt.dstore.miners.*");
+		
+		ExternalLoader hostsLoader = new ExternalLoader(getDescriptor().getPluginClassLoader(), 
+								loadScope);
+		
+		_clientConnection = new ClientConnection("Hosts", 2000); 
+		_clientConnection.setLoader(hostsLoader);	
+		_dataStore = _clientConnection.getDataStore();
+		String install = _corePath;
+		
+		_dataStore.setAttribute(DataStoreAttributes.A_PLUGIN_PATH, install);
+		
+		IWorkspace workbench = (IWorkspace)getPluginWorkspace();
+		Path rootPath = (Path)Platform.getLocation();
+		
+		String rootDirectory = rootPath.toString();
+
+		DataElement hostRoot = _dataStore.getHostRoot();
+		hostRoot.setAttribute(DE.A_SOURCE, rootDirectory);
+		
+		_clientConnection.setHostDirectory(rootDirectory);	
+		_dataStore.setMinersLocation("org.eclipse.cdt.dstore.miners");
+		_clientConnection.localConnect();
 	
-	_dataStore.setAttribute(DataStoreAttributes.A_PLUGIN_PATH, install);
-
-	IWorkspace workbench = (IWorkspace)getPluginWorkspace();
-        Path rootPath = (Path)Platform.getLocation();
-
-       	String rootDirectory = rootPath.toString();
-
-	DataElement hostRoot = _dataStore.getHostRoot();
-        hostRoot.setAttribute(DE.A_SOURCE, rootDirectory);
-
-       	_clientConnection.setHostDirectory(rootDirectory);	
-	_dataStore.setMinersLocation("org.eclipse.cdt.dstore.miners");
-	_clientConnection.localConnect();
-
-	_instance = this;
-
-	// load schema
-	_dataStore.showTicket(_dataStore.getTicket().getName());
-	_dataStore.getSchema();
-	_dataStore.initMiners();
-
-
-	// setup schema
-	_schemaRegistry = new SchemaRegistry();
-	_schemaExtender = new HostsSchemaExtender();
-	_schemaRegistry.registerSchemaExtender(_schemaExtender);
-	_schemaRegistry.extendSchema(_dataStore);
-
-	// create hosts action loader
-	_actionLoader = new HostsActionLoader(this);
-	
-
-        // for remote connections
-        _connectionManager = new ConnectionManager(_dataStore.getRoot(), _dataStore.getDomainNotifier());
-        _connectionManager.readConnections();
-      }
-  }
-
+		_instance = this;
+		
+		// load schema
+		_dataStore.showTicket(_dataStore.getTicket().getName());
+		_dataStore.getSchema();
+		_dataStore.initMiners();
+		
+		
+		// setup schema
+		_schemaRegistry = new SchemaRegistry();
+		_schemaExtender = new HostsSchemaExtender(hostsLoader);
+		_schemaRegistry.registerSchemaExtender(_schemaExtender);
+		_schemaRegistry.extendSchema(_dataStore);
+		
+		// create hosts action loader
+		_actionLoader = new HostsActionLoader(this);
+		
+		
+		// for remote connections
+		_connectionManager = new ConnectionManager(_dataStore.getRoot(), _dataStore.getDomainNotifier());
+		_connectionManager.readConnections();
+	    }
+    }
+    
     public DataStore getDataStore()
     { 
 	return _dataStore; 

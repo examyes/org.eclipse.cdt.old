@@ -6,7 +6,7 @@ package org.eclipse.cdt.dstore.core.server;
  * the Common Public License which accompanies this distribution.
  */
 
-import org.eclipse.cdt.dstore.core.server.*;
+import org.eclipse.cdt.dstore.core.util.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.cdt.dstore.core.miners.miner.*;
@@ -18,9 +18,9 @@ import java.lang.*;
 public class ServerCommandHandler extends CommandHandler
 {
     private ArrayList            _miners;
-    private ILoader              _loader;
+    private ExternalLoader       _loader;
 
-  public ServerCommandHandler(ILoader loader)
+  public ServerCommandHandler(ExternalLoader loader)
     {
       super();
 
