@@ -2173,98 +2173,95 @@ public final class DataStore
     }
     
     /**
-	     * Finds all the elements that are of a given type from a specified element.  
-	     *
-	     * @param root where to search from 
-	     * @param type the descriptor representing the type of the objects to search for 
-	     * @return a list of elements
-	     */     
-	    public ArrayList findObjectsOfType(DataElement root, String type)
+     * Finds all the elements that are of a given type from a specified element.  
+     *
+     * @param root where to search from 
+     * @param type the descriptor representing the type of the objects to search for 
+     * @return a list of elements
+     */     
+    public ArrayList findObjectsOfType(DataElement root, String type)
+    {
+	ArrayList results = new ArrayList();
+	ArrayList searchList = root.getAssociated(getContentsRelation());
+	if (searchList != null)
 	    {
-		ArrayList results = new ArrayList();
-		ArrayList searchList = root.getAssociated(getContentsRelation());
-		if (searchList != null)
-		{
-			for (int i = 0; i < searchList.size(); i++)
+		for (int i = 0; i < searchList.size(); i++)
 		    {
 			DataElement child = (DataElement)searchList.get(i);
 			if (child.getType().equals(type) || child.isOfType(type))
 			    {
 				results.add(child);
 			    }
-	
+			
 			ArrayList subResults = findObjectsOfType(child, type);
 			for (int j = 0; j < subResults.size(); j++)
 			    {
 				results.add(subResults.get(j));
 			    }
 		    }
-			}
+	    }
 	
-		return results;
-	    }
-	    
-        /**
-	     * Finds all the deleted elements
-	     *
-	     * @param root where to search from 
-	     * @param type the descriptor representing the type of the objects to search for 
-	     * @return a list of elements
-	     */     
-	    public ArrayList findDeleted(DataElement root)
-	    {	       
-	        ArrayList results = new ArrayList();
-		results = findDeleted(root, results);
-		return results;
-	    }
-
-      
-	    private synchronized ArrayList findDeleted(DataElement root, ArrayList results)
-	    {	 
-		synchronized(root)
-		{
-			if (root != null && root.getDataStore() == this)
-			    {		     	
-				if (results.contains(root))
+	return results;
+    }
+    
+    /**
+     * Finds all the deleted elements
+     *
+     * @param root where to search from 
+     * @param type the descriptor representing the type of the objects to search for 
+     * @return a list of elements
+     */     
+    public synchronized ArrayList findDeleted(DataElement root)
+    {	 
+	ArrayList results = new ArrayList();
+	synchronized(root)
+	    {
+		if (root != null && root.getDataStore() == this)
+		    {		     	
+			if (results.contains(root))
+			    {
+				return results;
+			    }
+			
+			if (root != null && root.isDeleted())
+			    {
+				results.add(root);
+			    }
+			
+			ArrayList searchList = root.getNestedData();
+			
+			if (searchList != null)
+			    {
+				for (int i = 0; i < searchList.size(); i++)
 				    {
-					return results;
-				    }
-
-				if (root != null && root.isDeleted())
-				    {
-					results.add(root);
-				    }
-
-				ArrayList searchList = root.getNestedData();
-				
-				if (searchList != null)
-				    {
-					for (int i = 0; i < searchList.size(); i++)
-					    {
-						DataElement child = (DataElement)searchList.get(i);
-						if (child != null && child.getDataStore() == this)
-						    {
-							synchronized(child)
-							    {
-								if (child.isDeleted() && !results.contains(child))
-								    {					   
-									
-									results.add(child);
-									if (!child.isReference())
-									    {
-										results = findDeleted(child, results);	
-									    }
-								    }
-							    }
-						    }
-					    }
+					DataElement child = (DataElement)searchList.get(i);
+					{
+					    synchronized(child)
+						{
+						    if (child != null && child.isDeleted() && !results.contains(child))
+							{					   
+							    
+							    results.add(child);
+							    if (!child.isReference())
+								{
+								    ArrayList sResults = findDeleted(child);	
+								    for (int j = 0; j < sResults.size(); j++)
+									{
+									    results.add(sResults.get(j));
+									}
+								    
+								}
+							}
+						}
+					}
 				    }
 			    }
-		    }	
-		return results;
+		    }
 	    }
-    
-
+	return results;
+    }
+	
+	
 
     /**
      * Finds all relationship descriptor types that can be applied to a particular element.  

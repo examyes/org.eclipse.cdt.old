@@ -259,7 +259,12 @@ public final class DataElement implements Serializable, IDataElement
      * @return whehther the element is deleted or not
      */
     public boolean isDeleted()
-    {    
+    {   
+	if (_attributes == null)
+	    {
+		return true;
+	    }
+
 	String valueAttribute = getAttribute(DE.A_VALUE);
 	
 	if (_depth == -1)
