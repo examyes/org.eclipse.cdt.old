@@ -55,7 +55,7 @@ public class ManagedProjectMiner extends Miner
 		_dataStore.createReference(managedProjectsD, targetAttributeD);
 		_dataStore.createReference(managedProjectsD, targetOptionD);
   
-		_dataStore.createReference(workspaceD, managedProjectsD); // disable this to hide the Mnged Projects View
+		//******_dataStore.createReference(workspaceD, managedProjectsD); // disable this for now
 
 		//createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
 		createCommandDescriptor(targetD, "Build", "C_BUILD_TARGET",false);
@@ -121,7 +121,7 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_INIT_CREATE_RUN"))
 			{
 				autoconfManager.manageProject(project, status);
-				parseAmFile(project); 
+				//parseAmFile(project); 
 			}
 			else if (name.equals("C_DIST_CLEAN"))
 			{
@@ -130,17 +130,17 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.generateAutoconfFiles(project, status,false);
-				parseAmFile(project); 
+				//parseAmFile(project); 
 			}
 			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 			{
 				autoconfManager.updateAutoconfFiles(project, status,false);
-				parseAmFile(project); 
+				//parseAmFile(project); 
 			}
 			else if (name.equals("C_UPDATE_CONFIGURE_IN"))
 			{
 				autoconfManager.configureInManager.updateConfigureIn(project,false);
-				parseAmFile(project); 
+				//parseAmFile(project); 
 			}		
 			else if (name.equals("C_CREATE_CONFIGURE"))
 			{
@@ -158,7 +158,7 @@ public class ManagedProjectMiner extends Miner
 		 	if (name.equals("C_UPDATE_MAKEFILE_AM"))
 			{
 				autoconfManager.makefileAmManager.updateMakefileAm(subject,false);
-				parseAmFile(subject); 
+				//parseAmFile(subject); 
 			}
 			else if (name.equals("C_REFRESH"))
 			{
