@@ -20,6 +20,7 @@ abstract class DisassemblyView extends View
    {
       super(debugEngine,  parentPart);
       _noViewLines[_noViewLines.length-1] = _debugEngine.getResourceString("DISASSEMBLY_NOT_AVAILABLE_MSG");
+      _lineMap = new Hashtable();
    }
 
    /**
@@ -87,35 +88,21 @@ System.out.println("@@@@ DisassemblyView.convertDisassemblyLineToAddress lineNum
    }
 
    public String convertAddressToDisassemblyLine(String targetAddress)
-   {
+   {   	
       String lineNum = null;
-      if(_viewLines==null || _viewLines.size()==0)
-      {
-          verifyView( _parentPart.getName() );
-      } 
 
-      if(_viewLines==null || _viewLines.size()==0)
-      {
-          if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(3,"DisassemblyView.convertAddressToDisassemblyLine targetAddress="+targetAddress+" _viewLines=null" );
-          return lineNum;
-      }
+	  Object tmp = _lineMap.get(targetAddress);
+	  if (tmp != null)
+	  {
+	  	// correct line number in disassembly view
+	  	lineNum = (String)_lineMap.get(targetAddress).toString();
+	  }
+	  else
+	  {
+	  	// first line in disassembly if we can't map
+		lineNum = "1";
+	  }
 
-      int totalLines = _viewLines.size();
-      for(int i=1; i<=totalLines; i++)
-      {
-         String str = (String)_viewLines.elementAt(i-1);
-         String keyword = "0x";
-         int address = str.indexOf(keyword);
-         if(address<0)
-             return lineNum;
-         str = str.substring(address);
-         int end = str.indexOf(" ");
-         String lineAddress = str.substring(0,end);
-System.out.println("@@@@ DisassemblyView.convertAddressToDisassemblyLine target="+targetAddress+" i="+i+" lineAddress="+lineAddress );
-         if(targetAddress.equals(lineAddress))
-            return String.valueOf(i);
-      }
       return lineNum;
    }
 
@@ -154,11 +141,14 @@ System.out.println("#### DisassemblyView.verifyView(STRING) sourceFileName="+sou
       int maxLength = 0;
       _viewLines.removeAllElements();
       String srcLine = null;
+      String address = null;
       while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
       {
+      	 address = srcLine.substring(0,9);
          srcLine = processViewLine(lineNum+1, " "+srcLine);
 
-         _viewLines.addElement(srcLine);
+         _viewLines.addElement(srcLine);        
+         _lineMap.put(address, new String(Integer.toString(lineNum+1)));
                   
          if (srcLine.length() > maxLength)
             maxLength = srcLine.length();
@@ -430,6 +420,9 @@ System.out.println("#### DisassemblyView.addViewToReply viewNo="+viewNo  );
    // Data members
    protected int          _moduleID;
    protected ModuleManager _moduleManager;
+   
+   // sam
+   private Hashtable _lineMap;
    
    // Data members
    static byte _prefixl = 10;
