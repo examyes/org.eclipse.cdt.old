@@ -96,18 +96,26 @@ public class ParseMiner extends Miner
  private void handleNotification(DataElement cmd, DataElement subject, DataElement status)
  {
  	String cmdStr = cmd.getValue();
+ 	DataElement project = getProjectFor(subject);
  	if (cmdStr.equals("C_DELETE"))
  	{ 
  		DataElement parsedFile = getParseFileFor(subject);
  		if (parsedFile != null)
  		{
  			removeParseInfo(parsedFile);
+ 			
+ 			DataElement theProject = getParseProject(project);
+ 			DataElement projectObjects = getProjectElement(theProject, ParserSchema.ProjectObjects);
+ 			
+ 			_dataStore.refresh(projectObjects);
  		}
  	}
  	else if (cmdStr.equals("C_ADD"))
  	{
- 		DataElement project = getProjectFor(subject); 		
- 		handleFileParse(subject, project, status);		
+  		if (project != null)
+  		{
+ 			handleFileParse(subject, project, status);		
+  		}
  	}
  
  }
@@ -421,6 +429,7 @@ public class ParseMiner extends Miner
   {
    DataElement result = _parseManager.removeParseInformation(theFile);
    _dataStore.refresh(theFile.getParent());
+ 
   }
   return theFile;
  }
