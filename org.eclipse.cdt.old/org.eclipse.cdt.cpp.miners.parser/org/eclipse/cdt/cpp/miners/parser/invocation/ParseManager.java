@@ -107,10 +107,9 @@ public class ParseManager
   //Map theType to the appropriate type:
   if (theType.equals(ParserSchema.Struct) || theType.equals(ParserSchema.Union) || theType.equals(ParserSchema.Namespace))
    theType = ParserSchema.Class;
-  else if (theType.equals(ParserSchema.Constructor) || theType.equals(ParserSchema.Destructor))
+  else if (theType.equals(ParserSchema.Constructor) || theType.equals(ParserSchema.Destructor) || theType.equals(ParserSchema.MainFunction))
    theType = ParserSchema.Function;
 
- 
   
   
   while (!done)
