@@ -76,11 +76,17 @@ public class ConfigureAction extends CustomAction
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
 		//enable disable based on object files
-		if((_command.getValue().equals("UPDATE_AUTOCONF_FILES")||_command.getValue().equals("UPDATE_CONFIGURE_IN")
-		||_command.getValue().equals("UPDATE_MAKEFILE_AM")||_command.getValue().equals("CREATE_CONFIGURE")
-		||_command.getValue().equals("RUN_CONFIGURE"))&&!doesAutoconfSupportExists())
-			//if (subject.getType().equals("Project"))	
+		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")	&& !doesAutoconfSupportExists())
 				setEnabled(false);
+		//enable disable based on object files
+		
+		if((_command.getValue().equals("UPDATE_MAKEFILE_AM")&&!doesFileExists("Makefile.am")))
+				setEnabled(false);
+				
+		if (subject.getType().equals("Project"))	
+			if((_command.getValue().equals("UPDATE_CONFIGURE_IN")&&!doesFileExists("configure.in")))
+				setEnabled(false);
+				
 		if(_command.getValue().equals("CREATE_CONFIGURE")&&
 		   (!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
 			setEnabled(false);		
@@ -185,7 +191,7 @@ public class ConfigureAction extends CustomAction
 					    name.equals("Makefile.am") ||
 					    name.equals("configure.in"))
 					    {
-						return true;
+							return true;
 					    }
 				    }
 			    }
