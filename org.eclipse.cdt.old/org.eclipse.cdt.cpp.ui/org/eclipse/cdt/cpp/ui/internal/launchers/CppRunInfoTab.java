@@ -49,7 +49,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 
     // widgets
     private Text                             _programNameField;
-    private Text                             programParametersField;
+    private Text                             _parametersField;
     protected Text		                     _workingDirectoryField;
     protected Button                         workingDirectoryBrowseButton;
 
@@ -85,7 +85,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	createSpacer(composite);
    	createWorkingDirectoryGroup(composite);
    	
-   	programParametersField.setFocus();
+   	_parametersField.setFocus();
    	
    	setControl(composite);
     }
@@ -153,21 +153,20 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
     	
 
     	// new parameters name entry field
-    	programParametersField = new Text(parametersGroup, SWT.BORDER);
-    	//programParametersField.addListener(SWT.Modify, this);
+    	_parametersField = new Text(parametersGroup, SWT.BORDER);
     	data = new GridData(GridData.FILL_HORIZONTAL);
     	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
-    	programParametersField.setLayoutData(data);
+    	_parametersField.setLayoutData(data);
 
-		programParametersField.addModifyListener(new ModifyListener() {
+		_parametersField.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent evt) {
 				updateLaunchConfigurationDialog();
 			}
 		});
-    	programParametersField.setEnabled(true);
+    	_parametersField.setEnabled(true);
          	
     	if (initialParametersFieldValue != null)
-    	    programParametersField.setText(initialParametersFieldValue);
+    	    _parametersField.setText(initialParametersFieldValue);
 
 
 
@@ -227,7 +226,6 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy config)
    {
-
      IProject project;
      IStructuredSelection selection = getSelection();
      if(selection == null)
@@ -301,6 +299,9 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	   	_directory = null;
    		return;
 	   }
+
+      config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, _executable.getSource());
+      config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, _directory.getSource());
 	}
 	
 	/**
@@ -313,33 +314,27 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	protected void updateExecutableFromConfig(ILaunchConfiguration config) {
 		String executableName = "";
 		String workingDirectory = "";
+		String parameters = "";
+
 		try
       {
 			executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-         if (executableName.length() == 0)
-         {
-            if (_executable != null)
-              _programNameField.setText(_executable.getSource());
-            else
-               return;
-         }
-         else
+         if (executableName.length() != 0)
          {
       		_programNameField.setText(executableName);		
          }
 
-			workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
-         if (workingDirectory.length() == 0)
+			parameters = config.getAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, "");
+         if (parameters.length() != 0)
          {
-            if (_directory != null)
-               _workingDirectoryField.setText(_directory.getSource());
+      		_parametersField.setText(parameters);		
          }
-         else
+
+			workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
+         if (workingDirectory.length() != 0)
          {
       		_workingDirectoryField.setText(workingDirectory);		
          }
-
-
 		}
       catch (CoreException ce)
       {			
@@ -353,6 +348,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	public void performApply(ILaunchConfigurationWorkingCopy config)
    {
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
+		config.setAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, (String)_parametersField.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, (String)_workingDirectoryField.getText());
 	}
 
@@ -376,8 +372,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
          DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
    		directory = directory.getParent();
 	   	DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", /*_directory*/directory, true);
-		dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
-   		
+   		dialog.setActionLoader(org.eclipse.cdt.cpp.ui.internal.views.CppActionLoader.getInstance());
    		dialog.open();
 	   	if (dialog.getReturnCode() == dialog.OK)
    	   {
@@ -415,13 +410,11 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
          {
             setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingWorkingDirectory"));
             return false;
-
          }
          else
          {
             return true;
          }
-		
     }
 	
 	/**

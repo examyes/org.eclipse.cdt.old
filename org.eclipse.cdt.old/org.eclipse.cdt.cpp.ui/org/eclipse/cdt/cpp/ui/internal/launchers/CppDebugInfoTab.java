@@ -368,8 +368,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	
     protected void handleWorkingDirectoryBrowseButtonPressed()
     {
-
-
       if (_directory != null)
       {
          DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();

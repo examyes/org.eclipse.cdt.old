@@ -14,6 +14,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -48,12 +52,12 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
       String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
       String processID = configuration.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
       IResource resource  = _api.findFile(executableName);
-      
+
       if (resource != null)
       {
       	 _project = resource.getProject();
    	 _executable = _api.findResourceElement(resource);
-      	 
+      	
          if (!_project.isOpen())
          {
             displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
@@ -102,7 +106,7 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
        else
        {
 	  return;
-       } 
+       }
 	
 	
        if (_executable != null)
@@ -154,9 +158,28 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
      */
     protected void displayMessageDialog(String message)
     {
-	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("runLauncher.Error.Title"),message);
+		  IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
+        IWorkbenchWindow[] windows= workbench.getWorkbenchWindows();
+
+		  if (windows != null && windows.length > 0)
+        {
+				final Shell shell= windows[0].getShell();
+            final String msg = message;
+
+				if (!shell.isDisposed())
+            {
+              Display display = shell.getDisplay();
+
+              display.asyncExec(new Runnable()
+              {
+                 public void run()
+                 {
+            	     MessageDialog.openError(shell, _plugin.getLocalizedString("attachLauncher.Error.Title"), msg);
+                 }
+              });
+
+				}
+			}
     }
-	
-			
 }
 

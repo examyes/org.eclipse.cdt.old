@@ -12,10 +12,15 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ErrorDialog;
 
 /**
  * Launches a local VM.
@@ -34,12 +39,18 @@ public class CppRunLaunchConfigurationDelegate implements ILaunchConfigurationDe
      public void launch(ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException
      {
 	 //System.out.println("CppRunLaunchConfigurationDelegate:launch() ");
-	 
+	
 	 _plugin = CppPlugin.getDefault();
 	 _api = ModelInterface.getInstance();
-	 
+	
 	 String executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
 	 IResource file  = _api.findFile(executableName);
+    if (file == null)
+    {
+		displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.invalidResource"));
+		return;
+    }
+
 	 IProject project = file.getProject();
 	 DataElement _executable = _api.findResourceElement(file);
 	 if (!project.isOpen())
@@ -60,9 +71,9 @@ public class CppRunLaunchConfigurationDelegate implements ILaunchConfigurationDe
 
 	/*
 	  String mainTypeName = verifyMainTypeName(configuration);
-	  
+	
 	  IVMInstall vm = verifyVMInstall(configuration);
-	  
+	
 	  IVMRunner runner = vm.getVMRunner(mode);
 	  if (runner == null) {
 			abort(MessageFormat.format("Internal error: JRE {0} does not specify a VM Runner.", new String[]{vm.getId()}), null, IJavaLaunchConfigurationConstants.ERR_VM_RUNNER_DOES_NOT_EXIST);
@@ -113,8 +124,28 @@ public class CppRunLaunchConfigurationDelegate implements ILaunchConfigurationDe
      */
     protected void displayMessageDialog(String message)
     {
-	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("runLauncher.Error.Title"),message);
+		  IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
+        IWorkbenchWindow[] windows= workbench.getWorkbenchWindows();
+
+		  if (windows != null && windows.length > 0)
+        {
+				final Shell shell= windows[0].getShell();
+            final String msg = message;
+
+				if (!shell.isDisposed())
+            {
+              Display display = shell.getDisplay();
+
+              display.asyncExec(new Runnable()
+              {
+                 public void run()
+                 {
+            	     MessageDialog.openError(shell, _plugin.getLocalizedString("runLauncher.Error.Title"), msg);
+                 }
+              });
+
+				}
+			}
     }
-	
 }
 

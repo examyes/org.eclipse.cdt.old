@@ -14,6 +14,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -46,27 +50,31 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 
 	String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
 	IResource resource  = _api.findFile(executableName);
+   if (resource == null)
+    {
+		displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.invalidResource"));
+		return;
+    }
+
 	IProject project = resource.getProject();
 	
 	_executable = _api.findResourceElement(resource);
 
-	DataElement projectElement = _api.getProjectFor(_executable);
 	if (!project.isOpen())
-	    {
-		displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+    {
+		displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
 		return;
-	    }
+    }
 	String workingDirectory = configuration.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
 
-
 	//  set default source locator if none specified
-	if (launch.getSourceLocator() == null) 
-	    {
+	if (launch.getSourceLocator() == null)
+    {
 		String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
-		if (id == null) 
-		    {
-		    }
+		if (id == null)
+	    {
 	    }
+    }
 
    	PICLLoadInfo loadInfo = new PICLLoadInfo();
 	String qualifiedFileName = "";
@@ -75,8 +83,8 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	IFile file = (IFile)_api.findFile(qualifiedFileName);
    	if (file == null)
 	    {
-	   	projectElement = _api.getProjectFor(_executable);
-		project = _api.findProjectResource(projectElement);
+      	DataElement projectElement = _api.getProjectFor(_executable);
+		   project = _api.findProjectResource(projectElement);
    		file = new FileResourceElement(_executable, project);
 	   	_api.addNewFile(file);			
 	    }
@@ -173,11 +181,31 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
      *
      *	@param message java.lang.String
      */
+
     protected void displayMessageDialog(String message)
     {
-	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("runLauncher.Error.Title"),message);
+		  IWorkbench workbench = CppPlugin.getDefault().getWorkbench();
+        IWorkbenchWindow[] windows= workbench.getWorkbenchWindows();
+
+		  if (windows != null && windows.length > 0)
+        {
+				final Shell shell= windows[0].getShell();
+            final String msg = message;
+
+				if (!shell.isDisposed())
+            {
+              Display display = shell.getDisplay();
+
+              display.asyncExec(new Runnable()
+              {
+                 public void run()
+                 {
+            	     MessageDialog.openError(shell, _plugin.getLocalizedString("loadLauncher.Error.Title"), msg);
+                 }
+              });
+
+				}
+			}
     }
-	
-			
 }
 
