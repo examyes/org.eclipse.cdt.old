@@ -45,23 +45,23 @@ import com.ibm.debug.model.Line;
 public class AutoconfBuilderPropertyPageControl extends Composite
 {
    
-    private Button _showConfigureDialogtButton;
-    private Button _showRunDialogtButton;
-    private Button _showCreateDialogtButton;
+    //private Button _showConfigureDialogtButton;
+    //private Button _showRunDialogtButton;
+    //private Button _showCreateDialogtButton;
     
-    private Button _updateAllButton;
-    private Button _updateConfigureInButton;
-    private Button _updateMakefileAmButton;
+    //private Button _updateAllButton;
+    //private Button _updateConfigureInButton;
+    private Button _debuggableButton;
+    private Button _optimizedButton;
+    private Group _execGroup;
+  //  private Group _advancedGroup;
+   // private Group _advancedConfigureGroup;
     
-    private Group _configureGroup;
-    private Group _advancedGroup;
-    private Group _advancedConfigureGroup;
-    
-    protected Button globalSettingsButton;
+    //protected Button globalSettingsButton;
     
     // labels
-    private Label configureDialogSetup;
-    private Label advancedSetup;
+    //private Label configureDialogSetup;
+   // private Label advancedSetup;
     
     private CppPlugin _plugin;
 
@@ -75,29 +75,29 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 	   	layout.numColumns = 1;
 	   	
 	   	
-		// group #1 - configure group
+		// group #1 - executable group
 		
-		_configureGroup = new Group(this,SWT.NONE);
-		_configureGroup.setText("configure dialog behaviour setup:");
+		_execGroup = new Group(this,SWT.NONE);
+		_execGroup.setText("Executable type:");
 		GridLayout g1Layout = new GridLayout();
 	   	g1Layout.numColumns = 1;
 	   	
-		_configureGroup.setLayout(g1Layout);
-		_configureGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		//_configureGroup.setText(_plugin.getLocalizedString("AutoconfPoperties.Configure_Group_Title"));
-		
-		Composite configureComp = new Composite(_configureGroup,SWT.NONE);
+		_execGroup.setLayout(g1Layout);
+		_execGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+
+		Composite execComp = new Composite(_execGroup,SWT.NONE);
 		
 		GridLayout c1Layout = new GridLayout();
 	   	c1Layout.numColumns = 1;
-		configureComp.setLayout(c1Layout);
+		execComp.setLayout(c1Layout);
 
 
-		_showConfigureDialogtButton = new Button(configureComp, SWT.CHECK);
-		_showConfigureDialogtButton.setText("Show dialog before configure is executed");
+		_optimizedButton = new Button(_execGroup, SWT.RADIO);
+		_optimizedButton.setText("optimized executables");
 		
-	   	
-	   	// group #2 - advanced autoconf files group
+		_debuggableButton = new Button(_execGroup, SWT.RADIO);
+		_debuggableButton.setText("optimized executables");	   	
+/*	   	// group #2 - advanced autoconf files group
 	   	
 	   	_advancedGroup = new Group(this,SWT.NONE);
 	   	//_advancedGroup.setText(_plugin.getLocalizedString("AutoconfPoperties.Advanced_Group_Title"));
@@ -151,7 +151,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		new Label(this,SWT.LEFT);
 		new Label(this,SWT.LEFT);
 		globalSettingsButton = new Button(this, SWT.CHECK);
-		globalSettingsButton.setText("Apply preference's page settings");
+		globalSettingsButton.setText("Apply preference's page settings");*/
 
 		setLayout(layout);
     }
@@ -160,16 +160,16 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 	
     public boolean getShowConfigureDialogSelection()
     {
-		return _showConfigureDialogtButton.getSelection();
+		return _optimizedButton.getSelection();
     }
 
     
     public boolean getShowRunDialogSelection()
     {
-		return _showRunDialogtButton.getSelection();
+		return _debuggableButton.getSelection();
     }
     
-    public boolean getShowCreateDialogSelection()
+/*    public boolean getShowCreateDialogSelection()
     {
 		return _showCreateDialogtButton.getSelection();
     }
@@ -190,22 +190,22 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 	public boolean getGlobalSettingsSelection()
     {
 		return globalSettingsButton.getSelection();
-    }
+    }*/
     
     // sets
     
 
     public void setShowConfigureDialogSelection(boolean flag)
     {
-		_showConfigureDialogtButton.setSelection(flag);
+		_debuggableButton.setSelection(flag);
     }
    
     public void setShowRunDialogSelection(boolean flag)
     {
-		_showRunDialogtButton.setSelection(flag);
+		_optimizedButton.setSelection(flag);
     }
 
-    public void setShowCreateDialogSelection(boolean flag)
+ /*   public void setShowCreateDialogSelection(boolean flag)
     {
 		_showCreateDialogtButton.setSelection(flag);
     }
@@ -225,23 +225,6 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 	public void setGlobalSettingsSelection(boolean flag)
     {
 		globalSettingsButton.setSelection(flag);
-    }
+    }*/
     
-    ///////////////
-    
-    public void enableLocalActions(boolean flg)
-    {
-
-    	this._configureGroup.setEnabled(flg);
-    	this._advancedGroup.setEnabled(flg);
-    	this._advancedConfigureGroup.setEnabled(flg);
-    	//////////////
-    	this._showConfigureDialogtButton.setEnabled(flg);
-    	this._showCreateDialogtButton.setEnabled(flg);
-     	this._showRunDialogtButton.setEnabled(flg);
-    	this._updateAllButton.setEnabled(flg);
-    	this._updateConfigureInButton.setEnabled(flg);
-    	this._updateMakefileAmButton.setEnabled(flg);   	
-    }
-
 }
