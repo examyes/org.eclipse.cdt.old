@@ -1,7 +1,13 @@
+2004-12-09  Rick Moseley  <rmoseley@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/rpm_strings.properties: bz# 78773/78788
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage_2.java (modifyText): bz#
+	   78773/78788
+
 2004-11-11  Rick Moseley  <rmoseley@redhat.com>
 
 	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java (createProjectBox): add
-	  addSelectionListener for when a project to imort into is not selected
+	  addSelectionListener for when a project to import into is not selected
 
 2004-11-11  Rick Moseley  <rmoseley@redhat.com>
 	* plugin.xml: remove "test" from labels
