@@ -132,7 +132,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 		_dataElementDirectory = _executable.getParent();
 	    }
 	
-	IDebugTarget target = PICLLaunchUtils.getDebugTarget(loadInfo);
+	IDebugTarget target = PICLLaunchUtils.getDebugTarget(launch, loadInfo);
 	int key = CoreDaemon.generateKey();
 	CoreDaemon.storeDebugTarget(target, key);
         int port = CoreDaemon.getCurrentPort();
