@@ -32,7 +32,8 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 	private AutoconfBuilderPropertyPageControl _autoconfBuildControl;
 
 	// items in the project property page
-	String execKey = "Executable_Type"; 
+	String optionKey = "Executable_Type";
+	String compKey="Compiler_Type"; 
 
 	IProject project;
 
@@ -70,17 +71,17 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 	protected void performInit()
 	{
 		CppPlugin plugin      = CppPlugin.getDefault();
-		ArrayList execType = plugin.readProperty(project,execKey);
-		if (execType.isEmpty())
+		ArrayList options = plugin.readProperty(project,optionKey);
+		if (options.isEmpty())
 		{
-			execType.add("Debug");
+			options.add("Debug");
 			_autoconfBuildControl.setDebugButtonSelection(true);
 			_autoconfBuildControl.setOptimizedButtonSelection(false);
-			plugin.writeProperty(project,execKey,execType);	
+			plugin.writeProperty(project,optionKey,options);	
 		}
 		else
 		{
-			String type = (String)execType.get(0);
+			String type = (String)options.get(0);
 			if (type.equals("Debug"))
 			{
 				_autoconfBuildControl.setDebugButtonSelection(true);
@@ -93,6 +94,30 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 				_autoconfBuildControl.setDebugButtonSelection(false);
 			}
 		}
+
+		ArrayList compiler = plugin.readProperty(project,compKey);
+		if (compiler.isEmpty())
+		{
+			compiler.add("Cpp");
+			_autoconfBuildControl.setCppButtonSelection(true);
+			_autoconfBuildControl.setCButtonSelection(false);
+			plugin.writeProperty(project,compKey,compiler);	
+		}
+		else
+		{
+			String type = (String)compiler.get(0);
+			if (type.equals("Cpp"))
+			{
+				_autoconfBuildControl.setCppButtonSelection(true);
+				_autoconfBuildControl.setCButtonSelection(false);
+				
+			}
+			else
+			{
+				_autoconfBuildControl.setCButtonSelection(true);
+				_autoconfBuildControl.setCppButtonSelection(false);
+			}
+		}		
 	}
 	protected void performDefaults()
 	{
@@ -101,26 +126,30 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 	
 	protected void performApply()
 	{
-		// if show all selected then check all buttons
-		
-		// if don't show all selected then uncheck all
-	}
-	
-	public boolean performOk()
-	{
 		CppPlugin plugin      = CppPlugin.getDefault();
+		ModelInterface api = ModelInterface.getInstance();
+		
 		ArrayList list = new ArrayList();
 		if(_autoconfBuildControl.getOptimizedButtonSelection())
 		{
 			list.add("Optimized");
-			plugin.writeProperty(project,execKey,list);
+			plugin.writeProperty(project,optionKey,list);
+			DataElement optimizedCmd = plugin.getDataStore().localDescriptorQuery(api.findProjectElement(project).getDescriptor(), "C_OPTIMIZED_OPTION");			
+			DataElement status = plugin.getDataStore().command(optimizedCmd, api.findProjectElement(project));
 		}
 		if(_autoconfBuildControl.getDebugButtonSelection())
 		{
 			list.add("Debug");
-			plugin.writeProperty(project,execKey,list);
+			plugin.writeProperty(project,optionKey,list);
+			DataElement optimizedCmd = plugin.getDataStore().localDescriptorQuery(api.findProjectElement(project).getDescriptor(), "C_DEBUG_OPTION");			
+			DataElement status = plugin.getDataStore().command(optimizedCmd, api.findProjectElement(project));
+
 		}
-		
+	}
+	
+	public boolean performOk()
+	{
+
 		return true;
 	}
 	private IProject getProject()

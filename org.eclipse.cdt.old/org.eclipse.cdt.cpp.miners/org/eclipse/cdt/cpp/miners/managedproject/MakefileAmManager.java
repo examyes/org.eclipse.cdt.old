@@ -1401,8 +1401,13 @@ public class MakefileAmManager {
 			}catch (IOException e){}
 		}
 	}
-	//public void defineCompilerFlags(DataElement subject)
-	//{
-	//}
+	public void setCompilerFlag(DataElement subject, String key)
+	{
+		// iterate through the project and find the list of Makefile.am's
+		//System.out.println("\n option = "+key);
+		
+		// switch the compiler falg to the key
+		
+	}
 }
 

@@ -111,6 +111,10 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(managedProjectD,"SharedLib","C_SHAREDLIB_MAKEFILE_AM",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);		
 		
+		createCommandDescriptor(projectD, "Optimized","C_OPTIMIZED_OPTION",false);
+		createCommandDescriptor(projectD, "Debuggable","C_DEBUG_OPTION",false);
+		
+		
 		 createRelationDescriptor(schemaRoot, "class type");			
 	}
 	
@@ -139,8 +143,7 @@ public class ManagedProjectMiner extends Miner
 				
 				_workspaceLocation = _workspace.getSource();
 				autoconfManager.setWorkspaceLocation(_workspaceLocation);
-			}
-	 
+			}		
 			if (name.equals("C_UNMANAGE_PROJECT"))
 			{
  	 			_dataStore.deleteObject(project.getParent(), project);
@@ -232,6 +235,21 @@ public class ManagedProjectMiner extends Miner
 				autoconfManager.maintainerClean(project,status);
 				project.refresh(false);
 			}
+			
+			else if (name.equals("C_OPTIMIZED_OPTION"))
+			{
+				// the code to add/change CFLAGS/CXXFLAGS = -O2 the program Makefile.am to be optimized 
+				//System.out.println("\nOptimized selected");
+				autoconfManager.makefileAmManager.setCompilerFlag(project,"-O2");
+			
+			}
+			else if (name.equals("C_DEBUG_OPTION"))
+			{
+				// the code to add/change CFLAGS/CXXFLAGS = -g the program Makefile.am to be optimized 
+				//System.out.println("\nDebug selected");
+				autoconfManager.makefileAmManager.setCompilerFlag(project,"-g");
+			}
+			
 			// new : to havdle delete notification
  			else if (name.equals("C_NOTIFICATION"))
 			{
