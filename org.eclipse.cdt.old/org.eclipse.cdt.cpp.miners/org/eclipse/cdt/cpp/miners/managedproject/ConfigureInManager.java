@@ -231,10 +231,10 @@ public class ConfigureInManager {
 					}
 				}
 			}catch(IOException e){System.out.println("Erroe: "+e);};
-			return "\t"+")";
+			return "\n"+")";
 		}
 		else
-		return "\t"+")";
+		return "\n"+")";
 	}
 	protected void getConfigureInTemplateFile(DataElement project)
 	{
