@@ -160,8 +160,8 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 		     theElement = _api.getProjectFor(theElement);
 		 }
 	 }
-     String type = theElement.getType();
-     if (theElement != null && (type.equals("Project") || type.equals("Namespace")))
+
+     if (theElement != null && (theElement.getType().equals("Project") || theElement.getType().equals("Namespace")))
 	 {
 	     theInput = _api.findParseFiles(theElement);
 	 }
