@@ -974,6 +974,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    }
 	    }
 
+	if (workspaceObj != null)
+	{
+		workspaceObj.setAttribute(DE.A_SOURCE, _workbenchDirectory);	
+	}
+	
 	return workspaceObj;
     }  
 
