@@ -67,7 +67,7 @@ public class ManagedProjectMiner extends Miner
 		
 		createCommandDescriptor(projectD, "Create configure ", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
-		createCommandDescriptor(projectD, "Generate All", "C_MANAGE_PROJECT", false);
+		createCommandDescriptor(projectD, "Initialize configure.in & Makefile.am's and createte & run configure", "C_MANAGE_PROJECT", false);
 		createCommandDescriptor(projectD, "DistClean", "C_DIST_CLEAN", false);
 		
 		//

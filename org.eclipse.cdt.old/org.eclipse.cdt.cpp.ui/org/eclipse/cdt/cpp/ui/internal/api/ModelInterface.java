@@ -2019,13 +2019,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Initialize/Create/Run", 
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
 	mngCmd.setAttribute(DE.A_VALUE,"MANAGE_PROJECT");
+	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
+	DataElement defCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Default Cmds");
 						  
-	DataElement distCleanCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement distCleanCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Distclean", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");		
+	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
 	
-	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
+	
 //
 	DataElement makefileCmds = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Customize Autoconf");
 
