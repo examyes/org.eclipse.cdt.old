@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="org.eclipse.cdt.debug.win32.core"
+   name="%pluginName"
+   version="1.0.0"
+   provider-name="Eclipse.org"
+   class="org.eclipse.cdt.debug.win32.core.CorePlugin">
+
+   <runtime>
+      <library name="windbgcore.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.cdt.debug.core"/>
+   </requires>
+   <extension
+         point="org.eclipse.cdt.debug.core.CDebugger">
+      <debugger
+            platform="win32"
+            class="org.eclipse.cdt.debug.win32.core.Win32Debugger"
+            cpu="native"
+            name="%debuggerName"
+            modes="run,attach"
+            id="org.eclipse.cdt.debug.win32.core.debugger"/>
+   </extension>
+
+</plugin>
