@@ -100,7 +100,7 @@ public class ProjectStructureManager {
 		// analyze
 		analyze(project,0);
 		Object[][] projectStructure = new Object [subdirs.size()+1][2];
-		projectStructure[0][1]=project;
+		projectStructure[0][0]=project;
 		projectStructure[0][1]="0";
 		for(int i = 0; i < subdirs.size(); i ++)
 		{
