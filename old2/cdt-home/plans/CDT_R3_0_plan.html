@@ -277,7 +277,6 @@ information to the index clients.&nbsp;
 <p> 
     <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress 
     (IBM)</em></p>
-<p>&nbsp;</p>
 </blockquote>
 
 <h4>Proposed Items (Eclipse Platform subproject, Performance theme)</h4>
@@ -345,17 +344,33 @@ spec</a>
   <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/dom/index.html?cvsroot=Tools_Project">
   Doc</a>,&nbsp;
   <a href="https://bugs.eclipse.org/bugs/attachment.cgi?id=14650&action=view">
-  CDT AST v0.1</a>, bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=57816">57816</a>) 
+  CDT AST v0.1</a>, bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=57816">57816</a>) <ul>
+    	<li>DOM available in M5 
     <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress</em> 
-(IBM)<ul>
-    	<li>DOM available in M5</li>
-    	<li>Selection client ported to new DOM in M6</li>
-    	<li>Indexer Client ported to new DOM in M6</li>
-    	<li>Search Client Ported to new DOM in M6</li>
+(IBM)</li>
+    	<li>Selection client ported to new DOM in M6 
+    <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress</em> 
+(IBM)</li>
+    	<li>Indexer Client ported to new DOM in M6<em> <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress</em> 
+(IBM)</li>
+    	<li>Search Client ported to new DOM in M6<em> <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress</em> 
+(IBM)</li>
+    	<li>Content Assist ported to new DOM in M7<em> <img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> in progress</em> 
+(IBM)</li>
     </ul>
     </p>
 </blockquote>
 <h4>Proposed Items (Eclipse Platform subproject, AST theme)</h4>
+<blockquote>
+<p><b>CDT AST/DOM creation.</b> 
+  <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/dom/index.html?cvsroot=Tools_Project">
+  Doc</a>,&nbsp;
+  <a href="https://bugs.eclipse.org/bugs/attachment.cgi?id=14650&action=view">
+  CDT AST v0.1</a>, bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=57816">57816</a>)<ul>
+    	<li>CModel ported to new DOM ????</li>
+    	<li>CMerge ???</li>
+    </ul>
+</blockquote>    
 <h3><a name="ThemeUserExperience">Theme 4: User Experience</a></h3>
 
 <p>A continued goal for the CDT development team is enabling C/C++ developers
@@ -577,62 +592,64 @@ Milestone: TBD
     <em><img src="http://www.eclipse.org/eclipse/development/ok.gif" width="12" height="12"> No Committment</em></p>
 
 <pre>Core
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Error Parser: The current error parser is limited,
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; and there is no clean way to maintain contexts for
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; multiline errors matching.
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* new Interface been proposed(PR 54812)
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* new feature: hyperlinking (PR 50124)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Error Parser: The current error parser is limited,
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; and there is no clean way to maintain contexts for
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; multiline errors matching.
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* new Interface been proposed(PR 54812)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* new feature: hyperlinking (PR 50124)
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Resolver Model: The current file mappings/associations
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; are standalone to CDT, the resolver needs to propagate
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; the information to the Eclipse platform.&nbsp; This can now
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; be done with the new IContentTypeManager and extension
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; points in Eclipse-3.1 (PR 78821 ..).
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Resolver Model: The current file mappings/associations
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; are standalone to CDT, the resolver needs to propagate
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; the information to the Eclipse platform.&nbsp; This can now
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; be done with the new IContentTypeManager and extension
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; points in Eclipse-3.1 (PR 78821 ..).
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- IPathEntry interface changes: The scanner automatic discovery
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; is now more powerfull and can return information on per file basis.
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; The interface of the IPathEntry needs to be change to accomodate (PR 72821).
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- IPathEntry interface changes: The scanner automatic discovery
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; is now more powerfull and can return information on per file basis.
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; The interface of the IPathEntry needs to be change to accomodate (PR 72821).
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Variable substitution: A service offered by the Core Model to mantain
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; variables specific to the CDT, those variables could be exported (PR 79518).
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Variable substitution: A service offered by the Core Model to mantain
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; variables specific to the CDT, those variables could be exported (PR 79518).
 
-  &nbsp; &nbsp; &nbsp; UI
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Overhaul of the OpenType, Type Hierarchy and C/C++ browsing views: The
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; OpenType was doing a very agressive caching, with the new features provided
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; by the indexer(providing offset locations) we can scale down the process and
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; rely more on the indexer (PR 48213, ...).
+  &nbsp; &nbsp; &nbsp; &nbsp; UI
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Overhaul of the OpenType, Type Hierarchy and C/C++ browsing views: The
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; OpenType was doing a very agressive caching, with the new features provided
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; by the indexer(providing offset locations) we can scale down the process and
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; rely more on the indexer (PR 48213, ...).
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Generate overriding methods in the CEditor, for C++ classes (PR 58932)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Generate overriding methods in the CEditor, for C++ classes (PR 58932)
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Class Wizard
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* generate user customizable define guards (PR 75153)
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* use documentation templates(PR 56207)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Class Wizard
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* generate user customizable define guards (PR 75153)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* use documentation templates(PR 56207)
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- More Drag && Drop support, in the views (PR 83112, ..).
-&nbsp; &nbsp; &nbsp; &nbsp;
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- C/C++ Editor improvements:
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* coloring of operators, braces and numbers,
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* outline in selectable dialog (Ctrl O) with search input(PR 83112).
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Preference Pages changes to match Eclipse-3.1 policies(Many settings
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;&nbsp; are now common on the Workbench/Text Editor).
-&nbsp; &nbsp; &nbsp; &nbsp;
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Removing of the old Template scheme to match Eclipse-3.1 (PR 71111).
-  &nbsp; &nbsp; &nbsp; 		&nbsp;
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Definition/Declaration view, showing the definition of a symbol(relies
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; on the indexer.
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- More Drag && Drop support, in the views (PR 83112, ..).
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- C/C++ Editor improvements:
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* coloring of operators, braces and numbers,
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* outline in selectable dialog (Ctrl O) with search input(PR 83112).
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Preference Pages changes to match Eclipse-3.1 policies(Many settings
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;&nbsp; are now common on the Workbench/Text Editor).
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Removing of the old Template scheme to match Eclipse-3.1 (PR 71111).
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Definition/Declaration view, showing the definition of a symbol(relies
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; on the indexer.
 
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Open call hierarchy view.
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Open call hierarchy view.
 
 
-  &nbsp; &nbsp; &nbsp; Make Builder
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- Make targets
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Allow setting environment for build targets(PR 47241)
-  &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Allow variables substitution in arguments(PR 48009).
+  &nbsp; &nbsp; &nbsp; &nbsp; Make Builder
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- Make targets
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Allow setting environment for build targets(PR 47241)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;		&nbsp;* Allow variables substitution in arguments(PR 48009).
 
-  &nbsp; &nbsp; &nbsp; Launch
-  &nbsp; &nbsp; &nbsp; 		&nbsp;- New launch configuration, gdbserver.&nbsp; Currently the
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; gdb server launch is tied to the local launcher,
-  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; confusing the user(PR 79458)
+  &nbsp; &nbsp; &nbsp; &nbsp; Launch
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;- New launch configuration, gdbserver.&nbsp; Currently the
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; gdb server launch is tied to the local launcher,
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp; confusing the user(PR 79458)
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
   &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
 &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
   &nbsp; &nbsp; 		&nbsp;&nbsp;
