@@ -906,6 +906,7 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN") + cmd);
 
+         errorMsg[0] = getResourceString("GDBPICL_FAILED_TO_RUN_TO_MAIN");  // initialize
          String[] lines = getTextResponseLines();
          for (int i=0; i<lines.length; i++)
          {
