@@ -353,7 +353,7 @@
 	   </action>
 	   <action
               id="convert"
-	      label="Convert to C/C++ Project"
+	      label="Support C/C++"
 	      icon="icons/objects.gif"
 	      path="additions"
 	class="com.ibm.cpp.ui.internal.actions.ConvertToCppProject"	
