@@ -351,7 +351,9 @@ public class FileSystemMiner extends Miner
 		// Adjust the 'source' attribute of all children.
 		updateSourceHelper(subject);
 		
-		_dataStore.refresh(subject, true);		      
+		_dataStore.refresh(subject, true);
+		_dataStore.refresh(subject.getParent());
+	      
 	    }
 	status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
 	return status;
