@@ -1073,8 +1073,8 @@ public class DataStore
   public void setObject(DataElement localObject, boolean noRef)
     {
       DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
-      //DataElement status = synchronizedCommand(cmd, localObject, noRef);
-      DataElement status = command(cmd, localObject, noRef);
+      DataElement status = synchronizedCommand(cmd, localObject, noRef);
+      //DataElement status = command(cmd, localObject, noRef);
   }
 
   public void modifyObject(DataElement localObject)
