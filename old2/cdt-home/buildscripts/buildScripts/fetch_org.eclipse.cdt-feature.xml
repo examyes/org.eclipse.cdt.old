@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Fetch script for feature@org.eclipse.cdt-feature -->
+
+<project name="FetchScript" default="fetch" basedir=".">
+    <property name="quiet" value="true"/>
+    <property name="CVS.TAG" value="HEAD"/>
+    <property name="repository" value=":pserver:anonymous@dev.eclipse.org:/home/tools"/>
+
+    <target name="fetch">
+        <mkdir dir="${install}/features"/>
+        <cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/home/tools" dest="${install}/features" package="org.eclipse.cdt-feature" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <mkdir dir="${install}/plugins"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core.linux" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core.qnx" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core.solaris" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.core.win32" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.core" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.mi.core" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.mi.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.debug.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.launch" tag="${CVS.TAG}" quiet="${quiet}"/>
+        <cvs cvsRoot="${repository}" dest="${install}/plugins" package="org.eclipse.cdt.ui" tag="${CVS.TAG}" quiet="${quiet}"/>
+    </target>
+</project>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="org.eclipse.cdt.launch" default="build.jars" basedir=".">
+
+    <property name="bootclasspath" value=""/>
+    <property name="ws" value=""/>
+    <property name="os" value=""/>
+    <property name="arch" value=""/>
+
+    <target name="init" depends="properties">
+        <property name="plugin" value="org.eclipse.cdt.launch"/>
+        <property name="version.suffix" value="_1.0.0"/>
+        <property name="full.name" value="${plugin}${version.suffix}"/>
+        <property name="temp.folder" value="${basedir}/temp.folder"/>
+        <property name="plugin.destination" value="${basedir}"/>
+        <property name="build.result.folder" value="${basedir}"/>
+    </target>
+
+    <target name="properties" if="eclipse.running">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+    </target>
+
+    <target name="build.update.jar" depends="init">
+        <delete dir="${temp.folder}"/>
+        <mkdir dir="${temp.folder}"/>
+        <antcall target="build.jars"/>
+        <antcall target="gather.bin.parts">
+            <param name="destination.temp.folder" value="${temp.folder}/"/>
+        </antcall>
+        <zip zipfile="${plugin.destination}/${full.name}.jar" basedir="${temp.folder}/${full.name}" filesonly="false"/>
+        <delete dir="${temp.folder}"/>
+    </target>
+
+    <target name="gather.bin.parts" depends="init" if="destination.temp.folder">
+        <mkdir dir="${destination.temp.folder}/${full.name}"/>
+        <copy file="${build.result.folder}/cdtlaunch.jar" todir="${destination.temp.folder}/${full.name}"/>
+        <copy todir="${destination.temp.folder}/${full.name}">
+            <fileset dir="${basedir}" includes="plugin.xml,plugin.properties,icons/,*.jar,about.html"/>
+        </copy>
+    </target>
+
+    <target name="cdtlaunch.jar" depends="init" unless="cdtlaunch.jar">
+        <property name="destdir" value="${temp.folder}/cdtlaunch.jar.bin"/>
+        <delete dir="${temp.folder}/cdtlaunch.jar.bin"/>
+        <mkdir dir="${temp.folder}/cdtlaunch.jar.bin"/>
+        <!-- compile the source code -->
+        <javac destdir="${temp.folder}/cdtlaunch.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.core.resources/bin;../org.eclipse.swt/bin;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.eclipse.debug.core/dtcore.jar;../org.eclipse.ui/workbench.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.core.runtime/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.cdt.debug.core/cdtdebugcore.jar;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.cdt.ui/bin;../org.eclipse.core.boot/bin;../org.eclipse.debug.ui/bin;../org.eclipse.core.resources/resources.jar;../org.eclipse.cdt.debug.ui/bin;../org.eclipse.cdt.core/bin;../org.eclipse.debug.core/bin;../org.eclipse.cdt.ui/cdtui.jar;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.debug.ui/dtui.jar;../org.eclipse.cdt.debug.core/bin;../org.eclipse.core.boot/boot.jar;../org.eclipse.cdt.debug.ui/cdtdebugui.jar;../org.eclipse.swt.${ws}/ws/${ws}/swt.jar">
+            <src path="src/"/>
+        </javac>
+        <!-- copy necessary resources -->
+        <copy todir="${temp.folder}/cdtlaunch.jar.bin">
+            <fileset dir="src/" excludes="**/*.java"/>
+        </copy>
+        <mkdir dir="${build.result.folder}"/>
+        <jar jarfile="${build.result.folder}/cdtlaunch.jar" basedir="${temp.folder}/cdtlaunch.jar.bin"/>
+        <delete dir="${temp.folder}/cdtlaunch.jar.bin"/>
+    </target>
+
+    <target name="cdtlaunchsrc.zip" depends="init" unless="cdtlaunchsrc.zip">
+        <mkdir dir="${build.result.folder}"/>
+        <zip zipfile="${build.result.folder}/cdtlaunchsrc.zip" filesonly="false">
+            <fileset dir="src/" includes="**/*.java"/>
+        </zip>
+    </target>
+
+    <target name="build.jars" depends="init">
+        <available property="cdtlaunch.jar" file="${build.result.folder}/cdtlaunch.jar"/>
+        <antcall target="cdtlaunch.jar"/>
+    </target>
+
+    <target name="build.sources" depends="init">
+        <available property="cdtlaunchsrc.zip" file="${build.result.folder}/cdtlaunchsrc.zip"/>
+        <antcall target="cdtlaunchsrc.zip"/>
+    </target>
+
+    <target name="build.zips" depends="init">
+    </target>
+
+    <target name="gather.sources" depends="init" if="destination.temp.folder">
+        <mkdir dir="${destination.temp.folder}/${full.name}"/>
+        <copy file="${build.result.folder}/cdtlaunchsrc.zip" todir="${destination.temp.folder}/${full.name}"/>
+        <copy todir="${destination.temp.folder}/${full.name}">
+            <fileset dir="${basedir}" includes="about.html"/>
+        </copy>
+    </target>
+
+    <target name="gather.logs" depends="init" if="destination.temp.folder">
+        <mkdir dir="${destination.temp.folder}/${full.name}"/>
+        <copy file="${temp.folder}/cdtlaunch.jar.bin.log" todir="${destination.temp.folder}/${full.name}"/>
+    </target>
+
+    <target name="clean" depends="init">
+        <delete file="${build.result.folder}/cdtlaunch.jar"/>
+        <delete file="${build.result.folder}/cdtlaunchsrc.zip"/>
+        <delete file="${plugin.destination}/${full.name}.jar"/>
+        <delete file="${plugin.destination}/${full.name}.zip"/>
+        <delete dir="${temp.folder}"/>
+    </target>
+
+    <target name="refresh" depends="init" if="eclipse.running">
+        <eclipse.refreshLocal resource="${plugin}" depth="infinite"/>
+    </target>
+
+    <target name="zip.plugin" depends="init">
+        <delete dir="${temp.folder}"/>
+        <mkdir dir="${temp.folder}"/>
+        <antcall target="build.jars"/>
+        <antcall target="build.sources"/>
+        <antcall target="gather.bin.parts">
+            <param name="destination.temp.folder" value="${temp.folder}/"/>
+        </antcall>
+        <antcall target="gather.sources">
+            <param name="destination.temp.folder" value="${temp.folder}/"/>
+        </antcall>
+        <delete>
+            <fileset dir="${temp.folder}" includes="**/*.bin.log"/>
+        </delete>
+        <zip zipfile="${plugin.destination}/${full.name}.zip" basedir="${temp.folder}" filesonly="true"/>
+        <delete dir="${temp.folder}"/>
+    </target>
+
+</project>
