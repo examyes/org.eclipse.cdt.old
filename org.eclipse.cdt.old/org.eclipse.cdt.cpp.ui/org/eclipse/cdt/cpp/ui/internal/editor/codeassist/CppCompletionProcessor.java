@@ -67,7 +67,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 	 */
    public char[] getCompletionProposalAutoActivationCharacters()
       {
-        return null; 
+        return null;
       }
 	
   /**
@@ -76,7 +76,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
   public IContextInformation[] computeContextInformation(ITextViewer viewer, int position)
       {
         return null;
-      } 
+      }
 
   public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int position)
       {
@@ -87,7 +87,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
         if (currentString != null
             && currentString.length() > 0)
 	{
-        	// find the parser 
+        	// find the parser
         	ModelInterface api = _plugin.getModelInterface();
 
         	IProject project = _input.getProject();
@@ -100,7 +100,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		if (projectRoot != null)
 		    {
 			dataStore = projectRoot.getDataStore();
-			DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
+			DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(),
 										       "C_CODE_ASSIST");
 			if (commandDescriptor != null)
 			    {				
@@ -190,6 +190,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 					else
 					    {
 						lastIndex++;
+						lastIndex++;
 						String after = currentString.substring(lastIndex);
 						result[i] = new CompletionProposal(text,
 										   -after.length(),
@@ -215,12 +216,12 @@ public class CppCompletionProcessor implements IContentAssistProcessor
       // ZERO-based column preceding cursor's
       int column = lpexView.currentPosition() - 2;
 
-      if (text != null && text.length() > column) 
+      if (text != null && text.length() > column)
 	  {
-         while (column >= 0) 
-	     {		 
+         while (column >= 0)
+	     {		
 		 char c = text.charAt(column);
-		 
+		
 		 boolean isValid = Character.isLetterOrDigit(c);
 		 if (!isValid)
 		     {
@@ -236,8 +237,8 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 					 {
 					     if (text.charAt(column + 1) == '>')
 						 isValid = true;
-					     
-					 }				     
+					
+					 }				
 				 }
 				 break;
 			     case '>':
@@ -254,7 +255,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 				 break;
 			     }
 		     }
-		 
+		
 		 if (!isValid)
 		     {
 			 break;
@@ -264,8 +265,8 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		 column--;
 	     }
       }
-      
+
       return currentText.toString();
     }
-    
+
 }
