@@ -16,6 +16,13 @@ public class ManagedProjectMiner extends Miner
 {	private AutoconfManager autoconfManager;
 	private TargetManager targetManager;
 	private DataElement _workspace = null;
+	// classification constants
+	private MakefileAmClassifier classifier;
+	private final String TOPLEVEL = "1";
+	private final String PROGRAMS = "2";
+	private final String STATICLIB = "3";
+	private final String SHAREDLIB = "4";
+	private String _workspaceLocation = "";
 	
 	public void load() 
 	{
@@ -35,6 +42,9 @@ public class ManagedProjectMiner extends Miner
 		_dataStore.createReference(contObjD, managedProjectD, "abstracts", "abstracted by");
 		DataElement cmdD = _dataStore.localDescriptorQuery(projectD, "C_COMMAND");
 		_dataStore.createReference(managedProjectD, cmdD);
+		
+		createCommandDescriptor(fsObjectD, "Check Update State", "C_CHECK_UPDATE_STATE", false);
+		createCommandDescriptor(fsObjectD, "Classify Makefile", "C_CLASSIFY_MAKEFILE_AM", false);
 		
 			createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
 		DataElement targetD          = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.PROJECT_TARGET);
@@ -58,11 +68,10 @@ public class ManagedProjectMiner extends Miner
 		//******_dataStore.createReference(workspaceD, managedProjectsD); // disable this for now
 
 		//createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
-		createCommandDescriptor(targetD, "Build", "C_BUILD_TARGET",false);
-		createCommandDescriptor(targetD, "Execute", "C_EXECUTE_TARGET",false);
+		createCommandDescriptor(targetD, "Build", "C_BUILD_TARGET", false);
+		createCommandDescriptor(targetD, "Execute", "C_EXECUTE_TARGET", false);
 		
 		// autoconf	
-		//createCommandDescriptor(projectD, "Generating all files - configure.in and Makefile.am's - needed by Autoconf & Automake", "C_GENERATE_AUTOCONF_FILES", false);
 		createCommandDescriptor(projectD, "Updating all - configure.in and Makefile.am's - missing files will be generated", "C_UPDATE_AUTOCONF_FILES", false);
 		//
 		createCommandDescriptor(fsObjectD,"Updating Makefile.am","C_UPDATE_MAKEFILE_AM",false);
@@ -105,8 +114,7 @@ public class ManagedProjectMiner extends Miner
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
   		DataElement  subject = getCommandArgument(theCommand, 0);
-
-	
+  		
 		if (subject.getType().equals("Project") || subject.getType().equals("Closed Project"))
 		{
 			DataElement project = subject;
@@ -114,7 +122,16 @@ public class ManagedProjectMiner extends Miner
 			if (_workspace == null)
 			{
 				_workspace = project.getParent();
-				autoconfManager.setWorkspaceLocation(_workspace.getSource());
+				///////////////
+				// classifying Makefile.am
+				String location = _workspace.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
+				System.out.println("\n Template Location from Managed Project = "+location);
+				classifier = new MakefileAmClassifier(location);
+				///////////////
+				
+				_workspaceLocation = _workspace.getSource();
+				System.out.println("\n Managed Pfroject Workspace Location = "+_workspaceLocation);
+				autoconfManager.setWorkspaceLocation(_workspaceLocation);
 			}
 	 
 			if (name.equals("C_UNMANAGE_PROJECT"))
@@ -122,23 +139,18 @@ public class ManagedProjectMiner extends Miner
  	 			_dataStore.deleteObject(project.getParent(), project);
  	 			//project.getParent().removeNestedData();
 			}
-		/*	else if (name.equals("C_UPDATE_CREATE_RUN"))
+			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 			{
-				autoconfManager.manageProject(project, status);
+				autoconfManager.updateAutoconfFiles(project, status,false,classifier);
 				project.refresh(false);
 				//parseAmFile(project); 
 			}
-			*/
-		/*	else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
+			else if (name.equals("C_CHECK_UPDATE_STATE"))
 			{
-				autoconfManager.generateAutoconfFiles(project, status,false);
-				//parseAmFile(project); 
-			}*/
-			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
-			{
-				autoconfManager.updateAutoconfFiles(project, status,false);
-				project.refresh(false);
-				//parseAmFile(project); 
+				// do whatever it takes to figure out whether we're updated or not
+				status.setAttribute(DE.A_NAME, "done");
+				DataElement state = _dataStore.createObject(status, "state", "uptodate");
+				_dataStore.refresh(status);	
 			}
 			else if (name.equals("C_UPDATE_CONFIGURE_IN"))
 			{
@@ -148,22 +160,22 @@ public class ManagedProjectMiner extends Miner
 			}		
 			else if (name.equals("C_CREATE_CONFIGURE"))
 			{
-				autoconfManager.createConfigure(project, status,true);
+				autoconfManager.createConfigure(project, status,true,classifier);
 				project.refresh(false);
 			}
 			else if (name.equals("C_CREATE_CONFIGURE_NO_UPDATE"))
 			{
-				autoconfManager.createConfigure(project, status,false);
+				autoconfManager.createConfigure(project, status,false,classifier);
 				project.refresh(false);
 			}
 			else if (name.equals("C_RUN_CONFIGURE"))
 			{
-				autoconfManager.runConfigure(project, status,true);
+				autoconfManager.runConfigure(project, status,true,classifier);
 				project.refresh(false);
 			}
 			else if (name.equals("C_RUN_CONFIGURE_NO_UPDATE"))
 			{
-				autoconfManager.runConfigure(project, status,false);
+				autoconfManager.runConfigure(project, status,false,classifier);
 				project.refresh(false);
 			}
 			else if (name.equals("C_DIST_CLEAN"))
@@ -186,10 +198,10 @@ public class ManagedProjectMiner extends Miner
 		
 		
 		if (subject.getType().equals("directory") || subject.getType().equals("Project"))
-		{
+		{	
 		 	if (name.equals("C_UPDATE_MAKEFILE_AM"))
 			{
-				autoconfManager.makefileAmManager.updateMakefileAm(subject,false);
+				autoconfManager.makefileAmManager.updateMakefileAm(subject,false,classifier);
 				subject.refresh(false);
 				//parseAmFile(subject); 
 			}
@@ -201,6 +213,17 @@ public class ManagedProjectMiner extends Miner
 			{
 				//parseAmFile(subject);
 			}
+			else if (name.equals("C_CLASSIFY_MAKEFILE_AM"))
+			{
+				File makefileAm = getMakefileAm(subject.getFileObject());
+				if(makefileAm!=null)
+				{			
+					String classification = getMakefileClassification(makefileAm);
+					status.setAttribute(DE.A_NAME, "done");
+					DataElement state = _dataStore.createObject(status, "classification", classification);
+					_dataStore.refresh(status);
+				}	
+			}
 			
 		}
 			
@@ -210,22 +233,22 @@ public class ManagedProjectMiner extends Miner
 		{	
 			if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
 			{
-				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status);
+				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status,classifier);
 				subject.refresh(false);
 			}
 			else if (name.equals("C_STATICLIB_MAKEFILE_AM"))
 			{
-				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status);
+				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status,classifier);
 				subject.refresh(false);
 			}
 			else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 			{
-				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status);
+				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status,classifier);
 				subject.refresh(false);
 			}
 			else if (name.equals("C_SHAREDLIB_MAKEFILE_AM"))
 			{
-				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status);
+				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status,classifier);
 				subject.refresh(false);
 			}
 			else if (name.equals("C_INSERT_CONFIGURE_IN"))
@@ -252,9 +275,6 @@ public class ManagedProjectMiner extends Miner
 				subject.refresh(false);
 			}
 		}
-		
-
-		
   		status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
   		return status;
 	}
@@ -277,5 +297,25 @@ public class ManagedProjectMiner extends Miner
 		}
 	    return null;
 	}
+	private File getMakefileAm(File dir)
+	{
+		File[] list = dir.listFiles();
+		for(int i = 0; i < list.length; i++)
+			if(list[i].getName().equals("Makefile.am"))
+				return list[i];
+		return null;
+	}
+	private String getMakefileClassification(File makefileAm)
+	{
+		// classifying Makefile.am
+		//String location = _workspace.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
+		//System.out.println("\n Template Location from Managed Project = "+location);
+		//classifier = new MakefileAmClassifier(location);
+		int classification = classifier.classify(makefileAm);
+		Integer classifier = new Integer(classification);
+		return new String(classifier.toString());
+	}
 }
+
+	
 

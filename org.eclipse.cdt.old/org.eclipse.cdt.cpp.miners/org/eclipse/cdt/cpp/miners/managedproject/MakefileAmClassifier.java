@@ -20,8 +20,8 @@ public class MakefileAmClassifier {
 	private Vector sharedlAm = new Vector(5,5);
 	
 	private final String MAKEFILE_AM = "Makefile.am";
-	private final String templateLocation = "workspace/com.ibm.cpp.miners/autoconf_templates/";
-	
+	//private String templateLocation = "workspace/com.ibm.cpp.miners/autoconf_templates/";
+	private static String _templateLocation = "";
 	// Member Variables which can be defined in Makefile.am
 	final String _PROGRAMS = new String ("_PROGRAMS");
 	final String _LDADD = new String("_LDADD");
@@ -44,8 +44,10 @@ public class MakefileAmClassifier {
 	final String _la_LIBADD= new String("_la_LIBADD");
 	final String _HEADERS = new String("_HEADERS");
 	
-	public MakefileAmClassifier()
+	public MakefileAmClassifier(String location)
 	{
+		_templateLocation = location+"/com.ibm.cpp.miners/autoconf_templates/";
+		//System.out.println("\n Template Location = "+_templateLocation);
 		generateMakefileAmLayout();
 	}
 	protected void generateMakefileAmLayout()
@@ -59,7 +61,7 @@ public class MakefileAmClassifier {
 	private void buildToplevelLayout()
 	{
 		
-		File Makefile_am = new File(templateLocation,"Makefile.am");
+		File Makefile_am = new File(_templateLocation,"Makefile.am");
 		if(Makefile_am.exists())
 		{
 			String line;
@@ -84,7 +86,7 @@ public class MakefileAmClassifier {
 	}
 	private	void buildProgramsLayout()
 	{
-		File Makefile_am = new File(templateLocation+"sub/","Makefile.am");
+		File Makefile_am = new File(_templateLocation+"sub/","Makefile.am");
 		if(Makefile_am.exists())
 		{
 			String line;
@@ -130,7 +132,7 @@ public class MakefileAmClassifier {
 	}
 	private void buildStaticLayout()
 	{
-		File Makefile_am = new File(templateLocation+"sub/static/","Makefile.am");
+		File Makefile_am = new File(_templateLocation+"sub/static/","Makefile.am");
 		if(Makefile_am.exists())
 		{
 			String line;
@@ -163,7 +165,7 @@ public class MakefileAmClassifier {
 	}
 	private void buildSharedLayout()
 	{
-		File Makefile_am = new File(templateLocation+"sub/shared/","Makefile.am");
+		File Makefile_am = new File(_templateLocation+"sub/shared/","Makefile.am");
 		if(Makefile_am.exists())
 		{
 			String line;
@@ -216,6 +218,7 @@ public class MakefileAmClassifier {
 	}
 	private int getClassification(Vector profile)
 	{	
+		
 		int classification = 0;
 		int unique = 0;
 		for(int i = 0; i < profile.size(); i++)
@@ -242,7 +245,6 @@ public class MakefileAmClassifier {
 				unique++;
 			}
 		}
-			
 		if(unique ==1)
 			return classification= checkProfileLength(profile,classification);
 		else
@@ -255,6 +257,7 @@ public class MakefileAmClassifier {
 		int programsLength = programsAm.size();
 		int staticLenght = staticlAm.size();
 		int sharedLength = sharedlAm.size();
+		//System.out.println("\n Top Length = "+topLevelLenght+"\n Program Length = "+programsLength+"\n Static Lenght = "+staticLenght+"\n Shared Lenght = "+sharedLength);
 		
 		if(classification==TOPLEVEL&& (profileLength>=topLevelLenght-1&&profileLength<=topLevelLenght+1))
 			return TOPLEVEL;
@@ -263,7 +266,7 @@ public class MakefileAmClassifier {
 		if(classification==STATICLIB&& (profileLength>=staticLenght-1&&profileLength<=staticLenght+1))
 			return STATICLIB;
 		if(classification==SHAREDLIB&& (profileLength>=sharedLength-1&&profileLength<=sharedLength+1))
-			return SHAREDLIB;				
+			return SHAREDLIB;		
 		return 0;
 	}
 	private Vector getProfile(File Makefile_am)
@@ -295,6 +298,5 @@ public class MakefileAmClassifier {
 			System.out.println(vec.elementAt(i));
 		System.out.println("***************************\n");
 	}
-
 }
 

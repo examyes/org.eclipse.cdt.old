@@ -33,12 +33,11 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
-import com.ibm.cpp.miners.managedproject.MakefileAmClassifier;
+//import com.ibm.cpp.miners.managedproject.MakefileAmClassifier;
 
 public class MakefileAmAction extends CustomAction {
 	
-	// to identify Makefile.am identity
-	private static MakefileAmClassifier classifier = new MakefileAmClassifier();
+	// to identify Makefile.am type
 	private final int TOPLEVEL = 1;
 	private final int PROGRAMS = 2;
 	private final int STATICLIB = 3;
@@ -48,8 +47,6 @@ public class MakefileAmAction extends CustomAction {
 	{	
 		super(subject, label, command, dataStore);
 		
-		
-		
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
@@ -58,37 +55,46 @@ public class MakefileAmAction extends CustomAction {
 			
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN") && doesFileExist("configure.in"))	
 				setEnabled(false);
-		// classifying Makefile.am
-	/*	DataElement makefileAm = getFileElement("Makefile.am");
-		if(makefileAm!=null)
-		{
-			int classification = classifier.classify(makefileAm.getFileObject());
-			switch (classification)
+
+		if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM")||_command.getValue().equals("PROGRAMS_MAKEFILE_AM")
+		 	||_command.getValue().equals("STATICLIB_MAKEFILE_AM")||_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
+		 {
+			DataElement cmdD = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CLASSIFY_MAKEFILE_AM");
+			if (cmdD != null)
 			{
-				case (TOPLEVEL):
-				if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
-					setEnabled(false);
-				break;
+				DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);	
+				DataElement classifier = (DataElement)status.get(0);
+				String type = classifier.getName();
 				
-				case (PROGRAMS):
-				if(_command.getValue().equals("PROGRAMS_MAKEFILE_AM"))
-					setEnabled(false);
-				break;
+				int classification = (new Integer(type)).intValue();
 				
-				case (STATICLIB):
-				if(_command.getValue().equals("STATICLIB_MAKEFILE_AM"))
-					setEnabled(false);
-				break;
+				switch (classification)
+				{
+					case (TOPLEVEL):
+					if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
+						setEnabled(false);
+					break;
+					
+					case (PROGRAMS):
+					if(_command.getValue().equals("PROGRAMS_MAKEFILE_AM"))
+						setEnabled(false);
+					break;
 				
-				case (SHAREDLIB):
-				if(_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
-					setEnabled(false);
-				break;
+					case (STATICLIB):
+					if(_command.getValue().equals("STATICLIB_MAKEFILE_AM"))
+						setEnabled(false);
+					break;
+				
+					case (SHAREDLIB):
+					if(_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
+						setEnabled(false);
+					break;
 											
-				default:
-				break;
+					default:
+					break;
+				}
 			}
-		}*/
+		}
 	}
 	public void run()
 	{
@@ -145,7 +151,7 @@ public class MakefileAmAction extends CustomAction {
 		    }
 		return false;
 	}
-	private DataElement getFileElement(String fileName)
+/*	private DataElement getFileElement(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
 		{
@@ -156,5 +162,5 @@ public class MakefileAmAction extends CustomAction {
 			}
 		}
 		return null;
-	}
+	}*/
 }

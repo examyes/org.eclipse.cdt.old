@@ -41,10 +41,6 @@ public class MakefileAmManager {
 	final String TARGET = new String("!TARGET!");
 	final char delim = '!';
 	
-	// to identify Makefile.am identity
-	private static MakefileAmClassifier classifier = new MakefileAmClassifier();
-	
-	// default values in Makefile.am
 	//String targetSuffix = new String("_target");
 	String targetSuffix = new String("");
 	/**
@@ -56,6 +52,7 @@ public class MakefileAmManager {
 	
 	public void setWorkspaceLocation(String location)
 	{
+		//System.out.println("\n Workspace Location = "+location);
 		_workspaceLocation = location;	
 	}
 	
@@ -372,11 +369,11 @@ public class MakefileAmManager {
 
 		}
 	}
-	protected void updateMakefileAm(DataElement subject,boolean actionIsManageProject)
+	protected void updateMakefileAm(DataElement subject,boolean actionIsManageProject, MakefileAmClassifier classifier)
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( subject.getFileObject());
 		File Makefile_am = new File(subject.getFileObject(),MAKEFILE_AM);
-			
+				
 		if(Makefile_am.exists()&&!subject.getFileObject().getName().startsWith("."))
 		{
 			int classification = classifier.classify(Makefile_am);
@@ -385,28 +382,28 @@ public class MakefileAmManager {
 				case (TOPLEVEL):
 				createDotOldFileFor(Makefile_am);
 				updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
-				updateMakefileAmDependency(Makefile_am.getParentFile());
+				updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 				compareOldAndNew(Makefile_am.getParentFile());
 				break;
 				
 				case (PROGRAMS):
 				createDotOldFileFor(Makefile_am);
-				updateProgramsMakefileAm(Makefile_am.getParentFile());
-				updateMakefileAmDependency(Makefile_am.getParentFile());
+				updateProgramsMakefileAm(Makefile_am.getParentFile(),classifier);
+				updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 				compareOldAndNew(Makefile_am.getParentFile());
 				break;
 				
 				case (STATICLIB):
 				createDotOldFileFor(Makefile_am);
 				updateStaticLibMakefileAm(Makefile_am.getParentFile());
-				updateMakefileAmDependency(Makefile_am.getParentFile());
+				updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 				compareOldAndNew(Makefile_am.getParentFile());
 				break;
 					
 				case (SHAREDLIB):
 				createDotOldFileFor(Makefile_am);
 				updateSharedLibMakefileAm(Makefile_am.getParentFile());
-				updateMakefileAmDependency(Makefile_am.getParentFile());
+				updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 				compareOldAndNew(Makefile_am.getParentFile());
 				break;
 					
@@ -415,7 +412,7 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	protected void updateAllMakefileAm(DataElement project,boolean actionIsManageProject)
+	protected void updateAllMakefileAm(DataElement project,boolean actionIsManageProject, MakefileAmClassifier classifier)
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
 		String[] subdirs = structureManager.getSubdirWorkspacePath();
@@ -433,28 +430,28 @@ public class MakefileAmManager {
 					case (TOPLEVEL):
 					createDotOldFileFor(Makefile_am);
 					updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
-					updateMakefileAmDependency(Makefile_am.getParentFile());
+					updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (PROGRAMS):
 					createDotOldFileFor(Makefile_am);
-					updateProgramsMakefileAm(Makefile_am.getParentFile());
-					updateMakefileAmDependency(Makefile_am.getParentFile());
+					updateProgramsMakefileAm(Makefile_am.getParentFile(),classifier);
+					updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (STATICLIB):
 					createDotOldFileFor(Makefile_am);
 					updateStaticLibMakefileAm(Makefile_am.getParentFile());
-					updateMakefileAmDependency(Makefile_am.getParentFile());
+					updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
 					case (SHAREDLIB):
 					createDotOldFileFor(Makefile_am);
 					updateSharedLibMakefileAm(Makefile_am.getParentFile());
-					updateMakefileAmDependency(Makefile_am.getParentFile());
+					updateMakefileAmDependency(Makefile_am.getParentFile(),classifier);
 					compareOldAndNew(Makefile_am.getParentFile());
 					break;
 					
@@ -491,7 +488,7 @@ public class MakefileAmManager {
 		initializeTopLevelMakefileAm(parent,structureManager,false);
 	}
 
-	private void updateProgramsMakefileAm(File parent)
+	private void updateProgramsMakefileAm(File parent,MakefileAmClassifier classifier)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -508,7 +505,7 @@ public class MakefileAmManager {
 					line = updateSourcesLine(line, parent, out);
 				}
 				if(line.indexOf(_LDADD)!=-1)
-					line = updateLdaddLine(line, parent);
+					line = updateLdaddLine(line, parent, classifier);
 				if(line.indexOf(SUBDIRS)!=-1)
 				{
 					removeIfMoreThanOneLine(line,in);
@@ -838,7 +835,7 @@ public class MakefileAmManager {
 		}
 		return line.trim();
 	}
-	private String updateLdaddLine(String line, File parent)
+	private String updateLdaddLine(String line, File parent,MakefileAmClassifier classifier)
 	{
 		line = line.substring(0,line.lastIndexOf("=")+1);
 		File Makefile_am = new File(parent,"Makefile.am");
@@ -1076,7 +1073,7 @@ public class MakefileAmManager {
 		}
 		return (new String(modLine)).trim();
 	}
-	protected void setMakefileAmToStaticLib(File parent ,DataElement status)
+	protected void setMakefileAmToStaticLib(File parent ,DataElement status,MakefileAmClassifier classifier)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
@@ -1086,9 +1083,9 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/static/",parent.getAbsolutePath());
 		initializeStaticLibMakefileAm(parent);	
-		updateMakefileAmDependency(parent);
+		updateMakefileAmDependency(parent,classifier);
 	}
-	protected void setMakefileAmToPrograms(File parent ,DataElement status)
+	protected void setMakefileAmToPrograms(File parent ,DataElement status,MakefileAmClassifier classifier)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
@@ -1098,9 +1095,9 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/",parent.getAbsolutePath());
 		initializeProgramsMakefileAm(parent);
-		updateMakefileAmDependency(parent);				
+		updateMakefileAmDependency(parent,classifier);				
 	}
-	protected void setMakefileAmToTopLevel(DataElement project,DataElement status)
+	protected void setMakefileAmToTopLevel(DataElement project,DataElement status,MakefileAmClassifier classifier)
 	{
 		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
 		File parent = project.getFileObject();
@@ -1114,9 +1111,9 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/",parent.getAbsolutePath());
 		initializeTopLevelMakefileAm(parent,structureManager,true);
-		updateMakefileAmDependency(parent);	
+		updateMakefileAmDependency(parent,classifier);	
 	}
-	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
+	protected void setMakefileAmToSharedLib(File parent ,DataElement status,MakefileAmClassifier classifier)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
@@ -1126,9 +1123,9 @@ public class MakefileAmManager {
 			copyMakefileFromTempDir(status.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH),
 			"/com.ibm.cpp.miners/autoconf_templates/sub/shared/",parent.getAbsolutePath());
 		initializeSharedLibMakefileAm(parent);
-		updateMakefileAmDependency(parent);	
+		updateMakefileAmDependency(parent,classifier);	
 	}
-	private void updateMakefileAmDependency(File parent)
+	private void updateMakefileAmDependency(File parent,MakefileAmClassifier classifier)
 	{
 		File dir = parent.getParentFile();
 		ArrayList list = new ArrayList();
@@ -1173,7 +1170,7 @@ public class MakefileAmManager {
 					while((line=in.readLine())!=null)
 					{
 						if(line.indexOf(_LDADD)!=-1)
-							line = updateDependenciesLine(line, Makefile_am,parent_Makefile_am);
+							line = updateDependenciesLine(line, Makefile_am,parent_Makefile_am,classifier);
 						out.write(line);
 						out.newLine();
 					}
@@ -1188,7 +1185,7 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	private String updateDependenciesLine(String line,File Makefile_am,File ProgramsMakefile)
+	private String updateDependenciesLine(String line,File Makefile_am,File ProgramsMakefile,MakefileAmClassifier classifier)
 	{
 		StringBuffer modLine = new StringBuffer();
 		StringTokenizer tokenizer = new StringTokenizer(line);
