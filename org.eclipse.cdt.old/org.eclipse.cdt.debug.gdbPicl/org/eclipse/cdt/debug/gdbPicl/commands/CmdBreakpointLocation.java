@@ -363,6 +363,9 @@ public class CmdBreakpointLocation extends Command
 					true : false, _req.getConditionalExpression());
 				
 				// if setting regular breakpoint failed, set breakpoint as deferred	
+				// UI does not seem to support this properly.  This code causes UI to crash.
+				// I will comment this out for now.
+/*				
 				if (ret < 0)
 				{
 					int attr = _req.bkpAttr();
@@ -371,6 +374,8 @@ public class CmdBreakpointLocation extends Command
 					ret = ((GdbBreakpointManager)bm).setDeferredAddressBreakpoint(address, attr, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? 
 					true : false, _req.getConditionalExpression());	
 				}
+*/
+				
 			}
 
 			if (ret < 0) {
