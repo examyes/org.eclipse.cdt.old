@@ -38,47 +38,49 @@ public class CppCompletionProcessor implements IContentAssistProcessor
       }
 	
 	
-   /**
-    * @see IContentAssistProcessor#getErrorMessage()
-    */
-  public String getErrorMessage()
-      {
+    /**
+     * @see IContentAssistProcessor#getErrorMessage()
+     */
+    public String getErrorMessage()
+    {
         return null;
-      }
-
-	/**
-	 * @see IContentAssistProcessor#getContextInformationValidator()
-	 */
-   public IContextInformationValidator getContextInformationValidator()
-   {
-      return null;
-   }
-
-	/**
-	 * @see IContentAssistProcessor#getContextInformationAutoActivationCharacters()
-	 */
-   public char[] getContextInformationAutoActivationCharacters()
-   {
-      return null;
-   }
-
-	/**
-	 * @see IContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
-	 */
-   public char[] getCompletionProposalAutoActivationCharacters()
-      {	  
-	  //return null;
-        return new char[] { '.' };
-      }
-	
-  /**
-   * @see IContentAssistProcessor#computeTips(ITextViewer, int)
-   */
-  public IContextInformation[] computeContextInformation(ITextViewer viewer, int position)
-      {
+    }
+    
+    /**
+     * @see IContentAssistProcessor#getContextInformationValidator()
+     */
+    public IContextInformationValidator getContextInformationValidator()
+    {
+	return null;
+    }
+    
+    /**
+     * @see IContentAssistProcessor#getContextInformationAutoActivationCharacters()
+     */
+    public char[] getContextInformationAutoActivationCharacters()
+    {
+	//System.out.println("getcontextinfoautoactivationchars");
+	return null;
+	//	return new char[] { '(' };
+    }
+    
+    /**
+     * @see IContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
+     */
+    public char[] getCompletionProposalAutoActivationCharacters()
+    {	  
+        return new char[] { '.','>' };
+    }
+    
+    /**
+     * @see IContentAssistProcessor#computeTips(ITextViewer, int)
+     */
+    public IContextInformation[] computeContextInformation(ITextViewer viewer, int position)
+    {
+	//System.out.println("compute tips");
         return null;
-      }
-
+    }
+    
   public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int position)
       {
         ICompletionProposal[] result = null;

@@ -38,6 +38,9 @@ public class CppSourceViewerConfiguration extends LpexSourceViewerConfiguration
              ContentAssistant assistant = new ContentAssistant();
              assistant.setContentAssistProcessor(new CppCompletionProcessor(file), IDocument.DEFAULT_CONTENT_TYPE);
              assistant.setProposalPopupOrientation(assistant.PROPOSAL_OVERLAY);
+
+	     assistant.enableAutoActivation(true);
+	     assistant.enableAutoInsert(true);
              return assistant;
            }
         }
