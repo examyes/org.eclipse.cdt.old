@@ -514,6 +514,11 @@ public class FileSystemMiner extends Miner
 			int written = 0;
 
 			int bufferSize = (size > maxSize) ? maxSize : size;
+			if (bufferSize == 0)
+			    {
+				bufferSize = 1;
+			    }
+
 			byte[] subBuffer = new byte[bufferSize];
 
 			while (written < size)
@@ -538,6 +543,14 @@ public class FileSystemMiner extends Miner
 					_dataStore.updateAppendFile(sourceString, subBuffer, subWritten);
 				    }
 			    }
+			// special case for empty files
+			if (written == 0)
+			    {
+				subBuffer[0] = ' ';
+				_dataStore.updateFile(sourceString, subBuffer, 1);
+			    }
+
+			
 			inFile.close();
 		    }
 		catch (IOException e)
