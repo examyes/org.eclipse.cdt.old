@@ -461,9 +461,6 @@ public class GdbVariableMonitorManager extends VariableMonitorManager
     */
    public void expandSubTree(int exprID, int rootNodeID, int startChild, int endChild)
    {
-   	  if (true)
-   	  			return; 
-   	  			
       GdbVariableMonitor monitor = (GdbVariableMonitor) _monitors.get(new Integer(exprID));
 
       if (monitor != null)
