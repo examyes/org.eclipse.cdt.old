@@ -1,10 +1,13 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta http-equiv="Content-Language" content="en-us">
-   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.76 [en] (X11; U; Linux 2.4.2-2 i686) [Netscape]">
    <title>The C/C++ Development Plugin - Creating a C/C++ Project</title>
-</head>
+<link rel="stylesheet" type="text/css" href="/org.eclipse.help/html/default.css">
 <!----------------------------------------------------------------------------------->
+</head>
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
 <!-----------------------------------------------------------------------------------
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
@@ -16,140 +19,143 @@
 </table>
 ----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr>
-  <h1>Creating a C/C++ Project</h1> 
-  <!-----
+<caption><!----------></caption>
+
+<tr>
+<td>
+<h1>
+Creating a C/C++ Project</h1>
+<!-----
      <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
         Creating a C/C++ Project</font></b>
      </td>
----->
-  </tr>
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">
-        <p>Whether you are working with existing C/C++ Source or beginning a project from
-           scratch, you will need to first create a Project. There are two ways to create
-           a C/C++ Project: the File Menu, or through the workbench toolbar.      
-     </td>
-  </tr> 
+----></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">Whether you are working with existing
+C/C++ Source or beginning a project from scratch, you will need to first
+create a Project. There are two ways to create a C/C++ Project: the File
+Menu, or through the workbench toolbar.&nbsp;</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
-<table width=80%>
-  <tr>
-     <td valign="bottom">
-        <H2>File Menu</H2>
-     </td>
-     <td valign="bottom">
-        <H2>Toolbar</H2>
-     </td>
-  </tr>
-<!---------->
-  <tr>
-     <td valign="top">
-        <img src="../../images/create_1.gif" border=0>
-     </td>
-     <td valign="top">
-        <img src="../../images/create_2.gif" border=0>
-     </td>
-  </tr>
-<!---------->
-  <tr>
-     <td valign="top" colspan=3>
-        <p>Both of these methods will launch a <i>New Project</i> Wizard.
-        <p><center><img src="../../images/projectwizard_0.gif"></p></center>
-     </td>
-  </tr>
+<table WIDTH="80%" >
+<caption><!---------->
+<br><!----------></caption>
+
+<tr>
+<td VALIGN=BOTTOM>
+<h2>
+File Menu</h2>
+</td>
+
+<td VALIGN=BOTTOM>
+<h2>
+Toolbar</h2>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP><img SRC="create_1.gif" BORDER=0 ></td>
+
+<td VALIGN=TOP><img SRC="create_2.gif" BORDER=0 ></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP COLSPAN="3">Both of these methods will launch a <i>New Project</i>
+Wizard.&nbsp;
+<center>
+<p><img SRC="projectwizard_0.gif" ></center>
+</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr>
-<h1>Project Creation Wizard</h1> 
+<caption><!----------></caption>
+
+<tr>
+<td>
+<h1>
+Project Creation Wizard</h1>
 <!----
     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
        Project Creation Wizard</font></b></td>
------>
-  </tr>
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">     
-        <p>Here you can choose your Project Name and specify where do you wish the source
-           code to reside. If you have no existing files and hence start editing from scratch,
-           then the default location which is under the same subdirectory where Eclipse was
-           installed is the way to go. If you have already existing files, there are three possibilities:
-        <ol>
-           <li><p>Use the default location and use the <a href="import.htm">Import wizard</a> to copy the
-                  files from the local disk or through ftp to the default workbench location, within
-                  Eclipse workspace.</p>
-           </li>
-           <li><p>Choose the "Local directory" button and specify the path to the files. The project
-                  will know to reference those files, as opposed to copying them to the workbench.
-                  (Note: be aware that deleting the project, will cause a deletion of those referenced
-                  files as well! If you close the project before deleting it, the referenced files will
-                  not be deleted.)</p>
-           </li>
-           <li><p>Choose the "Host" button if the files reside in a remote server. Specify the <code>hostname
-	   </code> and <code>port</code> number under which the server/daemon is running in the remote machine.
-	    The <code>Directory</code> should point to the location in the remote machine that contains 
-	    the source files of your project. If you are using samba to mount remote shares then you have the option to specify the <code>local mount point</code> but this is not necessary.</p></li>
-        </ol>
-     </td>
-  </tr> 
+-----></td>
+</tr>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">Here you can choose your Project
+Name and specify where do you wish the source code to reside. If you have
+no existing files and hence start editing from scratch, then the default
+location which is under the same subdirectory where Eclipse was installed
+is the way to go. If you have already existing files, there are three possibilities:&nbsp;
+<ol>Use the default location and use the <a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/gettingstarted/createproject/import.htm">Import
+wizard</a> to copy the files from the local disk or through ftp to the
+default workbench location, within Eclipse workspace.
+<p>Choose the "Local directory" button and specify the path to the files.
+The project will know to reference those files, as opposed to copying them
+to the workbench. (Note: be aware that deleting the project, will cause
+a deletion of those referenced files as well! If you close the project
+before deleting it, the referenced files will not be deleted.)
+<p>Choose the "Host" button if the files reside in a remote server. Specify
+the <tt>hostname </tt>and <tt>port</tt> number under which the server/daemon
+is running in the remote machine. The <tt>Directory</tt> should point to
+the location in the remote machine that contains the source files of your
+project. If you are using samba to mount remote shares then you have the
+option to specify the <tt>local mount point</tt> but this is not necessary.</ol>
+</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
-<center><img src="../../images/projectwizard_1.gif"></p></center>
+<center><img SRC="projectwizard_1.gif" ></center>
 <!---------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">     
-        <p>Select <img src="../../images/nextbutton.gif">
-        <p>The next page of the wizard is where you specify the build invocation and environment
-          used for building those files. If at this point in time you are moreinterested
-           in analyzing the code rather than building, you can specify the
-          <a href="../../tasks/compile/invocation.htm">build command for your project</a>
-           later on.</p>
-     </td>
-  </tr> 
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">Select&nbsp;<img SRC="nextbutton.gif" >
+<p>The next page of the wizard is where you specify the build invocation
+and environment used for building those files. If at this point in time
+you are more interested in analyzing the code rather than building, you
+can specify the <a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/tasks/compile/invocation.htm">build
+command for your project</a> later on.</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
-<center><img src="../../images/projectwizard_2.gif"></p></center>
-<center><img src="../../images/projectwizard_2a.gif"></p></center>
+<center><img SRC="projectwizard_2.gif" >
+<br><img SRC="projectwizard_2a.gif" ></center>
 <!----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">     
-        <p>Select <img src="../../images/nextbutton.gif">
-        <p>The next page of the wizard is where you will specify your <code>parse behaviour</code>, <code>parse path</code> hierarchy
-           and <code>parse quality</code> to be used with your project.
-     </td>
-  </tr> 
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">Select&nbsp;<img SRC="nextbutton.gif" >
+<p>The next page of the wizard is where you will specify your <tt>parse
+behavior</tt>, <tt>parse path</tt> hierarchy and <tt>parse quality</tt>
+to be used with your project.&nbsp;</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
-<center><img src="../../images/projectwizard_3.gif"></p></center>
-<center><img src="../../images/projectwizard_3a.gif"></p></center>
-<center><img src="../../images/projectwizard_3b.gif"></p></center>
+<center><img SRC="projectwizard_3.gif" >
+<br><img SRC="projectwizard_3a.gif" >
+<br><img SRC="projectwizard_3b.gif" ></center>
 <!---------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">     
-        <p>When you have finished, click on <img src="../../images/finishbutton.gif"> to create your
-           project within the workbench.</p>
-     </td>
-  </tr> 
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2">When you have finished, click on&nbsp;<img SRC="finishbutton.gif" >
+to create your project within the workbench.</td>
+</tr>
 </table>
 <!----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-<!----
+<caption><!----
   <tr> 
     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
        Contact Us</font></b></td>
   </tr>
------>
-<!---------->
-  <tr>
-     <td ALIGN=left VALIGN=top COLSPAN="2">
-     <p><a href = "../../frames/contact.htm">Contact Us</a>
-     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
-  </td>  
+-----><!----------></caption>
+
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2"><a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/frames/contact.htm">Contact
+Us</a>
+<p><a href="http://127.0.0.1:32896/com.ibm.cpp.docs.user/hglegal.htm"><img SRC="ngibmcpy.gif" BORDER=0 height=12 width=195></a></td>
 </tr>
 </table>
 <!----------------------------------------------------------------------------------->
