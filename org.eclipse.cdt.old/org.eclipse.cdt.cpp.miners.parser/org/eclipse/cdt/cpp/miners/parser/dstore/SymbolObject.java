@@ -42,10 +42,11 @@ public class SymbolObject
   
  public void reset()
  {
+  _variableTypes.clear();
   _uses.clear();
   _returnTypes.clear();
   _arguments.clear();
-  _variableTypes.clear();
+  //object = null;
  }
   
  public DataElement removeVariableType()

@@ -4,8 +4,8 @@
 
 options
 {
-  //DEBUG_PARSER=true;
-  //DEBUG_LOOKAHEAD=true;
+ //DEBUG_PARSER=true;
+ //DEBUG_LOOKAHEAD=true;
   //DEBUG_TOKEN_MANAGER=true;
   //USER_CHAR_STREAM=true;
   static=false;
@@ -969,7 +969,7 @@ String declarator_suffix() :
 {
  (
      (LOOKAHEAD(2) "[" "]" | "[" next = constant_expression() "]")  {name = "[" + next + "]";}
-  |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(true) | expression())  ")")  {name = "(" + next + ")";}
+  |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(true) | next = expression())  ")")  {name = "(" + next + ")";}
  )
  [LOOKAHEAD(2) ("const" | "volatile")]
  [LOOKAHEAD(2) exception_spec()]

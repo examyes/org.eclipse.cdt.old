@@ -34,7 +34,6 @@ public class DataStoreSymbolTable implements SymbolTable
  public DataStoreSymbolTable()
  {
   super();
-  
   _curObj          = new SymbolObject();
   _rootStack       = new Stack();
   _builtinTypes    = new Hashtable();
@@ -60,6 +59,7 @@ public class DataStoreSymbolTable implements SymbolTable
   _root          = theRoot;
   _dataStore     = theRoot.getDataStore();
   _currentSource = (String)theRoot.getElementProperty(DE.P_SOURCE_NAME);
+  _curObj.object = null;
  }
  
 
@@ -201,8 +201,16 @@ public class DataStoreSymbolTable implements SymbolTable
  
  public DataElement addObject(DataElement objType, String objName, String objValue, int beginLine, boolean isScope)
  {
-  DataElement theObject = addObject(objType, objName, beginLine, isScope);
-  theObject.setAttribute(DE.A_VALUE, objValue);
+  DataElement theObject = null;
+  try
+   {
+   theObject = addObject(objType, objName, beginLine, isScope);
+   theObject.setAttribute(DE.A_VALUE, objValue);
+   }
+  catch (Throwable e) 
+  {
+   e.printStackTrace();
+  }
   return theObject;
  }
  
@@ -218,13 +226,15 @@ public class DataStoreSymbolTable implements SymbolTable
   {
    objType = ParserSchema.dTypedef;
   }  
-   
-  _curObj.object = _dataStore.createObject(_root, objType, objName, _currentSource + ":" + beginLine);//, "" + _idCounter++);
-  _curObj.object.setAttribute(DE.A_VALUE,objName);
+  
+  DataElement theObject = _dataStore.createObject(_root, objType, objName, _currentSource + ":" + beginLine);//, "" + _idCounter++);
+  theObject.setAttribute(DE.A_VALUE,objName);
   
   if (isScope) 
-   _root = _curObj.object;
+   _root = theObject;
   
+  _curObj.object = theObject;
+
   if ( isSet(USES) && !objType.getName().equals("error"))
    _curObj.createUseReferences();
   
@@ -242,7 +252,7 @@ public class DataStoreSymbolTable implements SymbolTable
  
    _curObj.reset();
   
-  return _curObj.object;
+  return theObject;
  } 
  
  
@@ -284,6 +294,7 @@ public class DataStoreSymbolTable implements SymbolTable
   }
 
   String nameString = name.substring(firstIndex, lastIndex+1);
+  
   String typeString = name.substring(0, firstIndex) + name.substring(lastIndex+1);
   
   //In the case of a function pointer, we want to represent the type as 
@@ -294,10 +305,13 @@ public class DataStoreSymbolTable implements SymbolTable
    return nameString;
   }
   
+  
   StringTokenizer tokenizer = new StringTokenizer(typeString);
   while (tokenizer.hasMoreTokens())
   {
     _curObj.addVariableType(lookupTypeElement(tokenizer.nextToken()));  
+    // For now I just return after adding the first type...Fix this later!!!
+    return nameString;
   }
    
   return nameString;
@@ -448,7 +462,6 @@ public class DataStoreSymbolTable implements SymbolTable
    return;
   
   DataElement base = _nameLookup.nameLookup(baseName, ParserSchema.Class, _curObj.object);
-  
   if (base != null)
    {
     _dataStore.createReference(_curObj.object,base,ParserSchema.BaseClasses);

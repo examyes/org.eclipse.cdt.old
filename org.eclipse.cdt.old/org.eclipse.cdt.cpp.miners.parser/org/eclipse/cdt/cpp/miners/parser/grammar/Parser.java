@@ -1730,7 +1730,7 @@ public final class Parser implements ParserConstants {
             case CHARACTER:
             case STRING:
             case ID:
-              expression();
+              next = expression();
               break;
             default:
               jj_la1[38] = jj_gen;
@@ -1746,7 +1746,7 @@ public final class Parser implements ParserConstants {
           throw new ParseException();
         }
       }
-                                                                                                                           name = "(" + next + ")";
+                                                                                                                                  name = "(" + next + ")";
       break;
     default:
       jj_la1[40] = jj_gen;
