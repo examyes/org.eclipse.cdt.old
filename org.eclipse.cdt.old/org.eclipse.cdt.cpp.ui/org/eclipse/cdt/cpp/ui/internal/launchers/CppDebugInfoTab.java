@@ -449,12 +449,12 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 
         if (_programNameField.getText() == "")
         {
-           setErrorMessage(_plugin.getLocalizedString("missingProgramName"));
+           setErrorMessage(_plugin.getLocalizedString("loadLauncher.Error.missingProgramName"));
            return false;
         }
-        elseif (_workingDirectoryField.getText() == "")
+        else if (_workingDirectoryField.getText() == "")
         {
-           setErrorMessage(_plugin.getLocalizedString("missingWorkingDirectory"));
+           setErrorMessage(_plugin.getLocalizedString("loadLauncher.Error.missingWorkingDirectory"));
            return false;
         }
         else

@@ -444,21 +444,21 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	 */
     public boolean isValid()
     {
-		setErrorMessage(null);
-		setMessage(null);
+	setErrorMessage(null);
+	setMessage(null);
 
       if (_programNameField.getText() == "")
       {
-         setErrorMessage(_plugin.getLocalizedString("missingProgramName"));
+         setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingProgramName"));
          return false;
       }
-      elseif (_workingDirectoryField.getText() == "")
+      else if (_workingDirectoryField.getText() == "")
       {
-         setErrorMessage(_plugin.getLocalizedString("missingWorkingDirectory"));
+         setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingWorkingDirectory"));
          return false;
       }
       else
-  	   	return true;
+         return true;
 		
     }
 	
