@@ -115,14 +115,7 @@ public abstract class Receiver extends Thread
         return _socket;
       }
 
-  public void handleFile(DataElement fileObject)
-      {
-        // file name gives us the file name from remote system
-        String remotePath = fileObject.getSource();
-        StringBuffer contents = fileObject.getBuffer();
-        _dataStore.saveFile(remotePath, contents);
-
-      }
+  
 
   // this is implemented by extended classes
   public abstract void handleDocument(DataElement documentObject);

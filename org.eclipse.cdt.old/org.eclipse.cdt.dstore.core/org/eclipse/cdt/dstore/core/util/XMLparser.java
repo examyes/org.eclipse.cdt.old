@@ -76,14 +76,13 @@ public class XMLparser
 		    }
 	    }
 
+
 	if (_tagType.equals("File.Append"))
 	    {
-		//_dataStore.replaceAppendFile(path, buffer, size);
 		_dataStore.appendToFile(path, buffer, size);
 	    }
 	else
 	    {
-		//_dataStore.replaceFile(path, buffer, size);
 		_dataStore.saveFile(path, buffer, size);
 	    }
     }

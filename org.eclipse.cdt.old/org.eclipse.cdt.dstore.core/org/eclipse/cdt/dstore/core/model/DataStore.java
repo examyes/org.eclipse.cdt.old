@@ -47,6 +47,7 @@ public final class DataStore
     private DataStoreSchema     _dataStoreSchema;    
     private CommandHandler      _commandHandler;
     private UpdateHandler       _updateHandler;
+    private FileHandler         _fileHandler;
     
     private DomainNotifier      _domainNotifier;
 
@@ -2592,58 +2593,7 @@ public final class DataStore
      */         
     public void saveFile(String localPath, File file)
     {
-	File newFile = new File(localPath);
-	if (!newFile.exists())
-	{
-		try
-		{
-		newFile.createNewFile();
-		}
-		catch (IOException e)
-		{
-		}
-	}
-
-	try
-	    {
-		FileOutputStream newFileStream = new FileOutputStream(newFile);
-
-		if (file != null && !file.isDirectory() && file.exists())
-		    {
-			int maxSize = 5000000;
-			int size = (int)file.length();
-
-			FileInputStream inFile = new FileInputStream(file);
-			int written = 0;
-			
-			int bufferSize = (size > maxSize) ? maxSize : size;
-			byte[] subBuffer = new byte[bufferSize];
-			
-			while (written < size)
-			    {
-				int subWritten = 0;
-				
-				while (written < size && subWritten < bufferSize)
-				    {
-					int available = inFile.available();
-					available = (bufferSize > available) ? available : bufferSize;
-					int read = inFile.read(subBuffer, subWritten, available);
-					subWritten += read;
-					written += subWritten;
-				    }
-				
-				newFileStream.write(subBuffer, 0, subWritten);
-			    }
-			
-			inFile.close();
-			newFileStream.close();
-		    }
-	    }
-	catch (IOException e)
-	    {
-		System.out.println(e);
-		e.printStackTrace();			
-	    }
+    	_fileHandler.saveFile(localPath, file);
     }
 	
     /**
@@ -2654,35 +2604,7 @@ public final class DataStore
      */         
     public void saveFile(String remotePath, byte[] buffer, int size)
     {
-        remotePath = new String(remotePath.replace('\\', '/'));
-        String fileName = mapToLocalPath(remotePath);
-	
-        if (fileName != null)
-        {
-          try
-          {
-            // need to create directories as well
-            File file = new File(fileName);
-            if (!file.exists())
-            {
-	      File parent = new File(file.getParent());	      
-	      parent.mkdirs();
-            }
-            else
-            {
-            }
-
-            File newFile = new File(fileName);
-            FileOutputStream fileStream = new FileOutputStream(newFile);
-            //fileStream.write(buffer);
-            fileStream.write(buffer, 0, size);
-            fileStream.close();
-          }
-          catch (IOException e)
-          {
-            System.out.println(e);
-          }
-        }
+    	_fileHandler.saveFile(remotePath, buffer, size);   
     }   
 
     /**
@@ -2693,119 +2615,9 @@ public final class DataStore
      */         
     public void appendToFile(String remotePath, byte[] buffer, int size)
     {
-        remotePath = new String(remotePath.replace('\\', '/'));
-        String fileName = mapToLocalPath(remotePath);
-	
-        if (fileName != null)
-        {
-          try
-          {
-            // need to create directories as well
-            File file = new File(fileName);
-            if (!file.exists())
-		{
-		    File parent = new File(file.getParent());	      
-		    parent.mkdirs();
-
-		    File newFile = new File(fileName);
-		    FileOutputStream fileStream = new FileOutputStream(newFile);
-		    fileStream.write(buffer, 0, size);
-		    fileStream.close();
-		}
-	    else
-		{
-		    // need to reorganize this so that we don't use up all the memory
-		    // divide appendedBuffer into chunks
-		    // at > 50M this kills Eclipse
-		    File oldFile = new File(fileName);
-		    File newFile = new File(fileName + ".new");
-
-		    FileInputStream  oldFileStream = new FileInputStream(oldFile);            
-		    FileOutputStream newFileStream = new FileOutputStream(newFile);
-
-		    // write old file to new file
-		    int maxSize = 5000000;
-		    int written = 0;
-		    int oldSize = (int)oldFile.length();		    
-		    int bufferSize = (oldSize > maxSize) ? maxSize : oldSize;
-		    byte[] subBuffer = new byte[bufferSize];
-
-		    while (written < oldSize)
-			{
-			    int subWritten = 0;
-			    
-			    while (written < oldSize && subWritten < bufferSize)
-				{
-				    int available = oldFileStream.available();
-				    available = (bufferSize > available) ? available : bufferSize;
-				    int read = oldFileStream.read(subBuffer, subWritten, available);
-				    subWritten += read;
-				    written += subWritten;
-				}
-			    
-			    newFileStream.write(subBuffer, 0, subWritten);
-			}
-		    
-		    oldFileStream.close();		    		    
-
-		    // write new buffer to new file
-		    newFileStream.write(buffer, 0, size);
-		    newFileStream.close();
-
-		    // remote old file
-		    oldFile.delete();
-
-		    // rename new file 
-		    newFile.renameTo(oldFile);
-		} 
-          }
-          catch (IOException e)
-          {
-            System.out.println(e);
-          }
-        }
+    	_fileHandler.appendToFile(remotePath, buffer, size);
     }   
 
-    /**
-     * Save a file in the specified location with the given contents   
-     *
-     * @param remotePath the path where to save the file
-     * @param contents the buffer to save
-     */         
-    public void saveFile(String remotePath, StringBuffer contents)
-      {
-        remotePath = new String(remotePath.replace('\\', '/'));
-        String fileName = mapToLocalPath(remotePath);
-	
-        if (fileName != null)
-        {
-          try
-          {
-            // need to create directories as well
-            File file = new File(fileName);
-            if (!file.exists())
-            {
-	      File parent = new File(file.getParent());	      
-	      parent.mkdirs();
-            }
-            else
-            {
-              file.renameTo(new File(fileName + ".bak"));
-            }
-
-            File newFile = new File(fileName);
-
-
-            FileOutputStream fileStream = new FileOutputStream(newFile);
-            fileStream.write(contents.toString().getBytes());
-            fileStream.close();
-          }
-          catch (IOException e)
-          {
-            System.out.println(e);
-          }
-        }
-      }
     
     /**
      * Load a persisted <code>DataStore</code> tree into the specified <code>DataElement</code>   
@@ -2977,10 +2789,11 @@ public final class DataStore
 
     private void initialize()
     {
+    _fileHandler = new FileHandler(this);	
 	_minersLocation = "org.eclipse.cdt.dstore.core";
 	_random = new Random(System.currentTimeMillis());
 
-        _hashMap = new HashMap(2 * _initialSize);
+    _hashMap = new HashMap(2 * _initialSize);
 	_recycled = new ArrayList(_initialSize);
 	initElements(_initialSize);
 
