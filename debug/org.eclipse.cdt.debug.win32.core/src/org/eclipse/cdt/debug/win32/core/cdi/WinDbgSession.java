@@ -17,7 +17,6 @@ import org.eclipse.cdt.debug.core.cdi.ICDIConfiguration;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
-import org.eclipse.cdt.debug.core.cdi.ICDISharedLibraryManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIVariableManager;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
@@ -100,13 +99,6 @@ public class WinDbgSession implements ICDISession {
 
 	public ICDIEventManager getEventManager() {
 		return eventManager;
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#getSharedLibraryManager()
-	 */
-	public ICDISharedLibraryManager getSharedLibraryManager() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public ICDIConfiguration getConfiguration() {

@@ -25,6 +25,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMixedInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
+import org.eclipse.cdt.debug.core.cdi.model.ICDISharedLibrary;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
@@ -591,5 +592,13 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	public ICDIMemoryBlock[] getMemoryBlocks() throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDISharedLibraryManagement#getSharedLibraries()
+	 */
+	public ICDISharedLibrary[] getSharedLibraries() throws CDIException {
+		// TODO Auto-generated method stub
+		return new ICDISharedLibrary[0];
 	}
 }
