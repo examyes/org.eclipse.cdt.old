@@ -96,13 +96,13 @@ public class SearchHtml
 	boolean success = true;
 	try{
 
-	    //HTMLParser parser = new HTMLParser(theFile);///
+	    HTMLParser parser = new HTMLParser(theFile);
 	    Document document = new Document();
 	    document.add(Field.UnIndexed(FIELD_PATH,theFile.getCanonicalPath()));	    	    
-	    //document.add(Field.UnIndexed(FIELD_TITLE,parser.getTitle()));///
-	    //document.add(Field.Text(FIELD_CONTENT,parser.getReader()));//FIXME:Exceptions with QT docs!
-	    document.add(Field.Text(FIELD_CONTENT,
-				    (Reader)new InputStreamReader(new FileInputStream(theFile))));
+	    document.add(Field.UnIndexed(FIELD_TITLE,parser.getTitle()));///
+	    document.add(Field.Text(FIELD_CONTENT,parser.getReader()));//FIXME:Exceptions with QT docs!
+	    // document.add(Field.Text(FIELD_CONTENT,
+	    //		    (Reader)new InputStreamReader(new FileInputStream(theFile))));
 
 	    writer.addDocument(document);
 	}catch(Exception e)
@@ -124,15 +124,15 @@ public class SearchHtml
 	    Hits hits = engine.search(query);
 	    for(int i=0;i<hits.length();i++)
 		{
-		    /*
+		   
 		    results.add(new ItemElement(null,hits.doc(i).get(FIELD_PATH),
 						hits.doc(i).get(FIELD_TITLE),null,null,
 						ItemElement.HTML_TYPE));
-		    */
+		    /**
 		     results.add(new ItemElement(null,hits.doc(i).get(FIELD_PATH),
 						"",null,null,
 						ItemElement.HTML_TYPE));
-		    
+		    **/
 		}
 	}catch(Exception e)
 	    {
