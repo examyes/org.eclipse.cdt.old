@@ -81,7 +81,8 @@ public class ConfigureAction extends CustomAction
 		||_command.getValue().equals("RUN_CONFIGURE"))&&!doesAutoconfSupportExists())
 			//if (subject.getType().equals("Project"))	
 				setEnabled(false);
-		if(_command.getValue().equals("RUN_CONFIGUTRE")&&!doesFileExists("configure.in")&&!doesFileExists("Makefile.am"))
+		if(_command.getValue().equals("CREATE_CONFIGURE")&&
+		   (!doesFileExists("configure.in") || !doesFileExists("Makefile.am")))
 			setEnabled(false);		
 
 		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure"))
@@ -153,15 +154,50 @@ public class ConfigureAction extends CustomAction
 	}
 	private boolean doesFileExists(String fileName)
 	{
-		File project = _subject.getFileObject();
-		File[]fileList = project.listFiles();
-		for (int i = 0; i < fileList.length; i++)
-			if(fileList[i].getName().equals(fileName))
+		for (int i = 0; i < _subject.getNestedSize(); i++)
+		    {
+			DataElement child = _subject.get(i).dereference();
+			if (!child.isDeleted() && child.getName().equals(fileName))
+			    {
 				return true;
+			    }
+		    }
 		return false;
 	}
-	private boolean doesAutoconfSupportExists()
+    
+    private boolean doesAutoconfSupportExists()
+    {
+	return doesAutoconfSupportExistsHelper(_subject);
+    }
+    
+    private boolean doesAutoconfSupportExistsHelper(DataElement root)
 	{
+		for (int i = 0; i < root.getNestedSize(); i++)
+		    {
+			DataElement child = root.get(i).dereference();
+			String type = child.getType();
+			if (type.equals("file"))
+			    {
+				if (!child.isDeleted())
+				    {
+					String name = child.getName();
+					if (name.equals("Makefile") ||
+					    name.equals("Makefile.am") ||
+					    name.equals("configure.in"))
+					    {
+						return true;
+					    }
+				    }
+			    }
+			else if (type.equals("Project") || type.equals("directory"))
+			    {
+				return doesAutoconfSupportExistsHelper(child);
+			    }
+		    }
+		return false;
+
+		/*
+
 		File project = _subject.getFileObject();
 		ProjectStructureManager structure = new ProjectStructureManager(project);
 		File[]fileList = structure.getFiles();
@@ -170,6 +206,7 @@ public class ConfigureAction extends CustomAction
 			if(fileList[i].getName().equals("Makefile")||fileList[i].getName().equals("Makefile.am")||fileList[i].getName().equals("Configure.in"))
 				return true;
 		return false;
+		*/
 	}
 }
 
