@@ -1,6 +1,6 @@
 
 Instructions for building the Eclipse CDT from a command line using ANT.
-The build scripts will be posted to CVS cdt-home/downloads/buildscripts directory.
+The build scripts will be posted to CVS cdt-home/buildscripts directory.
 Alternately you may receive these instructions with a zip of the build scripts.
 
 
@@ -18,7 +18,7 @@ JDK 1.3 --> http://download.eclipse.org/downloads/drops/R-2.0.1-200208291828/jav
 CVS 1.10 or higher  --> http://ccvs.cvshome.org/servlets/ProjectDownloadList
 
 300 meg free disk space
-Source build files from Eclipse CVS repo --> ** /tools/cdt-home/downloads/buildscripts
+Source build files from Eclipse CVS repo --> ** /tools/cdt-home/buildscripts
 
 Initial Setup:
 Install Ant, a JDK, and a CVS client, as per each program's instructions.
@@ -44,7 +44,7 @@ Minimally you will need the following environment variables set.
 
 3) Obtain the build scripts from CVS
 
-4) Checkout the contents of the cdt-home/downloads/buildscripts directory into the eclipse install directory
+4) Checkout the contents of the cdt-home/cdt-home/buildscripts directory into the eclipse install directory
 
 5) Edit the startCDT-<os><win>build.bat files
     build -os win32 -ws win32 -install "C:\eclipse"
