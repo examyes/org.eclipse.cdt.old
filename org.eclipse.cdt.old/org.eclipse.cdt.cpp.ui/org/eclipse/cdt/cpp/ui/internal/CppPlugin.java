@@ -134,10 +134,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
       {
         try
         {
-          // register the default adapter for elements
-          IAdapterManager manager = Platform.getAdapterManager();
-           manager.registerAdapters(new DataElementAdapterFactory(), IFile.class);
-
 	   if (_instance == null)
 	       {	
 		   _instance = this;
@@ -147,7 +143,13 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	   super.startup();
         }
         catch (CoreException e)
-        {}
+        {
+	}
+	
+	// register the default adapter for elements
+	IAdapterManager manager = Platform.getAdapterManager();
+	manager.registerAdapters(new DataElementAdapterFactory(_interface), DataElement.class);	  
+	manager.registerAdapters(new ResourceAdapterFactory(_interface), IResource.class);	  
       }
 
     public void initDefaultBuildPreference()
