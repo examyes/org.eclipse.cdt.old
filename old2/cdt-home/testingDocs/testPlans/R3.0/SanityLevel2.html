@@ -1,0 +1,1299 @@
+<head>
+<style type="text/css">
+
+.verify 	{ color: blue; font-weight: bold; }
+.list	 	{ font-size: 10pt; font-family: Arial, Helvetica, sans-serif; }
+.indextop   { font-size: x-large; font-family: Arial, Helvetica, sans-serif; font-weight: bold}
+.indexsub   { font-size: xx-small; font-family: Arial, Helvetica, sans-serif; color: #8080FF}
+.section    { font-size: 16pt; padding-left: 3pt; background: #0080C0; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.subsection { font-size: 13.5pt; padding-left: 3pt; background: #999999; color: white; font-weight: bold;
+              text-decoration: underline; width: 100%; }
+.tb			{ border-style: solid; border-width: 1px }
+.myTable	{ font-family: Arial; font-size: 10pt; }
+ li.MsoNormal
+	{mso-style-parent:"";
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	margin-left:0in; margin-right:0in; margin-top:0in}
+span.NumberedChar
+	{}
+</style>
+
+<script language="JavaScript" type="text/javascript">
+
+function _dSectionExpand(sec) {
+	if ( document.all )
+	{
+		document.all["cSec"+sec].style.display = "none";
+		document.all["xSec"+sec].style.display = "";
+	}
+	else
+	{
+		document.getElementById("cSec"+sec).style.display="none";
+		document.getElementById("xSec"+sec).style.display="";
+	}
+}
+function _dSectionCollapse(sec) {
+	if ( document.all )
+	{
+		document.all["xSec"+sec].style.display = "none";
+		document.all["cSec"+sec].style.display = "";
+	}
+	else
+	{
+		document.getElementById("xSec"+sec).style.display="none";
+		document.getElementById("cSec"+sec).style.display="";
+	}
+}
+
+
+var T=1;
+// Used for test case header bullets, requires the feature index (e.g. F1, F2, ...) associated 
+//	with the test case.
+function incT() {
+	document.write(T+". ");
+	T++;
+}
+
+
+</script>
+
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<font face="arial" size="2">
+
+<TABLE cellPadding="2" width="100%" border=0>
+  <TR>
+    <TD align=left width="72%">
+	<font class="indextop">Sanity Test Suite Level 2</font><br>
+    &nbsp;<span class="indexsub">Test cases that quickly evaluate a build</span>
+  </TD>
+    <TD width="28%"><IMG height=86 alt="" 
+      src="../../../website/images/Idea.jpg" width=120>
+	</TD>
+  </TR>
+</TABLE>
+
+
+
+
+
+
+
+<span id="cSec1" style="position:relative;  ">
+<br>
+<a onclick="return _dSectionExpand('1');">
+<img src="../../../website/images/Adarrow.gif" border="0" alt="Show Document Information" width="16" height="16">&nbsp;&nbsp;<b><u>Show Document Information</u></b></a>
+</span>
+
+<span id="xSec1" style="position:relative; display:none;">
+<br>
+<a onclick="return _dSectionCollapse('1');">
+<img src="../../../website/images/Adarrow.gif" border="0" alt="Hide Document Information" width="16" height="16">&nbsp;&nbsp;<b><u>Hide Document Information</u></b></a><br><br>
+
+<table class="myTable" width="1140">
+  <tr>
+    <TD class="tb" width="64"><b>Date</b></TD>
+    <TD class="tb" width="54"><b>Revision</b></TD>
+    <TD class="tb" width="115"><b>Author</b></TD>
+    <TD class="tb" width="881"><b>Description</b></TD>
+  </tr>
+  <tr>
+    <TD class="tb" align="left" valign="top" width="64">
+    2004/06/21</TD>
+    <TD class="tb" align="center" valign="top" width="54">
+    0.1.0</TD>
+    <TD class="tb" align="left" valign="top" width="115">
+    Pixy Boparai</TD>
+    <TD class="tb" align="left" valign="top" width="881">
+    Created</TD>
+  </tr>
+  <tr>
+    <TD class="tb" align="left" valign="top" width="64">
+    2004/09/14</TD>
+    <TD class="tb" align="center" valign="top" width="54">
+    1.0</TD>
+    <TD class="tb" align="left" valign="top" width="115">
+    Tanya Wolff</TD>
+    <TD class="tb" align="left" valign="top" width="881">
+    Added TOC, added debug/signals test, fixed class browser tests for linux, created project for scanner config test.</TD>
+  </tr>
+
+  <tr>
+    <TD class="tb" align="left" valign="top" width="64">
+    2005/03/11</TD>
+    <TD class="tb" align="center" valign="top" width="54">
+    1.1</TD>
+    <TD class="tb" align="left" valign="top" width="115">
+    James Tan</span></TD>
+
+<span id="xSec1" style="position:relative; display:none;">
+    <TD class="tb" align="left" valign="top" width="881">
+    Updated for CDT3.0 testing, changed Class Browser test 4 </span>
+
+<span id="xSec1" style="position:relative; display:none;">
+&quot;wint_t&quot; to &quot;FILE&quot;, reworded test Binary and Error Parsers
+,&nbsp;</span></TD>
+  </tr>
+
+  </table>
+
+
+
+
+<p>
+<div class="section">Notes</div>
+<h4>Before you begin</h4>
+<ol class="list">
+<li>If you have a copy of LogAlert to monitor your <font face="courier">&lt;workspace&gt;/.metadata/.log</font> file, start it now. (Windows only)</li>
+<li>Disable the auto-build feature before you begin.</li>
+<li>For Windows,&nbsp; please install eclipse and CDT onto &quot;Program Files&quot;.&nbsp; 
+This will add a space in the path of the workspace and all related files of the 
+CDT.</li>
+<li>If you are running eclipse with the IBM JRE, create a short cut of
+  eclipse.exe and in the properties, make sure you should have &quot;.../eclipse.exe&quot;
+  -vmargs -Xj9.&nbsp; Verify that in Help-&gt;About Eclipse
+  Platform-&gt;Configurations Details&quot;, you are running with the J9 option.</li>
+</ol>
+<p>&nbsp;</p>
+
+
+<div class="section">Table of Contents</div>
+<ol start="1" type="1" class="MsoNormal">
+  <li><a href=#Create>Create a project</a></li>
+   <li><a href=#delete>Delete a project</a></li>
+   <li><a href=#import>Import a project</a></li>
+ <li><a href=#close>Close a project</a></li>
+ <li><a href=#open>Open a project</a></li>
+ <li><a href=#newClass>Class Wizard</a></li>
+ <li><a href=#cbrowse>Class Browser Perspective</a></li>
+ <li><a href=#contentassistStd>Content Assist for Standard Project</a></li>
+ <li><a href=#parsers>Binary and Error Parsers</a></li>
+ <li><a href=#mkEditor>Makefile Editor</a></li>
+ <li><a href=#contentassistMgd>Content Assist for Managed Make Projects</a></li>
+ <li><a href=#opentype>Open Type</a></li>
+ <li><a href=#refactor>Refactor -> Rename</a></li>
+ <li><a href=#csearch>C/C++ Search</a></li>
+ <li><a href=#contextsearch>Context Menu Search</a></li>
+<li><a href=#hyper>Hyperlink Navigation</a></li>
+<li><a href=#langhighlight>C/C++ Language Highlighting</a></li>
+<li><a href=#save>Save a project</a></li>
+<li><a href=#indexer>Index a project</a></li>
+<li><a href=#indexErrors>Index Error Markers</a></li>
+<li><a href=#debug>Debug Features</a></li>
+<li><a href=#scannerconfig>Scanner Config</a></li>
+ <li><a href=#gui>GUI issues</a></li>
+ <li><a href=#log>Logfile</a></li>
+
+
+</ol>
+
+<p>
+<div class="subsection"><script>incT()</script>
+  <a name="Create">Create a project</a></div>
+<ol class="list">
+<li>
+Right Click in the Navigator view and select New -&gt; Project or select File -&gt; 
+New -&gt; Project from the toolbar.</li>
+<li>
+>From the new Project wizard select C++ -&gt; Managed Make C++ Project.</li>
+<li>
+Enter MgdCpp in the Project name field and click next if you want to change the 
+default build target or hit Finish.</li>
+<li class="verify">
+Verify that the project is added to the workspace and it is opened in the C/C++ 
+Perspective.</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>
+  <a name="delete">Delete a project</a></div>
+<ol class="list">
+<li>
+Select MgdCpp in the C/C++ Perspective. Right Click in the project and select 
+Delete.</li>
+<li>
+Make sure that the Confirm Project Delete dialog comes up. Select 'Do not delete 
+contents' radio button. This deletes the project from the C/C++ perspective but 
+it is still there in the workspace.</li>
+<li class="verify">
+Verify that the project and its contents are deleted from the C/C++ Perspective 
+but still exist in the workspace.</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="import">Import a project</a></div>
+<p>Note: Bring up the Progress view and make sure it is visible while importing 
+the projects. (<a href="RunDebug.htm#How to bring up the Progress view">how to bring up the Progress view</a>)</p>
+<ol class="list">
+<li>
+Right Click in the C/C++ Perspective and select Import or select File -&gt; Import 
+from the toolbar.</li>
+<li>
+>From the Import dialog, select Existing Project from Workspace.</li>
+<li>
+Click on the Browse button for the Project contents field and look for MgdCpp in 
+the workspace. Select MgdCpp and click Finish.</li>
+<li class="verify">
+Verify that the project has been imported along with its contents and is open in the C/C++ Perspective.</li>
+<li class="verify">
+
+<font color="#0000FF"><b>Make sure that the Indexer is kicked off after the
+project is imported.</b></font>
+</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script> <a name="close"> Close a project </a></div>
+<ol class="list">
+<li>
+Ensure there is an executable in the binaries folder under the MgdCpp project.</li>
+<li>
+Right Click on MgdCpp in the C/C++ Perspective and select Close Project.</li>
+<li class="verify">
+Verify that the project is visible in the C/C++ Perspective but there are no 
+contents in it.</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script> <a name="open"> Open a project</a></div>
+<p>Note: Bring up the Progress view and make sure it is visible while importing 
+the projects. (<a href="RunDebug.htm#How to bring up the Progress view">how to bring up the Progress view</a>)</p>
+<ol class="list">
+<li>Right Click on MgdCpp in the C/C++ Perspective and select Open Project.</li>
+<li class="verify">
+Verify that the project is open in the C/C++ Perspective and you can see all the 
+contents in it, including the executable in the binaries folder.</li>
+<li class="verify">
+
+<font color="#0000FF"><b>Make sure that the Indexer is kicked off after the 
+project is opened.</b></font>
+</li>
+</ol>
+
+<p>
+<div class="subsection"><script>incT()</script><a name="newclass">Class Wizard</a></div>
+
+<ol class="list">
+<li>Delete BubbleSort from MgdCpp project created during Sanity Level 1. Make 
+sure MgdCpp has main.cpp in it. </li>
+<li>Right click on the project and select New -&gt; Class.</li>
+<li>
+Make sure the Class wizard is launched. Type Foo in the Name Field.
+</li>
+<li>
+Browse and choose a base class in the Base Class field. Make sure the Class 
+Browser launches and you are able to choose the base class.</li>
+<li>
+Hit the Finish button on the bottom of the Class Wizard.
+</li>
+<li class="verify">
+Verify that the Class Foo is added to the project. Verify that Foo.h and Foo.cpp 
+file are added to MgdCpp.
+</li>
+</ol>
+
+
+<p>
+<div class="subsection">
+  <script>incT()</script><a name="cbrowse">Class Browser Perspective</a></div>
+
+<ol class="list">
+<li>From the main menu, select Window-&gt;Open Perspective-&gt;C/C++ Browsing.</li>
+<li class="verify">
+Verify that the C/C++ browser launches correctly with four sections - Projects, 
+Namespaces, Types, Members, and Editor. Make sure that the C/C++ 
+Browser perspective lists all the projects in the Projects section.</li>
+</ol>
+<p><b><i>Test Case 1 global enumerator</i></b></p>
+
+<ol class="list">
+<li>In the C/C++ browser perspective, select Sort for Projects.</li>
+<li>Make sure you get a list of Namespaces as soon as you select the Sort 
+Project.</li>
+<li>Select 'global' for Namespaces.</li>
+<li>Make sure you get a list of Types when you select the Namespace 'global'.</li>
+<li>Select enumerator _fdlibm_version (windows) or <font face="arial" size="2">__codecvt_result
+  (linux) </font>in the Types section.</li>
+<li>Make sure you get a list of members in the Members list.</li>
+<li>Double click on _fdlibm_ieee (windows) or __codecvt_ok (linux)</li>
+<li class="verify">
+Verify that math.h (windows) or libio.h (linux) opens up in the Editor with variable
+_fdlibm_ieee or__codecvt_ok highlighted in 
+it.</li>
+</ol>
+<p><b><i>Test Case 2 global structure</i></b></p>
+
+<ol class="list">
+<li>Repeat steps 1-4 in TestCase 1.</li>
+<li>Select structure timespec in the Types section.</li>
+<li>Make sure you get a two members in the Members list. On linux, for these to
+  show up, set the C/C++ preferences: &quot;Follow #includes when producing the
+  outline view&quot;, then close and reopen the sort project to reinvoke the
+  indexer on the whole project.</li>
+<li>Double click on tv_sec.</li>
+<li class="verify">
+Verify that types.h (windows) time.h (linux) opens up in the Editor with variable tv_sec highlighted in 
+it.</li>
+</ol>
+<p><b><i>Test Case 3 global union</i></b></p>
+
+<ol class="list">
+<li>Repeat steps 1-4 in TestCase 1.</li>
+<li>Select union sigval (windows) wait (linux) in the Types section.</li>
+<li>Make sure you get a list of two members in the Members list. (currently
+  fails for linux because __USE_BSD is not defined.)</li>
+<li>Double click on sival_int.</li>
+<li class="verify">
+Verify that signal.h opens up in the Editor with variable sival_int highlighted in 
+it.</li>
+</ol>
+<p><b><i>Test Case 4 global typedef</i></b></p>
+
+<ol class="list">
+<li>Repeat steps 1-4 in TestCase 1.</li>
+<li>Select TypeDef FILE in the Types section.</li>
+<li>Double click on FiILE.</li>
+<li class="verify">
+Verify that stdio.h opens up in the Editor with typedef FILE highlighted in 
+it.</li>
+</ol>
+<p><b><i>Test Case 5 project's class</i></b></p>
+
+<ol class="list">
+<li>In the C/C++ browser perspective, select Sort for Projects.</li>
+<li>Make sure you get a list of Namespaces as soon as you select the Sort 
+Project.</li>
+<li>Select B5 for Namespaces.</li>
+<li>Make sure you get a list of Types when you select the Namespace B5.</li>
+<li>Select class SD_05 in the Types section.</li>
+<li>Make sure you get four members in the Members list.</li>
+<li>Double click on method f_SD_05.</li>
+<li class="verify">
+Verify that SD_05.h opens up in the Editor with method f_SD_05 highlighted in 
+it.</li>
+</ol>
+<p><b><i>Test Case 6 std class (known bugs: 85284, 85286)</i></b></p>
+
+<ol class="list">
+<li>In the C/C++ browser perspective, select Sort for Projects.</li>
+<li>Make sure you get a list of Namespaces as soon as you select the Sort 
+Project.</li>
+<li>Select 'std' for Namespaces.</li>
+<li>Make sure you get a list of Types when you select the Namespace 'std'.</li>
+<li>Select class exception in the Types section.</li>
+<li>Make sure you get three members in the Members list.</li>
+<li>Double click on ~exception.</li>
+<li class="verify">
+Verify that the exception file opens up in the Editor with ~exception 
+highlighted in it.</li>
+</ol>
+<p><b><i>Test Case 7 std structure</i></b></p>
+
+<ol class="list">
+<li>Repeat steps 1-4 in TestCase 6.</li>
+<li>Select structure char_traits in the Types section.</li>
+<li>Make sure you get a list of members in the Members list.</li>
+<li>Double click on member char_type.</li>
+<li class="verify">
+Verify that the char_traits.h file opens up in the Editor with char_type 
+highlighted in it.</li>
+</ol>
+<p><b><i>Test Case 8 std enumerator</i></b></p>
+
+<ol class="list">
+<li>Repeat steps 1-4 in TestCase 6.</li>
+<li>Select enumerator _Ios_Iostate in the Types section.</li>
+<li>Make sure you get a list of members in the Members list.</li>
+<li>Double click on attribute _M_ios_iostate_end.</li>
+<li class="verify">
+Verify that the ios_base.h opens up in the Editor with attribute _M_ios_iostate_end highlighted in it.</li>
+</ol>
+<p><b><i>Test Case 9 std typedef</i></b></p>
+
+<ol class="list">
+<li>Repeat steps 1-4 in TestCase 6.</li>
+<li>Double click on the TypeDef iostream in the Types section.</li>
+<li class="verify">
+Verify that the iosfwd opens up in the Editor with typedef iostream highlighted in it.</li>
+</ol>
+<div class="subsection">
+  <script>incT()</script><a name="contentassistStd">Content Assist for Standard Make Project</a></div>
+
+<ol class="list">
+<li>
+Create a new standard make C project, call it StdC.</li>
+<li>
+Add a new file to the project StdC, call it <font face="courier">makefile</font>.</li>
+<li>
+Open <font face="courier">makefile</font> and enter the following:
+
+<p>
+<table border="1">
+<tr>
+	<td bgcolor="#AAAAAA">
+		<code>
+		all: cubevolume.exe
+		<br><br>
+		clean:
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		rm -f main.o cubevolume.exe
+		<br><br>
+		cubevolume.exe: main.o
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		gcc -g -o cubevolume.exe main.o
+		<br><br>
+		main.o:
+		<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		gcc -c -g main.c
+		<br>
+		</code>
+	</td>
+</table>
+</li>
+
+
+<li>
+Add a new file to the project StdC, call it <font face="courier">main.c</font>.
+</li>
+<li>
+Right click on StdC and click Rebuild Project. There will be errors but this 
+step is necessary for content assist to work.</li>
+
+<li>
+Open <font face="courier">main.c</font> and manually insert the following code (using Content Assist where indicated):
+<p>
+<table border="1">
+<tr>
+	<td bgcolor="#AAAAAA">
+		<code>
+			#include &lt;stdio.h&gt;
+			<br>
+			#include &lt;stdlib.h&gt;
+			<br>
+			<br>
+			// struct Cube {
+			<br>
+			st[^SPC]
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;int nLength;
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;int nWidth;
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;int nHeight;	
+			<br>
+			};
+			<br>
+			<br>
+			int getVolume( struct Cube * pCube ) {
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;return pCube->nHeight * pCube->nLength * pCube->nWidth;
+			<br>
+			}
+			<br>
+			<br>
+			int 
+			<br>
+			main(int argc, char **argv) { 
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// printf("Calculate the volume of a cube\n"); 
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;pr[^SPC]
+			<br>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// struct Cube * pCube;
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;struct C[^SPC] * pCube;
+			<br>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// pCube = (struct Cube*)(malloc( sizeof(struct Cube) ));
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;pC[^SPC] = (struct Cube*)(malloc( siz[^SPC](struct Cube) ));
+			<br>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;printf("Length: ");
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// scanf("%d", &(pCube->nLength) );
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;s[^SPC]("%d", &(pCube->[^SPC]) );
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;printf("Width: ");
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;scanf("%d", &(pCube->nWidth));
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;printf("Height: ");
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;scanf("%d", &(pCube->nHeight));
+			<br>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// int nVolume = getVolume( pCube );
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;int nVolume = g[^SPC];
+			<br>
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// printf("\nThe volume of this cube is %d\n", nVolume);
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;printf("\nThe volume of this cube is %d\n", 
+        n[^SPC]);
+			<br>
+			}
+			<br>
+        </code>
+	</td>
+</tr>
+</table>
+
+</li>
+
+<li class="verify">
+Verify that each of the completions was successful.
+</li>
+</ol>
+<div class="subsection">
+  <script>incT()</script><a name="parsers">Binary and Error Parsers</a></div>
+<ol class="list">
+<li>
+Open the project properties for StdC.<li>
+Select C/C++ Make Project in the Properties dialog. 
+<li>
+Click on the Binary Parser tab.<li>
+Select the PE Windows Parser to debug and 
+build on Windows and Elf Parser on Linux if they are not selected by default.<li>
+Build project and verify a binary folder created<li>
+Go back to check off PE Windows Parser to debug and 
+build on Windows and Elf Parser on Linux&nbsp;<li>
+Verify the binary folder disappeared<li>
+Click on the Error Parser tab.<li>
+Select all the Error Parsers before building the project.<li>
+Make some errors in the source code and build the project<li>
+Verify those errors are reported in problems view<li>
+Deselect all the Error Parsers and rebuild the project<li>
+Verify those errors are not reported in problems view</ol>
+&nbsp;
+<p>
+<div class="subsection"><script>incT()</script>  <a name="mkEditor">Makefile Editor</a></div>
+<ol class="list">
+<li>Open the <font face="courier">makefile</font> in Shell project. </li>
+<li class="verify">
+Verify that the file is opened in the Editor and it has proper syntax 
+highlighting.</li>
+</ol>
+
+<p>
+<div class="subsection">
+  <script>incT()</script><a name="contentassistMgd">Content Assist for Managed Make Project</a></div>
+
+<ol>
+  <li>Create a new managed make C++ project, call it MgdCpp.</li>
+  <li>Add a new file to the project MgdCpp, call it
+
+</font>
+
+<font face="courier" size="2">
+
+  main.cpp</font><font face="arial" size="2">.</font><font face="arial" size="2"><li>
+<font face="Arial">Under Configuration settings -&gt; GCC C++ Compiler, select 
+Directories. Click on the icon that adds paths. Browse for BubbleSort Directory 
+in your workspace and include that path.</font><li>
+<font face="Arial">Under Configuration settings -&gt; GCC C++ Linker, select 
+Libraries. Click on the icon that adds Library paths. Type Sort and click ok.</font><li>
+<font face="Arial">Click on the icon that adds Library search path. Browse for 
+Debug folder under Sort project in your workspace. Select Debug folder and 
+finish. </font>
+
+</font>
+  <font face="arial" size="2">
+<li>
+Manually insert the following code (using Content Assist where indicated):
+</li>
+
+<p>
+<table border="1">
+<tr>
+	<td bgcolor="#AAAAAA">
+		<code>
+		#include &lt;iostream&gt;
+		<br>
+		#include "SD_01.h"
+		<br>
+		<br>
+		// using namespace std;
+		<br>
+		us[^SPC]
+		<br>
+		<br>
+		int
+		<br>
+		main(int argc, char **argv) {
+		<br>
+			&nbsp;&nbsp;&nbsp; cout &lt;&lt; "Starting test case!\n";
+		<br>
+		<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;B::SD_01* p;
+		<br>
+		<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;p = new B::SD_01();   &nbsp;&nbsp;&nbsp;&nbsp;// ** (A) **
+		<br>
+		<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// p->goBubbleSort();  
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;p->[^SPC]
+		<br>
+		<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;// for (int i = 0; i < 10; ++i) {
+			<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;fo[^SPC]     
+				<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Printing number " &lt;&lt; i &lt;&lt; "\n";
+				<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;}
+		<br>
+		<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Stopping test case!\n";  &nbsp;&nbsp;&nbsp;&nbsp;// ** (B) **
+		<br>
+		}
+		</code>
+	</td>
+</tr>
+</table>
+<p>
+
+<li class="verify">
+Verify that each of the completions was successful.
+</li>
+
+
+</ol>
+
+<p>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="opentype">Open Type</a></div>
+
+<ol class="list">
+<li>
+Import all the projects from <a href="4projects4sanity.zip">4Projects4sanity.zip</a> to 
+the workspace.(<a href="SanityLevel1.html#Import Existing C++ Project into Managed C++ Project">how 
+to import an existing zipped project</a>)</li>
+<li>
+Select Sort project and from the menu, select Navigate -&gt; Open Type.</li>
+<li>
+Select namespace from the Visible types section.</li>
+<li>
+Type letter B in the &quot;Choose a type&quot; field at the top of the Open Type dialog.&nbsp;
+</li>
+<li class="verify">
+Verify that a list of all the namespaces starting with B is displayed in the 
+Matching types and (global)-/MgdCpp, (global)-/Shell, (global)-/Sort is displayed in the Qualifier section.
+</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="refactor">Refactor->Rename</a></div>
+<p><b><i>Refactoring&nbsp; a Class</i></b></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project.&nbsp; Enable the auto-build 
+feature by selecting Project -&gt; Build Automatically.</li>
+<li>
+Open the <font face="courier">SD_01.h</font> file.</li>
+<li>
+>From the Outline view, right-click on the class SD_01 and select Refactor->Rename.
+</li>
+<li>
+Change the name from SD_01 to BubbleSort and click the OK button.
+</li>
+<li class="verify">
+Verify that a successful build is executed post refactor.</li>
+<li class="verify">
+>From the Outline view, right-click on the class SD_01 and select Refactor-&gt;Undo 
+Rename SD_01</li>
+</ol>
+<p><b><i>Refactoring&nbsp; a Method</i></b></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project. Enable the auto-build 
+feature by selecting Project -&gt; Build Automatically.
+</li>
+<li>
+Open the <font face="courier">SD_01.h</font> file.</li>
+<li>
+>From the Outline view, right-click on the method f_SD_01 and select Refactor->Rename.
+</li>
+<li>
+Change the name from f_SD_01 to bubbleMethod and click the OK button.
+</li>
+<li class="verify">
+Verify that a successful build is executed post refactor.</li>
+<li class="verify">
+>From the Outline view, right-click on the method f_SD_01 and select Refactor-&gt;Undo 
+Rename f_SD_01</li>
+</ol>
+<p><b><i>Refactoring&nbsp; an Attribute</i></b></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project. Enable the auto-build 
+feature by selecting Project -&gt; Build Automatically.
+</li>
+<li>
+Open the <font face="courier">SD_01.h</font> file.</li>
+<li>
+>From the Outline view, right-click on the attribute next::SD_02 and select Refactor->Rename.
+</li>
+<li>
+Change the name from next to BubbleNext and click the OK button.
+</li>
+<li class="verify">
+Verify that a successful build is executed post refactor.</li>
+<li class="verify">
+>From the Outline view, right-click on the attribute next::SD_02 and select Refactor-&gt;Undo 
+Rename next::SD_02</li>
+</ol>
+<p><b><i>Refactoring&nbsp; a Class</i></b></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project.&nbsp; <b>Disable</b> the auto-build 
+feature.</li>
+<li>
+Open the <font face="courier">SD_01.h</font> file.</li>
+<li>
+>From the Outline view, right-click on the class SD_01 and select Refactor->Rename.
+</li>
+<li>
+Change the name from SD_01 to BubbleSort and click the OK button.
+</li>
+<li class="verify">
+Right click on the Shell project and click Rebuild Project. Verify that a 
+successful build of Shell as well as Sort project is executed post refactor.</li>
+<li class="verify">
+>From the Outline view, right-click on the class SD_01 and select Refactor-&gt;Undo 
+Rename SD_01</li>
+</ol>
+
+
+<p>
+<div class="subsection">
+  <script>incT()</script><a name="csearch">C/C++ Search</a></div>
+
+<p><b><i>Search All Ocurrences</i></b></p>
+<ol class="list">
+<li>
+Select Sort project. Select Search -&gt; C/C++ Search from the toolbar.</li>
+<li>
+Enter f_SD_02 into the Search string field.
+</li>
+<li>
+Un-check the Any Element checkbox.
+</li>
+<li>
+Check the Method checkbox.
+</li>
+<li>
+Check the
+Limit to All Occurrences radiobutton. 
+</li>
+<li>
+Click on the Working Set scope. Click on the Choose button.
+</li>
+<li>
+Select Working Set dialog appears. Click on New.</li>
+<li>
+Enter SortWorkingSet in the Working Set Name field. Double click on C/C++. Select check box for 
+Sort. Click on Finish.</li>
+<li>Follow steps 1 to 5 from the above test case. </li>
+<li>
+Limit to All Occurrences.
+</li>
+<li>
+Click on Choose for the Working Set field and select SortWorkingSet.
+</li>
+<li>
+Execute the search.
+</li>
+<li class="verify">
+Verify that there are <u>54</u> search results.
+</li>
+</ol>
+
+<p><b><i>Search Declarations</i></b></p>
+<ol class="list">
+<li>Open the search dialog.&nbsp;</li>
+<li>From the Search string combo box, select the previous search item, f_SD_02
+  from the drop down list.</li>
+<li>Check the Limit to Declarations radiobutton.</li>
+<li>
+Execute the search.
+</li>
+<li class="verify">
+Verify that there are <u>18</u> search results.
+</li>
+</ol>
+<p><b><i>Search Definitions</i></b></p>
+<ol class="list">
+<li>Open the search dialog.&nbsp;</li>
+<li>From the Search string combo box, select the previous search item, f_SD_02
+  from the drop down list.</li>
+<li>
+Check the Limit to Definitions radiobutton.
+</li>
+<li>
+Execute the search.
+</li>
+<li class="verify">
+Verify that there are <u>18</u> search results.
+</li>
+</ol>
+<p><b><i>Search References</i></b></p>
+<ol class="list">
+<li>Open the search dialog.&nbsp;</li>
+<li>From the Search string combo box, select the previous search item, f_SD_02
+  from the drop down list.</li>
+<li>
+Check the Limit to References radiobutton.
+</li>
+<li>
+Execute the search.
+</li>
+<li class="verify">
+Verify that there are <u>18</u> search results.
+</li>
+</ol>
+
+
+<p>
+&nbsp;
+<div class="subsection">
+  <script>incT()</script><a name="contextsearch">Context Menu Search</a></div>
+
+<p><i><b>Searching through C/C++ projects Perspective</b></i></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project.
+</li>
+<li>
+>From the C/C++ Projects Perspective, expand SD_02.h, expand Namespace B, 
+right-click on the class SD_02 and select Search For 
+-&gt; All Declarations->Workspace.</li>
+<li class="verify">
+Verify that there is <u>1</u> search result.
+</li>
+</ol>
+<p><i><b>Searching through </b></i><b><i>Outline View</i></b></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project and open the <font face="courier">SD_02.h</font> file
+</li>
+<li>
+>From the Outline view, right-click on the method f_SD_02 and select Search For 
+-&gt; All References->Workspace.</li>
+<li class="verify">
+Verify that there is <u>1</u> search result.
+</li>
+<li>
+>From the Outline view, right-click on the method f_SD_02 and select Search For 
+-&gt; All References->Working Set.</li>
+<li>
+Select SortWorkingSet.
+</li>
+<li class="verify">
+Verify that there is <u>1</u> search result.
+</li>
+</ol>
+<p><i><b>Searching through the Editor</b></i></p>
+<ol class="list">
+<li>
+Expand the BubbleSort directory in the Sort project and open the <font face="courier">
+SD_02.cpp</font> file
+</li>
+<li>
+>From the Editor, right-click on the attribute 'next' and select Search For 
+-&gt; All Declarations->Working Set.</li>
+<li>
+Select SortWorkingSet.
+</li>
+<li class="verify">
+Verify that there is <u>1</u> search result.
+</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="hyper">Hyperlink Navigation</a></div>
+<ol class="list">
+<li>
+Select Windows -&gt; Preferences from the toolbar.</li>
+<li>
+Expand C/C++ in the Preferences dialog.</li>
+<li>
+Select Editor under C/C++. Select Navigation tab in the Editor menu.</li>
+<li>
+Select check box for Enable Hyperlink Navigation feature.</li>
+<li>
+Apply changes and exit the Preferences dialog.</li>
+<li>
+Open main.cpp in MgdCpp</li>
+<li>
+Point on keyword &quot;std&quot; in &quot;using namespace std&quot; and press 
+Ctrl. Keep holding Ctrl until the word under the mouse turns green. Then click 
+on the 'std'.</li>
+<li class="verify">
+Verify that clicking on 'std' while pressing Ctrl takes you to the code where std 
+namespace is defined.
+</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="langhighlight">C++ Language Highlighting</a></div>
+<ol class="list">
+<li>
+Open one of the code files (*.cpp, *.C, *.CC, *.c) in the workspace.
+</li>
+<li class="verify">
+Verify that all C++ language specific key words are highlighted.
+</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="save">Save the project</a></div>
+<ol class="list">
+<li>
+Open main.cpp in MgdCpp and insert a comment to the body of the main() routine.</li>
+<li>
+Save the file or you can save the project by selecting File -&gt; Save All.
+</li>
+<li>
+Execute a build by selecting MgdCpp -&gt; Rebuild Project.</li>
+<li class="verify">
+Verify that the build does not give any errors on the changes introduced.
+</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="indexer">Index the project</a></div>
+<p>Note: Bring up the Progress view and make sure it is visible while importing 
+the projects. (<a href="RunDebug.htm#How to bring up the Progress view">how to bring up the Progress view</a>)</p>
+<ol class="list">
+<li>
+Right click on the Sort project and select properties.</li>
+<li>
+Select C/C++ Indexer in the Properties dialog. Select check box for Enable C/C+ 
+Indexing feature.</li>
+<li>
+Close the Sort project and open it again.&nbsp;
+</li>
+<li class="verify">
+Verify that the Indexer is kicked off
+
+<font color="#0000FF"><b>after the project is opened.</b></font> Make sure that 
+the Indexer runs only once.</li>
+</ol>
+<p>
+<div class="subsection"><script>incT()</script>  <a name="indexErrors">Index Error Markers</a></div>
+<p>Note: Bring up the Progress view and make sure it is visible while importing 
+the projects. (<a href="RunDebug.htm#How to bring up the Progress view">how to bring up the Progress view</a>)</p>
+<ol class="list">
+<li>
+Right click on the StdC project and select properties.</li>
+<li>
+Select C/C++ Indexer in the Properties dialog. Select check boxes for all the 
+options under Enable C/C+ 
+Index Problem Reporting feature.</li>
+<li>
+Open main.c. Type #include &lt;index.h&gt; at the beginning of the file with all other 
+include statements. Make sure the file index.h does not exist in the workspace.</li>
+<li>
+Save the file.
+</li>
+<li class="verify">
+Verify that the Indexer is kicked off
+
+<font color="#0000FF"><b>after the file is saved and there is a yellow question 
+mark at the line #include &lt;index.h&gt;.</b></font> Make sure that pointing the 
+question mark with the mouse gives other details about the error.</li>
+</ol>
+
+<p>
+<div class="subsection">
+  <script>incT()</script><a name="debug">Debug Features</a></div>
+
+<ol class="list">
+<li>
+Right click on <font face="Arial">MgdCpp and select properties. Select C/C++ 
+Build.</font><li>
+<font face="Arial">Under Configuration settings -&gt; GCC C++ Compiler, select
+</font>Debugger. Change the Debug Level to 'Default -g'.
+</li>
+<li>
+<font face="Arial">Under Configuration settings -&gt; GCC C++ Compiler, select
+</font>Optimization. Change the Optimization Level to 'None'.
+</li>
+<li>
+Accept the changes and close the dialog.</li>
+</ol>
+<p><i><b>Breakpoint</b></i></p>
+<ol class="list">
+<li>
+Set a break-point on lines (A) and (B).
+</li>
+<li>
+Create a new Debug configuration.
+</li>
+<li>
+Under the 'Debugger' tab, check the 'Stop at main()' checkbox.</li>
+<li>
+Under the 'Source' tab, click on Add under Additional Source Locations. Browse 
+and select BubbleSort folder from the Sort project in your workspace and add it.
+</li>
+<li>
+Run the configuration. Switch to Debug perspective.</li>
+<li class="verify">
+Verify that the Breakpoint View lists all the breakpoints.</li>
+<li class="verify">
+Verify that the program pauses on the first non-declarative line of code.
+</li>
+<li>
+Run to the first break-point (F8 is the shortcut for this step).
+</li>
+<li>
+Step into the call to <font face="courier">p->goBubbleSort();</font> (F6 is to step over and F5 to step into a call)
+<li>
+>From the <font face="courier">goBubbleSort()</font> method, step into <font face="courier">f_SD_01();</font>
+</li>
+<li>
+Continue to step into the code for 10 levels.
+</li>
+<li>
+Resume execution. (F8 is the shortcut to resume)
+</li>
+<li class="verify">
+Verify that execution is now paused at the second break-point in <font face="courier">main()</font>.
+</li>
+<li>
+Run to completion.
+</li>
+<li class="verify">
+Verify that execution has ended.
+</li>
+</ol>
+<p>Note: For all these tests, you should be in the Debug perspective.</p>
+<p><b><i>Variables</i></b></p>
+<ol>
+  <li>From the toolbar select, Windows -&gt; Show View -&gt; Other -&gt; Debug -&gt; 
+  Variables. </li>
+  <li class="verify">
+Verify that the Variables View is launched and all the variables in main1.cpp, 
+that is, argc, argv, and p are displayed in it.</li>
+
+</ol>
+<p><b><i>Memory</i></b></p>
+<ol>
+  <li>From the toolbar select, Windows -&gt; Show View -&gt; Other -&gt; Debug -&gt; 
+  Memory.</li>
+  <li>Type an address in the Address field and click on Evaluate button. You can 
+  get the address of argv from the Variables view for testing.</li>
+  <li class="verify">
+Verify that the Memory View is launched and a stack of address and their 
+contents is displayed in it.</li>
+
+</ol>
+<p><b><i>Registers</i></b></p>
+<ol>
+  <li>From the toolbar select, Windows -&gt; Show View -&gt; Other -&gt; Debug -&gt; 
+  Registers.</li>
+  <li class="verify">
+Verify that the Registers View is launched with an Entry called Main.</li>
+  <li class="verify">
+Expand main. Verify that a list of registers with their values displayed under 
+Main.</li>
+
+</ol>
+<p><b><i>Shared Library</i></b></p>
+<ol>
+  <li>From the toolbar select, Windows -&gt; Show View -&gt; Other -&gt; Debug -&gt; 
+  Shared Library.</li>
+  <li class="verify">
+Verify that the Shared Library View is launched with a list of .dll library 
+files.</li>
+
+</ol>
+<p><b><i>Signals</i></b></p>
+<ol>
+<li>Create a managed C++ project with main.cpp containing the code, where 30 seconds is the amount of time you need to kill a process. If using RedHat linux you may not be able to call sleep, so use nested loops of 1000.</li>
+<p>
+<table border="1">
+<tr>
+	<td bgcolor="#AAAAAA">
+		
+		
+	
+<code>
+int main(int argc, char **argv) {<br>
+    &nbsp;&nbsp;cout << "Starting test case!\n";<br>
+    &nbsp;&nbsp;sleep(30);<br>
+    <br>
+    &nbsp;&nbsp;for (int i = 0; i < 10; ++i) {<br>
+    &nbsp;&nbsp;    cout << "Printing number " << i << "\n";<br>
+    &nbsp;&nbsp;}<br>
+<br>
+    &nbsp;&nbsp;cout << "Stopping test case!\n";    <br>
+}<br>
+</code>
+</td>
+</table>
+
+<li>Start a debug session which stops in main.</li> 
+<li>Open Signals view and verify SIGINT has Suspend=yes, Pass=no. </li>
+<li>Hit continue, so it couts then starts sleeping.</li>
+<li>While it's sleeping, send signal INT to program. On windows, use the task manager; on linux<br>
+	kill -s INT `ps -ef | grep gdb | head -n1 | awk '{print $2}'`</li>
+<li class="verify">Verify program suspends with the Debug view showing  Signal 'SIGINT' received. </li>
+<li>Run to end.</li>
+<li>Start another debug session stopping in main.</li>
+<li>Set SIGINT: Pass=No, Suspend=No.</li>
+<li>Continue.</li>
+<li>While sleeping send signal SIGINT.</li>
+<li class="verify">Verify the program ignores the signal and continues to end.</li>
+<li>Start another debug session stopping in main.</li>
+<li>Set SIGINT: Suspend=Yes.</li>
+<li>Continue.</li>
+<li>While sleeping send signal SIGINT.</li>
+<li>When the program is suspended, set SIGINT: Pass=yes.</li>
+<li>Continue.</li>
+<li class="verify">Verify program terminates without printing numbers.</p></li>
+<li>Start another debug session stopping in main. Continue.</li>
+<li>Right click SIGINT and select Resume with signal.</li>
+<li class="verify">Verify program terminates.</li>
+</ol>
+    
+
+
+
+<p><b><i>Disassembly</i></b></p>
+<ol>
+  <li>From the toolbar select, Windows -&gt; Show View -&gt; Other -&gt; Debug -&gt; 
+  Disassembly.</li>
+  <li class="verify">
+Verify that the Disassembly View is launched with some numbers in it.</li>
+  <li class="verify">
+Step into the code using the Instruction Stepping mode icon and verify that the 
+numbers in the Disassembly view keep moving accordingly.</li>
+
+</ol>
+<div class="subsection"><script>incT()</script><a name="scannerConfig">Scanner config</a></div>
+<p><i><b>Test 1</b></i></p>
+
+</font>
+<ol>
+  <li class="MsoNormal"><font face="Arial" size="2">Unzip <a href="http://pdg-ottawa/projects/tsp/CDT_Project/Supporting_Files/CDTQETracker/CDT2.0.1/Testcases/SC.zip" style="color: blue; text-decoration: underline; text-underline: single">
+  SC.zip</a> into a local directory.</font></li>
+  <li class="MsoNormal"><font face="Arial" size="2">Import the project using the
+    Import Existing Project into Workspace wizard. Make sure the project
+    properties/binary parser is set correctly (Windows PE parser for windows,
+    Elf parser for linux).</font></li>
+  <font face="arial" size="2">
+  <li class="MsoNormal"><font face="Arial" size="2">Build the project. It may not compile yet, but we need the build action so the scanner is invoked.</li>
+  <li>Open Properties &gt; C/C++ Project Paths &gt; Path Containers &gt; Discovered Paths. You 
+  should see the include paths and defined symbols that the scanner 
+  configuration feature discovered. The format of the paths will depend on the 
+  platform where you are running the test, but the list should contain a 
+  variation of : </font>
+  <ul style="margin-top: 0in; margin-bottom: 0in" type="disc">
+    <li class="MsoNormal"><code style="font-family: Arial">
+    <span style="font-size:10.0pt">/usr/include/c++/&lt;version&gt;</span></code><font face="Arial" size="2">
+    </font></li>
+    <li class="MsoNormal"><code style="font-family: Arial">
+    <span style="font-size:10.0pt">/usr/include/c++/&lt;version&gt;/&lt;platform&gt;</span></code><font face="Arial" size="2">
+    </font></li>
+    <li class="MsoNormal"><code style="font-family: Arial">
+    <span style="font-size:10.0pt">/usr/include/c++/&lt;version&gt;/backward</span></code><font face="Arial" size="2">
+    </font></li>
+    <li class="MsoNormal"><code style="font-family: Arial">
+    <span style="font-size:10.0pt">/lib/gcc-lib/&lt;platform&gt;/&lt;version&gt;/include</span></code><font face="Arial" size="2">
+    </font></li>
+    <li class="MsoNormal"><code style="font-family: Arial">
+    <span style="font-size:10.0pt">/usr/include</span></code><font face="Arial" size="2"><span class="NumberedChar">
+    </span></font></li>
+  </ul>
+  <font face="Arial" size="2"><span class="NumberedChar">where </span></font>
+  <code style="font-family: Arial"><span style="font-size:10.0pt">version</span></code><font face="Arial" size="2"><span class="NumberedChar"> 
+  is the compiler version and </span></font><code style="font-family: Arial">
+  <span style="font-size:10.0pt">platform</span></code><font face="Arial" size="2"><span class="NumberedChar"> 
+  identifies the processor and OS type (i.e. i686-pc-cygwin). The defined symbol 
+  list will contain different values depending on the OS the test is running on. 
+  Typically, you will see symbols for the version, minor, and patch level, along 
+  with symbols identifying the OS.</span></font></li>
+
+</font>
+  <font face="Arial" size="2">
+  <li>Now let’s add a new path and make sure it gets discovered. Create a file. 
+  Call it
+  <a href="http://pdg-ottawa/projects/tsp/CDT_Project/Supporting_Files/CDTQETracker/CDT2.0.1/Testcases/find_me.h" style="color: blue; text-decoration: underline; text-underline: single">
+  findme.h</a> and copy-paste the code by following the hyperlink. Copy this 
+  file to C:/include on your file system. Do not save this file in the 
+  workspace. Note that if you are testing on a POSIX system, change C:/include to a directory that you have write privileges 
+  in.</li>
+  
+  
+</font>
+  <li>
+  <span style="font-size: 12.0pt; font-family: Times New Roman">Modify the makefile 
+  in the test directory of the project so that INC_PATHS points to the correct location of findme.h.
+  <font face="arial" size="2">
+  </li>&nbsp;<table border="1">
+<tr>
+	<td bgcolor="#AAAAAA">
+		<code>
+		SRCS += test/Test.cpp
+		<br>
+		INC_PATHS := /directory/containing/findme.h/with/write/permissions
+		<br>
+		&nbsp;</code><p>
+		<code>test/%.o: test/%.cpp</code></p>
+        <p>
+		<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(CC) $(CCFLAGS) -I$(INC_PATHS) 
+        -o $@ $&lt;</code></p>
+		
+		</td>
+</tr>
+</table>
+  <li>Build the project.</li>
+  <li>Search for the declaration of FOUND_ME. To do that, open test/Test.cpp, click on the reference and hit F3. You should be taken to the header 
+  file where it is declared.</li>
+  <li>Open Properties &gt; C/C++ Include Paths &amp; Symbols. 
+    Expand the project and note that discovered path list should now contain the 
+    directory <code style="font-family: Courier New">
+    <span style="font-size:10.0pt">C:\include</span></code> (or your path with write permissions). The problem is that 
+    we do not want this path applied to whole project, just source files built 
+    in the <i>test</i> folder. Select Discovered Paths &gt; Edit … &gt; C:\include &gt; 
+    Disable &gt; Finish to make sure it does not keep being added back to the list.
+    </li>
+    <li>Now we are going to manually add it back so it only 
+    applies to the <i>test</i> folder and retest that search still works. Select 
+    Add Folder/File &gt; test to add the folder to the list control. Select test &gt; 
+    Add External Include Path… &gt; C:\include &gt; OK. </li>
+  <li>Rebuild the project. Search for the declaration of FOUND_ME and ensure that you are still 
+  getting the external header file as the result.</li>
+  </ol>
+
+
+<p>
+<div class="subsection">
+  <script>incT()</script><a name="gui">GUI Issues</a></div>
+
+<ol class="list">
+<li class="verify">
+Verify that there are no glaring GUI issues with the C/C++ and Debug perspectives as well as the preference dialogs (glaring GUI issue ==> missing strings, wrong/missing icons, refresh problems, etc.).
+</li>
+</ol>
+
+
+<p>
+<div class="subsection">
+  <script>incT()</script><a name="log">Log File, Silent Failures</a></div>
+
+<ol class="list">
+<li>
+Close Eclipse.
+</li>
+<li class="verify">
+Verify that <font face="courier">&lt;workspace&gt;/.metadata/.log</font> does not contain any errors.
+</li>
+</ol>
+
+</font>
