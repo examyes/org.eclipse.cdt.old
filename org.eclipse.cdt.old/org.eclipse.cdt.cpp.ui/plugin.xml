@@ -39,6 +39,13 @@
  	  	   label= "Start a C/C++ Application"
  	  	   public= "true"
  	  	   description= "C/C++ debug program launcher" />
+
+	<launcher  id="com.ibm.cpp.ui.launchers.CppRunLauncher"
+	   	   class="com.ibm.cpp.ui.internal.launchers.CppRunLauncher"
+	  	   modes="run"
+ 	  	   label= "Start a C/C++ Application"
+ 	  	   public= "true"
+ 	  	   description= "C/C++ run program launcher" />
 </extension>
 
 <extension
@@ -163,17 +170,6 @@
 
 
   <extension point = "org.eclipse.ui.popupMenus">
-	<viewerContribution
-	   id="editor actions"
-           targetID="#TextEditorContext">
-	   <action
-             id="Add Breakpoint"
-	      label="%Add_Breakpoint"
-	      icon="icons/project.gif"
-	      menubarPath="additions"
-	      class="com.ibm.cpp.ui.internal.editor.EditorActionDelegate">	
-	   </action>
-        </viewerContribution>
 
         <objectContribution
            id="com.ibm.cpp.ui.internal.menu"
