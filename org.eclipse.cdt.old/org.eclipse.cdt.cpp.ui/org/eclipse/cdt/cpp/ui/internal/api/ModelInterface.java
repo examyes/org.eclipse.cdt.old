@@ -1932,9 +1932,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     	{
     		parsedFile = element;
     	}
-    	else
+    	else if (element.getType().equals("file"))
     	{
 		 	parsedFile = findParseFile(element);
+    	}
+    	else if (element.isOfType("directory"))
+    	{
+    		for (int i = 0; i < element.getNestedSize(); i++)
+    		{
+    			DataElement file = element.get(i);
+    			if (!file.isReference())
+    			{
+    				removeParseInfo(file);
+    			}
+    		}
     	}
 		if (parsedFile != null)
 		{
