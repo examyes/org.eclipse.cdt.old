@@ -306,12 +306,20 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 	if (fileObject == null)
 	    {
 		fileObject = _element.getFileObject();
-		String fileName = fileObject.getAbsolutePath();
-
-		if (!_path.toString().equals(fileName))
+		if (fileObject != null)
 		    {
-			_path = new Path(fileName);	  
-		    }		
+			String fileName = fileObject.getAbsolutePath();
+			
+			if (!_path.toString().equals(fileName))
+			    {
+				_path = new Path(fileName);	  
+			    }		
+		    }
+		else
+		    {
+			System.out.println("FileResourceElement: " + _element.getSource() + " not found");
+			return result;
+		    }
 	    }
 
       if (fileObject != null && fileObject.exists())
