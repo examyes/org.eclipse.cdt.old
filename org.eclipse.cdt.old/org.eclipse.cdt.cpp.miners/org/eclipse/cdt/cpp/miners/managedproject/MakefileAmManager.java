@@ -117,9 +117,9 @@ public class MakefileAmManager {
 			{
 				case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
-					initTopLevelMakefileAm(project.getFileObject());
-					absPath = project.getFileObject().getAbsolutePath()+MAKEFILE_AM;
-					timeStamps.put(project.getFileObject().getAbsolutePath(),new Long(getMakefileAmStamp(project.getFileObject())));
+					initTopLevelMakefileAm((File)projectStucture[i][0]);
+					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
+					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				case (1):
 					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
@@ -140,7 +140,7 @@ public class MakefileAmManager {
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
 		{
-			File modMakefile_am = new File(project.getSource(),"mod_Makefile.am");// this is the tope level Makefile.am
+			File modMakefile_am = new File(parent.getAbsolutePath(),"mod_Makefile.am");// this is the tope level Makefile.am
 			String line;
 			boolean found = false;
 			try
@@ -386,6 +386,8 @@ public class MakefileAmManager {
 			File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
 			if(Makefile_am.exists())
 			{
+				//  need to figure out what kind of a target that I am dealing with
+				// then update
 				int classification = classifier.getClassification(Makefile_am);
 				switch (classification)
 				{
@@ -435,7 +437,7 @@ public class MakefileAmManager {
 			Runtime rt = Runtime.getRuntime();
 			// copy the old Makefile.am to Makefile.am.old
 			try{
-				Process p = rt.exec("cp Makefile.am Makefile.am.old",null, project.getFileObject());
+				Process p = rt.exec("cp Makefile.am Makefile.am.old",null, parent);
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -671,7 +673,7 @@ public class MakefileAmManager {
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+"/sub/static/Makefile.am "+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+"/sub/static/Makefile.am "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -682,26 +684,25 @@ public class MakefileAmManager {
 	protected void setMakefileAmToPrograms(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		File projectFile = project.getFileObject();
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		//check the project structure
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+"sub/Makefile.am "+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+"sub/Makefile.am "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -712,26 +713,25 @@ public class MakefileAmManager {
 	protected void setMakefileAmToTopLevel(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		File projectFile = project.getFileObject();
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		//check the project structure
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+MAKEFILE_AM+" "+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+MAKEFILE_AM+" "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
@@ -742,26 +742,25 @@ public class MakefileAmManager {
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		File projectFile = project.getFileObject();
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
-			// rename the existing Maekfile.am if exists
+			// rename the existing Makefile.am if exists
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		//check the project structure
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("cp "+TEMPLOCATION+"sub/shared/Makefile.am "+project.getSource());
+				p= rt.exec("cp "+TEMPLOCATION+"sub/shared/Makefile.am "+parent.getAbsolutePath());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	

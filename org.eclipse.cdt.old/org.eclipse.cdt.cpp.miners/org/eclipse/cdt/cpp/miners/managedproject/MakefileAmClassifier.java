@@ -45,10 +45,10 @@ public class MakefileAmClassifier {
 	public MakefileAmClassifier()
 	{
 		generateMakefileAmLayout();
-		print(toplevelAm);
-		print(programsAm);
-		print(staticlAm);
-		print(sharedlAm);
+		//print(toplevelAm);
+		//print(programsAm);
+		//print(staticlAm);
+		//print(sharedlAm);
 	}
 	protected void generateMakefileAmLayout()
 	{
@@ -210,6 +210,7 @@ public class MakefileAmClassifier {
 	}
 	public int getClassification(File MakefileAm)
 	{
+		System.out.println("\n Got it :"+MakefileAm.getAbsolutePath());
 		return -1;
 	}
 	private void print(Vector vec)
