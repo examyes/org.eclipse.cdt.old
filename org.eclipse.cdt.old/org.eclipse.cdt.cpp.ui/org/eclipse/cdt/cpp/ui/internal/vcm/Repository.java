@@ -57,7 +57,7 @@ import org.eclipse.ui.*;
 public class Repository extends Project 
     implements IProject, IWorkbenchAdapter, 
     IDataElementContainer, IDomainListener, 
-    IResource, IActionFilter
+    IResource, org.eclipse.ui.IActionFilter
 {
   private class PersistentProperty
   {
