@@ -651,6 +651,13 @@ public class FileSystemMiner extends Miner
     private DataElement handleSetDate(DataElement theFile, DataElement newDate, DataElement status)
     {
 	File file = new File(theFile.getSource());
+	try
+	{
+		file = file.getCanonicalFile();
+	}
+	catch (IOException e)
+	{
+	}
 	if (file.exists())
 	    {
 		if (newDate != null)
