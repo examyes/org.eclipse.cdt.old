@@ -25,11 +25,14 @@ public class ManagedProjectMiner extends Miner
 	
 	public void extendSchema(DataElement schemaRoot)
 	{
+		
+		DataElement contObjD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object");
+		
 		DataElement projectD = _dataStore.find(schemaRoot, DE.A_NAME, "Project");
 		DataElement fsObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects");
 
 		DataElement managedProjectD  = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.MANAGED_PROJECT);
-		//_dataStore.createReference(projectD, managedProjectD, "abstracts", "abstracted by");
+		_dataStore.createReference(contObjD, managedProjectD, "abstracts", "abstracted by");
 		DataElement cmdD = _dataStore.localDescriptorQuery(projectD, "C_COMMAND");
 		_dataStore.createReference(managedProjectD, cmdD);
 		
@@ -52,7 +55,7 @@ public class ManagedProjectMiner extends Miner
 		_dataStore.createReference(managedProjectsD, targetAttributeD);
 		_dataStore.createReference(managedProjectsD, targetOptionD);
   
-		_dataStore.createReference(workspaceD, managedProjectsD);
+		_dataStore.createReference(workspaceD, managedProjectsD); // disable this to hide the Mnged Projects View
 
 		//createCommandDescriptor(managedProjectD, "New Target", "C_ADD_TARGET");
 		createCommandDescriptor(targetD, "Build", "C_BUILD_TARGET",false);
