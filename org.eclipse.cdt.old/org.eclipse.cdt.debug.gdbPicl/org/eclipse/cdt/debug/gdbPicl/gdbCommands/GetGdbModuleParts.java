@@ -681,6 +681,13 @@ public class GetGdbModuleParts
 
      String keyword = "Current source file is ";
 
+	 if (lines.length <= 0)
+	 {
+         if (Gdb.traceLogger.ERR)
+             Gdb.traceLogger.err(2,"GetGdbModuleParts.checkCurrentPart was expecting str="+keyword+", received nothing" );
+         return null;
+	 }
+	 
      String str = lines[0];
      if(!str.startsWith(keyword))
      {
