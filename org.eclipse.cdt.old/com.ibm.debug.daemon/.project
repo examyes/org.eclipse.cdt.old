@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>com.ibm.debug.pdt</name>
+	<name>com.ibm.debug.daemon</name>
 	<comment></comment>
 	<projects>
-		<project>com.ibm.debug.common</project>
-		<project>com.ibm.lpex</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

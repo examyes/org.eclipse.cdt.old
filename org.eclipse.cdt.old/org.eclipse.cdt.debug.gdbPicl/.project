@@ -3,6 +3,7 @@
 	<name>org.eclipse.cdt.debug.gdbPicl</name>
 	<comment></comment>
 	<projects>
+		<project>com.ibm.debug.common</project>
 		<project>com.ibm.debug.pdt</project>
 	</projects>
 	<buildSpec>
