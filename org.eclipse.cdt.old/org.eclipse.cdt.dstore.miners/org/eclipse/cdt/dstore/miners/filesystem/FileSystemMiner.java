@@ -28,7 +28,7 @@ public class FileSystemMiner extends Miner
     private DataElement _containsDescriptor;
     private DataElement _dateDescriptor;
     private DataElement _permissionsDescriptor;
-    private DataElement _modifiedAtDescriptor;
+    private DataElement _sizeDescriptor;
     private DataElement _attributesDescriptor;
 
   public FileSystemMiner ()
@@ -187,18 +187,16 @@ public class FileSystemMiner extends Miner
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 	  _attributesDescriptor     = _dataStore.find(schemaRoot, DE.A_NAME, "attributes", 1);
 
-	  _modifiedAtDescriptor     = createRelationDescriptor(schemaRoot, "modified at");
-	  _modifiedAtDescriptor.setDepth(0);
-	  
 
+	  _sizeDescriptor           = createObjectDescriptor(schemaRoot, "size");
 	  _dateDescriptor           = createObjectDescriptor(schemaRoot, "date");
 	  _permissionsDescriptor    = createObjectDescriptor(schemaRoot, "permissions");
 
+	  _dataStore.createReference(_fileDescriptor, _sizeDescriptor, _attributesDescriptor);	  
 	  _dataStore.createReference(_fileDescriptor, _dateDescriptor, _attributesDescriptor);	  
 	  _dataStore.createReference(_fileDescriptor, _permissionsDescriptor, _attributesDescriptor);	  
 	  
 
-	  _dataStore.createReference(_fileDescriptor, _modifiedAtDescriptor);
 
 	  _hiddenFileDescriptor     = createObjectDescriptor(schemaRoot, "hidden file");
 	  _dataStore.createReference(_fileDescriptor, _hiddenFileDescriptor, "abstracts", "abstracted by"); 
@@ -576,6 +574,46 @@ public class FileSystemMiner extends Miner
 		return status;
 	}
 
+    private DataElement handleSize(DataElement theFile, DataElement status)
+    {
+	ArrayList attributes = theFile.getAssociated(_attributesDescriptor);
+	DataElement sizeObj = null;
+	if (attributes.size() != 0)
+	    {
+		for (int i = 0; i < attributes.size(); i++)
+		    {
+			DataElement att = (DataElement)attributes.get(i);
+			if (att.getType().equals("size"))
+			    {
+				sizeObj = att;					
+			    }
+		    }
+	    }
+	
+	File file = new File(theFile.getSource());
+	try 
+	{
+		file = file.getCanonicalFile();
+	}
+	catch(IOException e)
+	{
+	}
+	if (file.exists())
+	    {
+		if (sizeObj == null)
+		    {
+			sizeObj = _dataStore.createObject(status, _sizeDescriptor, "" + file.length());
+			_dataStore.createReference(theFile, sizeObj, _attributesDescriptor);
+		    }
+		else
+		    {
+			sizeObj.setAttribute(DE.A_NAME, "" + file.length());
+		    }
+ 
+	    }
+	return status;
+    }
+
     private DataElement handleDates(DataElement theDirectory, DataElement status)
     {
 	handleDate(theDirectory, status);
@@ -591,12 +629,18 @@ public class FileSystemMiner extends Miner
 
     private DataElement handleDate(DataElement theFile, DataElement status)
     {
-	//	ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
 	ArrayList dateInfo = theFile.getAssociated(_attributesDescriptor);
 	DataElement dateObj = null;
 	if (dateInfo.size() != 0)
 	    {
-		dateObj = (DataElement)dateInfo.get(0);		
+		for (int i = 0; i < dateInfo.size(); i++)
+		    {
+			DataElement att = (DataElement)dateInfo.get(i);
+			if (att.getType().equals("date"))
+			    {
+				dateObj = att;
+			    }
+		    }
 	    }
 	
 	File file = new File(theFile.getSource());
@@ -618,7 +662,6 @@ public class FileSystemMiner extends Miner
 		    {
 			dateObj = _dataStore.createObject(status, _dateDescriptor, "" + date);
 			dateObj.setAttribute(DE.A_VALUE, value);
-			//_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);
 			_dataStore.createReference(theFile, dateObj, _attributesDescriptor);
 		    }
 		else
@@ -633,7 +676,6 @@ public class FileSystemMiner extends Miner
 		if (dateObj == null)
 		    {
 			dateObj = _dataStore.createObject(status, _dateDescriptor, "-1");
-			//_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
 			_dataStore.createReference(theFile, dateObj, _attributesDescriptor);		
 		    }
 		else
@@ -800,11 +842,15 @@ public class FileSystemMiner extends Miner
 												   objName, filePath);
 						  if (!f.isDirectory())
 						      {
-							  handleDate(newObject, status);
-							  handlePermissions(newObject, status);
 							  newObject.setDepth(1);
 						      }		      
-					      }				  
+					      }
+					  if (newObject != null)
+					      {
+						  handleSize(newObject, status);
+						  handleDate(newObject, status);
+						  handlePermissions(newObject, status);
+					      }
 				      }
 			      }
 		      }	
@@ -894,14 +940,18 @@ public class FileSystemMiner extends Miner
 					changed = true;				     
 					if (!f.isDirectory())
 					    {						
-						handleDate(newObject, status);
-						handlePermissions(newObject, status);
 						newObject.setDepth(1);
 					    }
 				    }
 				else
 				    {
 					handleRefresh(newObject, status);
+				    }
+				if (newObject != null)
+				    {
+					handleSize(newObject, status);
+					handleDate(newObject, status);
+					handlePermissions(newObject, status);
 				    }
 			    }			
 		    }
