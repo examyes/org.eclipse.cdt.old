@@ -41,7 +41,7 @@ public class CppPerspective implements IPerspectiveFactory
 
     IFolderLayout bbottomRight = factory.createFolder("bbottomRight", IPageLayout.BOTTOM, (float)0.70,
 						      editorArea);
-    bbottomRight.addView("com.ibm.dstore.hosts.views.OutputViewPart");
+    bbottomRight.addView("com.ibm.cpp.ui.internal.views.CppOutputViewPart");
     bbottomRight.addView("com.ibm.cpp.ui.internal.views.SuperDetailsViewPart");
 
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
