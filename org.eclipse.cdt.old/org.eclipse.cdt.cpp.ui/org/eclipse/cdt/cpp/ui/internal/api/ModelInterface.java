@@ -170,12 +170,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    String statusValue = _status.getName();
 	    if (_timesHandled > _threshold)
 		{
-		    if (!_project.isOpen())
+		    if ((_project == null) ||  (!_project.isOpen()))
 			{
 			    statusValue = "done";
 			}
 		}
-
+	    
 	    if (statusValue.equals("done") || statusValue.equals("timeout"))
 		{
 		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
