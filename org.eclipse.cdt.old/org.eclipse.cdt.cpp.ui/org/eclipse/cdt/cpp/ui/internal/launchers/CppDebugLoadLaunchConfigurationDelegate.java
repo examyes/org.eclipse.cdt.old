@@ -41,7 +41,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
     public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) 
 	throws CoreException
     {
-	System.out.println("CppDebugLoadLaunchConfigurationDelegate:launch() ");
 	_plugin = CppPlugin.getDefault();
 	_api = ModelInterface.getInstance();
 
@@ -71,7 +70,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	String qualifiedFileName = "";
 	
 	qualifiedFileName = _executable.getSource();
-	System.out.println("CppDebugLoadLaunchConfigurationDelegate:launch() - qualifiedFileName = " + qualifiedFileName);
 	IFile file = (IFile)_api.findFile(qualifiedFileName);
    	if (file == null)
 	    {
@@ -129,7 +127,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 		if (projectElement != null)
 		    {
 			sourceLocator = new CppSourceLocator(projectElement);
-                    System.out.println("CppDebugLoadLaunchConfigurationDelegate:doLaunch() calling loadInfo.setWorkspaceSourceLocator() ");
 			loadInfo.setWorkspaceSourceLocator(sourceLocator);
 		    }
 		_dataElementDirectory = _executable.getParent();
