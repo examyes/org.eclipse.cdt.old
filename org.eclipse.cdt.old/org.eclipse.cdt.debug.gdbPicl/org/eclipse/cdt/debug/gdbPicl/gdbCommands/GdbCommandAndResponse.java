@@ -167,7 +167,18 @@ public class GdbCommandAndResponse
            }
            else if (lines[i].startsWith(FRAME_INVALID_keyword))
            {
-				if (lines[i+1].startsWith("Stopped due to shared library event"))
+           		// handle multi-threaded application for dll events
+           		int x;
+           	    if (lines[i+1].startsWith("[Switching to Thread"))
+           	    {
+           	    	x = i+2;
+           	    }
+           	    else
+           	    {
+           	    	x = i+1;
+           	    }           	    
+           	    
+				if (lines[x].startsWith("Stopped due to shared library event"))
            		{           			      			           			
 		           if (Gdb.traceLogger.DBG)
 		               Gdb.traceLogger.dbg(1, " ...... GdbDebugSession.getGdbResponseLines - Stopped by Shared Library Event" );               
@@ -175,7 +186,7 @@ public class GdbCommandAndResponse
 		   		    ((GdbDebugSession)_debugSession).updateSharedLibraries();
 		   		    _debugSession.enableDeferredBreakpoints();
 		   		    
-	   		    if(((GdbBreakpointManager)(_debugSession.getBreakpointManager())).getNumDeferredBkpt() == 0)
+		   		    if(((GdbBreakpointManager)(_debugSession.getBreakpointManager())).getNumDeferredBkpt() == 0)
 		   		    {
 		 	           if (Gdb.traceLogger.DBG)
 		    	            Gdb.traceLogger.dbg(1, " ...... GdbDebugSession.getGdbResponseLines - unset stop-on-solib-events" );               
@@ -189,8 +200,7 @@ public class GdbCommandAndResponse
        	            	lines = _gdbProcess.readAllLines();
        	            	length = lines.length;
        	            	continue;
-       	            }
-       	            
+       	            }       	            
            		}
            }
            else if( lines[i].startsWith(FRAME_BEGIN_keyword) || lines[i].startsWith(BP_HEADERS_keyword)
