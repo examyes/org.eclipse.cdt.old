@@ -20,7 +20,7 @@ import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.dstore.hosts.*;
 
 import java.util.*;
- 
+
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
 
@@ -47,25 +47,25 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       {
 	  _project = project;
       }
-      
+
       public void run()
       {
 	  DataStore dataStore = _plugin.getDataStore();
-	  
+	
 	  DataElement projectMinerProject = null;
 	  if (_project instanceof Repository)
 	      {
 		  dataStore = ((Repository)_project).getDataStore();
-		  
+		
 		  DataElement workspace = findWorkspaceElement(dataStore);
 		  if (workspace != null)
 		      {
-			  projectMinerProject = dataStore.createObject(workspace, "Project", 
+			  projectMinerProject = dataStore.createObject(workspace, "Project",
 								       _project.getName(),
 								       _project.getLocation().toString());
 			  dataStore.setObject(workspace, false);
 			  dataStore.setObject(projectMinerProject);
-		      }	  
+		      }	
 	      }
 	  else
 	      {
@@ -76,7 +76,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  return;
 		      }
 	      }
-	  
+	
 	  if (projectMinerProject != null)
 	      {
 		  DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
@@ -85,63 +85,63 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
 			  projectMinerProject.refresh(true);
 		      }
-		  
+		
 		  setParseIncludePath(_project);	
 		  setParseQuality(_project);	
 		  setEnvironment(_project);
-		  
+		
 		  if (_project instanceof Repository)
 		      {
 			  DataElement rworkspace = findWorkspaceElement(dataStore);
 			  projectMinerProject = dataStore.find(rworkspace, DE.A_NAME, _project.getName(), 1);
-			  
-			  DataElement localWorkspace = findWorkspaceElement();		    
+			
+			  DataElement localWorkspace = findWorkspaceElement();		
 			  if (localWorkspace != null && projectMinerProject != null)
 			      {
 				  DataStore localDataStore = _plugin.getDataStore();
-				  DataElement localRemoteProject = localDataStore.find(localWorkspace, 
-										       DE.A_SOURCE, 
-										       projectMinerProject.getSource(), 
+				  DataElement localRemoteProject = localDataStore.find(localWorkspace,
+										       DE.A_SOURCE,
+										       projectMinerProject.getSource(),
 										       1);
 				  if (localRemoteProject != null)
 				      {
 					  localDataStore.deleteObject(localWorkspace, localRemoteProject);
 				      }
-				  
-				  localDataStore.createReference(localWorkspace, projectMinerProject);		    
+				
+				  localDataStore.createReference(localWorkspace, projectMinerProject);		
 				  localDataStore.refresh(localWorkspace);
 			      }
 		      }
-		  
+		
 		  CppProjectNotifier notifier = getProjectNotifier();
 		  notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _project));
 	      }
-      } 
+      }
   }
-  
+
 
     public class MonitorStatusThread extends Handler
     {
-	private DataElement _status;  
+	private DataElement _status;
 	private IProject    _project;
 	
 	public MonitorStatusThread(DataElement status, IProject project)
 	{
 	    _status = status;
 	    _project = project;
-	    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
-								    CppProjectEvent.START, 
+	    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
+								    CppProjectEvent.START,
 								    _status,
 								    _project));
 	}
 	
 	public void handle()
-	{	  
+	{	
 	    String statusValue = _status.getName();
 	    if (statusValue.equals(_status.getDataStore().getLocalizedString("model.done")) ||
 		statusValue.equals(_status.getDataStore().getLocalizedString("model.timeout")))
 		{
-		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
+		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
 									    CppProjectEvent.DONE,
 									    _status,
 									    _project));
@@ -149,7 +149,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		}
 	    else
 		{
-		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND, 
+		    _projectNotifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.COMMAND,
 									    CppProjectEvent.WORKING,
 									    _status,
 									    _project));
@@ -268,7 +268,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    int loc = location.intValue();
 		
 		    file = findFile(fileName);
-		    
+		
 		    if (file == null)
 			{
 			    DataElement fileElement = output.getDataStore().createObject(null, "file", fileName, fileName);
@@ -312,7 +312,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   private ArrayList      _markedFiles;
     private ArrayList    _tempFiles;
-    
+
   private DataElement    _status;
 
   private ISearchResultView _searchResultsView;
@@ -339,7 +339,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     _projectNotifier = new CppProjectNotifier(this);
     _projectNotifier.enable(true);
-    
+
     _instance = this;
   }
 
@@ -350,25 +350,25 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
   public static CppProjectNotifier getProjectNotifier()
   {
-      return _projectNotifier; 
-  }  
+      return _projectNotifier;
+  }
 
   public void loadSchema()
       {
 	  if (_plugin == null)
 	      _plugin = CppPlugin.getDefault();
 
-	  DataStore dataStore = _plugin.getDataStore(); 
+	  DataStore dataStore = _plugin.getDataStore();
 	  DataElement schemaRoot    = dataStore.getDescriptorRoot();
 	  dataStore.showTicket(dataStore.getTicket().getName());
 	  dataStore.getSchema();
 	  dataStore.initMiners();
-	  
+	
 	  // extend schema from UI side
 	  extendSchema(dataStore.getDescriptorRoot());
-	  
+	
 	  _markersDescriptor = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "markers", 1);
-	  
+	
 	  dataStore.getDomainNotifier().addDomainListener(this);
 
       }
@@ -397,7 +397,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       {	
 	  IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
 	  IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
-	  
+	
 	  if (win != null)
 	      {	
 		  _dummyShell = win.getShell();
@@ -413,10 +413,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  return null;
 		      }
 	      }
-	  
+	
 	  _plugin.getDataStore().getDomainNotifier().setShell(_dummyShell);
       }
-    
+
     _plugin.getDataStore().getDomainNotifier().enable(true);
     return _dummyShell;
   }
@@ -447,7 +447,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    }
 	    }
     }
-    
+
     public void debug(String pathStr, String port, String key)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
@@ -496,7 +496,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				jrePath = jrePath.substring(0, indexOfPlugins);
 			    }
 			jrePath = jrePath + "jre/bin/";
-			DataElement javaPath = dataStore.createObject(null, "directory", jrePath); 
+			DataElement javaPath = dataStore.createObject(null, "directory", jrePath);
 			dataStore.setObject(javaPath);
 			args.add(javaPath);
 		    }
@@ -505,9 +505,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		monitorStatus(_status);
 		showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
 	    }
-    }  
-    
-    
+    }
+
+
     public DataElement command(IResource resource, String invocation, boolean showProgress)
       {
 	if (resource instanceof ResourceElement)
@@ -592,12 +592,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement workspace = findWorkspaceElement(dataStore);
 	if (workspace != null)
 	    {
-		dataStore.createObject(workspace, "Closed Project", 
+		dataStore.createObject(workspace, "Closed Project",
 				       project.getName(),
 				       project.getLocation().toString());
 	    }
     }
- 
+
     public void openProjects()
     {
 	// open all local projects
@@ -620,7 +620,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public void openProject(IProject project, Shell shell)
     {
     	if (project.isOpen())
-	    {	     
+	    {	
 		if (_plugin.isCppProject(project))
 		    {
 			if (project instanceof Repository)
@@ -642,10 +642,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				dataStore.deleteObject(closedProjectElement.getParent(), closedProjectElement);
 			    }
 		    }
-	    }   
+	    }
     }
 
- 
+
     private class CloseEditorAction implements Runnable
     {
 	private IEditorPart    _editor;
@@ -678,7 +678,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		        for (int c = 0; c < editors.length; c++)
 			    {
 				IEditorPart editor = editors[c];
-				if (editor.getEditorInput() instanceof IFileEditorInput) 
+				if (editor.getEditorInput() instanceof IFileEditorInput)
 				    {
 					IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
 					if (input != null)
@@ -727,14 +727,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
     }
 
-    
+
     private void closeEditors(IProject project)
     {
 	IWorkbench desktop = CppPlugin.getDefault().getWorkbench();
 
 	IWorkbenchWindow[] windows = desktop.getWorkbenchWindows();
 	for (int a = 0; a < windows.length; a++)
-	    {	      
+	    {	
 		IWorkbenchWindow window = windows[a];
 		IWorkbenchPage[] pages = window.getPages();
 		for (int b = 0; b < pages.length; b++)
@@ -744,7 +744,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		        for (int c = 0; c < editors.length; c++)
 			    {
 				IEditorPart editor = editors[c];
-				if (editor.getEditorInput() instanceof IFileEditorInput) 
+				if (editor.getEditorInput() instanceof IFileEditorInput)
 				  {
 				    IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
 				    if (input != null)
@@ -753,11 +753,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					
 					if (file.getProject().getLocation() == project.getLocation())
 					    {
-						Display d= getDummyShell().getDisplay(); 
+						Display d= getDummyShell().getDisplay();
 						d.asyncExec(new CloseEditorAction(page, editor));
 					    }
 				      }
-				  } 
+				  }
 			    }
 		    }	
 	    }
@@ -804,7 +804,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
       // close editors
       closeEditors(project);
-      
+
       // remote temp information
       for (int i = 0; i < _tempFiles.size(); i++)
 	  {
@@ -820,18 +820,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     DataStore dataStore = _plugin.getDataStore();	
     if (project instanceof Repository)
 	{
-	    dataStore = ((Repository)project).getDataStore();		    
+	    dataStore = ((Repository)project).getDataStore();		
 	}
-  
+
     // close project
-    DataElement workspace = findWorkspaceElement(dataStore);	    
+    DataElement workspace = findWorkspaceElement(dataStore);	
     DataElement cprojectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
 
 
     if (cprojectObj != null)
 	{
 	    DataElement closeD = dataStore.localDescriptorQuery(cprojectObj.getDescriptor(), "C_CLOSE_PROJECT");
-	    
+	
 	    if (closeD != null)
 		{
 		    dataStore.synchronizedCommand(closeD, cprojectObj);
@@ -886,7 +886,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    DataStore dataStore = _plugin.getDataStore();	
    if (project instanceof Repository)
     dataStore = ((Repository)project).getDataStore();	
-      
+
 
    DataElement envElement = dataStore.createObject(null, "Environment Variable", project.getName());
    ArrayList envVars = _plugin.readProperty(project, "Environment");
@@ -895,7 +895,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
    setEnvironment(findProjectElement(project), envElement);
   }
- 
+
  public void setEnvironment(DataElement theObject, DataElement theEnvironment)
  {
   if ((theObject == null) || (theEnvironment == null))
@@ -905,11 +905,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   DataElement contObj = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Container Object", 1);
   DataElement setD = dataStore.localDescriptorQuery(contObj, "C_SET_ENVIRONMENT_VARIABLES");
   if (setD != null)
-  {  
+  {
    dataStore.command(setD, theEnvironment, theObject, true);
   }
  }
- 
+
  public void setParseIncludePath(IProject project)
  {
   DataStore dataStore = _plugin.getDataStore();	
@@ -923,7 +923,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  ArrayList includePaths = _plugin.readProperty(project, "Include Path");
 	  for (int i = 0; i < includePaths.size(); i++)
 	      dataStore.createObject(includeElement, "directory", (String)includePaths.get(i), (String)includePaths.get(i));
-	  
+	
 	  DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_INCLUDE_PATH");
 	  if (setD != null)
 	      {
@@ -947,7 +947,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	   // parse quality
 	   DataElement qualityElement = dataStore.createObject(null, "quality", "2");
 	   ArrayList quality = _plugin.readProperty(project, "ParseQuality");
-	   
+	
 	   if (!quality.isEmpty())
 	       {
 		   String qualityStr = (String)quality.get(0);
@@ -957,21 +957,21 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	   // parse behaviour
 	   DataElement autoParseElement = dataStore.createObject(null, "autoparse", "No");
 	   ArrayList autoParse = _plugin.readProperty(project, "AutoParse");
-	   	       
+	   	
 	   if (!autoParse.isEmpty())
 	       {
 		   String autoParseStr = (String)autoParse.get(0);
 		   autoParseElement.setAttribute(DE.A_NAME, autoParseStr);
-	       }	   
+	       }	
 
 	   DataElement autoPersistElement = dataStore.createObject(null, "autopersist", "No");
 	   ArrayList autoPersist = _plugin.readProperty(project, "AutoPersist");
-	   	       
+	   	
 	   if (!autoPersist.isEmpty())
 	       {
 		   String autoPersistStr = (String)autoPersist.get(0);
 		   autoPersistElement.setAttribute(DE.A_NAME, autoPersistStr);
-	       }	   
+	       }	
 
 	   DataElement setD = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SET_PREFERENCES");
 	   if (setD != null)
@@ -1003,7 +1003,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
 		if (workspaceObj == null)
 		    {
-			System.out.println("couldn't find workspace"); 
+			System.out.println("couldn't find workspace");
 		    }
 	    }
 
@@ -1013,7 +1013,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	}
 	
 	return workspaceObj;
-    }  
+    }
 
     public IResource findResource(DataElement resourceElement)
     {
@@ -1032,7 +1032,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		return getResource(source);
 	    }	
     }
-    
+
   public IProject findProjectResource(DataElement projectElement)
     {
 	// first search local projects
@@ -1046,7 +1046,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    {
 				if (projectElement.getName().equals(project.getName()))
 				    {
-					return project;  
+					return project;
 				    }
 			    }
 		    }
@@ -1062,12 +1062,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			for (int j = 0; j < rprojects.length; j++)
 			    {	
 				IProject project = rprojects[j];
-				if (compareFileNames(project.getLocation().toString(), 
+				if (compareFileNames(project.getLocation().toString(),
 						     projectElement.getSource()))
 				    {
 					if (projectElement.getName().equals(project.getName()))
 					    {
-						return project;  
+						return project;
 					    }
 				    }
 			    }
@@ -1103,7 +1103,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
 	
 	return result;
-    }  
+    }
 
     public DataElement findResourceElement(DataStore dataStore, String path)
     {
@@ -1126,7 +1126,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 	    	if (!root.isExpanded())
 	    	{
-	    		root.expandChildren();	
+	    		root.expandChildren(true);	
 	    	}
 	    	
 	    	ArrayList children = root.getAssociated("contents");
@@ -1136,7 +1136,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			DataElement child = (DataElement)children.get(i);
 			if (child != null && !child.isDeleted())
 			    {
-				if (child.getType().equals("file")  || 
+				if (child.getType().equals("file")  ||
 				    child.getType().equals("directory") ||
 				    child.getType().equals("Project")
 				    )
@@ -1153,7 +1153,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	return found;
     }
-    
+
   public DataElement findProjectElement(IProject project)
     {
 	return findProjectElement(project, "Project");
@@ -1163,7 +1163,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
       if (project == null)
 	  return null;
-      
+
       DataStore dataStore = _plugin.getDataStore();	
       if (project instanceof Repository)
 	  dataStore = ((Repository)project).getDataStore();	
@@ -1173,7 +1173,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  {
 	      return null;
 	  }
-      
+
       DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
       if (projectObj == null)
 	  {
@@ -1183,7 +1183,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  {
 		      dataStore.setObject(workspace);
 		  }
-	  } 
+	  }
 
       return projectObj;
   }
@@ -1203,7 +1203,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
     parse(resource, isSynchronized, false);
   }
- 
+
     public void parse(IResource resource, boolean isSynchronized, boolean showView)
     {
 	DataElement pathElement = getPathElement(resource);
@@ -1216,36 +1216,36 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
        {
 	   DataStore   dataStore    = pathElement.getDataStore();
 	   DataElement projectRoot  = getProjectFor(pathElement);
-	   
+	
 	   if (projectRoot != null)
 	       {
 		   DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
 		   DataElement projectsRoot = findWorkspaceElement(dataStore);		
-		   
+		
 		   if ((commandDescriptor == null) || (projectRoot == null))
 		       return;
-	   
+	
 		   ArrayList args = new ArrayList();	
 		   args.add(projectRoot);
 		   dataStore.getDomainNotifier().addDomainListener(this);
-		   
+		
 		   DataElement status = null;
 		   status = dataStore.command(commandDescriptor, args, pathElement, false);		
-		   
+		
 		   monitorStatus(status);
 		   _status = status;
 	       }
        }
     }	
 
-  public synchronized void search(String pattern, ArrayList types, ArrayList relations, 
+  public synchronized void search(String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
   {
     DataElement subject = findWorkspaceElement(_plugin.getCurrentDataStore());
     search(subject, pattern, types, relations, ignoreCase, regex);
   }
 
-  public synchronized void search(Object input, String pattern, ArrayList types, ArrayList relations, 
+  public synchronized void search(Object input, String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
   {
     if (input instanceof DataElement)
@@ -1258,7 +1258,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       }
   }
 
-  public synchronized void search(DataElement subject, String pattern, ArrayList types, ArrayList relations, 
+  public synchronized void search(DataElement subject, String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
   {
       DataStore dataStore = subject.getDataStore();
@@ -1299,7 +1299,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       if (dataStore == _plugin.getDataStore())
 	  {
 	      _searchResultsView = SearchUI.getSearchResultView();
-	      
+	
 	      StringBuffer patternStr = new StringBuffer("Pattern: " + pattern + " Types: ");
 	      for (int i = 0; i < types.size(); i++)
 		  {
@@ -1316,7 +1316,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					       new ShowMarkerAction(),
 					       new GroupByKeyComputer(),
 					       null);		
-	      
+	
 	      Display d = getDummyShell().getDisplay();
 	      d.syncExec(new Runnable()
 		  {
@@ -1332,7 +1332,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		      }
 		  });
 	  }
-      
+
       DataElement status = dataStore.command(searchDescriptor, args, subject, true);
       _status = status;
       monitorStatus(_status);
@@ -1368,7 +1368,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     IResource file = null;
 
     if (fileName != null)
-      {		  
+      {		
 	  IWorkspace ws = _plugin.getPluginWorkspace();
 	  IWorkspaceRoot root = ws.getRoot();
 
@@ -1377,8 +1377,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	  // search remote files
 	  if (file == null)
-	      {		  
-		  RemoteProjectAdapter rmt = RemoteProjectAdapter.getInstance();		  
+	      {		
+		  RemoteProjectAdapter rmt = RemoteProjectAdapter.getInstance();		
 		  if (rmt != null)
 		      file = findFile(rmt, fileName);
 	      }
@@ -1389,7 +1389,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  for (int i = 0; i < _tempFiles.size(); i++)
 		      {
 			  FileResourceElement tempFile = (FileResourceElement)_tempFiles.get(i);
-			  String tempFileName = tempFile.getLocalLocation().toString(); 
+			  String tempFileName = tempFile.getLocalLocation().toString();
 			  if (compareFileNames(tempFileName, fileName))
 			      {
 				  return tempFile;
@@ -1481,11 +1481,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
 
 
-	    
+	
     public DataElement getProjectFor(DataElement resource)
-    {  
+    {
 	DataElement parent = resource;
-	while (parent != null && 
+	while (parent != null &&
 	       !parent.getType().equals("Project") &&
 	       !parent.getType().equals("Closed Project"))
 	    {
@@ -1530,7 +1530,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	return findFile(fileName);
     }
-    
+
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
@@ -1542,12 +1542,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	else
 	    {		
 		/*
-		if (parent != null) 
+		if (parent != null)
 		    {		
 			IResource resource = null;
 			String type = parent.getType();
 			
-			if (type.equals("Project")) 
+			if (type.equals("Project"))
 			    {
 				resource = findProjectResource(parent);
 			    }
@@ -1571,18 +1571,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		*/
 		return false;
 	    }
-    }   
+    }
 
   public synchronized void domainChanged(DomainEvent ev)
-  { 
+  {
       DataElement object = (DataElement)ev.getParent();
       if ((object != null) && (object.getType().equals("status")))
       {	
 	  monitorStatus(object);
-	  
+	
 	  DataElement commandInstance = object.getParent();
 	  String commandName = (String)commandInstance.getElementProperty(DE.P_NAME);
-	  String state = (String)object.getElementProperty(DE.P_NAME);	    
+	  String state = (String)object.getElementProperty(DE.P_NAME);	
 	  if (state.equals("done"))
 	      {               		
 		  IResource  file        = null;
@@ -1593,7 +1593,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  if (children != null)
 		      {
 			  int size = ev.getChildrenCount();
-			  
+			
 			  synchronized(children)
 			      {
 				  if (commandName.equals("C_SEARCH") || commandName.equals("C_SEARCH_REGEX"))
@@ -1608,7 +1608,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						      }
 					      }
 				      }
-				  
+				
 				  else
 				      {
 					  for (int i = 0; i < size; i++)
@@ -1626,18 +1626,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 								      priority = IMarker.SEVERITY_WARNING;
 								  else
 								      priority = IMarker.SEVERITY_INFO;	
-								  
+								
 								  fileName  = (String)(output.getElementProperty(DE.P_SOURCE_NAME));
 								  Integer location = (Integer)(output.getElementProperty(DE.P_SOURCE_LOCATION));
 								  int loc = location.intValue();
-								  
+								
 								  if (!fileName.equals(oldFileName))
 								      {			    	
 									  oldFileName = new String(fileName);
-									  
+									
 									  file = findFile(fileName);
 								      }
-								  
+								
 								  if ( file != null)
 								      {
 									  try
@@ -1645,7 +1645,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 										  IMarker errorMarker = file.createMarker(IMarker.PROBLEM);
 										  errorMarker.setAttribute(IMarker.MESSAGE,
 													   (String)output.getElementProperty(DE.P_VALUE));
-										  
+										
 										  errorMarker.setAttribute(IMarker.SEVERITY, priority);
 										  errorMarker.setAttribute(IMarker.LINE_NUMBER, loc);
 									      }
@@ -1655,7 +1655,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 								      }		
 							      }
 						      }
-						  
+						
 					      }	
 				      }
 			      }
@@ -1667,17 +1667,17 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     private void resourceChanged(IResource resource)
     {
-	if (resource != null) 
+	if (resource != null)
 	    {
 		DataElement resourceElement = findResourceElement(resource);
 		if (resourceElement.getType().equals("file"))
 			resourceElement = resourceElement.getParent();
 		
-		if (resourceElement != null) 
+		if (resourceElement != null)
 		    {
 			DataStore dataStore = resourceElement.getDataStore();
 			
-			DataElement refreshD = dataStore.localDescriptorQuery(resourceElement.getDescriptor(), 
+			DataElement refreshD = dataStore.localDescriptorQuery(resourceElement.getDescriptor(),
 									      "C_REFRESH");
 			if (refreshD != null)
 			    {
@@ -1697,7 +1697,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	if (resource != null)
 	    {
-		switch (kind)		    
+		switch (kind)		
 		    {
 		    case IResourceDelta.CHANGED:			
 			if ((flags & IResourceDelta.CONTENT) != 0)
@@ -1747,7 +1747,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		traverseDelta(aff[i]);
 	    }
     }
-    
+
     public void resourceChanged(IResourceChangeEvent event)
     {
 	int type = event.getType();
@@ -1789,15 +1789,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    DataElement cProject = findProjectElement((IProject)resource);
 			    if (cProject != null)
 				{
-				    DataElement commandDescriptor = dataStore.localDescriptorQuery(cProject.getDescriptor(), 
+				    DataElement commandDescriptor = dataStore.localDescriptorQuery(cProject.getDescriptor(),
 												   "C_DELETE_PROJECT");
 				    if (commandDescriptor != null)
 					{		
 					    dataStore.command(commandDescriptor, cProject);	
 					}				
-				}    
+				}
 			}
-		    
+		
 		    resourceChanged(resource);
 		}
 		break;
@@ -1822,7 +1822,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement function  = dataStore.find(schemaRoot, DE.A_NAME, "function", 1);
 	DataElement classD    = dataStore.find(schemaRoot, DE.A_NAME, "class", 1);
 	DataElement targetD = dataStore.find(schemaRoot,DE.A_NAME, "Project Target",1);
- 
+
 
 	
 
@@ -1854,7 +1854,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						   "Clean Project",
 						   "com.ibm.cpp.ui.internal.actions.BuildAction");
 	clean.setAttribute(DE.A_VALUE, "CLEAN");
-       
+
 	
 	DataElement openFile = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Open File",
@@ -1865,55 +1865,55 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 
 	// connection actions
-	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						     dataStore.getLocalizedString("model.Connect_to"), 
+	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
+						     dataStore.getLocalizedString("model.Connect_to"),
 						     "com.ibm.dstore.ui.connections.ConnectAction");
         connect.setAttribute(DE.A_VALUE, "C_CONNECT");
 
 	
-	DataElement disconnect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							dataStore.getLocalizedString("model.Disconnect_from"), 
-							"com.ibm.dstore.ui.connections.DisconnectAction");	 
+	DataElement disconnect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
+							dataStore.getLocalizedString("model.Disconnect_from"),
+							"com.ibm.dstore.ui.connections.DisconnectAction");	
         disconnect.setAttribute(DE.A_VALUE, "C_DISCONNECT");
 	
-	DataElement editConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						  "Edit Connection", 
-						  "com.ibm.dstore.ui.connections.EditConnectionAction");	 
+	DataElement editConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
+						  "Edit Connection",
+						  "com.ibm.dstore.ui.connections.EditConnectionAction");	
         editConnection.setAttribute(DE.A_VALUE, "C_EDIT");
 
-	DataElement removeConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						    dataStore.getLocalizedString("model.Delete_Connection"), 
-						    "com.ibm.dstore.ui.connections.DeleteAction");	 
+	DataElement removeConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR,
+						    dataStore.getLocalizedString("model.Delete_Connection"),
+						    "com.ibm.dstore.ui.connections.DeleteAction");	
         removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");
 
-        
-              
+
+
         DataElement parseMenuD = dataStore.createObject(fileD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Parse", "");
 	
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse", 
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Begin Parse",
 			       "com.ibm.cpp.ui.internal.actions.ProjectParseAction");
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Save Parse Information", 
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Save Parse Information",
 			       "com.ibm.cpp.ui.internal.actions.ProjectSaveParseAction");
-        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information", 
+        dataStore.createObject(parseMenuD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove Parse Information",
 			       "com.ibm.cpp.ui.internal.actions.ProjectRemoveParseAction");
-        
-         
-       
+
+
+
 	// replicated project actions
-	DataElement replicate = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, 
+	DataElement replicate = dataStore.createObject(fsD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR,
 							   "Replicate");
 
-	DataElement replicateFrom = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR, 
+	DataElement replicateFrom = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR,
 							   "from...",
 							   "com.ibm.cpp.ui.internal.actions.ReplicateFromAction");
 	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_FROM");
 
-	DataElement replicateTo = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR, 
+	DataElement replicateTo = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR,
 							   "to...",
 							   "com.ibm.cpp.ui.internal.actions.ReplicateToAction");
 	replicateFrom.setAttribute(DE.A_VALUE, "C_REPLICATE_TO");
 
-	DataElement synchronizeWith = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR, 
+	DataElement synchronizeWith = dataStore.createObject(replicate, DE.T_UI_COMMAND_DESCRIPTOR,
 							     "with...",
 							     "com.ibm.cpp.ui.internal.actions.SynchronizeWithAction");
 	synchronizeWith.setAttribute(DE.A_VALUE, "C_SYNCHRONIZE_WITH");
@@ -1932,19 +1932,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	/*
 	// cvs actions
-	DataElement cvsD = dataStore.find(fsD, DE.A_NAME, "CVS", 1); 
-	DataElement cvsUpdate     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							   "update", 
+	DataElement cvsD = dataStore.find(fsD, DE.A_NAME, "CVS", 1);
+	DataElement cvsUpdate     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR,
+							   "update",
 							   "com.ibm.cpp.ui.internal.actions.CVSAction");
 	cvsUpdate.setAttribute(DE.A_VALUE, "CVS_UPDATE");
 
-	DataElement cvsCheckout     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							     "checkout", 
+	DataElement cvsCheckout     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR,
+							     "checkout",
 							     "com.ibm.cpp.ui.internal.actions.CVSAction");
 	cvsCheckout.setAttribute(DE.A_VALUE, "CVS_CHECKOUT");	
 
-	DataElement cvsCommit     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							     "commit", 
+	DataElement cvsCommit     = dataStore.createObject(cvsD, DE.T_UI_COMMAND_DESCRIPTOR,
+							     "commit",
 							     "com.ibm.cpp.ui.internal.actions.CVSAction");
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
 	*/
@@ -2014,28 +2014,28 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement configureCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Configure Cmds");
 
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-								 "Create configure", 
+								 "Create configure",
 								 "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
 
 	DataElement configureCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Run configure", 
+							  "Run configure",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	configureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
 	
 	dataStore.createReference(configureCmds, autoconfCmds, "abstracts", "abstracted by");
 
 	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
-						  
+						
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Initialize/Create/Run", 
+							  "Initialize/Create/Run",
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
 	mngCmd.setAttribute(DE.A_VALUE,"MANAGE_PROJECT");
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 	DataElement defCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Default Cmds");
-						  
+						
 	DataElement distCleanCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Distclean", 
+							  "Distclean",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");		
 	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
@@ -2047,24 +2047,24 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement libCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
 	
 	DataElement toStatLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to StaticLib Makefile.am", 
+							  "Add/Change to StaticLib Makefile.am",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toStatLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
 	
 	DataElement toSharedLibCmd = dataStore.createObject(libCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to SharedLib Makefile.am", 
+							  "Add/Change to SharedLib Makefile.am",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toSharedLibCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
 
 	dataStore.createReference(libCmds, makefileCmds, "abstracts", "abstracted by");
 	
 	DataElement toTopLevelCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to TopLevel Makefile.am", 
+							  "Add/Change to TopLevel Makefile.am",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
 	
 	DataElement toProgCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add/Change to Programs Makefile.am", 
+							  "Add/Change to Programs Makefile.am",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toProgCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
 	
@@ -2072,9 +2072,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement confInCmds = dataStore.createObject(makefileCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "ConfigureIn Cmds");
 
 	DataElement confInCmd = dataStore.createObject(confInCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Add configure.in file", 
+							  "Add configure.in file",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");	
-	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						  
+	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						
 	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
 	
 	
@@ -2085,19 +2085,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement libTargetCmds = dataStore.createObject(makefileTargetCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
 	
 	DataElement toStatLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "StaticLib", 
+							  "StaticLib",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_STATIC_LIB");
 	
 	DataElement toSharedLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "SharedLib", 
+							  "SharedLib",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SWITCH_TO_SHARED_LIB");
 
 	dataStore.createReference(libTargetCmds, makefileTargetCmds, "abstracts", "abstracted by");
 
 	DataElement toProgTargetCmd = dataStore.createObject(makefileTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "bin Programs", 
+							  "bin Programs",
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toProgTargetCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
 	//***********************************
@@ -2108,7 +2108,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
     }
-        
+
 }
 
 
