@@ -43,12 +43,13 @@ import org.eclipse.jface.dialogs.*;
 
 public class ConfigureAction extends CustomAction implements SelectionListener
 { 
-	//private MessageDialog dialog = new MessageDialog(null,null,null,null,0,null,0);
 	CustomMessageDialog dialog;
 	String[] extraLabels;
-	boolean enableUpdateConfigureInDialog = true;
-	boolean enableUpdateAllDialg = true;
-	boolean enableUpdateMakefileAmDialog = true;
+	
+	String updateAllDialogKey = "Show_Update_All_Dialog";
+	String updateMakefileAmKey = "Show_Update_MakefileAm_Dialog";
+	String updateConfigureInKey = "Show_Update_ConfigureIn_Dialog";
+	
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -98,25 +99,9 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
-			/////////////////////
-						
-			ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show_Update_All_Dialog");
-			if (!list.isEmpty())
-			{
-				String preference = (String)list.get(0);
-				if (preference.equals("Yes"))
-					enableUpdateAllDialg = true;
-				else
-					enableUpdateAllDialg =false;
-			}
-			//////////////////////
-			
-			
 			
 			if(doesAutoconfSupportExist())
 			{
-				if(enableUpdateAllDialg)
-				{
 					String message = new String
 						("Attempting to update existing and/or generating configure.in and makefile.am's "
 							+"\nOld files will be renamed *.old");
@@ -124,7 +109,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					String[] extraLabel = new String[]{"Do not show this Dialog again"};
 					dialog = new CustomMessageDialog(
 										shell,
-										"Updating configure.in and Makefile.am's ",
+										"Updating configure.in and Makefile.am ",
 										null,
 										message,
 										2,
@@ -132,33 +117,17 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										0,
 										extraLabel,
 										this);
-					execute = dialog.open()==0;
-				}
-				else
-				{
-					enableUpdateAllDialg = true;
-				}
+					int result = dialog.open(updateAllDialogKey);
+					if(result!=-1)
+						execute = result ==0;
+					else
+						execute = true;
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
 		{
 			if(doesFileExist("Makefile.am"))
 			{
-				/////////////////////
-						
-				ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show_Update_MakefileAm_Dialog");
-				if (!list.isEmpty())
-				{
-					String preference = (String)list.get(0);
-					if (preference.equals("Yes"))
-						enableUpdateMakefileAmDialog = true;
-					else
-						enableUpdateMakefileAmDialog =false;
-				}
-				//////////////////////
-			
-				if(enableUpdateMakefileAmDialog)
-				{
 					String message = new String
 							("Attempting to update existing makefile.am's"+
 							"\nIf updated then old Makefile.am's will be renamed *.old");
@@ -166,7 +135,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					String[] extraLabel = new String[]{"Do not show this Dialog again"};
 					dialog = new CustomMessageDialog(
 										shell,
-										"Updating Makefile.am's ",
+										"Updating Makefile.am ",
 										null,
 										message,
 										2,
@@ -174,32 +143,17 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										0,
 										extraLabel,
 										this);
-					execute = dialog.open()==0;
-				}
-				else
-				{
-					enableUpdateMakefileAmDialog = true;
-				}
+					int result = dialog.open(updateMakefileAmKey);
+					if(result!=-1)
+						execute = result ==0;
+					else
+						execute = true;
 			}
 		}	
 		if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 		{
 			if(doesFileExist("configure.in"))
 			{
-				/////////////////////
-						
-				ArrayList list = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show_Update_ConfigureIn_Dialog");
-				if (!list.isEmpty())
-				{
-					String preference = (String)list.get(0);
-					if (preference.equals("Yes"))
-						enableUpdateConfigureInDialog = true;
-					else
-						enableUpdateConfigureInDialog =false;
-				}
-				//////////////////////
-				if(enableUpdateConfigureInDialog)
-				{
 					String message = new String
 						("Attempting to update existing configure.in "+
 						"\nIf updated then old configure.in shall be renamed *.old");
@@ -215,13 +169,11 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 										0,
 										extraLabel,
 										this);
-					execute = dialog.open()==0;
-				}
-				else
-				{
-					execute = true;
-				}
-			
+					int result = dialog.open(updateConfigureInKey);
+					if(result!=-1)
+						execute = result ==0;
+					else
+						execute = true;
 			}
 		}	
 		
@@ -321,11 +273,11 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				list.add("Yes");
 			}
 			if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show_Update_All_Dialog",list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(updateAllDialogKey,list);
 			if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show_Update_ConfigureIn_Dialog",list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(updateConfigureInKey,list);
 			if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show_Update_MakefileAm_Dialog",list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(updateMakefileAmKey,list);
 
 		}
     }
