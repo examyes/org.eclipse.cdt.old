@@ -53,8 +53,8 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     //private Button _updateConfigureInButton;
     private Button _debuggableButton;
     private Button _optimizedButton;
-    private Button _cButton;
-    private Button _cppButton;
+  //  private Button _cButton;
+ //   private Button _cppButton;
     private Combo _compilerList;
     private Group _execGroup;
   //  private Group _advancedGroup;
@@ -91,13 +91,23 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		Composite execComp = new Composite(_execGroup,SWT.NONE);
 		
 		GridLayout execCompLayout = new GridLayout();
-	   	execCompLayout.numColumns = 2;
+	   	execCompLayout.numColumns = 1;
 		execComp.setLayout(execCompLayout);
 		execComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
-		// compiler group
+		// options contents
+		_debuggableButton = new Button(execComp, SWT.RADIO);
+		_debuggableButton.setText("Debug");	   	
+
+		_optimizedButton = new Button(execComp, SWT.RADIO);
+		_optimizedButton.setText("Optimized");
+		
+
+
+
+/*		// compiler group
 		Group compilerGroup = new Group(execComp,SWT.NONE);
-		compilerGroup.setText("1- Compiler Selection:");
+		compilerGroup.setText("Compiler Selection:");
 		GridLayout compilerGroupLayout = new GridLayout();
 	   	compilerGroupLayout.numColumns = 1;
 		compilerGroup.setLayout(compilerGroupLayout);
@@ -119,15 +129,11 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		_cButton.setText("C");	   	
 
 
-/*		Label compilerLabel = new Label(compilerComp,SWT.NONE);
-		compilerLabel.setText("1- Set the compiler to:");
-		_compilerList = new Combo(compilerComp, SWT.DROP_DOWN);
-		_compilerList.setItems(new String[]{"C","C++"});
-		_compilerList.select(1);*/
+*/
 		
-		// compiler options group
+/*		// compiler options group
 		Group compilerOptionGroup = new Group(execComp,SWT.NONE);
-		compilerOptionGroup.setText("2- Options Selection:");
+		compilerOptionGroup.setText("Options Selection:");
 		GridLayout optionGroupLayout = new GridLayout();
 	   	optionGroupLayout.numColumns = 1;
 		compilerOptionGroup.setLayout(optionGroupLayout);
@@ -148,7 +154,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		_optimizedButton = new Button(compilerOptionComp, SWT.RADIO);
 		_optimizedButton.setText("Optimized");
 		
-
+*/
 		
 /*	   	// group #2 - advanced autoconf files group
 	   	
@@ -221,7 +227,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		return _optimizedButton.getSelection();
     }
 
-    public boolean getCButtonSelection()
+ /*   public boolean getCButtonSelection()
     {
 		return _cButton.getSelection();
     }
@@ -229,7 +235,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     {
 		return _cppButton.getSelection();
     }
-
+*/
     
 /*    public boolean getShowCreateDialogSelection()
     {
@@ -266,7 +272,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     {
 		_optimizedButton.setSelection(flag);
     }
-   	public void setCButtonSelection(boolean flag)
+ /*  	public void setCButtonSelection(boolean flag)
     {
 		 _cButton.setSelection(flag);
     }
@@ -274,6 +280,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     {
 		 _cppButton.setSelection(flag);
     }
+    */
  /*   public void setShowCreateDialogSelection(boolean flag)
     {
 		_showCreateDialogtButton.setSelection(flag);

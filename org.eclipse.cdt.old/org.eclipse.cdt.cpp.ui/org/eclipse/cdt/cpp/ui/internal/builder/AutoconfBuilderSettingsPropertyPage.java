@@ -95,29 +95,6 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 			}
 		}
 
-		ArrayList compiler = plugin.readProperty(project,compKey);
-		if (compiler.isEmpty())
-		{
-			compiler.add("Cpp");
-			_autoconfBuildControl.setCppButtonSelection(true);
-			_autoconfBuildControl.setCButtonSelection(false);
-			plugin.writeProperty(project,compKey,compiler);	
-		}
-		else
-		{
-			String type = (String)compiler.get(0);
-			if (type.equals("Cpp"))
-			{
-				_autoconfBuildControl.setCppButtonSelection(true);
-				_autoconfBuildControl.setCButtonSelection(false);
-				
-			}
-			else
-			{
-				_autoconfBuildControl.setCButtonSelection(true);
-				_autoconfBuildControl.setCppButtonSelection(false);
-			}
-		}		
 	}
 	protected void performDefaults()
 	{
