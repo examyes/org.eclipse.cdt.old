@@ -1320,8 +1320,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public synchronized void search(String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
   {
-    DataElement subject = findWorkspaceElement(_plugin.getCurrentDataStore());
-    search(subject, pattern, types, relations, ignoreCase, regex);
+      IProject project = _plugin.getCurrentProject();
+      DataElement subject = findProjectElement(project);
+
+      //DataElement subject = findWorkspaceElement(_plugin.getCurrentDataStore());
+      search(subject, pattern, types, relations, ignoreCase, regex);
   }
 
   public synchronized void search(Object input, String pattern, ArrayList types, ArrayList relations,
@@ -1417,9 +1420,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       DataElement status = dataStore.command(searchDescriptor, args, subject, true);
       _status = status;
       monitorStatus(_status);
-
+      
       // needed because eclipse doesn't support remote files
-      if (dataStore != _plugin.getCurrentDataStore())
+      if (dataStore != _plugin.getDataStore())
 	  {
 	      showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
 	  }
