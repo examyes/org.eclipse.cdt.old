@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
 import org.eclipse.jface.dialogs.*;
+import org.eclipse.jface.operation.*;
 
 import org.eclipse.core.resources.*;
 import java.io.*;
@@ -306,9 +307,22 @@ public class IndexPathControl extends Composite implements Listener
 	ArrayList pathList = readPathsToIndex();
 	//FIXME:add check that pathList is valid list of directories/files 
 	if(pathList==null || pathList.size()==0)return false;
-	SearchHtml indexBox = new SearchHtml();
-	success = indexBox.createIndex(indexPathName,pathList);
+	//SearchHtml indexBox = new SearchHtml();
+	//success = indexBox.createIndex(indexPathName,pathList);
 	
+	IRunnableWithProgress searchWithProgress = new SearchHtmlWithProgress(indexPathName,pathList);
+	ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(HelpPlugin.getDefault().getView().getSite().getShell());
+	progressDialog.setCancelable(false);	
+	try 
+	    {		
+		progressDialog.run(true,false,searchWithProgress);
+	    }
+	catch(Exception e)
+	    {
+		e.printStackTrace();
+	    }
+	success=true;////
+
 	if(success)
 	    {   
 		//indicate an index has been created

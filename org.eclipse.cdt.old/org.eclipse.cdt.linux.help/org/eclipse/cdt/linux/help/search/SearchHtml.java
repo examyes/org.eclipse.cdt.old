@@ -11,6 +11,10 @@ import com.ibm.linux.help.*;
 import java.io.*;
 import java.util.*;
 
+/////////
+import org.eclipse.core.runtime.*;
+import org.eclipse.jface.operation.*;
+
 import com.ibm.linux.help.util.lucene.index.IndexWriter;
 import com.ibm.linux.help.util.lucene.analysis.*;
 import com.ibm.linux.help.util.lucene.document.*;
@@ -28,8 +32,10 @@ public class SearchHtml
 
     private IndexWriter writer; 
 
-    public boolean createIndex(String indexDestination,ArrayList paths)
+    public boolean createIndex(String indexDestination,ArrayList paths, IProgressMonitor monitor)
     {	
+	monitor.beginTask("Creating Index...",IProgressMonitor.UNKNOWN);
+
 	boolean success = true;
 	//always recreate an index
 	try
@@ -39,7 +45,7 @@ public class SearchHtml
 		for(int i=0;i<paths.size();i++)
 		    {
 			File file = new File((String)paths.get(i));
-			if(!processFile(file))
+			if(!processFile(file,monitor))
 			    success = false;
 		    }	
 
@@ -50,11 +56,12 @@ public class SearchHtml
 		e.printStackTrace();
 		return false;
 	    }
+	monitor.done();
 	return success;
     }
     
 
-    private boolean processFile(File file)
+    private boolean processFile(File file, IProgressMonitor monitor)
     {
 	boolean success = true;
 	if(!file.exists())
@@ -64,7 +71,7 @@ public class SearchHtml
 		File[] fileList=file.listFiles();
 		for(int i=0;i<fileList.length;i++)
 		    {
-			if(!processFile(fileList[i]))
+			if(!processFile(fileList[i],monitor))
 			    success = false;
 		    }
 	    }
@@ -75,23 +82,27 @@ public class SearchHtml
 		if(!(filename.endsWith(".html")||
 		     filename.endsWith(".htm")))
 		    return true;
-		if(!addFileToDocument(file))
+		if(!addFileToDocument(file,monitor))
 		    success = false;
 	    }
 	return success;
     }
 
-    private boolean addFileToDocument(File theFile)
+    private boolean addFileToDocument(File theFile,IProgressMonitor monitor)
     {
+	monitor.worked(1);	
+	monitor.subTask("Processing: "+theFile.getName());	
+
 	boolean success = true;
 	try{
 
-	    //    HTMLParser parser = new HTMLParser(theFile);
+	    //HTMLParser parser = new HTMLParser(theFile);///
 	    Document document = new Document();
-	    document.add(Field.UnIndexed(FIELD_PATH,theFile.getCanonicalPath()));	    
-	    //document.add(Field.Text(FIELD_CONTENT,parser.getReader()));
-	    //document.add(Field.UnIndexed(FIELD_TITLE,parser.getTitle()));
-	    document.add(Field.Text(FIELD_CONTENT,(Reader)new InputStreamReader(new FileInputStream(theFile))));
+	    document.add(Field.UnIndexed(FIELD_PATH,theFile.getCanonicalPath()));	    	    
+	    //document.add(Field.UnIndexed(FIELD_TITLE,parser.getTitle()));///
+	    //document.add(Field.Text(FIELD_CONTENT,parser.getReader()));//FIXME:Exceptions with QT docs!
+	    document.add(Field.Text(FIELD_CONTENT,
+				    (Reader)new InputStreamReader(new FileInputStream(theFile))));
 
 	    writer.addDocument(document);
 	}catch(Exception e)
@@ -121,7 +132,7 @@ public class SearchHtml
 		     results.add(new ItemElement(null,hits.doc(i).get(FIELD_PATH),
 						"",null,null,
 						ItemElement.HTML_TYPE));
-
+		    
 		}
 	}catch(Exception e)
 	    {
