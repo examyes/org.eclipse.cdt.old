@@ -91,6 +91,7 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  
 	  // Create the arguments group
 	  Composite argumentGroup = new Composite(c, SWT.NONE);
+	  argumentGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	  
 	  layout = new GridLayout();
 	  layout.numColumns = 2;
@@ -101,7 +102,6 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  _argumentField.addListener(SWT.Modify, this);
 	  
 	  GridData data = new GridData(GridData.FILL_HORIZONTAL);
-	  data.widthHint = 220;
 	  _argumentField.setLayoutData(data);
 	  
 	  // Create the description text
@@ -109,9 +109,10 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  description.setText("Note: The executable will be added to the Trace Files view.\n" +
 	  		"You can select the appropriate actions from that view to do the run and analysis.");
 	  
-	  data = new GridData(GridData.GRAB_VERTICAL |GridData.FILL_BOTH);
+	  data = new GridData(GridData.FILL_BOTH);
 	  data.horizontalIndent = 8;
-	  data.widthHint  = 160;
+	  data.widthHint  = 340;
+	  data.heightHint = 45;
 	  description.setLayoutData(data);
 	  
       getShell().setText(_title);

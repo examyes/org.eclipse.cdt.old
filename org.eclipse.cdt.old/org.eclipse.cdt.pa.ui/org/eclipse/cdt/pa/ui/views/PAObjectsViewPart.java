@@ -8,23 +8,16 @@ package org.eclipse.cdt.pa.ui.views;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
-import org.eclipse.cdt.dstore.ui.views.*;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.views.*;
 
 import org.eclipse.cdt.pa.ui.PAPlugin;
 import org.eclipse.cdt.pa.ui.api.*; 
-
 import org.eclipse.swt.widgets.*;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.resource.*;
-import org.eclipse.ui.*;
 
 
 public class PAObjectsViewPart extends ObjectsViewPart implements IPATraceListener
 {
-
     protected PAModelInterface 	_api;
     protected PAPlugin      	_plugin;
     
@@ -32,8 +25,7 @@ public class PAObjectsViewPart extends ObjectsViewPart implements IPATraceListen
     public PAObjectsViewPart()
     {
 	  super();
-	  _plugin = PAPlugin.getDefault();
-	  _api = PAModelInterface.getInstance();
+	  _plugin = PAPlugin.getDefault();	  _api = PAModelInterface.getInstance();
     }
     
     protected String getF1HelpId()
@@ -59,19 +51,16 @@ public class PAObjectsViewPart extends ObjectsViewPart implements IPATraceListen
       DataElement dummy = _api.getDummyElement();
       if (dummy != null)
 	   _viewer.setInput(dummy);
-	  else
-	   super.initInput(dataStore);
+	  else	   super.initInput(dataStore);
     } 
 
     public void setFocus() {
-    
     }
 
     public void dispose()
     {	
 	  PATraceNotifier notifier = _api.getTraceNotifier();
-	  notifier.removeTraceListener(this);
-	  
+	  notifier.removeTraceListener(this);	
       super.dispose();
     }
     
@@ -85,26 +74,20 @@ public class PAObjectsViewPart extends ObjectsViewPart implements IPATraceListen
 		{
 		  updateSelectionStatus(event);
 		}
-		break;
-		
+		break;		
 	    case CppProjectEvent.VIEW_CHANGE:
-		{
-		  updateViewBackground();		
+		{		  updateViewBackground();		
 		  updateViewForeground();		
 		  updateViewFont();
 		}
-		break;
-		
-		
+		break;			
 	    default:
-		break;
+		 break;
 	  }
     }
     
     
     public void traceChanged(PATraceEvent event)
-    {
-      
-    }
-    
+    {      
+    }    
 }

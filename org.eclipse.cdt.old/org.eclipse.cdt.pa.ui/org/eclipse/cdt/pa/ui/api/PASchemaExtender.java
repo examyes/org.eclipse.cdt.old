@@ -35,13 +35,15 @@ public class PASchemaExtender implements ISchemaExtender
     {	
 	// System.out.println("extend schema");
 	DataStore   dataStore 	= schemaRoot.getDataStore();
-	DataElement fileD         = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
+	
+	// DataElement fileD         = dataStore.find(schemaRoot, DE.A_NAME, "file",1);
+	// dataStore.createObject(fileD,         DE.T_UI_COMMAND_DESCRIPTOR, "Add trace file", "org.eclipse.cdt.pa.ui.actions.AddTraceFileAction");    
+	
 	DataElement executableD	= dataStore.find(schemaRoot, DE.A_NAME, "binary executable",1);
 	DataElement traceFileD    = dataStore.find(schemaRoot, DE.A_NAME, "trace file", 1);
 	DataElement traceProgramD = dataStore.find(schemaRoot, DE.A_NAME, "trace program", 1);
 	
-	dataStore.createObject(fileD,         DE.T_UI_COMMAND_DESCRIPTOR, "Add trace file", "org.eclipse.cdt.pa.ui.actions.AddTraceFileAction");    
-	dataStore.createObject(executableD,   DE.T_UI_COMMAND_DESCRIPTOR, "Add trace program", "org.eclipse.cdt.pa.ui.actions.AddTraceProgramAction");      
+	dataStore.createObject(executableD,   DE.T_UI_COMMAND_DESCRIPTOR, "Analyze...", "org.eclipse.cdt.pa.ui.actions.AddTraceProgramAction");      
 	dataStore.createObject(traceFileD,    DE.T_UI_COMMAND_DESCRIPTOR, "Remove", "org.eclipse.cdt.pa.ui.actions.RemoveTraceTargetAction");
 	dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Remove", "org.eclipse.cdt.pa.ui.actions.RemoveTraceTargetAction");
 	dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Run", "org.eclipse.cdt.pa.ui.actions.RunTraceProgramAction");
