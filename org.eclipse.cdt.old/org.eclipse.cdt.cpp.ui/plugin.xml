@@ -42,7 +42,7 @@
 <!-- C++ Project Nature -->
 <extension
       id="cppnature"
-      name="C/C++ Project Nature"
+      name="%CppProjectNature"
       point="org.eclipse.core.resources.natures">
    <runtime>
       <run
@@ -51,8 +51,7 @@
    </runtime>
 </extension>
 
-<!-- C++ launch configurations   -->
-	
+<!-- C++ launch configurations   -->	
 	<extension point = "org.eclipse.debug.core.launchConfigurationTypes">
    		<launchConfigurationType
    	   		id="org.eclipse.cdt.run.launchconfig"
@@ -524,7 +523,7 @@
    </page>
    <page
          objectClass="org.eclipse.core.resources.IProject"
-         name="Paths"
+         name="%Paths"
          class="org.eclipse.cdt.cpp.ui.internal.builder.PathsPropertyPage"
          id="org.eclipse.cdt.cpp.ui.internal.builder.PathsPropertyPage">
       <filter
@@ -609,7 +608,7 @@
          id="org.eclipse.cdt.cpp.ui.internal.preferences.DefaultBuildPreferencePage">
    </page>
    <page
-         name="Default Paths"
+         name="%Default_Paths"
          category="org.eclipse.cdt.cpp.ui.internal.preferences.CppBasePreferencePage"
          class="org.eclipse.cdt.cpp.ui.internal.preferences.PathsPreferencePage"
          id="org.eclipse.cdt.cpp.ui.internal.preferences.PathsPreferencePage">
