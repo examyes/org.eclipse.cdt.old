@@ -180,16 +180,23 @@ public class ObjectsViewPart extends GenericViewPart
                           DataElement theObject = (DataElement)object;
 			  DataElement theParent = theObject;
 			  while ((theParent != null) 
-                            && (!theParent.getType().equals("Project")) 
-                            && (!theParent.getType().equals("directory"))  
-                            && (!theParent.getType().equals("Remote Project"))
-                            && (!theParent.getType().equals("data")))
-                           theParent = theParent.getParent();
+				 && (!theParent.getType().equals("Project")) 
+				 && (!theParent.getType().equals("directory"))  
+				 && (!theParent.getType().equals("data")))
+			      theParent = theParent.getParent();
+
 			  if ( (theParent != null) && (!theParent.getType().equals("data")))
-                          {
-                           initDataElementInput(theParent);
-			   dataElement = true;
-			  }
+			      {
+				  DataStore dataStore = theParent.getDataStore();
+				  _plugin.setCurrentDataStore(dataStore);
+				  if (theParent.getType().equals("Project"))
+				      {
+					  changed = _plugin.setCurrentProject(theParent);
+				      }
+
+				  initDataElementInput(theParent);
+				  dataElement = true;
+			      }
 			  
                          }
 			

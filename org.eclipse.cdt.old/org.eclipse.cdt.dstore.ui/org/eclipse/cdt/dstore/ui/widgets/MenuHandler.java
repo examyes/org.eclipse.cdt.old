@@ -76,8 +76,9 @@ public class MenuHandler
 	java.util.List list = es.toList();
 
 	DataElement first = (DataElement)es.getFirstElement();
-	DataElement mergeDescriptor = first.dereference().getDescriptor();
 
+	DataElement mergeDescriptor = first.dereference().getDescriptor();
+	
 	for (int i = 1; i < list.size(); i++)
 	    {
 		DataElement selectedElement = ((DataElement)list.get(i)).dereference();		

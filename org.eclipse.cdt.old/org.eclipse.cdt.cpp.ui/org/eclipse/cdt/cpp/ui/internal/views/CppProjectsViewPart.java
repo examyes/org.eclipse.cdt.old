@@ -49,6 +49,10 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
   }
   _viewer.setInput(null);
  }
+
+    public void selectionChanged(IWorkbenchPart part, ISelection sel) 
+    {
+    }
 }
 
 

@@ -371,15 +371,20 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	_isLocked = !_isLocked;
     }
   
+    public void clearView()
+    {
+	_viewer.clearView();
+    }
+
   public void setInput(IAdaptable adp)
       {
         // convert the resource
         DataElement object = null;
 
         if (adp instanceof DataElement)
-        {
-	    setInput((DataElement)adp);
-        }
+	    {
+		setInput((DataElement)adp);
+	    }
       }
 
   public void setInput(DataElement object)

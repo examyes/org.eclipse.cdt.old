@@ -129,6 +129,7 @@ public class ServerCommandHandler extends CommandHandler
 	      }
           else if (commandName.equals("C_SCHEMA"))
 	      {
+		  _dataStore.refresh(_dataStore.getRoot());
 		  if (_miners.size() == 0)
 		      {
 			  loadMiners(); 
@@ -153,6 +154,9 @@ public class ServerCommandHandler extends CommandHandler
 				      
 				      if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
 					  {
+					      //System.out.println(commandName);
+					      //System.out.println(miner.getName());
+
 					      status = miner.command(command);
 					      
 					      if ((status != null) && 
@@ -161,6 +165,7 @@ public class ServerCommandHandler extends CommandHandler
 						      failure = true;
 						  }
 					  }		
+
 				  }
 		      }
 	      }

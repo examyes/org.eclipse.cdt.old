@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: FileTransferAction.class HostConnectAction.class ITransferListener.class SearchDictionaryAction.class SelectFileAction.class QuickConnectAction.class FindFileAction.class TransferFiles.class
+all: FileTransferAction.class HostConnectAction.class TransferFiles.class ITransferListener.class SearchDictionaryAction.class SelectFileAction.class QuickConnectAction.class FindFileAction.class
 
 # Class Targets
 FileTransferAction.class: FileTransferAction.java
@@ -13,6 +13,9 @@ FileTransferAction.class: FileTransferAction.java
 
 HostConnectAction.class: HostConnectAction.java
 	javac HostConnectAction.java
+
+TransferFiles.class: TransferFiles.java
+	javac TransferFiles.java
 
 ITransferListener.class: ITransferListener.java
 	javac ITransferListener.java
@@ -28,9 +31,6 @@ QuickConnectAction.class: QuickConnectAction.java
 
 FindFileAction.class: FindFileAction.java
 	javac FindFileAction.java
-
-TransferFiles.class: TransferFiles.java
-	javac TransferFiles.java
 
 
 

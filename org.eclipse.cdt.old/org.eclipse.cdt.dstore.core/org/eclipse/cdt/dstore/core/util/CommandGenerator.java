@@ -98,7 +98,6 @@ public class CommandGenerator
     }
 
     _log.addNestedData(commandObject, false);
-    _dataStore.refresh(_log);
 
     return commandObject;
   }
@@ -130,7 +129,7 @@ public class CommandGenerator
 
       if (arguments != null)
       {
-        commandObject.addNestedData(arguments, false);
+	  commandObject.addNestedData(arguments, false);
       }
 
       return logCommand(commandObject);

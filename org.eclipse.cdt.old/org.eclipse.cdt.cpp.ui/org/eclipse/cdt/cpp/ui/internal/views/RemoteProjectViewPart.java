@@ -206,14 +206,6 @@ public class RemoteProjectViewPart extends ViewPart
   {
     DataStore dataStore = _plugin.getDataStore();
     _root = RemoteProjectAdapter.getInstance();
-    
-    // initially use old code
-    PlatformVCMProvider provider = PlatformVCMProvider.getInstance();
-    provider.getRepositories();
-    IProject[] repositories = provider.getKnownProjects();
-    if (repositories != null)
-      _root.setChildren(repositories);
-    
     setInput(_root);    
   }
 

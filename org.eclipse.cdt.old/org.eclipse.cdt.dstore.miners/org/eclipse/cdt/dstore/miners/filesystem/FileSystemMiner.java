@@ -578,6 +578,9 @@ public class FileSystemMiner extends Miner
   private DataElement handleQuery (DataElement theElement, DataElement status, boolean force)
       {
 	  theElement = theElement.dereference();
+	  if (theElement.getDescriptor() == null || theElement.getDescriptor().isOfType(_fsystemObjectDescriptor))
+	      {
+
 	  if (force || (!theElement.isExpanded() || (theElement.getNestedSize() == 0)))
 	      {
 		  try
@@ -625,6 +628,7 @@ public class FileSystemMiner extends Miner
 			  e.printStackTrace();
 		      }
 	      }
+	  }
 	  
 	  if (status != null)
 	      status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));	 

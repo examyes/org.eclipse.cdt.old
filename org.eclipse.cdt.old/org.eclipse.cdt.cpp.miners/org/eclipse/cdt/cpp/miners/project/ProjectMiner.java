@@ -16,7 +16,8 @@ public class ProjectMiner extends Miner
 
  public void load() 
     {
-	_workspace = _dataStore.createObject(_minerData, getLocalizedString("project.Workspace"), getLocalizedString("project.Workspace"));
+	_workspace = _dataStore.createObject(_minerData, getLocalizedString("project.Workspace"), 
+					     "workspace on " + _dataStore.getName());
     }
 
     public void updateMinerInfo()
@@ -37,26 +38,28 @@ public class ProjectMiner extends Miner
   DataElement workspaceD     = createObjectDescriptor(schemaRoot, getLocalizedString("project.Workspace"));
   DataElement projectD       = createObjectDescriptor(schemaRoot, getLocalizedString("project.Project"));
   DataElement closedProject  = createObjectDescriptor(schemaRoot, "Closed Project");
-  DataElement remoteProjectD = createObjectDescriptor(schemaRoot, "Remote Project");
-  DataElement closedRemoteProjectD = createObjectDescriptor(schemaRoot, "Closed Remote Project");
   DataElement projectFileD   = createObjectDescriptor(schemaRoot, getLocalizedString("project.ProjectFile"));
   DataElement projectsD      = createAbstractObjectDescriptor(schemaRoot, getLocalizedString("project.Projects"));
 
  
-  createCommandDescriptor(projectD, "Close Project", "C_CLOSE_PROJECT");
+  createCommandDescriptor(projectD, "Close Project", "C_CLOSE_PROJECT").setDepth(0);
   createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
 
   createCommandDescriptor(closedProject, "Delete Project", "C_DELETE_PROJECT").setDepth(0);
-  createCommandDescriptor(closedProject, "Open Project", "C_OPEN");
-  //eateCommandDescriptor(closedRemoteProjectD, "Open Remote Project", "C_OPEN_REMOTE");
-   
+  DataElement openD = createCommandDescriptor(closedProject, "Open Project", "C_OPEN");
+  openD.setDepth(0);
+  // openD.setAttribute(DE.A_SOURCE, "*");
+  
   
   createAbstractRelationship(fsObjectD, projectD);
   createAbstractRelationship(fsObjectD, workspaceD);
   createReference(projectsD,  projectD); 
+  createReference(projectsD,  closedProject); 
   createReference(projectsD,  projectFileD); 
   createReference(projectsD,  fsObjectD); 
   createReference(workspaceD, projectsD);
+
+  projectsD.setDepth(100); 
  }
  
  
@@ -66,24 +69,22 @@ public class ProjectMiner extends Miner
   DataElement   status = getCommandStatus(theCommand);
   DataElement  subject = getCommandArgument(theCommand, 0);
   String          type = subject.getType();
-  
+
+  /*  
   if (!type.equals(getLocalizedString("project.Workspace")))
    if (type.indexOf("Project") < 0)
     if (!type.equals("directory"))
      return status;
-  
+  */
+
   if (name.equals("C_OPEN"))
-   handleOpenProject(subject, status);
+      handleOpenProject(subject, status);
   else if (name.equals("C_CLOSE_PROJECT"))
    handleCloseProject(subject, status);
   else if (name.equals("C_DELETE_PROJECT"))
       handleDeleteProject(subject, status);
   else if (name.equals("C_REFRESH"))
    handleRefreshProject(subject, status);
-  else if (name.equals("C_CREATE_REMOTE"))
-   handleCreateRemote(subject, status);
-  else if (name.equals("C_OPEN_REMOTE"))
-   handleOpenRemote(subject, status);
   else 
    return status;
   
@@ -97,31 +98,6 @@ public class ProjectMiner extends Miner
   return _dataStore.find(_workspace, DE.A_NAME, name, 1);
  }
 
- 
- private void handleOpenRemote(DataElement project, DataElement status)
- {
-  DataElement theProject = findProject(project.getName());
-  if (theProject != null)
-  {
-   _dataStore.deleteObject(_workspace, theProject);
-   _dataStore.refresh(_workspace);
-  }
-  
-  createReference(_workspace, project);
-  _dataStore.refresh(_workspace);
-  
- }
- 
- private void handleCreateRemote(DataElement project, DataElement status)
- {
-  if (findProject(project.getName())!=null)
-   return;
-  _workspace.addNestedData(project,true);
-  project.setParent(_workspace);
-  _dataStore.refresh(project);
-  _dataStore.refresh(_workspace);
- }
- 
 
  private void handleOpenProject(DataElement project, DataElement status)
  {
@@ -129,18 +105,30 @@ public class ProjectMiner extends Miner
   {
    project.setAttribute(DE.A_TYPE, "Project");
    project.setDescriptor(null);
-  }
-  
+   _workspace.addNestedData(project, true);
+   project.setParent(_workspace);
+  }  
   else
   {
    project.setParent(_workspace);
    _workspace.addNestedData(project, true);
   }
   
-   project.expandChildren();
-   DataElement refreshD = _dataStore.localDescriptorQuery(project.getDescriptor(), "C_REFRESH");
-   _dataStore.command(refreshD, project);_dataStore.refresh(project);
-   _dataStore.refresh(_workspace); 
+  _dataStore.refresh(_workspace); 
+  if (project.isExpanded())
+      {
+	  project.refresh(false); 
+      }
+  else
+      {
+	  project.expandChildren();
+      }
+
+  project.refresh(false);
+  //_dataStore.refresh(project);
+  
+   status.setAttribute(DE.A_NAME, "done");
+   _dataStore.refresh(status);
  }
     
  private void handleCloseProject(DataElement project, DataElement status)

@@ -13,6 +13,7 @@ public class DE
   public static final String P_LABEL = "label";
   public static final String P_NOTIFIER = "notifier";
 
+  public static final String P_DATASTORE       = "dataStore";
   public static final String P_SOURCE_NAME     = "source";
   public static final String P_SOURCE          = "sourcefile";
   public static final String P_SOURCE_LOCATION = "sourcelocation";

@@ -448,12 +448,15 @@ public class ViewMenu implements IMenuListener
 		for (int i = 0; i < items.size(); i++)
 		    {
 			DataElement item = (DataElement)items.get(i);
-			int depth = item.depth();
-			if (depth > 0)
+			if (item != null)
 			    {
-				if (!_relationItems.contains(item))
+				int depth = item.depth();
+				if (depth > 0)
 				    {
-					_relationItems.add(item);
+					if (!_relationItems.contains(item))
+					    {
+						_relationItems.add(item);
+					    }
 				    }
 			    }
 		    }

@@ -118,12 +118,14 @@ public class Repository extends Project
 		    _dataStore = _connection.getDataStore();
 
 		    DataElement hostRoot = _dataStore.getHostRoot();
-
+		    
 		    DataElement fsMinerData = _dataStore.findMinerInformation("com.ibm.dstore.miners.filesystem.FileSystemMiner");
 		    _remoteRoot = hostRoot.get(0).dereference();
 
 		    
 		    _remoteRoot.expandChildren(true);
+
+		    _root.setAttribute(DE.A_ID, _root.getName() + ".repository");
 		    _root.addNestedData(_remoteRoot.getNestedData(), false);
 		    _root.setDataStore(_remoteRoot.getDataStore());
 		    
@@ -144,12 +146,12 @@ public class Repository extends Project
 		    
 		    
 		    ModelInterface api = ModelInterface.getInstance();
+
 		    api.openProject(_repository);
-		    
+
 		    
 		    _refreshAction.run(); 
-		    CppProjectNotifier notifier = api.getProjectNotifier();
-		    notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.OPEN, _repository));
+
 		}
 	    else
 		{

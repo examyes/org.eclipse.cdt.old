@@ -96,10 +96,8 @@ public abstract class Miner
 		    }
 		updateMinerInfo();
 
-		DataElement minerRoot = _minerElement.getParent();
-		_dataStore.refresh(minerRoot);	
-		_dataStore.refresh(_minerElement);	
-
+		DataElement minerRoot = _dataStore.getMinerRoot();
+		_dataStore.refresh(minerRoot, true);
 
 		if (status.getAttribute(DE.A_NAME).equals(getLocalizedString("model.incomplete")))
 		    {
@@ -108,6 +106,7 @@ public abstract class Miner
 		else
 		    {
 			status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
+			_dataStore.refresh(status);
 		    }
 	    }    
 	else
@@ -170,6 +169,9 @@ public abstract class Miner
 	// extend schema
 	DataElement schemaRoot = _dataStore.getDescriptorRoot();
 	extendSchema(schemaRoot);
+
+	_dataStore.refresh(root, true);	
+	_dataStore.refresh(_minerElement);	
     }
     
     

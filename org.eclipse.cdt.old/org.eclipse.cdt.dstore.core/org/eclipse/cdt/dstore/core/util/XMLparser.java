@@ -184,12 +184,12 @@ public class XMLparser
 					  try
 					      {
 						  DataElement result = parseTag(xmlTag, parent);
-						  if (parent == null)
-						      {
-							  _rootDataElement = result;
-						      }
-						  
 						  parent = result;
+						  if (_rootDataElement == null)
+						      {
+							  _rootDataElement = parent;
+							  _rootDataElement.setParent(null);
+						      }
 						  if (_isFile && (result != null))
 						      {
 							  int size = result.depth();
@@ -281,16 +281,15 @@ public class XMLparser
 				  if (parent == _rootDataElement)
 				      {
 					  DataElement rParent = result.getParent();
-					  if (rParent == null)
-					      {
-						  System.out.println("null parent for " + result);
-					      }
 					  parent = rParent;
-					  _rootDataElement.addNestedData(result, false);
+					  //_rootDataElement.addNestedData(result, false);
 				      }
 				  else
 				      {
-					  result.setParent(parent);
+					  if (result.getParent() == null)
+					      {
+						  result.setParent(parent);
+					      }
 				      }
 				  
 				  if (parent != null)
@@ -334,6 +333,11 @@ public class XMLparser
 				  else
 				      {
 					  // new object
+					  if (attributes[DE.A_TYPE].equals("status"))
+					      {
+						  System.out.println("status!");
+						  System.out.println("parent = " + parent);
+					      }
 					  result = _dataStore.createObject(parent, attributes);
 				      }
 				  

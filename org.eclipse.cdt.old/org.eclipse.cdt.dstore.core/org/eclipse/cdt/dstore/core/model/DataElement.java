@@ -623,6 +623,11 @@ public final class DataElement implements Serializable, IDataElement
     {
 	boolean result = false;
 
+	if (type == null)
+	    {
+		return result;
+	    }
+
 	DataElement descriptor = this;
 	if (!isDescriptor)
 	    {
@@ -855,6 +860,12 @@ public final class DataElement implements Serializable, IDataElement
 			if (type.equals(_dataStore.getLocalizedString("model.parent")) && (_parent != null))	
 			    {
 				set.add(_parent);
+			    }
+			else if (type.equals(_dataStore.getLocalizedString("model.descriptor_for")))
+			    {
+				getDescriptor();
+				if (_descriptor != null)
+				    set.add(_descriptor);
 			    }
 			else if (_nestedData != null)
 			    {	
@@ -1134,6 +1145,7 @@ public final class DataElement implements Serializable, IDataElement
 	    "\n\tID:\t" + getId() +
 	    "\n\tSource:\t" + getSource() +
 	    "\n\tDepth:\t" + _depth +
+	    "\n\tDataStore:\t" + _dataStore.getName() +
 	    "\n}\n";
     }
 
@@ -1235,6 +1247,10 @@ public final class DataElement implements Serializable, IDataElement
 		  else if (DE.P_SOURCE_LOCATION_COLUMN.equals(name))
 		      {
 			  return null;
+		      }
+		  else if (DE.P_DATASTORE.equals(name))
+		      {
+			  return _dataStore.getName();
 		      }
 		  else if (DE.P_NESTED.equals(name) || DE.P_CHILDREN.equals(name))
 		      {

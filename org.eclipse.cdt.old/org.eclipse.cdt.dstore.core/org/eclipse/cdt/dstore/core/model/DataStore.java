@@ -375,6 +375,10 @@ public class DataStore
 	  String sugId = reference.getId();
 	  _hashMap.put(sugId, reference);
 
+	  /*****/
+	  refresh(parent);
+	  /*****/
+
 	  return reference;
       }
 
@@ -397,6 +401,10 @@ public class DataStore
 	  
 	  String sugId = reference.getId();
 	  _hashMap.put(sugId, reference);
+
+	  /*****/
+	  refresh(parent);
+	  /*****/
 
 	  return reference;
       }
@@ -451,6 +459,10 @@ public class DataStore
 	
         String fromId = fromReference.getId();
         _hashMap.put(fromId, fromReference);
+
+	/*****/
+	refresh(parent);
+	/*****/
 	
         return toReference;
       }
@@ -494,7 +506,10 @@ public class DataStore
 	
         String fromId = fromReference.getId();
         _hashMap.put(fromId, fromReference);
-	
+	/*****/
+	refresh(parent);
+	/*****/
+
         return toReference;
       }
 
@@ -583,6 +598,10 @@ public class DataStore
 	    }
 
         _hashMap.put(id, newObject);
+
+	/*****/
+	refresh(parent);
+	/*****/
         return newObject;
     }
 
@@ -613,6 +632,9 @@ public class DataStore
 	    }
 
         _hashMap.put(id, newObject);
+	/*****/
+	refresh(parent);
+	/*****/
         return newObject;
       }
     
@@ -641,6 +663,9 @@ public class DataStore
 	      }
 	  
 	  _hashMap.put(attributes[DE.A_ID], newObject);
+	/*****/
+	refresh(parent);
+	/*****/
 	  return newObject;
       }
 
@@ -846,6 +871,7 @@ public class DataStore
       {
 	  // by default, name will be the id
 	  return name;
+	  //return generateId();
       }
 
     public String generateId()
@@ -962,8 +988,13 @@ public class DataStore
 
   public void setObject(DataElement localObject)
   {
+      setObject(localObject, true);
+  }
+
+  public void setObject(DataElement localObject, boolean noRef)
+    {
       DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
-      DataElement status = synchronizedCommand(cmd, localObject, true);
+      DataElement status = synchronizedCommand(cmd, localObject, noRef);
   }
 
   public void modifyObject(DataElement localObject)
@@ -1341,6 +1372,24 @@ public DataElement command(DataElement commandDescriptor,
 			}
 		}
         }        
+
+	DataElement containsD   = findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.contents"));	
+	if (!result.contains(containsD))
+	    {
+		result.add(containsD);
+	    }
+
+	DataElement parentD   = findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.parent"));	
+	if (!result.contains(parentD))
+	    {
+		result.add(parentD);
+	    }
+
+	DataElement descriptorD   = findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.descriptor_for"));	
+	if (!result.contains(descriptorD))
+	    {
+		result.add(descriptorD);
+	    }
 
 	return result;
     }
@@ -2144,6 +2193,7 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement containsD     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents"));
 	containsD.setDepth(100);
 
+	DataElement descriptorForD  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.descriptor_for"));	
 	DataElement parentD       = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.parent"));	
 	DataElement argsD         = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.arguments"));	
 	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));

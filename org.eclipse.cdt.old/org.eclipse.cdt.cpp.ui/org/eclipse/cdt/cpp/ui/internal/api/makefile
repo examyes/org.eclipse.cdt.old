@@ -5,17 +5,17 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: CppProjectNotifier.class ModelInterface.class DataElementAdapterFactory.class ICppProjectListener.class SearchLabelProvider.class CppProjectEvent.class DataElementAdapter.class
+all: CppProjectNotifier.class DataElementAdapterFactory.class ModelInterface.class ICppProjectListener.class SearchLabelProvider.class CppProjectEvent.class DataElementAdapter.class
 
 # Class Targets
 CppProjectNotifier.class: CppProjectNotifier.java
 	javac CppProjectNotifier.java
 
-ModelInterface.class: ModelInterface.java
-	javac ModelInterface.java
-
 DataElementAdapterFactory.class: DataElementAdapterFactory.java
 	javac DataElementAdapterFactory.java
+
+ModelInterface.class: ModelInterface.java
+	javac ModelInterface.java
 
 ICppProjectListener.class: ICppProjectListener.java
 	javac ICppProjectListener.java

@@ -37,8 +37,9 @@ public class ParsedSourceViewPart extends ProjectViewPart
     
  public void doClear()
  {
-  _viewer.setInput(null);
-  setTitle("Parsed-Files");
+     _viewer.setInput(null);	
+     _viewer.clearView();
+     setTitle("Parsed-Files");
  }
     
  public void doSpecificInput(DataElement projectParseInformation)

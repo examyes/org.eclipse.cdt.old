@@ -31,6 +31,7 @@ public class SystemObjectsViewPart extends ProjectViewPart
  public void doClear()
  {
   _viewer.setInput(null);
+  _viewer.clearView();
   setTitle("System-Objects");
  }
 

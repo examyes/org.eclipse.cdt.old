@@ -16,6 +16,7 @@ public class ServerUpdateHandler extends UpdateHandler
 {
   private ArrayList            _senders;
   private CommandGenerator  _commandGenerator;
+    private int _replies = 0;
 
   public ServerUpdateHandler()
     {
@@ -82,7 +83,7 @@ public class ServerUpdateHandler extends UpdateHandler
       {
 	  synchronized(_dataObjects)
 	      {
-		  DataElement document = _dataStore.createObject(null, "DOCUMENT", "doc");
+		  DataElement document = _dataStore.createObject(null, "DOCUMENT", "doc" + _replies++);
 		  document.setParent(null);
 		  DataElement response = _commandGenerator.generateResponse(document, _dataObjects);
 		  

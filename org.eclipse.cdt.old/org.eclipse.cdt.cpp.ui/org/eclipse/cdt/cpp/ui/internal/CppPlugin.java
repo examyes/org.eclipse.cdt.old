@@ -192,23 +192,53 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());
 
-	// open all local projects
+	initializeProjects();
+      }
+  }
+
+    private void initializeProjects()
+    {
+	DataStore dataStore = getDataStore();
+	IWorkspace workbench = (IWorkspace)getPluginWorkspace();
+
+	// init all local projects
 	IProject[] projects = workbench.getRoot().getProjects();
 	for (int i = 0; i < projects.length; i++)
 	  {	
-	      if (projects[i].isOpen() && isCppProject(projects[i]))
+	      IProject project = projects[i];
+	      //***	      if (isCppProject(project))
 		  {
-		      _interface.openProject(projects[i]);
-		      if (i == 0)
+		      if (project.isOpen())
 			  {
-			      _currentProject = projects[i];			
-			  }	
+			      _interface.openProject(project);
+			      if (i == 0)
+				  {
+				      _currentProject = project;			
+				  }	
+			  }
+		      else
+			  {
+			      // handle closed project
+			      _interface.initializeProject(project);
+			  }
 		  }
 	  }	
 
-	new RemoteProjectAdapter(dataStore.getRoot());	
-      }
-  }
+	// init all remote projects
+	PlatformVCMProvider provider = PlatformVCMProvider.getInstance();
+	provider.getRepositories();
+	IProject[] rmtProjects = provider.getKnownProjects();
+	if (rmtProjects != null)
+	    {
+		for (int i = 0; i < rmtProjects.length; i++)
+		    {
+			IProject project = rmtProjects[i];
+			_interface.initializeProject(project);		
+		    }
+	    }
+	RemoteProjectAdapter adapter = new RemoteProjectAdapter(dataStore.getRoot());
+	adapter.setChildren(rmtProjects);	
+    }
 
   public String getInstallLocation()
   {
@@ -274,6 +304,11 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
   {
     _corePlugin.setCurrentDataStore(dataStore);
   }
+
+  public boolean setCurrentProject(DataElement obj)
+    {
+	return setCurrentProject(_interface.findProjectResource(obj));
+    }
 
   public boolean setCurrentProject(Repository obj)
   {
