@@ -13,8 +13,8 @@
 
 <body>
 <h1>CDT Project<br>
-  3.0 Plan (Draft template)</h1>
-<p>Initial Document December 20, 2004 <br>
+  3.0 Plan</h1>
+<p>Initial Document December 20, 2004, updated Feb 15, 2005<br>
 <br>
 <i>&nbsp;&nbsp;&nbsp; Please send comments about this draft plan to the </i><a href="mailto:dev-cdt-dev@eclipse.org">cdt-dev@eclipse.org</a>
 <i>developer mailing list.</i></p>
@@ -86,8 +86,12 @@ this plan.
   <li>Source code release for CDT Project, available as versions tagged 
       &quot;CDT_30&quot; 
     in the CDT Project <a href="http://dev.cdt.org/viewcvs/">CVS repository</a>.</li>
-  <li> CDT Project (downloadable).</li>
-  <li>CDT runtime binary distribution (downloadable).</li>
+  <li> CDT Project (downloadable, and update site) -- source + binary 
+  distribution, used to develop on, or extend the CDT</li>
+  <li>CDT runtime binary distribution (downloadable and update site) -- the 
+  stuff needed to run CDT</li>
+  <li>CDT Test Plugins (downloadable zips and update site) -- All the JUnit and 
+  test infrastructure need to run the automated CDT tests</li>
 </ul>
 
 <h2><a name="Milestones"></a>Release milestones</h2>
@@ -109,39 +113,32 @@ not suitable for large scale C/C++ development.
 
 <p>The milestones are:
 <ul>
- <i>Eclipse 3.1 M4 based builds</i>
- <li>Friday Jan. 7,2005 - Milestone 1 (3.0 M1) - initial tool and process spin up
- <li>Friday Feb. 4,2005 - Milestone 2 (3.0 M2) - stable build reflecting progress
-</ul>
-<ul>
  <i>Eclipse 3.1 M5 Feb 18,2005</i>
- <li>Friday Mar. 4,2005 - Milestone 3 (3.0 M3) - stable build reflecting progress
- <li>Friday Apr. 1,2005 - Milestone 4 (3.0 M4) - initial API freeze for breaking changes
-</ul>
+ <li>Friday Mar. 14, 2005 - CDT 3.0 M5 - stable build reflecting progress
+ </ul>
 <ul>
  <i>Eclipse 3.1 M6 Apr 1, 2005</i>
- <li>Friday May  6,2005 - Milestone 5 (3.0 M5) - API freeze, stable build focus on clearing
-                                             bug backlog
- <li>Friday Jun. 3,2005 - Milestone 6 (3.0 M6) - stable build, feature complete, RC0
+ <li>Friday April 11, 2005 - CDT 3.0 M6 - stable build reflecting progress, APIs are documented
+</ul>
+<ul>
+	<i>Eclipse 3.1 M7 May 13, stable build - feature complete - development freeze lock down and testing begins</i>
+	<li>Monday, May 30, 2005 - CDT 3.0 M7  - stable build, feature complete, APIs frozen. This is considered RC0. 
+	Lock down and external testing begins with M7 and progresses through a series of test-fix phases against candidate
+	releases. Focus on clearing bug backlog.</li>
 </ul>
 
-<p>Lock down and external testing begins with M6 and progresses through a series of 
-test-fix phases against candidate releases.  Release candidate builds are planned
-as follows (M6 is RC0)</p>
+<p>Release candidate builds are planned as follows (M7 is RC0):
 
 <ul>
  <i>Note these dates are conditional on Eclipse 3.1 schedule</i>
-
- <li>Wednesday Jun. 15,2005 - Release Candidate 1 (3.0 RC1)
- <li>Friday Jun. 24, 2005 - Release Candidate 2 (3.0 RC2)
- <li>Friday Jul. 1, 2005 - Release Candidate 3 (3.0 RC3)
+ <li>CDT 3.0 RC1 Monday,  June 13,2005 - Release Candidate</li>
+ <li>CDT 3.0 RC2 Monday, June 27, 2005 - Release Candidate </li> 
 </ul>
 <ul> 
- <i>Eclipse 3.1 GA expected ~July 1
-</i>
-
- <li>Wednesday Jul. 13, 2005 - Release Candate 4 (3.0 RC4) 
+ <i>Eclipse 3.1 GA expected ~July 1</i>
+ <li>Wednesday Jul. 13, 2005 - Release Candate 4 (3.0 RC4)</li>  
 </ul>
+
 
 <p> Depending on the circumstances, and on the stability of Eclipse 3.1, we may add 
   additional release candidate builds 
@@ -220,6 +217,10 @@ as follows (M6 is RC0)</p>
   
   <li><a href="#ThemeUserExperience">Theme 4: User Experience</a> - 
   Work focusing on making the CDT easier to use.</li>
+  
+  <li><a href="#ThemeManagedBuild">Theme 5: Managed Build Extensions</a> - 
+  Work on extending the CDT managed build system.</li>
+
 </ul>
 
 <p>In addition, there are important CDT improvements that do not naturally fit 
@@ -332,17 +333,21 @@ spec</a>
 <h3><a name="ThemeAST">Theme 3: AST/DOM</a></h3>
 <h4>Committed Items </h4>
 <blockquote>
-</blockquote>
-<h4>Proposed Items (Eclipse Platform subproject, AST theme)</h4>
-<blockquote>
-  <p><b>CDT AST/DOM creation.</b> 
+<p><b>CDT AST/DOM creation.</b> 
   <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/dom/index.html?cvsroot=Tools_Project">
   Doc</a>,&nbsp;
   <a href="https://bugs.eclipse.org/bugs/attachment.cgi?id=14650&action=view">
-  CDT AST v0.1</a>,
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=57816">57816</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  CDT AST v0.1</a>, bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=57816">57816</a>) 
+    <em><img src="ok.gif" width="12" height="12"> in progress</em>
+    <ul>
+    	<li>DOM available in M5</li>
+    	<li>Selection client ported to new DOM in M6</li>
+    	<li>Indexer Client ported to new DOM in M6</li>
+    	<li>Search Client Ported to new DOM in M6</li>
+    </ul>
+    </p>
 </blockquote>
+<h4>Proposed Items (Eclipse Platform subproject, AST theme)</h4>
 <h3><a name="ThemeUserExperience">Theme 4: User Experience</a></h3>
 
 <p>A continued goal for the CDT development team is enabling C/C++ developers
@@ -396,18 +401,135 @@ around the Managed Build System.</p>
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-
-  <p><b>Better support for nested projects and linked resources
-
-.</b> 
+  <p><b>Better support for nested projects and linked resources.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-
-
 </blockquote>
 
+<h3><a name="ThemeManagedBuild">Theme 5: Managed Builder Extensions</a></h3>
+<h4>Committed Items (no theme)</h4>
+<blockquote> 
+</blockquote>
 
+<h4>Proposed Items ( no theme)</h4>
+<blockquote> 
+<pre>- Multi-Version Tool-chain support
+Add the ability to support multiple versions simultaneously and to
+support migration from one version to another.
+Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Converter extension point
+Add the ability to convert Projects, Tool-chains, Tools, Builders.  This
+supports tool version migration (previous item) and converting a project
+from one tool-chain to a different one.
+Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Tool-chain installation support
+Add an isSupported extension callback that allows a tool-chain
+integration to report whether the tool-chain that is deswcribes is
+installed on the system.
+Add an initialize extension callback that allows a tool-chain to
+initialize itself.
+Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Build macros - ${macro}
+Add support for build macros in configuration properties that accept
+text.  MBS will define many built-in macros (files, paths, names).
+Tool-chains can define additional macros and values at configuration and
+project scope.  Users can define additional macros and values at
+configuration, project, and workspace scope.  Macro values can be
+context sensitive (e.g. have a different value depending upon the
+current file, configuration, project, etc.).  More specific scope
+overrides less specific (e.g. configuration takes precedence over
+workspace). User defined values override tool-chain defined values which
+override built-in values at the same scope.
+Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Environment variables
+Allow tool-chains to define additional environment variables and values
+at configuration and project scope.  This includes being able to set the
+executable, include and library paths, so that the user is not required
+to set the environment before starting Eclipse.  Users can define
+additional variables and values at configuration, project, and workspace
+scope.  More specific scope overrides less specific (e.g. configuration
+takes precedence over workspace).  User defined values override
+tool-chain defined values which override built-in values at the same
+scope.  Environment variables are passed to the build process and can be
+used as build macros.
+Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Custom build steps (command line scripts)
+Add support for Pre & Post build command scripts.  Allow a user to
+define a set of commands to be run on all files with a specified
+extension(s).  This is a simple tool integration method that could be
+used with tools such as lex and yacc.  Allow a user to define a set of
+commands to be used to build a specific source file. Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Custom file extensions
+Allow the user to modify the default file extensions that map to a tool.
+CDT already has the C/C++ File Types property page.  MBS will use that
+information.  MBS would also like to extend that page to allow
+tool-integrators to define "file-types" and default extensions for any
+tool that they want to integrate into their tool chain - for example,
+lex, yacc, or a Fortran compiler.
+Bugzilla entries: 81450
+Priority: High
+Status: In design
+Milestone: TBD
+
+- Integrate into Scanner configuration discovery mechanisms:
+Update MBS to use the new CDT mechanisms.
+Bugzilla entries: 81450
+Priority: High
+Status: Not started 
+Milestone: TBD
+
+- Tool Input ordering
+Allow the user to specify the order for input files for tools that
+accept multiple files (e.g. Linker).
+Bugzilla entries: 81450
+Priority: Medium
+Status: Not started
+Milestone: TBD
+
+- Option enhancements:
+Add an extension callback for option "applicability".  This would allow
+a tool-chain to specify whether or not an option is currently displayed,
+enabled, and used in command-line generation.
+Support the browseType attribute for String properties by displaying a
+file selection dialog box.
+Bugzilla entries: 81450
+Priority: Medium
+Status: Not started
+Milestone: TBD
+
+- Support new Remote Building
+Allow tool integrators to use the new Remote System support in CDT 3.0.
+Bugzilla entries: 81450
+Priority: Medium
+Status: Not started
+Milestone: TBD
+</pre>
+</blockquote>
 
 <h3><a name="OtherPlatform">Other CDT Items</a></h3>
 
@@ -422,43 +544,90 @@ around the Managed Build System.</p>
 <h4>Proposed Items ( no theme)</h4>
 <blockquote> 
 
-  <p><b>Pervasive use of workspace variables
-
-.</b> This helps developers create location
+  <p><b>Pervasive use of workspace variables.</b> This helps developers create location
     independant projects and all paths/symbols created in the CDT should be "variable" aware.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="ok.gif" width="12" height="12"> No Committment</em></p>
 
 
-  <p><b>Enhanced refactoring
-
-.</b> 
-    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+  <p><b>Enhanced refactoring.</b> 
+    bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=75364">75364</a>) 
+    <em><img src="ok.gif" width="12" height="12"> No Committment </em></p>
 
 
-  <p><b>Source based hover help
-
-.</b> Using the comments within the source and headers to
+  <p><b>Source based hover help.</b> Using the comments within the source and headers to
     provide content dynamic hover help and content assist help.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="ok.gif" width="12" height="12"> No Committment</em></p>
 
 
-  <p><b>Java based C/C++ code formatter
-
-.</b> A java native (ie portable) based code formatter.
+  <p><b>Java based C/C++ code formatter.</b> A java native (ie portable) based code formatter.
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
     <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
 
-
-  <p><b>Improved ISV documentation
-
-.</b> 
+  <p><b>Improved ISV documentation.</b> 
     bugzilla ref. (<a href="http://bugs.eclipse.org/bugs/show_bug.cgi?id=37929">####</a>) 
-    <em><img src="ok.gif" width="12" height="12"> in progress </em></p>
+    <em><img src="ok.gif" width="12" height="12"> No Committment</em></p>
+
+<pre>Core
+		 - Error Parser: The current error parser is limited,
+		   and there is no clean way to maintain contexts for
+		   multiline errors matching.
+		 		 * new Interface been proposed(PR 54812)
+		 		 * new feature: hyperlinking (PR 50124)
+
+		 - Resolver Model: The current file mappings/associations
+		   are standalone to CDT, the resolver needs to propagate
+		   the information to the Eclipse platform.  This can now
+		   be done with the new IContentTypeManager and extension
+		   points in Eclipse-3.1 (PR 78821 ..).
+
+		 - IPathEntry interface changes: The scanner automatic discovery
+		   is now more powerfull and can return information on per file basis.
+		   The interface of the IPathEntry needs to be change to accomodate (PR 72821).
+
+		 - Variable substitution: A service offered by the Core Model to mantain
+		   variables specific to the CDT, those variables could be exported (PR 79518).
+
+UI
+		 - Overhaul of the OpenType, Type Hierarchy and C/C++ browsing views: The
+		   OpenType was doing a very agressive caching, with the new features provided
+		   by the indexer(providing offset locations) we can scale down the process and
+		   rely more on the indexer (PR 48213, ...).
+
+		 - Generate overriding methods in the CEditor, for C++ classes (PR 58932)
+
+		 - Class Wizard
+		 		 * generate user customizable define guards (PR 75153)
+		 		 * use documentation templates(PR 56207)
+
+		 - More Drag && Drop support, in the views (PR 83112, ..).
+ 
+		 - C/C++ Editor improvements:
+		 		 * coloring of operators, braces and numbers,
+		 		 * outline in selectable dialog (Ctrl O) with search input(PR 83112).
+		 		 * Preference Pages changes to match Eclipse-3.1 policies(Many settings
+		 		   are now common on the Workbench/Text Editor).
+ 
+		 - Removing of the old Template scheme to match Eclipse-3.1 (PR 71111).
+		 
+		 - Definition/Declaration view, showing the definition of a symbol(relies
+		   on the indexer.
+
+		 - Open call hierarchy view.
 
 
+Make Builder
+		 - Make targets
+		 		 * Allow setting environment for build targets(PR 47241)
+		 		 * Allow variables substitution in arguments(PR 48009).
+
+Launch
+		 - New launch configuration, gdbserver.  Currently the
+		   gdb server launch is tied to the local launcher,
+		   confusing the user(PR 79458)
+		   
+</pre>
 
 </blockquote>
 </body>
