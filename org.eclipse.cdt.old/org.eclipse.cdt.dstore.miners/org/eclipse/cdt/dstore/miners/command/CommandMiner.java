@@ -72,7 +72,13 @@ public class CommandMiner extends Miner
 		  status.setAttribute(DE.A_NAME, "done");
 	      }
       }
-  if (name.equals("C_CANCEL"))
+  else if (name.equals("C_SEND_INPUT"))
+  {
+  	DataElement input = getCommandArgument(theElement, 1);
+  	DataElement de = (DataElement)subject.dereference().get(1);
+  	sendInputToCommand(de.getName().trim(), input.getName());
+  }
+  else if (name.equals("C_CANCEL"))
       {
 	  DataElement de = (DataElement)subject.dereference().get(1);
 	  DataElement cancelStatus = getCommandStatus(subject);
@@ -100,12 +106,40 @@ public class CommandMiner extends Miner
   newCommand.start();
  }
 
+ private void sendInputToCommand(String theCommand, String input)
+ {
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
+
+     
+   if (theThread != null)
+   {
+   	  Process theProcess = theThread.getProcess();
+   	  if (theProcess != null)
+   	  {  	  	 
+   	  	 int len = input.length();
+   	  	 byte[] intoout = input.getBytes();
+	   	 OutputStream output = theProcess.getOutputStream();
+   	  	 try
+   	  	 {   	  	 	
+   	  	 	output.write(intoout, 0, len);
+   	  	 	output.write('\n');
+   	  	 	output.flush();
+   	  	 }
+   	  	 catch (IOException e)
+   	  	 {
+   	  	 	System.out.println(e);
+   	  	 }
+   	  }      
+  	}
+
+ }
+
  private void cancelCommand (String theCommand, DataElement status)
  {
   CommandMinerThread theThread = (CommandMinerThread)_threads.get(theCommand);
-   
+
   if (theThread != null)
-  {
+  { 	
       theThread.stopThread();
       boolean done = false;
       long stopIn = System.currentTimeMillis() + 3000;
@@ -114,9 +148,10 @@ public class CommandMiner extends Miner
 	  if ( (!theThread.isAlive()) || (stopIn < System.currentTimeMillis()) )
 	      done = true;
   }
-  _dataStore.createObject(status, "stdout", "Command Cancelled by User Request");
-  _dataStore.update(status);
+  	_dataStore.createObject(status, "stdout", "Command Cancelled by User Request");
+  	_dataStore.refresh(status);
  }
+
 }
 
 class CommandMinerThread extends MinerThread
@@ -199,7 +234,7 @@ class CommandMinerThread extends MinerThread
  private FileSystemMiner _fileMiner;
  private Process         _theProcess;
  private String          _fileLocation;
-    private DataElement _subject;
+ private DataElement _subject;
 
  private OutputHandler    _stdOutputHandler;
  private OutputHandler    _stdErrorHandler;
@@ -233,7 +268,7 @@ class CommandMinerThread extends MinerThread
 
 
     if (!theOS.toLowerCase().startsWith("win"))
-	{
+    	{
 	    String property = "SHELL=";
 	    String[] env = getEnvironment(_subject);
 	    for (int i = 0; i < env.length; i++)
@@ -260,12 +295,13 @@ class CommandMinerThread extends MinerThread
 	}
     else
 	{
-	    theShell = "cmd /c ";
-	    _theProcess = Runtime.getRuntime().exec(theShell + _invocation, getEnvironment(_subject), theDirectory); 
+	    theShell = "cmd /C ";
+	    _theProcess = Runtime.getRuntime().exec(theShell + "(" + _invocation + ") &", getEnvironment(_subject), theDirectory); 
         }
     
     _stdInput = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
     _stdError = new BufferedReader(new InputStreamReader(_theProcess.getErrorStream()));
+    
    }
    catch (IOException e) 
    {
@@ -283,6 +319,11 @@ class CommandMinerThread extends MinerThread
     _stdErrorHandler = new OutputHandler(_stdError, null);
     _stdErrorHandler.setWaitTime(0);
     _stdErrorHandler.start();  
+ }
+ 
+ public Process getProcess()
+ {
+ 	return _theProcess;
  }
  
  

@@ -199,6 +199,7 @@ public class DataStoreSchema
 	_dataStore.createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT", false);
      
     _dataStore.createCommandDescriptor(rootD, "Notification", "*", "C_NOTIFICATION", false);
+    _dataStore.createCommandDescriptor(rootD, "Send Input", "*", "C_SEND_INPUT", false);
       }
 
 
