@@ -104,7 +104,7 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	DataElement theInput = null;
 	if (theElement.getType().equals("file"))
 	    {
-		theInput = _api.getProjectFor(theElement);		
+		theElement = _api.getProjectFor(theElement);		
 	    }
 
 	if (theElement.getType().equals("Project"))
