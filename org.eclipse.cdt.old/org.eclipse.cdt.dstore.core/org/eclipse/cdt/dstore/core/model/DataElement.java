@@ -1215,7 +1215,7 @@ public final class DataElement implements Serializable, IDataElement
 			    }
 			else
 			    {
-				return this;
+				return null;
 			    }
 		    }
 	    }
