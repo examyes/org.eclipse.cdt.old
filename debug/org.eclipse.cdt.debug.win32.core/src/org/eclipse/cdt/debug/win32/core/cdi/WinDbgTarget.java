@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
+import java.math.BigInteger;
+
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
@@ -115,18 +117,25 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	private native long getLineAddress(String file, int lineNumber);
 	
 	void resolveLocation(ICDILocation location) {
-		long address = 0;
+		BigInteger address = BigInteger.ZERO;
 		
-		if (location.getFunction() != null)
-			address = getFunctionAddress(location.getFunction());
-		else if (location.getFile() != null)
-			address = getLineAddress(dir + "\\" + location.getFile(), location.getLineNumber());
+		if (location.getFunction() != null) {
+			long addr = getFunctionAddress(location.getFunction());
+			address = new BigInteger(Long.toString(addr));
+		} else if (location.getFile() != null) {
+			long addr = getLineAddress(dir + "\\" + location.getFile(), location.getLineNumber());
+			address = new BigInteger(Long.toString(addr));
+		}
 		
 		((WinDbgLocation)location).setAddress(address);
 	}
 	
 	native void setBreakpoint(long address, boolean temporary);
 	
+	void setBreakpoint(BigInteger address, boolean temporary) {
+		setBreakpoint(address.longValue(), temporary);
+	}
+
 	public ICDISession getSession() {
 		return session;
 	}
@@ -402,7 +411,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createLocation(long)
 	 */
-	public ICDILocation createLocation(long address) {
+	public ICDILocation createLocation(BigInteger address) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
+import java.math.BigInteger;
+
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
 
 public class WinDbgLocation implements ICDILocation {
 
-	private long address;
+	private BigInteger address;
 	private String file;
 	private String function;
 	private int lineNumber;
@@ -23,21 +25,21 @@ public class WinDbgLocation implements ICDILocation {
 		this.file = file;
 		this.function = function;
 		this.lineNumber = lineNumber;
-		address = 0;
+		address = BigInteger.ZERO;
 	}
 	
-	public WinDbgLocation(long address) {
+	public WinDbgLocation(BigInteger address) {
 		this.address = address;
 		this.file = null;
 		this.function = null;
 		this.lineNumber = 0;
 	}
 	
-	void setAddress(long address) {
+	void setAddress(BigInteger address) {
 		this.address = address;
 	}
 	
-	public long getAddress() {
+	public BigInteger getAddress() {
 		return address;
 	}
 
@@ -54,7 +56,7 @@ public class WinDbgLocation implements ICDILocation {
 	}
 
 	public boolean equals(ICDILocation location) {
-		return address == location.getAddress()
+		return address.equals(location.getAddress())
 			&& lineNumber == location.getLineNumber()
 			&& function.equals(location.getFunction())
 			&& file.equals(location.getFile());

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
+import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -52,7 +53,8 @@ public class WinDbgThread implements ICDIThread {
 	private native void populateStackFrames();
 	
 	private void createStackFrame(long address) {
-		stackFrames.addFirst(new WinDbgStackFrame(this, new WinDbgLocation(address), 0, 0));
+		BigInteger big = new BigInteger(Long.toString(address));
+		stackFrames.addFirst(new WinDbgStackFrame(this, new WinDbgLocation(big), 0, 0));
 	}
 	
 	private void createStackFrame(String file, String function, int line, long pc, long frame) {
