@@ -741,6 +741,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     // cancel all pending commands
     dataStore.cancelAllCommands();
 
+
     // close parse project
     DataElement projectObj = findProjectElement(project);
     if (projectObj != null)
@@ -753,9 +754,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		}
 	}
 
+
     // close project
     DataElement workspace = findWorkspaceElement(dataStore);	    
     DataElement cprojectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
+
 
     if (cprojectObj != null)
 	{
@@ -768,7 +771,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	    if (project instanceof Repository)
 		{
-		    System.out.println("closing "+ project);
 		    initializeProject(project);
 		}
 	}
@@ -981,37 +983,30 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     
   public DataElement findProjectElement(IProject project)
   {
-   if (project == null)
-    return null;
-   
-   DataStore dataStore = _plugin.getDataStore();	
-   if (project instanceof Repository)
-    dataStore = ((Repository)project).getDataStore();	
+      if (project == null)
+	  return null;
+      
+      DataStore dataStore = _plugin.getDataStore();	
+      if (project instanceof Repository)
+	  dataStore = ((Repository)project).getDataStore();	
 	
-   DataElement workspace = findWorkspaceElement(dataStore);
-   if (workspace == null)
-       {
-	   return null;
-       }
-   
-   DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
-   if (projectObj == null)
-       {
-	   System.out.println("no project obj for " +project.getName());
-	   /*
-	   System.out.println(" workspace " +workspace);
-	   for (int i = 0; i < workspace.getNestedSize(); i++)
-	       {
-		   System.out.println("\t" + workspace.get(i));
-	       }
-	   */
-	   
-	   /****/
-	   projectObj = dataStore.createObject(workspace, "Project", project.getName(), project.getLocation().toString());
-	   dataStore.setObject(workspace);
-	   /***/
-     } 
-   return projectObj;
+      DataElement workspace = findWorkspaceElement(dataStore);
+      if (workspace == null)
+	  {
+	      return null;
+	  }
+      
+      DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
+      if (projectObj == null)
+	  {
+	      /**
+	      System.out.println("no project obj for " + project.getName());
+	      projectObj = dataStore.createObject(workspace, "Project", project.getName(), project.getLocation().toString());
+	      dataStore.setObject(workspace);
+	      **/
+	  } 
+
+      return projectObj;
   }
 
   public void parse(IResource resource)
@@ -1551,6 +1546,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    DataElement cProject = findProjectElement((IProject)resource);
 			    if (cProject != null)
 				{
+				    System.out.println("calling delete of " + cProject);
 				    DataElement commandDescriptor = dataStore.localDescriptorQuery(cProject.getDescriptor(), 
 												   "C_DELETE_PROJECT");
 				    if (commandDescriptor != null)
@@ -1597,6 +1593,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement closeProject = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Close Project",
 							 "com.ibm.cpp.ui.internal.actions.CloseProjectAction");
+
+	DataElement deleteProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
+							 "Delete Project",
+							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
+
+	DataElement deleteProject2 = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+							 "Delete Project",
+							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
+
 
 
 	// connection actions

@@ -116,11 +116,8 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 		
 	    case CppProjectEvent.COMMAND:
 		{
-		    if (event.getStatus() == CppProjectEvent.START 
-			/*|| 
-			event.getStatus() == CppProjectEvent.DONE
-			*/
-			)
+		    if (event.getStatus() == CppProjectEvent.START || 
+			event.getStatus() == CppProjectEvent.DONE)
 			{
 			    doInput(project);
 			}

@@ -43,9 +43,16 @@ public class ProjectObjectsViewPart extends ProjectViewPart
    return;
   
   //Finally just set the input and the title
-  _viewer.setInput(projectObjects);
-  _viewer.selectRelationship("contents");
-  setTitle(projectParseInformation.getName() + " Project-Objects");   
+  if (_viewer.getInput() == projectObjects)
+      {
+	  _viewer.resetView();
+      }
+  else
+      {
+	  _viewer.setInput(projectObjects);	
+	  _viewer.selectRelationship("contents");
+	  setTitle(projectParseInformation.getName() + " Project-Objects");   
+      }
  }
 }
 

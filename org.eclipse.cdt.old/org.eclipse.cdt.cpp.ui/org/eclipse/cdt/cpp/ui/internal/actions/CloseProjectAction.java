@@ -58,6 +58,8 @@ public class CloseProjectAction extends CustomAction
 
 	protected void execute(IProgressMonitor pm) 
 	{
+	    _api.closeProject(_project);
+
 	    try
 		{
 		    _project.close(pm);
@@ -66,7 +68,6 @@ public class CloseProjectAction extends CustomAction
 		{
 		    System.out.println(e);
 		}
-	    _api.closeProject(_project);
 	}
     }
 

@@ -53,6 +53,31 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
     }
+
+
+    public void projectChanged(CppProjectEvent event)
+    {
+	int type = event.getType();
+	IProject project = event.getProject();
+	switch (type)
+	    {
+	    case CppProjectEvent.OPEN:
+		{
+		}
+		break;
+	    case CppProjectEvent.CLOSE:
+	    case CppProjectEvent.DELETE:
+		{
+		    _viewer.resetView();
+		}
+		break;
+		
+	    default:
+		super.projectChanged(event);
+		break;
+	    }
+    }
+
 }
 
 

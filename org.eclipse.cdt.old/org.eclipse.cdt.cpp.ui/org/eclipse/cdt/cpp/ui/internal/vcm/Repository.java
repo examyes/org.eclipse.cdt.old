@@ -497,19 +497,14 @@ public class Repository extends Project
   {
     if (isOpen())
     {	
-      ModelInterface api = ModelInterface.getInstance();
-      api.closeProject(this);
-      _children.clear();
-
-
-      _connection.disconnect();  
-      _dataStore = _root.getDataStore();	
-      _refreshAction.run();
-      saveProperties();
-
-
-      CppProjectNotifier notifier = api.getProjectNotifier();
-      notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.CLOSE, this));
+	ModelInterface api = ModelInterface.getInstance();
+	_children.clear();
+	_connection.disconnect();  
+	_dataStore = _root.getDataStore();	
+	saveProperties();
+	
+	CppProjectNotifier notifier = api.getProjectNotifier();
+	notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.CLOSE, this));
     }
   }
 
