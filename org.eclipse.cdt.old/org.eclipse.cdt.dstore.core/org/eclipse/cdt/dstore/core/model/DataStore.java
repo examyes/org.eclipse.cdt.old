@@ -1227,8 +1227,6 @@ public DataElement command(DataElement commandDescriptor,
 		      String type = subDescriptor.getType();
 		      if (type == null)
 			  {
-			      System.out.println(descriptor);
-			      System.out.println(subDescriptor);
 			  }
 		      if (type.equals(DE.T_COMMAND_DESCRIPTOR))
 			  {

@@ -92,8 +92,9 @@ public class ViewFilter extends ViewerFilter
 				  {
 				      return true; 
 				  }
+			      /*
 			      else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
-				  {         
+				  {  
 				      for (int i = 0; i < descriptor.getNestedSize(); i++)
 					  {
 					      DataElement subObject = descriptor.get(i).dereference();
@@ -101,6 +102,20 @@ public class ViewFilter extends ViewerFilter
 						  {
 						      return true;
 						  }
+					  }
+				  }
+			      */
+			      else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+				  {
+				      ArrayList abstractedList = descriptor.getAssociated("abstracts");
+				      for (int i = 0; i < abstractedList.size(); i++)
+					  {
+					      DataElement aDes = (DataElement)abstractedList.get(i);
+					      if (aDes != null && doesExist(aDes, dataElement, checked))
+						  {
+						      return true;
+						  }
+					      
 					  }
 				  }
 			  }

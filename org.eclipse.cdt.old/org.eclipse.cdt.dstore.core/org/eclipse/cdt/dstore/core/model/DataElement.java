@@ -984,7 +984,6 @@ public final class DataElement implements Serializable, IDataElement
 	if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
 	    {
 		DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
-		System.out.println("query = " + queryDescriptor);
 		if (queryDescriptor != null)
 		    {	
 			if (isSynchronized)

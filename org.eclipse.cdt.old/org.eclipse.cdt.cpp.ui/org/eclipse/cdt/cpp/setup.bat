@@ -1,4 +1,4 @@
-set ECLIPSEDIR=e:\eclipse
+set ECLIPSEDIR=e:\eclipse\eclipse
 
 set DSCORE=%ECLIPSEDIR%\plugins\com.ibm.dstore.core
 set DSUI=%ECLIPSEDIR%\plugins\com.ibm.dstore.ui
