@@ -73,23 +73,27 @@ public class TransferFiles extends Thread
 
     public void run()
     {
-	DataStore sourceDataStore = _source.getDataStore();
-	DataStore targetDataStore = _target.getDataStore();
+		DataStore sourceDataStore = _source.getDataStore();
+		DataStore targetDataStore = _target.getDataStore();
 
-
-	boolean validSource = _source.getType().equals("file") || 
+		boolean validSource = _source.getType().equals("file") || 
 	    _source.getType().equals("directory") ||
 	    _source.getType().equals("Project"); // hack 
-	if (validSource)
+	    
+		if (validSource)
 	    {
 			recursiveQuery(_source);
 			recursiveQuery(_target);
 			
-		transfer(_source, _target);
-		if (_listener != null)
-	    {
-		_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
-	    }
+			transfer(_source, _target);
+
+			recursiveQuery(_target);
+
+			if (_listener != null)
+		    {
+				_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
+		    }
+		    
 	    }
 	
 
@@ -109,6 +113,14 @@ public class TransferFiles extends Thread
 
     private void transfer(DataElement source, DataElement target)
     {
+    	if (_pm != null)
+    	{
+    	   if (_pm.isCanceled())
+    	   {
+    	   	return;
+    	   }	
+    	}
+    	
 	target.setExpanded(true);
 
 	DataStore targetDataStore = target.getDataStore();
@@ -121,51 +133,36 @@ public class TransferFiles extends Thread
 	} 
 	String newSourceStr = targetStr + source.getName();
 	
-	boolean needsUpdate = false;
+	boolean needsUpdate = false; 
+	boolean scratchUpdate = false;
 
 	String type = source.getType();
 
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
-	    {
-		if (type.equals("file"))
-		    {
-			DataElement mkfile = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_FILE");
-			if (mkfile != null)
-			    {
-				ArrayList args = new ArrayList();				
-				
-				DataElement newDir = targetDataStore.createObject(null, type, source.getName());
-				args.add(newDir);
-				
-				targetDataStore.synchronizedCommand(mkfile, args, target);
+	    {	 		
+	    	if (type.equals("file"))
+	    	{
+	    		copiedSource = targetDataStore.createObject(null, type, source.getName(), newSourceStr);
 
-				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
-				needsUpdate = true;
-			    }
+	    		needsUpdate = true;
+	    	}	    
+	    	else 
+	    	{
+	    		copiedSource = targetDataStore.createObject(null, type, source.getName(), newSourceStr);
+	    		DataElement mkdir = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_DIR", 3);
+	    		if (mkdir != null)
+	    		{
 
-		    }
-		else
-		    {
-			DataElement mkdir = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_DIR");
-			if (mkdir != null)
-			    {
-				ArrayList args = new ArrayList();				
-				
-				DataElement newDir = targetDataStore.createObject(null, type, source.getName());
-				args.add(newDir);
-				
-				targetDataStore.synchronizedCommand(mkdir, args, target);
-
-				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
-			
-				 }
-		    }
+	    			ArrayList args = new ArrayList();
+	    			args.add(copiedSource); 
+	    			targetDataStore.synchronizedCommand(mkdir, args, target);
+	    		}	    		
+	    	}
+	    	scratchUpdate = true;
 	    }
-	else
-	    {
-		if (type.equals("file"))
-		    {
+	else if (type.equals("file"))
+		{
 			// compare dates
 			if (_checkTimestamps)
 			{
@@ -174,40 +171,33 @@ public class TransferFiles extends Thread
 			else
 			{
 				needsUpdate = true;
+		    }
+	    }
+	
+
+		// both projects on same machine
+		if (needsUpdate)
+		{
+			String utask = null;	
+			if (scratchUpdate)
+			{
+				utask = "Creating " + newSourceStr + "...";
 			}
-		    }
-	    }
-
-
-	if (needsUpdate)
-	    {
-		String utask = "Updating " + newSourceStr + "...";
-		if (_listener != null)
+			else
+			{
+			    utask = "Updating " + newSourceStr + "...";
+			}
+		
+			if (_listener != null)
 		    {
-			_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
+				_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
 		    }
-		else if (_pm != null)
+			else if (_pm != null)
 		    {
-			_pm.subTask(utask);
-		    }
-	    }
-	else
-	    {
-		String utask = newSourceStr + " is up-to-date";
-		if (_listener != null)
-		    {
-			_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
-		    }
-		else if (_pm != null)
-		    {
-			_pm.subTask(utask);
-		    }
-	    }
-
-	// both projects on same machine
-	if (needsUpdate)
-	{
-	if ((targetDataStore == sourceDataStore) || (!targetDataStore.isVirtual() && !sourceDataStore.isVirtual()))
+				_pm.subTask(utask);
+		    }	
+		
+		if ((targetDataStore == sourceDataStore) || (!targetDataStore.isVirtual() && !sourceDataStore.isVirtual()))
 	    {
 		// files on the same system
 			// simply copy them
@@ -221,11 +211,10 @@ public class TransferFiles extends Thread
 				{
 					setDate(copiedSource, getDate(source));
 				}
-				
-				target.refresh(false);
+
 			}
 	    }
-	else if (targetDataStore == _plugin.getDataStore())
+		else if (targetDataStore == _plugin.getDataStore())
 	    {
 	
 			source.getFileObject();
@@ -243,7 +232,7 @@ public class TransferFiles extends Thread
 					newSource.renameTo(newFile);
 			    }		
 	    }
-	else
+		else
 	    {	
 
 			// make sure we have a local copy of the file
@@ -254,7 +243,7 @@ public class TransferFiles extends Thread
 				FileInputStream input = new FileInputStream(theFile);
 				long totalSize = theFile.length();
 				boolean firstAppend = true;
-				int bufferSize = 500000;
+				int bufferSize = 50000;
 				byte[] buffer = new byte[bufferSize];
 				int totalRead = 0;
 				while (totalRead < totalSize)
@@ -280,7 +269,11 @@ public class TransferFiles extends Thread
 					
 				if (_pm != null)
 		  		  {
-		  		  	String msg = "Writing " + newSourceStr + "(" + totalRead / 1000 + "k of " + totalSize / 1000 + "k)";
+		  		  	String msg = "Writing " + newSourceStr;
+		  		  	if (totalRead != totalSize)
+		  		  	{
+		  		  	  msg = "Writing " + newSourceStr + " (" + totalRead / 1000 + "K of " + totalSize / 1000 + "K bytes)";
+		  		  	}
 					_pm.subTask(msg);
 		  		  }
 				}
@@ -297,29 +290,26 @@ public class TransferFiles extends Thread
 	    }
 	}
 	
-	if ((type.equals("directory") || type.equals("Project")) 
-	 	&& copiedSource != null) //hack
-	    {
-		if (!source.isExpanded())
-		    {
-			source.expandChildren(true);
-		    }
-
+	if ((type.equals("directory") || type.equals("Project")))
+	    {	
 		if (_checkTimestamps)
 		{
-			queryDates(source);
-			queryDates(copiedSource);
+			queryDates(source);	
+			
+			if (!scratchUpdate)
+			{		
+			  queryDates(copiedSource);
+			}
 		}
 	
-
-		for (int i = 0; i < source.getNestedSize(); i++)
+	    ArrayList children = source.getAssociated("contents");
+		for (int i = 0; i < children.size(); i++)
 		    {
-			DataElement child = source.get(i);
+			DataElement child = (DataElement)children.get(i);
 			String ctype = child.getType();
 			if (ctype.equals("directory") || ctype.equals("file"))
 			    {	
-				transfer(child, copiedSource);
-				targetDataStore.refresh(target);
+				transfer(child, copiedSource);				
 			    }
 
 			if (_pm != null)
@@ -364,7 +354,7 @@ public class TransferFiles extends Thread
 	    }
 
 	return -1;
-    }
+    } 
 
     private void setDate(DataElement fileElement, long newDate)
     {
