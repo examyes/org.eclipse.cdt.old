@@ -173,7 +173,7 @@
 		id="com.ibm.cpp.ui.SystemObjectsViewPart"
 		name="%System_Objects"
 		category="com.ibm.cpp.ui.cpp"
-		icon="icons/details.gif"
+		icon="icons/objects.gif"
 		class="com.ibm.cpp.ui.internal.views.SystemObjectsViewPart">
 	</view>
 	<view
@@ -187,7 +187,7 @@
 		id="com.ibm.cpp.ui.SchemaViewPart"
 		name="%Schema"
 		category="com.ibm.cpp.ui.cpp"
-		icon="icons/details.gif"
+		icon="icons/schema.gif"
 		class="com.ibm.cpp.ui.internal.views.SchemaViewPart">
 	</view>
 	<view
