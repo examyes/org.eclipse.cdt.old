@@ -32,371 +32,367 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 
-public class OutputViewer extends TableViewer
-    implements ISelected, ISelectionChangedListener, IDomainListener, IMenuListener
+public class OutputViewer
+	extends TableViewer
+	implements ISelected, ISelectionChangedListener, IDomainListener, IMenuListener
 {
 
-    protected DataElement           _selected;
-    protected DataElement           _currentInput;
-    private int                   _maxWidth;
-    private int                   _charWidth;
-    private OpenEditorAction      _openEditorAction;
-    private OpenPerspectiveAction _openPerspectiveAction;
-    private MenuHandler           _menuHandler;
+	protected DataElement _selected;
+	protected DataElement _currentInput;
+	private int _maxWidth;
+	private int _charWidth;
+	private OpenEditorAction _openEditorAction;
+	private OpenPerspectiveAction _openPerspectiveAction;
+	private MenuHandler _menuHandler;
 
-    protected HostsPlugin           _plugin;
+	protected HostsPlugin _plugin;
 
+	private static int MAX_BUFFER = 1000;
 
-    private static int            MAX_BUFFER = 1000;
-
-  public OutputViewer(Table parent, IActionLoader loader)
-      {
+	public OutputViewer(Table parent, IActionLoader loader)
+	{
 		super(parent);
 
-	    _plugin = HostsPlugin.getPlugin();
-	    setContentProvider(new DataElementTableContentProvider());
-	    
-	    if (loader == null)
-	    {
-	    	loader = _plugin.getActionLoader();
-	    }
-	    
-		setLabelProvider(new DataElementLabelProvider(_plugin.getImageRegistry(), loader));
-       	addSelectionChangedListener(this);
+		_plugin = HostsPlugin.getPlugin();
+		setContentProvider(new DataElementTableContentProvider());
+
+		if (loader == null)
+			{
+			loader = _plugin.getActionLoader();
+		}
+
+		setLabelProvider(
+			new DataElementLabelProvider(_plugin.getImageRegistry(), loader));
+		addSelectionChangedListener(this);
 
 		_menuHandler = new MenuHandler(_plugin.getActionLoader());
 
-		_maxWidth = 200;	
+		_maxWidth = 200;
 		_charWidth = 8;
 
-	Table table = getTable();
+		Table table = getTable();
 
-	MenuManager menuMgr = new MenuManager("#PopupMenu");
-	menuMgr.setRemoveAllWhenShown(true);
-	menuMgr.addMenuListener(this);
-	Menu menu = menuMgr.createContextMenu(table);
-	table.setMenu(menu);
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(this);
+		Menu menu = menuMgr.createContextMenu(table);
+		table.setMenu(menu);
 
-	Display display = table.getDisplay();
-	table.setBackground(new Color(display, 255, 255, 255));
+		Display display = table.getDisplay();
+		table.setBackground(new Color(display, 255, 255, 255));
 
 		table.setVisible(false);
-      }
-
-  protected void handleDoubleSelect(SelectionEvent event)
-  {
-    if (_openEditorAction == null)
-      {
-	_openEditorAction = new OpenEditorAction(_selected);
-      }
-
-    DataElement type = _selected.getDescriptor();
-    boolean isContainer = false;
-
-    if (isContainer)
-	{
-	    _selected.expandChildren();
-	    setInput(_selected);
 	}
 
+	protected void handleDoubleSelect(SelectionEvent event)
+	{
+		if (_openEditorAction == null)
+			{
+			_openEditorAction = new OpenEditorAction(_selected);
+		}
 
-    _openEditorAction.setSelected(_selected);
-    _openEditorAction.run();
-  }
+		DataElement type = _selected.getDescriptor();
+		boolean isContainer = false;
 
-  public void handleLinkEvent(SelectionChangedEvent event)
-      {
-	IStructuredSelection sel = (IStructuredSelection) event.getSelection();
-	if (sel.isEmpty())
-          return;
-	IElement input = (IElement)sel.getFirstElement();
+		if (isContainer)
+			{
+			_selected.expandChildren();
+			setInput(_selected);
+		}
 
-	if (input instanceof DataElement)
-	  setInput((DataElement)input);
-      }
+		_openEditorAction.setSelected(_selected);
+		_openEditorAction.run();
+	}
 
-  private void clearInput()
-  {
-  	Table table = getTable();
-  	table.setRedraw(false);
-	table.removeAll();
-	table.setRedraw(true);
+	public void handleLinkEvent(SelectionChangedEvent event)
+	{
+		IStructuredSelection sel = (IStructuredSelection) event.getSelection();
+		if (sel.isEmpty())
+			return;
+		IElement input = (IElement) sel.getFirstElement();
 
-	TableColumn column = table.getColumn(0);
-	column.setText("");
-	table.setVisible(false);		
-  }
-  
-  public void clear()
-  {
-  	_currentInput = null;
-  	getTable().setVisible(false);
-  }
+		if (input instanceof DataElement)
+			setInput((DataElement) input);
+	}
 
-  public void setInput(DataElement input)
-  {
-      super.setInput((IElement)input);
-    if (input != null)
-      {
-      	if (_currentInput == null)
-      	{
-			getTable().setVisible(true);
-      	}
-		  _currentInput = input;
-		  
-		  DataStore dataStore = _currentInput.getDataStore();	
+	private void clearInput()
+	{
+		Table table = getTable();
+		table.setRedraw(false);
+		table.removeAll();
+		table.setRedraw(true);
 
-	  if (_currentInput.getType().equals("status"))
-	      {
-		  DataElement commandInstance = _currentInput.getParent();
-		  String commandValue = commandInstance.getAttribute(DE.A_VALUE);
+		TableColumn column = table.getColumn(0);
+		column.setText("");
+		table.setVisible(false);
+	}
+
+	public void clear()
+	{
+		_currentInput = null;
+		getTable().setVisible(false);
+	}
+
+	public void setInput(DataElement input)
+	{
+		super.setInput((IElement) input);
+		if (input != null)
+			{
+			if (_currentInput == null)
+				{
+				getTable().setVisible(true);
+			}
+			_currentInput = input;
+
+			DataStore dataStore = _currentInput.getDataStore();
+
+			if (_currentInput.getType().equals("status"))
+				{
+				DataElement commandInstance = _currentInput.getParent();
+				String commandValue = commandInstance.getAttribute(DE.A_VALUE);
+
+				TableColumn column = getTable().getColumn(0);
+				column.setText(commandValue);
+			}
+			else
+				{
+				String value = _currentInput.getAttribute(DE.A_VALUE);
+
+				TableColumn column = getTable().getColumn(0);
+				column.setText(value);
+			}
+
+			Table table = getTable();
+			if (table != null)
+				{
+				table.setRedraw(false);
+				table.removeAll();
+				updateChildren();
+				table.setRedraw(true);
+			}
+		}
+	}
+
+	public void menuAboutToShow(IMenuManager menu)
+	{
+		menu.removeAll();
+
+		fillContextMenu(menu);
+	}
+
+	public void fillContextMenu(IMenuManager menu)
+	{
+		DataElement selected = ConvertUtility.convert(getSelection());
+		_menuHandler.fillContextMenu(menu, _currentInput, selected);
+	}
+
+	public DataElement getCurrentInput()
+	{
+		return _currentInput;
+	}
+
+	public void setSelected(DataElement selected)
+	{
+		_selected = selected;
+	}
+
+	public DataElement getSelected()
+	{
+		return _selected;
+	}
+
+	public boolean listeningTo(DomainEvent ev)
+	{
+		if (_currentInput == null || _currentInput.isDeleted())
+			{
+			_currentInput = null;
+			return false;
+		}
+		else
+			{
+			DataElement parent = (DataElement) ev.getParent();
+			if (parent == _currentInput)
+				{
+				return true;
+			}
+			else
+				{
+				return false;
+			}
+		}
+	}
+
+	public void domainChanged(DomainEvent ev)
+	{
+		DataElement parent = (DataElement) ev.getParent();
+		Table table = getTable();
+		if (table != null && !table.isDisposed())
+			{
+			// we should only update periodically	
+			int ecount = ev.getChildrenCount();
+			int tcount = table.getItemCount();
+			
 	
-		  TableColumn column = getTable().getColumn(0);
-		  column.setText(commandValue);	
-	      }
-	  else
-	      {
-		  String value = _currentInput.getAttribute(DE.A_VALUE);
-	
-		  TableColumn column = getTable().getColumn(0);
-		  column.setText(value);			
-	      }
+			{
+				updateChildren();
 
-	  Table table = getTable();
-	  if (table != null)
-	      {
-		  table.setRedraw(false);
-		  table.removeAll();
-		  //internalRefresh(_currentInput);
-		  updateChildren(_currentInput.getAssociated("contents"));
-		  table.setRedraw(true);
-	      }
-      }
-  }
+				TableColumn column = table.getColumn(0);
 
-  public void menuAboutToShow(IMenuManager menu)
-      {
-	menu.removeAll();
-	
-	fillContextMenu(menu);
-      }
+				if (column.getWidth() < _maxWidth)
+				{
+					table.setRedraw(false);
+					column.setWidth(_maxWidth);
+					table.setRedraw(true);
+				}
+			}
+		}
 
-  public void fillContextMenu(IMenuManager menu)
-      {
-	DataElement selected = ConvertUtility.convert(getSelection());
-	_menuHandler.fillContextMenu(menu, _currentInput, selected);
-      }
+	}
 
+	public Shell getShell()
+	{
+		if (!getControl().isDisposed())
+			return getControl().getShell();
+		else
+			return null;
+	}
 
-  public DataElement getCurrentInput()
-  {
-    return _currentInput;
-  }
+	public synchronized void updateChildren()
+	{
+		Table table = getTable();
+		table.setRedraw(false);
+		int index = table.getItemCount();
+		if (index > MAX_BUFFER)
+			{
+			clearFirstItems(index - (MAX_BUFFER / 2));
 
+		}
 
-  public void setSelected(DataElement selected)
-      {
-        _selected = selected;
-      }
+		table.setRedraw(true);
 
-  public DataElement getSelected()
-      {
-        return _selected;
-      }
+		index = table.getItemCount();
 
-    public boolean listeningTo(DomainEvent ev)
-    {
-       if (_currentInput == null || _currentInput.isDeleted())
-       {
-       	_currentInput = null;
-       	//clearInput();
-       	return false;
-       }
-       else
-       {
-       	DataElement parent = (DataElement)ev.getParent();
-       	if (parent == _currentInput)
-	   	{
-	       return true;
-	   	}
-    	   else
-	   	{
-	       return false;
-	   	}
-       }
-    }
+		TableItem latestItem = null;
+		ArrayList children = _currentInput.getAssociated("contents");
+		for (int i = index; i < children.size(); i++)
+			{
+			DataElement child = (DataElement) children.get(i);
+			if (child != null && child.isReference())
+				{
+				child = child.dereference();
+			}
+			if (child != null)
+				{
+				child.setUpdated(true);
+				//if (doFindItem(child) == null)
+					{
 
-    public void domainChanged(DomainEvent ev)
-    {
+					TableItem newItem = (TableItem) newItem(table, SWT.NONE, index);
+					updateItem(newItem, child);
+					index++;
 
-    	{
-			DataElement parent = (DataElement)ev.getParent();
-			ArrayList children = ev.getChildren();
-			if (children != null)
-		    {
-				Table table = getTable();
-				if (table != null && !table.isDisposed())
-			    {
-					updateChildren(children);
-	
-					TableColumn column = table.getColumn(0);
+					int charLen = child.getName().length();
+					int itemWidth = charLen * _charWidth;
 
-					if (column.getWidth() < _maxWidth)
-				    {
-						table.setRedraw(false);
-						column.setWidth(_maxWidth);		 
-						table.setRedraw(true);
-			 		}
-		    	}	
-	    	}
-    	}
-    }
+					if (_maxWidth < itemWidth)
+						_maxWidth = itemWidth;
 
-  public Shell getShell()
-      {
-	  if (!getControl().isDisposed())
-	      return getControl().getShell();
-	  else
-	      return null;
-      }
+					latestItem = newItem;
+				}
+			}
+		}
 
-  public synchronized void updateChildren(ArrayList children)
-      {
-	  Table table = getTable();
-	  table.setRedraw(false);	
-	  int index = table.getItemCount();
-	  if (index > MAX_BUFFER)
-	      {
-		  clearFirstItems(index - (MAX_BUFFER / 2));
+		if (latestItem != null)
+			{
+			table.showItem(latestItem);
+		}
 
-	      }
+	}
 
-	  table.setRedraw(true);	
+	private void clearFirstItems(int items)
+	{
+		Table table = getTable();
+		synchronized (table)
+		{
+			int count = table.getItemCount();
+			table.remove(0, items);
+			for (int i = 0; i < items; i++)
+				{
+				DataElement item = _currentInput.get(i);
+				ArrayList nestedData = _currentInput.getNestedData();
+				synchronized (nestedData)
+				{
+					nestedData.remove(item);
+				}
+			}
+		}
+	}
 
-	  index = table.getItemCount();
-	  	
-	  TableItem latestItem = null;
-	  for (int i = 0; i < children.size(); i++)
-	      {
-	      	DataElement child = (DataElement)children.get(i);
-	      	if (child != null && child.isReference())
-	      	{
-		  		child = child.dereference();
-	      	}
-		  if (child != null)
-		      {
-			  child.setUpdated(true);
-			  if (doFindItem(child) == null)	
-			      {		
-				
-				  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
-				  updateItem(newItem, child);
-				  index++;
-				
-				  int charLen = child.getName().length();		
-				  int itemWidth = charLen * _charWidth;
-				
-				  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
+	protected Item newItem(Widget parent, int flags, int ix)
+	{
+		if (parent instanceof Table)
+			{
+			return new TableItem((Table) parent, flags);
+		}
 
-				  latestItem = newItem;				
-			      }	
-		      }
-	      }
-	
-	  if (latestItem != null)
-	      {
-		  table.showItem(latestItem);
-	      }
+		return null;
+	}
 
-      }
+	public void fillLocalToolBar(IToolBarManager toolBarManager)
+	{
+	}
 
-    private void clearFirstItems(int items)
-    {
-	Table table = getTable();
-	synchronized (table)
-	    {
-		int count = table.getItemCount();
-		table.remove(0, items);
-		for (int i = 0; i < items; i++)
-		    {
-			DataElement item = _currentInput.get(i);
-			ArrayList nestedData = _currentInput.getNestedData();
-			synchronized(nestedData)
-			    {
-				nestedData.remove(item);
-			    }
-		    }
-	    }
-    }
+	public void selectionChanged(SelectionChangedEvent e)
+	{
+		DataElement selected = ConvertUtility.convert(e);
+		if (selected != null)
+			{
+			setSelected(selected);
+		}
+	}
 
-    protected Item newItem(Widget parent, int flags, int ix)
-    {
-	if (parent instanceof Table)
-	    {
-		return new TableItem((Table) parent, flags);
-	    }
+	public void setBackground(int r, int g, int b)
+	{
+		Table table = getTable();
 
-	return null;
-    }
+		Display display = table.getDisplay();
+		table.setBackground(new Color(display, r, g, b));
+	}
 
+	public void setForeground(int r, int g, int b)
+	{
+		Table table = getTable();
 
-  public void fillLocalToolBar(IToolBarManager toolBarManager)
-  {
-   }
+		Display display = table.getDisplay();
+		table.setForeground(new Color(display, r, g, b));
+	}
 
-  public void selectionChanged(SelectionChangedEvent e)
-  {
-    DataElement selected = ConvertUtility.convert(e);
-    if (selected != null)
-      {
-	setSelected(selected);
-      }
-  }
+	public void setFont(FontData data)
+	{
+		Table table = getTable();
 
+		Display display = table.getDisplay();
 
-  public void setBackground(int r, int g, int b)
-  {
-    Table table = getTable();
+		_charWidth = data.getHeight();
+		setFont(new Font(display, data));
+	}
 
-    Display display = table.getDisplay();
-    table.setBackground(new Color(display, r, g, b));
-  }
+	public void setFont(Font font)
+	{
+		getTable().setFont(font);
+	}
 
-  public void setForeground(int r, int g, int b)
-  {
-    Table table = getTable();
+	public void enableActions()
+	{
+	}
 
-    Display display = table.getDisplay();
-    table.setForeground(new Color(display, r, g, b));
-  }
+	public void dispose()
+	{
+		Table table = getTable();
+		if (table != null)
+			{
+			table.dispose();
+		}
+	}
 
-    public void setFont(FontData data)
-    {
-	Table table = getTable();
-	
-	Display display = table.getDisplay();
-
-	_charWidth = data.getHeight();
-	setFont(new Font(display, data));
-    }
-
-    public void setFont(Font font)
-    {	
-	getTable().setFont(font);
-    }
-    
-    public void enableActions()
-    {
-    }
-    
- 	public void dispose()
- 	{
- 		Table table = getTable();
- 		if (table != null)
- 		{
- 			table.dispose();	
- 		}
- 	}
- 
 }
-
