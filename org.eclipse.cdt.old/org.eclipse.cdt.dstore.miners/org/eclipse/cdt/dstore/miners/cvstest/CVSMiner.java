@@ -20,14 +20,11 @@ public class CVSMiner extends Miner
 	DataElement fsD         = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	commandD = _dataStore.find(fsD, DE.A_VALUE, "C_COMMAND");
   
-	DataElement fileD        = _dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
-	
 	DataElement cvsD      = createAbstractCommandDescriptor(fsD, "CVS", "C_CVS");
 
 	DataElement updateD   = createCommandDescriptor(cvsD, "update",   "C_CVS_UPDATE", false);	
 	DataElement checkoutD = createCommandDescriptor(cvsD, "checkout", "C_CVS_CHECKOUT", false);	
 	DataElement commitD   = createCommandDescriptor(cvsD, "commit",   "C_CVS_COMMIT", false);	
-	createReference(fileD, cvsD);
 	DataElement loginD    = createCommandDescriptor(cvsD, "login",    "C_CVS_LOGIN");	
 	DataElement linputD   = _dataStore.createObject(loginD, "input", "Enter Password");	
     }

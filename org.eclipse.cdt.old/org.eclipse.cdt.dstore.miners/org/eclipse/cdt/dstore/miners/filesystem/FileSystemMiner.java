@@ -172,33 +172,18 @@ public class FileSystemMiner extends Miner
 	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
 	  
 	  DataElement open      = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Open"), "C_OPEN");
+
 	  DataElement move      = createCommandDescriptor(_fsystemObjectDescriptor, 
 							  getLocalizedString("model.Move"), "C_MOVE", false);
-
 	  
 	  //renaming files and dirs
-	  DataElement renF = createCommandDescriptor(_fsystemObjectDescriptor, 
-						     getLocalizedString("model.Rename"), "C_RENAME");
-	  renF.setDepth(1);
-
+	  DataElement renF = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Rename"), "C_RENAME");
 	  DataElement inRenF = _dataStore.createObject(renF,"input", "Enter the New Name");
-
-	  DataElement renFile = createCommandDescriptor(_fileDescriptor, 
-							getLocalizedString("model.Rename"), "C_RENAME");
-	  renFile.setDepth(1);
-	  
-	  DataElement inRenFile = _dataStore.createObject(renFile,"input", "Enter the New Name");
 	  
 	  DataElement findD = createCommandDescriptor(_fsystemObjectDescriptor, "Find", "C_FIND_FILE", false);
 
-
 	  //deleting dirs
-	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,
-						    getLocalizedString("model.Delete"),
-						    "C_DELETE");
-	  DataElement del2 = createCommandDescriptor(_fileDescriptor,
-						     getLocalizedString("model.Delete"),
-						     "C_DELETE");
+	  DataElement del = createCommandDescriptor(_fileDescriptor, getLocalizedString("model.Delete"), "C_DELETE");
 	  
 
 	  //creating new files and dirs
@@ -259,9 +244,9 @@ public class FileSystemMiner extends Miner
 	 DataElement subElement2 = getCommandArgument(theElement, 1);
 	 status = handleImport(subElement1.dereference(), subElement2, status);	 
      }
-     else if (name.equals("C_OPEN") && (!subject.getType().equals("Project")))
-       {
-	 status = handleOpen(subject.dereference(), status);
+     else if (name.equals("C_OPEN") && (!subject.getDescriptor().isOfType(_fsystemObjectDescriptor)))
+	 {
+	     status = handleOpen(subject.dereference(), status);
        }
      else if (name.equals("C_MOVE"))
      {

@@ -644,14 +644,12 @@ public final class DataElement implements Serializable, IDataElement
 				result = true;
 			    }
 		    }
-		else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+
+		ArrayList abstracted = type.getAssociated(_dataStore.getLocalizedString("model.abstracts"));
+		for (int i = 0; (i < abstracted.size()) && !result; i++)
 		    {
-			ArrayList abstracted = type.getAssociated(_dataStore.getLocalizedString("model.abstracts"));
-			for (int i = 0; (i < abstracted.size()) && !result; i++)
-			    {
-				DataElement subDescriptor = (DataElement)abstracted.get(i);
-				result = isOfType(subDescriptor, true);
-			    }
+			DataElement subDescriptor = (DataElement)abstracted.get(i);
+			result = isOfType(subDescriptor, true);
 		    }
 	    }
 
@@ -1043,7 +1041,8 @@ public final class DataElement implements Serializable, IDataElement
 		}
 	    
 	    String type = getType();
-	    if (!getDescriptor().isOfType("Filesystem Objects") &&
+	    
+	    if ((getDescriptor() != null) && !getDescriptor().isOfType("Filesystem Objects") &&
 		(getParent() != _dataStore.getDescriptorRoot()))
 		{			  
 		    String localPath = _dataStore.mapToLocalPath(source);

@@ -113,6 +113,7 @@ public class MenuHandler
 		    }
 		else 
 		    {
+			System.out.println(merge.getName() + " is NOT type " + descriptor.getName());
 			ArrayList abstractsMerge = merge.getAssociated(dataStore.getLocalizedString("model.abstracted_by"));
 			for (int i = 0; i < abstractsMerge.size(); i++)
 			    {

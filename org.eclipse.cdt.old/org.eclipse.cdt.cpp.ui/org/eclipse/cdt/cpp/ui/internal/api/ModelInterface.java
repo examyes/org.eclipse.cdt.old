@@ -1002,8 +1002,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement workspace = findWorkspaceElement(dataStore);
 	if (workspace != null)
 	    {
-		String resString = resource.getLocation().toString().replace('\\', '/');
+		String resString = resource.getLocation().toString();
 		result = findResourceElement(workspace, resString);
+		System.out.println(resString + " maps to " + result);
 	    }
 
 	return result;
@@ -1020,8 +1021,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		for (int i = 0; i < root.getNestedSize(); i++)
 		    {
-			DataElement child = root.get(i);
-			if (child != null && !child.isDeleted() && !child.isReference())
+			DataElement child = root.get(i).dereference();
+			if (child != null && !child.isDeleted())
 			    {
 				if (child.getType().equals("file")  || 
 				    child.getType().equals("directory") ||
@@ -1029,6 +1030,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    )
 				    {
 					found = findResourceElement(child, path);
+					if (found != null)
+					    {
+						return found;
+					    }
 				    }
 			    }
 		    }
@@ -1451,7 +1456,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					parent = parent.getParent();
 				    }
 				
-				if (parent.getType().equals("Project"))
+				if (parent != null && parent.getType().equals("Project"))
 				    {
 					resource = findProjectResource(parent);
 				    }

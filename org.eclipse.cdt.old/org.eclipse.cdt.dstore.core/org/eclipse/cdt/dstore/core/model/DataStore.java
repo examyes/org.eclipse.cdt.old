@@ -2232,7 +2232,7 @@ public DataElement command(DataElement commandDescriptor,
 
 	// misc
         DataElement allD      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.all"));
-	allD.setDepth(100);
+	allD.setDepth(1);
 
 	DataElement invokeD   = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.invocation"));	
 	DataElement patternD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.pattern"));	
@@ -2248,11 +2248,11 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement parentD       = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.parent"));	
 	DataElement argsD         = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.arguments"));	
 	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));
-	abstracts.setDepth(0);
+	//***abstracts.setDepth(0);
         
 	
 	DataElement abstractedBy  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracted_by"));	
-	abstractedBy.setDepth(0);
+	//***abstractedBy.setDepth(0);
 	
 	DataElement caRelations = createAbstractRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents&arguments"));
 	createReference(caRelations, containsD, containsD);
@@ -2288,29 +2288,24 @@ public DataElement command(DataElement commandDescriptor,
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
-        createReference(objectDescriptor, containerObjectD, abstracts, abstractedBy);
 
       // file objects
 	createReference(hostD, containsD, containsD);	
 
         DataElement deviceD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.device"), 
 						      "com.ibm.dstore.miners");
-
-        DataElement dirD     = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.directory"), 
-						      "com.ibm.dstore.miners");
-
-        DataElement folderD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.folder"), 
-						      "com.ibm.dstore.miners");
         DataElement fileD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.file"), 
+						      "com.ibm.dstore.miners");
+        DataElement dirD     = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.directory"), 
 						      "com.ibm.dstore.miners");
 
         DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
 
 	createReference(containerObjectD, fsObject, abstracts, abstractedBy);
-	//createReference(containerObjectD, hostD, abstracts, abstractedBy);	
 	createReference(fsObject, deviceD,  abstracts, abstractedBy);
 
-	 createReference(fsObject, dirD, abstracts, abstractedBy);
+	createReference(fileD,    fsObject, abstracts, abstractedBy);
+	createReference(fsObject, dirD, abstracts, abstractedBy);
         createReference(fsObject, fileD,    containsD);
         createReference(fsObject, dirD,     containsD);
 	createReference(fsObject, fsObject, containsD);
@@ -2365,7 +2360,6 @@ public DataElement command(DataElement commandDescriptor,
 
         // basic commands
 	createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
- 	createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "*", "C_QUERY", false);
 	createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET", false); 
 	createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST", false);
 	createCommandDescriptor(rootD, getLocalizedString("model.Init_Miners"), "*", "C_INIT_MINERS", false);
