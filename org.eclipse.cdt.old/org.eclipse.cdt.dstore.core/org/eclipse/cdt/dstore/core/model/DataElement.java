@@ -822,7 +822,7 @@ public final class DataElement implements Serializable, IDataElement
         _depth = depth;
         setAttribute(DE.A_DEPTH, "" + _depth);
         _isUpdated = false;
-        _dataStore.refresh(this);
+        //_dataStore.refresh(this);
     }
 
 
