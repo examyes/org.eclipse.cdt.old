@@ -33,7 +33,7 @@ class GenerateMakefiles
  
  private static String getSWTJar()
  {
-  String [] platforms = new String[] {"motif", "win32"};
+  String [] platforms = new String[] {"motif", "gtk", "win32", "photon"};
   for (int i=0; i<platforms.length; i++)
   {
    String theJarString = _pluginsDir + "/" + "org.eclipse.swt." + platforms[i] + "_2.0.0/ws/" + platforms[i] + "/swt.jar";
