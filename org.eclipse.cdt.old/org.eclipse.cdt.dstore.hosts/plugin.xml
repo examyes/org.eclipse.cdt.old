@@ -1,84 +1,73 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
 <plugin
-   name = "%pluginName"
-   id = "org.eclipse.cdt.dstore.hosts"
-   version = "0.5.0"
-   vendor-name = "International Business Machines Corp."
+   id="org.eclipse.cdt.dstore.hosts"
+   name="%pluginName"
+   version="2.0.0"
    class="org.eclipse.cdt.dstore.hosts.HostsPlugin">
+<requires>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.swt"/>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.core.runtime"/>
+   <import plugin="org.eclipse.core.boot"/>
+   <import plugin="org.eclipse.cdt.dstore.extra"/>
+   <import plugin="org.eclipse.cdt.dstore.core"/>
+   <import plugin="org.eclipse.cdt.dstore.ui"/>
+   <import plugin="org.eclipse.cdt.dstore.miners"/>
+</requires>
 
-   <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.boot"/>
-      <import plugin="org.eclipse.cdt.dstore.extra"/>
-      <import plugin="org.eclipse.cdt.dstore.core"/>
-      <import plugin="org.eclipse.cdt.dstore.ui"/>
-      <import plugin="org.eclipse.cdt.dstore.miners"/>
-   </requires>
-
-   <runtime>
-    <library name=".">
-       	<export name="*" />      
-     </library> 
-      <library name="dstore_hosts.jar">
-       	<export name="*" />      
-     </library> 
-   </runtime>
+<runtime>
+   <library name=".">
+      <export name="*"/>
+   </library>
+   <library name="dstore_hosts.jar">
+      <export name="*"/>
+   </library>
+</runtime>
 
 <extension
-	point="org.eclipse.ui.perspectives">
+      point="org.eclipse.ui.perspectives">
    <perspective
-	id="org.eclipse.cdt.dstore.hosts.views.HostsPerspective"
-	icon="icons/full/cview16/host_perspective.gif"
-	name="%Hosts"
-	class="org.eclipse.cdt.dstore.hosts.views.HostsPerspective">
-	</perspective>
-	
-  </extension>
-
-<extension
-	point="org.eclipse.ui.views">
-	<category
-	   id="org.eclipse.cdt.dstore.hosts"
-	   name="&amp;Hosts">
-	</category>
-	<view
-		id="org.eclipse.cdt.dstore.hosts.views.HostsViewPart"
-		name="%Hosts"
-		category="org.eclipse.cdt.dstore.hosts"
-		icon="icons/full/cview16/hosts_view.gif"
-		class="org.eclipse.cdt.dstore.hosts.views.HostsViewPart">
-	</view>
-	<view
-		id="org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart"
-		name="%Host_Details"
-		category="org.eclipse.cdt.dstore.hosts"
-		icon="icons/full/cview16/hostdetail_view.gif"
-		class="org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart">
-	</view>
-	<view
-		id="org.eclipse.cdt.dstore.hosts.views.OutputViewPart"
-		name="%Output"
-		category="org.eclipse.cdt.dstore.hosts"
-		icon="icons/full/cview16/outgoing_view.gif"
-		class="org.eclipse.cdt.dstore.hosts.views.OutputViewPart">
-	</view>
-	<view
-		id="org.eclipse.cdt.dstore.hosts.views.CommandViewPart"
-		name="%Command"
-		category="org.eclipse.cdt.dstore.hosts"
-		icon="icons/full/cview16/command_view.gif"
-		class="org.eclipse.cdt.dstore.hosts.views.CommandViewPart">
-	</view>
+         name="%Hosts"
+         icon="icons/full/cview16/host_perspective.gif"
+         class="org.eclipse.cdt.dstore.hosts.views.HostsPerspective"
+         id="org.eclipse.cdt.dstore.hosts.views.HostsPerspective">
+   </perspective>
 </extension>
-
+<extension
+      point="org.eclipse.ui.views">
+   <category
+         name="&amp;Hosts"
+         id="org.eclipse.cdt.dstore.hosts">
+   </category>
+   <view
+         name="%Hosts"
+         icon="icons/full/cview16/hosts_view.gif"
+         category="org.eclipse.cdt.dstore.hosts"
+         class="org.eclipse.cdt.dstore.hosts.views.HostsViewPart"
+         id="org.eclipse.cdt.dstore.hosts.views.HostsViewPart">
+   </view>
+   <view
+         name="%Host_Details"
+         icon="icons/full/cview16/hostdetail_view.gif"
+         category="org.eclipse.cdt.dstore.hosts"
+         class="org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart"
+         id="org.eclipse.cdt.dstore.hosts.views.HostsDetailsViewPart">
+   </view>
+   <view
+         name="%Output"
+         icon="icons/full/cview16/outgoing_view.gif"
+         category="org.eclipse.cdt.dstore.hosts"
+         class="org.eclipse.cdt.dstore.hosts.views.OutputViewPart"
+         id="org.eclipse.cdt.dstore.hosts.views.OutputViewPart">
+   </view>
+   <view
+         name="%Command"
+         icon="icons/full/cview16/command_view.gif"
+         category="org.eclipse.cdt.dstore.hosts"
+         class="org.eclipse.cdt.dstore.hosts.views.CommandViewPart"
+         id="org.eclipse.cdt.dstore.hosts.views.CommandViewPart">
+   </view>
+</extension>
 </plugin>
-
-
-
-
-
-
-

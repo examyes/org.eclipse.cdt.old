@@ -1,26 +1,20 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
 <plugin
-   name = "Cpp ParseMiner Plugin"
-   id = "org.eclipse.cdt.cpp.miners.parser"
-   version = "0.5.0"
-   vendor-name = "International Business Machines Corp.">
-   <requires>
-     <import plugin="org.eclipse.cdt.cpp.miners"/> 
-     <import plugin="org.eclipse.cdt.dstore.core"/>
-   </requires>
-   <runtime>
-    <library name=".">
-       	<export name="*" />      
-     </library> 
-      <library name="miners_parser.jar">
-       	<export name="*" />      
-     </library> 
-   </runtime>
+   id="org.eclipse.cdt.cpp.miners.parser"
+   name="Cpp ParseMiner Plugin"
+   version="2.0.0">
+<requires>
+   <import plugin="org.eclipse.cdt.cpp.miners"/>
+   <import plugin="org.eclipse.cdt.dstore.core"/>
+</requires>
+
+<runtime>
+   <library name=".">
+      <export name="*"/>
+   </library>
+   <library name="miners_parser.jar">
+      <export name="*"/>
+   </library>
+</runtime>
 </plugin>
-
-
-
-
-
-
-

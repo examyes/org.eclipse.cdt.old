@@ -1,28 +1,19 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
 <plugin
-   name = "Cpp Miners Plugin"
-   id = "org.eclipse.cdt.cpp.miners"
-   version = "0.5.0"
-   vendor-name = "International Business Machines Corp.">
+   id="org.eclipse.cdt.cpp.miners"
+   name="Cpp Miners Plugin"
+   version="2.0.0">
+<requires>
+   <import plugin="org.eclipse.cdt.dstore.core"/>
+</requires>
 
-   <requires>
-      <import plugin="org.eclipse.cdt.dstore.core"/>
-   </requires>
-
-   <runtime>
-    <library name=".">
-       	<export name="*" />      
-     </library> 
-     <library name="cpp_miners.jar">
-       	<export name="*" />      
-     </library> 
-   </runtime>
-
+<runtime>
+   <library name=".">
+      <export name="*"/>
+   </library>
+   <library name="cpp_miners.jar">
+      <export name="*"/>
+   </library>
+</runtime>
 </plugin>
-
-
-
-
-
-
-

@@ -1,71 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
 <plugin
-  name="Linux Help Plugin"
-  id = "org.eclipse.cdt.linux.help"
-  version="0.5.0"
-  provider-name="International Business Machines Corp."
-  class="org.eclipse.cdt.linux.help.HelpPlugin">
+   id="org.eclipse.cdt.linux.help"
+   name="Linux Help Plugin"
+   version="2.0.0"
+   provider-name="International Business Machines Corp."
+   class="org.eclipse.cdt.linux.help.HelpPlugin">
+<requires>
+   <import plugin="org.eclipse.core.runtime"/>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.swt"/>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.cdt.dstore.core"/>
+   <import plugin="com.ibm.lpex"/>
+   <import plugin="org.apache.lucene"/>
+</requires>
 
-  <requires>
-         <import plugin="org.eclipse.core.runtime"/>
-         <import plugin="org.eclipse.core.resources"/>
-         <import plugin="org.eclipse.swt"/>
-	 <import plugin="org.eclipse.ui"/>
-         <import plugin="org.eclipse.cdt.dstore.core"/>
-	 <import plugin="com.ibm.lpex"/>
-         <import plugin="org.apache.lucene"/>
-  </requires>
-
-  <runtime>
-    <library name=".">
+<runtime>
+   <library name=".">
       <export name="*"/>
-    </library>
-     <library name="linux_help.jar">
+   </library>
+   <library name="linux_help.jar">
       <export name="*"/>
-    </library>
-  </runtime>
+   </library>
+</runtime>
 
-  <extension
-	point="org.eclipse.ui.views">		
-	<view
-		id="org.eclipse.cdt.linux.help.views.ResultsViewPart"
-		name="%View.Title.HelpResults"
-		category="org.eclipse.cdt.cpp.ui.cpp"
-		icon="icons/results.gif"
-		class="org.eclipse.cdt.linux.help.views.ResultsViewPart">
-	</view>	
-  </extension>
-
-  <extension
-    point = "org.eclipse.ui.viewActions">
-      <viewContribution 
-         id="org.eclipse.cdt.linux.help.actions.vc1" 
-         targetID="org.eclipse.cdt.linux.help.views.ResultsViewPart">        
-	 <action id="org.eclipse.cdt.linux.help.actions.va1" 
-              label="%PopupMenu.ResultsView.label" 
-	      menubarPath="additions"
-              toolbarPath="additions" 
-              icon="icons/sections.gif" 
-              tooltip="%PopupMenu.ResultsView.tooltip" 
-   	     
-              class="org.eclipse.cdt.linux.help.actions.ViewActionDelegate" 
-              > 			   
-	</action>
-        <action id="org.eclipse.cdt.linux.help.actions.va2"
-		label="%PopupMenu.ResultsView.AddFilter.label"
-		menubarPath="additions"
-		toolbarPath="additions"
-		icon="icons/filter.gif"
-		tooltip="%PopupMenu.ResultsView.AddFilter.tooltip"
-		class="org.eclipse.cdt.linux.help.actions.FilterActionDelegate"
-		>              
-        </action>
-
-      </viewContribution>
-  </extension>
-
+<extension
+      point="org.eclipse.ui.views">
+   <view
+         name="%View.Title.HelpResults"
+         icon="icons/results.gif"
+         category="org.eclipse.cdt.cpp.ui.cpp"
+         class="org.eclipse.cdt.linux.help.views.ResultsViewPart"
+         id="org.eclipse.cdt.linux.help.views.ResultsViewPart">
+   </view>
+</extension>
+<extension
+      point="org.eclipse.ui.viewActions">
+   <viewContribution
+         targetID="org.eclipse.cdt.linux.help.views.ResultsViewPart"
+         id="org.eclipse.cdt.linux.help.actions.vc1">
+      <action
+            label="%PopupMenu.ResultsView.label"
+            icon="icons/sections.gif"
+            tooltip="%PopupMenu.ResultsView.tooltip"
+            class="org.eclipse.cdt.linux.help.actions.ViewActionDelegate"
+            menubarPath="additions"
+            toolbarPath="additions"
+            id="org.eclipse.cdt.linux.help.actions.va1">
+      </action>
+      <action
+            label="%PopupMenu.ResultsView.AddFilter.label"
+            icon="icons/filter.gif"
+            tooltip="%PopupMenu.ResultsView.AddFilter.tooltip"
+            class="org.eclipse.cdt.linux.help.actions.FilterActionDelegate"
+            menubarPath="additions"
+            toolbarPath="additions"
+            id="org.eclipse.cdt.linux.help.actions.va2">
+      </action>
+   </viewContribution>
+</extension>
 </plugin>
-
-
-
-

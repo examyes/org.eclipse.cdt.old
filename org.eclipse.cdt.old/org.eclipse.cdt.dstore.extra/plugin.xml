@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- File written by PDE 1.0 -->
 <plugin
-  name="DataStore Extra Plugin"
-   id = "org.eclipse.cdt.dstore.extra"
-  version="0.5.0"
-  provider-name="International Business Machines Corp.">
-   <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.core.runtime"/>
-   </requires>
+   id="org.eclipse.cdt.dstore.extra"
+   name="DataStore Extra Plugin"
+   version="2.0.0"
+   provider-name="International Business Machines Corp.">
+<requires>
+   <import plugin="org.eclipse.ui"/>
+   <import plugin="org.eclipse.swt"/>
+   <import plugin="org.eclipse.core.resources"/>
+   <import plugin="org.eclipse.core.runtime"/>
+</requires>
 
-  <runtime>
-    <library name=".">
+<runtime>
+   <library name=".">
       <export name="*"/>
-    </library>
-    <library name="dstore_extra.jar">
+   </library>
+   <library name="dstore_extra.jar">
       <export name="*"/>
-    </library>
-  </runtime>
+   </library>
+</runtime>
 </plugin>
-
-
-
-
