@@ -21,7 +21,5 @@ public class ProjectSaveParseAction extends ProjectAction
  {
      DataElement status = _dataStore.command(_saveCommand, _subject);
      _api.monitorStatus(status);
-     _api.showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
-     _api.showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
  }
 }
