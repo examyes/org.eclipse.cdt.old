@@ -87,9 +87,9 @@ public class CopyAction extends CustomAction
     public void run()
     {
 	ModelInterface api = ModelInterface.getInstance();	
-	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a directory to copy to", 
+	ChooseProjectDialog dlg = new ChooseProjectDialog("Choose a Directory to Copy to", 
 							  api.findWorkspaceElement());
-	dlg.useFilter(false);
+	dlg.useFilter(true);
 	dlg.open();
 	
 	if (dlg.getReturnCode() == dlg.OK)
