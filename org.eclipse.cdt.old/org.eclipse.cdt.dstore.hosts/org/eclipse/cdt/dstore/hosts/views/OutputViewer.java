@@ -1,7 +1,7 @@
 package com.ibm.dstore.hosts.views;
 
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
+ * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
  */
 
 import com.ibm.dstore.hosts.*;
@@ -30,15 +30,15 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 
-public class OutputViewer extends TableViewer  
+public class OutputViewer extends TableViewer
     implements ISelected, ISelectionChangedListener, IDomainListener, IMenuListener
 {
   public class CancelAction extends Action
-  {      
+  {
     public CancelAction(String name, ImageDescriptor image)
     {
       super(name, image);
-      
+
     }
 
       public void run()
@@ -50,7 +50,7 @@ public class OutputViewer extends TableViewer
 		  cancel(command);
 	      }
       }
-      
+
       public void cancel(DataElement command)
       {
 	  DataStore dataStore = command.getDataStore();
@@ -121,7 +121,7 @@ public class OutputViewer extends TableViewer
     private OpenEditorAction      _openEditorAction;
     private OpenPerspectiveAction _openPerspectiveAction;
     private MenuHandler           _menuHandler;
-    
+
     protected HostsPlugin           _plugin;
 
 
@@ -172,19 +172,19 @@ public class OutputViewer extends TableViewer
 		    if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
 			{
 			    isContainer = true;
-			}		    
+			}		
 		}
 	}
-    
+
     if (isContainer)
 	{
 	    _selected.expandChildren();
 	    setInput(_selected);
 	}
-    
+
 
     _openEditorAction.setSelected(_selected);
-    _openEditorAction.run();    
+    _openEditorAction.run();
   }
 
   public void handleLinkEvent(SelectionChangedEvent event)
@@ -219,7 +219,7 @@ public class OutputViewer extends TableViewer
 		  String value = _currentInput.getAttribute(DE.A_VALUE);
 	
 		  TableColumn column = getTable().getColumn(0);
-		  column.setText(value);			  
+		  column.setText(value);			
 	      }
 
 	  Table table = getTable();
@@ -275,7 +275,7 @@ public class OutputViewer extends TableViewer
 	       return false;
 	   }
     }
-    
+
     public void domainChanged(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
@@ -318,7 +318,7 @@ public class OutputViewer extends TableViewer
 
 	      }
 	  index = table.getItemCount();
-	  	  
+	  	
 	  for (int i = 0; i < children.size(); i++)
 	      {
 		  DataElement child = ((DataElement)children.get(i)).dereference();
@@ -327,21 +327,21 @@ public class OutputViewer extends TableViewer
 			  child.setUpdated(true);
 			  if (doFindItem(child) == null)	
 			      {		
-				  
+				
 				  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
 				  updateItem(newItem, child);
 				  index++;
-				  
+				
 				  int charLen = child.getName().length();		
 				  int itemWidth = charLen * _charWidth;
-				  
+				
 				  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
-				  
+				
 			      }	
 		      }
 	      }
-	  
-	  table.setTopIndex(index);	  
+	
+	  table.setTopIndex(index);	
 	  table.setRedraw(true);				
       }
 
@@ -364,7 +364,7 @@ public class OutputViewer extends TableViewer
 	    }
     }
 
-    protected Item newItem(Widget parent, int flags, int ix)  
+    protected Item newItem(Widget parent, int flags, int ix)
     {
 	if (parent instanceof Table)
 	    {
@@ -377,11 +377,11 @@ public class OutputViewer extends TableViewer
 
   public void fillLocalToolBar(IToolBarManager toolBarManager)
   {
-    toolBarManager.add(new HistoryAction(_plugin.getLocalizedString("OutputViewer.back"), 
+    toolBarManager.add(new HistoryAction(_plugin.getLocalizedString("OutputViewer.back"),
 					 _plugin.getImageDescriptor("back.gif"), -1));
-    toolBarManager.add(new HistoryAction(_plugin.getLocalizedString("OutputViewer.forward"), 
+    toolBarManager.add(new HistoryAction(_plugin.getLocalizedString("OutputViewer.forward"),
 					 _plugin.getImageDescriptor("forward.gif"), 1));
-    toolBarManager.add(new CancelAction(_plugin.getLocalizedString("OutputViewer.Cancel"), 
+    toolBarManager.add(new CancelAction(_plugin.getLocalizedString("OutputViewer.Cancel"),
 					_plugin.getImageDescriptor("cancel.gif")));
   }
 
@@ -394,21 +394,21 @@ public class OutputViewer extends TableViewer
       }
   }
 
-    
+
   public void setBackground(int r, int g, int b)
   {
     Table table = getTable();
-   
+
     Display display = table.getDisplay();
-    table.setBackground(new Color(display, r, g, b));    
+    table.setBackground(new Color(display, r, g, b));
   }
 
   public void setForeground(int r, int g, int b)
   {
     Table table = getTable();
-   
+
     Display display = table.getDisplay();
-    table.setForeground(new Color(display, r, g, b));    
+    table.setForeground(new Color(display, r, g, b));
   }
 
     public void setFont(FontData data)
@@ -417,13 +417,13 @@ public class OutputViewer extends TableViewer
 	
 	Display display = table.getDisplay();
 
-	_charWidth = data.height;
+	_charWidth = data.getHeight();
 	setFont(new Font(display, data));
     }
 
     public void setFont(Font font)
     {	
-	getTable().setFont(font);    
+	getTable().setFont(font);
     }
 }
 
