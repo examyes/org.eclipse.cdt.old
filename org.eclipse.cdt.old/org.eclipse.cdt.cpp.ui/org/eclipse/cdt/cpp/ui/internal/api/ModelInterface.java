@@ -2128,14 +2128,28 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				}
 			    else
 				{
-				    DataElement resourceElement = findResourceElement(resource);
-				    if (resourceElement == null)
+					DataElement resourceElement = findResourceElement(resource);
+
+					if (kind == IResourceDelta.ADDED)
 					{
-					    IResource parent = resource.getParent();
-					    DataElement parentElement = findResourceElement(parent);		
-					    if (parentElement != null)
+				    	if (resourceElement == null)
+						{	
+							// new file
+						    IResource parent = resource.getParent();
+						    DataElement parentElement = findResourceElement(parent);		
+						    if (parentElement != null)
+							{
+							    parentElement.refresh(false);
+							}
+						}
+					}
+					else if (kind == IResourceDelta.REMOVED)
+					{
+						if (resourceElement !=  null)
 						{
-						    parentElement.refresh(false);
+							removeParseInfo(resourceElement);	
+							DataElement parentElement = resourceElement.getParent();
+							parentElement.refresh(false);
 						}
 					}
 

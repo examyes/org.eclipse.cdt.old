@@ -61,7 +61,7 @@ public class ParseMiner extends Miner
   }
   else if (name.equals("C_NOTIFICATION"))
   {
-  	handleNotification(subject, getCommandArgument(theElement, 1));
+  	handleNotification(subject, getCommandArgument(theElement, 1), status);
   }
   else if (name.equals("C_QUERY"))
    handleObjectParse(subject, status);
@@ -93,28 +93,26 @@ public class ParseMiner extends Miner
    return status;
  }
 
- private void handleNotification(DataElement cmd, DataElement subject)
+ private void handleNotification(DataElement cmd, DataElement subject, DataElement status)
  {
  	String cmdStr = cmd.getValue();
- 	DataElement parsedFile = getParseFileFor(subject);
- 	if (parsedFile != null)
- 	{
  	if (cmdStr.equals("C_DELETE"))
- 	{
- 
- 		removeParseInfo(parsedFile);
+ 	{ 
+ 		DataElement parsedFile = getParseFileFor(subject);
+ 		if (parsedFile != null)
+ 		{
+ 			removeParseInfo(parsedFile);
+ 		}
  	}
- 	else if (cmdStr.equals("C_RENAME"))
+ 	else if (cmdStr.equals("C_ADD"))
  	{
- 		
- 		removeParseInfo(parsedFile);
- 		
- 	}
+ 		DataElement project = getProjectFor(subject); 		
+ 		handleFileParse(subject, project, status);		
  	}
  
  }
  
- private DataElement getParseFileFor(DataElement file)
+ private DataElement getProjectFor(DataElement file)
  {
  	String type = file.getType();
  	DataElement theProject = file;
@@ -123,6 +121,13 @@ public class ParseMiner extends Miner
  		theProject = file.getParent();
  		type = theProject.getType();
  	}
+ 	
+ 	return theProject;
+ }
+ 
+ private DataElement getParseFileFor(DataElement file)
+ {
+ 	DataElement theProject = getProjectFor(file);
  	
  	if (theProject != null)
  	{
@@ -400,7 +405,7 @@ public class ParseMiner extends Miner
    File systemObjs   = new File (sourcePath + "system_objects.xml");
    File projectObjs  = new File (sourcePath + "project_objects.xml");
    
-   //   DataElement theParent = theFile.getParent();
+
    DataElement theProject = getParseProject(theFile);
    _dataStore.deleteObjects(getProjectElement(theProject, ParserSchema.ProjectObjects));
    _dataStore.deleteObjects(getProjectElement(theProject, ParserSchema.SystemObjects));
@@ -413,7 +418,10 @@ public class ParseMiner extends Miner
    metadata.delete();
   }
   else
-   return _parseManager.removeParseInformation(theFile);
+  {
+   DataElement result = _parseManager.removeParseInformation(theFile);
+   _dataStore.refresh(theFile.getParent());
+  }
   return theFile;
  }
 

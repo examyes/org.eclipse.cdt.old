@@ -56,11 +56,32 @@ public class RenameResource extends CustomAction
 									    "C_RENAME", 4);
 			if (cmdDescriptor != null)
 		    {
+		   	    	
 		    	ArrayList args = new ArrayList();
 		    	DataElement newName = _dataStore.createObject(null, "name", newNameStr);
 		    	
 		    	args.add(newName);
+		    	
+		    	DataElement notifyD = _dataStore.localDescriptorQuery(_dataStore.getRoot().getDescriptor(), "C_NOTIFICATION", 1);
+		    	if (notifyD != null)
+		    	{
+		    			DataElement delDescriptor = _dataStore.createObject(null, "dummy", "C_DELETE");
+		    			ArrayList nargs = new ArrayList();
+		    			nargs.add(_subject);
+		    			_dataStore.command(notifyD, nargs, delDescriptor);
+		    	}
+	
 				_dataStore.command(cmdDescriptor, args, _subject);
+				
+				if (notifyD != null)
+				{
+    					DataElement addDescriptor = _dataStore.createObject(null, "dummy", "C_ADD");
+		    			
+		    			ArrayList nargs = new ArrayList();
+		    			nargs.add(_subject);
+		    			_dataStore.command(notifyD, nargs, addDescriptor);
+					
+				}
 		    }
 	    }
     }
