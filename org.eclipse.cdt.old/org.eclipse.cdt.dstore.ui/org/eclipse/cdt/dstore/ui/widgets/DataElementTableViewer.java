@@ -297,25 +297,25 @@ public class DataElementTableViewer extends TableViewer
 	    }
 	else if (_currentInput == parent)
 	    {
-	    	getTable().setRedraw(false);
+	    	//getTable().setRedraw(false);
+		
 		internalRefresh(parent);
-		getTable().setRedraw(true);
+		//getTable().setRedraw(true);
 	    }
 	else		     
 	    {
 		synchronized(parent)
 		    {
-			
 			try
 			    {
 				Table table = getTable();
-				table.setRedraw(false);
+				//table.setRedraw(false);
 				Item item = findItemFor(table, parent);
 				if (item != null)
 				    {
 					updateItem(item, parent);
 				    }
-				table.setRedraw(true);
+				//table.setRedraw(true);
 			    }
 			catch (Exception e)
 			    {
