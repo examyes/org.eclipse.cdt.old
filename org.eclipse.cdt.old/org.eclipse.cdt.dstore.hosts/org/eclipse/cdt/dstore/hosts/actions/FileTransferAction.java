@@ -36,8 +36,8 @@ public class FileTransferAction extends CustomAction
 
     public void run()
     {
-	DataElement localInput =  _plugin.getDataStore().getHostRoot().get(0).dereference();
-	DataElement remoteInput = _subject.get(0).dereference();
+	DataElement localInput =  _plugin.getDataStore().getHostRoot().get(0).dereference().getParent();
+	DataElement remoteInput = _subject.getDataStore().getHostRoot().get(0).dereference().getParent();
 
 	DataElementFileTransferDialog ftd = new DataElementFileTransferDialog("Transfer Files", localInput, remoteInput);
 	ftd.open();

@@ -117,7 +117,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 					_plugin.getImageRegistry(), _plugin.getDialogActionLoader(), true);
 
 	_localViewer.setSorter(new DataElementSorter(DE.P_NAME));
-	_localViewer.setInput(localDataStore.getHostRoot().get(0).dereference().getParent());
+	_localViewer.setInput(_localInput);
 
 	GridLayout lvlayout= new GridLayout();
 	lvlayout.numColumns = 1;
@@ -199,7 +199,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 	_remoteViewer = new ObjectWindow(remoteGroup, 0, remoteDataStore, 
 					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader(), true);
 	_remoteViewer.setSorter(new DataElementSorter(DE.P_NAME));
-	_remoteViewer.setInput(remoteDataStore.getHostRoot().get(0).dereference().getParent());
+	_remoteViewer.setInput(_remoteInput);
 
 
 	GridLayout rvlayout= new GridLayout();
@@ -250,14 +250,6 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 			TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
 			transferAction.start();
 		    }
-
-		/***
-		DataElement source = _localViewer.getSelected();
-		DataElement target = _remoteViewer.getInput();
-
-		TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
-		transferAction.start();
-		***/
 	    }
 	else if (widget == _sendLocal)
 	    {
@@ -271,13 +263,6 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 			TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
 			transferAction.start();
 		    }
-		/*
-		DataElement source = _remoteViewer.getSelected();
-		DataElement target = _localViewer.getInput();
-
-		TransferFiles transferAction = new TransferFiles("transfer", source, target, this);
-		transferAction.start();
-		*/
 	    }
 	else if (widget == _localBack)
 	    {
@@ -303,13 +288,12 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 	    }
 	else if (widget == _localHome)
 	    {
-		DataElement input = _localViewer.getInput();
-		_localViewer.setInput(input.getDataStore().getHostRoot());
+		_localViewer.setInput(_localInput);
 	    }
 	else if (widget == _remoteHome)
 	    {
 		DataElement input = _remoteViewer.getInput();
-		_remoteViewer.setInput(input.getDataStore().getHostRoot());
+		_remoteViewer.setInput(_remoteInput);
 	    }
     }
 
