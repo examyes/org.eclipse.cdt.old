@@ -38,6 +38,7 @@ public interface SymbolTable
  //Setters...GET RID OF THESE!!!!
  public abstract boolean doBodies();
  public abstract void objectIsTypedef();
+ public abstract void setCurrentDeclaration(DataElement type);
  
 }
 

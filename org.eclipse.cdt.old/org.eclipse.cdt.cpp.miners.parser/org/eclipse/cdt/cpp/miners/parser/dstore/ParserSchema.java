@@ -66,6 +66,7 @@ public class ParserSchema
  public static String SystemObjects      = getLocalizedString("parser.SystemObjects");
  public static String Preferences        = getLocalizedString("parser.Preferences");
  public static String Types              = getLocalizedString("parser.Types");
+ public static String DeclVariables      = getLocalizedString("parser.DeclarationVariables");
  public static String FileSystemObjects  = getLocalizedString("parser.FileSystemObjects");
  public static String ContainerObject    = getLocalizedString("parser.ContainerObject");
  public static String ObjectDescriptor   = getLocalizedString("parser.ObjectDescriptor");
@@ -93,6 +94,7 @@ public class ParserSchema
  public static DataElement dAll;
  public static DataElement dUses;
  public static DataElement dTypes;
+ public static DataElement dDeclVariables;
  public static DataElement dReturnType;
  public static DataElement dParameters;
  public static DataElement dCallees;
@@ -184,8 +186,9 @@ public class ParserSchema
   dCallers         = createRelationDescriptor(dFunctions,       Callers);
   dBaseClasses     = createRelationDescriptor(dClassesStructs,  BaseClasses);
   dDerivedClasses  = createRelationDescriptor(dClassesStructs,  DerivedClasses);
+  dDeclVariables   = createRelationDescriptor(dClassesStructs,  DeclVariables);
   dTypes           = createRelationDescriptor(dVariables,       Types);
-
+  
   /*
   DataElement dC_QUERY = createCommandDescriptor(dFunctions, "Query", "C_QUERY");
   createReference(dClassesStructs, dC_QUERY);

@@ -13,15 +13,16 @@ package com.ibm.cpp.miners.parser.dstore;
 public class UnnamedTypeManager
 {
   private static UnnamedTypeManager _instance = null;
-  
+
   private int _classId  = 0;
   private int _structId = 0;
   private int _unionId  = 0;
   private int _enumId   = 0;
+  private int _bitfieldId = 0;
   private int _namespaceId  = 0;
-  
+
   private UnnamedTypeManager() {}
-  
+
   public static UnnamedTypeManager instance()
   {
    if (_instance == null)
@@ -30,7 +31,7 @@ public class UnnamedTypeManager
    }
    return _instance;
   }
-  
+
   public String getNextClass()
   {
    return "_Unnamed_class_" + String.valueOf(++_classId);
@@ -50,7 +51,12 @@ public class UnnamedTypeManager
   {
    return "_Unnamed_enum_" + String.valueOf(++_enumId);
   }
-  
+
+  public String getNextBitfield()
+  {
+   return "_Unnamed_bitfield_" + String.valueOf(++_bitfieldId);
+  }
+
   public String getNextNamespace()
   {
    return "_Unnamed_namespace_" + String.valueOf(++_namespaceId);
@@ -66,19 +72,22 @@ public class UnnamedTypeManager
     return getNextUnion();
    else if (type.equals("enum"))
     return getNextEnum();
+   else if (type.equals("bitfield"))
+    return getNextBitfield();
    else if (type.equals("namespace"))
     return getNextNamespace();
    else
-    return "_Unnamed_unknown_type";	
+    return "_Unnamed_unknown_type";
   }
-  
+
   public void reset()
   {
    _classId = 0;
    _structId = 0;
    _unionId = 0;
    _enumId = 0;
+   _bitfieldId = 0;
    _namespaceId = 0;
   }
-  
+
 }

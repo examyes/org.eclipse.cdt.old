@@ -29,6 +29,7 @@ public class DataStoreSymbolTable implements SymbolTable
  private int           _quality;
  private int           _idCounter       = 1;
  private boolean       _isTypedef       = false;
+ private DataElement   _currentDeclaration = null;
  
  public DataStoreSymbolTable()
  {
@@ -136,6 +137,11 @@ public class DataStoreSymbolTable implements SymbolTable
   _isTypedef = true;
  }
  
+ public void setCurrentDeclaration(DataElement type)
+ {
+  _currentDeclaration = type;
+ }
+ 
  public boolean doBodies()
  {
   return isSet(BODIES);
@@ -220,8 +226,10 @@ public class DataStoreSymbolTable implements SymbolTable
   
   _curObj.createTypeReferences();
   
-
- if (    objType.getName().equals(ParserSchema.Function) 
+  if (objType == ParserSchema.dVariable && _currentDeclaration != null)
+   _dataStore.createReference(_currentDeclaration, _curObj.object, ParserSchema.DeclVariables);
+  
+  if (    objType.getName().equals(ParserSchema.Function) 
       || objType.getName().equals(ParserSchema.MainFunction)
       || objType.getName().equals(ParserSchema.Constructor) 
       || objType.getName().equals(ParserSchema.Destructor)
