@@ -1713,7 +1713,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		IContainer container = (IContainer)resource;
 		
 		// compare elements to resources				
-		for (int i = 0; (i < parent.getNestedSize()) && !needsRefresh; i++)
+		for (int i = 0; (i < parent.getNestedSize()); i++)
 		    {
 			DataElement child = parent.get(i);
 			if (!child.isDeleted() && !child.isReference())
@@ -1727,7 +1727,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				}
 			}			
 		}
-		
+		 
 		// compare resources to elements in case deleted
 		if (!needsRefresh)
 		    {
@@ -2139,7 +2139,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						    DataElement parentElement = findResourceElement(parent);		
 						    if (parentElement != null)
 							{
-							    parentElement.refresh(false);
+							  parentElement.refresh(false);
 							}
 						}
 					}
