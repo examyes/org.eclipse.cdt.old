@@ -150,7 +150,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 				}
 			}
 		});
-	_searchEntry.setFont(new Font(getShell().getDisplay(), "Courier", 10, SWT.NORMAL));
+	
 	getShell().setText(_title);
 	return c;
     }

@@ -298,7 +298,6 @@ public class CppOutputViewPart
 				}
 			}
 		});
-		_inputEntry.setFont(new Font(getShell().getDisplay(), "Courier", 10, SWT.NORMAL));
 		
 		
 		_sendButton = new Button(inputContainer, SWT.PUSH);
