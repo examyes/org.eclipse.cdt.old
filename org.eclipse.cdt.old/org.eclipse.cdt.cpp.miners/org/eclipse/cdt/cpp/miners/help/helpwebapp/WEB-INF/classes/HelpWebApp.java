@@ -506,7 +506,7 @@ public class HelpWebApp extends HttpServlet
 			    }
 			else
 			    {
-				out.println(line);
+				out.println(filterHtmlTags(line));
 			    }
 		    }
 	    }
@@ -586,4 +586,22 @@ public class HelpWebApp extends HttpServlet
 		    }
 	    }
     }
+
+    private String filterHtmlTags(String line)
+    {
+	StringBuffer result = new StringBuffer();
+	char currChar;
+	for(int i =0;i<line.length();i++)
+	    {
+		currChar = line.charAt(i);
+		if(currChar=='<') result.append("&lt;");
+		else if (currChar=='>') result.append("&gt;");
+		else if (currChar=='&') result.append("amp;");
+		else if (currChar=='"') result.append("&quot;");
+		/*else if*/
+		else result.append(currChar);
+	    }
+	return result.toString();
+    }
+
 }
