@@ -91,6 +91,7 @@ public class DataElementTableViewer extends TableViewer
     private ObjectSelectionChangedListener _listener;
 
     private DelayedRefresher _refresher = null;
+    private boolean _isContainable = false;
     
     public DataElementTableViewer(ObjectWindow parent, Table table)
     {
@@ -685,6 +686,11 @@ public class DataElementTableViewer extends TableViewer
 	_openEditorAction = action;
     }
     
+    public void setContainable(boolean isContainable)
+    {
+	_isContainable = isContainable;
+    }
+
     protected void handleDoubleSelect(SelectionEvent event) 
     {  
 	if (_openEditorAction == null)
@@ -695,26 +701,15 @@ public class DataElementTableViewer extends TableViewer
 	if (_selected != null)
 	    {
 		DataElement type = _selected.getDescriptor();
-		boolean isContainer = false;
-		if (type != null)
+		if (type != null && _isContainable)
 		    {
-			ArrayList contents = type.getAssociated("contents");
-			for (int i = 0; (i < contents.size()) && !isContainer; i++)
+			if (type.isOfType("Container Object"))
 			    {
-				DataElement contained = (DataElement)contents.get(i);
-				if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
-				    {
-					isContainer = true;
-				    }		    
+				_selected.expandChildren();
+				_parent.setInput(_selected);
 			    }
 		    }
 		
-		if (isContainer)
-		    {
-			_selected.expandChildren();
-			_parent.setInput(_selected);
-		    }
-
 		_openEditorAction.setSelected(_selected);
 		_openEditorAction.run();
 	    }

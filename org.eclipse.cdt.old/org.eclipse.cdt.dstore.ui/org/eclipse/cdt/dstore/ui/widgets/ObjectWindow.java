@@ -155,7 +155,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private boolean             _isTable;
     private boolean             _isLocked;
 
-
     public ObjectWindow(Composite container, int style, 
 			DataStore dataStore, ImageRegistry imageRegistry,
 			IActionLoader loader)
@@ -198,7 +197,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	_loader = loader;
 	_provider = provider;
 
-	boolean isTable = ((style & TABLE) != 0);
+	boolean isTable = ((style & TREE) == 0);
 	initialize(isTable);
     }
 
@@ -224,6 +223,14 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	createContents();
 	createViewActions();
     } 
+
+    public void setContainable(boolean flag)
+    {
+	if (_viewer != null)
+	    {
+		_viewer.setContainable(flag);
+	    }
+    }
 
     public void setActionLoader(IActionLoader loader)
     {
@@ -589,6 +596,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		    }
 	    }
 		
+
 	_viewer.setContentProvider(_provider);     
 	_viewer.setLabelProvider(new DataElementLabelProvider(_imageRegistry));
 	if (_dataStore != null)

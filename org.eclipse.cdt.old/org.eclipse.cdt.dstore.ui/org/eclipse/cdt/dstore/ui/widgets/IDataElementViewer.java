@@ -82,4 +82,6 @@ public interface IDataElementViewer extends IDomainListener
     public void refresh();
     public void setFocus();
     public void enable(boolean flag);
+
+    public void setContainable(boolean flag);
 }

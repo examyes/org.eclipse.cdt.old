@@ -613,6 +613,11 @@ public void doExpand(DataElement obj)
 	_openEditorAction = action;
     }
 
+    public void setContainable(boolean flag)
+    {
+	// sure
+    }
+
     protected void handleDoubleSelect(SelectionEvent event) 
     {  
 	if (_openEditorAction == null)
