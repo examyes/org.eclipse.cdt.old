@@ -58,7 +58,7 @@ public class ReplicateFromAction extends CustomAction
 			   }
 	    _subject.doCommandOn("C_DATES", true);		
 
-	    for (int i = 0; i < _projects.size(); i++)
+	    for (int i = 0; i < _projects.size() && !pm.isCanceled(); i++)
 		{
 		    DataElement sourceProject = ((DataElement)_projects.get(i)).dereference();
 		
@@ -77,7 +77,7 @@ public class ReplicateFromAction extends CustomAction
 			    _pm.beginTask("Replicating files from " + sourceProject.getName() + "...", sourceProject.getNestedSize());
 
 			    // do transfer files
-			    for (int j = 0; j < sourceProject.getNestedSize(); j++)
+			    for (int j = 0; j < sourceProject.getNestedSize() && !pm.isCanceled(); j++)
 				{
 				    DataElement source = sourceProject.get(j);
 				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))

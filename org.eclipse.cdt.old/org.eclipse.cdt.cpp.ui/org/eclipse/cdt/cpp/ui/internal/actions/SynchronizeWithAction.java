@@ -72,7 +72,7 @@ public class SynchronizeWithAction extends CustomAction
 					  project1.getNestedSize());
 
 			    // transfer from project1 to project2
-			    for (int j = 0; j < project1.getNestedSize(); j++)
+			    for (int j = 0; j < project1.getNestedSize() && !pm.isCanceled(); j++)
 				{
 				    DataElement source = project1.get(j);
 				    if (!source.isReference())
@@ -90,13 +90,13 @@ public class SynchronizeWithAction extends CustomAction
 			    
 
 			    // transfer from project2 to project1
-			    for (int k = 0; k < project2.getNestedSize(); k++)
+			    for (int k = 0; k < project2.getNestedSize() && !pm.isCanceled(); k++)
 				{
 				    DataElement source = project2.get(k);
 				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))
 					{
 					    TransferFiles transferAction = new TransferFiles("transfer", source, 
-											     project1, null);
+											     project1, null);					     
 					    transferAction.run(pm);
 					}
 				    _pm.worked(1);

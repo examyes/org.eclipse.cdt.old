@@ -52,9 +52,7 @@ public class CopyAction extends CustomAction
 
 	    _pm.beginTask("Copying " + _subject.getName() + "...", _projects.size());
 
-	    _subject.doCommandOn("C_DATES", true);		
-
-	    for (int i = 0; i < _projects.size(); i++)
+	    for (int i = 0; i < _projects.size() && !pm.isCanceled(); i++)
 		{
 		    DataElement targetProject = ((DataElement)_projects.get(i)).dereference();
 		   
@@ -70,7 +68,7 @@ public class CopyAction extends CustomAction
 			
 		}
 		_subject.getDataStore().refresh(_subject.getParent());
-
+//
 	}
     }
 

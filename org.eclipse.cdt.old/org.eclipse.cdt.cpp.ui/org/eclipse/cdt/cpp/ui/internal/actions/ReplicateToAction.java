@@ -73,7 +73,7 @@ public class ReplicateToAction extends CustomAction
 	
 
 			    // do transfer files
-			    for (int j = 0; j < _subject.getNestedSize(); j++)
+			    for (int j = 0; j < _subject.getNestedSize() && !pm.isCanceled(); j++)
 				{
 				    DataElement source = _subject.get(j);
 				    if (!source.isReference() && (source.isOfType("file") || source.isOfType("directory")))
@@ -103,7 +103,7 @@ public class ReplicateToAction extends CustomAction
 	
 	dlg.open();
 	if (dlg.getReturnCode() == dlg.OK)
-	    {
+	    { 
 		List projects = dlg.getSelected();
 		
 		ReplicateToOperation op = new ReplicateToOperation(_subject, projects, api);
