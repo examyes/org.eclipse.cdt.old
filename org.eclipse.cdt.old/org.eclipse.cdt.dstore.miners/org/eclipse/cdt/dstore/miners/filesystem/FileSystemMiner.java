@@ -87,10 +87,13 @@ public class FileSystemMiner extends Miner
         DataElement host =  _dataStore.getHostRoot();
 	_dataStore.refresh(host, true);
 
-	DataElement cwd = host.get(0).dereference();
-	DataElement theElement = cwd;
-	_dataStore.refresh(_minerData);
-	refreshFrom(cwd);
+	DataElement cwdRef = host.get(0);
+	if (cwdRef != null)
+	    {
+		DataElement theElement = cwdRef.dereference();
+		_dataStore.refresh(_minerData);
+		refreshFrom(theElement);
+	    }
     }
 
     private void refreshFrom(DataElement child)
@@ -586,7 +589,7 @@ public class FileSystemMiner extends Miner
 			      {
 				  for (int i= 0; i < list.length; i++)
 				      {
-					  String filePath = path.toString() + list[i];
+					  String filePath = path.toString().replace('\\', '/') + list[i];
 					  String objName = list[i];
 					  
 					  DataElement objType = _directoryDescriptor;
@@ -652,9 +655,10 @@ public class FileSystemMiner extends Miner
 		    {
 			for (int i= 0; i < list.length; i++)
 			    {
-				String filePath = path.toString() + list[i];
-				String objName = list[i];
+				String filePath = path.toString().replace('\\', '/') + list[i];
 				
+				String objName = list[i];
+									  
 				DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
 				if (newObject == null || newObject.isDeleted())
 				    {

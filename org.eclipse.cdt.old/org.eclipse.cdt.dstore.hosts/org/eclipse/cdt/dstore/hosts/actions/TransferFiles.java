@@ -94,7 +94,7 @@ public class TransferFiles extends Thread
 	DataStore sourceDataStore = source.getDataStore();
 
 	String targetStr = target.getSource();
-	String newSourceStr = targetStr + java.io.File.separator + source.getName();
+	String newSourceStr = targetStr + "/" + source.getName();
 
 	if (_listener != null)
 	    {
