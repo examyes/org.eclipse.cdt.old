@@ -66,11 +66,11 @@ public class StatusLineUpdater implements ICppProjectListener
 	  IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
 	  IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();	
 	  IWorkbenchPage persp= win.getActivePage();
-      IViewPart[] viewParts = persp.getViews();
+      IViewReference[] viewRefs = persp.getViewReferences();
     
-      if (viewParts.length > 0)
+      if (viewRefs.length > 0)
       {
-	    _mgr = viewParts[0].getViewSite().getActionBars().getStatusLineManager();
+	    _mgr = viewRefs[0].getView(false).getViewSite().getActionBars().getStatusLineManager();
 	    _pm = _mgr.getProgressMonitor();
 	  } 
 	}
@@ -100,9 +100,18 @@ public class StatusLineUpdater implements ICppProjectListener
 			    {
 				String commandStr = commandObject.getValue() + " running on " + event.getProject().getName();
 				_mgr.setMessage(commandStr);
-
+				DataElement cancelDescriptor = commandObject.getDataStore().localDescriptorQuery(commandObject.getDescriptor(), "C_CANCEL");
+				if (cancelDescriptor != null)
+				{
+					_mgr.setCancelEnabled(true);
+				}
 				_pm.beginTask(commandStr, IProgressMonitor.UNKNOWN);
 			    }
+			   else if (_pm != null && _pm.isCanceled())
+			   {
+			   	ModelInterface api = ModelInterface.getInstance();
+			   	api.cancel(commandObject);
+			   }
 		    }
 		    }
 	    }   
