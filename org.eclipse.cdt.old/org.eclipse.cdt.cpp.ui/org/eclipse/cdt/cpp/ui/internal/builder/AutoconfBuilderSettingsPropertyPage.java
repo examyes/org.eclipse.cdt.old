@@ -127,7 +127,7 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 			DataElement status = plugin.getDataStore().command(optimizedCmd, api.findProjectElement(project));
 
 		}
-			plugin.writeProperty(project,extensionKey,_autoconfBuildControl.getExtensionList());
+		plugin.writeProperty(project,extensionKey,_autoconfBuildControl.getExtensionList());
 	}
 	
 	public boolean performOk()
