@@ -5,9 +5,8 @@ package com.ibm.cpp.miners.parser.grammar;
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
  */
 
-import com.ibm.dstore.core.model.*; 
+import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.cpp.miners.parser.grammar.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -15,8 +14,8 @@ import java.lang.*;
 public final class Parser implements ParserConstants {
  private SymbolTable  symtab;
  private boolean      _lazy;
- public boolean isConstructor;
- public Parser() {}
+ public  boolean      isConstructor;
+ public  Parser()     {}
 
 
  public void setSymbolTable(SymbolTable theSymbolTable)
@@ -11505,7 +11504,7 @@ public final class Parser implements ParserConstants {
   }
 
   public ParserTokenManager token_source;
-  ASCII_CharStream jj_input_stream;
+  SimpleCharStream jj_input_stream;
   public Token token, jj_nt;
   private int jj_ntk;
   private Token jj_scanpos, jj_lastpos;
@@ -11524,7 +11523,7 @@ public final class Parser implements ParserConstants {
   private int jj_gc = 0;
 
   public Parser(java.io.InputStream stream) {
-    jj_input_stream = new ASCII_CharStream(stream, 1, 1);
+    jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new ParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
@@ -11544,7 +11543,7 @@ public final class Parser implements ParserConstants {
   }
 
   public Parser(java.io.Reader stream) {
-    jj_input_stream = new ASCII_CharStream(stream, 1, 1);
+    jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new ParserTokenManager(jj_input_stream);
     token = new Token();
     jj_ntk = -1;

@@ -6,7 +6,6 @@ package com.ibm.cpp.miners.parser.grammar;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.cpp.miners.parser.grammar.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -149,6 +148,8 @@ public class ParserTokenManager implements ParserConstants
    //Reached End of File...most likely
   }
  }
+  public  java.io.PrintStream debugStream = System.out;
+  public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private final int jjMoveStringLiteralDfa0_2()
 {
    return jjMoveNfa_2(0, 0);
@@ -2209,25 +2210,25 @@ static final long[] jjtoSkip = {
 static final long[] jjtoMore = {
    0x1500000L, 0x0L, 0x0L, 
 };
-private ASCII_CharStream input_stream;
+private SimpleCharStream input_stream;
 private final int[] jjrounds = new int[108];
 private final int[] jjstateSet = new int[216];
 StringBuffer image;
 int jjimageLen;
 int lengthOfMatch;
 protected char curChar;
-public ParserTokenManager(ASCII_CharStream stream)
+public ParserTokenManager(SimpleCharStream stream)
 {
-   if (ASCII_CharStream.staticFlag)
+   if (SimpleCharStream.staticFlag)
       throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
    input_stream = stream;
 }
-public ParserTokenManager(ASCII_CharStream stream, int lexState)
+public ParserTokenManager(SimpleCharStream stream, int lexState)
 {
    this(stream);
    SwitchTo(lexState);
 }
-public void ReInit(ASCII_CharStream stream)
+public void ReInit(SimpleCharStream stream)
 {
    jjmatchedPos = jjnewStateCnt = 0;
    curLexState = defaultLexState;
@@ -2241,7 +2242,7 @@ private final void ReInitRounds()
    for (i = 108; i-- > 0;)
       jjrounds[i] = 0x80000000;
 }
-public void ReInit(ASCII_CharStream stream, int lexState)
+public void ReInit(SimpleCharStream stream, int lexState)
 {
    ReInit(stream);
    SwitchTo(lexState);

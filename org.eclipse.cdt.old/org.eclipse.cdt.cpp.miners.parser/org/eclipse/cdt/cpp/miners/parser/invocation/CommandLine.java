@@ -30,7 +30,7 @@ class CommandLine
   _theParser.setSymbolTable(_theSymbolTable); 
   
   BufferedReader input = new BufferedReader(new StringReader(_thePreprocessor.preprocess(theFile)));
-  ParserTokenManager token_mgr = new ParserTokenManager(new ASCII_CharStream(input, 1, 1));
+  ParserTokenManager token_mgr = new ParserTokenManager(new SimpleCharStream(input, 1, 1));
   token_mgr.setSymbolTable(_theSymbolTable);
   _theParser.ReInit(token_mgr);
   

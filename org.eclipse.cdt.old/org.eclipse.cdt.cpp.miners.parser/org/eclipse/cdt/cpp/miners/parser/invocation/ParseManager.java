@@ -17,7 +17,7 @@ public class ParseManager
  private Parser               _theParser;
  private Preprocessor         _thePreprocessor;
  private DataStoreSymbolTable _theSymbolTable;
- private ASCII_CharStream     _theCharStream;
+ private SimpleCharStream     _theCharStream;
  private ParserTokenManager   _theParserTokenManager;
  
  private DataStore          _dataStore = null;
@@ -31,7 +31,7 @@ public class ParseManager
   _theParser             = new Parser();
   _theSymbolTable        = new DataStoreSymbolTable();
   _thePreprocessor       = new Preprocessor(this);
-  _theCharStream         = new ASCII_CharStream(new StringReader("default"), 1, 1, 16);
+  _theCharStream         = new SimpleCharStream(new StringReader("default"), 1, 1, 16);
   _theParserTokenManager = new ParserTokenManager(_theCharStream);
  }
  

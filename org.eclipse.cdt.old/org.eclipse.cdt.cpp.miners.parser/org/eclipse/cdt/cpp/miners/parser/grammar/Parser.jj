@@ -21,7 +21,6 @@ package com.ibm.cpp.miners.parser.grammar;
 
 import com.ibm.dstore.core.model.*;
 import com.ibm.cpp.miners.parser.dstore.*;
-import com.ibm.cpp.miners.parser.grammar.*;
 import java.util.*;
 import java.io.*;
 import java.lang.*; 
@@ -30,8 +29,8 @@ public final class Parser
 {
  private SymbolTable  symtab;
  private boolean      _lazy;
- public boolean isConstructor;
- public Parser() {}
+ public  boolean      isConstructor;
+ public  Parser()     {}
 
  
  public void setSymbolTable(SymbolTable theSymbolTable)

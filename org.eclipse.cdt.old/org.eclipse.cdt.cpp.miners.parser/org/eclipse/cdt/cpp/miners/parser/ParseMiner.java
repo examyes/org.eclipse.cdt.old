@@ -34,6 +34,7 @@ public class ParseMiner extends Miner
 
  public void load()
  {
+  System.out.println("ParseMiner loading()");
   _parseManager    = new ParseManager();
   _parseExtensionFile  = getParseExtensionsFile();
   _codeAssist          = new CodeAssist(_parseManager);
@@ -42,6 +43,8 @@ public class ParseMiner extends Miner
 
  public void extendSchema(DataElement schemaRoot)
  {
+  System.out.println("ParseMiner ExtendSchema()");
+  
   new ParserSchema(schemaRoot);
  }
 
