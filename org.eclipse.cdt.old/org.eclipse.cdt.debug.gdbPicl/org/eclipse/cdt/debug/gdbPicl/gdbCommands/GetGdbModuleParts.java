@@ -4,15 +4,15 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl.gdbCommands;
+package org.eclipse.cdt.debug.gdbPicl.gdbCommands;
 
-import  com.ibm.debug.gdbPicl.*;
-import  com.ibm.debug.gdbPicl.objects.Module;
-import  com.ibm.debug.gdbPicl.objects.Part;
-import  com.ibm.debug.gdbPicl.objects.GdbPart;
-import  com.ibm.debug.gdbPicl.objects.View;
-import  com.ibm.debug.gdbPicl.objects.GdbDisassemblyView;
-import  com.ibm.debug.gdbPicl.objects.GdbThreadComponent;
+import  org.eclipse.cdt.debug.gdbPicl.*;
+import  org.eclipse.cdt.debug.gdbPicl.objects.Module;
+import  org.eclipse.cdt.debug.gdbPicl.objects.Part;
+import  org.eclipse.cdt.debug.gdbPicl.objects.GdbPart;
+import  org.eclipse.cdt.debug.gdbPicl.objects.View;
+import  org.eclipse.cdt.debug.gdbPicl.objects.GdbDisassemblyView;
+import  org.eclipse.cdt.debug.gdbPicl.objects.GdbThreadComponent;
 
 /**
  * gets Gdb Threads

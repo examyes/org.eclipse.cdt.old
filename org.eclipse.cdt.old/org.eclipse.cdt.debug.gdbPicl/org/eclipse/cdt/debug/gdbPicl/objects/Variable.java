@@ -4,11 +4,11 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl.objects;
-import  com.ibm.debug.gdbPicl.*;
+package org.eclipse.cdt.debug.gdbPicl.objects;
+import  org.eclipse.cdt.debug.gdbPicl.*;
 
 import com.ibm.debug.epdc.*;
-//import com.ibm.debug.gdbPicl.expr.ExprValue;
+//import org.eclipse.cdt.debug.gdbPicl.expr.ExprValue;
 
 /**
  * This class represents a variable that is being monitored.  It stores the information required

@@ -4,11 +4,11 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl.objects;
+package org.eclipse.cdt.debug.gdbPicl.objects;
 
 import com.ibm.debug.epdc.*;
-import com.ibm.debug.gdbPicl.DebugSession;
-import com.ibm.debug.gdbPicl.GdbDebugSession;
+import org.eclipse.cdt.debug.gdbPicl.DebugSession;
+import org.eclipse.cdt.debug.gdbPicl.GdbDebugSession;
 import java.util.*;
 
 public class GdbObjectVariable extends GdbVariable {

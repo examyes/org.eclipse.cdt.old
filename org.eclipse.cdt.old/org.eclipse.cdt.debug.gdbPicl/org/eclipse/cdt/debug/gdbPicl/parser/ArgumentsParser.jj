@@ -11,7 +11,7 @@ options
 
 PARSER_BEGIN(ArgumentsParser)
 
-package com.ibm.debug.gdbPicl.parser;
+package org.eclipse.cdt.debug.gdbPicl.parser;
 
 import java.util.*;
 import java.io.*;

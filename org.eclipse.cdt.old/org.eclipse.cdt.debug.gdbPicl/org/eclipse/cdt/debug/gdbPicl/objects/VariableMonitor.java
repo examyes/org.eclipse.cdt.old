@@ -4,8 +4,8 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl.objects;
-import  com.ibm.debug.gdbPicl.*;
+package org.eclipse.cdt.debug.gdbPicl.objects;
+import  org.eclipse.cdt.debug.gdbPicl.*;
 
 import com.ibm.debug.epdc.*;
 import java.util.*;
@@ -185,7 +185,7 @@ public abstract class VariableMonitor
    protected int _stackEntry;
 
 //   protected static ExprParser parser =
-//       new ExprParser(new com.ibm.debug.gdbPicl.StringInputStream(""));
+//       new ExprParser(new org.eclipse.cdt.debug.gdbPicl.StringInputStream(""));
 
    // status flags
    protected boolean _monDeferred;

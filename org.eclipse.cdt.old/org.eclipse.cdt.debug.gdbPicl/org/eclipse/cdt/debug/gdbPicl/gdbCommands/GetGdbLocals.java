@@ -4,10 +4,10 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl.gdbCommands;
-import  com.ibm.debug.gdbPicl.*;
-import  com.ibm.debug.gdbPicl.objects.*;
-import  com.ibm.debug.gdbPicl.gdbCommands.GdbProcess;
+package org.eclipse.cdt.debug.gdbPicl.gdbCommands;
+import  org.eclipse.cdt.debug.gdbPicl.*;
+import  org.eclipse.cdt.debug.gdbPicl.objects.*;
+import  org.eclipse.cdt.debug.gdbPicl.gdbCommands.GdbProcess;
 
 import java.util.Hashtable;
 

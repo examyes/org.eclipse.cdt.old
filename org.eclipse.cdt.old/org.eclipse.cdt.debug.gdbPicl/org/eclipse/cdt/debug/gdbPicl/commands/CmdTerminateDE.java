@@ -4,11 +4,11 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl.commands;
-import com.ibm.debug.gdbPicl.*;
-import com.ibm.debug.gdbPicl.objects.*;
-//package com.ibm.debug.gdbPicl.commands.commands;
-import  com.ibm.debug.gdbPicl.*;
+package org.eclipse.cdt.debug.gdbPicl.commands;
+import org.eclipse.cdt.debug.gdbPicl.*;
+import org.eclipse.cdt.debug.gdbPicl.objects.*;
+//package org.eclipse.cdt.debug.gdbPicl.commands.commands;
+import  org.eclipse.cdt.debug.gdbPicl.*;
 
 import com.ibm.debug.epdc.*;
 

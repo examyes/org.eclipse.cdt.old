@@ -4,8 +4,8 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl;
-import com.ibm.debug.gdbPicl.commands.*;
+package org.eclipse.cdt.debug.gdbPicl;
+import org.eclipse.cdt.debug.gdbPicl.commands.*;
 
 import java.io.*;
 import java.net.*;
@@ -153,7 +153,7 @@ public class DebugEngine extends Thread
       {
          // We need the fully qualified name here or else we may not be able to find the resource bundle
          _frontEndMessages =
-            ResourceBundle.getBundle("com.ibm.debug.gdbPicl.GdbMessages", locale);
+            ResourceBundle.getBundle("org.eclipse.cdt.debug.gdbPicl.GdbMessages", locale);
       }
       catch (MissingResourceException e)
       {

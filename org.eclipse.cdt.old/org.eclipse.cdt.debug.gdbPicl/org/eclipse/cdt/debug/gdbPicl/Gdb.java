@@ -4,7 +4,7 @@
  * the Common Public License which accompanies this distribution.
  */
 
-package com.ibm.debug.gdbPicl;
+package org.eclipse.cdt.debug.gdbPicl;
 
 import java.io.*;
 import java.net.*;
@@ -178,7 +178,7 @@ public class Gdb
          // Note: We need the fully qualified name here or else we may not be
          // able to find the resource bundle
          _backEndMessages =
-            ResourceBundle.getBundle("com.ibm.debug.gdbPicl.GdbMessages", locale);
+            ResourceBundle.getBundle("org.eclipse.cdt.debug.gdbPicl.GdbMessages", locale);
       }
       catch (MissingResourceException e)
       {
@@ -649,7 +649,7 @@ public class Gdb
    {
       try
       {
-         _messagesBundle =  ResourceBundle.getBundle("com.ibm.debug.gdbPicl.GdbMessages", locale);
+         _messagesBundle =  ResourceBundle.getBundle("org.eclipse.cdt.debug.gdbPicl.GdbMessages", locale);
       }
       catch (MissingResourceException e)
       {
