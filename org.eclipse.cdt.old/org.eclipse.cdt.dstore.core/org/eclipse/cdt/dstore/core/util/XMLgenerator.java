@@ -479,6 +479,7 @@ public class XMLgenerator
 			addAttribute(DE.P_NAME, object.getAttribute(DE.A_NAME));
 			addAttribute(DE.P_VALUE, object.getAttribute(DE.A_VALUE));
 			addAttribute(DE.P_SOURCE, object.getAttribute(DE.A_SOURCE));
+			addAttribute(DE.P_SOURCE_LOCATION, object.getAttribute(DE.A_SOURCE_LOCATION));
 
 			if (object.isReference())
 				{
@@ -527,6 +528,7 @@ public class XMLgenerator
 					addAttribute(DE.P_NAME, object.getAttribute(DE.A_NAME));
 					addAttribute(DE.P_VALUE, object.getAttribute(DE.A_VALUE));
 					addAttribute(DE.P_SOURCE, object.getAttribute(DE.A_SOURCE));
+					addAttribute(DE.P_SOURCE_LOCATION, object.getAttribute(DE.A_SOURCE_LOCATION));
 
 					if (object.isReference())
 						{

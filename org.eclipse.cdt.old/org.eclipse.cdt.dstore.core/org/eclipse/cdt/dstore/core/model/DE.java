@@ -190,17 +190,22 @@ public class DE
     public static final int    A_SOURCE     = 4;
 
     /*
+     * Source line attribute index.  
+     */
+    public static final int    A_SOURCE_LOCATION= 5;
+
+    /*
      * IsRef attribute index.  
      */
-    public static final int    A_ISREF      = 5;
+    public static final int    A_ISREF      = 6;
 
     /*
      * Visibility attribute index.  
      */
-    public static final int    A_DEPTH      = 6;
+    public static final int    A_DEPTH      = 7;
 
     /*
      * Size attribute index.  
      */
-    public static final int    A_SIZE       = 7;
+    public static final int    A_SIZE       = 8;
 }

@@ -86,7 +86,6 @@ public final class DataElement implements Serializable, IDataElement
 		_attributes[DE.A_ID]         = parent.getId() + refType.getName() + originalObject.getId();
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
-		_attributes[DE.A_SOURCE]     = originalObject.getSource();
 		
 		initialize(refType);	
 		
@@ -115,7 +114,6 @@ public final class DataElement implements Serializable, IDataElement
 		
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
-		_attributes[DE.A_SOURCE]     = originalObject.getSource();
 		
 		initialize();	
 
@@ -462,6 +460,17 @@ public final class DataElement implements Serializable, IDataElement
     {
         return getAttribute(DE.A_SOURCE);
     }
+
+    /**
+     * Returns the source line attribute for this element.
+     *
+     * @return the source line attribute 
+     */
+    public String getSourceLocation()
+    {
+        return getAttribute(DE.A_SOURCE_LOCATION);
+    }
+
 
     /**
      * Returns the buffer for this element.
@@ -1624,30 +1633,21 @@ public final class DataElement implements Serializable, IDataElement
 		      }
 		  else if (DE.P_SOURCE.equals(name))
 		      {
-			  return null;
+			  return getAttribute(DE.A_SOURCE);
 		      }
 		  else if (DE.P_SOURCE_LOCATION.equals(name))
 		      {
-			  String source = getAttribute(DE.A_SOURCE);
-			  if (source != null)
+			  String line = getAttribute(DE.A_SOURCE_LOCATION);
+			  if (line != null)
 			      {
-				  int locationIndex =  source.lastIndexOf(":");
-				  if (locationIndex > 3)
+				  try
 				      {
-					  int columnIndex = source.lastIndexOf(",");
-					  if (columnIndex < locationIndex)
-					      {
-						  columnIndex = source.length();
-					      }
-					  try
-					      {
-						  Integer sourceLocation = new Integer(source.substring(locationIndex + 1, columnIndex));
-						  return sourceLocation;
-					      }
-					  catch (NumberFormatException e)
-					      {
-						  System.out.println(e);						  
-					      }
+					  Integer sourceLocation = new Integer(line);
+					  return sourceLocation;
+				      }
+				  catch (NumberFormatException e)
+				      {
+					  System.out.println(e);						  
 				      }
 			      }
 			  
@@ -1762,7 +1762,8 @@ public final class DataElement implements Serializable, IDataElement
     {
 	// set delete attribute
 	setAttribute(DE.A_SOURCE, "deleted");
-	setAttribute(DE.A_VALUE, "deleted");
+	setAttribute(DE.A_SOURCE_LOCATION,   "deleted");
+	setAttribute(DE.A_VALUE,  "deleted");
 	
 	_isUpdated = false;	 
 	_isExpanded = true;
