@@ -1387,7 +1387,7 @@ public final class DataStore
     	{
     		if (element.isReference()) 
     		{
-    			refresh(element.dereference(), true);
+    			refresh(element.dereference(), false);
     		}
     	
 			refresh(element, false);	
