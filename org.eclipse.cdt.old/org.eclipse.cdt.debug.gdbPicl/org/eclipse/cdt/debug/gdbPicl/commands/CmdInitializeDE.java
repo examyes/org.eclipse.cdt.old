@@ -288,33 +288,34 @@ public class CmdInitializeDE extends Command
 // ***************************************************************************
       _EPDCSession._functCustomTable = new EFunctCustTable(
          // Startup options
-         EPDC.FCT_DEBUG_APPLICATION_INIT | // support debugging app init
+//         EPDC.FCT_DEBUG_APPLICATION_INIT | // support debugging app init
          0,
 
          // General Functions
          EPDC.FCT_MULTIPLE_THREADS       | // support multiple threads
 //       EPDC.FCT_FILE_PATH_AVAILABLE    | // support file path
 //       EPDC.FCT_FILE_LIST_AVAILABLE    | // support file list
+		 EPDC.FCT_INCLUDE_FILES			 | // support stepping into headers
 //       EPDC.FCT_CHILD_PROCESSES        | // support child processes
 //       EPDC.FCT_PROCESS_LIST_STARTUP   | // support process list startup
-         EPDC.FCT_STARTUP                | // support startup dialog
+//         EPDC.FCT_STARTUP                | // support startup dialog
          0,
 
          // File Options
-         EPDC.FCT_MODULE_ADD             | // support addition of modules
+//         EPDC.FCT_MODULE_ADD             | // support addition of modules
 //       EPDC.FCT_MODULE_REMOVE          | // support removal of modules
          EPDC.FCT_PROCESS_ATTACH         | // support attach to process
          EPDC.FCT_PROCESS_DETACH         | // support detach from process
-         EPDC.FCT_FILE_RESTART           | // support restart of program
+//         EPDC.FCT_FILE_RESTART           | // support restart of program
          EPDC.FCT_LOCAL_SOURCE_FILES     | // support local src files
-         EPDC.FCT_CHANGE_SOURCE_FILE     | // support changing source file
+//         EPDC.FCT_CHANGE_SOURCE_FILE     | // support changing source file
          0,
 
          // Storage Options
-         EPDC.FCT_STORAGE_ENABLE_TOGGLE      | // support storage monitor enable/disable
-         EPDC.FCT_STORAGE_EXPR_ENABLE_TOGGLE | // support storage monitor expr enable/disable
+//         EPDC.FCT_STORAGE_ENABLE_TOGGLE      | // support storage monitor enable/disable
+//         EPDC.FCT_STORAGE_EXPR_ENABLE_TOGGLE | // support storage monitor expr enable/disable
 //         EPDC.FCT_STORAGE_CONTENT_ASCII      | // support ASCII
-//         EPDC.FCT_STORAGE_CONTENT_CHAR       | // support character (native code page, DBCS, etc)
+         EPDC.FCT_STORAGE_CONTENT_CHAR       | // support character (native code page, DBCS, etc)
 //         EPDC.FCT_STORAGE_CONTENT_16INT      | // support 16-bit int
 //         EPDC.FCT_STORAGE_CONTENT_16UINT     | // support 16-bit uint
 //         EPDC.FCT_STORAGE_CONTENT_32INT      | // support 32-bit int
@@ -327,26 +328,26 @@ public class CmdInitializeDE extends Command
 //         EPDC.FCT_STORAGE_CONTENT_32PTR      | // support 32-bit prs
 //         EPDC.FCT_STORAGE_CONTENT_64PTR      | // support 64-bit ptr
 //         EPDC.FCT_STORAGE_CONTENT_16INTHEX   | // support 16-bit hex
-         EPDC.FCT_STORAGE_CONTENT_32INTHEX   | // support 32-bit hex
+//         EPDC.FCT_STORAGE_CONTENT_32INTHEX   | // support 32-bit hex
 //         EPDC.FCT_STORAGE_CONTENT_64INTHEX   | // support 16-bit hex
          0,
 
          // Breakpoint Options
          EPDC.FCT_LINE_BREAKPOINT           | // support line bkpts
 //       EPDC.FCT_STATEMENT_BREAKPOINT      | // support stmt bkpts
-         EPDC.FCT_FUNCTION_BREAKPOINT       | // support function bkpts
-         EPDC.FCT_ADDRESS_BREAKPOINT        | // support address bkpts
-         EPDC.FCT_CHANGE_ADDRESS_BREAKPOINT | // support chg addr bkpts
+//         EPDC.FCT_FUNCTION_BREAKPOINT       | // support function bkpts
+//         EPDC.FCT_ADDRESS_BREAKPOINT        | // support address bkpts
+//         EPDC.FCT_CHANGE_ADDRESS_BREAKPOINT | // support chg addr bkpts
 //       EPDC.FCT_BREAKPOINT_MONITOR_8BYTES | // support monitor 8 bytes
 //       EPDC.FCT_BREAKPOINT_MONITOR_4BYTES | // support monitor 4 bytes
 //       EPDC.FCT_BREAKPOINT_MONITOR_2BYTES | // support monitor 2 bytes
 //       EPDC.FCT_BREAKPOINT_MONITOR_1BYTES | // support monitor 1 bytes
-         EPDC.FCT_LOAD_BREAKPOINT           | // support load bkpts
+//         EPDC.FCT_LOAD_BREAKPOINT           | // support load bkpts
          EPDC.FCT_BREAKPOINT_ENABLE_TOGGLE  | // support enablemt bkpts
          EPDC.FCT_BREAKPOINT_MODIFY         | // support modify bkpts
 //       EPDC.FCT_BREAKPOINT_NO_THREADS     | // do not support thread specific breakpoints
 //       EPDC.FCT_BREAKPOINT_NO_FREQUENCY   | // do not support frequency conditions
-         EPDC.FCT_BREAKPOINT_EXPRESSION     | // conditional expressions
+//         EPDC.FCT_BREAKPOINT_EXPRESSION     | // conditional expressions
 //         EPDC.FCT_BREAKPOINT_DEFERRED       | // support deferred bkpts
          0,
 
@@ -363,7 +364,7 @@ public class CmdInitializeDE extends Command
          0,
 
          // Run Options
-//       EPDC.FCT_THREAD_ENABLED      | // support thread enablement
+         EPDC.FCT_THREAD_ENABLED      | // support thread enablement
          EPDC.FCT_STEP_INTO           | // support step into
          EPDC.FCT_STEP_OVER           | // support step over
 //       EPDC.FCT_STEP_DEBUG          | // support step debug
@@ -379,9 +380,9 @@ public class CmdInitializeDE extends Command
          //FCT_EXCEPTION_EXAMINE bit must be disabled until this functionality
          //is supported. 
          EPDC.FCT_EXCEPTION_EXAMINE |  // support examine-retry
-         EPDC.FCT_EXCEPTION_FILTER  |  // support exception filtering
+//         EPDC.FCT_EXCEPTION_FILTER  |  // support exception filtering
 //         EPDC.FCT_EXCEPTION_STEP    |  // support step exception
-         EPDC.FCT_EXCEPTION_RUN     |  // support run exception
+//         EPDC.FCT_EXCEPTION_RUN     |  // support run exception
          0,
 
          // Stack Options
