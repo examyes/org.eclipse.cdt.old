@@ -814,6 +814,8 @@ public class FileSystemMiner extends Miner
 			DataElement child = theElement.get(i);
 			if (child != null && !child.isDeleted())
 			    {
+			    	if (child.getType().equals("file") || child.getType().equals("directory"))
+			    	{
 				String src = child.getSource();
 				if (src != null)
 				    {
@@ -823,6 +825,7 @@ public class FileSystemMiner extends Miner
 						_dataStore.deleteObject(theElement, child);
 					    }
 				    }
+			    	}
 			    }
 		    }
 		
