@@ -242,6 +242,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	_viewMenu = new ViewMenu(this, _topContainer, _loader);
 	
 	_toolBarContainer.setLayout(new ToolLayout());
+	_toolBarContainer.setVisible(false);
 	
 	return _toolBarContainer;
     }

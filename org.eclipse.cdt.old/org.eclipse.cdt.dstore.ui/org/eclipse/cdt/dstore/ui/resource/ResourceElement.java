@@ -425,14 +425,18 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	if (dateDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
-		ArrayList timeArray = _element.getAssociated("modified at");
+		ArrayList attributes = _element.getAssociated("attributes"); 
+
 		DataElement dateObj = null;
-		if (timeArray.size() > 0)
-		{
-			dateObj = (DataElement)timeArray.get(0);
-			dateObj.setAttribute(DE.A_NAME, "" + stamp);
-		}
-		else
+		for (int i = 0; (i < attributes.size()) && dateObj == null; i++)
+		    {
+			DataElement attribute = (DataElement)attributes.get(i);
+			if (attribute.getType().equals("date"))
+			    {
+				dateObj = attribute;
+			    }
+		    }
+		if (dateObj == null)
 		{
 			dateObj = _dataStore.createObject(null, "date", "" + stamp);
 			
@@ -448,32 +452,39 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	if (_modificationStamp == 0)
 	    {
 		DataElement dateObj = null;
-		ArrayList timeArray = _element.getAssociated("modified at");
-		if (timeArray.size() > 0)
-		    {
-			dateObj = (DataElement)timeArray.get(0); 
-		    }
-		
-		DataElement status = _element.doCommandOn("C_DATE", true);
+		ArrayList attributes = _element.getAssociated("attributes"); 
 
-		if (status != null && status.getNestedSize() > 0)
+		for (int i = 0; (i < attributes.size()) && dateObj == null; i++)
 		    {
-			dateObj = status.get(0);
+			DataElement attribute = (DataElement)attributes.get(i);
+			if (attribute.getType().equals("date"))
+			    {
+				dateObj = attribute;
+			    }
 		    }
+		{
+		    DataElement status = _element.doCommandOn("C_DATE", true);
 		    
-		if (dateObj != null)
-		    {
-			Long date = new Long(dateObj.getName());
-			_modificationStamp = date.longValue(); 
-		    }
-		else
-		    {
-			_modificationStamp = -1;
-		    }
+		    if (status != null && status.getNestedSize() > 0)
+			{
+			    dateObj = status.get(0);
+			}
+		    
+		    if (dateObj != null)
+			{
+			    Long date = new Long(dateObj.getName());
+			    _modificationStamp = date.longValue(); 
+			}
+		    else
+			{
+			    _modificationStamp = -1;
+			}
+		}
 	    }
+
 	return _modificationStamp;
     }
-
+	
     public ResourceElement findResource(String name)
     {
 	if (_children != null)

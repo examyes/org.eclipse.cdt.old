@@ -29,7 +29,7 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.events.*;
 
 public class DataElementTableViewer extends TableViewer 
-    implements ISelected, Listener, IDataElementViewer
+    implements ISelected, Listener, IDataElementViewer, SelectionListener
 {
     private class DelayedRefresher extends Thread
     {
@@ -72,6 +72,7 @@ public class DataElementTableViewer extends TableViewer
     }
 
 
+
     private   ViewFilter   _viewFilter;
     
     private   DataElement  _currentDescriptor;
@@ -93,10 +94,17 @@ public class DataElementTableViewer extends TableViewer
     private DelayedRefresher _refresher = null;
     private boolean _isContainable = false;
     
+    private TableLayout _layout;
+    private ArrayList   _attributeColumns;
+
     public DataElementTableViewer(ObjectWindow parent, Table table)
     {
 	super(table);
 	
+	_layout = new TableLayout();
+
+	computeLayout();
+
 	_parent = parent;
 	
 	_property = null;
@@ -109,7 +117,12 @@ public class DataElementTableViewer extends TableViewer
 	_isShowing = false;
 	_isWorking = false;
 	
+	_attributeColumns = new ArrayList();
+
+	setVisibility(false);
     }
+
+    
     
     public void setFocus()
     {
@@ -372,9 +385,7 @@ public class DataElementTableViewer extends TableViewer
 		System.out.println(e);
 	    }				
     }    
-    */
  
-    /*
     private synchronized void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
 	int maxAdd = (recycled.size() > 100) ? recycled.size() : 100;
@@ -415,11 +426,33 @@ public class DataElementTableViewer extends TableViewer
 			    }
 			else
 			    {
-				item = (TableItem)newItem(table, SWT.NONE,totalItems +  numAdded);
+ 				item = (TableItem)newItem(table, SWT.NONE,totalItems +  numAdded);
 				numAdded++;
 			    }
 			
-			updateItem(item, child); 			
+			// remember element we are showing
+			if (true) 
+			    {
+				associate(child, item);
+			    } 
+			else 
+			    {
+				item.setData(child);
+				mapElement(child, item);	
+			    }
+
+			DataElementLabelProvider provider = (DataElementLabelProvider)getLabelProvider();
+			// need to really do an update though to register properly
+			item.setText(0, provider.getColumnText(child, 0));
+			item.setImage(0, provider.getColumnImage(child, 0));
+			ArrayList attributes = child.getAssociated("attributes");
+			for (int a = 0; a < attributes.size(); a++)
+			    {
+				DataElement attribute = (DataElement)attributes.get(a);
+				item.setText(a + 1, attribute.getName());
+			    }
+
+			//***updateItem(item, child); 			
 		    }
 		elements.remove(child);
 	    }
@@ -450,12 +483,11 @@ public class DataElementTableViewer extends TableViewer
 		    }
 	    }	
     }
-    
+    */
     protected Item newItem(Widget parent, int flags, int ix)  
     {
 	return new TableItem((Table)parent, flags, ix);
     }
-    */
     
     public void doExpand(DataElement obj)
     {
@@ -482,20 +514,20 @@ public class DataElementTableViewer extends TableViewer
 
     protected void inputChanged(Object object, Object oldInput)
     {
-		if (object == null)
+	if (object == null)
 	    {
-			_currentInput = null;
-			setVisibility(false);
-			return;
+		_currentInput = null;
+		setVisibility(false);
+		return;
 	    }
-
-		if (getTable().isDisposed())
-		{
-			return;	
-		}			    
-
-		boolean selectionListening = _listener.isEnabled();
-       	if (selectionListening)
+	
+	if (getTable().isDisposed())
+	    {
+		return;	
+	    }			    
+	
+	boolean selectionListening = _listener.isEnabled();
+	if (selectionListening)
 	    {
 		if (_currentInput != object)
 		    {
@@ -503,9 +535,16 @@ public class DataElementTableViewer extends TableViewer
 			    {
 				setVisibility(true);				
 			    }
-
+			
+			boolean newType = _currentInput == null || 
+			    (_currentInput.getDescriptor() != ((DataElement)object).getDescriptor());
 			_currentInput = (DataElement)object;
 			
+			if (newType)
+			    {
+				computeLayout();
+			    }
+
 			internalRefresh(_currentInput);
 			_isShowing = true;
 		    }
@@ -717,6 +756,7 @@ public class DataElementTableViewer extends TableViewer
     {
 	setFilter(filter);
 	setProperty(relation);
+	computeLayout();
 	internalRefresh(_currentInput);
     }
 
@@ -729,5 +769,149 @@ public class DataElementTableViewer extends TableViewer
     public void dispose()
     {
 	getTable().dispose();
+    }
+
+    private void computeLayout()
+    {
+	if (_currentInput != null)
+	    {
+		_attributeColumns.clear();
+
+		Table table = getTable();
+		
+		// get column information
+		
+		// find first column type
+		DataElement col1Type = _viewFilter.getType();
+		TableColumn[] columns = table.getColumns();
+		int numColumns = 0;
+		if (columns != null)
+		    numColumns = columns.length;
+
+		if (col1Type != null)
+		    {
+			TableColumn tc = null;
+			if (numColumns > 0 && columns[0] != null)
+			    {
+				tc = columns[0];
+			    }
+			else
+			    {
+				_layout.addColumnData(new ColumnWeightData(200));
+				tc = new TableColumn(table, SWT.NONE, 0);				
+				tc.addSelectionListener(this);
+			    }
+
+			DataElementLabelProvider provider = (DataElementLabelProvider)getLabelProvider();
+
+			tc.setText(provider.getText(col1Type));
+			//tc.setImage(provider.getImage(col1Type));
+
+			_attributeColumns.add(col1Type);
+			
+			// find attributes of filter type
+			ArrayList attributeTypes = col1Type.getAssociated("attributes");
+			for (int i = 0; i < attributeTypes.size(); i++)
+			    {
+				DataElement attributeType = (DataElement)attributeTypes.get(i);
+				
+				TableColumn atc = null;
+				if (numColumns > i+ 1)
+				    {
+					atc = (TableColumn)columns[i + 1];
+				    }
+				else
+				    {
+					_layout.addColumnData(new ColumnWeightData(100));
+					atc = new TableColumn(table, SWT.NONE, i + 1);
+					atc.addSelectionListener(this);
+				    }
+				
+				_attributeColumns.add(attributeType);
+
+				atc.setText(provider.getText(attributeType));
+				//atc.setImage(provider.getImage(attributeType));
+			    }
+
+			while (attributeTypes.size() + 1 < numColumns)
+			    {
+				columns[numColumns - 1].dispose();
+				numColumns--;
+			    }
+
+
+			// compute widths
+			columns = table.getColumns();
+			Rectangle clientA = table.getClientArea();
+			int totalWidth = clientA.width;
+			int averageWidth = totalWidth / columns.length;
+			int firstWidth = averageWidth;
+			if (averageWidth < 200)
+			    {
+				int difference = 200 - averageWidth;
+				firstWidth = 200;
+				averageWidth -= difference / columns.length;
+			    }
+			
+			for (int i = columns.length - 1; i >= 0; i--)
+			    {
+				if (i == 0)
+				    {
+					columns[i].setWidth(firstWidth);
+				    }
+				else
+				    {
+					columns[i].setWidth(averageWidth);
+				    }
+			    }
+
+			if (attributeTypes.size() == 0)
+			    {
+				table.setHeaderVisible(false);
+			    }
+			else
+			    {
+				table.setHeaderVisible(true);	
+			    }
+		    }
+		else
+		    {
+			table.setHeaderVisible(false);	
+		    }
+
+		table.setLayout(_layout);
+		
+	    }
+    }
+
+    public void widgetDefaultSelected(SelectionEvent e)
+    {
+	widgetSelected(e);
+    }
+
+    public void widgetSelected(SelectionEvent e)
+    {
+	Widget source = e.widget;
+	
+	TableColumn col = (TableColumn)source;
+	int index = getTable().indexOf(col);
+
+	DataElementSorter sorter = (DataElementSorter)getSorter();
+	if (sorter == null)
+	    {
+		sorter = new DataElementSorter(DE.P_NAME);
+	    }
+
+	if (index > 0)
+	    {
+		sorter.setSortAttribute((DataElement)_attributeColumns.get(index));
+	    }
+	else
+	    {
+		sorter.setSortAttribute(null);		
+	    }
+
+	setSorter(sorter);
+	internalRefresh(_currentInput);
     }
 }

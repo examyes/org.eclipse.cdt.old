@@ -65,6 +65,7 @@ public class DataElementTreeViewer extends TreeViewer
 	_isShowing = false;
 	_isWorking = false;
 	
+	setVisibility(false);
     }
     
     public void setListener(ObjectSelectionChangedListener listener)

@@ -613,7 +613,9 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	Composite widget = null;
 	if (_isTable)
 	    {
-		widget = new Table(treeContainer, SWT.MULTI);
+		widget = new Table(treeContainer, SWT.H_SCROLL | SWT.V_SCROLL | 
+				   SWT.MULTI | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
+	
 		widget.setLayoutData(textData);
 		
 		_viewer = new DataElementTableViewer(this, (Table)widget);

@@ -253,12 +253,36 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
     
     public Image getColumnImage(Object element, int columnIndex)
     {
-	return getImage(element);    
+	if (columnIndex == 0)
+	    {
+		return getImage(element);    
+	    }
+	else
+	    {
+		return null;
+	    }
     }
         
     public String getColumnText(Object element, int columnIndex)
     {
-	return getText(element);    
+	if (columnIndex == 0)
+	    {
+		return getText(element);    
+	    }
+	else if (element instanceof DataElement)
+	    {		
+		ArrayList attributes = ((DataElement)element).getAssociated("attributes");
+		if (attributes.size() > columnIndex - 1)
+		    {
+			DataElement attribute = (DataElement)attributes.get(columnIndex - 1);
+			return getText(attribute);
+		    }
+		else
+		    {
+			return "";
+		    }
+	    }
+	return null;
     }    
 }
 
