@@ -341,6 +341,14 @@ public class XMLparser
 			      }			  
 		      }
 	      } 
+
+
+	  /*	  if (attributes[DE.A_TYPE].equals("status"))
+	      {
+		  System.out.println("status = " + result);
+	      }
+	  */
+
 	  return result;
 	}	
 	

@@ -92,7 +92,6 @@ public abstract class CommandHandler extends Handler
         if ((cmd != null) && _dataStore != null)
 	    {
 		status = _dataStore.find(cmd, DE.A_TYPE, _dataStore.getLocalizedString("model.status"), 1);		
-
 		if (status != null && !status.getName().equals(_dataStore.getLocalizedString("model.done")))
 		    //if (status != null)
 		    {
