@@ -820,6 +820,7 @@ public class FileSystemMiner extends Miner
 
     public DataElement handleRefresh(DataElement theElement, DataElement status)
     {
+    	boolean changed = false;
 	try
 	    {		
 		String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
@@ -883,9 +884,10 @@ public class FileSystemMiner extends Miner
 							objType = _hiddenDirectoryDescriptor;
 						    }
 					    }
-						
+									
 					newObject = _dataStore.createObject (theElement, objType, 
 									     objName, filePath);
+					changed = true;				     
 					if (!f.isDirectory())
 					    {
 						newObject.setDepth(1);
@@ -905,7 +907,11 @@ public class FileSystemMiner extends Miner
 		e.printStackTrace();
 	    }
 	
-	_dataStore.refresh(theElement);
+	if (changed)
+	{
+		_dataStore.refresh(theElement);
+	}
+	
 	status.setAttribute(DE.A_NAME, "done");
 	return status;
     }
