@@ -24,26 +24,4 @@
       <export name="*"/>
    </library>
 </runtime>
-
-<extension
-      point="org.eclipse.ui.views">
-   <category
-         name="&amp;DataStore"
-         id="org.eclipse.cdt.dstore.ui">
-   </category>
-   <view
-         name="%Generic_View_Part"
-         icon="icons/objects.gif"
-         category="org.eclipse.cdt.dstore.ui"
-         class="org.eclipse.cdt.dstore.ui.views.GenericViewPart"
-         id="org.eclipse.cdt.dstore.ui.views.GenericViewPart">
-   </view>
-   <view
-         name="%Object_Details"
-         icon="icons/details.gif"
-         category="org.eclipse.cdt.dstore.ui"
-         class="org.eclipse.cdt.dstore.ui.views.DetailsViewPart"
-         id="org.eclipse.cdt.dstore.ui.views.DetailsViewPart">
-   </view>
-</extension>
 </plugin>
