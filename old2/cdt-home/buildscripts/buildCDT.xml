@@ -17,6 +17,7 @@
     <!--  all features required to build eclipse sdk and javadoc  -->
     <target name="allElements">
         <ant antfile="${install}/features/org.eclipse.cdt.${platformId}-feature/build.xml" target="${target}" dir="${install}/features/org.eclipse.cdt.${platformId}-feature" />
+        <ant antfile="${install}/features/org.eclipse.cdt.source-feature/build.xml" target="${target}" dir="${install}/features/org.eclipse.cdt.source-feature" />
     </target>
     
     <!--   runs targets that fetch all projects required for eclipse CDT from dev.eclipse.org  -->
