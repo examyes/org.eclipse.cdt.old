@@ -1,0 +1,149 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html><head><title>TestUserProfile.java</title></head><body bgcolor="#ffffff"><pre>
+<font color="#008080">//----------------------------------------------------------------------------</font>
+<font color="#008080">// COMPONENT NAME: LPEX Editor</font>
+<font color="#008080">//</font>
+<font color="#008080">// (C) Copyright IBM Corporation 1998, 2001</font>
+<font color="#008080">// All Rights Reserved.</font>
+<font color="#008080">//</font>
+<font color="#008080">// DESCRIPTION:</font>
+<font color="#008080">// TestUserProfile - sample user profile.</font>
+<font color="#008080">//----------------------------------------------------------------------------</font>
+
+<font color="#0000ff">package</font><font color="#000000"> com.ibm.lpex.samples;</font>
+
+<font color="#0000ff">import</font><font color="#000000"> com.ibm.lpex.core.LpexAction;</font>
+<font color="#0000ff">import</font><font color="#000000"> com.ibm.lpex.core.LpexDocumentLocation;</font>
+<font color="#0000ff">import</font><font color="#000000"> com.ibm.lpex.core.LpexView;</font>
+
+
+<font color="#008080">/**</font>
+<font color="#008080"> * This class is a sample user profile.  It customizes the &lt;b>lpex&lt;/b> base</font>
+<font color="#008080"> * editor profile by redefining several keys and settings.</font>
+<font color="#008080"> *</font>
+<font color="#008080"> * &lt;p>The user profile is run during the processing of the &lt;b>updateProfile&lt;/b></font>
+<font color="#008080"> * command.  The &lt;b>updateProfile&lt;/b> command is normally run when a document</font>
+<font color="#008080"> * view is created, and it may be issued at any time to allow the document view</font>
+<font color="#008080"> * to reflect changes to the profile.&lt;/p></font>
+<font color="#008080"> *</font>
+<font color="#008080"> * &lt;p>Here is the &lt;a href="doc-files/TestUserProfile.java.html">TestUserProfile</font>
+<font color="#008080"> * code&lt;/a>.&lt;/p></font>
+<font color="#008080"> *</font>
+<font color="#008080"> * &lt;p>To run this sample:</font>
+<font color="#008080"> * &lt;ul></font>
+<font color="#008080"> *  &lt;li>Compile the user-profile class:</font>
+<font color="#008080"> *    &lt;pre>javac TestUserProfile.java&lt;/pre></font>
+<font color="#008080"> *  &lt;li>Set the user profile, by entering this on the editor command line:</font>
+<font color="#008080"> *    &lt;pre>set updateProfile.userProfile com.ibm.lpex.samples.TestUserProfile&lt;/pre></font>
+<font color="#008080"> *  &lt;li>Run the &lt;b>updateProfile&lt;/b> command from the editor command line,</font>
+<font color="#008080"> *    by entering:</font>
+<font color="#008080"> *    &lt;pre>updateProfile&lt;/pre></font>
+<font color="#008080"> * &lt;/ul>&lt;/p></font>
+<font color="#008080"> *</font>
+<font color="#008080"> * See the &lt;b>updateProfile.userProfile&lt;/b> parameter.</font>
+<font color="#008080"> */</font>
+<font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">class</font><font color="#000000"> TestUserProfile</font>
+<font color="#000000">{</font>
+<font color="#000000"> </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">static</font><font color="#000000"> </font><font color="#0000ff">void</font><font color="#000000"> userProfile(LpexView lpexView)</font>
+<font color="#000000"> {</font>
+<font color="#000000">  </font><font color="#008080">// if the current profile is different from "lpex" (or none), don't touch it</font>
+<font color="#000000">  String baseProfile = lpexView.query(</font><font color="#800080">"baseProfile"</font><font color="#000000">);</font>
+<font color="#000000">  </font><font color="#0000ff">if</font><font color="#000000"> (baseProfile != </font><font color="#0000ff">null</font><font color="#000000"> &amp;&amp; !baseProfile.equals(</font><font color="#800080">"lpex"</font><font color="#000000">))</font>
+<font color="#000000">   {</font>
+<font color="#000000">    </font><font color="#0000ff">return</font><font color="#000000">;</font>
+<font color="#000000">   }</font>
+
+<font color="#000000">  </font><font color="#008080">// define a backSpace action restricted to the current line</font>
+<font color="#000000">  lpexView.defineAction(</font><font color="#800080">"myBackSpace"</font><font color="#000000">, </font><font color="#0000ff">new</font><font color="#000000"> LpexAction()</font>
+<font color="#000000">  {</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">void</font><font color="#000000"> doAction(LpexView view)</font>
+<font color="#000000">   {</font>
+<font color="#000000">    </font><font color="#0000ff">if</font><font color="#000000"> (view.currentPosition() > </font><font color="#800000">1</font><font color="#000000">)</font>
+<font color="#000000">     {</font>
+<font color="#000000">      view.doDefaultAction(view.actionId(</font><font color="#800080">"backSpace"</font><font color="#000000">));</font>
+<font color="#000000">     }</font>
+<font color="#000000">   }</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">boolean</font><font color="#000000"> available(LpexView view) { </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">true</font><font color="#000000">; }</font>
+<font color="#000000">  });</font>
+
+<font color="#000000">  </font><font color="#008080">// define a delete action restricted to the current line</font>
+<font color="#000000">  lpexView.defineAction(</font><font color="#800080">"myDelete"</font><font color="#000000">, </font><font color="#0000ff">new</font><font color="#000000"> LpexAction()</font>
+<font color="#000000">  {</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">void</font><font color="#000000"> doAction(LpexView view)</font>
+<font color="#000000">   {</font>
+<font color="#000000">    </font><font color="#0000ff">if</font><font color="#000000"> (view.currentPosition() &lt;= view.queryInt(</font><font color="#800080">"length"</font><font color="#000000">))</font>
+<font color="#000000">     {</font>
+<font color="#000000">      view.doDefaultAction(view.actionId(</font><font color="#800080">"delete"</font><font color="#000000">));</font>
+<font color="#000000">     }</font>
+<font color="#000000">   }</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">boolean</font><font color="#000000"> available(LpexView view) { </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">true</font><font color="#000000">; }</font>
+<font color="#000000">  });</font>
+
+<font color="#000000">  </font><font color="#008080">// define an action to select the current line</font>
+<font color="#000000">  lpexView.defineAction(</font><font color="#800080">"myBlockMarkElement"</font><font color="#000000">, </font><font color="#0000ff">new</font><font color="#000000"> LpexAction()</font>
+<font color="#000000">  {</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">void</font><font color="#000000"> doAction(LpexView view)</font>
+<font color="#000000">   {</font>
+<font color="#000000">    view.doDefaultCommand(</font><font color="#800080">"block clear"</font><font color="#000000">);</font>
+<font color="#000000">    view.doDefaultCommand(</font><font color="#800080">"block set element"</font><font color="#000000">);</font>
+<font color="#000000">   }</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">boolean</font><font color="#000000"> available(LpexView view) { </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">true</font><font color="#000000">; }</font>
+<font color="#000000">  });</font>
+
+<font color="#000000">  </font><font color="#008080">// define a deleteLine action that preserves the cursor column position</font>
+<font color="#000000">  lpexView.defineAction(</font><font color="#800080">"myDeleteLine"</font><font color="#000000">, </font><font color="#0000ff">new</font><font color="#000000"> LpexAction()</font>
+<font color="#000000">  {</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">void</font><font color="#000000"> doAction(LpexView view)</font>
+<font color="#000000">   {</font>
+<font color="#000000">    </font><font color="#0000ff">int</font><font color="#000000"> displayPosition = view.queryInt(</font><font color="#800080">"displayPosition"</font><font color="#000000">);</font>
+<font color="#000000">    </font><font color="#0000ff">if</font><font color="#000000"> (displayPosition > </font><font color="#800000">0</font><font color="#000000">)</font>
+<font color="#000000">     {</font>
+<font color="#000000">      view.doDefaultAction(view.actionId(</font><font color="#800080">"deleteLine"</font><font color="#000000">));</font>
+<font color="#000000">      view.doDefaultCommand(</font><font color="#800080">"set displayPosition "</font><font color="#000000"> + displayPosition);</font>
+<font color="#000000">     }</font>
+<font color="#000000">   }</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">boolean</font><font color="#000000"> available(LpexView view) { </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">true</font><font color="#000000">; }</font>
+<font color="#000000">  });</font>
+
+<font color="#000000">  </font><font color="#008080">// define a join action that keeps one and only one space between texts</font>
+<font color="#000000">  lpexView.defineAction(</font><font color="#800080">"myJoin"</font><font color="#000000">, </font><font color="#0000ff">new</font><font color="#000000"> LpexAction()</font>
+<font color="#000000">  {</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">void</font><font color="#000000"> doAction(LpexView view)</font>
+<font color="#000000">   {</font>
+<font color="#000000">    LpexDocumentLocation joinLocation = view.documentLocation();</font>
+<font color="#000000">    </font><font color="#0000ff">if</font><font color="#000000"> (joinLocation.element > </font><font color="#800000">0</font><font color="#000000">)</font>
+<font color="#000000">     {</font>
+<font color="#000000">      </font><font color="#008080">// save cursor position, may be affected by deleteWhiteSpace / insertText</font>
+<font color="#000000">      </font><font color="#0000ff">int</font><font color="#000000"> displayPosition = view.queryInt(</font><font color="#800080">"displayPosition"</font><font color="#000000">);</font>
+<font color="#000000">      joinLocation.position = view.queryInt(</font><font color="#800080">"length"</font><font color="#000000">) + </font><font color="#800000">1</font><font color="#000000">;</font>
+<font color="#000000">      view.doDefaultAction(view.actionId(</font><font color="#800080">"join"</font><font color="#000000">));</font>
+<font color="#000000">      view.doDefaultCommand(joinLocation, </font><font color="#800080">"action deleteWhiteSpace"</font><font color="#000000">);</font>
+<font color="#000000">      view.doDefaultCommand(joinLocation, </font><font color="#800080">"insertText  "</font><font color="#000000">);</font>
+<font color="#000000">      </font><font color="#008080">// restore original cursor position</font>
+<font color="#000000">      view.doDefaultCommand(</font><font color="#800080">"set displayPosition "</font><font color="#000000"> + displayPosition);</font>
+<font color="#000000">     }</font>
+<font color="#000000">   }</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">boolean</font><font color="#000000"> available(LpexView view) { </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">true</font><font color="#000000">; }</font>
+<font color="#000000">  });</font>
+
+<font color="#000000">  </font><font color="#008080">// set default selection to character (not stream)</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set block.defaultType character"</font><font color="#000000">);</font>
+
+<font color="#000000">  </font><font color="#008080">// set "Enter" key to go to the next line (not split)</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set keyAction.enter.t newLine"</font><font color="#000000">);</font>
+
+<font color="#000000">  </font><font color="#008080">// set "Delete" and "Backspace" keys to keep it inside the current line</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set keyAction.backSpace.t myBackSpace"</font><font color="#000000">);</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set keyAction.delete.t myDelete"</font><font color="#000000">);</font>
+
+<font color="#000000">  </font><font color="#008080">// set "Alt+J" to join next line's text with only one space in-between</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set keyAction.a-j.t myJoin"</font><font color="#000000">);</font>
+
+<font color="#000000">  </font><font color="#008080">// set mouse button 1 double-click to select the line (not word)</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set mouseAction.1-pressed.2 myBlockMarkElement"</font><font color="#000000">);</font>
+
+<font color="#000000">  </font><font color="#008080">// indicate this profile has run</font>
+<font color="#000000">  lpexView.doDefaultCommand(</font><font color="#800080">"set messageText My settings (TestUserProfile) in effect."</font><font color="#000000">);</font>
+<font color="#000000"> }</font>
+<font color="#000000">}</font>
+</pre></body></html>
