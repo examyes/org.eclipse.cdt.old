@@ -843,7 +843,19 @@ public class DataElementTableViewer extends TableViewer
 				else
 				    {
 					_layout.addColumnData(new ColumnWeightData(100));
-					atc = new TableColumn(table, SWT.RIGHT, i + 1);
+					
+					int alignment = SWT.RIGHT;
+					ArrayList attributeFormats = attributeType.getAssociated("attributes");
+					if (attributeFormats.size() > 0)
+					    {
+						DataElement attributeFormat = (DataElement)attributeFormats.get(0);
+						if (attributeFormat.getName().equals("String"))
+						    {
+							alignment = SWT.LEFT;
+						    }
+					    }
+
+					atc = new TableColumn(table, alignment, i + 1);
 					atc.addSelectionListener(this);
 				    }
 				
@@ -871,9 +883,9 @@ public class DataElementTableViewer extends TableViewer
 				firstWidth = 150;
 				averageWidth -= difference / columns.length;
 
-				if (averageWidth < 70)
+				if (averageWidth < 50)
 				    {
-					averageWidth = 70;
+					averageWidth = 50;
 				    }
 			    }
 			
