@@ -1,17 +1,18 @@
 <contexts>
- <context id="objects_view_context">
-  <description>This view allows you to view objects.</description>
-  <topic label="blah" href="gettingstarted/createproject/create.htm"/>
-  <topic label="blah" href="gettingstarted/createproject/import.htm"/>
- </context>
- <context id="view_toolbar_context">
-  <description>These drop downs allow you filter:</description>
-  <topic label="Relation Types" href="gettingstarted/createproject/create.htm"/>
-  <topic label="Object Types" href="gettingstarted/createproject/import.htm"/>
- </context>
  <context id="project_objects_view_context">
-  <description>This view shows you the Project Object.</description>
-  <topic label="Hey" href="gettingstarted/createproject/create.htm"/>
-  <topic label="it" href="gettingstarted/createproject/import.htm"/>
+  <description>This view shows you the Project Objects view.</description>
+  <topic label="Project Objects View" href="concepts/views/projectobjects.htm"/>
+ </context>
+ <context id="system_objects_view_context">
+  <description>This view shows you the System Objects view.</description>
+  <topic label="System Objects View" href="concepts/views/systemobjects.htm"/>
+ </context>
+ <context id="parsed_source_view_context">
+  <description>This view shows you the Parsed Files view.</description>
+  <topic label="Parsed Files View" href="concepts/views/parsedfiles.htm"/>
+ </context>
+ <context id="details_view_context">
+  <description>This view shows you the Project Details View.</description>
+  <topic label="Project Details View" href="concepts/views/details.htm"/>
  </context>
 </contexts>
