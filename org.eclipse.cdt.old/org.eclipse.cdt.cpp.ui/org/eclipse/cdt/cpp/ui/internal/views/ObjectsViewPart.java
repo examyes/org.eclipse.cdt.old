@@ -313,13 +313,13 @@ public class ObjectsViewPart extends GenericViewPart
 		
 		if ((commandObject != null) && (event.getProject() != null))
 		    {
-			String commandStr = "Issuing " + commandObject.getValue() + " on " + event.getProject().getName();
+			String commandStr = "Issuing " + 
+			    commandObject.getValue() + " on " + event.getProject().getName();
 			mgr.setMessage(commandStr);
 			
 			if (event.getStatus() == CppProjectEvent.DONE)
 			    {
-				mgr.setMessage("");
-				pm.done();
+				//pm.done();
 			    }
 			else if (event.getStatus() == CppProjectEvent.START)
 			    {
@@ -327,7 +327,7 @@ public class ObjectsViewPart extends GenericViewPart
 			    }
 			else
 			    {
-				pm.worked(2);
+				pm.worked(5);
 			    }		 
 		    }
 		    }
