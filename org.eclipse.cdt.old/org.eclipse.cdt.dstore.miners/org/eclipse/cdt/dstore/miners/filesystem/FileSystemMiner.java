@@ -117,13 +117,16 @@ public class FileSystemMiner extends Miner
 
     private void refreshFrom(DataElement child)
     {
-	DataElement parent = child.getParent();
-	if (parent != _minerData)
+	if (child != null)
 	    {
-		refreshFrom(parent);
+		DataElement parent = child.getParent();
+		if (parent != _minerData)
+		    {
+			refreshFrom(parent);
+		    }
+		
+		_dataStore.refresh(child);
 	    }
-
-	_dataStore.refresh(child);
     }
 
 
