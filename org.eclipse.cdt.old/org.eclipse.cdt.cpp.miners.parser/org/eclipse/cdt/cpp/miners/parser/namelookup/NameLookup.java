@@ -96,10 +96,13 @@ public class NameLookup
   String      curName          = null;
   ArrayList   recursiveResults = null;
   
-    
+  int count = 0;  
   //Now curChild should be pointing to the startElement
   while ((rootElement != null) && !rootElement.getType().equals("Source Files"))
   {
+      if (count++ > 10)
+	  return results;
+
    for (; curChild >=0; curChild--)
    {
     curObject = (DataElement)children.get(curChild);
