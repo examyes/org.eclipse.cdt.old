@@ -18,9 +18,9 @@ public class SearchMiner extends Miner
 
    public void extendSchema(DataElement schemaRoot)
     {
-      DataElement solD       = _dataStore.find(schemaRoot, DE.A_NAME, "solution", 1);
-      createCommandDescriptor(solD, "Search", "C_SEARCH", false);
-      createCommandDescriptor(solD, "Regular Expression Search", "C_SEARCH_REGEX", false);
+	DataElement solD       = _dataStore.find(schemaRoot, DE.A_NAME, "Workspace", 1);
+	createCommandDescriptor(solD, "Search", "C_SEARCH", false);
+	createCommandDescriptor(solD, "Regular Expression Search", "C_SEARCH_REGEX", false);
     }
  
    public DataElement handleCommand(DataElement theCommand)
@@ -29,6 +29,7 @@ public class SearchMiner extends Miner
      DataElement  status  = getCommandStatus(theCommand);
      DataElement  subject = getCommandArgument(theCommand, 0);
      DataElement  pattern = getCommandArgument(theCommand, 1);
+
 
      if (name.equals("C_SEARCH"))
        {
@@ -105,7 +106,25 @@ public class SearchMiner extends Miner
 		  return;
 	      }
 
-	  compareRegex(matcher, pattern, type, root, status);
+	  if (root.getType().equals("Workspace"))
+	      {
+		  for (int i = 0; i < root.getNestedSize(); i++)
+		      {
+			  DataElement project = root.get(i);
+			  for (int j = 0; j < project.getNestedSize(); j++)
+			      {
+				  DataElement child = project.get(j);
+				  if (child.isReference() && child.getType().equals("Parse Reference"))
+				      {
+					  compareRegex(matcher, pattern, type, child.dereference(), status);
+				      }
+			      }
+		      }
+	      }
+	  else
+	      {
+		  compareRegex(matcher, pattern, type, root, status);
+	      }
       }
       
       public void compareRegex(PatternMatcher matcher, Pattern pattern, 
@@ -113,8 +132,7 @@ public class SearchMiner extends Miner
       {
 	  for (int i = 0; i < root.getNestedSize(); i++)
 	      {
-		  DataElement child = root.get(i);
-		  
+		  DataElement child = root.get(i);		  
 		  if (!child.isReference() && matcher.matches(child.getName(), pattern)) 
 		      {
 			  if (child.isOfType(type))

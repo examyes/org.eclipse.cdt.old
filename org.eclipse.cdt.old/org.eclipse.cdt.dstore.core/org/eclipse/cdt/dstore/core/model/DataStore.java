@@ -737,13 +737,16 @@ public class DataStore
   
   public void deleteObjects(DataElement from)
       {
-	  for (int i = 0; i < from.getNestedSize(); i++)
+	  if (from != null)
 	      {
-		  DataElement deletee = from.get(i);
-		  deleteObjectHelper(from, deletee, 2);		  
+		  for (int i = 0; i < from.getNestedSize(); i++)
+		      {
+			  DataElement deletee = from.get(i);
+			  deleteObjectHelper(from, deletee, 2);		  
+		      }
+		  
+		  refresh(from);
 	      }
-	  
-	  refresh(from);
       }
 
   public void deleteObject(DataElement from, DataElement toDelete)

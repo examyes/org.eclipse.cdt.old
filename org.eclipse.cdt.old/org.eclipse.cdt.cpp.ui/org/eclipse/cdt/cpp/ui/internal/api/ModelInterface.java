@@ -193,8 +193,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				    String message = output.getName();				
 				    HashMap attributes = new HashMap(5);
 				    attributes.put(IMarker.MESSAGE, message);
-				    attributes.put(IMarker.CHAR_START, new Integer(0));
-				    attributes.put(IMarker.CHAR_END, new Integer(message.length()));
+				    attributes.put(IMarker.CHAR_START, new Integer(-1));
+				    attributes.put(IMarker.CHAR_END, new Integer(-1));
 				    attributes.put(IMarker.LINE_NUMBER, new Integer(loc));
 				    attributes.put("DataElementID", output);
 				    searchMarker.setAttributes(attributes);
@@ -907,7 +907,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  }
 
 	      _searchResultsView.searchStarted(
-					       "com.ibm.cpp.ui.internal.views.CppSearchPage",
+					       "com.ibm.cpp.ui.internal.views.search.CppSearchPage",
 					       patternStr.toString(),
 					       CppPlugin.getDefault().getImageDescriptor("details.gif"),//null,
 					       null,
