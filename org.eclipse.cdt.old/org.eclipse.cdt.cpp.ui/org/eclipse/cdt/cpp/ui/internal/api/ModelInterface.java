@@ -910,7 +910,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       // remote temp information
       for (int i = 0; i < _tempFiles.size(); i++)
 	  {
-	      IFile file = (IFile)_tempFiles.get(i);
+	      IResource file = (IResource)_tempFiles.get(i);
 	      if (file.getProject() == project)
 		  {
 		      _tempFiles.remove(file);
