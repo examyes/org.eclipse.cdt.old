@@ -35,7 +35,7 @@ public class CommandMiner extends Miner
      DataElement cancellable   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.Cancellable"), 1);
      
 
-     DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND");
+     DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND", false);
      _dataStore.createReference(cancellable, cmdD, "abstracts", "abstracted by");
 
      DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
