@@ -47,10 +47,8 @@ public class ConfigureInManager {
 					line = insertVersionName(line.toCharArray(),delimPosition[1]);
 				}
 				if(line.indexOf(acKey)!=-1)
-				{
-					if(subdirs.length>0)
-						line = updateAcoutputMacroLine(subdirs,line);
-				}
+					line = updateAcoutputMacroLine(subdirs,line);
+					
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
 			}
@@ -142,10 +140,7 @@ public class ConfigureInManager {
 					}
 				}
 				if(line.indexOf(acKey)!=-1)
-				{
-					if(subdirs.length>0)
-						line = updateAcoutputMacroLine(subdirs,line);
-				}
+					line = updateAcoutputMacroLine(subdirs,line);
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
 			}
@@ -239,9 +234,8 @@ public class ConfigureInManager {
 		{
 			// add configure.in template files only if not exist
 			try{
-				Process p = rt.exec(
-					"cp " + project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/"  + 
-"com.ibm.cpp.miners/autoconf_templates/configure.in "
+				Process p = rt.exec("cp "+ project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)
+				 					+"/"+"com.ibm.cpp.miners/autoconf_templates/configure.in "
 						+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
