@@ -15,6 +15,9 @@
     <library name=".">
        	<export name="*" />      
      </library> 
+    <library name="dstore_miners.jar">
+       	<export name="*" />      
+     </library> 
    </runtime>
 
 </plugin>

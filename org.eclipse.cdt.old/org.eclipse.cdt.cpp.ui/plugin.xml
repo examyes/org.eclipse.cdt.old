@@ -34,6 +34,10 @@
      <library name=".">
        	<export name="*" />
      </library>
+     <library name="cpp_ui.jar">
+       	<export name="*" />
+     </library>
+     
    </runtime>
 
 

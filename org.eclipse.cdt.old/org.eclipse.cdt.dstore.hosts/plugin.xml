@@ -22,6 +22,9 @@
     <library name=".">
        	<export name="*" />      
      </library> 
+      <library name="dstore_hosts.jar">
+       	<export name="*" />      
+     </library> 
    </runtime>
 
 <extension

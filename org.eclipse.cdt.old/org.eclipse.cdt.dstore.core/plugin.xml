@@ -17,6 +17,9 @@
     <library name=".">
       <export name="*"/>
     </library>
+    <library name="dstore_core.jar">
+      <export name="*"/>
+    </library>
   </runtime>
 </plugin>
 

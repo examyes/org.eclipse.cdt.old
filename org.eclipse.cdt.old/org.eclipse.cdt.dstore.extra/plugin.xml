@@ -12,7 +12,13 @@
    </requires>
 
   <runtime>
-    <library name="dstore_extra_client.jar">
+    <library name=".">
+      <export name="*"/>
+    </library>
+    <library name="dstore_extra_client.jar"/>
+      <export name="*"/>
+    </library>
+    <library name="dstore_extra_server.jar"/>
       <export name="*"/>
     </library>
   </runtime>

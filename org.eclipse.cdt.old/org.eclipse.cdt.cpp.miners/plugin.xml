@@ -13,6 +13,9 @@
     <library name=".">
        	<export name="*" />      
      </library> 
+     <library name="cpp_miners.jar">
+       	<export name="*" />      
+     </library> 
    </runtime>
 
 </plugin>
