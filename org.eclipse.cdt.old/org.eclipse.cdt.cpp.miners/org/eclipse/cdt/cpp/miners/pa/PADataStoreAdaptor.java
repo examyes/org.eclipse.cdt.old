@@ -29,19 +29,19 @@ public class PADataStoreAdaptor {
  private DataElement _callTreeRoot;
  private DataElement _attributesRoot;
  private DataElement _callArcsRoot;
+ private boolean	 _hasParsedSource;
  
- // maps between PA trace functions and their corresponding data elements
- private HashMap _elementToTraceFuncMap;
- private HashMap _traceFuncToElementMap;
+ // This map stores the correspondence between PA trace functions and their 
+ // corresponding data elements.
+ private HashMap _traceFunctionsMap;
  
  
- // Constructors
+ // Create a PADataStoreAdaptor from a given trace element
  public PADataStoreAdaptor(DataElement traceElement) {
   
    _traceElement = traceElement;
-   _elementToTraceFuncMap = new HashMap();
-   _traceFuncToElementMap = new HashMap();
-
+   _traceFunctionsMap = new HashMap();
+   
    ArrayList projects = traceElement.getAssociated(getLocalizedString("pa.ReferencedProject"));
      
    if (projects.size() > 0) {
@@ -52,6 +52,7 @@ public class PADataStoreAdaptor {
     System.out.println("Cannot find the containing project for trace element: " + traceElement.getName());
    }
  } 
+ 
  
  /**
   * Set the PA miner
@@ -70,6 +71,7 @@ public class PADataStoreAdaptor {
    
    _provideSourceForD = _dataStore.localDescriptorQuery(cppObjD, "C_PROVIDE_SOURCE_FOR", 1);    
  }
+ 
  
  /**
   * Return the localized string from a given key
@@ -95,6 +97,7 @@ public class PADataStoreAdaptor {
  
  }
   
+  
  /**
   * Return the trace file format as a String
   */
@@ -108,6 +111,7 @@ public class PADataStoreAdaptor {
     return getLocalizedString("pa.UnknownTraceFile");
     
  }
+ 
  
  /**
   * Return the trace file format as a String
@@ -134,6 +138,10 @@ public class PADataStoreAdaptor {
   
  } 
 
+
+ /**
+  * Round a double to an approximate value with 3 digits after the dot.
+  */
  public static String roundDouble(double d) {
  
    String result = String.valueOf(d);
@@ -141,18 +149,31 @@ public class PADataStoreAdaptor {
    int eIndex = result.indexOf('E');
    if (eIndex < 0)
     eIndex = result.indexOf('e');
-   
+         
    if (dotIndex >= 0) {
    
      if (eIndex > dotIndex) {
      
-       if (eIndex > dotIndex + 4)
-         result = result.substring(0, dotIndex + 4) + result.substring(eIndex);
+       if (eIndex > dotIndex + 4) {
+         
+         double base = d;
+         try {
+          base = Double.parseDouble(result.substring(0, eIndex)) + 0.0005;
+         }
+         catch (NumberFormatException e)
+         {     
+         }
+         
+         String baseStr = String.valueOf(base);
+         result = baseStr.substring(0, dotIndex + 4) + result.substring(eIndex);
+       }
      }
      else {
        
-       if (result.length() - dotIndex > 3)
-         result = result.substring(0, dotIndex + 4);
+       if (result.length() - dotIndex > 3) {
+         String baseStr = String.valueOf(d + 0.0005);
+         result = baseStr.substring(0, dotIndex + 4);
+       }
      }
      
    }
@@ -160,11 +181,36 @@ public class PADataStoreAdaptor {
    return result;
  }
  
+ 
+ /**
+  * Has the referenced project been parsed?
+  */
+ private boolean hasParsedSource() {
+   
+   if (_referencedProject != null) {
+   
+     DataElement parsedProject = ((DataElement)(_referencedProject.getAssociated("Parse Reference").get(0))).dereference();
+     DataElement parsedFiles = _dataStore.find(parsedProject, DE.A_NAME, "Parsed Files", 2);
+     if (parsedFiles != null) {
+      
+      ArrayList files = parsedFiles.getAssociated("contents");
+      
+      if (files.size() > 0)
+       return true;
+     }
+   }
+   
+   return false;
+ }
+ 
+ 
  /**
   * Find out the source location for a trace function
   */
  public void getSourceLocation(DataElement traceFuncElement) {
-       
+   
+   // System.out.println("Calling getSourceLocation");
+   
    if (_provideSourceForD != null && _referencedProject != null) {     
      ArrayList args = new ArrayList();
      args.add(_referencedProject);
@@ -172,6 +218,7 @@ public class PADataStoreAdaptor {
    }
    
  }
+ 
  
  /**
   * Find out the source location for a trace function
@@ -226,10 +273,14 @@ public class PADataStoreAdaptor {
   */
  public void populateDataStore(DataElement fileElement, PATraceFile traceFile) {
    
+   // Clean the old trace information if we are re-parsing a trace target
    if (_dataStore.find(fileElement, DE.A_NAME, getLocalizedString("pa.AttributesRoot")) != null) {
      cleanTraceInformation(fileElement);
    }
-                    
+   
+   // Detect whether the project has been parsed
+   _hasParsedSource = hasParsedSource();
+   
    // Find the trace functions root and call tee root  
    _traceFunctionsRoot = _dataStore.find(fileElement, DE.A_VALUE, getLocalizedString("pa.TraceFuncRoot"), 1);
    _callTreeRoot   = _dataStore.find(fileElement, DE.A_TYPE, getLocalizedString("pa.CallRoot"), 1);
@@ -247,28 +298,63 @@ public class PADataStoreAdaptor {
    int i = 0;
    while (it.hasNext()) {
     PATraceFunction trcFunc = (PATraceFunction)it.next();
-    DataElement trcFuncElement = createTraceFunction(_traceFunctionsRoot, trcFunc);
-    
-    // set the attributes for the trace function
-    createTraceFunctionAttributes(trcFuncElement, trcFunc);
-    
-    _elementToTraceFuncMap.put(trcFuncElement, trcFunc);
-    _traceFuncToElementMap.put(trcFunc, trcFuncElement);
-    
+    DataElement funcElement = findOrCreateTraceFunctionElement(trcFunc);
+    createCallNestingRelations(trcFunc);
+        
     // Create a "calls" reference between the call root and the top level
     // trace functions.
     if (trcFunc.isTopLevelFunction()) {
-     _dataStore.createReference(_callTreeRoot, trcFuncElement, getLocalizedString("pa.Calls"));
+     _dataStore.createReference(_callTreeRoot, funcElement, getLocalizedString("pa.Calls"));
     }
     
    }
-  
-   // System.out.println("Create trace functions done");
-   
-   createCallNestingRelations(_traceFunctionsRoot);
-   
-   // System.out.println("createCallNestingRelations done");
+     
+   _dataStore.refresh(_attributesRoot, false);
+
  }
+ 
+ 
+ /**
+  * Find or create a data element for a PATraceFunction
+  */
+ private DataElement findOrCreateTraceFunctionElement(PATraceFunction traceFunction) {
+ 
+   // First try to find the trace function element from the hash map.
+   DataElement funcElement = (DataElement)_traceFunctionsMap.get(traceFunction);
+   
+   // Create a trace function element if it does not already exist.
+   if (funcElement == null) {
+   
+     funcElement = createTraceFunction(traceFunction);
+     
+     // set the attributes for the trace function     
+     createTraceFunctionAttributes(funcElement, traceFunction);
+     
+     // Store the created trace function into the map
+     _traceFunctionsMap.put(traceFunction, funcElement);
+   }
+   
+   return funcElement;
+ }
+ 
+ 
+  /**
+   * Create a DataElement for a trace function object in the datastore
+   */
+  private DataElement createTraceFunction(PATraceFunction traceFunction) {
+  
+   String type = getTraceFunctionFormat(traceFunction);
+   
+   DataElement traceFuncElement = _dataStore.createObject(_traceFunctionsRoot, type, traceFunction.getName());
+   
+   // Get the source location from the parser if we have parsed source information.
+   if (_hasParsedSource) {
+     getSourceLocation(traceFuncElement);
+   }
+   
+   return traceFuncElement;
+  }
+
  
  /**
   * create an attribute for a DataElement
@@ -276,9 +362,9 @@ public class PADataStoreAdaptor {
  private void createAttribute(DataElement parent, String name, String value) {
  
   DataElement anAttribute = _dataStore.createObject(_attributesRoot, name, value);
-  _dataStore.refresh(anAttribute, false);
   _dataStore.createReference(parent, anAttribute, getLocalizedString("pa.Attributes"));
  }
+ 
  
  /**
   * Create attributes for a trace file element
@@ -352,50 +438,21 @@ public class PADataStoreAdaptor {
  }
 
 
-  /**
-   * Create a trace function object in the datastore
-   */
-  public DataElement createTraceFunction(DataElement parent, PATraceFunction traceFunction) {
-  
-   String type = getTraceFunctionFormat(traceFunction);
-   
-   DataElement traceFuncElement = _dataStore.createObject(parent, type, traceFunction.getName());
-   //traceFuncElement.expandChildren();
-   getSourceLocation(traceFuncElement);
-   return traceFuncElement;
-  }
-
-
  /**
-  * Create the call nesting relations for all trace functions
+  * Create the call nesting relations for a trace function
   */
- private void createCallNestingRelations(DataElement funcRoot) {
+ private void createCallNestingRelations(PATraceFunction traceFunction) {
  
-  ArrayList traceFunctions = funcRoot.getAssociated("contents");
-  for (int i=0; i < traceFunctions.size(); i++) {
-   
-    DataElement funcElement = (DataElement)traceFunctions.get(i);
-    
-    PATraceFunction trcFunc = (PATraceFunction)_elementToTraceFuncMap.get(funcElement);
-    if (trcFunc != null) {
-      createCallMap(funcElement, trcFunc);
-    }
-  }
+  DataElement funcElement = findOrCreateTraceFunctionElement(traceFunction);
   
- }
- 
- /**
-  * Create the caller/callee relations for a given trace function
-  */
- private void createCallMap(DataElement funcElement, PATraceFunction trcFunc) {
-  
-  ArrayList callees = trcFunc.getCallees();
+  ArrayList callees = traceFunction.getCallees();
   
   int numCallees = callees.size();
   for (int i=0; i < numCallees; i++) {
+   
    PACallArc callArc = (PACallArc)callees.get(i);
    PATraceFunction callee = callArc.getCallee();
-   DataElement calleeElement = (DataElement)_traceFuncToElementMap.get(callee);
+   DataElement calleeElement = findOrCreateTraceFunctionElement(callee);
    
    if (calleeElement != null) {
    
@@ -405,7 +462,7 @@ public class PADataStoreAdaptor {
    
      // create a caller arc and a callee arc
      DataElement calleeArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), callee.getName());
-     DataElement callerArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), trcFunc.getName());
+     DataElement callerArc    = _dataStore.createObject(_callArcsRoot, getLocalizedString("pa.CallArc"), traceFunction.getName());
    
      DataElement numCalls     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.numCalls"), String.valueOf(callArc.getCallNumber()));
      DataElement selfTime     = _dataStore.createObject(_attributesRoot, getLocalizedString("pa.SelfTime"), String.valueOf(callArc.getSelfTime()));
@@ -423,8 +480,9 @@ public class PADataStoreAdaptor {
      _dataStore.createReference(callerArc, selfTime,     getLocalizedString("pa.Attributes"));
      _dataStore.createReference(callerArc, childrenTime, getLocalizedString("pa.Attributes"));
    }
+
   }
-  
+    
  }
-   
+  
 }

@@ -231,7 +231,10 @@ public class PAMiner extends Miner {
   calleeArcD.setDepth(0);
   referencedFileD.setDepth(0);
   referencedProjectD.setDepth(0);
-    
+  
+  callsD.setDepth(200);
+  calledByD.setDepth(100);
+  
   // Set up the relation between trace targets and trace functions.
   // This models the fact that a gprof trace file or program can contain 
   // a list of gprof trace functions.
@@ -312,6 +315,8 @@ public class PAMiner extends Miner {
      PADataStoreAdaptor.provideSourceFor(traceFuncElement);
    }
    
+   // System.out.println("source: " + traceFuncElement.getSource());
+
  }
  
  /**
