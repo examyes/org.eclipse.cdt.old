@@ -116,58 +116,50 @@ public class CppOutputViewPart extends OutputViewPart
       super(name, image);
       _increment = increment;
        setToolTipText(name);
+       checkEnableState();
+    }
+    
+    public void checkEnableState()
+    { 
+    	DataElement status = _viewer.getCurrentInput();
+    	if (status != null && _history != null)
+    	{
+    		int currentIndex = _history.indexOf(status);
+    		currentIndex += _increment;
+    		
+    		if (currentIndex >= 0 && currentIndex < _history.size())
+    		{
+    			DataElement newStatus = (DataElement)_history.get(currentIndex);
+  				if (newStatus != null && !newStatus.isDeleted())
+  				{
+     		 	  setEnabled(true);
+     		 	  return;
+  				}
+    		}
+    	}
+  
+    	setEnabled(false);
     }
 
-      public void run()
+    public void run()
     {
       DataElement status = _viewer.getCurrentInput();
-      if (status != null)
-      {
-        DataElement command = status.getParent();
-
-        DataStore dataStore = command.getDataStore();
-        DataElement logRoot = dataStore.getLogRoot();
-
-        ArrayList commands = logRoot.getNestedData();
-        int thisIndex = commands.indexOf(command);
-
-        DataElement newStatus = null;
-        int newIndex = thisIndex + _increment;
-        boolean found = false;
-        while (!found && (newIndex > -1) && (newIndex < commands.size()))
-        {
-          DataElement newCommand = (DataElement)commands.get(newIndex);	
-	  String commandName = newCommand.getName();
-
-	  if (commandName.equals("C_COMMAND") ||
-	      commandName.equals("C_SHELL") ||
-	      commandName.equals("C_SEARCH") ||
-	      commandName.equals("C_SEARCH_REGEX"))
-	    {	
-	      newStatus  = newCommand.get(newCommand.getNestedSize() - 1);
-	      if (newStatus != null)
-		{	
-		  found = (newStatus.getNestedSize() > 1);
-		}	
-	    }
-	  newIndex += _increment;
-	}
-	
-        if (found && newStatus != null)
-        {
-          setInput(newStatus);
-        }
-      }
+      int currentIndex = _history.indexOf(status);
+      currentIndex += _increment;
+      DataElement newStatus = (DataElement)_history.get(currentIndex);
+      setInput(newStatus);   	    
     }
   }
 
-    protected CppPlugin         _plugin;  
-	private Combo 				_inputEntry;
-	private Button 				_sendButton;
+    protected CppPlugin           _plugin;  
+	private Combo 				  _inputEntry;
+	private Button 				  _sendButton;
     private CancelAction 	 	  _cancelAction;
     private ShellAction			  _shellAction;
     private HistoryAction	      _backAction;
     private HistoryAction         _forwardAction;
+    
+    private ArrayList             _history;
 
 	public CppOutputViewPart()
 	{
@@ -331,6 +323,57 @@ public class CppOutputViewPart extends OutputViewPart
 		}
 		break;
 		
+		case CppProjectEvent.CLOSE:
+	    case CppProjectEvent.DELETE:
+		{
+		    if (_viewer != null)
+		    {
+		    	IProject project = event.getProject();
+		    	String prjPath = project.getLocation().toString();
+				if (_history != null)
+				{
+			    	for (int i = _history.size() - 1; i >= 0; i--)
+			    	{
+		    		 DataElement status = (DataElement)_history.get(i);
+		    				    			    			    	
+			    	 if (status != null)
+			    	 {
+			    	 	if (status.isDeleted())
+			    	 	{
+			    	 		_history.remove(status);
+			    	 	}
+			    	 	else
+			    	 	{
+			    			DataElement cmd = status.getParent();
+			    			DataElement subject = cmd.get(0).dereference();
+
+							String subPath = subject.getSource();
+							if (subPath.startsWith(prjPath))
+							{
+								_history.remove(status);
+							}    				    		
+			    	 	}
+			    	 }
+			    	}
+			    	
+			    	DataElement currentInput = _viewer.getCurrentInput();
+			    	if (!_history.contains(currentInput))
+			    	{
+			    		if (_history.size() > 0)
+			    		{
+			    		 setInput((DataElement)_history.get(_history.size() - 1));
+			    		}
+			    		else
+			    		{
+			    			_viewer.clear();
+			    		}
+			    	}
+			    	
+			    	enableActions();
+				}
+		    }
+		}
+		break;
 		
 	    default:
 	    {
@@ -455,11 +498,22 @@ public class CppOutputViewPart extends OutputViewPart
     { 
     	if (_viewer != null && !_viewer.getTable().isDisposed())
     	{
-    	DomainNotifier notifier = element.getDataStore().getDomainNotifier();
-		notifier.addDomainListener(_viewer);	
-		notifier.addDomainListener(this);
-		_viewer.setInput(element);		
-		enableActions();
+    	  DomainNotifier notifier = element.getDataStore().getDomainNotifier();
+		  notifier.addDomainListener(_viewer);	
+		  notifier.addDomainListener(this);
+		  _viewer.setInput(element);		
+		  
+		  if (_history == null)
+		  {
+		  	_history = new ArrayList();
+		  }
+		  
+		  if (!_history.contains(element))
+		  {
+			  _history.add(element);
+		  }
+		  
+		  enableActions();
     	}
     }
     
@@ -506,9 +560,10 @@ public class CppOutputViewPart extends OutputViewPart
 			_cancelAction.setEnabled(false);
 		}
 	
+	_backAction.checkEnableState();
+	_forwardAction.checkEnableState();
+	
 	DataElement currentInput = _viewer.getCurrentInput();
-	_backAction.setEnabled(currentInput != null);
-	_forwardAction.setEnabled(currentInput != null);
 	
 	CppPlugin plugin = CppPlugin.getDefault();
 	IProject project = plugin.getCurrentProject();

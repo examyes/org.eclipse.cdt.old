@@ -124,8 +124,13 @@ public class OutputViewer extends TableViewer
 
 	TableColumn column = table.getColumn(0);
 	column.setText("");
-	table.setVisible(false);
-		
+	table.setVisible(false);		
+  }
+  
+  public void clear()
+  {
+  	_currentInput = null;
+  	getTable().setVisible(false);
   }
 
   public void setInput(DataElement input)
@@ -204,7 +209,7 @@ public class OutputViewer extends TableViewer
        if (_currentInput == null || _currentInput.isDeleted())
        {
        	_currentInput = null;
-       	clearInput();
+       	//clearInput();
        	return false;
        }
        else
@@ -273,8 +278,11 @@ public class OutputViewer extends TableViewer
 	  TableItem latestItem = null;
 	  for (int i = 0; i < children.size(); i++)
 	      {
-
-		  DataElement child = ((DataElement)children.get(i)).dereference();
+	      	DataElement child = (DataElement)children.get(i);
+	      	if (child != null && child.isReference())
+	      	{
+		  		child = child.dereference();
+	      	}
 		  if (child != null)
 		      {
 			  child.setUpdated(true);
