@@ -100,6 +100,7 @@ public class CppAttachLauncherWizard extends Wizard implements ILaunchWizard
 
       attachInfo.setLauncher(_launcher);
       attachInfo.setProcessID(processID);
+      attachInfo.setProcessPath(_currentSelectionName);
 
       getLauncher().doLaunch(attachInfo);
 
