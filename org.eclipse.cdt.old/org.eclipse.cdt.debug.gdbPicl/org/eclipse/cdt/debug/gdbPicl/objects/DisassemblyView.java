@@ -93,6 +93,37 @@ abstract class DisassemblyView extends View
 		
       return lineAddress;
    }
+   
+   
+/**
+ * Method convertLineNumToAddress.
+ * Given the line number, find address for that line
+ * @param lineNum
+ * @return String
+ *  - null on error
+ *  - address otherwise
+ */
+   public String convertLineNumToAddress (int lineNum)
+   {
+		String address = null;
+		
+		String lineInfo = getViewLine(lineNum);
+		
+		if (lineInfo != null) {
+			lineInfo = lineInfo.trim();
+		} else {
+			return null;
+		}
+		
+		// get address from view
+		if (lineInfo.startsWith("0x")) {
+			int idx = lineInfo.indexOf(" ");
+			if (idx > 0) {
+				address = lineInfo.substring(0, this._prefixl);
+			}
+		} 		
+		return address;
+   }
 
    public String convertAddressToLineNum(String targetAddress)
    {   	

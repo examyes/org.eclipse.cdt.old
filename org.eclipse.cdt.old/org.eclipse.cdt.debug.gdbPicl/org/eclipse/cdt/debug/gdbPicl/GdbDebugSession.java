@@ -31,6 +31,8 @@ import org.eclipse.cdt.debug.gdbPicl.objects.MethodInfo;
 import org.eclipse.cdt.debug.gdbPicl.objects.Module;
 import org.eclipse.cdt.debug.gdbPicl.objects.Part;
 import org.eclipse.cdt.debug.gdbPicl.objects.ThreadComponent;
+import org.eclipse.cdt.debug.gdbPicl.objects.View;
+import org.eclipse.cdt.debug.gdbPicl.objects.*;
 
 import com.ibm.debug.epdc.ECPLog;
 import com.ibm.debug.epdc.EPDC;
@@ -1429,6 +1431,81 @@ public class GdbDebugSession extends DebugSession {
 		updateRegisters();
 		updateStorage();
 		getCurrentFileLineModule();
+		return _whyStop;
+	}
+	
+	/**
+	 * Method cmdRunToCursor.
+	 * Run to user specified location
+	 * @param partID
+	 * @param viewNo
+	 * @param lineNum
+	 * @return int - -1 if lineNum is invalid
+	 * 				- whyStop value otherwise
+	 */
+	public int cmdRunToCursor(int partID, int viewNo, int lineNum)
+	{
+		if (viewNo == Part.VIEW_SOURCE) // SOURCE VIEW
+			{
+			if (_breakpointManager.isLocationBreakpoint(partID, lineNum)) {
+				cmdRun_User();
+			} else {
+				// attempt to set breakpoint
+				if (setLineBreakpoint(partID, lineNum) < 0) {
+					return -1;
+				}
+				setTmpBkpt(partID, lineNum);
+
+				setLastUserCmd(DebugSession.CmdRun, 0);
+				this.cmdRun_User();
+
+				clearBreakpoint(partID, lineNum);
+				clearTmpBkpt();
+			}
+		} else // MIXED VIEW OR DISASSEMBLY VIEW
+			{
+			Part part = getModuleManager().getPart(partID);
+			View viewInfo = part.getView(viewNo);
+			String lineInfo = viewInfo.getViewLine(lineNum);
+			String address = null;
+			int viewPrefix = 10;
+
+			if (lineInfo != null) {
+				lineInfo = lineInfo.trim();
+			} else {
+				return -1;
+			}
+
+			// get address from view
+			if (viewInfo instanceof GdbDisassemblyView)
+			{
+				address = ((GdbDisassemblyView)viewInfo).convertLineNumToAddress(lineNum);
+			}
+			else
+			{
+				address = ((GdbMixedView)viewInfo).convertLineNumToAddress(lineNum);
+			}
+
+			if (address != null) {
+				int id = setAddressBreakpoint(address);
+
+				if (id < 0) {
+					return -1;
+				}
+
+				setLastUserCmd(DebugSession.CmdRun, 0);
+				cmdRun_User();
+				clearBreakpoint(id);
+			} else {
+				return -1;
+			}
+		}
+		
+		if (_whyStop == this.WS_UserBkptHit)
+		{
+			_whyStop = this.WS_BkptHit;
+		}
+		
 		return _whyStop;
 	}
 

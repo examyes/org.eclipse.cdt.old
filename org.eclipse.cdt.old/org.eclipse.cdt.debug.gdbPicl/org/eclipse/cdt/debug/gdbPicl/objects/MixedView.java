@@ -624,6 +624,52 @@ abstract class MixedView extends View
       return lineNum;
    }
    
+   /**
+ * Method convertLineNumToAddress.
+ * Given the line number, find address for that line
+ * @param lineNum
+ * @return String
+ *  - null on error
+ *  - address otherwise
+ */
+   public String convertLineNumToAddress (int lineNum)
+   {
+		String address = null;
+		
+		String lineInfo = getViewLine(lineNum);
+		
+		if (lineInfo != null) {
+			lineInfo = lineInfo.trim();
+		} else {
+			return null;
+		}
+		
+		// get address from view
+		if (lineInfo.startsWith("0x")) {
+			int idx = lineInfo.indexOf(" ");
+			if (idx > 0) {
+				address = lineInfo.substring(0, _prefixl);
+			}
+		} 
+		else {
+			// get next executable line in mixed view
+			for (int x = lineNum + 1; x < getViewNumLines(); x++) {
+				lineInfo = getViewLine(x);
+				lineInfo = lineInfo.trim();
+
+				if (lineInfo.startsWith("0x")) {
+					int idx = lineInfo.indexOf(" ");
+					if (idx > 0) {
+						address = lineInfo.substring(0, _prefixl);
+					}
+					break;
+				}
+			}
+		}
+				
+		return address;
+   }
+   
    private boolean validDisStartEnd(int start, int end)
    {
    		// start line must be less than end line   		
