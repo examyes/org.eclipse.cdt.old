@@ -45,9 +45,11 @@ class GenerateMakefiles
   File[] subdirs = theDirectory.listFiles();
   for (int i=0; i<subdirs.length; i++)
   {
-    
    File theSubdir = subdirs[i];
-   if ( theSubdir.isDirectory() && (!theSubdir.getName().equals("CVS")) && (!theSubdir.getName().equals("build")))
+   if (  theSubdir.isDirectory() && 
+       (!theSubdir.getName().equals("CVS")) &&
+       (!theSubdir.getName().equals("build")) &&
+       (!theSubdir.getName().equals("icons")))
     recursiveCreateMakefiles(theSubdir, theEnvMakefile);
   }
  }
