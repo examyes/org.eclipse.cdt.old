@@ -113,6 +113,11 @@ public class ViewFilter extends ViewerFilter
 	      depth--;
 	      if (descriptor != null && dataElement != null && !dataElement.isDeleted())
 		  {
+		      if (dataElement.depth() <= 0)
+			  {
+			      return false;
+			  }
+
 		      DataElement elementDescriptor = dataElement.getDescriptor();
 		      
 		      if (_isCache.contains(elementDescriptor))
@@ -131,9 +136,17 @@ public class ViewFilter extends ViewerFilter
 					  {
 					      addTo(_isCache, elementDescriptor);
 					      return true; 
-					  }
+					  }				      
 				      else
 					  {
+					      if (elementDescriptor != null)
+						  {
+						      if (elementDescriptor.depth() <= 0)
+							  {
+							      return false;
+							  }
+						  }
+					      
 					      if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 						  {
 						      if (elementDescriptor != null && 
