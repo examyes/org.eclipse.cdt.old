@@ -3,7 +3,7 @@
   name="C/C++ Plugin User Guide"
   id="com.ibm.cpp.docs.user"
   version="1.0"
-  provider-name="IBM Linux Application DevelopmentD" 
+  provider-name="International Business Machines Corp." 
 >
  <extension point="org.eclipse.help.contributions">
   <infoset name="infoset_CPluginGuide.xml" />
