@@ -566,6 +566,11 @@ public final class DataElement implements Serializable, IDataElement
         return _parent;
     }
 
+    public boolean isDescriptor()
+    {
+	return _isDescriptor;
+    }
+
     /**
      * Explicitly sets the type descriptor for this element.
      *
@@ -725,7 +730,7 @@ public final class DataElement implements Serializable, IDataElement
 	    {	
 	    if (attributes[i] != null)
 		{		
-		    _attributes[i] = attributes[i];
+		    setAttribute(i, attributes[i]);
 		}	
 	    }
 	

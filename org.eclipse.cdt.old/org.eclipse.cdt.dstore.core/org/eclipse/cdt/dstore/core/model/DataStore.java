@@ -1713,7 +1713,7 @@ public final class DataStore
     
     public void waitUntil(DataElement status, String state, int timeout)   
     {
-	int timeWaited = 20;
+	int timeWaited = 200;
 	boolean timedOut = false;
 	
 	while ((status != null) 

@@ -334,70 +334,68 @@ public class XMLparser
           int nextnextQuote = nextSpace;
           while ((index < DE.A_SIZE) && (nextQuote >= 0))
           {
-            nextQuote     = fullTag.indexOf('\"', nextnextQuote + 1);
-            nextnextQuote = fullTag.indexOf('\"', nextQuote + 1);
-
-            if ((nextQuote >= 0) && (nextnextQuote > nextQuote) && (fullTag.length() > nextnextQuote))
-            {
-		     String attribute = fullTag.substring(nextQuote + 1, nextnextQuote);	      
-
+	      nextQuote     = fullTag.indexOf('\"', nextnextQuote + 1);
+	      nextnextQuote = fullTag.indexOf('\"', nextQuote + 1);
+	      
+	      if ((nextQuote >= 0) && (nextnextQuote > nextQuote) && (fullTag.length() > nextnextQuote))
+		  {
+		      String attribute = fullTag.substring(nextQuote + 1, nextnextQuote);	      
+		      
 		      attributes[index] = convertStringFromXML(attribute);  
-              index++;
-            }
+		      index++;
+		  }
           }
-
-		  DataElement result = null;
-		  if (attributes.length == DE.A_SIZE)
+	  
+	  DataElement result = null;
+	  if (attributes.length == DE.A_SIZE)
 	      {
-			  if (_isFile)
+		  if (_isFile)
 		      {
-				  result = _dataStore.createObject(parent, attributes);		
+			  result = _dataStore.createObject(parent, attributes);		
 		      }
-		  	  else
+		  else
 		      {	      
-			  	String id = attributes[DE.A_ID]; 
-			  	if (id == null)
-			  	{
-			  		handlePanic(new Exception(fullTag));
-			  		return null;	
-			  	}
-			  	
-			  	if (parent != null && _dataStore.contains(id))
+			  String id = attributes[DE.A_ID]; 
+			  if (id == null)
+			      {
+				  handlePanic(new Exception(fullTag));
+				  return null;	
+			      }
+			  
+			  if (parent != null && _dataStore.contains(id))
 			      {
 				  result = _dataStore.find(id);      
 				  
-				  /*****/
 				  // treat status special test
 				  String type = attributes[DE.A_TYPE];				  
 				  String name = attributes[DE.A_NAME];
 				  if (type.equals("status") && name.equals("done"))
 				  {
-				    result.setAttributes(attributes);
-					result.setAttribute(DE.A_NAME, "almost done");	  	
-					
+				      result.setAttributes(attributes);
+				      result.setAttribute(DE.A_NAME, "almost done");	  	
+				      
 				  }
 				  else
-				  {
-					result.setAttributes(attributes);
-				  }
-				  /*****/
+				      {
+					  result.setAttributes(attributes);
+				      }
 				  
 				  
 				  if (parent == _rootDataElement)
 				      {
 					  DataElement rParent = result.getParent();
 					  parent = rParent;
-
+					  
 					  _rootDataElement.addNestedData(result, false);
 				      }
 				  else
 				      {
 					  if (result.getParent() == null)
 					      {
-					      	if (result != _dataStore.getRoot())
-					      	{
+						  if (result != _dataStore.getRoot())
+						      {
 							  result.setParent(parent);
-					      	}
+						      }
 					      }
 				      }
 				  
@@ -407,19 +405,19 @@ public class XMLparser
 				      }
 				  else
 				      {
-				      	if (result != _dataStore.getRoot())
-				      	{
-					  		System.out.println("parent of " + result.getName() + " is NULL!");
-				      	}
-				      	else 
-				      	{
-				      		result.setParent(null);
-				      	}
+					  if (result != _dataStore.getRoot())
+					      {
+						  _dataStore.trace("parent of " + result.getName() + " is NULL!");
+					      }
+					  else 
+					      {
+						  result.setParent(null);
+					      }
 				      }
 			      }
 			  else
 			      {
-
+				  
 				  String isRefStr = attributes[DE.A_ISREF];
 				  if ((isRefStr != null) && isRefStr.equals("true"))
 				      {
@@ -437,7 +435,7 @@ public class XMLparser
 						      }
 						  else
 						      {
-							  System.out.println("NULL2!");
+							  _dataStore.trace("NULL2!");
 						      }
 					      }
 					  else
