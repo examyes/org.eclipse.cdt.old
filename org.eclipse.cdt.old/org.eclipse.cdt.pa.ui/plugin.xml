@@ -75,7 +75,7 @@
 <extension
       point="org.eclipse.ui.views">
    <category
-         name="&amp;Trace"
+         name="&amp;Profile"
          id="org.eclipse.cdt.pa.ui.pa">
    </category>
 
@@ -144,7 +144,7 @@
 
    <category
 
-         name="Trace"
+         name="Profile"
 
          id="org.eclipse.cdt.pa.ui.pa">
 
@@ -195,6 +195,19 @@
             id="org.eclipse.cdt.pa.ui.TraceDropDownAction">
       </action>
    </actionSet>
+</extension>
+
+<extension
+      point="org.eclipse.ui.popupMenus">
+     <objectContribution
+           id="Analyze"
+		    objectClass="org.eclipse.cdt.dstore.core.model.DataElement">
+           <filter name="type" value="binary executable"/>
+           <action
+                id="org.eclipse.cdt.pa.ui.actions.AddTraceProgramActionDelegate"
+                label="Analyze..."
+		        class="org.eclipse.cdt.pa.ui.actions.AddTraceProgramActionDelegate"/>
+     </objectContribution>
 </extension>
 
 </plugin>
