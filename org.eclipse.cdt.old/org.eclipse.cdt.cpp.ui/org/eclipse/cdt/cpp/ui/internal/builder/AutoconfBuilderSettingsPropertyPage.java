@@ -143,7 +143,8 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 	
 	public boolean performOk()
 	{
-
+		ModelInterface api = ModelInterface.getInstance();
+		api.setDistributionExtensions(getProject());
 		return true;
 	}
 	private IProject getProject()
