@@ -23,8 +23,6 @@ public class PreprocessWorker extends Thread
  private DataElement    _parsedFiles;
  private DataElement    _projectObjects;
  private DataElement    _systemObjects;
- private DataElement    _status;
- private boolean        _monitorStatus;
  private String         _projectCanonicalPath;
 
  public PreprocessWorker()
@@ -38,11 +36,9 @@ public class PreprocessWorker extends Thread
  {
   _dataStore   = theParsedFiles.getDataStore();
   _parsedFiles = theParsedFiles;
-  _theParseWorker.setParsedFiles(_parsedFiles);
+  _theParseWorker.setParsedFiles(_parsedFiles, status);
   _projectObjects = _dataStore.find(_parsedFiles.getParent(), DE.A_NAME, ParserSchema.ProjectObjects, 1);
   _systemObjects  = _dataStore.find(_parsedFiles.getParent(), DE.A_NAME, ParserSchema.SystemObjects, 1);
-  _status = status;
-  _monitorStatus = false;
   try{_projectCanonicalPath = (new File (_parsedFiles.getParent().getSource())).getCanonicalPath();} catch (IOException e){}
   updateParseExtensions(); 
  }
@@ -52,7 +48,6 @@ public class PreprocessWorker extends Thread
   File theFile = new File(fileName);
   if (theFile.exists() && (theFile.isDirectory() || isCorCPPFile(fileName)))
    _fileQueue.add(new File(fileName));
-  _monitorStatus = true;
  }
 
  public void parseObjectNow(DataElement theObject)
@@ -69,7 +64,7 @@ public class PreprocessWorker extends Thread
    while(true)
    {
     preprocessFilesFromQueue();
-    sleep(100);
+    sleep(600);
    }
   }
   catch (InterruptedException e) {_theParseWorker.interrupt();}
@@ -179,30 +174,22 @@ public class PreprocessWorker extends Thread
   while (!_fileQueue.isEmpty())
   {  
    File theFile = (File)_fileQueue.get(0);
-  _fileQueue.remove(0);
+   _fileQueue.remove(0);
  
-  if (theFile.isFile())
-   return theFile;
-  else if (theFile.isDirectory())
-  {
-   File[] theFiles = theFile.listFiles();
- 
-   for (int i=theFiles.length-1; i>=0; i--)
+   if (theFile.isFile())
+    return theFile;
+   else if (theFile.isDirectory())
    {
-    try
+    File[] theFiles = theFile.listFiles();
+    for (int i=theFiles.length-1; i>=0; i--)
     {
-     preprocessFile(theFiles[i].getCanonicalPath());
-    }
-    catch (IOException e) {}
-   } 
-  }
-  else
-   return null;
-  }
-  if (_monitorStatus)
-  {
-   _status.setAttribute(DE.A_NAME, "done");
-   _dataStore.refresh(_status);
+     try
+     {
+      preprocessFile(theFiles[i].getCanonicalPath());
+     }
+     catch (IOException e) {}
+    } 
+   }
   }
   return null;
  }

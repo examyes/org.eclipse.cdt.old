@@ -23,6 +23,9 @@ public class ParseWorker extends Thread
  private ParserTokenManager    _theParserTokenManager;
  private DataStoreSymbolTable  _theSymbolTable;
  private boolean               _enabled;
+ private DataElement           _projectObjects;
+ private DataStore             _dataStore;
+ private DataElement           _status;
 
  public ParseWorker()
  {
@@ -50,9 +53,12 @@ public class ParseWorker extends Thread
   _fileQueue.add(theFile);
  }
 
- public void setParsedFiles(DataElement parsedFiles)
+ public void setParsedFiles(DataElement parsedFiles, DataElement status)
  {
+  _status = status;
   _theSymbolTable.setParsedFiles(parsedFiles);
+  _dataStore = parsedFiles.getDataStore();
+  _projectObjects = _dataStore.find(parsedFiles.getParent(), DE.A_NAME, ParserSchema.ProjectObjects,1);
  }
 
  public void setEnabled(boolean enabled)
@@ -62,7 +68,7 @@ public class ParseWorker extends Thread
 
  public void run()
  {
-     //setPriority(getPriority()+3);
+  //setPriority(getPriority()+3);
   try
   {
    while (true)
@@ -72,7 +78,7 @@ public class ParseWorker extends Thread
      parseFilesInQueue();
      parseObjectsInQueue();
     }
-    sleep(100);
+    sleep(1000);
    }
   }
   catch (InterruptedException e) {}
@@ -86,26 +92,33 @@ public class ParseWorker extends Thread
  //Start of private methods:
  private void parseObjectsInQueue()
  {
-  DataElement theObject;
+  DataElement theObject = null;
   while ((!_objectQueue.isEmpty()) || (!_immediateObjectQueue.isEmpty()))
   { 
    theObject = getObjectFromQueue();
    if (initializeParser(theObject))
     beginObjectParse(theObject);
-   update(theObject);
+   update(theObject); 
   }
+  if (theObject != null)
+   update(_projectObjects);
  }
 
  private void parseFilesInQueue()
  {
-  DataElement theFile;
+  DataElement theFile = null;
   while(!_fileQueue.isEmpty())
   {
    theFile = getFileFromQueue();
    if (initializeParser(theFile))
     beginFileParse(theFile);
    update(theFile);
-   yield();
+  }
+  if (theFile != null)
+  { 
+   _status.setAttribute(DE.A_NAME, "done");
+   update(_status);
+   update(_projectObjects);
   }
  }
 
@@ -130,8 +143,7 @@ public class ParseWorker extends Thread
 
  private void beginObjectParse(DataElement theObject)
  {
-  String        theType = theObject.getType();
-  
+  String theType = theObject.getType();
   done = false;
   partiallyDone = false;
   errorCount = 0;
@@ -284,8 +296,8 @@ public class ParseWorker extends Thread
  }
 
  private void update(DataElement theObject)
- { 
-  theObject.getDataStore().update(theObject);
+ {
+  _dataStore.update(theObject); 
  }
 
  private DataElement getFileFromQueue()

@@ -690,7 +690,8 @@ String declaration_specifier() :
    | "*"
    | "&"
    | "operator" name = optor() {name = "operator" + name;}
-   | LOOKAHEAD(nested_name_lookahead()) nested_name_specifier() [LOOKAHEAD(2) "template"] [LOOKAHEAD(2)name = identifier()]
+   | LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier() 
+     [LOOKAHEAD(2) "template"] [LOOKAHEAD(2)name = identifier() {name = next+name;]
    | ["::"] [LOOKAHEAD(nested_name_lookahead()) nested_name_specifier() ["template"]] name = identifier()
   )
   { 

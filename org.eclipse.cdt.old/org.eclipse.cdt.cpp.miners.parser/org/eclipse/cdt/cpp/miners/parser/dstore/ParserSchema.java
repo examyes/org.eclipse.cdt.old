@@ -37,6 +37,7 @@ public class ParserSchema
  public static String ParseReference     = getLocalizedString("parser.ParseReference");
  public static String Includes           = getLocalizedString("parser.Includes");
  public static String IncludedBy         = getLocalizedString("parser.IncludedBy");
+ public static String All                = getLocalizedString("parser.All");
 
  //C/C++ Objects
  public static String ParsedSource       = getLocalizedString("parser.ParsedSource");
@@ -89,6 +90,7 @@ public class ParserSchema
  public static DataElement dC_FIND_DECLARATION;
  public static DataElement dC_SET_INCLUDE_PATH;
  public static DataElement dC_SET_PREFERENCES;
+ public static DataElement dAll;
  public static DataElement dUses;
  public static DataElement dTypes;
  public static DataElement dReturnType;
@@ -132,7 +134,6 @@ public class ParserSchema
  public static DataElement dError;
  public static DataElement dTimeStamp;
  public static DataElement dContents;
- public static DataElement dAll;
  public static DataElement dObject;
 
  public ParserSchema(DataElement schemaRoot)
@@ -143,10 +144,7 @@ public class ParserSchema
   dContObject.setDepth(0);
   dContents   = findDescriptor(Contents, schemaRoot.getDataStore());
   dContents.setDepth(100);
-  dAll        = findDescriptor("all", schemaRoot.getDataStore());
-
-
-
+  
   //Set up the abstract object descriptors:
   dCppObject          = createAbstractDerivativeDescriptor(dObject,          CppObject);
   dContCppObject      = createAbstractDerivativeDescriptor(dContObject,      ContCppObject);
@@ -155,7 +153,8 @@ public class ParserSchema
   dClassesStructs     = createAbstractDerivativeDescriptor(dContCppObject,   ClassesStructs);
   dVariables          = createAbstractDerivativeDescriptor(dUsableCppObject, Variables);
   dFunctions          = createAbstractDerivativeDescriptor(dContCppObject,   Functions);
-
+  dAll                = createAbstractDerivativeDescriptor(dContCppObject,   All);
+  dAll.setDepth(200); 
 
   //Set up the relations and commands for the above objects:
   //  dC_QUERY            = findDescriptor(Query, schemaRoot.getDataStore());
@@ -176,6 +175,8 @@ public class ParserSchema
   dC_PARSE.setDepth(0);
   createCommandDescriptor(dFile, RemoveParseInformation, "C_REMOVE_PARSE").setDepth(0);
 
+  
+  
   dUses            = createRelationDescriptor(dUsableCppObject, Uses);
   dReturnType      = createRelationDescriptor(dFunctions,       ReturnType);
   dParameters      = createRelationDescriptor(dFunctions,       Parameters);
@@ -209,7 +210,8 @@ public class ParserSchema
   dEnum           = createDerivativeDescriptor(dVariables,       Enum);
   dTypedef        = createDerivativeDescriptor(dVariables,       Typedef);
   dVariable       = createDerivativeDescriptor(dVariables,       Variable);
-
+ 
+ 
   //Create others
   dProject           = findDescriptor(Project, schemaRoot.getDataStore());
   if (dProject == null)
@@ -251,24 +253,23 @@ public class ParserSchema
   createReference(dIncludedSource, dVariables);
   createReference(dIncludedSource, dMacro);
 
+  createReference(dFunctions,    dAll);
   createReference(dFunctions,    dVariables);
   createReference(dFunctions,    dStatement);
-
+ 
+  createReference(dClassesStructs,    dAll);
   createReference(dClassesStructs, dFunctions);
   createReference(dClassesStructs, dVariables);
   createReference(dUnion,       dVariables);
 
 
-
+  dSourceFiles.setDepth(0);
   dVariables.setDepth(dMacro.depth() + 1);
   dClassesStructs.setDepth(dVariables.depth() + 1);
   dFunctions.setDepth(dClassesStructs.depth() + 1);
 
   dUses.setDepth(dContents.depth() + 100);
 
-  dSourceFiles.setDepth(dAll.depth() + 4);
-  dParsedSource.setDepth(dAll.depth() +3);
-  dIncludedSource.setDepth(dAll.depth() +2);
 
  }
 
