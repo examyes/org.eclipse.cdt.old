@@ -1,66 +1,79 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
-	<TITLE>CDT Developer Documentation</TITLE>
-	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.0  (Win32)">
-	<META NAME="CREATED" CONTENT="20030904;14231715">
-	<META NAME="CHANGED" CONTENT="20030904;14475183">
-	<STYLE>
-	<!--
-		@page { size: 8.5in 11in }
-		TD P { font-family: "arial", "helvetica", "geneva"; font-size: 10pt }
-		P { font-family: "arial", "helvetica", "geneva"; font-size: 10pt }
-	-->
-	</STYLE>
-</HEAD>
-<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
-<TABLE WIDTH=100% BORDER=0 CELLPADDING=2 CELLSPACING=2 STYLE="page-break-before: always">
-	<TR>
-		<TD WIDTH=72%>
-			<P ALIGN=LEFT><B><FONT SIZE=6><FONT FACE="Verdana, Arial, Helvetica, sans-serif">CDT
-			Developer Documentation</FONT></FONT></B><BR><FONT SIZE=1><FONT FACE="Arial, Helvetica, sans-serif"><FONT COLOR="#8080ff">What
-			does the CDT do and how does it do it...</FONT></FONT></FONT> 
-			</P>
-		</TD>
-		<TD WIDTH=28%>
-			<P><IMG SRC="http://dev.eclipse.org/images/Idea.jpg" NAME="Graphic1" ALIGN=BOTTOM WIDTH=120 HEIGHT=86 BORDER=0></P>
-		</TD>
-	</TR>
-</TABLE>
-<P><I><SPAN STYLE="background: #ffff00">Note</SPAN>: These documents
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE"
+ content="text/html; charset=windows-1252">
+  <title>CDT Developer Documentation</title>
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body lang="en-US" style="background-color: rgb(255, 255, 255);"
+ dir="ltr">
+<table width="100%" border="0" cellpadding="2" cellspacing="2"
+ style="page-break-before: always;">
+  <tbody>
+    <tr>
+      <td width="72%">
+      <p align="left"><b><font size="6"><font
+ face="Verdana, Arial, Helvetica, sans-serif">CDT Developer
+Documentation</font></font></b><br>
+      <font size="1"><font face="Arial, Helvetica, sans-serif"><font
+ color="#8080ff">What does the CDT do and how does it do it...</font></font></font>
+      </p>
+      </td>
+      <td width="28%">
+      <p><img src="http://dev.eclipse.org/images/Idea.jpg"
+ name="Graphic1" align="bottom" width="120" height="86" border="0"></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p><i><span
+ style="background: rgb(255, 255, 0) none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-inline-policy: initial; -moz-background-origin: initial;">Note</span>:
+These documents
 are in the very early stages of development. If you have any
 suggestions, feedback, or unanswered questions, please send them to
-the cdt-dev mailing list and we'll try to address them.</I></P>
-<P>As the CDT begins to mature as a product and project and as the
+the cdt-dev mailing list and we'll try to address them.</i></p>
+<p>As the CDT begins to mature as a product and project and as the
 number of parties interested in getting involved grows, it becomes
-imperative that we lay out in writing the answers to two questions:</P>
-<UL>
-	<LI><P>What does the CDT do and why?</P>
-	<LI><P>How does the CDT do that and why?</P>
-</UL>
-<P>The key factor in the above questions is &ldquo;why&rdquo;. As the
+imperative that we lay out in writing the answers to two questions:</p>
+<ul>
+  <li>
+    <p>What does the CDT do and why?</p>
+  </li>
+  <li>
+    <p>How does the CDT do that and why?</p>
+  </li>
+</ul>
+<p>The key factor in the above questions is “why”. As the
 CDT grows in functionality, it is important that the integrity of big
 picture is maintained. The CDT is built with specific goals in mind.
 These are honorable goals aimed at making the CDT the best C/C++ IDE
 on the planet (and off for that matter). These documents should
-hopefully convey what &ldquo;best&rdquo; means so that new developers
-can carry on the torch.</P>
-<P>To help answer the two questions, the following two (or course)
-documents are created.</P>
-<UL>
-	<LI><P><B>Feature Specification</B><SPAN STYLE="font-weight: medium">
-	&ndash; describes what the CDT does. There are two main ways of
-	describing features: first by describing the visible components that
-	the users sees, second by describing how the user accompishes
-	specific tasks. This spec does both.</SPAN></P>
-	<LI><P><B>Design Specification</B><SPAN STYLE="font-weight: medium">
-	&ndash; describes how the CDT does what it does. </SPAN>It also
-	describes the architectural guidelines that should be followed by
-	developers working on the CDT to ensure we can stretch the CDT in
-	new and exciting (yet not really thought out yet) ways.</P>
-</UL>
-<P><BR><BR>
-</P>
-</BODY>
-</HTML>
+hopefully convey what “best” means so that new developers
+can carry on the torch.</p>
+<p>To help answer the two questions, the following two (or course)
+documents are created.</p>
+<ul>
+  <li>
+    <p><a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/main.html?cvsroot=Tools_Project"><b>Feature
+Specification</b></a><span style=""> – describes what the CDT does.
+There are two main ways of describing features: first by describing the
+visible components that the users sees, second by describing how the
+user accompishes specific tasks. This spec does both.</span></p>
+  </li>
+  <li>
+    <p><b>Design Specification</b><span style=""> – describes how the
+CDT does what it does. </span>It also describes the architectural
+guidelines that should be followed by developers working on the CDT to
+ensure we can stretch the CDT in new and exciting (yet not really
+thought out yet) ways.</p>
+  </li>
+</ul>
+<p><br>
+<br>
+</p>
+</body>
+</html>
