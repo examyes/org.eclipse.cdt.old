@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>print Command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>print command</h3>
+<p>The <b>print</b> command can be used to print the current document.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>print [ block
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | bottomMargin <i>n</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | endElement <i>n</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | font <i>fontName</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | leftMargin <i>n</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | lineNumbers { on | off }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | prompt
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | rightMargin <i>n</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | startElement <i>n</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | tokenized { on | off }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | topMargin <i>n</i>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | visible
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ] [...] </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">block</td>
+    <td valign="top">Use the optional parameter <b>block</b> to indicate that
+      only the selected text should be printed.</td>
+  </tr>
+  <tr>
+    <td valign="top">bottomMargin <i>n</i></td>
+    <td valign="top">Use the optional parameter <b>bottomMargin</b> to indicate
+      the bottom margin.&nbsp; <i>n</i> must be an integer that is greater than
+      or equal to zero.&nbsp; <em>n</em> indicates the number of pixels that
+      should be used for the bottom margin.&nbsp; If you do not specify <b>bottomMargin</b>,
+      the setting is taken from the <b>current.print.bottomMargin</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">endElement <i>n</i></td>
+    <td valign="top">Use the optional parameter <b>endElement</b> to indicate
+      the last element that you want printed.&nbsp; <i>n</i> must be a positive
+      integer.&nbsp; If you do not specify the end element, printing continues
+      to the end of the file.</td>
+  </tr>
+  <tr>
+    <td valign="top">font <i>fontName</i></td>
+    <td valign="top">Use the optional parameter <b>font</b> to indicate the name
+      of the font that you want to use to print with.&nbsp; If you do not
+      specify <b>font</b>, the setting is taken from the <b>current.print.font</b>
+      parameter.&nbsp; If the <b>print.font</b> parameter is not set, the font
+      is taken from the current view.&nbsp; The <i>fontName</i> parameter should
+      be in one of the following forms:&nbsp;
+      <ul>
+        <li><i>fontname</i>-<i>style</i>-<i>height</i></li>
+        <li><i>fontname</i>-<i>height</i></li>
+        <li><i>fontname</i>-<i>style</i></li>
+        <li><i>fontname</i></li>
+      </ul>
+      <p>where style is one of the three strings &quot;bold&quot;,
+      &quot;bolditalic&quot;, or &quot;italic&quot;, and height is a decimal
+      representation of the font height.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">leftMargin <i>n</i></td>
+    <td valign="top">Use the optional parameter <b>leftMargin</b> to indicate
+      the left margin.&nbsp; <b><i>n</i></b> must be an integer that is greater
+      than or equal to zero.&nbsp; <i>n</i> indicates the number of pixels that
+      should be used for the left margin.&nbsp; If you do not specify <b>leftMargin</b>,
+      the setting is taken from the <b>current.print.leftMargin</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">lineNumbers { on | off }</td>
+    <td valign="top">Use the optional parameter <b>lineNumbers</b> to indicate
+      if line numbers should be displayed to the left of each line.&nbsp; If you
+      do not specify <b>lineNumbers</b>, the setting is taken from the <b>current.print.lineNumbers</b>
+      parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">prompt</td>
+    <td valign="top">Use the optional parameter <b>prompt</b> to indicate that
+      the user should be prompted for print options.</td>
+  </tr>
+  <tr>
+    <td valign="top">rightMargin <i>n</i></td>
+    <td valign="top">Use the optional parameter <b>rightMargin</b> to indicate
+      the right margin.&nbsp; <i>n</i> must be an integer that is greater than
+      or equal to zero.&nbsp; <i>n</i> indicates the number of pixels that
+      should be used for the right margin.&nbsp; If you do not specify <b>rightMargin</b>,
+      the setting is taken from the <b>current.print.rightMargin</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">startElement <i>n</i></td>
+    <td valign="top">Use the optional parameter <b>startElement</b> to indicate
+      the first element that you want printed.&nbsp; <i>n</i> must be a positive
+      initeger.&nbsp; If you do not specify a starting element, printing starts
+      at the top of the file.</td>
+  </tr>
+  <tr>
+    <td valign="top">tokenized { on | off }</td>
+    <td valign="top">Use the optional parameter <b>tokenized</b> to indicate if
+      the text should be tokenized or not.&nbsp; If you do not specify <b>tokenized</b>,
+      the setting is taken from the <b>current.print.tokenized</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">topMargin <i>n</i></td>
+    <td valign="top">Use the optional parameter <b>topMargin</b> to indicate the
+      top margin.&nbsp; <i>n</i> must be an integer that is greater than or
+      equal to zero.&nbsp; <i>n</i> indicates the number of pixels that should
+      be used for the top margin.&nbsp; If you do not specify <b>topMargin</b>,
+      the setting is taken from the <b>current.print.topMargin</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">visible</td>
+    <td valign="top">Use the optional parameter <b>visible</b> to indicate that
+      only visible lines should be printed.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>print
+print tokenized </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlcblock.htm#top">block</a> command<br>
+<a href="rlpprtbm.htm#top">print.bottomMargin</a> parameter<br>
+<a href="rlpprtfn.htm#top">print.font</a> parameter<br>
+<a href="rlpprtlm.htm#top">print.leftMargin</a> parameter<br>
+<a href="rlpprtln.htm#top">print.lineNumbers</a> parameter<br>
+<a href="rlpprtrm.htm#top">print.rightMargin</a> parameter<br>
+<a href="rlpprttk.htm#top">print.tokenized</a> parameter<br>
+<a href="rlpprttm.htm#top">print.topMargin</a> parameter<br>
+<a href="rlpvisib.htm#top">visible</a> parameter<br>
+<a href="rlsdfact.htm#print">print</a> action<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

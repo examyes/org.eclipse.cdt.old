@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>The C/C++ Development Plugin - Developing DataStore Miners</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Developing DataStore Miners</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p>All DataStore Miners subclass from the abstract class com.ibm.dstore.core.miners.miner.Miner provided by the DataStore. 
+     <h4>The Miner Class</h4>
+     <h5>Abstract Methods</h5>
+     <ul>
+          <li>public abstract void extendSchema(DataElement schemaRoot)<br>
+	  Called when the miner is first loaded by the DataStore.  Allows the miner to add any miner specific descriptors to the schema.  All schema additions should be made from this method.  The DataElement input parameter is the root of the descriptor tree.</li>
+	  <li>public abstract DataElement handleCommand(DataElement theElement)<br>
+	  Called by the DataStore when a command is received whose source attribute is this miner's class name.  The DataElement input parameter is the command object.  The method returns the status object for the command.</li>
+	</ul>
+	Possible methods for overriding (default implementation provided by Miner class)
+	<ul>
+	<li>	public void load()<br>
+	Called when the miner is loaded by the DataStore.  Allows the miner to perform and configurations and load any persisted information.</li>
+	<li>public void finish()<br>
+	Called by the DataStore when the server is ending.  Allows the miner to perform cleanup and persist information.</li>
+	<li>public void updateMinerInfo()<br>
+	Called when the DataStore receives a C_INIT_MINERS command.</li>
+	</ul>
+	<h5>Helper Methods</h5>
+	<ul>
+	<li>public int getNumberOfCommandArguments(DataElement command)<br>
+	Given a command object, returns the number of arguments passed to the command.  This provides a quick method for checking if all the required arguments are passed with a command.
+	<li>	public DataElement getCommandArgument(DataElement command, int arg)<br>
+	Given an command object and argument number (argument numbers started a zero) returns the corresponding argument.</li>
+	<li>	public String getCommandName(DataElement command)<br>
+	Given a command object returns the command name (name attribute)</li>
+	<li>	public String getCommandFilter(DataElement command)<br>
+	Given a command object, getCommandFilter searches for a child DataElement of type "filter" and returns the DataElement's name attribute.  If no child DataElement is found then "details" is returned.</li>
+	<li>	public DataElement getCommandStatus(DataElement command)<br>
+	Given a command object returns the child DataElement of type "status"</li>
+	<li>	public DataElement getMinerData()<br>
+	Returns the DataElement representing the root of the Miner Data subtree.  All data objects created by the miner should be added in this subtree.</li>
+	<li>	public void makeTransient(DataElement objectDescriptor)<br>
+	Flags a data object as being transient.  </li>
+	</ul>       
+       
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->

@@ -1,0 +1,27 @@
+<actions infoview="com.ibm.cpp.docs.user.view_Contents" standalone="true"> 
+  <insert 
+     from="com.ibm.cpp.docs.user.topics_GettingStarted" 
+     to="com.ibm.cpp.docs.user.GettingStartedRoot" 
+     as="child"/>
+ <insert 
+     from="com.ibm.cpp.docs.user.topics_Concepts" 
+     to="com.ibm.cpp.docs.user.Concepts" 
+     as="child"/>
+ <insert 
+     from="com.ibm.cpp.docs.user.topics_Tasks" 
+     to="com.ibm.cpp.docs.user.Tasks" 
+     as="child"/>
+ <insert 
+     from="com.ibm.cpp.docs.user.topics_Tutorial" 
+     to="com.ibm.cpp.docs.user.Tutorial" 
+     as="child"/>
+ <insert 
+     from="com.ibm.cpp.docs.user.topics_Troubleshooting" 
+     to="com.ibm.cpp.docs.user.Troubleshooting" 
+     as="child"/>
+<insert 
+     from="com.ibm.cpp.docs.user.topics_Extensibility" 
+     to="com.ibm.cpp.docs.user.Extensibility" 
+     as="child"/>
+</actions> 
+ 

@@ -1,0 +1,72 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>The C/C++ Development Plugin - DataStore</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        DataStore Tree Structure</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p>All DataElements are stored (internally) in the DataStore in a tree structure.
+     <h5>Descriptor Root [Schema]</h5>
+     <p>All DataElements have a type attribute which references a descriptor object in the schema.  Each miner will create the descriptor objects it requires.  Since descriptor objects are them selves DataElements they also need a type.  The DataStore provides the following basic types for creating new descriptor objects in the schema:
+     <ul>
+     <li>DE.T_OBJECT_DESCRIPTOR</li>
+     <li>DE.T_COMMAND_DESCRIPTOR</li>
+     <li>DE.T_RELATION_DESCRIPTOR</li>
+     </ul>
+
+     <h5>Host root</h5>
+     <p>The host root is intended by the DataStore as a starting point for browsing host system data.  Miners create the actual data objects in the miner data tree and create links from the host root to the data objects to facilitate browsing by the user.
+We are not using the host root subtree since our users will not be directly navigating the DataStore tree from the user interface (we have created our own user interface with a thin layer of code between the UI and DataStore which handles navigation and browsing.)
+
+<h5>Log Root</h5>
+<p>Central place for logging DataStore commands, actions and other information.
+
+<h5>Miner Root</h5>
+<p>The file <code>minerFile.dat</code> stores a list of all miners the DataStore should load and use at runtime.  Each line of this text file specifies the class name for a miner to be loaded.  For example:
+<pre>
+com.ibm.dstore.miners.filesystem.FileSystemMiner
+com.ibm.dstore.miners.command.CommandMiner
+com.ibm.cpp.miners.search.SearchMiner
+com.ibm.cpp.miners.parser.ParseMiner
+com.ibm.dstore.miners.test.TestMiner</pre>
+For each Miner loaded by the DataStore, a unique miner element is created under the miner root.  In turn each miner element has three children; data, state and transient. All data objects created by the Miner (or created by the front-end on behalf of the Miner) should only be created in the Miner s data subtree.  The specific layout of this subtree may be unique for each Miner and is outlined in the Miners documentation.      
+       
+<h5>Unique Identifiers</h5>
+<p>DataElement ids should be considered as <code>internal use only</code> by the DataStore and MUST NOT be used in Miners or front-end code.
+       
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->

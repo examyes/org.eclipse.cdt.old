@@ -1,0 +1,142 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>The C/C++ Development Plugin - Parsing Files</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Parsing Files</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+       <p>The parser is a work in progress.  There are many areas of both C and C++ where the parser has difficulty. 
+          For the most part, the parser just skips over the problem areas and keeps parsing.  However there are still
+	  some open defects that may cause incorrect information to be displayed.  See 
+          <a href="../../readme.txt">readme.txt</a> for a list of some of the known problems.
+     </td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       File Types</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+       <p>The parser looks for files with certain extensions like <i>.cpp</i> or <i>.h</i> when deciding whether to 
+          attempt a  parse of the file.   The list of extensions that the parser considers to be C/C++ files is defined
+          in the file called <i><b>CPPExtensions.dat</b></i> located in the 
+          <i><b>plugins/com.ibm.dstore.core</b></i> directory.
+          If you find that the parser doesn't seem to be parsing certain files, you should check this file to make 
+          sure that your C/C++ file extensions are shown, and add them if not.
+     </td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Invoking The Parser</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+       <p>There are 4 ways that a parse can be invoked:
+          <ol>
+	   <li> <b>By opening a file in the Editor.</b>  From within the Navigator, if you double-click on a C/C++ file,
+                the file will be opened in the editor, and an "implicit" parse will be initiated.<hr>
+           <li> <b>By saving a file in the Editor.</b>  Assuming you already have a C/C++ file open in the Editor, when 
+	        you make a change and save the file, an "implicit" parse is initiated to keep the parse information
+		up-to-date.<hr>
+           <li> <b>By invoking the "Parse... File" action on a file</b>.  From the Navigator, if you Right-Click on a 
+                file, the "Parse Contents" menu option is available:</p>
+                <center><img src="../../images/parsecontents.gif"></center>
+                <p>This will kick-off a parse of that file, that will step into any other files that may be included.<hr>
+	   <li> <b>By invoking the "Parse... Project" action on a directory or the project</b>.  The same "Parse Contents"
+                action is available for a Directory or Project.  When this action is chosen, the Parser recursively
+		parses every C/C++ file it can find below the selected directory, stepping any included files as well.
+	  </ol>
+     </td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Setting The Include Path</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+       <p>The parser needs to know where to look to find include files.  By default, only the directory of the file 
+          doing the including is searched, so if you want to be able to browse included source in other directories,
+          you will need to set the Parse Include Path.
+       <p>Select menu item <b>Properties</b> from the pop-up menu for your Project in the
+          <a href="../../concepts/views/navigator.htm">Navigator</a> view.<br><br> 
+          <center><img src="../../images/selectproperties.gif"></center>
+       <p>The Project Properties dialog is opened where you can set the Parse Include Path.<br><br>
+          <center><img src="../../images/includeproperties.gif"></center>
+       <p><b>Usability note:</b> After browsing for or typing your include path, you click
+          <img src="../../images/addbutton.gif"> to add the path to that large list box in
+          the centre of the dialog. If you don't, the path won't be remembered.
+     </td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Removing Parse Information</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+       <p>In some cases, the parser may step into so many files and create so many objects, that the views become 
+          hard to navigate.  One solution is to filter the views using the drop-down menus. Another option is 
+          to explicitly remove a file's parse information.  This will remove all the objects in the 
+          <a href="../../concepts/views/projectobjects.htm">Project Objects</a> view and the 
+          <a href="../../concepts/views/systemobjects.htm">System Objects</a> view that come from the removed file,
+          as well as remove it from the <a href="../../concepts/views/parsedfiles.htm">Parsed Files</a> view.
+       </p>
+       <p>To remove a file's parse information, find the file in the  
+          <a href="../../concepts/views/parsedfiles.htm">Parsed Files</a> view, Right-Click on the file, and 
+          choose <b>Remove Parse Information</b> from the pop-up menu:
+          (Note: Currently this feature only removes the selected file's parse information.  In the future, this
+	  feature will be more intelligent and remove the selected file's included files as well.)</p> 
+         <center><img src="../../images/removeparseinformation.gif"></center>
+     </td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

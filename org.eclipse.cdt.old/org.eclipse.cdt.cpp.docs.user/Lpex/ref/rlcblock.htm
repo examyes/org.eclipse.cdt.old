@@ -1,0 +1,213 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>block command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>block command</h3>
+<p>The <b>block</b> command can be used to set the block selection or manipulate
+the text that is currently selected.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <p><tt>block { clear</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | copy</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | delete</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | fill </tt><i><tt>c</tt></i><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | find [end]</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | lowerCase</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | move</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | overlay [transparent]</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | set [stream | character | element |
+  rectangle]</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | shift [left | right] [</tt><i><tt>count</tt></i><tt>]</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | upperCase</tt><br>
+  <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</tt></p>
+</blockquote>
+<h4>Parameters</h4>
+<p>You must specify at least one of the parameters to the block command. &nbsp;</p>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">clear</td>
+    <td valign="top">Use the <b>clear</b> parameter to remove the current block
+      selection.</td>
+  </tr>
+  <tr>
+    <td valign="top">copy</td>
+    <td valign="top">Use the <b>copy</b> parameter to copy the currently
+      selected text to the current cursor position.&nbsp; After the copy has
+      completed, the new text will be selected.</td>
+  </tr>
+  <tr>
+    <td valign="top">delete</td>
+    <td valign="top">Use the <b>delete</b> parameter to delete the currently
+      selected text from the document.</td>
+  </tr>
+  <tr>
+    <td valign="top">fill <i>c</i></td>
+    <td valign="top">Use the <b>fill</b> parameter to replace all of the
+      characters that are currently contained within the block selection with
+      the character <i>c</i>.</td>
+  </tr>
+  <tr>
+    <td valign="top">find [end]</td>
+    <td valign="top">Use the <b>find</b> parameter to move the cursor to the
+      beginning of the block selection.&nbsp; If you specify the optional <b>end</b>
+      parameter, the cursor will be moved to the end of the block selection.</td>
+  </tr>
+  <tr>
+    <td valign="top">lowerCase</td>
+    <td valign="top">Use the <b>lowerCase</b> parameter to change the selected
+      text to lower case.</td>
+  </tr>
+  <tr>
+    <td valign="top">move</td>
+    <td valign="top">Use the <b>move</b> parameter to move the selected text to
+      the current cursor position.&nbsp; After the move has completed, the moved
+      text will be reselected.</td>
+  </tr>
+  <tr>
+    <td valign="top">overlay [transparent]</td>
+    <td valign="top">Use the <b>overlay</b> parameter to overlay the text at the
+      current cursor position with the currently selected text.&nbsp; If you
+      specify the optional <b>transparent</b> parameter, only the spaces will be
+      overlayed by the selected text.</td>
+  </tr>
+  <tr>
+    <td valign="top">set [ stream<br>
+      &nbsp;&nbsp;&nbsp; | character<br>
+      &nbsp;&nbsp;&nbsp; | element<br>
+      &nbsp;&nbsp;&nbsp; | rectangle<br>
+      &nbsp;&nbsp;&nbsp; ]</td>
+    <td valign="top">Use the <b>set</b> parameter to set the block
+      selection.&nbsp; A new block selection will be created at the current
+      cursor position if&nbsp;
+      <ul>
+        <li>there is no block selection.</li>
+        <li>the block selection is not in the current view.</li>
+        <li>the specified block type does not match the current type.</li>
+      </ul>
+      <p>If there is no block type specified and there is no block selection in
+      the current view, <b>current.block.defaultType</b> will be used.&nbsp; If
+      there is a block selection in the current view and the specified block
+      type matches the block type of the block selection or there is no
+      specified block type, the current block will be extended to the current
+      cursor position.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">shift [left | right] [<i>count</i>]</td>
+    <td valign="top">Use the <b>shift</b> parameter to shift the currently
+      selected text.&nbsp; The <b>shift</b> parameter may only be used if the
+      current block type is <b>element</b> or <b>rectangle</b>.&nbsp; Use the
+      optional <b>left</b> and <b>right</b> parameters to indicate the direction
+      that the text should be shifted.&nbsp; If you do not specify either, the
+      text will be shifted to the right.&nbsp; The <i>count</i> parameter may be
+      specified to indicate the number of character positions that the text
+      should be shifted. <i>count</i> must be an integer.</td>
+  </tr>
+  <tr>
+    <td valign="top">upperCase</td>
+    <td valign="top">Use the <b>upperCase</b> parameter to change the selected
+      text to upper case.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Description</h4>
+<blockquote>
+  <p>There is only one block selection for the entire application.&nbsp; If you
+  have a block selection in one document view and you set a block selection in a
+  new document view, the block selection in the first document view is
+  cleared.&nbsp; This allows you to perform copy and move operations from one
+  document view to another.&nbsp; There is no ambiguity since there is only one
+  selection.</p>
+</blockquote>
+<blockquote>
+  <p>There are four block selection types:&nbsp; stream, character, element, and
+  rectangle.</p>
+  <ul>
+    <li>Stream selection allows you to select a stream of characters.&nbsp; The
+      selection is coupled to the cursor.&nbsp; If you move the cursor, the
+      selection is removed.&nbsp; If you make a change while there is a stream
+      selection active, all of the selected text is removed before the change.</li>
+    <li>Character selection also allows you to select a stream of characters but
+      the selection is not coupled to the cursor.</li>
+    <li>Rectangle selection allows you to select a rectangle of text.&nbsp; The
+      selection is not coupled to the cursor.</li>
+    <li>Element selection allows you to select whole elements only.&nbsp; The
+      selection is not coupled to the cursor.</li>
+  </ul>
+</blockquote>
+<blockquote>
+  <p>Block operations will only affect visible elements.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>block clear
+block move
+block set </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlcfndtx.htm#top">findText</a> command<br>
+<a href="rlpblkbe.htm#top">block.bottomElement</a> parameter<br>
+<a href="rlpblkbp.htm#top">block.bottomPosition</a> parameter<br>
+<a href="rlpblktp.htm#top">block.defaultType</a> parameter<br>
+<a href="rlpblkiv.htm#top">block.inView</a> parameter<br>
+<a href="rlpblktx.htm#top">block.text</a> parameter<br>
+<a href="rlpblkte.htm#top">block.topElement</a> parameter<br>
+<a href="rlpblkto.htm#top">block.topPosition</a> parameter<br>
+<a href="rlpblkty.htm#top">block.type</a> parameter<br>
+<a href="rlsdfact.htm#blockCopy">blockCopy</a> action<br>
+<a href="rlsdfact.htm#blockDelete">blockDelete</a> action<br>
+<a href="rlsdfact.htm#blockFill">blockFill</a> action<br>
+<a href="rlsdfact.htm#blockLowerCase">blockLowerCase</a> action<br>
+<a href="rlsdfact.htm#blockMarkAll">blockMarkAll</a> action<br>
+<a href="rlsdfact.htm#blockMarkBottom">blockMarkBottom</a> action<br>
+<a href="rlsdfact.htm#blockMarkCharacter">blockMarkCharacter</a> action<br>
+<a href="rlsdfact.htm#blockMarkDown">blockMarkDown</a> action<br>
+<a href="rlsdfact.htm#blockMarkElement">blockMarkElement</a> action<br>
+<a href="rlsdfact.htm#blockMarkElementAtMouse">blockMarkElementAtMouse</a> action<br>
+<a href="rlsdfact.htm#blockMarkEnd">blockMarkEnd</a> action<br>
+<a href="rlsdfact.htm#blockMarkHome">blockMarkHome</a> action<br>
+<a href="rlsdfact.htm#blockMarkLeft">blockMarkLeft</a> action<br>
+<a href="rlsdfact.htm#blockMarkNextWord">blockMarkNextWord</a> action<br>
+<a href="rlsdfact.htm#blockMarkPageDown">blockMarkPageDown</a> action<br>
+<a href="rlsdfact.htm#blockMarkPageLeft">blockMarkPageLeft</a> action<br>
+<a href="rlsdfact.htm#blockMarkPageRight">blockMarkPageRight</a> action<br>
+<a href="rlsdfact.htm#blockMarkPageUp">blockMarkPageUp</a> action<br>
+<a href="rlsdfact.htm#blockMarkPrevWord">blockMarkPrevWord</a> action<br>
+<a href="rlsdfact.htm#blockMarkRectangle">blockMarkRectangle</a> action<br>
+<a href="rlsdfact.htm#blockMarkRectangleAtMouse">blockMarkRectangleAtMouse</a> action<br>
+<a href="rlsdfact.htm#blockMarkRight">blockMarkRight</a> action<br>
+<a href="rlsdfact.htm#blockMarkToMouse">blockMarkToMouse</a> action<br>
+<a href="rlsdfact.htm#blockMarkTop">blockMarkTop</a> action<br>
+<a href="rlsdfact.htm#blockMarkUp">blockMarkUp</a> action<br>
+<a href="rlsdfact.htm#blockMarkWord">blockMarkWord</a> action<br>
+<a href="rlsdfact.htm#blockMarkWordAtMouse">blockMarkWordAtMouse</a> action<br>
+<a href="rlsdfact.htm#blockMove">blockMove</a> action<br>
+<a href="rlsdfact.htm#blockOverlay">blockOverlay</a> action<br>
+<a href="rlsdfact.htm#blockShiftLeft">blockShiftLeft</a> action<br>
+<a href="rlsdfact.htm#blockShiftRight">blockShiftRight</a> action<br>
+<a href="rlsdfact.htm#blockUnmark">blockUnmark</a> action<br>
+<a href="rlsdfact.htm#blockUpperCase">blockUpperCase</a> action<br>
+<a href="rlsdfact.htm#filterSelection">filterSelection</a> action<br>
+<a href="rlsdfact.htm#findBlockEnd">findBlockEnd</a> action<br>
+<a href="rlsdfact.htm#findBlockStart">findBlockStart</a> action<br>
+<a href="rlsdfact.htm#findSelection">findSelection</a> action<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

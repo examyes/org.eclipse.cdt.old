@@ -1,0 +1,194 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>The C/C++ Development Plugin - Setting C/C++ Project Preferences</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Setting C/C++ Project Preferences</font></b>
+     </td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>The <b>C/C++ Devlopment Plugin</b> provides you with the ability to tailor its behaviour to
+           meet your individual needs and working environment.
+        <P>The values which you select via the preferences dialog will be applied as defaults to any subsequent
+           C/C++ projects which you create.
+        <P>You can then further tailor individual projects via the
+           <a href="../../concepts/views/properties.htm">Properties view</a>.
+        <p>The preferences dialog accessed from the Workbench menu:<br><br>
+           <center><img src="../../images/windowpreferences_1.gif"></center><br>
+     </td>
+  </tr> 
+</table>
+
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Workbench - Automatic Build Feature</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>By default the workbench will perform an automatic build of your project anytime a project
+           resource is modified. Click <a href="../../tasks/compile/automatic.htm">here</a> for more information.
+     </td>
+  </tr> 
+</table>
+
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Project Preferences</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_1.gif"></center><br>
+        <p>The following behaviours can be tailored:
+        <ol>
+           <li><a href="preferences.htm#dbi">Default Build Invocation</a>
+           <li><a href="preferences.htm#de">Default Environment</a>
+           <li><a href="preferences.htm#dpip">Default Parse Include Path</a>
+           <li><a href="preferences.htm#dpq">Default Parse Quality</a>
+           <li><a href="preferences.htm#gv">Generic Views</a>
+           <li><a href="preferences.htm#ov">Output View</a>
+        </ol>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<A NAME="dbi"></A>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Default Build Invocation</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_2.gif"></center><br>     
+        <p>Specify the default build invocation command.
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<A NAME="de"></A>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Default Environment</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_3.gif"></center><br>     
+        <p>Specify any additional default environment variables to be used by this project.
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<A NAME="dpip"></A>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Default Parse Include Path</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_4.gif"></center><br>     
+        <p>For include files which are not contained in the project directory, specify which directories
+           and the order in which the parser will search for include files.
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<A NAME="dpq"></A>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Default Parse Quality</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_5.gif"></center><br>     
+        <p>Select the speed and quality of analysis performed by the parser. Choose from:
+        <ul>
+           <li>Low depth and limited analysis. Discovers the files and high level objects of
+               a project. Parsed files, included files, and objects such as classes are determined.
+           <li>Low depth and moderate analysis. Discovers relations ships between files and high
+               level objects of a project. Dependency analysis of files and inheritance analysis
+               of classes are determined.
+           <li>Full depth and moderate analysis. Discovers all objects of a project and basic
+               relationships between objects. All objects and statements are determined.
+           <li>Full depth and complete analysis. Discovers all relationships between all objects.
+               Uses of objects and instances in statements are determined.
+        </ul>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<A NAME="gv"></A>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Generic View</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_6.gif"></center><br>     
+        <p>Select your background and text colours and the font.
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<A NAME="ov"></A>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Output View</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p><center><img src="../../images/preferences_7.gif"></center><br>
+        <p>Select your background and text colours and the font.
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

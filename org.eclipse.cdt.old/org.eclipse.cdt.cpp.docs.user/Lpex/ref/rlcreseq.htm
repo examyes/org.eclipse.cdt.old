@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="Author" content="Bruce Baker">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>resequence Command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>resequence command</h3>
+<p>The <b>resequence</b> command can be used to reorder the numeric part of
+the document's sequence numbers into unique ascending numbers.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>resequence [ <i>start</i> [ <i>increment</i> ] ] </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>start</i></td>
+    <td valign="top">Use the optional parameter <i>start</i> to indicate the
+      sequence number that should be used for the first line in the
+      document.&nbsp; If this parameter is not specified, the <b>resequence</b>
+      command will use 100 as the start value.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>increment</i></td>
+    <td valign="top">Use the optional parameter <i>increment</i> to indicate the
+      increment that should be used to resequence the sequence numbers.&nbsp; If
+      this parameter is not specified, the <b>resequence</b> command will use
+      the <i>start</i> value as the increment value.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <b>status</b> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Description</h4>
+<blockquote>
+  <p>If you issue the <b>resequence</b> command, the document's sequence numbers
+  will be reordered.&nbsp; The document will only have sequence numbers if the <b>sequenceNumbers</b>
+  parameter has been set.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>resequence
+resequence 10 10 </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlpsqnm.htm#top">sequenceNumber</a> parameter<br>
+<a href="rlpsqnms.htm#top">sequenceNumbers</a> parameter<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+
+</html>

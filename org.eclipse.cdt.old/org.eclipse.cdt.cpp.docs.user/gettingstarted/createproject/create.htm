@@ -1,0 +1,148 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>The C/C++ Development Plugin - Creating a C/C++ Project</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Creating a C/C++ Project</font></b>
+     </td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>Whether you are working with existing C/C++ Source or beginning a project from
+           scratch, you will need to first create a Project. There are two ways to create
+           a C/C++ Project: the File Menu, or through the workbench toolbar.      
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table width=80%>
+  <tr>
+     <td valign="bottom">
+        <H2>File Menu</H2>
+     </td>
+     <td valign="bottom">
+        <H2>Toolbar</H2>
+     </td>
+  </tr>
+<!---------->
+  <tr>
+     <td valign="top">
+        <img src="../../images/create_1.gif" border=0>
+     </td>
+     <td valign="top">
+        <img src="../../images/create_2.gif" border=0>
+     </td>
+  </tr>
+<!---------->
+  <tr>
+     <td valign="top" colspan=3>
+        <p>Both of these methods will launch a <i>New Project</i> Wizard.
+        <p><center><img src="../../images/projectwizard_0.gif"></p></center>
+     </td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Project Creation Wizard</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">     
+        <p>Here you can choose your Project Name and specify where do you wish the source
+           code to reside. If you have no existing files and hence start editing from scratch,
+           then the default location which is under the same subdirectory where Eclipse was
+           installed is the way to go. If you have already existing files, there are three possibilities:
+        <ol>
+           <li><p>Use the default location and use the <a href="import.htm">Import wizard</a> to copy the
+                  files from the local disk or through ftp to the default workbench location, within
+                  Eclipse workspace.</p>
+           </li>
+           <li><p>Choose the "Local directory" button and specify the path to the files. The project
+                  will know to reference those files, as opposed to copying them to the workbench.
+                  (Note: be aware that deleting the project, will cause a deletion of those referenced
+                  files as well! If you close the project before deleting it, the referenced files will
+                  not be deleted.)</p>
+           </li>
+           <li><p>Choose the "Host" button if the files reside in a remote server. Specify the <code>hostname
+	   </code> and <code>port</code> number under which the server/daemon is running in the remote machine.
+	    The <code>Directory</code> should point to the location in the remote machine that contains 
+	    the source files of your project.</p></li>
+        </ol>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<center><img src="../../images/projectwizard_1.gif"></p></center>
+<!---------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">     
+        <p>Select <img src="../../images/nextbutton.gif">
+        <p>The next page of the wizard is where you specify the build invocation and environment
+          used for building those files. If at this point in time you are moreinterested
+           in analyzing the code rather than building, you can specify the
+          <a href="../../tasks/compile/invocation.htm">build command for your project</a>
+           later on.</p>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<center><img src="../../images/projectwizard_2.gif"></p></center>
+<center><img src="../../images/projectwizard_2a.gif"></p></center>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">     
+        <p>Select <img src="../../images/nextbutton.gif">
+        <p>The next page of the wizard is where you will specify your <code>include path</code> hierarchy
+           and the <code>parse quality</code> to be used with your project.
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<center><img src="../../images/projectwizard_3.gif"></p></center>
+<center><img src="../../images/projectwizard_3a.gif"></p></center>
+<!---------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">     
+        <p>When you have finished, click on <img src="../../images/finishbutton.gif"> to create your
+           project within the workbench.</p>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title> The C/C++ Development Plugin - --Sample project 2: studentdata2--</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Sample Project 2: <i>studentdata2</i></font></b></td>
+  </tr>
+<!---------->
+<tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+
+<p>The program <b>"studentdata2"</b> is written in C and is provided to show more of the basic functionality of the Eclipse C/C++ IDE. The source files are identical to the <b>"studentdata"</b> project except that they contain a different BUG and we use the <b>Search</b> view. Follow the next steps to find the BUG and fix it.</p>
+
+<ol>
+	<li><b><a href="../gettingstarted/createproject/create.htm">Create a new project</a></b>
+	<div>Name the project <i>studentdata2</i> and select as its source location the folder <code>plugins/com.ibm.cpp.docs.user/sample/studentdata2</code>.<br><br>
+	
+	<li><b><a href="../tasks/parse/parsefiles.htm">Parse the project</a></b>
+	<div>Set the <a href="../tasks/compile/invocation.htm">Build invocation</a> to "<code>make</code>" (by right-clicking on the project and selecting the <b>Properties</b> option) but do not specify anything for the <a href="../tasks/parse/parsefiles.htm">Parse Include Path</a>
+<div>Once you parse the project (by rightclicking on the project and selecting the <b>parse</b> option) you would notice that since you did not specify a <i>Parse Include Path</i>, then no files from the <code>/usr/include</code> directory have been parsed and therefore the <b><a href="../concepts/views/systemobjects.htm">System Objects</a></b> view is empty and the <b><a href="../concepts/views/parsedfiles.htm">Parsed Files</a></b> view only displays your source files (and not files from the <i>include</i> directory).
+	<div>You can close the <b>Properties</b> and the <b>Tasks</b> view (by clicking on the "X" icon at the top-right margin) since we will not be using them in this example.</br><br>
+   	</li>
+
+	<li><b><a href="../concepts/compiling/projects.htm">Build the project</a></b>
+	<div>Build the project (by right-clicking on the project and selecting the <b>Rebuild All</b> option). Alternatively, by default, the <i><a href="../tasks/compile/automatic.htm">Automatic build on resource modification</a></i> option is enabled so if you modify any file a build would be triggered. Look at the <b><a href="../concepts/views/output.htm">Output</a></b> view to examine any output that the build may have produced.<br><br>
+	</li>
+
+	<li><b><a href="../tasks/compile/errors.htm">Fix the errors</a></b>
+	<div>Since this project contains an error, you can double-click on the first error reported in the Command Output view to find the error location in the source files. In this case, the function <code>doDelete()</code> is reported to have too few  arguments. You know that this function is not declared in the file "main.c" that is open in the Editor view because the <b>Outline</b> view does not display it. The <b>Outline</b> view displays the contents of the current file in the <b><a href="../lpex/index.htm">Editor</a></b> view (in this case it displays the functions declared in "main.c").<br><br>
+	<img src="images/fixing_2.gif">
+	<div>To find the declaration of the function <code>doDelete</code> you change focus to the <b><a href="../concepts/views/projectobjects.htm">Project Objects</a></b> view  and set the <b>filter</b> (at the top-right margin) to "</i>function</i>" so that the view would display only functions. Then,  scroll down until you find the function <code>doDelete</code> and click on it to have its location in the source files displayed in the <b><a href="../lpex/index.htm">Editor</a></b> view.<br><br>
+	<img src="images/fixing_2b.gif"><br><br>
+	<div>You can now see that the missing argument is a pointer variable "<code>boolean *</code>"  that reports the success or failure of the function. So go back to the error location (by double-clicking on the error message in the <b><a href="../concepts/views/output.htm">Output</a></b> view), add the argument <code>&success</code> to the function call, save the file (<b>File->Save</b>) and <b>build</b> the project. The build should report no errors now.<br><br>
+	<img src="images/fixing_2c.gif"><br><br>
+	<div>Notice that any new files created during the build are not displayed in the Navigator view automatically. To display them, go to the <a href="../concepts/views/navigator.htm">Navigator</a> view, right-click on the project and select the <b>Refresh from Local</b> option. You should now be able to see any newly created files.<br><br>
+	</li>	
+
+	<li><b><a href="../concepts/views/search.htm">SEARCHING</a></b>
+	<div>Alternatively, you can find the declaration of a function without using the <b>Project Objects</b> view by making use of the <b>Search</b> facility. Close the <b>Outline</b> view and bring up the search dialog box by clicking on the search icon<img src="./images/searchicon.gif"> below the menu bar. Then select <b>C/C++ Search</b>, enter "<code>doDelete</code>" as the search expression and specify a search for <i>method</i> with no <i>regular expressions</i>. From the results displayed in the <b>Search Results</b> View , you can see the argument types that the function <code>doDelete()</code> takes and realize that you need a "<code>boolean *</code>" as the last argument. So add "<code>&success</code>" to the <code>doDelete()</code> call in <code>main.c</code> to fix the error and save the file (<b>File->Save</b>).<br><br>
+	<img src=images/search.gif><br><br>
+	<div>Performing a <b>Build</b> should report no errors now.<br><br>
+	<div>NOTE: When you use the <b>C/C++ Search</b> then you would get no results unless you first <b>Parse</b> your project since the <b>C/C++ Search</b> uses parsed information. The <b>Text Search</b>, on the other hand, does not use parsed information.
+ 	</li><br><br>
+
+<!--	<li><b>Creating TARGETS</b>
+	<div>If you feel you need to create specific targets from your makefile, you can create them in the <b>Targets</b> view. For example, after you are done playing with the sample program, bring up the <b>Targets</b> view (<b>Perspective->C++->Targets</b>). Then, right-click on the Targets view to open the submenu and select the <i>New Target</i> option. Give the target a name such as <i>clean</i>, specify the <i>make invocation</i> as <i>make clean</i> and make the <i>working dir</i> be the same as the "project". To build the target, right-click on the newly created target and select the <b>Build Target</b> option.		
+	</li>
+-->
+
+	<li><b><a href="../tasks/commands/launch.htm">RUNNING the project</a></b>
+	<div>You run the newly created executable from the <b><a href="../concepts/views/command.htm">Command</a></b> view. e.g. for the <i>studentdata2</i> project enter "<code>studentdata &lt; input.test</code>" as the command to run in the <b>Command</b> view. The output of the program will be displayed in the <b><a href="../concepts/views/output.htm">Output</a></b> view.<br><br>
+	<img src="images/running.gif">
+	</li><br><br>
+
+	<li><b>Closing the project</b>
+	<div>Go to the <b>Navigator</b> view, right-click on the project to open its submenu, and select the <b>Close</b> option. <br><br>	
+	</li>
+
+</ol>
+
+<b>Additional Notes:</b>
+<div>You can save your parsed information from the <b><a href="../concepts/views/navigator.htm">Navigator</a></b> view by right-clicking on the project to open the submenu and then selecting the <b>Save Parsed Information</b> option. The parsed information is saved in a series of "<code>.xml</code>" files created in your workspace. Once saved, you can shutdown the Eclipse IDE, start it up again and all the views would load the parsed information they need from these ".xml" files.
+
+ </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../frames/contact.htm">Contact Us</a>
+     <p><a href="../hglegal.htm"><img border="0" src="../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

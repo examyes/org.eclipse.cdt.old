@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>sort command</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>sort command</h3>
+<p>The <b>sort</b> command can be used to sort elements in the current document.</p>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>sort [ all
+&nbsp;&nbsp;&nbsp;&nbsp; | selection
+&nbsp;&nbsp;&nbsp;&nbsp; | elementRange <i>startElement</i> [ <i>endElement</i> ]
+&nbsp;&nbsp;&nbsp;&nbsp; ]
+&nbsp;&nbsp;&nbsp;&nbsp; [ descending ]
+&nbsp;&nbsp;&nbsp;&nbsp; [ numeric ]
+&nbsp;&nbsp;&nbsp;&nbsp; [ localeSensitive ]
+&nbsp;&nbsp;&nbsp;&nbsp; [ columnRange <i>startColumn</i> [ <i>endColumn</i> ] ]
+&nbsp;&nbsp;&nbsp;&nbsp; [ newField
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ descending ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ numeric ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ localeSensitive ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ columnRange <i>startColumn</i> [ <i>endColumn</i> ] ]
+&nbsp;&nbsp;&nbsp;&nbsp; ] [...] </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">all</td>
+    <td valign="top">Use the parameter <b>all</b> to indicate that you want to
+      sort all of the visible elements.</td>
+  </tr>
+  <tr>
+    <td valign="top">selection</td>
+    <td valign="top">Use the parameter <b>selection</b> to indicate that you
+      want to sort only those elements included in the block selection.</td>
+  </tr>
+  <tr>
+    <td valign="top">elementRange <br><i>startElement</i> [ <i>endElement</i> ]</td>
+    <td valign="top">Use the parameter <b>elementRange</b> to indicate the range
+      of elements that you wish to sort.&nbsp; The <b><i>startElement</i></b>
+      and <b><i>endElement</i></b> parameters must be positive integers
+      indicating the element's ordinal position in the document.&nbsp; If you do
+      not specify <b><i>endElement</i></b>, the element range will extend from <b><i>startElement</i></b>
+      to the end of the document.</td>
+  </tr>
+  <tr>
+    <td valign="top">descending</td>
+    <td valign="top">Use the parameter <b>descending</b> to indicate that the
+      elements should be sorted in descending order.</td>
+  </tr>
+  <tr>
+    <td valign="top">numeric</td>
+    <td valign="top">Use the parameter <b>numeric</b> to indicate that the
+      element text should be interpreted as numbers rather than as text.</td>
+  </tr>
+  <tr>
+    <td valign="top">localeSensitive</td>
+    <td valign="top">Use the parameter <b>localeSensitive</b> to indicate the
+      element text should be sorted based on locale-sensitive comparisons.</td>
+  </tr>
+  <tr>
+    <td valign="top">columnRange <br><i>startColumn</i> [ <i>endColumn</i> ]</td>
+    <td valign="top">Use the parameter <b>columnRange</b> to indicate the column
+      range of text that should be used in sort comparisons.&nbsp; The <b><i>startColumn</i></b>
+      and <b><i>endColumn</i></b> parameters must be positive integers
+      indicating the column positions.&nbsp; If you do not specify <b><i>endColumn</i></b>,
+      the column range will extend to the end of the element.</td>
+  </tr>
+  <tr>
+    <td valign="top">newField</td>
+    <td valign="top">Use the parameter <b>newField</b> to indicate that an
+      additional field should be used to further sort the document.</td>
+  </tr>
+</table>
+<h4>Status</h4>
+<blockquote>
+  <p>The <strong>status</strong> parameter is not affected by this command.</p>
+</blockquote>
+<h4>Description</h4>
+<blockquote>
+  <p>If there is a block selection and you do not specify <b>all</b> or <b>elementRange</b>,
+  the sort command will sort the elements that are included in the current block
+  selection.</p>
+  <p>If there is no block selection and you do not specify <b>elementRange</b>,
+  the all of the visible elements in the document will be included in the sort.</p>
+  <p>If there is a rectangular block selection and you do not specify <b>all</b>,
+  <b>elementRange</b>, or <b>columnRange</b>, the sort will be based on the text
+  that is included in the rectangular block selection.</p>
+  <p>The sort command will only affect visible elements that are not show
+  elements.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>sort
+sort selection
+sort elementRange 10 20 columnRange 1 4 newField columnRange 10 20 numeric descending
+</pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<img src="../images/ngrelc.gif" width="142" height="9"><br>
+<a href="../concepts/clcommds.htm#top">Editor commands and parameters</a>
+<p><img src="../images/ngrelr.gif" width="142" height="9"><br>
+<a href="rlpshow.htm#top">show</a> parameter<br>
+<a href="rlpvisib.htm#top">visible</a> parameter<br>
+<a href="rlscmds.htm#top">Default editor commands</a></p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Selected Pulldown Menu</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>Selected Pulldown Menu</h3>
+<p>Actions in the <strong>Selected</strong> pulldown menu let you define how to
+manipulate items selected in the editor. Depending on the context of the
+selection and pane you you are working in, actions available in the <strong>Selected</strong>
+pulldown menu may refer to selected text in the Editor pane or selected files
+and directories in the File Selector pane.</p>
+<table border="0" cellpadding="5">
+  <tr>
+    <th align="left" valign="top"><a name="OpenSelectedFiles">Open selected
+      files</a></th>
+    <td valign="top">Opens for editing the file or files selected in the File
+      Selector pane.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="SaveSelectedFiles">Save selected
+      files</a></th>
+    <td valign="top">Saves the file or files selected in the File Selector pane.
+      This action is available only if at least one of the selected files is
+      already open for editing.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="ReloadSelectedFiles">Reload selected
+      files</a></th>
+    <td valign="top">Reloads the most recently saved version of the file or
+      files selected in the File Selector pane. Changes made after the most
+      recentfile save are lost. This action is available only if at least one of
+      the selected files is already open for editing, and only files already
+      open for editing are reloaded.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="RemoveSelectedFiles">Remove selected
+      files</a></th>
+    <td valign="top">Removes the selected file or files from the <strong>Recently
+      Opened Files</strong> list in the File Selector pane. Files are removed
+      only from this list, and are not deleted from your system. Files currently
+      open for editing remain so.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="CloseSelectedFiles">Close selected
+      files</a></th>
+    <td valign="top">Closes the file or files selected in the File Selector
+      pane. This action is available only if at least one of the selected files
+      is open for editing.
+      <p>For each file containing unsaved changes, a dialog appears offering you
+      the following choices:</p>
+      <dl>
+        <dt><strong>Yes</strong></dt>
+        <dd>Saves the changed file to its current file name and directory
+          location and closes its editing view. If you are saving a new file for
+          the first time, the editor opens the Save As dialog to let you specify
+          a file name and directory where the file will be saved.</dd>
+        <dt><strong>No</strong></dt>
+        <dd>Discards changes to the file and closes its editing view.</dd>
+        <dt><strong>Cancel</strong></dt>
+        <dd>Cancels the <strong>Close selected files</strong> action and leaves
+          remaining unclosed files and their editing views open.</dd>
+      </dl>
+      <p>Closing files with this action does not close the editor window.</p>
+    </td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="AddDirectoriesToDriveList">Add
+      directories to drive list</a></th>
+    <td valign="top">Adds the directory or directories selected from the file
+      directory tree in the File Selector pane to the drive selection list in
+      that pane.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="CopySelectedText">Copy selected text</a></th>
+    <td valign="top">Copies selected text to the current cursor position.
+      Selected text is not erased from its original position.
+      <p>To copy selected text using this menu selection:</p>
+      <ol>
+        <li>Use the <strong>Edit-&gt;Select</strong> action to select the
+          desired text in the Editor pane.</li>
+        <li>Move the cursor to where you want to copy the selected text.</li>
+        <li>Choose this menu selection. The type of text selection determines
+          how selected text is copied to the new location. The types of text
+          selections you can copy are:
+          <dl>
+            <dt><strong>Character</strong></dt>
+            <dd>Selected text (including line breaks) is inserted at the
+              character position to the right of the cursor. Existing text to
+              the right of and below the cursor shifts as needed to make room
+              for the copied text.</dd>
+            <dt><strong>Line</strong></dt>
+            <dd>Selected text is inserted at the line following the cursor.
+              Existing lines below the cursor shift down as needed to make room
+              for the copied line or lines of text</dd>
+            <dt><strong>Rectangle</strong></dt>
+            <dd>The selected rectangle of text is inserted at the current
+              position of the cursor. Dimensions of the text rectangle are
+              maintained, and existing text to the right of the rectangle shifts
+              as needed to make room for the copied rectangle of text. If
+              necessary, lines are lengthened or added to the file.</dd>
+          </dl>
+        </li>
+      </ol>
+    </td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="OverlayWithSelectedText">Overlay with
+      selected text</a></th>
+    <td valign="top">Copies selected text to the current cursor position,
+      replacing existing text at that location as needed to fit the selected
+      text.
+      <p>To copy selected text using this menu selection:</p>
+      <ol>
+        <li>Use the <strong>Edit-&gt;Select</strong> action to select the
+          desired text in the Editor pane.</li>
+        <li>Move the cursor to where you want to overlay the selected text.</li>
+        <li>Choose this menu selection. The type of text selection determines
+          how selected text is overlaid onto the new location. The types of text
+          selections that you can overlay are:
+          <dl>
+            <dt><strong>Line</strong></dt>
+            <dd>Selected text (including line breaks) overlays existing text
+              starting with the line on which the cursor is located. That line
+              and following lines are replaced as needed until all lines of the
+              selected text have been copied. If necessary, extra lines are
+              added to the end of the file to accomodate the length of the
+              selected text.</dd>
+            <dt><strong>Rectangle</strong></dt>
+            <dd>The selected rectangle of text overlays existing text starting
+              at the current position of the cursor. Dimensions of the text
+              rectangle are maintained and if necessary, lines are lengthened or
+              added to the file.</dd>
+          </dl>
+        </li>
+      </ol>
+    </td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="MoveSelectedText">Move selected text</a></th>
+    <td valign="top">Moves selected text to the current cursor position.
+      <p>To move selected text using this menu selection:</p>
+      <ol>
+        <li>Use the <strong>Edit-&gt;Select</strong> action to select the
+          desired text in the Editor pane.</li>
+        <li>Move the cursor to where you want to move the selected text.</li>
+        <li>Choose this menu selection. The selected text is moved and existing
+          text following the selected text shifts to occupy the gap created. The
+          type of text selection determines how selected text is moved to the
+          new location. The types of text selections you can move are:
+          <dl>
+            <dt><strong>Character</strong></dt>
+            <dd>Selected text (including line breaks) is moved from its original
+              location and inserted at the character position to the right of
+              the cursor. Existing text to the right of and below the cursor
+              shifts as needed to make room for the copied text.</dd>
+            <dt><strong>Line</strong></dt>
+            <dd>Selected text is moved from its original location and inserted
+              at the line following the cursor. Existing lines below the cursor
+              shift down as needed to make room for the copied line or lines of
+              text</dd>
+            <dt><strong>Rectangle</strong></dt>
+            <dd>The selected rectangle of text is moved from its original
+              location and inserted at the current position of the cursor. The
+              dimensions of the text rectangle is maintained, and existing text
+              below and to the right of the rectangle shifts as needed to make
+              room for the copied rectangle of text. If necessary, lines are
+              lengthened or added to the file.</dd>
+          </dl>
+        </li>
+      </ol>
+    </td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="DeleteSelectedText">Delete selected
+      text</a></th>
+    <td valign="top">Deletes the selected text. Remaining text shifts to fill
+      the gap created.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="UppercaseSelectedText">Uppercase
+      selected text</a></th>
+    <td valign="top">Changes all characters in the selected text to upper case
+      characters.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="LowercaseSelectedText">Lowercase
+      selected text</a></th>
+    <td valign="top">Changes all characters in the selected text to lower case
+      characters.</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="ShiftSelectedTextLeft">Shift selected
+      text left</a></th>
+    <td valign="top">Shifts text selected with the <strong>Edit-&gt;Select-&gt;Line</strong>
+      or <strong>Edit-&gt;Select-&gt;Rectangle</strong> actions one character
+      position to the left. Characters shifted left from column 1 are
+      discarded..</td>
+  </tr>
+  <tr>
+    <th align="left" valign="top"><a name="ShiftSelectedTextRight">Shift
+      selected text right</a></th>
+    <td valign="top">Shifts text selected with the <strong>Edit-&gt;Select-&gt;Line</strong>
+      or <strong>Edit-&gt;Select-&gt;Rectangle</strong> actions one character
+      position to the right. Blanks are used to pad empty space to the left of
+      the shifted text selection.</td>
+  </tr>
+</table>
+&nbsp;
+<p><a href="file:///C:/work/jlpex/source/concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+
+</html>

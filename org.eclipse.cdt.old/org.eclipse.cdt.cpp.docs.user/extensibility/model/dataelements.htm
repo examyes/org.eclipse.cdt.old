@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>The C/C++ Development Plugin - DataElements</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        DataElements</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p>All information is stored in the DataStore as DataElement instances.  There are basically two types of DataElements;  descriptor DataElements which define data types and make up the schema and informational DataElements which hold information.  Each DataElement has the following String attributes:
+     <ul>
+     <li>name - Informational name (possibly displayable) for the DataElement.  Each miner will specify what information should be stored in the name attribute.</li>
+     <li>type - Although the type attribute is stored as a String, it should reference the name of descriptor object in the schema.  This relationship is not enforced by the DataStore, but should be followed for style and consistency.</li>
+     <li>source - The contents of the source attribute are determined by the miner.  For example, the command miner specifies the source of a command is the target miner</li>
+     <li>value - Miner specific attribute.</li>
+     <li>id - used internally by the DataStore and should never by explicitly used</li>
+     </ul> 
+       
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->

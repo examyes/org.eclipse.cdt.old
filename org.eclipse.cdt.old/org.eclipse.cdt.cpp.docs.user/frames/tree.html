@@ -1,0 +1,252 @@
+<HTML>
+<HEAD>
+<TITLE>C/C++ Development</TITLE>
+</HEAD>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<SCRIPT LANGUAGE="JavaScript">
+
+var _items = new Array();
+_items[0] = new Object(); //Dummy
+var _state = ""
+var cookie_name = "currentNAVState"
+
+ //Tree Items
+ //Format: addItem(isParent, text, URL, level)
+ addItem(false, "readme.txt"                     , "../readme.txt"                                   , 0)
+ addItem(false, "todo.txt"                       , "../todo.txt"                                     , 0)
+
+ addItem(true,  "Getting Started"                , ""                                                , 0)
+ addItem(true,  "Introduction"                   , ""                                                , 1)
+ addItem(false, "About This Plugin"              , "../gettingstarted/introduction/about.htm"        , 2)
+ addItem(false, "Contact Us"                     , "contact.htm"                                     , 2)
+
+ addItem(true,  "Installation"                   , ""                                                , 1)
+ addItem(false, "Install the plugin"             , "../gettingstarted/installation/install.htm"      , 2)
+
+ addItem(true,  "Create a C/C++ project"         , ""                                                , 1)
+ addItem(false, "Setting Preferences"            , "../gettingstarted/createproject/preferences.htm" , 2)
+ addItem(false, "Project Wizard"                 , "../gettingstarted/createproject/create.htm"      , 2)
+ addItem(false, "Import Wizard"                  , "../gettingstarted/createproject/import.htm"      , 2)
+
+ addItem(true,  "Concepts"                       , ""                                                , 0)
+ addItem(true,  "C/C++ Perspective\Views"        , ""                                                , 1)
+ addItem(false, "C/C++ Perspective"              , "../concepts/views/cppperspective.htm"            , 2)
+ addItem(false, "Command"                        , "../concepts/views/command.htm"                   , 2)
+ addItem(false, "Custom Perspectives"            , "../concepts/views/custom.htm"                    , 2)
+ addItem(false, "Details"                        , "../concepts/views/details.htm"                   , 2)
+ addItem(false, "Navigator"                      , "../concepts/views/navigator.htm"                 , 2)
+ addItem(false, "Output"                         , "../concepts/views/output.htm"                    , 2)
+ addItem(false, "Parsed-Files"                   , "../concepts/views/parsedfiles.htm"               , 2)
+ addItem(false, "Project-Objects"                , "../concepts/views/projectobjects.htm"            , 2)
+ addItem(false, "Properties"                     , "../concepts/views/properties.htm"                , 2)
+ addItem(false, "Remote Projects"                , "../concepts/views/remote.htm"                    , 2)
+ addItem(false, "Search"                         , "../concepts/views/search.htm"                    , 2)
+ addItem(false, "Source"                         , "../concepts/views/source.htm"                    , 2)
+ addItem(false, "System-Objects"                 , "../concepts/views/systemobjects.htm"             , 2)
+ addItem(false, "Targets"                        , "../concepts/views/targets.htm"                   , 2)
+
+ addItem(true,  "View Content Controls"          , ""                                                , 2)
+ addItem(false, "View Content"                   , "../concepts/views/content.htm"                   , 3)
+
+ addItem(true,  "Hosts Perspective\Views"        , ""                                                , 1)
+ addItem(false, "Details"                        , "../concepts/views/hostsdetails.htm"              , 2)
+ addItem(false, "Hosts"                          , "../concepts/views/hosts.htm"                     , 2)
+
+ addItem(true,  "Miner Perspective\Views"        , ""                                                , 1)
+ addItem(false, "Details"                        , "../concepts/views/minersdetails.htm"             , 2)
+ addItem(false, "Log"                            , "../concepts/views/log.htm"                       , 2)
+ addItem(false, "Miner"                          , "../concepts/views/miner.htm"                     , 2)
+ addItem(false, "Schema"                         , "../concepts/views/schema.htm"                    , 2)
+
+ addItem(true,  "Browsing(Parsing)"              , ""                                                , 1)
+ addItem(false, "Parsing"                        , "../concepts/parse/parse.htm"                     , 2)
+ addItem(true,  "Building(Compiling)"            , ""                                                , 1)
+ addItem(false, "Projects"                       , "../concepts/compiling/projects.htm"              , 2)
+ addItem(false, "Makefiles"                      , "../concepts/compiling/makefiles.htm"             , 2)
+ addItem(true,  "Commands"                       , ""                                                , 1)
+ addItem(false, "Commands"                       , "../concepts/commands/commands.htm"               , 2)
+ addItem(false, "Formats"                        , "../concepts/commands/formats.htm"                , 2)
+
+ addItem(true,  "Tasks"                          , ""                                                , 0)
+ addItem(true,  "Editing Source Files"           , ""                                                , 1)
+ addItem(false, "Lpex Editor Reference"          , "../tasks/edit/lpexeditor.htm"                    , 2)
+ addItem(true,  "Browse/Parse Source Files"      , ""                                                , 1)
+ addItem(false, "Parsing Files"                  , "../tasks/parse/parsefiles.htm"                   , 2)
+ addItem(true,  "Compiling Projects"             , ""                                                , 1)
+ addItem(false, "Build Invocation"               , "../tasks/compile/invocation.htm"                 , 2)
+ addItem(false, "Automatic Build Feature"        , "../tasks/compile/automatic.htm"                  , 2)
+ addItem(false, "Handling Build Errors"          , "../tasks/compile/errors.htm"                     , 2)
+ addItem(true,  "Working with Commands"          , ""                                                , 1)
+ addItem(false, "Launch"                         , "../tasks/commands/launch.htm"                    , 2)
+ addItem(false, "View/Cancel Output"             , "../tasks/commands/view.htm"                      , 2)
+ addItem(false, "Change Parse Formats"           , "../tasks/commands/formats.htm"                   , 2)
+
+ addItem(true,  "Tutorial"                       , ""                                                , 0)
+ addItem(false, "project 1"                      , "../sample/sample1.htm"                           , 1)
+ addItem(false, "project 2"                      , "../sample/sample2.htm"                           , 1)
+
+ addItem(true,  "Troubleshooting"                , ""                                                , 0)
+ addItem(false, "Command"                        , "../troubleshooting/commands.htm"                 , 1)
+ addItem(false, "Editing"                        , "../troubleshooting/edit.htm"                     , 1)
+ addItem(false, "Installation"                   , "../troubleshooting/installproblems.htm"          , 1)
+
+ addItem(true,  "Extensibility"                  , ""                                                , 0)
+ addItem(true,  "Introduction"                   , ""                                                , 1)
+ addItem(false, "Definitions"                    , "../extensibility/intro/definitions.htm"          , 2)
+ addItem(true,  "Model"                          , ""                                                , 1)
+ addItem(false, "DataStore Architecture"         , "../extensibility/model/architecture.htm"         , 2)
+ addItem(false, "DataElements"                   , "../extensibility/model/dataelements.htm"         , 2)
+ addItem(false, "DataStore"                      , "../extensibility/model/datastore.htm"            , 2)
+ addItem(true,  "Developing Miners"              , ""                                                , 1)
+ addItem(false, "The Miner Class"                , "../extensibility/developing/minerclass.htm"      , 2)
+
+ //End of Tree Items
+ _state = getState()
+
+function debug(theText)
+{
+ self.status=theText
+ var i = 0
+ while (i>-1)
+ {
+  i++
+ }
+}
+
+// Add an entry to the database
+function addItem(parent,text,URL,indent)
+{
+ var i = _items.length
+ _items[i] = new Object;
+ _items[i].parent = parent
+ _items[i].text   = text
+ _items[i].URL    = URL
+ _items[i].indent = indent
+}
+
+//Toggle a specific entry in _state
+function toggle(n)
+{
+ if (n != 0)
+ {
+  var newState = ""
+  newState += _state.substring(0,n-1)
+  newState += (_state.substring(n-1,n)) ^ 1 // Bitwise XOR clicked item
+  newState += _state.substring(n,_state.length)
+  saveState(newState)
+ }
+}
+
+//Return an default state...all 0's
+function defaultState()
+{
+ var theState = ""
+ for (var i=0; i<_items.length; i++)
+  theState += "0"
+ return theState
+}
+
+function saveState(theState)
+{
+ var date = new Date();
+ date.setTime(date.getTime()+(10*24*60*60*1000))
+ var expires = "; expires="+date.toGMTString()
+ var theCookie = cookie_name+"="+ escape(theState) + expires + "; path=/"
+ document.cookie=theCookie
+}
+
+function getState()
+{
+ theName = cookie_name + "="
+ var ca = document.cookie.split(';')
+
+ for(var i in ca)
+ {
+  var c = ca[i];
+  while (c.charAt(0)==' ')
+   c = c.substring(1,c.length)
+  if (c.indexOf(theName) == 0)
+   return unescape(c.substring(theName.length,c.length))
+ }
+ return defaultState()
+}
+
+// returns padded spaces (in mulTIPles of 2) for indenting
+function pad(n)
+{
+ var result = ""
+ for (var i = 1; i <= n; i++) {  result += "&nbsp;&nbsp;&nbsp;&nbsp;" }
+ return result
+}
+
+//Guts of the script...write the page out...
+ var ICONSTART = "<IMG SRC='images/"
+ var ICONEND   = ".gif' WIDTH=16 HEIGHT=16 BORDER=0>"
+ var prevIndentDisplayed = 0
+ var showMyDaughter = 0
+ var Outline=""
+ Outline += "<table width=100% cellspacing=0 cellpadding=3 border=0>"
+ Outline += "<tr><td align=left  bgcolor='#006666' width=100%><font color='#fffffe' face='arial'>"
+ Outline += "<b>C/C++ Development</b></font></td></tr>"
+ Outline += "<tr><td>"
+
+ // cycle through each entry in the outline array
+ for (var i = 1; i < _items.length; i++)
+ {
+  var currIndent = _items[i].indent           // get the indent level
+  var expanded = _state.substring(i-1,i) // current state
+  if (currIndent == 0)
+   var fontSize = 3
+  else
+   var fontSize = 2
+  var theText = "<FONT SIZE=" + fontSize + "><b>" + _items[i].text + "</b></FONT>"
+  // display entry only if it meets one of three criteria
+  if ((currIndent == 0 || currIndent<=prevIndentDisplayed || (showMyDaughter==1 && (currIndent-prevIndentDisplayed==1))))
+  {
+
+   Outline += pad(currIndent)
+
+   // Insert the appropriate GIF and HREF
+   if (!(_items[i].parent))
+    Outline += ICONSTART + "blank" + ICONEND + ICONSTART + "document" + ICONEND
+   else
+   {
+    if (_state.substring(i-1,i) == 1)
+    {
+     Outline += "<A HREF='javascript:history.go(0)' onClick='toggle(" + i + ")'>"
+     Outline += ICONSTART + "minus" + ICONEND + ICONSTART + "open" + ICONEND
+     Outline += "</A>"
+    }
+    else
+    {
+     Outline += "<A HREF='javascript:history.go(0)' onClick='toggle(" + i + ")'>"
+     Outline += ICONSTART + "plus" + ICONEND + ICONSTART + "closed" + ICONEND
+     Outline += "</A>"
+    }
+   }
+   Outline += "&nbsp;";
+
+   if (_items[i].URL == "" || _items[i].URL == null)
+   {
+    Outline += " " + theText      // no link, just a listed item
+   }
+   else
+   {
+    Outline += " <A HREF='" + _items[i].URL + "' TARGET='content'>" + theText + "</A>"
+   }
+
+   var fontSize = 5-currIndent
+   Outline = "<B>" + Outline + "</B>"
+   Outline += "<BR>"
+   prevIndentDisplayed = currIndent
+   showMyDaughter = expanded
+  }
+ }
+ Outline += "</td></tr></table><hr noshade>"
+ document.write(Outline)
+
+</SCRIPT>
+</BODY>
+</HTML>

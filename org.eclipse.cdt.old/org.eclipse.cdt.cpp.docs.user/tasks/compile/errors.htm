@@ -1,0 +1,62 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>Handling Build Errors</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Handling Build Errors</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2"> 
+        <p>All Output from Builds (both stdout and stderr) is shown in the 
+           <a href="../../concepts/views/output.htm">Output View</a>. 
+           Just before appearing in the Output View however, output 
+           is parsed using the defined    <a href="../../concepts/commands/formats.htm">Formats</a>.
+        <p>Most compilers will emit messages (errors, warnings, information) with
+           File Names and Locations, such as the following (from the VisualAge 3.5 Compiler):<br><br>
+           <center><img src="../../images/parsederror.gif"></center>
+        <p>In the picture above, the <img src="../../images/error.gif"> icons indicate 
+           that the lines were successfully parsed.  If we Double-Click on those lines, we 
+           will be taken to the appropriate location in the Source view.  If you are finding 
+           that errors, warnings or information from your compilers are not being parsed, 
+           you will need to <a href="../commands/formats.htm">Modify the Formats</a>.
+        <p><b>NOTE</b>: Errors, Warnings and Informationals that do have valid Source 
+           Locations are added to the Task List.  If your compiler messages are getting 
+           parsed but are not appearing in the Task List, this probably means that the 
+           associated File was not found.  In this case you may consider "moving" the
+           file to a location that is in a sub-directory of where you are invoking the build. 
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

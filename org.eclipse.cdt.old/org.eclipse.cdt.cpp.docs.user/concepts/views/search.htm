@@ -1,0 +1,200 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>C/C++ Search</title>
+   <title>The C/C++ Development Plugin - C/C++ Search</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        C/C++ Search</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>The C/C++ Search mechanism provided by the
+           <a href="../../gettingstarted/introduction/about.htm">C/C++ Development Plugin</a>
+           enables users to search for both text (string) and specific C/C++ data types - variables,
+           functions, macros, etc. 
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Eclipse Search Dialog</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>The C/C++ Search Tool accessed through the Eclipse Search dialog. There are three ways to
+           open the Eclipse Workbench Search dialog.
+           <ol>
+              <li>From the Workbench menu:
+              <p><center><img SRC="../../images/search_1.gif"></center><br>
+        <!---------->
+              <li>From the Workbench tool bar:
+              <p><center><img SRC="../../images/search_2.gif"></center><br>
+              <li>From the keyboard via keyboard sequence: <b>Ctrl+h</b>
+          </ol>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        C/C++ Search Tool</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>Select the C/C++ Search tab.
+        <p><center><img SRC="../../images/search_3.gif"></center>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        C/C++ Search Features</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>The goal for the C/C++ search mechanism is to enable the user to easily
+           navigate and understand the source code in hand. The C/C++ search tab
+           consists of four groups or areas:
+        <ul>
+           <li>Search Expression group where the user inputs the string to search for.
+               Note that if the user highlights text in the editor, this text will be
+               shown in the text field area
+           <li>Search For group which limits the search to the desired data types selected
+               by the user. This simplifies the search results when viewed in the search
+               results view. It also speeds up getting the search results.
+           <li>Limit to group which enables the user to refine the search to whether
+               to limit the search to declaration only or references only or both.
+           <li>Scope group which enables the user to define the search scope. It enhances
+               the search and provides faster results when working with huge projects.
+               To narrow the search, the user clicks on the selection radio button and
+               selects the directory to search in. The default is set to the whole workspace.
+        </ul>
+     </td>
+  </tr> 
+</table>
+
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        C/C++ Search Options</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>
+           <dl>
+              <dt>Case Sensitivity
+              <dd><b>Off</b> by default, you may choose to refine your searches by turning on case sensitivity.<br>
+              <dt><br>Regular Expressions
+              <dd><b>On</b> by default, you may specify your search argument as a regular expression.
+              <dt><br>
+              <dd>Our regular expression support uses the Jakarta ORO package (available from:
+                  <a href="http://jakarta.apache.org/oro/index.html">http://jakarta.apache.org</a>)
+                  which is described on their website as:<br><br>
+                  <pre>"The Kakarta-ORO Java classes are a set of text-processing Java classes that provide
+Perl5 compatible regular expressions, AWK-like regular expressions, glob expressions
+and utility classes for performing substitutions, splits, filtering filenames, etc."
+</pre>
+           </dl>
+     </td>
+  </tr> 
+</table>
+
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Example of using C/C++ Search</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <ol>
+           <li>Launch Search Dialog using the methods described above
+           <li>Input the desired search string in the search Expression field
+           <li>Select the data type that you wish to search for from the Search For group
+           <li>Using the Scope group, define the scope of the search - By default the
+               scope is the whole workspace
+           <li>Click on the search button to view the search results
+        </ol>
+        <p><center><img SRC="../../images/search_4.gif"></center><br>
+        <p>Click <img SRC="../../images/searchbutton.gif">. The results are viewed
+           in the Search view.
+        <p><center><img SRC="../../images/search_5.gif"></center>
+        <p><b>Note:</b> You can switch focus to the source code location by:
+        <ul>
+           <li>Double clicking the mouse on a specific line in the Search Results view
+           <li>Selecting a specific line in the Search Results view and mouse clicking on
+               the view tool bar icon: <img SRC="../../images/search_6.gif">
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Limitations for this release <font color="yellow">( Will be fixed in a future release )</font></font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>"<b>Limit to</b>" group has not been implemented
+    </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Limitations</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>Before using C/C++ search mechanism, the C/C++ code must be parsed first.
+    </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

@@ -1,0 +1,74 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>Troubleshooting Installation/Invocation Problems</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Troubleshooting Installation/Invocation Problems</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+ 
+        <p>If you encounter problems with your installation of the C/C++ Perspective or if
+           after a period of time the Perspective stops working, first ensure the following files
+           exist:
+        <ul>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.core\<b>cpp_core.jar</b></li>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.core\<b>plugin.xml</b></li>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.core\<b>runCommand.bat</b></li>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.core\<b>formats.dat</b></li>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.ui\<b>plugin.xml</b></li>
+	   <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.ui\<b>cpp_ui.jar</b></li>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.lpex\<b>vabaselpex.jar</b></li>
+           <li>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.lpex\<b>plugin.xml</b></li>
+        </ul> 
+        <p>If any one of these files is missing, you will need to
+           <a href="../gettingstarted/installation/install.htm">re-install</a> the
+           <b>C/C++ Development Plugin</b>.
+        <p>In some circumstances we've noticed that the workbench metadata becomes corrupt.  
+           If this happens, you usually receive an error dialog about an "unrecoverable error
+           in the desktop".  Our workaround has been to delete the 
+           <b>&lt;<i>...</i>&gt;\eclipse\workspace\.metadata</b> directory.  If you have a lot
+           of information in the workbench that you do not want to lose, then prior to 
+           wiping the directory, save each project sub-directory to a temporary location,
+           then you can re-import your source after deleting the workbook.
+        <p>If all of the above files exist and your workbench is not corrupt, and you are still
+           having problems bringing up the C/C++ Perspective, then you have either run 
+           into a bug/limitation in our plugin, or perhaps a bug in the Studio Workbench 
+           itself.  Please let us know of such situations with a complete description of 
+           your problem. 
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../frames/contact.htm">Contact Us</a>
+     <p><a href="../hglegal.htm"><img border="0" src="../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

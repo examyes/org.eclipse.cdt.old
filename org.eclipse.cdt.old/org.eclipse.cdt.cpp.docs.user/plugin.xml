@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<plugin 
+  name="C/C++ Plugin User Guide"
+  id="com.ibm.cpp.docs.user"
+  version="1.0"
+  provider-name="IBM Linux Application DevelopmentD" 
+>
+ <extension point="org.eclipse.help.contributions">
+  <infoset name="infoset_CPluginGuide.xml" />
+ </extension> 
+ <extension point="org.eclipse.help.contributions">
+  <topics name="topics_view_Contents.xml" />
+  <actions name="actions_view_Contents.xml" />
+ </extension> 
+ <extension point="org.eclipse.help.contributions">
+  <topics name="topics_GettingStarted.xml" />
+  <topics name="topics_Concepts.xml" />
+  <topics name="topics_Tasks.xml" />
+  <topics name="topics_Tutorial.xml" />
+  <topics name="topics_Troubleshooting.xml" />
+  <topics name="topics_Extensibility.xml" />
+  <actions name="actions_All.xml" />
+ </extension> 
+ 
+ <extension point="org.eclipse.help.contexts"> 
+  <contexts name="contexts_CPP.xml" plugin="com.ibm.cpp.ui"/> 
+ </extension>
+</plugin>

@@ -1,0 +1,57 @@
+<topics id="topics_Concepts"> 
+ 
+ <topic label="C/C++ Perspective\Views">
+  <topic label="C/C++ Perspective"            href="concepts/views/cppperspective.htm"/>
+  <topic label="Command"                      href="concepts/views/command.htm"/>
+  <topic label="Custom Perspectives"          href="concepts/views/custom.htm"/>
+  <topic label="Details"                      href="concepts/views/details.htm"/>
+  <topic label="Navigator"                    href="concepts/views/navigator.htm"/>
+  <topic label="Output"                       href="concepts/views/output.htm"/>
+  <topic label="Parsed-Files"                 href="concepts/views/parsedfiles.htm"/>
+  <topic label="Project-Objects"              href="concepts/views/projectobjects.htm"/>
+  <topic label="Properties"                   href="concepts/views/properties.htm"/>
+  <topic label="Remote Projects"              href="concepts/views/remote.htm"/>
+  <topic label="Search"                       href="concepts/views/search.htm"/>
+  <topic label="Source"                       href="concepts/views/source.htm"/>
+  <topic label="System-Objects"               href="concepts/views/systemobjects.htm"/>
+  <topic label="Targets"                      href="concepts/views/targets.htm"/>
+  <topic label="View Content Controls">
+   <topic label="View Content"                href="concepts/views/content.htm"/>
+  </topic>
+ </topic>
+
+
+ <topic label="Hosts Perspective\Views">
+  <topic label="Details"                      href="concepts/views/hostsdetails.htm"/>
+  <topic label="Hosts"                        href="concepts/views/hosts.htm"/>
+ </topic>
+
+ <topic label="Miner Perspective\Views">
+  <topic label="Details"                      href="concepts/views/minersdetails.htm"/>
+  <topic label="Log"                          href="concepts/views/log.htm"/>
+  <topic label="Miner"                        href="concepts/views/miner.htm"/>
+  <topic label="Schema"                       href="concepts/views/schema.htm"/>
+ </topic>
+
+ <topic label="Browsing(Parsing)">
+  <topic label="Parsing"                      href="concepts/parse/parse.htm"/>
+ </topic>
+
+ <topic label="Building(Compiling)">
+  <topic label="Projects"                     href="concepts/compiling/projects.htm"/>
+  <topic label="Makefiles"                    href="concepts/compiling/makefiles.htm"/>
+ </topic>
+
+ <topic label="Commands">
+  <topic label="Commands"                     href="concepts/commands/commands.htm"/>
+  <topic label="Formats"                      href="concepts/commands/formats.htm"/>
+ </topic>
+
+</topics>
+
+
+
+
+
+
+

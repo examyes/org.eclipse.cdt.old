@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>The C/C++ Development Plugin - DataStore Architecture</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        DataStore Architecture Overview</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+      <p>The DataStore architecture provides a communication layer for moving Java objects (instances of DataElement) between two systems.  Miners running on the server add data objects to the DataStore and the DataStore replicates the data object to the client.
+The DataStore was designed to allow direct viewing of the underlying tree structure.  Thus it contains a mechanism for creating links between objects in the underlying tree and contains specific descriptor types (such as "details") which are intended to affect the view.         
+     </td>
+  </tr> 
+<!---------->
+ <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        DataStore Architecture Details </font></b></td>
+  </tr>
+<!---------->
+<tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p> The DataStore Model provides the ability to integrate Distributed Tools with an Integrated Development Environment (IDE). There are 3 main componentsto a typical IDE: 
+<ol>
+<li> A GUI (Eclipse)</li>
+<li> A DATASTORE or information repository</li>
+<li> MINERS or functional components</li>
+</ol>
+<p>The IDE present the user with a graphical interface to access information in the repository(Datastore). The Datastore or repository maintains information at run-time and persistantly. The Miners are functional components that perform operations using the information in the repository. When a user selects an element of the GUI, the Element issues a request to the Datastore which in turn routes the request to the appropriate Miner. The Miner executes the request and the result is sent back to the Datastore which in turn updates/modifies the GUI either by modifying the element that originated the request or by adding or deleting other elements.<br><br>
+<img src="../../images/single.gif"><img src="../../images/double.gif">
+<p>In a distributed environment, multiple Datastores in different machines effectively mirror each other and are responsible for being synchronized with each other. The communication between client and server is carried out by "Handlers"; they ensure that the frequency and number of jobs carried at any one time.will not interfere with the normal use of a computer by consuming all its resources. Handlers make communication asynchronous, detach the GUI from communication and thus allow the server to communicate with multiple machines. Information can be partitioned and assembled at arbitrary points.<br><br>
+<img src="../../images/front.gif">
+<p>User are encouraged to extend the extend the funtionality of the C++ IDE by writing <code>miners</code>.
+     </td>
+</tr> 
+
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>updateProfile.userCommands Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>updateProfile.userCommands parameter</h3>
+<p>The <b>updateProfile.userCommands</b> parameter may be used to query or set
+the user commands that will be used by the <b>updateProfile</b> command.&nbsp;
+The user commands are a list of command/class name pairs that you wish to define
+when the <b>updateProfile</b> command is issued.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>updateProfile.userCommands</b> is scoped to the current view.<br>
+  <b>current.updateProfile.userCommands</b> is scoped to the current view.<br>
+  <b>default.updateProfile.userCommands</b> is globally scoped.<br>
+  <b>install.updateProfile.userCommands</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query updateProfile.userCommands
+set updateProfile.userCommands { default
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | [ <i>command</i> <i>className</i> ] [...]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+query current.updateProfile.userCommands
+query default.updateProfile.userCommands
+set default.updateProfile.userCommands { install
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | [ <i>command</i> <i>className</i> ] [...]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+query install.updateProfile.userCommands </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      updateProfile.userCommands</b> command, the current view will use the
+      value of <b>default.updateProfile.userCommands</b> as the user commands
+      for the <b>updateProfile</b> command.</td>
+  </tr>
+  <tr>
+    <td valign="top">[<i> command</i> <i>className</i> ] [...]</td>
+    <td valign="top">If you specify a list of command/class name pairs for the <b>set
+      updateProfile.userCommands</b> command, the <b>updateProfile</b> command
+      will use that list of user commands within the current view.&nbsp;
+      If you specify a list of command/class name pairs for the set <b>default.updateProfile.userCommands</b>
+      command, the <b>updateProfile</b> command will use that list of user
+      commands within all document views that have the <b>updateProfile.userCommands</b>
+      set to <b>default</b>.&nbsp;
+      The <i>command</i> parameter is the name of the command that you want to define.&nbsp;
+      The <i>className</i> parameter should be the name of a java class that implements the
+      <b>com.ibm.lpex.core.LpexCommand</b> interface.</td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.updateProfile.userCommands</b> command, all views with <b>updateProfile.userCommands</b>
+      set to <b>default</b> will use the value of <b>install.updateProfile.userCommands</b>
+      to determine the user commands to be used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>query current.updateProfile.userCommands</b> command will return the
+  list of command/class name pairs that will be used, within the current view,
+  by the <b>updateProfile</b> command.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query updateProfile.userCommands
+set updateProfile.userCommands test com.ibm.lpex.samples.TestCommand
+query current.updateProfile.userCommands
+query default.updateProfile.userCommands
+set default.updateProfile.userCommands install
+query install.updateProfile.userCommands </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcupdat.htm#top">updateProfile</a> command<br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpcmdcl.htm#top">commandClass</a> parameter<br>
+<a href="rlpcmds.htm#top">commands</a> parameter<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a> parameter<br>
+<a href="rlpupbpr.htm#top">updateProfile.baseProfile</a> parameter<br>
+<a href="rlpupps.htm#top">updateProfile.parser</a> parameter<br>
+<a href="rlpupua.htm#top">updateProfile.userActions</a> parameter<br>
+<a href="rlpupuka.htm#top">updateProfile.userKeyActions</a> parameter<br>
+<a href="rlpupuma.htm#top">updateProfile.userMouseActions</a> parameter<br>
+<a href="rlpupupr.htm#top">updateProfile.userProfile</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

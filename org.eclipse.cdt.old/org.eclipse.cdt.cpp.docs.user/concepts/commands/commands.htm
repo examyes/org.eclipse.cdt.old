@@ -1,0 +1,90 @@
+ <html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Commands</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Commands</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>The C/C++ Development plugin provides support for launching arbitrary commands and parsing
+           the output in user-defined ways.  The intent is to "wrap" command line tools, so that
+           any command output that contains references to files can be parsed to give the user the
+           ability to click on pieces of output and get taken to the appropriate file location in the
+           Source View.
+        <p>Any output from a command issued from the <a href="../views/command.htm">Command View</a> will
+           appear in the <a href="../views/output.htm">Output View</a>.
+           Lines that are not successfully parsed will just appear as regular lines of text.
+           If a line is parsed, it will appear as an object that the user can double-click on to
+           get to the Source Location.
+        <p>A perfect example, and probably one of the most common uses for this function is <b>grep</b>,
+           the powerful searching tool.  If <b>grep</b> is installed on your system, you would use it in
+           the following way in a typical Windows shell:
+       <tt>
+       <pre>
+          &lt;<i>...</i>&gt;\eclipse\workspace\Payroll> <b>grep -Hn cout *.cpp</b>
+          payroll.cpp:14:  cout << "Monthly Employee Pay Report" << endl;
+          payroll.cpp:15:  cout << endl;
+       </pre>
+       </tt>
+       <p>So in this example, <b>grep</b> found 2 matches of "cout" in the file <i>payroll.cpp</i>
+          (on lines 14 and 15).The -Hn options tell <b>grep</b> to include the file names and line
+          numbers in the output. Since the output format of most command-line tools is predicatable,
+          it is not hard to parse the output to grab the filename and line number.  If you launched
+          the same grep command as above in the Command View, the Output View would like this:
+       <p><center><img src="../../images/commandoutput.gif"></center>
+<font color=red>
+  <b><p>This section and " formats.htm " ( see link below ) need to be re-written because of
+  changes to how command output has changed.</p></b>
+</font>
+       <p>Both lines of output were parsed to get the file information, so that if you Double-Clicked
+          on either of the lines, the Source View would open <i>payroll.cpp</i> and move to the
+          appropriate line.  A file called <b><i>patterns.dat</i></b> located in the
+          <i><b>&lt;<i>...</i>&gt;/eclipse/plugins/com.ibm.cpp.core</i></b> directory contains the formats that the system
+          will use while trying to parse command output. This file can be changed by the user at runtime,
+          to control how the parsing is done.For details on how to change <b><i>patterns.dat</i></b>
+          go to <a href="../../tasks/commands/formats.htm">Formats</a>.
+       <p>The default <i>patterns.dat</i> that comes with this installation contains a format that could
+          parse the <b>grep</b> output above:<br>
+       <tt>
+       <pre>
+          grep FILE:LINE:TEXT
+       </pre>
+       </tt>
+       <p>See <a href="../../tasks/commands/formats.htm">Formats</a> for information on format syntax and usage.
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

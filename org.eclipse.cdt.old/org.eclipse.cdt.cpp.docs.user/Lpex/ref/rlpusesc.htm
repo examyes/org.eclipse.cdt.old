@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>useSourceColumns Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>useSourceColumns parameter</h3>
+<p>The <b>useSourceColumns</b> parameter may be used to set of query if
+the editor uses column characteristics of the file in its source character
+encoding.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>useSourceColumns</b> is scoped to the current document.<br>
+  <b>current.useSourceColumns</b> is scoped to the current document.<br>
+  <b>default.useSourceColumns</b> is globally scoped.<br>
+  <b>install.useSourceColumns</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query useSourceColumns
+set useSourceColumns [ default | on | off ]
+query current.useSourceColumns
+query default.useSourceColumns
+set default.useSourceColumns [ install | on | off ]
+query install.useSourceColumns </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      useSourceColumns</b> command, the current document will use the value of
+      <b>default.useSourceColumns</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">on</td>
+    <td valign="top">If you specify the <b>on</b> parameter for the <b>set
+      useSourceColumns</b> command, the current document will use column
+      characteristics of the file in its source encoding.&nbsp;
+      If you specify the <b>on</b> parameter for the <b>set
+      default.useSourceColumns</b> command, all
+      documents that have <b>useSourceColumns</b> set to <b>default</b>
+      will use column characteristics of the file in its source encoding.</td>
+  </tr>
+  <tr>
+    <td valign="top">off</td>
+    <td valign="top">If you specify the <b>off</b> parameter for the <b>set
+      useSourceColumns</b> command, the current document will use column
+      characteristics of the file in its Unicode encoding.&nbsp;
+      If you specify the <b>off</b> parameter for the <b>set
+      default.useSourceColumns</b> command, all documents that have
+      <b>useSourceColumns</b> set to <b>default</b> will use column
+      characteristics of the files in their Unicode encoding.</td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.useSourceColumns</b> command, all of the documents that have
+      <b>useSourceColumns</b> set to <b>default</b> will use the value of
+      <b>install.useSourceColumns</b>.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>By default, column-related editor settings are in terms of Unicode
+  characters.&nbsp;
+  The <b>useSourceColumns</b> parameter changes this to bytes for DBCS/MBCS
+  (double-byte/multibyte character set) source character encodings, in order
+  to better emulate the editing of host files in their native environment.&nbsp;
+  If the source encoding of the file is not DBCS/MBCS, this parameter has
+  no effect.&nbsp;
+  The following editor settings are affected by the value of the
+  <b>useSourceColumns</b> parameter:&nbsp;
+    <ul>
+    <li>the <b>save.textLimit</b> parameter
+    <li>the <b>sequenceNumbers</b> parameter
+    <li>the "Column" field displayed on the status line
+    <li>tabs expansion
+    <li>the hex edit line dialog.
+    </ul>
+  </p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query useSourceColumns
+set useSourceColumns off
+query current.useSourceColumns
+query default.useSourceColumns
+set default.useSourceColumns off
+query install.useSourceColumns </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a> parameter<br>
+<a href="rlpsvtxt.htm#top">save.textLimit</a> parameter<br>
+<a href="rlpsqnms.htm#top">sequenceNumbers</a> parameter<br>
+<a href="rlpsrcen.htm#top">sourceEncoding</a> parameter<p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

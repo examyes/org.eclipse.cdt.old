@@ -1,0 +1,115 @@
+This is a list of features that could appear in future versions of this 
+product.  The document is split into 2 sections: Work that we (the plugin 
+developers) will probably be doing and work that could be good for 
+you (the users\open source developer) to consider.
+ 
+(Note: this is not a list of known issues or defects with the current 
+release. For that information see readme.txt) 
+
+Work that we are planning or considering doing:
+
+1.  Linux Version 
+     - We will be keeping up with the latest releases of Eclipse.  
+       This will include versions on Linux and Windows as they become
+       available.
+
+2.  Autoconf support 
+     - We will be looking into providing support for various build  
+       environments and packaging tooling.  
+
+3.  Proper Handling of Setting Environment 
+     - In the current release, there is no integrated way to set 
+       environment variables before kicking off a build or parse.  We 
+       would like to provide views to allow this.  
+
+4.  Remote Projects
+     - This work is in progress, but has not been tested, and is not 
+       secure.  We will hopefully be using some common eclipse componentry 
+       for host system authentication.
+
+5.  Source Control Integration
+     - There are still open question as to how Eclipse plugins are to 
+       surface their source control integration.
+
+6.  Debug\PA Integration
+     - We will be providing some level of integration with other plugins 
+       such as Debug and Performance Analaysis.  
+
+7.  Support for Mixed Language Projects
+     - We need to look at the issues that arise from having Java, C/C++ 
+       and other languages in the same project.
+
+8.  Class SmartGuide
+     - We have enough information in our datastore to make a powerful 
+       class creation wizard relatively easy to implement.
+
+9.  Miner Development
+     - We plan to create documentation and provide views that help 
+       users who wish to extend this product by writing their own miners.
+
+10. Web Front End
+     - Since we have nice de-coupling of our model\communication from 
+       the UI, we can provide a web-based front end to drive the Datastore
+       and the miners.
+
+11. MOF Importer/Exporter
+     - We will be providing mechanisms to import our export our model 
+       into a MOF model 
+
+12. Multiple Users
+     - This will become more important when we have a Linux version, 
+       but we need to support more than one user working on the same 
+       project. 
+
+13. Importing Parse Information From Other Projects
+     - It would be nice if you could parse some code that is used alot 
+       such as an include directory, and then import that parse 
+       information into one or more other projects.  
+
+14. Parser Features
+     - Full C++ Support (hasn't been tested yet)
+     - Support for some or all of the GCC Language Extensions and\or 
+       support for non-ANSI C\C++
+     - Performance Improvements (there are *lots* of areas where 
+       performance can be improved)
+
+
+Work that you may consider interesting or worthwhile
+ 
+1.  Metrics
+     - The DataStore is essentially just a tree of objects.  This makes 
+       the job of writing tooling that consumes this information very 
+       straight-forward.  A program metrics tool that calculates things 
+       like number of functions, complexity, or any other standard 
+       measurements would be a good way to familiarize yourself with 
+       writing Miners.	   
+
+2.  Class/Include Hierarchy Views
+     - We are currently storing, in the DataStore, all the information 
+       required to create a Visual Graph of both the Class Hierarchy and 
+       Include File Hierarchy.  We have not however, investigated what is 
+       required to implement a robust layout manager using the GEF 
+       (Graphical Editing Framework) in Eclipse  
+
+3.  Renamer
+     - Another useful tool could be an object renamer. One note of 
+       caution here:
+       We have not tested any sort of round-tripping of the parse 
+       information (i.e. using the parse information to re-generate the 
+       code), so instead of trying to re-gen code, a better implementation 
+       would be just to use the information in the DataStore to find where 
+       objects are used and then handle the re-naming through some simple 
+       file operations.
+
+4.  Test Case Generator
+     - Since we have parse information down to the statement\expression 
+       level, a tool can be written that automatically creates test cases 
+       that test each branch of a conditional statement for example
+
+
+
+
+
+
+
+

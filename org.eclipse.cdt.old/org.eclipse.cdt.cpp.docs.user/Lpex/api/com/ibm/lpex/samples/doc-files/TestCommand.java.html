@@ -1,0 +1,70 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html><head><title>TestCommand.java</title></head><body><pre>
+<font color="#008080">//----------------------------------------------------------------------------</font>
+<font color="#008080">// COMPONENT_NAME: LPEX Editor</font>
+<font color="#008080">//</font>
+<font color="#008080">// IBM(R) C/C++ Productivity Tools for OS/390, Version 1.0 and others</font>
+<font color="#008080">// (C) Copyright IBM Corp. 1998, 2000</font>
+<font color="#008080">//</font>
+<font color="#008080">// DESCRIPTION:</font>
+<font color="#008080">// TestCommand - sample user-defined command.</font>
+<font color="#008080">//----------------------------------------------------------------------------</font>
+
+<font color="#0000ff">package</font><font color="#000000"> com.ibm.lpex.samples;</font>
+
+<font color="#0000ff">import</font><font color="#000000"> com.ibm.lpex.core.LpexCommand;</font>
+<font color="#0000ff">import</font><font color="#000000"> com.ibm.lpex.core.LpexView;</font>
+<font color="#0000ff">import</font><font color="#000000"> java.util.StringTokenizer;</font>
+
+<font color="#008080">/**</font>
+<font color="#008080"> * This class is a sample command implementation.  Running this command will</font>
+<font color="#008080"> * display a short message on the editor message line.</font>
+<font color="#008080"> *</font>
+<font color="#008080"> * &lt;p>Here is the &lt;A HREF="doc-files/TestCommand.java.html">TestCommand code&lt;/A>.</font>
+<font color="#008080"> *</font>
+<font color="#008080"> * &lt;p>To run this sample:</font>
+<font color="#008080"> * &lt;ul></font>
+<font color="#008080"> * &lt;li>Compile the command class:</font>
+<font color="#008080"> *   &lt;pre>javac TestCommand.java&lt;/pre></font>
+<font color="#008080"> * &lt;li>Define the command, by entering this on the editor command line:</font>
+<font color="#008080"> *   &lt;pre>set commandClass.testCommand com.ibm.lpex.samples.TestCommand&lt;/pre></font>
+<font color="#008080"> * &lt;li>Run the command from the editor command line, by entering:</font>
+<font color="#008080"> *   &lt;pre>testCommand message&lt;/pre></font>
+<font color="#008080"> * &lt;/ul></font>
+<font color="#008080"> *</font>
+<font color="#008080"> * @see com.ibm.lpex.core.LpexCommand</font>
+<font color="#008080"> * @see com.ibm.lpex.core.LpexView</font>
+<font color="#008080"> */</font>
+<font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">class</font><font color="#000000"> TestCommand </font><font color="#0000ff">implements</font><font color="#000000"> LpexCommand</font>
+<font color="#000000">{</font>
+<font color="#000000">   </font><font color="#0000ff">public</font><font color="#000000"> </font><font color="#0000ff">boolean</font><font color="#000000"> doCommand(LpexView lpexView, String parameters)</font>
+<font color="#000000">   {</font>
+<font color="#000000">      StringTokenizer st = </font><font color="#0000ff">new</font><font color="#000000"> StringTokenizer(parameters);</font>
+<font color="#000000">      </font><font color="#0000ff">if</font><font color="#000000"> (!st.hasMoreTokens()) {</font>
+<font color="#000000">         lpexView.doCommand(</font><font color="#800080">"set messageText "</font><font color="#000000"> +</font>
+<font color="#000000">          </font><font color="#800080">"Parameters are required for the \"testCommand\" command."</font><font color="#000000">);</font>
+<font color="#000000">         </font><font color="#008080">// return false to indicate that the command syntax was invalid</font>
+<font color="#000000">         </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">false</font><font color="#000000">;</font>
+<font color="#000000">         }</font>
+
+<font color="#000000">      String token = st.nextToken();</font>
+<font color="#000000">      </font><font color="#0000ff">if</font><font color="#000000"> (st.hasMoreTokens()) {</font>
+<font color="#000000">         lpexView.doCommand(</font><font color="#800080">"set messageText \""</font><font color="#000000"> + st.nextToken() +</font>
+<font color="#000000">          </font><font color="#800080">"\" is not a valid parameter for the \"testCommand\" command."</font><font color="#000000">);</font>
+<font color="#000000">         </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">false</font><font color="#000000">;</font>
+<font color="#000000">         }</font>
+
+<font color="#000000">      </font><font color="#0000ff">if</font><font color="#000000"> (token.equals(</font><font color="#800080">"message"</font><font color="#000000">)) {</font>
+<font color="#000000">         lpexView.doCommand(</font><font color="#800080">"set messageText Hello there from testCommand!"</font><font color="#000000">);</font>
+<font color="#000000">         }</font>
+<font color="#000000">      </font><font color="#0000ff">else</font><font color="#000000"> </font><font color="#0000ff">if</font><font color="#000000"> (!token.equals(</font><font color="#800080">"quiet"</font><font color="#000000">)) {</font>
+<font color="#000000">         lpexView.doCommand(</font><font color="#800080">"set messageText \""</font><font color="#000000"> + token +</font>
+<font color="#000000">          </font><font color="#800080">"\" is not a valid parameter for the \"testCommand\" command."</font><font color="#000000">);</font>
+<font color="#000000">         </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">false</font><font color="#000000">;</font>
+<font color="#000000">         }</font>
+
+<font color="#000000">      </font><font color="#008080">// return true to indicate the parameters were specified correctly</font>
+<font color="#000000">      </font><font color="#0000ff">return</font><font color="#000000"> </font><font color="#0000ff">true</font><font color="#000000">;</font>
+<font color="#000000">   }</font>
+<font color="#000000">}</font>
+</pre></body></html>

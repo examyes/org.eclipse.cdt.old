@@ -1,0 +1,114 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>Changing Parse Formats</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<body>
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Changing Parse Formats</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2"> 
+        <p>The formats that are used to parse command line output are stored in a file called 
+           <i>patterns.dat</i> which is located in 
+           <b>&lt;<i>...</i>&gt;\eclipse\plugins\com.ibm.cpp.core</b> directory.
+           There are 3 types of lines allowed in the patterns.dat file:
+        <ol>
+           <li><b>Comments</b> - These lines begin with a pound sign (#) as in:<br>
+               <pre>     #This is a comment</pre>
+           <li><b>Logging</b> - This feature has been temporarily disabled in this version of our plugin
+               <i>This line toggles logging to <i>formats.log</i> on or off.
+               The format is very strict : LOGGING={ON|OFF}, as in:
+               <pre>     LOGGING=OFF</pre> </i>
+               
+           <li><b>Format</b> - These lines are the meat of the file, and are discussed below.
+        </ol>
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Format Syntax</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+        <p>The syntax for a format is very simple:  <i><b>objName</i> = <i>pattern</i></b>,
+           where <b><i>objName</b></i> is the type of object (ie error, warning, grep etc)
+           that you want to create in the IDE when a line of output matches <b><i>pattern</b></i>.
+           As an example, let's assume that we perform some command (like a build) and the output
+           looks like the following:<br>
+        <pre>
+        employee.cpp(4,10) Missing Semicolon
+        manager.hpp(315,15) Undefined symbol 'x'
+        </pre>
+           Here is the format in the default <i>formats.dat</i> that is able to parse this output
+           (explanation to follow):<br><b>error =FILE(LINE,COL) TEXT</b><br><br>
+        <p>So in this case we are going to create <b>error</b> objects in the Command Output View,
+           when we find that line of output contains the pattern: <b>FILE(LINE:COL) TEXT</b>.
+           Currently patterns are NOT regular expressions... they are much more limited.
+           Wildcards (*) will NOT work... see Note at the bottom of this page.  There are four types
+           of information that can be "plucked" from a line of output:<br>
+        <pre>
+        TEXT => Any Character including Whitespace 
+        FILE => String representing the file
+        LINE => Integer denoting the line number
+        COL  => Integer denoting the column
+        </pre>
+        <p>There are a few restrictions on how these flags can be used:  Since a Column makes no
+           sense without knowing what line number you're on, you can't use COL unless you use LINE.
+           Likewise since a line number is useless without knowing what file it's referring to, you
+           can't used LINE unless you use FILE.  You do not have to have a FILE tag in your pattern,
+           but if output is matched, you obviously will not be able to double click on that line and
+           get taken to a Source View.
+       <p>The <i>formats.dat</i> can be updated while you are running the Websphere Studio Workbench.
+          Any changes you make will be seen immediately when you run your next command.  This is handy
+          for quick trial-and-error pattern construction.
+       <p>If you are creating custom objects instead of errors, warnings or informationals, you'll need
+          to make sure that a .gif with same name exists in the 
+          <b>&lt;<i>...</i>&gt;:\eclipse\plugins\com.ibm.cpp.core\icons</b>
+          directory. For example you change the example pattern above to: 
+          <br><b>stupiderror =FILE(LINE,COL) TEXT</b><br><br>then as long as you had a
+          stupiderror.gif file in the icons directory the parsed output would who stupiderror objects.
+       <p>If you have any problems, check out 
+          <a href="../../troubleshooting/commands.htm">Troubleshooting Commands</a>.
+       <p><b>NOTE</b>: This Formats feature is not intended to make it into any future releases.  Instead, the 
+          parsing of command output should be handled by "real" regular-expressions and should be configurable
+          from within the C/C++ Perspective. 
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

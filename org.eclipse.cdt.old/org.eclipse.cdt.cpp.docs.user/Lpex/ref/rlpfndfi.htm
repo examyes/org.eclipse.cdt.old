@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>findText.findText Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>findText.findText parameter</h3>
+<p>The <b>findText.findText</b> parameter may be used to query or set the search text
+for the <b>findText</b> command.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>findText.findText</b> is scoped to the current view.<br>
+  <b>current.findText.findText</b> is scoped to the current view.<br>
+  <b>default.findText.findText</b> is globally scoped.<br>
+  <b>install.findText.findText</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query findText.findText
+set findText.findText [ default | &quot;<i>text</i>&quot; ]
+query current.findText.findText
+query default.findText.findText
+set default.findText.findText [ install | &quot;<i>text</i>&quot; ]
+query install.findText.findText </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      findText.findText</b> command, the current view will use the value of <b>default.findText.findText</b>
+      as the search text for the <b>findText</b> command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>text</i></td>
+    <td valign="top">If you specify the <i>text</i> parameter for the <b>set
+      findText.findText</b> command, the <b>findText</b> command will search for
+      <i>text</i> within the current view.&nbsp; If you specify the <i>text</i>
+      parameter for the set <b>default.findText.findText</b> command, the <b>findText</b>
+      command will search for <i>text</i> within all views that have <b>findText.findText</b>
+      set to <b>default</b>.&nbsp; If you are quoting the <i>text</i> parameter,
+      you will need to ensure that all backslashes and imbedded quotes are
+      quoted with a backslash.&nbsp; e.g. to quote <b>a&quot;b\c</b> you need to
+      specify <b>&quot;a\&quot;b\\c&quot;</b>.</td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.findText.findText</b> command, the <b>findText</b> command will
+      search for the value of <b>install.findText.findText</b> within all of
+      document views that have <b>findText.findText</b> set to <b>default</b>.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>If you do not specify any of the parameters for the <b>set
+  findText.findText</b> command, <b>default</b> is assumed.</p>
+  <p>If you do not specify any of the parameters for the <b>set
+  default.findText.findText</b> command, <b>install</b> is assumed.</p>
+  <p>The <b>query current.findText.findText</b> command will return the text
+  that the <b>findText</b> will search for within the current view.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query findText.findText
+set findText.findText &quot;hello&quot;
+query current.findText.findText
+query default.findText.findText
+set default.findText.findText &quot;hello&quot;
+query install.findText.findText </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcfndtx.htm#top">findText</a> command<br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpfndas.htm#top">findText.asis</a> parameter<br>
+<a href="rlpfndbl.htm#top">findText.block</a> parameter<br>
+<a href="rlpfndcl.htm#top">findText.columns</a> parameter<br>
+<a href="rlpfndem.htm#top">findText.emphasis</a> parameter<br>
+<a href="rlpfnden.htm#top">findText.endColumn</a> parameter<br>
+<a href="rlpfndma.htm#top">findText.mark</a> parameter<br>
+<a href="rlpfndrg.htm#top">findText.regularExpression</a> parameter<br>
+<a href="rlpfndrp.htm#top">findText.replaceText</a> parameter<br>
+<a href="rlpfndst.htm#top">findText.startColumn</a> parameter<br>
+<a href="rlpfndwr.htm#top">findText.wrap</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

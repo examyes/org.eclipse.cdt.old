@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>updateProfile.baseProfile Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>updateProfile.baseProfile parameter</h3>
+<p>The <b>updateProfile.baseProfile</b> parameter may be used to query or set
+the base profile that will be used by the <b>updateProfile</b> command.&nbsp;
+The base profile governs the initial action assignments for key and mouse
+actions. It will also affect the prefix commands that are available with the <b>processPrefix</b>
+action.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>updateProfile.baseProfile</b> is scoped to the current view.<br>
+  <b>current.updateProfile.baseProfile</b> is scoped to the current view.<br>
+  <b>default.updateProfile.baseProfile</b> is globally scoped.<br>
+  <b>install.updateProfile.baseProfile</b> is globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query updateProfile.baseProfile
+set updateProfile.baseProfile { default
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | [ <i>profile</i> ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+query current.updateProfile.baseProfile
+query default.updateProfile.baseProfile
+set default.updateProfile.baseProfile { install
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | [ <i>profile</i> ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+query install.updateProfile.baseProfile </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      updateProfile.baseProfile</b> command, the current view will use the value
+      of <b>default.updateProfile.baseProfile</b> as the base profile for the <b>updateProfile</b>
+      command.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>profile</i></td>
+    <td valign="top">If you specify the <i>profile</i> parameter for the <b>set
+      updateProfile.baseProfile</b> command, the <b>updateProfile</b> command
+      will use the base profile indicated by <i>profile</i>. for the current
+      view&nbsp; If you specify the <i>profile</i> parameter for the <b>set
+      default.updateProfile.baseProfile</b> command, the <b>updateProfile</b>
+      command will use the base profile indicated by <i>baseProfile</i> for all
+      document views that have the <b>updateProfile.baseProfile</b> parameter
+      set to <b>default</b>.&nbsp; The editor recognizes the following base
+      profiles:
+      <ul>
+        <li>brief</li>
+        <li>emacs</li>
+        <li>epm</li>
+        <li>ispf</li>
+        <li>lpex</li>
+        <li>seu</li>
+        <li>vi</li>
+        <li>xedit.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.updateProfile.baseProfile</b> command, all of the views that have <b>updateProfile.baseProfile</b>
+      set to <b>default</b> will use the value of <b>install.updateProfile.baseProfile</b>
+      to determine if the base profile that should be used by the <b>updateProfile</b>
+      command.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>query current.updateProfile.baseProfile</b> command will return the
+  base profile that will be used, within the current view, by the <b>updateProfile</b>
+  command.<br>
+  If you specify a base profile other than one of the ones understood by the
+  editor, the editor will behave as though the <b>lpex</b> base profile was
+  chosen.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query updateProfile.baseProfile
+set updateProfile.baseProfile seu
+query current.updateProfile.baseProfile
+query default.updateProfile.baseProfile
+set default.updateProfile.baseProfile lpex
+query install.updateProfile.baseProfile </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcupdat.htm#top">updateProfile</a> command<br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpbsprf.htm#top">baseProfile</a> parameter<br>
+<a href="rlpcrrnt.htm#top">current</a> parameter<br>
+<a href="rlpdeflt.htm#top">default</a> parameter<br>
+<a href="rlpinstl.htm#top">install</a> parameter<br>
+<a href="rlpupps.htm#top">updateProfile.parser</a> parameter<br>
+<a href="rlpupua.htm#top">updateProfile.userActions</a> parameter<br>
+<a href="rlpupuc.htm#top">updateProfile.userCommands</a> parameter<br>
+<a href="rlpupuka.htm#top">updateProfile.userKeyActions</a> parameter<br>
+<a href="rlpupuma.htm#top">updateProfile.userMouseActions</a> parameter<br>
+<a href="rlpupupr.htm#top">updateProfile.userProfile</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

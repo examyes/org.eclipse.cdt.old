@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>updateProfile.paletteAttributes Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>updateProfile.paletteAttributes parameter</h3>
+<p>The <b>updateProfile.paletteAttributes</b> parameter may be used to query or
+set the style attributes that are to be used for a specified style and palette
+when the <b>updateProfile</b> command is issued.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command<br>
+  <b>current</b> parameter<br>
+  <b>default</b> parameter<br>
+  <b>install</b> parameter</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p><b>updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i> is
+  scoped to the current view.<b><br>
+  current.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i> is
+  scoped to the current view.<br>
+  <strong>default.updateProfile.paletteAttributes</strong>.<i>style</i>.<i>palette</i>
+  is globally scoped.<b><br>
+  install.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i> is
+  globally scoped.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query updateProfile.paletteAttributes.<i>style</i>.<i>palette</i>
+set updateProfile.paletteAttributes.<i>style</i>.<i>palette</i> { default
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | [<i> styleAttributes</i> ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+query current.updateProfile.paletteAttributes.<i>style</i>.<i>palette</i>
+query default.updateProfile.paletteAttributes.<i>style</i>.<i>palette</i>
+set default.updateProfile.paletteAttributes.<i>style</i>.<i>palette</i> { install
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | [ <i>styleAttributes</i> ]
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+query install.updateProfile.paletteAttributes.<i>style</i>.<i>palette</i> </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>style</i></td>
+    <td valign="top">Use the <i>style</i> parameter to indicate the style.&nbsp;
+      The following styles are available:
+      <ul>
+        <li>addedLines</li>
+        <li>background</li>
+        <li>default</li>
+        <li>deletedLines</li>
+        <li>emphasis</li>
+        <li>expandHide</li>
+        <li>messageLine</li>
+        <li>prefixArea</li>
+        <li>prefixText</li>
+        <li>selection</li>
+        <li>sequenceNumber</li>
+        <li>sequenceText</li>
+        <li>statusLine.</li>
+      </ul>
+      <p>Refer to the <strong>styleAttributes</strong> parameter for more
+      information on these styles.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><i>palette</i></td>
+    <td valign="top">Use the <i>palette</i> parameter to indicate the palette
+      for which you wish to define style attributes.&nbsp; When definining a
+      palette you must at a minimum indicate the style attributes for the <b>default</b>
+      style.&nbsp; It is those palettes for which the default style is defined
+      that are returned by the <b>current.updateProfile.palettes</b> parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">default</td>
+    <td valign="top">If you specify the <b>default</b> parameter for the <b>set
+      updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i> command,
+      the current view will use the value of <b>default.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      to determine the style attributes when the <strong>updateProfile</strong>
+      command is issued.</td>
+  </tr>
+  <tr>
+    <td valign="top"><i>styleAttributes</i></td>
+    <td valign="top">If you specify the <i>styleAttributes</i> parameter for the
+      set <b>updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      command, for the current view, the <b>updateProfile</b> command will use <i>styleAttributes</i>
+      as the style attributes for the style and palette indicated by <i>style</i>
+      and <i>palette</i>..&nbsp; If you specify the <i>styleAttributes</i>
+      parameter for the <b>set default.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      command, for all document views that have the <b>updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      parameter set to <b>default</b>, the <b>updateProfile</b> command will use
+      <i>styleAttributes</i> as the style attributes for the style and palette
+      indicated by <i>style</i> and <i>palette</i>.&nbsp; For information on the
+      valid syntax of <i>styleAttributes</i>, refer to the <b>styleAttributes</b>
+      parameter.</td>
+  </tr>
+  <tr>
+    <td valign="top">install</td>
+    <td valign="top">If you specify the <b>install</b> parameter for the <b>set
+      default.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      command, all of the views that have <b>updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      set to default will use the value of <b>install.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+      to determine the style attributes when the <b>updateProfile</b> command is
+      issued.</td>
+  </tr>
+</table>
+<h4>Description</h4>
+<blockquote>
+  <p>The <b>query current.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+  command will return the style attributes that the <b>updateProfile</b> command
+  will use for the current view for the specified style and palette.</p>
+  <p>If you do not specify any parameters for the <b>set
+  updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i> command, no
+  style attributes will be used for the specified style and palette.</p>
+  <p>If you do not specify any parameters for the <b>set
+  default.updateProfile.paletteAttributes</b>.<i>style</i>.<i>palette</i>
+  command, no default style attributes will be used for the specified style and
+  palette.</p>
+</blockquote>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query updateProfile.paletteAttributes.default.white
+set updateProfile.paletteAttributes.default.white 0 0 170 255 255 255
+set updateProfile.paletteAttributes.default.white default
+set updateProfile.paletteAttributes.prefixArea.black
+query current.updateProfile.paletteAttributes.default.gray
+query default.updateProfile.paletteAttributes.background.white
+set default.updateProfile.paletteAttributes.background.white 0 0 0 204 204 204
+set default.updateProfile.paletteAttributes.background.white install
+set default.updateProfile.paletteAttributes.background.white
+query install.updateProfile.paletteAttributes.default.white </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlcupdat.htm#top">updateProfile</a> command<br>
+<a href="rlppalet.htm#top">palette</a> parameter<br>
+<a href="rlpstyla.htm#top">styleAttributes</a> parameter<br>
+<a href="rlpuppl.htm#top">updateProfile.palette</a> parameter<br>
+<a href="rlpuppls.htm#top">updateProfile.palettes</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

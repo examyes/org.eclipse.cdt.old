@@ -1,0 +1,16 @@
+<topics id="topics_GettingStarted"> 
+ <topic label="Introduction"> 
+  <topic label="About This Plugin"    href="gettingstarted/introduction/about.htm"/>
+  <topic label="Contact Us"           href="frames/contact.htm"/> 
+ </topic> 
+ <topic label="Installation"> 
+  <topic label="Install the plugin"   href="gettingstarted/installation/install.htm"/>
+ </topic> 
+ <topic label="Create a C/C++ project">
+  <topic label = "Setting Preferences" href="gettingstarted/createproject/preferences.htm"/>
+  <topic label = "Project Wizard"      href="gettingstarted/createproject/create.htm"/>
+  <topic label = "Import Wizard"       href="gettingstarted/createproject/import.htm"/>
+ </topic>
+</topics>
+
+ 

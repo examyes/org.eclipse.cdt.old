@@ -1,0 +1,99 @@
+<html>
+<head>
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <title>Troubleshooting Command Launching & Output</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Troubleshooting Command Launching & Output</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2"> 
+  <p>
+     <li><font size=+1><b>Clicking on the Run Button does not launch a Command:</b></font><br>
+        A Command will not launch if there is no <i>Working Directory</i> specified. We will
+        fix this soon, so that the <i>Run</i> button is not enabled in this case. The workaround
+        for this is just to pick a directory either by Browsing from within the Command View, or
+        by picking a directory in the
+        <a href="../concepts/views/navigator.htm">Navigator View</a>.<br><br>
+     <li><font size=+1><b>Pressing &lt;Enter&gt; does not launch a Command:</b></font><br>
+        There is known problem in the <a href="../concepts/views/command.htm">Command View</a>
+        with &lt;Enter&gt not causing the command to start.
+        We are looking into it. As a workaround, you can click the <i>Run</i> button or if you 
+        must use the keyboard...press &lt;Tab&gt; until the <i>Run</i> button is selected, then
+        pressing the &lt;Spacebar&gt will cause the Command to be run.<br><br>
+     <li><font size=+1><b>Trouble cancelling a command or commands that never finish:</b></font><br>
+        Each command is launched on a background thread, so it is possible that a Cancel request
+        will not be immediately received by a command thread. In some cases, commands may take
+        a several seconds to actually get Canceled. You can tell if a Command is successfully 
+        cancelled by checking the <a href="../concepts/views/output.htm">Output View</a>
+        for the line "Command Cancelled by User Request"<br>
+        We have also found some command combinations that can result in a command that never 
+        finishes and can cause the Desktop to slow down.  One such command type is the following:<br>
+        <pre><b>      ls | xargs grep "some text"</b></pre>  
+        In some extreme cases it may be necessary to kill the "java.exe" process that the 
+        Studio Workbench is running in (via Task Manager).  This will be fixed shortly.<br><br>
+     <li><font size=+1><b>Commands Won't Work on Windows 98:</b></font><br>
+        There is a limitation on Windows 98 that prevents us from being able to redirect
+        stderr to stdout.  If you are running on Windows 98, you will need to edit 
+        <i>runCommand.bat</i> which is in the <b><i>&lt;...&gt;/eclipse/plugins/com.ibm.cpp.core</i></b>
+        directory         and change the line:<pre><b>      call %THECOMMAND% 2&gt;&1</b></pre>
+        to<pre><b>      call %THECOMMAND%</b></pre> This will result in only stdout appearing
+        in the Command Output View. We will address this problem in a future release.<br><br>
+     <li><font size=+1><b>If error messages are getting parsed incorrectly or not at all:</b></font><br>
+        The formats mechanism is only a temporary proof-of-concept.  Eventually full regular expression
+        support will be added as well as a clean, integrated way of changing or adding to them. In the
+        meantime, here are the most common causes for formats not parsing output:<br>
+        <ol>
+           <li><b>Whitespace problems</b>: The biggest weakness with the current formats mechanism is
+              the lack of proper Whitespace control.  If a line of output contains "HELLO***SOME_FILE"
+              (where a * is a space), then the format <i><b>output=TEXT*FILE</i></b> will NOT match
+              the pattern in the way you might expect.  TEXT will match "HELLO" and FILE will match
+              "**SOME_FILE". To correctly match this pattern, you need to change the format to
+              <i><b>output=TEXT***FILE</i></b>.<br><br>
+           <li><b>Patterns too general</b>: Output is parsed with the formats in the order they appear in 
+              formats.dat.  Therefore if you have something like the following in formats:dat:<br>
+              error1 = TEXT:FILE<br> error2 = TEXT:FILE:LINE<br> No output will ever be parsed as
+              an error2 since error1 is more "general" than error2. (Any output that could be parsed
+              as error2 will be parsed as an error1 where the FILE in error1 contains everything after
+              the first ':') So the fix for this case is to switch the order that error1 and error2
+              appear in formats.dat.<br><br>
+           <li><b>No icons appearing</b>: To get icons appearing for the parsed output, there needs to
+              be an icon in the <b>&lt;<i>...</i>&gt;/eclipse/plugins/com.ibm.cpp.core/icons</b>
+              directory of the form <b><i>objName</i>.gif</b> for every format
+              (<b><i>objName</i> = some_pattern</b>) in the <b>formats.dat</b> file.
+        </ol>
+      </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../frames/contact.htm">Contact Us</a>
+     <p><a href="../hglegal.htm"><img border="0" src="../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>

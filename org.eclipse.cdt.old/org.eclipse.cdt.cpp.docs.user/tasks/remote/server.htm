@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>The C/C++ Development Plugin - Running the Server</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Running the Server/Daemon</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+       
+
+       <h3>Server: Running the Server/Daemon</h3>
+       <h4>Server: Installation </h4>
+       <ul>
+       <li>If you downloaded the full version of the CppPlugin (i.e. <code>C_IDE_Linux_R1.0_mmddyy.tgz</code>), then make sure that the following directories exist in your <code>plugins</code> directory.<br><br>
+       <code>/home/user/eclipse/plugins/com.ibm.dstore.extra</code><br>
+       <code>/home/user/eclipse/plugins/com.ibm.dstore.core</code><br>
+       <code>/home/user/eclipse/plugins/com.ibm.dstore.miners</code><br>
+       <code>/home/user/eclipse/plugins/com.ibm.cpp.miners</code><br>    
+       </li><br>
+       <li>If you only downloaded the server version (i.e. "<code>C_IDE_Linux_Server_R1.0_mmddyy.tgz</code>") then:<br>
+       <ol>
+       
+       <li>choose a directory on your server machine to install the DataStore server
+       <pre>/home/user/dstore/</pre></li>
+       <li>copy the <code>C_IDE_Linux_Server_R1.0_mmddyy.tgz</code> file to the server machine in the chosen location</li>
+       <li>untar C_IDE_Linux_Server_R1.0_mmddyy.tgz:
+       <pre>tar zxvf C_IDE_Linux_Server_R1.0_mmddyy.tgz </pre>
+       You should have the following directories:<br>
+       <code>/home/user/dstore/com.ibm.dstore.extra</code><br>
+       <code>/home/user/dstore/com.ibm.dstore.core</code><br>
+       <code>/home/user/dstore/com.ibm.dstore.miners</code><br>
+       <code>/home/user/dstore/com.ibm.cpp.miners</code><br>  
+       </li></ol></li>
+       </ul>
+<br>
+
+       <h4>Running a DSTORE SERVER</h4>
+       <ul>
+       <li>You need to run the script "<code>server.linux</code>" which is located in the directory <code>com.ibm.dstore.core</code>. So, if you have the full version the CppPlugin:
+        <pre>
+	cd /home/user/eclipse/plugins/com.ibm.dstore.core
+	./server.linux
+	</pre>	
+	</li>
+	<li> 
+	If you only have the server version (i.e. downloaded "<code>C_IDE_Linux_Server_R1.0_mmddyy.tgz</code>") then:
+	 <pre>
+	 cd /home/user/dstore/com.ibm.dstore.core
+	 ./server.linux
+	 </pre>
+	 </li>
+       </ul>
+
+       <h4>Running a DSTORE DAEMON</h4>
+        <ul>
+	<li> Make sure that you are running as <b>root</b>.  If the daemon is not run under root, it will be unable to authenticate connecting users.</li><br><br>
+       <li>You need to run the script "<code>daemon.linux</code>" which is located in the directory <code>com.ibm.dstore.core</code>. So, if you have the full version the CppPlugin:
+        <pre>
+	cd /home/user/eclipse/plugins/com.ibm.dstore.core
+	./daemon.linux
+	</pre>	
+	</li>
+	</li>
+	<li> 
+	If you only have the server version (i.e. downloaded "<code>C_IDE_Linux_Server_R1.0_mmddyy.tgz</code>") then:
+	 <pre>
+	 cd /home/user/dstore/com.ibm.dstore.core
+	 ./daemon.linux
+	 </pre>
+	 </li>
+	</ul>
+
+<hr>
+
+       <h3 color='red'>Server: Installing/Running the Server/Daemon MANUALLY</h3>
+If for some reason the scripts above failed to run the server/daemon, then try runnning the server/daemon manually.<br>
+The following assumes you downloaded the  full CppPlugin(i.e. <code>C_IDE_Linux_R1.0_mmddyy.tgz</code>). If you instead downloaded only the server version <code>C_IDE_Linux_Server_R1.0_mmddyy.tgz</code>, then replace all references to <code>/home/user/eclipse/plugins/</code> with <code>/home/user/dstore/</code> 
+
+       <h4 color='blue'>Server: Installation </h4>
+       <ol>
+       <li>Make sure that the following directories exist in your <code>plugins</code> directory.<br>
+       <code>/home/user/eclipse/plugins/com.ibm.dstore.extra</code><br>
+       <code>/home/user/eclipse/plugins/com.ibm.dstore.core</code><br>
+       <code>/home/user/eclipse/plugins/com.ibm.dstore.miners</code><br>
+       <code>/home/user/eclipse/plugins/com.ibm.cpp.miners</code>    
+       </li><br><br>
+       <li>Define the environment variable <code>A_PLUGIN_PATH</code> as follows:<br>
+       <pre>export A_PLUGIN_PATH=/home/user/eclipse/plugins</pre>
+       </li>
+       <li>Set your CLASSPATH as follows:
+        <pre>
+export CLASSPATH=/home/user/eclipse/plugins/com.ibm.dstore.extra/
+dstore_extra_server.jar:/home/user/eclipse/plugins/com.ibm.dstore
+.core/dstore_core.jar:/home/user/eclipse/plugins/com.ibm.dstore.m
+iners/dstore_miners.jar:/home/user/eclipse/plugins/com.ibm.cpp.mi
+ners/cpp_miners.jar:$CLASSPATH
+        </pre>      
+       </li>
+       </ol>
+
+       <h4 color='blue'>Running a DStore Server </h4>
+       <ol>
+       <li>Change directory to <pre>/home/user/eclipse/plugins/com.ibm.dstore.core</pre> </li>
+       <li>Type the following to start a DStore Server:<br>
+	<pre>java -DA_PLUGIN_PATH=$A_PLUGIN_PATH com.ibm.dstore.core.server.Server [port]</pre><br>
+
+	NOTE: By default the port is 4033.  
+       </li>
+       </ol>
+
+       <h4 color='blue'>Running a DStore Daemon </h4>
+       <ol>
+       <li> Make sure that you are running as <b>root</b>.  If the daemon is not run under root, it will be unable to authenticate connecting users.</li><br><br>
+       <li>Type the following to start a DStore Daemon:<br>
+	<pre>java -DA_PLUGIN_PATH=$A_PLUGIN_PATH com.ibm.dstore.core.server.ServerLauncher</pre><br>
+       </ol>
+
+     </td>
+  </tr> 
+</table>
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->

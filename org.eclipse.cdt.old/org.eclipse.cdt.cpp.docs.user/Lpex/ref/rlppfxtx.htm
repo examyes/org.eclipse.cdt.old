@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>prefixText Parameter</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h3><a name="top"></a>prefixText parameter</h3>
+<p>The <b>prefixText</b> parameter may be used to query or set the current
+element's prefix text.&nbsp; The prefix area is the area to the left of the text
+area that is visible when <b>current.prefixArea</b> is <b>on</b>.&nbsp;
+Prefix text is normally entered by the user, and is used by the <b>processPrefix</b>
+command to run prefix commands for base profiles like <b>ispf</b>, <b>seu</b>,
+and <b>xedit</b>.</p>
+<h4>Availability</h4>
+<blockquote>
+  <p><b>query</b> command<br>
+  <b>set</b> command</p>
+</blockquote>
+<h4>Scope</h4>
+<blockquote>
+  <p>The current element of the current view.</p>
+</blockquote>
+<h4>Syntax</h4>
+<blockquote>
+  <pre>query prefixText
+set prefixText <i>text</i> </pre>
+</blockquote>
+<h4>Parameters</h4>
+<table border="0" cellpadding="5" width="100%">
+  <tr>
+    <td valign="top"><i>text</i></td>
+    <td valign="top">Use the <i>text</i> parameter to specify the prefix text
+      for the current element.</td>
+  </tr>
+</table>
+<h4>Examples</h4>
+<blockquote>
+  <pre>query prefixText
+set prefixText cc </pre>
+</blockquote>
+<hr>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+</table>
+<p><img src="../images/ngrelr.gif" width="153" height="9"><br>
+<a href="rlcquery.htm#top">query</a> command<br>
+<a href="rlcset.htm#top">set</a> command<br>
+<a href="rlpinpfx.htm#top">inPrefix</a> parameter<br>
+<a href="rlppfxa.htm#top">prefixArea</a> parameter<br>
+<a href="rlppfxaw.htm#top">prefixAreaWidth</a> parameter<br>
+<a href="rlppfxpo.htm#top">prefixPosition</a> parameter<br>
+<a href="rlppfxpr.htm#top">prefixProtect</a> parameter<br>
+<a href="rlpupbpr.htm#top">updateProfile.baseProfile</a> parameter</p>
+<p><a href="../concepts/cllnotic.htm#top"><img src="../images/nlibmcpy.gif" border="0" width="219" height="21"></a></p>
+
+</body>
+</html>

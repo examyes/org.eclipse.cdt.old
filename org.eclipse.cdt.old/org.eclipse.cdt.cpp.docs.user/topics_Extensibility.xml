@@ -1,0 +1,14 @@
+<topics id="topics_Extensibility"> 
+ <topic label="Introduction">
+  <topic label="Definitions"            href="extensibility/intro/definitions.htm"/>  
+ </topic>
+ <topic label="Model">
+  <topic label="DataStore Architecture"       href="extensibility/model/architecture.htm"/>
+  <topic label="DataElements"                 href="extensibility/model/dataelements.htm"/>
+  <topic label="DataStore"                    href="extensibility/model/datastore.htm"/>
+ </topic>
+ <topic label="Developing Miners">
+  <topic label="The Miner class"              href="extensibility/developing/minerclass.htm"/>  
+ </topic>
+</topics>
+
