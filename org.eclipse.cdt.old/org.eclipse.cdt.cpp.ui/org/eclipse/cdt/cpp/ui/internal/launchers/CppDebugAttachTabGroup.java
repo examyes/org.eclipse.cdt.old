@@ -16,7 +16,6 @@ public class CppDebugAttachTabGroup extends AbstractLaunchConfigurationTabGroup 
 	 * @see ILaunchConfigurationTabGroup#createTabs(ILaunchConfigurationDialog, String)
 	 */
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-      System.out.println("CppDebugAttachTabGroup:createTabs()");
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[2];
 		tabs[0] = new CppAttachInfoTab();
 		tabs[1] = new CommonTab();

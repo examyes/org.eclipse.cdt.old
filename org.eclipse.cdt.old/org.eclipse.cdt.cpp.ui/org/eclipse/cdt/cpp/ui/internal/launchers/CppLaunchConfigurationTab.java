@@ -25,8 +25,6 @@ public abstract class CppLaunchConfigurationTab extends AbstractLaunchConfigurat
 
 	protected IStructuredSelection getSelection()
    {
-
-      System.out.println("CppLaunchConfigurationTab:getSelection");
 		IWorkbenchWindow window= CppPlugin.getActiveWorkbenchWindow();
 		if (window != null) {
 			ISelection selection= window.getSelectionService().getSelection();
