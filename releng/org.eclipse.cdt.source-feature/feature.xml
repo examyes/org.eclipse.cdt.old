@@ -18,31 +18,6 @@
       <update label="%updateSiteName" url="http://update.eclipse.org/tools/cdt/updates/release"/>
    </url>
 
-   <includes
-         id="org.eclipse.cdt"
-         version="2.0.0"
-         name="%featureName"/>
-
-   <includes
-         id="org.eclipse.cdt.make"
-         version="2.0.0"
-         name="%featureName"/>
-
-   <includes
-         id="org.eclipse.cdt.managedbuilder"
-         version="2.0.0"
-         name="%featureName"/>
-
-   <includes
-         id="org.eclipse.cdt.sdk.source"
-         version="2.0.0"
-         name="%featureName"/>
-
-   <includes
-         id="org.eclipse.cdt.make.bananas"
-         version="2.0.0"
-         name="%featureName"/>
-
    <plugin
          id="org.eclipse.cdt.source"
          download-size="0"
