@@ -964,15 +964,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			for (int j = 0; j < rprojects.length; j++)
 			    {	
 				IProject project = rprojects[j];
-				//***	if (_plugin.isCppProject(project))
+				if (compareFileNames(project.getLocation().toString(), 
+						     projectElement.getSource()))
 				    {
-					if (compareFileNames(project.getLocation().toString(), 
-							     projectElement.getSource()))
+					if (projectElement.getName().equals(project.getName()))
 					    {
-						if (projectElement.getName().equals(project.getName()))
-						    {
-							return project;  
-						    }
+						return project;  
 					    }
 				    }
 			    }

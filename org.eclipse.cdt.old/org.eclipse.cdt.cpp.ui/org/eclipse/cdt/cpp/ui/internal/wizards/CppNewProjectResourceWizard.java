@@ -103,8 +103,6 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		ModelInterface api = ModelInterface.getInstance();
 		if (project instanceof Repository)
 		    {
-			api.openProject(project);
-
 			QualifiedName mountFile = new QualifiedName("Mount Point", newPath.toString());
 			try
 			    {
@@ -115,6 +113,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			    {
 				System.out.println("CppNewProjectResourceWizard setPersistenProperty C++ Project CoreException: " +ce);
 			    }
+			api.initializeProject(project);
 		    }
 		else
 		    {

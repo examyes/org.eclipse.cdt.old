@@ -22,13 +22,15 @@ import org.eclipse.core.runtime.*;
 
 public class RemoteProjectAdapter extends ResourceElement
 {
-  private IProject[] _repositories;
+    private PlatformVCMProvider _provider;
     static private RemoteProjectAdapter _instance;
 
   public RemoteProjectAdapter(DataElement root)
   {
     super(root, null, null);    
-    _repositories = null;
+
+    _provider = PlatformVCMProvider.getInstance();
+
     _instance = this;
   }
 
@@ -39,19 +41,18 @@ public class RemoteProjectAdapter extends ResourceElement
 
   public void setChildren(IProject[] repositories)
   {
-    _repositories = repositories;    
   }
 
 
   public boolean hasChildren(Object o)
   {
-    boolean has = (_repositories != null);
+    boolean has = (getProjects() != null);
     return has;    
   } 
   
   public IProject[] getProjects() 
   {    
-    return _repositories;   
+      return _provider.getKnownProjects();
   }  
 
   public Object[] getElements(Object o) 
@@ -61,26 +62,28 @@ public class RemoteProjectAdapter extends ResourceElement
 
   public Object[] getChildren(Object o) 
   {    
-    return _repositories;   
+      return getProjects();
   }  
 
     public void close()
     {
-	if (_repositories != null)
+	IProject[] repositories = getProjects();
+	
+	if (repositories != null)
 	    {
-	for (int i = 0; i < _repositories.length; i++)
-	    {
-		Repository repository = (Repository)_repositories[i];
+		for (int i = 0; i < repositories.length; i++)
+		    {
+			Repository repository = (Repository)repositories[i];
 
-		try
-		    {
-			repository.close(null);
+			try
+			    {
+				repository.close(null);
+			    }
+			catch (CoreException e)
+			    {
+				System.out.println(e);
+			    }
 		    }
-		catch (CoreException e)
-		    {
-			System.out.println(e);
-		    }
-	    }
 	    }
     }
   

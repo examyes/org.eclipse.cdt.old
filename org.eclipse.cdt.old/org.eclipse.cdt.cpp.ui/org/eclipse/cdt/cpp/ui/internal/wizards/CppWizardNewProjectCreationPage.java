@@ -462,7 +462,6 @@ protected IProject getProjectHandle()
 {    
     if (remoteHostRadio.getSelection())
 	{
-	    System.out.println("remote project");
 	    String name = getProjectFieldValue();
 
 	    ArrayList args = new ArrayList();
@@ -484,7 +483,6 @@ protected IProject getProjectHandle()
 	}
     else
 	{
-	    System.out.println("local project");
 	    return _plugin.getPluginWorkspace().getRoot().getProject(getProjectFieldValue());
 	}
 }

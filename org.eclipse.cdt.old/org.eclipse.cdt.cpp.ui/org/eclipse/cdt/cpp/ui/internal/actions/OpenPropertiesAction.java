@@ -60,38 +60,44 @@ public class OpenPropertiesAction extends CustomAction
 	ModelInterface api = ModelInterface.getInstance();
 	IProject project = api.findProjectResource(_subject);
 	
-	Shell shell = api.getDummyShell();
-	
-	// load pages for the selection
-	// fill the manager with contributions from the matching contributors
-	PropertyPageContributorManager.getManager().contribute(pageManager, project);
-	
-	// testing if there are pages in the manager
-	Iterator pages = pageManager.getElements(PreferenceManager.PRE_ORDER).iterator();
-	String name = project.getName();
-
-	if (!pages.hasNext()) 
+	if (project != null)
 	    {
-		MessageDialog.openInformation(
-					      shell,
-					      WorkbenchMessages.getString("PropertyDialog.messageTitle"), //$NON-NLS-1$
-					      WorkbenchMessages.format("PropertyDialog.noPropertyMessage", new Object[] {name})); //$NON-NLS-1$
-		return;
-	    } 
+		Shell shell = api.getDummyShell();
+		
+		// load pages for the selection
+		// fill the manager with contributions from the matching contributors
+		PropertyPageContributorManager.getManager().contribute(pageManager, project);
+		
+		// testing if there are pages in the manager
+		Iterator pages = pageManager.getElements(PreferenceManager.PRE_ORDER).iterator();
+		String name = project.getName();
+		
+		if (!pages.hasNext()) 
+		    {
+			MessageDialog.openInformation(
+						      shell,
+						      WorkbenchMessages.getString("PropertyDialog.messageTitle"), //$NON-NLS-1$
+						      WorkbenchMessages.format("PropertyDialog.noPropertyMessage", new Object[] {name})); //$NON-NLS-1$
+			return;
+		    } 
+		else
+		    {
+			title = WorkbenchMessages.format("PropertyDialog.propertyMessage", new Object[] {name}); //$NON-NLS-1$
+		    }
+		
+		
+		
+		PropertyDialog propertyDialog = new PropertyDialog(shell, pageManager, new StructuredSelection(project)); 
+		propertyDialog.create();
+		propertyDialog.getShell().setText(title);
+		WorkbenchHelp.setHelp(propertyDialog.getShell(), new Object[]{IHelpContextIds.PROPERTY_DIALOG});
+		propertyDialog.open();
+	    }
 	else
 	    {
-		title = WorkbenchMessages.format("PropertyDialog.propertyMessage", new Object[] {name}); //$NON-NLS-1$
+		System.out.println("project is null");
 	    }
-
-
-	
-	PropertyDialog propertyDialog = new PropertyDialog(shell, pageManager, new StructuredSelection(project)); 
-	propertyDialog.create();
-	propertyDialog.getShell().setText(title);
-	WorkbenchHelp.setHelp(propertyDialog.getShell(), new Object[]{IHelpContextIds.PROPERTY_DIALOG});
-	propertyDialog.open();
     }
-
 }
 
 

@@ -85,18 +85,22 @@ public IWorkspace getWorkspace()
     // create new project connection
     Connection repConnection = new Connection(connection, root);
     Repository nRepository = new Repository(repConnection, root);
-    _repositories.add(nRepository);
-    writeRepositories();
+    addRepository(nRepository);
     return nRepository;
   }
 
   public IRepository createRepository(Connection connection) 
   {
     Repository nRepository = new Repository(connection);
-    _repositories.add(nRepository);
-    writeRepositories();
+    addRepository(nRepository);
     return nRepository;
   }
+
+    public void addRepository(IRepository repository)
+    {
+	_repositories.add(repository);
+	writeRepositories();	
+    }
 
   public void deleteRepository(Repository r)
   {
