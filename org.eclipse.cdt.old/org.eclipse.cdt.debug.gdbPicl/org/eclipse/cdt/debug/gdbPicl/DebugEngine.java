@@ -339,7 +339,7 @@ public class DebugEngine extends Thread
       {
          while (true)
          {
-	   req = EPDC_Request.decodeRequestStream(_connection);
+	   req = EPDC_Request.decodeRequestStream(_connection.getInputStream());
 	   cmd = getCommand(req);
 
 	   if (cmd == null)

@@ -70,7 +70,7 @@ public abstract class Command
             addChangePackets();
             if (Gdb.traceLogger.DBG) 
                 Gdb.traceLogger.dbg(2,"Command.reply about to output _rep="+_rep );
-            _rep.output(connection);
+            _rep.output(connection.getOutputStream());
             if (Gdb.traceLogger.EVT) 
                 Gdb.traceLogger.evt(2,"Command.reply output DONE" );
          }
