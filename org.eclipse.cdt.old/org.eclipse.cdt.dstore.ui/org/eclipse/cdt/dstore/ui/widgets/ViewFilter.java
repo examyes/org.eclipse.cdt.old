@@ -91,9 +91,9 @@ public class ViewFilter extends ViewerFilter
 	      checked.add(descriptor);
 	      if (descriptor != null && dataElement != null && !dataElement.isDeleted())
 		  {
-		      String dataType  = (String)dataElement.getElementProperty(DE.P_TYPE);
-		      String typeName  = (String)descriptor.getElementProperty(DE.P_NAME);
-		      String typeType  = (String)descriptor.getElementProperty(DE.P_TYPE);
+		      String dataType  = dataElement.getType();
+		      String typeName  = descriptor.getName();
+		      String typeType  = descriptor.getType();
 		      
 		      if (dataType != null && typeName != null)
 			  {
@@ -101,19 +101,14 @@ public class ViewFilter extends ViewerFilter
 				  {
 				      return true; 
 				  }
-			      else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+			      else
 				  {
-				      ArrayList abstractedList = descriptor.getAssociated("abstracts");
-				      for (int i = 0; i < abstractedList.size(); i++)
+				      DataElement ddes = dataElement.getDescriptor();
+				      if (ddes != null && ddes.isOfType(descriptor, true))
 					  {
-					      DataElement aDes = (DataElement)abstractedList.get(i);
-					      if (aDes != null && doesExist(aDes, dataElement, checked))
-						  {
-						      return true;
-						  }
-					      
+					      return true;
 					  }
-				      
+
 				      if (_enableContents)
 					  {
 					      ArrayList containsList = descriptor.getAssociated("contents");

@@ -687,7 +687,6 @@ public class DataStore
 	      }
 	  
 	  _hashMap.put(attributes[DE.A_ID], newObject);
-	  //***refresh(parent);
 	  return newObject;
       }
 

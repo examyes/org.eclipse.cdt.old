@@ -208,7 +208,6 @@ public class ExtendedTableViewer extends TableViewer
 			    {
 				getTable().setRedraw(false);
 				remove(parent);
-				//internalRefresh(parent.getParent());
 				getTable().setRedraw(true);				      
 			    }
 				catch (Exception e)
@@ -226,9 +225,7 @@ public class ExtendedTableViewer extends TableViewer
 	    }
 	else if (_currentInput == parent)
 	    {
-		getTable().setRedraw(false);
 		internalRefresh(parent);
-		getTable().setRedraw(true);				      
 	    }
 	else		     
 	    {
@@ -239,14 +236,11 @@ public class ExtendedTableViewer extends TableViewer
 			    {
 				Table table = getTable();
 				table.setRedraw(false);
-				/***/
 				Item item = findItemFor(table, parent);
 				if (item != null)
 				    {
 					updateItem(item, parent);
 				    }
-				/****/
-				//				internalRefresh(parent);					  
 				table.setRedraw(true);
 			    }
 			catch (Exception e)
@@ -264,6 +258,71 @@ public class ExtendedTableViewer extends TableViewer
 	    }
     }	
 
+    private void internalRefresh(DataElement parent)
+    {
+	try
+	    {
+		Table table = getTable();
+		
+		// remove those that are gone		
+		TableItem[] children = table.getItems();
+		ArrayList toRemove = new ArrayList();
+		for (int i = 0; i < children.length; i++) 
+		    {
+			TableItem item = children[i];
+			if (item != null)
+			    {
+				DataElement data = (DataElement)item.getData();
+				if (data == null || 
+				    data.isDeleted() ||
+				    !_viewFilter.select(this, data, null))
+				    {
+					toRemove.add(item);
+				    }
+			    }
+		    }
+		
+
+		table.setRedraw(false);
+		
+		for (int i = 0; i < toRemove.size(); i++)
+		    {
+			TableItem removee = (TableItem)toRemove.get(i);
+			removee.dispose();
+			removee = null;
+		    }
+				
+		// add new or modified
+		for (int i = 0; i < parent.getNestedSize(); i++)
+		    {
+			DataElement child = parent.get(i).dereference();
+			
+			synchronized(child)
+			    {
+				if (_viewFilter.select(this, child, null))
+				    {
+					
+					Item item = findItemFor(table, child);
+					if (item != null)
+					    {
+						updateItem(item, child);
+					    }
+					else
+					    {
+						item = newItem(table, SWT.NONE, i);
+						updateItem(item, child);
+					    }
+				    }
+			    }		
+		    }
+		table.setRedraw(true);
+
+	    }
+	catch (Exception e)
+	    {
+		System.out.println(e);
+	    }				
+    }
     
     protected Item newItem(Widget parent, int flags, int ix)  
     {

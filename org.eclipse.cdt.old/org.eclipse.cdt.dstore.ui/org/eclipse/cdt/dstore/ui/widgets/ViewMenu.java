@@ -626,8 +626,15 @@ public class ViewMenu implements IMenuListener
     public void enable(boolean flag)
     {
 	_isEnabled = flag;
-	_filterLabel.setEnabled(flag);
-	_relationLabel.setEnabled(flag);
+	if (!_filterLabel.isDisposed())
+	    {
+		_filterLabel.setEnabled(flag);
+	    }
+
+	if (!_relationLabel.isDisposed())
+	    {
+		_relationLabel.setEnabled(flag);
+	    }
     }
 }
 

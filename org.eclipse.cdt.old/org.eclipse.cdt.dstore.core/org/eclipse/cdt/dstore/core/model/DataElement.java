@@ -32,6 +32,10 @@ public final class DataElement implements Serializable, IDataElement
     private DataElement         _referencedObject = null;
     
     private PropertySource      _propertySource = null;
+
+
+    // convenience
+    private DataElement         _abstracts = null;
   
   /////////////////////////////////////////
   //
@@ -604,11 +608,23 @@ public final class DataElement implements Serializable, IDataElement
       }
 
 
+    private DataElement getAbstractsRelationship()
+    {
+	if (_abstracts == null)
+	    {
+		String abstractsStr = _dataStore.getLocalizedString("model.abstracts");
+		_abstracts = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, abstractsStr);
+	    }
+	return _abstracts;
+    }
+
+
   /////////////////////////////////////////
   //
   // comparisons and searching
   //
   /////////////////////////////////////////
+
 
     public boolean isOfType(String typeStr)
     {
@@ -647,7 +663,7 @@ public final class DataElement implements Serializable, IDataElement
 			    }
 		    }
 
-		ArrayList abstracted = type.getAssociated(_dataStore.getLocalizedString("model.abstracts"));
+		ArrayList abstracted = type.getAssociated(getAbstractsRelationship());
 		for (int i = 0; (i < abstracted.size()) && !result; i++)
 		    {
 			DataElement subDescriptor = (DataElement)abstracted.get(i);

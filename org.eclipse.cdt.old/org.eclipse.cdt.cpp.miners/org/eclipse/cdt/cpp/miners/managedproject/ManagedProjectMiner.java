@@ -173,7 +173,7 @@ public class ManagedProjectMiner extends Miner
 			refresh(project);
 		}
 		else if (name.equals("C_REFRESH"))
-        {
+		{
 		 	refreshProject(project);
   			parseAmFile(project); 
 		}
@@ -189,7 +189,6 @@ public class ManagedProjectMiner extends Miner
 	}
 	private DataElement refreshProject(DataElement theUnmanagedProject)
 	{
-
 		return null;
 	}
 }
