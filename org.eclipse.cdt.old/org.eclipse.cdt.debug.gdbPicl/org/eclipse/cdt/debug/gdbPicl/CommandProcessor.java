@@ -14,7 +14,7 @@ import org.eclipse.cdt.debug.gdbPicl.commands.CmdTerminateDE;
 import org.eclipse.cdt.debug.gdbPicl.commands.Command;
 
 import com.ibm.debug.epdc.EPDC_EngineSession;
-import com.ibm.debug.internal.pdt.connection.Connection;
+
 
 /**
  * CommandProcessor main class.

@@ -140,7 +140,6 @@ import com.ibm.debug.epdc.EReqVerifyViews;
 import com.ibm.debug.epdc.EReqVersion;
 import com.ibm.debug.epdc.EReqViewFileInfoSet;
 import com.ibm.debug.epdc.EReqViewSearchPath;
-import com.ibm.debug.internal.pdt.connection.Connection;
 
 
 /**

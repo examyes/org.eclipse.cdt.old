@@ -5,7 +5,7 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl;
-import com.ibm.debug.internal.pdt.connection.Connection;
+
 
 /**
  * The DebugEngine class represents one debug engine.  You may instantiate

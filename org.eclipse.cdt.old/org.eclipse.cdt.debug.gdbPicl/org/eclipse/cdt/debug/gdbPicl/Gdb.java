@@ -23,7 +23,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
-import com.ibm.debug.internal.pdt.connection.SocketConnection;
+
 
 /**
  * Java Debug Engine (JDE) main class.
