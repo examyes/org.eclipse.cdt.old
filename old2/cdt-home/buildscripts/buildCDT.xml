@@ -12,7 +12,7 @@
     <property name="rt" value="${bootclasspath}" />
         
     <!--  default target that runs complete build   -->
-    <target name="run" depends="clean,fetchAll,slamBuildId,copyScripts,compile,build.update.jar,build.zips,zip.distribution,build.sources,zip.sources" />
+    <target name="run" depends="copyScripts,clean,fetchAll,slamBuildId,copyScripts,compile,build.update.jar,build.zips,zip.distribution,build.sources,zip.sources" />
     
     <!--  all features required to build eclipse sdk and javadoc  -->
     <target name="allElements">
@@ -105,7 +105,7 @@
     <target name="copyScripts" depends="init">
         <copy todir="${install}" overwrite="true" >
             <fileset dir="buildScripts" includes="features/org.eclipse.cdt-feature/build.xml" />
-            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${platformId}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml" />
+            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${os}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml" />
         </copy>
     </target>
     
