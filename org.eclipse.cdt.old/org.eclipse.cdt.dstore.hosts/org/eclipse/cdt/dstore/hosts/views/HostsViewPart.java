@@ -71,6 +71,10 @@ public class HostsViewPart extends GenericViewPart
 		{		    
 		    // for this view, the global datastore makes sense
 		    DataElement root = dataStore.getRoot();
+		    DataElement descriptor = root.getDescriptor();
+		    DataElement property = dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, "abstracted by");
+		    DataElement schema = dataStore.getDescriptorRoot();
+
 		    _viewer.setInput(root);
 		    _viewer.selectFilter("Hosts");
 		}

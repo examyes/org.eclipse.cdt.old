@@ -41,7 +41,7 @@ import org.eclipse.jface.action.*;
 
 public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 {
-    private static HostsPlugin         _instance;
+    private static HostsPlugin         _instance = null;
     
     private static ClientConnection    _clientConnection;
     private static ConnectionManager   _connectionManager;
@@ -129,6 +129,7 @@ public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 								loadScope);
 		
 		_clientConnection = new ClientConnection("Hosts", 2000); 
+		_clientConnection.setHost("Local Host");
 		_clientConnection.addLoader(hostsLoader);	
 		_dataStore = _clientConnection.getDataStore();
 		String install = _corePath;
