@@ -31,9 +31,9 @@ public abstract class GdbVariable  extends Variable
     */
    public static GdbVariable createVariable(DebugSession debugSession, String varName, String type, String value, int nodeID) 
    {
-   		if (value.indexOf("= {") != -1)
+   		if (value.startsWith("{"))
    		{		
-	         return new GdbObjectVariable(debugSession, varName, type, value, nodeID);
+	         return new GdbObjectVariable(debugSession, varName, type, value, varName, nodeID);
    		}
    		else
    		{
