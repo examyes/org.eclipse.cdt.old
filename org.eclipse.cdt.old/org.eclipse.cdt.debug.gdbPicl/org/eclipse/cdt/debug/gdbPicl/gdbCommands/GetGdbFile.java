@@ -290,9 +290,10 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
 	  
       // find start address of file
       
-      for (int lineNum=1; lineNum <= totalLines; lineNum++)
-      {
-	      cmd = "info line "+fileName+":"+lineNum;
+//      for (int lineNum=1; lineNum <= totalLines; lineNum++)
+//      {
+//	      cmd = "info line "+fileName+":"+lineNum;
+		  cmd = "info line "+fileName+":1";
 	      if (Gdb.traceLogger.DBG) 
 	          Gdb.traceLogger.dbg(3,"GetGdbFile.getStartEnd cmd="+cmd );
 	      ok = _debugSession.executeGdbCommand(cmd);
@@ -305,10 +306,10 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
 	      str = lines[0];
 	      if (Gdb.traceLogger.DBG) 
 	          Gdb.traceLogger.dbg(2,"GetGdbFile.getStartEnd start str="+str );
-	          
+/*	          
 	      if (str.indexOf("contains no code") >= 0)
 	      	continue;
-	          
+*/	          
 	      //Line nn of "FileName" starts at address 0xHHHHHH <fcnMane+nnnn> and ends at 0xHHHHHH <fcnName+nnnn>.
 	      keyword = " at address 0x";
 	      address = str.indexOf(keyword);
@@ -317,7 +318,7 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
 	      str = str.substring(address+keyword.length()-2);  // include '0x' in address
 	      end = str.indexOf(" ");
 	      startAddress = str.substring(0,end);
-	      
+/*	      
 	      Integer s = Integer.decode(startAddress);
 	      Integer e = Integer.decode(endAddress);	      
 	      int startAdd = s.intValue();
@@ -326,6 +327,7 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
 	      if (startAddress != null && startAdd < endAdd)
 	      	break;
       }
+*/      
 	  
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"GetGdbFile.getStartEnd start="+startAddress+" end="+endAddress );
