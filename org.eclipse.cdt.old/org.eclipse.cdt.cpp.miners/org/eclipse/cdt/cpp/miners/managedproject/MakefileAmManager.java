@@ -516,8 +516,6 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-				out.write(getGeneratedStamp());
-				out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					if(line.indexOf(_la_SOURCES)!=-1)
@@ -642,7 +640,7 @@ public class MakefileAmManager {
 				String name = parent.listFiles()[i].getName();
 				if(line.indexOf(name)==-1 && 
 					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
-					line = line.concat(" ").concat(parent.listFiles()[i].getName());
+					line = line.concat(parent.listFiles()[i].getName()).concat(" ");
 			}
 		return line;
 	}
@@ -943,13 +941,14 @@ public class MakefileAmManager {
 		while (tokenizer.hasMoreTokens())
 		{
 			String token = tokenizer.nextToken();
+			int classification = classifier.classify(Makefile_am);
 			
-			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1)
+			if(token.indexOf(Makefile_am.getParentFile().getName())!=-1 && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
 			{
-				int classification = classifier.classify(Makefile_am);
-				if(classification==STATICLIB && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
+				
+				if(classification==STATICLIB)
 					token = getModifiedLibString(token,getLibName(Makefile_am,_LIBRARIES));
-				else if (classification==SHAREDLIB && token.indexOf(getLibName(old,"LIBRARIES"))!=-1)
+				else if (classification==SHAREDLIB)
 					token = getModifiedLibString(token,getLibName(Makefile_am,_LTLIBRARIES));
 				else
 					token = "";
