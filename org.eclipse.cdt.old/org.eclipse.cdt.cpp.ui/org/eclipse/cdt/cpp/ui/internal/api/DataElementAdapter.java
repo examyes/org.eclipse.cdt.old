@@ -37,26 +37,26 @@ public class DataElementAdapter
       ModelInterface api = ModelInterface.getInstance();
       IProject project = e.getProject();
       
-      DataStore dataStore = DataStoreCorePlugin.getPlugin().getCurrentDataStore();
-      if (project != null && dataStore != null)
+      DataElement projectElement = api.findProjectElement(project);
+      if (projectElement != null)
 	  { 
-	      String path = new String(e.getLocation().toOSString());
-	      System.out.println("getting root for " + path);
-	      
-	      DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
-	      DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
-	      
-	      if (projectObj != null)
+	      DataStore dataStore = projectElement.getDataStore();
+	      ArrayList parseReferences = projectElement.getAssociated("Parse Reference");
+	      if (parseReferences.size() > 0)
 		  {
-		      DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);		      		      DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
+		      DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
+		      DataElement parsedSource = projectParseInformation.getDataStore().find(projectParseInformation, DE.A_NAME, "Parsed Files", 1);
 		      
-		      System.out.println("got " + pathElement);
-		      return pathElement;
+		      String path = e.getLocation().toOSString();
+		      
+		      if (parsedSource != null)
+			  {
+			      DataElement pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
+			      
+			      return pathElement;
+			  }
 		  }
-	      
-	      System.out.println("got nothing!");
 	  }
-      
       return null;
   }
 
