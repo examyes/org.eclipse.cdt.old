@@ -18,23 +18,20 @@ $cdtutilsdir="cdt_utils";
 $tomcatpath="$plugins_dir/$cdtutilsdir";
 $lucenepath="$plugins_dir/$cdtutilsdir";
 $xercespath="$plugins_dir/$cdtutilsdir";
-$helpClasspath="$lucenepath/lucene-1.2-rc4.jar:$lucenepath/lucene-demos-1.2-rc4.jar:$tomcatpath/bootstrap.jar:$tomcatpath/catalina.jar:$tomcatpath/jakarta-regexp-1.2.jar:$tomcatpath/jasper-compiler.jar:$tomcatpath/jasper-runtime.jar:$tomcatpath/naming-common.jar:$tomcatpath/naming-factory.jar:$tomcatpath/naming-resources.jar:$tomcatpath/servlet.jar:$tomcatpath/servlets-common.jar:$tomcatpath/servlets-default.jar:$tomcatpath/servlets-invoker.jar:$tomcatpath/servlets-manager.jar:$tomcatpath/servlets-snoop.jar:$tomcatpath/servlets-webdav.jar:$tomcatpath/tomcat-util.jar:$xercespath/xerces.jar:$toolspath";
-$ENV{CDTHELP_TOMCATDIR}="$cdtutilsdir";
+$helpClasspath="$lucenepath/lucene-1.2-rc4.jar:$lucenepath/lucene-demos-1.2-rc4.jar:$tomcatpath/bootstrap.jar:$tomcatpath/catalina.jar:$tomcatpath/jakarta-regexp-1.2.jar:$tomcatpath/jasper-compiler.jar:$tomcatpath/jasper-runtime.jar:$tomcatpath/naming-common.jar:$tomcatpath/naming-factory.jar:$tomcatpath/naming-resources.jar:$tomcatpath/servlet.jar:$tomcatpath/servlets-common.jar:$tomcatpath/servlets-default.jar:$tomcatpath/servlets-invoker.jar:$tomcatpath/servlets-manager.jar:$tomcatpath/servlets-snoop.jar:$tomcatpath/servlets-webdav.jar:$tomcatpath/tomcat-util.jar:$xercespath/xercesImpl.jar:$xercespath/xmlParserAPIs.jar:$toolspath";
 
 $ENV{"CLASSPATH"}="$plugins_dir/org.eclipse.cdt.dstore.extra.server/:$plugins_dir/org.eclipse.cdt.dstore.core/:$plugins_dir/org.eclipse.cdt.dstore.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners/:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/:$plugins_dir/org.eclipse.cdt.dstore.extra.server/extra_server.jar:$plugins_dir/org.eclipse.cdt.dstore.core/dstore_core.jar:$plugins_dir/org.eclipse.cdt.dstore.miners/dstore_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners/cpp_miners.jar:$plugins_dir/org.eclipse.cdt.cpp.miners.parser/miners_parser.jar:$oldClasspath:$helpClasspath";
-
-
 
 while (1)
   {
 
     if (defined($port))
       {
-	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH -DCDTHELP_TOMCATDIR=\$CDTHELP_TOMCATDIR org.eclipse.cdt.dstore.core.server.Server $port");
+	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.Server $port");
       }
     else
       {
-	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH -DCDTHELP_TOMCATDIR=\$CDTHELP_TOMCATDIR org.eclipse.cdt.dstore.core.server.Server");
+	$signo = system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH org.eclipse.cdt.dstore.core.server.Server");
       }
 
     if ($signo &= 127)
