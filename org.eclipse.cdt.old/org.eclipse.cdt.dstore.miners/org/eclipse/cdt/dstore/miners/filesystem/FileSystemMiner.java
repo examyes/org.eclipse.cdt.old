@@ -1040,7 +1040,7 @@ public class FileSystemMiner extends Miner
 	String name = theFile.getName();
 	if (name.endsWith(".exe"))
 	    {
-		theFile.setAttribute(DE.A_TYPE, "executable");
+		theFile.setAttribute(DE.A_TYPE, "binary executable");
 	    }
     }
 
