@@ -148,7 +148,8 @@ public class ParserSchema
   dContents.setDepth(100);
   
   //Set up the abstract object descriptors:
-  dCppObject          = createAbstractDerivativeDescriptor(dObject,          CppObject);
+	//  dCppObject          = createAbstractDerivativeDescriptor(dObject,          CppObject);
+  dCppObject		  = createObjectDescriptor(schemaRoot, CppObject);
   dContCppObject      = createAbstractDerivativeDescriptor(dContObject,      ContCppObject);
   schemaRoot.getDataStore().createReference(dCppObject, dContCppObject, "abstracts", "abstracted by");
   dUsableCppObject    = createAbstractDerivativeDescriptor(dCppObject,       UsableCppObject);
