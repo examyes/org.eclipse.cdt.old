@@ -7,6 +7,11 @@
    provider-name="International Business Machines Corp.">
 <requires>
    <import plugin="org.eclipse.cdt.dstore.core"/>
+
+   <!--These are needed by the HelpMiner-->
+   <import plugin="org.apache.lucene" version="1.2.0"/>
+   <import plugin="org.eclipse.tomcat" version="4.0.3"/>
+   <import plugin="org.apache.xerces" version="3.2.1"/>
 </requires>
 
 <runtime>
@@ -15,6 +20,10 @@
    </library>
    <library name="cpp_miners.jar">
       <export name="*"/>
+   </library>
+
+   <!-- This is needed by the HelpMiner-->
+   <library name="catalina.jar">
    </library>
 </runtime>
 </plugin>

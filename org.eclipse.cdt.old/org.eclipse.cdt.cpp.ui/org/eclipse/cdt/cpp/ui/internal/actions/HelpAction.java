@@ -10,7 +10,7 @@ import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
-import org.eclipse.cdt.linux.help.*;
+import org.eclipse.cdt.cpp.ui.internal.help.*;
 
 public class HelpAction extends CustomAction
 { 
@@ -24,7 +24,8 @@ public class HelpAction extends CustomAction
 	String theKey = getKey(_subject.getName());
 	if (theKey != null)
 	    {
-		HelpPlugin.getDefault().showMatches(theKey,IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT); //find the docs
+		LaunchSearch.getDefault().showHelpView();	
+		LaunchSearch.getDefault().doSearch(theKey,IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT);
 	    }
     }
     

@@ -26,7 +26,6 @@
    <import plugin="org.eclipse.cdt.dstore.core"/>
    <import plugin="org.eclipse.cdt.dstore.ui"/>
    <import plugin="org.eclipse.cdt.dstore.hosts"/>
-   <import plugin="org.eclipse.cdt.linux.help"/>
 </requires>
 
 <runtime>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app PUBLIC 
+    "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
+
+<web-app>
+
+<servlet>
+  <servlet-name>Help</servlet-name>
+  <servlet-class>HelpWebApp</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>Help</servlet-name>
+  <url-pattern>/Help</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>Help</servlet-name>
+  <url-pattern>*.html</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>Help</servlet-name>
+  <url-pattern>*.htm</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+  <servlet-name>Help</servlet-name>
+  <url-pattern>*.png</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>Help</servlet-name>
+  <url-pattern>*.gif</url-pattern>
+</servlet-mapping>
+
+  <!-- If URL gives a directory but no filename, try index.jsp
+       first and index.html second. If neither is found,
+       the result is server-specific (e.g., a directory 
+       listing). For details, see the chapter on Web apps
+       in More Servlets and JavaServer Pages. -->
+<!--
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+-->
+</web-app>

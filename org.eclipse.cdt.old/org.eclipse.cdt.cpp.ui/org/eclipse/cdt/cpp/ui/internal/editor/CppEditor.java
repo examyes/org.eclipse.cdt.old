@@ -16,7 +16,7 @@ import org.eclipse.cdt.dstore.core.model.DE;
 import org.eclipse.cdt.dstore.core.model.DataElement;
 import org.eclipse.cdt.dstore.core.model.DataStore;
 import org.eclipse.cdt.dstore.ui.resource.ResourceElement;
-import org.eclipse.cdt.linux.help.listeners.CppeditorHelpListener;
+import org.eclipse.cdt.cpp.ui.internal.help.CppeditorHelpListener;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
