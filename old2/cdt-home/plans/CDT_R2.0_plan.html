@@ -45,6 +45,16 @@ consideration by IBM<br>
 from IBM<br>
       </td>
     </tr>
+    <tr>
+      <td style="vertical-align: top;">Oct 20, 2003<br>
+      </td>
+      <td style="vertical-align: top;">Doug Schaefer<br>
+      </td>
+      <td style="vertical-align: top;">Added links to feature specs,
+updated compatibility section,<br>
+parser enhancment feature.<br>
+      </td>
+    </tr>
   </tbody>
 </table>
 <p><i>Please send comments about this draft plan to
@@ -262,9 +272,14 @@ with Previous Releases</h2>
 solidifying and documenting the APIs to various functions in the CDT.
 As
 such, no committment is made to maintain compatibility with previous
-releases. Every effort will be made to maximize compatibility, and area
+releases. Every effort will be made to maximize compatibility, and
+areas
 that do require change will be documented and communicated to the
 community.<br>
+</p>
+<p>Compatability of project description files must be maintained or
+automated upgrade mechanisms put in place to ensure that users of
+previous CDT releases can move seemlessly to CDT 2.0.<br>
 </p>
 <h2><a name="Plan_Items"></a>Plan Items</h2>
 <p>The plan items listed in this section reflect new features of the
@@ -325,7 +340,10 @@ for
 performance, handling of C visibility rules, and for the handling of
 C++ code completion on members.
 &nbsp;The majority of this work will be to make more use of the parser
-to provide accurate and speedy competion proposals.</p>
+to provide accurate and speedy competion proposals. (<a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/contentassist.html?cvsroot=Tools_Project">feature
+spec</a>)<br>
+</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Managed
 Build enhancements.</span> The managed build feature will be enhanced
 for usability and for flexibility to support a large variety of build

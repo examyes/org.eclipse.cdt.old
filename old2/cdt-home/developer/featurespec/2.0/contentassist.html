@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>CDT Content Assist Feature Spec</title>
+  <meta name="author" content="Doug Schaefer">
+  <meta name="description" content="For CDT Release 2.0">
+</head>
+<body>
+<h1>CDT Content Assist Feature Spec<br>
+<small>For CDT Release 2.0</small></h1>
+<p><span style="font-style: italic;">This feature is often also called
+code assist. However, the concept originates in the Eclipse Platform
+with the JFace text editor. As such, this feature applies to more then
+just code. Besides, the interface is called IContentAssistant.</span><br>
+</p>
+<p>Content assist is a feature that is heavy used in many development
+environments and developers soon rely on since it is such a great
+productivity enhancer. This feature is seen as critical to the
+acceptance of the CDT by the mass C/C++ development community.<br>
+</p>
+<h2>Requirements</h2>
+<p>Essentially, when invoked, content assist will present a scrollable
+list of potential code fragments that can be inserted at the current
+cursor location. The following content can be inserted:<br>
+</p>
+<ul>
+  <li>[P1] Code completion - determines the best code that can be
+inserted at the current location. The completions must take into
+account scoping rules for the current language variant (e.g. link scope
+for C). The types of completions include:</li>
+  <ul>
+    <li>[P1] calls to global functions or use of global variables <br>
+    </li>
+    <li>[P1] use of local variables</li>
+    <li>[P1] use of types</li>
+    <li>[P1] calls to member functions and use of member variables</li>
+    <li>[P2] keywords</li>
+  </ul>
+  <li>[P2] Code templates - presents a list of code templates that can
+be applied in the current cursor position. Example templates can
+include C code structures such as 'for' statements, or larger templates
+like classes or member functions. The list of templates must be
+extendible to allow plugins to provide additional templates.</li>
+  <li>[P3] Virtual member function override - when the cursor is an
+appropriate place in a class, the list of potential virtual method
+overrides would be supplied in the completion list.</li>
+</ul>
+<p>When the mouse hovers over one of the list items, and
+additional pane will open up presenting additional information. The
+following content information is required:<br>
+</p>
+<ul>
+  <li>Documentation for code completions - this can come from a number
+of different places and thus, should be extendible. Example extensions
+would include doxygen style documentation, documentation databases, man
+pages, etc.</li>
+  <li>Preview of completion proposal - this would be for code templates
+and virtual member function override to show what text will be inserted
+at the cursor location.</li>
+</ul>
+<h3>Performance<br>
+</h3>
+<p>A key requirement on content assist is performance. A key benefit of
+content assist is to speed up the creation of code content. If it takes
+longer for the completion proposals to be calculate than it would to
+type in the desired text, then this benefit is lost. The actual time
+that would serve as this requirement is subjective, but a reasonable
+initial stake would be a maximum of 3 seconds.<br>
+</p>
+<h2>Architectural Notes</h2>
+<p>Clearly, the extension mechanism provided by the
+SourceViewerConfiguration shall be used to implement a content
+assistant. The CDT already provides an implementation of the content
+assistant. Any changes must be co-ordinated carefully to ensure
+existing functionality isn't compromised.<br>
+</p>
+<h2>Design Notes</h2>
+<p>None at this time.<br>
+</p>
+<br>
+</body>
+</html>
