@@ -1,5 +1,9 @@
 2004-11-11  Rick Moseley  <rmoseley@redhat.com>
 
+	* RPM_Plugin.htm: some massaging by the docs guy
+
+2004-11-11  Rick Moseley  <rmoseley@redhat.com>
+
 	* plugin.xml: change version to 1.2
 
 2004-11-09  Rick Moseley  <rmoseley@redhat.com>
