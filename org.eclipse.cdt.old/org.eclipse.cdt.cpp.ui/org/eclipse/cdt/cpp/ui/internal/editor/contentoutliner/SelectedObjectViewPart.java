@@ -69,6 +69,18 @@ public class SelectedObjectViewPart extends GenericViewPart
   {
   }
 
+    public void setInput(DataElement element)
+    {    
+	_viewer.setInput(element);     
+
+	// open editor
+	CppActionLoader loader = CppActionLoader.getInstance();
+	IOpenAction openAction = loader.getOpenAction();
+	openAction.setSelected(element);
+	openAction.run();
+    }
+
+
   public void setFocus()
   {  
       _viewer.setFocus();
