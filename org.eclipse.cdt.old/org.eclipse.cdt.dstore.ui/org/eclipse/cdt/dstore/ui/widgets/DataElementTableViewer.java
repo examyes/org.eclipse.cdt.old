@@ -31,6 +31,48 @@ import org.eclipse.swt.events.*;
 public class DataElementTableViewer extends TableViewer 
     implements ISelected, Listener, IDataElementViewer
 {
+    private class DelayedRefresher extends Thread
+    {
+	private ArrayList _elements;
+	private Shell _shell;
+	public DelayedRefresher(ArrayList elements)
+	{
+	    _shell = getTable().getShell();
+	    _elements = elements;
+	    setDaemon(true);
+	}
+
+	public void run()
+	{
+	    try
+		{
+		    Thread.currentThread().sleep(5000);
+		    Thread.currentThread().yield();
+		}
+	    catch (InterruptedException e)
+		{
+		    System.out.println(e);
+		}
+	    
+	    if (_shell != null)
+		{
+		    Display d= _shell.getDisplay();
+		    d.asyncExec(new Runnable()
+			{
+			    public void run()
+			    {
+				//	updateItems(getTable(), _elements, new ArrayList(0));
+			    }
+			});
+		}
+
+	    _refresher = null;
+
+	}
+	
+    }
+
+
     private   ViewFilter   _viewFilter;
     
     private   DataElement  _currentDescriptor;
@@ -48,6 +90,8 @@ public class DataElementTableViewer extends TableViewer
     private boolean _isWorking;
 
     private ObjectSelectionChangedListener _listener;
+
+    private DelayedRefresher _refresher = null;
     
     public DataElementTableViewer(ObjectWindow parent, Table table)
     {
@@ -336,9 +380,9 @@ public class DataElementTableViewer extends TableViewer
     }    
  
 
-    private void updateItems(Table table, ArrayList elements, ArrayList recycled)
+    private synchronized void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
-	int maxAdd = 80;
+	int maxAdd = (recycled.size() > 100) ? recycled.size() : 100;
 	int numAdded = 0;
 
 	// first update existing ones
@@ -363,7 +407,7 @@ public class DataElementTableViewer extends TableViewer
        	int totalItems = table.getItemCount();	  
 
 	// then create new ones
-	for (int i = 0; (i < elements.size()) && (numAdded < maxAdd); i++)
+	for (int i = (elements.size() - 1); (i >= 0) && (numAdded < maxAdd); i--)
 	    {		
 		DataElement child = (DataElement)elements.get(i);			
 		TableItem item = null;
@@ -382,9 +426,9 @@ public class DataElementTableViewer extends TableViewer
 			
 			updateItem(item, child); 			
 		    }
+		elements.remove(child);
 	    }
   
-
 	
 	if (recycled.size() > 0)
 	    {		
@@ -401,7 +445,15 @@ public class DataElementTableViewer extends TableViewer
 		
 		recycled.clear();
 	    }
-	
+
+	if (elements.size() > 0)
+	    {	    
+		if (_refresher == null)
+		    {
+			_refresher = new DelayedRefresher(elements);
+			_refresher.start();
+		    }
+	    }	
     }
     
     protected Item newItem(Widget parent, int flags, int ix)  

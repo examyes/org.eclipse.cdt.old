@@ -63,7 +63,14 @@ public class DataElementTableContentProvider extends DataElementContentProvider
     
     public ArrayList getList(DataElement object)
     {
-	return object.getAssociated(_property);
+	if (object != null)
+	    {
+		return object.getAssociated(_property);
+	    }
+	else
+	    {
+		return new ArrayList(0);
+	    }
     }
     
     public Object[] getElements(Object object)
