@@ -128,7 +128,6 @@ public class DataStoreSchema
         _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
 	
 	_dataStore.createReference(containerObjectD, fsObject, abstracts, abstractedBy);
-	_dataStore.createReference(fsObject, deviceD,  abstracts, abstractedBy);
 	
 	_dataStore.createReference(fileD,    fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, dirD, abstracts, abstractedBy);
