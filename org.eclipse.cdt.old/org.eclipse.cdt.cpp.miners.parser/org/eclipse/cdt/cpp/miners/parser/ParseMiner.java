@@ -487,17 +487,10 @@ public class ParseMiner extends Miner
   		{ 
    			project = getProjectFor(theFile);
   		}
-  		else
-  		{
-  			project = theFile.getParent().getParent();
-  		}
   	}
-   if (project != null)
-    {
-   return _parseManager.removeParseInformation(theFile, getParseProject(project));
-    }
+  	return _parseManager.removeParseInformation(theFile, getParseProject(project));
   }
-     return false;
+
  }
 
 

@@ -62,9 +62,16 @@ public class ParseManager
  
  public boolean removeParseInformation(DataElement theFile, DataElement theProject)
  {
+  DataElement theParsedFiles = null;	
   if (theProject == null)
-   return false;
-  DataElement theParsedFiles = _dataStore.find(theProject,DE.A_NAME, ParserSchema.ParsedFiles,1);
+  {
+  	theParsedFiles = theFile.getParent();
+  }
+  else
+  {
+   theParsedFiles = _dataStore.find(theProject,DE.A_NAME, ParserSchema.ParsedFiles,1);
+  }
+  
   if (theParsedFiles == null)
    return false;
 
@@ -89,7 +96,7 @@ public class ParseManager
     thePath = f.getCanonicalPath();
    }
    catch (IOException e) {return false;}
-
+ 
    for (int i = theFiles.size()-1; i >= 0; i--)
    {  
     DataElement theElement = (DataElement)theFiles.get(i);
