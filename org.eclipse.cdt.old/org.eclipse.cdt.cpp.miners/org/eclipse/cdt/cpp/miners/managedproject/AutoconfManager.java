@@ -58,9 +58,9 @@ public class AutoconfManager {
 			updateAutoconfFiles(project,status,true,classifier);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project,status,"./autogen.sh"+"&&"+"./configure");
+				runCommand(project,status,"./bootstrap.sc"+"&&"+"./configure");
 			else
-				runCommand(project, status, cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure");
+				runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure");
 		}
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
@@ -92,15 +92,15 @@ public class AutoconfManager {
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
-		File script = new File (project.getSource(),"autogen.sh");
+		File script = new File (project.getSource(),"bootstrap.sc");
 		if(!configure.exists())
 		{
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 			else
-			runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+
+			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 		else if(configureIsUptodate(project))
@@ -113,9 +113,9 @@ public class AutoconfManager {
 		else 
 		{
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 			else
-				runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+				runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 	} 	
 
@@ -165,15 +165,15 @@ public class AutoconfManager {
 		Process p;	
 		Runtime rt = Runtime.getRuntime();
 		// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
-		File script = new File (project.getSource(),"autogen.sh");
+		File script = new File (project.getSource(),"bootstrap.sc");
 		if(!script.exists())
 		{
 			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			{
-				try{// add autogen.sh only if not exist
+				try{// add bootstrap.sc only if not exist
 					p = rt.exec(
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
-						"/org.eclipse.cdt.cpp.miners/autoconf_templates/autogen.sh "+project.getSource());
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/bootstrap.sc "+project.getSource());
 					p.waitFor();
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	
@@ -182,7 +182,7 @@ public class AutoconfManager {
 		modifyScript(script,projectFile);
 		try
 		{
-			p = rt.exec("chmod +x "+project.getSource()+"/autogen.sh ");
+			p = rt.exec("chmod +x "+project.getSource()+"/bootstrap.sc ");
 			p.waitFor();	
 		}catch(IOException e){System.out.println(e);}
 		catch(InterruptedException e){System.out.println(e);}	
@@ -249,24 +249,24 @@ public class AutoconfManager {
 	private void createConfigureScript(DataElement project, DataElement status)
 	{
 		if(getOS().equals("Linux"))
-			runCommand(project, status, "./autogen.sh"+"&&"+"touch -m configure");
+			runCommand(project, status, "./bootstrap.sc"+"&&"+"touch -m configure");
 		else 
-			runCommand(project, status, cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"\'touch -m configure\'");
+			runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"\'touch -m configure\'");
 	}
 	public void runConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
-		File script = new File (project.getSource(),"autogen.sh");
+		File script = new File (project.getSource(),"bootstrap.sc");
 		if(!configure.exists())
 		{
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+
+				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+
 				"configure");
 			else
-			runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+
+			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 		else
@@ -291,9 +291,9 @@ public class AutoconfManager {
 				}
 				
 				if(getOS().equals("Linux"))
-					runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
+					runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 				else
-					runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+					runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 			}
 		}
 	} 
