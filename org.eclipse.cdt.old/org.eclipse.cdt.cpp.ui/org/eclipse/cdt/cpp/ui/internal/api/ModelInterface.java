@@ -584,7 +584,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	     if (oDescriptor != null)
 		 {
 		     dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
-		     projectMinerProject.expandChildren(true);
+		     //projectMinerProject.expandChildren(true);
+		     projectMinerProject.refresh(true);
 		 }
 	     
 	     setParseIncludePath(_project);	
@@ -1861,11 +1862,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	dataStore.createReference(configureCmds, autoconfCmds, "abstracts", "abstracted by");
 
-							  
-	DataElement mngCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement mngCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Manage Cmds");
+						  
+	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Manage Project", 
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
 	
+	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 	
 	DataElement managedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Managed Project", 1);
 	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change target to");
