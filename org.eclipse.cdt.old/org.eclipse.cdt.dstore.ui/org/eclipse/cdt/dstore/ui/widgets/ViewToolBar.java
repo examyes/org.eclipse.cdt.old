@@ -34,7 +34,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 {
     private   Label        _inputIconLabel;
     private   Label        _inputTextLabel;
-    
+    private   String       _viewName = null;
     
     private   ViewMenu     _viewMenu;
     
@@ -170,20 +170,12 @@ public class ViewToolBar extends Viewer implements IDomainListener
     public void domainChanged(DomainEvent ev)
     {
         DataElement parent = (DataElement)ev.getParent();   
-	String name = (String)_currentInput.getElementProperty(DE.P_NAME);	  
-	if ((_inputTextLabel != null) && 
-	    !_inputTextLabel.isDisposed() &&
-	    !_inputTextLabel.getText().equals(name))
-	    {	      
-		if (name != null)
-		    {
-			_inputTextLabel.setText(name);
-		    }
-		else
-		    {
-			_inputTextLabel.setText("null");
-		    }
-	    }
+	String name = _currentInput.getName();	  
+	if (!name.equals(_viewName))
+	{
+	    _viewName = name;
+	    _inputTextLabel.setText(name);
+	}
     }
     
 
@@ -278,6 +270,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 		    }
 	    }
 
+	
 	inputChanged(input, null);
     }
     
@@ -298,15 +291,25 @@ public class ViewToolBar extends Viewer implements IDomainListener
     {
 	if (object == null)
 	    {
+		_toolBarContainer.setVisible(false);
+	    }
+	else if (_currentInput == null)
+	    {
+		_toolBarContainer.setVisible(true);
+	    }
+
+	if (object == null)
+	    {
 		_currentInput = null;
 		String imageStr = getPluginPath() + java.io.File.separator + 
 		    "icons" + java.io.File.separator + "default.gif";
 		DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
 		if (plugin != null)
 		    {
-			_inputIconLabel.setImage(plugin.getImage(imageStr));
+			_inputIconLabel.setImage(null);
 		    }
-		_inputTextLabel.setText(getLocalizedString("view.No_input"));	      
+		_viewName = getLocalizedString("view.No_input");
+		_inputTextLabel.setText(_viewName);	      
 	    }
 	else if (_currentInput != object)
 	    {
@@ -328,11 +331,13 @@ public class ViewToolBar extends Viewer implements IDomainListener
 			      String name = (String)_currentInput.getElementProperty(DE.P_NAME);
 			      if (name != null)
 				  {
+				      _viewName = name;
 				      _inputTextLabel.setText(name);
 				  }
 			      else
 				  {
-				      _inputTextLabel.setText("null");
+				      _viewName = "null";
+				      _inputTextLabel.setText(_viewName);
 				  }
 			  }
 		      if (_viewMenu != null)
