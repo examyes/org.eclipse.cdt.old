@@ -70,8 +70,19 @@ public class PADataStoreAdaptor {
  
   // Run the given command
   Process process = null;
+  String theShell = getShell();
   try {
-   process = Runtime.getRuntime().exec(getShell() + command, null, workingDir);
+  
+   if (theShell.equals("sh")) {
+     String args[] = new String[3];
+     args[0] = theShell;
+     args[1] = "-c";
+     args[2] = command;
+     process = Runtime.getRuntime().exec(args, null, workingDir);
+   }
+   else {
+     process = Runtime.getRuntime().exec(theShell + command, null, workingDir);
+   }
   }
   catch (Exception e) {
    System.out.println("Error running the command: " + command);
@@ -105,7 +116,7 @@ public class PADataStoreAdaptor {
    String theShell = null;
    
    if (!theOS.toLowerCase().startsWith("win")) {
-    theShell = "sh -c ";
+    theShell = "sh";
    }
    else {
    
@@ -130,10 +141,23 @@ public class PADataStoreAdaptor {
   */
  public static String getFirstCommandOutputLine(File workingDir, String command) {
    
+  // System.out.println("command: " + command);
+  
   // Run the given command
   Process process = null;
+  String theShell = getShell();
   try {
-   process = Runtime.getRuntime().exec(getShell() + command, null, workingDir);
+  
+   if (theShell.equals("sh")) {
+     String args[] = new String[3];
+     args[0] = theShell;
+     args[1] = "-c";
+     args[2] = command;
+     process = Runtime.getRuntime().exec(args, null, workingDir);
+   }
+   else {
+     process = Runtime.getRuntime().exec(theShell + command, null, workingDir);
+   }
   }
   catch (Exception e) {
    System.out.println("Error running the command: " + command);
@@ -142,10 +166,12 @@ public class PADataStoreAdaptor {
      
   // Parse the command output
   BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-  
+    
   String line = null;
   try {
     while ((line = reader.readLine()) != null) {
+     
+     // System.out.println("line: " + line);
      if (line.trim().length() > 0)
       break;
     }

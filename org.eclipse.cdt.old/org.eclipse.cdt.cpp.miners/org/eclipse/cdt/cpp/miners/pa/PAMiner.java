@@ -319,17 +319,17 @@ public class PAMiner extends Miner {
  public void handleQueryTraceProgramFormat(DataElement fileElement, DataElement status) {
    
    File file = new File(fileElement.getSource());
-   
+      
    String formatStr = null;
    String gprofQueryCommand = "nm" + " " + file.getName() + "| grep mcount";
    String fcQueryCommand = "nm" + " " + file.getName() + "| grep cyg_profile_func_enter";
    
    String line = PADataStoreAdaptor.getFirstCommandOutputLine(file.getParentFile(), gprofQueryCommand);
-   if (line.indexOf("mcount") >= 0)
+   if (line != null && line.indexOf("mcount") >= 0)
      formatStr = "gprof";
    else {
      line = PADataStoreAdaptor.getFirstCommandOutputLine(file.getParentFile(), fcQueryCommand);
-     if (line.indexOf("cyg_profile_func_enter") >= 0) {
+     if (line != null && line.indexOf("cyg_profile_func_enter") >= 0) {
        formatStr = "functioncheck";
      }
      else {
