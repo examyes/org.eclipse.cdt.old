@@ -98,16 +98,6 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
-			ArrayList showDialogRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(runDialogKey);
-			if (!showDialogRun.isEmpty())
-			{
-				String preference = (String)showDialogRun.get(0);
-				if (preference.equals("Yes"))
-					enableRunDialog = true;
-				else
-					enableRunDialog=false;
-			}
-			
 			// checking if automatic updating is enabled from the autoconf preferences page
 			ArrayList autoUpdateRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(runUpdateKey);
 			if(!autoUpdateRun.isEmpty())
@@ -124,68 +114,60 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 			}
 			if(!configureIsUptodate(_subject))
 			{
-				if(enableRunDialog)
+				if(enableRunUpdate)
 				{
-					if(enableRunUpdate)
-					{
-						String message = new String
-						("\nThe system detects that configure script is not up to date"+
-						"\nWould you like to update and generate missing configuration files before running configure?");
-						box = new CustomMessageDialog(shell,
-												title,
-												null,
-												message,3,
-												new String[]{
-											  	IDialogConstants.YES_LABEL,
-											  	IDialogConstants.NO_LABEL, 
-													IDialogConstants.CANCEL_LABEL},
-												0,
-												extraLabels,
-												this
-												);
-						// open	the xbox		
-						runUpdate = box.open();
-					}
-					else
-					{
-						String message = new String
-						("\nRunning existing configure script" 
-						+"\nAutomatic update is turned off - You can use the preferences page to turn it on");
-						box = new CustomMessageDialog(shell,
-												title,
-												null,
-												message,2,
-												new String[]{
-											  	IDialogConstants.OK_LABEL,
-											  	IDialogConstants.CANCEL_LABEL},
-												0,
-												extraLabels,
-												this
-												);
-						// open	the xbox		
-						runUpdate = box.open(); 
-						// 0 is equiv to 1 ie run with no update , 
-						//and 1 is equiv to 2 which is to cancel the action so we need to increment
-						runUpdate++; 
-						
-					}
+					String message = new String
+					("\nThe system detects that configure script is not up to date"+
+					"\nWould you like to update and generate missing configuration files before running configure?");
+					box = new CustomMessageDialog(shell,
+											title,
+											null,
+											message,3,
+											new String[]{
+										  	IDialogConstants.YES_LABEL,
+										  	IDialogConstants.NO_LABEL, 
+												IDialogConstants.CANCEL_LABEL},
+											0,
+											extraLabels,
+											this
+											);
+					// open	the xbox		
+					int result = box.open(runDialogKey);
+					if(result != -1)
+						runUpdate = result; 
+					else 
+						runUpdate = 0;
 				}
 				else
-				{ 
-					if(enableRunUpdate)
-					{
-						runUpdate = 0;
-					}
+				{
+					String message = new String
+					("\nRunning existing configure script" 
+					+"\nAutomatic update is turned off - You can use the preferences page to turn it on");
+					box = new CustomMessageDialog(shell,
+											title,
+											null,
+											message,2,
+											new String[]{
+										  	IDialogConstants.OK_LABEL,
+										  	IDialogConstants.CANCEL_LABEL},
+											0,
+											extraLabels,
+											this
+											);
+					// open	the xbox		
+					int result = box.open(runDialogKey); 
+					if(result!=-1)
+						runUpdate = ++result;
 					else
-						runUpdate=1;
+						runUpdate = 1; 
+					// 0 is equiv to 1 ie run with no update , 
+					//and 1 is equiv to 2 which is to cancel the action so we need to increment
 				}
 			}
 			else
 			{
-				runUpdate = 1;
+			runUpdate = 1;
 			}
-		
-
 		}
 		if(execute)
 		{	
@@ -199,7 +181,7 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else if(runUpdate==0&&enableRunUpdate)
+			else if(runUpdate==0)//&&enableRunUpdate)
 			{	
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 				DataElement status = _dataStore.command(configureCmd, _subject);
