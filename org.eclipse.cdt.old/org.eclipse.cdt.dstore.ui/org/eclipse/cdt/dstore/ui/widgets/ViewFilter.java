@@ -12,13 +12,15 @@ import java.util.*;
 
 public class ViewFilter extends ViewerFilter
 {
-  static public final String V_DETAILS = "details";
-  private DataElement _type;
+    static public final String V_DETAILS = "details";
+    private DataElement _type;
+    private boolean _enableContents = false;
 
   public ViewFilter()
   {
     super();
     _type = null; 
+    
   }
 
   public ViewFilter(DataElement type)
@@ -31,6 +33,11 @@ public class ViewFilter extends ViewerFilter
       {
 	_type = oTemplate.getType();
       }
+
+    public void setEnableContents(boolean flag)
+    {
+	_enableContents = flag;
+    }  
 
   public Object[] filter(Viewer viewer,
 		       Object parent,
@@ -75,7 +82,7 @@ public class ViewFilter extends ViewerFilter
       }
   }
 
-  public static boolean doesExist(DataElement descriptor, DataElement dataElement, ArrayList checked)
+  public boolean doesExist(DataElement descriptor, DataElement dataElement, ArrayList checked)
   {
       if (!checked.contains(descriptor))
 	  {
@@ -92,19 +99,6 @@ public class ViewFilter extends ViewerFilter
 				  {
 				      return true; 
 				  }
-			      /*
-			      else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
-				  {  
-				      for (int i = 0; i < descriptor.getNestedSize(); i++)
-					  {
-					      DataElement subObject = descriptor.get(i).dereference();
-					      if (subObject != null && doesExist(subObject, dataElement, checked))
-						  {
-						      return true;
-						  }
-					  }
-				  }
-			      */
 			      else if (typeType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 				  {
 				      ArrayList abstractedList = descriptor.getAssociated("abstracts");
@@ -116,6 +110,20 @@ public class ViewFilter extends ViewerFilter
 						      return true;
 						  }
 					      
+					  }
+				      
+				      if (_enableContents)
+					  {
+					      ArrayList containsList = descriptor.getAssociated("contents");
+					      for (int i = 0; i < containsList.size(); i++)
+						  {
+						      DataElement aDes = (DataElement)containsList.get(i);
+						      if (aDes != null && 
+							  doesExist(aDes, dataElement, checked))
+							  {
+							      return true;
+							  }					      
+						  }
 					  }
 				  }
 			  }

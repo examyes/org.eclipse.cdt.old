@@ -56,6 +56,7 @@ public class ExtendedTreeViewer extends TreeViewer
 	
 	_property = null;
 	_viewFilter = new ViewFilter();
+	_viewFilter.setEnableContents(true);
 	addFilter(_viewFilter);
 	
 	setContentProvider(new TreeContentProvider(toolBar));     

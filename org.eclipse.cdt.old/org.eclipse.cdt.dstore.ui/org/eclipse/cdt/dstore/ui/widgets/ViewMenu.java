@@ -450,28 +450,9 @@ public class ViewMenu implements IMenuListener
 			int depth = item.depth();
 			if (depth > 0)
 			    {
-				if (_relationItems.size() == 0)
+				if (_relationItems.contains(item))
 				    {
 					_relationItems.add(item);
-				    }
-				else
-				    {
-					for (int j = 0; (j < _relationItems.size()) && !_relationItems.contains(item); j++)
-					    {
-						DataElement relItem = (DataElement)_relationItems.get(j);
-						if (relItem != item)
-						    {
-							if (depth > relItem.depth())
-							    {
-								_relationItems.add(j, item);
-							    }
-							else
-							    {
-								_relationItems.add(j + 1, item);
-							    }
-						    }
-						
-					    }
 				    }
 			    }
 		    }
@@ -491,27 +472,9 @@ public class ViewMenu implements IMenuListener
 		  int depth = item.depth();
 		  if (depth > 0)
 		      {
-			  if (_filterItems.size() == 0)
+			  if (!_filterItems.contains(item))
 			      {
 				  _filterItems.add(item);
-			      }
-			  else
-			      {
-				  for (int j = 0; (j < _filterItems.size()) && !_filterItems.contains(item); j++)
-				      {
-					  DataElement filItem = (DataElement)_filterItems.get(j);
-					  if (filItem != item)
-					      {
-						  if (depth > filItem.depth())
-						      {
-							  _filterItems.add(j, item);
-						      }
-						  else
-						      {
-							  _filterItems.add(j + 1, item);
-						      }
-					      }
-				      }
 			      }
 		      }
 	      }	
@@ -542,48 +505,81 @@ public class ViewMenu implements IMenuListener
       }
 
   
+    public static class Sorter
+    {
+	public static ArrayList sort(ArrayList list)
+	    {
+		ArrayList sortedList = new ArrayList(list.size());
+		while (list.size() > 0)
+		    {
+			DataElement first = findFirst(list);
+			sortedList.add(first);
+		    }
+
+		return sortedList;
+	    }
+
+
+	private static DataElement findFirst(ArrayList list)
+	    {
+		DataElement result = null;
+		for (int i = 0; i < list.size(); i++)
+		    {
+			DataElement item = (DataElement)list.get(i);
+			int depth = item.depth();
+			if ((result == null) || (depth > result.depth()))
+			    {
+				result = item;
+			    }			
+		    }
+		
+		list.remove(result);
+		return result;			
+	    }
+    }
+
 
   public void fillFilterMenu(IMenuManager menu)
       {
-        for (int i = 0; i < _filterItems.size(); i++)
-        {
-          DataElement object = (DataElement)_filterItems.get(i);		
-
-	  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-	  String imageStr = DataElementLabelProvider.getImageString(object);
-	  if (plugin != null)
+	  _filterItems = Sorter.sort(_filterItems);
+	  for (int i = 0; i < _filterItems.size(); i++)
 	      {
-		  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
-		  menu.add(new MenuSelectFilterAction(object, image));        
-	      }
-	  else
-	      {
-		  menu.add(new MenuSelectFilterAction(object));        
-	      }
-        }        
-
+		  DataElement object = (DataElement)_filterItems.get(i);
+		  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+		  String imageStr = DataElementLabelProvider.getImageString(object);
+		  if (plugin != null)
+		      {
+			  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
+			  menu.add(new MenuSelectFilterAction(object, image));        
+		      }
+		  else
+		      {
+			  menu.add(new MenuSelectFilterAction(object));        
+		      }
+	      }        	  
       }
 
   public void fillRelationMenu(IMenuManager menu)
       {
-        for (int i = 0; i < _relationItems.size(); i++)
-        {
-          DataElement object = (DataElement)_relationItems.get(i);		
-
-	  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
-	  String imageStr = DataElementLabelProvider.getImageString(object);
-	  if (plugin != null)
-	      {
-		  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
-		  menu.add(new MenuSelectRelationAction(object, image));      
-	      }
-	  else
-	      {
-		  menu.add(new MenuSelectRelationAction(object));      
-	      }
-        }        
+	  _relationItems = Sorter.sort(_relationItems);
+	  for (int i = 0; i < _relationItems.size(); i++)
+	      { 
+		  DataElement object = (DataElement)_relationItems.get(i);		
+		  
+		  DataStoreCorePlugin plugin = DataStoreCorePlugin.getInstance();
+		  String imageStr = DataElementLabelProvider.getImageString(object);
+		  if (plugin != null)
+		      {
+			  ImageDescriptor image = plugin.getImageDescriptor(imageStr, false);
+			  menu.add(new MenuSelectRelationAction(object, image));      
+		      }
+		  else
+		      {
+			  menu.add(new MenuSelectRelationAction(object));      
+		      }
+	      }        
       }
-
+    
     public void selectRelationship(String relationship)
     {
 	for (int i = 0; i < _relationItems.size(); i++)
