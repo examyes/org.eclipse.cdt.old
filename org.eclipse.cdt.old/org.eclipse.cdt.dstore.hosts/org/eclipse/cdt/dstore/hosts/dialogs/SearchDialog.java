@@ -52,6 +52,8 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
     protected int          _width;
     protected int          _height;
 
+    protected IActionLoader _actionLoader;
+
 
     public SearchDialog(String title, DataElement root, String patternLabel, String actionLabel)
     {
@@ -64,6 +66,20 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	_actionLabel = actionLabel;
 	_height = 250;
 	_width = 250;
+    }
+
+    public void setActionLoader(IActionLoader loader)
+    {
+	_actionLoader = loader;
+    }
+
+    public IActionLoader getActionLoader()
+    {
+	if (_actionLoader == null)
+	    {
+		_actionLoader = _plugin.getDialogActionLoader();
+	    }
+	return _actionLoader;
     }
 
     public Control createDialogArea(Composite parent)
@@ -102,7 +118,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
 	_cancel.setLayoutData(cangrid);
 	
 	_resultViewer = new ObjectWindow(c, ObjectWindow.TABLE, _plugin.getDataStore(), 
-					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader());
+					 _plugin.getImageRegistry(), getActionLoader());
 
 
 	GridLayout vlayout = new GridLayout();

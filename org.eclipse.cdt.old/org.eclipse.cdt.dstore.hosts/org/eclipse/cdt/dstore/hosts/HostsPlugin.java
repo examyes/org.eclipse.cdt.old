@@ -145,7 +145,7 @@ public class HostsPlugin extends AbstractUIPlugin
 
     public IActionLoader getDialogActionLoader()
     { 
-	return _dialogActionLoader;
+	return _actionLoader;
     }    
 
   protected void initializeDefaultPreferences()
