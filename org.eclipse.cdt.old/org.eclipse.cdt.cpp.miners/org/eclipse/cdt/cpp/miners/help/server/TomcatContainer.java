@@ -35,11 +35,6 @@ public class TomcatContainer
 		_pluginPath = a_plugin_path;
 	    }
 
-	//String tomcatPath = "org.eclipse.tomcat_4.0.3";
-	String tomcatPath = System.getProperty("CDTHELP_TOMCATDIR");
-	if(tomcatPath==null)
-	    tomcatPath = "org.eclipse.tomcat_4.0.3";  
-	
 	File logdir;
 	if (a_plugin_path == null)
 	    {
@@ -77,7 +72,7 @@ public class TomcatContainer
 	_embedded.setDebug(0); // no debug
 	_embedded.setLogger(logger);	
 	
-	_path = _pluginPath +tomcatPath;
+	_path = _pluginPath + "org.eclipse.cdt.cpp.miners/help/tomcatbase";
 	
 	System.setProperty("catalina.home", _path);
 	System.setProperty("catalina.base", _path);
