@@ -119,4 +119,12 @@ public class WinDbgVariable implements ICDIVariable {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIVariable#equals(org.eclipse.cdt.debug.core.cdi.model.ICDIVariable)
+	 */
+	public boolean equals(ICDIVariable variable) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
