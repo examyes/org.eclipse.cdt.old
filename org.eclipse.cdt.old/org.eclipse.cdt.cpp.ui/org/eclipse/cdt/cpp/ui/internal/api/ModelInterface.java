@@ -1432,9 +1432,29 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	if (_statuses.contains(parent))
 	    {
 		return true;
-	    }
+	    }	
 	else
-	    {
+	    {		
+		
+		if (parent != null && 
+		    parent.getDescriptor() != null &&
+		    parent.getDescriptor().isOfType("Filesystem Objects"))
+		    {			
+			IResource resource = getResource(parent.getSource());
+			if (resource != null)
+			    {
+			    try
+				{
+				    resource.refreshLocal(resource.DEPTH_INFINITE, null);
+				}
+			    catch (CoreException e)
+				{
+				    System.out.println(e);
+				}	
+			    
+			    }
+		    }
+
 		return false;
 	    }
     }   
@@ -1474,6 +1494,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						      }
 					      }
 				      }
+				  
 				  else
 				      {
 					  for (int i = 0; i < size; i++)
@@ -1652,12 +1673,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							 "Delete Project",
 							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
 	dataStore.createReference(projectD, deleteProject);
-	
+
+
+	// hide delete for files and directories
+	dataStore.localDescriptorQuery(fsD, "C_DELETE").setDepth(0);
+	dataStore.localDescriptorQuery(fileD, "C_DELETE").setDepth(0);
+
 	DataElement deleteResource = dataStore.createObject(dirD, DE.T_UI_COMMAND_DESCRIPTOR,
 							    "Delete",
 							    "com.ibm.cpp.ui.internal.actions.DeleteResourceAction");
 	dataStore.createReference(fileD, deleteResource);
-
 
 	// connection actions
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 

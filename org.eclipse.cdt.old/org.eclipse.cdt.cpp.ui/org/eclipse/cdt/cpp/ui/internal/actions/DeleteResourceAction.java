@@ -75,7 +75,7 @@ public class DeleteResourceAction extends CustomAction
 		    pm.worked(1);
 		    
 		    if (pResource != null)
-			{
+			{  
 			    try
 				{
 				    pResource.getParent().refreshLocal(pResource.DEPTH_INFINITE, pm);
