@@ -108,6 +108,7 @@ public class ViewFilter extends ViewerFilter
 					  {
 					      return true;
 					  }
+
 				      if (_enableContents)
 					  {
 					      ArrayList containsList = descriptor.getAssociated("contents");

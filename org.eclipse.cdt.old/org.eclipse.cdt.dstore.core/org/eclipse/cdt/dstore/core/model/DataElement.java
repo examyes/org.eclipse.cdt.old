@@ -651,7 +651,7 @@ public final class DataElement implements Serializable, IDataElement
 	    {
 		descriptor = getDescriptor();
 	    }
-
+	
 	if (descriptor != null && !descriptor.isDeleted())
 	    {
 		String typeType = type.getType();
@@ -660,10 +660,21 @@ public final class DataElement implements Serializable, IDataElement
 			if ((descriptor == type) || (type.getName().equals(_dataStore.getLocalizedString("model.all"))))
 			    {
 				result = true;
+				return result;
 			    }
 		    }
+		
+		DataElement relationship = getAbstractsRelationship();
+		ArrayList abstracted = null;
+		if (relationship != null)
+		    {
+			abstracted = type.getAssociated(relationship);
+		    }
+		else
+		    {
+			abstracted = type.getAssociated("abstracts");
+		    }
 
-		ArrayList abstracted = type.getAssociated(getAbstractsRelationship());
 		for (int i = 0; (i < abstracted.size()) && !result; i++)
 		    {
 			DataElement subDescriptor = (DataElement)abstracted.get(i);

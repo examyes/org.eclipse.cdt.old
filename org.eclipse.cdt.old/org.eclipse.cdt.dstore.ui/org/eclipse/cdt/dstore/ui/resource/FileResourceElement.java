@@ -101,7 +101,10 @@ public class FileResourceElement extends ResourceElement implements IFile
 			    }
 		    }
 	    }
-
+	else
+	    {
+		_path = new Path(_element.getSource());
+	    }
     }
 
   public boolean exists(boolean c, boolean p)

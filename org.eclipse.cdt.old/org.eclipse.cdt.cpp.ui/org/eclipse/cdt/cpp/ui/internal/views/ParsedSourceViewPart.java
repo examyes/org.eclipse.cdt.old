@@ -51,7 +51,7 @@ public class ParsedSourceViewPart extends ProjectViewPart
   if (parsedSource == null)
    return;
   
-  //Finally just set the input and the title
+  //Finally just set the input and the title 
   if (_viewer.getInput() == parsedSource)
       {
 	  _viewer.resetView();
@@ -61,9 +61,7 @@ public class ParsedSourceViewPart extends ProjectViewPart
 	  _viewer.setInput(parsedSource);	
 	  _viewer.selectRelationship("contents");
 	  setTitle(projectParseInformation.getName() + " Parsed-Files");   
-
       }
-  
  } 	
 }
 
