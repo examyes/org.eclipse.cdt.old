@@ -26,7 +26,7 @@ public class ActionRemoveTarget extends ActionTarget {
 // NL enablement
 	private static CppPlugin pluginInstance = CppPlugin.getPlugin();
 	private static String REMOVE_ACTION_KEY = "TargetsViewer.Action.Remove_Target";
-
+	private static String ROOT_KEY="TargetsViewer.RootElement.Key";
 
 public ActionRemoveTarget(TargetsPage targetsPage) {
 	super(targetsPage.getViewer(), pluginInstance.getLocalizedString(REMOVE_ACTION_KEY));
@@ -42,7 +42,7 @@ private void removeDescriptor( int x, RootElement root)
 		for(int i =0; i < root.getPropertyDescriptors().length; i++)
 		{
 			int numberExtension = x+root.MAX_TARGETS;
-			if(!((PropertyDescriptor)root.getPropertyDescriptors()[i]).getId().equals("Command"+numberExtension))
+			if(!((PropertyDescriptor)root.getPropertyDescriptors()[i]).getId().equals( pluginInstance.getLocalizedString(ROOT_KEY)+numberExtension))
 				vec.add(root.getPropertyDescriptors()[index++]);
 		}
 		// reset the counter
