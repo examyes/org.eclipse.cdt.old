@@ -131,7 +131,7 @@ abstract class MixedView extends View
 				String line = sourceView.getViewLine(i);
 	   			if (line != null)
 	   			{
-					line = processViewLine(mixedCurrentLine, line);      			
+					line = processViewLine(line);      			
 	      			_viewLines.addElement(line);
 	      			mixedCurrentLine++;
 	   			}
@@ -159,7 +159,7 @@ abstract class MixedView extends View
 	      			line = sourceView.getViewLine(j);
 	      			if (line != null)
 	      			{
-						line = processViewLine(mixedCurrentLine, line);      			
+						line = processViewLine(line);      			
 		      			_viewLines.addElement(line);
 		      			mixedCurrentLine++;
 	      			}
@@ -184,7 +184,7 @@ abstract class MixedView extends View
 	      				String line = sourceView.getViewLine(i);
 	      				if (line != null)
 	      				{
-							line = processViewLine(mixedCurrentLine, line);      			
+							line = processViewLine(line);      			
 			      			_viewLines.addElement(line);
 			      			mixedCurrentLine++;
 	      				}
@@ -213,7 +213,7 @@ abstract class MixedView extends View
 					String line = srcLine.toString();
 	      			if (line != null)
 	      			{
-						line = processViewLine(mixedCurrentLine, line);      			
+						line = processViewLine(line);      			
 		      			_viewLines.addElement(line);
 		      			mixedCurrentLine++;
 	      			}
@@ -274,7 +274,7 @@ abstract class MixedView extends View
                 Gdb.traceLogger.err(2,"MixedView.combineSourcePlusDisassemblyLines string==null for sourceLineNumber="+i );
             return -1;
          }
-         line = processViewLine(mixedCurrentLine, line);
+         line = processViewLine(line);
          _viewLines.addElement(line);
 	  if (Gdb.traceLogger.DBG) 
               Gdb.traceLogger.dbg(3,"MixedView.combineSourcePlusDisassemblyLines lineNumber="+mixedCurrentLine+" source="+line );
@@ -374,17 +374,17 @@ abstract class MixedView extends View
    * Process a line of source into a format suitable for front-end viewing.  The
    * old prefix is removed, and the new line number is prepended to the source line.
    */
-   private String processViewLine(int lineNum, String srcLine)
+   private String processViewLine(String srcLine)
    {
-	  if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(3,"#### MixedView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
-      StringBuffer processedLine;
+   	
+	    StringBuffer processedLine;
+      
+      processedLine = new StringBuffer(srcLine.substring(0,super._prefixl));
 
       // Strip off old prefix
       srcLine = srcLine.substring(super._prefixl);
 
       // create new prefix      
-      processedLine = new StringBuffer(Integer.toString(lineNum));
       while (processedLine.length() < _prefixl)
          processedLine.insert(0, ' ');
 
@@ -446,7 +446,7 @@ abstract class MixedView extends View
             // EPDC.SourceLinePlaceHolder character.  This should be removed
             // when the front end has implemented the local source bit.  That
             // is, only use 1 space.
-            srcLine = processViewLine(lineNum,"  ");
+            srcLine = processViewLine(Integer.toString(lineNum) + "  ");
          }
          else
          {
