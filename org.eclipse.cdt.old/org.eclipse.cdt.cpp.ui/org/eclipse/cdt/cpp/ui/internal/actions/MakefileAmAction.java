@@ -1,9 +1,4 @@
 package com.ibm.cpp.ui.internal.actions;
-
-/*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
- */
-
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
 
@@ -14,6 +9,7 @@ import java.io.*;
 import java.util.*;
 
 import org.eclipse.jface.action.*;
+
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -35,18 +31,18 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
-public class ManageProjectAction extends CustomAction
-{ 
-	public ManageProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
+public class MakefileAmAction extends CustomAction {
+	public MakefileAmAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
 	}
-    public void run()
+	public void run()
 	{
-		DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
-		DataElement status = _dataStore.command(manageProjectCmd, _subject);
+		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
+		DataElement status = _dataStore.command(makefileAmCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
 		api.monitorStatus(status);
-	}
+    }
 }
+

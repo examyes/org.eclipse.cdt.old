@@ -24,10 +24,12 @@ public class MakefileAmManager {
 	// needed to for creating Makefile.am's
 	String[] subdirs;
 	
-	//for lib files
+	//for static lib files
 	String _LIBRARIES = new String("_LIBRARIES");
-	String _a_SOURCES = new String("_a_SOURCES"); // static lib
-	
+	String _a_SOURCES = new String("_a_SOURCES");
+	//for shared lib files
+	String _LTLIBRARIES = new String("_LTLIBRARIES");
+	String _la_SOURCES = new String("_la_SOURCES"); 	
 	// updating data
 	String TARGET = new String("!TARGET!");
 	char delim = '!';
@@ -156,7 +158,7 @@ public class MakefileAmManager {
 			//if(!found_INCLUDES)
 				//insertIncludesLine(Makefile_am);
 			//if(!found_LDFLAGS)
-				//insertLdflagsLine(Makefile_am);*/
+				//insertLdflagsLine(Makefile_am);
 		}
 	}
 	private String updateExtraDistLine(String line, File parent)
@@ -165,7 +167,8 @@ public class MakefileAmManager {
 		for(int i = 0; i <parent.listFiles().length; i++)
 		{
 			String name = parent.listFiles()[i].getName();
-			if(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||name.endsWith(".H") || name.endsWith(".C"))
+			if(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") 
+			||name.endsWith(".H") || name.endsWith(".C"))
 				line = line.concat(" "+name);
 		}
 		return line;
@@ -389,11 +392,35 @@ public class MakefileAmManager {
 			}
 		return line;
 	}
+	private String updateAlSourcesLine(String line, File parent)
+	{
+		// add the target name at the begining of the "_SOURCES"
+		String mod = line.substring(line.lastIndexOf(_la_SOURCES));
+		String lib = new String("lib");
+		line = lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
+		// add files to the _SOURCES variable
+		for(int i = 0; i <parent.listFiles().length; i++)
+			if(!parent.listFiles()[i].isDirectory())
+			{
+				String name = parent.listFiles()[i].getName();
+				if(line.indexOf(name)==-1 && 
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
+						name.endsWith(".H") || name.endsWith(".C")))
+					line = line.concat(" ").concat(parent.listFiles()[i].getName());
+			}
+		return line;
+	}
 	private String updateLibrariesLine(String line, File parent)
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
 		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a");
+	}
+	private String updateLtlibrariesLine(String line, File parent)
+	{
+		// add lib to the target name first
+		String libName = new String("lib");
+		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".la");
 	}
 	private String trimTargetLine(String line)
 	{
@@ -421,11 +448,12 @@ public class MakefileAmManager {
 	protected void setMakefileAmToStaticLib(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		// get the static lib template file
-		File projectFile = project.getFileObject();
+		//File projectFile = project.getFileObject();
+		File projectFile = parent;
+		System.out.println("\nSelected Dir = "+parent.getName());
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add configure.in template files only if not exist
+			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
@@ -437,28 +465,29 @@ public class MakefileAmManager {
 		//check the project structure
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add Makefile.am template files only if not exist
+			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
+				
 				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
-						+project.getSource());
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
+						+project.getSource()+"/"+parent.getName());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		updateStaticLibMakefile_am(parent);
-			
 	}
-	protected void setMakefileAmToDefault(File parent ,DataElement status)
+	public void setMakefileAmToStaticLib(DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		// get the static lib template file
-		File projectFile = project.getFileObject();
+		File parent = status.getFileObject();
+		File projectFile = parent;
+		System.out.println("\nSelected Dir = "+parent.getName());
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add configure.in template files only if not exist
+			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
@@ -470,7 +499,39 @@ public class MakefileAmManager {
 		//check the project structure
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add Makefile.am template files only if not exist
+			// add proper Makefile.am template files 
+			try{
+				Process p;
+				System.out.println("\n>>>>>>>>>>>>>>>>>>>>  "+projectFile.getAbsolutePath());
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
+						+projectFile.getAbsolutePath());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		updateStaticLibMakefile_am(parent);
+	}
+	protected void setMakefileAmToDefault(File parent ,DataElement status)
+	{
+		Runtime rt = Runtime.getRuntime();
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// rename the existing Maekfile.am if exists
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		//check the project structure
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		{
+			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
@@ -487,11 +548,10 @@ public class MakefileAmManager {
 	protected void setMakefileAmToTopLevel(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		// get the static lib template file
 		File projectFile = project.getFileObject();
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add configure.in template files only if not exist
+			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
@@ -503,7 +563,7 @@ public class MakefileAmManager {
 		//check the project structure
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add Makefile.am template files only if not exist
+			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
@@ -520,11 +580,10 @@ public class MakefileAmManager {
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		// get the static lib template file
 		File projectFile = project.getFileObject();
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add configure.in template files only if not exist
+			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
@@ -536,20 +595,76 @@ public class MakefileAmManager {
 		//check the project structure
 		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			// add Makefile.am template files only if not exist
+			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
 				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/shared/Makefile.am "
 						+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		updateStaticLibMakefile_am(parent);
-			
+		updateSharedLibMakefile_am(parent);	
 	}
+	private void updateSharedLibMakefile_am(File parent)
+	{
+		File Makefile_am = new File(parent,"Makefile.am");
+		String line = new String();
+		if(Makefile_am.exists())
+		{
+			File modMakefile_am = new File(parent,"mod_Makefile.am");
+			boolean found_LTLIBRARIES = false;
+			boolean found_la_SOURCES = false;
+			boolean found_SUBDIRS = false;
+			boolean found_EXTRA_DIST = false;
+			try
+			{
+				// searching for the subdir line
+				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				while((line=in.readLine())!=null)
+				{
+					// searching for the bin_PROGRAMS line
+					if(line.indexOf(_LTLIBRARIES)!=-1)
+					{
+						found_LTLIBRARIES= true;
+						line = updateLtlibrariesLine(line, parent);
+					}
+					if(line.indexOf(_la_SOURCES)!=-1)
+					{
+						found_la_SOURCES = true;
+						line = updateAlSourcesLine(line, parent);
+					}
+					if(line.indexOf(SUBDIRS)!=-1)
+					{
+						found_SUBDIRS = true;
+						line = updateSubdirsLine(line, parent);
+					}
+					if(line.indexOf(EXTRA_DIST)!=-1)
+					{
+						found_EXTRA_DIST = true;
+						line = updateExtraDistLine(line, parent);
+					}
+					out.write(line);
+					out.newLine();
+				}
+				in.close();
+				out.close();
+				modMakefile_am.renameTo(Makefile_am);
+			}catch(FileNotFoundException e){System.out.println(e);}
+			catch(IOException e){System.out.println(e);}
+			
+			//if(!found_SUBDIRS)
+				//insertSubdirsLine(Makefile_am);
+			//if(!found_LIBRARIES)
+				//insertLdaddLine(Makefile_am);
+			//if(!found_SOURCES)
+				//insertSourcesLine(Makefile_am,parent);
+
+		}
+	}	
 	protected void getMakefileAmTemplateFiles(DataElement project)
 	{
 		Runtime rt = Runtime.getRuntime();
@@ -588,7 +703,7 @@ public class MakefileAmManager {
 				{
 					try{
 						Process p= rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/lib/Makefile.am "
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
 							+project.getSource()+"/"+subdirs[i]);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}

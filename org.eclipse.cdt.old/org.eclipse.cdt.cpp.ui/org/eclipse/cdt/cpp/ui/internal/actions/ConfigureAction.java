@@ -38,21 +38,18 @@ import org.eclipse.debug.core.IDebugConstants;
 
 public class ConfigureAction extends CustomAction
 { 
-  public ConfigureAction(DataElement subject, String label, DataElement command, DataStore dataStore)
-      {	
-        super(subject, label, command, dataStore);
-      }
-
+	public ConfigureAction(DataElement subject, String label, DataElement command, DataStore dataStore)
+	{	
+		super(subject, label, command, dataStore);
+	}
     public void run()
-    {
-	DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE");
-	DataElement status = _dataStore.synchronizedCommand(configureCmd, _subject);
-
-	ModelInterface api = ModelInterface.getInstance();
-	api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status.get(0));
-	
-    }
-
+	{
+		DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(),_command.getValue());
+		DataElement status = _dataStore.command(configureCmd, _subject);
+		ModelInterface api = ModelInterface.getInstance();
+		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
+		api.monitorStatus(status);
+	}
 }
 
 
