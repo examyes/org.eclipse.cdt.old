@@ -117,6 +117,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	if (_input.getDescriptor().isOfType("Filesystem Objects") || _input.getType().equals("data"))
 	    {
 		_viewer.setInput(_input);
+		_input.expandChildren();
 	    }
 	else
 	    {
@@ -128,6 +129,7 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	{
 		_viewer.fixateOnObjectType("Directories");
 	}
+	_viewer.setSorter(DE.P_NAME);
 
 	GridLayout layout= new GridLayout();
 	layout.numColumns = 1;
@@ -139,6 +141,9 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	tgrid.heightHint = 300;
 	tgrid.widthHint = 300;
 	_viewer.setLayoutData(tgrid);
+    _viewer.getViewer().getControl().addListener(SWT.Selection, this);
+
+	_forward.setEnabled(false);
 	
 	getShell().setText(_title);
 
@@ -148,18 +153,29 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
     public void handleEvent(Event e)
     {
 	Widget widget = e.widget;
-	if (widget == _back)
+	if (widget == _viewer.getViewer().getControl())
+	{
+		DataElement selection = _viewer.getSelected();
+		if (selection != null)	
+		{
+			_forward.setEnabled(true);	
+		}
+		else
+		{
+			_forward.setEnabled(false);	
+		}
+	}
+	else if (widget == _back)
 	    {
 		DataElement input = _viewer.getInput();
 		if (input != null)
 		    {
-			DataElement inputD = input.getDescriptor();
-			if (inputD != null && inputD.isOfType("Filesystem Objects"))
+
+			if (input != null && (input.isOfType("directory") || input.isOfType("device")))
 			    {
-				DataElement parent = input.getParent();
-				DataElement parentD = parent.getDescriptor();
+				DataElement parent = input.getParent();				
 				
-				if (parentD != null && parentD.isOfType("Filesystem Objects"))
+				if (parent != null && (parent.isOfType("directory") || parent.isOfType("device")))
 				    {
 					_viewer.setInput(parent);
 			
@@ -172,11 +188,10 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 		DataElement input = _viewer.getSelected();
 		if (input != null)
 		    {
-			DataElement inputD = input.getDescriptor();
-			if (inputD != null && inputD.isOfType("Filesystem Objects"))
+			if (input.isOfType("directory") || input.isOfType("device"))
 			    {
 				_viewer.setInput(input);
-				
+				_forward.setEnabled(false);
 			    }
 		    }
 	    }
