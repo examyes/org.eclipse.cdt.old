@@ -57,6 +57,10 @@ public class ProjectMiner extends Miner
   closeD.setDepth(0);
   closeD.setAttribute(DE.A_SOURCE, "*");
 
+  DataElement closeAllD = createCommandDescriptor(workspaceD, "Close Projects", "C_CLOSE_PROJECTS");
+  closeAllD.setDepth(0);
+  closeAllD.setAttribute(DE.A_SOURCE, "*");
+
 
  createCommandDescriptor(projectD, "Create Project", "C_CREATE_PROJECT").setDepth(0);
 
