@@ -49,6 +49,8 @@ public class MakefileAmManager {
 	final String TARGET = new String("!TARGET!");
 	final char delim = '!';
 	
+	final String TEMP_MAKEFILE_AM_NAME = "mod_Makefile.am";
+	
 	//String targetSuffix = new String("_target");
 	String targetSuffix = new String("");
 	
@@ -129,7 +131,7 @@ public class MakefileAmManager {
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
 		{
-			File modMakefile_am = new File(parent.getAbsolutePath(),"mod_Makefile.am");// this is the tope level Makefile.am
+			File modMakefile_am = new File(parent.getAbsolutePath(),TEMP_MAKEFILE_AM_NAME);// this is the tope level Makefile.am
 			String line;
 			boolean found = false;
 			try
@@ -170,7 +172,7 @@ public class MakefileAmManager {
 		String line = new String();
 		if(Makefile_am.exists())
 		{
-			File modMakefile_am = new File(parent,"mod_Makefile.am");
+			File modMakefile_am = new File(parent,TEMP_MAKEFILE_AM_NAME);
 			boolean found_SUBDIRS = false;
 			boolean found_bin_PROGRAMS = false;
 			boolean found_LDADD = false;
@@ -249,7 +251,7 @@ public class MakefileAmManager {
 		String line = new String();
 		if(Makefile_am.exists())
 		{
-			File modMakefile_am = new File(parent,"mod_Makefile.am");
+			File modMakefile_am = new File(parent,TEMP_MAKEFILE_AM_NAME);
 			boolean found_SUBDIRS = false;
 			boolean found_LIBRARIES = false;
 			boolean found_a_SOURCES = false;
@@ -310,7 +312,7 @@ public class MakefileAmManager {
 		String line = new String();
 		if(Makefile_am.exists())
 		{
-			File modMakefile_am = new File(parent,"mod_Makefile.am");
+			File modMakefile_am = new File(parent,TEMP_MAKEFILE_AM_NAME);
 			boolean found_LTLIBRARIES = false;
 			boolean found_la_SOURCES = false;
 			boolean found_SUBDIRS = false;
@@ -566,7 +568,7 @@ public class MakefileAmManager {
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
-		File modMakefile_am = new File(parent,"mod_Makefile.am");
+		File modMakefile_am = new File(parent,TEMP_MAKEFILE_AM_NAME);
 		try
 		{
 			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
@@ -607,7 +609,7 @@ public class MakefileAmManager {
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
-		File modMakefile_am = new File(parent,"mod_Makefile.am");
+		File modMakefile_am = new File(parent,TEMP_MAKEFILE_AM_NAME);
 		try
 		{
 			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
@@ -646,7 +648,7 @@ public class MakefileAmManager {
 		String line = new String();
 		if(Makefile_am.exists())
 		{
-			File modMakefile_am = new File(parent,"mod_Makefile.am");
+			File modMakefile_am = new File(parent,TEMP_MAKEFILE_AM_NAME);
 			try
 			{
 				// searching for the subdir line
@@ -682,7 +684,7 @@ public class MakefileAmManager {
 			catch(IOException e){System.out.println(e);}
 		}
 	}
-	private long getMakefileAmStamp(File parent)
+/*	private long getMakefileAmStamp(File parent)
 	{
 		// get time stamp
 		File Makefile_am = new File (parent,"Makefile.am");
@@ -705,7 +707,7 @@ public class MakefileAmManager {
 			in.close();
 		}catch(IOException e){System.out.println(e);}
 		return false;		
-	}	
+	}	*/
 
 	private String initExtraDistLine(String line, File parent, BufferedWriter out)
 	{
@@ -1462,28 +1464,39 @@ public class MakefileAmManager {
 		catch(IOException e){System.out.println(e);}
 		
 	}
-	public void setExtradistExtensions(ArrayList extensionList)
+	public void setExtradistExtensions(ArrayList extensionList,DataElement project, String commandDescriptor)
 	{
 		extradistExtensions = new ArrayList();
 		for(int i = 0; i < extensionList.size(); i ++)
 					extradistExtensions.add(((DataElement)extensionList.get(i)).getName());
-		System.out.println("\n setExtradistExtensions()");
-		for(int j = 0; j < extradistExtensions.size(); j++)
-			System.out.println("\n extension  = "+extradistExtensions.get(j));
-					
+		// open a makefile.am to force an update for configure - hack
+		if(commandDescriptor.equals("C_SET_EXTRA_DIST_EXTENSIONS"))
+		{
+			System.out.println("\n Modified");
+			ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+			String[] subdirs = structureManager.getSubdirWorkspacePath();
+			Object[][] projectStucture = structureManager.getProjectStructure();
+			for(int i =0; i < projectStucture.length; i++)
+			{
+				File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
+				
+				if(Makefile_am.exists()&&!((File)projectStucture[i][0]).getName().startsWith("."))
+				{
+					Makefile_am.setLastModified(System.currentTimeMillis());
+					break;
+				}
+			}
+		}
 	}
 	private boolean foundInExtraList(String name)
 	{
-		System.out.println("\n foundInExtraList()");
-		for(int j = 0; j < extradistExtensions.size(); j++)
-			System.out.println("\n extension  = "+extradistExtensions.get(j));
 
 		for(int i= 0; i < extradistExtensions.size(); i++)
 		{
 			String item = (String)extradistExtensions.get(i);
 			String ext = item.substring(item.indexOf("."));
-			System.out.println("\n name = "+name+"\n > ext = "+ext);
-			if(name.endsWith(ext)||name.equals(item))
+			//System.out.println("\n name = "+name+"\n > ext = "+ext);
+			if((name.endsWith(ext)||name.equals(item))&&!name.equals(TEMP_MAKEFILE_AM_NAME))
 				return true;
 		}
 		return false;
