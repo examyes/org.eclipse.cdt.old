@@ -250,7 +250,7 @@ public class XMLgenerator
 					written += read;
 				}
 
-				boolean binary = true;
+				boolean binary = false;
 				if (binary)
 				{
 					// send everything across
@@ -302,7 +302,7 @@ public class XMLgenerator
 			flushData();
 
 			// send everything across
-			boolean binary = true;
+			boolean binary = false;
 			if (binary)
 			{
 				_fileWriter.write(bytes, 0, size);

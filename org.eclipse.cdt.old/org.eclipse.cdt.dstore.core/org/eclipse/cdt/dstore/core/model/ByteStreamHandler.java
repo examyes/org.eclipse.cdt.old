@@ -120,7 +120,7 @@ public class ByteStreamHandler
             File newFile = new File(fileName);
 	        FileOutputStream fileStream = new FileOutputStream(newFile);
             
-            boolean binary = true;
+            boolean binary = false;
             if (binary)
             {
 	            fileStream.write(buffer, 0, size);
@@ -162,38 +162,38 @@ public class ByteStreamHandler
             // need to create directories as well
             File file = new File(fileName);
             if (!file.exists())
-			{	
-			    File parent = new File(file.getParent());	      
-			    parent.mkdirs();
-
-			    File newFile = new File(fileName);
-			    FileOutputStream fileStream = new FileOutputStream(newFile);
-			    
-			    boolean binary = false;
-     	        if (binary)
-            	{
-	            	fileStream.write(buffer, 0, size);
-            	}    
-            	else
-            	{
-            		String bufferString = new String(buffer, 0,size, "UTF-8");			
-			
-	 				OutputStreamWriter writer = new OutputStreamWriter(fileStream);
-	 				writer.write(bufferString, 0, size);
-	 				writer.flush();
-    	        }
-
-			    fileStream.close();
-			}
+		{	
+		    File parent = new File(file.getParent());	      
+		    parent.mkdirs();
+		    
+		    File newFile = new File(fileName);
+		    FileOutputStream fileStream = new FileOutputStream(newFile);
+		    
+		    boolean binary = false;
+		    if (binary)
+			{
+			    fileStream.write(buffer, 0, size);
+			}    
 		    else
 			{
-			    // need to reorganize this so that we don't use up all the memory
-			    // divide appendedBuffer into chunks
-			    // at > 50M this kills Eclipse
-			    File oldFile = new File(fileName);
-			    File newFile = new File(fileName + ".new");
-			    newFile.createNewFile();
-	
+			    String bufferString = new String(buffer, 0,size, "UTF-8");			
+			    
+			    OutputStreamWriter writer = new OutputStreamWriter(fileStream);
+			    writer.write(bufferString, 0, size);
+			    writer.flush();
+			}
+		    
+		    fileStream.close();
+		}
+	    else
+		{
+		    // need to reorganize this so that we don't use up all the memory
+		    // divide appendedBuffer into chunks
+		    // at > 50M this kills Eclipse
+		    File oldFile = new File(fileName);
+		    File newFile = new File(fileName + ".new");
+		    newFile.createNewFile();
+		    
 			    FileInputStream  oldFileStream = new FileInputStream(oldFile);            
 			    FileOutputStream newFileStream = new FileOutputStream(newFile);
 
@@ -224,32 +224,32 @@ public class ByteStreamHandler
 
 			    // write new buffer to new file
 			    boolean binary = false;
-     	        if (binary)
-            	{
-	            	newFileStream.write(buffer, 0, size);
-            	}    
-            	else
-            	{
-            		String bufferString = new String(buffer, 0,size, "UTF-8");			
-			
-	 				OutputStreamWriter writer = new OutputStreamWriter(newFileStream);
-	 				writer.write(bufferString, 0, size);
-	 				writer.flush();
-    	        }
-
+			    if (binary)
+				{
+				    newFileStream.write(buffer, 0, size);
+				}    
+			    else
+				{
+				    String bufferString = new String(buffer, 0,size, "UTF-8");			
+				    
+				    OutputStreamWriter writer = new OutputStreamWriter(newFileStream);
+				    writer.write(bufferString, 0, size);
+				    writer.flush();
+				}
+			    
 			    newFileStream.close();
-
+			    
 			    // remote old file
 			    oldFile.delete();
-
+			    
 			    // rename new file 
 			    newFile.renameTo(oldFile);
-			} 
+		} 
           }
           catch (IOException e)
-          {
-            System.out.println(e);
-          }
+	      {
+		  System.out.println(e);
+	      }
         }
     }   
 
