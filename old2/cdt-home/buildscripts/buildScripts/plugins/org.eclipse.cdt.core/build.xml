@@ -34,7 +34,7 @@
         <mkdir dir="${destination.temp.folder}/${full.name}"/>
         <copy file="${build.result.folder}/cdtcore.jar" todir="${destination.temp.folder}/${full.name}"/>
         <copy todir="${destination.temp.folder}/${full.name}">
-            <fileset dir="${basedir}" includes="plugin.xml,plugin.properties,about.html,*.jar,"/>
+            <fileset dir="${basedir}" includes="plugin.xml,plugin.properties,about.html"/>
         </copy>
     </target>
 
