@@ -635,9 +635,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void saveProject(IProject project)
     {
-     System.out.println("About to save project");
-     
-	DataStore dataStore = _plugin.getDataStore();	
+        DataStore dataStore = _plugin.getDataStore();	
 	if (project instanceof Repository)
 	    dataStore = ((Repository)project).getDataStore();	
 	
