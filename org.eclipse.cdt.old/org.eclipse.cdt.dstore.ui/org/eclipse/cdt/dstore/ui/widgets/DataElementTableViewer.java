@@ -195,6 +195,8 @@ public class DataElementTableViewer extends TableViewer
     
     public boolean listeningTo(DomainEvent ev)
     {
+    	if (!getTable().isDisposed())
+    	{
 	DataElement parent = (DataElement)ev.getParent();
 	
 	if ((parent == _selected) || 
@@ -205,9 +207,9 @@ public class DataElementTableViewer extends TableViewer
 	    {
 		return true;
 	    }
-
-	return false;
-    }   
+    	}
+	return false;   
+    }
     
     private Item findItemFor(Table widget, Object res)
     {
@@ -262,7 +264,9 @@ public class DataElementTableViewer extends TableViewer
 	    }
 	else if (_currentInput == parent)
 	    {
+	    	getTable().setRedraw(false);
 		internalRefresh(parent);
+		getTable().setRedraw(true);
 	    }
 	else		     
 	    {
@@ -478,14 +482,19 @@ public class DataElementTableViewer extends TableViewer
 
     protected void inputChanged(Object object, Object oldInput)
     {
-	if (object == null)
+		if (object == null)
 	    {
-		_currentInput = null;
-		setVisibility(false);
-		return;
+			_currentInput = null;
+			setVisibility(false);
+			return;
 	    }
 
-	boolean selectionListening = _listener.isEnabled();
+		if (getTable().isDisposed())
+		{
+			return;	
+		}			    
+
+		boolean selectionListening = _listener.isEnabled();
        	if (selectionListening)
 	    {
 		if (_currentInput != object)
