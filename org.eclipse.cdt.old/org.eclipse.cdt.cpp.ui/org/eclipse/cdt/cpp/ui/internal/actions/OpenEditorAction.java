@@ -9,11 +9,14 @@ package com.ibm.cpp.ui.internal.actions;
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.vcm.*;
+import com.ibm.cpp.ui.internal.editor.*;
 
 import com.ibm.dstore.ui.*;
 import com.ibm.dstore.ui.resource.*;
-
 import com.ibm.dstore.core.model.*;
+
+import com.ibm.lpex.alef.*;
+import com.ibm.lpex.core.*;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
@@ -31,7 +34,10 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
+    private static DataElement _previousElement;
+
     private DataElement _element;
+    private IEditorPart _editor;
     private CppPlugin   _plugin = CppPlugin.getDefault();
 
   public OpenEditorAction(DataElement element)
@@ -40,10 +46,42 @@ public class OpenEditorAction extends Action implements IOpenAction
         _element = element;
       }
 
-  public void setSelected(DataElement selected)
-  {
-    _element = selected;
-  }
+    public void resetSelection()
+    {
+	_element = _previousElement;
+    }
+    
+    public void setSelected(DataElement selected)
+    {
+	if (_element != null)
+	    {
+		DataStore dataStore = _element.getDataStore();
+		_previousElement = dataStore.createObject(null, "location", "location");
+
+		if (_editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
+		    {
+			CppEditor editor = ((com.ibm.cpp.ui.internal.editor.CppEditor)_editor);
+			
+			LpexView lpexViewer = editor.getLpexView();
+			int line = lpexViewer.currentElement();
+			IEditorInput input = editor.getEditorInput();			
+			String path = null;
+			if (input instanceof IFileEditorInput)
+			    {
+				IFile file = ((IFileEditorInput)input).getFile();
+				path = new String(file.getLocation().toOSString());
+				_previousElement.setAttribute(DE.A_SOURCE, path + ":" + line);				
+			    }
+		    }
+		else
+		    {
+			_previousElement.setAttribute(DE.A_SOURCE, _element.getSource());
+		    }
+	    }
+
+	_element = selected;
+	_editor = null;
+    }
 
   public void run()
   {
@@ -69,8 +107,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 	com.ibm.cpp.ui.internal.api.ModelInterface api = _plugin.getModelInterface();
 	api.addNewFile(file);
     }
-
-  public void performGoto(boolean openEditor)
+    
+    public void performGoto(boolean openEditor)
       {
         if (_element != null)
         {
@@ -125,7 +163,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    IWorkbench desktop = _plugin.getWorkbench();
 						    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
 						    
-						    IEditorPart editor = null;
+						    _editor = null;
 						    
 						    IEditorPart [] editors = persp.getEditors();
 						    for (int i = 0; i < editors.length; i++)
@@ -135,13 +173,13 @@ public class OpenEditorAction extends Action implements IOpenAction
 							    if ((input != null) && 
 								openFile.getLocation().toString().equals(file.getLocation().toString()))
 								{
-								    editor = editors[i];		
-								    persp.bringToTop(editor);		
+								    _editor = editors[i];		
+								    persp.bringToTop(_editor);		
 								    break;
 								}
 							}
 						    
-						    if (editor == null)
+						    if (_editor == null)
 							{
 							    if (!openEditor)
 								{
@@ -156,17 +194,17 @@ public class OpenEditorAction extends Action implements IOpenAction
 								{
 								}
 							    
-							    editor = persp.getActiveEditor();
+							    _editor = persp.getActiveEditor();
 							}
 						    
 						    
 						    Integer lineLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));
 						    int line = lineLocation.intValue();	
-						    if ((line > 0) && (editor != null))
+						    if ((line > 0) && (_editor != null))
 							{	
-							    if (editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
+							    if (_editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
 								{
-								    ((com.ibm.cpp.ui.internal.editor.CppEditor)editor).gotoLine(line);
+								    ((com.ibm.cpp.ui.internal.editor.CppEditor)_editor).gotoLine(line);
 								}
 							    else
 								{
@@ -177,7 +215,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 									    marker.setAttribute(IMarker.CHAR_START, -1);
 									    marker.setAttribute(IMarker.CHAR_END, -1);
 									    
-									    editor.gotoMarker(marker);
+									    _editor.gotoMarker(marker);
 									}
 								    catch (CoreException e)
 									{

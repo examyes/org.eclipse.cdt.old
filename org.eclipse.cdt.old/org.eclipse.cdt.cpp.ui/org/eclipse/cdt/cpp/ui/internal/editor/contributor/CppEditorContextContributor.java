@@ -27,7 +27,9 @@ import java.util.*;
 public class CppEditorContextContributor extends LpexContextContributor
 {
     private TextOperationAction _caAction;
-    private FindObjectAction _fAction;
+    private FindObjectAction    _fAction;
+    private JumpBackAction      _bAction;
+
     private IEditorPart _part;
 
 
@@ -48,9 +50,13 @@ public void contributeToMenu(IMenuManager mbm)
     _fAction = new FindObjectAction("Find Selected@F4", ( CppEditor)_part, true);
     _fAction.setText("Find Selected@F4");
 
+    _bAction = new JumpBackAction("Jump Back@F5", (CppEditor)_part);
+    _bAction.setText("Jump Back@F5");
+
     IMenuManager m = mbm.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);
     m.add(_caAction);
     m.add(_fAction);
+    m.add(_bAction);
 }
 
 public void contributeToToolBar(IToolBarManager tbm)
@@ -72,6 +78,10 @@ public void setActiveEditor(IEditorPart part)
 	    if (_fAction != null)
 		{
 		    _fAction.setEditor((CppEditor)_part);
+		}
+	    if (_bAction != null)
+		{
+		    _bAction.setEditor((CppEditor)_part);
 		}
 	}
 }
