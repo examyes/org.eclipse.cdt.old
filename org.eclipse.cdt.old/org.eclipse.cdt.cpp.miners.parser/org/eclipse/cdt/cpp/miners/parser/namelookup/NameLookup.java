@@ -184,7 +184,6 @@ public class NameLookup
   int    col  = src.lastIndexOf(":");
   String path = src.substring(0,col);
   DataElement theFile = _dataStore.find(_parsedFiles, DE.A_SOURCE, path,1);
-
   return findAllElements(theFile, DE.A_SOURCE, src);
  }
  

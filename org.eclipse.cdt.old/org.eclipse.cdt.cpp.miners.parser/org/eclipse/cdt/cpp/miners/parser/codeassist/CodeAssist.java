@@ -35,8 +35,26 @@ public class CodeAssist
  public DataElement doFindDeclaration(DataElement theProject, DataElement patternElement, DataElement status)
  {
   ArrayList results = _nameLookup.getClosestObjects(patternElement.getSource());
-  if (results != null)
-   status.addNestedData(results,true);
+  if ((results == null) || results.isEmpty())
+   return status;
+ 
+  //Should really look at all matches from the line...but for now we'll just do the first.
+  DataElement theElement = (DataElement)results.get(0);
+  ArrayList uses = theElement.getAssociated("Uses");
+  if ((uses == null) || uses.isEmpty())
+   return status;
+  
+  for (int i=0; i<uses.size(); i++)
+  {
+   DataElement theUse = ((DataElement)uses.get(i)).dereference();
+   if (patternElement.getValue() == theUse.getValue())
+   {
+    status.addNestedData(theUse,true);
+    return status;
+   }
+  }
+  
+  status.addNestedData(((DataElement)uses.get(0)).dereference(),true);
   return status;
  }
  
