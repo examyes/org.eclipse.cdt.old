@@ -40,34 +40,36 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
   throws CoreException
    {
+   	String qualifiedFileName = "";
       _plugin = CppPlugin.getDefault();
       _api = ModelInterface.getInstance();
 
 		String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
     	String processID = configuration.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
       IResource resource  = _api.findFile(executableName);
-   	IProject project = resource.getProject();
-	
-	   _executable = _api.findResourceElement(resource);
-   	DataElement projectElement = _api.getProjectFor(_executable);
-      if (!project.isOpen())
+      if (resource != null)
       {
-         displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
-      	return;
-		}
+      	IProject project = resource.getProject();
+   	   _executable = _api.findResourceElement(resource);
+      	DataElement projectElement = _api.getProjectFor(_executable);
+         if (!project.isOpen())
+         {
+            displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+         	return;
+	   	}
+
+      	qualifiedFileName = _executable.getSource();
+      	IFile file = (IFile)_api.findFile(qualifiedFileName);
+      	if (file == null)
+         {
+   	   	projectElement = _api.getProjectFor(_executable);
+      		project = _api.findProjectResource(projectElement);
+      		file = new FileResourceElement(_executable, project);
+   	   	_api.addNewFile(file);			
+         }
+      }
 
       PICLAttachInfo attachInfo = new PICLAttachInfo();
-   	String qualifiedFileName = "";
-	
-   	qualifiedFileName = _executable.getSource();
-   	IFile file = (IFile)_api.findFile(qualifiedFileName);
-   	if (file == null)
-      {
-	   	projectElement = _api.getProjectFor(_executable);
-   		project = _api.findProjectResource(projectElement);
-   		file = new FileResourceElement(_executable, project);
-	   	_api.addNewFile(file);			
-      }
 	
       attachInfo.setProcessID(processID);
       attachInfo.setProcessPath(qualifiedFileName);
@@ -92,8 +94,15 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
 	      return;
 	
 	
-       _dataElementDirectory = _executable.getParent();
-       
+       if (_executable != null)
+       {
+          _dataElementDirectory = _executable.getParent();
+       }
+       else
+       {
+          _dataElementDirectory = null;
+       }
+
        IDebugTarget target = PICLLaunchUtils.getDebugTarget(launch, attachInfo);
        int key = CoreDaemon.generateKey();
        CoreDaemon.storeDebugTarget(target, key);
@@ -101,17 +110,17 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
 	
         launch.addDebugTarget(target);
 	
-	// locator
-	DataElement projectElement = _api.getProjectFor(_executable);
-	if (projectElement != null)
+   	// locator
+   	DataElement projectElement = _api.getProjectFor(_executable);
+   	if (projectElement != null)
 	    {
-		// source locator
-		CppSourceLocator sourceLocator = new CppSourceLocator(projectElement);
-		launch.setSourceLocator(sourceLocator);
+   		// source locator
+	   	CppSourceLocator sourceLocator = new CppSourceLocator(projectElement);
+	   	launch.setSourceLocator(sourceLocator);
 	    }
-	else
+   	else
 	    {
-		launch.setSourceLocator(attachInfo.getWorkspaceSourceLocator());
+	   	launch.setSourceLocator(attachInfo.getWorkspaceSourceLocator());
 	    }
 	
    	launchEngine(new Integer(port).toString(), new Integer(key).toString());

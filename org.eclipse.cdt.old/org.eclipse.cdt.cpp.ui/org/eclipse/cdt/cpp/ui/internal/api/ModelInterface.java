@@ -526,7 +526,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void debug(DataElement dirObject, String port, String key)
     {
-	DataStore dataStore = dirObject.getDataStore();
+       if (dirObject == null)
+          {
+            DataStore ddataStore = _plugin.getCurrentDataStore();
+            dirObject = ddataStore.getHostRoot().get(0);
+          }
+
+       DataStore dataStore = dirObject.getDataStore();
+
 
 	String hostName = "localhost";
 	try
@@ -1658,7 +1665,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    {
 			if (child.isOfType("directory"))
 			{
-			    result = new org.eclipse.cdt.dstore.ui.resource.FolderResourceElement(child, project);	  	    
+			    result = new org.eclipse.cdt.dstore.ui.resource.FolderResourceElement(child, project);	  	
 			}
 			else
 			{
@@ -1849,7 +1856,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public DataElement getProjectFor(DataElement resource)
     {
 	 if (resource != null)
-	 {	    
+	 {	
 	     String rtype = resource.getType();
 	     if (resource.isOfType("file") || rtype.equals("Closed Project"))
 		 {

@@ -233,6 +233,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
      if(selection == null)
      {
         displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.noSelection"));
+        _directory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
         return;
      }
 
@@ -372,6 +373,8 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	
     protected void handleWorkingDirectoryBrowseButtonPressed()
     {
+
+
       if (_directory != null)
       {
          DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
