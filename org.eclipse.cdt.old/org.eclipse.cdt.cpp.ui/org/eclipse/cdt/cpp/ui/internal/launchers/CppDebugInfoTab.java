@@ -63,7 +63,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
     private  DataElement   _directory;
     private  String        _parameters;
 
-    private static DataElement _executable;
+    private  DataElement   _executable;
 
 				
 	/**
@@ -442,7 +442,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
    	spacer.setLayoutData(data);
     }
 
-    
+
     /**
      *	Display an error dialog with the specified message.
      *

@@ -63,7 +63,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
     private  DataElement   _directory;
     private  String        _parameters;
 
-    private  static DataElement   _executable;
+    private  DataElement   _executable;
 				
 
 	/**
@@ -402,18 +402,18 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    {
 	setErrorMessage(null);
 	setMessage(null);
-      
+
         if (_programNameField.getText().length() == 0)
         {
             setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingProgramName"));
             return false;
          }
-   
+
          if (_workingDirectoryField.getText().length() == 0)
-         { 
+         {
             setErrorMessage(_plugin.getLocalizedString("runLauncher.Error.missingWorkingDirectory"));
             return false;
-     
+
          }
          else
          {
@@ -444,7 +444,7 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	spacer.setLayoutData(data);
     }
 
-    
+
     /**
      *	Display an error dialog with the specified message.
      *

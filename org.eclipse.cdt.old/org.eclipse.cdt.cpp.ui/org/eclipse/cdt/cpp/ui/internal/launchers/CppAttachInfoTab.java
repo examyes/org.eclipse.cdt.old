@@ -62,7 +62,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     private  String        _programName;
     private  String        _processID;
 
-    private static DataElement _executable;
+    private  DataElement   _executable;
     private  DataElement   _directory = null;
 
 				
