@@ -1423,7 +1423,7 @@ public final class DataElement implements Serializable, IDataElement
 		}
 
 	    File result = new File(source);
-	    if (result.exists())
+	    if (result.exists() && !_dataStore.isVirtual())
 		{
 		    return result;
 		}
