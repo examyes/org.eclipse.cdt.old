@@ -73,12 +73,20 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 
 	TreeViewer treeViewer = getTreeViewer();
 	treeViewer.setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry()));
-	treeViewer.setContentProvider(new TreeContentProvider());
-	
-	treeViewer.setInput(getContentOutline(input));
+
+	TreeContentProvider provider = new TreeContentProvider(); 
+	provider.setProperty(ds.findDescriptor(DE.T_RELATION_DESCRIPTOR, "contents"));
+	treeViewer.setContentProvider(provider);
+		
+	IAdaptable adp = getContentOutline(input);
+	if (adp != null)
+	    {
+		setViewInput((DataElement)adp);
+	    }
+
 	treeViewer.getTree().addListener(SWT.Expand, this);
 	ds.getDomainNotifier().addDomainListener(this);
-
+	
 	getControl().addKeyListener(
 				    new KeyAdapter() 
 					{
@@ -96,7 +104,16 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	menuMgr.addMenuListener(this);
         Menu menu = menuMgr.createContextMenu(treeViewer.getTree());
         treeViewer.getTree().setMenu(menu);
+    }
 
+    private void setViewInput(DataElement input)
+    {
+	TreeViewer treeViewer = getTreeViewer();
+	Object cinput = treeViewer.getInput();
+	if (cinput != input)
+	    {
+		treeViewer.setInput(input);
+	    }
     }
 
     public void dispose()
@@ -124,8 +141,9 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	    }
 	else
 	    {
+		setViewInput(_elementRoot);
+
 		control.setRedraw(false);
-		getTreeViewer().setInput(_elementRoot);
 		getTreeViewer().internalRefresh(_elementRoot);
 		control.setRedraw(true);
 	    }
@@ -164,10 +182,17 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 
 	if (_elementRoot == null || _elementRoot.isDeleted())
 	    {
-		_elementRoot = _adapter.getElementRoot((IFile)input);	
+		_elementRoot = _adapter.getElementRoot((IFile)input);		
+		if (_elementRoot != null)
+		    {
+			setViewInput(_elementRoot);
+			
+			getTreeViewer().internalRefresh(_elementRoot);
+			
+			return true;
+		    }
 	    }
-	
-	if (_elementRoot != null)
+	else
 	    {	
 		if (parent == _elementRoot || parent.contains((DataElement)_elementRoot))
 		    {
@@ -183,18 +208,15 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 	DataElement parent = (DataElement)ev.getParent();
 	DataStore dataStore = parent.getDataStore();
 	
-	_elementRoot = _adapter.getElementRoot((IFile)input);	
-	
 	if (_elementRoot != null)
 	    {	
-		if (parent == _elementRoot ||
-		    parent.contains((DataElement)_elementRoot))
+		if (parent == _elementRoot || parent.contains((DataElement)_elementRoot))
 		    {
 			update(parent);	
 			
 			if (_expanded == parent || parent.contains(_expanded))
 			    {
-				getTreeViewer().expandToLevel(_expanded, 1);
+				getTreeViewer().expandToLevel(_expanded, 1);	
 			    }
 		    }
 	    }

@@ -45,13 +45,18 @@ public class DataElementAdapter
 	      if (parseReferences.size() > 0)
 		  {
 		      DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
-		      DataElement parsedSource = projectParseInformation.getDataStore().find(projectParseInformation, DE.A_NAME, "Parsed Files", 1);
-		      
-		      String path = e.getLocation().toOSString();
-		      
+		      DataElement parsedSource = dataStore.find(projectParseInformation, DE.A_NAME, "Parsed Files", 1);
+		     
+		      String path1 = e.getLocation().toString();		      
+		      path1 = path1.replace('/', '\\');
+		      String path2 = path1.replace('\\', '/');
 		      if (parsedSource != null)
 			  {
-			      DataElement pathElement = dataStore.find(parsedSource, DE.A_NAME, path, 1);
+			      DataElement pathElement = dataStore.find(parsedSource, DE.A_SOURCE, path1, 1);
+			      if (pathElement == null)
+				  {
+				      pathElement = dataStore.find(parsedSource, DE.A_SOURCE, path2, 1);
+				  }
 			      
 			      return pathElement;
 			  }
@@ -63,7 +68,8 @@ public class DataElementAdapter
 
   public DataElement getContentOutline(IAdaptable e)
   {
-    return parse((IFile) e);
+      //    return parse((IFile) e);
+      return getElementRoot((IFile) e);
   }
 
   public DataElement parse(IFile e)
