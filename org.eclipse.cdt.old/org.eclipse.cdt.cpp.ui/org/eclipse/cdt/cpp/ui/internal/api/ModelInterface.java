@@ -1238,7 +1238,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
 	else if (resourceElement.isOfType("file") || resourceElement.isOfType("directory"))
 	    {
-		return findFile(resourceElement.getSource());
+		return findFile(resourceElement);
 	    }
 	else
 	    {
@@ -1664,10 +1664,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	_tempFiles.add(file);
     }
 
-  public IResource findFile(String fileName)
+	public IResource findFile(String fileName)
+	{
+		boolean isLocal = !_plugin.getCurrentDataStore().isVirtual();
+		return findFile(fileName, isLocal);	
+	}
+	
+  	public IResource findFile(String fileName, boolean isLocal)
     {
 	IResource result = null;
-	if (!_plugin.getCurrentDataStore().isVirtual())
+	if (!isLocal)
 	{
 	java.io.File theFile = new java.io.File(fileName);
 	result = findFile(theFile);
@@ -1684,6 +1690,91 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	return result;
     }
+    
+    public IResource findFile(DataElement fileElement)
+    {
+    	ArrayList segments = new ArrayList();
+    	String type = fileElement.getType();
+    	DataElement parent = fileElement;
+    	while (parent != null &&			
+				    !type.equals("Project") &&
+				    !type.equals("Closed Project"))
+				 {		
+				     if (type.equals("temp") || type.equals("Root"))
+					 {
+					     parent = null;
+					 }
+				     else
+					 {
+						 segments.add(parent);
+					     parent = parent.getParent();
+					     if (parent != null)
+						 {
+						     type = parent.getType();
+						 }
+					 }
+				 }
+				 
+		if (parent != null)
+		{
+    	  DataElement projectElement = parent;
+    	      	
+    		IProject project = findProjectResource(projectElement);
+    		if (project != null)
+    		{
+    			if (segments.size() == 0)
+    			{
+    				return project;	
+    			}
+    			else
+    			{
+    				return findFile(project, fileElement, segments);   					
+    			}
+    		}	
+    	}
+    	else
+    	{
+    		return findFile(fileElement.getSource(), !fileElement.getDataStore().isVirtual());	
+    	}
+    	
+    	return null;
+    }
+    
+    
+    public IResource findFile(IContainer root, DataElement fileElement, ArrayList segments)
+    {
+    	DataElement currentSegment = (DataElement)segments.get(segments.size() - 1);
+    	segments.remove(currentSegment);
+    	try
+    	{
+    	IResource resources[] = root.members();
+    	if (resources != null)
+    	{
+    		for (int i = 0; i < resources.length; i++)
+    		{
+    			IResource resource = resources[i];
+    			String name = resource.getName();
+    			if (name.equals(fileElement.getName()))
+    			{
+    				return resource;	
+    			}
+    			else if (name.equals(currentSegment.getName()))
+    			{
+    				if (resource instanceof IContainer)
+    				{
+	    				return findFile((IContainer)resource, fileElement, segments);		
+    				}
+    			}	
+    		}   		
+    	}
+    	}
+    	catch (CoreException e)
+    	{
+    	}
+    	
+    	return null;
+    }
+    
 
   public IResource findFile(java.io.File fileName)
   {
@@ -1821,7 +1912,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			IResource resources[] = root.members();
 			if (resources != null)
 			    {
-			    	String fileNameString = fileName.getAbsolutePath();
+			    String fileNameString = fileName.getAbsolutePath().replace('\\', '/');
 				for (int i = 0; i < resources.length; i++)
 				    {
 					IResource resource = resources[i];
@@ -2055,6 +2146,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				DataElement child = parent.get(i);
 				if (child != null && !child.isDeleted() && !child.isReference())
 				    {
+				    //	IResource match = findFile(child);
 					IResource match = container.findMember(child.getName());
 					
 					needsRefresh = (match == null);
@@ -2071,15 +2163,15 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				for (int i = 0; (i < members.length) && !needsRefresh; i++)
 				    {
 						IResource member = members[i];
+						String name = member.getName();
+						if (!name.startsWith("."))
+						{
 						DataStore dataStore = parent.getDataStore();
 						DataElement match = dataStore.find(parent,
 										       DE.A_NAME,
-										       member.getName(),
+										       name,
 										       1);
 						needsRefresh = ((match == null) || match.isDeleted());					
-						if (needsRefresh)
-						{
-												
 						}
 				    }
 			    }
