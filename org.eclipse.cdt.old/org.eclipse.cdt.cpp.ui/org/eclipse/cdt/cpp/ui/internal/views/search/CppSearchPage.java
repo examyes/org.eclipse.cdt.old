@@ -146,7 +146,7 @@ public void createControl(Composite parent) {
 	layouter.perform(createExpression(result));
 	layouter.perform(createSearchFor(result), createLimitTo(result), -1);
 	// new code
-	layouter.perform(createScope(result));
+	//layouter.perform(createScope(result));
 	layouter.perform(createFilters(result));
 	
 	// end new code
@@ -232,7 +232,7 @@ private Control createLimitTo(Composite parent) {
 	}
 	return result;		
 }
-private Control createScope(Composite parent) {
+/*private Control createScope(Composite parent) {
 	Group result= new Group(parent, SWT.NONE);
 	result.setText(pluginInstance.getLocalizedString(SCOPE_TITLE));
 	GridLayout layout= new GridLayout();
@@ -287,7 +287,7 @@ private Control createScope(Composite parent) {
 	});
 		
 	return result;		
-}
+}*/
 private Control createSearchFor(Composite parent) {
 	Group result= new Group(parent, SWT.NONE);
 	result.setText(pluginInstance.getLocalizedString(SEARCH_FOR_TITLE));
