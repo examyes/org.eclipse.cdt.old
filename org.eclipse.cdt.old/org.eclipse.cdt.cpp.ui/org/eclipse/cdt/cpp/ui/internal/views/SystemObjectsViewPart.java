@@ -119,7 +119,8 @@ public class SystemObjectsViewPart extends ProjectViewPart
 	//Finally just set the input and the title
 	if (_viewer.getInput() == theInput)
 	    {
-		_viewer.resetView();
+		// this is too expensive
+		//_viewer.resetView();
 	    }
 	else
 	    {

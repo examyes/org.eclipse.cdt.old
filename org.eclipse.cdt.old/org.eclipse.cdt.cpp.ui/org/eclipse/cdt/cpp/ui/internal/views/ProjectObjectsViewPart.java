@@ -99,32 +99,33 @@ public class ProjectObjectsViewPart extends ProjectViewPart
   IProject project = event.getProject();
 
   switch (type)
-  {
-   case CppProjectEvent.OPEN:
-   {
-     doInput(project);
-   }
-   break;
-   case CppProjectEvent.CLOSE:
-   case CppProjectEvent.DELETE:
-   {
-    doClear();
-   }
-   break;
-   case CppProjectEvent.COMMAND:
-   {
-    if ((event.getStatus() == CppProjectEvent.START) || (event.getStatus() == CppProjectEvent.DONE))
-    {
-     doInput(project);
-    }
-   }
-   super.projectChanged(event);
-   break;
-   default:
-   break;
-  }
+      {
+      case CppProjectEvent.OPEN:
+	  {
+	      doInput(project);
+	  }
+	  break;
+      case CppProjectEvent.CLOSE:
+      case CppProjectEvent.DELETE:
+	  {
+	      doClear();
+	  }
+	  break;
+      case CppProjectEvent.COMMAND:
+	  {
+	      if ((event.getStatus() == CppProjectEvent.START) || (event.getStatus() == CppProjectEvent.DONE))
+		  {
+		      doInput(project);
+		  }
+	  }	  
+	  super.projectChanged(event);
+	  break;
+      default:
+	  super.projectChanged(event);
+	  break;
+      }
  }
-
+    
 
 
  public void doSpecificInput(DataElement theElement)
@@ -145,7 +146,10 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      
      //Finally just set the input and the title
      if (_viewer.getInput() == theInput)
-	 _viewer.resetView();
+	 {
+	     // this is too expensive
+	     //_viewer.resetView();
+	 }
      else
 	 {
 	     _viewer.setInput(theInput);	
