@@ -21,7 +21,7 @@ public class DebugMiner extends Miner
        String pluginPath = null;
        pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
 
-       String ps = System.getProperty("path.separator"); 
+       String ps = System.getProperty("path.separator");
        //       String fs = System.getProperty("file.separator");
        String fs = "/";
        _gdbPluginPath = pluginPath + "com.ibm.debug.gdbPicl" + fs;
@@ -80,7 +80,7 @@ public class DebugMiner extends Miner
                                               " -quiport=" + port.getName() +
                                               " -startupKey=" + key.getName();
 
-	if (System.getProperty("os.name").equals("linux"))
+	if (System.getProperty("os.name").equals("Linux"))
 	{
 	    invocationStr += " -gdbPath=" + _gdbPluginPath;
 	}
