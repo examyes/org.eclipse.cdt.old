@@ -13,6 +13,13 @@ import com.ibm.dstore.core.util.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * DataElement is the unit of information for the DataStore.  All objects including
+ * schema descriptors, commands and instance objects are represented by DataElements.
+ * DataElements should not be constructed directly, rather they are requested via the createObject()
+ * method in DataStore
+ *
+ */
 public final class DataElement implements Serializable, IDataElement
 {
     private String              _attributes[];
@@ -37,54 +44,58 @@ public final class DataElement implements Serializable, IDataElement
     // convenience
     private DataElement         _abstracts = null;
   
-  /////////////////////////////////////////
-  //
-  // Constructors
-  //
-  /////////////////////////////////////////
-
-    // default constructor
-    public DataElement()
+    /**
+     * Creates a new DataElement without initializing it.
+     *
+     * @param dataStore the owner DataStore for this element
+     */
+    public DataElement(DataStore dataStore)
     {
-
-	_dataStore   = null;
+	_dataStore   = dataStore;
 	_parent      = null;
 
     }
 
-  /////////////////////////////////////////
-  //
-  // initialization and settings
-  //
-  /////////////////////////////////////////
-
-  public void reInit(DataElement parent, DataElement originalObject, DataElement refType)
-      {
+    /**
+     * Initializes a DataElement to be reference to some other DataElement.  
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the element that contains this reference
+     * @param originalObject the element that gets referenced
+     * @param refType the type descriptor of the reference
+     */
+    public void reInit(DataElement parent, DataElement originalObject, DataElement refType)
+    {
 	if ((parent != null) && (originalObject != null))
 	    {
-		_dataStore   = originalObject.getDataStore();
 		_parent = parent;
-
+		
 		_attributes                  = getAttributes();
 		_attributes[DE.A_TYPE]       = refType.getName();		
 		_attributes[DE.A_ID]         = parent.getId() + refType.getName() + originalObject.getId();
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
 		_attributes[DE.A_SOURCE]     = originalObject.getSource();
-				
+		
 		initialize(refType);	
-
+		
 		_referencedObject = originalObject;
 		_isReference      = true;		
 	    }
-      }
+    }
 
-  public void reInit(DataElement parent, DataElement originalObject, String refType)
-      {
+    /**
+     * Initializes a DataElement to be reference to some other DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the element that contains this reference
+     * @param originalObject the element that gets referenced
+     * @param refType the a string representing the type of reference
+     */
+    public void reInit(DataElement parent, DataElement originalObject, String refType)
+    {
 	if ((parent != null) && (originalObject != null))
 	    {
-
-		_dataStore   = originalObject.getDataStore();
 		_parent = parent;
 
 		_attributes                  = getAttributes();
@@ -102,72 +113,117 @@ public final class DataElement implements Serializable, IDataElement
 	    }
       }
 
-  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String id, String name, String source)
-	{
-	  _dataStore   = dataStore;
-	  _parent      = parent;
+    /**
+     * Initializes a DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the parent of the element
+     * @param type the type descriptor of the element
+     * @param id the ID of the element
+     * @param name the name of the element
+     * @param source the source location of the element
+     */
+    public void reInit(DataElement parent, DataElement type, String id, String name, String source)
+    {
+	_parent      = parent;
+	
+	_attributes = getAttributes();
+	_attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
+	_attributes[DE.A_ID]         = id;
+	_attributes[DE.A_NAME]       = name;
+	_attributes[DE.A_VALUE]      = name;
+	_attributes[DE.A_SOURCE]     = source; 
+	
+	initialize(type);
+    }
 
-	  _attributes = getAttributes();
-	  _attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
-          _attributes[DE.A_ID]         = id;
-          _attributes[DE.A_NAME]       = name;
-          _attributes[DE.A_VALUE]      = name;
-	  _attributes[DE.A_SOURCE]     = source; 
+    /**
+     * Initializes a DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the parent of the element
+     * @param type a string representing the type descriptor of the element
+     * @param id the ID of the element
+     * @param name the name of the element
+     * @param source the source location of the element
+     */
+    public void reInit(DataElement parent, String type, String id, String name, String source)
+    {
+	_parent      = parent;
+	
+	_attributes = getAttributes();
+	_attributes[DE.A_TYPE]       = type;
+	_attributes[DE.A_ID]         = id;
+	_attributes[DE.A_NAME]       = name;
+	_attributes[DE.A_VALUE]      = name;
+	_attributes[DE.A_SOURCE]     = source; 
+	
+	initialize();
+    }
 
-	  initialize(type);
-	}
 
-  public void reInit(DataStore dataStore, DataElement parent, String type, String id, String name, String source)
-	{
-	  _dataStore   = dataStore;
-	  _parent      = parent;
+    /**
+     * Initializes a DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the parent of the element
+     * @param type the type descriptor of the element
+     * @param id the ID of the element
+     * @param name the name of the element
+     * @param source the source location of the element
+     * @param isRef an indication of whether the element is a reference or not
+     */
+    public void reInit(DataElement parent, DataElement type, String id, String name, String source, boolean isRef)
+    {
+	_parent = parent;
+	
+	_attributes = getAttributes();
+	_attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
+	_attributes[DE.A_ID]         = id;
+	_attributes[DE.A_NAME]       = name;
+	_attributes[DE.A_VALUE]      = name;
+	_attributes[DE.A_SOURCE]     = source;
+	
+	initialize(type);
+	_isReference = isRef;
+    }
 
-	  _attributes = getAttributes();
-	  _attributes[DE.A_TYPE]       = type;
-          _attributes[DE.A_ID]         = id;
-          _attributes[DE.A_NAME]       = name;
-          _attributes[DE.A_VALUE]      = name;
-	  _attributes[DE.A_SOURCE]     = source; 
-
-	  initialize();
-	}
-
-  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String id, String name, String source, boolean isRef)
-	{
-          _dataStore = dataStore;
-          _parent = parent;
-
-	  _attributes = getAttributes();
-	  _attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
-          _attributes[DE.A_ID]         = id;
-          _attributes[DE.A_NAME]       = name;
-          _attributes[DE.A_VALUE]      = name;
-	  _attributes[DE.A_SOURCE]     = source;
-
-	  initialize(type);
-	  _isReference = isRef;
-	}
-
-  public void reInit(DataStore dataStore, DataElement parent, String type, String id, String name, String source, boolean isRef)
-	{
-
-          _dataStore = dataStore;
-          _parent = parent;
-
-	  _attributes = getAttributes();
-	  _attributes[DE.A_TYPE]       = type;
-          _attributes[DE.A_ID]         = id;
-          _attributes[DE.A_NAME]       = name;
-          _attributes[DE.A_VALUE]      = name;
-	  _attributes[DE.A_SOURCE]     = source;
-
-	  initialize();
-	  _isReference = isRef;
-	}
-
-  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String[] attributes)
-      {
-        _dataStore   = dataStore;
+    /**
+     * Initializes a DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the parent of the element
+     * @param type a string representing the type descriptor of the element
+     * @param id the ID of the element
+     * @param name the name of the element
+     * @param source the source location of the element
+     * @param isRef an indication of whether the element is a reference or not
+     */
+    public void reInit(DataElement parent, String type, String id, String name, String source, boolean isRef)
+    {
+	_parent = parent;
+	
+	_attributes = getAttributes();
+	_attributes[DE.A_TYPE]       = type;
+	_attributes[DE.A_ID]         = id;
+	_attributes[DE.A_NAME]       = name;
+	_attributes[DE.A_VALUE]      = name;
+	_attributes[DE.A_SOURCE]     = source;
+	
+	initialize();
+	_isReference = isRef;
+    }
+    
+    /**
+     * Initializes a DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the parent of the element
+     * @param type the type descriptor of the element
+     * @param attributes the attributes for this element (name, source, id, etc.) 
+     */
+    public void reInit(DataElement parent, DataElement type, String[] attributes)
+    {
         _parent      = parent;
 	
 	_attributes = attributes;
@@ -176,70 +232,75 @@ public final class DataElement implements Serializable, IDataElement
 	initialize(type);
       }
 
-  public void reInit(DataStore dataStore, DataElement parent, String[] attributes)
-      {
-        _dataStore   = dataStore;
+    /**
+     * Initializes a DataElement 
+     * This method should only be called from the DataStore.
+     *
+     * @param parent the parent of the element
+     * @param attributes the attributes for this element (type, name, source, id, etc.) 
+     */
+    public void reInit(DataElement parent, String[] attributes)
+    {
         _parent      = parent;
 
 	_attributes = attributes;
-
+	
 	initialize();
-      }
+    }
 
 
 
-  private void initialize()
+    private void initialize()
     {
 	initialize(null);
     }
 
-  private void initialize(DataElement typeDescriptor)
-      {
-	  _isReference  = false;
-	  _isDescriptor = false;
-	  _depth        = 2;
-
-	  _referencedObject = null; 
-	  _isExpanded  = false;
-	  _isUpdated   = false;
-	  _descriptor  = typeDescriptor;
-
-
-
-	  String depthStr = getAttribute(DE.A_DEPTH);
-	  if (depthStr != null)
-	      {
+    private void initialize(DataElement typeDescriptor)
+    {
+	_isReference  = false;
+	_isDescriptor = false;
+	_depth        = 2;
+	
+	_referencedObject = null; 
+	_isExpanded  = false;
+	_isUpdated   = false;
+	_descriptor  = typeDescriptor;
+	
+	String depthStr = getAttribute(DE.A_DEPTH);
+	if (depthStr != null)
+	    {
 	      	if (!depthStr.equals("2"))
-	      	{
-	    
-		  		_depth = Integer.parseInt(depthStr);
-	      	}
-	      }
-
-	  String isRef = getAttribute(DE.A_ISREF);
-	  if (isRef != null && isRef.equals("true"))
-	      {
-		  _isReference = true;	 
-	      }
-	  
-	  String type  = getAttribute(DE.A_TYPE);
-	  if (type.equals(DE.T_OBJECT_DESCRIPTOR)          ||
-	      type.equals(DE.T_COMMAND_DESCRIPTOR)         ||
-	      type.equals(DE.T_RELATION_DESCRIPTOR)        ||
-	      type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
-	      type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR) ||
-	      type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR)
-	      )
-	      {
+		    {			
+			_depth = Integer.parseInt(depthStr);
+		    }
+	    }
+	
+	String isRef = getAttribute(DE.A_ISREF);
+	if (isRef != null && isRef.equals("true"))
+	    {
+		_isReference = true;	 
+	    }
+	
+	String type  = getAttribute(DE.A_TYPE);
+	if (type.equals(DE.T_OBJECT_DESCRIPTOR)          ||
+	    type.equals(DE.T_COMMAND_DESCRIPTOR)         ||
+	    type.equals(DE.T_RELATION_DESCRIPTOR)        ||
+	    type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
+	    type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR) ||
+	    type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR)
+	    )
+	    {
 		  _isDescriptor = true; 
-	      }
-	  
-	  if (_nestedData != null)
-	      _nestedData.clear();
-      }
-
-
-
+	    }
+	
+	if (_nestedData != null)
+	    _nestedData.clear();
+    }
+    
+    /**
+     * Removes all the attributes of a DataElement. 
+     * This method should only be called from the UpdateHandlers.
+     */
     public synchronized void clear()
     {
 	if (_attributes != null)
@@ -267,17 +328,26 @@ public final class DataElement implements Serializable, IDataElement
     }
 
 
-  public synchronized void delete()
-      {
-	  // set delete attribute
-	  setAttribute(DE.A_SOURCE, "deleted");
-	  setAttribute(DE.A_VALUE, "deleted");
+    /**
+     * Marks a DataElement as deleted.
+     * This method should only be called from the DataStore
+     */
+    public synchronized void delete()
+    {
+	// set delete attribute
+	setAttribute(DE.A_SOURCE, "deleted");
+	setAttribute(DE.A_VALUE, "deleted");
+	
+	_isUpdated = false;	 
+	_isExpanded = true;
+	_buffer = null;
+    }
 
-	  _isUpdated = false;	 
-	  _isExpanded = true;
-	  _buffer = null;
-      }
-
+    /**
+     * Indicates whether the DataElement is deleted or not.
+     *
+     * @return whehther the element is deleted or not
+     */
     public boolean isDeleted()
     {    
 	String valueAttribute = getAttribute(DE.A_VALUE);
@@ -295,10 +365,16 @@ public final class DataElement implements Serializable, IDataElement
 	return false;	
       }
 
-  public void addNestedData(ArrayList nestedData, boolean checkUnique)
-      {
-	  if (nestedData != null)
-	      {
+    /**
+     * Adds a set of elements as children to this element.
+     *
+     * @param nestedData a set of elements to add to this element 
+     * @param checkUnique whether to prevent duplicates from being added
+     */
+    public void addNestedData(ArrayList nestedData, boolean checkUnique)
+    {
+	if (nestedData != null)
+	    {
 		  if (_nestedData == null)
 		      {
 			  _nestedData = new ArrayList(nestedData.size());
@@ -312,46 +388,57 @@ public final class DataElement implements Serializable, IDataElement
 				  addNestedData(child, checkUnique);
 			      }
 		      }
-	      }
-      }
+	    }
+    }
 
-  public void addNestedData(DataElement obj, boolean checkUnique)
-      {
-	  if (_nestedData == null)
-	      {
-		  _nestedData = new ArrayList(4);	    
-	      }
-
-	  synchronized(_nestedData)
-	      {	  
-		  boolean alreadyThere = false;
-		  if (checkUnique)
-		      {
-			  alreadyThere = _nestedData.contains(obj);
-		      }
-
-		  if (!checkUnique || !alreadyThere)
-		      {
-			  if (alreadyThere)
-			      {
-				  return;
-			      }
-			  else
-			      {
-				  _nestedData.add(obj);
-				  
-				  if (obj.getParent() == null)
-				      obj.setParent(this);
-				  //***_isExpanded = true;
-			      }
-		      }
-		  
-		  _isUpdated = false;
-		  obj.setUpdated(false);
-	      }	  
-      }
+    /**
+     * Adds another element as a child to this element.
+     *
+     * @param obj the element to add 
+     * @param checkUnique whether to prevent duplicates from being added
+     */
+    public void addNestedData(DataElement obj, boolean checkUnique)
+    {
+	if (_nestedData == null)
+	    {
+		_nestedData = new ArrayList(4);	    
+	    }
+	
+	synchronized(_nestedData)
+	    {	  
+		boolean alreadyThere = false;
+		if (checkUnique)
+		    {
+			alreadyThere = _nestedData.contains(obj);
+		    }
+		
+		if (!checkUnique || !alreadyThere)
+		    {
+			if (alreadyThere)
+			    {
+				return;
+			    }
+			else
+			    {
+				_nestedData.add(obj);
+				
+				if (obj.getParent() == null)
+				    obj.setParent(this);
+			    }
+		    }
+		
+		_isUpdated = false;
+		obj.setUpdated(false);
+	    }	  
+    }
     
-  public synchronized void removeNestedData(DataElement object)
+
+    /**
+     * Removes a specified child element from this element.
+     *
+     * @param object the element to remove 
+     */
+    public synchronized void removeNestedData(DataElement object)
       {
 	  if (_nestedData != null)
 	      {
@@ -364,34 +451,41 @@ public final class DataElement implements Serializable, IDataElement
         _isUpdated = false; 
       }
 
-  public synchronized void removeNestedData()
-      {
+    /**
+     * Removes all the children from this element.
+     */
+    public synchronized void removeNestedData()
+    {
 	if (_nestedData != null)
-	  {
-	      while (_nestedData.size() > 0)
-		  {
-		      DataElement nestedObject = (DataElement)_nestedData.get(0);
-		      _nestedData.remove(nestedObject);
-		  }
-	  }
-
-	_isExpanded = false;
-	_isUpdated = false;
+	    {
+		while (_nestedData.size() > 0)
+		    {
+			DataElement nestedObject = (DataElement)_nestedData.get(0);
+			_nestedData.remove(nestedObject);
+		    }
+	    }
 	
-      }
+	_isExpanded = false;
+	_isUpdated = false;	
+    }
 
 
-  /////////////////////////////////////////
-  //
-  // gets
-  //
-  /////////////////////////////////////////
+    /**
+     * Returns an attribute of this element.
+     *
+     * @param attributeIndex the index of the element 
+     * @return the attribute 
+     */
+    public String getAttribute(int attributeIndex)
+    {
+	return _attributes[attributeIndex];
+    }
 
-  public String getAttribute(int attributeIndex)
-      {
-	  return _attributes[attributeIndex];
-      }
-
+    /**
+     * Returns the set of attributes for this element.
+     *
+     * @return the set of attributes 
+     */
     public String[] getAttributes()
     {
 	if (_attributes == null)
@@ -401,44 +495,85 @@ public final class DataElement implements Serializable, IDataElement
 	return _attributes;		
     }
 
-  public String getType()
-      {
+
+    /**
+     * Returns the type attribute for this element.
+     *
+     * @return the type attribute 
+     */
+    public String getType()
+    {
         return getAttribute(DE.A_TYPE);
-      }
+    }
 
-  public String getId()
-      {
+    /**
+     * Returns the ID attribute for this element.
+     *
+     * @return the ID attribute 
+     */
+    public String getId()
+    {
         return getAttribute(DE.A_ID);
-      }
+    }
 
-  public String getName()
-      {
+    /**
+     * Returns the name attribute for this element.
+     *
+     * @return the name attribute 
+     */
+    public String getName()
+    {
         return getAttribute(DE.A_NAME);
-      }
+    }
 
-  public String getValue()
-      {
+    /**
+     * Returns the value attribute for this element.
+     *
+     * @return the value attribute 
+     */
+    public String getValue()
+    {
         return getAttribute(DE.A_VALUE);
-      }
+    }
 
-  public String getSource()
-      {
+    /**
+     * Returns the source attribute for this element.
+     *
+     * @return the source attribute 
+     */
+    public String getSource()
+    {
         return getAttribute(DE.A_SOURCE);
-      }
+    }
 
-  public StringBuffer getBuffer()
-      {
+    /**
+     * Returns the buffer for this element.
+     *
+     * @return the buffer 
+     */
+    public StringBuffer getBuffer()
+    {
         if (_buffer == null)
-          _buffer = new StringBuffer();
-
+	    _buffer = new StringBuffer();
+	
         return _buffer;
-      }
-
-  public DataStore getDataStore()
-      {
+    }
+    
+    /**
+     * Returns the DataStore for this element.
+     *
+     * @return the DataStore 
+     */
+    public DataStore getDataStore()
+    {
         return _dataStore;
-      }
+    }
 
+    /**
+     * Initializes the children set of this element with a specified size.
+     *
+     * @param size the initial size 
+     */
     public void initializeNestedData(int size)
     {
 	if (_nestedData == null)
@@ -447,219 +582,316 @@ public final class DataElement implements Serializable, IDataElement
 	    }
     }
 
-  public ArrayList getNestedData()
-      {
+    /**
+     * Returns the children of this element.
+     *
+     * @return the children of this element 
+     */
+    public ArrayList getNestedData()
+    {
 	if (_nestedData == null)
-	  {
-	    _nestedData = new ArrayList();	    
-	  }
+	    {
+		_nestedData = new ArrayList();	    
+	    }
         return _nestedData;
-      }
+    }
 
-  public DataElement get(int index)
-  {
-    if (_nestedData == null)
-      {
-	return null;	
-      }
-    else
-      {
-        if (getNestedSize() > index)
-        {
-          Object obj = _nestedData.get(index);
-          return (DataElement)obj;
-        }
-        else
-        {
-          return null;
-        }
-      } 
-  }
-
-  public int getNestedSize()
-  {
-    if (_nestedData == null)
-      {
-	return 0;	
-      }
-    else
-      {	
-	return _nestedData.size();
-      }
-  }  
-  
-  public DataElement getParent()
-      {
+    /**
+     * Returns the child at the specified index.
+     *
+     * @param index the index of the child to retrieve 
+     * @return the child element 
+     */
+    public DataElement get(int index)
+    {
+	if (_nestedData == null)
+	    {
+		return null;	
+	    }
+	else
+	    {
+		if (getNestedSize() > index)
+		    {
+			Object obj = _nestedData.get(index);
+			return (DataElement)obj;
+		    }
+		else
+		    {
+			return null;
+		    }
+	    } 
+    }
+    
+    /**
+     * Returns the number of children this element contains.
+     *
+     * @return the number of children 
+     */    
+    public int getNestedSize()
+    {
+	if (_nestedData == null)
+	    {
+		return 0;	
+	    }
+	else
+	    {	
+		return _nestedData.size();
+	    }
+    }  
+    
+    /**
+     * Returns the parent of this element.
+     *
+     * @return the parent 
+     */   
+    public DataElement getParent()
+    {
         return _parent;
-      }
+    }
 
- public void setDescriptor(DataElement theDescriptor)
- {
-  _descriptor = theDescriptor;
-  
-
-
- }
+    /**
+     * Explicitly sets the type descriptor for this element.
+     *
+     * @param theDescriptor the type descriptor for this element 
+     */   
+    public void setDescriptor(DataElement theDescriptor)
+    {
+	_descriptor = theDescriptor;
+    }
  
-  public DataElement getDescriptor()
-      {
-	  if (isDeleted())
+     /**
+     * Returns the type descriptor for this element.
+     *
+     * @return the type descriptor for this element 
+     */   
+    public DataElement getDescriptor()
+    {
+	if (isDeleted())
 	      {
 		  return null;
 	      }
-
+	
         if (_isReference)
-	  {
-	    if (_referencedObject == null)
-	      {
-		_referencedObject = dereference();		
-	      }
-	    if (this == _referencedObject || _referencedObject.isDeleted())
-		{
-		    _referencedObject = null;
-		}
-	    else
-		{
-		    return _referencedObject.getDescriptor();
-		}
-	  }
+	    {
+		if (_referencedObject == null)
+		    {
+			_referencedObject = dereference();		
+		    }
+		if (this == _referencedObject || _referencedObject.isDeleted())
+		    {
+			_referencedObject = null;
+		    }
+		else
+		    {
+			return _referencedObject.getDescriptor();
+		    }
+	    }
         else if ((_descriptor == null) && (_dataStore != null))
 	    {
 		if (_isDescriptor)
 		    {
-			_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 1);
+			_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), 
+						      DE.A_NAME, getAttribute(DE.A_TYPE), 1);
 		    }
 		else
 		    {
 			_descriptor = _dataStore.findDescriptor(DE.T_OBJECT_DESCRIPTOR, getAttribute(DE.A_TYPE));	   
 			if (_descriptor == null)
 			    {
-				_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 3);	   
+				_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, 
+							      getAttribute(DE.A_TYPE), 3);	   
 			    }
 		    }
 	    }
-
+	
         return _descriptor;
-      }
-
-  public DataElement getCommandFor(String value)
-      {
+    }
+    
+    /*    public DataElement getCommandFor(String value)
+    {
         DataElement descriptor = getDescriptor();
         for (int i = 0; i < descriptor.getNestedSize(); i++)
         {
-          DataElement subDescriptor = (DataElement)descriptor.get(i);
-          if (subDescriptor.getType().equals(DE.T_COMMAND_DESCRIPTOR))
-          {
-            if (subDescriptor.getValue().equals(value))
-            {
-              return subDescriptor;
-            }
-          }
+	    DataElement subDescriptor = (DataElement)descriptor.get(i);
+	    if (subDescriptor.getType().equals(DE.T_COMMAND_DESCRIPTOR))
+		{
+		    if (subDescriptor.getValue().equals(value))
+			{
+			    return subDescriptor;
+			}
+		}
         }
-
+	
         return null;
-	}
-
-  public int depth()
-      {
+	}*/
+    
+    
+    /**
+     * Returns the visibility of this element.
+     *
+     * @return the level of visibility for this element 
+     */   
+    public int depth()
+    {
         return _depth;
+    }
+
+    /**
+     * Indicates whether this is a reference or not.
+     *
+     * @return whether this is a reference or not 
+     */   
+    public boolean isReference()
+    {
+	return _isReference;
+    }
+
+    /**
+     * Indicates whether this element has been queried for it's children.
+     *
+     * @return whether element has been expanded 
+     */   
+    public boolean isExpanded()
+      {
+	  return _isExpanded;
       }
 
-  public boolean isReference()
-  {
-    return _isReference;
-  }
-
-  public boolean isExpanded()
-      {
-        return _isExpanded;
-      }
-
-  public boolean isUpdated()
-      {
+    /**
+     * Indicates whether this element has been updated yet. 
+     * On a server, an element is updated if it has been transfered the the client.
+     * On a client, an element is updated if a notification has been sent out for the ui
+     *
+     * @return whether element has been updated yet 
+     */   
+    public boolean isUpdated()
+    {
         return _isUpdated;
-      }
+    }
 
-
-  /////////////////////////////////////////
-  //
-  // sets
-  //
-  /////////////////////////////////////////
-
-  public void setAttribute(int attributeIndex, String attribute)
-      {
+    /**
+     * Sets an attribute of the element. 
+     *
+     * @param attributeIndex the index of the attribute to set 
+     * @param attribute the new value for the specified attribute 
+     */   
+    public void setAttribute(int attributeIndex, String attribute)
+    {
         if (attribute != null)
-        {
-          if ((attributeIndex == DE.A_NAME) && (getAttribute(DE.A_NAME).equals(getAttribute(DE.A_VALUE))))
-          {
-            _attributes[DE.A_VALUE] = attribute;
+	    {
+		if ((attributeIndex == DE.A_NAME) && (getAttribute(DE.A_NAME).equals(getAttribute(DE.A_VALUE))))
+		    {
+			_attributes[DE.A_VALUE] = attribute;
+			
+		    }
+		
+		_attributes[attributeIndex] = attribute;
+		_isUpdated = false;
+	    }
+    }
+    
 
-          }
-
-          _attributes[attributeIndex] = attribute;
-	  _isUpdated = false;
-        }
-      }
-
-  public void setAttributes(String attributes[])
-      {
+    /**
+     * Sets all of the attributes of the element. 
+     *
+     * @param attributes the new set of attributes for the element 
+     */   
+    public void setAttributes(String attributes[])
+    {
 	for (int i = 0; i < DE.A_SIZE; i++)
-	  {	
+	    {	
 	    if (attributes[i] != null)
-	      {		
-		_attributes[i] = attributes[i];
-	      }	
-	  }
-
+		{		
+		    _attributes[i] = attributes[i];
+		}	
+	    }
+	
 	_isUpdated = false;
-      }
-
-  public void setBuffer(StringBuffer buffer)
-      {
+    }
+    
+    /**
+     * Sets the buffer for this element. 
+     * The buffer is used if extra temporary information needs to be stored
+     * with this element
+     *
+     * @param buffer the new buffer for this element 
+     */       
+    public void setBuffer(StringBuffer buffer)
+    {
         _buffer = buffer;
 	if (_depth < 2 && buffer.length() > 0)
 	    {
 		setDepth(2);
 	    }
-
+	
 	_isUpdated = false;
-      }
+    }
 
-  public void appendToBuffer(String text)
-      {
+    /**
+     * Appends to the buffer for this element. 
+     * The buffer is used if extra temporary information needs to be stored
+     * with this element
+     *
+     * @param text text to append to the buffer 
+     */       
+    public void appendToBuffer(String text)
+    {
         if (_buffer == null)
-        {
-          _buffer = new StringBuffer();
-        }
+	    {
+		_buffer = new StringBuffer();
+	    }
         _buffer.append(text);
 	_isUpdated = false;
-      }
+    }
 
-  public void setExpanded(boolean flag)
-	{
-	  _isExpanded = flag;
-	}
-  public void setUpdated(boolean flag)
+    /**
+     * Sets the expanded indication for this element. 
+     *
+     * @param flag whether the element is expanded or not 
+     */       
+    public void setExpanded(boolean flag)
+    {
+	_isExpanded = flag;
+    }
+
+    /**
+     * Sets the updated indication for this element. 
+     *
+     * @param flag whether the element is updated or not 
+     */       
+    public void setUpdated(boolean flag)
       {
         _isUpdated = flag;
       }
 
-  public void setParent(DataElement parent)
-      {
+    /**
+     * Sets the parent for this element. 
+     *
+     * @param parent the new parent 
+     */       
+    public void setParent(DataElement parent)
+    {
         _parent = parent;
-      }
+    }
   
-  public void setDataStore(DataStore dataStore)
-      {
+    /**
+     * Sets the DataStore for this element. 
+     *
+     * @param dataStore the new dataStore 
+     */       
+    public void setDataStore(DataStore dataStore)
+    {
         _dataStore = dataStore;
-      }
+    }
 
-  public void setDepth(int depth)
-      {
+    /**
+     * Sets the depth of visibility for this element. 
+     *
+     * @param depth the level of visibility 
+     */       
+    public void setDepth(int depth)
+    {
         _depth = depth;
-      }
-
+    }
 
     private DataElement getAbstractsRelationship()
     {
@@ -672,24 +904,36 @@ public final class DataElement implements Serializable, IDataElement
     }
 
 
-  /////////////////////////////////////////
-  //
-  // comparisons and searching
-  //
-  /////////////////////////////////////////
-
-
+    /**
+     * Tests if this element is of the specified type. 
+     *
+     * @param typeStr a string representing the type descriptor to compare with 
+     * @return whether the element is of the specified type
+     */       
     public boolean isOfType(String typeStr)
     {
 	DataElement typeDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, typeStr, 1);
 	return isOfType(typeDescriptor);
     }
 
+    /**
+     * Tests if this element is of the specified type. 
+     *
+     * @param type the type descriptor to compare with 
+     * @return whether the element is of the specified type
+     */       
     public boolean isOfType(DataElement type)
     {
 	return isOfType(type, false);
     }
 
+    /**
+     * Tests if this element is of the specified type. 
+     *
+     * @param type the type descriptor to compare with 
+     * @param isDescriptor whehter this element is a descriptor or an instance object 
+     * @return whether the element is of the specified type
+     */       
     public boolean isOfType(DataElement type, boolean isDescriptor)
     {
 	boolean result = false;
@@ -738,34 +982,58 @@ public final class DataElement implements Serializable, IDataElement
 			result = isOfType(subDescriptor, true);
 		    }
 	    }
-
+	
 	return result;
     }
-
-  public boolean patternMatch(int attributes[], String patterns[], int numAttributes, boolean ignoreCase)
-      {
+    
+    /**
+     * Tests if this element matches the specified patterns. 
+     *
+     * @param attributes the attribute indexes to compare with 
+     * @param patterns the values to compare the specified attributes with 
+     * @param numAttributes the number of attributes to compare 
+     * @param ignoreCase whether to ignore case or not 
+     * @return whether the element matches the patterns
+     */       
+    public boolean patternMatch(int attributes[], String patterns[], int numAttributes, boolean ignoreCase)
+    {
         int index = 0;
         while (index < numAttributes)
-        {
-	  String attribute = getAttribute(attributes[index]);
-	  String pattern   = patterns[index];
-	  
-          if (!StringCompare.compare(pattern, attribute, ignoreCase))
-          {
-            return false;
-          }
-          index++;
-        }
-
+	    {
+		String attribute = getAttribute(attributes[index]);
+		String pattern   = patterns[index];
+		
+		if (!StringCompare.compare(pattern, attribute, ignoreCase))
+		    {
+			return false;
+		    }
+		index++;
+	    }
+	
         return true;
-      }
+    }
 
 
+    /**
+     * Tests if this element contains a specified element in a particular relationship. 
+     *
+     * @param object the object to look for 
+     * @param property relationship under which to find the object 
+     * @return whether the element is found
+     */       
     public boolean contains(DataElement object, DataElement property)
     {
 	return contains(object, property, 1);
     }
 
+    /**
+     * Tests if this element contains a specified element in a particular relationship. 
+     *
+     * @param object the object to look for 
+     * @param property relationship under which to find the object 
+     * @param depth how deep to search for the specified element 
+     * @return whether the element is found
+     */       
     public boolean contains(DataElement object, DataElement property, int depth)
     {
 	if (depth > 0)
@@ -841,10 +1109,10 @@ public final class DataElement implements Serializable, IDataElement
 								    }
 								else
 								    {
-									 if (nestedObject.contains(object, property, depth))
-									 {
+									if (nestedObject.contains(object, property, depth))
+									    {
 									 	return true;
-									 }
+									    }
 								    }
 							    }
 						    }
@@ -857,12 +1125,24 @@ public final class DataElement implements Serializable, IDataElement
     }
     
     
+    /**
+     * Tests if this element contains a specified element in the default contents relationship. 
+     *
+     * @param object the object to look for 
+     * @return whether the element is found
+     */       
     public boolean contains(DataElement object)
     {
 	return contains(object, 1);
     }
-  
-    
+      
+    /**
+     * Tests if this element contains a specified element in the default contents relationship. 
+     *
+     * @param object the object to look for 
+     * @param depth how deep to search 
+     * @return whether the element is found
+     */       
     public boolean contains(DataElement object, int depth)
       {
 	  boolean result = false;
@@ -895,17 +1175,29 @@ public final class DataElement implements Serializable, IDataElement
 	  return result;
       }
 
-  public boolean equals(Object arg)
-      {
+    /**
+     * Tests if this element is the same as another. 
+     *
+     * @param arg the object to compare with 
+     * @return whether the element is the same
+     */       
+    public boolean equals(Object arg)
+    {
 	if (arg instanceof DataElement)
-	  {	
-	      return arg == this;
-	  }
-
+	    {	
+		return arg == this;
+	    }
+	
 	return false;
-      }
+    }
 
-  public ArrayList getAssociated(String propertyStr)
+    /**
+     * Gets the set of elements that are related to this element via a specified relationship. 
+     *
+     * @param propertyStr a string representing the relationship that is required  
+     * @return the set of related elements
+     */       
+    public ArrayList getAssociated(String propertyStr)
     {
 	DataElement property = _dataStore.findObjectDescriptor(propertyStr);
 	if (property != null)
@@ -919,7 +1211,13 @@ public final class DataElement implements Serializable, IDataElement
     }
 
 
-  public ArrayList getAssociated(DataElement property)
+    /**
+     * Gets the set of elements that are related to this element via a specified relationship. 
+     *
+     * @param property the relationship that is required  
+     * @return the set of related elements
+     */       
+    public ArrayList getAssociated(DataElement property)
       {	  
 	  ArrayList set = new ArrayList();
 	 	  
@@ -986,41 +1284,49 @@ public final class DataElement implements Serializable, IDataElement
 	  return set;
       }
     
-    /////////////////////////////////////////
-  //
-  // query operations
-  //
-  /////////////////////////////////////////
-
-  public DataElement dereference()
-  {
-    if (_isReference)
-      {
-	 
-	  if ((_referencedObject != null))
-	  {
-	    return _referencedObject;	
-	  }
+    /**
+     * Returns the element that this references.
+     * If the element is not a reference, itself is returned
+     *
+     * @return the element that this references
+     */       
+    public DataElement dereference()
+    {
+	if (_isReference)
+	    {
+		
+		if ((_referencedObject != null))
+		    {
+			return _referencedObject;	
+		    }
+		else
+		    {            
+			String name = getAttribute(DE.A_NAME);
+			_referencedObject = _dataStore.find(name);
+			if ((_referencedObject != null))
+			    {
+				return _referencedObject;
+			    }
+			else
+			    {
+				return this;
+			    }
+		    }
+	    }
 	else
-	  {            
-	      String name = getAttribute(DE.A_NAME);
-	      _referencedObject = _dataStore.find(name);
-	      if ((_referencedObject != null))
-		  {
-		      return _referencedObject;
-		  }
-	      else
-		  {
-		      return this;
-		  }
-	  }
-      }
-    else
-	{
-	    return this;	
+	    {
+		return this;	
 	}
-  }
-
+    }
+    
+    /**
+     * Do the specified command on this element.
+     * This element becomes the subject of a command that has a value, command
+     *
+     * @param command the string representing the command to issue
+     * @param isSynchronized an indication of whether this command should be synchronized
+     * @return the status of the command
+     */       
     public DataElement doCommandOn(String command, boolean isSynchronized)
     {
 	DataElement status = null;
@@ -1043,87 +1349,117 @@ public final class DataElement implements Serializable, IDataElement
 	return status;
     }
 
-
-  public DataElement refresh(boolean isSynchronized)
-  {    
-      DataElement status = null;
-      if (!_isExpanded )
-        {
-	    status = (DataElement)expandChildren(isSynchronized);
-	}
-      
-      if (status == null)
-        {
-	      if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
-		  {
-		      DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_REFRESH");
-		      if (queryDescriptor != null)
-			  {	
-			      if (isSynchronized)
-				  {
-				      status = _dataStore.synchronizedCommand(queryDescriptor, this);
+    /**
+     * Force a query command on this element.
+     *
+     * @param isSynchronized an indication of whether this command should be synchronized
+     * @return the status of the command
+     */       
+    public DataElement refresh(boolean isSynchronized)
+    {    
+	DataElement status = null;
+	if (!_isExpanded )
+	    {
+		status = (DataElement)expandChildren(isSynchronized);
+	    }
+	
+	if (status == null)
+	    {
+		if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
+		    {
+			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_REFRESH");
+			if (queryDescriptor != null)
+			    {	
+				if (isSynchronized)
+				    {
+					status = _dataStore.synchronizedCommand(queryDescriptor, this);
 				  }
-			      else
-				  {
-				      status = _dataStore.command(queryDescriptor, this);
-				  }
-			      _isExpanded = true; 
-			      _isUpdated = false;
-			  }
-		  }
-	  }
-      return status;
-  }
+				else
+				    {
+					status = _dataStore.command(queryDescriptor, this);
+				    }
+				_isExpanded = true; 
+				_isUpdated = false;
+			    }
+		    }
+	    }
+	return status;
+    }
 
+    /**
+     * Do an asynchronous query on this element if necessary.
+     *
+     */       
     public void expandChildren()
-  {    
-      if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
-      {	  
-      	if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
-      	{
-        	DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
-        	if (queryDescriptor != null)
-        	{	
-        	  _dataStore.command(queryDescriptor, this);
-        	  _isExpanded = true;
-        	  _isUpdated = false;
-        	}
-      	}
-      }
-  }
-
+    {    
+	if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
+	    {	  
+		if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
+		    {
+			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
+			if (queryDescriptor != null)
+			    {	
+				_dataStore.command(queryDescriptor, this);
+				_isExpanded = true;
+				_isUpdated = false;
+			    }
+		    }
+	    }
+    }
+    
+    /**
+     * Do a query on this element if necessary.
+     *
+     * @param isSynchronized an indication of whether this command should be synchronized
+     */       
     public IDataElement expandChildren(boolean isSynchronized)
     {
 	DataElement status = null;
 	if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
 	    {
 	    	if (getDescriptor() != null && _descriptor.isOfType("Container Object"))
-	    	{
-				DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
-				if (queryDescriptor != null)
+		    {
+			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
+			if (queryDescriptor != null)
 			    {	
-					if (isSynchronized)
+				if (isSynchronized)
 				    {
-						status = _dataStore.synchronizedCommand(queryDescriptor, this);		  
+					status = _dataStore.synchronizedCommand(queryDescriptor, this);		  
 				    }
-					else
-			 	   {		  
-						status = _dataStore.command(queryDescriptor, this);
-			  	  	}
-			
+				else
+				    {		  
+					status = _dataStore.command(queryDescriptor, this);
+				    }
+				
 				_isExpanded = true;
 				_isUpdated = false;
-		    	}
-	    	}
+			    }
+		    }
 	    }
 	return status;
     }
-
+    
+    /**
+     * Get the file that this element's source points to if there is one.
+     * If this element is in a virtual DataStore, a file transfer is done to get the actual file,
+     * otherwise the local file is used.
+     *
+     * @return the file
+     */       
     public File getFileObject()
     {
 	return getFileObject(true);
     }
 
+    /**
+     * Get the file that this element's source points to if there is one.
+     * If this element is in a virtual DataStore, a file transfer is done to get the actual file,
+     * otherwise the local file is used.
+     *
+     * @param doSynchronized an indication of whether this command should be synchronized
+     *                       if so, the call will transfer the file but will return null
+     * @return the file
+     */       
     public File getFileObject(boolean doSynchronize)
       {
         String source = new String(getAttribute(DE.A_SOURCE));
@@ -1206,38 +1542,43 @@ public final class DataElement implements Serializable, IDataElement
       } 
     
 	
-  public void fireDomainChanged()
-      {
-	  _dataStore.fireDomainChanged(new DomainEvent(DomainEvent.INSERT,
-						       this,
-						       DE.P_NESTED));						
-      }
+    public void fireDomainChanged()
+    {
+	_dataStore.fireDomainChanged(new DomainEvent(DomainEvent.INSERT,
+						     this,
+						     DE.P_NESTED));						
+    }
   
-  public Object getAdapter(Class key)
-      {
-	  Object adapter = DesktopElement.getPlatformAdapter(this, key);
-	  if (adapter != null)
-	      {
-		  return adapter;
-	      }
-	  else if (PropertySource.matches(key))
-	      {
-		  if (_propertySource == null)
-		      {
-			  _propertySource = new PropertySource(this);
-		      }
-		  
-		  return  _propertySource;	    
-	      }
-	  return null;
-      }
+    /**
+     * Gets the adapter specified by key for this element
+     *
+     * @param key the identifier for this adapter
+     * @return the adapter
+     */       
+    public Object getAdapter(Class key)
+    {
+	Object adapter = DesktopElement.getPlatformAdapter(this, key);
+	if (adapter != null)
+	    {
+		return adapter;
+	    }
+	else if (PropertySource.matches(key))
+	    {
+		if (_propertySource == null)
+		    {
+			_propertySource = new PropertySource(this);
+		    }
+		
+		return  _propertySource;	    
+	    }
+	return null;
+    }
 
-  /////////////////////////////////////////
-  //
-  // Testing
-  //
-  /////////////////////////////////////////
-
+    /**
+     * Returns a string showing the attributes of this element
+     *
+     * @return a printable string
+     */       
     public String toString()
     {
       	return "DataElement " + (_isReference ? "reference" : "") + 
@@ -1252,13 +1593,14 @@ public final class DataElement implements Serializable, IDataElement
     }
 
 
-  /////////////////////////////////////////
-  //
-  // IElement implementation
-  //
-  /////////////////////////////////////////
-  public Object getElementProperty(Object name)
-      {        
+    /**
+     * Returns the property identified by name.
+     *
+     * @param name a specifier of which property to return
+     * @return the specified property
+     */       
+    public Object getElementProperty(Object name)
+    {        
        if(_isReference)
 	      {          
 		  if (_referencedObject == null)
