@@ -10,8 +10,7 @@
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
 &nbsp;
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
-<caption>&nbsp;
-<br>&nbsp;</caption>
+<caption>&nbsp;</caption>
 
 <tr>
 <td>
@@ -38,12 +37,11 @@ suggest to visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;</font
 
 <dd>
 <font size=+1>Support for Project Management, which is provided by the
-C/C++ IDE, can be defined in two categories.&nbsp; The first category is<a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/projectmanagement/generation/automaticgeneration.htm">
-automatic generation </a>of configuration files&nbsp; for projects that
-are either newly created or imported to the tool without configuration
-files. The second category is<a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/projectmanagement/maintaining/maintainingexistingconf.htm">
-maintaining existing </a>when importing a software package that has already
-autoconf and automake configuration files.&nbsp;</font></dd>
+C/C++ IDE, can be defined in two categories.&nbsp; The first category isautomatic
+generation of configuration files&nbsp; for projects that are either newly
+created or imported to the tool without configuration files. The second
+category ismaintaining existing when importing a software package that
+has already autoconf and automake configuration files.&nbsp;</font></dd>
 
 <dd>
 <font size=+1>Before we dive in and explain how to accomplish that tasks
@@ -52,7 +50,6 @@ will be used in this section</font></dd>
 
 <br>&nbsp;
 <p>&nbsp;
-<br>&nbsp;
 <p><b><font size=+3>Terminology and Definitions</font></b>
 <br>&nbsp;
 <ul>
@@ -151,69 +148,6 @@ directory</font></li>
 the Command Launcher view or&nbsp; the Run Specifications view</font></li>
 </ol>
 
-<p><br><b><font size=+3>Implicit Updating Configuration files</font></b>
-<p><font size=+1>If any of the configuration files has been updated , configure
-will be not up to date and regenerating configure is needed. so invoking
-generate configure and run configure will perform an update.</font>
-<ol>
-<li>
-<font size=+1>From the C/C++ Projects view, right mouse click on the project
-directory</font></li>
-
-<li>
-<font size=+1>Select Autoconf -> Generate Configure if you wish only to
-generate configure - an update will be performed if needed OR</font></li>
-
-<li>
-<font size=+1>Select Autoconf -> Run Configure and this action will perform
-an update as well if need</font></li>
-</ol>
-<font size=+1></font><font size=+1></font>
-<p><b><font size=+3>Explicit Updating for Configuration files</font></b>
-<br>&nbsp;
-<dd>
-<font size=+1>The tool provide actions for those users who are familiar
-with autoconf and provide them with the flexibility to make there own prefered
-updates. Once you need to make updates and take owner ship of the package,
-the tool provide actions that will help you accomplish that. Also, you
-need to be aware of the following automatic updates that the tool perform.&nbsp;</font></dd>
-
-<dd>
-<font size=+1></font></dd>
-
-<dd>
-<font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The C/C++ IDE
-can only do an update to certain Makefile.am templates and the configure.in
-template as well. For example an automatic update will occur if each makefile
-has one designated target per file. Also, the updated Targets are either
-Programs, Static Libraries Shared Libraries.&nbsp; Basic variables for
-each target will get updated for this release. Later, more and more update
-will be performed. For example, the _Program target will have its _SOURCES,_LDADD,
-SUBDIRS and EXTRA_DIST variables updates. For Static Libraries targets,
-the C/C++ tool will update LIBRARIES,&nbsp; _a_SOURCES,&nbsp; SUBDIRS and
-EXTRA_DIST will be updatede. For shared libraries, the _LTLIBRARIE, _la_SOURCES,
-SUBDIRS and EXTA_DIST will be updated .</font></dd>
-
-<dd>
-<font size=+1></font></dd>
-
-<dd>
-<font size=+1>I order to perform the previous actions, you need to&nbsp;
-do the following:</font></dd>
-
-<ol>
-<li>
-<font size=+1>From the <a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/compiling/projects.htm">C/C++
-Projects view,</a> right mouse click on the project directory</font></li>
-
-<li>
-<font size=+1>Select&nbsp; Autoconf -> Advanced-> and then you will have
-three options to choose from</font></li>
-</ol>
-
-<dd>
-<font size=+1></font></dd>
-
 <p><br><b><font size=+2>Maintaining Existing Project Configuration Files</font></b>
 <p><font size=+1>When one download open source projects or importing projects
 to the workspace that are managed by autoconf and automake tools, one scenario
@@ -230,6 +164,110 @@ generate and update all the configuration files and generate configure
 for you</font></li>
 </ol>
 
+<p><b><font size=+3>Implicit Updating Configuration files</font></b>
+<p><font size=+1>If any of the configuration files has been updated , configure
+will be not up to date and regenerating configure is needed. so invoking
+generate configure and run configure will perform an update.</font>
+<ol>
+<li>
+<font size=+1>From the C/C++ Projects view, right mouse click on the project
+directory</font></li>
+
+<li>
+<font size=+1>Select Autoconf -> Generate Configure if you wish only to
+generate configure - an update will be performed if needed OR</font></li>
+
+<li>
+<font size=+1>Select Autoconf -> Run Configure and this action will perform
+an update as well if need</font></li>
+</ol>
+<b><font size=+3>Explicit Updating for Configuration files</font></b>
+<br>&nbsp;
+<dd>
+<font size=+1>The tool provide actions for those users who are familiar
+with autoconf and provide them with the flexibility to make there own preferred
+updates. Once you need to make updates and take owner ship of the package,
+the tool provide actions that will help you accomplish that. Also, you
+need to be aware of the following automatic updates that the tool perform.&nbsp;</font></dd>
+
+<dd>
+<font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The C/C++ IDE
+can only do an update to certain Makefile.am templates and the configure.in
+template as well. For example an automatic update will occur if each makefile
+has one designated target per file. Also, the updated Targets are either
+Programs, Static Libraries Shared Libraries.&nbsp; Basic variables for
+each target will get updated for this release. Later, more and more update
+will be performed. For example, the _Program target will have its _SOURCES,_LDADD,
+SUBDIRS and EXTRA_DIST variables updates. For Static Libraries targets,
+the C/C++ tool will update LIBRARIES,&nbsp; _a_SOURCES,&nbsp; SUBDIRS and
+EXTRA_DIST will be updated. For shared libraries, the _LTLIBRARIE, _la_SOURCES,
+SUBDIRS and EXTA_DIST will be updated .</font></dd>
+
+<dd>
+<font size=+1>I order to perform the previous actions, you need to&nbsp;
+do the following:</font></dd>
+
+<ol>
+<li>
+<font size=+1>From the <a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/compiling/projects.htm">C/C++
+Projects view,</a> right mouse click on the project directory</font></li>
+
+<li>
+<font size=+1>Select&nbsp; Autoconf -> Advanced-> and then you will have
+three options to choose from</font></li>
+
+<li>
+<font size=+1>Select Create/Update all&nbsp; automake files to update all
+configuration files</font></li>
+
+<li>
+<font size=+1>Select update configure.in if you wish to update the top
+level configure.in</font></li>
+
+<li>
+<font size=+1>Select update Makefile.am to update the one Makefile.am that
+exist in this directory</font></li>
+</ol>
+
+<p><br><b><font size=+3>Modifying the Project Structure</font></b><b><font size=+3></font></b>
+<p><font size=+1>The&nbsp; C/C++ IDE&nbsp;provides a set of actions that
+helps the user to easily modify the Makefile.am target . In order to that&nbsp;
+you need to :</font>
+<ol>
+<li>
+<font size=+1>From the <a href="/home/eyasser/eclipse_136a/eclipse/workspace/com.ibm.cpp.docs.user/concepts/compiling/projects.htm">C/C++
+Projects view,</a> right mouse click on the project directory</font></li>
+
+<li>
+<font size=+1>Select&nbsp; Autoconf -> Advanced-> and then you will have
+five create actions</font></li>
+
+<li>
+<font size=+1>Selecting Create TopLevel Makefile.am will generate tha top
+levet Makefile .am and if there was an existing Makefile.am, it will be
+renamed *.old</font></li>
+
+<li>
+<font size=+1>Selecting Create Programs Makefile.am will generate tha Programs
+Makefile .am and if there was an existing Makefile.am, it will be renamed
+*.old</font></li>
+
+<li>
+<font size=+1>Selecting Create Static Lib Makefile.am will generate tha
+static library&nbsp; Makefile.am and if there was an existing Makefile.am,
+it will be renamed *.old</font></li>
+
+<li>
+<font size=+1>Selecting Create Sthared LibMakefile.am will generate tha
+shared library Makefile.am and if there was an existing Makefile.am, it
+will be renamed *.old</font></li>
+
+<li>
+<font size=+1>Selecting Create Configure.in will generate tha top levet
+configure.in and if there was an existing configure.in, it will be renamed
+*.old</font></li>
+</ol>
+<b><font size=+3></font></b><b><font size=+3></font></b>
 <p><b><font size=+3>Running Autoconf Standard targets</font></b>
 <p><font size=+1>You may invoke any of the following three standard autoconf
 targets from the The tool. These targets are make-install, distclean and
