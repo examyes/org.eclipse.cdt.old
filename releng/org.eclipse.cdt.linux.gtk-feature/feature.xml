@@ -23,12 +23,8 @@
 
    <includes
          id="org.eclipse.cdt"
-         version="1.2.0"
-         match="equivalent"/>
-
-   <requires>
-      <import feature="org.eclipse.cdt" version="2.0.0"/>
-   </requires>
+         version="2.0.0"
+         name="%featureName"/>
 
    <plugin
          id="org.eclipse.cdt.core.linux"
