@@ -276,10 +276,10 @@ public class DebugEngine extends Thread
                 Gdb.traceLogger.evt(1,"EPDC_CMD> Event breakpoint \n");
             return new CmdBreakpointEvent(_debugSession, (EReqBreakpointEvent) req);
 
-         case EPDC.Remote_CommandLogExecute:
+         case EPDC.Remote_CommandLog:
             if (Gdb.traceLogger.EVT) 
                 Gdb.traceLogger.evt(1,"EPDC_CMD> CommandLogExecute \n");
-            return new CmdCommandLogExecute(_debugSession, (EReqCommandLogExecute) req);
+            return new CmdCommandLogExecute(_debugSession, (EReqCommandLog) req);
 
          case EPDC.Remote_ContextConvert:
             if (Gdb.traceLogger.EVT) 
@@ -687,8 +687,8 @@ public class DebugEngine extends Thread
     String    filterFile = "modules.lst";
 
     // AB: the following represent the supported versions of EPDC that the engine will handle.
-    public static final int MIN_SUPPORTED_EPDC_VERSION = 907;
-    public static final int MAX_SUPPORTED_EPDC_VERSION = 907;
+    public static final int MIN_SUPPORTED_EPDC_VERSION = 307;
+    public static final int MAX_SUPPORTED_EPDC_VERSION = 307;
 
 //    public static final int MIN_SUPPORTED_EPDC_VERSION = 305;
 //    public static final int MAX_SUPPORTED_EPDC_VERSION = 307;

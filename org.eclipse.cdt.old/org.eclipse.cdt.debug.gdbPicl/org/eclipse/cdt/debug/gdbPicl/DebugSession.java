@@ -12,7 +12,7 @@ import java.net.*;
 import java.io.*;
 import java.text.*;
 import com.ibm.debug.epdc.EPDC;
-import com.ibm.debug.epdc.ERepCommandLogExecute;
+import com.ibm.debug.epdc.ERepCommandLog;
 
 
 // User Events
@@ -53,7 +53,7 @@ public abstract class DebugSession
    */
    abstract void initExceptions();
 
-   public abstract int cmdCommandLogExecute(String cmd, ERepCommandLogExecute _rep );
+   public abstract int cmdCommandLogExecute(String cmd, ERepCommandLog _rep );
 
   /**
    * Attempts to perform detach operation from the remote JVM
