@@ -85,15 +85,22 @@ public class MakefileAmAction extends CustomAction {
 				if (classifier != null)
 				{
 					type = classifier.getName();		
-				}
-				else
+				} 				
+				else 
 				{		
 			
 					DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);								
 								
-					updated = _subject.getAssociated("class type");								
-					classifier = (DataElement)updated.get(0);
-					type = classifier.getName();
+					updated = _subject.getAssociated("class type");		
+					if (updated != null && updated.size() > 0)
+					{						
+					 classifier = (DataElement)updated.get(0);
+					 type = classifier.getName();
+					}
+					else
+					{
+					  type = "0";	
+					}
 				}
 				
 				int classification = (new Integer(type)).intValue();
