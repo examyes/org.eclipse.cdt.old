@@ -129,8 +129,9 @@ zipFile=cdt-eclipse-R2-20020408-local.zip
 createZip: createEmptyZip zipUpPlugins
 	@echo Created $(pluginsDirectory)/$(zipFile)
 
+# Here we explicitly add makefiles that we want included in the final package, since we exclude makefiles in general.
 createEmptyZip: 
-	@-cd $(pluginsDirectory) && rm -f $(zipFile) && zip -q $(zipFile) org.eclipse.cdt.dstore.core/makefile
+	@-cd $(pluginsDirectory) && rm -f $(zipFile) && zip -q $(zipFile) org.eclipse.cdt.dstore.core/makefile org.eclipse.cdt.cpp.docs.user/sample/payroll/makefile
 
 zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 
