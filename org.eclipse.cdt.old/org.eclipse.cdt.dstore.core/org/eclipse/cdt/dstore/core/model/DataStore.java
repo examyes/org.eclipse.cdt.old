@@ -2095,8 +2095,12 @@ public final class DataStore
 	
 	return null;
     }
-    
 
+    public void addToRecycled(DataElement toRecycle)
+    {
+	_recycled.add(toRecycle);
+    }
+    
     /**
      * Finds the element that represents the miner that implements a particular command.  
      *
@@ -2184,46 +2188,41 @@ public final class DataStore
 	    public ArrayList findDeleted(DataElement root)
 	    {	       
 	        ArrayList results = new ArrayList();
-			results = findDeleted(root, results);
-			return results;
-		}
+		results = findDeleted(root, results);
+		return results;
+	    }
 
       
 	    private ArrayList findDeleted(DataElement root, ArrayList results)
 	    {	   
-	     synchronized(root)
-	     {
-		  if (root != null)
-	     	{		     	
+		synchronized(root)
+		    {
+			if (root != null)
+			    {		     	
 				ArrayList searchList = root.getNestedData();
 				
 				if (searchList != null)
-				{
-					for (int i = 0; i < searchList.size(); i++)
 				    {
+					for (int i = 0; i < searchList.size(); i++)
+					    {
 						DataElement child = (DataElement)searchList.get(i);
-						if (!child.isReference())
-						{
-					
+						
 						if (child.isDeleted())
-					    {					    
-					    
-						    results.add(child);				
-					    }
-	
+						    {					    
+							results.add(child);				
+						    }
+						
 						if (!child.isReference())
-						{
+						    {
 							results = findDeleted(child, results);	
-							
-						}
-						}
+						    }
+					    }
 				    }
-				}
-			}
-			}	
-			return results;
+			    }
+		    }	
+		return results;
 	    }
-
+    
 
     /**
      * Finds all relationship descriptor types that can be applied to a particular element.  
@@ -3092,7 +3091,6 @@ public final class DataStore
 		  
 		  String id = toDelete.getAttribute(DE.A_ID);
 		  _hashMap.remove(id);
-		  _recycled.add(toDelete);
 	    }
     }
     
