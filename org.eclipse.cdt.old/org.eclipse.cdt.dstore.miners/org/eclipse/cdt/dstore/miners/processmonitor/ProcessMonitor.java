@@ -34,6 +34,8 @@ public class ProcessMonitor extends Handler
 
     public synchronized void handle()
     {	
+	synchronized(_writer)
+	    {
 	try
 	    {  
 		_writer.write(_psCommand);
@@ -44,7 +46,8 @@ public class ProcessMonitor extends Handler
 	    }
 	catch (IOException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
+	    }
 	    }		
     }
 
