@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type"
  content="text/html; charset=ISO-8859-1">
-  <meta name="GENERATOR" content="IBM WebSphere Studio">
+  <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
   <meta http-equiv="Content-Style-Type" content="text/css">
   <link href="theme/Master.css" rel="stylesheet" type="text/css">
   <title>Managed Build System Extensibility Document</title>
@@ -146,9 +146,10 @@ integrators who supply tool definitions to the build model. The diagram
 below shows the basic set of
 relationships
 between these components.</p>
-<p><img src="images/image002.gif" title=""
+<p>
+<img src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image002.gif?cvsroot=Tools_Project" title=""
  alt="Build model logical elements"
- style="border: 0px solid ; width: 476px; height: 385px;"></p>
+ style="border: 0px solid ; "></p>
 <h5>Figure 1 Managed build system Overview</h5>
 <p class="subsection">1.2.1 External Users</p>
 <p>From the perspective of the build model, there are two external
@@ -210,8 +211,9 @@ grammar
 and what the information is used for by the build model.</p>
 <p class="subsection"><a name="_TocSection2_1">2.1 Model</a></p>
 <p>The figure below shows a UML model of schema elements. </p>
-<p><img style="border: 0px solid ; width: 640px; height: 528px;"
- src="images/image004.gif" title="" alt="UML model of schema elements"></p>
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image004.gif?cvsroot=Tools_Project" title="" alt="UML model of schema elements"></p>
 <h5>Figure 2 Managed build model elements</h5>
 <p class="subsection"><a name="_TocSection2_2">2.2 Target</a></p>
 <p>In its current implementation, the <span style="font-style: italic;">target</span>
@@ -486,8 +488,9 @@ valid for.</p>
 Tool
 and configuration information will be added to our definition is later
 sections.</p>
-<p><img style="border: 0px solid ; width: 334px; height: 220px;"
- src="images/image006.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image006.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing a Target specification"></p>
 <p class="subsection"><a name="_TocSection2_3">2.3 Tool</a></p>
 <p>A tool represents some sort of executable component that can take a
@@ -718,8 +721,9 @@ extension and will produce a file with an <code>.o</code>
 extension.
 When the makefile is generated, a rule will be generated with the
 command <code>g++ &lt;&#8230;&gt; -o &lt;&#8230;&gt;</code>.</p>
-<p><img style="border: 0px solid ; width: 462px; height: 193px;"
- src="images/image008.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image008.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing a Tool specification"></p>
 <p class="subsection"><a name="_TocSection2_4">2.4 Option Category</a></p>
 <p>A tool can have a large number of options. To help organize the user
@@ -804,8 +808,9 @@ UI with the label <span style="font-style: italic;">Flags</span>.
 There are two options defined in this
 category, <span style="font-style: italic;">General</span>, and <span
  style="font-style: italic;">Optimization</span>.</p>
-<p><img style="border: 0px solid ; width: 328px; height: 207px;"
- src="images/image010.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image010.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing an Option Category specification"></p>
 <p class="subsection"><a name="_TocSection2_5">2.5 Configuration</a></p>
 <p>A target defines the information about the tools
@@ -878,8 +883,9 @@ identify this configuration.</p>
 <p>The example below shows a configuration named <span
  style="font-style: italic;">Default</span> that
 belongs to the target <span style="font-style: italic;">Executable</span>.</p>
-<p><img style="border: 0px solid ; width: 255px; height: 87px;"
- src="images/image012.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image012.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing a Configuration specification"></p>
 <p class="subsection"><a name="_TocSection2_6">2.6 Tool Reference</a></p>
 <p>A tool reference is primarily intended to be used when saving user
@@ -933,8 +939,9 @@ default to the highest possible level.</p>
 <p>The example below shows how the user has overridden the compiler
 flags option in the compiler tool in the <span
  style="font-style: italic;">Default</span> configuration.</p>
-<p><img style="border: 0px solid ; width: 573px; height: 74px;"
- src="images/image014.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image014.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing a Tool Reference specifiation"></p>
 <p class="subsection"><a name="_TocSection2_7">2.7 Option</a></p>
 <p>Options in the build model are used to organize and maintain the
@@ -1268,8 +1275,9 @@ attributes defined for the option itself are its id for the build
 model,
 a human-readable name, the id of the category it belongs to, and the
 type of value the option holds.</p>
-<p><img style="border: 0px solid ; width: 316px; height: 392px;"
- src="images/image016.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image016.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing some Option specifications"></p>
 <p class="subsection"><a name="_TocSection2_8">2.8 Option Reference</a></p>
 <p>An option reference always belongs to a tool reference, and is used
@@ -1358,8 +1366,9 @@ is not used.</p>
 information in the project file. In this case, the tool reference is a
 linker, and the option references are for linker flags and library
 paths.</p>
-<p><img style="border: 0px solid ; width: 533px; height: 87px;"
- src="images/image018.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image018.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing an Option Reference specification"></p>
 <p class="subsection"><a name="_TocSection2_9">2.9 List Option Value</a></p>
 <p>Some options are best described using a list of values. This build
@@ -1442,8 +1451,9 @@ Symbols</span>,
 which
 contains a pre-populated list of built-in values; <code>__I386__</code>,
 and <code>__i386__</code> respectively.</p>
-<p><img style="border: 0px solid ; width: 480px; height: 140px;"
- src="images/image020.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image020.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing a List Option Value"></p>
 <p class="subsection"><a name="_TocSection2_10">2.10 Enumerated Option
 Value</a></p>
@@ -1547,8 +1557,9 @@ command line.</p>
 <p class="subsection">2.10.2 Example</p>
 <p>The option below shows an enumerated option to flag the language
 dialect for the Gnu preprocessor.</p>
-<p><img style="border: 0px solid ; width: 449px; height: 168px;"
- src="images/image022.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image022.gif?cvsroot=Tools_Project" title=""
  alt="An XML fragment containing an example of Enumerated Option Values"></p>
 <p class="section"><a name="_TocSection3">3 UI Representation</a></p>
 <p>In addition to controlling the way a project is built, the build
@@ -1573,8 +1584,9 @@ labelled <span style="font-style: italic;">Platform</span> in the UI.
 This will change in the next iteration of the build system as we
 further refine the concept of host target and build target.<br>
 </p>
-<p><img style="border: 0px solid ; width: 488px; height: 566px;"
- src="images/image024.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image024.gif?cvsroot=Tools_Project" title=""
  alt="New project wizard platform selection page"></p>
 <h5>Figure 3 New project wizard</h5>
 <p class="subsection"><a name="_TocSection3_2">3.2 Build Property Page</a></p>
@@ -1592,8 +1604,9 @@ first. The figure below shows a project targeted solely at a Cygwin
 executable, with two configurations &#8216;Release&#8217; (not shown), and &#8216;Debug&#8217;.
 Note that the build settings model is queried for the target and
 configuration <var>name</var> information.</p>
-<p><img style="border: 0px solid ; width: 574px; height: 288px;"
- src="images/image026.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image026.gif?cvsroot=Tools_Project" title=""
  alt="Project property page configuration selection/edit area"></p>
 <h5>Figure 4 Configuration selection</h5>
 <p>Users change the build settings for options associated with
@@ -1607,8 +1620,9 @@ is used as the text of the tree elements. Note that the tool uses an
 externalized string to identify its name to help internationalize a
 tool
 specification, but this is not necessary.</p>
-<p><img style="border: 0px solid ; width: 575px; height: 413px;"
- src="images/image028.gif" title=""
+<p>
+<img style="border: 0px solid ; width: 575px; height: 413px;"
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image028.gif?cvsroot=Tools_Project" title=""
  alt="Project property page tool selection area"></p>
 <h5>Figure 5 Tools and option category display</h5>
 <p>As mentioned in the discussion of the build settings model, options
@@ -1643,8 +1657,9 @@ There are clients of this information in the CDT that will query the
 build system for this information, and this is currently the only way
 to
 flag these values as special.</p>
-<p><img style="border: 0px solid ; width: 575px; height: 497px;"
- src="images/image030.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image030.gif?cvsroot=Tools_Project" title=""
  alt="Project property page option edit area"></p>
 <h5>Figure 6 Option display</h5>
 <p>Finally Verbose, a Boolean option, is displayed as a check-box.
@@ -1669,8 +1684,9 @@ the purposes of this discussion. The source for the project is spread
 over the directories <code>source1/</code>, <code>source2/</code>,
 and <code>source2/source21</code>.
 Header files are located in 2 locations; <code>headers/</code>, and <code>source2/source21</code>.</p>
-<p><img style="border: 0px solid ; width: 332px; height: 349px;"
- src="images/image032.gif" title="" alt="Example project"></p>
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image032.gif?cvsroot=Tools_Project" title="" alt="Example project"></p>
 <h5>Figure 7 Example project source files</h5>
 <p>While simple, this example illustrates some of the problems projects
 using <span style="font-style: italic;">make</span> typically face
@@ -1702,8 +1718,9 @@ code, and uses the include capability of <span
 together.</p>
 <p>The figure below shows the makefile, makefile fragments, and
 dependency fragments that are generated for the project.</p>
-<p><img style="border: 0px solid ; width: 359px; height: 494px;"
- src="images/image034.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image034.gif?cvsroot=Tools_Project" title=""
  alt="Example project generated files"></p>
 <h5>Figure 8 Generated makefiles</h5>
 <p>In the next sections, we will examine the makefiles that are
@@ -1719,8 +1736,9 @@ but they are populated in the makefile fragments. It also contains a
 list of subdirectories that contribute source files to the build. The
 makefile generator will generate fragmentary makefiles for each of the
 directories, so the main makefile must include each of these fragments.</p>
-<p><img src="images/image036.gif" title="" alt="Generated main makefile"
- style="border: 0px solid ; width: 636px; height: 465px;"></p>
+<p>
+<img src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image036.gif?cvsroot=Tools_Project" title="" alt="Generated main makefile"
+ style="border: 0px solid ; "></p>
 <p>This makefile is passed as an argument to <span
  style="font-style: italic;">make</span>, so it
 contains
@@ -1739,8 +1757,9 @@ However, the makefile generator places that information into makefile
 fragments for each subdirectory contributing source to the build. The
 figure below shows what the fragment for the <code>source1/</code>
 subdirectory looks like.</p>
-<p><img style="border: 0px solid ; width: 635px; height: 279px;"
- src="images/image038.gif" title="" alt="Generated fragment makefile"></p>
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image038.gif?cvsroot=Tools_Project" title="" alt="Generated fragment makefile"></p>
 <p>The fragment contributes one file, <code>class1.cpp</code>, and a
 rule to build all source files with the &#8216;cpp&#8217; extension. The content of
 the dependency and command lines is derived from the build settings
@@ -1774,8 +1793,9 @@ files with an &#8216;o&#8217; and a &#8216;cpp&#8217; extension.</p>
 in
 a separate makefile fragment for each subdirectory. The figure below
 shows the fragment for the <code>source1/</code> subdirectory.</p>
-<p><img style="border: 0px solid ; width: 449px; height: 61px;"
- src="images/image040.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image040.gif?cvsroot=Tools_Project" title=""
  alt="Generated dependency makefile fragment"></p>
 <p class="subsection"><a name="_TocSection4_4">4.4 Inter-Project
 Dependencies</a></p>
@@ -1790,8 +1810,9 @@ basic scenario. Project A builds an executable, <code>a.exe</code>. It
 references project B which builds a library <code>libB.a</code>. The
 main build target in the makefile for project A would be generated with
 the output of project B as a dependency.</p>
-<p><img style="border: 0px solid ; width: 605px; height: 101px;"
- src="images/image042.gif" title=""
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image042.gif?cvsroot=Tools_Project" title=""
  alt="Generated inter-project dependency target"></p>
 <p>As you can see from the generated makefile above, the rule for the
 target <code>A.exe</code> will be evaluated if the output of B has
@@ -2100,8 +2121,9 @@ to be the id you created in step 3, and its <span
 </ol>
 <p>At this point, you can test how your options appear in the UI by
 debugging your run-time workbench. You should see something like this.</p>
-<p><img style="border: 0px solid ; width: 400px; height: 294px;"
- src="images/image044.gif" title="" alt="Tutorial project property page"></p>
+<p>
+<img style="border: 0px solid ; "
+ src="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build/image044.gif?cvsroot=Tools_Project" title="" alt="Tutorial project property page"></p>
 <h5>Figure 9 Property page with tool and category</h5>
 <p class="subsection"><a name="_TocSection5_9">5.9 Taking the Next Step</a></p>
 <p>The purpose of the tutorial you just followed was to become familiar
