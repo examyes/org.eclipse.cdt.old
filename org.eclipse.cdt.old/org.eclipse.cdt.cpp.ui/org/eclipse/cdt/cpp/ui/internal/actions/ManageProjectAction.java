@@ -37,6 +37,26 @@ import org.eclipse.debug.core.IDebugConstants;
 
 public class ManageProjectAction extends CustomAction
 { 
+	public class RunThread extends Handler
+	{
+		private DataElement _subject;
+		private DataElement _status;
+		
+		public RunThread(DataElement subject, DataElement status)
+		{
+			_subject = subject;
+			_status = status;
+		}
+		
+		public void handle()
+		{
+			if (_status.getName().equals("done"))
+			{
+				_subject.refresh(false);
+				finish();
+			}		
+		}
+	}
 	public ManageProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
@@ -48,5 +68,8 @@ public class ManageProjectAction extends CustomAction
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
 		api.monitorStatus(status);
+		
+		RunThread thread = new RunThread(_subject, status);
+		thread.start();
 	}
 }
