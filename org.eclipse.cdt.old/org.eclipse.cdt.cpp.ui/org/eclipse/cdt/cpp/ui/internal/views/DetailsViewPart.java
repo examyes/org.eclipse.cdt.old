@@ -80,7 +80,7 @@ public class DetailsViewPart extends ObjectsViewPart
 	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();	
 	IWorkbenchPage persp= win.getActivePage();
 
-	if  (persp == getSite().getPage())
+	if (persp.findView(getSite().getId()) == this)
 	    {
 		((ILinkable)part).linkTo(this);	
 		setLinked(true);
@@ -120,7 +120,7 @@ public class DetailsViewPart extends ObjectsViewPart
 	      
 	    case CppProjectEvent.COMMAND:
 		{
-		    updateStatusLine(event);
+		    //updateStatusLine(event);
 		    updateSelectionStatus(event);
 		}
 		break;

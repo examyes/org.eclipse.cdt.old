@@ -21,6 +21,9 @@ import org.eclipse.jface.viewers.*;
 
 import org.eclipse.ui.*;
 
+import org.eclipse.ui.internal.*;
+
+
 public class SuperDetailsViewPart extends ObjectsViewPart
 { 
   public SuperDetailsViewPart()
@@ -52,11 +55,19 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 
   public void selectionChanged(IWorkbenchPart part, ISelection sel) 
   {
-      if (part instanceof ILinkable)
-	  {
-	      ((ILinkable)part).linkTo(this);	
-	      setLinked(true);
-	  }
+    if (part != this && part instanceof ILinkable)
+    {
+	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();	
+	IWorkbenchPage persp= win.getActivePage();
+
+	if (persp.findView(getSite().getId()) == this)
+	    {
+		((ILinkable)part).linkTo(this);	
+		setLinked(true);
+	    }
+    }
+
   }
 
     public void projectChanged(CppProjectEvent event)
@@ -91,7 +102,6 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 	      
 	    case CppProjectEvent.COMMAND:
 		{
-		    updateStatusLine(event);
 		    updateSelectionStatus(event);
 		}
 		break;
