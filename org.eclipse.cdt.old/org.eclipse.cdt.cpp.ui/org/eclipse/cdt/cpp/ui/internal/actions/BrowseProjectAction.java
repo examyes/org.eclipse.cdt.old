@@ -8,6 +8,7 @@ package org.eclipse.cdt.cpp.ui.internal.actions;
 
 import org.eclipse.cdt.cpp.ui.internal.*;
 import org.eclipse.cdt.cpp.ui.internal.views.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 
 import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.ui.*;
@@ -53,6 +54,9 @@ public class BrowseProjectAction extends Action
 	if (_subject != null)
 	    {
 		openPerspective(_subject);
+		
+		ModelInterface api = ModelInterface.getInstance();
+		api.parse(_subject, false, false);
 	    }
     }
     
