@@ -1061,7 +1061,8 @@ public class DataStore
   public void setObject(DataElement localObject, boolean noRef)
     {
       DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
-      DataElement status = synchronizedCommand(cmd, localObject, noRef);
+      //DataElement status = synchronizedCommand(cmd, localObject, noRef);
+      DataElement status = command(cmd, localObject, noRef);
   }
 
   public void modifyObject(DataElement localObject)
@@ -1860,7 +1861,7 @@ public DataElement command(DataElement commandDescriptor,
 	    {
 		FileOutputStream newFileStream = new FileOutputStream(newFile);
 
-		if (!file.isDirectory() && file.exists())
+		if (file != null && !file.isDirectory() && file.exists())
 		    {
 			int maxSize = 5000000;
 			int size = (int)file.length();

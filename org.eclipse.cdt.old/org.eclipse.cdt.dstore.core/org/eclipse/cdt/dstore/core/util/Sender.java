@@ -100,7 +100,6 @@ public class Sender implements ISender
 		  _xmlGenerator.generate(objectRoot, depth);
 		  _xmlGenerator.flush();
 	      }
-
       }
 
 
