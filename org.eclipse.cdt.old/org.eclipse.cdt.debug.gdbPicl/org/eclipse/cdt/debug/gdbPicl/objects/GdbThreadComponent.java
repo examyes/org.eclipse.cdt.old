@@ -76,7 +76,29 @@ public class GdbThreadComponent extends ThreadComponent
             EPDCThread.setWhereStopped(Part.VIEW_SOURCE, 1, lineNumber(0));
             if (Gdb.traceLogger.ERR) 
                 Gdb.traceLogger.err(1,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
-            EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1, lineNumber(0)); 
+                
+            // convert to correct disassembly line number
+			ModuleManager moduleManager = _debugSession.getModuleManager();            
+			GdbPart part = (GdbPart)moduleManager.getPart(_partID);
+			String partName = part.getName();           
+			GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
+			String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(partName,String.valueOf(lineNumber(0)));
+			String disLineNum = null;
+			int disNum;
+			
+			if (address != null)
+				disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
+			
+			if (disLineNum != null)
+			{
+				disNum = Integer.parseInt(disLineNum);
+			}
+			else
+			{
+				disNum = lineNumber(0);
+			}
+			
+            EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  disNum); 
             if (Part.MIXED_VIEW_ENABLED)
 	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
          }
