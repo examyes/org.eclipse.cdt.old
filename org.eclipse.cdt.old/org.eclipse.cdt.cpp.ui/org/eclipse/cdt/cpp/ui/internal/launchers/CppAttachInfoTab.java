@@ -285,6 +285,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	protected void updateExecutableFromConfig(ILaunchConfiguration config) {
 		String executableName = "";
 		String processID = "";
+
 		try
       {
 			executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
@@ -294,6 +295,11 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
             {
                _programNameField.setText(_executable.getSource());
             }
+            else
+            {
+               return;
+            }
+
          }
          else
          {
@@ -360,13 +366,13 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	   	if (dialog.getReturnCode() == dialog.OK)
    	   {
      	      System.out.println("handleProcessIDBrowseButton 2 ");
-             DataElement selected = dialog.getSelected();
+            DataElement selected = dialog.getSelected();
 
-	      if (selected != null)
-   	      {
-      	         System.out.println("pid = " + selected.getName());
-      	         _processIDField.setText(selected.getSource());
-  	      }
+   	      if (selected != null)
+  	         {
+               System.out.println("pid = " + selected.getName());
+               _processIDField.setText(selected.getName());
+  	         }
    	   }
     }	
 
