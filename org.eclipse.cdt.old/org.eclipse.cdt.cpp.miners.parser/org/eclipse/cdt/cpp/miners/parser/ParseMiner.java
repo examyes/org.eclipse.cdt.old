@@ -481,6 +481,7 @@ public class ParseMiner extends Miner
   }
   else
   {
+  	DataElement theProject = null;
   	if (project == null)
   	{
   		if (theFile.getType().equals("directory") || theFile.getType().equals("file"))
@@ -488,7 +489,12 @@ public class ParseMiner extends Miner
    			project = getProjectFor(theFile);
   		}
   	}
-  	return _parseManager.removeParseInformation(theFile, getParseProject(project));
+  	
+  	if (project != null)
+  	{
+  		theProject = getParseProject(project);
+  	}
+  	return _parseManager.removeParseInformation(theFile, theProject);
   }
 
  }
