@@ -18,6 +18,9 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
+import org.eclipse.core.resources.*;
+import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
+
 public class LaunchSearch
 {
     public static LaunchSearch _launchSearch = null;
@@ -26,7 +29,10 @@ public class LaunchSearch
 
     String _hostname="localhost";
     boolean _isHelpWebAppRegistered=false;
-    
+
+    HelpMonitor helpMonitor;
+    IWorkbenchWindow window;    
+
     private LaunchSearch()
     {
 	try
@@ -89,6 +95,22 @@ public class LaunchSearch
 	        status = helpDataStore.command(helpDescriptor, args, helpObject);
 		
 		 getHelpView().setInput(status);
+		
+		 helpMonitor = new HelpMonitor(CppPlugin.getDefault().getLocalizedString("Help.Search.ProgressMessage"),status);
+		 window = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+
+		 WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell().getDisplay().syncExec(new Runnable()
+		    {
+			public void run()
+			{
+			    try{
+				window.run(true,true,helpMonitor);
+			    }catch(Exception e){
+				e.printStackTrace();
+			    }
+			}
+		    });
+
 		 /******
 		WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell().getDisplay().syncExec(new Runnable()
 		    {
