@@ -121,8 +121,7 @@ public class CommandMiner extends Miner
      
    if (theThread != null)
    {
-   	  theThread.sendInput(input);
-  
+   	  theThread.sendInput(input);  
   	}
 
  }
@@ -234,10 +233,12 @@ class CommandMinerThread extends MinerThread
  private OutputHandler    _stdErrorHandler;
  
  private boolean          _isShell;
+ private boolean          _isDone;
   
  public CommandMinerThread (DataElement theElement, String invocation, DataElement status, Patterns thePatterns)
  {
   _isShell = false; 
+  _isDone  = false;
   _status     = status;
   _dataStore  =  theElement.getDataStore();
   _subject = theElement;
@@ -336,7 +337,10 @@ class CommandMinerThread extends MinerThread
  
  public void sendInput(String input)
  {
- 	 byte[] intoout = input.getBytes();
+ 	if (!_isDone)
+ 	{
+ 	byte[] intoout = input.getBytes();
+ 	 
 	 OutputStream output = _theProcess.getOutputStream();
    	 try
    		{   	  	 	
@@ -355,6 +359,7 @@ class CommandMinerThread extends MinerThread
    	  	 {
    	  	 	System.out.println(e);
    	  	 }	
+ 	}
  }
  
  
@@ -573,6 +578,7 @@ class CommandMinerThread extends MinerThread
 
     public void cleanupThread()
     {
+    	_isDone = true;
     	if (_isShell)
     	{
     		sendInput("exit");
