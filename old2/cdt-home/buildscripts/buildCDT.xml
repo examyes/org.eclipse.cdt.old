@@ -28,7 +28,7 @@
     
     <!--     Fill in values for original timestamp in all about.mappings files  -->
     <target name="slamBuildId" depends="init">
-        <replace dir="${install}/plugins" value="${ TODAYS_DAT}" token="@build@">
+        <replace dir="${install}/plugins" value="${TODAYS_DATE}" token="@build@">
         <include name="**/about.mappings" />
         </replace>
     </target>
@@ -101,9 +101,9 @@
         <record name="compilelog.txt" action="stop" /> 
     </target>
 
-    <!--  copies only those scripts required to build the specified platform of the Eclipse Sdk  -->
+    <!--  copies only those scripts required to build the specified platform of the Eclipse CDT  -->
     <target name="copyScripts" depends="init">
-        <copy todir="${install}">
+        <copy todir="${install}" overwrite="true" >
             <fileset dir="buildScripts" includes="features/org.eclipse.cdt-feature/build.xml" />
             <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt/build.xml, plugins/org.eclipse.cdt.core/build.xml, plugins/org.eclipse.cdt.core.${platformId}/build.xml, plugins/org.eclipse.cdt.debug.core/build.xml, plugins/org.eclipse.cdt.debug.mi.core/build.xml, plugins/org.eclipse.cdt.debug.mi.ui/build.xml, plugins/org.eclipse.cdt.debug.ui/build.xml, plugins/org.eclipse.cdt.launch/build.xml, plugins/org.eclipse.cdt.ui/build.xml" />
         </copy>
