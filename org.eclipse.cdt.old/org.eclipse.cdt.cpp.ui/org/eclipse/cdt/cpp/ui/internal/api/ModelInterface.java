@@ -109,6 +109,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				      }
 				
 				  localDataStore.createReference(localWorkspace, projectMinerProject);		
+				  projectMinerProject.setParent(rworkspace);
+				  
 				  localDataStore.refresh(localWorkspace);
 			      }
 		      }
@@ -1049,7 +1051,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public DataElement findWorkspaceElement(DataStore dataStore)
     {
-	if (_workspaceElement == null)
+	//if (_workspaceElement == null)
 	    {
 		DataElement workspaceObj = null;
 		DataElement projectInfo = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");

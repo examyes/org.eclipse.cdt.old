@@ -116,9 +116,9 @@ public class DeleteProjectAction extends CustomAction
 		Shell shell = api.getDummyShell();
 		String msg = "About to delete project \'" + project.getName() + "\'.\n";
 		msg += "Delete all its contents under " + project.getLocation().toOSString() + " as well?";
+ 
 		boolean deleteContents = MessageDialog.openQuestion(shell, "Delete Project Contents", msg);          
-		
-
+		//boolean deleteContents = PreventableMessageBox.openQuestion(shell, "Delete Project Contents", msg);          
 		DeleteOperation op = new DeleteOperation(project, api, deleteContents);
 		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(shell);
 		try
