@@ -228,7 +228,8 @@ public class ObjectsViewPart extends GenericViewPart
 	
 	CppProjectNotifier notifier = _api.getProjectNotifier();
 	notifier.removeProjectListener(this);
-	
+
+	_viewer.dispose();
         super.dispose();
     }
         
@@ -319,7 +320,7 @@ public class ObjectsViewPart extends GenericViewPart
 			
 			if (event.getStatus() == CppProjectEvent.DONE)
 			    {
-				//pm.done();
+				pm.done();
 			    }
 			else if (event.getStatus() == CppProjectEvent.START)
 			    {
