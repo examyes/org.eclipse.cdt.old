@@ -2597,8 +2597,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
 	
+	
+	//removed temporary
 	//***********************************
-	DataElement managedProjectD = dataStore.find(schemaRoot,DE.A_NAME,"Managed Project",1);
+	/*DataElement managedProjectD = dataStore.find(schemaRoot,DE.A_NAME,"Managed Project",1);
 	DataElement makefileTargetCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change Target to..");
 
 	DataElement libTargetCmds = dataStore.createObject(makefileTargetCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Libs Cmds");
@@ -2606,19 +2608,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement toStatLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "StaticLib",
 							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
-	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"STATICLIB_MAKEFILE_AM");
+	toStatLibTargetCmd.setAttribute(DE.A_VALUE,"STATICLIB_MAKEFILE_AM_VIEW");
 	
 	DataElement toSharedLibTargetCmd = dataStore.createObject(libTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "SharedLib",
 							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
-	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SHAREDLIB_MAKEFILE_AM");
+	toSharedLibTargetCmd.setAttribute(DE.A_VALUE,"SHAREDLIB_MAKEFILE_AM_VIEW");
 
 	dataStore.createReference(libTargetCmds, makefileTargetCmds, "abstracts", "abstracted by");
 
 	DataElement toProgTargetCmd = dataStore.createObject(makefileTargetCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "bin Programs",
 							  "org.eclipse.cdt.cpp.ui.internal.actions.MakefileAmAction");
-	toProgTargetCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM");
+	toProgTargetCmd.setAttribute(DE.A_VALUE,"PROGRAMS_MAKEFILE_AM_VIEW");*/
 	//***********************************
 
 
