@@ -89,107 +89,123 @@
    </perspective>
 </extension>
 
+<extension point="org.eclipse.ui.perspectiveExtensions">
+	<perspectiveExtension 
+		targetID="org.eclipse.ui.resourcePerspective">
+		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
+	</perspectiveExtension>
+	<perspectiveExtension 
+		targetID="com.ibm.cpp.ui.CppPerspective">
+		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
+	</perspectiveExtension>
+	<perspectiveExtension 
+		targetID="com.ibm.cpp.ui.CppPerspective">
+		<perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective"/>
+	</perspectiveExtension>
+	<perspectiveExtension 
+		targetID="org.eclipse.ui.resourcePerspective">
+		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
+	</perspectiveExtension>
+	<perspectiveExtension 
+		targetID="org.eclipse.debug.ui.DebugPerspective">
+		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
+	</perspectiveExtension>
+</extension>
+
 <extension
 	point="org.eclipse.ui.views">
 	<category
-	   id="com.ibm.cpp.ui"
+	   id="com.ibm.cpp.ui.cpp"
 	   name="&amp;C++">
 	</category>
 	<view
 		id="com.ibm.cpp.ui.DetailsViewPart"
 		name="%Details"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/details.gif"
 		class="com.ibm.cpp.ui.internal.views.DetailsViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.SelectedObjectViewPart"
 		name="Selected Object"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/details.gif"
 		class="com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.SuperDetailsViewPart"
 		name="%More_Details"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/details.gif"
 		class="com.ibm.cpp.ui.internal.views.SuperDetailsViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.CppCommandViewPart"
 		name="%Commands"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/commands.gif"
 		class="com.ibm.cpp.ui.internal.views.CppCommandViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.CppOutputViewPart"
 		name="%C/C++ Output"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/output.gif"
 		class="com.ibm.cpp.ui.internal.views.CppOutputViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.ProjectObjectsViewPart"
 		name="%Project_Objects"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/details.gif"
 		class="com.ibm.cpp.ui.internal.views.ProjectObjectsViewPart">
 	</view>
         <view
 		id="com.ibm.cpp.ui.SystemObjectsViewPart"
 		name="%System_Objects"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/details.gif"
 		class="com.ibm.cpp.ui.internal.views.SystemObjectsViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.ParsedSourceViewPart"
 		name="%Parsed_Files"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/Parsed Source.gif"
 		class="com.ibm.cpp.ui.internal.views.ParsedSourceViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.SchemaViewPart"
 		name="%Schema"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/details.gif"
 		class="com.ibm.cpp.ui.internal.views.SchemaViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.MinersViewPart"
 		name="%Miners"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/miners.gif"
 		class="com.ibm.cpp.ui.internal.views.MinersViewPart">
 	</view>
 	<view
 		id="com.ibm.cpp.ui.LogViewPart"
 		name="%Log"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/log.gif"
 		class="com.ibm.cpp.ui.internal.views.LogViewPart">
 	</view>
 	<view
-		id="com.ibm.cpp.ui.RemoteProjectViewPart"
-		name="%Remote_Projects"
-		category="com.ibm.cpp.ui"
-		icon="icons/filenav_nav.gif"
-		class="com.ibm.cpp.ui.internal.views.RemoteProjectViewPart">
-	</view>
-	<view
 		id="com.ibm.cpp.ui.Targets"
 		name="%Targets"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/objects.gif"
 		class="com.ibm.cpp.ui.internal.views.targets.Targets">
 	</view>
         <view
 		id="com.ibm.cpp.ui.CppProjectsViewPart"
 		name="%C++_Projects"
-		category="com.ibm.cpp.ui"
+		category="com.ibm.cpp.ui.cpp"
 		icon="icons/objects.gif"
 		class="com.ibm.cpp.ui.internal.views.CppProjectsViewPart">
 	</view>
@@ -358,17 +374,17 @@
 <extension
 	point="org.eclipse.ui.newWizards">
 	<category
-	   id="com.ibm.cpp.ui.new"
+	   id="com.ibm.cpp.ui.cpp"
 	   name="%C++">
 	</category>
 	<wizard
-	   id="com.ibm.cpp.ui.internal.wizards.new.project"
+	   id="com.ibm.cpp.ui.wizards.CppNewProjectResourceWizard"
 	   name="%C++_Project"
 	   availableAsShortcut="true"
 	   class="com.ibm.cpp.ui.internal.wizards.CppNewProjectResourceWizard"
-	   category="com.ibm.cpp.ui.new"
+	   category="com.ibm.cpp.ui.cpp"
 	   project="true"
-	   finalPerspective="com.ibm.cpp.ui.internal.views.CppPerspective"
+	   finalPerspective="com.ibm.cpp.ui.CppPerspective"
 	   icon="icons/newprj_wiz.gif">
            <description>%Create_a_C++_Project</description>
         </wizard>
@@ -422,7 +438,7 @@
 </extension>
 
 <extension point="org.eclipse.search.searchPages">
-   <page  id="com.ibm.cpp.ui.internal.views.search.CppSearchPage"
+   <page  id="com.ibm.cpp.ui.CppSearchPage"
          icon="icons/search.gif"
          label="%C++_Search"
 		 sizeHint="400,240"

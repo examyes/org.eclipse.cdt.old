@@ -41,7 +41,7 @@ public class CancelAction implements ISelectionChangedListener, IWorkbenchWindow
 		      if (status != null)
 			  {
 			      String state = status.getName();
-			      if (state.equals("working") || state.equals("progress"))
+			      if (!state.equals("done"))
 				  {
 				      api.cancel(cmd);
 				  }
