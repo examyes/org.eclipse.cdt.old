@@ -79,14 +79,16 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	Composite composite = new Composite(parent, SWT.NULL);
    	
    	
-   	composite.addHelpListener(new HelpListener()
+   	/*
+       composite.addHelpListener(new HelpListener()
    	    {
    		public void helpRequested(HelpEvent event)
    		{
    		    performHelp();
    		}
    	    }
-     );
+       );
+      */
    	
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -237,9 +239,6 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 
    	// Directory name entry field
    	_workingDirectoryField = new Combo(workingDirectoryGroup,SWT.BORDER);
-   	//workingDirectoryField.addListener(SWT.Modify,this);
-   	//workingDirectoryField.addListener(SWT.Selection,this);
-   	//workingDirectoryField.setText(_directory.getSource());
    	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
    	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
    	data.horizontalSpan = 1;
@@ -274,7 +273,6 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    {
 
      IProject project;
-     //System.out.println("CppDebugInfoTab:setDefaults");
      IStructuredSelection selection = getSelection();
      if(selection == null)
      {
@@ -347,14 +345,12 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	   	_directory = null;
    		return;
 	   }
-      //System.out.println("CppDebugInfoTab:setDefaults _executable = " +_executable.getSource());
 	}
 	
 	/**
 	 * @see ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
 	 */
 	public void initializeFrom(ILaunchConfiguration config) {
-    //System.out.println("CppDebugInfoTab:initializeFrom");
 		updateExecutableFromConfig(config);
 	}
 
@@ -406,7 +402,6 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#dispose()
 	 */
 	public void dispose() {
-      //System.out.println("CppDebugInfoTab:dispose() ");
 	}
 
 	/**
@@ -445,15 +440,15 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
 	/**
 	 * @see ILaunchConfigurationTab#isPageComplete()
 	 */
-	public boolean isValid() {
-
-      //System.out.println("CppDebugInfoTab:isValid()");
-
+	public boolean isValid()
+  {
 		setErrorMessage(null);
 		setMessage(null);
+      if (_programNameField.getText() == "" || _workingDirectoryField.getText() == "")
+         return false;
+      else
+  	   	return true;
 		
-		// TO DO should verify that test exists
-		return true;
 	}
 	
 	/**
@@ -476,11 +471,12 @@ public class CppRunInfoTab extends CppLaunchConfigurationTab
    	spacer.setLayoutData(data);
     }
 
-
+    /*
     public void performHelp()
     {
        System.out.println("HELP");
     }
+    */
 
     /**
      *	Display an error dialog with the specified message.

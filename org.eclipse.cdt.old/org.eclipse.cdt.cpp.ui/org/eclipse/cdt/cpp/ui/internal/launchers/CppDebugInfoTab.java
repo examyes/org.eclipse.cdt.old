@@ -538,24 +538,12 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 
 		setErrorMessage(null);
 		setMessage(null);
-		
-    /*		
-		String name = fProjText.getText().trim();
-		if (name.length() > 0) {
-			if (!ResourcesPlugin.getWorkspace().getRoot().getProject(name).exists()) {
-				setErrorMessage("Project does not exist.");
-				return false;
-			}
-		}
 
-		name = fTestText.getText().trim();
-		if (name.length() == 0) {
-			setErrorMessage("Test not specified.");
-			return false;
-		}
-    */
-		// TO DO should verify that test exists
-		return true;
+      if (_programNameField.getText() == "" || _workingDirectoryField.getText() == "")
+         return false;
+      else
+  	   	return true;
+		
 	}
 	
 	/**
