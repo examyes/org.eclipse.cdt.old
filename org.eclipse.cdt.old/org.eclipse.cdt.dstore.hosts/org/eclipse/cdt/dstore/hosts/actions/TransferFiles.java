@@ -78,12 +78,12 @@ public class TransferFiles extends Thread
 	    {
 		if (_source.isOfType("directory"))
 		    {
-			_source.expandChildren();
+			_source.expandChildren(true);
 			queryDates(_source);
 		    }
 		if (_target.isOfType("directory"))
 		    {
-			_target.expandChildren();
+			_target.expandChildren(true);
 			queryDates(_target);
 		    }
 		
@@ -248,7 +248,7 @@ public class TransferFiles extends Thread
 		    {
 			_pm.beginTask("Transfering files from " + source.getName() + "...", source.getNestedSize());
 		    }
-		
+		source.refresh(true);
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {
 			DataElement child = source.get(i);
