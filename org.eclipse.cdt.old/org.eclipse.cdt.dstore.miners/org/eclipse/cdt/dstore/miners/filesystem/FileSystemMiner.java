@@ -59,9 +59,11 @@ public class FileSystemMiner extends Miner
 	  File[] deviceList = File.listRoots();
 	  for(int i=0;i<deviceList.length;i++)
 	      {		  
+		  String devicePath = deviceList[i].getPath().replace('\\', '/');
 		  DataElement temp=_dataStore.createObject(_minerData, 
 							   getLocalizedString("model.device"),
-							   deviceList[i].getPath(),deviceList[i].getPath());
+							   devicePath,
+							   devicePath);
 
 	      }	 
 	  
@@ -107,16 +109,21 @@ public class FileSystemMiner extends Miner
 
     private DataElement findFile(DataElement root, File path)
     {	
-	DataElement result = null;
+	DataElement result = root;
 	if (root.getType().equals("data"))
 	    {
 		for (int i =0; i < root.getNestedSize(); i++)
 		    {
 			DataElement device= root.get(i);
-			String path_device=path.getPath();		      		
-			if(device.getName().equals(path_device))
-			    return device;			
-			if(device.getSource().startsWith(path_device.substring(0,path_device.indexOf(File.separator))))
+			String path_device=path.getPath().replace('\\', '/');		      		
+			String device_source = device.getSource(); 
+			
+			if(device_source.equals(path_device))
+			    {
+				return device;			
+			    }
+
+			if(path_device.startsWith(device_source))
 			    {				
 				DataElement tempstatus=_dataStore.createObject(null,"status","start");
 				handleQuery(device,tempstatus);
@@ -129,11 +136,15 @@ public class FileSystemMiner extends Miner
 		for (int i = 0; i < root.getNestedSize(); i++)
 		    {
 			DataElement directory = root.get(i);					
-			if (directory.getSource().equals(path.getPath()))
+
+			String path_dir = path.getPath().replace('\\', '/');
+			String directory_source = directory.getSource();
+			if (directory_source.equals(path_dir))
 			    {
 				return directory;
 			    }
-			if (path.getPath().startsWith(directory.getSource()+File.separator))
+
+			if (path_dir.startsWith(directory_source))
 			    {			
 				DataElement tempstatus=_dataStore.createObject(null,"status","start");
 				handleQuery(directory,tempstatus);				
