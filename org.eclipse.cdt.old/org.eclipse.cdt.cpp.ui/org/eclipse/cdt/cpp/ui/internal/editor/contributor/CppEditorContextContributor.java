@@ -50,8 +50,8 @@ public void contributeToMenu(IMenuManager mbm)
     _fAction = new FindObjectAction("Find Selected@F4", ( CppEditor)_part, true);
     _fAction.setText("Find Selected@F4");
 
-    _bAction = new JumpBackAction("Jump Back@F5", (CppEditor)_part);
-    _bAction.setText("Jump Back@F5");
+    _bAction = new JumpBackAction("Jump Back@F9", (CppEditor)_part);
+    _bAction.setText("Jump Back@F9");
 
     IMenuManager m = mbm.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);
     m.add(_caAction);

@@ -124,6 +124,7 @@ public class FindObjectAction extends Action
 							CppActionLoader loader = CppActionLoader.getInstance();
 							IOpenAction open = loader.getOpenAction();
 							open.setLocation(path, line);
+
 							viewPart.setInput(status.get(0));
 							
 						    }
