@@ -91,7 +91,8 @@ public class ManageProjectAction extends CustomAction
 		
 		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
 		String message = new String("This action will generate all the files needed for Autoconf Support"+
-		"\nExisting configure.in and Makefile.am's will be overwritten - do you wish to continue?");
+		"\nAll existing Autoconf related files will be overwritten"+
+		"\nDo you wish to continue?");
 		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
 		if(dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
 		{

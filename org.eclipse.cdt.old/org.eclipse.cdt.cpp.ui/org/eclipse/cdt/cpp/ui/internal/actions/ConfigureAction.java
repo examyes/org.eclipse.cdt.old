@@ -38,6 +38,13 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
+import org.eclipse.swt.widgets.*;
+import org.eclipse.jface.dialogs.MessageDialog;
+
+import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.*;
+
 public class ConfigureAction extends CustomAction
 { 
 	public class RunThread extends Handler
@@ -67,15 +74,33 @@ public class ConfigureAction extends CustomAction
 	}
     public void run()
 	{
-		DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
-		DataElement status = _dataStore.command(configureCmd, _subject);
+	
+		boolean execute = true;
+		if(_command.getValue().equals("GENERATE_AUTOCONF_FILES"))
+		{
+			Shell shell = _dataStore.getDomainNotifier().findShell();
+			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+			String message = new String("This action will generate all the files needed for Autoconf Support"+
+				"\nExisting configure.in and Makefile.am's will be overwritten"+
+				"\nDo you wish to continue?");
+			if(!dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
+			{			
+				execute = false;
+			}
+		}
 		
-		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
-		api.monitorStatus(status);
-		
-		RunThread thread = new RunThread(_subject, status);
-		thread.start();
+		if(execute)
+		{
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
+			DataElement status = _dataStore.command(configureCmd, _subject);
+			
+			ModelInterface api = ModelInterface.getInstance();
+			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+			api.monitorStatus(status);
+			
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
+		}
 	}
 }
 
