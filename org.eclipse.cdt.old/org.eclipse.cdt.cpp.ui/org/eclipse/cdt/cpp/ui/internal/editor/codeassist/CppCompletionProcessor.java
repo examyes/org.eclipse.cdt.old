@@ -216,8 +216,6 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 
       if (text != null && text.length() > column) 
 	  {
-	      char lastChar = ' ';
-	      
          while (column >= 0) 
 	     {		 
 		 char c = text.charAt(column);
@@ -232,8 +230,23 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 				 isValid = true;
 				 break;
 			     case '-':
-				 if (lastChar == '>')
-				     isValid = true;
+				 {
+				     if ((column + 1) < text.length())
+					 {
+					     if (text.charAt(column + 1) == '>')
+						 isValid = true;
+					     
+					 }				     
+				 }
+				 break;
+			     case '>':
+				 {
+				     if ((column - 1) > 0)
+					 {
+					     if (text.charAt(column - 1) == '-')
+						 isValid = true;
+					 }
+				 }
 				 break;
 			     default:
 				 isValid = false;
@@ -247,7 +260,6 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		     }
 
 		 currentText.insert(0, c);
-		 lastChar = c;
 		 column--;
 	     }
       }
