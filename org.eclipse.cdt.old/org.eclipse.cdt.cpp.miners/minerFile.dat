@@ -5,4 +5,4 @@ com.ibm.cpp.miners.parser.ParseMiner
 com.ibm.dstore.miners.command.CommandMiner
 com.ibm.cpp.miners.search.SearchMiner
 com.ibm.cpp.miners.managedproject.ManagedProjectMiner
-com.ibm.dstore.miners.monitor.MonitorMiner
+com.ibm.cpp.miners.debug.DebugMiner

@@ -15,6 +15,7 @@ public class DebugMiner extends Miner
     {  
 	_debugJarPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "com.ibm.debug.temp/derdebug.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb -qhost=localhost ";
+	//_debugInvocation = "java com.ibm.debug.gdb.Gdb -qhost=localhost ";
     }
         
     public void extendSchema(DataElement schemaRoot)
@@ -44,7 +45,7 @@ public class DebugMiner extends Miner
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
 
 	System.out.println("doing " + invocation);
-	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory, "C_COMMAND");
+	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
 	if (cmdDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();

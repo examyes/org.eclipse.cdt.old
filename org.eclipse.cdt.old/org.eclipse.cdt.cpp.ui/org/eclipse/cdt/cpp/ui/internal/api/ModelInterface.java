@@ -344,7 +344,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement dirObject = dataStore.createObject(null, "directory", pathStr, pathStr);
 	DataElement portObj = dataStore.createObject(null, "port", port);
 	DataElement keyObj  = dataStore.createObject(null, "key", key);
-	DataElement debugDescriptor = dataStore.localDescriptorQuery(dirObject, "C_DEBUG");
+
+	DataElement debugDescriptor = dataStore.localDescriptorQuery(dirObject.getDescriptor(), "C_DEBUG");
 	if (debugDescriptor != null)
 	    {
 		ArrayList args = new ArrayList();
