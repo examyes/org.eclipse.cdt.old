@@ -1,0 +1,137 @@
+<html>
+
+<CENTER>
+<H2>CDT Monthly Call March 10, 2005</H2>
+</CENTER>
+
+<pr>
+Attendee who identified themselves:
+<UL>
+<LI>Intel - Bob, Sumit, Leo, Anurag
+<LI>Monta Vista - Pierre-Alexander
+<LI>Los Alamos - Craig
+<LI>Altera - Daryl
+<LI>Redhat - Rick
+<LI>University of Illinois - Brian
+<LI>IBM – Doug, Dave, Mathieu, Bogdan
+<LI>WindRiver- Rooney 
+<LI>TimeSys - Sam 
+<LI>TI- Chris
+<LI>QNX – Derrick, Thomas, Alain, Mikhail, James, Seb, Chris
+</UL>
+
+<H3>CDT 2.03</H3>
+<UL>
+<LI>We are still waiting to see if there is any other fixes. We are pretty 
+much there unless someone identifies an issue that needs to be fixes. We’re 
+holding off a bit because we want to avoid a 2.04
+</UL> 
+
+<H3>CDT 2.1.1</H3>
+<UL>
+<LI>There was a managed build issue raised. As far as Leo (Intel) is 
+  concerned it not appropriate to fix it for 211. 
+<LI>Open Type Stack Overflow is last outstanding issue
+<LI>Doug (IBM) waiting for the ok from Alain (QNX) before spinning build
+</UL>
+
+
+<H3>CDT 3.0</H3>
+<UL>
+<LI>Milestone 5 is over, no more feedback is coming
+<LI>Derrick (QNX) sent out a plea to have people actually read
+  and update the status of plan items:
+  <UL>
+  <LI>Indicate if you are working on something and it is "committed"
+  <LI>Indicate if you are working on something and it is "proposed"
+  </UL>
+<LI>Derrick indicated all should review the plan so that we
+  can make a plan and update for Milestone 6 instead of 7
+<LI>M5 should be built March 14th for initial testing
+	<UL>
+  	<LI>Results will be posted to the newsgroup (cdt-test)
+  	</UL>
+<LI>M5 go-no criteria before posting as stable
+  <UL>
+  <LI>Sanity testing of features (1 day activity)
+    <UL>
+    <LI>Formally done by James Tan (QNX) (who may be absent =;-)
+    <LI>Committers encouraged to help informally
+    </UL>
+  <LI>Feature testing of features (1 day activity)  <LI>Red flag any items that were marked for M5 that are not present
+  <LI>Red flag any items that were committed but not working
+  </UL>
+<LI><b>The branch is "slushy" at this time so no commits of large
+    destabilizing features.</b>
+<LI>Additional participants/resources requested to help with the 
+  scalability testing by Mathieu (IBM)
+
+<LI>Doug (IBM) committed to having ISV docs built for the M5 build
+  <UL>
+  <LI>John (IBM) indicated the DOM docs are in good shape
+  <LI>Alain (QNX) indicated that there is a fair amount of javadoc
+    in place for the debug interfaces, but there may be some changes
+    coming along with WindRiver and their debug issues. For 3.0 the
+    CDI javadocs will be up to date.
+  </UL>
+</UL>
+
+<H3>CDT 3.x</H3>
+<UL
+<li>IBM has identified the need for a release for Q4 of 2005.  Likely
+  a bug fixing effort.
+<LI>Leo (Intel) & Chris (TI) both indicated that they have features
+  that they will expect to have come up for that timeframe (MBS)
+</UL>
+
+<H3>Eclipse Con Review</H3>
+<UL>
+<LI>WindRiver is hosting a top level Device Software Project as a 
+  strategic developers:
+  <UL>
+  <LI>Also interested in enhancing CDT: additional requirements/new features
+  <LI>General areas include debugging (CDT & Platform), 
+    parsing/static analysis (WR technology), managed build 
+    capabilities (language agnostic)
+
+  <LI>Rooney (WRS) mentioned that the focus will be on remote target 
+    management (data models and functionality).
+  <LI>Montavista's target proposal will likely shift to this project.
+  </UL>
+<LI>Look forward to much news and background about this showing up
+  on the Eclipse.org/CDT mailing list.
+
+<LI>Many discussions about the debugger (CDT and platform) API and 
+  frameworks and how to go forward to make changes.  There will 
+  likely be a meeting in Toronto in the next few weeks (as a post
+  3.0 activity).
+</UL>
+
+<H3>LDT Project</H3>
+<UL>
+<LI>Lots of discussion around multi-language development, specifically
+  the way that the Fortran project(s) have built off of the CDT as
+  an example.  There may be parts of CDT that are applicable to this
+  project.
+<LI>No official involvement yet, some confusion around what the LDT
+  project is going to go short term.
+<LI>CDT could be positioned as a better solution for some clients who
+  might be considering the LDT but are waiting for a solution.
+</UL>
+
+<H3>Fortran/Core Plugin Replacement</H3>
+<UL>
+<LI>Current discussion/proposal on how the Fortran code can easily 
+  replace the calls to CCore.getDefault() for accessing the Core Model.
+<LI>Brian (??) indicated that there doesn't appear to be a clear solution 
+  on where this cut would occur.  It was proposed that it might be 
+  worthwhile to use the MBS as a candidate for this first "language 
+  agnostic" component.
+<LI>Leo (Intel) indicated that his plate is pretty full for CDT 3.0 and
+  that there won't be time for exploring this, but that contributions
+  are welcome.
+<LI>For the short term, the Fortran "folks" are going to have to do the 
+  initial probing to figure out how to make this go.
+</UL>
+
+</HTML>
