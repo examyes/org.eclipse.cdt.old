@@ -1,8 +1,16 @@
-2005-01-15  Aaron Luchko <aluchko@redhat.com>
+2005-01-17  Aaron Luchko  <aluchko@redhat.com>
 
-	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java: bz# 82881
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage.java (): bz# 83031
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportOperation.java (): ditto
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java (): ditto
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportWizard.java (): ditto
+	* src/org/eclipse/cdt/rpm/ui/rpm_strings.properties: ditto
+
+2005-01-15  Aaron Luchko  <aluchko@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java:
 	  Add previously opened srpms to the combo box when opening srpms
-
+	
 2004-12-15  Rick Moseley  <rmoseley@redhat.com>
 
 	* src/org/eclipse/cdt/rpm/ui/RPMExportPage.java (returnProjectPath): 

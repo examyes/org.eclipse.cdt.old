@@ -497,7 +497,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 		// we want to seperate it from the other widgets on the wizard dialog box
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout());
-		group.setText(Messages.getString("RPMExportPage.Select_a_project")); //$NON-NLS-1$
+		group.setText(Messages.getString("RPMPage.Select_a_project")); //$NON-NLS-1$
 		group.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL |
 				GridData.HORIZONTAL_ALIGN_FILL));
 
@@ -521,7 +521,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 
 		if (internalProjectList.length < 1) {
 			projectList.add(Messages.getString(
-					"RPMExportPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
+					"RPMPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
 			return;
 		}
 
@@ -654,7 +654,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 		Button rpmBrowseButton = new Button(composite, SWT.PUSH);
 		rpmBrowseButton.setToolTipText(Messages.getString(
 				"RPMExportPage.toolTip_file_navigator")); //$NON-NLS-1$
-		rpmBrowseButton.setText(Messages.getString("RPMExportPage.Browse")); //$NON-NLS-1$
+		rpmBrowseButton.setText(Messages.getString("RPMPage.Browse")); //$NON-NLS-1$
 		rpmBrowseButton.addListener(SWT.Selection,
 			new Listener() {
 				public void handleEvent(Event event) {

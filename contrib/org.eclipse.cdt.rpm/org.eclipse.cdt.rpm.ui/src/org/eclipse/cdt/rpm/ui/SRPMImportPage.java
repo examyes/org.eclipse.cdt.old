@@ -161,7 +161,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		Button srpmBrowse = new Button(sourceSpecComposite, SWT.PUSH);
 		srpmBrowse.setToolTipText(Messages.getString(
 				"SRPMImportPage.toolTip_Open_file_navigator")); //$NON-NLS-1$
-		srpmBrowse.setText(Messages.getString("RPMExportPage.Browse")); //$NON-NLS-1$
+		srpmBrowse.setText(Messages.getString("RPMPage.Browse")); //$NON-NLS-1$
 		srpmBrowse.addListener(SWT.Selection,
 			new Listener() {
 				public void handleEvent(Event event) {
@@ -183,7 +183,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		//Create a group for the control and set up the layout.
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout());
-		group.setText(Messages.getString("RPMExportPage.Build_Options")); //$NON-NLS-1$
+		group.setText(Messages.getString("SRPMImportPage.Build_Options")); //$NON-NLS-1$
 		group.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL |
 				GridData.HORIZONTAL_ALIGN_FILL));
 
@@ -227,7 +227,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		// we want to seperate it from the other widgets on the wizard dialog box
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout());
-		group.setText(Messages.getString("RPMExportPage.Select_a_project")); //$NON-NLS-1$
+		group.setText(Messages.getString("RPMPage.Select_a_project")); //$NON-NLS-1$
 		group.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL |
 				GridData.HORIZONTAL_ALIGN_FILL));
 
@@ -251,7 +251,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 
 		if (internalProjectList.length < 1) {
 			projectList.add(Messages.getString(
-					"RPMExportPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
+					"RPMPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
 			return;
 		}
 		// Stuff the listbox with the text name of the projects 
@@ -395,7 +395,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		}
 		srpmVector.add((String)(sourceSRPM.getText()));
 		
-		// Create a new instance of rpmExportOperation build class
+		// Create a new instance of SRPMImportOperation build class
 		try {
 			srpmImport = new SRPMImportOperation(detailedProject,
 					sourceSRPM.getText(), applyPatch.getSelection(),
@@ -412,7 +412,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		// If the status does not come back clean, open error dialog
 		if (!srpmImportStatus.isOK()) {
 			ErrorDialog.openError(getContainer().getShell(),
-				Messages.getString("RPMExportPage.Errors_importing_SRPM"), //$NON-NLS-1$
+				Messages.getString("SRPMImportPage.Errors_importing_SRPM"), //$NON-NLS-1$
 				null, // no special message
 				srpmImportStatus);
 

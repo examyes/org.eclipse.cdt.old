@@ -11,7 +11,7 @@
  *
  *
  * Plug-in entry point. When the user chooses to import an RPM the plug-in manager in Eclipse
- * will invoke this class. This class extends Wizard and implements IExportWizard.
+ * will invoke this class. This class extends Wizard and implements IImportWizard.
  */
 package org.eclipse.cdt.rpm.ui;
 
@@ -34,7 +34,7 @@ public class SRPMImportwizard extends Wizard implements IImportWizard {
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
 
-	// Create a local reference to RPMExportPage
+	// Create a local reference to SRPMImportPage
 	private SRPMImportPage mainPage;
 
 	/**
@@ -54,8 +54,8 @@ public class SRPMImportwizard extends Wizard implements IImportWizard {
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 
-	// We have elected to do the Finish button clickin in the RPMExportPage. So override
-	//the default and point to RPMExport finish()
+	// We have elected to do the Finish button clickin in the SRPMImportPage. So override
+	//the default and point to SRPMImport finish()
 	public boolean performFinish() {
 		try {
 			return mainPage.finish();
@@ -77,7 +77,7 @@ public class SRPMImportwizard extends Wizard implements IImportWizard {
 	 * @see org.eclipse.jface.wizard.IWizard#addPages()
 	 */
 
-	// Add the RPMExportPage as the only page in this wizard.
+	// Add the SRPMImportPage as the only page in this wizard.
 	public void addPages() {
 		mainPage = new SRPMImportPage(workbench, selection);
 		addPage(mainPage);

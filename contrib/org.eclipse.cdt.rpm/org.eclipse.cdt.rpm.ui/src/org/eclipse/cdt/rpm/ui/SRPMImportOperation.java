@@ -44,8 +44,6 @@ public class SRPMImportOperation implements IRunnableWithProgress {
 	private boolean keep_log;
 	private boolean applyPatches;
 	private boolean runAutoConf;
-	public String Project_Location = null;
-	private RPMCore rpmExportCore;
 
 	// Progressmonitor
 	private IProgressMonitor monitor;
