@@ -48,17 +48,20 @@ public class ConnectDialog extends org.eclipse.jface.dialogs.Dialog implements L
     private final static int	SIZING_SELECTION_WIDGET_WIDTH = 300;
     
     private Connection _connection;
+    private DataStoreUIPlugin _plugin;
 
     public ConnectDialog(String title)
     {
 	super(null);
 	_connection = null;
+	_plugin = DataStoreUIPlugin.getInstance();
     }
 
     public ConnectDialog(String title, Connection connection)
     {
 	super(null);
 	_connection = connection;
+	_plugin = DataStoreUIPlugin.getInstance();
     }
 
     
@@ -129,18 +132,18 @@ public class ConnectDialog extends org.eclipse.jface.dialogs.Dialog implements L
 	c.setLayout(layout);
 
 	Label nameLabel = new Label(c, SWT.NONE);
-	nameLabel.setText("Name");
+	nameLabel.setText(_plugin.getLocalizedString("dialog.Name"));
 
 	_nameText = new Text(c, SWT.BORDER);
 	GridData dp0 = new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL);
 	_nameText.setLayoutData(dp0);
 	
 	_remoteConnect = new Button(c, SWT.CHECK);
-	_remoteConnect.setText("Work Remotely");
+	_remoteConnect.setText(_plugin.getLocalizedString("dialog.Work_Remotely"));
 	_remoteConnect.addListener(SWT.Selection, this);
 	
 	Group sGroup = new Group(c, SWT.NONE);
-	sGroup.setText("Server");
+	sGroup.setText(_plugin.getLocalizedString("dialog.Server"));
 	
 	GridLayout serverLayout = new GridLayout();
 	serverLayout.numColumns = 4;
@@ -150,17 +153,17 @@ public class ConnectDialog extends org.eclipse.jface.dialogs.Dialog implements L
 	sGroup.setLayout(serverLayout);
 
 	Label ipLabel = new Label(sGroup, SWT.NONE);	
-	ipLabel.setText("Host IP");
+	ipLabel.setText(_plugin.getLocalizedString("dialog.Host_IP"));
 	
 	_ipText = new Text(sGroup, SWT.SINGLE | SWT.BORDER);
 	
 	Label portLabel = new Label(sGroup, SWT.NONE);	
-	portLabel.setText("Port");
+	portLabel.setText(_plugin.getLocalizedString("dialog.Port"));
 	
 	_portText = new Text(sGroup, SWT.SINGLE | SWT.BORDER);
 	
 	_connectToUsingDaemon = new Button(sGroup, SWT.CHECK);
-	_connectToUsingDaemon.setText("Connect to using daemon");		
+	_connectToUsingDaemon.setText(_plugin.getLocalizedString("dialog.Connect_using_daemon"));		
 	GridData cdData = new GridData();
 	cdData.horizontalAlignment = GridData.FILL;
 	cdData.grabExcessHorizontalSpace = true;
@@ -173,7 +176,7 @@ public class ConnectDialog extends org.eclipse.jface.dialogs.Dialog implements L
 	sGroup.setLayoutData(serverData);
 	
 	Label dirLabel = new Label(c, SWT.NONE);	
-	dirLabel.setText("Root Directory");
+	dirLabel.setText(_plugin.getLocalizedString("dialog.Working_Directory"));
 	
 	_dirText = new Text(c, SWT.SINGLE | SWT.BORDER);
 	_dirText.setLayoutData(textData);
@@ -183,7 +186,7 @@ public class ConnectDialog extends org.eclipse.jface.dialogs.Dialog implements L
 	
 	setDefaults();
 
-	getShell().setText("Connect");
+	getShell().setText(_plugin.getLocalizedString("dialog.Connect"));
 	return c;
     }
 

@@ -21,7 +21,7 @@ import org.eclipse.jface.dialogs.*;
 import org.eclipse.swt.*;
 //import org.eclipse.swt.widgets.*;
 
-public class CustomAction extends Action
+public abstract class CustomAction extends Action
 {
     protected DataStore          _dataStore;
     protected DataElement        _command;
@@ -72,20 +72,6 @@ public class CustomAction extends Action
 	_subjects.add(_subject);
     }  
 
-  public void run()
-      {
-        String msg = "Extend CustomAction and add a ui_commanddescriptor to add your own custom action!";
-        MessageDialog explainD = new MessageDialog(null,
-						   "Custom Action", 
-						   null, 
-						   msg, 
-						   MessageDialog.INFORMATION,
-                                                   new String[]  { "OK" },
-						   0);
-                                          
-
-        explainD.openInformation(new org.eclipse.swt.widgets.Shell(), "CustomAction", msg);          
-      }
-    
+    public abstract void run();    
   }
 

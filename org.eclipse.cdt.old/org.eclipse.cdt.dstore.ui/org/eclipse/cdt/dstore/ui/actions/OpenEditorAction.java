@@ -29,8 +29,8 @@ import org.eclipse.ui.texteditor.*;
 
 public class OpenEditorAction extends Action implements IOpenAction
 {
-  private static DataElement _previousElement;
-  private DataElement _element;
+    private static DataElement _previousElement;
+    private DataElement _element;
 
   public OpenEditorAction(DataElement element)
       {

@@ -111,38 +111,6 @@ public class CommandDialog extends org.eclipse.jface.dialogs.Dialog implements L
 
 	    _entries.add(aText);	
 	  }
-        /*
-	else if (input.getType().equals("select"))
-	  {
-            DataElement root = input.get(0);
-
-            if (root != null)
-            {
-              root = root.dereference();
-            }
-
-	    DataElement descriptor = input.get(1);
-            if (descriptor == null)
-            {
-              descriptor = root.getDescriptor();
-            }
-            descriptor.dereference();
-
-            CppViewer viewer = new CppViewer(c);
-	
-            //ViewFilter viewFilter = new ViewFilter();
-	    //viewFilter.setType(descriptor);
-            // ViewSorter viewSorter = new ViewSorter();
-            // viewer.addFilter(viewFilter);
-            //viewer.setSorter(viewSorter);
-	
-	    viewer.setInput(root);
-            viewer.addSelectionChangedListener(this);
-
-	    _entries.add(viewer);	
-	  }	
-        */
-
         if (_entries.size() > 0)
         {
           Object firstEntry = _entries.get(0);

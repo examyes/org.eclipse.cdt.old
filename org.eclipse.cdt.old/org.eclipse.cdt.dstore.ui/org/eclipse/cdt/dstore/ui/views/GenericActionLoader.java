@@ -41,10 +41,11 @@ public class GenericActionLoader implements IActionLoader
 {
     protected   IOpenAction            _openAction;
     protected   CustomAction           _openPerspectiveAction;
-    
+    private     DataStoreUIPlugin      _plugin;
 
     public GenericActionLoader()	
     {	
+	_plugin = DataStoreUIPlugin.getInstance();
     }
    
     public CustomAction getOpenPerspectiveAction()
@@ -52,11 +53,12 @@ public class GenericActionLoader implements IActionLoader
 	if (_openPerspectiveAction == null)
 	    {
 		_openPerspectiveAction = loadAction("org.eclipse.cdt.dstore.ui.actions.OpenPerspectiveAction", 
-						    "Open Perspective On");
+						    _plugin.getLocalizedString("Open_Perspective_On"));
+		return _openPerspectiveAction;
 	    }
-	return _openPerspectiveAction;
+	return null;
     }
-
+    
     public IOpenAction getOpenAction()
     {
 	if (_openAction == null)
@@ -65,7 +67,7 @@ public class GenericActionLoader implements IActionLoader
 	    }
 	return _openAction;
     }
-
+    
     public Class forName(String source) throws ClassNotFoundException
     {
 	return Class.forName(source);

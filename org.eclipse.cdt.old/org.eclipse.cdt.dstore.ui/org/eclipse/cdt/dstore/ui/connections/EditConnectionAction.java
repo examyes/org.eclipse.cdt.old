@@ -35,18 +35,20 @@ import java.io.*;
 public class EditConnectionAction extends CustomAction
 {
     private DataElement _host;
+    private DataStoreUIPlugin _plugin;
 
     public EditConnectionAction(DataElement subject, String label, DataElement command, DataStore dataStore)
     {
 	super(label);
 	_host = subject;
+	_plugin = DataStoreUIPlugin.getDefault();
     }
     
     public void run()
     {
 	Connection connection = ConnectionManager.getInstance().findConnectionFor(_host);
 
-	ConnectDialog dialog = new ConnectDialog("Edit Connection", connection);	      
+	ConnectDialog dialog = new ConnectDialog(_plugin.getLocalizedString("Edit_Connection"), connection);	      
 	dialog.open();
 	if (dialog.getReturnCode() != dialog.OK)
 	    return;

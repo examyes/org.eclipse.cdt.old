@@ -712,16 +712,6 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 		DataElement input = (DataElement)_viewer.getInput();
 		_menuHandler.fillContextMenu(menu, input, selected);
 
-		/*
-		menu.add(new Separator("#View"));
-		MenuManager sort = new MenuManager(getLocalizedString("ui.Sort_by"), "#SortMenu");
-		for (int i = 0; i < _sortByAction.length; i++)
-		    {
-			_sortByAction[i].setChecked(false);
-			sort.add(_sortByAction[i]);
-		    }
-		menu.add(sort);
-		*/
 
 		_currentSortAction.setChecked(true);
 		_currentViewByAction.setChecked(true);		

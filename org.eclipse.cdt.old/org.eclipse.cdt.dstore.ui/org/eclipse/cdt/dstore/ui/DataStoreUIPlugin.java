@@ -25,13 +25,24 @@ import java.net.*;
 
 public class DataStoreUIPlugin extends AbstractUIPlugin
 {
-  private static DataStoreUIPlugin    _instance;
+    private static DataStoreUIPlugin    _instance;
+    private ResourceBundle _resourceBundle;
 
   public DataStoreUIPlugin(IPluginDescriptor descriptor)
   {
     super(descriptor);
     _instance = this;
     URL url =descriptor.getInstallURL();    
+
+    // setup resource bundle
+    try
+	{
+	    _resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.ui.UIResources");
+	}
+    catch (MissingResourceException mre)
+	{
+	    _resourceBundle = null;
+	}
   }
 
   static public DataStoreUIPlugin getDefault()
@@ -103,8 +114,17 @@ public class DataStoreUIPlugin extends AbstractUIPlugin
     
     public static String getLocalizedString(String key)
     {
-	return null;
+	try
+	    {
+		if (_instance._resourceBundle != null && key != null)
+		    return _instance._resourceBundle.getString(key);
+	    }
+         catch (MissingResourceException mre)
+	     {
+	     }
+	return "";
     }
+
 }
 
 

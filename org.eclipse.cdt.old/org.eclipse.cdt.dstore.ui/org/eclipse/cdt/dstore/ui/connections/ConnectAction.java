@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.*;
 public class ConnectAction extends CustomAction
 {
     protected Connection _connection;
+    private DataStoreUIPlugin _plugin;
 
     public ConnectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
     {	
@@ -32,6 +33,8 @@ public class ConnectAction extends CustomAction
         
         _connection = ConnectionManager.getInstance().findConnectionFor(subject);
         setEnabled(!_connection.isConnected());
+
+	_plugin = DataStoreUIPlugin.getDefault();
       }
     
     public void run()
@@ -44,14 +47,16 @@ public class ConnectAction extends CustomAction
 		if (!status.isConnected())
 		    {
 			MessageDialog failD = new MessageDialog(null, 
-								"Connection Failure", 
+								_plugin.getLocalizedString("dialog.Connection_Failure"), 
 								null, msg, 
 								MessageDialog.INFORMATION,
 								new String[]  { "OK" },
 								0);
 			
 			
-			failD.openInformation(new Shell(), "Connection Failure", msg);          
+			failD.openInformation(new Shell(), 								
+					      _plugin.getLocalizedString("dialog.Connection_Failure"), 
+					      msg);          
 		    }
 		else
 		    {

@@ -57,7 +57,7 @@ public class Connection implements IDomainListener
 
 	protected void execute(IProgressMonitor pm) 
 	{
-	    pm.beginTask("Connecting...", 100);
+	    pm.beginTask(_plugin.getLocalizedString("connection.Connecting"), 100);
 	    if (_isLocal) 
 		{
 		    _connectStatus = _client.localConnect();
@@ -71,7 +71,7 @@ public class Connection implements IDomainListener
 
 	    if (_connectStatus.isConnected())
 	    {
-		pm.beginTask("Getting Schema...", 100);
+		pm.beginTask(_plugin.getLocalizedString("connection.Initializing_DataStore"), 100);
 
 		if (getSchema(_connectStatus, _minersLocation, pm))
 		    {
@@ -91,18 +91,18 @@ public class Connection implements IDomainListener
 	    DataStore dataStore = _client.getDataStore();
 	    DataElement hostRoot = dataStore.getHostRoot();         
 	    
-	    monitor.subTask("Showing Ticket...");
+	    monitor.subTask(_plugin.getLocalizedString("connection.Showing_ticket"));
 	    // show ticket	
 	    if (dataStore.showTicket(ticketStr))
 		{
 		    monitor.worked(10);
 
-		    monitor.subTask("Setting Miners Location...");
+		    monitor.subTask(_plugin.getLocalizedString("connection.Setting_miners_location"));
 		    dataStore.setMinersLocation(minersLocation);
 		    monitor.worked(10);
 		    
 		    // get schema
-		    monitor.subTask("Getting Schema...");
+		    monitor.subTask(_plugin.getLocalizedString("connection.Getting_schema"));
 		    dataStore.getSchema();
 		    monitor.worked(10);
 		    
@@ -111,7 +111,7 @@ public class Connection implements IDomainListener
 		    String host = _client.getHost();
 		    String hostDirectory = _client.getHostDirectory();
 		    
-		    monitor.subTask("Setting Host...");
+		    monitor.subTask(_plugin.getLocalizedString("connection.Setting_working_directory"));
 		    if (!host.equals(hostRoot.getName()) || !hostDirectory.equals(hostRoot.getSource()))
 			{
 			    hostRoot.setAttribute(DE.A_NAME, host);
@@ -121,19 +121,19 @@ public class Connection implements IDomainListener
 		    monitor.worked(10);
 		    
 		    // initialize miners
-		    monitor.subTask("Initializing Miners...");
+		    monitor.subTask(_plugin.getLocalizedString("connection.Initializing_miners"));
 		    DataElement status = dataStore.initMiners();
 		    DataElement rootDir = dataStore.getHostRoot().get(0);
 		    if (rootDir == null)
 			{
-			    String msg = "Could not find " + hostDirectory + " on " + _host + ".";
+			    String msg = _plugin.getLocalizedString("connection.Failed_to_find_working_directory");
 			    status.setAttribute(DE.A_NAME, "failed");
 			    dataStore.createObject(status, "error", msg);			    
 			}
 
 		    monitor.worked(20);
 
-		    monitor.subTask("Setting Status...");
+		    monitor.subTask(_plugin.getLocalizedString("connection.Checking_status"));
 		    if (!status.getName().equals("done"))
 			{
 			    disconnect();
@@ -145,7 +145,7 @@ public class Connection implements IDomainListener
 				}
 			    else
 				{
-				    connectionStatus.setMessage("Couldn't Connect to " + _host + ".");
+				    connectionStatus.setMessage(_plugin.getLocalizedString("connection.Could_not_connect") + "  " + _host + ".");
 				}
 			    result = false;
 			}
@@ -155,7 +155,7 @@ public class Connection implements IDomainListener
 			}
 
 		    monitor.worked(10);		    
-		    monitor.subTask("Connected to " + host);
+		    monitor.subTask(_plugin.getLocalizedString("connection.Connected_to") + " "  + host);
 		    dataStore.getDomainNotifier().enable(true);
 
 		}
@@ -189,6 +189,7 @@ public class Connection implements IDomainListener
     private String _password = null;
 
     private DomainNotifier _notifier = null;
+    private DataStoreUIPlugin _plugin;
 
     public Connection(String name, ArrayList args, DataElement parent)
     {
@@ -228,6 +229,7 @@ public class Connection implements IDomainListener
 
         _element = parent.getDataStore().createObject(parent, _type, _name, _dir);
         parent.getDataStore().update(parent);
+	_plugin = DataStoreUIPlugin.getDefault();
     }        
     
     public Connection(String name,
@@ -254,6 +256,7 @@ public class Connection implements IDomainListener
 	
         _element = parent.getDataStore().createObject(parent, _type, _name, _dir);
         parent.getDataStore().update(parent);
+	_plugin = DataStoreUIPlugin.getDefault();
     }
     
     public Connection(Connection connection, DataElement element)
@@ -275,6 +278,7 @@ public class Connection implements IDomainListener
         _name     = element.getAttribute(DE.A_NAME);
         _type     = element.getAttribute(DE.A_TYPE);
         _dir      = element.getAttribute(DE.A_SOURCE);
+	_plugin = DataStoreUIPlugin.getDefault();
     }
         
     public void setHost(String host)
@@ -468,7 +472,7 @@ public class Connection implements IDomainListener
 			if (shell != null)
 			    {
 				String msg = dsStatus.getName();
-				MessageDialog.openError(shell, "Connection Error", msg);   
+				MessageDialog.openError(shell, _plugin.getLocalizedString("connection.Connection_Error"), msg);   
 			    }
 		    }
 		

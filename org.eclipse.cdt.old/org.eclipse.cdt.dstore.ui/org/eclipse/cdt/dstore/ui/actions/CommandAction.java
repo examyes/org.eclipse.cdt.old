@@ -101,16 +101,13 @@ import org.eclipse.core.runtime.*;
 
 	  try
 	      {
-		  System.out.println("running...");
 		  op.run(new NullProgressMonitor());
-		  System.out.println("...running");
 	      }
 	  catch (InvocationTargetException e)
 	      {
 	      }
 
 	  DataElement statusObject = op.getStatus();
-	  System.out.println("statusObject = " + statusObject.getName());
 	  if (statusObject.getName().equals("incomplete"))
 	    {		
 	      ArrayList subOutput = initCommandOutput(statusObject);

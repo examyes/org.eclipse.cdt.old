@@ -8,7 +8,6 @@ package org.eclipse.cdt.dstore.ui.dialogs;
 
 import org.eclipse.cdt.dstore.ui.*;
 import org.eclipse.cdt.dstore.core.model.*;
-//import org.eclipse.cdt.dstore.core.internal.extra.*;
 
 import java.util.*;
 
@@ -31,10 +30,13 @@ public class LoginDialog extends org.eclipse.jface.dialogs.Dialog
 
   private  String     _user;
   private  String     _password;
+    
+    private DataStoreUIPlugin _plugin;
 
   public LoginDialog()
   {
     super(null);
+    _plugin = DataStoreUIPlugin.getDefault();
   }
 
   protected void buttonPressed(int buttonId)
@@ -79,7 +81,7 @@ public class LoginDialog extends org.eclipse.jface.dialogs.Dialog
 
       Composite u = new Composite(c, SWT.NONE);
       Label userLabel = new Label(u, SWT.NONE);	
-      userLabel.setText("User ID:");
+      userLabel.setText(_plugin.getLocalizedString("dialog.User_ID:"));
       
       _userText = new Text(u, SWT.SINGLE | SWT.BORDER);
       _userText.setText("");
@@ -95,7 +97,7 @@ public class LoginDialog extends org.eclipse.jface.dialogs.Dialog
 
       Composite p = new Composite(c, SWT.NONE);      
       Label passwordLabel = new Label(p, SWT.NONE);	
-      passwordLabel.setText("Password:");
+      passwordLabel.setText(_plugin.getLocalizedString("dialog.Password:"));
       
       _passwordText = new Text(p, SWT.SINGLE | SWT.BORDER);
       _passwordText.setText("");
@@ -109,7 +111,7 @@ public class LoginDialog extends org.eclipse.jface.dialogs.Dialog
       p.setLayout(pLayout);
       p.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-      getShell().setText("Login");
+      getShell().setText(_plugin.getLocalizedString("dialog.Login"));
       
       return c;
   }
