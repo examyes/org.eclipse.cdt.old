@@ -123,7 +123,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 	  }
   }
 
-    public void addNewFile(IFile file)
+    public void addNewFile(IResource file)
     {
 	_api.addNewFile(file);
     }

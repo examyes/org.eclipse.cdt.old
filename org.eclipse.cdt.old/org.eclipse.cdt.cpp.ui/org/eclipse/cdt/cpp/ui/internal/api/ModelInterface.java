@@ -1235,6 +1235,35 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	return null;
     }
 
+
+
+
+
+    public DataElement findOrCreateResourceElement(IResource resource)
+    {
+	DataElement result = findResourceElement(resource);
+	if (result == null)
+	    {
+		// create some temporary element to represent a resource
+		DataElement projectElement = findProjectElement(resource.getProject());
+		if (projectElement != null)
+		    {
+			DataStore dataStore = projectElement.getDataStore();
+			if (resource instanceof IFile)
+			    {			
+				result = dataStore.createObject(null, "file", resource.getName(), resource.getLocation().toString());
+			    }			
+			else if (resource instanceof IFolder)
+			    {
+				result = dataStore.createObject(null, "directory", resource.getName(), resource.getLocation().toString());
+				
+			    }			
+		    }
+	    }
+
+	return result;
+    }
+
     public DataElement findResourceElement(IResource resource)
     {
 	DataStore dataStore = _plugin.getCurrentDataStore();
@@ -1310,6 +1339,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 	return found;
     }
+
+
+
+
 
   public DataElement findProjectElement(IProject project)
     {
