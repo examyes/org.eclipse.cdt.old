@@ -271,6 +271,11 @@ class CommandMinerThread extends MinerThread
 		    theShell = "sh";
 		}
 
+		if (_invocation.equals(">"))
+		{
+			_invocation = theShell;
+		}
+
 
 	    String args[] = new String[3];
 	    args[0] = theShell;
@@ -281,8 +286,13 @@ class CommandMinerThread extends MinerThread
 	}
     else
 	{
-	    theShell = "cmd /C ";
-	    _theProcess = Runtime.getRuntime().exec(theShell + "(" + _invocation + ") &", getEnvironment(_subject), theDirectory); 
+	    theShell = "cmd";
+	    if (_invocation.equals(">"))
+	    {
+	    	_invocation = theShell;
+	    }
+	
+	    _theProcess = Runtime.getRuntime().exec(theShell + " /C " + _invocation, getEnvironment(_subject), theDirectory); 
         }
     
     _stdInput = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
