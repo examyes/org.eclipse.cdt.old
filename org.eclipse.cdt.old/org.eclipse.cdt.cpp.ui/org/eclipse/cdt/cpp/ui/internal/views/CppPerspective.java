@@ -55,8 +55,9 @@ public class CppPerspective implements IPerspectiveFactory
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppCommandViewPart");
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.CppOutputViewPart");
     factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.Targets");
+    factory.addShowViewShortcut("org.eclipse.cdt.cpp.ui.ProcessMonitorViewPart");
     factory.addShowViewShortcut("org.eclipse.cdt.linux.help.views.ResultsViewPart");
-
+    
     // search
     factory.addShowViewShortcut(SearchUI.SEARCH_RESULT_VIEW_ID);
     
