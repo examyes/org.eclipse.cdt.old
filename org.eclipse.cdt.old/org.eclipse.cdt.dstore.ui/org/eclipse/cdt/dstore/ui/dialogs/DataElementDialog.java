@@ -107,6 +107,11 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
     {
 	return null;
     }
+
+    public Class forName(String source) throws ClassNotFoundException
+    {
+	return Class.forName(source);       
+    }
     
     public CustomAction loadAction(String source, String name)
     {
