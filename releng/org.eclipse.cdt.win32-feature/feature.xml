@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.win32"
       label="%featureName"
-      version="1.1.0"
+      version="1.2.0"
       provider-name="%providerName"
       os="win32"
       ws="win32"
@@ -23,24 +23,24 @@
 
    <includes
          id="org.eclipse.cdt"
-         version="1.1.0"
+         version="1.2.0"
          match="equivalent"/>
-   
+
    <requires>
-     <import plugin="org.eclipse.cdt" version="1.1.0" match="compatible"/>
+      <import plugin="org.eclipse.cdt" version="1.2.0" match="compatible"/>
    </requires>
-   
+
    <plugin
          id="org.eclipse.cdt.core.win32"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          fragment="true"/>
 
    <plugin
          id="org.eclipse.cdt.win32"
          download-size="0"
          install-size="0"
-         version="1.1.0"/>
+         version="1.2.0"/>
 
 </feature>
