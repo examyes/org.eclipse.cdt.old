@@ -54,7 +54,6 @@ public class ProcessMonitorMiner extends Miner
 	DataElement killD = createCommandDescriptor(processD, "Kill", "C_KILL");
 
 	String theOS = System.getProperty("os.name").replace(' ', '_');
-	System.out.println("getting ps command for " + theOS);
 	_psCommand = getLocalizedString(theOS + "_ps");
 	if (_psCommand == null)
 	    {
