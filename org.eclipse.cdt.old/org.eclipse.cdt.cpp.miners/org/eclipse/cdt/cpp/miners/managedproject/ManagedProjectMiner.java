@@ -77,7 +77,7 @@ public class ManagedProjectMiner extends Miner
 		}
 		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
-			autoconfManager.generateSupportFile(status);
+			autoconfManager.generateAutoconfFile(status);
 			project.refresh(false);
 			parseAmFile(project); 
 		}

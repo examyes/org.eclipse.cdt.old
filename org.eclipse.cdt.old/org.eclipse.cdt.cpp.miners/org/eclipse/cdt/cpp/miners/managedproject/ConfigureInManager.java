@@ -42,7 +42,7 @@ public class ConfigureInManager {
 	}
 	private void initializeConfigure_in(File configure_in)
 	{
-		File modFile = new File(project.getSource(),"mod_configure.in");
+		File modFile = new File(project.getSource(),"modConfigure.in");
 		// reading configure.in
 		String line;
 		try{// initializing Package Version and Subdir fields
@@ -69,7 +69,10 @@ public class ConfigureInManager {
 			}
 			in.close();
 			out.close();
-			modFile.renameTo(configure_in);
+			// because rename does not work properly on windows cygwin
+			File abstractPath = new File(configure_in.getAbsolutePath());
+			configure_in.delete();
+			modFile.renameTo(abstractPath);
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
 	}

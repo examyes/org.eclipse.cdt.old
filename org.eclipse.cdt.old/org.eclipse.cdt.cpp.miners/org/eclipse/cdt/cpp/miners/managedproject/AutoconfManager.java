@@ -21,6 +21,7 @@ public class AutoconfManager {
 	ConfigureInManager configure_in_manager;
 	MakefileAmManager makefile_am_manager; 
 	static Object O = new Object();
+	String cygwinPrefix = new String("sh -c ");
 
 	public AutoconfManager(DataElement aProject)
 	{
@@ -34,26 +35,27 @@ public class AutoconfManager {
 	protected void manageProject(DataElement status)
 	{
 
-		if(getOS().equals("Linux")) // to be modified
+		String path = project.getSource().toString();
+		//check if he tools are available	autolocal, autoheader, automake & autoconf
+		if(!areAllNeededPackagesAvailable())
 		{
-			String path = project.getSource().toString();
-			//check if he tools are available	autolocal, autoheader, automake & autoconf
-			if(!areAllNeededPackagesAvailable())
-			{
-				// should be a popup dialog
-				System.out.println("neede package is missing to manage the project"
-				+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
-			}
-			else
-			{	
-				generateSupportFile(status);
-				getAutoconfScript(project);
-				runCommand(status, "./script.batch;./configure");
-			}
-			//check // autoloca	// autoheader // automake // autoconf // else notify the user with the missed packages
+			// should be a popup dialog
+			System.out.println("neede package is missing to manage the project"
+			+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
 		}
+		else
+		{	
+			generateAutoconfFile(status);
+			getAutoconfScript(project);
+			if(getOS().equals("Linux"))
+				runCommand(status,"./script.batch;./configure");
+			else
+				runCommand(status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
+		}
+		//check // autoloca	// autoheader // automake // autoconf 
+		// else notify the user with the missed packages
 	}
-	protected void generateSupportFile(DataElement status)
+	protected void generateAutoconfFile(DataElement status)
 	{
 		configure_in_manager.manageConfigure_in();
 		makefile_am_manager.manageMakefile_am();
@@ -99,11 +101,18 @@ public class AutoconfManager {
 	}
 	private void createConfigureScript(DataElement status)
 	{
-		runCommand(status, "./script.batch");
+		
+		if(getOS().equals("Linux"))
+			runCommand(status, "./script.batch");
+		else
+			runCommand(status, cygwinPrefix+"script.batch");
 	}
 	public void runConfigureScript(DataElement status)
 	{
-		runCommand(status, "./configure");
+		if(getOS().equals("Linux"))
+			runCommand(status, "./configure");
+		else
+			runCommand(status, cygwinPrefix+"configure");
 	} 
 	
 	public void runCommand(DataElement status, String invocation)

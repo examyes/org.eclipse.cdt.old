@@ -144,7 +144,10 @@ public class MakefileAmManager {
 				}
 				in.close();
 				out.close();
-				modMakefile_am.renameTo(Makefile_am);
+				File abstractPath = new File(Makefile_am.getAbsolutePath());
+				Makefile_am.delete();
+				modMakefile_am.renameTo(abstractPath);
+				//modMakefile_am.renameTo(Makefile_am);
 			}catch(FileNotFoundException e){System.out.println(e);}
 			catch(IOException e){System.out.println(e);}
 			//if(!found_SUBDIRS)
@@ -274,7 +277,10 @@ public class MakefileAmManager {
 				}
 				in.close();
 				out.close();
-				modMakefile_am.renameTo(Makefile_am);
+				File abstractPath = new File(Makefile_am.getAbsolutePath());
+				Makefile_am.delete();
+				modMakefile_am.renameTo(abstractPath);
+				//modMakefile_am.renameTo(Makefile_am);
 			}catch(FileNotFoundException e){System.out.println(e);}
 			catch(IOException e){System.out.println(e);}
 			if(!found)
@@ -300,7 +306,10 @@ public class MakefileAmManager {
 			}
 			in.close();
 			out.close();
-			modMakefile_am.renameTo(Makefile_am);
+			File abstractPath = new File(Makefile_am.getAbsolutePath());
+			Makefile_am.delete();
+			modMakefile_am.renameTo(abstractPath);
+			//modMakefile_am.renameTo(Makefile_am);
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
 	}
@@ -361,7 +370,10 @@ public class MakefileAmManager {
 				}
 				in.close();
 				out.close();
-				modMakefile_am.renameTo(Makefile_am);
+				File abstractPath = new File(Makefile_am.getAbsolutePath());
+				Makefile_am.delete();
+				modMakefile_am.renameTo(abstractPath);
+				//modMakefile_am.renameTo(Makefile_am);
 			}catch(FileNotFoundException e){System.out.println(e);}
 			catch(IOException e){System.out.println(e);}
 			
@@ -615,7 +627,10 @@ public class MakefileAmManager {
 				}
 				in.close();
 				out.close();
-				modMakefile_am.renameTo(Makefile_am);
+				File abstractPath = new File(Makefile_am.getAbsolutePath());
+				Makefile_am.delete();
+				modMakefile_am.renameTo(abstractPath);
+				//modMakefile_am.renameTo(Makefile_am);
 			}catch(FileNotFoundException e){System.out.println(e);}
 			catch(IOException e){System.out.println(e);}
 			
@@ -649,25 +664,29 @@ public class MakefileAmManager {
 		// provide one makefile.am in each subdiectory
 		for(int i =0; i < subdirs.length ; i++)
 		{
-			if(subdirs[i].indexOf(".")==-1)
+			String name = new String(subdirs[i].toString());
+			
+			String modName = name.replace('\\','/');
+			if(modName.indexOf(".")==-1)
 			{
-				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
+				StringTokenizer token = new StringTokenizer(modName,"/");
 				if (token.countTokens()==1)
 				{
 					try{
 						Process p = 	rt.exec(
 							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
+							+project.getSource()+"/"+modName);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
 				}
 				else
 				{
+					
 					try{
 						Process p= rt.exec(
 							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
+							+project.getSource()+"/"+modName);
 						p.waitFor();
 					}catch(IOException e){System.out.println(e);}
 					catch(InterruptedException e){System.out.println(e);}
