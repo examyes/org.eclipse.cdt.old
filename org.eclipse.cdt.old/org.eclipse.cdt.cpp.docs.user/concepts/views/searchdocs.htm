@@ -1,0 +1,108 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta http-equiv="Content-Language" content="en-us">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>Search Docs view</title>
+   <title>The C/C++ Development Plugin - Search Docs view</title>
+</head>
+<!----------------------------------------------------------------------------------->
+<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
+<!-----------------------------------------------------------------------------------
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr> 
+    <td ALIGN=left width="80%"><b><font face="Verdana" size="+3">The C/C++<br>
+        Development Plugin</font></b></td>
+    <td width="20%"><img SRC="../../images/idea.jpg" height=86 width=120 align=center></td>
+  </tr>
+</table>
+----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+  <tr>
+<h1>Search Docs view</h1> 
+<!---
+     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+        Search Docs view</font></b></td>
+---->
+  </tr>                     
+</table>
+
+<p>The Search Docs view is intended to help a user quickly find documentation for a specific function/system call. Users can search for documentation in man pages, info and html. <br><br>
+
+<center><img SRC="../../images/searchdocs.gif"></center>
+<h3>Launching a search for Documentation</h3>
+<ul>
+<li>From the View -- To do a search, the user would enter some text in the <code>"Look for"</code> field and press the <code>"Find"</code> button. Selecting any of the results with the mouse would open an external browser (see below) to display the corresponding documentation. By default, the first entry is always selected after a search. <br><br>
+</li>
+<li>From the Editor -- A search for documentation could also be launched from the Lpex editor by pressing F1 when the cursor is over a function name. 
+</li>
+<center><img SRC="../../images/searchdocsfromeditor.gif"></center>
+</ul><br>
+
+<h1>Search Docs Settings</h1>
+
+
+<h3>LookUp Mode</h3>
+<p> A search for documentation could proceed in 3 modes:
+<ol>
+<li>Exact -- Only report matches that match exactly the <code>'key'</code> entered (case insensitive) </li>
+<li>Substring -- Report all matches that include the <code>'key'</code> entered as a <i>substring</i> (case insensitive)</li>
+<li>Regular Expression(Perl compatible)</li>
+</ol> 
+
+<h3>Scope</h3>
+<p> A search for documentation could be limited in scope:
+<ol>
+<li>Man Pages -- only report matches in the man pages</li>
+<li>Info Pages -- only report matches in the info pages</li>
+<li>Html -- only report matches from the Html index (created by the user -- see below)</li>
+</ol>
+<h5>Notes:</h5>
+<ul>
+<li><i>'whatis' path</i> --  When man pages are selected, a search only looks at the entries in the 'whatis' database to report matches. So it is important to have the <code>'whatis' path</code> set correctly. A reasonable default has been provided("/var/cache/man/whatis") but this may change according to your distribution. You can only change it if <code>"Man pages"</code> is selected in the <b>Scope</b>.      
+</li><br><br>
+<li><i>'dir'  path</i> -- When info pages are selected, a search only looks at the entries in the top level 'dir' node.  So it is important to have the <code>'dir' path</code> set correctly. A reasonable default has been provided("/usr/share/info/dir") but this may change according to your distribution. You can only  change it if <code>"Info pages"</code> is selected in the <b>Scope</b>
+</li>
+</ul>
+
+<h3>Browsing</h3>
+<p>To view the actual documentation, you will need either one of the following external browsers:
+<ol>
+<li>konqueror -- It is part of the KDE desktop</li>
+<li>gnome-help-browser -- It is part of the GNOME desktop</li>
+</ol>
+
+<h3>Indexing Html Documentation</h3>
+<p>To index html documentation, the user needs  to specify a list of directories that contain html files. Use the <code>Browse</code> button to navigate the filesystem and then add it to the list with the <code>Add</code> button. Then use the <code>Create index</code> button to index all html files in the list of directories.
+<p>Since the contents of files are indexed as words, you can only do a search in the html documentation in <code>Exact</code> mode(no substring, no regular expressions). You can only create an index if you have <code>"Html"</code> selected in the <b>Scope</b>. 
+
+<h3>Limitations</h3>
+<ul>
+<li><p>It is possible that the 'whatis' file used for searching man pages may be incomplete. It can be recreated with the 'makewhatis' comand. e.g to recreate the 'whatis' from the man pages in 2 directories(<code>/usr/share/man</code> and <code>/usr/X11R6/man</code>) a user would typically run:<br><br>
+/user/sbin/<b>makewhatis</b> <code> /usr/share/man  /usr/X11R6/man</code>   
+</li>
+<li> When searching for Html documentation, the results of the search only show the names of the files that contains the 'key' typed. There is no description for each file.<br><br>
+</li>
+<li>The search for documentation does NOT support Remote Projects
+</li>
+</ul>
+
+<!----------------------------------------------------------------------------------->
+<table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
+<!----
+  <tr> 
+    <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
+       Contact Us</font></b></td>
+  </tr>
+----->
+<!---------->
+  <tr>
+     <td ALIGN=left VALIGN=top COLSPAN="2">
+     <p><a href = "../../frames/contact.htm">Contact Us</a>
+     <p><a href="../../hglegal.htm"><img border="0" src="../../images/ngibmcpy.gif" width="195" height="12"></a></p>
+  </td>  
+</tr>
+</table>
+<!----------------------------------------------------------------------------------->
+</body>
+</html>
