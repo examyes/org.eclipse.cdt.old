@@ -17,6 +17,7 @@ package org.eclipse.cdt.rpm.ui;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.Vector;
 
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.core.resources.IProject;
@@ -71,6 +72,8 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	private Button buildSource;
 	private List projectList;
 	private IStructuredSelection selection;
+
+	static private Vector srpmVector;
 	
 	/**
 	 * @see java.lang.Object#Object()
@@ -141,6 +144,10 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		sourceSRPM.setToolTipText(Messages.getString(
 				"SRPMImportPage.toolTip_SRPM_Name")); //$NON-NLS-1$
 
+		if (srpmVector == null)
+			srpmVector = new Vector();
+		for (int i = srpmVector.size(); i > 0; i--)
+			sourceSRPM.add((String)(srpmVector.elementAt(i - 1)));
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.grabExcessHorizontalSpace = true;
@@ -377,6 +384,17 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		// in the returned array is valid.
 		IProject detailedProject = workspaceRoot.getProject(selectedProject[0]);
 			
+		// Add this SRPM to srpmList
+		for (int i = 0; i < srpmVector.size(); i++)
+		{	// There can only be one occurance 
+			if (srpmVector.elementAt(i).equals(sourceSRPM.getText()))
+			{
+				srpmVector.remove(i);
+				break;
+			}
+		}
+		srpmVector.add((String)(sourceSRPM.getText()));
+		
 		// Create a new instance of rpmExportOperation build class
 		try {
 			srpmImport = new SRPMImportOperation(detailedProject,
