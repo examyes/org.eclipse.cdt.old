@@ -154,58 +154,13 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
 
     if(!exprValue.equals("???"))
     {
-      cmd = "ptype "+exprString;
-      ok = _debugSession.executeGdbCommand(cmd);
-      if( ok )
-      {
-         _debugSession.addCmdResponsesToUiMessages();
-         if(_debugSession.cmdResponses.size()>0)
-         {
-            String str = null;
-
-            for(int i=0; i<_debugSession.cmdResponses.size(); i++)
-            {
-               str = (String)_debugSession.cmdResponses.elementAt(i);
-               if(str!=null && !str.equals("") && !str.equals(" ") && !str.startsWith("(gdb)") )
-                  break;
-            }
-            if(str!=null && !str.equals("") && !str.equals(" ") && !str.startsWith("(gdb)") )
-            {
-               if (Gdb.traceLogger.EVT) 
-                   Gdb.traceLogger.evt(2,"GdbVariableMonitor.evaluateExpression str="+str );
-               if(str.startsWith("No symbol "))
-               {
-                  if (Gdb.traceLogger.EVT) 
-                      Gdb.traceLogger.evt(1,"GdbVariableMonitor.evaluateExpression NO SYMBOL "+exprString );
-                  return new GdbExprEvalInfo(GdbExprEvalInfo.exprNOTFOUND);
-               }
-               if (Gdb.traceLogger.DBG) 
-                   Gdb.traceLogger.dbg(2,"GdbVariableMonitor.evaluateExpression "+exprString +" >>>> "+str );
-
-               int equals = str.indexOf("= ");
-               if(equals<=0)
-               {
-                  if (Gdb.traceLogger.ERR) 
-                      Gdb.traceLogger.err(2,"GdbVariableMonitor.evaluateExpression missing '= from gdb response="+str );
-               }
-               else
-               {
-                  exprType = str.substring(equals+2);
-                  if (Gdb.traceLogger.DBG) 
-                      Gdb.traceLogger.dbg(3,"GdbVariableMonitor.evaluateExpression exprType="+exprName +"<<<<" );
-               }
-            }
-            _debugSession.cmdResponses.removeAllElements(); 
-         }
-      }
+    	exprType = getExpressionType(_debugSession, exprString);
     }
 
     if (Gdb.traceLogger.EVT) 
         Gdb.traceLogger.evt(1,"<<<<<<<<-------- GdbVariableMonitor.evaluateExpression String="+exprString+" Name="+exprName +" Value="+exprValue +" Number="+exprNumber+" Type="+exprType+"<<<<" );
 
-    StringTokenizer exprTokens = null;
-
-    if (exprString == null || exprValue.equals("???") )
+    if (exprString == null || exprValue.equals("???") || exprType == null)
     {
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(1,"GdbVariableMonitor.evaluateExpression exprString==null || exprValue==??? ");
@@ -229,6 +184,69 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
  
     // Expression evaluation successful.
     return varInfo;
+  }
+  
+  static public String getExpressionType(GdbDebugSession _debugSession, String exprString)
+  {
+  	// give blanks for now... bad performance caused by asking for
+  	// types of all variables
+  	if (true)
+  	{
+	  	return " ";
+  	}
+  	  	
+      String exprType = "unknown_Type";  	
+      String cmd = "whatis "+exprString;
+      
+      boolean ok = _debugSession.executeGdbCommand(cmd);
+      if( ok )
+      {
+         _debugSession.addCmdResponsesToUiMessages();
+         if(_debugSession.cmdResponses.size()>0)
+         {
+            String str = null;
+
+            for(int i=0; i<_debugSession.cmdResponses.size(); i++)
+            {
+               str = (String)_debugSession.cmdResponses.elementAt(i);
+               if(str!=null && !str.equals("") && !str.equals(" ") && !str.startsWith("(gdb)") )
+                  break;
+            }
+            if(str!=null && !str.equals("") && !str.equals(" ") && !str.startsWith("(gdb)") )
+            {
+            	
+               if (Gdb.traceLogger.EVT) 
+                   Gdb.traceLogger.evt(2,"GdbVariableMonitor.evaluateExpression str="+str );
+               if(str.startsWith("No symbol "))
+               {
+                  if (Gdb.traceLogger.EVT) 
+                      Gdb.traceLogger.evt(1,"GdbVariableMonitor.evaluateExpression NO SYMBOL "+exprString );
+               }
+               if (Gdb.traceLogger.DBG) 
+                   Gdb.traceLogger.dbg(2,"GdbVariableMonitor.evaluateExpression "+exprString +" >>>> "+str );
+
+               int equals = str.indexOf("= ");
+               if(equals<=0)
+               {
+               	
+                  if (Gdb.traceLogger.ERR) 
+                      Gdb.traceLogger.err(2,"GdbVariableMonitor.evaluateExpression missing '= from gdb response="+str );
+                      
+               }
+               else
+               {
+          	  	  // scalar type
+                  exprType = str.substring(equals+2);
+                 
+                  if (Gdb.traceLogger.DBG) 
+                      Gdb.traceLogger.dbg(3,"GdbVariableMonitor.evaluateExpression exprType="+exprType+"<<<<" );
+               }
+            }
+            _debugSession.cmdResponses.removeAllElements(); 
+         }     
+      }
+      
+      return exprType;
   }
 
 }
