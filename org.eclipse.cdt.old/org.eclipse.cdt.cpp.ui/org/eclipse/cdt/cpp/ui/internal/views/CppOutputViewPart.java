@@ -46,6 +46,50 @@ public class CppOutputViewPart
 	implements ICppProjectListener, SelectionListener, IDomainListener, ISelectionListener
 {
 
+	public class SaveOutputAction extends Action
+	{
+	    public SaveOutputAction(String name, ImageDescriptor image)
+	    {
+		super(name, image);
+		setToolTipText(name);
+	    }
+	    
+	    public void run()
+		{
+		    DataElement input = _viewer.getCurrentInput();
+		    if (input != null)
+			{
+			    saveOutput(input);
+			}
+		}
+	    
+	    public void saveOutput(DataElement status)
+	    {
+		FileDialog dialog = new FileDialog(_viewer.getShell(), SWT.SAVE);
+		dialog.setFilterPath("*.*");
+		
+		String selectedFile = dialog.open();
+		java.io.File logFile = new java.io.File(selectedFile);
+		
+		try
+		    {
+			java.io.RandomAccessFile outputLog = new java.io.RandomAccessFile(logFile, "rw");		
+			
+			// for each element 
+			for (int i = 0; i < status.getNestedSize(); i++)
+			    {
+				outputLog.writeBytes(((DataElement)status.get(i)).getValue());		
+				outputLog.writeBytes(System.getProperty("line.separator"));
+			    }
+			
+			outputLog.close();
+		    }
+		catch (java.io.IOException e)
+		    {
+		    }
+	    }
+	}
+
 	public class CancelAction extends Action
 	{
 		public CancelAction(String name, ImageDescriptor image)
@@ -159,6 +203,7 @@ public class CppOutputViewPart
 	private ShellAction _shellAction;
 	private HistoryAction _backAction;
 	private HistoryAction _forwardAction;
+	private SaveOutputAction _saveOutputAction;
 
 	private ArrayList _history;
 
@@ -557,6 +602,9 @@ public class CppOutputViewPart
 				plugin.getImageDescriptor("cancel"));
 		toolBarManager.add(_cancelAction);
 
+		_saveOutputAction = new SaveOutputAction("Save Output", plugin.getImageDescriptor("saveas"));
+		toolBarManager.add(_saveOutputAction);
+
 		enableActions();
 	}
 
@@ -577,6 +625,7 @@ public class CppOutputViewPart
 			_cancelAction.setEnabled(false);
 		}
 
+		_saveOutputAction.setEnabled(input != null);
 		_backAction.checkEnableState();
 		_forwardAction.checkEnableState();
 
