@@ -157,7 +157,10 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 					if(doesFileExist("configure"))
 					{
 						if(!configureIsUptodate(_subject))
+						{
 							message = new String("\nRegenerating and running configure script - configure is not up to date "+str1);
+							dialogHas2Buttons = false;
+						}
 						else
 						{
 							dialogHas2Buttons = true;
@@ -181,7 +184,10 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 								configueDialogPrefernceKey);
 					int result = box.open();
 					if(result!= -1)
-						configureUpdate= result;
+						if(dialogHas2Buttons)
+							configureUpdate= result+1;
+						else
+							configureUpdate = result;
 					else
 						configureUpdate = 0;
 					
@@ -236,16 +242,13 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 
 		if(configureUpdate==1 && configFilesExist)
 		{
-			if(!dialogHas2Buttons)  // this to take care in case the cancel button pressesd when the dialog has 2 buttons only
-			{
-				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
-				DataElement status = _dataStore.command(configureCmd, _subject);
-				ModelInterface api = ModelInterface.getInstance();
-				api.monitorStatus(status);			
-				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
-				RunThread thread = new RunThread(_subject, status);
-				thread.start();
-			}
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
+			DataElement status = _dataStore.command(configureCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.monitorStatus(status);			
+			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
 		}
 		else if(configureUpdate==0 && targetType==DEFAULT&&dialogButtonPushed!=1) 
 		{

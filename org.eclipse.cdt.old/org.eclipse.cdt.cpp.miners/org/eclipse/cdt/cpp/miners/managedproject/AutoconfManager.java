@@ -58,9 +58,9 @@ public class AutoconfManager {
 			updateAutoconfFiles(project,status,true,classifier);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project,status,"./bootstrap.sc"+"&&"+"./configure");
+				runCommand(project,status,"./autogen.sh"+"&&"+"./configure");
 			else
-				runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure");
+				runCommand(project, status, cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure");
 		}
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
@@ -88,34 +88,29 @@ public class AutoconfManager {
 	}
 
 	
-	public void generateAndRunConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
+	public void generateAndRunConfigure(DataElement project, DataElement status, boolean updateFlag,MakefileAmClassifier classifier)
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
-		File script = new File (project.getSource(),"bootstrap.sc");
-		if(!configure.exists())
+		File script = new File (project.getSource(),"autogen.sh");
+		if(!configure.exists()||updateFlag)
 		{
+			//System.out.println("\n configure does not exist!"+"   Or force update");
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
+				runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 			else
-			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
+			runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
-		else if(configureIsUptodate(project))
+		else if(configureIsUptodate(project)||!updateFlag)
 		{
+			//System.out.println("\n configure is up to date"+"dont care just don't update and use existing configure");
 			if(getOS().equals("Linux"))
 				runCommand(project, status,"./configure"+"&&"+"touch -m "+"configure");
 			else
 				runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
-		}
-		else 
-		{
-			if(getOS().equals("Linux"))
-				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
-			else
-				runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 	} 	
 
@@ -165,15 +160,15 @@ public class AutoconfManager {
 		Process p;	
 		Runtime rt = Runtime.getRuntime();
 		// check if there is an existing script - calls for aclocal, autoheader,automake and autoconf
-		File script = new File (project.getSource(),"bootstrap.sc");
+		File script = new File (project.getSource(),"autogen.sh");
 		if(!script.exists())
 		{
 			if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 			{
-				try{// add bootstrap.sc only if not exist
+				try{// add autogen.sh only if not exist
 					p = rt.exec(
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
-						"/org.eclipse.cdt.cpp.miners/autoconf_templates/bootstrap.sc "+project.getSource());
+						"/org.eclipse.cdt.cpp.miners/autoconf_templates/autogen.sh "+project.getSource());
 					p.waitFor();
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	
@@ -182,7 +177,7 @@ public class AutoconfManager {
 		modifyScript(script,projectFile);
 		try
 		{
-			p = rt.exec("chmod +x "+project.getSource()+"/bootstrap.sc ");
+			p = rt.exec("chmod +x "+project.getSource()+"/autogen.sh ");
 			p.waitFor();	
 		}catch(IOException e){System.out.println(e);}
 		catch(InterruptedException e){System.out.println(e);}	
@@ -249,24 +244,24 @@ public class AutoconfManager {
 	private void createConfigureScript(DataElement project, DataElement status)
 	{
 		if(getOS().equals("Linux"))
-			runCommand(project, status, "./bootstrap.sc"+"&&"+"touch -m configure");
+			runCommand(project, status, "./autogen.sh"+"&&"+"touch -m configure");
 		else 
-			runCommand(project, status, cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"\'touch -m configure\'");
+			runCommand(project, status, cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"\'touch -m configure\'");
 	}
 	public void runConfigure(DataElement project, DataElement status, boolean update,MakefileAmClassifier classifier)
 	{
 		// if configure is not found then create it first
 		File configure = new File (project.getSource(),"configure");
-		File script = new File (project.getSource(),"bootstrap.sc");
+		File script = new File (project.getSource(),"autogen.sh");
 		if(!configure.exists())
 		{
 			if(!script.exists())
 				getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+
+				runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+
 				"configure");
 			else
-			runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+
+			runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+
 			cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 		else
@@ -291,9 +286,9 @@ public class AutoconfManager {
 				}
 				
 				if(getOS().equals("Linux"))
-					runCommand(project, status,"./bootstrap.sc"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
+					runCommand(project, status,"./autogen.sh"+"&&"+"./configure"+"&&"+"touch -m "+"configure");
 				else
-					runCommand(project, status,cygwinPrefix+"bootstrap.sc"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
+					runCommand(project, status,cygwinPrefix+"autogen.sh"+"&&"+cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 			}
 		}
 	} 
@@ -336,37 +331,24 @@ public class AutoconfManager {
 	{
 		return makefileAmManager;
 	}
-	/*private boolean configureIsUptodate(DataElement root)
-	{
-		DataElement cmdD = root.getDataStore().localDescriptorQuery(root.getDescriptor(), "C_CHECK_UPDATE_STATE", 4);
-		
-		if (cmdD != null)
-		{
-			DataElement status = root.getDataStore().synchronizedCommand(cmdD, root);		
-			DataElement updateState = (DataElement)status.get(0);
-		    String state = updateState.getName();
-		    if(state.equals("uptodate"))
-		    	return true;
-		}
-		return false;
-	}*/
 	private boolean configureIsUptodate(DataElement subject)
 	{
 		File configure = getfile(subject.getFileObject(),"configure");
 		long configureTimeStamp = configure.lastModified();
-		System.out.println("\n My configure file = "+configureTimeStamp);
 		
 		File rootObject = subject.getFileObject();
 		ProjectStructureManager manager = new ProjectStructureManager(rootObject);
 		
 		File[] list = manager.getFiles();
+		
 		for(int i = 0; i < list.length; i++)
-			if(!list[i].getName().equals("configure"))
+		{
+			if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")&&!list[i].getName().equals("Makefile"))
 			{
-				System.out.println("\n"+list[i].getName()+" = "+list[i].lastModified());
-				if(list[i].lastModified()>configureTimeStamp)
-					return false;
+					if(list[i].lastModified()>configureTimeStamp)
+						return false;
 			}
+		}
 		return true;
 	}
 	private File getfile(File dir,String name)
