@@ -443,7 +443,12 @@ public class FileSystemMiner extends Miner
      private DataElement handleCreateDir(DataElement subject, DataElement newName, DataElement status)
 	 {	
 	     StringBuffer newDirName = new StringBuffer(subject.getSource());
-	     newDirName.append("/"+newName.getName());
+	     if (newDirName.charAt(newDirName.length() - 1) != '/')
+		 {
+		     newDirName.append("/");
+		 }
+
+	     newDirName.append(newName.getName());
 	     
 	     File toBeCreated = new File(newDirName.toString());
 	     if (!toBeCreated.exists())
