@@ -36,8 +36,8 @@ public class MakefileAmManager {
 	char delim = '!';
 	
 	// default values in Makefile.am
-	String targetSuffix = new String("_target");
-	
+	//String targetSuffix = new String("_target");
+	String targetSuffix = new String("");
 	/**
 	 * Constructor for MakefileAmManager
 	 */
@@ -107,19 +107,26 @@ public class MakefileAmManager {
 		for(int i =0; i < projectStucture.length; i++)
 		{
 			Integer level = new Integer((String)projectStucture[i][1]);
+			String absPath = new String("");
 			switch (level.intValue())
 			{
 				case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
 					initTopLevelMakefileAm(project.getFileObject());
+					absPath = project.getFileObject().getAbsolutePath()+"Makefile.am";
+					timeStamps.put(project.getFileObject().getAbsolutePath(),new Long(getMakefileAmStamp(project.getFileObject())));
 					break;
 				case (1):
 					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
 					initDefaultMakefileAm((File)projectStucture[i][0]);
+					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+"Makefile.am";
+					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				default:
 				// initialize all other files in the subdirs
 					initStaticLibMakefileAm((File)projectStucture[i][0]);
+					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+"Makefile.am";
+					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 			}
 		}
 	}
@@ -367,9 +374,12 @@ public class MakefileAmManager {
 	protected void updateMakefileAm(boolean actionIsManageProject)
 	{
 		Object[][] projectStucture = structureManager.getProjectStructure();
+		// update Makefile in the top level directory
+		// first check if it is ok to update
+		
 		for(int i =0; i < projectStucture.length; i++)
 		{
-			Integer level = new Integer((String)projectStucture[i][1]);
+		/*	Integer level = new Integer((String)projectStucture[i][1]);
 			switch (level.intValue())
 			{
 				case (0):
@@ -384,7 +394,7 @@ public class MakefileAmManager {
 				// update all other files in the subdirs
 				// this will be changed as based on the file layout  - static or shared
 					updateStaticLibMakefileAm((File)projectStucture[i][0]);
-			}
+			}*/
 		}
 	}
 	private void updateTopLevelMakefileAm(File parent)
@@ -419,10 +429,10 @@ public class MakefileAmManager {
 	{
 	}
 
-	private long getMakefileAmStamp(File Makefile_am)
+	private long getMakefileAmStamp(File parent)
 	{
 		// get time stamp
-		//File Makefile_am = new File (project.getSource(),"Makefile.am");
+		File Makefile_am = new File (parent,"Makefile.am");
 		return Makefile_am.lastModified();
 	}
 	private String getGeneratedStamp()
@@ -738,6 +748,12 @@ public class MakefileAmManager {
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		initSharedLibMakefileAm(parent);	
+	}
+	private void displayHassTableContents()
+	{
+		Enumeration enum = timeStamps.elements();
+		while(enum.hasMoreElements())
+			System.out.println(""+enum.nextElement());
 	}
 }
 

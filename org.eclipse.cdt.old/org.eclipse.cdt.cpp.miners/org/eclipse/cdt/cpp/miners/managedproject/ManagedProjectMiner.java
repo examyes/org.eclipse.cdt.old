@@ -98,7 +98,6 @@ public class ManagedProjectMiner extends Miner
 		{
 			autoconfManager.runSupportScript(status);
 			refresh(project);
-			parseAmFile(project); 
 		}
 		else if (name.equals("C_RUN_CONFIGURE"))
 		{
