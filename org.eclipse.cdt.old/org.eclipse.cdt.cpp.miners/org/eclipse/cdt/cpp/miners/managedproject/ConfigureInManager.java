@@ -38,8 +38,11 @@ public class ConfigureInManager {
 			// if the action was mangeProject then
 			if(actionIsManageProject)
 			{
-				System.out.println("\n configure.in will be updated"+ 
-					"\nexisting file will be named configure.in.old");
+				System.out.println("************************************************"+
+									"\n* configure.in will be updated"+ 
+									"\n* existing file will be named configure.in.old"+
+									"\n* Never prompt me again! - check box"+
+									"***********************************************");
 			}
 			// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
 			// the rest of the file will be te same
