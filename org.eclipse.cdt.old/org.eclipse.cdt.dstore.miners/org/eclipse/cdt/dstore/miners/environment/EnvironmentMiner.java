@@ -58,22 +58,18 @@ public class EnvironmentMiner extends Miner
  public void handleSetEnvironment(DataElement theElement, DataElement environment)
  {
   //First check to see if we already have an Environment for theElement..and get rid of it if we do.
-     DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getName(), 1);
-
-  
+  DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getName() + ".env", 1);
   if (envRoot != null)
   {
    _dataStore.deleteObject(_minerData, envRoot);
    _dataStore.refresh(_minerData);
-   ArrayList theReferences = theElement.getAssociated("Environment");
+   ArrayList theReferences = theElement.getAssociated("inhabits");
    if (theReferences.size() > 0)
    {
     _dataStore.deleteObject(theElement, (DataElement)theReferences.get(0));
     _dataStore.refresh(theElement);
    }
-   
   }
-
 
   environment.setAttribute(DE.A_NAME, theElement.getName() + ".env");
 
