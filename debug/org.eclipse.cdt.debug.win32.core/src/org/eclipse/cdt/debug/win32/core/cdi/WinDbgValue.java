@@ -14,6 +14,7 @@ import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
+import org.eclipse.cdt.debug.core.cdi.model.type.ICDIType;
 
 public class WinDbgValue implements ICDIValue {
 
@@ -50,6 +51,14 @@ public class WinDbgValue implements ICDIValue {
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIObject#getTarget()
 	 */
 	public ICDITarget getTarget() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIValue#getType()
+	 */
+	public ICDIType getType() throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
 	}
