@@ -80,6 +80,8 @@ public class ParseMiner extends Miner
     handleRefresh(subject, getCommandArgument(theElement, 1), status); 
   else if (name.equals("C_CODE_ASSIST"))
    handleCodeAssist(subject,getCommandArgument(theElement, 1),status);
+  else if (name.equals("C_PROVIDE_SOURCE_FOR"))
+   handleProvideSourceFor(subject, getCommandArgument(theElement, 1), status);
   else if (name.equals("C_FIND_DECLARATION"))
    handleFindDeclaration(subject, getCommandArgument(theElement, 1), status);
   else if (name.equals("C_REMOVE_PARSE"))
@@ -264,6 +266,19 @@ public class ParseMiner extends Miner
   theProject = getParseProject(theProject);
   _codeAssist.setProject(theProject);
   return _codeAssist.doCodeAssist(theProject, thePattern, status);
+ }
+ 
+ private DataElement handleProvideSourceFor(DataElement theElement, DataElement theProject, DataElement status)
+ {
+  //theProject = getParseProject(theProject);
+  //Delete From Here
+  //DataStore _ds = theElement.getDataStore();
+  //DataElement theParent = theElement.getParent();
+  //theElement = _ds.createObject(theParent, "function", "manager::pay(1)");
+  //theElement.setAttribute(DE.A_VALUE, "manager::pay(1)");
+  //return _codeAssist.doProvideSourceFor(theElement, theElement.getParent().getParent(), status);
+  //To Here
+  return _codeAssist.doProvideSourceFor(theElement, getProjectElement(theProject, ParserSchema.ParsedFiles), status);
  }
  
  private DataElement handleFindDeclaration(DataElement theProject, DataElement thePattern, DataElement status)
