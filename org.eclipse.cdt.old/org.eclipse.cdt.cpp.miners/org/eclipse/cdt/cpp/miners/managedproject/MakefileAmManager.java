@@ -119,25 +119,25 @@ public class MakefileAmManager {
 			{
 				case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
-					initTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
+					initializeTopLevelMakefileAm((File)projectStucture[i][0],structureManager,true);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				case (1):
 					// initialize First level Makefile.am - updating the bin_BROGRAMS,SUBDIR variable definition
-					initProgramsMakefileAm((File)projectStucture[i][0]);
+					initializeProgramsMakefileAm((File)projectStucture[i][0]);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
 				default:
 				// initialize all other files in the subdirs
-					initStaticLibMakefileAm((File)projectStucture[i][0]);
+					initializeStaticLibMakefileAm((File)projectStucture[i][0]);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 			}
 		}
 	}
-	private void initTopLevelMakefileAm(File parent, ProjectStructureManager structureManager, boolean stampit)
+	private void initializeTopLevelMakefileAm(File parent, ProjectStructureManager structureManager, boolean stampit)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
@@ -176,7 +176,7 @@ public class MakefileAmManager {
 			catch(IOException e){System.out.println(e);}
 		}
 	}
-	private void initProgramsMakefileAm(File parent)
+	private void initializeProgramsMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -202,32 +202,32 @@ public class MakefileAmManager {
 					if(line.indexOf(bin_PROGRAMS)!=-1)
 					{
 						found_bin_PROGRAMS = true;
-						line = updateBinProgramsLine(line, parent);
+						line = initBinProgramsLine(line, parent);
 					}
 					if(line.indexOf(_SOURCES)!=-1)
 					{
 						found_SOURCES = true;
-						line = updateSourcesLine(line, parent);
+						line = initSourcesLine(line, parent);
 					}
 					if(line.indexOf(_LDADD)!=-1)
 					{
 						found_LDADD= true;
-						line = updateLdaddLine(line, parent);
+						line = initLdaddLine(line, parent);
 					}
 					if(line.indexOf(SUBDIRS)!=-1)
 					{
 						found_SUBDIRS = true;
-						line = updateSubdirsLine(line, parent);
+						line = initSubdirsLine(line, parent);
 					}
 					if(line.indexOf(EXTRA_DIST)!=-1)
 					{
 						found_EXTRA_DIST = true;
-						line = updateExtraDistLine(line, parent);
+						line = initExtraDistLine(line, parent);
 					}
 					if(line.indexOf(_LDFLAGS)!=-1)
 					{
 						found_LDFLAGS= true;
-						line = updateLdflagsLine(line, parent);
+						line = initLdflagsLine(line, parent);
 					}
 				
 					out.write(line);
@@ -255,7 +255,7 @@ public class MakefileAmManager {
 				//insertLdflagsLine(Makefile_am);
 		}
 	}
-	private void initStaticLibMakefileAm(File parent)
+	private void initializeStaticLibMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -268,34 +268,31 @@ public class MakefileAmManager {
 			boolean found_EXTRA_DIST = false;
 			try
 			{
-				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
 				out.write(getGeneratedStamp());
 				out.newLine();
 				while((line=in.readLine())!=null)
 				{
-					// searching for the bin_PROGRAMS line
-
 					if(line.indexOf(_a_SOURCES)!=-1)
 					{
 						found_a_SOURCES = true;
-						line = updateASourcesLine(line, parent);
+						line = initASourcesLine(line, parent);
 					}
 					if(line.indexOf(_LIBRARIES)!=-1)
 					{
 						found_LIBRARIES= true;
-						line = updateLibrariesLine(line, parent);
+						line = initLibrariesLine(line, parent);
 					}
 					if(line.indexOf(SUBDIRS)!=-1)
 					{
 						found_SUBDIRS = true;
-						line = updateSubdirsLine(line, parent);
+						line = initSubdirsLine(line, parent);
 					}
 					if(line.indexOf(EXTRA_DIST)!=-1)
 					{
 						found_EXTRA_DIST = true;
-						line = updateExtraDistLine(line, parent);
+						line = initExtraDistLine(line, parent);
 					}
 				
 					out.write(line);
@@ -319,7 +316,7 @@ public class MakefileAmManager {
 
 		}
 	}
-	private void initSharedLibMakefileAm(File parent)
+	private void initializeSharedLibMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		String line = new String();
@@ -330,6 +327,8 @@ public class MakefileAmManager {
 			boolean found_la_SOURCES = false;
 			boolean found_SUBDIRS = false;
 			boolean found_EXTRA_DIST = false;
+			boolean found_la_LDFLAGS = false;
+			boolean found_la_LIBADD = false;
 			try
 			{
 				// searching for the subdir line
@@ -343,22 +342,32 @@ public class MakefileAmManager {
 					if(line.indexOf(_LTLIBRARIES)!=-1)
 					{
 						found_LTLIBRARIES= true;
-						line = updateLtlibrariesLine(line, parent);
+						line = initLtlibrariesLine(line, parent);
 					}
 					if(line.indexOf(_la_SOURCES)!=-1)
 					{
 						found_la_SOURCES = true;
-						line = updateAlSourcesLine(line, parent);
+						line = initLaSourcesLine(line, parent);
 					}
 					if(line.indexOf(SUBDIRS)!=-1)
 					{
 						found_SUBDIRS = true;
-						line = updateSubdirsLine(line, parent);
+						line = initSubdirsLine(line, parent);
 					}
 					if(line.indexOf(EXTRA_DIST)!=-1)
 					{
 						found_EXTRA_DIST = true;
-						line = updateExtraDistLine(line, parent);
+						line = initExtraDistLine(line, parent);
+					}
+					if(line.indexOf(_la_LDFLAGS)!=-1)
+					{
+						found_la_LDFLAGS = true;
+						line = initLaldflagsLine(line, parent);
+					}
+					if(line.indexOf(_la_LIBADD)!=-1)
+					{
+						found_la_LIBADD = true;
+						line = initLalibaddLine(line, parent);
 					}
 					out.write(line);
 					out.newLine();
@@ -427,7 +436,7 @@ public class MakefileAmManager {
 	}
 	private void updateTopLevelMakefileAm(File parent, ProjectStructureManager structureManager)
 	{
-		initTopLevelMakefileAm(parent,structureManager,false);
+		initializeTopLevelMakefileAm(parent,structureManager,false);
 	}
 
 	private void updateProgramsMakefileAm(File parent)
@@ -437,7 +446,6 @@ public class MakefileAmManager {
 		File modMakefile_am = new File(parent,"mod_Makefile.am");
 		try
 		{
-			// searching for the subdir line
 			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 			BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
 			while((line=in.readLine())!=null)
@@ -465,9 +473,66 @@ public class MakefileAmManager {
 	}
 	private void updateStaticLibMakefileAm(File parent)
 	{
+		File Makefile_am = new File(parent,"Makefile.am");
+		String line = new String();
+		File modMakefile_am = new File(parent,"mod_Makefile.am");
+		try
+		{
+			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+			BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+			while((line=in.readLine())!=null)
+			{
+				if(line.indexOf(_a_SOURCES)!=-1)
+					line = updateASourcesLine(line, parent);
+				if(line.indexOf(SUBDIRS)!=-1)
+					line = updateSubdirsLine(line, parent);
+				if(line.indexOf(EXTRA_DIST)!=-1)
+					line = updateExtraDistLine(line, parent);
+				out.write(line);
+				out.newLine();
+			}
+			in.close();
+			out.close();
+			File abstractPath = new File(Makefile_am.getAbsolutePath());
+			Makefile_am.delete();
+			modMakefile_am.renameTo(abstractPath);
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
 	}
 	private void updateSharedLibMakefileAm(File parent)
 	{
+		File Makefile_am = new File(parent,"Makefile.am");
+		String line = new String();
+		if(Makefile_am.exists())
+		{
+			File modMakefile_am = new File(parent,"mod_Makefile.am");
+			try
+			{
+				// searching for the subdir line
+				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				out.write(getGeneratedStamp());
+				out.newLine();
+				while((line=in.readLine())!=null)
+				{
+					if(line.indexOf(_la_SOURCES)!=-1)
+						line = updateLaSourcesLine(line, parent);
+					if(line.indexOf(SUBDIRS)!=-1)
+						line = updateSubdirsLine(line, parent);
+					if(line.indexOf(EXTRA_DIST)!=-1)
+						line = updateExtraDistLine(line, parent);
+					out.write(line);
+					out.newLine();
+				}
+				in.close();
+				out.close();
+				File abstractPath = new File(Makefile_am.getAbsolutePath());
+				Makefile_am.delete();
+				modMakefile_am.renameTo(abstractPath);
+				//modMakefile_am.renameTo(Makefile_am);
+			}catch(FileNotFoundException e){System.out.println(e);}
+			catch(IOException e){System.out.println(e);}
+		}
 	}
 	private long getMakefileAmStamp(File parent)
 	{
@@ -494,23 +559,26 @@ public class MakefileAmManager {
 		return false;		
 	}	
 
-	private String updateExtraDistLine(String line, File parent)
+	private String initExtraDistLine(String line, File parent)
 	{
-		String files = new String("");
+		line = line.substring(0,line.lastIndexOf("=")+1);
 		// add files to the EXTRA_DIST variable
 		for(int i = 0; i <parent.listFiles().length; i++)
 		{
 			String name = parent.listFiles()[i].getName();
 			if(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") 
 			||name.endsWith(".H") || name.endsWith(".C")||name.endsWith(".hpp"))
-				files = files.concat(" "+name);
+				line = line.concat(" "+name);
 		}
-		String variableName = line.substring(0,line.lastIndexOf("="))+"= ";
-		line = variableName+files;
 		return line;
 	}
-	private String updateSubdirsLine(String line, File parent)
+	private String updateExtraDistLine(String line, File parent)
 	{
+		return initExtraDistLine(line,parent);
+	}
+	private String initSubdirsLine(String line, File parent)
+	{
+		line = SUBDIRS+" =";
 		// add subdire to the SUBDIRS variable
 		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
 		Object[][] subdirs = dir_structure.getProjectStructure();
@@ -520,13 +588,21 @@ public class MakefileAmManager {
 		return line;
 		
 	}
-	private String updateLdflagsLine(String line, File parent)
+	private String updateSubdirsLine(String line, File parent)
 	{
-		// add the target name at the begining of the "_SOURCES"
+		return initSubdirsLine(line,parent);
+	}
+	private String initLdflagsLine(String line, File parent)
+	{
+		// add the target name at the begining of the "_LDFLAGS"
 		String mod = line.substring(line.lastIndexOf(_LDFLAGS));
 		return line = parent.getName().concat(targetSuffix).concat(mod);
 	}
-	private String updateBinProgramsLine(String line, File parent)
+	private String updateLdflagsLine(String line, File parent)
+	{
+		return line;
+	}
+	private String initBinProgramsLine(String line, File parent)
 	{
 		if(line.indexOf(TARGET)!=-1)
 		{
@@ -535,7 +611,7 @@ public class MakefileAmManager {
 		}
 		return line;
 	}
-	private String updateSourcesLine(String line, File parent)
+	private String initSourcesLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_SOURCES"
 		String mod = line.substring(line.lastIndexOf(_SOURCES));
@@ -551,7 +627,21 @@ public class MakefileAmManager {
 			}
 		return line;
 	}
-	private String updateLdaddLine(String line, File parent)
+	private String updateSourcesLine(String line, File parent)
+	{
+		line = line.substring(0,line.lastIndexOf("=")+1);
+		// add files to the _SOURCES variable
+		for(int i = 0; i <parent.listFiles().length; i++)
+			if(!parent.listFiles()[i].isDirectory())
+			{
+				String name = parent.listFiles()[i].getName();
+				if(line.indexOf(name)==-1 && 
+					(name.endsWith(".c")|| name.endsWith(".cpp") || name.endsWith(".C")))
+					line = line.concat(" ").concat(parent.listFiles()[i].getName());
+			}
+		return line;
+	}
+	private String initLdaddLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_LDADD"
 		String mod = line.substring(line.lastIndexOf(_LDADD));
@@ -573,7 +663,28 @@ public class MakefileAmManager {
 			}
 		}
 		return line;
-	}		
+	}
+	private String updateLdaddLine(String line, File parent)
+	{
+		line = line.substring(0,line.lastIndexOf("=")+1);
+		// add libs to the _LDADD variable
+		ProjectStructureManager dir_structure = new ProjectStructureManager( parent);
+		String[] subNames = dir_structure.getSubdirWorkspacePath();
+		for(int i = 0; i <subNames.length; i++)
+		{
+			// check if the directory starts with "."
+			if(subNames[i].indexOf(".")==-1)
+			{
+				String tok = getLastToken(subNames[i]);
+				String modTok = new String();
+				String modName = new String("./").concat(subNames[i]).concat("/");
+				modTok = modTok.concat("lib").concat(tok).concat(targetSuffix).concat(".a");
+				modName = modName.concat(modTok);
+				line = line.concat(" "+modName);
+			}
+		}
+		return line;
+	}			
 	private String getLastToken(String aName)
 	{
 		String name = new String(aName);
@@ -594,7 +705,7 @@ public class MakefileAmManager {
 		String line=new String (SUBDIRS+" ="+childrenOfTopDir);
 		return line;
 	}
-	private String updateASourcesLine(String line, File parent)
+	private String initASourcesLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_SOURCES"
 		String mod = line.substring(line.lastIndexOf(_a_SOURCES));
@@ -612,7 +723,23 @@ public class MakefileAmManager {
 			}
 		return line;
 	}
-	private String updateAlSourcesLine(String line, File parent)
+	private String updateASourcesLine(String line, File parent)
+	{
+		line = line.substring(0,line.lastIndexOf("=")+1);
+
+		// add files to the _SOURCES variable
+		for(int i = 0; i <parent.listFiles().length; i++)
+			if(!parent.listFiles()[i].isDirectory())
+			{
+				String name = parent.listFiles()[i].getName();
+				if(line.indexOf(name)==-1 && 
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
+						name.endsWith(".H") || name.endsWith(".C")))
+					line = line.concat(" ").concat(parent.listFiles()[i].getName());
+			}
+		return line;
+	}
+	private String initLaSourcesLine(String line, File parent)
 	{
 		// add the target name at the begining of the "_SOURCES"
 		String mod = line.substring(line.lastIndexOf(_la_SOURCES));
@@ -630,17 +757,47 @@ public class MakefileAmManager {
 			}
 		return line;
 	}
-	private String updateLibrariesLine(String line, File parent)
+	private String updateLaSourcesLine(String line, File parent)
+	{
+		line = line.substring(0,line.lastIndexOf("=")+1);
+		// add files to the _SOURCES variable
+		for(int i = 0; i <parent.listFiles().length; i++)
+			if(!parent.listFiles()[i].isDirectory())
+			{
+				String name = parent.listFiles()[i].getName();
+				if(line.indexOf(name)==-1 && 
+					(name.endsWith(".c")|| name.endsWith(".h")||name.endsWith(".cpp") ||
+						name.endsWith(".H") || name.endsWith(".C")))
+					line = line.concat(" ").concat(parent.listFiles()[i].getName());
+			}
+		return line;
+	}
+	private String initLibrariesLine(String line, File parent)
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
 		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".a");
 	}
-	private String updateLtlibrariesLine(String line, File parent)
+	private String initLtlibrariesLine(String line, File parent)
 	{
 		// add lib to the target name first
 		String libName = new String("lib");
 		return line = line.concat(libName).concat(parent.getName()).concat(targetSuffix).concat(".la");
+	}
+	private String initLaldflagsLine(String line, File parent)
+	{
+		// add the target name at the begining of the "_la_LDFLAGS"
+		String mod = line.substring(line.lastIndexOf(_la_LDFLAGS));
+		String lib = new String("lib");
+		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
+		
+	}
+	private String initLalibaddLine(String line, File parent)
+	{
+		// add the target name at the begining of the "_la_LDFLAGS"
+		String mod = line.substring(line.lastIndexOf(_la_LIBADD));
+		String lib = new String("lib");
+		return lib.concat(parent.getName()).concat(targetSuffix).concat(mod);
 	}
 	private String trimTargetLine(String line)
 	{
@@ -684,7 +841,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initStaticLibMakefileAm(parent);
+		initializeStaticLibMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	protected void setMakefileAmToPrograms(File parent ,DataElement status)
@@ -706,7 +863,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initProgramsMakefileAm(parent);
+		initializeProgramsMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));				
 	}
 	protected void setMakefileAmToTopLevel(DataElement project,DataElement status)
@@ -732,7 +889,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initTopLevelMakefileAm(parent,structureManager,true);
+		initializeTopLevelMakefileAm(parent,structureManager,true);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)
@@ -754,7 +911,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initSharedLibMakefileAm(parent);
+		initializeSharedLibMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	private void displayHassTableContents()
