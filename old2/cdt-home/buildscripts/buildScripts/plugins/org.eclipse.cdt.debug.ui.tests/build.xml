@@ -43,7 +43,7 @@
 		<delete dir="${temp.folder}/cdtdebuguitests.jar.bin"/>
 		<mkdir dir="${temp.folder}/cdtdebuguitests.jar.bin"/>
 		<!-- compile the source code -->
-		<javac destdir="${temp.folder}/cdtdebuguitests.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.core.resources/bin;../org.eclipse.swt/bin;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.apache.xerces/xercesImpl.jar;../org.eclipse.update.core.${os}/updatecore.jar;../org.eclipse.ui/workbench.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.core.runtime/bin;../org.apache.xerces/bin;../org.eclipse.cdt.debug.mi.core/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.cdt.debug.mi.core/cdtmicore.jar;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.cdt.debug.core/cdtdebugcore.jar;../org.junit/junit.jar;../org.eclipse.update.core/updatecore.jar;../org.eclipse.core.boot/bin;../org.eclipse.core.resources/resources.jar;../org.eclipse.update.core/bin;../org.eclipse.cdt.core/bin;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.cdt.debug.core/bin;../org.eclipse.core.boot/boot.jar;../org.eclipse.swt.${ws}/ws/${ws}/swt.jar;../org.apache.xerces/xmlParserAPIs.jar;../org.junit/bin">
+        <javac destdir="${temp.folder}/cdtdebuguitests.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.core.resources/bin;../org.eclipse.swt/bin;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.eclipse.debug.core/dtcore.jar;../org.eclipse.ui/workbench.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.core.runtime/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.cdt.debug.core/cdtdebugcore.jar;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.cdt.ui/bin;../org.eclipse.core.boot/bin;../org.eclipse.debug.ui/bin;../org.eclipse.core.resources/resources.jar;../org.eclipse.cdt.debug.ui/bin;../org.eclipse.cdt.core/bin;../org.eclipse.debug.core/bin;../org.eclipse.cdt.ui/cdtui.jar;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.debug.ui/dtui.jar;../org.eclipse.cdt.debug.core/bin;../org.eclipse.core.boot/boot.jar;../org.eclipse.cdt.debug.ui/cdtdebugui.jar;../org.eclipse.swt.${ws}/ws/${ws}/swt.jar">
 			<src path="src/"/>
 			<src path="core/"/>
 		</javac>
@@ -57,9 +57,9 @@
 		<delete dir="${temp.folder}/cdtdebuguitests.jar.bin"/>
 	</target>
 
-	<target name="cdtdebugtestssrc.zip" depends="init" unless="cdtdebugtestssrc.zip">
+	<target name="cdtdebuguitestssrc.zip" depends="init" unless="cdtdebuguitestssrc.zip">
 		<mkdir dir="${build.result.folder}"/>
-		<zip zipfile="${build.result.folder}/cdtdebugtestssrc.zip" filesonly="false">
+		<zip zipfile="${build.result.folder}/cdtdebuguitestssrc.zip" filesonly="false">
 			<fileset dir="src/" includes="**/*.java"/>
 			<fileset dir="core/" includes="**/*.java"/>
 		</zip>
@@ -71,8 +71,8 @@
 	</target>
 
 	<target name="build.sources" depends="init">
-		<available property="cdtdebugtestssrc.zip" file="${build.result.folder}/cdtdebugtestssrc.zip"/>
-		<antcall target="cdtdebugtestssrc.zip"/>
+		<available property="cdtdebuguitestssrc.zip" file="${build.result.folder}/cdtdebuguitestssrc.zip"/>
+		<antcall target="cdtdebuguitestssrc.zip"/>
 	</target>
 
 	<target name="build.zips" depends="init">
@@ -80,7 +80,7 @@
 
 	<target name="gather.sources" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
-		<copy file="${build.result.folder}/cdtdebugtestssrc.zip" todir="${destination.temp.folder}/${full.name}"/>
+		<copy file="${build.result.folder}/cdtdebuguitestssrc.zip" todir="${destination.temp.folder}/${full.name}"/>
 		<copy todir="${destination.temp.folder}/${full.name}">
 			<fileset dir="${basedir}" includes="about.html,plugin.xml,test.xml"/>
 		</copy>
@@ -93,7 +93,7 @@
 
 	<target name="clean" depends="init">
 		<delete file="${build.result.folder}/cdtdebuguitests.jar"/>
-		<delete file="${build.result.folder}/cdtdebugtestssrc.zip"/>
+		<delete file="${build.result.folder}/cdtdebuguitestssrc.zip"/>
 		<delete file="${plugin.destination}/${full.name}.jar"/>
 		<delete file="${plugin.destination}/${full.name}.zip"/>
 		<delete dir="${temp.folder}"/>
