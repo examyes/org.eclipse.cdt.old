@@ -45,8 +45,14 @@ public class CmdStackBuildView extends Command
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(2,"---------------- CmdStackView Getting viewInformation for thread " + Integer.toString(_stackDU) +
               ", stack entry " + Integer.toString(_stackEntryID) +" >>>> fileName="+tc.fileName(stackEntry)+" lineNumber="+tc.lineNumber(stackEntry) );
+
+	  short partID = (short)classManager.getPartID(moduleID, tc.fileName(stackEntry));
+	  
+	  if (partID <= 0)
+	  	partID = 1;
+	  
       _rep = new ERepStackBuildView( (short)Part.VIEW_SOURCE, 
-         (short)classManager.getPartID(moduleID, tc.fileName(stackEntry)), 1,
+         partID, 1,
          tc.lineNumber(stackEntry) );
 
       return false;
