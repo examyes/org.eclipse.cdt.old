@@ -43,7 +43,9 @@ public final class Parser
  public boolean jumpToClosingCurly()  
  {
   int number_of_curlies = 1;
-  Token tok = getToken(1);
+  
+  Token tok = token_source.jumpPastBadTokens();
+
   if ((tok == null) || (tok.kind == EOF))
    return true;
   try
@@ -160,7 +162,7 @@ TOKEN_MGR_DECLS:
   StringBuffer objectBody = new StringBuffer();
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the ASCII_CharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
    //probably more characters ahead of what the Parser thinks is the current token (the '{').
    //So first, we'll back the input_stream up to the curToken.
     
@@ -207,7 +209,7 @@ TOKEN_MGR_DECLS:
  {
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the ASCII_CharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
    //probably more characters ahead of what the Parser thinks is the current token (the '{').
    //So first, we'll back the input_stream up to the curToken.
     
@@ -252,7 +254,7 @@ TOKEN_MGR_DECLS:
  {
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the ASCII_CharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
    //probably more characters ahead of what the Parser thinks is the current token.
    //So first, we'll back the input_stream up to the curToken.
     
@@ -286,6 +288,31 @@ TOKEN_MGR_DECLS:
    //System.out.print("Error3 ");   //System.out.println(e.getMessage());
    //Reached End of File...most likely
   }
+ }
+
+ public Token jumpPastBadTokens()
+ {
+  Token t = null;
+  int charsTried = 0;
+  while (++charsTried < 10)
+  {
+   try
+   {
+    t = getNextToken();
+    //If we get here, then the getNextToken was successful...just return the token
+    return t;
+   }
+   catch (Throwable e) 
+   {
+    try 
+    {
+     input_stream.readChar();
+     input_stream.BeginToken();
+    }
+    catch (Throwable f) {}
+   }
+  }
+  return null;
  }
 }
 

@@ -148,6 +148,31 @@ public class ParserTokenManager implements ParserConstants
    //Reached End of File...most likely
   }
  }
+
+ public Token jumpPastBadTokens()
+ {
+  Token t = null;
+  int charsTried = 0;
+  while (++charsTried < 3)
+  {
+   try
+   {
+    t = getNextToken();
+    //If we get here, then the getNextToken was successful...just return the token
+    return t;
+   }
+   catch (Throwable e)
+   {
+    try
+    {
+     input_stream.readChar();
+     input_stream.BeginToken();
+    }
+    catch (Throwable f) {}
+   }
+  }
+  return null;
+ }
   public  java.io.PrintStream debugStream = System.out;
   public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private final int jjMoveStringLiteralDfa0_2()
