@@ -13,6 +13,7 @@
 	 <import plugin="org.eclipse.ui"/>
          <import plugin="org.eclipse.cdt.dstore.core"/>
 	 <import plugin="com.ibm.lpex"/>
+         <import plugin="org.apache.lucene"/>
   </requires>
 
   <runtime>

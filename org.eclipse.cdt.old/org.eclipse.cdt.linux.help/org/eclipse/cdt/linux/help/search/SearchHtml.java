@@ -15,14 +15,14 @@ import java.util.*;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
 
-import org.eclipse.cdt.linux.help.util.lucene.index.IndexWriter;
-import org.eclipse.cdt.linux.help.util.lucene.analysis.*;
-import org.eclipse.cdt.linux.help.util.lucene.document.*;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.analysis.*;
+import org.apache.lucene.document.*;
 
 import org.eclipse.cdt.linux.help.util.lucene.HTMLParser.*;
 
-import org.eclipse.cdt.linux.help.util.lucene.search.*;
-import org.eclipse.cdt.linux.help.util.lucene.queryParser.*;
+import org.apache.lucene.search.*;
+import org.apache.lucene.queryParser.*;
 
 public class SearchHtml
 {
@@ -99,8 +99,8 @@ public class SearchHtml
 	    HTMLParser parser = new HTMLParser(theFile);
 	    Document document = new Document();
 	    document.add(Field.UnIndexed(FIELD_PATH,theFile.getCanonicalPath()));	    	    
-	    document.add(Field.UnIndexed(FIELD_TITLE,parser.getTitle()));///
-	    document.add(Field.Text(FIELD_CONTENT,parser.getReader()));//FIXME:Exceptions with QT docs!
+	    document.add(Field.UnIndexed(FIELD_TITLE,parser.getTitle()));
+	    document.add(Field.Text(FIELD_CONTENT,parser.getReader()));
 	    // document.add(Field.Text(FIELD_CONTENT,
 	    //		    (Reader)new InputStreamReader(new FileInputStream(theFile))));
 
