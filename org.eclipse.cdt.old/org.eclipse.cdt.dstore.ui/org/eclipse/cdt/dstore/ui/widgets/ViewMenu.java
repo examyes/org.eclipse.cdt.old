@@ -450,7 +450,7 @@ public class ViewMenu implements IMenuListener
 			int depth = item.depth();
 			if (depth > 0)
 			    {
-				if (_relationItems.contains(item))
+				if (!_relationItems.contains(item))
 				    {
 					_relationItems.add(item);
 				    }
@@ -509,6 +509,7 @@ public class ViewMenu implements IMenuListener
     {
 	public static ArrayList sort(ArrayList list)
 	    {
+		/*
 		ArrayList sortedList = new ArrayList(list.size());
 		while (list.size() > 0)
 		    {
@@ -517,6 +518,8 @@ public class ViewMenu implements IMenuListener
 		    }
 
 		return sortedList;
+		*/
+		return list;
 	    }
 
 

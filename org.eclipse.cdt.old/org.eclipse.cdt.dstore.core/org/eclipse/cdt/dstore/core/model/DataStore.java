@@ -2116,10 +2116,11 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement parentD       = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.parent"));	
 	DataElement argsD         = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.arguments"));	
 	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));
+	abstracts.setDepth(0);
         
 	
 	DataElement abstractedBy  = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracted_by"));	
-	
+	abstractedBy.setDepth(0);
 	
 	DataElement caRelations = createAbstractRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents&arguments"));
 	createReference(caRelations, containsD, containsD);
@@ -2182,8 +2183,8 @@ public DataElement command(DataElement commandDescriptor,
 
         DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
 	createReference(containerObjectD, fsObject, abstracts, abstractedBy);
-
-	 createReference(fsObject, deviceD,  abstracts, abstractedBy);
+	
+	createReference(fsObject, deviceD,  abstracts, abstractedBy);
 
 	 createReference(fsObject, dirD, abstracts, abstractedBy);
         createReference(fsObject, fileD, abstracts, abstractedBy);
