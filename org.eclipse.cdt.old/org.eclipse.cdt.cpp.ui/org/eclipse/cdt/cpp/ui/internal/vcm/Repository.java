@@ -55,7 +55,9 @@ import org.eclipse.ui.model.*;
 import org.eclipse.ui.*;
  
 public class Repository extends Project 
-    implements IRepository, IProject, IWorkbenchAdapter, IDataElementContainer, IResource, IActionFilter
+    implements IRepository, IProject, IWorkbenchAdapter, 
+    IDataElementContainer, IDomainListener, 
+    IResource, IActionFilter
 {
   private class PersistentProperty
   {
@@ -91,7 +93,8 @@ public class Repository extends Project
 
 	public void run()
 	{
-	    ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier(), "com.ibm.cpp.miners");	
+	    DomainNotifier notifier = _dataStore.getDomainNotifier();
+	    ConnectionStatus status = _connection.connect(notifier, "com.ibm.cpp.miners");	
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
@@ -128,8 +131,7 @@ public class Repository extends Project
 		    api.extendSchema(_dataStore.getDescriptorRoot());
 		    api.openProject(_repository);
 
-		    
-
+		    notifier.addDomainListener(_repository);		    
 		}
 	    else
 		{
@@ -507,10 +509,14 @@ public class Repository extends Project
     {	
 	ModelInterface api = ModelInterface.getInstance();
 	_children.clear();
+
+	DomainNotifier dnotifier = _dataStore.getDomainNotifier();
+	dnotifier.removeDomainListener(this);		    
 	_connection.disconnect();  
 	_dataStore = _root.getDataStore();	
 	saveProperties();
-	
+
+
 	CppProjectNotifier notifier = api.getProjectNotifier();
 	notifier.fireProjectChanged(new CppProjectEvent(CppProjectEvent.CLOSE, this));
     }
@@ -1000,6 +1006,48 @@ public ITeamStream createTeamStream(String name, IProgressMonitor progressMonito
     public IProject[] getReferencedProjects() throws CoreException 
     {
 	return new IProject[0];
+    }
+
+
+
+    public boolean listeningTo(DomainEvent e)
+    {
+	if (isOpen() && _connection != null)
+	    {
+		DataElement dsStatus = _connection.getDataStore().getStatus();	
+		DataElement parent = (DataElement)e.getParent();
+		
+		if (dsStatus == parent)
+		    {
+			return true;
+		    }
+	    }
+	
+	return false;
+    }
+    
+    public void domainChanged(DomainEvent e)
+    {
+	DataElement status = (DataElement)e.getParent();
+	if (!status.getName().equals("okay"))
+	    {
+		// close the project
+		ModelInterface api = ModelInterface.getInstance();
+		api.closeProject(this);
+
+		try
+		    {
+			close(null);
+		    }
+		catch (Exception ex)
+		    {
+		    }
+	    }	
+    }
+
+    public Shell getShell()
+    {
+	return null;
     }
    
 }
