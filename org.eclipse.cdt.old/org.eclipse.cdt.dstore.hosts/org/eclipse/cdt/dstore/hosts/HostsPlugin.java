@@ -413,6 +413,7 @@ public class HostsPlugin extends AbstractUIPlugin
     public void extendSchema(DataElement schemaRoot)
     {
 	DataStore   dataStore = schemaRoot.getDataStore();
+	DataElement fileD     = dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
 	DataElement dirD      = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
 	DataElement fsD       = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
 	DataElement rootD     = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
@@ -459,6 +460,12 @@ public class HostsPlugin extends AbstractUIPlugin
 	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
 	*/
 
+	DataElement deleteResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
+							    "Delete Resource",
+							    "com.ibm.dstore.hosts.actions.DeleteResource");
+
+	deleteResource.setAttribute(DE.A_VALUE, "DELETE");
+	
     }
 
 }
