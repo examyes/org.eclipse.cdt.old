@@ -86,7 +86,7 @@ public final class DataElement implements IDataElement
       {
 	  _attributes = new String[DE.A_SIZE];
  	  _attributes[DE.A_TYPE]         = "contents";
-	  _attributes[DE.A_ID]           = originalObject.getId().concat(".ref");
+	  _attributes[DE.A_ID]           = _dataStore.generateId();
 	  _attributes[DE.A_NAME]         = originalObject.getId();
 	  _attributes[DE.A_VALUE]        = originalObject.getName();
 	  _attributes[DE.A_SOURCE]       = originalObject.getSource();
@@ -108,11 +108,12 @@ public final class DataElement implements IDataElement
       {
 	if ((parent != null) && (originalObject != null))
 	    {
+		_dataStore   = originalObject.getDataStore();
 		_parent = parent;
 
 		_attributes                  = new String[DE.A_SIZE];
 		_attributes[DE.A_TYPE]       = refType;		
-		_attributes[DE.A_ID]         = parent.getId().concat(".").concat(originalObject.getId());
+		_attributes[DE.A_ID]         = _dataStore.generateId();
 
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getName();
@@ -120,7 +121,6 @@ public final class DataElement implements IDataElement
 		_attributes[DE.A_ISREF]      = "true";
 		_attributes[DE.A_DEPTH]      = originalObject.getAttribute(DE.A_DEPTH);
 		
-		_dataStore   = originalObject.getDataStore();
 		
 		_referencedObject = originalObject;
 		_isReference      = true;
@@ -232,13 +232,20 @@ public final class DataElement implements IDataElement
 	  _isExpanded = true;
       }
 
-    public boolean isDeleted()
-    {
-	if (_depth == -1 || getAttribute(DE.A_DEPTH).equals("-1"))
+    public synchronized boolean isDeleted()
+    {    
+	String depthAttribute = getAttribute(DE.A_DEPTH);
+	String valueAttribute = getAttribute(DE.A_DEPTH);
+	if ((depthAttribute == null) || (valueAttribute == null))
 	    {
 		return true;
 	    }
-	else if (getAttribute(DE.A_VALUE).equals("deleted"))
+
+	if (_depth == -1 || depthAttribute.equals("-1"))
+	    {
+		return true;
+	    }
+	else if (valueAttribute.equals("deleted"))
 	    {
 		_depth = -1;	  
 		setAttribute(DE.A_DEPTH, "-1");

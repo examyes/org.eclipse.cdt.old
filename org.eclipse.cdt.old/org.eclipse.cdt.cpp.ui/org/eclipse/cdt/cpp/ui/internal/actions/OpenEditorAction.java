@@ -135,9 +135,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    
 						    
 						    Integer lineLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));
-						    Integer columnLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION_COLUMN));
 						    int line = lineLocation.intValue();	
-						    int col  = columnLocation.intValue();	
 						    if ((line > 0) && (editor != null))
 							{	
 							    if (editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
@@ -150,7 +148,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 									{
 									    IMarker marker = file.createMarker(IMarker.TEXT);
 									    marker.setAttribute(IMarker.LINE_NUMBER, line);
-									    marker.setAttribute(IMarker.CHAR_START, col);
+									    marker.setAttribute(IMarker.CHAR_START, -1);
+									    marker.setAttribute(IMarker.CHAR_END, -1);
 									    
 									    editor.gotoMarker(marker);
 									}

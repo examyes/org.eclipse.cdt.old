@@ -671,11 +671,22 @@ public class DataStore
       }
 
 
-  private String generateId(DataElement parent, String type, String name)
+    private String generateId(DataElement parent, String type, String name)
       {
 	  // by default, name will be the id
 	  return name;
       }
+
+    public String generateId()
+    {
+	String newId = String.valueOf(_random.nextInt());
+	while (_hashMap.containsKey(newId))
+	    {	    
+		newId = String.valueOf(_random.nextInt());
+	    }
+	
+	return newId;
+    }	
 
   public boolean contains(String id)
       {

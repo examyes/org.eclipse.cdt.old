@@ -33,9 +33,9 @@ public abstract class UpdateHandler extends Handler
 	clean(object, 1);
     }
     
-    protected void clean(DataElement object, int depth)
+    protected synchronized void clean(DataElement object, int depth)
     {
-	if (depth > 0)
+	if ((depth > 0) && (object != null))
 	    {
 		for (int i = 0; i < object.getNestedSize(); i++)
 		    {
