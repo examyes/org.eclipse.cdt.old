@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>CDT Managed Make Builder Feature Spec</title>
+  <meta name="author" content="Doug Schaefer">
+  <meta name="description" content="For CDT Release 2.0">
+</head>
+<body>
+<h1>CDT Managed Make Builder Feature Spec<br>
+<small>For CDT Release 2.0</small></h1>
+<p>The managed make builder automates the task of writing makefiles for
+building C/C++ projects. The build settings are presented to the user
+in a simplified yet flexible format in the UI and managed by a Build
+Model. This model is used to write out the makefiles as necessary. The
+model is persisted in the project to allow reuse by project members.<br>
+</p>
+<h2>Requirements</h2>
+<p>In CDT 1.2, much of the framework was put in place for the UI
+elements, build model, and the makefile generation and builder itself.
+CDT 2.0 will focus on cleaning up usability issues and filling out the
+build model. <br>
+</p>
+<p>To ensure common understanding, here are some definitions:<br>
+</p>
+<ul>
+  <li><span style="font-weight: bold;">Tool</span> - a utility of some
+sort that is used in the build process. A tool will generally execute
+on one or more resources to produce output resources. Most tools have a
+set of options that can be used to configure the functionality of the
+tool.<br>
+  </li>
+  <li><span style="font-weight: bold;">Target</span> - a target in the
+build sense represents the execution environment for the build output.
+This can include a number of different factors including operating
+system, processor, system libraries, etc. Probably the best analogy
+would be the --target argument used to configure the gnu tools.</li>
+  <li><span style="font-weight: bold;">Configuration</span> - a line up
+of tools and tool options to configure a given build for a given
+target. A configuration is associated with a target and
+inherits/overrides the tool set defined for the target. The most common
+example of configurations is debug versus release (or optimized). Other
+examples can introduce build tools for profiling, instrumentation, etc.<br>
+  </li>
+</ul>
+<p>The requirements are as follows: (Note: all of these requirements
+are P1 unless marked otherwise).<br>
+</p>
+<ul>
+  <li>A given project should be able to support multiple configurations
+for multiple targets.</li>
+  <li>Different configurations on the same target should be able to
+select a different set of tools to run during the build.</li>
+  <li>Configurations can&nbsp; be defined at the Workspace level
+(default for new projects), Project level (default for all source
+files), or the Source File level.</li>
+  <li>A Configuration can inherit and override tool sets and options
+from another Configuration at any level.</li>
+  <li>The user should be able to exclude source files from a
+Configuration.</li>
+  <li>The user should be able to specify commands to be invoked before
+and after the build. <span style="font-style: italic;">(Note: it might
+be possible to do this with the external tools builder).</span><br>
+  </li>
+  <li>The Configuration should define a clean script that is
+inheritable/overiddable.</li>
+  <li>It should be possible to use Build Macros in the settings of tool
+options. It should be possible for the user to define their build
+macros. A set of predefined build macros should also be provided
+(either in the generated makefile or on the command line) that describe
+useful information concerning the build environment.</li>
+  <li>It should be possible to place intermediate build results in a
+different directory from the build results.</li>
+  <li>It should be possible for the user to define new targets and tool
+sets. These new definitions shall be persisted on the file system to
+support sharing and delivery with integrated tool chains. [P2] A wizard
+should be provided to do this. {/P2]<br>
+  </li>
+  <li>When defining a new tool, it should be possible to
+inherit/override options from another tool.</li>
+  <li>Ensure 1.2 Managed Make users can bring their projects forward.
+Any necessary conversion should take place automatically (with
+notification to the user).<br>
+  </li>
+</ul>
+<h3>Supported Targets/Tool Sets</h3>
+<p>The objective is to support as many targets and tool sets as
+possible.<br>
+</p>
+<p>To ensure a good out-of-box experience for the CDT, a default set
+should be supported. The default targets should be the host development
+environments (i.e. the machines that the CDT runs on). The default tool
+set shall be the gnu tool chain. On Windows, this should include both
+MinGW/Msys and cygwin.<br>
+</p>
+<h2>Architecture Notes</h2>
+<p>This section will document the Build Model.<br>
+</p>
+<h2>Design Notes</h2>
+<p>None at this time.<br>
+</p>
+<br>
+</body>
+</html>
