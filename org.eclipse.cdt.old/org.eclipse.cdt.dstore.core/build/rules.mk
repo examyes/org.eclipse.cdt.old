@@ -20,7 +20,8 @@ $(filter-out build,\
 $(filter-out %CVS,\
 $(filter-out %cvs,\
 $(filter-out %icons,\
-$(shell find * -type d -print -prune))))))
+$(filter-out %lib,\
+$(shell find * -type d -print -prune)))))))
 endef
 
 # Determine the system path separator
