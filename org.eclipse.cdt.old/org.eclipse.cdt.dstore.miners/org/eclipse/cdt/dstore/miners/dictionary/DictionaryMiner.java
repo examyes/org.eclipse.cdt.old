@@ -57,7 +57,8 @@ public class DictionaryMiner extends Miner
 	for (int i = 0; i < 26; i++)
 	    {
 		char letter = Character.forDigit(i + offset, Character.MAX_RADIX);
-		DataElement category = _dataStore.createObject(languageRoot, _categoryDescriptor, "" + letter); 
+		Character theLetter = new Character(letter);
+		DataElement category = _dataStore.createObject(languageRoot, _categoryDescriptor, theLetter.toString()); 
 		categories[i] = category;
 	    }
 	try
