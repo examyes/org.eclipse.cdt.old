@@ -277,9 +277,9 @@ public class DataElementTableViewer extends TableViewer
 		DataElementTableContentProvider contentProvider = (DataElementTableContentProvider)getContentProvider();
 		
 		Table table = getTable();
-		if (table.isVisible())
 		    {					
 			ArrayList associated = contentProvider.getList(_currentInput);
+
 			
 			// remove those that are gone	
 			TableItem[] items = table.getItems();
@@ -442,17 +442,16 @@ public class DataElementTableViewer extends TableViewer
 	    }
 
 	boolean selectionListening = _listener.isEnabled();
-	if (selectionListening)
+       	if (selectionListening)
 	    {
 		if (_currentInput != object)
 		    {
 			if (_currentInput == null)
 			    {
-				setVisibility(true);
+				setVisibility(true);				
 			    }
 
 			_currentInput = (DataElement)object;
-			_viewFilter.reset();
 
 			internalRefresh(_currentInput);
 			_isShowing = true;

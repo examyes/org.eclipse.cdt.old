@@ -314,6 +314,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	else if (_currentInput != object)
 	    {
 		_currentInput = (DataElement)object;	
+
 		if (_currentInput != null && !_currentInput.isDeleted())
 		  {	
 		      String imageStr = DataElementLabelProvider.getImageString(_currentInput);
