@@ -48,7 +48,7 @@
        <p>The parser looks for files with certain extensions like <i>.cpp</i> or <i>.h</i> when deciding whether to 
           attempt a  parse of the file.   The list of extensions that the parser considers to be C/C++ files is defined
           in the file called <i><b>CPPExtensions.dat</b></i> located in the 
-          <i><b>plugins/com.ibm.dstore.core</b></i> directory.
+          <i><b>plugins/com.ibm.cpp.miners.parser</b></i> directory.
           If you find that the parser doesn't seem to be parsing certain files, you should check this file to make 
           sure that your C/C++ file extensions are shown, and add them if not.
      </td>
@@ -68,18 +68,12 @@
      <td ALIGN=left VALIGN=top COLSPAN="2">
        <p>There are 4 ways that a parse can be invoked:
           <ol>
-	   <li> <b>By opening a file in the Editor.</b>  From within the Navigator, if you double-click on a C/C++ file,
-                the file will be opened in the editor, and an "implicit" parse will be initiated.<hr>
-           <li> <b>By saving a file in the Editor.</b>  Assuming you already have a C/C++ file open in the Editor, when 
-	        you make a change and save the file, an "implicit" parse is initiated to keep the parse information
-		up-to-date.<hr>
-           <li> <b>By invoking the "Parse... File" action on a file</b>.  From the Navigator, if you Right-Click on a 
-                file, the "Parse Contents" menu option is available:</p>
+	   <li> <b>By opening a file in the Editor.</b>  From within the C/C++ Projects View, if you double-click on a C/C++ file, the file will be opened in the editor, and an "implicit" parse will be initiated.<hr>
+           <li> <b>By saving a file in the Editor.</b>  Assuming you already have a C/C++ file open in the Editor, when you make a change and save the file, an "implicit" parse is initiated to keep the parse information up-to-date.<hr>
+           <li> <b>By invoking the "Parse...Begin Parse" action on a file</b>.  From the C/C++ Projects View, if you Right-Click on a file, the "Parse" menu option is available:</p>
                 <center><img src="../../images/parsecontents.gif"></center>
                 <p>This will kick-off a parse of that file, that will step into any other files that may be included.<hr>
-	   <li> <b>By invoking the "Parse... Project" action on a directory or the project</b>.  The same "Parse Contents"
-                action is available for a Directory or Project.  When this action is chosen, the Parser recursively
-		parses every C/C++ file it can find below the selected directory, stepping any included files as well.
+	   <li> <b>By invoking the "Parse... Project" action on a directory or the project</b>.  The same "Parse" action is available for a Directory or Project.  When this action is chosen, the Parser recursively parses every C/C++ file it can find below the selected directory, stepping any included files as well.
 	  </ol>
      </td>
   </tr>
@@ -87,7 +81,7 @@
 <!----------------------------------------------------------------------------------->
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
   <tr>
-<h1>Setting The Include Path</h1> 
+<h1>Setting The Parse Include Path</h1> 
 <!----
     <td ALIGN=left VALIGN=top COLSPAN="2" BGCOLOR="#0080c0"><b><font color="#ffffff" face="Arial,Helvetica">
        Setting The Include Path</font></b></td>
@@ -96,11 +90,9 @@
 <!---------->
   <tr>
      <td ALIGN=left VALIGN=top COLSPAN="2">
-       <p>The parser needs to know where to look to find include files.  By default, only the directory of the file 
-          doing the including is searched, so if you want to be able to browse included source in other directories,
-          you will need to set the Parse Include Path.
+       <p>The parser needs to know where to look to find include files.  By default, only the directory of the file doing the including is searched, so if you want to be able to browse included source in other directories, you will need to set the Parse Include Path.
        <p>Select menu item <b>Properties</b> from the pop-up menu for your Project in the
-          <a href="../../concepts/views/navigator.htm">Navigator</a> view.<br><br> 
+          <a href="../../concepts/views/cppprojects.htm">C/C++ Projects </a> view.<br><br> 
           <center><img src="../../images/selectproperties.gif"></center>
        <p>The Project Properties dialog is opened where you can set the Parse Include Path.<br><br>
           <center><img src="../../images/includeproperties.gif"></center>
