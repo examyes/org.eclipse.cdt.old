@@ -19,9 +19,6 @@
       <library name="epdc.jar">
          <export name="*"/>
       </library>
-      <library name="xerces.jar">
-         <export name="*"/>
-      </library>
    </runtime>
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
@@ -33,6 +30,7 @@
       <import plugin="com.ibm.debug.daemon"/>
       <import plugin="com.ibm.lpex"/>
       <import plugin="com.ibm.debug.common"/>
+      <import plugin="org.apache.xerces"/>
    </requires>
 
 
@@ -382,15 +380,18 @@
             targetID="org.eclipse.debug.ui.DebugView"
             id="com.ibm.debug.DebugViewToolbarActions.StepDebug">
          <action
-               label="%StepDebugAction.label"
-               icon="icons/full/elcl16/stepdebug_tsk.gif"
-               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
-               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
-               tooltip="%StepDebugAction.tooltip"
-               class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
+               id="com.ibm.debug.pdt.ui.actions.StepDebug"
                toolbarPath="stepReturnGroup"
+               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
+               class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
+               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
                enablesFor="1"
-               id="com.ibm.debug.pdt.ui.actions.StepDebug">
+               icon="icons/full/elcl16/stepdebug_tsk.gif"
+               label="%StepDebugAction.label"
+               tooltip="%StepDebugAction.tooltip">
+            <selection
+                  class="com.ibm.debug.pdt.IStepExtended">
+            </selection>
          </action>
       </viewContribution>
    </extension>
@@ -494,7 +495,7 @@
 <!-- Launch Configurations -->
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
-      <!-- OldDaemonDefaultLaunchConfigurationDelegate will always be private and will not be shown in the dialog-->
+<!-- OldDaemonDefaultLaunchConfigurationDelegate will always be private and will not be shown in the dialog-->
       <launchConfigurationType
             name=" "
             delegate="com.ibm.debug.pdt.launch.OldDaemonDefaultLaunchConfigurationDelegate"
@@ -504,34 +505,34 @@
       </launchConfigurationType>
       <launchConfigurationType
             name="%loadPICLApplication"
-            helpContextId="load_picl_application"
             delegate="com.ibm.debug.pdt.launchconfig.PICLLoadLaunchConfigurationDelegate"
+            helpContextId="load_picl_application"
             modes="debug"
             id="com.ibm.debug.loadPICLApplication">
       </launchConfigurationType>
       <launchConfigurationType
             name="%attachPICLApplication"
-            helpContextId="attach_picl_application"
             delegate="com.ibm.debug.pdt.launchconfig.PICLAttachLaunchConfigurationDelegate"
+            helpContextId="attach_picl_application"
             modes="debug"
             id="com.ibm.debug.attachPICLApplication">
       </launchConfigurationType>
    </extension>
-   
-   <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-		<launchConfigurationTabGroup 
-	       	id="com.ibm.debug.PICLLoadLaunchConfigurationTabGroup"
-    	   	type="com.ibm.debug.loadPICLApplication"
-       		class="com.ibm.debug.pdt.launchconfig.PICLLoadLaunchConfigurationTabGroup">
-	    </launchConfigurationTabGroup>
-	    <launchConfigurationTabGroup 
-	       	id="com.ibm.debug.PICLAttachLaunchConfigurationTabGroup"
-    	   	type="com.ibm.debug.attachPICLApplication"
-       		class="com.ibm.debug.pdt.launchconfig.PICLAttachLaunchConfigurationTabGroup">
-	    </launchConfigurationTabGroup>
- 	</extension>
-   
-   <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            type="com.ibm.debug.loadPICLApplication"
+            class="com.ibm.debug.pdt.launchconfig.PICLLoadLaunchConfigurationTabGroup"
+            id="com.ibm.debug.PICLLoadLaunchConfigurationTabGroup">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            type="com.ibm.debug.attachPICLApplication"
+            class="com.ibm.debug.pdt.launchconfig.PICLAttachLaunchConfigurationTabGroup"
+            id="com.ibm.debug.PICLAttachLaunchConfigurationTabGroup">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             icon="icons/full/obj16/loadconfig_obj.gif"
             configTypeID="com.ibm.debug.loadPICLApplication"
@@ -544,15 +545,81 @@
       </launchConfigurationTypeImage>
    </extension>
 <!-- Editor -->
-   <extension point="org.eclipse.ui.editors">
-         <editor
-             name="%EditorName.label"
-             icon="icons/full/cview16/source_view.gif"
-             extensions="cpp"
-             helpContextId="debugger_editor"
-             contributorClass="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditorContextContributor"
-             class="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditor"
-             id="com.ibm.debug.pdt.editor.DebuggerEditor">
-         </editor>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="%EditorName.label"
+            icon="icons/full/cview16/source_view.gif"
+            extensions="cpp"
+            helpContextId="debugger_editor"
+            contributorClass="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditorContextContributor"
+            class="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditor"
+            id="com.ibm.debug.pdt.editor.DebuggerEditor">
+      </editor>
    </extension>
+<!-- Step debug menu action -->
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="%StepDebugAction.label"
+            visible="false"
+            id="com.ibm.debug.pdt.StepDebug">
+         <action
+               label="%StepDebugAction.label"
+               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
+               icon="icons/full/elcl16/stepdebug_tsk.gif"
+               class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
+               menubarPath="org.eclipse.ui.run/emptyStepGroup"
+               enablesFor="1"
+               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
+               id="com.ibm.debug.pdt.ui.actions.StepDebug">
+            <selection
+                  class="com.ibm.debug.pdt.IStepExtended">
+            </selection>
+         </action>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="com.ibm.debug.internal.pdt.PICLThread"
+            id="com.ibm.debug.pdt.StepDebug">
+         <action
+               label="%StepDebugAction.label"
+               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
+               icon="icons/full/elcl16/stepdebug_tsk.gif"
+               class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
+               menubarPath="stepReturnGroup"
+               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
+               id="com.ibm.debug.pdt.ui.actions.StepDebug">
+         </action>
+      </objectContribution>
+      <objectContribution
+            objectClass="com.ibm.debug.internal.pdt.PICLStackFrame"
+            id="com.ibm.debug.pdt.StepDebug">
+         <action
+               label="%StepDebugAction.label"
+               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
+               icon="icons/full/elcl16/stepdebug_tsk.gif"
+               class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
+               menubarPath="stepReturnGroup"
+               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
+               id="com.ibm.debug.pdt.ui.actions.StepDebug">
+         </action>
+      </objectContribution>
+      <objectContribution
+            objectClass="com.ibm.debug.internal.pdt.PICLDebugTarget"
+            id="com.ibm.debug.pdt.StepDebug">
+         <action
+               label="%StepDebugAction.label"
+               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
+               icon="icons/full/elcl16/stepdebug_tsk.gif"
+               class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
+               menubarPath="stepReturnGroup"
+               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
+               id="com.ibm.debug.pdt.ui.actions.StepDebug">
+         </action>
+      </objectContribution>
+   </extension>
+
 </plugin>
