@@ -33,6 +33,7 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
     private ModelInterface                  _api;
     private DataElement                     _executable;
     private DataElement                     _dataElementDirectory;
+    private IProject                        _project;
 
 	/**
 	 * @see ILaunchConfigurationDelegate#launch(ILaunchConfiguration, String, ILaunch, IProgressMonitor)
@@ -40,31 +41,36 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
   throws CoreException
    {
-   	String qualifiedFileName = "";
+      String qualifiedFileName = "";
       _plugin = CppPlugin.getDefault();
       _api = ModelInterface.getInstance();
 
-		String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-    	String processID = configuration.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
+      String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+      String processID = configuration.getAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, "");
       IResource resource  = _api.findFile(executableName);
+      
       if (resource != null)
       {
-      	IProject project = resource.getProject();
-   	   _executable = _api.findResourceElement(resource);
-      	DataElement projectElement = _api.getProjectFor(_executable);
-         if (!project.isOpen())
+      	 _project = resource.getProject();
+   	 _executable = _api.findResourceElement(resource);
+      	 
+         if (!_project.isOpen())
          {
             displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
-         	return;
-	   	}
+            return;
+	 }
 
-      	qualifiedFileName = _executable.getSource();
-      	IFile file = (IFile)_api.findFile(qualifiedFileName);
-      	if (file == null)
+      	 if (_executable != null)
+             qualifiedFileName = _executable.getSource();
+         else
+             qualifiedFileName = resource.getLocation().toString();
+
+      	 IFile file = (IFile)_api.findFile(qualifiedFileName);
+      	 if (file == null)
          {
-   	   	projectElement = _api.getProjectFor(_executable);
-      		project = _api.findProjectResource(projectElement);
-      		file = new FileResourceElement(_executable, project);
+   	   	DataElement projectElement = _api.getProjectFor(_executable);
+      		_project = _api.findProjectResource(projectElement);
+      		file = new FileResourceElement(_executable, _project);
    	   	_api.addNewFile(file);			
          }
       }
@@ -83,15 +89,20 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
     {
         //ensure the daemon is listening
 	//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
+       DataElement  projectElement;
        boolean ok = CoreDaemon.startListening();
        if (ok == true)
-  	    {
-   		int port = CoreDaemon.getCurrentPort();
-	   	if (port < 0)
-         return;
-	    }
+       {
+          int port = CoreDaemon.getCurrentPort();
+	  if (port < 0)
+          {
+             return;
+          }
+       }
        else
-	      return;
+       {
+	  return;
+       } 
 	
 	
        if (_executable != null)
@@ -111,7 +122,11 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
         launch.addDebugTarget(target);
 	
    	// locator
-   	DataElement projectElement = _api.getProjectFor(_executable);
+        if (_executable != null)
+            projectElement = _api.getProjectFor(_executable);
+        else
+            projectElement = _api.findResourceElement(_project);
+
    	if (projectElement != null)
 	    {
    		// source locator

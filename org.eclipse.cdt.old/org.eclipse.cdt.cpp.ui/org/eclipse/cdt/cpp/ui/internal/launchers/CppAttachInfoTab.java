@@ -198,9 +198,10 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
      if (element instanceof DataElement)
      {	
         _executable = (DataElement)element;
-	 if (!_executable.isOfType("executable"))
+       
+        if (!_executable.isOfType("executable"))
         {
-
+           /*
 	   if (_executable.isOfType("Process"))
 	       {
 		   _processIDField.setText(_executable.getName());
@@ -219,6 +220,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 		   _directory = _api.findProjectElement(project);
 	       }
    	     return;
+           */
         }
 
         DataElement projectElement = _api.getProjectFor(_executable);
