@@ -136,8 +136,8 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
           IAdapterManager manager = Platform.getAdapterManager();
            manager.registerAdapters(new DataElementAdapterFactory(), IFile.class);
 
-          initDataStore();
 	  initDefaultBuildPreference();
+          initDataStore();
           super.startup();
         }
         catch (CoreException e)
