@@ -154,10 +154,15 @@ public class GenericViewPart extends ViewPart
 	_viewer.setInput(element);     
     }
     
-    public void resetView()
+    public void resetView(boolean refreshLabels)
       {
-	  _viewer.resetView();
+	  _viewer.resetView(refreshLabels);
       }
+      
+    public void resetView()
+    {
+    	resetView(true);	
+    }
     
     public void setLinked(boolean flag)
     {

@@ -546,10 +546,15 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     {
 	return _toolBar.isSpecialized();
     }
+    
+    public void resetView(boolean refreshLabels)
+    {
+    	_toolBar.resetView(refreshLabels);
+    }
 
-  public void resetView()
+  	public void resetView()
       {
-        _toolBar.resetView();
+        resetView(true);
       }
 
   public boolean isLinked()

@@ -193,8 +193,7 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      //Finally just set the input and the title
      if (oldInput == theInput)
 	 {
-	     // this is too expensive
-	     //_viewer.resetView();
+	     _viewer.resetView(false);
 	 }
      else
 	 {

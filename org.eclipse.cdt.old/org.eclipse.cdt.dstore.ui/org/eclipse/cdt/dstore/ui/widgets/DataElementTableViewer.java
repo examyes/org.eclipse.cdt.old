@@ -613,10 +613,17 @@ public class DataElementTableViewer extends TableViewer
 				System.out.println(e);
 			    }
 		    }
-	    }
+	    }    
     }
     
-    public synchronized void resetView(DataElement parent)
+    
+    public void resetView(DataElement parent)
+    {
+     	resetView(parent, true);	
+    }
+    
+    
+    public synchronized void resetView(DataElement parent, boolean labelRefresh)    
     {
 	if (_isShowing && _currentInput != null && parent != null)
 	    {
@@ -632,7 +639,8 @@ public class DataElementTableViewer extends TableViewer
 			    {
 				try
 				    {
-					internalRefresh(parent, true);
+					internalRefresh(parent, labelRefresh);
+				
 					
 					DataElement selected = getSelected();
 					select(selected);
@@ -647,7 +655,12 @@ public class DataElementTableViewer extends TableViewer
 	    }
     }
 
-    public synchronized void resetView()
+	public void resetView()
+	{
+		resetView(true);	
+	}
+
+    public synchronized void resetView(boolean labelRefresh)
     {
 	if (_isShowing && _currentInput != null)
 	    {
@@ -673,6 +686,9 @@ public class DataElementTableViewer extends TableViewer
 		}
 	    }
     }
+    
+    
+  
 
 
     public void setSelected(DataElement selected)

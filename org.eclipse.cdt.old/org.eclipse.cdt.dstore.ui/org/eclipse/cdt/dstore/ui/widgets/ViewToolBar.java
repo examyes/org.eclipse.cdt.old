@@ -291,12 +291,17 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	inputChanged(input, null);
     }
     
-    public void resetView()
+    public void resetView(boolean refreshLabels)
     {
         if (_outLink != null)
 	    {
-		_outLink.resetView();
+		_outLink.resetView(refreshLabels);
 	    }
+    }
+    
+    public void resetView()
+    {
+    	resetView(true);	
     }
 
     private String getLocalizedString(String key)

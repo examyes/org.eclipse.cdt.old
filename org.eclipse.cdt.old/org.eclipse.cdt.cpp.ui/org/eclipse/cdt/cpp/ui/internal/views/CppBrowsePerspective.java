@@ -28,15 +28,12 @@ public class CppBrowsePerspective implements IPerspectiveFactory
     					  editorArea);
     topLeft.addView("org.eclipse.cdt.cpp.ui.CppProjectsViewPart");
 
-    IFolderLayout topLeftRight = factory.createFolder("topLeftRight", IPageLayout.RIGHT, (float)0.25,
+    IFolderLayout topLeftRight = factory.createFolder("topLeftRight", IPageLayout.RIGHT, (float)0.35,
 						      "topLeft");
     topLeftRight.addView("org.eclipse.cdt.cpp.ui.ProjectObjectsViewPart");
+    topLeftRight.addView("org.eclipse.cdt.cpp.ui.SystemObjectsViewPart");
     topLeftRight.addView("org.eclipse.cdt.cpp.ui.ParsedSourceViewPart");
-
-    IFolderLayout topRight = factory.createFolder("topRight", IPageLayout.RIGHT, (float)0.65,
-						  "topLeftRight");
-    topRight.addView("org.eclipse.cdt.cpp.ui.SuperDetailsViewPart");    
-
+ 
     // search
     factory.addShowViewShortcut(SearchUI.SEARCH_RESULT_VIEW_ID);
     

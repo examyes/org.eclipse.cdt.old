@@ -17,4 +17,5 @@ public interface ILinkable
     void unlinkTo(ILinkable to);
     void setInput(DataElement input);
     void resetView();
+    void resetView(boolean refreshLabels);
 }

@@ -102,6 +102,10 @@ public class OutputViewPart extends ViewPart implements ILinkable
     public void resetView()
     {
     }
+    
+    public void resetView(boolean refreshLabels)
+    {
+    }
 
 
     public void setInput(DataElement element)

@@ -407,7 +407,12 @@ public void doExpand(DataElement obj)
 	    }
     }
     
-    public synchronized void resetView(DataElement parent)
+    public void resetView(DataElement parent)
+    {
+    	resetView(parent, true);	
+    }
+    
+    public synchronized void resetView(DataElement parent, boolean refreshLabels)
     {
 	if (_isShowing && _currentInput != null && parent != null)
 	    {
@@ -425,9 +430,7 @@ public void doExpand(DataElement obj)
 				    {
 					try
 					    {
-						tree.setRedraw(false);
-						internalRefresh(parent);
-						tree.setRedraw(true);
+						internalRefresh(parent, refreshLabels);
 
 						DataElement selected = getSelected();
 						select(selected);
@@ -445,10 +448,16 @@ public void doExpand(DataElement obj)
     
    public Tree getTree()
    {
-   	   	   	   	return super.getTree();
+   	  return super.getTree();
    } 
 
-  public synchronized void resetView()
+
+  public void resetView()
+  {
+    resetView(true);	
+  }
+  
+  public synchronized void resetView(boolean refreshLabels)
     {
 	if (_isShowing && _currentInput != null)
 	    {
@@ -463,12 +472,7 @@ public void doExpand(DataElement obj)
 				{
 				    try
 					{
-					    tree.setRedraw(false);
-					    
-					    //internalRefresh(_currentInput);
-					    refresh(_currentInput);
-
-					    tree.setRedraw(true);
+					    internalRefresh(_currentInput, refreshLabels);
 					    DataElement selected = getSelected();
 					    select(selected);
 
@@ -485,7 +489,7 @@ public void doExpand(DataElement obj)
 
     public void internalRefresh(DataElement element)
     {
-	super.internalRefresh(element, false);
+		super.internalRefresh(element, false);
     }
 
     public void setSelected(DataElement selected)
@@ -667,4 +671,7 @@ public void doExpand(DataElement obj)
     {
 	//***	getTree().dispose();
     }
+    
+    
+  
 }
