@@ -41,7 +41,6 @@ public class HostsViewPart extends GenericViewPart
     public void createPartControl(Composite parent)
     {
 	super.createPartControl(parent);    
-	fillLocalToolBar();
 	initInput(_plugin.getDataStore());
     }
 
