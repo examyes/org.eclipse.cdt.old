@@ -189,6 +189,9 @@ public class ParserSchema
   
   //Create others
   dProject           = findDescriptor(Project, schemaRoot.getDataStore());
+  if (dProject == null)
+   dProject = createDerivativeDescriptor(dFsObjects, Project);
+  
   dParseReference    = createRelationDescriptor(dProject, ParseReference);
   dParseReference.setDepth(0); //make it invisible 
   dParsedFiles       = createDerivativeDescriptor(dContObject, ParsedFiles); 
