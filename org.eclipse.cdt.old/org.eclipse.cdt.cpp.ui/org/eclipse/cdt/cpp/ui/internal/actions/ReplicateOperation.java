@@ -62,8 +62,10 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
     
     public void complete()
     {
+    	
+    	/*
 	IResource subP = _api.findResource(_subject); 
-	/* CAUSES HANG ON LINUX
+
 	if (subP instanceof Repository)
 	    {
 	    }
@@ -78,10 +80,15 @@ public abstract class ReplicateOperation implements IRunnableWithProgress
 			System.out.println(e);
 		    }
 	    }
+	*/
 	
 	for (int i = 0; i < _projects.size(); i++)
 	    {
 		DataElement project = (DataElement)_projects.get(i); 
+		
+		project.getDataStore().refresh(project);
+	    }
+		/*
 		IResource tarP = _api.findResource(project); 
 		if (tarP instanceof Repository)
 		    {

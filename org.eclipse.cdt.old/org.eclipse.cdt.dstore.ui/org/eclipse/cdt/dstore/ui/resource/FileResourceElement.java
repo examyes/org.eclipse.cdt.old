@@ -240,7 +240,7 @@ public void transferStreams(InputStream source, OutputStream destination,
 			int available = source.available();
 			available = (bufferSize > available) ? available : bufferSize;
 	  		
-	  		if (available <= 0) 
+	  		if (available <= 0)  
 	  			break;
 	  		
 	  		int bytesRead = source.read(buffer, 0, available);
