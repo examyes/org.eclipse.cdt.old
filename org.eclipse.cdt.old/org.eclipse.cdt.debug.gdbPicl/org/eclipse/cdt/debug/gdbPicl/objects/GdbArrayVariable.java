@@ -94,16 +94,7 @@ public class GdbArrayVariable extends GdbVariable {
 	 * @see GdbVariable#numNodes()
 	 */
 	public int numNodes() {
-/*		
-		int numNodes = 0;
-		
-		for (int i=0; i<_elements.size(); i++)		
-		{
-			numNodes += ((GdbVariable)_elements.elementAt(i)).numNodes();
-		}
-				
-		return numNodes;
-*/
+
 		return _numNodes;
 	}
 

@@ -103,16 +103,7 @@ public class GdbObjectVariable extends GdbVariable {
 	 * @see GdbVariable#numNodes()
 	 */
 	public int numNodes() {
-/*		
-		int numNodes = 0;
-		
-		for (int i=0; i<_fields.size(); i++)		
-		{
-			numNodes += ((GdbVariable)_fields.elementAt(i)).numNodes();
-		}
-				
-		return numNodes;
-*/
+
 		return _numNodes;		
 	}
 
