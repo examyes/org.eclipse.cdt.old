@@ -71,7 +71,6 @@ public class ServerCommandHandler extends CommandHandler
 
           String commandSource = command.getSource();	
           String commandName   = command.getName();
-         
 	  
 	  if (commandName.equals("C_VALIDATE_TICKET"))
 	      {

@@ -1367,6 +1367,23 @@ public DataElement command(DataElement commandDescriptor,
 					}
 				}
 			}
+
+		    // abstracted filters
+		    ArrayList baseDescriptors = descriptor.getAssociated(getLocalizedString("model.abstracted_by"));
+		    for (int j = 0; j < baseDescriptors.size(); j++)
+			{
+			    DataElement baseDescriptor = (DataElement)baseDescriptors.get(j);
+			    ArrayList baseFilters = getFilterItems(baseDescriptor, fixateOn, relation);
+			    for (int k = 0; k < baseFilters.size(); k++)
+				{
+				    DataElement filter = (DataElement)baseFilters.get(k);
+				    if (!result.contains(filter))
+					{
+					    result.add(filter);
+					}
+				}
+			}
+		    
 		}
 	    /*
 	    if (result.size() < 1 && (_relationSelected != null))
@@ -2189,7 +2206,7 @@ public DataElement command(DataElement commandDescriptor,
 	createReference(fsObject, deviceD,  abstracts, abstractedBy);
 
 	 createReference(fsObject, dirD, abstracts, abstractedBy);
-        createReference(fsObject, fileD, abstracts, abstractedBy);
+	 //***        createReference(fsObject, fileD, abstracts, abstractedBy);
         createReference(fsObject, fileD,    containsD);
         createReference(fsObject, dirD,     containsD);
 	createReference(fsObject, fsObject, containsD);

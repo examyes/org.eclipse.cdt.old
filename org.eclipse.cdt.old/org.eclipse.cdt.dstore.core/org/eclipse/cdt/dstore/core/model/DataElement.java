@@ -301,7 +301,7 @@ public final class DataElement implements Serializable, IDataElement
 				  
 				  if (obj.getParent() == null)
 				      obj.setParent(this);
-				  _isExpanded = true;
+				  //***_isExpanded = true;
 			      }
 		      }
 		  
@@ -967,7 +967,7 @@ public final class DataElement implements Serializable, IDataElement
   public void expandChildren()
   {    
       if ((_dataStore != null) && (_dataStore.isConnected() && !isDeleted()))
-      {
+      {	  
         DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
         if (queryDescriptor != null)
         {	
