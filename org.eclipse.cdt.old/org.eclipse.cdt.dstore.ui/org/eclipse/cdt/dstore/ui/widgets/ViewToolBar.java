@@ -67,6 +67,7 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	public Point computeSize(Composite c, int w, int h, boolean force) 
         {
 	    int width = c.getParent().getClientArea().width;
+	    int height = c.getParent().getClientArea().height;
 	    return new Point(width, 22);
         }
 	
