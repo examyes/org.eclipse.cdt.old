@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.jface.action.*;
 
 import org.eclipse.ui.*;
+import org.eclipse.ui.internal.*;
 
 public class DetailsViewPart extends GenericViewPart
 {
@@ -67,14 +68,18 @@ public class DetailsViewPart extends GenericViewPart
     
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
-	if (part != this)
+    if (part != this && part instanceof ILinkable)
+     {
+	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();	
+	IWorkbenchPage persp= win.getActivePage();
+
+	if (persp.findView(getSite().getId()) == this)
 	    {
-		if (part instanceof ILinkable)
-		    {
-			((ILinkable)part).linkTo(this);	
-			setLinked(true);
-		    }
+		((ILinkable)part).linkTo(this);	
+		setLinked(true);
 	    }
+     }
     }    
 
     public void fillLocalToolBar() 
