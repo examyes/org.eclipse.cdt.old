@@ -31,6 +31,8 @@ import org.eclipse.jface.window.*;
 import org.eclipse.jface.text.*;
 import org.eclipse.jface.dialogs.*;
 
+import org.eclipse.swt.widgets.*;
+
 import org.eclipse.ui.internal.*;
 import org.eclipse.ui.internal.misc.*;
 
@@ -47,11 +49,13 @@ public class DeleteProjectAction extends CustomAction
     {
 	private IProject _project;
 	private ModelInterface _api;
+	private boolean _deleteContents;
 
-	public DeleteOperation(IProject project, ModelInterface api)
+	public DeleteOperation(IProject project, ModelInterface api, boolean deleteContents)
 	{
 	    _project = project;
 	    _api = api; 
+	    _deleteContents = deleteContents;
 	}    
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException
@@ -84,11 +88,11 @@ public class DeleteProjectAction extends CustomAction
 			    closedProject.getDataStore().deleteObject(closedProject.getParent(), closedProject);
 			}
 		}
-
+	    
 	    // delete project
 	    try
-		{
-		    _project.delete(false, true, pm);
+		{		    
+		    _project.delete(_deleteContents, true, pm);
 		}
 	    catch(CoreException e)
 		{
@@ -109,8 +113,14 @@ public class DeleteProjectAction extends CustomAction
 	IProject project = api.findProjectResource(_subject);
 	if (project != null)
 	    {
-		DeleteOperation op = new DeleteOperation(project, api);
-		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
+		Shell shell = api.getDummyShell();
+		String msg = "About to delete project \'" + project.getName() + "\'.\n";
+		msg += "Delete all its contents under " + project.getLocation().toOSString() + " as well?";
+		boolean deleteContents = MessageDialog.openQuestion(shell, "Delete Project Contents", msg);          
+		
+
+		DeleteOperation op = new DeleteOperation(project, api, deleteContents);
+		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(shell);
 		try
 		    {
 			progressDlg.run(true, true, op);
