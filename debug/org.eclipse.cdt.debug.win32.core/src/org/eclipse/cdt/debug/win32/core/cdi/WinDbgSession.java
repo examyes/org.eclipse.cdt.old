@@ -13,9 +13,9 @@ package org.eclipse.cdt.debug.win32.core.cdi;
 import java.io.IOException;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.ICDIConfiguration;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
+import org.eclipse.cdt.debug.core.cdi.ICDISessionConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
 import org.eclipse.core.resources.IFile;
@@ -34,7 +34,7 @@ public class WinDbgSession implements ICDISession {
 	
 	// Objects
 	private ICDITarget[] targets;
-	private WinDbgConfiguration configuration;
+	private WinDbgSessionConfiguration configuration;
 	private WinDbgEventManager eventManager;
 	private WinDbgRegisterManager registerManager;
 	private WinDbgBreakpointManager breakpointManager;
@@ -44,7 +44,7 @@ public class WinDbgSession implements ICDISession {
 		eventManager = new WinDbgEventManager(this);
 		targets = new ICDITarget[1];
 		targets[0] = new WinDbgTarget(this, exe);
-		configuration = new WinDbgConfiguration();
+		configuration = new WinDbgSessionConfiguration(this);
 		registerManager = new WinDbgRegisterManager();
 		breakpointManager = new WinDbgBreakpointManager(this);
 		variableManager = new WinDbgVariableManager();
@@ -87,7 +87,7 @@ public class WinDbgSession implements ICDISession {
 		return eventManager;
 	}
 
-	public ICDIConfiguration getConfiguration() {
+	public ICDISessionConfiguration getConfiguration() {
 		return configuration;
 	}
 	

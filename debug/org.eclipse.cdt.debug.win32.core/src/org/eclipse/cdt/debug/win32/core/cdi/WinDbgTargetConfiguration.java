@@ -10,11 +10,18 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
-import org.eclipse.cdt.debug.core.cdi.ICDIConfiguration;
+import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
+import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 
 /**
  */
-public class WinDbgConfiguration implements ICDIConfiguration {
+public class WinDbgTargetConfiguration implements ICDITargetConfiguration {
+
+	WinDbgTarget wTarget;
+
+	public WinDbgTargetConfiguration(WinDbgTarget target) {
+		wTarget = target;
+	}
 
 	public boolean supportsTerminate() {
 		return true;
@@ -74,5 +81,12 @@ public class WinDbgConfiguration implements ICDIConfiguration {
 
 	public boolean terminateSessionOnExit() {
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIObject#getTarget()
+	 */
+	public ICDITarget getTarget() {
+		return wTarget;
 	}
 }

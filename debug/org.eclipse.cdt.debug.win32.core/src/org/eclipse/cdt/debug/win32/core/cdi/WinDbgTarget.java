@@ -30,6 +30,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDISharedLibrary;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
+import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
@@ -48,6 +49,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	private WinDbgThread currentThread;
 	private Thread debugThread;
 	private WinDbgRuntimeOptions runtimeOptions;
+	private WinDbgTargetConfiguration configuration;
 	String cmdline;
 	String dir;
 
@@ -611,5 +613,12 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	public ICDIRegisterGroup[] getRegisterGroups() throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#getConfiguration()
+	 */
+	public ICDITargetConfiguration getConfiguration() {
+		return configuration;
 	}
 }
