@@ -24,7 +24,7 @@ import com.ibm.cpp.miners.parser.dstore.*;
 import com.ibm.cpp.miners.parser.invocation.*;
 import java.util.*;
 import java.io.*;
-import java.lang.*; 
+import java.lang.*;
 
 public final class Parser 
 {
@@ -754,9 +754,9 @@ void namespace_definition() :
     | {name = UnnamedTypeManager.instance().getNextUnnamedType("namespace");}
   )
   {
-   DataElement theNamespace = symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true); 
+  // DataElement theNamespace = symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true); 
   }
-  (";" {symtab.closeScope();} | "{" skip_object_body(theNamespace))
+  (";" {/*symtab.closeScope();*/} | namespace_body()) //"{" skip_object_body(theNamespace))
 }
 
 void namespace_body():
