@@ -71,4 +71,39 @@
          id="org.eclipse.cdt.dstore.hosts.views.CommandViewPart">
    </view>
 </extension>
+
+ <extension
+         point="org.eclipse.ui.popupMenus">
+         
+      <objectContribution
+            objectClass="org.eclipse.cdt.dstore.core.model.DataElement"
+            id="Connections">
+         <filter
+               name="type"
+               value="root">
+         </filter>
+         <action
+               label="Connect"
+               class="org.eclipse.cdt.dstore.hosts.actions.HostConnectAction"
+               id="org.eclipse.cdt.dstore.hosts.actions.HostConnectAction">
+         </action>
+        <action
+               label="Disconnect"
+               class="org.eclipse.cdt.dstore.hosts.actions.HostDisconnectAction"
+               id="org.eclipse.cdt.dstore.hosts.actions.HostDisconnectAction">
+         </action>
+         <action
+               label="Edit"
+               class="org.eclipse.cdt.dstore.hosts.actions.HostEditAction"
+               id="org.eclipse.cdt.dstore.hosts.actions.HostEditAction">
+         </action>
+         <action
+               label="Delete"
+               class="org.eclipse.cdt.dstore.hosts.actions.HostDeleteAction"
+               id="org.eclipse.cdt.dstore.hosts.actions.HostDeleteAction">
+         </action>
+          </objectContribution>
+         
+</extension>    
+    
 </plugin>
