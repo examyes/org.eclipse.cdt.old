@@ -45,8 +45,8 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
     private String       _title;
     private CppPlugin    _plugin;
 
-    private IStructuredSelection _selection;
     private boolean      _useFilter;
+    private DataElement  _selection;
 
     public BrowseProcessesDialog(String title, DataElement input)
     {
@@ -65,7 +65,7 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
 	if (OK == buttonId)
 	    {	
 		setReturnCode(OK);
-		_selection =_viewer.getSelection();
+		_selection =_viewer.getSelected();
 	    }
 	else if (CANCEL == buttonId)
 	    setReturnCode(CANCEL);
@@ -74,16 +74,9 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
 	close();
     }
 
-    public List getSelected()
+    public DataElement getSelected()
     {
-	if (_selection != null)
-	    {
-		return _selection.toList();
-	    }
-	else
-	    {
-		return null;
-	    }
+	return _selection;
     }
 
     public void useFilter(boolean flag)
