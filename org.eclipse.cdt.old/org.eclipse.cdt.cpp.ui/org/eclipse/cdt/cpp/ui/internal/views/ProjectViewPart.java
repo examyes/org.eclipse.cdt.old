@@ -399,6 +399,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 	
 	_sortAction.setChecked(_sortAction.isSorting());
 	toolBarManager.add(_sortAction); 
+	toolBarManager.add(new Separator());
 	toolBarManager.add(_homeAction);
 	toolBarManager.add(_backAction);
 	toolBarManager.add(_forwardAction);

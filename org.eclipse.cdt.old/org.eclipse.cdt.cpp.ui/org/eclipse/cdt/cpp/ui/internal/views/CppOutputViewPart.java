@@ -596,7 +596,7 @@ public class CppOutputViewPart
 		_shellAction =
 			new ShellAction("Launch Shell", plugin.getImageDescriptor("command"));
 		toolBarManager.add(_shellAction);
-
+		toolBarManager.add(new Separator());
 		_backAction =
 			new HistoryAction(
 				plugin.getLocalizedString("OutputViewer.back"),
@@ -610,12 +610,14 @@ public class CppOutputViewPart
 				plugin.getImageDescriptor("forward"),
 				1);
 		toolBarManager.add(_forwardAction);
+		toolBarManager.add(new Separator());
 
 		_cancelAction =
 			new CancelAction(
 				plugin.getLocalizedString("OutputViewer.Cancel"),
 				plugin.getImageDescriptor("cancel"));
 		toolBarManager.add(_cancelAction);
+		toolBarManager.add(new Separator());
 
 		_saveOutputAction = new SaveOutputAction("Save Output", plugin.getImageDescriptor("saveas"));
 		toolBarManager.add(_saveOutputAction);
