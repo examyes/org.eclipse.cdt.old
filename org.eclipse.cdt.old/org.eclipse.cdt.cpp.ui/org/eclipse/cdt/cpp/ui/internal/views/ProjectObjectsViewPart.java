@@ -15,8 +15,10 @@ import com.ibm.dstore.ui.widgets.*;
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.jface.action.*;
+import org.eclipse.jface.resource.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.graphics.*;
 
 import org.eclipse.jface.viewers.*; 
 import org.eclipse.ui.*;
@@ -25,9 +27,19 @@ import java.util.*;
 
 public class ProjectObjectsViewPart extends ProjectViewPart
 {
+	private ArrayList _browseHistory;
+	private int _browsePosition;
+	
+	private HomeAction _homeAction;
+	private BackAction _backAction;
+	private ForwardAction _forwardAction;
+	private DrillAction _drillAction;
+	
     public ProjectObjectsViewPart()
     {
-	super();
+		super();
+		_browseHistory = new ArrayList();
+		_browsePosition = 0;
     }
 
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
@@ -44,6 +56,8 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 
 	return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader, provider);
     }
+    
+    
 
  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
  {
@@ -163,7 +177,11 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 
 
      if (theInput == null)
-	 return;
+     {
+	 	return;
+     }
+     
+     
      
      //Finally just set the input and the title
      if (_viewer.getInput() == theInput)
@@ -173,9 +191,17 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	 }
      else
 	 {
+
 	     _viewer.setInput(theInput);	
 	     _viewer.selectRelationship("contents");
 	     setTitle(theElement.getName() + " Project-Objects");   
+	     
+	     
+	    _browseHistory.clear();
+     	_browseHistory.add(theInput);
+     	_browsePosition = 0;
+     	updateActionStates();
+ 
 	 }
  }
 
@@ -234,6 +260,163 @@ public class ProjectObjectsViewPart extends ProjectViewPart
      
      return theParseFile;
  }
+ 
+ class BrowseAction extends Action
+ {
+ 	public BrowseAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 	}
+ 	 	
+ 	
+ 	public void setPosition(int i)
+ 	{
+ 		setInput((DataElement)_browseHistory.get(i));
+ 	}
+ }
+ 
+ class BackAction extends BrowseAction
+ {
+ 	public BackAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 		
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 		setEnabled(false);
+ 		if (_browseHistory.size() > 1)
+ 		{
+ 			if (_browsePosition > 0)
+ 			{
+ 				setEnabled(true);
+ 			}
+ 		}
+
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		_browsePosition--;
+ 		setPosition(_browsePosition);
+ 		updateActionStates();
+ 	}
+ }
+ 
+ class ForwardAction extends BrowseAction
+ {
+ 	public ForwardAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 					
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 		 setEnabled(false);
+ 		if (_browseHistory.size() > 1)
+ 		{
+ 			if (_browsePosition < (_browseHistory.size() - 1))
+ 			{
+ 				setEnabled(true);
+ 			}
+ 		}
+
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		_browsePosition++;
+ 		setPosition(_browsePosition);
+ 		updateActionStates();
+ 	}
+ }
+ 
+ class HomeAction extends BrowseAction
+ {
+ 	public HomeAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		if (_browseHistory.size() > 0)
+ 		{
+ 			DataElement input = (DataElement)_browseHistory.get(0);
+ 			_viewer.setInput(input);	
+ 			_browsePosition = 0;
+ 			updateActionStates();
+ 		}
+ 	}
+ }
+ 
+ class DrillAction extends BrowseAction
+ {
+ 	
+ 	public DrillAction(String label, ImageDescriptor des)
+ 	{
+ 		super(label, des);		
+ 	}
+ 	
+ 	public void checkEnabledState()
+ 	{
+ 	}
+ 	
+ 	public void run()
+ 	{
+ 		DataElement selected = _viewer.getSelected();
+ 		if (selected != null)
+ 		{
+ 			for (int i = _browseHistory.size() - 1; i > _browsePosition; i--)
+ 			{
+ 				_browseHistory.remove(i);	
+ 			}
+ 			
+ 			_browseHistory.add(selected);
+ 			_browsePosition = _browseHistory.size() - 1;
+			_viewer.setInput(selected);		
+ 			updateActionStates();
+ 		}
+ 	}
+ 	
+ }
+ 
+  public void updateActionStates()
+  {
+ 	_homeAction.checkEnabledState();
+ 	_forwardAction.checkEnabledState();
+ 	_backAction.checkEnabledState();
+ 	_drillAction.checkEnabledState(); 	
+  }
+ 
+  public void fillLocalToolBar()
+    {
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
+		
+		_homeAction = new HomeAction("Home", _plugin.getImageDescriptor("home.gif"));
+		toolBarManager.add(_homeAction);
+		_backAction = new BackAction("Back", _plugin.getImageDescriptor("back.gif"));
+		toolBarManager.add(_backAction);
+		
+		_forwardAction = new ForwardAction("Forward", _plugin.getImageDescriptor("forward.gif"));
+    	toolBarManager.add(_forwardAction);
+				
+		_drillAction = new DrillAction("Drill Down", _plugin.getImageDescriptor("drill.gif"));	 
+    	toolBarManager.add(_drillAction); 
+    	
+    	updateActionStates();
+    }
+    
 }
 
 
