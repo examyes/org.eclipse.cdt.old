@@ -1786,32 +1786,36 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
 	
 	
-		DataElement buildCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Build");
-	DataElement generateAutoconfFilesCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+		DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
+	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Generate Autoconf/Automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	generateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "GENERATE_AUTOCONF_FILES");
-	DataElement updateAutoconfFilesCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement updateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Update Autoconf/Automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	updateAutoconfFilesCmd.setAttribute(DE.A_VALUE, "UPDATE_AUTOCONF_FILES");
-	DataElement createConfigureeCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement createConfigureeCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Create configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
-	DataElement configureCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement configureCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Run configure", 
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
 	configureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
 							  
-	DataElement mngCmd = dataStore.createObject(buildCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+	DataElement mngCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Manage Project", 
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
 	
 	
 	DataElement managedProjectD = dataStore.find(schemaRoot, DE.A_NAME, "Managed Project", 1);
-	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Makefile.am as");
-
+	DataElement makefileCmds = dataStore.createObject(managedProjectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Change target to");
+	
+	DataElement toDefCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
+							  "Programs", 
+							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
+	toDefCmd.setAttribute(DE.A_VALUE,"DEFAULT_MAKEFILE_AM");
 	DataElement toStatLibCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Static lib", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
@@ -1826,11 +1830,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							  "Top level", 
 							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
 	toTopLevelCmd.setAttribute(DE.A_VALUE,"TOPLEVEL_MAKEFILE_AM");
-	
-	DataElement toDefCmd = dataStore.createObject(makefileCmds, DE.T_UI_COMMAND_DESCRIPTOR,
-							  "Default", 
-							  "com.ibm.cpp.ui.internal.actions.MakefileAmAction");
-	toDefCmd.setAttribute(DE.A_VALUE,"DEFAULT_MAKEFILE_AM");
+
  	
     }
         
