@@ -6,6 +6,7 @@ package org.eclipse.cdt.cpp.ui.internal.builder;
  * the Common Public License which accompanies this distribution.
  */
 
+import org.eclipse.cdt.cpp.ui.internal.dialogs.FileExtensionDialog;
 import org.eclipse.cdt.cpp.ui.internal.wizards.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
 
@@ -19,8 +20,10 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.List;
 
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -35,60 +38,53 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.JFaceResources;
 
+import org.eclipse.ui.IFileEditorMapping;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.internal.registry.FileEditorMapping;
+import org.omg.stub.java.rmi._Remote_Stub;
 
+import java.io.FileWriter;
 import java.util.*;
-
-import com.ibm.debug.model.Line;
 
 public class AutoconfBuilderPropertyPageControl extends Composite
 {
    
-    //private Button _showConfigureDialogtButton;
-    //private Button _showRunDialogtButton;
-    //private Button _showCreateDialogtButton;
-    
-    //private Button _updateAllButton;
-    //private Button _updateConfigureInButton;
     private Button _debuggableButton;
     private Button _optimizedButton;
-  //  private Button _cButton;
- //   private Button _cppButton;
+    private Button _addButton;
+    private Button _removeButton;
+
     private Combo _compilerList;
-    private Group _execGroup;
-  //  private Group _advancedGroup;
-   // private Group _advancedConfigureGroup;
-    
-    //protected Button globalSettingsButton;
-    
-    // labels
-    //private Label configureDialogSetup;
-   // private Label advancedSetup;
-    
+    private Group _optionGroup;
+    private Table _fileExtensionList;
+ 
     private CppPlugin _plugin;
 
     public AutoconfBuilderPropertyPageControl(Composite cnr, int style)
     {
 		super(cnr, style);
 		
+		
+		
 		_plugin = CppPlugin.getDefault();
 		
 		GridLayout layout = new GridLayout();
 	   	layout.numColumns = 1;
 	   	
-	   	
+	   	setLayout(layout);
 		// group #1 - executable group
 		
-		_execGroup = new Group(this,SWT.NONE);
-		_execGroup.setText("Compiler debugging and optimization options");
+		_optionGroup = new Group(this,SWT.NONE);
+		_optionGroup.setText("Compiler debugging and optimization options");
 		GridLayout g1Layout = new GridLayout();
 	   	g1Layout.numColumns = 1;
 	   	
-		_execGroup.setLayout(g1Layout);
-		_execGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		_optionGroup.setLayout(g1Layout);
+		_optionGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
-		Composite execComp = new Composite(_execGroup,SWT.NONE);
+		// comp for options group 		
+		Composite execComp = new Composite(_optionGroup,SWT.NONE);
 		
 		GridLayout execCompLayout = new GridLayout();
 	   	execCompLayout.numColumns = 1;
@@ -102,121 +98,116 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 		_optimizedButton = new Button(execComp, SWT.RADIO);
 		_optimizedButton.setText("Optimized");
 		
+		// group #2 Extra Dist selection
+		Group distGroup = new Group(this,SWT.NONE);
+		distGroup.setText("Distribution control settings:");
+		GridLayout distLayout = new GridLayout();
+		distLayout.numColumns = 1;
+		distGroup.setLayout(distLayout);
+		distGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
+		// composite for distribution control group
+		Composite distComp = new Composite(distGroup,SWT.NONE);
+		
+		GridLayout distCompLayout = new GridLayout();
+	   	distCompLayout.numColumns = 2;
+		distComp.setLayout(distCompLayout);
+		distComp.setLayoutData(new GridData (GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+ 
+   		// widgets
+   		Label typeLbl = new Label(distComp,SWT.NONE);
+   		typeLbl.setText("File types:");
+   		
+   		new Label(distComp,SWT.NONE);
+   		   		   		
+   		_fileExtensionList = new Table(distComp,SWT.BORDER|SWT.MULTI|SWT.H_SCROLL|SWT.V_SCROLL|SWT.FULL_SELECTION);
+   //		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData data = new GridData(GridData.FILL_BOTH);
+		data.heightHint = _fileExtensionList.getItemHeight()*12;
+		_fileExtensionList.setLayoutData(data);
+		
+		
+		
+	//	gd.verticalAlignment = gd.FILL;
+	//	gd.grabExcessHorizontalSpace = false;
+	//	_fileExtensionList.setLayoutData(gd);
+   		
+		// button composite
+		
+		Composite buttonComp = new Composite(distComp,SWT.NONE);
+		buttonComp.setLayout(new GridLayout());		
 
-
-/*		// compiler group
-		Group compilerGroup = new Group(execComp,SWT.NONE);
-		compilerGroup.setText("Compiler Selection:");
-		GridLayout compilerGroupLayout = new GridLayout();
-	   	compilerGroupLayout.numColumns = 1;
-		compilerGroup.setLayout(compilerGroupLayout);
-		compilerGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		
-		// compiler group composite
-		
-		Composite compilerComp = new Composite(compilerGroup,SWT.NONE);
-		GridLayout compilerCompLayout = new GridLayout();
-	   	compilerCompLayout.numColumns = 2;
-		compilerComp.setLayout(compilerCompLayout);
-		compilerComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		
-		// compiler group contents
-		_cppButton = new Button(compilerComp, SWT.RADIO);
-		_cppButton.setText("C++");		
-
-		_cButton = new Button(compilerComp, SWT.RADIO);
-		_cButton.setText("C");	   	
-
-
-*/
-		
-/*		// compiler options group
-		Group compilerOptionGroup = new Group(execComp,SWT.NONE);
-		compilerOptionGroup.setText("Options Selection:");
-		GridLayout optionGroupLayout = new GridLayout();
-	   	optionGroupLayout.numColumns = 1;
-		compilerOptionGroup.setLayout(optionGroupLayout);
-		compilerOptionGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-				
-		// compiler options Comp
-		
-		Composite compilerOptionComp = new Composite(compilerOptionGroup,SWT.NONE);
-		GridLayout optionLayout = new GridLayout();
-	   	optionLayout.numColumns = 2;
-		compilerOptionComp.setLayout(optionLayout);
-		compilerOptionComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-						
-		// options contents
-		_debuggableButton = new Button(compilerOptionComp, SWT.RADIO);
-		_debuggableButton.setText("Debug");	   	
-
-		_optimizedButton = new Button(compilerOptionComp, SWT.RADIO);
-		_optimizedButton.setText("Optimized");
-		
-*/
-		
-/*	   	// group #2 - advanced autoconf files group
-	   	
-	   	_advancedGroup = new Group(this,SWT.NONE);
-	   	//_advancedGroup.setText(_plugin.getLocalizedString("AutoconfPoperties.Advanced_Group_Title"));
-		_advancedGroup.setText("Advanced actions' message dialog setup:");
-		
-		GridLayout g2Layout = new GridLayout();
-	   	g2Layout.numColumns = 1;
-		
-		_advancedGroup.setLayout(g2Layout);
-		_advancedGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-	   	   
-	   	Composite advancedComp = new Composite(_advancedGroup,SWT.NONE);
-	   	GridLayout c2Layout = new GridLayout();
-	   	c2Layout.numColumns = 1;
-	   	advancedComp.setLayout(c2Layout);
-	   	advancedComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-	   	
-		_updateAllButton = new Button(advancedComp, SWT.CHECK);
-		_updateAllButton.setText("Show \"Generate/Update all automake files\" dialog before execution");
-	
-		_updateConfigureInButton = new Button(advancedComp, SWT.CHECK);
-		_updateConfigureInButton.setText("Show \"Update configure.in\" dialog before execution");
-
-		_updateMakefileAmButton = new Button(advancedComp, SWT.CHECK);
-		_updateMakefileAmButton.setText("Show \"Update Makefile.am\" dialog before execution");
-		
-		// group #3 - advanced configure group
-		
-		_advancedConfigureGroup = new Group(this,SWT.NONE);
-		_advancedConfigureGroup.setText("Advanced configure Actions:");
-		
-		GridLayout g3Layout = new GridLayout();
-	   	g3Layout.numColumns = 1;
-		
-		
-		_advancedConfigureGroup.setLayout(g3Layout);
-		_advancedConfigureGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		
-		Composite advConfComp = new Composite(_advancedConfigureGroup,SWT.NONE);
-		GridLayout c3Layout = new GridLayout();
-	   	c3Layout.numColumns = 1;
-		advConfComp.setLayout(c3Layout);
-		advConfComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
-		
-		_showCreateDialogtButton = new Button(advConfComp, SWT.CHECK);
-		_showCreateDialogtButton.setText("Show \"generate configure\" dialog before execution");
-		
-		_showRunDialogtButton = new Button(advConfComp, SWT.CHECK);
-		_showRunDialogtButton.setText("Show \"run configure\" dialog before execution");
-
-		new Label(this,SWT.LEFT);
-		new Label(this,SWT.LEFT);
-		globalSettingsButton = new Button(this, SWT.CHECK);
-		globalSettingsButton.setText("Apply preference's page settings");*/
-
-		setLayout(layout);
+   		_addButton = new Button(buttonComp,SWT.PUSH);
+   		_addButton.setText("Add...");
+   		
+   		/* Add the listeners */
+		SelectionListener addSelectionListener = new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				addFileExtension();
+			};
+		};
+		_addButton.addSelectionListener(addSelectionListener);
+   		
+   		_removeButton = new Button(buttonComp,SWT.PUSH);
+   		_removeButton.setText("Remove");
+   		
+   		/* Add the listeners */
+		SelectionListener removeSelectionListener = new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				removeFileExtension();
+			};
+		};
+		_removeButton.addSelectionListener(removeSelectionListener);
+    }
+    
+    public void addFileExtension()
+    {
+    	// persist extension list
+    	promptForResourceType();
+    }
+    public void removeFileExtension()
+    {
+     		if(_fileExtensionList.getSelectionIndices().length>1)
+    			_fileExtensionList.remove(_fileExtensionList.getSelectionIndices());
+    		else if(_fileExtensionList.getSelectionIndex()!=-1)
+    		_fileExtensionList.remove(_fileExtensionList.getSelectionIndex());
+    	
+    		
     }
 
-	// gets
+	public void promptForResourceType() {
+		FileExtensionDialog dialog = new FileExtensionDialog(this.getShell());
+		if (dialog.open() == dialog.OK) {
+		String name = dialog.getName();
+		String extension = dialog.getExtension();
+		
+		// Create the new type and insert it
+		FileEditorMapping resourceType = new FileEditorMapping(name, extension);
+		TableItem item = newResourceTableItem(resourceType,true);
+		_fileExtensionList.setFocus();
+		_fileExtensionList.showItem(item);
+		}
+	}
+
+	protected TableItem newResourceTableItem(IFileEditorMapping mapping, boolean selected) {
+	Image image = mapping.getImageDescriptor().createImage(false);
+	//if (image != null)
+	//	imagesToDispose.add(image);
 	
+	//TableItem item = new TableItem(_fileExtensionList, SWT.NULL, index);
+	TableItem item = new TableItem(_fileExtensionList, SWT.NULL);
+	if (image != null) {
+		item.setImage(image);
+	}
+	item.setText(mapping.getLabel());
+	item.setData(mapping);
+//	if (selected) {
+//		_fileExtensionList.setSelection(index);
+	//}
+
+	return item;
+}
+	// gets
      
     public boolean getDebugButtonSelection()
     {
@@ -226,39 +217,6 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     {
 		return _optimizedButton.getSelection();
     }
-
- /*   public boolean getCButtonSelection()
-    {
-		return _cButton.getSelection();
-    }
-    public boolean getCppButtonSelection()
-    {
-		return _cppButton.getSelection();
-    }
-*/
-    
-/*    public boolean getShowCreateDialogSelection()
-    {
-		return _showCreateDialogtButton.getSelection();
-    }
-
-
-    public boolean getUpdateAllButtonSelection()
-    {
-		return _updateAllButton.getSelection();
-    }
-    public boolean getUpdateConfigureInButtonSelection()
-	{
-   		return _updateConfigureInButton.getSelection();
-	}
-	public boolean getUpdateMakefileAmButtonSelection()
-	{
-   		return _updateMakefileAmButton.getSelection();
-	}
-	public boolean getGlobalSettingsSelection()
-    {
-		return globalSettingsButton.getSelection();
-    }*/
     
     // sets
     
@@ -272,35 +230,5 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     {
 		_optimizedButton.setSelection(flag);
     }
- /*  	public void setCButtonSelection(boolean flag)
-    {
-		 _cButton.setSelection(flag);
-    }
-    public void setCppButtonSelection(boolean flag)
-    {
-		 _cppButton.setSelection(flag);
-    }
-    */
- /*   public void setShowCreateDialogSelection(boolean flag)
-    {
-		_showCreateDialogtButton.setSelection(flag);
-    }
-
-    public void setUpdateAllButtonSelection(boolean flag)
-    {
-		_updateAllButton.setSelection(flag);
-    }
-    public void setUpdateConfigureInButtonSelection(boolean flag)
-	{
-   		_updateConfigureInButton.setSelection(flag);
-	}
-	public void setUpdateMakefileAmButtonSelection(boolean flag)
-	{
-   		_updateMakefileAmButton.setSelection(flag);
-	}
-	public void setGlobalSettingsSelection(boolean flag)
-    {
-		globalSettingsButton.setSelection(flag);
-    }*/
     
 }
