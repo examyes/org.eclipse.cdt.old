@@ -80,7 +80,6 @@ public class CustomMessageDialog extends MessageDialog{
 			this.extraButtonLabels = extraButtonLabels;
 		this.actionListener = actionListener;
 		this.preferenceKey="";
-		//this.propertyKey = propertyKey;
 		this.customButtonType = buttonType;
 	}
 	
@@ -224,7 +223,7 @@ public class CustomMessageDialog extends MessageDialog{
     	ArrayList propertyList = new ArrayList();
     	ArrayList global = new ArrayList();
     	
-    	// check wethere to use preference seting- global - or to use the properties settings
+    	// check wethere to use preference settings- global - or to use the properties settings
     	global = CppPlugin.readProperty(project,globalSettingKey);
     	if(!global.isEmpty())
     	{
@@ -232,11 +231,18 @@ public class CustomMessageDialog extends MessageDialog{
     		if(global.get(0).equals("Yes"))
     		{
     			preferenceList = CppPlugin.readProperty(preferenceKey);
-    			String preference = (String)preferenceList.get(0);
-				if (preference.equals("Yes"))
-					return true;
-				else
-					return false;
+    			if(!preferenceList.isEmpty())
+    			{
+    				String preference = (String)preferenceList.get(0);
+					if (preference.equals("Yes"))
+						return true;
+					else
+						return false;
+    			}
+    			else
+    			{
+    				return true;
+    			}
     		}
     		else
     		{

@@ -77,24 +77,26 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 	{
 		CppPlugin plugin      = CppPlugin.getDefault();
 		// global seting is checked
+		ArrayList propertyList;
 		ArrayList globalSettingsKeyProp = plugin.readProperty(project,globalSettingKey); 
-		if(globalSettingsKeyProp.isEmpty())
+		if(globalSettingsKeyProp.isEmpty()||globalSettingsKeyProp.get(0).equals("Yes"))
 		{
 			// by default use global settings
+
 			ArrayList list = new ArrayList();
 			list.add("Yes");
 			plugin.writeProperty(project,globalSettingKey,list);
 			_autoconfControl.setGlobalSettingsSelection(true);
 			_autoconfControl.enableLocalActions(false);
 			
-		}
+	//	}
 		// if global setting is not empty
 		// check its value - if yes then use the global settings
-		else
-		{
-			ArrayList propertyList;
-			if(globalSettingsKeyProp.get(0).equals("Yes"))
-			{
+	//	else
+//		{
+			
+//			if(globalSettingsKeyProp.get(0).equals("Yes"))
+//			{
 				_autoconfControl.setGlobalSettingsSelection(true);
 				_autoconfControl.enableLocalActions(false);
 				
@@ -175,46 +177,12 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 				// 6 - update Makefile.am dialog
 				applyUpdateMakefileAmDialogSettings(propertyList);			
 			}
-		}
+	//	}
 		
 	}
 	protected void performDefaults()
 	{
-
-		CppPlugin plugin      = CppPlugin.getDefault();
-		ArrayList globalsettings = plugin.readProperty(project,globalSettingKey);
-		if(!globalsettings.isEmpty())
-		{
-			if(globalsettings.get(0).equals("Yes"))
-			{
-				_autoconfControl.setGlobalSettingsSelection(true);
-				_autoconfControl.enableLocalActions(false);
-			}
-			else
-			{
-				ArrayList showDialogConfigure = plugin.readProperty(configureDialogKey);
-				if (showDialogConfigure.isEmpty())
-				{
-					showDialogConfigure.add("Yes");
-					_autoconfControl.setShowConfigureDialogSelection(true);
-					plugin.writeProperty(configureDialogKey,showDialogConfigure);
-				}
-				else
-				{
-					String preference = (String)showDialogConfigure.get(0);
-					if (preference.equals("Yes"))
-					{
-						_autoconfControl.setShowConfigureDialogSelection(true);
-					}
-					else
-					{
-						_autoconfControl.setShowConfigureDialogSelection(false);
-					}
-				}
-
-			}
-		}
-
+		performInit();
 	}
 	
 	protected void performApply()
@@ -242,27 +210,39 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 			plugin.writeProperty(project,globalSettingKey,list);
 			
 			// then set the local property accordingly
-		
 			// show dialog when configure
-			ArrayList showConfigureDialog = new ArrayList();
-			if (_autoconfControl.getShowConfigureDialogSelection())
-			{
-				showConfigureDialog.add("Yes");		
-			}
-			else
-			{
-				showConfigureDialog.add("No");		
-			}	
-			plugin.writeProperty(project,configureDialogKey, showConfigureDialog);
-		
+			plugin.writeProperty(project,configureDialogKey,getProjectProperty(_autoconfControl.getShowConfigureDialogSelection()));
+			// setting for show create configure dialog property
+			plugin.writeProperty(project,createDialogKey,getProjectProperty(_autoconfControl.getShowCreateDialogSelection()));
+			// setting for show run configure dialog property
+			plugin.writeProperty(project,runDialogKey,getProjectProperty(_autoconfControl.getShowRunDialogSelection()));
+			// setting for show update All dialog property
+			plugin.writeProperty(project,updateAllDialogKey,getProjectProperty(_autoconfControl.getUpdateAllButtonSelection()));
+			// setting for show update configure.in dialog property
+			plugin.writeProperty(project,updateConfigureInKey,getProjectProperty(_autoconfControl.getUpdateConfigureInButtonSelection()));
+			// setting for show update Makefile.am dialog property
+			plugin.writeProperty(project,updateMakefileAmKey,getProjectProperty(_autoconfControl.getUpdateMakefileAmButtonSelection()));		
 		}	
 		return true;
 	}
+	
+	private ArrayList getProjectProperty(boolean selection)
+   	{
+		ArrayList list = new ArrayList();
+		if (selection)
+			list.add("Yes");		
+		else
+			list.add("No");		
+   		return list;
+   	}
+	
+	
 	
 	private IProject getProject()
 	{
 		return (IProject)getElement();
 	}
+    
     public void applyConfigureDialogSettings(ArrayList list)
     {
     	CppPlugin plugin      = CppPlugin.getDefault();
@@ -420,6 +400,7 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 
     public void widgetSelected(SelectionEvent e)
     {
+		ArrayList list;
 		// disable the dialog
 		Button button = (Button)e.widget;
 		CppPlugin plugin      = CppPlugin.getDefault();
@@ -435,6 +416,52 @@ public class AutoconfSettingsPropertyPage extends PropertyPage implements Select
 					_autoconfControl.setShowConfigureDialogSelection(true);
 				else
 					_autoconfControl.setShowConfigureDialogSelection(false);
+			}
+				
+			// 2- create configure dialog button
+			list = plugin.readProperty(createDialogKey);
+			if(!list.isEmpty())
+			{
+				if(list.get(0).equals("Yes"))
+					_autoconfControl.setShowCreateDialogSelection(true);
+				else
+					_autoconfControl.setShowCreateDialogSelection(false);
+			}
+			// 3- run configure dialog button
+			list = plugin.readProperty(runDialogKey);
+			if(!list.isEmpty())
+			{
+				if(list.get(0).equals("Yes"))
+					_autoconfControl.setShowRunDialogSelection(true);
+				else
+					_autoconfControl.setShowRunDialogSelection(false);
+			}
+			// 4- update all dialog button
+			list = plugin.readProperty(updateAllDialogKey);
+			if(!list.isEmpty())
+			{
+				if(list.get(0).equals("Yes"))
+					_autoconfControl.setUpdateAllButtonSelection(true);
+				else
+					_autoconfControl.setUpdateAllButtonSelection(false);
+			}
+			// 5- update configure.in dialog button
+			list = plugin.readProperty(updateConfigureInKey);
+			if(!list.isEmpty())
+			{
+				if(list.get(0).equals("Yes"))
+					_autoconfControl.setUpdateConfigureInButtonSelection(true);
+				else
+					_autoconfControl.setUpdateConfigureInButtonSelection(false);
+			}
+			// 6- update makefile.am dialog button
+			list = plugin.readProperty(updateMakefileAmKey);
+			if(!list.isEmpty())
+			{
+				if(list.get(0).equals("Yes"))
+					_autoconfControl.setUpdateMakefileAmButtonSelection(true);
+				else
+					_autoconfControl.setUpdateMakefileAmButtonSelection(false);
 			}
 		}
 		else

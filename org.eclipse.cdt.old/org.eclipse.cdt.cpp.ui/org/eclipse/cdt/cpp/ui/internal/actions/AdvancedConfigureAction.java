@@ -50,6 +50,10 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 	String updateMakefileAmKey = "Show_Update_MakefileAm_Dialog";
 	String updateConfigureInKey = "Show_Update_ConfigureIn_Dialog";
 	
+	
+	CppPlugin _plugin = CppPlugin.getDefault();
+	IProject project;
+	
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -92,6 +96,8 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 		boolean noConfigfilesExist = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
+		ModelInterface pluginApi = _plugin.getModelInterface();
+		project = (IProject)pluginApi.findResource(_subject);
 		
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
 		{
@@ -110,7 +116,8 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 										0,
 										extraLabels,
 										this,
-										updateAllDialogKey);
+										updateAllDialogKey,
+										project);
 					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
@@ -131,7 +138,8 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 										0,
 										extraLabels,
 										this,
-										updateAllDialogKey);
+										updateAllDialogKey,
+										project);
 					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
@@ -157,7 +165,8 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 										0,
 										extraLabels,
 										this,
-										updateMakefileAmKey);
+										updateMakefileAmKey,
+										project);
 					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
@@ -182,7 +191,8 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 										0,
 										extraLabels,
 										this,
-										updateConfigureInKey);
+										updateConfigureInKey,
+										project);
 					int result = dialog.open();
 					if(result!=-1)
 						execute = result ==0;
@@ -287,11 +297,11 @@ public class AdvancedConfigureAction extends CustomAction implements SelectionLi
 				list.add("Yes");
 			}
 			if(_command.getValue().equals("UPDATE_AUTOCONF_FILES"))
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(updateAllDialogKey,list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(project,updateAllDialogKey,list);
 			if(_command.getValue().equals("UPDATE_CONFIGURE_IN"))
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(updateConfigureInKey,list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(project,updateConfigureInKey,list);
 			if(_command.getValue().equals("UPDATE_MAKEFILE_AM"))
-				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(updateMakefileAmKey,list);
+				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(project,updateMakefileAmKey,list);
 
 		}
     }
