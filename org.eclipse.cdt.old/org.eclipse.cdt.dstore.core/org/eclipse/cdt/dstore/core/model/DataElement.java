@@ -1734,18 +1734,20 @@ public final class DataElement implements Serializable, IDataElement
 				att = null;
 			    }
 		    }		
+
+		_attributes = null;
 	    }
 
 	if (_nestedData != null)
 	    {
 		_nestedData.clear();
 	    }
-
+	
 	_parent = null;
 	_descriptor = null;	
 	_referencedObject = null;
-     
-    _propertySource = null;
+	
+	_propertySource = null;
 	_buffer = null;
     }
 

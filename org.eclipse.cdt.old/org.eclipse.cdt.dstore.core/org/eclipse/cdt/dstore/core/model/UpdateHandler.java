@@ -45,25 +45,25 @@ public abstract class UpdateHandler extends Handler
 	if ((depth > 0) && (object != null) && object.getNestedSize() > 0)
 	    {
 		ArrayList deletedList = _dataStore.findDeleted(object);
-
+		
 		for (int i = 0; i < deletedList.size(); i++)
 		    {
 			DataElement child = (DataElement)object.get(i);	
-			if (child != null)
-			{
+			if (child != null && child.isDeleted())
+			    {
 				DataElement parent = child.getParent();
 				child.clear();						
 				if (parent != null)
 				    {
 					parent.removeNestedData(child);
 				    }				
+			    }
 		    }
+		
+		deletedList.clear();
 	    }
-	    
-	    deletedList.clear();
-	   }
     }
-
+    
   public void update(ArrayList objects)
       {
         for (int i = 0; i < objects.size(); i++)

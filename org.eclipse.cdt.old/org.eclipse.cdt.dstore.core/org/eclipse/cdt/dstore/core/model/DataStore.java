@@ -2214,24 +2214,23 @@ public final class DataStore
 	    public ArrayList findDeleted(DataElement root)
 	    {	       
 	        ArrayList results = new ArrayList();
-		results = findDeleted(root, results, new String(""));
+		results = findDeleted(root, results);
 		return results;
 	    }
 
       
-	    private ArrayList findDeleted(DataElement root, ArrayList results, String buffer)
-	    {	   
+	    private synchronized ArrayList findDeleted(DataElement root, ArrayList results)
+	    {	 
 		synchronized(root)
-		    {
-			if (root != null)
+		{
+			if (root != null && root.getDataStore() == this)
 			    {		     	
-				trace(buffer + "find deleted " + root.getName());
 				if (results.contains(root))
 				    {
 					return results;
 				    }
 
-				if (root.isDeleted())
+				if (root != null && root.isDeleted())
 				    {
 					results.add(root);
 				    }
@@ -2243,15 +2242,20 @@ public final class DataStore
 					for (int i = 0; i < searchList.size(); i++)
 					    {
 						DataElement child = (DataElement)searchList.get(i);
-						
-						if (child.isDeleted())
-						    {					    
-							results.add(child);				
-						    }
-						
-						if (!child.isReference())
-						    {							
-							results = findDeleted(child, results, buffer + " ");	
+						if (child != null && child.getDataStore() == this)
+						    {
+							synchronized(child)
+							    {
+								if (child.isDeleted() && !results.contains(child))
+								    {					   
+									
+									results.add(child);
+									if (!child.isReference())
+									    {
+										results = findDeleted(child, results);	
+									    }
+								    }
+							    }
 						    }
 					    }
 				    }
@@ -2300,7 +2304,7 @@ public final class DataStore
 		}
 
 	    // abstracted relationships
-	    ArrayList baseDescriptors = descriptor.getAssociated(getLocalizedString("model.abstracted_by"));
+	    ArrayList baseDescriptors = descriptor.getAssociated(getAbstractedByRelation());
 	    for (int j = 0; j < baseDescriptors.size(); j++)
 		{
 
@@ -2322,7 +2326,7 @@ public final class DataStore
 	    {
 		result.add(containsD);
 	    }
-
+*/
 	DataElement parentD   = findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.parent"));	
 	if (!result.contains(parentD))
 	    {
@@ -2334,7 +2338,7 @@ public final class DataStore
 	    {
 		result.add(descriptorD);
 	    }
-*/
+
 
 	return result;
     }
@@ -3124,7 +3128,7 @@ public final class DataStore
 		  for (int i = 0; i < toDelete.getNestedSize(); i++)
 		      {
 			  DataElement subDelete = toDelete.get(i);
-			  if (subDelete != null && !subDelete.isDeleted())
+			  if (subDelete != null && subDelete.getDataStore() == this && !subDelete.isDeleted())
 			      {
 				  deleteObjectHelper(toDelete, subDelete, depth);
 			      }

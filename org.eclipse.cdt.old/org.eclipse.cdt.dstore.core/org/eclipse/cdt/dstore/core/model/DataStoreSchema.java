@@ -94,10 +94,10 @@ public class DataStoreSchema
 	_contents.setDepth(100);
 	
 	DataElement descriptorForD  = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.descriptor_for"));
-	descriptorForD.setDepth(0);
+	descriptorForD.setDepth(1);
 	
 	DataElement parentD       = _dataStore.createRelationDescriptor(schemaRoot, getLocalizedString("model.parent"));	
-	parentD.setDepth(0);
+	parentD.setDepth(1);
 
 	_attributes   = _dataStore.createRelationDescriptor(schemaRoot, "attributes");
 	_attributes.setDepth(0);
