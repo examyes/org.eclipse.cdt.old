@@ -564,7 +564,11 @@ public class FileSystemMiner extends Miner
 			DataElement dateObj = _dataStore.createObject(status, _dateDescriptor, "-1");
 			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
 		    }
+
+		_dataStore.refresh(theFile);
+		_dataStore.refresh(status);
 	    }
+	
 
 	return status;
     }
@@ -575,7 +579,11 @@ public class FileSystemMiner extends Miner
 	if (file.exists())
 	    {
 		long date = new Long(newDate.getName()).longValue();
-		file.setLastModified(date);
+		System.out.println("date = " + date);
+		if (date > 0)
+		    {
+			file.setLastModified(date);
+		    }
 	    }
 	
 	_dataStore.createReference(theFile, newDate, _modifiedAtDescriptor);

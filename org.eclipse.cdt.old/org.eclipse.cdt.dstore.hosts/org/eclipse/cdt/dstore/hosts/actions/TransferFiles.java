@@ -109,16 +109,6 @@ public class TransferFiles extends Thread
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
 	    {
-		String task = "Creating " + newSourceStr + "...";
-		if (_listener != null)
-		    {
-			_listener.getShell().getDisplay().asyncExec(new Notify(task)); 
-		    }
-		else if (_pm != null)
-		    {
-			_pm.subTask(task);
-		    }
-
 
 		if (type.equals("file"))
 		    {

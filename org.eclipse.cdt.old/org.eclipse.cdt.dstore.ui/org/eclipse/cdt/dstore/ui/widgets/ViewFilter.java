@@ -42,7 +42,11 @@ public class ViewFilter extends ViewerFilter
 
   public ViewFilter(ViewFilter oTemplate)
       {
+	  super();
 	_type = oTemplate.getType();
+	_notCache = new ArrayList();
+	_isCache = new ArrayList();
+	_depth = 5;
       }
 
     public void setEnableContents(boolean flag)
@@ -88,7 +92,7 @@ public class ViewFilter extends ViewerFilter
 			if (!result)
 			    {
 				DataElement notDescriptor = dataElement.getDescriptor();
-				//addTo(_notCache, notDescriptor);
+				addTo(_notCache, notDescriptor);
 			    }
 
 			return result;
@@ -181,8 +185,7 @@ public class ViewFilter extends ViewerFilter
       if (_type != type)
 	  {
 	      _type = type;
-	      _notCache.clear();
-	      _isCache.clear();
+	      reset();
 	  }
   }
     

@@ -57,7 +57,7 @@ public class DataStoreSchema
 	// misc
         DataElement allD      = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.all"));
 	allD.setDepth(50);
-
+ 
 	DataElement invokeD   = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.invocation"));	
 	DataElement patternD  = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.pattern"));	
 

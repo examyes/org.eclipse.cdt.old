@@ -48,7 +48,7 @@ public class ImportAction extends Action
     String fileName = fdlg.open();
     if (fileName != null)
       {
-	System.out.println("opening " + fileName);
+	System.out.println("IM: opening " + fileName);
  	dataStore.load(_object, fileName);
       }
   }
