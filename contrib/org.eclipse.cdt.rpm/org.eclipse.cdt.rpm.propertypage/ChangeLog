@@ -1,0 +1,4 @@
+2004-12-10  Rick Moseley  <rmoseley@redhat.com>
+
+	* .classpath: original (bugzilla 80657)
+	* .project: original (bugzilla 80657)
