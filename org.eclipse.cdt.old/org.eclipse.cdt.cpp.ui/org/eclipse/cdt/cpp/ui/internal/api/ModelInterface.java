@@ -1354,6 +1354,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public synchronized void search(DataElement subject, String pattern, ArrayList types, ArrayList relations,
 				  boolean ignoreCase, boolean regex)
   {      
+  	  if (subject == null)
+  	  {
+  	  	return;
+  	  }
+  	  
       DataStore dataStore = subject.getDataStore();     
    
       DataElement searchDescriptor = null;
