@@ -84,7 +84,7 @@
 	<target name="zip.distribution" depends="init">
 		<delete dir="${feature.temp.folder}"/>
 		<mkdir dir="${feature.temp.folder}"/>
-		<unzip src="../org.eclipse.cdt-feature/eclipse-CDT${feature.version.suffix}.bin.dist.zip" dest="${feature.temp.folder}"/>
+		<unzip src="../org.eclipse.cdt-feature/eclipse-cdt${feature.version.suffix}.bin.dist.zip" dest="${feature.temp.folder}"/>
 		
 		<antcall target="gather.bin.parts">
 			<param name="feature.base" value="${feature.temp.folder}"/>
