@@ -55,6 +55,7 @@ public class PathsPropertyPage extends PropertyPage
 		_control.setIncludePath(includePath);
 		_control.setExternalSourcePath(externalSourcePath);
 		_control.setLibraries(libraries);
+		_control.setContext(project);
 	
 		return _control;
 	    }

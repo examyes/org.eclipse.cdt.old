@@ -14,6 +14,8 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.graphics.Image;
 
+import org.eclipse.core.resources.*;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import java.util.*;
 
@@ -60,6 +62,13 @@ public class PathWorkbook extends Composite
 	item3.setText("External Source Path");
 	item3.setData(_externalSourcePage);
 	item3.setControl(_externalSourcePage.getControl());	
+    }
+
+    public void setContext(IProject project)
+    {
+	_includePathPage.setContext(project);
+	_externalSourcePage.setContext(project);
+	_libraryPage.setContext(project);
     }
 
     public void setRemote(boolean isRemote)

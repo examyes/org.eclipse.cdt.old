@@ -37,6 +37,11 @@ public class LibraryWorkbookPage
 
     }
 
+    public void setContext(IProject project)
+    {
+	_pathControl.setContext(project);
+    }
+
     public void setRemote(boolean isRemote)
     {
 	_pathControl.setRemote(isRemote);	
