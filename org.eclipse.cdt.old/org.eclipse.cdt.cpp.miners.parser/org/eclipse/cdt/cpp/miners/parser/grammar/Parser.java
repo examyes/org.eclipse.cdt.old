@@ -5239,7 +5239,7 @@ public final class Parser implements ParserConstants {
    StringBuffer buf = new StringBuffer(t.beginLine + ":" + body);
    //System.out.println("SETTING BUFFER=>" + buf);
    theObject.setBuffer(buf);
-   _theParseWorker.parseObject(theObject);
+   _theParseWorker.parseObject(theObject,null);
   }
   symtab.closeScope();
   }

@@ -139,7 +139,7 @@ public class CodeAssist
   }
   
   //baseObj.expandChildren();
-  _parseManager.parseObject(baseObj);
+  _parseManager.parseObject(baseObj,null);
   
   ArrayList tempresults = baseObj.getAssociated("contents");
   for (int i=tempresults.size()-1; i>=0; i--)
