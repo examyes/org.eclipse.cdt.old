@@ -867,15 +867,15 @@ public class DataElementTableViewer extends TableViewer
 			int totalWidth = clientA.width;
 			int averageWidth = totalWidth / columns.length;
 			int firstWidth = averageWidth;
-			if (averageWidth < 200)
+			if (averageWidth < 150)
 			    {
-				int difference = 200 - averageWidth;
-				firstWidth = 200;
+				int difference = 150 - averageWidth;
+				firstWidth = 150;
 				averageWidth -= difference / columns.length;
 
-				if (averageWidth < 50)
+				if (averageWidth < 70)
 				    {
-					averageWidth = 50;
+					averageWidth = 70;
 				    }
 			    }
 			
@@ -887,7 +887,15 @@ public class DataElementTableViewer extends TableViewer
 				    }
 				else
 				    {
-					columns[i].setWidth(averageWidth);
+					try
+					    {
+						columns[i].setWidth(averageWidth);
+					    }
+					catch (Exception e)
+					    {
+						System.out.println("Column Width = " + averageWidth);
+						e.printStackTrace();
+					    }
 				    }
 			    }
 
