@@ -61,6 +61,7 @@ public class ParsedSourceViewPart extends ProjectViewPart
 	  _viewer.setInput(parsedSource);	
 	  _viewer.selectRelationship("contents");
 	  setTitle(projectParseInformation.getName() + " Parsed-Files");   
+
       }
   
  } 	

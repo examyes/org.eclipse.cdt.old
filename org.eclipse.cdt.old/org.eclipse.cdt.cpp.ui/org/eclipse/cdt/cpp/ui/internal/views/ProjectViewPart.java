@@ -58,10 +58,10 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 		    {
 			doInput(project);
 		    }
-		else if (!project.isOpen())
+		else if (!project.isOpen() && _input == project)
 		    {
 			doClear();
-	      }
+		    }
 	    } 
     }  
  public void initDataElementInput(DataElement theProject)
@@ -111,6 +111,7 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
   }
     
  public abstract void doSpecificInput(DataElement projectParseInformation);
+
     public void projectChanged(CppProjectEvent event)
     {
 	int type = event.getType();
@@ -131,8 +132,9 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
 		
 	    case CppProjectEvent.COMMAND:
 		{
-		    if (event.getStatus() == CppProjectEvent.START || 
-			event.getStatus() == CppProjectEvent.DONE)
+		    if (event.getStatus() == CppProjectEvent.START 
+			//***|| event.getStatus() == CppProjectEvent.DONE
+			)
 			{
 			    doInput(project);
 			}

@@ -157,8 +157,6 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			    }
 		    }
 
-		
-		
 		// refresh view
 		api.openProject(project, getShell());	       
 		openPerspective(project);
