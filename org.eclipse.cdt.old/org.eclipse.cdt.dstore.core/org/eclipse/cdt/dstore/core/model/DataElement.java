@@ -1740,7 +1740,6 @@ public final class DataElement implements Serializable, IDataElement
 			    }
 		    }		
 
-		_attributes = null;
 	    }
 
 	if (_nestedData != null)
@@ -1763,14 +1762,17 @@ public final class DataElement implements Serializable, IDataElement
      */
     protected synchronized void delete()
     {
-	// set delete attribute
-	setAttribute(DE.A_SOURCE, "deleted");
-	setAttribute(DE.A_SOURCE_LOCATION,   "deleted");
-	setAttribute(DE.A_VALUE,  "deleted");
-
-	_isUpdated = false;	 
-	_isExpanded = true;
-	_buffer = null;
+	if (!isDeleted())
+	    {
+		// set delete attribute
+		setAttribute(DE.A_SOURCE, "deleted");
+		setAttribute(DE.A_SOURCE_LOCATION,   "deleted");
+		setAttribute(DE.A_VALUE,  "deleted");
+		
+		_isUpdated = false;	 
+		_isExpanded = true;
+		_buffer = null;
+	    }
     }
 
 
