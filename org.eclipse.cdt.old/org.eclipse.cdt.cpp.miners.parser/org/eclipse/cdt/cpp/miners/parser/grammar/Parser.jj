@@ -791,7 +791,10 @@ void function_definition(String theTypes) :
       String [] names = parseDeclaration(theTypes);
       symtab.addFunctionReturnTypes(names[1]);
       name = names[0] + name;
-      DataElement theFunction = symtab.addObject(ParserSchema.dFunction, names[0], name, getToken(0).beginLine, true);
+      String funcType = ParserSchema.dFunction;
+      if (names[0].equals("main"))
+       funcType = ParserSchema.dMainFunction;
+      DataElement theFunction = symtab.addObject(funcType, names[0], name, getToken(0).beginLine, true);
      }
      (
          LOOKAHEAD(2) ";" {symtab.closeScope();} 

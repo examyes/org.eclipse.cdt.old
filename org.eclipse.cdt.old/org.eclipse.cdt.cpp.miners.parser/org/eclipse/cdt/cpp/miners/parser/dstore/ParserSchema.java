@@ -44,6 +44,7 @@ public class ParserSchema
  public static String Statement          = getLocalizedString("parser.Statement");
  public static String Constructor        = getLocalizedString("parser.Constructor");
  public static String Destructor         = getLocalizedString("parser.Destructor");
+ public static String MainFunction       = getLocalizedString("parser.MainFunction");
  public static String Function           = getLocalizedString("parser.Function");
  public static String Class              = getLocalizedString("parser.Class");
  public static String Struct             = getLocalizedString("parser.Struct");
@@ -101,6 +102,7 @@ public class ParserSchema
  public static DataElement dStatement;
  public static DataElement dConstructor;
  public static DataElement dDestructor;
+ public static DataElement dMainFunction;
  public static DataElement dFunction;
  public static DataElement dClass;
  public static DataElement dStruct;
@@ -186,6 +188,7 @@ public class ParserSchema
   dMacro          = createDerivativeDescriptor(dUsableCppObject,      Macro);
   dConstructor    = createDerivativeDescriptor(dFunctions,      Constructor);
   dDestructor     = createDerivativeDescriptor(dFunctions,      Destructor);
+  dMainFunction   = createDerivativeDescriptor(dFunctions,      MainFunction);
   dFunction       = createDerivativeDescriptor(dFunctions,      Function);
   dClass          = createDerivativeDescriptor(dClassesStructs, Class);
   dStruct         = createDerivativeDescriptor(dClassesStructs, Struct);
