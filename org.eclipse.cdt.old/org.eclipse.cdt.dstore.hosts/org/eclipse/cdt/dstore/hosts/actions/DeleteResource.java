@@ -32,6 +32,12 @@ public class DeleteResource extends CustomAction
     public DeleteResource(DataElement subject, String label, DataElement command, DataStore dataStore)
     {	
 	super(subject, label, command, dataStore);
+	
+	String type = subject.getType();
+	if (!type.equals("directory") && !type.equals("file"))
+	    {
+		setEnabled(false);
+	    }
     }
 
     public void run()
@@ -49,7 +55,8 @@ public class DeleteResource extends CustomAction
 
 	if (deleteResource)
 	    {
-		DataElement cmdDescriptor = _dataStore.localDescriptorQuery(_subject.getDescriptor(), dCmdStr, 4);
+		DataElement cmdDescriptor = _dataStore.localDescriptorQuery(_subject.getDescriptor(), 
+									    dCmdStr, 4);
 		if (cmdDescriptor != null)
 		    {
 			_dataStore.command(cmdDescriptor, _subject);

@@ -159,6 +159,11 @@ public class HostsPlugin extends AbstractUIPlugin
 	    
 	    return newAction;
 	}
+
+	public String getImageString(String name)
+	{
+	    return null;
+	}
     }
     
     public class DialogActionLoader extends HostsActionLoader
