@@ -499,7 +499,11 @@ public class GdbThreadComponent extends ThreadComponent
          partID = cm.getPartID(moduleID(i),fileName(i));
          if (partID <= 0)
          {
-         	partID = 1;
+         	cm.checkPart(moduleID(i), fileName(i));
+         	partID = cm.getPartID(moduleID(i),fileName(i));
+         	
+         	if (partID <= 0)
+	         	partID = 1;
          }
 
          // NOTE: We must call setStackEntryViewInfo for each supported view
