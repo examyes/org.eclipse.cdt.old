@@ -181,12 +181,12 @@ public class DataElementSorter extends ViewerSorter
 
     private int compareIntegers(String n1, String n2)
     {
-	Integer int1 = null;
-	Integer int2 = null;
+	Long int1 = null;
+	Long int2 = null;
 	try
 	    {
-		int1 = new Integer(n1);
-		int2 = new Integer(n2);
+		int1 = new Long(n1);
+		int2 = new Long(n2);
 		return int1.compareTo(int2); 
 	    }
 	catch (NumberFormatException e)
