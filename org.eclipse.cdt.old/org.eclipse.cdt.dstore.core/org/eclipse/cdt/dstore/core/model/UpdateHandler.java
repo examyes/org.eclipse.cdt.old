@@ -59,7 +59,8 @@ public abstract class UpdateHandler extends Handler
 					 parent.removeNestedData(child);
 				     }
 
-				 _dataStore.addToRecycled(child);
+				 //_dataStore.addToRecycled(child);
+				 child = null;
 		    }
 	    }
 	    
