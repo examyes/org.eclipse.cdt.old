@@ -268,6 +268,10 @@ public class GdbDebugSession extends DebugSession
                   Gdb.traceLogger.evt(1,"$$$$$$$$$$$$$$$$ GdbDebugSession.checkResponseForException Termination="+str +"\n"  );
               _whyExceptionMsg = str; 
            }
+           else if(str.startsWith("Program exited normally"))
+           {
+              _whyStop = WS_PgmQuit;
+           }
            else if(str.startsWith("The program is not being run"))
            {
               _whyStop = WS_PgmQuit;
