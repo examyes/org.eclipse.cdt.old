@@ -1037,7 +1037,7 @@ void member_declaration() :
   | "export" "template" "<" template_declaration()
   | "template" "<" template_declaration()
   | ";"
-  | "~" function_definition("")
+  | LOOKAHEAD("~") function_definition("")
   | theTypes = declaration_specifiers()
     { 
      if (theTypes == null)
