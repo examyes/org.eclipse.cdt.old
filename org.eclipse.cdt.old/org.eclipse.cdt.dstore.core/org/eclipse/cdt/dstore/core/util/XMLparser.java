@@ -66,7 +66,7 @@ public class XMLparser
 	while (written < size)
 	    {			
 		try
-		    {
+		    { 
 			int available = reader.available();
 			int read = reader.read(buffer, written, size - written);				  
 			written += read;
@@ -79,11 +79,11 @@ public class XMLparser
 
 	if (_tagType.equals("File.Append"))
 	    {
-		_dataStore.appendToFile(path, buffer);
+		_dataStore.appendToFile(path, buffer, size);
 	    }
 	else
 	    {
-		_dataStore.saveFile(path, buffer);
+		_dataStore.saveFile(path, buffer, size);
 	    }
     }
 
