@@ -1687,7 +1687,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					}
 				    else if ((flags & IResourceDelta.OPEN) != 0)
 					{
-					    openProjects();
+					    resource = change.getResource();
+					    if (resource instanceof IProject)
+						openProject((IProject)resource);
 					}
 				}
 			}
