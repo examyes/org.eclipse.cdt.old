@@ -10,6 +10,50 @@
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
 <b><font size=+2>Maintaining
 Existing Project Configuration Files</font></b>
+<p><font size=+1>When one download open source projects or importing projects
+to the workspace that are managed by autoconf and automake tools, one scenario
+is usually to test the package and run&nbsp; configure. below is the steps
+need to run an existing configure</font>
+<ol>
+<li>
+<font size=+1>From the C/C++ Projects view, right mouse click on the project
+directory</font></li>
+
+<li>
+<font size=+1>Select&nbsp; Autoconf -> Run Configure - this action will
+generate and update all the configuration files and generate configure
+for you</font></li>
+</ol>
+
+<ul>
+<li>
+<font size=+1>Now if you wish to make updates and take owner ship of the
+package, here what you should be aware of</font></li>
+</ul>
+<font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The C/C++ IDE
+can only do an update to certain Makefile.am templates and the configure.in
+template as well. For example an automatic update will occur if each makefile
+has one designated target per file. Also, the updated Targets are either
+Programs, Static Libraries Shared Libraries.&nbsp; Basic variables for
+each target will get updated for this release. Later, more and more update
+will be performed. For example, the _Program target will have its _SOURCES,_LDADD,
+SUBDIRS and EXTRA_DIST variables updates. For Static Libraries targets,
+the C/C++ tool will update LIBRARIES,&nbsp; _a_SOURCES,&nbsp; SUBDIRS and
+EXTRA_DIST will be updates. For shared libraries</font>
+<br>&nbsp;
+<br>&nbsp;
+<p><b><font size=+3>Updating Configuration files</font></b>
+<p><font size=+1>I</font>
+<br><b><font size=+3></font></b>&nbsp;<b><font size=+3></font></b>
+<p><b><font size=+3>Running Autoconf Standard targets</font></b>
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
 <br>&nbsp;
 <br>&nbsp;
 <br>&nbsp;
