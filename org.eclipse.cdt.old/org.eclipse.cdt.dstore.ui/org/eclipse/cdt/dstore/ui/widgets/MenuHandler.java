@@ -175,6 +175,8 @@ public class MenuHandler
 
 	    ArrayList list = new ArrayList();
 	    list.add(selected);
+
+
 	    fillContextMenuHelper(menu, list, descriptor);
 	  }
 	
@@ -193,7 +195,9 @@ public class MenuHandler
 		  for (int i = 0; i < subDescriptors.size(); i++)
 		  { 
 		      DataElement subDescriptor = (DataElement)subDescriptors.get(i);
-		      String type = subDescriptor.getType();
+
+		      String type = subDescriptor.getType();		      
+
 		      if (type.equals(DE.T_COMMAND_DESCRIPTOR) && (subDescriptor.depth() > 0))
 			  {
 			      String name = subDescriptor.getName();

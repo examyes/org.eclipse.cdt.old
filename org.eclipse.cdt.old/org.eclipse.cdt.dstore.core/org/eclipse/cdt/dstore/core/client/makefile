@@ -5,14 +5,11 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: ClientAttributes.class ClientReceiver.class ConnectionStatus.class ClientUpdateHandler.class ClientCommandHandler.class ClientConnection.class
+all: ClientAttributes.class ConnectionStatus.class ClientUpdateHandler.class ClientConnection.class ClientReceiver.class ClientCommandHandler.class
 
 # Class Targets
 ClientAttributes.class: ClientAttributes.java
 	javac ClientAttributes.java
-
-ClientReceiver.class: ClientReceiver.java
-	javac ClientReceiver.java
 
 ConnectionStatus.class: ConnectionStatus.java
 	javac ConnectionStatus.java
@@ -20,11 +17,14 @@ ConnectionStatus.class: ConnectionStatus.java
 ClientUpdateHandler.class: ClientUpdateHandler.java
 	javac ClientUpdateHandler.java
 
-ClientCommandHandler.class: ClientCommandHandler.java
-	javac ClientCommandHandler.java
-
 ClientConnection.class: ClientConnection.java
 	javac ClientConnection.java
+
+ClientReceiver.class: ClientReceiver.java
+	javac ClientReceiver.java
+
+ClientCommandHandler.class: ClientCommandHandler.java
+	javac ClientCommandHandler.java
 
 
 

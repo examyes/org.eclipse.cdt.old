@@ -5,12 +5,9 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: DE.class DataStoreAttributes.class Handler.class DataStore.class UpdateHandler.class DataElement.class CommandHandler.class
+all: DataStoreAttributes.class Handler.class DataStore.class DE.class DataElement.class UpdateHandler.class CommandHandler.class
 
 # Class Targets
-DE.class: DE.java
-	javac DE.java
-
 DataStoreAttributes.class: DataStoreAttributes.java
 	javac DataStoreAttributes.java
 
@@ -20,11 +17,14 @@ Handler.class: Handler.java
 DataStore.class: DataStore.java
 	javac DataStore.java
 
-UpdateHandler.class: UpdateHandler.java
-	javac UpdateHandler.java
+DE.class: DE.java
+	javac DE.java
 
 DataElement.class: DataElement.java
 	javac DataElement.java
+
+UpdateHandler.class: UpdateHandler.java
+	javac UpdateHandler.java
 
 CommandHandler.class: CommandHandler.java
 	javac CommandHandler.java

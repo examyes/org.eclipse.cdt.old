@@ -5,14 +5,14 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: Miner.class MinerThread.class
+all: MinerThread.class Miner.class
 
 # Class Targets
-Miner.class: Miner.java
-	javac Miner.java
-
 MinerThread.class: MinerThread.java
 	javac MinerThread.java
+
+Miner.class: Miner.java
+	javac Miner.java
 
 
 

@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: ILoader.class Loader.class ServerUpdateHandler.class MinerLoader.class ServerAttributes.class ConnectionEstablisher.class ServerReceiver.class ServerReturnCodes.class ServerLauncher.class Server.class ServerCommandHandler.class
+all: ILoader.class Loader.class MinerLoader.class ServerAttributes.class ConnectionEstablisher.class ServerReceiver.class ServerReturnCodes.class ServerLauncher.class Server.class ServerCommandHandler.class ServerUpdateHandler.class
 
 # Class Targets
 ILoader.class: ILoader.java
@@ -13,9 +13,6 @@ ILoader.class: ILoader.java
 
 Loader.class: Loader.java
 	javac Loader.java
-
-ServerUpdateHandler.class: ServerUpdateHandler.java
-	javac ServerUpdateHandler.java
 
 MinerLoader.class: MinerLoader.java
 	javac MinerLoader.java
@@ -40,6 +37,9 @@ Server.class: Server.java
 
 ServerCommandHandler.class: ServerCommandHandler.java
 	javac ServerCommandHandler.java
+
+ServerUpdateHandler.class: ServerUpdateHandler.java
+	javac ServerUpdateHandler.java
 
 
 

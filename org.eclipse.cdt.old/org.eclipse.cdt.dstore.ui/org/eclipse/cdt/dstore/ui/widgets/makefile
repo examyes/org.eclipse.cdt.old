@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: DataElementLabelProvider.class DataElementSorter.class EditorCanvas.class ObjectTreeSample.class ExtendedTableViewer.class OldEditor.class TableContentProvider.class TestContentProvider.class ViewMenu.class TreeContentProvider.class ViewFilter.class ViewToolBar.class TestUI.class ObjectSelectionChangedListener.class MenuHandler.class IDataElementViewer.class ObjectWindow.class ExtendedTreeViewer.class
+all: DataElementLabelProvider.class DataElementSorter.class EditorCanvas.class ObjectTreeSample.class ExtendedTableViewer.class OldEditor.class TableContentProvider.class TestContentProvider.class ViewMenu.class TreeContentProvider.class ViewFilter.class ViewToolBar.class TestUI.class ObjectSelectionChangedListener.class MenuHandler.class ObjectWindow.class IDataElementViewer.class ExtendedTreeViewer.class
 
 # Class Targets
 DataElementLabelProvider.class: DataElementLabelProvider.java
@@ -53,11 +53,11 @@ ObjectSelectionChangedListener.class: ObjectSelectionChangedListener.java
 MenuHandler.class: MenuHandler.java
 	javac MenuHandler.java
 
-IDataElementViewer.class: IDataElementViewer.java
-	javac IDataElementViewer.java
-
 ObjectWindow.class: ObjectWindow.java
 	javac ObjectWindow.java
+
+IDataElementViewer.class: IDataElementViewer.java
+	javac IDataElementViewer.java
 
 ExtendedTreeViewer.class: ExtendedTreeViewer.java
 	javac ExtendedTreeViewer.java

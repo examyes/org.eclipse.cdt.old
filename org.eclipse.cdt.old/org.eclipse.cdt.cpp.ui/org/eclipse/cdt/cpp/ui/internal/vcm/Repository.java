@@ -146,7 +146,7 @@ public class Repository extends Project
 		    
 		    
 		    ModelInterface api = ModelInterface.getInstance();
-
+		    api.extendSchema(_dataStore.getDescriptorRoot());
 		    api.openProject(_repository);
 
 		    

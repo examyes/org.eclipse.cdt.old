@@ -5,11 +5,17 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: CppCommandViewPart.class CppViewer.class DataStoreViewPart.class RemoteProjectViewPart.class MinersPerspective.class MinersViewPart.class ParsedSourceViewPart.class SystemObjectsViewPart.class RemoteProjectNavigator.class LogViewPart.class SchemaViewPart.class SelectionUtil.class SuperDetailsViewPart.class DetailsViewPart.class ProjectViewPart.class ProjectObjectsViewPart.class CppOutputViewer.class CppProjectsViewPart.class CppCommandViewer.class CppPerspective.class ObjectsViewPart.class CppOutputViewPart.class targets_dir search_dir
+all: CppCommandViewPart.class RemoteProjectViewPart.class ObjectsViewPart.class CppViewer.class DataStoreViewPart.class ParsedSourceViewPart.class MinersPerspective.class MinersViewPart.class ProjectViewPart.class SystemObjectsViewPart.class RemoteProjectNavigator.class LogViewPart.class SchemaViewPart.class SelectionUtil.class SuperDetailsViewPart.class CppProjectsViewPart.class DetailsViewPart.class ProjectObjectsViewPart.class CppOutputViewer.class CppCommandViewer.class CppPerspective.class CppOutputViewPart.class targets_dir search_dir
 
 # Class Targets
 CppCommandViewPart.class: CppCommandViewPart.java
 	javac CppCommandViewPart.java
+
+RemoteProjectViewPart.class: RemoteProjectViewPart.java
+	javac RemoteProjectViewPart.java
+
+ObjectsViewPart.class: ObjectsViewPart.java
+	javac ObjectsViewPart.java
 
 CppViewer.class: CppViewer.java
 	javac CppViewer.java
@@ -17,8 +23,8 @@ CppViewer.class: CppViewer.java
 DataStoreViewPart.class: DataStoreViewPart.java
 	javac DataStoreViewPart.java
 
-RemoteProjectViewPart.class: RemoteProjectViewPart.java
-	javac RemoteProjectViewPart.java
+ParsedSourceViewPart.class: ParsedSourceViewPart.java
+	javac ParsedSourceViewPart.java
 
 MinersPerspective.class: MinersPerspective.java
 	javac MinersPerspective.java
@@ -26,8 +32,8 @@ MinersPerspective.class: MinersPerspective.java
 MinersViewPart.class: MinersViewPart.java
 	javac MinersViewPart.java
 
-ParsedSourceViewPart.class: ParsedSourceViewPart.java
-	javac ParsedSourceViewPart.java
+ProjectViewPart.class: ProjectViewPart.java
+	javac ProjectViewPart.java
 
 SystemObjectsViewPart.class: SystemObjectsViewPart.java
 	javac SystemObjectsViewPart.java
@@ -47,11 +53,11 @@ SelectionUtil.class: SelectionUtil.java
 SuperDetailsViewPart.class: SuperDetailsViewPart.java
 	javac SuperDetailsViewPart.java
 
+CppProjectsViewPart.class: CppProjectsViewPart.java
+	javac CppProjectsViewPart.java
+
 DetailsViewPart.class: DetailsViewPart.java
 	javac DetailsViewPart.java
-
-ProjectViewPart.class: ProjectViewPart.java
-	javac ProjectViewPart.java
 
 ProjectObjectsViewPart.class: ProjectObjectsViewPart.java
 	javac ProjectObjectsViewPart.java
@@ -59,17 +65,11 @@ ProjectObjectsViewPart.class: ProjectObjectsViewPart.java
 CppOutputViewer.class: CppOutputViewer.java
 	javac CppOutputViewer.java
 
-CppProjectsViewPart.class: CppProjectsViewPart.java
-	javac CppProjectsViewPart.java
-
 CppCommandViewer.class: CppCommandViewer.java
 	javac CppCommandViewer.java
 
 CppPerspective.class: CppPerspective.java
 	javac CppPerspective.java
-
-ObjectsViewPart.class: ObjectsViewPart.java
-	javac ObjectsViewPart.java
 
 CppOutputViewPart.class: CppOutputViewPart.java
 	javac CppOutputViewPart.java

@@ -333,11 +333,6 @@ public class XMLparser
 				  else
 				      {
 					  // new object
-					  if (attributes[DE.A_TYPE].equals("status"))
-					      {
-						  System.out.println("status!");
-						  System.out.println("parent = " + parent);
-					      }
 					  result = _dataStore.createObject(parent, attributes);
 				      }
 				  

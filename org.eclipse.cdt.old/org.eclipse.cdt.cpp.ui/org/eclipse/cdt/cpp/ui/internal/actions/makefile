@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: AbstractSourceSyncher.class AddClassBreakpoint.class AddFunctionBreakpoint.class AddStatementBreakpoint.class ClearAction.class CppActionDelegateBuild.class CppActionDelegateDesignate.class CppActionDelegateFolderBuild.class CppActionDelegateUnDesignate.class ExtractFiles.class MergeFiles.class OpenPerspectiveAction.class ParseAction.class ReleaseFiles.class SaveAction.class SourceExtractor.class SourceReleaser.class SourceSyncher.class SynchronizeFiles.class ConfigureAction.class FindObjectAction.class ProjectOpenAction.class BuildAction.class ProjectParseAction.class OpenEditorAction.class OpenProjectAction.class ProjectRemoveParseAction.class ProjectSaveParseAction.class SharedLibMakefileAmAction.class StaticLibMakefileAmAction.class ReplicateFromAction.class DefaultMakefileAmAction.class TopLevelMakefileAmAction.class ManageProjectAction.class ProjectAction.class ReplicateToAction.class RefreshNavigatorAction.class CloseProjectAction.class SynchronizeWithAction.class OpenPropertiesAction.class CVSAction.class
+all: AbstractSourceSyncher.class AddClassBreakpoint.class AddFunctionBreakpoint.class AddStatementBreakpoint.class ClearAction.class CppActionDelegateBuild.class CppActionDelegateDesignate.class CppActionDelegateFolderBuild.class CppActionDelegateUnDesignate.class ExtractFiles.class MergeFiles.class OpenPerspectiveAction.class ParseAction.class ReleaseFiles.class SaveAction.class SourceExtractor.class SourceReleaser.class SourceSyncher.class SynchronizeFiles.class MakefileAmAction.class FindObjectAction.class ProjectOpenAction.class BuildAction.class ProjectParseAction.class OpenEditorAction.class OpenProjectAction.class ProjectRemoveParseAction.class ProjectSaveParseAction.class SharedLibMakefileAmAction.class StaticLibMakefileAmAction.class ReplicateFromAction.class DefaultMakefileAmAction.class TopLevelMakefileAmAction.class ProjectAction.class ReplicateToAction.class RefreshNavigatorAction.class CloseProjectAction.class SynchronizeWithAction.class ConfigureAction.class ManageProjectAction.class OpenPropertiesAction.class CVSAction.class
 
 # Class Targets
 AbstractSourceSyncher.class: AbstractSourceSyncher.java
@@ -65,8 +65,8 @@ SourceSyncher.class: SourceSyncher.java
 SynchronizeFiles.class: SynchronizeFiles.java
 	javac SynchronizeFiles.java
 
-ConfigureAction.class: ConfigureAction.java
-	javac ConfigureAction.java
+MakefileAmAction.class: MakefileAmAction.java
+	javac MakefileAmAction.java
 
 FindObjectAction.class: FindObjectAction.java
 	javac FindObjectAction.java
@@ -107,9 +107,6 @@ DefaultMakefileAmAction.class: DefaultMakefileAmAction.java
 TopLevelMakefileAmAction.class: TopLevelMakefileAmAction.java
 	javac TopLevelMakefileAmAction.java
 
-ManageProjectAction.class: ManageProjectAction.java
-	javac ManageProjectAction.java
-
 ProjectAction.class: ProjectAction.java
 	javac ProjectAction.java
 
@@ -124,6 +121,12 @@ CloseProjectAction.class: CloseProjectAction.java
 
 SynchronizeWithAction.class: SynchronizeWithAction.java
 	javac SynchronizeWithAction.java
+
+ConfigureAction.class: ConfigureAction.java
+	javac ConfigureAction.java
+
+ManageProjectAction.class: ManageProjectAction.java
+	javac ManageProjectAction.java
 
 OpenPropertiesAction.class: OpenPropertiesAction.java
 	javac OpenPropertiesAction.java

@@ -568,8 +568,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		     DataElement localWorkspace = findWorkspaceElement();		    
 		     if (localWorkspace != null && projectMinerProject != null)
 			 {
-			     _plugin.getDataStore().createReference(localWorkspace, projectMinerProject);		    
-			     _plugin.getDataStore().refresh(localWorkspace);
+			     DataStore localDataStore = _plugin.getDataStore();
+			     DataElement localRemoteProject = localDataStore.find(localWorkspace, 
+											  DE.A_SOURCE, 
+											  projectMinerProject.getSource(), 
+											  1);
+			     if (localRemoteProject != null)
+				 {
+				     localDataStore.deleteObject(localWorkspace, localRemoteProject);
+				 }
+			     
+			     localDataStore.createReference(localWorkspace, projectMinerProject);		    
+			     localDataStore.refresh(localWorkspace);
 			 }
 		 }
 
@@ -717,6 +727,19 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     // cancel all pending commands
     dataStore.cancelAllCommands();
 
+    // close parse project
+    DataElement projectObj = findProjectElement(project);
+    if (projectObj != null)
+	{
+	    DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_CLOSE_PROJECT");
+	    
+	    if (commandDescriptor != null)
+		{		
+		    dataStore.synchronizedCommand(commandDescriptor, projectObj);	
+		}
+	}
+
+    // close project
     DataElement workspace = findWorkspaceElement(dataStore);	    
     DataElement cprojectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
 
@@ -728,19 +751,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		{
 		    dataStore.synchronizedCommand(closeD, cprojectObj);
 		}
-	}
 
-    // for parser
-    DataElement projectObj = findProjectElement(project);
-    if (projectObj != null)
-	{
-	    DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_CLOSE_PROJECT");
-	    
-	    if (commandDescriptor != null)
-		{		
-		    dataStore.synchronizedCommand(commandDescriptor, projectObj);	
+	    if (project instanceof Repository)
+		{
+		    System.out.println("closing "+ project);
+		    initializeProject(project);
 		}
 	}
+
   }
 
     public void saveProject(IProject project)

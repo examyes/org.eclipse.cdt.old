@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: CppMarkerAnnotation.class CppMarkerAnnotationModel.class IConstants.class Trace.class CppEditor.class BreakpointRulerAction.class CppDocumentProvider.class EditorActionDelegate.class contributor_dir contentoutliner_dir codeassist_dir
+all: CppMarkerAnnotation.class CppMarkerAnnotationModel.class IConstants.class Trace.class CppEditor.class CppDocumentProvider.class BreakpointRulerAction.class contributor_dir contentoutliner_dir codeassist_dir
 
 # Class Targets
 CppMarkerAnnotation.class: CppMarkerAnnotation.java
@@ -23,14 +23,11 @@ Trace.class: Trace.java
 CppEditor.class: CppEditor.java
 	javac CppEditor.java
 
-BreakpointRulerAction.class: BreakpointRulerAction.java
-	javac BreakpointRulerAction.java
-
 CppDocumentProvider.class: CppDocumentProvider.java
 	javac CppDocumentProvider.java
 
-EditorActionDelegate.class: EditorActionDelegate.java
-	javac EditorActionDelegate.java
+BreakpointRulerAction.class: BreakpointRulerAction.java
+	javac BreakpointRulerAction.java
 
 
 
