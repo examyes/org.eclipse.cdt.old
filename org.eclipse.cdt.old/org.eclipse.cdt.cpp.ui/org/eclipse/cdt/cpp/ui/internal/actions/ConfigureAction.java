@@ -107,12 +107,12 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		
 		if(_command.getValue().equals("CONFIGURE") && sourceExistInTopLevelDir && !doesAutoconfSupportExist())
 		{
+			dialogHas2Buttons=true;
 			String str1 = "";
 			String message;
 			String[] extraLabel = new String[]{"Program","Static Lib","Shared Lib"};
 			String title = "Creating configure script";
-			
-			message = new String("\nPlease select one of the following targets"+str1);
+			message = new String("\nPlease select one of the following targets for your project"+str1);
 			box = new CustomMessageDialog(
 					shell,
 					title,
@@ -161,7 +161,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 						else
 						{
 							dialogHas2Buttons = true;
-							buttonTitles = new String[]{IDialogConstants.YES_LABEL,IDialogConstants.CANCEL_LABEL};
+							buttonTitles = new String[]{IDialogConstants.OK_LABEL,IDialogConstants.CANCEL_LABEL};
 							message = new String("\nRunning configure script - configure is up to date");
 						}
 					}
@@ -236,7 +236,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 
 		if(configureUpdate==1 && configFilesExist)
 		{
-			if(!dialogHas2Buttons)
+			if(!dialogHas2Buttons)  // this to take care in case the cancel button pressesd when the dialog has 2 buttons only
 			{
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
@@ -247,8 +247,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				thread.start();
 			}
 		}
-		else if(configureUpdate==0 && targetType==DEFAULT) 
-		// targetSelection 0 means no selection was made and it will default to program
+		else if(configureUpdate==0 && targetType==DEFAULT&&dialogButtonPushed!=1) 
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 			DataElement status = _dataStore.command(configureCmd, _subject);
