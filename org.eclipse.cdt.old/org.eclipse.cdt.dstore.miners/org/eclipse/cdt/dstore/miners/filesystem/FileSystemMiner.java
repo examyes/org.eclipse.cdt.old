@@ -910,6 +910,16 @@ public class FileSystemMiner extends Miner
 								classifyExecutable(newObject);
 							    }
 						    }
+						else
+						    {
+							if (newObject.depth() == 1)
+							    {
+								if (newObject.getNestedSize() > 0)
+								    {
+									newObject.setDepth(2);
+								    }
+							    }
+						    }
 					    }
 				    }
 			    }
@@ -1053,6 +1063,16 @@ public class FileSystemMiner extends Miner
 							if (!newObject.isOfType(_directoryDescriptor))
 							    {
 								winClassifyFile(newObject);								
+							    }
+							else
+							    {
+								if (newObject.depth() == 1)
+								    {
+									if (newObject.getNestedSize() > 0)
+									    {
+										newObject.setDepth(2);
+									    }
+								    }
 							    }
 						    }
 					    }
