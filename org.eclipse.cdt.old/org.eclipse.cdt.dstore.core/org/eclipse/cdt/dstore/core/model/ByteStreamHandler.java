@@ -19,11 +19,11 @@ import java.io.*;
 // this will be the new class for abstracting out file read and write
 
 
-public class BytesStreamHandler
+public class ByteStreamHandler
 {
 	private DataStore _dataStore;
 	
-	public BytesStreamHandler(DataStore dataStore)
+	public ByteStreamHandler(DataStore dataStore)
 	{
 		_dataStore = dataStore;
 	}

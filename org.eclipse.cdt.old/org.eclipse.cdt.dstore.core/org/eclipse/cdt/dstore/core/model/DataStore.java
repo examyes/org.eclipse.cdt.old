@@ -47,7 +47,7 @@ public final class DataStore
     private DataStoreSchema     _dataStoreSchema;    
     private CommandHandler      _commandHandler;
     private UpdateHandler       _updateHandler;
-    private BytesStreamHandler         _byteStreamHandler;
+    private ByteStreamHandler         _byteStreamHandler;
     
     private DomainNotifier      _domainNotifier;
 
@@ -2795,7 +2795,6 @@ public final class DataStore
 
     private void initialize()
     {
-    _byteStreamHandler = new BytesStreamHandler(this);	
 	_minersLocation = "org.eclipse.cdt.dstore.core";
 	_random = new Random(System.currentTimeMillis());
 
@@ -2814,7 +2813,23 @@ public final class DataStore
 	    }
 
 	_dataStoreSchema = new DataStoreSchema(this);
+	setByteStreamHandler();
     }
+    
+    public void setByteStreamHandler()
+    {
+    	setByteStreamHandler(null);
+    }
+    
+    public void setByteStreamHandler(ByteStreamHandler handler)
+    {
+   		_byteStreamHandler = handler;	
+   		if (_byteStreamHandler == null)
+   		{
+   			_byteStreamHandler = new ByteStreamHandler(this);	
+   		}
+    }
+ 
 
     /**
      * Preallocates a set of <code>DataElement</code>s.
