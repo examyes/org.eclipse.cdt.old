@@ -315,15 +315,21 @@ public class ObjectsViewPart extends GenericViewPart
 		
 		if ((commandObject != null) && (event.getProject() != null))
 		    {
-			String commandStr = commandObject.getValue() + " running on " + event.getProject().getName();
-			mgr.setMessage(commandStr);
-			
 			if (event.getStatus() == CppProjectEvent.DONE)
 			    {
 				pm.done();
+
+				String commandStr = commandObject.getValue() + " running on " + 
+				    event.getProject().getName();
+				commandStr += " is complete";
+				mgr.setMessage(commandStr);
+
 			    }
 			else if (event.getStatus() == CppProjectEvent.START)
 			    {
+				String commandStr = commandObject.getValue() + " running on " + event.getProject().getName();
+				mgr.setMessage(commandStr);
+
 				pm.beginTask(commandStr, IProgressMonitor.UNKNOWN);
 			    }
 		    }
