@@ -19,6 +19,9 @@
     <library name=".">
       <export name="*"/>
     </library>
+     <library name="linux_help.jar">
+      <export name="*"/>
+    </library>
   </runtime>
 
   <extension
