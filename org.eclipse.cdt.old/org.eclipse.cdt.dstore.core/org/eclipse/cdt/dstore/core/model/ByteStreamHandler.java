@@ -120,7 +120,7 @@ public class ByteStreamHandler
             File newFile = new File(fileName);
 	        FileOutputStream fileStream = new FileOutputStream(newFile);
             
-            boolean binary = false;
+            boolean binary = true;
             if (binary)
             {
 	            fileStream.write(buffer, 0, size);

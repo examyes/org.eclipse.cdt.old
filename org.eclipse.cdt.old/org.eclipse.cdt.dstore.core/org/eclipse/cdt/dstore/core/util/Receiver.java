@@ -61,6 +61,7 @@ public abstract class Receiver extends Thread
         {
           while (!_canExit)
           {
+	      System.out.println("receiving...");
             handleInput();
           }
         }

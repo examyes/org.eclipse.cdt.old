@@ -26,6 +26,7 @@ public abstract class UpdateHandler extends Handler
       {
           if (!_dataObjects.isEmpty())
           {
+	      System.out.println("update...");
 	      sendUpdates();
           }
       }

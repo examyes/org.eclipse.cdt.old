@@ -50,6 +50,7 @@ public class ServerReceiver extends Receiver
      */
     public void handleError(Exception e) 
     {
+	System.out.println("RECEIVER ERROR");
 		e.printStackTrace();
 		_connection.finished(this);
     }

@@ -29,21 +29,22 @@ public class ClientReceiver extends Receiver
       }      
       else
       {        
-		  synchronized(documentObject)
+	  synchronized(documentObject)
 	      {
-			  for (int i = 0; i < documentObject.getNestedSize(); i++)
+		  for (int i = 0; i < documentObject.getNestedSize(); i++)
 		      {
-				  DataElement rootOutput = documentObject.get(i);
-				  _dataStore.refresh(rootOutput);
+			  DataElement rootOutput = documentObject.get(i);
+			  _dataStore.refresh(rootOutput);
 		      }
-		     documentObject.removeNestedData();
-		     _dataStore.deleteObject(documentObject.getParent(), documentObject);
+		  documentObject.removeNestedData();
+		  _dataStore.deleteObject(documentObject.getParent(), documentObject);
 	      }
       }
     }
     
     public void handleError(Exception e) 
     {
+	System.out.println("RECEIVER ERROR");
 		DataElement status = _dataStore.getStatus();
 		status.setAttribute(DE.A_NAME, e.getMessage());
 		_dataStore.refresh(status);

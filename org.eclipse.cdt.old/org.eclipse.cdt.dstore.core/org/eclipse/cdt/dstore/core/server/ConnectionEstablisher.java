@@ -113,6 +113,7 @@ public class ConnectionEstablisher
      */
     public void finished(ServerReceiver receiver)
       {
+	  System.out.println("finishing");
         _updateHandler.removeSenderWith(receiver.socket());
         _receivers.remove(receiver);
         if (_receivers.size() == 0)
@@ -129,42 +130,46 @@ public class ConnectionEstablisher
     {
       while (_continue == true)
       {
-        try
-            {
-              // wait for connection
-              Socket newSocket        = _serverSocket.accept();
-			  doHandShake(newSocket);
+	  System.out.println("waiting for connections");
+	  try
+	      {
+		  // wait for connection
+		  Socket newSocket        = _serverSocket.accept();
+		  doHandShake(newSocket);
+		  
+		  ServerReceiver receiver = new ServerReceiver(newSocket, this);
+		  Sender sender           = new Sender(newSocket);
+		  
+		  // add this connection to list of elements
+		  _receivers.add(receiver);
+		  _updateHandler.addSender(sender);
+		  
+		  receiver.start();
+		  
+		  if (_receivers.size() == 1)
+		      {
+			  _updateHandler.start();
+			  _commandHandler.start();
+		      }
 
-              ServerReceiver receiver = new ServerReceiver(newSocket, this);
-              Sender sender           = new Sender(newSocket);
-
-              // add this connection to list of elements
-              _receivers.add(receiver);
-              _updateHandler.addSender(sender);
-	      
-              receiver.start();
-	      
-              if (_receivers.size() == 1)
-              {
-				  _updateHandler.start();
-				  _commandHandler.start();
-              }
-	      
-	      if (_receivers.size() == _maxConnections)
-		  {
-		      _continue = false;
-		      _serverSocket.close();
-		      
-		  }
-         }
-	
-        catch (IOException ioe)
-        {
-			System.err.println(ServerReturnCodes.RC_CONNECTION_ERROR);
-			System.err.println("Server: error initializing socket: " + ioe);
-			_continue = false;
-        }
+		  /****	      
+		  if (_receivers.size() == _maxConnections)
+		      {
+			  _continue = false;
+			  _serverSocket.close();
+			  
+		      }
+		  ****/
+	      }	  
+	  catch (IOException ioe)
+	      {
+		  System.err.println(ServerReturnCodes.RC_CONNECTION_ERROR);
+		  System.err.println("Server: error initializing socket: " + ioe);
+		  _continue = false;
+	      }
       }      
+      System.out.println("FINISHED waiting for connections");
+
     }
     
 
