@@ -19,8 +19,8 @@ public class CommandLineSymbolTable implements SymbolTable
  public CommandLineSymbolTable()
  {
   _indent    = "";
-  _dummy     = new DataElement();
-  _dummy.reInit(null, null, "B", "C", "D", "E", false);
+  _dummy     = new DataElement(); 
+  _dummy.reInit(null, "B", "C", "D", "E", false);
  }
  
  public DataElement addObject(DataElement a, String name, int line, boolean hasChildred)
