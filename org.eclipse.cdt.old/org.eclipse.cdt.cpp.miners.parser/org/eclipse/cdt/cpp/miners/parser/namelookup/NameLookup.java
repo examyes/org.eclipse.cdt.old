@@ -31,20 +31,124 @@ public class NameLookup
   _parsedFiles = _dataStore.find(theProject, DE.A_NAME, "Parsed Files", 1);
  }
   
+ //This method and the few that follow, take a fully qualified function name such as 
+ //abc::def::foo(int bar) and searches for it in the parse information.
  public DataElement provideSourceFor(DataElement theElement, DataElement parsedFiles, DataElement status)
  {
   if ((theElement == null) || (parsedFiles == null) || (status == null))
    return null;
  
-  DataElement foundFunction = findFunction(parsedFiles, getFunctionName(theElement.getValue()), countCommas(theElement.getValue()));
-  if (foundFunction == null)
+  String fullyQualifiedName = theElement.getValue();
+  ArrayList names = parseQualifiedName(fullyQualifiedName);
+  int lastIndex = names.size()-1;
+  if (lastIndex < 0)
    return null;
 
+  String functionName = (String)names.get(lastIndex);
+  names.remove(lastIndex);
+ 
+  //First try to find the fully qualified name directly under a parsed file. 
+  DataElement foundFunction = findFunction(parsedFiles.getAssociated("contents"), getFunctionName(fullyQualifiedName), countCommas(fullyQualifiedName));
+  
+  if (foundFunction == null)
+  {
+   //If we get here, we try to navigate the namespaces first 
+   DataElement containingNamespace = navigateNamespaces(parsedFiles, names);
+   if (containingNamespace == null)
+    return null;
+   //If we get here, we have found the right container, so just find the function.
+   ArrayList container = new ArrayList();
+   container.add(containingNamespace);
+   foundFunction = findFunction(container, getFunctionName(functionName), countCommas(functionName));
+   if (foundFunction == null)
+    return null;
+  }
   theElement.setAttribute(DE.A_SOURCE, foundFunction.getSource());
   theElement.getDataStore().update(theElement);
   return status;
  }
+ 
+ //Break a fully qualified name apart based on ::'s
+ public ArrayList parseQualifiedName(String fullyQualifiedName)
+ {
+  ArrayList theNames = new ArrayList();
+  StringTokenizer st = new StringTokenizer(fullyQualifiedName, "::");
+  while (st.hasMoreTokens())
+   theNames.add(st.nextToken());
+  return theNames;
+ }
 
+ //Simply try to find each of the names...
+ public DataElement navigateNamespaces(DataElement parsedFiles, ArrayList namespaces)
+ {
+  ArrayList files = parsedFiles.getAssociated("contents");
+  DataElement currentRoot = null;
+  for (int i = 0; i<namespaces.size(); i++)
+  {
+   currentRoot = null;
+   String theName = (String)namespaces.get(i);
+   for (int j = files.size()-1; j>=0; j--)
+   {
+    DataElement aFile = (DataElement)files.get(j);
+    currentRoot = findDataElement(aFile, theName);
+    if (currentRoot != null)
+     break;
+   }
+   if (currentRoot == null)
+    return null;
+  }
+  return currentRoot;
+ }
+ 
+ public DataElement findDataElement(DataElement root, String theName)
+ {
+  ArrayList contents = root.getAssociated("contents");
+  for (int i=contents.size()-1; i>=0; i--)
+  {
+   DataElement de = (DataElement)contents.get(i);
+   if (de.getValue().equals(theName))
+    return de;
+  }
+  return null;
+ }
+
+ public DataElement findFunction(ArrayList roots, String functionName, int commas)
+ { 
+ 
+  for (int j=roots.size()-1; j>=0; j--)
+  {
+   ArrayList contents = ((DataElement)roots.get(j)).getAssociated("contents");
+   for (int i=contents.size()-1; i>=0; i--)
+   {
+    DataElement theElement = (DataElement)contents.get(i);
+    String theType = theElement.getType();
+    if (theType.equals("function")||theType.equals("mainfunction")||theType.equals("constructor")||theType.equals("destructor"))
+    if ( getFunctionName(theElement.getValue()).equals(functionName) && (countCommas(theElement.getValue()) == commas))
+     return theElement;   
+   }
+  }
+  return null;
+ }
+
+ public String getFunctionName(String functionSignature)
+ {
+  int firstParen = functionSignature.indexOf("(");
+  if (firstParen < 0)
+   return functionSignature;
+  return functionSignature.substring(0, firstParen);
+ }
+ 
+ public int countCommas(String functionName)
+ {
+  int commas = 0;
+  char[] letters = functionName.toCharArray();
+  for (int i=letters.length-1; i>=0; i--)
+   if (letters[i] == ',')
+    commas++;
+  return commas;
+ }
+
+ /*
  public DataElement findFunction(DataElement root, String functionName, int commas)
  {
   ArrayList contents = root.getAssociated("contents");
@@ -68,24 +172,11 @@ public class NameLookup
   return null;
  } 
 
- public String getFunctionName(String functionSignature)
- {
-  int firstParen = functionSignature.indexOf("(");
-  if (firstParen < 0)
-   return functionSignature;
-  return functionSignature.substring(0, firstParen);
- }
+
  
- public int countCommas(String functionName)
- {
-  int commas = 0;
-  char[] letters = functionName.toCharArray();
-  for (int i=letters.length-1; i>=0; i--)
-   if (letters[i] == ',')
-    commas++;
-  return commas;
- }
- 
+ */
+
+
  public DataElement nameLookup(String objName, String type, DataElement start)
  {
   _searchedFiles.clear();
