@@ -43,13 +43,13 @@ public class ParsePathPropertyPage extends PropertyPage
         if (CppPlugin.isCppProject(project))
         {
           _pathControl = new ParsePathControl(parent, SWT.NONE);	
-	  if (project instanceof Repository)
+	 	 if (project instanceof Repository)
 	      {
 		  _pathControl.setContext(project);
 	      }
 
-          _pathControl.setPaths(CppPlugin.readProperty(project, "Include Path"));
           _pathControl.setLayout(layout);
+          setCurrent();
           return _pathControl;
         }
         else
@@ -62,14 +62,21 @@ public class ParsePathPropertyPage extends PropertyPage
           return cnr;
         }
 
-
+ 
       }
 
+  protected void setCurrent()
+  {
+  	IProject project = getProject();
+  	 _pathControl.setPaths(CppPlugin.readProperty(project, "Include Path"));
+
+  }
 
   protected void performDefaults()
-      {
+   {
 	  super.performDefaults();
-      }
+	  _pathControl.setPaths(CppPlugin.readProperty("DefaultParseIncludePath"));
+   }
 	
   public boolean performOk()
       {

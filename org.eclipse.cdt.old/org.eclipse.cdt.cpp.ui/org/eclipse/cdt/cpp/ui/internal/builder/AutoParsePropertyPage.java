@@ -47,7 +47,8 @@ public class AutoParsePropertyPage extends PropertyPage
 	    _parseBehaviourControl = new ParseBehaviourControl(control, SWT.NONE);
 	    
 	    control.setLayout(new GridLayout());
-	    performDefaults();
+	
+	    setCurrent();
 	    return control;
         }
         else
@@ -63,9 +64,49 @@ public class AutoParsePropertyPage extends PropertyPage
 
 
   protected void performDefaults()
+  {
+  	super.performDefaults();
+  	  ArrayList autoParsePreferences = CppPlugin.readProperty("AutoParse");
+	  if (!autoParsePreferences.isEmpty())
+	      {
+		  String autoParse = (String)autoParsePreferences.get(0);
+		  if (autoParse.equals("Yes"))
+		      {
+			  _parseBehaviourControl.setAutoParseSelection(true);
+		      }
+		  else
+		      {
+			  _parseBehaviourControl.setAutoParseSelection(false);
+		      }
+	      }
+	  else
+	      {
+		  _parseBehaviourControl.setAutoParseSelection(false);
+	      }
+
+	  ArrayList autoPersistPreferences = CppPlugin.readProperty("AutoPersist");
+	  if (!autoPersistPreferences.isEmpty())
+	      {
+		  String autoPersist = (String)autoPersistPreferences.get(0);
+		  if (autoPersist.equals("Yes"))
+		      {
+			  _parseBehaviourControl.setAutoPersistSelection(true);
+		      }
+		  else
+		      {
+			  _parseBehaviourControl.setAutoPersistSelection(false);
+		      }
+	      }
+	  else
+	      {
+		  _parseBehaviourControl.setAutoPersistSelection(false);
+	      }
+	  
+  }
+  
+  protected void setCurrent()
       {
-	  super.performDefaults();	  
-	 
+	  	 
 	  ArrayList autoParsePreferences = CppPlugin.readProperty(getProject(), "AutoParse");
 	  if (!autoParsePreferences.isEmpty())
 	      {

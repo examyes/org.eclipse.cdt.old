@@ -297,6 +297,7 @@ public class ParsePathControl extends Composite implements Listener
 
   public void setPaths(ArrayList paths)
       {
+      	_pathList.removeAll();
         for (int i = 0; i < paths.size(); i++)
         {
           addPath((String)paths.get(i));

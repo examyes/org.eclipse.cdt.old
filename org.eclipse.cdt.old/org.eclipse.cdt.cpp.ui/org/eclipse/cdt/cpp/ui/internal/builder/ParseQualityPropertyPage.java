@@ -45,16 +45,8 @@ public class ParseQualityPropertyPage extends PropertyPage
 	    _qualityControl = new ParseQualityControl(parent, SWT.NONE);	
 	    FillLayout layout2 = new FillLayout();
 	    _qualityControl.setLayout(layout2);	
-	    ArrayList preferences = CppPlugin.readProperty(project, "ParseQuality");
-	    if (!preferences.isEmpty())
-		{
-		    String preference = (String)preferences.get(0);
-		    _qualityControl.setSelection(Integer.parseInt(preference));		    
-		}
-	    else
-		{
-		    _qualityControl.setSelection(3);
-		}
+	    
+		setCurrent();
 	    return _qualityControl;
         }
         else
@@ -69,9 +61,35 @@ public class ParseQualityPropertyPage extends PropertyPage
       }
 
 
+  protected void setCurrent()
+  {
+  	  IProject project = getProject();
+	  ArrayList preferences = CppPlugin.readProperty(project, "ParseQuality");
+	    if (!preferences.isEmpty())
+		{
+		    String preference = (String)preferences.get(0);
+		    _qualityControl.setSelection(Integer.parseInt(preference));		    
+		}
+	    else
+		{
+		    _qualityControl.setSelection(3);
+		}
+
+  }
+  
   protected void performDefaults()
       {
 	  super.performDefaults();
+	  	ArrayList preferences = CppPlugin.readProperty("ParseQuality");
+	    if (!preferences.isEmpty())
+		{
+		    String preference = (String)preferences.get(0);
+		    _qualityControl.setSelection(Integer.parseInt(preference));		    
+		}
+	    else
+		{
+		    _qualityControl.setSelection(3);
+		}
       }
 	
   public boolean performOk()
