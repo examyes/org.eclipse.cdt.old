@@ -37,6 +37,9 @@ public class CommandMiner extends Miner
 
      DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND", false);
      _dataStore.createReference(cancellable, cmdD, "abstracts", "abstracted by");
+     
+     DataElement shellD        = createCommandDescriptor(fsD, "Shell", "C_SHELL", false);
+     _dataStore.createReference(cancellable, shellD, "abstracts", "abstracted by");
 
      DataElement inputD    = _dataStore.createObject(cmdD, "input", "Enter command");	
      DataElement outputD   = _dataStore.createObject(cmdD, "output", "Command Output");
@@ -72,6 +75,12 @@ public class CommandMiner extends Miner
 		  status.setAttribute(DE.A_NAME, "done");
 	      }
       }
+  else if (name.equals("C_SHELL"))
+  {
+  	System.out.println("launching shell");
+  	String invocation = ">";
+  	launchCommand(subject, invocation, status);
+  }
   else if (name.equals("C_SEND_INPUT"))
   {
   	DataElement input = getCommandArgument(theElement, 1);
@@ -102,7 +111,7 @@ public class CommandMiner extends Miner
    }
   }
   CommandMinerThread newCommand = new CommandMinerThread(subject, invocation, status, _patterns);
-  _threads.put(/*invocation*/status.getAttribute(DE.A_ID), newCommand);
+  _threads.put(status.getAttribute(DE.A_ID), newCommand);
   newCommand.start();
  }
 
@@ -121,7 +130,7 @@ public class CommandMiner extends Miner
 
  private void cancelCommand (String theCommand, DataElement status)
  {
-  CommandMinerThread theThread = (CommandMinerThread)_threads.get(/*theCommand*/ status.getAttribute(DE.A_ID));
+  CommandMinerThread theThread = (CommandMinerThread)_threads.get(status.getAttribute(DE.A_ID));
 
   if (theThread != null)
   { 	
@@ -224,10 +233,12 @@ class CommandMinerThread extends MinerThread
 
  private OutputHandler    _stdOutputHandler;
  private OutputHandler    _stdErrorHandler;
+ 
+ private boolean          _isShell;
   
  public CommandMinerThread (DataElement theElement, String invocation, DataElement status, Patterns thePatterns)
  {
-  
+  _isShell = false; 
   _status     = status;
   _dataStore  =  theElement.getDataStore();
   _subject = theElement;
@@ -238,12 +249,8 @@ class CommandMinerThread extends MinerThread
   ServerCommandHandler sch = (ServerCommandHandler)(_dataStore.getCommandHandler());
   _fileMiner = (FileSystemMiner)(sch.getMiners("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner"));
   
-  //This dataElement is where the handleQuerys from FileSystem Miner get put during a find file
-  createObject("command", "> " + _invocation);
-  createObject("stdout","");
-  _dataStore.update(status);
   
-   
+     
    try
    {
     File theDirectory = new File(theElement.getSource().trim());
@@ -290,6 +297,7 @@ class CommandMinerThread extends MinerThread
 	    if (_invocation.equals(">"))
 	    {
 	    	_invocation = theShell;
+	    	_isShell = true;
 	    }
 	
 	    _theProcess = Runtime.getRuntime().exec(theShell + " /C " + _invocation, getEnvironment(_subject), theDirectory); 
@@ -307,8 +315,13 @@ class CommandMinerThread extends MinerThread
     return;
    }
    
-   status.setAttribute(DE.A_NAME, "progress");  
-  
+   //This dataElement is where the handleQuerys from FileSystem Miner get put during a find file
+  createObject("command", "> " + _invocation);
+  createObject("stdout","");
+
+  status.setAttribute(DE.A_NAME, "progress");  
+   _dataStore.update(status);
+    
     _stdOutputHandler = new OutputHandler(_stdInput, null);
     _stdOutputHandler.setWaitTime(0);
     _stdOutputHandler.start();
@@ -333,7 +346,11 @@ class CommandMinerThread extends MinerThread
    	  	 	output.flush();
    	  	 	
    	  	 	createObject("command", input);
-   	  	 	_patterns.refresh(input);
+   	  	 	
+   	  	 	if (_isShell)
+   	  	 	{
+   	  	 	  _patterns.refresh(input);
+   	  	 	}
    	  	 }
    	  	 catch (IOException e)
    	  	 {

@@ -101,6 +101,8 @@ public class TransferFiles extends Thread
 
 	private void recursiveQuery(DataElement source)
 	{
+		if (!source.getType().equals("file"))
+		{
 		DataStore dataStore = source.getDataStore();
 		DataElement oDescriptor = dataStore.localDescriptorQuery(source.getDescriptor(), "C_OPEN", 4);
 		if (oDescriptor != null)
@@ -108,6 +110,7 @@ public class TransferFiles extends Thread
 			// open opened project - recursive query
 			dataStore.command(oDescriptor, source);
 		}				
+		}
 	}
 
 

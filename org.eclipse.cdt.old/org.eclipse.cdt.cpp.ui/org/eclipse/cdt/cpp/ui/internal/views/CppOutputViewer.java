@@ -86,10 +86,16 @@ public class CppOutputViewer extends OutputViewer
   		IProject project = plugin.getCurrentProject();
   		if (project != null)
   		{
-  			DataElement projectElement = api.findProjectElement(project);
+  			DataElement projectElement = api.findProjectElement(project);			
   			if (projectElement != null)
   			{
-  				api.invoke(projectElement, ">", true);
+  				DataStore dataStore = projectElement.getDataStore();
+  				DataElement shellD = dataStore.localDescriptorQuery(projectElement.getDescriptor(), "C_SHELL", 2);
+  				if (shellD != null)
+				{
+	  				DataElement status = dataStore.command(shellD, projectElement);
+	  				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+				}
   			}
   		}
   	}
