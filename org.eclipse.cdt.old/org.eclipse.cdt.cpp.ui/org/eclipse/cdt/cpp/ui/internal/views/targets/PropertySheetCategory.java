@@ -5,6 +5,9 @@ package com.ibm.cpp.ui.internal.views.targets;
  * WebSphere Studio Workbench
  * (c) Copyright IBM Corp 2000
  */
+import org.eclipse.ui.views.properties.IPropertySheetEntry;
+import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
+
 import java.util.ArrayList;
 import java.util.List;
 /**

@@ -7,6 +7,8 @@ package com.ibm.cpp.ui.internal.views.targets;
  * This program and the accompanying materials are made available under the terms of
  * the Common Public License which accompanies this distribution.
  */
+import org.eclipse.ui.views.properties.IPropertySheetEntry;
+import org.eclipse.ui.views.properties.IPropertySheetEntryListener;
  
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.*;
