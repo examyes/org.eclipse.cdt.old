@@ -347,7 +347,7 @@ public class CmdInitializeDE extends Command
          EPDC.FCT_BREAKPOINT_ENABLE_TOGGLE  | // support enablemt bkpts
          EPDC.FCT_BREAKPOINT_MODIFY         | // support modify bkpts
 //       EPDC.FCT_BREAKPOINT_NO_THREADS     | // do not support thread specific breakpoints
-//       EPDC.FCT_BREAKPOINT_NO_FREQUENCY   | // do not support frequency conditions
+         EPDC.FCT_BREAKPOINT_NO_FREQUENCY   | // do not support frequency conditions
 //         EPDC.FCT_BREAKPOINT_EXPRESSION     | // conditional expressions
 //         EPDC.FCT_BREAKPOINT_DEFERRED       | // support deferred bkpts
          0,
