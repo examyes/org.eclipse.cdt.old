@@ -182,7 +182,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	_interface = new ModelInterface(dataStore);	
        	_interface.loadSchema();
 
-	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());
 
 	initializeProjects();
       }

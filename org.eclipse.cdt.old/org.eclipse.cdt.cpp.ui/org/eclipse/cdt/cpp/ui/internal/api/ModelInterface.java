@@ -285,7 +285,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  
 	  _markersDescriptor = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "markers", 1);
 	  
-	  dataStore.getDomainNotifier().addDomainListener(this);	
+	  dataStore.getDomainNotifier().addDomainListener(this);
+
+	  HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
       }
 
   public Shell getShell()
