@@ -27,6 +27,7 @@
 	</target>
 
 	<target name="all.plugins" depends="init">
+		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.${platformID}/" target="${target}"/>
 	</target>
 
 	<target name="all.fragments" depends="init">
