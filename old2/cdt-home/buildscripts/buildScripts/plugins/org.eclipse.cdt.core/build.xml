@@ -44,7 +44,7 @@
 		<mkdir dir="${temp.folder}/cdtcore.jar.bin"/>
 		<!-- compile the source code -->
 		<javac destdir="${temp.folder}/cdtcore.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.search/search.jar;../org.eclipse.core.resources/resources.jar;../org.eclipse.debug.core/bin;../org.eclipse.core.resources/bin;../org.apache.xerces/xercesImpl.jar;../org.eclipse.debug.core/dtcore.jar;../org.apache.xerces/bin;../org.eclipse.core.runtime/bin;../org.eclipse.core.boot/boot.jar;../org.eclipse.compare/compare.jar;../org.eclipse.search/bin;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.compare/bin;../org.apache.xerces/xmlParserAPIs.jar;../org.eclipse.core.boot/bin">
-			<src path="builder/"/>
+			<src path="build/"/>
 			<src path="index/"/>
 			<src path="model/"/>
 			<src path="src/"/>
@@ -52,7 +52,7 @@
 		</javac>
 		<!-- copy necessary resources -->
 		<copy todir="${temp.folder}/cdtcore.jar.bin">
-			<fileset dir="builder/" excludes="**/*.java"/>
+			<fileset dir="build/" excludes="**/*.java"/>
 			<fileset dir="index/" excludes="**/*.java"/>
 			<fileset dir="model/" excludes="**/*.java"/>
 			<fileset dir="src/" excludes="**/*.java"/>
@@ -66,7 +66,7 @@
 	<target name="cdtcoresrc.zip" depends="init" unless="cdtcoresrc.zip">
 		<mkdir dir="${build.result.folder}"/>
 		<zip zipfile="${build.result.folder}/cdtcoresrc.zip" filesonly="false">
-			<fileset dir="builder/" includes="**/*.java"/>
+			<fileset dir="build/" includes="**/*.java"/>
 			<fileset dir="index/" includes="**/*.java"/>
 			<fileset dir="model/" includes="**/*.java"/>
 			<fileset dir="src/" includes="**/*.java"/>
