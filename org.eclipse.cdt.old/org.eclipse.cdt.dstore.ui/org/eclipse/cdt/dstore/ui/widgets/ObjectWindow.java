@@ -99,7 +99,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
 	public void run()
 	{
-	    if ((_viewer != null) && (_property != null))
+	    if ((_viewer != null)/*allow null sorts && (_property != null)*/)
 		{
 		    _viewer.setSorter(_sorter);
 		    _currentSortAction = this;
