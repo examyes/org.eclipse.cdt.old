@@ -73,7 +73,8 @@ class GdbScalarVariable extends GdbVariable
     */
    public EStdTreeNode getTreeNode()
    {
-      return new EStdTreeNode(_nodeID, getScalarItem());
+//      return new EStdTreeNode(_nodeID, getScalarItem());
+      return new EStdTreeNode(_nodeID, getPointerItem());
    }
 
    /**
@@ -188,6 +189,43 @@ class GdbScalarVariable extends GdbVariable
       
 
       return new EStdScalarItem(_name, _type+PAD, scalarValue, scalarReps, (short)(_rep+1));
+   }
+   
+   
+      /**
+    * Get the EStdScalarItem for this data type
+    */
+   EStdPointerItem getPointerItem()
+   {
+
+      short[] scalarReps = 
+         _debugEngine.getSession()._repInfo.repsForType(Gdb.TYPEINDEX_DEFAULT);
+
+      String scalarValue = _value; //null;
+      
+      // retrieve value with specified representation
+      if (_rep+1 != Gdb.REPINDEX_DEFAULT)
+      {
+      	String name = _fullName;
+      	
+      	if (name.equals(""))
+      		name = _name;
+		String cmd = "print" + _repArgument[_rep] + name;
+		boolean ok = ((GdbDebugSession)_debugSession).executeGdbCommand(cmd);
+
+		if (ok)
+		{
+			String[] lines = ((GdbDebugSession)_debugSession).getTextResponseLines();
+			
+			if (lines.length > 1)
+			{
+				scalarValue = lines[1];
+			}
+		}
+      }
+      
+
+      return new EStdPointerItem((short)1, _name, _type+PAD, _type+PAD, scalarValue, (short)(_rep+1),scalarReps);
    }
    
    public GdbVariable getNode(int nodeID)
