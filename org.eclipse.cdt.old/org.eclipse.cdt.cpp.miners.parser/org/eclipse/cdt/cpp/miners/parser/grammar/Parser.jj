@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
+ * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
  */
 
-options 
+options
 {
   //DEBUG_PARSER=true;
   //DEBUG_LOOKAHEAD=true;
@@ -16,7 +16,7 @@ PARSER_BEGIN(Parser)
 package com.ibm.cpp.miners.parser.grammar;
 
 /*
- * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
+ * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
  */
 
 import com.ibm.dstore.core.model.*;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.io.*;
 import java.lang.*;
 
-public final class Parser 
+public final class Parser
 {
  private SymbolTable  symtab;
  private boolean      isConstructor;
@@ -34,7 +34,7 @@ public final class Parser
  private String       empty = "";
  private ParseWorker  _theParseWorker;
 
- public Parser(ParseWorker theParseWorker) 
+ public Parser(ParseWorker theParseWorker)
  {
   _theParseWorker = theParseWorker;
  }
@@ -44,10 +44,10 @@ public final class Parser
  }
 
  //This is used to skip over exceptions in the file based parse.
- public boolean jumpToClosingCurly()  
+ public boolean jumpToClosingCurly()
  {
   int number_of_curlies = 1;
-  
+
   Token tok;
   try
   {
@@ -69,10 +69,10 @@ public final class Parser
     else if (tok.kind == CLOSECURLY) number_of_curlies--;
     else if (tok.kind == SEMICOLON)  number_of_curlies = 0;
     tok = getNextToken();
-   }  
+   }
    symtab.gotoGlobalScope();
   }
-  catch (Throwable e) 
+  catch (Throwable e)
   {
    return true;
   }
@@ -81,7 +81,7 @@ public final class Parser
 
 
  //This is used to skip over exceptions in the object based parse.
- public boolean jumpToNextDeclaration(String objectType)  
+ public boolean jumpToNextDeclaration(String objectType)
  {
   //First calculate how far under the main parse Object we are:
   int depth = 0;
@@ -99,7 +99,7 @@ public final class Parser
   {
    Token tok = getToken(1);
    if (tok.kind == SEMICOLON)
-    tok = getToken(2); 
+    tok = getToken(2);
    if ((tok == null) || (tok.kind == EOF))
     return true;
 
@@ -112,7 +112,7 @@ public final class Parser
    }
    if (tok.kind == EOF)
     return true;
-   
+
    //Now we are at depth 0, so we'll look for the next ;
    while (tok.kind != SEMICOLON)
    {
@@ -121,7 +121,7 @@ public final class Parser
    }
    //When we get here, we are at a semi-colon, so step over it, and we're done:
    //tok = getNextToken();
-  } catch (Throwable e)  
+  } catch (Throwable e)
     {
      //System.out.print("Error2 ");
      //System.out.println(e.getMessage());}
@@ -129,7 +129,7 @@ public final class Parser
   return false;
  }
 
- //This method takes a string containing a bunch of type names and a declaration name and returns just the 
+ //This method takes a string containing a bunch of type names and a declaration name and returns just the
  //type names and the Declarator split into an Array. If pointerInType is true, the ptr operators belong to
  //the type; otherwise they belong to the name.
  //So if "const char *c" is passed in,  just "const char *" is list[1] and "c" is list[0] when pointerInType is true.
@@ -138,27 +138,27 @@ public final class Parser
  {
   //First find the last word...
   int division = theTypes.lastIndexOf(" ");
-  
+
   //If the pointer operator is not part of the type, move the division point to the first ptr operator.
   if (!pointerInType)
   {
    int firstPtr = theTypes.indexOf("*");
    if (firstPtr > 0 && firstPtr < division)
     division = firstPtr;
-  
+
    firstPtr = theTypes.indexOf("&");
    if (firstPtr > 0 && firstPtr < division)
     division = firstPtr;
   }
-  
+
   String[] theArray = new String[2];
   if (division < 1)
   {
    theArray[0] = theTypes.trim();  //All name...no types
    theArray[1] = empty;
-  } 
-  else 
-  { 
+  }
+  else
+  {
    theArray[0] = theTypes.substring(division, theTypes.length()).trim();
    theArray[1] = theTypes.substring(0, division).trim();
   }
@@ -173,18 +173,18 @@ TOKEN_MGR_DECLS:
 {
  public int beginLine;
  public SymbolTable symtab;
- public void setSymbolTable(SymbolTable st) {symtab = st;} 
+ public void setSymbolTable(SymbolTable st) {symtab = st;}
 
- public SimpleCharStream getInputStream() {return input_stream;} 
+ public SimpleCharStream getInputStream() {return input_stream;}
  public String skipOverObjectBody(Token curToken)
  {
   StringBuffer objectBody = new StringBuffer();
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or
    //probably more characters ahead of what the Parser thinks is the current token (the '{').
    //So first, we'll back the input_stream up to the curToken.
-    
+
    int curLine = curToken.beginLine;
    int curCol  = curToken.beginColumn;
    curToken.next = null;
@@ -192,16 +192,16 @@ TOKEN_MGR_DECLS:
     input_stream.backupToken();
    while (input_stream.getBeginColumn() != curCol)
     input_stream.backupToken();
-    
-   
+
+
    //input_stream.adjustBeginLineColumn(curLine, curCol);
    beginLine = curLine;
-  
+
    int c;
 
    //Now that we have the source location properly saved off in beginLine, and the input stream
-   //backed up to the '{', we can proceed. 
-   //input_stream.BeginToken();    
+   //backed up to the '{', we can proceed.
+   //input_stream.BeginToken();
    objectBody.append("{");
    int depth = 1;
    do
@@ -210,10 +210,10 @@ TOKEN_MGR_DECLS:
     if      (c == 123) depth++;     //123 is a '{'
     else if (c == 125) depth--;     //125 is a '}'
     objectBody.append((char)c);
-   } while ((c != 125) || (depth > 0));  
+   } while ((c != 125) || (depth > 0));
    input_stream.backup(1);
    input_stream.BeginToken();
- 
+
   }
   catch (Throwable e)
   {
@@ -228,10 +228,10 @@ TOKEN_MGR_DECLS:
  {
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or
    //probably more characters ahead of what the Parser thinks is the current token (the '{').
    //So first, we'll back the input_stream up to the curToken.
-    
+
    int curLine = curToken.beginLine;
    int curCol  = curToken.beginColumn;
    curToken.next = null;
@@ -239,27 +239,27 @@ TOKEN_MGR_DECLS:
     input_stream.backupToken();
    while (input_stream.getBeginColumn() != curCol)
     input_stream.backupToken();
-    
-   
+
+
    //input_stream.adjustBeginLineColumn(curLine, curCol);
    beginLine = curLine;
-  
+
    int c;
 
    //Now that we have the source location properly saved off in beginLine, and the input stream
-   //backed up to the '{', we can proceed. 
-   //input_stream.BeginToken();    
- 
+   //backed up to the '{', we can proceed.
+   //input_stream.BeginToken();
+
    int depth = 1;
    do
    {
     c = input_stream.readChar();
     if      (c == 123) depth++;     //123 is a '{'
     else if (c == 125) depth--;     //125 is a '}'
-   } while ((c != 125) || (depth > 0));  
+   } while ((c != 125) || (depth > 0));
    input_stream.backup(1);
    input_stream.BeginToken();
- 
+
   }
   catch (Throwable e)
   {
@@ -273,10 +273,10 @@ TOKEN_MGR_DECLS:
  {
   try
   {
-   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or 
+   //This kind of sucks, but due to LOOKAHEAD the SimpleCharStream reader could be one or
    //probably more characters ahead of what the Parser thinks is the current token.
    //So first, we'll back the input_stream up to the curToken.
-    
+
    int curLine = curToken.beginLine;
    int curCol  = curToken.beginColumn;
    curToken.next = null;
@@ -284,23 +284,23 @@ TOKEN_MGR_DECLS:
     input_stream.backupToken();
    while (input_stream.getBeginColumn() != curCol)
     input_stream.backupToken();
-    
+
    //input_stream.adjustBeginLineColumn(curLine, curCol);
    beginLine = curLine;
-  
+
    //Now that we have the source location properly saved off in beginLine, and the input stream
-   //backed up to the currentLine, we can proceed. 
-   //input_stream.BeginToken();    
+   //backed up to the currentLine, we can proceed.
+   //input_stream.BeginToken();
    int c = -1;
    int prev_c = -1;
    do
    {
     prev_c = c;
     c = input_stream.readChar();
-    } while ((c != 34) || (prev_c == 92));   //34 is a "   and 92 is a \ 
- 
+    } while ((c != 34) || (prev_c == 92));   //34 is a "   and 92 is a \
+
    input_stream.BeginToken();
- 
+
   }
   catch (Throwable e)
   {
@@ -321,9 +321,9 @@ TOKEN_MGR_DECLS:
      //If we get here, then the getNextToken was successful...just return the previous token
      return t;
    }
-   catch (Throwable e) 
+   catch (Throwable e)
    {
-    try 
+    try
     {
      input_stream.BeginToken();
     }
@@ -341,13 +341,13 @@ SKIP :
  | "\n"
  | "\r\n"
  | "\\\n"    //Line Continuation
- | "##" 
+ | "##"
  | "\u001a"
  | "//" : IN_LINE_COMMENT
  | "/*" : IN_COMMENT
  | "#define " : IN_DEFINE
- | < "#include " <STRING> > 
-    {symtab.addIncludeFile(image.toString().substring(10,image.toString().length()-1).replace('?','\\')); } 
+ | < "#include " <STRING> >
+    {symtab.addIncludeFile(image.toString().substring(10,image.toString().length()-1).replace('?','\\')); }
  | < "#line" ([" ", "\t"])* ["0"-"9"] > { input_stream.backup(1); } : LINE_NUMBER
 }
 
@@ -393,7 +393,7 @@ SKIP :
 
 <IN_DEFINE> SKIP:
 {
-  < "\n"> 
+  < "\n">
   {
    symtab.addObject(ParserSchema.dMacro,image.toString().trim(), input_stream.getEndLine(), false);
   } :DEFAULT
@@ -402,9 +402,9 @@ SKIP :
 
 <IN_DEFINE> MORE:
 {
-  < ~[] >  
+  < ~[] >
 }
-    
+
 <IN_LINE_COMMENT> SKIP:
 {
   <"\n"> : DEFAULT
@@ -573,7 +573,7 @@ TOKEN :
            )
      )
    )
-   "'" 
+   "'"
   >
 //| <  STRING : ("L")? "\""  (( ~["\""]))* "\"" >
 | <  STRING : ("L")? "\""
@@ -585,7 +585,7 @@ TOKEN :
            )
      )
    )*
-   "\"" 
+   "\""
   >
 }
 
@@ -597,22 +597,22 @@ TOKEN :
 
 //START OF GRAMMAR DEFINITION
 
-//This is the root production that starts a file-based parse...The rest of the 
+//This is the root production that starts a file-based parse...The rest of the
 //productions below are a mixture of productions from the CPlusPlus sample
-//that comes with javacc and productions based on the C++ Standard 
+//that comes with javacc and productions based on the C++ Standard
 //(mostly the latter).
 void translation_unit() :
 {}
 {
-  (declaration())* 
+  (declaration())*
   <EOF>
 }
 
 
 //This production is key in terms of performance...It is really the base production
-//used to parse each declaration.  We have to be really careful about how we use 
-//LOOKAHEAD here because this method is called so many times.  So the basic idea 
-//is that I try to determine 1,2 or at most 3 tokens (based on the C++ standard),
+//used to parse each declaration.  We have to be really careful about how we use
+//LOOKAHEAD here because this method is called so many times.  So the basic idea
+//is that I try to determine 1,2 or	at most 3 tokens (based on the C++ standard),
 //to lookahead to decide what type of declaration we are dealing with.
 void declaration() :
 {String theTypes = empty;}
@@ -623,15 +623,15 @@ void declaration() :
    | "namespace" namespace_definition()
    | "using" ("namespace" using_directive() | using_declaration())
    | "asm" asm_definition()
-   | ";"
+   | ";" {symtab.setCurrentDeclaration(null);}
    | theTypes = declaration_specifiers()
      {
       if (theTypes == null)
        return;
-     } 
+     }
      (LOOKAHEAD(function_definition_lookahead()) function_definition(theTypes, null) | simple_declaration(theTypes))
    | function_pointer_without_return_type()
-}
+ }
 
 //This matches a function pointer without return type (e.g. (*fpt)(int, void*)).
 void function_pointer_without_return_type() :
@@ -651,11 +651,11 @@ String declaration_specifiers() :
  {
   if (name == null)
    return null;
- } 
- (LOOKAHEAD(2) next = declaration_specifier()  
- { 
-  if (next == null) 
-   return null; 
+ }
+ (LOOKAHEAD(2) next = declaration_specifier()
+ {
+  if (next == null)
+   return null;
   name += " " + next;
  }
  )*
@@ -663,45 +663,46 @@ String declaration_specifiers() :
 }
 
 String declaration_specifier() :
-{String name = null, next; boolean classSpecFound = false; boolean semicolonFound = false;}
+{String name = null, next; DataElement classDecl = null; boolean semicolonFound = false;}
 {
-  ( 
+  (
     //Specifiers
-     (<CLASS> | "struct" | "union") {name = getToken(0).image;} 
-                                    [LOOKAHEAD(class_specifier_lookahead()) next = class_specifier() 
-                                    {name += " " + next;}]
-                                    [LOOKAHEAD(";") ";" {semicolonFound = true;}]
-                                    { if ((semicolonFound) || (getToken(0).image.equals(";"))) return null;}                                    
-   | "enum"   {name = "enum";} 
+     (<CLASS> | "struct" | "union") {name = getToken(0).image;}
+              [LOOKAHEAD(class_specifier_lookahead()) classDecl = class_specifier()
+               {if (classDecl != null) {name += " " + classDecl.getName(); symtab.setCurrentDeclaration(classDecl);}}
+              ]
+              [LOOKAHEAD(";") ";" {semicolonFound = true; symtab.setCurrentDeclaration(null);}]
+              { if ((semicolonFound) || (getToken(0).image.equals(";"))) return null;}
+   | "enum"   {name = "enum";}
               [LOOKAHEAD(enum_specifier_lookahead())  next = enum_specifier() {name += " " + next;}]
               [LOOKAHEAD(";") ";" {return null;}]
    //Builtins
-   | "int" 
-   | "long" 
-   | "float" 
-   | "double" 
-   | "bool" 
-   | "void" 
-   | "char" 
-   | "short" 
-   | "signed" 
-   | "unsigned" 
-   | "wchar_t" 
+   | "int"
+   | "long"
+   | "float"
+   | "double"
+   | "bool"
+   | "void"
+   | "char"
+   | "short"
+   | "signed"
+   | "unsigned"
+   | "wchar_t"
    //Cv-Qualifiers
-   | "const" 
-   | "volatile" 
+   | "const"
+   | "volatile"
    //Storage Class
-   | "auto" 
-   | "register" 
-   | "static"  
-   // "extern"  This is matched inside declaration itself as part of a linkage specification  
-   | "mutable" 
+   | "auto"
+   | "register"
+   | "static"
+   // "extern"  This is matched inside declaration itself as part of a linkage specification
+   | "mutable"
    //Function Specifiers
-   | "inline"   
+   | "inline"
    | "virtual"
-   | "explicit" 
+   | "explicit"
    //Others
-   | "friend"  
+   | "friend"
    | "typedef"  {symtab.objectIsTypedef(); name = empty;}
    | "typename"
    | "*"
@@ -712,10 +713,10 @@ String declaration_specifier() :
    | ["::"] [LOOKAHEAD(nested_name_lookahead()) nested_name_specifier() ["template"]] name = identifier()
      [LOOKAHEAD(2) ":" next = constant() { name += ":" + next; } ]
   )
-  { 
+  {
    if (name == null)
     name = getToken(0).image;
-   
+
    return name;
   }
 }
@@ -723,8 +724,8 @@ String declaration_specifier() :
 //The declaration_specifiers have already been matched when we get here:
 void member_function_definition_lookahead() :
 {}
-{  
-   (LOOKAHEAD(2) ptr_operator())* (id_expression())? 
+{
+   (LOOKAHEAD(2) ptr_operator())* (id_expression())?
    "(" (")" | LOOKAHEAD(3) parameter_list(false) ")" | expression() ")")
    //Match a ";" below, since we want A B(); to be matched as a constructor
    ( ";" | ":" | "{" | "try" | "=" | "const" | "volatile" )
@@ -733,8 +734,8 @@ void member_function_definition_lookahead() :
 //The declaration_specifiers have already been matched when we get here:
 void function_definition_lookahead() :
 {}
-{  
-   (LOOKAHEAD(2) ptr_operator())* (id_expression())? 
+{
+   (LOOKAHEAD(2) ptr_operator())* (id_expression())?
    "(" (")" | LOOKAHEAD(3) parameter_list(false) ")" | expression() ")")
    //Don't match a ";" below since we want A B(); to be matched as a variable declaration;
    ( ":" | "{" | "try" | "=" | ";" | declaration_specifier() )
@@ -744,7 +745,7 @@ void function_definition_lookahead() :
 void simple_declaration(String theTypes) :
 {}
 {
-  init_declarator_list(theTypes)  
+  init_declarator_list(theTypes)
 }
 
 //The "template <" keywords have already been matched when we get here:
@@ -760,7 +761,7 @@ void template_declaration() :
 void linkage_specification() :
 {}
 {
-  (  "{" (declaration())* "}" 
+  (  "{" (declaration())* "}"
    | declaration()
   )
 }
@@ -770,16 +771,16 @@ void linkage_specification() :
 void namespace_definition() :
 {String name = empty, next = empty;}
 {
-  (    name = identifier() ["=" next = id_expression()] 
+  (    name = identifier() ["=" next = id_expression()]
     | {name = UnnamedTypeManager.instance().getNextUnnamedType("namespace");}
   )
-  // DataElement theNamespace = symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true); 
+  // DataElement theNamespace = symtab.addObject(ParserSchema.dNamespace, name, getToken(0).beginLine, true);
   namespace_body()
 }
 
 void namespace_body():
 {}
-{ 
+{
   ( ";" | "{" (declaration())* "}" )
 }
 
@@ -814,7 +815,7 @@ void function_definition(String theTypes, String className) :
 {String name;}
 {
   // Determine whether this function is a constructor
-  { 
+  {
     // If we have a class name, then the function is a constructor if the function name
     // is the same as the class name plus an optional "inline" prefix.
     if (className != null && className.length() > 0)
@@ -832,8 +833,8 @@ void function_definition(String theTypes, String className) :
   }
   (  LOOKAHEAD(2) "~" constructor_destructor_definition(theTypes, ParserSchema.Destructor)
    | LOOKAHEAD({isConstructor}) constructor_destructor_definition(theTypes, ParserSchema.Constructor)
-   | 
-     name = declarator(ParserSchema.Function) 
+   |
+     name = declarator(ParserSchema.Function)
      {
       String [] names = parseDeclaration(theTypes, true);
       symtab.addFunctionReturnTypes(names[1]);
@@ -844,9 +845,9 @@ void function_definition(String theTypes, String className) :
       DataElement theFunction = symtab.addObject(funcType, names[0], name, getToken(0).beginLine, true);
      }
      (
-         LOOKAHEAD(2) ";" {symtab.closeScope();} 
+         LOOKAHEAD(2) ";" {symtab.closeScope();}
       |  "=" constant_expression() {symtab.closeScope();}
-      |  (LOOKAHEAD(2) declaration())* "{" skip_object_body(theFunction) 
+      |  (LOOKAHEAD(2) declaration())* "{" skip_object_body(theFunction)
      )
   )
 }
@@ -854,7 +855,7 @@ void function_definition(String theTypes, String className) :
 void function_body() :
 {}
 {
-  (  
+  (
      <EOF>
    | "{" (statement_list())? "}"
   )
@@ -867,17 +868,17 @@ void init_declarator_list(String theTypes) :
 {String name = empty; int startLine = getToken(1).beginLine; boolean firstTime = true;}
 {
   name = init_declarator()
-  {  
+  {
    if (theTypes != null)
    {
     name = theTypes + " " + name;
     Token t = getToken(1);
-    if ( (t!=null) && ( (t.kind==COMMA) || (t.kind==SEMICOLON))) 
+    if ( (t!=null) && ( (t.kind==COMMA) || (t.kind==SEMICOLON)))
      symtab.addObject(ParserSchema.dVariable, name, startLine,false);
    }
-  }     
-  ( 
-    "," 
+  }
+  (
+    ","
     {
      if ((firstTime) && (theTypes != null))
      {
@@ -899,11 +900,11 @@ void init_declarator_list(String theTypes) :
 String init_declarator() :
 { String name=empty;}
 {
-  [LOOKAHEAD(3) name = declarator(ParserSchema.Variable)] 
-  [LOOKAHEAD(2) (   "(" ( ")" | expression() ")" ) 
+  [LOOKAHEAD(3) name = declarator(ParserSchema.Variable)]
+  [LOOKAHEAD(2) (   "(" ( ")" | expression() ")" )
                   | "=" ( "{" skip_initializer() | expression())
                 )
-               
+
   ]
   {return name;}
 }
@@ -923,20 +924,20 @@ String declarator(String objType) :
 String direct_declarator(String objType) :
 {String name = empty, params = null;}
 {
- ( 
+ (
      LOOKAHEAD(8) "("  name = declarator(objType) ")" [LOOKAHEAD(2) params = declarator_suffix()]
-     { 
+     {
       if (objType.equals("function"))
        return "(" + name + ")";
       if ((name.length() > 1) && (name.charAt(0) == '*') && (params != null))
        return ("(*)" + params + " " + name.substring(1, name.length()));
-      return name; 
+      return name;
      }
-   | name = id_expression()      
-   | name = declarator_suffix()  
+   | name = id_expression()
+   | name = declarator_suffix()
  )
- 
- (LOOKAHEAD(2) params = declarator_suffix() {name += " " + params;})* 
+
+ (LOOKAHEAD(2) params = declarator_suffix() {name += " " + params;})*
  {return name;}
 }
 
@@ -945,11 +946,11 @@ String declarator_suffix() :
 {String name = empty, next = empty;}
 {
  (
-     (LOOKAHEAD(2) "[" "]" | "[" next = constant_expression() "]")  {name = "[" + next + "]";} 
+     (LOOKAHEAD(2) "[" "]" | "[" next = constant_expression() "]")  {name = "[" + next + "]";}
   |  (LOOKAHEAD(2) "(" ")" | "(" (LOOKAHEAD(parameter_list(false) ")") next = parameter_list(true) | expression())  ")")  {name = "(" + next + ")";}
  )
  [LOOKAHEAD(2) ("const" | "volatile")]
- [LOOKAHEAD(2) exception_spec()] 
+ [LOOKAHEAD(2) exception_spec()]
  {return name;}
 }
 
@@ -976,7 +977,7 @@ void builtin_type_specifier() :
 {}
 {
   ( "void" | "char" | "short" | "int" | "long" | "float" |
-    "double" | "signed" | "unsigned" | "wchar_t" | "bool" 
+    "double" | "signed" | "unsigned" | "wchar_t" | "bool"
   )
 }
 
@@ -991,8 +992,8 @@ void enum_specifier_lookahead() :
 //The "enum" keyword has already been matched when we get here:
 String enum_specifier() :
 { String name = empty; int startLine = getToken(1).beginLine;}
-{  
-   (LOOKAHEAD(2)   name = identifier() 
+{
+   (LOOKAHEAD(2)   name = identifier()
                 | {name = UnnamedTypeManager.instance().getNextUnnamedType("enum");}
    )
    {
@@ -1003,7 +1004,7 @@ String enum_specifier() :
 }
 
 
-//When this lookahead is invoked, the "class", "struct" or "union" keyword has already 
+//When this lookahead is invoked, the "class", "struct" or "union" keyword has already
 //been matched.
 void class_specifier_lookahead() :
 {}
@@ -1016,17 +1017,17 @@ void class_specifier_lookahead() :
 
 //The "class", "struct" or "union" keyword has already been matched when we get here.
 //This method returns a bool indicating whether a class DataElement was created or not.
-String class_specifier() :
-{String classType = empty; String name = empty; int startLine = getToken(1).beginLine; }
+DataElement class_specifier() :
+{String classType = empty; String name = empty; DataElement theClass = null; int startLine = getToken(1).beginLine; }
 {
   {classType = getToken(0).image;}
   [LOOKAHEAD(nested_name_lookahead()) nested_name_specifier()]
-  (  name = identifier() 
+  (  name = identifier()
    | {name = UnnamedTypeManager.instance().getNextUnnamedType(classType);}
   )
-  [";" {return name;}]
+  [";" {return null;}]
   {
-   DataElement theClass = null;
+   //DataElement theClass = null;
    if (classType.equals(ParserSchema.Union))
     theClass = symtab.addObject(ParserSchema.dUnion, name, startLine, true);
    else if (classType.equals(ParserSchema.Struct))
@@ -1034,10 +1035,10 @@ String class_specifier() :
    else
     theClass = symtab.addObject(ParserSchema.dClass, name, startLine, true);
   }
-  [base_clause(theClass)] 
-  "{" 
+  [base_clause(theClass)]
+  "{"
   skip_object_body(theClass)
-  {return name;}
+  {return theClass;}
 }
 
 void base_clause(DataElement child) :
@@ -1054,19 +1055,19 @@ void base_specifier(DataElement child) :
    name = identifier()
    {
     symtab.addClassBase(name);
-   } 
+   }
 }
 
 void access_specifier() :
 {}
 {
-   "public"    
- | "private"   
- | "protected" 
+   "public"
+ | "private"
+ | "protected"
 }
 
-void class_body(String className) : 
-{}  
+void class_body(String className) :
+{}
 {
   "{" [member_declaration_list(className)] "}"
   { symtab.closeScope(); }
@@ -1075,32 +1076,32 @@ void class_body(String className) :
 void member_declaration_list(String className) :
 {}
 {
-  (member_declaration(className))+ 
+  (member_declaration(className))+
 }
 
 void member_declaration(String className) :
 {String theTypes = empty;}
 {
- ( 
+ (
     //Access Specifiers
     "public"    ":"
   | "private"   ":"
-  | "protected" ":" 
+  | "protected" ":"
     //Member declarations
   | "using" using_declaration()
   | "export" "template" "<" template_declaration()
   | "template" "<" template_declaration()
-  | ";"
+  | ";" {symtab.setCurrentDeclaration(null);}
   | LOOKAHEAD("~") function_definition("", className)
   | theTypes = declaration_specifiers()
-    { 
+    {
      if (theTypes == null)
       return;
-    } 
+    }
     (LOOKAHEAD(member_function_definition_lookahead()) function_definition(theTypes, className)
                                                      | member_declarator_list(theTypes))
-  | function_pointer_without_return_type()                                                  
-  
+  | function_pointer_without_return_type()
+
  )
 }
 
@@ -1108,23 +1109,25 @@ void member_declaration(String className) :
 void member_declarator_list(String theTypes) :
 {String name = empty; int startLine = getToken(1).beginLine; boolean firstTime = true; }
 {
-   [LOOKAHEAD(2) name = member_declarator()]
+   [LOOKAHEAD(2) (name = member_declarator()
+    | ":" name = constant() {name = UnnamedTypeManager.instance().getNextBitfield() + ":" + name;})
+   ]
    {
     name = theTypes + " " + name;
-    symtab.addObject(ParserSchema.dVariable, name, startLine,false); 
+    symtab.addObject(ParserSchema.dVariable, name, startLine,false);
    }
-   ( ","  
+   ( ","
      {
       if (firstTime)
       {
        theTypes = parseDeclaration(theTypes, false)[1];
        firstTime = false;
-      }        
+      }
      }
      name = member_declarator()
      {
       name = theTypes + " " + name;
-      symtab.addObject(ParserSchema.dVariable, name,startLine,false); 
+      symtab.addObject(ParserSchema.dVariable, name,startLine,false);
      }
    )*
 }
@@ -1134,14 +1137,14 @@ String member_declarator() :
 {
    name = declarator(ParserSchema.Variable)
    [   "=" (LOOKAHEAD(2) constant_expression() | <DECIMALINT>)
-     | ":" constant_expression() 
+     | ":" constant_expression()
    ]
    {return name;}
 }
 
 void enum_body() :
 {}
-{ 
+{
   (  <EOF>
    | "{" (LOOKAHEAD(2) enumerator_list())? "}"
   )
@@ -1149,7 +1152,7 @@ void enum_body() :
    symtab.closeScope();
   }
 }
- 
+
 void enumerator_list() :
 {}
 {
@@ -1159,10 +1162,9 @@ void enumerator_list() :
 void enumerator() :
 {String name = empty; String value = empty; int startLine = getToken(1).beginLine;}
 {
-  identifier() {name = getToken(0).image;} ("=" { value = constant_expression(); })?
+  identifier() {name = getToken(0).image;} ("=" value = constant_expression() {name = name + "=" + value;})?
   {
-   value = name + "=" + value;
-   symtab.addObject(ParserSchema.dVariable, name, value, startLine, false);
+   symtab.addObject(ParserSchema.dVariable, name, startLine, false);
   }
 }
 
@@ -1180,9 +1182,9 @@ String ptr_operator() :
 String cv_qualifier_seq() :
 {String name = empty;}
 {
-   [ LOOKAHEAD(2) ( "const" {name = "const";} [ LOOKAHEAD(2) "volatile" {name += " volatile";} ] 
-                   | "volatile" {name = "volatile";} [ LOOKAHEAD(2) "const" {name += " const";}] 
-                  ) 
+   [ LOOKAHEAD(2) ( "const" {name = "const";} [ LOOKAHEAD(2) "volatile" {name += " volatile";} ]
+                   | "volatile" {name = "volatile";} [ LOOKAHEAD(2) "const" {name += " const";}]
+                  )
    ]
    {return name;}
 }
@@ -1193,7 +1195,7 @@ void constructor_destructor_definition(String name, String objectType) :
 {String fullName = empty; int startLine = getToken(1).beginLine;}
 {
   [name = identifier()]
-  (LOOKAHEAD(2) "(" ")" | "(" fullName = parameter_list(true) ")") 
+  (LOOKAHEAD(2) "(" ")" | "(" fullName = parameter_list(true) ")")
   {
    //Weed out the inline specifier if it exists:
    if (name.startsWith("inline "))
@@ -1208,7 +1210,7 @@ void constructor_destructor_definition(String name, String objectType) :
    else
     theConstructor = symtab.addObject(ParserSchema.dConstructor, fullName, startLine, true);
   }
-  [ LOOKAHEAD(2) ( ";" {symtab.closeScope(); return;}  | ctor_initializer()) ] 
+  [ LOOKAHEAD(2) ( ";" {symtab.closeScope(); return;}  | ctor_initializer()) ]
   "{" skip_object_body(theConstructor)
 }
 
@@ -1240,9 +1242,9 @@ String parameter_declaration() :
 {
    ( "..." {return "...";}
     | name = declaration_specifiers() {if (name == null) return empty;}
-      (  LOOKAHEAD(2) next = declarator(ParserSchema.Variable) {name += " " + next;} 
+      (  LOOKAHEAD(2) next = declarator(ParserSchema.Variable) {name += " " + next;}
        | next = abstract_declarator() {name += " " + next;}
-      ) 
+      )
       ["=" next = assignment_expression() {name += " = " + next;}]
    )
    {return name.trim();}
@@ -1251,9 +1253,9 @@ String parameter_declaration() :
 String initializer() :
 {String name = empty; String next = empty;}
 {
- ( LOOKAHEAD(3) 
+ ( LOOKAHEAD(3)
    "{" name = initializer() {name = "{" + name;}
-     (LOOKAHEAD(2)"," next = initializer() {name += " , " + next;})* 
+     (LOOKAHEAD(2)"," next = initializer() {name += " , " + next;})*
      [","]
    "}" {name += "}";}
  | name = assignment_expression()
@@ -1264,11 +1266,11 @@ String initializer() :
 String abstract_declarator() :
 {String name = empty; String next = empty;}
 {
-   [ LOOKAHEAD(2) 
+   [ LOOKAHEAD(2)
      (  "(" name = abstract_declarator() ")" {name = "(" + name + ")";}
         (LOOKAHEAD(3)next = abstract_declarator_suffix() {name += next;})+
       | (LOOKAHEAD(2) (LOOKAHEAD(2) "[" "]" | "[" next = constant_expression() "]") {name += "[" + next + "]";})+
-      | name = ptr_operator() next = abstract_declarator() {name += " " + next;} 
+      | name = ptr_operator() next = abstract_declarator() {name += " " + next;}
      )
    ]
    {return name;}
@@ -1278,7 +1280,7 @@ String abstract_declarator_suffix() :
 {String name = empty;}
 {
  (
-     LOOKAHEAD(2) "[" "]" {return "[]";} 
+     LOOKAHEAD(2) "[" "]" {return "[]";}
    | LOOKAHEAD(2) "(" ")" {return "()";}
    | "[" name = constant_expression() "]" {return "[" + name + "]";}
    | "(" name = parameter_list(false) ")"
@@ -1302,7 +1304,7 @@ void template_parameter_list() :
 void template_parameter() :
 { Token t; }
 {
-   LOOKAHEAD(3) "class" t=<ID> 
+   LOOKAHEAD(3) "class" t=<ID>
  | parameter_declaration()
 }
 
@@ -1322,17 +1324,17 @@ void template_argument() :
 
 void statement_list() :
 {boolean foundBreak = false;}
-{  
+{
    (LOOKAHEAD(2) foundBreak = statement() {if (foundBreak) return;})+
 }
 
 boolean statement() :
 {String stmt, theTypes = empty; int startLine = getToken(1).beginLine; boolean foundBreakStatement = false;}
 {
- (  
+ (
 
    iteration_statement()
-  | foundBreakStatement = jump_statement() 
+  | foundBreakStatement = jump_statement()
   | compound_statement()
   | selection_statement()
   | try_block()
@@ -1343,24 +1345,24 @@ boolean statement() :
   | ";"
   | LOOKAHEAD(2) labeled_statement()
   | LOOKAHEAD(expression() ";") stmt = expression() ";" {symtab.addObject(ParserSchema.dStatement, stmt + ";", startLine, false);}
-  | theTypes = declaration_specifiers() 
+  | theTypes = declaration_specifiers()
     {
      if (theTypes == null)
       return false;
     }
     simple_declaration(theTypes) ";"
- 
+
  )
- {return foundBreakStatement;}  
+ {return foundBreakStatement;}
 }
 
 
 void labeled_statement() :
 {String name = empty; int startLine = getToken(1).beginLine;}
 {
- (  <ID> {name = getToken(0).image;} 
-  | "case" name = constant_expression() {name = "case " + name;}  
-  | "default" {name = "default";} 
+ (  <ID> {name = getToken(0).image;}
+  | "case" name = constant_expression() {name = "case " + name;}
+  | "default" {name = "default";}
  )
  ":"
  {symtab.addObject(ParserSchema.dCompoundStatement, name + " :",startLine,true);}
@@ -1379,13 +1381,13 @@ void selection_statement() :
 {
  (
    "if" "(" name = expression() ")" {symtab.addObject(ParserSchema.dCompoundStatement, "if ( " + name + " )", startLine,true);}
-   statement() {symtab.closeScope();} 
+   statement() {symtab.closeScope();}
    [ LOOKAHEAD("else")
     "else"  {symtab.addObject(ParserSchema.dCompoundStatement, "else", getToken(0).beginLine,true);}
     statement() {symtab.closeScope();}
    ]
- | "switch" "(" name = expression() ")" 
-   {symtab.addObject(ParserSchema.dCompoundStatement, "switch ( " + name + " )", startLine,true);} 
+ | "switch" "(" name = expression() ")"
+   {symtab.addObject(ParserSchema.dCompoundStatement, "switch ( " + name + " )", startLine,true);}
    statement() {symtab.closeScope();}
  )
 }
@@ -1394,19 +1396,19 @@ void iteration_statement() :
 {String name = empty; String next = empty; int startLine = getToken(1).beginLine; DataElement theObject;}
 {
  (
-   "while" "(" name = expression() ")" 
-   {symtab.addObject(ParserSchema.dCompoundStatement, "while (" + name + ")", startLine,true);} 
-   statement() 
- | "do" 
+   "while" "(" name = expression() ")"
+   {symtab.addObject(ParserSchema.dCompoundStatement, "while (" + name + ")", startLine,true);}
+   statement()
+ | "do"
    {theObject = symtab.addObject(ParserSchema.dCompoundStatement, "do", startLine,true);}
-   statement() 
+   statement()
    "while" "(" name = expression() ")" ";"
    {if (name == null) name = empty; theObject.setAttribute(DE.A_NAME, "do...while (" + name + ")");}
  | "for" "(" {Token currentToken = getToken(1); name = "for(";}
      (
         ";" {name += ";";}
-      | LOOKAHEAD(expression() ";") next = expression() ";" {name = "for (" + next + ";";} 
-      | declaration_specifiers() simple_declaration(null) ";" //Loop from currentToken to get the text of the declaration: 
+      | LOOKAHEAD(expression() ";") next = expression() ";" {name = "for (" + next + ";";}
+      | declaration_specifiers() simple_declaration(null) ";" //Loop from currentToken to get the text of the declaration:
         {
          while (( currentToken != null) && (currentToken != getToken(0)))
          {
@@ -1414,33 +1416,33 @@ void iteration_statement() :
           currentToken = currentToken.next;
          }
          name += currentToken.image;
-        }  
+        }
      )
      [LOOKAHEAD(expression_lookahead()) next = expression()  {name += " " + next;}]
       ";" {name += ";";}
-     [LOOKAHEAD(expression_lookahead()) next = expression() {name += " " + next;}] 
-    ")" 
+     [LOOKAHEAD(expression_lookahead()) next = expression() {name += " " + next;}]
+    ")"
     {
      name += ")";
      symtab.addObject(ParserSchema.dCompoundStatement, name, startLine,true);
-    } 
+    }
     statement()
  )
  {symtab.closeScope();}
 }
 
 boolean jump_statement() :
-{String theText = empty; int theLineNumber = getToken(1).beginLine; 
+{String theText = empty; int theLineNumber = getToken(1).beginLine;
  boolean breakFound = false; //Tells whether we found a break or return statement.
 }
 {
  (  "goto" <ID>             {theText = "goto " + getToken(0).image + ";";}
-  | "continue"               {theText = "continue;";} 
+  | "continue"               {theText = "continue;";}
   | "break"                  {theText = "break;"; breakFound = true;}
   | "return" (theText = expression())? {theText = "return " + theText + ";"; } //breakFound = true;}
  )
  ";"
- { 
+ {
   symtab.addObject(ParserSchema.dStatement, theText, theLineNumber,false);
   return breakFound;
  }
@@ -1449,17 +1451,17 @@ boolean jump_statement() :
 void try_block() :
 {}
 {
-   "try" 
+   "try"
    {symtab.addObject(ParserSchema.dCompoundStatement, "try", getToken(0).beginLine, true);}
-   compound_statement() 
-   {symtab.closeScope();} 
+   compound_statement()
+   {symtab.closeScope();}
    (handler())*
 }
 
 void handler() :
 {String name = null; int startLine = getToken(1).beginLine;}
 {
-  (  "catch" "(" name = exception_declaration() ")" {name = "catch (" + name + ")";} 
+  (  "catch" "(" name = exception_declaration() ")" {name = "catch (" + name + ")";}
    | "finally" {name = "finally";}
   )
   {
@@ -1470,7 +1472,7 @@ void handler() :
 
 String exception_declaration() :
 {String name = empty;}
-{  
+{
   (  LOOKAHEAD(parameter_list(false)) name = parameter_list(false) //a parameter list can equal "..."
    | declaration()
   )
@@ -1479,7 +1481,7 @@ String exception_declaration() :
 
 void throw_statement() :
 {String theText = empty; int startLine = getToken(1).beginLine;}
-{   
+{
    "throw" (theText = assignment_expression())? ";"
    {
     theText = "throw " + theText + ";";
@@ -1491,7 +1493,7 @@ void expression_lookahead() :
 {}
 {
    LOOKAHEAD(2) constant()
- | expression() 
+ | expression()
 }
 
 
@@ -1507,18 +1509,18 @@ String assignment_expression() :
 {String name = empty; String next = empty; String op = empty;}
 {
    name = conditional_expression()
-   (LOOKAHEAD(2)  
+   (LOOKAHEAD(2)
     ("=" | "*=" | "/=" | "%=" | "+=" | "-=" | "<<=" | ">>=" | "&=" | "^=" | "|=" ) {op = " " + getToken(0).image + " ";}
-    next = assignment_expression() {name += op + next;}  
+    next = assignment_expression() {name += op + next;}
    )*
    {return name;}
 }
 
 String conditional_expression() :
 {String name = empty; String next = empty;}
-{  
+{
    name = logical_or_expression()
-   [ 
+   [
      "?" next = expression() {name += " ? " + next;}
      ":" next = assignment_expression() {name += " : " + next;}
    ]
@@ -1527,7 +1529,7 @@ String conditional_expression() :
 
 String constant_expression() :
 {String name = empty;}
-{    
+{
   ( LOOKAHEAD(3) name = conditional_expression()
    | name = constant()
   )
@@ -1536,42 +1538,42 @@ String constant_expression() :
 
 String logical_or_expression() :
 {String name = empty; String next = empty;}
-{    
+{
    name = logical_and_expression() (LOOKAHEAD(2) "||" next = logical_and_expression() {name += " || " + next;})*
    {return name;}
 }
 
 String logical_and_expression() :
 {String name = empty; String next = empty;}
-{    
+{
    name = inclusive_or_expression() (LOOKAHEAD(2) "&&" next = inclusive_or_expression() {name += " && " + next;})*
    {return name;}
 }
 
 String inclusive_or_expression() :
 {String name = empty; String next = empty;}
-{    
+{
    name = exclusive_or_expression() (LOOKAHEAD(2) "|" next = exclusive_or_expression() {name += " | " + next;})*
    {return name;}
 }
 
 String exclusive_or_expression() :
 {String name = empty; String next = empty;}
-{    
+{
    name = and_expression()(LOOKAHEAD(2)  "^" next = and_expression() {name += " ^ " + next;})*
    {return name;}
 }
 
 String and_expression() :
 {String name = empty; String next = empty;}
-{    
+{
    name = equality_expression() (LOOKAHEAD(2) "&" next = equality_expression() {name += " & " + next;})*
    {return name;}
 }
 
 String equality_expression() :
 {String name = empty; String next = empty;}
-{   
+{
    name = relational_expression() (LOOKAHEAD(2) ( "!=" | "==") {name += " " + getToken(0).image;}
                                     next = relational_expression() {name += " " + next;}
                                   )*
@@ -1580,7 +1582,7 @@ String equality_expression() :
 
 String relational_expression() :
 {String name = empty; String next = empty;}
-{  
+{
    name = shift_expression() ( LOOKAHEAD(2) ("<" | ">" | "<=" | ">=") {name += " " + getToken(0).image;}
                                next = shift_expression() {name += " " + next;}
                               )*
@@ -1589,7 +1591,7 @@ String relational_expression() :
 
 String shift_expression() :
 {String name = empty; String next = empty;}
-{  
+{
    name = additive_expression() (LOOKAHEAD(2)  ("<<" | ">>") {name += " " + getToken(0).image;}
                                   next = additive_expression() {name += " " + next;}
                                 )*
@@ -1598,7 +1600,7 @@ String shift_expression() :
 
 String additive_expression() :
 {String name = empty; String next = empty;}
-{  
+{
    name = multiplicative_expression()
    (LOOKAHEAD(2) ( "+" | "-") {name += " " + getToken(0).image;}
     next = multiplicative_expression() {name += " " + next;}
@@ -1608,7 +1610,7 @@ String additive_expression() :
 
 String multiplicative_expression() :
 {String name = empty; String next = empty;}
-{  
+{
    name = pm_expression()
    (LOOKAHEAD(2) ("*" | "/" | "%") {name += " " + getToken(0).image;}
     next =  pm_expression() {name += " " + next;}
@@ -1627,9 +1629,9 @@ String pm_expression() :
 
 String cast_expression() :
 {String name = empty; String next = empty;}
-{  
- ( 
-    LOOKAHEAD("(" type_id() ")" cast_expression()) 
+{
+ (
+    LOOKAHEAD("(" type_id() ")" cast_expression())
               "(" name = type_id() ")" next = cast_expression() {name = "(" + name + ")" + next;}
   | name = unary_expression()
  )
@@ -1638,11 +1640,11 @@ String cast_expression() :
 
 String unary_expression() :
 {String name = empty; String next = empty;}
-{  
+{
  ( "++" name = unary_expression() {name = "++" + name;}
  | "--" name = unary_expression() {name = "--" + name;}
  | "sizeof"  (  LOOKAHEAD("(" type_id() ")") "(" name = type_id()  ")" {name = "sizeof " + "(" + name + ")";}
-              | name = unary_expression() 
+              | name = unary_expression()
              )
  | LOOKAHEAD(3) name = unary_operator() next = cast_expression() {name += next;}
  | name = postfix_expression()
@@ -1652,7 +1654,7 @@ String unary_expression() :
 
 String postfix_expression() :
 {String name = empty; String next = empty; String functionName = empty;}
-{  
+{
   (
    (
       LOOKAHEAD(3) name = primary_expression()
@@ -1667,8 +1669,8 @@ String postfix_expression() :
     LOOKAHEAD(2)
     (
        "[" next = expression() "]"           {name += "[" + next + "]";}
-     | {functionName = getToken(0).image;} 
-       (LOOKAHEAD(2) "(" ")" | "("  next = expression() ")") 
+     | {functionName = getToken(0).image;}
+       (LOOKAHEAD(2) "(" ")" | "("  next = expression() ")")
        {name += "(" + next + ")"; symtab.addFunctionCall(functionName, next);}
      | "." next = id_expression()        {name += "." + next;}
      | "->" next = id_expression()       {name += "->" + next;}
@@ -1683,14 +1685,14 @@ String postfix_expression() :
 
 String primary_expression() :
 {String name = empty; String next = empty;}
-{  
- ( 
+{
+ (
     name = constant()
   | <STRING> {name = getToken(0).image;} (LOOKAHEAD(2) <STRING> {name += getToken(0).image + " ";})*
   | "(" name = expression()  ")" {name = "(" + name + ")";}
-  | LOOKAHEAD( ("::")? "new") name = new_expression() 
-  | LOOKAHEAD( ("::")? "delete") name  = delete_expression() 
-  | name = id_expression() 
+  | LOOKAHEAD( ("::")? "new") name = new_expression()
+  | LOOKAHEAD( ("::")? "delete") name  = delete_expression()
+  | name = id_expression()
  )
  {return name;}
 }
@@ -1698,7 +1700,7 @@ String primary_expression() :
 
 String new_expression() :
 {String name = empty; String next = empty;}
-{    
+{
    ["::" {name = "::";}]
    "new" {name += "new";}
    [LOOKAHEAD("(" expression_lookahead()) "(" next = expression() ")" {name += " " + next;}]  //new_placement
@@ -1712,14 +1714,14 @@ String new_expression() :
 String new_type_id() :
 {String name = empty; String next = empty;}
 {
-   (LOOKAHEAD(2) next = declaration_specifier(){name += " " + next;})+  
+   (LOOKAHEAD(2) next = declaration_specifier(){name += " " + next;})+
    [LOOKAHEAD(2) next = new_declarator() {name += " " + next;}]
    {return name;}
 }
 
 String new_declarator() :
 {String name = empty; String next = empty;}
-{ 
+{
  (  name = direct_new_declarator()
   | name = ptr_operator() {name += next;}
     [ LOOKAHEAD(2) next = new_declarator() {name += " " + next;} ]
@@ -1736,24 +1738,24 @@ String direct_new_declarator() :
 
 String new_initializer() :
 {String name = empty;}
-{ 
+{
   (LOOKAHEAD(2) "(" ")" |  "(" name = expression() ")" ) {name = "(" + name + ")";}
-  {return name;} 
+  {return name;}
 }
 
 String delete_expression() :
 {String name = empty; String next = empty;}
 {
-  ("::" {name = "::";})? 
+  ("::" {name = "::";})?
   "delete" {name += "delete";}
-  ( "[" "]" {name += "[]";})? 
+  ( "[" "]" {name += "[]";})?
   next = cast_expression() {name += " " + next;}
   {return name;}
 }
 
 String unary_operator() :
 {}
-{ 
+{
  ( "&"
  | "*"
  | "+"
@@ -1779,18 +1781,18 @@ String qualified_id() :
 {
   ( "::" {name = "::";}
     (  "operator" next = optor()          {name += "operator" + next;}
-     | LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier() {name += next;} 
-                                          ["template" {name += "template";}] 
+     | LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier() {name += next;}
+                                          ["template" {name += "template";}]
                                           next = unqualified_id() {name += " " + next;}
-     | next = identifier()                {name += next;} 
+     | next = identifier()                {name += next;}
     )
-  | LOOKAHEAD(nested_name_lookahead())  name = nested_name_specifier() 
-                                        ["template" {name += "template";}] 
+  | LOOKAHEAD(nested_name_lookahead())  name = nested_name_specifier()
+                                        ["template" {name += "template";}]
                                         (  next = unqualified_id() {name += " " + next;}
                                          | next = identifier()     {name += " " + next;}
                                         )
-  | name = identifier()                  
-                                        
+  | name = identifier()
+
  )
  {return name;}
 }
@@ -1799,10 +1801,10 @@ String id_expression() :
 {String name;}
 {
  (
-    name = qualified_id()   
+    name = qualified_id()
   | name = unqualified_id()
  )
- {return name;} 
+ {return name;}
 }
 
 String identifier() :
@@ -1836,9 +1838,9 @@ String nested_name_specifier() :
 {String name = empty, next;}
 {
   <ID> {name = getToken(0).image;}
-  ["<" [template_argument_list()] ">"] 
+  ["<" [template_argument_list()] ">"]
   "::" {name += "::";}
-  [LOOKAHEAD(2) "template" {name += "template";}] 
+  [LOOKAHEAD(2) "template" {name += "template";}]
   [LOOKAHEAD(nested_name_lookahead()) next = nested_name_specifier() {name += next;}]
   {return name;}
 }
@@ -1853,7 +1855,7 @@ String constant() :
   | <DECIMALINT>
   | <DECIMALLONG>
   | <HEXADECIMALINT>
-  | <HEXADECIMALLONG>  
+  | <HEXADECIMALLONG>
 
   | <UNSIGNED_OCTALINT>
   | <UNSIGNED_OCTALLONG>
@@ -1874,42 +1876,42 @@ String optor() :
 {
  ( "new"    [ LOOKAHEAD(2) "[" "]" {name += "[]";}]
  | "delete" [ LOOKAHEAD(2) "[" "]" {name += "[]";}]
- | "+"      
- | "-"      
- | LOOKAHEAD(2) "*"  
- | "/"      
- | "%"      
- | "^"      
- | LOOKAHEAD(2) "&"  
- | "|"      
- | LOOKAHEAD(2) "~"      
- | "!"      
- | "="      
- | "<"      
- | ">"      
- | "+="     
- | "-="     
- | "*="     
- | "/="     
- | "%="     
- | "^="     
- | "&="    
- | "|="    
- | "<<"    
- | ">>"    
- | ">>="   
- | "<<="   
- | "=="  
- | "!="  
- | "<="  
- | ">="  
- | "&&"  
- | "||"  
- | "++"  
- | "--"  
- | ","   
- | "->*" 
- | "->"  
+ | "+"
+ | "-"
+ | LOOKAHEAD(2) "*"
+ | "/"
+ | "%"
+ | "^"
+ | LOOKAHEAD(2) "&"
+ | "|"
+ | LOOKAHEAD(2) "~"
+ | "!"
+ | "="
+ | "<"
+ | ">"
+ | "+="
+ | "-="
+ | "*="
+ | "/="
+ | "%="
+ | "^="
+ | "&="
+ | "|="
+ | "<<"
+ | ">>"
+ | ">>="
+ | "<<="
+ | "=="
+ | "!="
+ | "<="
+ | ">="
+ | "&&"
+ | "||"
+ | "++"
+ | "--"
+ | ","
+ | "->*"
+ | "->"
  | "(" ")"                        {name += ")";}
  | LOOKAHEAD(2) "[" "]"           {name += "]";}
  | declaration_specifiers() {name = getToken(0).image;} (LOOKAHEAD(2) ("*"|"&"){name += getToken(0);})?
@@ -1951,7 +1953,7 @@ void skip_string_literal() :
 
 void skip_object_body(DataElement theObject) :
 {}
-{ 
+{
  {
   if (theObject == null)
    return;
