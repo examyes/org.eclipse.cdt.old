@@ -1,28 +1,17 @@
 This document is intended to point out issues or problems with the current
 release of the product.(You may also want to see the accompanying "todo.txt")
 
-This list is not complete, please refer to the CDT Bugzilla database for
-a comprehensive and up-to-date list of known defects.
+This list is not complete, please refer to the CDT Bugzilla database 
+at http://bugs.eclipse.org for a comprehensive and up-to-date list of known defects.
 
 
 
 Project Issues (Local and Remote)
 ---------------------------------
 
-1.  Sometimes with small projects (no subdirectories), the C/C++ Projects View
-    will not show the files contained in the project immediately after creating
-    the project.  To get the files to appear, right-click on the Project and 
-    click "Refresh".
-2.  C/C++ files contained in non-C/C++ projects will not get parsed in the
+1.  C/C++ files contained in non-C/C++ projects will not get parsed in the
     current driver.
-3.  When deleting a project created with files found in "Local directory" using the 
-    "Delete Project" action, you are prompted asking if you want to delete 
-    all the source files as well. If you instead try to delete the project with the 
-    "Delete" action then you are not prompted, and all your source files will 
-    be deleted without warning.    
-4.  If you have two files with the same name in the same directory but different case 
-    then only one will show up in the C/C++ Projects View
-
+2.  Some memory leaks have been reported when working with large projects.
 
 Appearance on Linux
 -------------------
@@ -97,7 +86,6 @@ Command Specifications View
    highlighted and selected automatically. Changing it to another project
    from within the wizard will not cause the command specification to belong to the
    selected project. This will be fixed in the next release
-3. This feature does not support remote projects.
 
 
 Searching
@@ -111,18 +99,15 @@ Searching
 General View Issues
 -------------------
 
-1. We have not finalized any icons.  The current set of icons is really a collection
-   of assorted images we grabbed from anywhere we could.  Very shortly our
-   graphic design team will be creating a consistent, professional set of icons.
-2. Several views such as the Command Specifications and Command Launcher view may require 
+1. Several views such as the Command Specifications and Command Launcher view may require 
    a project to be selected before the view can operate properly.  If you find a view not working 
    as expected, goto the C/C++ Projects view and select your project and try again.
-3. For large projects, parse view refreshing is quite slow.
-4. The C/C++ Projects view and the Navigator are not always in sync. The solution is to
+2. For large projects, parse view refreshing is quite slow.
+3. The C/C++ Projects view and the Navigator are not always in sync. The solution is to
    do a refresh in the view that appears not up to date.
-5. If you display a large amounts of information in the Output view, then painting problems 
+4. If you display a large amounts of information in the Output view, then painting problems 
    have been known to occur.
-6. Markers are not be displayed in the Editor for remote projects.e.g adding a breakpoint
+5. Markers are not be displayed in the Editor for remote projects.e.g adding a breakpoint
     will succedd even though the marker is not visible in the Editor left margin.
 
 Platform issues
@@ -157,3 +142,5 @@ Project Management Issues - autoconf and automake
    configure file is valid and you don't want to regenerate it,
    press the cancel button.  This cancels the regeneration, but proceeds
    to run configure.
+
+
