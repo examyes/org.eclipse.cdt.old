@@ -60,50 +60,66 @@ public class AutoconfControl extends Composite
     {
 		super(cnr, style);
 
-    	Label ConfigureAutoupdate = new Label(this,SWT.LEFT);
-    	ConfigureAutoupdate.setText("Configure auto update setup:");
     	
-    	_autoConfigureUpdateButton = new Button(this, SWT.CHECK);
-		_autoConfigureUpdateButton.setText("Perform automatic update whenever configure is executed");
-		
-	   	Label configureDialogSetup = new Label(this,SWT.LEFT);
-    	configureDialogSetup.setText("Configure confirmation message dialog setup:");
-	
-		_showConfigureDialogtButton = new Button(this, SWT.CHECK);
-		_showConfigureDialogtButton.setText("Show configure dialog before execution");
+    	Group autoUpdateGroup = new Group(this,SWT.NONE);
+    	autoUpdateGroup.setText("Autoconf settings for handling automatic update:");
+    	GridLayout autoLayout = new GridLayout();
+    	autoLayout.numColumns = 1;
+    	autoUpdateGroup.setLayout(autoLayout);
+ 		autoUpdateGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
-		new Label(this,SWT.NONE);
-    	Label Autoupdate = new Label(this,SWT.LEFT);
-    	Autoupdate.setText("Advanced auto update setup:");
+		Composite auotUpdateComp = new Composite(autoUpdateGroup,SWT.NONE);
+    	GridLayout autoCompLayout = new GridLayout();
+    	autoCompLayout.numColumns = 1;
+    	auotUpdateComp.setLayout(autoCompLayout);
+ 		auotUpdateComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+		
     	
-    	_autoCreateUpdateButton = new Button(this, SWT.CHECK);
+    	_autoConfigureUpdateButton = new Button(auotUpdateComp, SWT.CHECK);
+		_autoConfigureUpdateButton.setText("Perform automatic update whenever configure is executed");
+
+		new Label(auotUpdateComp,SWT.NONE);
+		
+    	_autoCreateUpdateButton = new Button(auotUpdateComp, SWT.CHECK);
 		_autoCreateUpdateButton.setText("Perform automatic update whenever generate configure is executed");
 	
-	   	_autoRunUpdateButton = new Button(this, SWT.CHECK);
+	   	_autoRunUpdateButton = new Button(auotUpdateComp, SWT.CHECK);
 		_autoRunUpdateButton.setText("Perform automatic update whenever run configure is executed");
 	
 	
-		new Label(this,SWT.NONE);
-	   	Label dialogSetup = new Label(this,SWT.LEFT);
-    	dialogSetup.setText("Advanced Generate/Run configure confirmation message dialog setup:");
-	
-		_showCreateDialogtButton = new Button(this, SWT.CHECK);
-		_showCreateDialogtButton.setText("Show generate configure dialog before execution");
-		
-		_showRunDialogtButton = new Button(this, SWT.CHECK);
-		_showRunDialogtButton.setText("Show run configure dialog before execution");
+    	Group dialogGroup = new Group(this,SWT.NONE);
+    	dialogGroup.setText("Show/hide settings for pop up dialogs when autoconf actions performed:");
+    	GridLayout dialogLayout = new GridLayout();
+    	dialogLayout.numColumns = 1;
+    	dialogGroup.setLayout(dialogLayout);
+ 		dialogGroup.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
-		new Label(this,SWT.NONE);
-	   	Label advancedSetup = new Label(this,SWT.LEFT);
-    	advancedSetup.setText("Advanced actions confirmation message dialog setup:");
-    	
-		_updateAllButton = new Button(this, SWT.CHECK);
+		Composite dialogComp = new Composite(dialogGroup,SWT.NONE);
+    	GridLayout dialogCompLayout = new GridLayout();
+    	dialogCompLayout.numColumns = 1;
+    	dialogComp.setLayout(dialogCompLayout);
+ 		dialogComp.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
+
+		_showConfigureDialogtButton = new Button(dialogComp, SWT.CHECK);
+		_showConfigureDialogtButton.setText("Show configure dialog before execution");
+
+		new Label(dialogComp,SWT.NONE);
+	   		
+		_showCreateDialogtButton = new Button(dialogComp, SWT.CHECK);
+		_showCreateDialogtButton.setText("Show \"Generate configure\" dialog before execution");
+		
+		_showRunDialogtButton = new Button(dialogComp, SWT.CHECK);
+		_showRunDialogtButton.setText("Show \"Run configure\" dialog before execution");
+
+		new Label(dialogComp,SWT.NONE);
+
+		_updateAllButton = new Button(dialogComp, SWT.CHECK);
 		_updateAllButton.setText("Show \"Generate/Update all automake files\" dialog before execution");
 	
-		_updateConfigureInButton = new Button(this, SWT.CHECK);
+		_updateConfigureInButton = new Button(dialogComp, SWT.CHECK);
 		_updateConfigureInButton.setText("Show \"Update configure.in\" dialog before execution");
 
-		_updateMakefileAmButton = new Button(this, SWT.CHECK);
+		_updateMakefileAmButton = new Button(dialogComp, SWT.CHECK);
 		_updateMakefileAmButton.setText("Show \"Update Makefile.am\" dialog before execution");
 
 
@@ -111,6 +127,8 @@ public class AutoconfControl extends Composite
 		setLayout(new GridLayout());
     }
 
+
+	// gets
 
     public boolean getAutoConfigureUpdateSelection()
     {
@@ -121,9 +139,6 @@ public class AutoconfControl extends Composite
     {
 		return _showConfigureDialogtButton.getSelection();
     }
-
-    
-    
     public boolean getAutoRunUpdateSelection()
     {
 		return _autoRunUpdateButton.getSelection();
@@ -144,8 +159,6 @@ public class AutoconfControl extends Composite
     {
 		return _showCreateDialogtButton.getSelection();
     }
-
-
     public boolean getUpdateAllButtonSelection()
     {
 		return _updateAllButton.getSelection();
@@ -160,7 +173,7 @@ public class AutoconfControl extends Composite
 	}
    
     
-    
+    // sets
     
     public void setAutoConfigureUpdateSelection(boolean flag)
     {
