@@ -94,7 +94,7 @@ public class CommandGenerator
 
     public DataElement createCommand(DataElement commandDescriptor)
     {
-	return _dataStore.createObject(null,
+      return _dataStore.createObject(null,
 				commandDescriptor.getName(),
 				commandDescriptor.getValue(),
 				commandDescriptor.getSource());	

@@ -1048,43 +1048,38 @@ public DataElement command(DataElement commandDescriptor,
     }
 
   public DataElement localDescriptorQuery(DataElement descriptor, String keyName, int depth)
+  {
+   if ((descriptor != null) && (depth > 0))
+   {	
+    for (int i = 0; i < descriptor.getNestedSize(); i++)
     {
-	if ((descriptor != null) && (depth > 0))
-	    {	
-		for (int i = 0; i < descriptor.getNestedSize(); i++)
-		    {
-			DataElement subDescriptor = (DataElement)descriptor.get(i);
-			String type = subDescriptor.getType();
-			if (type.equals(DE.T_COMMAND_DESCRIPTOR))
-			    {
-				if (keyName.equals(subDescriptor.getValue()))
-				    {
-					return subDescriptor;		
-				    }
-			    }
-			else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
-			    {
-				DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
-				if (result != null)
-				    {
-					return result;
-				    }
-			    }
-		    }
-		
-		ArrayList abstractDescriptors = descriptor.getAssociated(getLocalizedString("model.abstracted_by"));
-		for (int j = 0; j < abstractDescriptors.size(); j++)
-		    {
-			DataElement abstractDescriptor = (DataElement)abstractDescriptors.get(j);
-			DataElement result = localDescriptorQuery(abstractDescriptor, keyName, depth - 1);;
-			if (result != null)
-			    {
-				return result;
-			    }
-		    }	    
-	    }	
-	return null;
+     DataElement subDescriptor = (DataElement)descriptor.get(i);
+     String type = subDescriptor.getType();
+     if (type.equals(DE.T_COMMAND_DESCRIPTOR))
+     {
+      if (keyName.equals(subDescriptor.getValue()))
+       return subDescriptor;		
+     }
+     else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
+     {
+      DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
+      if (result != null)
+       return result;
+     }
     }
+    ArrayList abstractDescriptors = descriptor.getAssociated(getLocalizedString("model.abstracted_by"));
+    for (int j = 0; j < abstractDescriptors.size(); j++)
+    {
+     DataElement abstractDescriptor = (DataElement)abstractDescriptors.get(j);
+     DataElement result = localDescriptorQuery(abstractDescriptor, keyName, depth - 1);;
+     if (result != null)
+      return result;
+    }
+   }
+  
+   
+   return null;
+  }
 
   public DataElement getMinerFor(DataElement commandDescriptor)
       {
@@ -1903,25 +1898,13 @@ public DataElement command(DataElement commandDescriptor,
 
         DataElement rootD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.root"));
         DataElement hostD    = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.host"));
-        DataElement projectD = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.project"));
-
+       
 	DataElement logD      = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.log"));
 	DataElement statusD   = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.status"));
 
 	DataElement deletedD   = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.deleted"));
 
 
-	// these all belong in the "Project Miner" (when we have one)
-	DataElement errorD       = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.error"));
-	DataElement warningD     = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.warning"));
-	DataElement informationD = createObjectDescriptor(_descriptorRoot,  getLocalizedString("model.informational"));
-
-	DataElement markers      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.markers"));
-	createReference(markers, errorD);
-	createReference(markers, warningD);
-	createReference(markers, informationD);
-	
-	
 	// misc
         DataElement allD      = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.all"));
 	DataElement invokeD   = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.invocation"));	
@@ -1973,7 +1956,17 @@ public DataElement command(DataElement commandDescriptor,
 	createReference(logD, caRelations);
 	createReference(logD, containsD);
 
-	// file objects
+	 //Base Container Object
+        DataElement containerObjectD = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Container_Object"));
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY");
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN");
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE");
+	createReference(containerObjectD, containsD);
+        createReference(containerObjectD, parentD); 
+       
+
+      // file objects
 	createReference(hostD, containsD);	
 
         DataElement deviceD  = createObjectDescriptor(_descriptorRoot, getLocalizedString("model.device"), 
@@ -1988,9 +1981,9 @@ public DataElement command(DataElement commandDescriptor,
 						      "com.ibm.dstore.miners");
 
         DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
+         createReference(containerObjectD, fsObject, getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
 
-	createReference(fsObject, containsD);
-	createReference(fsObject, parentD);
+
         createReference(fsObject, deviceD,  getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
         createReference(fsObject, dirD,     getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
         createReference(fsObject, fileD,    getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));

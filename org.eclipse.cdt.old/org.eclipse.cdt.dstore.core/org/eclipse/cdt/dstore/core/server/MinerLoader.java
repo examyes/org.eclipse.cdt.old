@@ -55,8 +55,10 @@ public class MinerLoader
 		    {
 			// check name
 			name = name.trim();
+
 			if (!name.startsWith("#") && 
 			    (name.length() > 5))
+
 			    {
 				Miner miner = _loader.loadMiner(name);
 				if (miner != null)

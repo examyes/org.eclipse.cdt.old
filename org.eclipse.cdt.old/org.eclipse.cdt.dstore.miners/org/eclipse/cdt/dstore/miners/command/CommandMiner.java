@@ -58,7 +58,7 @@ public class CommandMiner extends Miner
    cancelCommand(de.getName().trim(),cancelStatus);
    return status;
   }
-  return null;
+  return status;
  }
 
  public void launchCommand (DataElement subject, String invocation, DataElement status, DataElement project)

@@ -18,44 +18,33 @@ import org.eclipse.ui.*;
 
 public class ProjectObjectsViewPart extends ProjectViewPart
 {
-    private IProject _input = null;
+ public ProjectObjectsViewPart()
+ {
+  super();
+ }
+
+ protected String getF1HelpId()
+ {
+  return CppHelpContextIds.PROJECT_OBJECTS_VIEW;
+ }
     
-    public ProjectObjectsViewPart()
-    {
-	super();
-    }
+ public void doClear()
+ {
+  _viewer.setInput(null);
+  setTitle("Project-Objects");
+ }
 
-    protected String getF1HelpId()
-    {
-	return "com.ibm.cpp.ui.project_objects_view_context";
-    }
-    
-    public void doClear()
-    {
-	_input = null;
-	_viewer.setInput(null);
-	setTitle("Project-Objects");
-    }
-
-    public void doInput(IProject project)
-    {
-	DataStore dataStore = _plugin.getCurrentDataStore();
-	_input = project;
-	ModelInterface api = _plugin.getModelInterface();
-	DataElement projectObj = api.findProjectElement(project);
-	
-	if (projectObj != null)
-	    {
-		dataStore = projectObj.getDataStore();
-		DataElement declarations = dataStore.find(projectObj, DE.A_NAME, PM.PROJECT_OBJECTS, 1);
-		if (declarations != null)
-		    {
-			_viewer.setInput(declarations);	    
-			setTitle(project.getName() + " Project-Objects");   
-		    }
-	    } 	
-    }
-
+ public void doSpecificInput(DataElement projectParseInformation)
+ {
+  //Find the Project Objects Object under the projectParseInformation
+  DataElement projectObjects = projectParseInformation.getDataStore().find(projectParseInformation, DE.A_NAME, "Project Objects", 1);
+  if (projectObjects == null)
+   return;
+  
+  //Finally just set the input and the title
+  _viewer.setInput(projectObjects);	    
+  setTitle(projectParseInformation.getName() + "Project-Objects");   
+ }
 }
 
 

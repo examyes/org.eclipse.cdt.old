@@ -153,8 +153,8 @@ public class ServerCommandHandler extends CommandHandler
 				  if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
 				      {
 					  status = miner.command(command);
-
-					  if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
+                                          		  
+                                          if (status.getAttribute(DE.A_NAME).equals(_dataStore.getLocalizedString("model.incomplete")))
 					      {
 						  failure = true;
 					      }

@@ -1,4 +1,4 @@
-set ECLIPSEDIR=e:\eclipse\eclipse
+set ECLIPSEDIR=e:\eclipse
 
 set DSCORE=%ECLIPSEDIR%\plugins\com.ibm.dstore.core
 set DSUI=%ECLIPSEDIR%\plugins\com.ibm.dstore.ui
@@ -20,9 +20,7 @@ set HELP=%ECLIPSEDIR%\plugins\org.eclipse.help\help.jar
 
 set A_PLUGIN_PATH=%DSCORE%
 
-
 set SWT=%ECLIPSEDIR%\plugins\org.eclipse.swt\swt.jar
-
  
 set CLASSPATH=%CLASSPATH%;%ECLIPSEDIR%\plugins\org.eclipse.core.runtime\runtime.jar;%ECLIPSEDIR%\plugins\org.eclipse.core.boot\boot.jar;%ECLIPSEDIR%\plugins\org.eclipse.core.resources\resources.jar;%ECLIPSEDIR%\plugins\org.eclipse.update\update.jar;%ECLIPSEDIR%\plugins\org.eclipse.ui\workbench.jar;%ECLIPSEDIR%\startup.jar;%ECLIPSEDIR%\plugins\com.ibm.lpex\eclipselpex.jar;%CPP%;.;%XML%;%VCM%;%VCMUI%;%SEARCH%;%TM%;%DSCORE%;%DSEXTRA%;%DSUI%;%DSMINERS%;%SWT%;%DEBUGCORE%;%DEBUGUI%;%HELP%;%HOSTS%
 

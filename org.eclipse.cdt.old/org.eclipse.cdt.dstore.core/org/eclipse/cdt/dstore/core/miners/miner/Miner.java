@@ -176,8 +176,7 @@ public abstract class Miner
     // creation helpers
     public DataElement createAbstractCommandDescriptor(DataElement descriptor, String name, String value) 
     {
-	DataElement cmdD = _dataStore.createAbstractCommandDescriptor(descriptor, name, getName(), value);
-	return cmdD;
+	return _dataStore.createAbstractCommandDescriptor(descriptor, name, getName(), value);
     }
     
     public DataElement createCommandDescriptor(DataElement descriptor, String name, String value)
@@ -215,6 +214,33 @@ public abstract class Miner
     {
 	return _dataStore.createObjectDescriptor(descriptor, name, source);
     }
+
+    public DataElement createAbstractRelationship(DataElement from, DataElement to)
+    {
+     return _dataStore.createReference(from, to, "abstracts", "abstracted by");
+    }
+     
+    public DataElement createReference(DataElement from, DataElement to)
+    {
+     return _dataStore.createReference(from, to);
+    }
+    
+    public DataElement createRelationDescriptor(DataElement descriptor, String name)
+    {
+     return _dataStore.createRelationDescriptor(descriptor, name);
+    }
+ 
+ 
+     
+
+ //Find an object under the schema Root.
+ public DataElement findDescriptor(String descName)
+ {
+  return _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, descName, 1);
+ }
+ 
+
+    
 
     
     // gets
@@ -291,6 +317,12 @@ public abstract class Miner
 	return _dataStore.getLocalizedString(key);
     }
 
+ public DataElement getSchemaRoot()
+ {
+  return _dataStore.getDescriptorRoot();
+  
+  }
+ 
 
     // functions that miners need to implement
     public abstract void extendSchema(DataElement schemaRoot);

@@ -127,7 +127,7 @@ public final class DataElement implements IDataElement
 	    }
 	else
 	    {
-		System.out.println("bad reference!");
+	     System.out.println("bad reference!");
 	    }
       }
 

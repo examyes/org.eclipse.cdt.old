@@ -40,6 +40,8 @@ public class OutputPattern
 
  public ParsedOutput matchLine(String theLine, PatternMatcher matcher)
  {
+  System.out.println("line->" + theLine + "<-");
+  
   if (!matcher.matches(theLine, _pattern))
    return null;
 
