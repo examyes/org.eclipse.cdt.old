@@ -57,7 +57,7 @@ public class CppBuilder extends IncrementalProjectBuilder
 
 	String invocation = getInvocation(projectR, isBuild);
 	
-	DataElement status = api.invoke(project, invocation, false);
+	DataElement status = api.invoke(project, invocation, true);
 	
     }
 
@@ -77,7 +77,7 @@ public class CppBuilder extends IncrementalProjectBuilder
    		String invocation = getInvocation(project, isBuild);
 		DataElement projectElement = api.findProjectElement(project);
 
-   		DataElement status = api.invoke(projectElement, invocation, false);
+   		DataElement status = api.invoke(projectElement, invocation, true);
 
 	    }		
     }

@@ -548,7 +548,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		    }
 
 		_status = dataStore.command(debugDescriptor, args, dirObject);
-		monitorStatus(_status);
 		showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", _status);
 	    }
     }
@@ -625,7 +624,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    invocationObj.setParent(status.getParent());
 	_status = status;
 
-	monitorStatus(status);
+	if (showProgress)
+	{
+		monitorStatus(status);
+	}
 	
 	showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", _status);
 	return status;	
