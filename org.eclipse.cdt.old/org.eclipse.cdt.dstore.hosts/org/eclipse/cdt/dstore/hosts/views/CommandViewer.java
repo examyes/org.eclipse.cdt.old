@@ -130,12 +130,21 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 		    }
 		else
 		    {
-			DataStore dataStore = DataStoreCorePlugin.getInstance().getCurrentDataStore();
-			if (dataStore != null)
+			if (input instanceof IResource)
 			    {
-				_input = ConvertUtility.convert(dataStore, 
-								dataStore.getHostRoot(), 
-								(IAdaptable)input);
+				DataStore dataStore = DataStoreCorePlugin.getInstance().getCurrentDataStore();
+				if (dataStore != null)
+				    {
+					IResource resource = (IResource)input;
+					if (resource instanceof IFile)
+					    {
+						resource = resource.getParent();
+					    }
+				
+					_input = dataStore.createObject(null, "directory", 
+									resource.getName(), 
+									resource.getLocation().toString());
+				    }
 			    }
 		    }
 	    }	
