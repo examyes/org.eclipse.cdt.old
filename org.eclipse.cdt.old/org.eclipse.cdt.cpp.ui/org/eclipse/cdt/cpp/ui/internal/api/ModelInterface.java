@@ -804,10 +804,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    {	    
     String name = new String(theProject.getName());
     DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
+
     DataElement projectsRoot = findWorkspaceElement(dataStore);		
     DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
 
-    if (projectRoot != null)
+    if (commandDescriptor != null && projectRoot != null)
     {	
      projectRoot.setAttribute(DE.A_SOURCE, theProject.getLocation().toString());	
      if (theProject != null)

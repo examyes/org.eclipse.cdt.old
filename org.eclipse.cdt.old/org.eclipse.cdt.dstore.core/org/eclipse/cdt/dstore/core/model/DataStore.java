@@ -364,10 +364,11 @@ public class DataStore
         return createReference(from, to, getLocalizedString("model.contents"));
       }
 
-  public DataElement createReference(DataElement parent, DataElement realObject, String relationType)
+  public DataElement createReference(DataElement parent, DataElement realObject, DataElement relationType)
       {
 	// reference with a specified type of relationship
 	  DataElement reference = createElement();
+
 	  reference.reInit(parent, realObject, relationType);
 	  parent.addNestedData(reference, false);
 	  
@@ -377,22 +378,65 @@ public class DataStore
 	  return reference;
       }
 
+  public DataElement createReference(DataElement parent, DataElement realObject, String relationType)
+      {
+	// reference with a specified type of relationship
+	  DataElement reference = createElement();
+
+	  DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, relationType);
+	  if (toDescriptor != null)
+	      {
+		  reference.reInit(parent, realObject, toDescriptor);
+	      }
+	  else
+	      {
+		  reference.reInit(parent, realObject, relationType);
+	      }
+
+	  parent.addNestedData(reference, false);
+	  
+	  String sugId = reference.getId();
+	  _hashMap.put(sugId, reference);
+
+	  return reference;
+      }
+
+
 
   public void createReferences(DataElement from, ArrayList to, String type)
   {
-    for (int i = 0; i < to.size(); i++)
-      {	
-	DataElement toObject = (DataElement)to.get(i);
-	createReference(from, toObject, type);	 
-      }
+      DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, type);
+      if (toDescriptor != null)
+	  {
+	      createReferences(from, to, toDescriptor);
+	  }
+      else
+	  {
+	      for (int i = 0; i < to.size(); i++)
+		  {	
+		      DataElement toObject = (DataElement)to.get(i);
+		      createReference(from, toObject, type);	 
+		  }
+	  }
   }
 
+    public void createReferences(DataElement from, ArrayList to, DataElement type)
+    {
+	for (int i = 0; i < to.size(); i++)
+	    {	
+		DataElement toObject = (DataElement)to.get(i);
+		createReference(from, toObject, type);	 
+	    }
+    }
+    
+    
   public DataElement createReference(DataElement parent, DataElement realObject, 
-				     String toRelation, String fromRelation)
+				     DataElement toRelation, DataElement fromRelation)
     {
 	  // reference with "to" relationship
 	DataElement toReference = createElement();
 	toReference.reInit(parent, realObject, toRelation);
+
         parent.addNestedData(toReference, false);
 
         String toId = toReference.getId();
@@ -400,7 +444,9 @@ public class DataStore
 
 	// reference with "from" relationship
 	DataElement fromReference = createElement();
-        fromReference.reInit(realObject, parent, fromRelation);
+
+	fromReference.reInit(realObject, parent, fromRelation);
+	
         realObject.addNestedData(fromReference, false);
 	
         String fromId = fromReference.getId();
@@ -409,14 +455,76 @@ public class DataStore
         return toReference;
       }
 
+  public DataElement createReference(DataElement parent, DataElement realObject, 
+				     String toRelation, String fromRelation)
+    {
+	  // reference with "to" relationship
+	DataElement toReference = createElement();
+	DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, toRelation);
+	if (toDescriptor != null)
+	    {
+		toReference.reInit(parent, realObject, toDescriptor);
+	    }
+	else
+	    {
+		toReference.reInit(parent, realObject, toRelation);
+	    }
+
+        parent.addNestedData(toReference, false);
+
+
+        String toId = toReference.getId();
+        _hashMap.put(toId, toReference);
+
+	// reference with "from" relationship
+	DataElement fromReference = createElement();
+
+	DataElement fromDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, fromRelation);
+	if (fromDescriptor != null)
+	    {
+		fromReference.reInit(realObject, parent, fromDescriptor);
+	    }
+	else
+	    {
+		fromReference.reInit(realObject, parent, fromRelation);
+	    }
+	
+        realObject.addNestedData(fromReference, false);
+
+	
+        String fromId = fromReference.getId();
+        _hashMap.put(fromId, fromReference);
+	
+        return toReference;
+      }
+
+
+  public void createReferences(DataElement from, ArrayList to, DataElement toRel, DataElement fromRel)
+  {
+      for (int i = 0; i < to.size(); i++)
+	  {	
+	      DataElement toObject = (DataElement)to.get(i);
+	      createReference(from, toObject, toRel, fromRel);	 
+	  }
+  }
 
   public void createReferences(DataElement from, ArrayList to, String toRel, String fromRel)
   {
-    for (int i = 0; i < to.size(); i++)
-      {	
-	DataElement toObject = (DataElement)to.get(i);
-	createReference(from, toObject, toRel, fromRel);	 
-      }
+      DataElement toDescriptor   = findDescriptor(DE.T_RELATION_DESCRIPTOR, toRel);
+      DataElement fromDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, fromRel);
+
+      if ((toDescriptor != null) && (fromDescriptor != null))
+	  {
+	      createReferences(from, to, toDescriptor, fromDescriptor);
+	  }
+      else
+	  {
+	      for (int i = 0; i < to.size(); i++)
+		  {	
+		      DataElement toObject = (DataElement)to.get(i);
+		      createReference(from, toObject, toRel, fromRel);	 
+		  }
+	  }
   }
 
   public DataElement createObject(DataElement parent, String type, String name)
@@ -437,21 +545,12 @@ public class DataStore
 
   public DataElement createObject(DataElement parent, String type, String name, String source, String sugId)
       {
-        String id = makeIdUnique(sugId);
-
-	DataElement newObject = createElement();
-	newObject.reInit(this, parent, type, id, name, source); 
-        if (parent != null)
-        {
-          parent.addNestedData(newObject, false);
-        }
-
-        _hashMap.put(id, newObject);
-        return newObject;
+	  return createObject(parent, type, name, source, sugId, "false");
       }
 
-  public DataElement createObject(DataElement parent, String type, String name, String source, String sugId, String isReference)
-  {
+  public DataElement createObject(DataElement parent, String type, String name, String 
+				  source, String sugId, String isReference)
+    {
         String id = makeIdUnique(sugId);
 
 	DataElement newObject = createElement();
@@ -460,15 +559,25 @@ public class DataStore
 		parent = _tempRoot;
 	    }
 
-	newObject.reInit(this, parent, type, id, name, source, isReference); 
+	DataElement descriptor = findDescriptor(DE.T_OBJECT_DESCRIPTOR, type);
+	if (descriptor != null  && (parent != _descriptorRoot))
+	    {
+		newObject.reInit(this, parent, descriptor, id, name, source, isReference); 
+	    }
+	else
+	    {
+		newObject.reInit(this, parent, type, id, name, source, isReference); 
+	    }
+
         if (parent != null)
-        {
-          parent.addNestedData(newObject, false);
-        }
+	    {
+		parent.addNestedData(newObject, false);
+	    }
+
         _hashMap.put(id, newObject);
         return newObject;
       }
-
+    
   public DataElement createObject(DataElement parent, String attributes[])
       {
 	  DataElement newObject = createElement();
@@ -477,7 +586,16 @@ public class DataStore
 	      {
 		  parent = _tempRoot;
 	      }
-	  newObject.reInit(this, parent, attributes);
+
+	  DataElement descriptor = findDescriptor(DE.T_OBJECT_DESCRIPTOR, attributes[DE.A_TYPE]);
+	  if (descriptor != null  && (parent != _descriptorRoot))
+	      {
+		  newObject.reInit(this, parent, descriptor, attributes);
+	      }
+	  else
+	      {
+		  newObject.reInit(this, parent, attributes);
+	      }
 
 	  if (parent != null)
 	      {
@@ -1060,34 +1178,40 @@ public DataElement command(DataElement commandDescriptor,
 
   public DataElement localDescriptorQuery(DataElement descriptor, String keyName, int depth)
   {
-   if ((descriptor != null) && (depth > 0))
-   {	
-    for (int i = 0; i < descriptor.getNestedSize(); i++)
-    {
-     DataElement subDescriptor = (DataElement)descriptor.get(i);
-     String type = subDescriptor.getType();
-     if (type.equals(DE.T_COMMAND_DESCRIPTOR))
-     {
-      if (keyName.equals(subDescriptor.getValue()))
-       return subDescriptor;		
-     }
-     else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
-     {
-      DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
-      if (result != null)
-       return result;
-     }
-    }
-    ArrayList abstractDescriptors = descriptor.getAssociated(getLocalizedString("model.abstracted_by"));
-    for (int j = 0; j < abstractDescriptors.size(); j++)
-    {
-     DataElement abstractDescriptor = (DataElement)abstractDescriptors.get(j);
-     DataElement result = localDescriptorQuery(abstractDescriptor, keyName, depth - 1);;
-     if (result != null)
-      return result;
-    }
-   }
-  
+      if ((descriptor != null) && (depth > 0))
+	  {	
+	      for (int i = 0; i < descriptor.getNestedSize(); i++)
+		  {
+		      DataElement subDescriptor = (DataElement)descriptor.get(i);
+		      String type = subDescriptor.getType();
+		      if (type == null)
+			  {
+			      System.out.println(descriptor);
+			      System.out.println(subDescriptor);
+			  }
+		      if (type.equals(DE.T_COMMAND_DESCRIPTOR))
+			  {
+			      if (keyName.equals(subDescriptor.getValue()))
+				  return subDescriptor;		
+			  }
+		      else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
+			  {
+			      DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
+			      if (result != null)
+				  return result;
+			  }
+		  }
+
+	      DataElement abstractedBy = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.abstracted_by"), 1);
+	      ArrayList abstractDescriptors = descriptor.getAssociated(abstractedBy);
+	      for (int j = 0; j < abstractDescriptors.size(); j++)
+		  {
+		      DataElement abstractDescriptor = (DataElement)abstractDescriptors.get(j);
+		      DataElement result = localDescriptorQuery(abstractDescriptor, keyName, depth - 1);;
+		      if (result != null)
+			  return result;
+		  }
+	  }
    
    return null;
   }
@@ -1349,6 +1473,25 @@ public DataElement command(DataElement commandDescriptor,
     
     return information;    
   }
+
+    public DataElement findDescriptor(String type, String name)
+    {
+	if (_descriptorRoot != null)
+	    {
+		for (int i = 0; i < _descriptorRoot.getNestedSize(); i++)
+		    {
+			DataElement descriptor = _descriptorRoot.get(i);
+			if (descriptor.getName().equals(name) &&
+			    descriptor.getType().equals(type))
+			    {
+				return descriptor;
+			    }
+		    }
+	    }
+	
+	return null;
+    }
+
   
   public DataElement findObjectDescriptor(String name)
       {
@@ -1939,6 +2082,7 @@ public DataElement command(DataElement commandDescriptor,
 	
         createReference(objectDescriptor, containsD);
         createReference(objectDescriptor, parentD);
+        createReference(objectDescriptor, abstracts);
         createReference(objectDescriptor, abstractedBy);
 
         createReference(abstractObjectDescriptor, containsD);
@@ -1994,12 +2138,16 @@ public DataElement command(DataElement commandDescriptor,
 						      "com.ibm.dstore.miners");
 
         DataElement fsObject = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
-         createReference(containerObjectD, fsObject, getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
+         createReference(containerObjectD, fsObject, getLocalizedString("model.abstracts")
+			 , getLocalizedString("model.abstracted_by"));
 
+	 createReference(fsObject, deviceD,  getLocalizedString("model.abstracts")
+			, getLocalizedString("model.abstracted_by"));
 
-        createReference(fsObject, deviceD,  getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
-        createReference(fsObject, dirD,     getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
-        createReference(fsObject, fileD,    getLocalizedString("model.abstracts"), getLocalizedString("model.abstracted_by"));
+        createReference(fsObject, dirD,     getLocalizedString("model.abstracts")
+			, getLocalizedString("model.abstracted_by"));
+        createReference(fsObject, fileD,    getLocalizedString("model.abstracts")
+			, getLocalizedString("model.abstracted_by"));
         createReference(fsObject, fileD,    getLocalizedString("model.contents"));
         createReference(fsObject, dirD,     getLocalizedString("model.contents"));
 	createReference(fsObject, fsObject, getLocalizedString("model.contents"));

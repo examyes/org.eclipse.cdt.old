@@ -1,6 +1,6 @@
 package com.ibm.cpp.ui.internal.editor;
 
-/*
+/* 
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.
  */
 

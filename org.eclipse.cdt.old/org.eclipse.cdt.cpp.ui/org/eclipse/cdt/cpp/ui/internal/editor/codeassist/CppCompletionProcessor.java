@@ -64,7 +64,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 	 */
    public char[] getCompletionProposalAutoActivationCharacters()
       {
-        return null;
+        return null; 
       }
 	
   /**
@@ -73,7 +73,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
   public IContextInformation[] computeContextInformation(ITextViewer viewer, int position)
       {
         return null;
-      }
+      } 
 
   public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int position)
       {

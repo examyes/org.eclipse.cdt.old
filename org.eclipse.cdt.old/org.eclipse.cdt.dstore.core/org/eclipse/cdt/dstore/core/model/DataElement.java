@@ -43,8 +43,6 @@ public final class DataElement implements IDataElement
     {
 	_dataStore   = null;
 	_parent      = null;
-	
-	_attributes                   = new String[DE.A_SIZE];
     }
 
   /////////////////////////////////////////
@@ -53,61 +51,35 @@ public final class DataElement implements IDataElement
   //
   /////////////////////////////////////////
 
-  public void reInit(String type, String id, String name, String source)
+  public void reInit(DataElement parent, DataElement originalObject, DataElement refType)
       {
-	  _dataStore   = null;
- 	  _parent      = null;
+	if ((parent != null) && (originalObject != null))
+	    {
+		_dataStore   = originalObject.getDataStore();
+		_parent = parent;
 
-	  _attributes                   = new String[DE.A_SIZE];
+		_attributes                  = new String[DE.A_SIZE];
+		_attributes[DE.A_TYPE]       = refType.getName();		
+		_attributes[DE.A_ID]         = _dataStore.generateId();
+		_attributes[DE.A_NAME]       = originalObject.getId();
+		_attributes[DE.A_VALUE]      = originalObject.getId();
+		_attributes[DE.A_SOURCE]     = originalObject.getSource();
+		_attributes[DE.A_ISREF]      = "true";
+		_attributes[DE.A_DEPTH]      = originalObject.getAttribute(DE.A_DEPTH);
+		
+		
+		_referencedObject = originalObject;
+		_isReference      = true;
+		
+		initialize(refType);	
+	    }
+      }
 
-	  _attributes[DE.A_TYPE]        = type;
-	  _attributes[DE.A_ID]          = id;
-	  _attributes[DE.A_NAME]        = name;
-	  _attributes[DE.A_VALUE]       = name;
-	  _attributes[DE.A_SOURCE]      = source;
-	  _attributes[DE.A_ISREF]       = "false";
-	  _attributes[DE.A_DEPTH]       = "2";
-
-	  initialize();
-	}
-
-
-
-  public void reInit(String attributes[])
-	{
-          _attributes = attributes;
-	  initialize();
-	}
-
-
-
-  // this is a reference constructor, not a copy constructor
-  public void reInit(DataElement originalObject)
-      {
-	  _attributes = new String[DE.A_SIZE];
- 	  _attributes[DE.A_TYPE]         = "contents";
-	  _attributes[DE.A_ID]           = _dataStore.generateId();
-	  _attributes[DE.A_NAME]         = originalObject.getId();
-	  _attributes[DE.A_VALUE]        = originalObject.getName();
-	  _attributes[DE.A_SOURCE]       = originalObject.getSource();
-	  _attributes[DE.A_ISREF]        = "true";
-	  _attributes[DE.A_DEPTH]        = originalObject.getAttribute(DE.A_DEPTH);
-
-          _dataStore   = originalObject.getDataStore();
-
-	  _referencedObject = originalObject;
-	  _isReference      = true;
-
-          initialize();	
-	}
-
-
-
-  // create a reference
   public void reInit(DataElement parent, DataElement originalObject, String refType)
       {
 	if ((parent != null) && (originalObject != null))
 	    {
+
 		_dataStore   = originalObject.getDataStore();
 		_parent = parent;
 
@@ -116,7 +88,7 @@ public final class DataElement implements IDataElement
 		_attributes[DE.A_ID]         = _dataStore.generateId();
 
 		_attributes[DE.A_NAME]       = originalObject.getId();
-		_attributes[DE.A_VALUE]      = originalObject.getName();
+		_attributes[DE.A_VALUE]      = originalObject.getId();
 		_attributes[DE.A_SOURCE]     = originalObject.getSource();
 		_attributes[DE.A_ISREF]      = "true";
 		_attributes[DE.A_DEPTH]      = originalObject.getAttribute(DE.A_DEPTH);
@@ -127,11 +99,24 @@ public final class DataElement implements IDataElement
 		
 		initialize();	
 	    }
-	else
-	    {
-	     System.out.println("bad reference!");
-	    }
       }
+
+  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String id, String name, String source)
+	{
+	  _dataStore   = dataStore;
+	  _parent      = parent;
+
+	  _attributes = new String[DE.A_SIZE];
+	  _attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
+          _attributes[DE.A_ID]         = id;
+          _attributes[DE.A_NAME]       = name;
+          _attributes[DE.A_VALUE]      = name;
+	  _attributes[DE.A_SOURCE]     = source; 
+	  _attributes[DE.A_ISREF]      = "false";
+	  _attributes[DE.A_DEPTH]      = "2";
+
+	  initialize(type);
+	}
 
   public void reInit(DataStore dataStore, DataElement parent, String type, String id, String name, String source)
 	{
@@ -150,10 +135,26 @@ public final class DataElement implements IDataElement
 	  initialize();
 	}
 
+  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String id, String name, String source, String isRef)
+	{
+          _dataStore = dataStore;
+          _parent = parent;
 
+	  _attributes = new String[DE.A_SIZE];
+	  _attributes[DE.A_TYPE]       = type.getAttribute(DE.A_NAME);
+          _attributes[DE.A_ID]         = id;
+          _attributes[DE.A_NAME]       = name;
+          _attributes[DE.A_VALUE]      = name;
+	  _attributes[DE.A_SOURCE]     = source;
+	  _attributes[DE.A_ISREF]      = isRef;
+	  _attributes[DE.A_DEPTH]      = "2";
+
+	  initialize(type);
+	}
 
   public void reInit(DataStore dataStore, DataElement parent, String type, String id, String name, String source, String isRef)
 	{
+
           _dataStore = dataStore;
           _parent = parent;
 
@@ -168,7 +169,17 @@ public final class DataElement implements IDataElement
 
 	  initialize();
 	}
-    
+
+  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String[] attributes)
+      {
+        _dataStore   = dataStore;
+        _parent      = parent;
+	
+	_attributes = attributes;
+	_attributes[DE.A_TYPE] = type.getName();
+
+	initialize(type);
+      }
 
   public void reInit(DataStore dataStore, DataElement parent, String[] attributes)
       {
@@ -176,19 +187,18 @@ public final class DataElement implements IDataElement
         _parent      = parent;
 
 	_attributes = attributes;
-	try
-	    {
-		initialize();
-	    }
-	catch (Exception e)
-	    {
-		System.out.println(e);
-	    }
+
+	initialize();
       }
 
 
 
   private void initialize()
+    {
+	initialize(null);
+    }
+
+  private void initialize(DataElement typeDescriptor)
       {
 	  _isReference  = false;
 	  _isDescriptor = false;
@@ -196,7 +206,7 @@ public final class DataElement implements IDataElement
 	  _referencedObject = null;
 	  _isExpanded  = false;
 	  _isUpdated   = false;
-	  _descriptor = null;
+	  _descriptor  = typeDescriptor;
 
 	  String depth = getAttribute(DE.A_DEPTH);
 	  if (depth != null)
@@ -211,9 +221,12 @@ public final class DataElement implements IDataElement
 		  _isReference = true;	
 	      }
 	  
-	  if (type.equals(DE.T_OBJECT_DESCRIPTOR) ||
-	      type.equals(DE.T_COMMAND_DESCRIPTOR) ||
-	      type.equals(DE.T_RELATION_DESCRIPTOR)
+	  if (type.equals(DE.T_OBJECT_DESCRIPTOR)          ||
+	      type.equals(DE.T_COMMAND_DESCRIPTOR)         ||
+	      type.equals(DE.T_RELATION_DESCRIPTOR)        ||
+	      type.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR) ||
+	      type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR) ||
+	      type.equals(DE.T_ABSTRACT_RELATION_DESCRIPTOR)
 	      )
 	      {
 		  _isDescriptor = true; 
@@ -463,7 +476,7 @@ public final class DataElement implements IDataElement
 	  }
         else if ((_descriptor == null) && (_dataStore != null))
 	    {
-		_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 1);	   
+		_descriptor = _dataStore.findDescriptor(DE.T_OBJECT_DESCRIPTOR, getAttribute(DE.A_TYPE));	   
 		if (_descriptor == null)
 		    {
 			_descriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, getAttribute(DE.A_TYPE), 3);	   
@@ -891,6 +904,7 @@ public final class DataElement implements IDataElement
   {
     if (_isReference)
       {
+	 
 	  if ((_referencedObject != null))
 	  {
 	    return _referencedObject;	
@@ -898,21 +912,21 @@ public final class DataElement implements IDataElement
 	else
 	  {            
 	      String name = getAttribute(DE.A_NAME);
-	    _referencedObject = _dataStore.find(name);
-	    if ((_referencedObject != null))
-		{
-		    return _referencedObject;
-		}
-	    else
-	      {
-		  return this;
-	      }
+	      _referencedObject = _dataStore.find(name);
+	      if ((_referencedObject != null))
+		  {
+		      return _referencedObject;
+		  }
+	      else
+		  {
+		      return this;
+		  }
 	  }
       }
     else
-      {
-	return this;	
-      }
+	{
+	    return this;	
+	}
   }
 
     public DataElement doCommandOn(String command, boolean isSynchronized)
