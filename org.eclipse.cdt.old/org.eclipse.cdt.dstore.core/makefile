@@ -126,7 +126,7 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
 	(cd org 2>/dev/null || cd com 2>/dev/null) || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -qo *src.zip)
 
-zipFile=cdt-eclipse-R2-20020408-local.zip
+zipFile=cdt-eclipse-R2-20020508-local.zip
 createZip: createEmptyZip zipUpPlugins
 	@echo Created $(pluginsDirectory)/$(zipFile)
 
@@ -140,7 +140,7 @@ zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x org *org\/* com *makefile* *setenv.mk* *com\/* *CVS*
 
 tempDir=cdt
-finalZip=cdt-eclipse-R2-20020408.zip
+finalZip=cdt-eclipse-R2-20020508.zip
 
 createFinalPackage: createServerZip createFinalZip
 	@echo Created $(pluginsDirectory)/$(finalZip)
@@ -156,7 +156,7 @@ createFinalZip:
 	zip -qr $(finalZip) $(tempDir);\
 	rm -r $(tempDir)
 
-serverZipFile=cdt-eclipse-R2-20020408-server.zip
+serverZipFile=cdt-eclipse-R2-20020508-server.zip
 
 createServerZip: createEmptyServerZip zipServerPlugins
 	@echo Created $(pluginsDirectory)/$(serverZipFile)
