@@ -13,7 +13,7 @@
 #
 #  "makefiles"             -> Generate Makefiles & Build Environment for All Plugins
 #  "jars"                  -> Generate Jar Files for every Plugin
-
+SHELL=sh
 # Grab Absolute Path to Plugin Directory...We do this by launching GenerateMakefiles with no arguments,
 # which uses java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
 pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
