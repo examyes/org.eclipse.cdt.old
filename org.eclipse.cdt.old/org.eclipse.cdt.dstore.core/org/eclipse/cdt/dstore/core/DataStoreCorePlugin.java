@@ -88,7 +88,7 @@ public class DataStoreCorePlugin extends AbstractUIPlugin
       }
 
   public static void setRootDataStore(DataStore ds)
-      {
+      { 
         _rootDataStore = ds;
         if (_currentDataStore == null)
           _currentDataStore = ds;
@@ -101,6 +101,7 @@ public class DataStoreCorePlugin extends AbstractUIPlugin
 	      String location = ((PluginDescriptor)getDescriptor()).getInstallURLInternal().getPath();
 	      File file = new File(location);
 	      _installLocation = file.getParent() + "/";
+	      _installLocation = _installLocation.replace('\\', '/'); 
 	  }
 
       return _installLocation;

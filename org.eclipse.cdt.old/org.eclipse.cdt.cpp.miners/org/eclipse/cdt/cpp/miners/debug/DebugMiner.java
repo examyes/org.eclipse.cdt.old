@@ -3,7 +3,6 @@ package com.ibm.cpp.miners.debug;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.core.miners.miner.*;
 
-import org.eclipse.core.runtime.*;
 import java.io.*;
 import java.util.*;
 
@@ -17,15 +16,15 @@ public class DebugMiner extends Miner
        String pluginPath = null;
        pluginPath = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
 
-       String osString = org.eclipse.core.boot.BootLoader.getOS();
-		 if (osString.equals("win32"))
-		 {			
-         _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar;" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ";" on Windows
-		 }
-		 else
-		 {
-         _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar:" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ":" on Linux
-		 }
+       String osString = System.getProperty("os.name");			    
+       if (osString.equals("win32"))
+	   {			
+	       _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar;" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ";" on Windows
+	   }
+       else
+	   {
+	       _debugJarPath = pluginPath + "com.ibm.debug.gdb/epdc.jar:" + pluginPath + "com.ibm.debug.gdb/gdbPicl.jar"; // ":" on Linux
+	   }
        _debugInvocation = "java -cp " + _debugJarPath + " com.ibm.debug.gdb.Gdb ";
     }
 
@@ -43,25 +42,52 @@ public class DebugMiner extends Miner
 
 	if (name.equals("C_DEBUG"))
 	    {
-		handleDebug(subject,
-			    getCommandArgument(theCommand, 1),
-			    getCommandArgument(theCommand, 2),
-			    getCommandArgument(theCommand, 3),
-			    status);
+		DataElement jre = getCommandArgument(theCommand, 4);
+		if (jre.getType().equals("directory"))
+		    {
+			handleDebug(subject,
+				    getCommandArgument(theCommand, 1),
+				    getCommandArgument(theCommand, 2),
+				    getCommandArgument(theCommand, 3),			    
+				    jre,
+				    status);
+		    }
+		else
+		    {
+			handleDebug(subject,
+				    getCommandArgument(theCommand, 1),
+				    getCommandArgument(theCommand, 2),
+				    getCommandArgument(theCommand, 3),			    
+				    status);
+		    }
 	    }
 
 	status.setAttribute(DE.A_NAME, "done");
 	return status;
     }
 
-    public void handleDebug(DataElement directory, DataElement hostName, DataElement port, DataElement key, DataElement status)
+    public void handleDebug(DataElement directory, DataElement hostName, DataElement port, 
+			    DataElement key, DataElement status)
+    {
+	handleDebug(directory, hostName, port, key, status, null);
+    }
+
+    public void handleDebug(DataElement directory, DataElement hostName, DataElement port, 
+			    DataElement key, DataElement jre, DataElement status)
     {
 	String invocationStr = _debugInvocation + "-qhost=" +
 	    hostName.getName() + " -quiport=" + port.getName() + " -startupKey=" + key.getName();
+
+	if (jre != null)
+	    {
+		invocationStr = jre.getName() + invocationStr;
+	    }
+
+	System.out.println("invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
+       
 
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
-	System.out.println("cd for  " + directory + " is " + cmdDescriptor);
 	if (cmdDescriptor != null)
 	    {
 		//		File dir = new File(directory.getName());

@@ -276,6 +276,11 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
     return image;
   }
+    
+    public String getPluginPath()
+    {
+	return _corePath;
+    }
 
   public ImageDescriptor getImageDescriptor(String name)
       {

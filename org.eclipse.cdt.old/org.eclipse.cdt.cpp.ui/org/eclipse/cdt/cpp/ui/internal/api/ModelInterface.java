@@ -389,6 +389,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		args.add(portObj);
 		args.add(keyObj);
 
+		if (_plugin.getDataStore() == dataStore)
+		    {			
+			String jrePath = new String(_plugin.getPluginPath());
+			int indexOfPlugins = jrePath.indexOf("plugins");
+			if (indexOfPlugins > 0)
+			    {
+				jrePath = jrePath.substring(0, indexOfPlugins);
+			    }
+			jrePath = jrePath + "jre/bin/";
+			DataElement javaPath = dataStore.createObject(null, "directory", jrePath); 
+			dataStore.setObject(javaPath);
+			args.add(javaPath);
+		    }
+
 		_status = dataStore.command(debugDescriptor, args, dirObject);
 		monitorStatus(_status);
 		showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
@@ -1648,6 +1662,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 
 	DataElement propertyDialogAction = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+								  "Properties...",
+								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
+	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
+
+	DataElement propertyDialogAction2 = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 								  "Properties...",
 								  "com.ibm.cpp.ui.internal.actions.OpenPropertiesAction");
 	propertyDialogAction.setAttribute(DE.A_VALUE, "C_PROPERTIES");
