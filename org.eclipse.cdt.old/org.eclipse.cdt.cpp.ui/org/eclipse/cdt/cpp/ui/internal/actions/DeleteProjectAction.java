@@ -85,7 +85,10 @@ public class DeleteProjectAction extends CustomAction
 		    DataElement closedProject = _api.findProjectElement(_project);
 		    if (closedProject != null)
 			{
-			    closedProject.getDataStore().deleteObject(closedProject.getParent(), closedProject);
+			    DataElement workspace = closedProject.getParent();
+			    closedProject.getDataStore().deleteObject(workspace, closedProject);
+			    workspace.getDataStore().refresh(workspace);
+			    workspace.removeNestedData(closedProject);
 			}
 		}
 	    
