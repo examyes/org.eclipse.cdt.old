@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.rpm"
       label="%featureName"
-      version="1.1"
+      version="1.2.0"
       provider-name="Eclipse.org">
 
    <install-handler/>
@@ -35,18 +35,23 @@
          id="org.eclipse.cdt.rpm.core"
          download-size="0"
          install-size="0"
-         version="1.1"/>
+         version="1.2"/>
 
    <plugin
          id="org.eclipse.cdt.rpm.doc"
          download-size="0"
          install-size="0"
-         version="1.1"/>
+         version="1.2"/>
 
    <plugin
          id="org.eclipse.cdt.rpm.ui"
          download-size="0"
          install-size="0"
-         version="1.1"/>
+         version="1.2"/>
 
+	<plugin
+         id="org.eclipse.cdt.rpm.propertypage"
+         download-size="0"
+         install-size="0"
+         version="1.0"/>
 </feature>
