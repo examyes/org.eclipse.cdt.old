@@ -30,7 +30,7 @@ public class EnvironmentMiner extends Miner
   DataElement containerObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Container Object", 1);
   _dataStore.createReference(containerObjectD, envVar, "abstracts", "abstracted by");
   
-  createCommandDescriptor(containerObjectD, "C_SET_ENVIRONMENT_VARIABLES", "C_SET_ENVIRONMENT_VARIABLES");
+  createCommandDescriptor(containerObjectD, "Set Environment Variables", "C_SET_ENVIRONMENT_VARIABLES", false);
 
   DataElement fsObj = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
   DataElement inhabits = _dataStore.createRelationDescriptor(schemaRoot, "inhabits");

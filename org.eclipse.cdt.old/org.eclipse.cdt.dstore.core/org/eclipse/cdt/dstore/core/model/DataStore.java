@@ -723,6 +723,18 @@ public class DataStore
 	return cmd;
     }   
 
+    public DataElement createCommandDescriptor(DataElement parent, String name, String source, String value, boolean visible)
+    {
+	DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source);
+        cmd.setAttribute(DE.A_VALUE, value);        
+	if (!visible)
+	    {
+		cmd.setDepth(0);
+	    }
+
+	return cmd;
+    }   
+
 
   public void moveObject(DataElement source, DataElement target)
       {
@@ -2180,10 +2192,10 @@ public DataElement command(DataElement commandDescriptor,
 
 	 //Base Container Object
         DataElement containerObjectD = createAbstractObjectDescriptor(_descriptorRoot, getLocalizedString("model.Container_Object"));
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY");
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY", false);
         createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN");
-        createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE");
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
+        createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
         createReference(objectDescriptor, containerObjectD, abstracts, abstractedBy);
 
       // file objects
@@ -2260,30 +2272,15 @@ public DataElement command(DataElement commandDescriptor,
         createReference(logInfo, commandDescriptor, containsD);
 
         // basic commands
-	DataElement cancel = createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
- 	DataElement oQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "*", "C_QUERY");
-
-	DataElement set = createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET"); 
-	set.setDepth(0);
-
-	DataElement setHost = createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST");
-	setHost.setDepth(0);
-	DataElement info  = createCommandDescriptor(rootD, getLocalizedString("model.Init_Miners"), "*", 
-						    "C_INIT_MINERS");
-	info.setDepth(0);
-	DataElement setMiners = createCommandDescriptor(rootD, "Set Miners", "-", 
-							"C_SET_MINERS");
-	setMiners.setDepth(0);
-	DataElement vTicket = createCommandDescriptor(rootD, getLocalizedString("model.Show_Ticket"), "-", 
-						      "C_VALIDATE_TICKET");	
-	
-	vTicket.setDepth(0);
-	DataElement sQuery = createCommandDescriptor(rootD, getLocalizedString("model.Get_Schema"), "*", 
-						     "C_SCHEMA");	
-
-	sQuery.setDepth(0);
-	DataElement oExit = createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT");	 
-	oExit.setDepth(0);
+	createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
+ 	createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "*", "C_QUERY", false);
+	createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET", false); 
+	createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST", false);
+	createCommandDescriptor(rootD, getLocalizedString("model.Init_Miners"), "*", "C_INIT_MINERS", false);
+	createCommandDescriptor(rootD, "Set Miners", "-", "C_SET_MINERS", false);
+	createCommandDescriptor(rootD, getLocalizedString("model.Show_Ticket"), "-", "C_VALIDATE_TICKET", false);	
+	createCommandDescriptor(rootD, getLocalizedString("model.Get_Schema"), "*", "C_SCHEMA", false);	
+	createCommandDescriptor(rootD, getLocalizedString("model.Exit"), "*", "C_EXIT", false);
       }
 }
 
