@@ -23,13 +23,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ErrorDialog;
 
 /**
- * Launches a local VM.
+ * Launches a program.
  */
 public class CppRunLaunchConfigurationDelegate implements ILaunchConfigurationDelegate
  {
 
-    private static DataElement _directory;
-    private static DataElement _executable;
     private static ModelInterface _api;
     private static CppPlugin   _plugin;
 
@@ -38,83 +36,28 @@ public class CppRunLaunchConfigurationDelegate implements ILaunchConfigurationDe
       */
      public void launch(ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException
      {
-	 //System.out.println("CppRunLaunchConfigurationDelegate:launch() ");
-	
-	 _plugin = CppPlugin.getDefault();
-	 _api = ModelInterface.getInstance();
-	
-	 String executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-	 IResource file  = _api.findFile(executableName);
-    if (file == null)
-    {
-		displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.invalidResource"));
-		return;
-    }
+   	 _plugin = CppPlugin.getDefault();
+   	 _api = ModelInterface.getInstance();
+   	
+   	 String executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+   	 IResource file  = _api.findFile(executableName);
+       if (file == null)
+       {
+   		displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.invalidResource"));
+   		return;
+       }
 
-	 IProject project = file.getProject();
-	 DataElement _executable = _api.findResourceElement(file);
-	 if (!project.isOpen())
-	     {
-		 displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
-		 return;
-	     }
-	 //_directory = _executable.getParent();
-    	String workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
-	//      String command = executableName + " " + parameters;
-	String command = executableName;
+   	 IProject project = file.getProject();
+   	 if (!project.isOpen())
+       {
+   		 displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+   		 return;
+       }
+     	 String workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
+     	 String parameters = config.getAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, "");
+	    String command = executableName + " " + parameters;
 	
-	//System.out.println("CppRunLaunchConfigurationDelegate:launch() command = " +command);
-	//System.out.println("CppRunLaunchConfigurationDelegate:launch() workingDirectory = " +workingDirectory);
-	
-     	_api.invoke(workingDirectory, command, false);
-	
-
-	/*
-	  String mainTypeName = verifyMainTypeName(configuration);
-	
-	  IVMInstall vm = verifyVMInstall(configuration);
-	
-	  IVMRunner runner = vm.getVMRunner(mode);
-	  if (runner == null) {
-			abort(MessageFormat.format("Internal error: JRE {0} does not specify a VM Runner.", new String[]{vm.getId()}), null, IJavaLaunchConfigurationConstants.ERR_VM_RUNNER_DOES_NOT_EXIST);
-			}
-			
-			File workingDir = verifyWorkingDirectory(configuration);
-			String workingDirName = null;
-		if (workingDir != null) {
-			workingDirName = workingDir.getAbsolutePath();
-		}
-		
-		// Program & VM args
-		String pgmArgs = getProgramArguments(configuration);
-		String vmArgs = getVMArguments(configuration);
-		ExecutionArguments execArgs = new ExecutionArguments(vmArgs, pgmArgs);
-		
-		// Classpath
-		String[] classpath = getClasspath(configuration);
-		
-		// Create VM config
-		VMRunnerConfiguration runConfig = new VMRunnerConfiguration(mainTypeName, classpath);
-		runConfig.setProgramArguments(execArgs.getProgramArgumentsArray());
-		runConfig.setVMArguments(execArgs.getVMArgumentsArray());
-		runConfig.setWorkingDirectory(workingDirName);
-
-		// Bootpath
-		String[] bootpath = getBootpath(configuration);
-		runConfig.setBootClassPath(bootpath);
-		
-		// Launch the configuration
-		runner.run(runConfig, launch, monitor);		
-		*/
-		//  set default source locator if none specified
-		if (launch.getSourceLocator() == null) {
-			String id = config.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
-			if (id == null) {
-			//	IJavaProject javaProject = JavaLaunchConfigurationUtils.getJavaProject(configuration);
-			//	ISourceLocator sourceLocator = new JavaSourceLocator(javaProject);
-			//	launch.setSourceLocator(sourceLocator);
-			}
-		}
+     	 _api.invoke(workingDirectory, command, false);
 	}	
 		
    /**

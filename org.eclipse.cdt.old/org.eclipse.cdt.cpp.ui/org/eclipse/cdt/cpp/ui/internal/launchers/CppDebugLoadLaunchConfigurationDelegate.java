@@ -50,6 +50,12 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 
 	String executableName = configuration.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
 	IResource resource  = _api.findFile(executableName);
+   if (resource == null)
+    {
+		displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.invalidResource"));
+		return;
+    }
+
 	IProject project = resource.getProject();
 	
 	_executable = _api.findResourceElement(resource);
@@ -61,16 +67,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
     }
 	String workingDirectory = configuration.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
 
-	//  set default source locator if none specified
-	if (launch.getSourceLocator() == null)
-    {
-		String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
-		if (id == null)
-	    {
-	    }
-    }
-
-   	PICLLoadInfo loadInfo = new PICLLoadInfo();
+  	PICLLoadInfo loadInfo = new PICLLoadInfo();
 	String qualifiedFileName = "";
 	
 	qualifiedFileName = _executable.getSource();
@@ -83,11 +80,9 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	   	_api.addNewFile(file);			
 	    }
 	
-	//  loadInfo.setResource(file);  RW  gone??
-	
-   	//loadInfo.setLauncher(_launcher);
    	loadInfo.setProgramName(qualifiedFileName);
-   	//loadInfo.setProgramParms(parameters);  RW - todo
+    	String parameters = configuration.getAttribute(CppLaunchConfigConstants.ATTR_PARAMETERS, "");
+   	loadInfo.setProgramParms(parameters);
 	
 	int startupBehaviour;
 	
@@ -109,10 +104,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 
     public void doLaunch(PICLLoadInfo loadInfo, ILaunch launch, String workingDirectory)
     {
-	
-	
-        //ensure the daemon is listening
-	//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
         boolean ok = CoreDaemon.startListening();
         if (ok == true)
 	    {
