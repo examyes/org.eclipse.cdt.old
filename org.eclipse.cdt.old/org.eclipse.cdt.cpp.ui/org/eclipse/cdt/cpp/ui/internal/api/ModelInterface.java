@@ -1399,7 +1399,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     String newFileName = null;
     IResource fileHandle = null;
 
-    if ((fileName != null) && (fileName.startsWith(_workbenchDirectory)))
+    if ((fileName != null) /*&& (fileName.startsWith(_workbenchDirectory))*/)
       {	
 	int len = _workbenchDirectory.length();
 	newFileName = fileName.substring(len, fileName.length());
@@ -1435,26 +1435,41 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }	
 	else
 	    {		
-		
-		if (parent != null && 
-		    parent.getDescriptor() != null &&
-		    parent.getDescriptor().isOfType("Filesystem Objects"))
-		    {			
-			IResource resource = getResource(parent.getSource());
+		if (parent != null) 
+		    {		
+			IResource resource = null;
+			String type = parent.getType();
+			
+			if (type.equals("Project")) 
+			    {
+				resource = findProjectResource(parent);
+			    }
+			else if (type.equals("directory") || type.equals("file"))
+			    {				
+				while (parent != null && !parent.getType().equals("Project"))
+				    {
+					parent = parent.getParent();
+				    }
+				
+				if (parent.getType().equals("Project"))
+				    {
+					resource = findProjectResource(parent);
+				    }
+			    }
+
 			if (resource != null)
 			    {
-			    try
-				{
-				    resource.refreshLocal(resource.DEPTH_INFINITE, null);
-				}
-			    catch (CoreException e)
-				{
-				    System.out.println(e);
-				}	
-			    
+				try
+				    {
+					resource.refreshLocal(resource.DEPTH_INFINITE, null);
+				    }
+				catch (CoreException e)
+				    {
+					System.out.println(e);
+				    }	
+				
 			    }
 		    }
-
 		return false;
 	    }
     }   
@@ -1675,14 +1690,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	dataStore.createReference(projectD, deleteProject);
 
 
-	// hide delete for files and directories
-	dataStore.localDescriptorQuery(fsD, "C_DELETE").setDepth(0);
-	dataStore.localDescriptorQuery(fileD, "C_DELETE").setDepth(0);
-
-	DataElement deleteResource = dataStore.createObject(dirD, DE.T_UI_COMMAND_DESCRIPTOR,
-							    "Delete",
-							    "com.ibm.cpp.ui.internal.actions.DeleteResourceAction");
-	dataStore.createReference(fileD, deleteResource);
 
 	// connection actions
 	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 

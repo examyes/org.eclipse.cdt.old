@@ -173,6 +173,7 @@ public class ExtendedTreeViewer extends TreeViewer
 			    }
 		    }
 	    }
+
 	return false;
     }   
 
@@ -252,7 +253,7 @@ public class ExtendedTreeViewer extends TreeViewer
 			    {
 				Tree tree = getTree();
 				tree.setRedraw(false);				
-				internalRefresh(parent);					  
+				internalRefresh(parent);
 				getTree().setRedraw(true);
 			    }
 			catch (Exception e)

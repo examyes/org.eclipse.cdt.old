@@ -30,7 +30,7 @@ public abstract class UpdateHandler extends Handler
     
     protected void clean(DataElement object)
     {
-	clean(object, 3);
+	clean(object, 2);
     } 
     
     protected synchronized void clean(DataElement object, int depth)
@@ -53,7 +53,7 @@ public abstract class UpdateHandler extends Handler
 				if (dchild.isDeleted())
 				    {
 					dchild.getParent().removeNestedData(dchild);
-				    }		
+				    }
 			    }
 		    }
 	    }

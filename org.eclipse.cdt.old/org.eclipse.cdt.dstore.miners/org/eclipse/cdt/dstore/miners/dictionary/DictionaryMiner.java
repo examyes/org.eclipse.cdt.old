@@ -65,7 +65,7 @@ public class DictionaryMiner extends Miner
 		DataElement  pattern   = getCommandArgument(theCommand, 1);
 		return handleRegexSearch(subject, pattern, status);	 
 	    }
-	else if (name.equals("C_QUERY"))
+	else if (name.equals("C_QUERY") && (subject == _languageRoot))
 	    {
 		// english
 		loadLanguage(_languageRoot);

@@ -292,7 +292,8 @@ public class XMLparser
 				      {
 					  DataElement rParent = result.getParent();
 					  parent = rParent;
-					  //_rootDataElement.addNestedData(result, false);
+
+					  _rootDataElement.addNestedData(result, false);
 				      }
 				  else
 				      {

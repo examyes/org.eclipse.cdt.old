@@ -142,11 +142,12 @@ public class Connection
 		    else
 			{
 			    result = true;
-			    dataStore.getDomainNotifier().enable(true);
 			}
 
 		    monitor.worked(10);		    
 		    monitor.subTask("Connected to " + host);
+		    dataStore.getDomainNotifier().enable(true);
+
 		}
 	    
 	    return result;
