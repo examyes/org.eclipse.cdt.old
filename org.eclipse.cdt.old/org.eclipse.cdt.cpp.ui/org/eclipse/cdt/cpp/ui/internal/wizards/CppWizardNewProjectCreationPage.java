@@ -585,7 +585,8 @@ protected String getDirectoryName() {
 		com.ibm.dstore.hosts.actions.QuickConnectAction browse = 
 		    new com.ibm.dstore.hosts.actions.QuickConnectAction(remoteHostNameField.getText(), 
 									remoteHostPortNumberField.getText(),
-									remoteHostDirectoryField.getText());
+									remoteHostDirectoryField.getText(),
+									remoteHostUseDaemon.getSelection());
 
 		
 	        Display d = remoteHostBrowseButton.getShell().getDisplay(); 
