@@ -669,7 +669,11 @@ abstract class MixedView extends View
 		// get address from view
 		if (lineInfo.startsWith("0x")) {
 			int idx = lineInfo.indexOf(" ");
-			if (idx > 0) {
+			if (idx > 0) {								
+				address = lineInfo.substring(0, idx);
+			}
+			else
+			{
 				address = lineInfo.substring(0, _prefixl);
 			}
 		} 

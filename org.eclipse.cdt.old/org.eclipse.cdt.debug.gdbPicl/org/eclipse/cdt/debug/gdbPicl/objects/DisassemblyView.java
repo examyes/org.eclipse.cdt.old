@@ -119,7 +119,11 @@ abstract class DisassemblyView extends View
 		if (lineInfo.startsWith("0x")) {
 			int idx = lineInfo.indexOf(" ");
 			if (idx > 0) {
-				address = lineInfo.substring(0, this._prefixl);
+				address = lineInfo.substring(0, idx);
+			}
+			else
+			{
+				address = lineInfo.substring(0, _prefixl);
 			}
 		} 		
 		return address;
