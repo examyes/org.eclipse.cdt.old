@@ -274,8 +274,8 @@ public class ParseMiner extends Miner
   //Delete From Here
   //DataStore _ds = theElement.getDataStore();
   //DataElement theParent = theElement.getParent();
-  //theElement = _ds.createObject(theParent, "function", "manager::pay(1)");
-  //theElement.setAttribute(DE.A_VALUE, "manager::pay(1)");
+  //theElement = _ds.createObject(theParent, "function", "main");
+  //theElement.setAttribute(DE.A_VALUE, "main");
   //return _codeAssist.doProvideSourceFor(theElement, theElement.getParent().getParent(), status);
   //To Here
   return _codeAssist.doProvideSourceFor(theElement, getProjectElement(theProject, ParserSchema.ParsedFiles), status);
