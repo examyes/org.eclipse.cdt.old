@@ -31,7 +31,7 @@ import java.util.*;
 public class OutputViewPart extends ViewPart implements ILinkable
 {
     private OutputViewer        _viewer;
-    private HostsPlugin         _plugin;  
+    protected HostsPlugin         _plugin;  
 
     public OutputViewPart()
     {

@@ -114,15 +114,15 @@ public class OutputViewer extends TableViewer
     }
   }
 
-    private DataElement           _selected;
-    private DataElement           _currentInput;
+    protected DataElement           _selected;
+    protected DataElement           _currentInput;
     private int                   _maxWidth;
     private int                   _charWidth;
     private OpenEditorAction      _openEditorAction;
     private OpenPerspectiveAction _openPerspectiveAction;
     private MenuHandler           _menuHandler;
     
-    private HostsPlugin           _plugin;
+    protected HostsPlugin           _plugin;
 
   public OutputViewer(Table parent)
       {
