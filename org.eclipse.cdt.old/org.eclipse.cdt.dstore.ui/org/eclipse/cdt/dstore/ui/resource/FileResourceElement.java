@@ -226,6 +226,7 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
     return result;
   }  
 
+    
 
   public String getExtendedType() throws CoreException
   {

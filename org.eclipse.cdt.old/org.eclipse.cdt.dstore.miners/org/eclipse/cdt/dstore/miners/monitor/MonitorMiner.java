@@ -37,8 +37,6 @@ public class MonitorMiner extends Miner
     {
      String name          = getCommandName(theCommand);
      DataElement  status  = getCommandStatus(theCommand);
-     DataElement  subject = getCommandArgument(theCommand, 0);
- 
      status.setAttribute(DE.A_NAME, "done");
      return status;
     }

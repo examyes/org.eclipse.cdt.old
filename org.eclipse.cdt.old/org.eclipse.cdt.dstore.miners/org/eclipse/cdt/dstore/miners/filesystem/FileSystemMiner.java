@@ -156,13 +156,6 @@ public class FileSystemMiner extends Miner
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
-	  DataElement fileQuery  = createCommandDescriptor(_fileDescriptor,    
-							   getLocalizedString("model.Query"), "C_QUERY", false);
-	  fileQuery.setAttribute(DE.A_SOURCE, "-");
-
-	  DataElement fileRefresh   = createCommandDescriptor(_fileDescriptor, 
-							      getLocalizedString("model.Refresh"), "C_REFRESH", false);
-	  fileRefresh.setAttribute(DE.A_SOURCE, "-");
 
 	  DataElement fdateD    = createCommandDescriptor(_fsystemObjectDescriptor, "Get Date", "C_DATE", false);
 	  DataElement setDateD  = createCommandDescriptor(_fsystemObjectDescriptor,  "Set Date", "C_SET_DATE", false);
@@ -646,7 +639,7 @@ public class FileSystemMiner extends Miner
 			File childFile = new File(child.getSource());
 			if (!childFile.exists())
 			    {
-				//***_dataStore.deleteObject(theElement, child);
+				_dataStore.deleteObject(theElement, child);
 			    }
 		    }
 		
@@ -675,7 +668,7 @@ public class FileSystemMiner extends Miner
 					if (!f.isDirectory())
 					    {
 						newObject.setDepth(1);
-					    }		      
+					    }
 				    }
 			    }			
 		    }
@@ -688,7 +681,6 @@ public class FileSystemMiner extends Miner
 	    }
 	
 	_dataStore.refresh(theElement);
-
 	status.setAttribute(DE.A_NAME, "done");
 	return status;
     }

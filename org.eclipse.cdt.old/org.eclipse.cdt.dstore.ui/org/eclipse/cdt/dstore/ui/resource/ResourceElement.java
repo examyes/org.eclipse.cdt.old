@@ -358,6 +358,15 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	return false;
     }
 
+    private void deleteLocalFile()
+    {
+	java.io.File fileObject = _element.getFileObject();
+	if (fileObject != null && fileObject.exists())
+	    {
+		fileObject.delete();
+	    }
+    }
+
     public void delete(boolean force, IProgressMonitor monitor) throws CoreException 
     {
 	delete(force, false, monitor);
@@ -370,6 +379,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 		((IDataElementContainer)_parent).remove(this);
 	    }
 
+	deleteLocalFile();
 	DataStore dataStore = _element.getDataStore();	
         DataElement deleteDescriptor = dataStore.localDescriptorQuery(_element.getDescriptor(), "C_DELETE");
         if (deleteDescriptor != null)
@@ -546,6 +556,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 			DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_element.getDescriptor(), "C_REFRESH");
 			if (refreshDescriptor != null)
 			    {	
+				System.out.println("doing refresh on " + _element);
 				_dataStore.synchronizedCommand(refreshDescriptor, _element);	    
 				
 				Object[] children = getChildren(_element, true);
