@@ -762,7 +762,7 @@ public class MakefileAmManager {
 		try{
 			Process p;
 			// check if exist then
-			p= rt.exec("mv "+aFile.getName()+" "+aFile.getName()+".old ", null, aFile.getParentFile());
+			p= rt.exec("cp "+aFile.getName()+" "+aFile.getName()+".old ", null, aFile.getParentFile());
 			p.waitFor();
 		}catch(IOException e){System.out.println(e);}
 		catch(InterruptedException e){System.out.println(e);}	
