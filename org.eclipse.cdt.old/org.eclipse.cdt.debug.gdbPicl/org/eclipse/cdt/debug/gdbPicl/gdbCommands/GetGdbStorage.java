@@ -144,7 +144,7 @@ public class GetGdbStorage
             
 //            if (i%2 == 0)
 //            {
-	            address = str.substring(2,space);
+	            address = str.substring(2,space-1);
 	            address = fixedSizeString(address,charsPerColumn);
 //            }
 
