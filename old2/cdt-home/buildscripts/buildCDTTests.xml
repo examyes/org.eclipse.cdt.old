@@ -1,0 +1,164 @@
+<project name="Eclipse CDT Source Build" default="run" basedir=".">  
+    <!--  directory where to perform the build  -->
+    <property name="install" value="${basedir}" />
+    
+    <!--  identifies build type and original build date  -->
+    <property file="${basedir}/label.properties" />
+    
+    <!--  default setting for bootclasspath if none specified  -->
+    <property name="bootclasspath" value="${java.home}/lib/rt.jar" />
+        
+    <!--  sourcepath setting for rt.jar in javadoc scripts in org.eclipse.platform.doc.isv and org.eclipse.jdt.doc.isv  -->
+    <property name="rt" value="${bootclasspath}" />
+        
+    <!--  default target that runs complete build  -->
+    <target name="run" depends="copyScripts,clean,fetchAll,slamBuildId,copyScripts,build.update.jar,zip.distribution" />
+    
+    <!--  all features required to build eclipse sdk and javadoc  -->
+    <target name="allElements">
+    	<ant antfile="${install}/features/org.eclipse.cdt.testing-feature/build.xml" target="${target}" dir="${install}/features/org.eclipse.cdt.testing-feature" />
+    </target>
+    
+    <!--   runs targets that fetch all projects required for eclipse CDT from dev.eclipse.org  -->
+    <target name="fetchAll" depends="fetchProjects" />
+
+    <target name="fetchProjects" depends="cvspass">    
+        <ant antfile="buildScripts/fetch_org.eclipse.cdt.testing-feature.xml" />
+    </target>
+    
+    <!--     Fill in values for original timestamp in all about.mappings files  -->
+    <target name="slamBuildId" depends="init">
+        <replace dir="${install}/plugins" value="${TODAYS_DATE}" token="@build@">
+        <include name="**/about.mappings" />
+        </replace>
+    </target>
+   
+   <!--
+        build.update.jar
+   -->
+   <target name="build.update.jar" depends="init,clean,compile">
+        <record name="compilelog.txt" action="start" /> 
+        <antcall target="allElements">
+            <param name="target" value="build.update.jar" />
+        </antcall>
+        <record name="compilelog.txt" action="stop" /> 
+    </target>
+   
+    <!--
+        build.zips
+   -->
+   <target name="build.zips" depends="init,clean,compile">
+        <record name="compilelog.txt" action="start" /> 
+        <antcall target="allElements">
+            <param name="target" value="build.zips" />
+        </antcall>
+        <record name="compilelog.txt" action="stop" /> 
+    </target>
+    
+    <!--    
+        zip.distribution
+    -->
+   <target name="zip.distribution" depends="init,clean,compile,build.zips">
+        <record name="compilelog.txt" action="start" /> 
+        <antcall target="allElements">
+            <param name="target" value="zip.distribution" />
+        </antcall>
+        <record name="compilelog.txt" action="stop" /> 
+    </target>
+   
+    <!--
+        build.sources
+    -->
+    <target name="build.sources" depends="init,clean">
+        <record name="compilelog.txt" action="start" /> 
+        <antcall target="allElements">
+            <param name="target" value="build.sources" />
+        </antcall>
+        <record name="compilelog.txt" action="stop" /> 
+    </target>
+   
+    <!--
+        zip.sources
+    -->
+    <target name="zip.sources" depends="init,clean,build.sources">
+        <record name="compilelog.txt" action="start" /> 
+        <antcall target="allElements">
+            <param name="target" value="zip.sources" />
+        </antcall>
+        <record name="compilelog.txt" action="stop" /> 
+    </target>
+    
+    <!--  
+          Compiles jars for all CDT plugins
+          Deletes previously compiled jars first.
+          default is 
+    -->
+    <target name="compile" depends="init,clean">
+        <record name="compilelog.txt" action="start" /> 
+        <antcall target="allElements">
+            <param name="target" value="build.jars" />
+        </antcall>
+        <record name="compilelog.txt" action="stop" /> 
+    </target>
+
+    <!--  copies only those scripts required to build the specified platform of the Eclipse CDT  -->
+    <target name="copyScripts" depends="init">
+        <copy todir="${install}" overwrite="true" >
+        	<fileset dir="buildScripts" includes="features/org.eclipse.cdt.testing-feature/build.xml" />
+            <fileset dir="buildScripts" includes="plugins/org.eclipse.cdt.testing/build.xml,plugins/org.eclipse.cdt.debug.ui.tests/build.xml,plugins/org.eclipse.cdt.ui.tests/build.xml" />
+        </copy>
+    </target>
+    
+    <!--  Only deletes jars that are to be compiled, i.e. comm.jar does not get deleted --> 
+    <target name="clean" depends="init">
+        <antcall target="allElements">
+            <param name="target" value="clean" />
+        </antcall>
+    </target>
+    
+    <target name="setPermissions">
+        <chmod dir="${install}" perm="755" includes="**/eclipse,**/*.so*,**/*.sl"/>
+    </target>
+    
+    <target name="init">
+        <available file="${java.home}/../bin/javadoc.exe" property="JAVADOC14_HOME" value="${java.home}/../bin" />
+        <available file="${java.home}/../bin/javadoc" property="JAVADOC14_HOME" value="${java.home}/../bin" />
+
+        <condition property="platformId" value="${os}.${ws}">
+            <not>
+                <equals arg1="${os}" arg2="${ws}" />
+            </not>
+        </condition>
+        <condition property="platformId" value="${os}">
+            <and>
+                <equals arg1="${os}" arg2="${ws}" />
+            </and>
+        </condition>
+        <condition property="linux">
+            <and>
+                <equals arg1="${os}" arg2="linux" />
+                <os family="unix" />
+            </and>
+        </condition> 
+        
+        <!--  Time stamp of the same format as used to stamp the files-->
+        <tstamp>
+            <format property="TIME" pattern="hh:mm aa" /> 
+            <format property="TODAYS_DATE" pattern="yyyyMMddhhmm" /> 
+        </tstamp>  
+    </target>
+
+    <target name="cvspass" depends="init">
+        <antcall target="wincvspass" />
+        <antcall target="unixcvspass" />
+    </target>
+
+    <target name="wincvspass"  if="win">
+        <touch file="c:\.cvspass" />
+    </target>
+
+    <target name="unixcvspass"  if="unix">
+        <touch file="${user.home}/.cvspass" />
+    </target>
+    
+</project>
