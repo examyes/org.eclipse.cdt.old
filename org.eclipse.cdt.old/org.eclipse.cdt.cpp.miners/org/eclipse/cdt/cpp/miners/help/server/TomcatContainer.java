@@ -118,7 +118,7 @@ public class TomcatContainer
         _host.addChild(root);
 
 	cdthelp =_embedded.createContext("/cdthelp",
-					 _pluginPath+"org.eclipse.cdt.cpp.miners/org/eclipse/cdt/cpp/miners/help/helpwebapp");
+					 _pluginPath+"org.eclipse.cdt.cpp.miners/help/helpwebapp");
 	_host.addChild(cdthelp);
 
 	_embedded.addEngine(_engine);
