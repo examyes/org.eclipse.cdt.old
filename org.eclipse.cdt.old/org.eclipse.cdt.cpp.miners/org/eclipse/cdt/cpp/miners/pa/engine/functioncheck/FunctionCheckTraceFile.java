@@ -154,6 +154,11 @@ public class FunctionCheckTraceFile extends PATraceFile {
     traceFunction.setMaxTotalTime(tokenizer.getTokenAsDouble(5));
     traceFunction.setMinLocalTime(tokenizer.getTokenAsDouble(6));
     traceFunction.setMaxLocalTime(tokenizer.getTokenAsDouble(7));
+    
+    if (traceFunction.getCallNumber() > 0) {
+     traceFunction.setSelfMsPerCall (traceFunction.getSelfSeconds()  * 1.0e6 / traceFunction.getCallNumber());
+     traceFunction.setTotalMsPerCall(traceFunction.getTotalSeconds() * 1.0e6 / traceFunction.getCallNumber());
+    }
    }
    catch (NumberFormatException e) {
     System.out.println(e);

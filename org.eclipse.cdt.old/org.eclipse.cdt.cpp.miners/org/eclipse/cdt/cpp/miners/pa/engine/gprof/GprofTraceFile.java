@@ -115,11 +115,7 @@ public class GprofTraceFile extends PATraceFile {
   private void parseFlatProfileEntry(String line) throws Exception {
   
    PATokenizer tokenizer = new PATokenizer(line, 7);
-   
-   if (tokenizer.getTokenNumber() < 7) {
-    throw new PAException("Invalid flat profile entry: " + line);
-   }
-   
+      
    String lastToken = tokenizer.getLastToken();
    String functionName = GprofUtility.trimmedFunctionName(lastToken);
    PATraceFunction traceFunction = findOrCreateTraceFunction(functionName);
