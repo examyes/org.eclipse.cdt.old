@@ -43,24 +43,27 @@ import org.eclipse.jface.window.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.widgets.*;
 
+import java.util.*;
+
 public class CppContentOutlinePage
 	extends ContentOutlinePage
-	implements IDomainListener, Listener, IMenuListener
+	implements IDomainListener, Listener, IMenuListener, ICppProjectListener
 {
-	protected IFile input;
+	protected IFile _input;
 	protected DataElement _elementRoot;
 	protected DataElementAdapter _adapter;
 	protected DataElement _expanded;
 	private MenuHandler _menuHandler;
 
 	private CppPlugin _plugin = CppPlugin.getDefault();
+	private ModelInterface _api;
 
 	public CppContentOutlinePage(IFile input)
 	{
 		super();
-		this.input = input;
+		this._input = input;
 		_adapter =
-			(DataElementAdapter) input.getAdapter(DataElementAdapter.class);
+			(DataElementAdapter) _input.getAdapter(DataElementAdapter.class);
 
 		_menuHandler = new MenuHandler(new CppActionLoader());
 	}
@@ -79,7 +82,7 @@ public class CppContentOutlinePage
 		provider.setProperty(ds.getContentsRelation());
 		treeViewer.setContentProvider(provider);
 
-		IAdaptable adp = getContentOutline(input);
+		IAdaptable adp = getContentOutline(_input);
 		if (adp != null)
 		{
 			setViewInput((DataElement) adp);
@@ -95,6 +98,10 @@ public class CppContentOutlinePage
 				handleKeyPressed(e);
 			}
 		});
+		
+		_api = plugin.getModelInterface();
+		CppProjectNotifier notifier = _api.getProjectNotifier();
+		notifier.addProjectListener(this);
 
 		// menu
 		// add menu handling
@@ -112,6 +119,7 @@ public class CppContentOutlinePage
 		if (cinput != input)
 		{
 			treeViewer.setInput(input);
+			treeViewer.refresh(input);
 		}
 	}
 
@@ -139,11 +147,7 @@ public class CppContentOutlinePage
 		} 
 		else
 		{
-			setViewInput(_elementRoot);
-
-			control.setRedraw(false);
-			getTreeViewer().refresh(_elementRoot, false);
-			control.setRedraw(true);
+			hackRedraw();
 		}
 	}
 
@@ -189,46 +193,73 @@ public class CppContentOutlinePage
 	public boolean listeningTo(DomainEvent ev)
 	{
 		DataElement parent = (DataElement) ev.getParent();
-		if (parent == _elementRoot)
+		if (_elementRoot != null 
+			&& (parent == _elementRoot || _elementRoot.contains(parent)) 
+			&& !_elementRoot.isDeleted())
 		{
 			return true;	
 		}		
+		else if (parent.getType().equals("status"))
+		{
+			if (parent.getName().equals("done"))
+			{
+				DataElement cmd = parent.getParent();
+				if (cmd.getName().equals("C_PARSE"))
+				{
+					return canUpdate(parent);
+				}		
+			}				
+		} 
 		else if (parent.getType().equals("Parsed Files"))
 		{
-		{
-			DataStore dataStore = parent.getDataStore();
+			return canUpdate(parent);
+		}
+		return false;
+	}
+
+	private boolean canUpdate(DataElement element)
+	{
+		DataStore dataStore = element.getDataStore();
 
 			if (_elementRoot == null || _elementRoot.isDeleted())
 			{
-				IFile fileInput = (IFile) input;
+				IFile fileInput =  _input;
 				IProject project = fileInput.getProject();
 				if (project == null || !project.isOpen())
 				{
 					dataStore.getDomainNotifier().removeDomainListener(this);
 					return false;
-				} else
+				} 
+				else
 				{
-					_elementRoot = _adapter.getElementRoot((IFile) input);
-					if (_elementRoot != null)
+					DataElement newElementRoot = _adapter.getElementRoot(_input);
+					if (newElementRoot != null && !newElementRoot.isDeleted())
 					{
-						setViewInput(_elementRoot);
-
-						getTreeViewer().internalRefresh(_elementRoot);
-
-						return true;
+						if (_elementRoot == null)
+						{
+							_elementRoot = newElementRoot;
+							setViewInput(_elementRoot);	
+						
+							return true;	
+						}
+						else if (_elementRoot == newElementRoot)
+						{
+							return false;						
+						}
+						else if (newElementRoot != null)
+						{
+							_elementRoot = newElementRoot;				
+							return true;
+						}
 					}
 				}
-			} else
-			{
-				if (parent == _elementRoot)
-				{
-					return true;
-				}
-			}
-		}
-		}
-		return false;
+			} 	
+			
+			return false;
+		
 	}
+
+
 
 	public void domainChanged(DomainEvent ev)
 	{
@@ -237,9 +268,9 @@ public class CppContentOutlinePage
 
 		if (_elementRoot != null)
 		{
-			if (parent == _elementRoot)
+			if (parent == _elementRoot || _elementRoot.contains(parent))
 			{
-				update(parent);
+				update(_elementRoot);
 
 				if (_expanded == parent)
 				{
@@ -302,4 +333,84 @@ public class CppContentOutlinePage
 		}
 	}
 
+	private void hackRedraw()
+	{
+		TreeViewer treeViewer = getTreeViewer();
+		Tree tree = treeViewer.getTree();
+					
+		TreeItem[] items = tree.getItems();
+		ArrayList newItems = _elementRoot.getAssociated(_elementRoot.getDataStore().getContentsRelation());
+		if (newItems.size() > 0)
+		{
+		for (int i = 0; i < items.length; i++)
+		{
+			TreeItem item = items[i];
+			Object data = item.getData();
+			DataElement oldElement = (DataElement)data;
+			
+			if (newItems.size() > i)
+			{
+				DataElement newElement = (DataElement)newItems.get(i);	
+				if (oldElement != newElement)
+				{
+					item.setData(newElement);
+					DataElementLabelProvider provider = (DataElementLabelProvider)treeViewer.getLabelProvider();
+					// need to really do an update though to register properly
+					item.setText(provider.getText(newElement));
+					item.setImage(provider.getImage(newElement));	
+					treeViewer.refresh(newElement);	
+				}	
+			}
+			else
+			{
+				if (oldElement.isDeleted())
+				{
+					treeViewer.remove(oldElement);
+				}
+			}
+		}
+		
+		for (int j = items.length; j < newItems.size(); j++)
+		{
+			DataElement newElement = (DataElement)newItems.get(j);
+			TreeItem item = new TreeItem(tree, SWT.NONE);
+			item.setData(newElement);
+			
+			DataElementLabelProvider provider = (DataElementLabelProvider)treeViewer.getLabelProvider();
+			// need to really do an update though to register properly
+			item.setText(provider.getText(newElement));
+			item.setImage(provider.getImage(newElement));
+			treeViewer.refresh(newElement);
+			
+		}
+		} 
+			
+	}
+   public void projectChanged(CppProjectEvent event)
+    {
+	int type = event.getType();
+	IProject project = event.getProject();
+	
+	if (_input.getProject().equals(project))
+	{
+	switch (type)
+	    {
+	    case CppProjectEvent.OPEN:
+		{
+			_api.parse(_input, false);		
+		}
+		break;
+	    case CppProjectEvent.CLOSE:
+	    case CppProjectEvent.DELETE:
+		{
+	
+		}
+		break;
+		
+	    default:
+		break;
+	    }
+    }
+    }
+        
 }
