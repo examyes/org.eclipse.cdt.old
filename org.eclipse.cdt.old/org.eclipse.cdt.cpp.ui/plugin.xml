@@ -287,7 +287,9 @@
 <extension
       point="org.eclipse.ui.popupMenus">
    <objectContribution
-	objectClass="org.eclipse.core.resources.IFile" id="org.eclipse.cdt.cpp.ui.internal.menu" adaptable="true">
+	objectClass="org.eclipse.core.resources.IFile" 
+	id="org.eclipse.cdt.cpp.ui.internal.menu" 
+	adaptable="true">
       <filter name="projectNature" value="org.eclipse.cdt.cpp.ui.cppnature"/>
       <menu
             label="%Makefile___"
