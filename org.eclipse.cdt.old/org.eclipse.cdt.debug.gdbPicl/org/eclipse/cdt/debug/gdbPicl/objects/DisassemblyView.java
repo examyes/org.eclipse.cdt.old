@@ -141,7 +141,7 @@ System.out.println("#### DisassemblyView.verifyView(STRING) sourceFileName="+sou
 
       file = new File(sourceFileName);
       if (!file.exists() || file.isDirectory())
-      {
+      { 	
          return false;
       }
 
@@ -430,4 +430,7 @@ System.out.println("#### DisassemblyView.addViewToReply viewNo="+viewNo  );
    // Data members
    protected int          _moduleID;
    protected ModuleManager _moduleManager;
+   
+   // Data members
+   static byte _prefixl = 10;
   }
