@@ -25,15 +25,18 @@ public class XMLparser
     private String            _tagType;
 
     private byte[]            _byteBuffer;
+    private int               _maxBuffer;
+    
     private boolean           _panic = false;
     
+
     public XMLparser(DataStore dataStore)
     {
         _dataStore = dataStore;
         _tagStack = new Stack();
         _objStack = new Stack();
-
-	_byteBuffer = new byte[10000];
+	_maxBuffer = 100000;
+	_byteBuffer = new byte[_maxBuffer];
     }
     
     public void readFile(BufferedInputStream reader, int size, String path)
@@ -99,6 +102,12 @@ public class XMLparser
 			    }
 			else
 			    {
+				if (offset >= _maxBuffer)
+				    {
+					System.out.println("BUFFER OVERFLOW");
+					done = true;
+				    }
+
 				_byteBuffer[offset] = aByte;
 				offset++;
 			    }
@@ -111,6 +120,7 @@ public class XMLparser
 			return null;
 		    }
 	    }
+
 
 	if (offset > 0)
 	    {

@@ -73,10 +73,11 @@ public abstract class Receiver extends Thread
         }
       }
 
-  public synchronized void handleInput()
+  public void handleInput()
       {
         try
         {
+	    // wait on the socket
 	    DataElement rootObject = _xmlParser.parseDocument(_in);
 	    
 	    if (rootObject != null)
