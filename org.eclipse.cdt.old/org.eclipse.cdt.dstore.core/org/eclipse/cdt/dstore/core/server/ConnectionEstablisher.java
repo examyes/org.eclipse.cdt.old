@@ -74,6 +74,7 @@ public class ConnectionEstablisher
             // create server socket from port
             _serverSocket = new ServerSocket(port);
 	    System.err.println(ServerReturnCodes.RC_SUCCESS);
+	    System.err.println(_serverSocket.getLocalPort());
             System.out.println("Server running on: " + InetAddress.getLocalHost().getHostName());
           }
       catch (UnknownHostException e)
