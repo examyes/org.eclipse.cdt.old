@@ -81,7 +81,9 @@ public class TransferFiles extends Thread
 		    _source.getType().equals("directory") ||
 		    _source.getType().equals("Project"); // hack 
 		*/
-		boolean validSource = _source.isOfType("file");
+		boolean validSource = _source.getType().equals("file") || 
+		    _source.getType().equals("directory") || 
+		    _source.isOfType("file");
 
 		if (validSource)
 	    {
