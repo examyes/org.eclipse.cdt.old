@@ -205,7 +205,7 @@ public class BreakpointManager extends ComponentManager
         }
      }
 
-     int bkpID = _breakpoints.size()+1;
+     int bkpID = _breakpoints.size()+1;  //  RW to revisit
 
      LineBreakpoint bkp = new LineBreakpoint(_debugSession, bkpID, moduleName,
                                              partName, fileName, attr,
@@ -248,7 +248,7 @@ public class BreakpointManager extends ComponentManager
       if (bkpID < 1 || bkpID > _breakpoints.size())
         return -1;
 
-      LineBreakpoint bkp = (LineBreakpoint) _breakpoints.elementAt(bkpID-1);
+      LineBreakpoint bkp = (LineBreakpoint) _breakpoints.elementAt(bkpID);
 
       if (bkp == null)
         return -1;
@@ -294,7 +294,7 @@ public class BreakpointManager extends ComponentManager
      if (bkpID < 1 || bkpID > _breakpoints.size())
          return -1;
 
-     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID-1);
+     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID);
 
      if (!(bkp instanceof LineBreakpoint))
          return -1;
@@ -350,7 +350,7 @@ public class BreakpointManager extends ComponentManager
       if (lineNum <0)
          return -1;
 
-      int bkpID = _breakpoints.size()+1;
+      int bkpID = _breakpoints.size()+1;  //  RW to revisit
 
       try
       {
@@ -469,7 +469,7 @@ public class BreakpointManager extends ComponentManager
         }
      }
 
-     int bkpID = _breakpoints.size()+1;
+     int bkpID = _breakpoints.size()+1;  //  RW to revisit
 
      try
      {
@@ -512,7 +512,7 @@ public class BreakpointManager extends ComponentManager
       if (bkpID < 1 || bkpID > _breakpoints.size())
         return -1;
 
-      MethodBreakpoint bkp = (MethodBreakpoint) _breakpoints.elementAt(bkpID-1);
+      MethodBreakpoint bkp = (MethodBreakpoint) _breakpoints.elementAt(bkpID);
 
       if (bkp == null)
         return -1;
@@ -574,7 +574,7 @@ public class BreakpointManager extends ComponentManager
      if (bkpID < 1 || bkpID > _breakpoints.size())
          return -1;
 
-     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID-1);
+     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID);
 
      if (!(bkp instanceof MethodBreakpoint))
          return -1;
@@ -781,7 +781,7 @@ public class BreakpointManager extends ComponentManager
          if (obj instanceof LocationBreakpoint)
          {
              LocationBreakpoint b = (LocationBreakpoint)obj;
-             if ((i != bkpID-1) && (b.partID() == partID) &&
+             if ((i != bkpID) && (b.partID() == partID) &&
                  (b.lineNum() == lineNum) && b.isEnabled())
                  removeBkp = false;
          }

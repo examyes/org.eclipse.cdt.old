@@ -211,7 +211,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       if (bkpID < 1 || bkpID > _breakpoints.size())
         return -1;
 
-      LineBreakpoint bkp = (LineBreakpoint) _breakpoints.elementAt(bkpID-1);
+      LineBreakpoint bkp = (LineBreakpoint) _breakpoints.elementAt(bkpID);
 
       if (bkp == null)
         return -1;
@@ -253,7 +253,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
      if (bkpID < 1 || bkpID > _breakpoints.size())
          return -1;
 
-     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID-1);
+     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID);
 
      if (!(bkp instanceof LineBreakpoint))
          return -1;
@@ -472,7 +472,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       if (bkpID < 1 || bkpID > _breakpoints.size())
         return -1;
 
-      MethodBreakpoint bkp = (MethodBreakpoint) _breakpoints.elementAt(bkpID-1);
+      MethodBreakpoint bkp = (MethodBreakpoint) _breakpoints.elementAt(bkpID);
 
       if (bkp == null)
         return -1;
@@ -539,7 +539,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
      if (bkpID < 1 || bkpID > _breakpoints.size())
          return -1;
 
-     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID-1);
+     Breakpoint bkp = (Breakpoint)_breakpoints.elementAt(bkpID);
 
      if (!(bkp instanceof MethodBreakpoint))
          return -1;
