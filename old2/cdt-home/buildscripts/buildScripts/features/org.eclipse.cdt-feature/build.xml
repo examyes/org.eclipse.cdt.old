@@ -97,7 +97,7 @@
 			<param name="feature.base" value="${feature.temp.folder}"/>
 			<param name="include.children" value="true"/>
 		</antcall>
-        <zip zipfile="${feature.destination}/${feature.dated.name}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
+        <zip zipfile="${feature.destination}/${feature.full.name}.bin.dist.zip" basedir="${feature.temp.folder}" filesonly="false"/>
 		<delete dir="${feature.temp.folder}"/>
 	</target>
 
@@ -108,7 +108,7 @@
 			<param name="target" value="gather.sources"/>
 			<param name="destination.temp.folder" value="${feature.temp.folder}/plugins/${feature}.source${feature.version.suffix}/src"/>
 		</antcall>
-        <zip zipfile="${feature.destination}/${feature.dated.name}.src.zip" basedir="${feature.temp.folder}" filesonly="true"/>
+        <zip zipfile="${feature.destination}/${feature.full.name}.src.zip" basedir="${feature.temp.folder}" filesonly="true"/>
 		<delete dir="${feature.temp.folder}"/>
 	</target>
 
