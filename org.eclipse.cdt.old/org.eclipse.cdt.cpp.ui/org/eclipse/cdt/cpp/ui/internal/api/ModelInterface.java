@@ -2079,7 +2079,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						 		{
 									String memberSource = oldRes.getLocation().toString().replace('\\', '/');
 									String memberSource2 = oldRes.getLocation().toString().replace('/', '\\');
-									System.out.println("remove " + memberSource);
+								
 									IProject project = oldRes.getProject();
 							
 									DataElement projectElement = findProjectElement(project);	
