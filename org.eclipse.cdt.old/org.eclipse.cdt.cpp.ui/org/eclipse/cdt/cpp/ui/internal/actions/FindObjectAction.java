@@ -67,8 +67,7 @@ public class FindObjectAction extends Action
     {
 	if (_lpexViewer != null)
 	    {
-		String str = getCurrentText(_lpexViewer);
-		
+		String str = getCurrentText(_lpexViewer);		
 		int line = _lpexViewer.currentElement();
 		
 		String path = null;
@@ -76,10 +75,9 @@ public class FindObjectAction extends Action
 		if (input instanceof IFileEditorInput)
 		    {
 			IFile file = ((IFileEditorInput)input).getFile();
-			path = new String(file.getLocation().toOSString());
+			path = new String(file.getLocation().toString());
 			
-			IProject project    = file.getProject();
-			
+			IProject project    = file.getProject();			
 			CppPlugin plugin   = CppPlugin.getDefault();
 			ModelInterface api  = plugin.getModelInterface();
 			
@@ -121,12 +119,7 @@ public class FindObjectAction extends Action
 						
 						if (viewPart != null)
 						    {
-							CppActionLoader loader = CppActionLoader.getInstance();
-							IOpenAction open = loader.getOpenAction();
-							open.setLocation(path, line);
-
-							viewPart.setInput(status.get(0));
-							
+							viewPart.setInput(status.get(0));							
 						    }
 					    }
 				    }		
@@ -171,7 +164,7 @@ public class FindObjectAction extends Action
 
     boolean isSeparator(char c)
     {
-	boolean result = Character.isLetterOrDigit(c);
+	boolean result = !Character.isLetterOrDigit(c);
 	return result;
     }
 }
