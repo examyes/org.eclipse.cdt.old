@@ -864,8 +864,8 @@ public String removeWhitespace(String theLine)
 	   }
        else
 	   {
-	       obj = _dataStore.createObject(_status, type, text, 
-							 file + ":" + line.intValue());
+	       obj = _dataStore.createObject(_status, type, text, file);
+	       obj.setAttribute(DE.A_SOURCE_LOCATION, line.toString());
 	   }
 
        if (fileElement != null)
