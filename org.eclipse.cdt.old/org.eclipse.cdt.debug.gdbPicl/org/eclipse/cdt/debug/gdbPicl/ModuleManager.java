@@ -1000,7 +1000,6 @@ public class ModuleManager extends ComponentManager
               return moduleIDs[j];
        }
        return getModuleID( ((GdbDebugSession)_debugEngine.getDebugSession()).getProgramName() );
-;
    }
    /**
     * Checks the startingAddress and endingAddress to see if this address is contained (default is true)
