@@ -84,6 +84,9 @@ public class CommandGenerator
     if (status != null)
 	{
 	    status.setAttribute(DE.A_NAME, _dataStore.getLocalizedString("model.start"));
+	    status.setParent(commandObject);
+	    _dataStore.refresh(commandObject);
+	
 	}
 
     if (status == null)
