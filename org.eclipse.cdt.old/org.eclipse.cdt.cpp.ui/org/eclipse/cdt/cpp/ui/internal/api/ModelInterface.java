@@ -586,13 +586,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
         IResource resource = getResource(path);
         return invoke(path, invocation, showProgress);
       }
-
-  public DataElement invoke(String path, String invocation, boolean showProgress)
+ public DataElement invoke(String path, String invocation, boolean showProgress)
   {
-    DataElement pathElement = _plugin.getCurrentDataStore().createObject(null, "directory", path, path);
+  	// first try to find the path element
+  	DataElement pathElement = findResourceElement(findWorkspaceElement(), path);
+  	if (pathElement == null)
+  	{
+     pathElement = _plugin.getCurrentDataStore().createObject(null, "directory", path, path);
+  	}
+  	
     return invoke(pathElement, invocation, showProgress);
   }
-
+ 
   public DataElement invoke(DataElement pathElement, String invocation, boolean showProgress)
   {
    if (invocation != null)
