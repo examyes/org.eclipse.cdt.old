@@ -665,6 +665,6 @@ public void doExpand(DataElement obj)
 
     public void dispose()
     {
-	getTree().dispose();
+	//***	getTree().dispose();
     }
 }
