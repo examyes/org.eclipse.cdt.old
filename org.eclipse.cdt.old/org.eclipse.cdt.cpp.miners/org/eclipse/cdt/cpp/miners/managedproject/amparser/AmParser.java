@@ -56,14 +56,15 @@ public class AmParser
 	if (!root.getType().equals(Am.MANAGED_PROJECT))
 	{
 		DataElement parent = root.getParent();
-		root = findExistingManagedProject(parent, root.getName());
+		if(parent!=null)
+			root = findExistingManagedProject(parent, root.getName());
 	}
     
   DataElement project = findExistingManagedProject(root, subdir);
   if (project != null)
   {
-  	//_dataStore.deleteObject(root, _project);	
-	root.removeNestedData(project);
+  	_dataStore.deleteObject(root, project);	
+	//root.removeNestedData(project);
   }
   
   
