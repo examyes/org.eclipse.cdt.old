@@ -253,7 +253,6 @@ public class TransferFiles extends Thread
 			_pm.beginTask("Checking files from " + source.getName() + "...", source.getNestedSize());
 		    }
 
-		//		source.refresh(true);
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {
 			DataElement child = source.get(i);
