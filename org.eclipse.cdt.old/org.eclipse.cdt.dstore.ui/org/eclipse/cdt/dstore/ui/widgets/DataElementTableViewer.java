@@ -337,7 +337,7 @@ public class DataElementTableViewer extends TableViewer
 
     private void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
-	int maxAdd = 50;
+	int maxAdd = 100;
 	int numAdded = 0;
 	int totalItems = table.getItemCount();
 	
