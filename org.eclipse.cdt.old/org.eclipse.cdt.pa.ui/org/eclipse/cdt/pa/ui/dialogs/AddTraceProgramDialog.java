@@ -105,12 +105,13 @@ public class AddTraceProgramDialog extends org.eclipse.jface.dialogs.Dialog
 	  _argumentField.setLayoutData(data);
 	  
 	  // Create the description text
-	  Label description = new Label(c, SWT.NONE);
+	  Text description = new Text(c, SWT.WRAP | SWT.MULTI | SWT.READ_ONLY);
 	  description.setText("Note: The executable will be added to the Trace Files view.\n" +
-	  		"You can select the appropriate actions from that view to do\n the run and analysis.");
+	  		"You can select the appropriate actions from that view to do the run and analysis.");
 	  
-	  data = new GridData();
+	  data = new GridData(GridData.GRAB_VERTICAL |GridData.FILL_BOTH);
 	  data.horizontalIndent = 8;
+	  data.widthHint  = 160;
 	  description.setLayoutData(data);
 	  
       getShell().setText(_title);
