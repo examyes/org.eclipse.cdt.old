@@ -23,6 +23,9 @@ import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -50,6 +53,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.NewProjectAction;
 
 /**
  * @author pmuldoon
@@ -60,6 +65,36 @@ import org.eclipse.ui.IWorkbench;
  */
 public class SRPMImportPage extends WizardPage implements Listener {
 	
+	/** This is a copy of 
+	 * org.eclipse.team.internal.ccvs.ui.wizards.CheckoutAsWizard.NewProjectListener**/
+	class NewProjectListener implements IResourceChangeListener {
+		private IProject newProject = null;
+
+		/**
+		 * @see IResourceChangeListener#resourceChanged(IResourceChangeEvent)
+		 */
+		public void resourceChanged(IResourceChangeEvent event) {
+			IResourceDelta root = event.getDelta();
+			IResourceDelta[] projectDeltas = root.getAffectedChildren();
+			for (int i = 0; i < projectDeltas.length; i++) {
+				IResourceDelta delta = projectDeltas[i];
+				IResource resource = delta.getResource();
+				if (delta.getKind() == IResourceDelta.ADDED) {
+					newProject = (IProject) resource;
+				}
+			}
+		}
+
+		/**
+		 * Gets the newProject.
+		 * 
+		 * @return Returns a IProject
+		 */
+		public IProject getNewProject() {
+			return newProject;
+		}
+	}
+
 	private IWorkbench workbench;
 
 	// Convienience SRPM import operation class 
@@ -70,6 +105,8 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	private Button applyPatch;
 	private Button runAutoConf;
 	private Button buildSource;
+	private Button intoConfigured;
+	private Button intoExisting;
 	private List projectList;
 	private IStructuredSelection selection;
 
@@ -166,7 +203,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 			new Listener() {
 				public void handleEvent(Event event) {
 					FileDialog srpmBrowseDialog = new FileDialog(getContainer()
-																				 .getShell(), SWT.OPEN);
+							.getShell(), SWT.OPEN);
 					String selectedSRPM_name = srpmBrowseDialog.open();
 					if (selectedSRPM_name != null)
 					{
@@ -208,13 +245,13 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	 *
 	 * Create a list box and populate it with
 	 * the list of current projects in the workspace
+	 * along with adding the option for a configured project
 	 */
 	protected void createProjectBox(Composite parent) {
 		// Creates a control that enumerates all the projects in the current 
 		// Workspace and places them in a listbox. 
-		// Need to check what to do if the user chooses to export an RPM
-		// when there are no current projects in the workspace. Right now 
-		// the other export wizard just open, with empty treeviews (?)
+		// Give the option of importing into an existing project or creating a new one
+		
 		// Declare an array of IProject;
 		IProject[] internalProjectList;
 		String Proj_Enum;
@@ -223,21 +260,26 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace()
 															  .getRoot();
 
-		//Create a group for the control and set up the layout. Even though it is a single control, 
-		// we want to seperate it from the other widgets on the wizard dialog box
+		// Create a group and set up the layout, we want to seperate 
+		// project selection from the other widgets on the wizard dialog box
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout());
-		group.setText(Messages.getString("RPMPage.Select_a_project")); //$NON-NLS-1$
+		group.setText(Messages.getString("SRPMImportPage.import_srpm_into")); //$NON-NLS-1$
 		group.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL |
 				GridData.HORIZONTAL_ALIGN_FILL));
-
-		// Creata a new SWT listbox. Only allow single selection of items	 
+		intoExisting = new Button(group, SWT.RADIO);
+		intoExisting.setText(Messages.getString("RPMPage.Select_a_project")); //$NON-NLS-1$
+		
+		// Create a new SWT listbox. Only allow single selection of items	 
 		// Set up the layout data
 		projectList = new List(group, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
 		projectList.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL |
 				GridData.HORIZONTAL_ALIGN_FILL));
 		projectList.setToolTipText(Messages.getString(
 				"SRPMImportPage.toolTip_project_destination")); //$NON-NLS-1$
+
+		intoConfigured = new Button(group, SWT.RADIO);
+		intoConfigured.setText(Messages.getString("SRPMImportPage.Configured_New_Project")); //$NON-NLS-1$
 
 		// Set the height to 4 elements high
 		GridData projectLayout = new GridData(GridData.GRAB_HORIZONTAL |
@@ -249,11 +291,6 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		// This should come back to us as an array of IProject.
 		internalProjectList = workspaceRoot.getProjects();
 
-		if (internalProjectList.length < 1) {
-			projectList.add(Messages.getString(
-					"RPMPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
-			return;
-		}
 		// Stuff the listbox with the text name of the projects 
 		// using the getName() method
 		// Find the first selected project in the workspace
@@ -290,9 +327,20 @@ public class SRPMImportPage extends WizardPage implements Listener {
 			}
 		}
 		
-		if (!isSelection)
-			projectList.setSelection(0);//if none is selected select first
-										// project
+		if (projectList.getItemCount() == 0) //there were no C/C++ projects
+		{
+			projectList.add(Messages.getString(
+			"RPMPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
+			intoExisting.setEnabled(false); // Can't very well import into an existing
+			projectList.setEnabled(false);  // project now can we?
+			intoConfigured.setSelection(true);
+			isSelection = true; // we don't want select the "RPMPage.No_c/c++_projects_found_2"
+		}
+		else
+			intoExisting.setSelection(true);
+			
+		if (!isSelection) //if none is selected select first project
+			projectList.setSelection(0);
 		else
 			projectList.addSelectionListener(new SelectionListener() {
 				public void widgetSelected(SelectionEvent e) {
@@ -303,6 +351,8 @@ public class SRPMImportPage extends WizardPage implements Listener {
 				}
 			});
 
+		intoExisting.addListener(SWT.Selection, this);
+		intoConfigured.addListener(SWT.Selection, this);
 		projectList.addListener(SWT.FocusOut, this);
 	}
 
@@ -310,6 +360,17 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	 * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
 	 */
 	public void handleEvent(Event event) {
+		if (event != null)
+		{
+			if (event.widget == intoExisting && intoExisting.getSelection())
+			{
+				projectList.setEnabled(true);
+			}
+			else if (event.widget == intoConfigured && intoConfigured.getSelection())
+			{
+				projectList.setEnabled(false);
+			}
+		}
 		setPageComplete(canFinish());
 	}
 
@@ -322,8 +383,13 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	 * @return boolean. true if finish can be activated
 	 */
 	public boolean canFinish() {
-		// Make sure project has been selected
-		if (returnProject().equals("")) { //$NON-NLS-1$
+		// Make sure project has been selected or the user 
+		// has decided to configure a new one instead
+		if (intoConfigured.getSelection())
+		{
+			return true;
+		}
+		else if (returnProject().equals("")) { //$NON-NLS-1$
 			return false;
 		}
 
@@ -368,7 +434,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	 * 	 */
 	public boolean finish() throws CoreException {
 		IPath detailedProjectLocation = null;
-		
+		IProject detailedProject;
 		// Check second step validation
 		if (!validateFinish())
 			return false;
@@ -376,14 +442,18 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		// Get the handle to the current activate Workspace	    
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 
-		// Get the current selected member from the list box (projectList)
-		String[] selectedProject = projectList.getSelection();
-
-		// As we only allow a single selection in the listbox, and the listbox always
-		// comes with the first element selected, we can assume the first element
-		// in the returned array is valid.
-		IProject detailedProject = workspaceRoot.getProject(selectedProject[0]);
+		// User chooses an existing project or make a new project
+		if (intoExisting.getSelection()) {
+			// Get the current selected member from the list box (projectList)
+			String[] selectedProject = projectList.getSelection();
 			
+			// As we only allow a single selection in the listbox, and the listbox always
+			// comes with the first element selected, we can assume the first element
+			// in the returned array is valid.
+			detailedProject = workspaceRoot.getProject(selectedProject[0]);
+		}		
+		else 
+			detailedProject = getNewProject();
 		// Add this SRPM to srpmList
 		for (int i = 0; i < srpmVector.size(); i++)
 		{	// There can only be one occurance 
@@ -420,5 +490,21 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get a new project that is configured by the new project wizard. This is
+	 * currently the only way to do this.  This is a copy of 
+	 * org.eclipse.team.internal.ccvs.ui.wizards.CheckoutAsWizard.getNewProject()
+	 */
+	private IProject getNewProject() {
+		NewProjectListener listener = new NewProjectListener();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+				IResourceChangeEvent.POST_CHANGE);
+		(new NewProjectAction(PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow())).run();
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(listener);
+		IProject project = listener.getNewProject();
+		return project;
 	}
 }
