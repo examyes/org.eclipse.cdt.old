@@ -78,7 +78,7 @@ public class RenameRegressionTests extends RenameTests {
         suite.addTest( new RenameRegressionTests("testClass_55_79231")); //$NON-NLS-1$
         suite.addTest( new RenameRegressionTests("testClass_55") ); //$NON-NLS-1$
         suite.addTest( new RenameRegressionTests("testClass_55_72748")); //$NON-NLS-1$
-        suite.addTest( new FailingTest(new RenameRegressionTests("testClass_56"), 0) ); //$NON-NLS-1$ //mstodo file an spr
+        suite.addTest( new RenameRegressionTests("testClass_56") ); //$NON-NLS-1$ 
         suite.addTest( new RenameRegressionTests("testAttribute_61") ); //$NON-NLS-1$
         suite.addTest( new RenameRegressionTests("testEnumerator_62") ); //$NON-NLS-1$
         suite.addTest( new RenameRegressionTests("testAttribute_63") ); //$NON-NLS-1$
