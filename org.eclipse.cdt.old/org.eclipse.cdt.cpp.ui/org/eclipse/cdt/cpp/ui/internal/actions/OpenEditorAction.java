@@ -80,7 +80,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 	    }
 
 	_element = selected;
-	_editor = null;
     }
 
   public void run()
