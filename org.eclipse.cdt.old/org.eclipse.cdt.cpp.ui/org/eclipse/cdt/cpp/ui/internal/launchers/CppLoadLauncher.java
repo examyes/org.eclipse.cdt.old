@@ -130,6 +130,8 @@ public class CppLoadLauncher implements ILauncherDelegate {
 	ModelInterface api = ModelInterface.getInstance();
 	String port = new Integer(daemonInfo.getPort()).toString();
 	String key  = new Integer(daemonInfo.getKey()).toString();
+
+	System.out.println("call to debug");
 	api.debug(_directory, port, key);
 
         /*
