@@ -181,9 +181,11 @@ public class CmdBreakpointLocation extends Command
                      Gdb.traceLogger.dbg(1,"PartID  : " + partID);
 
                  lineNum = bkpContext.getLineNum();
+                 
                  if(partID<=0)
                  {
                      Part part = _debugSession.isPartInModule(partName, moduleName);
+
                      if(part!=null)
                      {  int moduleID = cm.getModuleID(moduleName);
                         partID = ((GdbModuleManager)cm).getPartID(moduleID,partName);
@@ -192,8 +194,16 @@ public class CmdBreakpointLocation extends Command
                      }
                      else
                      {
-                         if (Gdb.traceLogger.ERR) 
-                             Gdb.traceLogger.err(2,"CmdExpression.execute FAILED to find part for breakpoint (MUST ADD DEFER CAPABILITY) moduleName="+moduleName+" partName="+partName+" partID="+partID+" srcFileIndex="+srcFileIndex+" lineNum="+lineNum );
+                     	 // don't have a valid part id... try to set with just partName and line number
+                     	 ret = bm.setLineBreakpoint(partName, lineNum, ((_req.bkpAttr() & EPDC.BkpEnable) == EPDC.BkpEnable) ? true : false, _req.getConditionalExpression());
+						 
+						 if (ret < 0)
+						 {
+						 	// should set deferred breakpoint when it is implemented
+						 	_rep.setReturnCode(EPDC.ExecRc_BadLineNum);
+	                        _rep.setMessage(_debugSession.getResourceString("INVALID_BREAKPOINT_LOCATION_MSG")+lineNum );
+						 }
+						 
                          return false;
                      }
                  }

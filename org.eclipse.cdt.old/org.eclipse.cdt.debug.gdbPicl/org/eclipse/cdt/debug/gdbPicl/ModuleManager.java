@@ -227,6 +227,9 @@ public class ModuleManager extends ComponentManager
     */
    public int[] getPartIDs(int moduleID) 
    {
+   	  if (_modules == null)
+   	  	return new int[0];
+   	
       Module module = (Module)_modules.elementAt(moduleID-1);
 
       if (module == null)

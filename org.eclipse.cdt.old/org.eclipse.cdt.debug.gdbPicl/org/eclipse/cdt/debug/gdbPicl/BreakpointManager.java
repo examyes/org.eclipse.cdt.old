@@ -81,6 +81,52 @@ public class BreakpointManager extends ComponentManager
    }
 
    /**
+    * Add a line breakpoint
+    * @return 0 if succesful
+    * @return -1 if failed
+    * @return breakpoint ID of a duplicate breakpoint if this line already has a line breakpoint set.
+    */
+   public int setLineBreakpoint(String filename,
+                         int lineNum, boolean enable,
+                         EStdExpression2 conditionalExpr)
+   {
+   	  // try to add breakpoint with specified name
+      if (!((GdbDebugSession)_debugSession).setLineBreakpoint(filename, lineNum))
+         return -1;
+
+      int bkpID = _breakpoints.size()+1;
+      
+      // added breakpoint successfully, add part to first module
+      ModuleManager cm = _debugSession.getModuleManager();
+      cm.checkPart(1, filename);     
+      
+      int partID = cm.getPartID(1, filename); 
+
+      try
+      {
+         if (Gdb.traceLogger.DBG) 
+             Gdb.traceLogger.dbg(1,"Line breakpoint set: line number " + lineNum +
+                        (conditionalExpr == null ? " No condition" : " Conditional expr = >" + conditionalExpr.getExprString() + "<") );
+      } catch(Exception e) {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(3,"Error printing out Line breakpoint info");
+      }
+
+      LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, 0, partID, 1,
+                                                  Part.VIEW_SOURCE, lineNum, conditionalExpr);
+
+      _breakpoints.addElement(lineBkp);
+
+      // if breakpoint should be disabled, then disable it.
+      if (!enable)
+         disableBreakpoint(bkpID);
+      else
+         _changedBreakpoints.addElement(lineBkp);
+      return 0;
+   }
+
+
+   /**
     * Add a deferred line breakpoint
     * @return 0 if succesful
     * @return -1 if failed

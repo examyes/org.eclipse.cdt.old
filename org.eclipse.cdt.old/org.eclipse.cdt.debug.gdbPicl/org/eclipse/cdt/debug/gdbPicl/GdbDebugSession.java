@@ -1098,6 +1098,20 @@ System.out.println("????????????????? GdbDebugSession.remoteDetach "+processInde
      return ret;
   }
 
+  // set breakpoint with filename and line number  
+  public boolean setLineBreakpoint(String fileName, int lineNumber)
+  {
+     String lineNum = new Integer(lineNumber).toString();
+
+     if (Gdb.traceLogger.EVT) 
+         Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setLineBreakpoint fileName="+fileName+" lineNum="+lineNum  );
+
+     boolean ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
+
+     addChangesToUiMessages();
+     return ret;
+  }
+
   /**
    * Remove a breakpoint at a specific location
    */
