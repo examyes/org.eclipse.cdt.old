@@ -79,7 +79,8 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
    	Composite composite = new Composite(parent, SWT.NULL);
    	
    	
-   	composite.addHelpListener(new HelpListener()
+   	/*
+      composite.addHelpListener(new HelpListener()
 	     {
    		 public void helpRequested(HelpEvent event)
    	    {
@@ -87,6 +88,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
        	 }
         }
       );
+      */
    	
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -281,7 +283,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
     */
 
      IProject project;
-     System.out.println("CppDebugInfoTab:setDefaults");
      IStructuredSelection selection = getSelection();
      if(selection == null)
      {
@@ -354,7 +355,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	   	_directory = null;
    		return;
 	   }
-      System.out.println("CppDebugInfoTab:setDefaults _executable = " +_executable.getSource());
       //_programNameField.setText(_executable.getSource());
       //_workingDirectoryField.setText(_directory.getSource());
 
@@ -364,7 +364,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
 	 */
 	public void initializeFrom(ILaunchConfiguration config) {
-    System.out.println("CppDebugInfoTab:initializeFrom");
 		updateExecutableFromConfig(config);
 	}
 
@@ -378,6 +377,8 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
          {
             if (_executable != null)
               _programNameField.setText(_executable.getSource());
+            else
+               return;
          }
          else
          {
@@ -408,9 +409,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void performApply(ILaunchConfigurationWorkingCopy config)
    {
-      System.out.println("CppDebugInfoTab:performApply() ");
-		//config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, (String)fProjText.getText());
-		//config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, (String)fTestText.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, (String)_workingDirectoryField.getText());
 	}
@@ -419,7 +417,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#dispose()
 	 */
 	public void dispose() {
-      System.out.println("CppDebugInfoTab:dispose() ");
 	}
 
 	/**
@@ -539,8 +536,6 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 */
 	public boolean isValid() {
 
-      System.out.println("CppDebugInfoTab:isValid()");
-
 		setErrorMessage(null);
 		setMessage(null);
 		
@@ -594,11 +589,12 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
    	spacer.setLayoutData(data);
     }
 
-
+    /*
     public void performHelp()
     {
        System.out.println("HELP");
     }
+    */
 
     /**
      *	Display an error dialog with the specified message.

@@ -74,7 +74,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     {
    	Composite composite = new Composite(parent, SWT.NULL);
    	
-   	
+   	/*
    	composite.addHelpListener(new HelpListener()
 	     {
    		 public void helpRequested(HelpEvent event)
@@ -83,6 +83,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
        	 }
         }
       );
+      */
    	
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -197,7 +198,6 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    {
 
      IProject project;
-     System.out.println("CppDebugInfoTab:setDefaults");
      IStructuredSelection selection = getSelection();
      if(selection == null)
      {
@@ -213,9 +213,9 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	 if (!_executable.getType().equals("file"))
         {
            _executable = null;
- 	    _directory = null;
+           _directory = null;
            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notExecutable"));
-   	    return;
+   	     return;
         }
 
         DataElement projectElement = _api.getProjectFor(_executable);
@@ -270,15 +270,12 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	   	_directory = null;
    		return;
 	   }
-      System.out.println("CppDebugInfoTab:setDefaults _executable = " +_executable.getSource());
-
 	}
 	
 	/**
 	 * @see ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
 	 */
 	public void initializeFrom(ILaunchConfiguration config) {
-    System.out.println("CppDebugInfoTab:initializeFrom");
 		updateExecutableFromConfig(config);
 	}
 
@@ -332,7 +329,6 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void performApply(ILaunchConfigurationWorkingCopy config)
    {
-      System.out.println("CppDebugInfoTab:performApply() ");
 		config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, (String)_programNameField.getText());
 		config.setAttribute(CppLaunchConfigConstants.ATTR_PROCESS_ID, (String)_processIDField.getText());
 	}
@@ -341,7 +337,6 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#dispose()
 	 */
 	public void dispose() {
-         System.out.println("CppDebugInfoTab:dispose() ");
 	}
 
 	/**
@@ -358,19 +353,13 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 
     protected void handleProcessIDBrowseButtonPressed()
     {
-  	      System.out.println("handleProcessIDBrowseButton  ");
-//         DataElement directory = _directory.getDataStore().getHostRoot().get(0).dereference();
-//   		directory = directory.getParent();
          BrowseProcessesDialog dialog = new BrowseProcessesDialog("select process id", _directory);
    		dialog.open();
 	   	if (dialog.getReturnCode() == dialog.OK)
    	   {
-     	      System.out.println("handleProcessIDBrowseButton 2 ");
             DataElement selected = dialog.getSelected();
-
    	      if (selected != null)
   	         {
-               System.out.println("pid = " + selected.getName());
                _processIDField.setText(selected.getName());
   	         }
    	   }
@@ -389,8 +378,6 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
 	 * @see ILaunchConfigurationTab#isPageComplete()
 	 */
 	public boolean isValid() {
-
-      System.out.println("CppDebugInfoTab:isValid()");
 
 		setErrorMessage(null);
 		setMessage(null);
@@ -419,11 +406,12 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    	spacer.setLayoutData(data);
     }
 
-
+    /*
     public void performHelp()
     {
        System.out.println("HELP");
     }
+    */
 
     /**
      *	Display an error dialog with the specified message.
