@@ -39,6 +39,8 @@ public class PreprocessWorker extends Thread
  
  public void setParsedFiles(DataElement theParsedFiles)
  {
+  if (theParsedFiles == null)
+   return;
   _dataStore   = theParsedFiles.getDataStore();
   _parsedFiles = theParsedFiles;
   _theParseWorker.setParsedFiles(_parsedFiles);
