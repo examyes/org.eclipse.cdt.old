@@ -188,7 +188,7 @@ public class FileSystemMiner extends Miner
 
   public void extendSchema(DataElement schemaRoot)
       {
-	  _fsystemObjectDescriptor  = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
+	  _fsystemObjectDescriptor  = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.Filesystem_Objects"), 1);
 	  _deviceDescriptor         = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.device"), 1);    
 	  _directoryDescriptor      = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.directory"), 1);
 	  _hostDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.host"), 1);
