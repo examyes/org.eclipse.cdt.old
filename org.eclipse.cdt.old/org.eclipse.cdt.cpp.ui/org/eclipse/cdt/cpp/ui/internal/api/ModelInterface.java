@@ -2056,6 +2056,27 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		}
     }
     
+
+ private void provideSourceFor(DataElement element)
+ {
+  DataStore dataStore = element.getDataStore();
+  DataElement cppObjD = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME,  "Cpp Object", 1);
+  if (cppObjD == null) 
+   return; 
+  DataElement provideSourceForD = dataStore.localDescriptorQuery(cppObjD.getDescriptor(), "C_PROVIDE_SOURCE_FOR", 1);
+  if (provideSourceForD != null)
+  {
+   ArrayList args = new ArrayList();
+   args.add(getProjectFor(element));
+   dataStore.command(provideSourceForD, args, element, false);
+  }
+ }
+
+
+
+
+
+
     
     private void parseFile(DataElement element)
     {
