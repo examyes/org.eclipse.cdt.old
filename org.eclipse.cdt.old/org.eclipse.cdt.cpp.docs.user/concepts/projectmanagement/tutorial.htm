@@ -8,7 +8,7 @@
 <!----------------------------------------------------------------------------------->
 </head>
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#FF0000" alink="#000000">
-&nbsp;
+m
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <caption>&nbsp;</caption>
 
@@ -17,18 +17,17 @@
 <h1>
 <font size=+4>Autoconf Tutorial</font></h1>
 <b><font size=+3>Managing Project Using Autoconf Support</font></b>
-<p><font size=+1>The following is a tutorial that shows how to use CDT
-support for the GNU autoconf and automake tools to manage a newly created
-project. We will use a&nbsp; simple project - HelloWorld App-&nbsp; in
-this tutorial as the focus here is to explain the various feature that
-CDT provides.</font>
+<p><font size=+1>The following is a tutorial that shows how to use the
+CDT support for the GNU autoconf and automake tools to manage a newly created
+C/C++ project. We will use a&nbsp; simple project - hello -&nbsp; in this
+tutorial as the focus is to explain the various feature that CDT provides.</font>
 <p><b><font size=+1>1- Creating C++ project</font></b>
 <br>&nbsp;
 <ul>
 <li>
 <font size=+1>The first step is to successfully <font color="#FF0000">create
-a new cpp project </font><font color="#000000">and set its location to
-be the default location.</font></font></li>
+a new cpp project </font><font color="#000000">and set the name to be "hello"
+and&nbsp; its location to be the default location.</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Create a subdir which will include
@@ -41,51 +40,180 @@ project view</font><font color="#000000">, RMC(right mouse click) the project
 and select "New -> Directory"</font></font></li>
 
 <li>
-<font color="#000000"><font size=+1>Enter the name of the directory and
-press OK</font></font></li>
+<font color="#000000"><font size=+1>Enter the name of the directory&nbsp;
+"source" and press OK</font></font></li>
 </ol>
 
 <li>
-<font color="#000000"><font size=+1>Create a new cpp file by RMC&nbsp;the
+<font color="#000000"><font size=+1>Create a new cpp file by RMC the source
 directory that you have created and select New - > File, then enter tha
-file name HelloWorld.C</font></font></li>
+file name to be "HelloWorld.C"</font></font></li>
 
 <li>
 <font color="#000000"><font size=+1>Now we need to write the HelloWorld.C:</font></font></li>
-<font color="#000000"><font size=+1></font></font>
-<p><br><font color="#000000"><font size=+1>You can simply copy the following
-code to your file in the Eclipse workspace or type the following:</font></font>
-<br><font color="#000000"><font size=+1></font></font>&nbsp;
+
+<br>&nbsp;
+<p>&nbsp;
+<p><font color="#000000"><font size=+1>You can simply copy and paste the
+following code to your file in the Eclipse workspace or type the following:</font></font>
+<br>&nbsp;
 <ul><font color="#000000"><font size=+1><font face="Times New Roman,Times">/</font><font face="Arial,Helvetica">/include
 this file for cout</font></font></font>
 <br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>#include
-&lt;iostream.h></font></font></font><font face="Arial,Helvetica"><font color="#000000"><font size=+1></font></font></font>
+&lt;iostream.h></font></font></font>
 <p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>int
 main()&nbsp;</font></font></font>
-<br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>{&nbsp;&nbsp;</font></font></font><font face="Arial,Helvetica"><font color="#000000"><font size=+1></font></font></font>
+<br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>{&nbsp;</font></font></font>
 <p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
 //print out the text string, "Hello, World!"</font></font></font>
 <br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
-cout &lt;&lt; "Hello,&nbsp; World!" &lt;&lt; endl;&nbsp;&nbsp;</font></font></font><font face="Arial,Helvetica"><font color="#000000"><font size=+1></font></font></font>
+cout &lt;&lt; "Hello,&nbsp; World!" &lt;&lt; endl;&nbsp;</font></font></font>
 <p><font face="Arial,Helvetica"><font color="#000000"><font size=+1>&nbsp;&nbsp;
 return 0;&nbsp;</font></font></font>
 <br><font face="Arial,Helvetica"><font color="#000000"><font size=+1>}</font></font></font></ul>
-<font face="Arial,Helvetica"><font color="#000000"><font size=+1></font></font></font>
+
 <p><br><font color="#000000"><font size=+1>Before we move to the next part
-make sure that you have the following project structure:</font></font><font color="#000000"><font size=+1></font></font>
-<p><font color="#000000"><font size=+1>ProjectFolder</font></font>
-<ul><font color="#000000"><font size=+1>Source Folder</font></font>
-<ul><font color="#000000"><font size=+1>Source Files</font></font>
-<br><font color="#000000"><font size=+1></font></font>&nbsp;</ul>
+make sure that you have the following project structure:</font></font>
+<p><font color="#000000"><font size=+1>hello</font></font>
+<ul><font color="#000000"><font size=+1>source</font></font>
+<ul><font color="#000000"><font size=+1>HelloWorld.C</font></font></ul>
 </ul>
 </ul>
 <b><font color="#000000"><font size=+1>2- Creating the project configuration
-files to create the configure script</font></font></b>
-<br>&nbsp;</td>
+files and creating the configure script</font></font></b>
+<blockquote><font color="#000000"><font size=+1>In order to use automake
+and autoconf to generate the configure script, certain files has to exist
+first. The CDT creates and maintains these file on your behalf.&nbsp; Two
+types of these files are maintanined by&nbsp; the CDT tools, the configure.in
+and makefile.am. For each proejct there is only one configure.in and one
+or more Makefile.am's. Let us learn how to use the CDT tool to generate
+and maintain these files:</font></font></blockquote>
+
+<ul>
+<li>
+<font size=+1><font color="#000000">From the </font><font color="#FF0000">C/C++
+project view</font><font color="#000000">, RMC the hello project </font>(top
+level dirctory)<font color="#000000"> and select Autoconf -> Generate configure.</font></font></li>
+
+<li>
+<font color="#000000"><font size=+1>Click the OK button from the message
+dialog.</font></font></li>
+
+<li>
+<font size=+1><font color="#000000">Make sure that the command has completed
+successfully -&nbsp;</font> you can monitor the comand outpout from the
+<font color="#FF6666">output
+view</font> <font color="#000000">, then examin your project directory.
+You should now see all the files that automake and autoconf have cretaed
+to generate the configure script together with the configure script. This
+is one good reason why you might not want to put any files you want to
+work with in the top level directory as it will be cluttered with the autoconf
+and automake generated files.&nbsp; Take note of the following files as
+you may want to be familiar with, in&nbsp; the case when you need to modify
+the way you want to manage your project. These files are configure.in and
+Makefile.am.</font></font></li>
+
+<li>
+<font color="#000000"><font size=+1>Following the previous steps, the system
+will assign the name of your project to be your package name - if you want
+to check it out, examine the configure.in and check the input to the AM_INIT_AUTOMAKE
+macro. Later on, we will learn how to change these values.</font></font></li>
+
+<li>
+<font color="#000000"><font size=+1>Also, by default, the system will set
+the program name to be the same as the name of your source directory -&nbsp;
+Later on, we will learn how to change these values.</font></font></li>
+
+<li>
+<font color="#000000"><font size=+1>For now let us use the system default
+values and later on we will see how we can modify these values and regenerate
+the configuration files and create the configure script.</font></font></li>
+</ul>
+&nbsp;<b><font size=+1>3- Running the generated configure script&nbsp;</font></b>
+<blockquote><font size=+1>Now that we have created the configure script,
+the next step would be running the script and building our program&nbsp;</font></blockquote>
+</td>
 </tr>
 
 <tr>
 <td ALIGN=LEFT VALIGN=TOP COLSPAN="2">
+<ul>
+<li>
+<font size=+1>&nbsp;From the <font color="#FF0000">C/C++ project</font>,
+RMC the project (top level dirctory) folder and select Autoconf -> run
+configure</font></li>
+
+<li>
+<font size=+1>Make sure that the command has completed succefully- you
+can monitor the command outpout from the <font color="#FF0000">output view</font>,
+and&nbsp;&nbsp; also by making sure that there is Makefile in your source
+directory.</font></li>
+</ul>
+<b><font size=+1>4- Building and running the Hello Program</font></b>
+<blockquote>
+<li>
+<font size=+1>From the <font color="#FF0000">C/C++ project view </font>RMC
+the hello project and select Build Project</font></li>
+
+<li>
+<font size=+1>Afetr successful completion, check the source dirctory and
+make sure that the source target has been created - we will change the
+target name to be more meaningful later.</font></li>
+
+<li>
+<font size=+1>From <font color="#FF0000">Comand specification view</font>,
+create a new command - Make sure that the command container being the "source"
+directory, enter the name of the command to be&nbsp; "run hello" and the
+invocation to be "./source"</font></li>
+
+<li>
+<font size=+1>Fro the command Specificatio view, RMC the command and select
+execute - you can use the view's local tool bar instead.</font></li>
+
+<li>
+<font size=+1>Once the command has been finished, you should see Hello,
+World! in the <font color="#FF0000">output view</font></font></li>
+</blockquote>
+
+<p><br><b><font size=+1>5- Modifying configuration files (configure.in
+and Makefile.am)</font></b>
+<br>&nbsp;
+<ol><font size=+1>There are many scenarios in which you will need to make
+some modifications to your configuration files, below is some of these
+scenarios. The scenarios are selected to show the capabilities that the
+CDT provide in supporting the GNU automake and autoconf.</font>
+<br>&nbsp;
+<li>
+Modfifying the value for the _PROGRAMS variables (Makefile.am)</li>
+
+<ul>&nbsp;
+<li>
+We will continue with our example that we have created earlier. As you
+might already now, the name of&nbsp; the target was set to be "source"
+- the nake of the source file directory -&nbsp; which might not be the
+name that you were thinking of for your target. When the system tries to
+set a value for the bin_PROGRAMS&nbsp;variable, which exists in the /hello/source/Makefile.am,
+it sets the variable's value to be the name of its parent directory. That
+been said, then you might change the name of the directory to be your target
+name and regenerate the configuration files and you are all set. But in
+the cases that you would like to keep your directory name as it is, you
+can still change target name to be whatever value you want to use.</li>
+
+<li>
+For now, all the updates to Makefile.am's will be done manually. Soon,
+the CDT&nbsp;tool will facilitate the way to perform configuration file
+updates.&nbsp;</li>
+
+<li>
+Open hello/sources/Makefile.am and change the value for the following variables:</li>
+
+<ol>
+<li>
+Set the bin_PROGRAMS variable to be equal to&nbsp;</li>
+</ol>
+</ul>
+</ol>
+
 <table BORDER=0 CELLSPACING=5 CELLPADDING=2 WIDTH="100%" >
 <caption>&nbsp;</caption>
 
