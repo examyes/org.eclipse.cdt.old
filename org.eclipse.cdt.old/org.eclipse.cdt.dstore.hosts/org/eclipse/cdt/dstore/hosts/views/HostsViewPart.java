@@ -46,7 +46,7 @@ public class HostsViewPart extends GenericViewPart
     public IActionLoader getActionLoader()
     {
 	IActionLoader loader = _plugin.getActionLoader();
-	return loader;
+	return loader; 
     }
 
     

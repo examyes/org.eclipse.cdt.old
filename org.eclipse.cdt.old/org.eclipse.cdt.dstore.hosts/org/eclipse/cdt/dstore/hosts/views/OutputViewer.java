@@ -53,7 +53,7 @@ public class OutputViewer
 	{
 		super(parent);
 
-		_plugin = HostsPlugin.getPlugin();
+		_plugin = HostsPlugin.getPlugin(); 
 		setContentProvider(new DataElementTableContentProvider());
 
 		if (loader == null)

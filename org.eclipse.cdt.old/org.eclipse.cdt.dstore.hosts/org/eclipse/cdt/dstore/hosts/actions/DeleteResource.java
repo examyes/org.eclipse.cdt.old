@@ -1,5 +1,5 @@
 package org.eclipse.cdt.dstore.hosts.actions;
-
+ 
 /*
  * Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of

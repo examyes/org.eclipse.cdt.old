@@ -118,7 +118,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	DataStore localDataStore = _localInput.getDataStore();
 	_localViewer = new ObjectWindow(localGroup, ObjectWindow.TABLE, localDataStore, 
-					_plugin.getImageRegistry(), _plugin.getDialogActionLoader());
+					_plugin.getImageRegistry(), _plugin.getActionLoader());
 
 	_localViewer.setSorter(new DataElementSorter(DE.P_NAME));
 	_localViewer.setInput(_localInput);
@@ -210,7 +210,7 @@ public class DataElementFileTransferDialog extends org.eclipse.jface.dialogs.Dia
 
 	DataStore remoteDataStore = _remoteInput.getDataStore();
 	_remoteViewer = new ObjectWindow(remoteGroup, ObjectWindow.TABLE, remoteDataStore, 
-					 _plugin.getImageRegistry(), _plugin.getDialogActionLoader());
+					 _plugin.getImageRegistry(), _plugin.getActionLoader());
 	_remoteViewer.setSorter(new DataElementSorter(DE.P_NAME));
 	_remoteViewer.setInput(_remoteInput);
 	_remoteViewer.setContainable(true);

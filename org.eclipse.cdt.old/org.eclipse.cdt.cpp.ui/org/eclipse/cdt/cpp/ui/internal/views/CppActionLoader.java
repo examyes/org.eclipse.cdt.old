@@ -39,35 +39,50 @@ import java.lang.reflect.*;
 
 public class CppActionLoader extends GenericActionLoader
 {
-    private static CppActionLoader _instance = new CppActionLoader();
-	private ResourceBundle _iconBundle;
-	private String _defaultIcon;
-	private HashMap _hashMap; 
-	private String _baseDir;
-
+    private static CppActionLoader _instance;
+    private ResourceBundle _iconBundle;
+    private String _defaultIcon;
+    private HashMap _hashMap; 
+    private String _baseDir;
+    
     public CppActionLoader()
     {
-		super(); 
-
-		try
-    	{
+	super(CppPlugin.getDefault()); 
+	
+	try
+	    {
       	 	_iconBundle = ResourceBundle.getBundle("org.eclipse.cdt.cpp.ui.internal.IconResources");
-    	}
+	    }
     	catch (MissingResourceException mre)
-    	{
+	    {
        		_iconBundle = null;
-    	}
+	    }
     	
     	_hashMap = new HashMap();
     	
     	CppPlugin plugin = CppPlugin.getDefault();
     	_baseDir = plugin.getPluginPath();
+	_instance = this;
+    }
 
-	ArrayList loadScope = new ArrayList();
-	loadScope.add("org.eclipse.cdt.cpp.ui.*");
-	loadScope.add("org.eclipse.cdt.dstore.hosts.*");
-	provideExternalLoader(new ExternalLoader(plugin.getDescriptor().getPluginClassLoader(),
-						 loadScope));
+    public CppActionLoader(ISchemaProvider schemaProvider)
+    {
+	super(schemaProvider); 
+	
+	try
+	    {
+      	 	_iconBundle = ResourceBundle.getBundle("org.eclipse.cdt.cpp.ui.internal.IconResources");
+	    }
+    	catch (MissingResourceException mre)
+	    {
+       		_iconBundle = null;
+	    }
+    	
+    	_hashMap = new HashMap();
+    	
+    	CppPlugin plugin = CppPlugin.getDefault();
+    	_baseDir = plugin.getPluginPath();
+	_instance = this;
     }
  
     public static IActionLoader getInstance()

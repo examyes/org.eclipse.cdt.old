@@ -39,10 +39,8 @@ import org.eclipse.jface.action.*;
 
 
 
-public class HostsPlugin extends AbstractUIPlugin
+public class HostsPlugin extends AbstractUIPlugin implements ISchemaProvider
 {
-    
-
     public class MinerClassLoader implements ILoader
     {
 	public Miner loadMiner(String name)
@@ -80,19 +78,21 @@ public class HostsPlugin extends AbstractUIPlugin
     private static ConnectionManager   _connectionManager;
 
     private static DataStoreCorePlugin _corePlugin;
-    private        String              _corePath;
+    private static String              _corePath;
 
     private static DataStore           _dataStore;
-    private        ResourceBundle      _resourceBundle;
+    private static ResourceBundle      _resourceBundle;
 
-    private        IActionLoader       _actionLoader;
+    private static IActionLoader       _actionLoader;
+    private        SchemaRegistry      _schemaRegistry;
+    private        ISchemaExtender     _schemaExtender;
 
     public HostsPlugin(IPluginDescriptor descriptor)
     {
 	super(descriptor);
 	_corePlugin = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin();
 	_corePath = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();	
-	_actionLoader = new HostsActionLoader(this);
+
 	try
 	    {
 		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.hosts.PluginResources");
@@ -122,27 +122,17 @@ public class HostsPlugin extends AbstractUIPlugin
   {
     return ResourcesPlugin.getWorkspace();
   }
-
-    public IActionLoader getActionLoader()
+    
+    public static IActionLoader getActionLoader()
     {
 	return _actionLoader;
     }    
 
-    public void setActionLoader(IActionLoader loader)
+    protected void initializeDefaultPreferences()
     {
-	_actionLoader = loader;
     }
 
-    public IActionLoader getDialogActionLoader()
-    { 
-	return _actionLoader;
-    }    
-
-  protected void initializeDefaultPreferences()
-  {
-  }
-
-  public void startup() throws CoreException
+    public void startup() throws CoreException
       {
         try
         {
@@ -183,7 +173,15 @@ public class HostsPlugin extends AbstractUIPlugin
 	_dataStore.getSchema();
 	_dataStore.initMiners();
 
-	extendSchema(_dataStore.getDescriptorRoot());
+
+	// setup schema
+	_schemaRegistry = new SchemaRegistry();
+	_schemaExtender = new HostsSchemaExtender();
+	_schemaRegistry.registerSchemaExtender(_schemaExtender);
+	_schemaRegistry.extendSchema(_dataStore);
+
+	// create hosts action loader
+	_actionLoader = new HostsActionLoader(this);
 	
 
         // for remote connections
@@ -319,72 +317,16 @@ public class HostsPlugin extends AbstractUIPlugin
 	      }
       }
 
-
-    // temporary place for extending schema from UI side
-    public void extendSchema(DataElement schemaRoot)
+    public ISchemaRegistry getSchemaRegistry()
     {
-	DataStore   dataStore = schemaRoot.getDataStore();
-	DataElement fileD     = dataStore.find(schemaRoot, DE.A_NAME, "file", 1);
-	DataElement dirD      = dataStore.find(schemaRoot, DE.A_NAME, "directory", 1);
-	DataElement fsD       = dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
-	DataElement rootD     = dataStore.find(schemaRoot, DE.A_NAME, "root", 1);
-	DataElement hostD     = dataStore.find(schemaRoot, DE.A_NAME, "host", 1);
-		
-	DataElement connect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						     dataStore.getLocalizedString("model.Connect_to"), 
-						     "org.eclipse.cdt.dstore.hosts.actions.HostConnectAction");
-        connect.setAttribute(DE.A_VALUE, "C_CONNECT");
-	
-	DataElement disconnect = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-							dataStore.getLocalizedString("model.Disconnect_from"), 
-							"org.eclipse.cdt.dstore.ui.connections.DisconnectAction");	 
-        disconnect.setAttribute(DE.A_VALUE, "C_DISCONNECT");
-	
-	DataElement editConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						  getLocalizedString("model.Edit_Connection"), 
-						  "org.eclipse.cdt.dstore.ui.connections.EditConnectionAction");	 
-        editConnection.setAttribute(DE.A_VALUE, "C_EDIT");
-
-
-	DataElement removeConnection = dataStore.createObject(rootD, DE.T_UI_COMMAND_DESCRIPTOR, 
-						    dataStore.getLocalizedString("model.Delete_Connection"), 
-						    "org.eclipse.cdt.dstore.ui.connections.DeleteAction");	 
-        removeConnection.setAttribute(DE.A_VALUE, "C_DELETE");	
-
-	DataElement fileTransfer = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
-							  getLocalizedString("model.File_Transfer"), 
-							  "org.eclipse.cdt.dstore.hosts.actions.FileTransferAction");
-	
-	DataElement findFiles = dataStore.createObject(fsD, DE.T_UI_COMMAND_DESCRIPTOR,
-						       getLocalizedString("model.Find_Files"), 
-						       "org.eclipse.cdt.dstore.hosts.actions.FindFileAction");
-	findFiles.setAttribute(DE.A_VALUE, "C_FIND_FILES_ACTION");
-	
-	/*
-	  DataElement dictionarySearch = dataStore.createObject(hostD, DE.T_UI_COMMAND_DESCRIPTOR,
-							      getLocalizedString("model.Dictionary_Search"), 
-							      "org.eclipse.cdt.dstore.hosts.actions.SearchDictionaryAction");
-	dictionarySearch.setAttribute(DE.A_VALUE, "C_DICTIONARY_SEARCH_ACTION");
-	*/
-	DataElement newD = dataStore.find(fsD, DE.A_VALUE, "C_NEW", 1);
-	DataElement newFile = dataStore.createObject(newD, DE.T_UI_COMMAND_DESCRIPTOR,
-						     getLocalizedString("model.New_File"),
-						     "org.eclipse.cdt.dstore.hosts.actions.NewFile");
-	
-	DataElement renameResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
-							    getLocalizedString("model.Rename_Resource"),
-							    "org.eclipse.cdt.dstore.hosts.actions.RenameResource");
-
-	renameResource.setAttribute(DE.A_VALUE, "RENAME");
-
-	DataElement deleteResource = dataStore.createObject(fileD, DE.T_UI_COMMAND_DESCRIPTOR,
-							    getLocalizedString("model.Delete_Resource"),
-							    "org.eclipse.cdt.dstore.hosts.actions.DeleteResource");
-
-	deleteResource.setAttribute(DE.A_VALUE, "DELETE");
-
-	
+	return _schemaRegistry;
     }
+
+    public ISchemaExtender getSchemaExtender()
+    {
+	return _schemaExtender;
+    }
+
 
 }
 

@@ -39,7 +39,8 @@ public class HostConnectAction extends ConnectAction
 	  if (dataStore != null && _connection.isConnected())
 	      {
 		  HostsPlugin plugin = HostsPlugin.getInstance();
-		  plugin.extendSchema(dataStore.getDescriptorRoot());
+		  ISchemaRegistry registry = plugin.getSchemaRegistry();
+		  registry.extendSchema(dataStore);
 	      }
       }  
 }

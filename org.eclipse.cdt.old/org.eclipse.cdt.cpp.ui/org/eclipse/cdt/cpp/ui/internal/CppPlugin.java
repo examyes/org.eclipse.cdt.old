@@ -43,7 +43,7 @@ import java.io.*;
 import java.util.ResourceBundle;
 
 public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
-    implements IDomainListener
+    implements IDomainListener, ISchemaProvider
 {
     public class MinerClassLoader implements ILoader
     {
@@ -79,13 +79,15 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     private static ModelInterface         _interface;
     private static CppDocumentProvider    _CppDocumentProvider;
 
-    private        String                 _pluginPath;
-    private        String                 _corePath;
+    private static String                 _pluginPath;
+    private static String                 _corePath;
 
     private static IProject               _currentProject;
-    private        ResourceBundle         _resourceBundle;
+    private static ResourceBundle         _resourceBundle;
 
     private static DataStore              _hostDataStore;
+    private        SchemaRegistry         _schemaRegistry;
+    private        ISchemaExtender        _schemaExtender;
 
 
 	/**
@@ -109,6 +111,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     _hostDataStore = org.eclipse.cdt.dstore.hosts.HostsPlugin.getPlugin().getDataStore();
     _corePlugin = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin();
     _corePath = org.eclipse.cdt.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();
+
 
     try
     {
@@ -196,7 +199,20 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
 	_interface = new ModelInterface(dataStore);	
 	_interface.getDummyShell();
-       	_interface.loadSchema();
+
+       	_interface.initDataStore();
+
+	// set up UI schema
+	_schemaRegistry = new SchemaRegistry();
+	_schemaExtender = new CppSchemaExtender();
+    
+	_schemaRegistry.registerSchemaExtender(_schemaExtender);
+	_schemaRegistry.registerSchemaExtender(HostsPlugin.getDefault().getSchemaExtender());
+	_schemaRegistry.extendSchema(dataStore);
+       
+	// create action loader
+	new CppActionLoader(); 
+	
 
 	DataElement workspace = _interface.findWorkspaceElement(dataStore);
 	if (workspace == null)
@@ -282,11 +298,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	adapter.setChildren(rmtProjects);	
     }
 
-    public void provideExternalLoader(ExternalLoader loader)
-    {
-	IActionLoader cpploader = CppActionLoader.getInstance();
-	cpploader.provideExternalLoader(loader);
-    }
 
   public String getInstallLocation()
   {
@@ -706,6 +717,16 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
      }
      return _CppDocumentProvider;
   }
+
+    public ISchemaRegistry getSchemaRegistry()
+    {
+	return _schemaRegistry;
+    }
+
+    public ISchemaExtender getSchemaExtender()
+    {
+	return _schemaExtender;
+    }
 
 }
 

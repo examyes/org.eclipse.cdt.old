@@ -52,7 +52,7 @@ public class HostsActionLoader extends GenericActionLoader
     
     public HostsActionLoader(HostsPlugin plugin)
     {
-	super(); 
+	super(plugin); 
 	
 	try
 	    {
@@ -66,8 +66,6 @@ public class HostsActionLoader extends GenericActionLoader
     	_hashMap = new HashMap();
     	_instance = this;    	
 	_plugin = plugin;
-	provideExternalLoader(new ExternalLoader(_plugin.getDescriptor().getPluginClassLoader(), 
-						 "org.eclipse.cdt.dstore.hosts.*"));
     }
       
     public static HostsActionLoader getInstance()

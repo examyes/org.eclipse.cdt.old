@@ -22,7 +22,7 @@ import org.eclipse.jface.action.*;
 
 import org.eclipse.ui.*;
 
-public class HostsDetailsViewPart extends DetailsViewPart
+public class HostsDetailsViewPart extends DetailsViewPart 
 {
     public ObjectWindow createViewer(Composite parent, IActionLoader loader)
     {

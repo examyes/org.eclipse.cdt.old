@@ -18,6 +18,7 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.cdt.dstore.extra.internal.extra.*;
 import org.eclipse.cdt.dstore.ui.resource.*;
 import org.eclipse.cdt.dstore.ui.connections.*;
+import org.eclipse.cdt.dstore.ui.*;
 
 
 import org.eclipse.core.resources.IResource;
@@ -111,7 +112,7 @@ public class Repository extends Project
 		    
 		    
 		    // create directory for project
-		    String rootPath = CppPlugin.getDefault().getStateLocation().
+		    String rootPath = _plugin.getStateLocation().
 			append(".repositories").toOSString();
 
 		    String path = rootPath + java.io.File.separator + getName();
@@ -125,10 +126,12 @@ public class Repository extends Project
 			{	
 			    _dataStore.setAttribute(DataStoreAttributes.A_LOCAL_PATH, path);
 			}
-		    
+
+
+		    ISchemaRegistry registry = _plugin.getSchemaRegistry();
+		    registry.extendSchema(_dataStore);		    
 		    
 		    ModelInterface api = ModelInterface.getInstance();
-		    api.extendSchema(_dataStore.getDescriptorRoot());
 		    api.openProject(_repository);
 
 		    notifier.addDomainListener(_repository);		    

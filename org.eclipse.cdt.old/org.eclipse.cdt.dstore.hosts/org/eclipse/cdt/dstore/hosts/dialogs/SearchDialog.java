@@ -77,7 +77,7 @@ public abstract class SearchDialog extends org.eclipse.jface.dialogs.Dialog
     {
 	if (_actionLoader == null)
 	    {
-		_actionLoader = _plugin.getDialogActionLoader();
+		_actionLoader = _plugin.getActionLoader();
 	    }
 	return _actionLoader;
     }
