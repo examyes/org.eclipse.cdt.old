@@ -134,7 +134,7 @@ public class LaunchSearch
 	boolean success=false;
 	if(!_isHelpWebAppRegistered)
 	    {
-		success=AppServer.add("cdthelp","org.eclipse.cdt.cpp.miners","org/eclipse/cdt/cpp/miners/help/helpwebapp");
+		success=AppServer.add("cdthelp","org.eclipse.cdt.cpp.miners","help/helpwebapp");
 		_isHelpWebAppRegistered=success;
 	    }
     }
