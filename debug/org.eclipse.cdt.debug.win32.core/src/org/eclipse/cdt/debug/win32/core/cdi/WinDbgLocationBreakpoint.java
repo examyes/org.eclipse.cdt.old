@@ -24,10 +24,9 @@ public class WinDbgLocationBreakpoint extends WinDbgBreakpoint
 	WinDbgLocationBreakpoint(
 			int type,
 			ICDICondition condition,
-			String threadId,
 			ICDITarget target,
 			ICDILocation location) {
-		super(type, condition, threadId, target);
+		super(type, condition, target);
 		this.location = location;
 	}
 

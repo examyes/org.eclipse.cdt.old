@@ -357,15 +357,18 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	 */
 	public ICDIBreakpoint[] getBreakpoints() throws CDIException {
 		// TODO Auto-generated method stub
-		return null;
+		WinDbgSession wSession = (WinDbgSession)getSession();
+		WinDbgBreakpointManager bMgr = wSession.getBreakpointManager();
+		return bMgr.getBreakpoints(this);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setLocationBreakpoint(int, org.eclipse.cdt.debug.core.cdi.ICDILocation, org.eclipse.cdt.debug.core.cdi.ICDICondition, boolean)
 	 */
 	public ICDILocationBreakpoint setLocationBreakpoint(int type, ICDILocation location, ICDICondition condition, boolean deferred) throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+		WinDbgSession wSession = (WinDbgSession)getSession();
+		WinDbgBreakpointManager bMgr = wSession.getBreakpointManager();
+		return bMgr.setLocationBreakpoint(this, type, location, condition, deferred);
 	}
 
 

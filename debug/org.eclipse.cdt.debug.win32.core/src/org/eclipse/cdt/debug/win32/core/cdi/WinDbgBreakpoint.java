@@ -20,13 +20,11 @@ public class WinDbgBreakpoint implements ICDIBreakpoint {
 	private int type;
 	private boolean enabled = true;
 	private ICDICondition condition;
-	private String threadId;
 	private ICDITarget target;
 	
-	WinDbgBreakpoint(int type, ICDICondition condition, String threadId, ICDITarget target) {
+	WinDbgBreakpoint(int type, ICDICondition condition, ICDITarget target) {
 		this.type = type;
 		this.condition = condition;
-		this.threadId = threadId;
 		this.target = target;
 	}
 	
@@ -52,10 +50,6 @@ public class WinDbgBreakpoint implements ICDIBreakpoint {
 
 	public void setCondition(ICDICondition condition) throws CDIException {
 		this.condition = condition;
-	}
-
-	public String getThreadId() throws CDIException {
-		return threadId;
 	}
 
 	public ICDITarget getTarget() {

@@ -47,8 +47,9 @@ public class WinDbgEventManager implements ICDIEventManager {
 		// Listeners may get added during the firing
 		Object [] currListeners = listeners.toArray();
 		int n = currListeners.length;
-		for (int i = 0; i < n; ++i)
+		for (int i = 0; i < n; ++i) {
 			((ICDIEventListener)currListeners[i]).handleDebugEvents(events);
+		}
 	}
 
 }

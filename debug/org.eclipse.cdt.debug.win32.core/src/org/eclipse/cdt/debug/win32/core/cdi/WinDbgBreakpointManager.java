@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
@@ -27,16 +28,23 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 
 	private ICDISession session;
 	boolean processCreated = false;
-	List bpQueue = new LinkedList();
+	List bpQueue = Collections.synchronizedList(new LinkedList());
+	List deferredQueue = Collections.synchronizedList(new LinkedList());
 	
 	WinDbgBreakpointManager(ICDISession session) {
 		this.session = session;
 		session.getEventManager().addEventListener(this);
 	}
 	
-	public ICDIBreakpoint[] getBreakpoints() throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
+	public ICDIBreakpoint[] getBreakpoints(WinDbgTarget target) throws CDIException {
+		ICDIBreakpoint[] bps = (ICDIBreakpoint[]) bpQueue.toArray(new ICDIBreakpoint[bpQueue.size()]);
+		List list = new LinkedList();
+		for (int i = 0; i < bps.length; i++) {
+			if (bps[i].getTarget().equals(target)) {
+				list.add(bps[i]);
+			}
+		}
+		return (ICDIBreakpoint[]) list.toArray(new ICDIBreakpoint[list.size()]);
 	}
 
 	public void deleteBreakpoint(ICDIBreakpoint breakpoint) throws CDIException {
@@ -52,29 +60,24 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 		// TODO Auto-generated method stub
 	}
 
-	public ICDILocationBreakpoint setLocationBreakpoint(int type,
-			ICDILocation location, ICDICondition condition, String threadId,
-			boolean deferred) throws CDIException {
-		// TODO Does it matter what deferred is?
-		return setLocationBreakpoint(type, location, condition, threadId);
-	}
-
-	public synchronized ICDILocationBreakpoint setLocationBreakpoint(int type,
-			ICDILocation location, ICDICondition condition, String threadId)
+	public synchronized ICDILocationBreakpoint setLocationBreakpoint(WinDbgTarget wTarget, int type,
+			ICDILocation location, ICDICondition condition, boolean deferred)
 			throws CDIException {
 		
+		// TODO Does it matter what deferred is?
+
 		WinDbgLocationBreakpoint bp = new WinDbgLocationBreakpoint(
 				type, 
 				condition, 
-				threadId, 
-				session.getCurrentTarget(),
+				wTarget,
 				location);
 
 		if (processCreated) {
-			((WinDbgTarget)session.getCurrentTarget()).resolveLocation(location);
-			((WinDbgTarget)session.getCurrentTarget()).setBreakpoint(bp.getLocation().getAddress(), bp.isTemporary());
-		} else {
+			wTarget.resolveLocation(location);
+			wTarget.setBreakpoint(bp.getLocation().getAddress(), bp.isTemporary());
 			bpQueue.add(bp);
+		} else {
+			deferredQueue.add(bp);
 		}
 		
 		return bp;
@@ -120,11 +123,13 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 	public synchronized void handleDebugEvents(ICDIEvent[] event) {
 		for (int i = 0; i < event.length; ++i)
 			if (event[i] instanceof ICDICreatedEvent) {
-				while (!bpQueue.isEmpty()) {
-					ICDILocationBreakpoint bp = (ICDILocationBreakpoint)bpQueue.remove(0);
+				while (!deferredQueue.isEmpty()) {
+					ICDILocationBreakpoint bp = (ICDILocationBreakpoint)deferredQueue.remove(0);
 					try {
-						((WinDbgTarget)session.getCurrentTarget()).resolveLocation(bp.getLocation());
-						((WinDbgTarget)session.getCurrentTarget()).setBreakpoint(bp.getLocation().getAddress(), bp.isTemporary());
+						WinDbgTarget wTarget = (WinDbgTarget)bp.getTarget();
+						wTarget.resolveLocation(bp.getLocation());
+						wTarget.setBreakpoint(bp.getLocation().getAddress(), bp.isTemporary());
+						bpQueue.add(bp);
 					} catch (CDIException e) {
 					}
 				}
