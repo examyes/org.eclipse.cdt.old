@@ -32,6 +32,7 @@ buildPlugins += com.ibm.linux.help
 
 # List of All Plugins Used in C/C++ Deliverable (e.g buildPlugins plus the ones we don't build)
 allPlugins = $(buildPlugins)
+allPlugins += com.ibm.cpp.docs.user
 allPlugins += com.ibm.lpex
 allPlugins += com.ibm.debug
 allPlugins += com.ibm.debug.doc.user
@@ -45,7 +46,7 @@ allPlugins += com.ibm.debug.doc.user
 # plugin, we accomplish this by appending some text like "_buildPlugin" to every plugin name, 
 # and then provide the actual rules for these pseudo-prerequisites below.
 all:
-	cd com ; ${MAKE} ${MAKEFLAGS} ; cd ..
+	@cd com 2>/dev/null && (${MAKE} ${MAKEFLAGS} ; cd ..) || (echo "";echo "Build Environment needs to be generated...";echo "Run:  make dev[elopment]")
 
 development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars source-zips createTar
@@ -91,18 +92,40 @@ unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
 	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
 	cd com 2>/dev/null || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -q *src.zip)
 
-createTar: createEmptyTar tarUpPlugins
+zipFile=c4eclipse.zip
+createZip: createEmptyZip zipUpPlugins
+	@echo Created $(pluginsDirectory)/$(zipFile)
 
-tarFile=c4eclipse.zip
+createEmptyZip: 
+	@-cd $(pluginsDirectory) && rm -f $(zipFile) && zip -q $(zipFile) com.ibm.dstore.core/makefile
 
-createEmptyTar: 
-	@-cd $(pluginsDirectory) && rm -f $(tarFile)*
+zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 
-tarUpPlugins: $(patsubst %,%_tarPlugin,$(allPlugins))
+%_zipPlugin: 
+	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x com *com\/* *CVS*
 
-%_tarPlugin: 
-	@-cd $(pluginsDirectory) && zip -qr $(tarFile) $(patsubst %_tarPlugin,%,$@) -x com *com\/* *CVS* &&\
-	echo Created Master Zip File -> $(pluginsDirectory)/$(tarFile)
+# Targets specific to com.ibm.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
+jarFile=dstore_core.jar
+pluginName=com.ibm.dstore.core
+
+jar:
+	@cd $(pluginsDirectory)/$(pluginName);\
+	rm -f $(jarFile);\
+	touch $(jarFile);\
+	find . -name '*.class' -or -name '*.properties' | xargs jar -uf $(jarFile)
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(jarFile) 
+
+source-zip:
+	@cd $(pluginsDirectory)/$(pluginName);\
+	rm -f $(patsubst %.jar,%src.zip,$(jarFile));\
+	zip -qr $(patsubst %.jar,%src.zip,$(jarFile)) . -i *.java *.jj build/*.mk build/*.java makefile 
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(patsubst %.jar,%src.zip,$(jarFile)) 
+
+clean:
+	@cd $(pluginsDirectory)/$(pluginName);\
+	find . -name '*.class' |xargs rm -f
+
+
 
 # The last 3 targets are some hacky stuff to set up the dstore.extra and gdbPicl Plugins...
 setUpSpecialPlugins: setUpExtraPlugin setUpGdbPiclPlugin

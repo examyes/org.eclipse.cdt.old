@@ -61,8 +61,9 @@ createJarFile:
 
 createSourceZip:
 	@cd $(pluginsDirectory)/$(pluginName);\
+	rm -f $(patsubst %.jar,%src.zip,$(jarFile));\
 	zip -qr $(patsubst %.jar,%src.zip,$(jarFile)) . -i *.java *.jj *build/makefile *rules.mk
-	@echo " Created" $(pluginsDirectory)/$(pluginName)/ $(patsubst %.jar,%src.zip,$(jarFile)) 
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(patsubst %.jar,%src.zip,$(jarFile)) 
 
 doClean:
 	@cd $(pluginsDirectory)/$(pluginName);\
