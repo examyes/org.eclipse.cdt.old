@@ -35,18 +35,20 @@ public class DataElementAdapter
     ModelInterface api = ModelInterface.getInstance();
     IProject project = (IProject)CppPlugin.getDefault().getCurrentProject();
     DataStore dataStore = DataStoreCorePlugin.getPlugin().getCurrentDataStore();
-
-    String path = new String(e.getLocation().toOSString());
-
-    DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
-    DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
-   
-    if (projectObj != null)
+    if (project != null && dataStore != null)
 	{
-	    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
-	    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
-
-	    return pathElement;
+	    String path = new String(e.getLocation().toOSString());
+	    
+	    DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.parser.ParseMiner");
+	    DataElement projectObj = dataStore.find(parseMinerData, DE.A_NAME, project.getName(), 1);
+	    
+	    if (projectObj != null)
+		{
+		    DataElement parsedFiles = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
+		    DataElement pathElement = dataStore.find(parsedFiles, DE.A_NAME, path, 1);
+		    
+		    return pathElement;
+		}
 	}
 
     return null;
