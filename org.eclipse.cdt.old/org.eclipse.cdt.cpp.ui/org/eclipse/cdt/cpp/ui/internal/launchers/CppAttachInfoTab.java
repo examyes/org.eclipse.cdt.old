@@ -372,8 +372,13 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
        DataStore dataStore = _directory.getDataStore();
        DataElement hostRoot = dataStore.getHostRoot();	
        DataElement processRoot = dataStore.find(hostRoot, DE.A_TYPE, "Processes", 1);
-       DataElement process = dataStore.find(processRoot, DE.A_NAME, processID, 1);
-       return (process != null);
+       if (processRoot.getNestedSize() > 0)
+       {
+          DataElement process = dataStore.find(processRoot, DE.A_NAME, processID, 1);
+          return (process != null);
+       }
+       else
+          return true;
     }
 	
 	/**
