@@ -48,7 +48,7 @@ public class PAMinerParseErrorThread extends Thread {
   public String getErrorCode(String line) {
  
    
-     if (line.indexOf("gmon.out:") >= 0)
+     if (line.indexOf("gmon.out:") >= 0 || line.indexOf("cannot open profile data file 'functioncheck.fc'") >= 0)
       return getLocalizedString("pa.NoTraceData");
      
      else if (line.indexOf("ommand not found") >= 0)
