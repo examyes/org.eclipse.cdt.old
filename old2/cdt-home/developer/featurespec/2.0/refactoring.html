@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>CDT Refactoring Feature Spec</title>
+  <meta content="Doug Schaefer" name="author">
+</head>
+<body>
+<h1>CDT Refactoring Feature Spec</h1>
+<p>Refactoring has been popularized by a number of text books and by
+the implementation of a number of refactorings in the Eclipse JDT.
+Refactoring is seen as a great productivity enhancer in support of
+editing the source files in a project.<br>
+</p>
+<p>What is refactoring? Refactoring is essentially a high level source
+edit function. It often involves edits in multiple locations in a file
+and across multiple files.<br>
+</p>
+<h2>Requirements</h2>
+<p>Refactoring as implemented in the JDT is a complicated beast. Since
+no refactoring functionality exists in the CDT and since there is no
+common refactoring engine that we can take advantage, we will need to
+take a slow and steady approach and implement only enough of an engine
+to support basic functionality in the first release. In future
+releases, as the complexity of refactorings grow, the engine can grow
+with it.<br>
+</p>
+<p>The refactoring engine requirements are as follows with priorities
+assigned:<br>
+</p>
+<ul>
+  <li>[P1] Undo - it shall be possible to undo a refactor operation.
+Care must be taken to ensure the refactoring operation can be undone
+after a number of edits on the affected files (it is fine if that
+number is one to start). This will allow the user to do a build/debug
+cycle to ensure the refactor worked correctly and then undo the changes
+if it didn't.</li>
+  <li>[P1] Preview - before carrying out a refactoring operation, the
+option shall be provided to preview the changes that will be carried
+out by that operation. The option to cancel or edit the result of the
+operation shall then be provided. This is similar (if not identical) to
+the preview functionality in the JDT.</li>
+  <li>[P1] Refactor menu item on C/C++ Projects View and Outline View.
+In particular, the refactoring is carried out on elements in the C
+Model.</li>
+  <li>[P2] Refactor menu in C Editor. In particular, the refactoring is
+carried out on elements in context at the cursor position.<br>
+  </li>
+</ul>
+<p>The following refactorings shall be supported:<br>
+</p>
+<ul>
+  <li>[P1] Rename of C Model Elements - the ability to change the name
+of a C Model Element and have all references to that identifier updated
+to reflect the new name.</li>
+  <li>[P2] Move of C Model Elements owned by Files - this basically
+means moving top level elements from one file to another.</li>
+  <li>[P2] Move of Type Members - the ability to move members, e.g.
+member variables and member functions, from one type to another.</li>
+</ul>
+<p>That should be enough for the first release and give us the ability
+to test out the refactoring engine.<br>
+</p>
+</body>
+</html>
