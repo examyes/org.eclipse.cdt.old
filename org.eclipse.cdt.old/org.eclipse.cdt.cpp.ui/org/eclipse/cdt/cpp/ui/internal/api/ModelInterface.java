@@ -2437,12 +2437,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	DataElement createConfigureeCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 								 "Generate configure",
-								 "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
+								 "org.eclipse.cdt.cpp.ui.internal.actions.CreateConfigureAction");
 	createConfigureeCmd.setAttribute(DE.A_VALUE,"CREATE_CONFIGURE");
 
 	DataElement configureCmd = dataStore.createObject(configureCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Run configure",
-							  "org.eclipse.cdt.cpp.ui.internal.actions.ConfigureAction");
+							  "org.eclipse.cdt.cpp.ui.internal.actions.RunConfigureAction");
 	configureCmd.setAttribute(DE.A_VALUE,"RUN_CONFIGURE");
 	
 	dataStore.createReference(configureCmds, autoconfCmds, "abstracts", "abstracted by");

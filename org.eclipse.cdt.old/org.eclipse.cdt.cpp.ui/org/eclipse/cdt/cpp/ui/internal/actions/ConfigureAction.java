@@ -7,6 +7,7 @@ package org.eclipse.cdt.cpp.ui.internal.actions;
  */
 
 import org.eclipse.cdt.cpp.ui.internal.api.*;
+import org.eclipse.cdt.cpp.ui.internal.dialogs.CustomMessageDialog;
 import org.eclipse.cdt.cpp.ui.internal.dialogs.PreventableMessageBox;
 import org.eclipse.cdt.cpp.ui.internal.*;
 
@@ -34,16 +35,19 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.dialogs.*;
 
 
-public class ConfigureAction extends CustomAction
+public class ConfigureAction extends CustomAction implements SelectionListener
 { 
-	private MessageDialog dialog = new MessageDialog(null,null,null,null,3,null,0);
-	private PreventableMessageBox box  = 
-			new PreventableMessageBox(null,null,null,null,0,null,0);
-		
+	private MessageDialog dialog = new MessageDialog(null,null,null,null,0,null,0);
+	CustomMessageDialog xbox;
+	String[] extraLabels;
+	boolean enableRunDialog = true;
+	boolean enableRunUpdate = true;
 	public class RunThread extends Handler
 	{
 		private DataElement _subject;
@@ -97,8 +101,8 @@ public class ConfigureAction extends CustomAction
 	{
 		boolean execute = true;
 		int runUpdate = 0;// 0 == ok, 1 == no, 2 == cancel
-		int updating = 0; // 0 == ok, 1 == no, 2 == cancel
-		boolean noConffilesExist = true;
+		int createUpdate = 0; // 0 == ok, 1 == no, 2 == cancel
+		boolean noConfigfilesExist = true;
 		
 		Shell shell = _dataStore.getDomainNotifier().findShell();
 		
@@ -140,60 +144,134 @@ public class ConfigureAction extends CustomAction
 			
 			if(doesAutoconfSupportExist())
 			{
-				noConffilesExist = false;
-				str1 = new String(
-				"Would you like the system to update and generate missing configuration files?");
+				noConfigfilesExist = false;
+				str1 = new String("\nWould you like the system to update and generate missing configuration files?");
 				message = new String("\nGenerating project configuration files"+str1);
-				box = new PreventableMessageBox(shell,
+				CustomMessageDialog box = new CustomMessageDialog(shell,
 										"Creating configure.in and Makefile.am's ",
 										null,
 										message,3,new String[]{
 									  	IDialogConstants.YES_LABEL,
 									  	IDialogConstants.NO_LABEL, 
-										IDialogConstants.CANCEL_LABEL},0);
-				updating = box.open();
+										IDialogConstants.CANCEL_LABEL},
+										0,
+										new String[]{"Do not show this Dialog again"},
+										this);
+				createUpdate = box.open();
 			}
 			else
 			{
-				noConffilesExist = true;
+				noConfigfilesExist = true;
 				str1 = "";
 				message = new String("\nGenerating project configuration files"+str1);
-				box = new PreventableMessageBox(shell,
+				PreventableMessageBox box = new PreventableMessageBox(shell,
 										"Creating configure.in and Makefile.am's ",
 										null,
 										message,2,new String[]{
 									  	IDialogConstants.OK_LABEL, 
 										IDialogConstants.CANCEL_LABEL},0);
-				updating = box.open();
+				createUpdate = box.open();
 			}
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
+			ArrayList showDialogRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show Dialog Run");
+			if (!showDialogRun.isEmpty())
+			{
+				String preference = (String)showDialogRun.get(0);
+				if (preference.equals("Yes"))
+					enableRunDialog = true;
+				else
+					enableRunDialog=false;
+			}
+			
+			// checking if automatic updating is enabled from the autoconf preferences page
+			ArrayList autoUpdateRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Auto Update Run");
+			if(!autoUpdateRun.isEmpty())
+			{
+				String preference = (String)autoUpdateRun.get(0);
+				if (preference.equals("Yes"))
+				{
+					enableRunUpdate = true;
+				}
+				else
+				{
+					enableRunUpdate = false;;		
+				}
+			}
 			if(!configureIsUptodate(_subject))
 			{
-				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-				String message = new String
-				("\nThe system detects that configure script is not up to date"+
-				"\nWould you like to update and generate missing configuration files before running configure?");
-				box = new PreventableMessageBox(shell,
-										"Running configure script ",
-										null,
-										message,3,new String[]{
-									  	IDialogConstants.YES_LABEL,
-									  	IDialogConstants.NO_LABEL, 
-										IDialogConstants.CANCEL_LABEL},0);
-				runUpdate = box.open();
+				if(enableRunDialog)
+				{
+					if(enableRunUpdate)
+					{
+						String message = new String
+						("\nThe system detects that configure script is not up to date"+
+						"\nWould you like to update and generate missing configuration files before running configure?");
+						extraLabels = new String[]{"Do not show this dialog again"};
+						xbox = new CustomMessageDialog(shell,
+												"Running configure script ",
+												null,
+												message,3,
+												new String[]{
+											  	IDialogConstants.YES_LABEL,
+											  	IDialogConstants.NO_LABEL, 
+													IDialogConstants.CANCEL_LABEL},
+												0,
+												extraLabels,
+												this
+												);
+						// open	the xbox		
+						runUpdate = xbox.open();
+					}
+					else
+					{
+						String message = new String
+						("\nRunning existing configure script" 
+						+"\nAutomatic update is turned off - You can use autoconf preferences page to turn it on");
+						extraLabels = new String[]{"Do not show this dialog again"};
+						xbox = new CustomMessageDialog(shell,
+												"Running configure script ",
+												null,
+												message,2,
+												new String[]{
+											  	IDialogConstants.OK_LABEL,
+											  	IDialogConstants.CANCEL_LABEL},
+												0,
+												extraLabels,
+												this
+												);
+						// open	the xbox		
+						runUpdate = xbox.open(); 
+						// 0 is equiv to 1 ie run with no update , 
+						//and 1 is equiv to 2 which is to cancel the action so we need to increment
+						runUpdate++; // this just to reflect what the user request
+						System.out.println("\n run Updatetetet = "+runUpdate);
+						
+					}
+				}
+				else
+				{ 
+					if(enableRunUpdate)
+					{
+						runUpdate = 0;
+					}
+					else
+						runUpdate=1;
+				}
 			}
 			else
 			{
 				runUpdate = 1;
 			}
+		
+
 		}
-			
 		if(execute)
 		{	
-			if(updating==1 && !noConffilesExist)
+			if(createUpdate==1 && !noConfigfilesExist)
 			{
+				System.out.println("\n 1");
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CREATE_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
@@ -204,6 +282,7 @@ public class ConfigureAction extends CustomAction
 			}
 			else if(runUpdate==1)
 			{
+				System.out.println("\n 2");
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_RUN_CONFIGURE_NO_UPDATE");			
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
@@ -212,8 +291,9 @@ public class ConfigureAction extends CustomAction
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
 			}
-			else if(updating==0&&runUpdate==0)
-			{		
+			else if(createUpdate==0&&runUpdate==0&&enableRunUpdate)
+			{
+				System.out.println("\n 3");		
 				DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
 				DataElement status = _dataStore.command(configureCmd, _subject);
 				ModelInterface api = ModelInterface.getInstance();
@@ -221,7 +301,7 @@ public class ConfigureAction extends CustomAction
 				api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
 				RunThread thread = new RunThread(_subject, status);
 				thread.start();
-			}
+			}	
 		}
 	}
 	private boolean doesFileExist(String fileName)
@@ -297,6 +377,33 @@ public class ConfigureAction extends CustomAction
 		}
 		return false;
 	}
+	public void widgetDefaultSelected(SelectionEvent e)
+    {
+		widgetSelected(e);
+    }
+
+    public void widgetSelected(SelectionEvent e)
+    {
+		Widget source = e.widget;
+		int buttonId = ((Integer)e.widget.getData()).intValue();
+		boolean selection = xbox.extraButtons[buttonId].getSelection();
+		ArrayList list = new ArrayList();
+		if(buttonId == 0)
+		{
+			// persist this value for thos project
+			if(selection)
+			{
+				//enableRunDialog = false;
+				list.add("No");
+			}
+			else
+			{
+				//enableRunDialog = true;
+				list.add("Yes");
+			}
+			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show Dialog Run",list);
+		}
+    }
 }
 
 
