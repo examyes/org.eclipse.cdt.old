@@ -36,8 +36,10 @@
   <topic label="Makefiles"                    href="concepts/compiling/makefiles.htm"/>
  </topic>
 
- <topic label="Autoconf Project Management">
-  <topic label="Enabling Autoconf Support"     href="concepts/autoconf/support.htm"/>
+ <topic label="Project Management">
+  <topic label="Introduction"     href="concepts/project_management/autoconf_support/introduction/support.htm"/>
+  <topic label="Creating New Managed Project"     href="concepts/project_management/autoconf_support/creating_new_managed_project/support.htm"/>
+  <topic label="Importing Managed Project"     href="concepts/project_management/autoconf_support/importing_managed_project/support.htm"/>
  </topic>
 
  <topic label="Commands">
