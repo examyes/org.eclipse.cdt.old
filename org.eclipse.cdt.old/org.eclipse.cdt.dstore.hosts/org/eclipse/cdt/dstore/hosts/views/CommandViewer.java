@@ -245,7 +245,7 @@ public class CommandViewer extends Viewer implements SelectionListener
         _directoryText = new Text(directoryContainer, SWT.SINGLE | SWT.BORDER);
 	_directoryText.setLayoutData(textData);
 	
-        _browseButton = new Button(directoryContainer, SWT.TOGGLE);
+        _browseButton = new Button(directoryContainer, SWT.PUSH);
 	_browseButton.setLayoutData(buttonData);
         _browseButton.setText(_plugin.getLocalizedString("CommandViewer.Browse..."));
 	_browseButton.addSelectionListener(this);
