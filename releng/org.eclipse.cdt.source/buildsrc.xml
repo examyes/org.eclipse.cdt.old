@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<project name="CDT Source" default="main">
+	<property name="source.plugin" value="org.eclipse.cdt.source"/>
+	
+	<target name="main">
+		<ant target="build.sources" dir="../org.eclipse.cdt">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.core">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.core">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.core.linux">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.core.linux">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.core.qnx">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.core.qnx">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.core.solaris">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.core.solaris">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+			<ant target="build.sources" dir="../org.eclipse.cdt.core.win32">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.core.win32">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+			<ant target="build.sources" dir="../org.eclipse.cdt.core.tests">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.core.tests">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.debug.core">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.debug.core">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.debug.mi.core">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.debug.mi.core">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.debug.mi.ui">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.debug.mi.ui">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.debug.ui">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+			<ant target="gather.sources" dir="../org.eclipse.cdt.debug.ui">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.debug.ui.tests">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.debug.ui.tests">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.doc.user">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.doc.user">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.launch">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.launch">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.linux.gtk">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.linux.gtk">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.linux.motif">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.linux.motif">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.make.core">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.make.core">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.make.ui">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.make.ui">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.managedbuilder.core">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.managedbuilder.core">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.managedbuilder.ui">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.managedbuilder.ui">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.qnx.photon">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.qnx.photon">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.solaris.motif">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.solaris.motif">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.source">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.source">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.testing">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.testing">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.ui">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.ui">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.ui.tests">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.ui.tests">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+		<ant target="build.sources" dir="../org.eclipse.cdt.win32">
+			<property value="true" name="javacFailOnError"/>
+		</ant>
+		<ant target="gather.sources" dir="../org.eclipse.cdt.win32">
+			<property value="true" name="javacFailOnError"/>
+			<property value="../${source.plugin}/src" name="destination.temp.folder"/>
+		</ant>
+	</target>
+</project>
