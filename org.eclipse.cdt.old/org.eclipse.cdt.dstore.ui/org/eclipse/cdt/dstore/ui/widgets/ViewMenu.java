@@ -320,6 +320,14 @@ public class ViewMenu implements IMenuListener
 	    }
     }
 
+    public void fixateOn(String relationType, String objectType)
+    {
+	fixateOnRelationType(relationType);
+	fixateOnObjectType(objectType);
+
+	_viewToolBar.setVisible(false);
+    }
+
   public void fixateOnRelationType(String relationType)
       {
 	  _fixatedRelationType = relationType;
@@ -497,6 +505,7 @@ public class ViewMenu implements IMenuListener
 				    }
 			    }
 		    }
+		
 	    }
 	  _relationItems = Sorter.sort(_relationItems);
 

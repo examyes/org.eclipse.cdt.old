@@ -263,14 +263,22 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	return _parent;
     }    
     
+    public void fixateOn(String relationType, String objectType)
+    {
+ 	fixateOnRelationType(relationType);
+ 	fixateOnObjectType(relationType);
+    }
+
     public void fixateOnRelationType(String relationType)
     {
         _viewMenu.fixateOnRelationType(relationType);
+	_toolBarContainer.setVisible(false);
     }
     
     public void fixateOnObjectType(String objectType)
     {
         _viewMenu.fixateOnObjectType(objectType);
+	_toolBarContainer.setVisible(false);
     }
     
     public void enable(boolean flag)

@@ -504,6 +504,11 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	return (DataElement)_viewer.getInput();
     }
 
+  public void fixateOn(String relationType, String objectType)
+    {
+	_toolBar.fixateOn(relationType, objectType);
+    }
+
   public void fixateOnRelationType(String relationType)
       {
         _toolBar.fixateOnRelationType(relationType);
