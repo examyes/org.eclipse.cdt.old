@@ -45,7 +45,7 @@ public abstract class Receiver extends Thread
         }
       }
 
-  public synchronized void finish()
+  public void finish()
       {
         _canExit = true;
       }

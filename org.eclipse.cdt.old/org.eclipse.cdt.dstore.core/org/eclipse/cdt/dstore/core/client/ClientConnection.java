@@ -118,7 +118,8 @@ public class ClientConnection
 	  {
 	    _commandHandler.command(_dataStore.find(_dataStore.getRoot(), DE.A_NAME, "Exit"),
 				    _dataStore.getHostRoot(),
-				    true);
+				    //				    true);
+				    false);
             _receiver.finish();
 	  }
 
