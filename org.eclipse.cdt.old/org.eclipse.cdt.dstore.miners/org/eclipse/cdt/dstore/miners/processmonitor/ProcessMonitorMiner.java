@@ -129,7 +129,7 @@ public class ProcessMonitorMiner extends Miner
 	    }
 	catch (IOException e)
 	    {
-		System.out.println(e);
+		//	System.out.println(e);
 	    }	
 	
 	_monitor.finish();
