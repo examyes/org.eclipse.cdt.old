@@ -210,7 +210,7 @@ public class MenuHandler
 
 		  // inherit actions from abstract object descriptors
 		  menu.add(new Separator(dataStore.getLocalizedString("model.abstracted_by")));
-		  
+
 		  ArrayList baseDescriptors = descriptor.getAssociated(dataStore.getLocalizedString("model.abstracted_by"));
 		  for (int j = 0; j < baseDescriptors.size(); j++)
 		      {

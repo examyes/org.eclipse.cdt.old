@@ -62,7 +62,7 @@ public final class DataElement implements Serializable, IDataElement
 
 		_attributes                  = new String[DE.A_SIZE];
 		_attributes[DE.A_TYPE]       = refType.getName();		
-		_attributes[DE.A_ID]         = _dataStore.generateId();
+		_attributes[DE.A_ID]         = parent.getId() + refType.getName() + originalObject.getId();
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
 		_attributes[DE.A_SOURCE]     = originalObject.getSource();
@@ -84,8 +84,8 @@ public final class DataElement implements Serializable, IDataElement
 
 		_attributes                  = new String[DE.A_SIZE];
 		_attributes[DE.A_TYPE]       = refType;		
-		_attributes[DE.A_ID]         = _dataStore.generateId();
-
+		_attributes[DE.A_ID]         = parent.getId() + refType + originalObject.getId();
+		
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
 		_attributes[DE.A_SOURCE]     = originalObject.getSource();

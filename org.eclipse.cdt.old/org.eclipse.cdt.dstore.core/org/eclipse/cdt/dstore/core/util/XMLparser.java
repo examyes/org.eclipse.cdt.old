@@ -318,6 +318,7 @@ public class XMLparser
 						      {
 							  result = _dataStore.createReference(parent, to, 
 											      attributes[DE.A_TYPE]);
+							  
 						      }
 						  else
 						      {

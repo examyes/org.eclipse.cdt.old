@@ -457,6 +457,7 @@ public class XMLgenerator
 		    }
 		else
 		    {	      			
+		
 			startTag(tagType);
 			addAttribute(DE.P_TYPE, object.getAttribute(DE.A_TYPE));
 			addAttribute(DE.P_ID, object.getAttribute(DE.A_ID));

@@ -2078,6 +2078,7 @@ public DataElement command(DataElement commandDescriptor,
 
   public void initializeDescriptors()
       {
+	 
 	// miner-specific descriptors are defined in the miners when they extend the schema
 
 	// these first elements are the most fundamental
@@ -2186,12 +2187,11 @@ public DataElement command(DataElement commandDescriptor,
 
 	 createReference(fsObject, deviceD,  abstracts, abstractedBy);
 
-        createReference(fsObject, dirD, abstracts, abstractedBy);
+	 createReference(fsObject, dirD, abstracts, abstractedBy);
         createReference(fsObject, fileD, abstracts, abstractedBy);
         createReference(fsObject, fileD,    containsD);
         createReference(fsObject, dirD,     containsD);
 	createReference(fsObject, fsObject, containsD);
-	createReference(fsObject, fsObject, parentD);
 	createReference(hostD,    fsObject, containsD);
 	createReference(deviceD,  dirD, containsD);
 	createReference(deviceD,  fileD, containsD);
@@ -2246,6 +2246,7 @@ public DataElement command(DataElement commandDescriptor,
  	DataElement oQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "*", "C_QUERY");
 
 	DataElement set = createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET"); 
+	set.setDepth(0);
 
 	DataElement setHost = createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST");
 	setHost.setDepth(0);
