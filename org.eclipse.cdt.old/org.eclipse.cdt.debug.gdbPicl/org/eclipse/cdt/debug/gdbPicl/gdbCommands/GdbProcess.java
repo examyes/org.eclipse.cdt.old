@@ -188,7 +188,7 @@ public class GdbProcess {
 			return;
 		}
 		
-		_stopOnSharedLibEvents = true;
+		_stopOnSharedLibEvents = false;
 	}
 
 	public boolean writeLine(String cmd) {
