@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<plugin
+   name = "DataStore UI Plugin"
+   id = "com.ibm.dstore.ui"
+   version = "1.2.1"
+   vendor-name = "IBM"
+   class="com.ibm.dstore.ui.DataStoreUIPlugin">
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.ibm.dstore.extra"/>
+      <import plugin="com.ibm.dstore.core"/>
+   </requires>
+
+   <runtime>
+    <library name=".">
+       	<export name="*" />      
+     </library> 
+   </runtime>
+
+<extension
+	point="org.eclipse.ui.perspectives">
+   <perspective
+	id="com.ibm.dstore.ui.views.ObjectsPerspective"
+	name="DataStore Objects"
+	class="com.ibm.dstore.ui.views.ObjectsPerspective">
+   </perspective>
+</extension>
+
+<extension
+	point="org.eclipse.ui.views">
+	<category
+	   id="com.ibm.dstore.ui"
+	   name="&amp;DataStore">
+	</category>
+	<view
+		id="com.ibm.dstore.ui.views.GenericViewPart"
+		name="Generic View Part"
+		category="com.ibm.dstore.ui"
+		icon="icons/objects.gif"
+		class="com.ibm.dstore.ui.views.GenericViewPart">
+	</view>
+	<view
+		id="com.ibm.dstore.ui.views.DetailsViewPart"
+		name="Object Details"
+		category="com.ibm.dstore.ui"
+		icon="icons/details.gif"
+		class="com.ibm.dstore.ui.views.DetailsViewPart">
+	</view>
+</extension>
+
+</plugin>
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+cd ..
+nmake
+cd ui
+
