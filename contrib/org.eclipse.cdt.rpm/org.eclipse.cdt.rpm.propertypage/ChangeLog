@@ -1,3 +1,10 @@
+2005-01-18  Jeremy Handcock  <handcock@redhat.com>
+
+	Bugzilla 83155:
+	* .cvsignore: New.
+	* build.properties: New.
+	* plugin.xml (plugin): Provider is Eclipse.org.
+
 2004-12-10  Jeremy Handcock  <handcock@redhat.com>
 
 	Bugzilla 80698:

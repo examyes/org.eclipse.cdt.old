@@ -4,7 +4,7 @@
 	id="org.eclipse.cdt.rpm.propertypage"
    name="RPM Property Page Plug-in"
    version="1.0"
-   provider-name="Red Hat, Inc.">
+   provider-name="Eclipse.org">
 
 	<runtime>
    <library name="RPMPropertyPage.jar"/>
