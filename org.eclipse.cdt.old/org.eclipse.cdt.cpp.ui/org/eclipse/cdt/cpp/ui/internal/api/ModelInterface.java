@@ -991,8 +991,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			return;
 		theExtensions.setAttribute(DE.A_NAME, theObject.getId());
 		DataStore dataStore = theObject.getDataStore();
-		//DataElement contObj = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Container Object", 1);
-		DataElement setD = dataStore.localDescriptorQuery(theObject, "C_SET_EXTRA_DIST_EXTENSIONS");
+		DataElement contObj = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Container Object", 1);
+		DataElement setD = dataStore.localDescriptorQuery(contObj, "C_SET_EXTRA_DIST_EXTENSIONS");
 		if (setD != null)
 		{
 			dataStore.command(setD, theExtensions, theObject, true);
