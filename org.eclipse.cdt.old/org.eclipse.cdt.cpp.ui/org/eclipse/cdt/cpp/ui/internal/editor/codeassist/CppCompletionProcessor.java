@@ -123,7 +123,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 		    {
 			dataStore = _plugin.getHostDataStore();
 			DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
-			
+
 			String language = "english";
 			DataElement root = dataStore.find(dictionaryData, DE.A_NAME, language, 1);
 			if (root != null)

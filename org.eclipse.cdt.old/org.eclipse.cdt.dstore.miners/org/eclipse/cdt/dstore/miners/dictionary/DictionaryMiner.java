@@ -19,6 +19,8 @@ public class DictionaryMiner extends Miner
     private DataElement _nameDescriptor;
     private DataElement _containsDescriptor;
 
+    private DataElement _languageRoot;
+
    public void extendSchema(DataElement schemaRoot)
     {
 	_containsDescriptor  = _dataStore.findDescriptor(DE.T_RELATION_DESCRIPTOR, getLocalizedString("model.contents"));
@@ -27,6 +29,9 @@ public class DictionaryMiner extends Miner
 	_wordDescriptor       = createObjectDescriptor(schemaRoot, "word", "com.ibm.dstore.miners");
 	_nameDescriptor       = createObjectDescriptor(schemaRoot, "name", "com.ibm.dstore.miners");
 
+
+	DataElement dictQuery  = createCommandDescriptor(_dictionaryDescriptor, 
+							 getLocalizedString("model.Query"), "C_QUERY", false);
 
 	_dataStore.createReference(_dictionaryDescriptor, _categoryDescriptor, _containsDescriptor);
 	_dataStore.createReference(_dictionaryDescriptor, _wordDescriptor, _containsDescriptor);
@@ -41,16 +46,44 @@ public class DictionaryMiner extends Miner
     {
 	String fileLocation = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH);
 	_dictionary = fileLocation + File.separator + "com.ibm.dstore.miners" + File.separator + "dictionary";	
-
-	// english
-	loadLanguage("english");
+	_languageRoot = _dataStore.createObject(_minerData, _dictionaryDescriptor, "english"); 
     }
 
-    private void loadLanguage(String language)
+   public DataElement handleCommand(DataElement theCommand)
     {
-	DataElement languageRoot = _dataStore.createObject(_minerData, _dictionaryDescriptor, language); 
+	String name          = getCommandName(theCommand);
+	DataElement  status  = getCommandStatus(theCommand);
+	DataElement  subject = getCommandArgument(theCommand, 0);
+	
+	if (name.equals("C_SEARCH_DICTIONARY"))
+	    {
+		if (_languageRoot.getNestedSize() == 0)
+		    {
+			loadLanguage(_languageRoot);
+		    }
 
-	String languageFile = _dictionary + File.separator + language + File.separator + "words";
+		DataElement  pattern   = getCommandArgument(theCommand, 1);
+		return handleRegexSearch(subject, pattern, status);	 
+	    }
+	else if (name.equals("C_QUERY"))
+	    {
+		// english
+		loadLanguage(_languageRoot);
+	    }
+	
+	status.setAttribute(DE.A_NAME, "done");
+	return status;
+    }
+
+
+    private void loadLanguage(DataElement languageRoot)
+    {
+	if (languageRoot.getNestedSize() > 0)
+	    {
+		return;
+	    }
+		
+	String languageFile = _dictionary + File.separator + languageRoot.getName() + File.separator + "words";
 	int offset = Character.digit('a', Character.MAX_RADIX);
 
 	DataElement categories[] = new DataElement[26];
@@ -95,24 +128,11 @@ public class DictionaryMiner extends Miner
 	    {
 		System.out.println(e);
 	    }
+
+	_dataStore.refresh(languageRoot);
     }
     
  
-   public DataElement handleCommand(DataElement theCommand)
-    {
-	String name          = getCommandName(theCommand);
-	DataElement  status  = getCommandStatus(theCommand);
-	DataElement  subject = getCommandArgument(theCommand, 0);
-	
-	if (name.equals("C_SEARCH_DICTIONARY"))
-	    {
-		DataElement  pattern   = getCommandArgument(theCommand, 1);
-		return handleRegexSearch(subject, pattern, status);	 
-	    }
-	
-	status.setAttribute(DE.A_NAME, "done");
-	return status;
-    }
       
       
       private DataElement handleRegexSearch(DataElement dictionary, DataElement pattern, DataElement status)

@@ -456,7 +456,7 @@ public class FileSystemMiner extends Miner
 	  }
 
 	File file = new File(sourceString);
-	if (file.exists())
+	if (!file.isDirectory() && file.exists())
 	    {
 		int maxSize = 5000000;
 		int size = (int)file.length();

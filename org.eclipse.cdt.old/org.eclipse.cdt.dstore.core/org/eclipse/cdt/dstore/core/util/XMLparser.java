@@ -62,7 +62,8 @@ public class XMLparser
 		    }
 		catch (IOException e)
 		    {
-			System.out.println("XMLparser:" + e);
+			System.out.println("XMLparser:read:" + e);
+			_panic = true;
 		    }
 	    }
 
@@ -101,7 +102,7 @@ public class XMLparser
 		catch (IOException e)
 		    {
 			done = true; 
-			System.out.println("XMLparser:" + e);
+			System.out.println("XMLparser:readLine:" + e);
 			_panic = true;
 			return null;
 		    }
@@ -212,11 +213,9 @@ public class XMLparser
 					      }
 				      }
 			      }
-			  else
-			      {
-				  if (_panic)
-				      return null;
-			      }
+
+			  if (_panic)
+			      return null;
 		      }
 	      }
 

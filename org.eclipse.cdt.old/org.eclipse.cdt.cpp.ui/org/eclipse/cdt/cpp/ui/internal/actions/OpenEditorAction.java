@@ -84,11 +84,14 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    if (indexOfSlash > 0)
 							{
 							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
+							    fileElement = dataStore.createObject(null, "file", name, fileName);
+							    // create the object on server
+							    dataStore.setObject(fileElement);
+							}	
+						    else
+							{
+							    return;
 							}
-						    
-						    fileElement = dataStore.createObject(null, "file", name, fileName);
-						    // create the object on server
-						    dataStore.setObject(fileElement);
 						}
 					    
 					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, _plugin.getCurrentProject());

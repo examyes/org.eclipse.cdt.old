@@ -278,18 +278,21 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
   public boolean setCurrentProject(Repository obj)
   {
     boolean changed = false;
- 
-    DataStore dataStore = ((Repository)obj).getDataStore();	
-    if (_currentProject != obj)
-      {	
-	_currentProject = obj;
-	setCurrentDataStore(obj.getDataStore());	
-	changed = true;
-      }
+    
+    if (obj.isOpen())
+	{
+	    DataStore dataStore = ((Repository)obj).getDataStore();	
+	    if (_currentProject != obj)
+		{	
+		    _currentProject = obj;
+		    setCurrentDataStore(obj.getDataStore());	
+		    changed = true;
+		}
+	}
 
     return changed;
   }
-
+    
 
   public boolean setCurrentProject(IResource obj)
   {

@@ -112,7 +112,7 @@ public class Repository extends Project
 
 	public void run()
 	{
-	    ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier());	
+	    ConnectionStatus status = _connection.connect(_dataStore.getDomainNotifier(), "com.ibm.cpp.miners");	
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
@@ -297,7 +297,12 @@ public class Repository extends Project
   
   public DataStore getDataStore()
   {
-    return _dataStore;
+      if (_remoteRoot != null)
+	  {
+	      return _remoteRoot.getDataStore();
+	  }
+
+      return _dataStore;
   }
 
     public boolean hasChildren(Object o)

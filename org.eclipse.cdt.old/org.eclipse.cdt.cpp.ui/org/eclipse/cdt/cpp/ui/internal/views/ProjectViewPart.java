@@ -61,22 +61,25 @@ public abstract class ProjectViewPart extends ObjectsViewPart implements ISelect
  
    public void doInput(IProject project)
   {
-  //Grab the project DataElement
-  DataElement projectObj = _plugin.getModelInterface().findProjectElement(project);
-  if (projectObj == null)
-   return;
-   
-  //Get the reference to the Project's Parse Data
-  ArrayList parseReferences = projectObj.getAssociated("Parse Reference");
-  if (parseReferences.size() < 1)
-   return;
-  DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
-  if (projectParseInformation == null)
-   return;
-  
-  doSpecificInput(projectParseInformation);
- } 	
- 
+      //Grab the project DataElement
+      DataElement projectObj = _plugin.getModelInterface().findProjectElement(project);
+      if (projectObj == null)
+	  {
+	      System.out.println("project " + project + " has no element");
+	      return;
+	  }
+
+      //Get the reference to the Project's Parse Data
+      ArrayList parseReferences = projectObj.getAssociated("Parse Reference");
+      if (parseReferences.size() < 1)
+	  return;
+      DataElement projectParseInformation = ((DataElement)parseReferences.get(0)).dereference();
+      if (projectParseInformation == null)
+	  return;
+      
+      doSpecificInput(projectParseInformation);
+  } 	
+    
  public abstract void doSpecificInput(DataElement projectParseInformation);
     public void projectChanged(CppProjectEvent event)
     {

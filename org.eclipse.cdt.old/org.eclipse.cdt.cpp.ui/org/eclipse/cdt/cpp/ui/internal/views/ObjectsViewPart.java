@@ -169,7 +169,6 @@ public class ObjectsViewPart extends GenericViewPart
 					changed = _plugin.setCurrentProject((IResource)object);
 				    }  
 			    }
-			
 			if (changed)
 			    {		
 				_plugin.getCurrentDataStore().getDomainNotifier().enable(true);
@@ -182,7 +181,10 @@ public class ObjectsViewPart extends GenericViewPart
 
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
-	if ((part instanceof ResourceNavigator) || (part instanceof RemoteProjectViewPart))
+	if ((part instanceof ResourceNavigator) || 
+	    (part instanceof RemoteProjectViewPart) ||
+	    (part instanceof RemoteProjectNavigator)
+	    )
 	    {
 		if (sel instanceof IStructuredSelection)
 		    {
