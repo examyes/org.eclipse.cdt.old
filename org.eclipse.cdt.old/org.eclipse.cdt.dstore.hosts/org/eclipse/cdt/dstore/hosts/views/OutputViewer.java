@@ -307,6 +307,9 @@ public class OutputViewer extends TableViewer
 		  clearFirstItems(index - (MAX_BUFFER / 2));
 
 	      }
+
+	  table.setRedraw(true);	
+
 	  index = table.getItemCount();
 	  	
 	  TableItem latestItem = null;
@@ -339,7 +342,6 @@ public class OutputViewer extends TableViewer
 		  table.showItem(latestItem);
 	      }
 
-	  table.setRedraw(true);				
       }
 
     private void clearFirstItems(int items)
