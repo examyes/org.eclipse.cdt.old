@@ -6,7 +6,9 @@
    vendor-name = "IBM">
 
    <requires>
+      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="com.ibm.dstore.core"/>
+      <import plugin="com.ibm.dstore.extra"/>
    </requires>
 
    <runtime>
