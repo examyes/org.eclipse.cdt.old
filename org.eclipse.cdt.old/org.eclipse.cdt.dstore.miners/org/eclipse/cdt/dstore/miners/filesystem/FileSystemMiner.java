@@ -703,7 +703,7 @@ public class FileSystemMiner extends Miner
     {
 	if (compareString(patternStr, root.getName(), true))
 	    {
-		_dataStore.createReference(status, root, _containsDescriptor);
+		_dataStore.createReference(status, root, getLocalizedString("model.contents"));
 		_dataStore.refresh(root);
 		_dataStore.refresh(status);
 	    }

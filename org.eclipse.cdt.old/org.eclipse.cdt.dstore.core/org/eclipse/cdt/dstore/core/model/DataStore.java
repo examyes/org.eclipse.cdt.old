@@ -556,20 +556,20 @@ public class DataStore
 
   public DataElement createObject(DataElement parent, DataElement type, String name, String source, String sugId)
       {
-	  return createObject(parent, type, name, source, sugId, "false");
+	  return createObject(parent, type, name, source, sugId, false);
       }
 
   public DataElement createObject(DataElement parent, String type, String name, String source, String sugId)
       {
-	  return createObject(parent, type, name, source, sugId, "false");
+	  return createObject(parent, type, name, source, sugId, false);
       }
 
   public DataElement createObject(DataElement parent, DataElement type, String name, 
-				  String source, String sugId, String isReference)
+				  String source, String sugId, boolean isReference)
     {
         String id = makeIdUnique(sugId);
 	
-	DataElement newObject = createElement();
+	DataElement newObject = createElement(); 
 	if (parent == null)
 	    {
 		parent = _tempRoot;
@@ -587,7 +587,7 @@ public class DataStore
     }
 
   public DataElement createObject(DataElement parent, String type, String name, String 
-				  source, String sugId, String isReference)
+				  source, String sugId, boolean isReference)
     {
         String id = makeIdUnique(sugId);
 
@@ -947,8 +947,8 @@ public class DataStore
 
   public void setObject(DataElement localObject)
   {
-    DataElement cmd = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.Set"), 2);  
-    DataElement status = synchronizedCommand(cmd, localObject, true);
+      DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
+      DataElement status = synchronizedCommand(cmd, localObject, true);
   }
 
   public void modifyObject(DataElement localObject)
@@ -2116,7 +2116,7 @@ public DataElement command(DataElement commandDescriptor,
 
 	DataElement caRelations = createAbstractRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents&arguments"));
 	createReference(caRelations, containsD, containsD);
-	createReference(caRelations, argsD, containsD);
+	createReference(caRelations, argsD, containsD); 
 	
         createReference(objectDescriptor, containsD, containsD);
         createReference(objectDescriptor, parentD, containsD);
@@ -2239,7 +2239,7 @@ public DataElement command(DataElement commandDescriptor,
 	DataElement cancel = createCommandDescriptor(commandDescriptor, getLocalizedString("model.Cancel"), "*", "C_CANCEL");	
  	DataElement oQuery = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Query"), "-", "C_QUERY");
 
-	DataElement set = createCommandDescriptor(objectDescriptor, getLocalizedString("model.Set"), "-", "C_SET"); 
+	DataElement set = createCommandDescriptor(rootD, getLocalizedString("model.Set"), "-", "C_SET"); 
 
 	DataElement setHost = createCommandDescriptor(rootD, getLocalizedString("model.Set_Host"), "-", "C_SET_HOST");
 	setHost.setDepth(0);

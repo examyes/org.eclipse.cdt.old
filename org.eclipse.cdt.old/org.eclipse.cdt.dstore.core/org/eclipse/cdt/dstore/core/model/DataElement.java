@@ -16,11 +16,11 @@ public final class DataElement implements Serializable, IDataElement
     private String              _attributes[];
     private StringBuffer        _buffer;
     
- private boolean             _isReference = false;
- private boolean             _isDescriptor = false;
- private boolean             _isExpanded   = false;
- private boolean             _isUpdated    = false;
- private int                 _depth        = 1;
+    private boolean             _isReference = false;
+    private boolean             _isDescriptor = false;
+    private boolean             _isExpanded   = false;
+    private boolean             _isUpdated    = false;
+    private int                 _depth        = 1;
     
     private DataStore           _dataStore = null;
     private DataElement         _parent = null;
@@ -66,14 +66,11 @@ public final class DataElement implements Serializable, IDataElement
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
 		_attributes[DE.A_SOURCE]     = originalObject.getSource();
-		_attributes[DE.A_ISREF]      = "true";
-		_attributes[DE.A_DEPTH]      = originalObject.getAttribute(DE.A_DEPTH);
-		
-		
-		_referencedObject = originalObject;
-		_isReference      = true;
-		
+				
 		initialize(refType);	
+
+		_referencedObject = originalObject;
+		_isReference      = true;		
 	    }
       }
 
@@ -92,14 +89,11 @@ public final class DataElement implements Serializable, IDataElement
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getId();
 		_attributes[DE.A_SOURCE]     = originalObject.getSource();
-		_attributes[DE.A_ISREF]      = "true";
-		_attributes[DE.A_DEPTH]      = originalObject.getAttribute(DE.A_DEPTH);
-		
-		
-		_referencedObject = originalObject;
-		_isReference      = true;
 		
 		initialize();	
+
+		_referencedObject = originalObject;
+		_isReference      = true;		
 	    }
       }
 
@@ -114,8 +108,6 @@ public final class DataElement implements Serializable, IDataElement
           _attributes[DE.A_NAME]       = name;
           _attributes[DE.A_VALUE]      = name;
 	  _attributes[DE.A_SOURCE]     = source; 
-	  _attributes[DE.A_ISREF]      = "false";
-	  _attributes[DE.A_DEPTH]      = "2";
 
 	  initialize(type);
 	}
@@ -131,13 +123,11 @@ public final class DataElement implements Serializable, IDataElement
           _attributes[DE.A_NAME]       = name;
           _attributes[DE.A_VALUE]      = name;
 	  _attributes[DE.A_SOURCE]     = source; 
-	  _attributes[DE.A_ISREF]      = "false";
-	  _attributes[DE.A_DEPTH]      = "2";
 
 	  initialize();
 	}
 
-  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String id, String name, String source, String isRef)
+  public void reInit(DataStore dataStore, DataElement parent, DataElement type, String id, String name, String source, boolean isRef)
 	{
           _dataStore = dataStore;
           _parent = parent;
@@ -148,13 +138,12 @@ public final class DataElement implements Serializable, IDataElement
           _attributes[DE.A_NAME]       = name;
           _attributes[DE.A_VALUE]      = name;
 	  _attributes[DE.A_SOURCE]     = source;
-	  _attributes[DE.A_ISREF]      = isRef;
-	  _attributes[DE.A_DEPTH]      = "2";
 
 	  initialize(type);
+	  _isReference = isRef;
 	}
 
-  public void reInit(DataStore dataStore, DataElement parent, String type, String id, String name, String source, String isRef)
+  public void reInit(DataStore dataStore, DataElement parent, String type, String id, String name, String source, boolean isRef)
 	{
 
           _dataStore = dataStore;
@@ -166,10 +155,9 @@ public final class DataElement implements Serializable, IDataElement
           _attributes[DE.A_NAME]       = name;
           _attributes[DE.A_VALUE]      = name;
 	  _attributes[DE.A_SOURCE]     = source;
-	  _attributes[DE.A_ISREF]      = isRef;
-	  _attributes[DE.A_DEPTH]      = "2";
 
 	  initialize();
+	  _isReference = isRef;
 	}
 
   public void reInit(DataStore dataStore, DataElement parent, DataElement type, String[] attributes)
@@ -204,25 +192,27 @@ public final class DataElement implements Serializable, IDataElement
       {
 	  _isReference  = false;
 	  _isDescriptor = false;
-	  _depth        = 1;
-	  _referencedObject = null;
+	  _depth        = 2;
+
+	  _referencedObject = null; 
 	  _isExpanded  = false;
 	  _isUpdated   = false;
 	  _descriptor  = typeDescriptor;
-
-	  String depth = getAttribute(DE.A_DEPTH);
-	  if (depth != null)
-	      {	  
-		  _depth = Integer.parseInt(depth);	    
-	      } 
 	  
-	  String type  = getAttribute(DE.A_TYPE);
+
+	  String depthStr = getAttribute(DE.A_DEPTH);
+	  if (depthStr != null)
+	      {
+		  _depth = Integer.parseInt(_attributes[DE.A_DEPTH]);
+	      }
+
 	  String isRef = getAttribute(DE.A_ISREF);
 	  if (isRef != null && isRef.equals("true"))
 	      {
 		  _isReference = true;	
 	      }
 	  
+	  String type  = getAttribute(DE.A_TYPE);
 	  if (type.equals(DE.T_OBJECT_DESCRIPTOR)          ||
 	      type.equals(DE.T_COMMAND_DESCRIPTOR)         ||
 	      type.equals(DE.T_RELATION_DESCRIPTOR)        ||
@@ -249,17 +239,15 @@ public final class DataElement implements Serializable, IDataElement
 
     public boolean isDeleted()
     {    
-	String depthAttribute = getAttribute(DE.A_DEPTH);
 	String valueAttribute = getAttribute(DE.A_VALUE);
 	
-	if (_depth == -1 || depthAttribute.equals("-1"))
+	if (_depth == -1)
 	    {
 		return true;
 	    }
 	else if (valueAttribute.equals("deleted"))
 	    {
 		_depth = -1;	  
-		setAttribute(DE.A_DEPTH, "-1");
 		return true;
 	    }
 	
@@ -604,7 +592,6 @@ public final class DataElement implements Serializable, IDataElement
   public void setDepth(int depth)
       {
         _depth = depth;
-	setAttribute(DE.A_DEPTH, String.valueOf(depth));
       }
 
 

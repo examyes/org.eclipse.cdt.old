@@ -16,6 +16,13 @@ public class ProjectMiner extends Miner
  {
   _dataStore.createObject(_minerData, getLocalizedString("project.Workspace"), getLocalizedString("project.Workspace"));
  }
+
+    public void updateMinerInfo()
+    {
+	_dataStore.refresh(_minerData.get(0));
+	_dataStore.refresh(_minerData);
+    }
+
  
  public void extendSchema(DataElement schemaRoot)
  {

@@ -231,6 +231,7 @@ public class XMLparser
         int nextSpace = fullTag.indexOf(' ');
         if (nextSpace > 0)
         {
+
           String[] attributes = new String[DE.A_SIZE];
 
           // tag type
@@ -262,6 +263,7 @@ public class XMLparser
               index++;
             }
           }
+
 	  DataElement result = null;
 	  if (attributes.length == DE.A_SIZE)
 	      {
@@ -279,6 +281,10 @@ public class XMLparser
 				  if (parent == _rootDataElement)
 				      {
 					  DataElement rParent = result.getParent();
+					  if (rParent == null)
+					      {
+						  System.out.println("null parent for " + result);
+					      }
 					  parent = rParent;
 					  _rootDataElement.addNestedData(result, false);
 				      }
@@ -287,10 +293,18 @@ public class XMLparser
 					  result.setParent(parent);
 				      }
 				  
-				  parent.addNestedData(result, true);
+				  if (parent != null)
+				      {
+					  parent.addNestedData(result, true);
+				      }
+				  else
+				      {
+					  System.out.println("NULL!");
+				      }
 			      }
 			  else
 			      {
+
 				  String isRefStr = attributes[DE.A_ISREF];
 				  if ((isRefStr != null) && isRefStr.equals("true"))
 				      {
@@ -298,8 +312,17 @@ public class XMLparser
 					  String origId = attributes[DE.A_NAME];
 					  if (_dataStore.contains(origId))
 					      {
+
 						  DataElement to = _dataStore.find(origId);
-						  result = _dataStore.createReference(parent, to, attributes[DE.A_TYPE]);
+						  if (parent != null)
+						      {
+							  result = _dataStore.createReference(parent, to, 
+											      attributes[DE.A_TYPE]);
+						      }
+						  else
+						      {
+							  System.out.println("NULL2!");
+						      }
 					      }
 					  else
 					      {
@@ -312,11 +335,12 @@ public class XMLparser
 					  // new object
 					  result = _dataStore.createObject(parent, attributes);
 				      }
+				  
 			      }			  
 		      }
 	      } 
 	  return result;
-        }	
+	}	
 	
         return null;
     }

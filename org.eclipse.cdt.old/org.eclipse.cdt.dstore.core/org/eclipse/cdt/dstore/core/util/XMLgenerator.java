@@ -418,7 +418,15 @@ public class XMLgenerator
 		addAttribute(DE.P_NAME, object.getAttribute(DE.A_NAME));
 		addAttribute(DE.P_VALUE, object.getAttribute(DE.A_VALUE));
 		addAttribute(DE.P_SOURCE, object.getAttribute(DE.A_SOURCE));
-		addAttribute(DE.P_ISREF, object.getAttribute(DE.A_ISREF));
+
+		if (object.isReference())
+		    {
+			addAttribute(DE.P_ISREF, "true");
+		    }
+		else
+		    {
+			addAttribute(DE.P_ISREF, "false");
+		    }
 		
 		addAttribute(DE.P_DEPTH, "" + size);
 		addFile(bytes, size);
@@ -455,7 +463,15 @@ public class XMLgenerator
 			addAttribute(DE.P_NAME, object.getAttribute(DE.A_NAME));
 			addAttribute(DE.P_VALUE, object.getAttribute(DE.A_VALUE));
 			addAttribute(DE.P_SOURCE, object.getAttribute(DE.A_SOURCE));
-			addAttribute(DE.P_ISREF, object.getAttribute(DE.A_ISREF));
+
+			if (object.isReference())
+			    {
+				addAttribute(DE.P_ISREF, "true");
+			    }
+			else
+			    {
+				addAttribute(DE.P_ISREF, "false");
+			    }
 			
 			if (file != null)
 			{
@@ -464,20 +480,20 @@ public class XMLgenerator
 			    addFile(file, (int)length);
 			}
 			else
-			{
-			    addAttribute(DE.P_DEPTH, object.getAttribute(DE.A_DEPTH));
-			    addData(object.getBuffer());
-			    object.setUpdated(true);
-
-			    if (!object.isReference() && depth >= 0)
 			    {
-				for (int i = 0; i < object.getNestedSize(); i++)
+				addAttribute(DE.P_DEPTH, "" + object.depth());
+				addData(object.getBuffer());
+				object.setUpdated(true);
+				
+				if (!object.isReference() && depth >= 0)
 				    {
-					generate(object.get(i), depth - 1, file);
+					for (int i = 0; i < object.getNestedSize(); i++)
+					    {
+						generate(object.get(i), depth - 1, file);
+					    }
 				    }
-			    }
-			}	      
-		
+			    }	      
+			
 			// end generation
 			endTag(tagType);
 
