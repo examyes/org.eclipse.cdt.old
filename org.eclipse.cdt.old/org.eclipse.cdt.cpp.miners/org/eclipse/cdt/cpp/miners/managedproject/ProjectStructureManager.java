@@ -85,20 +85,22 @@ public class ProjectStructureManager {
 		}
 		return locations;
 	}
-	protected String[][] getSubdirWithDepth()
+	protected Object[][] getProjectStructure()
 	{
 		// analyze fresh
 		subdirs.removeAllElements();
 		files.removeAllElements();
 		// analyze
 		analyze(project,0);
-		String[][] dirWithDepth = new String [subdirs.size()][2];
+		Object[][] projectStructure = new Object [subdirs.size()+1][2];
+		projectStructure[0][1]=project;
+		projectStructure[0][1]="0";
 		for(int i = 0; i < subdirs.size(); i ++)
 		{
-			dirWithDepth[i][0]=((File)subdirs.elementAt(i)).getName();
-			dirWithDepth[i][1]=subdirs_depth.elementAt(i).toString();
+			projectStructure[i+1][0]=(File)(subdirs.elementAt(i));
+			projectStructure[i+1][1]=subdirs_depth.elementAt(i).toString();
 		}
-		return dirWithDepth;
+		return projectStructure;
 	}
 }
 

@@ -6,10 +6,7 @@ import com.ibm.dstore.core.model.*;
 import java.io.*;
 
 public class ConfigureInManager {
-
-	
 	DataElement project;
-		// will be grouped under Configure_in Manager
 	String version = new String("@VERSION@");
 	String pack = new String("@PACKAGE@");
 	String subdir = new String ("@SUBDIR/Makefile@");
