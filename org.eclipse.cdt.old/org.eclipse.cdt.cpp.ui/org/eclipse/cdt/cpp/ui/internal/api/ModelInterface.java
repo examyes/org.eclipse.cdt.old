@@ -87,7 +87,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			  dataStore.synchronizedCommand(oDescriptor, projectMinerProject);
 
 			  // open opened project - recursive query
-			  dataStore.command(oDescriptor, projectMinerProject); 
+			  dataStore.command(oDescriptor, projectMinerProject);
 		      }
 		
 		  setPreferences(_project);
