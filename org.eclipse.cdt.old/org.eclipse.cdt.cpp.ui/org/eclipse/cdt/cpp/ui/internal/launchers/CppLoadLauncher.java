@@ -29,8 +29,8 @@ import com.ibm.debug.launch.PICLLoadInfo;
 
 import com.ibm.debug.daemon.IOldDaemonSupport;
 import com.ibm.debug.daemon.CoreDaemon;
-import com.ibm.debug.daemon.DaemonLauncherDelegate;
 import com.ibm.debug.daemon.DaemonSocketConnection;
+import com.ibm.debug.daemon.DebugDaemonPlugin;
 import com.ibm.debug.internal.picl.PICLDebugTarget;
 
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
@@ -148,9 +148,16 @@ public String getLaunchMemento(Object obj)
 
 
         //ensure the daemon is listening
-        int port = DaemonLauncherDelegate.launchDaemon(_elements);
-        if (port < 0)
+//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
+        boolean ok = CoreDaemon.startListening();
+        if (ok == true)
+        {
+          int port = CoreDaemon.getCurrentPort();
+          if (port < 0)
             return;
+        }
+        else
+           return;
 
 	
 	if (_executable != null)
