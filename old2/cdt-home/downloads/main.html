@@ -14,7 +14,7 @@
 	-->
 	</style>
 </head>
-<body lang="en-US" bgcolor="#ffffff">
+<body lang="en-US" style="background-color: rgb(255, 255, 255);">
 <table width="100%" border="0" cellpadding="2" cellspacing="2"
  style="page-break-before: always;">
   <tbody>
@@ -51,38 +51,10 @@ Downloads&nbsp;</b></font></font></p>
       <h3><img
  src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/new.jpg?cvsroot=Tools_Project"
  name="Graphic2" align="bottom" width="100" height="69" border="0"></h3>
-      <h3>CDT 1.2 Release Candidate 1 Now Available</h3>
-      <p><span style="font-style: italic;">October 9, 2003</span></p>
-      <p>The CDT 1.2 RC1 build is now available. This is hopefully the
-last
-build leading up the release of CDT 1.2 and is being made available for
-testing.&nbsp; The CDT is projected for general availability on October
-14.<br>
-      </p>
-      <p>If you find any bugs with this build, please raise them in <a
- href="http://bugs.eclipse.org/bugs">Bugzilla</a>. If there are show
-stopper
-items, please report them to the CDT Developer <a
- href="mailto:cdt-dev@eclipse.org">Mailing List</a>. Also note that
-this only a Release Candidate so please use a seperate Eclipse install
-from your main environments to do any testing.<br>
-      </p>
-      <p>A new update site has been created for these builds at the
-following URL: <a
- href="http://update.eclipse.org/tools/cdt/updates/rc/1.2RC1">http://update.eclipse.org/tools/cdt/updates/rc/1.2RC1</a>.
-If you have previously installed one of the 1.2 nighly builds, you must
-remove all CDT features and plugins from you install in order to
-install the RC1 build.<br>
-      </p>
-      <p>As well as the update site, a collection of zip files have
-been created for manual installation and packaging.&nbsp; These zip
-files can be downloaded from the <a
- href="http://download.eclipse.org/tools/cdt/updates/rc/1.2RC1/zips.html">CDT
-1.2 RC1 Distribution Zip</a> Page.<br>
-      </p>
-      <h3>Current CDT Releases<br>
-      </h3>
-      <p style="">As of CDT 1.1.0 GA, builds are now available through
+      <h3>CDT 1.2 Now Generally Available</h3>
+      <p><span style="font-style: italic;">October 16, 2003</span></p>
+      <p style="">The CDT 1.2 and CDT 1.1 builds are now available
+through
 the Update Manager of Eclipse. To access the Update Manager, select
 Software Updates-&gt;Update Manager from the Help menu. To access an
 update site, select New-&gt;Site Bookmark from the context menu in the
@@ -90,23 +62,30 @@ Feature Updates view. In the New Site Bookmark dialog, enter a name for
 the site (any name) and enter the appropriate URL for the update site.
 You can then expand the site bookmark in the Feature Updates view to
 reveal the available downloads.</p>
+      <p style=""><span style="font-weight: bold;">CDT 1.2 Note:</span>
+For
+CDT 1.2, the standard make project type and the new managed make
+project type have been separated out from the CDT "Platform".&nbsp;
+When
+using the update site, please install the CDT feature as well as
+the Standard Build feature and optionally the Managed Make feature, in
+that order, or optionally selecting them and installing them at the
+same time (Process All). Other release notes for CDT 1.2 are available <a
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/CDT_1_2_Release_Notes.html?cvsroot=Tools_Project">here.</a><br>
+      </p>
+      <p style=""> </p>
       <p style="">The release, or GA, builds for the CDT are available
 from the CDT Release update site at the following URL: <a
- href="http://update.eclipse.org/tools/cdt/updates/release">http://update.eclipse.org/tools/cdt/updates/release</a></p>
-      <p>The nightly builds for CDT 1.2 are available from the CDT 1.2
-Builds update site at the following URL: <a
- href="http://update.eclipse.org/tools/cdt/updates/builds/1.2">http://update.eclipse.org/tools/cdt/updates/builds/1.2</a></p>
-      <p>The nightly builds represent works in progress for the
+ href="http://update.eclipse.org/tools/cdt/updates/release">http://update.eclipse.org/tools/cdt/updates/release</a><br>
+      </p>
+      <p>The nightly builds (or more accurately "regular" builds) for
+CDT 2.0 will available soon. The
+nightly builds represent works in progress for the
 upcoming releases and are provided &#8220;as is&#8221;. It is possible that these
 builds have major bugs and may not run at all. Always check the test
 logs available from the site home page (click on the link above or
 click on the Site home page link in the Update Manager) before
 installing a nightly build.</p>
-      <p><i>Freeze builds</i> (F#) are considered relatively stable, no
-new features will be added during this development cycle. Once a freeze
-build has been used for a few days it will be considered a stable
-build. If problems are found in a Freeze build, please submit a bug
-report.</p>
       <p>The CDT Project (like the Eclipse Project) uses <a
  href="http://www.bugzilla.org/">bugzilla</a> as its bug and feature
 tracking system. Entering a bug\feature report is as simple as filling
@@ -116,7 +95,8 @@ bugzilla page</a>. The first time you enter a bug you will need to <a
 bugzilla account</a> for yourself by providing an email address and
 choosing a password. </p>
       <p>If you prefer not to use the Update Manager, the old style zip
-distributions are still available for GA builds.</p>
+distributions are available below:<br>
+      </p>
       </td>
     </tr>
     <tr>
@@ -137,29 +117,58 @@ distributions are still available for GA builds.</p>
       <p><b>Build Name</b></p>
       </td>
       <td>
-      <p><b>Build DateNote: The CDT 1.1 GA has been posted -- see
-Releases below. </b> </p>
+      <p><b>Release Date </b> </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>Latest Release</p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a href="#cdt_1_2_0">1.2.0</a><br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p>Fri, 16 Oct 2003<br>
+      </p>
       </td>
     </tr>
     <tr>
       <td width="30%">
-      <p>Latest Release</p>
+      <p>Previous Release</p>
       </td>
       <td>
-      <p><a href="#release">1.1.0</a></p>
+      <p><a href="#cdt_1_1_0">1.1.0</a></p>
       </td>
       <td>
       <p>Sat, 17 May 2003</p>
       </td>
     </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>Even Earlier Release<br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a href="#cdt_1_0_1">1.0.1</a><br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p>Mon, 17 Feb 2003<br>
+      </p>
+      </td>
+    </tr>
   </tbody>
 </table>
+<br>
 <table width="100%" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td colspan="3" bgcolor="#999999">
-      <p><a name="release"></a><font color="#ffffff"><font
- face="Arial, Helvetica"><b>Latest Releases&nbsp;</b></font></font></p>
+      <p><a name="cdt_1_2_0"></a><font color="#ffffff"><font
+ face="Arial, Helvetica"><b>CDT 1.2 - the "Full" builds include the
+Platform, Standard Make, and Managed Make<br>
+      </b></font></font></p>
       </td>
     </tr>
     <tr>
@@ -175,7 +184,232 @@ Releases below. </b> </p>
     </tr>
     <tr>
       <td>
-      <p>2003/05/17</p>
+      <p>CDT 1.2 Full for Linux/GTK<br>
+      </p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-full-1.2-linux-gtk.zip">1.2.0
+GA - Full - Linux (GTK)<br>
+      </a></p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <p>CDT 1.2 Full for Linux/Motif</p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-full-1.2-linux-motif.zip">1.2.0
+GA - Full - Linux (Motif)</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <p>CDT 1.2 Full for QNX Neutrino<br>
+      </p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-full-1.2-qnx.zip">1.2.0
+GA - Full - QNX Neutrino (Photon)<br>
+      </a></p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <p>CDT 1.2 Full for Solaris</p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-full-1.2-solaris.zip">1.2.0
+GA - Full - Solaris (Motif)</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <p>CDT 1.2 Full for Windows</p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td>
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-full-1.2-win32.zip">1.2.0
+GA - Full - Windows</a><a
+ href="http://download.eclipse.org/tools/cdt/downloads/cdt/org.eclipse.cdt-qnx.photon_1.1.0.bin.dist.zip"><!-- <td>2003/05/17</td>
+
+<td><a href="http://download2.eclipse.org/downloads/drops/R-2.1-200303272130/index.php">R2.1</a></td>
+
+<td><a href="http://download.eclipse.org/tools/cdt/downloads/cdt/org.eclipse.cdt.source_1.1.0.src.zip">1.1.0 GA - source</a></td>
+
+</tr>
+
+--><!-- ********* 2002/11/11 removed *********** --></a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Platform for Linux/GTK<br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-platform-1.2-linux-gtk.zip">1.2.0
+GA - Platform - Linux (GTK)</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Platform for Linux/Motif</p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-platform-1.2-linux-motif.zip">1.2.0
+GA - Platform - Linux (Motif)</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Platform for QNX Neutrino</p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-platform-1.2-qnx.zip">1.2.0
+GA - Platform - QNX Neutrino (Photon)</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Platform for Solaris</p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-platform-1.2-solaris.zip">1.2.0
+GA - Platform - Solaris (Motif)</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Platform for Windows</p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-platform-1.2-win32.zip">1.2.0
+GA - Platform - Windows</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Standard Build<br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-standardmake-1.2.zip">1.2.0
+GA - Standard Build<br>
+      </a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Managed Build<br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-managedmake-1.2.zip">1.2.0
+GA - Managed Build<br>
+      </a></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">
+      <p>CDT 1.2 Source<br>
+      </p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/downloads/drops/R-2.1.1-200306271545/index.php">R2.1.1</a></p>
+      </td>
+      <td style="vertical-align: top;">
+      <p><a
+ href="http://download.eclipse.org/tools/cdt/updates/release/dist/cdt-source-1.2.zip">1.2.0
+GA - Source</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<table width="100%" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td colspan="3" bgcolor="#999999">
+      <p><a name="cdt_1_1_0"></a><font color="#ffffff"><font
+ face="Arial, Helvetica"><b>CDT 1.1<br>
+      </b></font></font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="30%">
+      <p><b>Build Name</b></p>
+      </td>
+      <td width="20%">
+      <p><b>Use With Eclipse Version</b></p>
+      </td>
+      <td width="50%">
+      <p><b>Package\Files<!-- ********* 2003/01/08 *********** --></b></p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+      <p>CDT 1.1 for Windows<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -189,7 +423,8 @@ GA - Windows</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/05/17</p>
+      <p>CDT 1.1. for Linux/Motif<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -203,7 +438,8 @@ GA - Linux (Motif)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/05/17</p>
+      <p>CDT 1.1 for Linux/GTK<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -217,7 +453,8 @@ GA- Linux (GTK)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/05/17</p>
+      <p>CDT 1.1 for Solaris<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -231,7 +468,8 @@ GA - Solaris (Motif)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/05/17</p>
+      <p>CDT 1.1 for QNX Neutrino<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -246,21 +484,22 @@ GA - QNX Neutrino (Photon)<!-- <td>2003/05/17</td>
 
 <td><a href="http://download.eclipse.org/tools/cdt/downloads/cdt/org.eclipse.cdt.source_1.1.0.src.zip">1.1.0 GA - source</a></td>
 
-</tr> 
+</tr>
 
 --><!-- ********* 2002/11/11 removed *********** --></a></p>
       </td>
     </tr>
   </tbody>
 </table>
-<p style="margin-bottom: 0cm;"><!-- Previous 1.0.1 release --><br>
-</p>
+<span style="font-family: &quot;arial&quot;,&quot;helvetica&quot;,&quot;geneva&quot;;"><br>
+</span>
 <table width="100%" cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td colspan="3" bgcolor="#999999">
-      <p><a name="release1"></a><font color="#ffffff"><font
- face="Arial, Helvetica"><b>Previous Release&nbsp;</b></font></font></p>
+      <p><a name="cdt_1_0_1"></a><font color="#ffffff"><font
+ face="Arial, Helvetica"><b>CDT 1.0.1<br>
+      </b></font></font></p>
       </td>
     </tr>
     <tr>
@@ -276,7 +515,8 @@ GA - QNX Neutrino (Photon)<!-- <td>2003/05/17</td>
     </tr>
     <tr>
       <td>
-      <p>2003/01/08</p>
+      <p>CDT 1.0.1 for Windows<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -290,7 +530,8 @@ GA - Windows</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/01/08</p>
+      <p>CDT 1.0.1 for Linux/Motif<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -304,7 +545,8 @@ GA - Linux (Motif)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/01/08</p>
+      <p>CDT 1.0.1 for Linux/GTK<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -318,7 +560,8 @@ GA- Linux (GTK)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/01/08</p>
+      <p>CDT 1.0.1 for Solaris<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -332,7 +575,8 @@ GA - Solaris (Motif)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/01/08</p>
+      <p>CDT 1.0.1 for QNX Neutrino<br>
+      </p>
       </td>
       <td>
       <p><a
@@ -346,7 +590,8 @@ GA - QNX Neutrino (Photon)</a></p>
     </tr>
     <tr>
       <td>
-      <p>2003/01/08</p>
+      <p>CDT 1.0.1 Source<br>
+      </p>
       </td>
       <td>
       <p><a
