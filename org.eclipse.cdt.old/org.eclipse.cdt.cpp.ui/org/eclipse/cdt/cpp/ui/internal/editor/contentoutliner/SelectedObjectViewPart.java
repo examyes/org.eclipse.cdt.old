@@ -140,6 +140,21 @@ public class SelectedObjectViewPart extends GenericViewPart
 	  }
     }
 
+    public void dispose()
+    {
+        IWorkbench aWorkbench = _plugin.getWorkbench();
+        IWorkbenchWindow win= aWorkbench.getActiveWorkbenchWindow();
+        win.getSelectionService().removeSelectionListener(this);
+	
+		ModelInterface api = ModelInterface.getInstance();
+		CppProjectNotifier notifier = api.getProjectNotifier();
+		notifier.removeProjectListener(this);
+
+		if (_viewer != null)
+		    _viewer.dispose();
+        super.dispose();
+    }
+        
     public void projectChanged(CppProjectEvent event)
     {
 	int type = event.getType();
