@@ -19,7 +19,7 @@ public class ServerReceiver extends Receiver
 
   public ServerReceiver(Socket socket, ConnectionEstablisher connection)
       {
-        super(socket, connection.dataStore());
+        super(socket, connection.getDataStore());
         _connection = connection;
       }
 
