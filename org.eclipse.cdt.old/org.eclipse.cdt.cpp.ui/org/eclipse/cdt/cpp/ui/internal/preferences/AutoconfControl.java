@@ -44,10 +44,10 @@ import java.util.*;
 public class AutoconfControl extends Composite
 {
     private Button _autoRunUpdateButton;
-    private Button _showRunDialgtButton;
+    private Button _showRunDialogtButton;
 
     private Button _autoCreateUpdateButton;
-    private Button _showCreateDialgtButton;
+    private Button _showCreateDialogtButton;
     
     private Button _updateAllButton;
     private Button _updateConfigureInButton;
@@ -70,11 +70,11 @@ public class AutoconfControl extends Composite
 	   	Label dialogSetup = new Label(this,SWT.LEFT);
     	dialogSetup.setText("Run/Ctreate configure confirmation message dialog setup:");
     	
-		_showRunDialgtButton = new Button(this, SWT.CHECK);
-		_showRunDialgtButton.setText("Show run configure Dialg before execution");
+		_showRunDialogtButton = new Button(this, SWT.CHECK);
+		_showRunDialogtButton.setText("Show run configure dialog before execution");
 	
-		_showCreateDialgtButton = new Button(this, SWT.CHECK);
-		_showCreateDialgtButton.setText("Show create configure Dialg before execution");
+		_showCreateDialogtButton = new Button(this, SWT.CHECK);
+		_showCreateDialogtButton.setText("Show create configure dialog before execution");
 
 
 		new Label(this,SWT.NONE);
@@ -82,13 +82,13 @@ public class AutoconfControl extends Composite
     	advancedSetup.setText("Advanced actions confirmation message dialog setup:");
     	
 		_updateAllButton = new Button(this, SWT.CHECK);
-		_updateAllButton.setText("Show \"Create/Update all automake files\" Dialg before execution");
+		_updateAllButton.setText("Show \"Create/Update all automake files\" dialog before execution");
 	
 		_updateConfigureInButton = new Button(this, SWT.CHECK);
-		_updateConfigureInButton.setText("Show \"Update configure.in\" Dialg before execution");
+		_updateConfigureInButton.setText("Show \"Update configure.in\" dialog before execution");
 
 		_updateMakefileAmButton = new Button(this, SWT.CHECK);
-		_updateMakefileAmButton.setText("Show \"Update Makefile.am\" Dialg before execution");
+		_updateMakefileAmButton.setText("Show \"Update Makefile.am\" dialog before execution");
 
 
 
@@ -103,7 +103,7 @@ public class AutoconfControl extends Composite
 
     public boolean getShowRunDialogSelection()
     {
-		return _showRunDialgtButton.getSelection();
+		return _showRunDialogtButton.getSelection();
     }
     
     
@@ -114,7 +114,7 @@ public class AutoconfControl extends Composite
 
     public boolean getShowCreateDialogSelection()
     {
-		return _showCreateDialgtButton.getSelection();
+		return _showCreateDialogtButton.getSelection();
     }
 
 
@@ -139,7 +139,7 @@ public class AutoconfControl extends Composite
 
     public void setShowRunDialogSelection(boolean flag)
     {
-		_showRunDialgtButton.setSelection(flag);
+		_showRunDialogtButton.setSelection(flag);
     }
     public void setAutoCreateUpdateSelection(boolean flag)
     {
@@ -148,7 +148,7 @@ public class AutoconfControl extends Composite
 
     public void setShowCreateDialogSelection(boolean flag)
     {
-		_showCreateDialgtButton.setSelection(flag);
+		_showCreateDialogtButton.setSelection(flag);
     }
 
     public void setUpdateAllButtonSelection(boolean flag)
