@@ -49,6 +49,7 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	IProject project = resource.getProject();
 	
 	_executable = _api.findResourceElement(resource);
+
 	DataElement projectElement = _api.getProjectFor(_executable);
 	if (!project.isOpen())
 	    {
@@ -56,15 +57,16 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 		return;
 	    }
 	String workingDirectory = configuration.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
+
+
 	//  set default source locator if none specified
-	if (launch.getSourceLocator() == null) {
-	    String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
-	    if (id == null) {
-		//	IJavaProject javaProject = JavaLaunchConfigurationUtils.getJavaProject(configuration);
-		//	ISourceLocator sourceLocator = new JavaSourceLocator(javaProject);
-		//	launch.setSourceLocator(sourceLocator);
+	if (launch.getSourceLocator() == null) 
+	    {
+		String id = configuration.getAttribute(ILaunchConfiguration.ATTR_SOURCE_LOCATOR_ID, (String)null);
+		if (id == null) 
+		    {
+		    }
 	    }
-	}
 
    	PICLLoadInfo loadInfo = new PICLLoadInfo();
 	String qualifiedFileName = "";
@@ -105,7 +107,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 
     public void doLaunch(PICLLoadInfo loadInfo, ILaunch launch, String workingDirectory)
     {
-        CppSourceLocator sourceLocator = null;
 	
 	
         //ensure the daemon is listening
@@ -123,12 +124,6 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
 	
 	if (_executable != null)
 	    {
-		DataElement projectElement = _api.getProjectFor(_executable);
-		if (projectElement != null)
-		    {
-			sourceLocator = new CppSourceLocator(projectElement);
-			loadInfo.setWorkspaceSourceLocator(sourceLocator);
-		    }
 		_dataElementDirectory = _executable.getParent();
 	    }
 	
@@ -138,7 +133,20 @@ public class CppDebugLoadLaunchConfigurationDelegate implements ILaunchConfigura
         int port = CoreDaemon.getCurrentPort();
 		
         launch.addDebugTarget(target);
-	launch.setSourceLocator(loadInfo.getWorkspaceSourceLocator());
+
+	// locator
+	DataElement projectElement = _api.getProjectFor(_executable);
+	if (projectElement != null)
+	    {
+		// source locator
+		CppSourceLocator sourceLocator = new CppSourceLocator(projectElement);
+		launch.setSourceLocator(sourceLocator);
+	    }
+	else
+	    {
+		launch.setSourceLocator(loadInfo.getWorkspaceSourceLocator());
+	    }
+
 	//target.launchEngine(key);    		
 
 	launchEngine(workingDirectory, new Integer(port).toString(), new Integer(key).toString());

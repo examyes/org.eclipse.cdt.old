@@ -25,6 +25,7 @@ public class CppSourceLocator extends WorkspaceSourceLocator
     public CppSourceLocator(DataElement projectElement) 
     {
 	super();  
+
 	_api = ModelInterface.getInstance();
 	_projectElement = projectElement;
 	_projectResource = _api.findProjectResource(projectElement);

@@ -105,6 +105,7 @@ public class Repository extends Project
 
 		    
 		    _root.setAttribute(DE.A_ID, _root.getName() + ".repository");
+
 		    _root.addNestedData(_remoteRoot.getNestedData(), false);
 		    _root.setDataStore(_remoteRoot.getDataStore());
 		    

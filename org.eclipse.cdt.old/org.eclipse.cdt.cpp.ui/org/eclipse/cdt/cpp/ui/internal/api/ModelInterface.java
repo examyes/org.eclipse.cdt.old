@@ -1790,35 +1790,50 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public DataElement getProjectFor(DataElement resource)
     {
 	 if (resource != null)
-	 {
+	 {	    
 	     String rtype = resource.getType();
 	     if (resource.isOfType("file") || rtype.equals("Closed Project"))
 		 {
-		     DataElement parent = resource;
-		     String type = parent.getType();
-		     while (parent != null &&			
-			    !type.equals("Project") &&
-			    !type.equals("Closed Project"))
-			 {		
-			     if (type.equals("temp") || type.equals("Root"))
-				 {
-				     parent = null;
+		     DataStore dataStore = resource.getDataStore();
+		     if (!dataStore.isVirtual())
+			 {
+			     DataElement parent = resource;
+			     String type = parent.getType();
+			     while (parent != null &&			
+				    !type.equals("Project") &&
+				    !type.equals("Closed Project"))
+				 {		
+				     if (type.equals("temp") || type.equals("Root"))
+					 {
+					     parent = null;
+					 }
+				     else
+					 {
+					     parent = parent.getParent();
+					     if (parent != null)
+						 {
+						     type = parent.getType();
+						 }
+					 }
 				 }
-			     else
+			     return parent;
+			 }
+		     else
+			 {
+			     // virtual datastore
+			     // -only one project per remote datastore
+			     DataElement workspace = findWorkspaceElement(dataStore);
+			     if (workspace != null)
 				 {
-				     parent = parent.getParent();
-				 	if (parent != null)
-					    {
-					 	type = parent.getType();
-					    }
+				     DataElement project = workspace.get(0);
+				     return project;
 				 }
 			 }
-		     return parent;
 		 }
-		else
-	    {
-			return null;
-	    }
+	     else
+		 {
+		     return null;
+		 }
 	 }
 	 return null;
     }

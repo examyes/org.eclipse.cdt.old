@@ -79,9 +79,6 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
 
     public void doLaunch(PICLAttachInfo attachInfo, ILaunch launch)
     {
-       CppSourceLocator sourceLocator = null;
-	
-	
         //ensure the daemon is listening
 	//        int port = DaemonLauncherDelegate.launchDaemon(_elements);
        boolean ok = CoreDaemon.startListening();
@@ -95,22 +92,28 @@ public class CppDebugAttachLaunchConfigurationDelegate implements ILaunchConfigu
 	      return;
 	
 	
-  	   DataElement projectElement = _api.getProjectFor(_executable);
-     	if (projectElement != null)
-  	   {
-		   sourceLocator = new CppSourceLocator(projectElement);
-  			attachInfo.setWorkspaceSourceLocator(sourceLocator);
-      }
-  		_dataElementDirectory = _executable.getParent();
-	
-   	IDebugTarget target = PICLLaunchUtils.getDebugTarget(launch, attachInfo);
-   	int key = CoreDaemon.generateKey();
-   	CoreDaemon.storeDebugTarget(target, key);
+       _dataElementDirectory = _executable.getParent();
+       
+       IDebugTarget target = PICLLaunchUtils.getDebugTarget(launch, attachInfo);
+       int key = CoreDaemon.generateKey();
+       CoreDaemon.storeDebugTarget(target, key);
         int port = CoreDaemon.getCurrentPort();
 	
         launch.addDebugTarget(target);
-   	launch.setSourceLocator(attachInfo.getWorkspaceSourceLocator());
-
+	
+	// locator
+	DataElement projectElement = _api.getProjectFor(_executable);
+	if (projectElement != null)
+	    {
+		// source locator
+		CppSourceLocator sourceLocator = new CppSourceLocator(projectElement);
+		launch.setSourceLocator(sourceLocator);
+	    }
+	else
+	    {
+		launch.setSourceLocator(attachInfo.getWorkspaceSourceLocator());
+	    }
+	
    	launchEngine(new Integer(port).toString(), new Integer(key).toString());
     }
 
