@@ -163,7 +163,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     private void setElementInput(DataElement input)
     {
 	String type = input.getType();
-	if (type.equals("directory") || type.equals("Project") || type.equals("host") || type.equals("device"))
+	if (type.equals("file") || input.getDescriptor().isOfType("file"))
 	    {
 		_input = input;
 		DataElement element = _input;
@@ -172,7 +172,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 		    {
 			DataElement descriptor = element.getDescriptor();
 			if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
-			{
+			    {
 			    String directory = element.getSource();				
 				if ((directory != null) && (_directoryText != null))
 				    {		
@@ -188,7 +188,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 			    }
 			else if (element.getType().equals("file"))
 			    {
-				setInput(element.getParent());
+				setElementInput(element.getParent());
 			    }
 			if (_history != null)
 			    {
