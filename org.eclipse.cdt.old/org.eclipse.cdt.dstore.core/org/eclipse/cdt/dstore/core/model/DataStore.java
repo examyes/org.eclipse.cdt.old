@@ -1905,6 +1905,7 @@ public DataElement command(DataElement commandDescriptor,
         createReference(abstractObjectDescriptor, abstracts);
         createReference(abstractObjectDescriptor, abstractedBy);
 
+	createReference(statusD, containsD);	
 	DataElement statusDetails = createAbstractObjectDescriptor(statusD, getLocalizedString("model.details"));	
         createReference(statusDetails, allD);
 

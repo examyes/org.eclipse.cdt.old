@@ -1081,7 +1081,6 @@ public class DataElement implements IDataElement
 	      {
 		  return new PropertySource(this);	    
 	      }
-
 	  return null;
       }
 
