@@ -69,6 +69,8 @@ public final class DataStore
     private File                _traceFileHandle;
     private RandomAccessFile    _traceFile;
     private boolean             _tracingOn;
+
+    private ArrayList           _waitingStatuses = null;
     
     /**
      * Creates a new <code>DataStore</code> instance
@@ -185,14 +187,15 @@ public final class DataStore
      *
      * @param minersLocation a string representing the location of the miners
      */
-    public void setMinersLocation(String minersLocation)
+    public DataElement setMinersLocation(String minersLocation)
     {
 	_minersLocation = minersLocation;
 	DataElement location = createObject(_tempRoot, "location", _minersLocation);
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_MINERS", 1);  
 	ArrayList args = new ArrayList();
 	args.add(location);
-	synchronizedCommand(cmd, args, _root);
+	//synchronizedCommand(cmd, args, _root);
+	return command(cmd, args, _root);
     }
 
     /**
@@ -1411,7 +1414,7 @@ public final class DataStore
         if ((_updateHandler != null) && (element != null))
 	    {
 		// update either client or ui
-		element.setUpdated(false);	
+		//element.setUpdated(false);	
 		_updateHandler.update(element, immediate);
 	    }
     }
@@ -1585,21 +1588,22 @@ public final class DataStore
      *
      * @param localHostObject the client host element to transfer to the server site 
      */
-    public void setHost(DataElement localHostObject)
+    public DataElement setHost(DataElement localHostObject)
     {
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_HOST", 1);  
 	DataElement status = _commandHandler.command(cmd, localHostObject, false);
 	waitUntil(status, getLocalizedString("model.done"));
+	return status;
     }
     
     /**
      * Used at <code>DataStore</code> initialization time to setup the schema
      *
      */
-    public void getSchema()
+    public DataElement getSchema()
     {
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SCHEMA", 1);
-	synchronizedCommand(cmd, _descriptorRoot);
+       	return command(cmd, _descriptorRoot);
     }
     
     /**
@@ -1710,12 +1714,29 @@ public final class DataStore
     {
     	waitUntil(status, state, _timeout); 
     }
+
+    public boolean isWaiting(DataElement status)
+    {	
+	return _waitingStatuses.contains(status);
+    }
     
+    public void stopWaiting(DataElement status)
+    {
+	_waitingStatuses.remove(status);
+    } 
+
+    public void startWaiting(DataElement status)
+    {
+	_waitingStatuses.add(status);
+    }
+
     public void waitUntil(DataElement status, String state, int timeout)   
     {
-	int timeWaited = 200;
+	int timeToWait = 1000;
+	int timeWaited = 0;
 	boolean timedOut = false;
-	
+	startWaiting(status);
+
 	while ((status != null) 
 	       && (_status == null || _status.getName().equals("okay"))
 	       && !status.getName().equals(state) 
@@ -1731,15 +1752,23 @@ public final class DataStore
 		
 		try
 		    {		
-			Thread.currentThread().sleep(timeWaited);
+			Thread.currentThread().sleep(timeToWait);
 		    } 
 		catch (InterruptedException e)
 		    {
 			System.out.println(e);
 		    }
 		
-		timeWaited += timeWaited;
+		timeWaited += timeToWait;
+
+		if (!isWaiting(status))
+		    {
+			// stopped waiting
+			return;
+		    }
 	    }
+
+	stopWaiting(status);
 	
 	if (timedOut)
 	    {
@@ -2802,7 +2831,7 @@ public final class DataStore
 	_recycled = new ArrayList(_initialSize);
 	initElements(_initialSize);
 
-	_timeout = 10000;
+	_timeout = 20000;
 	try
 	    {
 		_resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.dstore.core.model.DataStoreResources");
@@ -2822,6 +2851,8 @@ public final class DataStore
 	catch (IOException e)
 	    {
 	    }
+
+	_waitingStatuses = new ArrayList();
 
 	startTracing();
 	setByteStreamHandler();

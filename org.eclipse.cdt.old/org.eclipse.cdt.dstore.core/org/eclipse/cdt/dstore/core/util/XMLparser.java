@@ -225,6 +225,10 @@ public class XMLparser
 						  	if (parent.getName().equals("almost done"))
 						  	{
 						  		parent.setAttribute(DE.A_NAME, "done");	
+								if (_dataStore.isWaiting(parent))
+								    {
+									_dataStore.stopWaiting(parent);
+								    }
 						  	}
 						 }
 						  	

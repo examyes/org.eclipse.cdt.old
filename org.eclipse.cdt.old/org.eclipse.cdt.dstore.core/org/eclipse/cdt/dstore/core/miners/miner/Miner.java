@@ -152,12 +152,14 @@ public abstract class Miner
 
 	if (name.equals("C_INIT_MINERS"))
 	    {
+		//System.out.println("loading " + this + "...");
 		if (!_initialized)
 		    {
 			load(status);
 			_initialized = true;
 		    }
 		updateMinerInfo();
+		//System.out.println("...loading " + this);
 
 		DataElement minerRoot = _dataStore.getMinerRoot();
 		_dataStore.refresh(minerRoot, true);
@@ -231,7 +233,9 @@ public abstract class Miner
 	
 	// extend schema
 	DataElement schemaRoot = _dataStore.getDescriptorRoot();
+	//System.out.println("extend schema " + name + "...");
 	extendSchema(schemaRoot);
+	//System.out.println("...extend schema " + name);
 
 	_dataStore.refresh(root, true);	
 	_dataStore.refresh(_minerElement);	
