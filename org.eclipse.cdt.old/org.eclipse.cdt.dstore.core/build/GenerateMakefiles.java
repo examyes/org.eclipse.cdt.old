@@ -202,7 +202,7 @@ class GenerateMakefiles
    pwd = new File(pwd).getCanonicalPath();
   }
   catch (IOException e) { return ""; }
-  pwd.replace('\\','/');
+  pwd = pwd.replace('\\','/');
   int last = pwd.lastIndexOf('/');
   if(last == pwd.length()-1)
   	last = pwd.lastIndexOf('/', last-1);
