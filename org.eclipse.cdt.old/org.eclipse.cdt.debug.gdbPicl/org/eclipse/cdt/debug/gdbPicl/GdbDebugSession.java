@@ -440,6 +440,12 @@ public class GdbDebugSession extends DebugSession
 
          return _whyStop;
      } 
+     
+     updateMonitors();
+     updateRegisters();
+     updateStorage();
+     getCurrentFileLineModule();
+     
 
      return 1;
   }
