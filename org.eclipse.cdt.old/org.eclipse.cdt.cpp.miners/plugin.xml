@@ -11,7 +11,7 @@
    <!--These are needed by the HelpMiner-->
    <import plugin="org.apache.lucene" version="1.2.0"/>
    <import plugin="org.eclipse.tomcat" version="4.0.3"/>
-   <import plugin="org.apache.xerces" version="3.2.1"/>
+   <import plugin="org.apache.xerces" version="4.0.3"/>
 </requires>
 
 <runtime>
