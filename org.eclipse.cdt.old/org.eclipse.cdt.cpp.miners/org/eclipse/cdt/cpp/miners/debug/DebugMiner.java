@@ -46,7 +46,6 @@ public class DebugMiner extends Miner
         _debugJarPath += ps + _gdbPiclPath;
 	_debugJarPath += ps + _gdbPiclPath + fs + "debug_gdbPicl.jar";
 	_debugInvocation = "java -cp " + _debugJarPath + " " + _debugOptions + " org.eclipse.cdt.debug.gdbPicl.Gdb ";
-        System.out.println("DebugMiner:load()");
     }
 
     public void extendSchema(DataElement schemaRoot)
@@ -112,11 +111,8 @@ public class DebugMiner extends Miner
 	    }
 	**/
 
-	System.out.println("DebugMiner:handleDebug() invocation = " + invocationStr);
 	DataElement invocation = _dataStore.createObject(null, "invocation", invocationStr);
-        System.out.println("DebugMiner:handleDebug() 2");
 	DataElement cmdDescriptor = _dataStore.localDescriptorQuery(directory.getDescriptor(), "C_COMMAND");
-        System.out.println("DebugMiner:handleDebug() 3");
 	if (cmdDescriptor != null)
 	    {
 		//		File dir = new File(directory.getName());
@@ -133,7 +129,7 @@ public class DebugMiner extends Miner
                 {
                   e.printStackTrace();
                 }
-               
+
 	    }
     }
 }
