@@ -617,6 +617,15 @@ public class GdbDebugSession extends DebugSession {
 					+ " parms="
 					+ parms);
 					
+		if (programName == null || programName.equals("")) {
+			if (Gdb.traceLogger.EVT)
+				Gdb.traceLogger.evt(
+					1,
+					"################ GdbDebugSession INVALID_START_PROGRAM_NAME_MSG programName="
+						+ programName);
+			return false;
+		}					
+					
 		programName = escapedString(programName);
 					
 		_mainProgram = programName;
@@ -628,15 +637,6 @@ public class GdbDebugSession extends DebugSession {
 			{
 				_mainProgram = _mainProgram.substring(last+1);
 			}
-		}
-
-		if (programName == null || programName.equals("")) {
-			if (Gdb.traceLogger.EVT)
-				Gdb.traceLogger.evt(
-					1,
-					"################ GdbDebugSession INVALID_START_PROGRAM_NAME_MSG programName="
-						+ programName);
-			return false;
 		}
 
 		String[] lines = null;
