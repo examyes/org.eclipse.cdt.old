@@ -237,84 +237,71 @@
 </p>
 
 <div class=section><a name="commandline"> 3. Developing the CDT outside Eclipse</a></div>
+
 <p>
-<b><font color=red>
- The following section and the process that it describes is in a state of extreme reorganization. 
- This description has been left for reference but should not be taken as fact.</font></b>
-</p>
+ The CDT internal nightly build is done from the command line using ANT scripts.
 <p>
- The CDT internal nightly build is done from the command line using makefiles.  Eventually this will be migrated
- to an Ant-based build, but in the meantime we describe the steps necessary to build the CDT from the command line here.
-<p>
-<div class=subsection>1. The first thing to do is make sure your system has the dependencies installed:</div>
+<div class=subsection>1. Installation of Build Scripts and Environment Setup:</div>
   <ul>
-   <li><b>JDK version 1.3 or greater</b>
-    <ul>
-     <li>Find a JDK for your system 
-      <a href="http://download.eclipse.org/downloads/drops/S-F1-200205211339/java-runtimes.html">here</a>
-     </li>
-    </ul>
+  <li>System Requirements:
+   <ul>
+     <li><a href="http://jakarta.apache.org/"> Ant 1.4</a> or higher </li>
+	 <li><a href="http://download.eclipse.org/downloads/drops/R-2.0.1-200208291828/java-runtimes.html">JDK 1.3 </a> </li>
+	  <li><a href="http://cvs.cvshome.org/servlets/ProjectDownloadList"> CVS 1.10 </a> or higher </li>
+	  <li>300 meg free disk space </li>
+	  <li>Source build files from Eclipse CVS repository --> ** /tools/cdt-home/buildscripts</li>
+	</ul>
    </li>
-   <li><b>A version of Eclipse that matches the level of CDT you intend to check out of cvs</b>
-    <ul>
-     <li>If you are going to be checking out from the HEAD, then the latest Stable Eclipse build is typically
-         the right choice.  Check the 
-         <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">Download page</a>
-         to see which Eclipse Build the latest nightly CDT builds are using.
-     </li>
-    </ul>
-   </li>
-   <li><b>Linux\Unix System Tools</b>
-    <ul>
-     <li>
-      The makefile-based build process uses the following Linux\Unix System Tools:<br>
-      - make, find, test, cat, rm, xargs, and others<br>  
-      These tools should be standard on most Linux\Unix systems.  On Windows these tools can be obtained 
-      by installing <a href="http://www.redhat.com/software/tools/cygwin/">Cygwin</a>
-     </li>
-    </ul>
-   </li>
-   <li><B>OPTIONAL</b>: <b>JavaCC - only required if you intend to make changes to and regenerate the C/C++ Parser</b>
-    <ul>
-     <li>Get the latest version of JavaCC <a href="http://www.webgain.com/products/java_cc">here</a><br><br></li>
-    </ul>
-   </li>
-  </ul>
- <div class=subsection>2. Once you have installed the dependencies, check-out the CDT code from CVS:</div>
-  <ul>
-   <li><b>Set the CVSROOT environment variable as follows:</b>
-    <div class=indent>export CVSROOT=:pserver:anonymous@dev.eclipse.org:/home/tools</div>
-   </li>
-   <li><b>Move the Eclipse Plugins directory:</b>
-    <div class=indent>cd &lt;some directory&gt;/eclipse/plugins</div>
-   </li>
-   <li><b>Check out the CDT:</b>
-    <div class=indent>cvs checkout cdt<br><br></div>
-   </li>
-  </ul>
- <div class=subsection>3. Once the CDT code has been completely checked-out, you can start a build:</div>
-  <ul>
-   <li><b>Goto the org.eclipse.cdt.dstore.core directory:</b>
-    <div class=indent>cd org.eclipse.cdt.dstore.core</div>
-   </li>
-   <li><b>Run make (and use the "dev" or "development" target):</b>
-    <div class=indent>make -s dev</div>
-   </li>
-   <li><b>The "dev" target does 2 things:</b>
-    <ol>
-     <li>It generates simple makefiles in all CDT sub-directories.  This enables you to be in any CDT plug-in directory, 
-         make a change to some source, and type <b>make</b> to build from just the current directory.</li>
-     <li>It then builds the entire CDT source tree.</li>
-    </ol>
-   </li>
-  </ul>
-<div class=subsection>4. If the build finished with no errors you can then verify that the CDT load and runs:</div>
-  <ul>
-   <li><b>The simplest way to make sure the CDT Support is being properly loaded is to try to create a C/C++ Project:</b>
-    <ul>
-     <li>Start Eclipse</li>
-     <li>Select <b>File</b> -> <b>New</b> -> <b>Project</b></li>
-     <li>Verify that <b>C/C++</b> appears in the list of available Wizards.</li>
+   <li>Initial Setup:
+   	<ol>
+   	 <li>Install Ant, a JDK, and a CVS client, as per each program's instructions.
+		Minimally you will need the following environment variables set.
+		<ol>
+		  <li>Add the Ant bin directory, 
+		  <li>Add the CVS executable to your path 
+		  	  and login using the username/password 
+		  	  and root that you will be using to access CVS <br>
+		  	  e.g. <br> cvs -d :pserver:anonymous@dev.eclipse.org:/home/eclipse.</li>
+		  <li>Set the JAVA_HOME environment variable to the root of your JDK installation.</li>
+		  <li>Set the ANT_HOME environment variable to the root of your Ant installation.</li>
+		  <li>(Windows 98) Set the HOME environment variable to c:</li>	
+		</ol>  
+		<li>Install a clean installation of Eclipse 2.0.1<br>
+   			--You will need all the plugins and features
+    		for all platforms that you want to build--
+			<br>
+  			They can reside in the same plugin directory,
+  			but you will have to download the full installation
+  			for each platform in order to get the plugins.
+		</li> 
+		<li>Navigate to the plugins and features directories
+    		Remove the version number from all plugin and feature directory names		
+		</li>
+		<li>
+		   Checkout the contents of the cdt-home/cdt-home/buildscripts/ directory into the eclipse install directory
+		</li>
+		<li>
+			Edit the startCDT-<os><win>build.bat files<br>
+    		build -os win32 -ws win32 -install "C:\eclipse"<br>
+      		e.g. <br> 
+      			rename -install <installDir> to point to your clean Eclipse installation directory
+		</li>
+		<li>
+			Run the startCDT-<os><win>build.bat file of your choice
+		</li>
+		<li>
+		  The resulting distribution.zip and source zips will reside in
+    		<installDir>/features/org.eclipse.cdt-feature/
+		</li>
+	  </li>
+     </ol>
+   </li>	
+   <li>Note: <br>
+   	   The scripted CVS checkout sometimes leaves old files around and does not remove
+       them when they have been removed from the CVS repository.<br>
+       You may have to remove the contents of the org.eclipse.cdt.* 
+       directories from the eclipse/plugins and eclipse/features directories.
+       Then recopy the contents from the same directories in the buildscripts directory.
    </li>
   <ul>
 </p>
@@ -328,7 +315,7 @@
 </tr>
 </table>
 <center><I>
-Last Modified on Friday, September 27, 2002
+Last Modified on Wednesday, October 9, 2002
 </I></center>
 
 </body>
