@@ -832,6 +832,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    {
 		return findProjectResource(resourceElement);
 	    }
+	else if (type.equals("file"))
+	    {
+		return getNewFile(resourceElement.getSource());
+	    }
 	else
 	    {
 		String source = resourceElement.getSource();
