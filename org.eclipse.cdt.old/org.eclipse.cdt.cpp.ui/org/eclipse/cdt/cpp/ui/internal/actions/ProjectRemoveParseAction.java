@@ -14,15 +14,13 @@ public class ProjectRemoveParseAction extends ProjectAction
  public ProjectRemoveParseAction(DataElement subject, String label, DataElement command, DataStore dataStore)
  {	
   super(subject, label, command, dataStore);
-  _removeCommand = _dataStore.createCommandDescriptor(null, "C_REMOVE_PARSE", "com.ibm.cpp.miners.parser.ParseMiner", "C_REMOVE_PARSE");
+  _removeCommand = _dataStore.localDescriptorQuery(subject.getDescriptor(), "C_REMOVE_PARSE");
 
  }
 
  public void run()
  {
-  ArrayList args = new ArrayList();
-  args.add(_project);
-  DataElement status = _dataStore.command(_removeCommand, args, _subject, false);
+  DataElement status = _dataStore.command(_removeCommand, _subject);
   _api.monitorStatus(status);
   _api.showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
   _api.showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);

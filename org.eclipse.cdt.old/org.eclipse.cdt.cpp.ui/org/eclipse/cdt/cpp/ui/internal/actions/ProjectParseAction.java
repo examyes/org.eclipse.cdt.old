@@ -13,20 +13,17 @@ public class ProjectParseAction extends ProjectAction
  
  public ProjectParseAction(DataElement subject, String label, DataElement command, DataStore dataStore)
  {	
-  super(subject, label, command, dataStore);
-  _parseCommand = _dataStore.createCommandDescriptor(null, "C_PARSE", "com.ibm.cpp.miners.parser.ParseMiner", "C_PARSE");
-
+     super(subject, label, command, dataStore);
+     _parseCommand = _dataStore.localDescriptorQuery(subject.getDescriptor(), "C_PARSE");
  }
-
- public void run()
- {
-  ArrayList args = new ArrayList();
-  args.add(_project);
-  DataElement status = _dataStore.command(_parseCommand, args, _subject, false);
-  _api.monitorStatus(status);
-  //_api.showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
-  //_api.showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
- }
+    
+    public void run()
+    {
+	DataElement status = _dataStore.command(_parseCommand, _subject);
+	_api.monitorStatus(status);
+	//_api.showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
+	//_api.showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
+    }
 }
 
 

@@ -153,8 +153,8 @@ public class ServerCommandHandler extends CommandHandler
 				      
 				      if (commandSource.equals("*") || commandSource.equals(miner.getClass().getName()))
 					  {
-					      //System.out.println(commandName);
-					      //System.out.println(miner.getName());
+					      System.out.println(commandName);
+					      System.out.println(miner.getName());
 
 					      status = miner.command(command);
 					      
@@ -163,6 +163,8 @@ public class ServerCommandHandler extends CommandHandler
 						  {
 						      failure = true;
 						  }
+
+					      System.out.println("done");
 					  }		
 
 				  }
