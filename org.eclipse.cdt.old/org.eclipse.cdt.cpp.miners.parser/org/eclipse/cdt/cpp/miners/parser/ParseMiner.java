@@ -177,7 +177,10 @@ public class ParseMiner extends Miner
  	while (!type.equals("Project") && theProject != null)
  	{
  		theProject = theProject.getParent();
- 		type = theProject.getType();
+ 		if (theProject != null)
+ 		{
+ 			type = theProject.getType();
+ 		}
  	}
  	
  	return theProject;
