@@ -1104,7 +1104,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			workspaceObj = dataStore.find(projectInfo, DE.A_TYPE, "Workspace", 1);
 			if (workspaceObj == null)
 			    {
-				System.out.println("couldn't find workspace");
+				//System.out.println("couldn't find workspace");
 			    }
 		    }
 		
