@@ -249,7 +249,7 @@ public class HostsPlugin extends AbstractUIPlugin
     {
     if (_instance == null)
       {	
-	_clientConnection = new ClientConnection("Hosts", 2000);
+	_clientConnection = new ClientConnection("Hosts", 2000); 
       	_clientConnection.setLoader(new MinerClassLoader());	
         _dataStore = _clientConnection.getDataStore();
 	String install = _corePath;
