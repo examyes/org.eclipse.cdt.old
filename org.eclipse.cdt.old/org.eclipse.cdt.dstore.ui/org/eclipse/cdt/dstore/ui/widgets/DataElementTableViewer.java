@@ -140,7 +140,8 @@ public class DataElementTableViewer extends TableViewer
      */
     public void controlResized(ControlEvent e)
     {	
-	computeLayout();
+	//*** DKM - leave this out for now
+	// computeLayout();
     }
     
     
@@ -663,7 +664,17 @@ public class DataElementTableViewer extends TableViewer
 
     public void setSelected(DataElement selected)
     { 
-	_selected = selected;
+	if (_selected != selected && selected != null)
+	    {
+		_selected = selected;
+		Table table = getTable();
+		Widget widget = findItem(_selected);
+		if (widget != null)
+		    {
+			int index = table.indexOf((TableItem)widget);
+			table.setSelection(index);
+		    }
+	    }
     }
     
     public DataElement getSelected()
@@ -885,9 +896,9 @@ public class DataElementTableViewer extends TableViewer
 				firstWidth = 150;
 				averageWidth -= difference / columns.length;
 
-				if (averageWidth < 50)
+				if (averageWidth < 80)
 				    {
-					averageWidth = 50;
+					averageWidth = 80;
 				    }
 			    }
 			
