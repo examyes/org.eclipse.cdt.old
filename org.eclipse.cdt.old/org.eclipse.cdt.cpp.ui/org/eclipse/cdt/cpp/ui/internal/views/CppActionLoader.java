@@ -134,6 +134,15 @@ public class CppActionLoader extends GenericActionLoader
     }
     
         
+    public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)
+    {
+    }
+ 
+    public String getImageString(DataElement object)
+    {
+	return null;
+    }
+
 }
 
 

@@ -18,4 +18,7 @@ public interface IActionLoader
     public CustomAction loadAction(String source, String name);
     public CustomAction loadAction(DataElement object, DataElement descriptor);
     public CustomAction loadAction(List objects, DataElement descriptor);
+
+    public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor); 
+    public String getImageString(DataElement object);     
 }

@@ -176,4 +176,13 @@ public class DataElementDialog extends org.eclipse.jface.dialogs.Dialog implemen
         return newAction;
     }
 
+    public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)
+    {
+    }
+
+    public String getImageString(DataElement object)
+    {
+	return null;
+    }     
+
 }

@@ -26,12 +26,15 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*; 
 import org.eclipse.jface.resource.*;
 import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.*;
 import org.eclipse.ui.*;
 
 import java.io.*;
 import java.util.*;
 import java.net.*;
 import java.lang.reflect.*;
+import org.eclipse.jface.action.*;
+
 
 
 public class HostsPlugin extends AbstractUIPlugin
@@ -160,11 +163,15 @@ public class HostsPlugin extends AbstractUIPlugin
 	    return newAction;
 	}
 
-	public String getImageString(String name)
+	public String getImageString(DataElement object)
 	{
 	    return null;
 	}
-    }
+
+	public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)
+	{
+	}
+     }
     
     public class DialogActionLoader extends HostsActionLoader
     {

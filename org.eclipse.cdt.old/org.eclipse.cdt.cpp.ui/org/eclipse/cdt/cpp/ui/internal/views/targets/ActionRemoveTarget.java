@@ -76,7 +76,7 @@ private void removeTarget( String key, RootElement root)
  */
 public void run() {
 
-	final Object root = NavigatorSelection.selection;
+	IProject root = pluginInstance.getCurrentProject();
 	
 	if(root!=null)
 	{

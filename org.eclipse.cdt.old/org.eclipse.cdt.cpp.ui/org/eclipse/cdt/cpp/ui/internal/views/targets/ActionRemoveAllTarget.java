@@ -15,6 +15,7 @@ import org.eclipse.ui.actions.*;
 import org.eclipse.jface.viewers.*;
 import java.util.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
 
 /**
  *  
@@ -38,9 +39,9 @@ public ActionRemoveAllTarget(TargetsPage targetsPage) {
 /**
  * Implementation of method defined on <code>IAction</code>.
  */
-public  void run(){
-	
-	final Object root = NavigatorSelection.selection;
+public  void run()
+    {
+	IProject root = pluginInstance.getCurrentProject();
 	
 	if(root!=null)
 	{

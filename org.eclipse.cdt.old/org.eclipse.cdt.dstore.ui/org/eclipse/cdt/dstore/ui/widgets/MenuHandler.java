@@ -184,6 +184,11 @@ public class MenuHandler
 
 
 	    fillContextMenuHelper(menu, list, descriptor);
+
+	    if (_loader != null)
+		{
+		    _loader.loadCustomActions(menu, input, selected); 
+		}
 	  }
 	
       }
