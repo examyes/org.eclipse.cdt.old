@@ -139,7 +139,7 @@ abstract public class IndexReader {
 
   /** Returns the byte-encoded normalization factor for the named field of
     every document.  This is used by the search code to score documents.
-    @see org.apache.lucene.search.Similarity#norm
+    @see com.ibm.linux.help.util.lucene.search.Similarity#norm
     */
   abstract public byte[] norms(String field) throws IOException;
 

@@ -75,7 +75,7 @@ public abstract class HitCollector {
    * <p>Note: This is called in an inner search loop.  For good search
    * performance, implementations of this method should not call {@link
    * Searcher#doc(int)} or {@link
-   * org.apache.lucene.index.IndexReader#document(int)} on every document
+   * com.ibm.linux.help.util.lucene.index.IndexReader#document(int)} on every document
    * number encountered.  Doing so can slow searches by an order of magnitude
    * or more. */
   public abstract void collect(int doc, float score);
