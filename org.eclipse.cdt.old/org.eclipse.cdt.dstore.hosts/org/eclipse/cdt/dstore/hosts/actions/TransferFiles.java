@@ -78,14 +78,15 @@ public class TransferFiles extends Thread
 	    {
 		if (_source.isOfType("directory") || _source.isOfType("Project"))
 		    {
-			//if (!_source.isExpanded())
-			//  _source.expandChildren(true);
+			//****
+			if (!_source.isExpanded())
+			    _source.expandChildren(true);
 			queryDates(_source);
 		    }
 		if (_target.isOfType("directory") || _target.isOfType("Project"))
 		    {
-			//if (!_target.isExpanded())
-			//  _target.expandChildren(true);
+			if (!_target.isExpanded())
+			    _target.expandChildren(true);
 			queryDates(_target);
 		    }
 		
@@ -249,6 +250,12 @@ public class TransferFiles extends Thread
 	
 	if (type.equals("directory") && copiedSource != null)
 	    {
+		if (!source.isExpanded())
+		    {
+			source.expandChildren(true);
+		    }
+
+
 		queryDates(source);
 		queryDates(copiedSource);
 		if (_pm != null)
@@ -261,7 +268,7 @@ public class TransferFiles extends Thread
 			DataElement child = source.get(i);
 			String ctype = child.getType();
 			if (ctype.equals("directory") || ctype.equals("file"))
-			    {
+			    {	
 				transfer(child, copiedSource);
 				targetDataStore.refresh(target);
 			    }
