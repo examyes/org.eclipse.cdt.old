@@ -251,24 +251,25 @@ public class XMLgenerator
 					written += read;
 				}
 
-				/****
-				// send everything across
-				_fileWriter.write(buffer, 0, size);
-				_fileWriter.flush();
-				
-				****/
-				
-				/// TEST!
-				try
+				boolean binary = false;
+				if (binary)
 				{
+					// send everything across
+					_fileWriter.write(buffer, 0, size);
+					_fileWriter.flush();
+				}
+				else
+				{
+					try
+					{
 					_dataWriter.write(new String(buffer), 0, size);
 					_dataWriter.flush();
-				}
-				catch (IOException e)
-				{
+					}
+					catch (IOException e)
+					{
+					}
 				}
 			
-				// TEST!
 
 				inFile.close();
 			}
