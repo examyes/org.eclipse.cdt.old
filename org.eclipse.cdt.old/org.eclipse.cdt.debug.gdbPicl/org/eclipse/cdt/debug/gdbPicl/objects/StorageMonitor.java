@@ -36,14 +36,17 @@ public abstract class StorageMonitor
       _id = ID;
       _totalColumns = totalColumns; 
       _columnsPerLine = columnsPerLine;
+/*      
       if(_columnsPerLine!=4)
       {  if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"StorageMonitor unsupported columnsPerLine="+_columnsPerLine ); 
          _columnsPerLine = 4;     
       }
+*/      
       _startLine = startLine;
       _endLine = endLine;
       _mode = mode;
+/*      
       if(!_mode.equals("x"))
       {  if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"StorageMonitor unsupported mode="+_mode ); 
@@ -61,6 +64,7 @@ public abstract class StorageMonitor
              Gdb.traceLogger.err(2,"StorageMonitor unsupported charsPerColumn="+_charsPerColumn ); 
          _charsPerColumn = 8;     
       }
+*/      
       _bytesPerColumn = _charsPerColumn/2;
       _startAddress = startAddress; // the start (first) address to be fetched
       _baseAddress  = baseAddress;  // the base (default) address to be displayed
@@ -89,9 +93,10 @@ public abstract class StorageMonitor
 
        _startLine = rangeStart;
        _endLine = rangeEnd;
-       _totalColumns = String.valueOf(_columnsPerLine * (rangeEnd-rangeStart));
-       int    startAddress = Integer.parseInt(_baseAddress.substring(2),16) +(_startLine*_columnsPerLine*_bytesPerColumn);
-             _startAddress = "0x"+Integer.toHexString(startAddress);
+//       _totalColumns = String.valueOf(_columnsPerLine * (rangeEnd-rangeStart+1));
+       _totalColumns = String.valueOf(_columnsPerLine * _maxLines);
+       long    startAddress = Long.parseLong(_baseAddress.substring(2),16) +(_startLine*_columnsPerLine*_bytesPerColumn);
+             _startAddress = "0x"+Long.toHexString(startAddress);
        if (Gdb.traceLogger.DBG) 
            Gdb.traceLogger.dbg(1,"StorageMonitor.storageRangeSet _baseAddress="+_baseAddress+" _startAddress="+_startAddress );
 
@@ -230,8 +235,9 @@ public abstract class StorageMonitor
          int unitOffset = 0;
          EStdStorageLocation location = new EStdStorageLocation(baseAddress, lineOffset, unitOffset);
          EStdExpression2 expr= _expr;
-         short unitStyle=EPDC.StorageStyle32BitIntHex;
-         int unitCount=4; // 4 columns
+//         short unitStyle=EPDC.StorageStyle32BitIntHex;
+         short unitStyle=EPDC.StorageStyleByteHexCharacter;
+         int unitCount=16; // 4 columns
          short addressStyle=1;  // flat
          // Line Offsets:
          int firstAddress   = 0x01;
@@ -255,7 +261,7 @@ public abstract class StorageMonitor
          int lineNum = s.lineNum;
          flags = (short)s.flag;
          id   = s.id;  
-         contents = contents  +"\0\0"+ attributes;
+         contents = contents  +"\0................\0"+ attributes;
          if (Gdb.traceLogger.DBG) 
              Gdb.traceLogger.dbg(3,"StorageMonitor.getStorageChangeInfo line="+z+" address="+address+" flags="+Integer.toHexString(flags)+" contents="+contents );
 
@@ -290,8 +296,25 @@ ERepGetNextMonitorStorageId storage = new ERepGetNextMonitorStorageId(
 
       return changeInfo; 
    }
-
+/*
    // data fields
+   protected DebugSession _debugSession;
+   protected short  _id = 1;
+   public    short  getID() { return _id; }
+   protected String _totalColumns = "40";
+   protected String _mode = "x"; //x=hex, d=decimal, u=unsigned
+   protected String _wordSize = "b"; //b=byte(8-bits), h=halfWord(16-bits) w=word(32-bits) g=giant(64bits)
+   protected String _startAddress = "0x0"; // the start (first) address to be fetched
+   protected String _baseAddress  = "0x0"; // the base (default) address to be displayed
+   public    String getBaseAddress() { return _baseAddress; }
+   protected int    _charsPerColumn = 2;
+   protected int    _bytesPerColumn = _charsPerColumn/2;
+   protected int    _columnsPerLine = 8;
+   protected int    _startLine = 0;
+   protected int    _endLine = 0;
+   protected EStdExpression2 _expr = null;
+*/   
+
    protected DebugSession _debugSession;
    protected short  _id = 1;
    public    short  getID() { return _id; }

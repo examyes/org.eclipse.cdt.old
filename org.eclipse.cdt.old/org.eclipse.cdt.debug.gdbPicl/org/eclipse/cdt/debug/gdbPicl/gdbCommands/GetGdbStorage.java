@@ -102,17 +102,24 @@ public class GetGdbStorage
       }
 
       _maxLines = lines.length;
+
       _storageAddresses = new String[_maxLines];
-      _storageContents = new String[_maxLines];
+      _storageContents = new String[_maxLines];      
 
       String address     = "";
       String data        = "";
       for(int i=0; i<lines.length; i++)
       { 
         String str = lines[i];
-        _storageContents[i] = "?storage_error?";
+        
+//        if (i%2 == 0)
+//        {
+//	        _storageContents[i/2] = "?storage_error?";
+//        }	        
+       _storageContents[i] = "?storage_error?";
         if(str!=null && !str.equals("") )
-        {   if (Gdb.traceLogger.DBG) 
+        {
+        	if (Gdb.traceLogger.DBG) 
                 Gdb.traceLogger.dbg(2,"GetGdbStorage i="+i+" storage str: "+str );
             int space = str.indexOf(" ");
             int tab = str.indexOf("\t");
@@ -132,8 +139,12 @@ public class GetGdbStorage
                lastEvaluationError += str;
                return;
             }
-            address = str.substring(2,space);
-            address = fixedSizeString(address,charsPerColumn);
+            
+//            if (i%2 == 0)
+//            {
+	            address = str.substring(2,space);
+	            address = fixedSizeString(address,charsPerColumn);
+//            }
 
             int colon = str.indexOf(":");
             if(colon<=0)
@@ -146,6 +157,7 @@ public class GetGdbStorage
             data = str.substring(colon+1)+" ";
             String contents = "";
             for(int z=0; z<columnsPerLine; z++)
+//	        for(int z=0; z<8; z++)
             {
                 int hex = data.indexOf("0x");
                 if(hex<0)
@@ -167,13 +179,26 @@ public class GetGdbStorage
                    return;
                 }
                 String s = data.substring(hex,space);
+//                contents = contents + fixedSizeString(s,2);
                 contents = contents + fixedSizeString(s,8);
+//				contents = contents + s;
                 data = data.substring(space+1);
             }
             if (Gdb.traceLogger.DBG) 
                 Gdb.traceLogger.dbg(3,"GetGdbStorage updateStorage line="+i+" address="+address+" contents="+contents );
-            _storageAddresses[i] = address;
-            _storageContents[i] = contents;
+
+	            _storageAddresses[i] = address;
+	            _storageContents[i] = contents;
+			
+//			if (i%2 == 0)
+//			{
+//	            _storageAddresses[i/2] = address;
+//	            _storageContents[i/2] = contents;
+//			}
+//			else
+//			{
+//				_storageContents[(i-1)/2] += contents;
+//			}
         }
       }
       lastEvaluationError = null;

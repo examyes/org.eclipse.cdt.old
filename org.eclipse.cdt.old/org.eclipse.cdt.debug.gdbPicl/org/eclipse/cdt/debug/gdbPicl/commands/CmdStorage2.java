@@ -66,14 +66,14 @@ public class CmdStorage2 extends Command
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"CmdStorage2.execute EReqStorage2 EStdExpression2 expr="+expr+" lineNum="+lineNum+" PPID="+PPID );
 
-      int startAddress = 0;
+      long startAddress = 0;
       try
       { 
           String dataAddress = ((GdbDebugSession)_debugSession).getDataAddress();
           if(!dataAddress.equals(""))
           {
              dataAddress = dataAddress.substring(2);
-             startAddress = Integer.parseInt(dataAddress,16); 
+             startAddress = Long.parseLong(dataAddress,16); 
              if (Gdb.traceLogger.DBG) 
                  Gdb.traceLogger.dbg(1,"CmdStorage2.execute hex dataAddress=0x"+dataAddress+" int dataAddress="+startAddress );
           }

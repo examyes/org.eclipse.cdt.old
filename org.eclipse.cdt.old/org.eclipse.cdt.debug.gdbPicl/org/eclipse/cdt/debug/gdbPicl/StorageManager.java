@@ -49,7 +49,7 @@ public class StorageManager extends ComponentManager      //HC
    * Monitor storage and send Storage change packets to SUI when necessary.
    * @param DU the unique thread identification number
    */
-   public void monitorStorage(int startAddress, short addressStyle, short unitStyle, int styleUnitCount,
+   public void monitorStorage(long startAddress, short addressStyle, short unitStyle, int styleUnitCount,
                               int rangeStart, int rangeEnd, int attributes,
                               String exprString, int exprDU, int PPID, int lineNum,  EStdExpression2 expr )
    {
@@ -67,37 +67,43 @@ public class StorageManager extends ComponentManager      //HC
              _getGdbStorage.lastEvaluationError = "Negative address="+startAddress;
       }
    }
-   private int evaluateAddressOfExpression(String expr, int exprDU)
+   private long evaluateAddressOfExpression(String expr, int exprDU)
    {
          GetGdbStorage _getGdbStorage = ((GdbDebugSession)_debugSession)._getGdbStorage;
          String address = _getGdbStorage.evaluateAddressOfExpression(expr, exprDU); 
-         int a = -1;
+         long a = -1;
          try
          {
             if(address!=null)
-               a = Integer.parseInt(address.substring(2),16);
-         }catch(java.lang.NumberFormatException exc) {}
+            {
+				a = Long.valueOf(address.substring(2), 16).longValue();
+            }
+         }catch(java.lang.NumberFormatException exc) {
+			if(Gdb.traceLogger.ERR)
+				Gdb.traceLogger.err(1, "Error Converting Address: " + address);         
+         }
          if (Gdb.traceLogger.DBG) 
-             Gdb.traceLogger.dbg(1,"StorageManager.monitorStorage expr address=0x"+Integer.toHexString(a) );
+             Gdb.traceLogger.dbg(1,"StorageManager.monitorStorage expr address=0x"+Long.toHexString(a) );
          return a;
    }
 
   /**
    * Monitor storage and send Storage change packets to SUI when necessary.
    */
-   public void monitorStorage(int address, short addressStyle, short unitStyle, int styleUnitCount,
+   public void monitorStorage(long address, short addressStyle, short unitStyle, int styleUnitCount,
                               int rangeStart, int rangeEnd, int attributes, EStdExpression2 expr )
    {
       if (Gdb.traceLogger.EVT) 
-          Gdb.traceLogger.evt(2,"StorageManager.monitorStorage address=0x"+Integer.toHexString(address)+" addressStyle="+addressStyle+" unitStyle="+unitStyle+" styleUnitCount="+styleUnitCount
+          Gdb.traceLogger.evt(2,"StorageManager.monitorStorage address=0x"+Long.toHexString(address)+" addressStyle="+addressStyle+" unitStyle="+unitStyle+" styleUnitCount="+styleUnitCount
                      +" rangeStart="+rangeStart+" rangeEnd="+rangeEnd+" attributes=0x"+Integer.toHexString(attributes) );
-
+/*
       if(unitStyle!=EPDC.StorageStyle32BitIntHex)
       {
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(1,"######## StorageManager.monitorStorage requested UNIMPLEMENTED unitStyle="+unitStyle );
          unitStyle = EPDC.StorageStyle32BitIntHex;
       }
+*/
 
       int columnsPerLine = 4;
       int columns = (rangeEnd-rangeStart+1)*columnsPerLine;
@@ -106,9 +112,22 @@ public class StorageManager extends ComponentManager      //HC
       String wordSize = "w"; //b=byte(8-bits), h=halfWord(16-bits) w=word(32-bits) g=giant(64bits)
       int bytesPerColumn = 4;
       int charsPerColumn = 2*bytesPerColumn;
-             _baseAddress = "0x"+Integer.toHexString(address);
-      int     startAddress = address +(rangeStart*columnsPerLine*4); // 4bytes per column
-             _startAddress = "0x"+Integer.toHexString(startAddress);
+             _baseAddress = "0x"+Long.toHexString(address);
+      long     startAddress = address +(rangeStart*columnsPerLine*4); //d 4bytes per column
+             _startAddress = "0x"+Long.toHexString(startAddress);
+             
+/*
+      int columnsPerLine = 16;
+      int columns = (rangeEnd-rangeStart+1)*columnsPerLine;
+      String totalColumns = Integer.toString(columns);  //"81*4=324";
+      String mode = "x"; //x=hex, d=decimal, u=unsigned
+      String wordSize = "b"; //b=byte(8-bits), h=halfWord(16-bits) w=word(32-bits) g=giant(64bits)
+      int bytesPerColumn = 1;
+      int charsPerColumn = 2*bytesPerColumn;
+             _baseAddress = "0x"+Long.toHexString(address);
+      long     startAddress = address +(rangeStart*columnsPerLine*4); // 4bytes per column
+             _startAddress = "0x"+Long.toHexString(startAddress);
+*/             
       _id++;
       GdbStorageMonitor monitor = new GdbStorageMonitor(_debugSession, _id, totalColumns, columnsPerLine, 
                                                         mode, wordSize, charsPerColumn, rangeStart, rangeEnd, _startAddress, _baseAddress, expr);
