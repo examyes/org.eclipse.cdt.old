@@ -909,7 +909,7 @@ public class DataStore
 		    {
 			String name = deletedObject.getName();
 			String type = deletedObject.getType();
-			
+			 
 			// find undeleted ancestor
 			DataElement parent = deletedObject.getParent();
 			if ((parent != null) && parent.isDeleted())
