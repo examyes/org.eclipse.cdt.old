@@ -21,7 +21,6 @@ public class DictionaryMiner extends Miner
 
 	// english
 	loadLanguage("english");
-	loadLanguage("c");
     }
 
     private void loadLanguage(String language)
@@ -31,12 +30,13 @@ public class DictionaryMiner extends Miner
 	String languageFile = _dictionary + File.separator + language + File.separator + "words";
 	int offset = Character.digit('a', Character.MAX_RADIX);
 
+	DataElement categories[] = new DataElement[26];
 	for (int i = 0; i < 26; i++)
 	    {
 		char letter = Character.forDigit(i + offset, Character.MAX_RADIX);
 		DataElement category = _dataStore.createObject(languageRoot, "category", new String("" + letter)); 
+		categories[i] = category;
 	    }
-
 	try
 	    {
 		File wordsFile = new File(languageFile);
@@ -46,15 +46,22 @@ public class DictionaryMiner extends Miner
 		String line = null;
 		while ((line = in.readLine()) != null)
 		    {
-			char firstChar = line.charAt(0);
-			DataElement parent = _dataStore.find(languageRoot, DE.A_NAME, 
-							     new String("" + Character.toLowerCase(firstChar)), 1);				
-			String type = "word";
-			if (!Character.isLowerCase(firstChar))
+			char firstChar = Character.toLowerCase(line.charAt(0));
+			int index = Character.digit(firstChar, Character.MAX_RADIX);
+			if ((index > 0) && (index < 26))
 			    {
-				type = "name";
+				DataElement parent = categories[index];
+				if (parent != null)
+				    {
+					String type = "word";
+					if (!Character.isLowerCase(firstChar))
+					    {
+						type = "name";
+					    }
+
+					_dataStore.createObject(parent, type, line);
+				    }
 			    }
-			_dataStore.createObject(parent, type, line);
 		    }
 		
 		inFile.close();

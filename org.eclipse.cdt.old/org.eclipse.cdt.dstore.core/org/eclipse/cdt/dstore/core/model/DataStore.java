@@ -79,9 +79,9 @@ public class DataStore
 	_minersLocation = "com.ibm.dstore.core";
 	_random = new Random(System.currentTimeMillis());
 
-        _hashMap = new HashMap(200000);
+        _hashMap = new HashMap(100000);
 	_recycled = new ArrayList();
-	initElements(20000);
+	initElements(4000);
 
 	_timeout = 100000;
 	try
@@ -627,20 +627,27 @@ public class DataStore
     
   private String makeIdUnique(String id)
       {
-        String newId = id;
-        while (_hashMap.containsKey(newId))
-        {	    
-	    int i = _random.nextInt();
-	    newId = i + id;	
-        }
-        return newId;
+	  if (!_hashMap.containsKey(id))
+	      {
+		  return id;
+	      }
+	  else
+	      {
+		  String newId = String.valueOf(_random.nextInt());
+		  while (_hashMap.containsKey(newId))
+		      {	    
+			  newId = String.valueOf(_random.nextInt());
+		      }
+		  
+		  return newId;
+	      }
       }
 
 
   private String generateId(DataElement parent, String type, String name)
       {
-        String id = name + "." + type;
-        return id;
+	  // by default, name will be the id
+	  return name;
       }
 
   public boolean contains(String id)

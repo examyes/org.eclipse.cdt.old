@@ -121,19 +121,23 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 			
 		if (results == null || results.size() == 0)
 		    {
+			dataStore = _plugin.getHostDataStore();
 			DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
 			
 			String language = "english";
 			DataElement root = dataStore.find(dictionaryData, DE.A_NAME, language, 1);
-			DataElement pattern = dataStore.createObject(null, "pattern", currentString + ".*");
-			DataElement search = dataStore.localDescriptorQuery(root.getDescriptor(),
-									    "C_SEARCH_DICTIONARY", 1);
-			if (search != null)
-			    {	
-				ArrayList sargs = new ArrayList();
-				sargs.add(pattern);
-				status = dataStore.synchronizedCommand(search, sargs, root);
-				results = status.getNestedData();
+			if (root != null)
+			    {
+				DataElement pattern = dataStore.createObject(null, "pattern", currentString + ".*");
+				DataElement search = dataStore.localDescriptorQuery(root.getDescriptor(),
+										    "C_SEARCH_DICTIONARY", 1);
+				if (search != null)
+				    {	
+					ArrayList sargs = new ArrayList();
+					sargs.add(pattern);
+					status = dataStore.synchronizedCommand(search, sargs, root);
+					results = status.getNestedData();
+				    }
 			    }
 		    }
 		

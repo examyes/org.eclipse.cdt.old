@@ -84,7 +84,7 @@ public class DataElement implements IDataElement
       {
 	  _attributes = new String[DE.A_SIZE];
  	  _attributes[DE.A_TYPE]         = "contents";
-	  _attributes[DE.A_ID]           = originalObject.getId() + ".ref";
+	  _attributes[DE.A_ID]           = originalObject.getId().concat(".ref");
 	  _attributes[DE.A_NAME]         = originalObject.getId();
 	  _attributes[DE.A_VALUE]        = originalObject.getName();
 	  _attributes[DE.A_SOURCE]       = originalObject.getSource();
@@ -110,7 +110,7 @@ public class DataElement implements IDataElement
 
 		_attributes                  = new String[DE.A_SIZE];
 		_attributes[DE.A_TYPE]       = refType;		
-		_attributes[DE.A_ID]         = parent.getId() + "." + originalObject.getId();
+		_attributes[DE.A_ID]         = parent.getId().concat(".").concat(originalObject.getId());
 
 		_attributes[DE.A_NAME]       = originalObject.getId();
 		_attributes[DE.A_VALUE]      = originalObject.getName();
@@ -232,14 +232,14 @@ public class DataElement implements IDataElement
 
     public boolean isDeleted()
     {
-	if (_depth == -1 || getAttribute(DE.A_DEPTH).equals("" + -1))
+	if (_depth == -1 || getAttribute(DE.A_DEPTH).equals("-1"))
 	    {
 		return true;
 	    }
 	else if (getAttribute(DE.A_VALUE).equals("deleted"))
 	    {
 		_depth = -1;	  
-		setAttribute(DE.A_DEPTH, "" + -1);
+		setAttribute(DE.A_DEPTH, "-1");
 		return true;
 	    }
 	
@@ -582,7 +582,7 @@ public class DataElement implements IDataElement
   public void setDepth(int depth)
       {
         _depth = depth;
-	setAttribute(DE.A_DEPTH, "" + depth);
+	setAttribute(DE.A_DEPTH, String.valueOf(depth));
       }
 
 
@@ -1113,65 +1113,6 @@ public class DataElement implements IDataElement
 	    "\n}\n";
     }
 
-    /*
-  public void print(String indent)
-      {
-        System.out.println(indent +
-                           getAttribute(DE.A_NAME) + " " +
-                           getAttribute(DE.A_VALUE)
-                           );
-        String newIndent = indent + " ";
-
-	if (getNestedSize() > 0)
-	  {	    
-	    for (int i = 0; i < _nestedData.size(); i++)
-	      {
-		((DataElement)_nestedData.get(i)).print(newIndent);
-	      }
-	  }	
-      }
-
-  public String toHTML(int depth)
-  {
-    if (_isReference && _referencedObject != null)
-      {
-	return _referencedObject.toHTML(depth);
-      }
-
-    if (depth > 0)
-      {	
-	String type = getType();
-	if (type.equals(DE.T_OBJECT_DESCRIPTOR))
-	  {
-	    type = getName();
-	  }
-
-	String iconName = type + ".gif";
-	String iconPath = "../icons/" + iconName;
-
-	String result = new String("<DL><B>"
-				   + "<IMG src=\"" + iconPath + "\">"
-				   + "</B><A HREF=\"../servlet/MyServer?" + getAttribute(DE.A_ID) + "\"> "
-				   + getAttribute(DE.A_NAME) + " "
-				   + "</A>"
-				   + "<br>");
-	String subResult = new String("");
-	depth--;
-	
-	for (int i = 0; i < getNestedSize(); i++)
-	  {
-	    subResult = "<DT>" + ((DataElement)_nestedData.get(i)).toHTML(depth) + "</DT>";
-	    result += subResult;	
-	  }
-	
-	return result + "</DL>";
-      }
-    else
-      {
-	return "";
-      }
-  }
-    */
 
   /////////////////////////////////////////
   //

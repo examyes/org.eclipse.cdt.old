@@ -63,20 +63,22 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    }
     }
 
-    private static CppPlugin        _instance;
+    private static CppPlugin              _instance;
     private static DataStoreCorePlugin    _corePlugin;
     
-    private static ClientConnection  _clientConnection;
+    private static ClientConnection       _clientConnection;
     
-    private static ModelInterface    _interface;
-    private static CppDocumentProvider  _CppDocumentProvider;
+    private static ModelInterface         _interface;
+    private static CppDocumentProvider    _CppDocumentProvider;
     
-    private        String            _pluginPath;
-    private        String            _corePath;
+    private        String                 _pluginPath;
+    private        String                 _corePath;
     
-    private static IProject          _currentProject;
-    private        ResourceBundle    _resourceBundle;
+    private static IProject               _currentProject;
+    private        ResourceBundle         _resourceBundle;
     
+    private static DataStore              _hostDataStore;
+
     private static final String FN_LOCAL_HISTORY= "proj_local.hist";
     private static final String FN_URL_HISTORY= "proj_url.hist";
     private static final String FN_HOST_NAME_HISTORY= "proj_host_name.hist";
@@ -89,6 +91,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
     _pluginPath = getInstallLocation();
 
+    _hostDataStore = com.ibm.dstore.hosts.HostsPlugin.getPlugin().getDataStore();
     _corePlugin = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin();
     _corePath = com.ibm.dstore.core.DataStoreCorePlugin.getPlugin().getInstallLocation();
 
@@ -115,7 +118,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 
   public static IWorkspace getPluginWorkspace()
   {
-    return ResourcesPlugin.getWorkspace();
+      return ResourcesPlugin.getWorkspace();
   }
 
   protected void initializeDefaultPreferences()
@@ -166,7 +169,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
       {	
  	_clientConnection = new ClientConnection("Hosts");
 	_clientConnection.setLoader(new MinerClassLoader());	
-
         DataStore dataStore = _clientConnection.getDataStore();
 	dataStore.setMinersLocation("com.ibm.cpp.miners");
         _corePlugin.setRootDataStore(dataStore);
@@ -252,6 +254,11 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	    "icons" + java.io.File.separator + name;
 	return ImageDescriptor.createFromFile(null, file);
       }
+    
+    public static DataStore getHostDataStore()
+    {
+	return _hostDataStore;
+    }  
 
   public static DataStore getDataStore()
   {
@@ -271,7 +278,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
   public boolean setCurrentProject(Repository obj)
   {
     boolean changed = false;
-
+ 
     DataStore dataStore = ((Repository)obj).getDataStore();	
     if (_currentProject != obj)
       {	
