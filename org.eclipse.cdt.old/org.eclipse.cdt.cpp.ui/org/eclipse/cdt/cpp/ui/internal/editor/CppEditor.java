@@ -5,6 +5,7 @@ package com.ibm.cpp.ui.internal.editor;
  */
 
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.actions.*;
 import com.ibm.cpp.ui.internal.editor.contentoutliner.*;
 import com.ibm.cpp.ui.internal.editor.codeassist.*;
 import com.ibm.cpp.ui.internal.api.*;
@@ -22,6 +23,7 @@ import org.eclipse.core.resources.*;
 import org.eclipse.ui.views.navigator.*;
 import org.eclipse.jface.text.source.*;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.*;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.eclipse.ui.*;
@@ -103,29 +105,38 @@ public class CppEditor extends LpexTextEditor
         setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK, getAction("ManageBreakpoints"));		
       }
 
+
   public void editorContextMenuAboutToShow(IMenuManager menu)
       {
         super.editorContextMenuAboutToShow(menu);
         addAction(menu, "ContentAssistProposal");
+	/***/
+	MenuManager findCascade = new MenuManager("Find", "Find");
+	findCascade.add(new FindObjectAction("Declaration", this, true));
+	menu.add(findCascade);
+	/***/
       }
 
-   /**
-	 * @see AbstractTextEditor#rulerContextMenuAboutToShow
-	 */
-	protected void rulerContextMenuAboutToShow(IMenuManager menu) {
-		super.rulerContextMenuAboutToShow(menu);
-      // only add/remove breakpoints if clicked on a valid line in the edit window
-      if (getVerticalRuler().getLineOfLastMouseButtonActivity() >= 0)
-      {
-         addAction(menu, "ManageBreakpoints");
-      }
-	}
 
-   /**
-    * Saves the contents of the target.
-    * @see ITextEditor#doSave
-    */
-   public void doSave(IProgressMonitor monitor)
+    /**
+     * @see AbstractTextEditor#rulerContextMenuAboutToShow
+     */
+    protected void rulerContextMenuAboutToShow(IMenuManager menu) 
+    {
+	super.rulerContextMenuAboutToShow(menu);
+	// only add/remove breakpoints if clicked on a valid line in the edit window
+	if (getVerticalRuler().getLineOfLastMouseButtonActivity() >= 0)
+	    {
+		addAction(menu, "ManageBreakpoints");
+	    }
+    }
+    
+    /**
+     * Saves the contents of the target.
+     * @see ITextEditor#doSave
+     */
+
+    public void doSave(IProgressMonitor monitor)
    {
       super.doSave(monitor);
       IEditorInput input = getEditorInput();

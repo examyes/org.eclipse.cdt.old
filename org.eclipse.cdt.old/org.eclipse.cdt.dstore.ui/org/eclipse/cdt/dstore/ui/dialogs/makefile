@@ -1,17 +1,10 @@
 
-all: ModifyDialog.class CommandDialog.class ConnectDialog.class LoginDialog.class
+.SUFFIXES: .java .class
 
-LoginDialog.class: LoginDialog.java
-	javac LoginDialog.java
+.java.class:
+       javac %s
 
-ConnectDialog.class: ConnectDialog.java
-	javac ConnectDialog.java
-
-CommandDialog.class: CommandDialog.java
-	javac CommandDialog.java
-
-ModifyDialog.class: ModifyDialog.java
-	javac ModifyDialog.java
+all: ModifyDialog.class CommandDialog.class ConnectDialog.class LoginDialog.class DataElementDialog.class
 
 clean:
 	rm *.class

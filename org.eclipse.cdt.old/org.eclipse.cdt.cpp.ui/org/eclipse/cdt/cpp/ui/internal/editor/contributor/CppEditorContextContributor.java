@@ -26,6 +26,7 @@ public class CppEditorContextContributor extends LpexContextContributor
     private TextOperationAction _caAction;
     private IEditorPart _part;
 
+
 public CppEditorContextContributor()
 {
     super();
@@ -40,6 +41,8 @@ public void contributeToMenu(IMenuManager mbm)
 
     _caAction = new TextOperationAction(bundle, "ContentAssistProposal.", (ITextEditor)_part, ISourceViewer.CONTENTASSIST_PROPOSALS);
     _caAction.setText("Code assist@Ctrl+SPACE");
+
+    
 
     IMenuManager m = mbm.findMenuUsingPath(IWorkbenchActionConstants.M_EDIT);
     m.add(_caAction);
