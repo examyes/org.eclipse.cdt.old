@@ -61,8 +61,6 @@ public class ViewPreferenceControl extends Composite implements Listener
 
 	CppPlugin plugin = CppPlugin.getDefault();
 
-	_colour1 = new RGB(255,255,255);
-	_colour2 = new RGB(0,0,0);
 
 	Composite superControl = new Composite(this, SWT.NONE);
 
@@ -108,6 +106,14 @@ public class ViewPreferenceControl extends Composite implements Listener
 	GridData data1 = new GridData(GridData.GRAB_VERTICAL | GridData.FILL_BOTH);
 	data1.heightHint = 80;
 	_canvas.setLayoutData(data1);
+
+
+	_colour1 = new RGB(255,255,255);
+	_colour2 = new RGB(0,0,0);
+
+
+	_colour1 = _canvas.getBackground().getRGB();
+	_colour2 = _canvas.getForeground().getRGB();
 
 	superControl.setLayout(new GridLayout());
     }
