@@ -6,33 +6,30 @@ import com.ibm.dstore.core.model.*;
 import java.io.*;
 
 public class ConfigureInManager {
-	DataElement project;
 	String amKey = new String("AM_INIT_AUTOMAKE");
 	String acKey = new String("AC_OUTPUT");
 	String pack = new String("@PACKAGE@");
 	String makefile = new String("/Makefile");
 	int[] delimPosition = {-1,-1,-1};
 	char delim = '@';
-	String[] subdirs;
 	static long timeStamp=-1;
 	/**
 	 * Constructor for ConfigureInManager
 	 */
-	public ConfigureInManager(DataElement aProject) {
-		
-		this.project = aProject;
-		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
-		subdirs = structureManager.getSubdirWorkspacePath();
-		
+	public ConfigureInManager() 
+	{
+
 	}
-	protected void generateConfigureIn()
+	protected void generateConfigureIn(DataElement project)
 	{
 		File configure_in = new File (project.getSource(),"configure.in");
 		getConfigureInTemplateFile(project);
-		initializeConfigureIn(configure_in);
+		initializeConfigureIn(project,configure_in);
 	}
-	private void initializeConfigureIn(File configure_in)
+	private void initializeConfigureIn(DataElement project,File configure_in)
 	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		String[] subdirs = structureManager.getSubdirWorkspacePath();
 		File modFile = new File(project.getSource(),"mod.in");
 		// reading configure.in
 		String line;
@@ -46,13 +43,13 @@ public class ConfigureInManager {
 				if(line.indexOf(amKey)!=-1)
 				{
 					line = trimTargetLine(line);// replace this line with the new values
-					line = insertPackageName(line.toCharArray(),delimPosition[0]);
+					line = insertPackageName(project.getName(),line.toCharArray(),delimPosition[0]);
 					line = insertVersionName(line.toCharArray(),delimPosition[1]);
 				}
 				if(line.indexOf(acKey)!=-1)
 				{
 					if(subdirs.length>0)
-						line = updateAcoutputMacroLine(line);
+						line = updateAcoutputMacroLine(subdirs,line);
 				}
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
@@ -67,12 +64,12 @@ public class ConfigureInManager {
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
 	}
-	private long getConfigureInStamp()
+/*	private long getConfigureInStamp()
 	{
 		// get time stamp
 		File configure_in = new File (project.getSource(),"configure.in");
 		return configure_in.lastModified();
-	}
+	}*/
 	private String getGeneratedStamp()
 	{
 		String stamp = new String(
@@ -91,7 +88,7 @@ public class ConfigureInManager {
 		}catch(IOException e){System.out.println(e);}
 		return false;		
 	}	
-	protected void updateConfigureIn( boolean actionIsManageProject)
+	protected void updateConfigureIn(DataElement project,boolean actionIsManageProject)
 	{
 		// if the action was mangeProject then
 		if(actionIsManageProject)
@@ -118,11 +115,14 @@ public class ConfigureInManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 			// update configure.in
-			updateConfigureIn(configure_in);
+			updateConfigureIn(project,configure_in);
 		}
 	}
-	private void updateConfigureIn(File configure_in)
+	private void updateConfigureIn(DataElement project,File configure_in)
 	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		String[] subdirs = structureManager.getSubdirWorkspacePath();
+
 		File modFile = new File(project.getSource(),"mod.in");
 		// reading configure.in
 		String line;
@@ -137,14 +137,14 @@ public class ConfigureInManager {
 					if(line.indexOf(pack)!=-1)
 					{
 						line = trimTargetLine(line);// replace this line with the new values
-						line = insertPackageName(line.toCharArray(),delimPosition[0]);
+						line = insertPackageName(project.getName(),line.toCharArray(),delimPosition[0]);
 						line = insertVersionName(line.toCharArray(),delimPosition[1]);
 					}
 				}
 				if(line.indexOf(acKey)!=-1)
 				{
 					if(subdirs.length>0)
-						line = updateAcoutputMacroLine(line);
+						line = updateAcoutputMacroLine(subdirs,line);
 				}
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
@@ -182,7 +182,7 @@ public class ConfigureInManager {
 		}
 		return new String(modLine);
 	}
-	private String insertPackageName(char[] line, int position)
+	private String insertPackageName(String name,char[] line, int position)
 	{
 		int k=0;
 		int counetrForModLine = 0;
@@ -191,13 +191,13 @@ public class ConfigureInManager {
 		while(line[i]!= '\0')
 		{
 			if(i == position)
-				for(int j=0; j<project.getName().toCharArray().length; j++)
-					modLine[counetrForModLine++]=project.getName().toCharArray()[j];
+				for(int j=0; j<name.toCharArray().length; j++)
+					modLine[counetrForModLine++]=name.toCharArray()[j];
 			modLine[counetrForModLine++]=line[i];
 			i++;
 		}
 		int extra_chars = delimPosition[1] - delimPosition[0] - pack.length(); // to account for any characters between @PACKAGE@ and @VERSIONS@
-		delimPosition[1] = position+project.getName().toCharArray().length+extra_chars;
+		delimPosition[1] = position+name.toCharArray().length+extra_chars;
 		String packageName = (new String(modLine)); 
 		return packageName;
 	}
@@ -219,7 +219,7 @@ public class ConfigureInManager {
 		String versionName = (new String(modLine)).trim();
 		return versionName;
 	}
-	private String updateAcoutputMacroLine(String line)
+	private String updateAcoutputMacroLine(String[] subdirs,String line)
 	{
 		line = line.substring(0,line.indexOf('('));
 		StringBuffer buff = new StringBuffer(line);

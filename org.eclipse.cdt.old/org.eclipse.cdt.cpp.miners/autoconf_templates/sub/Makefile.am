@@ -6,7 +6,7 @@ bin_PROGRAMS = !TARGET!
 
 SUBDIRS = 
 
-EXTA_DIST = 
+EXTRA_DIST = 
 # set the include path found by configure
 
 INCLUDES= $(all_includes)

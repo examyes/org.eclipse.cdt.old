@@ -10,8 +10,6 @@ import java.lang.Runtime;
 import java.util.*;
 
 public class AutoconfManager {
-	
-	DataElement project;
 	String autoconf = new String("autoconf");
 	String automake = new String("automake");
 	String aclocal = new String("aclocal");
@@ -23,16 +21,13 @@ public class AutoconfManager {
 	static Object O = new Object();
 	String cygwinPrefix = new String("sh -c ");
 
-	public AutoconfManager(DataElement aProject)
+	public AutoconfManager()
 	{
-		this.project = aProject;
-		//manage configure.in
-		configureInManager = new ConfigureInManager(project);
-		// manage Makefile.am
-		makefileAmManager = new MakefileAmManager(project);
-		// check if it is a unix like system
+		configureInManager = new ConfigureInManager();
+		makefileAmManager = new MakefileAmManager();
 	}
-	protected void manageProject(DataElement status)
+
+	protected void manageProject(DataElement project, DataElement status)
 	{
 
 		String path = project.getSource().toString();
@@ -47,30 +42,30 @@ public class AutoconfManager {
 		{	// chechk if there are existing autoconf files anf if there are then
 			//prompt the user that any existing autoconf files will be regenerated
 			// and existing files will be renamed as *.old
-			generateAutoconfFiles(status,true);
+			generateAutoconfFiles(project,status,true);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))
-				runCommand(status,"./script.batch;./configure");
+				runCommand(project,status,"./script.batch;./configure");
 			else
-				runCommand(status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
+				runCommand(project, status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
 		}
 		//check // autoloca	// autoheader // automake // autoconf 
 		// else notify the user with the missed packages
 	}
-	protected void generateAutoconfFiles(DataElement status, boolean actionIsManagedProject)
+	protected void generateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
 	{
-		configureInManager.generateConfigureIn();
-		makefileAmManager.generateMakefileAm();
+		configureInManager.generateConfigureIn(project);
+		makefileAmManager.generateMakefileAm(project);
 	}
-	protected void updateAutoconfFiles(DataElement status, boolean actionIsManagedProject)
+	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
 	{
-		configureInManager.updateConfigureIn(actionIsManagedProject);
-		makefileAmManager.updateMakefileAm(actionIsManagedProject);
+		configureInManager.updateConfigureIn(project,actionIsManagedProject);
+		makefileAmManager.updateMakefileAm(project,actionIsManagedProject);
 	}
-	protected void runSupportScript(DataElement status)
+	protected void runSupportScript(DataElement project,DataElement status)
 	{
 		getAutoconfScript(project);
-		createConfigureScript(status);
+		createConfigureScript(project,status);
 	}
 	protected String getOS()
 	{
@@ -106,23 +101,23 @@ public class AutoconfManager {
 			}
 		}	
 	}
-	private void createConfigureScript(DataElement status)
+	private void createConfigureScript(DataElement project, DataElement status)
 	{
 		
 		if(getOS().equals("Linux"))
-			runCommand(status, "./script.batch");
+			runCommand(project, status, "./script.batch");
 		else
-			runCommand(status, cygwinPrefix+"script.batch");
+			runCommand(project, status, cygwinPrefix+"script.batch");
 	}
-	public void runConfigureScript(DataElement status)
+	public void runConfigureScript(DataElement project, DataElement status)
 	{
 		if(getOS().equals("Linux"))
-			runCommand(status, "./configure");
+			runCommand(project, status, "./configure");
 		else
-			runCommand(status, cygwinPrefix+"configure");
+			runCommand(project, status, cygwinPrefix+"configure");
 	} 
 	
-	public void runCommand(DataElement status, String invocation)
+	public void runCommand(DataElement project,DataElement status, String invocation)
 	{
 		DataStore ds = status.getDataStore();
 		DataElement invocationElement = ds.createObject(null,"invocation",invocation);

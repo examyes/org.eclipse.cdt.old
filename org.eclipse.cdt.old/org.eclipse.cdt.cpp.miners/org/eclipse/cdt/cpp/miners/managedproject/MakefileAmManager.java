@@ -14,8 +14,8 @@ public class MakefileAmManager {
 	private final int STATICLIB = 3;
 	private final int SHAREDLIB = 4;
 	
-	DataElement project;
-	ProjectStructureManager structureManager;
+	//DataElement project;
+	//ProjectStructureManager structureManager;
 	
 	public static Hashtable timeStamps = new Hashtable();
 	private final String MAKEFILE_AM = "Makefile.am";
@@ -31,7 +31,7 @@ public class MakefileAmManager {
 	final String _LDFLAGS= new String("_LDFLAGS");
 	
 	// needed to for creating Makefile.am's
-	String[] subdirs;
+	//String[] subdirs;
 	
 	//for static lib files
 	final String _LIBRARIES = new String("_LIBRARIES");
@@ -54,18 +54,24 @@ public class MakefileAmManager {
 	 */
 	public MakefileAmManager(DataElement aProject) {
 		
-		this.project = aProject;
-		structureManager = new ProjectStructureManager( project.getFileObject());
-		subdirs = structureManager.getSubdirWorkspacePath();
+		//this.project = aProject;
+		//structureManager = new ProjectStructureManager( project.getFileObject());
+		//subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void generateMakefileAm()
+	public MakefileAmManager() 
 	{
-		getMakefileAmTemplateFiles(project);
-		initializeMakefileAm();
 	}
-	protected void getMakefileAmTemplateFiles(DataElement project)
+	protected void generateMakefileAm(DataElement project)
 	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		getMakefileAmTemplateFiles(project,structureManager);
+		initializeMakefileAm(structureManager);
+	}
+	protected void getMakefileAmTemplateFiles(DataElement project,ProjectStructureManager structureManager)
+	{
+		
+		String[] subdirs = structureManager.getSubdirWorkspacePath();
 		Runtime rt = Runtime.getRuntime();
 		//check the project structure
 		File projectFile = project.getFileObject();
@@ -106,7 +112,7 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	private void initializeMakefileAm()
+	private void initializeMakefileAm(ProjectStructureManager structureManager)
 	{
 		Object[][] projectStucture = structureManager.getProjectStructure();
 		for(int i =0; i < projectStucture.length; i++)
@@ -117,7 +123,7 @@ public class MakefileAmManager {
 			{
 				case (0):
 					// initialize top level Makefile.am - basically updating the SUBDIR variable definition
-					initTopLevelMakefileAm((File)projectStucture[i][0]);
+					initTopLevelMakefileAm((File)projectStucture[i][0],structureManager);
 					absPath = ((File)projectStucture[i][0]).getAbsolutePath()+MAKEFILE_AM;
 					timeStamps.put(absPath,new Long(getMakefileAmStamp(((File)projectStucture[i][0]))));
 					break;
@@ -135,7 +141,7 @@ public class MakefileAmManager {
 			}
 		}
 	}
-	private void initTopLevelMakefileAm(File parent)
+	private void initTopLevelMakefileAm(File parent, ProjectStructureManager structureManager)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
 		if(Makefile_am.exists())
@@ -155,7 +161,7 @@ public class MakefileAmManager {
 					if(line.indexOf(SUBDIRS)!=-1)
 					{
 						found = true;
-						line = insertSubdirValueDef();
+						line = insertSubdirValueDef(structureManager);
 					}
 				
 					out.write(line);
@@ -376,31 +382,22 @@ public class MakefileAmManager {
 
 		}
 	}	
-	protected void updateMakefileAm(boolean actionIsManageProject)
+	protected void updateMakefileAm(DataElement project,boolean actionIsManageProject)
 	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		String[] subdirs = structureManager.getSubdirWorkspacePath();
+
 		Object[][] projectStucture = structureManager.getProjectStructure();
-		// update Makefile in the top level directory
-		// first check if it is ok to update
 		for(int i =0; i < projectStucture.length; i++)
 		{
 			File Makefile_am = new File((File)projectStucture[i][0],MAKEFILE_AM);
 			if(Makefile_am.exists())
 			{
-				//  need to figure out what kind of a target that I am dealing with
-				// then update
-				
-		// this is for switching Makefiles.am's to specific targets
-		//checkFileStamp();
-		
-		//if(notModified)
-			//generateNewMakefilAm();
-		//else
-			//updateMakefileAmBasedOnClassification();
 				int classification = classifier.classify(Makefile_am);
 				switch (classification)
 				{
 					case (TOPLEVEL):
-					updateTopLevelMakefileAm(Makefile_am.getParentFile());
+					updateTopLevelMakefileAm(Makefile_am.getParentFile(),structureManager);
 					break;
 					
 					case (PROGRAMS):
@@ -408,46 +405,65 @@ public class MakefileAmManager {
 					break;
 					
 					case (STATICLIB):
+					updateStaticLibMakefileAm(Makefile_am.getParentFile());
 					break;
 					
 					case (SHAREDLIB):
+					updateSharedLibMakefileAm(Makefile_am.getParentFile());
 					break;
 					
 					default:
 					break;
-				
 				}
 			}
-		/*	Integer level = new Integer((String)projectStucture[i][1]);
-			switch (level.intValue())
-			{
-				case (0):
-					// update top level Makefile.am - basically updating the SUBDIR variable definition
-					updateTopLevelMakefileAm(project.getFileObject());
-					break;
-				case (1):
-					// update First level Makefile.am - updating the SUBDIR variable definition
-					updateDefaultMakefileAm((File)projectStucture[i][0]);
-					break;
-				default:
-				// update all other files in the subdirs
-				// this will be changed as based on the file layout  - static or shared
-					updateStaticLibMakefileAm((File)projectStucture[i][0]);
-			}*/
 		}
 	}
-	private void updateTopLevelMakefileAm(File parent)
+	private void updateTopLevelMakefileAm(File parent, ProjectStructureManager structureManager)
 	{
-		initTopLevelMakefileAm(parent);
+		initTopLevelMakefileAm(parent,structureManager);
 	}
 
-	private void updateProgramsMakefileAm(File MakefileAm)
+	private void updateProgramsMakefileAm(File parent)
+	{
+		File Makefile_am = new File(parent,"Makefile.am");
+		String line = new String();
+		File modMakefile_am = new File(parent,"mod_Makefile.am");
+		try
+		{
+			// searching for the subdir line
+			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
+			BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+			out.write(getGeneratedStamp());
+			out.newLine();
+			while((line=in.readLine())!=null)
+			{
+				if(line.indexOf(_SOURCES)!=-1)
+					line = updateSourcesLine(line, parent);
+				if(line.indexOf(_LDADD)!=-1)
+					line = updateLdaddLine(line, parent);
+				if(line.indexOf(SUBDIRS)!=-1)
+					line = updateSubdirsLine(line, parent);
+				if(line.indexOf(EXTRA_DIST)!=-1)
+					line = updateExtraDistLine(line, parent);
+				if(line.indexOf(_LDFLAGS)!=-1)
+					line = updateLdflagsLine(line, parent);
+				out.write(line);
+				out.newLine();
+			}
+			in.close();
+			out.close();
+			File abstractPath = new File(Makefile_am.getAbsolutePath());
+			Makefile_am.delete();
+			modMakefile_am.renameTo(abstractPath);
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
+	}
+	private void updateStaticLibMakefileAm(File parent)
 	{
 	}
-	private void updateStaticLibMakefileAm(File MakefileAm)
+	private void updateSharedLibMakefileAm(File parent)
 	{
 	}
-
 	private long getMakefileAmStamp(File parent)
 	{
 		// get time stamp
@@ -560,7 +576,7 @@ public class MakefileAmManager {
 		return last_dir_name;
 		
 	}		
-	private String insertSubdirValueDef()
+	private String insertSubdirValueDef(ProjectStructureManager structureManager)
 	{
 		String childrenOfTopDir = new String();
 		// get subdirectories of depth one of the top level dir
@@ -700,8 +716,10 @@ public class MakefileAmManager {
 		initProgramsMakefileAm(parent);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));				
 	}
-	protected void setMakefileAmToTopLevel(File parent ,DataElement status)
+	protected void setMakefileAmToTopLevel(DataElement project,DataElement status)
 	{
+		ProjectStructureManager structureManager = new ProjectStructureManager( project.getFileObject());
+		File parent = project.getFileObject();
 		Runtime rt = Runtime.getRuntime();
 		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
@@ -726,7 +744,7 @@ public class MakefileAmManager {
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
-		initTopLevelMakefileAm(parent);
+		initTopLevelMakefileAm(parent,structureManager);
 		timeStamps.put(parent.getAbsolutePath()+MAKEFILE_AM,new Long(getMakefileAmStamp(parent)));	
 	}
 	protected void setMakefileAmToSharedLib(File parent ,DataElement status)

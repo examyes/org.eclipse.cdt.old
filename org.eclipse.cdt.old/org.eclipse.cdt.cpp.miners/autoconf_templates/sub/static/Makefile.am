@@ -4,6 +4,6 @@ lib!TARGET!_a_SOURCES =
 
 SUBDIRS =
 
-EXTA_DIST = 
+EXTRA_DIST = 
 
 
