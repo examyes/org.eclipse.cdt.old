@@ -19,6 +19,15 @@ public class AutoconfPreferencesPage
 	implements IWorkbenchPreferencePage {
 	private AutoconfControl _autoconfControl;
     
+    String createDialogKey = "Show_Create_Dialog";
+	String createUpdateKey = "Update_When_Create";
+	
+	String runDialogKey = "Show_Run_Dialg";
+	String runUpdateKey = "Update_When_Run";
+	
+	String updateAllDialogKey = "Show_Update_All_Dialog";
+	String updateMakefileAmKey = "Show_Update_MakefileAm_Dialog";
+	String updateConfigureInKey = "Show_Update_ConfigureIn_Dialog";
   
 	/*
 	 * @see PreferencePage#createContents(Composite)
@@ -41,12 +50,12 @@ public class AutoconfPreferencesPage
 	public void performDefaults() 
     {
 		CppPlugin plugin      = CppPlugin.getDefault();
-		ArrayList autoUpdateRun = plugin.readProperty("Auto Update Run");
+		ArrayList autoUpdateRun = plugin.readProperty(runUpdateKey);
 		if (autoUpdateRun.isEmpty())
 		{
 			autoUpdateRun.add("Yes");
 			_autoconfControl.setAutoRunUpdateSelection(true);
-			plugin.writeProperty("Auto Update Run",autoUpdateRun);	
+			plugin.writeProperty(runUpdateKey,autoUpdateRun);	
 		}
 		else
 		{
@@ -61,12 +70,12 @@ public class AutoconfPreferencesPage
 			}
 		}
 
-		ArrayList autoUpdateCreate = plugin.readProperty("Auto Update Create");
+		ArrayList autoUpdateCreate = plugin.readProperty(createUpdateKey);
 		if (autoUpdateCreate.isEmpty())
 		{
 			autoUpdateCreate.add("Yes");
 			_autoconfControl.setAutoCreateUpdateSelection(true);	
-			plugin.writeProperty("Auto Update Create",autoUpdateCreate);
+			plugin.writeProperty(createUpdateKey,autoUpdateCreate);
 		}
 		else
 		{
@@ -81,12 +90,12 @@ public class AutoconfPreferencesPage
 			}
 		}
 
-		ArrayList showDialogRun = plugin.readProperty("Show Dialog Run");
+		ArrayList showDialogRun = plugin.readProperty(runDialogKey);
 		if (showDialogRun.isEmpty())
 		{
 			showDialogRun.add("Yes");
 			_autoconfControl.setShowRunDialogSelection(true);
-			plugin.writeProperty("Show Dialog Run", showDialogRun);
+			plugin.writeProperty(runDialogKey, showDialogRun);
 		}
 		else
 		{
@@ -101,12 +110,12 @@ public class AutoconfPreferencesPage
 			}
 		}
 
-		ArrayList showDialogCreate = plugin.readProperty("Show_Create_Dialog");
+		ArrayList showDialogCreate = plugin.readProperty(createDialogKey);
 		if (showDialogCreate.isEmpty())
 		{
 			showDialogCreate.add("Yes");
 			_autoconfControl.setShowCreateDialogSelection(true);
-			plugin.writeProperty("Show_Create_Dialog",showDialogCreate);
+			plugin.writeProperty(createDialogKey,showDialogCreate);
 		}
 		else
 		{
@@ -122,12 +131,12 @@ public class AutoconfPreferencesPage
 		}
 
 
-		ArrayList list = plugin.readProperty("Show_Update_All_Dialog");
+		ArrayList list = plugin.readProperty(updateAllDialogKey);
 		if (list.isEmpty())
 		{
 			list.add("Yes");
 			_autoconfControl.setUpdateAllButtonSelection(true);
-			plugin.writeProperty("Show_Update_All_Dialog",list);	
+			plugin.writeProperty(updateAllDialogKey,list);	
 		}
 		else
 		{
@@ -143,12 +152,12 @@ public class AutoconfPreferencesPage
 		}
 
 
-		ArrayList updateConflist = plugin.readProperty("Show_Update_ConfigureIn_Dialog");
+		ArrayList updateConflist = plugin.readProperty(updateConfigureInKey);
 		if (updateConflist.isEmpty())
 		{
 			updateConflist.add("Yes");
 			_autoconfControl.setUpdateConfigureInButtonSelection(true);
-			plugin.writeProperty("Show_Update_ConfigureIn_Dialog",list);	
+			plugin.writeProperty(updateConfigureInKey,list);	
 		}
 		else
 		{
@@ -165,12 +174,12 @@ public class AutoconfPreferencesPage
 
 
 
-		ArrayList makefileAmlist = plugin.readProperty("Show_Update_MakefileAm_Dialog");
+		ArrayList makefileAmlist = plugin.readProperty(updateMakefileAmKey);
 		if (makefileAmlist.isEmpty())
 		{
 			makefileAmlist.add("Yes");
 			_autoconfControl.setUpdateMakefileAmButtonSelection(true);
-			plugin.writeProperty("Show_Update_MakefileAm_Dialog",list);	
+			plugin.writeProperty(updateMakefileAmKey,list);	
 		}
 		else
 		{
@@ -203,7 +212,7 @@ public class AutoconfPreferencesPage
 		}
 	
 		CppPlugin plugin      = CppPlugin.getDefault();
-		plugin.writeProperty("Auto Update Run", autoRunUpdate);			
+		plugin.writeProperty(runUpdateKey, autoRunUpdate);			
 
 
 		// auto update when create configure
@@ -217,7 +226,7 @@ public class AutoconfPreferencesPage
 			autoCreateUpdate.add("No");		
 		}		
 
-		plugin.writeProperty("Auto Update Create", autoCreateUpdate);	
+		plugin.writeProperty(createUpdateKey, autoCreateUpdate);	
 		
 	
 		// show dialog when run configure
@@ -232,7 +241,7 @@ public class AutoconfPreferencesPage
 		}	
 
 		plugin      = CppPlugin.getDefault();
-		plugin.writeProperty("Show Dialog Run", showRunDialog);	
+		plugin.writeProperty(runDialogKey, showRunDialog);	
 
 
 		// show dialog when create configure
@@ -246,7 +255,7 @@ public class AutoconfPreferencesPage
 			showCreateDialog.add("No");		
 		}	
 
-		plugin.writeProperty("Show_Create_Dialog", showCreateDialog);	
+		plugin.writeProperty(createDialogKey, showCreateDialog);	
 		
 		
 		// update all dialog
@@ -260,20 +269,20 @@ public class AutoconfPreferencesPage
 			udateAllDialog.add("No");		
 		}	
 
-		plugin.writeProperty("Show_Update_All_Dialog", udateAllDialog);
+		plugin.writeProperty(updateAllDialogKey, udateAllDialog);
 		
 		// update configureIn dialog
-		ArrayList udateConfigureInDialog = new ArrayList();
+		ArrayList updateConfigureInDialog = new ArrayList();
 		if (_autoconfControl.getUpdateConfigureInButtonSelection())
 		{
-			udateConfigureInDialog.add("Yes");		
+			updateConfigureInDialog.add("Yes");		
 		}
 		else
 		{
-			udateConfigureInDialog.add("No");		
+			updateConfigureInDialog.add("No");		
 		}	
 
-		plugin.writeProperty("Show_Update_ConfigureIn_Dialog", udateConfigureInDialog);		
+		plugin.writeProperty(updateConfigureInKey, updateConfigureInDialog);		
 		
 		// update makefileAm dialog
 		ArrayList updateMakefileAmDialog = new ArrayList();
@@ -286,7 +295,7 @@ public class AutoconfPreferencesPage
 			updateMakefileAmDialog.add("No");		
 		}	
 
-		plugin.writeProperty("Show_Update_MakefileAm_Dialog", updateMakefileAmDialog);		
+		plugin.writeProperty(updateMakefileAmKey, updateMakefileAmDialog);		
 						
 		return true;
    	}

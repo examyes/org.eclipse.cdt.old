@@ -44,10 +44,17 @@ import org.eclipse.jface.dialogs.*;
 public class RunConfigureAction extends CustomAction implements SelectionListener
 { 
 	CustomMessageDialog box;
-	String[] extraLabels;
+	String[] extraLabels = new String[]{"Do not show this dialog again"};
+	String title = "Running configure script";
 	boolean enableRunDialog = true;
 	boolean enableRunUpdate = true;
+	
+	String runDialogKey = "Show_Run_Dialg";
+	String runUpdateKey = "Update_When_Run";
+	
 	public class RunThread extends Handler
+	
+	
 	{
 		private DataElement _subject;
 		private DataElement _status;
@@ -91,7 +98,7 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 
 		if(_command.getValue().equals("RUN_CONFIGURE"))
 		{
-			ArrayList showDialogRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Show Dialog Run");
+			ArrayList showDialogRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(runDialogKey);
 			if (!showDialogRun.isEmpty())
 			{
 				String preference = (String)showDialogRun.get(0);
@@ -102,7 +109,7 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 			}
 			
 			// checking if automatic updating is enabled from the autoconf preferences page
-			ArrayList autoUpdateRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Auto Update Run");
+			ArrayList autoUpdateRun = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(runUpdateKey);
 			if(!autoUpdateRun.isEmpty())
 			{
 				String preference = (String)autoUpdateRun.get(0);
@@ -124,9 +131,8 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 						String message = new String
 						("\nThe system detects that configure script is not up to date"+
 						"\nWould you like to update and generate missing configuration files before running configure?");
-						extraLabels = new String[]{"Do not show this dialog again"};
 						box = new CustomMessageDialog(shell,
-												"Running configure script ",
+												title,
 												null,
 												message,3,
 												new String[]{
@@ -145,9 +151,8 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 						String message = new String
 						("\nRunning existing configure script" 
 						+"\nAutomatic update is turned off - You can use the preferences page to turn it on");
-						extraLabels = new String[]{"Do not show this dialog again"};
 						box = new CustomMessageDialog(shell,
-												"Running configure script ",
+												title,
 												null,
 												message,2,
 												new String[]{
@@ -256,7 +261,7 @@ public class RunConfigureAction extends CustomAction implements SelectionListene
 				//enableRunDialog = true;
 				list.add("Yes");
 			}
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty("Show Dialog Run",list);
+			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(runDialogKey,list);
 		}
     }
 }

@@ -47,7 +47,8 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 	String[] extraLabels;
 	boolean enableCreateDialog = true;
 	boolean enableCreateUpdate = true;
-	String preferenceKey = "Show_Create_Dialog";
+	String dialogPrefernceKey = "Show_Create_Dialog";
+	String updatePreferenceKey = "Update_When_Create";
 	
 	public class RunThread extends Handler
 	{
@@ -101,7 +102,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			String title = "Creating configure script";
 
 			// checking if automatic updating is enabled from the autoconf preferences page
-			ArrayList autoUpdateCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty("Auto Update Create");
+			ArrayList autoUpdateCreate = org.eclipse.cdt.cpp.ui.internal.CppPlugin.readProperty(updatePreferenceKey);
 			if(!autoUpdateCreate.isEmpty())
 			{
 				String preference = (String)autoUpdateCreate.get(0);
@@ -128,7 +129,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								0,
 								extraLabel,
 								this);
-					int result = box.open(preferenceKey);
+					int result = box.open(dialogPrefernceKey);
 					if(result!= -1)
 						createUpdate= result;
 					else
@@ -148,7 +149,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 									0,
 									extraLabel,
 									this);
-					int result = box.open(preferenceKey);
+					int result = box.open(dialogPrefernceKey);
 					if(result!= -1)
 						createUpdate= result+1;
 					else
@@ -171,7 +172,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 								0,
 								extraLabel,
 								this);
-				int result = box.open(preferenceKey);
+				int result = box.open(dialogPrefernceKey);
 				if(result!= -1)
 					if(result==1)
 						createUpdate= result+1;
@@ -286,7 +287,7 @@ public class CreateConfigureAction extends CustomAction implements SelectionList
 			{
 				list.add("Yes");
 			}
-			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(preferenceKey,list);
+			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(dialogPrefernceKey,list);
 		}
     }
 }
