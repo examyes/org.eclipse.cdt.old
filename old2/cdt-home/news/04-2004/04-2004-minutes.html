@@ -1,0 +1,160 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+   <title>Eclipse Tools - CDT June Project Meeting Minutes</title>
+<link rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css">
+</head>
+<body>
+&nbsp;
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT WIDTH="60%">CDT&nbsp;
+<br>April 2004 Project Meeting Minutes</td>
+
+<td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
+</tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b><font face="Arial,Helvetica"><font color="#FFFFFF">CDT
+Meeting Minutes</font></font></b></td>
+</tr>
+</table>
+
+<p><b><i>April 7, 2004</i></b>
+<p>Phone in meeting of Eclipse CDT stakeholders. Review progress to date
+and map out the future direction for the Eclipse CDT Project.
+<p>1:00 PM EST on April 7, 2004<p>&nbsp;<b>View the
+<a <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/news/04-2004/04-2004-notice.html?cvsroot=Tools_Project">Agenda</a></b><p>&nbsp;<p><b>Minutes</b>
+<br>&nbsp;<p>Here are the minutes of the CDT conference call.
+<br>&nbsp;<p><b>Present:</b>
+<p><b>QNX, IBM-Rational, RedHat, Intel, Altera, RealTime Innovations, MontaVista, 
+Texas Instruments, Rockwell, TimeSys</b><p>** Apologies for not listing the 
+individuals from these companies that attended the call, that notes sheet has 
+been misplaced...<p>&nbsp;<p>The following was discussed:
+<p>&nbsp;</p>
+<p>
+<b>Update from participants:</b></li> </p>
+<p>&nbsp;</p>
+<p><u><b>QNX</b>:</u></p>
+<ol>
+<li>Turning efforts to looking at standar make.<br>
+&nbsp;</li>
+<li>C++ Class Browser coming along, some changes starting to trickly in<br>
+&nbsp;</li>
+<li>Debugging work is continuing.<br>
+&nbsp;</li>
+<li>The CDT registers view got abstracted out and pushed down into the Eclipse 
+platform.<br>
+&nbsp;</li>
+<li>Thomas Fletcher will look to contact the author of an eclipse core article 
+on &quot;How to Contribute a debugger&quot;. Please contact Thomas
+<a href="mailto:(ThomasF@qnx.com">(ThomasF@qnx.com</a>) if interested in the 
+opportunity to contribute from a C++ perspective.</li>
+</ol>
+<p><u><b>IBM-Rational:</b></u><ol>
+  <li>&nbsp;Working to wrap up 2.0 features under development. Significant 
+  recent additions include Scanner Configuration, selection search, background 
+  search &amp; build.<br>
+&nbsp;</li>
+  <li>&nbsp;Have provided a drop of the UI to IBM Translation centers to get 
+  started on translations. Everyone's help to get strings externalized are 
+  appreciated, the various translated properties files will be contributed back 
+  into the project once they are available.<br>
+&nbsp;</li>
+  </ol>
+
+<p><u><b>Redhat</b></u>: 
+<ol>
+  <li>Hover help, profiling &amp; other plugins are ready for committing.<br>
+&nbsp;</li>
+  <li>Also working on a change logs plugin</li>
+  </ol>
+  <p><u><b>Altera:</b></u>
+<ol>
+  <li>CDT 1.2 based IDE engineering efforts wrapping up<br>
+&nbsp;</li>
+  <li>Coming up to speed on CDT 2.0, working on bringing plugins in line with a 
+  view to contributing (ideally in 2.0 but likely later to avoid churn).</li>
+  </ol>
+  <p><u><b>Intel</b></u>:<ol>
+    <li>Assisting in the managed build area, adding parser support. Patches 
+    expected soon.</li>
+    </ol>
+    <p><u><b>Real 
+  Time Innovations:</b></u>
+    <ol>
+      <li>Working with CDT 1.x, following along with 2.0 developmnets.</li>
+      </ol>
+      <p><u><b>MontaVista:</b></u><ol>
+        <li>Not many cycles devoted to CDT, still based on 1.x. Cycles not 
+        expected to free up until post 2.0</li>
+        </ol>
+        <p><u><b>Texas Instruments:</b></u><ol>
+          <li>Eclipse 3.0 &amp; CDT 2.0 based product is in the works, not ready for 
+          any announcement yet.<br>
+&nbsp;</li>
+          <li>There is a lot of buy-in at TI for contributing to Eclipse 
+          projects, will be crystalizing on areas for contributions. One known 
+          area for working on is Managed Build in order to support 
+          mixed-language requirements.</li>
+          </ol>
+          <p><u><b>Rockwell:</b></u><ol>
+            <li>Deploying CDT 1.2 to internal projects, still working so resolve 
+            issues related to being able to contribute.</li>
+            </ol>
+            <p><u><b>TimeSys:</b></u><ol>
+              <li>Some work being done on translation unit identification ...</li>
+              </ol>
+              <p>&nbsp;<p><b>CDT 2.0 Status:</b></p>
+  <ul>
+    <li>No visible signs of progress in getting the committer permissions 
+    re-organized or getting the component inboxes created yet.<br>
+&nbsp;</li>
+    <li>As we get closer to M9 (one month away), we need to start having some 
+    discussions on how feature development is progressing and make some 
+    decisions about which pieces to still keep in the release and which (if any) 
+    we need to start thinking about delaying until later in order to avoid risky 
+    churn past the M9 milestone. The late April timeframe was agreed to have 
+    such a discussion, and Kleo Hapitas took an action to poll for status from 
+    various teams to seed the discussion.<br>
+&nbsp;</li>
+    <li>For items that we know are beyond the 2.0 timeframe, people are 
+    encouraged to create bugzilla plan items to start generating ideas and 
+    discussion. As an example, Doug Schaefer is planning to do some DOM 
+    prototyping and could get that ball rolling by capturing some initial 
+    information in a Bugzilla item &amp; taking it from there...</li>
+  </ul>
+  <p>&nbsp;<p>
+<b>Documentation</b></li> </p>
+
+              <ul>
+                <li>There is a new person on the IBM-Rational team working on 
+                CDT documentation (Dave Williams, can be contacted at
+                <a href="mailto:Dave_Williams@ca.ibm.com">
+                Dave_Williams@ca.ibm.com</a></li>
+                <li>Dave's first goal will be to clean up some 1.2 documentation 
+                before tacking additional content for the 2.0 release. Welcome 
+                aboard Dave!</li>
+                </ul>
+                <p>&nbsp;</p>
+  <p>
+<b>Verification/Bugs</b></li>:</p>
+  <p>&nbsp;<p>
+<b>Infrastructure/Builds</b></li>:</p>
+  <p><br>&nbsp;
+  <p>Any comments, additions, corrections etc. welcome! As always, many thanks
+to everyone for your ongoing support.&nbsp;<!-- Footer --> </p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"></td>
+</tr>
+</table>
+
+<center><i>Last Modified on April 28, 2004</i></center>
+
+</body>
+</html>
