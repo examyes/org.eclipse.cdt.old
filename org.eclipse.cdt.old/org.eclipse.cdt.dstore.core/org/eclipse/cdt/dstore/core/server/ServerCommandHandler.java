@@ -207,14 +207,17 @@ public class ServerCommandHandler extends CommandHandler
 
   public void sendFile(String fileName, File file)
   {
+  	_dataStore.saveFile(fileName, file);
   }
       
       
   public void sendFile(String fileName, byte[] bytes, int size)
   {  	
+  	_dataStore.saveFile(fileName, bytes);
   }
   
   public void sendAppendFile(String fileName, byte[] bytes, int size)
   {
+  	_dataStore.appendToFile(fileName, bytes);
   }
 }

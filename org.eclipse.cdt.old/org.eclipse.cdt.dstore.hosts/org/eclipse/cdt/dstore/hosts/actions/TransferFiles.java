@@ -196,15 +196,6 @@ public class TransferFiles extends Thread
 			DataElement cmd = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_COMMAND");
 			if (cmd != null)
 			{
-				/*
-				String invocation = "cp -f " + source.getSource() + " " + newSourceStr;
-				DataElement invocationElement = targetDataStore.createObject(null, 
-											     "invocation", 
-											     invocation);
-				ArrayList args = new ArrayList();
-				args.add(invocationElement);
-				targetDataStore.synchronizedCommand(cmd, args, target);
-				*/
 				java.io.File sFile = source.getFileObject();
 				targetDataStore.replaceFile(newSourceStr, sFile);
 				
@@ -212,6 +203,8 @@ public class TransferFiles extends Thread
 				{
 					setDate(copiedSource, getDate(source));
 				}
+				
+				target.refresh(false);
 			}
 	    }
 	else if (targetDataStore == _plugin.getDataStore())
