@@ -20,7 +20,7 @@ width=120></TD></TR></TBODY></TABLE>
     <TD>: Brent Nicolle, Mathieu Lapensée, Katherine Franklin</TD></TR>
   <TR>
     <TD>Revision Date</TD>
-    <TD>: 08/27/2003 - Version: 0.5.0</TD></TR>
+    <TD>: 10/23/2003 - Version: 0.6.0</TD></TR>
   <TR>
     <TD>Change History</TD>
     <TD>: 0.1.0 - Document Creation</TD></TR>
@@ -32,760 +32,1095 @@ width=120></TD></TR></TBODY></TABLE>
     <TD>&nbsp; 0.3.0 - Re-organized for multi team use</TD></TR>
   <TR>
     <TD></TD>
-    <TD>&nbsp; 0.4.0 - Added QNX material, updated IBM Status and clarified
+    <TD>&nbsp; 0.4.0 - Added QNX material, updated IBM Status and clarified 
       Defect List</TD></TR>
   <TR>
-     <TD></TD>
-     <TD>&nbsp; 0.5.0 - Updated Red Hat material and status</TD></TR></TBODY></TABLE><BR>
-	<!-- End of Document Header -->
-	<!-- Table of Contents -->
+    <TD></TD>
+    <TD>&nbsp; 0.5.0 - Updated Red Hat material and 
+status</TD></TR>
+  <TR>
+    <TD></TD>
+    <TD>&nbsp; 0.6.0 - Updated with the final testing results of CDT 1.2, added
+      defect list</TD></TR></TBODY></TABLE><BR><!-- End of Document Header --><!-- Table of Contents -->
 <DIV class=section>Table of Contents</DIV><BR>
-<DIV class=indent><a href="#introduction">Introduction</a> </DIV>
-<DIV class=indent><a href="#exclusions">Test Inclusions</a> </DIV>
-<DIV class=indent style="width: 1138; height: 19"><a href="#exclusions">Test
-  Exclusions</a> </DIV>
-<DIV class=indent><a href="#descriptions">Test Descriptions</a> 
+<DIV class=indent><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#introduction">Introduction</A> 
 </DIV>
-<DIV class=indent><a href="#contacts">Contacts</a> 
-</DIV> 
-<DIV class=indent><a href="#references">References</a> 
+<DIV class=indent><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#exclusions">Test 
+Inclusions</A> </DIV>
+<DIV class=indent style="WIDTH: 1138px; HEIGHT: 19px"><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#exclusions">Test 
+Exclusions</A> </DIV>
+<DIV class=indent><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#descriptions">Test 
+Descriptions</A> </DIV>
+<DIV class=indent><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#contacts">Contacts</A> 
 </DIV>
-<p>&nbsp;
-	<!-- End of Table of Contents -->
-
-	<!-- Test Platforms -->
-<DIV class=section><a name="introduction">Introduction</a></DIV>
-&nbsp;
-<p><span style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">This document summarizes
-the system testing topics and configurations will be subject to manual testing for CDT 1.2. It
-represents the combined testing from many contributors. For each topic, the
-contributor will provide updates about the status, an evaluation of the test
-results and a defect listing in <a href="#inclusions">Test Inclusions</a>. A
-more detailed description of the topics being tested is available in <a href="Test%20Descriptions">Test Descriptions</a>.&nbsp;</span></p>
-<p><span style="font-size: 10pt; font-family: Arial">Areas that do not currently
-have a committed test prime are listed in <a href="Test%20Exclusions">Test Exclusions</a>.
-Volunteers are encouraged to step forward and test these areas. Please join us;
-see </span><a href="Contacts">Contacts</a>.
-	<!-- End of Table of Contents -->
-
-	<!-- Test Platforms -->
-</p>
-<DIV class=section><a name="inclusions">Test Inclusions</a></DIV>
-&nbsp;
-<p><span style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">The following topics and
-configurations will be subject to testing. For each topic and configuration, the
-prime will list the development status and test status. Once completed (or in
-progress), the prime will provide an evaluation of the test results and provide
-a defect listing. Detailed descriptions of each topic are provided below.</span></p>
-<p><span style="font-size: 10pt; font-family: Arial">For Evaluation/Results,
-please include the build number(s) used for testing, a description of your test
-experience, and a recommendation of the topics readiness for general use. For
-the Defect list, please include a full list regardless of current status. If the
-list is long, feel free to add as a separate page and link to it.&nbsp;</span></p>
-<table border="1" width="100%" height="600">
-  <tr>
-    <td width="12%" height="16"><b>Test Area and Prime</b></td>
-    <td width="13%" height="16"><b>Configuration Coverage</b></td>
-    <td width="14%" height="16"><b>Development Status</b></td>
-    <td width="9%" height="16"><b>Test Status</b></td>
-    <td width="26%" height="16"><b>Evaluation/Results</b></td>
-    <td width="11%" height="16"><b>Defect List</b></td>
-  </tr>
-  <tr>
-    <td width="12%" height="48">
-      <p style="margin: 0">Adoptability</p>
-      <p style="margin: 0">&nbsp;&nbsp;&nbsp; IBM - Brent Nicolle</td>
-    <td width="13%" height="48">
-      <p style="margin: 0">Solaris 8</p>
-      <p style="margin: 0">Red Hat Linux 8.0</p>
-      <p style="margin: 0">Win XP, Win 2000</td>
-    <td width="14%" height="48">
-      <p style="margin: 0">No specific feature work.</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Ready to test.</td>
-    <td width="9%" height="48">
-      <p style="margin: 0">In Progress</td>
-    <td width="26%" height="48">
-      <p style="margin: 0">&nbsp;</td>
-    <td width="11%" height="48">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%" height="48">
-      <p style="margin: 0">Scalability</p>
-      <p style="margin: 0">&nbsp;&nbsp; IBM - Mathieu Lapensée</td>
-    <td width="13%" height="48">
-      <p style="margin: 0">Solaris 8</p>
-      <p style="margin: 0">Red Hat Linux 8.0</p>
-      <p style="margin: 0">Win XP, Win 2000</td>
-    <td width="14%" height="48">
-      <p style="margin: 0">No specific feature work.</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Ready to test.</td>
-    <td width="9%" height="48">
-      <p style="margin: 0">In Progress</td>
-    <td width="26%" height="48">
-      <p style="margin: 0">Build 18. No gating problem but some poor error
-      handling with large numbers of files. Defect list to be posted soon.</td>
-    <td width="11%" height="48">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%" height="48">
-      <p style="margin: 0">Performance</p>
-      <p style="margin: 0">&nbsp;&nbsp; IBM - Tanya Wolff</td>
-    <td width="13%" height="48">
-      <p style="margin: 0">Solaris 8</p>
-      <p style="margin: 0">Red Hat Linux 8.0</p>
-      <p style="margin: 0">Win XP, Win 2000</td>
-    <td width="14%" height="48">
-      <p style="margin: 0">In progress.&nbsp;</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Not ready to test.</td>
-    <td width="9%" height="48">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="48">
-      <p style="margin: 0">&nbsp;</td>
-    <td width="11%" height="48">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%" height="96">
-      <p style="margin: 0">Build</p>
-      <p style="margin: 0">&nbsp;&nbsp; IBM - Tanya Wolff</td>
-    <td width="13%" height="96">
-      <p style="margin: 0">Solaris 8</p>
-      <p style="margin: 0">Red Hat Linux 8.0</p>
-      <p style="margin: 0">Win XP, Win 2000</td>
-    <td width="14%" height="96">
-      <p style="margin: 0">Unmanaged projects - Ready to test.</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Managed projects &amp; extensibility - In progress.
-      Not ready to test.</td>
-    <td width="9%" height="96">
-      <p style="margin: 0">In Progress</td>
-    <td width="26%" height="96">
-      <p style="margin: 0">Build 18. Unmanaged builds testing complete and
-      successful.</td>
-    <td width="11%" height="96">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%" height="80">
-      <p style="margin: 0">Search</p>
-      <p style="margin: 0">&nbsp;&nbsp; IBM - Mathieu Lapensée</td>
-    <td width="13%" height="80">
-      <p style="margin: 0">Solaris 8</p>
-      <p style="margin: 0">Red Hat Linux 8.0</p>
-      <p style="margin: 0">Win XP, Win 2000</td>
-    <td width="14%" height="80">
-      <p style="margin: 0">Class Declaration - ready to test.&nbsp;</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">References &amp; selection search - In progress. Not
-      ready to test.</td>
-    <td width="9%" height="80">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="80">
-      <p style="margin: 0">&nbsp;</td>
-    <td width="11%" height="80">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%" height="48">
-      <p style="margin-top: 00; margin-bottom: 0">Outline view filters</p>
-      <p style="margin-top: 00; margin-bottom: 0">&nbsp;&nbsp; IBM - Brent
-      Nicolle</td>
-    <td width="13%" height="48">
-      <p style="margin-left: 0; margin-right: 0; margin-top: 00; margin-bottom: 0">Solaris
-      8</p>
-      <p style="margin-left: 0; margin-right: 0; margin-top: 00; margin-bottom: 0">Red
-      Hat Linux 8.0</p>
-      <p style="margin-left: 0; margin-right: 0; margin-top: 00; margin-bottom: 0">Win
-      XP, Win 2000</td>
-    <td width="14%" height="48">
-      <p style="margin-left: 0; margin-right: 0; margin-top: 00; margin-bottom: 0">In
-      progress. Not ready to test.</td>
-    <td width="9%" height="48">
-      <p style="margin-left: 0; margin-right: 0; margin-top: 00; margin-bottom: 0">Planned</td>
-    <td width="26%" height="48">
-      <p style="margin-top: 00; margin-bottom: 0">&nbsp;</td>
-    <td width="11%" height="48">
-      <p style="margin-top: 00; margin-bottom: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%" height="83">
-      <p style="margin: 0">Debug - New Breakpoint Functionality</p>
-      <p style="margin: 0">&nbsp;&nbsp; QNX - Peter Graves</td>
-    <td width="13%" height="83">
-      <p style="margin: 0">Windows 2000</p>
-      <p style="margin: 0">QNX Neutrino 6.2.1</p>
-      <p style="margin: 0">Linux (Red Hat 8.0)</td>
-    <td width="14%" height="83">
-      <p style="margin: 0">In Progress. Not ready to test</td>
-    <td width="9%" height="83">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="83">
-      <p style="margin: 0"></td>
-    <td width="11%" height="83">
-      <p style="margin: 0"></td>
-  </tr>
-  <tr>
-    <td width="12%" height="16">
-      <p style="margin: 0">Debug - GDB/MI 2 support</td>
-    <td width="13%" height="16">
-      <p style="margin: 0">TBD</td>
-    <td width="14%" height="16">
-      <p style="margin: 0">In Progress. Not ready to test</td>
-    <td width="9%" height="16">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="16">
-      <p style="margin: 0"></td>
-    <td width="11%" height="16">
-      <p style="margin: 0"></td>
-  </tr>
-  <tr>
-    <td width="12%" height="16">
-      <p style="margin: 0">Debug - Variable Book-keeping</p>
-      <p style="margin: 0">QNX - Peter Grave</p>
-      <p style="margin: 0">&nbsp;</td>
-    <td width="13%" height="16">
-      <p style="margin: 0">Windows 2000</p>
-      <p style="margin: 0">QNX Neutrino 6.2.1</p>
-      <p style="margin: 0">Linux (Red Hat 8.0)</td>
-    <td width="14%" height="16">
-      <p style="margin: 0">In Progress. Not ready to test</td>
-    <td width="9%" height="16">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="16">
-      <p style="margin: 0"></td>
-    <td width="11%" height="16">
-      <p style="margin: 0"></td>
-  </tr>
-  <tr>
-    <td width="12%" height="16">
-      <p style="margin: 0">Debug - General New Functionality</p>
-      <p style="margin: 0">QNX - Peter Graves</p>
-      <p style="margin: 0">&nbsp;</td>
-    <td width="13%" height="16">
-      <p style="margin: 0">Windows 2000</p>
-      <p style="margin: 0">QNX Neutrino 6.2.1</p>
-      <p style="margin: 0">Linux (Red Hat 8.0)</td>
-    <td width="14%" height="16">
-      <p style="margin: 0">Variable Casting, Variables view details pane, and
-      formatting values - Ready to test.</td>
-    <td width="9%" height="16">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="16">
-      <p style="margin: 0"></td>
-    <td width="11%" height="16">
-      <p style="margin: 0"></td>
-  </tr>
-  <tr>
-    <td width="12%" height="13">
-      <p style="margin: 0">Debug - Existing Functionality</p>
-      <p style="margin: 0">QNX - Peter Graves</p>
-      <p style="margin: 0">&nbsp;</td>
-    <td width="13%" height="13">
-      <p style="margin: 0">Windows 2000</p>
-      <p style="margin: 0">QNX Neutrino 6.2.1</p>
-      <p style="margin: 0">Linux (Red Hat 8.0)</td>
-    <td width="14%" height="13">
-      <p style="margin: 0">No new functionality - Ready to verify</td>
-    <td width="9%" height="13">
-      <p style="margin: 0">Planned</td>
-    <td width="26%" height="13">
-      <p style="margin: 0"></td>
-    <td width="11%" height="13">
-      <p style="margin: 0"></td>
-  </tr>
-  <tr>
-    <td width="12%">
-	<p style="margin: 0">Documentation</p>
-	<p style="margin: 0">Red Hat - Mike Behm</td>
-    <td width="13%">All</td>
-    <td width="14%">In progress</td>
-    <td width="9%">In Progress</td>
-    <td width="26%">Review technical content; specifically execute task
-      instructions to confirm accuracy.  Feedback being offered on cdt-doc-dev list.</td>
-    <td width="11%">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%">
-	<p style="margin: 0">Usability</p>
-	<p style="margin: 0">Red Hat - Bertina Lee</td>
-    <td width="13%">Linux (Red Hat)</td>
-    <td width="14%">N/A</td>
-    <td width="9%">Complete</td>
-    <td width="26%"><a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/usability_feedback.html?cvsroot=Tools_Project">Informal usability study</a> has been conducted.</td>
-    <td width="11%">&nbsp;</td>
-  </tr>
-
-</table>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<DIV class=section><a name="exclusions">Test Exclusions</a></DIV>
-&nbsp;
-<p><span style="font-size: 10pt; font-family: Arial">These areas that do not
-currently have a committed test prime. Volunteers are encouraged to step forward
-and test these areas. Please join us; see </span><a href="Contacts">Contacts</a>.
-	<!-- End of Table of Contents -->
-
-&nbsp;</p>
-<table border="1" width="100%">
-  <tr>
-    <td width="12%"><b>Test Area</b></td>
-    <td width="13%"><b>Configuration Coverage</b></td>
-    <td width="14%"><b>Development Status</b></td>
-    <td width="9%"><b>Test Status</b></td>
-    <td width="26%"><b>Testing Requirements</b></td>
-    <td width="11%"><b>Defect List</b></td>
-  </tr>
-  <tr>
-    <td width="12%">
-      <p style="margin: 0">Adoptability</td>
-    <td width="13%">
-      <p style="margin: 0">SuSE Linux 8.1</td>
-    <td width="14%">
-      <p style="margin: 0">No specific feature work.</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Ready to test.</td>
-    <td width="9%">
-      <p style="margin: 0">Not Planned</td>
-    <td width="26%">
-      <p style="margin: 0">Confirm results for SuSE Linux 8.1.</td>
-    <td width="11%">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%">
-      <p style="margin: 0">Scalability</td>
-    <td width="13%">
-      <p style="margin: 0">SuSE Linux 8.1</td>
-    <td width="14%">
-      <p style="margin: 0">No specific feature work.</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Ready to test.</td>
-    <td width="9%">
-      <p style="margin: 0">Not Planned</td>
-    <td width="26%">
-      <p style="margin: 0">Confirm results for SuSE Linux 8.1.</td>
-    <td width="11%">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%">
-      <p style="margin: 0">Performance</td>
-    <td width="13%">
-      <p style="margin: 0">SuSE Linux 8.1</td>
-    <td width="14%">
-      <p style="margin: 0">Development - In progress.&nbsp;</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Not ready to test</td>
-    <td width="9%">
-      <p style="margin: 0">Not Planned</td>
-    <td width="26%">
-      <p style="margin: 0">Confirm results for SuSE Linux 8.1.</td>
-    <td width="11%">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%">
-      <p style="margin: 0">Build</td>
-    <td width="13%">
-      <p style="margin: 0">SuSE Linux 8.1</td>
-    <td width="14%">
-      <p style="margin: 0">Unmanaged projects - Ready to test.</p>
-      <p style="margin: 0">&nbsp;</p>
-      <p style="margin: 0">Managed projects &amp; extensibility - Not ready to
-      test</td>
-    <td width="9%">
-      <p style="margin: 0">Not Planned</td>
-    <td width="26%">
-      <p style="margin: 0">Confirm results for SuSE Linux 8.1.</td>
-    <td width="11%">
-      <p style="margin: 0">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%">
-      <p style="margin: 0">Search</td>
-    <td width="13%">
-      <p style="margin: 0">SuSE Linux 8.1</td>
-    <td width="14%">
-      <p style="margin: 0">Class Declaration - ready to test.&nbsp;</p>
-      <p style="margin: 0">References &amp; selection search - in progress. Not
-      ready to test</td>
-    <td width="9%">
-      <p style="margin: 0">Not Planned</td>
-    <td width="26%">
-      <p style="margin: 0">Confirm results for SuSE Linux 8.1.</td>
-    <td width="11%">
-      <p style="margin: 0">&nbsp;</td>
-  </tr> 
-  <tr>
-    <td width="12%">New Class Wizard</td>
-    <td width="13%">All</td>
-    <td width="14%">In progress</td>
-    <td width="9%">Not Planned</td>
-    <td width="26%">Full test; e.g. confirm functional behavior</td>
-    <td width="11%">&nbsp;</td>
-  </tr>
-  <tr>
-    <td width="12%">Update New Project Wizard</td>
-    <td width="13%">All</td>
-    <td width="14%">In progress</td>
-    <td width="9%">Not Planned</td>
-    <td width="26%">Full test; e.g. confirm functional behavior</td>
-    <td width="11%">&nbsp;</td>
-  </tr>
-</table>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-	<!-- Test Platforms -->
-
-	<!-- Test Outline -->
-<DIV class=section><a name="descriptions">Test Descriptions</a></DIV>
-<P>This is meant to be an overview, with references to individual Detailed Test 
-Plans. </P>
-<TABLE border=1 width="1147">
+<DIV class=indent><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#references">References</A> 
+</DIV>
+<P>&nbsp; <!-- End of Table of Contents --><!-- Test Platforms --></P>
+<DIV class=section><A name=introduction>Introduction</A></DIV>&nbsp; 
+<P><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">This document summarizes 
+the system testing topics and configurations will be subject to manual testing 
+for CDT 1.2. It represents the combined testing from many contributors. For each 
+topic, the contributor will provide updates about the status, an evaluation of 
+the test results and a defect listing in <A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/CDT%20System%20Test%20Plan.html?cvsroot=Tools_Project#inclusions">Test 
+Inclusions</A>. A more detailed description of the topics being tested is 
+available in <A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/Test%20Descriptions">Test 
+Descriptions</A>.&nbsp;</SPAN></P>
+<P><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">Areas that do not currently 
+have a committed test prime are listed in <A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/Test%20Exclusions">Test 
+Exclusions</A>. Volunteers are encouraged to step forward and test these areas. 
+Please join us; see </SPAN><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/Contacts">Contacts</A>. 
+<!-- End of Table of Contents --><!-- Test Platforms --></P>
+<DIV class=section><A name=inclusions>Test Inclusions</A></DIV>&nbsp; 
+<P><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">The following topics and 
+configurations will be subject to testing. For each topic and configuration, the 
+prime will list the development status and test status. Once completed (or in 
+progress), the prime will provide an evaluation of the test results and provide 
+a defect listing. Detailed descriptions of each topic are provided 
+below.</SPAN></P>
+<P><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">For Evaluation/Results, 
+please include the build number(s) used for testing, a description of your test 
+experience, and a recommendation of the topics readiness for general use. For 
+the Defect list, please include a full list of open bugs. If the 
+list is long, feel free to add as a separate page and link to 
+it.&nbsp;</SPAN></P>
+<TABLE height=600 width="100%" border=1>
   <TBODY>
   <TR>
-    <TD width="135">
-      <b>Adoptability</b></TD>
-    <TD vAlign=top height="37" width="996">
-      <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">The key to CDT
-      success will be the ability of existing C/C++ project to gain immediate
-      benefits of using CDT (IDE features and eventually other products based on
-      CDT) with absolutely no impact on their existing project structure. It can
-      be assumed that these customers have large C/C++ code bases consisting of
-      a hierarchical directory structure in a source control repository and
-      complex and probably hierarchical structure for building these
-      applications.</span><span lang="EN-US">&nbsp;&nbsp;</span>
-      <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
-      <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US" style="font-size: 10.0pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">We
-      need to ensure we know how CDT could apply regardless of the existing
-      structure and highlight any obstacles to adoption as feature requests on
-      the CDT.</span></p>
-      <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
-      <p style="margin-top: 0; margin-bottom: 0"><font SIZE="2"><b>Strategy:</b></p>
-      <ul>
-        <li>
-          <p style="line-height: 100%; margin-top: 0; margin-bottom: 0">Use an
-      end-to-end example to perform the following tasks. These will be manual
-      tests.</li>
-      </ul>
-      <p style="line-height: 100%; margin-top: 0; margin-bottom: 0"><b>Tasks (evaluate each item with ease of use and functionality):</b></p>
-      <ul>
-        <li>
-          <p style="line-height: 100%; margin-top: 0; margin-bottom: 0">Importing existing projects (unmanaged) in CDT</li>
-        <li>
-          <p style="line-height: 100%; margin-top: 0; margin-bottom: 0">Setup to build the project</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Build the project</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Modifying makefiles</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Basic editing and debugging workflows</li>
-        <b>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">(most important) Managing projects with an existing directory
-        structure of 3 or more levels</li>
-        </ul>
-      </b></font>
- </TD></TR>
+    <TD width="12%" height=16><B>Test Area and Prime</B></TD>
+    <TD width="13%" height=16><B>Configuration Coverage</B></TD>
+    <TD width="14%" height=16><B>Development Status</B></TD>
+    <TD width="9%" height=16><B>Test Status</B></TD>
+    <TD width="26%" height=16><B>Evaluation/Results</B></TD>
+    <TD width="11%" height=16><B>Defect List</B></TD></TR>
   <TR>
-    <TD width="135">
-      <B>Scalability</B></TD>
-    <TD vAlign=top width="996">
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Existing C/C++ projects are often
-      very large, and scalability will be an immediate concern. Attempt to find the following
-      boundaries which we can then communicate.</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Maximum
-          size of a C/C++ source file (lines, characters). (e.g. 10K lines)</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Maximum
-          number or projects in Eclipse. (e.g. 200 projects)</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Maximum
-          number of resources in a project. (files/folders) (e.g. 50K)</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Ma<span lang="EN-US" style="font-size: 10.0pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">ximum
-          hierarchical depth of a project (folders) (e.g. 15 levels)</span></li>
-      </ul>
- </TD></TR>
+    <TD width="12%" height=48>
+      <P style="MARGIN: 0px">Adoptability</P>
+      <P style="MARGIN: 0px">&nbsp;&nbsp;&nbsp; IBM - Brent Nicolle</P></TD>
+    <TD width="13%" height=48>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P></TD>
+    <TD width="14%" height=48>
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%" height=48>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=48>
+      <P style="MARGIN: 0px"><font size="2">Build RC1.&nbsp; No gating problems but there are
+      19 open bugs.&nbsp; There was very little done after the
+      report in August.&nbsp;</font></P>
+      <P style="MARGIN: 0px">&nbsp;</P>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5"><b><font FACE="Arial" SIZE="2">
+      Top pain points:
+      </font></b></P>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Arial" SIZE="2">
+      -Expecting tools, and correct versions of tools, to be installed
+      without enforcing these restrictions. Particularly gdb 5.2.1 (41402) and
+      binutils 2.12.&nbsp; (25816,36859,41404). Also, Windows
+      users continue to be confused by the error messages when make or
+      cygwin-make are absent.
+      </font></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Arial" SIZE="2">
+      -Better error parsing support is needed (41381,39777, 41386) even for
+      the default &quot;best supported&quot; tool-chain (gcc). The result is
+      that the error list in the Tasks view is not always as informative as the
+      C-Build log. In turn the C-Build log is a poorer alternative to simple
+      command-line output (39776, 41382).
+      </font></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Arial" SIZE="2">
+      -No cut-and-paste between Eclipse and other apps (41405).
+      </font></p>
+    </TD>
+    <TD width="11%" height=48>
+      <b>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Helv" size="2">Current
+      :</font></b></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Helv" size="2">Total logged: 24</font></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Helv" size="2">New (Open bugs): 19&nbsp;</font></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Helv" size="2">Resolved: 4</font></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Helv" size="2">Verified: 1</font></p>
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;</p>
+      <p style="margin-top: 5; margin-bottom: 5"><font face="Helv" size="2"><b>Open
+      bugs:</b></font></p>
+      <table width="71">
+        <col width="53" style="mso-width-source:userset;mso-width-alt:1938;width:40pt">
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl24" width="63" style="height: 12.75pt" x:num align="right"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=25816"><font size="1">25816</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num x:fmla="=41387" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41387"><font size="1">41387</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl24" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=36859"><font size="1">36859</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num x:fmla="=41393" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41393"><font size="1">41393</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39343"><font size="1">39343</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num x:fmla="=41402" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41402"><font size="1">41402</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39776"><font size="1">39776</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41405"><font size="1">41405</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39777"><font size="1">39777</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41410"><font size="1">41410</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=40032"><font size="1">40032</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41414"><font size="1">41414</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=40033"><font size="1">40033</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41415"><font size="1">41415</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num x:fmla="=41381" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41381"><font size="1">41381</font></a></td>
+          <td height="17" class="xl24" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41417"><font size="1">41417</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num x:fmla="=41382" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41382"><font size="1">41382</font></a></td>
+          <td height="17" class="xl24" style="height: 12.75pt" x:num x:fmla="=41457" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41457"><font size="1">41457</font></a></td>
+        </tr>
+        <tr height="17" style="height:12.75pt">
+          <td height="17" class="xl25" style="height: 12.75pt" x:num x:fmla="=41386" align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41386"><font size="1">41386</font></a></td>
+          <td height="17" class="xl25" style="height: 12.75pt" x:num align="right" width="63"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43061"><font size="1">43061</font></a></td>
+        </tr>
+      </table>
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
   <TR>
-    <TD width="135">
-      <B>Performance</B></TD>
-    <TD vAlign=top width="996">
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">With very large projects (see e.g.
-      of previous sections) we also need to ensure the performance is adequate.
-      It will be expected that certain features will be impacted by project size
-      and complexity (i.e. search, code assist), but it would be expected that
-      standard IDE features are not adversely affected by project size. (i.e.
-      opening a source file, switching perspectives). These activities will have
-      to be qualified on all platforms with the goal being of course acceptable
-      user performance given the task performed.</span></p>
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Examples:</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">If
-          you have 10K file loaded which all use ClassX and you search on
-          references of ClassX you could expect a performance hit.</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US" style="font-size: 10.0pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">If
-          you have 10K files loaded and opening a source file takes 300 seconds
-          instead of .5 seconds in a small project, this would be unacceptable.</span></li>
-      </ul>
-      <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><b><span lang="EN-US">Strategy:</span></b></p>
-      <ul>
-        <li>
-          <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Use an end-to-end example to perform the following tasks.<span style="mso-spacerun:
-yes">&nbsp; </span>These will be manual tests.</span></li>
-      </ul>
-      <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><b><span lang="EN-US">Tasks<span style="mso-spacerun: yes">&nbsp;
-      </span>(evaluate each item with ease of use and functionality):</span></b></p>
-      <ul>
-        <li>
-          <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Importing/opening all project used in Adoptability and collect
-          benchmarks</span>
-          <ul>
-            <li>
-              <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Large hierarchy of projects</span></li>
-            <li>
-              <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Large number of files in one directory/project/workspace</span></li>
-          </ul>
-        </li>
-        <li>
-          <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">&nbsp;R</span>un-time performance of large Makefile-driven projects 
-      with non-trivial project structures</li>
-        <li>
-          <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0">&nbsp;Indexer-related
-          functions
-          <ul>
-            <li>
-              <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0">Search for references</li>
-            <li>
-              <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0">Code-assist in a project</li>
-          </ul>
-        </li>
-        <li>
-          <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">General UI response</span>
-          <ul>
-            <li>
-              <p class="MsoBodyText" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Displaying large number of files in one directory in Navigator</span></li>
-            <li>
-              <p style="margin-top: 0; margin-bottom: 0">
-      <span style="mso-tab-count: 1; font-size: 10.0pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA" lang="EN-US">Acceptable response doing the basic workflows of the CDT</span>
-              <ul>
-                <li>
-                  <p style="margin-top: 0; margin-bottom: 0"><font SIZE="2">Importing existing projects (unmanaged) in CDT</font></li>
-                <li>
-                  <p style="margin-top: 0; margin-bottom: 0"><font size="2">Setup to build the project</font></li>
-                <li>
-                  <p style="margin-top: 0; margin-bottom: 0"><font SIZE="2">Build the project</li>
-                  <li>
-                    <p style="margin-top: 0; margin-bottom: 0">Modifying makefiles</li>
-                  <li>
-                    <p style="margin-top: 0; margin-bottom: 0">Basic editing and debugging workflows</font>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
- </TD></TR>
+    <TD width="12%" height=48>
+      <P style="MARGIN: 0px">Scalability</P>
+      <P style="MARGIN: 0px">&nbsp;&nbsp; IBM - Mathieu Lapensée</P></TD>
+    <TD width="13%" height=48>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P></TD>
+    <TD width="14%" height=48>
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%" height=48>
+      <P style="MARGIN: 0px">50% Completed</P>
+      <P style="MARGIN: 0px">(because of blocked test cases)</P></TD>
+    <TD width="26%" height=48>
+      <P style="MARGIN: 0px"><font size="2">Build RC1. No gating problem. There
+      were no scalability/performance problems while importing large projects.
+      However, there were some for File/Project Management, Indexer related
+      functionality and one initial delay in building.</font></P>
+      <P style="MARGIN: 0px">&nbsp;</P>
+      <P style="MARGIN: 0px"><b><font FACE="Arial" size="2">Top pain points:
+      </font></P>
+      </b>
+      <p style="margin-top: 5; margin-bottom: 5"><font FACE="Arial" size="2">
+      -CDT is not error handling large scale in terms of number of projects
+      and files</font><font FACE="Tms Rmn" SIZE="2"></p>
+      </font>
+      <p style="margin-top: 5; margin-bottom: 5"><font FACE="Arial" size="2">
+      -Indexer related functionality such as Search and Code Assist are poor
+      performers
+      </font></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font FACE="Arial" size="2">
+      -eclipse slow on build start-up (of large project) (45137)
+      </font></p>
+    </TD>
+    <TD width="11%" height=48>
+      <b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Current bugs:</p>
+      </font></b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Total logged: 6&nbsp;</p>
+      <p style="margin-top: 5; margin-bottom: 5">New (Open bugs): 3 (no majors)</p>
+      <p style="margin-top: 5; margin-bottom: 5">Resolved: 3
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;
+      <p style="margin-top: 5; margin-bottom: 5"><b>Open bugs:</b></font>
+      <table width="33">
+        <col width="64" style="width:48pt">
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl24" align="right" width="32" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=40867"><font size="1">40867</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl24" align="right" width="32" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41011"><font size="1">41011</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl24" align="right" width="32" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41021"><font size="1">41021</font></a></td>
+        </tr>
+      </table>
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
   <TR>
-    <TD width="135">
-      <B>Code Assist</B></TD>
-    <TD vAlign=top width="996">
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Code Assist will be invoked in the
-      same manner and from the same user interface points as Code Assist in the
-      JDT. (ctrl-space).</span></p>
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">All identifiers would be
-          ideal.</span></p>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Highest priority:</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Members
-              of definitions. (A.* - find all members for the A’s type)</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Types
-              (Cl* - presents all available types beginning with Cl)</span></li>
-      </ul>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Low Priority</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Anything
-              to do with templates.</span></li>
-      </ul>
-      </TD></TR>
-  <TR>
-    <TD width="135">
-      <B>Search UI</B></TD>
-    <TD vAlign=top width="996">
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Search will be invoked in the same
-      manner and from the same user interface points as Search in the JDT.
-      Search capabilities include:</span></p>
-      <ul>
-        <li>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Invocation from Search menu
-      items and context search from source code</span></li>
-        <li>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Ability to search for
-      declarations, definitions, and references</span></li>
-        <li>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Ability to scope searches to
-      “Workspace” and “Working Set”</span></li>
-      </ul>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">All identifiers would be
-          ideal, the primary driver for Eclipse Modeler is the ability to rename
-          classes, attributes, and operations from a UML diagram, so the ability
-          to search for these items will enable refactoring to rename in CDT
-          2.0.</span></p>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Highest priority:</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Types</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Members</span></li>
-      </ul>
-          <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Low Priority</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Global
-              functions and variables.</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Anything
-              to do with templates.</span></li>
-      </ul>
+    <TD width="12%" height=48>
+      <P style="MARGIN: 0px">Performance</P>
+      <P style="MARGIN: 0px">&nbsp;&nbsp; IBM - Mathieu Lapensée</P></TD>
+    <TD width="13%" height=48>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P></TD>
+    <TD width="14%" height=48>
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%" height=48>
+      <P style="MARGIN: 0px">50% Completed (because of blocked test cases)</P></TD>
+    <TD width="26%" height=48>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5">Build RC1.&nbsp; No gating problems but there is
+      performance issues with Indexer related functionality such as Search and
+      Content Assist&nbsp;</P>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5">&nbsp;</P>
+      <b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Top pain points:</font></b></p>
+      <p style="margin-top: 5; margin-bottom: 5"><font FACE="Arial" SIZE="2">-Indexer related functionality such as
+      Search and Code Assist are poor performers</p>
+      <p style="margin-top: 5; margin-bottom: 5">-eclipse slow on build start-up (of large project) (45137)</p>
+      </font>
+      </TD>
+    <TD width="11%" height=48>
+      <b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Current bugs:</p>
+      </font></b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Total logged: 4&nbsp;</p>
+      <p style="margin-top: 5; margin-bottom: 5">New (Open bugs): 2 (no majors)</p>
+      <p style="margin-top: 5; margin-bottom: 5">Resolved: 1
+      <p style="margin-top: 5; margin-bottom: 5">Verified: 1
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;
+      <p style="margin-top: 5; margin-bottom: 5"><b>Open bugs:</b></font>
+      <table width="38">
+        <col width="64" style="width:48pt">
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="33" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44679"><font size="1">44679</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="33" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45137"><font size="1">45137</font></a></td>
+        </tr>
+      </table>
     </TD></TR>
   <TR>
-    <TD width="135">
-      <B>Managed Build feature&nbsp; and Extensibility</B></TD>
-    <TD vAlign=top width="996">
-      <p class="MsoNormal" style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Managed build provides the
-      automatic generation of makefiles and allows users to customize makefile
-      generation to support their build tool chains</span></p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Generate
-              makefiles and build project for GNU tool chains on all platforms
-              (windows – cygwin, Solaris and Linux – gnu)</span></li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Generate
-              executables, static libraries, and shared libraries.</span></li>
-            <li class="MsoNormal" style="mso-list:l107 level1 lfo288;tab-stops:list .5in">
-              <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US">Documentation
-              and proof that build mechanism can be customized for other tool
-              chains, including compilers, linkers, libraries to link in,
-              etc.</span></li>
-      </ul>
-      </TD></TR>
+    <TD width="12%" height=96>
+      <P style="MARGIN: 0px">Managed Build</P>
+      <P style="MARGIN: 0px">Unmanaged Build</P>
+      <P style="MARGIN: 0px">Extensibility</P>
+      <P style="MARGIN: 0px">Dependencies</P>
+      <P style="MARGIN: 0px">&nbsp;</P>
+      <P style="MARGIN: 0px">&nbsp;&nbsp; IBM - Tanya Wolff</P></TD>
+    <TD width="13%" height=96>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P></TD>
+    <TD width="14%" height=96>
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%" height=96>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=96>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5"><font size="2">Build RC1.&nbsp; No gating problems. A lot of hard
+      work was done here. Few bugs remaining.&nbsp;</font></P>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5">&nbsp;</P><b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Top pain points:</p>
+      </font></b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">-spaces in workspace cause managed project to fail build (44128) (maj)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-subdir.dep not updated if saving including file before included
+      (44154) (maj)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-long build errors not completely visible (39777)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-cannot abort a build when automatically build turned on (41752)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-incremental build managed project referencing standard fails (44945)</p>
+      </font>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="11%" height=96>
+      <b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Current bugs:</p>
+      </font></b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Total logged: 76</p>
+      <p style="margin-top: 5; margin-bottom: 5">New (Open bugs): 27 (3 majors)</p>
+      <p style="margin-top: 5; margin-bottom: 5">Resolved: 29
+      <p style="margin-top: 5; margin-bottom: 5">Verified: 20
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;
+      <p style="margin-top: 5; margin-bottom: 5"><b>Open bugs:</b></font>
+      <table width="160">
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39776"><font size="1">39776</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44353"><font size="1">44353</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45137"><font size="1">45137</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43020"><font size="1">43020</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45172"><font size="1">45172</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39777"><font size="1">39777</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41752"><font size="1">41752</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=35499"><font size="1">35499</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44128"><font size="1">44128</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=30198"><font size="1">30198</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41382"><font size="1">41382</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45029"><font size="1">45029</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41766"><font size="1">41766</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44945"><font size="1">44945</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=40862"><font size="1">40862</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41386"><font size="1">41386</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=37124"><font size="1">37124</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39017"><font size="1">39017</font></a></td>
+          <td height="26" class="xl23" align="right" width="93" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44159"><font size="1">44159</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43643"><font size="1">43643</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=41415"><font size="1">41415</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43899"><font size="1">43899</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44333"><font size="1">44333</font></a></td>
+          <td height="26" class="xl23" align="right" width="74" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44675"><font size="1">44675</font></a></td>
+          <td height="26" class="xl23" align="right" width="48" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=28259"><font size="1">28259</font></a></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43917"><font size="1">43917</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39888"><font size="1">39888</font></a></td>
+          <td height="26" class="xl23" align="right" width="39" style="height: 20.1pt" x:num></td>
+          <td height="26" class="xl23" align="right" width="74" style="height: 20.1pt" x:num></td>
+          <td height="26" class="xl23" align="right" width="48" style="height: 20.1pt" x:num></td>
+        </tr>
+      </table>
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
   <TR>
-    <TD width="135">
-      <B>Unmanaged Build configuration</B></TD>
-    <TD vAlign=top width="996">
-      <p style="margin-top: 0; margin-bottom: 0"><span lang="EN-US" style="font-size: 10.0pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Standard
-      build functionality is adequate (see Adoptability for details), but we need
-      a mechanism to enable other CDT features such as code assist and search.
-      This requires the ability to specify include paths and compiler
-      information related to (-D option).</span>
-      <p style="margin-top: 0; margin-bottom: 0">&nbsp;</p>
+    <TD width="12%" height=80>
+      <P style="MARGIN: 0px">Search</P>
+      <P style="MARGIN: 0px">&nbsp;&nbsp; IBM - Brent Nicolle</P></TD>
+    <TD width="13%" height=80>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P></TD>
+    <TD width="14%" height=80>
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%" height=80>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=80>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5"><font size="2">Build RC1.&nbsp; No gating problems.
+      A
+      lot of progress has been made for this feature. However, there are
+      functionality and usability issues.</font></P>
+      <P style="margin-left: 0px; margin-right: 0px; margin-top: 5; margin-bottom: 5">&nbsp;</P><b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Top pain points:</p>
+      </font></b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">-cannot search relative search paths (43051)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-cannot search items in stdio.h because of parsing problems (43021)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-need to troubleshoot UI to understand results (44597)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-search only works on perfect code (45015)</p>
+      </font>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="11%" height=80>
+      <b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Current bugs:</p>
+      </font></b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Total logged: 57 defects</p>
+      <p style="margin-top: 5; margin-bottom: 5">New (Open bugs): 24 (4 majors)</p>
+      <p style="margin-top: 5; margin-bottom: 5">Resolved: 4
+      <p style="margin-top: 5; margin-bottom: 5">Verified: 28
+      <p style="margin-top: 5; margin-bottom: 5">Closed: 1
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;
+      <p style="margin-top: 5; margin-bottom: 5"><b>Open bugs:</b></font>
+      <table width="123">
+        <col width="64" style="width:48pt">
+        <tr height="20" style="mso-height-source:userset;height:15.0pt">
+          <td height="20" class="xl23" align="right" width="1" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43021"><font size="1">43021</font></a></td>
+          <td height="20" class="xl23" align="right" width="59" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44846"><font size="1">44846</font></a></td>
+          <td height="20" class="xl23" align="right" width="55" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44845"><font size="1">44845</font></a></td>
+        </tr>
+        <tr height="20" style="mso-height-source:userset;height:15.0pt">
+          <td height="20" class="xl23" align="right" width="1" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43054"><font size="1">43054</font></a></td>
+          <td height="20" class="xl23" align="right" width="59" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43562"><font size="1">43562</font></a></td>
+          <td height="20" class="xl23" align="right" width="55" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43951"><font size="1">43951</font></a></td>
+        </tr>
+        <tr height="20" style="mso-height-source:userset;height:15.0pt">
+          <td height="20" class="xl23" align="right" width="1" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43055"><font size="1">43055</font></a></td>
+          <td height="20" class="xl23" align="right" width="59" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44337"><font size="1">44337</font></a></td>
+          <td height="20" class="xl23" align="right" width="55" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43733"><font size="1">43733</font></a></td>
+        </tr>
+        <tr height="20" style="mso-height-source:userset;height:15.0pt">
+          <td height="20" class="xl23" align="right" width="1" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43061"><font size="1">43061</font></a></td>
+          <td height="20" class="xl23" align="right" width="59" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44339"><font size="1">44339</font></a></td>
+          <td height="20" class="xl23" align="right" width="55" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43063"><font size="1">43063</font></a></td>
+        </tr>
+        <tr height="20" style="mso-height-source:userset;height:15.0pt">
+          <td height="20" class="xl23" align="right" width="1" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44510"><font size="1">44510</font></a></td>
+          <td height="20" class="xl23" align="right" width="59" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44597"><font size="1">44597</font></a></td>
+          <td height="20" class="xl23" align="right" width="55" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43498"><font size="1">43498</font></a></td>
+        </tr>
+        <tr height="20" style="mso-height-source:userset;height:15.0pt">
+          <td height="20" class="xl23" align="right" width="1" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=39580"><font size="1">39580</font></a></td>
+          <td height="20" class="xl23" align="right" width="59" style="height: 15.0pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=45015"><font size="1">45015</font></a></td>
+          <td height="20" class="xl23" align="right" width="55" style="height: 15.0pt" x:num></td>
+        </tr>
+      </table>
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%" height=48>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Outline view filters</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;&nbsp; IBM - Brent 
+      Nicolle</P></TD>
+    <TD width="13%" height=48>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P></TD>
+    <TD width="14%" height=48>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="9%" height=48>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=48>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;Build 18.&nbsp; No gating problems&nbsp;</P></TD>
+    <TD width="11%" height=48>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%" height=48>
+      Navigation - IBM Brent Nicolle</TD>
+    <TD width="13%" height=48>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P>
+      <p>&nbsp;</TD>
+    <TD width="14%" height=48>
+      Completed</TD>
+    <TD width="9%" height=48>
+      Completed</TD>
+    <TD width="26%" height=48>
+      <p style="margin-top: 5; margin-bottom: 5"><font size="2">
+      Build RC1.&nbsp; No gating problems. Only one significant
+      problem with Navigation and it is the parsing problem in stdio.h. Few
+      non-major bugs remaining.</font><b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Top pain point:</p>
+      </font></b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">-cannot search items in stdio.h because of parsing problems (43021)</p>
+      </font></TD>
+    <TD width="11%" height=48>
+      <b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Current bugs:</p>
+      </font></b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Total logged: 8 defects</p>
+      <p style="margin-top: 5; margin-bottom: 5">New (Open bugs): 4 (no majors)</p>
+      <p style="margin-top: 5; margin-bottom: 5">Resolved: 1
+      <p style="margin-top: 5; margin-bottom: 5">Verified: 3
+      <p style="margin-top: 5; margin-bottom: 5"><b>Open bugs:</b></font>
+      <table height="21" width="47">
+        <col width="64" style="width:48pt">
+        <tr height="25" style="mso-height-source:userset;height:18.75pt">
+          <td height="1" class="xl23" align="right" width="39" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44947"><font size="1">44947</font></a></td>
+          <td height="1" class="xl23" align="right" width="39" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44948"><font size="1">44948</font></a></td>
+          <td height="1" class="xl23" align="right" width="39" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43930"><font size="1">43930</font></a></td>
+          <td height="1" class="xl23" align="right" width="39" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44679"><font size="1">44679</font></a></td>
+        </tr>
+      </table>
     </TD></TR>
   <TR>
-    <TD width="135">
-      <p style="margin-top: 0; margin-bottom: 0"><b>Debug - New Breakpoint
-      Functionality</b></TD>
-    <TD vAlign=top width="996">
-      <p style="margin-top: 0; margin-bottom: 0">Breakpoints in the CDT will be
-      enhanced in CDT 1.2 release by adding the following functionality:</p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Setting deferred
-          breakpoints</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Setting breakpoints on
-          external sources with persistency on the project.</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Setting a breakpoint on a
-          specific thread.</li>
-      </ul>
+    <TD width="12%" height=48>
+      Content Assist - IBM Mathieu Lapensée</TD>
+    <TD width="13%" height=48>
+      <P style="MARGIN: 0px">Solaris 8</P>
+      <P style="MARGIN: 0px">Red Hat Linux 8.0</P>
+      <P style="MARGIN: 0px">Win XP, Win 2000</P>
+      <p>&nbsp;</TD>
+    <TD width="14%" height=48>
+      Completed</TD>
+    <TD width="9%" height=48>
+      Completed</TD>
+    <TD width="26%" height=48>
+      <p style="margin-top: 5; margin-bottom: 5"><font size="2">
+      Build RC1.&nbsp; No gating problems. Content Assist will
+      only work with global function and global data structures. Content Assist
+      for methods and attributes will done for CDT 2.0. Few bugs remaining. The
+      parsing problem in stdio.h will affect Content Assist as well.</font>
+      <p style="margin-top: 5; margin-bottom: 5"><b><font FACE="Arial" SIZE="2">
+      </p>
+      <p style="margin-top: 5; margin-bottom: 5">Top pain point:</p>
+      </font></b><font FACE="Arial" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">-&lt;ctrl&gt; &lt;space&gt; after the ‘.’ or the ‘-&gt;’ will
+      not work (2.0 feature)</p>
+      <p style="margin-top: 5; margin-bottom: 5">-cannot search items in stdio.h because of parsing problems (43021)</p>
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;</p>
+      </font></TD>
+    <TD width="11%" height=48>
+      <b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Current bugs:</p>
+      </font></b><font FACE="Helv" SIZE="2">
+      <p style="margin-top: 5; margin-bottom: 5">Total logged: 42 defects</p>
+      <p style="margin-top: 5; margin-bottom: 5">New (Open bugs): 16 (1 major)</p>
+      <p style="margin-top: 5; margin-bottom: 5">Resolved: 18
+      <p style="margin-top: 5; margin-bottom: 5">Verified: 6
+      <p style="margin-top: 5; margin-bottom: 5">Closed: 2
+      <p style="margin-top: 5; margin-bottom: 5">&nbsp;
+      <p style="margin-top: 5; margin-bottom: 5"><b>Open bugs:</b></font>
+      <table height="92">
+        <col width="64" style="width:48pt">
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43117"><font size="1">43117</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44371"><font size="1">44371</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44552"><font size="1">44552</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=42600"><font size="1">42600</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><font size="1"><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44370">44370</a></font></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44251"><font size="1">44251</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44373"><font size="1">44373</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44556"><font size="1">44556</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=43158"><font size="1">43158</font></a></td>
+          <td height="18" class="xl23" align="right" width="64" style="width: 48pt" x:num></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="17" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44359"><font size="1">44359</font></a></td>
+          <td height="17" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44378"><font size="1">44378</font></a></td>
+          <td height="17" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=23258"><font size="1">23258</font></a></td>
+          <td height="17" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44664"><font size="1">44664</font></a></td>
+          <td height="17" class="xl23" align="right" width="64" style="width: 48pt" x:num></td>
+        </tr>
+        <tr height="26" style="mso-height-source:userset;height:20.1pt">
+          <td height="23" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44364"><font size="1">44364</font></a></td>
+          <td height="23" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44375"><font size="1">44375</font></a></td>
+          <td height="23" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=40520"><font size="1">40520</font></a></td>
+          <td height="23" class="xl23" align="right" width="64" style="width: 48pt" x:num><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=44043"><font size="1">44043</font></a></td>
+          <td height="23" class="xl23" align="right" width="64" style="width: 48pt" x:num></td>
+        </tr>
+      </table>
     </TD></TR>
   <TR>
-    <TD width="135">
-      <p style="margin-top: 0; margin-bottom: 0"><b>Debug - GDB/MI 2 Support</b></TD>
-    <TD vAlign=top width="996">
-      <p style="margin-top: 0; margin-bottom: 0">CDT 1.2 should have support for
-      GDB/MI 2, which is only currently supported in the GDB head branch. Due to
-      this, the testing of this feature will likely be fairly light.
-    </TD></TR>
+    <TD width="12%" height=83>
+      <P style="MARGIN: 0px">Debug - New Breakpoint Functionality</P>
+      <P style="MARGIN: 0px">&nbsp;&nbsp; QNX - Peter Graves</P></TD>
+    <TD width="13%" height=83>
+      <P style="MARGIN: 0px">Windows 2000</P>
+      <P style="MARGIN: 0px">QNX Neutrino 6.2.1</P>
+      <P style="MARGIN: 0px">Linux (Red Hat 8.0)</P></TD>
+    <TD width="14%" height=83>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="9%" height=83>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=83>
+      <P style="MARGIN: 0px">Build RC1.&nbsp; No gating problems.</P></TD>
+    <TD width="11%" height=83>
+      <P style="MARGIN: 0px"></P></TD></TR>
   <TR>
-    <TD width="135">
-      <p style="margin-top: 0; margin-bottom: 0"><b>Debug - Variable
-      book-keeping</b></TD>
-    <TD vAlign=top width="996">
-      <p style="margin-top: 0; margin-bottom: 0">Currently, the CDT will attempt
-      to read the values of all program variables, which can have unwanted side
-      affects in some cases (i.e. if a variable is pointing at hardware, a read
-      may be interpreted as a command). The variable book-keeping functionality
-      will allow the user to disable the automated reading of some/all
-      variables.
-    </TD></TR>
+    <TD width="12%" height=16>
+      <P style="MARGIN: 0px">Debug - Variable Book-keeping</P>
+      <P style="MARGIN: 0px">QNX - Peter Grave</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="13%" height=16>
+      <P style="MARGIN: 0px">Windows 2000</P>
+      <P style="MARGIN: 0px">QNX Neutrino 6.2.1</P>
+      <P style="MARGIN: 0px">Linux (Red Hat 8.0)</P></TD>
+    <TD width="14%" height=16>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="9%" height=16>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=16>
+      <P style="MARGIN: 0px">Build RC1.&nbsp; No gating problems.</P></TD>
+    <TD width="11%" height=16>
+      <P style="MARGIN: 0px"></P></TD></TR>
   <TR>
-    <TD width="135">
-      <p style="margin-top: 0; margin-bottom: 0"><b>Debug - General new
-      functionality</b></TD>
-    <TD vAlign=top width="996">
-      <p style="margin-top: 0; margin-bottom: 0">Other new functionality that
-      has been added to the CDT 1.2 related to debug include:</p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Variable Casting</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Variables view details pane</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Formatting values</li>
-      </ul>
-    </TD></TR>
+    <TD width="12%" height=16>
+      <P style="MARGIN: 0px">Debug - General New Functionality</P>
+      <P style="MARGIN: 0px">QNX - Peter Graves</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="13%" height=16>
+      <P style="MARGIN: 0px">Windows 2000</P>
+      <P style="MARGIN: 0px">QNX Neutrino 6.2.1</P>
+      <P style="MARGIN: 0px">Linux (Red Hat 8.0)</P></TD>
+    <TD width="14%" height=16>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="9%" height=16>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=16>
+      <P style="MARGIN: 0px">Build RC1.&nbsp; No gating problems.</P></TD>
+    <TD width="11%" height=16>
+      <P style="MARGIN: 0px"></P></TD></TR>
   <TR>
-    <TD width="135">
-      <p style="margin-top: 0; margin-bottom: 0"><b>Debug - Existing
-      Functionality</b></TD>
-    <TD vAlign=top width="996">
-      <p style="margin-top: 0; margin-bottom: 0">Existing functionality of the
-      CDT debug components will be tested to verify that the forward progress in
-      the CDT has not caused regressions. At least the following areas will be
-      checked:</p>
-      <ul>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Launch Debug/Run Local
-          C/C++ Application</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">The various debug views
-          (Variables, Breakpoints, Expressions, Registers, Memory, Shared Libs,
-          Signals)</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Debug View - Switching
-          debug sessions/stack frames</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">GDB Console - Can enter
-          various GDB commands and see results. Sync with IDE on step/next/etc</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Editor integration - hover
-          for value, run to line etc.</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Link to source code -
-          source in and outside of workspace.</li>
-        <li>
-          <p style="margin-top: 0; margin-bottom: 0">Breakpoints</li>
-      </ul>
-    </TD></TR>
-  </TBODY></TABLE><!-- End of Plan Outline --><!-- Undertested -->
+    <TD width="12%" height=13>
+      <P style="MARGIN: 0px">Debug - Existing Functionality</P>
+      <P style="MARGIN: 0px">QNX - Peter Graves</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="13%" height=13>
+      <P style="MARGIN: 0px">Windows 2000</P>
+      <P style="MARGIN: 0px">QNX Neutrino 6.2.1</P>
+      <P style="MARGIN: 0px">Linux (Red Hat 8.0)</P></TD>
+    <TD width="14%" height=13>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="9%" height=13>
+      <P style="MARGIN: 0px">Completed</P></TD>
+    <TD width="26%" height=13>
+      <P style="MARGIN: 0px">Build RC1.&nbsp; No gating problems.</P></TD>
+    <TD width="11%" height=13>
+      <P style="MARGIN: 0px"></P></TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Documentation</P>
+      <P style="MARGIN: 0px">Red Hat - Mike Behm</P></TD>
+    <TD width="13%">All</TD>
+    <TD width="14%">In progress</TD>
+    <TD width="9%">In Progress</TD>
+    <TD width="26%">Review technical content; specifically execute task 
+      instructions to confirm accuracy. Feedback being offered on cdt-doc-dev 
+      list.</TD>
+    <TD width="11%">&nbsp;</TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Usability</P>
+      <P style="MARGIN: 0px">Red Hat - Bertina Lee</P></TD>
+    <TD width="13%">Linux (Red Hat)</TD>
+    <TD width="14%">N/A</TD>
+    <TD width="9%">Complete</TD>
+    <TD width="26%"><A 
+      href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/usability_feedback.html?cvsroot=Tools_Project">Informal 
+      usability study</A> has been conducted.</TD>
+    <TD width="11%">&nbsp;</TD></TR></TBODY></TABLE>
 <P>&nbsp;</P>
-<!-- end of Undertested -->
-
-<!-- Who -->
+<P>&nbsp;</P>
+<DIV class=section><A name=exclusions>Test Exclusions</A></DIV>&nbsp; 
+<P><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: Arial">These areas areas were not
+covered for CDT 1.2; they will be planned in future CDT releases; see </SPAN><A 
+href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/developer/Contacts">Contacts</A>. 
+<!-- End of Table of Contents -->&nbsp;</P>
+<TABLE width="100%" border=1>
+  <TBODY>
+  <TR>
+    <TD width="12%"><B>Test Area</B></TD>
+    <TD width="13%"><B>Configuration Coverage</B></TD>
+    <TD width="14%"><B>Development Status</B></TD>
+    <TD width="9%"><B>Test Status</B></TD>
+    <TD width="26%"><B>Testing Requirements</B></TD>
+    <TD width="11%"><B>Defect List</B></TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Adoptability</P></TD>
+    <TD width="13%">
+      <P style="MARGIN: 0px">SuSE Linux 8.1</P></TD>
+    <TD width="14%">
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P></TD>
+    <TD width="26%">
+      <P style="MARGIN: 0px">Confirm results for SuSE Linux 8.1.</P></TD>
+    <TD width="11%">
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Scalability</P></TD>
+    <TD width="13%">
+      <P style="MARGIN: 0px">SuSE Linux 8.1</P></TD>
+    <TD width="14%">
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="26%">
+      <P style="MARGIN: 0px">Confirm results for SuSE Linux 8.1.</P></TD>
+    <TD width="11%">
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Performance</P></TD>
+    <TD width="13%">
+      <P style="MARGIN: 0px">SuSE Linux 8.1</P></TD>
+    <TD width="14%">
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="26%">
+      <P style="MARGIN: 0px">Confirm results for SuSE Linux 8.1.</P></TD>
+    <TD width="11%">
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Build</P></TD>
+    <TD width="13%">
+      <P style="MARGIN: 0px">SuSE Linux 8.1</P></TD>
+    <TD width="14%">
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="26%">
+      <P style="MARGIN: 0px">Confirm results for SuSE Linux 8.1.</P></TD>
+    <TD width="11%">
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%">
+      <P style="MARGIN: 0px">Search</P></TD>
+    <TD width="13%">
+      <P style="MARGIN: 0px">SuSE Linux 8.1</P></TD>
+    <TD width="14%">
+      <p style="margin: 0px">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P>
+      <P style="MARGIN: 0px">&nbsp;</P></TD>
+    <TD width="26%">
+      <P style="MARGIN: 0px">Confirm results for SuSE Linux 8.1.</P></TD>
+    <TD width="11%">
+      <P style="MARGIN: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width="12%">New Class Wizard</TD>
+    <TD width="13%">All</TD>
+    <TD width="14%">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P>&nbsp;</TD>
+    <TD width="26%">Full test; e.g. confirm functional behavior</TD>
+    <TD width="11%">&nbsp;</TD></TR>
+  <TR>
+    <TD width="12%">Update New Project Wizard</TD>
+    <TD width="13%">All</TD>
+    <TD width="14%">Completed</TD>
+    <TD width="9%">
+      <P style="MARGIN: 0px">Not Done</P>
+      <P style="MARGIN: 0px">To be Re-planned</P>&nbsp;</TD>
+    <TD width="26%">Full test; e.g. confirm functional behavior</TD>
+    <TD width="11%">&nbsp;</TD></TR></TBODY></TABLE>
+<P>&nbsp;</P>
+<P>&nbsp;</P><!-- Test Platforms --><!-- Test Outline -->
+<DIV class=section><A name=descriptions>Test Descriptions</A></DIV>
+<P>This is meant to be an overview, with references to individual Detailed Test 
+Plans. </P>
+<TABLE width=1147 border=1>
+  <TBODY>
+  <TR>
+    <TD width=135><B>Adoptability</B></TD>
+    <TD vAlign=top width=996 height=37>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>The key to 
+      CDT success will be the ability of existing C/C++ project to gain 
+      immediate benefits of using CDT (IDE features and eventually other 
+      products based on CDT) with absolutely no impact on their existing project 
+      structure. It can be assumed that these customers have large C/C++ code 
+      bases consisting of a hierarchical directory structure in a source control 
+      repository and complex and probably hierarchical structure for building 
+      these applications.</SPAN><SPAN lang=EN-US>&nbsp;&nbsp;</SPAN> 
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US 
+      style="FONT-SIZE: 10pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">We 
+      need to ensure we know how CDT could apply regardless of the existing 
+      structure and highlight any obstacles to adoption as feature requests on 
+      the CDT.</SPAN></P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;</P>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><FONT 
+      size=2><B>Strategy:</B></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">Use an 
+        end-to-end example to perform the following tasks. These will be manual 
+        tests. </P></LI></UL>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%"><B>Tasks 
+      (evaluate each item with ease of use and functionality):</B></P>
+      <UL>
+        <LI>
+        <P 
+        style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">Importing 
+        existing projects (unmanaged) in CDT </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px; LINE-HEIGHT: 100%">Setup 
+        to build the project </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Build the project </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Modifying makefiles </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Basic editing and 
+        debugging workflows <B></P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">(most important) Managing 
+        projects with an existing directory structure of 3 or more levels 
+        </P></LI></UL></B></FONT></TD></TR>
+  <TR>
+    <TD width=135><B>Scalability</B></TD>
+    <TD vAlign=top width=996>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Existing C/C++ projects are often very large, and scalability 
+      will be an immediate concern. Attempt to find the following boundaries 
+      which we can then communicate.</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Maximum 
+        size of a C/C++ source file (lines, characters). (e.g. 10K lines)</SPAN> 
+        </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Maximum 
+        number or projects in Eclipse. (e.g. 200 projects)</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Maximum 
+        number of resources in a project. (files/folders) (e.g. 50K)</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Ma<SPAN lang=EN-US 
+        style="FONT-SIZE: 10pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">ximum 
+        hierarchical depth of a project (folders) (e.g. 15 levels)</SPAN> 
+        </P></LI></UL></TD></TR>
+  <TR>
+    <TD width=135><B>Performance</B></TD>
+    <TD vAlign=top width=996>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>With very large projects (see e.g. of previous sections) we 
+      also need to ensure the performance is adequate. It will be expected that 
+      certain features will be impacted by project size and complexity (i.e. 
+      search, code assist), but it would be expected that standard IDE features 
+      are not adversely affected by project size. (i.e. opening a source file, 
+      switching perspectives). These activities will have to be qualified on all 
+      platforms with the goal being of course acceptable user performance given 
+      the task performed.</SPAN></P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Examples:</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>If you 
+        have 10K file loaded which all use ClassX and you search on references 
+        of ClassX you could expect a performance hit.</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US 
+        style="FONT-SIZE: 10pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">If 
+        you have 10K files loaded and opening a source file takes 300 seconds 
+        instead of .5 seconds in a small project, this would be 
+        unacceptable.</SPAN> </P></LI></UL>
+      <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><B><SPAN 
+      lang=EN-US>Strategy:</SPAN></B></P>
+      <UL>
+        <LI>
+        <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Use an end-to-end example to perform the following 
+        tasks.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>These will be manual 
+        tests.</SPAN> </P></LI></UL>
+      <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><B><SPAN 
+      lang=EN-US>Tasks<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>(evaluate 
+      each item with ease of use and functionality):</SPAN></B></P>
+      <UL>
+        <LI>
+        <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Importing/opening all project used in Adoptability and 
+        collect benchmarks</SPAN> 
+        <UL>
+          <LI>
+          <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+          lang=EN-US>Large hierarchy of projects</SPAN> </P>
+          <LI>
+          <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+          lang=EN-US>Large number of files in one 
+          directory/project/workspace</SPAN> </P></LI></UL>
+        <LI>
+        <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>&nbsp;R</SPAN>un-time performance of large Makefile-driven 
+        projects with non-trivial project structures </P>
+        <LI>
+        <P class=MsoBodyText 
+        style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;Indexer-related 
+        functions 
+        <UL>
+          <LI>
+          <P class=MsoBodyText 
+          style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Search for references </P>
+          <LI>
+          <P class=MsoBodyText 
+          style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Content assist in a project 
+          </P></LI></UL>
+        <LI>
+        <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>General UI response</SPAN> 
+        <UL>
+          <LI>
+          <P class=MsoBodyText style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+          lang=EN-US>Displaying large number of files in one directory in 
+          Navigator</SPAN> </P>
+          <LI>
+          <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US 
+          style="FONT-SIZE: 10pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA; mso-tab-count: 1">Acceptable 
+          response doing the basic workflows of the CDT</SPAN> 
+          <UL>
+            <LI>
+            <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><FONT 
+            size=2>Importing existing projects (unmanaged) in CDT</FONT> </P>
+            <LI>
+            <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><FONT size=2>Setup to 
+            build the project</FONT> </P>
+            <LI>
+            <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><FONT size=2>Build 
+            the project </P>
+            <LI>
+            <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Modifying makefiles 
+            </P>
+            <LI>
+            <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Basic editing and 
+            debugging workflows</FONT> </P></LI></UL></LI></UL></LI></UL></TD></TR>
+  <TR>
+    <TD width=135><B>Content Assist</B></TD>
+    <TD vAlign=top width=996>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Content Assist will be invoked in the same manner and from the 
+      same user interface points as Content Assist in the JDT. 
+      (ctrl-space).</SPAN></P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>All identifiers would be ideal.</SPAN></P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Highest priority:</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Members 
+        of definitions. (A.* - find all members for the A’s type)</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Types 
+        (Cl* - presents all available types beginning with Cl)</SPAN> 
+      </P></LI></UL>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Low Priority</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Anything 
+        to do with templates.</SPAN> </P></LI></UL></TD></TR>
+  <TR>
+    <TD width=135><B>Search UI</B></TD>
+    <TD vAlign=top width=996>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Search will be invoked in the same manner and from the same 
+      user interface points as Search in the JDT. Search capabilities 
+      include:</SPAN></P>
+      <UL>
+        <LI>
+        <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Invocation from Search menu items and context search from 
+        source code</SPAN> </P>
+        <LI>
+        <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Ability to search for declarations, definitions, and 
+        references</SPAN> </P>
+        <LI>
+        <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Ability to scope searches to “Workspace” and “Working 
+        Set”</SPAN> </P></LI></UL>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>All identifiers would be ideal, the primary driver for Eclipse 
+      Modeler is the ability to rename classes, attributes, and operations from 
+      a UML diagram, so the ability to search for these items will enable 
+      refactoring to rename in CDT 2.0.</SPAN></P>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Highest priority:</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Types</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Members</SPAN> </P></LI></UL>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Low Priority</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Global 
+        functions and variables.</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Anything 
+        to do with templates.</SPAN> </P></LI></UL></TD></TR>
+  <TR>
+    <TD width=135><B>Managed Build feature&nbsp; and Extensibility</B></TD>
+    <TD vAlign=top width=996>
+      <P class=MsoNormal style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+      lang=EN-US>Managed build provides the automatic generation of makefiles 
+      and allows users to customize makefile generation to support their build 
+      tool chains</SPAN></P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Generate 
+        makefiles and build project for GNU tool chains on all platforms 
+        (windows – cygwin, Solaris and Linux – gnu)</SPAN> </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US>Generate 
+        executables, static libraries, and shared libraries.</SPAN> </P>
+        <LI class=MsoNormal 
+        style="mso-list: l107 level1 lfo288; tab-stops: list .5in">
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN 
+        lang=EN-US>Documentation and proof that build mechanism can be 
+        customized for other tool chains, including compilers, linkers, 
+        libraries to link in, etc.</SPAN> </P></LI></UL></TD></TR>
+  <TR>
+    <TD width=135><B>Unmanaged Build configuration</B></TD>
+    <TD vAlign=top width=996>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><SPAN lang=EN-US 
+      style="FONT-SIZE: 10pt; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Standard 
+      build functionality is adequate (see Adoptability for details), but we 
+      need a mechanism to enable other CDT features such as code assist and 
+      search. This requires the ability to specify include paths and compiler 
+      information related to (-D option).</SPAN> 
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">&nbsp;</P></TD></TR>
+  <TR>
+    <TD width=135>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><B>Debug - New Breakpoint 
+      Functionality</B></P></TD>
+    <TD vAlign=top width=996>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Breakpoints in the CDT will 
+      be enhanced in CDT 1.2 release by adding the following functionality:</P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Setting deferred 
+        breakpoints </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Setting breakpoints on 
+        external sources with persistency on the project. </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Setting a breakpoint on a 
+        specific thread. </P></LI></UL></TD></TR>
+  <TR>
+    <TD width=135>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><B>Debug - Variable 
+      book-keeping</B></P></TD>
+    <TD vAlign=top width=996>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Currently, the CDT will 
+      attempt to read the values of all program variables, which can have 
+      unwanted side affects in some cases (i.e. if a variable is pointing at 
+      hardware, a read may be interpreted as a command). The variable 
+      book-keeping functionality will allow the user to disable the automated 
+      reading of some/all variables. </P></TD></TR>
+  <TR>
+    <TD width=135>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><B>Debug - General new 
+      functionality</B></P></TD>
+    <TD vAlign=top width=996>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Other new functionality 
+      that has been added to the CDT 1.2 related to debug include:</P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Variable Casting </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Variables view details 
+        pane </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Formatting values 
+        </P></LI></UL></TD></TR>
+  <TR>
+    <TD width=135>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><B>Debug - Existing 
+      Functionality</B></P></TD>
+    <TD vAlign=top width=996>
+      <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Existing functionality of 
+      the CDT debug components will be tested to verify that the forward 
+      progress in the CDT has not caused regressions. At least the following 
+      areas will be checked:</P>
+      <UL>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Launch Debug/Run Local 
+        C/C++ Application </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">The various debug views 
+        (Variables, Breakpoints, Expressions, Registers, Memory, Shared Libs, 
+        Signals) </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Debug View - Switching 
+        debug sessions/stack frames </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">GDB Console - Can enter 
+        various GDB commands and see results. Sync with IDE on step/next/etc 
+</P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Editor integration - 
+        hover for value, run to line etc. </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Link to source code - 
+        source in and outside of workspace. </P>
+        <LI>
+        <P style="MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px">Breakpoints 
+    </P></LI></UL></TD></TR></TBODY></TABLE><!-- End of Plan Outline --><!-- Undertested -->
+<P>&nbsp;</P><!-- end of Undertested --><!-- Who -->
 <DIV class=section><A name=contacts>Contacts</A></DIV>
 <TABLE border=1>
   <TBODY>
@@ -795,39 +1130,42 @@ yes">&nbsp; </span>These will be manual tests.</span></li>
       <TABLE width="100%">
         <TBODY>
         <TR>
-          <TD>Mathieu Lapensée, <a href="mailto:lapensee@ca.ibm.com">lapensee@ca.ibm.com</a>&nbsp;</TD></TR>
+          <TD>Mathieu Lapensée</TD></TR>
         <TR>
-          <TD>Brent Nicolle, <a href="mailto:bnicolle@ca.ibm.com">bnicolle@ca.ibm.com</a>&nbsp;</TD></TR>
-        <tr>
-          <TD>Tanya Wolff, <a href="mailto:twolff@ca.ibm.com">twolff@ca.ibm.com</a>&nbsp;</TD>
-        </tr>
+          <TD>Brent Nicolle</TD></TR>
         <TR>
-          <TD>Katherine Franklin, <a href="mailto:kfrankli@ca.ibm.com">kfrankli@ca.ibm.com</a>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+          <TD>Tanya Wolff</TD></TR>
+        <TR>
+          <TD>James Ciesielski</TD></TR>
+        <TR>
+          <TD>Katherine Franklin</TD></TR></TBODY></TABLE></TD></TR>
   <TR vAlign=top>
     <TD><B>QNX</B></TD>
     <TD>
       <TABLE width="100%">
         <TBODY>
         <TR>
-          <TD>Peter Graves, <a href="mailto:peter.graves@qnx.com">peter.graves@qnx.com</a></TD></TR>
+          <TD>Peter Graves</TD></TR>
         <TR>
-          <TD>Dave Young, <a href="mailto:david.young@qnx.com">david.young@qnx.com</a>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+          <TD>Dave Young</TD></TR></TBODY></TABLE></TD></TR>
   <TR vAlign=top>
     <TD><B>Red Hat</B></TD>
     <TD>
       <TABLE width="100%">
         <TBODY>
         <TR>
-	  <TD>Mike Behm, <a href="mailto:mbehm@redhat.com">mbehm@redhat.com</a>&nbsp;</TD></TR>
-          <TD>Bertina Lee, <a href="mailto:blee@redhat.com">blee@redhat.com</a>&nbsp;</TD></TR>
-	  <TD>Jeremy Handcock, <a href="mailto:handcock@redhat.com">handcock@redhat.com</a>&nbsp;</TD></TR></TBODY></TABLE></TD></TR>
+          <TD>Mike Behm</TD></TR>
+        <TR>
+          <TD>Bertina Lee</TD></TR>
+        <TR>
+          <TD>Jeremy Handcock</TD></TR></TBODY></TABLE></TD></TR>
   <TR vAlign=top>
     <TD><B>TimeSys</B></TD>
     <TD>
       <TABLE width="100%">
         <TBODY>
         <TR>
-          <TD>Steven Jensen, <a href="mailto:steven.jensen@timesys.com">steven.jensen@timesys.com</a>&nbsp;</TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
+          <TD>Steven Jensen&nbsp;</TD></TR></TBODY></TABLE></TD></TR></TBODY></TABLE>
 <P>You can reach all of us at the mailing list <A 
 href="mailto:cdt-test-dev@eclipse.org">cdt-test-dev@eclipse.org</A>.&nbsp; For 
 spam protection, you must join the mailing list first before you can email to 
@@ -837,14 +1175,10 @@ testing CDT.&nbsp; Details of this conference call are published on the mailing
 list.</P>
 
 <!-- References -->
-<DIV class=section><A name=references>References</A></DIV>
-<P>TBD. References to Useful Eclipse CDT Pages. 
 <P>
-<!-- End of References -->
-
 &nbsp;
 <TABLE cellPadding=2 width="100%" border=0>
   <TBODY>
   <TR>
     <TD vAlign=top align=left bgColor=#0080c0 colSpan=2></TD></TR></TBODY></TABLE>
-<CENTER><I>Last Modified on Wednesday, August 27 2003 </I></CENTER></BODY></HTML>
+<CENTER><I>Last Modified on Wednesday, October 24th, 2003 </I></CENTER></BODY></HTML>
