@@ -257,7 +257,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	    }
 	else
 	    {
-		for (int i = 0; i < _sortByAction.length; i++)
+		for (int i = 1; i < _sortByAction.length; i++)
 		    {
 			if (_sortByAction[i].getProperty().equals(property))
 			    {

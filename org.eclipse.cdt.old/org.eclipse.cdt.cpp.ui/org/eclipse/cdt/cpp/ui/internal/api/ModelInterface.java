@@ -1113,6 +1113,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public DataElement findResourceElement(DataElement root, String path)
     {
 	DataElement found = null;
+	if (root == null)
+	    {
+		return null;
+	    }
+	
 	if (compareFileNames(root.getSource(), path))
 	    {
 		found = root;

@@ -88,10 +88,7 @@ public class ViewFilter extends ViewerFilter
 			if (!result)
 			    {
 				DataElement notDescriptor = dataElement.getDescriptor();
-				if (notDescriptor != null && !_notCache.contains(notDescriptor))
-				    {
-					_notCache.add(notDescriptor);
-				    }
+				//addTo(_notCache, notDescriptor);
 			    }
 
 			return result;
@@ -128,7 +125,7 @@ public class ViewFilter extends ViewerFilter
 				  {
 				      if (dataType.equals(typeName) || typeName.equals("all"))
 					  {
-					      _isCache.add(elementDescriptor);
+					      addTo(_isCache, elementDescriptor);
 					      return true; 
 					  }
 				      else
@@ -138,7 +135,7 @@ public class ViewFilter extends ViewerFilter
 						      if (elementDescriptor != null && 
 							  elementDescriptor.isOfType(descriptor, true))
 							  {
-							      _isCache.add(elementDescriptor);
+							      addTo(_isCache, elementDescriptor);
 							      return true;
 							  }
 						      
@@ -151,7 +148,7 @@ public class ViewFilter extends ViewerFilter
 								      if (aDes != null && 
 									  doesExist(aDes, dataElement, depth))
 									  {
-									      _isCache.add(elementDescriptor);
+									      addTo(_isCache, elementDescriptor);
 									      return true;
 									  }					      
 								  }
@@ -165,6 +162,14 @@ public class ViewFilter extends ViewerFilter
       
       return false;
   }
+    
+    private void addTo(ArrayList cache, DataElement descriptor)
+    {
+	if (descriptor != null && !cache.contains(descriptor))
+	    {
+		cache.add(descriptor);
+	    }
+    }
 
     public void setDepth(int depth)
     {

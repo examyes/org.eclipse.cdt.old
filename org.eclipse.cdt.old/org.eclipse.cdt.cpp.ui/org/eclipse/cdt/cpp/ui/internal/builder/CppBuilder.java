@@ -34,27 +34,6 @@ public class CppBuilder extends IncrementalProjectBuilder
 {
     private static CppBuilder _instance = new CppBuilder();
 
-    public class BuildMonitor extends Handler
-    {
-	private DataElement _status;
-	private DataElement _projectElement = null;
-
-	public BuildMonitor(DataElement status, DataElement project)
-	{
-	    _status = status;
-	    _projectElement = project;
-	}
-
-	public void handle()
-	{
-	    if (_status.getName().equals("done"))
-		{
-		    //***_projectElement.refresh(false);
-		    finish();
-		}
-	}
-
-    }
 
     public CppBuilder()
     {
@@ -80,8 +59,6 @@ public class CppBuilder extends IncrementalProjectBuilder
 	
 	DataElement status = api.invoke(project, invocation, false);
 	
-	BuildMonitor monitor = new BuildMonitor(status, project);
-	monitor.start();
     }
 
     public void doBuild(IProject project)
@@ -102,8 +79,6 @@ public class CppBuilder extends IncrementalProjectBuilder
 
    		DataElement status = api.invoke(projectElement, invocation, false);
 
-		BuildMonitor monitor = new BuildMonitor(status, projectElement);
-		monitor.start();
 	    }		
     }
 

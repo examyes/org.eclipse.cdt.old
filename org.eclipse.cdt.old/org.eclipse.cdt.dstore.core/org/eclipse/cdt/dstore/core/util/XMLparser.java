@@ -311,7 +311,7 @@ public class XMLparser
 				      }
 				  else
 				      {
-					  System.out.println("NULL!");
+					  System.out.println("parent of " + result.getName() + " is NULL!");
 				      }
 			      }
 			  else

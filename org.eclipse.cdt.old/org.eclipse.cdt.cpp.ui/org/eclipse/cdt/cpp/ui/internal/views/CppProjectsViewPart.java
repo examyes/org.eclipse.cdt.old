@@ -22,7 +22,8 @@ import org.eclipse.ui.*;
 
 public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionListener, ICppProjectListener
 { 
-    
+    private boolean _inputed = false;
+
     public CppProjectsViewPart()
     {
 	super();
@@ -40,32 +41,65 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     
     public void initInput(DataStore dataStore)
     {
-	setTitle("C/C++ Projects");
-	dataStore = _plugin.getDataStore();
-	DataElement projectMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
-	if (projectMinerData != null)
+	if (!_inputed)
 	    {
-		DataElement rootElement = null;
-		IAdaptable input = getSite().getPage().getInput();
-		if (input instanceof IResource)
-		    {
-			IResource resource = (IResource)input;
-			rootElement = _api.findResourceElement(resource);
-		    }
 		
-		if (rootElement != null)
+		setTitle("C/C++ Projects");
+		dataStore = _plugin.getDataStore();
+		DataElement projectMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
+		if (projectMinerData != null)
 		    {
-			_viewer.setInput(rootElement);
-		    }
-		
-		lock(true);
-		return;
-	    } 
-	_viewer.setInput(null);
+			DataElement rootElement = null;
+			IAdaptable input = getSite().getPage().getInput();
+			if (input instanceof IResource)
+			    {
+				IResource resource = (IResource)input;
+				rootElement = _api.findResourceElement(resource);
+			    }
+			
+			if (rootElement != null)
+			    {
+				_viewer.setInput(rootElement);
+				_viewer.setSorter(DE.P_NAME);
+
+			    }
+			
+			lock(true);
+			_inputed = true;
+			return;
+		    } 
+		_viewer.setInput(null);
+	    }
+	
     }
     
+
+
+
     public void selectionChanged(IWorkbenchPart part, ISelection sel) 
     {
+	if (part == this && (sel instanceof IStructuredSelection))
+	    {
+		IStructuredSelection ssel = (IStructuredSelection)sel;
+		Object object = ssel.getFirstElement();
+		if (object instanceof DataElement)
+		    {
+			DataElement theObject = (DataElement)object;
+			DataElement theParent = _api.getProjectFor(theObject);
+			
+			if (theParent != null)
+			    {
+				IProject project = _api.findProjectResource(theParent);
+				if (project != null)
+				    {
+					DataStore dataStore = theParent.getDataStore();
+					_plugin.setCurrentProject(project);
+					_plugin.setCurrentDataStore(dataStore);
+				    }
+			    }			
+		    }
+		
+	    }
     }
 
 

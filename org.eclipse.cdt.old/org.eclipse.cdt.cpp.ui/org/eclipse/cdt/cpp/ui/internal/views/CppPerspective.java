@@ -64,6 +64,7 @@ public class CppPerspective implements IPerspectiveFactory
     factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
     factory.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
     factory.addShowViewShortcut(IPageLayout.ID_RES_NAV);
+    factory.addShowViewShortcut(IPageLayout.ID_PROP_SHEET); 
     
     // new actions - c++ project creation wizard
     factory.addNewWizardShortcut("com.ibm.cpp.ui.wizards.CppNewProjectResourceWizard"); //$NON-NLS-1$
