@@ -19,7 +19,6 @@ public class EnvironmentMiner extends Miner
  public void updateMinerInfo() {}
  public void load() 
  {
-  System.out.println("Loading Environment Miner");
   _system = _dataStore.createObject(_minerData, "Environment Variable", "System Environment");
   getSystemEnvironment();
  }
@@ -41,9 +40,7 @@ public class EnvironmentMiner extends Miner
   DataElement subject = getCommandArgument(theElement, 0);
   DataElement     env = getCommandArgument(theElement, 1);
   
-  System.out.println("Handle Command " + theElement);
-  System.out.println("subject " + subject);
-  System.out.println("environment " + env);
+ 
   if (name.equals("C_SET_ENVIRONMENT_VARIABLES"))
    handleSetEnvironment(subject, env);
 
@@ -53,9 +50,6 @@ public class EnvironmentMiner extends Miner
 
  public void handleSetEnvironment(DataElement theElement, DataElement environment)
  {
-  System.out.println("theElement = " + theElement);
-  System.out.println("env = " + environment);
-  
   //First check to see if we already have an Environment for theElement..and get rid of it if we do.
   DataElement envRoot = _dataStore.find(_minerData, DE.A_NAME, environment.getId(), 1);
   if (envRoot != null)
