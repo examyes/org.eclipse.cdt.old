@@ -37,15 +37,42 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 
  public void selectionChanged(IWorkbenchPart part, ISelection sel) 
  {
-  try
-  {
-   Object object = ((IStructuredSelection)sel).getFirstElement();
-   if (object instanceof DataElement)
-    doSpecificInput((DataElement)object);
-  }
-  catch (ClassCastException e){}
+     if (part instanceof CppProjectsViewPart)
+	 {
+	     try
+		 {
+		     Object object = ((IStructuredSelection)sel).getFirstElement();
+		     if (object instanceof DataElement)
+			 doSpecificInput((DataElement)object);
+		 }
+	     catch (ClassCastException e)
+		 {
+		 }	
+	 } 
+     else if (part instanceof org.eclipse.ui.views.navigator.ResourceNavigator)
+	 {
+
+	     try
+		 {
+		     Object object = ((IStructuredSelection)sel).getFirstElement();
+		     if (object instanceof IResource)
+			 {
+			     IResource res = (IResource)object;
+			     DataElement element = _api.findResourceElement(res);
+			     if (element != null)
+				 {
+				     doSpecificInput(element);
+				 }
+			 }
+		 }
+	     catch (ClassCastException e)
+		 {
+		 }	
+
+	 }
+
  }
-  
+     
  protected String getF1HelpId()
  {
   return CppHelpContextIds.PROJECT_OBJECTS_VIEW;
@@ -126,8 +153,6 @@ public class ProjectObjectsViewPart extends ProjectViewPart
   while (!(theProjectFile = theProjectFile.getParent()).getType().equals("Project")) 
       {
       }
-
-
 
      DataElement parseProject = ((DataElement)(theProjectFile.getAssociated("Parse Reference").get(0))).dereference();
      DataElement parsedFiles  = dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
