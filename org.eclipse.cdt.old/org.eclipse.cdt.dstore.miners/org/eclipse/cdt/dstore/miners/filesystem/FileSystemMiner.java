@@ -360,7 +360,6 @@ public class FileSystemMiner extends Miner
      return status;
    }
     
-    //////////////////////    
     private DataElement handleRename(DataElement subject, DataElement newName, DataElement status)
     {
 	File toBeRenamed = new File(subject.getSource());
@@ -495,18 +494,26 @@ public class FileSystemMiner extends Miner
 		     
 		     String objName = newName.getName();
 		     DataElement type = _fileDescriptor;
-		     if (objName.charAt(0) == '.')
+		     boolean hidden = objName.charAt(0) == '.';
+		     if (hidden)
 		     {
-		     	type = _hiddenDirectoryDescriptor;	
+		     	type = _hiddenFileDescriptor;	
 		     }
 		     
 		     DataElement newObject = _dataStore.createObject(subject, type,
 								     objName, newFileName.toString());
 		     
-		     handleSize(newObject, status);
-		     handleDate(newObject, status, false);
-		     newObject.setDepth(1);// the new file has no children
-		     subject.setDepth(2);// my parent directory has the new file as its child
+		     if (!hidden)
+			 {
+			     handleSize(newObject, status);
+			     handleDate(newObject, status, false);
+			     newObject.setDepth(1);// the new file has no children
+			     subject.setDepth(2);// my parent directory has the new file as its child
+			 }
+		     else
+			 {
+			     newObject.setDepth(0);
+			 }
 		     _dataStore.refresh(subject);
 		 }
 	     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
@@ -536,18 +543,27 @@ public class FileSystemMiner extends Miner
 
 		     String objName = newName.getName();
 		     DataElement type = _directoryDescriptor;
-		     if (objName.charAt(0) == '.')
+		     boolean hidden = objName.charAt(0) == '.';
+		     if (hidden)
 		     {
 		     	type = _hiddenDirectoryDescriptor;	
 		     }
 		     
 		     DataElement newObject=_dataStore.createObject(subject, type,
 								   objName, newDirName.toString());
-		     handleSize(newObject, status);
-		     handleDate(newObject, status, false);
-		     
-		     newObject.setDepth(1);//new directory is empty so it does not have any children(i.e.depth=1)
-		     subject.setDepth(2);// the parent directory now has the new directory as its child.
+		     if (!hidden)
+			 {
+			     handleSize(newObject, status);
+			     handleDate(newObject, status, false);
+			     
+			     newObject.setDepth(1);//new directory is empty so it does not have any children(i.e.depth=1)
+			     subject.setDepth(2);// the parent directory now has the new directory as its child.
+			 }
+		     else
+			 {
+			     newObject.setDepth(0);
+			 }
+
 		     _dataStore.refresh(subject);
 		 }
 	     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
@@ -799,7 +815,7 @@ public class FileSystemMiner extends Miner
 
     private DataElement handleQueryAll(DataElement theElement, DataElement status)
     {
-	handleQuery(theElement, status);
+	handleQuery(theElement, status, true);
 	for (int i = 0; i < theElement.getNestedSize(); i++)
 	    {
 		DataElement child = theElement.get(i);
@@ -860,13 +876,22 @@ public class FileSystemMiner extends Miner
 			String line = null;
 			while ((line = reader.readLine()) != null)
 			    {
-				DataElement type = _fileDescriptor;
-				String name = line;
-				
+				String name = line;				
 				int length = line.length();
+
+
+				boolean hidden = name.charAt(0) == '.';
+				DataElement type = (hidden ? _hiddenFileDescriptor : _fileDescriptor);				
 				if (line.charAt(length - 1) == '/')
 				    {
-					type = _directoryDescriptor;
+					if (hidden)
+					    {
+						type = _hiddenDirectoryDescriptor;
+					    }
+					else
+					    {
+						type = _directoryDescriptor;
+					    }
 					name = line.substring(0, length - 1);
 				    }
 				else if (line.charAt(length - 1) == '*')
@@ -882,44 +907,58 @@ public class FileSystemMiner extends Miner
 				    {
 					newObject = _dataStore.createObject(theElement, type, name, filePath);
 					
-					if (type == _directoryDescriptor)
+					if (!hidden)
 					    {
-						handleSize(newObject, status);
-						handleDate(newObject, status, false);
+						if (type == _directoryDescriptor)
+						    {
+							handleSize(newObject, status);
+							handleDate(newObject, status, false);
+						    }
+						else
+						    {
+							handleSize(newObject, status);
+							handleDate(newObject, status, false);
+							classifyExecutable(newObject, false);
+							newObject.setDepth(1);
+						    }
 					    }
 					else
 					    {
-						handleSize(newObject, status);
-						handleDate(newObject, status, false);
-						classifyExecutable(newObject, false);
-						newObject.setDepth(1);
+						newObject.setDepth(0);
 					    }
 				    }
 				else
 				    {
 					if (refresh)
 					    {
-						if (!newObject.isOfType(_directoryDescriptor))
+						if (!hidden)
 						    {
-							if (type != newObject.getDescriptor())
+							if (!newObject.isOfType(_directoryDescriptor))
 							    {
-								newObject.setAttribute(DE.A_TYPE, type.getName());
+								if (type != newObject.getDescriptor())
+								    {
+									newObject.setAttribute(DE.A_TYPE, type.getName());
+								    }
+								
+								if (type == _exeDescriptor)
+								    {
+									classifyExecutable(newObject, false);
+								    }
 							    }
-
-							if (type == _exeDescriptor)
+							else
 							    {
-								classifyExecutable(newObject, false);
+								if (newObject.depth() == 1)
+								    {
+									if (newObject.getNestedSize() > 0)
+									    {
+										newObject.setDepth(2);
+									    }
+								    }
 							    }
 						    }
 						else
 						    {
-							if (newObject.depth() == 1)
-							    {
-								if (newObject.getNestedSize() > 0)
-								    {
-									newObject.setDepth(2);
-								    }
-							    }
+							newObject.setDepth(0);
 						    }
 					    }
 				    }
@@ -996,12 +1035,12 @@ public class FileSystemMiner extends Miner
 				      	File f = list[i];
 					String filePath = f.getAbsolutePath().replace('\\', '/');			
 					String objName = f.getName();
+					boolean hidden = f.isHidden()  || objName.charAt(0) == '.';
 					
 					DataElement newObject = _dataStore.find(theElement, DE.A_SOURCE, filePath, 1);
 					if (newObject == null || newObject.isDeleted())
 					    {
 						DataElement objType = _directoryDescriptor;
-						boolean hidden = f.isHidden()  || objName.charAt(0) == '.';
 
 						if (!f.isDirectory())
 						    {
@@ -1061,15 +1100,29 @@ public class FileSystemMiner extends Miner
 						    {
 							if (!newObject.isOfType(_directoryDescriptor))
 							    {
-								winClassifyFile(newObject);								
+								if (hidden)
+								    {
+									newObject.setDepth(0);
+								    }
+								else
+								    {
+									winClassifyFile(newObject);	
+								    }
 							    }
 							else
 							    {
-								if (newObject.depth() == 1)
+								if (hidden)
 								    {
-									if (newObject.getNestedSize() > 0)
+									newObject.setDepth(0);
+								    }
+								else
+								    {
+									if (newObject.depth() == 1)
 									    {
-										newObject.setDepth(2);
+										if (newObject.getNestedSize() > 0)
+										    {
+											newObject.setDepth(2);
+										    }
 									    }
 								    }
 							    }
@@ -1095,6 +1148,7 @@ public class FileSystemMiner extends Miner
     {
 	// use 'exe' extension
 	String name = theFile.getName();
+
 	if (name.endsWith(".exe"))
 	    {
 		theFile.setAttribute(DE.A_TYPE, "binary executable");
