@@ -159,7 +159,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
 	// gets
 	
      
-    public boolean getDebugButonSelection()
+    public boolean getDebugButtonSelection()
     {
 		return _debuggableButton.getSelection();
     }
@@ -196,7 +196,7 @@ public class AutoconfBuilderPropertyPageControl extends Composite
     // sets
     
 
-    public void setDebugButonSelection(boolean flag)
+    public void setDebugButtonSelection(boolean flag)
     {
 		_debuggableButton.setSelection(flag);
     }

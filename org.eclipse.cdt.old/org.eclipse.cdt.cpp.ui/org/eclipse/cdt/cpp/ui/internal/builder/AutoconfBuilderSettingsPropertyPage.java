@@ -74,7 +74,7 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 		if (execType.isEmpty())
 		{
 			execType.add("Debug");
-			_autoconfBuildControl.setDebugButonSelection(true);
+			_autoconfBuildControl.setDebugButtonSelection(true);
 			_autoconfBuildControl.setOptimizedButtonSelection(false);
 			plugin.writeProperty(project,execKey,execType);	
 		}
@@ -83,14 +83,14 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 			String type = (String)execType.get(0);
 			if (type.equals("Debug"))
 			{
-				_autoconfBuildControl.setDebugButonSelection(true);
+				_autoconfBuildControl.setDebugButtonSelection(true);
 				_autoconfBuildControl.setOptimizedButtonSelection(false);
 				
 			}
 			else
 			{
 				_autoconfBuildControl.setOptimizedButtonSelection(true);
-				_autoconfBuildControl.setDebugButonSelection(false);
+				_autoconfBuildControl.setDebugButtonSelection(false);
 			}
 		}
 	}
@@ -108,22 +108,21 @@ public class AutoconfBuilderSettingsPropertyPage extends PropertyPage
 	
 	public boolean performOk()
 	{
-
+		CppPlugin plugin      = CppPlugin.getDefault();
+		ArrayList list = new ArrayList();
+		if(_autoconfBuildControl.getOptimizedButtonSelection())
+		{
+			list.add("Optimized");
+			plugin.writeProperty(project,execKey,list);
+		}
+		if(_autoconfBuildControl.getDebugButtonSelection())
+		{
+			list.add("Debug");
+			plugin.writeProperty(project,execKey,list);
+		}
+		
 		return true;
 	}
-	
-	private ArrayList getProjectProperty(boolean selection)
-   	{
-		ArrayList list = new ArrayList();
-		if (selection)
-			list.add("Yes");		
-		else
-			list.add("No");		
-   		return list;
-   	}
-	
-	
-	
 	private IProject getProject()
 	{
 		return (IProject)getElement();
