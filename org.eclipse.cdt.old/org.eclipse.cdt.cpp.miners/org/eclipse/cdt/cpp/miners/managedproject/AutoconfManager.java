@@ -109,9 +109,9 @@ public class AutoconfManager {
 						"cp "+project.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH)+
 						"/com.ibm.cpp.miners/autoconf_templates/script.batch "+project.getSource());
 					p.waitFor();
-					p = rt.exec(
+				/*	p = rt.exec(
 						"chmod +x "+project.getSource()+"/script.batch ");
-					p.waitFor();
+					p.waitFor();*/
 
 				}catch(IOException e){System.out.println(e);}
 				catch(InterruptedException e){System.out.println(e);}	
