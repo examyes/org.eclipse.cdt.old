@@ -240,6 +240,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 					{	
 					    _file = file;
 
+						
+
 					    if (_plugin != null)
 						{
 						    
@@ -247,18 +249,24 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
 						    IEditorPart editor = null;
 						    
-						    IEditorPart [] editors = persp.getEditors();
+						    IEditorReference[] editors = persp.getEditorReferences();
+						    
 						    for (int i = 0; i < editors.length; i++)
 							{
-							    IEditorInput eInput = editors[i].getEditorInput();
+								IEditorPart editorPart = editors[i].getEditor(false);
+								if (editorPart != null)
+								{
+					
+							    IEditorInput eInput = editorPart.getEditorInput();
 							    if (eInput instanceof IFileEditorInput)
 								{
 								    IFileEditorInput input = (IFileEditorInput)eInput;
 								    IFile openFile = input.getFile();
+								    
 								    if ((input != null) && 
 									openFile.getLocation().toString().equals(file.getLocation().toString()))
 									{
-									    editor = editors[i];
+									    editor = editorPart;
 									    _editor = editor;
 									    // force focus
 									    if (openEditor)
@@ -268,8 +276,10 @@ public class OpenEditorAction extends Action implements IOpenAction
 		
 									    break;
 									}
+								}	
 								}
 							}
+						    
 						    
 						    if (editor == null)
 							{
