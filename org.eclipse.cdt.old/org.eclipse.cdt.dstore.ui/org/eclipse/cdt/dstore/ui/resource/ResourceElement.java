@@ -157,8 +157,13 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     }
 
   public Object[] getChildren(Object o) 
+    {
+	return getChildren(o, false);
+    }
+
+  public Object[] getChildren(Object o, boolean force) 
   {
-    if ((_children == null) || (_children.size() == 0))
+      if ((_children == null) || (_children.size() == 0) || force)
       {	
 	if (_children == null)
 	  _children = new Vector();
@@ -166,7 +171,6 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	DataElement element = toElement(o);
 	if (!element.getAttribute(DE.A_TYPE).equals("file"))
 	  {	    
-	      //element.refresh(true);
     	      element.expandChildren(true);
 	    
 	    ArrayList objs = element.getNestedData();
@@ -178,23 +182,50 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 		if (!obj.isDeleted() && obj.getDataStore().filter(_resourceDescriptor, obj))
 		  {	    
 		    String type = obj.getType();
-		    ResourceElement child = null;
-		    
-		    if (type.equals("project"))
-		      {
-			child = new ProjectResourceElement(obj, _project);				    
-		      }		
-		    else if (type.equals("directory"))
-		      {
-			child = new FolderResourceElement(obj, this, _project);		
-		      }
-		    else 
-		      {
-			child = new FileResourceElement(obj, this, _project);		
-		      }
-		    
-		    _children.add(child);
-		    
+		    String name = obj.getName();
+		    ResourceElement child = findResource(name);
+		    if (child != null)
+			{
+			    DataElement childElement = child.getElement();
+			    if (childElement.isDeleted())
+				{
+				    _children.remove(child);
+				    if (!obj.isDeleted())
+					{
+					    if (type.equals("project"))
+						{
+						    child = new ProjectResourceElement(obj, _project);				    
+						}		
+					    else if (type.equals("directory"))
+						{
+						    child = new FolderResourceElement(obj, this, _project);		
+						}
+					    else 
+						{
+						    child = new FileResourceElement(obj, this, _project);		
+						}
+					    
+					    _children.add(child);
+					}
+				}
+			}
+		    else
+			{
+			    if (type.equals("project"))
+				{
+				    child = new ProjectResourceElement(obj, _project);				    
+				}		
+			    else if (type.equals("directory"))
+				{
+				    child = new FolderResourceElement(obj, this, _project);		
+				}
+			    else 
+				{
+				    child = new FileResourceElement(obj, this, _project);		
+				}
+			    
+			    _children.add(child);
+			}
 		  }	
 	      }
 	    
@@ -505,22 +536,25 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 
     public void refreshLocal(int depth, IProgressMonitor monitor)
     {
-	removeChildren();
-
-	DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_element.getDescriptor(), "C_REFRESH");
-        if (refreshDescriptor != null)
-        {	
-	    _dataStore.synchronizedCommand(refreshDescriptor, _element);	    
-
-	    Object[] children = getChildren(null);
-	    for (int i = 0; i < children.length; i++)
-		{
-		    ResourceElement child = (ResourceElement)children[i];
-		    child.refreshLocal(depth - 1, monitor);
-		}
-        }
-    }  
-
+	if (depth > 0)
+	    {
+		if (_element.isExpanded())
+		    {
+			DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_element.getDescriptor(), "C_REFRESH");
+			if (refreshDescriptor != null)
+			    {	
+				_dataStore.synchronizedCommand(refreshDescriptor, _element);	    
+				
+				Object[] children = getChildren(_element, true);
+				for (int i = 0; i < children.length; i++)
+				    {
+					ResourceElement child = (ResourceElement)children[i];
+					child.refreshLocal(depth - 1, null);
+				    }
+			    }
+		    }
+	    }  
+    }
 }
 
 

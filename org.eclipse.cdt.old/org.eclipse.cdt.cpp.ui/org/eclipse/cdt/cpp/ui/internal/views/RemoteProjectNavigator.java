@@ -106,7 +106,7 @@ public class RemoteProjectNavigator extends TreeViewer  implements ISelected, ID
 				    }
 				else
 				    {
-					if (repositoryElement.contains(parent, 3))
+					if (repositoryElement != null && repositoryElement.contains(parent, 5))
 					    {
 						return true;
 					    }
@@ -139,7 +139,7 @@ public class RemoteProjectNavigator extends TreeViewer  implements ISelected, ID
 			//internalRefresh(repository);
 
 			reveal(repository);
-			expandToLevel(repository, 2);
+			expandToLevel(_currentInput, 2);
 
 			tree.setRedraw(true);				
 			return;

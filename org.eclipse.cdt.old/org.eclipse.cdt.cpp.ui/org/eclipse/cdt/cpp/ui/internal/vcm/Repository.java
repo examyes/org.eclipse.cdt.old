@@ -90,24 +90,13 @@ public class Repository extends Project
 	    DataElement refreshDescriptor = _dataStore.localDescriptorQuery(_remoteRoot.getDescriptor(), "C_REFRESH");
 	    if (refreshDescriptor != null)
 		{	
-		    _dataStore.synchronizedCommand(refreshDescriptor, _remoteRoot);	   
+		    _dataStore.synchronizedCommand(refreshDescriptor, _remoteRoot);
 		    Object[] children = internalGetChildren(_remoteRoot, true);
-		    System.out.println("refreshing...");
-		    /*
 		    for (int i = 0; i < children.length; i++)
 			{
 			    ResourceElement child = (ResourceElement)children[i];
-			    System.out.println("    " + child.getName());
-			    //			    child.refreshLocal(1, null);
+			    child.refreshLocal(1, null);
 			}
-		    */
-		    for (int i = 0; i < _remoteRoot.getNestedSize(); i++)
-			{
-			    DataElement child = _remoteRoot.get(i);
-			    System.out.println("   " + child.getName());
-			}
-
-		    _dataStore.refresh(_remoteRoot);
 		} 
 	}
     }
@@ -660,6 +649,7 @@ public class Repository extends Project
   public void build(int kind, IProgressMonitor monitor) throws CoreException
   {
       CppBuilder.doBuild(this);
+      refreshLocal(1, null);
   }
   
   public void build(int kind, String builderName, Map args, IProgressMonitor monitor) throws CoreException

@@ -212,11 +212,7 @@ public class FileSystemMiner extends Miner
 	 }
      else if (name.equals("C_REFRESH"))
      {
-	 _dataStore.deleteObjects(subject);
-	 _dataStore.refresh(subject, true);
-	 DataElement subStatus = _dataStore.createObject(status, "status", "start");
-	 handleQuery(subject, subStatus, true);
-	 status.setAttribute(DE.A_NAME, "done");
+	 status = handleRefresh(subject, status);
      }
      else if (name.equals("C_FIND_FILE"))
        {
@@ -597,6 +593,68 @@ public class FileSystemMiner extends Miner
         return status;
       }
 
+    public DataElement handleRefresh(DataElement theElement, DataElement status)
+    {
+	try
+	    {		
+		String type = (String)theElement.getElementProperty(DE.P_TYPE);	   
+		File theFile = new File (theElement.getSource());
+		StringBuffer path = new StringBuffer (theFile.getPath());
+		
+		if (!type.equals("device"))
+		    {
+			path.append(File.separator);
+		    }
+		
+		// check for deleted
+		for (int i = 0; i < theElement.getNestedSize(); i++)
+		    {
+			DataElement child = theElement.get(i);
+			File childFile = new File(child.getSource());
+			if (!childFile.exists())
+			    {
+				_dataStore.deleteObject(theElement, child);
+			    }
+		    }
+
+
+		// query
+		String[] list= theFile.list();
+		if (list != null)
+		    {
+			String objType  = new String(getLocalizedString("model.directory"));
+			for (int i= 0; i < list.length; i++)
+			    {
+				String filePath = path.toString() + list[i];
+				String objName = list[i];
+				
+				DataElement newObject = _dataStore.find(theElement, DE.A_NAME, objName, 1);
+				if (newObject == null || newObject.isDeleted())
+				    {
+					newObject = _dataStore.createObject (theElement, objType, 
+											 objName, filePath);
+					File f = new File (filePath);
+					if (!f.isDirectory())
+					    {
+						newObject.setAttribute(DE.A_TYPE, getLocalizedString("model.file"));
+						newObject.setDepth(1);
+					    }		      
+				    }
+			    }			
+		    }
+		
+	    }	
+	catch (Exception e)
+	    {
+		System.out.println(e);
+		e.printStackTrace();
+	    }
+	
+	_dataStore.refresh(theElement);
+
+	status.setAttribute(DE.A_NAME, "done");
+	return status;
+    }
 
     public DataElement findFile (DataElement root, String matchStr, DataElement status)
     {
