@@ -129,7 +129,6 @@ public class FileSystemMiner extends Miner
 
     private DataElement findFile(DataElement root, File path)
     {	
-	_dataStore.trace("find " + path + " in " + root.getName());
 	DataElement result = root;
 	if (root.getType().equals("data"))
 	    {
@@ -164,7 +163,6 @@ public class FileSystemMiner extends Miner
 				String directory_source = directory.getSource();
 				if (directory_source.equals(path_dir))
 				    {
-					_dataStore.trace("found " + directory.getName() + " for " + path);
 					return directory;
 				    }
 				
@@ -261,7 +259,6 @@ public class FileSystemMiner extends Miner
      DataElement status  = getCommandStatus(theElement);
      DataElement subject = getCommandArgument(theElement, 0);
 
-     _dataStore.trace(name + " on " + subject.getName());
      if (name.equals("C_QUERY"))
        {
 	  if (subject != null)
