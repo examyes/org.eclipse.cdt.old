@@ -61,7 +61,6 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
 	 _plugin = PAPlugin.getDefault();
 	 _api = PAModelInterface.getInstance();
 	 _api.getTraceNotifier().addTraceListener(this);
-	 
 	 _traceType = PAResource.TRACE_FILE;
 	 _traceFormat = AUTO_FORMAT;
 	 _realTraceFormat = AUTO_FORMAT;
@@ -220,8 +219,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
            setErrorMessage("Not a valid trace program: " + argument.getSource());
            _detectedTraceFormat = null;
            setPageComplete(false);
-           if (!_argumentField.isDisposed())
-            _argumentField.setEditable(false);
+           _argumentField.setEditable(false);
          }
          else {
            setErrorMessage(null);
@@ -231,8 +229,7 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
            setPageComplete(true);
            
            if (_traceType == PAResource.TRACE_PROGRAM) {
-             if (!_argumentField.isDisposed())
-              _argumentField.setEditable(true);
+             _argumentField.setEditable(true);
            }
            
          }         
@@ -268,13 +265,20 @@ public class PATraceTypeWizardPage extends WizardPage implements Listener, IPATr
      else {
       _api.addTraceProgram(_traceElement, _realTraceFormat, _argument);
      }
-               
+     
      return true;
    }
    
-    /**
-     * Creates a new label with a bold font.
-     */
+   
+   public void dispose()
+   {
+     _api.getTraceNotifier().removeTraceListener(this);
+   }
+   
+   
+   /**
+    * Creates a new label with a bold font.
+    */
    protected Label createBoldLabel(Composite parent, String text)
    {
 	Label label = new Label(parent, SWT.NONE);
