@@ -88,8 +88,6 @@ public class TransferFiles extends Thread
 	    {
 		_listener.getShell().getDisplay().asyncExec(new Notify("Ready")); 
 	    }
-	    	
-		targetDataStore.refresh(_target.getParent());
 	    }
 	
 
@@ -234,9 +232,47 @@ public class TransferFiles extends Thread
 
 			// make sure we have a local copy of the file
 			File theFile = source.getFileObject();
-
-			// this works when transferring from local to server
-			targetDataStore.replaceFile(newSourceStr, theFile);
+			
+			try
+			{ 
+				FileInputStream input = new FileInputStream(theFile);
+				long totalSize = theFile.length();
+				boolean firstAppend = true;
+				int bufferSize = 500000;
+				byte[] buffer = new byte[bufferSize];
+				int totalRead = 0;
+				while (totalRead < totalSize)
+				{ 
+					int available = input.available();
+					available = (bufferSize > available) ? available : bufferSize;
+				
+					int bytesRead = input.read(buffer, 0, available);
+					if (bytesRead == -1)
+						break;
+						
+					if (firstAppend) 
+					{ 
+						firstAppend = false;
+						targetDataStore.replaceFile(newSourceStr, buffer, bytesRead);				
+					}
+					else
+					{
+						targetDataStore.replaceAppendFile(newSourceStr, buffer, bytesRead);
+					}
+					
+					totalRead += bytesRead;
+					
+				if (_pm != null)
+		  		  {
+		  		  	String msg = "Writing " + newSourceStr + "(" + totalRead / 1000 + "k)";
+					_pm.subTask(msg);
+		  		  }
+				}
+			}
+			catch (IOException e)
+			{
+			}
+			
 			if (_checkTimestamps)
 			{
 				setDate(copiedSource, getDate(source));

@@ -67,6 +67,8 @@ public class CopyAction extends CustomAction
 			    transferAction.run(pm);
 			    _pm.worked(1);
 			}
+			
+			targetProject.getDataStore().refresh(targetProject);
 		}
 	}
     }

@@ -162,6 +162,8 @@ public class CommandViewer extends Viewer implements SelectionListener
 
     protected void setElementInput(DataElement input)
     {
+    	if (input != null)
+    	{
 	String type = input.getType();
 	DataElement descriptor = input.getDescriptor();
 	if (type.equals("file") || (descriptor != null && input.getDescriptor().isOfType("file")))
@@ -193,6 +195,7 @@ public class CommandViewer extends Viewer implements SelectionListener
 		
 		updateCombo();	
 	}		
+    	}
     }
 
     protected void updateCombo()

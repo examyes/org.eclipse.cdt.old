@@ -87,7 +87,10 @@ public class QuickConnectAction implements Runnable
 	else if (status.isConnected())
 	    {
 		DataStore rmtDataStore = tempConnection.getDataStore();
-		DataElement input = rmtDataStore.getHostRoot().get(0).dereference();
+		
+		DataElement host = rmtDataStore.getHostRoot();
+		
+		DataElement input = host.get(0).dereference();
 		input.expandChildren();
 		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", 
 									 input);

@@ -1,5 +1,6 @@
 package com.ibm.dstore.hosts;
 
+
 /*
  * Copyright (c) 2001 International Business Machines Corporation. All rights reserved.
  * This program and the accompanying materials are made available under the terms of
@@ -196,8 +197,8 @@ public class HostsPlugin extends AbstractUIPlugin
   }
 
     public DataStore getDataStore()
-    {
-	return _dataStore;
+    { 
+	return _dataStore; 
     }
 
     public String getInstallLocation()
