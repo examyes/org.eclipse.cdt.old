@@ -44,35 +44,16 @@ public class CppOutputViewer extends OutputViewer
 
     protected void handleDoubleSelect(SelectionEvent event)
     {
-	if (_cppOpenEditorAction == null)
+	if (_selected != null)
 	    {
-		_cppOpenEditorAction = new OpenEditorAction(_selected);
-	    }
-
-	DataElement type = _selected.getDescriptor();
-	boolean isContainer = false;
-	if (type != null)
-	    {
-		ArrayList contents = type.getAssociated("contents");
-		for (int i = 0; (i < contents.size()) && !isContainer; i++)
+		if (_cppOpenEditorAction == null)
 		    {
-			DataElement contained = (DataElement)contents.get(i);
-			if (contained.getType().equals(DE.T_OBJECT_DESCRIPTOR))
-			    {
-				isContainer = true;
-			    }		    
+			_cppOpenEditorAction = new OpenEditorAction(_selected);
 		    }
+		
+		_cppOpenEditorAction.setSelected(_selected);
+		_cppOpenEditorAction.run();    
 	    }
-	
-	if (isContainer)
-	    {
-		_selected.expandChildren();
-		setInput(_selected);
-	    }
-	
-	
-	_cppOpenEditorAction.setSelected(_selected);
-	_cppOpenEditorAction.run();    
     }
     
 }
