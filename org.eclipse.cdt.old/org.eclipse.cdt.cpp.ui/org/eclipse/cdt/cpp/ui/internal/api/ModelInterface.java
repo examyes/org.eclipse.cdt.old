@@ -2046,7 +2046,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement mngCmd = dataStore.createObject(mngCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Initialize/Create/Run",
 							  "com.ibm.cpp.ui.internal.actions.ManageProjectAction");
-	mngCmd.setAttribute(DE.A_VALUE,"MANAGE_PROJECT");
+	mngCmd.setAttribute(DE.A_VALUE,"INIT_CREATE_RUN");
 	dataStore.createReference(mngCmds, autoconfCmds, "abstracts", "abstracted by");
 	DataElement defCmds = dataStore.createObject(autoconfCmds, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Default Cmds");
 						
