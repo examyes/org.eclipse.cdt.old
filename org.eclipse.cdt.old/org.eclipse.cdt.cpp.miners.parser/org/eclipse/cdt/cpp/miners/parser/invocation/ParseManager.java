@@ -83,8 +83,6 @@ public class ParseManager
   if (theFile.getType().equals("directory"))
   {
    File f = new File (theFile.getSource());
-   if (!f.exists())
-    return false;
    String thePath = null;
    try
    {
@@ -96,9 +94,8 @@ public class ParseManager
    {  
     DataElement theElement = (DataElement)theFiles.get(i);
     f = new File (theElement.getSource());
-    if (!f.exists())
-     continue;
-    String theElementPath = null;
+   
+    String theElementPath = null; 
     try
      {
       theElementPath = f.getCanonicalPath();
