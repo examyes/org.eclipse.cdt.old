@@ -1045,25 +1045,29 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public DataElement findResourceElement(IResource resource)
     {
-	if (resource instanceof IProject)
+	DataStore dataStore = _plugin.getCurrentDataStore();
+	DataElement workspace = findWorkspaceElement(dataStore);
+	if (resource instanceof IWorkspace)
+	    {
+		return workspace;
+	    }
+	else if (resource instanceof IProject)
 	    {
 		return findProjectElement((IProject)resource);
 	    }
-	if (resource instanceof ResourceElement)
+	else if (resource instanceof ResourceElement)
 	    {
 		ResourceElement resElement = (ResourceElement)resource;
 		return resElement.getElement();
 	    }
-
+	
 	DataElement result = null;
-	DataStore dataStore = _plugin.getCurrentDataStore();
-	DataElement workspace = findWorkspaceElement(dataStore);
 	if (workspace != null)
 	    {
 		String resString = resource.getLocation().toString();
 		result = findResourceElement(workspace, resString);
 	    }
-
+	
 	return result;
     }  
 
@@ -1730,6 +1734,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
  
 
 	// project actions
+
 	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
 							 "Open Project",
 							 "com.ibm.cpp.ui.internal.actions.OpenProjectAction");
@@ -1742,6 +1747,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							 "Delete Project",
 							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
 	dataStore.createReference(projectD, deleteProject);
+
 
 
 	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
@@ -1847,7 +1853,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	cvsCommit.setAttribute(DE.A_VALUE, "CVS_COMMIT");
 	
 	
-		DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
+	DataElement autoconfCmds = dataStore.createObject(projectD, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, "Autoconf");
 	DataElement generateAutoconfFilesCmd = dataStore.createObject(autoconfCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Generate Autoconf/Automake files",
 							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
