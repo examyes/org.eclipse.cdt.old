@@ -1,16 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <link rel="stylesheet"
+  <link type="text/css"
  href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
- type="text/css">
+ rel="stylesheet">
   <title>Eclipse CDT Draft 2.0 Plan</title>
 </head>
 <body>
 <h1>Eclipse CDT DRAFT 2.0 Plan</h1>
 <p style="font-weight: bold;">Revision History:</p>
-<table style="text-align: left; width: 100%;" border="1" cellspacing="2"
- cellpadding="2">
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 100%;">
   <tbody>
     <tr>
       <td style="vertical-align: top; font-weight: bold;">Date</td>
@@ -107,7 +107,9 @@ proposal will either be committed, deferred, or rejected.</li>
   <li><b>Deferred</b> plan item - A reasonable proposal that will not
 make it in to this release for some reason is marked as deferred with a
 brief note as to why it was deferred. Deferred plan items may resurface
-as committed plan items at a later point</li>
+as committed plan items at a later point, especially if someone
+volunteers to carry out the item.<br>
+  </li>
   <li><b>Rejected</b> plan item - Plan items that were proposed but
 judged unworkable are marked as rejected plan items, with an
 accompanying summary of why they were dismissed. Keeping track of
@@ -155,7 +157,7 @@ environments listed in the <a
  href="http://www.eclipse.org/eclipse/development/eclipse_project_plan_3_0.html#TargetOperatingEnvironments">Eclipse
 3.0 Project Plan</a>. This list is as follows:<br>
 </p>
-<table width="95%" border="1">
+<table border="1" width="95%">
   <tbody>
     <tr>
       <td width="20%"><b>Operating system</b></td>
@@ -359,7 +361,15 @@ virtual, etc), their overrides, and the inheritance structure (both
 inherited from and inherited by).<br>
 </p>
 <h4>Deferred Items</h4>
-<p style="margin-left: 40px;">None at this time.</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">Quick
+Fix.</span>&nbsp; Do something like the Quick Fix feature in Java.<br>
+</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;">Mixed
+Java/C/C++ Development.</span>&nbsp; Support the writing, building, and
+debugging of native methods in a mixed Java/C/C++ environment. If we
+want to get real good, support the debugging of an embedded JVM in a
+C/C++ application. Java calling C, C calling Java...<br>
+</p>
 <h4>Rejected Items<br>
 </h4>
 <p style="margin-left: 40px;">None at this time.</p>
