@@ -33,8 +33,6 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
-//import com.ibm.cpp.miners.managedproject.MakefileAmClassifier;
-
 public class MakefileAmAction extends CustomAction {
 	
 	// to identify Makefile.am type
