@@ -150,8 +150,8 @@ public class ConfigureAction extends CustomAction
 			MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 			String message = new String
 			("Trying to update existing configure.in and makefile.am's "+
-			"\nconfigure.in and or Makefile.am Files will be generated if missing"
-				+"\nIf updated then old configure.in and Makefile.am's will be renamed *.old");
+			"\nconfigure.in and or Makefile.am Files will be generated if missing"+
+			"\nOld existing configuration files will be renamed *.old if updated");
 			//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
 			createUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
 		}
@@ -161,9 +161,11 @@ public class ConfigureAction extends CustomAction
 			{
 				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
-				("\nThe system detects that configure script is outdated"+
-				"\nUpdating automake and autoconf files then generating configure is needed"+
-				"\nPress OK to update cofigure script, or cancel to skip updating configure.");
+				("\nThe system detects that the configure script is not up to date"+
+				"\nUpdating project configuration files and regenerating configure may be needed"+
+				"\nOld existing configuration files will be renamed *.old if updated"+
+				"\nPress OK to update project configuration files, or "+
+				"\nPress Cancel to skip updating  - recommended if you are not the package maintainer");
 				//dialog.openInformation(shell,"Updating configure.in and Makefile.am's ",message);
 				runUpdate = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
 			}
