@@ -31,6 +31,7 @@ public class GdbObjectVariable extends GdbVariable {
 	    _fields = new Vector();
        	_gdbData = value;
        	_prefix = prefix;
+       	_numNodes = 1;
 	    
 	    value.trim();
     	    
@@ -102,15 +103,17 @@ public class GdbObjectVariable extends GdbVariable {
 	 * @see GdbVariable#numNodes()
 	 */
 	public int numNodes() {
-		
+/*		
 		int numNodes = 0;
 		
 		for (int i=0; i<_fields.size(); i++)		
 		{
 			numNodes += ((GdbVariable)_fields.elementAt(i)).numNodes();
 		}
-		
+				
 		return numNodes;
+*/
+		return _numNodes;		
 	}
 
 	/**
@@ -223,7 +226,8 @@ public class GdbObjectVariable extends GdbVariable {
 			int equal = parseStr.indexOf("=");
 			fieldName = parseStr.substring(0, equal);
 			
-			// get type name for this field			    		
+			// get type name for this field		
+			fieldName = fieldName.trim();	    		
 	   		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
 	   		{
 				fullFieldName = _prefix + "." + fieldName;
@@ -237,10 +241,23 @@ public class GdbObjectVariable extends GdbVariable {
 	   		}
 			
 			// get value (from first equal sign to comma)
-			if (!lastone)
+			if (!lastone && equal+2 < comma)
 				fieldValue = parseStr.substring(equal+2, comma);
 			else
+			{
 				fieldValue = parseStr.substring(equal+2);				
+			}							
+			
+			// in case this is a string and a comma is part of the data
+			if (fieldValue.startsWith("\""))
+			{
+				comma = parseStr.indexOf("\",");
+				if (comma != -1)
+				{
+					comma++;	// skip the quote
+					fieldValue = parseStr.substring(equal+2, comma);
+				}
+			}
 			
 			// if the value starts with {
 			if (fieldValue.startsWith("{"))
@@ -255,8 +272,9 @@ public class GdbObjectVariable extends GdbVariable {
 					if (endClass != -1)
 					{
 			    		fieldValue = parseStr.substring(equal+2, endClass+1);
-			    		GdbArrayVariable newField = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+			    		GdbArrayVariable newField = new GdbArrayVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
 			    		_fields.add(newField);
+			    		_numNodes += newField.numNodes();
 			    		
 			    		if (endClass+3 > parseStr.length())
 			    		{
@@ -271,8 +289,9 @@ public class GdbObjectVariable extends GdbVariable {
 						// braces not matching
 						// create scalar and break
 						GdbScalarVariable newField;
-						newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+						newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);						
 						_fields.add(newField);
+						_numNodes++;
 						break;
 					}
 				}
@@ -284,8 +303,9 @@ public class GdbObjectVariable extends GdbVariable {
 					if (endClass != -1)
 					{
 			    		fieldValue = parseStr.substring(equal+2, endClass+1);
-			    		GdbObjectVariable newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID);
+			    		GdbObjectVariable newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID + _numNodes);
 			    		_fields.add(newField);
+			    		_numNodes += newField.numNodes();
 			    		
 			    		if (endClass+3 > parseStr.length())
 			    		{
@@ -300,8 +320,9 @@ public class GdbObjectVariable extends GdbVariable {
 						// braces not matching
 						// create scalar and break
 						GdbScalarVariable newField;
-						newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+						newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
 						_fields.add(newField);
+						_numNodes++;
 						break;
 					}   		
 				}				
@@ -311,8 +332,9 @@ public class GdbObjectVariable extends GdbVariable {
 				// the value does not start with {
 				// this is a scalar		
 				GdbScalarVariable newField;
-				newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID);
+				newField  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
 				_fields.add(newField);
+				_numNodes++;
 				
 				if (lastone)
 					break;
