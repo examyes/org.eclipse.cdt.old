@@ -37,6 +37,9 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
+//
+import org.eclipse.jface.dialogs.*;
+
 public class ManageProjectAction extends CustomAction
 { 
 	public class RunThread extends Handler
@@ -65,13 +68,22 @@ public class ManageProjectAction extends CustomAction
 	}
     public void run()
 	{
-		DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
-		DataElement status = _dataStore.command(manageProjectCmd, _subject);
-		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
-		api.monitorStatus(status);
 		
-		RunThread thread = new RunThread(_subject, status);
-		thread.start();
+		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
+		String message = new String("This action will generate all the files needed for Autoconf Support"+
+		"\nExisting configure.in and Makefile.am's will be overwritten - do you wish to continue?");
+		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
+		if(dialog.openConfirm(shell,"Autoconf",message))
+		{
+		
+			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
+			DataElement status = _dataStore.command(manageProjectCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
+			api.monitorStatus(status);
+			
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
+		}
 	}
 }
