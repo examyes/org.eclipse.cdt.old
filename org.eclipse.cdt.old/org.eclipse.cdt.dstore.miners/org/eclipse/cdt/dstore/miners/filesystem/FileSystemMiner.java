@@ -71,8 +71,13 @@ public class FileSystemMiner extends Miner
 							   devicePath,
 							   devicePath);
 
+		  if (dir.length() == 0)
+		      {
+			  dir = devicePath; 
+		      }
 	      }	 
 	  
+
 	  String dir2 = dir.substring(0,1).toUpperCase()+dir.substring(1,dir.length());	
 	  File hostFile = new File(dir2);
 	  
