@@ -77,6 +77,7 @@ public class GenericViewPart extends ViewPart
     public void createPartControl(Composite parent)
     {
 	_viewer = createViewer(parent, this);       
+	_viewer.setSorter("name");
 	
 	getSite().setSelectionProvider((ISelectionProvider)_viewer.getViewer());
 	_viewer.getViewer().addSelectionChangedListener(new ISelectionChangedListener()
@@ -107,6 +108,7 @@ public class GenericViewPart extends ViewPart
     public void initInput(DataStore dataStore)
     {
 	_viewer.setInput((getSite().getPage().getInput()));      
+
     } 
     
     public Shell getShell()
