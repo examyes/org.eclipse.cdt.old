@@ -143,9 +143,24 @@ public class AutoconfManager {
 			while((line=in.readLine())!=null)
 			{
 				if(line.indexOf(ACLOCAL)!=-1)
-					if(line.indexOf(dir.getName())==-1)
-						line = line+ " -I "+dir.getPath();
-					
+				{
+					String path = dir.getPath().replace('\"','\\');
+					String modPath = new String("");
+					int j =0;
+					for(int i = 0; i < path.length(); i++)
+					{
+						if(path.charAt(i)=='\\')
+						{
+							modPath = modPath+path.charAt(i);
+							modPath = modPath+'"';
+						}
+						else
+							modPath = modPath+path.charAt(i);
+					}
+					// check if it does exixt before adding it
+					if(!contains(line,modPath))
+							line = line+ " -I "+modPath;
+				}
 				out.write(line);
 				out.newLine();
 			}
@@ -156,6 +171,14 @@ public class AutoconfManager {
 			mod.renameTo(abstractPath);
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
+	}
+	private boolean contains(String line,String str)
+	{
+		StringTokenizer tokenizer = new StringTokenizer(line);
+		while(tokenizer.hasMoreTokens())
+			if(tokenizer.nextToken().equals(str))
+				return true;
+		return false;
 	}
 	private void createConfigureScript(DataElement project, DataElement status)
 	{
