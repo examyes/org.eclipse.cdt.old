@@ -78,10 +78,6 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")||_command.getValue().equals("UPDATE_CONFIGURE_IN"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-				
-		//enable disable based on object files
-		if(_command.getValue().equals("UPDATE_AUTOCONF_FILES")&& !projectHasSubdir())
-				setEnabled(false);		
 		
 		if((_command.getValue().equals("UPDATE_MAKEFILE_AM")&&!doesFileExist("Makefile.am")))
 				setEnabled(false);
@@ -198,7 +194,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		    }
 		return false;
 	}
-    private boolean projectHasSubdir()
+/*    private boolean projectHasSubdir()
     {
     	return projectHasSubdirHelper(_subject);
     }    
@@ -212,7 +208,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				return true;
 		}
 		return false;
-	}
+	}*/
 
 
     private boolean doesAutoconfSupportExist()
