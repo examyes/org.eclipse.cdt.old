@@ -33,15 +33,11 @@ public class ProjectObjectsViewPart extends ProjectViewPart
 	DataStore dataStore = _plugin.getCurrentDataStore();
 
 	DataElement parsedSourceD = dataStore.findObjectDescriptor("Parsed Source");
-	DataElement includedSourceD = dataStore.findObjectDescriptor("Included Source");
-	DataElement parsedFilesD = dataStore.findObjectDescriptor("Parsed Files");
 
 	PTDataElementTableContentProvider provider = new PTDataElementTableContentProvider();
 
 	// pass thru these
 	provider.addPTDescriptor(parsedSourceD);
-       	provider.addPTDescriptor(includedSourceD); 
-	provider.addPTDescriptor(parsedFilesD);
 
 
 	return new ObjectWindow(parent, ObjectWindow.TABLE, dataStore, _plugin.getImageRegistry(), loader, provider);
