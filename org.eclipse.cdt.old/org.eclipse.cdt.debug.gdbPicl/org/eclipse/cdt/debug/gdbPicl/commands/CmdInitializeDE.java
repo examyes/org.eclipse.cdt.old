@@ -86,7 +86,10 @@ public class CmdInitializeDE extends Command
       // The platform is really JVM, but version7 UIs will fail if
       // PLATFORM_ID_JVM is sent.  Await resolution: see defect 9352.
 //      _EPDCSession._debugEnginePlatformID = EPDC.PLATFORM_ID_JVM;
-      _EPDCSession._debugEnginePlatformID = EPDC.PLATFORM_ID_AIX;
+	if (System.getProperty("os.name").equals("AIX"))
+	      _EPDCSession._debugEnginePlatformID = EPDC.PLATFORM_ID_AIX;
+	else      
+	      _EPDCSession._debugEnginePlatformID = EPDC.PLATFORM_ID_LINUX;
 
       _EPDCSession._defaultSettings       = EPDC.DebuggerBusyBoxEnable;
       _EPDCSession._processDetachAction   = EPDC.ProcessRelease;
@@ -226,7 +229,7 @@ public class CmdInitializeDE extends Command
 //       EPDC.FCT_BREAKPOINT_MONITOR_4BYTES | // support monitor 4 bytes
 //       EPDC.FCT_BREAKPOINT_MONITOR_2BYTES | // support monitor 2 bytes
 //       EPDC.FCT_BREAKPOINT_MONITOR_1BYTES | // support monitor 1 bytes
-//         EPDC.FCT_LOAD_BREAKPOINT           | // support load bkpts
+         EPDC.FCT_LOAD_BREAKPOINT           | // support load bkpts
          EPDC.FCT_BREAKPOINT_ENABLE_TOGGLE  | // support enablemt bkpts
          EPDC.FCT_BREAKPOINT_MODIFY         | // support modify bkpts
 //       EPDC.FCT_BREAKPOINT_NO_THREADS     | // do not support thread specific breakpoints

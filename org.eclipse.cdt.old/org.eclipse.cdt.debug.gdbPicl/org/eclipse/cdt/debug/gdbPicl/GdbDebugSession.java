@@ -28,6 +28,7 @@ import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbStorage;
 import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbThreads;
 import org.eclipse.cdt.debug.gdbPicl.objects.GdbPart;
 import org.eclipse.cdt.debug.gdbPicl.objects.MethodInfo;
+import org.eclipse.cdt.debug.gdbPicl.objects.Module;
 import org.eclipse.cdt.debug.gdbPicl.objects.Part;
 import org.eclipse.cdt.debug.gdbPicl.objects.ThreadComponent;
 
@@ -1757,6 +1758,79 @@ public class GdbDebugSession extends DebugSession {
     			gdbProcess.setStopOnSharedLibEvents(false);
     		}
     	}
+    }
+    
+    /*
+     * Checks _dllToStop to see if the debug session should stop after a shared lib event
+     * Update shared libreaires in module manager
+     */
+    public boolean stopAtThisEvent()
+    {
+		if (Gdb.traceLogger.EVT)
+			Gdb.traceLogger.evt(
+				1,
+				"========>>>>>>>> GdbDebugSession.stopAtThisEvent");
+				
+		boolean stop = false;				
+	
+		GetGdbSharedLibraries.ModuleInfo[] moduleInfo =
+			_getGdbSharedLibraries.updateSharedLibraries();
+		if (moduleInfo != null) 
+		{
+			for (int i = 0; i < moduleInfo.length; i++)
+				if (moduleInfo[i] != null) {
+					if (Gdb.traceLogger.EVT)
+						Gdb.traceLogger.evt(
+							1,
+							"<<<<<<<<======== GdbDebugSession.updateSharedLibraries name="
+								+ moduleInfo[i].name
+								+ " moduleInfo[i].segments.size()="
+								+ moduleInfo[i].segments.size()
+								+ " fullFileName="
+								+ moduleInfo[i].fullFileName);
+					if (_moduleManager.isNewModule(moduleInfo[i].name))
+					{	
+						if (_dllToStop.containsValue(moduleInfo[i].name))
+						{
+							stop = true;
+						}
+						_moduleManager.addModule(moduleInfo[i].name, moduleInfo[i].fullFileName);
+						_moduleManager.setModuleStartFinishAddress(
+							moduleInfo[i].name,
+							moduleInfo[i].segments);
+					}
+				}
+		
+		
+			// check of unloaded dll
+			int id[] = _moduleManager.getModuleIDs();
+			for (int j=0; j<id.length; j++)
+			{
+				String moduleName = _moduleManager.getModuleName(id[j]);
+				boolean match = false;
+				for (int k=0; k<moduleInfo.length; k++)
+				{
+					if (moduleInfo[k] != null)
+					{
+						if (moduleName.equals(moduleInfo[k].name))
+						{
+							match = true;
+							break;
+						}
+					}
+				}
+				if (!match)
+				{
+					// just set a flag to delete the module
+					// will not send any change packet
+					// actually deleting the module from the module list will require a lot of changes in the picl
+		 			Module m = _moduleManager.getModule(id[j]);
+		 			m.delete();
+				}
+			}
+		}
+	
+		return stop;
     }
     
     // return true - if num of deferred bkpt + num of load bkpt is zero

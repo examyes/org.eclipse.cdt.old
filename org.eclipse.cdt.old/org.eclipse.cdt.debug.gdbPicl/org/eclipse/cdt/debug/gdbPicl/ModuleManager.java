@@ -392,7 +392,7 @@ public class ModuleManager extends ComponentManager
     */
    public String getModuleName(int moduleID) 
    {
-      if(moduleID<=0 || _modules==null || moduleID>=_modules.size())
+      if(moduleID<=0 || _modules==null || moduleID>_modules.size())
       {
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(3,"ModuleManager.getModuleName invalid moduleID="+moduleID );
@@ -1018,6 +1018,26 @@ public class ModuleManager extends ComponentManager
          return false;
        Module module = (Module) _modules.elementAt(moduleID-1);
        return module.containsAddress(address);
+   }
+   
+   boolean isNewModule(String moduleName)
+   {
+      if (_moduleIDs.containsKey(moduleName)) 
+      {
+      	if (this.getModule(moduleName).isDeleted())
+      	{
+      		this.getModule(moduleName).undelete();
+      		return true;
+      	}
+      	else
+      	{      		
+	        return false;
+      	}
+      }
+      else
+      {
+      	return true;
+      }
    }
 
 

@@ -232,6 +232,31 @@ public class Module
    {
       return _moduleID;
    }
+   
+   /**
+	 * Gets the _moduleDeleted.
+	 * @return Returns a boolean
+	 */
+	public boolean isDeleted() {
+		return _moduleDeleted;
+	}
+	
+	/**
+	 * Sets the _moduleDeleted.
+	 * @param _moduleDeleted The _moduleDeleted to set
+	 */
+	public void delete() {
+		this._moduleDeleted = true;
+	}
+	
+	/**
+	 * Sets the _moduleDeleted.
+	 * @param _moduleDeleted The _moduleDeleted to set
+	 */
+	public void undelete() {
+		this._moduleDeleted = false;
+	}
+
 
 
    // data members
@@ -253,4 +278,6 @@ public class Module
    protected boolean _moduleEntryChanged;
    protected boolean _moduleEntryHasParts;
    protected boolean _moduleEntryHasDebugData;
+   protected boolean _moduleDeleted = false;
+
 }

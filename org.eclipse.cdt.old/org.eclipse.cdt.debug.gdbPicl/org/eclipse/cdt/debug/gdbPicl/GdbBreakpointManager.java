@@ -829,25 +829,30 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
    	
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"GdbBreakpointManager.disableBreakpoint ID="+bkpID );
-
+          
       GdbDebugSession _debugSession = (GdbDebugSession)_debugEngine.getDebugSession();
       Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
-//      String ID = String.valueOf(bkpID);
-      String ID = String.valueOf(bkp.getGdbBkID());
-      String cmd = "disable breakpoint "+ID;
-      boolean ok = _debugSession.executeGdbCommand(cmd);
-      if( ok )
+      
+      if (bkp instanceof LocationBreakpoint)
       {
-//         _debugSession.getGdbResponseLines();
-         _debugSession.addCmdResponsesToUiMessages();
+	      String ID = String.valueOf(bkp.getGdbBkID());
+	      String cmd = "disable breakpoint "+ID;
+	      boolean ok = _debugSession.executeGdbCommand(cmd);
+	      if( ok )
+	      {
+	         _debugSession.addCmdResponsesToUiMessages();
+	      }
+	
+	      bkp.disableBreakpoint();
+	      _changedBreakpoints.addElement(bkp);
       }
+      else if (bkp instanceof LoadBreakpoint)
+      {
+	      ((GdbDebugSession)_debugSession).clearLoadBreakpoint(bkp.getGdbBkID());
+	      ((LoadBreakpoint)bkp).disableBreakpoint();
+	      _changedBreakpoints.addElement(bkp);
 
-	  // don't need to remove breakpoint after a disable
-//      if (!bkp.isDeferred())
-//          removeBreakpoint(bkp);
-
-      bkp.disableBreakpoint();
-      _changedBreakpoints.addElement(bkp);
+      }
 
    }
 
@@ -864,25 +869,26 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
   
       GdbDebugSession _debugSession = (GdbDebugSession)_debugEngine.getDebugSession();
       Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
-//      String ID = String.valueOf(bkpID);
-      String ID = String.valueOf(bkp.getGdbBkID());
-      String cmd = "enable breakpoint "+ID;
-      boolean ok = _debugSession.executeGdbCommand(cmd);
-      if( ok )
+      
+      if (bkp instanceof LocationBreakpoint)
       {
-//         _debugSession.getGdbResponseLines();
-         _debugSession.addCmdResponsesToUiMessages();
+	      String ID = String.valueOf(bkp.getGdbBkID());
+	      String cmd = "enable breakpoint "+ID;
+	      boolean ok = _debugSession.executeGdbCommand(cmd);
+	      if( ok )
+	      {
+	         _debugSession.addCmdResponsesToUiMessages();
+	      }
+	
+	      bkp.enableBreakpoint();
+	      _changedBreakpoints.addElement(bkp);
       }
-
-//      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
-
-		// don't need to add breakpoint after a enable
-//      if (!bkp.isDeferred())
-//          addBreakpoint(bkp);
-
-      bkp.enableBreakpoint();
-
-      _changedBreakpoints.addElement(bkp);
+      else if (bkp instanceof LoadBreakpoint)
+      {
+	      ((GdbDebugSession)_debugSession).setLoadBreakpoint(((LoadBreakpoint)bkp).getDllName());
+	      ((LoadBreakpoint)bkp).enableBreakpoint();
+	      _changedBreakpoints.addElement(bkp);
+      }
    }
 
    /**
@@ -944,12 +950,27 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
     */
    protected void removeBreakpoint(Breakpoint bkp) {
       if (bkp instanceof LocationBreakpoint)
+      {
          removeLocationBreakpoint((LocationBreakpoint)bkp);
+      }
+      else if (bkp instanceof LoadBreakpoint)
+      {
+      	removeLoadBreakpoint((LoadBreakpoint)bkp);
+      }
       else
       {  if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"GdbBreakpointManager.removeBreakpoint *NOT* of type LocationBreakpoint" );
       }
    }
+   
+   /*
+    * remove load breakpoint
+    */
+   protected void removeLoadBreakpoint(LoadBreakpoint bkp)
+   {
+   		((GdbDebugSession)_debugSession).clearLoadBreakpoint(bkp.getGdbBkID());
+   }
+   
 
   /*
     * Remove a location breakpoint 
