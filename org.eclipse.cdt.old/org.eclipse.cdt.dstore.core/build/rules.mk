@@ -15,13 +15,13 @@ endef
 
 # Grab the directories from the current directory, weed out CVS, and append _dir to each
 define get-directories
- $(patsubst %, %_dir,\
+$(patsubst %, %_dir,\
 $(filter-out build,\
 $(filter-out %extra.Client,\
 $(filter-out %extra.Server,\
 $(filter-out %CVS,\
 $(filter-out %icons,\
-$(shell find * -type d -maxdepth 0))))))
+$(shell find * -type d -maxdepth 0)))))))
 endef
 
 # Determine the system path separator
