@@ -130,8 +130,8 @@ public abstract class StorageMonitor
           return;
        }
 
-       int    actualAddressInt = Integer.parseInt(_baseAddress.substring(2),16) +(lineOffset*_columnsPerLine*_bytesPerColumn) +(columnOffset*_bytesPerColumn);
-       String actualAddressStr = "0x"+Integer.toHexString(actualAddressInt);
+       long    actualAddressInt = Long.parseLong(_baseAddress.substring(2),16) +(lineOffset*_columnsPerLine*_bytesPerColumn) +(columnOffset*_bytesPerColumn);
+       String actualAddressStr = "0x"+Long.toHexString(actualAddressInt);
        if (Gdb.traceLogger.DBG) 
            Gdb.traceLogger.dbg(1,"StorageMonitor.modifyStorage actualAddressStr="+actualAddressStr +" value="+value  );
 
