@@ -1673,7 +1673,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   	public IResource findFile(String fileName, boolean isLocal)
     {
 	IResource result = null;
-	if (!isLocal)
+	if (isLocal)
 	{
 	java.io.File theFile = new java.io.File(fileName);
 	result = findFile(theFile);
