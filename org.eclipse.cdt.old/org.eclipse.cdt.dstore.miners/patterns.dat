@@ -4,36 +4,36 @@
 # CLICK THIS LINE TO EDIT THIS FILE (PATTERNS.DAT). (When viewing from the Output view)
 
 command: grep -Hn.*
-	 grep          file line         pattern =([\w,.]*):(\d*):.*   
+	 grep          file line         pattern =([\w,.,/,\\]*):(\d*):.*   
 
 
 command: nmake.*
 	 error                           pattern=NMAKE : .*
 	 error         file line         pattern =([\w,.,\\,:]*)\((\d*):(\d*)\) : error EDC.*
-	 error         file              pattern =[\w,.,\\,:]*\(([\w,.]*)\) : error LNK.*
-	 error         file line         pattern=([\w,.]*):(\d*):\d*\) : error .*
-	 warning       file line         pattern=([\w,.]*)\((\d*):\d*\) : warning .*
-	 informational file line         pattern=([\w,.]*)\((\d*):\d*\) : informational .*   
+	 error         file              pattern =[\w,.,\\,:]*\(([\w,.,/,\\]*)\) : error LNK.*
+	 error         file line         pattern=([\w,.,/,\\]*):(\d*):\d*\) : error .*
+	 warning       file line         pattern=([\w,.,/,\\]*)\((\d*):\d*\) : warning .*
+	 informational file line         pattern=([\w,.,/,\\]*)\((\d*):\d*\) : informational .*   
 
 command: .*make.*
-	 warning       file line         pattern =([\w,.]*):(\d*): warning: .*
-	 error         file line         pattern =([\w,.]*):(\d*):.*   
-	 informational file              pattern =([\w,.]*):.*   
-	 informational file line         pattern =In file included from ([\w,.]*):(\d*):
+	 warning       file line         pattern =([\w,.,/,\\]*):(\d*): warning: .*
+	 error         file line         pattern =([\w,.,/,\\]*):(\d*):.*   
+	 informational file              pattern =([\w,.,/,\\]*):.*   
+	 informational file line         pattern =In file included from ([\w,.,/,\\]*):(\d*):
 
 
 command: dir.*
-	 directory     file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s<DIR>\s([\w,.]*).*
-	 file          file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s[\d,,]*\s([\w,.]*).*
+	 directory     file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s<DIR>\s([\w,.,/,\\]*).*
+	 file          file              pattern=\d{2}/\d{2}/\d*\s\d{2}:\d{2}[a,p]\s[\d,,]*\s([\w,.,/,\\]*).*
 
 command: ls.*
-	 file          file              pattern=.*\d{2}:\d{2} ([\w,.]*)
-	 file          file              pattern=.* \d{4} ([\w,.]*)
+	 file          file              pattern=.*\d{2}:\d{2} ([\w,.,/,\\]*)
+	 file          file              pattern=.* \d{4} ([\w,.,/,\\]*)
 
 command: xl.*
-	 error         file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
-	 warning       file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(W\).*
-	 informational file line         pattern=\"([\w,.]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
+	 error         file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(S\).*
+	 warning       file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(W\).*
+	 informational file line         pattern=\"([\w,.,/,\\]*)\", line (\d*)\.\d*: \d*-\d* \(I\).*
 
 command: cat.*patterns.*
 	 informational file 		 pattern=.*(PATTERNS.DAT).*
@@ -88,7 +88,7 @@ command: cat.*patterns.*
 #	
 # 	<reg-ex>: 	A regular expression that describes a line of output. Backreferences 
 #			are used to store (instead of just match) the filename and line 
-#			number.  To store a filename use the backreference ([\w,.]*), and 
+#			number.  To store a filename use the backreference ([\w,.,/,\\]*), and 
 #			to store a line number, use (\d*) 
 #
 #
