@@ -23,8 +23,13 @@ public class SearchMiner extends Miner
    public void extendSchema(DataElement schemaRoot)
     {
 	DataElement solD       = _dataStore.find(schemaRoot, DE.A_NAME, "Workspace", 1);
-	createCommandDescriptor(solD, "Search", "C_SEARCH", false);
-	createCommandDescriptor(solD, "Regular Expression Search", "C_SEARCH_REGEX", false);
+	DataElement prjD       = _dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
+	
+	DataElement s1 = createCommandDescriptor(solD, "Search", "C_SEARCH", false);
+	DataElement s2 = createCommandDescriptor(solD, "Regular Expression Search", "C_SEARCH_REGEX", false);
+
+	_dataStore.createReference(prjD, s1);
+	_dataStore.createReference(prjD, s2);
     }
  
    public DataElement handleCommand(DataElement theCommand)
@@ -101,7 +106,20 @@ public class SearchMiner extends Miner
 			  }
 		  }
 	  }
-      
+      else if (subject.getType().equals("Project"))
+	  {
+	      DataElement project = subject;
+	      ArrayList parseRef = project.getAssociated("Parse Reference");
+	      if (parseRef != null && parseRef.size() > 0)
+		  {
+		      DataElement parseProject = (DataElement)parseRef.get(0);
+		      DataElement parsedFiles  = _dataStore.find(parseProject, DE.A_NAME, "Parsed Files", 1);
+		      ArrayList matches = _dataStore.findObjectsOfType(parsedFiles, type);
+		      
+		      // find matches
+		      compare(pattern.getName(), matches, status);
+		  }
+	  }
       
       status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
       _dataStore.update(status);
@@ -138,6 +156,18 @@ public class SearchMiner extends Miner
 			      compareRegex(matcher, pattern, type, parseProject, status);
 			  }
 		  }
+	      }
+	  else if (root.getType().equals("Project"))
+	      {
+		  DataElement project = root;
+		  ArrayList parseRef = project.getAssociated("Parse Reference");
+		  if (parseRef != null && parseRef.size() > 0)
+		      {
+			  DataElement parseProject = (DataElement)parseRef.get(0);
+			  
+			  // find matches
+			  compareRegex(matcher, pattern, type, parseProject, status);
+		      }
 	      }
 	  else
 	      {
