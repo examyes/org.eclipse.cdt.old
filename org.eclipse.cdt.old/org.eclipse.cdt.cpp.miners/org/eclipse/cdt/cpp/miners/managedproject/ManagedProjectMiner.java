@@ -58,6 +58,12 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(managedProjectD,"Top level","C_TOPLEVEL_MAKEFILE_AM",false);
 		createCommandDescriptor(managedProjectD,"Default ","C_DEFAULT_MAKEFILE_AM",false);  			
 	}
+	
+	private void refresh(DataElement object)
+	{
+	//	object.
+	}
+	
 	public DataElement handleCommand(DataElement theCommand)
  	{
   		String          name = getCommandName(theCommand);
@@ -73,54 +79,58 @@ public class ManagedProjectMiner extends Miner
 		else if (name.equals("C_MANAGE_PROJECT"))
 		{
 			autoconfManager.manageProject(status);
-			project.refresh(false);
+			refresh(project);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
 			autoconfManager.generateAutoconfFiles(status,false);
-			project.refresh(false);
+			refresh(project);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
 		{
 			autoconfManager.updateAutoconfFiles(status,false);
-			project.refresh(false);
+			refresh(project);
 			parseAmFile(project); 
 		}
 		else if (name.equals("C_CREATE_CONFIGURE"))
 		{
 			autoconfManager.runSupportScript(status);
-			project.refresh(false);
+			refresh(project);
+			parseAmFile(project); 
 		}
 		else if (name.equals("C_RUN_CONFIGURE"))
 		{
 			autoconfManager.runConfigureScript(status);
-			project.refresh(false);
+			refresh(project);
 		}
 		else if (name.equals("C_DEFAULT_MAKEFILE_AM"))
 		{
 			autoconfManager.getMakeFileAmManager().setMakefileAmToDefault(project.getFileObject(),status);
-			project.refresh(false);
+			refresh(project);
 		}
 		else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
 		{
 			autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(project.getFileObject(),status);
-			project.refresh(false);
+			refresh(project);
 		}
 		else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 		{
 			autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(project.getFileObject(),status);
-			project.refresh(false);
+			refresh(project);
 		}
 		else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
 		{
 			autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
-			project.refresh(false);
+			refresh(project);
 		}
 		else if (name.equals("C_REFRESH"))
+		{
   			refreshProject(project);
-  
+  			parseAmFile(project); 
+		}
+		
   		status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
   		return status;
 	}
@@ -128,8 +138,8 @@ public class ManagedProjectMiner extends Miner
 	{
 		AmParser theParser = new AmParser(theUnmanagedProject);
 		DataElement theManagedProject = theParser.parse();
-		_dataStore.refresh(theManagedProject);
-		_dataStore.refresh(theManagedProject.getParent());
+	//	_dataStore.refresh(theManagedProject);
+	//	_dataStore.refresh(theManagedProject.getParent());
 		return theManagedProject;
 	}
 	private DataElement refreshProject(DataElement theUnmanagedProject)

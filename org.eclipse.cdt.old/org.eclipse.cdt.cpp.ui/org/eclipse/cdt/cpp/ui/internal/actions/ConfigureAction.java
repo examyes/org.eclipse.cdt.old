@@ -38,6 +38,27 @@ import org.eclipse.debug.core.IDebugConstants;
 
 public class ConfigureAction extends CustomAction
 { 
+	public class RunThread extends Handler
+	{
+		private DataElement _subject;
+		private DataElement _status;
+		
+		public RunThread(DataElement subject, DataElement status)
+		{
+			_subject = subject;
+			_status = status;
+		}
+		
+		public void handle()
+		{
+			if (_status.getName().equals("done"))
+			{
+				_subject.refresh(false);
+				finish();
+			}		
+		}
+	}
+	
 	public ConfigureAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
@@ -46,9 +67,13 @@ public class ConfigureAction extends CustomAction
 	{
 		DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(configureCmd, _subject);
+		
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
 		api.monitorStatus(status);
+		
+		RunThread thread = new RunThread(_subject, status);
+		thread.start();
 	}
 }
 

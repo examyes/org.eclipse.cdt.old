@@ -11,6 +11,7 @@ public class MakefileAmManager {
 
 	DataElement project;
 	ProjectStructureManager structureManager;
+	public static Hashtable timeStamps = new Hashtable();
 	
 	// Member Variables which can be defined in Makefile.am
 	String SUBDIRS = new String("SUBDIRS");
@@ -52,37 +53,53 @@ public class MakefileAmManager {
 		getMakefileAmTemplateFiles(project);
 		initializeMakefileAm();
 	}
-	protected void updateMakefileAm(boolean actionIsManageProject)
+	protected void getMakefileAmTemplateFiles(DataElement project)
 	{
-		Object[][] projectStucture = structureManager.getProjectStructure();
-		for(int i =0; i < projectStucture.length; i++)
+		Runtime rt = Runtime.getRuntime();
+		//check the project structure
+		File projectFile = project.getFileObject();
+		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
 		{
-			Integer level = new Integer((String)projectStucture[i][1]);
-			switch (level.intValue())
+			// add configure.in template files only if not exist
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec(
+					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
+						+project.getSource());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		}
+		// provide one makefile.am in each subdiectory
+		for(int i =0; i < subdirs.length ; i++)
+		{
+			if(subdirs[i].indexOf(".")==-1)
 			{
-				case (0):
-					// update top level Makefile.am - basically updating the SUBDIR variable definition
-					updateTopLevelMakefileAm(project.getFileObject());
-					break;
-				case (1):
-					// update First level Makefile.am - updating the SUBDIR variable definition
-					updateDefaultMakefileAm((File)projectStucture[i][0]);
-					break;
-				default:
-				// update all other files in the subdirs
-					updateStaticLibMakefileAm((File)projectStucture[i][0]);
+				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
+				if (token.countTokens()==1)
+				{
+					try{
+						Process p = 	rt.exec(
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
+							+project.getSource()+"/"+subdirs[i]);
+						p.waitFor();
+					}catch(IOException e){System.out.println(e);}
+					catch(InterruptedException e){System.out.println(e);}
+				}
+				else
+				{
+					
+					try{
+						Process p= rt.exec(
+							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
+							+project.getSource()+"/"+subdirs[i]);
+						p.waitFor();
+					}catch(IOException e){System.out.println(e);}
+					catch(InterruptedException e){System.out.println(e);}
+				}
 			}
 		}
-	}
-	private void updateTopLevelMakefileAm(File MakefileAm)
-	{
-		initTopLevelMakefileAm(MakefileAm);// updates the subdir variable
-	}
-	private void updateDefaultMakefileAm(File MakefileAm)
-	{
-	}
-	private void updateStaticLibMakefileAm(File MakefileAm)
-	{
 	}
 	private void initializeMakefileAm()
 	{
@@ -106,6 +123,85 @@ public class MakefileAmManager {
 			}
 		}
 	}
+	protected void updateMakefileAm(boolean actionIsManageProject)
+	{
+		Object[][] projectStucture = structureManager.getProjectStructure();
+		for(int i =0; i < projectStucture.length; i++)
+		{
+			Integer level = new Integer((String)projectStucture[i][1]);
+			switch (level.intValue())
+			{
+				case (0):
+					// update top level Makefile.am - basically updating the SUBDIR variable definition
+					updateTopLevelMakefileAm(project.getFileObject());
+					break;
+				case (1):
+					// update First level Makefile.am - updating the SUBDIR variable definition
+					updateDefaultMakefileAm((File)projectStucture[i][0]);
+					break;
+				default:
+				// update all other files in the subdirs
+				// this will be changed as based on the file layout  - static or shared
+					updateStaticLibMakefileAm((File)projectStucture[i][0]);
+			}
+		}
+	}
+	private void updateTopLevelMakefileAm(File parent)
+	{
+		long fileStamp=-1;
+		long hashedStamp=-2;
+		File MakefileAm = new File(parent,"Makefile.am");
+		if(MakefileAm.exists())
+		{
+			fileStamp = getMakefileAmStamp(MakefileAm);
+			Runtime rt = Runtime.getRuntime();
+			// copy the old Makefile.am to Makefile.am.old
+			try{
+				Process p = rt.exec("cp Makefile.am Makefile.am.old",null, project.getFileObject());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+		
+			// compare time stamps to veriy that it is safe to update
+			try{
+			hashedStamp = ((Long)timeStamps.get(MakefileAm.getAbsolutePath())).longValue();
+			}catch(NullPointerException e){System.out.println("Error: "+e);}
+			
+			if(hashedStamp == fileStamp)
+				initTopLevelMakefileAm(parent);// updates the subdir variable
+		}
+	}
+	private void updateDefaultMakefileAm(File MakefileAm)
+	{
+	}
+	private void updateStaticLibMakefileAm(File MakefileAm)
+	{
+	}
+
+	private long getMakefileAmStamp(File Makefile_am)
+	{
+		// get time stamp
+		//File Makefile_am = new File (project.getSource(),"Makefile.am");
+		return Makefile_am.lastModified();
+	}
+	private String getGeneratedStamp()
+	{
+		String stamp = new String(
+		"# Generated by C/C++ IDE plugin - Do not change/delete if you wish the tool to manage your project\n");
+		return stamp;
+	}
+	private boolean doesStampExist(File MakefileAm)
+	{
+		String line;
+		try{// initializing Package Version and Subdir fields
+			BufferedReader in = new BufferedReader(new FileReader(MakefileAm));
+			while((line=in.readLine())!=null)
+				if(line.indexOf("C/C++ IDE plugin")!=-1)
+					return true;
+			in.close();
+		}catch(IOException e){System.out.println(e);}
+		return false;		
+	}	
 	private void initDefaultMakefileAm(File parent)
 	{
 		File Makefile_am = new File(parent,"Makefile.am");
@@ -124,6 +220,8 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				out.write(getGeneratedStamp());
+				out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					// searching for the bin_PROGRAMS line
@@ -283,6 +381,8 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				out.write(getGeneratedStamp());
+				out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					if(line.indexOf(SUBDIRS)!=-1)
@@ -302,35 +402,7 @@ public class MakefileAmManager {
 				//modMakefile_am.renameTo(Makefile_am);
 			}catch(FileNotFoundException e){System.out.println(e);}
 			catch(IOException e){System.out.println(e);}
-			if(!found)
-				insertSubdirVariableDefAtFirstLine(Makefile_am);
 		}
-	}
-	private void insertSubdirVariableDefAtFirstLine(File Makefile_am)
-	{
-		File modMakefile_am = new File(project.getSource(),"mod_Makefile.am");// this is the tope level Makefile.am
-		String line;
-		try
-		{
-			// searching for the subdir line
-			BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
-			BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
-			// insert the SUBDIR line @ the begining of the file
-			out.write(insertSubdirValueDef());
-			out.newLine();
-			while((line=in.readLine())!=null)
-			{
-				out.write(line);
-				out.newLine();
-			}
-			in.close();
-			out.close();
-			File abstractPath = new File(Makefile_am.getAbsolutePath());
-			Makefile_am.delete();
-			modMakefile_am.renameTo(abstractPath);
-			//modMakefile_am.renameTo(Makefile_am);
-		}catch(FileNotFoundException e){System.out.println(e);}
-		catch(IOException e){System.out.println(e);}
 	}
 	private String insertSubdirValueDef()
 	{
@@ -359,6 +431,8 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				out.write(getGeneratedStamp());
+				out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					// searching for the bin_PROGRAMS line
@@ -618,6 +692,8 @@ public class MakefileAmManager {
 				// searching for the subdir line
 				BufferedReader in = new BufferedReader(new FileReader(Makefile_am));
 				BufferedWriter out= new BufferedWriter(new FileWriter(modMakefile_am));
+				out.write(getGeneratedStamp());
+				out.newLine();
 				while((line=in.readLine())!=null)
 				{
 					// searching for the bin_PROGRAMS line
@@ -662,53 +738,5 @@ public class MakefileAmManager {
 
 		}
 	}	
-	protected void getMakefileAmTemplateFiles(DataElement project)
-	{
-		Runtime rt = Runtime.getRuntime();
-		//check the project structure
-		File projectFile = project.getFileObject();
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
-		{
-			// add configure.in template files only if not exist
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/Makefile.am "
-						+project.getSource());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
-		// provide one makefile.am in each subdiectory
-		for(int i =0; i < subdirs.length ; i++)
-		{
-			if(subdirs[i].indexOf(".")==-1)
-			{
-				StringTokenizer token = new StringTokenizer(subdirs[i],"/");
-				if (token.countTokens()==1)
-				{
-					try{
-						Process p = 	rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
-						p.waitFor();
-					}catch(IOException e){System.out.println(e);}
-					catch(InterruptedException e){System.out.println(e);}
-				}
-				else
-				{
-					
-					try{
-						Process p= rt.exec(
-							"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-							+project.getSource()+"/"+subdirs[i]);
-						p.waitFor();
-					}catch(IOException e){System.out.println(e);}
-					catch(InterruptedException e){System.out.println(e);}
-				}
-			}
-		}
-	}
 }
 

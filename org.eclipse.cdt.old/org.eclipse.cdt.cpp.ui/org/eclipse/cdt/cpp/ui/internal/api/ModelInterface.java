@@ -1573,14 +1573,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     private void resourceChanged(IResource resource)
     {
-	if (resource != null)
+	if (resource != null) 
 	    {
+	
+	    	{
 		IProject project = resource.getProject();
 		DataElement cProject = findProjectElement(project);
-		if (cProject != null)
+		
+		if (cProject != null) 
 		    {
 			DataStore dataStore = cProject.getDataStore();
-			System.out.println("refreshing project " + project);
 			DataElement refreshD = dataStore.localDescriptorQuery(cProject.getDescriptor(), "C_REFRESH");
 			if (refreshD != null)
 			    {
@@ -1592,6 +1594,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			System.out.println("no project " + project);     					
 		    }
 	    }
+    }
     }
 
     public void resourceChanged(IResourceChangeEvent event)
@@ -1609,7 +1612,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			}
 		    if (resource == null)
 			{
-			    resourceChanged(resource);
+				IResourceDelta[] changes = delta.getAffectedChildren();
+				resource = changes[0].getResource();
+				
+				if (changes[0].getKind() == IResourceDelta.CHANGED)
+				{
+			  	  resourceChanged(resource);
+				}
 			}
 		}
 		break;

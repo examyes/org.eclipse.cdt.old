@@ -44,7 +44,9 @@ public class AutoconfManager {
 			+"\n ... the needed packages are  autolocal, autoheader, automake & autoconf");
 		}
 		else
-		{	
+		{	// chechk if there are existing autoconf files anf if there are then
+			//prompt the user that any existing autoconf files will be regenerated
+			// and existing files will be renamed as *.old
 			generateAutoconfFiles(status,true);
 			getAutoconfScript(project);
 			if(getOS().equals("Linux"))

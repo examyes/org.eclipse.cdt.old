@@ -20,7 +20,16 @@ public class AmParser
  public AmParser (DataElement theUnmanagedProject)
  {
   _dataStore = theUnmanagedProject.getDataStore();
-  _project   = _dataStore.createObject(theUnmanagedProject.getParent(), Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
+  
+  DataElement workspace = theUnmanagedProject.getParent();
+  DataElement project = findExistingManagedProject(workspace, theUnmanagedProject.getName() );
+  if (project != null)
+  {
+  	//_dataStore.deleteObject(workspace, _project);
+  	workspace.removeNestedData(project);
+  }
+  
+  _project   = _dataStore.createObject(workspace, Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
   _curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
   try 
   {
@@ -35,8 +44,18 @@ public class AmParser
  public AmParser (DataElement root, String subdir)
  {
   _dataStore = root.getDataStore();
+  
+  DataElement project = findExistingManagedProject(root, subdir);
+  if (project != null)
+  {
+  	//_dataStore.deleteObject(root, _project);	
+	root.removeNestedData(project);
+  }
+  
+  
   _project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
   _curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
+  _project.setAttribute(DE.A_SOURCE, root.getSource() + "/" + subdir + "/");
   try 
   {
    _theFileReader = new BufferedReader(new FileReader(new File(_curFile)));
@@ -45,6 +64,23 @@ public class AmParser
   {
    System.out.println("Problem opening " + _curFile);
   }
+ }
+ 
+ private DataElement findExistingManagedProject(DataElement workspace, String name)
+ {
+ 	for (int i = 0; i < workspace.getNestedSize(); i++)
+ 	{
+ 		DataElement child = workspace.get(i);
+ 		if (child.getType().equals(Am.MANAGED_PROJECT))
+ 		{
+ 			if (child.getName().equals(name))
+ 			{
+ 				return child;
+ 			}
+ 			
+ 		}	
+ 	}
+ 	return null;
  }
 
  public DataElement parse()
