@@ -95,6 +95,10 @@
 		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
 	</perspectiveExtension>
 	<perspectiveExtension 
+		targetID="org.eclipse.vcm.ui.vcmPerspective">
+		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
+	</perspectiveExtension>
+	<perspectiveExtension 
 		targetID="com.ibm.cpp.ui.CppPerspective">
 		<perspectiveShortcut id="com.ibm.cpp.ui.CppPerspective"/>
 	</perspectiveExtension>
