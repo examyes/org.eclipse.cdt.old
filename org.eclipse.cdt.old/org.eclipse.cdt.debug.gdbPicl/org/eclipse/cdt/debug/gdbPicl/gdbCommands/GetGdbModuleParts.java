@@ -343,13 +343,16 @@ public class GetGdbModuleParts
 	             {
 	   				String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(currentFileName,currentLineNumber);
 					View tempView = ((GdbPart)part).getView(Part.VIEW_DISASSEMBLY);
-	             	if (address != null && !((GdbDisassemblyView)tempView).containsAddressInView(address))
-	             	{
-	             		((GdbPart)part).setPartVerified(false);
-	             		((GdbPart)part).setPartChanged(true);
-	             		tempView.setViewVerify(false);
-	            		((GdbPart)part).verifyViews();
-	             	}             		
+					if (tempView.isViewVerify())
+					{
+		             	if (address != null && !((GdbDisassemblyView)tempView).containsAddressInView(address))
+		             	{
+		             		((GdbPart)part).setPartVerified(false);
+		             		((GdbPart)part).setPartChanged(true);
+		             		tempView.setViewVerify(false);
+		            		((GdbPart)part).verifyViews();
+		             	}             		
+					}
 	             }
              }
          }
