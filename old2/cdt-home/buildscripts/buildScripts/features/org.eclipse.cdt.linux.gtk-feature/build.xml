@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="org.eclipse.cdt" default="build.update.jar" basedir=".">
+<project name="org.eclipse.cdt.linux.gtk" default="build.update.jar" basedir=".">
 
 	<target name="init">
         <tstamp>
@@ -24,22 +24,13 @@
         <property name="feature.dated.name" value="${feature}-${TODAYS_DATE}-${platformId}${feature.version.suffix}"/>
 		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
 		<property name="feature.destination" value="${basedir}"/>
-		
 	</target>
 
 	<target name="all.plugins" depends="init">
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.core/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.ui/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.ui/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.mi.core/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.launch/" target="${target}"/>
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.debug.mi.ui/" target="${target}"/>
 	</target>
 
 	<target name="all.fragments" depends="init">
-        <ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.${os}/" target="${target}"/>
+		<ant antfile="build.xml" dir="../../plugins/org.eclipse.cdt.core.linux/" target="${target}"/>
 	</target>
 
 	<target name="all.children" depends="init,all.plugins,all.fragments">

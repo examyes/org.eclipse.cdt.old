@@ -34,7 +34,7 @@
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy file="${build.result.folder}/cdt_qnx.jar" todir="${destination.temp.folder}/${full.name}"/>
 		<copy todir="${destination.temp.folder}/${full.name}">
-			<fileset dir="${basedir}" includes="fragment.xml,os/"/>
+			<fileset dir="${basedir}" includes="fragment.xml,os/,fragment.properties"/>
 		</copy>
 	</target>
 
