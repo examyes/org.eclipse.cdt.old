@@ -502,11 +502,11 @@ public class ParseMiner extends Miner
 
  private DataElement getProjectElement(DataElement theProject, String name)
  {
+     if (theProject == null)
+	 return null;
      if (theProject.getId().indexOf(".parse") < 0)
-   theProject = getParseProject(theProject);
-  if (theProject == null)
-   return null;
-  return _dataStore.find(theProject, DE.A_NAME, name,1);
+	 theProject = getParseProject(theProject);
+     return _dataStore.find(theProject, DE.A_NAME, name,1);
  }
  
  private DataElement getParseProject(DataElement theProject)
