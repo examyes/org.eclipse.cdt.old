@@ -275,7 +275,7 @@ public class FileSystemMiner extends Miner
 	 {
 	     String type = subject.getType();
 	     DataElement des = subject.getDescriptor();
-	     if (des.isOfType(_fsystemObjectDescriptor, true))
+	     if (des != null && des.isOfType(_fsystemObjectDescriptor, true))
 		 {
 		     status = handleQueryAll(subject, status);
 		 }
