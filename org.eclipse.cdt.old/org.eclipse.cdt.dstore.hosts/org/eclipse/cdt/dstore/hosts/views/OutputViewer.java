@@ -94,6 +94,7 @@ public class OutputViewer extends TableViewer
         {
           DataElement newCommand = (DataElement)commands.get(newIndex);	
 	  String commandName = newCommand.getName();
+
 	  if (commandName.equals("C_COMMAND") ||
 	      commandName.equals("C_SEARCH") ||
 	      commandName.equals("C_SEARCH_REGEX"))
@@ -189,7 +190,7 @@ public class OutputViewer extends TableViewer
 
   public void setInput(DataElement input)
   {
-    super.setInput((IElement)input);
+      super.setInput((IElement)input);
     if (input != null)
       {
 	  _currentInput = input;
@@ -216,7 +217,8 @@ public class OutputViewer extends TableViewer
 	      {
 		  table.setRedraw(false);
 		  table.removeAll();
-		  internalRefresh(_currentInput);
+		  //internalRefresh(_currentInput);
+		  updateChildren(_currentInput.getAssociated("contents"));
 		  table.setRedraw(true);
 	      }
       }
@@ -317,7 +319,7 @@ public class OutputViewer extends TableViewer
 	      {
 
 		  DataElement child = ((DataElement)children.get(i)).dereference();
-		  if ((child != null) && !child.isUpdated())
+		  if (child != null)
 		      {
 			  child.setUpdated(true);
 			  if (doFindItem(child) == null)	
