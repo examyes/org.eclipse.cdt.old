@@ -44,17 +44,45 @@ Eclipse/CDT so that you can work on it from within the CDT.</font></p>
 </table>
 <br>
 A common scenerio that users run into when starting to use the CDT is
-how to start using it with existing source code. Eclipse supports a
-number of ways of doing this. The following are recommended approaches
-to doing this for the CDT.<br>
+how to bring existing source code into the Eclipse workspace. There are
+a number of ways to this and the following are recommended approaches
+for C/C++ projects.<br>
 <br>
 <div class="subsection">Create New Projects for Existing Source Roots</div>
-<p>This method is best used when the source for the project exists on
-the file system accessible to the user's desktop.&nbsp; The idea is to
-create a new CDT project that is rooted on each root directory that
-contains the source.<br>
+<p>If the source is accessible to the user from thier desktop using the
+command line then it is possible to simply make the root directories
+containing that source as Eclipse projects. This is accomplished by
+invoking the New Project Wizard, selecting C or C++ and then Standard
+Make Project as the project type. On the next page, enter a name for
+the project, the deselect the "Use Default Location" checkbox. This
+will let you Browse to the root folder of the source tree. After
+setting other information and clicking on Finish, the project will be
+created in the root of the source folder you have selected.<br>
+</p>
+<p>The resource for the project are maintained in the remote location
+specified, not in the workspace folder for eclipse. Meta data for the
+project, such as the index for the project and the "link" to the
+project, is stored in the metadata directory in the workspace folder.<br>
 </p>
 <div class="subsection">Create Project from CVS</div>
-<p>blah</p>
+<p>If the existing source tree is managed in CVS, it is possible to use
+the CVS Repository perspective to "Checkout As Project" any folder in
+the repository. The first time this is done, a Simple Project is
+created for the folder. To access the features of the CDT for this
+project, the project must be converted to a C or C++ project using the
+"Convert to a C or C++ Project" project type in the New Wizard.<br>
+</p>
+<p>This does a CVS checkout of the project into the project's location
+(usually in the workspace). <br>
+</p>
+<div class="subsection">Import File System<br>
+</div>
+<p>Another approach would be to create the C/C++ Project and then do an
+"Import"-&gt;"File System". This will make a copy of the files from the
+selected location into the selected folder in the project. With the
+copy, this approach is more wasteful and detaches the source from any
+control mechanism that existed in the originaly file location (e.g. a
+ClearCase view).<br>
+</p>
 </body>
 </html>
