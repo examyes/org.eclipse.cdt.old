@@ -328,12 +328,11 @@ public class GdbDebugSession extends DebugSession
      }
 
      MethodInfo[] methods = _getGdbPartMethods.getPartMethods(part);
-     if(methods!=null)
+     if (Gdb.traceLogger.EVT) 
      {
-        for(int i=0; i<methods.length; i++ )
-           if (Gdb.traceLogger.EVT) 
-               Gdb.traceLogger.evt(3,"---------------- GdbDebugSession.getPartMethods methods["+i+"] name="+methods[i]._name
-                  +" lineNum="+methods[i]._lineNum );
+     	if(methods!=null)
+        for(int i=0; i<methods.length; i++ )           
+          Gdb.traceLogger.evt(3,"---------------- GdbDebugSession.getPartMethods methods["+i+"] name="+methods[i]._name +" lineNum="+methods[i]._lineNum );
      }
 
      addMethodsToPart(part, methods);
@@ -343,11 +342,11 @@ public class GdbDebugSession extends DebugSession
   public void addMethodsToPart(GdbPart part, MethodInfo[] methods)
   {
      MethodInfo[] debuggableMethods = _getGdbPartMethods.getDebuggableMethods(part, methods);
-     if(debuggableMethods!=null)
+     if (Gdb.traceLogger.EVT)
      {
-        for(int i=0; i<debuggableMethods.length; i++ )
-           if (Gdb.traceLogger.EVT) 
-               Gdb.traceLogger.evt(3,"---------------- GdbDebugSession.addMethodsToPart DEBUGGABLE methods["+i+"] name="+debuggableMethods[i]._name
+     	if(debuggableMethods!=null)
+        for(int i=0; i<debuggableMethods.length; i++ )       
+            Gdb.traceLogger.evt(3,"---------------- GdbDebugSession.addMethodsToPart DEBUGGABLE methods["+i+"] name="+debuggableMethods[i]._name
                   +" lineNum="+debuggableMethods[i]._lineNum );
      }
 
