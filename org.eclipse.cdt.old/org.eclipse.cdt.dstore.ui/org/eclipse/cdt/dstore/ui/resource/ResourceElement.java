@@ -375,6 +375,11 @@ public class ResourceElement extends Container implements IDesktopElement, IData
         if (deleteDescriptor != null)
         {	 
 	    dataStore.command(deleteDescriptor, _element);
+	    IContainer parent = getParent();
+	    if (parent instanceof ResourceElement)
+		{
+		    ((ResourceElement)getParent()).remove(this);
+		}
         }
     }
 
@@ -395,8 +400,6 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 
     public IMarker createMarker(String type) throws CoreException
     {
-	System.out.println("createMarker");
-	//	return super.createMarker(type);
 	IMarker result = new ElementMarker(this, type);
 	return result;
     }

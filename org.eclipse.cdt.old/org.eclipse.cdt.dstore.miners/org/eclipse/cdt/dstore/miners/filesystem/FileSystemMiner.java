@@ -343,6 +343,10 @@ public class FileSystemMiner extends Miner
 		 { 		    
 		     _dataStore.deleteObject(parent, subject);		     		   
 		 }
+	     else
+		 {
+		     System.out.println("Delete failed!");
+		 }
        	    
 	     status.setAttribute(DE.A_NAME,getLocalizedString("model.done"));
 	     return status;
@@ -387,6 +391,9 @@ public class FileSystemMiner extends Miner
 		     try
 			 {
 			     toBeCreated.createNewFile();
+			     FileOutputStream fileStream = new FileOutputStream(toBeCreated);			     
+			     fileStream.write((new String(" ")).getBytes());            
+			     fileStream.close();
 			 }
 		     catch(IOException e)
 			 {
