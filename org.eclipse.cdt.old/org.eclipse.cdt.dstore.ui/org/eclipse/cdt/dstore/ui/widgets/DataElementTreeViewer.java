@@ -262,6 +262,7 @@ public class DataElementTreeViewer extends TreeViewer
 			    }
 			catch (Exception e)
 			    {
+			    	System.out.println(e);
 			    }
 			
 			
