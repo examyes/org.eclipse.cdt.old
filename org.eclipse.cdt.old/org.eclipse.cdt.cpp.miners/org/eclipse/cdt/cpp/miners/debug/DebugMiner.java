@@ -74,8 +74,12 @@ public class DebugMiner extends Miner
     {
 	String invocationStr = _debugInvocation + "-qhost=" + hostName.getName() +
                                               " -quiport=" + port.getName() +
-                                              " -startupKey=" + key.getName() +
-                                              " -gdbPath=" + _gdbPluginPath;
+                                              " -startupKey=" + key.getName();
+
+	if (System.getProperty("os.name").equals("linux"))
+	{
+	    invocationStr += " -gdbPath=" + _gdbPluginPath;
+	}
 
 	if (jre != null)
 	    {
