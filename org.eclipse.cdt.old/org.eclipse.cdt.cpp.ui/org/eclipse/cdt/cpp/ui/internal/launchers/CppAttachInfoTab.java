@@ -23,8 +23,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.HelpEvent;
-import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -74,18 +72,7 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
     public void createControl(Composite parent)
     {
    	Composite composite = new Composite(parent, SWT.NULL);
-   	
-   	/*
-   	composite.addHelpListener(new HelpListener()
-	     {
-   		 public void helpRequested(HelpEvent event)
-   	    {
-   		    performHelp();
-       	 }
-        }
-      );
-      */
-   	
+   	   	
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
    	
@@ -408,8 +395,16 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
         if (_directory == null)
            return true;
 
-        if (_programNameField.getText() == "" || processID == "")
+        if (_programNameField.getText().length() == 0)
+        {
+           setErrorMessage(_plugin.getLocalizedString("attachLauncher.Error.missingProgramName"));
            return false;
+        }
+        if (processID.length() == 0)
+        {
+           setErrorMessage(_plugin.getLocalizedString("attachLauncher.Error.missingProcessID"));
+           return false;
+        }
         else
         {
            if (isValidProcessID(processID))
@@ -441,13 +436,6 @@ public class CppAttachInfoTab extends CppLaunchConfigurationTab
    	data.verticalAlignment = GridData.BEGINNING;
    	spacer.setLayoutData(data);
     }
-
-    /*
-    public void performHelp()
-    {
-       System.out.println("HELP");
-    }
-    */
 
     /**
      *	Display an error dialog with the specified message.

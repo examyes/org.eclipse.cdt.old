@@ -23,8 +23,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.HelpEvent;
-import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -77,19 +75,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
     public void createControl(Composite parent)
     {
    	Composite composite = new Composite(parent, SWT.NULL);
-   	
-   	
-   	/*
-      composite.addHelpListener(new HelpListener()
-	     {
-   		 public void helpRequested(HelpEvent event)
-   	    {
-   		    performHelp();
-       	 }
-        }
-      );
-      */
-   	
+   	   	   	   	
    	composite.setLayout(new GridLayout());
    	composite.setLayoutData(new GridData(GridData.FILL_BOTH));
    	
@@ -359,8 +345,8 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 		String workingDirectory = "";
 		try
       {
-			executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
-         if (executableName == "")
+	 executableName = config.getAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, "");
+         if (executableName.length() == 0)
          {
             if (_executable != null)
               _programNameField.setText(_executable.getSource());
@@ -373,7 +359,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
          }
 
 			workingDirectory = config.getAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, "");
-         if (workingDirectory == "")
+         if (workingDirectory.length() == 0)
          {
             if (_directory != null)
                _workingDirectoryField.setText(_directory.getSource());
@@ -447,20 +433,22 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 		setErrorMessage(null);
 		setMessage(null);
 
-        if (_programNameField.getText() == "")
+        if (_programNameField.getText().length() == 0)
         {
            setErrorMessage(_plugin.getLocalizedString("loadLauncher.Error.missingProgramName"));
            return false;
         }
-        else if (_workingDirectoryField.getText() == "")
+
+        if (_workingDirectoryField.getText().length() == 0)
         {
            setErrorMessage(_plugin.getLocalizedString("loadLauncher.Error.missingWorkingDirectory"));
            return false;
         }
         else
-  	   	return true;
-		
-	}
+        {
+           return true;
+        }
+      }
 	
 	/**
 	 * @see ILaunchConfigurationTab#getName()
@@ -482,13 +470,7 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
    	spacer.setLayoutData(data);
     }
 
-    /*
-    public void performHelp()
-    {
-       System.out.println("HELP");
-    }
-    */
-
+    
     /**
      *	Display an error dialog with the specified message.
      *
