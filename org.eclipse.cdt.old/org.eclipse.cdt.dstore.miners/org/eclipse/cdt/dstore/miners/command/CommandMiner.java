@@ -42,25 +42,34 @@ public class CommandMiner extends Miner
   String          name = getCommandName(theElement);
   DataElement   status = getCommandStatus(theElement);
   DataElement  subject = getCommandArgument(theElement, 0);
-  String    invocation = getCommandArgument(theElement, 1).getName();
 
   if (name.equals("C_COMMAND"))
-  {
-    //Remove all extra whitespace from the command
-   if (invocation.trim().length() > 0)
-    launchCommand(subject, invocation, status);
-   return status;
-  }
+      {
+	  DataElement   invArg = getCommandArgument(theElement, 1);
+	  if (invArg != null)
+	      {
+		  String    invocation = invArg.getName();
+		  
+		  //Remove all extra whitespace from the command
+		  if (invocation.trim().length() > 0)
+		      launchCommand(subject, invocation, status);
+		  return status;
+	      }
+	  else
+	      {
+		  status.setAttribute(DE.A_NAME, "done");
+	      }
+      }
   if (name.equals("C_CANCEL"))
-  {
-   DataElement de = (DataElement)subject.dereference().get(1);
-   DataElement cancelStatus = getCommandStatus(subject);
-   cancelCommand(de.getName().trim(),cancelStatus);
-   return status;
-  }
+      {
+	  DataElement de = (DataElement)subject.dereference().get(1);
+	  DataElement cancelStatus = getCommandStatus(subject);
+	  cancelCommand(de.getName().trim(),cancelStatus);
+	  return status;
+      }
   return status;
  }
-
+    
  public void launchCommand (DataElement subject, String invocation, DataElement status)
  {
   //First Check to make sure that there are no "zombie" threads

@@ -489,7 +489,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void openProject(IProject project)
     {
-    	if (project.isOpen() || (project instanceof Repository) )
+    	if (project.isOpen())
 	    {
 	     
 		OpenProjectAction openAction = new OpenProjectAction(project);
@@ -525,6 +525,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	     return;
 	 }
 
+     System.out.println("opening " + _project);
      DataElement oDescriptor = dataStore.localDescriptorQuery(projectMinerProject.getDescriptor(), "C_OPEN", 4);
      if (oDescriptor != null)
 	 {
@@ -1404,8 +1405,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	switch (type)
 	    {
 	    case IResourceChangeEvent.POST_CHANGE:
-		{				
-		    openProjects();
+		{		
+		    if (resource instanceof IProject)
+			{
+			    openProjects();
+			}
 		    if (resource == null)
 			{
 			    resourceChanged(resource);
