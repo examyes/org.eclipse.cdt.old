@@ -227,20 +227,19 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy config)
    {
-     System.out.println("CppDebugInfoTab:setDefaults() entry; this = " + this);
      IProject project;
      IStructuredSelection selection = getSelection();
      if(selection == null)
      {
         displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.noSelection"));
-        _directory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
+        //_directory = CppPlugin.getDefault().getCurrentDataStore().getHostRoot().get(0);
         return;
      }
 
      Object element = selection.getFirstElement();
 
      if (element instanceof DataElement)
-     {	
+     {
    		_executable = (DataElement)element;
 	   	if (!_executable.isOfType("executable"))
 	      {
@@ -302,13 +301,15 @@ public class CppDebugInfoTab extends CppLaunchConfigurationTab
 	   	_directory = null;
    		return;
 	   }
+
+      config.setAttribute(CppLaunchConfigConstants.ATTR_EXECUTABLE_NAME, _executable.getSource());
+      config.setAttribute(CppLaunchConfigConstants.ATTR_WORKING_DIRECTORY, _directory.getSource());
 	}
 	
 	/**
 	 * @see ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
 	 */
 	public void initializeFrom(ILaunchConfiguration config) {
-      System.out.println("CppDebugInfoTab:initializeFrom() entry this = " + this);
 		updateExecutableFromConfig(config);
 	}
 
