@@ -135,7 +135,7 @@ createEmptyZip:
 zipUpPlugins: $(patsubst %,%_zipPlugin,$(allPlugins))
 
 %_zipPlugin: 
-	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x org *org\/* com makefile setenv.mk *com\/* *CVS*
+	@-cd $(pluginsDirectory) && zip -qr $(zipFile) $(patsubst %_zipPlugin,%,$@) -x org *org\/* com *makefile* *setenv.mk* *com\/* *CVS*
 
 tempDir=cdt
 finalZip=cdt-eclipse-0.5.0.zip
@@ -165,7 +165,7 @@ createEmptyServerZip:
 zipServerPlugins: $(patsubst %,%_zipServerPlugin,$(serverPlugins))
 
 %_zipServerPlugin:
-	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x org *org\/* makefile setenv.mk com *com\/* *CVS*
+	@-cd $(pluginsDirectory) && zip -qr $(serverZipFile) $(patsubst %_zipServerPlugin,%,$@) -x org *org\/* *makefile* *setenv.mk* com *com\/* *CVS*
 
 # Targets specific to org.eclipse.cdt.dstore.core (these are copied from rules.mk...so make sure they stay in synch!!!
 jarFile=dstore_core.jar
