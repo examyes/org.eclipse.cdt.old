@@ -243,7 +243,7 @@ public class CppActionLoader extends GenericActionLoader
     	return result;
     }
 
- 	private String getPropertyString(String obj)
+ 	protected String getPropertyString(String obj)
       {
       	String iconStr = "";
          {
