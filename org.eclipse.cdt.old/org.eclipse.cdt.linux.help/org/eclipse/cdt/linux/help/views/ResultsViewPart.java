@@ -313,8 +313,10 @@ public class ResultsViewPart extends ViewPart
 	_settings.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 
 	HelpDialogSettingUtil.setDefaultSettings();
-	HelpDialogSettingUtil.updateDisplayedSettings(); //show some default settings
-
+	_settings.setText(getSettingsToDisplay());
+	/*
+	 HelpDialogSettingUtil.updateDisplayedSettings(); //show some default settings
+	
 	IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
 	IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 	IWorkbenchPage persp= win.getActivePage();
@@ -324,7 +326,7 @@ public class ResultsViewPart extends ViewPart
 	}catch(PartInitException e){
 	    e.printStackTrace();
 	}
-
+	*/
     }   
 
     public void populate(ArrayList list)
@@ -398,6 +400,52 @@ public class ResultsViewPart extends ViewPart
 	    _findButton.dispose();
 	if(_settings!=null)
 	    _settings.dispose();
+    }
+
+    private String getSettingsToDisplay()
+    {
+	StringBuffer displayedSettings= new StringBuffer();
+	IDialogSettings settings = HelpPlugin.getDefault().getDialogSettings();
+	displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_LOOKUPMODE_TITLE)+":");
+
+	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_EXACT))
+	    {
+		displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_LOOKUPMODE_EXACT));
+	    }
+	else if (settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_CONTAINS))
+	    {
+		displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_LOOKUPMODE_SUBSTRING));
+	    }
+	else if (settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_TYPE_REGEXP))
+	    {		
+		displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_LOOKUPMODE_REGEXP));
+	    }
+	displayedSettings.append("  "+HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_SCOPE_TITLE)+":");
+	if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_ALL))
+	    {
+		displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_SCOPE_ALL));
+	    }
+	else
+	    {
+		boolean scopeSelected = false;
+		if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_MAN))
+		    {		 
+			displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_SCOPE_MAN));
+			scopeSelected = true;
+		    }
+		if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_INFO))
+		    {
+			if(scopeSelected) displayedSettings.append(","); 
+			displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_SCOPE_INFO));
+			scopeSelected = true;
+		    }
+		if(settings.getBoolean(IHelpSearchConstants.HELP_SEARCH_SCOPE_HTML))
+		    {
+			if(scopeSelected) displayedSettings.append(","); 
+			displayedSettings.append(HelpPlugin.getDefault().getLocalizedString(IHelpNLConstants.SETTINGS_SCOPE_HTML));
+		    }
+	    }
+	return displayedSettings.toString();
     }
 
 } 
