@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-$packaged_as = $ARGV[0]
+$packaged_as = $ARGV[0];
 
 $dir= $ENV{PWD};
 print("path $dir");
@@ -12,18 +12,7 @@ $ENV{A_PLUGIN_PATH}="$plugins_dir/";
 $oldClasspath = $ENV{CLASSPATH};
 
 
-if ($packaged_as == "jar")
-{
-    $ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$plugins_dir/com.ibm.cpp.miners.parser/miners_parser.jar:$oldClasspath";
-}
-else if ($packaged_as == "src")
-{
-    $ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/:$plugins_dir/com.ibm.dstore.core/:$plugins_dir/com.ibm.dstore.miners/:$plugins_dir/com.ibm.cpp.miners/:$plugins_dir/com.ibm.cpp.miners.parser/:$oldClasspath";
-}
-else
-{
     $ENV{"CLASSPATH"}="$plugins_dir/com.ibm.dstore.extra.server/:$plugins_dir/com.ibm.dstore.core/:$plugins_dir/com.ibm.dstore.miners/:$plugins_dir/com.ibm.cpp.miners/:$plugins_dir/com.ibm.cpp.miners.parser/:$plugins_dir/com.ibm.dstore.extra.server/extra_server.jar:$plugins_dir/com.ibm.dstore.core/dstore_core.jar:$plugins_dir/com.ibm.dstore.miners/dstore_miners.jar:$plugins_dir/com.ibm.cpp.miners/cpp_miners.jar:$plugins_dir/com.ibm.cpp.miners.parser/miners_parser.jar:$oldClasspath";
-}
 
 system("java -DA_PLUGIN_PATH=\$A_PLUGIN_PATH com.ibm.dstore.core.server.Server");
 
