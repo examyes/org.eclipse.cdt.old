@@ -738,9 +738,9 @@ public class GdbDebugSession extends DebugSession {
 					+ directory
 					+ "  programName = "
 					+ programName);
-                boolean ok;
-		String cmd = "directory " + directory;
-                /*
+
+         	String cmd = "directory " + directory;
+                
 		boolean ok = executeGdbCommand(cmd);
 		if (!ok) {
 			if (Gdb.traceLogger.ERR)
@@ -748,7 +748,8 @@ public class GdbDebugSession extends DebugSession {
 					1,
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
-               
+
+               /*
 		cmd = "file " + programName;
 		ok = executeGdbCommand(cmd);
 		if (!ok) {
@@ -758,6 +759,15 @@ public class GdbDebugSession extends DebugSession {
 					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
 		}
                  */
+                
+                cmd = "symbol " + programName;
+		ok = executeGdbCommand(cmd);
+		if (!ok) {
+			if (Gdb.traceLogger.ERR)
+				Gdb.traceLogger.err(
+					1,
+					getResourceString("GDBPICL_FAILED_TO_ATTACH_TO_PROCESSID") + processIndex);
+		}
 
 
                
