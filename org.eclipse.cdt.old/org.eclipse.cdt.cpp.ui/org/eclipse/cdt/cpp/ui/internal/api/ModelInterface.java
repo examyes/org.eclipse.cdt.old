@@ -1163,7 +1163,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     public IResource findResource(DataElement resourceElement)
     {
 	String type = resourceElement.getType();
-	if (type.equals("Project"))
+	if (type.equals("Project") || type.equals("Closed Project"))
 	    {
 		return findProjectResource(resourceElement);
 	    }
