@@ -519,7 +519,7 @@ public class Connection implements IDomainListener
 		if (shell != null)
 		    {
 			String msg = status.getName();
-			MessageDialog.openError(shell, "Connection Error", msg);          
+			MessageDialog.openError(shell, "Connection Error", msg);   
 		    }
 	    }
 	
