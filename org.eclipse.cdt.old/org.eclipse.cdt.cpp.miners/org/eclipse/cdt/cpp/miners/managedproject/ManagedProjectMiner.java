@@ -47,7 +47,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(targetD, "Remove Target", "C_REMOVE_TARGET");
 		
 		// autoconf	
-		createCommandDescriptor(projectD, "Generate Autoconf/Automake support", "C_GENERATE_SUPPORT", false);
+		createCommandDescriptor(projectD, "Generate Autoconf/Automake files", "C_GENERATE_AUTOCONF_FILES", false);
 		createCommandDescriptor(projectD, "Create configure ", "C_CREATE_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Run configure", "C_RUN_CONFIGURE",false);
 		createCommandDescriptor(projectD, "Manage Project", "C_MANAGE_PROJECT", false);
@@ -75,7 +75,7 @@ public class ManagedProjectMiner extends Miner
 			project.refresh(false);
 			parseAmFile(project); 
 		}
-		else if (name.equals("C_GENERATE_SUPPORT"))
+		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
 		{
 			manager.generateSupportFile(status);
 			project.refresh(false);

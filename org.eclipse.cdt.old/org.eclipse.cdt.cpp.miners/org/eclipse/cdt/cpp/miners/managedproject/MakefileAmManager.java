@@ -448,65 +448,28 @@ public class MakefileAmManager {
 	protected void setMakefileAmToStaticLib(File parent ,DataElement status)
 	{
 		Runtime rt = Runtime.getRuntime();
-		//File projectFile = project.getFileObject();
-		File projectFile = parent;
-		System.out.println("\nSelected Dir = "+parent.getName());
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// rename the existing Maekfile.am if exists
 			try{
 				Process p;
 				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
+				p= rt.exec("mv Makefile.am Makefile.am.old ", null, parent);
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	
 		}
 		//check the project structure
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
+		if(parent.isDirectory()&& !(parent.getName().startsWith(".")))
 		{
 			// add proper Makefile.am template files 
 			try{
 				Process p;
 				// check if exist then
-				
+				System.out.println("\n>>>>>>>>>>>>>>>>>>>>  "+parent.getAbsolutePath());
 				p= rt.exec(
 					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-						+project.getSource()+"/"+parent.getName());
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
-		updateStaticLibMakefile_am(parent);
-	}
-	public void setMakefileAmToStaticLib(DataElement status)
-	{
-		Runtime rt = Runtime.getRuntime();
-		File parent = status.getFileObject();
-		File projectFile = parent;
-		System.out.println("\nSelected Dir = "+parent.getName());
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
-		{
-			// rename the existing Maekfile.am if exists
-			try{
-				Process p;
-				// check if exist then
-				p= rt.exec("mv Makefile.am Makefile.am.old ", null, projectFile);
-				p.waitFor();
-			}catch(IOException e){System.out.println(e);}
-			catch(InterruptedException e){System.out.println(e);}	
-		}
-		//check the project structure
-		if(projectFile.isDirectory()&& !(projectFile.getName().startsWith(".")))
-		{
-			// add proper Makefile.am template files 
-			try{
-				Process p;
-				System.out.println("\n>>>>>>>>>>>>>>>>>>>>  "+projectFile.getAbsolutePath());
-				// check if exist then
-				p= rt.exec(
-					"cp workspace/com.ibm.cpp.miners/autoconf_templates/sub/static/Makefile.am "
-						+projectFile.getAbsolutePath());
+						+project.getSource());
 				p.waitFor();
 			}catch(IOException e){System.out.println(e);}
 			catch(InterruptedException e){System.out.println(e);}	

@@ -3,7 +3,7 @@ AC_INIT(Makefile.am)
 
 AM_CONFIG_HEADER(config.h)
 
-AM_INIT_AUTOMAKE(|NAMELITTLE|,|VERSION|)
+AM_INIT_AUTOMAKE(|NAME|,|VERSION|)
 
 dnl Checks for programs.
 AC_PROG_CC
@@ -16,4 +16,4 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_OUTPUT(Makefile |NAMELITTLE|/Makefile)
+AC_OUTPUT(Makefile |NAME|/Makefile)
