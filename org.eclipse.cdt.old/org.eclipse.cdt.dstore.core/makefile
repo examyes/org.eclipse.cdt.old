@@ -50,6 +50,7 @@ allPlugins += com.ibm.lpex
 allPlugins += com.ibm.debug.doc.user
 allPlugins += com.ibm.debug.pdt
 allPlugins += com.ibm.debug.daemon
+allPlugins += com.ibm.debug.common
 
 
 # List of Plugins needed for the Serverside Zip
