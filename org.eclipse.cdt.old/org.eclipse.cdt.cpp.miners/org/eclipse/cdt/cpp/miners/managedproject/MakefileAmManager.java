@@ -47,7 +47,7 @@ public class MakefileAmManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void manageMakefile_am()
+	protected void manageMakefileAm()
 	{
 		// check if there is an existing makefile.am in top level dir - sufficient to check if the user has autoconf/automake support
 		File makefile_am = new File (project.getSource(),"Makefile.am");

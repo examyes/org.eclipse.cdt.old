@@ -18,18 +18,18 @@ public class AutoconfManager {
 	String autoheader = new String("autoheader");
 	String autoscan = new String ("autoscan");
 	ProjectStructureManager structureManager;
-	ConfigureInManager configure_in_manager;
-	MakefileAmManager makefile_am_manager; 
+	ConfigureInManager configureInManager;
+	MakefileAmManager makefileAmManager; 
 	static Object O = new Object();
 	String cygwinPrefix = new String("sh -c ");
 
 	public AutoconfManager(DataElement aProject)
 	{
 		this.project = aProject;
-				//manage configure.in
-		configure_in_manager = new ConfigureInManager(project);
+		//manage configure.in
+		configureInManager = new ConfigureInManager(project);
 		// manage Makefile.am
-		makefile_am_manager = new MakefileAmManager(project);
+		makefileAmManager = new MakefileAmManager(project);
 		// check if it is a unix like system
 	}
 	protected void manageProject(DataElement status)
@@ -57,8 +57,8 @@ public class AutoconfManager {
 	}
 	protected void generateAutoconfFile(DataElement status)
 	{
-		configure_in_manager.manageConfigure_in();
-		makefile_am_manager.manageMakefile_am();
+		configureInManager.manageConfigureIn();
+		makefileAmManager.manageMakefileAm();
 	}
 	protected void runSupportScript(DataElement status)
 	{
@@ -131,7 +131,7 @@ public class AutoconfManager {
 	
 	public MakefileAmManager getMakeFileAmManager()
 	{
-		return makefile_am_manager;
+		return makefileAmManager;
 	}
 }
 

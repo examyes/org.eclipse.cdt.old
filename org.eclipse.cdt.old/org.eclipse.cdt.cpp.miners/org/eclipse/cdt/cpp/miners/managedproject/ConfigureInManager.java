@@ -7,10 +7,10 @@ import java.io.*;
 
 public class ConfigureInManager {
 	DataElement project;
-	String version = new String("@VERSION@");
+	String amKey = new String("AM_INIT_AUTOMAKE");
+	String acKey = new String("AC_OUTPUT");
 	String pack = new String("@PACKAGE@");
-	String subdir = new String ("@SUBDIR/Makefile@");
-	String makefile = new String("/Makefile ");
+	String makefile = new String("/Makefile ");// note the space @ the end
 	int[] delimPosition = {-1,-1,-1};
 	char delim = '@';
 	String[] subdirs;
@@ -24,25 +24,33 @@ public class ConfigureInManager {
 		subdirs = structureManager.getSubdirWorkspacePath();
 		
 	}
-	protected void manageConfigure_in()
+	protected void manageConfigureIn()
 	{
 		// check if there is an existing configure.in
 		File configure_in = new File (project.getSource(),"configure.in");
 		if(!configure_in.exists())
 		{
 			getConfigureInTemplateFile(project);
-			initializeConfigure_in(new File(project.getSource(),"configure.in"));
+			initializeConfigureIn(new File(project.getSource(),"configure.in"));
 		}
 		else
 		{
-			System.out.println("\n exist");
-			// if there is then
-			//updateConfigure_in(new File(project.getSource(),"configure.in"));
+			Runtime rt = Runtime.getRuntime();
+			// copy the old configure.in to configure.in.old
+			try{
+				Process p;
+				// check if exist then
+				p= rt.exec("cp configure.in configure.in.old ", null, project.getFileObject());
+				p.waitFor();
+			}catch(IOException e){System.out.println(e);}
+			catch(InterruptedException e){System.out.println(e);}	
+			// update configure.in
+			updateConfigureIn(new File(project.getSource(),"configure.in"));
 		}
 	}
-	private void initializeConfigure_in(File configure_in)
+	private void updateConfigureIn(File configure_in)
 	{
-		File modFile = new File(project.getSource(),"modConfigure.in");
+		File modFile = new File(project.getSource(),"mod.in");
 		// reading configure.in
 		String line;
 		try{// initializing Package Version and Subdir fields
@@ -50,19 +58,53 @@ public class ConfigureInManager {
 			BufferedWriter out= new BufferedWriter(new FileWriter(modFile));
 			while((line=in.readLine())!=null)
 			{
-				if(line.indexOf(pack)!=-1)
+				if(line.indexOf(amKey)!=-1)
+				{
+					// just make sure that the package name has a name diferent than @PACKAGE@
+					if(line.indexOf(pack)!=-1)
+					{
+						line = trimTargetLine(line);// replace this line with the new values
+						line = insertPackageName(line.toCharArray(),delimPosition[0]);
+						line = insertVersionName(line.toCharArray(),delimPosition[1]);
+					}
+				}
+				if(line.indexOf(acKey)!=-1)
+				{
+					if(subdirs.length>0)
+						line = updateAcoutputMacroLine(line);
+				}
+				out.write(line);
+				out.newLine();// needed at the end of each line when writing  the modified file
+			}
+			in.close();
+			out.close();
+			// because rename does not work properly on windows cygwin
+			File abstractPath = new File(configure_in.getAbsolutePath());
+			configure_in.delete();
+			modFile.renameTo(abstractPath);
+		}catch(FileNotFoundException e){System.out.println(e);}
+		catch(IOException e){System.out.println(e);}
+	}
+	private void initializeConfigureIn(File configure_in)
+	{
+		File modFile = new File(project.getSource(),"mod.in");
+		// reading configure.in
+		String line;
+		try{// initializing Package Version and Subdir fields
+			BufferedReader in = new BufferedReader(new FileReader(configure_in));
+			BufferedWriter out= new BufferedWriter(new FileWriter(modFile));
+			while((line=in.readLine())!=null)
+			{
+				if(line.indexOf(amKey)!=-1)
 				{
 					line = trimTargetLine(line);// replace this line with the new values
 					line = insertPackageName(line.toCharArray(),delimPosition[0]);
 					line = insertVersionName(line.toCharArray(),delimPosition[1]);
 				}
-				if(line.indexOf(subdir)!=-1)
+				if(line.indexOf(acKey)!=-1)
 				{
 					if(subdirs.length>0)
-					{
-						line = trimTargetLine(line);
-						line = insertSubdirs(line.toCharArray(),delimPosition[0]);
-					}
+						line = updateAcoutputMacroLine(line);
 				}
 				out.write(line);
 				out.newLine();// needed at the end of each line when writing  the modified file
@@ -94,7 +136,6 @@ public class ConfigureInManager {
 			{
 				
 				delimPosition[loc++] = i++;
-				System.out.println("\n pos = "+delimPosition[loc-1]);
 				while(originalLine[i]!=delim)
 					i++;
 			}
@@ -106,7 +147,6 @@ public class ConfigureInManager {
 		int k=0;
 		int counetrForModLine = 0;
 		char[] modLine = new char[256];
-		System.out.println("\n line length = "+line.length);
 		int i = 0;
 		while(line[i]!= '\0')
 		{
@@ -123,7 +163,6 @@ public class ConfigureInManager {
 	}
 	private String insertVersionName(char[] line, int pos)
 	{
-		System.out.println("\n line length = "+line.length);
 		String version = new String("0.1");
 		int k=0;
 		int counetrForModLine = 0;
@@ -140,37 +179,16 @@ public class ConfigureInManager {
 		String versionName = (new String(modLine)).trim();
 		return versionName;
 	}
-	private String insertSubdirs(char[] line, int position)
+	private String updateAcoutputMacroLine(String line)
 	{
-		int counetrForModLine = 0;
-		char[] modLine = new char[256];
-		int i = 0;
-		while(line[i]!= '\0')
-		{
-			if(i == position)
-			{
-				
-				for(int j = 0; j< subdirs.length; j++)
-				{
-					if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
-					{
-						for(int k=0; k< subdirs[j].toCharArray().length; k++)
-							modLine[counetrForModLine++]=subdirs[j].toCharArray()[k];
-						for(int l=0; l< makefile.length(); l++)
-							modLine[counetrForModLine++]=makefile.toCharArray()[l];
-						// for portability issues add this '\' character
-						modLine[counetrForModLine++]='\\';
-						modLine[counetrForModLine++]='\n';
-						
-					}
-				}
-				
-			}
-			modLine[counetrForModLine++]=line[i];
-			i++;
-		}
-		String subdirs = (new String(modLine)).trim();
-		return subdirs;
+		line = line.substring(0,line.indexOf('('));
+		StringBuffer buff = new StringBuffer(line);
+		buff.append('(');
+		for(int j = 0; j< subdirs.length; j++)
+			if(subdirs[j].indexOf(".")==-1)// check that the path doesnot have any  hidden dirs
+				buff.append(subdirs[j]).append(makefile).append('\\');
+		buff.append(')');	
+		return buff.toString();
 	}
 	protected void getConfigureInTemplateFile(DataElement project)
 	{
