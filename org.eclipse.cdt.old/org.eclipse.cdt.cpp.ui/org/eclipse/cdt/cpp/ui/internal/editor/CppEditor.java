@@ -52,6 +52,10 @@ import org.eclipse.swt.widgets.*;
 import java.util.ResourceBundle;
 import java.util.ArrayList;
 
+import com.ibm.linux.help.listeners.CppeditorHelpListener;
+import com.ibm.lpex.core.LpexWindow;
+import com.ibm.lpex.core.LpexView;
+
 public class CppEditor extends LpexTextEditor
 {
   protected CppContentOutlinePage page;
@@ -106,6 +110,17 @@ public class CppEditor extends LpexTextEditor
                                            this));
 
         setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK, getAction("ManageBreakpoints"));		
+
+	///////////////////////////////
+	LpexSourceViewer lpexSourceViewer= (LpexSourceViewer)getSourceViewer();	
+	LpexWindow lpexWindow = lpexSourceViewer.getLpexWindow();	
+	LpexView lpexView = lpexSourceViewer.getLpexView();	
+	try{
+	    lpexWindow.addHelpListener(new CppeditorHelpListener(lpexView));
+	}catch(Exception e){	   
+	    e.printStackTrace();
+	}
+	//////////////////////////////
 
       }
 
