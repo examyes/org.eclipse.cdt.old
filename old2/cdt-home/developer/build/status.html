@@ -25,19 +25,41 @@
 
 <!-- Status -->
 <div class=section>Status</a></div>
-<i>all times are Eastern Standard Time</i>
-<table>
+<p>
+Check the <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/errors.html?cvsroot=Tools_Project">Errors</a> (or hopefully lack of errors) from the latest build.
+</p>
+</div>
+
+<div class=section>CDT Versions in CVS</div>
+<p>
+ When checking the CDT out of CVS you can optionally include a tagname that checks out versions of the CDT source 
+ that build with particular Eclipse builds.  So for example, if you were working with Eclipse R1.0 you would check
+ out CDT using the following command:<br><br>
+ <div class=indent><b>cvs checkout <font color=red>-r R1-0</font> cdt</b></div>
+ <br>
+ See the table below for the current tag list:
+<p>
+
+<table width="50%" border=1 cellpadding=5>
  <tbody>
   <tr>
-   <td><img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/PASS.gif?cvsroot=Tools_Project" alt=""> May 23 , 9:00 a.m.</td> 
-     <td>Problem fixed...Code checked in last night under org.eclipse.cdt.linux.help
-         depended on org.eclipse.cdt.cpp.ui, but was being built first by our makefile</td>
-  </tr> 
-  <td><img src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/FAIL.gif?cvsroot=Tools_Project" alt="">May 23 , 8:30 a.m.</td> 
-    <td>Problems reported building with F1.</td>
+   <td><b>CDT TagName</b></td>
+   <td><b>Eclipse Version</b></td>
   </tr>
+  <tr>
+   <td>F1</td>
+   <td> Eclipse Freeze <a href="http://64.38.198.171/downloads/drops/S-F1-200205211339/index.php">F1</a></td>
+  </tr>
+  <tr>
+   <td>I20020521</td>
+   <td> Eclipse Integration Build <a href="http://64.38.198.171/downloads/drops/I-20020521-200205210959/index.php">20020521</a></td>
+  </tr>
+  <tr>
+   <td>R1-0</td>
+   <td> Eclipse Release <a href="http://64.38.198.171/downloads/drops/R-R1.0-200111070001/index.php">R1.0</a></td>
+  </tr>
+
  </tbody>
 </table>
-<!-- End of Status -->
 </body>
 </html>
