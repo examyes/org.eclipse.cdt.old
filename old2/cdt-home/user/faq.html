@@ -78,6 +78,7 @@
       <li><a href="#install_20">How do I download and install the CDT</li>
       <li><a href="#install_30">I can't find the CDT download for XXX?</a></li>
       <li><a href="#install_40">How do I uninstall CDT?</a></li>
+      <li><a href="#install_50">How do I convince Eclipse to "re-read" the configuration files?</a></li>
      </ol>
    </li>
 
@@ -135,7 +136,9 @@
     <li> <a href="#build_70">My Compiler errors seem to be truncated or split.&nbsp; What is going on? </a></li>
     <li> <a href="#build_80">What causes the message<br>
 		&nbsp;&nbsp;&nbsp; make (e=2): The system cannot find the file specified?</a></li>
-    </ol>
+	<li><a href="build_90">How do I exclude files from being built in a managed make project?   I have tried setting up individual source folder in the Project->Properties panel, 
+	but the managed make seems to always include all source file in the project, regardless of the Project Paths settings.</a></li>
+  </ol>
 
   <!-- Debugging subheader -->
   <br>
@@ -162,6 +165,7 @@
     	<br>
     What is wrong?</a></li>
     <li><a href="#debug_120">Is there any way of using the dbx debugger from the CDT?</a></li>
+    <li><a href="#debug_130">Is there any way of using the Visual Studio debugger from the CDT?</a></li>
   </ol>
 
   <!-- Troubleshooting subheader -->
@@ -173,6 +177,10 @@
       		memory. What is wrong?</a></li>
       <li><a href="#troubleshooting_20">Whenever I build the project, the eclipse hangs (gets &quot;stuck&quot;). 
       		I need to kill a process named: &quot;c++ filt&quot; to restart it.&nbsp; Why?</a></li>
+      <li><a href="#troubleshooting_30">I always get an error info for editor:
+    <pre>Unable to instantiate editor: org.eclipse.cdt.ui.editor.CEDitor.
+org.eclipse.core.runtime.CoreException: Plug-in org.eclipse.cdt.ui was 
+unable to load class org.eclipse.cdt.internal.ui.editor.CEditor.</pre></a></li>
   </ol>
 
   <!-- Working On CDT subheader -->
@@ -186,6 +194,10 @@
       <li><a href="#developing_40">How do I submit a fix for a bug?</a></li>
       <li><a href="#developing_50">How do I distribute my changes to my customers?</a></li>
       <li><a href="#developing_60">How do I generate JavaDocs?</a></li>
+      <li><a href="#developing_62">How do I add a CDT extension to my PDE project?</a>
+	  <li><a href="#developing_64">How do I add an Error Parser (or The project seems to build file, but doesn't parse my error output what can I do?)</a>
+      <li><a href="#developing_66">How do I add a Cross platform debugger?</a>
+      <li><a href="#developing_68">I am developing a plug-in that requires a parsing a c file and obtaining the information such as method signatures, parameter types etc. How can I do this using the CDT parser?</a>
       <li><a href="#developing_70">What are some areas that are not complete?</a></li>
       <li><a href="#developing_80">In addition to submitting fixes, how else can I contribute to the CDT Project?</a></li>
      </ol>
@@ -266,8 +278,9 @@
     minutes, and</li>
     <li>
     <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_R2.0_plan.html?cvsroot=Tools_Project">
-    CDT 2.0 Plan</a> - This plan is a description of the ongoing development on 
-    CDT 2.0.&nbsp; It is subject to change. </li>
+    CDT 2.0 Plan</a> - This plan is a description of the development on CDT 2.0. </li>
+    <li>
+    CDT 2.1 Plan --&nbsp; It is currently unavailable. </li>
   </ul>
   <p>If you wish to contribute to the development of the CDT, we welcome the 
   opportunity to work with you. The plans will be updated to reflect the 
@@ -287,7 +300,7 @@
 
 <li><b><a name="general_50">What is the default configuration supported by the CDT?</a></b><p class="MsoPlainText">
 	This is a bit of a moving target, but currently the compiler supported (from an error parsing point of view) 
-	is gcc, the debugger interface will work with gdb 5.2.1 and the default build command is GNU &quot;make&quot;.</p>
+	is gcc, the debugger interface will work with gdb 5.2.1 (or higher) and the default build command is GNU &quot;make&quot;.</p>
     <hr size="1">
     </li>
 
@@ -630,10 +643,16 @@ Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
  <li><b><a name="install_10">Which CDT build should I download?</a></b>
     <p>Check the <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
     CDT Download Page</a> for information on which CDT Build to use. Currently 
-    the following builds are available there:<p>CDT 1.2
+    the following builds are available there:<p>CDT 2.0
    <ul>
-      <li>The CDT 1.2 stream is now in maintenance mode. A new release, 1.2.1 is 
-         expected in the first quarter of 2004. The 1.2 stream runs against versions 
+       <li>The CDT 2.0 stream is now in maintenance mode. There will be patch 
+       releases available -- check the download page for more up-to-date 
+       information.</li>
+   </ul>
+   <p>CDT 1.2
+   <ul>
+      <li>The CDT 1.2 stream is now in maintenance mode. CDT 1.2.1 is 
+         available. The 1.2 stream runs against versions 
          2.1.x of Eclipse. It does not run against Eclipse 3.0 builds.
       </li>
       <li><b>CDT 1.2 Note:</b> For CDT 1.2, the standard make project type and the 
@@ -645,13 +664,6 @@ Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
          <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/downloads/CDT_1_2_Release_Notes.html?cvsroot=Tools_Project">
          here.</a>
       </li>
-   </ul>
-   <p>CDT 2.0
-   <ul>
-       <li>The CDT 2.0 stream is currently under development. The objective of this 
-           stream is to keep up with the Eclipse 3.0 development and is targeted at 
-           release in sync with Eclipse 3.0, i.e. June 2004.
-       </li>
    </ul>
    <p>CDT 1.0
    <ul>
@@ -672,12 +684,12 @@ Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
  probably out of date):</p>
  <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="73%" id="AutoNumber1">
    <tr>
-     <td width="6%"><b>CDT 1.2</b><p><b>(must have Eclipse 2.1.X installed)</b></td>
+     <td width="6%"><b>CDT 1.2</b><p><b>Must have Eclipse 2.1.X installed</b></td>
      <td width="94%" colspan="2">CDT release builds are made available on the CDT release 
      update site. Use the following URL in a Site Bookmark in the update 
      manager:<p style="MARGIN-LEFT: 0.32in">
      <a href="http://update.eclipse.org/tools/cdt/updates/release">
-     http://update.eclipse.org/tools/cdt/updates/release</a></p>
+     http://update.eclipse.org/tools/cdt/updates/new</a></p>
      <p>To access the Update Manager, select Software Updates-&gt;Update Manager 
      from the Help menu. To access an update site, select New-&gt;Site Bookmark 
      from the context menu in the Feature Updates view. In the New Site Bookmark 
@@ -691,69 +703,25 @@ Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
      are available
      <a href="http://dev.eclipse.org/viewcvs/3.0/cdt/cdt-home/downloads/main.html#zips">
      here</a>. </p>
-     <p>&nbsp;</td>
+     </td>
    </tr>
    <tr>
-     <td width="6%" rowspan="4"><b>CDT 2.0</b><p><b>(Requires some form of 
-     Eclipse 3.0)</b></td>
-     <td width="10%">General Instructions</td>
-     <td width="84%"><b>The CDT 2.0 stream is currently under development. The 
-     objective of this stream is to keep up with the Eclipse 3.0 development and 
-     is targeted at release in sync with Eclipse 3.0, i.e. June 2004.</b><p>To 
-     install the update in Eclipse 3.0, first uninstall any CDT version you 
-     happen to have currently installed. Then from the menu bar, </p>
+     <td width="6%" rowspan="4"><b>CDT 2.0</b><p><b>Requires&nbsp; Eclipse 3.0</b></td>
+     <td width="94%">The CDT 2.0 build is available from the following update site:<p style="MARGIN-LEFT: 0.79in">
+     <a href="http://update.eclipse.org/tools/cdt/releases/new">
+     http://update.eclipse.org/tools/cdt/releases/new</a></p>
+     <p>To install the update in Eclipse 3.0, first uninstall any CDT version you 
+     	happen to have currently installed. Then from the menu bar, </p>
      <ul>
        <li>select Help-&gt;Software Updates-&gt;Find and Install..., </li>
        <li>select “Search for new features to install”, </li>
        <li>add the update site with the above URL, </li>
        <li>and proceed through the rest of the wizard. </li>
      </ul>
-     <p>As with 1.2, please make sure you install one or both builders to ensure 
-     you can create a C/C++ project (clicking on Select All works nicely).</p>
-     <p>&nbsp;</td>
-   </tr>
-   <tr>
-     <td width="10%">CDT 2.0 Development Stream</td>
-     <td width="84%">The CDT 2.0 M6 build is available from the following update 
-     site:<p style="MARGIN-LEFT: 0.79in">
-     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0">
-     http://update.eclipse.org/tools/cdt/updates/builds/2.0</a></p>
-     <p>
-     The builds are all created from the head stream;&nbsp; They will usually 
-     work with the latest milestone build of Eclipse -- your mileage may vary.</p>
+     <p>There are zip files available at this same link.</p>
      </td>
    </tr>
-   <tr>
-     <td width="10%">CDT 2.0 M6</td>
-     <td width="84%">The CDT 2.0 M6 build is available from the following update 
-     site:<p style="MARGIN-LEFT: 0.79in">
-     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0M6">
-     http://update.eclipse.org/tools/cdt/updates/builds/2.0M6</a></p>
-     <p>There is a zip file available
-     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0M6/cdt.zip">
-     http://update.eclipse.org/tools/cdt/updates/builds/2.0M6/cdt.zip</a>.&nbsp;
-     Note that CDT 2.0 M6 will only run against 
-     Eclipse 3.0 M6 and later. This should hopefully be the last Eclipse 3.0 
-     milestone release where 
-     platform API changes blow us out of the water.</td>
-   </tr>
-   <tr>
-     <td width="10%">CDT 2.0 M7</td>
-     <td width="84%">The CDT 2.0 M7 build is available from the following update 
-     site:<p style="MARGIN-LEFT: 0.79in">
-     <a href="http://update.eclipse.org/tools/cdt/updates/builds/2.0M7">
-     http://update.eclipse.org/tools/cdt/updates/builds/2.0M7</a></p>
-     <p>
-     Use the update manager mechanisms described in &quot;CDT 2.0&quot;.&nbsp; If you are 
-     redistributing the CDT or are having trouble with the Update Site, a zip 
-     file containing the entire CDT distribution is available
-     <a href="http://download.eclipse.org/tools/cdt/updates/builds/2.0M7/cdt.zip">
-     here</a>.&nbsp; Note that CDT 2.0 M7 will run against Eclipse 3.0 M6 and 
-     later (but not earlier).</p>
-     </td>
-   </tr>
- </table>
- <p>&nbsp;</p>
+  </table>
    <hr size="1">
  </li>
 
@@ -812,6 +780,18 @@ Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
   </ol>
   <hr size="1">
   </li>
+      <li><b><a name="install_50">How do I convince Eclipse to "re-read" the configuration files?</a></b>
+      <p>
+		Delete the following:
+		<ul>
+		<li><EclipseDir>/configuration/org.eclipse.osgi/manifests</li>
+		<li><EclipseDir>/configuration/org.eclipse.osgi/.bundledata</li>
+		<li><EclipseDir>/configuration/org.eclipse.osgi/.state</li>
+		</ul>
+		and restart eclipse.
+    <hr size="1">
+    </li>
+
 </ol>
 <!-- Create Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
@@ -832,6 +812,12 @@ Motif 2.1 (included); SWT HTML viewer requires Mozilla 1.4GTK2.</p>
     Open a C/C++ Perspective and complete the following steps: </p>
      <p>
      <ol>
+		<li> For C/C++ projects Build Automatically should be turned off (Bugzilla Bug 71443), 
+			otherwise builds will be performed whenever a file is saved, including makefiles and 
+			header files.  As well the explicit build menus will not be accessable.
+			<p>Click <b>Projects</b> from the menubar and ensure there is no checkmark beside 
+			<b>Build Automatically</b> if there is one click <b>Build Automatically</b> to deselect it. </p></li>
+
         <li> In the C/C++ Projects View right click and select "New Project ..." </li>
         <li> Select "C++" in the left pane and the select "Managed Make C++ Project"</li>
         <li> Enter a name for the new project and select Finish.
@@ -1103,7 +1089,17 @@ clean :
     </p>
     <hr size="1">
     </li>
-    
+    <li><b><a name="build_25">Where are the Build menu's?  I could not invoke building action by clicking. However, after
+saving action, the project would be built and an executable would be
+generated.</a></b>
+<p>
+Bugzilla Bug 71443.  The Build Automatically flag removes the build menus.
+<p>For C/C++ projects this feature should be turned off, otherwise builds will be performed whenever a file is saved, including makefiles and header files.  </p>
+<p>Click <b>Projects</b> from the menubar and ensure there is no checkmark beside <b>Build Automatically</b> if there is one click <b>Build Automatically</b> to deselect it. </p>
+
+<p>You should now be able to Build and Clean a project.</p>
+    <hr size="1">
+    </li>
 	<li><b><a name="build_30">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></b> <ol>
  		<li>Follow the instructions, on the respective web site, to install your GNU tools. </li>
  		<li>Create a <a href="#create">new C++ project</a></li>
@@ -1160,6 +1156,19 @@ clean :
     path.</p>
 	<hr size="1">
 	</li>
+	
+	<li><b><a name="build_90">How do I exclude files from being built in a managed make project?   I have tried setting up individual source folder in the Project->Properties panel, 
+	but the managed make seems to always include all source file in the project, regardless of the Project Paths settings.</b></a>
+	<p>  
+		The ManagedBuilder does not  respect  the src paths when generating the makefile (as of CDT 2.0).  However, there is a hack to prevent the generated makefile from building files.  
+	<p>
+	To remove the file "devices/devices.c[pp]" from the build, add a file named "makefile.deps" to the project ROOT and added the following lines to it:
+<pre>OBJS := $(OBJS:devices/devices.o=)
+</pre>
+That has the effect of removing the offending (i.e. non-compiling) sources from the required objects and hence make will never attempt to build them.
+	<hr size="1">
+	</li>
+
 </ol>
 
 <!-- Debug Header -->
@@ -1292,6 +1301,14 @@ clean :
     </p>
     <hr size="1">
     </li>
+    <li><b><a name="debug_130">Is there any way of using the Visual Studio debugger from the CDT?</a></b> 
+    <p>There is currently no integration with the Visual Studio debugger.   However, there has been some work on debugging native win32 applications using windows debuggin api's.  
+    This is not currently working, but anybody who wants to help build this is encouraged to let the CDT development community know.</p>
+    <p>
+    </p>
+    <hr size="1">
+    </li>
+
 </ol>
 
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
@@ -1326,6 +1343,16 @@ clean :
     </p>
     <hr size="1">
     </li>
+    
+    <li><b><a name="troubleshooting_30">I always get an error info for editor:
+    <pre>Unable to instantiate editor: org.eclipse.cdt.ui.editor.CEDitor.
+org.eclipse.core.runtime.CoreException: Plug-in org.eclipse.cdt.ui was 
+unable to load class org.eclipse.cdt.internal.ui.editor.CEditor.</pre></a></b>
+ 	<p>
+	This happens when you use a mismatching eclipse and CDT builds.
+    <hr size="1">
+    </li>
+    
 </ol>
 
 <!-- Working On CDT subheader -->
@@ -1342,7 +1369,18 @@ clean :
   This document describes the process of building, running and debugging the 
   CDT within Eclipse. We will try to keep this document up-to-date 
   with the behavior of the latest builds.</p>
-  <p>To build the CDT inside Eclipse you will need a build of eclipse from the <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>. Once you have Eclipse properly installed, the CDT CVS 
+  <p>
+  Two methods: use eclipse SDK, and link to CVS repository.</p>
+  <p>
+  <b>SDK</b></p>
+After installing the CDT-SDK, you can import CDT projects like this:
+<p>
+File --> import --> External Plug-ins and Fragments
+<br>
+select "Extract source archives and create source folders in projects"
+and in the next step, you can select the projects of CDT.
+  <p>
+<b>CVS Repository</b><p>To build the CDT inside Eclipse you will need a build of eclipse from the <a href="http://download.eclipse.org/downloads">Eclipse Download Page</a>. Once you have Eclipse properly installed, the CDT CVS 
   Repository can 
   be accessed and the CDT plugins checked-out and built. <b>Note</b>: The exact 
   steps may vary depending on what Eclipse build you use. 
@@ -1503,7 +1541,170 @@ clean :
    The result will be a complete JavaDoc hierarchy of all the public APIs for the selected plugin. </p>
   <hr size="1">
   </li>
+  
+  <li><b><a name="developing_62">How do I add a CDT extension to my PDE project?</a></b>
+  <p>
+  <ol>
+  	<li>Make sure that you have the C/C++ Development Tools SDK feature installed (Help > About > Feature Details).</li>
+	<li>If not, use the software update feature to install it, or download the appropriate zip file distribution from the CDT update site.</li> 
+	<li>Open the Plugin.xml file for your PDE project.</li>
+	<li>On the "Dependencies" tab, add a dependency on one or more of the CDT plugins in the "Required Plug-ins list", for example  org.eclipse.cdt.managedbuilder.core</li>
+	<li>On the "Extensions" tab, any extension points supplied by the plugins you specified as required should now be visible in the list.</li>
+  </ol>
+  <hr size="1">
+  </li>
+  
+  <li><b><a name="developing_64">How do I add an Error Parser (or The project seems to build file, but doesn't parse my error output what can I do?)</a></b>
+  <p>Its little easy to develop a new error parser for ur BuildTool.  Create an Extension for org.eclipse.cdt.core.ErrorParser
+  <pre>&lt;extension
+  id="NewErrorParser"
+  name="New Error Parser"
+  point="org.eclipse.cdt.core.ErrorParser">
+  &lt;errorparser
+      class="com.xxx.ErrorParser.NewErrorParser">
+  &lt;/errorparser>
+&lt;/extension>
+</pre>
+<p>
+have a look at the source code for (CDT GNU C/C++ Error Parser)
+GCCErrorParser.java .
+Then write a new class NewErrorParser.
+<hr size="1">
+  </li>
 
+  <li><b><a name="developing_66">How do I add a Cross platform debugger?</a></b>
+  <p>
+
+The ELF parser only recognizes a fixed set of
+architectures. If it is not recognized as a valid type then it is recognized as "none".
+<p>
+E.g. To create an "AVR" aware debugger, create a plugin with the following extension:
+<pre>&lt;plugin>
+   &lt;extension
+         point="org.eclipse.cdt.debug.core.CDebugger">
+      &lt;debugger
+            platform="native"
+            name="AVR GDB Debugger"
+            modes="run,attach"
+            cpu="none,avr"
+            class="org.eclipse.cdt.debug.mi.core.GDBServerDebugger"
+            id="org.eclipse.cdt.debug.mi.core.GDBServerCDebugger">
+      &lt;/debugger>
+   &lt;/extension>
+&lt;/plugin>
+</pre>
+
+The "cpu="none,avr"" part is of course the magical stuff...
+
+
+
+  <hr size="1">
+  </li>
+
+  <li><b><a name="developing_68">I am developing a plug-in that requires a parsing a c file and obtaining the information such as method signatures, parameter types etc. How can I do this using the CDT parser?</a></b>
+  <p>
+To use the parser, all you need to do is put cdtparser.jar in your class path and code away. 
+
+As an example, here is how the CDT Core Model instantiates and uses an IParser to build its model. 
+
+<pre>IProject currentProject = null;
+&nbsp; boolean hasCppNature = true;
+&nbsp; String code = ""; //$NON-NLS-1$
+
+&nbsp; // get the current project
+&nbsp; if (translationUnit != null && translationUnit.getCProject() != null) {
+&nbsp; 	currentProject = translationUnit.getCProject().getProject();
+&nbsp; }
+&nbsp; // check the project's nature
+&nbsp; if( currentProject != null )
+&nbsp; {
+&nbsp; 	hasCppNature = CoreModel.hasCCNature(currentProject);
+&nbsp; }
+&nbsp; // get the code to parse
+&nbsp; try{
+&nbsp; 	code = translationUnit.getBuffer().getContents();
+&nbsp; } catch (CModelException e) {
+
+&nbsp; }
+&nbsp; // use quick or structural parse mode
+&nbsp; ParserMode mode = quickParseMode ? ParserMode.QUICK_PARSE : ParserMode.STRUCTURAL_PARSE;
+&nbsp; if(quickParseMode)
+&nbsp; 	quickParseCallback = ParserFactory.createQuickParseCallback();
+&nbsp; else
+&nbsp; 	quickParseCallback = ParserFactory.createStructuralParseCallback();
+
+&nbsp; // pick the language
+&nbsp; ParserLanguage language = hasCppNature ? ParserLanguage.CPP : ParserLanguage.C;
+
+&nbsp; // create the parser
+&nbsp; IParser parser = null;
+&nbsp; try
+&nbsp; {
+&nbsp; 	IScannerInfo scanInfo = new ScannerInfo();
+&nbsp; 	IScannerInfoProvider provider = CCorePlugin.getDefault().getScannerInfoProvider(currentProject);
+&nbsp; 	if (provider != null){
+&nbsp; 		IScannerInfo buildScanInfo = provider.getScannerInformation(currentProject);
+&nbsp; 		if (buildScanInfo != null){
+&nbsp; 			scanInfo = new ScannerInfo(buildScanInfo.getDefinedSymbols(), buildScanInfo.getIncludePaths());
+&nbsp; 		}
+&nbsp; 	}
+
+&nbsp; 	parser = ParserFactory.createParser(
+&nbsp; 		ParserFactory.createScanner(
+&nbsp; 			new StringReader( code ),
+&nbsp; 			(translationUnit.getUnderlyingResource() != null ?
+&nbsp; 					translationUnit.getUnderlyingResource().getLocation().toOSString() :
+&nbsp; 					""), //$NON-NLS-1$
+&nbsp; 			scanInfo,
+&nbsp; 			mode,
+&nbsp; 			language,
+&nbsp; 			quickParseCallback,
+&nbsp; 			quickParseMode ? new NullLogService() : ParserUtil.getScannerLogService(), null)
+&nbsp; 		,quickParseCallback,
+&nbsp; 		mode,
+&nbsp; 		language,
+&nbsp; 		ParserUtil.getParserLogService() );
+&nbsp; }
+&nbsp; catch( ParserFactoryError pfe )
+&nbsp; {
+&nbsp; 	throw new ParserException( CCorePlugin.getResourceString("CModelBuilder.Parser_Construction_Failure")); //$NON-NLS-1$
+&nbsp; }
+&nbsp; // call parse
+&nbsp; hasNoErrors = parser.parse();
+&nbsp; if( (!hasNoErrors) && throwExceptionOnError )
+&nbsp; 	throw new ParserException(CCorePlugin.getResourceString("CModelBuilder.Parse_Failure")); //$NON-NLS-1$
+&nbsp; return quickParseCallback.getCompilationUnit();
+</pre>
+Here's a quick description of the ParserFactory interface methods you require: 
+<pre>/**
+&nbsp; * @param scanner tokenizer to retrieve C/C++ tokens
+&nbsp; * @param callback the callback that reports results to the client
+&nbsp; * @param mode the parser mode you wish to use
+&nbsp; * @param language C or C++
+&nbsp; * @param log a log utility to output errors
+&nbsp; * @return
+&nbsp; * @throws ParserFactoryError - erroneous input provided
+&nbsp; */
+&nbsp; public static IParser createParser( IScanner scanner, ISourceElementRequestor callback, ParserMode mode, ParserLanguage language, IParserLogService log ) throws ParserFactoryError;
+
+&nbsp; /**
+&nbsp; * @param input the java.io.Reader that reads the source-code input you want parsed
+&nbsp; * @param fileName the absolute path of the file you are parsing (necessary for determining location of local inclusions)
+&nbsp; * @param config represents the include-paths and preprocessor definitions you wish to initialize the scanner with
+&nbsp; * @param mode the parser mode you wish to use
+&nbsp; * @param language C or C++
+&nbsp; * @param requestor the callback that reports results to the client
+&nbsp; * @param log a log utility to output errors
+&nbsp; * @param workingCopies a java.util.List of IWorkingCopy buffers if you wish for include files to use CDT Working Copies rather than saved files
+&nbsp; * @return
+&nbsp; * @throws ParserFactoryError - erroneous input provided
+&nbsp; */
+&nbsp; public static IScanner createScanner( Reader input, String fileName, IScannerInfo config, ParserMode mode, ParserLanguage language, ISourceElementRequestor requestor, IParserLogService log, List workingCopies ) throws ParserFactoryError;
+</pre>
+For other information you can perhaps attach to the CVS repository @ dev.eclipse.org in order to see the rest of the code. The repository path is /home/tools and you can attach anonymously to get the source. 
+
+  <hr size="1">
+  </li>
   <li><b><a name="developing_70">What are some areas that are not complete</a></b> <p>This is an endless list, but here are a few examples:</p>
   <ul>
   <li>Source code formatting</li>
