@@ -25,6 +25,8 @@ public class FileSystemMiner extends Miner
     private DataElement _deviceDescriptor;
     private DataElement _hostDescriptor;
     private DataElement _containsDescriptor;
+    private DataElement _dateDescriptor;
+    private DataElement _modifiedAtDescriptor;
 
   public FileSystemMiner ()
       {
@@ -171,14 +173,19 @@ public class FileSystemMiner extends Miner
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
+	  _modifiedAtDescriptor     = createRelationDescriptor(schemaRoot, "modified at");
+	  _dateDescriptor           = createObjectDescriptor(schemaRoot, "date");
+	  
+	  _dataStore.createReference(_fileDescriptor, _modifiedAtDescriptor);
+
 	  _hiddenFileDescriptor     = createObjectDescriptor(schemaRoot, "hidden file");
 	  _dataStore.createReference(_fileDescriptor, _hiddenFileDescriptor, "abstracts", "abstracted by"); 
-	  //_dataStore.createReference(_fsystemObjectDescriptor, _hiddenFileDescriptor, _containsDescriptor);
 
 	  _hiddenDirectoryDescriptor     = createObjectDescriptor(schemaRoot, "hidden directory");
 	  _dataStore.createReference(_directoryDescriptor, _hiddenDirectoryDescriptor, "abstracts", "abstracted by"); 
-	  //	  _dataStore.createReference(_fsystemObjectDescriptor, _hiddenDirectoryDescriptor, _containsDescriptor);
+
 	  
+	  DataElement fdatesD   = createCommandDescriptor(_fsystemObjectDescriptor, "Get Dates", "C_DATES", false);
 	  DataElement fdateD    = createCommandDescriptor(_fileDescriptor, "Get Date", "C_DATE", false);
 	  DataElement setDateD  = createCommandDescriptor(_fileDescriptor,  "Set Date", "C_SET_DATE", false);
 	  
@@ -226,6 +233,10 @@ public class FileSystemMiner extends Miner
 	     status = handleQuery(subject, status);
          }
        }
+     else if (name.equals("C_DATES"))
+	 {
+	     status = handleDates(subject, status);
+	 }
      else if (name.equals("C_DATE"))
 	 {
 	     status = handleDate(subject, status);
@@ -285,6 +296,8 @@ public class FileSystemMiner extends Miner
 	     DataElement newName = getCommandArgument(theElement,1);
 	     status = handleCreateDir(subject,newName,status);
 	 }
+
+     status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
      return status;
    }
     
@@ -524,22 +537,35 @@ public class FileSystemMiner extends Miner
         return status;        
       }
 
+    private DataElement handleDates(DataElement theDirectory, DataElement status)
+    {
+	handleDate(theDirectory, status);
+	for (int i = 0; i < theDirectory.getNestedSize(); i++)
+	    {
+		handleDate(theDirectory.get(i), status);
+	    }
+	return status;
+    }
+
     private DataElement handleDate(DataElement theFile, DataElement status)
     {
-	File file = new File(theFile.getSource());
-	if (file.exists())
+	ArrayList dateInfo = theFile.getAssociated(_modifiedAtDescriptor);
+	if (dateInfo.size() == 0)
 	    {
-		long date = file.lastModified();
-		DataElement dateObj = _dataStore.createObject(status, "date", "" + date);
-		_dataStore.createReference(theFile, dateObj, "modified at");
-	    }
-	else
-	    {
-		DataElement dateObj = _dataStore.createObject(status, "date", "-1");
-		_dataStore.createReference(theFile, dateObj, "modified at");		
+		File file = new File(theFile.getSource());
+		if (file.exists())
+		    {
+			long date = file.lastModified();
+			DataElement dateObj = _dataStore.createObject(status, _dateDescriptor, "" + date);
+			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);
+		    }
+		else
+		    {
+			DataElement dateObj = _dataStore.createObject(status, _dateDescriptor, "-1");
+			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
+		    }
 	    }
 
-        status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
 	return status;
     }
 
@@ -552,6 +578,7 @@ public class FileSystemMiner extends Miner
 		file.setLastModified(date);
 	    }
 	
+	_dataStore.createReference(theFile, newDate, _modifiedAtDescriptor);
         status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
 	return status;
     }

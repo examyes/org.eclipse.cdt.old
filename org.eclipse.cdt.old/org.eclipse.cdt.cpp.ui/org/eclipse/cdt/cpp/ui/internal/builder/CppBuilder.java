@@ -49,7 +49,7 @@ public class CppBuilder extends IncrementalProjectBuilder
 	{
 	    if (_status.getName().equals("done"))
 		{
-		    _projectElement.refresh(false);
+		    //***_projectElement.refresh(false);
 		    finish();
 		}
 	}

@@ -173,10 +173,13 @@ public class ExtendedTableViewer extends TableViewer
 		for (int i= 0; i < items.length; i++) 
 		    {
 			Item child = items[i];
-			Object data = child.getData();
-			if (data == res)
+			if (!child.isDisposed()) 
 			    {
-				return child;
+				Object data = child.getData();
+				if (data == res)
+				    {
+					return child;
+				    }
 			    }
 		    }
 	    }
@@ -284,7 +287,7 @@ public class ExtendedTableViewer extends TableViewer
 		if (table.isVisible())
 		    {
 		
-		// remove those that are gone		
+		// remove those that are gone	
 		ArrayList associated = parent.getAssociated(_property);
 
 		TableItem[] items = table.getItems();
@@ -340,47 +343,47 @@ public class ExtendedTableViewer extends TableViewer
 	
 	int maxAdd = 100;
 	int numAdded = 0;
-
+	
 	synchronized(_currentInput)
 	    {
 		for (int i = 0; i < elements.size(); i++)
 		    {
 			DataElement child = (DataElement)elements.get(i);			
 			{
-				    TableItem item = (TableItem)findItemFor(table, child);
-				    if (item != null)
+			    TableItem item = (TableItem)findItemFor(table, child);
+			    if (item != null)
+				{
+				    if (!item.getText().equals(child.getValue()))
 					{
-					    if (!item.getText().equals(child.getValue()))
-						{
-						    updateItem(item, child);
-						}
+					    updateItem(item, child);
 					}
-				    else
+				}
+			    else
+				{
+				    if (numAdded < maxAdd)
 					{
-					    if (numAdded < maxAdd)
-						{
-						    if (_viewFilter.select(this, child, null))
-							{ 							
-							    if (recycled.size() > 0)
-								{
-								    item = (TableItem)recycled.get(0);
-								}
-							    else
-								{
-								    item = (TableItem)newItem(table, SWT.NONE, i);
-								    numAdded++;
-								}
-							    
-							    updateItem(item, child); 
-							    
+					    if (_viewFilter.select(this, child, null))
+						{ 							
+						    if (recycled.size() > 0)
+							{
+							    item = (TableItem)recycled.get(0);
 							}
+						    else
+							{
+							    item = (TableItem)newItem(table, SWT.NONE, i);
+							    numAdded++;
+							}
+						    
+						    updateItem(item, child); 
+						    
 						}
 					}
+				}
 			}
 		    }		
 	    }
 	
-
+	
 	if (recycled.size() > 0)
 	    {
 		for (int i = 0; i < recycled.size(); i++)
@@ -441,8 +444,10 @@ public void doExpand(DataElement obj)
 		else if (_currentInput != object)
 		    {
 			_currentInput = (DataElement)object;
+			_currentInput.expandChildren();
 
 			super.inputChanged(object, oldInput);
+			internalRefresh(_currentInput);
 			_isShowing = true;
 		    }
 	    }

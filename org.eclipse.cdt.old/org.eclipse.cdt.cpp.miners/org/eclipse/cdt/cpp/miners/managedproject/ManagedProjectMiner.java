@@ -155,12 +155,12 @@ public class ManagedProjectMiner extends Miner
 		 	if (name.equals("C_UPDATE_MAKEFILE_AM"))
 			{
 				autoconfManager.makefileAmManager.updateMakefileAm(subject,false);
-				parseAmFile(subject); 
+				//***parseAmFile(subject); 
 			}
 			else if (name.equals("C_OPEN") || name.equals("C_REFRESH"))
       	    {
       	    	    	    	
-  			  parseAmFile(subject); 
+		//***parseAmFile(subject); 
 		    }
 		}
 			

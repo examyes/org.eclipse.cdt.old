@@ -72,6 +72,11 @@ public class ViewFilter extends ViewerFilter
     
     public boolean select(Viewer viewer, Object element, Object other)
     {
+	if (_type == null || _type.getName().equals("all"))
+	    {
+		return true;
+	    }
+
 	DataElement dataElement = (DataElement)element;	
 	if (dataElement != null)
 	    {	

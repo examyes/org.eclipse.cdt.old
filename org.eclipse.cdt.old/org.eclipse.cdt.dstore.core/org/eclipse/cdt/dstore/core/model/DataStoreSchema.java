@@ -105,9 +105,6 @@ public class DataStoreSchema
 	 //Base Container Object
         DataElement containerObjectD = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Container_Object"));
         _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Query"),   "*", "C_QUERY", false);
-        _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
-        _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
-        _dataStore.createCommandDescriptor(containerObjectD, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
 
       // file objects
 	_dataStore.createReference(hostD, containsD, containsD);	
@@ -120,6 +117,10 @@ public class DataStoreSchema
 						      "com.ibm.dstore.miners");
 
         DataElement fsObject = _dataStore.createAbstractObjectDescriptor(schemaRoot, getLocalizedString("model.Filesystem_Objects"), "com.ibm.dstore.miners");
+
+        _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Refresh"), "*", "C_REFRESH");
+        _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Open"),    "*", "C_OPEN", false);
+        _dataStore.createCommandDescriptor(fsObject, getLocalizedString("model.Close"),   "*", "C_CLOSE", false);
 
 	_dataStore.createReference(containerObjectD, fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, deviceD,  abstracts, abstractedBy);

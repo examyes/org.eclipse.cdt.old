@@ -51,11 +51,16 @@ public class SynchronizeWithAction extends CustomAction
 	    
 	    for (int i = 0; i < _projects.size(); i++)
 		{
-		    _pm.worked(1);
 		    DataElement project2 = ((DataElement)_projects.get(i)).dereference();
+		    project1.doCommandOn("C_DATES", true);		
+		    project2.doCommandOn("C_DATES", true);		
 		    
 		    if (project2 != null && project1 != project2)
 			{
+			    _pm.beginTask("Transfering from " + 
+					  project1.getName() + " to " + project2.getName() + "...", 
+					  project1.getNestedSize());
+
 			    // transfer from project1 to project2
 			    for (int j = 0; j < project1.getNestedSize(); j++)
 				{
@@ -63,27 +68,31 @@ public class SynchronizeWithAction extends CustomAction
 				    if (!source.isReference())
 					{
 					    TransferFiles transferAction = new TransferFiles("transfer", source, 
-											     project2, this);
-					    transferAction.start();
+											     project2, null);
+					    transferAction.run(pm);
 					}
-
-
+				    _pm.worked(1);
 				}
+
+			    _pm.beginTask("Transfering from " + 
+					  project2.getName() + " to " + project1.getName() + "...", 
+					  project2.getNestedSize());
 			    
+
 			    // transfer from project2 to project1
 			    for (int k = 0; k < project2.getNestedSize(); k++)
 				{
 				    DataElement source = project2.get(k);
-				    if (!source.isReference())
+				    if (!source.isReference() && source.isOfType("file"))
 					{
 					    TransferFiles transferAction = new TransferFiles("transfer", source, 
-											     project1, this);
-					    transferAction.start();
+											     project1, null);
+					    transferAction.run(pm);
 					}
+				    _pm.worked(1);
 				}				
 			}
 		}
-	    _pm.done();
 	}
     }
     

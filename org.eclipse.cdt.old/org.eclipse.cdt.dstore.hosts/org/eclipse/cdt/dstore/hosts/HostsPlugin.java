@@ -272,6 +272,7 @@ public class HostsPlugin extends AbstractUIPlugin
 	_dataStore.showTicket(_dataStore.getTicket().getName());
 	_dataStore.getSchema();
 	_dataStore.initMiners();
+
 	extendSchema(_dataStore.getDescriptorRoot());
 	
 	_instance = this;

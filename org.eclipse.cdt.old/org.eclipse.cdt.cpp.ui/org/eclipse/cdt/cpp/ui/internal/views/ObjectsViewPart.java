@@ -229,7 +229,8 @@ public class ObjectsViewPart extends GenericViewPart
 	CppProjectNotifier notifier = _api.getProjectNotifier();
 	notifier.removeProjectListener(this);
 
-	_viewer.dispose();
+	if (_viewer != null)
+	    _viewer.dispose();
         super.dispose();
     }
         

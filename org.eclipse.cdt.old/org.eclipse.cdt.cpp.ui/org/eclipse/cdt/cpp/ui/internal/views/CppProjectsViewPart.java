@@ -77,6 +77,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 	    {
 	    case CppProjectEvent.OPEN:
 		{
+		    _viewer.resetView();
 		}
 		break;
 	    case CppProjectEvent.CLOSE:

@@ -20,6 +20,8 @@ import com.ibm.dstore.core.model.*;
 import java.io.*; 
 import java.util.*;
 
+import org.eclipse.core.runtime.*;
+
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.window.*;
 import org.eclipse.jface.dialogs.*; 
@@ -46,7 +48,8 @@ public class TransferFiles extends Thread
     private DataElement _source;
     private DataElement _target;
     private HostsPlugin _plugin;
-    private ITransferListener _listener;
+    private ITransferListener _listener = null;
+    private IProgressMonitor  _pm = null;
 
     public TransferFiles(String name, DataElement source, DataElement target, ITransferListener listener)
     {
@@ -56,11 +59,27 @@ public class TransferFiles extends Thread
 	_plugin = HostsPlugin.getInstance();
     }
 
+    public void run(IProgressMonitor pm)
+    {
+	_pm = pm;
+	run();
+    }
+
     public void run()
     {
-	// this should work for receiving remotely...
 	DataStore sourceDataStore = _source.getDataStore();
 	DataStore targetDataStore = _target.getDataStore();
+
+	if (_source.isOfType("directory"))
+	    {
+		_source.expandChildren();
+		queryDates(_source);
+	    }
+	if (_target.isOfType("directory"))
+	    {
+		_target.expandChildren();
+		queryDates(_target);
+	    }
 
 	transfer(_source, _target);
 
@@ -76,19 +95,12 @@ public class TransferFiles extends Thread
     private void transfer(DataElement source, DataElement target)
     {
 	target.setExpanded(true);
-	source.expandChildren();
 
 	DataStore targetDataStore = target.getDataStore();
 	DataStore sourceDataStore = source.getDataStore();
 
 	String targetStr = target.getSource();
 	String newSourceStr = targetStr + "/" + source.getName();
-
-	if (_listener != null)
-	    {
-		_listener.getShell().getDisplay().asyncExec(new Notify("Creating " + newSourceStr + "...")); 
-	    }
-
 
 	boolean needsUpdate = false;
 
@@ -97,6 +109,17 @@ public class TransferFiles extends Thread
 	DataElement copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 	if (copiedSource == null)
 	    {
+		String task = "Creating " + newSourceStr + "...";
+		if (_listener != null)
+		    {
+			_listener.getShell().getDisplay().asyncExec(new Notify(task)); 
+		    }
+		else if (_pm != null)
+		    {
+			_pm.subTask(task);
+		    }
+
+
 		if (type.equals("file"))
 		    {
 			DataElement mkfile = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_FILE");
@@ -129,6 +152,7 @@ public class TransferFiles extends Thread
 				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
 			    }
 		    }
+
 	    }
 	else
 	    {
@@ -139,6 +163,33 @@ public class TransferFiles extends Thread
 		    }
 	    }
 
+
+	if (needsUpdate)
+	    {
+		String utask = "Updating " + newSourceStr + "...";
+		if (_listener != null)
+		    {
+			_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
+		    }
+		else if (_pm != null)
+		    {
+			_pm.subTask(utask);
+		    }
+	    }
+	else
+	    {
+		String utask = "";
+		if (_listener != null)
+		    {
+			_listener.getShell().getDisplay().asyncExec(new Notify(utask)); 
+		    }
+		else if (_pm != null)
+		    {
+			_pm.subTask(utask);
+		    }
+	    }
+
+	// both projects on same machine
 	if (targetDataStore == sourceDataStore)
 	    {
 		// files on the same system
@@ -196,15 +247,32 @@ public class TransferFiles extends Thread
 	
 	if (type.equals("directory") && copiedSource != null)
 	    {
+		if (_pm != null)
+		    {
+			_pm.beginTask("Transfering files from " + source.getName() + "...", source.getNestedSize());
+		    }
 		
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {
 			DataElement child = source.get(i);
-			if (child.getType().equals("directory") || child.getType().equals("file"))
+			String ctype = child.getType();
+			if (ctype.equals("directory") || ctype.equals("file"))
 			    {
+				if (ctype.equals("directory"))
+				    {
+					child.expandChildren();
+					queryDates(child);
+				    }
+				if (type.equals("directory"))
+				    {
+					copiedSource.expandChildren();
+					queryDates(copiedSource);
+				    }
+
 				transfer(child, copiedSource);
 				targetDataStore.refresh(target);
 			    }
+			_pm.worked(1);
 		    }
 	    }	
     }
@@ -215,6 +283,11 @@ public class TransferFiles extends Thread
 	long date2 = getDate(oldSource);
 
 	return (date1 > date2);
+    }
+
+    public void queryDates(DataElement directory)
+    {
+	directory.doCommandOn("C_DATES", true);		
     }
 
     private long getDate(DataElement fileElement)

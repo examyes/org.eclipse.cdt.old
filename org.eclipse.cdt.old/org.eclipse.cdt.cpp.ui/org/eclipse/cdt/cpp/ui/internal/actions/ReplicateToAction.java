@@ -50,26 +50,29 @@ public class ReplicateToAction extends CustomAction
 
 	    for (int i = 0; i < _projects.size(); i++)
 		{
-		    _pm.worked(1);
-
 		    DataElement targetProject = ((DataElement)_projects.get(i)).dereference();
 		    
 		    if (targetProject != null && _subject != targetProject)
 			{
+ 			    targetProject.doCommandOn("C_DATES", true);		
+
+			    _pm.beginTask("Transfering files from " + _subject.getName() + "...", _subject.getNestedSize());
+  			    _subject.doCommandOn("C_DATES", true);		
+
 			    // do transfer files
 			    for (int j = 0; j < _subject.getNestedSize(); j++)
 				{
 				    DataElement source = _subject.get(j);
-				    if (!source.isReference())
+				    if (!source.isReference() && source.isOfType("file"))
 					{
 					    TransferFiles transferAction = new TransferFiles("transfer", source, 
-											     targetProject, this);
-					    transferAction.start();
+											     targetProject, null);
+					    transferAction.run(pm);
 					}
+				    _pm.worked(1);
 				}
 			}
 		}
-	    _pm.done();
 	}
     }
 

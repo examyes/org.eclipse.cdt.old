@@ -343,8 +343,6 @@ public class ViewToolBar extends Viewer implements IDomainListener
 		  }
 		
 		_toolBarContainer.layout(true);
-		if (!_currentInput.isExpanded() || (_currentInput.getNestedSize() == 0))
-		    _currentInput.expandChildren();
 
 	    }
     }

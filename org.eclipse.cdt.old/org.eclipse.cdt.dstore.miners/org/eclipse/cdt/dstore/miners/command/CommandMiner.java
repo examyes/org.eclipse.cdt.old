@@ -34,6 +34,7 @@ public class CommandMiner extends Miner
      DataElement fsD           = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects", 1);
      DataElement cancellable   = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.Cancellable"), 1);
      
+
      DataElement cmdD          = createCommandDescriptor(fsD, "Command", "C_COMMAND");
      _dataStore.createReference(cancellable, cmdD, "abstracts", "abstracted by");
 
@@ -350,6 +351,7 @@ class CommandMinerThread extends MinerThread
 	    {
 		_status.setAttribute(DE.A_NAME, "done");
 		_dataStore.refresh(_status, true);
+		_subject.refresh(false);
 		
 		_stdOutputHandler.finish();
 		_stdErrorHandler.finish();
@@ -536,8 +538,9 @@ public String removeWhitespace(String theLine)
  *************************************************************************************************/
  private DataElement createObject (String type, String text, String file, Integer line, Integer col)
  {
-  if (file != null)
+  if (file != null && file.length() > 0)
    {
+       DataElement fileElement = null;
        // check for fully qualified file 
        File qfile = new File(file);
        if (!qfile.exists())
@@ -545,7 +548,17 @@ public String removeWhitespace(String theLine)
 	       qfile = new File(_subject.getSource() + "/" + file);
 	       if (!qfile.exists())
 		   {
-		       file = "";
+		       DataElement subStatus = _dataStore.createObject(null, "status", "find"); 
+		       DataElement statusElement =_fileMiner.findFile(_subject, file, subStatus);
+		       fileElement = statusElement.get(0);
+		       if (fileElement != null)
+			   {
+			       String fileStr = fileElement.getSource();
+			       if (fileStr.length() > 0)
+				   {
+				       file = fileStr;
+				   }
+			   }
 		   }
 	       else
 		   {
@@ -553,14 +566,28 @@ public String removeWhitespace(String theLine)
 		   }
 	   }
    
+       DataElement obj = null;
        if (line == null || (line.intValue() == 1))
-	   return _dataStore.createObject(_status, type, text, file);
-       return _dataStore.createObject(_status, type, text, file + ":" + line.intValue()); //Not handling column yet
-     }
-   else
-     {
-        return createObject(type, text);
-     }   
+	   {
+	       obj =  _dataStore.createObject(_status, type, text, file);
+	   }
+       else
+	   {
+	       obj = _dataStore.createObject(_status, type, text, 
+							 file + ":" + line.intValue());
+	   }
+
+       if (fileElement != null)
+	   {
+	       _dataStore.createReference(obj, fileElement);
+	   }
+
+       return obj;
+   }
+  else
+      {
+	  return createObject(type, text);
+      }   
  }
 }
 

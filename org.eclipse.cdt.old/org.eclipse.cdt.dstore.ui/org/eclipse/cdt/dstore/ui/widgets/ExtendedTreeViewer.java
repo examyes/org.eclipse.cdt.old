@@ -259,7 +259,7 @@ public class ExtendedTreeViewer extends TreeViewer
 				Tree tree = getTree();
 				tree.setRedraw(false);				
 				internalRefresh(parent);
-				getTree().setRedraw(true);
+				tree.setRedraw(true);
 			    }
 			catch (Exception e)
 			    {
@@ -279,6 +279,25 @@ public class ExtendedTreeViewer extends TreeViewer
 		_listener.enable(true); 
 	    }
     }	
+
+
+    protected void doUpdateItem(Item item, Object element) 
+    {
+	// update icon and label
+	ILabelProvider provider = (ILabelProvider) getLabelProvider();
+	String text = provider.getText(element); 
+	if (text != null && !text.equals(item.getText()))
+	    {
+		item.setText(text);
+	    }
+
+	Image image = provider.getImage(element);
+	if (image != null) 
+	    {
+		item.setImage(image);
+	    }
+    }
+
 
     public void enable(boolean flag)
     {

@@ -4,5 +4,5 @@ e l root 127.0.0.1 4033 e:/ true
 goose root goose 4033 /home/ftp false true
 dmcknigh2-linux root dmcknigh2 1555 / false true
 dmcknigh5 root 127.0.0.1 0 e:/ false true
-127.0.0.1 root 127.0.0.1 4033 e:/working/ false true
+127.0.0.1 root 127.0.0.1 4033 e:/ true true
 bad root 127.0.0.1 4033 / false false

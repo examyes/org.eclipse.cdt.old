@@ -35,7 +35,7 @@ import org.eclipse.jface.dialogs.*;
 import java.lang.reflect.InvocationTargetException;
 
 
-public abstract class ReplicateOperation implements IRunnableWithProgress, ITransferListener
+public abstract class ReplicateOperation implements IRunnableWithProgress
 {
     protected ModelInterface _api;
     protected DataElement _subject;
@@ -52,6 +52,7 @@ public abstract class ReplicateOperation implements IRunnableWithProgress, ITran
     public void run(IProgressMonitor monitor) throws InvocationTargetException
     {
 	execute(monitor);
+	complete();
     }
     
     public Shell getShell()
@@ -59,48 +60,45 @@ public abstract class ReplicateOperation implements IRunnableWithProgress, ITran
 	return _api.getShell();
     }
     
-    public void update(String updateString)
+    public void complete()
     {
-	_pm.subTask(updateString);
-	
-	if (updateString.equals("Ready"))
+	IResource subP = _api.findResource(_subject); 
+	if (subP instanceof Repository)
 	    {
-		IResource subP = _api.findResource(_subject); 
-		if (subP instanceof Repository)
+	    }
+	else
+	    {
+		try
+		    {
+			subP.refreshLocal(subP.DEPTH_INFINITE, _pm);
+		    }
+		catch (CoreException e)
+		    {
+			System.out.println(e);
+		    }	
+	    }
+	
+	for (int i = 0; i < _projects.size(); i++)
+	    {
+		DataElement project = (DataElement)_projects.get(i); 
+		IResource tarP = _api.findResource(project); 
+		if (tarP instanceof Repository)
 		    {
 		    }
 		else
 		    {
 			try
 			    {
-				subP.refreshLocal(subP.DEPTH_INFINITE, _pm);
+				tarP.refreshLocal(tarP.DEPTH_INFINITE, _pm);
 			    }
 			catch (CoreException e)
 			    {
 				System.out.println(e);
 			    }	
 		    }
+	    }
 
-		for (int i = 0; i < _projects.size(); i++)
-		    {
-			DataElement project = (DataElement)_projects.get(i); 
-			IResource tarP = _api.findResource(project); 
-			if (tarP instanceof Repository)
-			    {
-			    }
-			else
-			    {
-				try
-				    {
-					tarP.refreshLocal(tarP.DEPTH_INFINITE, _pm);
-				    }
-				catch (CoreException e)
-				    {
-					System.out.println(e);
-				    }	
-			    }
-		    }
-	    }    
+	_pm.done();
     }
     
     protected abstract void execute(IProgressMonitor pm);

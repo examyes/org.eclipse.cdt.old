@@ -178,6 +178,7 @@ public class ClientConnection
     _dataStore.setUpdateHandler(_updateHandler);
     _dataStore.setConnected(true);
     _dataStore.setLoader(_loader);
+    _dataStore.getDomainNotifier().enable(true);
 
     _commandHandler.setDataStore(_dataStore);
     _updateHandler.setDataStore(_dataStore);
@@ -238,6 +239,7 @@ public class ClientConnection
           _dataStore.setCommandHandler(_commandHandler);
           _dataStore.setUpdateHandler(_updateHandler);
           _dataStore.setConnected(true);
+	  _dataStore.getDomainNotifier().enable(true);
 
 	  _commandHandler.setDataStore(_dataStore);
 	  _updateHandler.setDataStore(_dataStore);

@@ -1195,22 +1195,6 @@ public class DataStore
 
     public void cleanBadReferences(DataElement root)
     {
-	/****
-	for (int i = 0; i < root.getNestedSize(); i++)
-	    {
-		DataElement child = (DataElement)root.get(i);
-		if (child.isReference())
-		    {
-			DataElement referenced = child.dereference();
-			if ((referenced == null) || (referenced == child))
-			    {
-				deleteObject(child.getParent(), child);
-			    }
-		    }
-		
-		cleanBadReferences(child);
-	    }
-	***/
     }
 
     public void cancelAllCommands()
