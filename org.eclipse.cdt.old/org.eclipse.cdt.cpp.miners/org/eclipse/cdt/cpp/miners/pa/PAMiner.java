@@ -22,7 +22,14 @@ public class PAMiner extends Miner {
  {
   super.finish();
  }
-    
+
+ protected ArrayList getDependencies()
+ {
+   ArrayList dependencies = new ArrayList();
+   dependencies.add("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner");
+   return dependencies;
+ }
+ 
  public void load()
  {
   // System.out.println("Calling PAMiner.load");
