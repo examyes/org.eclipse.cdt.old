@@ -35,6 +35,12 @@ import java.util.*;
 import java.net.*;
 import java.lang.reflect.*;
 
+import org.eclipse.swt.widgets.*;
+
+import org.eclipse.jface.action.*;
+import org.eclipse.jface.window.*;
+import org.eclipse.jface.dialogs.*;
+
 public class QuickConnectAction implements Runnable
 {
     private String _host;
@@ -62,10 +68,11 @@ public class QuickConnectAction implements Runnable
 
 
 	ConnectionStatus status = tempConnection.connect(dataStore.getDomainNotifier(), "com.ibm.dstore.miners/fs.dat");
-	DataStore rmtDataStore = tempConnection.getDataStore();
-	if (rmtDataStore != null && tempConnection.isConnected())
+	if (status.isConnected())
 	    {
-		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", rmtDataStore.getHostRoot().get(0).dereference());
+		DataStore rmtDataStore = tempConnection.getDataStore();
+		DataElementFileDialog dialog = new DataElementFileDialog("Select Directory", 
+									 rmtDataStore.getHostRoot().get(0).dereference());
 		dialog.open();
 		if (dialog.getReturnCode() == dialog.OK)
 		    {
@@ -77,6 +84,22 @@ public class QuickConnectAction implements Runnable
 			
 		    }
 		tempConnection.disconnect();
+	    }
+	else
+	    {
+		String msg = status.getMessage();
+		if (!status.isConnected())
+		    {
+			MessageDialog failD = new MessageDialog(null, 
+								"Connection Failure", 
+								null, msg, 
+								MessageDialog.INFORMATION,
+								new String[]  { "OK" },
+								0);
+			
+			
+			failD.openInformation(new Shell(), "Connection Failure", msg);          
+		    }
 	    }
     }
 

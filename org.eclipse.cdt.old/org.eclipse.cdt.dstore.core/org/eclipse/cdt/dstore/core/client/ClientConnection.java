@@ -231,6 +231,12 @@ public class ClientConnection
 	  result = new ConnectionStatus(_isConnected);	  
 	  result.setTicket(ticket);
         }
+	catch (java.net.ConnectException e)
+	    {
+		String msg = "Connection Refused.";		
+		msg += "\nMake sure that the DataStore server is running on " + _host + " under port " + _port + ".";
+		result = new ConnectionStatus(false, msg);				  
+	    }
         catch (UnknownHostException uhe)
         {
 	    _isConnected = false;
@@ -289,6 +295,12 @@ public class ClientConnection
 		  writer.close();
 		  launchSocket.close(); 
 	      }
+	  catch (java.net.ConnectException e)
+	    {
+		String msg = "Connection Refused.";		
+		msg += "\nMake sure that the DataStore daemon is running on " + _host + ".";
+		result = new ConnectionStatus(false, msg);				  
+	    }
 	  catch (UnknownHostException uhe)
 	      {
 		  result = new ConnectionStatus(false, uhe);
