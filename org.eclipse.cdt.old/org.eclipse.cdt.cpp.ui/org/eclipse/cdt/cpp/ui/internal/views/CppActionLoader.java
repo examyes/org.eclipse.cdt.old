@@ -65,19 +65,19 @@ public class CppActionLoader extends GenericActionLoader
 	    }
 	catch (ClassNotFoundException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	catch (InstantiationException e)
 	    { 
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	catch (IllegalAccessException e)
 	    {
-		System.out.println(e);	
+		//System.out.println(e);	
 	    }
 	catch (InvocationTargetException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	
         return newAction;
@@ -104,19 +104,19 @@ public class CppActionLoader extends GenericActionLoader
 	    }
         catch (ClassNotFoundException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
         catch (InstantiationException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
         catch (IllegalAccessException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
         catch (InvocationTargetException e)
 	    {
-		System.out.println(e);
+		//System.out.println(e);
 	    }
 	
         return newAction;

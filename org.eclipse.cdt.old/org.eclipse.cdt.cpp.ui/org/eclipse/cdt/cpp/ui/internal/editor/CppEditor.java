@@ -14,6 +14,7 @@ import com.ibm.cpp.ui.internal.editor.codeassist.*;
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.resource.*;
 
 import org.eclipse.core.resources.*;
 import com.ibm.lpex.alef.LpexTextEditor;
@@ -150,7 +151,7 @@ public class CppEditor extends LpexTextEditor
 	 if (file instanceof ResourceElement)
 	     {
 		 DataElement fileElement = ((ResourceElement)file).getElement();
-		 api.parse(fileElement, false);
+		 api.parse(fileElement, false, false);
 	     }
 	 else
 	     {
