@@ -229,27 +229,4 @@ public class PreventableMessageBox extends MessageDialog implements SelectionLis
 		return 0;
 	    }
     }
-    public static int openYesNoCancel(Shell parent, String title, String message) 
-    {
-	if (_showAgain)
-	    {
-		PreventableMessageBox dialog = new PreventableMessageBox (
-									  parent, 
-									  title, 
-									  null,	// accept the default window icon
-									  message, 
-									  QUESTION, 
-									  new String[] {
-									  	IDialogConstants.YES_LABEL, 
-										IDialogConstants.NO_LABEL,
-										IDialogConstants.CANCEL_LABEL}, 
-									  0); 	// OK is the default
-
-		return dialog.open();
-	    }
-	else
-	    {
-		return -1;
-	    }
-    }
 }

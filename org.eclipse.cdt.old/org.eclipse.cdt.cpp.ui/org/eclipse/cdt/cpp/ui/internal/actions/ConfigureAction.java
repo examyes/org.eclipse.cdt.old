@@ -40,7 +40,7 @@ import org.eclipse.jface.dialogs.*;
 
 public class ConfigureAction extends CustomAction
 { 
-
+	private MessageDialog dialog = new MessageDialog(null,null,null,null,3,null,0);
 	private PreventableMessageBox box  = 
 			new PreventableMessageBox(null,null,null,null,0,null,0);
 		
@@ -106,10 +106,9 @@ public class ConfigureAction extends CustomAction
 		{
 			if(doesAutoconfSupportExist())
 			{
-				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
-				("Attempting to update existing & generating missing configure.in and makefile.am's "
-					+"\nUpdated files will be renamed *.old");
+				("Attempting to update existing and/or generating configure.in and makefile.am's "
+					+"\nOld files will be renamed *.old");
 				execute = dialog.openConfirm(shell,"Updating configure.in and Makefile.am's ",message);
 			}
 		}	
@@ -117,7 +116,6 @@ public class ConfigureAction extends CustomAction
 		{
 			if(doesFileExist("Makefile.am"))
 			{
-				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
 				("Attempting to update existing makefile.am's"+
 					"\nIf updated then old Makefile.am's will be renamed *.old");
@@ -128,7 +126,6 @@ public class ConfigureAction extends CustomAction
 		{
 			if(doesFileExist("configure.in"))
 			{
-				MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
 				String message = new String
 				("Attempting to update existing configure.in "+
 					"\nIf updated then old configure.in shall be renamed *.old");
@@ -147,10 +144,14 @@ public class ConfigureAction extends CustomAction
 				str1 = new String(
 				"Would you like the system to update and generate missing configuration files?");
 				message = new String("\nGenerating project configuration files"+str1);
-				updating = box.openYesNoCancel(
-												shell,
-												"Creating configure.in and Makefile.am's ",
-												message);
+				box = new PreventableMessageBox(shell,
+										"Creating configure.in and Makefile.am's ",
+										null,
+										message,3,new String[]{
+									  	IDialogConstants.YES_LABEL,
+									  	IDialogConstants.NO_LABEL, 
+										IDialogConstants.CANCEL_LABEL},0);
+				updating = box.open();
 			}
 			else
 			{
@@ -160,11 +161,10 @@ public class ConfigureAction extends CustomAction
 				box = new PreventableMessageBox(shell,
 										"Creating configure.in and Makefile.am's ",
 										null,
-										message,0,new String[]{
-									  	IDialogConstants.YES_LABEL, 
+										message,2,new String[]{
+									  	IDialogConstants.OK_LABEL, 
 										IDialogConstants.CANCEL_LABEL},0);
 				updating = box.open();
-
 			}
 		}
 		if(_command.getValue().equals("RUN_CONFIGURE"))
@@ -175,10 +175,14 @@ public class ConfigureAction extends CustomAction
 				String message = new String
 				("\nThe system detects that configure script is not up to date"+
 				"\nWould you like to update and generate missing configuration files before running configure?");
-				runUpdate = box.openYesNoCancel(
-				shell,
-				"Running configure script",
-				message);
+				box = new PreventableMessageBox(shell,
+										"Running configure script ",
+										null,
+										message,3,new String[]{
+									  	IDialogConstants.YES_LABEL,
+									  	IDialogConstants.NO_LABEL, 
+										IDialogConstants.CANCEL_LABEL},0);
+				runUpdate = box.open();
 			}
 			else
 			{
