@@ -53,7 +53,7 @@ public class PADataStoreAdaptor {
  private String		 _selfTimeString;
  private String		 _totalTimeString;
  private boolean	 _hasParsedSource;
- 
+  
  // This map stores the correspondence between PA trace functions and their 
  // corresponding data elements.
  private HashMap _traceFunctionsMap;
@@ -391,7 +391,7 @@ public class PADataStoreAdaptor {
     }
     
    }
-     
+   
    _dataStore.refresh(_attributesRoot, false);
 
  }
@@ -452,6 +452,33 @@ public class PADataStoreAdaptor {
  
  
  /**
+  * create a float number attribute for a DataElement.
+  * We only create the DataElement when the float number is not zero.
+  */
+ private void createFloatAttribute(DataElement parent, String name, double value) {
+ 
+   if (value > 0)
+    createAttribute(parent, name, String.valueOf(value));
+    
+ }
+ 
+ /**
+  * create a float rounded attribute for a DataElement
+  */
+ private void createFloatAttribute(DataElement parent, String name, double value, boolean round) {
+ 
+   if (value > 0) {
+    
+     if (round)
+       createAttribute(parent, name, roundDouble(value));
+     else
+       createAttribute(parent, name, String.valueOf(value));
+   }
+    
+ }
+ 
+ 
+ /**
   * Create attributes for a trace file element
   */
  private void createTraceFileAttributes(DataElement fileElement, PATraceFile traceFile) {
@@ -494,12 +521,12 @@ public class PADataStoreAdaptor {
   */
  private void createGprofTraceFunctionAttributes(DataElement funcElement, PATraceFunction trcFunc) {
 
-  createAttribute(funcElement, _timePercentD,    String.valueOf(trcFunc.getTotalPercentage()));
-  createAttribute(funcElement, _numCallsD, 		 String.valueOf(trcFunc.getCallNumber()));
-  createAttribute(funcElement, _selfTimeD, 		 String.valueOf(trcFunc.getSelfSeconds()));
-  createAttribute(funcElement, _totalTimeD, 	 roundDouble(trcFunc.getTotalSeconds()));  
-  createAttribute(funcElement, _selfTimeString,  String.valueOf(trcFunc.getSelfTimePerCall()));
-  createAttribute(funcElement, _totalTimeString, String.valueOf(trcFunc.getTotalTimePerCall()));
+  createFloatAttribute(funcElement, _timePercentD,    trcFunc.getTotalPercentage());
+  createAttribute(funcElement, 		_numCallsD, 	  String.valueOf(trcFunc.getCallNumber()));
+  createFloatAttribute(funcElement, _selfTimeD, 	  trcFunc.getSelfSeconds());
+  createFloatAttribute(funcElement, _totalTimeD, 	  trcFunc.getTotalSeconds(), true);  
+  createFloatAttribute(funcElement, _selfTimeString,  trcFunc.getSelfTimePerCall());
+  createFloatAttribute(funcElement, _totalTimeString, trcFunc.getTotalTimePerCall());
  
  }
  
@@ -509,16 +536,16 @@ public class PADataStoreAdaptor {
   */
  private void createFunctionCheckTraceFunctionAttributes(DataElement funcElement, FunctionCheckTraceFunction trcFunc) {
 
-  createAttribute(funcElement, _timePercentD,     String.valueOf(trcFunc.getTotalPercentage()));
-  createAttribute(funcElement, _numCallsD, 		  String.valueOf(trcFunc.getCallNumber()));
-  createAttribute(funcElement, _selfTimeD, 		  String.valueOf(trcFunc.getSelfSeconds()));
-  createAttribute(funcElement, _totalTimeD, 	  String.valueOf(trcFunc.getTotalSeconds()));  
-  createAttribute(funcElement, _selfMsPerCallD,   roundDouble(trcFunc.getSelfTimePerCall()));  
-  createAttribute(funcElement, _totalMsPerCallD,  roundDouble(trcFunc.getTotalTimePerCall()));
-  createAttribute(funcElement, _minSelfTimeD,  	  String.valueOf(trcFunc.getMinLocalTime()));
-  createAttribute(funcElement, _maxSelfTimeD,  	  String.valueOf(trcFunc.getMaxLocalTime()));
-  createAttribute(funcElement, _minTotalTimeD, 	  String.valueOf(trcFunc.getMinTotalTime())); 
-  createAttribute(funcElement, _maxTotalTimeD, 	  String.valueOf(trcFunc.getMaxTotalTime()));
+  createFloatAttribute(funcElement, _timePercentD,    trcFunc.getTotalPercentage());
+  createAttribute(funcElement, 		_numCallsD, 	  String.valueOf(trcFunc.getCallNumber()));
+  createFloatAttribute(funcElement, _selfTimeD, 	  trcFunc.getSelfSeconds());
+  createFloatAttribute(funcElement, _totalTimeD, 	  trcFunc.getTotalSeconds());  
+  createFloatAttribute(funcElement, _selfMsPerCallD,  trcFunc.getSelfTimePerCall(),  true);  
+  createFloatAttribute(funcElement, _totalMsPerCallD, trcFunc.getTotalTimePerCall(), true);
+  createFloatAttribute(funcElement, _minSelfTimeD,    trcFunc.getMinLocalTime());
+  createFloatAttribute(funcElement, _maxSelfTimeD,    trcFunc.getMaxLocalTime());
+  createFloatAttribute(funcElement, _minTotalTimeD,   trcFunc.getMinTotalTime()); 
+  createFloatAttribute(funcElement, _maxTotalTimeD,   trcFunc.getMaxTotalTime());
   
  }
 
@@ -545,19 +572,15 @@ public class PADataStoreAdaptor {
    // create a DataElement to represent the call arc
    DataElement callArcElement    = _dataStore.createObject(_callArcsRoot, _callArcD, traceFunction.getName());
    callArcElement.setAttribute(DE.A_VALUE, callee.getName());
-     
-   DataElement numCalls     = _dataStore.createObject(_attributesRoot, _numCallsD, 		String.valueOf(callArc.getCallNumber()));
-   DataElement selfTime     = _dataStore.createObject(_attributesRoot, _selfTimeD, 		String.valueOf(callArc.getSelfTime()));
-   DataElement childrenTime = _dataStore.createObject(_attributesRoot, _childrenTimeD, 	String.valueOf(callArc.getChildrenTime()));
+   
+   createAttribute(callArcElement, 		_numCallsD, 	String.valueOf(callArc.getCallNumber()));
+   createFloatAttribute(callArcElement, _selfTimeD, 	callArc.getSelfTime());
+   createFloatAttribute(callArcElement, _childrenTimeD, callArc.getChildrenTime());
    
    // create the relations between trace functions and call arcs
    _dataStore.createReference(funcElement,   callArcElement, _calleeArcD);
    _dataStore.createReference(calleeElement, callArcElement, _callerArcD);
-   
-   _dataStore.createReference(callArcElement, numCalls,     _attributesD);
-   _dataStore.createReference(callArcElement, selfTime,     _attributesD);
-   _dataStore.createReference(callArcElement, childrenTime, _attributesD);
-   
+      
   }
     
  }
