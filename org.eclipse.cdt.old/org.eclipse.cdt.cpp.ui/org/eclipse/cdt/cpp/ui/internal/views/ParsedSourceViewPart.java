@@ -29,7 +29,7 @@ public class ParsedSourceViewPart extends ProjectViewPart
     
  public ObjectWindow createViewer(Composite parent, IActionLoader loader)
  {
-  return new ObjectWindow(parent, 0, _plugin.getCurrentDataStore(), _plugin.getImageRegistry(), this, true);
+  return new ObjectWindow(parent, 0, _plugin.getCurrentDataStore(), _plugin.getImageRegistry(), loader, true);
  }
     
  protected String getF1HelpId()

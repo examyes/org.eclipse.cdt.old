@@ -51,7 +51,7 @@ public class DetailsViewPart extends ObjectsViewPart
 
   public void setFocus()
   {  
-      _viewer.setFocus();
+      _viewer.setFocus(); 
   }
 
   public void selectionChanged(IWorkbenchPart part, ISelection sel) 
