@@ -141,6 +141,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
     private IActionLoader       _loader;
 
     private MenuHandler         _menuHandler;
+    private MenuManager         _menuManager;
+
     private ObjectSelectionChangedListener _selectionListener;
 
     private ResourceBundle      _resourceBundle;  
@@ -681,14 +683,19 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	initDragAndDrop();
 	
         // add menu handling
-        MenuManager menuMgr = new MenuManager("#PopupMenu");
-	menuMgr.setRemoveAllWhenShown(true);
-	menuMgr.addMenuListener(this);
-        Menu menu = menuMgr.createContextMenu(widget);
+        _menuManager = new MenuManager("#PopupMenu");
+	_menuManager.setRemoveAllWhenShown(true);
+	_menuManager.addMenuListener(this);
+        Menu menu = _menuManager.createContextMenu(widget);
         widget.setMenu(menu);
 
         return parent;
       }
+
+    public MenuManager getMenuManager()
+    {
+	return _menuManager;
+    }
 
   public void menuAboutToShow(IMenuManager menu) 
       {
