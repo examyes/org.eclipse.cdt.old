@@ -76,10 +76,13 @@ public class TransferFiles extends Thread
 		DataStore sourceDataStore = _source.getDataStore();
 		DataStore targetDataStore = _target.getDataStore();
 
+		/*
 		boolean validSource = _source.getType().equals("file") || 
-	    _source.getType().equals("directory") ||
-	    _source.getType().equals("Project"); // hack 
-	    
+		    _source.getType().equals("directory") ||
+		    _source.getType().equals("Project"); // hack 
+		*/
+		boolean validSource = _source.isOfType("file");
+
 		if (validSource)
 	    {
 			recursiveQuery(_source);
