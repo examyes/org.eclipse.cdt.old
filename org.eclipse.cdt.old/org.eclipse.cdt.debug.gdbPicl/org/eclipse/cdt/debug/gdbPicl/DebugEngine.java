@@ -50,6 +50,7 @@ import org.eclipse.cdt.debug.gdbPicl.commands.CmdProcessAttach2;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdProcessDetach;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdProcessDetailsGet;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdProcessListGet;
+import org.eclipse.cdt.debug.gdbPicl.commands.CmdProgramInput;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdRegisters2;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdRegistersDetailsGet;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdRegistersFree2;
@@ -115,6 +116,7 @@ import com.ibm.debug.epdc.EReqProcessAttach2;
 import com.ibm.debug.epdc.EReqProcessDetach;
 import com.ibm.debug.epdc.EReqProcessDetailsGet;
 import com.ibm.debug.epdc.EReqProcessListGet;
+import com.ibm.debug.epdc.EReqProgramInput;
 import com.ibm.debug.epdc.EReqRegisters2;
 import com.ibm.debug.epdc.EReqRegistersDetailsGet;
 import com.ibm.debug.epdc.EReqRegistersFree2;
@@ -545,6 +547,11 @@ public class DebugEngine extends Thread
             if (Gdb.traceLogger.EVT) 
                 Gdb.traceLogger.evt(1,"EPDC_CMD> Process list get \n");
             return new CmdProcessListGet(_debugSession, (EReqProcessListGet) req);
+            
+         case EPDC.Remote_ProgramInput:
+            if (Gdb.traceLogger.EVT) 
+                Gdb.traceLogger.evt(1,"EPDC_CMD> Program Input \n");
+            return new CmdProgramInput(_debugSession, (EReqProgramInput) req);
 
          case EPDC.Remote_RepForTypeSet:
             if (Gdb.traceLogger.EVT) 

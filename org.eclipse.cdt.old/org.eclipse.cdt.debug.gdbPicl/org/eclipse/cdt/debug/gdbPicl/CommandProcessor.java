@@ -9,11 +9,13 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.eclipse.cdt.debug.gdbPicl.commands.CmdProgramInput;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdRemoteHalt;
 import org.eclipse.cdt.debug.gdbPicl.commands.CmdTerminateDE;
 import org.eclipse.cdt.debug.gdbPicl.commands.Command;
 
 import com.ibm.debug.epdc.EPDC_EngineSession;
+import com.ibm.debug.epdc.*;
 
 
 /**
@@ -154,7 +156,8 @@ class CommandProcessor extends Thread
          }
          else
          {
-               System.out.println("RW CommandProcessor execute === kill -s SIGINT " + ((GdbDebugSession)_debugSession).getDebuggeeProcessID());
+               if (Gdb.traceLogger.DBG)
+                   Gdb.traceLogger.dbg(1,"CommandProcessor execute === kill -s SIGINT " + ((GdbDebugSession)_debugSession).getDebuggeeProcessID());
                try
                {
                	  ((GdbDebugSession)_debugSession).setTerminatePending(true);
@@ -167,6 +170,12 @@ class CommandProcessor extends Thread
                }
          }
       }
+//      else if (cmd instanceof CmdProgramInput)
+//      {
+//      	if (Gdb.traceLogger.DBG)
+//                   Gdb.traceLogger.dbg(1,"Program Input received");
+//      	((CmdProgramInput)cmd).execute(_engineSession);      	
+//      }
       else
       {
          // We have to protect access to this queue since debug engine is on another thread

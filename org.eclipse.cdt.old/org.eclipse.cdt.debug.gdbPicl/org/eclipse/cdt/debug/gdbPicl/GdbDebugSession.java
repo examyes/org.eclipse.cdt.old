@@ -535,10 +535,12 @@ public class GdbDebugSession extends DebugSession {
 			return _whyStop;
 		}
 
+		updateBreakpoints();
 		updateMonitors();
 		updateRegisters();
-		updateStorage();
+		updateStorage();		
 		getCurrentFileLineModule();
+		this._threadManager.updateThreads();
 
 		return 1;
 	}
@@ -1019,8 +1021,19 @@ public class GdbDebugSession extends DebugSession {
 		if (Gdb.traceLogger.EVT)
 			Gdb.traceLogger.evt(
 				2,
-				"######## GdbDebugSession.updateMonitors BYPASSING (GDB command 'display' could be used to them) ??NOT NEEDED??");
+				"######## GdbDebugSession.updateMonitors");
+		this._variableMonitorManager.updateMonitors();		
 	}
+	
+	private void updateBreakpoints()
+	{
+		if (Gdb.traceLogger.EVT)
+			Gdb.traceLogger.evt(
+				2,
+				"######## GdbDebugSession.updateBreakpoints");
+		((GdbBreakpointManager)this._breakpointManager).updateBreakpoints();
+
+	}	
 
 	private void updateAllMethodsForAllParts() {
 		getMethodsForAllParts();
@@ -1801,7 +1814,7 @@ public class GdbDebugSession extends DebugSession {
 		return (GdbDebugEngine) _debugEngine;
 	}
 	
-	   /** Adds the breakpoint change packets to the reply packet */
+	   /** Adds output change packets to the reply packet */
     public void addChangesToReply(EPDC_Reply rep) {
 		ECPLog cp = new ECPLog();
 
@@ -1813,13 +1826,14 @@ public class GdbDebugSession extends DebugSession {
 				if (str == null || str.equals("")) {
 					str = " ";
 				}
-				cp.addCmdLogLine(str);
-//				cp.addPgmOutputLine(str);
+//				cp.addCmdLogLine(str);
+				cp.addPgmOutputLine(str);
 			}
 			uiMessages.removeAllElements();
 		}
 
 		rep.addLogChangePacket(cp);
+		
     }
 
 	// add the name to the list of dll to stop for    

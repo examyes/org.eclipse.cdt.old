@@ -248,6 +248,7 @@ public class CmdInitializeDE extends Command
          EPDC.FCT_REGISTERS                 | // support registers
          EPDC.FCT_STORAGE                   | // support storage
          EPDC.FCT_COMMAND_LOG               | // support commandLog
+         EPDC.FCT_PROGRAMIO					|
          0,
 
          // Run Options
@@ -316,8 +317,6 @@ public class CmdInitializeDE extends Command
 
       return nlsCode;
    }
-
-
 
 
    // Data members
