@@ -90,10 +90,10 @@ public class GdbThreadComponent extends ThreadComponent
             if (Gdb.traceLogger.ERR) 
                 Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY VIEW GdbThreadComponent lineNumber(0)="+lineNumber(0) );
                 
-			int location = convertLineNum(lineNumber(0), _partID);
+			int location = convertLineNum(Part.VIEW_DISASSEMBLY, lineNumber(0), _partID);
 			if (location < 1)
 			{
-				location = convertLineNum(frameAddress(0), _partID);                				
+				location = convertLineNum(Part.VIEW_DISASSEMBLY, frameAddress(0), _partID);                				
 				if (location < 1)
 					location = 1;	
 			}			
@@ -102,7 +102,17 @@ public class GdbThreadComponent extends ThreadComponent
 	        EPDCThread.setWhereStopped(Part.VIEW_DISASSEMBLY, 1,  location); 
 
             if (Part.MIXED_VIEW_ENABLED)
-	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
+            {
+            	location = convertLineNum(Part.VIEW_MIXED, lineNumber(0), _partID);
+				if (location < 1)
+				{
+					location = convertLineNum(Part.VIEW_MIXED, frameAddress(0), _partID);                				
+					if (location < 1)
+						location = 1;	
+				}	
+   	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, location); 
+//	            EPDCThread.setWhereStopped(Part.VIEW_MIXED, 1, lineNumber(0)); 
+            }
          }
       return EPDCThread;
 
@@ -543,11 +553,11 @@ public class GdbThreadComponent extends ThreadComponent
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"######## UNIMPLEMENTED DISASSEMBLY/MIXED VIEW GdbThreadComponent.ERepGetChangedStack lineNum="+lineNumber(i) );
              
-		 int location = convertLineNum(lineNumber(i), partID);
+		 int location = convertLineNum(Part.VIEW_DISASSEMBLY, lineNumber(i), partID);
 		 		 
 		 if (location < 1)
 		 {
-		 	location = convertLineNum(frameAddress(i), partID);
+		 	location = convertLineNum(Part.VIEW_DISASSEMBLY, frameAddress(i), partID);
 		 	if (location < 1)
 		 		location = 1;
 		 }             
@@ -561,8 +571,18 @@ public class GdbThreadComponent extends ThreadComponent
          
          if (Part.MIXED_VIEW_ENABLED)               
          {
+         	 location = convertLineNum(Part.VIEW_MIXED, lineNumber(i), partID);
+		 		 
+			 if (location < 1)
+			 {
+			 	location = convertLineNum(Part.VIEW_MIXED, frameAddress(i), partID);
+			 	if (location < 1)
+			 		location = 1;
+			 }       
+//	         entry.setStackEntryViewInfo((short) Part.VIEW_MIXED,
+//	               (short)partID, 1, lineNumber(i));
 	         entry.setStackEntryViewInfo((short) Part.VIEW_MIXED,
-	               (short)partID, 1, lineNumber(i));
+	               (short)partID, 1, location);
          }
 
          if (Gdb.traceLogger.EVT) 

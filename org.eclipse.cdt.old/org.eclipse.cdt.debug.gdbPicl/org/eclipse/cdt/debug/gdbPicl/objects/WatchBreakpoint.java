@@ -57,7 +57,8 @@ public class WatchBreakpoint extends Breakpoint
       bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
       
       if (Part.MIXED_VIEW_ENABLED)
-	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
+   	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, _context.getPPID(), _context.getSrcFileIndex(), 1);
+//	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, _context.getPPID(), _context.getSrcFileIndex(), _lineNum);
 
 //      bkpChangeItem.setEntryID(0);
 //      bkpChangeItem.setVarInfo("");

@@ -71,7 +71,7 @@ public class CmdContextConvert extends Command
                                    +" fileIndex="+_req.context().getSrcFileIndex()+" lineNum="+_req.context().getLineNum() );
 
            address = gdbDebugSession._getGdbFile.convertSourceLineToAddress(partName,lineNum); 
-           String disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
+           String disLineNum = disassemblyView.convertAddressToLineNum(address); 
            //String disLineNum = gdbDebugSession._getGdbFile.convertAddressToDisassemblyLine(address, part.getStartAddress(), part.getEndAddress() ); 
 			if (Gdb.traceLogger.DBG) 
               Gdb.traceLogger.dbg(1,"CmdContextConvert.DISSASM file="+partName+" line="+lineNum+" address="+address+" disassemblyLine="+disLineNum );

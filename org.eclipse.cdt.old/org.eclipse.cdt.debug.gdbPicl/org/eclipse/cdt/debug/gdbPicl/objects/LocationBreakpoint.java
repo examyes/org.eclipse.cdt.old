@@ -221,7 +221,8 @@ public class LocationBreakpoint extends Breakpoint
       bkpChangeItem.setBkpContext((short) Part.VIEW_DISASSEMBLY, (short)_partID, 1, _lineNum);
       
       if (Part.MIXED_VIEW_ENABLED)
-	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, _lineNum);
+   	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, 1);
+//	      bkpChangeItem.setBkpContext((short) Part.VIEW_MIXED, (short)_partID, 1, _lineNum);
 
       bkpChangeItem.setEntryID(_entryID);
       bkpChangeItem.setVarInfo(_entryName);

@@ -219,13 +219,18 @@ public abstract class ThreadComponent    //HC
       whereStopped[Part.VIEW_DISASSEMBLY-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_DISASSEMBLY,
                                                       1,
-                                                      convertLineNum(_lineNumber, _partID));                                                     
+                                                      convertLineNum(Part.VIEW_DISASSEMBLY, _lineNumber, _partID));                                                     
 	  if (Part.MIXED_VIEW_ENABLED)                                                      
 	  {
 	      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
                                                       (short)Part.VIEW_MIXED,
                                                       1,
+                                                      convertLineNum(Part.VIEW_MIXED, _lineNumber, _partID));
+/*	      whereStopped[Part.VIEW_MIXED-1] = new EStdView((short)_partID,
+                                                      (short)Part.VIEW_MIXED,
+                                                      1,
                                                       _lineNumber);
+                                                      */
 	  }
       
       EPDC_EngineSession _engineSession = _debugSession.getDebugEngine().getSession();
@@ -434,7 +439,7 @@ public abstract class ThreadComponent    //HC
    /* take the partID and line number from source view and decide
    the appropriate line number for disassembly view
    */   
-    public int convertLineNum(int line, int partID)
+    public int convertLineNum(int viewNum, int line, int partID)
     {
         // convert to correct disassembly line number
 		ModuleManager moduleManager = _debugSession.getModuleManager();            
@@ -444,17 +449,18 @@ public abstract class ThreadComponent    //HC
 		if (part != null)
 		{			
 			String partName = part.getName();           
-			GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
-			
-//			if (!disassemblyView.isViewVerify())
-//				disassemblyView.verifyView();
-			
-			
+			View view = part.getView(viewNum);
+						
 			String address = ((GdbDebugSession)_debugSession)._getGdbFile.convertSourceLineToAddress(partName,String.valueOf(line));
 			String disLineNum = null;
 			
 			if (address != null)
-				disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
+			{
+				if (viewNum == Part.VIEW_DISASSEMBLY)
+					disLineNum = ((GdbDisassemblyView)view).convertAddressToLineNum(address); 
+				else
+					disLineNum = ((GdbMixedView)view).convertAddressToLineNum(address); 
+			}
 			
 			if (disLineNum != null)
 			{
@@ -476,7 +482,7 @@ public abstract class ThreadComponent    //HC
    /* take the partID and frame address to decide
    the appropriate line number for disassembly view
    */   
-    public int convertLineNum(String address, int partID)
+    public int convertLineNum(int viewNum, String address, int partID)
     {
         // convert to correct disassembly line number
 		ModuleManager moduleManager = _debugSession.getModuleManager();            
@@ -486,14 +492,16 @@ public abstract class ThreadComponent    //HC
 		if (part != null)
 		{			
 			String partName = part.getName();           
-			GdbDisassemblyView disassemblyView = (GdbDisassemblyView)part.getView(Part.VIEW_DISASSEMBLY);
+			View view = part.getView(viewNum);
 			String disLineNum = null;
-			
-//			if (!disassemblyView.isViewVerify())
-//				disassemblyView.verifyView();
-			
+					
 			if (address != null)
-				disLineNum = disassemblyView.convertAddressToDisassemblyLine(address); 
+			{	
+				if (viewNum == Part.VIEW_DISASSEMBLY)
+					disLineNum = ((GdbDisassemblyView)view).convertAddressToLineNum(address); 
+				else
+					disLineNum = ((GdbMixedView)view).convertAddressToLineNum(address); 
+			}
 			
 			if (disLineNum != null)
 			{

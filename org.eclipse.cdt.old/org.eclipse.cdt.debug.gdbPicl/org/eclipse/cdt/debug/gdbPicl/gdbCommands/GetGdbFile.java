@@ -339,4 +339,70 @@ System.out.println("GetGdbFile.convertDisassemblyLineToAddress lineNum="+lineNum
       startEnd = new StartEnd(startAddress,endAddress);
       return startEnd;
    }
+   
+   public StartEnd getLineStartEnd(String fileName, int lineNum)
+   {
+		StartEnd startEnd = null;
+		String str;
+		int end;
+		String [] lines;
+		String startAddress;
+		String endAddress;
+		boolean noSource = false;
+		String keywordEnd;
+   		
+        String cmd = "info line "+fileName+":"+lineNum;
+		if (Gdb.traceLogger.DBG)
+			Gdb.traceLogger.dbg(1,"GetGdbFile.getLineStartEnd cmd="+cmd );
+		boolean ok = _debugSession.executeGdbCommand(cmd);
+		if(!ok)
+			return startEnd;
+			
+		lines = _debugSession.getTextResponseLines();
+		if(lines.length==0)
+			return startEnd;
+
+		str = lines[0];
+		if (Gdb.traceLogger.DBG) 
+			Gdb.traceLogger.dbg(1,"GetGdbFile.getLineStartEnd start str="+str );	          
+
+		if (str.indexOf("contains no code") >= 0)
+	      	noSource = true;
+	      	
+		if (str.indexOf("out of range") >= 0)
+			return startEnd;	      	
+          
+        //Line nn of "FileName" starts at address 0xHHHHHH <fcnMane+nnnn> and ends at 0xHHHHHH <fcnName+nnnn>.
+		String keyword = " at address ";
+		int address = str.indexOf(keyword);
+
+		if(address<0 && !noSource)
+			return startEnd;
+
+		str = str.substring(address+keyword.length());  // include '0x' in address
+		end = str.indexOf(" ");
+		startAddress = str.substring(0,end);
+		
+		if (noSource)
+		{
+			startEnd = new StartEnd(startAddress, null);
+		}
+		
+		keyword = "ends at ";
+		address = str.indexOf(keyword);
+		
+		if (address<0)
+			return startEnd;
+			
+		str = str.substring(address+keyword.length());
+		end = str.indexOf(" ");	
+		endAddress = str.substring(0, end);
+		
+		if (Gdb.traceLogger.DBG) 
+			Gdb.traceLogger.dbg(1,"GetGdbFile.getLineStartEnd startAdd="+startAddress + " endAdd=" + endAddress );
+		
+		startEnd = new StartEnd(startAddress,endAddress);
+   		
+   		return startEnd;
+   }
 }

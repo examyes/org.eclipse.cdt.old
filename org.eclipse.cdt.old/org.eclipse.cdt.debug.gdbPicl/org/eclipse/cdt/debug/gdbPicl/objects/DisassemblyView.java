@@ -94,7 +94,7 @@ abstract class DisassemblyView extends View
       return lineAddress;
    }
 
-   public String convertAddressToDisassemblyLine(String targetAddress)
+   public String convertAddressToLineNum(String targetAddress)
    {   	
       String lineNum = null;
 
@@ -278,6 +278,65 @@ abstract class DisassemblyView extends View
       setViewFileName(1,sourceFileName);
       _parentPart.setPartChanged(true);
       return true;
+   }
+   
+   /*
+   */
+   public boolean appendDisassemblyLineByAddress(String disAddress)
+   {
+      GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
+      String[] lines = gdbDebugSession._getGdbFile.getDisassemblyLines(disAddress);	      
+		
+      int lineNum   = 0;
+      int maxLength = 0;
+	
+      String srcLine = null;
+      String address = null;
+		      
+      int dispNumLines = _viewLines.size();
+		      
+      if (lines == null)
+		return false;
+		      
+      while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
+      {
+      	 int space = srcLine.indexOf(" ");
+      	 if (space != -1)
+      	 {
+			 address = srcLine.substring(0, space);
+      	 }
+      	 else
+      	 {
+	      	 address = srcLine.substring(0,9);
+      	 }	      	 
+         srcLine = processViewLine(lineNum+1, " "+srcLine);
+		         
+         dispNumLines++;
+		
+         _viewLines.addElement(srcLine);      
+		         
+         /*
+         This hashtable keeps track of the addresses and their associated line numbers
+         in disassembly view.  This hashtable is used for reporting where a debugee stopped
+         in the disassembly.  Before reporting the status of the stack frame to UI, we
+         get the location of a part, convert this line number to an address, and look up
+         this address in the hashtable.  Then we report the associated line number as the
+         correct location of a particular line in disassembly view.
+         */  
+         _lineMap.put(address, new String(Integer.toString(dispNumLines)));
+		                  
+		 if (srcLine.length() > maxLength)
+		 	maxLength = srcLine.length();
+		
+         lineNum++;
+      }      
+		      
+      setViewRecordLength(maxLength);
+      setViewLineRange(1, dispNumLines);
+      setExecutableLines();
+      _parentPart.setPartChanged(true);
+
+	  return true;
    }
 
   /**
@@ -492,7 +551,7 @@ abstract class DisassemblyView extends View
       int viewNo = nextPartRep.createView(_prefixl, _viewValidated ? EPDC.VIEW_VALIDATED : 0);
 
 	  if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(3,"#### DisassemblyView.addViewToReply viewNo="+viewNo  );
+              Gdb.traceLogger.dbg(1,"#### DisassemblyView.addViewToReply viewNo="+viewNo  );
       // Determine this part's source view attributes
       int viewAttr = 0;
 
@@ -538,7 +597,7 @@ abstract class DisassemblyView extends View
    protected int          _moduleID;
    protected ModuleManager _moduleManager;
    
-   // sam
+   // hashtable to keep track of addresses and its associated line number in view
    private Hashtable _lineMap;
    
    // Data members
