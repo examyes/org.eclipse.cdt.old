@@ -112,24 +112,27 @@ public class NameLookup
     	{
     	 String currAtt = curObject.getAttribute(att);
      
-    	 if ((currAtt != null) && (currAtt.startsWith(objName)))   //We have at least a fuzzy match
-    	 {
-    	  if (!isFuzzy && currAtt.equals(objName)) //We have an exact match
-    	  { 
-    	   results.add(curObject);
-    	   return results;
-    	  }
-    	  else if (isFuzzy)
-    	   results.add(curObject);
+     	 if (currAtt != null) 
+     	 {
+     	 	if (isFuzzy && currAtt.startsWith(objName))
+     	 	{
+				results.add(curObject);    	 		
+     	 	} 
+    	    else if (currAtt.equals(objName)) //We have an exact match
+    	    { 
+    	   		results.add(curObject);
+    	   		return results;
+    	    }	
     	 }
     	}
-    }     
+    }      
     else if (curObject.getType().equals("includes"))             
     {
      DataElement incObj = curObject.dereference();
-     if (!_searchedFiles.contains(incObj.getName()))   //Only step into the include file if we haven't been there yet
+     String incName = incObj.getName();
+     if (!_searchedFiles.contains(incName))   //Only step into the include file if we haven't been there yet
      {
-      _searchedFiles.add(incObj.getName());
+      _searchedFiles.add(incName);
       int incSize = incObj.getNestedSize();
       if (incSize > 0)
       {
