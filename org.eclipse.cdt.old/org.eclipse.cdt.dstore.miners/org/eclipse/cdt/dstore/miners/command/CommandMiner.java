@@ -206,7 +206,12 @@ class CommandMinerThread extends MinerThread
 				case 13    : break;                          //Carriage Return
 				default    : theLine.append((char)ch);             //Any other character
 				}
-			}
+		
+                    //Check to see if the BufferedReader is still ready which means there are more characters 
+                    //in the Buffer...If not, then we assume it is waiting for input.
+		    if (!_reader.ready())
+                     done = true;
+                    }  
 		    catch (IOException e)
 			{
 			    return null;
