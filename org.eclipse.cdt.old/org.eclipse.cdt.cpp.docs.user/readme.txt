@@ -1,5 +1,5 @@
 This document is intended to point out issues or problems with the current
-release of the product.
+release of the product.(You may also want to see the accompanying "todo.txt")
 
 
 Project Issues (Local and Remote)
@@ -10,13 +10,6 @@ Project Issues (Local and Remote)
 2.  When deleting a project created with files found in "Local directory",
     those files will be deleted as well, unless the project is closed first.
     A message box will ask if you are sure you want to delete the files.
-3.  The remote projects view and functionality are currently in the design 
-    and prototype stage.  There are issues about how remote projects fit 
-    into the overall Eclipse resource model that restrict progress.
-    As a result this feature has had limited testing and there are many 
-    areas that will not work or will break when using the Remote Projects
-    view.  In particular, actions contributed by third parties on resources
-    have not been tested and may not work with remote resources.
 
 
 Host Actions
@@ -32,7 +25,7 @@ Appearance on Linux
 -------------------
 
 1.  Eclipse on Linux currently uses Motif widgets.  There will soon be support
-    for QT and KDE widgets, which should improve the look and feel of the 
+    for GTK widgets, which should improve the look and feel of the 
     Eclipse platform on Linux. 
 
 
@@ -77,7 +70,7 @@ Here are some of the most common known problems:
   file that starts eclipse (so that we can have control over the command-line 
   parameters sent to the JVM.  A typical script would look like this:
 
-  .\jre\bin\java -Xms100m -Xmx200m -verify -cp startup.jar org.eclipse.core.launcher.Main  
+  ./jre/bin/java -Xms100m -Xmx200m -verify -cp startup.jar org.eclipse.core.launcher.Main  
   
   The -Xms and -Xmx set the minimum and maximum memory size that the JVM is invoked with.
   (We will be looking into memory issues in upcoming releases)
@@ -105,19 +98,19 @@ Here are some of the most common known problems:
 Command View
 ------------
 
-1. The Command View sometimes requires an object in the Navigator to be selected.
+1. The Command View sometimes requires an object in the C/C++ Projects view to be selected.
    If you find that the Run Button in the Command View doesn't appear to work, 
-   goto the Navigator and select a Project or File and try again.
+   goto the C/C++ Projects view and select a Project or File and try again.
 
 
-Targets View
-------------
+Command Specifications View
+---------------------------
 
 1. Users may need to click on the project to set the focus in the navigator
-   before adding/removing targets within that project scope
-2. When creating a target using the wizard, the selected project will be
+   before adding/removing command specifications within that project scope
+2. When creating a command specification using the wizard, the selected project will be
    highlighted and selected automatically. Changing it to another project
-   from within the wizard will not cause the target to belong to the
+   from within the wizard will not cause the command specification to belong to the
    selected project. This will be fixed in the next release
 
 
@@ -139,12 +132,21 @@ General View Issues
 1. We have not finalized any icons.  The current set of icons is really a collection
    of assorted images we grabbed from anywhere we could.  Very shortly our
    graphic design team will be creating a consistent, professional set of icons.
-2. Several views such as the Targets and Command view may require a project to be
-   selected before the view can operate properly.  If you find a view not working 
-   as expected, goto the Navigator and select your project and try again.
+2. Several views such as the Command Specifications and Command Launcher view may require 
+   a project to be selected before the view can operate properly.  If you find a view not working 
+   as expected, goto the C/C++ Projects view and select your project and try again.
+3. For large projects, parse view refreshing is quite slow.
+4. The C/C++ Projects view and the Navigator are not always in sync. The solution is to
+   do a refresh in the view that appears not up to date.
 
+Platform issues
+---------------
+1. The C/C++ Plugin is intended for Linux, although some of its features will not work 
+   with Windows.
 
-
+Debugger issues
+---------------
+For debugger issues, see the accompanying "todo.txt"
 
 
 
