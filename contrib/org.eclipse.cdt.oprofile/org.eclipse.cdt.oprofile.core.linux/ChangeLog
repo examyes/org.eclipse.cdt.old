@@ -1,3 +1,7 @@
+2005-02-04  Keith Seitz  <keiths@redhat.com>
+
+	* fraagment.xml: Bump to 1.2.0. Require core version 1.2.0.
+
 2004-10-13  Jeremy Handcock  <handcock@redhat.com>
 
 	* build.properties (source.oprofile_linux.jar): Include src/, not 
