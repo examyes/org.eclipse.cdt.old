@@ -232,7 +232,7 @@ public abstract class RegistersMonitor
          int registerID = r.id;
          int groupID    = r.group;
          int flags      = r.flag;
-         int type       = 0;
+         int type       = EPDC.ConstantRegister;
          if (Gdb.traceLogger.DBG) 
              Gdb.traceLogger.dbg(1,"RegistersMonitor.getRegisterChangeInfo _DU="+_DU+" groupID="+groupID+" registerID="+registerID+" name="+name+" value="+value+" flags="+flags+" type="+type );
          rep.addRegisterChangePacket( new ERepGetNextRegister(_DU, groupID, registerID, name, value, flags, type) ); 
