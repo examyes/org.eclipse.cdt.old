@@ -37,7 +37,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
   
  public void initInput(DataStore dataStore)
  {
-  setTitle("C++ Projects");
+  setTitle("C/C++ Projects");
   dataStore = _plugin.getDataStore();
   DataElement projectMinerData = dataStore.findMinerInformation("com.ibm.cpp.miners.project.ProjectMiner");
   if (projectMinerData != null)

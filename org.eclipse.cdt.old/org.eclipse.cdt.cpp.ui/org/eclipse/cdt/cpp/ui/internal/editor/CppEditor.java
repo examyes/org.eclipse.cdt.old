@@ -16,6 +16,7 @@ import com.ibm.dstore.core.model.*;
 import org.eclipse.core.resources.*;
 import com.ibm.lpex.alef.LpexTextEditor;
 import com.ibm.lpex.core.LpexView;
+import com.ibm.lpex.core.LpexWindow;
 import com.ibm.lpex.core.LpexConstants;
 import com.ibm.lpex.alef.*;
 
@@ -69,6 +70,10 @@ public class CppEditor extends LpexTextEditor
       super.setSourceViewerConfiguration(new CppSourceViewerConfiguration(this));
    }
 
+
+    // test
+    
+
    public void createPartControl(Composite parent)
       {
         super.createPartControl(parent);
@@ -106,6 +111,7 @@ public class CppEditor extends LpexTextEditor
                                            this));
 
         setAction(ITextEditorActionConstants.RULER_DOUBLE_CLICK, getAction("ManageBreakpoints"));		
+
       }
 
 
@@ -114,7 +120,7 @@ public class CppEditor extends LpexTextEditor
         super.editorContextMenuAboutToShow(menu);
         addAction(menu, "ContentAssistProposal");
 
-	FindObjectAction action = new FindObjectAction("Find Selected@Ctrl+X", this, true);
+	FindObjectAction action = new FindObjectAction("Find Selected@F4", this, true);
 	menu.add(action);
 	setAction(ITextEditorActionConstants.FIND, action);
       }
@@ -199,18 +205,6 @@ public class CppEditor extends LpexTextEditor
         if (marker.getAttribute(IMarker.CHAR_START, 0) == -1) // if line marker
            lpexView.doCommand("set emphasisLength 100"); // emphasize 100 chars
         lpexView.triggerAction(lpexView.actionId("scrollCenter")); // make it a centerpiece
-
-//      LpexView lpexView = getLpexView();
-//      if (lpexView != null && marker != null)
-//      {
-//        int line = marker.getAttribute(IMarker.LINE_NUMBER, 0);
-//        int col  = marker.getAttribute(IMarker.CHAR_START, 0);
-//        lpexView.doCommand("locate emphasis line " + line);
-//        lpexView.doCommand("set position " + col);   // cursor on col.1 (/use whatever position appropriate)
-// //***  lpexView.doCommand("set position 1");   // cursor on col.1 (/use whatever position appropriate)
-//        lpexView.doCommand("set emphasisLength 100"); // emphasize the line
-//        lpexView.triggerAction(lpexView.actionId("scrollCenter")); // make it a centerpiece
-//      }
       }
 
     public void gotoLine(int line)

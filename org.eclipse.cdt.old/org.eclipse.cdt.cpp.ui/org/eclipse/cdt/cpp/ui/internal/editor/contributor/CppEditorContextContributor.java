@@ -41,7 +41,6 @@ public void contributeToMenu(IMenuManager mbm)
     super.contributeToMenu(mbm);
 
     ResourceBundle bundle = LpexPlugin.getDefault().getResourceBundle();
-
     _caAction = new TextOperationAction(bundle, "ContentAssistProposal.", (ITextEditor)_part, ISourceViewer.CONTENTASSIST_PROPOSALS);
     _caAction.setText("Code assist@Ctrl+SPACE");
 

@@ -88,15 +88,17 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 	{
         	// find the parser 
         	ModelInterface api = _plugin.getModelInterface();
-        	IProject project = _plugin.getCurrentProject();
-		DataStore dataStore = _plugin.getCurrentDataStore();
+
+        	IProject project = _input.getProject();
 
 		DataElement status = null;
 		ArrayList results = null;
 		
+		DataStore dataStore = null;
 		DataElement projectRoot = api.findProjectElement(project);
 		if (projectRoot != null)
 		    {
+			dataStore = projectRoot.getDataStore();
 			DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
 										       "C_CODE_ASSIST");
 			if (commandDescriptor != null)

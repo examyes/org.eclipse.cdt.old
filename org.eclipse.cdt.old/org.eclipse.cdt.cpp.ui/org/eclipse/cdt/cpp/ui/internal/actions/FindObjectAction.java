@@ -53,7 +53,6 @@ public class FindObjectAction extends Action
     public void run()
     {
 	String str = getCurrentText(_lpexViewer);
-	System.out.println(str);
 
 	int line = _lpexViewer.currentElement();
 	
@@ -63,54 +62,55 @@ public class FindObjectAction extends Action
 	    {
 		IFile file = ((IFileEditorInput)input).getFile();
 		path = new String(file.getLocation().toOSString());
-	    }				
 	
-	CppPlugin plugin   = CppPlugin.getDefault();
-	ModelInterface api  = plugin.getModelInterface();
-	IProject project    = plugin.getCurrentProject();
-	DataStore dataStore = plugin.getCurrentDataStore();
-	
-	DataElement projectRoot = api.findProjectElement(project);
-	if (projectRoot != null)
-	    {
-		DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
-									       "C_FIND_DECLARATION");
-		if (commandDescriptor != null)
-		    {				
-			DataElement patternLoc = dataStore.createObject(null, "source", str, path+":"+line);
-			
-			ArrayList args = new ArrayList();
-			args.add(patternLoc);
-			DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);
-			
-			if (status.getNestedSize() > 0)
-			    {
-				IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
-				IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+		IProject project    = file.getProject();
+		
+		CppPlugin plugin   = CppPlugin.getDefault();
+		ModelInterface api  = plugin.getModelInterface();
 				
-				IWorkbenchPage persp= win.getActivePage();
-				ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
-
-				if (viewPart == null)
+		DataElement projectRoot = api.findProjectElement(project);
+		if (projectRoot != null)
+		    {
+			DataStore dataStore = projectRoot.getDataStore();
+			DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
+										       "C_FIND_DECLARATION");
+			if (commandDescriptor != null)
+			    {				
+				DataElement patternLoc = dataStore.createObject(null, "source", str, path+":"+line);
+				
+				ArrayList args = new ArrayList();
+				args.add(patternLoc);
+				DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);
+				
+				if (status.getNestedSize() > 0)
 				    {
-					try
+					IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+					IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
+					
+					IWorkbenchPage persp= win.getActivePage();
+					ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+					
+					if (viewPart == null)
 					    {
-						persp.showView("com.ibm.cpp.ui.SelectedObjectViewPart");
-						viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
-
+						try
+						    {
+							persp.showView("com.ibm.cpp.ui.SelectedObjectViewPart");
+							viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
+							
+						    }
+						catch (PartInitException e)
+						    {
+							System.out.println(e);
+						    }
 					    }
-					catch (PartInitException e)
+					
+					if (viewPart != null)
 					    {
-						System.out.println(e);
+						viewPart.setInput(status.get(0));
 					    }
 				    }
-
-				if (viewPart != null)
-				    {
-					viewPart.setInput(status.get(0));
-				    }
-			    }
-		    }		
+			    }		
+		    }
 	    }
     }
     
