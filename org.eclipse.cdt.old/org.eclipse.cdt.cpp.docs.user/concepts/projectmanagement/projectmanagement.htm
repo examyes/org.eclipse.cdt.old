@@ -37,11 +37,11 @@ suggest to visit the <a href="http://www.gnu.org/">GNU</a> web site.&nbsp;</font
 
 <dd>
 <font size=+1>Support for Project Management, which is provided by the
-C/C++ IDE, can be defined in two categories.&nbsp; The first category isautomatic
-generation of configuration files&nbsp; for projects that are either newly
-created or imported to the tool without configuration files. The second
-category ismaintaining existing when importing a software package that
-has already autoconf and automake configuration files.&nbsp;</font></dd>
+C/C++ IDE, can be defined in two categories.&nbsp; The first category is
+automatic generation of configuration files&nbsp; for projects that are
+either newly created or imported to the tool without configuration files.
+The second category is maintaining existing when importing a software package
+that has already autoconf and automake configuration files.&nbsp;</font></dd>
 
 <dd>
 <font size=+1>Before we dive in and explain how to accomplish that tasks
@@ -50,6 +50,8 @@ will be used in this section</font></dd>
 
 <br>&nbsp;
 <p>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
 <p><b><font size=+3>Terminology and Definitions</font></b>
 <br>&nbsp;
 <ul>
@@ -163,8 +165,7 @@ Projects view,</a> right mouse click on the project directory</font></li>
 generate and update all the configuration files and generate configure
 for you</font></li>
 </ol>
-
-<p><b><font size=+3>Implicit Updating Configuration files</font></b>
+<b><font size=+3>Implicit Updating Configuration files</font></b>
 <p><font size=+1>If any of the configuration files has been updated , configure
 will be not up to date and regenerating configure is needed. so invoking
 generate configure and run configure will perform an update.</font>
@@ -197,7 +198,7 @@ template as well. For example an automatic update will occur if each makefile
 has one designated target per file. Also, the updated Targets are either
 Programs, Static Libraries Shared Libraries.&nbsp; Basic variables for
 each target will get updated for this release. Later, more and more update
-will be performed. For example, the _Program target will have its _SOURCES,_LDADD,
+will be performed. For example, the Program target will have its _SOURCES,_LDADD,
 SUBDIRS and EXTRA_DIST variables updates. For Static Libraries targets,
 the C/C++ tool will update LIBRARIES,&nbsp; _a_SOURCES,&nbsp; SUBDIRS and
 EXTRA_DIST will be updated. For shared libraries, the _LTLIBRARIE, _la_SOURCES,
@@ -229,9 +230,9 @@ level configure.in</font></li>
 exist in this directory</font></li>
 </ol>
 
-<p><br><b><font size=+3>Modifying the Project Structure</font></b><b><font size=+3></font></b>
-<p><font size=+1>The&nbsp; C/C++ IDE&nbsp;provides a set of actions that
-helps the user to easily modify the Makefile.am target . In order to that&nbsp;
+<p><br><b><font size=+3>Modifying the Project Structure</font></b>
+<p><font size=+1>The&nbsp; C/C++ IDE provides a set of actions that helps
+the user to easily modify the Makefile.am target . In order to that&nbsp;
 you need to :</font>
 <ol>
 <li>
@@ -243,32 +244,31 @@ Projects view,</a> right mouse click on the project directory</font></li>
 five create actions</font></li>
 
 <li>
-<font size=+1>Selecting Create TopLevel Makefile.am will generate tha top
-levet Makefile .am and if there was an existing Makefile.am, it will be
+<font size=+1>Selecting Create TopLevel Makefile.am will generate the top
+level Makefile .am and if there was an existing Makefile.am, it will be
 renamed *.old</font></li>
 
 <li>
-<font size=+1>Selecting Create Programs Makefile.am will generate tha Programs
+<font size=+1>Selecting Create Programs Makefile.am will generate the Programs
 Makefile .am and if there was an existing Makefile.am, it will be renamed
 *.old</font></li>
 
 <li>
-<font size=+1>Selecting Create Static Lib Makefile.am will generate tha
+<font size=+1>Selecting Create Static Lib Makefile.am will generate the
 static library&nbsp; Makefile.am and if there was an existing Makefile.am,
 it will be renamed *.old</font></li>
 
 <li>
-<font size=+1>Selecting Create Sthared LibMakefile.am will generate tha
+<font size=+1>Selecting Create Stared Lib Makefile.am will generate the
 shared library Makefile.am and if there was an existing Makefile.am, it
 will be renamed *.old</font></li>
 
 <li>
-<font size=+1>Selecting Create Configure.in will generate tha top levet
+<font size=+1>Selecting Create Configure.in will generate the top level
 configure.in and if there was an existing configure.in, it will be renamed
 *.old</font></li>
 </ol>
-<b><font size=+3></font></b><b><font size=+3></font></b>
-<p><b><font size=+3>Running Autoconf Standard targets</font></b>
+<b><font size=+3>Running Autoconf Standard targets</font></b>
 <p><font size=+1>You may invoke any of the following three standard autoconf
 targets from the The tool. These targets are make-install, distclean and
 maintainer-clean</font>
