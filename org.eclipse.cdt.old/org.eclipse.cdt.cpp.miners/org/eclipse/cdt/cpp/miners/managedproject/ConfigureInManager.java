@@ -82,7 +82,7 @@ public class ConfigureInManager {
 		}catch(IOException e){System.out.println(e);}
 		return false;		
 	}	
-	protected void updateConfigureIn(DataElement project,boolean actionIsManageProject)
+	protected void updateConfigureIn(DataElement project,boolean forceGenerate)
 	{
 		// notify the user, using a popup dilalog, that the file will be updated - only 2 macros
 		// the rest of the file will be te same
@@ -96,10 +96,8 @@ public class ConfigureInManager {
 			updateConfigureIn(project,configure_in);
 			compareOldAndNew(configure_in.getParentFile());
 		}
-		else
-		{
+		if(forceGenerate)
 			generateConfigureIn(project);
-		}
 	}
 	private void updateConfigureIn(DataElement project,File configure_in)
 	{

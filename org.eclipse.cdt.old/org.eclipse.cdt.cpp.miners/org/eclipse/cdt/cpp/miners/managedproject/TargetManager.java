@@ -35,10 +35,10 @@ public class TargetManager {
 					i++;
 			}
 			autoconfmanager.getAutoconfScript(parentData);
-			//if(getOS().equals("Linux"))
-				//runCommand(parentData,status,"./script.batch;./configure");
-			//else
-				//runCommand(parentData, status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
+			if(getOS().equals("Linux"))
+				runCommand(parentData,status,"./script.batch;./configure");
+			else
+				runCommand(parentData, status, cygwinPrefix+"script.batch;"+cygwinPrefix+"configure");
 			autoconfmanager.runConfigureScript(parentData,status);
 			autoconfmanager.runSupportScript(parentData,status);
 		}*/

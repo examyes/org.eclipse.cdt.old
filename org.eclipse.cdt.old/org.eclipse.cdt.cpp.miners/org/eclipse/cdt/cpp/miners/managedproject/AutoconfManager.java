@@ -75,7 +75,7 @@ public class AutoconfManager {
 	}
 	protected void updateAutoconfFiles(DataElement project, DataElement status, boolean actionIsManagedProject)
 	{
-		configureInManager.updateConfigureIn(project,actionIsManagedProject);
+		configureInManager.updateConfigureIn(project,true);
 		makefileAmManager.updateAllMakefileAm(project,actionIsManagedProject);
 	}
 	protected void runSupportScript(DataElement project,DataElement status)

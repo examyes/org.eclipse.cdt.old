@@ -8,6 +8,7 @@ package com.ibm.cpp.ui.internal.actions;
 
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.miners.managedproject.*;
 
 import com.ibm.dstore.ui.actions.*;
 import com.ibm.dstore.core.model.*;
@@ -90,13 +91,14 @@ public class ManageProjectAction extends CustomAction
 	}
     public void run()
 	{
-		
+		String overwrite = "";
+		if(doesAutoconfSupportExists())
+			overwrite = "\nAll existing Autoconf related files will be overwritten";
 		org.eclipse.swt.widgets.Shell shell = _dataStore.getDomainNotifier().findShell();
-		String message = new String("This action will generate all the files needed for Autoconf Support"+
-		"\nAll existing Autoconf related files will be overwritten"+
-		"\nDo you wish to continue?");
+		String message = new String("This action will generate all the files needed for Autoconf Support"
+				+overwrite+"\nDo you wish to continue?");
+				
 		CustomDialog dialog = new CustomDialog(shell,null,null,null,3,null,0);
-		
 		if(dialog.openConfirm(shell,"Generating Autoconf Support Files ",message))
 		{
 			DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
@@ -108,5 +110,16 @@ public class ManageProjectAction extends CustomAction
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
 		}
+	}
+	private boolean doesAutoconfSupportExists()
+	{
+		File project = _subject.getFileObject();
+		ProjectStructureManager structure = new ProjectStructureManager(project);
+		File[]fileList = structure.getFiles();
+
+		for (int i = 0; i < fileList.length; i++)
+			if(fileList[i].getName().equals("Makefile")||fileList[i].getName().equals("Makefile.am")||fileList[i].getName().equals("Configure.in"))
+				return true;
+		return false;
 	}
 }

@@ -70,6 +70,14 @@ public class TargetAction extends CustomAction
 	{	
 		super(subject, label, command, dataStore);
 		_subject = subject;
+		
+		if(_command.getValue().equals("DIST_CLEAN"))
+			if (!subject.getType().equals("Project"))
+				setEnabled(false);
+		if(_command.getValue().equals("DIST_CLEAN")&&!doesFileExists("Makefile"))
+			setEnabled(false);		
+
+		
 	}
 	public void run()
 	{
@@ -95,5 +103,14 @@ public class TargetAction extends CustomAction
 			monitor.start();
 		}
     }
+    private boolean doesFileExists(String fileName)
+	{
+		File project = _subject.getFileObject();
+		File[]fileList = project.listFiles();
+		for (int i = 0; i < fileList.length; i++)
+			if(fileList[i].getName().equals(fileName))
+				return true;
+		return false;
+	}
 }
 

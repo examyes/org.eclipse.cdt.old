@@ -82,8 +82,7 @@ public class ConfigureAction extends CustomAction
 			//if (subject.getType().equals("Project"))	
 				setEnabled(false);
 		if(_command.getValue().equals("RUN_CONFIGUTRE")&&!doesFileExists("configure.in")&&!doesFileExists("Makefile.am"))
-			//if (subject.getType().equals("Project"))	
-				setEnabled(false);		
+			setEnabled(false);		
 
 		if(_command.getValue().equals("RUN_CONFIGURE")&&!doesFileExists("configure"))
 			if (subject.getType().equals("Project"))	
