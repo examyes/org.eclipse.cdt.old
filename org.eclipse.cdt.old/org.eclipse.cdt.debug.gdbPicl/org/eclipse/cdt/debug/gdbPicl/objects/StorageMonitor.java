@@ -123,21 +123,33 @@ public abstract class StorageMonitor
               Gdb.traceLogger.evt(1,"StorageMonitor.modifyStorage lineOffset="+lineOffset+" _maxLines="+_maxLines );
           return;
        }
-       if(columnOffset>=_columnsPerLine)
+//       if(columnOffset>=_columnsPerLine)
+      if(columnOffset>=16)
        {
           if (Gdb.traceLogger.EVT) 
               Gdb.traceLogger.evt(1,"StorageMonitor.modifyStorage columnOffset="+columnOffset+" _columnsPerLine="+_columnsPerLine );
           return;
        }
+       
+   		// Bug 7644 - need to compute the address correctly
+		// big edian?  little edian?
+		// This map is specifically defined for Linux.
+		// need to modify this map for different platform
+		int[] offsetMap = {3,2,1,0,7,6,5,4,11,10,9,8,15,14,13,12};
+			
+		columnOffset = offsetMap[columnOffset];
 
-       long    actualAddressInt = Long.parseLong(_baseAddress.substring(2),16) +(lineOffset*_columnsPerLine*_bytesPerColumn) +(columnOffset*_bytesPerColumn);
-       String actualAddressStr = "0x"+Long.toHexString(actualAddressInt);
+      long    actualAddressInt = Long.parseLong(_baseAddress.substring(2),16); 
+       actualAddressInt = actualAddressInt + (lineOffset*_columnsPerLine*_bytesPerColumn); 
+       actualAddressInt = actualAddressInt + columnOffset;
+       String actualAddressStr = "0x"+Long.toHexString(actualAddressInt);       
        if (Gdb.traceLogger.DBG) 
            Gdb.traceLogger.dbg(1,"StorageMonitor.modifyStorage actualAddressStr="+actualAddressStr +" value="+value  );
 
        String type = "{int}";
             if (_bytesPerColumn==4)
-          type = "{int}";
+ //          type = "{int}";
+          type = "{char}";
        else if (_bytesPerColumn==2)
           type = "{short}";
        else if (_bytesPerColumn==1)
