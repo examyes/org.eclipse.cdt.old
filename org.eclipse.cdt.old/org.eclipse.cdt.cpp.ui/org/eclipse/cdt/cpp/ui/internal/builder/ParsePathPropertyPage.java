@@ -45,7 +45,11 @@ public class ParsePathPropertyPage extends PropertyPage
           _pathControl = new ParsePathControl(parent, SWT.NONE);	
 	 	 if (project instanceof Repository)
 	      {
-		  _pathControl.setContext(project);
+			  _pathControl.setContext(project);
+			  if (!project.isOpen())
+			  {
+			  	_pathControl.setRemote(true);
+			  }
 	      }
 
           _pathControl.setLayout(layout);
