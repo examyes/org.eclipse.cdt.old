@@ -593,8 +593,8 @@ public class FileSystemMiner extends Miner
 			_dataStore.createReference(theFile, dateObj, _modifiedAtDescriptor);		
 		    }
 
-		_dataStore.refresh(theFile);
 		_dataStore.refresh(status);
+		_dataStore.refresh(theFile);
 	    }
 	
 
