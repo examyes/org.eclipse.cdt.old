@@ -102,7 +102,7 @@ public class GenericViewPart extends ViewPart
     {
     	if (_loader == null)
     	{
-    		_loader = new GenericActionLoader();
+    		_loader = new GenericActionLoader(DataStoreUIPlugin.getInstance());
     	}
 
 		return _loader;
