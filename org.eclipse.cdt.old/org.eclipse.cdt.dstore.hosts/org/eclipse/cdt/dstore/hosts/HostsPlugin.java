@@ -144,7 +144,7 @@ public class HostsPlugin extends AbstractUIPlugin
     }
 
     public IActionLoader getDialogActionLoader()
-    {
+    { 
 	return _dialogActionLoader;
     }    
 
