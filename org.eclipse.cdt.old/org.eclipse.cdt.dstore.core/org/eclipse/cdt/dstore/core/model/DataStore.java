@@ -790,6 +790,7 @@ public class DataStore
       {
         deleteObjectHelper(from, toDelete, 5);
 	refresh(toDelete);	
+	refresh(from);	
       }
 
   private void deleteObjectHelper(DataElement from, DataElement toDelete, int depth)

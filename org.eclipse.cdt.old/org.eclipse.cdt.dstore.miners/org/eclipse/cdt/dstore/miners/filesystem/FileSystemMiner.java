@@ -195,10 +195,10 @@ public class FileSystemMiner extends Miner
 	  //deleting dirs
 	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,
 						    getLocalizedString("model.Delete"),
-						    "C_DELETE", false);
+						    "C_DELETE");
 	  DataElement del2 = createCommandDescriptor(_fileDescriptor,
 						     getLocalizedString("model.Delete"),
-						     "C_DELETE", false);
+						     "C_DELETE");
 	  
 
 	  //creating new files and dirs

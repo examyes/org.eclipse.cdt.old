@@ -192,7 +192,7 @@ public class TransferFiles extends Thread
 		    }
 	    }
 	
-	if (type.equals("directory"))
+	if (type.equals("directory") && copiedSource != null)
 	    {
 		
 		for (int i = 0; i < source.getNestedSize(); i++)

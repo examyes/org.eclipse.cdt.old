@@ -216,12 +216,11 @@ public class ExtendedTreeViewer extends TreeViewer
 	DataElement parent = (DataElement)ev.getParent();   
 
 	if (parent.isDeleted())
-	    {
-		
-		if (parent == _currentInput)
-		    {
-			clearView();
-		    }
+	    {		
+		    if (parent == _currentInput)
+			{
+			    clearView();
+			}
 		else
 		    {
 			synchronized(parent)

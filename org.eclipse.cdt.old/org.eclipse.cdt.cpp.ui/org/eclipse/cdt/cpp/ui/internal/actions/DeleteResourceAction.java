@@ -66,11 +66,19 @@ public class DeleteResourceAction extends CustomAction
 	    pm.beginTask("Deleting " + _resource.getSource(), 3);
 	    if (deleteD != null) 
 		{
-		    IResource pResource = _api.getResource(_resource.getSource());
-
 		    pm.worked(1);
 
-		    dataStore.synchronizedCommand(deleteD, _resource);
+		    IResource pResource = null;
+
+		    if (CppPlugin.getDefault().getDataStore() == dataStore)
+			{
+			    pResource = _api.getResource(_resource.getSource());
+			    dataStore.synchronizedCommand(deleteD, _resource);
+			}
+		    else
+			{
+			    dataStore.command(deleteD, _resource);			    
+			}
 
 		    pm.worked(1);
 		    
