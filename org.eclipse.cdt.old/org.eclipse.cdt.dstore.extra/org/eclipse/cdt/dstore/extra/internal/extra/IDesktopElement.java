@@ -6,7 +6,7 @@ package com.ibm.dstore.extra.internal.extra;
  * the Common Public License which accompanies this distribution.
  */
 
-
+ 
 public interface IDesktopElement extends org.eclipse.ui.model.IWorkbenchAdapter
 {  
 }

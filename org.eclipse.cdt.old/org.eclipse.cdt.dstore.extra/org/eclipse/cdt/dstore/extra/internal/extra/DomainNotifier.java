@@ -83,15 +83,18 @@ public class DomainNotifier implements IDomainNotifier
         }
       }
 
-  private Shell findShell()
+  public Shell findShell()
   {
-    for (int i = 0; i < _listeners.size(); i++)
+    for (int i = 0; i < _listeners.size(); i++) 
       {
 	IDomainListener listener = (IDomainListener)_listeners.get(i);
-	Shell shell = listener.getShell();
-	if ((shell != null) && !shell.isDisposed())
+	if (listener != null)
 	    {
-		return shell;
+		Shell shell = listener.getShell();
+		if ((shell != null) && !shell.isDisposed())
+		    {
+			return shell;
+		    }
 	    }
       }   
 
@@ -101,14 +104,14 @@ public class DomainNotifier implements IDomainNotifier
 
   public void fireDomainChanged(DomainEvent event)
       {
-	  //	  if (_enabled)
+	  if (_enabled)
 	      {
 
 		  if (_shell == null || (_shell.isDisposed()))
 		      {
 			  _shell = findShell();	    
 		      }
-		  
+		   
 		  if (_shell != null)
 		      {	    
 			  try
@@ -117,18 +120,18 @@ public class DomainNotifier implements IDomainNotifier
 				  if (d != null)
 				      {					  
 					  FireMainThread fire = new FireMainThread(event);
-					  d.syncExec(fire); 
+					  d.asyncExec(fire); 
 				      }	      
 			      }
 			  catch (SWTException e)
 			      {
-				  System.out.println(e);	      
+				  System.out.println(e);	       
 			      }
 		      }	    
 	      }
       }	
-
-  public boolean hasDomainListener(IDomainListener listener)
+    
+    public boolean hasDomainListener(IDomainListener listener)
       {
 	return _listeners.contains(listener);
       }

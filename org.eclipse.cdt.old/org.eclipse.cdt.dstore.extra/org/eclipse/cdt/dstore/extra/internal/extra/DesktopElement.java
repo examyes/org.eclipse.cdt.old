@@ -6,7 +6,6 @@ package com.ibm.dstore.extra.internal.extra;
  * the Common Public License which accompanies this distribution.
  */
  
-import com.ibm.dstore.core.DataStoreCorePlugin;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.jface.viewers.Viewer;
@@ -49,10 +48,7 @@ public class DesktopElement implements org.eclipse.ui.model.IWorkbenchAdapter
 
   public ImageDescriptor getImageDescriptor(Object object) 
   {
-    IDataElement element = toElement(object);
-
-    String imageFile = (String)element.getElementProperty("org.eclipse.jface.icon");
-    return DataStoreCorePlugin.getPlugin().getImageDescriptor(imageFile);
+      return null;
   }
 
   public String getLabel(Object o) 
@@ -62,7 +58,6 @@ public class DesktopElement implements org.eclipse.ui.model.IWorkbenchAdapter
 
   public Object getParent(Object o) 
   {
-      //    return _element.getParent();
       return null;
   }
   

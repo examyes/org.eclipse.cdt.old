@@ -6,8 +6,6 @@ package com.ibm.dstore.extra.internal.extra;
  * the Common Public License which accompanies this distribution.
  */
 
-import com.ibm.dstore.core.model.*; 
-
 import java.util.*; 
 
 public interface IDataElement extends IElement
