@@ -25,6 +25,7 @@ abstract class MixedView extends View
       _noViewLines[_noViewLines.length-1] = _debugEngine.getResourceString("MIXED_NOT_AVAILABLE_MSG");
       _mixedExecutableLines = new Vector();
       _lineMap = new Hashtable();
+      _viewConstructed = false;
    }
 
    public void setDisassemblyLines() 
@@ -85,37 +86,9 @@ abstract class MixedView extends View
       return verified;
    }
 
-  /**
-   * Attempts to combine the source View and the disassembly Views.
-   */
-   public boolean combineSourcePlusDisassemblyViews(String sourceFileName) 
+   
+   private boolean constructMixedView(String sourceFileName, int startLine, int numLines)
    {
-	  if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(3,"#### MixedView.combineSourcePlusDisassemblyViews(STRING) sourceFileName="+sourceFileName  );
-      _fakeNoSource = true;
-
-      if(_parentPart==null)
-      {
-         if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(2,"MixedView.verifyView _parentPart==null");
-         return true;
-      }
-
-      sourceView = (SourceView)_parentPart.getView(Part.VIEW_SOURCE);
-      disassemblyView = (DisassemblyView)_parentPart.getView(Part.VIEW_DISASSEMBLY);
-      if(sourceView==null || disassemblyView==null)
-      {
-         if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(2,"MixedView.verifyView source||disassembly==null source="+sourceView+" disassembly="+disassemblyView );
-         return true;
-      }
-      if(!sourceView.isViewVerify() || !disassemblyView.isViewVerify())
-      {
-         if (Gdb.traceLogger.ERR) 
-             Gdb.traceLogger.err(2,"MixedView.verifyView source||disassembly !isViewVerify source.isViewVerify()="+sourceView.isViewVerify()+" disassembly.isViewVerify()="+disassemblyView.isViewVerify() );
-         return false;
-      }
-
       int totalSource = sourceView.getViewNumLines();
       int totalDisassembly = disassemblyView.getViewNumLines();
 	  if (Gdb.traceLogger.DBG) 
@@ -124,108 +97,132 @@ abstract class MixedView extends View
       {
          if (Gdb.traceLogger.ERR) 
              Gdb.traceLogger.err(2,"MixedView.verifyView totalSource||totalDisassembly<=0 totalSource="+totalSource+" totalDisassembly="+totalDisassembly );
-         return true;
+         return false;
       }
 
       int mixedCurrentLine = 1;
+      int disStart = -1;
+      int disEnd = -1;
+      SourceView.SourceLine srcLine;
       
       GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
       
+      // based on information from disassembly view, create association of source view and disassembly view
+	  /*    0x8049393 <main+283 at payroll.cpp:73>: sub    $0x8,%esp
+			0x8049396 <main+286 at payroll.cpp:73>: push   $0x804a22b
+			0x804939b <main+291 at payroll.cpp:73>: lea    0xffffff48(%ebp),%eax
+			0x80493a1 <main+297 at payroll.cpp:73>: push   %eax
+	  */
+      
       for(int i=1; i<=totalSource; i++)
       {
-      	// get line information by "info line filename.cpp:lineNum"
-      	GetGdbFile.StartEnd startEnd = gdbDebugSession._getGdbFile.getLineStartEnd(sourceFileName, i);
+      	srcLine = sourceView.getLine(i);
       	
-      	if (startEnd == null)
-      	{
-			String line = sourceView.getViewLine(i);
-   			if (line != null)
-   			{
-				line = processViewLine(mixedCurrentLine, line);      			
-      			_viewLines.addElement(line);
-      			mixedCurrentLine++;
-   			}
-   			continue;
-      	}
+		disStart = srcLine.getStart();
+		disEnd = srcLine.getEnd();
       	
-      	// if the line contains no source
-      	if (startEnd.endAddress == null)
+      	if (disStart < 0 || disEnd < 0)
       	{
-      		if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### No code for line " + i + " get next address:  " + startEnd.startAddress);   		
-      		
-      		// get the next executable line by "info line *address" where address comes from prev "info line" call
-      		String nextLineNum = gdbDebugSession._getGdbFile.convertAddressToSourceLine(startEnd.startAddress);
-      		// add source from current line to next executable line to _viewLine
-      		String line;
-      		
-      		int nextLine = Integer.parseInt(nextLineNum);
-      		
-      		if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### No code for line " + i + " next line:  " + nextLine);  
-      		
-      		for (int j=i; j< nextLine; j++)
-      		{
-      			line = sourceView.getViewLine(j);
-      			if (line != null)
-      			{
+	      	// get line information by "info line filename.cpp:lineNum"
+	      	GetGdbFile.StartEnd startEnd = gdbDebugSession._getGdbFile.getLineStartEnd(sourceFileName, i);
+	      	
+	      	if (startEnd == null)
+	      	{
+				String line = sourceView.getViewLine(i);
+	   			if (line != null)
+	   			{
 					line = processViewLine(mixedCurrentLine, line);      			
 	      			_viewLines.addElement(line);
 	      			mixedCurrentLine++;
-      			}
-      		}
-      		// i = next executable line
-      		i = nextLine-1;
-      		// continue with the for loop
-      	}
-      	// else
-      	else
-      	{
-      		// get start address
-      		// if disassembly does not contain address
-      		if (!disassemblyView.containsAddressInView(startEnd.startAddress))
-      		{
-      			// disassemble by the address and append to the end of the view
-      			boolean ok = disassemblyView.appendDisassemblyLineByAddress(startEnd.startAddress);
-      			
-      			// just add line to view if we can't disassembly the given address successfully
-      			if (!ok)
-      			{
-      				String line = sourceView.getViewLine(i);
-      				if (line != null)
-      				{
+	   			}
+	   			continue;
+	      	}
+	      	
+	      	// if the line contains no source
+	      	if (startEnd.endAddress == null)
+	      	{
+	      		if (Gdb.traceLogger.DBG) 
+	              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### No code for line " + i + " get next address:  " + startEnd.startAddress);   		
+	      		
+	      		// get the next executable line by "info line *address" where address comes from prev "info line" call
+	      		String nextLineNum = gdbDebugSession._getGdbFile.convertAddressToSourceLine(startEnd.startAddress);
+	      		// add source from current line to next executable line to _viewLine
+	      		String line;
+	      		
+	      		int nextLine = Integer.parseInt(nextLineNum);
+	      		
+	      		if (Gdb.traceLogger.DBG) 
+	              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### No code for line " + i + " next line:  " + nextLine);  
+	      		
+	      		for (int j=i; j< nextLine; j++)
+	      		{
+	      			line = sourceView.getViewLine(j);
+	      			if (line != null)
+	      			{
 						line = processViewLine(mixedCurrentLine, line);      			
 		      			_viewLines.addElement(line);
 		      			mixedCurrentLine++;
-      				}
-		      		continue;
-      			} 			
-      			
-      		}
-      		// get line number for startAdd
-      		String disassemblyStartLine = disassemblyView.convertAddressToLineNum(startEnd.startAddress);
-      		int disStart = Integer.parseInt(disassemblyStartLine);
+	      			}
+	      		}
+	      		// i = next executable line
+	      		i = nextLine-1;
+	      		// continue with the for loop
+	      	}
+	      	// else
+	      	else
+	      	{
+	      		// get start address
+	      		// if disassembly does not contain address
+	      		if (!disassemblyView.containsAddressInView(startEnd.startAddress))
+	      		{
+	      			// disassemble by the address and append to the end of the view
+	      			boolean ok = disassemblyView.appendDisassemblyLineByAddress(startEnd.startAddress);
+	      			
+	      			// just add line to view if we can't disassembly the given address successfully
+	      			if (!ok)
+	      			{
+	      				String line = sourceView.getViewLine(i);
+	      				if (line != null)
+	      				{
+							line = processViewLine(mixedCurrentLine, line);      			
+			      			_viewLines.addElement(line);
+			      			mixedCurrentLine++;
+	      				}
+			      		continue;
+	      			}	      			
+	      		}
 
-   			// get lne number for endAdd
-   			String disassemblyEndLine = disassemblyView.convertAddressToLineNum(startEnd.endAddress);
-   			int disEnd = Integer.parseInt(disassemblyEndLine)-1;
-   			
-   			// startLine and endLine may not be sequential
-   			// or we may be changing context from one function to another with this start and end address
-   			if (!validDisStartEnd(disStart, disEnd))
-   			{
-   				disEnd = findValidEndLine(disStart);
-   			}
-      			
-   			int sourceStartLine = i;
-   			int sourceEndLine = i;
-   			
-      		if (Gdb.traceLogger.DBG) 
-              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### For line " + i + " start disp line: " + disStart + " end disp line:  " + disEnd);  
-      			
-   			// combineSourcePlusDisassemblyLines
-			mixedCurrentLine = combineSourcePlusDisassemblyLines(mixedCurrentLine, sourceStartLine, sourceEndLine,
-				disStart, disEnd);
+				srcLine = sourceView.getLine(i);
+				disStart = srcLine.getStart();
+				disEnd = srcLine.getEnd();
+				
+				if (disStart != -1 && disEnd != -1)
+				{		      			
+		   			int sourceStartLine = i;
+		   			int sourceEndLine = i;
+		   			
+		      		if (Gdb.traceLogger.DBG) 
+		              Gdb.traceLogger.dbg(3, "### MixedView.combineSourcePlusDisassemblyViews ### For line " + i + " start disp line: " + disStart + " end disp line:  " + disEnd);  
+		      			
+		   			// combineSourcePlusDisassemblyLines
+					mixedCurrentLine = combineSourcePlusDisassemblyLines(mixedCurrentLine, sourceStartLine, sourceEndLine,
+						disStart, disEnd);
+				}
+				else
+				{
+					String line = srcLine.toString();
+	      			if (line != null)
+	      			{
+						line = processViewLine(mixedCurrentLine, line);      			
+		      			_viewLines.addElement(line);
+		      			mixedCurrentLine++;
+	      			}
+				}
+	      	}
+      	}
+      	else
+      	{
+      		mixedCurrentLine = combineSourcePlusDisassemblyLines(mixedCurrentLine, i, i, disStart,disEnd);
       	}
       }
       
@@ -235,8 +232,9 @@ abstract class MixedView extends View
       for (int i=0; i<_mixedExecutableLines.size(); i++)
       {
       	_executableLines[i] = ((Integer)_mixedExecutableLines.elementAt(i)).intValue();
-      }
+      }   	
 
+	  // update view info      
       int srcMax = sourceView.getViewRecordLength();
       int disMax = disassemblyView.getViewRecordLength();
       if(srcMax>disMax) 
@@ -244,13 +242,16 @@ abstract class MixedView extends View
       else
           setViewRecordLength(disMax);
 
-      setViewLineRange(1,_viewLines.size() );
+//      setViewLineRange(1,_viewLines.size() );
+      setViewLineRange(1,sourceView.getViewNumLines() + disassemblyView.getViewNumLines());
 
       _fakeNoSource = false;
       _viewVerify = true;
       setViewFileName(1,sourceFileName);
-      _parentPart.setPartChanged(true);
+      _parentPart.setPartChanged(true);      
+      
       return true;
+   	
    }
 
   /**
@@ -313,14 +314,60 @@ abstract class MixedView extends View
    }
 
   /**
-   * Attempts to load the source file and create index of line number locations.
+   * Verify View:
+   *   - make sure source view and disassembly views are verified
+   *   - find the record length of the views
+   *   - find the length of mixed view
    */
    public boolean verifyView(String sourceFileName) 
    {
 	  if (Gdb.traceLogger.EVT) 
               Gdb.traceLogger.evt(1,"#### MixedView.verifyView(STRING) sourceFileName="+sourceFileName  );
 
-       return combineSourcePlusDisassemblyViews(sourceFileName);
+	  if (Gdb.traceLogger.DBG) 
+              Gdb.traceLogger.dbg(3,"#### MixedView.combineSourcePlusDisassemblyViews(STRING) sourceFileName="+sourceFileName  );
+      _fakeNoSource = true;
+
+      if(_parentPart==null)
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"MixedView.verifyView _parentPart==null");
+         return true;
+      }
+
+      sourceView = (SourceView)_parentPart.getView(Part.VIEW_SOURCE);
+      disassemblyView = (DisassemblyView)_parentPart.getView(Part.VIEW_DISASSEMBLY);
+      if(sourceView==null || disassemblyView==null)
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"MixedView.verifyView source||disassembly==null source="+sourceView+" disassembly="+disassemblyView );
+         return true;
+      }
+      if(!sourceView.isViewVerify() || !disassemblyView.isViewVerify())
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"MixedView.verifyView source||disassembly !isViewVerify source.isViewVerify()="+sourceView.isViewVerify()+" disassembly.isViewVerify()="+disassemblyView.isViewVerify() );
+         return false;
+      }
+
+//	  constructMixedView(sourceFileName);
+
+      int srcMax = sourceView.getViewRecordLength();
+      int disMax = disassemblyView.getViewRecordLength();
+      if(srcMax>disMax) 
+          setViewRecordLength(srcMax);
+      else
+          setViewRecordLength(disMax);
+
+//      setViewLineRange(1,_viewLines.size() );
+      setViewLineRange(1,sourceView.getViewNumLines() + disassemblyView.getViewNumLines());
+
+      _fakeNoSource = false;
+      _viewVerify = true;
+      setViewFileName(1,sourceFileName);
+      _parentPart.setPartChanged(true);
+      return true;
+
     }
 
   /**
@@ -358,6 +405,16 @@ abstract class MixedView extends View
    {
 	  if (Gdb.traceLogger.DBG) 
               Gdb.traceLogger.dbg(3,"#### MixedView.getViewLines startLine="+startLine +" numLines="+numLines  );
+              
+      if (!_viewConstructed)
+      {
+		  GdbDebugSession gdbDebugSession = (GdbDebugSession)_debugEngine.getDebugSession();
+ 		  GdbThreadManager threadManager = (GdbThreadManager) gdbDebugSession.getThreadManager();
+      	        
+	      _viewConstructed = constructMixedView(_viewFileName, startLine, numLines);        
+	      threadManager.forceUpdate();
+      }
+              
       int lineNum, index;
       index   = 0;
       String srcLine;
@@ -393,7 +450,14 @@ abstract class MixedView extends View
          }
          else
          {
-            srcLine = (String) _viewLines.elementAt(lineNum-1);
+         	if (lineNum-1 > _viewLines.size())
+         	{
+				srcLine = " ";
+         	}
+         	else
+         	{
+	            srcLine = (String) _viewLines.elementAt(lineNum-1);
+         	}
          }
 
          if (_executableLines != null && _executableLines.length > 0)
@@ -675,4 +739,5 @@ abstract class MixedView extends View
    protected Vector			 _mixedExecutableLines;
    protected Hashtable       _lineMap;
    static byte _prefixl = 11;
+   private boolean _viewConstructed;
 }

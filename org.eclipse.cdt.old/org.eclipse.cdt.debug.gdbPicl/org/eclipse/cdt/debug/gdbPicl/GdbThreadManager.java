@@ -330,4 +330,18 @@ public Vector getThreadComponentsforPart(String partName)
 	return linesNum;
 }
 
+public void forceUpdate()
+{
+	GdbThreadComponent tc;
+	
+	for (int j = 0; j < _threads.size(); j++)
+	{
+		tc = (GdbThreadComponent) _threads.elementAt(j);
+		tc.setChanged();
+	}
+	
+	updateThreads();
+}
+
+
 }

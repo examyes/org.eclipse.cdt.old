@@ -140,6 +140,11 @@ abstract class DisassemblyView extends View
    public boolean verifyView(String sourceFileName) 
    {
 
+	  int currentSrcLineNumIdx = 0;
+	  GdbSourceView srcView = (GdbSourceView) _parentPart.getView(Part.VIEW_SOURCE);
+	  SourceView.SourceLine srcViewLine;
+	  
+	  
 	  if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(3,"#### DisassemblyView.verifyView(STRING) sourceFileName="+sourceFileName  );
       File file;
@@ -231,8 +236,11 @@ abstract class DisassemblyView extends View
 		      if (lines == null)
 		      	continue;
 		      
+		      int start = 0;
+		      int end = 0;
+		      
 		      while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
-		      {
+		      {		      			      	
 		      	 int space = srcLine.indexOf(" ");
 		      	 if (space != -1)
 		      	 {
@@ -242,7 +250,7 @@ abstract class DisassemblyView extends View
 		      	 {
 			      	 address = srcLine.substring(0,9);
 		      	 }	      	 
-		         srcLine = processViewLine(lineNum+1, " "+srcLine);
+		         srcLine = processViewLine(lineNum+1, " "+srcLine);		         
 		         
 		         dispNumLines++;
 		
@@ -257,6 +265,47 @@ abstract class DisassemblyView extends View
 		         correct location of a particular line in disassembly view.
 		         */  
 		         _lineMap.put(address, new String(Integer.toString(dispNumLines)));
+		         
+		         /*    0x8049393 <main+283 at payroll.cpp:73>: sub    $0x8,%esp
+						0x8049396 <main+286 at payroll.cpp:73>: push   $0x804a22b
+						0x804939b <main+291 at payroll.cpp:73>: lea    0xffffff48(%ebp),%eax
+						0x80493a1 <main+297 at payroll.cpp:73>: push   %eax
+				  */		      			      	
+		      	  String keyword = ":";
+				  int at = srcLine.indexOf(keyword);	
+				  keyword = ">:";
+				  int endAt = srcLine.indexOf(keyword);
+
+				  if (at > -1 && endAt > -1 && endAt > at)
+				  {
+				  	String srcLineNum = srcLine.substring(at+1, endAt);
+				  	try {
+						int srcLineNumIdx = Integer.parseInt(srcLineNum);
+						
+						srcViewLine = srcView.getLine(srcLineNumIdx);
+						
+						if (srcViewLine != null)
+						{						
+							if (srcLineNumIdx != currentSrcLineNumIdx)
+							{
+								start = dispNumLines;
+								end = dispNumLines;
+								currentSrcLineNumIdx = srcLineNumIdx;
+								srcViewLine.setDisassemblyIndex(start, end);
+							}
+							else
+							{
+								end = dispNumLines;
+								srcViewLine.setDisassemblyIndex(start, end);
+							}
+						}
+						
+					} catch(NumberFormatException e) 
+					{
+					}
+					
+				  }
+		         				  
 		                  
 		         if (srcLine.length() > maxLength)
 		            maxLength = srcLine.length();
@@ -295,12 +344,18 @@ abstract class DisassemblyView extends View
       String address = null;
 		      
       int dispNumLines = _viewLines.size();
+      
+      GdbSourceView srcView = (GdbSourceView)_parentPart.getView(Part.VIEW_SOURCE);
+      SourceView.SourceLine srcViewLine;
+      int currentSrcLineNumIdx = 0;
+      int start = 0;
+      int end = 0;
 		      
       if (lines == null)
 		return false;
 		      
       while (  lineNum<lines.length && (srcLine=lines[lineNum])!=null )
-      {
+      {      	
       	 int space = srcLine.indexOf(" ");
       	 if (space != -1)
       	 {
@@ -325,6 +380,40 @@ abstract class DisassemblyView extends View
          correct location of a particular line in disassembly view.
          */  
          _lineMap.put(address, new String(Integer.toString(dispNumLines)));
+         
+          String keyword = ":";
+		  int at = srcLine.indexOf(keyword);	
+		  keyword = ">:";
+		  int endAt = srcLine.indexOf(keyword);
+
+		  if (at > -1 && endAt > -1 && endAt > at)
+		  {
+		  	String srcLineNum = srcLine.substring(at+1, endAt);
+		  	try {
+				int srcLineNumIdx = Integer.parseInt(srcLineNum);
+				
+				srcViewLine = srcView.getLine(srcLineNumIdx);
+				
+				if (srcViewLine != null)
+				{						
+					if (srcLineNumIdx != currentSrcLineNumIdx)
+					{
+						start = dispNumLines;
+						end = dispNumLines;
+						currentSrcLineNumIdx = srcLineNumIdx;
+						srcViewLine.setDisassemblyIndex(start, end);
+					}
+					else
+					{
+						end = dispNumLines;
+						srcViewLine.setDisassemblyIndex(start, end);
+					}
+				}
+				
+			} catch(NumberFormatException e) 
+			{
+			}
+		  }
 		                  
 		 if (srcLine.length() > maxLength)
 		 	maxLength = srcLine.length();
@@ -354,12 +443,7 @@ abstract class DisassemblyView extends View
               Gdb.traceLogger.dbg(3,"#### DisassemblyView.processViewLine lineNum="+lineNum +" srcLine="+srcLine  );
               
       StringBuffer processedLine;
-/*
-      // create the prefix
-      processedLine = new StringBuffer(Integer.toString(lineNum));
-      while (processedLine.length() < _prefixl)
-         processedLine.insert(0, ' ');
-*/
+
        // Strip off possible new line character at end
       if (srcLine.length() > 0 && srcLine.charAt(srcLine.length()-1) == '\n')
          srcLine = srcLine.substring(0, srcLine.length()-1);
@@ -368,7 +452,31 @@ abstract class DisassemblyView extends View
       if (srcLine.length() > 0 && srcLine.charAt(srcLine.length()-1) == '\r')
          srcLine = srcLine.substring(0, srcLine.length()-1);
 
-//      processedLine.append(srcLine);
+/*
+ *    DISABLE THIS CODE FOR NOW.... 
+	  //    0x8049393 <main+283 at payroll.cpp:73>: sub    $0x8,%esp
+	  // remove " at payroll.cpp:73"
+	  
+	  String line = srcLine;
+	  
+	  int idx = line.indexOf(" at ");
+	  if (idx > -1)
+	  {
+	  	line = line.substring(0, idx);
+	  	processedLine = new StringBuffer(line);
+	  	
+	  	idx = srcLine.indexOf(">:");
+	  	if (idx > -1)
+	  	{
+	  		line = srcLine.substring(idx);
+	  		processedLine.append(line);
+	  	}	  	
+	  }
+	  else
+	  {	
+		  processedLine = new StringBuffer(srcLine);
+	  }
+*/
 
 	  processedLine = new StringBuffer(srcLine);
 

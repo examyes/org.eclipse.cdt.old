@@ -170,6 +170,13 @@ public class GdbProcess {
 			cmd = "set print null-stop";
 			ok = writeLine(cmd);
 		}
+		
+		
+		if (ok)
+		{
+			cmd = "set print symbol-filename on";
+			ok = writeLine(cmd);
+		}
 /*		
 		if (Gdb.supportDeferredBreakpoint)
 		{		
@@ -222,7 +229,8 @@ public class GdbProcess {
 		}
 		Vector allLines = new Vector();
 		String txt = null;
-		for (int i = 0; i < MAXLINES; i++) // up to MAXLINES read **OR** until PROMPT
+//		for (int i = 0; i < MAXLINES; i++) // up to MAXLINES read **OR** until PROMPT
+		while (true)
 			{
 			txt = readLine();
 			if (txt != null) {
@@ -234,6 +242,12 @@ public class GdbProcess {
 			} else
 				break;
 		}
+		
+		if (Gdb.traceLogger.DBG)
+		{		
+			Gdb.traceLogger.dbg(3,"ReadAllLines size = " + allLines.size());
+		}
+		
 		if (allLines.size() >= 1) {
 			String str = (String) allLines.elementAt(0);
 			if (Gdb.traceLogger.DBG)

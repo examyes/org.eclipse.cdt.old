@@ -17,7 +17,63 @@ import com.ibm.debug.epdc.*;
 abstract class SourceView extends View
 //mark it abstract so nobody can new one of this directly although it has no abstract method
 {
+	public class SourceLine
+	{
+		private String _line;
+		private int _startDisassemblyIndex;
+		private int _endDisassemblyIndex;
+		private boolean _executable;
+				
+		SourceLine(String line)
+		{
+			_line = line;
+			_startDisassemblyIndex = -1;
+			_endDisassemblyIndex = -1;
+		}
+		
+		public void setDisassemblyIndex(int start, int end)
+		{
+			_startDisassemblyIndex = start;
+			_endDisassemblyIndex = end;
+		}
+		
+		public int getStart()
+		{
+			return _startDisassemblyIndex;
+		}
+		
+		public int getEnd()
+		{
+			return _endDisassemblyIndex;
+		}
+		
+		public boolean isDisassemblyIndexFound()
+		{
+			return (_startDisassemblyIndex != -1 && _endDisassemblyIndex != -1);
+		}
+		
+		public String toString()
+		{
+			return _line;
+		}
+		/**
+		 * Gets the _executable.
+		 * @return Returns a boolean
+		 */
+		public boolean isExecutable() {
+			return _executable;
+		}
 
+		/**
+		 * Sets the _executable.
+		 * @param _executable The _executable to set
+		 */
+		public void setExecutable(boolean executable) {
+			this._executable = executable;
+		}
+
+	}	
+	
    SourceView(DebugEngine debugEngine, Part parentPart)
    {
       super(debugEngine,  parentPart);
@@ -133,8 +189,10 @@ abstract class SourceView extends View
          while ((srcLine = reader.readLine()) != null)
          {
             srcLine = processViewLine(lineNum+1, " "+srcLine);
-
-            _viewLines.addElement(srcLine);
+            
+            SourceLine line = new SourceLine(srcLine);
+            
+            _viewLines.addElement(line);
 
             if (srcLine.length() > maxLength)
                maxLength = srcLine.length();
@@ -225,6 +283,7 @@ abstract class SourceView extends View
       int lineNum, index;
       index   = 0;
       String srcLine;
+      SourceLine line;
       StringBuffer processedLine;
 
       if (_executableLines == null || _executableLines.length == 0)
@@ -257,7 +316,8 @@ abstract class SourceView extends View
          }
          else
          {
-            srcLine = (String) _viewLines.elementAt(lineNum-1);
+            line = (SourceLine) _viewLines.elementAt(lineNum-1);
+            srcLine = line.toString();
          }
 
          if (_executableLines != null && _executableLines.length > 0)
@@ -318,7 +378,7 @@ abstract class SourceView extends View
       while ( count < numLinesToSearch && !found)
       {
          // Get the source line to search through and strip off the prefix
-         srcLine = (String) _viewLines.elementAt(line-1);  
+         srcLine = ((SourceLine) _viewLines.elementAt(line-1)).toString();  
          srcLine = srcLine.substring(_prefixl);
 
          // If we don't care about case, convert the source line to upper case
@@ -442,7 +502,7 @@ abstract class SourceView extends View
        		}
 					
             srcLine = processViewLine(i+1, " "+srcLine);
-            _viewLines.addElement(srcLine);
+            _viewLines.addElement(new SourceLine(srcLine));
 
             if (srcLine.length() > maxLength)
                maxLength = srcLine.length();
@@ -460,6 +520,39 @@ abstract class SourceView extends View
 		return true;						
    }
    
+   public String getViewLine(int lineNumber)
+   {
+      if(_viewLines==null)
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"SourceView.getViewLine _viewLines==null");
+         return null;
+      }
+      if(lineNumber<_viewStartLine || lineNumber>_viewEndLine )
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"SourceView.getViewLine lineNumber="+lineNumber+" _viewStartLine="+_viewStartLine+" _viewEndLine="+_viewEndLine );
+         return null;
+      }
+      return ((SourceLine)_viewLines.elementAt(lineNumber-_viewStartLine)).toString();
+   }
+   
+   public SourceLine getLine(int lineNumber)
+   {
+      if(_viewLines==null)
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"SourceView.getViewLine _viewLines==null");
+         return null;
+      }
+      if(lineNumber<_viewStartLine || lineNumber>_viewEndLine )
+      {
+         if (Gdb.traceLogger.ERR) 
+             Gdb.traceLogger.err(2,"SourceView.getViewLine lineNumber="+lineNumber+" _viewStartLine="+_viewStartLine+" _viewEndLine="+_viewEndLine );
+         return null;
+      }
+      return ((SourceLine)_viewLines.elementAt(lineNumber-_viewStartLine));
+   }
 
    // Data members
    protected int           _moduleID;
