@@ -635,13 +635,14 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     public void saveProject(IProject project)
     {
+     System.out.println("About to save project");
+     
 	DataStore dataStore = _plugin.getDataStore();	
 	if (project instanceof Repository)
 	    dataStore = ((Repository)project).getDataStore();	
 	
 	DataElement projectObj = findProjectElement(project);
-	DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SAVE_PROJECT");
-	
+	DataElement commandDescriptor = dataStore.localDescriptorQuery(projectObj.getDescriptor(), "C_SAVE_PARSE");
 	if (commandDescriptor != null)
 	    {		
 		dataStore.command(commandDescriptor, projectObj, false, true);	
