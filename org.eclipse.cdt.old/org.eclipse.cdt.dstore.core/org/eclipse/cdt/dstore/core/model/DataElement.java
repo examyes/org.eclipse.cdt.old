@@ -1565,6 +1565,10 @@ public final class DataElement implements Serializable, IDataElement
 		      {
 			  return getAttribute(DE.A_ID);
 		      }
+		  else if (DE.P_DESCRIPTOR.equals(name))
+		      {
+			  return _descriptor;
+		      }
 		  else if (DE.P_SOURCE_NAME.equals(name))
 		      {
 			  String source = getAttribute(DE.A_SOURCE);

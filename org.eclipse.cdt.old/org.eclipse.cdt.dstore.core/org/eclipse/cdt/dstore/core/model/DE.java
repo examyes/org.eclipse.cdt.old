@@ -114,6 +114,11 @@ public class DE
     public static final String P_FILE            = "file";
 
     /*
+     * The file property identifier of a <code>DataElement</code>.  
+     */
+    public static final String P_DESCRIPTOR      = "descriptor";
+
+    /*
      * Reference type.  
      */
     public static final String T_REFERENCE          = "reference";
