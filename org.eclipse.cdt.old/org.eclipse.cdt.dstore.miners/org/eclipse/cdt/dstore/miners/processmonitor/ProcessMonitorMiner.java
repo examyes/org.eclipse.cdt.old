@@ -21,6 +21,7 @@ public class ProcessMonitorMiner extends Miner
     private BufferedReader _reader;
     private BufferedWriter _writer;
     private boolean        _validPS = false;
+    private DataElement    _processes = null;
 
     public ResourceBundle getResourceBundle()
     {
@@ -91,6 +92,10 @@ public class ProcessMonitorMiner extends Miner
 		    {
 			_validPS = false;
 		    }
+
+		// get host object
+		DataElement hostObject = _dataStore.getHostRoot();			
+		_processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
 	    }
 	catch (IOException e)
 	    {
@@ -196,11 +201,7 @@ public class ProcessMonitorMiner extends Miner
 	    {
 		if (_validPS)
 		    {
-			// get host object
-			DataElement hostObject = _dataStore.getHostRoot();
-			
-			DataElement processes = _dataStore.createObject(hostObject, "Processes", "Processes");	
-			_monitor = new ProcessMonitor(_psCommand, _reader, _writer, processes);
+			_monitor = new ProcessMonitor(_psCommand, _reader, _writer, _processes);
 			_monitor.setWaitTime(3000);
 			_monitor.setDataStore(_dataStore);
 			_monitor.start();
