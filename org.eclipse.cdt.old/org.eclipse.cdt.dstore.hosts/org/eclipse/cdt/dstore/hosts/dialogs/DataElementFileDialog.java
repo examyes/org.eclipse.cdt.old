@@ -145,18 +145,32 @@ public class DataElementFileDialog extends org.eclipse.jface.dialogs.Dialog
 	if (widget == _back)
 	    {
 		DataElement input = _viewer.getInput();
-		DataElement parent = input.getParent();
-		if (parent.getType().equals("directory") || 
-		    parent.getType().equals("device") || 
-		    parent.getType().equals("data"))
+		if (input != null)
 		    {
-			_viewer.setInput(parent);
+			DataElement inputD = input.getDescriptor();
+			if (inputD != null && inputD.isOfType("Filesystem Objects"))
+			    {
+				DataElement parent = input.getParent();
+				DataElement parentD = parent.getDescriptor();
+				
+				if (parentD != null && parentD.isOfType("Filesystem Objects"))
+				    {
+					_viewer.setInput(parent);
+				    }
+			    }
 		    }
 	    }
 	else if (widget == _forward)
 	    {
 		DataElement input = _viewer.getSelected();
-		_viewer.setInput(input);
+		if (input != null)
+		    {
+			DataElement inputD = input.getDescriptor();
+			if (inputD != null && inputD.isOfType("Filesystem Objects"))
+			    {
+				_viewer.setInput(input);
+			    }
+		    }
 	    }
     }
 }
