@@ -1,8 +1,8 @@
 ! Cross platform
-plugin@org.eclipse.cdt.oprofile.core=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools/,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.core
-plugin@org.eclipse.cdt.oprofile.launch=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools/,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.launch
-plugin@org.eclipse.cdt.oprofile.ui=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools/,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.ui
-plugin@org.eclipse.cdt.oprofile.doc=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools/,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.doc
+plugin@org.eclipse.cdt.oprofile.core=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.core
+plugin@org.eclipse.cdt.oprofile.launch=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.launch
+plugin@org.eclipse.cdt.oprofile.ui=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.ui
+plugin@org.eclipse.cdt.oprofile.doc=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile.doc
 
 feature@org.eclipse.cdt.oprofile=HEAD,:pserver:anonymous@dev.eclipse.org:/home/tools,,org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile/org.eclipse.cdt.oprofile-feature
 

@@ -1,4 +1,8 @@
-2004-10-13  Jeremy Handcock <handcock@redhat.com>
+2004-10-13  Jeremy Handcock  <handcock@redhat.com>
+
+	* maps/oprofile.map: Remove training '/' from cvsroot.
+
+2004-10-13  Jeremy Handcock  <handcock@redhat.com>
 
 	* maps/oprofile.map: Fix typo.
 
