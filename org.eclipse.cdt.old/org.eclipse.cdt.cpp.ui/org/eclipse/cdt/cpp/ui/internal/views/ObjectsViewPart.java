@@ -318,17 +318,16 @@ public class ObjectsViewPart extends GenericViewPart
 			
 			if (event.getStatus() == CppProjectEvent.DONE)
 			    {
-				//mgr.setCancelEnabled(false);
+				mgr.setMessage("");
 				pm.done();
 			    }
 			else if (event.getStatus() == CppProjectEvent.START)
 			    {
-				//mgr.setCancelEnabled(true);
 				pm.beginTask(commandStr, 100);
 			    }
 			else
 			    {
-				pm.worked(5);
+				pm.worked(2);
 			    }		 
 		    }
 		    }

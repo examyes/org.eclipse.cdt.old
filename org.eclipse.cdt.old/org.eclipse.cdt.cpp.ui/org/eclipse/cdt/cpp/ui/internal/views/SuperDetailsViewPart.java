@@ -10,7 +10,8 @@ import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.cpp.ui.internal.*;
 
 import com.ibm.dstore.core.model.*;
-import com.ibm.dstore.ui.ILinkable;
+import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.widgets.*;
 
 import org.eclipse.core.resources.*;
 
@@ -32,9 +33,6 @@ public class SuperDetailsViewPart extends ObjectsViewPart
     super.createPartControl(parent);    
   }
   
-  public void initInput(DataStore dataStore)
-  {
-  }
 
   protected String getF1HelpId()
   {
@@ -49,14 +47,11 @@ public class SuperDetailsViewPart extends ObjectsViewPart
 
   public void selectionChanged(IWorkbenchPart part, ISelection sel) 
   {
-    if (part != this && part instanceof ILinkable)
-    {
-	if (part instanceof DetailsViewPart)
-	    {
-		((ILinkable)part).linkTo(this);	
-		setLinked(true);
-	    }
-    }
+      if (part instanceof DetailsViewPart)
+	  {
+	      ((ILinkable)part).linkTo(this);	
+	      setLinked(true);
+	  }
   }
 
     public void projectChanged(CppProjectEvent event)
