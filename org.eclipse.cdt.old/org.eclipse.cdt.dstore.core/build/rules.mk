@@ -49,9 +49,15 @@ clean             : doClean
 #
 #addCopyrights:=$(patsubst %, java -cp f:/programs/cygwin/usr/local/javautils/addCopyright.jar addCopyright % "Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved. This program and the accompanying materials are made available under the terms of the Common Public License which accompanies this distribution.";,$(shell find $(pluginsDirectory)/$(pluginName) -type d))
 
+helpjarSource=help/helpwebapp/servlet
+
 %.class: %.java
 	@echo " Compiling" $(patsubst %.class, %.java, $@)
 	@javac -classpath $(subst $(space),$(sep),$(cp)) $(JAVACFLAGS) $<
+ifeq ($(helpjarSource),$(findstring $(helpjarSource),$(shell pwd)))
+	$(createHelpJar)
+	@echo " Created" $(pluginsDirectory)/$(pluginName)/$(helpjarDir)/$(helpjarFile)
+endif	
 
 %_dir:
 	@$(MAKE) -C $(patsubst %_dir,%, $@)
@@ -95,7 +101,7 @@ helpjarFile=helpwebapp.jar
 helpjarDir=help/helpwebapp/WEB-INF/lib
 define createHelpJar
 	@cd $(pluginsDirectory)/$(pluginName);\
-	rm -Rf $(pluginsDirectory)/$(pluginName)/$(helpjarDir);\
+	rm -Rf $(pluginsDirectory)/$(pluginName)/$(helpjarDir)/$(helpjarFile);\
 	mkdir $(pluginsDirectory)/$(pluginName)/$(helpjarDir);\
 	find help/helpwebapp/servlet -name '*.class' |xargs jar -cf $(helpjarDir)/$(helpjarFile)
 endef
