@@ -66,42 +66,45 @@ public abstract class GdbVariable  extends Variable
 		String returnStr="";			
 		StringBuffer buffer = new StringBuffer(parseStr.length());
 		
+		char [] strChar = str.toCharArray();
+				
 		for (int i=0; i<str.length(); i++)
 		{			
-			if (str.charAt(i) == '\"')
+			if (strChar[i] == '\"')
 			{
 				quote = !quote;
 			}
 			
-			if (str.charAt(i) == '<' && !quote)
+			if (strChar[i] == '<' && !quote)
 			{			
 				start++;
 				startLocation = i;
-				buffer.append(str.charAt(i));
+				buffer.append(strChar[i]);
 			}
 			
-			if (str.charAt(i) == '>' && !quote)
+			if (strChar[i] == '>' && !quote)
 			{
 				end++;
 				endLocation = i;
-				buffer.append(str.charAt(i));
+				buffer.append(strChar[i]);
 			}
 			
-			if (start==end && str.charAt(i) != '<' && str.charAt(i) != '>')
+			if ((start==end && strChar[i] != '<') && (strChar[i] != '>'))
 			{				
-				buffer.append(str.charAt(i));
+				buffer.append(strChar[i]);
 			}
 			else
 			{
-				if (str.charAt(i) == ',')
+				if (strChar[i] == ',')
 					buffer.append((char) 26);
-				else if ((str.charAt(i) != '<') && (str.charAt(i) != '>'))
-					buffer.append(str.charAt(i));					
+				else if ((strChar[i] != '<') && (strChar[i] != '>'))
+					buffer.append(strChar[i]);					
 			}
 		}				
 		
 		returnStr = buffer.toString();
-		return returnStr;
+		return returnStr;		
+		
 	}
 
    /**

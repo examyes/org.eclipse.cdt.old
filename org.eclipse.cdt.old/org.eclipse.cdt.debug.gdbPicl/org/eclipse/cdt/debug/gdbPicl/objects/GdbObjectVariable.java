@@ -142,7 +142,6 @@ public class GdbObjectVariable extends GdbVariable {
 	
 	private int findMatchingEnd(String parseStr)
 	{
-		String str = parseStr;
 		int startLocation=-1;
 		int endLocation=-1;
 
@@ -150,22 +149,23 @@ public class GdbObjectVariable extends GdbVariable {
 		int end=0;
 		
 		boolean quote = false;
-			
 		
-		for (int i=0; i<str.length(); i++)
+		char[] str = parseStr.toCharArray();			
+		
+		for (int i=0; i<str.length; i++)
 		{
-			if (str.charAt(i) == '\"')
+			if (str[i] == '\"')
 			{
 				quote = !quote;
 			}
 			
-			if (str.charAt(i) == '{' && !quote)
+			if (str[i] == '{' && !quote)
 			{			
 				start++;
 				startLocation = i;						
 			}
 			
-			if (str.charAt(i) == '}' && !quote)
+			if (str[i] == '}' && !quote)
 			{
 				end++;
 				endLocation = i;
@@ -176,6 +176,7 @@ public class GdbObjectVariable extends GdbVariable {
 		}				
 		
 		return endLocation;
+
 	}
 	
 	/*

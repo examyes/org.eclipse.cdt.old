@@ -371,23 +371,23 @@ public class GdbArrayVariable extends GdbVariable {
 	
 	private int findMatchingEnd(String parseStr)
 	{
-		String str = parseStr;
 		int startLocation=-1;
 		int endLocation=-1;
 
 		int start=0;
-		int end=0;
-			
+		int end=0;		
 		
-		for (int i=0; i<str.length(); i++)
+		char[] str = parseStr.toCharArray();			
+		
+		for (int i=0; i<str.length; i++)
 		{
-			if (str.charAt(i) == '{')
+			if (str[i] == '{')
 			{			
 				start++;
 				startLocation = i;						
 			}
 			
-			if (str.charAt(i) == '}')
+			if (str[i] == '}')
 			{
 				end++;
 				endLocation = i;
@@ -398,6 +398,7 @@ public class GdbArrayVariable extends GdbVariable {
 		}				
 		
 		return endLocation;
+
 	}
 	
 	public GdbVariable getNode(int nodeID)
