@@ -48,7 +48,7 @@ public void contributeToMenu(IMenuManager mbm)
     _caAction.setText("Code assist@Ctrl+SPACE");
     
     _fAction = new FindObjectAction("Find Selected@F4", ( CppEditor)_part, true);
-    _fAction.setText("Find Selected@F4");
+    _fAction.setText("Find Selected@F3");
 
     _bAction = new JumpBackAction("Jump Back@F9", (CppEditor)_part);
     _bAction.setText("Jump Back@F9");

@@ -40,251 +40,266 @@ import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.jface.window.*;
 
-
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.widgets.*;
 
-
-public class CppContentOutlinePage extends ContentOutlinePage implements IDomainListener, Listener, IMenuListener
+public class CppContentOutlinePage
+	extends ContentOutlinePage
+	implements IDomainListener, Listener, IMenuListener
 {
-    protected IFile input;
-    protected DataElement _elementRoot;
-    protected DataElementAdapter _adapter;
-    protected DataElement _expanded;
-    private MenuHandler         _menuHandler;
+	protected IFile input;
+	protected DataElement _elementRoot;
+	protected DataElementAdapter _adapter;
+	protected DataElement _expanded;
+	private MenuHandler _menuHandler;
 
-    private CppPlugin   _plugin = CppPlugin.getDefault();
-    
+	private CppPlugin _plugin = CppPlugin.getDefault();
 
-    public CppContentOutlinePage(IFile input)
-    {
-	super();
-	this.input = input;
-	_adapter = (DataElementAdapter)input.getAdapter(DataElementAdapter.class);
-
-	_menuHandler = new MenuHandler(new CppActionLoader());
-    }
-    
-    public void createControl(Composite parent) 
-    {
-	super.createControl(parent);
-	CppPlugin plugin = CppPlugin.getDefault();
-	DataStore ds = plugin.getCurrentDataStore();
-
-	TreeViewer treeViewer = getTreeViewer();
-	treeViewer.setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry(), CppActionLoader.getInstance()));
-
-	DataElementTreeContentProvider provider = new DataElementTreeContentProvider(); 
-	provider.setProperty(ds.findDescriptor(DE.T_RELATION_DESCRIPTOR, "contents"));
-	treeViewer.setContentProvider(provider);
-		
-	IAdaptable adp = getContentOutline(input);
-	if (adp != null)
-	    {
-		setViewInput((DataElement)adp);
-	    }
-
-	treeViewer.getTree().addListener(SWT.Expand, this);
-	ds.getDomainNotifier().addDomainListener(this);
-	
-	getControl().addKeyListener(
-				    new KeyAdapter() 
-					{
-					    public void keyPressed(KeyEvent e) 
-					    {
-						handleKeyPressed(e);
-					    }
-					});
-		
-
-	// menu
-	// add menu handling
-        MenuManager menuMgr = new MenuManager("#PopupMenu");
-	menuMgr.setRemoveAllWhenShown(true);
-	menuMgr.addMenuListener(this);
-        Menu menu = menuMgr.createContextMenu(treeViewer.getTree());
-        treeViewer.getTree().setMenu(menu);
-    }
-
-    private void setViewInput(DataElement input)
-    {
-	TreeViewer treeViewer = getTreeViewer();
-	Object cinput = treeViewer.getInput();
-	if (cinput != input)
-	    {
-		treeViewer.setInput(input);
-	    }
-    }
-
-    public void dispose()
-    {
-	CppPlugin plugin = CppPlugin.getDefault();
-	DataStore ds = plugin.getCurrentDataStore();
-	ds.getDomainNotifier().removeDomainListener(this);
-    }
-    
-    
-    protected IAdaptable getContentOutline(IAdaptable input)
-    {
-	if (_elementRoot == null || _elementRoot.isDeleted())
-	    {
-		_elementRoot = _adapter.getContentOutline(input);
-	    }
-	return _elementRoot;
-    }
-    
-    public void update(DataElement parent)
-    {
-	Control control = getTreeViewer().getControl();
-	if (control.isDisposed())
-	    {	
-	    }
-	else
-	    {
-		setViewInput(_elementRoot);
-
-		control.setRedraw(false);
-		getTreeViewer().internalRefresh(_elementRoot);
-		control.setRedraw(true);
-	    }
-    }
-    
-    public void selectionChanged(SelectionChangedEvent event)
-    {
-	super.selectionChanged(event);
-	
-	DataElement selection = ConvertUtility.convert(event);
-	if (selection != null)
-	    {	
-		selection.expandChildren();
-		
-		IWorkbench Workbench = _plugin.getWorkbench();
-		IWorkbenchPage persp= Workbench.getActiveWorkbenchWindow().getActivePage();
-		IEditorPart editor = persp.getActiveEditor();
-		
-		Integer location = (Integer)(selection.getElementProperty(DE.P_SOURCE_LOCATION));
-		if (location != null)
-		    {
-			int loc = location.intValue();
-			
-			if ((loc > 0) && (editor != null))
-			    {	
-				((org.eclipse.cdt.cpp.ui.internal.editor.CppEditor)editor).gotoLine(loc);
-			    } 
-		    }
-	    }	
-    }
-    
-    public boolean listeningTo(DomainEvent ev)
-    {
-	DataElement parent = (DataElement)ev.getParent();
-	synchronized(parent)
+	public CppContentOutlinePage(IFile input)
 	{
-	DataStore dataStore = parent.getDataStore();
+		super();
+		this.input = input;
+		_adapter =
+			(DataElementAdapter) input.getAdapter(DataElementAdapter.class);
 
-	if (_elementRoot == null || _elementRoot.isDeleted())
-	    {
-		IFile fileInput = (IFile)input;
-		IProject project = fileInput.getProject();
-		if (project == null || !project.isOpen())
-		    {
-			dataStore.getDomainNotifier().removeDomainListener(this);
-			return false;
-		    }
-		else
-		    {
-			_elementRoot = _adapter.getElementRoot((IFile)input);		
-			if (_elementRoot != null)
-			    {
-				setViewInput(_elementRoot);
-				
-				getTreeViewer().internalRefresh(_elementRoot);
-				
-				return true;
-			    }
-		    }
-	    }
-	else
-	    {	
-		if (parent == _elementRoot || parent.contains(_elementRoot))
-		    {
-			return true;
-		    }
-	    }
+		_menuHandler = new MenuHandler(new CppActionLoader());
 	}
 
-	return false;    
-    }
-    
-    public void domainChanged(DomainEvent ev)
-    {
-	DataElement parent = (DataElement)ev.getParent();
-	DataStore dataStore = parent.getDataStore();
-	
-	if (_elementRoot != null)
-	    {	
-		if (parent == _elementRoot || parent.contains((DataElement)_elementRoot))
-		    {
-			update(parent);	
-			
-			if (_expanded == parent || parent.contains(_expanded))
-			    {
-				getTreeViewer().expandToLevel(_expanded, 1);	
-			    }
-		    }
-	    }
-    }
+	public void createControl(Composite parent)
+	{
+		super.createControl(parent);
+		CppPlugin plugin = CppPlugin.getDefault();
+		DataStore ds = plugin.getCurrentDataStore();
 
-  public Shell getShell()
-  {
-      Control control = getControl();
-      if (control != null && !control.isDisposed())
-	  {
-	      return control.getShell();
-	  }
+		TreeViewer treeViewer = getTreeViewer();
+		treeViewer.setLabelProvider(new DataElementLabelProvider(plugin.getImageRegistry(),
+									CppActionLoader.getInstance()));
 
-      return null;
-  }
+		DataElementTreeContentProvider provider = new DataElementTreeContentProvider();
+		provider.setProperty(ds.getContentsRelation());
+		treeViewer.setContentProvider(provider);
 
-  public void menuAboutToShow(IMenuManager menu) 
-      {
-	  IStructuredSelection es= (IStructuredSelection) getTreeViewer().getSelection();
-	  if (es.size() > 1)
-	      {
-		  _menuHandler.multiFillContextMenu(menu, es);
-	      }
-	  else
-	      {
-		  DataElement selected = (DataElement)es.getFirstElement();
-		  if (_elementRoot != null )
-		      {
-			  _menuHandler.fillContextMenu(menu, (DataElement)_elementRoot, selected);
-		      }
-	      }
-      }
+		IAdaptable adp = getContentOutline(input);
+		if (adp != null)
+		{
+			setViewInput((DataElement) adp);
+		}
 
-    private void handleKeyPressed(KeyEvent event) 
-    {
-    }
+		treeViewer.getTree().addListener(SWT.Expand, this);
+		ds.getDomainNotifier().addDomainListener(this);
 
-  public void handleEvent(Event e)
-      {
-        Widget widget = e.widget;
-        DataElement selected = (DataElement)e.item.getData();
-        if (selected != null)
-        {
-          switch (e.type)
-          {
-          case SWT.Expand:
-	    _expanded = selected;
-	    selected.expandChildren(true);
-	    getTreeViewer().expandToLevel(_expanded, 1);
-            break;
-          default:
-          }
-        }
-      }
+		getControl().addKeyListener(new KeyAdapter()
+		{
+			public void keyPressed(KeyEvent e)
+			{
+				handleKeyPressed(e);
+			}
+		});
+
+		// menu
+		// add menu handling
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(this);
+		Menu menu = menuMgr.createContextMenu(treeViewer.getTree());
+		treeViewer.getTree().setMenu(menu);
+	}
+
+	private void setViewInput(DataElement input)
+	{
+		TreeViewer treeViewer = getTreeViewer();
+		Object cinput = treeViewer.getInput();
+		if (cinput != input)
+		{
+			treeViewer.setInput(input);
+		}
+	}
+
+	public void dispose()
+	{
+		CppPlugin plugin = CppPlugin.getDefault();
+		DataStore ds = plugin.getCurrentDataStore();
+		ds.getDomainNotifier().removeDomainListener(this);
+	}
+
+	protected IAdaptable getContentOutline(IAdaptable input)
+	{
+		if (_elementRoot == null || _elementRoot.isDeleted())
+		{
+			_elementRoot = _adapter.getContentOutline(input);
+		}
+		return _elementRoot;
+	}
+
+	public void update(DataElement parent)
+	{
+		Control control = getTreeViewer().getControl();
+		if (control.isDisposed())
+		{
+		} 
+		else
+		{
+			setViewInput(_elementRoot);
+
+			control.setRedraw(false);
+			getTreeViewer().refresh(_elementRoot, false);
+			control.setRedraw(true);
+		}
+	}
+
+	public void selectionChanged(SelectionChangedEvent event)
+	{
+		super.selectionChanged(event);
+
+		DataElement selection = ConvertUtility.convert(event);
+		if (selection != null)
+		{
+			selection.expandChildren();
+
+			IWorkbench Workbench = _plugin.getWorkbench();
+			IWorkbenchPage persp =
+				Workbench.getActiveWorkbenchWindow().getActivePage();
+			IEditorPart editor = persp.getActiveEditor();
+
+			Integer location =
+				(Integer) (selection.getElementProperty(DE.P_SOURCE_LOCATION));
+			if (location != null)
+			{
+				int loc = location.intValue();
+
+				if ((loc > 0) && (editor != null))
+				{
+					(
+						(
+							org
+								.eclipse
+								.cdt
+								.cpp
+								.ui
+								.internal
+								.editor
+								.CppEditor) editor)
+								.gotoLine(
+						loc);
+				}
+			}
+		}
+	}
+
+	public boolean listeningTo(DomainEvent ev)
+	{
+		DataElement parent = (DataElement) ev.getParent();
+		if (parent == _elementRoot)
+		{
+			return true;	
+		}		
+		else if (parent.getType().equals("Parsed Files"))
+		{
+		{
+			DataStore dataStore = parent.getDataStore();
+
+			if (_elementRoot == null || _elementRoot.isDeleted())
+			{
+				IFile fileInput = (IFile) input;
+				IProject project = fileInput.getProject();
+				if (project == null || !project.isOpen())
+				{
+					dataStore.getDomainNotifier().removeDomainListener(this);
+					return false;
+				} else
+				{
+					_elementRoot = _adapter.getElementRoot((IFile) input);
+					if (_elementRoot != null)
+					{
+						setViewInput(_elementRoot);
+
+						getTreeViewer().internalRefresh(_elementRoot);
+
+						return true;
+					}
+				}
+			} else
+			{
+				if (parent == _elementRoot)
+				{
+					return true;
+				}
+			}
+		}
+		}
+		return false;
+	}
+
+	public void domainChanged(DomainEvent ev)
+	{
+		DataElement parent = (DataElement) ev.getParent();
+		DataStore dataStore = parent.getDataStore();
+
+		if (_elementRoot != null)
+		{
+			if (parent == _elementRoot)
+			{
+				update(parent);
+
+				if (_expanded == parent)
+				{
+					getTreeViewer().expandToLevel(_expanded, 1);
+				}
+			}
+		}
+	}
+
+	public Shell getShell()
+	{
+		Control control = getControl();
+		if (control != null && !control.isDisposed())
+		{
+			return control.getShell();
+		}
+
+		return null;
+	}
+
+	public void menuAboutToShow(IMenuManager menu)
+	{
+		IStructuredSelection es =
+			(IStructuredSelection) getTreeViewer().getSelection();
+		if (es.size() > 1)
+		{
+			_menuHandler.multiFillContextMenu(menu, es);
+		} else
+		{
+			DataElement selected = (DataElement) es.getFirstElement();
+			if (_elementRoot != null)
+			{
+				_menuHandler.fillContextMenu(
+					menu,
+					(DataElement) _elementRoot,
+					selected);
+			}
+		}
+	}
+
+	private void handleKeyPressed(KeyEvent event)
+	{
+	}
+
+	public void handleEvent(Event e)
+	{
+		Widget widget = e.widget;
+		DataElement selected = (DataElement) e.item.getData();
+		if (selected != null)
+		{
+			switch (e.type)
+			{
+				case SWT.Expand :
+					_expanded = selected;
+					selected.expandChildren(true);
+					getTreeViewer().expandToLevel(_expanded, 1);
+					break;
+				default :
+					}
+		}
+	}
 
 }
-
-
