@@ -45,13 +45,15 @@ public class SuperDetailsViewPart extends ObjectsViewPart
       _viewer.setFocus();
   }
 
+    public void linkTo(ILinkable viewer)
+    {
+	// this view doesn't link to others
+    }
+
   public void selectionChanged(IWorkbenchPart part, ISelection sel) 
   {
-      if (part instanceof DetailsViewPart)
-	  {
-	      ((ILinkable)part).linkTo(this);	
-	      setLinked(true);
-	  }
+      ((ILinkable)part).linkTo(this);	
+      setLinked(true);
   }
 
     public void projectChanged(CppProjectEvent event)
