@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright (c) 2001, 2002 International Business Machines Corporation. All rights reserved
+   This program and the accompanying materials are made available under the terms of
+   the Common Public License which accompanies this distribution.
+-->
+
 <plugin
    id="com.ibm.debug.pdt"
    name="%PluginName"
@@ -24,6 +30,7 @@
       <import plugin="org.eclipse.swt"/>
       <import plugin="com.ibm.debug.daemon"/>
       <import plugin="com.ibm.lpex"/>
+      <import plugin="com.ibm.debug.common"/>
    </requires>
 
 
@@ -250,17 +257,18 @@
       <view
             name="%StorageMapView.title"
             icon="icons/full/cview16/storage_view.gif"
-            helpContextId="storage_view"
+            helpContextId="storage_map_view"
             category="org.eclipse.debug.ui"
             class="com.ibm.debug.internal.pdt.ui.views.StorageMapView"
             id="com.ibm.debug.pdt.ui.StorageMapView">
       </view>
       <view
-            name="%GdbView.title"
+            name="%DebugConsoleView.title"
             icon="icons/full/cview16/gdbView.gif"
+            helpContextId="gdb_view"
             category="org.eclipse.debug.ui"
-            class="com.ibm.debug.internal.pdt.ui.views.GdbView"
-            id="com.ibm.debug.pdt.ui.GdbView">
+            class="com.ibm.debug.internal.pdt.ui.views.DebugConsoleView"
+            id="com.ibm.debug.pdt.ui.DebugConsoleView">
       </view>
       <view
             name="%ModulesView.title"
@@ -373,7 +381,9 @@
             id="com.ibm.debug.DebugViewToolbarActions.StepDebug">
          <action
                label="%StepDebugAction.label"
-               icon="icons/full/clcl16/stepdebug_tsk.gif"
+               icon="icons/full/elcl16/stepdebug_tsk.gif"
+               disabledIcon="icons/full/dlcl16/stepdebug_tsk.gif"
+               hoverIcon="icons/full/clcl16/stepdebug_tsk.gif"
                tooltip="%StepDebugAction.tooltip"
                class="com.ibm.debug.internal.pdt.ui.actions.StepDebugActionDelegate"
                toolbarPath="stepReturnGroup"
@@ -390,6 +400,7 @@
             id="com.ibm.debug.internal.pdt.ui.BreakpointViewActions">
          <menu
                label="%AddBP.label"
+               helpContextId="add_breakpoint"
                path="emptyBreakpointGroup"
                id="com.ibm.debug.internal.pdt.ui.actions.AddBreakpoint">
             <separator
@@ -449,18 +460,26 @@
                id="com.ibm.debug.pdt.ui.actions.ShowStoppingThreadAction">
          </action>
       </viewerContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            name="Debugger Editor"
-            icon="icons/full/cview16/source_view.gif"
-            extensions="text-1"
-            helpContextId="debugger_editor"
-            contributorClass="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditorContextContributor"
-            class="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditor"
-            id="com.ibm.debug.pdt.editor.DebuggerEditor">
-      </editor>
+      <viewerContribution
+            targetID="com.ibm.debug.pdt.ui.RegisterView"
+            id="com.ibm.debug.internal.pdt.ui.RegisterViewActions">
+         <action
+               label="%AddRegisterMonitorAction.label"
+               helpContextId="add_register_monitor_action"
+               class="com.ibm.debug.internal.pdt.ui.actions.AddRegisterMonitorAction"
+               menubarPath="emptyDebugGroup"
+               enablesFor="0"
+               id="com.ibm.debug.internal.pdt.ui.actions.AddRegisterMonitorAction">
+         </action>
+         <action
+               label="%AddRegisterStorageMonitorAction.label"
+               helpContextId="add_register_storage_monitor_action"
+               class="com.ibm.debug.internal.pdt.ui.actions.AddRegisterStorageMonitorAction"
+               menubarPath="emptyDebugGroup"
+               enablesFor="0"
+               id="com.ibm.debug.internal.pdt.ui.actions.AddRegisterStorageMonitorAction">
+         </action>
+      </viewerContribution>
    </extension>
 <!-- Infopop (F1 Help) enablement -->
    <extension
@@ -473,6 +492,7 @@
 <!-- Launch Configurations -->
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
+      <!-- OldDaemonDefaultLaunchConfigurationDelegate will always be private and will not be shown in the dialog-->
       <launchConfigurationType
             name=" "
             delegate="com.ibm.debug.pdt.launch.OldDaemonDefaultLaunchConfigurationDelegate"
@@ -482,19 +502,34 @@
       </launchConfigurationType>
       <launchConfigurationType
             name="%loadPICLApplication"
+            helpContextId="load_picl_application"
             delegate="com.ibm.debug.pdt.launchconfig.PICLLoadLaunchConfigurationDelegate"
             modes="debug"
             id="com.ibm.debug.loadPICLApplication">
       </launchConfigurationType>
       <launchConfigurationType
             name="%attachPICLApplication"
+            helpContextId="attach_picl_application"
             delegate="com.ibm.debug.pdt.launchconfig.PICLAttachLaunchConfigurationDelegate"
             modes="debug"
             id="com.ibm.debug.attachPICLApplication">
       </launchConfigurationType>
    </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+   
+   <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+		<launchConfigurationTabGroup 
+	       	id="com.ibm.debug.PICLLoadLaunchConfigurationTabGroup"
+    	   	type="com.ibm.debug.loadPICLApplication"
+       		class="com.ibm.debug.pdt.launchconfig.PICLLoadLaunchConfigurationTabGroup">
+	    </launchConfigurationTabGroup>
+	    <launchConfigurationTabGroup 
+	       	id="com.ibm.debug.PICLAttachLaunchConfigurationTabGroup"
+    	   	type="com.ibm.debug.attachPICLApplication"
+       		class="com.ibm.debug.pdt.launchconfig.PICLAttachLaunchConfigurationTabGroup">
+	    </launchConfigurationTabGroup>
+ 	</extension>
+   
+   <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             icon="icons/full/obj16/loadconfig_obj.gif"
             configTypeID="com.ibm.debug.loadPICLApplication"
@@ -506,32 +541,16 @@
             id="com.ibm.debug.launchConfigurationTypeImage.PICLAttachApplicationImage">
       </launchConfigurationTypeImage>
    </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabs">
-      <launchConfigurationTab
-            name="%AttachConfig.tab1"
-            type="com.ibm.debug.attachPICLApplication"
-            class="com.ibm.debug.pdt.launchconfig.PICLAttachMainTab"
-            id="com.ibm.debug.launchConfigurationTab.AttachMain">
-      </launchConfigurationTab>
-      <launchConfigurationTab
-            name="%AttachConfig.tab2"
-            type="com.ibm.debug.attachPICLApplication"
-            class="com.ibm.debug.pdt.launchconfig.PICLAttachAdvancedTab"
-            id="com.ibm.debug.launchConfigurationTab.AttachAdvanced">
-      </launchConfigurationTab>
-      <launchConfigurationTab
-            name="%LoadConfig.tab1"
-            type="com.ibm.debug.loadPICLApplication"
-            class="com.ibm.debug.pdt.launchconfig.PICLLoadMainTab"
-            id="com.ibm.debug.launchConfigurationTab.LoadMain">
-      </launchConfigurationTab>
-      <launchConfigurationTab
-            name="%LoadConfig.tab2"
-            type="com.ibm.debug.loadPICLApplication"
-            class="com.ibm.debug.pdt.launchconfig.PICLLoadAdvancedTab"
-            id="com.ibm.debug.launchConfigurationTab.LoadAdvanced">
-      </launchConfigurationTab>
+<!-- Editor -->
+   <extension point="org.eclipse.ui.editors">
+         <editor
+             name="%EditorName.label"
+             icon="icons/full/cview16/source_view.gif"
+             extensions="cpp"
+             helpContextId="debugger_editor"
+             contributorClass="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditorContextContributor"
+             class="com.ibm.debug.internal.pdt.ui.editor.DebuggerEditor"
+             id="com.ibm.debug.pdt.editor.DebuggerEditor">
+         </editor>
    </extension>
-
 </plugin>

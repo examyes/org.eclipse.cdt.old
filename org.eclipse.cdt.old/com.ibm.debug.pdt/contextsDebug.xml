@@ -3,9 +3,7 @@
 <!-- THIS FILE CONTAINS TRANSLATABLE TEXT:
 		<description>"translatable text"</description>
 			and
-		label="translatable text"
-     TRANSLATION OF COMMENTED TEXT IN THE FILE IS POSSIBLE, BUT NOT NECESSARY, AND TO BE LEFT TO
-     THE DISCRETION OF THE TRANSLATION CENTRES. -->
+		label="translatable text" -->
 <!-- ////////////////////////////////////////////////////////////////////////////////
      // Copyright (c) 2001, 2002 International Business Machines Corporation. All rights
      // reserved. This program and the accompanying materials are made available under
@@ -20,53 +18,73 @@
 		<description>The Registers view allows you to see or modify the contents of the registers monitored for your program. Initially, registers are displayed by register groups. These register groups can be expanded to display a register that you wish to examine or edit.
 
 In the Registers view, floating-point registers are displayed either as floating-point decimal numbers or as hexadecimal values.</description>
-		<topic label="Compiled language debugging views" href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm"></topic>
-		<topic label="Viewing the contents of a register" href="/com.ibm.debug.pdt.doc/tasks/tbpirgvu.htm"></topic>
-		<topic label="Changing the contents of a register" href="/com.ibm.debug.pdt.doc/tasks/tbpirgct.htm"></topic>
-		<topic label="Adding a register to the Monitors view or Storage view" href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpirgvu.htm" label="Viewing the contents of a register"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpirgct.htm" label="Changing the contents of a register"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm" label="Adding a register to the Monitors view or Storage view"></topic>
 	</context>
 
 	<context  id="monitor_view" >
-		<description>The Monitors view displays variables, expressions, and registers that you have selected to monitor. You select variables and expressions for monitoring while in the Editor. To monitor a register, you select it in the Registers View and choose to monitor it.
+		<description>The Monitors view displays variables, expressions, and registers that you have selected to monitor.
+
+You can specify variables and expressions for monitoring via the <b>Monitor Expression</b> dialog box or you can select them for monitoring while in the editor. To monitor a register, you can add it to the Monitors view view via the <b>Monitor Expression</b> dialog box or by pop-up menu item in the Registers view.
 
 Use the Monitors view to monitor global variables or variables you want to see at all times during your debugging session. From the Monitors view, you can also modify the content of variables or change the representation of values.</description>
-		<topic label="Compiled language debugging views" href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm"></topic>
-		<topic label="Adding a variable or expression to the Monitors view" href="/com.ibm.debug.pdt.doc/tasks/tbpiaddv.htm"></topic>
-		<topic label="Adding a register to the Monitors view or Storage view" href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiaddv.htm" label="Adding an expression to the Monitors view"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm" label="Adding a register to the Monitors view or Storage view"></topic>
 	</context>
 
 	<context  id="modules_view" >
 		<description>The Modules view displays a list of modules loaded while running your program. The items in the list can be expanded to show compile units, files, and functions.</description>
-		<topic label="Compiled language debugging views" href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpimdvu.htm" label="Using the Modules view"></topic>
 	</context>
 
 	<context  id="storage_view" >
-		<description>The Storage view lets you see and change the contents of storage areas used by your program. You can also change the address range to view and modify the contents of storage.</description>
-		<topic label="Compiled language debugging views" href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm"></topic>
-		<topic label="Viewing a location in storage" href="/com.ibm.debug.pdt.doc/tasks/tbpistvu.htm"></topic>
-		<topic label="Changing the contents of a storage location" href="/com.ibm.debug.pdt.doc/tasks/tbpistct.htm"></topic>
-		<topic label="Removing a Storage monitor" href="/com.ibm.debug.pdt.doc/tasks/tbpistrm.htm"></topic>
+		<description>The Storage view lets you see and change the contents of storage areas used by your program. You can also change the address range to view and modify the contents of storage.
+
+You can specify variables and expressions for monitoring via the <b>Monitor Expression</b> dialog box or you can select them for monitoring while in the editor. To monitor a register, you can add it to the Monitors view view via the <b>Monitor Expression</b> dialog box or by pop-up menu item in the Registers view.</description>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpistvu.htm" label="Viewing a location in storage"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpistct.htm" label="Changing the contents of a storage location"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpistrm.htm" label="Removing a Storage monitor"></topic>
+	</context>
+
+	<context  id="debug_console" >
+		<description>This view allows you to pass debug commands to and see messages from the GDB debug engine, when the program that you are debugging is running on Linux.</description>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
+	</context>
+
+	<context  id="storage_map_view" >
+		<description>This view displays a set of elements representing blocks of storage mapped according to a storage layout that you define.</description>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpismpv.htm" label="Using the Storage Mapping view"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpismap.htm" label="Mapping storage"></topic>
 	</context>
 
 <!-- Actions -->
 
 	<context  id="edit_value_action" >
 		<description>Select this menu item to be able to edit the value that you have selected. Alternatively, you may double-click on the value to edit it.</description>
-		<topic label="Changing the contents of a register" href="/com.ibm.debug.pdt.doc/tasks/tbpirgct.htm"></topic>
-		<topic label="Changing the contents of a variable" href="/com.ibm.debug.pdt.doc/tasks/tbpivrct.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpirgct.htm" label="Changing the contents of a register"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpivrct.htm" label="Changing the contents of a variable"></topic>
 	</context>
 
         <context  id="change_representation_action" >
-		<description>Select your preferred representation (Decimal or Hexadecimal) for monitor contents.</description>
-		<topic label="Changing the representation of monitor contents" href="/com.ibm.debug.pdt.doc/tasks/tbpichrp.htm"></topic>
+		<description>Select your preferred representation for monitor contents.
+
+Available representations vary depending on the operating system on which the program you are debugging is running.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpichrp.htm" label="Changing the representation of monitor contents"></topic>
 	</context>
 
         <context  id="dereference_pointer_action" >
 		<description>Choose this menu item to dereference the selected expression or variable.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpivdrf.htm" label="Dereferencing variables and expressions in the Monitors view"></topic>
 	</context>
 
 	<context  id="copy_view_to_clipboard_action" >
-		<description>Select this button to copy the view to your system clipboard. The view is copied so that expanded nodes display node contents and the contents of collapsed nodes are not copied.</description>
+		<description>Select this button to copy the view to your system clipboard. This copies the nodes in the view as they appear in the user interface, and the contents of collapsed nodes are not copied.</description>
 	</context>
 
 	<context  id="disable_storage_monitor_action" >
@@ -75,98 +93,124 @@ Use the Monitors view to monitor global variables or variables you want to see a
 
 	<context  id="disable_variable_monitor_action" >
 		<description>Select this menu item to disable the monitoring of a variable, expression, or register in this view. The advantage of disabling a monitored expression instead of deleting it is that it is easier to enable a monitored expression than to recreate it.</description>
-		<topic label="Enabling and disabling a monitored expression" href="/com.ibm.debug.pdt.doc/tasks/tbpimned.htm"></topic>
-		<topic label="Removing a monitored expression" href="/com.ibm.debug.pdt.doc/tasks/tbpivarm.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpimned.htm" label="Enabling and disabling a monitored expression"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpivarm.htm" label="Removing a monitored expression"></topic>
 	</context>
 
 	<context  id="monitor_expression_action" >
-		<description>Select this to invoke the Monitor Expression dialog box, in which you can set a variable, expression, or register to be monitored in the Monitors or Storage view.</description>
-		<topic label="Enabling and disabling a monitored expression" href="/com.ibm.debug.pdt.doc/tasks/tbpimned.htm"></topic>
+		<description>Select this to invoke the <b>Monitor Expression</b> dialog box, in which you can set a variable, expression, or register to be monitored in the Monitors or Storage view.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiaddv.htm" label="Adding an expression to the Monitors view"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpistad.htm" label="Adding an expression to the Storage view"></topic>
+	</context>
+
+	<context  id="map_storage_action" >
+		<description>Select this to invoke the <b>Map Storage</b> dialog box.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpismap.htm" label="Mapping storage"></topic>
 	</context>
 
 	<context  id="print_view_action" >
-		<description>Select this button to print this view. The view is printed so that expanded nodes display node contents and the contents of collapsed nodes are not printed.</description>
+		<description>Select this button to print this view. This prints the nodes in the view as they appear in the user interface, and the contents of collapsed nodes are not printed.</description>
 	</context>
 
 	<context  id="remove_storage_monitor_action" >
 		<description>Select this to remove the monitoring of the selected variable, expression, or register in this view.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpivarm.htm" label="Removing a monitored expression"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpistrm.htm" label="Removing a Storage monitor"></topic>
+	</context>
+
+	<context  id="remove_mapping_action" >
+		<description>Select this to remove the monitoring of the selected storage mapping in this view.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpismap.htm" label="Mapping storage"></topic>
 	</context>
 
 	<context  id="remove_variable_from_monitor_action" >
 		<description>Select this to remove the monitoring of the variable in this view.</description>
-		<topic label="Removing a monitored expression" href="/com.ibm.debug.pdt.doc/tasks/tbpivarm.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpivarm.htm" label="Removing a monitored expression"></topic>
 	</context>
 
 	<context  id="reset_storage_monitor_action" >
 		<description>If you have scrolled away from the address that you are monitoring, select this to return to the address.</description>
 	</context>
+	<context  id="add_function_breakpoint_action" >
+		<description>This will set a new breakpoint that stops program execution when the start of a function, method, or entry point is encountered.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbfunc.htm" label="Setting a function breakpoint"></topic>
+	</context>
+
+	<context  id="remove_program_action" >
+		<description>Choose this to stop debugging the selected program and remove it from the Modules view.</description>
+	</context>
 
 	<!-- Set in plugin.xml - Breakpoint -->
 
+	<context  id="add_breakpoint" >
+		<description>From the expanded list, choose the type of breakpoint that you would like to set.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+	</context>
+
 	<context  id="edit_breakpoint_action" >
 		<description>This will re-launch the wizard by which this breakpoint was created, allowing you to edit entries in the wizard.</description>
-		<topic label="Editing breakpoint properties" href="/com.ibm.debug.pdt.doc/tasks/tbpbedit.htm"></topic>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbedit.htm" label="Editing breakpoint properties"></topic>
 	</context>
 
 	<context  id="add_address_breakpoint_action" >
-		<description>This will launch a dialog that allows you to set a new breakpoint that stops program execution when a specific address is reached in your executable.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting an address breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbaddr.htm"></topic>
+		<description>This will launch a dialog box that allows you to set a new breakpoint that stops program execution when a specific address is reached in your executable.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbaddr.htm" label="Setting an address breakpoint"></topic>
 	</context>
 
 	<context  id="add_entry_breakpoint_action" >
-		<description>This will launch a dialog that allows you to set a new breakpoint that stops program execution when the start of a function, method, or entry point is encountered.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting an entry breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbentr.htm"></topic>
+		<description>This will launch a dialog box that allows you to set a new breakpoint that stops program execution when the start of a function, method, or entry point is encountered.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbentr.htm" label="Setting an entry breakpoint"></topic>
 	</context>
 
 	<context  id="add_watch_breakpoint_action" >
-		<description>This will launch a dialog that allows you to set a new breakpoint that causes program execution to stop whenever the class field being watched is modified. Program execution stops even if the new value for the field is the same as the old value.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting a watch breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbwtch.htm"></topic>
+		<description>This will launch a dialog box that allows you to set a new breakpoint that causes program execution to stop whenever the class field being watched is modified. Program execution stops even if the new value for the field is the same as the old value.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbwtch.htm" label="Setting a watch breakpoint"></topic>
 	</context>
 
 	<context  id="add_load_breakpoint_action" >
-		<description>This will launch a dialog that allows you to set a new breakpoint that stops program execution when a specified DLL, dynamically called routine, or program loads.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting a load breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbload.htm"></topic>
+		<description>This will launch a dialog box that allows you to set a new breakpoint that stops program execution when a specified DLL, dynamically called routine, or program loads.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbload.htm" label="Setting a load breakpoint"></topic>
 	</context>
 
 	<context  id="add_register_monitor_action" >
 		<description>Choose this to add the selected register to the Monitors view.</description>
-		<topic label="Adding a register to the Monitors view or Storage view" href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm" label="Adding a register to the Monitors view or Storage view"></topic>
 	</context>
 
 	<context  id="add_register_storage_monitor_action" >
 		<description>Choose this to add the selected register to a Storage monitor in the Storage view.</description>
-		<topic label="Adding a register to the Monitors view or Storage view" href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiadrg.htm" label="Adding a register to the Monitors view or Storage view"></topic>
 	</context>
 
 <!-- Dialogs -->
 
 	<context  id="add_exception_dialog" >
-		<description>Use this dialog to specify the types of exceptions or the exception level that you want the Debugger to recognize in the loaded program. To specify an exception or exception level, select the checkbox to the left of it.
+		<description>Use this dialog box to specify the types of exceptions or the exception level that you want the debugger to recognize in the loaded program. To specify an exception or exception level, select the checkbox to the left of it.
 
-You can narrow down the list of available exceptions by making filter entries in the search field. If you have hidden selected exceptions by using search and hit OK, the debugger will recognize all selected exceptions (those selected when filtering and those hidden during a search).</description>
-		<topic label="Exception handling" href="/com.ibm.debug.pdt.doc/concepts/cbpexcep.htm"></topic>
-		<topic label="Compiled language exceptions" href="/com.ibm.debug.pdt.doc/tasks/tbpbexcp.htm"></topic>
+You can narrow down the list of available exceptions by making filter entries in the search field. If you have hidden selected exceptions by using search and hitting OK, the debugger will recognize all selected exceptions (those selected when filtering and those hidden during a search).</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpexcep.htm" label="Exception handling"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbexcp.htm" label="Compiled language exceptions"></topic>
 	</context>
 
 	<context  id="fork_dialog" >
-		<description>A fork() call has been encountered. Use this dialog to specify the process to debug when the debugger encounters a fork() call. The debugger will halt inside the fork() runtime function, where the call to the kernel is made.</description>
-		<topic label="fork() handling" href="/com.ibm.debug.pdt.doc/concepts/cbpfork.htm"></topic>
+		<description>A fork() call has been encountered. Use this dialog box to specify the process to debug when the debugger encounters a fork() call. The debugger will halt inside the fork() runtime function, where the call to the kernel is made.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpfork.htm" label="fork() handling"></topic>
 	</context>
 
 	<context  id="exception_dialog" >
-		<description>An exception that matches one of the exceptions specified when setting a compiled language exception breakpoint has occurred.</description>
-		<topic label="Exception handling" href="/com.ibm.debug.pdt.doc/concepts/cbpexcep.htm"></topic>
-		<topic label="Compiled language exceptions" href="/com.ibm.debug.pdt.doc/tasks/tbpbexcp.htm"></topic>
+		<description>An exception that is selected in the <b>Manage exception breakpoints</b> dialog box has occurred.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpexcep.htm" label="Exception handling"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbexcp.htm" label="Compiled language exceptions"></topic>
 	</context>
 
 	<context  id="new_process_dialog" >
-		<description>A new process has been created as the result of an exec() function call in the program you are debugging. While in this dialog, you can choose to debug program initialization. When you close the dialog box, you will be debugging the new process rather than the calling process.</description>
-		<topic label="exec() handling" href="/com.ibm.debug.pdt.doc/concepts/cbpbexec.htm"></topic>
+		<description>A new process has been created as the result of an exec() function call in the program you are debugging. While in this dialog box, you can choose to debug program initialization. When you close the dialog box, you will be debugging the new process rather than the calling process.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbexec.htm" label="exec() handling"></topic>
 	</context>
 
 	<context  id="overloaded_dialog" >
@@ -174,35 +218,44 @@ You can narrow down the list of available exceptions by making filter entries in
 	</context>
 
 	<context  id="monitor_expression_dialog" >
-		<description>Use this dialog to specify an expression that you would like to add to the Monitors or Storage view.</description>
-		<topic label="Enabling and disabling a monitored expression" href="/com.ibm.debug.pdt.doc/tasks/tbpimned.htm"></topic>
+		<description>Use this dialog box to specify an expression that you would like to add to the Monitors or Storage view.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpimned.htm" label="Enabling and disabling a monitored expression"></topic>
+	</context>
+
+	<context  id="map_storage_dialog" >
+		<description>Use this dialog box to specify the starting address of a block of storage that you want to display according to a user-defined mapping layout.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpismap.htm" label="Mapping storage"></topic>
 	</context>
 
 	<context  id="preferred_source_dialog" >
-		<description>Use this dialog to change the default source view in the editor to source view, disassembly view, or mixed view.</description>
-		<topic label="Editor source views" href="/com.ibm.debug.pdt.doc/concepts/cbpsourc.htm"></topic>
-		<topic label="Changing the Editor source view" href="/com.ibm.debug.pdt.doc/tasks/tbposrce.htm"></topic>
+		<description>Use this dialog box to change the default source view in the editor. The source views that are available depend on the operating system on which the program you are debugging is running.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpsourc.htm" label="Editor source views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbposrce.htm" label="Changing the editor source view"></topic>
+	</context>
+
+	<context  id="add_program_dialog" >
+		<description>Use this dialog box to specify the type and the name of the program (*PGM), service program (*SRVPGM), or Java class that you want to add to the list of programs under debug mode.
+
+Programs under debug mode must include at least one module that has been compiled with debug data. Java classes must be compiled with debug data.</description>
 	</context>
 
 <!-- Wizards -->
 
 	<!-- Conditional breakpoint / optional debug parameters -->
-
 	<context  id="cond_bp_wizard" >
 		<description>Use this wizard page to make the breakpoint that you are setting conditional upon parameters that are specified in the wizard. In this page, you can complete the following:
 
 <b>Thread</b> field: This selection list lets you choose what threads to set the breakpoint in. To select a thread ID from the list, highlight the thread where you want to set the breakpoint.
-<b>To</b> field: Enter the last breakpoint encounter you want the Debugger to stop on.
-<b>From</b> field: Enter the first breakpoint encounter you want the Debugger to stop on.
-<b>Every</b> field: Enter the frequency with which you want the Debugger to stop on this breakpoint.
+<b>To</b> field: Enter the last breakpoint encounter you want the debugger to stop on.
+<b>From</b> field: Enter the first breakpoint encounter you want the debugger to stop on.
+<b>Every</b> field: Enter the frequency with which you want the debugger to stop on this breakpoint.
 <b>Expression</b> field: Entering an expression into this field causes the execution of the program to stop at the breakpoint only if the condition specified in this field tests true.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting a conditional breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbcond.htm"></topic>
-		<topic label="Optional breakpoint parameters" href="/com.ibm.debug.pdt.doc/ref/rbpbkpar.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbcond.htm" label="Setting a conditional breakpoint"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/ref/rbpbkpar.htm" label="Optional breakpoint parameters"></topic>
 	</context>
 
 	<!-- Entry breakpoint -->
-
 	<context  id="entry_bp_wizard" >
 		<description>Use this wizard to set a breakpoint that is triggered when the method, function, or entry point it applies to is entered. In this wizard page, you can complete the following:
 
@@ -210,60 +263,50 @@ You can narrow down the list of available exceptions by making filter entries in
 <b>Source</b> field: Enter the name of or browse for the source file with which you want the breakpoint associated.
 <b>Entry</b> field: Enter the name of or browse for the function or entry point where the breakpoint is to be set.
 <b>Case</b> check box: Select this if you would like the function or entry point that you specify to be recognized by its case.</description>
-		<!--Defer check box: Select this checkbox if the application executable with which the breakpoint is to be 
-		associated is not currently loaded. -->
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting an entry breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbentr.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbentr.htm" label="Setting an entry breakpoint"></topic>
 	</context>
 
 	<!-- Line breakpoint -->
-
 	<context  id="line_bp_wizard" >
 		<description>Use this wizard to edit a line breakpoint. In this wizard page, you can complete the following:
 
 <b>Project</b> field: Enter the name of or browse for the debug project in which to set a breakpoint.
 <b>Source</b> field: Enter the name of or browse for the source file with which you want the breakpoint associated.
 <b>Line</b> field: Enter a new line number at which the breakpoint is to be set.</description>
-		<!--Defer check box: Select this checkbox if the application executable with which the breakpoint is to be 
-		associated is not currently loaded. -->
-		<topic label="Editing breakpoint properties" href="/com.ibm.debug.pdt.doc/tasks/tbpbedit.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbline.htm" label="Setting a line breakpoint"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbedit.htm" label="Editing breakpoint properties"></topic>
 	</context>
 
 	<!-- Address breakpoint -->
-
 	<context  id="address_bp_wizard" >
 		<description>Use this wizard to set a breakpoint that is triggered before the disassembly instruction at a particular address is executed. In this wizard page, you can complete the following:
 		
 <b>Project</b> field: Enter the name of or browse for the debug project in which to set a breakpoint.
 <b>Address</b> field: Enter the name of the address or expression where the breakpoint is to be set.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting an address breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbaddr.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbaddr.htm" label="Setting an address breakpoint"></topic>
 	</context>
 
-		<!--Defer check box: Select this checkbox if the application executable with which the breakpoint is to be 
-		associated is not currently loaded. -->
-
 	<!-- Load breakpoint -->
-
 	<context  id="load_bp_wizard" >
 		<description>Use this wizard to set a breakpoint that is triggered when a library/DLL or object module is loaded. In this wizard page, you can complete the following:
 
 <b>Project</b> field: Enter the name of or browse for the debug project in which to set a breakpoint.
 <b>Library</b> field: Enter the name of the library or shared object file name with which you want the breakpoint associated.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting a load breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbload.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbload.htm" label="Setting a load breakpoint"></topic>
 	</context>
 
 	<!-- Watch breakpoint -->
-
 	<context  id="watch_bp_wizard" >
 		<description>Use this wizard to set a breakpoint that is triggered when execution changes data at a specific address.  In this wizard page, you can complete the following:
 
 <b>Project</b> field: Enter the name of or browse for the debug project in which to set a breakpoint.
 <b>Address</b> field: Enter the name of the address or expression where the breakpoint is to be set.
 <b>Number of Bytes</b> field:Enter the number of bytes of the address or expression you want to watch.</description>
-		<topic label="Setting breakpoints in C/C++ applications" href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm"></topic>
-		<topic label="Setting a watch breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbwtch.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpbrkpt.htm" label="Breakpoints"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbwtch.htm" label="Setting a watch breakpoint"></topic>
 	</context>
 
 <!-- Editor IDs -->
@@ -271,51 +314,107 @@ You can narrow down the list of available exceptions by making filter entries in
 	<context  id="debugger_editor" >
 		<description>Use the editor to view and edit the source file(s) of the program you are debugging.
 
-You can change the source view of the editor from the Debug view. You can also perform debug functions by pop-up in the editor by selecting objects and right-clicking on them.</description>
-		<topic label="Editor source views" href="/com.ibm.debug.pdt.doc/concepts/cbpsourc.htm"></topic>
-		<topic label="Changing the Editor source view" href="/com.ibm.debug.pdt.doc/tasks/tbposrce.htm"></topic>
+You can change the source view of the editor from the Debug view. You can also perform debug functions by pop-up menu in the editor by selecting objects and right-clicking on them.</description>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpsourc.htm" label="Editor source views"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbposrce.htm" label="Changing the editor source view"></topic>
 	</context>
 
 	<context  id="jump_to_location_action" >
-		<description>Choose this to skip over sections of code to avoid executing certain statements or to move to a position where certain statements can be executed again.</description>
-		<topic label="Jumping over sections of a program" href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm"></topic>
-		<topic label="Running a C/C++ application" href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm"></topic>
+		<description>Choose this to jump to the editor cursor position and skip over sections of code. With this action, you can avoid executing certain statements or to move to a position where certain statements can be executed again.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm" label="Jumping over sections of a program"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm" label="Running a compiled language application"></topic>
 	</context>
 
 	<context  id="jump_to_location_ruler_action" >
-		<description>Choose this to skip over sections of code to avoid executing certain statements or to move to a position where certain statements can be executed again.</description>
-		<topic label="Jumping over sections of a program" href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm"></topic>
-		<topic label="Running a C/C++ application" href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm"></topic>
+		<description>Choose this to jump to the position that you have selected on the ruler and skip over sections of code.  With this action, you can avoid executing certain statements or to move to a position where certain statements can be executed again.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm" label="Jumping over sections of a program"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm" label="Running a compiled language application"></topic>
 	</context>
 
 	<context  id="run_to_location_action" >
-		<description>Choose this to run the program to the selected location unless an active breakpoint is hit, an exception occurs, or the end of the program is reached.</description>
-		<topic label="Running a C/C++ application" href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm"></topic>
-		<topic label="Jumping over sections of a program" href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm"></topic>
+		<description>Choose this to run the program to the editor cursor position unless an active breakpoint is hit, an exception occurs, or the end of the program is reached.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm" label="Running a compiled language application"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm" label="Jumping over sections of a program"></topic>
 	</context>
 
 	<context  id="run_to_location_ruler_action" >
-		<description>Choose this to run the program to the selected location unless an active breakpoint is hit, an exception occurs, or the end of the program is reached.</description>
-		<topic label="Running a C/C++ application" href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm"></topic>
-		<topic label="Jumping over sections of a program" href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm"></topic>
+		<description>Choose this to run the program to the position that you have selected on the ruler, unless an active breakpoint is hit, an exception occurs, or the end of the program is reached.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbporunc.htm" label="Running a compiled language application"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpojump.htm" label="Jumping over sections of a program"></topic>
 	</context>
 
 	<context  id="add_editor_breakpoint_action" >
-		<description>Source: If a line of source (in the Source or Mixed View) that contains no breakpoint is selected, choosing this will add a line breakpoint. If a line that contains a breakpoint is selected, choosing this will remove the breakpoint.
+		<description>Source: If a line of source (in a Source or Mixed View) that contains no breakpoint is selected, choosing this will add a line breakpoint. If a line that contains a breakpoint is selected, choosing this will remove the breakpoint.
 
-Disassembly: If an address (in the Disassembly or Mixed View) that contains no breakpoint is selected, choosing this will add an address breakpoint. If an address that contains a breakpoint is selected, choosing this will remove the breakpoint.</description>
-		<topic label="Setting an address breakpoint" href="/com.ibm.debug.pdt.doc/tasks/tbpbaddr.htm"></topic>
-		<topic label="Editor source views" href="/com.ibm.debug.pdt.doc/concepts/cbpsourc.htm"></topic>
+Disassembly: If an address (in a Disassembly or Mixed View) that contains no breakpoint is selected, choosing this will add an address breakpoint. If an address that contains a breakpoint is selected, choosing this will remove the breakpoint.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpbaddr.htm" label="Setting an address breakpoint"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/concepts/cbpsourc.htm" label="Editor source views"></topic>
 	</context>
 
 	<context  id="add_snippet_to_monitor_action" >
 		<description>Choose this to add the selected expression to the Monitors view.</description>
-		<topic label="Adding a variable or expression to the Monitors view" href="/com.ibm.debug.pdt.doc/tasks/tbpiaddv.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpiaddv.htm" label="Adding an expression to the Monitors view"></topic>
 	</context>
 
 	<context  id="add_snippet_to_storage_monitor_action" >
 		<description>Choose this to add the selected expression to a Storage monitor in the Storage view.</description>
-		<topic label="Adding an expression to the Storage view" href="/com.ibm.debug.pdt.doc/tasks/tbpistad.htm"></topic>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpistad.htm" label="Adding an expression to the Storage view"></topic>
+	</context>
+
+<!-- Launch Configurations -->
+
+	<!-- temporary -->
+	<context  id="load_picl_application" >
+		<description>Choose this to create a launch configuration that loads a compiled language application for debugging.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpstart.htm" label="Debugging compiled languages"></topic>
+	</context>
+
+	<!-- temporary -->
+	<context  id="attach_picl_application" >
+		<description>Choose this to create a launch configuration that attaches to a compiled language application.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpsatch.htm" label="Attaching to compiled languages"></topic>
+	</context>
+
+	<!-- Tabs -->
+
+	<!-- temporary -->
+	<context  id="attach_main" >
+		<description>This page contains the main settings for creating a launch configuration for attaching to a compiled language application.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpsatch.htm" label="Attaching to compiled languages"></topic>
+	</context>
+
+	<!-- temporary -->
+	<context  id="attach_advanced" >
+		<description>This page contains optional settings for creating a launch configuration for attaching to a compiled language application.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpsatch.htm" label="Attaching to compiled languages"></topic>
+	</context>
+
+	<!-- temporary -->
+	<context  id="load_main" >
+		<description>This page contains the main settings for creating a launch configuration for loading a compiled language application for debugging.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpstart.htm" label="Debugging compiled languages"></topic>
+	</context>
+
+	<!-- temporary -->
+	<context  id="load_advanced" >
+		<description>This page contains optional settings for creating a launch configuration for loading a compiled language application for debugging.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpstart.htm" label="Debugging compiled languages"></topic>
+	</context>
+
+	<!-- Dialogs -->
+
+	<!-- temporary -->
+	<context  id="browse_process" >
+		<description>From the list, choose the process that you want to debug. If you do not see the program that you want to debug in the process list, click <b>Refresh</b> to refresh the list with programs that have recently started.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpsatch.htm" label="Attaching to compiled languages"></topic>
+	</context>
+
+	<!-- temporary -->
+	<context  id="browse_project" >
+		<description>Select the project that contains the source for the application that you want to debug.
+
+If the application source is not in a workbench project, indicate the source search path in the launch configuration <b>Advanced</b> page.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpsatch.htm" label="Attaching to compiled languages"></topic>
 	</context>
 
 <!-- Temporary -->
@@ -325,18 +424,19 @@ Disassembly: If an address (in the Disassembly or Mixed View) that contains no b
 	</context>
 
 <!-- TBD -->
+
 	<!-- Debug View -->	
 	<context  id="show_stopping_thread_action" >
-		<description>TBD</description>
+		<description>Choose this to show the thread at which program execution has stopped.</description>
 	</context>
-	<!-- Preference pages -->
-	<context  id="picl_debug_preference_page" >
-		<description>TBD</description>
-	</context>
-	<!-- Launchers -->
 	<!-- Debug -->
 	<context  id="picl_load_launcher" >
 		<description>Choose this to launch and debug a compiled application.</description>
+	</context>
+	<!-- Preference pages -->
+	<context  id="picl_debug_preference_page" >
+		<description>Use this page to specify debug preferences.</description>
+		<topic href="/com.ibm.debug.pdt.doc/tasks/tbpopref.htm" label="Setting debug preferences"></topic>
 	</context>
 
 </contexts>
