@@ -16,43 +16,25 @@
 
 # Grab Absolute Path to Plugin Directory...We do this by launching GenerateMakefiles with no arguments,
 # which used java.io.File.getCanonicalPath() to do the resolving of symbolic links, path separators etc
-pluginsDirectory := $(shell javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
+pluginsDirectory := $(shell cd build && javac GenerateMakefiles.java && java -cp . GenerateMakefiles)
 
-# List of All Plugins Used in C/C++ Deliverable
-allPlugins += com.ibm.dstore.extra
-allPlugins += com.ibm.dstore.core
-allPlugins += com.ibm.cpp.miners.parser
-allPlugins += com.ibm.dstore.hosts
-allPlugins += com.ibm.dstore.ui
-allPlugins += com.ibm.cpp.ui
-allPlugins += com.ibm.dstore.miners
-allPlugins += com.ibm.cpp.miners
-allPlugins += com.ibm.debug.gdbPicl
-allPlugins += com.ibm.linux.help	
-allPlugins += com.ibm.cpp.docs.user
+# List of Plugins that we build
+buildPlugins += com.ibm.dstore.extra
+buildPlugins += com.ibm.dstore.core
+buildPlugins += com.ibm.cpp.miners.parser
+buildPlugins += com.ibm.dstore.hosts
+buildPlugins += com.ibm.dstore.ui
+buildPlugins += com.ibm.cpp.ui
+buildPlugins += com.ibm.dstore.miners
+buildPlugins += com.ibm.cpp.miners
+buildPlugins += com.ibm.debug.gdbPicl
+buildPlugins += com.ibm.linux.help	
+
+# List of All Plugins Used in C/C++ Deliverable (e.g buildPlugins plus the ones we don't build)
+allPlugins = $(buildPlugins)
 allPlugins += com.ibm.lpex
 allPlugins += com.ibm.debug
 allPlugins += com.ibm.debug.doc.user
-
-# Look for list of Plugins that are "build-able", (e.g. that have a 'com' directory).  This is a little complicated,
-# but there are really 5 pieces of work going on:
-# 1.  Add the dstore.extra and dstore.core directories to the list to ensure they appear first.
-# 2.  Using the $(wildcard) function, get all of the plugins that have a 'com' subdirectory
-# 3.  Using the $(patsubst) function, remove the plugin Directory from the beginning of each directory
-# 4.  Using the $(patsubst) function, remove the /com/ suffix from each directory
-# 5.  Using the $(filter-out) funtion, remove the dstore.core and dstore.extra directory from the generated list
-#
-
-buildPlugins = com.ibm.dstore.extra com.ibm.dstore.core\
-               $(filter-out com.ibm.dstore.core,\
-                 $(filter-out com.ibm.dstore.extra,\
-                   $(patsubst %/com/,%,\
-                      $(patsubst $(pluginsDirectory)/%,%,\
-                        $(wildcard $(pluginsDirectory)/*/com/)\
-                       )\
-                    )\
-                  )\
-                )
 
 
 # PUBLIC TARGETS
@@ -62,9 +44,12 @@ buildPlugins = com.ibm.dstore.extra com.ibm.dstore.core\
 # work is done in the private targets below.  For the "public" targets that do some work on each
 # plugin, we accomplish this by appending some text like "_buildPlugin" to every plugin name, 
 # and then provide the actual rules for these pseudo-prerequisites below.
-development     : makefiles all
+all:
+	 allCommands = cd com ; ${MAKE} ${MAKEFLAGS} ; cd ..
+
+development     : makefiles $(patsubst %,%_buildPlugin,$(buildPlugins))
 production      : development jars source-zips createTar
-all             : $(patsubst %,%_buildPlugin,$(buildPlugins))
+
 jars            : $(patsubst %,%_createJars,$(buildPlugins))
 source-zips     : $(patsubst %,%_createSrcZips,$(buildPlugins))
 clean           : $(patsubst %,%_cleanPlugin,$(buildPlugins))
@@ -73,6 +58,7 @@ makefiles       : generateBuildEnvironment
 # Helper shortcut targets (for lazy typists)
 dev             : development
 prod            : production
+
 
 
 # PRIVATE TARGETS
@@ -96,8 +82,14 @@ prod            : production
 %_cleanMakefiles:
 	@-cd $(pluginsDirectory)/$(patsubst %_cleanMakefiles,%,$@) && $(MAKE) $(MAKEFLAGS) clean-makefiles 
 
-generateBuildEnvironment: setUpSpecialPlugins GenerateMakefiles.class
-	@java -cp . GenerateMakefiles $(buildPlugins)
+generateBuildEnvironment: unzipBuildPlugins setUpSpecialPlugins
+	@cd build && java -cp . GenerateMakefiles $(buildPlugins)
+
+unzipBuildPlugins: $(patsubst %,%_unzipPlugin,$(buildPlugins))
+
+%_unzipPlugin:
+	@-cd $(pluginsDirectory)/$(patsubst %_unzipPlugin,%,$@);\
+	cd com 2>/dev/null || (echo Unzipping Source for $(patsubst %_unzipPlugin,%,$@); unzip -q *src.zip)
 
 createTar: createEmptyTar tarUpPlugins
 
@@ -111,9 +103,6 @@ tarUpPlugins: $(patsubst %,%_tarPlugin,$(allPlugins))
 %_tarPlugin: 
 	@-cd $(pluginsDirectory) && zip -qr $(tarFile) $(patsubst %_tarPlugin,%,$@) -x com *com\/* *CVS* &&\
 	echo Created Master Zip File -> $(pluginsDirectory)/$(tarFile)
-
-GenerateMakefiles.class: GenerateMakefiles.java
-	@javac GenerateMakefiles.java
 
 # The last 3 targets are some hacky stuff to set up the dstore.extra and gdbPicl Plugins...
 setUpSpecialPlugins: setUpExtraPlugin setUpGdbPiclPlugin
