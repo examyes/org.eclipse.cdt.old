@@ -461,7 +461,6 @@ public class FileSystemMiner extends Miner
 	    sourceString = sourceString.substring(0, indexOfLocation);
 	  }
 
-	System.out.println("opening " + sourceString);
 	File file = new File(sourceString);
 	if (!file.isDirectory() && file.exists())
 	    {

@@ -1031,7 +1031,6 @@ public final class DataElement implements Serializable, IDataElement
 	      (getParent() != _dataStore.getDescriptorRoot()))
           {	
             String localPath = _dataStore.mapToLocalPath(source);
-	    System.out.println("open " + localPath); 
             
             if (localPath != null)
             {

@@ -63,6 +63,7 @@ public class TransferFiles extends Thread
 	transfer(_source, _target);
 
 	targetDataStore.refresh(_target.getParent());
+	targetDataStore.refresh(_target);
 
 	if (_listener != null)
 	    {
@@ -143,14 +144,12 @@ public class TransferFiles extends Thread
 			java.io.File newSource = new java.io.File(sourceMapping);
 			if (newSource != null && newSource.exists())
 			    {
-				String targetMapping = target.getSource() + "/" + source.getName();
-				newSource.renameTo(new java.io.File(targetMapping));
+				newSource.renameTo(new java.io.File(newSourceStr));
 			    }
 		    }
 		else if (source.getType().equals("directory"))
 		    {
-			String newDir = target.getSource() + "/" + source.getName();
-			java.io.File targetDir = new java.io.File(newDir);
+			java.io.File targetDir = new java.io.File(newSourceStr);
 			targetDir.mkdir();
 		    }
 	    }
@@ -172,10 +171,12 @@ public class TransferFiles extends Thread
 		for (int i = 0; i < source.getNestedSize(); i++)
 		    {
 			DataElement child = source.get(i);
-			transfer(child, copiedSource);
-			targetDataStore.refresh(target);
+			if (child.getType().equals("directory") || child.getType().equals("file"))
+			    {
+				transfer(child, copiedSource);
+				targetDataStore.refresh(target);
+			    }
 		    }
-
 	    }	
     }
 
