@@ -87,113 +87,115 @@ public class CppCompletionProcessor implements IContentAssistProcessor
         	// find the parser 
         	ModelInterface api = _plugin.getModelInterface();
         	IProject project = _plugin.getCurrentProject();
+		DataStore dataStore = _plugin.getCurrentDataStore();
 
+		DataElement status = null;
+		ArrayList results = null;
+		
 		DataElement projectRoot = api.findProjectElement(project);
-		DataStore dataStore =projectRoot.getDataStore();
-		
-		DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), "C_CODE_ASSIST");
-		if (commandDescriptor != null)
+		if (projectRoot != null)
 		    {
-		
-			ArrayList args = new ArrayList();	
-			int line = lview.getLpexView().currentElement();
-
-			String path = null;
-			if (_input instanceof FileResourceElement)
-			    {
-				path = ((FileResourceElement)_input).getElement().getSource();
-			    }
-			else
-			    {
-				path = new String(_input.getLocation().toOSString());
-			    }
-			DataElement patternLoc = dataStore.createObject(null, "source", currentString, path+":"+line);
-			
-			args.add(patternLoc);
-			
-			DataElement status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);	   
-			ArrayList results = status.getNestedData();
-
-			if (results.size() == 0)
-			    {
-				DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
-				DataElement root = dictionaryData.get(0);
-				DataElement pattern = dataStore.createObject(null, "pattern", currentString + ".*");
-				DataElement search = dataStore.localDescriptorQuery(
-										    root.getDescriptor(),
-										    "C_SEARCH_DICTIONARY", 1);
-				if (search != null)
-				    {	
-					ArrayList sargs = new ArrayList();
-					sargs.add(pattern);
-					status = dataStore.synchronizedCommand(search, sargs, root);
-					results = status.getNestedData();
-				    }
-			    }
-			
-			if (results.size() > 0)
-			    {
-				result= new ICompletionProposal[results.size()];
-				for (int i = 0; i < results.size(); i++)
+			DataElement commandDescriptor = dataStore.localDescriptorQuery(projectRoot.getDescriptor(), 
+										       "C_CODE_ASSIST");
+			if (commandDescriptor != null)
+			    {				
+				ArrayList args = new ArrayList();	
+				int line = lview.getLpexView().currentElement();
+				
+				String path = null;
+				if (_input instanceof FileResourceElement)
 				    {
-					DataElement found = ((DataElement)results.get(i)).dereference();
-					String text     = (String)found.getElementProperty(DE.P_VALUE);
-					String imageStr = com.ibm.dstore.ui.widgets.DataElementLabelProvider.getImageString(found);
-					Image image     = _plugin.getImage(imageStr);
+					path = ((FileResourceElement)_input).getElement().getSource();
+				    }
+				else
+				    {
+					path = new String(_input.getLocation().toOSString());
+				    }
 
-					int len = currentString.length();
+				DataElement patternLoc = dataStore.createObject(null, "source", currentString, path+":"+line);				
+				args.add(patternLoc);
+				status = dataStore.synchronizedCommand(commandDescriptor, args, projectRoot);
+				results = status.getNestedData();
+			    }
+		    }
+			
+		if (results == null || results.size() == 0)
+		    {
+			DataElement dictionaryData =  dataStore.findMinerInformation("com.ibm.dstore.miners.dictionary.DictionaryMiner");
+			DataElement root = dictionaryData.get(0);
+			DataElement pattern = dataStore.createObject(null, "pattern", currentString + ".*");
+			DataElement search = dataStore.localDescriptorQuery(root.getDescriptor(),
+									    "C_SEARCH_DICTIONARY", 1);
+			if (search != null)
+			    {	
+				ArrayList sargs = new ArrayList();
+				sargs.add(pattern);
+				status = dataStore.synchronizedCommand(search, sargs, root);
+				results = status.getNestedData();
+			    }
+		    }
+		
+		if (results != null && results.size() > 0)
+		    {
+			result= new ICompletionProposal[results.size()];
+			for (int i = 0; i < results.size(); i++)
+			    {
+				DataElement found = ((DataElement)results.get(i)).dereference();
+				String text     = (String)found.getElementProperty(DE.P_VALUE);
+				String imageStr = com.ibm.dstore.ui.widgets.DataElementLabelProvider.getImageString(found);
+				Image image     = _plugin.getImage(imageStr);
+				
+				int len = currentString.length();
+				
+				if (text.regionMatches(0, currentString, 0, len))
+				    {
+					result[i] = new CompletionProposal(text,               // replacement string
+									   -len,               // replacement offset
+									   text.length(),      // replacement length
+									   0,                  // cursor position
+									   image,
+									   null, null, null);
+				    }
+				else
+				    {
+					int lastDotIndex = currentString.lastIndexOf(".");
+					int lastPointerIndex = currentString.lastIndexOf("->");
+					int lastIndex = 0;
 					
-					if (text.regionMatches(0, currentString, 0, len))
+					if (lastDotIndex == -1 && lastPointerIndex == -1)
+					    lastIndex = -1;
+					else
+					    lastIndex = Math.max(lastDotIndex, lastPointerIndex);
+					
+					if (lastIndex == -1 || (lastIndex == len-1))
 					    {
-						result[i] = new CompletionProposal(text,               // replacement string
-										   -len,               // replacement offset
-										   text.length(),      // replacement length
-										   0,                  // cursor position
+						result[i] = new CompletionProposal(text,              // replacement string
+										   0,                 // replacement offset
+										   text.length(),     // replacement length
+										   0,                 // cursor position
 										   image,
 										   null, null, null);
 					    }
 					else
 					    {
-						int lastDotIndex = currentString.lastIndexOf(".");
-						int lastPointerIndex = currentString.lastIndexOf("->");
-						int lastIndex = 0;
-						
-						if (lastDotIndex == -1 && lastPointerIndex == -1)
-						    lastIndex = -1;
-						else
-						    lastIndex = Math.max(lastDotIndex, lastPointerIndex);
-						
-						if (lastIndex == -1 || (lastIndex == len-1))
-						    {
-							result[i] = new CompletionProposal(text,              // replacement string
-											   0,                 // replacement offset
-											   text.length(),     // replacement length
-											   0,                 // cursor position
-											   image,
-											   null, null, null);
-						    }
-						else
-						    {
-							lastIndex++;
-							String after = currentString.substring(lastIndex);
-							result[i] = new CompletionProposal(text,
-											   -after.length(),
-											   text.length(),
-											   0,
-											   image,
-											   null, null, null);
-						    }
-					    }					
+						lastIndex++;
+						String after = currentString.substring(lastIndex);
+						result[i] = new CompletionProposal(text,
+										   -after.length(),
+										   text.length(),
+										   0,
+										   image,
+										   null, null, null);
+					    }
 				    }
 			    }
 		    }
 	}
-        return result;
+	return result;
       }
 
-
-   private String getCurrentText(LpexTextViewer viewer)
-   {
+    private String getCurrentText(LpexTextViewer viewer)
+    {
       StringBuffer currentText = new StringBuffer();
 
       LpexView lpexView = viewer.getLpexView();
