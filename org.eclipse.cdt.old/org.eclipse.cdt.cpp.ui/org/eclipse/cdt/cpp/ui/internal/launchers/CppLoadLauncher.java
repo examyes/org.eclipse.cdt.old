@@ -6,7 +6,6 @@ package org.eclipse.cdt.cpp.ui.internal.launchers;
  * the Common Public License which accompanies this distribution.
  */
 
-import java.util.Hashtable;
 
 import org.eclipse.cdt.dstore.core.model.*;
 
@@ -34,7 +33,6 @@ import com.ibm.debug.daemon.DaemonLauncherDelegate;
 import com.ibm.debug.daemon.DaemonSocketConnection;
 import com.ibm.debug.internal.picl.PICLDebugTarget;
 
-
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.wizards.*;
@@ -48,8 +46,7 @@ public class CppLoadLauncher implements ILauncherDelegate, IOldDaemonSupport
     private static DataElement _directory;
     private static DataElement _executable;
     private static ModelInterface _api;
-
-    private Hashtable loadInfoHashtable = new Hashtable();
+    private static Object[] _elements;
 
 
     public CppLoadLauncher()
@@ -67,6 +64,7 @@ public String getLaunchMemento(Object obj)
 	}
     public boolean launch(Object[] elements, String mode, ILauncher launcher)
     {
+        _elements = elements;
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
         if(selection == null)
@@ -119,9 +117,9 @@ public String getLaunchMemento(Object obj)
 	    }
 
         //start the daemon to listen
-        int port = DaemonLauncherDelegate.launchDaemon(elements);
-        if (port < 0)
-            return false;
+        //int port = DaemonLauncherDelegate.launchDaemon(elements);
+        //if (port < 0)
+        //    return false;
 
         // display the wizard
         CppLoadLauncherWizard w= new CppLoadLauncherWizard();
@@ -140,6 +138,13 @@ public String getLaunchMemento(Object obj)
     public void doLaunch(PICLLoadInfo loadInfo, String workingDirectory)
     {
         CppSourceLocator sourceLocator = null;
+
+
+        //ensure the daemon is listening
+        int port = DaemonLauncherDelegate.launchDaemon(_elements);
+        if (port < 0)
+            return;
+
 	
 	if (_executable != null)
 	    {
@@ -151,7 +156,7 @@ public String getLaunchMemento(Object obj)
 		    }
 	   }
 	
-      PICLDebugTarget target = new  PICLDebugTarget(loadInfo,loadInfo.getEngineConnectionInfo()); //connection info can't be null
+      PICLDebugTarget target = new  PICLDebugTarget(loadInfo, loadInfo.getEngineConnectionInfo());
       int key = CoreDaemon.generateKey();
       CoreDaemon.storeDebugTarget(target, key);
 
