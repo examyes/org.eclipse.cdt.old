@@ -256,7 +256,7 @@ public class FileSystemMiner extends Miner
      }
      else if (name.equals("C_OPEN") && (!subject.getType().equals("Project")))
        {
-	 status = handleOpen(subject, status);
+	 status = handleOpen(subject.dereference(), status);
        }
      else if (name.equals("C_MOVE"))
      {
