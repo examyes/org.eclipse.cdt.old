@@ -31,8 +31,6 @@ import java.util.*;
 public class OutputViewPart extends ViewPart implements ILinkable
 {
     protected OutputViewer        _viewer;
-    protected HostsPlugin         _plugin;  
-
     public OutputViewPart()
     {
 	super();
@@ -40,8 +38,6 @@ public class OutputViewPart extends ViewPart implements ILinkable
     
     public void createPartControl(Composite container)
     {
-	_plugin = HostsPlugin.getDefault();
-	
 	Table table = new Table(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
 	
 	_viewer = new OutputViewer(table);
@@ -52,10 +48,6 @@ public class OutputViewPart extends ViewPart implements ILinkable
 	layout.addColumnData(new ColumnWeightData(256));
 	TableColumn tc = new TableColumn(table, SWT.NONE, 0);
 	tc.setText("Output");
-	
-	updateViewBackground();
-	updateViewForeground();
-	updateViewFont();
 	
 	getSite().setSelectionProvider(_viewer);
 	fillLocalToolBar();
@@ -111,49 +103,6 @@ public class OutputViewPart extends ViewPart implements ILinkable
 	_viewer.setInput(element);
     }
 
-    public void updateViewForeground()
-    {
-      ArrayList colours = _plugin.readProperty("OutputViewForeground");
-      if (colours.size() == 3)
-	  {
-	      int r = new Integer((String)colours.get(0)).intValue();
-	      int g = new Integer((String)colours.get(1)).intValue();
-	      int b = new Integer((String)colours.get(2)).intValue();
-	      
-	      _viewer.setForeground(r, g, b);	      
-	  }    
-    }
-    
-  public void updateViewBackground()
-  {
-      ArrayList colours = _plugin.readProperty("OutputViewBackground");
-      if (colours.size() == 3)
-	  {
-	      int r = new Integer((String)colours.get(0)).intValue();
-	      int g = new Integer((String)colours.get(1)).intValue();
-	      int b = new Integer((String)colours.get(2)).intValue();
-	      
-	      _viewer.setBackground(r, g, b);	      
-	  }    
-  }
-
-    public void updateViewFont()
-    {
-      ArrayList fontArray = _plugin.readProperty("OutputViewFont");
-      if (fontArray.size() > 0)
-	  {
-	      String fontStr = (String)fontArray.get(0);
-	      fontStr = fontStr.replace(',', '|');
-	      FontData fontData = new FontData(fontStr);
-	      _viewer.setFont(fontData);
-	  }
-      else
-	  {
-	      Font font = JFaceResources.getTextFont();
-	      _viewer.setFont(font);
-	      
-	  }
-    }
 
     public Shell getShell()
     {

@@ -4,6 +4,9 @@ package com.ibm.cpp.ui.internal.views;
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
  */
 
+import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
+
 import com.ibm.dstore.hosts.*;
 import com.ibm.dstore.hosts.views.*;
 
@@ -30,10 +33,14 @@ import org.eclipse.ui.part.*;
 import java.util.*;
 
 public class CppOutputViewPart extends OutputViewPart 
+    implements ICppProjectListener
+
 {
+    protected CppPlugin         _plugin;  
+
     public void createPartControl(Composite container)
     {
-	_plugin = HostsPlugin.getDefault();
+	_plugin = CppPlugin.getDefault();
 	
 	Table table = new Table(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | 
 				SWT.MULTI | SWT.FULL_SELECTION | SWT.HIDE_SELECTION);
@@ -47,6 +54,9 @@ public class CppOutputViewPart extends OutputViewPart
 	TableColumn tc = new TableColumn(table, SWT.NONE, 0);
 	tc.setText("Output");
 	
+	CppProjectNotifier notifier = _plugin.getModelInterface().getProjectNotifier();
+	notifier.addProjectListener(this);
+
 	updateViewBackground();
 	updateViewForeground();
 	updateViewFont();
@@ -55,4 +65,69 @@ public class CppOutputViewPart extends OutputViewPart
 	fillLocalToolBar();
 	
     }
+
+    public void updateViewForeground()
+    {
+      ArrayList colours = _plugin.readProperty("OutputViewForeground");
+      if (colours.size() == 3)
+	  {
+	      int r = new Integer((String)colours.get(0)).intValue();
+	      int g = new Integer((String)colours.get(1)).intValue();
+	      int b = new Integer((String)colours.get(2)).intValue();
+	      
+	      _viewer.setForeground(r, g, b);	      
+	  }    
+    }
+    
+  public void updateViewBackground()
+  {
+      ArrayList colours = _plugin.readProperty("OutputViewBackground");
+      if (colours.size() == 3)
+	  {
+	      int r = new Integer((String)colours.get(0)).intValue();
+	      int g = new Integer((String)colours.get(1)).intValue();
+	      int b = new Integer((String)colours.get(2)).intValue();
+	      
+	      _viewer.setBackground(r, g, b);	      
+	  }    
+  }
+
+    public void updateViewFont()
+    {
+      ArrayList fontArray = _plugin.readProperty("OutputViewFont");
+      if (fontArray.size() > 0)
+	  {
+	      String fontStr = (String)fontArray.get(0);
+	      fontStr = fontStr.replace(',', '|');
+	      FontData fontData = new FontData(fontStr);
+	      _viewer.setFont(fontData);
+	  }
+      else
+	  {
+	      Font font = JFaceResources.getTextFont();
+	      _viewer.setFont(font);
+	      
+	  }
+    }
+
+    public void projectChanged(CppProjectEvent event)
+    {
+	int type = event.getType();
+	switch (type)
+	    {
+	    case CppProjectEvent.VIEW_CHANGE:
+		{
+		    updateViewBackground();		
+		    updateViewForeground();		
+		    updateViewFont();
+		}
+		break;
+		
+		
+	    default:
+		break;
+	    }
+    }
+
+
 }

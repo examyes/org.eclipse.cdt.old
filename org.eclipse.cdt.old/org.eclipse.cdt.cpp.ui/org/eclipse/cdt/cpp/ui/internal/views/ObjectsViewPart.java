@@ -383,7 +383,9 @@ public class ObjectsViewPart extends GenericViewPart
 	
 	if (event.getType() == CppProjectEvent.COMMAND)
 	    {
-		DataElement commandStatus = event.getObject();		    
+		DataElement commandStatus = event.getObject();
+		if (commandStatus != null)
+		    {
 		DataElement commandObject = commandStatus.getParent();
 		
 		if ((commandObject != null) && (event.getProject() != null))
@@ -403,6 +405,7 @@ public class ObjectsViewPart extends GenericViewPart
 			    {
 				pm.worked(5);
 			    }		 
+		    }
 		    }
 	    }   
     }

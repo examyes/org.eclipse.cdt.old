@@ -107,7 +107,7 @@ public class ManagedProjectMiner extends Miner
 	}
 	private DataElement refreshProject(DataElement theUnmanagedProject)
 	{
-		System.out.println("Got it");
+
 		return null;
 	}
 }
