@@ -34,6 +34,7 @@ public class CmdPreparePgm extends Command
           Gdb.traceLogger.dbg(1,"Attempting to find program: " + programName);
 
 	String[] errorMsg = new String[1];
+	errorMsg[0] = this._debugSession.getResourceString("GDBPICL_FAILED_TO_LOAD_PROGRAM") + programName;
         if (!_debugSession.setStartProgramName(programName, _req.reqPgmParms(), errorMsg)) {
            _rep = new ERepPreparePgm(EPDCSession, 
 				     new EStdTime(0,0,0), 

@@ -513,7 +513,7 @@ public class GdbDebugSession extends DebugSession {
 				if (str == null || str.equals("")) {
 					str = " ";
 				}
-				cp.addPgmOutputLine(str);
+//				cp.addPgmOutputLine(str);
 				cp.addCmdLogLine(str);
 			}
 			uiMessages.removeAllElements();
@@ -618,6 +618,27 @@ public class GdbDebugSession extends DebugSession {
 					+ parms);
 		_mainProgram = programName;
 		
+		StringBuffer buffer = new StringBuffer();
+		char[] mainProg = _mainProgram.toCharArray();
+		
+		for (int i=0; i<mainProg.length; i++)
+		{
+			if (escapeChars.indexOf(mainProg[i]) >= 0)
+			{
+				buffer.append('\\');
+			}
+			buffer.append(mainProg[i]);
+		}
+		
+		_mainProgram = buffer.toString();
+		
+		if (Gdb.traceLogger.DBG)
+		{
+			Gdb.traceLogger.dbg(1, "Program name parsed:  " + _mainProgram);
+		}
+		
+		programName = _mainProgram;
+		
 		if (_mainProgram.indexOf("/") != -1)
 		{
 			int last = _mainProgram.lastIndexOf("/");
@@ -672,7 +693,7 @@ public class GdbDebugSession extends DebugSession {
 						+ programName
 						+ " ("
 						+ lastMsg
-						+ ")");
+						+ ")");					
 			return false;
 		} else
 			for (int i = 0; i < lines.length; i++) {
@@ -2055,5 +2076,9 @@ public class GdbDebugSession extends DebugSession {
 	private Hashtable _parts = new Hashtable();
 	private Hashtable _dllToStop = new Hashtable();
 	protected String _dataAddress = "";
+	
+	private String escapeChars=" ~`!@#$%^&()+={}[];,\\/:*?\"<>|";
+	
+	// \/:*?"<>|
 
 }
