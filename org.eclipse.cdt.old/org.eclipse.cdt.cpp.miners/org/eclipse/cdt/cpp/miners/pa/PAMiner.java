@@ -310,6 +310,7 @@ public class PAMiner extends Miner {
    
    status.setAttribute(DE.A_NAME, "done");
    status.setAttribute(DE.A_VALUE, formatStr);
+   // System.out.println("format: " + status);
  }
  
 
@@ -355,6 +356,8 @@ public class PAMiner extends Miner {
    
    File file = fileElement.getFileObject(false);
    
+   // System.out.println("file: " + file.getAbsolutePath());
+   
    PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
    
    String traceFormat = adaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
@@ -381,16 +384,18 @@ public class PAMiner extends Miner {
   */
  public void handleTraceProgramAnalyze(DataElement traceElement, DataElement status) {
   
+  // System.out.println("traceElement: " + traceElement);
+  
   String traceFormat = PADataStoreAdaptor.getAttribute(traceElement, getLocalizedString("pa.TraceFormat"));
   
   // System.out.println("trace format: " + traceFormat);
   
   // Create profile command according to the trace format
   String profileCommand = null;
-  if (traceFormat.indexOf("gprof") >= 0) {
+  if (traceFormat != null && traceFormat.indexOf("gprof") >= 0) {
    profileCommand = "gprof -b";
   }
-  else if (traceFormat.equals("functioncheck")) {
+  else if (traceFormat != null && traceFormat.equals("functioncheck")) {
    profileCommand = "fcdump -demangle-params";
   }
   else {
@@ -422,7 +427,7 @@ public class PAMiner extends Miner {
    status.setAttribute(DE.A_NAME, "error");
    return;
   }
-    
+      
   // Parse the trace output
   BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
   PATraceFile traceFile = null;
@@ -439,7 +444,6 @@ public class PAMiner extends Miner {
   PADataStoreAdaptor adaptor = new PADataStoreAdaptor(traceElement);
   adaptor.populateDataStore(traceElement, traceFile);
   status.setAttribute(DE.A_NAME, "done");
-  
  }
  
  

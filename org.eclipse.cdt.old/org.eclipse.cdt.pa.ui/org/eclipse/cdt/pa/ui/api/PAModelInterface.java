@@ -239,6 +239,8 @@ public class PAModelInterface implements IDomainListener
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Analyze", "org.eclipse.cdt.pa.ui.actions.AnalyzeTraceProgramAction");
   dataStore.createObject(traceProgramD, DE.T_UI_COMMAND_DESCRIPTOR, "Run and Analyze", "org.eclipse.cdt.pa.ui.actions.RunAndAnalyzeTraceProgramAction");
   
+  dataStore.getDomainNotifier().addDomainListener(this);
+  
  }
 
  // From IDomainListener
@@ -260,7 +262,7 @@ public class PAModelInterface implements IDomainListener
    if ((object != null) && (object.getType().equals("status")))
    {
      DataElement traceElement = (DataElement)_statuses.get(object);
-	 _statuses.remove(object);
+     _statuses.remove(object);
 
      if (object.getName().equals("done"))
      {
@@ -271,6 +273,9 @@ public class PAModelInterface implements IDomainListener
        if (commandValue.equals("C_QUERY_TRACE_FILE_FORMAT") 
           || commandValue.equals("C_QUERY_TRACE_PROGRAM_FORMAT"))
        {
+          // System.out.println("format changed");
+	  // System.out.println("format: " + object);
+	  
           PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FORMAT_CHANGED, object, traceElement);
          _notifier.fireTraceChanged(traceEvent);
        }
@@ -297,13 +302,15 @@ public class PAModelInterface implements IDomainListener
    }
  }
 
-
+ /**
+  * Monitor the command status
+  */
  public void monitorStatus(DataElement status, DataElement traceElement)
  {
-	if (status != null && !_statuses.containsKey(status))
-	{
-	  _statuses.put(status, traceElement);		
-	}
+   if (status != null && !_statuses.containsKey(status))
+   {
+     _statuses.put(status, traceElement);		
+   }
  }
   
   
@@ -344,6 +351,7 @@ public class PAModelInterface implements IDomainListener
   */
  public DataElement setAttribute(DataElement element, String name, String value) {
   
+  DataStore dataStore = element.getDataStore();
   DataElement attributeElement = null;
   ArrayList attributes = element.getAssociated("attributes");
   for (int i=0; i < attributes.size(); i++) {
@@ -356,8 +364,11 @@ public class PAModelInterface implements IDomainListener
    attributeElement.setAttribute(DE.A_NAME, value);
   }
   else {
-   attributeElement = _dataStore.createObject(null, name, value);
-   _dataStore.createReference(element, attributeElement, "attributes");
+   attributeElement = dataStore.createObject(null, name, value);
+   dataStore.createReference(element, attributeElement, "attributes");
+   if (dataStore != _dataStore)
+    dataStore.setObject(attributeElement);
+    dataStore.setObject(element);
   }
 
   return attributeElement;
@@ -514,7 +525,7 @@ public class PAModelInterface implements IDomainListener
    if (dataStore != getDataStore()) {
     dataStore.setObject(traceFile);
    }
-   
+      
    DataElement parseCommand = dataStore.localDescriptorQuery(traceFile.getDescriptor(), "C_PARSE_TRACE");
    DataElement status = dataStore.command(parseCommand, traceFile);
    
@@ -575,7 +586,7 @@ public class PAModelInterface implements IDomainListener
    setAttribute(traceProgram, "trace format", traceFormat);
    
    if (dataStore != getDataStore()) {
-     dataStore.setObject(traceProgram);
+     dataStore.setObject(traceProject);
    }
    
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceProgram);
@@ -598,7 +609,7 @@ public class PAModelInterface implements IDomainListener
   * has been generated.
   */
  public void analyzeTraceProgram(DataElement traceProgram) {
- 
+    
    DataStore dataStore = traceProgram.getDataStore();        
    DataElement analyzeCommand = dataStore.localDescriptorQuery(traceProgram.getDescriptor(), "C_ANALYZE_PROGRAM");
    DataElement status = dataStore.command(analyzeCommand, traceProgram);
