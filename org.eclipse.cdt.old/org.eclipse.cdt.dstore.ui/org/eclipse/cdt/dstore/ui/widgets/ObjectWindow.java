@@ -459,6 +459,34 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 			      }
 			  if (_viewer != null)
 			      {
+			      	DataElement des = object.getDescriptor();
+			      	if (des != null)
+			      	{
+			          	ArrayList relationships = _dataStore.getRelationItems(des, null);	
+				      	if (relationships.size() == 0)
+				      	{
+				      	-	return;
+				      	}
+				      	else
+				      	{
+				      		boolean visible = false;
+				      		for (int i = 0; (i < relationships.size()) && !visible; i++)
+				      		{
+				      			DataElement relationship = (DataElement)relationships.get(i);
+				      			if (relationship.depth() > 0)
+				      			{
+				      				visible = true;
+				      			}
+				      		}
+				      		
+				      		if (visible == false)
+				      		{
+				      			return;	
+				      		}
+				      	}
+			      	}
+			      
+			      	
 				  _toolBar.setInput(object);
 			      }
 		      }
