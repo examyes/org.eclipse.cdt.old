@@ -1,0 +1,222 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+   <title>Eclipse Tools - CDT June Project Meeting Minutes</title>
+<link rel="stylesheet" HREF="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project" type="text/css">
+</head>
+<body>
+&nbsp;
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT WIDTH="60%">CDT&nbsp;
+<br>January 2004 Project Meeting Minutes</td>
+
+<td WIDTH="40%"><img SRC="http://dev.eclipse.org/images/Idea.jpg" HSPACE=50 height=86 width=120 align=CENTER></td>
+</tr>
+</table>
+
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"><b><font face="Arial,Helvetica"><font color="#FFFFFF">CDT
+Meeting Minutes</font></font></b></td>
+</tr>
+</table>
+
+<p><b><i>January 7, 2003</i></b>
+<p>Phone in meeting of Eclipse CDT stakeholders. Review progress to date
+and map out the future direction for the Eclipse CDT Project.
+<p>11:00 to 1PM EST on June 3 2003
+<p>&nbsp;<b>View the
+<a <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/news/01-2004/01-2004-notice.html?cvsroot=Tools_Project">Agenda</a></b><p>&nbsp;<p><b>Minutes</b>
+<br>&nbsp;<p>Here are the minutes of the CDT conference call.
+<br><b>Present:</b>
+<table VALIGN="TOP" COLSPAN="2" width="1208" height="204" >
+<tr>
+<td VALIGN=TOP WIDTH="258" height="120">QNX
+<ul>
+
+<li>
+David Inglis&nbsp;</li>
+
+<li>
+Alain Magloire</li>
+
+<li>
+Thomas Fletcher</li>
+
+<li>
+Sebastien Marineau</li>
+</ul>
+</td>
+
+<td VALIGN=TOP WIDTH="270" height="120">Rational
+<ul>
+
+<li>
+Doug Schaefer&nbsp;&nbsp;</li>
+
+<li>
+Dave Daoust</li>
+
+<li>
+John Camelon</li>
+
+<li>
+Hoda Amer</li>
+
+<li>
+Vlad Hirsl</li>
+
+<li>
+Andrew Niefer</li>
+
+<li>
+Mathieu Lapensee</li>
+
+<li>
+James Ciesielski</li>
+
+<li>
+Tanya Wolff</li>
+
+<li>
+Brent Nicolle</li>
+
+<li>
+Angelina Gomes</li>
+
+<li>
+Michel Paquet</li>
+</ul>
+<p>&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="243" height="120">Redhat
+<ul>
+<li>
+John Healy&nbsp;</li>
+
+<li>
+Jeremy Handcock</li>
+</ul>
+<p>&nbsp;</td>
+
+<td VALIGN=TOP WIDTH="218" height="120">Intel<ul>
+  <li>Leo Treggiari</li>
+  <li>Bob Montelioni</li>
+</ul>
+</td>
+
+<td VALIGN=TOP WIDTH="234" height="120">Altera<ul>
+  <li>Traci Miranda</li>
+</ul>
+</td>
+
+<td VALIGN=TOP WIDTH="234" height="120">Real Time Innovations<ul>
+  <li>Lori Frailey</li>
+</ul>
+</td>
+</tr>
+
+</table>
+
+<p>The following was discussed:
+<ol>
+<li>
+<b>Update from participants:</b></li>
+
+<p>&nbsp;</p>
+<p><u><b>QNX</b>:</u></p>
+<p>&nbsp;<ol>
+<li>QNX have cut over to a 1.2.1 build (their own build) as part testing their 
+upcoming release. Testing going well, would be happy with a 1.2.1 GA build 
+anytime.<p>&nbsp;</li>
+<li>Hoping to have a 1st cut at a proposal for the hierarchy view (class 
+browser) feature in the next week.</li>
+</ol>
+</ol>
+
+<p>&nbsp;<p><u><b>IBM-Rational:</b></u><ol>
+  <li>&nbsp;Continue to work on 2.0 features and helping with fixing and 
+  committing patches that address 1.2 issues.<br>
+&nbsp;</li>
+  <li>&nbsp;In the middle of creating design specs for all 2.0 feature work, 
+  will be done by end of January.<br>
+&nbsp;</li>
+  <li>Some Content Assist now in the M6 build, should be finishing up near the 
+  M7 build.<br>
+&nbsp;</li>
+  <li>The on-line documention activities are being taken over by a different 
+  IBM-Rational person, Angelina Gomes. We welcome Angelina on board and look 
+  forward to working with her when she becomes assigned to this new task in 
+  Mid-February. A thank you also to Tanya-Marise De Sousa who has been handling 
+  these activities over the course of the 1.2 stream.</li>
+  </ol>
+
+<p><u><b>Redhat</b></u>: 
+<ol>
+  <li>Continuing work on hover help and profiling plugins, should be ready to 
+  commit very soon. A question came up about how the hover help will be 
+  structured given that its a little RedHat/Linux specific; the answer was that 
+  it will be in a separate plug in that it not part of the base CDT.<br>
+&nbsp;</li>
+  <li>Internal planning for 2004 being wrapped up, should have a clearer picture 
+  w.r.t. to CDT activities in 2004 soon.</li>
+  </ol>
+  <p>&nbsp;<p><u><b>Altera:</b></u> Working on a product prototype based on CDT 
+  1.2<p>&nbsp;<p><u><b>Intel</b></u>: No new update...<p>&nbsp;<p><u><b>Real 
+  Time Innovations:</b></u> Keeping themselves informed of CDT developments<p>&nbsp;<p>
+<b>CDT 1.2.1 status:</b></li> </p>
+  <p>Continuing to find and fix some issues on the 1.2.1 RC1 build, but nothing 
+  worth holding off doing a GA build for wider adoption. A target was set for 
+  doing another release candidate build at the end of the following week 
+  (January 16, 2004).</p>
+  <p>&nbsp;</p>
+  <p><b>CDT 2.0 Status:</b></p>
+  <ul>
+    <li>The proposed <u><b>Managed Build Enhancements</b></u> feature will be been to the 
+    committed section of the 2.0 plan as IBM-Rational has committed the 
+    resources for the associated development, testing and documentation. See the
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/plans/CDT_R2.0_plan.html?cvsroot=Tools_Project">
+    CDT 2.0 Plan</a> for more details.<p>&nbsp;</li>
+    <li>We need to setup inbox mail accounts to help us better triage incoming 
+    defects, along the lines of what the Eclipse project does. Kleo has taken 
+    the action to request this via Webmaster, highlighting that this was 
+    discussed and agreed upon at the CDT monthly conference calls.</li>
+  </ul>
+  <p>&nbsp;</p>
+  <ul>
+    <li>Eclipse Conference coming up first week of February 2004. Several folks 
+    from QNX, IBM, Intel, RTI and possibly others will be attending. CDT 
+    specific highlights will include a presentation/demonstration and also a &quot;<i>birds 
+    of a feather&quot; </i>session.</li>
+  </ul>
+  <p>&nbsp;<p>
+<b>Documentation</b></li> </p>
+
+<p>As mentioned, Angelina Gomes is the new contact point for CDT documentation, 
+taking over for Tanya-Marise De Sousa. Angeline will not be active in this role 
+until approximately mid-February 2004. She will be monitoring the documentation 
+mailing list and participating in some CDT design proposal meetings in the 
+meantime in an effort to get up to speed as quickly as possible.<p>&nbsp;</p>
+  <p>
+<b>Verification/Bugs</b></li>:</p>
+  <p>Not much to discuss here since we are in the early stages of the 2.0 
+  release.
+  <p>&nbsp;</p>
+<b>Infrastructure/Builds</b></li>:<p>The CDT 2.0 automated build issues have 
+  been resolved, we are generating regular 2.0 builds again. </p>
+  <p><br>&nbsp;
+  <p>Any comments, additions, corrections etc. welcome! As always, many thanks
+to everyone for your ongoing support.&nbsp;<!-- Footer --> </p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%" >
+<tr>
+<td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0"></td>
+</tr>
+</table>
+
+<center><i>Last Modified on Friday February 6, 2004</i></center>
+
+</body>
+</html>
