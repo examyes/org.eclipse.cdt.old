@@ -6,6 +6,7 @@
   <topic label="Custom Perspectives"          href="concepts/views/custom.htm"/>
   <topic label="Details"                      href="concepts/views/details.htm"/>
   <topic label="Navigator"                    href="concepts/views/navigator.htm"/>
+  <topic label="C/C++ Projects"               href="concepts/views/cppprojects.htm"/>
   <topic label="Output"                       href="concepts/views/output.htm"/>
   <topic label="Parsed-Files"                 href="concepts/views/parsedfiles.htm"/>
   <topic label="Project-Objects"              href="concepts/views/projectobjects.htm"/>
