@@ -12,7 +12,7 @@
     <library name=".">
        	<export name="*" />      
      </library> 
-      <library name="cpp_miners_parser.jar">
+      <library name="miners_parser.jar">
        	<export name="*" />      
      </library> 
    </runtime>
