@@ -112,18 +112,7 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 			
 			if ((loc > 0) && (editor != null))
 			    {	
-				try
-				    {
-					IFileEditorInput input = (IFileEditorInput)editor.getEditorInput();
-					IFile file = input.getFile();
-					IMarker marker = file.createMarker(IMarker.TEXT);
-					marker.setAttribute(IMarker.LINE_NUMBER, loc);
-					
-					editor.gotoMarker(marker);
-				    }
-				catch (CoreException e)
-				    {
-				    }
+				((com.ibm.cpp.ui.internal.editor.CppEditor)editor).gotoLine(loc);
 			    }
 		    }
 	    }	

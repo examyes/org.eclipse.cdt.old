@@ -28,7 +28,7 @@ public class CppMarkerAnnotation extends MarkerAnnotation {
 	
 	public CppMarkerAnnotation(IMarker marker) {
 		super(marker);
-      System.out.println("CppMarkerAnnotation()");
+		//      System.out.println("CppMarkerAnnotation()");
 	}
 	/**
 	 * @see MarkerAnnotation#getUnknownImageName(IMarker)
@@ -42,7 +42,7 @@ public class CppMarkerAnnotation extends MarkerAnnotation {
 	 */
 	protected void initialize()
    {
-      System.out.println("CppMarkerAnnotation.initialize()");
+       //      System.out.println("CppMarkerAnnotation.initialize()");
 		try
       {
          IMarker breakpoint = getMarker();

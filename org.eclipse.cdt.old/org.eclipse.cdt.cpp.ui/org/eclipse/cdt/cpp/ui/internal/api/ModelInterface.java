@@ -1620,13 +1620,18 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			}
 		    if (resource == null)
 			{
-				IResourceDelta[] changes = delta.getAffectedChildren();
-				resource = changes[0].getResource();
-				
-				if (changes[0].getKind() == IResourceDelta.CHANGED)
+			    IResourceDelta[] changes = delta.getAffectedChildren(IResourceDelta.CHANGED | 
+										 IResourceDelta.ADDED | 
+										 IResourceDelta.REMOVED);
+			    for (int i = 0; i < changes.length; i++)
 				{
-			  	  resourceChanged(resource);
+				    resource = changes[i].getResource();
+				    resourceChanged(resource);
 				}
+			}
+		    else
+			{
+			    resourceChanged(resource);
 			}
 		}
 		break;

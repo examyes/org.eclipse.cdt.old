@@ -31,14 +31,18 @@ public class AmParser
   
   _project   = _dataStore.createObject(workspace, Am.MANAGED_PROJECT, theUnmanagedProject.getName(), theUnmanagedProject.getSource());
   _curFile   = theUnmanagedProject.getSource() + "/" + "Makefile.am";
-  try 
-  {
-   _theFileReader = new BufferedReader(new FileReader(new File(_curFile)));
-  }
-  catch (Throwable e)
-  {
-   System.out.println("Problem opening " + _curFile);
-  }
+  File theFile = new File(_curFile);
+  if (theFile.exists())
+      {
+	  try 
+	      {
+		  _theFileReader = new BufferedReader(new FileReader(theFile));
+	      }
+	  catch (Throwable e)
+	      {
+		  System.out.println("Problem opening " + _curFile);
+	      }
+      }
  }
  
  public AmParser (DataElement root, String subdir)
@@ -56,14 +60,19 @@ public class AmParser
   _project   = _dataStore.createObject(root, Am.MANAGED_PROJECT, subdir, root.getSource());
   _curFile   = root.getSource() + "/" + subdir + "/" + "Makefile.am";
   _project.setAttribute(DE.A_SOURCE, root.getSource() + "/" + subdir + "/");
-  try 
-  {
-   _theFileReader = new BufferedReader(new FileReader(new File(_curFile)));
-  }
-  catch (Throwable e)
-  {
-   System.out.println("Problem opening " + _curFile);
-  }
+
+  File theFile = new File(_curFile);
+  if (theFile.exists())
+      {
+	  try 
+	      {
+		  _theFileReader = new BufferedReader(new FileReader(theFile));
+	      }
+	  catch (Throwable e)
+	      {
+		  System.out.println("Problem opening " + _curFile);
+	      }
+      }  
  }
  
  private DataElement findExistingManagedProject(DataElement workspace, String name)

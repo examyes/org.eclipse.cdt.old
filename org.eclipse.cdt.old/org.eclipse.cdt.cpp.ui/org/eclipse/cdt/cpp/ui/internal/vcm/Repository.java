@@ -619,8 +619,7 @@ public class Repository extends Project
 
   public void build(int kind, IProgressMonitor monitor) throws CoreException
   {
-      CppBuilder.doBuild(this);
-      refreshLocal(1, null);
+      CppBuilder.getInstance().doBuild(this);
   }
   
   public void build(int kind, String builderName, Map args, IProgressMonitor monitor) throws CoreException

@@ -30,21 +30,53 @@ import org.eclipse.ui.*;
 
 public class CppBuilder extends IncrementalProjectBuilder
 {
+    private static CppBuilder _instance = new CppBuilder();
+
+    public class BuildMonitor extends Handler
+    {
+	private DataElement _status;
+	private DataElement _projectElement = null;
+
+	public BuildMonitor(DataElement status, DataElement project)
+	{
+	    _status = status;
+	    _projectElement = project;
+	}
+
+	public void handle()
+	{
+	    if (_status.getName().equals("done"))
+		{
+		    _projectElement.refresh(false);
+		    finish();
+		}
+	}
+
+    }
+
     public CppBuilder()
     {
     }
 
-    static public void doBuild(DataElement project)
+    public static CppBuilder getInstance()
+    {
+	return _instance;
+    }
+
+    public void doBuild(DataElement project)
     {
 	ModelInterface api = CppPlugin.getModelInterface();	
 	
 	IProject projectR = api.findProjectResource(project); 
 	String invocation = getInvocation(projectR);
 	
-	api.invoke(project, invocation, false);
+	DataElement status = api.invoke(project, invocation, false);
+	
+	BuildMonitor monitor = new BuildMonitor(status, project);
+	monitor.start();
     }
 
-    static public void doBuild(IProject project)
+    public void doBuild(IProject project)
     {
         if ((project != null) && project.isOpen() &&
 	    (CppPlugin.getDefault().isCppProject(project)))
@@ -55,7 +87,10 @@ public class CppBuilder extends IncrementalProjectBuilder
    		String invocation = getInvocation(project);
 		DataElement projectElement = api.findProjectElement(project);
 
-   		api.invoke(projectElement, invocation, false);
+   		DataElement status = api.invoke(projectElement, invocation, false);
+
+		BuildMonitor monitor = new BuildMonitor(status, projectElement);
+		monitor.start();
 	    }		
     }
 
@@ -91,7 +126,7 @@ public class CppBuilder extends IncrementalProjectBuilder
         if (goAndBuild == true)
         {
         	  monitor.beginTask("Building " + project.getName(), 100);
-           doBuild(project);	
+		  doBuild(project);	
         }
 
 

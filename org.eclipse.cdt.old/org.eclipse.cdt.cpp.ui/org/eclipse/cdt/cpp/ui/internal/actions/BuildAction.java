@@ -34,7 +34,7 @@ public class BuildAction extends CustomAction
 	IProject project = api.findProjectResource(_subject);
 	if (project != null)
 	    {
-		CppBuilder.doBuild(project);
+		CppBuilder.getInstance().doBuild(project);
 	    }
     }
 
