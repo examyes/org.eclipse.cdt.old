@@ -253,7 +253,8 @@ public class FileSystemMiner extends Miner
 							    "C_NEW");
 	  
 	  DataElement newF = createCommandDescriptor(newFD, getLocalizedString("model.File___"),
-						     "C_CREATE_FILE");
+						     "C_CREATE_FILE", false);
+
 	  DataElement inNewF = _dataStore.createObject(newF, "input", 
 						       "Enter Name for New file");
 	  DataElement newD = createCommandDescriptor(newFD,getLocalizedString("model.Directory___"),
