@@ -186,7 +186,9 @@ public abstract class Miner
 	
 	if (status == null)
 	    {
-		System.out.println("bad command " + name);
+		_dataStore.trace("bad command: ");
+		_dataStore.trace("\tcmd=" + command);
+		_dataStore.trace("\tparent=" + command.getParent());
 		return null;
 	    }
 	    
