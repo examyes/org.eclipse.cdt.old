@@ -80,11 +80,27 @@ public class SearchMiner extends Miner
       DataElement type = (DataElement)pattern.get(0).dereference();
 
       // find all matching types
-      ArrayList matches = _dataStore.findObjectsOfType(subject, type);
-
-      // find matches
-      compare(pattern.getName(), matches, status);
-
+      /****/
+      if (subject.getType().equals("Workspace"))
+	  {
+	      for (int i = 0; i < subject.getNestedSize(); i++)
+		  {
+		      DataElement project = subject.get(i);
+		      for (int j = 0; j < project.getNestedSize(); j++)
+			  {
+			      DataElement child = project.get(j);
+			      if (child.isReference() && child.getType().equals("Parse Reference"))
+				  {
+				      ArrayList matches = _dataStore.findObjectsOfType(child.dereference(), type);
+				      
+				      // find matches
+				      compare(pattern.getName(), matches, status);
+				  }
+			  }
+		  }
+	  }
+      
+      
       status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
       _dataStore.update(status);
       return status;      

@@ -2112,6 +2112,8 @@ public DataElement command(DataElement commandDescriptor,
 
 	// types of relationships
 	DataElement containsD     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.contents"));
+	containsD.setDepth(100);
+
 	DataElement parentD       = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.parent"));	
 	DataElement argsD         = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.arguments"));	
 	DataElement abstracts     = createRelationDescriptor(_descriptorRoot, getLocalizedString("model.abstracts"));

@@ -447,10 +447,32 @@ public class ViewMenu implements IMenuListener
 		for (int i = 0; i < items.size(); i++)
 		    {
 			DataElement item = (DataElement)items.get(i);
-			if (item.depth() > 0)
+			int depth = item.depth();
+			if (depth > 0)
 			    {
-				if (!_relationItems.contains(item))
-				    _relationItems.add(item);
+				if (_relationItems.size() == 0)
+				    {
+					_relationItems.add(item);
+				    }
+				else
+				    {
+					for (int j = 0; (j < _relationItems.size()) && !_relationItems.contains(item); j++)
+					    {
+						DataElement relItem = (DataElement)_relationItems.get(j);
+						if (relItem != item)
+						    {
+							if (depth > relItem.depth())
+							    {
+								_relationItems.add(j, item);
+							    }
+							else
+							    {
+								_relationItems.add(j + 1, item);
+							    }
+						    }
+						
+					    }
+				    }
 			    }
 		    }
 	    }
@@ -466,10 +488,31 @@ public class ViewMenu implements IMenuListener
 	  for (int i = 0; i < items.size(); i++)
 	      {
 		  DataElement item = (DataElement)items.get(i);
-		  if (item.depth() > 0)
+		  int depth = item.depth();
+		  if (depth > 0)
 		      {
-			  if (!_filterItems.contains(item))
-			      _filterItems.add(item);
+			  if (_filterItems.size() == 0)
+			      {
+				  _filterItems.add(item);
+			      }
+			  else
+			      {
+				  for (int j = 0; (j < _filterItems.size()) && !_filterItems.contains(item); j++)
+				      {
+					  DataElement filItem = (DataElement)_filterItems.get(j);
+					  if (filItem != item)
+					      {
+						  if (depth > filItem.depth())
+						      {
+							  _filterItems.add(j, item);
+						      }
+						  else
+						      {
+							  _filterItems.add(j + 1, item);
+						      }
+					      }
+				      }
+			      }
 		      }
 	      }	
 	  
