@@ -166,7 +166,7 @@
 		id="com.ibm.cpp.ui.ProjectObjectsViewPart"
 		name="%Project_Objects"
 		category="com.ibm.cpp.ui.cpp"
-		icon="icons/details.gif"
+		icon="icons/objects.gif"
 		class="com.ibm.cpp.ui.internal.views.ProjectObjectsViewPart">
 	</view>
         <view
