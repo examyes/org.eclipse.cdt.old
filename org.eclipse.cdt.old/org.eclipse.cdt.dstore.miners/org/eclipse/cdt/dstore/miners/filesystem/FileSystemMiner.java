@@ -156,8 +156,8 @@ public class FileSystemMiner extends Miner
 	  _fileDescriptor           = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.file"), 1);
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
-	  //  DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
-	  //					  getLocalizedString("model.Query"), "C_QUERY", false);
+	  DataElement dirQuery  = createCommandDescriptor(_fsystemObjectDescriptor, 
+							  getLocalizedString("model.Query"), "C_QUERY", false);
 	  //DataElement refresh   = createCommandDescriptor(_fsystemObjectDescriptor, 
 	  //						  getLocalizedString("model.Refresh"), "C_REFRESH");
 	  DataElement fileQuery  = createCommandDescriptor(_fileDescriptor,    
@@ -207,10 +207,10 @@ public class FileSystemMiner extends Miner
      String name         = getCommandName(theElement);    
 
      DataElement status  = getCommandStatus(theElement);
-
      DataElement subject = getCommandArgument(theElement, 0);
      if (name.equals("C_QUERY"))
        {
+	   System.out.println("Query " + subject);
          if (subject != null)
          {
 	     status = handleQuery(subject, status);
