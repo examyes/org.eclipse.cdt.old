@@ -171,6 +171,8 @@ public class Repository extends Project
     private CppPlugin _plugin;
  
     private Workspace _workspace;
+    
+    private ArrayList _markers;
 
     public Repository(Connection connection) 
     {
@@ -1013,7 +1015,79 @@ public class Repository extends Project
     public Shell getShell()
     {
 	return null;
+    } 
+   public IMarker createMarker(String type) throws CoreException
+    {
+		MarkerInfo info = new MarkerInfo();
+		info.setType(type);
+		IMarker result = new ElementMarker(this, type);
+
+		if (_markers == null)
+		{
+			_markers = new ArrayList();
+		}		
+		_markers.add(result);
+
+		return result;
     }
-   
+    
+    public IMarker findMarker(long id) throws CoreException 
+    {
+    	if (_markers != null)
+    	{
+    		for (int i = 0; i < _markers.size(); i++)
+			{
+				IMarker marker = (IMarker)_markers.get(i);
+				if (marker.getId() == id)
+				{
+					return marker;	
+				}
+			}
+			
+			return null;
+    	}    	
+    	else
+    	{
+    		return null;
+    	}
+	}
+
+
+	public IMarker[] findMarkers(String type, boolean includeSubtypes, int depth) throws CoreException 
+	{
+		ArrayList results = new ArrayList();
+		if (_markers != null)
+		{
+			int added = 0;
+
+			for (int i = 0; i < _markers.size(); i++)
+			{
+				IMarker marker = (IMarker)_markers.get(i);
+				//if (marker.getType().equals(type))
+				{
+					results.add(marker);
+					added++;	
+				}
+			}
+			
+			IMarker[] markers = new IMarker[results.size()];
+			for (int j = 0; j < results.size(); j++)
+			{
+				markers[j] = (IMarker)results.get(j);
+			}	
+			return markers;			
+		}
+	
+		return new IMarker[0];
+	}
+	
+	public void deleteMarkers(String type, boolean includeSubtypes, int depth) throws CoreException 
+	{
+		if (_markers != null)
+		{
+		  _markers.clear();
+		}
+	}
+    
 }
 

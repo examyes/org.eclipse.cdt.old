@@ -17,11 +17,11 @@ import java.util.*;
 public class ElementMarker implements IMarker
 {
     private long            _id;
-    private ResourceElement _resource;
+    private IResource       _resource;
     private HashMap         _attributes;
     private String          _type;
 
-    public ElementMarker(ResourceElement element, String type)
+    public ElementMarker(IResource element, String type)
     {
 	_resource = element;
 	_type = type;
@@ -31,7 +31,11 @@ public class ElementMarker implements IMarker
 
     public DataElement getElement()
     {
-	return _resource.getElement();
+    	if (_resource instanceof IDataElementContainer)
+    	{
+    		return ((IDataElementContainer)_resource).getElement();
+    	}
+    	return null;
     }
 
     public void delete() throws CoreException

@@ -48,7 +48,8 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     protected DataStore _dataStore;
   
     protected long  _modificationStamp;
-    protected boolean _isReadOnly;
+    
+    protected ArrayList _markers;
 
   public ResourceElement (DataElement e, IProject project)
   {
@@ -62,7 +63,6 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     _dataStore = _element.getDataStore();
     _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1); 
     _modificationStamp = 0;
-    _isReadOnly = false;
   }
 
   public ResourceElement (DataElement e, Object parent, IProject project)
@@ -77,7 +77,6 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     _dataStore = _element.getDataStore();
     _resourceDescriptor = _dataStore.find(_dataStore.getDescriptorRoot(), DE.A_NAME, "directory", 1);    
     _modificationStamp = 0;
-    _isReadOnly = false;
   }
 
   public void contributeActions(MenuManager menu, Object element, IStructuredSelection selection) 
@@ -361,7 +360,11 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     {
     }
 
-  
+    public boolean isReadOnly()
+    {
+	return false;
+    }
+
     private void deleteLocalFile()
     {
 	java.io.File fileObject = _element.getFileObject();
@@ -412,34 +415,7 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 	_children.remove(child);
     }
 
-    public IMarker createMarker(String type) throws CoreException
-    {
-	MarkerInfo info = new MarkerInfo();
-	info.setType(type);
-	IMarker result = new ElementMarker(this, type);
-
-	return result;
-    }
-    
-    
-  	public boolean isReadOnly()
-    {
-		DataElement permissionObj = null;
-		DataElement status = _element.doCommandOn("C_PERMISSIONS", true);
-
-		if (status != null && status.getNestedSize() > 0)
-		{
-			permissionObj = status.get(0);
-
-			if (permissionObj.getName().equals("readonly"))
-			{
-				return true;	
-			}
-		}
-		    
-		
-		return false;
-    }
+   
 
     public void setModificationStamp(long stamp)
     {
@@ -459,10 +435,11 @@ public class ResourceElement extends Container implements IDesktopElement, IData
 		else
 		{
 			dateObj = _dataStore.createObject(null, "date", "" + stamp);
+			
 		}
 		
 		args.add(dateObj); 
-		_dataStore.synchronizedCommand(dateDescriptor, args, _element);
+		_dataStore.command(dateDescriptor, args, _element);
 	    }
     }
 
@@ -617,6 +594,79 @@ public class ResourceElement extends Container implements IDesktopElement, IData
     {
 	getChildren(_element, true);
     }
+    
+    public IMarker createMarker(String type) throws CoreException
+    {
+		MarkerInfo info = new MarkerInfo();
+		info.setType(type);
+		IMarker result = new ElementMarker(this, type);
+
+		if (_markers == null)
+		{
+			_markers = new ArrayList();
+		}		
+		_markers.add(result);
+
+		return result;
+    }
+    
+    public IMarker findMarker(long id) throws CoreException 
+    {
+    	if (_markers != null)
+    	{
+    		for (int i = 0; i < _markers.size(); i++)
+			{
+				IMarker marker = (IMarker)_markers.get(i);
+				if (marker.getId() == id)
+				{
+					return marker;	
+				}
+			}
+			
+			return null;
+    	}    	
+    	else
+    	{
+    		return null;
+    	}
+	}
+
+
+	public IMarker[] findMarkers(String type, boolean includeSubtypes, int depth) throws CoreException 
+	{
+		ArrayList results = new ArrayList();
+		if (_markers != null)
+		{
+			int added = 0;
+
+			for (int i = 0; i < _markers.size(); i++)
+			{
+				IMarker marker = (IMarker)_markers.get(i);
+				//if (marker.getType().equals(type))
+				{
+					results.add(marker);
+					added++;	
+				}
+			}
+			
+			IMarker[] markers = new IMarker[results.size()];
+			for (int j = 0; j < results.size(); j++)
+			{
+				markers[j] = (IMarker)results.get(j);
+			}	
+			return markers;			
+		}
+	
+		return new IMarker[0];
+	}
+	
+	public void deleteMarkers(String type, boolean includeSubtypes, int depth) throws CoreException 
+	{
+		if (_markers != null)
+		{
+		  _markers.clear();
+		}
+	}
 }
 
 
