@@ -35,8 +35,8 @@ public class XMLparser
         _dataStore = dataStore;
         _tagStack = new Stack();
         _objStack = new Stack();
-	_maxBuffer = 100000;
-	_byteBuffer = new byte[_maxBuffer];
+		_maxBuffer = 100000;
+		_byteBuffer = new byte[_maxBuffer];
     }
     
     public void readFile(BufferedInputStream reader, int size, String path)
@@ -66,9 +66,8 @@ public class XMLparser
 	while (written < size)
 	    {			
 		try
-		    { 
-			int available = reader.available();
-			int read = reader.read(buffer, written, size - written);				  
+		    { 		   		
+				int read = reader.read(buffer, written, size - written);	
 			written += read;
 		    }
 		catch (IOException e)
@@ -91,12 +90,26 @@ public class XMLparser
     {
 	boolean done = false;
 	int offset = 0;
-
+	/*
+	try
+	{
+		return reader.readLine();
+	}
+	catch (IOException e)
+	{
+		
+	}
+	
+	return null;
+	*/
+	
+	try
+	{
 	while (!done)
 	    {
-		try
-		    {
+
 			int in = reader.read();
+
 			if (in == -1)
 			{
 				done = true;
@@ -123,27 +136,35 @@ public class XMLparser
 				offset++;
 			    }
 			}
-		    }
-		catch (IOException e)
-		    {
+	    }
+	}
+	catch (IOException e)
+	{
 			done = true; 
 
 			handlePanic(e);
 			
 			return null;
-		    }
-	    }
-
+	}
 
 	if (offset > 0)
 	    {
-		String result = new String(_byteBuffer, 0, offset);
+		  
+		String result = null;
+		try
+		{
+		result = new String(_byteBuffer, 0, offset, "UTF-8");
+		}
+		catch (IOException e)
+		{
+		}
 		return result; 
 	    }
 	else
 	    {
 		return null;
 	    }
+
     }
 
 
@@ -160,7 +181,6 @@ public class XMLparser
 
   public DataElement parseDocument(BufferedInputStream reader) throws IOException
       {
-	      {
 		  _tagStack.clear();
 		  _objStack.clear();
 		  		  
@@ -179,7 +199,7 @@ public class XMLparser
 		  while (!done)
 		      {
 			  String xmlTag = readLine(reader);
-			  
+	
 			  if (xmlTag != null)
 			      {
 				  String trimmedTag = xmlTag.trim();
@@ -204,31 +224,26 @@ public class XMLparser
 				      }
 				  else if ((matchTag != null) && trimmedTag.equals(matchTag))
 				      {
-				      	/*****/
-						  	// special case test
-						  	if (parent.getType().equals("status"))
+						 if (parent.getType().equals("status"))
+						 {
+						  	if (parent.getName().equals("almost done"))
 						  	{
-						  		if (parent.getName().equals("almost done"))
-						  		{
-						  			parent.setAttribute(DE.A_NAME, "done");	
-						  		}
+						  		parent.setAttribute(DE.A_NAME, "done");	
 						  	}
-						  	/***/ 
+						 }
 						  	
-					  _tagStack.pop();					  
-					  if (_tagStack.empty())
+					    _tagStack.pop();					  
+					    if (_tagStack.empty())
 					      {
 						  	done = true;
 					      }
-					  else if (_tagStack.size() == 1)
+					     else if (_tagStack.size() == 1)
 					      {
-						  parent = _rootDataElement;
+						    parent = _rootDataElement;
 					      }
-					  else
+					     else
 					      {
-						  	parent = (DataElement)_objStack.pop();
-						  	
-						  
+						  	parent = (DataElement)_objStack.pop();						  							  
 					      }
 					      					     	
 				      }
@@ -274,9 +289,8 @@ public class XMLparser
 							  _isFile = false;
 						      }
 						  
-						  String endTag = new String("</" + _tagType + ">");
-						  _tagStack.push(endTag);
-					     
+						  	String endTag = new String("</" + _tagType + ">");
+						  	_tagStack.push(endTag);					     
 					      }
 					  catch (Exception e)
 					      {
@@ -290,7 +304,7 @@ public class XMLparser
 			  if (_panic)
 			      return null;
 		      }
-	      }
+
 
 		DataElement result = _rootDataElement;
 		_rootDataElement = null;

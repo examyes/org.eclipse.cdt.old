@@ -22,8 +22,7 @@ public abstract class Receiver extends Thread
   private XMLparser           _xmlParser;
   private BufferedInputStream _in;
 
-  protected boolean          _canExit;
- 
+  protected boolean           _canExit;
 
   public Receiver(Socket socket, DataStore dataStore)
       {
@@ -34,7 +33,7 @@ public abstract class Receiver extends Thread
 
         try
         {
-          _in  = new BufferedInputStream(socket.getInputStream());
+          _in  = new BufferedInputStream(socket.getInputStream());                    
         }
         catch (UnknownHostException uhe)
         {
@@ -76,18 +75,18 @@ public abstract class Receiver extends Thread
 
     public void handleInput()
       {
-   
-      	
         try
         {
 	    // wait on the socket
 	    DataElement rootObject = _xmlParser.parseDocument(_in);
 	    
+
 	    if (rootObject != null)
 		{
 		    String type = rootObject.getType();
 		    if (!type.equals("FILE"))
 			{
+
 			    handleDocument(rootObject);
 			}
 		}

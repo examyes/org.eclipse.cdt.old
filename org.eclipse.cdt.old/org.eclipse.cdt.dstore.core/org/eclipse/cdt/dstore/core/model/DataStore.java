@@ -2574,15 +2574,17 @@ public final class DataStore
           File newFile = new File(file.getCanonicalPath());
           if (newFile.canWrite())
           {
-          FileOutputStream fileStream = new FileOutputStream(newFile);
-	  	  PrintStream writer = new PrintStream(fileStream);
+   		  	FileOutputStream fileStream = new FileOutputStream(newFile);
+	  	  	PrintStream fileWriter = new PrintStream(fileStream);
+			BufferedWriter dataWriter = new BufferedWriter(new OutputStreamWriter(fileStream, "UTF-8"));
 
           XMLgenerator generator = new XMLgenerator();
           generator.setIgnoreDeleted(true);
-          generator.setWriter(writer);
+          generator.setFileWriter(fileWriter);
+          generator.setDataWriter(dataWriter);
           generator.setBufferSize(1000);
 	      generator.generate(root, depth);
-	  	  generator.flush();
+	  	  generator.flushData();
 	  
           fileStream.close();
           }
@@ -2826,28 +2828,35 @@ public final class DataStore
     public void load(DataElement root, String pathName)
     {
         String fileName = pathName;
-        BufferedInputStream document = loadFile(fileName);
+ 
+        FileInputStream inFile = loadFile(fileName);
+        if (inFile != null)
+        {        	        
+         BufferedInputStream document = new BufferedInputStream(inFile);
+           
         if (document != null)
 	    {
           try
           {
             XMLparser parser = new XMLparser(this);
             DataElement subRoot = parser.parseDocument(document);
-	    if (subRoot != null)
-		{
-		    root.removeNestedData();
-		    root.addNestedData(subRoot.getNestedData(), true);
-		    refresh(root);
-		}
+	   		 if (subRoot != null)
+			{	
+			    root.removeNestedData();
+			    root.addNestedData(subRoot.getNestedData(), true);
+			    refresh(root);
+			}
           }
           catch (IOException e)
 	      {
 	      }
 	    }
+        }
+   
     }
     
-    // this should be gone
-    public static BufferedInputStream loadFile(String fileName)
+    
+    public static FileInputStream loadFile(String fileName)
       {
         String document = null;
         File file = new File(fileName);
@@ -2856,9 +2865,8 @@ public final class DataStore
           try
           {
             FileInputStream inFile = new FileInputStream(file);            
-            BufferedInputStream in= new BufferedInputStream(inFile);
 
-            return in;
+            return inFile;
           }
           catch (FileNotFoundException e)
           {

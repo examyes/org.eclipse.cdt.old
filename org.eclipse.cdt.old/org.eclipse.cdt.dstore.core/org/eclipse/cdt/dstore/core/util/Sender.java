@@ -16,9 +16,10 @@ import java.util.*;
 
 public class Sender implements ISender
 {
-  private Socket            _socket;
-  private PrintStream       _out;
-  private XMLgenerator      _xmlGenerator;
+  private Socket             _socket;
+  private PrintStream        _outFile;
+  private BufferedWriter     _outData;
+  private XMLgenerator       _xmlGenerator;
 
   public Sender(Socket socket)
     {
@@ -26,21 +27,24 @@ public class Sender implements ISender
       _xmlGenerator = new XMLgenerator();
 
       try
-	{
+ 	  {
 	    int bufferSize = _socket.getSendBufferSize();	  
 	  
-	  _socket.setSendBufferSize(bufferSize);	  
-	  _xmlGenerator.setBufferSize(bufferSize);
-	}
+	    _socket.setSendBufferSize(bufferSize);	  
+	    _xmlGenerator.setBufferSize(bufferSize);
+	  }
       catch (SocketException e)
-	{
-	  System.out.println("Sender:" + e);	  
-	}      
+	  {
+	   System.out.println("Sender:" + e);	  
+	  }      
       try
       {
-        _out = new PrintStream(_socket.getOutputStream());
-	_xmlGenerator.setWriter(_out);	  
-	_xmlGenerator.setGenerateBuffer(false);
+        _outFile = new PrintStream(_socket.getOutputStream());
+        _outData = new BufferedWriter(new OutputStreamWriter(_socket.getOutputStream(), "UTF-8"));
+        
+	    _xmlGenerator.setFileWriter(_outFile);	  
+	    _xmlGenerator.setDataWriter(_outData);
+	    _xmlGenerator.setGenerateBuffer(false);
       }
       catch (java.io.IOException e)
       {
@@ -55,53 +59,61 @@ public class Sender implements ISender
 
   public void sendDocument(String document)
       {
-	synchronized(_out)
+    	synchronized(_outData)
         {
-	      _out.println(document);
-              _out.flush();
+        	try
+        	{
+		      _outData.write(document, 0, document.length());
+              _outData.flush();
+        	}
+        	catch (IOException e)
+        	{
+        	}        	
         }
       }
 
   public void sendFile(DataElement objectRoot, File file, int depth)
       {
-	synchronized(_out)
+     	synchronized(_outData)
         {
           _xmlGenerator.empty();	  
           _xmlGenerator.generate(objectRoot, depth, file);
-          _xmlGenerator.flush();
+          _xmlGenerator.flushData();
         }
       }
 
   public void sendFile(DataElement objectRoot, byte[] bytes, int size)
       {
-	synchronized(_out)
+    	synchronized(_outData)
         {
           _xmlGenerator.empty();	  
           _xmlGenerator.generate(objectRoot, bytes, size);
-          _xmlGenerator.flush();
+          _xmlGenerator.flushData();
         }
       }
 
   public void sendAppendFile(DataElement objectRoot, byte[] bytes, int size)
       {
-	synchronized(_out)
+		synchronized(_outFile)
         {
           _xmlGenerator.empty();	  
           _xmlGenerator.generate(objectRoot, bytes, size, true);
-          _xmlGenerator.flush();
+         // _xmlGenerator.flushData();
         }
       }
 
   public void sendDocument(DataElement objectRoot, int depth)
       {
-	  synchronized(_out)
+		  synchronized(_outData)
 	      {
-		  _xmlGenerator.empty();	  
-		  _xmlGenerator.generate(objectRoot, depth);
-		  _xmlGenerator.flush();
+			  _xmlGenerator.empty();	  
+			  _xmlGenerator.generate(objectRoot, depth);
+			  _xmlGenerator.flushData();
 	      }
+	      
+	      if (objectRoot.getParent() != null)
+	  	    objectRoot.getDataStore().deleteObject(objectRoot.getParent(), objectRoot);	      
       }
-
 
 }
 

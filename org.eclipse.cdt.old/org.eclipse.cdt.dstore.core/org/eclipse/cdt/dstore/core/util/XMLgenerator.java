@@ -19,7 +19,10 @@ public class XMLgenerator
     
     private int          _indent;
     private Stack        _tagStack;
-    private PrintStream  _writer;
+
+    private PrintStream         _fileWriter;
+    private BufferedWriter      _dataWriter;
+
     private int          _bufferSize;
     private boolean      _generateBuffer;
     private boolean      _updateAll;
@@ -49,19 +52,24 @@ public class XMLgenerator
     	_ignoreDeleted = flag;
     }
     
-    public void setWriter(PrintStream writer)
+    public void setFileWriter(PrintStream writer)
     {
-        _writer = writer;
+        _fileWriter = writer;
+    }
+    
+    public void setDataWriter(BufferedWriter writer)
+    {
+    	_dataWriter = writer;
     }
 
     public void setBufferSize(int size)
     {
-	_bufferSize = size;
+		_bufferSize = size;
     }
     
     public void setGenerateBuffer(boolean flag)
     {
-	_generateBuffer = flag;    
+		_generateBuffer = flag;    
     }
 
     private void append(String buffer)
@@ -71,41 +79,43 @@ public class XMLgenerator
     
     private void append(StringBuffer buffer)
     {
-	_document.append(buffer);	
+		_document.append(buffer);	
     }
     
     private void nextLine()
     {
-        if (_writer != null)
+        if (_dataWriter != null)
         {
-	  _document.append("\n");
+		  _document.append("\n");
   
-	  int length = _document.length();
-	  if (length > _bufferSize)
-	    {	      
-		flush();
-	    }
-	}	
-      }
+		  int length = _document.length();
+		  if (length > _bufferSize)
+		   {	      
+			flushData();
+		   }
+		}	
+    }
 
-    public void flush()
+    
+    
+    public void flushData()
     {
-	if (_document.length() > 0)
+      	if (_document.length() > 0)
 	    {
 		try
 		    {
-			_writer.println(_document);	      
-			_writer.flush();
+			_dataWriter.write(_document.toString(), 0, _document.length());
+			_dataWriter.newLine();	      
+			_dataWriter.flush();
 			_document.setLength(0);
 		    }
 		catch (Exception e)
 		    {
 			System.out.println(e);
-			_writer = null;
+			_dataWriter = null;
 		    }
-	    }
+	    }  	
     }
-    
     
     private void indent()
     {
@@ -225,7 +235,8 @@ public class XMLgenerator
 	      {
 		  try
 		      {
-			  flush();
+			  flushData();
+			  _fileWriter.flush();
 
 			  FileInputStream inFile = new FileInputStream(file);
 			  			  
@@ -240,8 +251,8 @@ public class XMLgenerator
 			      }
 			  
 			  // send everything across
-			  _writer.write(buffer, 0, size);
-			  _writer.flush();
+			  _fileWriter.write(buffer, 0, size);
+			  _fileWriter.flush();
 			  
 			  inFile.close();
 		      }
@@ -269,11 +280,11 @@ public class XMLgenerator
 	    }
 	if (_state == BODY)
 	    {
-		flush();
+		flushData();
 		
 		// send everything across
-		_writer.write(bytes, 0, size);
-		_writer.flush();
+		_fileWriter.write(bytes, 0, size);
+		_fileWriter.flush();
 	    }
 	else if (_state == EMPTY)
 	    {
