@@ -14,7 +14,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.jface.viewers.Viewer;
 
-import java.util.*; 
+import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -32,21 +32,21 @@ import org.eclipse.jface.viewers.Viewer;
 
 import org.eclipse.swt.widgets.Shell;
 
-public class FileResourceElement extends ResourceElement implements IFile				     
-{  
+public class FileResourceElement extends ResourceElement implements IFile				
+{
     private java.io.File _mountedFile = null;
     private java.io.File _currentFile = null;
 
   public FileResourceElement (DataElement e, IProject project)
   {
-    super(e, project);    
+    super(e, project);
     initializePath(project);
 
   }
 
   public FileResourceElement (DataElement e, Object parent, IProject project)
   {
-    super(e, parent, project);    
+    super(e, parent, project);
     initializePath(project);
   }
 
@@ -98,7 +98,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 			if (file.exists())
 			    {
 				_mountedFile = file;
-				_path = new Path(_mountedFile.getAbsolutePath());	  
+				_path = new Path(_mountedFile.getAbsolutePath());	
 			    }
 		    }
 	    }
@@ -112,7 +112,7 @@ public class FileResourceElement extends ResourceElement implements IFile
       {
         return true;
       }
-  
+
 
   public IFileState[] getHistory(IProgressMonitor monitor) throws CoreException
   {
@@ -124,7 +124,7 @@ public class FileResourceElement extends ResourceElement implements IFile
 	_mountedFile = file;
 	if (_mountedFile != null)
 	    {
-		_path = new Path(_mountedFile.getAbsolutePath());	  
+		_path = new Path(_mountedFile.getAbsolutePath());	
 	    }
     }
 
@@ -139,10 +139,10 @@ public class FileResourceElement extends ResourceElement implements IFile
       if (_mountedFile == null)
 	  {
 	      String localPath = getFullPath().toOSString();
-	      
+	
 	      try
 		  {	
-		      java.io.File theFile = new java.io.File(localPath);    
+		      java.io.File theFile = new java.io.File(localPath);
 		      FileOutputStream output = new FileOutputStream(theFile);
 		      		
 		      // remote?		
@@ -150,18 +150,18 @@ public class FileResourceElement extends ResourceElement implements IFile
 		      localPath = localPath.replace('\\', '/');
 		      String remotePath = (String)_element.getElementProperty(DE.P_SOURCE_NAME);
 		      remotePath = remotePath.replace('\\', '/');
-		      
+		
 		      File remoteFile = new File(remotePath);
 		      if (_dataStore.isVirtual() || (!remoteFile.exists() &&(!remotePath.equals(localPath))))
 			  {	
 			      doRemote = true;
 			  }
-		      
+		
 		      transferStreams(in, output, doRemote, remotePath, monitor);
 		  }
 	      catch (IOException e)
 		  {
-		  }     
+		  }
 	  }
       else
 	  {
@@ -172,30 +172,30 @@ public class FileResourceElement extends ResourceElement implements IFile
 		  }
 	      catch (IOException e)
 		  {
-		  }     	      
+		  }     	
 	  }
   }
-  
- 
 
-public void transferStreams(InputStream source, OutputStream destination, 
+
+
+public void transferStreams(InputStream source, OutputStream destination,
 							boolean doRemote, String remotePath,
-							IProgressMonitor monitor) 
-		throws IOException 
+							IProgressMonitor monitor)
+		throws IOException
 {
-  try 
+  try
     {
       int totalWritten = 0;
-	  boolean firstAppend = true;    
+	  boolean firstAppend = true;
 	  int bufferSize = 8192;
       byte[] buffer = new byte[bufferSize];
 
-      while (true) 
+      while (true)
 		{
 			int available = source.available();
 			available = (bufferSize > available) ? available : bufferSize;
 	  		
-	  		if (available <= 0)  
+	  		if (available <= 0)
 	  			break;
 	  		
 	  		int bytesRead = source.read(buffer, 0, available);
@@ -209,55 +209,55 @@ public void transferStreams(InputStream source, OutputStream destination,
 					firstAppend = false;
 					_element.getDataStore().replaceFile(remotePath, buffer, bytesRead, false);
 				}
-				else 
+				else
 				{
 					_element.getDataStore().replaceAppendFile(remotePath, buffer, bytesRead, false);				
 				}
 			}
 		  	destination.write(buffer, 0, bytesRead);	
 		  	totalWritten += bytesRead;
-	  
+	
 	 	 	if (monitor != null)
 	  	    {
 		  		monitor.worked(1);
 	   	   }
 		}	
-    } 
-  finally 
+    }
+  finally
     {
-    try 
+    try
       {
 		source.close();
-      } 
-    catch (IOException e) 
+      }
+    catch (IOException e)
       {
       }
-    try 
+    try
       {
 		destination.close();
-      } 
-    catch (IOException e) 
+      }
+    catch (IOException e)
       {
       }
   }
 }
-  
 
-  public int getType() 
+
+  public int getType()
   {
-    return IResource.FILE;    
+    return IResource.FILE;
   }
-  
+
   public Object getAdapter(Class aClass)
   {
     Object result = null;
-    
-    if (aClass == org.eclipse.ui.model.IWorkbenchAdapter.class)    
+
+    if (aClass == org.eclipse.ui.model.IWorkbenchAdapter.class)
       {
 	return this;	
       }
-    
-    result = _element.getAdapter(aClass); 
+
+    result = _element.getAdapter(aClass);
     if (result != null)
       {
 	return result;	
@@ -265,15 +265,15 @@ public void transferStreams(InputStream source, OutputStream destination,
     else
       {	
 	return Platform.getAdapterManager().getAdapter(this, aClass);
-      }  
+      }
   }
 
-  public InputStream getContents() throws CoreException 
+  public InputStream getContents() throws CoreException
     {
 	return getContents(false);
     }
 
-  public InputStream getContents(boolean force) throws CoreException 
+  public InputStream getContents(boolean force) throws CoreException
   {
     InputStream result = null;
     java.io.File fileObject = _mountedFile;
@@ -301,7 +301,7 @@ public void transferStreams(InputStream source, OutputStream destination,
 			
 			if (!_path.toString().equals(fileName))
 			    {
-				_path = new Path(fileName);	  
+				_path = new Path(fileName);	
 			    }		
 		    }
 		else
@@ -319,36 +319,36 @@ public void transferStreams(InputStream source, OutputStream destination,
     catch (FileNotFoundException e)
     {
     }
-    
-    return result;
-  }  
 
-    
+    return result;
+  }
+
+
   public String getExtendedType() throws CoreException
   {
       return _path.getFileExtension();
   }
-  
-  public String getFileExtension() 
+
+  public String getFileExtension()
   {
       return _path.getFileExtension();
   }
-  
+
   public IPath getFullPath()
   {
     return _path;
   }
-  
+
   public IPath getLocation()
     {
 	return _path;
     }
 
-   
-  public Object[] getChildren(Object o) 
+
+  public Object[] getChildren(Object o)
   {
-    return new Vector(0).toArray();    
-  }  
+    return new Vector(0).toArray();
+  }
 
   public boolean equals(Object other)
   {
@@ -356,21 +356,21 @@ public void transferStreams(InputStream source, OutputStream destination,
       {
 	ResourceElement otherFile = (ResourceElement)other;
 	String fileName = getFileName();
-	 
+	
  	if (fileName.equals(otherFile.getFileName()))
 	  {
 	    return true;
 	  }	
       }
-    
-    return false;    
+
+    return false;
   }
 
   public boolean isLocal(int depth)
   {
-    return true;    
+    return true;
   }
-  
+
   public boolean isPhantom()
   {
     return false;
@@ -393,62 +393,62 @@ public void transferStreams(InputStream source, OutputStream destination,
 	System.out.println("FileResourceElement.appendContents: not implemented");
     }
 
-    public void create(InputStream content, boolean force, IProgressMonitor monitor) throws CoreException 
+    public void create(InputStream content, boolean force, IProgressMonitor monitor) throws CoreException
     {
 	System.out.println("FileResourceElement.create: not implemented");
     }
 
-    public void create(InputStream content, IProgressMonitor monitor) throws CoreException 
+    public void create(InputStream content, IProgressMonitor monitor) throws CoreException
     {
 	System.out.println("FileResourceElement.create: not implemented");
     }
 
-    public void create(InputStream content, int i, IProgressMonitor monitor) throws CoreException 
+    public void create(InputStream content, int i, IProgressMonitor monitor) throws CoreException
     {
 	System.out.println("FileResourceElement.create: not implemented");
     }
 
-    public void setContents(IFileState source, boolean force, boolean keepHistory, IProgressMonitor monitor) 
+    public void setContents(IFileState source, boolean force, boolean keepHistory, IProgressMonitor monitor)
 	throws CoreException
     {
 	System.out.println("FileResourceElement.setContents: not implemented");
     }
-    
+
     public void setContents(InputStream in, boolean b, IProgressMonitor m)
-    {    
+    {
 	System.out.println("FileResourceElement.setContents: not implemented");
     }
 
     public void setContents(InputStream in, IProgressMonitor m)
-    {    
+    {
 	System.out.println("FileResourceElement.setContents: not implemented");
     }
 
     public void setContents(InputStream in, int i, IProgressMonitor m)
-    {    
+    {
 	System.out.println("FileResourceElement.setContents: not implemented");
     }
 
     public void setContents(IFileState state, int i, IProgressMonitor m)
-    {    
+    {
 	System.out.println("FileResourceElement.setContents: not implemented");
     }
 
   public void setContents(InputStream in, boolean a, boolean b, IProgressMonitor monitor)
-  {    
+  {
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
-    
+
     if (monitor != null)
 	{
 	    monitor = Policy.monitorFor(monitor);
 	}
-    try 
+    try
       {
 	  if (monitor != null)
 	      {
 		  monitor.beginTask(Policy.bind("settingContents", new String[] {getFullPath().toString()}), Policy.totalWork);
 	      }
-	internalSetContents(in, monitor);	  
+	internalSetContents(in, monitor);	
 
 	long time = System.currentTimeMillis();
 	setModificationStamp(time);
@@ -456,10 +456,10 @@ public void transferStreams(InputStream source, OutputStream destination,
 	/*
 	ResourceInfo info = getResourceInfo(false, true);
 	info.incrementContentId();
-	((Workspace)workspace).updateModificationStamp(info);  
+	((Workspace)workspace).updateModificationStamp(info);
 	*/
-      } 
-    finally 
+      }
+    finally
       {
 	  if (monitor != null)
 	      {
@@ -468,7 +468,10 @@ public void transferStreams(InputStream source, OutputStream destination,
       }
   }
 
-
+   public int getEncoding()
+   {
+     return 0;
+   }
 }
 
 
