@@ -549,7 +549,6 @@ public void doExpand(DataElement obj)
 	(type != null))
     {
 	_viewFilter.setType(type);
-	resetView();
     }
   }
 
@@ -567,7 +566,6 @@ public void doExpand(DataElement obj)
       _property = property;
       provider.setProperty(property);
        
-      resetView();
     }	
   }
 
@@ -592,9 +590,11 @@ public void doExpand(DataElement obj)
 	_openEditorAction.run();
     }
   
-    public void refreshView(DataElement filter)
+    public void refreshView(DataElement relation, DataElement filter)
     {
 	setFilter(filter);
+	setProperty(relation);	
+	resetView();
     }
 
     public boolean isWorking()

@@ -296,7 +296,7 @@ public class ViewMenu implements IMenuListener
 
 	if (showFilter)
 	    {
-		_parent.getViewer().refreshView(_filterSelected);
+		_parent.getViewer().refreshView(_relationSelected, _filterSelected);
 	    }
     }
 
@@ -414,7 +414,7 @@ public class ViewMenu implements IMenuListener
 
           filter = (String)_filterSelected.getElementProperty(DE.P_NAME);
 
-          _parent.getViewer().refreshView(_filterSelected);
+          _parent.getViewer().refreshView(_relationSelected, _filterSelected);
         }
         else
         {

@@ -47,7 +47,7 @@ public interface IDataElementViewer extends IDomainListener
     public void clearView();    
     public void resetView(DataElement parent);
     public void resetView();
-    public void refreshView(DataElement filter);
+    public void refreshView(DataElement relation, DataElement filter);
 
     public void setSelected(DataElement selected);
     public DataElement getSelected();

@@ -265,6 +265,8 @@ public class ExtendedTableViewer extends TableViewer
 		Table table = getTable();
 		
 		// remove those that are gone		
+		ArrayList associated = parent.getAssociated(_property);
+
 		TableItem[] children = table.getItems();
 		ArrayList toRemove = new ArrayList();
 		for (int i = 0; i < children.length; i++) 
@@ -273,8 +275,11 @@ public class ExtendedTableViewer extends TableViewer
 			if (item != null)
 			    {
 				DataElement data = (DataElement)item.getData();
-				if (data == null || 
-				    data.isDeleted() ||
+				if (!associated.contains(data))
+				    {
+					toRemove.add(item);
+				    }
+				else if (data == null || data.isDeleted() ||
 				    !_viewFilter.select(this, data, null))
 				    {
 					toRemove.add(item);
@@ -293,10 +298,9 @@ public class ExtendedTableViewer extends TableViewer
 		    }
 				
 		// add new or modified
-		for (int i = 0; i < parent.getNestedSize(); i++)
+		for (int i = 0; i < associated.size(); i++)
 		    {
-			DataElement child = parent.get(i).dereference();
-			
+			DataElement child = (DataElement)associated.get(i);			
 			synchronized(child)
 			    {
 				if (_viewFilter.select(this, child, null))
@@ -541,7 +545,6 @@ public void doExpand(DataElement obj)
 	(type != null))
     {
 	_viewFilter.setType(type);
-	resetView();
     }
   }
 
@@ -557,9 +560,7 @@ public void doExpand(DataElement obj)
     if (property != provider.getProperty())
     {      
       _property = property;
-      provider.setProperty(property);
-       
-      resetView();
+      provider.setProperty(property);       
     }	
   }
 
@@ -608,9 +609,11 @@ public void doExpand(DataElement obj)
 	    }
     }
   
-    public void refreshView(DataElement filter)
+    public void refreshView(DataElement relation, DataElement filter)
     {
 	setFilter(filter);
+	setProperty(relation);
+	internalRefresh(_currentInput);
     }
 
 
