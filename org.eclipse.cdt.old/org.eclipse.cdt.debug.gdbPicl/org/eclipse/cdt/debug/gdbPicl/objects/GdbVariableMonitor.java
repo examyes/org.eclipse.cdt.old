@@ -193,9 +193,9 @@ public class GdbVariableMonitor extends Gdb_VariableMonitor
   {
   	// give blanks for now... bad performance caused by asking for
   	// types of all variables
-  	if (true)
+  	if (false)
   	{
-	  	return "";
+	  	return "<No Type Info>";
   	}
   	  	
       String exprType = "<No Type Info>";  	

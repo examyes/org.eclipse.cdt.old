@@ -225,7 +225,7 @@ public class GdbObjectVariable extends GdbVariable {
 				int endClass = findMatchingEnd(parseStr);
 				fieldName = "union";
 				prefix = _prefix;
-				fieldType = "";
+				fieldType = "<No Type Info>";
 				fieldValue = parseStr.substring(0, endClass+1);
 
 	    		GdbObjectVariable newField = new GdbObjectVariable(_debugSession, fieldName, fieldType, fieldValue, prefix, _nodeID + _numNodes);
@@ -281,7 +281,16 @@ public class GdbObjectVariable extends GdbVariable {
 			fieldName = fieldName.replace((char)26, ',');
 			
 			// get type name for this field		
-			fieldName = fieldName.trim();			
+			fieldName = fieldName.trim();
+			
+			// space in name
+			// possible gdb output "static fieldname"
+			int idx = fieldName.indexOf(" ");
+			if (idx != -1)
+			{
+				fieldName = fieldName.substring(idx+1);
+			}
+						
 			fullFieldName = _prefix + "." + fieldName;
 	   		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
 	   		{
@@ -294,7 +303,7 @@ public class GdbObjectVariable extends GdbVariable {
 	   			// comment out for now, return "" for all type names
 	   			//fieldType = fieldName.substring(1, fieldName.length()-1);
 	   			
-	   			fieldType = "";
+	   			fieldType = "<No Type Info>";
 	   		}
 			
 			// get value (from first equal sign to comma)
