@@ -8,23 +8,29 @@ package org.eclipse.cdt.dstore.core.server;
 
 import org.eclipse.cdt.dstore.core.server.*;
 
+/**
+ * Server is the standard way of instantiating and controlling a remote DataStore.
+ * The server runs a ConnectionEstablisher which manages client connections to
+ * the DataStore.
+ *
+ */
 public class Server
 {
-  private ConnectionEstablisher  _establisher;
+    private ConnectionEstablisher  _establisher;
     
+    /**
+     * The startup interface to run the Server.
+     *
+     * @param args a list of arguments for running the server.  These consist of 
+     * the socket port to wait on, the timeout value, and the the ticket
+     */
     public static void main(String[] args)
     {
 	try 
 	    {
 		Server theServer = null;
-		
-		// args:
-		// 1 = port
-		// 2 = timeout
-		// 3 = ticket
-		
 		switch (args.length)
-		{
+		    {
 			case 0:
 			  theServer = new Server();
 			  break;
@@ -53,29 +59,55 @@ public class Server
 	    }
     }
     
+    /**
+     * Creates a new Server with default DataStore and connection attributes.
+     *
+     */
     public Server() 
     {
         _establisher = new ConnectionEstablisher();
     }
     
+    /**
+     * Creates a new Server that waits on the specified socket port.
+     *
+     * @param port the number of the socket port to wait on
+     */
     public Server(String port)
     {
         _establisher = new ConnectionEstablisher(port);
     } 
     
+    /**
+     * Creates a new Server that waits on the specified socket port for
+     * the specified time interval before shutting down.
+     *
+     * @param port the number of the socket port to wait on
+     * @param timeout the idle time to wait before shutting down 
+     */
     public Server(String port, String timeout)
     {
     	_establisher = new ConnectionEstablisher(port, timeout);	
     }
     
+    /**
+     * Creates a new Server that waits on the specified socket port for
+     * the specified time interval before shutting down.  
+     *
+     * @param port the number of the socket port to wait on
+     * @param timeout the idle time to wait before shutting down 
+     * @param ticket the ticket that the client needs to interact with the DataStore 
+     */
     public Server(String port, String timeout, String ticket)
     {
 	  _establisher = new ConnectionEstablisher(port, timeout, ticket);
     }
   
-
-  public void run()
+    /**
+     * Runs the server by starting the ConnectionEstablisher  
+     */
+    public void run()
     {
-      _establisher.start();
+	_establisher.start();
     }
 }
