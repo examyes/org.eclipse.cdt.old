@@ -22,6 +22,7 @@
       <import plugin="org.eclipse.vcm.core"/>
       <import plugin="com.ibm.dstore.miners"/>
       <import plugin="com.ibm.cpp.miners"/>
+      <import plugin="com.ibm.cpp.miners.parser"/>
       <import plugin="com.ibm.dstore.extra"/>
       <import plugin="com.ibm.dstore.core"/>
       <import plugin="com.ibm.dstore.ui"/>
