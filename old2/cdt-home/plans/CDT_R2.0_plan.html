@@ -46,6 +46,11 @@ updated compatibility section, parser enhancment feature.</td>
 			<TD style="vertical-align: top" width="121">Doug Schaefer</TD>
 			<TD style="vertical-align: top" width="576">Changed milestones to line up with new Eclipse 3.0 plan.</TD>
 		</TR>
+		<TR>
+			<TD style="vertical-align: top">Nov 11, 2003</TD>
+			<TD style="vertical-align: top" width="121">Doug Schaefer</TD>
+			<TD style="vertical-align: top" width="576">Adjusted the committed feature lists to ensure only those features that have been fully investigated or that are blocking the release remain in the list.</TD>
+		</TR>
 	</tbody>
 </table>
 <p><i>Please send comments about this draft plan to
@@ -299,45 +304,42 @@ on
 Eclipse 3.0. It also means ensuring the CDT provides the same look at
 feel and supports a number of the new features that are being provided
 by the Eclipse Platform.</p>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">Rename
-refactoring.</span> This feature represents our first foray into the
-world of refactoring. This includes bringing in a refactoring framework
-that is very similar to the JDT's refactoring framework. The focus is
-then on rename refactoring which will leverage off and make
-improvements to the C/C++ Search
-feature to correctly refactor the references. (<a
- href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
-spec</a>)</p>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">Content
-assist enhancements.</span>
-The
-code completion part of the contents assist feature will be enhanced
-for
-performance, handling of C visibility rules, and for the handling of
-C++ code completion on members.
-&nbsp;The majority of this work will be to make more use of the parser
-to provide accurate and speedy competion proposals. (<a
- href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/contentassist.html?cvsroot=Tools_Project">feature
-spec</a>)</p>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">Managed
-Build enhancements.</span> The managed build feature will be enhanced
-for usability and for flexibility to support a large variety of build
-target environments as well as to better support multiple
-configurations of tool and tool settings. Support will also be added
-for handling different variety of underlying tools including different
-make utilities, as well as support for different file types (like
-lex/yacc). (<a
- href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/managedmake.html?cvsroot=Tools_Project">feature
-spec</a>)</p>
-<p style="margin-left: 40px;"><span style="font-weight: bold;">User
-Documentation enhancements.</span> The user documentation will be
-expanded on to ensure the success of new and experienced users of the
-CDT.</p>
+
 <p style="margin-left: 40px;"><span style="font-weight: bold;">Internationalization
 and Accessibility. </span>Normally, these capabilities should be
 designed into features as they have been developed. Areas where this
-hasn't be done will be addressed in this release.</p>
+hasn't be done will be addressed in this release. The objective is to allow translation of the CDT to different languages and to comply with government standards on accessibility.</p>
 <h4>Proposed Items</h4>
+<P style="margin-left: 40px"><SPAN style="font-weight: bold">Rename
+refactoring.</SPAN> This feature represents our first foray into the
+world of refactoring. This includes bringing in a refactoring framework
+that is very similar to the JDT's refactoring framework. The focus is
+then on rename refactoring which will leverage off and make improvements
+to the C/C++ Search feature to correctly refactor the references. (<A
+	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/refactoring.html?cvsroot=Tools_Project">feature
+spec</A>)</P>
+<P style="margin-left: 40px"><SPAN style="font-weight: bold">Content
+assist enhancements.</SPAN> The code completion part of the contents
+assist feature will be enhanced for performance, handling of C
+visibility rules, and for the handling of C++ code completion on
+members. &nbsp;The majority of this work will be to make more use of the
+parser to provide accurate and speedy competion proposals. (<A
+	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/contentassist.html?cvsroot=Tools_Project">feature
+spec</A>)</P>
+<P style="margin-left: 40px"><SPAN style="font-weight: bold">Managed
+Build enhancements.</SPAN> The managed build feature will be enhanced
+for usability and for flexibility to support a large variety of build
+target environments as well as to better support multiple configurations
+of tool and tool settings. Support will also be added for handling
+different variety of underlying tools including different make
+utilities, as well as support for different file types (like lex/yacc).
+(<A
+	href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/featurespec/2.0/managedmake.html?cvsroot=Tools_Project">feature
+spec</A>)</P>
+<P style="margin-left: 40px"><SPAN style="font-weight: bold">User
+Documentation enhancements.</SPAN> The user documentation will be
+expanded on to ensure the success of new and experienced users of the
+CDT.</P>
 <p style="margin-left: 40px;"><span style="font-weight: bold;">C/C++
 Parser enhancements.</span> The C/C++ parser is not externally visible
 but it provides essential services to a number of CDT features
