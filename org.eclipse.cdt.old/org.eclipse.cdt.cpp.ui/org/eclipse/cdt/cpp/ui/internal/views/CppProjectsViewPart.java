@@ -24,6 +24,24 @@ import org.eclipse.ui.*;
 
 public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionListener, ICppProjectListener
 { 
+	
+	private IPartListener _partListener = new IPartListener() 
+	{
+		public void partActivated(IWorkbenchPart part) 
+		{
+			if (part instanceof IEditorPart)
+				editorActivated((IEditorPart) part);
+		}
+		public void partBroughtToTop(IWorkbenchPart part) {
+		}
+		public void partClosed(IWorkbenchPart part) {
+		}
+		public void partDeactivated(IWorkbenchPart part) {
+		}
+		public void partOpened(IWorkbenchPart part) {
+		}
+	};
+	
     private boolean _inputed = false;
 
     public CppProjectsViewPart()
@@ -39,6 +57,29 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
     protected String getF1HelpId()
     {
 	return "org.eclipse.cdt.cpp.ui.cpp_projects_view_context";
+    }
+    
+    protected void editorActivated(IEditorPart editor)
+    {
+    	IEditorInput input = editor.getEditorInput();
+		if (input instanceof IFileEditorInput) 
+		{
+			IFileEditorInput fileInput = (IFileEditorInput) input;
+			IFile file = fileInput.getFile();
+			DataElement fileElement = _api.findResourceElement(file);
+			if (fileElement != null)
+			{
+				ISelection newSelection = new StructuredSelection(fileElement);
+				if (_viewer != null)
+				{
+					TreeViewer treeViewer = (TreeViewer)_viewer.getViewer();
+					if (!treeViewer.getSelection().equals(newSelection)) 
+					{
+						treeViewer.setSelection(newSelection);
+					}
+				}
+			}
+		}	
     }
     
     public void initInput(DataStore dataStore)
@@ -74,6 +115,7 @@ public class CppProjectsViewPart extends ObjectsViewPart implements ISelectionLi
 				_viewer.setSorter(DE.P_NAME);
 				lock(true);
 				_inputed = true;
+				getSite().getPage().addPartListener(_partListener);
 			    }
 			
 			return;

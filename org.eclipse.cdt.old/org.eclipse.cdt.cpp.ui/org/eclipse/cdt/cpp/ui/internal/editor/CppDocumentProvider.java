@@ -208,5 +208,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
 			disconnect(e.next());
 	}
 	
+	
+
 
 }
