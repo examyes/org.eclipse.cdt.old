@@ -16,6 +16,7 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.ui.editors.text.*;
@@ -81,6 +82,7 @@ public class CppDocumentProvider extends FileDocumentProvider {
 	/**
 	 * @see AbstractDocumentProvider#createElementInfo(Object)
 	 */
+	
    protected ElementInfo createElementInfo(Object element) throws CoreException
    {
 //		if ( !(element instanceof IFileEditorInput))
@@ -104,8 +106,12 @@ public class CppDocumentProvider extends FileDocumentProvider {
 				    }
 				
 				IDocument document = createDocument(element);
+				
 				IAnnotationModel model = createCppAnnotationModel(element);
-
+	
+				FileSynchronizer f= new FileSynchronizer(input);
+				f.install();
+		
 				FileInfo elementInfo= new FileInfo(document, model, null);
 				elementInfo.fModificationStamp = computeModificationStamp(original);
 				return elementInfo;
@@ -119,6 +125,9 @@ public class CppDocumentProvider extends FileDocumentProvider {
 		}
       return info;
 	}
+	
+	
+	
 	/**
 	 * @see IWorkingCopyManager#disconnect(IEditorInput)
 	 */
@@ -192,9 +201,12 @@ public class CppDocumentProvider extends FileDocumentProvider {
 	/**
 	 * @see IWorkingCopyManager#shutdown
 	 */
+	
 	public void shutdown() {
 		Iterator e= getConnectedElements();
 		while (e.hasNext())
 			disconnect(e.next());
 	}
+	
+
 }
