@@ -33,7 +33,6 @@ public class ServerCommandHandler extends CommandHandler
     
     public void loadMiners()
     {
-	System.out.println("loading miners");
 	if (_dataStore != null)
 	    {
 		MinerLoader minerLoader = new MinerLoader(_dataStore, _loader);
