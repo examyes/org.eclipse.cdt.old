@@ -19,6 +19,9 @@
       <library name="epdc.jar">
          <export name="*"/>
       </library>
+      <library name="xerces.jar">
+         <export name="*"/>
+      </library>
    </runtime>
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
@@ -26,7 +29,6 @@
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.apache.xerces"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="com.ibm.debug.daemon"/>
       <import plugin="com.ibm.lpex"/>

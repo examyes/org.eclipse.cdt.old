@@ -52,9 +52,13 @@ You can specify variables and expressions for monitoring via the <b>Monitor Expr
 	</context>
 
 	<context  id="debug_console" >
-		<description>This view allows you to pass debug commands to and see messages from the GDB debug engine, when the program that you are debugging is running on Linux.</description>
+		<description>This view allows you to pass debug commands to the debug engine and see messages that result from these commands, if the engine supports this functionality.
+
+For example, when the program that you are debugging is running on Linux, you can use this console to pass GDB commands to the GDB debug engine.</description>
 		<topic href="/com.ibm.debug.pdt.doc/ref/rbpviewc.htm" label="Compiled language debugging views"></topic>
 	</context>
+
+>> AB: At first it was gdb only but I did work to make it available to any engine that wants to use it.    It will only work if the debug engine enables it.  Basically it sends commands to the engine doing the debugging and echos the results of executing that command.  The commands supported depend on the debug engine.    You could mention as an example that when connected to the linux C/C++ debug engine you can enter "gdb" commands.
 
 	<context  id="storage_map_view" >
 		<description>This view displays a set of elements representing blocks of storage mapped according to a storage layout that you define.</description>
