@@ -230,17 +230,6 @@ public class CppContentOutlinePage extends ContentOutlinePage implements IDomain
 
     private void handleKeyPressed(KeyEvent event) 
     {
-	System.out.println("key event " + event);
-	if (event.stateMask != 0)
-	    return;
-	
-	IAction action= null;
-	if (event.keyCode == SWT.F4) 
-	    {
-	    }
-	
-	if (action != null && action.isEnabled())
-	    action.run();
     }
 
   public void handleEvent(Event e)

@@ -1730,6 +1730,20 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
  
 
 	// project actions
+	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
+							 "Open Project",
+							 "com.ibm.cpp.ui.internal.actions.OpenProjectAction");
+
+	DataElement closeProject = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+							 "Close Project",
+							 "com.ibm.cpp.ui.internal.actions.CloseProjectAction");
+
+	DataElement deleteProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
+							 "Delete Project",
+							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
+	dataStore.createReference(projectD, deleteProject);
+
+
 	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 						   "Build Project",
 						   "com.ibm.cpp.ui.internal.actions.BuildAction");
@@ -1746,18 +1760,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 							 "com.ibm.cpp.ui.internal.actions.OpenFileAction");
 
 
-	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
-							 "Open Project",
-							 "com.ibm.cpp.ui.internal.actions.OpenProjectAction");
-
-	DataElement closeProject = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
-							 "Close Project",
-							 "com.ibm.cpp.ui.internal.actions.CloseProjectAction");
-
-	DataElement deleteProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,
-							 "Delete Project",
-							 "com.ibm.cpp.ui.internal.actions.DeleteProjectAction");
-	dataStore.createReference(projectD, deleteProject);
 
 
 

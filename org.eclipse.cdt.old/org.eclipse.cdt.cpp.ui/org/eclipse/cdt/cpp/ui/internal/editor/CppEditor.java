@@ -8,10 +8,12 @@ package com.ibm.cpp.ui.internal.editor;
 
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.actions.*;
+import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.editor.contentoutliner.*;
 import com.ibm.cpp.ui.internal.editor.codeassist.*;
 import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.dstore.core.model.*;
+import com.ibm.dstore.ui.*;
 
 import org.eclipse.core.resources.*;
 import com.ibm.lpex.alef.LpexTextEditor;
@@ -153,13 +155,16 @@ public class CppEditor extends LpexTextEditor
     public void setFocus()
     {
 	super.setFocus();
+	
 
-      IEditorInput input = getEditorInput();
-      if (input instanceof IFileEditorInput)
-      {
-         IFile file = ((IFileEditorInput)input).getFile();
-         String fileName = file.getLocation().toOSString();
+	IEditorInput input = getEditorInput();
+	if (input instanceof IFileEditorInput)
+	    {
+		IFile file = ((IFileEditorInput)input).getFile();
+		String fileName = file.getLocation().toOSString();
 
+
+		
 	 /***
        	if (!_isParsed)
 	      {

@@ -8,6 +8,7 @@ package com.ibm.cpp.ui.internal.actions;
 
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.editor.*;
+import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.api.*;
 
 import com.ibm.dstore.ui.*;
@@ -120,7 +121,11 @@ public class FindObjectAction extends Action
 						
 						if (viewPart != null)
 						    {
+							CppActionLoader loader = CppActionLoader.getInstance();
+							IOpenAction open = loader.getOpenAction();
+							open.setLocation(path, line);
 							viewPart.setInput(status.get(0));
+							
 						    }
 					    }
 				    }		

@@ -50,13 +50,34 @@ public class OpenEditorAction extends Action implements IOpenAction
     {
 	_element = _previousElement;
     }
+
+    public void setLocation(String filename, int location)
+    {
+	if (_previousElement == null)
+	    {
+		if (_element != null)
+		    {
+			DataStore dataStore = _element.getDataStore();
+			_previousElement = dataStore.createObject(null, "file", "location");
+		    }
+	    }
+
+	if (_previousElement != null)
+	    {
+		_previousElement.setAttribute(DE.A_SOURCE, filename + ":" + location);
+	    }
+    }
     
     public void setSelected(DataElement selected)
     {
-	if (_element != null)
+	if (_element != null && 
+	    _element != selected)
 	    {
 		DataStore dataStore = _element.getDataStore();
-		_previousElement = dataStore.createObject(null, "location", "location");
+		if (_previousElement == null)
+		    {
+			_previousElement = dataStore.createObject(null, "file", "location");
+		    }
 
 		if (_editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
 		    {
@@ -70,13 +91,15 @@ public class OpenEditorAction extends Action implements IOpenAction
 			    {
 				IFile file = ((IFileEditorInput)input).getFile();
 				path = new String(file.getLocation().toOSString());
-				_previousElement.setAttribute(DE.A_SOURCE, path + ":" + line);				
+				setLocation(path, line);
 			    }
 		    }
 		else
 		    {
 			_previousElement.setAttribute(DE.A_SOURCE, _element.getSource());
 		    }
+
+		System.out.println("prev = " + _previousElement);
 	    }
 
 	_element = selected;
@@ -162,7 +185,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						    IWorkbench desktop = _plugin.getWorkbench();
 						    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
 						    
-						    _editor = null;
+						    IEditorPart editor = null;
 						    
 						    IEditorPart [] editors = persp.getEditors();
 						    for (int i = 0; i < editors.length; i++)
@@ -172,13 +195,13 @@ public class OpenEditorAction extends Action implements IOpenAction
 							    if ((input != null) && 
 								openFile.getLocation().toString().equals(file.getLocation().toString()))
 								{
-								    _editor = editors[i];		
-								    persp.bringToTop(_editor);		
+								    editor = editors[i];		
+								    persp.bringToTop(editor);		
 								    break;
 								}
 							}
 						    
-						    if (_editor == null)
+						    if (editor == null)
 							{
 							    if (!openEditor)
 								{
@@ -193,14 +216,15 @@ public class OpenEditorAction extends Action implements IOpenAction
 								{
 								}
 							    
-							    _editor = persp.getActiveEditor();
+							    editor = persp.getActiveEditor();
 							}
 						    
 						    
 						    Integer lineLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));
 						    int line = lineLocation.intValue();	
-						    if ((line > 0) && (_editor != null))
+						    if ((line > 0) && (editor != null))
 							{	
+							    _editor = editor;
 							    if (_editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
 								{
 								    ((com.ibm.cpp.ui.internal.editor.CppEditor)_editor).gotoLine(line);
