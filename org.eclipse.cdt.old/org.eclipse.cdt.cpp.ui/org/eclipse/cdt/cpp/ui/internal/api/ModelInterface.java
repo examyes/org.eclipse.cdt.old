@@ -2044,7 +2044,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 						
 	DataElement distCleanCmd = dataStore.createObject(defCmds, DE.T_UI_COMMAND_DESCRIPTOR,
 							  "Distclean",
-							  "com.ibm.cpp.ui.internal.actions.ConfigureAction");
+							  "com.ibm.cpp.ui.internal.actions.TargetAction");
 	distCleanCmd.setAttribute(DE.A_VALUE,"DIST_CLEAN");		
 	dataStore.createReference(defCmds, autoconfCmds, "abstracts", "abstracted by");	
 	
