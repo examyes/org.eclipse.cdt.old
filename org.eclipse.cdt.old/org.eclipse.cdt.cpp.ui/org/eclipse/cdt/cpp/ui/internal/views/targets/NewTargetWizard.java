@@ -86,14 +86,14 @@ public boolean performFinish() {
 		// here put the code to open up the make targets view and show the new created target	
 		try 
 		{
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("com.ibm.cpp.ui.internal.views.targets.Targets");
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("com.ibm.cpp.ui.Targets");
 		} 
 		catch (PartInitException e) 
 		{
 			System.out.println(""+e);
 		}
 		// add the new target to the page
-		targetsPart = (Targets)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.ibm.cpp.ui.internal.views.targets.Targets");
+		targetsPart = (Targets)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView("com.ibm.cpp.ui.Targets");
 		final TargetsPage targetsPage = targetsPart.getTargetsPage();
 		//final Object root = targetsPage.getNavigatorSelection();
 		final IResource root = NavigatorSelection.selection;

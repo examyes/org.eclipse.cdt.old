@@ -87,14 +87,14 @@ public class FindObjectAction extends Action
 				IWorkbenchWindow win = desktop.getActiveWorkbenchWindow();
 				
 				IWorkbenchPage persp= win.getActivePage();
-				ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
+				ILinkable viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
 
 				if (viewPart == null)
 				    {
 					try
 					    {
-						persp.showView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
-						viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.internal.editor.contentoutliner.SelectedObjectViewPart");
+						persp.showView("com.ibm.cpp.ui.SelectedObjectViewPart");
+						viewPart = (ILinkable)persp.findView("com.ibm.cpp.ui.SelectedObjectViewPart");
 
 					    }
 					catch (PartInitException e)

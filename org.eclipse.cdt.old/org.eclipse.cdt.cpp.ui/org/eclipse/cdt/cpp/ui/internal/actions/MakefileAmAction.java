@@ -41,7 +41,7 @@ public class MakefileAmAction extends CustomAction {
 		DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
 		DataElement status = _dataStore.command(makefileAmCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
+		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
 }

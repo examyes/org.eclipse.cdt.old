@@ -66,7 +66,7 @@ public class ManageProjectAction extends CustomAction
 		DataElement manageProjectCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_MANAGE_PROJECT");
 		DataElement status = _dataStore.command(manageProjectCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
+		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
 		
 		RunThread thread = new RunThread(_subject, status);

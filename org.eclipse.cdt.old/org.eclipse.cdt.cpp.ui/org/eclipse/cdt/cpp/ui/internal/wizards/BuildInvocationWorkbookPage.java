@@ -25,30 +25,40 @@ public class BuildInvocationWorkbookPage {
 
 public BuildInvocationWorkbookPage(Composite parent) 
     {
-	ArrayList list = CppPlugin.readProperty("DefaultBuildInvocation");
-	String defaultStr = "nmake";
-	if (list.size() > 0)
+	ArrayList blist = CppPlugin.readProperty("DefaultBuildInvocation");
+	String defaultBuildStr = "gmake all";
+	if (blist.size() > 0)
 	    {
-		defaultStr = (String)list.get(0);
+		defaultBuildStr = (String)blist.get(0);
 	    }
 
-	_buildInvocationEntry = new BuildInvocationEntry(parent, "Build Invocation", defaultStr);
+	ArrayList clist = CppPlugin.readProperty("DefaultCleanInvocation");
+	String defaultCleanStr = "gmake clean";
+	if (clist.size() > 0)
+	    {
+		defaultCleanStr = (String)clist.get(0);
+	    }
+
+	_buildInvocationEntry = new BuildInvocationEntry(parent, 
+							 "Build Invocation", defaultBuildStr, 
+							 "Clean Invocation", defaultCleanStr );
 	_buildInvocationEntryControl = _buildInvocationEntry.getControl();
     }
 
-/**
- * getInvocations method comment.
- */
-
- public ArrayList getInvocations()
- {
-  return _buildInvocationEntry.getInvocations();
- }
-
-public Control getControl() {
-
-   return _buildInvocationEntryControl;
-}
+    public ArrayList getBuildInvocations()
+    {
+	return _buildInvocationEntry.getBuildInvocations();
+    }
+    
+    public ArrayList getCleanInvocations()
+    {
+	return _buildInvocationEntry.getCleanInvocations();
+    }
+    
+    public Control getControl() 
+    {	
+	return _buildInvocationEntryControl;
+    }
 
 }
 

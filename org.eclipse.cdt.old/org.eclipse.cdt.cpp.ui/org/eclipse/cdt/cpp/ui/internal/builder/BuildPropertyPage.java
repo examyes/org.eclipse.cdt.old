@@ -22,13 +22,15 @@ import org.eclipse.ui.dialogs.*;
 
 public class BuildPropertyPage extends PropertyPage
 {	
-  private ArrayList _history;
+  private ArrayList _buildHistory;
+  private ArrayList _cleanHistory;
   private BuildInvocationEntry _buildInvocationEntry;
 
   public BuildPropertyPage()
       {
         super();
-        _history = new ArrayList();
+        _buildHistory = new ArrayList();
+        _cleanHistory = new ArrayList();
       }
 
 
@@ -37,7 +39,9 @@ public class BuildPropertyPage extends PropertyPage
 
         String labelText = "";
         String defaultInvocation = "";
-        _buildInvocationEntry = new BuildInvocationEntry(parent, "Build Invocation", "");
+        _buildInvocationEntry = new BuildInvocationEntry(parent, 
+							 "Build Invocation", "",
+							 "Clean Invocation", "");
 
         IProject project= getProject();
 
@@ -45,22 +49,44 @@ public class BuildPropertyPage extends PropertyPage
         {
           Control _buildInvocationEntryControl = _buildInvocationEntry.getControl();
 
-          _history.removeAll(_history);
-          _history = CppPlugin.readProperty(project, "Build History");
-          if (_history.size() == 0)
+	  // build history
+          _buildHistory.removeAll(_buildHistory);
+          _buildHistory = CppPlugin.readProperty(project, "Build History");
+          if (_buildHistory.size() == 0)
           {
-	      _history = CppPlugin.readProperty("DefaultBuildInvocation");
+	      _buildHistory = CppPlugin.readProperty("DefaultBuildInvocation");
           }
 
-	  for (int i = 0; i < _history.size(); i++)
+	  for (int i = 0; i < _buildHistory.size(); i++)
 	      {
-		  String item = (String)_history.get(i);
-		  _buildInvocationEntry._invocation.add(item, i);
+		  String item = (String)_buildHistory.get(i);
+		  _buildInvocationEntry.addBuild(item, i);
 		  if (i == 0)
 		      {
-			  _buildInvocationEntry._invocation.setText(item);
+			  _buildInvocationEntry.setBuildText(item);
 		      }
 	      }
+
+	  // clean history
+          _cleanHistory.removeAll(_cleanHistory);
+          _cleanHistory = CppPlugin.readProperty(project, "Clean History");
+          if (_cleanHistory.size() == 0)
+          {
+	      _cleanHistory = CppPlugin.readProperty("DefaultCleanInvocation");
+          }
+
+	  for (int i = 0; i < _cleanHistory.size(); i++)
+	      {
+		  String item = (String)_cleanHistory.get(i);
+		  _buildInvocationEntry.addClean(item, i);
+		  if (i == 0)
+		      {
+			  _buildInvocationEntry.setCleanText(item);
+		      }
+	      }
+
+
+
 	  return _buildInvocationEntryControl;
         }
         else
@@ -76,6 +102,7 @@ public class BuildPropertyPage extends PropertyPage
       {
 	  super.performDefaults();
 
+	  // build
 	  ArrayList list = CppPlugin.readProperty("DefaultBuildInvocation");
 	  String defaultStr = "";
 	  if (list.size() > 0)
@@ -83,22 +110,44 @@ public class BuildPropertyPage extends PropertyPage
 		  defaultStr = (String)list.get(0);
 	      }
 
-	  _buildInvocationEntry.setText(defaultStr);
+	  _buildInvocationEntry.setBuildText(defaultStr);
+
+
+	  // clean
+	  ArrayList clist = CppPlugin.readProperty("DefaultCleanInvocation");
+	  String cdefaultStr = "";
+	  if (clist.size() > 0)
+	      {
+		  cdefaultStr = (String)clist.get(0);
+	      }
+
+	  _buildInvocationEntry.setCleanText(cdefaultStr);
       }
 	
   public boolean performOk()
       {
-        Combo  _invocation = _buildInvocationEntry._invocation;
-        String toAdd = _invocation.getText();
-
-        int index= _history.indexOf(toAdd);
+        String toAdd = _buildInvocationEntry.getBuildText();
+        int index= _buildHistory.indexOf(toAdd);
 
 	if (index != -1)
 	    {
-		_history.remove(index);
+		_buildHistory.remove(index);
 	    }
-	_history.add(0, toAdd);
-	CppPlugin.writeProperty(getProject(), "Build History",  _history);
+	_buildHistory.add(0, toAdd);
+	CppPlugin.writeProperty(getProject(), "Build History",  _buildHistory);
+
+
+        String ctoAdd = _buildInvocationEntry.getCleanText();
+        int cindex= _cleanHistory.indexOf(ctoAdd);
+
+	if (cindex != -1)
+	    {
+		_cleanHistory.remove(cindex);
+	    }
+	_cleanHistory.add(0, ctoAdd);
+	CppPlugin.writeProperty(getProject(), "Clean History",  _cleanHistory);
+
+
 	return true;
       }
 

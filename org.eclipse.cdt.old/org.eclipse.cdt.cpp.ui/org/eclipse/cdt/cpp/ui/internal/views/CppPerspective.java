@@ -23,25 +23,25 @@ public class CppPerspective implements IPerspectiveFactory
 
     IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.LEFT, (float)0.50,
 					     editorArea);
-    bottomLeft.addView("com.ibm.cpp.ui.internal.views.targets.Targets");
-    bottomLeft.addView("com.ibm.cpp.ui.internal.views.CppCommandViewPart");
-    bottomLeft.addView("com.ibm.cpp.ui.internal.views.DetailsViewPart");
+    bottomLeft.addView("com.ibm.cpp.ui.Targets");
+    bottomLeft.addView("com.ibm.cpp.ui.CppCommandViewPart");
+    bottomLeft.addView("com.ibm.cpp.ui.DetailsViewPart");
 
     IFolderLayout topLeft = factory.createFolder("topLeft", IPageLayout.TOP, (float)0.60,
     					  "bottomLeft");
     topLeft.addView(IPageLayout.ID_RES_NAV);
-    topLeft.addView("com.ibm.cpp.ui.internal.views.CppProjectsViewPart");
+    topLeft.addView("com.ibm.cpp.ui.CppProjectsViewPart");
 
     IFolderLayout topLeftRight = factory.createFolder("topLeftRight", IPageLayout.RIGHT, (float)0.45,
 						      "topLeft");
-    topLeftRight.addView("com.ibm.cpp.ui.internal.views.ProjectObjectsViewPart");
-    topLeftRight.addView("com.ibm.cpp.ui.internal.views.SystemObjectsViewPart");
-    topLeftRight.addView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart");
+    topLeftRight.addView("com.ibm.cpp.ui.ProjectObjectsViewPart");
+    topLeftRight.addView("com.ibm.cpp.ui.SystemObjectsViewPart");
+    topLeftRight.addView("com.ibm.cpp.ui.ParsedSourceViewPart");
 
     IFolderLayout bbottomRight = factory.createFolder("bbottomRight", IPageLayout.BOTTOM, (float)0.70,
 						      editorArea);
-    bbottomRight.addView("com.ibm.cpp.ui.internal.views.CppOutputViewPart");
-    bbottomRight.addView("com.ibm.cpp.ui.internal.views.SuperDetailsViewPart");
+    bbottomRight.addView("com.ibm.cpp.ui.CppOutputViewPart");
+    bbottomRight.addView("com.ibm.cpp.ui.SuperDetailsViewPart");
 
     factory.addActionSet(IDebugUIConstants.DEBUG_ACTION_SET);
   }

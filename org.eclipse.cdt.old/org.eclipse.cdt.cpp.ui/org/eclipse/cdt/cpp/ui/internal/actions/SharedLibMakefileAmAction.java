@@ -41,7 +41,6 @@ public class SharedLibMakefileAmAction extends CustomAction {
 		DataElement toLibCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_SWITCH_TO_SHARED_LIB");
 		DataElement status = _dataStore.command(toLibCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
-		//api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
 }

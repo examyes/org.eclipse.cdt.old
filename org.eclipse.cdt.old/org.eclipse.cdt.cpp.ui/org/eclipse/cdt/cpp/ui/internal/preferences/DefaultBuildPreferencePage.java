@@ -67,7 +67,11 @@ public class DefaultBuildPreferencePage extends PreferencePage implements IWorkb
     {		
         String labelText = "";
         String defaultInvocation = "";
-        _buildInvocationEntry = new BuildInvocationEntry(parent, _plugin.getLocalizedString("BuildPreferences.Default_Build_Invocation"), "");
+	String buildLabel = _plugin.getLocalizedString("BuildPreferences.Default_Build_Invocation");
+        String cleanLabel = "Clean Invocation";
+        _buildInvocationEntry = new BuildInvocationEntry(parent, 
+							 buildLabel, "",
+							 cleanLabel, "");
 
 	Control buildInvocationEntryControl = _buildInvocationEntry.getControl();
 
@@ -77,34 +81,44 @@ public class DefaultBuildPreferencePage extends PreferencePage implements IWorkb
     
     public void performDefaults() 
     {
+	// build 
 	ArrayList history = _plugin.readProperty("DefaultBuildInvocation");
 	if ((history != null) && (history.size() > 0))
 	    {
 		String defaultStr = (String)history.get(0);
-		_buildInvocationEntry.setText(defaultStr);
-		_buildInvocationEntry.add(defaultStr, 0);
+		_buildInvocationEntry.setBuildText(defaultStr);
+		_buildInvocationEntry.addBuild(defaultStr, 0);
 	    }
 	else
 	    {
-		String osString = org.eclipse.core.boot.BootLoader.getOS();
-		if (osString.equals("win32"))
-		    {
-			_buildInvocationEntry.setText("make");
-			_buildInvocationEntry.add("make", 0);
-		    }
-		else
-		    {
-			_buildInvocationEntry.setText("gmake");
-			_buildInvocationEntry.add("gmake", 0);
-		    }
+		_buildInvocationEntry.setBuildText("gmake all");
+		_buildInvocationEntry.addBuild("gmake all", 0);
+	    }
+
+	// clean 
+	ArrayList chistory = _plugin.readProperty("DefaultCleanInvocation");
+	if ((chistory != null) && (chistory.size() > 0))
+	    {
+		String defaultStr = (String)chistory.get(0);
+		_buildInvocationEntry.setCleanText(defaultStr);
+		_buildInvocationEntry.addClean(defaultStr, 0);
+	    }
+	else
+	    {
+		_buildInvocationEntry.setCleanText("gmake clean");
+		_buildInvocationEntry.addClean("gmake clean", 0);
 	    }
     }
 
     public boolean performOk()
     {
 	ArrayList list = new ArrayList(); 
-	list.add(new String(_buildInvocationEntry.getText()));
+	list.add(new String(_buildInvocationEntry.getBuildText()));
 	_plugin.writeProperty("DefaultBuildInvocation", list);
+
+	ArrayList clist = new ArrayList(); 
+	clist.add(new String(_buildInvocationEntry.getCleanText()));
+	_plugin.writeProperty("DefaultCleanInvocation", clist);
 	return true;
     }
 }

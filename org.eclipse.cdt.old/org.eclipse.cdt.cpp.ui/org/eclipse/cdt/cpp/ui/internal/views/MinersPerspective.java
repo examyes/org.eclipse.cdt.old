@@ -24,14 +24,14 @@ public class MinersPerspective implements IPerspectiveFactory
                                                  , (float)0.60
                                                  , editorArea
                                                  );
-    topLeft.addView("com.ibm.cpp.ui.internal.views.SchemaViewPart");
-    topLeft.addView("com.ibm.cpp.ui.internal.views.MinersViewPart");
-    topLeft.addView("com.ibm.cpp.ui.internal.views.LogViewPart");
+    topLeft.addView("com.ibm.cpp.ui.SchemaViewPart");
+    topLeft.addView("com.ibm.cpp.ui.MinersViewPart");
+    topLeft.addView("com.ibm.cpp.ui.LogViewPart");
      
     // Bottom left.
     IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.BOTTOM, (float)0.60,
 					     "topLeft");
-    bottomLeft.addView("com.ibm.cpp.ui.internal.views.DetailsViewPart");
+    bottomLeft.addView("com.ibm.cpp.ui.DetailsViewPart");
   }
 }
 

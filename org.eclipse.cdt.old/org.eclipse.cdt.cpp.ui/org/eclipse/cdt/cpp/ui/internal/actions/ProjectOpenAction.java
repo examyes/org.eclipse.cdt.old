@@ -57,9 +57,9 @@ public class ProjectOpenAction extends ProjectAction
   args.add(_project);
   DataElement status = _dataStore.command(_openCommand, args, theProjectElement, false);
   _api.monitorStatus(status);
-  _api.showView("com.ibm.cpp.ui.internal.views.CppProjectsViewPart", null);
-  _api.showView("com.ibm.cpp.ui.internal.views.ParsedSourceViewPart", null);
-  _api.showView("com.ibm.cpp.ui.internal.views.DetailsViewPart", null);
+  _api.showView("com.ibm.cpp.ui.CppProjectsViewPart", null);
+  _api.showView("com.ibm.cpp.ui.ParsedSourceViewPart", null);
+  _api.showView("com.ibm.cpp.ui.DetailsViewPart", null);
  }
 }
 

@@ -14,73 +14,117 @@ import org.eclipse.swt.*;
 import java.util.ArrayList;
 import java.io.File;
 
-public class BuildInvocationEntry {
+public class BuildInvocationEntry 
+{
+    private  Combo  _buildInvocation;
+    private  Combo  _cleanInvocation;
 
-public  Combo  _invocation;
-  Control  _control;
-
-/**
- */
-
-public BuildInvocationEntry(Composite parent, String labelText, String defaultEntryText) {
+    private Control  _control;
+    
+    public BuildInvocationEntry(Composite parent, String labelText, String defaultEntryText) 
+    {
 	this.createControl(parent, labelText, defaultEntryText);
-}
-
-/**
- * createControl method comment.
- */
- public ArrayList getInvocations()
- {
-  ArrayList items = new ArrayList();
-  items.add(new String(_invocation.getText()));
- return items;
- }
-
-    public String getText()
-    {
-	return _invocation.getText();
     }
 
-    public void setText(String text)
+    public BuildInvocationEntry(Composite parent, 
+				String blabelText, String bdefaultEntryText,
+				String clabelText, String cdefaultEntryText) 
     {
-	_invocation.setText(text);
+	this.createControl(parent, blabelText, bdefaultEntryText, clabelText, cdefaultEntryText);
+    }
+    
+    public ArrayList getBuildInvocations()
+    {
+	ArrayList items = new ArrayList();
+	items.add(new String(_buildInvocation.getText()));
+	return items;
     }
 
-    public void add(String text, int index)
+    public ArrayList getCleanInvocations()
     {
-	_invocation.add(text, index);
+	ArrayList items = new ArrayList();
+	items.add(new String(_cleanInvocation.getText()));
+	return items;
+    }
+
+    public String getBuildText()
+    {
+	return _buildInvocation.getText();
+    }
+
+    public String getCleanText()
+    {
+	return _cleanInvocation.getText();
+    }
+
+    public void setBuildText(String text)
+    {
+	_buildInvocation.setText(text);
+    }
+
+    public void setCleanText(String text)
+    {
+	_cleanInvocation.setText(text);
+    }
+
+    public void addBuild(String text, int index)
+    {
+	_buildInvocation.add(text, index);
+    }
+
+    public void addClean(String text, int index)
+    {
+	_cleanInvocation.add(text, index);
     }
  
- public Control createControl(Composite parent, String labelText, String defaultEntryText ) {
+    public Control createControl(Composite parent, String blabelText, String defaultBuildText) 
+    {
+	return createControl(parent, blabelText, defaultBuildText, null, null);
+    }
 
-   Composite composite= new Composite(parent, SWT.NONE);
-   composite.setLayout(new GridLayout());
+    public Control createControl(Composite parent, 
+				 String blabelText, String defaultBuildText,
+				 String clabelText, String defaultCleanText) 
+    {	
+	Composite composite= new Composite(parent, SWT.NONE);
+	composite.setLayout(new GridLayout());
+	
+	Composite cnr = new Composite(composite, SWT.NONE);
+	
+	Label blabel = new Label(cnr, SWT.NULL);
+	blabel.setText(blabelText);
+	
+	_buildInvocation = new Combo(cnr, SWT.SINGLE | SWT.BORDER);
+	GridData textData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	textData.widthHint = 200;
+	_buildInvocation.setLayoutData(textData);	
+	_buildInvocation.setText(defaultBuildText);
 
-   Composite cnr = new Composite(composite, SWT.NONE);
+	if (clabelText != null)
+	    {
+		Label clabel = new Label(cnr, SWT.NULL);
+		clabel.setText(clabelText);
+		
+		_cleanInvocation = new Combo(cnr, SWT.SINGLE | SWT.BORDER);
+		GridData textData2 = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		textData2.widthHint = 200;
+		_cleanInvocation.setLayoutData(textData2);	
+		_cleanInvocation.setText(defaultCleanText);
+	    }
 
-   Label label = new Label(cnr, SWT.NULL);
-   label.setText(labelText);
-
-   _invocation = new Combo(cnr, SWT.SINGLE | SWT.BORDER);
-   GridData textData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-   textData.widthHint = 200;
-   _invocation.setLayoutData(textData);
-
-   _invocation.setText(defaultEntryText);
-
-   GridLayout layout = new GridLayout();
-   layout.numColumns = 2;
-   layout.marginHeight = 5;
-   layout.marginWidth = 5;
-   layout.verticalSpacing=0;
-   cnr.setLayout(layout);
+	GridLayout layout = new GridLayout();
+	layout.numColumns = 2;
+	layout.marginHeight = 5;
+	layout.marginWidth = 5;
+	layout.verticalSpacing=5;
+	cnr.setLayout(layout);
 	GridData data = (GridData)cnr.getLayoutData();
 	cnr.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-
-   _control = composite;
-   return composite;
-}
-
+	
+	_control = composite;
+	return composite;
+    }
+    
 public Control getControl()
 {
     return _control;

@@ -41,7 +41,6 @@ public class DefaultMakefileAmAction extends CustomAction {
 		DataElement toLibCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_DEFAULT_MAKEFILE_AM");
 		DataElement status = _dataStore.command(toLibCmd, _subject);
 		ModelInterface api = ModelInterface.getInstance();
-		//api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
 		api.monitorStatus(status);
     }
 }

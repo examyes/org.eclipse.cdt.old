@@ -416,7 +416,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 		_status = dataStore.command(debugDescriptor, args, dirObject);
 		monitorStatus(_status);
-		showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
+		showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
 	    }
     }  
     
@@ -491,7 +491,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
 	monitorStatus(status);
 	
-	showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
+	showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
 	return status;	
       }
 
@@ -1120,6 +1120,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       return projectObj;
   }
 
+
+ private DataElement getPathElement(IResource resource)
+ {
+     return findResourceElement(resource);
+ }
+
   public void parse(IResource resource)
   {
     parse(resource, false);
@@ -1129,49 +1135,43 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   {
     parse(resource, isSynchronized, false);
   }
-
- private DataElement getPathElement(IResource resource)
- {
-     return findResourceElement(resource);
- }
-
  
-  public void parse(IResource resource, boolean isSynchronized, boolean showView)
-  {
-   DataElement pathElement = getPathElement(resource);
+    public void parse(IResource resource, boolean isSynchronized, boolean showView)
+    {
+	DataElement pathElement = getPathElement(resource);
+	parse(pathElement, isSynchronized, showView);
+    }
 
+  public void parse(DataElement pathElement, boolean isSynchronized, boolean showView)
+    {
    if (pathElement != null)
        {
-	   DataStore   dataStore   = pathElement.getDataStore();
-	   IProject    theProject  = getProjectFor(resource);
+	   DataStore   dataStore    = pathElement.getDataStore();
+	   DataElement projectRoot  = getProjectFor(pathElement);
 	   
-	   if (theProject == null)
-	       return;
+	   if (projectRoot != null)
+	       {
+		   DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
+		   DataElement projectsRoot = findWorkspaceElement(dataStore);		
+		   
+		   if ((commandDescriptor == null) || (projectRoot == null))
+		       return;
 	   
-	   String      name = new String(theProject.getName());
-	   DataElement commandDescriptor = dataStore.localDescriptorQuery(pathElement.getDescriptor(), "C_PARSE");
-	   DataElement projectsRoot = findWorkspaceElement(dataStore);		
-	   DataElement projectRoot = dataStore.find(projectsRoot, DE.A_NAME, name, 1);
-	   
-	   if ((commandDescriptor == null) || (projectRoot == null))
-	       return;
-	   
-	   ArrayList args = new ArrayList();	
-	   args.add(projectRoot);
-	   dataStore.getDomainNotifier().addDomainListener(this);
-	   
-	   DataElement status = null;
-	   if (isSynchronized)
-	       status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);	
-	   else
-	       status = dataStore.command(commandDescriptor, args, pathElement, false);		
-	   
-	   monitorStatus(status);
-	   _status = status;
-	   
+		   ArrayList args = new ArrayList();	
+		   args.add(projectRoot);
+		   dataStore.getDomainNotifier().addDomainListener(this);
+		   
+		   DataElement status = null;
+		   if (isSynchronized)
+		       status = dataStore.synchronizedCommand(commandDescriptor, args, pathElement);	
+		   else
+		       status = dataStore.command(commandDescriptor, args, pathElement, false);		
+		   
+		   monitorStatus(status);
+		   _status = status;
+	       }
        }
-  }	
-
+    }	
 
   public synchronized void search(String pattern, ArrayList types, ArrayList relations, 
 				  boolean ignoreCase, boolean regex)
@@ -1243,7 +1243,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  }
 
 	      _searchResultsView.searchStarted(
-					       "com.ibm.cpp.ui.internal.views.search.CppSearchPage",
+					       "com.ibm.cpp.ui.CppSearchPage",
 					       patternStr.toString(),
 					       CppPlugin.getDefault().getImageDescriptor("details.gif"),//null,
 					       null,
@@ -1275,7 +1275,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       // needed because eclipse doesn't support remote files
       if (dataStore != _plugin.getDataStore())
 	  {
-	      showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", _status);
+	      showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
 	  }
     }
   }
@@ -1284,10 +1284,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public void cancel(DataElement command)
   {
       DataStore dataStore = command.getDataStore();
-      DataElement commandDescriptor = dataStore.find(dataStore.getDescriptorRoot(), DE.A_NAME, "Cancel");
-      if (commandDescriptor != null)
+      DataElement cancelDescriptor = dataStore.localDescriptorQuery(command.getDescriptor(), "C_CANCEL");
+      if (cancelDescriptor != null)
 	  {	
-	      dataStore.command(commandDescriptor, command, false, true);
+	      dataStore.command(cancelDescriptor, command, false, true);
 	  }
   }
 
@@ -1759,6 +1759,12 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	DataElement build = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
 						   "Build Project",
 						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+	build.setAttribute(DE.A_VALUE, "BUILD");
+
+	DataElement clean = dataStore.createObject(projectD, DE.T_UI_COMMAND_DESCRIPTOR,
+						   "Clean Project",
+						   "com.ibm.cpp.ui.internal.actions.BuildAction");
+	clean.setAttribute(DE.A_VALUE, "CLEAN");
        
 	
 	DataElement openProject = dataStore.createObject(closedProjectD, DE.T_UI_COMMAND_DESCRIPTOR,

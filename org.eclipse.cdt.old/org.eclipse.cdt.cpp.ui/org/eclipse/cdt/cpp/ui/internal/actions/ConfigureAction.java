@@ -69,7 +69,7 @@ public class ConfigureAction extends CustomAction
 		DataElement status = _dataStore.command(configureCmd, _subject);
 		
 		ModelInterface api = ModelInterface.getInstance();
-		api.showView("com.ibm.cpp.ui.internal.views.CppOutputViewPart", status);
+		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
 		
 		RunThread thread = new RunThread(_subject, status);

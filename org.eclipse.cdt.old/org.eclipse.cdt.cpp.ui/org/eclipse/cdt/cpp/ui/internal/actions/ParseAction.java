@@ -7,6 +7,7 @@ package com.ibm.cpp.ui.internal.actions;
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.api.*;
 
+import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.ui.dialogs.*;
 
 import org.eclipse.swt.*;
@@ -24,10 +25,13 @@ import org.eclipse.ui.*;
 import java.io.*;
 import java.util.*;
 
-public class ParseAction implements IActionDelegate, ISelectionChangedListener
+public class ParseAction implements ISelectionChangedListener, IWorkbenchWindowActionDelegate
 {
   private String    _path;
-  private IResource _resource;
+
+  private IResource   _resource;
+  private DataElement _resourceElement;
+
   private ISelection _selection;
 
 
@@ -39,7 +43,13 @@ public class ParseAction implements IActionDelegate, ISelectionChangedListener
 
     ModelInterface api = CppPlugin.getModelInterface();	
     if (_resource != null)
-      api.parse(_resource, false, true);
+	{
+	    api.parse(_resource, false, true);
+	}
+    else if (_resourceElement != null)
+	{
+	    api.parse(_resourceElement, false, true);
+	}
   }
 
 
@@ -60,24 +70,53 @@ public class ParseAction implements IActionDelegate, ISelectionChangedListener
   {
     boolean state= !selection.isEmpty();
     _selection = selection;
+    _resource = null;
+    _resourceElement = null;
 
     if (selection instanceof IStructuredSelection)
     {
-	    IStructuredSelection structuredSelection= (IStructuredSelection)selection;
-       _resource= (IResource)structuredSelection.getFirstElement();
-       if (_resource != null)
-       {
-          IProject project = _resource.getProject();
-
-          if (CppPlugin.isCppProject(project))
-          {
-   	      ((Action)action).setEnabled(true);
-   	    }
-   	    else
-   	    {
-   	      ((Action)action).setEnabled(false);
-          }
-       }
+	IStructuredSelection structuredSelection= (IStructuredSelection)selection;
+	Object first = structuredSelection.getFirstElement();
+	
+	if (first instanceof IResource)
+	    {		
+		_resource= (IResource)first;
+		if (_resource != null)
+		    {
+			IProject project = _resource.getProject();
+			
+			if (CppPlugin.isCppProject(project))
+			    {
+				((Action)action).setEnabled(true);
+			    }
+			else
+			    {
+				((Action)action).setEnabled(false);
+			    }
+		    }
+	    }
+	else if (first instanceof DataElement)
+	    {
+		_resourceElement = (DataElement)first;
+		DataElement descriptor = _resourceElement.getDescriptor();
+		
+		if (descriptor != null && descriptor.isOfType("file"))
+		    {
+			((Action)action).setEnabled(true);			
+		    }
+		else
+		    {
+			((Action)action).setEnabled(false);			
+		    }
+	    }
     }
   }
+    
+    public void dispose()
+    {
+    }
+
+    public void init(IWorkbenchWindow window)
+    {
+    }
 }

@@ -99,8 +99,12 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		_plugin.writeProperty(project, "ParseQuality", preferences);      
 		
 		// add build history
-		ArrayList builds = _fProjectInfoWizardPage._workbookPageBuildInvocation.getInvocations();
+		ArrayList builds = _fProjectInfoWizardPage._workbookPageBuildInvocation.getBuildInvocations();
 		_plugin.writeProperty(project, "Build History", builds);
+
+		// add clean history
+		ArrayList cleans = _fProjectInfoWizardPage._workbookPageBuildInvocation.getCleanInvocations();
+		_plugin.writeProperty(project, "Clean History", cleans);
 
 		ArrayList variables = _fProjectInfoWizardPage._workbookPageEnvironment.getVariables();
 		_plugin.writeProperty(project, "Environment", variables);
@@ -194,7 +198,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 	    }
 
 	
-	String navID = "com.ibm.cpp.ui.internal.views.CppProjectsViewPart";
+	String navID = "com.ibm.cpp.ui.CppProjectsViewPart";
 
 	final IViewPart viewPart = persp.findView(navID);
 	if (viewPart != null)

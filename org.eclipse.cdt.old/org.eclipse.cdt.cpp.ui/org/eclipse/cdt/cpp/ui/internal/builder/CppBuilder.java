@@ -65,10 +65,16 @@ public class CppBuilder extends IncrementalProjectBuilder
 
     public void doBuild(DataElement project)
     {
+	doBuild(project, true);
+    }
+
+    public void doBuild(DataElement project, boolean isBuild)
+    {
 	ModelInterface api = CppPlugin.getModelInterface();	
 	
 	IProject projectR = api.findProjectResource(project); 
-	String invocation = getInvocation(projectR);
+
+	String invocation = getInvocation(projectR, isBuild);
 	
 	DataElement status = api.invoke(project, invocation, false);
 	
@@ -78,13 +84,18 @@ public class CppBuilder extends IncrementalProjectBuilder
 
     public void doBuild(IProject project)
     {
+	doBuild(project, true);
+    }
+
+    public void doBuild(IProject project, boolean isBuild)
+    {
         if ((project != null) && project.isOpen() &&
 	    (CppPlugin.getDefault().isCppProject(project)))
 	    {
     		ModelInterface api = CppPlugin.getModelInterface();	
 			
     		String path = new String(project.getLocation().toOSString());	
-   		String invocation = getInvocation(project);
+   		String invocation = getInvocation(project, isBuild);
 		DataElement projectElement = api.findProjectElement(project);
 
    		DataElement status = api.invoke(projectElement, invocation, false);
@@ -161,10 +172,21 @@ public class CppBuilder extends IncrementalProjectBuilder
       }
 
   static private String getInvocation(IProject project)
+    {
+	return getInvocation(project, true);
+    }
+
+  static private String getInvocation(IProject project, boolean isBuild)
       {
         if (project != null)
         {
-          ArrayList history = CppPlugin.readProperty(project, "Build History");
+	    String property = "Build History";
+	    if (!isBuild)
+		{
+		    property = "Clean History";
+		}
+	    
+          ArrayList history = CppPlugin.readProperty(project, property);
           if ((history != null) && (history.size() > 0))
             return new String((String)history.get(0));
 	  else
