@@ -31,6 +31,12 @@ public abstract class GdbVariable  extends Variable
     */
    public static GdbVariable createVariable(DebugSession debugSession, String varName, String type, String value, int nodeID) 
    {
+   	
+   		if (!_allowTreeStructure)
+   		{
+	         return new GdbScalarVariable(debugSession, varName, type, value, nodeID);
+   		}
+   		
    		if (value.startsWith("{"))
    		{	 
    			int comma = value.indexOf(",");
@@ -174,5 +180,6 @@ public abstract class GdbVariable  extends Variable
 
    public abstract String getScalarValue();
    public abstract void setScalarValue(String s);
-
+   
+   private static boolean _allowTreeStructure=false;
 }
