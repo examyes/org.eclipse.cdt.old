@@ -152,7 +152,7 @@ public class BreakpointRulerAction extends LpexMarkerRulerAction {
 
       if (rulerLine >= 0)
       {
-           int eolLength = System.getProperty("line.separator").length();
+           int eolLength = ((LpexAbstractTextEditor)getTextEditor()).getEOL().length();
            LpexDocumentLocation loc = new LpexDocumentLocation(rulerLine+1, 1);
            LpexView lpexView = ((LpexAbstractTextEditor)getTextEditor()).getLpexView();
            _start = lpexView.charOffset(loc, eolLength);
