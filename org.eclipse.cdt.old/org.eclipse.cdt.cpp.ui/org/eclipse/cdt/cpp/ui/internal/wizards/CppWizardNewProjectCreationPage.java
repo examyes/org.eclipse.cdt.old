@@ -71,6 +71,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
     protected Combo		                remoteHostNameField;
     protected Combo		                remoteHostPortNumberField;
     protected Combo		                remoteHostDirectoryField;
+    protected Combo		                remoteHostMountField;
     protected Button                            remoteHostBrowseButton;
     protected Button                            remoteHostUseDaemon;
 
@@ -78,6 +79,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
     protected String                        selectedHostName="";
     protected String                        selectedHostPortNumber="";
     protected String                        selectedHostDirectory="";
+    protected String                        selectedHostMount="";
     private   CheckboxTableViewer           referenceProjectsViewer;
     
     // constants
@@ -260,6 +262,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 		setDefaults("DefaultRemoteHostName",      remoteHostNameField);
 		setDefaults("DefaultRemoteHostPort",      remoteHostPortNumberField);
 		setDefaults("DefaultRemoteHostDirectory", remoteHostDirectoryField);			    
+		setDefaults("DefaultRemoteHostMount",     remoteHostMountField);
 	    }
 
 	return getNewProject() != null;
@@ -296,6 +299,7 @@ public class CppWizardNewProjectCreationPage extends WizardPage implements Liste
 	selectedHostName       = remoteHostNameField.getText();
 	selectedHostPortNumber = remoteHostPortNumberField.getText();
 	selectedHostDirectory  = remoteHostDirectoryField.getText();
+	selectedHostMount      = remoteHostMountField.getText();
 
 	_projectHandle = getProjectHandle();
 
@@ -475,6 +479,7 @@ protected IProject getProjectHandle()
 
 	    com.ibm.cpp.ui.internal.vcm.PlatformVCMProvider provider = com.ibm.cpp.ui.internal.vcm.PlatformVCMProvider.getInstance();
 	    IProject newPrj = (IProject)provider.createRepository(con, con.getRoot());	   	    
+
 	    return newPrj;
 	}
     else
@@ -543,6 +548,7 @@ protected String getDirectoryName() {
 		remoteHostUseDaemon.setEnabled(false);
             	remoteHostPortNumberField.setEnabled(false);
             	remoteHostDirectoryField.setEnabled(false);
+            	remoteHostMountField.setEnabled(false);
             	remoteHostBrowseButton.setEnabled(false);
 		_sourceLocation = CppProjectAttributes.LOCATION_WORKBENCH;
             }
@@ -555,6 +561,7 @@ protected String getDirectoryName() {
             	remoteHostNameField.setEnabled(false);
             	remoteHostPortNumberField.setEnabled(false);
 		remoteHostDirectoryField.setEnabled(false);
+		remoteHostMountField.setEnabled(false);
 		remoteHostBrowseButton.setEnabled(false);
 		remoteHostUseDaemon.setEnabled(false);
 		_sourceLocation = CppProjectAttributes.LOCATION_LOCAL;
@@ -565,6 +572,7 @@ protected String getDirectoryName() {
 		remoteHostNameField.setEnabled(true);
             	remoteHostPortNumberField.setEnabled(true);
             	remoteHostDirectoryField.setEnabled(true);
+            	remoteHostMountField.setEnabled(true);
 		remoteHostBrowseButton.setEnabled(true);
 		remoteHostUseDaemon.setEnabled(true);
             	remoteHostNameField.setFocus();
@@ -590,7 +598,6 @@ protected String getDirectoryName() {
 		    }
 	    }
 
-	//***	this.clearErrorMessage();
 	this.setPageComplete(this.validatePage());
     }
     
@@ -709,7 +716,6 @@ protected String getDirectoryName() {
 	sourceBrowseButton = new Button(projectMappingSelectionGroup,SWT.PUSH);
 	sourceBrowseButton.setText(_plugin.getLocalizedString("BrowseButton"));
 	sourceBrowseButton.addListener(SWT.Selection,this);
-	//	sourceBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
 	sourceBrowseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 	
 	/*****
@@ -806,22 +812,37 @@ protected String getDirectoryName() {
 	dD.widthHint = SIZING_TEXT_FIELD_WIDTH;
 	remoteHostUseDaemon.setLayoutData(dD);
 
+	// mounted directory name label
+	Label mountedDirectoryLabel = new Label(projectMappingSelectionGroup,SWT.NONE);
+	mountedDirectoryLabel.setText("Local Mount Point (Optional):");
+	data = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+	data.horizontalIndent = 30;
+	mountedDirectoryLabel.setLayoutData(data);
+
+	// mounted Directory name entry field
+	remoteHostMountField = new Combo(projectMappingSelectionGroup,SWT.BORDER);
+	remoteHostMountField.addListener(SWT.Modify,this);
+	remoteHostMountField.addListener(SWT.Selection,this);
+	data = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	data.widthHint = SIZING_TEXT_FIELD_WIDTH;
+	data.horizontalSpan = 1;
+	remoteHostMountField.setLayoutData(data);
+
+
 	// remote Host (socket connection)
 	remoteHostRadio.setEnabled(true);
 	remoteHostNameField.setEnabled(false);
 	remoteHostPortNumberField.setEnabled(false);
 	remoteHostDirectoryField.setEnabled(false);
+	remoteHostMountField.setEnabled(false);
 	remoteHostBrowseButton.setEnabled(false);
 	remoteHostUseDaemon.setEnabled(false);
 
 	getDefaults("DefaultRemoteHostName",      remoteHostNameField);
 	getDefaults("DefaultRemoteHostPort",      remoteHostPortNumberField);
 	getDefaults("DefaultRemoteHostDirectory", remoteHostDirectoryField);
+	getDefaults("DefaultRemoteHostMount",     remoteHostMountField);
 	
-	/****
-	remoteURLRadio.setEnabled(true);
-	remoteURLNameField.setEnabled(false);
-	****/
 
 	// workbench
 	defaultMappingRadio.setSelection(true);
@@ -889,6 +910,11 @@ protected String getDirectoryName() {
 	    result = result.removeTrailingSeparator();
 	
 	return result.toOSString();
+    }
+
+    public String getRemoteMountPoint()
+    {
+	return selectedHostMount;
     }
     
     /**

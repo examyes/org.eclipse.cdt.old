@@ -39,6 +39,7 @@ public class QuickConnectAction implements Runnable
     private String _port;
     private String _selected;
     private String _directory;
+    private String _mountedDirectory;
 
     public QuickConnectAction(String host, String port, String directory)
     {

@@ -9,6 +9,7 @@ import com.ibm.cpp.ui.internal.views.*;
 import com.ibm.cpp.ui.internal.vcm.*;
 
 import com.ibm.dstore.ui.*;
+import com.ibm.dstore.ui.resource.*;
 
 import com.ibm.dstore.core.model.*;
 
@@ -69,6 +70,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 			    if ( !realFile.isDirectory())
 				{		
 				    IFile file = getNewFile(fileName);
+
 				    if (file == null)
 					{
 					    DataElement fileElement = null;	
@@ -99,6 +101,27 @@ public class OpenEditorAction extends Action implements IOpenAction
 				    
 				    if (file != null)
 					{	
+					    // if this is a remote file
+					    if (file instanceof FileResourceElement)
+						{
+						    IProject project = file.getProject();
+						    ArrayList mountPoints = _plugin.readProperty(project, "Mount Point");
+						    if (mountPoints != null && mountPoints.size() > 0)
+							{
+							    String mountPoint = (String)mountPoints.get(0);
+							    FileResourceElement fileElement = (FileResourceElement)file;
+							    if (fileElement.getMountedFile() == null)
+								{
+								    String mountedFileName = mountPoint + 
+									java.io.File.separator +
+									fileElement.getName();
+
+								    java.io.File mountedFile = new java.io.File(mountedFileName);
+								    fileElement.setMountedFile(mountedFile);
+								}
+							}
+						}
+
 					    if (_plugin != null)
 						{
 						    IWorkbench desktop = _plugin.getWorkbench();

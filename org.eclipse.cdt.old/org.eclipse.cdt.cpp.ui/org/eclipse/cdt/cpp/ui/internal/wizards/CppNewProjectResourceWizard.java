@@ -104,6 +104,16 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		
 		if (project instanceof Repository)
 		    {
+			QualifiedName mountFile = new QualifiedName("Mount Point", newPath.toString());
+			try
+			    {
+				String mountLocation = _mainPage.getRemoteMountPoint();
+				project.setPersistentProperty(mountFile, mountLocation);
+			    }
+			catch (CoreException ce)
+			    {
+				System.out.println("CppNewProjectResourceWizard setPersistenProperty C++ Project CoreException: " +ce);
+			    }
 		    }
 		else
 		    {

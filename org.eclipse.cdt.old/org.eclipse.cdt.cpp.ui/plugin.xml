@@ -360,6 +360,12 @@
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage">
         </page>
+	<page
+		id="com.ibm.cpp.ui.internal.builder.RemotePropertyPage"
+		name="Remote Properties"
+		objectClass="com.ibm.cpp.ui.internal.vcm.Repository"
+		class="com.ibm.cpp.ui.internal.builder.RemotePropertyPage">
+        </page>
 </extension>
 
 <extension point="org.eclipse.search.searchPages">

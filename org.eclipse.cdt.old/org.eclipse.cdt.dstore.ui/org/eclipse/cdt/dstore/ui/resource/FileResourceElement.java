@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class FileResourceElement extends ResourceElement implements IFile				     
 {  
+    private java.io.File _mountedFile = null;
+
   public FileResourceElement (DataElement e, IProject project)
   {
     super(e, project);    
@@ -56,6 +58,20 @@ public class FileResourceElement extends ResourceElement implements IFile
   public void create(InputStream content, boolean force, IProgressMonitor monitor) throws CoreException 
   {
   }
+
+    public void setMountedFile(java.io.File file)
+    {
+	_mountedFile = file;
+	if (_mountedFile != null)
+	    {
+		_path = new Path(_mountedFile.getAbsolutePath());	  
+	    }
+    }
+
+    public java.io.File getMountedFile()
+    {
+	return _mountedFile;
+    }
 
   public void setContents(IFileState source, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
@@ -100,18 +116,32 @@ public class FileResourceElement extends ResourceElement implements IFile
 
   private void internalSetContents(InputStream in, IProgressMonitor monitor)
   {
-    String localPath = getFullPath().toOSString();
-    
-    try
-      {	
-	java.io.File theFile = new java.io.File(localPath);    
-	FileOutputStream output = new FileOutputStream(theFile);
-	transferStreams(in, output, monitor);
-        updateRemoteFile(theFile);
-      }
-    catch (IOException e)
-      {
-      }     
+      if (_mountedFile == null)
+	  {
+	      String localPath = getFullPath().toOSString();
+	      
+	      try
+		  {	
+		      java.io.File theFile = new java.io.File(localPath);    
+		      FileOutputStream output = new FileOutputStream(theFile);
+		      transferStreams(in, output, monitor);
+		      updateRemoteFile(theFile);
+		  }
+	      catch (IOException e)
+		  {
+		  }     
+	  }
+      else
+	  {
+	      try
+		  {	
+		      FileOutputStream output = new FileOutputStream(_mountedFile);
+		      transferStreams(in, output, monitor);
+		  }
+	      catch (IOException e)
+		  {
+		  }     	      
+	  }
   }
 
   private void updateRemoteFile(java.io.File theFile)
@@ -204,7 +234,11 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 
     try
     {
-      java.io.File fileObject = _element.getFileObject();
+	java.io.File fileObject = _mountedFile;
+	if (fileObject == null)
+	    {
+		fileObject = _element.getFileObject();
+	    }
 
       if (fileObject != null && fileObject.exists())
 	{
@@ -221,13 +255,11 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
     catch (FileNotFoundException e)
     {
     }
-
     
     return result;
   }  
 
     
-
   public String getExtendedType() throws CoreException
   {
       return _path.getFileExtension();
@@ -243,7 +275,6 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
     return _path;
   }
   
-
   public IPath getLocation()
     {
 	return _path;
@@ -251,7 +282,7 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 
   public IPath getLocalLocation()
   {
-    return _path;    
+      return _path;    
   }
    
   public Object[] getChildren(Object o) 
