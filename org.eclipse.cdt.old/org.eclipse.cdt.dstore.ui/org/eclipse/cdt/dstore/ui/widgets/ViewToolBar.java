@@ -263,24 +263,6 @@ public class ViewToolBar extends Viewer implements IDomainListener
 	return _parent;
     }    
     
-    public void fixateOn(String relationType, String objectType)
-    {
- 	fixateOnRelationType(relationType);
- 	fixateOnObjectType(relationType);
-    }
-
-    public void fixateOnRelationType(String relationType)
-    {
-        _viewMenu.fixateOnRelationType(relationType);
-	_toolBarContainer.setVisible(false);
-    }
-    
-    public void fixateOnObjectType(String objectType)
-    {
-        _viewMenu.fixateOnObjectType(objectType);
-	_toolBarContainer.setVisible(false);
-    }
-    
     public void enable(boolean flag)
     {
 	_viewMenu.enable(flag);
@@ -399,6 +381,39 @@ public class ViewToolBar extends Viewer implements IDomainListener
     public void selectFilter(String filter)
     {
 	_viewMenu.selectFilter(filter);
+    }
+
+    public void fixateOn(String relationType, String objectType)
+    {
+ 	fixateOnRelationType(relationType);
+ 	fixateOnObjectType(relationType);
+    }
+
+    public void fixateOnRelationType(String relationType)
+    {
+        _viewMenu.fixateOnRelationType(relationType);
+	_toolBarContainer.setVisible(false);
+    }
+    
+    public void fixateOnObjectType(String objectType)
+    {
+        _viewMenu.fixateOnObjectType(objectType);
+	_toolBarContainer.setVisible(false);
+    }
+
+    public DataElement getSelectedRelationship()
+    {
+	return _viewMenu.getRelation();
+    }
+
+    public DataElement getSelectedFilter()
+    {
+	return _viewMenu.getFilter();
+    }
+    
+    public boolean isSpecialized()
+    {
+	return _viewMenu.isSpecialized();
     }
 
     public void dispose()

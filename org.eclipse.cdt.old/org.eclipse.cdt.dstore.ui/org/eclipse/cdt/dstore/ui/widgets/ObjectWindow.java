@@ -529,6 +529,20 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 	_toolBar.selectFilter(filter);
     }
 
+    public DataElement getSelectedRelationship()
+    {
+	return _toolBar.getSelectedRelationship();
+    }
+
+    public DataElement getSelectedFilter()
+    {
+	return _toolBar.getSelectedRelationship();
+    }
+
+    public boolean isSpecialized()
+    {
+	return _toolBar.isSpecialized();
+    }
 
   public void resetView()
       {

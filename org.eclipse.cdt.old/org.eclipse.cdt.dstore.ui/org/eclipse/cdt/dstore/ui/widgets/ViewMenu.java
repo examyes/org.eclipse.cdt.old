@@ -353,6 +353,8 @@ public class ViewMenu implements IMenuListener
       }
 
 
+
+
   public DataElement getFilter()
       {
         return _filterSelected;
@@ -697,6 +699,18 @@ public class ViewMenu implements IMenuListener
 				updateVisibility();
 			    }
 		    }
+	    }
+    }
+
+    public boolean isSpecialized()
+    {
+	if (_relationItems.size() == 1)
+	    {
+		return true;
+	    }
+	else
+	    {
+		return false;
 	    }
     }
     
