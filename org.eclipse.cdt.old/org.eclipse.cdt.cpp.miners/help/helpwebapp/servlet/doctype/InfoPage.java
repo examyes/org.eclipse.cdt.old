@@ -45,7 +45,15 @@ public class InfoPage
 	    "Transitional//EN\">\n";
 	
 	out.println("<HTML>\n" +
-		    "<HEAD><TITLE>" + _invocation + "</TITLE></HEAD>\n" +
+		    "<HEAD>\n"+
+		    "<TITLE>" + _invocation + "</TITLE>\n"+
+		    "<style type=\"text/css\">\n"+
+		    "<!--\n"+
+		    "TABLE{background-color:white;}\n"+
+		    "TD{font-size:120%;height:50pt;width:33%;}\n"+
+		    "-->\n"+
+		    "</style>\n"+
+		    "</HEAD>\n" +
 		    "<BODY BGCOLOR=\"#FDF5E6\">\n"+
 		    "<pre>\n");
 	
@@ -157,24 +165,49 @@ public class InfoPage
 			up = field.substring("Up:".length()).trim();
 		    }
 	    }
-	if(nodewanted.equals(nodename))
+	if(nodewanted.equals(nodename) && nodename!=null)
 	    {
-		StringBuffer link = new StringBuffer();
-		if(nodename!=null)
+		out.println("<center><H2>"+nodename+"<H2></center>");
+		out.println("<TABLE rules=\"all\" border=\"1\" align=\"center\" width=\"100%\">\n"+
+			    "<TR>\n"+
+			    "<TD>PREVIOUS</TD><TD>UP</TD><TD>NEXT</TD>\n"+
+			    "</TR>\n"+
+			    "<TR>");
+
+		if(prev!=null && !prev.startsWith("("))
 		    {
-			if(prev!=null && !prev.startsWith("("))
-			    link.append("<a href=Help?type=I&invocation=info:/"+_filename+"/"+prev.replace(' ','+')+
-					"><H3>"+"Previous:"+prev+"</H3></a>");
-			if(up!=null && !up.startsWith("(") )
-			    link.append("<a href=Help?type=I&invocation=info:/"+_filename+"/"+up.replace(' ','+')+
-					"><H3>"+"Up:"+up+"</H3></a>");
-			if(next!=null && !next.startsWith("("))
-			    link.append("<a href=Help?type=I&invocation=info:/"+_filename+"/"+next.replace(' ','+')+
-					"><H3>"+"Next:"+next+"</H3></a>");
-		   
-			out.println(link.toString());			
-			out.println("<center><H2>"+nodename+"</H2></center>");
+			out.println("<TD><a href=Help?type=I&invocation=info:/"+_filename+"/"+prev.replace(' ','+')+
+				    "><H3>"+prev+"</H3></a></TD>");
 		    }
+		else
+		    {
+			out.println("<TD></TD>");
+		    }
+
+		if(up!=null && !up.startsWith("(") )
+		    {
+			out.println("<TD><a href=Help?type=I&invocation=info:/"+_filename+"/"+up.replace(' ','+')+
+				    "><H3>"+up+"</H3></a></TD>");
+		    }
+		else
+		    {
+			out.println("<TD></TD>");
+		    }
+
+		
+		if(next!=null && !next.startsWith("("))
+		    {
+			out.println("<TD><a href=Help?type=I&invocation=info:/"+_filename+"/"+next.replace(' ','+')+
+				    "><H3>"+next+"</H3></a></TD>");
+		    }
+		else
+		    {
+			out.println("<TD></TD>");
+		    }
+
+		out.println("</TR>\n"+
+			    "</TABLE>");
+		
       		return true;
 	    }
 	return false;
