@@ -27,6 +27,9 @@ import com.ibm.debug.WorkspaceSourceLocator;
 import com.ibm.debug.launch.PICLDaemonInfo;
 import com.ibm.debug.launch.PICLAttachInfo;
 
+import com.ibm.debug.daemon.CoreDaemon;
+import com.ibm.debug.internal.picl.PICLDebugTarget;
+
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.cpp.ui.internal.wizards.*;
@@ -79,7 +82,7 @@ public class CppAttachLauncher implements ILauncherDelegate {
 
 		_directory = _executable.getParent();
 	    }
-	else if (element instanceof IProject || element instanceof IResource) 
+	else if (element instanceof IProject || element instanceof IResource)
 	    {
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
@@ -89,10 +92,10 @@ public class CppAttachLauncher implements ILauncherDelegate {
 
 			CppPlugin plugin = CppPlugin.getDefault();
 			DataStore dataStore = plugin.getCurrentDataStore();
-			_directory = dataStore.createObject(null, "directory", parentRes.getName(), 
+			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
 							    parentRes.getLocation().toString());
 
-			_executable = dataStore.createObject(_directory, "file", resource.getName(), 
+			_executable = dataStore.createObject(_directory, "file", resource.getName(),
 							     resource.getLocation().toString());
 			
 		    }
@@ -137,10 +140,22 @@ public class CppAttachLauncher implements ILauncherDelegate {
 	    }
 	
 
-        PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(attachInfo);
+      //PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(attachInfo);
+
+      PICLDebugTarget target = new  PICLDebugTarget(attachInfo,attachInfo.getEngineConnectionInfo()); //connection info can't be null
+      int key = CoreDaemon.generateKey();
+      CoreDaemon.storeDebugTarget(target, key);
+
+//      PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
+      PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
+                                      new Integer(attachInfo.getEngineConnectionInfo().getConduit()).intValue());
+	
+
+
         if(daemonInfo == null)
             return;
 
+        //storeAttachInfo(key, attachInfo);
         launchEngine(daemonInfo);
     }
 
