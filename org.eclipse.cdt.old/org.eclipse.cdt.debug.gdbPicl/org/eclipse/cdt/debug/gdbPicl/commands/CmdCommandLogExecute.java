@@ -5,11 +5,20 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl.commands;
-import org.eclipse.cdt.debug.gdbPicl.*;
-import org.eclipse.cdt.debug.gdbPicl.objects.*;
+import org.eclipse.cdt.debug.gdbPicl.BreakpointManager;
+import org.eclipse.cdt.debug.gdbPicl.DebugSession;
+import org.eclipse.cdt.debug.gdbPicl.Gdb;
+import org.eclipse.cdt.debug.gdbPicl.GdbDebugSession;
+import org.eclipse.cdt.debug.gdbPicl.LocalVariablesMonitorManager;
+import org.eclipse.cdt.debug.gdbPicl.ModuleManager;
+import org.eclipse.cdt.debug.gdbPicl.ThreadManager;
+import org.eclipse.cdt.debug.gdbPicl.VariableMonitorManager;
+import org.eclipse.cdt.debug.gdbPicl.objects.ThreadComponent;
 
-import com.ibm.debug.epdc.*;
-import com.ibm.debug.util.TraceLogger;
+import com.ibm.debug.epdc.EPDC;
+import com.ibm.debug.epdc.EPDC_EngineSession;
+import com.ibm.debug.epdc.ERepCommandLog;
+import com.ibm.debug.epdc.EReqCommandLog;
 
 /**
  * Process CommandLogExecute command

@@ -5,13 +5,17 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl;
-import org.eclipse.cdt.debug.gdbPicl.commands.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.util.Vector;
 
-import java.io.*;
-import java.util.*;
-import com.ibm.debug.connection.*;
-import com.ibm.debug.epdc.*;
-import com.ibm.debug.util.*;
+import org.eclipse.cdt.debug.gdbPicl.commands.CmdRemoteHalt;
+import org.eclipse.cdt.debug.gdbPicl.commands.CmdTerminateDE;
+import org.eclipse.cdt.debug.gdbPicl.commands.Command;
+
+import com.ibm.debug.internal.pdt.connection.Connection;
+import com.ibm.debug.epdc.EPDC_EngineSession;
+import com.ibm.debug.internal.pdt.util.Semaphore;
 
 /**
  * CommandProcessor main class.

@@ -5,13 +5,7 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl;
-import  org.eclipse.cdt.debug.gdbPicl.commands.*;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import com.ibm.debug.epdc.*;      // EPDC classes
-import com.ibm.debug.connection.Connection;
+import com.ibm.debug.internal.pdt.connection.Connection;
 
 /**
  * The DebugEngine class represents one debug engine.  You may instantiate

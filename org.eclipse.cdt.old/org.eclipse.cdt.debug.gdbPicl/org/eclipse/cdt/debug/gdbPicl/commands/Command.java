@@ -5,12 +5,14 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl.commands;
-import org.eclipse.cdt.debug.gdbPicl.*;
-import org.eclipse.cdt.debug.gdbPicl.objects.*;
+import org.eclipse.cdt.debug.gdbPicl.DebugSession;
+import org.eclipse.cdt.debug.gdbPicl.Gdb;
+import org.eclipse.cdt.debug.gdbPicl.GdbDebugSession;
 
-import java.io.*;
-import com.ibm.debug.epdc.*;
-import com.ibm.debug.connection.*;
+import com.ibm.debug.epdc.EPDC_EngineSession;
+import com.ibm.debug.epdc.EPDC_Reply;
+import com.ibm.debug.epdc.ERepVersion;
+import com.ibm.debug.internal.pdt.connection.Connection;
 
 /**
  * Abstract class that defines the methods that must be implemented by

@@ -484,24 +484,5 @@ public abstract class DebugSession
    public static final int CommandLogExecute   = 8;
    public static final int CmdGoTo             = 9;
 
-   // Kicker Flow Codes
-   public static final int DEBUG_FLOW_DEBUG    = 1;
-   public static final int DEBUG_FLOW_PASSTHRU = 0;
-   public static final int DEBUG_FLOW_UNKNOWN  =-1;
 
-   static final String DEBUG_FLOW_DEBUG_STRING    = "DEBUG";
-   static final String DEBUG_FLOW_PASSTHRU_STRING = "PASSTHRU";
-   static final String DEBUG_FLOW_UNKNOWN_STRING  = "UNKNOWN";
-
-   // KICKER_NAME should be set to the fully qualified package name of
-   // the kicker class.
-   // DEBUG_* should be set to the names of the methods Gdb PICL will set
-   // breakpoints in after attaching.
-   static final String KICKER_NAME   = "com.ibm.debug.export.Kicker";
-   static final String DEBUG_START   = "debug_start";
-   static final String DEBUG_STARTABS= "debug_startabs";
-   static final String DEBUG_STOP    = "debug_stop";
-   static final String DEBUG_SUSPEND = "debug_suspend";
-   static final String DEBUG_RESUME  = "debug_resume";
-   static final String DEBUG_DETACH  = "debug_detach";
 }

@@ -6,12 +6,7 @@
 
 package org.eclipse.cdt.debug.gdbPicl;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import java.text.*;
-import com.ibm.debug.epdc.EPDC;
-import com.ibm.debug.util.Semaphore;
+
 
 class GdbEvent 
 {

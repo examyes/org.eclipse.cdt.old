@@ -5,21 +5,36 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl;
-import org.eclipse.cdt.debug.gdbPicl.objects.*;
-import org.eclipse.cdt.debug.gdbPicl.gdbCommands.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
-import java.text.*;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GdbCommandAndResponse;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GdbExceptions;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GdbProcess;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbBreakpoints;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbFile;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbLocals;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbModuleParts;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbPartMethods;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbRegisters;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbSharedLibraries;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbStorage;
+import org.eclipse.cdt.debug.gdbPicl.gdbCommands.GetGdbThreads;
+import org.eclipse.cdt.debug.gdbPicl.objects.GdbPart;
+import org.eclipse.cdt.debug.gdbPicl.objects.MethodInfo;
+import org.eclipse.cdt.debug.gdbPicl.objects.Part;
+import org.eclipse.cdt.debug.gdbPicl.objects.ThreadComponent;
 
-import com.ibm.debug.epdc.*;
 import com.ibm.debug.epdc.ECPLog;
 import com.ibm.debug.epdc.EPDC;
+import com.ibm.debug.epdc.EPDC_Reply;
 import com.ibm.debug.epdc.ERepCommandLog;
-import com.ibm.debug.epdc.EStdCmdLogLine;
-import com.ibm.debug.util.Semaphore;
-import com.ibm.debug.util.Platform;
 
 public class GdbDebugSession extends DebugSession {
 	private boolean echoInternalCommands = false;
@@ -114,7 +129,7 @@ public class GdbDebugSession extends DebugSession {
 			Gdb.traceLogger.dbg(1, "GdbDebugSession constructor");
 
 		String shell = "cmd.exe /C ";
-		if (Platform.isUnix())
+		if (isUnix())
 			shell = "";
 		try {
 			String cmd;
@@ -1722,6 +1737,15 @@ public class GdbDebugSession extends DebugSession {
     	return ((numDeferred + loadBkpt) == 0);
     }
 
+	private boolean isUnix() {
+		String os = System.getProperty("os.name");
+		return (os.equals("AIX") ||
+				 os.equals("Solaris") ||
+				 os.equals("SunOS") ||
+				 os.equals("Linux") ||
+				 os.equals("UnixWare") ||
+				 os.equals("HP-UX"));
+	}
 
 	// data members
 

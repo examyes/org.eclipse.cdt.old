@@ -6,13 +6,24 @@
 
 package org.eclipse.cdt.debug.gdbPicl;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.text.*;
-import com.ibm.debug.connection.*;
-import com.ibm.debug.epdc.*;      // EPDC classes
-import com.ibm.debug.util.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.StringTokenizer;
+
+import com.ibm.debug.internal.pdt.connection.SocketConnection;
 
 /**
  * Java Debug Engine (JDE) main class.

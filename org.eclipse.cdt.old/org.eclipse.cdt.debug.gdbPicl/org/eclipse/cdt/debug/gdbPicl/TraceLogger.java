@@ -601,7 +601,7 @@ public final class TraceLogger extends Object
       // the english messages. See defect 9984:
 
       try
-      {  _messagesBundle=ResourceBundle.getBundle("com.ibm.debug.util.MessagesBundle",
+      {  _messagesBundle=ResourceBundle.getBundle("org.eclipse.cdt.debug.gdbPicl.MessagesBundle",
                                                   new Locale("en", "US"));
       }
       catch (MissingResourceException e)
