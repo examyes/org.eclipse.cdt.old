@@ -325,9 +325,9 @@ public class Repository extends Project
 
     public IResource[] getChildren(IPath path, boolean phantom) 
     {
-	if (_children == null)
+	if (_children == null || _children.size() == 0)
 	    {
-		_children = new Vector();
+		internalGetChildren(_remoteRoot);
 	    }
 
 	IResource[] resources = new IResource[_children.size()];
@@ -380,16 +380,17 @@ public class Repository extends Project
             element = _remoteRoot;
           }
 
-	  if (!element.getAttribute(DE.A_TYPE).equals("file"))
-	    {	      
-	      ArrayList objs = element.getNestedData();	  
+	  if (element.isOfType("directory"))
+	      {	      
+		  element.expandChildren(true);
+		  ArrayList objs = element.getAssociated("contents");	  
 	      
 	      // hard-coded for now
 	      for (int i = 0; i < objs.size(); i++)
 		{
 		  DataElement obj = ((DataElement)objs.get(i)).dereference();
 		  
-		  if (obj.getDataStore().filter(_resourceDescriptor, obj))
+		  //if (obj.getDataStore().filter(_resourceDescriptor, obj))
 		      {	    
 			  String type = obj.getType();
 			  String name = obj.getName();
@@ -403,31 +404,36 @@ public class Repository extends Project
 					  _children.remove(child);
 					  if (!obj.isDeleted())
 					      {
-						  if (type.equals("directory"))
+						  if (obj.isOfType("file"))
 						      {
-							  child = new FolderResourceElement(obj, this, this);		
+							  if (type.equals("directory"))
+							      {
+								  child = new FolderResourceElement(obj, this, this);		
+							      }
+							  else 
+							      {
+								  child = new FileResourceElement(obj, this, this);		
+							      }
+							  _children.add(child);		      
 						      }
-						  else 
-						      {
-							  child = new FileResourceElement(obj, this, this);		
-						      }
-						  _children.add(child);		      
 					      }
 				      }
 			      }
 			  else
 			  {
-				  if (type.equals("directory"))
-				      {
-					  child = new FolderResourceElement(obj, this, this);		
-				      }
-				  else 
-				      {
-					  child = new FileResourceElement(obj, this, this);		
-				      }
-				  _children.add(child);		      
-
-			      }
+			      if (obj.isOfType("file"))
+				  {
+				      if (type.equals("directory"))
+					  {
+					      child = new FolderResourceElement(obj, this, this);		
+					  }
+				      else 
+					  {
+					      child = new FileResourceElement(obj, this, this);		
+					  }
+				      _children.add(child);		      
+				  }			      
+			  }
 		      }	
 		}
 	    }	  

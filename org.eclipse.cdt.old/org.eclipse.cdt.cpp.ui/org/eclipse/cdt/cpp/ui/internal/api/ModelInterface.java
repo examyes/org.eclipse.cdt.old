@@ -1574,7 +1574,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   public IResource findFile(java.io.File fileName)
   {
     IResource file = null;
-
     if (fileName != null)
       {		
 	  IWorkspace ws = _plugin.getPluginWorkspace();
@@ -1613,12 +1612,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     {
 	IProject projects[] = root.getProjects();
 	if (projects != null)
-	    {
+	    {		
 		for (int i = 0; i < projects.length; i++)
 		    {
-			IResource result = findFile(projects[i], fileName);
-			if (result != null)
-			    return result;
+			IProject project = projects[i];
+			if (project.isOpen())
+			    {
+				IResource result = findFile(project, fileName);
+				if (result != null)
+				    return result;
+			    }
 		    }
 	    }
 	
@@ -1630,9 +1633,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	IProject projects[] = root.getProjects();
 	for (int i = 0; i < projects.length; i++)
 	    {
-		IResource result = findFile(projects[i], fileName);
-		if (result != null)
-		    return result;
+		IProject project = projects[i];
+		if (project.isOpen())
+		    {
+			IResource result = findFile(project, fileName);
+			if (result != null)
+			    return result;
+		    }
 	    }
 	
 	return null;
@@ -1651,8 +1658,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 				return container;
 			    }
 		    }
-
-
+		
 		IResource resources[] = root.members();
 		if (resources != null)
 		    {
@@ -1943,8 +1949,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					resource = findProjectResource(parent);
 				    }
 				else if (type.equals("directory"))
-				    {				
-					resource = findResource(parent);
+				    {	
+					// is this part of a project?
+					DataElement prj = getProjectFor(parent);
+					if (prj != null)
+					    {
+						resource = findResource(parent);
+					    }
 				    }
 			
 				if (resource != null)
