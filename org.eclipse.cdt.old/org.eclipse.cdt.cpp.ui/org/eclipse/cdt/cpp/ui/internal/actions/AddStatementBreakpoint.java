@@ -33,11 +33,6 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
-import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IBreakpointManager;
-import org.eclipse.debug.core.IDebugConstants;
-
 public class AddStatementBreakpoint extends CustomAction
 { 
   public AddStatementBreakpoint(DataElement subject, String label, DataElement command, DataStore dataStore)
