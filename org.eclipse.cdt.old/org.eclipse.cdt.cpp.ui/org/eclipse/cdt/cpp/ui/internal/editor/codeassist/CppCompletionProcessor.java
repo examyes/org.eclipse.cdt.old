@@ -51,6 +51,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
      */
     public IContextInformationValidator getContextInformationValidator()
     {
+	System.out.println("get validator");
 	return null;
     }
     
@@ -77,7 +78,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
      */
     public IContextInformation[] computeContextInformation(ITextViewer viewer, int position)
     {
-	//System.out.println("compute tips");
+	System.out.println("compute tips");
         return null;
     }
     
@@ -159,6 +160,7 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 				String imageStr = CppActionLoader.getInstance().getImageString(found);
 				Image image     = _plugin.getImage(imageStr);
 				
+				ContextInformation info = new ContextInformation(image, text, text);
 				int len = currentString.length();
 				
 				if (text.regionMatches(0, currentString, 0, len))
@@ -168,7 +170,9 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 									   text.length(),      // replacement length
 									   0,                  // cursor position
 									   image,
-									   null, null, null);
+									   text, 
+									   info, 
+									   text);
 				    }
 				else
 				    {
@@ -188,11 +192,12 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 										   text.length(),     // replacement length
 										   0,                 // cursor position
 										   image,
-										   null, null, null);
+										   text, 
+										   info, 
+										   text);
 					    }
 					else
 					    {
-						lastIndex++;
 						lastIndex++;
 						String after = currentString.substring(lastIndex);
 						result[i] = new CompletionProposal(text,
@@ -200,12 +205,16 @@ public class CppCompletionProcessor implements IContentAssistProcessor
 										   text.length(),
 										   0,
 										   image,
-										   null, null, null);
+										   text, 
+										   info, 
+										   text);
 					    }
 				    }
 			    }
 		    }
 	}
+
+
 	return result;
       }
 
