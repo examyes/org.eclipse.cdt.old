@@ -53,19 +53,21 @@ Get_InstallDirectory()
  while [ ! -d $InstallDir ]; do
   echo $n "Enter Installation Directory (typically <..>/eclipse/plugins) -> " $c;
   read InstallDir
-   (eval "ls -d $InstallDir 2>&1" > /dev/null) || 
-   (echo
-    echo "ERROR: Can't find directory \"$InstallDir\","
-    pwd="`pwd`/"
-    case "$InstallDir" in /*)
-     pwd=""
-    esac 
-    echo $n "would you like to create $pwd$InstallDir? (y or n) -> " $c;
-    read ans
-     case "$ans" in  y*|Y*)
-      mkdir -p $InstallDir;;
-     esac
-   )
+  #Hack to get a fully qualified path and expand a tilde.
+  case $InstallDir in 
+   /*) InstallDir=$InstallDir;;
+   ~*) InstallDir=$HOME"`echo $InstallDir | cut -c 2-`";;
+   *)  InstallDir="`pwd`"/$InstallDir;;
+  esac
+  (eval "ls -d $InstallDir 2>&1" > /dev/null) || 
+  (echo
+   echo "ERROR: Can't find directory \"$InstallDir\","
+   echo $n "would you like to create $InstallDir? (y or n) -> " $c;
+   read ans
+   case "$ans" in  y*|Y*)
+    mkdir -p $InstallDir;;
+   esac
+  )
  done
 }
 
@@ -88,14 +90,16 @@ backupCDT()
    while [ ! -d $BackupDir ]; do
     echo $n "Enter Directory for CDT Backup -> " $c;
     read BackupDir
+    #Hack to get a fully qualified path and expand a tilde.
+    case $BackupDir in 
+     /*) BackupDir=$BackupDir;;
+     ~*) BackupDir=$HOME"`echo $BackupDir | cut -c 2-`";;
+     *)  BackupDir="`pwd`"/$BackupDir;;
+    esac
     (eval "ls -d $BackupDir 2>&1" > /dev/null) || 
     (echo
      echo "ERROR: Can't find backup directory \"$BackupDir\","
-     pwd="`pwd`/"
-     case "$BackupDir" in /*)
-      pwd=""
-     esac 
-     echo $n "would you like to create $pwd$BackupDir? (y or n) -> " $c;
+     echo $n "would you like to create $BackupDir? (y or n) -> " $c;
      read ans
      case "$ans" in  y*|Y*)
       mkdir -p $BackupDir;;
