@@ -11,6 +11,7 @@
 C/C++ Development Tools - CDT Project<br>
 R2.0 Updated Plan</h1>
 <p>First edition July 10, 2002<p>
+<p>Second edition July 25, 2002<p>
 This document lays out the plan for the next major release of the C/C++
 Development Tools (CDT) Project, designated release 2.0. The two main goals
 of the 2.0 release will be to enable CDT to run on Eclipse R2.0, and to define 
@@ -49,9 +50,12 @@ The release milestones are:
  </li>
  <li>Subsequent source code releases will be with respect to 
  	<ul>
-	  <li>org.eclipse.cdt.debug.core </li>
-	  <li>org.eclipse.cdt.debug.ui </li>
-	  <li>org.eclipse.cdt.debug.mi</li>
+ 	  <li> 1 August, 2002, inital release of proposed framework API
+ 	  <ul>
+	  	<li>org.eclipse.cdt.debug.core </li>
+	  	<li>org.eclipse.cdt.debug.ui </li>
+	  	<li>org.eclipse.cdt.debug.mi</li>
+	  <ul></li>
 	  <li>org.eclipse.cdt.launch components.</li>
 	 </ul> 
   </li>
@@ -70,12 +74,15 @@ be available for download as soon as the release has been tested and validated.
 <h2>
 Compatibility with Previous Release</h2>
 
-<p><br><b>API Contract Compatibility:</b> CDT 2.0 will be upwards contract
-compatible with CDT 1.0 unless noted. This means that programs in full
-compliance with contracts specified in the CDT 1.0 APIs will automatically
-be in full compliance with the CDT 2.0 APIs. Downward contract compatibility
-is not supported. There is no guarantee that compliance with the CDT 2.0
-APIs would ensure compliance with the CDT 1.0 APIs.
+<p><br><b>API Contract Compatibility:</b> The architecture for the CDT 2.0 is completely different than
+the architecture of the CDT 1.0 release. As a result, there will be no compatibility supported, between version 1.0 and 2.0.
+</p>
+<p>
+Future releases will strive to be contract compatibile built upon the 2.0 contracts.
+This means that programs in full compliance with contracts specified in the CDT 2.0 APIs will automatically
+be in full compliance with the CDT 3.0 APIs. Downward contract compatibility
+is not supported. There is no guarantee that compliance with the CDT 3.0
+APIs would ensure compliance with the CDT 2.0 APIs.
 <br>&nbsp;
 <h2>
 Work Items</h2>
@@ -85,6 +92,7 @@ included in this plan unless they would also involve significant changes
 to the plugin.
 <p>The following committed items reflect new features of CDT, or areas
 where existing features will be significantly reworked.</p>
+
 TBD
 
 <br>&nbsp;
@@ -98,47 +106,17 @@ TBD
  </td>
 </tr>
 </table>
+
+<!-- Footer -->
 <p>
+<table BORDER=0 CELLPADDING=2 WIDTH="100%">
+<tr>
+ <td ALIGN=LEFT VALIGN=TOP COLSPAN="2" BGCOLOR="#0080C0">
+ </td>
+</tr>
+</table>
 <center><I>
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--//hide script from old browsers
-
-// Write the URL
-document.write('Last Modified on ');
-// last modified
-var days = new Array(8);
-days[1] = "Sunday";
-days[2] = "Monday";
-days[3] = "Tuesday";
-days[4] = "Wednesday";
-days[5] = "Thursday";
-days[6] = "Friday";
-days[7] = "Saturday";
-var months = new Array(13);
-months[1] = "January";
-months[2] = "February";
-months[3] = "March";
-months[4] = "April";
-months[5] = "May";
-months[6] = "June";
-months[7] = "July";
-months[8] = "August";
-months[9] = "September";
-months[10] = "October";
-months[11] = "November";
-months[12] = "December";
-var dateObj = new Date(document.lastModified)
-var wday = days[dateObj.getDay() + 1]
-var lmonth = months[dateObj.getMonth() + 1]
-var date = dateObj.getDate()
-var fyear = dateObj.getYear()
-if (fyear < 2000)
-fyear = fyear + 1900
-document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
-//end hiding contents -->
-</SCRIPT>
-
+Last Modified on Tuesday, July 23, 2002
 </I></center>
 
 </body>

@@ -31,7 +31,7 @@
    </tr>
    <tr>
       <td><font size="-1" face="arial,helvetica,geneva">
-      <p>The following is the official CDT User FAQ.  This document is work in progress.</p>
+      <p>The following is the official CDT User FAQ.  This document is, very much, a work in progress.</p>
       </font></td>
    </tr>
 
@@ -45,8 +45,8 @@
    <tbody>
     <tr>
       <td>
-      	<b><font face="Arial,Helvetica" color="#000000" size="+1"><a name="toc">
-      		Table of contents:
+        <b><font face="Arial,Helvetica" color="#000000" size="+1"><a name="toc">
+            Table of contents:
         </a></font></b>
       </td>
    </tr>
@@ -64,9 +64,9 @@
       <li><a href="#general_50">Which operating systems does the CDT support?</a></li>
       <li><a href="#general_60">Why isn't the XXX operating system supported by CDT?</a></li>
       <li><a href="#general_70">How do I ask questions?</a></li>
-      <li><a href="#general_80">How do I report a bug or request a feature?</a></li> 
-      <li><a href="#general_90">What is this .log file I hear so much about?</a></li> 
-      <li><a href="#general_100">How do I generate JavaDocs?</a></li> 
+      <li><a href="#general_80">How do I report a bug or request a feature?</a></li>
+      <li><a href="#general_90">What is this .log file I hear so much about?</a></li>
+      <li><a href="#general_100">How do I generate JavaDocs?</a></li>
    </ol>
   </li>
   <!-- Installation subheader -->
@@ -81,11 +81,19 @@
   <!-- Project Creations subheader -->
   <li> <b><a href="#create">C/C++ Project Creation:</a></b>
     <ol>
+    <li> <a href="#create_10">Creating a simple C++ Project -- "Hello World" on a Windows Platform</a></li>
+    <li> <a href="#create_20">Creating a simple C++ Project -- "Hello World" on a Linux Platform</a></li>
+    <li> <a href="#create_30">Creating a simple C++ Project -- "Hello World" on a Solaris Platform</a></li>
+    <li> <a href="#create_40">Creating a simple C++ Project -- "Hello World" on a QNX Neutrino Platform</a></li>
     </ol>
   </li>
    <!-- Building,Browsing subheader -->
-  <li> <b><a href="#build">Building & Browsing C/C++ Projects:</a></b>
+  <li> <b><a href="#build">Building C/C++ Projects:</a></b>
     <ol>
+    <li> <a href="#build_10">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></li>
+    <li> <a href="#build_20">Building a simple C++ Project -- "Hello World" on a Linux Platform</a></li>
+    <li> <a href="#build_30">Building a simple C++ Project -- "Hello World" on a Solaris Platform</a></li>
+    <li> <a href="#build_40">Building a simple C++ Project -- "Hello World" on a QNX Neutrino Platform</a></li>
     </ol>
   </li>
   <!-- Debug subheader -->
@@ -98,7 +106,7 @@
     <ol>
     </ol>
   </li>
-  
+
 </ul>
 
 <!-- General Header -->
@@ -107,9 +115,9 @@
     <td width="90%"> <a name="general"><b><font color="#000000" size="+1"> General
       </font></b></a> </td>
     <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
     </td>
   </tr>
 </table>
@@ -118,11 +126,13 @@
 <ol>
   <li><b><a name="general_10">What is the CDT?</a></b>
     <p>
-     The CDT (C/C++ Development Tools) Project is working towards providing a fully functional C and C++ Integrated 
-     Development Environment (IDE). Our focus is on designing and developing a fully extensible framework
-     but we are interested in participation from others who would like to extend our work.  The 
-     CDT is fully open-source and implemented purely in java as a set of plugins to the 
-     <a href="http://www.eclipse.org">Eclipse</a> platform.  To learn more visit the 
+     The CDT (C/C++ Development Tools) Project is working towards providing a fully functional C/C++ Integrated
+     Development Environment (IDE). Our focus is on designing and developing a fully extensible framework,
+     together with a full-featured default implementation. We are always interested in participation
+     from others who would like to extend our work.  </p>
+     <p>
+     The CDT is fully open-source and implemented purely in java as a set of plugins to the
+     <a href="http://www.eclipse.org">Eclipse</a> platform.  To learn more visit the
      <a href="http://www.eclipse.org/cdt">CDT Home Page</a>.
     </p>
     <hr size="1">
@@ -130,8 +140,8 @@
 
   <li><b><a name="general_20">How is the CDT licensed?</a></b>
    <p>The CDT consists of software produced by the CDT team combined with third party software developed from other
-      Open Source Projects.  The software produced by the CDT team is licensed under the 
-      <a href="http://www.eclipse.org/legal/cpl-v05.html">Common Public License</a>.  The software designed by 
+      Open Source Projects.  The software produced by the CDT team is licensed under the
+      <a href="http://www.eclipse.org/legal/cpl-v05.html">Common Public License</a>.  The software designed by
       third parties is made available under their respective licenses.  Refer to the about.html file in the root
       directory of every CDT plugin for specific licensing information.
     </p>
@@ -140,114 +150,131 @@
 
   <li><b><a name="general_30">How is the CDT Project organized?</a></b>
    <p>
-    The CDT was the first approved subproject of the Eclipse Tools Project hosted at 
-    <a href="http://www.eclipse.org/tools">www.eclipse.org/tools</a>.  To learn more about 
-    the organization of the Eclipse Tools Project, read the 
+    The CDT was the first approved subproject of the Eclipse Tools Project hosted at
+    <a href="http://www.eclipse.org/tools">www.eclipse.org/tools</a>.  To learn more about
+    the organization of the Eclipse Tools Project, read the
     <a href="http://www.eclipse.org/tools/eclipsetools-charter.html">Eclipse Tools Charter</a>.
    </p>
    <p>
-    The CDT project itself is organized into autonomous 
-    <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/main.html?cvsroot=Tools_Project#components">components</a> 
+    The CDT project itself is organized into autonomous
+    <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/main.html?cvsroot=Tools_Project#components">components</a>
     each with its own set of committers, bug categories and mailing lists.
    </p>
    <hr size="1">
   </li>
-  
+
   <li><b><a name="general_40">How do I find out about future releases of the CDT?</a></b>
     <p>
-     Release Milestones (which represent planned availability dates for Stable CDT builds) are noted in the CDT Plan 
-     Documents which can be found on the 
+     Release Milestones (which represent planned availability dates for Stable CDT builds) are noted in the CDT Plan
+     Documents which can be found on the
      <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/overview.html?cvsroot=Tools_Project">
-     CDT Overview Page</a>.  To see the currently available CDT builds, visit the  
+     CDT Overview Page</a>.  To see the currently available CDT builds, visit the
      <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project#">
-     CDT Download Page.</a> 
+     CDT Download Page.</a>
     </p>
     <hr size="1">
   </li>
- 
+
 <li><b><a name="general_50">Which operating systems does the CDT support?</a></b>
   <p>
-    The CDT Framework is platform independent. It will run where Eclipse will run. 
-    However, the default implementations may depend on external application.
-    Example, dependencies on GDB for debugging, or Make for building, 
+    The CDT Framework is platform independent. It will run where Eclipse will run.
+    However, the default implementations may depend on external applications.
+    To follow in the Eclipse spirit of open source, the default implementations rely
+    upon freely available open source tools, such as the GNU Tools: GDB and Make.
+    Therefore, the dependencies on GDB for debugging, or Make for building,
     will require that these applications are available for the platform that
-    the user wishes to use.
+    the user wishes to use. References to some of the known implementations for each platform
+    will be indicated in the sections of this FAQ that include instructions for installation,
+    project creation and building the CDT on the various platforms.</p>
+
+    <p>
+    Which platforms are fully supported will ultimately depend on the needs of the community,
+    as expressed by the participation in developing, and testing for each platform.
+    </p>
   </p>
    <hr size="1">
   </li>
- 
+
   <li><b><a name="general_60">Why isn't the XXX operating system supported by CDT?</a></b>
   <p>
-   "Supported" has a particular meaning to us. It means that on that platform we have a good level of 
-   confidence that CDT works correctly and that its function is appropriate and complete.   That means
+   "Supported" has a particular meaning to us. It means that on that platform we have a good level of
+   confidence that CDT works correctly and that its function is appropriate and complete. That means
    <ul>
-    <li>someone has ensured that the function addesses the important use cases</li>
+    <li>someone has ensured that the function addresses the important use cases</li>
     <li>the function is exercised by regular execution of a test plan</li>
     <li>identified problems are tracked to resolution</li>
     <li>there is a recipient for user feedback</li>
     <li>code patches are developed as necessary to correct or extend CDT on that platform </li>
    </ul>
-   To make this all happen a platform has an Owner - someone who accepts the responsibility to make sure 
+   To make this all happen a platform has an Owner - someone who accepts the responsibility to make sure
    those things all happen.
   </p>
   <p>
-    The Framework supports all the platforms that Eclipse does. 
-    The QNX CDT team is responsible for ensuring that this remains true for the framework.
+    The Framework supports all the platforms that Eclipse does.
+    The CDT team is responsible for ensuring that this remains true for the framework.
     Specific default implementations will work only on platforms where the required applications are available.
-    Creation of additional implementations are highly encouraged and will be the mechanism used to extend functionality
-    to all platforms.
+    The following list is derived from the initial CDT meeting in July 2002. The following companies have agreed
+    to provide support for the associated platforms:
+    <table border="0" cellspacing="5" cellpadding="2" width="100%">
+    <tr><td><b>Platform </b></td><td> <b>Company</b></td></tr>
+    <tr><td>QNX Neutrino</td><td>QNX Software Systems Ltd.</td></tr>
+    <tr><td>Linux</td><td>Red Hat</td></tr>
+    <tr><td>Windows</td><td>MontaVista with initial support from QNX</td></tr>
+    <tr><td>Solaris</td><td><!--Rational (tentative)--></td></tr>
+    </table>
+
   </p>
   <p>
-   If you have a favourite platform we highly encourage you to get involved and 
-   volunteer to own a feature that does not currently have an implementation that 
+   If you have a favorite platform we highly encourage you to get involved and
+   volunteer to own a feature that does not currently have an implementation that
    works on your platform of choice.
-  </p>  
+  </p>
   <hr size="1">
-  </li>  
- 
+  </li>
+
   <li><b><a name="general_70">How do I ask questions?</a></b>
    <p>
-    CDT related questions that are not answered in this FAQ or the documentation should be posted to the 
-    <a href="news://eclipse.org/eclipse.tools.cdt" target="_top">CDT newsgroup</a>. 
-    You will need a <a href="http://dev.eclipse.org/newsManager/newsRequestForm.html">password</a>.  You can 
-    also use this simple 
+    CDT related questions that are not answered in this FAQ or the documentation should be posted to the
+    <a href="news://eclipse.org/eclipse.tools.cdt" target="_top">CDT newsgroup</a>.
+    You will need a <a href="http://dev.eclipse.org/newsManager/newsRequestForm.html">password</a>.  You can
+    also use this simple
     <a href="http://www.eclipse.org/newsportal/thread_frameset.php3?name=eclipse.tools.cdt">web interface</a>
     to browse the newsgroup.
    </p>
-    General Questions about the Eclipse SDK which includes the 
-    <a href="http://www.eclipse.org/platform">Eclipse Platform</a> , 
-    <a href="http://www.eclipse.org/jdt">JDT</a> (Java Development Tools), 
+    General Questions about the Eclipse SDK which includes the
+    <a href="http://www.eclipse.org/platform">Eclipse Platform</a> ,
+    <a href="http://www.eclipse.org/jdt">JDT</a> (Java Development Tools),
     or <a href="http://www.eclipse.org/pde">PDE</a> (Plugin Development Environment)
-    should be posted to the 
-    <a href="news://eclipse.org/eclipse.tools" target="_top">Eclipse newsgroup</a>.  
+    should be posted to the
+    <a href="news://eclipse.org/eclipse.tools" target="_top">Eclipse newsgroup</a>.
    </p>
    <p>
-    Keep in mind that these newsgroups are public, so do not include any confidental information in your questions. 
-    You should also read 
-    <a href="http://www.tuxedo.org/%7Eesr/faqs/smart-questions.html">How to ask questions the smart way</a> 
-    by Eric Raymond before participating in the newsgroups. 
-    NOTE: Please submit bugs to <a href="http://dev.eclipse.org/bugs">bugzilla</a>, not to the newsgroups. 
+    Keep in mind that these newsgroups are public, so do not include any confidential information in your questions.
+    You should also read
+    <a href="http://www.tuxedo.org/%7Eesr/faqs/smart-questions.html">How to ask questions the smart way</a>
+    by Eric Raymond before participating in the newsgroups.
+    NOTE: Please submit bugs to <a href="http://dev.eclipse.org/bugs">bugzilla</a>, not to the newsgroups.
     See the <a href="#general_60">How do I report a bug or request a feature?</a> section of this document.
    </p>
    <hr size="1">
   </li>
-  
-  <li><b><a name="general_80">How do I report a bug or request a feature?</a></b> 
+
+  <li><b><a name="general_80">How do I report a bug or request a feature?</a></b>
    <p>
-    The CDT Project (like the Eclipse Project) uses 
-    <a href="http://www.bugzilla.org/">bugzilla</a> as its bug and feature tracking system. Entering a 
-    bug\feature report is as simple as filling in a web form on the 
-    <a href="http://dev.eclipse.org/bugs/">eclipse bugzilla page</a>. The first time you enter a bug you 
+    The CDT Project (like the Eclipse Project) uses
+    <a href="http://www.bugzilla.org/">bugzilla</a> as its bug and feature tracking system. Entering a
+    bug\feature report is as simple as filling in a web form on the
+    <a href="http://dev.eclipse.org/bugs/">eclipse bugzilla page</a>. The first time you enter a bug you
     will need to <a href="http://dev.eclipse.org/bugs/createaccount.cgi">create
     a new bugzilla account</a> for yourself by providing an email address and
     choosing a password.
    </p>
    <p>
-    Before enterring a bug report, you should 
-    <a href="http://dev.eclipse.org/bugs/query.cgi">search bugzilla</a> to see if someone else has already 
+    Before entering a bug report, you should
+    <a href="http://dev.eclipse.org/bugs/query.cgi">search bugzilla</a> to see if someone else has already
     entered a bug report similar to yours. If you find a bug report that outlines the problem you are seeing,
     you can simply annotate it with your comments to let the developers know that you have also hit the bug.
-    Also you can add yourself to the CC list of the bug so that you will notified when the status of the bug 
+    Also you can add yourself to the CC list of the bug so that you will notified when the status of the bug
     changes or someone adds comments.
    </p>
    <p>
@@ -258,12 +285,12 @@
    <p>
     To make your bug report more helpful include the following in your bug reports:
     <ol>
-      <li>The build level of both the CDT and Eclipse that you are using.  
+      <li>The build level of both the CDT and Eclipse that you are using.
        For example, "cdt 20020704 with Eclipse 2.0 Build"</li>
       <li>Your computer's specifications (OS + level, memory, other pertinent info)</li>
       <li>The contents of your .log file (or lack thereof).  This is especially
       important if you get a dialog that reports an internal error.  See
-      <a href="#general_70">What is this .log file I hear so much about?</a> for information on 
+      <a href="#general_70">What is this .log file I hear so much about?</a> for information on
       on finding your .log file.</li>
       <li>The Java runtime or development kit you are using to run eclipse (use
         java -version or java -fullversion)</li>
@@ -277,35 +304,36 @@
 
   <li><b><a name="general_90">What is this .log file I hear so much about?</a></b>
   <p>
-   The .log file is used by the Eclipse Platform to log runtime errors.  It is invaluable when debugging both 
-   problems with plugins not starting, as well as any exceptions they may throw once loaded.  A .log file 
+   The .log file is used by the Eclipse Platform to log runtime errors.  It is invaluable when debugging both
+   problems with plugins not starting, as well as any exceptions they may throw once loaded.  A .log file
    should always be included when opening a bug against the CDT or Eclipse (or if there is no .log file, that
    fact should be mentioned in the bug).
   </p>
   <p>
    The .log file is located in the workspace/.metadata directory (or sometimes just in the .metadata directory).
   </p>
-  <hr size="1">  
-  </li>  
-  
+  <hr size="1">
+  </li>
+
   <li><b><a name="general_100">How do I generate JavaDocs?</a></b>
   <p>
    The following steps can be used to create JavaDocs for any CDT project.
   </p>
   <p>
    <ol>
-   <li>Check out the project (i.e. org.eclipse.cdt.debug.core) from dev.eclipse.org 
-	    with cvsroot /home/tools</li>
-    <li>Ensure that you have JavaDoc installed and configured (go to preferences->Java->Javadoc 
-    	and set the location for the javadoc command </li>
-    <li>Select the project in the package explorer, right-click Export, 
-    	select Javadoc and follow the wizard instructions. It will generate the 
-    	Javadoc html in a doc directory for that plugin </li>
-   </ol>
+   <li>Check out the project (i.e. org.eclipse.cdt.debug.core) from dev.eclipse.org
+        with cvsroot /home/tools</li>
+    <li>Ensure that you have JavaDoc installed and configured (go to preferences->Java->Javadoc
+        and set the location for the javadoc command </li>
+    <li>Select the project in the package explorer, right-click Export,
+        select Javadoc and follow the wizard instructions. It will generate the
+        Javadoc html in a doc directory for that plugin </li>
+   </ol></p>
+   <p>
    The result will be a complete JavaDoc hierarchy of all the public APIs for the selected plugin.
   </p>
   <hr size="1">
-  </li>  
+  </li>
 </ol>
 
 <!-- Installation Header -->
@@ -313,9 +341,9 @@
   <tr>
     <td width="90%"> <a name="install"><b><font color="#000000" size="+1"> Download and Installation </font></b></a> </td>
     <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
     </td>
   </tr>
 </table>
@@ -330,47 +358,47 @@
    &nbsp;&nbsp;<b>R2</b> - Previous architecture, for use with specific Eclipse <b>Stable</b> Pre - R2.0 Builds.
   </p>
   So,<br>
-  If you are using a Eclipse Release R2.0, then check the 
+  If you are using a Eclipse Release R2.0, then check the
     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
     CDT Download Page</a> for information on which CDT Build to use.</li>
   <br>
    <hr size="1">
  </li>
- 
- 
+
+
  <li><b><a name="install_30">I can't find the CDT download for the XXX operating system?</a></b>
   <p>
    There is no special CDT download for any particular operating system.  Much of the CDT default functionality
    will uses applications that are available on most operating systems.  The CDT
-   leverages some Linux system tools such as gdb(debugging), make(building).  
-   These tools are available for many platforms and if they exist on your system, there is 
-   a good chance that the default functionality will work.  
+   leverages some Linux system tools such as gdb(debugging), make(building).
+   These tools are available for many platforms and if they exist on your system, there is
+   a good chance that the default functionality will work.
   </p>
   <p>
    For example, on Windows you can install the <a href="http://www.redhat.com/download/cygwin.html">Cygwin toolkit</a>
-   which is a Unix environment for Windows and includes automake and gdb. 
+   which is a Unix environment for Windows and includes automake and gdb.
   </p>
   <p>
-   The caveat is that the operation of the CDT on some operating systems has not been fully tested and we 
-   cannot commit time to fixing platform specific problems found on these platforms.  
-   However, code submissions from developers wanting to improve the CDT will always be gratefully accepted.   
+   The caveat is that the operation of the CDT on some operating systems has not been fully tested and we
+   cannot commit time to fixing platform specific problems found on these platforms.
+   However, code submissions from developers wanting to improve the CDT will always be gratefully accepted.
   </p>
    <hr size="1">
   </li>
 
   <li><b><a name="install_50">How do I build or debug the CDT itself?</a></b>
   <p>Are you Interested in playing with the CDT source and perhaps fixing a bug or adding a feature?
-     See the 
-     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/faq.html?cvsroot=Tools_Project">Developer FAQ</a> 
+     See the
+     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/faq.html?cvsroot=Tools_Project">Developer FAQ</a>
      for general information.  For specific information on how to build or debug the CDT see the document
-     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/developingCDT.html?cvsroot=Tools_Project">Developing the CDT</a>.
+     <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/build/developingCDT.html?cvsroot=Tools_Project">Developing with the CDT</a>.
   </p>
   <hr size="1">
   </li>
 
   <li><b><a name="install_60">How do I uninstall CDT?</a></b>
   <p>
-   We do not currently ship an uninstaller. You can uninstall the CDT in 2 manual steps: 
+   We do not currently ship an uninstaller. You can uninstall the CDT in 2 manual steps:
   </p>
 
   <ol>
@@ -405,37 +433,155 @@
   <tr>
     <td width="90%"> <a name="create"><b><font color="#000000" size="+1"> C/C++ Project Creation </font></b></a> </td>
     <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
     </td>
   </tr>
 </table>
 
-<hr size="1">
+<ol>
+    <li><b><a name="create_10"> Creating a simple C++ Project -- "Hello World on a Windows Platform"</a></b>
+    <p>This section will use an example to create the familiar "Hello World!" C++ program.
+    First, ensure that you have the CDT installed within Eclipse, as described <a href="#install"> above</a>.
+    Open a C/C++ Perspective and complete the following steps: </p>
+     <p>
+     <ol>
+        <li> In the C/C++ Projects View right click and select "New Project ..." </li>
+        <li> Select "C++" in the left pane and the select "Standard Make C++ Project"</li>
+        <li> Enter a name for the new project and select Finish.
+             Note: you can determine the "Build Settings" from this dialog,
+             but we will do so later, in the <a href="#build" >build</a> section.</li>
+        <li> In the C/C++ Projects View right click and select "New" > "Simple" > "File".
+              Name your file hello.cpp</li>
+        <li>Repeat the previous step and name the second new file "makefile".</li>
+        <li>Copy the following text into the "hello.cpp" file: <br>
+
+            <blockquote><pre>
+#include <iostream.h>
+#include <stdlib.h>
+
+int main()
+{
+  char buff[128];
+
+  cout << "Hello World!\n";
+  cin >> buff;
+  return (0);
+}           </blockquote></pre>
+            Now, save the file. </li>
+        <li>Copy the following text into the "makefile" file: <br>
+
+            <blockquote><pre>
+objects = hello.o
+
+hello : $(objects)
+    gcc -o hello $(objects) -L C:/MinGW/lib/gcc-lib/mingw32/2.95.3-5/ -lstdc++
+
+$(objects) : hello.cpp
+    gcc -c hello.cpp
+
+all :
+    ${MAKE} hello
+
+.PHONY : clean
+clean :
+    -del hello.exe $(objects)
+            </blockquote></pre>
+            Now, save the file. <br>
+            Note: the entry "C:/MinGW/lib/gcc-lib/mingw32/2.95.3-5/ "
+            will depend entirely on the, your platform, installation location and which GNU tools you have installed</li>
+     </ol></p>
+     <hr size="1">
+    </li>
+
+    <li><b><a name="create_20"> Creating a simple C++ Project -- "Hello World, on a Linux Platform"</a></b>
+    <p><hr size="1">
+    </li>
+
+    <li><b><a name="create_30"> Creating a simple C++ Project -- "Hello World, on a Solaris Platform"</a></b>
+    <p><hr size="1">
+    </li>
+
+    <li><b><a name="create_40"> Creating a simple C++ Project -- "Hello World, on a QNX Neutrino Platform"</a></b>
+    <p><hr size="1">
+    </li>
+
+</ol>
+
 
 <!-- Build Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
-    <td width="90%"> <a name="build"><b><font color="#000000" size="+1"> Building & Browsing C/C++ Projects </font></b></a> </td>
+    <td width="90%"> <a name="build"><b><font color="#000000" size="+1"> BuildingC/C++ Projects </font></b></a> </td>
     <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
     </td>
   </tr>
 </table>
 
+<ol>
+<li><b><a name="build_10">Building a simple C++ Project -- "Hello World" on a Windows Platform</a></b></li>
+<p>There are several tools that can help you run GNU Tools on Windows.
+<ul>
+  <li> <a href="http://www.redhat.com/software/tools/cygwin/"> Cygwin </a>
+  <li> <a href="http://www.mingw.org/"> MinGW.</a> <br>
+        Note: MinGW also works on top of a CygWin installation.
+</ul>
+Both of these tools offer a selection of GNU tools such as gcc and make.
+<p>
+The following example uses an installation of MinGW,
+installed into the directory C:\MinGW. If your installation has the GNU tools and libraries in a different
+location you will have to modify the example "makefile" to look for the libraries in the correct location.
+<ol>
+  <li>Follow the instructions, on the respective web site, to install your GNU tools. </li>
+  <li>In the C/C++ Projects View, select your new C/C++ project, right click and select Properties </li>
+  <li>In the properties dialog  select "C/C++ Project".</li>
+  <li>Then select the  "Build Settings" tab.</li>
+  <li>Deselect the "Use Default" checkbox </li>
+  <li>Enter the following in the "Build Command" text box <br>
+
+  <blockquote><pre>
+  make -f makefile
+  </blockquote></pre>
+
+   </li>
+   <li>Now you are ready to build your first CDT C/C++ project. <br>
+   In the C/C++ Projects View, select your new C/C++ project, right click and select
+   "Rebuild Project"     </li>
+    <li> You will have two additional files. "hello.o" and "hello.exe"</li>
+    <li> Double click on "hello.exe" or right click and select "Open With" > "Default Editor" to launch your simple program.</li>
+</ol>
+<p>
 <hr size="1">
+
+    <li><b><a name="build_20"> Building a simple C++ Project -- "Hello World, on a Linux Platform"</a></b>
+    <p><hr size="1">
+    </li>
+
+    <li><b><a name="build_30"> Building a simple C++ Project -- "Hello World, on a Solaris Platform"</a></b>
+    <p><hr size="1">
+    </li>
+
+    <li><b><a name="build_40"> Building a simple C++ Project -- "Hello World, on a QNX Neutrino Platform"</a></b>
+    <p><hr size="1">
+    </li>
+
+</ol>
+</p>
+
+
 
 <!-- Debug Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
     <td width="90%"> <a name="debug"><b><font color="#000000" size="+1"> Debugging C/C++ Projects </font></b></a> </td>
     <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
     </td>
   </tr>
 </table>
@@ -447,13 +593,14 @@
   <tr>
     <td width="90%"> <a name="profile"><b><font color="#000000" size="+1"> Profiling C/C++ Projects </font></b></a> </td>
     <td align="right">
-		<a href="#toc">
-			<img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
-		</a>
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
     </td>
   </tr>
 </table>
 
+<!-- Footer -->
 <p>
 
 <table BORDER=0 CELLPADDING=2 WIDTH="100%">
@@ -462,47 +609,8 @@
  </td>
 </tr>
 </table>
-
 <center><I>
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--//hide script from old browsers
-
-// Write the URL
-document.write('Last Modified on ');
-// last modified
-var days = new Array(8);
-days[1] = "Sunday";
-days[2] = "Monday";
-days[3] = "Tuesday";
-days[4] = "Wednesday";
-days[5] = "Thursday";
-days[6] = "Friday";
-days[7] = "Saturday";
-var months = new Array(13);
-months[1] = "January";
-months[2] = "February";
-months[3] = "March";
-months[4] = "April";
-months[5] = "May";
-months[6] = "June";
-months[7] = "July";
-months[8] = "August";
-months[9] = "September";
-months[10] = "October";
-months[11] = "November";
-months[12] = "December";
-var dateObj = new Date(document.lastModified)
-var wday = days[dateObj.getDay() + 1]
-var lmonth = months[dateObj.getMonth() + 1]
-var date = dateObj.getDate()
-var fyear = dateObj.getYear()
-if (fyear < 2000)
-fyear = fyear + 1900
-document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
-//end hiding contents -->
-</SCRIPT>
-
+Last Modified on Tuesday, July 23, 2002
 </I></center>
 </body>
 </html>
