@@ -337,7 +337,7 @@ public class CppOutputViewPart
 						IProject project = event.getProject();
 						String prjPath = null;
 						
-						if (project != null)
+						if (project != null && project.getLocation() != null)
 						{
 							prjPath = project.getLocation().toString();
 						}
