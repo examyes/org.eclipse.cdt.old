@@ -66,6 +66,10 @@ public class PTDataElementTableContentProvider extends DataElementTableContentPr
     private ArrayList getPTList(DataElement object)
     {
 	ArrayList resultList = new ArrayList();
+	if (object == null)
+	    {
+		return resultList;
+	    }
 	ArrayList list = object.getAssociated(_property);
 
 	for (int i = 0; i < list.size(); i++)

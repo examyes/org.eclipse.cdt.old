@@ -334,80 +334,76 @@ public class DataElementTableViewer extends TableViewer
 		System.out.println(e);
 	    }				
     }    
+ 
 
     private void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
 	int maxAdd = 80;
 	int numAdded = 0;
-	int totalItems = table.getItemCount();
-	
-	    {
-		for (int i = 0; i < elements.size(); i++)
-		    {
-			DataElement child = (DataElement)elements.get(i);			
-			synchronized(child)
 
-			{
-			    TableItem item = (TableItem)findItemFor(table, child);
-			    if (item != null)
-				{
-				    if (!item.getText().equals(child.getValue()))
-					{
-					    updateItem(item, child);
-					}
-				}
-			    else
-				{
-				    if (numAdded < maxAdd)
-					{
-					    if (_viewFilter.select(this, child, null))
-						{ 							
-						    if (recycled.size() > 0)
-							{
-							    item = (TableItem)recycled.get(0);
-							    recycled.remove(0);
-							}
-						    else
-							{
-							    item = (TableItem)newItem(table, SWT.NONE,totalItems +  numAdded);
-							    numAdded++;
-							}
-						    
-						    updateItem(item, child); 
-						    
-						}
-					}
-				    else
-					{
-					    // defer draw until later
-					    //_currentInput.getDataStore().refresh(_currentInput);
-					    
-					}
-				}
-			}
-		    }		
-	    }
 	
+	// first update existing ones
+	for (int i = (elements.size() - 1); i >= 0; i--)
+	    {
+		DataElement child = (DataElement)elements.get(i);	
+		TableItem item = (TableItem)findItemFor(table, child);
+		if (item != null)
+		    {
+			if (!item.getText().equals(child.getValue()))
+			    {
+				updateItem(item, child);
+			    }
+			
+			// remove from list
+			elements.remove(child);
+		    }
+	    }
+
+	
+
+       	int totalItems = table.getItemCount();	  
+	
+	// then create new ones
+	for (int i = 0; (i < elements.size()) && (numAdded < maxAdd); i++)
+	    {		
+		DataElement child = (DataElement)elements.get(i);			
+		TableItem item = null;
+		if (_viewFilter.select(this, child, null))
+		    { 							
+			if (recycled.size() > 0)
+			    {
+				item = (TableItem)recycled.get(0);
+				recycled.remove(0);
+			    }
+			else
+			    {
+				item = (TableItem)newItem(table, SWT.NONE,totalItems +  numAdded);
+				numAdded++;
+			    }
+			
+			updateItem(item, child); 			
+		    }
+	    }
+  
 	
 	if (recycled.size() > 0)
-	    {
-			
+	    {		
 		table.setRedraw(false);
-
+		
 		for (int i = 0; i < recycled.size(); i++)
 		    {
 			TableItem item = (TableItem)recycled.get(i);
 			item.dispose();
 			item = null;
 		    }
-
+		
 		table.setRedraw(true);
-
+		
 		recycled.clear();
 	    }
-
+	
     }
-   
+    
     protected Item newItem(Widget parent, int flags, int ix)  
     {
 	return new TableItem((Table)parent, flags, ix);
@@ -456,10 +452,8 @@ public class DataElementTableViewer extends TableViewer
 			    }
 
 			_currentInput = (DataElement)object;
-			_currentInput.expandChildren();
 			_viewFilter.reset();
 
-			super.inputChanged(object, oldInput);
 			internalRefresh(_currentInput);
 			_isShowing = true;
 		    }

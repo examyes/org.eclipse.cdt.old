@@ -410,7 +410,6 @@ public class ViewMenu implements IMenuListener
 	    {
 		_filterSelected = object.dereference();
 		filter = _filterSelected.getName();
-		_parent.getViewer().refreshView(_relationSelected, _filterSelected);
 	    }
         else
 	    {
@@ -436,7 +435,6 @@ public class ViewMenu implements IMenuListener
 		_filterLabel.setImage(image);
 		_filterLabel.setToolTipText(filter);
 		_filterLabel.setEnabled(true);
-		//***_viewToolBar.redraw();
 	    }
 	else
 	    {
