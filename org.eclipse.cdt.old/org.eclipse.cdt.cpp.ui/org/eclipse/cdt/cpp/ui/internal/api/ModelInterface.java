@@ -1639,6 +1639,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	int flags = delta.getFlags();
 	IResource resource = delta.getResource();
 
+
 	if (resource != null)
 	    {
 		switch (kind)		    
@@ -1651,7 +1652,9 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			else if ((flags & IResourceDelta.OPEN) != 0)
 			    {
 				if (resource instanceof IProject)
-				    openProject((IProject)resource);
+				    {
+					openProject((IProject)resource);
+				    }
 			    }			
 			break;
 		    case IResourceDelta.ADDED:

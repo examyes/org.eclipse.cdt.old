@@ -963,11 +963,12 @@ public final class DataElement implements Serializable, IDataElement
   {    
       DataElement status = null;
       if (!_isExpanded )
-	  {
-	      expandChildren(isSynchronized);
-	  }
-      else
-	  {
+        {
+	    status = (DataElement)expandChildren(isSynchronized);
+	}
+      
+      if (status == null)
+        {
 	      if ((_dataStore != null) && (_dataStore.isConnected()) && !isDeleted())
 		  {
 		      DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_REFRESH");
