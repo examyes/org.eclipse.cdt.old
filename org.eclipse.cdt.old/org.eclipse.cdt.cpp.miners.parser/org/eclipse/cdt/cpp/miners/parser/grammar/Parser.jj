@@ -994,6 +994,7 @@ String class_specifier() :
   (  name = identifier() 
    | {name = UnnamedTypeManager.instance().getNextUnnamedType(classType);}
   )
+  [";" {return name;}]
   { 
    DataElement theClass = null;
    if (classType.equals(ParserSchema.Union))
@@ -1004,7 +1005,8 @@ String class_specifier() :
     theClass = symtab.addObject(ParserSchema.dClass, name, startLine, true);
   }
   [base_clause(theClass)] 
-  ( ";" {symtab.closeScope(); return name;} | "{" skip_object_body(theClass) )
+  "{" 
+  skip_object_body(theClass)
   {return name;}
 }
 
