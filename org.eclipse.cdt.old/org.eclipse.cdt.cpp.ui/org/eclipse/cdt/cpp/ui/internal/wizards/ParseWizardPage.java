@@ -18,8 +18,9 @@ import org.eclipse.jface.wizard.*;
 
 public class ParseWizardPage extends WizardPage 
 {
-    public ParsePathWorkbookPage    _workbookPageParsePath;
-    public ParseQualityWorkbookPage _workbookPageParseQuality;
+    public ParseBehaviourWorkbookPage    _workbookPageParseBehaviour;
+    public ParsePathWorkbookPage         _workbookPageParsePath;
+    public ParseQualityWorkbookPage       _workbookPageParseQuality;
 
     protected CppPlugin    _plugin = CppPlugin.getPlugin();
     private CppNewProjectResourceWizard _wizard;
@@ -48,19 +49,27 @@ public class ParseWizardPage extends WizardPage
 
 	//page 1
 	TabItem item1;
-	_workbookPageParsePath = new ParsePathWorkbookPage(folder);
+	_workbookPageParseBehaviour = new ParseBehaviourWorkbookPage(folder);
 	item1 = new TabItem(folder, SWT.NONE);
-	item1.setText(_plugin.getLocalizedString("createProjectWizard.Info.ParseTab"));
-	item1.setData(_workbookPageParsePath);
-	item1.setControl(_workbookPageParsePath.getControl());
+	item1.setText("Parser Behaviour");
+	item1.setData(_workbookPageParseBehaviour);
+	item1.setControl(_workbookPageParseBehaviour.getControl());
 
 	//page 2
 	TabItem item2;
-	_workbookPageParseQuality = new ParseQualityWorkbookPage(folder);
+	_workbookPageParsePath = new ParsePathWorkbookPage(folder);
 	item2 = new TabItem(folder, SWT.NONE);
-	item2.setText("Parse Quality");
-	item2.setData(_workbookPageParseQuality);
-	item2.setControl(_workbookPageParseQuality.getControl());
+	item2.setText(_plugin.getLocalizedString("createProjectWizard.Info.ParseTab"));
+	item2.setData(_workbookPageParsePath);
+	item2.setControl(_workbookPageParsePath.getControl());
+
+	//page 3
+	TabItem item3;
+	_workbookPageParseQuality = new ParseQualityWorkbookPage(folder);
+	item3 = new TabItem(folder, SWT.NONE);
+	item3.setText("Parse Quality");
+	item3.setData(_workbookPageParseQuality);
+	item3.setControl(_workbookPageParseQuality.getControl());
 		
 	composite.setLayout(new FillLayout());
 	setPageComplete(true);

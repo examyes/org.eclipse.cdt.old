@@ -90,6 +90,10 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 		ArrayList paths = _parserWizardPage._workbookPageParsePath._pathControl.getPaths();
 		_plugin.writeProperty(project, "Include Path", paths);
 		
+		// add parse behaviour
+		ArrayList autoParse = _parserWizardPage._workbookPageParseBehaviour.getAutoParse();
+		_plugin.writeProperty(project, "AutoParse", autoParse);      
+
 		// add parse quality
 		ArrayList preferences = _parserWizardPage._workbookPageParseQuality.getQuality();
 		_plugin.writeProperty(project, "ParseQuality", preferences);      
