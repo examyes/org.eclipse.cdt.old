@@ -271,18 +271,58 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	    }
 	else if (element instanceof DataElement)
 	    {		
-		ArrayList attributes = ((DataElement)element).getAssociated("attributes");
-		if (attributes.size() > columnIndex - 1)
+		DataElement data = (DataElement)element;
+		DataElement descriptor = data.getDescriptor();
+		DataElement attributeDescriptor = getAttributeDescriptor(descriptor, columnIndex - 1);
+		
+		if (attributeDescriptor != null)
 		    {
-			DataElement attribute = (DataElement)attributes.get(columnIndex - 1);
-			return getText(attribute);
-		    }
-		else
-		    {
-			return "";
-		    }
+			ArrayList attributes = data.getAssociated("attributes");
+			for (int i = 0; i < attributes.size(); i++)
+			    {
+				DataElement attribute = (DataElement)attributes.get(i);
+				if (attribute.getDescriptor() == attributeDescriptor)
+				    {
+					return getText(attribute);
+				    }
+			    }
+			
+			// get attribute attributes
+			ArrayList format = attributeDescriptor.getAssociated("attributes");
+			if (format != null && format.size() > 0)
+			    {
+				DataElement formatDescriptor = (DataElement)format.get(0);
+				String formatStr = formatDescriptor.getName();
+				
+				if (formatStr.equals("Integer") || formatStr.equals("Date"))
+				    {
+					return "0";
+				    }
+				else if (formatStr.equals("Float"))
+				    {
+					return "0.0";
+				    }
+				else
+				    {
+					return "";
+				    }		
+			    }
+		    }		
 	    }
-	return null;
+	return "";
     }    
+
+
+    private DataElement getAttributeDescriptor(DataElement rootDescriptor, int attributeIndex)
+    {
+	ArrayList attributes = rootDescriptor.getAssociated("attributes");
+	if (attributes.size() > attributeIndex)
+	    {
+		DataElement attributeDescriptor = (DataElement)attributes.get(attributeIndex);
+		return attributeDescriptor;
+	    }	
+
+	return null;
+    }
 }
 

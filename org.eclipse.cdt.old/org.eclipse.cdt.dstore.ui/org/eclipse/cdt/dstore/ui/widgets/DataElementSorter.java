@@ -241,19 +241,29 @@ public class DataElementSorter extends ViewerSorter
 		_reverseSort = false;
 	    }
 	_attribute = attributeDescriptor;
-	 if (hasFormat(_attribute, "Integer") || hasFormat(_attribute, "Date"))
-	 {
-	  _sortFormat = INTEGER;
-	 }
-	 else if (hasFormat(_attribute, "Float"))
-	 {
-	  _sortFormat = FLOAT;
-	 }
-	 else
-	 {
-	  _sortFormat = STRING;
-	 }
-	
+	ArrayList format = attributeDescriptor.getAssociated("attributes");
+	if (format.size() > 0)
+	    {
+		DataElement formatDescriptor = (DataElement)format.get(0);
+		String formatStr = formatDescriptor.getName();
+
+		if (formatStr.equals("Integer") || formatStr.equals("Date"))
+		    {
+			_sortFormat = INTEGER;
+		    }
+		else if (formatStr.equals("Float"))
+		    {
+			_sortFormat = FLOAT;
+		    }
+		else
+		    {
+			_sortFormat = STRING;
+		    }		
+	    }	
+	else
+	    {
+		_sortFormat = STRING;
+	    }
     }  
 
 
