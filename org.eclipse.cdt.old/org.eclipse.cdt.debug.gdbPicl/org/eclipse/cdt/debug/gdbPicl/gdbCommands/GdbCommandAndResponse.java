@@ -142,9 +142,7 @@ public class GdbCommandAndResponse
 
                if (Gdb.traceLogger.DBG)
                    Gdb.traceLogger.dbg(3,". . . . . . . .  GdbDebugSession.getGdbResponseLines Object = "+ classObject.toString());
-               _debugSession.cmdResponses.addElement(classObject.toString());
-              
-               System.out.println("RW ===== GdbCommandAndResponse.java classObject: " + classObject.toString());
+               _debugSession.cmdResponses.addElement(classObject.toString());              
                classObject.setLength(0);
            }
            else if ( lines[i].equals(PRE_PROMPT_keyword) )
