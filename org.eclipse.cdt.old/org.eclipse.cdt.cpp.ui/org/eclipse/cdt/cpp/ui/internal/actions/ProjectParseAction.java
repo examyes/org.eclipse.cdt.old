@@ -12,54 +12,40 @@ import java.util.*;
 
 public class ProjectParseAction extends ProjectAction
 { 
- DataElement _parseCommand;
- 
- public ProjectParseAction(DataElement subject, String label, DataElement command, DataStore dataStore)
- {	
-     super(subject, label, command, dataStore);
-     _parseCommand = _dataStore.localDescriptorQuery(subject.getDescriptor(), "C_PARSE");
- }
-    
+ 	public ProjectParseAction(DataElement subject, String label, DataElement command, DataStore dataStore)
+ 	{	
+     	super(subject, label, command, dataStore);
+	}
+	
+	public ProjectParseAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+	{
+		super(subjects, label, command, dataStore);
+	}
+       
     public void run()
     {
-	if (_parseCommand != null)
-	    {
-		DataElement status = null;
-		DataElement projectElement = getProjectFor(_subject);
-		if (projectElement != null)
-	        {
-		 ArrayList args = new ArrayList();
-		 args.add(projectElement); 
-		 status = _dataStore.command(_parseCommand, args, _subject);		
-		 _api.monitorStatus(status);
-		}
-	    }
+    	for (int i = 0; i < _subjects.size(); i++)
+    	{
+	    	DataElement subject = (DataElement)_subjects.get(i);
+	    	DataStore dataStore = subject.getDataStore();
+	    		    	
+      		DataElement parseCommand = dataStore.localDescriptorQuery(subject.getDescriptor(), "C_PARSE");
+    	
+			if (parseCommand != null)
+	    	{
+				DataElement status = null;
+				DataElement projectElement = _api.getProjectFor(subject);
+				if (projectElement != null)
+	        	{
+			 		ArrayList args = new ArrayList();
+			 		args.add(projectElement); 
+			 		status = _dataStore.command(parseCommand, args, subject);		
+			 	_api.monitorStatus(status);
+				}
+	    	}
+    	}
     }
-
-    private DataElement getProjectFor(DataElement subject)
-    {
-     if (subject.getType().equals("Project"))
-      return subject;
-	DataElement parent = subject.getParent();
-	if (parent == null)
-	    {
-		return null;
-	    }
-
-	String type = parent.getType();
-	if (type.equals("Project"))
-	    {
-		return parent;
-	    }
-	else if (type.equals("Data"))
-	    {
-		return null;
-	    }
-	else 
-	    {
-		return getProjectFor(parent);
-	    }
-    }
+  
 }
 
 
