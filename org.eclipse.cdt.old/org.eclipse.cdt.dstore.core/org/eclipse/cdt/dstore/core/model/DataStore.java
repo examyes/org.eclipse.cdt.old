@@ -15,7 +15,13 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-public class DataStore
+/**
+ * DataStore is the central interface into the DataStore Distributed Tooling Framework.
+ * This class is used for creating and accessing DataElements and for communicating commands 
+ * to miners (tools).
+ *
+ */
+public final class DataStore
 {
     private DataStoreAttributes _dataStoreAttributes;
     
@@ -50,12 +56,11 @@ public class DataStore
 
     private int                 _initialSize;
     
-    /////////////////////////////////////////
-    //
-    // Constructors
-    //
-    /////////////////////////////////////////
-    
+    /**
+     * Creates a new DataStore instance
+     *
+     * @param attributes the default attributes of the DataStore
+     */
     public DataStore(DataStoreAttributes attributes)
     {
         _dataStoreAttributes = attributes;
@@ -69,6 +74,12 @@ public class DataStore
 	initialize();
       }
 
+    /**
+     * Creates a new DataStore instance
+     *
+     * @param attributes the default attributes of the DataStore
+     * @param initialSize the initial number of preallocated DataElements
+     */
     public DataStore(DataStoreAttributes attributes, int initialSize)
     {
         _dataStoreAttributes = attributes;
@@ -82,10 +93,18 @@ public class DataStore
 	initialize();
       }
 
-  public DataStore(DataStoreAttributes attributes, 
-		   CommandHandler commandHandler,
-                   UpdateHandler updateHandler, 
-		   DomainNotifier domainNotifier)
+    /**
+     * Creates a new DataStore instance
+     *
+     * @param attributes the default attributes of the DataStore
+     * @param commandHandler the DataStore's handler for sending commands
+     * @param updateHandler the DataStore's handler for doing updates
+     * @param domainNotifier the domain notifier 
+     */
+    public DataStore(DataStoreAttributes attributes, 
+		     CommandHandler commandHandler,
+		     UpdateHandler updateHandler, 
+		     DomainNotifier domainNotifier)
       {
         _dataStoreAttributes = attributes;
         _commandHandler      = commandHandler;
@@ -99,6 +118,15 @@ public class DataStore
 	createRoot();
       }
 
+    /**
+     * Creates a new DataStore instance
+     *
+     * @param attributes the default attributes of the DataStore
+     * @param commandHandler the DataStore's handler for sending commands
+     * @param updateHandler the DataStore's handler for doing updates
+     * @param domainNotifier the domain notifier 
+     * @param initialSize the initialNumber of preallocated DataElements 
+     */
   public DataStore(DataStoreAttributes attributes, 
 		   CommandHandler commandHandler,
                    UpdateHandler updateHandler, 
@@ -139,23 +167,32 @@ public class DataStore
 	_dataStoreSchema = new DataStoreSchema(this);
     }
 
-
-  /////////////////////////////////////////
-  //
-  // Sets
-  //
-  /////////////////////////////////////////
-
+    /**
+     * Sets the ticket for this DataStore.  A ticket is used to prevent unauthorized users
+     * from accessing the DataStore
+     *
+     * @param ticket the DataElement representing the ticket
+     */
     public void setTicket(DataElement ticket)
     {
 	_ticket = ticket;
     }
 
+    /**
+     * Sets the loader for this DataStore.  The loader is used to load miners (extension tools). 
+     *
+     * @param loader the loader for the miners this DataStore will be using
+     */
     public void setLoader(ILoader loader)
     {
 	_loader         = loader;
     }
 
+    /**
+     * Tells the DataStore where to find the miners which it needs to load. 
+     *
+     * @param minersLocation a string representing the location of the miners
+     */
     public void setMinersLocation(String minersLocation)
     {
 	_minersLocation = minersLocation;
@@ -166,6 +203,11 @@ public class DataStore
 	synchronizedCommand(cmd, args, _root);
     }
 
+    /**
+     * Tells the DataStore where to find the miners which it needs to load. 
+     *
+     * @param minersLocation a DataElement representing the location of the miners
+     */
     public void setMinersLocation(DataElement location)
     {
 	if (_minersLocation != location.getName())
@@ -174,57 +216,105 @@ public class DataStore
 	    }
     }
   
-  public void setConnected(boolean isConnected)
-      {
-        _isConnected = isConnected;
-      }
+    /**
+     * Tells the DataStore that it is connected to it's tools 
+     *
+     * @param isConnected indicates whether it is connected or not
+     */
+    public void setConnected(boolean isConnected)
+    {
+	_isConnected = isConnected;
+    }
  
-  public void setDomainNotifier(DomainNotifier domainNotifier)
-      {
+    /**
+     * Sets the DataStore's DomainNotifier 
+     *
+     * @param domainNotifier the domainNotifier
+     */
+    public void setDomainNotifier(DomainNotifier domainNotifier)
+    {
         _domainNotifier = domainNotifier;
-      }
+    }
 
-  public void setUpdateHandler(UpdateHandler updateHandler)
-      {
+    /**
+     * Sets the DataStore's handler for doing updates 
+     *
+     * @param updateHandler the handler for doing updates
+     */
+    public void setUpdateHandler(UpdateHandler updateHandler)
+    {
         _updateHandler = updateHandler;
-      }
+    }
 
-  public void setCommandHandler(CommandHandler commandHandler)
-      {
+    /**
+     * Sets the DataStore's handler for sending commands to miners 
+     *
+     * @param commandHandler the handler for sending commands to miners
+     */
+    public void setCommandHandler(CommandHandler commandHandler)
+    {
         _commandHandler = commandHandler;
-      }
+    }
 
-  public void setUpdateWaitTime(int time)
-      {
+    /**
+     * Sets the time the update handler sleeps in between update requests 
+     *
+     * @param time interval to wait
+     */
+    public void setUpdateWaitTime(int time)
+    {
         _updateHandler.setWaitTime(time);
-      }
+    }
 
-  public void setCommandWaitTime(int time)
-      {
+    /**
+     * Sets the time the command handler sleeps in between command requests 
+     *
+     * @param time interval to wait
+     */
+    public void setCommandWaitTime(int time)
+    {
         _commandHandler.setWaitTime(time);
-      }
+    }
 
+    /**
+     * Sets the maximum amount of time that the DataStore will wait to receive a response
+     * for a synchronous command
+     *
+     * @param time interval to wait
+     */
     public void setTimeoutValue(int time)
     {
 	_timeout = time;
     }
 
-  public void setAttribute(int attribute, String value)
-  {
-    _dataStoreAttributes.setAttribute(attribute, value);
-  }
+    /**
+     * Sets an attribute of the DataStore  
+     *
+     * @param attribute index of the attribute to set
+     * @param value value to set the attribute at the give index
+     */
+    public void setAttribute(int attribute, String value)
+    {
+	_dataStoreAttributes.setAttribute(attribute, value);
+    }
 
-  public void setLogTimes(boolean flag)
-      {
+    /**
+     * Tells the DataStore to log durations of commands  
+     *
+     * @param flag whether to log times or not
+     */
+    public void setLogTimes(boolean flag)
+    {
         _logTimes = flag;
-      }
+    }
 
-  /////////////////////////////////////////
-  //
-  // Gets
-  //
-  /////////////////////////////////////////
-
+    /**
+     * Indicates whether this DataStore is virtual or not.  A virtual DataStore  
+     * is one that does not have it's own tools, but rather communicates with a non-virtual
+     * DataStore that does.
+     *
+     * @return whether the DataStore is virtual or not
+     */
     public boolean isVirtual()
     {
 	if (_commandHandler instanceof com.ibm.dstore.core.client.ClientCommandHandler)
@@ -237,36 +327,72 @@ public class DataStore
 	    }
     }  
 
-  public boolean isConnected()
-      { 
+    /**
+     * Indicates whether this DataStore is connected to it's miners or another DataStore
+     *
+     * @return whether the DataStore is connected or not
+     */
+    public boolean isConnected()
+    { 
         return _isConnected;
-      }
+    }
 
-  public boolean logTimes()
-      {
+    /**
+     * Indicates whether this DataStore logs the durations of commands
+     *
+     * @return whether the DataStore logs command times or not
+     */
+    public boolean logTimes()
+    {
         return _logTimes;
-      }
+    }
 
+    /**
+     * Returns the DataStore's ticket
+     *
+     * @return the ticket
+     */
     public DataElement getTicket()
     {
 	return _ticket;
     }
 
-  public int getUpdateWaitTime()
-      {
+    /**
+     * Returns the time the update handler waits between requests
+     *
+     * @return wait time
+     */
+    public int getUpdateWaitTime()
+    {
         return _updateHandler.getWaitTime();
-      }
-
-  public int getCommandWaitTime()
-      {
+    }
+    
+    /**
+     * Returns the time the command handler waits between requests
+     *
+     * @return wait time
+     */
+    public int getCommandWaitTime()
+    {
         return _commandHandler.getWaitTime();
-      }
+    }
 
+    /**
+     * Returns the ResourceBundle used to retrieve NL enabled strings
+     *
+     * @return the resource bundle
+     */
     public ResourceBundle getResourceBundle()
     {
 	return _resourceBundle;
     }
 
+    /**
+     * Retrieves an NL enabled string given a key
+     *
+     * @param key a key that maps to a string
+     * @return the mapping for the given key
+     */
     public String getLocalizedString(String key)
     {
 	try
@@ -280,85 +406,181 @@ public class DataStore
 	return "";
     }
 
-  public String getName()
-  {
-    return getAttribute(DataStoreAttributes.A_HOST_NAME);    
-  }
+    /**
+     * Returns the name of the DataStore
+     *
+     * @return the name of the DataStore
+     */
+    public String getName()
+    {
+	return getAttribute(DataStoreAttributes.A_HOST_NAME);    
+    }
   
-  public DataElement getRoot()
-      {
+    /**
+     * Returns the root DataElement in the DataStore.
+     * The root DataElement has no parent and contains every DataElement
+     * in the DataStore through a DataElement tree
+     *
+     * @return the root DataElement
+     */
+    public DataElement getRoot()
+    {
         return _root;
-      }
+    }
 
-  public DataElement getHostRoot()
-  {
-    return _hostRoot;
-  }
+    /**
+     * Returns the host root DataElement in the DataStore.
+     * The host root DataElement is a child of root and references
+     * DataElements in the DataStore that are related to host information
+     *
+     * @return the host root DataElement
+     */
+    public DataElement getHostRoot()
+    {
+	return _hostRoot;
+    }
 
-  public DataElement getMinerRoot()
-  {
-    return _minerRoot;
-  }
-
+    /**
+     * Returns the miner root DataElement in the DataStore.
+     * The miner root DataElement is a child of root and contains
+     * DataElements the represent tools and the information that tools possess
+     *
+     * @return the miner root DataElement
+     */
+    public DataElement getMinerRoot()
+    {
+	return _minerRoot;
+    }
+    
+    /**
+     * Returns the status of the DataStore.  
+     *
+     * @return the status of the DataStore
+     */
     public DataElement getStatus()
     {
 	return _status;
     }  
 
-  public DataElement getLogRoot()
-      {
+    /**
+     * Returns the log root DataElement of the DataStore.
+     * The log root contains all commands that are issued from the DataStore
+     *
+     * @return the log root
+     */
+    public DataElement getLogRoot()
+    {
         return _logRoot;
-      }
+    }
 
+    /**
+     * Returns the descriptor root DataElement of the DataStore.
+     * The descriptor root contains the schema for the DataStore and it's tools
+     *
+     * @return the descriptor root
+     */
+    public DataElement getDescriptorRoot()
+      {
+        return _descriptorRoot;
+      }
+    
+    /**
+     * Returns the temp root DataElement of the DataStore.
+     * The temp root contains temporary information.
+     *
+     * @return the temp root
+     */
     public DataElement getTempRoot()
     {
 	return _tempRoot;
     }
-  public CommandHandler getCommandHandler()
-  {
-    return _commandHandler;    
-  }
+
+    /**
+     * Returns the handler for sending commands.
+     *
+     * @return the command handler
+     */
+    public CommandHandler getCommandHandler()
+    {
+	return _commandHandler;    
+    }
   
-  public UpdateHandler getUpdateHandler()
-  {
-    return _updateHandler;    
-  }  
-
-  public DataElement getDescriptorRoot()
-      {
-        return _descriptorRoot;
-      }
-
+    /**
+     * Returns the handler for doing updates.
+     *
+     * @return the update handler
+     */
+    public UpdateHandler getUpdateHandler()
+    {
+	return _updateHandler;    
+    }  
+    
+    /**
+     * Returns the loader that is used for loading miners.
+     *
+     * @return the loader
+     */
     public ILoader getLoader()
     {
 	return _loader;
     }
     
+    /**
+     * Returns the location of the miners.
+     *
+     * @return the location of the miners
+     */
     public String getMinersLocation()
     {
 	return _minersLocation;
     }
 
-  public DomainNotifier getDomainNotifier ()
-  {
-    return _domainNotifier;
-  } 
+    /**
+     * Returns the domain notifier.
+     *
+     * @return the domain notifier
+     */
+    public DomainNotifier getDomainNotifier ()
+    {
+	return _domainNotifier;
+    } 
 
-  public String getAttribute(int attribute)
-  {
-    return _dataStoreAttributes.getAttribute(attribute);
-  }
+    /**
+     * Returns the attribute indicated by an index.
+     *
+     * @param the index of the attribute to get
+     * @return the attribute
+     */
+    public String getAttribute(int attribute)
+    {
+	return _dataStoreAttributes.getAttribute(attribute);
+    }
 
-  public int getNumElements()
-  {
-    return _hashMap.size();    
-  }
+    /**
+     * Returns the number of live elements in the DataStore.
+     *
+     * @return the number of live elements
+     */
+    public int getNumElements()
+    {
+	return _hashMap.size();    
+    }
 
-  public HashMap getHashMap()
-      {
+    /**
+     * Returns the table of live elements in the DataStore.
+     *
+     * @return the table of live elements
+     */
+    public HashMap getHashMap()
+    {
         return _hashMap;
-      }
+    }
 
+    /**
+     * Preallocates a set of DataElements.
+     *
+     * @param the number of elements to preallocate
+     */
     public void initElements(int size)
     {
 	for (int i = 0; i < size; i++)
@@ -367,7 +589,13 @@ public class DataStore
 	    }
     }
   
-  public DataElement createElement()  
+    /**
+     * Returns a new DataElement by either using an existing preallocated DataElement or
+     * by creating a new one.
+     *
+     * @return the new DataElement
+     */
+    public DataElement createElement()  
     {
 	DataElement newObject = null;
 	int numRecycled = _recycled.size();
@@ -397,58 +625,66 @@ public class DataStore
 	return newObject;
     }
   
-  /////////////////////////////////////////
-  //
-  // Initialization
-  //
-  /////////////////////////////////////////
+    /**
+     * Initializes the DataStore by creating the root elements
+     *
+     */
+    public void createRoot()
+    {
+	_root        = createObject(null, getLocalizedString("model.root"),
+				    _dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_NAME),
+				    _dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_PATH),
+				    "rootID");
+	
+	_descriptorRoot = createObject(_root, DE.T_OBJECT_DESCRIPTOR, getLocalizedString("model.descriptors"),
+				       "", "schemaID");
+	
+	_ticket = createObject(_root, getLocalizedString("model.ticket"), "null", "", "ticketID");
+	
+	createRoots();
+	initializeDescriptors();
+    }
+    
+    private void createRoots()
+    {
+	_tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
+	
+	_logRoot     = createObject(_root, getLocalizedString("model.log"), 
+				    getLocalizedString("model.Log_Root"), "", "logID");
+	
+	
+	_minerRoot   = createObject(_root, getLocalizedString("model.miners"), 
+				    getLocalizedString("model.Tool_Root"), "", "minersID");
+	
+	_hostRoot = createObject(_root,  getLocalizedString("model.host"),
+				 _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
+				 _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH), "hostID");
+	
+	_status = createObject(_root, getLocalizedString("model.status"), "okay", "", "statusID");
+    }
 
-  public void createRoot()
-  {
-    _root        = createObject(null, getLocalizedString("model.root"),
-				_dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_NAME),
-				_dataStoreAttributes.getAttribute(DataStoreAttributes.A_ROOT_PATH),
-				"rootID");
-
-    _descriptorRoot = createObject(_root, DE.T_OBJECT_DESCRIPTOR, getLocalizedString("model.descriptors"),
-    		"", "schemaID");
-    		
-    _ticket = createObject(_root, getLocalizedString("model.ticket"), "null", "", "ticketID");
-
-    createRoots();
-    initializeDescriptors();
-  }
-
-  private void createRoots()
-  {
-      _tempRoot = createObject(_root, "temp", "Temp Root", "", "tempID");
-      
-      _logRoot     = createObject(_root, getLocalizedString("model.log"), getLocalizedString("model.Log_Root"), "", "logID");
- 
-      
-      _minerRoot   = createObject(_root, getLocalizedString("model.miners"), getLocalizedString("model.Tool_Root"), "", "minersID");
-      
-      _hostRoot = createObject(_root,  getLocalizedString("model.host"),
-			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_NAME),
-			       _dataStoreAttributes.getAttribute(DataStoreAttributes.A_HOST_PATH), "hostID");
-
-      _status = createObject(_root, getLocalizedString("model.status"), "okay", "", "statusID");
-  }
-
-
-  /////////////////////////////////////////
-  //
-  // DataElement Creation
-  //
-  /////////////////////////////////////////
-
-  public DataElement createReference(DataElement from, DataElement to)
-      {
+    /**
+     * Creates a contents relationship between two DataElements
+     *
+     * @param from the element that contains the other
+     * @param to the element that is contained by the other
+     * @return the new reference
+     */
+    public DataElement createReference(DataElement from, DataElement to)
+    {
 	// default reference is a containment relationship
         return createReference(from, to, getLocalizedString("model.contents"));
-      }
+    }
 
-  public DataElement createReference(DataElement parent, DataElement realObject, DataElement relationType)
+    /**
+     * Creates a relationship between two DataElements given a type of relationship
+     *
+     * @param parent the element that references the other element
+     * @param realObject the element that is referenced by the parent element
+     * @param relationType the descriptor element that represents the type of relationship between parent and realObject
+     * @return the new reference
+     */
+    public DataElement createReference(DataElement parent, DataElement realObject, DataElement relationType)
       {
 	  if (parent != null)
 	      {
@@ -471,7 +707,15 @@ public class DataStore
 	      }
       }
 
-  public DataElement createReference(DataElement parent, DataElement realObject, String relationType)
+    /**
+     * Creates a relationship between two DataElements given a type of relationship
+     *
+     * @param parent the element that references the other element
+     * @param realObject the element that is referenced by the parent element
+     * @param relationType the string that represents the type of relationship between parent and realObject
+     * @return the new reference
+     */
+    public DataElement createReference(DataElement parent, DataElement realObject, String relationType)
       {
 	  if (parent != null)
 	      {
@@ -501,24 +745,38 @@ public class DataStore
       }
 
 
+    /**
+     * Creates a set of  relationships between one DataElement and a set of DataElements given a type of relationship
+     *
+     * @param from the element that references the other elements
+     * @param to a list of elements that from references
+     * @param type the string that represents the type of relationships between from and to
+     * @return the new reference
+     */
+    public void createReferences(DataElement from, ArrayList to, String type)
+    {
+	DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, type);
+	if (toDescriptor != null)
+	    {
+		createReferences(from, to, toDescriptor);
+	    }
+	else
+	    {
+		for (int i = 0; i < to.size(); i++)
+		    {	
+			DataElement toObject = (DataElement)to.get(i);
+			createReference(from, toObject, type);	 
+		    }
+	    }
+    }
 
-  public void createReferences(DataElement from, ArrayList to, String type)
-  {
-      DataElement toDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, type);
-      if (toDescriptor != null)
-	  {
-	      createReferences(from, to, toDescriptor);
-	  }
-      else
-	  {
-	      for (int i = 0; i < to.size(); i++)
-		  {	
-		      DataElement toObject = (DataElement)to.get(i);
-		      createReference(from, toObject, type);	 
-		  }
-	  }
-  }
-
+    /**
+     * Creates a set of  relationships between one DataElement and a set of DataElements given a type of relationship
+     *
+     * @param from the element that references the other elements
+     * @param to a list of elements that from references
+     * @param type the descriptor element that represents the type of relationships between from and to
+     */
     public void createReferences(DataElement from, ArrayList to, DataElement type)
     {
 	for (int i = 0; i < to.size(); i++)
@@ -529,7 +787,16 @@ public class DataStore
     }
     
     
-  public DataElement createReference(DataElement parent, DataElement realObject, 
+    /**
+     * Creates a two-way relationship between two elements
+     *
+     * @param parent an element that references the other element
+     * @param realObject an element that references the other element 
+     * @param toRelation the descriptor element that represents the type of relationship between parent and realObject
+     * @param fromRelation the descriptor element that represents the type of relationship between realObject and parent
+     * @return the new reference
+     */
+    public DataElement createReference(DataElement parent, DataElement realObject, 
 				     DataElement toRelation, DataElement fromRelation)
     {
 	if (parent != null)
@@ -560,7 +827,16 @@ public class DataStore
 	return null;
       }
 
-  public DataElement createReference(DataElement parent, DataElement realObject, 
+    /**
+     * Creates a two-way relationship between two elements
+     *
+     * @param parent an element that references the other element
+     * @param realObject an element that references the other element 
+     * @param toRelation the string that represents the type of relationship between parent and realObject
+     * @param fromRelation the string that represents the type of relationship between realObject and parent
+     * @return the new reference
+     */
+    public DataElement createReference(DataElement parent, DataElement realObject, 
 				     String toRelation, String fromRelation)
     {
 	if (parent != null)
@@ -607,74 +883,155 @@ public class DataStore
 	return null;
       }
 
-
-  public void createReferences(DataElement from, ArrayList to, DataElement toRel, DataElement fromRel)
-  {
+    /**
+     * Creates a set of two-way relationship between a DataElement and a list of elements
+     *
+     * @param from an element that references the other elements
+     * @param to a list of elements that reference from 
+     * @param toRel the descriptor element that represents the type of relationship between from and to
+     * @param fromRel the descriptor element that represents the type of relationship between to and from
+     */
+    public void createReferences(DataElement from, ArrayList to, DataElement toRel, DataElement fromRel)
+    {
       for (int i = 0; i < to.size(); i++)
 	  {	
 	      DataElement toObject = (DataElement)to.get(i);
 	      createReference(from, toObject, toRel, fromRel);	 
 	  }
-  }
+    }
 
-  public void createReferences(DataElement from, ArrayList to, String toRel, String fromRel)
-  {
-      DataElement toDescriptor   = findDescriptor(DE.T_RELATION_DESCRIPTOR, toRel);
-      DataElement fromDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, fromRel);
+    /**
+     * Creates a set of two-way relationship between a DataElement and a list of elements
+     *
+     * @param from an element that references the other elements
+     * @param to a list of elements that reference from 
+     * @param toRel the string that represents the type of relationship between from and to
+     * @param fromRel the string that represents the type of relationship between to and from
+     */
+    public void createReferences(DataElement from, ArrayList to, String toRel, String fromRel)
+    {
+	DataElement toDescriptor   = findDescriptor(DE.T_RELATION_DESCRIPTOR, toRel);
+	DataElement fromDescriptor = findDescriptor(DE.T_RELATION_DESCRIPTOR, fromRel);
+	
+	if ((toDescriptor != null) && (fromDescriptor != null))
+	    {
+		createReferences(from, to, toDescriptor, fromDescriptor);
+	    }
+	else
+	    {
+		for (int i = 0; i < to.size(); i++)
+		    {	
+			DataElement toObject = (DataElement)to.get(i);
+			createReference(from, toObject, toRel, fromRel);	 
+		    }
+	    }
+    }
+    
 
-      if ((toDescriptor != null) && (fromDescriptor != null))
-	  {
-	      createReferences(from, to, toDescriptor, fromDescriptor);
-	  }
-      else
-	  {
-	      for (int i = 0; i < to.size(); i++)
-		  {	
-		      DataElement toObject = (DataElement)to.get(i);
-		      createReference(from, toObject, toRel, fromRel);	 
-		  }
-	  }
-  }
-
-  public DataElement createObject(DataElement parent, DataElement type, String name)
-      {
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the descriptor representing the type of the new element 
+     * @param name the name of the new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, DataElement type, String name)
+    {
         return createObject(parent, type, name, "");
-      }
+    }
 
-  public DataElement createObject(DataElement parent, String type, String name)
-      {
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the string representing the type of the new element 
+     * @param name the name of the new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, String type, String name)
+    {
         return createObject(parent, type, name, "");
-      }
+    }
 
-  public DataElement createObject(DataElement parent, DataElement type, String name, String source)
-      {
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the descriptor element representing the type of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, DataElement type, String name, String source)
+    {
         String id = generateId();
         return createObject(parent, type, name, source, id);
-      }
+    }
 
-  public DataElement createObject(DataElement parent, String type, String name, String source)
-      {
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the string representing the type of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, String type, String name, String source)
+    {
         String id = generateId(parent, type, name);
 	if (id == null)
-	  {
-	    return null;
-	  }
+	    {
+		return null;
+	    }
 	
         return createObject(parent, type, name, source, id);
-      }
+    }
 
-  public DataElement createObject(DataElement parent, DataElement type, String name, String source, String sugId)
-      {
-	  return createObject(parent, type, name, source, sugId, false);
-      }
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the descriptor element representing the type of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param sugId the suggested ID for the new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, DataElement type, String name, String source, String sugId)
+    {
+	return createObject(parent, type, name, source, sugId, false);
+    }
+    
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the string representing the type of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param sugId the suggested ID for the new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, String type, String name, String source, String sugId)
+    {
+	return createObject(parent, type, name, source, sugId, false);
+    }
 
-  public DataElement createObject(DataElement parent, String type, String name, String source, String sugId)
-      {
-	  return createObject(parent, type, name, source, sugId, false);
-      }
-
-  public DataElement createObject(DataElement parent, DataElement type, String name, 
-				  String source, String sugId, boolean isReference)
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the descriptor element representing the type of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param sugId the suggested ID for the new element
+     * @param isReference an indication whether the new element is a reference
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, DataElement type, String name, 
+				    String source, String sugId, boolean isReference)
     {
         String id = makeIdUnique(sugId);
 	
@@ -685,7 +1042,7 @@ public class DataStore
 	    }
 	
 	newObject.reInit(this, parent, type, id, name, source, isReference); 
-
+	
         if (parent != null)
 	    {
 		parent.addNestedData(newObject, false);
@@ -697,17 +1054,29 @@ public class DataStore
         return newObject;
     }
 
-  public DataElement createObject(DataElement parent, String type, String name, String 
-				  source, String sugId, boolean isReference)
+ 
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param type the string representing the type of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param sugId the suggested ID for the new element
+     * @param isReference an indication whether the new element is a reference
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, String type, String name, String 
+				    source, String sugId, boolean isReference)
     {
         String id = makeIdUnique(sugId);
-
+	
 	DataElement newObject = createElement();
 	if (parent == null)
 	    {
 		parent = _tempRoot;
 	    }
-
+	
 	DataElement descriptor = findDescriptor(DE.T_OBJECT_DESCRIPTOR, type);
 	if (descriptor != null  && (parent != _descriptorRoot))
 	    {
@@ -728,7 +1097,14 @@ public class DataStore
         return newObject;
       }
     
-  public DataElement createObject(DataElement parent, String attributes[])
+    /**
+     * Creates a new DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param attributes the attributes to use in this new element
+     * @return the new element
+     */
+    public DataElement createObject(DataElement parent, String attributes[])
       {
 	  DataElement newObject = createElement();
 
@@ -753,56 +1129,129 @@ public class DataStore
 	      }
 	  
 	  _hashMap.put(attributes[DE.A_ID], newObject);
-	  //***refresh(parent);
 	  return newObject;
       }
 
-
+    /**
+     * Creates a new abstract object descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createAbstractObjectDescriptor(DataElement parent, String name)
     {
 	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
+    /**
+     * Creates a new abstract object descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @return the new descriptor element
+     */
     public DataElement createAbstractObjectDescriptor(DataElement parent, String name, String source)
     {
 	return createObject(parent, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, name, source, name);
     }   
 
+    /**
+     * Creates a new object descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createObjectDescriptor(DataElement parent, String name)
     {
 	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
+    /**
+     * Creates a new object descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createObjectDescriptor(DataElement parent, String name, String source)
     {
 	return createObject(parent, DE.T_OBJECT_DESCRIPTOR, name, source, name);
     }   
 
+    /**
+     * Creates a new abstract relation descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createAbstractRelationDescriptor(DataElement parent, String name)
     {
 	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
+    /**
+     * Creates a new abstract relation descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @return the new descriptor element
+     */
     public DataElement createAbstractRelationDescriptor(DataElement parent, String name, String source)
     {
 	return createObject(parent, DE.T_ABSTRACT_RELATION_DESCRIPTOR, name, source, name);
     }   
 
+    /**
+     * Creates a new relation descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createRelationDescriptor(DataElement parent, String name)
     {
 	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, "com.ibm.dstore.core", name);
     }   
 
+    /**
+     * Creates a new relation descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @return the new descriptor element
+     */
     public DataElement createRelationDescriptor(DataElement parent, String name, String source)
     {
 	return createObject(parent, DE.T_RELATION_DESCRIPTOR, name, source, name);
     }   
 
+    /**
+     * Creates a new abstract command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name)
     {
 	return createAbstractCommandDescriptor(parent, name, name);
     }
 
+    /**
+     * Creates a new abstract command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param value the value used to identify the command
+     * @return the new descriptor element
+     */
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name, String value)
     {
 	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core", name);
@@ -810,6 +1259,15 @@ public class DataStore
 	return cmd;
     }   
 
+    /**
+     * Creates a new abstract command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param value the value used to identify the command
+     * @return the new descriptor element
+     */
     public DataElement createAbstractCommandDescriptor(DataElement parent, String name, String source, String value)
     {
 	DataElement cmd = createObject(parent, DE.T_ABSTRACT_COMMAND_DESCRIPTOR, name, source, name);
@@ -817,11 +1275,26 @@ public class DataStore
 	return cmd;
     }   
 
+    /**
+     * Creates a new command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @return the new descriptor element
+     */
     public DataElement createCommandDescriptor(DataElement parent, String name)
     {
 	return createCommandDescriptor(parent, name, name); 
     } 
 
+    /**
+     * Creates a new command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param value the value used to identify the command
+     * @return the new descriptor element
+     */
     public DataElement createCommandDescriptor(DataElement parent, String name, String value)
     {
 		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, "com.ibm.dstore.core", name);
@@ -829,6 +1302,15 @@ public class DataStore
 		return cmd;
     }   
 
+    /**
+     * Creates a new command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param value the value used to identify the command
+     * @return the new descriptor element
+     */
     public DataElement createCommandDescriptor(DataElement parent, String name, String source, String value)
     {
 		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source, name);
@@ -836,31 +1318,53 @@ public class DataStore
 		return cmd;
     }   
 
-    public DataElement createCommandDescriptor(DataElement parent, String name, String source, String value, boolean visible)
+    /**
+     * Creates a new command descriptor DataElement
+     *
+     * @param parent the parent of the new element 
+     * @param name the name of the new element
+     * @param source the source location of the new element
+     * @param value the value used to identify the command
+     * @param visible indicates whether the command is visible or not
+     * @return the new descriptor element
+     */
+    public DataElement createCommandDescriptor(DataElement parent, String name, String source, 
+					       String value, boolean visible)
     {
-		DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source, name);
+	DataElement cmd = createObject(parent, DE.T_COMMAND_DESCRIPTOR, name, source, name);
         cmd.setAttribute(DE.A_VALUE, value);        
-		if (!visible)
+	if (!visible)
 	    {
-			cmd.setDepth(0);
+		cmd.setDepth(0);
 	    }
-
+	
 	return cmd;
     }   
 
 
-  public void moveObject(DataElement source, DataElement target)
-      {
+    /**
+     * Moves a element from one location in the DataStore tree to another
+     *
+     * @param source the element to move 
+     * @param target the element to move source to
+     */
+    public void moveObject(DataElement source, DataElement target)
+    {
         DataElement oldParent = source.getParent();
         oldParent.getNestedData().remove(source);
         refresh(oldParent, true);
-         
+	
         target.addNestedData(source, false);
         source.setParent(target);  
         refresh(target, true);
-      }
+    }
   
-  public void deleteObjects(DataElement from)
+    /**
+     * Deletes all the elements contained in from
+     *
+     * @param from the element from which to delete objects from  
+     */
+    public void deleteObjects(DataElement from)
       {
 	  if (from != null)
 	      {
@@ -874,19 +1378,25 @@ public class DataStore
 	      }
       }
 
-  public void deleteObject(DataElement from, DataElement toDelete)
-      {
+    /**
+     * Deletes an element from another element
+     *
+     * @param from the element from which to delete an object from  
+     * @param toDelete the element to remove  
+     */
+    public void deleteObject(DataElement from, DataElement toDelete)
+    {
         deleteObjectHelper(from, toDelete, 5);
-		refresh(toDelete);	
-		refresh(from);
-      }
-
-  private void deleteObjectHelper(DataElement from, DataElement toDelete, int depth)
-      {
-	  if (depth > 0)
-	      {
-		  depth--;
-		  toDelete.delete();
+	refresh(toDelete);	
+	refresh(from);
+    }
+    
+    private void deleteObjectHelper(DataElement from, DataElement toDelete, int depth)
+    {
+	if (depth > 0)
+	    {
+		depth--;
+		toDelete.delete();
 		  for (int i = 0; i < toDelete.getNestedSize(); i++)
 		      {
 			  DataElement subDelete = toDelete.get(i);
@@ -899,9 +1409,13 @@ public class DataStore
 		  String id = toDelete.getAttribute(DE.A_ID);
 		  _hashMap.remove(id);
 		  _recycled.add(toDelete);
-	      }
-      }
-
+	    }
+    }
+    
+    
+    /**
+     * Replaces a deleted object
+     */
     public DataElement replaceDeleted(DataElement deletedObject)
     {
 	if (deletedObject != null)
@@ -937,32 +1451,37 @@ public class DataStore
 	return null;
     }   
     
-  private String makeIdUnique(String id)
-      {
-	  if (!_hashMap.containsKey(id))
-	      {
-		  return id;
-	      }
-	  else
-	      {
-		  String newId = String.valueOf(_random.nextInt());
-		  while (_hashMap.containsKey(newId))
-		      {	    
-			  newId = String.valueOf(_random.nextInt());
-		      }
-		  
-		  return newId;
-	      }
-      }
-
-
+    private String makeIdUnique(String id)
+    {
+	if (!_hashMap.containsKey(id))
+	    {
+		return id;
+	    }
+	else
+	    {
+		String newId = String.valueOf(_random.nextInt());
+		while (_hashMap.containsKey(newId))
+		    {	    
+			newId = String.valueOf(_random.nextInt());
+		    }
+		
+		return newId;
+	    }
+    }
+    
+    
     private String generateId(DataElement parent, String type, String name)
-      {
-	  // by default, name will be the id
-	  //return name;
-	  return generateId();
-      }
-
+    {
+	// by default, name will be the id
+	//return name;
+	return generateId();
+    }
+    
+    /**
+     * Generates a new unique ID to be used by a DataElement
+     *
+     * @return the new id  
+     */
     public String generateId()
     {
 	String newId = String.valueOf(_random.nextInt());
@@ -974,32 +1493,45 @@ public class DataStore
 	return newId;
     }	
 
-  public boolean contains(String id)
-      {
-	  return _hashMap.containsKey(id);
-      }
+    /**
+     * Checks if a DataElement with a given ID exists in the DataStore
+     *
+     * @param id the id to look for  
+     * @return whether it exists or not  
+     */
+    public boolean contains(String id)
+    {
+	return _hashMap.containsKey(id);
+    }
 
-  /////////////////////////////////////////
-  //
-  // Updates
-  //
-  /////////////////////////////////////////
-
-  public void fireDomainChanged(DomainEvent e)
-      {
+    /**
+     * Fire a domain changed event
+     */
+    public void fireDomainChanged(DomainEvent e)
+    {
         _domainNotifier.fireDomainChanged(e);
-      }
+    }
 
-  public void refresh(ArrayList elements)
-      {
+    /**
+     * Refresh a set of DataElements
+     *
+     * @param elements a list of elements to refresh
+     */
+    public void refresh(ArrayList elements)
+    {
         // this gets called in response to a query
         for (int i = 0; i < elements.size(); i++)
-        {
-          refresh((DataElement)elements.get(i));
-        }
-      }
+	    {
+		refresh((DataElement)elements.get(i));
+	    }
+    }
 
-  public void refresh(DataElement element)
+    /**
+     * Refresh a DataElement
+     *
+     * @param element an element to refresh
+     */
+    public void refresh(DataElement element)
     {
     	if (element != null)
     	{
@@ -1012,18 +1544,23 @@ public class DataStore
     	}
     }
 
-  public void refresh(DataElement element, boolean immediate)
-      {
+    /**
+     * Refresh a DataElement - immediately if indicated
+     *
+     * @param element an element to refresh
+     * @param immediate indicates to do the refresh immediately
+     */
+    public void refresh(DataElement element, boolean immediate)
+    {
         if ((_updateHandler != null) && (element != null))
-        {
-	    // update either client or ui
-	    element.setUpdated(false);	
-	    _updateHandler.update(element, immediate);
-        }
-      }
+	    {
+		// update either client or ui
+		element.setUpdated(false);	
+		_updateHandler.update(element, immediate);
+	    }
+    }
 
-
-  public void update(ArrayList objects)
+    public void update(ArrayList objects)
       {
         // this gets called in response to a query
         for (int i = 0; i < objects.size(); i++)
@@ -1032,27 +1569,43 @@ public class DataStore
         }
       }
 
-  public void update(DataElement dataElement)
-      {
-       refresh(dataElement);       
-      }
-
-  public void updateFile(String remotePath, DataElement associatedObject)
-      {
+    public void update(DataElement dataElement)
+    {
+	refresh(dataElement);       
+    }
+    
+    /**
+     * Transfers a file from a server to a client.  The should only be called from
+     * a miner on a different machine from the client.
+     *
+     * @param remotePath the path of the file on the server side 
+     * @param associatedObject the element representing this file
+     */
+    public void updateFile(String remotePath, DataElement associatedObject)
+    {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
         if (fileName != null)
-        {
-          File file = new File(fileName);
-	  if (file.canRead())
-	      {
-		  _updateHandler.updateFile(file, associatedObject);
-	      }
-        }
-      }
+	    {
+		File file = new File(fileName);
+		if (file.canRead())
+		    {
+			_updateHandler.updateFile(file, associatedObject);
+		    }
+	    }
+    }
 
-  public void updateFile(String remotePath, byte[] bytes, int size)
-      {
+    /**
+     * Transfers a file from a server to a client.  The should only be called from
+     * a miner on a different machine from the client.  If a file exists on the client
+     * side that the server file maps to then the existing client file will be replaced.
+     *
+     * @param remotePath the path of the file on the server side 
+     * @param bytes an array of bytes representing a file 
+     * @param size the number of bytes to transfer
+     */
+    public void updateFile(String remotePath, byte[] bytes, int size)
+    {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
         if (fileName != null)
@@ -1061,6 +1614,15 @@ public class DataStore
         }
       }
 
+    /**
+     * Transfers and appends a file from a server to a client.  The should only be called from
+     * a miner on a different machine from the client.  If a file exists on the client
+     * side that the server file maps to then the existing client file will be appended to
+     *
+     * @param remotePath the path of the file on the server side 
+     * @param bytes an array of bytes representing a file 
+     * @param size the number of bytes to transfer
+     */
     public void updateAppendFile(String remotePath, byte[] bytes, int size)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
@@ -1071,11 +1633,19 @@ public class DataStore
         }	
     }
 
-  public void replaceFile(String remotePath, File file)
-  {
-    remotePath = new String(remotePath.replace('\\', '/'));
+    /**
+     * Transfers a file from a client to a server.  The should only be called from
+     * a client on a different machine from the server.  If a file exists on the server
+     * side that the client file maps to then the existing server file will be replaced.
+     *
+     * @param remotePath the path of the file on the server side 
+     * @param file the file to transfer 
+     */
+    public void replaceFile(String remotePath, File file)
+    {
+	remotePath = new String(remotePath.replace('\\', '/'));
    	String fileName = mapToLocalPath(remotePath);
-
+	
 	String dsName = getName();
 	if (!dsName.equals("local"))
 	    {
@@ -1085,13 +1655,22 @@ public class DataStore
 	    {
 		saveFile(remotePath, file);
 	    }
-  }
+    }
       
-  public void replaceFile(String remotePath, byte[] bytes, int size)
-  {
+    /**
+     * Transfers a file from a client to a server.  The should only be called from
+     * a client on a different machine from the server.  If a file exists on the server
+     * side that the client file maps to then the existing server file will be replaced.
+     *
+     * @param remotePath the path of the file on the server side 
+     * @param bytes an array of bytes representing a file 
+     * @param size the number of bytes to transfer
+     */
+    public void replaceFile(String remotePath, byte[] bytes, int size)
+    {
 	remotePath = new String(remotePath.replace('\\', '/'));
    	String fileName = mapToLocalPath(remotePath);
- 
+	
 	String dsName = getName();
 	if (!dsName.equals("local"))
 	    {
@@ -1101,14 +1680,22 @@ public class DataStore
 	    {
 		saveFile(remotePath, bytes);
 	    }  	  	
-  }
+    }
   
-  
-  public void replaceAppendFile(String remotePath, byte[] bytes, int size)
-  {
+    /**
+     * Transfers a file from a client to a server.  The should only be called from
+     * a client on a different machine from the server.  If a file exists on the server
+     * side that the client file maps to then the existing server file will be appended to.
+     *
+     * @param remotePath the path of the file on the server side 
+     * @param bytes an array of bytes representing a file 
+     * @param size the number of bytes to transfer
+     */
+    public void replaceAppendFile(String remotePath, byte[] bytes, int size)
+    {
 	remotePath = new String(remotePath.replace('\\', '/'));
    	String fileName = mapToLocalPath(remotePath);
-
+	
 	String dsName = getName();
 	if (!dsName.equals("local"))
 	    {
@@ -1118,45 +1705,77 @@ public class DataStore
 	    {
 		appendToFile(remotePath, bytes);
 	    }  	  	
-  }
+    }
 
-  public void setObject(DataElement localObject)
-  {
-      setObject(localObject, true);
-  }
-
-  public void setObject(DataElement localObject, boolean noRef)
+    /**
+     * Makes a given client element available on the server
+     *
+     * @param localObject the element to transfer
+     */
+    public void setObject(DataElement localObject)
     {
-      DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
-      DataElement status = synchronizedCommand(cmd, localObject, noRef);
-  }
-
-  public void modifyObject(DataElement localObject)
-  {
-    DataElement cmd = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.Modify"), 2);  
-    DataElement status = _commandHandler.command(cmd, localObject, true);
-    waitUntil(status, getLocalizedString("model.done"));
-  }
-
-  public void setHost(DataElement localHostObject)
-  {
-      DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_HOST", 1);  
-      DataElement status = _commandHandler.command(cmd, localHostObject, false);
-      waitUntil(status, getLocalizedString("model.done"));
-  }
+	setObject(localObject, true);
+    }
     
+    /**
+     * Makes a given client element available on the server
+     *
+     * @param localObject the element to transfer
+     * @param noRef indicates whether the element is a reference or not
+     */
+    public void setObject(DataElement localObject, boolean noRef)
+    {
+	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET", 1);  
+	DataElement status = synchronizedCommand(cmd, localObject, noRef);
+    }
+
+    public void modifyObject(DataElement localObject)
+    {
+	DataElement cmd = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.Modify"), 2);  
+	DataElement status = _commandHandler.command(cmd, localObject, true);
+	waitUntil(status, getLocalizedString("model.done"));
+    }
+
+    /**
+     * Used at DataStore initialization time to indicate where to point the host root
+     *
+     * @param localHostObject the client host element to transfer to the server site 
+     */
+    public void setHost(DataElement localHostObject)
+    {
+	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SET_HOST", 1);  
+	DataElement status = _commandHandler.command(cmd, localHostObject, false);
+	waitUntil(status, getLocalizedString("model.done"));
+    }
+    
+    /**
+     * Used at DataStore initialization time to setup the schema
+     *
+     */
     public void getSchema()
     {
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_SCHEMA", 1);
 	synchronizedCommand(cmd, _descriptorRoot);
     }
     
+    /**
+     * Used at DataStore initialization time to initialize the miners
+     *
+     * @return the status element for the initMiners command
+     */
     public DataElement initMiners()
     {
 	DataElement cmd = localDescriptorQuery(_root.getDescriptor(), "C_INIT_MINERS", 1);
 	return synchronizedCommand(cmd, _descriptorRoot);
     } 
     
+    
+    /**
+     * Used at DataStore initialization validate access to the DataStore
+     *
+     * @param ticketStr ticket string
+     * @return and indication of whether the ticket is valid or not
+     */
     public boolean showTicket(String ticketStr)
     {
 	if (ticketStr == null)
@@ -1172,6 +1791,11 @@ public class DataStore
 	return ticket.getAttribute(DE.A_VALUE).equals(getLocalizedString("model.valid"));
     }
     
+    /**
+     * Indicates whether a client has permission to access the DataStore
+     *
+     * @return and indication of whether the ticket is valid or not
+     */
     public boolean validTicket()
     {
 	if (_ticket.getAttribute(DE.A_VALUE).equals(getLocalizedString("model.valid")))
@@ -1184,188 +1808,305 @@ public class DataStore
 	    }
     }
 
-  public DataElement commandByName(String commandName, DataElement object, boolean synch)
-  {
-    DataElement status = null;
-    DataElement cmd = find(_descriptorRoot, DE.A_NAME, commandName, 3);  
-
-    if (synch)
+    /**
+     * Creates and issues a dataStore command from the specified command name 
+     *
+     * @param commandName the name of the command
+     * @param object the subject of the command
+     * @param synch an indication whether to synchronize the command or not
+     * @return the status of the command
+     */
+    public DataElement commandByName(String commandName, DataElement object, boolean synch)
     {
-      status = synchronizedCommand(cmd, object);
-    }
-    else
-    {
-      status = command(cmd, object);
-    }
-
-    return status;
-  }
-
-  public DataElement commandByName(String commandName, ArrayList arguments, DataElement object, boolean synch)
-  {
-    DataElement status = null;
-    DataElement cmd = find(_descriptorRoot, DE.A_NAME, commandName, 3);  
-
-    status = command(cmd, arguments, object);
-    if (synch)
-    {
-      waitUntil(status, getLocalizedString("model.done"));
-    }
-    return status;
-  }
-
-  /////////////////////////////////////////
-  //
-  // Commands
-  //
-  /////////////////////////////////////////
- 
-  public void waitUntil(DataElement status, String state)
-  {
-    int timeWaited = 20;
-    boolean timedOut = false;
-    boolean notificationEnabled = _domainNotifier.isEnabled();
-    if (notificationEnabled)
-    {
-      _domainNotifier.enable(false);
+	DataElement status = null;
+	DataElement cmd = find(_descriptorRoot, DE.A_NAME, commandName, 3);  
+	
+	if (synch)
+	    {
+		status = synchronizedCommand(cmd, object);
+	    }
+	else
+	    {
+		status = command(cmd, object);
+	    }
+	
+	return status;
     }
 
-    while ((status != null) 
-	   && (_status == null || _status.getName().equals("okay"))
-	   && !status.getName().equals(state) 
-	   && !status.getName().equals(getLocalizedString("model.incomplete")) 
-	   && !timedOut)
-      {	
-        if ((_timeout != -1) && (timeWaited > _timeout))
-        {
-          // waited too long!
-          timedOut = true;
-        }
-        
-        try
-        {		
-          Thread.currentThread().sleep(timeWaited);
-        } 
-        catch (InterruptedException e)
-        {
-          System.out.println(e);
-        }
-        
-        timeWaited += timeWaited;
-      }
-
-    if (timedOut)
+    /**
+     * Creates and issues a dataStore command from the specified command name 
+     *
+     * @param commandName the name of the command
+     * @param arguments the arguments of the command
+     * @param object the subject of the command
+     * @param synch an indication whether to synchronize the command or not
+     * @return the status of the command
+     */
+    public DataElement commandByName(String commandName, ArrayList arguments, DataElement object, boolean synch)
     {
-      status.setAttribute(DE.A_NAME, getLocalizedString("model.timeout"));
+	DataElement status = null;
+	DataElement cmd = find(_descriptorRoot, DE.A_NAME, commandName, 3);  
+	
+	status = command(cmd, arguments, object);
+	if (synch)
+	    {
+		waitUntil(status, getLocalizedString("model.done"));
+	    }
+	return status;
     }
 
-   if (notificationEnabled)
+    /**
+     * Wait until a given status element reached the specified state.  
+     * This is used for issuing synchronized commands
+     *
+     * @param status the status element 
+     * @param state the state to wait until 
+     */
+    public void waitUntil(DataElement status, String state)
     {
-      _domainNotifier.enable(true);
+	int timeWaited = 20;
+	boolean timedOut = false;
+	boolean notificationEnabled = _domainNotifier.isEnabled();
+	if (notificationEnabled)
+	    {
+		_domainNotifier.enable(false);
+	    }
+	
+	while ((status != null) 
+	       && (_status == null || _status.getName().equals("okay"))
+	       && !status.getName().equals(state) 
+	       && !status.getName().equals(getLocalizedString("model.incomplete")) 
+	       && !timedOut)
+	    {	
+		if ((_timeout != -1) && (timeWaited > _timeout))
+		    {
+			// waited too long!
+			timedOut = true;
+		    }
+		
+		try
+		    {		
+			Thread.currentThread().sleep(timeWaited);
+		    } 
+		catch (InterruptedException e)
+		    {
+			System.out.println(e);
+		    }
+		
+		timeWaited += timeWaited;
+	    }
+	
+	if (timedOut)
+	    {
+		status.setAttribute(DE.A_NAME, getLocalizedString("model.timeout"));
+	    }
+	
+	if (notificationEnabled)
+	    {
+		_domainNotifier.enable(true);
+	    }
     }
-  }
 
     public void cleanBadReferences(DataElement root)
     {
     }
 
+    /**
+     * Tells the command handler to cancel all pending commands.  
+     */
     public void cancelAllCommands()
     {
 	_commandHandler.cancelAllCommands();
     }   
 
-  public DataElement synchronizedCommand(DataElement commandDescriptor, DataElement dataObject)
-  {
-    return synchronizedCommand(commandDescriptor, dataObject, false);
-  }
+    /**
+     * Creates and issues a synchronized command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param dataObject the subject of the command
+     * @return the status of the command
+     */
+    public DataElement synchronizedCommand(DataElement commandDescriptor, DataElement dataObject)
+    {
+	return synchronizedCommand(commandDescriptor, dataObject, false);
+    }
 
-  public DataElement synchronizedCommand(DataElement commandDescriptor, DataElement dataObject, boolean noRef)
-  {
-    DataElement status = command(commandDescriptor, dataObject, noRef, true);
-    waitUntil(status, getLocalizedString("model.done"));
-
-    return status;
-  }
-
-  public DataElement synchronizedCommand(DataElement commandDescriptor, ArrayList arguments, DataElement dataObject)
-  {
-    DataElement status = command(commandDescriptor, arguments, dataObject, true);
-    waitUntil(status, getLocalizedString("model.done"));
-
-    return status;
-  }
+    /**
+     * Creates and issues a synchronized command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param dataObject the subject of the command
+     * @param noRef and indication of whether the subject should be referenced or not
+     * @return the status of the command
+     */
+    public DataElement synchronizedCommand(DataElement commandDescriptor, DataElement dataObject, boolean noRef)
+    {
+	DataElement status = command(commandDescriptor, dataObject, noRef, true);
+	waitUntil(status, getLocalizedString("model.done"));
+	
+	return status;
+    }
+    
+    /**
+     * Creates and issues a synchronized command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param dataObject the subject of the command
+     * @param noRef and indication of whether the subject should be referenced or not
+     * @return the status of the command
+     */
+    public DataElement synchronizedCommand(DataElement commandDescriptor, ArrayList arguments, DataElement dataObject)
+    {
+	DataElement status = command(commandDescriptor, arguments, dataObject, true);
+	waitUntil(status, getLocalizedString("model.done"));
+	
+	return status;
+    }
   
-public DataElement command(DataElement commandDescriptor, ArrayList arguments, DataElement dataObject)
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param arguments the arguments for the command
+     * @param dataObject the subject of the command
+     * @return the status of the command
+     */
+    public DataElement command(DataElement commandDescriptor, ArrayList arguments, DataElement dataObject)
     {
 	return command(commandDescriptor, arguments, dataObject, false);
     }
+    
 
-
-public DataElement command(DataElement commandDescriptor, 
-			   ArrayList arguments, DataElement dataObject, 
-			   boolean immediate)
-      {
-        if (_commandHandler != null)
-        {
-	  return _commandHandler.command(commandDescriptor, arguments, dataObject, true, immediate);
-        }
-	return null;
-      }
-
-public DataElement command(DataElement commandDescriptor, 
-			   DataElement objectDescriptor, DataElement dataObject
-			   )
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param arguments the arguments for the command
+     * @param dataObject the subject of the command
+     * @param immediate indicates whether the command should be placed first on the request queue 
+     * @return the status of the command
+     */
+    public DataElement command(DataElement commandDescriptor, 
+			       ArrayList arguments, DataElement dataObject, 
+			       boolean immediate)
     {
-	return command(commandDescriptor, objectDescriptor, dataObject, false);
-    } 
-
-public DataElement command(DataElement commandDescriptor, 
-			   DataElement objectDescriptor, DataElement dataObject, 
-			   boolean immediate)
-      {
         if (_commandHandler != null)
-        {
-	  return _commandHandler.command(commandDescriptor, objectDescriptor, dataObject, true, immediate);
-        }
+	    {
+		return _commandHandler.command(commandDescriptor, arguments, dataObject, true, immediate);
+	    }
 	return null;
-      }
+    }
 
-  public DataElement command(DataElement commandDescriptor, DataElement dataObject)
-  {
-      return command(commandDescriptor, dataObject, false);    
-  }
-  
-  public DataElement command(DataElement commandDescriptor, DataElement dataObject, boolean noRef)
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param arg an argument for the command
+     * @param dataObject the subject of the command
+     * @return the status of the command
+     */    
+    public DataElement command(DataElement commandDescriptor, 
+			       DataElement arg, DataElement dataObject
+			       )
+    {
+	return command(commandDescriptor, arg, dataObject, false);
+    } 
+    
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param arg an argument for the command
+     * @param dataObject the subject of the command
+     * @param immediate indicates whether the command should be placed first on the request queue 
+     * @return the status of the command
+     */    
+    public DataElement command(DataElement commandDescriptor, 
+			       DataElement arg, DataElement dataObject, 
+			       boolean immediate)
+    {
+        if (_commandHandler != null)
+	    {
+		return _commandHandler.command(commandDescriptor, arg, dataObject, true, immediate);
+	    }
+	return null;
+    }
+
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param dataObject the subject of the command
+     * @return the status of the command
+     */    
+    public DataElement command(DataElement commandDescriptor, DataElement dataObject)
+    {
+	return command(commandDescriptor, dataObject, false);    
+    }
+    
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param dataObject the subject of the command
+     * @param noRef an indication of whether to reference the subject or not
+     * @return the status of the command
+     */     
+    public DataElement command(DataElement commandDescriptor, DataElement dataObject, boolean noRef)
     {
 	return command(commandDescriptor, dataObject, noRef, false);
     }
 
-  public DataElement command(DataElement commandDescriptor, DataElement dataObject, boolean noRef, boolean immediate)
-      {
+    
+    /**
+     * Creates and issues a command.  
+     *
+     * @param commandDescriptor the comamnd descriptor for the command
+     * @param dataObject the subject of the command
+     * @param noRef an indication of whether to reference the subject or not
+     * @param immediate an indication of whether
+     * @return the status of the command
+     */     
+    public DataElement command(DataElement commandDescriptor, DataElement dataObject, boolean noRef, boolean immediate)
+    {
         if (_commandHandler != null)
-        {
-	  return _commandHandler.command(commandDescriptor, dataObject, !noRef);
-        }
-
+	    {
+		return _commandHandler.command(commandDescriptor, dataObject, !noRef);
+	    }
+	
 	return null;
-      }
-
-  public DataElement command(DataElement commandObject)
-      {
+    }
+    
+    /**
+     * Issues a command.  
+     *
+     * @param commandObject an instance of a command
+     * @return the status of the command
+     */     
+    public DataElement command(DataElement commandObject)
+    {
 	return _commandHandler.command(commandObject);	
-      }
+    }
  
-  public void flush()
-  {
-      // flush the whole thing
-      flush(_logRoot);
-      flush(_hostRoot);
-      flush(_minerRoot);
-      flush(_tempRoot);
-  }
-  
-
-  public void flush(DataElement element)
+    /**
+     * Delete information from the DataStore.  
+     *
+     */     
+    public void flush()
+    {
+	// flush the whole thing
+	flush(_logRoot);
+	flush(_hostRoot);
+	flush(_minerRoot);
+	flush(_tempRoot);
+    }
+    
+    /**
+     * Delete information from the DataStore contained by an element.  
+     *
+     * @param element the element from which to delete
+     */     
+    public void flush(DataElement element)
       {
 	if (element != null)
 	  {	
@@ -1373,59 +2114,92 @@ public DataElement command(DataElement commandDescriptor,
 	  }	
       }
 
-
-
-  public DataElement localDescriptorQuery(DataElement object, String keyName)
+    
+    /**
+     * Find a command descriptor element in the schema with the given value.  
+     *
+     * @param object the object descriptor representing the type of object that can issue such a command
+     * @param keyName the value of the command to search for
+     * @return the command descriptor for the specified command
+     */     
+    public DataElement localDescriptorQuery(DataElement object, String keyName)
     {
 	return localDescriptorQuery(object, keyName, 5);
     }
 
-  public DataElement localDescriptorQuery(DataElement descriptor, String keyName, int depth)
-  {
-      if ((descriptor != null) && (depth > 0))
-	  {	
-	      for (int i = 0; i < descriptor.getNestedSize(); i++)
-		  {
-		      DataElement subDescriptor = (DataElement)descriptor.get(i).dereference();
-		      String type = subDescriptor.getType();
-		      if (type == null)
-			  {
-			  }
-		      if (type.equals(DE.T_COMMAND_DESCRIPTOR))
-			  {
-			      if (keyName.equals(subDescriptor.getValue()))
-				  return subDescriptor;		
-			  }
-		      else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
-			  {
-			      DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
-			      if (result != null)
-				  return result;
-			  }
-		  }
+    /**
+     * Find a command descriptor element in the schema with the given value.  
+     *
+     * @param object the object descriptor representing the type of object that can issue such a command
+     * @param keyName the value of the command to search for
+     * @param depth the depth of abstraction to search 
+     * @return the command descriptor for the specified command
+     */     
+    public DataElement localDescriptorQuery(DataElement descriptor, String keyName, int depth)
+    {
+	if ((descriptor != null) && (depth > 0))
+	    {	
+		for (int i = 0; i < descriptor.getNestedSize(); i++)
+		    {
+			DataElement subDescriptor = (DataElement)descriptor.get(i).dereference();
+			String type = subDescriptor.getType();
+			if (type == null)
+			    {
+			    }
+			if (type.equals(DE.T_COMMAND_DESCRIPTOR))
+			    {
+				if (keyName.equals(subDescriptor.getValue()))
+				    return subDescriptor;		
+			    }
+			else if (type.equals(DE.T_ABSTRACT_COMMAND_DESCRIPTOR))
+			    {
+				DataElement result = localDescriptorQuery(subDescriptor, keyName, depth - 1);
+				if (result != null)
+				    return result;
+			    }
+		    }
+		
+		DataElement abstractedBy = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.abstracted_by"), 1);
+		ArrayList abstractDescriptors = descriptor.getAssociated(abstractedBy);
+		int numInherited = abstractDescriptors.size();
+		
+		for (int j = 0; j < numInherited; j++)
+		    {
+			DataElement abstractDescriptor = (DataElement)abstractDescriptors.get(j);
+			
+			DataElement result = localDescriptorQuery(abstractDescriptor, keyName, depth - 1);		    		    
+			if (result != null)
+			    {
+				return result;		      
+			    }
+		    }		  
+	    }
+	
+	return null;
+    }
+    
 
-	      DataElement abstractedBy = find(_descriptorRoot, DE.A_NAME, getLocalizedString("model.abstracted_by"), 1);
-	      ArrayList abstractDescriptors = descriptor.getAssociated(abstractedBy);
-	      for (int j = 0; j < abstractDescriptors.size(); j++)
-		  {
-		      DataElement abstractDescriptor = (DataElement)abstractDescriptors.get(j);
-		      DataElement result = localDescriptorQuery(abstractDescriptor, keyName, depth - 1);;
-		      if (result != null)
-			  return result;
-		  }
-	  }
-   
-   return null;
-  }
-
-  public DataElement getMinerFor(DataElement commandDescriptor)
+    /**
+     * Finds the element that represents the miner that implements a particular command.  
+     *
+     * @param commandDescriptor a command descriptor
+     * @return the element representing a miner
+     */     
+    public DataElement getMinerFor(DataElement commandDescriptor)
       {
         String minerName = commandDescriptor.getSource();
         DataElement theMinerElement = find(_minerRoot, DE.A_NAME, minerName, 1);
         return theMinerElement;
       }
 
- public ArrayList findObjectsOfType(DataElement root, DataElement type)
+    /**
+     * Finds all the elements that are of a given type from a specified element.  
+     *
+     * @param root where to search from 
+     * @param type the descriptor representing the type of the objects to search for 
+     * @return a list of elements
+     */     
+    public ArrayList findObjectsOfType(DataElement root, DataElement type)
     {
 	ArrayList results = new ArrayList();
 	for (int i = 0; i < root.getNestedSize(); i++)
@@ -1446,6 +2220,13 @@ public DataElement command(DataElement commandDescriptor,
 	return results;
     }
 
+    /**
+     * Finds all relationship descriptor types that can be applied to a particular element.  
+     *
+     * @param descriptor the object descriptor that uses relationships 
+     * @param fixateOn a filter for the type of relationships to look for 
+     * @return a list of relationship descriptor elements 
+     */     
     public ArrayList getRelationItems(DataElement descriptor, String fixateOn)
     {
 	ArrayList result = new ArrayList();
@@ -1514,6 +2295,14 @@ public DataElement command(DataElement commandDescriptor,
 	return result;
     }
 
+    /**
+     * Finds all object descriptor types that can exist relative to a particular object type with a given relation.  
+     *
+     * @param descriptor the object descriptor to apply this to 
+     * @param fixateOn a filter for the type of object descriptors to look for 
+     * @param relation the relationship that a element can have with other elements 
+     * @return a list of object descriptor elements 
+     */     
     public ArrayList getFilterItems(DataElement descriptor, String fixateOn, DataElement relation)
     {
 	ArrayList result = new ArrayList();
@@ -1604,113 +2393,179 @@ public DataElement command(DataElement commandDescriptor,
       }
 
 
-
-  public ArrayList searchForPattern(DataElement root, int attribute, String pattern, boolean ignoreCase)
-  {
-    int    attributes[] = { attribute };
-    String   patterns[] = { pattern };
-    return searchForPattern(root, attributes, patterns, 1, ignoreCase);
-  }
-
-  public ArrayList searchForPattern(DataElement root, ArrayList attributes, ArrayList patterns,
-				    boolean ignoreCase)
-  {
-    int att[]    = new int[attributes.size()];
-    String ptn[] = new String[attributes.size()];
-    for (int i = 0; i < attributes.size(); i++)
-      {
-	att[i] = ((Integer)attributes.get(i)).intValue();	
-	ptn[i] = (String)(patterns.get(i));	
-      }
+    /**
+     * Find all elements from a given element that match a certain attribute.  
+     *
+     * @param root the element to search from 
+     * @param attribute the index of the attribute to match 
+     * @param pattern the value to compare with the attribute 
+     * @param ignoreCase an indication whether to ignore case for the attribute or not 
+     * @return the list of matches
+     */     
+    public ArrayList searchForPattern(DataElement root, int attribute, String pattern, boolean ignoreCase)
+    {
+	int    attributes[] = { attribute };
+	String   patterns[] = { pattern };
+	return searchForPattern(root, attributes, patterns, 1, ignoreCase);
+    }
     
-    return searchForPattern(root, att, ptn, attributes.size(), ignoreCase);    
-  }
+    /**
+     * Find all elements from a given element that match a certain set of attributes.  
+     *
+     * @param root the element to search from 
+     * @param attributes a list of attributes to match 
+     * @param patterns a list of values to compare with the attributes 
+     * @param ignoreCase an indication whether to ignore case for the attributes or not 
+     * @return the list of matches
+     */     
+    public ArrayList searchForPattern(DataElement root, ArrayList attributes, ArrayList patterns,
+				      boolean ignoreCase)
+    {
+	int att[]    = new int[attributes.size()];
+	String ptn[] = new String[attributes.size()];
+	for (int i = 0; i < attributes.size(); i++)
+	    {
+		att[i] = ((Integer)attributes.get(i)).intValue();	
+		ptn[i] = (String)(patterns.get(i));	
+	    }
+	
+	return searchForPattern(root, att, ptn, attributes.size(), ignoreCase);    
+    }
   
-  public ArrayList searchForPattern(DataElement root, 
-				    int attributes[], String patterns[], int numAttributes,
-				    boolean ignoreCase)
-  {
-    return searchForPattern(root, attributes, patterns, numAttributes, ignoreCase, 10);
-  }
-
-  public ArrayList searchForPattern(DataElement root, int attributes[], 
-                                    String patterns[], int numAttributes,
-				    boolean ignoreCase, int depth)
+    /**
+     * Find all elements from a given element that match a certain set of attributes.  
+     *
+     * @param root the element to search from 
+     * @param attributes a list of attribute indexes to match 
+     * @param patterns a list of values to compare with the attributes 
+     * @param numAttributes the number of attributes to match 
+     * @param ignoreCase an indication whether to ignore case for the attributes or not 
+     * @return the list of matches
+     */     
+    public ArrayList searchForPattern(DataElement root, 
+				      int attributes[], String patterns[], int numAttributes,
+				      boolean ignoreCase)
+    {
+	return searchForPattern(root, attributes, patterns, numAttributes, ignoreCase, 10);
+    }
+    
+    /**
+     * Find all elements from a given element that match a certain set of attributes.  
+     *
+     * @param root the element to search from 
+     * @param attributes a list of attribute indexes to match 
+     * @param patterns a list of values to compare with the attributes 
+     * @param numAttributes the number of attributes to match 
+     * @param ignoreCase an indication whether to ignore case for the attributes or not 
+     * @param depth how deep to search 
+     * @return the list of matches
+     */     
+    public ArrayList searchForPattern(DataElement root, int attributes[], 
+				      String patterns[], int numAttributes,
+				      boolean ignoreCase, int depth)
     {
 	ArrayList searched = new ArrayList();
 	return searchForPattern(root, attributes, patterns, numAttributes, ignoreCase, depth, searched);
     }
+    
 
-  public ArrayList searchForPattern(DataElement root, int attributes[], 
-                                    String patterns[], int numAttributes,
-				    boolean ignoreCase, int depth, 
-				    ArrayList searched)
-  {      
-    ArrayList result = new ArrayList();
-    if (depth > 0)
-    {
-      for (int i = 0; i < root.getNestedSize(); i++)
-      {
-	DataElement child = (DataElement)root.get(i);
-	child = child.dereference();
-        if ((child != null) && !searched.contains(child))
-        {
-	    searched.add(child);
-	    if (child.patternMatch(attributes, patterns, numAttributes, ignoreCase))
-		{
-		    result.add(child);
-		}
-	    
-	    ArrayList subResults = searchForPattern(child, attributes, patterns, numAttributes, ignoreCase, depth - 1, searched);
-	    for (int j = 0; j < subResults.size(); j++)
-		{
-		    result.add(subResults.get(j));
-		}	
-	}
-      }
+    /**
+     * Find all elements from a given element that match a certain set of attributes.  
+     *
+     * @param root the element to search from 
+     * @param attributes a list of attribute indexes to match 
+     * @param patterns a list of values to compare with the attributes 
+     * @param numAttributes the number of attributes to match 
+     * @param ignoreCase an indication whether to ignore case for the attributes or not 
+     * @param depth how deep to search 
+     * @param searched a list of objects already searched 
+     * @return the list of matches
+     */     
+    public ArrayList searchForPattern(DataElement root, int attributes[], 
+				      String patterns[], int numAttributes,
+				      boolean ignoreCase, int depth, 
+				      ArrayList searched)
+    {      
+	ArrayList result = new ArrayList();
+	if (depth > 0)
+	    {
+		for (int i = 0; i < root.getNestedSize(); i++)
+		    {
+			DataElement child = (DataElement)root.get(i);
+			child = child.dereference();
+			if ((child != null) && !searched.contains(child))
+			    {
+				searched.add(child);
+				if (child.patternMatch(attributes, patterns, numAttributes, ignoreCase))
+				    {
+					result.add(child);
+				    }
+				
+				ArrayList subResults = searchForPattern(child, attributes, 
+									patterns, numAttributes, 
+									ignoreCase, depth - 1, searched);
+				for (int j = 0; j < subResults.size(); j++)
+				    {
+					result.add(subResults.get(j));
+				    }	
+			    }
+		    }
+	    }
+	
+	return result;
     }
 
-    return result;
-  }
 
+    public ArrayList fuzzyResolveName(DataElement object, String pattern)
+    {
+	ArrayList results = new ArrayList();
+	if (object != null)
+	    {	
+		for (int i = 0; i < object.getNestedSize(); i++)
+		    {
+			DataElement subObject = (DataElement)object.get(i);
+			if (subObject.getName().startsWith(pattern))
+			    {
+				results.add(subObject);
+			    }
+		    }
+		
+		ArrayList subResults = fuzzyResolveName(object.getParent(), pattern);
+		for (int j = 0; j < subResults.size(); j++)
+		    {
+			results.add(subResults.get(j));
+		    }	
+	    }
+	
+	return results;
+    }
 
-  public ArrayList fuzzyResolveName(DataElement object, String pattern)
-  {
-    ArrayList results = new ArrayList();
-    if (object != null)
-      {	
-	for (int i = 0; i < object.getNestedSize(); i++)
-	  {
-	    DataElement subObject = (DataElement)object.get(i);
-	    if (subObject.getName().startsWith(pattern))
-	      {
-		results.add(subObject);
-	      }
-	  }
-
-	ArrayList subResults = fuzzyResolveName(object.getParent(), pattern);
-	for (int j = 0; j < subResults.size(); j++)
-        {
-          results.add(subResults.get(j));
-        }	
-      }
-
-    return results;
-  }
-
-
-  public DataElement findMinerInformation(String minerName)
-  {
-    DataElement information = null;    
-    DataElement minerElement =  find(_minerRoot, DE.A_NAME, minerName, 1);
-    if (minerElement != null)
-      {	
-	information = find(minerElement, DE.A_TYPE, getLocalizedString("model.data"), 1);	
-      }
     
-    return information;    
-  }
-
+    /**
+     * Returns the element that represents the specified miner's data.  
+     *
+     * @param minerName the qualified name of the miner
+     * @return the element representing the miner information
+     */     
+    public DataElement findMinerInformation(String minerName)
+    {
+	DataElement information = null;    
+	DataElement minerElement =  find(_minerRoot, DE.A_NAME, minerName, 1);
+	if (minerElement != null)
+	    {	
+		information = find(minerElement, DE.A_TYPE, getLocalizedString("model.data"), 1);	
+	    }
+	
+	return information;    
+    }
+    
+    /**
+     * Finds a descriptor element with a specified type and name.  
+     *
+     * @param type the type of the descriptor
+     * @param name the name of the descriptor
+     * @return the found descriptor
+     */     
     public DataElement findDescriptor(String type, String name)
     {
 	if (_descriptorRoot != null)
@@ -1728,26 +2583,53 @@ public DataElement command(DataElement commandDescriptor,
 	
 	return null;
     }
-
-  
-  public DataElement findObjectDescriptor(String name)
+    
+    /**
+     * Finds an object descriptor element with a specified name.  
+     *
+     * @param name the name of the descriptor
+     * @return the found descriptor
+     */     
+    public DataElement findObjectDescriptor(String name)
       {
         return find(_descriptorRoot, DE.A_NAME, name, 5);
       }
 
-  public DataElement find(String id)
-      {
-        DataElement result = (DataElement)_hashMap.get(id);
-        
+    /**
+     * Finds an element with the specified ID.  
+     *
+     * @param id the ID of the descriptor
+     * @return the found element
+     */     
+    public DataElement find(String id)
+    {
+        DataElement result = (DataElement)_hashMap.get(id);        
         return result;
-      }
+    }
 
-  public DataElement find(DataElement root, int attribute, String name)
-      {
+    /**
+     * Finds an element matching a specified attribute and name.  
+     *
+     * @param root the element to search from
+     * @param attribute the index of the attribute to compare
+     * @param name the name of the element
+     * @return the first found element
+     */     
+    public DataElement find(DataElement root, int attribute, String name)
+    {
         return find(root, attribute, name, 10);
-      }
-
-  public DataElement find(DataElement root, int attribute, String name, int depth)
+    }
+    
+    /**
+     * Finds an element matching a specified attribute and name.  
+     *
+     * @param root the element to search from
+     * @param attribute the index of the attribute to compare
+     * @param name the name of the element
+     * @param depth the depth of the search
+     * @return the first found element
+     */     
+    public DataElement find(DataElement root, int attribute, String name, int depth)
       {
         if ((root != null) && (name != null) && !root.isReference() && depth > 0)
         {
@@ -1786,73 +2668,79 @@ public DataElement command(DataElement commandDescriptor,
         return null;
       }
 
-  public DataElement resolveName(DataElement object, String keyName)
-  {
-    if (object != null)
-      {	
-	for (int i = 0; i < object.getNestedSize(); i++)
-	  {
-	    DataElement subObject = (DataElement)object.get(i);
-	    if (keyName.equals(subObject.getName()))
-	      {
-		return subObject;
-	      }
-	  }
-
-	return resolveName(object.getParent(), keyName);
-      }
-
-    return null;
-  }
-
-
-  /////////////////////////////////////////
-  //
-  // File Operations
-  //
-  /////////////////////////////////////////
-
-  public String mapToLocalPath(String aPath)
-      {
-	  String result = null;
-
-	  char slash = '/';
-	  String remotePath = aPath.replace('\\', slash);
-	  String localRoot = _dataStoreAttributes.getAttribute(DataStoreAttributes.A_LOCAL_PATH).replace('\\', slash);
-	  String remoteRoot = getHostRoot().getSource().replace('\\', slash);
-
-	  if (localRoot.equals(remoteRoot))
-	      {
-		  result = remotePath;
-	      }
-	  else if (remotePath.startsWith(localRoot))
-	      {
-		  result = remotePath;
-	      }
-	  else if (remotePath.startsWith(remoteRoot))
-	      {
-		  result = new String(localRoot + slash + remotePath.substring(remoteRoot.length(), remotePath.length()));
-	      }
-	  else
-	      {
-		  // file is outside of scope
-		  // create temporary location
-		  int indexOfDrive = remotePath.indexOf(":");
-		  if (indexOfDrive > 0)
-		      {
-			  remotePath = remotePath.substring(indexOfDrive + 1, remotePath.length());
-		      }
-
-		  result = new String(localRoot + remotePath.substring(localRoot.indexOf(slash), remotePath.length()));
-	      }
-
-	  return result;
-      }
-  
+    public DataElement resolveName(DataElement object, String keyName)
+    {
+	if (object != null)
+	    {	
+		for (int i = 0; i < object.getNestedSize(); i++)
+		    {
+			DataElement subObject = (DataElement)object.get(i);
+			if (keyName.equals(subObject.getName()))
+			    {
+				return subObject;
+			    }
+		    }
+		
+		return resolveName(object.getParent(), keyName);
+	    }
+	
+	return null;
+    }
 
 
-  public void saveFile(DataElement root, String remotePath, int depth)
-      {
+    /**
+     * Get the mapping from a remote path to a local path.  
+     *
+     * @param aPath the remote path
+     * @return the local path
+     */     
+    public String mapToLocalPath(String aPath)
+    {
+	String result = null;
+	
+	char slash = '/';
+	String remotePath = aPath.replace('\\', slash);
+	String localRoot = _dataStoreAttributes.getAttribute(DataStoreAttributes.A_LOCAL_PATH).replace('\\', slash);
+	String remoteRoot = getHostRoot().getSource().replace('\\', slash);
+	
+	if (localRoot.equals(remoteRoot))
+	    {
+		result = remotePath;
+	    }
+	else if (remotePath.startsWith(localRoot))
+	    {
+		result = remotePath;
+	    }
+	else if (remotePath.startsWith(remoteRoot))
+	    {
+		result = new String(localRoot + slash + remotePath.substring(remoteRoot.length(), remotePath.length()));
+	    }
+	else
+	    {
+		// file is outside of scope
+		// create temporary location
+		int indexOfDrive = remotePath.indexOf(":");
+		if (indexOfDrive > 0)
+		    {
+			remotePath = remotePath.substring(indexOfDrive + 1, remotePath.length());
+		    }
+		
+		result = new String(localRoot + remotePath.substring(localRoot.indexOf(slash), remotePath.length()));
+	    }
+	
+	return result;
+    }
+    
+    
+    /**
+     * Persist the DataStore tree from a given root   
+     *
+     * @param root the element to persist from
+     * @param remotePath the path where the persisted file should be saved
+     * @param depth the depth of persistance from the root
+     */         
+    public void saveFile(DataElement root, String remotePath, int depth)
+    {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
         try
@@ -1861,7 +2749,7 @@ public DataElement command(DataElement commandDescriptor,
           File file = new File(fileName);
 		  try
 		  {	
-     	     file = file.getCanonicalFile();
+		      file = file.getCanonicalFile();
 		  }
 		  catch (IOException e)
 		  {
@@ -1896,6 +2784,12 @@ public DataElement command(DataElement commandDescriptor,
       }
 
   
+    /**
+     * Save a file in the specified location   
+     *
+     * @param localPath the path where to save the file
+     * @param file the file to save
+     */         
     public void saveFile(String localPath, File file)
     {
 	File newFile = new File(localPath);
@@ -1942,6 +2836,12 @@ public DataElement command(DataElement commandDescriptor,
 	    }
     }
 	
+    /**
+     * Save a file in the specified location   
+     *
+     * @param remotePath the path where to save the file
+     * @param buffer the buffer to save in the file
+     */         
     public void saveFile(String remotePath, byte[] buffer)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
@@ -1974,6 +2874,12 @@ public DataElement command(DataElement commandDescriptor,
         }
     }   
 
+    /**
+     * Append a file to the specified location   
+     *
+     * @param remotePath the path where to save the file
+     * @param buffer the buffer to append into the file
+     */         
     public void appendToFile(String remotePath, byte[] buffer)
     {
         remotePath = new String(remotePath.replace('\\', '/'));
@@ -2049,7 +2955,13 @@ public DataElement command(DataElement commandDescriptor,
         }
     }   
 
-  public void saveFile(String remotePath, StringBuffer contents)
+    /**
+     * Save a file in the specified location with the given contents   
+     *
+     * @param remotePath the path where to save the file
+     * @param contents the buffer to save
+     */         
+    public void saveFile(String remotePath, StringBuffer contents)
       {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
@@ -2083,13 +2995,19 @@ public DataElement command(DataElement commandDescriptor,
           }
         }
       }
-
-  public void load(DataElement root, String pathName)
-      {
+    
+    /**
+     * Load a persisted DataStore tree into the specified DataElement   
+     *
+     * @param root the root element of the persisted tree 
+     * @param pathName the location of the persisted file
+     */         
+    public void load(DataElement root, String pathName)
+    {
         String fileName = pathName;
         BufferedInputStream document = loadFile(fileName);
         if (document != null)
-        {
+	    {
           try
           {
             XMLparser parser = new XMLparser(this);
@@ -2102,12 +3020,13 @@ public DataElement command(DataElement commandDescriptor,
 		}
           }
           catch (IOException e)
-          {
-          }
-        }
-      }
-
-  public static BufferedInputStream loadFile(String fileName)
+	      {
+	      }
+	    }
+    }
+    
+    // this should be gone
+    public static BufferedInputStream loadFile(String fileName)
       {
         String document = null;
         File file = new File(fileName);
@@ -2131,38 +3050,33 @@ public DataElement command(DataElement commandDescriptor,
         }
       }
 
-  private String readerToString(BufferedReader in)
-      {
+    // this should be gone
+    private String readerToString(BufferedReader in)
+    {
         if (in != null)
-        {
-          StringBuffer buffer= new StringBuffer();
-          
-          String line;
-          try
-          {
-            while ((line = in.readLine()) != null)
-            {
-              buffer.append(line);
-              buffer.append("\n");
-            }
-          }
-          catch (IOException e)
-          {
-          }
-
-          return buffer.toString();
-        }
+	    {
+		StringBuffer buffer= new StringBuffer();
+		
+		String line;
+		try
+		    {
+			while ((line = in.readLine()) != null)
+			    {
+				buffer.append(line);
+				buffer.append("\n");
+			    }
+		    }
+		catch (IOException e)
+		    {
+		    }
+		
+		return buffer.toString();
+	    }
         else
-        {
-          return null;
-        }
-      }
-
-  /////////////////////
-  //
-  // tests
-  //
-  //////////////////////
+	    {
+		return null;
+	    }
+    }
 
   private boolean sameTree(DataElement root1, DataElement root2, int depth)
   {
@@ -2218,85 +3132,111 @@ public DataElement command(DataElement commandDescriptor,
       }
   }
 
-  public boolean filter(DataElement descriptor, DataElement dataElement)
-  {
-    return filter(descriptor, dataElement, 2);
-  }
-  
-
-  public boolean filter(DataElement descriptor, DataElement dataElement, int depth)
-  {
-    if (depth > 0)
-      {	
-	depth--;
-	
-	String dataType = (String)dataElement.getElementProperty(DE.P_TYPE);
-	String typeStr  = (String)descriptor.getElementProperty(DE.P_NAME);
-	
-	if (((dataType != null) && (typeStr != null)) &&
-	    (dataType.equals(typeStr) || typeStr.equals(getLocalizedString("model.all"))))
-	  {
-	    return true;
-	  }
-	else
-	  {
-	    for (int i = 0; i < descriptor.getNestedSize(); i++)
-	      {
-		if (filter((DataElement)descriptor.get(i), dataElement, depth))
-		  {
-		    return true;
-		  }
-	      }
-	    
-	    return false;
-	  }
-      }
-    
-    return false;
-  }
-
-  public boolean filter(ArrayList descriptors, DataElement dataElement)
-  {
-    for (int i = 0; i < descriptors.size(); i++)
+    /**
+     * Indicate whether a given descriptor can contain the specified element   
+     *
+     * @param descriptor the object descriptor to test 
+     * @param dataElement the object to test against
+     * @return and indication whether dataElement can be in an object of type descriptor
+     */         
+    public boolean filter(DataElement descriptor, DataElement dataElement)
     {
-      if (filter((DataElement)descriptors.get(i), dataElement))
-      {
-        return true;
-      }
+	return filter(descriptor, dataElement, 2);
+    }
+  
+    /**
+     * Indicate whether a given descriptor can contain the specified element   
+     *
+     * @param descriptor the object descriptor to test 
+     * @param dataElement the object to test against
+     * @param depth how far to search
+     * @return and indication whether dataElement can be in an object of type descriptor
+     */         
+    public boolean filter(DataElement descriptor, DataElement dataElement, int depth)
+    {
+	if (depth > 0)
+	    {	
+		depth--;
+		
+		String dataType = (String)dataElement.getElementProperty(DE.P_TYPE);
+		String typeStr  = (String)descriptor.getElementProperty(DE.P_NAME);
+		
+		if (((dataType != null) && (typeStr != null)) &&
+		    (dataType.equals(typeStr) || typeStr.equals(getLocalizedString("model.all"))))
+		    {
+			return true;
+		    }
+		else
+		    {
+			for (int i = 0; i < descriptor.getNestedSize(); i++)
+			    {
+				if (filter((DataElement)descriptor.get(i), dataElement, depth))
+				    {
+					return true;
+				    }
+			    }
+			
+			return false;
+		    }
+	    }
+	
+	return false;
+    }
+
+    /**
+     * Indicate whether a given set of descriptors can contain the specified element   
+     *
+     * @param descriptors the object descriptors to test 
+     * @param dataElement the object to test against
+     * @return and indication whether dataElement can be in an object of type descriptor
+     */         
+    public boolean filter(ArrayList descriptors, DataElement dataElement)
+    {
+	for (int i = 0; i < descriptors.size(); i++)
+	    {
+		if (filter((DataElement)descriptors.get(i), dataElement))
+		    {
+			return true;
+		    }
+	    }	
+	return false;
     }
     
-    return false;
-  }
-
-  public boolean isTransient(DataElement commandObject)
-      {
+    /**
+     * Indicate whether an command is specified as transient   
+     *
+     * @param commandObject the object descriptors to test 
+     * @return and indication whether the command is transient
+     */         
+    public boolean isTransient(DataElement commandObject)
+    {
         boolean isTransient = false;
         DataElement subject = (DataElement)commandObject.get(0);
-
+	
         DataElement subjectDescriptor = subject.getDescriptor();
         if (subjectDescriptor != null)
-        {
-          DataElement minerElement = getMinerFor(commandObject);
-          DataElement transientObjects = find(minerElement, DE.A_TYPE, getLocalizedString("model.transient"), 1);
-	  if (transientObjects != null)
 	    {
-	      for (int i = 0; i < transientObjects.getNestedSize(); i++)
-		{
-		  DataElement transientDescriptor = transientObjects.get(i).dereference();
-		  if (transientDescriptor == subjectDescriptor)
+		DataElement minerElement = getMinerFor(commandObject);
+		DataElement transientObjects = find(minerElement, DE.A_TYPE, getLocalizedString("model.transient"), 1);
+		if (transientObjects != null)
 		    {
-		      isTransient = true;
+			for (int i = 0; i < transientObjects.getNestedSize(); i++)
+			    {
+				DataElement transientDescriptor = transientObjects.get(i).dereference();
+				if (transientDescriptor == subjectDescriptor)
+				    {
+					isTransient = true;
+				    }
+			    }
 		    }
-		}
 	    }
-	}
 	
         return isTransient;
-      }
-
-  private void initializeDescriptors()
-      {
-	  _dataStoreSchema.extendSchema(_descriptorRoot);
-      }
+    }
+    
+    private void initializeDescriptors()
+    {
+	_dataStoreSchema.extendSchema(_descriptorRoot);
+    }
 }
 
