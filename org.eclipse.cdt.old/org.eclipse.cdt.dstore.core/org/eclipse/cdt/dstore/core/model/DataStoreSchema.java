@@ -114,9 +114,6 @@ public class DataStoreSchema
 	_dataStore.createReference(containerObjectD, containsD, containsD);
 	
 	// file objects
-	_dataStore.createReference(containerObjectD, hostD, abstracts, abstractedBy);	
-	
-	
         DataElement deviceD  = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.device"), 
 								 "org.eclipse.cdt.dstore.miners");
         DataElement fileD    = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.file"), 
@@ -132,6 +129,7 @@ public class DataStoreSchema
 	
 	_dataStore.createReference(containerObjectD, fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, deviceD,  abstracts, abstractedBy);
+	_dataStore.createReference(hostD, fsObject,  abstracts, abstractedBy);
 	
 	_dataStore.createReference(fileD,    fsObject, abstracts, abstractedBy);
 	_dataStore.createReference(fsObject, dirD, abstracts, abstractedBy);
@@ -145,14 +143,6 @@ public class DataStoreSchema
 	_dataStore.createReference(dirD,     dirD, containsD);
 	_dataStore.createReference(dirD,     fileD, containsD);
 	
-	DataElement hostDirectories  = _dataStore.createAbstractObjectDescriptor(hostD, getLocalizedString("model.Directories"),
-										 "org.eclipse.cdt.dstore.miners");	
-	_dataStore.createReference(hostDirectories, dirD, containsD);
-	_dataStore.createReference(hostDirectories, deviceD, containsD);
-	
-	DataElement hostDetails  = _dataStore.createAbstractObjectDescriptor(hostD, getLocalizedString("model.Details"));	        
-	_dataStore.createReference(hostDetails, hostDirectories, containsD);
-        _dataStore.createReference(hostDetails, fileD, containsD);
 	
 	// miner descriptors
 	DataElement minersD      = _dataStore.createObjectDescriptor(schemaRoot, getLocalizedString("model.miners"));
@@ -172,6 +162,8 @@ public class DataStoreSchema
         DataElement minerObjects = _dataStore.createAbstractObjectDescriptor(rootD, getLocalizedString("model.Tools"));
         _dataStore.createReference(minerObjects, minersD, abstracts, abstractedBy);
         _dataStore.createReference(minerObjects, minerD, abstracts, abstractedBy);
+        _dataStore.createReference(minerObjects, dataD, abstracts, abstractedBy);
+
 	
 	
 	// containers
