@@ -19,6 +19,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIArgument;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIValue;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
 
 public class WinDbgStackFrame implements ICDIStackFrame {
@@ -99,5 +100,21 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 
 	public ICDITarget getTarget() {
 		return thread.getTarget();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStepReturn#stepReturn()
+	 */
+	public void stepReturn() throws CDIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStepReturn#stepReturn(org.eclipse.cdt.debug.core.cdi.model.ICDIValue)
+	 */
+	public void stepReturn(ICDIValue value) throws CDIException {
+		// TODO Auto-generated method stub
+		
 	}
 }

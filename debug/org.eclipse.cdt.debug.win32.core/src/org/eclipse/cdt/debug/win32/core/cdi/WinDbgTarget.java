@@ -210,12 +210,48 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		return false;
 	}
 
-	public synchronized void resume() throws CDIException {
+	public synchronized void resume(boolean passSignal) throws CDIException {
 		resume = true;
 		// Clear everyone's stack frame
 		for (int i = 0; i < threads.length; ++i)
 			threads[i].clearStackFrames();
 		notify();
+	}
+	public synchronized void resume() throws CDIException {
+		resume(false);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#signal()
+	 */
+	public void signal() throws CDIException {
+		resume(false);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteResume#resume(boolean)
+	 */
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#jump(org.eclipse.cdt.debug.core.cdi.ICDILocation)
+	 */
+	public void jump(ICDILocation location) throws CDIException {
+		resume(location);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteResume#resume(org.eclipse.cdt.debug.core.cdi.ICDILocation)
+	 */
+	public void resume(ICDILocation location) throws CDIException {
+		// TODO Auto-generated method stub		
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#signal(org.eclipse.cdt.debug.core.cdi.model.ICDISignal)
+	 */
+	public void signal(ICDISignal signal) throws CDIException {
+		resume(signal);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteResume#resume(org.eclipse.cdt.debug.core.cdi.model.ICDISignal)
+	 */
+	public void resume(ICDISignal signal) throws CDIException {
+		// TODO Auto-generated method stub
 	}
 	
 	/* (non-Javadoc)
@@ -224,66 +260,80 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	public void suspend() throws CDIException {
 		// TODO Auto-generated method stub
 	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepReturn()
 	 */
 	public void stepReturn() throws CDIException {
-		// TODO Auto-generated method stub
+		getTarget().getCurrentThread().getCurrentStackFrame().stepReturn();
 	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepReturn(boolean)
-	 */
-	public void stepReturn(boolean execute) throws CDIException {
-		// TODO Auto-generated method stub
-	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepOver()
 	 */
 	public void stepOver() throws CDIException {
+		stepOver(1);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStep#stepOver(int)
+	 */
+	public void stepOver(int count) throws CDIException {
 		// TODO Auto-generated method stub
 	}
+
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepInto()
 	 */
 	public void stepInto() throws CDIException {
+		stepInto(1);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStep#stepInto(int)
+	 */
+	public void stepInto(int count) throws CDIException {
 		// TODO Auto-generated method stub
 	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepOverInstruction()
 	 */
 	public void stepOverInstruction() throws CDIException {
+		stepOverInstruction(1);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStep#stepOverInstruction(int)
+	 */
+	public void stepOverInstruction(int count) throws CDIException {
 		// TODO Auto-generated method stub
 	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#stepIntoInstruction()
 	 */
 	public void stepIntoInstruction() throws CDIException {
+		stepIntoInstruction(1);
+	}
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStep#stepIntoInstruction(int)
+	 */
+	public void stepIntoInstruction(int count) throws CDIException {
 		// TODO Auto-generated method stub
 	}
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#runUntil(org.eclipse.cdt.debug.core.cdi.ICDILocation)
 	 */
 	public void runUntil(ICDILocation location) throws CDIException {
-		// TODO Auto-generated method stub
+		stepUntil(location);
 	}
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#jump(org.eclipse.cdt.debug.core.cdi.ICDILocation)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExecuteStep#stepUntil(org.eclipse.cdt.debug.core.cdi.ICDILocation)
 	 */
-	public void jump(ICDILocation location) throws CDIException {
+	public void stepUntil(ICDILocation location) throws CDIException {
 		// TODO Auto-generated method stub
 	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#signal()
-	 */
-	public void signal() throws CDIException {
-		// TODO Auto-generated method stub
-	}
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#signal(org.eclipse.cdt.debug.core.cdi.model.ICDISignal)
-	 */
-	public void signal(ICDISignal signal) throws CDIException {
-		// TODO Auto-generated method stub
-	}
+
 
 	public ICDIThread getCurrentThread() throws CDIException {
 		return currentThread;
@@ -356,4 +406,6 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 }
