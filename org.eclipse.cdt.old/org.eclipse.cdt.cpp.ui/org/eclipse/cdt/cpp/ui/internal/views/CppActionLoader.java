@@ -112,7 +112,7 @@ public class CppActionLoader extends GenericActionLoader
 	menu.add(new Separator("additions"));
 
 	menu.add(new Separator("Properties"));
-	if (input.isOfType("file"))
+	if (input.isOfType("file") || type.equals("Closed Project"))
 	    {
 		menu.add(new OpenPropertiesAction(input, "Properties...", null, input.getDataStore()));
 	    }
