@@ -1,4 +1,4 @@
-# hi
+#
 #               parse command line output.
 #
 # CLICK THIS LINE TO EDIT THIS FILE (PATTERNS.DAT). (When viewing from the Output view)
@@ -42,11 +42,11 @@ command: cat.*patterns.*
 	 statement                   pattern=.* pattern.*=.*
 
 # special for autoconf
-command: ./autogen.sh
+command: ./autogen.sh.*
 	 error          file line         pattern=aclocal: ([\w,.,/,\\]*): (\d*):.*
 	 warning        file line         pattern=([\w,.,/,\\]*):(\d*):.*
 
-command: ./configure
+command: ./configure.*
          error          file line         pattern=./(configure): line (\d*): .*
 
 # How Patterns Work
