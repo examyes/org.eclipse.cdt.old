@@ -1095,6 +1095,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     }
     
   public DataElement findProjectElement(IProject project)
+    {
+	return findProjectElement(project, "Project");
+    }
+
+  public DataElement findProjectElement(IProject project, String type)
   {
       if (project == null)
 	  return null;
@@ -1112,8 +1117,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
       DataElement projectObj = dataStore.find(workspace, DE.A_NAME, project.getName(), 1);
       if (projectObj == null)
 	  {
-	      //System.out.println("no project obj for " + project.getName());
-	      projectObj = dataStore.createObject(workspace, "Project", project.getName(), project.getLocation().toString());
+	      projectObj = dataStore.createObject(workspace, type, project.getName(), project.getLocation().toString());
 	      dataStore.setObject(workspace);
 	  } 
 
@@ -1650,11 +1654,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			    {
 				dataStore.command(refreshD, cProject);
 			    }
-		    }
-		else
-		    {
-			System.out.println("no project " + project);     					
-		    }
+		    }		
 	    }
     }
 
@@ -1684,6 +1684,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					{
 					    resource = change.getResource();
 					    resourceChanged(resource);
+					}
+				    else if ((flags & IResourceDelta.OPEN) != 0)
+					{
+					    openProjects();
 					}
 				}
 			}

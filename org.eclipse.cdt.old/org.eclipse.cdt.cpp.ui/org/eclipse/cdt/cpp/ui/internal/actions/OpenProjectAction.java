@@ -80,20 +80,23 @@ public class OpenProjectAction extends CustomAction
 	}
     }
 
+    private IProject _project;
+    private ModelInterface _api;
 
   public OpenProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
         super(subject, label, command, dataStore);
+	_api = ModelInterface.getInstance();
+	_project = _api.findProjectResource(subject);
+        setEnabled(!_project.isOpen());
       }
 
     public void run()
     { 
-	ModelInterface api = ModelInterface.getInstance();
-	IProject project = api.findProjectResource(_subject);
-	if (project != null)
+	if (_project != null)
 	    {
-		OpenOperation op = new OpenOperation(project, _subject, api);
-		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
+		OpenOperation op = new OpenOperation(_project, _subject, _api);
+		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(_api.getDummyShell());
 		try
 		    {
 			progressDlg.run(true, true, op);

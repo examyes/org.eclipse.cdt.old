@@ -71,20 +71,24 @@ public class CloseProjectAction extends CustomAction
 	}
     }
 
+    private IProject _project;
+    private ModelInterface _api;
 
   public CloseProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
         super(subject, label, command, dataStore);
+
+	_api = ModelInterface.getInstance();
+	_project = _api.findProjectResource(subject);
+        setEnabled(_project.isOpen());
       }
 
     public void run()
     { 
-	ModelInterface api = ModelInterface.getInstance();
-	IProject project = api.findProjectResource(_subject);
-	if (project != null)
+	if (_project != null)
 	    {
-		CloseOperation op = new CloseOperation(project, api);
-		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(api.getDummyShell());
+		CloseOperation op = new CloseOperation(_project, _api);
+		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(_api.getDummyShell());
 		try
 		    {
 			progressDlg.run(true, true, op);
