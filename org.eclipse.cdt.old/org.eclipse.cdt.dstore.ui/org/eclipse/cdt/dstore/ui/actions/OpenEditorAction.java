@@ -107,104 +107,116 @@ public class OpenEditorAction extends Action implements IOpenAction
       {
         if (_element != null) 
         {
-          String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
-          String elementType = (String)(_element.getElementProperty(DE.P_TYPE));
+	    DataStore dataStore = _element.getDataStore();
 
-          if ((fileName != null) && (fileName.length() > 0))
-          {
-            Integer location = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));            
-	    
-	    if (!elementType.equals("directory") && !elementType.equals("device"))
-		{		
-		    IFile file = getNewFile(fileName);
-		    if (file == null)
-			{          
-			    DataElement fileElement = null;	
-			    if (elementType.equals("file"))
-				{
-				    fileElement = _element;			
-				}
-			    else
-				{
-				    String name = fileName;
+	    if (_element.getParent() != dataStore.getDescriptorRoot())
+		{
+		    String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
+		    String elementType = (String)(_element.getElementProperty(DE.P_TYPE));
+
+		    if ((fileName != null) && (fileName.length() > 0))
+			{
+			    java.io.File realFile = new java.io.File(fileName);
+			    if ( !realFile.isDirectory())
+				{		
+				    IFile file = getNewFile(fileName);
 				    
-				    int indexOfSlash = fileName.lastIndexOf(java.io.File.separator);
-				    if (indexOfSlash > 0)
+				    if (file == null)
 					{
-					    name = fileName.substring(indexOfSlash + 1, fileName.length());
-					    fileElement = _element.getDataStore().createObject(null, "file", name, fileName);
-					}
-				}
-			    
-			    if (fileElement != null)
-				{
-				    file = new FileResourceElement(fileElement, null);
-				}
-			    
-			}
-		    
-		    if (file != null)
-			{	  
-			    int loc = location.intValue();
-			    
-			    if (WorkbenchPlugin.getDefault() != null)
-				{
-				    IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
-				    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
-				    
-				    IEditorPart editor = null;
-				    
-				    IEditorPart [] editors = persp.getEditors();
-				    for (int i = 0; i < editors.length; i++)
-					{
-					    IEditorInput einput = editors[i].getEditorInput();
-					    if (einput instanceof IFileEditorInput)
+					    DataElement fileElement = null;	
+					    if (elementType.equals("file"))
 						{
-						    IFileEditorInput input = (IFileEditorInput)einput;
-						    if ((input != null) 
-							&& input.getName().equals(file.getName()))
+						    fileElement = _element;			
+						}
+					    else
+						{
+						    String name = fileName;
+						    
+						    int indexOfSlash1 = fileName.lastIndexOf('/');
+						    int indexOfSlash2 = fileName.lastIndexOf('\\');
+						    int indexOfSlash  = (indexOfSlash1 > indexOfSlash2) ? indexOfSlash1 : indexOfSlash2; 
+						    if (indexOfSlash > 0)
 							{
-							    editor = editors[i];		      
-							    persp.bringToTop(editor);		      
+							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
+							    fileElement = dataStore.createObject(null, "file", name, fileName);
+							    // create the object on server
+							    dataStore.setObject(fileElement);
+							}	
+						    else
+							{
+							    return;
+							}
+						}
+					    
+					    file = new com.ibm.dstore.ui.resource.FileResourceElement(fileElement, null);
+					}
+				    		    
+				    if (file != null)
+					{	  
+					    if (WorkbenchPlugin.getDefault() != null)
+						{
+						    IWorkbench desktop = WorkbenchPlugin.getDefault().getWorkbench();
+						    IWorkbenchPage persp= desktop.getActiveWorkbenchWindow().getActivePage();
+				    
+						    IEditorPart editor = null;
+						    
+						    IEditorPart [] editors = persp.getEditors();
+						    for (int i = 0; i < editors.length; i++)
+							{
+							    IEditorInput einput = editors[i].getEditorInput();
+							    if (einput instanceof IFileEditorInput)
+								{
+								    IFileEditorInput input = (IFileEditorInput)einput;
+								    if ((input != null) 
+									&& input.getName().equals(file.getName()))
+									{
+									    editor = editors[i];		      
+									    persp.bringToTop(editor);		      
+									}
+								}
+							}
+						    
+						    if (editor == null)
+							{
+							    if (!openEditor)
+								{
+								    return;		      
+								}
+							    
+							    try
+								{
+								    persp.openEditor(file);
+								}
+							    catch (org.eclipse.ui.PartInitException e)
+								{
+								}
+							    
+							    editor = persp.getActiveEditor();
+							}
+						    
+						    Integer lineLocation = (Integer)(_element.getElementProperty(DE.P_SOURCE_LOCATION));
+						    int line = lineLocation.intValue();	
+
+						    if ((line > 0) && (editor != null))
+							{	
+							    try
+								{
+								    IMarker marker = file.createMarker(IMarker.TEXT);
+								    marker.setAttribute(IMarker.LINE_NUMBER, line);
+								    marker.setAttribute(IMarker.CHAR_START, -1);
+								    marker.setAttribute(IMarker.CHAR_END, -1);
+								    
+								    editor.gotoMarker(marker);
+								}
+							    catch (CoreException e)
+								{
+								}
 							}
 						}
 					}
-				    
-				    if (editor == null)
-					{
-					    if (!openEditor)
-						{
-						    return;		      
-						}
-					    
-					    try
-						{
-						    persp.openEditor(file);
-						}
-					    catch (org.eclipse.ui.PartInitException e)
-						{
-						}
-					    
-					    editor = persp.getActiveEditor();
-					}
-				    
-				    if ((loc > 0) && (editor != null))
-					{	
-					    try
-						{
-						    IMarker marker = file.createMarker(IMarker.TEXT);
-						    marker.setAttribute(IMarker.LINE_NUMBER, loc);
-						    
-						    editor.gotoMarker(marker);
-						}
-					    catch (CoreException e)
-						{
-						}
-					}
-				}
+				}	
 			}
 		}	
-	  }
-	}	
+	}
       }
 }

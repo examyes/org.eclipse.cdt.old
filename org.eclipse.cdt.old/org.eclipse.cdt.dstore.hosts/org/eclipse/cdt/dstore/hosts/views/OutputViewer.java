@@ -178,6 +178,7 @@ public class OutputViewer extends TableViewer
 	    setInput(_selected);
 	}
     
+
     _openEditorAction.setSelected(_selected);
     _openEditorAction.run();    
   }
