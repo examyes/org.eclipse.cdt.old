@@ -689,7 +689,8 @@ public class FileSystemMiner extends Miner
 				    }
 				else
 				    {
-					newObject.refresh(false);
+					handleRefresh(newObject, status);
+					//newObject.refresh(false);
 				    }
 			    }			
 		    }
