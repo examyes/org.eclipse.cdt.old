@@ -40,7 +40,7 @@ public class DebugMiner extends Miner
 	if (name.equals("C_DEBUG"))
 	    {
 		DataElement jre = getCommandArgument(theCommand, 4);
-		if (jre.getType().equals("directory"))
+		if (jre != status)
 		    {
 			handleDebug(subject,
 				    getCommandArgument(theCommand, 1),
@@ -66,7 +66,7 @@ public class DebugMiner extends Miner
     public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
 			    DataElement key, DataElement status)
     {
-	handleDebug(directory, hostName, port, key, status, null);
+	handleDebug(directory, hostName, port, key, null, status);
     }
 
     public void handleDebug(DataElement directory, DataElement hostName, DataElement port,
