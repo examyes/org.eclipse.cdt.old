@@ -259,7 +259,6 @@ public class ManagedProjectMiner extends Miner
 				// the code to add/change CFLAGS/CXXFLAGS = -O2 the program Makefile.am to be optimized 
 				//System.out.println("\nOptimized selected");
 				autoconfManager.makefileAmManager.setCompilerFlag(project,"-O2");
-			
 			}
 			else if (name.equals("C_DEBUG_OPTION"))
 			{
@@ -370,7 +369,9 @@ public class ManagedProjectMiner extends Miner
 					DataElement state = _dataStore.createObject(null, "classification", "2");
 					_dataStore.createReference(subject, state, "class type");	
 				}
-				
+
+				reconfigure(subject,autoconfManager,status,classifier);
+
 				subject.refresh(false);
 			}
 			else if (name.equals("C_STATICLIB_MAKEFILE_AM"))
@@ -389,8 +390,9 @@ public class ManagedProjectMiner extends Miner
 					DataElement state = _dataStore.createObject(null, "classification", "3");
 					_dataStore.createReference(subject, state, "class type");	
 				}
-			
-			
+
+				reconfigure(subject,autoconfManager,status,classifier);
+
 				subject.refresh(false);
 			}
 			else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
@@ -408,8 +410,9 @@ public class ManagedProjectMiner extends Miner
 					DataElement state = _dataStore.createObject(null, "classification", "1");
 					_dataStore.createReference(subject, state, "class type");	
 				}
-			
-				
+
+				reconfigure(subject,autoconfManager,status,classifier);
+
 				subject.refresh(false);
 			}
 			else if (name.equals("C_SHAREDLIB_MAKEFILE_AM"))
@@ -428,7 +431,9 @@ public class ManagedProjectMiner extends Miner
 					DataElement state = _dataStore.createObject(null, "classification", "4");
 					_dataStore.createReference(subject, state, "class type");	
 				}
-			
+				
+				reconfigure(subject,autoconfManager,status,classifier);
+
 				subject.refresh(false);
 			}
 			else if (name.equals("C_INSERT_CONFIGURE_IN"))
@@ -549,6 +554,21 @@ public class ManagedProjectMiner extends Miner
  		return theProject;
  	}
  	// end new : to handle delete notification
+ 	
+ 	private void reconfigure(DataElement subject,AutoconfManager autoconfManager, DataElement status, MakefileAmClassifier classifier)
+ 	{
+	
+		DataElement parent = subject;
+		if(!parent.getType().equals("Project"))
+ 		{
+			while(!parent.getType().equals("Project"))
+			{
+				parent = subject.getParent();
+				subject = parent;
+			}
+ 		}
+		autoconfManager.configure(parent,status,true,classifier); 
+ 	}
 }
 
 	
