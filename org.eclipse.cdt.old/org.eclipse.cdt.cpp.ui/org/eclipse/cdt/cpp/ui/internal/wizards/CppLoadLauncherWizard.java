@@ -15,7 +15,8 @@ import org.eclipse.cdt.dstore.core.model.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.jface.wizard.*;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.jface.dialogs.*;
+import org.eclipse.jface.dialogs.MessageDialog;
+
 import org.eclipse.core.resources.*;
 import org.eclipse.debug.core.ILauncher;
 import org.eclipse.debug.ui.ILaunchWizard;
@@ -46,19 +47,21 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     private DataElement                     _directory;
 
     private ModelInterface                  _api;
+    private boolean                         _projectIsClosed = false;
 
     public void addPages()
     {
 	super.addPages();
+        if (_projectIsClosed)
+        {
+            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+            return;
+        }
 	
-   	_plugin = CppPlugin.getDefault();
-
    	_mainPage = new CppLoadLauncherWizardMainPage(_plugin.getLocalizedString("debugLauncher"), _currentSelectionName, _directory);
     	_mainPage.setTitle(_plugin.getLocalizedString("debugLauncher.Title"));
    	_mainPage.setDescription(_plugin.getLocalizedString("debugLauncher.Description"));
    	this.addPage(_mainPage);	
-
-	_api = _plugin.getModelInterface();
     }
 
     public CppLoadLauncherWizardMainPage getMainPage()
@@ -84,7 +87,8 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 
     public boolean performFinish()
     {
-	
+   	_plugin = CppPlugin.getDefault();
+      _api = _plugin.getModelInterface();
    	_mainPage.finish();
       //	boolean debugInitialization = debugInitialization();
     	String parameters = getParameters();
@@ -130,11 +134,11 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 		startupBehaviour = loadInfo.RUN_TO_MAIN;
 //	    }
 	
-	loadInfo.setStartupBehaviour(startupBehaviour);
+	   loadInfo.setStartupBehaviour(startupBehaviour);
 	
 	
-	getLauncher().doLaunch(loadInfo, workingDirectory);
-
+   	getLauncher().doLaunch(loadInfo, workingDirectory);
+      _projectIsClosed = false;
       return true;		
     }
 
@@ -146,10 +150,42 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 
     public void init(ILauncher launcher, String mode, IStructuredSelection selection)
     {
-	if (selection.getFirstElement() instanceof DataElement)
-	    {
-		init(launcher, mode, (DataElement)selection.getFirstElement());		
-	    }
+        DataElement dataElement = null;
+        Object element = selection.getFirstElement();
+        IProject project;
+
+        _plugin = CppPlugin.getDefault();
+        _api = _plugin.getModelInterface();
+
+        if (element instanceof DataElement)
+        {
+           dataElement = (DataElement)element;
+           DataElement projectElement = _api.getProjectFor(dataElement);
+           project = _api.findProjectResource(projectElement);
+           if (!project.isOpen())
+           {
+              _projectIsClosed = true;
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return;
+           } 		
+        }
+        else if (element instanceof IProject || element instanceof IResource)
+        {
+           dataElement = _api.findResourceElement((IResource)element);
+           project = ((IResource)element).getProject();
+           if (!project.isOpen())
+           {
+              _projectIsClosed = true;
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return;
+           }
+        }
+	
+        if (dataElement != null)
+        {
+           init(launcher, mode, dataElement);	
+        }
+
     }
 
     public void init(ILauncher launcher, String mode, DataElement resource)
@@ -160,5 +196,14 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
 //   	_currentSelectionName = ((DataElement)_element).getName();
    	_currentSelectionName = ((DataElement)_element).getSource();
    	_directory = ((DataElement)_element).getParent();
+    }
+ /**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
     }
 }

@@ -8,6 +8,7 @@ package org.eclipse.cdt.cpp.ui.internal.wizards;
 
 import org.eclipse.cdt.cpp.ui.internal.launchers.*;
 import org.eclipse.cdt.cpp.ui.internal.*;
+import org.eclipse.cdt.cpp.ui.internal.api.*;
 import org.eclipse.cdt.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
@@ -40,10 +41,18 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     private IProject                        _project;
     private String                          _programInvocation;
     private DataElement                     _directory;
+    private ModelInterface                  _api;
+    private boolean                         _projectIsClosed = false;
+
 
     public void addPages()
     {
 	   super.addPages();
+        if (_projectIsClosed)
+        {
+            displayMessageDialog(_plugin.getLocalizedString("runLauncher.Error.projectClosed"));
+            return;
+        }
 	
    	_mainPage = new CppRunLauncherWizardMainPage(_plugin.getLocalizedString("runLauncher"), _programInvocation, _directory);
     	_mainPage.setTitle(_plugin.getLocalizedString("runLauncher.Title"));
@@ -70,12 +79,12 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
     public boolean performFinish()
     {
    	_plugin = CppPlugin.getDefault();
-	
+        _api = _plugin.getModelInterface();
    	_mainPage.finish();
     	String parameters = getParameters();
     	String workingDirectory = getWorkingDirectory();
    	getLauncher().doLaunch(_programInvocation, parameters, workingDirectory);
-	
+      _projectIsClosed = false;
    	return true;		
     }
 
@@ -87,10 +96,42 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
 
     public void init(ILauncher launcher, String mode, IStructuredSelection selection)
     {
-	if (selection.getFirstElement() instanceof DataElement)
-	    {
-		init(launcher, mode, (DataElement)selection.getFirstElement());		
-	    }
+        DataElement dataElement = null;
+        Object element = selection.getFirstElement();
+        IProject project;
+
+        _plugin = CppPlugin.getDefault();
+        _api = _plugin.getModelInterface();
+
+       	if (element instanceof DataElement)
+      	{
+           dataElement = (DataElement)element;		
+           DataElement projectElement = _api.getProjectFor(dataElement);
+           project = _api.findProjectResource(projectElement);
+           if (!project.isOpen())
+           {
+              _projectIsClosed = true;
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return;
+           } 		
+      	}
+        else if (element instanceof IProject || element instanceof IResource)
+        {
+           dataElement = _api.findResourceElement((IResource)element);
+           project = ((IResource)element).getProject();
+           if (!project.isOpen())
+           {
+              _projectIsClosed = true;
+              displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.projectClosed"));
+              return;
+           } 		
+        }
+
+        if (dataElement != null)
+        {
+           init(launcher, mode, dataElement);
+        }
+
     }
 
     public void init(ILauncher launcher, String mode, DataElement resource)
@@ -101,8 +142,13 @@ public class CppRunLauncherWizard extends Wizard implements ILaunchWizard
    	_programInvocation = ((DataElement)_element).getSource();
    	_directory = ((DataElement)_element).getParent();
     }
-
-
+ /**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
+    }
 }
-
-
