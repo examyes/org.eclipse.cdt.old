@@ -1,5 +1,9 @@
-<topics id="topics_Troubleshooting"> 
- <topic label="Command"         href="troubleshooting/commands.htm"/>
- <topic label="Editing"         href="troubleshooting/edit.htm"/>
- <topic label="Installation"    href="troubleshooting/installproblems.htm"/>
-</topics>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for Troubleshooting -->
+<!-- ========================== -->
+<toc label="Troubleshooting"> 
+  <topic label="Command"         href="troubleshooting/commands.htm"/>
+  <topic label="Editing"         href="troubleshooting/edit.htm"/>
+  <topic label="Installation"    href="troubleshooting/installproblems.htm"/>
+</toc>

@@ -1,29 +1,30 @@
-<topics id="topics_Tasks"> 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for the Tasks -->
+<!-- ========================== -->
+<toc label="Tasks"> 
+  <topic label="Editing Source Files">
+    <topic label="Lpex Editor Reference" href="tasks/edit/lpexeditor.htm"/>
+  </topic>
 
- <topic label="Editing Source Files">
-  <topic label="Lpex Editor Reference" href="tasks/edit/lpexeditor.htm"/>
- </topic>
+  <topic label="Browse/Parse Source Files">
+    <topic label="Parsing Files" href="tasks/parse/parsefiles.htm"/>
+  </topic>
 
- <topic label="Browse/Parse Source Files">
-  <topic label="Parsing Files" href="tasks/parse/parsefiles.htm"/>
- </topic>
+  <topic label="Compiling Projects">
+    <topic label="Build Invocation"         href="tasks/compile/invocation.htm"/>
+    <topic label="Automatic Build Feature"  href="tasks/compile/automatic.htm"/>
+    <topic label="Handling Build Errors"    href="tasks/compile/errors.htm"/>
+  </topic>
 
- <topic label="Compiling Projects">
-  <topic label="Build Invocation"         href="tasks/compile/invocation.htm"/>
-  <topic label="Automatic Build Feature"  href="tasks/compile/automatic.htm"/>
-  <topic label="Handling Build Errors"    href="tasks/compile/errors.htm"/>
- </topic>
+  <topic label="Working with Commands">
+    <topic label="Launch"                   href="tasks/commands/launch.htm"/>
+    <topic label="View/Cancel Output"       href="tasks/commands/view.htm"/>
+    <topic label="Change Parse Formats"     href="tasks/commands/formats.htm"/>
+  </topic>
 
- <topic label="Working with Commands">
-  <topic label="Launch"                   href="tasks/commands/launch.htm"/>
-  <topic label="View/Cancel Output"       href="tasks/commands/view.htm"/>
-  <topic label="Change Parse Formats"     href="tasks/commands/formats.htm"/>
- </topic>
-
- <topic label="Working with Remote Projects">
-  <topic label="Running the Server"       href="tasks/remote/server.htm"/>
-  <topic label="Running the Client"       href="tasks/remote/client.htm"/>
- </topic>
-
-
-</topics>
+  <topic label="Working with Remote Projects">
+    <topic label="Running the Server"       href="tasks/remote/server.htm"/>
+    <topic label="Running the Client"       href="tasks/remote/client.htm"/>
+  </topic>
+</toc>

@@ -1,29 +1,43 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================== -->
+<!-- Declare the documentation for the C/C++ Plugin Guide  -->
+<!-- ===================================================== -->
+
 <plugin 
-  name="C/C++ Plugin User Guide"
+  name="C/C++ Development User Guide"
   id="org.eclipse.cdt.cpp.docs.user"
-  version="0.5.0"
-  provider-name="International Business Machines Corp." 
->
- <extension point="org.eclipse.help.contributions">
-  <infoset name="infoset_CPluginGuide.xml" />
- </extension> 
- <extension point="org.eclipse.help.contributions">
-  <topics name="topics_view_Contents.xml" />
-  <actions name="actions_view_Contents.xml" />
- </extension> 
- <extension point="org.eclipse.help.contributions">
-  <topics name="topics_GettingStarted.xml" />
-  <topics name="topics_Concepts.xml" />
-  <topics name="topics_Tasks.xml" />
-  <topics name="topics_Tutorial.xml" />
-  <topics name="topics_Troubleshooting.xml" />
-  <topics name="topics_Extensibility.xml" />
-  <topics name="topics_Disclaimer.xml" />
-  <actions name="actions_All.xml" />
- </extension> 
+  version="1.0"
+  provider-name="International Business Machines Corp.">
+
+<!-- ============================================================================= -->
+<!-- Define primary TOC                                                            -->
+<!-- ============================================================================= -->
+
+  <extension point="org.eclipse.help.toc"> 
+    <toc file="toc.xml" primary="true" />
+  </extension>
+
+<!-- ============================================================================= -->
+<!-- Define TOCs                                                                   -->
+<!-- ============================================================================= -->
+
+  <extension point="org.eclipse.help.toc">
+    <toc file="topics_GettingStarted.xml" />
+    <toc file="topics_Concepts.xml" />
+    <toc file="topics_Tasks.xml" />
+    <toc file="topics_Tutorial.xml" />
+    <toc file="topics_Troubleshooting.xml" />
+    <toc file="topics_Extensibility.xml" />
+    <toc file="topics_Disclaimer.xml" />
+  </extension>
  
+<!-- ============================================================================= -->
+<!-- F1 context files                                                              -->
+<!-- ============================================================================= --> 
+
  <extension point="org.eclipse.help.contexts"> 
   <contexts name="contexts_CPP.xml" plugin="org.eclipse.cdt.cpp.ui"/> 
  </extension>
+
+
 </plugin>

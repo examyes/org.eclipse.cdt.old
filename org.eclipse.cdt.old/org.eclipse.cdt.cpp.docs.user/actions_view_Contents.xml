@@ -1,7 +1,0 @@
-<actions infoview="org.eclipse.cdt.cpp.docs.user.view_Contents"> 
- <insert 
-  from="org.eclipse.cdt.cpp.docs.user.topics_view_Contents" 
-  to="org.eclipse.cdt.cpp.docs.user.view_Contents" 
-  as="child"/>
-</actions>
-

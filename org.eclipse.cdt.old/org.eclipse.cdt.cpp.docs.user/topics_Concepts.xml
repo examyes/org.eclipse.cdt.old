@@ -1,5 +1,8 @@
-<topics id="topics_Concepts"> 
- 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for the Concepts -->
+<!-- ========================== -->
+<toc label="Concepts">  
  <topic label="C/C++ Perspective\Views">
   <topic label="C/C++ Perspective"            href="concepts/views/cppperspective.htm"/>
   <topic label="Command"                      href="concepts/views/command.htm"/>
@@ -46,7 +49,7 @@
   <topic label="Formats"                      href="concepts/commands/formats.htm"/>
  </topic>
 
-</topics>
+</toc>
 
 
 

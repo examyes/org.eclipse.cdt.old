@@ -1,3 +1,7 @@
-<topics id="topics_Tutorial"> 
- <topic label="Sample"  href="sample/sample.htm"/>
-</topics>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ========================== -->
+<!-- Define topics for the Tutorial -->
+<!-- ========================== -->
+<toc label="Tutorial"> 
+  <topic label="Sample"  href="sample/sample.htm"/>
+</toc>
