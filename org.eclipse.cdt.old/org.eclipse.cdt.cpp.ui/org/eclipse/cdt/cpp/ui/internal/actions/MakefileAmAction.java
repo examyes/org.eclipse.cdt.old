@@ -48,19 +48,18 @@ public class MakefileAmAction extends CustomAction {
 	{	
 		super(subject, label, command, dataStore);
 		
-		DataElement makefileAm = getFileElement("Makefile.am");
+		
 		
 		if(_command.getValue().equals("INSERT_CONFIGURE_IN")||_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
 			if (!subject.getType().equals("Project"))	
 				setEnabled(false);
-		if(_command.getValue().equals("COMPILER_FLAGS") && makefileAm==null)	
+		if(_command.getValue().equals("COMPILER_FLAGS") && !doesFileExist("Makefile.am"))	
 			setEnabled(false);
-		//	
-		DataElement configureIn = getFileElement("configure.in");
-		if(_command.getValue().equals("INSERT_CONFIGURE_IN") && configureIn !=null)	
+			
+		if(_command.getValue().equals("INSERT_CONFIGURE_IN") && doesFileExist("configure.in"))	
 				setEnabled(false);
 		// classifying Makefile.am
-
+	/*	DataElement makefileAm = getFileElement("Makefile.am");
 		if(makefileAm!=null)
 		{
 			int classification = classifier.classify(makefileAm.getFileObject());
@@ -89,7 +88,7 @@ public class MakefileAmAction extends CustomAction {
 				default:
 				break;
 			}
-		}
+		}*/
 	}
 	public void run()
 	{
@@ -134,6 +133,18 @@ public class MakefileAmAction extends CustomAction {
 		}catch(IOException e){System.out.println(e);}  	
     	return "FLAG DEF";
     }
+ 	private boolean doesFileExist(String fileName)
+	{
+		for (int i = 0; i < _subject.getNestedSize(); i++)
+		    {
+			DataElement child = _subject.get(i).dereference();
+			if (!child.isDeleted() && child.getName().equals(fileName))
+			    {
+					return true;
+			    }
+		    }
+		return false;
+	}
 	private DataElement getFileElement(String fileName)
 	{
 		for (int i = 0; i < _subject.getNestedSize(); i++)
