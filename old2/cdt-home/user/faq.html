@@ -368,15 +368,20 @@
 
  <li><b><a name="install_30">I can't find the CDT download for the XXX operating system?</a></b>
   <p>
-   There is no special CDT download for any particular operating system.  Much of the CDT default functionality
-   will uses applications that are available on most operating systems.  The CDT
-   leverages some Linux system tools such as gdb(debugging), make(building).
+   The CDT is supported on the platofrms specified on the download page. The downloads are structured and naemd to indicate, which
+   OS and windowing system it runs on. If you do not see your os windowing system combination please contact us. 
+   We are always looking for volunteers to test and support platforms.<br>
+   Much of the CDT default functionality uses applications that are available on most operating systems.  The CDT
+   leverages some default system tools such as gdb(debugging), make(building).
    These tools are available for many platforms and if they exist on your system, there is
    a good chance that the default functionality will work.
   </p>
   <p>
    For example, on Windows you can install the <a href="http://www.redhat.com/download/cygwin.html">Cygwin toolkit</a>
-   which is a Unix environment for Windows and includes automake and gdb.
+   which is a Unix environment for Windows and includes automake and gdb.<br>
+   Note: <br>
+  The CDT currently uses GDB version 5.2.1 as the default. If you are using Cygwin the default version they currently install is too old. 
+  You need gdb 5.2.1, which should be in the gdb package dated 20020718-1 
   </p>
   <p>
    The caveat is that the operation of the CDT on some operating systems has not been fully tested and we
@@ -531,7 +536,13 @@ clean :
   <li> <a href="http://www.mingw.org/"> MinGW.</a> <br>
         Note: MinGW also works on top of a CygWin installation.
 </ul>
-Both of these tools offer a selection of GNU tools such as gcc and make.
+Both of these tools offer a selection of GNU tools such as gcc, gdb and make.<p>
+
+	Note: The CDT requires version  5.2.1 of the GDB. 
+		If you are using Cygwin the default version 
+		they currently install is too old. 
+		You need gdb 5.2.1, which should be in the gdb package 
+		dated 20020718-1         
 <p>
 The following example uses an installation of MinGW,
 installed into the directory C:\MinGW. If your installation has the GNU tools and libraries in a different
