@@ -64,6 +64,7 @@
       <li><a href="#general_40">How do I find out about future releases of the CDT?</a></li>
       <li><a href="#general_50">How do I ask questions?</a></li>
       <li><a href="#general_60">How do I report a bug or request a feature?</a></li> 
+      <li><a href="#general_70">What is this .log file I hear so much about?</a></li> 
    </ol>
   </li>
   <!-- Installation subheader -->
@@ -102,7 +103,7 @@
 <!-- General Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
   <tr>
-    <td width="90%"> <a name="general"><b><font color="#000000" size="+1"> General:
+    <td width="90%"> <a name="general"><b><font color="#000000" size="+1"> General
       </font></b></a> </td>
     <td align="right">
 		<a href="#toc">
@@ -192,10 +193,61 @@
   
   <li><b><a name="general_60">How do I report a bug or request a feature?</a></b> 
    <p>
-    ?
-   <p></p>
+    The CDT Project (like the Eclipse Project) uses 
+    <a href="http://www.bugzilla.org/">bugzilla</a> as its bug and feature tracking system. Entering a 
+    bug\feature report is as simple as filling in a web form on the 
+    <a href="http://dev.eclipse.org/bugs/">eclipse bugzilla page</a>. The first time you enter a bug you 
+    will need to <a href="http://dev.eclipse.org/bugs/createaccount.cgi">create
+    a new bugzilla account</a> for yourself by providing an email address and
+    choosing a password.
+   </p>
+   <p>
+    Before enterring a bug report, you should 
+    <a href="http://dev.eclipse.org/bugs/query.cgi">search bugzilla</a> to see if someone else has already 
+    entered a bug report similar to yours. If you find a bug report that outlines the problem you are seeing,
+    you can simply annotate it with your comments to let the developers know that you have also hit the bug.
+    Also you can add yourself to the CC list of the bug so that you will notified when the status of the bug 
+    changes or someone adds comments.
+   </p>
+   <p>
+    Once you have searched bugzilla and not found anything, you can go ahead
+    and enter a new bug report. Please read the bug writing guidelines located
+    on the <a href="http://dev.eclipse.org/bugzilla.html">eclipse bug reporting page</a>.
+   </p>
+   <p>
+    To make your bug report more helpful include the following in your bug reports:
+    <ol>
+      <li>The build level of both the CDT and Eclipse that you are using.  
+       For example, "cdt 20020508 with Eclipse M5 Stable Build"</li>
+      <li>Your computer's specifications (OS + level, memory, other pertinent info)</li>
+      <li>The contents of your .log file (or lack thereof).  This is especially
+      important if you get a dialog that reports an internal error.  See
+      <a href="#general_70">What is this .log file I hear so much about?</a> for information on 
+      on finding your .log file.</li>
+      <li>The Java runtime or development kit you are using to run eclipse (use
+        java -version or java -fullversion)</li>
+      <li>A description of what you were doing when you encountered the bug</li>
+      <li>An explanation of how the observed behavior differs from the expected
+        behavior</li>
+     </ol>
+    </p>
    <hr size="1">
   </li>
+
+  <li><b><a name="general_70">What is this .log file I hear so much about?</a></b>
+  <p>
+   The .log file is used by the Eclipse Platform to log runtime errors.  It is invaluable when debugging both 
+   problems with plugins not starting, as well as any exceptions they may throw once loaded.  A .log file 
+   should always be included when opening a bug against the CDT or Eclipse (or if there is no .log file, that
+   fact should be mentioned in the bug).
+  </p>
+  <p>
+   The .log file is located in the workspace/.metadata directory (or sometimes just in the .metadata directory).
+  </p>
+  <hr size="1">
+  </li>
+
+
 </ol>
 
 <!-- Installation Header -->
