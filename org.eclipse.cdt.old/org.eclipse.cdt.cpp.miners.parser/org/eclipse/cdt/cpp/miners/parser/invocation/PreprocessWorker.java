@@ -24,6 +24,10 @@ public class PreprocessWorker extends Thread
  private DataElement    _projectObjects;
  private DataElement    _systemObjects;
  private String         _projectCanonicalPath;
+ 
+ private static String  extFileComment = "#This file tells the parser what files to consider as C or C++ Source";
+ private static String  default_extensions[] = {".c", ".C", ".cpp", ".CPP", ".h", ".H", ".hpp",
+ 											   ".HPP", ".cxx", ".cc", ".CC"};
 
  public PreprocessWorker()
  {
@@ -46,8 +50,9 @@ public class PreprocessWorker extends Thread
  
  public void preprocessFile(String fileName, DataElement status)
  {
-  if (status != null)
+  if (status != null) {
    _theParseWorker.setMasterStatus(status);
+  }
   File theFile = new File(fileName);
   if (theFile.exists() && (theFile.isDirectory() || isCorCPPFile(fileName)))
    _fileQueue.add(new File(fileName));
@@ -214,9 +219,11 @@ public class PreprocessWorker extends Thread
  {
   _cppExtensions = new ArrayList();
   File parseExtensionFile = getParseExtensionsFile();
+  
+  BufferedReader br = null;
   try
   {
-   BufferedReader br = new BufferedReader(new FileReader(parseExtensionFile));
+   br = new BufferedReader(new FileReader(parseExtensionFile));
    String nextLine;
    while ( (nextLine = br.readLine()) != null)
    {
@@ -230,18 +237,39 @@ public class PreprocessWorker extends Thread
   {
    System.out.println("Problem reading Parse Extensions (CppExtensions.dat)");
   }
+  finally
+  {
+   try {br.close();} catch (IOException e) {}
+  }
+
  }
 
  private File getParseExtensionsFile()
  {
-  String fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.cpp.miners.parser/CPPExtensions.dat";  
+  String fileName = _dataStore.getAttribute(DataStoreAttributes.A_PLUGIN_PATH) +  _dataStore.getMinersLocation() + "/CPPExtensions.dat";  
   File extFile = new File (fileName);
   if (!extFile.exists())
-  {
-   System.out.println("Can't find " + fileName);
-   return null;
+  {   
+   BufferedWriter bw = null;
+   try
+   {
+    extFile.createNewFile();
+    bw = new BufferedWriter(new FileWriter(extFile));
+    bw.write(extFileComment + "\r\n");
+    for (int i=0; i<default_extensions.length; i++)
+     bw.write(default_extensions[i] + "\r\n");
+   }
+   catch (IOException e) 
+   {
+    System.out.println("Problem writing Parse Extensions (CppExtensions.dat)");
+   }
+   finally
+   {
+    try {bw.close();} catch (IOException e) {}
+   }
   }
   return extFile;
  }
+ 
 }
 

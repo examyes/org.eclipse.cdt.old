@@ -26,6 +26,8 @@ public class ParseWorker extends Thread
  private DataElement           _projectObjects;
  private DataStore             _dataStore;
  private DataElement           _masterStatus;
+ private boolean			   _fileParsedDone = false;
+ private boolean			   _statusDone = false;
  
  public ParseWorker()
  {
@@ -47,6 +49,8 @@ public class ParseWorker extends Thread
  public void setMasterStatus(DataElement status)
  {
   _masterStatus = status;
+  _fileParsedDone = false;
+  _statusDone = false;
  }
  
  public void parseObject(DataElement theObject, DataElement status)
@@ -118,6 +122,12 @@ public class ParseWorker extends Thread
    update(theObject[0]);
    statusDone(theObject[1]);
   }
+  
+  if (_fileParsedDone && _masterStatus != null)
+  {
+   _masterStatus.setAttribute(DE.A_VALUE, "really done");
+   _masterStatus.getDataStore().refresh(_masterStatus);
+  }
   if (theObject != null)
    update(_projectObjects);
  }
@@ -127,20 +137,21 @@ public class ParseWorker extends Thread
   DataElement[] theFile = null;
   while(!_fileQueue.isEmpty())
   {
-   theFile = getFileFromQueue();
+  theFile = getFileFromQueue();
    if (initializeParser(theFile[0]))
     beginFileParse(theFile[0]);
    update(theFile[0]);
+   _fileParsedDone = true;
    //statusDone(theFile[1]);
   }
   if (theFile != null)
   { 
    update(_projectObjects);
   }
-  if (_masterStatus != null)
+  if (!_statusDone)
   {
    statusDone(_masterStatus);
-   _masterStatus = null;
+   _statusDone = true;
   }
  }
 
