@@ -13,7 +13,6 @@ package org.eclipse.cdt.debug.win32.core.cdi;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.ICDICatchEvent;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
@@ -21,7 +20,6 @@ import org.eclipse.cdt.debug.core.cdi.event.ICDICreatedEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEventListener;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
-import org.eclipse.cdt.debug.core.cdi.model.ICDICatchpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 
@@ -83,12 +81,6 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 	}
 
 	public ICDIWatchpoint setWatchpoint(int type, int watchType,
-			String expression, ICDICondition condition) throws CDIException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ICDICatchpoint setCatchpoint(int type, ICDICatchEvent event,
 			String expression, ICDICondition condition) throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
