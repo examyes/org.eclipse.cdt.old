@@ -643,7 +643,7 @@ public class FileSystemMiner extends Miner
   private synchronized DataElement handleQuery (DataElement theElement, DataElement status)
       {
 	  theElement = theElement.dereference();
-	  if (!theElement.isExpanded() && (theElement.getNestedSize() == 0))
+	  if (!theElement.isExpanded() || (theElement.getNestedSize() == 0))
 	      {
 		  try
 		      {
