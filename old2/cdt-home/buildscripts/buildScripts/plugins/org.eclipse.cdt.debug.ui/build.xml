@@ -2,9 +2,9 @@
 <project name="org.eclipse.cdt.debug.ui" default="build.jars" basedir=".">
 
 	<property name="bootclasspath" value=""/>
-	<property name="ws" value="win32"/>
-	<property name="os" value="win32"/>
-	<property name="arch" value="x86"/>
+	<property name="ws" value=""/>
+	<property name="os" value=""/>
+	<property name="arch" value=""/>
 
 	<target name="init" depends="properties">
 		<property name="plugin" value="org.eclipse.cdt.debug.ui"/>
