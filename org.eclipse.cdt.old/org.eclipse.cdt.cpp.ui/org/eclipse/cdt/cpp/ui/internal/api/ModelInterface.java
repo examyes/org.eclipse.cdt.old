@@ -2427,21 +2427,26 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			// compare elements to resources	
 			synchronized (parent)
 			{
-				for (int i = 0;(i < parent.getNestedSize()); i++)
+				for (int i = 0;(i < parent.getNestedSize()) && !needsRefresh; i++)
 				{
 					DataElement child = parent.get(i);
 					if (child != null
 						&& !child.isDeleted()
 						&& !child.isReference())
 					{
-						//	IResource match = findFile(child);
-						IResource match = container.findMember(child.getName());
+						String name = child.getName();
+						if (name.indexOf('@') == -1 && name.indexOf('.') == -1)
+						{
+				//				IResource match = findFile(child);
+								IResource match = container.findMember(name);
 
-						needsRefresh = (match == null);
+								needsRefresh = (match == null);
+								
+						}
 					}
 				}
 			}
-
+/* this causes a performance problem at startup- we should find a better way to do this
 			// compare resources to elements in case deleted
 			if (!needsRefresh)
 			{
@@ -2466,9 +2471,11 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 					System.out.println(e);
 				}
 			}
+			*/
 
 			if (needsRefresh)
 			{
+	
 				try
 				{
 					resource.refreshLocal(2, null);
