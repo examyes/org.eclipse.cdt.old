@@ -116,7 +116,7 @@ public class Repository extends Project
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
-		    _dataStore.setMinersLocation("com.ibm.cpp.miners");
+		    //		    _dataStore.setMinersLocation("com.ibm.cpp.miners");
 
 		    DataElement hostRoot = _dataStore.getHostRoot();
 

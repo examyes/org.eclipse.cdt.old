@@ -582,12 +582,11 @@ protected String getDirectoryName() {
 		
 	        Display d = remoteHostBrowseButton.getShell().getDisplay(); 
 		d.syncExec(browse);
-		//	browse.run();
 
 		String selected = browse.getSelected();
 		if (selected != null)
 		    {
-			remoteHostDirectoryField.setText(selected + File.separator);
+			remoteHostDirectoryField.setText(selected + "/");
 		    }
 	    }
 

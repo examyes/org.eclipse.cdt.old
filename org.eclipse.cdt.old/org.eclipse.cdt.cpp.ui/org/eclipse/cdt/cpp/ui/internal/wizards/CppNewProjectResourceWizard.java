@@ -154,7 +154,7 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 			IWorkbenchPage aPersp = perspectives[i];
 			String layoutId = aPersp.getLabel();
 			
-			if (layoutId.equals("Workspace : C/C++ Development Perspective"))
+			if (layoutId.equals("Workspace : C/C++ Perspective"))
 			    {
 				persp = aPersp;	
 				dw.setActivePage(persp);		
