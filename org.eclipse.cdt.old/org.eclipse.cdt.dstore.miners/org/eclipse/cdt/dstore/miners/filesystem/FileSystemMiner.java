@@ -984,15 +984,18 @@ public class FileSystemMiner extends Miner
 			// next level query using "file"?
 			// find out if binary exe
 			Process theProcess = Runtime.getRuntime().exec("file " + theElement.getSource());	
-			BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(theProcess.getInputStream()));			
 			String line = reader.readLine();
-			if (line.indexOf("executable") > 0)
+			if (line != null)
 			    {
-				theElement.setAttribute(DE.A_TYPE, "binary executable");
-
-				if (doRefresh)
+				if (line.indexOf("executable") > 0)
 				    {
-					_dataStore.refresh(theElement);
+					theElement.setAttribute(DE.A_TYPE, "binary executable");
+					
+					if (doRefresh)
+					    {
+						_dataStore.refresh(theElement);
+					    }
 				    }
 			    }
 		    }
