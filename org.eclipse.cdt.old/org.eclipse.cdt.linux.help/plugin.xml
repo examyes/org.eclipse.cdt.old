@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
   name="Linux Help Plugin"
-  id = "com.ibm.linux.help"
+  id = "com.ibm.cpp.linux.help"
   version="0.5.0"
   provider-name="International Business Machines Corp."
   class="com.ibm.linux.help.HelpPlugin">
