@@ -27,7 +27,10 @@ import com.ibm.debug.WorkspaceSourceLocator;
 import com.ibm.debug.launch.PICLDaemonInfo;
 import com.ibm.debug.launch.PICLAttachInfo;
 
+import com.ibm.debug.daemon.IOldDaemonSupport;
 import com.ibm.debug.daemon.CoreDaemon;
+import com.ibm.debug.daemon.DaemonSocketConnection;
+import com.ibm.debug.daemon.DebugDaemonPlugin;
 import com.ibm.debug.internal.picl.PICLDebugTarget;
 
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
@@ -38,16 +41,21 @@ import org.eclipse.cdt.cpp.ui.internal.wizards.*;
 import java.io.IOException;
 
 
-public class CppAttachLauncher implements ILauncherDelegate {
-
+public class CppAttachLauncher implements ILauncherDelegate, IOldDaemonSupport
+ {
     private static DataElement _directory;
     private static DataElement _executable;
     private static ModelInterface _api;
+    private static CppPlugin   _plugin;
+    private static Object[] _elements;
+    private static int     _port;
+    private static int     _key;
 
 
     public CppAttachLauncher()
     {
 	_api = ModelInterface.getInstance();
+      _plugin = CppPlugin.getDefault();
     }
 
 	public String getLaunchMemento(Object obj)
@@ -60,14 +68,17 @@ public class CppAttachLauncher implements ILauncherDelegate {
 		return null;	
 	}
 
-    public boolean launch(Object[] elements, String mode, ILauncher launcher) {
-
+    public boolean launch(Object[] elements, String mode, ILauncher launcher)
+    {
+        _elements = elements;
         // Get the selection and check if valid
         StructuredSelection selection = new StructuredSelection(elements);
-        if(selection == null) {
-           System.out.println("CppAttachLauncher.launch() error = selection is null");
-            return false;
+        if(selection == null)
+        {
+           displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.noSelection"));
+           return false;
         }
+
         Object element = selection.getFirstElement();
 	
 	if (element instanceof DataElement)
@@ -77,39 +88,48 @@ public class CppAttachLauncher implements ILauncherDelegate {
 		    {
 			_executable = null;
 			_directory = null;
+         displayMessageDialog(_plugin.getLocalizedString("attachLauncher.Error.notExecutable"));
 			return false;
 		    }
 
 		_directory = _executable.getParent();
 	    }
 	else if (element instanceof IProject || element instanceof IResource)
-	    {
+	{
 		_executable = _api.findResourceElement((IResource)element);
 		if (_executable == null)
-		    {
-			IResource resource = (IResource)element;
-			IResource parentRes = resource.getParent();
+      {
+         IProject project = ((IResource)element).getProject();
+         if (_plugin.isCppProject(project))
+         {
+   			IResource resource = (IResource)element;
+	   		IResource parentRes = resource.getParent();
 
-			CppPlugin plugin = CppPlugin.getDefault();
-			DataStore dataStore = plugin.getCurrentDataStore();
-			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
+   			DataStore dataStore = _plugin.getCurrentDataStore();
+   			_directory = dataStore.createObject(null, "directory", parentRes.getName(),
 							    parentRes.getLocation().toString());
 
-			_executable = dataStore.createObject(_directory, "file", resource.getName(),
+	   		_executable = dataStore.createObject(_directory, "file", resource.getName(),
 							     resource.getLocation().toString());
-			
-		    }
-		else
-		    {
+	      }
+     		else
+	      {
+            displayMessageDialog(_plugin.getLocalizedString("loadLauncher.Error.notCppProject"));
+            return false;
+         }
+
+	   }
+   	else
+      {
 			_directory = _executable.getParent();
-		    }
-	    }
+	   }
+	}
 	else
-	    {
+	{
 		_executable = null;
 		_directory = null;
 		return false;
-	    }
+	}
 
         // display the wizard
         CppAttachLauncherWizard w= new CppAttachLauncherWizard();
@@ -127,46 +147,93 @@ public class CppAttachLauncher implements ILauncherDelegate {
     public void doLaunch(PICLAttachInfo attachInfo) {
 
 	CppSourceLocator sourceLocator = null;
+
+ 	
+        //ensure the daemon is listening
+        boolean ok = CoreDaemon.startListening();
+        if (ok == true)
+        {
+          _port = CoreDaemon.getCurrentPort();
+          if (_port < 0)
+            return;
+        }
+        else
+           return;
+
 	
 	if (_executable != null)
-	    {
+   {
 		DataElement projectElement = _api.getProjectFor(_executable);
 		if (projectElement != null)
 		    {
 			sourceLocator = new CppSourceLocator(projectElement);
 			// loader automatically sets home project
 			attachInfo.setWorkspaceSourceLocator(sourceLocator);
-		    }
 	    }
+    }
 	
 
       //PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(attachInfo);
 
-      PICLDebugTarget target = new  PICLDebugTarget(attachInfo,attachInfo.getEngineConnectionInfo()); //connection info can't be null
-      int key = CoreDaemon.generateKey();
-      CoreDaemon.storeDebugTarget(target, key);
+      PICLDebugTarget target = new  PICLDebugTarget(attachInfo, attachInfo.getEngineConnectionInfo()); //connection info can't be null
+      _key = CoreDaemon.generateKey();
+      CoreDaemon.storeDebugTarget(target, _key);
 
 //      PICLDaemonInfo daemonInfo = PICLDebugPlugin.getDefault().launchDaemon(loadInfo);
-      PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
-                                      new Integer(attachInfo.getEngineConnectionInfo().getConduit()).intValue());
+//      PICLDaemonInfo daemonInfo = new PICLDaemonInfo(key,
+//                                      new Integer(attachInfo.getEngineConnectionInfo().getConduit()).intValue());
 	
 
 
-        if(daemonInfo == null)
-            return;
+//        if(daemonInfo == null)
+//            return;
 
         //storeAttachInfo(key, attachInfo);
-        launchEngine(daemonInfo);
+//        launchEngine(daemonInfo);
+        launchEngine();
     }
 
 
 
-    protected void launchEngine(PICLDaemonInfo daemonInfo)
+//    protected void launchEngine(PICLDaemonInfo daemonInfo)
+    protected void launchEngine()
     {
-	String port = new Integer(daemonInfo.getPort()).toString();
-	String key  = new Integer(daemonInfo.getKey()).toString();
-
-	_api.debug(_directory, port, key);
+//   	String port = new Integer(daemonInfo.getPort()).toString();
+// 	String key  = new Integer(daemonInfo.getKey()).toString();
+    	String port = new Integer(_port).toString();
+    	String key  = new Integer(_key).toString();
+   	_api.debug(_directory, port, key);
     }
+
+
+    /**
+     *	Display an error dialog with the specified message.
+     *
+     *	@param message java.lang.String
+     */
+    protected void displayMessageDialog(String message)
+    {
+	     MessageDialog.openError(CppPlugin.getActiveWorkbenchWindow().getShell(),_plugin.getLocalizedString("loadLauncher.Error.Title"),message);
+    }
+
+
+    /*
+	 * @see IOldDaemonSupport#setSocket(DaemonSocketConnection)
+	 */
+	public void setSocket(DaemonSocketConnection socket) {
+		//this.socket= socket;
+	}
+
+	/*
+	 * @see IOldDaemonSupport#setInputParametersAsStrings(String[], int, int)
+	 */
+	public void setInputParametersAsStrings(String[] input, int key, int version) {
+		//stringArray = input;
+		//this.version =version;
+		//this.key = key;
+		
+	}
+	
+
 
 }
