@@ -260,13 +260,13 @@ public class TransferFiles extends Thread
 				if (ctype.equals("directory"))
 				    {
 					if (!child.isExpanded())
-					    child.expandChildren();
+					    child.expandChildren(true);
 					queryDates(child);
 				    }
 				if (type.equals("directory"))
 				    {
 					if (!copiedSource.isExpanded())
-					    copiedSource.expandChildren();
+					    copiedSource.expandChildren(true);
 					queryDates(copiedSource);
 				    }
 				
@@ -302,11 +302,16 @@ public class TransferFiles extends Thread
 	    }
 	else
 	    {
+		queryDates(fileElement.getParent());
+		return getDate(fileElement);
+		/*
 		DataElement status = fileElement.doCommandOn("C_DATE", true);	
 		if (status != null && status.getNestedSize() > 0)
 		    {
 			dateObj = status.get(0);			
 		    }	
+		*/
+		
 	    }
 
 	if (dateObj != null && dateObj.getType().equals("date"))
