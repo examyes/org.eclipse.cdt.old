@@ -219,6 +219,7 @@ public class NameValueTableControl extends Composite implements Listener
 	tgrid.heightHint = 80;
        	_table.setLayoutData(tgrid);
 
+
 	TableColumn tc1 = new TableColumn(_table, SWT.NONE, 0);
 	tc1.setText("Name");
 	tc1.setWidth(120);

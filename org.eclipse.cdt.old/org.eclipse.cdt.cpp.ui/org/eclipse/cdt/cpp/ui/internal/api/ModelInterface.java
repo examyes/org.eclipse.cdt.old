@@ -2860,6 +2860,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 			       "org.eclipse.cdt.cpp.ui.internal.actions.AttachAction");
 
 
+	HostsPlugin.getInstance().setActionLoader(CppActionLoader.getInstance());	
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
     }
 
