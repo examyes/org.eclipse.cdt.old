@@ -18,11 +18,15 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
 {
     private DataElement _property;
     private DataElement _containerDescriptor = null;
+    private ArrayList   _containerTypes;
+    private ArrayList   _nonContainerTypes;
 
   public DataElementTreeContentProvider()
   {
     super();
     _property = null;
+    _containerTypes = new ArrayList();
+    _nonContainerTypes = new ArrayList();
   }
   
 
@@ -52,6 +56,31 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
 
 	return _containerDescriptor;
     }
+    
+   private boolean isContainer(DataElement descriptor)
+   {
+   	if (_containerTypes.contains(descriptor))
+   	{
+   		return true;
+   	}
+   	else if (_nonContainerTypes.contains(descriptor))
+   	{
+   		return false;
+   	}
+   	else
+   	{
+   		if (descriptor.isOfType(getContainerDescriptor(descriptor), true))
+   		{
+   			_containerTypes.add(descriptor);
+   			return true;
+   		}
+   		else
+   		{
+   			_nonContainerTypes.add(descriptor);
+   			return false;
+   		}
+   	}
+   }
 
   public boolean hasChildren(Object object)
   {
@@ -71,7 +100,7 @@ public class DataElementTreeContentProvider extends DataElementContentProvider i
 	  {	  
 	      if (_property.getName().equals("contents"))
 		  {
-		      if (descriptor.isOfType(getContainerDescriptor(element), true))
+		      if (isContainer(descriptor))
 			  {
 			      if (element.isExpanded())
 				  {
