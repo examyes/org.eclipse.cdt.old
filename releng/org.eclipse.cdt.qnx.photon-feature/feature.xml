@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.qnx.photon"
       label="%featureName"
-      version="1.0.1"
+      version="1.1.0"
       provider-name="%providerName"
       os="qnx"
       ws="photon"
@@ -25,22 +25,19 @@
    <includes
          id="org.eclipse.cdt"
          version="1.0.1"
-         match="equivalent">
-   </includes>
+         match="equivalent"/>
 
    <plugin
          id="org.eclipse.cdt.core.qnx"
          download-size="0"
          install-size="0"
-         version="1.0.1"
-         fragment="true">
-   </plugin>
+         version="1.1.0"
+         fragment="true"/>
 
    <plugin
          id="org.eclipse.cdt.qnx.photon"
          download-size="0"
          install-size="0"
-         version="1.0.1">
-   </plugin>
+         version="1.1.0"/>
 
 </feature>

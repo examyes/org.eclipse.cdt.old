@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.linux.motif"
       label="%featureName"
-      version="1.0.1"
+      version="1.1.0"
       provider-name="%providerName"
       os="linux"
       ws="motif"
@@ -25,23 +25,19 @@
    <includes
          id="org.eclipse.cdt"
          version="1.0.1"
-         match="equivalent">
-   </includes>
+         match="equivalent"/>
 
- 
    <plugin
          id="org.eclipse.cdt.core.linux"
          download-size="0"
          install-size="0"
-         version="1.0.1"
-         fragment="true">
-   </plugin>
+         version="1.1.0"
+         fragment="true"/>
 
    <plugin
          id="org.eclipse.cdt.linux.motif"
          download-size="0"
          install-size="0"
-         version="1.0.1">
-   </plugin>
+         version="1.1.0"/>
 
 </feature>
