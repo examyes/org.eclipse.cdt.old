@@ -73,32 +73,62 @@ public class CloseProjectAction extends CustomAction
 	}
     }
 
-    private IProject _project;
+    private ArrayList _projects;
     private ModelInterface _api;
 
   public CloseProjectAction(DataElement subject, String label, DataElement command, DataStore dataStore)
       {	
         super(subject, label, command, dataStore);
 
-	_api = ModelInterface.getInstance();
-	_project = _api.findProjectResource(subject);
-        setEnabled(_project.isOpen());
+		_api = ModelInterface.getInstance();
+		_projects = new ArrayList();
+		
+		IProject project = _api.findProjectResource(subject);
+        setEnabled(project.isOpen());
+        _projects.add(project);
+      }
+      
+ public CloseProjectAction(java.util.List subjects, String label, DataElement command, DataStore dataStore)
+      {	
+        super(subjects, label, command, dataStore);
+		
+		_api = ModelInterface.getInstance();
+		_projects = new ArrayList();
+		
+		for (int i = 0; i < subjects.size(); i++)
+		{
+			DataElement subject = (DataElement)subjects.get(i);
+			IProject project = _api.findProjectResource(subject);
+			
+			if (!project.isOpen())
+			{
+        		setEnabled(false);
+        		return;
+			}
+			else
+			{
+				setEnabled(true);
+				_projects.add(project);
+			}
+		}
       }
 
     public void run()
     { 
-	if (_project != null)
+	 for (int i = 0; i < _projects.size(); i++)
 	    {
-		CloseOperation op = new CloseOperation(_project, _api);
-		ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(_api.getDummyShell());
-		try
+	    	IProject project = (IProject)_projects.get(i);
+
+			CloseOperation op = new CloseOperation(project, _api);
+			ProgressMonitorDialog progressDlg = new ProgressMonitorDialog(_api.getDummyShell());
+			try
 		    {
-			progressDlg.run(true, true, op);
+				progressDlg.run(true, true, op);
 		    }
-		catch (InterruptedException e) 
+			catch (InterruptedException e) 
 		    {
 		    } 
-		catch (InvocationTargetException e) 
+			catch (InvocationTargetException e) 
 		    {
 		    }
 	    }
