@@ -28,7 +28,11 @@ public class ManagedProjectMiner extends Miner
 		DataElement fsObjectD = _dataStore.find(schemaRoot, DE.A_NAME, "Filesystem Objects");
 
 		DataElement managedProjectD  = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.MANAGED_PROJECT);
-		createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
+		//_dataStore.createReference(projectD, managedProjectD, "abstracts", "abstracted by");
+		DataElement cmdD = _dataStore.localDescriptorQuery(projectD, "C_COMMAND");
+		_dataStore.createReference(managedProjectD, cmdD);
+		
+			createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
 		DataElement targetD          = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.PROJECT_TARGET);
   
 		DataElement targetAttributeTypeD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.TARGET_ATTRIBUTE_TYPE);
@@ -39,6 +43,7 @@ public class ManagedProjectMiner extends Miner
 		DataElement projectFileD     = _dataStore.find(schemaRoot, DE.A_NAME, "Project File", 1);
   
 		DataElement managedProjectsD = _dataStore.createObject(schemaRoot, DE.T_ABSTRACT_OBJECT_DESCRIPTOR, "Managed Projects");
+	
 		_dataStore.createReference(managedProjectsD, managedProjectD);
 		_dataStore.createReference(managedProjectsD, targetD);
 		_dataStore.createReference(managedProjectsD, projectFileD);
@@ -82,10 +87,7 @@ public class ManagedProjectMiner extends Miner
 					
 	}
 	
-	private void refresh(DataElement object)
-	{
-	//	object.
-	}
+
 	
 	public DataElement getWorkspace()
 	{
@@ -96,119 +98,135 @@ public class ManagedProjectMiner extends Miner
  	{
   		String          name = getCommandName(theCommand);
   		DataElement   status = getCommandStatus(theCommand);
-  		DataElement  project = getCommandArgument(theCommand, 0);
+  		DataElement  subject = getCommandArgument(theCommand, 0);
 
-		if (_workspace == null)
+	
+		if (subject.getType().equals("Project") || subject.getType().equals("Closed Project"))
 		{
-			_workspace = project.getParent();
-			autoconfManager.setWorkspaceLocation(_workspace.getSource());
+			DataElement project = subject;
+			
+			if (_workspace == null)
+			{
+				_workspace = project.getParent();
+				autoconfManager.setWorkspaceLocation(_workspace.getSource());
+			}
+	 
+			if (name.equals("C_UNMANAGE_PROJECT"))
+			{
+ 	 			_dataStore.deleteObject(project.getParent(), project);
+			}
+			else if (name.equals("C_MANAGE_PROJECT"))
+			{
+				autoconfManager.manageProject(project, status);
+				parseAmFile(project); 
+			}
+			else if (name.equals("C_DIST_CLEAN"))
+			{
+				autoconfManager.distClean(project,status);
+			}
+			else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
+			{
+				autoconfManager.generateAutoconfFiles(project, status,false);
+				parseAmFile(project); 
+			}
+			else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
+			{
+				autoconfManager.updateAutoconfFiles(project, status,false);
+				parseAmFile(project); 
+			}
+			else if (name.equals("C_UPDATE_CONFIGURE_IN"))
+			{
+				autoconfManager.configureInManager.updateConfigureIn(project,false);
+				parseAmFile(project); 
+			}		
+			else if (name.equals("C_CREATE_CONFIGURE"))
+			{
+				autoconfManager.runSupportScript(project, status);
+			}
+			else if (name.equals("C_RUN_CONFIGURE"))
+			{
+				autoconfManager.runConfigureScript(project, status);
+			}
 		}
+		
+		
+		if (subject.getType().equals("directory") || subject.getType().equals("Project"))
+		{
+		 	if (name.equals("C_UPDATE_MAKEFILE_AM"))
+			{
+				autoconfManager.makefileAmManager.updateMakefileAm(subject,false);
+				parseAmFile(subject); 
+			}
+			else if (name.equals("C_OPEN") || name.equals("C_REFRESH"))
+      	    {
+      	    	    	    	
+  			  parseAmFile(subject); 
+		    }
+		}
+			
+		if (subject.getType().equals("directory") || 
+			subject.getType().equals("Project") ||
+			subject.getType().equals("Managed Project"))
+		{	
+			if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
+			{
+				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status);
+			}
+			else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
+			{
+				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status);
+			}
+			else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
+			{
+				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status);
+			}
+			else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
+			{
+				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status);
+			}
+			else if (name.equals("C_INSERT_CONFIGURE_IN"))
+			{
+				autoconfManager.configureInManager.generateConfigureIn(subject);
+			}
+		}
+		
+		if (subject.getType().equals("Project Target"))
+		{		
+			if (name.equals("C_BUILD_TARGET"))
+			{
+				targetManager.buildTarget(subject,status,autoconfManager);
+			}
+			else if (name.equals("C_EXECUTE_TARGET"))
+			{
+				targetManager.executeTarget(subject,status,_workspace.getSource());
+			}
+		}
+		
 
-  		//if (!project.getType().equals("project"))  // refer to jeff regarding  this line
-   			//return status;
-		if (name.equals("C_UNMANAGE_PROJECT"))
- 	 		_dataStore.deleteObject(project.getParent(), project);
-		else if (name.equals("C_MANAGE_PROJECT"))
-		{
-			autoconfManager.manageProject(project, status);
-			refresh(project);
-			parseAmFile(project); 
-		}
-		else if (name.equals("C_DIST_CLEAN"))
-		{
-			autoconfManager.distClean(project,status);
-			refresh(project);
-		}
-		else if (name.equals("C_GENERATE_AUTOCONF_FILES"))
-		{
-			//try{Thread.currentThread().sleep(1000);}catch(Exception e){}
-			autoconfManager.generateAutoconfFiles(project, status,false);
-			refresh(project);
-			parseAmFile(project); 
-		}
-		else if (name.equals("C_UPDATE_AUTOCONF_FILES"))
-		{
-			autoconfManager.updateAutoconfFiles(project, status,false);
-			refresh(project);
-			parseAmFile(project); 
-		}
-		else if (name.equals("C_UPDATE_MAKEFILE_AM"))
-		{
-			autoconfManager.makefileAmManager.updateMakefileAm(project,false);
-			refresh(project);
-			parseAmFile(project); 
-		}
-		else if (name.equals("C_UPDATE_CONFIGURE_IN"))
-		{
-			autoconfManager.configureInManager.updateConfigureIn(project,false);
-			refresh(project);
-			parseAmFile(project); 
-		}		
-		else if (name.equals("C_CREATE_CONFIGURE"))
-		{
-			autoconfManager.runSupportScript(project, status);
-			refresh(project);
-		}
-		else if (name.equals("C_RUN_CONFIGURE"))
-		{
-			autoconfManager.runConfigureScript(project, status);
-			refresh(project);
-		}
-		else if (name.equals("C_PROGRAMS_MAKEFILE_AM"))
-		{
-			autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(project.getFileObject(),status);
-			refresh(project);
-		}
-		else if (name.equals("C_SWITCH_TO_STATIC_LIB"))
-		{
-			//try{Thread.currentThread().sleep(1000);}catch(Exception e){}
-			autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(project.getFileObject(),status);
-			refresh(project);
-		}
-		else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
-		{
-			autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(project,status);
-			refresh(project);
-		}
-		else if (name.equals("C_SWITCH_TO_SHARED_LIB"))
-		{
-			autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(project.getFileObject(),status);
-			refresh(project);
-		}
-		else if (name.equals("C_INSERT_CONFIGURE_IN"))
-		{
-			autoconfManager.configureInManager.generateConfigureIn(project);
-			refresh(project);
-		}
-		else if (name.equals("C_BUILD_TARGET"))
-		{
-			targetManager.buildTarget(project,status,autoconfManager);
-			refresh(project);
-		}
-		else if (name.equals("C_EXECUTE_TARGET"))
-		{
-			targetManager.executeTarget(project,status,_workspace.getSource());
-			refresh(project);
-		}
-		else if (name.equals("C_REFRESH"))
-        {
-		 	refreshProject(project);
-  			parseAmFile(project); 
-		}
 		
   		status.setAttribute(DE.A_NAME, getLocalizedString("model.done"));
   		return status;
 	}
 	private DataElement parseAmFile(DataElement theUnmanagedProject)
 	{
-		AmParser theParser = new AmParser(theUnmanagedProject);
-		DataElement theManagedProject = theParser.parse();
+		DataElement theManagedProject = null;
+		AmParser theParser = null;
+		if (theUnmanagedProject.getType().equals("Project"))
+		{
+			theParser = new AmParser(theUnmanagedProject);
+			theManagedProject = theParser.parse();
+			}
+		else if (theUnmanagedProject.getType().equals("directory"))
+		{
+			theParser = new AmParser(theUnmanagedProject.getParent(), theUnmanagedProject.getName());
+			theManagedProject = theParser.parse();
+			_dataStore.refresh(theManagedProject);
+		}
+
+
+
 		return theManagedProject;
 	}
-	private DataElement refreshProject(DataElement theUnmanagedProject)
-	{
 
-		return null;
-	}
 }
 

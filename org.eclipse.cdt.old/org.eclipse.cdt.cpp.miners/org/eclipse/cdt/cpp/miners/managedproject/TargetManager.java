@@ -19,8 +19,29 @@ public class TargetManager {
 	public TargetManager()
 	{
 	}
-	public void buildTarget(DataElement dir, DataElement status,AutoconfManager autoconfmanager)
+	public void buildTarget(DataElement target, DataElement status,AutoconfManager autoconfmanager)
 	{
+		File parent = target.getFileObject().getParentFile();
+		/*
+		DataElement parentData = target.getParent();
+		int i =0;
+		while(!parent.getAbsolutePath().equals(autoconfmanager.getWorkSpaceLocation()))
+		{
+				if(i>0)
+					parentData = parentData.getParent();
+				parent = parent.getParentFile();
+				i++;
+		}
+		System.out.println(parentData);
+		autoconfmanager.runSupportScript(parentData,status);
+		autoconfmanager.runConfigureScript(parentData,status);
+		*/
+		DataElement dirElement = target.getDataStore().createObject(null, "directory", 
+			parent.getName(),
+			parent.getAbsolutePath());
+		runCommand(dirElement, status, "gmake " + target.getName());
+		
+		/*
 		// here the only file that might be available is the Makefile.am
 		File parent = dir.getFileObject().getParentFile();
 		System.out.println("\n Dir = "+ parent.getName());
@@ -56,20 +77,29 @@ public class TargetManager {
 				autoconfmanager.runSupportScript(project,status);
 				autoconfmanager.runConfigureScript(project,status);
 			}		
-		}
+		}*/
 	}
-	public void executeTarget(DataElement MakefileAm, DataElement status,String workSpacePath)
+	public void executeTarget(DataElement target, DataElement status,String workSpacePath)
 	{
-		String target = "no target";
-		// get Target Name
-		//if executable does not exist
-		//call buildTraget(...)
-		if(getOS().equals("Linux"))
-			runCommand(MakefileAm, status, "./"+target);
+		File parent = target.getFileObject().getParentFile();
+	
+		DataElement dirElement = target.getDataStore().createObject(null, "directory", 
+			parent.getName(),
+			parent.getAbsolutePath());
+	
+	    String invocation = target.getName();
+	    
+	    if(getOS().equals("Linux"))
+			invocation = "./"+invocation;
 		else
-			runCommand(MakefileAm, status, cygwinPrefix+"./"+target);
+			invocation = cygwinPrefix+"./"+invocation;
+
+	
+		runCommand(dirElement, status, invocation);
 	} 
-	public void runCommand(DataElement project,DataElement status, String invocation)
+	
+	
+	public void runCommand(DataElement project, DataElement status, String invocation)
 	{
 		DataStore ds = status.getDataStore();
 		DataElement invocationElement = ds.createObject(null,"invocation",invocation);

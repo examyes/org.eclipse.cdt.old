@@ -38,7 +38,32 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugConstants;
 
-public class TargetAction extends CustomAction {
+public class TargetAction extends CustomAction 
+{
+	public class RunThread extends Handler
+	{
+		private DataElement _subject;
+		private DataElement _status;
+		
+		public RunThread(DataElement subject, DataElement status)
+		{
+			_subject = subject;
+			_status = status;
+		}
+		
+		public void handle()
+		{
+			if (_status.getName().equals("done"))
+			{
+				_subject.refresh(false);
+		
+				finish();
+			}		
+		}
+	}
+	
+	
+	
 	public TargetAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
 		super(subject, label, command, dataStore);
@@ -50,6 +75,9 @@ public class TargetAction extends CustomAction {
 		ModelInterface api = ModelInterface.getInstance();
 		api.showView("com.ibm.cpp.ui.CppOutputViewPart", status);
 		api.monitorStatus(status);
+		
+		RunThread monitor = new RunThread(_subject, status);
+		monitor.start();
     }
 }
 

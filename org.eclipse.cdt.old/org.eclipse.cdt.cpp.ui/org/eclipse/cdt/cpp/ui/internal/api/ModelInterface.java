@@ -1116,9 +1116,16 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	    }
 	else
 	    {
-		for (int i = 0; i < root.getNestedSize(); i++)
+	    	if (!root.isExpanded())
+	    	{
+	    		root.expandChildren(true);	
+	    	}
+	    	
+	    	ArrayList children = root.getAssociated("contents");
+		for (int i = 0; i < children.size(); i++)
 		    {
-			DataElement child = root.get(i).dereference();
+		    	
+			DataElement child = (DataElement)children.get(i);
 			if (child != null && !child.isDeleted())
 			    {
 				if (child.getType().equals("file")  || 
@@ -1656,10 +1663,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	if (resource != null) 
 	    {
 		DataElement resourceElement = findResourceElement(resource);
+		if (resourceElement.getType().equals("file"))
+			resourceElement = resourceElement.getParent();
 		
 		if (resourceElement != null) 
 		    {
 			DataStore dataStore = resourceElement.getDataStore();
+			
 			DataElement refreshD = dataStore.localDescriptorQuery(resourceElement.getDescriptor(), 
 									      "C_REFRESH");
 			if (refreshD != null)

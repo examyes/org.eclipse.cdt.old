@@ -52,7 +52,13 @@ public class AmParser
  public AmParser (DataElement root, String subdir)
  {
   _dataStore = root.getDataStore();
-  
+
+	if (!root.getType().equals(Am.MANAGED_PROJECT))
+	{
+		DataElement parent = root.getParent();
+		root = findExistingManagedProject(parent, root.getName());
+	}
+    
   DataElement project = findExistingManagedProject(root, subdir);
   if (project != null)
   {
@@ -104,6 +110,7 @@ public class AmParser
   String nextLine;
   while ((nextLine = readLine()) != null)
    processLine(nextLine);
+   
   return _project;
  }
 
