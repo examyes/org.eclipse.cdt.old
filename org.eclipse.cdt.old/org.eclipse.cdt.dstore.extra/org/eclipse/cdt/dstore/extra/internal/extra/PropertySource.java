@@ -26,19 +26,15 @@ public class PropertySource implements IPropertySource
 
     
     IDataElement descriptor = (IDataElement)element.getElementProperty("descriptor");
-    ArrayList attributes = descriptor.getAssociated("attributes");
-    for (int i = 0; i < attributes.size(); i++)
+    if (descriptor != null)
 	{
-	    IDataElement attribute = (IDataElement)attributes.get(i);	    
-	    _descriptors.add(new TextPropertyDescriptor(attribute.getName(), attribute.getName()));
+	    ArrayList attributes = descriptor.getAssociated("attributes");
+	    for (int i = 0; i < attributes.size(); i++)
+		{
+		    IDataElement attribute = (IDataElement)attributes.get(i);	    
+		    _descriptors.add(new TextPropertyDescriptor(attribute.getName(), attribute.getName()));
+		}
 	}
-    
-    /*
-    _descriptors.add(new TextPropertyDescriptor("value", "value"));
-    _descriptors.add(new TextPropertyDescriptor("id", "id"));
-    _descriptors.add(new TextPropertyDescriptor("source", "sourcefile"));
-    _descriptors.add(new TextPropertyDescriptor("dataStore", "dataStore"));
-    */
   }
 
   public static boolean matches(Class aClass)
