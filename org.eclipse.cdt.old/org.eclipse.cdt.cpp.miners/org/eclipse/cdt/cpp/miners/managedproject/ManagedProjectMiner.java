@@ -101,7 +101,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(managedProjectD,"SharedLib","C_SHAREDLIB_MAKEFILE_AM",false);
 		//_dataStore.createReference(fsObjectD, makefileCmds);		
 		
-		 createRelationDescriptor(schemaRoot, "update state");			
+		 createRelationDescriptor(schemaRoot, "class type");			
 	}
 	
 	public DataElement getWorkspace()
@@ -221,7 +221,7 @@ public class ManagedProjectMiner extends Miner
 					
 					
 					DataElement state = null;
-					ArrayList updated = subject.getAssociated("update state");
+					ArrayList updated = subject.getAssociated("class type");
 					if (updated.size() > 0)
 					{
 						state = (DataElement)updated.get(0);	
@@ -230,7 +230,7 @@ public class ManagedProjectMiner extends Miner
 					else
 					{							
 						state = _dataStore.createObject(null, "classification", classification);
-						_dataStore.createReference(subject, state, "update state");	
+						_dataStore.createReference(subject, state, "class type");	
 					}
 
 
@@ -251,7 +251,7 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToPrograms(subject.getFileObject(),status,classifier);
 				
-				ArrayList updated = subject.getAssociated("update state");
+				ArrayList updated = subject.getAssociated("class type");
 				if (updated.size() > 0)
 				{
 					DataElement state = (DataElement)updated.get(0);	
@@ -264,7 +264,7 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToStaticLib(subject.getFileObject(),status,classifier);
 			
-					ArrayList updated = subject.getAssociated("update state");
+					ArrayList updated = subject.getAssociated("class type");
 				if (updated.size() > 0)
 				{
 					DataElement state = (DataElement)updated.get(0);	
@@ -277,7 +277,7 @@ public class ManagedProjectMiner extends Miner
 			else if (name.equals("C_TOPLEVEL_MAKEFILE_AM"))
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToTopLevel(subject,status,classifier);
-				ArrayList updated = subject.getAssociated("update state");
+				ArrayList updated = subject.getAssociated("class type");
 				if (updated.size() > 0)
 				{
 					DataElement state = (DataElement)updated.get(0);	
@@ -291,7 +291,7 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.getMakeFileAmManager().setMakefileAmToSharedLib(subject.getFileObject(),status,classifier);
 				
-				ArrayList updated = subject.getAssociated("update state");
+				ArrayList updated = subject.getAssociated("class type");
 				if (updated.size() > 0)
 				{
 					DataElement state = (DataElement)updated.get(0);	

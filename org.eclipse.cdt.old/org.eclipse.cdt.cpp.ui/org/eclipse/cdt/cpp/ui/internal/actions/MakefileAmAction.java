@@ -66,7 +66,7 @@ public class MakefileAmAction extends CustomAction {
 				//String type = classifier.getName();
 				// end of to be removed
 				DataElement classifier = null;
-				ArrayList updated = _subject.getAssociated("update state");
+				ArrayList updated = _subject.getAssociated("class type");
 				if (updated.size() > 0)
 				{
 					classifier = (DataElement)updated.get(0);			
@@ -82,7 +82,7 @@ public class MakefileAmAction extends CustomAction {
 			
 					DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);								
 								
-					updated = _subject.getAssociated("update state");								
+					updated = _subject.getAssociated("class type");								
 					classifier = (DataElement)updated.get(0);
 					type = classifier.getName();
 				}
@@ -177,16 +177,4 @@ public class MakefileAmAction extends CustomAction {
 		    }
 		return false;
 	}
-/*	private DataElement getFileElement(String fileName)
-	{
-		for (int i = 0; i < _subject.getNestedSize(); i++)
-		{
-			DataElement child = _subject.get(i).dereference();
-			if (!child.isDeleted() && child.getName().equals(fileName))
-			{
-				return child;
-			}
-		}
-		return null;
-	}*/
 }
