@@ -3,3 +3,4 @@ org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner
 org.eclipse.cdt.dstore.miners.command.CommandMiner
 org.eclipse.cdt.dstore.miners.dictionary.DictionaryMiner
 
+
