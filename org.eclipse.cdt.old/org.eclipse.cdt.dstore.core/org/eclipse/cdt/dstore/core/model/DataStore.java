@@ -3054,7 +3054,7 @@ public final class DataStore
 	DataElement newObject = null;
 	int numRecycled = _recycled.size();
 
-	if (numRecycled > 0)
+	if (numRecycled > 1)
 	    {
 		/*
 		if (numRecycled > _MAX_FREE)
@@ -3069,7 +3069,6 @@ public final class DataStore
 		*/
 
 		newObject = (DataElement)_recycled.remove(_recycled.size() - 1);
-		newObject.clear();
 	    }
 	else
 	    {
