@@ -106,15 +106,18 @@ public class CppSearchPage extends DialogPage  implements ISearchPage, ICppSearc
  */
 private void browseButtonSelected(){
 	
-	ContainerSelectionDialog dialog = new ContainerSelectionDialog(scopeField.getShell(),null,true,pluginInstance.getLocalizedString(SELEC_SCOPE_TITLE));
+	ContainerSelectionDialog dialog = new ContainerSelectionDialog(scopeField.getShell(),null,false,pluginInstance.getLocalizedString(SELEC_SCOPE_TITLE));
 	dialog.open();
 	Object[] result =dialog.getResult();
-	for(int i = 0; i < result.length ; i++)
+	if(result!=null)
 	{
-		if(result[i]!=null)
+		for(int i = 0; i < result.length ; i++)
 		{
-			scopeInput = result[i];
-			scopeField.setText(scopeInput.toString().substring(1));
+			if(result[i]!=null)
+			{
+				scopeInput = result[i];
+				scopeField.setText(scopeInput.toString().substring(1));
+			}
 		}
 	}
 }
