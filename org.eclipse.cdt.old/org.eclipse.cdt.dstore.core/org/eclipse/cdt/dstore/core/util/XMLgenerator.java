@@ -23,6 +23,7 @@ public class XMLgenerator
     private int          _bufferSize;
     private boolean      _generateBuffer;
     private boolean      _updateAll;
+    private boolean      _ignoreDeleted;
   
     public static final int EMPTY = 0;
     public static final int OPEN  = 1;
@@ -38,9 +39,14 @@ public class XMLgenerator
         _document = new StringBuffer(_bufferSize);
 	
         _indent = 0;
-	_generateBuffer = true;
-	
+		_generateBuffer = true;
+		_ignoreDeleted = false;
         _tagStack = new Stack();
+    }
+    
+    public void setIgnoreDeleted(boolean flag)
+    {
+    	_ignoreDeleted = flag;
     }
     
     public void setWriter(PrintStream writer)
@@ -447,7 +453,8 @@ public class XMLgenerator
 
     public void generate(DataElement object, int depth, File file)
     {
-	if ((object != null) && ((file != null) || (depth >= 0)))
+	if ((object != null) && 
+		((file != null) || (depth >= 0)) )		
 	    {
 		String tagType = "DataElement";
 		if (file != null)
@@ -457,47 +464,52 @@ public class XMLgenerator
 
 		if (object.isUpdated() && !_generateBuffer && (file == null))
 		    {
-		    }
+		    }    
 		else
 		    {	      			
-		
-			startTag(tagType);
-			addAttribute(DE.P_TYPE, object.getAttribute(DE.A_TYPE));
-			addAttribute(DE.P_ID, object.getAttribute(DE.A_ID));
-			addAttribute(DE.P_NAME, object.getAttribute(DE.A_NAME));
-			addAttribute(DE.P_VALUE, object.getAttribute(DE.A_VALUE));
-			addAttribute(DE.P_SOURCE, object.getAttribute(DE.A_SOURCE));
+			  if (object.isDeleted() && _ignoreDeleted)			
+			  {
+			  }	
+			  else
+			  {			  
+				startTag(tagType);
+				addAttribute(DE.P_TYPE, object.getAttribute(DE.A_TYPE));
+				addAttribute(DE.P_ID, object.getAttribute(DE.A_ID));
+				addAttribute(DE.P_NAME, object.getAttribute(DE.A_NAME));
+				addAttribute(DE.P_VALUE, object.getAttribute(DE.A_VALUE));
+				addAttribute(DE.P_SOURCE, object.getAttribute(DE.A_SOURCE));
 
-			if (object.isReference())
+				if (object.isReference())
 			    {
-				addAttribute(DE.P_ISREF, "true");
+					addAttribute(DE.P_ISREF, "true");
 			    }
-			else
+				else
 			    {
-				addAttribute(DE.P_ISREF, "false");
+					addAttribute(DE.P_ISREF, "false");
 			    }
 			
-			if (file != null)
-			{
-			    long length = file.length();
-			    addAttribute(DE.P_DEPTH, "" + length);
-			    addFile(file, (int)length);
-			}
-			else
+				if (file != null)
+				{
+			 	   long length = file.length();
+			  	  addAttribute(DE.P_DEPTH, "" + length);
+			  	  addFile(file, (int)length);
+				}
+				else
 			    {
-				addAttribute(DE.P_DEPTH, "" + object.depth());
-				addData(object.getBuffer());
-				object.setUpdated(true);
+					addAttribute(DE.P_DEPTH, "" + object.depth());
+					addData(object.getBuffer());
+					object.setUpdated(true);
 				
-				if (!object.isReference() && depth >= 0)
+					if (!object.isReference() && depth >= 0)
 				    {
-					for (int i = 0; i < object.getNestedSize(); i++)
+						for (int i = 0; i < object.getNestedSize(); i++)
 					    {
-						generate(object.get(i), depth - 1, file);
+							generate(object.get(i), depth - 1, file);
 					    }
 				    }
 			    }	      
-			
+			  }
+			  
 			// end generation
 			endTag(tagType);
 

@@ -337,7 +337,10 @@ public class XMLparser
 				      }
 				  else
 				      {
-					  System.out.println("parent of " + result.getName() + " is NULL!");
+				      	if (result != _dataStore.getRoot())
+				      	{
+					  		System.out.println("parent of " + result.getName() + " is NULL!");
+				      	}
 				      }
 			      }
 			  else
