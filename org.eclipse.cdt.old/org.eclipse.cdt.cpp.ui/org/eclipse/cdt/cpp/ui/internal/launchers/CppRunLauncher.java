@@ -62,7 +62,7 @@ public class CppRunLauncher implements ILauncherDelegate
 	if (element instanceof DataElement)
 	    {
 		_executable = (DataElement)element;
-		if (_executable.getType() != "file")
+		if (!_executable.getType().equals("file"))
 		    {
 			_executable = null;
 			_directory = null;

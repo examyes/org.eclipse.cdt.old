@@ -61,7 +61,7 @@ public class CppLoadLauncher implements ILauncherDelegate
 	if (element instanceof DataElement)
 	    {	       
 		_executable = (DataElement)element;
-		if (_executable.getType() != "file")
+		if (!_executable.getType().equals("file"))
 		    {
 			_executable = null;
 			_directory = null;
@@ -142,5 +142,7 @@ public class CppLoadLauncher implements ILauncherDelegate
 
 	_api.debug(_directory, port, key);
     }
+
+
 
 }
