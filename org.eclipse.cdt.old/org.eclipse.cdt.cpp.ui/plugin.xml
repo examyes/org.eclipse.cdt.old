@@ -407,7 +407,7 @@
    <wizard
          availableAsShortcut="true"
          name="%C++_Project"
-         icon="icons/full/ctool16/newprj_wiz.gif"
+         icon="icons/full/ctool16/cproject_wiz.gif"
          category="org.eclipse.cdt.cpp.ui.cpp"
          class="org.eclipse.cdt.cpp.ui.internal.wizards.CppNewProjectResourceWizard"
          project="true"
@@ -485,7 +485,7 @@
       point="org.eclipse.search.searchPages">
    <page
          label="%C++_Search"
-         icon="icons/full/elcl16/search_nav.gif"
+         icon="icons/full/obj16/c_search.gif"
          extensions="cpp:90, C:90, c:90, hpp:90, H:90, h:90, *:1"
          class="org.eclipse.cdt.cpp.ui.internal.views.search.CppSearchPage"
          sizeHint="400,240"
@@ -579,7 +579,7 @@
          id="org.eclipse.cdt.cpp.ui.CppActionSet">
       <action
             label="Parse"
-            icon="icons/full/clcl16/default_misc.gif"
+            icon="icons/full/clcl16/parse_exe.gif"
             tooltip="Parse"
             class="org.eclipse.cdt.cpp.ui.internal.actions.ParseAction"
             toolbarPath="Normal/C++"
