@@ -246,9 +246,12 @@ public class PAModelInterface implements IDomainListener
  }
  
  // From IDomainListener
- public void domainChanged(DomainEvent ev) {
+ public void domainChanged(DomainEvent ev) 
+ {
 
    DataElement object = (DataElement)ev.getParent();
+   
+   // Only do something when the object's type is status.
    if ((object != null) && (object.getType().equals("status")))
    {
      DataElement traceElement = (DataElement)_statuses.get(object);
@@ -256,6 +259,7 @@ public class PAModelInterface implements IDomainListener
 
      // System.out.println("status in model interface: " + object);
      
+     // Handle parse errors from the miner
      if (object.getValue().equals("error"))
      {
       
@@ -263,23 +267,24 @@ public class PAModelInterface implements IDomainListener
       
       String name = new String(traceElement.getSource());
       
-      // Generate the normal error message
       String errorMsg = null;
-      if (traceElement.isOfType("trace file")) {
+      
+      // Generate error messages for trace files
+      if (traceElement.isOfType("trace file")) 
+      {
         
+        // Fire a notification to delete the trace file 
+        // if there is a parse error
         PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_DELETED, traceElement);
         _notifier.fireTraceChanged(traceEvent);
-                
-        if (traceElement.isOfType("gprof trace file"))
-          errorMsg = "Not a valid gprof trace file:\n" + name;
-        else if (traceElement.isOfType("functioncheck trace file"))
-          errorMsg = "Not a valid functioncheck trace file:\n" + name;
-        else
-          errorMsg = "Not a valid trace file:\n" + name;
+        
+        errorMsg = "Not a valid " + traceElement.getType() + ":\n" + name;
         
         traceElement.getDataStore().deleteObject(traceElement.getParent(), traceElement);
           
       }
+      
+      // Generate error messages for trace programs
       else if (traceElement.isOfType("trace program")) {
         
         errorMsg = "Error parsing the trace output of:\n" + name;
@@ -293,19 +298,25 @@ public class PAModelInterface implements IDomainListener
         }
 
       }
-            
+      
+      // Bring up a message dialog to show the error messages.
       Display d = getShell().getDisplay();
 	  d.asyncExec(new showMessageAction("Trace Parsing Error", errorMsg));
             
      }
-     else {
+     
+     // Hanle the normal case
+     else 
+     {
        
        DataElement cmdD = object.getParent();
        String commandValue = cmdD.getName();
-             
+       
+       // If the command is query trace file or program format
        if (commandValue.equals("C_QUERY_TRACE_FILE_FORMAT") 
           || commandValue.equals("C_QUERY_TRACE_PROGRAM_FORMAT"))
        {
+         // If there is a pending add trace file operation.
          if (_addTraceFilePending)
          {
             _addTraceFilePending = false;
@@ -330,6 +341,9 @@ public class PAModelInterface implements IDomainListener
             _notifier.fireTraceChanged(traceEvent);
           }
        }
+       
+       // Fire a FILE_PARSED notification if the command is to parse a trace file 
+       // or analyze a trace program.
        else if (commandValue.equals("C_PARSE_TRACE") || commandValue.equals("C_ANALYZE_PROGRAM"))
        {  
          PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_PARSED, traceElement);
@@ -350,6 +364,7 @@ public class PAModelInterface implements IDomainListener
    {
      _statuses.put(status, traceElement);
      
+     // Start a status monitor thread if we want to see the progress monitor.
      if (updateStatus) {
      
 	   IProject project = CppPlugin.getDefault().getCurrentProject();
@@ -370,47 +385,79 @@ public class PAModelInterface implements IDomainListener
    String result = "Unknown error";
    
    String errorCode = errorElement.getName();
-   if (errorCode != null) {
+   if (errorCode != null) 
+   {
     
-     if (errorCode.equals("no trace data")) {
-       
-       String dataFileName = "";
-       if (traceElement.isOfType("gprof trace program"))
-         dataFileName = "gmon.out";
-       else if (traceElement.isOfType("functioncheck trace program"))
-         dataFileName = "functioncheck.fc";
-         
-       result = "Cannot find the trace data file: " + dataFileName +  ".\n"
-       		+ "You should run the trace program before analyzing.";
+     if (errorCode.equals("no trace data")) 
+     {
+                
+       result = "Cannot find the trace data file: " + getProfileDataFileName(traceElement) +
+       			".\n" + "You should run the trace program before analyzing.";
      }
-     else if (errorCode.equals("no file")) {
+     else if (errorCode.equals("no file")) 
+     {
        result = "Cannot find the trace target file:\n" + traceElement.getSource();
      }
-     else if (errorCode.equals("no command")) {
-     
-       String profileCommand = "";
-       if (traceElement.isOfType("gprof trace program"))
-         profileCommand = " gprof ";
-       else if (traceElement.isOfType("functioncheck trace program"))
-         profileCommand = " fcdump ";
-        
-       result = "The profile command" + profileCommand + "does not exist or it is not an executable!";
+     else if (errorCode.equals("no command")) 
+     {
+             
+       result = "The profile command " + getProfileCommandName(traceElement) + 
+       			" does not exist or it is not an executable!";
      }
-     else if (errorCode.equals("unsupported option")) {
-
-       String profileCommand = "";
-       if (traceElement.isOfType("gprof trace program"))
-         profileCommand = "gprof";
-       else if (traceElement.isOfType("functioncheck trace program"))
-         profileCommand = "fcdump";
+     else if (errorCode.equals("unsupported option")) 
+     {
      
-       result = "You might have an incompatible version of " + profileCommand + 
-                ". Please update to a newer version.";
+       result = "You might have an incompatible version of " + getProfileCommandName(traceElement) + 
+                ". Please upgrade to a newer version.";
      }
      
    }
    
    return result;
+ }
+ 
+ 
+ /**
+  * Return the profile command name for a given trace element
+  */
+ public String getProfileCommandName(DataElement traceElement) {
+ 
+   String profileCommand = "";
+   if (traceElement.isOfType("gprof trace program")) {
+     profileCommand = "gprof";
+   }
+   else if (traceElement.isOfType("functioncheck trace program")) {
+     profileCommand = "fcdump";
+   }
+   else {
+   
+     // The default profile command is the first word of the type.
+     String type = traceElement.getType();
+     int spaceIndex = 0;
+     if (type != null && (spaceIndex = type.indexOf(' ')) > 0) {
+      profileCommand = type.substring(0, spaceIndex);
+     }
+     else {
+      profileCommand = type;
+     }
+   }
+   
+   return profileCommand;
+ }
+ 
+ 
+ /**
+  * Return the profile data file name for a given trace element
+  */
+ public String getProfileDataFileName(DataElement traceElement) {
+
+   String dataFileName = "";
+   if (traceElement.isOfType("gprof trace program"))
+     dataFileName = "gmon.out";
+   else if (traceElement.isOfType("functioncheck trace program"))
+     dataFileName = "functioncheck.fc";
+ 
+   return dataFileName;
  }
  
  
@@ -563,7 +610,10 @@ public class PAModelInterface implements IDomainListener
  
  
   /**
-   * Auto detect the trace file format and add it to the trace files view
+   * Auto detect the trace file format and add it to the trace files view.
+   * We will only query the trace file format for now and set the _addTraceFilePending 
+   * flag to true. When the query is done, it will detect whether there is a pending add
+   * trace file action and call the real addTraceFile() afterwards.
    */
   public void addAutoTraceFile(DataElement fileElement) {
 
@@ -573,7 +623,7 @@ public class PAModelInterface implements IDomainListener
   
   
  /**
-  * Add a new trace file
+  * Add a trace file with the given format
   */
  public void addTraceFile(DataElement fileElement, String traceFormat) {
 
@@ -586,11 +636,14 @@ public class PAModelInterface implements IDomainListener
    else if (traceFormat.indexOf("functioncheck") >= 0)
      type = "functioncheck trace file";
    else
-     return;
+     type = traceFormat + " trace file";
    
    DataElement traceProject = findOrCreateTraceProjectElement(fileElement);
    
+   // Create a data element to store the trace format.
    DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
+   
+   // Synchronize the data element update. This is only needed for remote.
    if (dataStore != getDataStore()) {
     dataStore.setObject(traceFormatElement);    
    }
@@ -608,7 +661,8 @@ public class PAModelInterface implements IDomainListener
    traceFunctionsRoot.setAttribute(DE.A_VALUE, "trace functions root");
    
    DataElement callTreeRoot = dataStore.createObject(traceFile, "call root", traceFile.getName());
-      
+   
+   // Update everything under the trace file for remote.
    if (dataStore != getDataStore()) {
     dataStore.setObject(traceFile);
    }
@@ -616,14 +670,15 @@ public class PAModelInterface implements IDomainListener
    // Create a reference to the trace file from the local trace files root
    getDataStore().createReference(getLocalTraceFilesRoot(), traceFile);
    
-   // Fire file created event
+   // Fire the file created event
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceFile);
    _notifier.fireTraceChanged(traceEvent);
    
    // call the parse trace command
    DataElement parseCommand = dataStore.localDescriptorQuery(traceFile.getDescriptor(), "C_PARSE_TRACE");
    DataElement status = dataStore.command(parseCommand, traceFile);
-      
+   
+   // Monitor the parse status
    monitorStatus(status, traceFile, true);
    
  }
@@ -648,10 +703,11 @@ public class PAModelInterface implements IDomainListener
  }
  
  /**
-  * Add a trace program
+  * Add a trace program with the given trace format and arguments
   */
  public void addTraceProgram(DataElement progElement, String traceFormat, String arguments) {
 
+   // Display an error message if the element is not a binary executable.
    if (!progElement.isOfType("binary executable")) {
      
      Display d = getShell().getDisplay();
@@ -672,8 +728,9 @@ public class PAModelInterface implements IDomainListener
    else if (traceFormat.equals("functioncheck"))
     type = "functioncheck trace program";
    else
-    type = "unknown trace program";
+    type = traceFormat + " trace program";
    
+   // Create the trace format element.
    DataElement traceFormatElement = dataStore.createObject(null, "data", traceFormat);
    if (dataStore != getDataStore()) {
      dataStore.setObject(traceFormatElement);   
@@ -681,6 +738,8 @@ public class PAModelInterface implements IDomainListener
    
    // Create the trace program element
    DataElement traceProgram = dataStore.createObject(traceProject, type, progElement.getName(), progElement.getSource());
+   
+   // Store the arguments in the VALUE attribute of the trace program element.
    if (arguments != null && arguments.trim().length() > 0) {
      traceProgram.setAttribute(DE.A_VALUE, progElement.getName() + " " + arguments);
    }
@@ -703,13 +762,15 @@ public class PAModelInterface implements IDomainListener
    // Create a reference from local trace files root to the trace program
    getDataStore().createReference(getLocalTraceFilesRoot(), traceProgram);
    
+   // Fire a file created event
    PATraceEvent traceEvent = new PATraceEvent(PATraceEvent.FILE_CREATED, traceProgram);
    _notifier.fireTraceChanged(traceEvent);
    
  }
   
  /**
-  * Run a trace program
+  * Run a trace program.
+  * The run is done by invoking the command miner.
   */
  public DataElement runTraceProgram(DataElement traceProgram) {
  
@@ -722,20 +783,25 @@ public class PAModelInterface implements IDomainListener
    return runCommand(dataStore, exeElement.getParent(), traceProgram.getValue());
  }
  
+ 
  /**
-  * Analyze a trace program after the program is run and the profile output file
-  * has been generated.
+  * Analyze the trace output generated by the run.
+  * The actual job is done in the miner.
   */
  public void analyzeTraceProgram(DataElement traceProgram) {
 
+   // This is to work around the problem when you select the analyze action from
+   // the popup menu of the empty Function Statstics view.
    if (traceProgram.getValue().equals("trace functions root")) {
     traceProgram = traceProgram.getParent();
    }
-       
+   
+   // Call the C_ANALYZE_PROGRAM command in PAMiner to do the real job.
    DataStore dataStore = traceProgram.getDataStore();        
    DataElement analyzeCommand = dataStore.localDescriptorQuery(traceProgram.getDescriptor(), "C_ANALYZE_PROGRAM");
    DataElement status = dataStore.command(analyzeCommand, traceProgram);
    
+   // Monitor the parse status.
    monitorStatus(status, traceProgram, true);
    
  }

@@ -98,7 +98,7 @@ public class CallTreeViewPart extends PAObjectsViewPart
 
     case PATraceEvent.FILE_PARSED:
       
-      _viewer.resetView();
+      // _viewer.resetView();
       break;
      
     case PATraceEvent.FILE_DELETED:

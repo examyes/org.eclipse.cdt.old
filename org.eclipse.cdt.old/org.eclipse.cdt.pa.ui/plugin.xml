@@ -191,7 +191,7 @@
             tooltip="Profile"
             pulldown="true"
             class="org.eclipse.cdt.pa.ui.actions.TraceDropDownAction"
-            toolbarPath="Normal/C++"
+            toolbarPath="Normal/PA"
             id="org.eclipse.cdt.pa.ui.TraceDropDownAction">
       </action>
    </actionSet>
