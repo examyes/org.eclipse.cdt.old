@@ -70,37 +70,6 @@ public class OpenEditorAction extends Action implements IOpenAction
     
     public void setSelected(DataElement selected)
     {
-	if (_element != null && 
-	    _element != selected)
-	    {
-		DataStore dataStore = _element.getDataStore();
-		if (_previousElement == null)
-		    {
-			_previousElement = dataStore.createObject(null, "file", "location");
-		    }
-
-		if (_editor instanceof com.ibm.cpp.ui.internal.editor.CppEditor)
-		    {
-			CppEditor editor = ((com.ibm.cpp.ui.internal.editor.CppEditor)_editor);
-			
-			LpexView lpexViewer = editor.getLpexView();
-			int line = lpexViewer.currentElement();
-			IEditorInput input = editor.getEditorInput();			
-			String path = null;
-			if (input instanceof IFileEditorInput)
-			    {
-				IFile file = ((IFileEditorInput)input).getFile();
-				path = new String(file.getLocation().toOSString());
-				setLocation(path, line);
-			    }
-		    }
-		else
-		    {
-			_previousElement.setAttribute(DE.A_SOURCE, _element.getSource());
-		    }
-
-	    }
-
 	_element = selected;
     }
 
