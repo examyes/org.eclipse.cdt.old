@@ -1,4 +1,7 @@
 2005-01-25  Rick Moseley  <rmoseley@redhat.com>
+	* bz#84229
+
+2005-01-25  Rick Moseley  <rmoseley@redhat.com>
 
 	* RPM_Plugin.htm: bz#83661
 	* 05_eclipse_rpm_srpm_import.png: bz#83661
