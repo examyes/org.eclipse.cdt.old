@@ -190,7 +190,10 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
     private void initializeProjects()
     {
 	DataStore dataStore = getDataStore();
+	PlatformVCMProvider provider = PlatformVCMProvider.getInstance();
+
 	IWorkspace workbench = (IWorkspace)getPluginWorkspace();
+
 
 	// init all local projects
 	IProject[] projects = workbench.getRoot().getProjects();
@@ -216,7 +219,6 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	  }	
 
 	// init all remote projects
-	PlatformVCMProvider provider = PlatformVCMProvider.getInstance();
 	provider.getRepositories();
 	IProject[] rmtProjects = provider.getKnownProjects();
 	if (rmtProjects != null)
