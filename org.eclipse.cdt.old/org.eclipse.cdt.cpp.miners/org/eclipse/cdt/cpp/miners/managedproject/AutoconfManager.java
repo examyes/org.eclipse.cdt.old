@@ -94,16 +94,13 @@ public class AutoconfManager {
 		File configure = new File (project.getSource(),"configure");
 		File script = new File (project.getSource(),"bootstrap.sc");
 
-		if(configure.exists())
+		if(configureIsUptodate(project))
 		{
-			if(configureIsUptodate(project))
-			{
-				//System.out.println("\n configure is up to date"+"dont care just don't update and use existing configure");
-				if(getOS().equals("Linux"))
-					runCommand(project, status,"./configure"+"&&"+"touch -m "+"configure");
-				else
-					runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
-			}
+			//System.out.println("\n configure is up to date"+"dont care just don't update and use existing configure");
+			if(getOS().equals("Linux"))
+				runCommand(project, status,"./configure"+"&&"+"touch -m "+"configure");
+			else
+				runCommand(project, status,cygwinPrefix+"configure"+"&&"+cygwinPrefix+"\'"+"touch -m "+"configure"+"\'");
 		}
 		else
 		{
@@ -339,21 +336,25 @@ public class AutoconfManager {
 	private boolean configureIsUptodate(DataElement subject)
 	{
 		File configure = getfile(subject.getFileObject(),"configure");
-		long configureTimeStamp = configure.lastModified();
-		
-		File rootObject = subject.getFileObject();
-		ProjectStructureManager manager = new ProjectStructureManager(rootObject);
-		
-		File[] list = manager.getFiles();
-		
-		for(int i = 0; i < list.length; i++)
+		if(configure!=null)
 		{
-			if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")
-											&&!list[i].getName().equals("Makefile")&&!list[i].getName().equals("config.h"))
-					if(list[i].lastModified()>configureTimeStamp)
-						return false;
+			long configureTimeStamp = configure.lastModified();
+		
+			File rootObject = subject.getFileObject();
+			ProjectStructureManager manager = new ProjectStructureManager(rootObject);
+			
+			File[] list = manager.getFiles();
+			
+			for(int i = 0; i < list.length; i++)
+				{
+				if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")
+												&&!list[i].getName().equals("Makefile")&&!list[i].getName().equals("config.h"))
+						if(list[i].lastModified()>configureTimeStamp)
+							return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	private File getfile(File dir,String name)
 	{

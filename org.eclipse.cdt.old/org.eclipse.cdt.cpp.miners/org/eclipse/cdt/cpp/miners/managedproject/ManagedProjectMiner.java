@@ -445,21 +445,25 @@ public class ManagedProjectMiner extends Miner
 	private boolean configureIsUptodate(DataElement subject)
 	{
 		File configure = getfile(subject.getFileObject(),"configure");
-		long configureTimeStamp = configure.lastModified();
-		
-		File rootObject = subject.getFileObject();
-		ProjectStructureManager manager = new ProjectStructureManager(rootObject);
-		
-		File[] list = manager.getFiles();
-		
-		for(int i = 0; i < list.length; i++)
+		if(configure!=null)
 		{
-			if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")
-											&&!list[i].getName().equals("Makefile")&&!list[i].getName().equals("config.h"))
-					if(list[i].lastModified()>configureTimeStamp)
-						return false;
+			long configureTimeStamp = configure.lastModified();
+		
+			File rootObject = subject.getFileObject();
+			ProjectStructureManager manager = new ProjectStructureManager(rootObject);
+		
+			File[] list = manager.getFiles();
+			
+			for(int i = 0; i < list.length; i++)
+			{
+				if(!list[i].getName().equals("configure") && !list[i].getName().equals("config.status")&&!list[i].getName().equals("config.log")
+												&&!list[i].getName().equals("Makefile")&&!list[i].getName().equals("config.h"))
+						if(list[i].lastModified()>configureTimeStamp)
+							return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	// new :to handle delete notification
 	private void handleNotification(DataElement cmd, DataElement subject, DataElement subjectArg, DataElement status)
