@@ -245,60 +245,58 @@ public class AmParser
 		theParser.parse();
 	}
  
- private DataElement addTargetAttribute(String targetName, int attType, String attValue)
- {
-  //Find the target that this attribute applies to
-  DataElement theTarget = findCanonicalName(_project,targetName);
-  if (theTarget == null)
-   theTarget = addTarget(targetName, -1);
+	private DataElement addTargetAttribute(String targetName, int attType, String attValue)
+	{
+		//Find the target that this attribute applies to
+		DataElement theTarget = findCanonicalName(_project,targetName);
+		if (theTarget == null)
+			theTarget = addTarget(targetName, -1);
+		//Check to see if the AttributeType already exists under the target
+		DataElement theAttributeType = _dataStore.find(theTarget, DE.A_NAME, Am.getString(attType), 1);
+		if (theAttributeType == null)
+			theAttributeType = _dataStore.createObject(theTarget, Am.TARGET_ATTRIBUTE_TYPE, Am.getString(attType), getSourceLocation());
   
-  //Check to see if the AttributeType already exists under the target
-  DataElement theAttributeType = _dataStore.find(theTarget, DE.A_NAME, Am.getString(attType), 1);
-  if (theAttributeType == null)
-   theAttributeType = _dataStore.createObject(theTarget, Am.TARGET_ATTRIBUTE_TYPE, Am.getString(attType), getSourceLocation());
-  
-  //If the AttributeType is DEPENDENCIES, this is a special case since we are creating a reference, not an object
-  if (Am.getString(attType).equals(Am.getString(Am.DEPENDENCIES)))
-  {
-   DataElement theRefTarget = findCanonicalName(_project, attValue);
-   if (theRefTarget != null)
-    return _dataStore.createReference(theAttributeType, theRefTarget);
-  }
-  return _dataStore.createObject(theAttributeType, Am.getType(attType), attValue, getSourceLocation());
- }
+		//If the AttributeType is DEPENDENCIES, this is a special case since we are creating a reference, not an object
+		if (Am.getString(attType).equals(Am.getString(Am.DEPENDENCIES)))
+		{
+			DataElement theRefTarget = findCanonicalName(_project, attValue);
+			if (theRefTarget != null)
+				return _dataStore.createReference(theAttributeType, theRefTarget);
+		}
+		return _dataStore.createObject(theAttributeType, Am.getType(attType), attValue, getSourceLocation());
+	}
 
- private String getSourceLocation()
- {
-  return _curFile + ":" + _curLine;
- }
+	private String getSourceLocation()
+	{
+		return _curFile + ":" + _curLine;
+	}
 
- private DataElement findCanonicalName(DataElement root, String name)
- {
-  ArrayList children = root.getNestedData();
-  for (int i = 0; i < children.size(); i++)
-  {
-   DataElement child = (DataElement)children.get(i);
-   String childName = child.getName();
-   if (makeCanonical(childName).equals(name))
-    return child;
-  }
-  return null;
- }
+	private DataElement findCanonicalName(DataElement root, String name)
+	{
+		ArrayList children = root.getNestedData();
+		for (int i = 0; i < children.size(); i++)
+		{
+			DataElement child = (DataElement)children.get(i);
+			String childName = child.getName();
+			if (makeCanonical(childName).equals(name))
+				return child;
+		}
+		return null;
+	}
 
- private String makeCanonical(String theString)
- {
-  StringBuffer theCanonicalString = new StringBuffer();
-  for (int i = 0; i < theString.length(); i++)
-  {
-   char c = theString.charAt(i);
-   if (Character.isLetterOrDigit(c))
-    theCanonicalString.append(c);
-   else
-    theCanonicalString.append("_");
-  }
-  return theCanonicalString.toString();
- }
- 
+	private String makeCanonical(String theString)
+	{
+		StringBuffer theCanonicalString = new StringBuffer();
+		for (int i = 0; i < theString.length(); i++)
+		{
+			char c = theString.charAt(i);
+			if (Character.isLetterOrDigit(c))
+				theCanonicalString.append(c);
+			else
+				theCanonicalString.append("_");
+		}
+		return theCanonicalString.toString();
+	}
 }
 
 
