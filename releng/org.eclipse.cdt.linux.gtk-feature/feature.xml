@@ -26,7 +26,9 @@
          id="org.eclipse.cdt"
          version="1.0.1"
          match="equivalent"/>
-
+   <requires>
+     <import plugin="org.eclipse.cdt" version="1.1.0" match="compatible"/>
+   </requires>
    <plugin
          id="org.eclipse.cdt.core.linux"
          download-size="0"
