@@ -127,21 +127,18 @@ public String getContainerFullPath() {
 	/****/
 			 // to  initialize target container root
 	String selFromDialog = containerGroup.getContainerFullPath().toString();
-				int b = selFromDialog.indexOf('/',1);
-				int e = selFromDialog.length();
-				String endPath = new String("");
-				if( b < 1 ) // means no '/'
-					endPath = new String("");
-				else
-					endPath = selFromDialog.substring(b,e);		 
-			 
-	
+	int b = selFromDialog.indexOf('/',1);
+	int e = selFromDialog.length();
+	String endPath = new String("");
+	if( b < 1 ) // means no '/'
+		endPath = new String("");
+	else
+		endPath = selFromDialog.substring(b,e);		 
+		
 	IContainer containerRoot = (IContainer)NavigatorSelection.selection;
 	
 	//return containerRoot.getLocation().toString()+containerGroup.getContainerFullPath().toString();
 	return containerRoot.getLocation().toString()+endPath;
-	
-	
 	//return containerGroup.getContainerFullPath().toString();
 }
 /**
