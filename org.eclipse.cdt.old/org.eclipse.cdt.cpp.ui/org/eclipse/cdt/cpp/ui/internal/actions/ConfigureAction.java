@@ -51,10 +51,11 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	String configureUpdatePreferenceKey = "Update_When_Configure";
 	String targetKey = "Target_Type";
 
+	private final int DEFAULT = 0;
 	private final int PROGRAM_TARGET = 100;	
 	private final int STATIC_TARGET = 101;	
 	private final int SHARED_TARGET = 102;
-	private int targetType = 100;	
+	private int targetType = DEFAULT;	
 	
 	public class RunThread extends Handler
 	{
@@ -241,11 +242,22 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 			RunThread thread = new RunThread(_subject, status);
 			thread.start();
 		}
-		// default "Progarm" target
-		else if(configureUpdate==0 && targetType==PROGRAM_TARGET) 
+		else if(configureUpdate==0 && targetType==DEFAULT) 
 		// targetSelection 0 means no selection was made and it will default to program
 		{
 			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());			
+			DataElement status = _dataStore.command(configureCmd, _subject);
+			ModelInterface api = ModelInterface.getInstance();
+			api.monitorStatus(status);			
+			api.showView("org.eclipse.cdt.cpp.ui.CppOutputViewPart", status);
+			RunThread thread = new RunThread(_subject, status);
+			thread.start();
+		}	
+		// "Progarm" target
+		else if(configureUpdate==0 && targetType==PROGRAM_TARGET) 
+		// targetSelection 0 means no selection was made and it will default to program
+		{
+			DataElement configureCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_CONFIGURE_PROGRAM");			
 			DataElement status = _dataStore.command(configureCmd, _subject);
 			ModelInterface api = ModelInterface.getInstance();
 			api.monitorStatus(status);			
@@ -399,9 +411,10 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 				org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(configueDialogPrefernceKey,list);
 			}
 			
-			// set default project target to Program - needed for Autoconf Manager
+			// set default project target to Default - needed for Autoconf Manager
+			targetType = DEFAULT;
 			list = new ArrayList();
-			list.add("Program");
+			list.add("Default");
 			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);
 
 		}
@@ -411,6 +424,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 		
 		if(buttonId == 100)
 		{
+			targetType = PROGRAM_TARGET;
 			// default target
 			list.add("Program");
 			org.eclipse.cdt.cpp.ui.internal.CppPlugin.writeProperty(targetKey,list);

@@ -83,6 +83,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(projectD, "Generating and running configure script using existing configuration","C_CONFIGURE_NO_UPDATE",false);
 		
 		//
+		createCommandDescriptor(projectD, "Generating and running configure script - program target","C_CONFIGURE_PROGRAM",false);
 		createCommandDescriptor(projectD, "Generating and running configure script - static target","C_CONFIGURE_STATIC",false);
 		createCommandDescriptor(projectD, "Generating and running configure script - shared target","C_CONFIGURE_SHARED",false);
 		//
@@ -178,6 +179,12 @@ public class ManagedProjectMiner extends Miner
 			{
 				autoconfManager.configure(project, status,false,classifier);
 				project.refresh(false);
+			}
+			else if (name.equals("C_CONFIGURE_PROGRAM"))
+			{
+				System.out.println("\n Excecuting Program");
+				//autoconfManager.configure(project, status,true,classifier);
+				//project.refresh(false);
 			}
 			else if (name.equals("C_CONFIGURE_STATIC"))
 			{
