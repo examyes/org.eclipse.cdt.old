@@ -11,11 +11,12 @@ import org.eclipse.cdt.cpp.miners.pa.engine.*;
  */
 public class FunctionCheckCalleeTokenizer {
 
-  private String _line;
-  private int _length;
-  private int _startIndex;
-  private int _endIndex;
-  private boolean _hasParameters;
+  private String 	_line;
+  private int 		_length;
+  private int 		_startIndex;
+  private int 		_endIndex;
+  private boolean 	_hasParameters;
+  
   
   // Constructor
   public FunctionCheckCalleeTokenizer(String line) {
@@ -24,7 +25,7 @@ public class FunctionCheckCalleeTokenizer {
    _startIndex = 0;
    _endIndex = 0;
    
-   _hasParameters = (line.indexOf('(') >= 0);
+   _hasParameters = isLastCharAParen();
    
   }
   
@@ -36,68 +37,102 @@ public class FunctionCheckCalleeTokenizer {
   }
   
   /**
+   * Is the character at the given index a white space?
+   */
+  private boolean isWhitespace(int index) {
+   return Character.isWhitespace(_line.charAt(index));
+  }
+  
+  
+  /**
    * Return the next token
    */
-  public String nextToken() {
+  public FunctionCheckCalleeToken nextToken() {
   
-   while (hasMoreTokens() && Character.isWhitespace(_line.charAt(_endIndex)))
+   // create a new token
+   FunctionCheckCalleeToken token = new FunctionCheckCalleeToken();
+   
+   // Move the pointer to the first non-space character
+   while (hasMoreTokens() && isWhitespace(_endIndex))
     _endIndex++;
     
    _startIndex = _endIndex;
-       
-   char ch = 0;
-   if (!_hasParameters) {
-    
-    while (hasMoreTokens() && !Character.isWhitespace(_line.charAt(_endIndex)))
-     _endIndex++;
-    
-    if (!hasMoreTokens()) {
-     return getTailingToken();
-    }
-    else {
-     int oldStartIndex = _startIndex;
+   
+   // Find the call number
+   if (_line.charAt(_endIndex) == '(') {
+   
+     int closeParenIndex = _line.indexOf(')', _endIndex);
+     if (closeParenIndex > _endIndex) {
+      String numberString = _line.substring(_endIndex+1, closeParenIndex);
+      token.setNumber(numberString);
+      _endIndex = closeParenIndex + 1;
+      _startIndex = _endIndex;
+     }
+   
+     // Skip white space characters
+     while (hasMoreTokens() && isWhitespace(_endIndex))
+      _endIndex++;
+
      _startIndex = _endIndex;
-     return _line.substring(oldStartIndex, _endIndex);
-    }
-     
+       
    }
    
+   
+   // If the function signature does not include parameters
+   if (!_hasParameters) {
+    
+    while (hasMoreTokens() && !isWhitespace(_endIndex))
+     _endIndex++;
+    
+    if (hasMoreTokens()) {
+     int oldStartIndex = _startIndex;
+     _startIndex = _endIndex;
+     token.setName(_line.substring(oldStartIndex, _endIndex));
+    }
+    else {
+     token.setName(getTailingToken());
+    }
+    
+    return token;
+   }
+   
+   // If the function signature includes parameters
+   
+   // Find the next "(" or "<" character
+   char ch = 0;
    while (hasMoreTokens() && (ch = _line.charAt(_endIndex)) != '(' && ch != '<') {
     _endIndex++;
    }
 
-   if (!hasMoreTokens()) {
-    return getTailingToken();   
-   }
-   else if (ch == '(') {
-    findMatchingParen();
+   // Move the pointer to the end parenthesis
+   if (ch == '(') {
+     findMatchingParen();
    }
    else if (ch == '<') {
    
-    findMatchingBracket();
+     findMatchingBracket();
     
-    while (hasMoreTokens() && _line.charAt(_endIndex) != '(')
-     _endIndex++;
-    
-    if (!hasMoreTokens()) {
-     return getTailingToken();   
-    }
-    else {    
-     findMatchingParen();
-    }
+     while (hasMoreTokens() && _line.charAt(_endIndex) != '(')
+      _endIndex++;
+     
+     if (hasMoreTokens()) {
+       findMatchingParen();
+     }
     
    }
    
-   if (!hasMoreTokens()) {
-    return getTailingToken();   
-   }
-   else {
+   // construct the returned token
+   if (hasMoreTokens()) {
     _endIndex++;
     int oldStartIndex = _startIndex;
     _startIndex = _endIndex;
-    return _line.substring(oldStartIndex, _endIndex);
+    token.setName(_line.substring(oldStartIndex, _endIndex));
+   }
+   else {
+    token.setName(getTailingToken());   
    }
     
+   return token;
  }
  
  /**
@@ -148,6 +183,27 @@ public class FunctionCheckCalleeTokenizer {
   else
    return null;
  
+ }
+ 
+ /**
+  * Is the last character a close parenthesis (')')?
+  */
+ private boolean isLastCharAParen() {
+ 
+   if (_length > 1) {
+   
+     int index = _length - 1;
+     while (isWhitespace(index))
+       index--;
+     
+     if (index > 0)
+      return _line.charAt(index) == ')';
+     else
+      return false;
+   }
+   else
+     return false;
+   
  }
  
  // Command line test driver

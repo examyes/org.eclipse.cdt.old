@@ -3,7 +3,7 @@ package org.eclipse.cdt.cpp.miners.pa.engine;
 /**
  * PAParseStatus describes the current status in the parsing process.
  * From an object of this class, we will know whether we are currently
- * parsing the flat profile or call graph, or the parse job is done.
+ * parsing the flat profile or call graph, or whether the parse job is done.
  */
 public class PAParseStatus {
 
@@ -11,7 +11,7 @@ public class PAParseStatus {
   public static int HEADER = 1;
   public static int PARSING = 2;
   public static int DONE = 3;
-
+  
   private int _flatProfileStatus;
   private int _callGraphStatus;
   

@@ -193,7 +193,7 @@ public class PAAdaptor {
    return GPROF_GNU;
   else if (firstLine.startsWith("ngranularity:") || firstLine.startsWith("granularity:"))
    return GPROF_BSD;
-  else if (firstLine.startsWith("FunctionCheck"))
+  else if (firstLine.startsWith("FunctionCheck") || firstLine.startsWith("FunctionDump"))
    return FUNCTIONCHECK;
   else
    return INVALID;

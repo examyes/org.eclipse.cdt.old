@@ -310,7 +310,6 @@ public class PAMiner extends Miner {
    
    status.setAttribute(DE.A_NAME, "done");
    status.setAttribute(DE.A_VALUE, formatStr);
-   // System.out.println("format: " + status);
  }
  
 

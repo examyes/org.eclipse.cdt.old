@@ -173,7 +173,7 @@ public class FunctionCheckTraceFile extends PATraceFile {
   /**
    * Parse a line in the call graph
    */
-  private void parseCallGraphEntry(String line) {
+  private void parseCallGraphEntry(String line) throws PAException {
   
    if (FunctionCheckUtility.isEmptyLine(line)) {
     _currentCaller = null;
@@ -194,19 +194,32 @@ public class FunctionCheckTraceFile extends PATraceFile {
   /**
    * Parse a callee line
    */
-  private void parseCalleeLine(String line) {
+  private void parseCalleeLine(String line) throws PAException {
   
    FunctionCheckCalleeTokenizer tokenizer = new FunctionCheckCalleeTokenizer(line);
    
    while (tokenizer.hasMoreTokens()) {
-    String token = tokenizer.nextToken();
+    FunctionCheckCalleeToken token = tokenizer.nextToken();
     
-    if (token.equals("nobody"))
+    if (token.getName().equals("nobody"))
      return;
     
-    PATraceFunction callee = findOrCreateTraceFunction(token);
+    PATraceFunction callee = findOrCreateTraceFunction(token.getName());
     if (_currentCaller != null) {
      PACallArc anArc = new PACallArc(_currentCaller, callee);
+     
+     String numberStr = token.getNumber();
+     if (numberStr != null) {
+       try {
+        int callNumber = Integer.parseInt(numberStr);
+        anArc.setCallNumber(callNumber);
+       }
+       catch (NumberFormatException e) {
+        System.out.println(e);
+        throw new PAException("Invalid call number at line: " + line);
+       }
+     }
+     
      _currentCaller.addCallee(anArc);
      callee.addCaller(anArc);
     }
