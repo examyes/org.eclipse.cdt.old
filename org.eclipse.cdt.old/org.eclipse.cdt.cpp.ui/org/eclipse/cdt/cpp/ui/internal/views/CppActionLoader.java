@@ -1,5 +1,9 @@
 package com.ibm.cpp.ui.internal.views;
 
+import com.ibm.cpp.ui.internal.actions.*;
+import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.*;
+
 import com.ibm.dstore.ui.*;
 import com.ibm.dstore.ui.views.*;
 import com.ibm.dstore.ui.actions.*;
@@ -136,6 +140,29 @@ public class CppActionLoader extends GenericActionLoader
         
     public void loadCustomActions(IMenuManager menu, DataElement input, DataElement descriptor)
     {
+	String type = input.getType();
+	if (type.equals("directory") || type.equals("Project"))
+	    {
+		// inherit actions from abstract object descriptors
+		menu.add(new Separator("Custom Actions"));
+	
+		MenuManager cascade = new MenuManager("Commands", "Commands");
+
+		CppPlugin plugin = CppPlugin.getDefault();
+		ModelInterface api = plugin.getModelInterface();
+		IResource res = api.findResource(input);
+		if (res != null)
+		    {
+			ArrayList cmds = plugin.readProperty(res, "Command History");
+			for (int i = 0; i < cmds.size(); i++)
+			    {
+				String str = (String)cmds.get(i);
+				cascade.add(new InvocationAction(input, str));				
+			    }
+		    }
+
+		menu.add(cascade);
+	    }
     }
  
     public String getImageString(DataElement object)
