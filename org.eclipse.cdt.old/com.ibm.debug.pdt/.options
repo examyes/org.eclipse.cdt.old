@@ -1,0 +1,9 @@
+com.ibm.debug.pdt/debug=true
+com.ibm.debug.pdt/debug/logging=false
+com.ibm.debug.pdt/debug/events=false
+com.ibm.debug.pdt/debug/dumpepdc=false
+com.ibm.debug.pdt/debug/dumpfile=dumpepdc
+com.ibm.debug.pdt/debug/jt_err=3
+com.ibm.debug.pdt/debug/jt_dbg=0
+com.ibm.debug.pdt/debug/jt_evt=0
+com.ibm.debug.pdt/debug/model=false
