@@ -188,6 +188,7 @@ public class CmdInitializeDE extends Command
 //       EPDC.FCT_MODULE_REMOVE          | // support removal of modules
          EPDC.FCT_PROCESS_ATTACH         | // support attach to process
          EPDC.FCT_PROCESS_DETACH         | // support detach from process
+         EPDC.FCT_PROCESS_DETACH_RELEASE | // support detach release from process
 //         EPDC.FCT_FILE_RESTART           | // support restart of program
          EPDC.FCT_LOCAL_SOURCE_FILES     | // support local src files
 //         EPDC.FCT_CHANGE_SOURCE_FILE     | // support changing source file
