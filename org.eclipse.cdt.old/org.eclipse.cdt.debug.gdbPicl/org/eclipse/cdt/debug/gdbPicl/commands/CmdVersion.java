@@ -89,7 +89,19 @@ public class CmdVersion extends Command
       return false;
    }
 
+	/**
+	 * The version reply must not have any change packets
+	 * By overriding this method we make sure that none are sent.
+	 * @see Command#addChangePackets()
+	 */
+	void addChangePackets() {
+		return;
+	}
+
+
+
    // Class fields
    private EReqVersion _req;
+
 }
 
