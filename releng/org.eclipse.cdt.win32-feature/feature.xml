@@ -29,10 +29,6 @@
          match="equivalent">
    </includes>
 
-   <requires>
-      <import plugin="org.eclipse.cdt" version="1.0.1" match="compatible"/>
-   </requires>
-
    <plugin
          id="org.eclipse.cdt.core.win32"
          download-size="0"
