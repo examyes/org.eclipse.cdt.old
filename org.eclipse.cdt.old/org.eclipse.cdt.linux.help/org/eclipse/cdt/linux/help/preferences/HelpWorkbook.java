@@ -17,15 +17,20 @@ import java.util.*;
 
 import org.eclipse.cdt.cpp.ui.internal.widgets.TabFolderLayout;
 
+import org.eclipse.cdt.linux.help.*;
+
 public class HelpWorkbook extends Composite 
 {
     public SearchWorkbookPage _searchPage;
     public IndexWorkbookPage _indexPage;
     public FilterWorkbookPage _filterPage;
 
+    private HelpPlugin _plugin;
+
     public HelpWorkbook(Composite parent, int style)  
     {
 	super(parent, style);
+	_plugin= HelpPlugin.getDefault();
 	initialize();
     }
 
@@ -39,7 +44,8 @@ public class HelpWorkbook extends Composite
 	TabItem item1;
 	_searchPage = new SearchWorkbookPage(folder);
 	item1 = new TabItem(folder, SWT.NONE);
-	item1.setText("Search Mode/Scope"); //FIXME:NL
+	item1.setText(_plugin.getLocalizedString(IHelpNLConstants.SETTINGS_PREFERENCES_SEARCHWORKBOOKPAGE_TITLE));
+	//item1.setImage(_plugin.getImage("full/"));
 	item1.setData(_searchPage);
 	item1.setControl(_searchPage.getControl());
 	
@@ -47,7 +53,8 @@ public class HelpWorkbook extends Composite
 	TabItem item2;
 	_indexPage = new IndexWorkbookPage(folder);
 	item2 = new TabItem(folder, SWT.NONE);
-	item2.setText("Local Paths/Indexing");
+	item2.setText(_plugin.getLocalizedString(IHelpNLConstants.SETTINGS_PREFERENCES_INDEXWORKBOOKPAGE_TITLE));
+	//item2.setImage(_plugin.getImage("full/"))
 	item2.setData(_indexPage);
 	item2.setControl(_indexPage.getControl());
 	
@@ -55,7 +62,8 @@ public class HelpWorkbook extends Composite
 	TabItem item3;
 	_filterPage = new FilterWorkbookPage(folder);
 	item3 = new TabItem(folder, SWT.NONE);
-	item3.setText("Filter");
+	item3.setText(_plugin.getLocalizedString(IHelpNLConstants.SETTINGS_PREFERENCES_FILTERWORKBOOKPAGE_TITLE));
+	//item3.setImage(_plugin.getImage("full/clcl16/filter_misc.gif"));
 	item3.setData(_filterPage);
 	item3.setControl(_filterPage.getControl());
     }

@@ -60,5 +60,19 @@ public interface IHelpNLConstants
     public static final String SETTINGS_INDEX_QUESTIONMESSAGE="HelpResults.Settings.Index.QuestionMessage";
     public static final String SETTINGS_INDEX_CONFIRMATION="HelpResults.Settings.Index.Confirmation";
     public static final String SETTINGS_INDEX_CONFIRMATIONMESSAGE="HelpResults.Settings.Index.ConfirmationMessage";
+    
+    public static final String SETTINGS_INDEX_INFORMATION="HelpResults.Settings.Index.Information";
+    public static final String SETTINGS_INDEX_INFORMATIONMESSAGE="HelpResults.Settings.Index.InformationMessage";
+    public static final String SETTINGS_INFORMATION="HelpResults.Settings.Information";
+    public static final String SETTINGS_INFORMATION_REMOTEBROWSEMESSAGE="HelpResults.Settings.Information.RemoteBrowseMessage"; 
+
+    public static final String SETTINGS_PROPERTY_NOTCPPPROJECT="HelpResults.Settings.Property.NotCppProject";
+    public static final String SETTINGS_INDEX_BROWSE_FILESYSTEMMESSAGE="HelpResults.Settings.Index.Browse.FileSystemMessage";
+    public static final String SETTINGS_INDEX_MONITORMESSAGE="HelpResults.Settings.Index.MonitorMessage";
+
+    public static final String SETTINGS_PREFERENCES_SEARCHWORKBOOKPAGE_TITLE="HelpResults.Settings.Preferences.SearchWorkbookPage.Title";
+    public static final String SETTINGS_PREFERENCES_INDEXWORKBOOKPAGE_TITLE="HelpResults.Settings.Preferences.IndexWorkbookPage.Title";
+    public static final String SETTINGS_PREFERENCES_FILTERWORKBOOKPAGE_TITLE="HelpResults.Settings.Preferences.FilterWorkbookPage.Title";
+    
 
 }

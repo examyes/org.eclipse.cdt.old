@@ -109,6 +109,7 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
 			try{
 			    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
 			    String url = getLocalUrl(element);
+			    _plugin.getLaunchSearch().registerHelpWebApp();
 			    browser.displayURL(url);
 			}
 			catch(Exception e)
@@ -151,6 +152,7 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
 			try{
 			    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
 			    String url = getLocalUrl(element);
+			    _plugin.getLaunchSearch().registerHelpWebApp();
 			    browser.displayURL(url);
 			}
 			catch(Exception e)
@@ -188,6 +190,7 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
 			try{
 			    IBrowser browser = WorkbenchHelpPlugin.getDefault().getHelpBrowser();
 			    String url = getLocalUrl(element);
+			    _plugin.getLaunchSearch().registerHelpWebApp();
 			    browser.displayURL(url);
 			}
 			catch(Exception e)
@@ -426,6 +429,8 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
 	String manType = _plugin.getLocalizedString(IHelpNLConstants.VIEW_TABLE_TYPECOLUMN_MAN);
 	String infoType = _plugin.getLocalizedString(IHelpNLConstants.VIEW_TABLE_TYPECOLUMN_INFO);
 	String htmlType = _plugin.getLocalizedString(IHelpNLConstants.VIEW_TABLE_TYPECOLUMN_HTML);
+	
+	boolean isOsWindows = System.getProperty("os.name").toLowerCase().startsWith("window");
 
 	//Add the new results
 	for(int i=0;i<list.size();i++)
@@ -448,7 +453,15 @@ public class ResultsViewPart extends ViewPart implements IDomainListener , IHelp
 		    {
 			ti.setImage(0,_plugin.getImage("full/obj16/htmlpage_obj.gif"));
 			String filename = theItem.getName();
-			ti.setText(1,filename.substring(filename.lastIndexOf(File.separator)+1));
+			if(isOsWindows && filename.startsWith("/"))
+			    {
+				//windows client, linux server
+				ti.setText(1,filename.substring(filename.lastIndexOf("/")+1));
+			    }
+			else
+			    {
+				ti.setText(1,filename.substring(filename.lastIndexOf(File.separator)+1));
+			    }
 		    }
 
 		ti.setText(2, theItem.getContent());

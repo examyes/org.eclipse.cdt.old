@@ -88,6 +88,11 @@ public class HelpPlugin extends AbstractUIPlugin
 	return _instance;
     }
 
+    public LaunchSearch getLaunchSearch()
+    {
+	return _launchSearch;
+    }
+
      public String getInstallLocation()
     {
 	if(_installLocation==null)

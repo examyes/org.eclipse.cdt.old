@@ -8,12 +8,17 @@ package org.eclipse.cdt.linux.help.preferences;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.ui.dialogs.*;
+import org.eclipse.jface.dialogs.*;
+
+import org.eclipse.ui.internal.*;
+import org.eclipse.core.internal.plugins.*;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.events.*;
 
+import org.eclipse.cdt.dstore.core.DataStoreCorePlugin;
 import org.eclipse.cdt.cpp.ui.internal.CppPlugin;
 import org.eclipse.cdt.linux.help.*;
 
@@ -90,7 +95,7 @@ public class HelpPropertyPage extends PropertyPage
 	    {
 		Composite cnr = new Composite(parent, SWT.NONE);
 		Label label = new Label(cnr, SWT.NULL);
-		label.setText("Not a C/C++ Project");
+		label.setText(_plugin.getLocalizedString(IHelpNLConstants.SETTINGS_PROPERTY_NOTCPPPROJECT));
 		cnr.setLayout(Layout);
 		cnr.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return cnr;
@@ -107,12 +112,27 @@ public class HelpPropertyPage extends PropertyPage
     public boolean performOk()
     {
 	storeSettings();
-	if(!_indexControl.isEmpty())
+
+	if(_isRemote)
 	    {
-		//may need to create an Index
-		_indexControl.checkIndexCreation();
+		//To create a index for a remote project, the project must be open(i.e. connected to remote server)
+		boolean isConnected = DataStoreCorePlugin.getDefault().getCurrentDataStore().isConnected(); 
+		if(isConnected)
+		    {
+			if(!_indexControl.isEmpty())
+			    {
+				//may need to create an Index
+				_indexControl.checkIndexCreation();
+			    }
+		    }
+		else
+		    {
+			Shell shell = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+			MessageDialog.openInformation(shell,
+						      _plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_INFORMATION),
+						      _plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_INFORMATIONMESSAGE));
+		    }
 	    }
-	
 	return true;
     }
 

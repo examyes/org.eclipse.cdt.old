@@ -86,14 +86,14 @@ public class IndexPageControl extends Composite implements Listener
     {		
 	//store all settings
 	storeSettings();
-
+	
 	if(!_indexControl.isEmpty())
 	    {
 		//may need to create an Index
 		_indexControl.checkIndexCreation();
 	    }
     }
-
+    
     public void performDefaults()
     {
 	whatisPath.setText("/var/cache/man/whatis");

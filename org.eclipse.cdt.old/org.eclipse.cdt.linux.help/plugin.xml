@@ -62,7 +62,7 @@
             icon="icons/full/clcl16/properties.gif"
             tooltip="%PopupMenu.ResultsView.tooltip"
             class="org.eclipse.cdt.linux.help.actions.HelpPreferencesActionDelegate"
-            menubarPath="additions"
+	    menubarPath="additions"
             toolbarPath="additions"
             id="org.eclipse.cdt.linux.help.actions.va1">
       </action>

@@ -161,7 +161,7 @@ public class IndexPathControl extends Composite implements Listener
 				DataElement dirInput = ((Repository)project).getRemoteElement();
 				if(dirInput!=null)
 				    {
-					DataElementFileDialog dialog = new DataElementFileDialog("Select Directory to Index", dirInput);
+					DataElementFileDialog dialog = new DataElementFileDialog(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_BROWSE_FILESYSTEMMESSAGE), dirInput);
 					dialog.open();
 					if (dialog.getReturnCode() == dialog.OK)
 					    {
@@ -171,6 +171,15 @@ public class IndexPathControl extends Composite implements Listener
 							selectedDirectory = selected.getSource();
 						    }
 					    }
+				    }
+
+				else
+				    {//the project is closed
+					Shell shell = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+					MessageDialog.openInformation(shell,
+								      plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INFORMATION),
+								      plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INFORMATION_REMOTEBROWSEMESSAGE));
+					
 				    }
 			    }
 		    }
@@ -363,7 +372,7 @@ public class IndexPathControl extends Composite implements Listener
 			args.add(argSettings);
 			status = dataStore.command(descriptor,args,indexObject);
 
-			HelpMonitor helpMonitor = new HelpMonitor("Index In Progress...",status);
+			HelpMonitor helpMonitor = new HelpMonitor(plugin.getLocalizedString(IHelpNLConstants.SETTINGS_INDEX_MONITORMESSAGE),status);
 			Shell shell = WorkbenchPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(shell);
 			progressDialog.setCancelable(false);	
