@@ -1,0 +1,811 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<title>Eclipse-OProfile Plug-In Developer's Guide</title>
+<link rel="stylesheet" href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile-home/css/main.css?cvsroot=Tools_Project" type="text/css">
+</head>
+
+<body lang="en-US" dir="ltr">
+<h2 align="center">Eclipse-OProfile Plug-in Developer's Guide</h2>
+
+<ul>
+    <li><a href="#overview">Overview of the Eclipse-OProfile Plug-ins</a>
+    </li><li><a href="#design_overview">Design Overview</a>
+    <ul>
+        <li><a href="#core_overview">Core Overview (org.eclipse.cdt.oprofile.core)</a>
+        <ul>
+            <li><a href="#data_model">Data Model Classes</a>
+            </li><li><a href="#control_classes">OProfile Control Classes</a>
+            </li><li><a href="#opxml_classes"><i>Opxml</i> Classes</a>
+        </li></ul>
+        </li><li><a href="#launch_overview">Launch Overview (org.eclipse.cdt.oprofile.launch)</a>
+        </li><li><a href="#ui_overview">UI Overview (org.eclipse.cdt.oprofile.ui)</a>
+    </li></ul>
+    </li><li><a href="#class_ref">Class Reference</a>
+    <ul>
+        <li><a href="#ref_core">org.eclipse.cdt.oprofile.core</a>
+        </li><li><a href="#ref_launch">org.eclipse.cdt.oprofile.launch</a>
+        </li><li><a href="#ref_ui">org.eclipse.cdt.oprofile.ui</a>
+    </li></ul>
+    </li><li><a href="#opxml_ref">Opxml Reference</a>
+    <ul>
+        <li><a href="#assumptions">Notation and Assumptions</a>
+        </li><li><a href="#info">Generic OProfile Information ("<code>info</code>")</a>
+        </li><li><a href="#check_events">Check Configuration Validity ("<code>check-events</code>")</a>
+        </li><li><a href="#debug_info">Debugging Information ("<code>debug-info</code>")</a>
+        </li><li><a href="#samples">Sample Information ("<code>samples</code>")</a>
+        </li><li><a href="#sessions">Debugging Information ("<code>sessions</code>")</a>
+    </li></ul>
+</li></ul>
+<hr>
+<h2 align="left"><a name="overview">Overview of the Eclipse-OProfile Plug-ins</a></h2><p></p>
+
+<p>OProfile is a powerful event-based, system-wide profiling tool. It requires
+no build support and is capable of profiling the kernel, kernel modules, and
+software interrupt handlers. It currently runs on a multitude of processors on
+Linux.</p>
+
+<p>OProfile utilizes the performance counters in modern CPUs. These counters
+may monitor certain events that happen in the system, such as instruction
+fetch misses. Whenever a monitored event occurs, the counter monitoring
+the event is increased. When it reaches a user-defined threshold, the
+OProfile daemon takes an interrupt and logs the address of the
+instruction that caused the event. This sample is saved into sample
+files on the disk. While profiling, OProfile saves all sample data
+into the default session (called "current"). Users may then save
+the session for later comparisons with future profiling sessions.</p>
+
+<p>In the non-Eclipse world, OProfile is controlled by a command-line utility
+called <i>opcontrol</i>, with which one can setup, run, and stop the
+OProfile daemon; install and uninstall the OProfile kernel module;
+and save sessions. OProfile also provides a graphical application,
+<i>oprof_start</i>, to help with daemon configuration and running.</p>
+
+<p>Several other utilities come with OProfile to display and analyze the
+collected sample data.</p>
+
+<p>The Eclipse OProfile plug-ins attempt to offer the user much of the
+command-line functionality in an easy-to-use graphical environment.</p>
+
+<p>Five projects comprise the plug-ins: core, linux core, launch, UI. It is
+important to single out the core and its platform extension to explain how the
+OProfile plug-ins get the information they need from OProfile.</p>
+
+<p>OProfile is a standalone, separately-maintained open source project (see <a
+href="http://oprofile.sourceforge.net/">oprofile.sourceforge.net</a>). In the
+interests of maintainability of the plug-in code, the plug-ins leverage as much
+of the OProfile maintainers' work as possible. In other words, let OProfile
+take care of OProfile tasks. The plug-ins frequently make system calls to the
+OProfile <i>opcontrol</i> program for many tasks. This largely isolates the
+plug-ins from changes in OProfile's launching protocol.  Sadly, the plug-ins
+are not able to take advantage of OProfile's analysis tools.</p>
+
+<p>Eclipse (and Red Hat's) plug-ins are released under the <a
+href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License</a>
+(EPL). <a href="http://oprofile.sourceforge.net/">OProfile</a> and <a
+href="http://sources.redhat.com/binutils">BFD</a> (the Binary File Descriptor
+library) are available for use under the terms of the <a
+href="http://www.gnu.org/licenses/licenses.html#GPL">GNU General Public
+License</a>. Unfortunately, these two licenses are incompatible, and therefore
+OProfile and BFD code may not be programmatically integrated into Eclipse or
+any CPL-licensed plug-in. This precludes the use of JNI for reading OProfile
+sample data. Therefore an application will serve to bridge the license
+barrier.</p>
+
+<p>There are, however, benefits from having to build a GPL-CPL bridge
+application: the application can mutate OProfile's data model into something
+more suitable for use with graphical user interfaces, the application can still
+fully utilize the work of the OProfile and BFD open source communities, and the
+application further isolates the OProfile plug-ins from upstream changes in
+OProfile. The majority of maintenance tasks lie within the bridge
+application.</p>
+
+<p>This bridge application is called opxml (for OProfile XML); it outputs XML
+which can be parsed by the plug-ins.</p>
+
+
+<h2><a name="design_overview">OProfile Design Overview</a></h2>
+
+<p>The OProfile plug-ins are arranged into four projects:</p>
+
+<dl><dt>org.eclipse.cdt.oprofile.core
+        </dt><dd>The core contains classes which represent the data model.
+    </dd><dt>org.eclipse.cdt.oprofile.core.linux
+        </dt><dd>The linux core contains classes which supply providers for opcontrol
+        and opxml.
+    </dd><dt>org.eclipse.cdt.oprofile.launch
+        </dt><dd>The launch plug-in provides an OProfile daemon launcher.
+    </dd><dt>org.eclipse.cdt.oprofile.ui
+        </dt><dd>The UI plug-in contains presentation classes for the Profiling
+        perspective.
+</dd></dl>
+
+
+<h3><a name="core_overview">Core Overview (org.eclipse.cdt.oprofile.core)</a></h3>
+
+<p>The core classes are responsible for several tasks: OProfile-related
+presentations, including the data model, OProfile control, and opxml,
+a program which bridges GPL (OProfile, BFD) and CPL code (Eclipse).</p>
+
+<p>The core defines two extension points for platform-specific extension to
+support data model population (<code>OpxmlProvider</code>) and daemon control
+(<code>OpcontrolProvider</code>). These are discussed in the appropriate
+sections below.</p>
+
+<p><a name="data_model"><u>Data Model Classes</u></a></p> 
+<p>The data model contains classes which represent sample information from
+OProfile to the UI.  [Remember that the data model used within the core and the
+OProfile plug-ins differs from the data model used within OProfile and its
+utilities. See earlier comments.]</p>
+
+<p>The core populates the model from information supplied via the
+<code>IOpxmlProvider</code> interface. A class implementing this interface
+should be registered using the org.eclipse.cdt.oprofile.core.OpxmlProvider
+extension point attribute <code>opxmlProvider</code>.</p>
+
+<p>The overall organization of the data model is actually quite simple.  The
+most general objects are OProfile's events; the most specific objects are the
+actual samples. The model is designed to allow for one-to-one representation in
+the UI. See <a href="#ui_overview">UI Overview</a> for a comparison of the
+model and presentation classes.</p>
+
+<p>The classes which comprise the model are:</p>
+
+<p><a name="isamplecontainer"><code>ISampleContainer</code></a><br> This
+interface is used by the UI; all sample-containing classes implement this
+interface.</p>
+
+<p><a name="sessionevent"><code>SessionEvent</code></a><br>
+<code>SessionEvent</code>s are the topmost data objects in the system.  They
+represent an event collected by OProfile. The set of all
+<code>SessionEvent</code>s is simply the union of all events collected in all
+sessions of OProfile. Each <code>SessionEvent</code> contains a list of all the
+sessions which collected the event in the <code>SessionEvent</code>.</p>
+
+<p><a name="samplesession"><code>SampleSession</code></a><br>
+<code>SampleSession</code>s represent OProfile sessions in the model.  They do
+not correlate, however, one-to-one with OProfile's sessions.  OProfile sessions
+are simply collection of samples collected on all counters.
+<code>SampleSession</code>s are a collection of a single event in a session.
+There may therefore be a maximum of one <code>SampleSession</code> for each
+counter available on the processor. <code>SampleSession</code>s contain a list
+of binary images for which profiling data exists.</p>
+
+<p><a name="profileimage"><code>ProfileImage</code></a><br>
+<code>ProfileImage</code>s are the binary images (kernel modules, shared
+libraries, applications) for which OProfile collected sample data.
+<code>ProfileImage</code>s may contain other <code>ProfileImage</code>s and/or
+sample data. For example, when the "separate shared library profiles
+per-application" option to opcontrol is used, a bash <code>ProfileImage</code>
+could contain samples and a <code>ProfileImage</code> for libc (and possibly
+libpthread and other libraries).</p>
+
+<p><a name="sample"><code>Sample</code></a><br>
+<code>Sample</code>s are very much the same as they are in OProfile's own
+lingo. They are the exact addresses in the code which were recorded by OProfile
+during profiling. <code>Sample</code>s also contain information about any debug
+or symbol information. (Debug information provides line number information;
+symbol information may derive from either the debug information or the image's
+minimal symbol table).</p>
+
+<p><a name="control_classes"><u>OProfile Control Classes</u></a></p>
+<p>Several core classes consolidate all OProfile knowledge. One ueberclass
+contains all the real knowledge of how to perform OProfile tasks (such as
+launching the daemon, saving sessions, fetching samples for an image, etc).
+This ueberclass delegates the work of running <i>opcontrol</i> to an
+<code>OpcontrolProvider</code> which is defined by a platform-specific plug-in
+extension.</p>
+
+<p><a name="oprofile"><code>Oprofile</code></a><br>
+A giant ueberclass where all the knowledge of OProfile is consolidated.  Much
+of its work is actually performed via the <code>IOpcontrolProvider</code> or
+<code>IOpxmlProvider</code> interfaces (supplied by extensions on
+<code>org.eclipse.cdt.oprofile.core.OpcontrolProvider</code> and
+<code>org.eclipse.cdt.oprofile.core.OpxmlProvider</code>).</p>
+
+<p><a name="iopcontrolprovider"><code>IOpcontrolProvider</code></a><br>
+This is the primary interface between class <code>Oprofile</code> and the
+command-line utility <i>opcontrol</i>. <code>IOpcontrolProvider</code> should
+be used only by the core. All core clients should use class
+<code>Oprofile</code> to accomplish OProfile tasks.</p>
+
+<p><a name="opcontrolexception"><code>OpcontrolException</code></a><br>
+When trouble occurs running opcontrol, the core throws an
+<code>OpcontrolException</code>, which contains the real exception which caused
+the problem.</p>
+
+<p><a name="opxml_classes"><u>Opxml Classes</u></a></p>
+<p>All operations involving disk files (sample files and images) are bridged to
+the core via a separate command-line program, <i>opxml</i>. <i>Opxml</i> serves
+two main purposes: to gap the GPL/CPL licensing incompatibility and to
+translate the OProfile data model into something more appropriate for a
+graphical front-end. <i>Opxml</i> is provided by a platform-specific plug-in
+extension, which registers a provider class via the core plug-in extension
+<code>org.eclipse.cdt.oprofile.core.OpcontrolProvider</code> attribute
+"opcontrolProvider".</p>
+
+<p><a name="iopxmlprovider"><code>IOpxmlProvider</code></a><br>
+The main interface for providing information about sessions, samples, debug
+information, and other  file-specific information to the core.</p>
+
+<p><a name="opxmlexception"><code>OpxmlException</code></a><br>
+When trouble occurs running opxml, the core throws an
+<code>OpxmlException</code>, which contains the real exception which caused the
+problem.</p>
+
+<p><code>org.eclipse.cdt.oprofile.core.opxml</code><br>
+The core opxml package is responsible for providing XML parsers for
+<i>opxml</i>. It is used only by the core platform extensions.</p>
+
+<h3><a name="launch_overview">Launch Overview (org.eclipse.cdt.oprofile.launch)</a></h3>
+
+<p>The launch plug-in adds an OProfile daemon launcher to the workbench's
+launcher facility. It consists of several tabs for configuring daemon run
+options (verbosity, per-application sample files, kernel image file, etc),
+event collection configuration, and and optional C/C++ launcher to invoke when
+the daemon is launched.</p>
+
+<p>The launcher is CPU-independent, querying the core for all valid counter
+event configurations.</p>
+
+
+<h3><a name="ui_overview">UI Overview (org.eclipse.cdt.oprofile.ui)</a></h3>
+
+<p>The UI plug-in provides all data analysis/visualization for the plug-ins. It
+contains a new 'Profiling' perspective and several views to help users navigate
+all the sample data collected by OProfile. The table at the end of this section
+displays the UI classes and their corresponding model classes.</p>
+
+<p>The System Profiling view is the main data-navigation view. Most of the UI
+classes simply wrap the core's data model classes: events, sessions, images,
+libraries, symbols, samples. Users will use System Profiling to view more
+detailed information in the Sample view.</p>
+
+<p>The Sample view will display detailed information about selected items in
+the System Profiling view, such as sample counts and symbol start/end
+information, and it will allow users to open an editor at the source code line
+for which a sample exists (images with debug information only).</p>
+
+<p>The OProfile Daemon view will display the contents of the OProfile daemon
+log.</p>
+
+<p align="center">
+<table border="1" cellpadding="5" cellspacing="1">
+	<thead>
+		<tr valign="top">
+			<th width="50%">
+				<p>Core Class</p>
+			</th>
+			<th width="50%">
+				<p>UI Class</p>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr valign="top">
+			<td width="50%">
+				<p>SampleSession</p>
+			</td>
+			<td width="50%">
+				<p>SystemProfileSession</p>
+			</td>
+		</tr>
+		<tr valign="CENTER">
+			<td width="50%">
+				<p>ProfileImage</p>
+			</td>
+			<td width="50%">
+				SystemProfileObject<br>
+				SystemProfileShLib<br>
+				SystemProfileExecutable
+			</td>
+		</tr>
+		<tr valign="top">
+			<td width="50%">
+				<p>Sample</p>
+			</td>
+			<td width="50%">
+				<p>SystemProfileSample</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+Table 1. The core and its corresponding UI classes</p>
+
+<h2><a name="class_ref">Class Reference</a></h2>
+
+<p>The following lists all of the classes and interfaces in the OProfile
+Plug-ins and provides a basic overview of their purpose and function within the
+plug-ins.</p>
+
+<p><a name="ref_core"><b>org.eclipse.cdt.oprofile.core</b></a></p>
+
+<p><code>IOpcontrolProvider</code><br>
+Interface between core and registered provider class for controlling the
+OProfile daemon through the <i>opcontrol</i> program. See <a
+href="#iopcontrolprovider"> <code>IOpcontrolProvider</code></a>.</p>
+
+<p><code>IOpxmlProvider</code><br>
+Interface between core and registered provider class for rendering the core
+model.  See <a href="#iopxmlprovider"><code>IOpxmlProvider</code></a>.</p>
+
+<p><code>ISampleContainer</code><br>
+Interface between core and UI plug-ins used to facilitate the inspection of
+sample-containing model classes (such as <code>SampleSession</code> and
+<code>ProfileImage</code>.</p>
+
+<p><code>OpcontrolException</code><br>
+Exception thrown by the core when an attempt to control the OProfile daemon has
+failed. See <a
+href="#opcontrolexception"><code>OpcontrolException</code></a>.</p>
+
+<p><code>OpEvent</code><br>
+A class which represents an OProfile event: name, number, description, unit
+masks.</p>
+
+<p><code>OpEventLabelProvider</code><br>
+A <code>LabelProvider</code> for <code>OpEvent</code> objects. May be used by
+any client.</p>
+
+<p><code>OpInfo</code><br>
+A class containing event lists, processor type and speed, and other general
+OProfile information.</p>
+
+<p><code>OprofileCorePlugin</code><br>
+The core plug-in main class.</p>
+
+<p><code>OprofileDaemonEvent</code><br>
+A class used to configure the OProfile daemon; it contains an
+<code>OpEvent</code>, counter reset value, and other per-counter configuration
+details.</p>
+
+<p><code>OprofileDaemonOptions</code><br>
+A class used to configure the OProfile daemon non-event options such as
+verbosity.</p>
+
+<p><code>Oprofile</code><br>
+A consolidation all things Oprofile. See <a href="#oprofile">
+<code>Oprofile</code></a>.</p>
+
+<p><code>OprofileProperties</code><br>
+Properties class for the core plug-in. Used by the core to provide
+internationalization of the core's user-visible text.</p>
+
+<p><code>OpUnitMask</code><br>
+A class which contains information about the allowable unit masks for an event,
+including a textual description of any valid masks.</p>
+
+<p><code>OpxmlException</code><br>
+Exception thrown when problems arise from calls on <code>IOpxmlProvider</code>.
+See <a href="#opxmlexception"><code>OpxmlException</code></a>.</p>
+
+<p><code>ProfileImage</code><br>
+Class representing any sample-containing binary image, such as executables,
+shared libraries, the kernel, or kernel modules. See <a
+href="#profileimage"><code>ProfileImage</code></a>.</p>
+
+<p><code>SampleContainer</code><br>
+A generic base class implementing <code>ISampleContainer</code> for any
+sample-containing object (<code>ProfileImage</code>,
+<code>SampleSession</code>, <i>etc</i>).</p>
+
+<p><code>Sample</code><br>
+An address and sample count from OProfile. Also contains information about the
+symbol in which the <code>Sample</code> exists, if any, and any available debug
+information. See <a href="#sample"><code>Sample</code></a>.</p>
+
+<p><code>SampleSession</code><br>
+A <code>SampleContainer</code> containing samples for a given session and given
+OProfile event. See <a
+href="#samplesession"><code>SampleSession</code></a>.</p>
+
+<p><code>SessionEvent</code><br>
+The topmost model element representing a single collected event (for all
+counters and sessions). See <a
+href="#sessionevent"><code>SessionEvent</code></a>.</p>
+
+
+<p><a name="ref_launch"><b>org.eclipse.cdt.oprofile.launch</b></a></p>
+
+
+<p><a name="ref_ui"><b>org.eclipse.cdt.oprofile.ui</b></a></p>
+
+
+<h2><a name="opxml_ref"><i>Opxml</i> Reference</a></h2>
+
+<p>There are two components to the <i>opxml</i> application. The first is the
+actual application classes. The second is support in the core for processing
+the XML output of the application. This section will cover the grammar
+implemented in <i>opxml</i>.
+
+</p><p><a name="assumptions"><b>Notation and Assumptions</b></a></p>
+<p>The classes in the core.opxml package are only provided as a convenience to
+platform-specific extension writers.  <b>IMPORTANT:</b> The parser details
+outlined herein are tightly coupled to the <a href="#version">version</a> of
+the software listed at the beginning of this document.</p>
+
+<p>The following notation and assumptions will be used in the grammar
+definition for the processing of <i>opxml</i> output.  </p><ul>
+<li><code>|</code> separates two alternatives
+
+	</li><li><code>[ <var>something</var> ]</code> indicates that
+	<var>something</var> is optional
+
+	</li><li><code>( <var>group</var> )*</code> means that the <var>group</var>
+	inside the parentheses may repeat zero or more times
+
+	</li><li><code>( <var>group</var> )+</code> means that <var>group</var>
+	inside the parentheses may repeat one or more times
+
+	</li><li><code>"string"</code> means a literal
+	<code><var>string</var></code>.
+
+    </li><li><code><var>string</var></code> is a string of characters
+
+	</li><li><code><var>decimal</var></code> is a decimal number,
+	<code>[0-9]+</code>
+
+	</li><li><code><var>float</var></code> is a floating-point number,
+	<code>[0-9]+\.[0-9]*</code>
+
+	</li><li><code><var>hex</var></code> is a hexadecimal number,
+	<code>[0-9A-F]+</code>
+
+	</li><li>The output is well-formatted XML. Rather than clutter the
+	definitions with whitespace rules, use common sense when questions about
+	whitespace arise.  </li></ul> <p></p>
+
+<p>The <i>opxml</i> application has five responsibilities which relate directly
+to its command-line invocation:</p>
+<ol>
+	<li>List generic information about OProfile ("<code>info</code>")
+	
+	</li><li>Check that a given counter, event, and unit mask represent a valid
+	configuration for collection ("<code>check-events</code>")
+	
+	</li><li>Retrieve debugging information about the samples in a given image
+	("<code>debug-info</code>") 
+	
+	</li><li>List all of the samples for a given configuration
+	("<code>samples</code>") 
+	
+	</li><li>List all of the sessions and events collected in the system
+	("<code>sessions</code>") </li> 
+</ol> 
+<p></p>
+
+<p><a name="info"><b>Generic OProfile Information ("<code>info</code>")</b></a></p>
+<p>Synopsis: <code>opxml info</code>
+</p><dl>Arguments:
+    <dt><i>none</i>
+</dt></dl>
+Result:<p></p>
+
+<pre><code>
+<var>output</var> := "&lt;info&gt;" <var>info</var> "&lt;/info&gt;"
+
+<var>info</var> := <var>num-ctrs</var> <var>cpu-freq</var> <var>defaults</var> <var>event-list</var>
+
+<var>num-ctrs</var> := "&lt;num-counters&gt;" <var>decimal</var> "&lt;/num-counters&gt;"
+
+<var>cpu-freq</var> := "&lt;cpu-frequency&gt;" <var>float</var> "&lt;/cpu-frequency&gt;"
+
+<var>defaults</var> := "&lt;defaults&gt;" <var>def-sample-dir</var> | <var>def-lock-file</var> | <var>def-log-file</var> | <var>def-dump-status</var> "&lt;/defaults&gt;"
+
+<var>def-sample-dir</var> := "&lt;sample-dir&gt;" <var>string</var> "&lt;/sample-dir&gt;"
+
+<var>def-lock-file</var> := "&lt;lock-file&gt;" <var>string</var> "&lt;/lock-file&gt;"
+
+<var>def-log-file</var> := "&lt;log-file&gt;" <var>string</var> "&lt;/log-file&gt;"
+
+<var>def-dump-status</var> := "&lt;dump-status&gt;" <var>string</var> "&lt;/dump-status&gt;"
+
+<var>event-list</var> := "&lt;event-list" <var>counter</var> "&gt;" ( <var>event</var> )+ "&lt;/event-list&gt;"
+
+<var>counter</var> := "counter=\"" <var>decimal</var> "\""
+
+<var>event</var> := <var>event-name</var> <var>event-desc</var> <var>event-value</var> <var>event-minimum</var> <var>unit-mask</var>
+
+<var>event-name</var> := "&lt;name&gt;" <var>string</var> "&lt;/name&gt;"
+
+<var>event-desc</var> := "&lt;description&gt;" <var>string</var> "&lt;/description&gt;"
+
+<var>event-value</var> := "&lt;value&gt;" <var>decimal</var> "&lt;/value&gt;"
+
+<var>event-minimum</var> := "&lt;minimum&gt;" <var>decimal</var> "&lt;/minimum&gt;"
+
+<var>unit-mask</var> := "&lt;unit-mask&gt;" <var>um-type</var> <var>um-default</var> ( <var>um-mask</var> )+ "&lt;/unit-mask&gt;"
+
+<var>um-type</var> := "&lt;type&gt;" ( "mandatory" | "bitmask" | "exclusive" ) "&lt;/type&gt;"
+
+<var>um-default</var> := "&lt;default&gt;" <var>decimal</var> "&lt;/default&gt;"
+
+<var>um-mask</var> := "&lt;mask&gt;" <var>mask-value</var> <var>mask-desc</var> "&lt;/mask&gt;"
+
+<var>mask-value</var> := "&lt;value&gt;" <var>decimal</var> "&lt;/value&gt;"
+
+<var>mask-desc</var> := "&lt;description&gt;" <var>string</var> "&lt;/description&gt;
+</code></pre>
+
+<p>Example:</p>
+<pre><code>
+$ opxml info
+&lt;info&gt;
+    &lt;num-counters&gt;2&lt;/num-counters&gt;
+    &lt;cpu-frequency&gt;728.619&lt;/cpu-frequency&gt;
+    &lt;defaults&gt;
+        &lt;sample-dir&gt;/var/lib/oprofile/samples/&lt;/sample-dir&gt;
+        &lt;lock-file&gt;/var/lib/oprofile/lock&lt;/lock-file&gt;
+        &lt;log-file&gt;/var/lib/oprofile/oprofiled.log&lt;/log-file&gt;
+        &lt;dump-status&gt;/var/lib/oprofile/complete_dump&lt;/dump-status&gt;
+    &lt;/defaults&gt;
+    &lt;event-list counter="0"&gt;
+        &lt;event&gt;
+            &lt;name&gt;CPU_CLK_UNHALTED&lt;/name&gt;
+            &lt;description&gt;clocks processor is not halted&lt;/description&gt;
+            &lt;value&gt;121&lt;/value&gt;
+            &lt;minimum&gt;6000&lt;/minimum&gt;
+            &lt;unit-mask&gt;
+                &lt;type&gt;mandatory&lt;/type&gt;
+                &lt;default&gt;0&lt;/default&gt;
+                &lt;mask&gt;
+                    &lt;value&gt;0&lt;/value&gt;
+                    &lt;description&gt;No unit mask&lt;/description&gt;
+                &lt;/mask&gt;
+            &lt;/unit-mask&gt;
+        &lt;/event&gt;
+    &lt;/event-list&gt;
+&lt;/info&gt;
+</code></pre>
+
+<p>Built-in processors used to parse output:
+</p><ul>
+    <li><code>OpInfoProcessor</code>
+    </li><li><code>DefaultsProcessor</code>
+    </li><li><code>EventListProcesso</code>
+</li></ul><p></p>
+
+<p><a name="check_events">
+<b>Check Configuration Validity ("<code>check-events</code>")</b></a></p>
+<p>Synopsis: <code>opxml check-events <var>CTR</var> <var>EVENT</var>
+<var>MASK</var></code>
+</p><dl>Arguments:
+    <dt><code><var>CTR</var></code>
+        </dt><dd>counter number (decimal)
+    </dd><dt><code><var>EVENT</var></code>
+        </dt><dd>event number (decimal)
+    </dd><dt><code><var>MASK</var></code>
+        </dt><dd>unit mask value (decimal)
+</dd></dl>
+Result:<p></p>
+
+<pre><code>
+<var>output</var> := "&lt;check-events&gt;" ( <var>check-result</var> )+ "&lt;/check-events&gt;"
+
+<var>check-result</var> := "ok" | "invalid-um" | "invalid-event" | "invalid-ctr"
+</code></pre>
+
+<p>Example:
+</p><pre><code>
+$ opxml check-events 0 121 0
+&lt;check-events&gt;
+    (&lt;result&gt;<var>result</var>&lt;/result&gt;)+
+&lt;/check-events&gt;
+</code></pre>
+<p></p>
+
+<p>Built-in processors used to parse output:
+</p><ul>
+    <li><code>CheckEventsProcessor</code>
+</li></ul><p></p>
+
+<p><a name="debug_info"><b>Debug Information ("<code>debug-info</code>")</b></a></p>
+<p>Synopsis: <code>opxml debug-info <var>SAMPLEFILE</var></code>
+</p><dl>Arguments:
+    <dt><code><var>SAMPLEFILE</var></code>
+        </dt><dd>Absolute path to an OProfile samplefile
+</dd></dl>
+<p></p>
+<p>Result:
+
+</p><pre><code>
+<var>output</var> := "&lt;debug-info&gt;" ( <var>sample-addr</var> )+ "&lt;/debug-info&gt;"
+
+<var>sample-addr</var> := "&lt;address" <var>source-file</var> <var>function</var> <var>lineno</var> "&gt;" <var>address</var> "&lt;/address&gt;"
+
+<var>source-file</var> := "source-filename=\"" <var>string</var> "\"" | ""
+
+<var>function</var> := "function=\"" <var>string</var> "\"" | ""
+
+<var>lineno</var> := "line=\"" <var>decimal</var> "\"" | ""
+
+<var>address</var> := <var>hex</var>
+</code></pre>
+
+<p>Example:
+</p><pre><code>
+$ opxml debug-info /var/lib/oprofile/samples/current/\{root\}/home/me/work/runtime-workspace/pi/pi/\{dep\}/\{root\}/home/me/work/runtime-workspace/pi/pi/CPU_CLK_UNHALTED.364000.0.all.all.all
+&lt;debug-info&gt;
+    &lt;address source-filename="/home/me/work/runtime-workspace/pi/pi.c" function="main" line="72"&gt;08048696&lt;/address&gt;
+    &lt;address source-filename="/home/me/work/runtime-workspace/pi/pi.c" function="main" line="76"&gt;080486d7&lt;/address&gt;
+    &lt;address source-filename="/home/me/work/runtime-workspace/pi/pi2.c" function="shift" line="12"&gt;08048734&lt;/address&gt;
+    &lt;address source-filename="/home/me/work/runtime-workspace/pi/pi2.c" function="shift" line="12"&gt;08048735&lt;/address&gt;
+    &lt;address source-filename="/home/me/work/runtime-workspace/pi/pi2.c" function="shift" line="12"&gt;08048738&lt;/address&gt;
+    &lt;address source-filename="/home/me/work/runtime-workspace/pi/pi2.c" function="xprint" line="59"&gt;08048920&lt;/address&gt;
+&lt;/debug-info&gt;
+</code></pre>
+<p></p>
+
+<p>Built-in processors used to parse output:
+</p><ul>
+    <li><code>DebugInfoProcessor</code>
+</li></ul><p></p>
+
+<p><a name="samples"><b>Sample Information ("<code>samples</code>")</b></a></p>
+<p>Synopsis: <code>opxml samples <var>EVENT</var> <var>[SESSION]</var></code>
+</p><dl>Arguments:
+    <dt><code><var>EVENT</var>
+        </code></dt><dd>OProfile event name (string)
+    </dd><dt><code><var>SESSION</var></code> <i>(optional)</i>
+        </dt><dd>Session (default: "current") for which to fetch samples (string)
+</dd></dl>
+Result:<p></p>
+
+<pre><code>
+<var>output</var> := "&lt;samples&gt;" ( <var>image</var> )* "&lt;/samples&gt;"
+
+<var>image</var> := "&lt;image" <var>image-name</var> "&gt;" <var>image-info</var> "&lt;/image&gt;"
+
+<var>image-name</var> := "name=\"" <var>string</var> "\""
+
+<var>image-info</var> := <var>header</var> <var>samplefile</var> ( <var>sample</var> )+ ( <var>image</var> )*
+
+<var>header</var> := "&lt;header&gt;" <var>cpu-type</var> <var>reset-count</var> <var>event</var> <var>unit-mask</var> <var>cpu-speed</var> "&lt;/header&gt;"
+
+<var>cpu-type</var> := "&lt;cpu-type&gt;" <var>string</var> "&lt;/cpu-type&gt;"
+
+<var>reset-count</var> := "&lt;count&gt;" <var>decimal</var> "&lt;/count&gt;"
+
+<var>event</var> := "&lt;event&gt;" <var>decimal</var> "&lt;/event&gt;"
+
+<var>unit-mask</var> := "&lt;unit-mask&gt;" <var>decimal</var> "&lt;/unit-mask&gt;"
+
+<var>cpu-speed</var> := "&lt;cpu-speed&gt;" <var>float</var> "&lt;/cpu-speed&gt;"
+
+<var>samplefile</var> := "&lt;samplefile&gt;" <var>string</var> "&lt;/samplefile&gt;"
+
+<var>sample</var> := "&lt;sample&gt;" <var>sample-addr</var> <var>sample-count</var> [ <var>symbol</var> ] "&lt;/sample&gt;"
+
+<var>sample-addr</var> := "&lt;addr&gt;" <var>hex</var> "&lt;/addr&gt;"
+
+<var>sample-count</var> := "&lt;count&gt;" <var>decimal</var> "&lt;/count&gt;"
+
+<var>symbol</var> := "&lt;symbol&gt;" <var>symbol-addr</var> <var>symbol-name</var> "&lt;/symbol&gt;"
+
+<var>symbol-addr</var> := "&lt;addr&gt;" <var>hex</var> "&lt;/addr&gt;"
+
+<var>symbol-name</var> := "&lt;name&gt;" <var>string</var> "&lt;/name&gt;"
+</code></pre>
+
+<p>Example:
+</p><pre><code>
+$ opxml samples CPU_CLK_UNHALTED foobar
+&lt;samples&gt;
+    &lt;image name="/bin/cat"&gt;
+        &lt;header&gt;
+            &lt;cpu_type&gt;PIII&lt;/cpu_type&gt;
+            &lt;count&gt;100000&lt;/count&gt;
+            &lt;event&gt;121&lt;/event&gt;
+            &lt;unit-mask&gt;0&lt;/unit-mask&gt;
+            &lt;cpu-speed&gt;728.628&lt;/cpu-speed&gt;
+        &lt;/header&gt;
+        &lt;samplefile&gt;/var/lib/oprofile/samples/foobar/{root}/bin/cat/{dep}/{root}/bin/cat/CPU_CLK_UNHALTED.100000.0.all.all.all&lt;/samplefile&gt;
+        &lt;sample&gt;
+            &lt;addr&gt;0804a7c9&lt;/addr&gt;
+            &lt;count&gt;1&lt;/count&gt;
+        &lt;/sample&gt;
+        &lt;image name="/lib/ld-2.3.2.so"&gt;
+            &lt;header&gt;
+                &lt;cpu_type&gt;PIII&lt;/cpu_type&gt;
+                &lt;count&gt;100000&lt;/count&gt;
+                &lt;event&gt;121&lt;/event&gt;
+                &lt;unit-mask&gt;0&lt;/unit-mask&gt;
+                &lt;cpu-speed&gt;728.628&lt;/cpu-speed&gt;
+            &lt;/header&gt;
+            &lt;samplefile&gt;/var/lib/oprofile/samples/foobar/{root}/bin/cat/{dep}/{root}/lib/ld-2.3.2.so/CPU_CLK_UNHALTED.100000.0.all.all.all&lt;/samplefile&gt;
+            &lt;sample&gt;
+                &lt;addr&gt;00003f63&lt;/addr&gt;
+                &lt;count&gt;1&lt;/count&gt;
+                &lt;symbol&gt;
+                    &lt;addr&gt;00003b04&lt;/addr&gt;
+                    &lt;name&gt;_dl_map_object_internal&lt;/name&gt;
+                &lt;/symbol&gt;
+            &lt;/sample&gt;
+            &lt;sample&gt;
+                &lt;addr&gt;00005406&lt;/addr&gt;
+                &lt;count&gt;1&lt;/count&gt;
+                &lt;symbol&gt;
+                    &lt;addr&gt;00004e24&lt;/addr&gt;
+                    &lt;name&gt;_dl_map_object_from_fd&lt;/name&gt;
+                &lt;/symbol&gt;
+            &lt;/sample&gt;
+        &lt;image name="/lib/libc-2.3.2.so"&gt;
+            &lt;header&gt;
+                &lt;cpu_type&gt;PIII&lt;/cpu_type&gt;
+                &lt;count&gt;100000&lt;/count&gt;
+                &lt;event&gt;121&lt;/event&gt;
+                &lt;unit-mask&gt;0&lt;/unit-mask&gt;
+                &lt;cpu-speed&gt;728.628&lt;/cpu-speed&gt;
+            &lt;/header&gt;
+            &lt;samplefile&gt;/var/lib/oprofile/samples/foobar/{root}/bin/cat/{dep}/{root}/lib/libc-2.3.2.so/CPU_CLK_UNHALTED.100000.0.all.all.all&lt;/samplefile&gt;
+            &lt;sample&gt;
+                &lt;addr&gt;000244bd&lt;/addr&gt;
+                &lt;count&gt;1&lt;/count&gt;
+                &lt;symbol&gt;
+                    &lt;addr&gt;000244bc&lt;/addr&gt;
+                    &lt;name&gt;__textdomain&lt;/name&gt;
+                &lt;/symbol&gt;
+            &lt;/sample&gt;
+        &lt;/image&gt;
+    &lt;/image&gt;
+&lt;/samples&gt;
+</code></pre>
+<p></p>
+
+<p>Built-in processors used to parse output:
+</p><ul>
+    <li><code>SamplesProcessor</code>
+    </li><li><code>HeaderProcessor</code>
+    </li><li><code>SampleProcessor</code>
+</li></ul><p></p>
+
+<p><a name="sessions"><b>Session Information ("<code>sessions</code>")</b></a></p>
+<p>Synopsis: <code>opxml sessions</code>
+</p><dl>Arguments:
+    <dt><i>none</i>
+</dt></dl>
+Result:<p></p>
+<pre><code>
+<var>output</var> := "&lt;sessions&gt;" ( <var>event</var> )* "&lt;/sessions&gt;"
+
+<var>event</var> := "&lt;event" <var>event-name</var> "&gt;" ( <var>session</var> )+ "&lt;/event&gt;"
+
+<var>event-name</var> := "name=\"" <var>string</var> "\""
+
+<var>session</var> := "&lt;session" <var>session-name</var> "&gt;" <var>session-count</var> "&lt;/session&gt;"
+
+<var>session-name</var> := "name=\"" <var>string</var> "\""
+
+<var>session-count</var> := "&lt;count&gt;" <var>decimal</var> "&lt;/count&gt;"
+</code></pre>
+
+<p>Example:
+</p><pre><code>
+$ opxml sessions
+&lt;sessions&gt;
+    &lt;event name="MUL"&gt;
+        &lt;session name="current"&gt;
+            &lt;count&gt;165&lt;/count&gt;
+        &lt;/session&gt;
+        &lt;session name="foobar"&gt;
+            &lt;count&gt;621&lt;/count&gt;
+        &lt;/session&gt;
+    &lt;/event&gt;
+    &lt;event name="CPU_CLK_UNHALTED"&gt;
+        &lt;session name="current"&gt;
+            &lt;count&gt;15952&lt;/count&gt;
+        &lt;/session&gt;
+        &lt;session name="foobar"&gt;
+            &lt;count&gt;85001&lt;/count&gt;
+        &lt;/session&gt;
+    &lt;/event&gt;
+&lt;/sessions&gt;
+<code></code></code></pre>
+<p></p>
+
+<p>Built-in processors used to parse output:
+</p><ul>
+    <li><code>SessionsProcessor</code>
+</li></ul><p></p>
+</body></html>
