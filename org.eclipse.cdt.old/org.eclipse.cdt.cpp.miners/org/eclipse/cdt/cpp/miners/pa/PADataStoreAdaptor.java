@@ -221,6 +221,20 @@ public class PADataStoreAdaptor {
  
  
  /**
+  * Retain 3 digits after the dot for a double value
+  */
+ private static String truncateDigits(double d) {
+ 
+   String doubleStr = String.valueOf(d);
+   int dotIndex = doubleStr.indexOf('.');
+   if (dotIndex >= 0 && doubleStr.length() - dotIndex > 4) {
+     return doubleStr.substring(0, dotIndex + 4);
+   }
+   else
+     return doubleStr;
+ }
+ 
+ /**
   * Round a double to an approximate value with 3 digits after the dot.
   */
  public static String roundDouble(double d) {
@@ -243,17 +257,15 @@ public class PADataStoreAdaptor {
          }
          catch (NumberFormatException e)
          {     
-         }
-         
-         String baseStr = String.valueOf(base);
-         result = baseStr.substring(0, dotIndex + 4) + result.substring(eIndex);
+         }	 
+	 
+         result = truncateDigits(base) + result.substring(eIndex);
        }
      }
      else {
        
        if (result.length() - dotIndex > 3) {
-         String baseStr = String.valueOf(d + 0.0005);
-         result = baseStr.substring(0, dotIndex + 4);
+         result = truncateDigits(d + 0.0005);
        }
      }
      
