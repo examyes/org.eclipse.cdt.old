@@ -20,12 +20,23 @@ import java.io.InputStream;
 
 import junit.framework.TestCase;
 
-import org.eclipse.cdt.core.*;
+import org.eclipse.cdt.core.CCProjectNature;
+import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.internal.core.index.sourceindexer.SourceIndexer;
 import org.eclipse.cdt.internal.core.search.indexing.IndexManager;
 import org.eclipse.cdt.refactoring.tests.TestsPlugin;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
  * @author aniefer
@@ -47,7 +58,7 @@ abstract public class BaseTestFramework extends TestCase {
 	            cproject = createCCProject("RegressionTestProject", "bin"); //$NON-NLS-1$ //$NON-NLS-2$
 	        
 	            project = cproject.getProject();
-	            project.setSessionProperty(IndexManager.activationKey, Boolean.FALSE );
+	            project.setSessionProperty(SourceIndexer.activationKey, Boolean.FALSE );
 	        } catch ( CoreException e ) {
                 e.printStackTrace();
 	            /*boo*/
@@ -62,7 +73,7 @@ abstract public class BaseTestFramework extends TestCase {
         if( CCorePlugin.getDefault() != null && CCorePlugin.getDefault().getCoreModel() != null){
             if( project != null )
                 try {
-                    project.setSessionProperty( IndexManager.activationKey, Boolean.TRUE );
+                    project.setSessionProperty( SourceIndexer.activationKey, Boolean.TRUE );
                 } catch ( CoreException e ) { //boo
                 }
         }
@@ -72,7 +83,7 @@ abstract public class BaseTestFramework extends TestCase {
         if( CCorePlugin.getDefault() != null && CCorePlugin.getDefault().getCoreModel() != null){
             if( project != null )
                 try {
-                    project.setSessionProperty( IndexManager.activationKey, Boolean.FALSE );
+                    project.setSessionProperty( SourceIndexer.activationKey, Boolean.FALSE );
                 } catch ( CoreException e ) { //boo
                 }
         }
