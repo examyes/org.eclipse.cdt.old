@@ -400,7 +400,7 @@ public class ConfigureAction extends CustomAction implements SelectionListener
 	private void setProjectStatusKey(IProject project, String key, String val)
 	{
 		ArrayList projectstatus = CppPlugin.readProperty(project,key);
-		if(projectstatus.isEmpty())
+		if(projectstatus != null && projectstatus.isEmpty())
 		{
 			ArrayList list = new ArrayList();
 			list.add(val);

@@ -11,6 +11,7 @@ import org.eclipse.cdt.cpp.ui.internal.*;
 
 import org.eclipse.cdt.dstore.ui.actions.*;
 import org.eclipse.cdt.dstore.core.model.*;
+import org.eclipse.cdt.dstore.extra.internal.extra.*;
 
 import java.io.*; 
 import java.util.*;
@@ -33,13 +34,18 @@ import org.eclipse.ui.texteditor.AbstractMarkerAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.MarkerRulerAction;
 
-public class MakefileAmAction extends CustomAction {
+import org.eclipse.swt.widgets.Shell;
+
+public class MakefileAmAction extends CustomAction implements IDomainListener 
+{
 	
 	// to identify Makefile.am type
 	private final int TOPLEVEL = 1;
 	private final int PROGRAMS = 2;
 	private final int STATICLIB = 3;
 	private final int SHAREDLIB = 4;
+
+    private DataElement _cmdStatus;
 	
 	public MakefileAmAction(DataElement subject, String label, DataElement command, DataStore dataStore)
 	{	
@@ -87,8 +93,14 @@ public class MakefileAmAction extends CustomAction {
 					type = classifier.getName();		
 				} 				
 				else 
-				{		
-			
+				{	
+
+				    // DKM
+				    // ---
+				    // Yasser, I've made this class impelment domain listener so that it doesn't have to
+				    // use synchronized commands.  In the remote case, that is a problem.
+				    
+				    /***
 					DataElement status = _dataStore.synchronizedCommand(cmdD, _subject);								
 								
 					updated = _subject.getAssociated("class type");		
@@ -101,41 +113,52 @@ public class MakefileAmAction extends CustomAction {
 					{
 					  type = "0";	
 					}
+				    ***/
+				    
+				    _cmdStatus = _dataStore.command(cmdD, _subject);
+				    _dataStore.getDomainNotifier().addDomainListener(this);
+				    type = "0";
 				}
-				
-				int classification = (new Integer(type)).intValue();
-				
-				switch (classification)
-				{
-					case (TOPLEVEL):
-					if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
-						setEnabled(false);
-					break;
-					
-					case (PROGRAMS):
-					if(_command.getValue().equals("PROGRAMS_MAKEFILE_AM"))
-						setEnabled(false);
-					break;
-				
-					case (STATICLIB):
-					if(_command.getValue().equals("STATICLIB_MAKEFILE_AM"))
-						setEnabled(false);
-					break;
-				
-					case (SHAREDLIB):
-					if(_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
-						setEnabled(false);
-					break;
-											
-					default:
-					break;
-				}
+
+				setEnabledState(type);
 				
 				return;
 			}
 		}
 	}
-	public void run()
+
+    private void setEnabledState(String type)
+    {
+	int classification = (new Integer(type)).intValue();
+	
+	switch (classification)
+	    {
+	    case (TOPLEVEL):
+		if(_command.getValue().equals("TOPLEVEL_MAKEFILE_AM"))
+		    setEnabled(false);
+		break;
+		
+	    case (PROGRAMS):
+		if(_command.getValue().equals("PROGRAMS_MAKEFILE_AM"))
+		    setEnabled(false);
+		break;
+		
+	    case (STATICLIB):
+		if(_command.getValue().equals("STATICLIB_MAKEFILE_AM"))
+		    setEnabled(false);
+		break;
+		
+	    case (SHAREDLIB):
+		if(_command.getValue().equals("SHAREDLIB_MAKEFILE_AM"))
+		    setEnabled(false);
+		break;
+		
+	    default:
+		break;
+	    }
+    }
+    
+    public void run()
 	{
 		/*
 		// open dialog to set Makefile.am compiler flags
@@ -195,4 +218,53 @@ public class MakefileAmAction extends CustomAction {
 		    }
 		return false;
 	}
+
+
+    // DKM
+    // ----
+    // We implement domain notifier her so that we don't have to synchronize commands
+    // to handle enable state
+    public Shell getShell()
+    {
+	ModelInterface api = ModelInterface.getInstance();
+	return api.getDummyShell();
+    }
+    
+
+    public boolean listeningTo(DomainEvent e)
+    {
+	DataElement parent = (DataElement)e.getParent();
+	if (parent == _cmdStatus)
+	    {
+		if (parent.getName().equals("done"))
+		    {
+			return true;
+		    }
+	    }
+
+	return false;
+    }
+
+    public void domainChanged(DomainEvent e)
+    {
+	DataElement classifier = null;
+	ArrayList updated = _subject.getAssociated("class type");
+	if (updated.size() > 0)
+	    {
+		classifier = (DataElement)updated.get(0);			
+	    }
+	
+	String type = null;		
+	if (classifier != null)
+	    {
+		type = classifier.getName();		
+	    } 				
+	else
+	    {
+		type = "0";	
+	    }
+
+	_cmdStatus = null;
+	_dataStore.getDomainNotifier().removeDomainListener(this);
+    }
 }

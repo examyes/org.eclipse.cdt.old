@@ -480,35 +480,40 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
         return readProperty(resource, property);
       }
 
-  public static synchronized ArrayList readProperty(IResource resource, String property)
-      {
-        IPath newPath = resource.getFullPath();
-        QualifiedName propertyQName = new QualifiedName(property, newPath.toString());
+    public static synchronized ArrayList readProperty(IResource resource, String property)
+    {
+	if (resource != null)
+	    {
+		IPath newPath = resource.getFullPath();
+		QualifiedName propertyQName = new QualifiedName(property, newPath.toString());
+		
+		ArrayList savedProperty = new ArrayList();
+		String propertyString = "";
+		
+		try
+		    {
+			propertyString = resource.getPersistentProperty(propertyQName);
+			  
+			if (propertyString != null && propertyString.length() != 0)
+			    {
+				StringTokenizer st = new StringTokenizer(propertyString, "|", false);
+				while (st.hasMoreTokens())
+				      {
+					  savedProperty.add(st.nextToken());
+				      }
+			    }
+		      }
+		catch (CoreException e)
+		    {
+		    }
+		
+		return savedProperty;
+	    }
 
-        ArrayList savedProperty = new ArrayList();
-        String propertyString = "";
-
-        try
-        {
-          propertyString = resource.getPersistentProperty(propertyQName);
-
-          if (propertyString != null && propertyString.length() != 0)
-          {
-             StringTokenizer st = new StringTokenizer(propertyString, "|", false);
-             while (st.hasMoreTokens())
-             {
-                savedProperty.add(st.nextToken());
-             }
-           }
-        }
-        catch (CoreException e)
-        {
-        }
-
-        return savedProperty;
-      }
-
-  public static void writeProperty(IResource resource, ArrayList property)
+	return null;
+    }
+    
+    public static void writeProperty(IResource resource, ArrayList property)
       {
         String qualifier = new String("org.eclipse.cdt.cpp.ui");
         writeProperty(resource, qualifier, property);
