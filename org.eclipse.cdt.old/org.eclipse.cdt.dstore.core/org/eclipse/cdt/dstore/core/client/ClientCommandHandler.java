@@ -24,7 +24,7 @@ public class ClientCommandHandler extends CommandHandler
   public synchronized void sendFile(String fileName, File file)
       {
 	  DataElement document = _dataStore.createObject(null, "FILE", fileName, fileName, fileName);
-	  _sender.sendFile(document, file, 2);
+	  _sender.sendFile(document, file, 1);
       }
 
   public synchronized void sendCommands()

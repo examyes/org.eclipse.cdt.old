@@ -34,6 +34,21 @@
      </library>
    </runtime>
 
+
+<!-- C++ Project Nature -->
+
+<extension 
+	point="org.eclipse.core.resources.natures" 
+	id="cppnature"
+	name="C/C++ Project Nature">
+	<runtime>
+		<run class="com.ibm.cpp.ui.internal.CppProject">
+		</run>
+	</runtime>
+</extension>
+
+
+
 <!-- Launchers -->
 
 <extension point="org.eclipse.debug.core.launchers">
@@ -360,30 +375,35 @@
 		name="%C++_Build_Invocation"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.BuildPropertyPage">
+	       <filter name="nature" value="com.ibm.cpp.ui.internal.cppnature"/>
         </page>
 	<page
 		id="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage"
 		name="%C++_Parse_Include_Path"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.ParsePathPropertyPage">
+	       <filter name="nature" value="com.ibm.cpp.ui.internal.cppnature"/>
         </page>
 	<page
 		id="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage"
 		name="%C++_Parse_Quality"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.ParseQualityPropertyPage">
+	       <filter name="nature" value="com.ibm.cpp.ui.internal.cppnature"/>
         </page>
 	<page
 		id="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage"
 		name="%C++_Environment"
 		objectClass="org.eclipse.core.resources.IProject"
 		class="com.ibm.cpp.ui.internal.builder.EnvironmentPropertyPage">
+	       <filter name="nature" value="com.ibm.cpp.ui.internal.cppnature"/>
         </page>
 	<page
 		id="com.ibm.cpp.ui.internal.builder.RemotePropertyPage"
 		name="Remote Properties"
 		objectClass="com.ibm.cpp.ui.internal.vcm.Repository"
 		class="com.ibm.cpp.ui.internal.builder.RemotePropertyPage">
+	       <filter name="nature" value="com.ibm.cpp.ui.internal.cppnature"/>
         </page>
 </extension>
 
@@ -396,7 +416,7 @@
 		 class="com.ibm.cpp.ui.internal.views.search.CppSearchPage">
    </page>
 </extension>
-
+ 
 <extension id="cppsearchmarker" point="org.eclipse.core.resources.markers">
 	<super type="org.eclipse.core.resources.searchmarker"/>
 	<attribute name="DataElementID"/>

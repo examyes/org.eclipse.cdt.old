@@ -206,7 +206,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
 	for (int i = 0; i < projects.length; i++)
 	  {	
 	      IProject project = projects[i];
-	      //***	      if (isCppProject(project))
+	      if (isCppProject(project))
 		  {
 		      if (project.isOpen())
 			  {
@@ -399,33 +399,25 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
   }
 
   public static boolean isCppProject(IProject resource)
-      {
+    {
 	if (resource instanceof Repository)
-	  {
-	    return true;	
-	  }
-	
-        IPath newPath = resource.getFullPath();
-        QualifiedName indicationFile = new QualifiedName("C++ Project", newPath.toString());
-
-        String fileType = new String("");
-        try
-        {
-          fileType = resource.getPersistentProperty(indicationFile);
-        }
-        catch (CoreException ce)
-        {
-        }
-
-        if ((fileType != null) && fileType.equals("yes"))
-        {
-          return true;
-        }
-        else
-        {
-          return false;
-        }
-      }
+	    {
+		return true;	
+	    }	
+	else
+	    {
+		IProjectNature nature = null;
+		try
+		    {
+			nature = resource.getNature("com.ibm.cpp.ui.internal.cppnature");
+		    }
+		catch (CoreException e)
+		    {
+		    }
+		
+		return (nature != null);
+	    }
+    }
 
   public static ArrayList readProperty(IResource resource)
       {

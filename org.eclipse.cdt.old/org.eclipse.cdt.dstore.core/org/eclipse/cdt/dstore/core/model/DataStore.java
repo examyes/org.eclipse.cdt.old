@@ -980,8 +980,11 @@ public class DataStore
       {
         remotePath = new String(remotePath.replace('\\', '/'));
         String fileName = mapToLocalPath(remotePath);
-	if (!remotePath.equals(fileName))
+
+	System.out.println("replacing " + file);
+	//***	if (!remotePath.equals(fileName))
 	  {
+	      System.out.println("\tsending " + remotePath);
 	    _commandHandler.sendFile(remotePath, file);
 	  }
       }

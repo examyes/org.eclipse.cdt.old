@@ -135,10 +135,25 @@ public class CppNewProjectResourceWizard extends Wizard implements INewWizard
 				System.out.println("CppNewProjectResourceWizard project.setBuildSpec CoreException " +ce);
 			    }
 
-			// tell parser miner to open the project
-			
-			api.openProject(project);	       
+			// specify nature
+			try 
+			    {
+				IProjectDescription description = project.getDescription();
+				String[] natures = description.getNatureIds();
+				String[] newNatures = new String[natures.length + 1];
+				System.arraycopy(natures, 0, newNatures, 0, natures.length);
+				newNatures[natures.length] = "com.ibm.cpp.ui.internal.cppnature";
+				description.setNatureIds(newNatures);
+				project.setDescription(description, null);
+			    } 
+			catch (CoreException e)  
+			    {
+				// Something went wrong
+			    }
 		    }
+
+		
+		api.openProject(project);	       
 		
 		// refresh view
 		openPerspective(project);

@@ -507,9 +507,10 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	IProject[] projects = _workbench.getRoot().getProjects();
 	for (int i = 0; i < projects.length; i++)
 	    {	
-		if (projects[i].isOpen())
+		IProject project = projects[i];
+		if (project.isOpen() && _plugin.isCppProject(project))
 		    {
-			openProject(projects[i]);
+			openProject(project);
 		    }
 	    }			    	
     }
@@ -944,7 +945,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	for (int i = 0; i < projects.length; i++)
 	    {	
 		IProject project = projects[i];
-		//***if (_plugin.isCppProject(project))
+		if (_plugin.isCppProject(project))
 		    {
 			if (compareFileNames(project.getLocation().toString(), projectElement.getSource()))
 			    {

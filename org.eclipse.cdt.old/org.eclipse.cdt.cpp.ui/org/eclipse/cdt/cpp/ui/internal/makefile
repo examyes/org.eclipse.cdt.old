@@ -5,7 +5,7 @@ SHELL=sh
 MAKE_MODE=unix
 include E:/eclipse/eclipse/plugins/com.ibm.dstore.core/com/ibm/dstore/core/build/setenv.mk
 
-all: CppHelpContextIds.class CppProjectAttributes.class CppPlugin.class wizards_dir views_dir vcm_dir preferences_dir launchers_dir editor_dir dialogs_dir builder_dir api_dir actions_dir
+all: CppHelpContextIds.class CppProjectAttributes.class CppPlugin.class CppProject.class wizards_dir views_dir vcm_dir preferences_dir launchers_dir editor_dir dialogs_dir builder_dir api_dir actions_dir
 
 # Class Targets
 CppHelpContextIds.class: CppHelpContextIds.java
@@ -17,7 +17,8 @@ CppProjectAttributes.class: CppProjectAttributes.java
 CppPlugin.class: CppPlugin.java
 	javac CppPlugin.java
 
-
+CppProject.class: CppProject.java
+	javac CppProject.java
 
 # Directory Targets
 wizards_dir:

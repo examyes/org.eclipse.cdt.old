@@ -97,14 +97,20 @@ public class TransferFiles extends Thread
 	    {
 		if (type.equals("file"))
 		    {
-			copiedSource = targetDataStore.createObject(target, 
-								    type, 
-								    source.getName(),
-								    newSourceStr);
+			DataElement mkfile = targetDataStore.localDescriptorQuery(target.getDescriptor(), "C_CREATE_FILE");
+			if (mkfile != null)
+			    {
+				ArrayList args = new ArrayList();				
+				
+				DataElement newDir = targetDataStore.createObject(null, type, source.getName());
+				args.add(newDir);
+				
+				targetDataStore.synchronizedCommand(mkfile, args, target);
 
-			// transfer to remote
-			targetDataStore.setObject(target);
-			needsUpdate = true;
+				copiedSource = targetDataStore.find(target, DE.A_NAME, source.getName(), 1);
+				needsUpdate = true;
+			    }
+
 		    }
 		else
 		    {
@@ -178,8 +184,11 @@ public class TransferFiles extends Thread
 			// make sure we have a local copy of the file
 			File theFile = source.getFileObject();
 
+			// this works when transferring from local to server
 			targetDataStore.replaceFile(newSourceStr, theFile);
 			setDate(copiedSource, getDate(source));
+
+			
 		    }
 	    }
 	

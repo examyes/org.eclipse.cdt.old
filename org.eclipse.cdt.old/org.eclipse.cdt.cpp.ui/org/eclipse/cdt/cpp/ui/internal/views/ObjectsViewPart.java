@@ -201,9 +201,12 @@ public class ObjectsViewPart extends GenericViewPart
                          }
 			
 			if (changed)
-			    {		
-				_plugin.getCurrentDataStore().getDomainNotifier().enable(true);
+			    {	
+				DataStore dataStore = _plugin.getCurrentDataStore();
+				if (dataStore != null)
+				    dataStore.getDomainNotifier().enable(true);
 			    }	    
+
 			if(!dataElement)
 			 initInput(_plugin.getCurrentDataStore());		
 		    }	

@@ -2,7 +2,7 @@ package com.ibm.cpp.ui.internal.vcm;
 
 /*
  * Copyright (C) 2000, 2001 International Business Machines Corporation and others. All Rights Reserved.  
- */
+ */ 
  
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.actions.*; 
