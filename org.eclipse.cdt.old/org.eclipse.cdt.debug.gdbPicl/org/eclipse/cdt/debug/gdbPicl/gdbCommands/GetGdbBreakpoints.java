@@ -26,39 +26,39 @@ public class GetGdbBreakpoints  //extends ThreadManager
      _debugSession = gdbDebugSession;
    }
 
-   public boolean lineBreakpoint(String fileName, String lineNumber)
+   public int lineBreakpoint(String fileName, String lineNumber)
    {  
        String cmd = "break";
        return breakpointCommand(cmd, fileName+":", lineNumber);
    }
-   public boolean methodBreakpoint(String fileName, String methodName)
+   public int methodBreakpoint(String fileName, String methodName)
    {  
        String cmd = "break ";
        return breakpointCommand(cmd, fileName, methodName);
    }
-   public boolean clearBreakpoint(String fileName, String lineNumber)
+   public int clearBreakpoint(String fileName, String lineNumber)
    {  
        String cmd = "clear";
        return breakpointCommand(cmd, fileName+":", lineNumber);
    }
-   public boolean watchBreakpoint(String expression)
+   public int watchBreakpoint(String expression)
    {  
        String cmd = "watch ";
        return breakpointCommand(cmd, " ", expression);
    }
 
    
-   public boolean breakpointCommand(String command, String fileName, String location)
+   public int breakpointCommand(String command, String fileName, String location)
    {  
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"GetGdbBreakpoints.breakpointCommand command="+command+" fileName="+fileName +" location="+location  );
-   
+      int returnValue = -1;   
       String cmd = command+" "+fileName+location;
      
       if( !_debugSession.executeGdbCommand(cmd) )
       {   if (Gdb.traceLogger.ERR) 
               Gdb.traceLogger.err(2,"Gdb Debug engine failed to execute the breakpoint command: "+cmd );
-          return false;
+          return returnValue;
       }
       _debugSession.addChangesToUiMessages();
 
@@ -66,7 +66,7 @@ public class GetGdbBreakpoints  //extends ThreadManager
       if(lines.length<=0)
       {   if (Gdb.traceLogger.ERR) 
               Gdb.traceLogger.err(2,"GetGdbBreakpoints.breakpointCommand cmd="+cmd+" responseLines==null" );
-          return false;
+          return returnValue;
       }
 
       String str = lines[0];
@@ -75,16 +75,24 @@ public class GetGdbBreakpoints  //extends ThreadManager
       if(str==null || str.equals("") )
       {   if (Gdb.traceLogger.ERR) 
               Gdb.traceLogger.err(2,"GetGdbBreakpoints.breakpointCommand cmd="+cmd+" responseLines[0]==null" );
-          return false;
+          return returnValue;
       }
 
       if( str.startsWith("No ") || str.endsWith("not defined.") )
       {   if (Gdb.traceLogger.ERR) 
               Gdb.traceLogger.err(2,"GetGdbBreakpoints.breakpointCommand cmd="+cmd+" responseLines="+str );
-          return false;
+          return returnValue;
+      }
+      
+      String bkp = "Breakpoint ";
+      if (str.startsWith(bkp))
+      {
+       	 int at = str.indexOf(" at ");
+         String bkpID = str.substring(bkp.length(), at);  // breakpoint id
+         returnValue = Integer.parseInt(bkpID);
       }
 
-      return true;
+      return returnValue;
    }
 
 }

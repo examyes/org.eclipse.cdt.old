@@ -114,7 +114,7 @@ public class CmdExecute extends Command
                else
                {
                   // attempt to set breakpoint
-                  if (!_debugSession.setLineBreakpoint(partID, lineNum)) {
+                  if (_debugSession.setLineBreakpoint(partID, lineNum) < 0) {
                      _rep = new ERepExecute(0, 0);
                      _rep.setReturnCode(EPDC.ExecRc_BadLineNum);
                      _rep.setMessage(_debugSession.getResourceString("LINE_NOT_EXECUTABLE_MSG"));

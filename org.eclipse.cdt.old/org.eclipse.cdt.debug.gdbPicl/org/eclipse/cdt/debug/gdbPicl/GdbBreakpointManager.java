@@ -55,11 +55,12 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
 
       // now try to set the breakpoint
       ModuleManager cm = _debugSession.getModuleManager();
-
-      if (!_debugSession.setLineBreakpoint(partID, lineNum))
+      
+      int bkpID = _debugSession.setLineBreakpoint(partID, lineNum);
+      if (bkpID < 0)
          return -1;
 
-      int bkpID = _breakpoints.size()+1;
+      //int bkpID = _breakpoints.size()+1;
 
       if (Gdb.traceLogger.DBG) 
       {
@@ -76,9 +77,11 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, 0, partID, srcFileIndex, viewNum, lineNum, conditionalExpr );
       if (Gdb.traceLogger.DBG) 
           Gdb.traceLogger.dbg(1,"Line breakpoint set");
-
+      String placeHolder = "";
+      while (_breakpoints.size() < bkpID)
+          _breakpoints.addElement(placeHolder);
       _breakpoints.addElement(lineBkp);
-
+     
       // if breakpoint should be disabled, then disable it.
       if (!enable)
          disableBreakpoint(bkpID);
@@ -216,7 +219,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       ModuleManager cm = _debugSession.getModuleManager();
 
       // set the new breakpoint
-      if (!_debugEngine.getDebugSession().setLineBreakpoint(partID, lineNum))
+      if (_debugEngine.getDebugSession().setLineBreakpoint(partID, lineNum) < 0)
          return -1;
 
       int old_partID = bkp.partID();
@@ -426,7 +429,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
         }
      }
 
-     int bkpID = _breakpoints.size()+1;
+     int bkpID = _breakpoints.size()+1;  //  RW revisit
 
      if (Gdb.traceLogger.DBG) 
      {
@@ -572,10 +575,11 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
    {
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(1,"GdbBreakpointManager.setWatchpoint expr="+exprString );
-      if ( !_debugSession.setWatchpoint(exprString) )
+      int bkpID = _debugSession.setWatchpoint(exprString);
+      if ( bkpID < 0)
           return -1;
 
-      int bkpID = _breakpoints.size()+1;
+      //int bkpID = _breakpoints.size()+1;
 
       int attrib = 0;
       WatchBreakpoint watchBkp = new WatchBreakpoint(_debugSession, bkpID, EPDC.ChangeAddrBkpType, attrib, context, exprString, byteCount );
@@ -691,7 +695,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
          _debugSession.addCmdResponsesToUiMessages();
       }
 
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
 	  // don't need to remove breakpoint after a disable
 //      if (!bkp.isDeferred())
@@ -720,7 +724,7 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
          _debugSession.addCmdResponsesToUiMessages();
       }
 
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
 		// don't need to add breakpoint after a enable
 //      if (!bkp.isDeferred())
@@ -737,14 +741,14 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
    public void clearBreakpoint(int bkpID) {
       boolean removeBkp = true;
 
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
       if (!bkp.isDeferred())
           removeBreakpoint(bkp);
 
       bkp.deleteBreakpoint();
       _changedBreakpoints.addElement(bkp);
-      _breakpoints.setElementAt(null, bkpID-1);
+      _breakpoints.setElementAt(null, bkpID);
    }
 
    /*
@@ -795,12 +799,12 @@ public class GdbBreakpointManager extends BreakpointManager//extends ComponentMa
       int lineNum = bkp.lineNum();
 
       int i = 0;
-      while ((i < _breakpoints.size()) && removeBkp == true) {
+      while ((i <= _breakpoints.size()) && removeBkp == true) {
          Object obj = _breakpoints.elementAt(i);
          if (obj instanceof LocationBreakpoint)
          {
              LocationBreakpoint b = (LocationBreakpoint)obj;
-             if ((i != bkpID-1) && (b.partID() == partID) &&
+             if ((i != bkpID) && (b.partID() == partID) &&
                  (b.lineNum() == lineNum) && b.isEnabled())
                  removeBkp = false;
          }

@@ -54,10 +54,11 @@ public class BreakpointManager extends ComponentManager
       // now try to set the breakpoint
       ModuleManager cm = _debugSession.getModuleManager();
 
-      if (!_debugSession.setLineBreakpoint(partID, lineNum))
+      int bkpID = _debugSession.setLineBreakpoint(partID, lineNum);
+      if (bkpID < 0)
          return -1;
 
-      int bkpID = _breakpoints.size()+1;
+      //int bkpID = _breakpoints.size()+1;
 
       try
       {
@@ -93,10 +94,11 @@ public class BreakpointManager extends ComponentManager
                          EStdExpression2 conditionalExpr)
    {
    	  // try to add breakpoint with specified name
-      if (!((GdbDebugSession)_debugSession).setLineBreakpoint(filename, lineNum))
+      int bkpID = (((GdbDebugSession)_debugSession).setLineBreakpoint(filename, lineNum));
+      if (bkpID < 0)
          return -1;
 
-      int bkpID = _breakpoints.size()+1;
+      //int bkpID = _breakpoints.size()+1;
       
       // added breakpoint successfully, add part to first module
       ModuleManager cm = _debugSession.getModuleManager();
@@ -116,7 +118,10 @@ public class BreakpointManager extends ComponentManager
 
       LineBreakpoint lineBkp = new LineBreakpoint(_debugSession, bkpID, 0, partID, 1,
                                                   Part.VIEW_SOURCE, lineNum, conditionalExpr);
-
+      String placeHolder = "";                                              
+      while (_breakpoints.size() < bkpID)
+         _breakpoints.addElement(placeHolder);
+         
       _breakpoints.addElement(lineBkp);
 
       // if breakpoint should be disabled, then disable it.
@@ -249,7 +254,7 @@ public class BreakpointManager extends ComponentManager
         return -1;
 
       // set the new breakpoint
-      if (!_debugSession.setLineBreakpoint(partID, lineNum))
+      if (_debugSession.setLineBreakpoint(partID, lineNum) < 0)
          return -1;
 
       int old_partID = bkp.partID();
@@ -605,7 +610,7 @@ public class BreakpointManager extends ComponentManager
    {
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(1,"BreakpointManager.setWatchpoint expr="+exprString );
-      if ( !_debugSession.setWatchpoint(exprString) )
+      if ( _debugSession.setWatchpoint(exprString) < 0)
           return -1;
       else
           return 0;
@@ -694,7 +699,7 @@ public class BreakpointManager extends ComponentManager
     * Disable a breakpoint
     */
    public void disableBreakpoint(int bkpID) {
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
       if (!bkp.isDeferred())
           removeBreakpoint(bkp);
@@ -708,7 +713,7 @@ public class BreakpointManager extends ComponentManager
     * Enable a breakpoint
     */
    public void enableBreakpoint(int bkpID) {
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
       if (!bkp.isDeferred())
           addBreakpoint(bkp);
@@ -721,14 +726,14 @@ public class BreakpointManager extends ComponentManager
     * Delete a breakpoint
     */
    public void clearBreakpoint(int bkpID) {
-      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID-1);
+      Breakpoint bkp = (Breakpoint) _breakpoints.elementAt(bkpID);
 
       if (!bkp.isDeferred())
           removeBreakpoint(bkp);
 
       bkp.deleteBreakpoint();
       _changedBreakpoints.addElement(bkp);
-      _breakpoints.setElementAt(null, bkpID-1);
+      _breakpoints.setElementAt(null, bkpID);
    }
 
    /*

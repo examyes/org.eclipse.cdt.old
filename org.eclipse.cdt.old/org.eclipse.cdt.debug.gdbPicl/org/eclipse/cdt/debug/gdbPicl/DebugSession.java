@@ -345,7 +345,7 @@ public abstract class DebugSession
    * Set a line breakpoint at the specified part and line
    * @return whether the breakpoint was successfully set
    */
-   public abstract boolean setLineBreakpoint(int partID, int lineNum);
+   public abstract int setLineBreakpoint(int partID, int lineNum);
 
    /**
    * Remove a breakpoint at a specific location
@@ -356,7 +356,7 @@ public abstract class DebugSession
    * Set a Watchpoint for the specifiec expression
    * @return whether the breakpoint was successfully set
    */
-   public abstract boolean setWatchpoint(String expression);
+   public abstract int setWatchpoint(String expression);
  
   /**
    * Get the debugger ModuleManager object

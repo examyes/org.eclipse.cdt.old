@@ -1118,17 +1118,17 @@ Thread.currentThread().dumpStack();
      cmdStepReturn_User(threadName);
   }
 
-  public boolean setWatchpoint(String expression)
+  public int setWatchpoint(String expression)
   {
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setWatchpoint expression="+expression  );
 
-     boolean ret = _getGdbBreakpoints.watchBreakpoint(expression);
+     int ret = _getGdbBreakpoints.watchBreakpoint(expression);
 
      addChangesToUiMessages();
      return ret;
   }
-  public boolean setLineBreakpoint(int partID, int lineNumber)
+  public int setLineBreakpoint(int partID, int lineNumber)
   {
      String fileName = _moduleManager.getFullPartName(partID);
      String lineNum = new Integer(lineNumber).toString();
@@ -1136,21 +1136,21 @@ Thread.currentThread().dumpStack();
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setLineBreakpoint partID="+partID +" fileName="+fileName+" lineNum="+lineNum  );
 
-     boolean ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
+     int ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
 
      addChangesToUiMessages();
      return ret;
   }
 
   // set breakpoint with filename and line number
-  public boolean setLineBreakpoint(String fileName, int lineNumber)
+  public int setLineBreakpoint(String fileName, int lineNumber)
   {
      String lineNum = new Integer(lineNumber).toString();
 
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.setLineBreakpoint fileName="+fileName+" lineNum="+lineNum  );
 
-     boolean ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
+     int ret = _getGdbBreakpoints.lineBreakpoint(fileName, lineNum);
 
      addChangesToUiMessages();
      return ret;
@@ -1167,7 +1167,7 @@ Thread.currentThread().dumpStack();
      if (Gdb.traceLogger.EVT)
          Gdb.traceLogger.evt(1,"-------->>>>>>>> GdbDebugSession.clearBreakpoint partID="+partID +" fileName="+fileName+" lineNum="+lineNum  );
 
-     boolean ret = _getGdbBreakpoints.clearBreakpoint(fileName, lineNum);
+     int ret = _getGdbBreakpoints.clearBreakpoint(fileName, lineNum);
 
      addChangesToUiMessages();
      return;
