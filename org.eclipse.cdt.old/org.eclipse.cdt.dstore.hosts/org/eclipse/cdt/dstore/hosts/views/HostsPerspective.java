@@ -30,7 +30,7 @@ public class HostsPerspective implements IPerspectiveFactory
       topLeft.addView("com.ibm.dstore.hosts.views.HostsViewPart");
 
       IFolderLayout bottomLeft = factory.createFolder("bottomLeft", IPageLayout.RIGHT, (float)0.60, "topLeft");
-      bottomLeft.addView("com.ibm.dstore.ui.views.DetailsViewPart");
+      bottomLeft.addView("com.ibm.dstore.hosts.views.HostsDetailsViewPart");
 
 
   }

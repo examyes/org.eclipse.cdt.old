@@ -49,6 +49,7 @@ public class FindFileDialog extends SearchDialog
 	    {
 		DataStore dataStore = _root.getDataStore();
 		DataElement searchCmd  = dataStore.localDescriptorQuery(_root.getDescriptor(), "C_FIND_FILE", 1);
+		System.out.println("sc in " + _root);
 		DataElement pattern = dataStore.createObject(null, "pattern", _searchEntry.getText());
 		if (searchCmd != null)
 		    {	       
