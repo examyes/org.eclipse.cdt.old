@@ -17,6 +17,7 @@ public class XMLparser
     private DataStore         _dataStore;
     private DataElement       _rootDataElement;
     private Stack             _tagStack;
+    private Stack             _objStack;
     
     private boolean           _isFile;
     private String            _tagType;
@@ -28,6 +29,7 @@ public class XMLparser
     {
         _dataStore = dataStore;
         _tagStack = new Stack();
+        _objStack = new Stack();
 
 	_byteBuffer = new byte[10000];
     }
@@ -123,6 +125,7 @@ public class XMLparser
       {
 	      {
 		  _tagStack.clear();
+		  _objStack.clear();
 		  		  
 		  _rootDataElement = null;
 		  _isFile = false;
@@ -175,7 +178,7 @@ public class XMLparser
 					      }
 					  else
 					      {
-						  parent = parent.getParent();
+						  parent = (DataElement)_objStack.pop();
 					      }
 				      }
 				  else if (xmlTag.length() > 0)
@@ -183,6 +186,11 @@ public class XMLparser
 					  xmlTag = xmlTag.trim();
 					  try
 					      {
+						  if (parent != null)
+						      {
+							  _objStack.push(parent);
+						      }
+
 						  DataElement result = parseTag(xmlTag, parent);
 						  if (parent == null && _rootDataElement == null)
 						      {
@@ -341,13 +349,6 @@ public class XMLparser
 			      }			  
 		      }
 	      } 
-
-
-	  /*	  if (attributes[DE.A_TYPE].equals("status"))
-	      {
-		  System.out.println("status = " + result);
-	      }
-	  */
 
 	  return result;
 	}	
