@@ -75,7 +75,7 @@ public class FindObjectAction extends Action
 		if (input instanceof IFileEditorInput)
 		    {
 			IFile file = ((IFileEditorInput)input).getFile();
-			path = new String(file.getLocation().toString());
+			path = new String(file.getLocation().toOSString());
 			
 			IProject project    = file.getProject();			
 			CppPlugin plugin   = CppPlugin.getDefault();
