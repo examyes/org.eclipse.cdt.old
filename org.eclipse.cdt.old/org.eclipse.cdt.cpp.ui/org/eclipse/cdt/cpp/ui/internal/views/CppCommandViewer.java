@@ -52,15 +52,25 @@ public class CppCommandViewer extends CommandViewer
 	setOutputId("com.ibm.cpp.ui.CppOutputViewPart");
     }
      
+    public void setInput(DataElement input)
+    {
+	ModelInterface api = _plugin.getModelInterface();
+	if (input != _input)
+	    {
+		_resourceInput = api.findResource((DataElement)input);
+		super.setInput((DataElement)input);
+	    }
+    }
+
     public void setInput(Object input)
     {
 	ModelInterface api = _plugin.getModelInterface();
 	if (input instanceof DataElement)
 	    {
-		super.setInput((DataElement)input);
-		if (input == _input)
+		if (input != _input)
 		    {
 			_resourceInput = api.findResource((DataElement)input);
+			super.setInput((DataElement)input);
 		    }
 	    }
 	else
