@@ -43,8 +43,10 @@ public class RenameResource extends CustomAction
     public void run()
     {
 
-	 String oldNameStr = _subject.getName();
-     RenameDialog dialog = new RenameDialog("Rename Resource", oldNameStr);
+	 String oldNameStr = new String(_subject.getName());
+	 String oldSourceStr = new String(_subject.getSource());
+	 
+     RenameDialog dialog = new RenameDialog("Rename Resource", _subject.getName());
      dialog.open();
      if (dialog.getReturnCode() == dialog.OK)
      {     
@@ -56,33 +58,23 @@ public class RenameResource extends CustomAction
 									    "C_RENAME", 4);
 			if (cmdDescriptor != null)
 		    {
-		   	    	
+		   	    String newSourceStr = _subject.getParent().getSource() + "/" + newNameStr;	
 		    	ArrayList args = new ArrayList();
-		    	DataElement newName = _dataStore.createObject(null, "name", newNameStr);
-		    	
+		    	DataElement newName = _dataStore.createObject(null, "name", newNameStr);		    	
 		    	args.add(newName);
-		    	
+		    	_dataStore.command(cmdDescriptor, args, _subject);							
+
 		    	DataElement notifyD = _dataStore.localDescriptorQuery(_dataStore.getRoot().getDescriptor(), "C_NOTIFICATION", 1);
 		    	if (notifyD != null)
 		    	{
-		    			DataElement delDescriptor = _dataStore.createObject(null, "dummy", "C_DELETE");
-		    			ArrayList nargs = new ArrayList();
+		    			ArrayList nargs = new ArrayList();		    		 			
 		    			nargs.add(_subject);
-		    			_dataStore.command(notifyD, nargs, delDescriptor);
+		    			nargs.add(_dataStore.createObject(null, _subject.getType(), oldNameStr, oldSourceStr));
+		    			DataElement dummyCmd = _dataStore.createObject(null, "dummy command", "C_RENAME");
+		    			_dataStore.command(notifyD, nargs, dummyCmd);
 		    	}
 	
-				_dataStore.command(cmdDescriptor, args, _subject);
-				
-				if (notifyD != null)
-				{
-    					DataElement addDescriptor = _dataStore.createObject(null, "dummy", "C_ADD");
-		    			
-		    			ArrayList nargs = new ArrayList();
-		    			nargs.add(_subject);
-		    			_dataStore.command(notifyD, nargs, addDescriptor);
-					
-				}
-		    }
+			}
 	    }
     }
     }    
