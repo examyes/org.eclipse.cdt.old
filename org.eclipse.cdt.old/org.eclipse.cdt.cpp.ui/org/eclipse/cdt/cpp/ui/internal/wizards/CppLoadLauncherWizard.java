@@ -117,7 +117,7 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
    	_launcher = launcher;
    	_selection = currentSelection;
 	_element = _selection.getFirstElement();
-
+ 
 	if (_element instanceof DataElement)
 	    {
 		ModelInterface api = ModelInterface.getInstance();
