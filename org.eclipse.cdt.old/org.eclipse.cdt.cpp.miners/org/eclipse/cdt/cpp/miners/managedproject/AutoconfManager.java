@@ -4,9 +4,6 @@ package com.ibm.cpp.miners.managedproject;
  */
 
 import com.ibm.dstore.core.model.*;
-import com.ibm.cpp.ui.internal.*;
-import com.ibm.cpp.ui.internal.api.*;
-import com.ibm.cpp.ui.internal.*;
 
 import java.io.*;
 import java.lang.Runtime;
