@@ -563,6 +563,11 @@ public final class DataStore
 	return _dataStoreSchema.getContentsRelation();
     }
 
+    public DataElement getAttributesRelation()
+    {
+	return _dataStoreSchema.getAttributesRelation();
+    }
+
     public DataElement getAbstractedByRelation()
     {
 	return _dataStoreSchema.getAbstractedByRelation();
@@ -2209,17 +2214,28 @@ public final class DataStore
 	    public ArrayList findDeleted(DataElement root)
 	    {	       
 	        ArrayList results = new ArrayList();
-		results = findDeleted(root, results);
+		results = findDeleted(root, results, new String(""));
 		return results;
 	    }
 
       
-	    private ArrayList findDeleted(DataElement root, ArrayList results)
+	    private ArrayList findDeleted(DataElement root, ArrayList results, String buffer)
 	    {	   
 		synchronized(root)
 		    {
 			if (root != null)
 			    {		     	
+				trace(buffer + "find deleted " + root.getName());
+				if (results.contains(root))
+				    {
+					return results;
+				    }
+
+				if (root.isDeleted())
+				    {
+					results.add(root);
+				    }
+
 				ArrayList searchList = root.getNestedData();
 				
 				if (searchList != null)
@@ -2234,8 +2250,8 @@ public final class DataStore
 						    }
 						
 						if (!child.isReference())
-						    {
-							results = findDeleted(child, results);	
+						    {							
+							results = findDeleted(child, results, buffer + " ");	
 						    }
 					    }
 				    }

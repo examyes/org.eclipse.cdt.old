@@ -52,21 +52,15 @@ public abstract class UpdateHandler extends Handler
 			if (child != null)
 			{
 				DataElement parent = child.getParent();
-	
-		 		 child.clear();						
-				 if (parent != null)
-				     {
-					 parent.removeNestedData(child);
-				     }
-
-				 //_dataStore.addToRecycled(child);
-				 child = null;
+				child.clear();						
+				if (parent != null)
+				    {
+					parent.removeNestedData(child);
+				    }				
 		    }
 	    }
 	    
 	    deletedList.clear();
-	    deletedList = null;
-
 	   }
     }
 

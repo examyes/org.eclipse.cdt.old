@@ -40,10 +40,6 @@ public final class DataElement implements Serializable, IDataElement
     
     private PropertySource      _propertySource = null;
 
-
-    // convenience
-    private DataElement         _containerDescriptor = null;
-
     /**
      * Creates a new <code>DataElement</code> without initializing it.
      *
@@ -1750,7 +1746,6 @@ public final class DataElement implements Serializable, IDataElement
 	_referencedObject = null;
      
     _propertySource = null;
-    _containerDescriptor = null;
 	_buffer = null;
     }
 
@@ -1765,7 +1760,6 @@ public final class DataElement implements Serializable, IDataElement
 	setAttribute(DE.A_SOURCE, "deleted");
 	setAttribute(DE.A_SOURCE_LOCATION,   "deleted");
 	setAttribute(DE.A_VALUE,  "deleted");
-	setAttribute(DE.A_TYPE,   "deleted");
 
 	_isUpdated = false;	 
 	_isExpanded = true;
@@ -1773,15 +1767,6 @@ public final class DataElement implements Serializable, IDataElement
     }
 
 
-    private DataElement getContainerDescriptor()
-    {
-	if (_containerDescriptor == null)
-	    {
-		_containerDescriptor = _dataStore.findDescriptor(DE.T_ABSTRACT_OBJECT_DESCRIPTOR, 
-								 _dataStore.getLocalizedString("model.Container_Object"));
-	    }
-	return _containerDescriptor;
-    }
       
 }
 
