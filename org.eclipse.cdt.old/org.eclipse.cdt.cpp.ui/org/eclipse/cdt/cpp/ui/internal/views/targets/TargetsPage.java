@@ -16,6 +16,7 @@ import com.ibm.dstore.core.model.*;
 import com.ibm.dstore.extra.internal.extra.*;
 import com.ibm.cpp.ui.internal.*;
 import com.ibm.cpp.ui.internal.api.*;
+import com.ibm.cpp.ui.internal.vcm.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
@@ -59,106 +60,146 @@ public class TargetsPage extends Page implements IPropertySheetPage {
 public TargetsPage() {
 	super();
 }
-/**
- * Creates and configures the TargetsViewer 
- * for this page
- **/
-public void createControl(Composite parent) {
-	viewer = new TargetsViewer(parent,this);
 
+    /**
+     * Creates and configures the TargetsViewer 
+     * for this page
+     **/
+    public void createControl(Composite parent) 
+    {
+	viewer = new TargetsViewer(parent,this);
+	
 	// set the model for the viewer
-	if (rootEntry == null) {
+	if (rootEntry == null) 
+	    {
 		// create a new root
 		TargetsEntry root = new TargetsEntry();
 		if (provider != null)
-			// set the property source provider
-			root.setPropertySourceProvider(provider);
+		    // set the property source provider
+		    root.setPropertySourceProvider(provider);
 		rootEntry = root;
-	}
+	    }
 	viewer.setRootEntry(rootEntry);
-
+	
 	// each time you start up targets view, initialize root list
 	initTargetsStore(targetStore);
-
+	
 	//create the actions
 	newAction = new ActionNewTarget(this);
 	removeAction = new ActionRemoveTarget(this);
 	buildAction = new ActionBuildTarget(this);
 	removeAllAction = new ActionRemoveAllTarget(this);
-
+	
 	
 	// navigatorSelection is a global variable - use set/get  instead
 	//Object root = getNavigatorSelection();
-	Object root  = NavigatorSelection.selection;
-	if(root!=null && (root instanceof IProject || root instanceof IFolder||root instanceof IFile))
+	Object root  = getProjectInput();
+	if(root!=null && (root instanceof IProject))
+	    {
 		newAction.setEnabled(true);
-	
-}
-/**
- * Returns the SWT control for this page
- *
- * @return the SWT control for this page
- */
-public Control getControl() {
+	    }
+    }
+
+    /**
+     * Returns the SWT control for this page
+     *
+     * @return the SWT control for this page
+     */
+    public Control getControl() 
+    {
 	if(viewer == null)
-		return null;
+	    return null;
 	return viewer.getControl();
-}
-/**
- * Returns the image descriptor with the given relative path.
- */
-private ImageDescriptor getImageDescriptor(String relativePath) {
+    }
+    
+    /**
+     * Returns the image descriptor with the given relative path.
+     */
+    private ImageDescriptor getImageDescriptor(String relativePath) 
+    {
 	try {
-		AbstractUIPlugin plugin = (AbstractUIPlugin) Platform.getPlugin(PlatformUI.PLUGIN_ID);
-		URL installURL = plugin.getDescriptor().getInstallURL();
+	    AbstractUIPlugin plugin = (AbstractUIPlugin) Platform.getPlugin(PlatformUI.PLUGIN_ID);
+	    URL installURL = plugin.getDescriptor().getInstallURL();
 		URL url = new URL(installURL, "icons/basic/" + relativePath);
 		return ImageDescriptor.createFromURL(url);
 	}
 	catch (MalformedURLException e) {
-		// Should not happen
-		return null;
+	    // Should not happen
+	    return null;
 	}
-}
-
-protected int getRootIndex(Object root)  {
+    }
+    
+    protected int getRootIndex(IProject root)  
+    {
 	for(int i = 0; i< targetStore.projectList.size(); i++)
-	{
+	    {
 		RootElement obj = (RootElement)targetStore.projectList.elementAt(i);
-		String name = new String(obj.getName());
-		if(name.equals(((IProject)root).getName()))
-			return i;
-	}
-	return -1;
-}
-/*
+		IProject project = obj.getRoot();
 
-*/
-private Vector getTargetsList(Object root) {
+		if(root.getName().equals(project.getName()))
+		    {
+			return i;
+		    }
+	    }
+
+	return -1;
+    }
+
+    private Vector getTargetsList(Object root) 
+    {
  	return null;
-}
-/**
- * Returns the SWT control for this page
- *
- * @return the SWT control for this page
- */
-public TargetsViewer getViewer() {
+    }
+
+    /**
+     * Returns the SWT control for this page
+     *
+     * @return the SWT control for this page
+     */
+    public TargetsViewer getViewer() 
+    {
 	return this.viewer;
-}
-/*
-*/
-private void initTargetsStore(TargetsStore store) {
+    }
+
+
+    /*
+     */
+    private void initTargetsStore(TargetsStore store) 
+    {
 	store.projectList.removeAllElements();
+
+	// local projects
 	IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-	if(projects.length>0)
+	if(projects.length > 0)
+	    {
  		for(int i = 0; i < projects.length; i++)
-	 		store.projectList.add(new RootElement((IResource)projects[i], null));
+		    {			
+			store.projectList.add(new RootElement(projects[i], null));
+		    }
+	    }
+
+	// remote projects
+	RemoteProjectAdapter rmtAdapter = RemoteProjectAdapter.getInstance();
+	if (rmtAdapter != null)
+	    {
+		IProject[] rprojects = rmtAdapter.getProjects();
+		
+		if (rprojects != null)
+		    {
+			for (int j = 0; j < rprojects.length; j++)
+			    {	
+				store.projectList.add(new RootElement(rprojects[j], null));
+			    }
+		    }
+	    }
 
 	// updating root elements
 	for(int y = 0; y < store.projectList.size(); y++)
 	{
 		RootElement root = (RootElement)store.projectList.elementAt(y);
+		IProject project = root.getRoot();
+
 		// look for that root in the persistence store and if found do update
-		java.util.ArrayList savedList = com.ibm.cpp.ui.internal.CppPlugin.readProperty(root.getRoot(),root.getName());
+		java.util.ArrayList savedList = com.ibm.cpp.ui.internal.CppPlugin.readProperty(project, root.getName());
 		for(int z = 0; z < savedList.size(); z++)
 		{
 			TargetElement target = new TargetElement(savedList.get(z++).toString(),
@@ -246,127 +287,118 @@ public void makeContributions(
 	
 
 }
-/**
- * Updates the model for the viewer.
- * <p>
- * Note that this means ensuring that the model reflects the state
- * of the current viewer input. 
- * </p>
- */
-public void refresh() {
+
+    /**
+     * Updates the model for the viewer.
+     * <p>
+     * Note that this means ensuring that the model reflects the state
+     * of the current viewer input. 
+     * </p>
+     */
+    public void refresh() 
+    {
 	if (viewer == null)
-		return;
+	    return;
 	// calling setInput on the viewer will cause the model to refresh
 	viewer.setInput(viewer.getInput());
-}
-/*
+    }
 
-*/
-protected boolean rootExists(Object root)  {
+    public IProject getProjectInput()
+    {
+	return pluginInstance.getCurrentProject();
+    }
+
+    protected boolean rootExists(Object root)  
+    {
 	for(int i = 0; i< targetStore.projectList.size(); i++)
-	{
+	    {
 		RootElement obj = (RootElement)targetStore.projectList.elementAt(i);
 		String name = new String(obj.getName());
 		if(name.equals(((IProject)root).getName()))
-			return true;
-	}
+		    return true;
+	    }
 	return false;
-}
-/**
- * Notify the viewer that selection has changed.
- */
-public final void selectionChanged(IWorkbenchPart part, ISelection sel) {
-	if(sel!=null && sel instanceof IStructuredSelection)
-	{
-		NavigatorSelection.structuredSelection = (IStructuredSelection)sel;
-		Object root = ((IStructuredSelection)sel).getFirstElement();
-		if(root instanceof IProject)
+    }
+
+    /**
+     * Notify the viewer that selection has changed.
+     */
+    public final void selectionChanged(IWorkbenchPart part, ISelection sel) 
+    {	
+	if (part instanceof com.ibm.cpp.ui.internal.views.CppProjectsViewPart || 
+	    part instanceof org.eclipse.ui.views.navigator.ResourceNavigator)
+	    {
+		if (viewer == null)
+		    return;
+		
+		IStructuredSelection es = (IStructuredSelection)sel;
+		Object object = es.getFirstElement();
+		
+		if (object != null)
 		    {
-			NavigatorSelection.selection = (IResource)root;
-		    }
-		else if (root instanceof IFolder)
-		    {
-			NavigatorSelection.selection = ((IFolder)root).getProject();
-		    }
-		else if (root instanceof IFile)
-		    {
-			NavigatorSelection.selection = ((IFile)root).getProject();
-		    }
-		else if (root instanceof DataElement)
-		    {
-			ModelInterface api = ModelInterface.getInstance();
-			if (((DataElement)root).getType().equals("Project"))
+			IProject project = null;
+			if (object instanceof IResource)
 			    {
-				IResource theResource = api.findProjectResource((DataElement)root);
-				if (theResource != null)
+				project = ((IResource)object).getProject();
+			    }
+			else if (object instanceof DataElement)
+			    {
+				ModelInterface api = ModelInterface.getInstance();
+				DataElement projectElement = api.getProjectFor((DataElement)object);
+				if (projectElement != null)
 				    {
-					NavigatorSelection.selection = theResource.getProject();
+					project = api.findProjectResource(projectElement);
 				    }
 			    }
-		    }		
-	}
+			
+		
+			// populate the viewer with existing projects
+			// this code is for populating the viewer with existing targets
+			// to be moved in a separte method
+			updateTargetsStore(targetStore); // new
+						
+			if (project != null)	
+			    {
+				// the following statement has been put in the TargetsPage.createPage mas well
+				newAction.setEnabled(true);
+				buildAction.setEnabled(false);
+				removeAction.setEnabled(false);
+				removeAllAction.setEnabled(false);
+			    }
+		
+			// set the input to be the targets associated witht the navigator selection
+			// I could use the selection object from the function header instead
+			if(project != null)
+			    {
+				java.util.List list = new ArrayList();
+				int index = getRootIndex(project);
+				if(index>-1)
+				    {
+					RootElement root = (RootElement)targetStore.projectList.elementAt(index);
+					list.add(root);
+					// enabling the relevant target actions
+					if(root.getTargets().size()>0)
+					    removeAllAction.setEnabled(true);
+					// end
+					viewer.setInput(list.toArray());
+				    }
+				else
+				    {
+					viewer.setInput(list.toArray()); // empty list
+				    }
+			    }
+		    }
+	    }
+    }
 
-	
-	if (viewer == null)
-		return;
-
-	// populate the viewer with existing projects
-	// this code is for populating the viewer with existing targets
-	// to be moved in a separte method
-	
-	updateTargetsStore(targetStore); // new
-	
-	if(NavigatorSelection.structuredSelection!=null && 
-		(NavigatorSelection.selection instanceof IProject || NavigatorSelection.selection instanceof IFolder || NavigatorSelection.selection instanceof IFile))
-	
-	{
-		// the following statement has been put in the TargetsPage.createPage mas well
-		newAction.setEnabled(true);
-		buildAction.setEnabled(false);
-		removeAction.setEnabled(false);
-		removeAllAction.setEnabled(false);
-	}
-	// set the input to be the targets associated witht the navigator selection
-	// I could use the selection object from the function header instead
-	if(NavigatorSelection.selection instanceof IProject)
-	{
-		java.util.List list = new ArrayList();
-		int index = getRootIndex(NavigatorSelection.selection);
-		if(index>-1)
-		{
-			RootElement root = (RootElement)targetStore.projectList.elementAt(index);
-			list.add(root);
-			// enabling the relevant target actions
-			if(root.getTargets().size()>0)
-				removeAllAction.setEnabled(true);
-			// end
-			viewer.setInput(list.toArray());
-		}
-		else
-		{
-			viewer.setInput(list.toArray()); // empty list
-		}
-	}
-}
-/**
- * Sets focus to a part in the page.
- */
-public void setFocus() {
+    /**
+     * Sets focus to a part in the page.
+     */
+    public void setFocus() 
+    {
 	viewer.getControl().setFocus();
-}
-/**
- * sets the navigator selection fot the tagets view
- */
-public void setNavigatorSelection(ISelection sel) {
-/*	if(sel!=null)
-	{
-		this.structuredSelection = (IStructuredSelection)sel;
-		Object root = ((IStructuredSelection)sel).getFirstElement();
-			if(root instanceof IProject)
-				this.resourceSelection = root;
-	}
-*/
-}
+    }
+
 /**
  * Sets the given property source provider as
  * the property source provider
@@ -400,9 +432,12 @@ public void setRootEntry(IPropertySheetEntry entry) {
 private void updateTargetsStore(TargetsStore oldStore) {
 
 	IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-	
+
+	RemoteProjectAdapter rmtAdapter = RemoteProjectAdapter.getInstance();
+	IProject[] rprojects = rmtAdapter.getProjects();		
+
 	// removing project list if the project has been deleted
-	if(projects.length==0)
+	if(projects.length==0 && rprojects.length==0)
 	{
 		oldStore.projectList.removeAllElements();
 		viewer.setInput(new ArrayList().toArray());
@@ -416,11 +451,19 @@ private void updateTargetsStore(TargetsStore oldStore) {
 	for (int i = 0; i < oldStore.projectList.size(); i++) 
 	{
 		boolean found = false;
+		// compare locals
 		for (int y = 0; y < projects.length; y++) 
 		{
 			RootElement root = (RootElement) oldStore.projectList.elementAt(i);
 			if (root.getName().equals(projects[y].getName())) 
 				found = true;
+		}
+		// compare remotes
+		for (int z = 0; z < rprojects.length; z++) 
+		{
+		    RootElement root = (RootElement) oldStore.projectList.elementAt(i);
+		    if (root.getName().equals(rprojects[z].getName())) 
+			found = true;
 		}
 		if (!found ) 
 		{

@@ -18,8 +18,8 @@ import java.util.*;
 import org.eclipse.core.resources.*;
 import com.ibm.cpp.ui.internal.*;
 
-public class RootElement extends BaseElement {
-
+public class RootElement extends BaseElement 
+{
 	private int counter = 0;
 	
 	protected int MAX_TARGETS = 100; //TBC
@@ -36,36 +36,37 @@ public class RootElement extends BaseElement {
 	private String key = new String("");
 	private int unique = 0;
 
-	private IResource root;
+	private IProject root;
 	
 	// NL enablement
 	private CppPlugin pluginInstance = CppPlugin.getPlugin();
 	protected String Key = "TargetsViewer.RootElement.Key";
 	
 
-/**
- * Constructor. 
- */
-public RootElement(IResource root, RootElement parent) {
+    /**
+     * Constructor. 
+     */
+    public RootElement(IProject root, RootElement parent) 
+    {
 	super(root.getName(), parent);
 	this.root = root;
 	P_ID_TARGETS = new String[MAX_TARGETS];
 	P_TARGETS = new String[MAX_TARGETS];
-}
-/**
- *
- */
-public void add(TargetElement obj) {
-
+    }
+    
+    /**
+     *
+     */
+    public void add(TargetElement obj) 
+    {	
 	if (obj.isTarget()) 
-	{
+	    {
 		obj.setID(key);
 		getTargets().add(obj);
-		obj.setParent(this);
+		obj.setParent(this);		
+	    }
+    }
 
-	}
-
-}
 /**
  *
  */
@@ -122,10 +123,12 @@ public Object getPropertyValue(Object propKey)
 	}
 	return null;	
 }
-public IResource getRoot() {
 
-	return this.root;
+public IProject getRoot() 
+{
+    return this.root;
 }
+
 public Vector getTargets() {
 	if (fTargets == null)
 		fTargets = new Vector();

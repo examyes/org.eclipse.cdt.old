@@ -10,14 +10,17 @@ package com.ibm.cpp.ui.internal.views.targets;
 import java.util.*;
 /**
  */
-public class TargetsStore {
+public class TargetsStore 
+{
 
-	Vector projectList;
-/**
- * TargetsStore constructor comment.
- */
-public TargetsStore() {
+    Vector projectList;
+
+    /**
+     * TargetsStore constructor comment.
+     */
+    public TargetsStore() 
+    {
 	super();
 	projectList = new Vector();
-}
+    }
 }

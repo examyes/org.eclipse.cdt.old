@@ -183,6 +183,11 @@ public String getContainerFullPath()
 	return targetNameField.getText();
     }
 
+    public DataElement getResourceElement()
+    {
+	return _viewer.getSelected();
+    }
+
     /**
      * Handles events for all controls in the group.
      *

@@ -70,14 +70,15 @@ public void dispose() {
 			java.util.ArrayList list = new java.util.ArrayList();
 			int listCounter = 0;
 			
-				RootElement root = (RootElement)projects.elementAt(i);
+			RootElement root = (RootElement)projects.elementAt(i);
 			for (int y=0; y < root.getTargets().size(); y++)
 			{
 				TargetElement target = (TargetElement)root.getTargets().elementAt(y);
 				list.add(listCounter++,target.getName());
-				list.add(listCounter++,target.getWorkingDirectory());
+				list.add(listCounter++,target.getWorkingDirectory()); 
 				list.add(listCounter++,target.getMakeInvocation());
 			}
+
 			com.ibm.cpp.ui.internal.CppPlugin.writeProperty(root.getRoot(),root.getName(),list);
 
 			// check if persistence has been worked properly 
