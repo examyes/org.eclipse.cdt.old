@@ -86,6 +86,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
   private Button             _browseButton;
 
   private boolean            _hasFocus;
+    private String           _outputViewId;
 
   protected DataElement      _input;
   protected ArrayList        _history;
@@ -95,8 +96,14 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     {
 	super();
 	doCreateControl(parent);
+	_outputViewId = "com.ibm.dstore.hosts.views.OutputViewePart";
     }
     
+    public void setOutputId(String outputId)
+    {
+	_outputViewId = outputId;
+    }
+
     public Control getControl()
     {
 	return null;
@@ -114,6 +121,8 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
     public void refresh()
     {
     }
+
+    
     
     public Object getInput()
     {
@@ -394,7 +403,7 @@ public class CommandViewer extends Viewer implements Listener, KeyListener
 			args.add(invocationObj);
 			DataElement cmdStatus = dataStore.command(cmdD, args, _input);
 			
-			ShowViewAction action = new ShowViewAction("com.ibm.dstore.hosts.views.OutputViewPart", cmdStatus);
+			ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
 			d.asyncExec(action);		
 		    }
 	    }
