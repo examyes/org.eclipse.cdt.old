@@ -2015,7 +2015,7 @@ public class GdbDebugSession extends DebugSession {
 		updateMonitors();
 		updateRegisters();
 		updateStorage();
-		updateBreakpoints();
+//		updateBreakpoints();
 	}
 
 	// data members
