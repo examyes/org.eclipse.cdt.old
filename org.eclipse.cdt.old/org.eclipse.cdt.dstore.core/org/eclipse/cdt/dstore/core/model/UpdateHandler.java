@@ -30,28 +30,31 @@ public abstract class UpdateHandler extends Handler
     
     protected void clean(DataElement object)
     {
-	clean(object, 1);
+	clean(object, 3);
     } 
     
-    protected void clean(DataElement object, int depth)
+    protected synchronized void clean(DataElement object, int depth)
     {
 	if ((depth > 0) && (object != null))
 	    {
 		for (int i = 0; i < object.getNestedSize(); i++)
 		    {
-			DataElement child = object.get(i);
+			DataElement child = object.get(i);			
 			clean(child, depth - 1);
-			if (child.isDeleted())
+			if (child != null)
 			    {
-				object.removeNestedData(child);
-			    }		
-
-			DataElement dchild = child.dereference();
-			clean(dchild, depth - 1);
-			if (dchild.isDeleted())
-			    {
-				dchild.getParent().removeNestedData(dchild);
-			    }		
+				if (child.isDeleted())
+				    {
+					object.removeNestedData(child);
+				    }		
+				
+				DataElement dchild = child.dereference();
+				clean(dchild, depth - 1);
+				if (dchild.isDeleted())
+				    {
+					dchild.getParent().removeNestedData(dchild);
+				    }		
+			    }
 		    }
 	    }
     }

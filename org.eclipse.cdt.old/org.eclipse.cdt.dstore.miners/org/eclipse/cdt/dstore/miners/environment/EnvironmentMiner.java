@@ -29,13 +29,19 @@ public class EnvironmentMiner extends Miner
  }
  
  public void extendSchema(DataElement schemaRoot) 
- { 
-  DataElement envVar = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Environment Variable");
+    { 
+	DataElement containerObjectD = _dataStore.findDescriptor(DE.T_ABSTRACT_OBJECT_DESCRIPTOR, getLocalizedString("model.Container_Object"));
+	
+	DataElement envVar = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, "Environment Variable");
+	_dataStore.createReference(containerObjectD, envVar, "abstracts", "abstracted by");
+
+
   _dataStore.createReference(envVar, envVar, "contents");
   DataElement parentD    = _dataStore.createObject(schemaRoot, DE.T_RELATION_DESCRIPTOR, "Parent Environment");
   _dataStore.createReference(envVar, parentD);
+  _dataStore.createReference(envVar, parentD);
   
-  DataElement projectD        = _dataStore.find(schemaRoot, DE.A_NAME, "project", 1);
+  DataElement projectD        = _dataStore.find(schemaRoot, DE.A_NAME, "Project", 1);
   createCommandDescriptor(projectD, "Set Environment Variables", "C_SET_ENVIRONMENT_VARIABLES");
  }
  

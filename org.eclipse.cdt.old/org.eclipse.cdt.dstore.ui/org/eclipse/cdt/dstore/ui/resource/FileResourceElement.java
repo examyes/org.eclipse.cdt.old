@@ -37,12 +37,70 @@ public class FileResourceElement extends ResourceElement implements IFile
   public FileResourceElement (DataElement e, IProject project)
   {
     super(e, project);    
+    initializePath(project);
+
   }
 
   public FileResourceElement (DataElement e, Object parent, IProject project)
   {
     super(e, parent, project);    
+    initializePath(project);
   }
+
+    public void initializePath(IProject project)
+    {
+	if (project != null)
+	    {
+		IPath newPath = project.getFullPath();
+		QualifiedName propertyQName = new QualifiedName("Mount Point", newPath.toString());
+		
+		String mountPoint = null;
+		
+		try
+		    {			
+			ArrayList savedProperty = new ArrayList();
+			String propertyString = project.getPersistentProperty(propertyQName);
+			if (propertyString != null && propertyString.length() != 0)
+			    {
+				StringTokenizer st = new StringTokenizer(propertyString, "|", false);
+				while (st.hasMoreTokens())
+				    {
+					savedProperty.add(st.nextToken());
+				    }
+			    }
+
+			if (savedProperty.size() > 0)
+			    {
+				mountPoint = (String)savedProperty.get(0);				
+			    }
+		    }
+		catch (CoreException e)
+		    {
+		    }
+		
+		if (mountPoint != null)
+		    {
+			StringBuffer mFName = new StringBuffer();
+			IResource resource = this;
+			while (!(resource instanceof IProject))
+			    {
+				mFName.insert(0, resource.getName());
+				resource = resource.getParent();
+				mFName.insert(0, java.io.File.separator);
+			    }
+			
+			mFName.insert(0, mountPoint);
+			String path = mFName.toString();
+			java.io.File file = new java.io.File(path);
+			if (file.exists())
+			    {
+				_mountedFile = file;
+				_path = new Path(_mountedFile.getAbsolutePath());	  
+			    }
+		    }
+	    }
+
+    }
 
   public boolean exists(boolean c, boolean p)
       {
@@ -244,10 +302,6 @@ public void transferStreams(InputStream source, OutputStream destination, IProgr
 	{
 	  String fileName = fileObject.getAbsolutePath();
 	  
-	  if (!_path.toOSString().equals(fileName))
-	    {
-	      _path = new Path(fileName);	  
-	    }
 	   
 	  result = new FileInputStream(fileName); 	
 	}

@@ -116,7 +116,6 @@ public class Repository extends Project
 	    if ((status != null) && status.isConnected())
 		{ 
 		    _dataStore = _connection.getDataStore();
-		    //		    _dataStore.setMinersLocation("com.ibm.cpp.miners");
 
 		    DataElement hostRoot = _dataStore.getHostRoot();
 
@@ -127,7 +126,7 @@ public class Repository extends Project
 		    _root.addNestedData(_remoteRoot.getNestedData(), false);
 		    _root.setDataStore(_remoteRoot.getDataStore());
 		    
-		    readProperties();
+		    //readProperties();
 		    
 		    // create directory for project
 		    Path rootPath = (Path)Platform.getLocation();
@@ -229,8 +228,10 @@ public class Repository extends Project
     _refreshAction = new RefreshNavigatorAction("refresh");
     _refreshResourcesAction = new RefreshResourcesAction();
 
-    _persistentProperties = new ArrayList();
     _plugin = CppPlugin.getDefault();
+    _persistentProperties = new ArrayList();
+    readProperties();
+
 
     _children = new Vector();
   }
@@ -582,7 +583,7 @@ public class Repository extends Project
       {
       }
 
-    _persistentProperties.clear();
+    //_persistentProperties.clear();
     
   }
   

@@ -101,40 +101,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 				    
 				    if (file != null)
 					{	
-					    // if this is a remote file
-					    if (file instanceof FileResourceElement)
-						{
-						    IProject project = file.getProject();
-						    ArrayList mountPoints = _plugin.readProperty(project, "Mount Point");
-						    if (mountPoints != null && mountPoints.size() > 0)
-							{
-							    String mountPoint = (String)mountPoints.get(0);
-							    FileResourceElement fileElement = (FileResourceElement)file;
-							    if (fileElement.getMountedFile() == null)
-								{
-								    StringBuffer mFName = new StringBuffer();
-								    IResource resource = fileElement;
-								    while (!(resource instanceof Repository))
-									{
-									    mFName.insert(0, resource.getName());
-									    resource = resource.getParent();
-									    mFName.insert(0, java.io.File.separator);
-									}
-								    
-								    mFName.insert(0, mountPoint);
-
-								    String mountedFileName = mFName.toString();
-								    
-								    System.out.println("opening mounted " + mountedFileName);
-								    java.io.File mountedFile = new java.io.File(mountedFileName);
-								    if (mountedFile.exists())
-									{
-									    fileElement.setMountedFile(mountedFile);
-									}
-								}
-							}
-						}
-
 					    if (_plugin != null)
 						{
 						    IWorkbench desktop = _plugin.getWorkbench();
