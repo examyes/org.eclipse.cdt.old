@@ -47,6 +47,16 @@ public class CppAttachLauncher implements ILauncherDelegate {
 	_api = ModelInterface.getInstance();
     }
 
+	public String getLaunchMemento(Object obj)
+	{
+		return null;	
+	}
+	
+	public Object getLaunchObject(String mem)
+	{
+		return null;	
+	}
+
     public boolean launch(Object[] elements, String mode, ILauncher launcher) {
 
         // Get the selection and check if valid
