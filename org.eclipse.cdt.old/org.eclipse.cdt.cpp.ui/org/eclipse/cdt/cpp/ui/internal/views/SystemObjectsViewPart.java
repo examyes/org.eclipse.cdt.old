@@ -109,12 +109,18 @@ public class SystemObjectsViewPart extends ProjectViewPart
     public DataElement doSpecificInput(DataElement theElement)
     {
 	DataElement theInput = null;
-	if (theElement.getType().equals("file"))
+	if (theElement == null)
+	{
+		return null;	
+	}
+		
+	String type = theElement.getType();	
+	if (type.equals("file"))
 	    {
 		theElement = _api.getProjectFor(theElement);		
 	    }
 
-	if (theElement.getType().equals("Project"))
+	if (theElement != null && theElement.getType().equals("Project"))
 	    {
 		theInput = findParseFiles(theElement);
 	    }
