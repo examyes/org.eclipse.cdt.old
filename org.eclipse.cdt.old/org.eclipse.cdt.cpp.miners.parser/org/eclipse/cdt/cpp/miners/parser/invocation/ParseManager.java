@@ -50,7 +50,6 @@ public class ParseManager
 
  public void cancelParse()
  {
-  System.out.println("GOT THE PARSE CANCEL!!!!!!!!!!!!!!!!");
   _thePreprocessWorker.interrupt();
   _thePreprocessWorker = new PreprocessWorker();
   _thePreprocessWorker.start();
