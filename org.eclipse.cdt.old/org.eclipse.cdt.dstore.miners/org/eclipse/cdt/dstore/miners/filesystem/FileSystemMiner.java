@@ -184,6 +184,8 @@ public class FileSystemMiner extends Miner
 	  _containsDescriptor       = _dataStore.find(schemaRoot, DE.A_NAME, getLocalizedString("model.contents"), 1);
 
 	  _modifiedAtDescriptor     = createRelationDescriptor(schemaRoot, "modified at");
+	  _modifiedAtDescriptor.setDepth(0);
+	  
 	  _dateDescriptor           = createObjectDescriptor(schemaRoot, "date");
 	  
 	  
