@@ -198,7 +198,7 @@ public class GdbVariableMonitor extends Gdb_VariableMonitor
 	  	return "";
   	}
   	  	
-      String exprType = "unknown_Type";  	
+      String exprType = "<No Type Info>";  	
       String cmd = "whatis "+exprString;
       
       boolean ok = _debugSession.executeGdbCommand(cmd);

@@ -15,7 +15,7 @@ import java.text.*;
  * Represents a variable monitor.  Specific monitor types (LocalMonitor, InstanceMonitor,
  * ClassMonitor) descend from this class.
  */
-abstract class Gdb_VariableMonitor
+public abstract class Gdb_VariableMonitor
 {
    Gdb_VariableMonitor(GdbDebugSession debugSession, int exprID, int monType, GdbVariable monVar, EStdView context, int DU)
    {

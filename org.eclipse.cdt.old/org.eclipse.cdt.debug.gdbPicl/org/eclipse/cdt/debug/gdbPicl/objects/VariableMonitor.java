@@ -165,7 +165,7 @@ public abstract class VariableMonitor
    /**
     * Get the Variable being monitored.
     */
-   Variable getMonitoredVariable()
+   public Variable getMonitoredVariable()
    {
       return _monitoredVar;
    }

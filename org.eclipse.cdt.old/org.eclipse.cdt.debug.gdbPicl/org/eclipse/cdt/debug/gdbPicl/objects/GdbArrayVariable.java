@@ -9,6 +9,8 @@ package org.eclipse.cdt.debug.gdbPicl.objects;
 import com.ibm.debug.epdc.EStdTreeNode;
 import com.ibm.debug.epdc.EStdArrayItem;
 import org.eclipse.cdt.debug.gdbPicl.DebugSession;
+import org.eclipse.cdt.debug.gdbPicl.GdbDebugSession;
+
 import java.util.*;
 
 public class GdbArrayVariable extends GdbVariable {
@@ -226,6 +228,9 @@ public class GdbArrayVariable extends GdbVariable {
 		int comma = parseStr.indexOf(delimiter) + adjustment;
 		int counter = 0;
 		
+		String elementName = _fullName+"["+counter+"]";
+		fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, elementName);		    						
+		
 		// tokenize by "," and get the values
 		while (comma-adjustment != -1)
 		{
@@ -238,7 +243,7 @@ public class GdbArrayVariable extends GdbVariable {
 
 			comma = parseStr.indexOf(delimiter) + adjustment;			
 
-			// create element 			
+			// create element					 			
 	    	GdbScalarVariable newElement  = new GdbScalarVariable(_debugSession, fieldName, fieldType, fieldValue, _nodeID + _numNodes);
 	    	newElement.setFullName(_fullName+"["+counter+"]");
 			_elements.add(newElement);
@@ -273,6 +278,9 @@ public class GdbArrayVariable extends GdbVariable {
 		String fieldName;		
 		String fieldType = _type;
 		String fullName;
+		
+		String elementName = _fullName+"["+counter+"]";
+		fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, elementName);
 		
 		while (parseStr != "" && parseStr != null)
 		{
@@ -329,8 +337,11 @@ public class GdbArrayVariable extends GdbVariable {
 		String fieldName;		
 		String fieldType = _type;
 		
+		String elementName = _fullName+"["+counter+"]";
+		fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, elementName);	
+		
 		while (parseStr != "" && parseStr != null)
-		{
+		{	    									
 			fieldName = _name + "[" + counter + "]";
 			
 			// delimite by "{}"

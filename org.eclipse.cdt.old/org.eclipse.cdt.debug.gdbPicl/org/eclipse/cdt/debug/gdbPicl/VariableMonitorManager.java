@@ -5,10 +5,19 @@
  */
 
 package org.eclipse.cdt.debug.gdbPicl;
-import  org.eclipse.cdt.debug.gdbPicl.objects.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import com.ibm.debug.epdc.*;
-import java.util.*;
+import org.eclipse.cdt.debug.gdbPicl.objects.ExprEvalInfo;
+import org.eclipse.cdt.debug.gdbPicl.objects.Gdb_VariableMonitor;
+import org.eclipse.cdt.debug.gdbPicl.objects.Variable;
+import org.eclipse.cdt.debug.gdbPicl.objects.VariableMonitor;
+
+import com.ibm.debug.epdc.EPDC_Reply;
+import com.ibm.debug.epdc.ERepGetNextMonitorExpr;
+import com.ibm.debug.epdc.EStdExpression2;
+import com.ibm.debug.epdc.EStdView;
 
 /**
  * This class manages variable monitors
@@ -56,14 +65,14 @@ public abstract class VariableMonitorManager extends ComponentManager      //HC
    /**
     * Enable a variable monitor
     */
-   VariableMonitor getMonitor(int exprID)
+   Gdb_VariableMonitor getMonitor(int exprID)
    {
-      VariableMonitor vm = null;
+      Gdb_VariableMonitor vm = null;
       Object o = _monitors.get(new Integer(exprID));
       if (Gdb.traceLogger.EVT) 
           Gdb.traceLogger.evt(1,"VariableMonitorManager.getMonitor exprID="+exprID +" object="+o );
       if(o!=null)
-         vm = (VariableMonitor) o;
+         vm = (Gdb_VariableMonitor) o;
       return vm;
    }
 

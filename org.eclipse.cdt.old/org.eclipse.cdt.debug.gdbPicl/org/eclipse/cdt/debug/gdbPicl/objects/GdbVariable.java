@@ -48,7 +48,7 @@ public abstract class GdbVariable  extends Variable
     * 
     * Need to change the algorithm to use string buffer?
     */
-   private static String cleanupForTemplate(String parseStr)
+   protected static String cleanupForTemplate(String parseStr)
 	{
 		String str = parseStr;
 		

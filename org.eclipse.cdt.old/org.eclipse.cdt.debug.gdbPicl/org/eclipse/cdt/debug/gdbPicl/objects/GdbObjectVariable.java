@@ -62,7 +62,9 @@ public class GdbObjectVariable extends GdbVariable {
 			_gdbData = s;
 			_fields.removeAllElements();
 		
-			String parseStr = s;		
+			String parseStr = s;	
+			
+			parseStr = super.cleanupForTemplate(s);	
 			
 			createTree(parseStr);
 			_changed = true;
@@ -284,7 +286,7 @@ public class GdbObjectVariable extends GdbVariable {
 	   		if (!fieldName.startsWith("<") && !fieldName.endsWith(">"))
 	   		{
 	    		prefix = fullFieldName;
-				fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fieldName);		    								
+				fieldType = GdbVariableMonitor.getExpressionType((GdbDebugSession)_debugSession, fullFieldName);		    								
 	   		}	   		
 	   		else			    		
 	   		{
