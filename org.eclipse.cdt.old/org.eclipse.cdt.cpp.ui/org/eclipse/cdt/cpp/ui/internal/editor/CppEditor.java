@@ -35,6 +35,8 @@ import com.ibm.lpex.alef.LpexTextEditor;
 import com.ibm.lpex.core.LpexView;
 import com.ibm.lpex.core.LpexWindow;
 
+
+
 public class CppEditor extends LpexTextEditor
 {
   protected CppContentOutlinePage page;
@@ -54,7 +56,8 @@ public class CppEditor extends LpexTextEditor
          _isParsed = false;
          _plugin = CppPlugin.getDefault();
 	         setDocumentProvider(_plugin.getCppDocumentProvider());
-//setDocumentProvider(new org.eclipse.ui.editors.text.FileDocumentProvider());
+
+
       }
 
   protected void initializeEditor()
@@ -70,6 +73,7 @@ public class CppEditor extends LpexTextEditor
    public void createPartControl(Composite parent)
       {
         super.createPartControl(parent);
+        
       }
 
    /**
@@ -222,22 +226,26 @@ public class CppEditor extends LpexTextEditor
 			String fileName = file.getLocation().toOSString();		
 	       	if (!_isParsed)
 	      {
-            _isParsed = true;
-		
+      
       		ModelInterface api = ModelInterface.getInstance();
       		DataStore dataStore = CppPlugin.getDefault().getCurrentDataStore();
 
       		IProject project = CppPlugin.getDefault().getCurrentProject();
-
-      		DataElement parseMinerData = dataStore.findMinerInformation("com.ibm.cpp.core.miners.parser.ParseMiner");
-      		DataElement projectObj = api.findProjectElement(project);
-      		DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
+			if (project != null)
+			{
+      			DataElement projectObj = api.findProjectElement(project);
+      			if (projectObj != null)
+      			{
+      				DataElement parsedSource = dataStore.find(projectObj, DE.A_NAME, "Parsed Files", 1);
       		
-      		DataElement fileObj = dataStore.find(parsedSource, DE.A_NAME, fileName, 1);
-      		if (fileObj == null)
-      		{
-      			api.parse(file, false);
-      		}
+      				DataElement fileObj = dataStore.find(parsedSource, DE.A_NAME, fileName, 1);
+      				if (fileObj == null)
+      				{
+      					api.parse(file, false);
+      					_isParsed = true;
+      				}
+      			}
+			}
 	      }
       	}
 
