@@ -31,6 +31,10 @@ public class GdbCommandAndResponse
    static String FIELD_NAME_END_keyword  = GdbProcess.MARKER+"field-name-end";
    static String FIELD_VALUE_keyword     = GdbProcess.MARKER+"field-value";
    static String FIELD_END_keyword       = GdbProcess.MARKER+"field-end";
+   static String ARRAY_SECTION_BEGIN_keyword = GdbProcess.MARKER+"array-section-begin";
+   static String ARRAY_ELEMENT_keyword   = GdbProcess.MARKER+"elt";
+   static String ARRAY_SECTION_END_keyword = GdbProcess.MARKER+"array-section-end";
+   
 
 
   /**
@@ -89,27 +93,9 @@ public class GdbCommandAndResponse
 
      if (Gdb.traceLogger.DBG)
          Gdb.traceLogger.dbg(3,"GdbDebugSession.getGdbResponseLines lines.length="+lines.length );
-/*
-     String PRE_PROMPT_keyword      = _gdbProcess.MARKER+"pre-prompt";
-     String FRAME_BEGIN_keyword     = _gdbProcess.MARKER+"frame-begin";
-     String FRAME_END_keyword       = _gdbProcess.MARKER+"frame-end";
-     String BP_RECORD_keyword       = _gdbProcess.MARKER+"record";
-     String BP_HEADERS_keyword      = _gdbProcess.MARKER+"breakpoints-headers";
-     String BP_TABLE_END_keyword    = _gdbProcess.MARKER+"breakpoints-table-end";
-     String DISPLAY_BEGIN_keyword   = _gdbProcess.MARKER+"display-begin";
-     String DISPLAY_END_keyword     = _gdbProcess.MARKER+"display-end";
-     String FIELD_BEGIN_keyword     = _gdbProcess.MARKER+"field-begin";
-     String FIELD_NAME_END_keyword  = _gdbProcess.MARKER+"field-name-end";
-     String FIELD_VALUE_keyword     = _gdbProcess.MARKER+"field-value";
-     String FIELD_END_keyword       = _gdbProcess.MARKER+"field-end";
-*/     
-     //String combinedLine = "";
 
         int length = lines.length;
-        int bufferSize = length * 80;
-
-       	//System.out.println("RW ===== GdbCommandAndResponse.java lines.length: " + length);
-
+        
         if(length>_debugSession.MAX_GDB_LINES)
         {
            if (Gdb.traceLogger.ERR)
@@ -131,7 +117,9 @@ public class GdbCommandAndResponse
                //  Could be a complex structure, class object, if yes put it all in one line   
                int j = i+1;
                if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
-                   lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword))
+                   lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
+                   lines[j].startsWith(ARRAY_SECTION_BEGIN_keyword) 
+                  )
                {
                   j++;
                   while (!lines[j].equals("}") || (lines[j].equals("}") && lines[j+1].startsWith(FIELD_END_keyword)))    
@@ -139,7 +127,9 @@ public class GdbCommandAndResponse
                  	 classObject.append(lines[j]);
                  	 j++;
                  	 if( lines[j].startsWith(FIELD_BEGIN_keyword) || lines[j].startsWith(FIELD_VALUE_keyword) ||
-                         lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword))
+                         lines[j].startsWith(FIELD_NAME_END_keyword) || lines[j].startsWith(FIELD_END_keyword) ||
+                         lines[j].startsWith(ARRAY_ELEMENT_keyword) || lines[j].startsWith(ARRAY_SECTION_END_keyword)
+                        )
                      {
                         j++;
                      }     
