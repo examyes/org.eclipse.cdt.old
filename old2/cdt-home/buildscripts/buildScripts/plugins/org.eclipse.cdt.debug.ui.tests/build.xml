@@ -33,6 +33,9 @@
 	<target name="gather.bin.parts" depends="init" if="destination.temp.folder">
 		<mkdir dir="${destination.temp.folder}/${full.name}"/>
 		<copy file="${build.result.folder}/cdttests.jar" todir="${destination.temp.folder}/${full.name}"/>
+		<copy todir="${destination.temp.folder}/${full.name}">
+			<fileset dir="${basedir}" includes="about.html"/>
+		</copy>
 	</target>
 
 	<target name="cdttests.jar" depends="init" unless="cdttests.jar">
@@ -40,7 +43,7 @@
 		<delete dir="${temp.folder}/cdttests.jar.bin"/>
 		<mkdir dir="${temp.folder}/cdttests.jar.bin"/>
 		<!-- compile the source code -->
-		<javac destdir="${temp.folder}/cdttests.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.core.resources/bin;../org.eclipse.swt/bin;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.apache.xerces/xercesImpl.jar;../org.eclipse.update.core.${os}/updatecore.jar;../org.eclipse.ui/workbench.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.core.runtime/bin;../org.apache.xerces/bin;../org.eclipse.cdt.debug.mi.core/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.cdt.debug.mi.core/cdtmicore.jar;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.cdt.debug.core/cdtdebugcore.jar;../org.junit/junit.jar;../org.eclipse.update.core/updatecore.jar;../org.eclipse.core.boot/bin;../org.eclipse.core.resources/resources.jar;../org.eclipse.update.core/bin;../org.eclipse.cdt.core/bin;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.cdt.debug.core/bin;cdtdebugtests.jar;../org.eclipse.core.boot/boot.jar;../org.eclipse.swt.win32/ws/${ws}/swt.jar;../org.apache.xerces/xmlParserAPIs.jar;../org.junit/bin">
+		<javac destdir="${temp.folder}/cdttests.jar.bin" failonerror="false" verbose="true" debug="on" includeAntRuntime="no" bootclasspath="${bootclasspath}" classpath="../org.eclipse.core.runtime/runtime.jar;../org.eclipse.ui.${ws}/workbench.jar;../org.eclipse.core.resources/bin;../org.eclipse.swt/bin;../org.eclipse.ui.${ws}/workbench${ws}.jar;../org.eclipse.cdt.core.${os}/cdtcore.jar;../org.apache.xerces/xercesImpl.jar;../org.eclipse.update.core.${os}/updatecore.jar;../org.eclipse.ui/workbench.jar;../org.eclipse.swt/ws/${ws}/swt.jar;../org.eclipse.core.runtime/bin;../org.apache.xerces/bin;../org.eclipse.cdt.debug.mi.core/bin;../org.eclipse.cdt.core/cdtcore.jar;../org.eclipse.ui/bin;../org.eclipse.cdt.debug.mi.core/cdtmicore.jar;../org.eclipse.core.resources.${os}/resources.jar;../org.eclipse.cdt.debug.core/cdtdebugcore.jar;../org.junit/junit.jar;../org.eclipse.update.core/updatecore.jar;../org.eclipse.core.boot/bin;../org.eclipse.core.resources/resources.jar;../org.eclipse.update.core/bin;../org.eclipse.cdt.core/bin;../org.eclipse.cdt.core.${os}/cdt_${os}.jar;../org.eclipse.cdt.debug.core/bin;cdtdebugtests.jar;../org.eclipse.core.boot/boot.jar;../org.eclipse.swt.${os}/ws/${ws}/swt.jar;../org.apache.xerces/xmlParserAPIs.jar;../org.junit/bin">
 			<src path="src/"/>
 			<src path="core/"/>
 		</javac>
