@@ -13,7 +13,7 @@ package org.eclipse.cdt.debug.win32.core.os;
 /**
  * @author Doug Schaefer
  */
-public class SYMBOL_INFO {
+public class IMAGEHLP_LINE64 {
 	
 	/**
 	 * Native goodies
@@ -26,15 +26,15 @@ public class SYMBOL_INFO {
 		staticInitNative();
 	}
 	
-	private native void initNative(int maxNameLength);
+	private native void initNative();
 	
 	protected native void finalize() throws Throwable;
 	
 	/**
 	 * Create and zero out the structure
 	 */
-	public SYMBOL_INFO(int maxNameLength) {
-		initNative(maxNameLength);
+	public IMAGEHLP_LINE64() {
+		initNative();
 	}
 	
 	/**

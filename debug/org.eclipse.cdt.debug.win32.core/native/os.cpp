@@ -5,6 +5,8 @@
 #include <dbghelp.h>
 #include "context.h"
 #include "stackframe64.h"
+#include "symbol_info.h"
+#include "imagehlp_line64.h"
 
 // There is no native object implemented in this class. This is just a conduit
 // to the Platform SDK calls
@@ -40,11 +42,11 @@ NATIVE(jboolean, SymCleanup)(JNIEnv * env, jclass cls, jlong processHandle)
 }
 
 NATIVE(jboolean, StackWalk64)(JNIEnv * env, jclass cls,
-							 jint machineType,
-							 jlong processHandle,
-							 jlong threadHandle,
-							 jobject stackFrame,
-							 jobject context)
+							  jint machineType,
+							  jlong processHandle,
+							  jlong threadHandle,
+							  jobject stackFrame,
+							  jobject context)
 {
 	return StackWalk64(
 		machineType,
@@ -57,3 +59,38 @@ NATIVE(jboolean, StackWalk64)(JNIEnv * env, jclass cls,
 		SymGetModuleBase64,
 		NULL) ? JNI_TRUE : JNI_FALSE;
 }
+
+NATIVE(jboolean, SymFromAddr)(JNIEnv * env, jclass cls,
+							  jlong processHandle,
+							  jlong address,
+							  jlongArray displacement,
+							  jobject symbol)
+{
+	DWORD64 disp;
+	jboolean rc = SymFromAddr(
+		reinterpret_cast<HANDLE>(processHandle),
+		address,
+		&disp,
+		getSymbolInfo(env, symbol)) ? JNI_TRUE : JNI_FALSE;
+
+	env->SetLongArrayRegion(displacement, 0, 1, (jlong *)&disp);
+	return rc;
+}
+
+NATIVE(jboolean, SymGetLineFromAddr64)(JNIEnv * env, jclass cls,
+									   jlong processHandle,
+									   jlong address,
+									   jintArray displacement,
+									   jobject line)
+{
+	DWORD disp;
+	jboolean rc = SymGetLineFromAddr64(
+		reinterpret_cast<HANDLE>(processHandle),
+		address,
+		&disp,
+		getIMAGEHLP_LINE64(env, line)) ? JNI_TRUE : JNI_FALSE;
+	
+	env->SetIntArrayRegion(displacement, 0, 1, (jint *)&disp);
+	return rc;
+}
+					

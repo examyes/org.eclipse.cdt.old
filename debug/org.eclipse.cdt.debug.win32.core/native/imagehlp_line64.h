@@ -1,0 +1,6 @@
+#ifndef _IMAGEHLP_LINE64_H_
+#define _IMAGEHLP_LINE64_H_
+
+IMAGEHLP_LINE64 * getIMAGEHLP_LINE64(JNIEnv * env, jobject obj);
+
+#endif //_IMAGEHLP_LINE64_H_

@@ -29,5 +29,14 @@ public class OS {
 											 STACKFRAME64 stackFrame,
 											 CONTEXT context);
 
+	public static native boolean SymFromAddr(long processHandle,
+											 long address,
+											 long [] displacement, // out value
+											 SYMBOL_INFO symbol);
+
+	public static native boolean SymGetLineFromAddr(long processHandle,
+													long address,
+													int [] displacement, // out value
+													IMAGEHLP_LINE64 line);
 
 }
