@@ -1211,14 +1211,22 @@ public final class DataElement implements Serializable, IDataElement
     {
 	if (_isReference)
 	    {
-		
+		String name = getAttribute(DE.A_NAME);		
 		if ((_referencedObject != null))
 		    {
-			return _referencedObject;	
+			if (_referencedObject.getName().equals(name))
+			    {
+				return _referencedObject;	
+			    }
+			else
+			    {
+				_referencedObject = null;
+				delete();
+				return null;
+			    }
 		    }
 		else
 		    {            
-			String name = getAttribute(DE.A_NAME);
 			_referencedObject = _dataStore.find(name);
 			if ((_referencedObject != null))
 			    {
