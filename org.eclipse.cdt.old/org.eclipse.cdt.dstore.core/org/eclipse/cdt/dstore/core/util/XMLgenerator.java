@@ -28,13 +28,16 @@ public class XMLgenerator
 	private boolean _updateAll;
 	private boolean _ignoreDeleted;
 
+        private DataStore _dataStore;
+
 	public static final int EMPTY = 0;
 	public static final int OPEN = 1;
 	public static final int CLOSE = 2;
 	public static final int BODY = 3;
 
-	public XMLgenerator()
+	public XMLgenerator(DataStore dataStore)
 	{
+	    _dataStore = dataStore;
 		_state = EMPTY;
 		_bufferSize = 100000;
 
@@ -108,15 +111,12 @@ public class XMLgenerator
 			}
 			catch (Exception e)
 				{
-			
-				e.printStackTrace();
-				System.out.println(e);
-				
-			       _dataWriter = null;
+				    _dataStore.trace(e);
+				    _dataWriter = null;
+				}
 			}
-		}
 	}
-
+    
 	private void indent()
 	{
 		for (int i = 0; i < _indent; i++)
@@ -262,12 +262,12 @@ public class XMLgenerator
 				{
 					try
 					{
-					_dataWriter.write(new String(buffer), 0, size);
-					_dataWriter.flush();
+					    _dataWriter.write(new String(buffer), 0, size);
+					    _dataWriter.flush();
 					}
 					catch (IOException e)
 					{
-					    e.printStackTrace();
+					    _dataStore.trace(e);
 					}
 				}
 			
@@ -276,9 +276,8 @@ public class XMLgenerator
 			}
 			catch (IOException e)
 				{
-				e.printStackTrace();
-				System.out.println(e);
-			}
+				    _dataStore.trace(e);
+				}
 		}
 		else
 			if (_state == EMPTY)
@@ -319,7 +318,7 @@ public class XMLgenerator
 				}
 				catch (IOException e)
 				{
-				    e.printStackTrace();
+				    _dataStore.trace(e);
 				}
 			}
 		}

@@ -113,32 +113,32 @@ public class ConnectionEstablisher
      */
     public void finished(ServerReceiver receiver)
       {
-	  System.out.println("finishing");
-        _updateHandler.removeSenderWith(receiver.socket());
-        _receivers.remove(receiver);
-        if (_receivers.size() == 0)
-        {
-          _continue = false;
-	  _commandHandler.finish();
-	  _updateHandler.finish();
-	  System.out.println(ServerReturnCodes.RC_FINISHED);
-	  System.exit(0);
-        }
+	  _updateHandler.removeSenderWith(receiver.socket());
+	  _receivers.remove(receiver);
+	  if (_receivers.size() == 0)
+	      {
+		  _continue = false;
+		  _commandHandler.finish();
+		  _updateHandler.finish();
+		  _dataStore.finish();
+		  System.out.println(ServerReturnCodes.RC_FINISHED);
+		  System.exit(0);
+	      }
       }
-
+    
     private void waitForConnections()
     {
       while (_continue == true)
       {
-	  System.out.println("waiting for connections");
 	  try
 	      {
 		  // wait for connection
 		  Socket newSocket        = _serverSocket.accept();
 		  doHandShake(newSocket);
+		  newSocket.setKeepAlive(true);
 		  
 		  ServerReceiver receiver = new ServerReceiver(newSocket, this);
-		  Sender sender           = new Sender(newSocket);
+		  Sender sender           = new Sender(newSocket, _dataStore);
 		  
 		  // add this connection to list of elements
 		  _receivers.add(receiver);
@@ -152,14 +152,12 @@ public class ConnectionEstablisher
 			  _commandHandler.start();
 		      }
 
-		  /****	      
 		  if (_receivers.size() == _maxConnections)
 		      {
 			  _continue = false;
 			  _serverSocket.close();
 			  
 		      }
-		  ****/
 	      }	  
 	  catch (IOException ioe)
 	      {
@@ -168,8 +166,6 @@ public class ConnectionEstablisher
 		  _continue = false;
 	      }
       }      
-      System.out.println("FINISHED waiting for connections");
-
     }
     
 

@@ -176,10 +176,8 @@ public abstract class Miner
 		    }
 		catch(Exception e)
 		    {
-			
-			System.out.println(e);
-			e.printStackTrace();
-			
+			_dataStore.trace(e);
+
 			status.setAttribute(DE.A_NAME, "Failed with Exception");
 			status.setAttribute(DE.A_VALUE, getLocalizedString("model.done"));
 			_dataStore.refresh(status);
@@ -190,9 +188,6 @@ public abstract class Miner
 			else
 			    exc = "Exception";
 			DataElement exception = _dataStore.createObject(status, getLocalizedString("model.error"), exc);
-			
-			e.printStackTrace();
-			
 		    }
 	    }
 	

@@ -20,18 +20,20 @@ public class Sender implements ISender
   private PrintStream        _outFile;
   private BufferedWriter     _outData;
   private XMLgenerator       _xmlGenerator;
+  private DataStore          _dataStore;  
 
-  public Sender(Socket socket)
+  public Sender(Socket socket, DataStore dataStore)
     {
       _socket = socket;
-      _xmlGenerator = new XMLgenerator();
+      _dataStore = dataStore;
 
+      _xmlGenerator = new XMLgenerator(_dataStore);
       try
  	  {
-	    int bufferSize = _socket.getSendBufferSize();	  
+	      int bufferSize = _socket.getSendBufferSize();	  
 	  
-	    _socket.setSendBufferSize(bufferSize);	  
-	    _xmlGenerator.setBufferSize(bufferSize);
+	      _socket.setSendBufferSize(bufferSize);
+	      _xmlGenerator.setBufferSize(bufferSize);
 	  }
       catch (SocketException e)
 	  {

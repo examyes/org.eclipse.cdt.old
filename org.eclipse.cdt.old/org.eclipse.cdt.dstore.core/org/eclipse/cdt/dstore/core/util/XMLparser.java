@@ -60,7 +60,7 @@ public class XMLparser
 	    }
 	catch (IOException e)
 	    {
-		System.out.println(e);
+		_dataStore.trace(e);
 	    }
 	
 	while (written < size)
@@ -72,7 +72,7 @@ public class XMLparser
 		    }
 		catch (IOException e)
 		    {
-			e.printStackTrace();
+			_dataStore.trace(e);
 			handlePanic(e);
 		    }
 	    }
@@ -131,12 +131,12 @@ public class XMLparser
 	}
 	catch (IOException e)
 	{
-	    e.printStackTrace();
-			done = true; 
-
-			handlePanic(e);
-			
-			return null;
+	    _dataStore.trace(e);
+	    done = true; 
+	    
+	    handlePanic(e);
+	    
+	    return null;
 	}
 
 	if (offset > 0)
@@ -148,9 +148,9 @@ public class XMLparser
 		result = new String(_byteBuffer, 0, offset, "UTF-8");
 		}
 		catch (IOException e)
-		{
-		    e.printStackTrace();
-		}
+		    {
+			_dataStore.trace(e);
+		    }
 		return result; 
 	    }
 	else
@@ -289,8 +289,7 @@ public class XMLparser
 					      }
 					  catch (Exception e)
 					      {
-						  e.printStackTrace();
-						  System.out.println(e);
+						  _dataStore.trace(e);
 						  return _rootDataElement;
 					      }
 				      }

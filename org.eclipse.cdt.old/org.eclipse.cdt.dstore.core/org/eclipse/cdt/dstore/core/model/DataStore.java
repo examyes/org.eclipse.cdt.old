@@ -65,6 +65,10 @@ public final class DataStore
     private Random              _random;  
 
     private int                 _initialSize;
+
+    private File                _traceFileHandle;
+    private RandomAccessFile    _traceFile;
+    private boolean             _tracingOn;
     
     /**
      * Creates a new <code>DataStore</code> instance
@@ -79,7 +83,7 @@ public final class DataStore
         _domainNotifier      = null;
         _isConnected         = false;
         _logTimes            = false;
-	_initialSize         = 10000;
+	_initialSize         = 100000;
 
 	initialize();
       }
@@ -122,7 +126,7 @@ public final class DataStore
         _domainNotifier      = domainNotifier;
         _isConnected         = true;
         _logTimes            = false;
-	_initialSize         = 10000;
+	_initialSize         = 100000;
 
 	initialize();
 	createRoot();
@@ -611,6 +615,7 @@ public final class DataStore
       {
 	  if (parent != null)
 	      {
+
 		  // reference with a specified type of relationship
 		  DataElement reference = createElement();
 		  
@@ -621,6 +626,7 @@ public final class DataStore
 		  _hashMap.put(sugId, reference);
 		  
 		  refresh(parent);
+
 		  
 		  return reference;
 	      }
@@ -1389,9 +1395,8 @@ public final class DataStore
     		if (element.isReference()) 
     		{
     			refresh(element.dereference(), false);
-    		}
-    	
-			refresh(element, false);	
+    		}    	
+		refresh(element, false);	
     	}
     }
 
@@ -2576,13 +2581,13 @@ public final class DataStore
 	  	  	PrintStream fileWriter = new PrintStream(fileStream);
 			BufferedWriter dataWriter = new BufferedWriter(new OutputStreamWriter(fileStream, "UTF-8"));
 
-          XMLgenerator generator = new XMLgenerator();
+          XMLgenerator generator = new XMLgenerator(this);
           generator.setIgnoreDeleted(true);
           generator.setFileWriter(fileWriter);
           generator.setDataWriter(dataWriter);
           generator.setBufferSize(1000);
-	      generator.generate(root, depth);
-	  	  generator.flushData();
+	  generator.generate(root, depth);
+	  generator.flushData();
 	  
           fileStream.close();
           }
@@ -2800,8 +2805,9 @@ public final class DataStore
     {
 	_minersLocation = "org.eclipse.cdt.dstore.core";
 	_random = new Random(System.currentTimeMillis());
+	
 
-    _hashMap = new HashMap(2 * _initialSize);
+	_hashMap = new HashMap(2 * _initialSize);
 	_recycled = new ArrayList(_initialSize);
 	initElements(_initialSize);
 
@@ -2816,6 +2822,17 @@ public final class DataStore
 	    }
 
 	_dataStoreSchema = new DataStoreSchema(this);
+	_traceFileHandle = new File(".dstoreTrace");
+	_tracingOn = false;
+	try
+	    {
+		_traceFile = new RandomAccessFile(_traceFileHandle, "rw");		
+	    }
+	catch (IOException e)
+	    {
+	    }
+
+	startTracing();
 	setByteStreamHandler();
     }
     
@@ -3079,18 +3096,69 @@ public final class DataStore
   }
 
 
-  private void walkTree(DataElement root)
-  {
-    if (root != null)
-      {	
-	root.expandChildren();
-	for (int i = 0; i < root.getNestedSize(); i++)
-        {
-          DataElement currentElement = (DataElement)root.get(i);
-          walkTree(currentElement);
-        }
-      }
-  }
+    private void walkTree(DataElement root)
+    {
+	if (root != null)
+	    {	
+		root.expandChildren();
+		for (int i = 0; i < root.getNestedSize(); i++)
+		    {
+			DataElement currentElement = (DataElement)root.get(i);
+			walkTree(currentElement);
+		    }
+	    }
+    }
+
+    public void startTracing()
+    {
+	trace("-----------------------------------------");
+	trace("Start Tracing at " + System.currentTimeMillis());
+    }
+
+
+    public void trace(String str)
+    {
+	internalTrace(str);
+    }  
+
+    public void trace(Exception e)
+    {
+	internalTrace(e.getMessage());
+    }  
+
+    private void internalTrace(String message)
+    {
+	if (_tracingOn)
+	    {
+		try
+		    {
+			_traceFile.seek(_traceFileHandle.length());
+			_traceFile.writeBytes(message);		
+			_traceFile.writeBytes(System.getProperty("line.separator"));
+		    }
+		catch (IOException e)
+		    {
+		    }
+	    }
+    }
+
+    public void finish()
+    {
+ 	flush();
+	if (_tracingOn)
+	    {
+		try
+		    {
+			_traceFile.seek(_traceFileHandle.length());
+			_traceFile.writeBytes("Finished Tracing");
+			_traceFile.writeBytes(System.getProperty("line.separator"));
+			_traceFile.close();
+		    }
+		catch (IOException e)
+		    {
+		    }
+	    }
+    }
 
 }
 

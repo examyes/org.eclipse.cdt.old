@@ -228,7 +228,7 @@ public class ClientConnection
 		    }
 		
 		_updateHandler.finish();
-		_dataStore.flush();
+		_dataStore.finish();
 		
 		_isConnected = false;
 	    }
@@ -334,7 +334,7 @@ public class ClientConnection
 		
 		if (doHandShake())
 		{		
-			_sender    = new Sender(_theSocket);
+			_sender    = new Sender(_theSocket, _dataStore);
 			_updateHandler = new ClientUpdateHandler();
 			_updateHandler.start(); 
 		

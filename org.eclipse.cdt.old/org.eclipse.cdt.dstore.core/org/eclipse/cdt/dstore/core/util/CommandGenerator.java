@@ -36,6 +36,7 @@ public class CommandGenerator
 	  {
     // prevent duplicate queries
     String name = commandObject.getAttribute(DE.A_NAME);
+
     if (name.equals("C_QUERY"))
       {
         // don't query log objects or schema objects
@@ -88,26 +89,26 @@ public class CommandGenerator
 	}
 
     if (status == null)
-    {
-	status = _dataStore.createObject(commandObject, 
-					 _dataStore.getLocalizedString("model.status"), 
-					 _dataStore.getLocalizedString("model.start"), "", 
-					 commandObject.getId() + _dataStore.getLocalizedString("model.status"));
-    }
+	{
+	    status = _dataStore.createObject(commandObject, 
+					     _dataStore.getLocalizedString("model.status"), 
+					     _dataStore.getLocalizedString("model.start"), "", 
+					     commandObject.getId() + _dataStore.getLocalizedString("model.status"));
+	}
     
     if (_dataStore.logTimes())
-    {
-	DataElement timeObject = _dataStore.createObject(status, _dataStore.getLocalizedString("model.time"), _dataStore.getLocalizedString("model.command_time"));
-      DataElement startTime = _dataStore.createObject(timeObject, _dataStore.getLocalizedString("model.property"), _dataStore.getLocalizedString("model.start_time"));
-      startTime.setAttribute(DE.A_VALUE, new String(System.currentTimeMillis() + ""));
-    }
-
+	{
+	    DataElement timeObject = _dataStore.createObject(status, _dataStore.getLocalizedString("model.time"), _dataStore.getLocalizedString("model.command_time"));
+	    DataElement startTime = _dataStore.createObject(timeObject, _dataStore.getLocalizedString("model.property"), _dataStore.getLocalizedString("model.start_time"));
+	    startTime.setAttribute(DE.A_VALUE, new String(System.currentTimeMillis() + ""));
+	}
+    
     _log.addNestedData(commandObject, false);
-
+    
 	  }
       catch (Exception e)
 	  {
-	      e.printStackTrace();
+	      _dataStore.trace(e);
 	  }
 
 
@@ -149,7 +150,7 @@ public class CommandGenerator
 	  	  DataElement tempRoot = _dataStore.getTempRoot();
 	   
 	      commandObject.setAttribute(DE.A_VALUE, commandDescriptor.getName());
-	      
+	
 	      if (refArg && dataObject.getParent() != tempRoot)
 		  {
 		      _dataStore.createReference(commandObject, dataObject, _dataStore.getLocalizedString("model.contents"));
