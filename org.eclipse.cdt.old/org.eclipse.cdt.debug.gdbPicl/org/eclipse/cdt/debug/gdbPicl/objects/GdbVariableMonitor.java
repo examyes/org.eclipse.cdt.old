@@ -34,16 +34,19 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
 
    public void deleteMonitor()
    { 
-      if (Gdb.traceLogger.EVT) 
-          Gdb.traceLogger.evt(2,"GdbVariableMonitor.deleteMonitor _exprID="+_exprID );
-
-      /*  RW - "display" was never issued, no reason for "undisplay"  
-      String ID = String.valueOf(_exprID);
-      String cmd = "undisplay "+ID;
-      boolean ok = _debugSession.executeGdbCommand(cmd);
-      if( ok )
-         _debugSession.addCmdResponsesToUiMessages();
-      */  
+      if (this._monType == EPDC.MonTypeProgram)
+      { 	 
+      	 String ID = String.valueOf(this.getMonitoredVariable().getNodeID());
+         
+         if (Gdb.traceLogger.EVT) 
+           Gdb.traceLogger.evt(2,"GdbVariableMonitor.deleteMonitor MonTypeProgram variable name: " + this.getMonitoredVariable().getName() + " id: " + ID );
+           
+         String cmd = "undisplay "+ID;
+         boolean ok = _debugSession.executeGdbCommand(cmd);
+         if( ok )
+            _debugSession.addCmdResponsesToUiMessages();
+            
+      }    
 
       _monDeleted = true;
    }
@@ -72,9 +75,10 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
                                          int         DU) 
   {
       Gdb.debugOutput("GdbVariableMonitor: Evaluating: " + exprString +" DU: "+DU);
-
+    
 //      GdbDebugSession debugSession = (GdbDebugSession) ((GdbDebugEngine)debugEngine).getDebugSession();
-      int l = context.getLineNum();
+
+     int l = context.getLineNum();
       String lineNo = Integer.toString(l);
       int partID = context.getPPID();
       String fileName = "";
@@ -95,6 +99,7 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
       String exprValue = "???";
       String exprType = "unknown_Type";
       String cmd = "display "+exprString;
+      //String cmd = "print "+exprString;
       boolean ok = _debugSession.executeGdbCommand(cmd);
       if( ok )
       {
@@ -181,9 +186,10 @@ System.out.println("##### GdbVariableMonitor.modifyMonitorValue called ?????????
     varInfo.setNodeID(exprNumber);
     if (Gdb.traceLogger.EVT) 
         Gdb.traceLogger.evt(3,"GdbVariableMonitor.evaluateExpression initialValue="+exprValue );
- 
-    // Expression evaluation successful.
+    
+        // Expression evaluation successful.
     return varInfo;
+    
   }
   
   static public String getExpressionType(GdbDebugSession _debugSession, String exprString)
