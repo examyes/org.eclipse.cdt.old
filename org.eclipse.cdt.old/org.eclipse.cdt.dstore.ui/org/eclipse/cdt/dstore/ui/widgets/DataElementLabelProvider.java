@@ -24,15 +24,20 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
     private ImageRegistry _registry;
     private static final String DEFAULT_ICON = "default.gif";
     private Image  _default;
+    
     private String _labelProperty;
+    private int    _labelPropertyIndex;
+    
     private static DataElementLabelProvider _instance;
     private IActionLoader _actionLoader;
+    
+    private DataElement _attributesD = null;
 
     public DataElementLabelProvider(ImageRegistry registry, IActionLoader loader)
     {
         super();
-        _labelProperty = DE.P_VALUE;
-	
+        setLabelProperty(DE.P_VALUE);
+   
         _registry = registry;
         _actionLoader = loader;
         
@@ -46,7 +51,7 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 		image = _registry.get(imageStr);
 	    }
 	
-        _default = image;
+        _default = image;	
 	_instance = this;
     }
 
@@ -158,18 +163,36 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
     public void setLabelProperty(String property)
     {
         _labelProperty = property;
+      
+        if (_labelProperty.equals(DE.P_TYPE))
+        {
+        	_labelPropertyIndex = DE.A_TYPE;
+        }
+        else if (_labelProperty.equals(DE.P_NAME))
+		{
+		    _labelPropertyIndex = DE.A_NAME;
+		}
+        else if (_labelProperty.equals(DE.P_VALUE))
+        {
+        	_labelPropertyIndex = DE.A_VALUE;
+        }
+        else if (_labelProperty.equals(DE.P_SOURCE))
+        {
+        	_labelPropertyIndex = DE.A_SOURCE;
+        }
+       
     }
     
-    public synchronized String getText(Object obj)
+    public String getText(Object obj)
     {
 	if (obj instanceof DataElement)
 	    {	
 		DataElement element = (DataElement)obj; 
-		String type  = (String)element.getElementProperty(DE.P_TYPE);
+		String type  = element.getAttribute(DE.A_TYPE);
 		if (type != null && type.equals("property"))
 		    {
-			String name = (String)element.getElementProperty(DE.P_NAME);
-			String value = (String)element.getElementProperty(DE.P_VALUE);
+			String name = element.getAttribute(DE.A_NAME);
+			String value = element.getAttribute(DE.A_VALUE);
 			return name + " = " + value;
 		    }
 		else
@@ -177,20 +200,8 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 			if (_labelProperty == null)
 			    {
 				_labelProperty = DE.P_VALUE;
-			    }
-			else if (_labelProperty == DE.P_BUFFER)
-			    {
-				StringBuffer buffer = (StringBuffer)element.getElementProperty(_labelProperty);
-				if (buffer != null)
-				    {
-					return buffer.toString();
-				    }
-				else
-				    {
-					return "null";
-				    }
-			    }	
-			String result = (String)element.getElementProperty(_labelProperty);
+			    }			
+			String result = element.getAttribute(_labelPropertyIndex);
 			if (result == null)
 			    {
 				if (element.isDeleted())
@@ -271,24 +282,49 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 	    }
 	else if (element instanceof DataElement)
 	    {		
-		DataElement data = (DataElement)element;
+	    	
+	   	DataElement data = (DataElement)element;
+	   	DataStore dataStore = data.getDataStore();
+	   	if (_attributesD == null || _attributesD.getDataStore() != dataStore)
+	   	{
+	   	  _attributesD = dataStore.findObjectDescriptor("attributes");
+	   	}
+	   	
+	   	
 		DataElement descriptor = data.getDescriptor();
-		DataElement attributeDescriptor = getAttributeDescriptor(descriptor, columnIndex - 1);
+		DataElement attributeDescriptor = getAttributeDescriptor(descriptor, columnIndex - 1);				
 		
 		if (attributeDescriptor != null)
 		    {
-			ArrayList attributes = data.getAssociated("attributes");
-			for (int i = 0; i < attributes.size(); i++)
+			ArrayList attributes = data.getAssociated(_attributesD);
+			
+			if (attributes.size() > 0)
+			{
+				DataElement attribute = null;
+				if (attributes.size() > columnIndex)
+				{
+					attribute = (DataElement)attributes.get(columnIndex - 1);
+					if (attribute.getDescriptor() == attributeDescriptor)
+					{
+						return getText(attribute);
+					}
+				}
+			
+				for (int i = 0; i < attributes.size(); i++)
 			    {
-				DataElement attribute = (DataElement)attributes.get(i);
-				if (attribute.getDescriptor() == attributeDescriptor)
-				    {
-					return getText(attribute);
+			    	if (i != columnIndex - 1)
+			    	{
+						attribute = (DataElement)attributes.get(i);
+						if (attribute.getDescriptor() == attributeDescriptor)
+				    	{
+							return getText(attribute);
+				    	}
 				    }
 			    }
-			
+			}
+	
 			// get attribute attributes
-			ArrayList format = attributeDescriptor.getAssociated("attributes");
+			ArrayList format = attributeDescriptor.getAssociated(_attributesD);
 			if (format != null && format.size() > 0)
 			    {
 				DataElement formatDescriptor = (DataElement)format.get(0);
@@ -307,7 +343,11 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 					return "";
 				    }		
 			    }
-		    }		
+			
+		    }
+		    
+		    
+		    
 	    }
 	return "";
     }    
@@ -315,12 +355,33 @@ public class DataElementLabelProvider  extends LabelProvider implements ILabelPr
 
     private DataElement getAttributeDescriptor(DataElement rootDescriptor, int attributeIndex)
     {
-	ArrayList attributes = rootDescriptor.getAssociated("attributes");
+    /*
+	ArrayList attributes = rootDescriptor.getAssociated(_attributesD);
 	if (attributes.size() > attributeIndex)
 	    {
 		DataElement attributeDescriptor = (DataElement)attributes.get(attributeIndex);
 		return attributeDescriptor;
-	    }	
+	    }	*/
+	
+	
+	int attributeNum = 0;
+	
+	for (int i = 0; i < rootDescriptor.getNestedSize(); i++)
+	{
+		DataElement child = rootDescriptor.get(i);
+		if (child.isReference())
+		{
+			if (child.getType().equals("attributes"))
+			{		
+				if (attributeNum == attributeIndex)
+				{
+					return child.dereference();				
+				}
+				attributeNum++;
+			}		
+		}
+	
+	}
 
 	return null;
     }
