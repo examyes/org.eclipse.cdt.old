@@ -85,9 +85,13 @@ public class TargetAction extends CustomAction
 		String message = new String("No Makefile to build '"+_subject.getName()+"' has been found in this directory"+
 		"\nYou may want to create and or run configure before performing this action");
 		MessageDialog dialog = new MessageDialog(shell,null,null,null,3,null,0);
-
-		if(!doesFileExists("Makefile"))
+		
+		File parent = _subject.getFileObject().getParentFile();
+		File Makefile = new File(parent,"Makefile");
+		if(!Makefile.exists())
 			dialog.openWarning(shell,"Building "+_subject.getName(),message);
+		//if(!doesFileExists("Makefile"))
+			//dialog.openWarning(shell,"Building "+_subject.getName(),message);
 		else
 		{
 			DataElement makefileAmCmd = _dataStore.localDescriptorQuery(_subject.getDescriptor(), "C_" + _command.getValue());
