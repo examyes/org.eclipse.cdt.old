@@ -437,7 +437,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
         return readProperty(resource, property);
       }
 
-  public static ArrayList readProperty(IResource resource, String property)
+  public static synchronized ArrayList readProperty(IResource resource, String property)
       {
         IPath newPath = resource.getFullPath();
         QualifiedName propertyQName = new QualifiedName(property, newPath.toString());
@@ -561,7 +561,7 @@ public class CppPlugin extends org.eclipse.ui.plugin.AbstractUIPlugin
       }
 
 
-  public static ArrayList readProperty(String preference)
+  public static synchronized ArrayList readProperty(String preference)
       {
         ArrayList savedProperty = new ArrayList();
 	String historyFilePath = _instance.getStateLocation().append(preference).toOSString();
