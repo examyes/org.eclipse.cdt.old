@@ -124,6 +124,9 @@ public class OutputViewer extends TableViewer
     
     protected HostsPlugin           _plugin;
 
+
+    private static int            MAX_BUFFER = 1000;
+
   public OutputViewer(Table parent)
       {
 	super(parent);
@@ -218,6 +221,15 @@ public class OutputViewer extends TableViewer
 		  TableColumn column = getTable().getColumn(0);
 		  column.setText(value);			  
 	      }
+
+	  Table table = getTable();
+	  if (table != null)
+	      {
+		  table.setRedraw(false);
+		  table.removeAll();
+		  internalRefresh(_currentInput);
+		  table.setRedraw(true);
+	      }
       }
   }
 
@@ -271,7 +283,6 @@ public class OutputViewer extends TableViewer
 	if (children != null)
 	    {
 		Table table = getTable();
-		table.setRedraw(false);	
 		if (table != null && !table.isDisposed())
 		    {
 			updateChildren(children);
@@ -279,10 +290,11 @@ public class OutputViewer extends TableViewer
 
 			if (column.getWidth() < _maxWidth)
 			    {
+				table.setRedraw(false);
 				column.setWidth(_maxWidth);		
+				table.setRedraw(true);
 			    }
 		    }	
-		table.setRedraw(true);				
 	    }
 
     }
@@ -295,35 +307,66 @@ public class OutputViewer extends TableViewer
 	      return null;
       }
 
-  public void updateChildren(ArrayList children)
+  public synchronized void updateChildren(ArrayList children)
       {
-        Table table = getTable();
+	  Table table = getTable();
+	  table.setRedraw(false);	
+	  int index = table.getItemCount();
+	  if (index > MAX_BUFFER)
+	      {
+		  //		  table.setTopIndex(index - (MAX_BUFFER / 2));	  
+		  clearFirstItems(index - (MAX_BUFFER / 2));
 
-        int index = table.getItemCount();
-        for (int i = 0; i < children.size(); i++)
-        {
-          DataElement child = ((DataElement)children.get(i)).dereference();
-          if ((child != null) && !child.isUpdated())
-          {
-            child.setUpdated(true);
-	    if (doFindItem(child) == null)	
-	      {		
+	      }
+	  index = table.getItemCount();
+	  	  
+	  synchronized(table)
+	      {
+		  for (int i = 0; i < children.size(); i++)
+		      {
+			  DataElement child = ((DataElement)children.get(i)).dereference();
+			  if ((child != null) && !child.isUpdated())
+			      {
+				  child.setUpdated(true);
+				  if (doFindItem(child) == null)	
+				      {		
+					  
+					  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
+					  updateItem(newItem, child);
+					  index++;
+					  
+					  int charLen = child.getName().length();		
+					  int itemWidth = charLen * _charWidth;
+					  
+					  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
+					  
+				      }	
+			      }
+		      }
 
-		  TableItem newItem = (TableItem)newItem(table, SWT.NONE, index);
-		  updateItem(newItem, child);
-		  index++;
-
-		  int charLen = child.getName().length();		
-		  int itemWidth = charLen * _charWidth;
-		
-		  if (_maxWidth < itemWidth) _maxWidth = itemWidth;		
-
-		  //reveal(newItem);
-		  table.setTopIndex(index);
-	      }	
-          }
-        }
+		  table.setTopIndex(index);	  
+	      }
+	  table.setRedraw(true);				
       }
+
+    private void clearFirstItems(int items)
+    {
+	Table table = getTable();
+	synchronized (table)
+	    {
+		int count = table.getItemCount();
+		table.remove(0, items);
+		for (int i = 0; i < items; i++)
+		    {
+			DataElement item = _currentInput.get(i);
+			ArrayList nestedData = _currentInput.getNestedData();
+			synchronized(nestedData)
+			    {
+				nestedData.remove(item);
+			    }
+		    }
+	    }
+    }
 
     protected Item newItem(Widget parent, int flags, int ix)  
     {
