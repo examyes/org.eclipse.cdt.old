@@ -164,7 +164,7 @@ public class ParseMiner extends Miner
  private void loadProject(DataElement theProject)
  {
   
-  String sourcePath = theProject.getAttribute(DE.A_SOURCE) + File.separator + ".metadata" + File.separator;
+  String sourcePath = theProject.getAttribute(DE.A_SOURCE) + "/.metadata/";
   String parsedSource = sourcePath + "parsed_source.xml";
   String systemObjs   = sourcePath + "system_objects.xml";
   String projectObjs  = sourcePath + "project_objects.xml";
@@ -198,7 +198,7 @@ public class ParseMiner extends Miner
  private void saveProject(DataElement project)
  {
   DataElement theProject = project.dereference();
-  String sourcePath = theProject.getAttribute(DE.A_SOURCE) + File.separator + ".metadata" + File.separator;
+  String sourcePath = theProject.getAttribute(DE.A_SOURCE) + "/.metadata/";
 
   String parsedSource = sourcePath + "parsed_source.xml";
   String systemObjs   = sourcePath + "system_objects.xml";
@@ -261,9 +261,9 @@ public class ParseMiner extends Miner
      if (theFile.getType().equals("Project"/*ParserSchema.Project*/))
   {
      
-   String sourcePath = theFile.getAttribute(DE.A_SOURCE) + File.separator + ".metadata";
+   String sourcePath = theFile.getAttribute(DE.A_SOURCE) + "/" + ".metadata";
    File metadata     = new File (sourcePath);
-   sourcePath += File.separator;
+   sourcePath += "/";
    File parsedSource = new File (sourcePath + "parsed_source.xml");
    File systemObjs   = new File (sourcePath + "system_objects.xml");
    File projectObjs  = new File (sourcePath + "project_objects.xml");
@@ -379,7 +379,7 @@ public class ParseMiner extends Miner
    return null;
   }
    
-  String fullFileName = fileLocation + File.separator + "com.ibm.cpp.miners.parser" + File.separator + PARSE_EXTENSIONS;
+  String fullFileName = fileLocation + "/com.ibm.cpp.miners.parser/" + PARSE_EXTENSIONS;
   
   File extFile = new File (fullFileName);
   if (!extFile.exists())
