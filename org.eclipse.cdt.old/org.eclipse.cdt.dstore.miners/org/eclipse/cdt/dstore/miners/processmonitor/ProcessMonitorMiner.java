@@ -146,16 +146,16 @@ public class ProcessMonitorMiner extends Miner
 	    {
 		String nextToken = tokenizer.nextToken();
 		DataElement attributeD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, nextToken);
-		_dataStore.createReference(processD, attributeD, "attributes");
+		_dataStore.createReference(processD, attributeD, _dataStore.getAttributesRelation());
 		
 		// determine format
 		if (nextToken.indexOf('%') == 0)
 		    {
-			_dataStore.createReference(attributeD, floatD, "attributes");
+			_dataStore.createReference(attributeD, floatD, _dataStore.getAttributesRelation());
 		    }
 		else
 		    {
-			_dataStore.createReference(attributeD, stringD, "attributes");
+			_dataStore.createReference(attributeD, stringD, _dataStore.getAttributesRelation());
 		    }
 	    }
     }

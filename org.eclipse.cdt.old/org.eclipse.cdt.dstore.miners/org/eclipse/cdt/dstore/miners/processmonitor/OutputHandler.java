@@ -83,15 +83,14 @@ public class OutputHandler extends Handler
 			_currentProcesses.add(process);
 		
 			int i = 0;
-			ArrayList attributes = processD.getAssociated("attributes");
+			ArrayList attributes = processD.getAssociated(_dataStore.getAttributesRelation());
 			while(tokenizer.hasMoreTokens() && i < attributes.size())
 			    {
 				DataElement attributeType = (DataElement)attributes.get(i);
-				
 				String nextToken = tokenizer.nextToken();
 				if (attributeType.getName().equals("STIME"))
 				    {
-					//*** hack for windows ***//
+					// hack for windows
 					if (Character.isLetter(nextToken.charAt(0)))
 					    {
 						nextToken += " " + tokenizer.nextToken();
@@ -111,8 +110,7 @@ public class OutputHandler extends Handler
 					    }			       
 					
 					attribute = _dataStore.createObject(process, attributeType, nextToken);
-					_dataStore.createReference(process, attribute, "attributes");
-					
+					DataElement ref = _dataStore.createReference(process, attribute, _dataStore.getAttributesRelation());	   			
 				    }
 				else
 				    {
