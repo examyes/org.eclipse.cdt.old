@@ -49,6 +49,7 @@ public class CommandMiner extends Miner
   DataElement   status = getCommandStatus(theElement);
   DataElement  subject = getCommandArgument(theElement, 0);
 
+ 
   if (name.equals("C_COMMAND"))
       {
 	  DataElement   invArg = getCommandArgument(theElement, 1);
@@ -56,13 +57,13 @@ public class CommandMiner extends Miner
 	      {
 		  String    invocation = invArg.getName();
 		  
-		  //Remove all extra whitespace from the command
+		  //Remove All extra whitespace from the command
 		  if (invocation.trim().length() > 0)
 		  {
 		   if (invocation.equals("?") || invocation.equals("help"))
 		    invocation = "cat " + theElement.getDataStore().getAttribute(DataStoreAttributes.A_PLUGIN_PATH) + "/com.ibm.dstore.miners/patterns.dat";
-		   
-                   launchCommand(subject, invocation, status);
+		   launchCommand(subject, invocation, status);
+  
 		  }
                   return status;
 	      }
@@ -261,7 +262,7 @@ class CommandMinerThread extends MinerThread
 	{
 	    theShell = "cmd /c ";
 	    _theProcess = Runtime.getRuntime().exec(theShell + _invocation, getEnvironment(_subject), theDirectory); 
-	}
+        }
     
     _stdInput = new BufferedReader(new InputStreamReader(_theProcess.getInputStream()));
     _stdError = new BufferedReader(new InputStreamReader(_theProcess.getErrorStream()));
@@ -279,7 +280,7 @@ class CommandMinerThread extends MinerThread
     _stdOutputHandler = new OutputHandler(_stdInput, null);
     _stdOutputHandler.setWaitTime(0);
     _stdOutputHandler.start();
-    _stdErrorHandler  = new OutputHandler(_stdError, null);
+    _stdErrorHandler = new OutputHandler(_stdError, null);
     _stdErrorHandler.setWaitTime(0);
     _stdErrorHandler.start();  
  }
@@ -287,48 +288,101 @@ class CommandMinerThread extends MinerThread
  
  private String[] getEnvironment(DataElement theSubject)
  {
-  ArrayList theVars = new ArrayList();
- 
-  try
+  //Grab the system environment:
+  DataElement envMiner  = _dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");
+  DataElement systemEnv = _dataStore.find(envMiner, DE.A_NAME, "System Environment", 1);
+  
+  //Grab the project environment
+  ArrayList projectEnvReference = theSubject.getAssociated("inhabits");
+  DataElement projectEnv = null;
+  if (projectEnvReference != null && (projectEnvReference.size() > 0))
+   projectEnv = (DataElement)projectEnvReference.get(0);
+  String[] theEnv = mergeEnvironments(systemEnv, projectEnv);
+  return theEnv;
+ }
+
+ private String[] mergeEnvironments(DataElement systemEnv, DataElement projectEnv)
+ {
+  ArrayList prjVars = null;
+  ArrayList sysVars = null;
+
+  //Fill the ArrayLists with the environment variables
+  if (systemEnv != null)   sysVars= systemEnv.getNestedData();
+  if (projectEnv != null)  prjVars = projectEnv.getNestedData();
+
+  //If one or both of the ArrayLists are null, exit early:
+  if ( (sysVars == null) || (sysVars.size() == 0) )
+   return listToArray(prjVars);
+  if ( (prjVars == null) || (prjVars.size() == 0) )
+   return listToArray(sysVars);
+
+
+  //If we get here, then we have both system and project variables...to make merging the 2 lists easier, we'll
+  //use a Hashtable (Variable Names are the keys, Variables Values are the values):
+  Hashtable varTable = new Hashtable();
+  
+  //First fill the varTable with the sysVars
+  varTable.putAll(mapVars(sysVars));
+  
+  //Now for every project variable, check to see if it already exists, and if the value contains other variables:
+  Hashtable theVars = mapVars(prjVars);
+  for (Enumeration e = theVars.keys() ; e.hasMoreElements() ;) 
   {
-   //First grab the system environment:
-   DataElement envMiner  = _dataStore.findMinerInformation("com.ibm.dstore.miners.environment.EnvironmentMiner");
-   DataElement systemEnv = _dataStore.find(envMiner, DE.A_NAME, "System Environment", 1);
-   ArrayList systemVars  = systemEnv.getNestedData();
-   int MAX = systemVars.size();
-   for (int i=0; i<MAX; i++)
-    theVars.add(((DataElement)systemVars.get(i)).getName());
-  
-   ArrayList prjEnv = theSubject.getAssociated("inhabits");
-   if (prjEnv != null && (prjEnv.size() > 0))
-       {
-	   DataElement theEnvironment = (DataElement)prjEnv.get(0);
-	   ArrayList varElements = theEnvironment.getNestedData();
-	   MAX = varElements.size();
-	   for (int i = 0; i<MAX; i++)
-	       {
-		   String var = ((DataElement)varElements.get(i)).getName();
-		   theVars.add(var);
-		   System.out.println(var);
-	       }
-       }
-  
+   String theKey = (String)e.nextElement();   
+   String theValue = (String)theVars.get(theKey);
+   theValue = calculateValue(theValue, varTable);
+   varTable.put(theKey, theValue);
   }
-  catch (Throwable e) 
-      {
-	  e.printStackTrace();	  
-      }  
-  
-  int MAX = theVars.size();
-  String[] env = new String[MAX];
-  for(int i = 0; i< MAX; i++)
-   {
-    env[i] = (String)theVars.get(i);
-   }
-  
-  return env;
+  return tableToArray(varTable);
  }
  
+ private String calculateValue(String theValue, Hashtable theTable)
+ {
+  return theValue;
+ }
+
+
+ private Hashtable mapVars(ArrayList theVars)
+ {
+  Hashtable theTable = new Hashtable();
+  int theSize = theVars.size();
+  for (int i = 0; i < theSize; i++)
+  {
+   String theVar = ((DataElement)theVars.get(i)).getName();
+   int equalsIndex = theVar.indexOf("=");
+   if (equalsIndex > 0)
+    theTable.put(theVar.substring(0,equalsIndex), theVar.substring(equalsIndex, theVar.length()));
+  }
+  return theTable;
+ }
+
+ private String[] listToArray(ArrayList theList)
+ {
+  if (theList == null)
+   theList = new ArrayList();
+  int theSize = theList.size();
+  String theArray[] = new String[theSize];
+  for (int i = 0; i < theSize; i++)
+   theArray[i] = ((DataElement)theList.get(i)).getName(); 
+  return theArray;
+ } 
+
+ private String[] tableToArray(Hashtable theTable)
+ {
+  if (theTable == null)
+   theTable = new Hashtable();
+  int theSize = theTable.size();
+  String theArray[] = new String[theSize];
+  int i = 0;
+  for (Enumeration e = theTable.keys() ; e.hasMoreElements() ;) 
+  {
+   String theKey = (String)e.nextElement();
+   String theValue = (String)theTable.get(theKey);
+   theArray[i++] = theKey + "=" + theValue;
+  }
+  return theArray;
+ }
+
  public boolean doThreadedWork()
  {
    if (((_stdOutputHandler == null) || _stdOutputHandler.isFinished()) && 
@@ -353,7 +407,7 @@ class CommandMinerThread extends MinerThread
 		_status.setAttribute(DE.A_NAME, "done");
 		_dataStore.refresh(_status, true);
 		_subject.refresh(false);
-		
+                		
 		_stdOutputHandler.finish();
 		_stdErrorHandler.finish();
 

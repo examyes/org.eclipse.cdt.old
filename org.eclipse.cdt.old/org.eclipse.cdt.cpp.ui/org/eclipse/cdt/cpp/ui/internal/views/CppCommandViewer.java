@@ -74,32 +74,28 @@ public class CppCommandViewer extends CommandViewer
 		    }
 	    }
 	else
-	    {
-		if (input instanceof IResource)
+	    {	if (input instanceof Repository)
+		    {
+			Repository project = (Repository)input;
+			if (project.isOpen())
+			    {
+				super.setElementInput(project.getRemoteElement());
+			    }
+		    }
+	        else if (input instanceof IResource)
 		    {
 			DataElement element = null;
 
 			_resourceInput = (IResource)input;
 			element = api.findResourceElement(_resourceInput);
-			super.setInput(element);
+			super.setElementInput(element);
 		    }
 		else
 		    {
 			_resourceInput = null;
 		    }
 		
-		if (input instanceof Repository)
-		    {
-			Repository project = (Repository)input;
-			if (project.isOpen())
-			    {
-				super.setInput(project.getRemoteElement());
-			    }
-		    }
-		else
-		    {
-			super.setInput(input);
-		    }
+
 	    }
     }
    

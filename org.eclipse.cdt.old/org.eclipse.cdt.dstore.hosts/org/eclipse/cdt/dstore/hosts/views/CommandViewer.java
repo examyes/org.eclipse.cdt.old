@@ -160,14 +160,14 @@ public class CommandViewer extends Viewer implements SelectionListener
 
     }
 
-    private void setElementInput(DataElement input)
+    protected void setElementInput(DataElement input)
     {
 	String type = input.getType();
 	DataElement descriptor = input.getDescriptor();
 	if (type.equals("file") || (descriptor != null && input.getDescriptor().isOfType("file")))
 	{
 		if ((descriptor != null) && descriptor.isOfType("Filesystem Objects"))
-		    {
+		 {
 			_input = input;
 			String directory = input.getSource();				
 			if ((directory != null) && (_directoryText != null))
@@ -375,6 +375,7 @@ public class CommandViewer extends Viewer implements SelectionListener
 				_history.remove(index);
 			    }
 		    }
+
 		_history.add(0, _command);
 		writeHistory();
 		updateCombo();
@@ -384,15 +385,16 @@ public class CommandViewer extends Viewer implements SelectionListener
 		DataStore dataStore = _input.getDataStore();
 		DataElement cmdD = dataStore.localDescriptorQuery(_input.getDescriptor(), "C_COMMAND");
 		if (cmdD != null)
+
 		    {				
 			ArrayList args = new ArrayList();
 			
 			DataElement invocationObj = dataStore.createObject(null, "invocation", _command, "");
 			args.add(invocationObj);
-			DataElement cmdStatus = dataStore.command(cmdD, args, _input);
-			
-			ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
-			d.asyncExec(action);		
+		 
+     		DataElement cmdStatus = dataStore.command(cmdD, args, _input);
+		ShowViewAction action = new ShowViewAction(_outputViewId, cmdStatus);
+	        d.asyncExec(action);		
 		    }
 
 	    }
