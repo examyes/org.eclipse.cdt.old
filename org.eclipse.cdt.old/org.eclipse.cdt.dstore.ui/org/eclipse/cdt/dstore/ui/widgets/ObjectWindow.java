@@ -644,6 +644,8 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
   public void menuAboutToShow(IMenuManager menu) 
       {
 	IStructuredSelection es= (IStructuredSelection) _viewer.getSelection();
+	
+	
 	if (es.size() > 1)
 	    {
 		_menuHandler.multiFillContextMenu(menu, es);
@@ -665,7 +667,7 @@ public class ObjectWindow extends Composite implements ILinkable, IMenuListener
 
 		_currentSortAction.setChecked(true);
 		_currentViewByAction.setChecked(true);		
-	    }
+	    }	    	  
       }
 
 

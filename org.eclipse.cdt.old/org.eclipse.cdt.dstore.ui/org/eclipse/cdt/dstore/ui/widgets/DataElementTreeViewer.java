@@ -171,7 +171,7 @@ public class DataElementTreeViewer extends TreeViewer
 		    (parent == _expanded) ||
 		    (_currentInput.contains(parent, _property, 2)))
 		    {
-			if ((getTree() != null) && !getTree().isDisposed())
+		//	if ((getTree() != null) && !getTree().isDisposed())
 			    {
 				return true;
 			    }
@@ -219,6 +219,7 @@ public class DataElementTreeViewer extends TreeViewer
 	    }
 
 	DataElement parent = (DataElement)ev.getParent();   
+	Tree tree = getTree();
 
 	if (parent.isDeleted())
 	    {		
@@ -232,9 +233,9 @@ public class DataElementTreeViewer extends TreeViewer
 			    {			
 				try
 				    {
-					getTree().setRedraw(false);
+					tree.setRedraw(false);
 					internalRefresh(parent.getParent());					  
-					getTree().setRedraw(true);				      
+					tree.setRedraw(true);				      
 				    }
 				catch (Exception e)
 				    {
@@ -255,13 +256,13 @@ public class DataElementTreeViewer extends TreeViewer
 			
 			try
 			    {
-				Tree tree = getTree();
-				tree.setRedraw(false);				
-				internalRefresh(parent);
-				tree.setRedraw(true);
-			    }
+					tree.setRedraw(false);				
+					internalRefresh(parent);				
+					tree.setRedraw(true);
+				}
 			catch (Exception e)
 			    {
+			    	e.printStackTrace();
 			    	System.out.println(e);
 			    }
 			
@@ -382,7 +383,7 @@ public void doExpand(DataElement obj)
 
     public void clearView()
     {
-	Control tree = getTree();
+	Tree tree = getTree();
 	if (tree != null)
 	    {
 		synchronized(tree)
@@ -390,7 +391,7 @@ public void doExpand(DataElement obj)
 			try
 			    {
 				tree.setRedraw(false);
-				getTree().removeAll();
+				tree.removeAll();
 				tree.setRedraw(true);	
 			    }
 			catch (Exception e)
@@ -412,7 +413,7 @@ public void doExpand(DataElement obj)
 		    }
 		else
 		    {
-			Control tree = getTree();
+			Tree tree = getTree();
 			if (tree != null)
 			    {
 				synchronized(tree)
@@ -436,6 +437,11 @@ public void doExpand(DataElement obj)
 		    }
 	    }
     }
+    
+   public Tree getTree()
+   {
+   	   	   	   	return super.getTree();
+   } 
 
   public synchronized void resetView()
     {
@@ -444,7 +450,7 @@ public void doExpand(DataElement obj)
 		boolean selectionListening = _listener.isEnabled();
 		if (selectionListening)
 		{
-		    Control tree = getTree();
+		    Tree tree = getTree();
 		    if (tree != null)
 			{
 			    synchronized (tree)
@@ -568,10 +574,11 @@ public void doExpand(DataElement obj)
 			catch (ArrayStoreException e)
 			    {
 				System.out.println(e);
-				getTree().setRedraw(false);
-				getTree().removeAll();
+				Tree tree = getTree();
+				tree.setRedraw(false);
+				tree.removeAll();
 				_selected = null;
-				getTree().setRedraw(true);
+				tree.setRedraw(true);
 				resetView();
 			    }
 		    }
