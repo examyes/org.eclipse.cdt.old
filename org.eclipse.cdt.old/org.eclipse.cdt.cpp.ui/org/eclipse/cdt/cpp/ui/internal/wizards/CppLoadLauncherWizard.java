@@ -6,6 +6,7 @@ package com.ibm.cpp.ui.internal.wizards;
 
 import com.ibm.cpp.ui.internal.launchers.*;
 import com.ibm.cpp.ui.internal.*;
+import com.ibm.cpp.ui.internal.api.*;
 import com.ibm.dstore.core.model.*;
 
 import org.eclipse.swt.widgets.*;
@@ -115,9 +116,20 @@ public class CppLoadLauncherWizard extends Wizard implements ILaunchWizard
     public void init(ILauncher launcher, String mode, IStructuredSelection currentSelection) {
    	_launcher = launcher;
    	_selection = currentSelection;
-      _element = _selection.getFirstElement();
-      _currentSelectionName = ((IResource)_element).getName();
-      System.out.println("CppLoadLauncherWizard - curentSelectionName = " + _currentSelectionName);
-      _project = ((IResource)_element).getProject();
+	_element = _selection.getFirstElement();
+
+	if (_element instanceof DataElement)
+	    {
+		ModelInterface api = ModelInterface.getInstance();
+		_element = api.findResource((DataElement)_element);
+	    }
+
+	if (_element instanceof IResource)
+	    {
+		_currentSelectionName = ((IResource)_element).getName();
+		System.out.println("CppLoadLauncherWizard - curentSelectionName = " + _currentSelectionName);
+		_project = ((IResource)_element).getProject();
+	    }
+
     }
 }
