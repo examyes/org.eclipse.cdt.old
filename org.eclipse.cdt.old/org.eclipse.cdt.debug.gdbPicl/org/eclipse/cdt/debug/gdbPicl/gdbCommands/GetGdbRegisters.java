@@ -139,8 +139,8 @@ public class GetGdbRegisters  //extends ThreadManager
          if(!ok)
             ;
       }
-      _maxGeneral = generalIndex;
-      _maxFloat =  floatIndex;
+      _maxGeneral = generalIndex+1;
+      _maxFloat =  floatIndex+1;
       return;
    }
 }
