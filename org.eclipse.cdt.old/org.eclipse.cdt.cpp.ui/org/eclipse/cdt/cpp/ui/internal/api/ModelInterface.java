@@ -2000,7 +2000,6 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	confInCmd.setAttribute(DE.A_VALUE,"INSERT_CONFIGURE_IN");						  
 	dataStore.createReference(confInCmds, makefileCmds, "abstracts", "abstracted by");
 
-
 	HostsPlugin.getInstance().extendSchema(dataStore.getDescriptorRoot());	
     }
         
