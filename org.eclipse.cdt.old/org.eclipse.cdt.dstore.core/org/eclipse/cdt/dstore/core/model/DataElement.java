@@ -13,22 +13,24 @@ import java.util.*;
 
 public final class DataElement implements IDataElement 
 {
-
-  private String              _attributes[];
-  private StringBuffer        _buffer;
-
-  private boolean             _isReference  = false;
-  private boolean             _isDescriptor = false;
-  private boolean             _isExpanded   = false;
-  private boolean             _isUpdated    = false;
-  private int                 _depth        = 1;
-
-  private DataStore           _dataStore = null;
-  private DataElement         _parent = null;
-  private DataElement         _descriptor = null;
-
-  private ArrayList           _nestedData = null;
-  private DataElement         _referencedObject = null;
+    private String              _attributes[];
+    private StringBuffer        _buffer;
+    
+    private boolean             _isReference  = false;
+    private boolean             _isDescriptor = false;
+    private boolean             _isExpanded   = false;
+    private boolean             _isUpdated    = false;
+    private int                 _depth        = 1;
+    
+    private DataStore           _dataStore = null;
+    private DataElement         _parent = null;
+    private DataElement         _descriptor = null;
+    
+    private ArrayList           _nestedData = null;
+    private DataElement         _referencedObject = null;
+    
+    private DesktopElement      _desktopElement = null;
+    private PropertySource      _propertySource = null;
   
   /////////////////////////////////////////
   //
@@ -248,19 +250,22 @@ public final class DataElement implements IDataElement
 
   public void addNestedData(ArrayList nestedData, boolean checkUnique)
       {
-	  if (_nestedData == null)
+	  if (nestedData != null)
 	      {
-		  _nestedData = new ArrayList(nestedData.size());
+		  if (_nestedData == null)
+		      {
+			  _nestedData = new ArrayList(nestedData.size());
+		      }
+		  
+		  for (int i = 0; i < nestedData.size(); i++)
+		      {
+			  DataElement child = (DataElement)nestedData.get(i);
+			  if (child != null && child != this)
+			      {
+				  addNestedData(child, checkUnique);
+			      }
+		      }
 	      }
-
-        for (int i = 0; i < nestedData.size(); i++)
-        {
-	    DataElement child = (DataElement)nestedData.get(i);
-	    if (child != null && child != this)
-		{
-		    addNestedData(child, checkUnique);
-		}
-        }
       }
 
   public void addNestedData(DataElement obj, boolean checkUnique)
@@ -314,7 +319,6 @@ public final class DataElement implements IDataElement
 		  {
 		      DataElement nestedObject = (DataElement)_nestedData.get(0);
 		      _nestedData.remove(nestedObject);
-		      // nestedObject.removeNestedData();
 		  }
 	  }
 
@@ -390,7 +394,7 @@ public final class DataElement implements IDataElement
       {
 	if (_nestedData == null)
 	  {
-	    _nestedData = new ArrayList(4);	    
+	    _nestedData = new ArrayList();	    
 	  }
         return _nestedData;
       }
@@ -792,7 +796,6 @@ public final class DataElement implements IDataElement
 	if (arg instanceof DataElement)
 	  {	
 	      return arg == this;
-	      //	    return getId().equals(((DataElement)arg).getId());
 	  }
 
 	return false;
@@ -1085,12 +1088,22 @@ public final class DataElement implements IDataElement
 	      }
 	  
 	  if (DesktopElement.matches(key))
-	      {	    
-		  return new DesktopElement((IDataElement)this);
+	      {
+		  if (_desktopElement == null)
+		      {
+			  _desktopElement = new DesktopElement((IDataElement)this);
+		      }
+
+		  return _desktopElement;
 	      }	  
 	  else if (PropertySource.matches(key))
 	      {
-		  return new PropertySource(this);	    
+		  if (_propertySource == null)
+		      {
+			  _propertySource = new PropertySource(this);
+		      }
+		  
+		  return  _propertySource;	    
 	      }
 	  return null;
       }
@@ -1121,131 +1134,106 @@ public final class DataElement implements IDataElement
   /////////////////////////////////////////
   public Object getElementProperty(Object name)
       {        
-        if (_isReference)
-        {          
-          if (_referencedObject == null)
-          {
-            dereference();
-          }
- 
-          if (_referencedObject != null)
-          {
-            return _referencedObject.getElementProperty(name);
-          }
-          else
-          {
-            return null;
-          }
-        }
-        else
-        {
-          if (DE.P_NOTIFIER.equals(name))
-          {
-            return _dataStore.getDomainNotifier();
-          }
-          else if (DE.P_LABEL.equals(name))
-          {
-            return getAttribute(DE.A_NAME);
-          }
-          else if (DE.P_TYPE.equals(name))
-          {
-            return getAttribute(DE.A_TYPE);
-          }
-          else if (DE.P_NAME.equals(name))
-          {
-            return getAttribute(DE.A_NAME);
-          }
-          else if (DE.P_VALUE.equals(name))
-          {
-            return getAttribute(DE.A_VALUE);
-          }
-          else if (DE.P_ID.equals(name))
-          {
-            return getAttribute(DE.A_ID);
-          }
-          else if (DE.P_SOURCE_NAME.equals(name))
-          {
-            String source = new String(getAttribute(DE.A_SOURCE));
-            int locationIndex =  source.lastIndexOf(":");
-            if (locationIndex > 3)
-	      {
-		source  = source.substring(0, locationIndex);
-	      }	
-	    return source;
-	
-          }
-          else if (DE.P_BUFFER.equals(name))
-          {
-            return _buffer;
-          }
-          else if (DE.P_SOURCE.equals(name))
-          {
-            return null;
-          }
-	  else if (DE.P_SOURCE_LOCATION.equals(name))
-          {
-            String source = new String(getAttribute(DE.A_SOURCE));
-	    if (source != null)
-		{
-		    int locationIndex =  source.lastIndexOf(":");
-		    if (locationIndex > 3)
-			{
-			    int columnIndex = source.lastIndexOf(",");
-			    if (columnIndex < locationIndex)
-				{
-				    columnIndex = source.length();
-				}
-			    try
-				{
-				    Integer sourceLocation = new Integer(source.substring(locationIndex + 1, columnIndex));
-				    return sourceLocation;
-				}
-			    catch (NumberFormatException e)
-				{
-				    System.out.println(e);
-				    
-				}
-			}
-		}
-
-            return new Integer(1);
-          }
-	  else if (DE.P_SOURCE_LOCATION_COLUMN.equals(name))
-          {
-            String source = new String(getAttribute(DE.A_SOURCE));
-	    if (source != null)
-		{
-		    int locationIndex =  source.lastIndexOf(":");
-		    if (locationIndex > 3)
-			{
-			    int columnIndex = source.lastIndexOf(",");
-			    if (columnIndex > locationIndex)
-				{
-				    try
-					{
-					    Integer sourceLocation = new Integer(source.substring(columnIndex + 1, source.length()));
-					    return sourceLocation;
-					}
-				    catch (NumberFormatException e)
-					{
-					    System.out.println(e);
-					}
-				}
-			}
-		}
-
-            return new Integer(1);
-          }
-          else if (DE.P_NESTED.equals(name) || DE.P_CHILDREN.equals(name))
-          {
-            return getNestedData();
-          }
+	  if (_isReference)
+	      {          
+		  if (_referencedObject == null)
+		      {
+			  dereference();
+		      }
+		  
+		  if (_referencedObject != null)
+		      {
+			  return _referencedObject.getElementProperty(name);
+		      }
+		  else
+		      {
+			  return null;
+		      }
+	      }
 	  else
-          {	
-              return null;
-          }
-        }
-      }
-
+	      {
+		  if (DE.P_NOTIFIER.equals(name))
+		      {
+			  return _dataStore.getDomainNotifier();
+		      }
+		  else if (DE.P_LABEL.equals(name))
+		      {
+			  return getAttribute(DE.A_NAME);
+		      }
+		  else if (DE.P_TYPE.equals(name))
+		      {
+			  return getAttribute(DE.A_TYPE);
+		      }
+		  else if (DE.P_NAME.equals(name))
+		      {
+			  return getAttribute(DE.A_NAME);
+		      }
+		  else if (DE.P_VALUE.equals(name))
+		      {
+			  return getAttribute(DE.A_VALUE);
+		      }
+		  else if (DE.P_ID.equals(name))
+		      {
+			  return getAttribute(DE.A_ID);
+		      }
+		  else if (DE.P_SOURCE_NAME.equals(name))
+		      {
+			  String source = getAttribute(DE.A_SOURCE);
+			  int locationIndex =  source.lastIndexOf(":");
+			  if (locationIndex > 3)
+			      {
+				  return source.substring(0, locationIndex);
+			      }	
+			  return source;	
+		      }
+		  else if (DE.P_BUFFER.equals(name))
+		      {
+			  return _buffer;
+		      }
+		  else if (DE.P_SOURCE.equals(name))
+		      {
+			  return null;
+		      }
+		  else if (DE.P_SOURCE_LOCATION.equals(name))
+		      {
+			  String source = getAttribute(DE.A_SOURCE);
+			  if (source != null)
+			      {
+				  int locationIndex =  source.lastIndexOf(":");
+				  if (locationIndex > 3)
+				      {
+					  int columnIndex = source.lastIndexOf(",");
+					  if (columnIndex < locationIndex)
+					      {
+						  columnIndex = source.length();
+					      }
+					  try
+					      {
+						  Integer sourceLocation = new Integer(source.substring(locationIndex + 1, columnIndex));
+						  return sourceLocation;
+					      }
+					  catch (NumberFormatException e)
+					      {
+						  System.out.println(e);						  
+					      }
+				      }
+			      }
+			  
+			  return new Integer(1);
+		      }
+		  else if (DE.P_SOURCE_LOCATION_COLUMN.equals(name))
+		      {
+			  return null;
+		      }
+		  else if (DE.P_NESTED.equals(name) || DE.P_CHILDREN.equals(name))
+		      {
+			  return getNestedData();
+		      }
+		  else
+		      {	
+			  return null;
+		      }
+	      }
+      }    
 }
 

@@ -1183,71 +1183,74 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  String fileName    = null;
 		  String oldFileName = null;		
 		  ArrayList children = ev.getChildren();
-		  
-		  int size = ev.getChildrenCount();
-		  
-		  synchronized(children)
+
+		  if (children != null)
 		      {
-			  if (commandName.equals("C_SEARCH") || commandName.equals("C_SEARCH_REGEX"))
+			  int size = ev.getChildrenCount();
+			  
+			  synchronized(children)
 			      {
-				  if (object.getDataStore() == _plugin.getDataStore())
+				  if (commandName.equals("C_SEARCH") || commandName.equals("C_SEARCH_REGEX"))
 				      {
-					  Display d = getDummyShell().getDisplay();
-					  d.asyncExec(new CreateSearchMarkersAction(children));
-					  if (_searchResultsView != null)
+					  if (object.getDataStore() == _plugin.getDataStore())
 					      {
-						  _searchResultsView.searchFinished();
-					      }
-				      }
-			      }
-			  else
-			      {
-				  for (int i = 0; i < size; i++)
-				      {		
-					  DataElement output = (DataElement)children.get(i);
-					  if (commandName.equals("C_COMMAND")) // handle batch command markers
-					      {			
-						  if (output.getDataStore().filter(_markersDescriptor, output))
-						      {			
-							  String type  = (String)(output.getElementProperty(DE.P_TYPE));
-							  int priority;
-							  if (type.equals("error"))
-							      priority = IMarker.SEVERITY_ERROR;			
-							  else if (type.equals("warning"))
-							      priority = IMarker.SEVERITY_WARNING;
-							  else
-							      priority = IMarker.SEVERITY_INFO;	
-							  
-							  fileName  = (String)(output.getElementProperty(DE.P_SOURCE_NAME));
-							  Integer location = (Integer)(output.getElementProperty(DE.P_SOURCE_LOCATION));
-							  int loc = location.intValue();
-							  
-							  if (!fileName.equals(oldFileName))
-							      {			    	
-								  oldFileName = new String(fileName);
-								  
-								  file = getNewFile(fileName);
-							      }
-							  
-							  if ( file != null)
-							      {
-								  try
-								      {
-									  IMarker errorMarker = file.createMarker(IMarker.PROBLEM);
-									  errorMarker.setAttribute(IMarker.MESSAGE,
-												   (String)output.getElementProperty(DE.P_VALUE));
-									  
-									  errorMarker.setAttribute(IMarker.SEVERITY, priority);
-									  errorMarker.setAttribute(IMarker.LINE_NUMBER, loc);
-								      }
-								  catch (CoreException e)
-								      {
-								      }						
-							      }		
+						  Display d = getDummyShell().getDisplay();
+						  d.asyncExec(new CreateSearchMarkersAction(children));
+						  if (_searchResultsView != null)
+						      {
+							  _searchResultsView.searchFinished();
 						      }
 					      }
-					  
-				      }	
+				      }
+				  else
+				      {
+					  for (int i = 0; i < size; i++)
+					      {		
+						  DataElement output = (DataElement)children.get(i);
+						  if (commandName.equals("C_COMMAND")) // handle batch command markers
+						      {			
+							  if (output.getDataStore().filter(_markersDescriptor, output))
+							      {			
+								  String type  = (String)(output.getElementProperty(DE.P_TYPE));
+								  int priority;
+								  if (type.equals("error"))
+								      priority = IMarker.SEVERITY_ERROR;			
+								  else if (type.equals("warning"))
+								      priority = IMarker.SEVERITY_WARNING;
+								  else
+								      priority = IMarker.SEVERITY_INFO;	
+								  
+								  fileName  = (String)(output.getElementProperty(DE.P_SOURCE_NAME));
+								  Integer location = (Integer)(output.getElementProperty(DE.P_SOURCE_LOCATION));
+								  int loc = location.intValue();
+								  
+								  if (!fileName.equals(oldFileName))
+								      {			    	
+									  oldFileName = new String(fileName);
+									  
+									  file = getNewFile(fileName);
+								      }
+								  
+								  if ( file != null)
+								      {
+									  try
+									      {
+										  IMarker errorMarker = file.createMarker(IMarker.PROBLEM);
+										  errorMarker.setAttribute(IMarker.MESSAGE,
+													   (String)output.getElementProperty(DE.P_VALUE));
+										  
+										  errorMarker.setAttribute(IMarker.SEVERITY, priority);
+										  errorMarker.setAttribute(IMarker.LINE_NUMBER, loc);
+									      }
+									  catch (CoreException e)
+									      {
+									      }						
+								      }		
+							      }
+						      }
+						  
+					      }	
+				      }
 			      }
 		      }
 	      }

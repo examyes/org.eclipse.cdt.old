@@ -1168,26 +1168,28 @@ public DataElement command(DataElement commandDescriptor,
 	    if ((relation == null) || relation.getName().equals(getLocalizedString("model.contents")))
 		{
 		    filters = descriptor.getNestedData();
-		    
-		    for (int i = 0; i < filters.size(); i++)
+		    if (filters != null)
 			{
-			    DataElement object = ((DataElement)(filters.get(i))).dereference();		
-			    String objType = (String)object.getElementProperty(DE.P_TYPE);
-			    if (objType.equals(DE.T_OBJECT_DESCRIPTOR)  || objType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
+			    for (int i = 0; i < filters.size(); i++)
 				{
-				    if (fixateOn != null)
+				    DataElement object = ((DataElement)(filters.get(i))).dereference();		
+				    String objType = (String)object.getElementProperty(DE.P_TYPE);
+				    if (objType.equals(DE.T_OBJECT_DESCRIPTOR)  || objType.equals(DE.T_ABSTRACT_OBJECT_DESCRIPTOR))
 					{
-					    String objName = (String)object.getElementProperty(DE.P_NAME);
-					    if (objName.equals(fixateOn))
+					    if (fixateOn != null)
+						{
+						    String objName = (String)object.getElementProperty(DE.P_NAME);
+						    if (objName.equals(fixateOn))
+							{
+							    if (!result.contains(object))
+								result.add(object);
+							}
+						}
+					    else
 						{
 						    if (!result.contains(object))
 							result.add(object);
 						}
-					}
-				    else
-					{
-					    if (!result.contains(object))
-						result.add(object);
 					}
 				}
 			}
