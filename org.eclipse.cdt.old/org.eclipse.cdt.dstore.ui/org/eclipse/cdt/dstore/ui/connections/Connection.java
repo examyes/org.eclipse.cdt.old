@@ -98,12 +98,12 @@ public class Connection implements IDomainListener
 		    monitor.worked(10);
 
 		    monitor.subTask(_plugin.getLocalizedString("connection.Setting_miners_location"));
-		    dataStore.setMinersLocation(minersLocation);
+		    DataElement smlStatus = dataStore.setMinersLocation(minersLocation);
 		    monitor.worked(10);
 		    
 		    // get schema
 		    monitor.subTask(_plugin.getLocalizedString("connection.Getting_schema"));
-		    dataStore.getSchema();
+		    DataElement schemaStatus = dataStore.getSchema();
 		    monitor.worked(10);
 		    
 		    
@@ -116,13 +116,14 @@ public class Connection implements IDomainListener
 			{
 			    hostRoot.setAttribute(DE.A_NAME, host);
 			    hostRoot.setAttribute(DE.A_SOURCE, hostDirectory);
-			    dataStore.setHost(hostRoot);
+			    DataElement shStatus = dataStore.setHost(hostRoot);
 			}
 		    monitor.worked(10);
 		    
 		    // initialize miners
 		    monitor.subTask(_plugin.getLocalizedString("connection.Initializing_miners"));
 		    DataElement status = dataStore.initMiners();
+		    
 		    DataElement rootDir = dataStore.getHostRoot().get(0);
 		    if (rootDir == null)
 			{
@@ -130,7 +131,6 @@ public class Connection implements IDomainListener
 			    status.setAttribute(DE.A_NAME, "failed");
 			    dataStore.createObject(status, "error", msg);			    
 			}
-
 		    monitor.worked(20);
 
 		    monitor.subTask(_plugin.getLocalizedString("connection.Checking_status"));
