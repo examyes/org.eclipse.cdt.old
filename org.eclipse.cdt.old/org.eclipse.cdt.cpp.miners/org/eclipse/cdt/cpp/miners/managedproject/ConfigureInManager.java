@@ -155,7 +155,6 @@ public class ConfigureInManager {
 			File abstractPath = new File(configure_in.getAbsolutePath());
 			configure_in.delete();
 			modFile.renameTo(abstractPath);
-			timeStamp = modFile.lastModified();
 		}catch(FileNotFoundException e){System.out.println(e);}
 		catch(IOException e){System.out.println(e);}
 	}
