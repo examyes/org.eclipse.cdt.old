@@ -19,6 +19,7 @@ import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIResumedEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIExpression;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
@@ -171,8 +172,8 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		return threads;
 	}
 
-	public void setCurrentThread(ICDIThread current) throws CDIException {
-		currentThread = (WinDbgThread)current;
+	public void setCurrentThread(WinDbgThread current) throws CDIException {
+		currentThread = current;
 	}
 	
 	/* (non-Javadoc)
@@ -443,5 +444,37 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	public String evaluateExpressionToString( ICDIStackFrame context, String expressionText ) throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExpressionManagement#createExpression(java.lang.String)
+	 */
+	public ICDIExpression createExpression(String code) throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExpressionManagement#getExpressions()
+	 */
+	public ICDIExpression[] getExpressions() throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExpressionManagement#destroyExpressions(org.eclipse.cdt.debug.core.cdi.model.ICDIExpression[])
+	 */
+	public void destroyExpressions(ICDIExpression[] expressions) throws CDIException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIExpressionManagement#destroyAllExpressions()
+	 */
+	public void destroyAllExpressions() throws CDIException {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -15,7 +15,6 @@ import java.io.IOException;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDIConfiguration;
 import org.eclipse.cdt.debug.core.cdi.ICDIEventManager;
-import org.eclipse.cdt.debug.core.cdi.ICDIExpressionManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIMemoryManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIRegisterManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
@@ -23,7 +22,6 @@ import org.eclipse.cdt.debug.core.cdi.ICDISharedLibraryManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISignalManager;
 import org.eclipse.cdt.debug.core.cdi.ICDISourceManager;
 import org.eclipse.cdt.debug.core.cdi.ICDIVariableManager;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.win32.core.CorePlugin;
 import org.eclipse.core.resources.IFile;
@@ -33,10 +31,10 @@ public class WinDbgSession implements ICDISession {
 	
 	static {
 		try {
-			CorePlugin.getDefault().loadLibrary("dbghelp");
-			CorePlugin.getDefault().loadLibrary("win32cdi");
+			CorePlugin.getDefault().loadLibrary("dbghelp"); //$NON-NLS-1$
+			CorePlugin.getDefault().loadLibrary("win32cdi"); //$NON-NLS-1$
 		} catch (IOException e) {
-			System.out.println("Failed to load: " + e);
+			System.out.println("Failed to load: " + e); //$NON-NLS-1$
 		}
 	}
 	
@@ -105,14 +103,6 @@ public class WinDbgSession implements ICDISession {
 
 	public ICDIVariableManager getVariableManager() {
 		return variableManager;
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.ICDISession#getExpressionManager()
-	 */
-	public ICDIExpressionManager getExpressionManager() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public ICDIRegisterManager getRegisterManager() {
