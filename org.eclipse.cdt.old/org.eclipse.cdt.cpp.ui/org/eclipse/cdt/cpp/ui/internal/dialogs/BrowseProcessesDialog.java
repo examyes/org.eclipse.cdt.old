@@ -115,8 +115,8 @@ public class BrowseProcessesDialog extends org.eclipse.jface.dialogs.Dialog
 	_viewer.setLayout(layout);
 
 	GridData tgrid = new GridData(GridData.FILL_BOTH);
-	tgrid.heightHint = 300;
-	tgrid.widthHint = 300;
+	tgrid.heightHint = 200;
+	tgrid.widthHint = 500;
 	_viewer.setLayoutData(tgrid);
 	
 	getShell().setText(_title);
