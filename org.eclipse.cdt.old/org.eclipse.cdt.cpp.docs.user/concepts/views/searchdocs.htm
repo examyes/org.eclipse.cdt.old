@@ -34,9 +34,12 @@
 <ul>
 <li>From the View -- To do a search, the user would enter some text in the <code>"Look for"</code> field and press the <code>"Find"</code> button. Selecting any of the results with the mouse would open an external browser (see below) to display the corresponding documentation. By default, the first entry is always selected after a search. <br><br>
 </li>
-<li>From the Editor -- A search for documentation could also be launched from the Lpex editor by pressing F1 when the cursor is over a function name. 
+<li>From the Editor -- A search for documentation could also be launched from the Lpex editor by pressing F1 when the cursor is over a function name. A search from the editor is always of type <code>"substring"</code> regardless of the settings the Search Docs view has.<br>
 </li>
-<center><img SRC="../../images/searchdocsfromeditor.gif"></center>
+<center><img SRC="../../images/searchdocsfromeditor.gif"></center><br><br>
+<li>From the Parser views -- Select a function/class in the one of the Parser views(Projects Objects, System Objects),right-click  on it and select the <code>Find Help</code> menu item from the Pop-up menu. The search type from a parser view is always <code>"exact"</code> regardless of the settings the Search Docs view has. <br>
+</li>
+<center><img SRC="../../images/searchdocsfromparseview.gif"></center>
 </ul><br>
 
 <h1>Search Docs Settings</h1>
@@ -104,9 +107,7 @@ NOTE: Any pattern added to the Filter Patterns dialog box is remembered. Thus, a
 <h3>Limitations</h3>
 <ul>
 <li><p>It is possible that the 'whatis' file used for searching man pages may be incomplete. It can be recreated with the 'makewhatis' comand. e.g to recreate the 'whatis' from the man pages in 2 directories(<code>/usr/share/man</code> and <code>/usr/X11R6/man</code>) a user would typically run:<br><br>
-/user/sbin/<b>makewhatis</b> <code> /usr/share/man  /usr/X11R6/man</code>   
-</li>
-<li> When searching for Html documentation, the results of the search only show the names of the files that contains the 'key' typed. There is no description for each file.<br><br>
+/user/sbin/<b>makewhatis</b> <code> /usr/share/man  /usr/X11R6/man</code>  <br><br> 
 </li>
 <li>The search for documentation does NOT support Remote Projects
 </li>
