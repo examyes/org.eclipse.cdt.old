@@ -225,6 +225,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
   private ArrayList      _viewers;
 
   private ArrayList      _markedFiles;
+    private ArrayList    _tempFiles;
+    
   private DataElement    _status;
 
   private ISearchResultView _searchResultsView;
@@ -247,6 +249,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
     _statuses = new ArrayList();
     _viewers = new ArrayList();
     _markedFiles = new ArrayList();
+    _tempFiles = new ArrayList();
 
     _projectNotifier = new CppProjectNotifier();
     _projectNotifier.enable(true);
@@ -1025,12 +1028,22 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	  IWorkspace ws = _plugin.getPluginWorkspace();
 	  IWorkspaceRoot root = ws.getRoot();
 
+	  // search workspace files
 	  file = findFile(root, fileName);
+
+	  // search remote files
 	  if (file == null)
 	      {		  
 		  RemoteProjectAdapter rmt = RemoteProjectAdapter.getInstance();		  
 		  if (rmt != null)
 		      file = findFile(rmt, fileName);
+	      }
+
+	  // search temporary files
+	  if (file == null)
+	      {
+
+
 	      }
       }
 
@@ -1111,8 +1124,8 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 
     private boolean compareFileNames(String file1, String file2)
     {
-	String f1 = file1.replace('/', java.io.File.separatorChar).replace('\\', java.io.File.separatorChar);
-	String f2 = file2.replace('/', java.io.File.separatorChar).replace('\\', java.io.File.separatorChar);
+	String f1 = file1.replace('/', '\\');
+	String f2 = file2.replace('/', '\\');
 	return f1.equalsIgnoreCase(f2);
     }
 

@@ -62,6 +62,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 	    if (_element.getParent() != dataStore.getDescriptorRoot())
 		{
 		    String fileName   = (String)(_element.getElementProperty(DE.P_SOURCE_NAME));
+		    fileName = fileName.replace('/', '\\');
+		    
 		    String elementType = (String)(_element.getElementProperty(DE.P_TYPE));
 		    
 		    if ((fileName != null) && (fileName.length() > 0))
@@ -70,7 +72,6 @@ public class OpenEditorAction extends Action implements IOpenAction
 			    if ( !realFile.isDirectory())
 				{		
 				    IFile file = getNewFile(fileName);
-
 				    if (file == null)
 					{
 					    DataElement fileElement = null;	
@@ -82,7 +83,7 @@ public class OpenEditorAction extends Action implements IOpenAction
 						{
 						    String name = fileName;
 						    
-						    int indexOfSlash = fileName.lastIndexOf("/");
+						    int indexOfSlash = fileName.lastIndexOf("\\");
 						    if (indexOfSlash > 0)
 							{
 							    name = fileName.substring(indexOfSlash + 1, fileName.length());		      		
@@ -102,6 +103,8 @@ public class OpenEditorAction extends Action implements IOpenAction
 				    
 				    if (file != null)
 					{	
+					    System.out.println("editor open " +fileName);
+
 					    if (_plugin != null)
 						{
 						    IWorkbench desktop = _plugin.getWorkbench();
@@ -114,11 +117,12 @@ public class OpenEditorAction extends Action implements IOpenAction
 							{
 							    IFileEditorInput input = (IFileEditorInput)editors[i].getEditorInput();
 							    IFile openFile = input.getFile();
-							    if ((input != null) && openFile == file)
+							    if ((input != null) && 
+								openFile.getLocation().toString().equals(file.getLocation().toString()))
 								{
 								    editor = editors[i];		
 								    persp.bringToTop(editor);		
-								    break;
+								    //break;
 								}
 							}
 						    
