@@ -1,0 +1,1571 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="MBS%203_0%20Proposal_files/filelist.xml">
+<title>CDT Managed Build System 3</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="place" downloadurl="http://www.5iantlavalamp.com/"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="PlaceName"/>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="PlaceType"/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>ltreggia</o:Author>
+  <o:LastAuthor>Leo Treggiari</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>640</o:TotalTime>
+  <o:Created>2005-01-25T15:41:00Z</o:Created>
+  <o:LastSaved>2005-01-25T15:41:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>4344</o:Words>
+  <o:Characters>24765</o:Characters>
+  <o:Company>Intel Corporation</o:Company>
+  <o:Lines>206</o:Lines>
+  <o:Paragraphs>58</o:Paragraphs>
+  <o:CharactersWithSpaces>29051</o:CharactersWithSpaces>
+  <o:Version>11.6360</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:PunctuationKerning/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Courier;
+	panose-1:2 7 4 9 2 2 5 2 4 4;
+	mso-font-charset:0;
+	mso-generic-font-family:modern;
+	mso-font-format:other;
+	mso-font-pitch:fixed;
+	mso-font-signature:3 0 0 0 1 0;}
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:0 268435456 0 0 -2147483648 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-font-kerning:16.0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+h3
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	font-size:13.0pt;
+	font-family:Arial;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p.section, li.section, div.section
+	{mso-style-name:section;
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	background:#0080C0;
+	font-size:16.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	color:white;
+	font-weight:bold;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:33039892;
+	mso-list-type:hybrid;
+	mso-list-template-ids:264286384 67698703 -695057042 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l0:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l0:level2
+	{mso-level-start-at:0;
+	mso-level-number-format:bullet;
+	mso-level-text:-;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@list l1
+	{mso-list-id:245916287;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1579511636 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l2
+	{mso-list-id:321856737;
+	mso-list-type:hybrid;
+	mso-list-template-ids:198844846 -1742318828 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l2:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l3
+	{mso-list-id:367335959;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1214876816 610952372 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l3:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l4
+	{mso-list-id:459105640;
+	mso-list-template-ids:-125913328;}
+@list l4:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l4:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l4:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.0in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l4:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l4:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l5
+	{mso-list-id:551887783;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-323482740 67698689 67698713 67698715 -808147668 67698713 67698715 67698703 67698713 67698715;}
+@list l5:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l5:level4
+	{mso-level-start-at:3;
+	mso-level-tab-stop:-.25in;
+	mso-level-number-position:left;
+	margin-left:-.25in;
+	text-indent:-.25in;}
+@list l5:level7
+	{mso-level-tab-stop:3.25in;
+	mso-level-number-position:left;
+	margin-left:3.25in;
+	text-indent:-.25in;}
+@list l6
+	{mso-list-id:687214721;
+	mso-list-template-ids:-751798976;}
+@list l6:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l7
+	{mso-list-id:724451716;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-80197946 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l7:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l8
+	{mso-list-id:746616820;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-125913328 67698703 -1098468948 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l8:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l8:level2
+	{mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l9
+	{mso-list-id:785928624;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1183332482 67698689 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l9:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l10
+	{mso-list-id:846479609;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-900421782 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l10:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l10:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:o;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:"Courier New";}
+@list l11
+	{mso-list-id:961569772;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1510739040 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l11:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l12
+	{mso-list-id:993484278;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-486232812 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l12:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l12:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l13
+	{mso-list-id:1058288932;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-620362546 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l13:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l14
+	{mso-list-id:1171212833;
+	mso-list-type:hybrid;
+	mso-list-template-ids:556989726 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l14:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l15
+	{mso-list-id:1199272410;
+	mso-list-type:hybrid;
+	mso-list-template-ids:174327794 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l15:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l16
+	{mso-list-id:1209102288;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1554603060 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l16:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17
+	{mso-list-id:1284579048;
+	mso-list-template-ids:-163306876;}
+@list l17:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l17:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l17:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17:level5
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17:level6
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:3.0in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l17:level7
+	{mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17:level8
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l17:level9
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:4.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l18
+	{mso-list-id:1293632091;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-2079712642 -1098468948 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l18:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l19
+	{mso-list-id:1305085251;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1684559278 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l19:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l20
+	{mso-list-id:1307321951;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1699843362 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l20:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l21
+	{mso-list-id:1393195815;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1438274516 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l21:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l22
+	{mso-list-id:1413507406;
+	mso-list-type:hybrid;
+	mso-list-template-ids:1557283036 1829172388 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l22:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l23
+	{mso-list-id:1502817274;
+	mso-list-type:hybrid;
+	mso-list-template-ids:762355500 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l23:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l24
+	{mso-list-id:1633364145;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1574806240 67698689 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l24:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.75in;
+	mso-level-number-position:left;
+	margin-left:.75in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l24:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.25in;
+	mso-level-number-position:left;
+	margin-left:1.25in;
+	text-indent:-.25in;}
+@list l25
+	{mso-list-id:1858228798;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-949221142 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l25:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l25:level3
+	{mso-level-number-format:roman-lower;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:right;
+	text-indent:-9.0pt;}
+@list l25:level4
+	{mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l26
+	{mso-list-id:1898853136;
+	mso-list-template-ids:2021058122;}
+@list l26:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l26:level2
+	{mso-level-number-format:alpha-lower;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l27
+	{mso-list-id:1962884455;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1773369868 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l27:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+@list l28
+	{mso-list-id:1996296849;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1515040720 -1865879702 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l28:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l29
+	{mso-list-id:2029675663;
+	mso-list-type:hybrid;
+	mso-list-template-ids:502560496 67698689 67698691 67698693 67698689 67698691 67698693 67698689 67698691 67698693;}
+@list l29:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.25in;
+	mso-level-number-position:left;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-family:Symbol;}
+@list l30
+	{mso-list-id:2046977594;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-163306876 1829172388 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l30:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	color:windowtext;}
+@list l31
+	{mso-list-id:2130584194;
+	mso-list-type:hybrid;
+	mso-list-template-ids:695212738 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
+@list l31:level1
+	{mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+table.MsoTableGrid
+	{mso-style-name:"Table Grid";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	border:solid windowtext 1.0pt;
+	mso-border-alt:solid windowtext .5pt;
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-border-insideh:.5pt solid windowtext;
+	mso-border-insidev:.5pt solid windowtext;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1>CDT Managed Build System 3.0 Proposal</h1>
+
+<h2 style='margin-bottom:6.0pt'>Revision History</h2>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:480;mso-padding-alt:0in 5.4pt 0in 5.4pt;mso-border-insideh:
+ .5pt solid windowtext;mso-border-insidev:.5pt solid windowtext'>
+ <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
+  <td width=102 valign=top style='width:76.55pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Date<o:p></o:p></b></p>
+  </td>
+  <td width=73 valign=top style='width:54.85pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Revision<o:p></o:p></b></p>
+  </td>
+  <td width=288 valign=top style='width:216.15pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Description<o:p></o:p></b></p>
+  </td>
+  <td width=127 valign=top style='width:95.25pt;border:solid windowtext 1.0pt;
+  border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
+  solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Author<o:p></o:p></b></p>
+  </td>
+ </tr>
+ <tr style='mso-yfti-irow:1;mso-yfti-lastrow:yes'>
+  <td width=102 valign=top style='width:76.55pt;border:solid windowtext 1.0pt;
+  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Dec 13, 2004</p>
+  </td>
+  <td width=73 valign=top style='width:54.85pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>0.1</p>
+  </td>
+  <td width=288 valign=top style='width:216.15pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Initial version for review – no specific functionality or
+  design is final</p>
+  </td>
+  <td width=127 valign=top style='width:95.25pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
+  mso-border-alt:solid windowtext .5pt;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal>Leo Treggiari</p>
+  </td>
+ </tr>
+</table>
+
+<h2>Introduction</h2>
+
+<p class=MsoNormal style='margin-top:6.0pt'>This document presents a proposal
+for additional functionality to be implemented in the Managed Build System
+(MBS) for the CDT 3.0 release.<span style='mso-spacerun:yes'>  </span>It is
+divided into 4 sections:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level1 lfo1;
+     tab-stops:list .5in'>Requirements List: presents a prioritized requirements
+     list of requested MBS functionality.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level1 lfo1;
+     tab-stops:list .5in'>New Object Model Elements and Attributes: presents
+     the design for the requirements that are proposed to be implemented in CDT
+     3.0.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level1 lfo1;
+     tab-stops:list .5in'>New MBS Extension Callback Interfaces: defines new
+     interfaces that can be implemented by a tool integrator in order to
+     provide dynamic information to MBS.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level1 lfo1;
+     tab-stops:list .5in'>New MBS Extension Points: defines new MBS extension
+     points.</li>
+</ol>
+
+<p class=MsoNormal style='margin-top:6.0pt'>A detailed description of the MBS 2.1
+functionality can be found at <span class=MsoHyperlink>http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/user/Reference%20Documents/Managed_Build_21/Managed_Build_Extensibility.html?cvsroot=Tools_Project</span>.<span
+class=MsoHyperlink><span style='color:windowtext;text-decoration:none;
+text-underline:none'><o:p></o:p></span></span></p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>There are 3 primary goals for
+enhancing the Managed Build system functionality:<span class=MsoHyperlink><o:p></o:p></span></p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l19 level1 lfo2;
+     tab-stops:list .5in'>Multi-platform and multi-version support:<span
+     style='mso-spacerun:yes'>  </span>A tool integrator should be able to
+     define a single project-type that contains configurations that can be used
+     with multiple host and target platform combinations, and/or with multiple
+     tool versions.<span style='mso-spacerun:yes'>  </span>The user can create
+     one of these project-types using an initial tool-chain and then easily use
+     the project on a different host and target combination, or with a different
+     tool version, by creating new configurations derived from the original
+     configurations.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l19 level1 lfo2;
+     tab-stops:list .5in'>Tool-chain extensibility and customization:<span
+     style='mso-spacerun:yes'>  </span>The user should be able to easily
+     customize the tool-chain used by a configuration by:</li>
+</ol>
+
+<ol style='margin-top:0in' start=4 type=1>
+ <ol style='margin-top:0in' start=1 type=a>
+  <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level2 lfo1;
+      tab-stops:list 1.0in'>replacing the entire tool-chain</li>
+  <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level2 lfo1;
+      tab-stops:list 1.0in'>replacing individual tools</li>
+  <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level2 lfo1;
+      tab-stops:list 1.0in'>adding custom steps</li>
+  <li class=MsoNormal style='margin-top:6.0pt;mso-list:l25 level2 lfo1;
+      tab-stops:list 1.0in'>specifying different settings, or a different tool,
+      for individual files</li>
+ </ol>
+</ol>
+
+<p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:0in;
+margin-left:.5in;margin-bottom:.0001pt'>In addition, a more sophisticated level
+of customization will continue to be available by extending the MBS with
+additional tool-chains and tools using manifest files (plugin.xml).</p>
+
+<ol style='margin-top:0in' start=3 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l19 level1 lfo2;
+     tab-stops:list .5in'>Usability:<span style='mso-spacerun:yes'>  </span>The
+     MBS functionality should be easy to use by the CDT user who needs to
+     define and build his projects.<span style='mso-spacerun:yes'> 
+     </span>Extending the MBS should be easy for the tool integrator who needs
+     to integrate her tool-chain (or individual tool) into the MBS.</li>
+</ol>
+
+<p class=MsoNormal style='margin-top:6.0pt'>The goals are intended to take
+advantage of Eclipse’s strength as a multi-platform, extensible,
+state-of-the-art, software development platform.<span
+style='mso-spacerun:yes'>  </span></p>
+
+<h2>Requirements List</h2>
+
+<p class=MsoNormal>This list is in priority order (top == highest priority).<span
+style='mso-spacerun:yes'>  </span>The <span style='color:#339966'>green line </span>represents
+the cut-off line for CDT 3.0 functionality.</p>
+
+<h3>Multi-Version Tool-chain Support:</h3>
+
+<p class=MsoNormal style='margin-top:6.0pt'>A tool integrator can support
+multiple versions of a tool-chain, tool or builder.<span
+style='mso-spacerun:yes'>  </span>The tool integrator can support multiple
+versions <i style='mso-bidi-font-style:normal'>simultaneously</i>, or <i
+style='mso-bidi-font-style:normal'>sequentially</i>.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>Simultaneously means that users can
+choose between the versions when creating projects and adding configurations. The
+tool integrator may also provide a converter extension (see below) that allows
+the user to upgrade his project configurations from an older to a newer version
+of the tool-chain, when the user decides it is appropriate.<span
+style='mso-spacerun:yes'>  </span>The user can also choose to maintain a single
+project with multiple configurations that use different versions of the tool-chain.<span
+style='mso-spacerun:yes'>  </span>This allows the user to build a project using
+different versions of the tool-chain. </p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>Sequentially means that the tool
+integrator requires the user to upgrade his projects to the newest version.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt;mso-margin-bottom-alt:auto'><b
+style='mso-bidi-font-weight:normal'>Design notes:</b> A tool integrator defines
+a version number that MBS uses to match tool references to the appropriate tool
+definitions.<span style='mso-spacerun:yes'>  </span>A tool integrator can
+define multiple tool definitions that use the same base id and are
+distinguished by the version number.<span style='mso-spacerun:yes'>  </span>MBS
+attempts to resolve references in the following manner:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l26 level1 lfo22;
+     tab-stops:list .5in'>MBS looks up the id with the version specified with
+     the reference.&nbsp; </li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l26 level1 lfo22;
+     tab-stops:list .5in'>If not found, MBS looks up all occurrences of the id,
+     and selects a match in the following order: </li>
+ <ol style='margin-top:0in' start=1 type=a>
+  <li class=MsoNormal style='margin-top:6.0pt;mso-list:l26 level2 lfo22;
+      tab-stops:list 1.0in'>the id with the closest higher version number that
+      lists the referenced version in its <i>versionsSupported</i> attribute </li>
+  <li class=MsoNormal style='margin-top:6.0pt;mso-list:l26 level2 lfo22;
+      tab-stops:list 1.0in'>the id with no version information specified </li>
+ </ol>
+</ol>
+
+<p class=MsoNormal style='margin-top:6.0pt;mso-margin-bottom-alt:auto'>If a
+match is found, there are 2 scenarios:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l6 level1 lfo23;
+     tab-stops:list .5in'>The version is still actively supported by the tool
+     integrator, and the MBS information is loaded. </li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l6 level1 lfo23;
+     tab-stops:list .5in'>The version specifies that a conversion to a later
+     version of the tool-chain/tool/builder is required.&nbsp; At the
+     discretion of the tool-chain/tool/builder, the conversion may occur
+     automatically, or the converter may prompt the user to confirm the
+     upgrade. </li>
+</ol>
+
+<p class=MsoNormal style='margin-top:6.0pt'>If no match is found, MBS displays
+an error message, and does not load the MBS information.&nbsp; None of the MBS
+operations are available on the project (for example, editing build properties,
+cleaning, building, …).</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>A version number is specified using
+the Eclipse PluginVersionIdentifier format, <i style='mso-bidi-font-style:normal'>major.minor.service.</i><span
+style='mso-spacerun:yes'>  </span>The version number gets appended to the
+element id.<span style='mso-spacerun:yes'>  </span>An example of a tool-chain
+id not using versioning is <span style='font-size:10.0pt;font-family:"Courier New"'>&quot;cdt.managedbuild.tool.gnu.c.linker&quot;</span>.<span
+style='mso-spacerun:yes'>  </span>An example of the same tool-chain id using
+versioning is <span style='font-size:10.0pt;font-family:"Courier New"'>&quot;cdt.managedbuild.tool.gnu.c.linker.v.5.1.0&quot;</span>.<span
+style='mso-spacerun:yes'>  </span>MBS identifies a version number by the
+presence of 3 integers (separated by “.”), preceded by “v”, at the end of an
+id.<span style='mso-spacerun:yes'>  </span>A tool integrator must not end an id
+in this manner for any other purpose.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>Tool definitions earlier than CDT 3.0
+are considered to have the following version numbers:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo26;tab-stops:list .5in'>v.0.0.1
+     - Tool definitions from a pre-CDT 2.0 project file.</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo26;tab-stops:list .5in'>v.0.0.2
+     - Tool definitions from a CDT 2.0 project file.</li>
+ <li class=MsoNormal style='mso-list:l1 level1 lfo26;tab-stops:list .5in'>v.0.0.3
+     - Tool definitions from a CDT 2.1 project file.</li>
+</ul>
+
+<p class=MsoNormal style='margin-top:6.0pt'>Tool integrators should begin their
+numbering with v.0.1.0 or greater.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>When a tool integrator
+simultaneously supports multiple versions, they must ship multiple tool-chain
+definitions with the same base id, but different version numbers. </p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>Simultaneously supporting multiple
+versions is complicated by the fact that a user may or may not have the
+corresponding multiple versions of the actual tool-chains installed.<span
+style='mso-spacerun:yes'>  </span>The tool integrator should implement the <i
+style='mso-bidi-font-style:normal'>isSupported</i> attribute (see below) so
+that, by default, MBS will filter out the tool-chains/tools/builders that are
+not installed.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>When a tool integrator decides to
+no longer support a version of a tool, they continue to ship the old tool
+definitions and specify the id with version number of the tool definition to
+convert to in the <i style='mso-bidi-font-style:normal'>convertToId</i>
+attribute.<span style='mso-spacerun:yes'>  </span>If changes to the project
+information need to be performed by the conversion, the tool must provide a
+conversion extension to perform the conversion.<span style='mso-spacerun:yes'> 
+</span>If no conversion extension is provided, then MBS performs the conversion
+automatically by simply changing the<i style='mso-bidi-font-style:normal'>
+superClass</i> attribute of the tool definitions in the project to reference
+the new version.</p>
+
+<h3>Converter Extension Point:</h3>
+
+<p class=MsoNormal>MBS allows the tool integrator to register project,
+tool-chain, tool and builder converters.<span style='mso-spacerun:yes'> 
+</span>These converters can be used for:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='mso-list:l11 level1 lfo28;tab-stops:list .5in'>multi-version
+     support, as described above</li>
+ <li class=MsoNormal style='mso-list:l11 level1 lfo28;tab-stops:list .5in'>converting
+     from one project-type to another</li>
+ <li class=MsoNormal style='mso-list:l11 level1 lfo28;tab-stops:list .5in'>converting
+     a project/configuration from using one tool-chain/tool/builder to another</li>
+</ul>
+
+<p class=MsoNormal style='margin-top:6.0pt'>See the org.eclipse.cdt.managedbuilder.core.converter
+extension point definition below for additional information.</p>
+
+<h3>Environment Variables and Build Paths:</h3>
+
+<p class=MsoNormal>Tool-chain integrators and users need to be able to define
+the value of environment variables while the tool-chain is executing.<span
+style='mso-spacerun:yes'>  </span>For the tool-chain integrator, a tool-chain
+can provide a method to be called that identifies the default environment
+variables for the tool-chain.<span style='mso-spacerun:yes'>  </span>These
+would typically include the build path variables (“bin”, “include”, “lib”).<span
+style='mso-spacerun:yes'>  </span>These environment variables are defined by
+MBS for the process in which the builder (e.g., make) runs.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>The CDT user can modify the tool-chain
+provided environment variables in the project properties page.<span
+style='mso-spacerun:yes'>  </span>A new Tab (“Environment”) in the C/C++ Build
+page allows the CDT user to add additional environment variables, and add
+additional paths to a variable that represents a path (e.g., “bin”, “include”,
+“lib”).</p>
+
+<h3>Build Macros: </h3>
+
+<p class=MsoNormal style='margin-top:6.0pt;mso-margin-bottom-alt:auto'>The CDT
+user can use Build Macros in all configuration properties that accept
+text.&nbsp; Build Macros help make a project file more easily shared with other
+CDT users and more easily maintained.<span style='mso-spacerun:yes'>  </span>MBS
+pre-defines many useful macros and allows tool integrators and the CDT user to
+define additional macros.&nbsp; Additional macros can be defined in the MBS
+preferences page and for individual configurations.&nbsp; Build Macros are
+referenced in strings by enclosing them in braces, preceded by a dollar sign.</p>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'>Design notes:</b> Each
+build macro should have a “type” that indicates the preferred UI for editing
+the value of the macro (e.g. a file or path vs. a purely text macro).<span
+style='mso-spacerun:yes'>  </span>File and path macros should use “Path Variables”.<span
+style='mso-spacerun:yes'>  </span>CDT 3.0 will have a path variable manager?<span
+style='mso-spacerun:yes'>  </span>String macros should use Eclipse “Variables”.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>When the build-file generator
+creates the build file (e.g. makefile), should the build macros be expanded, or
+should the macros be placed in the generated build file and defined in the
+build process environment?<span style='mso-spacerun:yes'>  </span>Should the
+user be able to select between these alternatives?</p>
+
+<h3>Custom Build Steps:</h3>
+
+<p class=MsoNormal>The Managed Build system provides a Custom Build Step tool
+which can be inserted by the user at any place(s) in the tool-chain of a
+configuration.<span style='mso-spacerun:yes'>  </span>A Custom Build Step can
+also be used with an individual file, either replacing the tool specified to
+build the file, or running before or after the tool specified to build the
+file.<span style='mso-spacerun:yes'>  </span>The CDT user specifies the command
+line, the names of the input files, and the names of the output files.</p>
+
+<h3>Custom Tool to File Extension Mapping:</h3>
+
+<p class=MsoNormal>The Managed Build system provides a default mapping of file
+extensions/file types to tools.<span style='mso-spacerun:yes'>  </span>The CDT
+user can modify the default “file extension/file type to tool” mapping in the
+MBS preferences and for individual configurations.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'><b style='mso-bidi-font-weight:
+normal'>Design notes:</b><span style='mso-spacerun:yes'>  </span>This implies
+that tools need to be assigned into generic categories (e.g. C compiler,
+assembler, linker, librarian).</p>
+
+<h3>Tool-chain Installation Support:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l12 level1 lfo17;tab-stops:list .5in'>A
+     project-type or tool-chain can provide a method to be called to determine
+     if support for the project-type or tool-chain is currently installed on
+     the system (<i style='mso-bidi-font-style:normal'>isSupported</i>
+     attribute).<span style='mso-spacerun:yes'>  </span>MBS uses this
+     information in order to filter the choices presented to the CDT user and
+     to inform the user when support needed by their project is not installed.</li>
+ <li class=MsoNormal style='mso-list:l12 level1 lfo17;tab-stops:list .5in'>A
+     tool-chain can provide a method to be called to initialize the
+     tool-chain.<span style='mso-spacerun:yes'>  </span>The method is passed
+     the IToolChain interface of the tool-chain, and other interfaces that
+     allow the tool-chain to modify the MBS environment:</li>
+ <ol style='margin-top:0in' start=1 type=a>
+  <li class=MsoNormal style='mso-list:l12 level2 lfo17;tab-stops:list 1.0in'>A
+      tool-chain can add additional build macros and can set the default value
+      of build macros for configurations using the tool-chain.<span
+      style='mso-spacerun:yes'>  </span>This is done through the
+      IManagedBuildMacroManager interface (TBD).</li>
+  <li class=MsoNormal style='mso-list:l12 level2 lfo17;tab-stops:list 1.0in'>A
+      tool-chain can modify the file extension/file type to tool mapping to be
+      used with the tool-chain.<span style='mso-spacerun:yes'>  </span>This is
+      done through the IManagedBuildFileMap interface (TBD).</li>
+ </ol>
+</ol>
+
+<h3><st1:place w:st="on"><st1:PlaceName w:st="on">Remote</st1:PlaceName> <st1:PlaceType
+ w:st="on">Building</st1:PlaceType></st1:place>:</h3>
+
+<p class=MsoNormal>MBS provides the ability to use Eclipse on a host system and
+have the build, in addition to debugging, occur on a remote system.<span
+style='mso-spacerun:yes'>  </span>This would likely use the capabilities to be
+implemented by the “Remote System (Target) Definition” (Bug #65471).</p>
+
+<h3>Option Enhancements:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l30 level1 lfo9;tab-stops:list .5in'>An
+     option can provide methods to be called to determine if the option is currently
+     visible, enabled and to be used in command-line generation.<span
+     style='mso-spacerun:yes'>  </span>By default, an option is visible,
+     enabled, and used in command-line generation.<b style='mso-bidi-font-weight:
+     normal'> <span style='mso-spacerun:yes'> </span></b>See<b
+     style='mso-bidi-font-weight:normal'> </b>the IManagedIsApplicable interface
+     described below (TBD).</li>
+ <li class=MsoNormal style='mso-list:l30 level1 lfo9;tab-stops:list .5in'>A
+     string option can specify the browseType attribute.<span
+     style='mso-spacerun:yes'>  </span>This allows the property page to display
+     a Browse… button that allows the CDT user to select a single file or
+     directory as the value of the option.</li>
+</ol>
+
+<h3>Tool Input Ordering:</h3>
+
+<p class=MsoNormal>The CDT user can specify the order of input resources passed
+to tools that process multiple resources (e.g. a linker) from the configuration
+property pages.</p>
+
+<h3>Tool-chain Output Chaining:</h3>
+
+<p class=MsoNormal>A tool-chain specifies how the outputs of one tool in the
+tool-chain are used as input to another tool in the tool-chain (e.g., are the
+outputs processed per resource as with a compiler following a preprocessor, or
+are the outputs processed collectively as with a linker following compiler
+invocations).</p>
+
+<h3><span style='color:#339966'>======================================================<o:p></o:p></span></h3>
+
+<h3>POSIX Make File Generation:</h3>
+
+<p class=MsoNormal>CDT will provide a reference, POSIX makefile generator, in
+addition to the GNU makefile generator that is provided in CDT 2.1.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>It is not known at this time
+whether all of the proposed MBS functionality can be implemented using a POSIX
+makefile.<span style='mso-spacerun:yes'>  </span>It is possible that the POSIX
+makefile generator, or future MBS builders, may not be able to implement all of
+the semantics defined by the build model.<span style='mso-spacerun:yes'> 
+</span>When this is true, the build/make file generator must indicate in the
+build output window and the build log file which part(s) of the project build
+model could not be honored.<span style='mso-spacerun:yes'>  </span>It would
+also be desirable to allow builders to somehow specify the functionality that
+they do not support so that the MBS could disable the UI for those features (TBD).</p>
+
+<h3>Extract GNU Tool-chain Definition into its Own Plug-in:</h3>
+
+<p class=MsoNormal>Remove the GNU tool-chain definition from the base MBS
+code.<span style='mso-spacerun:yes'>  </span>This allows CDT providers to
+decide whether or not to include the GNU definitions in their distribution.</p>
+
+<h3>Multi-Instance Tool Support:</h3>
+
+<p class=MsoNormal style='margin-top:6.0pt'>A tool integrator can also support
+multiple “instances” of the same version of a tool-chain.<span
+style='mso-spacerun:yes'>  </span>Compared to multi-version tool support, this
+is a “lighter weight” approach, uses a different UI (TBD), and is typically
+used when the tool-chain version instances support a semantically equivalent
+set of tools and options, but may differ, for example, in the target platform
+and where the tool-chain is installed on the system.<span
+style='mso-spacerun:yes'>  </span></p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>If the user has multiple instances
+of a tool-chain installed, the user can select the instance that they want to
+use per configuration.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'><b style='mso-bidi-font-weight:
+normal'>Design notes:</b> To support multiple instances of a tool version, the
+tool integrator uses the <i style='mso-bidi-font-style:normal'>toolChainInstanceSupplier</i>
+attribute.<i style='mso-bidi-font-style:normal'><span
+style='mso-spacerun:yes'>  </span></i>This attribute specifies an extension
+callback that implements the IManagedToolChainInstanceSupplier interface as described
+below (TBD).</p>
+
+<h3>Additional Tool-chain Installation Support:</h3>
+
+<p class=MsoNormal>The tool integrator can add additional default
+configurations to a project-type from a separate manifest file.<span
+style='mso-spacerun:yes'>  </span>This allows a family of tools to add
+configurations as tool-chains are installed.<span style='mso-spacerun:yes'> 
+</span>It also allows tool providers (e.g. profilers, code coverage tools) to
+add configurations to a project-type that enable the use of their tool.</p>
+
+<h3>Build Log Generation:</h3>
+
+<p class=MsoNormal>The CDT user can request that a build log be written to the
+output directory.<span style='mso-spacerun:yes'>  </span>The default is set
+from the Managed Build preferences page setting when the configuration is
+created and can be modified from the configuration property pages.</p>
+
+<h3>Additional Option Enhancements:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo32;tab-stops:list .5in'>An
+     option can provide a method to be called to return its default value. <span
+     style='mso-spacerun:yes'> </span>This supports the case where the default
+     value of the option changes based upon the value of another option(s) or
+     some other environment setting.</li>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo32;tab-stops:list .5in'>The
+     value of a particular instance of an option is dependent upon its current
+     context.<span style='mso-spacerun:yes'>  </span>The Managed Build system
+     supports option value “inheritance”.<span style='mso-spacerun:yes'> 
+     </span>The inheritance hierarchy is “option type default” -&gt; “option
+     default” -&gt; “configuration setting” -&gt; “resource specific
+     setting”.<span style='mso-spacerun:yes'>  </span>For option types other
+     than stringlist, a value specified at a lower level in the hierarchy
+     overrides a value specified at a higher level.<span
+     style='mso-spacerun:yes'>  </span>If a value is omitted in a lower level,
+     the value is inherited from the closest ancestor with a specified
+     value.<span style='mso-spacerun:yes'>  </span>Stringlist options support
+     the special build macros $(inherit) and $(noinherit).<span
+     style='mso-spacerun:yes'>  </span>If neither $(noinherit) or $(inherit) is
+     specified as an entry in a stringlist, the stringlist entries of the next
+     higher level in the hierarchy are automatically applied to the end of the
+     list.<span style='mso-spacerun:yes'>  </span>If $(noinherit) is a member
+     of the list, the stringlist entries are not inherited from the next higher
+     level.<span style='mso-spacerun:yes'>  </span>If $(inherit) is specified
+     in the list, the stringlist entries of the next higher level in the
+     hierarchy are applied at that point in the list.<span
+     style='mso-spacerun:yes'>  </span>$(noinherit) takes precedence over
+     $(inherit).<span style='mso-spacerun:yes'>  </span><b style='mso-bidi-font-weight:
+     normal'>Design notes:</b><span style='mso-spacerun:yes'>  </span>Stringlist
+     entries do not inherit by default in CDT 2.1.<span
+     style='mso-spacerun:yes'>  </span>When the default is changed to inherit,
+     a project conversion step will need to add $(noinherit) to all existing
+     stringlist values.</li>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo32;tab-stops:list .5in'>An
+     option can provide a method to be called to validate a new value for the
+     option.<span style='mso-spacerun:yes'>  </span>By default, the Managed
+     Build system accepts any value appropriate to the option type.</li>
+ <li class=MsoNormal style='mso-list:l22 level1 lfo32;tab-stops:list .5in'>An
+     option can register observers/listeners that want to be notified when the
+     value of the option changes.<span style='mso-spacerun:yes'>  </span>The
+     client must implement the TBD interface described below.</li>
+</ol>
+
+<h3>Property Page Enhancements:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l21 level1 lfo10;tab-stops:list .5in'>A
+     property page provides a visual cue (<b style='mso-bidi-font-weight:normal'>bolding</b>)
+     when a property value is different from the current default value of the
+     property </li>
+ <li class=MsoNormal style='mso-list:l21 level1 lfo10;tab-stops:list .5in'>A
+     property page provides an easy mechanism for setting an option back to its
+     default value in the current context.</li>
+</ol>
+
+<h3>Context Sensitive Help:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l15 level1 lfo20;tab-stops:list .5in'>An
+     option can specify a help “tip” to aid the CDT user in setting the value
+     of the option.</li>
+ <li class=MsoNormal style='mso-list:l15 level1 lfo20;tab-stops:list .5in'>A
+     project-type can provide a method to be called to display help from the
+     New Project dialogs.</li>
+ <li class=MsoNormal style='mso-list:l15 level1 lfo20;tab-stops:list .5in'>A
+     tool-chain, tool, option category, and option can provide a method to be
+     called to display detailed help information from the configuration
+     property pages.</li>
+</ol>
+
+<h3>Project Wizard Enhancements:</h3>
+
+<p class=MsoNormal>A project-type can optionally add tab pages to the
+“Additional Project Settings” page to allow the user to select various options,
+and can optionally populate the new project with code that is specific to the
+type of project.</p>
+
+<h3>Additional Dependent Project Support:</h3>
+
+<p class=MsoNormal>The outputs of dependent projects are automatically used by
+the project in a manner appropriate to the project-types.<span
+style='mso-spacerun:yes'>  </span>For example, if the dependent project is a
+static or dynamic library, the output of the dependent project is added to the
+linker/archiver/librarian tool.<span style='mso-spacerun:yes'>  </span>If the
+dependent project is a dynamic library, the library path is added to the debug
+configuration.</p>
+
+<h3>Additional Configuration Support:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>The
+     CDT user can change the tool-chain to be used by a configuration.<span
+     style='mso-spacerun:yes'>  </span>All appropriate settings are copied from
+     the current tool-chain to the new tool-chain using the concept of
+     “compatible” tools:</li>
+</ol>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l24 level1 lfo11;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Copy appropriate tool-chain attributes.</p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l24 level1 lfo11;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>If the new tool-chain contains the same tool as
+the old tool-chain, copy all of the tool options.</p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l24 level1 lfo11;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>If the new tool-chain contains a tool that is
+compatible (i.e., defines a common set of options) with the old tool chain,
+copy all of the compatible tool options.</p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in;mso-list:l24 level1 lfo11;
+tab-stops:list .75in'><![if !supportLists]><span style='font-family:Symbol;
+mso-fareast-font-family:Symbol;mso-bidi-font-family:Symbol'><span
+style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Copy all of the Custom Build steps from the old
+tool-chain to the new tool-chain.<span style='mso-spacerun:yes'>  </span>Make
+“best effort” at placing the Custom Build steps in equivalent positions in the
+new tool-chain.</p>
+
+<p class=MsoNormal style='margin-left:.5in'><b style='mso-bidi-font-weight:
+normal'>Design notes: </b>compatible options use commonly defined alias-ids in
+addition to the unique id defined for the option.</p>
+
+<ol style='margin-top:0in' start=2 type=1>
+ <li class=MsoNormal style='color:red;mso-list:l3 level1 lfo3;tab-stops:list .5in'><span
+     style='color:windowtext'>The CDT user can add additional configurations
+     based upon an existing configuration, using a different tool-chain for the
+     new configuration.</span> <o:p></o:p></li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>The
+     CDT user can export a make/build file based upon the current state of the
+     configuration at any time via an explicit “Export Build File” menu item.</li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>The
+     CDT user can override or add to the default “Clean” script for a
+     configuration.</li>
+ <li class=MsoNormal style='color:red;mso-list:l3 level1 lfo3;tab-stops:list .5in'><span
+     style='color:windowtext'>The CDT user can select a set of configurations
+     to modify by selecting a “category” of configurations.<span
+     style='mso-spacerun:yes'>  </span>Category names are defined by the tool
+     integrator and can be added to by the CDT user.<span
+     style='mso-spacerun:yes'>  </span>When the selection contains the same or
+     compatible tools, the user can view/modify the options that apply to all
+     of the configurations in the selection.</span><o:p></o:p></li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo3;tab-stops:list .5in'>The
+     CDT user can select a configuration and replace all of the appropriate
+     build settings with the settings from another configuration.</li>
+</ol>
+
+<h3>Additional Build System Support:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     Managed Build system defines a default “build intermediate output”
+     directory that is a sub-folder of the project folder using the name of the
+     configuration.<span style='mso-spacerun:yes'>  </span>Note that the
+     default for the “build output” and “build intermediate output” directories
+     are the same.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     CDT user can change the “build output” directory.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     CDT user can change the “build intermediate output” directory.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     CDT user can insert an additional tool(s) at any place(s) in the
+     tool-chain.<span style='mso-spacerun:yes'>  </span>The tool can come from
+     another tool-chain or a standalone tool definition defined in an installed
+     managed build manifest file.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     CDT user can rebuild an individual resource without performing a project
+     build.<span style='mso-spacerun:yes'>  </span>For example, the user can
+     compile an individual source file to check for compilation errors.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     CDT user can perform a build up to a user specified build step – for
+     example, compiling all files but not linking.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>The
+     CDT user can select a set of configurations to build.<span
+     style='mso-spacerun:yes'>  </span><b style='mso-bidi-font-weight:normal'>Design
+     notes: </b><span style='mso-spacerun:yes'> </span>Eclipse 3.0 added the
+     concept of “scoped builds” – is that what we are looking for?</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool-chain can specify the build order of the tools in the chain, or it
+     can allow the Managed Build system to determine an order based upon tool
+     inputs and outputs.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool-chain can invoke a tool multiple times even when the tool is not
+     associated with a type of project resource that can appear multiple times
+     in the project (e.g., the linker).</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool-chain specifies whether the failure of the tool causes the build
+     process to continue or stop.</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool can provide a method to be called that enumerates the input file
+     dependencies of a particular project resource.<span
+     style='mso-spacerun:yes'>  </span>The Managed Build system provides
+     default implementations for certain categories of tools (e.g. C/C++
+     compiler).</li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool can provide a method to be called that enumerates the outputs of a
+     particular project resource. </li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool can specify a message to be displayed in the build log immediately
+     before the invocation of the tool (e.g., “Compiling with Intel C++
+     v8.0…”).<span style='mso-spacerun:yes'>  </span>By default, MBS will
+     display the message “Invoking <i style='mso-bidi-font-style:normal'>tool-name
+     </i>(<i style='mso-bidi-font-style:normal'>tool-id</i>)…”<span
+     style='mso-spacerun:yes'>    </span><b style='mso-bidi-font-weight:normal'>Design
+     notes:</b><span style='mso-spacerun:yes'>  </span>Does this make the build
+     log too wordy?<span style='mso-spacerun:yes'>  </span>If we try to use
+     this to identify output for error parsers, are there internationalization
+     issues?</li>
+ <li class=MsoNormal style='color:red;mso-list:l28 level1 lfo15;tab-stops:list .5in'><span
+     style='color:windowtext'>A tool can produce multiple kinds of output (e.g.
+     .so &amp; .a)?<span style='mso-spacerun:yes'>  </span>Do we need the
+     concept of a primary output and secondary outputs?</span><o:p></o:p></li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>A
+     tool/builder specific error parser is added to the end of the error parser
+     list, if not already present, when a project resource is defined to use
+     the tool/builder.<span style='mso-spacerun:yes'>  </span>The error parser
+     can be removed by the CDT user, and is automatically removed when there
+     are no more project resources that use the tool/builder. </li>
+ <li class=MsoNormal style='mso-list:l28 level1 lfo15;tab-stops:list .5in'>An
+     option can specify a precedence order value that determines where it is
+     placed on the command line relative to other options.<span
+     style='mso-spacerun:yes'>  </span>Options with the lower precedence values
+     appear before options with a higher precedence value in the generated
+     options.<span style='mso-spacerun:yes'>  </span>The default precedence
+     order value is 0.<span style='mso-spacerun:yes'>  </span>Options with
+     negative precedence order appear before options with no precedence
+     order.<span style='mso-spacerun:yes'>  </span>Options with precedence
+     order values &gt; 0 appear after options with no precedence order.</li>
+</ol>
+
+<h3>Additional User Preferences:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l8 level1 lfo16;
+     tab-stops:list .5in'>The CDT user may remove installed and
+     possibly-installed (i.e. the project-type does NOT implement the method of
+     verifying that its support has been installed) project-types from future
+     consideration by turning them off in the MBS Preferences page.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l8 level1 lfo16;
+     tab-stops:list .5in'>The CDT user may remove installed and
+     possibly-installed (i.e. the tool-chain does NOT implement the method of
+     verifying that its support has been installed) tool-chains from future
+     consideration by turning them off in the MBS Preferences page.</li>
+</ol>
+
+<h3>Additional Property Page Enhancements:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l2 level1 lfo25;
+     tab-stops:list .5in'>Options support a guarded-string option type.<span
+     style='mso-spacerun:yes'>  </span>Guarded-string options are used for a
+     tool command that turns a tool feature on or off, and when “on”,
+     optionally takes a user-defined value.<span style='mso-spacerun:yes'> 
+     </span>An example is when a tool can optionally generate a particular
+     output file and the user can optionally specify the path of the file. The
+     UI representation for a guarded-string option is a check box followed by
+     an edit box.<span style='mso-spacerun:yes'>  </span>The edit box is only
+     enabled for input when the check box is “checked”.<span
+     style='mso-spacerun:yes'>  </span></li>
+ <li class=MsoNormal style='color:red;mso-list:l2 level1 lfo25;tab-stops:list .5in'><span
+     style='color:windowtext;mso-bidi-font-style:italic'>Options support a
+     Table (2 column) option type for options that take 2 string values.<span
+     style='mso-spacerun:yes'>  </span>The user can edit the cell contents, and
+     add and delete rows.</span><o:p></o:p></li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo25;tab-stops:list .5in'>The
+     tool integrator can override the standard property page display and
+     provide a custom page.</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo25;tab-stops:list .5in'>An
+     option can provide a custom editor to be used to view or change the value
+     of the option.</li>
+ <li class=MsoNormal style='mso-list:l2 level1 lfo25;tab-stops:list .5in'>An
+     option can request that it use a Managed Build system built-in custom
+     editor.<span style='mso-spacerun:yes'>  </span>Examples of such editors
+     include a string list editor and a file/path browsing editor.</li>
+</ol>
+
+<h3>Miscellaneous:</h3>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo4;tab-stops:list .5in'>A
+     project (and its child elements) can store private information in the
+     Managed Make project file (.cdtbuild).</li>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo4;tab-stops:list .5in'>The
+     CDT user need not specifically choose between a C and C++ project.<span
+     style='mso-spacerun:yes'>  </span>CDT should be able to assign intelligent
+     per-file defaults based upon the file extension, and allow the CDT user to
+     specify C vs. C++ if necessary.<span style='mso-spacerun:yes'>  </span><b
+     style='mso-bidi-font-weight:normal'>Design notes:</b> The main issue here
+     is how to handle file types where it is not obvious whether they are C or
+     C++ files – e.g. .h files &amp; .obj files.<span
+     style='mso-spacerun:yes'>  </span>Also, to do this impacts more than just
+     the MBS.</li>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo4;tab-stops:list .5in'>A
+     tool-chain can provide property setting “wizards” that modify sets of tool
+     options in order to reach an overall user-desired goal.<span
+     style='mso-spacerun:yes'>  </span>An example would be a “Most Highly
+     Optimized Build” wizard that set options on multiple tools.<span
+     style='mso-spacerun:yes'>  </span><b style='mso-bidi-font-weight:normal'>Design
+     notes:</b> Where do these buttons appear in the UI?<span
+     style='mso-spacerun:yes'>  </span>How are they defined?</li>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo4;tab-stops:list .5in'>Share/Enforce
+     Compiler Settings Across a Team – Part of the Eclipse 3.1 proposed
+     functionality is “For team-wide uniformity, some preferences settings
+     (e.g., compiler options) need to be shared (or imposed) across teams”.</li>
+ <li class=MsoNormal style='mso-list:l27 level1 lfo4;tab-stops:list .5in'>MBS
+     allows certain attributes to be overridden that would have a large impact
+     on the scanning of tool output – for example, the tool command and the make
+     command.<span style='mso-spacerun:yes'>  </span>Does MBS allow the user to
+     override everything that they need to in order to make this work?</li>
+</ol>
+
+<h2>New Object Model Elements and Attributes</h2>
+
+<p class=MsoNormal>TBD.</p>
+
+<h2>New MBS Extension Callback Interfaces</h2>
+
+<h3>IManagedIsApplicable:<span style='mso-spacerun:yes'>  </span></h3>
+
+<p class=MsoNormal>This interface is used by the Option.isApplicable
+attribute.<span style='mso-spacerun:yes'>  </span>It should be implemented when
+an option may or may not be applicable in the user interface, or in the
+generated command line, depending upon the current context (e.g., other option
+settings.)</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>TBD</p>
+
+<h2>New MBS Extension Points</h2>
+
+<h3>org.eclipse.cdt.managedbuilder.core.converter</h3>
+
+<p class=MsoNormal>This extension point allows a tool integrator to contribute
+a project-type/tool-chain/tool/builder converter to MBS.<span
+style='mso-spacerun:yes'>  </span>Converters can be used to upgrade to newer
+versions, change the project-type, or to perform conversions between different
+tool chains.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>A Converter specifies in its
+extension definition:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l10 level1 lfo29;
+     tab-stops:list .5in'>The class that implements the
+     IConvertManagedBuildDefinitions interface</li>
+ <li class=MsoNormal style='mso-list:l10 level1 lfo29;tab-stops:list .5in'>The
+     MBS version the converter was written for</li>
+ <li class=MsoNormal style='mso-list:l10 level1 lfo29;tab-stops:list .5in'>The
+     “from” tool-chain/tool id(s) – a regular expression</li>
+ <li class=MsoNormal style='mso-list:l10 level1 lfo29;tab-stops:list .5in'>The
+     “to” tool-chain/tool id(s) – a regular expression</li>
+ <li class=MsoNormal style='mso-list:l10 level1 lfo29;tab-stops:list .5in'>A
+     priority value in case MBS finds more than one match for a conversion</li>
+</ul>
+
+<p class=MsoNormal style='margin-top:6.0pt'>A converter cannot be invoked
+unless both the “from” and “to” tool-chain/tool definitions are installed into
+CDT.<span style='mso-spacerun:yes'>  </span>Old tool-chain/tool/builder
+definitions, that are to be used in conversions only, are marked by the tool
+integrator with the convertToId attribute set to the id of the new
+tool-chain/tool/builder definition.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>MBS invokes a converter:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l10 level1 lfo29;
+     tab-stops:list .5in'>During MBS version upgrading when the tool-chain/tool
+     is found to require conversion.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l10 level1 lfo29;
+     tab-stops:list .5in'>When MBS loads a project file and determines that a
+     referenced tool-chain/tool has the convertToId attribute set.<span
+     style='mso-spacerun:yes'>  </span>At the discretion of the converter, the
+     user may be asked to confirm the conversion.<span
+     style='mso-spacerun:yes'>  </span>If the user does not confirm, the
+     project is loaded in a read-only mode, and any changes made to the MBS
+     information will be discarded when Eclipse exits.</li>
+ <li class=MsoNormal style='margin-top:6.0pt;mso-list:l10 level1 lfo29;
+     tab-stops:list .5in'>If conversion is invoked explicitly from the UI.<span
+     style='mso-spacerun:yes'>  </span>When conversions are possible for a
+     selected project, the project context menu should display a “Convert
+     To<span style='mso-spacerun:yes'>  </span>&gt;” menu item with a submenu
+     listing the possible conversion targets.</li>
+</ul>
+
+<p class=MsoNormal style='margin-top:6.0pt'>Converters use the MBS model public
+interfaces (IManagedProject, IConfiguration, …) to modify the project
+definition “in-place”, and so could be affected by MBS model changes.</p>
+
+<p class=MsoNormal style='margin-top:6.0pt'>This is the definition of the
+IConvertManagedBuildDefinitions interface.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt;
+mso-bidi-font-size:12.0pt;font-family:Courier'>public interface
+IConvertManagedBuildDefintions {<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt;
+mso-bidi-font-size:12.0pt;font-family:Courier'><span style='mso-tab-count:1'>   </span>public
+toolChainPreConvert(IToolChain toolChain, String fromId, <o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:.25in'><span
+style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:Courier'>String
+toId, boolean userHasConfirmed);<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt;
+mso-bidi-font-size:12.0pt;font-family:Courier'><span style='mso-tab-count:1'>   </span>public
+toolConvert(ITool, String fromId, String toId,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:.25in'><span
+style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:Courier'>boolean
+userHasConfirmed);<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt;
+mso-bidi-font-size:12.0pt;font-family:Courier'><span style='mso-tab-count:1'>   </span>public
+tooChainPostConvert(IToolChain, String fromId, String toId,<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:.25in'><span
+style='font-size:10.0pt;mso-bidi-font-size:12.0pt;font-family:Courier'>boolean
+userHasConfirmed);<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-size:10.0pt;
+mso-bidi-font-size:12.0pt;font-family:Courier'>}<o:p></o:p></span></p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>The conversion process performs the following steps per
+tool-chain:</p>
+
+<ol style='margin-top:0in' start=1 type=1>
+ <li class=MsoNormal style='mso-list:l14 level1 lfo30;tab-stops:list .5in'>Calls
+     toolChainPreConvert if the tool-chain versions are different </li>
+ <li class=MsoNormal style='mso-list:l14 level1 lfo30;tab-stops:list .5in'>Calls
+     toolConvert for all tools, and the builder, in the tool-chain where the
+     versions are different </li>
+ <li class=MsoNormal style='mso-list:l14 level1 lfo30;tab-stops:list .5in'>Calls
+     toolChainPostConvert if the tool-chain versions are different </li>
+</ol>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>When a tool integrator conversion is invoked while an MBS
+conversion is also taking place, MBS will invoke the converter with the
+appropriate object model based upon the MBS version that the converter was
+written for.<span style='mso-spacerun:yes'>  </span>If the converter was
+written for the old MBS version, the converter is called with the old version
+of the MBS object model.<span style='mso-spacerun:yes'>  </span>If the
+converter was written for the new MBS version, the converter is called with the
+new MBS model.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+</div>
+
+</body>
+
+</html>
