@@ -32,6 +32,14 @@ public class DebugMiner extends Miner
 	return resourceBundle;
     }
 
+    protected ArrayList getDependencies()
+    {
+	ArrayList dependencies = new ArrayList();
+	dependencies.add("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner");
+	dependencies.add("org.eclipse.cdt.dstore.miners.command.CommandMiner");
+	return dependencies;
+    }
+
     public void load()
     {
 	_debugOptions = getLocalizedString("debug_options");

@@ -19,6 +19,13 @@ public class SearchMiner extends Miner
     {
     }
 
+    protected ArrayList getDependencies()
+    {
+	ArrayList dependencies = new ArrayList();
+	dependencies.add("org.eclipse.cdt.cpp.miners.project.ProjectMiner");
+	dependencies.add("org.eclipse.cdt.cpp.miners.parser.ParseMiner");
+	return dependencies;
+    }
 
    public void extendSchema(DataElement schemaRoot)
     {

@@ -22,7 +22,7 @@ public class PAMiner extends Miner {
  {
   super.finish();
  }
-
+    
  public void load()
  {
   // System.out.println("Calling PAMiner.load");

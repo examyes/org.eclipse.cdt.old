@@ -17,23 +17,32 @@ import org.eclipse.cdt.dstore.core.model.DataStoreAttributes;
 
 public class ManagedProjectMiner extends Miner
 {	
-	private AutoconfManager autoconfManager;
-	private TargetManager targetManager;
-	private DataElement _workspace = null;
-	// classification constants
-	private MakefileAmClassifier classifier;
-	private final String TOPLEVEL = "1";
-	private final String PROGRAMS = "2";
-	private final String STATICLIB = "3";
-	private final String SHAREDLIB = "4";
-	private String _workspaceLocation = "";
-	
-	public void load() 
-	{
-		autoconfManager = new AutoconfManager();
-		targetManager = new TargetManager();
-	}
-	
+    private AutoconfManager autoconfManager;
+    private TargetManager targetManager;
+    private DataElement _workspace = null;
+    // classification constants
+    private MakefileAmClassifier classifier;
+    private final String TOPLEVEL = "1";
+    private final String PROGRAMS = "2";
+    private final String STATICLIB = "3";
+    private final String SHAREDLIB = "4";
+    private String _workspaceLocation = "";
+    
+    public void load() 
+    {
+	autoconfManager = new AutoconfManager();
+	targetManager = new TargetManager();
+    }
+    
+    protected ArrayList getDependencies()
+    {
+	ArrayList dependencies = new ArrayList();
+	dependencies.add("org.eclipse.cdt.dstore.miners.filesystem.FileSystemMiner");
+	dependencies.add("org.eclipse.cdt.dstore.miners.command.CommandMiner");
+	dependencies.add("org.eclipse.cdt.cpp.miners.project.ProjectMiner");
+	return dependencies;
+    }
+    
 	public void extendSchema(DataElement schemaRoot)
 	{
 		
@@ -50,7 +59,7 @@ public class ManagedProjectMiner extends Miner
 		createCommandDescriptor(fsObjectD, "Check Update State", "C_CHECK_UPDATE_STATE", false);
 		createCommandDescriptor(fsObjectD, "Classify Makefile", "C_CLASSIFY_MAKEFILE_AM", false);
 		
-			createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
+		createCommandDescriptor(managedProjectD, "Unmanage Project", "C_UNMANAGE_PROJECT");
 		DataElement targetD          = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.PROJECT_TARGET);
   
 		DataElement targetAttributeTypeD = _dataStore.createObject(schemaRoot, DE.T_OBJECT_DESCRIPTOR, Am.TARGET_ATTRIBUTE_TYPE);
