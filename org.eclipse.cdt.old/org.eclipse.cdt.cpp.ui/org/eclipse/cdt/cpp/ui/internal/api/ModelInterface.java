@@ -728,6 +728,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
    if (project instanceof Repository)
     dataStore = ((Repository)project).getDataStore();	
       
+
    DataElement envElement = dataStore.createObject(null, "Environment Variable", project.getName());
    ArrayList envVars = _plugin.readProperty(project, "Environment");
    for (int i = 0; i < envVars.size(); i++)
@@ -1421,31 +1422,7 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 	
 
     }
-    
-    
-    // methods for debugger team
-    public static ArrayList getFunctions(IFile resource)
-    {
-	ArrayList results = new ArrayList();
-	DataElementAdapter adapter = DataElementAdapter.getInstance();
-	DataElement fileElement = adapter.parse(resource);
-	if (fileElement != null)
-	    {
-		DataStore dataStore = fileElement.getDataStore();
-		DataElement functionDescriptor = dataStore.findObjectDescriptor("Function");		
-		ArrayList functionList = dataStore.findObjectsOfType(fileElement, functionDescriptor);
-
-		for (int i = 0; i < functionList.size(); i++)
-		    { 
-			DataElement function = (DataElement)functionList.get(i);
-			String name = function.getName();
-			String type = function.getType();
-			results.add(name);
-		    }
-	    }
-	
-	return results;
-    }
+        
 }
 
 

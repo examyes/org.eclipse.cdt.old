@@ -177,7 +177,7 @@ public class FileSystemMiner extends Miner
 	  
 	  DataElement inRenFile = _dataStore.createObject(renFile,"input", "Enter the New Name");
 	  
-	  DataElement findD = createCommandDescriptor(_directoryDescriptor, "Find", "C_FIND_FILE", false);
+	  DataElement findD = createCommandDescriptor(_fsystemObjectDescriptor, "Find", "C_FIND_FILE", false);
 
 	  //deleting dirs
 	  DataElement del = createCommandDescriptor(_fsystemObjectDescriptor,getLocalizedString("model.Delete"),
@@ -339,6 +339,8 @@ public class FileSystemMiner extends Miner
      	     boolean success = deleteHelper(subject.getSource());// recursively delete all files rooted at 'subject'	
 	     if (success)
 		 { 		    
+		     System.out.println("deleting " + subject.getName());
+		     subject.setUpdated(false);
 		     _dataStore.deleteObject(parent, subject);		     		   
 		 }
 	     else
