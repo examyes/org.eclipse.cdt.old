@@ -204,6 +204,17 @@ public class XMLparser
 				      }
 				  else if ((matchTag != null) && trimmedTag.equals(matchTag))
 				      {
+				      	/*****/
+						  	// special case test
+						  	if (parent.getType().equals("status"))
+						  	{
+						  		if (parent.getName().equals("almost done"))
+						  		{
+						  			parent.setAttribute(DE.A_NAME, "done");	
+						  		}
+						  	}
+						  	/***/ 
+						  	
 					  _tagStack.pop();					  
 					  if (_tagStack.empty())
 					      {
@@ -215,8 +226,11 @@ public class XMLparser
 					      }
 					  else
 					      {
-						  parent = (DataElement)_objStack.pop();
+						  	parent = (DataElement)_objStack.pop();
+						  	
+						  
 					      }
+					      					     	
 				      }
 				  else if (xmlTag.length() > 0)
 				      {
@@ -343,7 +357,22 @@ public class XMLparser
 			  	if (parent != null && _dataStore.contains(id))
 			      {
 				  result = _dataStore.find(id);      
-				  result.setAttributes(attributes);
+				  
+				  /*****/
+				  // treat status special test
+				  String type = attributes[DE.A_TYPE];				  
+				  String name = attributes[DE.A_NAME];
+				  if (type.equals("status") && name.equals("done"))
+				  {
+					result.setAttribute(DE.A_NAME, "almost done");	  	
+				  }
+				  else
+				  {
+					result.setAttributes(attributes);
+				  }
+				  /*****/
+				  
+				  
 				  if (parent == _rootDataElement)
 				      {
 					  DataElement rParent = result.getParent();
