@@ -5,6 +5,7 @@ package com.ibm.cpp.ui.internal.views.targets;
  * WebSphere Studio Workbench
  * (c) Copyright IBM Corp 2000
  */
+import org.eclipse.ui.views.properties.ResourcePropertySource;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.ui.views.properties.IPropertySource;
