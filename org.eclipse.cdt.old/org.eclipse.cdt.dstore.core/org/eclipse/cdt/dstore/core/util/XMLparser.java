@@ -195,10 +195,10 @@ public class XMLparser
 				      }
 				  else if ((matchTag != null) && trimmedTag.equals(matchTag))
 				      {
-					  _tagStack.pop();
+					  _tagStack.pop();					  
 					  if (_tagStack.empty())
 					      {
-						  done = true;
+						  	done = true;
 					      }
 					  else if (_tagStack.size() == 1)
 					      {
@@ -216,7 +216,13 @@ public class XMLparser
 					      {
 						  if (parent != null)
 						      {
-							  _objStack.push(parent);
+						      	if (_objStack.contains(parent))
+						      	{						      							
+						      	}
+						      	else
+						      	{						      	
+							  		_objStack.push(parent);
+						      	}
 						      }
 
 						  DataElement result = parseTag(xmlTag, parent);
@@ -257,8 +263,10 @@ public class XMLparser
 		      }
 	      }
 
-        return _rootDataElement;
-      }
+		DataElement result = _rootDataElement;
+		_rootDataElement = null;
+		return result;
+       }
 
   protected synchronized DataElement parseTag(String fullTag, DataElement parent)
     {
