@@ -85,7 +85,7 @@ public class ServerUpdateHandler extends UpdateHandler
       {
 	  synchronized(_dataObjects)
 	      {
-		  DataElement document = _dataStore.createObject(null, "DOCUMENT", "doc" + _replies++);
+		  DataElement document = _dataStore.createObject(null, "DOCUMENT", "server.doc." + _replies++);
 		  document.setParent(null);
 		  DataElement response = _commandGenerator.generateResponse(document, _dataObjects);
 		  

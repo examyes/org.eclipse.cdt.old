@@ -43,7 +43,7 @@ public class ClientCommandHandler extends CommandHandler
 
   public synchronized void sendCommands()
     {
-	  DataElement commandRoot = _dataStore.createObject(null, "DOCUMENT", "doc" + _requests++);
+	  DataElement commandRoot = _dataStore.createObject(null, "DOCUMENT", "client.doc." + _requests++);
 	  commandRoot.setParent(null);
 	  while (_commands.size() > 0)
 	      {
