@@ -1347,7 +1347,6 @@ public final class DataElement implements Serializable, IDataElement
 		if (getDescriptor() != null /*&& _descriptor.isOfType(getContainerDescriptor(), true)*/)
 		    {
 			DataElement queryDescriptor = _dataStore.localDescriptorQuery(getDescriptor(), "C_QUERY");
-			System.out.println(queryDescriptor);
 			if (queryDescriptor != null)
 			    {	
 				_dataStore.command(queryDescriptor, this);
