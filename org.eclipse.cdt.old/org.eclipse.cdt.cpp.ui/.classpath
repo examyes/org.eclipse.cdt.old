@@ -17,7 +17,6 @@
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.debug.ui_2.0.0/dtui.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.search_2.0.0/search.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui_2.0.0/workbench.jar"/>
-    <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.win32_2.0.0/ws/win32/swt.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.apache.ant_1.4.1/ant.jar"/>
     <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.help_2.0.0/help.jar"/>
     <classpathentry kind="lib" path="/com.ibm.debug.common/commondebug.jar"/>
@@ -25,5 +24,6 @@
     <classpathentry kind="lib" path="/com.ibm.lpex/lpex.jar"/>
     <classpathentry kind="lib" path="/com.ibm.debug.pdt/ibmdebug.jar"/>
     <classpathentry kind="lib" path="/com.ibm.debug.daemon/daemon.jar"/>
+    <classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.swt.motif_2.0.0/ws/motif/swt.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
