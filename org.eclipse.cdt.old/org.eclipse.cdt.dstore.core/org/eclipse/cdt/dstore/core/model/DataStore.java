@@ -16,9 +16,18 @@ import java.lang.*;
 import java.io.*;
 
 /**
- * DataStore is the central interface into the DataStore Distributed Tooling Framework.
- * This class is used for creating and accessing <code>DataElement</code>s and for communicating commands 
- * to miners (tools).
+ * <code>DataStore</code> is the heart of the <code>DataStore</code> Distributed Tooling Framework.
+ * This class is used for creating, deleting and accessing <code>DataElement</code>s and for communicating commands 
+ * to miners (tools).  
+ *
+ * <p>
+ * Every <code>DataStore</code> has both a command handler and an update handler.  The command 
+ * handler is responsible for sending commands, in the form of <code>DataElement</code> trees, to the appropriate
+ * implementer, either directly to the miner, or indirectly over the communication layer through a server 
+ * <code>DataStore</code>.  The update handler is responsible for notifying listeners about changes in the 
+ * <code>DataStore</code>, either directly via a <code>DomainNotifier</code> or indirectly over the communication
+ * layer through a client <code>DataStore</code>.  
+ * </p>
  *
  */
 public final class DataStore
