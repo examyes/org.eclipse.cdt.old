@@ -107,7 +107,6 @@ public class BuildDialog extends org.eclipse.jface.dialogs.Dialog
       }
 
     public Control createContents(Composite parent)
-    //  public Control createDialogArea(Composite parent)
       {
 	 super.createContents(parent);
 
