@@ -205,7 +205,6 @@ public class XMLgenerator
 		StringBuffer niceValue = null;
 		if (value != null)
 			{
-			value = value.trim();
 			niceValue = prepareStringForXML(value);
 
 			append(" ");
