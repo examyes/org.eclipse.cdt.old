@@ -116,24 +116,31 @@ public abstract class RegistersMonitor
          }
          String[] genValues = _getGdbRegisters.getGeneralValues();
    
-         for (int z=0; z<_maxGeneral; z++)
-         {
-            int groupID = 1;
-            char delimiter = '\u0009';
-       		int x = genValues[z].indexOf(delimiter);
-       		
-       		if (x != -1)
-       			genValues[z] = genValues[z].substring(0, x);            
-            
-            if( !_generalValues[z].equals(genValues[z]) )
-            {
-               _changedRegisters.addElement( new ChangedRegister(_generalNames[z], genValues[z], groupID, z, flags) );
-               _generalValues[z] = genValues[z];
-               _regValuesChanged = true;
-               if (Gdb.traceLogger.DBG) 
-                   Gdb.traceLogger.dbg(1,"RegistersMonitor.updateRegisters GENERAL HAS_CHANGED name="+_generalNames[z]+" value="+genValues[z]+" groupID="+groupID+" registerID="+z  );
-            }
-         }
+   		 if (genValues != null)
+   		 {
+	         for (int z=0; z<_maxGeneral; z++)
+	         {
+	            int groupID = 1;
+	            char delimiter = '\u0009';
+	            
+		        if (z > genValues.length)
+	            	break;
+	            
+	       		int x = genValues[z].indexOf(delimiter);
+	       		
+	       		if (x != -1)
+	       			genValues[z] = genValues[z].substring(0, x);            
+	            
+	            if( !_generalValues[z].equals(genValues[z]) )
+	            {
+	               _changedRegisters.addElement( new ChangedRegister(_generalNames[z], genValues[z], groupID, z, flags) );
+	               _generalValues[z] = genValues[z];
+	               _regValuesChanged = true;
+	               if (Gdb.traceLogger.DBG) 
+	                   Gdb.traceLogger.dbg(1,"RegistersMonitor.updateRegisters GENERAL HAS_CHANGED name="+_generalNames[z]+" value="+genValues[z]+" groupID="+groupID+" registerID="+z  );
+	            }
+	         }
+   		 }
       }
 
       flags = EPDC.RegisterValueChanged;
@@ -151,17 +158,32 @@ public abstract class RegistersMonitor
             flags = flags | EPDC.RegisterNew;
          }
          String[] fltValues = _getGdbRegisters.getFloatValues();
-         for (int z=0; z<_maxFloat; z++)
+         
+         if (fltValues != null)
          {
-            int groupID = 2;
-            if( !_floatValues[z].equals(fltValues[z]) )
-            {
-               _changedRegisters.addElement( new ChangedRegister(_floatNames[z], fltValues[z], groupID, z, flags) );
-               _floatValues[z] = fltValues[z];
-               _regValuesChanged = true;
-               if (Gdb.traceLogger.DBG) 
-                   Gdb.traceLogger.dbg(1,"RegistersMonitor.updateRegisters FLOAT HAS_CHANGED name="+_floatNames[z]+" value="+fltValues[z]+" groupID="+groupID+" registerID="+z  );
-            }
+	         for (int z=0; z<_maxFloat; z++)
+	         {
+	            int groupID = 2;
+	            
+	            char delimiter = '\u0009';
+	            
+	            if (z >= fltValues.length)
+	            	break;
+	            
+	       		int x = fltValues[z].indexOf(delimiter);
+	       		
+	       		if (x != -1)
+	       			fltValues[z] = fltValues[z].substring(0, x);
+	       			            
+	            if( !_floatValues[z].equals(fltValues[z]) )
+	            {
+	               _changedRegisters.addElement( new ChangedRegister(_floatNames[z], fltValues[z], groupID, z, flags) );
+	               _floatValues[z] = fltValues[z];
+	               _regValuesChanged = true;
+	               if (Gdb.traceLogger.DBG) 
+	                   Gdb.traceLogger.dbg(1,"RegistersMonitor.updateRegisters FLOAT HAS_CHANGED name="+_floatNames[z]+" value="+fltValues[z]+" groupID="+groupID+" registerID="+z  );
+	            }
+	         }
          }
       }
 
