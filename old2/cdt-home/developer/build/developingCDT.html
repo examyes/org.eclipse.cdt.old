@@ -279,15 +279,31 @@
 		</li>
 		<li>
 		   Checkout the contents of the cdt-home/cdt-home/buildscripts/ directory into the eclipse install directory
+		</li>	
+		<li> You will only have to do the following steps the first time you set up as long as you never delete the 
+		     org.eclipse.cdt.* directories from the eclipse/features and eclipse/plugins directory.
+		  <ul>
+			
+			<li>
+			   Copy the contents of the buildscripts/buildscripts/plugins directory to the eclipse/plugins directory.
+			</li>
+			<li>
+			   Copy the contents of the buildscripts/buildscripts/features directory to the eclipse/features directory.
+			</li>
+			<li>
+			   Delete the contents of the org.eclipse.cdt.* directories you copied to the eclipse/plugins and eclipse/features 
+			   directories in the previous two steps.
+			</li>
+		  </ul>
 		</li>
 		<li>
-			Edit the startCDT-<os><win>build.bat files<br>
+			Edit the startCDT-&ltos&gt&ltwin&gtbuild.bat files<br>
     		build -os win32 -ws win32 -install "C:\eclipse"<br>
       		e.g. <br> 
       			rename -install <installDir> to point to your clean Eclipse installation directory
 		</li>
 		<li>
-			Run the startCDT-<os><win>build.bat file of your choice
+			Run the startCDT-&ltos&gt&ltwin&gtbuild.bat file of your choice
 		</li>
 		<li>
 		  The resulting distribution.zip and source zips will reside in
