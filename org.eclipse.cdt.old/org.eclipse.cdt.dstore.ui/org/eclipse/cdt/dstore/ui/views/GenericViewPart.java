@@ -85,7 +85,6 @@ public class GenericViewPart extends ViewPart
     public void createPartControl(Composite parent)
     {
 	_viewer = createViewer(parent, getActionLoader());       
-	_viewer.setSorter("name");
 	
 	getSite().setSelectionProvider((ISelectionProvider)_viewer.getViewer());
 	_viewer.getViewer().addSelectionChangedListener(new ISelectionChangedListener()

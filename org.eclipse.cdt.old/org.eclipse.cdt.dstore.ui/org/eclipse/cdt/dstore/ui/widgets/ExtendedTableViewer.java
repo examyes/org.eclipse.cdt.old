@@ -151,14 +151,15 @@ public class ExtendedTableViewer extends TableViewer
     public boolean listeningTo(DomainEvent ev)
     {
 	DataElement parent = (DataElement)ev.getParent();
-
+	
 	if ((parent == _selected) || 
 	    (parent == _currentInput) || 
 	    (parent == _expanded) ||
 	    ((_currentInput != null) && (_currentInput.contains(parent, _property)))
 	    )
 	    {
-		if ((getTable() != null) && !getTable().isDisposed())
+		Table table = getTable();
+		if ((table != null) &&  !table.isDisposed())
 		    return true;
 	    }
 	return false;
@@ -265,7 +266,12 @@ public class ExtendedTableViewer extends TableViewer
 	    {
 		Table table = getTable();
 		table.setRedraw(false);
-		refresh();
+		ScrollBar scrollBar = table.getVerticalBar();
+		scrollBar.setEnabled(false);
+		
+		internalRefresh(_currentInput);
+		
+		scrollBar.setEnabled(true);
 		table.setRedraw(true);
 	    }
     }
@@ -275,6 +281,8 @@ public class ExtendedTableViewer extends TableViewer
 	try
 	    {
 		Table table = getTable();
+		if (table.isVisible())
+		    {
 		
 		// remove those that are gone		
 		ArrayList associated = parent.getAssociated(_property);
@@ -302,18 +310,13 @@ public class ExtendedTableViewer extends TableViewer
 
 		table.setRedraw(false);
 		
-		for (int i = 0; i < toRemove.size(); i++)
-		    {
-			TableItem removee = (TableItem)toRemove.get(i);
-			removee.dispose();
-			removee = null;
-		    }
 		
-		updateItems(table, associated.toArray());
+		updateItems(table, associated, toRemove);
+
 
 	       	if (_listener.isEnabled())
 		    {
-			refresh();
+			//refresh();
 		    }
 
 		if (table.getItemCount() == 0) 
@@ -322,7 +325,7 @@ public class ExtendedTableViewer extends TableViewer
 		    }
 
 		table.setRedraw(true);
-
+		    }
 	    }
 	catch (Exception e)
 	    {
@@ -331,38 +334,68 @@ public class ExtendedTableViewer extends TableViewer
 	    }				
     }    
 
-    private void updateItems(Table table, Object[] elements)
+    private void updateItems(Table table, ArrayList elements, ArrayList recycled)
     {
-	for (int i = 0; i < elements.length; i++)
+	DataElementLabelProvider prov = (DataElementLabelProvider)getLabelProvider();
+	
+	int maxAdd = 100;
+	int numAdded = 0;
+
+	synchronized(_currentInput)
 	    {
-		DataElement child = (DataElement)elements[i];			
-		synchronized(child)
+		for (int i = 0; i < elements.size(); i++)
 		    {
-			if (_viewFilter.select(this, child, null))
-			    { 
-				Item item = findItemFor(table, child);
-				if (item != null)
-				    {
-					//updateItem(item, child);
-				    }
-				else
-				    {
-					item = newItem(table, SWT.NONE, i);
-					updateItem(item, child); 
-				    }
-			    }
+			DataElement child = (DataElement)elements.get(i);			
+			{
+				    TableItem item = (TableItem)findItemFor(table, child);
+				    if (item != null)
+					{
+					    if (!item.getText().equals(child.getValue()))
+						{
+						    updateItem(item, child);
+						}
+					}
+				    else
+					{
+					    if (numAdded < maxAdd)
+						{
+						    if (_viewFilter.select(this, child, null))
+							{ 							
+							    if (recycled.size() > 0)
+								{
+								    item = (TableItem)recycled.get(0);
+								}
+							    else
+								{
+								    item = (TableItem)newItem(table, SWT.NONE, i);
+								    numAdded++;
+								}
+							    
+							    updateItem(item, child); 
+							    
+							}
+						}
+					}
+			}
 		    }		
 	    }
+	
+
+	if (recycled.size() > 0)
+	    {
+		for (int i = 0; i < recycled.size(); i++)
+		    {
+			TableItem item = (TableItem)recycled.get(i);
+			item.dispose();
+			item = null;
+		    }
+	    }
+
     }
    
     protected Item newItem(Widget parent, int flags, int ix)  
     {
-	if (parent instanceof Table)
-	    {
-		return new TableItem((Table) parent, flags);
-	    }
-
-	return null;
+	return new TableItem((Table)parent, flags);
     }
 
 public void doExpand(DataElement obj)
