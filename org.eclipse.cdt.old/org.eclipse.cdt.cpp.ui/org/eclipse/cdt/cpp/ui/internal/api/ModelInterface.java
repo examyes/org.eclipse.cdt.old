@@ -1413,12 +1413,13 @@ public class ModelInterface implements IDomainListener, IResourceChangeListener
 		  });
 	  }
 
+
       DataElement status = dataStore.command(searchDescriptor, args, subject, true);
       _status = status;
       monitorStatus(_status);
 
       // needed because eclipse doesn't support remote files
-      if (dataStore != _plugin.getDataStore())
+      if (dataStore != _plugin.getCurrentDataStore())
 	  {
 	      showView("com.ibm.cpp.ui.CppOutputViewPart", _status);
 	  }
