@@ -40,7 +40,9 @@
 </ul><br>
 
 <h1>Search Docs Settings</h1>
-
+<p>Various search settings can be changed from the Search Docs settings dialog.
+which can be opened from the toolbar icon <img SRC="../../images/searchdocssettingsicon.gif"><br><br>
+<center><img SRC="../../images/searchdocssettings.gif"></center>
 
 <h3>LookUp Mode</h3>
 <p> A search for documentation could proceed in 3 modes:
@@ -49,6 +51,7 @@
 <li>Substring -- Report all matches that include the <code>'key'</code> entered as a <i>substring</i> (case insensitive)</li>
 <li>Regular Expression(Perl compatible)</li>
 </ol> 
+<center><img SRC="../../images/searchdocsmode.gif"></center>
 
 <h3>Scope</h3>
 <p> A search for documentation could be limited in scope:
@@ -57,6 +60,8 @@
 <li>Info Pages -- only report matches in the info pages</li>
 <li>Html -- only report matches from the Html index (created by the user -- see below)</li>
 </ol>
+<center><img SRC="../../images/searchdocsscope.gif"></center>
+
 <h5>Notes:</h5>
 <ul>
 <li><i>'whatis' path</i> --  When man pages are selected, a search only looks at the entries in the 'whatis' database to report matches. So it is important to have the <code>'whatis' path</code> set correctly. A reasonable default has been provided("/var/cache/man/whatis") but this may change according to your distribution. You can only change it if <code>"Man pages"</code> is selected in the <b>Scope</b>.      
@@ -64,6 +69,7 @@
 <li><i>'dir'  path</i> -- When info pages are selected, a search only looks at the entries in the top level 'dir' node.  So it is important to have the <code>'dir' path</code> set correctly. A reasonable default has been provided("/usr/share/info/dir") but this may change according to your distribution. You can only  change it if <code>"Info pages"</code> is selected in the <b>Scope</b>
 </li>
 </ul>
+<center><img SRC="../../images/searchdocspaths.gif"></center>
 
 <h3>Browsing</h3>
 <p>To view the actual documentation, you will need either one of the following external browsers:
@@ -71,10 +77,12 @@
 <li>konqueror -- It is part of the KDE desktop</li>
 <li>gnome-help-browser -- It is part of the GNOME desktop</li>
 </ol>
+<center><img SRC="../../images/searchdocsbrowser.gif"></center>
 
 <h3>Indexing Html Documentation</h3>
 <p>To index html documentation, the user needs  to specify a list of directories that contain html files. Use the <code>Browse</code> button to navigate the filesystem and then add it to the list with the <code>Add</code> button. Then use the <code>Create index</code> button to index all html files in the list of directories.
-<p>Since the contents of files are indexed as words, you can only do a search in the html documentation in <code>Exact</code> mode(no substring, no regular expressions). You can only create an index if you have <code>"Html"</code> selected in the <b>Scope</b>. 
+<p>Since the contents of files are indexed as words, you can only do a search in the html documentation in <code>Exact</code> mode(no substring, no regular expressions). You can only create an index if you have <code>"Html"</code> selected in the <b>Scope</b>. <br><br>
+<center><img SRC="../../images/searchdocsindex.gif"></center>
 
 <h3>Limitations</h3>
 <ul>
