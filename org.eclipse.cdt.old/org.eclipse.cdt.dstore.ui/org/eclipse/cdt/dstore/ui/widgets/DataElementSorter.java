@@ -20,10 +20,18 @@ public class DataElementSorter extends ViewerSorter
     private int         _property;
     private DataElement _attribute;
     private boolean     _reverseSort;
+    
+    private int         STRING  = 0;
+    private int         INTEGER = 1;
+    private int         FLOAT   = 2;
+    
+    private int         _sortFormat;
+    
 
     public DataElementSorter(String property)
     {
 	super();
+	_sortFormat = STRING;
 	_attribute = null;
 	_reverseSort = false;
 	
@@ -59,8 +67,9 @@ public class DataElementSorter extends ViewerSorter
 	return 0;
     }
 
-  public int compare(Viewer v, Object e1, Object e2) 
+  public int compare(Viewer v, Object e1, Object e2)   
   {
+
       DataElement element1 = (DataElement)e1;
       DataElement element2 = (DataElement)e2;
      	
@@ -109,22 +118,18 @@ public class DataElementSorter extends ViewerSorter
 		      n2 = name1;
 		  }
 
-
 	      // check for integers
-	      DataElement descriptor = element1.getDescriptor();
-	      if (hasFormat(descriptor, "Integer"))
+	      if (_sortFormat == INTEGER)
 		  {
 		      return compareIntegers(n1, n2);
 		  }
-	      else if (hasFormat(descriptor, "Float"))
+		
+	      else if (_sortFormat == FLOAT)
 		  {		 
 		      return compareFloats(n1, n2);
 		  }
-	      else if (hasFormat(descriptor, "Date"))
-		  {		 
-		      return compareDates(n1, n2);
-		  }
-	      else if (hasFormat(descriptor, "String"))
+	    
+	      else if (_sortFormat == STRING)
 		  {
 		      return compareStrings(n1, n2);
 		  }
@@ -139,23 +144,28 @@ public class DataElementSorter extends ViewerSorter
 			      return compareStrings(n1, n2);
 			  }
 		  }
+		  
+		
 	  }
       catch (Exception e)
 	  {
 	      return 0;
 	  }
+
   }
 
     private boolean hasFormat(DataElement descriptor, String format)
     {
-	ArrayList attributes = descriptor.getAssociated("attributes");
-	if (attributes.size() > 0)
+     if (descriptor != null)
+     {
+		ArrayList attributes = descriptor.getAssociated("attributes");
+		if (attributes.size() > 0)
 	    {
-		DataElement attribute = (DataElement)attributes.get(0);
-		return (attribute.getName().equals(format));
+			DataElement attribute = (DataElement)attributes.get(0);
+			return (attribute.getName().equals(format));
 	    }
-
-	return false;
+	 }
+	 return false;
     }
 
 
@@ -231,6 +241,19 @@ public class DataElementSorter extends ViewerSorter
 		_reverseSort = false;
 	    }
 	_attribute = attributeDescriptor;
+	 if (hasFormat(_attribute, "Integer") || hasFormat(_attribute, "Date"))
+	 {
+	  _sortFormat = INTEGER;
+	 }
+	 else if (hasFormat(_attribute, "Float"))
+	 {
+	  _sortFormat = FLOAT;
+	 }
+	 else
+	 {
+	  _sortFormat = STRING;
+	 }
+	
     }  
 
 

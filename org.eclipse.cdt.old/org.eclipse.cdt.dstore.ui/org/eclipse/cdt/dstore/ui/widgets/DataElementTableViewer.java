@@ -235,8 +235,7 @@ public class DataElementTableViewer extends TableViewer
 	
 	if ((parent == _selected) || 
 	    (parent == _currentInput) || 
-	    (parent == _expanded) ||
-	    ((_currentInput != null) && (_currentInput.contains(parent, _property)))
+	    (parent == _expanded) 
 	    )
 	    {
 		return true;
@@ -254,7 +253,7 @@ public class DataElementTableViewer extends TableViewer
 		    {
 			Item child = items[i];
 			if (!child.isDisposed()) 
-			    {
+			{    
 				Object data = child.getData();
 				if (data == res)
 				    {
@@ -298,10 +297,9 @@ public class DataElementTableViewer extends TableViewer
 	    }
 	else if (_currentInput == parent)
 	    {
-	    	//getTable().setRedraw(false);
-		
+	    		
 		internalRefresh(parent);
-		//getTable().setRedraw(true);
+
 	    }
 	else		     
 	    {
@@ -339,6 +337,10 @@ public class DataElementTableViewer extends TableViewer
 	    {
 	//	internalRefresh(_currentInput);
 	    }
+    }
+    private void internalRefresh(DataElement parent)
+    {
+     super.internalRefresh(parent, false);
     }
 
     /*
@@ -504,13 +506,13 @@ public class DataElementTableViewer extends TableViewer
 		    }
 	    }	
     }
-    */
-    /*
+    
+  
     protected Item newItem(Widget parent, int flags, int ix)  
     {
 	return new TableItem((Table)parent, flags, ix);
     }
-    */
+   */
     
     public void doExpand(DataElement obj)
     {
@@ -981,6 +983,15 @@ public class DataElementTableViewer extends TableViewer
 	    }
 
 	setSorter(sorter);
-	internalRefresh(_currentInput);
+	//internalRefresh(_currentInput, false);
     }
+    
+    public void setSorter(ViewerSorter sorter) 
+    {
+    	boolean sameSort = (getSorter() == sorter);
+		super.setSorter(sorter);
+	
+		if (sameSort) // force a refresh
+			internalRefresh(_currentInput, false);
+		}		
 }
