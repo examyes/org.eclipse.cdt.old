@@ -374,9 +374,16 @@ public class Connection
 		if (!status.getName().equals("done"))
 		    {
 			disconnect();
-			String msg = status.get(0).getName();
 			connectionStatus.setConnected(false);
-			connectionStatus.setMessage(msg);
+			if (status.get(0) != null)
+			    {
+				String msg = status.get(0).getName();
+				connectionStatus.setMessage(msg);
+			    }
+			else
+			    {
+				connectionStatus.setMessage("Couldn't Connect");
+			    }
 			result = false;
 		    }
 		else
