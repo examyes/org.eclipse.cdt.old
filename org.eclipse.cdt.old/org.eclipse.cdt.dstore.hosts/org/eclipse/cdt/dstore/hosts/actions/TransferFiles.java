@@ -100,7 +100,11 @@ public class TransferFiles extends Thread
 	DataStore sourceDataStore = source.getDataStore();
 
 	String targetStr = target.getSource();
-	String newSourceStr = targetStr + "/" + source.getName();
+	if (targetStr.charAt(targetStr.length() - 1) != '/')
+	    {
+		targetStr = "/" + targetStr;
+	    }
+	String newSourceStr = targetStr +  source.getName();
 
 	boolean needsUpdate = false;
 
