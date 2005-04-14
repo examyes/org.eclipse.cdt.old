@@ -14,7 +14,6 @@
 #include <string.h>
 #include <iostream>
 #include <fcntl.h>
-#include <gelf.h>
 
 #include "stable.h"
 #include "symbol.h"
@@ -60,11 +59,13 @@ symboltable::~symboltable ()
 // If this returns NULL, then the VMA is not in any range of
 // msymbols. This is can apparently happen. op_time and friends
 // ignore these samples.
-#define PRINT 0
 symbol*
-symboltable::lookup_vma (bfd_vma vma, bfd_vma& real_vma)
+symboltable::lookup_vma (bfd_vma vma, bfd_vma& real_vma, bool is_kernel)
 {
-  real_vma = vma + _start_vma;
+  if (is_kernel)
+    real_vma = vma;
+  else
+    real_vma = vma + _start_vma - _text_offset;
   return (lookup_vma (real_vma));
 }
 
@@ -208,42 +209,18 @@ symboltable::_open_bfd (void)
 	  char** matches;
 	  if (bfd_check_format_matches (_abfd, bfd_object, &matches))
 	    {
-	      // Get the physical load address
-	      elf_version (EV_CURRENT);
-
-	      Elf* elf = elf_begin (fd, ELF_C_READ, NULL);
-	      GElf_Ehdr ehdr_mem;
-	      GElf_Ehdr* ehdr = gelf_getehdr (elf, &ehdr_mem);
-	      if (ehdr != NULL)
+	      asection const* sect;
+	      for (sect = _abfd->sections; sect != NULL; sect = sect->next)
 		{
-		  switch (ehdr->e_type)
+		  if (sect->flags & SEC_CODE)
 		    {
-		    case ET_EXEC:
-		      for (int i = 0; i < ehdr->e_phnum; ++i)
-			{
-			  GElf_Phdr phdr_mem;
-			  GElf_Phdr* phdr = gelf_getphdr (elf, i, &phdr_mem);
-			  if (phdr->p_type == PT_LOAD
-			      && (phdr->p_flags & (PF_R | PF_X)))
-			    {
-			      _start_vma = phdr->p_paddr;
-			      break;
-			    }
-			}
-		      break;
-
-		    case ET_REL:
-		    case ET_DYN:
-		      // Do I need to worry about this?
-		      break;
-
-		    default:
+		      _text_offset = sect->filepos;
 		      break;
 		    }
 		}
-
-	      elf_end (elf);
 	    }
+
+	  _start_vma = bfd_get_start_address (_abfd);
 	}
     }
   return (_abfd != NULL);

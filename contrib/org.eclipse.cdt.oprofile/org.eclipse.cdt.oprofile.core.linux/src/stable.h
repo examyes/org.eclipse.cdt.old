@@ -23,10 +23,10 @@ class symboltable
   symboltable (const char* file);
   ~symboltable (void);
 
-  // Lookup a Symbol for the given sample vma. Returns
-  // the symbol found (or NULL) and gives the real address
-  // of the sample.
-  symbol* lookup_vma (bfd_vma sample_vma, bfd_vma &real_address);
+  // Lookup a Symbol for the given sample vma. Returns the symbol found (or NULL)
+  // and gives the real address of the sample. Sadly, kernel images are treated
+  // differently from userspace images.
+  symbol* lookup_vma (bfd_vma sample_vma, bfd_vma &real_address, bool is_kernel);
   symbol* lookup_vma (bfd_vma real_vma);
 
   // Read in the samples
@@ -79,6 +79,7 @@ class symboltable
   // The physical load address of this executable (NOT THE BFD SECTION
   // START ADDRESS)
   bfd_vma _start_vma;
+  bfd_vma _text_offset;
 
   // A performance cache
   symbol* _cache_symbol;

@@ -76,7 +76,7 @@ class samplefile
   // Returns the logical name of the image in this samplefile, i.e.,
   // the lib_image if this is a dependency or image_name if not
   std::string get_name (void) const
-    { return (has_samplefile () ? get_lib_image () : get_image ()); };
+    { return (has_samplefile () ? get_image () : get_lib_image ()); };
 
   // Returns the event name that was collected in this samplefile
   std::string get_event (void) const

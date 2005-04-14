@@ -87,5 +87,6 @@ class oprofile_db
 
   bool _has_samples;
   callback_t _callback;
+  bool _is_kernel;
 };
 #endif // !_OPROFILEDB_H

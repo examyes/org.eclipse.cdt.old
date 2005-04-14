@@ -45,10 +45,6 @@ class profileimage
   // Returns a list of all the dependencies of this image
   std::list<profileimage*>* get_dependencies (void) const { return _dependencies; };
 
-  // Returns a list of all the samples in this image, excluding dependencies
-  typedef samplefile::samples_t sampleslist_t;
-  sampleslist_t get_samples (void) const;
-
   // Returns the Oprofile samplefile for this image
   samplefile* get_samplefile (void) const { return _samplefile; };
 

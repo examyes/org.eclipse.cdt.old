@@ -1,3 +1,35 @@
+2005-04-14  Keith Seitz  <keiths@redhat.com>
+
+	* Makefile: Don't link against elfutils.
+	* build.xml: Likewise.
+	
+	* samplefile.h (get_name): Should return image name if we have
+	a samplefile.
+
+	* samplefile.cc (_get_info_from_filename): Fix typo "=" to
+	"+=" for image name.
+
+	* profileimage.cc (operator<<): Hack for --separate=none
+	weirdness (see comments).
+	(get_samples): Remove.
+	* profileimage.h (get_samples): Remove.
+
+	* oprofiledb.h (_is_kernel): New variable.
+	* oprofiledb.cc (oprofile_db): Initialize _is_kernel;
+	(_open_db): Note _is_kernel from the header.
+	(_get_samples_callback): Pass _is_kernel to lookup_vma.
+	* stable.h (lookup_vma): Add new is_kernel parameter. See comments.
+	(_text_offset): New variable.
+	* stable.cc (lookup_vma): Add is_kernel parameter. If from kernel,
+	the vma is unchanged. If it is from user space, the vma must
+	be adjusted by the start address and the offset to the first
+	text section.
+	(_open_bfd): Get rid of the ELF load address stuff. Don't seem to
+	need it anymore.
+	Loop through sections to find the offset to the first section
+	marked as containing code.
+	Note start address.
+
 2005-04-05  Keith Seitz  <keiths@redhat.com>
 
 	* opinfo.h (get_cpu_frequency): Resurrect. It really is needed.

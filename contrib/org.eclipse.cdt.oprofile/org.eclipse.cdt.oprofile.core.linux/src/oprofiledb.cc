@@ -18,7 +18,7 @@
 #include "sample.h"
 
 oprofile_db::oprofile_db (std::string filename)
-  : _filename (filename), _tree (NULL), _symbol_table (NULL)
+  : _filename (filename), _tree (NULL), _symbol_table (NULL), _is_kernel (false)
 {
 }
 
@@ -48,7 +48,12 @@ oprofile_db::_open_db (void)
 	  // This shouldn't happen, but let's at least print something out.
 	  std::cerr << "Error opening oprofile database: " << strerror (rc)
 		    << std::endl;
+	  return;
 	}
+
+      // Get the is_kernel parameter: this is needed for sample gathering later
+      const opd_header* hdr = static_cast<opd_header*> (odb_get_data (_tree));
+      _is_kernel = (hdr->is_kernel != 0);
     }
 }
 
@@ -117,7 +122,7 @@ oprofile_db::_get_samples_callback (odb_key_t key, odb_value_t info, void* data)
   symbol* symbol = NULL;
   bfd_vma real_addr;
   if (odb->_symbol_table != NULL)
-    symbol = odb->_symbol_table->lookup_vma ((bfd_vma) key, real_addr);
+    symbol = odb->_symbol_table->lookup_vma ((bfd_vma) key, real_addr, odb->_is_kernel);
 
   // Oprofile can have multiple samples for the same VMA, so look in the
   // our map/database and see if the given VMA exists. If it does not exist,

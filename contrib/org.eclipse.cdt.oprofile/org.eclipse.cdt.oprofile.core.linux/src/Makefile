@@ -9,8 +9,7 @@ CXXFLAGS = $(CFLAGS)
 OPROFILE_LIBS = -lop -lodb -loputil++ -loputil
 BFD_LIBRARY = -lbfd
 LIBIBERTY = -liberty
-LIBELF = -lelf
-OTHER_LIBS = $(BFD_LIBRARY) $(LIBELF)
+OTHER_LIBS = $(BFD_LIBRARY) 
 EXTRA_LIBS = $(OPROFILE_LIBS) $(OTHER_LIBS) $(LIBIBERTY)
 
 OPXML = 		opxml

@@ -108,7 +108,7 @@ samplefile::_get_info_from_filename (void)
 
       // Next "token" is "{dep}". Everything else is image name
       for ( ; i < parts.size () && parts[i] != "{dep}"; ++i)
-	_image = "/" + parts[i];
+	_image += "/" + parts[i];
       
       // Skip past "{dep}"
       ++i;
