@@ -40,10 +40,24 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 	private static final String _OPD_SETUP_SEPARATE_KERNEL = "kernel"; //$NON-NLS-1$
 	private static final String _OPD_SETUP_SEPARATE_THREAD = "thread"; //$NON-NLS-1$
 	private static final String _OPD_SETUP_SEPARATE_CPU = "cpu"; //$NON-NLS-1$
+	private static final String _OPD_SETUP_SEPARATE_ALL = "all"; //$NON-NLS-1$
 	private static final String _OPD_SETUP_EVENT = "--event="; //$NON-NLS-1$
 	private static final String _OPD_SETUP_EVENT_SEPARATOR = ":"; //$NON-NLS-1$
 	private static final String _OPD_SETUP_EVENT_TRUE = "1"; //$NON-NLS-1$
 	private static final String _OPD_SETUP_EVENT_FALSE = "0"; //$NON-NLS-1$
+	
+	// Kernel image file options
+	private static final String _OPD_KERNEL_NONE = "--no-vmlinux"; //$NON-NLS-1$
+	private static final String _OPD_KERNEL_FILE = "--vmlinux="; //$NON-NLS-1$
+	
+	// Logging verbosity
+	private static final String _OPD_VERBOSE_LOGGING = "--verbose="; //$NON-NSL-1$
+	private static final String _OPD_VERBOSE_ALL = "all"; //$NON-NLS-1$
+	private static final String _OPD_VERBOSE_SFILE = "sfile"; //$NON-NLS-1$
+	private static final String _OPD_VERBOSE_ARCS = "arcs"; //$NON-NLS-1$
+	private static final String _OPD_VERBOSE_SAMPLES = "samples"; //$NON-NLS-1$
+	private static final String _OPD_VERBOSE_MODULE = "module"; //$NON-NLS-1$
+	private static final String _OPD_VERBOSE_MISC = "misc"; //$NON-NLS-1$
 	
 	// Start the daemon process without starting data collection
 	private static final String _OPD_START_DAEMON = "--start-daemon"; //$NON-NLS-1$
@@ -192,6 +206,8 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 			throw new OpcontrolException(status);
 		}
 		
+		// TODO: I REALLY NEED TO CHECK FOR AN ERROR HERE! 
+		// The problem is that userhelper doesn't return any error codes!!
 		if (p != null && drainOutput) {
 			BufferedReader stdout = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			try {
@@ -237,16 +253,40 @@ public class LinuxOpcontrolProvider implements IOpcontrolProvider {
 	
 	// Convert the options into arguments for opcontrol
 	private void _optionsToArguments(ArrayList args, OprofileDaemonOptions options) {
-		String separate = new String(_OPD_SETUP_SEPARATE);
+		// Add separate flags
 		int mask = options.getSeparateProfilesMask();
-		if ((mask & OprofileDaemonOptions.SEPARATE_LIBRARY) != 0)
-			separate += _OPD_SETUP_SEPARATE_LIBRARY + _OPD_SETUP_SEPARATE_SEPARATOR;
-		if ((mask & OprofileDaemonOptions.SEPARATE_KERNEL) != 0)
-			separate += _OPD_SETUP_SEPARATE_KERNEL + _OPD_SETUP_SEPARATE_SEPARATOR;
-		if ((mask & OprofileDaemonOptions.SEPARATE_THREAD) != 0)
-			separate += _OPD_SETUP_SEPARATE_THREAD + _OPD_SETUP_SEPARATE_SEPARATOR;
-		if ((mask & OprofileDaemonOptions.SEPARATE_CPU) != 0)
-			separate += _OPD_SETUP_SEPARATE_CPU + _OPD_SETUP_SEPARATE_SEPARATOR;
+		if (mask != OprofileDaemonOptions.SEPARATE_NONE) {
+			String separate = new String(_OPD_SETUP_SEPARATE);
+			if (mask == OprofileDaemonOptions.SEPARATE_ALL) {
+				separate += _OPD_SETUP_SEPARATE_ALL;
+			} else {
+				if ((mask & OprofileDaemonOptions.SEPARATE_LIBRARY) != 0)
+					separate += _OPD_SETUP_SEPARATE_LIBRARY
+							+ _OPD_SETUP_SEPARATE_SEPARATOR;
+				if ((mask & OprofileDaemonOptions.SEPARATE_KERNEL) != 0)
+					separate += _OPD_SETUP_SEPARATE_KERNEL
+							+ _OPD_SETUP_SEPARATE_SEPARATOR;
+				if ((mask & OprofileDaemonOptions.SEPARATE_THREAD) != 0)
+					separate += _OPD_SETUP_SEPARATE_THREAD
+							+ _OPD_SETUP_SEPARATE_SEPARATOR;
+				if ((mask & OprofileDaemonOptions.SEPARATE_CPU) != 0)
+					separate += _OPD_SETUP_SEPARATE_CPU
+							+ _OPD_SETUP_SEPARATE_SEPARATOR;
+			}
+			args.add(separate);
+		}
+		
+		// Add kernel image
+		if (options.getKernelImageFile() == null || options.getKernelImageFile().equals("")) {
+			args.add(_OPD_KERNEL_NONE);
+		} else {
+			args.add(_OPD_KERNEL_FILE + options.getKernelImageFile());
+		}
+		
+		// Add verbosity (only support "all" now)
+		if (options.getVerboseLogging()) {
+			args.add(_OPD_VERBOSE_LOGGING + _OPD_VERBOSE_ALL);
+		}
 	}
 
 }

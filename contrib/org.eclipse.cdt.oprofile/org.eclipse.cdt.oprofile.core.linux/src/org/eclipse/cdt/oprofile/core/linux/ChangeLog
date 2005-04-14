@@ -1,3 +1,17 @@
+2005-04-14  Keith Seitz  <keiths@redhat.com>
+
+	* LinuxOpcontrolProvider.java (_OPD_SETUP_SEPARATE_ALL): New static variable.
+	(_OPD_KERNEL_NONE0: New static variable.
+	(_OPD_KERNEL_FILE): New static variable.
+	(_OPD_VERBOSE_LOGGING): New static variable.
+	(_OPD_VERBOSE_ALL): New static variable.
+	(_OPD_VERBOSE_SFILE): New static variable.
+	(_OPD_VERBOSE_ARCS): New static variable.
+	(_OPD_VERBOSE_SAMPELS): New static variable.
+	(_OPD_VERBOSE_MODULE): New static variable.
+	(_OPD_VERBOSE_MISC): New static variable.
+	(optionsToArguments): Add missing options.
+
 2004-08-27  Keith Seitz  <keiths@redhat.com>
 
 	* LinuxOpcontrolProvider.java (_OPD_SETUP_SEPARATE): New constant.
