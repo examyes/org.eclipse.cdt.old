@@ -8,6 +8,7 @@
 package org.eclipse.cdt.oprofile.launch;
 
 import java.io.File;
+import java.text.MessageFormat;
 
 import org.eclipse.cdt.oprofile.core.OprofileDaemonOptions;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -215,13 +216,35 @@ public class OprofileSetupTab extends AbstractLaunchConfigurationTab
 			else
 				_options.setSeparateSamples(OprofileDaemonOptions.SEPARATE_NONE);
 		}
+		
+		updateLaunchConfigurationDialog();
 	}
 	
 	// handles text modification events for all text boxes in this tab
 	private void _handleTextModify(Text text)
 	{
-		if (text == _kernelImageFileText)
-			_options.setKernelImageFile(text.getText());
+		if (text == _kernelImageFileText) {
+			String errorMessage = null;
+			String filename = text.getText();
+			
+			if (filename.length() > 0) {
+				File file = new File (filename);
+				if (file.exists() && file.isFile()) {
+					_options.setKernelImageFile(filename);
+				} else {
+					String msg = OprofileLaunchMessages.getString("tab.profileSetup.kernelImage.kernel.nonexistent"); //$NON-NLS-1$
+					Object[] args = new Object[] { filename };
+					errorMessage = MessageFormat.format(msg, args);
+				}
+			} else {
+				// no kernel image file
+				_options.setKernelImageFile(new String());
+			}
+
+			// Update dialog and error message
+			setErrorMessage(errorMessage);
+			updateLaunchConfigurationDialog();
+		}
 	}
 	
 	// handles text verify events for all text boxes	

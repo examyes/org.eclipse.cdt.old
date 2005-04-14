@@ -7,6 +7,8 @@
 
 package org.eclipse.cdt.oprofile.launch;
 
+import java.io.File;
+
 import org.eclipse.cdt.oprofile.core.Oprofile;
 import org.eclipse.cdt.oprofile.core.OprofileDaemonOptions;
 import org.eclipse.core.runtime.CoreException;
@@ -33,6 +35,13 @@ public class LaunchOptions {
 	 * @return whether the options are valid
 	 */
 	public boolean isValid() {
+		// The only point of contention is whether the specified vmlinux *file* exists.
+		String fn = _options.getKernelImageFile();
+		if (fn != null && fn.length() > 0) {
+			File file = new File(_options.getKernelImageFile());
+			return (file.exists() && file.isFile());
+		}
+		
 		return true;
 	}
 	

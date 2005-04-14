@@ -7,6 +7,8 @@
 
 package org.eclipse.cdt.oprofile.launch;
 
+import java.text.MessageFormat;
+
 import org.eclipse.cdt.oprofile.core.OpEvent;
 import org.eclipse.cdt.oprofile.core.OpEventLabelProvider;
 import org.eclipse.cdt.oprofile.core.Oprofile;
@@ -81,11 +83,19 @@ public class OprofileEventConfigTab extends AbstractLaunchConfigurationTab
 			if (counters[i].getEnabled())
 			{
 				++numEnabledEvents;
+
+				// First check min count
+				int min = counters[i].getEvent().getMinCount();
+				if (counters[i].getCount() < min) {
+					valid = false;
+					break;
+				}
+				
+				// Next ask oprofile if it is valid
 				if (!Oprofile.checkEvent(
 						counters[i].getNumber(),
 						counters[i].getEvent().getNumber(),
-						counters[i].getEvent().getUnitMask().getMaskValue())
-					|| counters[i].getCount() < counters[i].getEvent().getMinCount())
+						counters[i].getEvent().getUnitMask().getMaskValue()))
 				{
 					valid = false;
 					break;
@@ -306,7 +316,6 @@ public class OprofileEventConfigTab extends AbstractLaunchConfigurationTab
 				// SUCK FIXME: i18n?
 				try
 				{
-
 					//An event which doesn't contain text (backspace and delete)
 					//should still be allowed.
 					String text = ve.text;
@@ -353,7 +362,19 @@ public class OprofileEventConfigTab extends AbstractLaunchConfigurationTab
 		try
 		{
 			if (_currentCounter() != null) {
-				_currentCounter().setCount(Integer.parseInt(_countText.getText()));
+				String errorMessage = null;
+				
+				// This seems counter-intuitive, but we must save the count
+				// so that isValid knows this launch config is invalid
+				int count = Integer.parseInt(_countText.getText());
+				_currentCounter().setCount(count);
+				
+				// Check minimum count
+				int min = _currentCounter().getEvent().getMinCount();
+				if (count < min) {
+					errorMessage = _getMinCountErrorMessage(min);
+				}
+				setErrorMessage(errorMessage);
 				updateLaunchConfigurationDialog();
 			}
 		}
@@ -362,7 +383,15 @@ public class OprofileEventConfigTab extends AbstractLaunchConfigurationTab
 			// Shouldn't happen: all text is validated
 		}
 	}
-
+	
+	// Returns a string with the minimum allowed count, suitable for
+	// use with setErrorMessage().
+	private String _getMinCountErrorMessage(int min) {
+		String msg = OprofileLaunchMessages.getString("tab.event.counterSettings.count.too-small"); //$NON-NLS-1$
+		Object[] args = new Object[] { new Integer(min) };
+		return MessageFormat.format(msg, args);
+	}
+	
 	// handles the toggling of the "profile user" button
 	private void _handleProfileUserToggle()
 	{
@@ -503,11 +532,16 @@ public class OprofileEventConfigTab extends AbstractLaunchConfigurationTab
 			int index = _eventList.getList().getSelectionIndex();
 			OpEvent event = (OpEvent) _eventList.getElementAt(index);
 			_currentCounter().setEvent(event);
-			if (_currentCounter().getCount() < event.getMinCount()) {
-				_currentCounter().setCount(event.getMinCount());
-				_countText.setText(Integer.toString(_currentCounter().getCount()));
-			}
 			_updateEventDisplay(event);
+			updateLaunchConfigurationDialog();
+			
+			// Check the min count to update the error message (events can have different
+			// minimum reset counts)
+			int min = _currentCounter().getEvent().getMinCount();
+			if (_currentCounter().getCount() < min) {
+				setErrorMessage(_getMinCountErrorMessage(min));
+				updateLaunchConfigurationDialog();
+			}
 		}
 	}
 	

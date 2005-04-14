@@ -1,3 +1,18 @@
+2005-04-14  Keith Seitz  <keiths@redhat.com>
+
+	* oprofilelaunch.properties (tab.event.counterSettings.count.too-small): New
+	property.
+	(tab.profileSetup.kernelImage.kernel.nonexistent): New property.
+	(tab.profileSetup.kernelImage.label.text): Add "(optional)".
+	* OprofileSetupTab.java (_handleButtonSelected): Update launch config dialog.
+	(_handleTextModify): Validate kernel file and allow none to be specified.
+	* OprofileEventConfigTab.java (isValid): Check for valid minimum count, too.
+	(_handleModify): Save the count and check the minimum count.
+	(_getMinCountErrorMessage): New method.
+	(_updateEventDisplayFromSelection): Check for valid minimum count again.
+	Update the launch config dialog.
+	* LaunchOptions.java (isValid): Check if the specified kernel file exists.
+
 2004-08-27  Keith Seitz  <keiths@redhat.com>
 
 	* LaunchOptions.java: New file.
