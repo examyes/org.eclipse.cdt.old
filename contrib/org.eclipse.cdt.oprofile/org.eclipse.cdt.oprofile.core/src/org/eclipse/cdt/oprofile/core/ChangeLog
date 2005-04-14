@@ -1,3 +1,10 @@
+2005-04-14  Keith Seitz  <keiths@redhat.com>
+
+	* ProfileImage.java (Header.event): Now a string variable.
+	(setHeader): Read a string not an int.
+
+	* OpInfo.java (findEvent): Indices greater OR equal to zero are valid.
+
 2005-02-04  Keith Seitz  <keiths@redhat.com>
 
 	* opxml/NumCountersProcessor.java: Remove.

@@ -29,7 +29,7 @@ public class ProfileImage extends SampleContainer {
 		public int count;
 		
 		// The event collected
-		public int event;
+		public String event;
 		
 		// The unit mask used during collection
 		public int unitMask;
@@ -76,7 +76,7 @@ public class ProfileImage extends SampleContainer {
 	 */
 	public void setHeader(HashMap map) {
 		_header = new Header();
-		_header.event = Integer.parseInt((String) map.get(HeaderProcessor.EVENT));
+		_header.event = (String) map.get(HeaderProcessor.EVENT);
 		_header.count = Integer.parseInt((String) map.get(HeaderProcessor.COUNT));
 		_header.cpuSpeed = Float.parseFloat((String) map.get(HeaderProcessor.CPU_SPEED));
 		_header.cpuType = (String) map.get(HeaderProcessor.CPU_TYPE);

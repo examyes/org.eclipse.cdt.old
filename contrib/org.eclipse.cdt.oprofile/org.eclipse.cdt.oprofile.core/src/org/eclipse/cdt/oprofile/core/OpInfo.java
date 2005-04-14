@@ -211,7 +211,7 @@ public class OpInfo {
 		// Search through all counters
 		for (int counter = 0; counter < getNrCounters(); ++counter) {
 			int idx = Arrays.binarySearch(getEvents(counter), name, new SearchEventComparator());
-			if (idx > 0)
+			if (idx >= 0)
 				return _eventList[counter][idx];
 		}
 		
