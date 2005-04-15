@@ -10,12 +10,8 @@
  ******************************************************************************/ 
 package org.eclipse.cdt.internal.refactoring;
 
-import java.text.MessageFormat;
-import java.util.*;
-
 import org.eclipse.cdt.core.dom.ast.*;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPConstructor;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.core.runtime.*;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -82,32 +78,4 @@ public class CRenameMethodProcessor extends CRenameGlobalProcessor {
         result.merge(super.checkFinalConditions(monitor, context));
         return result;
     }
-
-    protected void handleConflictingBindings(IBinding[] bindings, 
-            Set equalBindings, HashSet conflictingBindings, RefactoringStatus status) {
-        if (bindings.length > 0 && bindings[0] instanceof ICPPMethod) {
-            ICPPMethod method= (ICPPMethod) bindings[0];
-            for (Iterator iter = conflictingBindings.iterator(); iter.hasNext();) {
-                IBinding conflict = (IBinding) iter.next();
-                if (conflict instanceof ICPPMethod) {
-                    ICPPMethod conflictMethod = (ICPPMethod) conflict;
-                    int same= ASTManager.UNKNOWN;
-                    try {
-                        same = ASTManager.hasSameSignature(method, conflictMethod);
-                    } catch (DOMException e) {
-                    }
-                    if (same != ASTManager.FALSE) {
-                        status.addError(MessageFormat.format(
-                                Messages.getString("CRenameMethodProcessor.error.conflictingMethod"), //$NON-NLS-1$
-                                new Object[]{ASTManager.getFirstEnclosingName(conflictMethod)}));
-                    }
-                }
-            }
-            return;
-        }
-
-        super.handleConflictingBindings(bindings, equalBindings, conflictingBindings, status);
-    }
-    
-    
 }

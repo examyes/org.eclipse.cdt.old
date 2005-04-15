@@ -13,19 +13,21 @@ package org.eclipse.cdt.internal.refactoring;
 
 import org.eclipse.cdt.refactoring.CRefactory;
 
+
 /**
  * Rename processor that sets up the input page for renaming a global entity.
  */
-public class CRenameGlobalProcessor extends CRenameTextProcessor {
+public class CRenameMacroProcessor extends CRenameGlobalProcessor {
 
-    public CRenameGlobalProcessor(CRenameProcessor processor, String name) {
+    public CRenameMacroProcessor(CRenameProcessor processor, String name) {
         super(processor, name);
     }
-
+    
     protected int getAvailableOptions() {
         return CRefactory.OPTION_ASK_SCOPE | 
             CRefactory.OPTION_IN_CODE |
             CRefactory.OPTION_IN_COMMENT | 
-            CRefactory.OPTION_IN_MACRO_DEFINITION;
+            CRefactory.OPTION_IN_MACRO_DEFINITION |
+            CRefactory.OPTION_IN_PREPROCESSOR_DIRECTIVE;
     }
 }

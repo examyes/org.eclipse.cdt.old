@@ -61,6 +61,7 @@ public class CRefactory {
     
     private static CRefactory sInstance= new CRefactory();
     private HashSet fEditorIDs= new HashSet();
+    private boolean fDisablePotentialMatches= false;
     
     public static CRefactory getInstance() {
         return sInstance;
@@ -93,7 +94,7 @@ public class CRefactory {
 		RefactoringWizardOpenOperation op= 
 		    new RefactoringWizardOpenOperation(new CRenameRefactoringWizard(r));
 		try {
-            op.run(shell, ""); //$NON-NLS-1$
+            op.run(shell, Messages.getString("CRefactory.title.rename"));  //$NON-NLS-1$
         } catch (InterruptedException e) {
             // operation was cancelled
         }
@@ -141,4 +142,12 @@ public class CRefactory {
     public String[] getAffectedProjectNatures() {
         return new String[] {CProjectNature.C_NATURE_ID, CCProjectNature.CC_NATURE_ID};
     }
+
+    public void setDisablePotentialMatches(boolean val) {
+        fDisablePotentialMatches= val;
+    }
+    
+    public boolean getDisablePotentialMatches() {
+        return fDisablePotentialMatches;
+    }    
 }

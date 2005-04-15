@@ -41,7 +41,7 @@ public class CRenameProcessor extends RenameProcessor {
     public CRenameProcessor(CRefactory refactoringManager, CRefactoringArgument arg) {
         fManager= refactoringManager;
         fArgument= arg;
-        fAstManager= new ASTManager(refactoringManager);
+        fAstManager= new ASTManager(refactoringManager, arg);
     }
     
     public CRefactoringArgument getArgument() {
@@ -84,7 +84,7 @@ public class CRenameProcessor extends RenameProcessor {
         String identifier= null;
         RefactoringStatus status= new RefactoringStatus();
         if (fArgument != null) {
-            fAstManager.analyzeArgument(fArgument, pm, status);
+            fAstManager.analyzeArgument(pm, status);
             identifier= fArgument.getName();
         }
         if (identifier == null || identifier.length() < 1) {
@@ -101,6 +101,10 @@ public class CRenameProcessor extends RenameProcessor {
         }
         
         fDelegate= createDelegate();
+        if (fDelegate == null) {
+            status.addFatalError(Messages.getString("CRenameTopProcessor.error.invalidTextSelection")); //$NON-NLS-1$
+            return status;
+        }            
         RefactoringStatus s1= fDelegate.checkInitialConditions(new NullProgressMonitor());
         status.merge(s1);
         return status;
@@ -143,11 +147,11 @@ public class CRenameProcessor extends RenameProcessor {
         	case CRefactory.ARGUMENT_TYPE:
                 return new CRenameTypeProcessor(this, Messages.getString("CRenameTopProcessor.type")); //$NON-NLS-1$
         	case CRefactory.ARGUMENT_MACRO:
-                return new CRenameGlobalProcessor(this, Messages.getString("CRenameTopProcessor.macro")); //$NON-NLS-1$
+                return new CRenameMacroProcessor(this, Messages.getString("CRenameTopProcessor.macro")); //$NON-NLS-1$
         	case CRefactory.ARGUMENT_INCLUDE_DIRECTIVE:
                 return new CRenameIncludeProcessor(this, Messages.getString("CRenameIncludeProcessor.includeDirective")); //$NON-NLS-1$
         	default:
-                return new CRenameTextProcessor(this, Messages.getString("CRenameTopProcessor.word")); //$NON-NLS-1$
+                return null;
         }
     }
 
@@ -172,8 +176,10 @@ public class CRenameProcessor extends RenameProcessor {
         String[] natures= getManager().getAffectedProjectNatures();
         List result= new ArrayList();
         IBinding binding= getArgument().getBinding();
-        result.addAll(Arrays.asList(ParticipantManager.loadRenameParticipants(status, 
-                this,  binding, arguments, natures, sharedParticipants)));
+        if (binding != null) {
+            result.addAll(Arrays.asList(ParticipantManager.loadRenameParticipants(status, 
+                    this,  binding, arguments, natures, sharedParticipants)));
+        }
         return (RefactoringParticipant[])result.toArray(new RefactoringParticipant[result.size()]);
     }
 

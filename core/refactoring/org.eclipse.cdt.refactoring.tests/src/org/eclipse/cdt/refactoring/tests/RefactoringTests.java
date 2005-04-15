@@ -14,6 +14,7 @@ package org.eclipse.cdt.refactoring.tests;
 import java.io.StringWriter;
 
 import org.eclipse.cdt.core.tests.BaseTestFramework;
+import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ltk.core.refactoring.*;
 import org.eclipse.text.edits.*;
@@ -33,6 +34,7 @@ public class RefactoringTests extends BaseTestFramework {
     protected void setUp() throws Exception {
         super.setUp();
         disableIndexing();
+        CRefactory.getInstance().setDisablePotentialMatches(true);
     }
 
     protected void tearDown() throws Exception {
@@ -148,13 +150,20 @@ public class RefactoringTests extends BaseTestFramework {
         writer.write( "class class_fwd;         \n"); //$NON-NLS-1$
         writer.write( "struct struct_fwd;       \n"); //$NON-NLS-1$
         writer.write( "union union_fwd;         \n"); //$NON-NLS-1$
-        writer.write( "typedef typedef_fwd;     \n"); //$NON-NLS-1$
-        writer.write( "namespace namespace_fwd; \n"); //$NON-NLS-1$
-        writer.write( "enum enum_fwd; \n"); //$NON-NLS-1$
         writer.write( "int func_proto();        \n"); //$NON-NLS-1$
         writer.write( "int func_proto_ov();     \n"); //$NON-NLS-1$
         writer.write( "int func_proto_ov(int);  \n"); //$NON-NLS-1$
         writer.write( "int func_proto_ov(int*); \n"); //$NON-NLS-1$
+        writer.write( "extern int extern_var;   \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        return importFile(fileName, contents ); //$NON-NLS-1$
+    }
+
+    protected IFile createCFwdDecls(String fileName) throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write( "struct struct_fwd;       \n"); //$NON-NLS-1$
+        writer.write( "union union_fwd;         \n"); //$NON-NLS-1$
+        writer.write( "int func_proto();        \n"); //$NON-NLS-1$
         writer.write( "extern int extern_var;   \n"); //$NON-NLS-1$
         String contents = writer.toString();
         return importFile(fileName, contents ); //$NON-NLS-1$
@@ -183,9 +192,26 @@ public class RefactoringTests extends BaseTestFramework {
         writer.write( "enum enum_def {            \n"); //$NON-NLS-1$
         writer.write( "   enum_item };            \n"); //$NON-NLS-1$
         writer.write( "int func_def() {}          \n"); //$NON-NLS-1$
-        writer.write( "int func_dev_ov() {}       \n"); //$NON-NLS-1$
-        writer.write( "int func_dev_ov(int){}     \n"); //$NON-NLS-1$
-        writer.write( "int func_dev_ov(int*){}    \n"); //$NON-NLS-1$
+        writer.write( "int func_def_ov() {}       \n"); //$NON-NLS-1$
+        writer.write( "int func_def_ov(int){}     \n"); //$NON-NLS-1$
+        writer.write( "int func_def_ov(int*){}    \n"); //$NON-NLS-1$
+        writer.write( "int var_def;               \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        return importFile(fileName, contents ); //$NON-NLS-1$
+    }
+
+    protected IFile createCDefs(String fileName) throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write( "struct struct_def {        \n"); //$NON-NLS-1$
+        writer.write( "   int st_member;          \n"); //$NON-NLS-1$
+        writer.write( "};                         \n"); //$NON-NLS-1$
+        writer.write( "union union_def {          \n"); //$NON-NLS-1$
+        writer.write( "   int un_member;          \n"); //$NON-NLS-1$
+        writer.write( "};                         \n"); //$NON-NLS-1$
+        writer.write( "typedef int typedef_def;   \n"); //$NON-NLS-1$
+        writer.write( "enum enum_def {            \n"); //$NON-NLS-1$
+        writer.write( "   enum_item };            \n"); //$NON-NLS-1$
+        writer.write( "int func_def() {}          \n"); //$NON-NLS-1$
         writer.write( "int var_def;               \n"); //$NON-NLS-1$
         String contents = writer.toString();
         return importFile(fileName, contents ); //$NON-NLS-1$
@@ -197,7 +223,15 @@ public class RefactoringTests extends BaseTestFramework {
         assertEquals(msg, e.getMessage());
     }
 
+    protected void assertRefactoringWarning(RefactoringStatus status, String msg) {
+        RefactoringStatusEntry e= status.getEntryMatchingSeverity(RefactoringStatus.WARNING);
+        assertNotNull("Expected refactoring warning!", e); //$NON-NLS-1$
+        assertEquals(msg, e.getMessage());
+    }
+
     protected void assertRefactoringOk(RefactoringStatus status) {
-        assertTrue("Expected refactoring status ok", status.getSeverity()==RefactoringStatus.OK); //$NON-NLS-1$
+        assertTrue("Expected refactoring status ok: " + //$NON-NLS-1$
+                status.getMessageMatchingSeverity(status.getSeverity()), 
+                status.getSeverity()==RefactoringStatus.OK); 
     }
 }

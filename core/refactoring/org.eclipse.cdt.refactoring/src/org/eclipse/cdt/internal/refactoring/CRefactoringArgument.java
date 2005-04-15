@@ -11,10 +11,7 @@
 package org.eclipse.cdt.internal.refactoring;
 
 import org.eclipse.cdt.core.dom.ast.*;
-import org.eclipse.cdt.core.dom.ast.c.ICFunctionScope;
-import org.eclipse.cdt.core.dom.ast.cpp.*;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPBlockScope;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPFunctionScope;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPMethod;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.cdt.refactoring.ICRefactoringArgument;
@@ -173,9 +170,12 @@ public class CRefactoringArgument implements ICRefactoringArgument {
 
     public void setName(IASTName name) {
         fText= name.toString();
-        fOffset= ASTManager.getOffset(name);
     }
-
+    
+    public void setOffset(int offset) {
+        fOffset= offset;
+    }
+    
     public void setBinding(IASTTranslationUnit tu, IBinding binding, IScope scope) {
         fTranslationUnit= tu;
         fBinding= binding;
@@ -189,9 +189,7 @@ public class CRefactoringArgument implements ICRefactoringArgument {
                 fKind= CRefactory.ARGUMENT_PARAMETER;
             }
             else {
-                if (scope instanceof ICPPFunctionScope ||
-                        scope instanceof ICPPBlockScope ||
-                        scope instanceof ICFunctionScope) {
+                if (ASTManager.isLocalVariable(var, scope)) {
                     fKind= CRefactory.ARGUMENT_LOCAL_VAR;
                 }
                 else {
@@ -248,6 +246,9 @@ public class CRefactoringArgument implements ICRefactoringArgument {
         }
         else if (binding instanceof ICPPNamespace) {
             fKind= CRefactory.ARGUMENT_NAMESPACE;
+        }
+        else if (binding instanceof IMacroBinding) {
+            fKind= CRefactory.ARGUMENT_MACRO;
         }
     }
 

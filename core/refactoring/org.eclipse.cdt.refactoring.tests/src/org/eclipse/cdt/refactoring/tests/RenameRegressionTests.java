@@ -96,6 +96,11 @@ public class RenameRegressionTests extends RenameTests {
         suite.addTest( new RenameRegressionTests("testClass_92B") ); //$NON-NLS-1$
         suite.addTest( new RenameRegressionTests("testRenameParticipant") ); //$NON-NLS-1$
         
+        suite.addTest( RenameVariableTests.suite(false));
+        suite.addTest( RenameFunctionTests.suite(false));
+        suite.addTest( RenameTypeTests.suite(false));
+        suite.addTest( RenameMacroTests.suite(false));
+        
         if( cleanup )
             suite.addTest( new RenameRegressionTests("cleanupProject") );    //$NON-NLS-1$
         
@@ -104,7 +109,10 @@ public class RenameRegressionTests extends RenameTests {
 
     public void testSimpleRename() throws Exception {
         StringWriter writer = new StringWriter();
-        writer.write( "int boo;            \n" ); //$NON-NLS-1$
+        writer.write( "int boo;    // boo  \n" ); //$NON-NLS-1$
+        writer.write( "#ifdef 0            \n" ); //$NON-NLS-1$
+        writer.write( "boo                 \n" ); //$NON-NLS-1$
+        writer.write( "#endif              \n" ); //$NON-NLS-1$
         writer.write( "void f() {          \n" ); //$NON-NLS-1$
         writer.write( "   boo++;           \n" ); //$NON-NLS-1$
         writer.write( "}                   \n" ); //$NON-NLS-1$
@@ -397,7 +405,8 @@ public class RenameRegressionTests extends RenameTests {
         Change changes = getRefactorChanges(file, offset, "foo" ); //$NON-NLS-1$
         assertTotalChanges( 1, changes );
         assertChange( changes, file, contents.indexOf("moon/*vp1*/"), 4, "foo" );  //$NON-NLS-1$//$NON-NLS-2$
-       
+        RefactoringStatus status= checkConditions(file, offset, "foo"); //$NON-NLS-1$
+        assertRefactoringWarning(status, "'foo' will overload a method."); //$NON-NLS-1$
    }
     
     public void testMethod_33_72605() throws Exception {
@@ -1266,7 +1275,7 @@ public class RenameRegressionTests extends RenameTests {
         
         String[] messages = getRefactorMessages( file, offset, "A" ); //$NON-NLS-1$
         assertEquals(1, messages.length);
-        assertTrue(messages[0].startsWith("The new name conflicts with a declaration in"));   //$NON-NLS-1$
+        assertEquals("'A' will redeclare a type.", messages[0]);   //$NON-NLS-1$
         // assert that you cannot refactor because severity is FATAL (4)
         int s = getRefactorSeverity(file, offset, "A"); //$NON-NLS-1$
         assertEquals(RefactoringStatus.ERROR,s);

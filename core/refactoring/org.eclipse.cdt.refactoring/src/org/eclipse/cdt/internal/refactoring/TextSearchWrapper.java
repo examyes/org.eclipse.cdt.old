@@ -206,7 +206,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
             return;
         }
         try {
-            scanner.initialize(reader);
+            scanner.initialize(reader, null);
             scanner.setReuseToken(true);
             Token token;
             int lastState= 0;

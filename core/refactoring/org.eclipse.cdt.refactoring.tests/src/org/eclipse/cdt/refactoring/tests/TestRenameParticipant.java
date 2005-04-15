@@ -60,6 +60,6 @@ public class TestRenameParticipant extends RenameParticipant {
 
     public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
         sCreateChange++;
-        return new NullChange();
+        return null;
     }
 }

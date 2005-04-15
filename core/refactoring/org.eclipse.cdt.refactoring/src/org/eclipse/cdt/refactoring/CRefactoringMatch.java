@@ -22,7 +22,8 @@ import org.eclipse.core.resources.IFile;
 public class CRefactoringMatch {
     public  static final int POTENTIAL= 0;
     public  static final int AST_REFERENCE= 1;
-    private static final int IN_COMMENT = 2;
+    public  static final int IN_COMMENT = 2;
+    public  static final int AST_REFERENCE_OTHER= 3;
     
     private static String[] LABELS= {
         Messages.getString("CRefactoringMatch.label.potentialOccurrence"),  //$NON-NLS-1$
@@ -34,6 +35,10 @@ public class CRefactoringMatch {
     private int fLocation;
     private int fAstInformation= 0;
 
+    public int getAstInformation() {
+        return fAstInformation;
+    }
+    
     public CRefactoringMatch(IFile file, int offset, int length, int location) {
         fFile= file;
         fOffset= offset;

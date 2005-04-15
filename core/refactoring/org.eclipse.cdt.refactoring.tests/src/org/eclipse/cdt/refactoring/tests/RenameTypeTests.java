@@ -1,0 +1,1628 @@
+/*******************************************************************************
+ * Copyright (c) 2005 Wind River Systems, Inc.
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html  
+ * 
+ * Contributors: 
+ * Markus Schorn - initial API and implementation 
+ ******************************************************************************/ 
+
+package org.eclipse.cdt.refactoring.tests;
+
+import java.io.StringWriter;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+
+/**
+ * @author markus.schorn@windriver.com
+ */
+public class RenameTypeTests extends RenameTests {
+
+    public RenameTypeTests(String name) {
+        super(name);
+    }
+    public static Test suite(){
+        return suite(true);
+    }
+    public static Test suite( boolean cleanup ) {
+        TestSuite suite = new TestSuite("RenameTypeTests"); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testNamespaceNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testClassNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testStructNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testStructNameConflictsPlainC") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testUnionNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testUnionNameConflictsPlainC") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testEnumNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testEnumNameConflictsPlainC") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testTypedefNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameTypeTests("testTypedefNameConflictsPlainC") ); //$NON-NLS-1$
+
+        if (cleanup) {
+            suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
+        }
+        return suite;
+    }
+    
+    
+    public void testClassNameConflicts() throws Exception {
+        createCppFwdDecls("cpp_fwd.hh"); //$NON-NLS-1$
+        createCppDefs("cpp_def.hh"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"cpp_fwd.hh\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"cpp_def.hh\"   \n"); //$NON-NLS-1$
+        writer.write("class v1 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("class v2 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("class v3 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("class v4 {                \n"); //$NON-NLS-1$
+        writer.write(" int function();          \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("int v4::function(){}      \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("  {                       \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1::v++;    \n"); //$NON-NLS-1$
+        writer.write("  }                       \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        writer.write("void class_def::method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w2; v2::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        writer.write("static void class_def::static_method(int par3) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w3; v3::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        int offset2= contents.indexOf("v2"); //$NON-NLS-1$
+        int offset3= contents.indexOf("v3"); //$NON-NLS-1$
+        int offset4= contents.indexOf("v4"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringError(status, "'v1' will shadow a constructor."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        
+        status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+
+    public void testNamespaceNameConflicts() throws Exception {
+        createCppFwdDecls("cpp_fwd.hh"); //$NON-NLS-1$
+        createCppDefs("cpp_def.hh"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"cpp_fwd.hh\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"cpp_def.hh\"   \n"); //$NON-NLS-1$
+        writer.write("namespace v4 {            \n"); //$NON-NLS-1$
+        writer.write(" int function();          \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("namespace v1 {            \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("namespace v2 {            \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("namespace v3 {            \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("int v4::function(){}      \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("  {                       \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1::v++;    \n"); //$NON-NLS-1$
+        writer.write("  }                       \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        writer.write("void class_def::method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w2; v2::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        writer.write("static void class_def::static_method(int par3) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w3; v3::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        int offset2= contents.indexOf("v2"); //$NON-NLS-1$
+        int offset3= contents.indexOf("v3"); //$NON-NLS-1$
+        int offset4= contents.indexOf("v4"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        
+        status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+
+    public void testStructNameConflicts() throws Exception {
+        createCppFwdDecls("cpp_fwd.hh"); //$NON-NLS-1$
+        createCppDefs("cpp_def.hh"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"cpp_fwd.hh\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"cpp_def.hh\"   \n"); //$NON-NLS-1$
+        writer.write("struct v4 {               \n"); //$NON-NLS-1$
+        writer.write(" int function();          \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("struct v1 {               \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("struct v2 {               \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("struct v3 {               \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("int v4::function(){}      \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("  {                       \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1::v++;    \n"); //$NON-NLS-1$
+        writer.write("  }                       \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        writer.write("void class_def::method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w2; v2::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        writer.write("static void class_def::static_method(int par3) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w3; v3::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        int offset2= contents.indexOf("v2"); //$NON-NLS-1$
+        int offset3= contents.indexOf("v3"); //$NON-NLS-1$
+        int offset4= contents.indexOf("v4"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        
+        status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+
+    public void testStructNameConflictsPlainC() throws Exception {
+        createCFwdDecls("c_fwd.h"); //$NON-NLS-1$
+        createCDefs("c_def.h"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"c_fwd.h\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"c_def.h\"   \n"); //$NON-NLS-1$
+        writer.write("struct v1 {               \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("struct v2 {               \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("struct v3 {               \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("  {                       \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1::v++;    \n"); //$NON-NLS-1$
+        writer.write("  }                       \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+    }
+
+    public void testUnionNameConflicts() throws Exception {
+        createCppFwdDecls("cpp_fwd.hh"); //$NON-NLS-1$
+        createCppDefs("cpp_def.hh"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"cpp_fwd.hh\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"cpp_def.hh\"   \n"); //$NON-NLS-1$
+        writer.write("union v4 {                \n"); //$NON-NLS-1$
+        writer.write(" int function();          \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("union v1 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("union v2 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("union v3 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("int v4::function(){}      \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("  {                       \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1::v++;    \n"); //$NON-NLS-1$
+        writer.write("  }                       \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        writer.write("void class_def::method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w2; v2::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        writer.write("static void class_def::static_method(int par3) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w3; v3::v++;     \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        int offset2= contents.indexOf("v2"); //$NON-NLS-1$
+        int offset3= contents.indexOf("v3"); //$NON-NLS-1$
+        int offset4= contents.indexOf("v4"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        
+        status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+
+    public void testUnionNameConflictsPlainC() throws Exception {
+        createCppFwdDecls("c_fwd.h"); //$NON-NLS-1$
+        createCppDefs("c_def.h"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"c_fwd.h\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"c_def.h\"   \n"); //$NON-NLS-1$
+        writer.write("union v1 {                \n"); //$NON-NLS-1$
+        writer.write(" int v;                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1::v++;    \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.c", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+    }
+
+    public void testEnumNameConflicts() throws Exception {
+        createCppFwdDecls("cpp_fwd.hh"); //$NON-NLS-1$
+        createCppDefs("cpp_def.hh"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"cpp_fwd.hh\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"cpp_def.hh\"   \n"); //$NON-NLS-1$
+        writer.write("enum v1 {                 \n"); //$NON-NLS-1$
+        writer.write("    v11                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("enum v2 {                 \n"); //$NON-NLS-1$
+        writer.write("    v22                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("enum v3 {                 \n"); //$NON-NLS-1$
+        writer.write("     v33                  \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1 v;        \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        writer.write("void class_def::method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("     int w2; v2 v;         \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        writer.write("static void class_def::static_method(int par3) { \n"); //$NON-NLS-1$
+        writer.write("     int w3; v3 v;         \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        int offset2= contents.indexOf("v2"); //$NON-NLS-1$
+        int offset3= contents.indexOf("v3"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        
+        status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+
+    public void testEnumNameConflictsPlainC() throws Exception {
+        createCppFwdDecls("c_fwd.h"); //$NON-NLS-1$
+        createCppDefs("c_def.h"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"c_fwd.h\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"c_def.h\"   \n"); //$NON-NLS-1$
+        writer.write("enum v1 {                 \n"); //$NON-NLS-1$
+        writer.write("    v11                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("enum v2 {                 \n"); //$NON-NLS-1$
+        writer.write("    v22                   \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("enum v3 {                 \n"); //$NON-NLS-1$
+        writer.write("     v33                  \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1 v;        \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.c", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+
+    public void testTypedefNameConflicts() throws Exception {
+        createCppFwdDecls("cpp_fwd.hh"); //$NON-NLS-1$
+        createCppDefs("cpp_def.hh"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"cpp_fwd.hh\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"cpp_def.hh\"   \n"); //$NON-NLS-1$
+        writer.write("typedef int v1;           \n"); //$NON-NLS-1$
+        writer.write("typedef long v2;          \n"); //$NON-NLS-1$
+        writer.write("typedef struct {int a;} v3; \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1 v;        \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        writer.write("void class_def::method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w2; v2 v;         \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        writer.write("static void class_def::static_method(int par3) { \n"); //$NON-NLS-1$
+        writer.write("  {                        \n"); //$NON-NLS-1$
+        writer.write("     int w3; v3 v;         \n"); //$NON-NLS-1$
+        writer.write("  }                        \n"); //$NON-NLS-1$
+        writer.write("}                          \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        int offset2= contents.indexOf("v2"); //$NON-NLS-1$
+        int offset3= contents.indexOf("v3"); //$NON-NLS-1$
+        int offset4= contents.indexOf("v4"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "w2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "par2");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "w3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "par3");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset2, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset2, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset2, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        
+        status= checkConditions(cpp, offset3, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset3, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        status= checkConditions(cpp, offset4, "class_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "class_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'class_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "namespace_def");  //$NON-NLS-1$
+        assertRefactoringWarning(status, "'namespace_def' will redeclare a namespace."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset4, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset4, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+    
+    public void testTypedefNameConflictsPlainC() throws Exception {
+        createCFwdDecls("c_fwd.h"); //$NON-NLS-1$
+        createCDefs("c_def.h"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"c_fwd.h\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"c_def.h\"   \n"); //$NON-NLS-1$
+        writer.write("typedef int v1;           \n"); //$NON-NLS-1$
+        writer.write("typedef long v2;          \n"); //$NON-NLS-1$
+        writer.write("typedef struct {int a;} v3; \n"); //$NON-NLS-1$
+        writer.write("void f(int par1){         \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1 v;        \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.c", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("v1"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "w1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, contents.indexOf("par1"), "v1");  //$NON-NLS-1$ //$NON-NLS-2$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "par1");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "extern_var");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "var_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "enum_item");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "static_method");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings conflicting with global stuff.
+        status= checkConditions(cpp, offset1, "func_proto");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_proto_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "func_def_ov");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+
+        // renamings colliding with types.
+        status= checkConditions(cpp, offset1, "struct_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_fwd");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_fwd' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "struct_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'struct_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "union_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'union_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "enum_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'enum_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "typedef_def");  //$NON-NLS-1$
+        assertRefactoringError(status, "'typedef_def' will redeclare a type."); //$NON-NLS-1$
+        status= checkConditions(cpp, offset1, "st_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+    }
+}

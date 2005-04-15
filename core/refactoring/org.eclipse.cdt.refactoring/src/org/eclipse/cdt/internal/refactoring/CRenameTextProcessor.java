@@ -14,7 +14,7 @@ package org.eclipse.cdt.internal.refactoring;
 import java.text.MessageFormat;
 import java.util.*;
 
-import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.*;
 import org.eclipse.cdt.refactoring.*;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.*;
@@ -101,11 +101,19 @@ public class CRenameTextProcessor extends CRenameProcessorDelegate {
         }
         selectMatchesByLocation(fMatches);        
         analyzeTextMatches(fMatches, new SubProgressMonitor(monitor, 1), result);
+        if (result.hasFatalError()) {
+            return result;
+        }
         
         HashSet fileset= new HashSet();
         for (Iterator iter = fMatches.iterator(); iter.hasNext();) {
             CRefactoringMatch tm = (CRefactoringMatch) iter.next();
-            fileset.add(tm.getFile());
+            if (tm.getAstInformation() == CRefactoringMatch.AST_REFERENCE_OTHER) {
+                iter.remove();
+            }
+            else {
+                fileset.add(tm.getFile());
+            }
         }
         IFile[] files= (IFile[]) fileset.toArray(new IFile[fileset.size()]);
         if (context != null) {
@@ -121,26 +129,15 @@ public class CRenameTextProcessor extends CRenameProcessorDelegate {
             RefactoringStatus status) {
         CRefactoringArgument argument= getArgument();
         IBinding[] renameBindings= getBindingsToBeRenamed(status);
-        HashSet conflictingBindings= new HashSet();
-        HashSet equalBindings= new HashSet();
         if (renameBindings != null && renameBindings.length > 0 && 
                 argument.getArgumentKind() != CRefactory.ARGUMENT_UNKNOWN) {
-            getAstManager().analyzeMatches(matches, argument.getName(),
-                    renameBindings, getReplacementText(),
-                    monitor, equalBindings, conflictingBindings, status);
-        }
-        handleConflictingBindings(renameBindings, equalBindings, conflictingBindings, status);
-    }
-
-    protected void handleConflictingBindings(IBinding[] bindings, 
-            Set equalBindings, HashSet conflictingBindings, RefactoringStatus status) {
-        // mstodo this is a workaround
-        conflictingBindings.remove(null);
-        if (!conflictingBindings.isEmpty()) {
-            status.addError(Messages.getString("CRenameTextProcessor.error.conflictingDecl")); //$NON-NLS-1$
+            ASTManager mngr= getAstManager();
+            mngr.setValidBindings(renameBindings);
+            mngr.setRenameTo(getReplacementText());
+            mngr.analyzeTextMatches(matches, monitor, status);
         }
     }
-
+    
     private void selectMatchesByLocation(ArrayList matches) {
         int acceptTextLocation= getAcceptedLocations(getSelectedOptions());
         for (Iterator iter = matches.iterator(); iter.hasNext();) {
@@ -170,19 +167,33 @@ public class CRenameTextProcessor extends CRenameProcessorDelegate {
         MultiTextEdit fileEdit= null;
         for (Iterator iter = fMatches.iterator(); iter.hasNext();) {
             CRefactoringMatch match= (CRefactoringMatch) iter.next();
-            IFile mfile= match.getFile();
-            if (file==null || !file.equals(mfile)) {
-                file= mfile;
-                fileChange= new TextFileChange(file.getName(), file); 
-                change.add(fileChange);
-                fileEdit= new MultiTextEdit();
-                fileChange.setEdit(fileEdit);
+            switch(match.getAstInformation()) {
+            case CRefactoringMatch.AST_REFERENCE_OTHER:
+                continue;
+            case CRefactoringMatch.IN_COMMENT:
+            case CRefactoringMatch.POTENTIAL:
+                if (getManager().getDisablePotentialMatches()) {
+                    continue;
+                }
+                break;
+            case CRefactoringMatch.AST_REFERENCE:
+                break;
             }
-            
-            ReplaceEdit replaceEdit= new ReplaceEdit(match.getOffset(), 
-                    identifier.length(), replacement);
-            fileEdit.addChild(replaceEdit);
-            fileChange.addTextEditGroup(new TextEditGroup(match.getLabel(), replaceEdit));
+            if (match.getAstInformation() != CRefactoringMatch.AST_REFERENCE_OTHER) {
+                IFile mfile= match.getFile();
+                if (file==null || !file.equals(mfile)) {
+                    file= mfile;
+                    fileChange= new TextFileChange(file.getName(), file); 
+                    change.add(fileChange);
+                    fileEdit= new MultiTextEdit();
+                    fileChange.setEdit(fileEdit);
+                }
+                
+                ReplaceEdit replaceEdit= new ReplaceEdit(match.getOffset(), 
+                        identifier.length(), replacement);
+                fileEdit.addChild(replaceEdit);
+                fileChange.addTextEditGroup(new TextEditGroup(match.getLabel(), replaceEdit));
+            }
             pm.worked(1);
         }
         return change;
