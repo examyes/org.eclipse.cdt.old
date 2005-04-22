@@ -11,13 +11,15 @@
 
 package org.eclipse.cdt.refactoring;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
-import org.eclipse.cdt.core.*;
-import org.eclipse.cdt.core.CCorePlugin;
+import org.eclipse.cdt.core.CCProjectNature;
 import org.eclipse.cdt.core.CProjectNature;
+import org.eclipse.cdt.core.dom.*;
 import org.eclipse.cdt.core.dom.IASTServiceProvider.UnsupportedDialectException;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.cdt.internal.refactoring.*;
 import org.eclipse.cdt.internal.refactoring.ui.CRenameRefactoringWizard;
 import org.eclipse.core.resources.*;
@@ -62,6 +64,9 @@ public class CRefactory {
     private static CRefactory sInstance= new CRefactory();
     private HashSet fEditorIDs= new HashSet();
     private boolean fDisablePotentialMatches= false;
+    private ICRefactoringSearch fTextSearch;
+    private String[] fAffectedProjectNatures;
+    private IParserConfigurationProvider[] fParserConfigurationProviders= new IParserConfigurationProvider[0];
     
     public static CRefactory getInstance() {
         return sInstance;
@@ -76,10 +81,15 @@ public class CRefactory {
         return new CRefactoringArgument(file, offset, text);
     }
 
-    protected CRefactory() {
+    private CRefactory() {
         fEditorIDs.add("org.eclipse.cdt.ui.editor.CEditor"); //$NON-NLS-1$
         fEditorIDs.add("com.windriver.ide.editor.cpp"); //$NON-NLS-1$
         fEditorIDs.add("com.windriver.ide.editor.c"); //$NON-NLS-1$
+        
+        fAffectedProjectNatures= new String[] {
+                CProjectNature.C_NATURE_ID, 
+                CCProjectNature.CC_NATURE_ID
+        };
     }
     
     // runs the rename refactoring
@@ -101,7 +111,14 @@ public class CRefactory {
     }
 
     public ICRefactoringSearch getTextSearch() {
-        return new TextSearchWrapper();
+        if (fTextSearch == null) {
+            return new TextSearchWrapper();
+        }
+        return fTextSearch;
+    }
+    
+    public void setTextSearch(ICRefactoringSearch txtSearch) {
+        fTextSearch= txtSearch;
     }
 
     public String[] getCCppPatterns() {
@@ -131,16 +148,48 @@ public class CRefactory {
 
     public IASTTranslationUnit getTranslationUnit(IFile sourceFile, 
             RefactoringStatus status) {
+        IParserConfiguration pcfg= null;
+        ICodeReaderFactory codeReader= SavedCodeReaderFactory.getInstance();
+        
+        for (int i = 0; i < fParserConfigurationProviders.length; i++) {
+            IParserConfigurationProvider pcp = fParserConfigurationProviders[i];
+            pcfg= pcp.getParserConfiguration(sourceFile);
+            if (pcfg != null) {
+                break;
+            }
+        }
+        
         try {
-            return CCorePlugin.getDefault().getDOM().getTranslationUnit(sourceFile);
+            return CDOM.getInstance().getTranslationUnit(sourceFile, codeReader, pcfg);
         } catch (UnsupportedDialectException e) {
             status.addError(e.getMessage());
         }
         return null;
     }
 
+    public void addAffectedProjectNatures(String nature) {
+        HashSet natures= new HashSet();
+        natures.addAll(Arrays.asList(fAffectedProjectNatures));
+        natures.add(nature);
+        fAffectedProjectNatures= (String[]) natures.toArray(new String[natures.size()]);
+    }
+    
     public String[] getAffectedProjectNatures() {
-        return new String[] {CProjectNature.C_NATURE_ID, CCProjectNature.CC_NATURE_ID};
+        return fAffectedProjectNatures;
+    }
+
+    public void addEditorDefiningExtension(String editorID) {
+        if (!fEditorIDs.contains(editorID)) {
+            fEditorIDs.add(editorID);
+        }
+    }
+
+    public void addParserConfigurationProvider(IParserConfigurationProvider pcp) {
+        HashSet now= new HashSet();
+        now.addAll(Arrays.asList(fParserConfigurationProviders));
+        now.add(pcp);
+        fParserConfigurationProviders= 
+            (IParserConfigurationProvider[]) now.toArray(new String[now.size()]);
     }
 
     public void setDisablePotentialMatches(boolean val) {

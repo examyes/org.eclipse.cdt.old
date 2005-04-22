@@ -60,27 +60,12 @@ public class ASTManager {
         }
         return name;
     }
-
-    
-    public static IASTFileLocation getFileLocation(IASTNode node) {
-        IASTNodeLocation[] locs = node.getNodeLocations();
-        for(int i = 0; i < locs.length; i++) {
-            IASTFileLocation fl = locs[i].asFileLocation();
-            if (fl != null && 
-     
-    fl.getFileName().equals(node.getTranslationUnit().getFilePath())) {
-                return fl;
-            }
-        }
-        return null;
-    }
-
     
     /**
      * Returns TRUE, FALSE or UNKNOWN.
      * @throws DOMException 
      */
-    public int isSameBinding(IBinding b1, IBinding b2) throws DOMException {
+    public static int isSameBinding(IBinding b1, IBinding b2) throws DOMException {
         if (b1==null || b2==null) {
             return UNKNOWN;
         }
