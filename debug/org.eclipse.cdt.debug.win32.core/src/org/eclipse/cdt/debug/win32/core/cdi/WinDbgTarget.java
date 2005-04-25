@@ -14,16 +14,21 @@ import java.math.BigInteger;
 
 import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
+import org.eclipse.cdt.debug.core.cdi.ICDIAddressLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
+import org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation;
+import org.eclipse.cdt.debug.core.cdi.ICDILineLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIResumedEvent;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIAddressBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExceptionpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExpression;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIFunctionBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIInstruction;
-import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDILineBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMixedInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterGroup;
@@ -132,13 +137,19 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	
 	void resolveLocation(ICDILocation location) {
 		BigInteger address = BigInteger.ZERO;
-		
-		if (location.getFunction() != null) {
-			long addr = getFunctionAddress(location.getFunction());
-			address = new BigInteger(Long.toString(addr));
-		} else if (location.getFile() != null) {
-			long addr = getLineAddress(dir + "\\" + location.getFile(), location.getLineNumber());
-			address = new BigInteger(Long.toString(addr));
+
+		if (location instanceof ICDILineLocation) {
+			ICDILineLocation lineLocation = (ICDILineLocation)location;
+			if (lineLocation.getFile() != null) {
+				long addr = getLineAddress(dir + "\\" + lineLocation.getFile(), lineLocation.getLineNumber());
+				address = new BigInteger(Long.toString(addr));
+			}
+		} else if (location instanceof ICDIFunctionLocation) {
+			ICDIFunctionLocation functionLocation = (ICDIFunctionLocation)location; 
+			if (functionLocation.getFunction() != null) {
+				long addr = getFunctionAddress(functionLocation.getFunction());
+				address = new BigInteger(Long.toString(addr));
+			}
 		}
 		
 		((WinDbgLocation)location).setAddress(address);
@@ -370,12 +381,27 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setLocationBreakpoint(int, org.eclipse.cdt.debug.core.cdi.ICDILocation, org.eclipse.cdt.debug.core.cdi.ICDICondition, boolean)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setLineBreakpoint(int, org.eclipse.cdt.debug.core.cdi.ICDILineLocation, org.eclipse.cdt.debug.core.cdi.ICDICondition, boolean)
 	 */
-	public ICDILocationBreakpoint setLocationBreakpoint(int type, ICDILocation location, ICDICondition condition, boolean deferred) throws CDIException {
+	public ICDILineBreakpoint setLineBreakpoint(int type, ICDILineLocation location, ICDICondition condition, boolean deferred) throws CDIException {
 		WinDbgSession wSession = (WinDbgSession)getSession();
 		WinDbgBreakpointManager bMgr = wSession.getBreakpointManager();
-		return bMgr.setLocationBreakpoint(this, type, location, condition, deferred);
+		return bMgr.setLineBreakpoint(this, type, location, condition, deferred);		
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpointManagement#setFunctionBreakpoint(int, org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation, org.eclipse.cdt.debug.core.cdi.ICDICondition, boolean)
+	 */
+	public ICDIFunctionBreakpoint setFunctionBreakpoint(int type, ICDIFunctionLocation location, ICDICondition condition, boolean deferred) throws CDIException {
+		WinDbgSession wSession = (WinDbgSession)getSession();
+		WinDbgBreakpointManager bMgr = wSession.getBreakpointManager();
+		return bMgr.setFunctionBreakpoint(this, type, location, condition, deferred);		
+	}
+
+	public ICDIAddressBreakpoint setAddressBreakpoint(int type, ICDIAddressLocation location, ICDICondition condition, boolean deferred) throws CDIException {
+		WinDbgSession wSession = (WinDbgSession)getSession();
+		WinDbgBreakpointManager bMgr = wSession.getBreakpointManager();
+		return bMgr.setAddressBreakpoint(this, type, location, condition, deferred);		
 	}
 
 	public ICDIExceptionpoint setExceptionBreakpoint(String clazz, boolean stopOnThrow, boolean stopOnCatch)
@@ -431,11 +457,24 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createLocation(long)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createAddressLocation(java.math.BigInteger)
 	 */
-	public ICDILocation createLocation(BigInteger address) {
-		// TODO Auto-generated method stub
-		return null;
+	public ICDIAddressLocation createAddressLocation(BigInteger address) {
+		return new WinDbgLocation(address);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createLineLocation(java.lang.String, int)
+	 */
+	public ICDILineLocation createLineLocation(String file, int lineNumber) {
+		return new WinDbgLocation(file, lineNumber);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createFunctionLocation(java.lang.String, java.lang.String)
+	 */
+	public ICDIFunctionLocation createFunctionLocation(String file, String function) {
+		return new WinDbgLocation(file, function);
 	}
 
 	public ICDIRuntimeOptions getRuntimeOptions() {

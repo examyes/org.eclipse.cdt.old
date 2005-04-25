@@ -14,13 +14,18 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.cdt.debug.core.cdi.CDIException;
+import org.eclipse.cdt.debug.core.cdi.ICDIAddressLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
-import org.eclipse.cdt.debug.core.cdi.ICDILocation;
+import org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation;
+import org.eclipse.cdt.debug.core.cdi.ICDILineLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.event.ICDICreatedEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEventListener;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIAddressBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIFunctionBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDILineBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 
@@ -60,27 +65,58 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 		// TODO Auto-generated method stub
 	}
 
-	public synchronized ICDILocationBreakpoint setLocationBreakpoint(WinDbgTarget wTarget, int type,
-			ICDILocation location, ICDICondition condition, boolean deferred)
+	public synchronized ICDILineBreakpoint setLineBreakpoint(WinDbgTarget wTarget, int type,
+			ICDILineLocation location, ICDICondition condition, boolean deferred)
 			throws CDIException {
 		
-		// TODO Does it matter what deferred is?
-
-		WinDbgLocationBreakpoint bp = new WinDbgLocationBreakpoint(
+		WinDbgLineBreakpoint bp = new WinDbgLineBreakpoint(
 				type, 
 				condition, 
 				wTarget,
 				location);
 
+		setLocationBreakpoint(bp);		
+		return bp;
+	}
+	
+	public synchronized ICDIFunctionBreakpoint setFunctionBreakpoint(WinDbgTarget wTarget, int type,
+			ICDIFunctionLocation location, ICDICondition condition, boolean deferred)
+			throws CDIException {
+		
+		WinDbgFunctionBreakpoint bp = new WinDbgFunctionBreakpoint(
+				type, 
+				condition, 
+				wTarget,
+				location);
+
+		setLocationBreakpoint(bp);		
+		return bp;
+	}
+
+	public synchronized ICDIAddressBreakpoint setAddressBreakpoint(WinDbgTarget wTarget, int type,
+			ICDIAddressLocation location, ICDICondition condition, boolean deferred)
+			throws CDIException {
+		
+		WinDbgAddressBreakpoint bp = new WinDbgAddressBreakpoint(
+				type, 
+				condition, 
+				wTarget,
+				location);
+
+		setLocationBreakpoint(bp);		
+		return bp;
+	}
+
+	public synchronized void setLocationBreakpoint(WinDbgLocationBreakpoint bp) throws CDIException {
+		
+		WinDbgTarget wTarget = (WinDbgTarget)bp.getTarget();
 		if (processCreated) {
-			wTarget.resolveLocation(location);
-			wTarget.setBreakpoint(bp.getLocation().getAddress(), bp.isTemporary());
+			wTarget.resolveLocation(bp.getLocator());
+			wTarget.setBreakpoint(bp.getLocator().getAddress(), bp.isTemporary());
 			bpQueue.add(bp);
 		} else {
 			deferredQueue.add(bp);
-		}
-		
-		return bp;
+		}		
 	}
 
 	public ICDIWatchpoint setWatchpoint(int type, int watchType,
@@ -91,20 +127,6 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 
 	public void allowProgramInterruption(boolean allow) {
 		// TODO Auto-generated method stub
-	}
-
-	public ICDICondition createCondition(int ignoreCount, String expression) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ICDILocation createLocation(String file, String function, int line) {
-		return new WinDbgLocation(file, function, line);
-	}
-
-	public ICDILocation createLocation(long address) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void setAutoUpdate(boolean update) {
@@ -125,13 +147,10 @@ public class WinDbgBreakpointManager implements ICDIEventListener {
 			if (event[i] instanceof ICDICreatedEvent) {
 				while (!deferredQueue.isEmpty()) {
 					ICDILocationBreakpoint bp = (ICDILocationBreakpoint)deferredQueue.remove(0);
-					try {
-						WinDbgTarget wTarget = (WinDbgTarget)bp.getTarget();
-						wTarget.resolveLocation(bp.getLocation());
-						wTarget.setBreakpoint(bp.getLocation().getAddress(), bp.isTemporary());
-						bpQueue.add(bp);
-					} catch (CDIException e) {
-					}
+					WinDbgTarget wTarget = (WinDbgTarget)bp.getTarget();
+					wTarget.resolveLocation(bp.getLocator());
+					wTarget.setBreakpoint(bp.getLocator().getAddress(), bp.isTemporary());
+					bpQueue.add(bp);
 				}
 				processCreated = true;
 			}

@@ -10,16 +10,21 @@
  ******************************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
-import org.eclipse.cdt.debug.core.cdi.CDIException;
+import java.math.BigInteger;
+
+import org.eclipse.cdt.debug.core.cdi.ICDIAddressLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDICondition;
+import org.eclipse.cdt.debug.core.cdi.ICDIFunctionLocation;
+import org.eclipse.cdt.debug.core.cdi.ICDILineLocation;
 import org.eclipse.cdt.debug.core.cdi.ICDILocation;
+import org.eclipse.cdt.debug.core.cdi.ICDILocator;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocationBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 
-public class WinDbgLocationBreakpoint extends WinDbgBreakpoint
+public abstract class WinDbgLocationBreakpoint extends WinDbgBreakpoint
 		implements ICDILocationBreakpoint {
 
-	private ICDILocation location;
+	private ICDILocation fLocation;
 	
 	WinDbgLocationBreakpoint(
 			int type,
@@ -27,10 +32,41 @@ public class WinDbgLocationBreakpoint extends WinDbgBreakpoint
 			ICDITarget target,
 			ICDILocation location) {
 		super(type, condition, target);
-		this.location = location;
+		fLocation = location;
 	}
 
-	public ICDILocation getLocation() throws CDIException {
-		return location;
+	public int getLineNumber() {
+		if (fLocation instanceof ICDILineLocation) {
+			return ((ICDILineLocation)fLocation).getLineNumber();
+		}
+		return 0;
 	}
+
+	public String getFile() {
+		if (fLocation instanceof ICDILineLocation) {
+			return ((ICDILineLocation)fLocation).getFile();
+		} else if (fLocation instanceof ICDIFunctionLocation) {
+			return ((ICDIFunctionLocation)fLocation).getFile();
+		}
+		return null;
+	}
+
+	public BigInteger getAddress() {
+		if (fLocation instanceof ICDIAddressLocation) {
+			return ((ICDIAddressLocation)fLocation).getAddress();
+		}
+		return null;
+	}
+
+	public String getFunction() {
+		if (fLocation instanceof ICDIFunctionLocation) {
+			return ((ICDIFunctionLocation)fLocation).getFunction();
+		}
+		return null;
+	}
+
+	public ICDILocator getLocator() {
+		return new WinDbgLocator(getFile(), getFunction(), getLineNumber(), getAddress());
+	}
+
 }

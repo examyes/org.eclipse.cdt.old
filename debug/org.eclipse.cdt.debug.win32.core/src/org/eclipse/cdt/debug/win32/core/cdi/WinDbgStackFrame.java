@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.cdt.debug.core.cdi.CDIException;
-import org.eclipse.cdt.debug.core.cdi.ICDILocation;
+import org.eclipse.cdt.debug.core.cdi.ICDILocator;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgument;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgumentDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor;
@@ -27,7 +27,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
 
 public class WinDbgStackFrame implements ICDIStackFrame {
 
-	private ICDILocation location;
+	private ICDILocator locator;
 	private WinDbgThread thread;
 	private int level = 0;
 	private long pc;
@@ -36,9 +36,9 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 	private List arguments = new ArrayList();
 	private List locals = new ArrayList();
 	
-	public WinDbgStackFrame(WinDbgThread thread, ICDILocation location, long pc, long frame) {
+	public WinDbgStackFrame(WinDbgThread thread, ICDILocator locator, long pc, long frame) {
 		this.thread = thread;
-		this.location = location;
+		this.locator = locator;
 		this.pc = pc;
 		this.frame = frame;
 	}
@@ -66,8 +66,11 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 		}
 	}
 	
-	public ICDILocation getLocation() {
-		return location;
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame#getLocator()
+	 */
+	public ICDILocator getLocator() {
+		return locator;
 	}
 
 	public ICDIVariable[] getLocalVariables() throws CDIException {

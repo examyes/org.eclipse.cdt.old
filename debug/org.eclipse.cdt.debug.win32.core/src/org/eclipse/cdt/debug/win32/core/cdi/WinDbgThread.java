@@ -55,7 +55,7 @@ public class WinDbgThread implements ICDIThread {
 	
 	private void createStackFrame(long address) {
 		BigInteger big = new BigInteger(Long.toString(address));
-		stackFrames.addFirst(new WinDbgStackFrame(this, new WinDbgLocation(big), 0, 0));
+		stackFrames.addFirst(new WinDbgStackFrame(this, new WinDbgLocator(null, null, 0, big), 0, 0));
 	}
 	
 	private void createStackFrame(String file, String function, int line, long pc, long frame) {
@@ -65,7 +65,7 @@ public class WinDbgThread implements ICDIThread {
 			// remove the dir name
 			realfile = file.substring(dir.length() + 1);
 		}
-		stackFrames.addFirst(new WinDbgStackFrame(this, new WinDbgLocation(realfile, function, line), pc, frame));
+		stackFrames.addFirst(new WinDbgStackFrame(this, new WinDbgLocator(realfile, function, line, null), pc, frame));
 	}
 	// Called by target on resume to clear stack frame
 	void clearStackFrames() {
