@@ -14,6 +14,7 @@ package org.eclipse.cdt.refactoring.tests;
 import java.io.StringWriter;
 
 import org.eclipse.cdt.core.tests.BaseTestFramework;
+import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ltk.core.refactoring.*;
@@ -39,6 +40,7 @@ public class RefactoringTests extends BaseTestFramework {
 
     protected void tearDown() throws Exception {
         super.tearDown();
+        SavedCodeReaderFactory.getInstance().getCodeReaderCache().flush();
     }
 
     protected void assertTotalChanges(int numChanges, Change changes) throws Exception {
