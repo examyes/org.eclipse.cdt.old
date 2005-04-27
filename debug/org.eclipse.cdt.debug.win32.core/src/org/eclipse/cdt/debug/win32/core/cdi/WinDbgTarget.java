@@ -535,9 +535,8 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDISourceManagement#addSourcePaths(java.lang.String[])
 	 */
-	public void addSourcePaths(String[] srcPaths) throws CDIException {
+	public void setSourcePaths(String[] srcPaths) throws CDIException {
 		// TODO Auto-generated method stub
-		
 	}
 
 	/* (non-Javadoc)
