@@ -333,12 +333,12 @@ public class RenameFunctionTests extends RenameTests {
         writer.write("  static int static_method(int);  \n"); //$NON-NLS-1$
         writer.write("  static int static_member;       \n"); //$NON-NLS-1$
         writer.write("};                        \n"); //$NON-NLS-1$        
-        writer.write("void Dummy::method(int par1) { \n"); //$NON-NLS-1$
+        writer.write("int Dummy::method(int par1) { \n"); //$NON-NLS-1$
         writer.write("  {                        \n"); //$NON-NLS-1$
         writer.write("     int w1; v1();         \n"); //$NON-NLS-1$
         writer.write("  }                        \n"); //$NON-NLS-1$
         writer.write("}                          \n"); //$NON-NLS-1$
-        writer.write("static void Dummy::static_method(int par2) { \n"); //$NON-NLS-1$
+        writer.write("static int Dummy::static_method(int par2) { \n"); //$NON-NLS-1$
         writer.write("  {                        \n"); //$NON-NLS-1$
         writer.write("     int w2; v2();         \n"); //$NON-NLS-1$
         writer.write("  }                        \n"); //$NON-NLS-1$
