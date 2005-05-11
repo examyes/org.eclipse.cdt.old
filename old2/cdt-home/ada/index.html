@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>CDT Ada Home Page</title>
+  <meta content="Doug Schaefer" name="author">
+  <link rel="stylesheet"
+ href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/cdt.css?cvsroot=Tools_Project"
+ type="text/css">
+</head>
+<body>
+&nbsp;
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+  <tbody>
+    <tr>
+      <td width="60%">
+      <p><font class="indextop">CDT Ada Home Page</font></p>
+      <p><font class="indexsub">Ada Development Tools built on top
+of the CDT</font></p>
+      </td>
+      <td width="40%">
+      <p><img src="http://dev.eclipse.org/images/Idea.jpg"
+ name="Graphic1" align="middle" border="0" height="86" hspace="50"
+ width="120"></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="2" bgcolor="#0080c0" valign="top">
+      <p align="left"><b><font color="#ffffff" face="Arial, Helvetica">About&nbsp;CDT
+Ada</font></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>This page is dedicated to work
+being done to add Gnu Ada (GNAT) support to the CDT. Let's call this
+CDT Ada to start. I (this is Doug
+Schaefer, BTW) am going to start this in a blog type format until we
+get a sense of where we want to take this and start putting together
+real plans and delivering stuff.</p>
+<p>In some ways adding Ada support
+to the CDT
+is a test of the CDT's multi-language capability. It should be able to
+help guide the architecture of the CDT to make it easier to add support
+for new languages. However, this is also a sandbox for those interested
+in
+adding Ada support into the open source community of Eclipse.org to
+dump their ideas, and eventually code.</p>
+<p>Why do Ada? Well, for me (Doug
+Schaefer), I've been a big fan of Ada since my university days where I
+spent a lot of time learning new languages and programming models. My
+main concern was finding the best languages to express various
+programming solutions. The idea that one language can solve all your
+problems is far from realistic. The language wars continue to fester
+and really, the choice of which language to use for a given project,
+belongs with the individual project teams that need to put together the
+solutions.</p>
+<p>In my case, I see Ada as an
+excellent language for solving the problems it was meant to solve, i.e.
+mission critical embedded systems. It has some of the strictest type
+safety rules I've seen and has some of the coolest multi-tasking
+programming mechanisms.</p>
+<p>As an aside, I find it a little
+funny that the Gnu Ada compiler itself is written mainly in Ada since
+I'm not sure this application fits the original intent of the DoD, but
+each to their own. But then I think that's one of the reasons it has
+taken a long time to see Gnu Ada ported to new systems since they need
+an Ada compiler to bootstrap.</p>
+<p>So it concerns me when I read
+and hear that Ada is becoming a dying language. A few years ago, DoD
+removed the requirement that all software written for DoD contracts be
+done in Ada. I need to research why they did that, but from what I
+remember, it was mainly due to the costs of tooling and training. There
+are very few Ada compilers on the market and even fewer IDEs for Ada.
+With the rise of the open source movement, it is clear that if you want
+your language to succeed in the big picture, you need to make the tools
+freely available. That way, those students who want to learn a new
+language have the tools available to try it out. Back in the 80's I
+unfortunately did not get that opportunity to use Ada and so it never
+made it to my programmers tool belt. The Gnu C and C++ compilers were
+free and so that is what I ended up using the most.</p>
+<p>In some ways, I'm hoping that
+by putting together an IDE in open source for Ada, in combination with
+the free Gnu Ada compiler that is now a part of most Linux
+distributions and Cygwin, we can spark a bit of a revival for Ada</p>
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="2" bgcolor="#0080c0" valign="top">
+      <p align="left"><b><font color="#ffffff" face="Arial, Helvetica">Extending
+the CDT for Ada</font></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>As a first step towards
+supporting Ada in the CDT, I created an editor and associated it with
+ads and adb files. This was&nbsp;a simple subclass of
+AbstractDecoratedTextEditor. I then created a Standard Make project and
+wrote a quick makefile that simply called gnatmake (which is pretty
+much itself a managed builder). I then created a simple hello world Ada
+program and did the build. As a pleasant surprise, whenever I had a
+compile error out of the build the red X showed up in my editor on the
+right line. That gave me a hint that I'm going to get a lot for free
+out of this thing.</p>
+<p>I then went on to look at debug
+support. The first thing I wanted to do was set a breakpoint at the
+Put_Line in my hello world program. Well, of course, that wasn't free
+with my plain editor. However, as I found out when looking at how
+breakpoints were set in the CEditor, it is a simple extension point
+that hooks up the toggle breakpoint action to a new editor. Doing that,
+I was able to get a breakpoint set on my Ada code. And thanks to the
+multi-language abilities of gdb, I was able to fire up the debugger,
+have my breakpoint hit, and have stack and variables from my Ada
+program available in the debug views. And selecting my stack frame, the
+right line gets highlighted in my Ada editor.</p>
+<p>So the conclusion of that
+activity, it appears that we should be able to reuse the CDT's build
+and debug functionality with minimal changes.</p>
+<p>So next, I started looking at
+the CDT's core/UI functionality. While browsing through the CEditor, I
+quickly got the feeling that there is a lot more to building an editor
+than I though and that I needed to spend time building one to figure
+out what all the pieces are. So I decided to continue with my Ada
+editor and, while doing so, see if there are any large language
+independent bits that aren't already part of the platform text editor
+support that would be useful for other languages. That work is ongoing.</p>
+<p>Also, we'll need to take a look
+at the other core/UI features such as the CView, Search, Class Browser,
+Type Hierarchy, etc. The main question I have here is whether we can
+make the DOM and CModel extensible for other languages, or whether this
+is worth it at all. To support this I'm building an Ada parser and Ada
+DOM (largely because I love writing parsers). My current gut feel is
+that, no, it won't be worth
+it. There are a lot of concepts similar between different languages,
+but the differences far outweigh the similarities. What I'd like to
+achieve in the least is to reuse the UI components, such as the CView,
+Class Browser, etc. We should only have on perspective for these
+languages and a common set of views. The main use case I'd like to keep
+clean is when a project has some Ada files and some C files and I want
+to work on both in the same perspective without an explosion in the
+number of views I have to work with.</p>
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+  <tbody>
+    <tr>
+      <td colspan="2" bgcolor="#0080c0" valign="top">
+      <p align="left"><b><font color="#ffffff" face="Arial, Helvetica">Help
+Wanted!</font></b></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>So where can you help out? While I'm currently focusing on building
+the Ada parser, I wouldn't mind seeing some work done on the
+Search/Indexer side. Gnu Ada has a pretty cool cross reference and
+searching tools, gnatxref and gnatfind. It would be cool to see if
+these can be integrated into CDT Ada. I might also be able to use this
+for the semantic analysis code in the DOM.</p>
+<p>The Ada Editor could also use some upgrades. For example, while the
+red X shows up on compile errors, you don't get the tool tip that shows
+the error. There are also some handy editor actions for
+commenting/uncommenting out code that the JDT and CDT have that could
+be useful here. Fancier features like content assist and open
+declaration need to wait for the DOM to support them.</p>
+</body>
+</html>
