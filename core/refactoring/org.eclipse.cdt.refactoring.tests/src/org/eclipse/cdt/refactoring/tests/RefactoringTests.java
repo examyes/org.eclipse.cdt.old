@@ -15,7 +15,6 @@ import java.io.StringWriter;
 
 import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
-import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ltk.core.refactoring.*;
 import org.eclipse.text.edits.*;
@@ -35,7 +34,6 @@ public class RefactoringTests extends BaseTestFramework {
     protected void setUp() throws Exception {
         super.setUp();
         disableIndexing();
-        CRefactory.getInstance().setDisablePotentialMatches(true);
     }
 
     protected void tearDown() throws Exception {
@@ -44,30 +42,45 @@ public class RefactoringTests extends BaseTestFramework {
     }
 
     protected void assertTotalChanges(int numChanges, Change changes) throws Exception {
-        int count = 0;
-        if( changes != null )
-            count = countChanges( changes );
-        assertEquals( numChanges, count );
+        assertTotalChanges(numChanges, 0, changes);
     }
 
-    private int countChanges(Change change) {
-        int count = 0;
+    protected void assertTotalChanges(int numChanges, int potChanges, Change changes) throws Exception {
+        int count[]= {0,0};
+        if( changes != null ) {
+            countChanges( changes, count);
+        }
+        assertEquals( numChanges, count[0] );
+        assertEquals("potential changes: ", potChanges, count[1]); //$NON-NLS-1$
+    }
+
+    private void countChanges(Change change, int[] count) {
         if( change instanceof CompositeChange ){
             Change [] children = ((CompositeChange) change).getChildren();
             for( int i = 0; i < children.length; i++ ){
-                count += countChanges( children[i] );
+                countChanges( children[i], count);
             }
         } else if( change instanceof TextFileChange ){
-            count += countEdits( ((TextFileChange) change).getEdit() );
+            TextFileChange tfc= (TextFileChange) change;
+            TextEditChangeGroup[] tecgs= tfc.getTextEditChangeGroups();
+            for (int i = 0; i < tecgs.length; i++) {
+                TextEditChangeGroup group = tecgs[i];
+                countChanges(group, count);
+            }
         }
-        return count;
     }
 
-    private int countEdits(TextEdit edit) {
-        if( edit instanceof MultiTextEdit ){
-            return ((MultiTextEdit) edit).getChildrenSize();
-        } 
-        return 1;
+    private void countChanges(TextEditChangeGroup edit, int[] count) {
+        String name= edit.getName();
+        if (name.indexOf("potential") != -1) { //$NON-NLS-1$
+            count[1]++;
+        }
+        else if (name.indexOf("comment") != -1) { //$NON-NLS-1$
+            count[1]++;
+        }
+        else {
+            count[0]++;
+        }
     }
 
     protected void assertChange(Change changes, IFile file, int startOffset, int numChars, String newText) throws Exception {

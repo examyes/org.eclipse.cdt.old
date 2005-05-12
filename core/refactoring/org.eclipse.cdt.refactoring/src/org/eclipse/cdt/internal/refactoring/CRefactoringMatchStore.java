@@ -34,12 +34,12 @@ public class CRefactoringMatchStore {
     public void addMatch(CRefactoringMatch match) {
         IPath path= resolvePath(match.getFile());
         if (path != null) {
-            Map matchesForPath= getMatchesForPath(path, true);
+            Map matchesForPath= getMapForPath(path, true);
             matchesForPath.put(match, match);
         }
     }
-
-    private Map getMatchesForPath(IPath path, boolean create) {
+        
+    private Map getMapForPath(IPath path, boolean create) {
         Map map= (Map) fPathToMatches.get(path);
         if (map == null && create) {
             map= new TreeMap(fOffsetComparator);
@@ -70,6 +70,20 @@ public class CRefactoringMatchStore {
 
     public boolean contains(IFile file) {
         return fFileToPathMap.containsKey(file);
+    }
+
+    public Collection getMatchesForFile(IFile file) {
+        return getMatchesForPath((IPath) fFileToPathMap.get(file));
+    }
+
+    public Collection getMatchesForPath(IPath path) {
+        if (path != null) {
+            Map map= (Map) fPathToMatches.get(path);
+            if (map != null) {
+                return map.keySet();
+            }
+        }
+        return Collections.EMPTY_LIST;
     }
 
     public CRefactoringMatch findMatch(IPath path, int nodeOffset) {

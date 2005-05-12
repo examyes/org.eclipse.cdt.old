@@ -121,7 +121,7 @@ public class RenameRegressionTests extends RenameTests {
         IFile file = importFile( "t.cpp", contents ); //$NON-NLS-1$
         Change changes = getRefactorChanges( file, contents.indexOf( "boo" ), "ooga" ); //$NON-NLS-1$ //$NON-NLS-2$
         
-        assertTotalChanges( 2, changes );
+        assertTotalChanges( 2, 2, changes );
         assertChange( changes, file, contents.indexOf("boo"), 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
         assertChange( changes, file, contents.indexOf("boo++"), 3, "ooga" );  //$NON-NLS-1$//$NON-NLS-2$
     }

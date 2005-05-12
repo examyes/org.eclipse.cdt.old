@@ -63,7 +63,6 @@ public class CRefactory {
     
     private static CRefactory sInstance= new CRefactory();
     private HashSet fEditorIDs= new HashSet();
-    private boolean fDisablePotentialMatches= false;
     private ICRefactoringSearch fTextSearch;
     private String[] fAffectedProjectNatures;
     private IParserConfigurationProvider[] fParserConfigurationProviders= new IParserConfigurationProvider[0];
@@ -189,14 +188,6 @@ public class CRefactory {
         now.addAll(Arrays.asList(fParserConfigurationProviders));
         now.add(pcp);
         fParserConfigurationProviders= 
-            (IParserConfigurationProvider[]) now.toArray(new String[now.size()]);
+            (IParserConfigurationProvider[]) now.toArray(new IParserConfigurationProvider[now.size()]);
     }
-
-    public void setDisablePotentialMatches(boolean val) {
-        fDisablePotentialMatches= val;
-    }
-    
-    public boolean getDisablePotentialMatches() {
-        return fDisablePotentialMatches;
-    }    
 }

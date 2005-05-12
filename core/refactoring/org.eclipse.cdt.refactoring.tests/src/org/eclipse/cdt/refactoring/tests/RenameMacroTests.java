@@ -36,6 +36,7 @@ public class RenameMacroTests extends RenameTests {
         suite.addTest(new RenameMacroTests("testMacroRename") ); //$NON-NLS-1$
         suite.addTest(new RenameMacroTests("testMacroNameConflicts") ); //$NON-NLS-1$
         suite.addTest(new RenameMacroTests("testIncludeGuard"));  //$NON-NLS-1$
+        suite.addTest(new RenameMacroTests("testClassMacroClash"));  //$NON-NLS-1$
 
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
@@ -155,10 +156,31 @@ public class RenameMacroTests extends RenameTests {
         int offset2= contents.indexOf("_guard", offset1+1); //$NON-NLS-1$
         Change ch= getRefactorChanges(cpp, offset2, "WELT");  //$NON-NLS-1$
         // mstodo for now the match within the ifndef is reported as potential.
-        assertTotalChanges(1, ch);
+        assertTotalChanges(1, 2, ch);
         int off= offset1;
 //        assertChange(ch, cpp, off, 6, "WELT"); //$NON-NLS-1$
         off= contents.indexOf("_guard", off+1); //$NON-NLS-1$
         assertChange(ch, cpp, off, 6, "WELT"); //$NON-NLS-1$
+    }
+
+    public void testClassMacroClash() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("class CC {int a;};         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+
+        writer = new StringWriter();
+        writer.write("#define CC mm              \n"); //$NON-NLS-1$
+        writer.write("int CC;                   \n"); //$NON-NLS-1$
+        String contents2 = writer.toString();
+        IFile cpp2= importFile("test2.cpp", contents2 ); //$NON-NLS-1$
+
+        int offset1= contents.indexOf("CC"); //$NON-NLS-1$
+        Change ch= getRefactorChanges(cpp, offset1, "CCC");  //$NON-NLS-1$
+        assertTotalChanges(1, ch);
+
+        int offset2= contents2.indexOf("CC"); //$NON-NLS-1$
+        ch= getRefactorChanges(cpp2, offset2, "CCC");  //$NON-NLS-1$
+        assertTotalChanges(2, ch);
     }
 }

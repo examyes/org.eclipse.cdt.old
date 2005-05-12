@@ -316,26 +316,7 @@ public class Scanner {
 
                 switch (c) {
                 case '\'':
-                    c = getChar(true);
-                    int next = getChar(true);
-                    if (c == '\\') {
-                        if (next >= '0' && next <= '7') {
-                            do {
-                                next = getChar(true);
-                            } while (next >= '0' && next <= '7');
-                        } else if (next == 'x' || next == 'X' || next == 'u' || next == 'U') {
-                            do {
-                                next = getChar(true);
-                            } while ((next >= '0' && next <= '9') || (next >= 'a' && next <= 'f')
-                                || (next >= 'A' && next <= 'F'));
-                        } else {
-                            next = getChar(true);
-                        }
-                    }
-                    if (next == '\'') {
-                        return newToken(Token.tCHAR);
-                    }
-                    ungetChar(next);
+					matchCharLiteral();
                     return newToken(Token.tCHAR);
 
 
@@ -550,6 +531,29 @@ public class Scanner {
         return null;
     }
 
+    private void matchCharLiteral() {
+        int c;
+        c = getChar(true);
+        int next = getChar(true);
+        if (c == '\\') {
+        	if (next >= '0' && next <= '7') {
+        		do {
+        			next = getChar(true);
+        		} while (next >= '0' && next <= '7');
+        	} else if (next == 'x' || next == 'X' || next == 'u' || next == 'U') {
+        		do {
+        			next = getChar(true);
+        		} while ((next >= '0' && next <= '9') || (next >= 'a' && next <= 'f')
+        			|| (next >= 'A' && next <= 'F'));
+        	} else {
+        		next = getChar(true);
+        	}
+        }
+        if (next != '\'') {
+            ungetChar(next);
+        }
+    }
+
     private void matchStringLiteral() {
         // string
         boolean escaped= false;
@@ -602,6 +606,17 @@ public class Scanner {
         boolean done= false;
         while (!done) {
             switch(c) {
+                case '\'':
+                    if (fTokenBuffer.length() > 1) {
+                        if (fPreprocessorToken==0) {
+                            fPreprocessorToken= categorizePreprocessor(fTokenBuffer);
+                        }
+                        ungetChar(c);
+                        return newPreprocessorToken();
+                    }
+                    matchCharLiteral();
+                    return newToken(Token.tCHAR);
+                        
                 case '"': 
                     if (fTokenBuffer.length() > 1) {
                         if (fPreprocessorToken==0) {

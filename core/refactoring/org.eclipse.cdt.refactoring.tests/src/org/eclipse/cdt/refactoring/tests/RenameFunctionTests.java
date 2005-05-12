@@ -17,6 +17,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 /**
@@ -33,6 +34,7 @@ public class RenameFunctionTests extends RenameTests {
     public static Test suite( boolean cleanup ) {
         TestSuite suite = new TestSuite("RenameFunctionTests"); //$NON-NLS-1$
         suite.addTest(new RenameFunctionTests("testFunctionNameConflicts") ); //$NON-NLS-1$
+        suite.addTest(new RenameFunctionTests("testFunctionsPlainC") ); //$NON-NLS-1$
         suite.addTest(new RenameFunctionTests("testFunctionNameConflictsPlainC") ); //$NON-NLS-1$
         suite.addTest(new RenameFunctionTests("testMethodNameConflicts1") ); //$NON-NLS-1$
         suite.addTest(new RenameFunctionTests("testMethodNameConflicts2") ); //$NON-NLS-1$
@@ -250,6 +252,30 @@ public class RenameFunctionTests extends RenameTests {
         assertRefactoringOk(status); 
     }
     
+    public void testFunctionsPlainC() throws Exception {
+        createCFwdDecls("c_fwd.h"); //$NON-NLS-1$
+        createCDefs("c_def.h"); //$NON-NLS-1$
+        StringWriter writer = new StringWriter();
+        writer.write("#include \"c_fwd.h\"   \n"); //$NON-NLS-1$
+        writer.write("#include \"c_def.h\"   \n"); //$NON-NLS-1$
+        writer.write("int v1(); int v2(); int v3();  \n"); //$NON-NLS-1$
+        writer.write("int func_proto();         \n"); //$NON-NLS-1$
+        writer.write("static int s2();          \n"); //$NON-NLS-1$
+        writer.write("void func_def(){         \n"); //$NON-NLS-1$
+        writer.write("     int w1; v1();        \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.c", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("func_proto"); //$NON-NLS-1$
+        Change change= getRefactorChanges(cpp, offset1, "xxx");  //$NON-NLS-1$
+        assertTotalChanges(2, change);
+
+        offset1= contents.indexOf("func_def"); //$NON-NLS-1$
+        change= getRefactorChanges(cpp, offset1, "xxx");  //$NON-NLS-1$
+        assertTotalChanges(2, change);
+    }
+        
 
     public void testFunctionNameConflictsPlainC() throws Exception {
         createCFwdDecls("c_fwd.h"); //$NON-NLS-1$

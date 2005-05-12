@@ -95,18 +95,11 @@ abstract public class ASTNameVisitor extends ASTVisitor {
         int off= floc.getNodeOffset();
         int len = floc.getNodeLength();
         if (locs[0] instanceof IASTMacroExpansion && node instanceof IASTName) {
-            // workaround bug 90978
-            IASTMacroExpansion me= (IASTMacroExpansion) locs[0];
-            if (node.toString().equals(me.getMacroDefinition().getName().toString())) {
-                // stick to the file-location
-            }
-            else {
-                IASTName name= (IASTName) node;
-                off= 
-                    ASTManager.backrelateNameToMacroCallArgument(name, 
-                            (IASTMacroExpansion) locs[0]);
-                len= name.toCharArray().length;
-            }
+            IASTName name= (IASTName) node;
+            off= 
+                ASTManager.backrelateNameToMacroCallArgument(name, 
+                        (IASTMacroExpansion) locs[0]);
+            len= name.toCharArray().length;
         }
         return off <= fOffset && fOffset < off+len;
     }

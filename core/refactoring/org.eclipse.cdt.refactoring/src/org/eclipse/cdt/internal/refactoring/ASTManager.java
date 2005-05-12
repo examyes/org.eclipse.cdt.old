@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import org.eclipse.cdt.core.dom.ast.*;
 import org.eclipse.cdt.core.dom.ast.c.*;
 import org.eclipse.cdt.core.dom.ast.cpp.*;
+import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.cdt.internal.core.dom.parser.c.CVisitor;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVisitor;
@@ -46,6 +47,32 @@ public class ASTManager {
     private HashSet fEqualToValidBinding;
     private HashSet fConflictingBinding;
 
+    public static String nth_of_m(int n, int m) {
+        StringBuffer nofm= new StringBuffer();
+        append_nth_of_m(n, m, nofm);
+        return nofm.toString();
+    }
+
+    static void append_nth_of_m(int n, int m, StringBuffer buf) {
+        buf.append(n);
+        switch(n) {
+            case 1:
+                buf.append("st"); //$NON-NLS-1$
+                break;
+            case 2:
+                buf.append("nd"); //$NON-NLS-1$
+                break;
+            case 3:
+                buf.append("rd"); //$NON-NLS-1$
+                break;
+            default:
+                buf.append("th"); //$NON-NLS-1$
+                break;
+        }
+        buf.append(" of "); //$NON-NLS-1$
+        buf.append(m);
+    }
+    
     public static IASTFileLocation getLocationInTranslationUnit(IASTNode node) {
         return node.getTranslationUnit().flattenLocationsToFile(
                 node.getNodeLocations());
@@ -95,23 +122,31 @@ public class ASTManager {
             if (!(b2 instanceof IFunction)) {
                 return FALSE;
             }
+            boolean isStatic= false;
+            boolean checkSig= true;
             IFunction c1= (IFunction) b1;
             IFunction c2= (IFunction) b2;
-            boolean fileStatic= false;
             if (b1 instanceof ICPPMethod) {
                 if (!(b2 instanceof ICPPMethod)) {
                     return FALSE;
                 }
             }
             else {
-                fileStatic= c1.isStatic() || c2.isStatic();
+                if (b2 instanceof ICPPMethod) {
+                    return FALSE;
+                }
+                isStatic= c1.isStatic() || c2.isStatic();
+                if (!(b1 instanceof ICPPFunction) && !(b2 instanceof ICPPFunction)) {
+                    checkSig= false;
+                }
             }
-            int r1= isSameScope(b1.getScope(), b2.getScope(), fileStatic);
+            
+            int r1= isSameScope(b1.getScope(), b2.getScope(), isStatic);
             if (r1 == FALSE) {
                 return FALSE;
             }
             
-            int r2= hasSameSignature(c1, c2);
+            int r2= checkSig ? hasSameSignature(c1, c2) : TRUE;
             if (r2 == FALSE) {
                 return FALSE;
             }
@@ -120,14 +155,15 @@ public class ASTManager {
             }
             return r1;
         }
-
+        
         if (b1 instanceof IVariable) {
-            IVariable c1= (IVariable) b1;
-            IVariable c2= (IVariable) b2;
             boolean fileStatic= false;
             if (!(b2 instanceof IVariable)) {
                 return FALSE;
             }
+
+            IVariable c1= (IVariable) b1;
+            IVariable c2= (IVariable) b2;
             if (b1 instanceof IField) {
                 if (!(b2 instanceof IField)) {
                     return FALSE;
@@ -148,10 +184,37 @@ public class ASTManager {
             return result == UNKNOWN ? TRUE : result;
         }
 
-        if (!b1.getClass().equals(b2.getClass())) {
-            return FALSE;
+        if (b1 instanceof IEnumerator) {
+            if (!(b2 instanceof IEnumerator)) {
+                return FALSE;
+            }
+            return isSameScope(b1.getScope(), b2.getScope(), false);
         }
-        return isSameScope(b1.getScope(), b2.getScope(), false);
+        
+        if (b1 instanceof ITypedef) {
+            if (!(b2 instanceof ITypedef)) {
+                return FALSE;
+            }
+            return isSameScope(b1.getScope(), b2.getScope(), false);
+        }
+        
+        if (b1 instanceof IMacroBinding) {
+            if (!(b2 instanceof IMacroBinding)) {
+                return FALSE;
+            }
+            IMacroBinding m1= (IMacroBinding) b1;
+            IMacroBinding m2= (IMacroBinding) b2;
+            return isSameScope(m1.getScope(), m2.getScope(), true);
+        }
+        int scopeCmp= isSameScope(b1.getScope(), b2.getScope(), false);
+        if (scopeCmp != TRUE) {
+            return scopeCmp;
+        }
+        
+        if (b1.getClass().equals(b2.getClass())) {
+            return TRUE;
+        }
+        return UNKNOWN;
     }
     
     public static int isSameScope(IScope s1, IScope s2, boolean fileStatic) throws DOMException {
@@ -165,15 +228,22 @@ public class ASTManager {
         if (s1.equals(s2)) {
             return TRUE;
         }
+
+        
+        IASTNode node1= s1.getPhysicalNode();
+        IASTNode node2= s2.getPhysicalNode();
+
+        if (node1 instanceof IASTTranslationUnit &&
+                node2 instanceof IASTTranslationUnit) {
+            return hasSameLocation(node1, node2, fileStatic);
+        }
         
         String name1= getName(s1);
         String name2= getName(s2);
         
         if (s1 instanceof ICPPBlockScope) {
             if (s2 instanceof ICPPBlockScope) {
-                ICPPBlockScope b1= (ICPPBlockScope) s1;
-                ICPPBlockScope b2= (ICPPBlockScope) s2;
-                return hasSameLocation(b1, b2, fileStatic);
+                return hasSameLocation(node1, node2, fileStatic);
             }
             return FALSE;
         }
@@ -181,7 +251,7 @@ public class ASTManager {
             if (s2 instanceof ICPPNamespaceScope) {
                 ICPPNamespaceScope n1= (ICPPNamespaceScope) s1;
                 ICPPNamespaceScope n2= (ICPPNamespaceScope) s2;
-                int r1= hasSameLocation(n1, n2, fileStatic);
+                int r1= hasSameLocation(node1, node2, fileStatic);
                 if (r1 == TRUE) {
                     return r1;
                 }
@@ -198,27 +268,23 @@ public class ASTManager {
         }
 
         // classes
-        if (s1 instanceof ICPPClassScope) {
-            if (s2 instanceof ICPPClassScope) {
-                return isSameScope(s1.getParent(), s2.getParent(), fileStatic);
-            }
-            return FALSE;
-        }
-        if (s1 instanceof ICCompositeTypeScope) {
-            if (s2 instanceof ICCompositeTypeScope) {
+        if (s1 instanceof ICPPClassScope || s1 instanceof ICCompositeTypeScope) {
+            if (s2 instanceof ICPPClassScope || s2 instanceof ICCompositeTypeScope) {
                 return isSameScope(s1.getParent(), s2.getParent(), fileStatic);
             }
             return FALSE;
         }
         if (s1 instanceof ICPPFunctionScope) {
             if (s2 instanceof ICPPFunctionScope) {
-                return hasSameLocation(s1, s2, true);
+                return hasSameLocation(node1, node2, true);
             }
             return FALSE;
         }
-        if (s1 instanceof ICFunctionScope || s1 instanceof ICFunctionPrototypeScope) {
-            if (s2 instanceof ICFunctionScope || s2 instanceof ICFunctionPrototypeScope) {
-                return hasSameLocation(s1, s2, true);
+        if (s1 instanceof ICFunctionScope || s1 instanceof ICFunctionPrototypeScope
+                || s1 instanceof ICScope) {
+            if (s2 instanceof ICFunctionScope || s2 instanceof ICFunctionPrototypeScope
+                    || s2 instanceof ICScope) {
+                return hasSameLocation(node1, node2, true);
             }
             return FALSE;
         }
@@ -470,10 +536,7 @@ public class ASTManager {
         return null;
     }
 
-    private static int hasSameLocation(IScope s1, IScope s2, boolean fileStatic) throws DOMException {
-        IASTNode node1= s1.getPhysicalNode();
-        IASTNode node2= s2.getPhysicalNode();
-
+    private static int hasSameLocation(IASTNode node1, IASTNode node2, boolean fileStatic) throws DOMException {
         if (node1 == null || node2 == null) {
             return UNKNOWN;
         }
@@ -712,6 +775,8 @@ public class ASTManager {
             return;
         }
         
+        SavedCodeReaderFactory.getInstance().getCodeReaderCache().flush();
+        
         pm.beginTask(Messages.getString("ASTManager.task.analyze"), 2); //$NON-NLS-1$
         IASTTranslationUnit tu= getTranslationUnit(fArgument.getSourceFile(), true, status);
         pm.worked(1);
@@ -784,20 +849,55 @@ public class ASTManager {
             store.addMatch(match);
         }
         
-        monitor.beginTask(Messages.getString("ASTManager.task.generateAst"), //$NON-NLS-1$ 
-                2*store.getFileCount()); 
+        int count= store.getFileCount();
+        String taskName= Messages.getString("ASTManager.task.generateAst"); //$NON-NLS-1$
+        monitor.beginTask(taskName, 2*count);
+        monitor.setTaskName(taskName);
 
         List files= store.getFileList();
+        int cc= 0;
+        long now= System.currentTimeMillis();
+        long update= now;
         for (Iterator iter = files.iterator(); iter.hasNext();) {
+            cc++;
             IFile file = (IFile) iter.next();
             if (store.contains(file)) {
-                IASTTranslationUnit tu= getTranslationUnit(file, false, status);
-                monitor.worked(1);
-                analyzeTextMatchesOfTranslationUnit(tu, store, status);
-                if (status.hasFatalError()) {
-                    return;
+                if ((now=System.currentTimeMillis()) > update) {
+                    String nofm= nth_of_m(cc, count);
+                    String taskname= MessageFormat.format(Messages.getString("ASTManager.subtask.analyzing"),   //$NON-NLS-1$
+                            new Object[] {nofm});
+                    monitor.subTask(taskname); //$NON-NLS-1$
+                    update= now+1000;
                 }
-                monitor.worked(1);
+                boolean doParse= false;
+                Collection fm= store.getMatchesForFile(file);
+                for (Iterator iterator = fm.iterator(); !doParse && iterator.hasNext();) {
+                    CRefactoringMatch match = (CRefactoringMatch) iterator.next();
+                    switch (match.getLocation()) {
+                    case CRefactory.OPTION_IN_COMMENT:
+                    case CRefactory.OPTION_IN_INCLUDE_DIRECTIVE:
+                    case CRefactory.OPTION_IN_STRING_LITERAL:
+                        break;
+                    default:
+                        doParse= true;
+                    }
+                }
+
+                if (doParse) {
+                    IASTTranslationUnit tu= getTranslationUnit(file, false, status);
+                    monitor.worked(1);
+                    analyzeTextMatchesOfTranslationUnit(tu, store, status);
+                    if (status.hasFatalError()) {
+                        return;
+                    }
+                    monitor.worked(1);
+                }
+                else {
+                    monitor.worked(2);
+                }
+                if (monitor.isCanceled()) {
+                    throw new OperationCanceledException();
+                }
             }
             else {
                 monitor.worked(2);
@@ -819,9 +919,8 @@ public class ASTManager {
         if (fArgument.getArgumentKind() == CRefactory.ARGUMENT_MACRO) {
             analyzeRenameToMatches(tu, store, paths, status);
         }
-        else {
-            analyzeLanguageMatches(tu, store, paths, status);
-        }
+
+        analyzeLanguageMatches(tu, store, paths, status);
 
         for (Iterator iter = paths.iterator(); iter.hasNext();) {
             IPath path = (IPath) iter.next();
@@ -865,11 +964,40 @@ public class ASTManager {
             else if (lookfor.equals(macroNameStr)) {
                 IPath path= analyzeAstMatch(macroName, store, false, status);
                 pathsVisited.add(path);
-    
-                IASTName[] refs= tu.getReferences(macroName.getBinding());
-                for (int j = 0; j < refs.length; j++) {
-                    path= analyzeAstMatch(refs[j], store, false, status);
-                    pathsVisited.add(path);
+                IBinding macroBinding= macroName.getBinding();
+                if (macroBinding != null) {
+                    IASTName[] refs= tu.getReferences(macroBinding);
+                    for (int j = 0; j < refs.length; j++) {
+                        path= analyzeAstMatch(refs[j], store, false, status);
+                        pathsVisited.add(path);
+                    }
+                }
+            }
+            if (mdef instanceof IASTPreprocessorFunctionStyleMacroDefinition) {
+                boolean nameIsPar= false;
+                IASTPreprocessorFunctionStyleMacroDefinition fm= (IASTPreprocessorFunctionStyleMacroDefinition) mdef;
+                IASTFunctionStyleMacroParameter[] pars= fm.getParameters();
+                if (pars != null) {
+                    for (int j = 0; !nameIsPar && j<pars.length; j++) {
+                        IASTFunctionStyleMacroParameter par = pars[j];
+                        String name= par.getParameter();
+                        if (lookfor.equals(name)) {
+                            nameIsPar= true;
+                        }
+                    }
+                    if (nameIsPar) {
+                        IASTFileLocation floc= mdef.getNodeLocations()[0].asFileLocation();
+                        int offset= floc.getNodeOffset();
+                        int end= offset+ floc.getNodeLength();
+                        Collection matches= store.getMatchesForPath(new Path(floc.getFileName()));
+                        for (Iterator iter = matches.iterator(); iter.hasNext();) {
+                            CRefactoringMatch match = (CRefactoringMatch) iter.next();
+                            int mo= match.getOffset();
+                            if (mo>=offset && mo<end) {
+                                match.setASTInformation(CRefactoringMatch.AST_REFERENCE_OTHER);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -922,15 +1050,13 @@ public class ASTManager {
             IASTFileLocation floc= loc.asFileLocation();
             if (floc != null) {
                 path= new Path(floc.getFileName());
-                if (path != null) {
+                if (loc instanceof IASTMacroExpansion) {
+                    IASTMacroExpansion me= (IASTMacroExpansion) loc;
+                    int offset= backrelateNameToMacroCallArgument(name, me);
+                    match= store.findMatch(path, offset + (isDestructor ? 1 : 0));
+                }
+                else {
                     match= store.findMatch(path, floc.getNodeOffset() + (isDestructor ? 1 : 0));
-                    // bug 90978 IASTMacroExpansions should be handled right away,
-                    // as a workaround look with fileOffset first.
-                    if (match==null && loc instanceof IASTMacroExpansion) {
-                        IASTMacroExpansion me= (IASTMacroExpansion) loc;
-                        int offset= backrelateNameToMacroCallArgument(name, me);
-                        match= store.findMatch(path, offset + (isDestructor ? 1 : 0));
-                    }
                 }
             }
         }
@@ -1002,9 +1128,16 @@ public class ASTManager {
     public void handleProblemBinding(IASTTranslationUnit tu, final IProblemBinding pb, RefactoringStatus status) {
         if (tu != null) {
             if (fProblemUnits.add(tu.getFilePath())) {
-                status.addWarning(MessageFormat.format(
-                        Messages.getString("ASTManager.warning.parsingErrors"), //$NON-NLS-1$
-                        new Object[] {tu.getFilePath()}));
+                String msg= pb.getMessage();
+                if (msg != null && msg.length() > 0) {
+                    msg= MessageFormat.format(Messages.getString("ASTManager.warning.parsingErrors.detailed"), new Object[]{msg}); //$NON-NLS-1$
+                }
+                else {
+                    msg= MessageFormat.format(
+                            Messages.getString("ASTManager.warning.parsingErrors"), //$NON-NLS-1$
+                            new Object[] {tu.getFilePath()});
+                }
+                status.addWarning(msg);
             }
         }
     }

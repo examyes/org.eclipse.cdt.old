@@ -172,9 +172,6 @@ public class CRenameTextProcessor extends CRenameProcessorDelegate {
                 continue;
             case CRefactoringMatch.IN_COMMENT:
             case CRefactoringMatch.POTENTIAL:
-                if (getManager().getDisablePotentialMatches()) {
-                    continue;
-                }
                 break;
             case CRefactoringMatch.AST_REFERENCE:
                 break;

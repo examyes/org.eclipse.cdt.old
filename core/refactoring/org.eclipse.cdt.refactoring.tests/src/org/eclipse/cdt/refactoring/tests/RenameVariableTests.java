@@ -45,7 +45,7 @@ public class RenameVariableTests extends RenameTests {
         suite.addTest(new RenameVariableTests("testMemberNameConflicts1") ); //$NON-NLS-1$
         suite.addTest(new RenameVariableTests("testMemberNameConflicts2") ); //$NON-NLS-1$
 
-        suite.addTest(new RenameVariableTests("testReferenceViaMacro1") ); //$NON-NLS-1$
+        suite.addTest(new RenameVariableTests("testReferenceViaMacro") ); //$NON-NLS-1$
         suite.addTest(new RenameVariableTests("testReferenceViaMacro2") ); //$NON-NLS-1$
         suite.addTest(new FailingTest(new RenameVariableTests("testReferenceViaMacro3"), 90956) ); //$NON-NLS-1$
         suite.addTest(new RenameVariableTests("testReferenceViaMacro4") ); //$NON-NLS-1$
@@ -1355,7 +1355,7 @@ public class RenameVariableTests extends RenameTests {
         assertRefactoringOk(status);
     }
     
-    public void testReferenceViaMacro1() throws Exception {
+    public void testReferenceViaMacro() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define PASSON(x) (x)         \n"); //$NON-NLS-1$
         writer.write("#define INC(x) PASSON(/*pc*/x)++         \n"); //$NON-NLS-1$
@@ -1424,7 +1424,7 @@ public class RenameVariableTests extends RenameTests {
         
         int offset =  contents.indexOf("v1") ; //$NON-NLS-1$
         Change changes = getRefactorChanges(cpp, offset, "z"); //$NON-NLS-1$
-        assertTotalChanges( 1, changes );
+        assertTotalChanges( 1, 1, changes );
         assertChange( changes, cpp, offset, 2, "z" );  //$NON-NLS-1$
     }
 
