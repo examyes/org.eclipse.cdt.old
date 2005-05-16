@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>CDT 3.0 News</TITLE>
+<META http-equiv=Content-Language content=en-us>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY>
+
+<H1>CDT 3.0 - New and Noteworthy (Draft leading up to CDT M7)</H1>
+
+<P>
+The
+<a href="http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/cdt-home/downloads/main.html?cvsroot=Tools_Project">
+CDT 3.0 download</a> is now available.
+
+<p>
+The CDT 3.0 release is compatible with the Eclipse 3.1.x stream and provides a number of 
+enhanced features.
+
+
+</P>
+<TABLE cellSpacing=0 cellPadding=10 width="80%" border=0>
+ <TBODY>
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR><TD colSpan=2 height="45"><H2>Category1</H2></TD>
+
+  <TR>
+    <TD vAlign=top align=left width="30%" height="76"> 
+        <P align=right>
+	<b>Feature</b>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%" height="76">
+      <P>
+	Feature Description</P>
+      <P>  
+         
+       IMG src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/ReleaseNotes/3.0/newclasswiz.gif?cvsroot=Tools_Project"
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR>
+    <TD vAlign=top align=left width="30%" height="19"> 
+        &nbsp;</TD>
+    <TD vAlign=top width="70%" height="19">
+      &nbsp;</TD>
+  </TR>
+
+  <TR>
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR>
+    <TD vAlign=top align=left width="30%" height="19"> 
+        &nbsp;</TD>
+    <TD vAlign=top width="70%" height="19">
+      <P>
+	&nbsp;</P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR>
+    <TD vAlign=top align=left width="30%" height="19"> 
+        <P align=right>
+	&nbsp;</P>
+    </TD>
+    <TD vAlign=top width="70%" height="19">
+      <P>
+	&nbsp;</P>
+    </TD>
+  </TR>
+
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR><TD colSpan=2 height="45"><H2>Indexer</H2></TD>
+
+  <TR>
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR>
+    <TD vAlign=top align=left width="30%" height="38"> 
+        <P align=right>
+	Original Indexer</P>
+    </TD>
+    <TD vAlign=top width="70%" height="38">
+      <P>    
+This is the indexer that has been released 
+with previous versions (2.1.1 and earlier) of the CDT based on the initial version of the 
+CDT parser.
+<P> 
+Advantages: Full information parse information (references, declarations, 
+definitions), stable</P>
+<P> 
+Disadvantages - Slow (which is especially problematic if you're trying to import 
+a large existing code base into the CDT; if you're starting from scratch on a 
+new project, it's reasonable)
+
+
+      </P>
+	<IMG src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/ReleaseNotes/3.0/OriginalIndexer.gif?cvsroot=Tools_Project">
+	
+    </TD>
+  </TR>
+   <TR>
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR>
+    <TD vAlign=top align=left width="30%" height="38"> 
+        <P align=right>
+	DOM Based Indexer</P>
+    </TD>
+    <TD vAlign=top width="70%" height="38">
+      <P>
+      This is an indexer 
+based on the new CDT parser.</P>
+      <P>
+Advantages - Full parse info 
+(references, declarations, definitions)
+Correctness of parse info is improved over the original indexer
+
+      </P>
+      <P>
+Disadvantages - 
+Slower than the original in M6 but that's slated for a tune up come M7
+
+      </P>
+	<IMG src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/ReleaseNotes/3.0/DOMIndexer.GIF?cvsroot=Tools_Project">
+    </TD>
+  </TR>
+
+ <TR>
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+  <TR>
+    <TD vAlign=top align=left width="30%" height="38"> 
+        <P align=right>
+	CTags Based Indexer</P>
+    </TD>
+    <TD vAlign=top width="70%" height="38">
+      <P>
+	CTags Indexer - Makes use of Exuberant 
+CTags (5.5.4 recommended)
+</P>
+      <P>
+	Advantages - Really Fast
+</P>
+      <P>
+	Disadvantages - No cross reference information (can't perform search for 
+    references, or refactoring)
+</P>
+	<IMG src="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/ReleaseNotes/3.0/CTagsIndexer.gif?cvsroot=Tools_Project">
+    </TD>
+  </TR>
+
+
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2 height="16"> <HR> </TD>
+  </TR>
+
+ </TBODY>
+</TABLE>
+
+
+<p>
+<hr>
+<p>
+There have been a number of programmatic changes that have been made from CDT 2.x 
+to CDT 3.0.  These
+changes that may affect developers.
+
+<p><b>ABC</b></p>
+<ul>
+  <li>ABC has been changed to DEF (the world will now end!)</li>
+</ul>
