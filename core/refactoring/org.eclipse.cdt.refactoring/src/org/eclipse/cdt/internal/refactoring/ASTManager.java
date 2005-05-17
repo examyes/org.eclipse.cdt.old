@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.dom.ast.c.*;
 import org.eclipse.cdt.core.dom.ast.cpp.*;
 import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.cdt.internal.core.dom.parser.c.CVisitor;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPImplicitMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPMethod;
 import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVisitor;
 import org.eclipse.cdt.refactoring.CRefactoringMatch;
@@ -629,8 +630,13 @@ public class ASTManager {
         return CVisitor.getContainingScope(name);
     }
         
-    public static int isVirtualMethod(CPPMethod method) throws DOMException {
-        IASTDeclaration decl= method.getPrimaryDeclaration();
+    public static int isVirtualMethod(ICPPMethod method) throws DOMException {
+        IASTDeclaration decl= null;
+		if( method instanceof CPPMethod )
+			decl = ((CPPMethod)method).getPrimaryDeclaration();
+		else if( decl instanceof CPPImplicitMethod )
+			decl = ((CPPImplicitMethod)method).getPrimaryDeclaration();
+			
         IASTDeclSpecifier spec= null;
         if (decl instanceof IASTFunctionDefinition) {
             IASTFunctionDefinition def = (IASTFunctionDefinition) decl;

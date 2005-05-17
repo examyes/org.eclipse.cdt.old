@@ -11,8 +11,8 @@
 package org.eclipse.cdt.internal.refactoring;
 
 import org.eclipse.cdt.core.dom.ast.*;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPMethod;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPNamespace;
-import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPMethod;
 import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.cdt.refactoring.ICRefactoringArgument;
 import org.eclipse.core.resources.IFile;
@@ -213,8 +213,8 @@ public class CRefactoringArgument implements ICRefactoringArgument {
         else if (binding instanceof IFunction) {
             fKind= CRefactory.ARGUMENT_NON_VIRTUAL_METHOD;
             IFunction func= (IFunction) binding;
-            if (binding instanceof CPPMethod) {
-                CPPMethod method= (CPPMethod) binding;
+            if (binding instanceof ICPPMethod) {
+                ICPPMethod method= (ICPPMethod) binding;
                 int isVirtual= ASTManager.UNKNOWN;
                 try {
                     isVirtual = ASTManager.isVirtualMethod(method);
