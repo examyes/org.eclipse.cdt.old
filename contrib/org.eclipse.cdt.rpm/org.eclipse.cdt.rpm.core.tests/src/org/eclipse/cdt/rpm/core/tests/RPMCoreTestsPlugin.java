@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1

@@ -1,22 +1,22 @@
 /*
- * (c) 2004, 2005 Red Hat, Inc.
+ * (c) 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
  */
-package org.eclipse.cdt.rpm.core.tests;
+package org.eclipse.cdt.rpm.core.internal.tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class RPMCoreTestSuite extends TestSuite {
+public class RPMCoreInternalTestSuite extends TestSuite {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(
-				"Test for org.eclipse.cdt.rpm.core.tests");
+				"Test for org.eclipse.cdt.rpm.core.internal.tests");
 		//$JUnit-BEGIN$
-		suite.addTestSuite(RPMProjectNatureTest.class);
-		suite.addTestSuite(RPMProjectFactoryTest.class);
+        suite.addTest(RPMProjectTest.suite());
+        suite.addTest(SpecFileParserTest.suite());
 		//$JUnit-END$
 		return suite;
 	}
