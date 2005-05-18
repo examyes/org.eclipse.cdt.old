@@ -12,9 +12,6 @@
         <library name="RPMCore.jar">
 	      <export name="*"/>    
       </library>
-      <library name="RPMPluginPreferencesPage.jar">
-	      <export name="*"/> 
-	  </library>
    </runtime>
     
  
@@ -25,5 +22,13 @@
       <import plugin="org.eclipse.ui" />
  
    </requires>
+   <extension
+         id="rpmnature"
+         name="RPM Project Nature"
+         point="org.eclipse.core.resources.natures">
+         <runtime>
+         	<run class="org.eclipse.cdt.rpm.core.RPMProjectNature"></run>
+         </runtime>
+   </extension>
 
 </plugin>

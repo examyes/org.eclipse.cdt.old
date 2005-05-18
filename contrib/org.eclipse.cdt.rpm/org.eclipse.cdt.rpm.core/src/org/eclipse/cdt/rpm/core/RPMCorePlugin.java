@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -7,13 +7,19 @@
 
 package org.eclipse.cdt.rpm.core;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.jface.preference.IPreferenceStore;
-
+import java.io.File;
+import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import org.eclipse.cdt.rpm.core.internal.Messages;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -24,8 +30,13 @@ public class RPMCorePlugin extends AbstractUIPlugin {
 	private static RPMCorePlugin plugin;
 	//Resource bundle.
 	private ResourceBundle resourceBundle;
+	//Shell script shared by all external operations
+	private File shellScriptFile;
+	//Log file shared by all external operations
+	private File externalLogFile;
 	
-	static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
+	public static final String ID = "org.eclipse.cdt.rpm.core";
+	
 	
 	/**
 	 * The constructor.
@@ -88,27 +99,50 @@ public class RPMCorePlugin extends AbstractUIPlugin {
 	protected void initializeDefaultPreferences(IPreferenceStore store)
 		 {
 		  String user_name = System.getProperty("user.name");
-		  store.setDefault("IRpmConstants.RPM_WORK_AREA","/var/tmp");
-		  store.setDefault("IRpmConstants.USER_WORK_AREA",file_sep + "rpm_workarea");
-		  store.setDefault("IRpmConstants.RPM_DISPLAYED_LOG_NAME",".logfilename_"
+		  store.setDefault(IRPMConstants.RPM_DISPLAYED_LOG_NAME, ".logfilename_" //$NON-NLS-1$
 		  		+ user_name);
-		  store.setDefault("IRpmConstants.SPEC_FILE_PREFIX","eclipse_");
-		  store.setDefault("IRpmConstants.SRPM_INFO_FILE",file_sep+".srpminfo");
-		  store.setDefault("IRpmConstants.RPM_SHELL_SCRIPT","rpmshell.sh");
-		  store.setDefault("IRpmConstants.RPM_LOG_NAME","rpmbuild.log");
-		  store.setDefault("IRpmConstants.RPM_RESOURCE_FILE",".rpmrc");
-		  store.setDefault("IRpmConstants.RPM_MACROS_FILE",".rpm_macros");
-		  store.setDefault("IRpmConstants.AUTHOR_NAME",user_name); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.AUTHOR_EMAIL",user_name +"@" + getHostName()); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault(IRPMConstants.RPM_LOG_NAME, "rpmbuild.log"); //$NON-NLS-1$
+		  store.setDefault(IRPMConstants.AUTHOR_NAME, user_name);
+		  store.setDefault(IRPMConstants.AUTHOR_EMAIL, user_name + "@" + getHostName()); //$NON-NLS-1$
 	
-		  store.setDefault("IRpmConstants.MAKE_CMD", "/usr/bin/make"); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.RPM_CMD", "/bin/rpm"); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.RPMBUILD_CMD", "/usr/bin/rpmbuild"); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.CHMOD_CMD", "/bin/chmod"); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.CP_CMD", "/bin/cp"); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.DIFF_CMD", "/usr/bin/diff"); //$NON-NLS-1$ //$NON-NLS-2$
-		  store.setDefault("IRpmConstants.TAR_CMD", "/bin/tar"); //$NON-NLS-1$ //$NON-NLS-2$
+		  store.setDefault(IRPMConstants.RPM_CMD, "/bin/rpm"); //$NON-NLS-1$
+		  store.setDefault(IRPMConstants.RPMBUILD_CMD, "/usr/bin/rpmbuild"); //$NON-NLS-1$
+		  store.setDefault(IRPMConstants.DIFF_CMD, "/usr/bin/diff"); //$NON-NLS-1$
 		 }
+
+	
+	//Note this method is not thread-safe
+	public File getShellScriptFile() throws CoreException {
+		if(shellScriptFile == null) {
+			try {
+				shellScriptFile = File.createTempFile(RPMCorePlugin.ID, ".sh"); //$NON-NLS-1$
+			} catch(IOException e) {
+				String throw_message = Messages.getString("RPMCore.Error_creating__1") + //$NON-NLS-1$
+				  shellScriptFile.getAbsolutePath();
+				IStatus error = new Status(IStatus.ERROR, IRPMConstants.ERROR, 1,
+						throw_message, null);
+				throw new CoreException(error);
+			}
+		}
+		return shellScriptFile;
+	}
+	
+	//Note this method is not thread-safe
+	public File getExternalLogFile() throws CoreException {
+		if(externalLogFile == null) {
+			try {
+				externalLogFile = File.createTempFile(RPMCorePlugin.ID, ".log"); //$NON-NLS-1$
+			} catch(IOException e) {
+				String throw_message = Messages.getString("RPMCore.Error_creating__1") + //$NON-NLS-1$
+				  externalLogFile.getAbsolutePath();
+				IStatus error = new Status(IStatus.ERROR, IRPMConstants.ERROR, 1,
+						throw_message, null);
+				throw new CoreException(error);
+			}
+		}
+		return externalLogFile;
+	}
+
 	/** 
 	* Method getHostName gets the name of the host to use as part of the
 	* e-mail address for the changelog entry in the spec file.
@@ -138,4 +172,5 @@ public class RPMCorePlugin extends AbstractUIPlugin {
 		 }
 		 return hosttemp.substring(1);
 	}
+   
 }

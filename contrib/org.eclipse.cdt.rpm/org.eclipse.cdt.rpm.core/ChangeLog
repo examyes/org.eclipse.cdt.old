@@ -1,3 +1,55 @@
+2005-05-18  Jeremy Handcock  <handcock@redhat.com>
+
+	Eclipse.org Bugzilla #82195:
+
+	* build.properties (bin.includes): Correct.
+	(src.includes): Ditto.
+	* plugin.xml (runtime): Remove RPMPluginPreferencesPage.jar.
+
+	* src/org/eclipse/cdt/rpm/core/IPatch.java: New.
+	* src/org/eclipse/cdt/rpm/core/IRPMConfiguration.java: New.
+	* src/org/eclipse/cdt/rpm/core/IRPMConstants.java: New.
+	* src/org/eclipse/cdt/rpm/core/IRPMProject.java: New.
+	* src/org/eclipse/cdt/rpm/core/ISourceRPM.java: New.
+	* src/org/eclipse/cdt/rpm/core/LinuxShellCmds.java: Remove.
+	* src/org/eclipse/cdt/rpm/core/Messages.java: Move to core.internal.
+	* src/org/eclipse/cdt/rpm/core/rpm_strings.properties: Ditto.
+	* src/org/eclipse/cdt/rpm/core/RPMCore.java: Remove.
+	* src/org/eclipse/cdt/rpm/core/RPMCorePlugin.java
+	(initializeDefaultPreferences): Use IRPMConstants.
+	(getExternalLogFile): New method.
+	* src/org/eclipse/cdt/rpm/core/RPMExport.java: Remove.
+	* src/org/eclipse/cdt/rpm/core/RPMExportCore.java: Remove.
+	* src/org/eclipse/cdt/rpm/core/RPMExportDelta.java: New.
+	* src/org/eclipse/cdt/rpm/core/RPMProjectFactory.java: New.
+	* src/org/eclipse/cdt/rpm/core/RPMProjectNature.java: New.
+	* src/org/eclipse/cdt/rpm/core/SpecFileOps.java: Remove; move relics 
+	to core.internal.SpecFileParser.
+	* src/org/eclipse/cdt/rpm/core/SRPMExport.java: Remove.
+	* src/org/eclipse/cdt/rpm/core/SRPMImport.java: Remove.
+	* src/org/eclipse/cdt/rpm/core/StreamReaderThread.java: Move to 
+	core.utils.internal.
+	* src/org/eclipse/cdt/rpm/core/TarOps.java: Remove.
+
+	* src/org/eclipse/cdt/rpm/core/internal/Messages.java: Move to here.
+	* src/org/eclipse/cdt/rpm/core/internal/Patch.java: New.
+	* src/org/eclipse/cdt/rpm/core/internal/rpm_strings.properties: Move to 
+	here.
+	* src/org/eclipse/cdt/rpm/core/internal/RPMConfiguration.java: New.
+	* src/org/eclipse/cdt/rpm/core/internal/RPMProject.java: New.
+	* src/org/eclipse/cdt/rpm/core/internal/SourceRPM.java: New.
+	* src/org/eclipse/cdt/rpm/core/internal/SpecFile.java: New.
+	* src/org/eclipse/cdt/rpm/core/internal/SpecFileParser.java: New.
+
+	* src/org/eclipse/cdt/rpm/core/utils/Diff.java: New.
+	* src/org/eclipse/cdt/rpm/core/utils/RPM.java: New.
+	* src/org/eclipse/cdt/rpm/core/utils/RPMBuild.java: New.
+
+	* src/org/eclipse/cdt/rpm/core/utils/internal/Command.java: New.
+	* src/org/eclipse/cdt/rpm/core/utils/internal/ShellScript.java: New.
+	* src/org/eclipse/cdt/rpm/core/utils/internal/StreamReaderThread.java:
+	Moved to here.
+
 2004-12-14  Rick Moseley  <rmoseley@redhat.com>
 
 	* src/org/eclipse/cdt/rpm/core/RPMCore.java (generateChecksum): added call to new

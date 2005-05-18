@@ -1,19 +1,17 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
  */
 
-package org.eclipse.cdt.rpm.core;
+package org.eclipse.cdt.rpm.core.internal;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Messages {
-
-	private static final String BUNDLE_NAME = "org.eclipse.cdt.rpm.core.rpm_strings"; 
-
+	private static final String BUNDLE_NAME = "org.eclipse.cdt.rpm.core.internal.rpm_strings"; //$NON-NLS-1$
 
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 
