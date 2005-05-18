@@ -4,7 +4,6 @@
       label="%featureName"
       version="1.2.0"
       provider-name="Eclipse.org">
-
    <install-handler/>
 
    <description url="[Enter Feature URL here.]">
@@ -28,7 +27,6 @@
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.jface"/>
       <import plugin="org.eclipse.text"/>
-      <import plugin="org.eclipse.cdt.core"/>
    </requires>
 
    <plugin
@@ -49,9 +47,4 @@
          install-size="0"
          version="1.2"/>
 
-	<plugin
-         id="org.eclipse.cdt.rpm.propertypage"
-         download-size="0"
-         install-size="0"
-         version="1.0"/>
 </feature>
