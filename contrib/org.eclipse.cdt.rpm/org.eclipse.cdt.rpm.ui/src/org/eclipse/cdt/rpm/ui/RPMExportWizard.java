@@ -1,36 +1,28 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
 */
 package org.eclipse.cdt.rpm.ui;
 
-import org.eclipse.core.runtime.CoreException;
+import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.cdt.rpm.core.IRPMProject;
+import org.eclipse.cdt.rpm.core.RPMExportDelta;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
-
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 
-
-/**
- * @author pmuldoon
- * @version 1.0
- *
- *
- * Plug-in entry point. When the user chooses to export an SRPM ,the plug-in manager in Eclipse
- * will invoke this class. This class extends Wizard and implements IExportWizard.
- *
- * The main plugin class to be used in the desktop. This is the "entrypoint"
- * for the export rpm plug-in.
- */
 public class RPMExportWizard extends Wizard implements IExportWizard {
-	// Create a local reference to RPMExportPage
-	RPMExportPage mainPage;
-	RPMExportPage_2 patchPage;
+	private RPMExportPage mainPage;
+	private RPMExportPatchPage patchPage;
 	private IStructuredSelection selection;
+	private IRPMProject rpmProject;
+	
 	/**
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 *
@@ -43,14 +35,44 @@ public class RPMExportWizard extends Wizard implements IExportWizard {
 		selection = currentSelection;
 	}
 
-	// We have elected to do the Finish button clickin in the RPMExportPage. So override
-	//the default and point to RPMExport finish()
 	public boolean performFinish() {
-		try {
-			return mainPage.finish(patchPage.patchData());
-		} catch (CoreException e) {
+		RPMExportDelta exportDelta = new RPMExportDelta();
+		exportDelta.setVersion(mainPage.getSelectedVersion());
+		exportDelta.setRelease(mainPage.getSelectedRelease());
+		exportDelta.setSpecFile(mainPage.getSelectedSpecFile());
+		if(mainPage.canGoNext()) {
+			exportDelta.setPatchName(patchPage.getSelectedPatchName());
+			exportDelta.setChangelogEntry(patchPage.getSelectedChangelog());
+		}
+		
+		// Create a new instance of the RPMExportOperation runnable
+		RPMExportOperation rpmExport = new RPMExportOperation(mainPage.getSelectedRPMProject(),
+				mainPage.getExportType(), exportDelta); 
+		
+		 // Run the export
+		  try {
+				getContainer().run(true, true, rpmExport);
+			} catch (InvocationTargetException e1) {
+				// use ExceptionHandler?
+				return false;
+			} catch (InterruptedException e1) {		
+			}
+
+		MultiStatus status = rpmExport.getStatus();
+
+		if (!status.isOK()) {
+			ErrorDialog.openError(getContainer().getShell(),
+				Messages.getString(
+					"RPMExportPage.Errors_encountered_importing_SRPM"), //$NON-NLS-1$
+				null, // no special message
+				status);
+
 			return false;
 		}
+
+		// Need to return some meaninful status. Should only return true if the wizard completed
+		// successfully.
+		return true;
 	}
 
 	public boolean canFinish() {
@@ -59,7 +81,6 @@ public class RPMExportWizard extends Wizard implements IExportWizard {
 		} else if (mainPage.canFinish() && patchPage.canFinish()) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -67,7 +88,7 @@ public class RPMExportWizard extends Wizard implements IExportWizard {
 	public void addPages() {
 		mainPage = new RPMExportPage(selection);
 		addPage(mainPage);
-		patchPage = new RPMExportPage_2();
+		patchPage = new RPMExportPatchPage();
 		addPage(patchPage);
 	}
 }

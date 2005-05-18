@@ -1,5 +1,5 @@
 /*
- ** (c) 2004 Red Hat, Inc.
+ ** (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -15,22 +15,22 @@
  */
 package org.eclipse.cdt.rpm.ui;
 
-import org.eclipse.cdt.rpm.core.*;
+import java.util.Iterator;
 
-import org.eclipse.cdt.core.CProjectNature;
+import org.eclipse.cdt.rpm.core.IRPMProject;
+import org.eclipse.cdt.rpm.core.RPMProjectFactory;
+import org.eclipse.cdt.rpm.core.RPMProjectNature;
+import org.eclipse.cdt.rpm.ui.util.ExceptionHandler;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.MultiStatus;
-
-import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -56,41 +56,40 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
 
 /**
- * @author pmuldoon
  *
  * RPMExportPage. Called by RPMExportWizard.  Class can not be subclassed
  *extends WizardPage for the RPM export wizard, implements Listener
  *
  */
 public class RPMExportPage extends WizardPage implements Listener {
-	private RPMExportOperation rpmExport;
-	private RPMCore rpmExportCore;
-
 	// Checkbox Buttons
-
 	private Button generatePatch;
 	private Button exportBinary;
 	private Button exportSource;
+	
+	// Version and release fields
 	private Text rpmVersion;
 	private Text rpmRelease;
+	
+	// The current selection
 	private IStructuredSelection selection;
 
 	//Composite Project Listbox control	
 	private List projectList;
+	
+	//Spec file combo box
 	private Combo specFileCombo;
-	private boolean patchNeeded = false;
+	
+	//Patch grid
 	private Group patchNeedHintGrid;
-	private static String path_to_specfile;
-	static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
-	static final String line_sep = System.getProperty("line.separator"); //$NON-NLS-1$
+	
+	//The currently selected RPM project
+	private IRPMProject rpmProject;
+	
+	//Is a patch needed?
+	private boolean patchNeeded = false;
 	
 	public RPMExportPage(IStructuredSelection currentSelection) {
 		super(Messages.getString("RPMExportPage.Export_SRPM"), //$NON-NLS-1$
@@ -99,144 +98,53 @@ public class RPMExportPage extends WizardPage implements Listener {
 		setPageComplete(true);
 		selection = currentSelection;
 	}
+	
+	public IRPMProject getSelectedRPMProject() {
+		return rpmProject;
+	}
+	
+	public IFile getSelectedSpecFile() {
+		Path newSpecFilePath = 
+			new Path(specFileCombo.getItem(specFileCombo.getSelectionIndex()));
+		return rpmProject.getProject().getFile(newSpecFilePath);
+	}
+	
+	public String getSelectedVersion() {
+		return rpmVersion.getText();
+	}
+	
+	public String getSelectedRelease() {
+		return rpmRelease.getText();
+	}
 
-	/**
-	 * Method returnProject.
-	 * @return String - returned selected project
-	 *
-	 * Returns a string from the selected project
-	 * in the control list box.
-	 */
-	public String returnProject() {
-		String projSelect;
+	public int getExportType() {
+		int exportType = 0;
+		if(exportBinary.getSelection() && exportSource.getSelection()) {
+			exportType = IRPMUIConstants.BUILD_ALL;
+		} else if(exportBinary.getSelection()) {
+			exportType = IRPMUIConstants.BUILD_BINARY; 
+		} else if(exportSource.getSelection()) {
+			exportType = IRPMUIConstants.BUILD_SOURCE;
+		}
+		return exportType;
+	}
+	
+	private String getSelectedProjectName() {
+		String projSelect = null;
 		String[] projDetails = projectList.getSelection();
 
 		if (projDetails.length > 0) {
 			projSelect = projDetails[0];
-		} else {
-			projSelect = ""; //$NON-NLS-1$
 		}
-
 		return projSelect;
 	}
-
-	/**
-	 * Method returnProjectPath
-	 * @return returns the path of the currently selected project in 
-	 * projectList
-	 */
-	public String returnProjectPath() {
-		String[] projectSelection = projectList.getSelection();
-		IProject projectDetail;
-
-		// As we only allow a single selection in the listbox, and the listbox
-		// always comes with the first element selected, we can assume
-		// the first element in the returned array is valid.
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		try {
-			projectDetail = workspaceRoot.getProject(projectSelection[0]);
-		} catch (Exception e) {
-			return null;
-		}
-
-		return projectDetail.getLocation().toOSString();
-	}
-
-	/**
-	 * Method setPatchModifier
-	 * @param patchDelta - sets whether patch is required in a project
-	 */
-	private void setPatchModifier(boolean patchDelta) {
+	
+	private void setPatchNeeded(boolean patchDelta) {
 		patchNeeded = patchDelta;
 	}
-
-	/**
-	 * Method patchNeeded
-	 * @return boolean - is a patch needed?
-	 */
-	public boolean patchNeeded() {
+	
+	private boolean isPatchNeeded() {
 		return patchNeeded;
-	}
-
-	/**
-	 * Method returnSpecFiles
-	 *
-	 * @param projname - Name of the project to mine for spec files
-	 * @return ArrayList - ArrayList of found spec files
-	 *
-	 * Method that mines a selected project for spec files
-	 * Will return an ArrayList of returned spec files
-	 *
-	 */
-	public ArrayList returnSpecFiles(String givenProjectName) {
-		IProject[] internalProjects;
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		internalProjects = workspaceRoot.getProjects();
-
-		String projectName;
-		ArrayList specFileList = new ArrayList();
-
-		for (int numberOfProjects = 0; numberOfProjects < internalProjects.length; numberOfProjects++) {
-			projectName = internalProjects[numberOfProjects].getName();
-
-			if (projectName.equals(givenProjectName)) {
-				try {
-					final IResource[] projectResourceList = internalProjects[numberOfProjects].members();
-
-					for (int numberOfResources = 0; numberOfResources < projectResourceList.length; numberOfResources++) {
-						String filenameExtension = projectResourceList[numberOfResources].getFileExtension();
-
-						if (filenameExtension != null) {
-							if (filenameExtension.equals("spec")) { //$NON-NLS-1$
-								specFileList.add(projectResourceList[numberOfResources].getName().toString());
-							}
-						}
-					}
-				} catch (CoreException e) {
-				}
-			}
-		}
-
-		return specFileList;
-	}
-
-	/**
-	 * Method hasMakefile.
-	 * @param givenProjectName - project name to check
-	 * @return boolean - true if project has makefile, false if not
-	 *
-	 *  Returns boolean on whether the currently selected project
-	 *  has a Makefile that is visible and can be sourced
-	 */
-	public boolean hasMakefile(String givenProjectName) {
-		IProject[] internalProjectList;
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		internalProjectList = workspaceRoot.getProjects();
-
-		String projectName;
-		IResource resourceList;
-
-		for (int a = 0; a < internalProjectList.length; a++) {
-			projectName = internalProjectList[a].getName();
-
-			if (projectName.equals(givenProjectName)) {
-				resourceList = internalProjectList[a].findMember(Messages.getString(
-							"RPMExportPage.Makefile_pc")); //$NON-NLS-1$
-
-				if (resourceList != null) {
-					return true;
-				}
-
-				resourceList = internalProjectList[a].findMember(Messages.getString(
-							"RPMExportPage.makefile_lc")); //$NON-NLS-1$
-
-				if (resourceList != null) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -246,7 +154,6 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 *
 	 */
 	public void createControl(Composite parent) {
-		
 		Composite composite = new Composite(parent, SWT.NULL);
 
 		// Create a layout for the wizard page
@@ -256,187 +163,38 @@ public class RPMExportPage extends WizardPage implements Listener {
 
 		// Create contols on the page
 		createProjectBox(composite);
-		createSpecFileField(composite);
-		setSpecFileComboData();
+		createSpecFileFields(composite);
 		createSpacer(composite);
-		createExportType(composite);
-		setPatchHint(composite);
+		createExportTypeControls(composite);
+		createPatchHint(composite);
+		
+		// Fill in the fields
+		setSpecFileComboData();
+		setVersionReleaseFields();
 
-		// Check if the project checksums are different
-		// and therefore the project needs a path
-		if (compareCheckSum(returnProjectPath()).equals("patch")) //$NON-NLS-1$
-		 {
+		// Check if the project has changed
+		// and therefore the project needs a patch
+		boolean projectChanged = false;
+		try {
+			if(rpmProject != null) {
+				projectChanged = rpmProject.isChanged();
+			}
+		} catch(CoreException e) {
+			ExceptionHandler.handle(e, getShell(), Messages.getString("ErrorDialog.title"),
+					e.getMessage());
+		}
+		if(projectChanged) {
 			patchNeedHintGrid.setVisible(true);
-			setPatchModifier(true);
+			setPatchNeeded(true);
 			setPageComplete(true);
 		} else {
-			setPatchModifier(false);
+			setPatchNeeded(false);
 			setPageComplete(false);
 		}
 	}
 
-	/**
-	 * Method compareCheckSum
-	 * 
-	 * @param givenProject - project to check
-	 * @return = match
-	 * @return = legacy
-	 * @return = patch
-	 * @return = error
-	 * 
-	 * Returns one of the above status depending on project status
-	 * 
-	 */
-	public String compareCheckSum(String givenProject) {
-		try {
-			// Create an instance of the RPMExport class
-			rpmExportCore = new RPMCore();
-			
-			// Mine the .srpmInfo file if there is one
-			if (rpmExportCore.firstSRPM(givenProject)) {
-				return "legacy";
-			}
-			ArrayList srpmProjectInfo = rpmExportCore.getSRPMexportinfo(givenProject);
-
-			// If the generated checksum, and the one in the srpmInfo file are the same
-			// then the project has not changed since last import and does not need a patch
-			if (rpmExportCore.generateChecksum(givenProject, 0) == Long.parseLong(
-						(String) srpmProjectInfo.get(6))) {
-				setPatchModifier(false);
-
-				return "match"; //$NON-NLS-1$
-						
-				
-				// If we cannot find an srpmInfo file, this is a legacy project
-			} else if (Long.parseLong((String) srpmProjectInfo.get(6)) == -1) {
-				setPatchModifier(false);
-
-				return "legacy"; //$NON-NLS-1$
-			// Otherwise they don't match and we need to patch
-				} else {
-					setPatchModifier(true);
-
-					return "patch";  //$NON-NLS-1$
-				}
-		} catch (CoreException e) {
-				return "error"; //$NON-NLS-1$
-		}
-	}
-
-	/**
-	 * Method checkPageComplete.
-	 * @return boolean
-	 *
-	 * Check if export rpm name is valid
-	 * Check if project has makefile
-	 * Check a valid project has been selected
-	 */
-	public boolean checkPageComplete() {
-		// Method invoked to check we have all the required data from the user
-		// before we  allow the wizard to execute. However they can cancel at 
-		// anytime.
-		// Check the contents of the RPM destination filename
-		// Needs work, least of all the variable name ;)
-		// Check to ensure that the selected project has a makefile
-		if (hasMakefile(returnProject()) == false) {
-			setErrorMessage(Messages.getString(
-					"RPMExportPage.project_does_not_have_Makefile")); //$NON-NLS-1$
-
-			return false;
-		}
-
-		// Check to ensure the select project is actually a project        
-		String projDetails = returnProject();
-
-		if (projDetails.equals(Messages.getString(
-						"RPMExportPage.No_c/c++_projects_found")) == true) { //$NON-NLS-1$
-			setErrorMessage(Messages.getString(
-					"RPMExportPage.Invald_project_specified")); //$NON-NLS-1$
-
-			return false;
-		}
-   
-		// If all tests pass, then we are okay to go.        
-		return true;
-	}
-
-	/**
-	 * Method finish. Performs the actual work.
-	 * @return boolean
-	 * @throws CoreException
-	 * @throws CoreException
-	 */
-	public boolean finish(String[] givenPatchData) throws CoreException {
-		// Selected project location
-		String projectLocation = null;
-
-		// Check that we can finish the export operation	
-		if (checkPageComplete() == false) {
-			return false;
-		}
-
-		// As we only allow a single selection in the listbox, and the listbox always
-		// comes with the first element selected, we can assume the first element
-		// in the returned array is valid. Need to add a try/catch group to check for
-		// null though
-		projectLocation = returnProjectPath();
-
-		String exportType = null;
-
-		// Calculate the export source type
-		// -ba = build all
-		// -bs = build source
-		// -bb = build binary
-		if ((exportSource.getSelection() == true) &&
-				(exportBinary.getSelection() == true)) {
-			exportType = "-ba"; //$NON-NLS-1$
-		} else if (exportSource.getSelection() == true) {
-			exportType = "-bs"; //$NON-NLS-1$
-		} else if (exportBinary.getSelection() == true) {
-			exportType = "-bb"; //$NON-NLS-1$
-		}
-
-		// Create a new instance of rpmExportOperation build class
-		try {
-			rpmExport = new RPMExportOperation(returnProject(),
-					projectLocation, specFileCombo.getText(), "", givenPatchData[0], //$NON-NLS-1$
-					givenPatchData[1] + line_sep + 
-					givenPatchData[2] + line_sep + line_sep, rpmVersion.getText(),
-					rpmRelease.getText(), exportType, patchNeeded);
-		} catch (Exception e) {
-			 setErrorMessage(e.toString());
-			 return false;
-		 }
-		 
-		 // Run the export
-		  try {
-				getContainer().run(true, true, rpmExport);
-			} catch (InvocationTargetException e1) {
-				setErrorMessage(e1.toString());
-				return false;
-			} catch (InterruptedException e1) {		
-				setErrorMessage(e1.toString());
-			}
-
-		MultiStatus status = rpmExport.getStatus();
-
-		if (!status.isOK()) {
-			ErrorDialog.openError(getContainer().getShell(),
-				Messages.getString(
-					"RPMExportPage.Errors_encountered_importing_SRPM"), //$NON-NLS-1$
-				null, // no special message
-				status);
-
-			return false;
-		}
-
-		// Need to return some meaninful status. Should only return true if the wizard completed
-		// successfully.
-		return true;
-	}
-
-	private void createExportType(Composite parent) { //Create a group for the control and set up the layout.
-
+	private void createExportTypeControls(Composite parent) { 
+		//Create a group for the control and set up the layout.
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout());
 		group.setText(Messages.getString("RPMExportPage.Composite_Export_Type")); //$NON-NLS-1$
@@ -479,13 +237,9 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 * Create a list box and populate it with
 	 * the list of current projects in the workspace
 	 */
-	protected void createProjectBox(Composite parent) {
+	private void createProjectBox(Composite parent) {
 		// Creates a control that enumerates all the projects in the current 
 		// Workspace and places them in a listbox. 
-		// Need to check what to do if the user chooses to export an RPM
-		// when there are no current projects in the workspace. Right now 
-		// the other export wizard just open, with empty treeviews (?)
-		// Declare an array of IProject;
 		IProject[] internalProjectList;
 		String Proj_Enum;
 
@@ -521,70 +275,80 @@ public class RPMExportPage extends WizardPage implements Listener {
 
 		if (internalProjectList.length < 1) {
 			projectList.add(Messages.getString(
-					"RPMPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
+					"RPMPage.No_RPM_projects_found")); //$NON-NLS-1$
 			return;
 		}
 
-		// Stuff the listbox with the text name of the projects 
-		// using the getName() method
 		// Find the first selected project in the workspace
-
 		Iterator iter = selection.iterator();
 		Object selectedObject= null;
 		IProject selectedProject = null;
 		boolean isSelection = false;
-		if (iter.hasNext())
-		{
+		if (iter.hasNext()) {
 			selectedObject = iter.next();
-			if (selectedObject instanceof IResource)
-			{
+			if (selectedObject instanceof IResource) {
 				selectedProject = ((IResource) selectedObject).getProject();
 				isSelection = true;
 			}
 		}
 
-		// Stuff the listbox with the text names of the projects 
-		// using the getName() method and select the selected 
-		// project if available
-	
-		
-		for (int a = 0; a < internalProjectList.length; a++) 
-		{
-
+		// Stuff the listbox with the text names of the projects
+		// Highlight the currently selected project in the workspace
+		int selectedProjectIndex = 0;
+		for (int a = 0; a < internalProjectList.length; a++) {
 			try {
-				IProjectNature cNature = internalProjectList[a].getNature(CProjectNature.C_NATURE_ID);
-				if (cNature!=null)
+				if(internalProjectList[a].hasNature(RPMProjectNature.RPM_NATURE_ID)) {
 					projectList.add(internalProjectList[a].getName());
-					if (isSelection && internalProjectList[a].equals(selectedProject))
-						projectList.setSelection(a);
-				} catch (CoreException e) {
-	
+					if (isSelection && internalProjectList[a].equals(selectedProject)) {
+						selectedProjectIndex = a;
+					}
+				}
+			} catch(CoreException e) {
+				ExceptionHandler.handle(e, getShell(),
+						Messages.getString("ErrorDialog.title"), e.getMessage());
 			}
 		}
+		projectList.setSelection(selectedProjectIndex);
+		try {
+			rpmProject = RPMProjectFactory.getRPMProject(internalProjectList[selectedProjectIndex]);
+		} catch(CoreException e) {
+			ExceptionHandler.handle(e, getShell(),
+					Messages.getString("ErrorDialog.title"), e.getMessage());
+		}
 		
-		if (!isSelection)
-			projectList.setSelection(0);//if none is selected select first project
-		
-		// Add a listener to set the name in the location box as 
-		// it is selected in project box
+		// Add a listener to the project box
 		projectList.addListener(SWT.Selection,
 			new Listener() {
 				public void handleEvent(Event event) {
-					rpmVersion.setText("");
-					rpmRelease.setText("");
+					// Reset the RPM project
+					int i = projectList.getSelectionIndex();
+					if(i != -1) {
+						IProject project = workspaceRoot.getProject(projectList.getSelection()[0]);
+						try {
+							rpmProject = RPMProjectFactory.getRPMProject(project);
+							if(rpmProject.isChanged()) {
+								setPatchNeeded(true);
+								patchNeedHintGrid.setVisible(true);
+								setPageComplete(true);
+							} else {
+								setPatchNeeded(false);
+								patchNeedHintGrid.setVisible(false);
+								setPageComplete(false);
+							}
+						} catch(CoreException e) {
+							ExceptionHandler.handle(e, getShell(),
+									Messages.getString("ErrorDialog.title"), e.getMessage());
+						}
+					} else {
+						rpmProject = null;
+						setPatchNeeded(false);
+						patchNeedHintGrid.setVisible(false);
+						setPageComplete(false);
+					}
 					setSpecFileComboData();
-					if (compareCheckSum(returnProjectPath()).equals("patch")) //$NON-NLS-1$
-					  {
-						 setPatchModifier(true);
-						 patchNeedHintGrid.setVisible(true);
-						 setPageComplete(true);
-					 } else {
-						 patchNeedHintGrid.setVisible(false);
-						 setPatchModifier(false);
-						 setPageComplete(false);
-					 }
-				 }
-			});
+					setVersionReleaseFields();
+				}
+		});
 	}
 
 	/**
@@ -596,16 +360,11 @@ public class RPMExportPage extends WizardPage implements Listener {
 	private void setSpecFileComboData() {
 		specFileCombo.clearSelection();
 		specFileCombo.removeAll();
-
-		final ArrayList specFileList = returnSpecFiles(returnProject());
-		Iterator i = specFileList.iterator();
-
-		while (i.hasNext())
-			specFileCombo.add(i.next().toString());
-
-		if (specFileList.size() > 0) {
-			specFileCombo.setText(specFileList.get(0).toString());
-			setVersionReleaseFields();
+		if(rpmProject != null) {
+			String specFile = 
+				rpmProject.getSpecFile().getFile().getProjectRelativePath().toOSString();
+			specFileCombo.add(specFile);
+			specFileCombo.setText(specFile);
 		}
 	}
 
@@ -615,9 +374,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 *
 	 * Creates the Spec file combo box
 	 */
-	protected void createSpecFileField(Composite parent) {
-		
-
+	private void createSpecFileFields(Composite parent) {
 		Group specGrid = new Group(parent, SWT.NONE);
 		specGrid.setLayout(new GridLayout());
 		specGrid.setText(Messages.getString("RPMExportPage.SPEC_file")); //$NON-NLS-1$
@@ -646,7 +403,11 @@ public class RPMExportPage extends WizardPage implements Listener {
 			new Listener() {
 				public void handleEvent(Event event) {
 					if (!specFileCombo.getText().equals("")) { //$NON-NLS-1$
-						setVersionReleaseFields();
+						Path newSpecFilePath = new Path(specFileCombo.getText());
+						IFile newSpecFile = rpmProject.getProject().getFile(newSpecFilePath);
+						if(!newSpecFile.exists()) {
+							setErrorMessage(Messages.getString("RPMExportPage.Cannont_find_file"));
+						}
 					}
 				}
 			});
@@ -662,7 +423,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 															 			.getShell(),	SWT.OPEN);
 					IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace()
 																	.getRoot();
-					IProject detailProject = workspaceRoot.getProject(returnProject());
+					IProject detailProject = workspaceRoot.getProject(getSelectedProjectName());
 					IPath detailProjectLocation = detailProject.getLocation();
 					rpmFileDialog.setFilterPath(detailProjectLocation.toString());
 
@@ -670,7 +431,6 @@ public class RPMExportPage extends WizardPage implements Listener {
 
 					if (selectedSpecName != null) {
 						specFileCombo.setText(selectedSpecName);
-						setVersionReleaseFields();
 					}
 				}
 			});
@@ -686,7 +446,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 				}
 			};
             
-		   ModifyListener trapChange = new ModifyListener(){
+		ModifyListener trapChange = new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
 					handleEvent(null);
 				}
@@ -731,14 +491,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 		rpmRelease.addModifyListener(trapChange);
 	}
 
-	/**
-	 * Method setPatchHint
-	 * 
-	 * Draws a patch hint for the user
-	 * @param parent - composite to draw on
-	 * 
-	 */
-	private void setPatchHint(Composite parent) {
+	private void createPatchHint(Composite parent) {
 		Display display = null;
 		patchNeedHintGrid = new Group(parent, SWT.NONE);
 		patchNeedHintGrid.setVisible(false);
@@ -767,75 +520,14 @@ public class RPMExportPage extends WizardPage implements Listener {
 			Messages.getString("RPMExportPage.needPatch_desc")); //$NON-NLS-1$
 	}
 
-	/**
-	 * Method setVersionReleaseFields
-	 * 
-	 * Sets the Version and Release fields to the 
-	 * values mined from the selected spec file
-	 */
+	
 	private void setVersionReleaseFields() {
-		String specFileLocation = ""; //$NON-NLS-1$
-
-		String selectSpecFile = specFileCombo.getText();
-		specFileLocation = returnSpecFilePath(selectSpecFile);
-		path_to_specfile = specFileLocation;
-		//Calculate spec file's physical location
-
-		ArrayList specVersionReleaseTag = returnSpecVersionRelease(specFileLocation);
-
-		// Mine the spec file's version and release information from
-		// the provided spec file 
-
-		if (specVersionReleaseTag.size() == 3) {
-			rpmVersion.setText(specVersionReleaseTag.get(0).toString());
-			rpmRelease.setText(specVersionReleaseTag.get(1).toString());
+		if(rpmProject != null) {
+			String version = rpmProject.getSpecFile().getVersion();
+			String release = rpmProject.getSpecFile().getRelease();
+			rpmVersion.setText(version);
+			rpmRelease.setText(release);
 		}
-	}
-
-	private String returnSpecFilePath(String giveSpecPath)
-	{		
-		if (!giveSpecPath.startsWith(file_sep)) { 
-
-			IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace()
-																		.getRoot();
-			IProject projectDetail = workspaceRoot.getProject(returnProject());
-			String projectLocation = projectDetail.getLocation().toOSString();
-			return  projectLocation + file_sep + specFileCombo.getText();
-		} else {
-			return specFileCombo.getText();
-		}
-
-	}
-	
-	/**
-	 * Method returnSpecVersionRelease
-	 * 
-	 * Method to return the Spec File version
-	 * and release
-	 * @param giveSpecFileLocation
-	 * @return
-	 */
-	private ArrayList returnSpecVersionRelease(String giveSpecFileLocation)
-	{
-		
-		ArrayList specFileVersionTag;
-		
-		try {
-			rpmExportCore = new RPMCore();
-			specFileVersionTag = rpmExportCore.getNameVerRel(giveSpecFileLocation);
-		} catch (FileNotFoundException e) {
-			setErrorMessage(Messages.getString(
-					"RPMExportPage.Cannont_find_file") + giveSpecFileLocation); //$NON-NLS-1$
-
-			return null;
-		} catch (CoreException e) {
-			setErrorMessage(Messages.getString("RPMExportPage.Core_Exception") +
-				e.getMessage()); //$NON-NLS-1$
-
-			return null;
-		}
-	
-	return specFileVersionTag;
 	}
 	
 	/**
@@ -845,7 +537,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 * Create a generic filler control so that we can dump
 	 * controls in a better layout
 	 */
-	protected void createSpacer(Composite parent) {
+	private void createSpacer(Composite parent) {
 		Label spacer = new Label(parent, SWT.NONE);
 		GridData data = new GridData();
 		data.horizontalAlignment = GridData.FILL;
@@ -860,21 +552,17 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 * button can be set to true
 	 * @return boolean. true if finish can be activated
 	 */
-
 	public boolean canFinish() {
-		
 		// Make sure project has been selected
-		if (returnProject().equals("")) { //$NON-NLS-1$
+		if (getSelectedProjectName() == null && rpmProject == null) {
 			return false;
 		}
-
-		
-		if (checkVersionReleaseFields() == false) {
+		// Make sure version/release fields are filled in
+		if (!checkVersionReleaseFields()) {
 			return false;
 		}
-        
         // Make sure either export binary/source is checked
-		if (exportBinary.getSelection() == false && exportSource.getSelection() == false)
+		if (!exportBinary.getSelection() && !exportSource.getSelection())
 			return false;
         	
 	   return true;
@@ -889,13 +577,10 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 */
 	private boolean checkVersionReleaseFields() {
 		if (!rpmVersion.getText().equals("")) { //$NON-NLS-1$
-
 			if (!rpmRelease.getText().equals("")) { //$NON-NLS-1$
-
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -908,7 +593,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 	public boolean canGoNext() {
 		// if a patch is needed, the next button should
 		// be enabled
-		if (patchNeeded()) {
+		if (isPatchNeeded()) {
 			return true;
 		} else {
 			return false;
@@ -917,8 +602,5 @@ public class RPMExportPage extends WizardPage implements Listener {
 
 	public void handleEvent(Event e) {
 		setPageComplete(canGoNext());
-	}
-	public static String getSpecFilePath() {
-		return path_to_specfile;
 	}
 }

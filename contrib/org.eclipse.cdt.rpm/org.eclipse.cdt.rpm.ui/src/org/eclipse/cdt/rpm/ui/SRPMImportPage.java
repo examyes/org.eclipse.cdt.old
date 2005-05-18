@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -19,9 +19,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -31,11 +29,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -51,14 +47,11 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
-
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.NewProjectAction;
 
 /**
- * @author pmuldoon
- *
  * SRPMImportPage. Called by SRPMImportwizard.  Class can not be subclassed
  * extends WizardPage and implements Listener (for events)
  *
@@ -97,14 +90,8 @@ public class SRPMImportPage extends WizardPage implements Listener {
 
 	private IWorkbench workbench;
 
-	// Convienience SRPM import operation class 
-	private SRPMImportOperation srpmImport;
-
 	// GUI Control variables	
 	private Combo sourceSRPM;
-	private Button applyPatch;
-	private Button runAutoConf;
-	private Button buildSource;
 	private Button intoConfigured;
 	private Button intoExisting;
 	private List projectList;
@@ -131,17 +118,20 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	}
 
 	
-	public String returnProject() {
-		String projSelect;
-		String[] projDetails = projectList.getSelection();
-
-		if (projDetails.length > 0) {
-			projSelect = projDetails[0];
-		} else {
-			projSelect = ""; //$NON-NLS-1$
+	private String getSelectedProjectName() {
+		String[] selections = projectList.getSelection();
+		if (selections.length > 0) {
+			return selections[0];
 		}
-
-		return projSelect;
+		return null;
+	}
+	
+	private File getSelectedSRPM() {
+		String srpmName = sourceSRPM.getText();
+		if(srpmName.equals("") || srpmName == null) { //$NON-NLS-1$
+			return null;
+		}
+		return new File(sourceSRPM.getText());
 	}
 
 	public void createControl(Composite parent) {
@@ -158,12 +148,11 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		setControl(composite);
 
 		// Create contols on the page
-		sourceRPMcombo(composite);
+		createSourceRPMCombo(composite);
 		createProjectBox(composite);
-		createOptions(composite);
 	}
 
-	protected void sourceRPMcombo(Composite parent) {
+	private void createSourceRPMCombo(Composite parent) {
 		Group specGrid = new Group(parent, SWT.NONE);
 		specGrid.setLayout(new GridLayout());
 		specGrid.setText(Messages.getString("SRPMImportPage.SRPM_Name")); //$NON-NLS-1$
@@ -216,29 +205,6 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		srpmBrowse.addListener(SWT.FocusOut, this);
 	}
 
-	protected void createOptions(Composite parent) {
-		//Create a group for the control and set up the layout.
-		Group group = new Group(parent, SWT.NONE);
-		group.setLayout(new GridLayout());
-		group.setText(Messages.getString("SRPMImportPage.Build_Options")); //$NON-NLS-1$
-		group.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL |
-				GridData.HORIZONTAL_ALIGN_FILL));
-
-		// Create the build environment checkbox
-		applyPatch = new Button(group, SWT.CHECK);
-		applyPatch.setText(Messages.getString("SRPMImportPage.ApplyPatches")); //$NON-NLS-1$
-		applyPatch.setSelection(true);
-		applyPatch.setToolTipText(Messages.getString(
-				"SRPMImportPage.toolTip_ApplyPatches")); //$NON-NLS-1$
-
-		runAutoConf = new Button(group, SWT.CHECK);
-		runAutoConf.setText(Messages.getString("SRPMImportPage.runAutoConf")); //$NON-NLS-1$
-		runAutoConf.setSelection(true);
-		runAutoConf.setToolTipText(Messages.getString(
-				"SRPMImportPage.toolTip_runAutoConf")); //$NON-NLS-1$
-
-	}
-
 	/**
 	 * Method createProjectBox.
 	 * @param parent - parent widget
@@ -247,7 +213,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	 * the list of current projects in the workspace
 	 * along with adding the option for a configured project
 	 */
-	protected void createProjectBox(Composite parent) {
+	private void createProjectBox(Composite parent) {
 		// Creates a control that enumerates all the projects in the current 
 		// Workspace and places them in a listbox. 
 		// Give the option of importing into an existing project or creating a new one
@@ -315,33 +281,29 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		
 		for (int a = 0; a < internalProjectList.length; a++) 
 		{
-
-			try {
-				IProjectNature cNature = internalProjectList[a].getNature(CProjectNature.C_NATURE_ID);
-				if (cNature!=null)
-					projectList.add(internalProjectList[a].getName());
-					if (isSelection && internalProjectList[a].equals(selectedProject))
-						projectList.setSelection(a);
-				} catch (CoreException e) {
-	
+			projectList.add(internalProjectList[a].getName());
+			if (isSelection && internalProjectList[a].equals(selectedProject)) {
+				projectList.setSelection(a);
 			}
 		}
 		
-		if (projectList.getItemCount() == 0) //there were no C/C++ projects
+		if (projectList.getItemCount() == 0) //there were no projects
 		{
 			projectList.add(Messages.getString(
-			"RPMPage.No_c/c++_projects_found_2")); //$NON-NLS-1$
+			"SRPMImportPage.No_projects_found")); //$NON-NLS-1$
 			intoExisting.setEnabled(false); // Can't very well import into an existing
 			projectList.setEnabled(false);  // project now can we?
 			intoConfigured.setSelection(true);
 			isSelection = true; // we don't want select the "RPMPage.No_c/c++_projects_found_2"
 		}
-		else
-			intoExisting.setSelection(true);
-			
-		if (!isSelection) //if none is selected select first project
+		else {
+			intoExisting.setSelection(true);	
+		}
+		
+		if (!isSelection) { //if none is selected select first project
 			projectList.setSelection(0);
-		else
+		}
+		else {
 			projectList.addSelectionListener(new SelectionListener() {
 				public void widgetSelected(SelectionEvent e) {
 					handleEvent(null);
@@ -350,6 +312,7 @@ public class SRPMImportPage extends WizardPage implements Listener {
 				public void widgetDefaultSelected(SelectionEvent e) {
 				}
 			});
+		}
 
 		intoExisting.addListener(SWT.Selection, this);
 		intoConfigured.addListener(SWT.Selection, this);
@@ -385,31 +348,16 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	public boolean canFinish() {
 		// Make sure project has been selected or the user 
 		// has decided to configure a new one instead
-		if (intoConfigured.getSelection())
-		{
-			return true;
-		}
-		else if (returnProject().equals("")) { //$NON-NLS-1$
+		if (getSelectedProjectName() == null && !intoConfigured.getSelection()) {
 			return false;
 		}
 
-		// Make sure an rpm name has been provided
+		// Make sure an srpm name has been provided
 		if (sourceSRPM.getText().equals("")) { //$NON-NLS-1$
 			return false;
 		}
-  
-		return true;
-	}
-
-	/**
-	 * validateFinish()
-	 * Second validation step. Validates minimum conditions
-	 * for starting import
-	 * @return boolean - true for go; false for problems
-	 */
-	public boolean validateFinish(){
-		File srpmExists = new File(sourceSRPM.getText());
-		if (!srpmExists.isFile()){
+		File srpm = new File(sourceSRPM.getText());
+		if (!srpm.isFile()){
 			setErrorMessage(Messages.getString("SRPMImportPage.Source_not_Valid"));
 			return false;
 		}
@@ -418,12 +366,9 @@ public class SRPMImportPage extends WizardPage implements Listener {
 			setErrorMessage(Messages.getString("SRPMImportPage.No_src_rpm_ext"));
 			return false;
 		}
-		
+  
 		return true;
-		
-			
 	}
-	
 	
 	/**
 	 * finish()
@@ -435,9 +380,6 @@ public class SRPMImportPage extends WizardPage implements Listener {
 	public boolean finish() throws CoreException {
 		IPath detailedProjectLocation = null;
 		IProject detailedProject;
-		// Check second step validation
-		if (!validateFinish())
-			return false;
 			
 		// Get the handle to the current activate Workspace	    
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -452,8 +394,12 @@ public class SRPMImportPage extends WizardPage implements Listener {
 			// in the returned array is valid.
 			detailedProject = workspaceRoot.getProject(selectedProject[0]);
 		}		
-		else 
+		else {
 			detailedProject = getNewProject();
+			if(detailedProject == null) {
+				return false;
+			}
+		}
 		// Add this SRPM to srpmList
 		for (int i = 0; i < srpmVector.size(); i++)
 		{	// There can only be one occurance 
@@ -465,19 +411,18 @@ public class SRPMImportPage extends WizardPage implements Listener {
 		}
 		srpmVector.add((String)(sourceSRPM.getText()));
 		
-		// Create a new instance of SRPMImportOperation build class
+		SRPMImportOperation srpmImportOp = null;
 		try {
-			srpmImport = new SRPMImportOperation(detailedProject,
-					sourceSRPM.getText(), applyPatch.getSelection(),
-					runAutoConf.getSelection());
-			getContainer().run(true, true, srpmImport);
+			srpmImportOp = new SRPMImportOperation(detailedProject,
+					getSelectedSRPM());
+			getContainer().run(true, true, srpmImportOp);
 		} catch (Exception e) {
 			setErrorMessage(e.toString());
 			return false;
 		}
 
 		// Get the status of the operation
-		IStatus srpmImportStatus = srpmImport.getStatus();
+		IStatus srpmImportStatus = srpmImportOp.getStatus();
 
 		// If the status does not come back clean, open error dialog
 		if (!srpmImportStatus.isOK()) {

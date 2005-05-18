@@ -1,49 +1,36 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
 */
 package org.eclipse.cdt.rpm.ui;
 
-import org.eclipse.cdt.rpm.core.*;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Status;
-
-import org.eclipse.jface.operation.IRunnableWithProgress;
-
-import org.eclipse.ui.PlatformUI;
-
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.cdt.rpm.core.IRPMProject;
+import org.eclipse.cdt.rpm.core.RPMProjectFactory;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.PlatformUI;
+
 /**
- * @author pmuldoon
- *
  * Import Operation Class for RPM plug-in. This allows us to abstract the operations
  *  to  a utility class which also inherits IRunnableWithProgress that allows use of
  * progress bar
  */
 
 public class SRPMImportOperation implements IRunnableWithProgress {
-	// Class variable that are use for storage
-	// as they are passed into the constrcutor
-	private String srpmname;
-	private IProject project_name;
-	private boolean preserve_env;
-	private boolean keep_log;
-	private boolean applyPatches;
-	private boolean runAutoConf;
+	private IProject project;
+	private File sourceRPM;
 
 	// Progressmonitor
 	private IProgressMonitor monitor;
@@ -57,16 +44,9 @@ public class SRPMImportOperation implements IRunnableWithProgress {
 	 * @param applyPatchesFlag - Apply patches on import
 	 * @param runAutoConfFlag - Run autoconf on import
 	 */
-	public SRPMImportOperation(
-		IProject name,
-		String srpm_name,
-		boolean applyPatchesFlag,
-		boolean runAutoConfFlag) {
-		// Copy passed variables to constructor, to class variables	
-		project_name = name;
-		srpmname = srpm_name;
-		applyPatches = applyPatchesFlag;
-		runAutoConf = runAutoConfFlag;
+	public SRPMImportOperation(IProject project, File sourceRPM) {
+		this.project = project;
+		this.sourceRPM = sourceRPM;
 	}
 
 	/**
@@ -82,59 +62,20 @@ public class SRPMImportOperation implements IRunnableWithProgress {
 		monitor = progressMonitor;
 		rpm_errorTable = new ArrayList();
 
-		SRPMImport srpmimport;
-
 		monitor.beginTask(Messages.getString("SRPMImportOperation.Starting"), //$NON-NLS-1$
 		totalWork); //$NON-NLS-1$
 
 		// Try to create an instance of the build class. 
 		try {
-			srpmimport = new SRPMImport(project_name.getLocation().toOSString(), srpmname); //$NON-NLS-1$
+			IRPMProject rpmProject = RPMProjectFactory.getRPMProject(project);
+			monitor.worked(1);
+			monitor.setTaskName(Messages.getString("SRPMImportOperation.Importing_SRPM")); //$NON-NLS-1$
+			rpmProject.importSourceRPM(sourceRPM);
 		} catch (Exception e) {
 			rpm_errorTable.add(e);
 			return;
 		}
 		monitor.worked(1);
-		String rpm_release;
-		String rpm_version;
-		String usr_rpm_cmd = RPMCorePlugin.getDefault().getPreferenceStore().getString("IRpmConstants.RPM_CMD"); //$NON_NLS-1$
-		
-		rpm_version = LinuxShellCmds.getInfo(usr_rpm_cmd + " --qf %{VERSION} -qp " + //$NON-NLS-1$
-						srpmname);
-		rpm_release = LinuxShellCmds.getInfo(usr_rpm_cmd + " --qf %{RELEASE} -qp " + //$NON-NLS-1$;
-						srpmname);
-		// If the generated checksum, and the one in the srpmInfo file are the same
-		// then the project has not changed since last import and does not need a patch
-					
-				
-		// set state and options
-		srpmimport.setDoAutoconf(runAutoConf);
-		srpmimport.setDoPatches(applyPatches);
-		srpmimport.setRpm_release(rpm_release);
-		srpmimport.setRpm_version(rpm_version);
-
-		monitor.setTaskName(Messages.getString("SRPMImportOperation.Importing_SRPM")); //$NON-NLS-1$
-
-		// execute import
-		try {
-			srpmimport.run();
-		} catch (CoreException e) {
-			rpm_errorTable.add(e.getStatus());
-			return;
-		}
-
-		monitor.worked(1);
-
-		// Refresh the workspace
-		IWorkspaceRoot myWorkspaceRoot =
-			ResourcesPlugin.getWorkspace().getRoot();
-
-		try {
-			myWorkspaceRoot.refreshLocal(2, null);
-			project_name.refreshLocal(2, null);
-		} catch (CoreException e1) {
-			rpm_errorTable.add(e1.getStatus());
-		}
 	}
 
 

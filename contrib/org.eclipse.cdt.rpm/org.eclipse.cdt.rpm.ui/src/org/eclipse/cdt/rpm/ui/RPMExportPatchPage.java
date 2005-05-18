@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -15,10 +15,14 @@
  */
 package org.eclipse.cdt.rpm.ui;
 
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import org.eclipse.cdt.rpm.core.IRPMConstants;
 import org.eclipse.cdt.rpm.core.RPMCorePlugin;
-
 import org.eclipse.jface.wizard.WizardPage;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -34,17 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import java.text.SimpleDateFormat;
-import java.net.UnknownHostException;
-import java.util.Date;
-import java.util.ArrayList;
-import java.io.*;
-
-public class RPMExportPage_2 extends WizardPage implements Listener {
-	// Composite file/browse control
-	// Core RPM build class
-	private RPMExportOperation rpmExport;
-
+public class RPMExportPatchPage extends WizardPage implements Listener {
 	// Checkbox Buttons
 	private Button generatePatch;
 
@@ -76,7 +70,7 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 	 * 
 	 * Constructor for RPMExportPage class
 	 */
-	public RPMExportPage_2() {
+	public RPMExportPatchPage() {
 		super(
 				Messages.getString("RPMExportPage.Export_SRPM"), //$NON-NLS-1$
 				Messages.getString("RPMExportPage.Export_SRPM_from_project"), null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -107,12 +101,12 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 	 *
 	 * Populate the patch widgets with data
 	 */
-	protected void populatePatchInfo() {
+	private void populatePatchInfo() {
 
 		String userName = RPMCorePlugin.getDefault().getPreferenceStore()
-				.getString("IRpmConstants.AUTHOR_NAME"); //$NON-NLS-1$
+				.getString(IRPMConstants.AUTHOR_NAME); //$NON-NLS-1$
 		String userEmail = RPMCorePlugin.getDefault().getPreferenceStore()
-				.getString("IRpmConstants.AUTHOR_EMAIL"); //$NON-NLS-1$
+				.getString(IRPMConstants.AUTHOR_EMAIL); //$NON-NLS-1$
 
 		// Populate the changeLog
 		Date today = new Date();
@@ -128,7 +122,7 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 	 *
 	 * Create the patch generation widgets
 	 */
-	protected void createPatchFields(Composite parent) {
+	private void createPatchFields(Composite parent) {
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout());
 		group.setText(Messages.getString("RPMExportPage.Patch_Options")); //$NON-NLS-1$
@@ -143,49 +137,6 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL
 				| GridData.GRAB_HORIZONTAL));
 
-		// Listen for changes to the patch tag field so we can make sure
-		// this tag has not been used before
-		ModifyListener trapTag = new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				if (firstTag) {
-					patch_names = getPatchNames(RPMExportPage.getSpecFilePath());
-					firstTag = false;
-				}
-
-				patchTagError = false;
-				// Does it have any spaces or special characters
-				if (patchTag.getText().length() != 0) {
-					for (int i = patchTag.getText().length(); i > 0; i--) {
-						if (valid_char_list.lastIndexOf(patchTag.getText()
-								.substring(i - 1,i)) == -1) {
-							setErrorMessage(Messages
-									.getString("RPMExportPage_2.1")); //$NON-NLS-1$
-							patchTagError = true;
-							handleEvent(null);
-							return;
-						}
-					}
-					// Is the patch tag unique? (That is, if there are any patch
-					// tags.)
-					if (!patch_names.isEmpty()) {
-						for (int i = 0; i < patch_names.size(); i++) {
-							if (patchTag.getText().equals(
-									(String) patch_names.get(i))) {
-								patchTagError = true;
-								setErrorMessage(Messages
-										.getString("RPMExportPage_2.3")); //$NON-NLS-1$
-								handleEvent(null);
-								return;
-							}
-						}
-					}
-				}
-				setErrorMessage(null);
-				setDescription(Messages.getString("RPMExportPage_2.0")); //$NON-NLS-1$
-				handleEvent(null);
-			}
-		};
-
 		ModifyListener trapPatch = new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
@@ -196,7 +147,7 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 		GridData patchTagGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL
 				| GridData.GRAB_HORIZONTAL);
 		new Label(composite, SWT.NONE).setText(Messages
-				.getString("RPMExportPage.Patch_Tag")); //$NON-NLS-1$
+				.getString("RPMExportPage.Patch_Name")); //$NON-NLS-1$
 		patchTag = new Text(composite, SWT.BORDER);
 		patchTag.setToolTipText(Messages
 				.getString("RPMExportPage.toolTip_Patch_Tag")); //$NON-NLS-1$
@@ -210,7 +161,7 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 
 		patchChangeLogstamp = new Text(composite, SWT.BORDER);
 		patchChangeLogstamp.setLayoutData(pChangelogStampGridData);
-		patchTag.addModifyListener(trapTag);
+		//patchTag.addModifyListener(trapTag);
 		patchChangeLogstamp.addModifyListener(trapPatch);
 		patchChangeLogstamp.setToolTipText(Messages
 				.getString("RPMExportPage.toolTip_Changelog_Stamp")); //$NON-NLS-1$
@@ -298,15 +249,15 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 
 		return true;
 	}
-
-	public String[] patchData() {
-		String[] patchDataList = new String[3];
-
-		patchDataList[0] = patchTag.getText();
-		patchDataList[1] = patchChangeLogstamp.getText();
-		patchDataList[2] = patchChangeLog.getText();
-
-		return patchDataList;
+	
+	public String getSelectedPatchName() {
+		return patchTag.getText();
+	}
+	
+	public String getSelectedChangelog() {
+		return patchChangeLogstamp.getText() + IRPMUIConstants.LINE_SEP + 
+			patchChangeLog.getText() + IRPMUIConstants.LINE_SEP + 
+			IRPMUIConstants.LINE_SEP;
 	}
 
 	public void handleEvent(Event e) {
@@ -335,69 +286,5 @@ public class RPMExportPage_2 extends WizardPage implements Listener {
 			lastdot = hosttemp2.lastIndexOf("."); //$NON-NLS-1$
 		}
 		return hosttemp.substring(1);
-	}
-
-	/*
-	 * This method gets the path to the spec file that will be used to create
-	 * the rpm and gleans the patch names from it.
-	 * @returns populated ArrayList if spec file found, null ArrayList if not
-	 */
-
-	private ArrayList getPatchNames(String path_to_specfile) {
-
-		File f = new File(path_to_specfile);
-		if (!f.exists()) {
-			return null;
-		}
-		ArrayList patch_names = new ArrayList();
-		try {
-			FileReader sp_file = new FileReader(path_to_specfile);
-			StreamTokenizer st = new StreamTokenizer(sp_file);
-
-			// Make sure numbers, colons and percent signs are considered valid
-			st.wordChars('a', 'z');
-			st.wordChars('A', 'Z');
-			st.wordChars(':', ':');
-			st.wordChars('0', '9');
-			st.wordChars('%', '%');
-			st.wordChars('{', '}');
-			st.wordChars('-', '-');
-			st.wordChars('/', '/');
-			st.wordChars('=', '=');
-			st.wordChars('.', '.');
-			st.wordChars('_', '_');
-			st.eolIsSignificant(true);
-			boolean found_patch = false;
-
-			String new_word;
-			int token = st.nextToken();
-			while (token != StreamTokenizer.TT_EOF) {
-				token = st.nextToken();
-
-				switch (token) {
-
-				case StreamTokenizer.TT_WORD:
-					new_word = st.sval;
-					if (new_word.startsWith("Patch")) { //$NON-NLS-1$
-						found_patch = true;
-						break;
-					}
-					if (new_word.endsWith(".patch") && found_patch) { //$NON-NLS-1$
-						int i = new_word.lastIndexOf("-"); //$NON-NLS-1$
-						int j = new_word.lastIndexOf(".patch"); //$NON-NLS-1$
-						patch_names.add(new_word.substring(i + 1, j));
-						found_patch = false;
-						break;
-					}
-				default:
-					found_patch = false;
-					break;
-				}
-			}
-			sp_file.close();
-		} catch (IOException e) {
-			return null;
-		}
-		return patch_names;
 	}
 }

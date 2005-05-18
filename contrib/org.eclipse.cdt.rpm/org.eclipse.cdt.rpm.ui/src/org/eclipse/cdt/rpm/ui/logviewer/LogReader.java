@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -8,6 +8,7 @@
 package org.eclipse.cdt.rpm.ui.logviewer;
 
 import org.eclipse.cdt.rpm.core.RPMCorePlugin;
+import org.eclipse.core.runtime.CoreException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -94,12 +95,12 @@ public class LogReader implements Runnable {
 	}
 	
 	public String getLogFile() {
-		String wksp_path = RPMCorePlugin.getDefault().getPreferenceStore()
-				.getString("IRpmConstants.RPM_WORK_AREA"); //$NON-NLS-1$
-		String log_name = RPMCorePlugin.getDefault().getPreferenceStore()
-				.getString("IRpmConstants.RPM_DISPLAYED_LOG_NAME"); //$NON-NLS-1$
-		String log_file_name = wksp_path + file_sep + log_name + file_sep;
-		File f = new File(log_file_name);
+		File f = null;
+		try {
+			f = RPMCorePlugin.getDefault().getExternalLogFile();
+		} catch(CoreException e) {
+			// Too bad.
+		}
 		if (!f.exists()) {
 			return null;
 		}

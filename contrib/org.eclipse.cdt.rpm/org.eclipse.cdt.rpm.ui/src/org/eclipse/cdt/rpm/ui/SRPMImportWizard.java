@@ -1,5 +1,5 @@
 /*
- * (c) 2004 Red Hat, Inc.
+ * (c) 2004, 2005 Red Hat, Inc.
  *
  * This program is open source software licensed under the 
  * Eclipse Public License ver. 1
@@ -25,24 +25,17 @@ import org.eclipse.ui.IWorkbench;
 
 
 /**
- * @author pmuldoon
- *
-  * The main plugin class to be used in the desktop. This is the "entrypoint"
+ * The main plugin class to be used in the desktop. This is the "entrypoint"
  * for the import rpm plug-in.
  */
-public class SRPMImportwizard extends Wizard implements IImportWizard {
+public class SRPMImportWizard extends Wizard implements IImportWizard {
 	private IWorkbench workbench;
 	private IStructuredSelection selection;
-
-	// Create a local reference to SRPMImportPage
 	private SRPMImportPage mainPage;
 
 	/**
 	 * @see org.eclipse.ui.IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
-
-	//Basic constructor. Don't do much, just print out debug, and set progress
-	//monitor status to true
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
 		this.workbench = workbench;
 		selection = currentSelection;

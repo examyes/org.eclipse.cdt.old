@@ -1,3 +1,46 @@
+2005-05-18  Jeremy Handcock  <handcock@redhat.com>
+
+	Eclipse.org Bugzilla #82195:
+	
+	* build.properties (bin.includes): Correct.
+	(src.includes): Ditto.
+	* plugin.xml (plugin): Set plugin class.
+	(extension): Tweak wording.
+	
+	* src/org/eclipse/cdt/rpm/ui/IRPMUIConstants.java: New.
+	* src/org/eclipse/cdt/rpm/ui/rpm_strings.properties: Add new strings.
+	* src/org/eclipse/cdt/rpm/ui/RPMExportOperation.java
+	(RPMExportOperation): Simplify.
+	(run): Update to use new core model.
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage_2.java: Rename to ...
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPatchPage.java: ... this.
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage.java: Simplify.
+	Update to use new core model.
+	* src/org/eclipse/cdt/rpm/ui/RPMExportWizard.java
+	(performFinish): Update to use new core model.
+	(addPages): Use renamed RPMExportPatchPage.
+	* src/org/eclipse/cdt/rpm/ui/RPMUIPlugin.java: New.  
+	Where was this before???
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportOperation.java
+	(SRPMImportOperation): Simplify.
+	(run): Update to use new core model.
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportPage.java: Simplify.
+	Update to use new core model.
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportwizard.java: Rename to ...
+	* src/org/eclipse/cdt/rpm/ui/SRPMImportWizard.java: ... this.
+	
+	* src/org/eclipse/cdt/rpm/ui/logviewer/LogReader.java
+	(getLogFile): Get log file from plug-in core class.
+
+	* src/org/eclipse/cdt/rpm/ui/preferences/RPMPluginPreferencesPage.java
+	(doGetPreferenceStore): Remove.
+	(init): Remove call to initializeDefaultPreferences.
+	(initializeDefaults): Use constants.
+	(storeValues): Ditto.
+	(createContents): Remove fields not used by new core model.
+	
+	* src/org/eclipse/cdt/rpm/ui/util/ExceptionHandler.java: New.
+
 2005-01-18  Aaron Luchko  <aluchko@redhat.com>
 
 	* src/org/eclipse/cdt/rpm/ui/preferences/RPMPluginPreferencesPage.java 
