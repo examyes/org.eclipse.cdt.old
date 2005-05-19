@@ -41,9 +41,10 @@ public class ShellScript {
 
 	/**
 	 * Executes the shell script without logging standard output.
+	 * @return standard output from execution
 	 * @throws CoreException if the operation fails
 	 */
-	public void execNoLog() throws CoreException {
+	public String execNoLog() throws CoreException {
 		byte[] buf = scriptContents.getBytes();
 		File file = null;
 		try {
@@ -63,17 +64,18 @@ public class ShellScript {
 		}
         	script = file;
 		Command.exec("chmod +x " + script.getAbsolutePath(), 0); //$NON-NLS-1$
-        	Command.exec("sh " + script.getAbsolutePath(), successCode); //$NON-NLS-1$
+        return Command.exec("sh " + script.getAbsolutePath(), successCode); //$NON-NLS-1$
 	}
 	
 	/**
 	 * Executes the shell script and logs standard output to the log file.
+	 * @return standard output from execution
 	 * @throws CoreException if the operation fails
 	 */
-	public void exec() throws CoreException {
+	public String exec() throws CoreException {
 		scriptContents += " >> " + 
 			RPMCorePlugin.getDefault().getExternalLogFile().getAbsolutePath(); //$NON-NLS-1$
-		execNoLog();
+		return execNoLog();
 	}
 	
 }

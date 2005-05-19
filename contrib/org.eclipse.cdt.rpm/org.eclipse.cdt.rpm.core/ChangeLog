@@ -1,3 +1,13 @@
+2005-05-19  Jeremy Handcock  <handcock@redha.com>
+
+	Eclipse.org Bugzilla #82196:
+	* src/org/eclipse/cdt/rpm/core/utils/RPMQuery.java: New.
+	* src/org/eclipse/cdt/rpm/core/utils/internal/Command.java
+	(exec): Return standard output as String.
+	* src/org/eclipse/cdt/rpm/core/utils/internal/ShellScript.java
+	(execNoLog): Same.
+	(exec): Same.
+
 2005-05-18  Jeremy Handcock  <handcock@redhat.com>
 
 	Eclipse.org Bugzilla #82195:

@@ -26,10 +26,11 @@ public class Command {
      * expected and the developer wants the output of the command, use the getInfo method.
      * @param command - a string containing a Linux command
      * @param successCode - what the successful status value from the command should be (normally 0)
-     * @return - throws a CoreException if an error is encountered
+     * @return standard output from execution
+     * @throws CoreException if error occurs
      */
     /****************************************************************************/
-    public static void exec(String command, int successCode) throws CoreException {
+    public static String exec(String command, int successCode) throws CoreException {
         Runtime r = Runtime.getRuntime();
         Process p = null;
         int returnCode;
@@ -68,5 +69,6 @@ public class Command {
                     null);
             throw new CoreException(error);
         }
+        return out.toString();
     }
 }
