@@ -1,3 +1,21 @@
+2005-05-19  Jeremy Handcock  <handcock@redhat.com>
+
+	Eclipse.org Bugzilla #82196:
+	* plugin.xml: Remove; move property page extensions to 
+	org.eclipse.cdt.rpm.ui.
+	* build.properties: Remove.
+	* src/org/eclipse/cdt/rpm/propertypage/PropertyPagePlugin.java: Remove.
+	* src/org/eclipse/cdt/rpm/propertypage/properties/RPMPropertyPage.java:
+	Move to org.eclipse.cdt.rpm.ui.propertypage.SpecFileHeaderPage.
+	* src/org/eclipse/cdt/rpm/propertypage/properties/RPMPropertyPage2.java:
+	Move to org.eclipse.cdt.rpm.ui.propertypage.ChangelogPage.
+	* src/org/eclipse/cdt/rpm/propertypage/properties/RPMPropertyPage3.java:
+	Move to org.eclipse.cdt.rpm.ui.propertypage.TargetPage.
+	* src/org/eclipse/cdt/rpm/propertypage/properties/RPMPropertyPage4.java:
+	Move to org.eclipse.cdt.rpm.ui.propertypage.InstallScriptsPage.
+	* src/org/eclipse/cdt/rpm/propertypage/properties/RPMPropertyPage5.java:
+	Move to org.eclipse.cdt.rpm.ui.propertypage.ProvidesPage.
+
 2005-01-18  Jeremy Handcock  <handcock@redhat.com>
 
 	Bugzilla 83155:
