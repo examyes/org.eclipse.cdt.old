@@ -1,3 +1,51 @@
+2005-05-19  Jeremy Handcock  <handcock@redhat.com>
+
+	Eclipse.org Bugzilla #82196:
+	* plugin.xml (extension): Add property page extensions.
+	* .settings/org.eclipse.core.resources.prefs: New.
+
+	* src/org/eclipse/cdt/rpm/ui/propertypage/ChangelogPage.java: Move from 
+	rpm.propertypage.  Externalize strings.
+	(addFirstSection): Remove method.
+	(addSeparator): Same.
+	(addSecondSection): Rename to addChangelogField.
+	(addChangelogField): Use rpm.core.utils.RPMQuery.
+	(createContents): Remove calls to removed methods; reflect method rename
+	changes.
+	* src/org/eclipse/cdt/rpm/ui/propertypage/InstallScriptsPage.java: Move
+	from rpm.propertypage.  Externalize strings.
+	(addFirstSection): Remove method.
+	(addSeparator): Same.
+	(addSecondSection): Rename to addScriptFields.
+	(addScriptFields): Use rpm.core.utils.RPMQuery.
+	(createContents): Remove calls to removed methods; reflect method rename
+	changes.
+	* src/org/eclipse/cdt/rpm/ui/propertypage/Messages.java: New.
+	* src/org/eclipse/cdt/rpm/ui/propertypage/messages.properties: New.
+	* src/org/eclipse/cdt/rpm/ui/propertypage/ProvidesPage.java: Move from 
+	rpm.propertypage.  Externalize strings.
+	(addFirstSection): Remove method.
+	(addSeparator): Same.
+	(addSecondSection): Rename to addProvidesField.
+	(addProvidesField): Use rpm.core.utils.RPMQuery.
+	(createContents): Remove calls to removed methods; reflect method rename
+	changes.
+	* src/org/eclipse/cdt/rpm/ui/propertypage/SpecFileHeaderPage.java: Move 
+	from rpm.propertypage.  Externalize strings.
+	(addFirstSection): Remove method.
+	(addSeparator): Same.
+	(addSecondSection): Rename to addInfoFields.
+	(addInfoFields): Use rpm.core.utils.RPMQuery.
+	(createContents): Remove calls to removed methods; reflect method rename
+	changes.
+	* src/org/eclipse/cdt/rpm/ui/propertypage/TargetPage.java: Move from 
+	rpm.propertypage.  Externalize strings.
+	(addFirstSection): Remove method.
+	(addSeparator): Same.
+	(addSecondSection): Rename to addTargetFields.
+	(addTargetFields): Convert Text widgets to Label widgets.  Use 
+	rpm.core.utils.RPMQuery.
+
 2005-05-18  Jeremy Handcock  <handcock@redhat.com>
 
 	Eclipse.org Bugzilla #82195:
