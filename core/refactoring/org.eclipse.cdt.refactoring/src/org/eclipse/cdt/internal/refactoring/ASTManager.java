@@ -45,7 +45,7 @@ public class ASTManager {
     private CRefactoringArgument fArgument;
     private IBinding[] fValidBindings;
     private String fRenameTo;
-    private HashSet fEqualToValidBinding;
+    private HashMap fKnownBindings;
     private HashSet fConflictingBinding;
 
     public static String nth_of_m(int n, int m) {
@@ -102,6 +102,9 @@ public class ASTManager {
         }
         String n1= b1.getName();
         String n2= b2.getName();
+        if (n1==null || n2==null) {
+            return UNKNOWN;
+        }
         if (!n1.equals(n2)) {
             return FALSE;
         }
@@ -115,7 +118,9 @@ public class ASTManager {
                 return FALSE;
             }
             IScope s1= c1.getCompositeScope();
+            if (s1 != null) s1= s1.getParent();
             IScope s2= c2.getCompositeScope();
+            if (s2 != null) s2= s2.getParent();
             return isSameScope(s1, s2, false);
         }
 
@@ -203,9 +208,13 @@ public class ASTManager {
             if (!(b2 instanceof IMacroBinding)) {
                 return FALSE;
             }
-            IMacroBinding m1= (IMacroBinding) b1;
-            IMacroBinding m2= (IMacroBinding) b2;
-            return isSameScope(m1.getScope(), m2.getScope(), true);
+            return TRUE;
+        }
+        if (b1 instanceof IEnumeration) {
+            if (!(b2 instanceof IEnumeration)) {
+                return FALSE;
+            }
+            return isSameScope(b1.getScope(), b2.getScope(), false);
         }
         int scopeCmp= isSameScope(b1.getScope(), b2.getScope(), false);
         if (scopeCmp != TRUE) {
@@ -222,7 +231,20 @@ public class ASTManager {
         if (s1==s2) {
             return TRUE;
         }
-        if (s1==null || s2==null) {
+        IASTNode node1= s1==null ? null : s1.getPhysicalNode();
+        IASTNode node2= s2==null ? null : s2.getPhysicalNode();
+
+        // forward declarations do not have parent scopes.
+        if (s1==null) {
+            if (!fileStatic && node2 instanceof IASTTranslationUnit) {
+                return TRUE;
+            }
+            return UNKNOWN;
+        }
+        if (s2==null) {
+            if (!fileStatic && node1 instanceof IASTTranslationUnit) {
+                return TRUE;
+            }
             return UNKNOWN;
         }
         
@@ -231,8 +253,6 @@ public class ASTManager {
         }
 
         
-        IASTNode node1= s1.getPhysicalNode();
-        IASTNode node2= s2.getPhysicalNode();
 
         if (node1 instanceof IASTTranslationUnit &&
                 node2 instanceof IASTTranslationUnit) {
@@ -378,6 +398,9 @@ public class ASTManager {
 
 
     private static int isSameType(IType t1, IType t2) throws DOMException {
+        if (t1 != null && t2 != null && t1.isSameType(t2)) {
+            return TRUE;
+        }
         t1= getRealType(t1);
         t2= getRealType(t2);
         if (t1==t2) {
@@ -593,30 +616,20 @@ public class ASTManager {
         for (int i= expansionCount-2; i>=0; i--) {
             macroExpansions[i]= (IASTMacroExpansion) macroExpansions[i+1].getExpansionLocations()[0];
         }
-        String orig= name.getTranslationUnit().getUnpreprocessedSignature(locs);
         
-        int count= countOccurrencesOf(name.toString(), orig);
-        if (count != 1) {
-            return -1;
-        }
         // because of bug#90956 we need to use a heuristics.
-        int lidx= orig.indexOf(name.toString());
-        if (lidx == -1) {
+        String orig= name.getTranslationUnit().getUnpreprocessedSignature(locs);
+        Pattern p= Pattern.compile("\\b" +name.toString()+"\\b");  //$NON-NLS-1$//$NON-NLS-2$
+        Matcher m= p.matcher(orig);
+        if (!m.find()) {
             return -1;
         }
-        return locs[0].getNodeOffset()+lidx;
-    }
-
-    private static int countOccurrencesOf(String sf, String text) {
-        Pattern p= Pattern.compile("\\b" +sf+"\\b");  //$NON-NLS-1$//$NON-NLS-2$
-        Matcher m= p.matcher(text);
-        int count= 0;
-        int start= 0;
-        while(m.find(start)) {
-            count++;
-            start= m.end();
+        int start= m.start();
+        
+        if (m.find(m.end())) {
+            return -1;
         }
-        return count;
+        return locs[0].getNodeOffset()+start;
     }
 
     private static IScope getContainingScope(IASTName name) {
@@ -914,19 +927,21 @@ public class ASTManager {
 
     private void analyzeTextMatchesOfTranslationUnit(IASTTranslationUnit tu, 
             final CRefactoringMatchStore store, final RefactoringStatus status) {
-        fEqualToValidBinding= new HashSet();
+        fKnownBindings= new HashMap();
         fConflictingBinding= new HashSet();
         final Set paths= new HashSet();
+        boolean renamesMacro= fArgument.getArgumentKind() == CRefactory.ARGUMENT_MACRO;
         
         analyzeMacroMatches(tu, store, paths, status);
-        if (status.hasFatalError()) {
-            return;
-        }
-        if (fArgument.getArgumentKind() == CRefactory.ARGUMENT_MACRO) {
-            analyzeRenameToMatches(tu, store, paths, status);
+        if (status.hasFatalError()) return;
+
+        if (renamesMacro) {
+            findConflictingBindingsWithNewName(tu, store, paths, status);
+            if (status.hasFatalError()) return;
         }
 
         analyzeLanguageMatches(tu, store, paths, status);
+        if (status.hasFatalError()) return;
 
         for (Iterator iter = paths.iterator(); iter.hasNext();) {
             IPath path = (IPath) iter.next();
@@ -935,7 +950,7 @@ public class ASTManager {
             }
         }
         handleConflictingBindings(tu, status);
-        fEqualToValidBinding= null;
+        fKnownBindings= null;
         fConflictingBinding= null;
     }
 
@@ -970,7 +985,7 @@ public class ASTManager {
             else if (lookfor.equals(macroNameStr)) {
                 IPath path= analyzeAstMatch(macroName, store, false, status);
                 pathsVisited.add(path);
-                IBinding macroBinding= macroName.getBinding();
+                IBinding macroBinding= macroName.resolveBinding();
                 if (macroBinding != null) {
                     IASTName[] refs= tu.getReferences(macroBinding);
                     for (int j = 0; j < refs.length; j++) {
@@ -995,13 +1010,11 @@ public class ASTManager {
                         IASTFileLocation floc= mdef.getNodeLocations()[0].asFileLocation();
                         int offset= floc.getNodeOffset();
                         int end= offset+ floc.getNodeLength();
-                        Collection matches= store.getMatchesForPath(new Path(floc.getFileName()));
+                        Collection matches= store.findMatchesInRange(
+                                new Path(floc.getFileName()), offset, end);
                         for (Iterator iter = matches.iterator(); iter.hasNext();) {
                             CRefactoringMatch match = (CRefactoringMatch) iter.next();
-                            int mo= match.getOffset();
-                            if (mo>=offset && mo<end) {
-                                match.setASTInformation(CRefactoringMatch.AST_REFERENCE_OTHER);
-                            }
+                            match.setASTInformation(CRefactoringMatch.AST_REFERENCE_OTHER);
                         }
                     }
                 }
@@ -1009,12 +1022,40 @@ public class ASTManager {
         }
     }
 
-    private void analyzeRenameToMatches(IASTTranslationUnit tu, 
+//    private void markPreprocessorMatchesAsReference(
+//            IASTTranslationUnit tu, final CRefactoringMatchStore store, 
+//            final Set pathsVisited, final RefactoringStatus status) {
+//        IASTPreprocessorStatement[] pdefs= tu.getAllPreprocessorStatements();
+//        for (int i = 0; i < pdefs.length; i++) {
+//            IASTPreprocessorStatement pdef = pdefs[i];
+//            if (pdef instanceof IASTPreprocessorIfdefStatement
+//                    || pdef instanceof IASTPreprocessorIfndefStatement
+//                    || pdef instanceof IASTPreprocessorIfStatement
+//                    || pdef instanceof IASTPreprocessorElifStatement
+////                  || pdef instanceof IASTPreprocessorElseStatement
+//                    || pdef instanceof IASTPreprocessorUndefStatement) {
+//        IPath path= new Path(tu.getContainingFilename());
+//                if (!store.getMatchesForPath(path).isEmpty()) {
+//                    IASTFileLocation floc= pdef.getNodeLocations()[0].asFileLocation();
+//                    int offset= floc.getNodeOffset();
+//                    int end= offset+ floc.getNodeLength();
+//                    Collection matches= store.findMatchesInRange(
+//                            new Path(floc.getFileName()), offset, end);
+//                    for (Iterator iter = matches.iterator(); iter.hasNext();) {
+//                        CRefactoringMatch match = (CRefactoringMatch) iter.next();
+//                        match.setASTInformation(CRefactoringMatch.AST_REFERENCE);
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+    private void findConflictingBindingsWithNewName(IASTTranslationUnit tu, 
             CRefactoringMatchStore store, final Set paths, 
             final RefactoringStatus status) {
         ASTNameVisitor nv = new ASTSpecificNameVisitor(fRenameTo) {
             protected int visitName(IASTName name, boolean isDestructor) {
-                IPath path= analyzeRenameToMatch(status, name);
+                IPath path= addConflictingBindingForName(status, name);
                 paths.add(path);
                 return ASTVisitor.PROCESS_CONTINUE;
             }
@@ -1022,7 +1063,7 @@ public class ASTManager {
         tu.accept(nv);
     }
 
-    protected IPath analyzeRenameToMatch(final RefactoringStatus status, IASTName name) {
+    protected IPath addConflictingBindingForName(final RefactoringStatus status, IASTName name) {
         IASTNodeLocation[] locations= name.getNodeLocations();
         IPath path= null;
         if (locations != null && locations.length==1) {
@@ -1077,8 +1118,9 @@ public class ASTManager {
         
         IBinding binding= name.resolveBinding();
         int cmp= FALSE;
-        if (fEqualToValidBinding.contains(binding)) {
-            cmp= TRUE;
+        Integer cmpObj= (Integer) fKnownBindings.get(binding);
+        if (cmpObj != null) {
+            cmp= cmpObj.intValue();
         }
         else if (binding instanceof IProblemBinding) {
             cmp= UNKNOWN;
@@ -1093,7 +1135,6 @@ public class ASTManager {
                         cmp= cmp0;
                     }
                     if (cmp0 == TRUE) {
-                        fEqualToValidBinding.add(renameBinding);
                         break;
                     }
                 }
@@ -1102,6 +1143,7 @@ public class ASTManager {
                     cmp= UNKNOWN;
                 }
             }
+            fKnownBindings.put(binding, new Integer(cmp));
         }
         switch(cmp) {
         case TRUE:
@@ -1244,7 +1286,7 @@ public class ASTManager {
                         else {
                             try {
                                 if (conflictingVar.isStatic()) {
-                                    what= Messages.getString("CRenameTextProcessor.fileStaticVariable"); //$NON-NLS-1$
+                                    what= Messages.getString("CRenameProcessorDelegate.fileStaticVariable"); //$NON-NLS-1$
                                 }
                             } catch (DOMException e) {
                             }
@@ -1306,10 +1348,10 @@ public class ASTManager {
                             } catch (DOMException e) {
                             }
                             if (isStatic) {
-                                what= Messages.getString("CRenameTextProcessor.fileStaticFunction"); //$NON-NLS-1$
+                                what= Messages.getString("CRenameProcessorDelegate.fileStaticFunction"); //$NON-NLS-1$
                             }
                             else {
-                                what= Messages.getString("CRenameTextProcessor.globalFunction"); //$NON-NLS-1$
+                                what= Messages.getString("CRenameProcessorDelegate.globalFunction"); //$NON-NLS-1$
                             }
                         }
                     }
@@ -1318,12 +1360,12 @@ public class ASTManager {
                         conflict instanceof IEnumeration ||
                         conflict instanceof ITypedef) {
                     if (isContainer || isMacro) {
-                        what= Messages.getString("CRenameTextProcessor.type"); //$NON-NLS-1$
+                        what= Messages.getString("CRenameProcessorDelegate.type"); //$NON-NLS-1$
                     }
                 }
                 else if (conflict instanceof ICPPNamespace) {
                     if (isContainer || isMacro) {
-                        what= Messages.getString("CRenameTextProcessor.namespace"); //$NON-NLS-1$
+                        what= Messages.getString("CRenameProcessorDelegate.namespace"); //$NON-NLS-1$
                         if (argKind==CRefactory.ARGUMENT_NAMESPACE) {
                             warn= true;
                         }
@@ -1360,10 +1402,11 @@ public class ASTManager {
         String name= fArgument.getName();
         IBinding[] newBindingsAboverOrEqual= null;
         IScope oldBindingsScope= null;
-        for (Iterator iter = fEqualToValidBinding.iterator(); 
-                (newBindingsAboverOrEqual==null || newBindingsAboverOrEqual.length==0) && iter.hasNext();) {
-            IBinding oldBinding = (IBinding) iter.next();
-            if (oldBinding.getName().equals(name)) {
+        for (Iterator iter= fKnownBindings.entrySet().iterator(); iter.hasNext();) {
+            Map.Entry entry= (Map.Entry) iter.next();
+            IBinding oldBinding= (IBinding) entry.getKey();
+            Integer value= (Integer) entry.getValue();
+            if (value.intValue() == TRUE && oldBinding.getName().equals(name)) {
                 try {
                     oldBindingsScope = oldBinding.getScope();
                     if (oldBindingsScope != null) {
@@ -1373,6 +1416,10 @@ public class ASTManager {
                     handleDOMException(tu, e, status);
                 }
             }            
+
+            if (newBindingsAboverOrEqual!=null && newBindingsAboverOrEqual.length>0) {
+                break;
+            }
         }
         if (newBindingsAboverOrEqual == null) {
             newBindingsAboverOrEqual= new IBinding[0];

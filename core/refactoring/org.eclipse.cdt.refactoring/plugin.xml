@@ -143,36 +143,38 @@
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             id="org.eclipse.cdt.ui.edit.text.c.rename.element">
       </command>
-      <keyBinding
-            keySequence="Alt+Shift+R"
-            contextId="org.eclipse.cdt.ui.cEditorScope"
-            commandId="org.eclipse.cdt.ui.edit.text.c.rename.element"
-            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
       <command
             name="%ActionDefinition.refactorRedo.name"
             description="%ActionDefinition.refactorRedo.description"
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             id="org.eclipse.cdt.ui.edit.text.c.refactor.redo">
       </command>
-      <keyBinding
-            keySequence="Alt+Shift+Y"
-            contextId="org.eclipse.cdt.ui.cEditorScope"
-            commandId="org.eclipse.cdt.ui.edit.text.c.refactor.redo"
-            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
       <command
             name="%ActionDefinition.refactorUndo.name"
             description="%ActionDefinition.refactorUndo.description"
             categoryId="org.eclipse.cdt.ui.category.refactoring"
             id="org.eclipse.cdt.ui.edit.text.c.refactor.undo">
-      </command>
-      <keyBinding
-            keySequence="Alt+Shift+Z"
+      </command>      
+   </extension>    
+   <extension
+         point="org.eclipse.ui.bindings">
+   	  <key
+            sequence="Alt+Shift+R"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.cdt.ui.cEditorScope"
+            commandId="org.eclipse.cdt.ui.edit.text.c.rename.element"
+      />
+   	  <key
+            sequence="Alt+Shift+Y"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.cdt.ui.cEditorScope"
+            commandId="org.eclipse.cdt.ui.edit.text.c.refactor.redo"
+      />
+   	  <key
+            sequence="Alt+Shift+Z"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.cdt.ui.cEditorScope"
             commandId="org.eclipse.cdt.ui.edit.text.c.refactor.undo"
-            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </keyBinding>
-      
-   </extension>            
+      />
+   </extension>    
 </plugin>

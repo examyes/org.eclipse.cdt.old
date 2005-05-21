@@ -17,6 +17,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 /**
@@ -31,18 +32,7 @@ public class RenameTypeTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite("RenameTypeTests"); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testNamespaceNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testClassNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testStructNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testStructNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testUnionNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testUnionNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testEnumNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testEnumNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testTypedefNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameTypeTests("testTypedefNameConflictsPlainC") ); //$NON-NLS-1$
-
+        TestSuite suite = new TestSuite(RenameTypeTests.class); //$NON-NLS-1$
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
         }
@@ -1290,7 +1280,7 @@ public class RenameTypeTests extends RenameTests {
         writer.write("     v33                  \n"); //$NON-NLS-1$
         writer.write("};                        \n"); //$NON-NLS-1$
         writer.write("void f(int par1){         \n"); //$NON-NLS-1$
-        writer.write("     int w1; v1 v;        \n"); //$NON-NLS-1$
+        writer.write("     int w1; enum v1 v;   \n"); //$NON-NLS-1$
         writer.write("}                         \n"); //$NON-NLS-1$
         String contents = writer.toString();
         IFile cpp= importFile("test.c", contents ); //$NON-NLS-1$
@@ -1624,5 +1614,32 @@ public class RenameTypeTests extends RenameTests {
         assertRefactoringOk(status);
         status= checkConditions(cpp, offset1, "un_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
+    }
+    
+    public void testRenameClass() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("class String              \n"); //$NON-NLS-1$
+        writer.write("{                         \n"); //$NON-NLS-1$
+        writer.write("public:                   \n"); //$NON-NLS-1$
+        writer.write("  String();               \n"); //$NON-NLS-1$
+        writer.write("  String(const String &other); \n"); //$NON-NLS-1$
+        writer.write("  ~String();                   \n"); //$NON-NLS-1$
+        writer.write("  String &operator=( const String &other ); \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("  String::String(){}      \n"); //$NON-NLS-1$
+        writer.write("  String::String(const String &other){}; \n"); //$NON-NLS-1$
+        writer.write("  String::~String(){};                   \n"); //$NON-NLS-1$
+        writer.write("  String& String::operator=( const String &other ) \n"); //$NON-NLS-1$
+        writer.write("     {return *this;}                        \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+
+        int offset1= contents.indexOf("String"); //$NON-NLS-1$
+        
+        // conflicting renamings
+        RefactoringStatus status= checkConditions(cpp, offset1, "CString");  //$NON-NLS-1$
+        assertRefactoringOk(status);
+        Change ch= getRefactorChanges(cpp, offset1, "CString"); //$NON-NLS-1$
+        assertTotalChanges(countOccurrences(contents, "String"), ch); //$NON-NLS-1$
     }
 }

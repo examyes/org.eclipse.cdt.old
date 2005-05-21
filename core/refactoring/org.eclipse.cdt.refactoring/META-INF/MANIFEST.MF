@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.eclipse.cdt.refactoring
+Bundle-SymbolicName: org.eclipse.cdt.refactoring;singleton=true
 Bundle-Version: 3.0.0
 Bundle-ClassPath: refactoring.jar
 Bundle-Activator: org.eclipse.cdt.refactoring.CRefactoringPlugin

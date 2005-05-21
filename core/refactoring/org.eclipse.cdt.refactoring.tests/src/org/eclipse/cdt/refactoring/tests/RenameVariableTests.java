@@ -1424,7 +1424,7 @@ public class RenameVariableTests extends RenameTests {
         
         int offset =  contents.indexOf("v1") ; //$NON-NLS-1$
         Change changes = getRefactorChanges(cpp, offset, "z"); //$NON-NLS-1$
-        assertTotalChanges( 1, 1, changes );
+        assertTotalChanges( 1, 1, 0, changes );
         assertChange( changes, cpp, offset, 2, "z" );  //$NON-NLS-1$
     }
 

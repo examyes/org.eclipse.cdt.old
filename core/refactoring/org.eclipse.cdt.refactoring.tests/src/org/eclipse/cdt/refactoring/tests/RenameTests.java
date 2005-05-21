@@ -102,4 +102,14 @@ public class RenameTests extends RefactoringTests {
         return (rs.getSeverity());
     }
 
+    protected int countOccurrences(String contents, String lookup) {
+        int idx= contents.indexOf(lookup);
+        int count= 0;
+        while (idx >=0) {
+            count++;
+            idx= contents.indexOf(lookup, idx+lookup.length());
+        }
+        return count;
+    }
+
 }

@@ -28,70 +28,51 @@ abstract public class ASTNameVisitor extends ASTVisitor {
     public ASTNameVisitor(String fileName, int offset) {
         fFileName= fileName;
         fOffset= offset;
-        shouldVisitDeclarations= shouldVisitStatements= shouldVisitNames= shouldVisitEnumerators=true;
+        shouldVisitNames=true;
     }
     
     abstract protected int visitName(IASTName name);
     
     final public int visit(IASTName name) {
-        if (checkLocation(name, true)) {
-            if (name instanceof ICPPASTQualifiedName) {
-                ICPPASTQualifiedName qn= (ICPPASTQualifiedName) name;
-                IASTName[] names= qn.getNames();
-                boolean visited= false;
-                for (int i = 0; i < names.length; i++) {
-                    if (checkLocation(names[i], false)) {
-                        if (visitName(names[i]) == PROCESS_ABORT) {
-                            return PROCESS_ABORT;
-                        }
-                        visited= true;
+        if (name instanceof ICPPASTQualifiedName) {
+            ICPPASTQualifiedName qn= (ICPPASTQualifiedName) name;
+            IASTName[] names= qn.getNames();
+            boolean visited= false;
+            for (int i = 0; i < names.length; i++) {
+                if (checkLocation(names[i])) {
+                    if (visitName(names[i]) == PROCESS_ABORT) {
+                        return PROCESS_ABORT;
                     }
+                    visited= true;
                 }
-                if (!visited && names.length>0) {
-                    if (checkLocation(name, false)) {
-                        return visitName(names[names.length-1]);
-                    }
-                }
-                return PROCESS_SKIP;
             }
+            if (!visited && names.length>0) {
+                if (checkLocation(name)) {
+                    return visitName(names[names.length-1]);
+                }
+            }
+        }
+        else if (checkLocation(name)) {
             return visitName(name);
         }
-        return PROCESS_SKIP;
+        return PROCESS_CONTINUE;
     }
-    
-    final public int visit(IASTDeclaration decl) {
-        if (checkLocation(decl, true)) {
-            return PROCESS_CONTINUE;
-        }
-        return PROCESS_SKIP;
-    }
-     
-    final public int visit(IASTStatement statement) {
-        if (checkLocation(statement, true)) {
-            return PROCESS_CONTINUE;
-        }
-        return PROCESS_SKIP;
-    }
-    
-    private boolean checkLocation(IASTNode node, boolean allowMultiLocs) {
+        
+    private boolean checkLocation(IASTNode node) {
         if (fFileName==null) {
             return true;
         }
+        if (!fFileName.equals(node.getContainingFilename())) {
+            return false;
+        }
         IASTNodeLocation[] locs= node.getNodeLocations();
-        if (locs==null || locs.length==0) {
+        if (locs==null || locs.length!=1) {
             return false;
         }
-        if (locs.length > 1) {
-            return allowMultiLocs;
-        }
-        IASTFileLocation floc= locs[0].asFileLocation();
-        if (!fFileName.equals(floc.getFileName())) {
-            return false;
-        }
-        
         if (fOffset==-1) {
             return true;
         }
+        IASTFileLocation floc= locs[0].asFileLocation();
         int off= floc.getNodeOffset();
         int len = floc.getNodeLength();
         if (locs[0] instanceof IASTMacroExpansion && node instanceof IASTName) {

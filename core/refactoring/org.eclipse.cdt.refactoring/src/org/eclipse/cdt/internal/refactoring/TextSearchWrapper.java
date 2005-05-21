@@ -17,11 +17,9 @@ import java.util.*;
 import org.eclipse.cdt.internal.refactoring.scanner.Scanner;
 import org.eclipse.cdt.internal.refactoring.scanner.Token;
 import org.eclipse.cdt.refactoring.*;
-import org.eclipse.cdt.refactoring.CRefactory;
-import org.eclipse.cdt.refactoring.ICRefactoringSearch;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.*;
-import org.eclipse.search.internal.core.ISearchScope;
+import org.eclipse.search.internal.core.SearchScope;
 import org.eclipse.search.internal.core.text.*;
 import org.eclipse.ui.*;
 
@@ -33,7 +31,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
     
     public TextSearchWrapper() {}
     
-    private ISearchScope createSearchScope(IFile file, int scope, 
+    private SearchScope createSearchScope(IFile file, int scope, 
             String workingSetName, String[] patterns) {
         switch (scope) {
         	case SCOPE_WORKSPACE:
@@ -43,7 +41,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         	case SCOPE_FILE:
         	    return defineSearchScope(file, patterns);
         	case SCOPE_WORKING_SET: {
-        	    ISearchScope result= defineWorkingSetAsSearchScope(workingSetName, patterns);
+        	    SearchScope result= defineWorkingSetAsSearchScope(workingSetName, patterns);
         	    if (result == null) {
         	        result= defineSearchScope(file.getWorkspace().getRoot(), patterns);
         	    }
@@ -53,7 +51,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
 	    return defineRelatedProjectsAsSearchScope(file.getProject(), patterns);
     }
     
-    private ISearchScope defineRelatedProjectsAsSearchScope(IProject project, String[] patterns) {
+    private SearchScope defineRelatedProjectsAsSearchScope(IProject project, String[] patterns) {
         HashSet projects= new HashSet();
         LinkedList workThrough= new LinkedList();
         workThrough.add(project);
@@ -72,7 +70,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         return defineSearchScope(resources, patterns);
     }
 
-    private ISearchScope defineWorkingSetAsSearchScope(String wsName, String[] patterns) {
+    private SearchScope defineWorkingSetAsSearchScope(String wsName, String[] patterns) {
         if (wsName == null) {
             return null;
         }
@@ -81,28 +79,26 @@ public class TextSearchWrapper implements ICRefactoringSearch {
 		if (ws == null) {
 		    return null;
 		}
-		TextSearchScope result= 	
-		    new TextSearchScope("c/cpp", new IWorkingSet[] {ws}); //$NON-NLS-1$
+		SearchScope result= SearchScope.newSearchScope("c/cpp", new IWorkingSet[] {ws}); //$NON-NLS-1$
 		applyFilePatterns(result, patterns);
 		return result;
     }
 
-    private void applyFilePatterns(TextSearchScope scope, String[] patterns) {
+    private void applyFilePatterns(SearchScope scope, String[] patterns) {
         for (int i = 0; i < patterns.length; i++) {
             String pattern = patterns[i];
-            scope.addExtension(pattern);
+            scope.addFileNamePattern(pattern);
         }
     }
 
-    private ISearchScope defineSearchScope(IResource resource, String[] patterns) {
-        TextSearchScope result= new TextSearchScope("c/cpp"); //$NON-NLS-1$
-        result.add(resource);
+    private SearchScope defineSearchScope(IResource resource, String[] patterns) {
+        SearchScope result= SearchScope.newSearchScope("c/cpp", new IResource[]{resource}); //$NON-NLS-1$
         applyFilePatterns(result, patterns);
         return result;
     }
     
-    private ISearchScope defineSearchScope(IResource[] resources, String[] patterns) {
-        TextSearchScope result= new TextSearchScope("c/cpp", resources); //$NON-NLS-1$            
+    private SearchScope defineSearchScope(IResource[] resources, String[] patterns) {
+        SearchScope result= SearchScope.newSearchScope("c/cpp", resources); //$NON-NLS-1$            
         applyFilePatterns(result, patterns);
         return result;
     }
@@ -121,7 +117,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
         searchPattern.append("\\E"); //$NON-NLS-1$
         searchPattern.append("\\b"); //$NON-NLS-1$
 
-        ISearchScope searchscope= createSearchScope(resource, scope, workingSet, patterns);
+        SearchScope searchscope= createSearchScope(resource, scope, workingSet, patterns);
         MatchLocator locator= new MatchLocator(searchPattern.toString(), true, true);
         final IProgressMonitor subProgress= new SubProgressMonitor(monitor, 95);
         ITextSearchResultCollector collector= new ITextSearchResultCollector() {
@@ -143,7 +139,7 @@ public class TextSearchWrapper implements ICRefactoringSearch {
                 }                
             }
         };
-        IStatus result= engine.search(searchscope, false, collector, locator, false);
+        IStatus result= engine.search(searchscope, false, collector, locator);
         categorizeMatches(target.subList(startPos, target.size()), 
                 new SubProgressMonitor(monitor, 5));
 

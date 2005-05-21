@@ -16,6 +16,7 @@ import java.util.*;
 import org.eclipse.cdt.refactoring.CRefactoringMatch;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 public class CRefactoringMatchStore {
     private Map fFileToPathMap= new HashMap();
@@ -78,12 +79,12 @@ public class CRefactoringMatchStore {
 
     public Collection getMatchesForPath(IPath path) {
         if (path != null) {
-            Map map= (Map) fPathToMatches.get(path);
+            SortedMap map= (SortedMap) fPathToMatches.get(path);
             if (map != null) {
                 return map.keySet();
             }
         }
-        return Collections.EMPTY_LIST;
+        return Collections.EMPTY_SET;
     }
 
     public CRefactoringMatch findMatch(IPath path, int nodeOffset) {
@@ -100,5 +101,16 @@ public class CRefactoringMatchStore {
             IFile file= ((CRefactoringMatch) map.values().iterator().next()).getFile();
             fFileToPathMap.remove(file);
         }
+    }
+
+    public Collection findMatchesInRange(Path path, int offset, int end) {
+        if (path != null) {
+            SortedMap map= (SortedMap) fPathToMatches.get(path);
+            if (map != null) {
+                return map.subMap(new CRefactoringMatch(null, offset, 0, 0),
+                        new CRefactoringMatch(null, end, 0, 0)).keySet();
+            }
+        }
+        return Collections.EMPTY_SET;
     }
 }

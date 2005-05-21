@@ -16,6 +16,7 @@ import java.io.StringWriter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.cdt.core.tests.FailingTest;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -32,12 +33,8 @@ public class RenameMacroTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite("RenameTypeTests"); //$NON-NLS-1$
-        suite.addTest(new RenameMacroTests("testMacroRename") ); //$NON-NLS-1$
-        suite.addTest(new RenameMacroTests("testMacroNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameMacroTests("testIncludeGuard"));  //$NON-NLS-1$
-        suite.addTest(new RenameMacroTests("testClassMacroClash"));  //$NON-NLS-1$
-
+        TestSuite suite = new TestSuite(RenameMacroTests.class); //$NON-NLS-1$
+        suite.addTest(new FailingTest(new RenameMacroTests("failingRenameMacroAsMacroArgument"), 94673)); //$NON-NLS-1$
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
         }
@@ -143,26 +140,6 @@ public class RenameMacroTests extends RenameTests {
         assertRefactoringError(status, "'enum_item' will conflict with the name of an enumerator."); //$NON-NLS-1$
    }
 
-    public void testIncludeGuard() throws Exception {
-        StringWriter writer = new StringWriter();
-        writer.write("#ifndef _guard            \n"); //$NON-NLS-1$
-        writer.write("#define _guard            \n"); //$NON-NLS-1$
-        writer.write(" int HALLO                \n"); //$NON-NLS-1$
-        writer.write("#endif /* _guard */       \n"); //$NON-NLS-1$
-        String contents = writer.toString();
-        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
-        
-        int offset1= contents.indexOf("_guard"); //$NON-NLS-1$
-        int offset2= contents.indexOf("_guard", offset1+1); //$NON-NLS-1$
-        Change ch= getRefactorChanges(cpp, offset2, "WELT");  //$NON-NLS-1$
-        // mstodo for now the match within the ifndef is reported as potential.
-        assertTotalChanges(1, 2, ch);
-        int off= offset1;
-//        assertChange(ch, cpp, off, 6, "WELT"); //$NON-NLS-1$
-        off= contents.indexOf("_guard", off+1); //$NON-NLS-1$
-        assertChange(ch, cpp, off, 6, "WELT"); //$NON-NLS-1$
-    }
-
     public void testClassMacroClash() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("class CC {int a;};         \n"); //$NON-NLS-1$
@@ -183,4 +160,51 @@ public class RenameMacroTests extends RenameTests {
         ch= getRefactorChanges(cpp2, offset2, "CCC");  //$NON-NLS-1$
         assertTotalChanges(2, ch);
     }
+    
+    public void testIncludeGuard() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("#ifndef _guard            \n"); //$NON-NLS-1$
+        writer.write("#define _guard            \n"); //$NON-NLS-1$
+        writer.write(" int HALLO                \n"); //$NON-NLS-1$
+        writer.write("#endif /* _guard */       \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("_guard"); //$NON-NLS-1$
+        int offset2= contents.indexOf("_guard", offset1+1); //$NON-NLS-1$
+        Change ch= getRefactorChanges(cpp, offset2, "WELT");  //$NON-NLS-1$
+        assertTotalChanges(2, 0, 1, ch);
+        int off= offset1;
+        assertChange(ch, cpp, off, 6, "WELT"); //$NON-NLS-1$
+        off= contents.indexOf("_guard", off+1); //$NON-NLS-1$
+        assertChange(ch, cpp, off, 6, "WELT"); //$NON-NLS-1$
+    }
+    
+    public void testMacroParameters() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("int var;                  \n"); //$NON-NLS-1$
+        writer.write("#define M1(var) var       \n"); //$NON-NLS-1$
+        writer.write("#define M2(var, x) (var+x)*var  \n"); //$NON-NLS-1$
+        writer.write("#define M3 var            \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("var"); //$NON-NLS-1$
+        Change ch= getRefactorChanges(cpp, offset1, "xxx");  //$NON-NLS-1$
+        assertTotalChanges(1, 1, 0, ch);
+    }
+
+    public void failingRenameMacroAsMacroArgument() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("#define M1(var) var       \n"); //$NON-NLS-1$
+        writer.write("#define M2 1              \n"); //$NON-NLS-1$
+        writer.write("int b= M2;                \n"); //$NON-NLS-1$        
+        writer.write("int a= M1(M2);            \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset1= contents.indexOf("M2"); //$NON-NLS-1$
+        Change ch= getRefactorChanges(cpp, offset1, "xxx");  //$NON-NLS-1$
+        assertTotalChanges(countOccurrences(contents, "M2"), ch); //$NON-NLS-1$
+    }        
 }

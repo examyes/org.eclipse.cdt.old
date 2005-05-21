@@ -23,7 +23,6 @@ import org.eclipse.text.edits.*;
  * @author markus.schorn@windriver.com
  */
 public class RefactoringTests extends BaseTestFramework {
-
     public RefactoringTests() {
     }
 
@@ -42,16 +41,18 @@ public class RefactoringTests extends BaseTestFramework {
     }
 
     protected void assertTotalChanges(int numChanges, Change changes) throws Exception {
-        assertTotalChanges(numChanges, 0, changes);
+        assertTotalChanges(numChanges, 0, 0, changes);
     }
 
-    protected void assertTotalChanges(int numChanges, int potChanges, Change changes) throws Exception {
-        int count[]= {0,0};
+    protected void assertTotalChanges(int numChanges, int potChanges, int commentCh, 
+            Change changes) throws Exception {
+        int count[]= {0,0,0};
         if( changes != null ) {
             countChanges( changes, count);
         }
         assertEquals( numChanges, count[0] );
         assertEquals("potential changes: ", potChanges, count[1]); //$NON-NLS-1$
+        assertEquals("comment changes: ", commentCh, count[2]); //$NON-NLS-1$
     }
 
     private void countChanges(Change change, int[] count) {
@@ -76,7 +77,7 @@ public class RefactoringTests extends BaseTestFramework {
             count[1]++;
         }
         else if (name.indexOf("comment") != -1) { //$NON-NLS-1$
-            count[1]++;
+            count[2]++;
         }
         else {
             count[0]++;

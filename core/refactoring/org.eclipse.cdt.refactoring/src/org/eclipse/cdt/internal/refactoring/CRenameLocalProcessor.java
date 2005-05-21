@@ -20,25 +20,18 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 /**
  * Rename processor, setting up input page for a local rename.
  */
-public class CRenameLocalProcessor extends CRenameTextProcessor {
+public class CRenameLocalProcessor extends CRenameProcessorDelegate {
     private IScope fScope;
     public CRenameLocalProcessor(CRenameProcessor input, String kind, IScope scope) {
         super(input, kind);
         fScope= scope;
+        setAvailableOptions(0);
+        setOptionsForcingPreview(0);
     }
     
     // overrider
     protected int getAcceptedLocations(int selectedOptions) {
-        return CRefactory.OPTION_IN_CODE | selectedOptions;
-    }
-    // overrider
-    protected int getAvailableOptions() {
-        return 0;
-    }
-    
-    // overrider
-    protected int getOptionsForcingPreview() {
-        return 0;
+        return CRefactory.OPTION_IN_CODE | CRefactory.OPTION_IN_MACRO_DEFINITION | selectedOptions;
     }
     
     // overrider

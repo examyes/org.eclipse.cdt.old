@@ -15,30 +15,19 @@ import org.eclipse.cdt.refactoring.CRefactory;
 /**
  * Rename processor setting up input page for renaming include directives.
  */
-public class CRenameIncludeProcessor extends CRenameTextProcessor {
+public class CRenameIncludeProcessor extends CRenameProcessorDelegate {
     
     public CRenameIncludeProcessor(CRenameProcessor input, String kind) {
         super(input, kind);
+        setAvailableOptions(CRefactory.OPTION_ASK_SCOPE | 
+                CRefactory.OPTION_IN_COMMENT | 
+                CRefactory.OPTION_IN_MACRO_DEFINITION);
+        setOptionsForcingPreview(-1);
+        setOptionsEnablingScope(-1);
     }
 
-    // overrider
-    public int getAvailableOptions() {
-        return CRefactory.OPTION_ASK_SCOPE | 
-        CRefactory.OPTION_IN_COMMENT | 
-        CRefactory.OPTION_IN_MACRO_DEFINITION;
-    }
 
     protected int getAcceptedLocations(int selectedOptions) {
         return selectedOptions | CRefactory.OPTION_IN_INCLUDE_DIRECTIVE;
-    }
-    
-    // overrider
-    public int getOptionsForcingPreview() {
-        return -1;
-    }
-
-    // overrider
-    public int getOptionsEnablingScope() {
-        return -1;
     }
 }
