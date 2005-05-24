@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -45,16 +46,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ResourceSelectionDialog;
 
 
 /**
@@ -64,6 +64,8 @@ import org.eclipse.swt.widgets.Text;
  *
  */
 public class RPMExportPage extends WizardPage implements Listener {
+	private static final String VALID_CHARS = "0123456789.";  //$NON-NLS-1$
+	
 	// Checkbox Buttons
 	private Button generatePatch;
 	private Button exportBinary;
@@ -79,8 +81,8 @@ public class RPMExportPage extends WizardPage implements Listener {
 	//Composite Project Listbox control	
 	private List projectList;
 	
-	//Spec file combo box
-	private Combo specFileCombo;
+	//Spec file field
+	private Text specFileField;
 	
 	//Patch grid
 	private Group patchNeedHintGrid;
@@ -105,7 +107,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 	
 	public IFile getSelectedSpecFile() {
 		Path newSpecFilePath = 
-			new Path(specFileCombo.getItem(specFileCombo.getSelectionIndex()));
+			new Path(specFileField.getText());
 		return rpmProject.getProject().getFile(newSpecFilePath);
 	}
 	
@@ -169,7 +171,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 		createPatchHint(composite);
 		
 		// Fill in the fields
-		setSpecFileComboData();
+		setSpecFileField();
 		setVersionReleaseFields();
 
 		// Check if the project has changed
@@ -207,13 +209,6 @@ public class RPMExportPage extends WizardPage implements Listener {
 		exportBinary.setSelection(true);
 		exportBinary.setToolTipText(Messages.getString(
 				"RPMExportPage.toolTip_Export_Binary")); //$NON-NLS-1$
-		exportBinary.addSelectionListener(new SelectionListener(){
-				public void widgetSelected(SelectionEvent e) {
-					handleEvent(null);
-				}
-				public void widgetDefaultSelected(SelectionEvent e) {
-				}
-		});
 		
 		// Create the export source checkbox
 		exportSource = new Button(group, SWT.CHECK);
@@ -221,13 +216,17 @@ public class RPMExportPage extends WizardPage implements Listener {
 		exportSource.setSelection(true);
 		exportSource.setToolTipText(Messages.getString(
 				"RPMExportPage.toolTip_Export_Source")); //$NON-NLS-1$
-		exportSource.addSelectionListener(new SelectionListener(){
+		
+		SelectionListener listener = new SelectionListener() {
 			public void widgetSelected(SelectionEvent e) {
 				handleEvent(null);
 			}
 			public void widgetDefaultSelected(SelectionEvent e) {
+				handleEvent(null);
 			}
-		});
+		};
+		exportBinary.addSelectionListener(listener);
+		exportSource.addSelectionListener(listener);
 	}
 
 	/**
@@ -329,11 +328,9 @@ public class RPMExportPage extends WizardPage implements Listener {
 							if(rpmProject.isChanged()) {
 								setPatchNeeded(true);
 								patchNeedHintGrid.setVisible(true);
-								setPageComplete(true);
 							} else {
 								setPatchNeeded(false);
 								patchNeedHintGrid.setVisible(false);
-								setPageComplete(false);
 							}
 						} catch(CoreException e) {
 							ExceptionHandler.handle(e, getShell(),
@@ -343,12 +340,12 @@ public class RPMExportPage extends WizardPage implements Listener {
 						rpmProject = null;
 						setPatchNeeded(false);
 						patchNeedHintGrid.setVisible(false);
-						setPageComplete(false);
 					}
-					setSpecFileComboData();
+					setSpecFileField();
 					setVersionReleaseFields();
 				}
 		});
+		projectList.addListener(SWT.Modify, this);
 	}
 
 	/**
@@ -357,14 +354,11 @@ public class RPMExportPage extends WizardPage implements Listener {
 	 * Populates the specFile Combo Box
 	 * 
 	 */
-	private void setSpecFileComboData() {
-		specFileCombo.clearSelection();
-		specFileCombo.removeAll();
+	private void setSpecFileField() {
 		if(rpmProject != null) {
 			String specFile = 
 				rpmProject.getSpecFile().getFile().getProjectRelativePath().toOSString();
-			specFileCombo.add(specFile);
-			specFileCombo.setText(specFile);
+			specFileField.setText(specFile);
 		}
 	}
 
@@ -389,28 +383,28 @@ public class RPMExportPage extends WizardPage implements Listener {
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL |
 				GridData.GRAB_HORIZONTAL));
 
-		specFileCombo = new Combo(composite, SWT.BORDER);
+		specFileField = new Text(composite, SWT.BORDER);
+		specFileField.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				handleEvent(null);
+			}
+		});
+		specFileField.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent e) {
+				handleEvent(null);
+			}
+			public void widgetSelected(SelectionEvent e) {
+				handleEvent(null);
+			}
+		});
 
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		
-		specFileCombo.setLayoutData(gridData);
-		specFileCombo.setToolTipText(Messages.getString(
+		specFileField.setLayoutData(gridData);
+		specFileField.setToolTipText(Messages.getString(
 				"RPMExportPage.toolTip_SpecFile")); //$NON-NLS-1$
-		
-		specFileCombo.addListener(SWT.Selection,
-			new Listener() {
-				public void handleEvent(Event event) {
-					if (!specFileCombo.getText().equals("")) { //$NON-NLS-1$
-						Path newSpecFilePath = new Path(specFileCombo.getText());
-						IFile newSpecFile = rpmProject.getProject().getFile(newSpecFilePath);
-						if(!newSpecFile.exists()) {
-							setErrorMessage(Messages.getString("RPMExportPage.Cannont_find_file"));
-						}
-					}
-				}
-			});
 
 		Button rpmBrowseButton = new Button(composite, SWT.PUSH);
 		rpmBrowseButton.setToolTipText(Messages.getString(
@@ -419,38 +413,22 @@ public class RPMExportPage extends WizardPage implements Listener {
 		rpmBrowseButton.addListener(SWT.Selection,
 			new Listener() {
 				public void handleEvent(Event event) {
-					FileDialog rpmFileDialog = new FileDialog(getContainer()
-															 			.getShell(),	SWT.OPEN);
-					IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace()
-																	.getRoot();
-					IProject detailProject = workspaceRoot.getProject(getSelectedProjectName());
-					IPath detailProjectLocation = detailProject.getLocation();
-					rpmFileDialog.setFilterPath(detailProjectLocation.toString());
-
-					String selectedSpecName = rpmFileDialog.open();
-
-					if (selectedSpecName != null) {
-						specFileCombo.setText(selectedSpecName);
+					ResourceSelectionDialog specFileDialog = 
+						new ResourceSelectionDialog(getContainer().getShell(),
+								rpmProject.getConfiguration().getSpecsFolder(), 
+								Messages.getString("RPMExportPage.Select_spec_file"));
+					specFileDialog.setBlockOnOpen(true);
+					int result = specFileDialog.open();
+					if(result == Window.OK) {
+						Object[] foo = specFileDialog.getResult();
+						if(foo[0] instanceof IFile) {
+							IFile newSpecFile = (IFile) foo[0];
+							specFileField.setText(newSpecFile.getProjectRelativePath().toOSString());
+						}
 					}
 				}
 			});
 
-
-		KeyListener trapPatch = new KeyListener() {
-				public void keyReleased(KeyEvent e) {
-					handleEvent(null);
-				}
-
-				public void keyPressed(KeyEvent e) {
-					handleEvent(null);
-				}
-			};
-            
-		ModifyListener trapChange = new ModifyListener(){
-				public void modifyText(ModifyEvent e) {
-					handleEvent(null);
-				}
-		   };	
 
 		Composite versionReleaseComposite = new Composite(specGrid, SWT.NONE);
 		GridLayout versionReleaseLayout = new GridLayout();
@@ -472,10 +450,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 		rpmVersion = new Text(versionReleaseComposite, SWT.BORDER);
 		rpmVersion.setToolTipText(Messages.getString(
 				"RPMExportPage.toolTip_Version")); //$NON-NLS-1$
-
 		rpmVersion.setLayoutData(versionGridData);
-		rpmVersion.addKeyListener(trapPatch);
-		rpmVersion.addModifyListener(trapChange);
 
 		GridData releaseGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL |
 				GridData.GRAB_HORIZONTAL);
@@ -485,10 +460,25 @@ public class RPMExportPage extends WizardPage implements Listener {
 		rpmRelease = new Text(versionReleaseComposite, SWT.BORDER);
 		rpmRelease.setToolTipText(Messages.getString(
 				"RPMExportPage.toolTip_Release")); //$NON-NLS-1$
-
 		rpmRelease.setLayoutData(releaseGridData);
-		rpmRelease.addKeyListener(trapPatch);
-		rpmRelease.addModifyListener(trapChange);
+		
+		// Set listeners
+		ModifyListener modListener = new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				handleEvent(null);
+			}
+		};
+		KeyListener keyListener = new KeyListener() {
+			public void keyPressed(KeyEvent e) {
+			}
+			public void keyReleased(KeyEvent e) {
+				handleEvent(null);
+			}
+		};
+		rpmVersion.addModifyListener(modListener);
+		rpmRelease.addModifyListener(modListener);
+		rpmVersion.addKeyListener(keyListener);
+		rpmRelease.addKeyListener(keyListener);
 	}
 
 	private void createPatchHint(Composite parent) {
@@ -555,17 +545,51 @@ public class RPMExportPage extends WizardPage implements Listener {
 	public boolean canFinish() {
 		// Make sure project has been selected
 		if (getSelectedProjectName() == null && rpmProject == null) {
+			setDescription(Messages.getString("RPMExportPage.Select_project")); //$NON-NLS-1$
 			return false;
 		}
+		
+		// Make sure spec file is selected
+		if(specFileField.getText() == "") { //$NON-NLS-1$
+			setDescription(Messages.getString("RPMExportPage.Select_spec_file"));
+			return false;
+		}
+		// Make sure spec file exists and path is valid
+		else {
+			IPath path = rpmProject.getProject().getFullPath().addTrailingSeparator().append(specFileField.getText());
+			IFile newSpecFile = rpmProject.getProject().getParent().getFile(path);
+			IPath newSpecFilePath = newSpecFile.getFullPath();
+			IPath specFolderPath = rpmProject.getConfiguration().getSpecsFolder().getFullPath();
+			if(!specFolderPath.isPrefixOf(newSpecFilePath)) {
+				setErrorMessage(Messages.getString("RPMExportPage.Not_in_specs"));
+				return false;
+			}
+			if(!newSpecFile.exists()) {
+				setErrorMessage(Messages.getString("RPMExportPage.Spec_file_does_not_exist"));
+				return false;
+			}
+		}
+			
 		// Make sure version/release fields are filled in
 		if (!checkVersionReleaseFields()) {
+			setDescription(Messages.getString("RPMExportPage.Fill_in_ver_rel")); //$NON-NLS-1$
 			return false;
 		}
-        // Make sure either export binary/source is checked
-		if (!exportBinary.getSelection() && !exportSource.getSelection())
+		// Make sure version/release fields are valid
+		if(!checkInvalidChars(rpmVersion.getText()) || !checkInvalidChars(rpmRelease.getText())) {
+			setErrorMessage(Messages.getString("RPMExportPage.Invalid_ver_rel"));
 			return false;
-        	
-	   return true;
+		}
+		
+		// Make sure either export binary/source is checked
+		if (!exportBinary.getSelection() && !exportSource.getSelection()) {
+			setErrorMessage(Messages.getString("RPMExportPage.Select_export_type")); //$NON-NLS-1$
+			return false;
+		}
+		
+		setDescription(null);
+		setErrorMessage(null);
+		return true;
 	}
 
 	/**
@@ -583,6 +607,16 @@ public class RPMExportPage extends WizardPage implements Listener {
 		}
 		return false;
 	}
+	
+	private boolean checkInvalidChars(String input) {
+		char[] inputChars = input.toCharArray();
+		for(int i=0; i < inputChars.length; i++) {
+			if(VALID_CHARS.indexOf(inputChars[i]) == -1) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * Method canGoNext()
@@ -593,7 +627,7 @@ public class RPMExportPage extends WizardPage implements Listener {
 	public boolean canGoNext() {
 		// if a patch is needed, the next button should
 		// be enabled
-		if (isPatchNeeded()) {
+		if (canFinish() && isPatchNeeded()) {
 			return true;
 		} else {
 			return false;
@@ -601,6 +635,6 @@ public class RPMExportPage extends WizardPage implements Listener {
 	}
 
 	public void handleEvent(Event e) {
-		setPageComplete(canGoNext());
+		setPageComplete(canFinish());
 	}
 }

@@ -1,3 +1,25 @@
+2005-05-24  Jeremy Handcock  <handcock@redhat.com>
+
+	* src/org/eclipse/cdt/rpm/ui/rpm_strings.properties: New strings.
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPage.java
+	VALID_CHARS: New field contains list of valid version-release 
+	characters.
+	specFileCombo: Change type to Text and rename to specFileField.
+	(getSelectedSpecFile): Reflect type change.
+	(setSpecFileComboData): Rename to setSpecFileField.
+	(setSpecFileField): Reflect type change.
+	(createProjectBox): Don't call setPageComplete.
+	(createSpecFileFields): Reflect type change.  Use a 
+	ResourceSelectionDialog to limit selections to workspace spec files.
+	(canFinish): Reflect type change.  Change ordering to verify fields 
+	in order of appearance.
+	(canGoNext): Enforce canFinish() == true before wizard can advance to 
+	next page.
+	(handleEvent): Call canFinish().
+	* src/org/eclipse/cdt/rpm/ui/RPMExportPatchPage.java
+	valid_char_list: '.' is valid.
+	(canFinish): Change ordering to verify fields in order of appearance.
+
 2005-05-19  Jeremy Handcock  <handcock@redhat.com>
 
 	Eclipse.org Bugzilla #82196:

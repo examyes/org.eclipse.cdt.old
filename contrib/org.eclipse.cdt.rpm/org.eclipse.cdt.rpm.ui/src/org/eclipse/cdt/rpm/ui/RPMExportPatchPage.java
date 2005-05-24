@@ -17,7 +17,6 @@ package org.eclipse.cdt.rpm.ui;
 
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.eclipse.cdt.rpm.core.IRPMConstants;
@@ -49,21 +48,7 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 
 	private Text patchChangeLogstamp;
 
-	private boolean first_spec = true;
-
-	private String path_to_specfile_save = null;
-
-	private String last_gettext = ""; //$NON-NLS-1$
-
-	private ArrayList patch_names;
-
-	private boolean firstTag = true;
-
-	private boolean patchTagError;
-
-	private final String valid_char_list = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-"; //$NON-NLS-1$
-
-	static final String file_sep = System.getProperty("file.separator"); //$NON-NLS-1$
+	private final String valid_char_list = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-."; //$NON-NLS-1$
 
 	/**
 	 * @see java.lang.Object#Object()
@@ -75,7 +60,6 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 				Messages.getString("RPMExportPage.Export_SRPM"), //$NON-NLS-1$
 				Messages.getString("RPMExportPage.Export_SRPM_from_project"), null); //$NON-NLS-1$ //$NON-NLS-2$
 		setDescription(Messages.getString("RPMExportPage_2.0")); //$NON-NLS-1$
-		patch_names = new ArrayList();
 	}
 
 	/**
@@ -137,9 +121,14 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL
 				| GridData.GRAB_HORIZONTAL));
 
-		ModifyListener trapPatch = new ModifyListener() {
-
+		ModifyListener patchListener = new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
+				handleEvent(null);
+			}
+		};
+		KeyListener patchKeyListener = new KeyListener() {
+			public void keyPressed(KeyEvent e) {}
+			public void keyReleased(KeyEvent e) {
 				handleEvent(null);
 			}
 		};
@@ -150,9 +139,10 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 				.getString("RPMExportPage.Patch_Name")); //$NON-NLS-1$
 		patchTag = new Text(composite, SWT.BORDER);
 		patchTag.setToolTipText(Messages
-				.getString("RPMExportPage.toolTip_Patch_Tag")); //$NON-NLS-1$
-
+				.getString("RPMExportPage.toolTip_Patch_Name")); //$NON-NLS-1$
 		patchTag.setLayoutData(patchTagGridData);
+		patchTag.addModifyListener(patchListener);
+		patchTag.addKeyListener(patchKeyListener);
 
 		GridData pChangelogStampGridData = new GridData(
 				GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
@@ -162,7 +152,7 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 		patchChangeLogstamp = new Text(composite, SWT.BORDER);
 		patchChangeLogstamp.setLayoutData(pChangelogStampGridData);
 		//patchTag.addModifyListener(trapTag);
-		patchChangeLogstamp.addModifyListener(trapPatch);
+		patchChangeLogstamp.addModifyListener(patchListener);
 		patchChangeLogstamp.setToolTipText(Messages
 				.getString("RPMExportPage.toolTip_Changelog_Stamp")); //$NON-NLS-1$
 
@@ -195,6 +185,7 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 		pChangelogGridData.heightHint = 7 * patchChangeLog.getLineHeight();
 		patchChangeLog.setLayoutData(pChangelogGridData);
 		patchChangeLog.addKeyListener(patchChangelogListener);
+		patchChangeLog.addModifyListener(patchListener);
 		patchChangeLog.setToolTipText(Messages
 				.getString("RPMExportPage.toolTip_Changelog")); //$NON-NLS-1$
 
@@ -208,7 +199,6 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 	 * @return boolean. true if finish can be activated
 	 */
 	public boolean canFinish() {
-
 		// Is the patch tag empty
 		if (patchTag.getText().equals("")) { //$NON-NLS-1$
 			setErrorMessage(null);
@@ -216,21 +206,20 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 			return false;
 		}
 
-		//		 Is tag a duplicate or have spaces?
-		if (patchTagError) {
-			return false;
+		//Check for invalid character in patch name
+		char[] chars = patchTag.getText().toCharArray();
+		for(int i=0; i < chars.length; i++) {
+			if(valid_char_list.indexOf(chars[i]) == -1) {
+				setErrorMessage(Messages.getString("RPMExportPage_2.1"));
+				return false;
+			}
 		}
-
-		else {
-			setErrorMessage(null);
-			setDescription(Messages.getString("RPMExportPage_2.4")); //$NON-NLS-1$
-		}
-
+		
 		// Is the Changelog fields empty?
 		if (patchChangeLog.getText().equals("- ") | patchChangeLog.getText().equals("") | //$NON-NLS-1$ //$NON-NLS-2$
 				patchChangeLog.getText().equals("-")) {
+			setErrorMessage(null);
 			setDescription(Messages.getString("RPMExportPage_2.4")); //$NON-NLS-1$
-
 			return false;
 		} else if (patchTag.getText().equals("")) {
 			setErrorMessage(null);
@@ -240,13 +229,13 @@ public class RPMExportPatchPage extends WizardPage implements Listener {
 
 		// Is the time stamp empty?
 		if (patchChangeLogstamp.getText().equals("")) { //$NON-NLS-1$
-
+			setErrorMessage(null);
+			setDescription(Messages.getString("RPMExportPage_2.4")); //$NON-NLS-1$
 			return false;
 		}
 
+		setDescription(null);
 		setErrorMessage(null);
-		setDescription(Messages.getString("RPMExportPage_2.2")); //$NON-NLS-1$
-
 		return true;
 	}
 	
