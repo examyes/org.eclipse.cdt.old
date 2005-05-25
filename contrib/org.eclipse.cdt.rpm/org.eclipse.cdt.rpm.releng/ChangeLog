@@ -1,3 +1,8 @@
+2005-05-25  Jeremy Handcock  <handcock@redhat.com>
+	
+	Eclipse.org Bugzilla #82196:
+	* maps/rpm.map: Remove rpm.propertypage plug-in.
+
 2005-01-14  Jeremy Handcock  <handcock@redhat.com>
 
 	Bugzilla #82889:
