@@ -1,3 +1,8 @@
+2005-05-26  Jeremy Handcock  <handcock@redhat.com>
+
+	Eclipse.org Bugzilla #96849:
+	* src/build.xml: Set failonerror="true" for all `exec' tasks.
+
 2005-02-04  Keith Seitz  <keiths@redhat.com>
 
 	* fraagment.xml: Bump to 1.2.0. Require core version 1.2.0.

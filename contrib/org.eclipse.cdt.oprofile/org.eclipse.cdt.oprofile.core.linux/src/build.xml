@@ -68,7 +68,7 @@
     <pathconvert pathsep=" " property="objs" refid="objects" />
 
     <echo message="${CXX} -o ${opxml} ${objs} ${extra-oprofile-libs} ${other-libs}" />
-    <exec executable="${CXX}" dir="${obj-path}/">
+    <exec executable="${CXX}" dir="${obj-path}/" failonerror="true">
         <arg value="-o" />
         <arg value="${opxml}" />
         <arg line="${objs}" />
@@ -78,11 +78,11 @@
     
     <!-- Cannot use <copy> task: it cannot preserve permissions (like the
 	 executable bit!) -->
-    <exec executable="mkdir">
+    <exec executable="mkdir" failonerror="true">
 	<arg value="-p" />
 	<arg value="${destination}" />
     </exec>
-    <exec executable="cp" dir="${obj-path}">
+    <exec executable="cp" dir="${obj-path}" failonerror="true">
 	<arg value="${opxml}" />
 	<arg value="${destination}" />
     </exec>
@@ -91,7 +91,8 @@
   <!-- This target builds all objects needed by the wrapper library -->
   <target name="build-objs">
       <echo message="Building oprofile wrapper objects" />
-      <apply executable="${CXX}" dest="${eclipse-home}/" parallel="false">
+      <apply executable="${CXX}" dest="${eclipse-home}/" parallel="false"
+          failonerror="true">
           <arg line="${cxxflags} -c" />
           <fileset refid="oprofile-lib-srcs" />
           <fileset refid="opxml-srcs" />
