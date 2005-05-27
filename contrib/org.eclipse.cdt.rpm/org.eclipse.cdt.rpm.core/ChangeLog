@@ -1,4 +1,8 @@
-2005-05-19  Jeremy Handcock  <handcock@redha.com>
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* plugin.xml: Bump version to 3.0.
+
+2005-05-19  Jeremy Handcock  <handcock@redhat.com>
 
 	Eclipse.org Bugzilla #82196:
 	* src/org/eclipse/cdt/rpm/core/utils/RPMQuery.java: New.
