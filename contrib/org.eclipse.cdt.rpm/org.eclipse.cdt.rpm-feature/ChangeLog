@@ -1,3 +1,9 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* about.html: New.
+	* build.properties: Include about.html.
+	* feature.xml: Bump version to 3.0.
+
 2005-05-18  Jeremy Handcock  <handcock@redhat.com>
 
 	* feature.xml 
