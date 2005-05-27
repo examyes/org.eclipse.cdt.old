@@ -1,3 +1,7 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* customTargets.xml: Change archive name to .tar.gz.
+
 2004-10-13  Jeremy Handcock  <handcock@redhat.com>
 
 	* maps/oprofile.map: Remove training '/' from cvsroot.
