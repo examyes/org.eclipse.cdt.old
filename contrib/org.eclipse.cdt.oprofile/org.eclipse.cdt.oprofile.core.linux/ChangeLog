@@ -1,5 +1,10 @@
 2005-05-27  Jeremy Handcock  <handcock@redhat.com>
 
+	* install: Revert last patch.
+	* update-perms: New.
+
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
 	* install: Set executable bits for `opxml', `opcontrol', and 
 	`uninstall'.
 
