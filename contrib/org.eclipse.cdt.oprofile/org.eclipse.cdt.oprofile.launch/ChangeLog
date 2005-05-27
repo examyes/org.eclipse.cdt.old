@@ -1,3 +1,8 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* build.properties: Include about.html.
+	(src.includes): Include icons/.
+
 2004-11-17  Aaron Luchko  <aluchko@redhat.com>
 
 	* build.properties (bin.includes): Include icons/ directory.
