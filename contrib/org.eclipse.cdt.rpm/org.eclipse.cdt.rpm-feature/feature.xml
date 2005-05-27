@@ -33,18 +33,18 @@
          id="org.eclipse.cdt.rpm.core"
          download-size="0"
          install-size="0"
-         version="1.2"/>
+         version="3.0.0"/>
 
    <plugin
          id="org.eclipse.cdt.rpm.doc"
          download-size="0"
          install-size="0"
-         version="1.2"/>
+         version="3.0.0"/>
 
    <plugin
          id="org.eclipse.cdt.rpm.ui"
          download-size="0"
          install-size="0"
-         version="1.2"/>
+         version="3.0.0"/>
 
 </feature>
