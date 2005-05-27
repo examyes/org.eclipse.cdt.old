@@ -1,3 +1,8 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* index.html: Add note about installation instructions.
+	* downloads.html: Add installation instructions.
+
 2005-02-04  Jeremy Handcock  <handcock@redhat.com>
 
 	* developer/oprofile-design.html: Updates from Keith.
