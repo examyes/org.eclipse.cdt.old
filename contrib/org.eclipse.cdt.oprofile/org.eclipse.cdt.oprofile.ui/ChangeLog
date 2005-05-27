@@ -1,3 +1,7 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* build.properties: Include about.html.
+
 2004-07-16  Keiht Seitz  <keiths@redhat.com>
 
 	* build.properties: "oprofile.jar"???? "oprofileui.jar".
