@@ -1,3 +1,7 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* build.properties: Include about.html.
+
 2005-02-04  Keith Seitz  <keiths@redhat.com>
 
 	* plugin.xml: Bump version to 1.2.0.
