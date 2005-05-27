@@ -1,5 +1,11 @@
 2005-05-27  Jeremy Handcock  <handcock@redhat.com>
 
+	* install: New.
+	* uninstall: New.
+	* build.properties: Include new files.
+
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
 	* .cvsignore: Add bin/.
 	* build.properties: Include about.html.
 	(bin.includes): Include opcontrol-wrappers.
