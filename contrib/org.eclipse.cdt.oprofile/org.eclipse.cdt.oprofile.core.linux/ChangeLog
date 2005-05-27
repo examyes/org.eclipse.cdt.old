@@ -1,3 +1,9 @@
+2005-05-27  Jeremy Handcock  <handcock@redhat.com>
+
+	* .cvsignore: Add bin/.
+	* build.properties: Include about.html.
+	(bin.includes): Include opcontrol-wrappers.
+
 2005-05-26  Jeremy Handcock  <handcock@redhat.com>
 
 	Eclipse.org Bugzilla #96849:
