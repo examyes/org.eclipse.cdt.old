@@ -75,8 +75,7 @@ public class ASTManager {
     }
     
     public static IASTFileLocation getLocationInTranslationUnit(IASTNode node) {
-        return node.getTranslationUnit().flattenLocationsToFile(
-                node.getNodeLocations());
+        return node.getFileLocation();
     }    
 
     public static IASTName getSimpleName(IASTName name) {
