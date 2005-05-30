@@ -1,3 +1,8 @@
+2005-05-30  Jeremy Handcock  <handcock@redhat.com>
+
+	* downloads.html: Add 3.0 M1 build.
+	* index.html: Add link to above.
+
 2005-05-24  Jeremy Handcock  <handcock@redhat.com>
 
 	* index.html: Remove references to CDT and C/C++ applications.
