@@ -1174,15 +1174,25 @@ public class ASTManager {
 
     public void handleProblemBinding(IASTTranslationUnit tu, final IProblemBinding pb, RefactoringStatus status) {
         if (tu != null) {
-            if (fProblemUnits.add(tu.getFilePath())) {
+            String fpath= tu.getFilePath();
+            if (fProblemUnits.add(fpath)) {
                 String msg= pb.getMessage();
                 if (msg != null && msg.length() > 0) {
-                    msg= MessageFormat.format(Messages.getString("ASTManager.warning.parsingErrors.detailed"), new Object[]{msg}); //$NON-NLS-1$
+                    msg= MessageFormat.format(Messages.getString("ASTManager.warning.parsingError.detailed"), new Object[]{msg}); //$NON-NLS-1$
+                }
+                else {
+                    msg= Messages.getString("ASTManager.warning.parsingError"); //$NON-NLS-1$
+                }
+                int line= pb.getLineNumber();
+                if (line >= 1) {
+                    msg= MessageFormat.format(
+                            Messages.getString("ASTManager.warning.parsingError.withFileAndLine"),  //$NON-NLS-1$
+                            new Object[] {msg, fpath, new Integer(line)});
                 }
                 else {
                     msg= MessageFormat.format(
-                            Messages.getString("ASTManager.warning.parsingErrors"), //$NON-NLS-1$
-                            new Object[] {tu.getFilePath()});
+                            Messages.getString("ASTManager.warning.parsingError.withFile"),  //$NON-NLS-1$
+                            new Object[] {msg, fpath});
                 }
                 status.addWarning(msg);
             }
