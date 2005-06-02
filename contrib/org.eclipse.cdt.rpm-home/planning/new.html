@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<title>Eclipse-RPM: What's New</title>
+<link rel="stylesheet" href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/org.eclipse.cdt-contrib/org.eclipse.cdt.oprofile-home/css/main.css?cvsroot=Tools_Project" type="text/css">
+</head>
+<body>
+<table width="100%">
+<tr>
+<td>
+<p class="indextop">Eclipse-RPM What's New</p>
+<p class="indexsub">Changes between releases of Eclipse-RPM</p>
+</td>
+<td align="right">
+<img src="http://dev.eclipse.org/images/Idea.jpg" alt="Idea">
+</td>
+</tr>
+</table>
+
+<table class="section">
+<tr><td>Eclipse-RPM 3.0 M1</td></tr>
+</table>
+
+<p>Enhancements implemented and bugs fixed in 3.0 M1:</p>
+
+<ul>
+<li><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=82195">82195</a>: Refactor org.eclipse.cdt.rpm.core</a></li>
+<ul>
+<li>The new API does not allow you to export S/RPMs from projects that have not
+been previously imported into.  This area of the old rpm.core was a bit flakey,
+and until we have a more advanced spec file model and better parsing support for
+spec files, its use is quite limited anyway.</li>
+<li>The new API does not rename source tarballs if the user changes the version
+number.  This behavior aligns better with the RPM workflow mantra of
+keeping pristine source artifacts.</li>
+<li>The default RPM directories (for RPMS, SRPMS, BUILD, SPECS, and SOURCES) are
+now created in the project itself (as derived resources) instead of being held
+externally.   This allows us to use the Eclipse Platform APIs for resource
+manipulation and removes the need to use platform-dependent utilities for
+operations like copying resources.</li>
+<li>Properties that were previously stored in a project's .srpminfo file are now stored as persistent project properties.</li>
+</ul>
+
+<li><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=82197">82197</a>: Add RPM project nature</li>
+<ul>
+<li>The new API adds a special RPM nature to projects on source RPM import.</li>
+</ul>
+
+<li><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=82196">82196</a>: Move propertypage plug-in to org.eclipse.cdt.rpm.ui.</li>
+
+<li><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=82176">82176</a>: Implement unit tests</li>
+<ul>
+<li>Unit tests to test the new core API are now in place.</li>
+</ul>
+
+<li><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=78773">78773</a>: Patch naming should guard against special characters</li>
+<ul>
+<li>The patch wizard page now does hot validation to check for invalid characters in the patch name.</li>
+</ul>
+
+<li><a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=78788">78788</a>: Patch naming should show error when no changelog entry</li>
+
+</ul>
+
+</body>
+</html>

@@ -1,3 +1,8 @@
+2005-06-02  Jeremy Handcock  <handcock@redhat.com>
+
+	* planning/new.html: New.
+	* index.html: Add link to above.
+
 2005-05-30  Jeremy Handcock  <handcock@redhat.com>
 
 	* downloads.html: Add 3.0 M1 build.
