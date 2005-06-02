@@ -33,23 +33,8 @@ public class RenameVariableTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite("RenameVariableTests"); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testLocalNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testLocalNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testParameterNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testParameterNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testVaribleNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testVaribleNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testEnumeratorNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testEnumeratorNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testMemberNameConflicts1") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testMemberNameConflicts2") ); //$NON-NLS-1$
-
-        suite.addTest(new RenameVariableTests("testReferenceViaMacro") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testReferenceViaMacro2") ); //$NON-NLS-1$
-        suite.addTest(new FailingTest(new RenameVariableTests("testReferenceViaMacro3"), 90956) ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testReferenceViaMacro4") ); //$NON-NLS-1$
-        suite.addTest(new RenameVariableTests("testReferenceViaMacro5") ); //$NON-NLS-1$
+        TestSuite suite = new TestSuite(RenameVariableTests.class); //$NON-NLS-1$
+        suite.addTest(new FailingTest(new RenameVariableTests("failReferenceViaMacro3"), 90956) ); //$NON-NLS-1$
 
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
@@ -1392,7 +1377,7 @@ public class RenameVariableTests extends RenameTests {
         assertChange( changes, cpp, offset2, 2, "z" );  //$NON-NLS-1$
     }
 
-    public void testReferenceViaMacro3() throws Exception {
+    public void failReferenceViaMacro3() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write("#define INC(x,y) x+=y      \n"); //$NON-NLS-1$
         writer.write("void f() {                 \n"); //$NON-NLS-1$
@@ -1448,5 +1433,25 @@ public class RenameVariableTests extends RenameTests {
         assertTotalChanges( 1, changes );
         assertChange( changes, cpp, offset, 2, "z" );  //$NON-NLS-1$
     }
-
+    
+    public void testBug72646() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("class C2: public C1 {     \n"); //$NON-NLS-1$
+        writer.write("  C2(int x, int y);       \n"); //$NON-NLS-1$
+        writer.write("  int y;                  \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("C2::C2(int x, int y)      \n"); //$NON-NLS-1$
+        writer.write("   :C1(x), y(y) {}        \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset =  contents.indexOf("y") ; //$NON-NLS-1$
+        offset=  contents.indexOf("y", offset+1) ; //$NON-NLS-1$        
+        Change changes = getRefactorChanges(cpp, offset, "z"); //$NON-NLS-1$
+        assertTotalChanges( 2, changes );
+        assertChange( changes, cpp, offset, 1, "z" );  //$NON-NLS-1$
+        offset=  contents.indexOf("y", offset+1) ; //$NON-NLS-1$        
+        offset=  contents.indexOf("y", offset+1) ; //$NON-NLS-1$        
+        assertChange( changes, cpp, offset, 1, "z" );  //$NON-NLS-1$
+    }
 }

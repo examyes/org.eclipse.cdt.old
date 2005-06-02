@@ -32,12 +32,7 @@ public class RenameFunctionTests extends RenameTests {
         return suite(true);
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite("RenameFunctionTests"); //$NON-NLS-1$
-        suite.addTest(new RenameFunctionTests("testFunctionNameConflicts") ); //$NON-NLS-1$
-        suite.addTest(new RenameFunctionTests("testFunctionsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameFunctionTests("testFunctionNameConflictsPlainC") ); //$NON-NLS-1$
-        suite.addTest(new RenameFunctionTests("testMethodNameConflicts1") ); //$NON-NLS-1$
-        suite.addTest(new RenameFunctionTests("testMethodNameConflicts2") ); //$NON-NLS-1$
+        TestSuite suite = new TestSuite(RenameFunctionTests.class); //$NON-NLS-1$
 
         if (cleanup) {
             suite.addTest( new RefactoringTests("cleanupProject") );    //$NON-NLS-1$
@@ -595,5 +590,38 @@ public class RenameFunctionTests extends RenameTests {
         assertRefactoringOk(status);
         status= checkConditions(cpp, offset3, "un_member");  //$NON-NLS-1$
         assertRefactoringOk(status);
+    }
+    
+    public void testBug72605() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("class Foo {               \n"); //$NON-NLS-1$
+        writer.write("  void m1(int x=0);       \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("void Foo::m1(int x) {}    \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset =  contents.indexOf("m1") ; //$NON-NLS-1$
+        int offset2=  contents.indexOf("m1", offset+1) ; //$NON-NLS-1$        
+        Change changes = getRefactorChanges(cpp, offset, "z"); //$NON-NLS-1$
+        assertTotalChanges( 2, changes );
+        changes = getRefactorChanges(cpp, offset2, "z"); //$NON-NLS-1$
+        assertTotalChanges( 2, changes );
+    }
+    
+    public void testBug72732() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("class Foo {               \n"); //$NON-NLS-1$
+        writer.write("  virtual void mthd() = 0;\n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("class Moo: public Foo{    \n"); //$NON-NLS-1$
+        writer.write("  void mthd() = 0;        \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        int offset =  contents.indexOf("mthd") ; //$NON-NLS-1$
+        offset=  contents.indexOf("mthd", offset+1) ; //$NON-NLS-1$        
+        RefactoringStatus status= checkConditions(cpp, offset, "xxx"); //$NON-NLS-1$
+        assertRefactoringWarning(status, "Renaming a virtual method. Consider renaming the base and derived class methods (if any)."); //$NON-NLS-1$
     }
 }

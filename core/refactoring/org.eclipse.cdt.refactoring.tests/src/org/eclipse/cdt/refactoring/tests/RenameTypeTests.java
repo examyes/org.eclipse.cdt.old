@@ -1642,4 +1642,24 @@ public class RenameTypeTests extends RenameTests {
         Change ch= getRefactorChanges(cpp, offset1, "CString"); //$NON-NLS-1$
         assertTotalChanges(countOccurrences(contents, "String"), ch); //$NON-NLS-1$
     }
+    
+    public void testBug72888() throws Exception {
+        StringWriter writer = new StringWriter();
+        writer.write("class MyEx {};            \n"); //$NON-NLS-1$
+        writer.write("void someFunc() {         \n"); //$NON-NLS-1$
+        writer.write("  throw MyEx();          \n"); //$NON-NLS-1$
+        writer.write("};                        \n"); //$NON-NLS-1$
+        writer.write("int main(){               \n"); //$NON-NLS-1$
+        writer.write("   try{                   \n"); //$NON-NLS-1$
+        writer.write("      someFunc();         \n"); //$NON-NLS-1$
+        writer.write("   } catch(MyEx &e) {}    \n"); //$NON-NLS-1$
+        writer.write("   return 0;              \n"); //$NON-NLS-1$
+        writer.write("}                         \n"); //$NON-NLS-1$
+        String contents = writer.toString();
+        IFile cpp= importFile("test.cpp", contents ); //$NON-NLS-1$
+        
+        int offset =  contents.indexOf("MyEx") ; //$NON-NLS-1$
+        Change changes = getRefactorChanges(cpp, offset, "xx"); //$NON-NLS-1$
+        assertTotalChanges( 3, changes );
+    }
 }

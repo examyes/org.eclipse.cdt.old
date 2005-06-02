@@ -219,8 +219,14 @@ public class TextSearchWrapper implements ICRefactoringSearch {
                         state= CRefactory.OPTION_IN_STRING_LITERAL;
                     	break;
                     case Token.tPREPROCESSOR:
-                        state= categorizePreprocessor(token.getText());
-                    	break;
+                        state= CRefactory.OPTION_IN_PREPROCESSOR_DIRECTIVE;
+                        break;
+                    case Token.tPREPROCESSOR_DEFINE:
+                        state= CRefactory.OPTION_IN_MACRO_DEFINITION;
+                        break;
+                    case Token.tPREPROCESSOR_INCLUDE:
+                        state= CRefactory.OPTION_IN_INCLUDE_DIRECTIVE;
+                        break;
                 }
                 if (state != lastState) {
                     locations.add(new int[] {token.getOffset(), state});

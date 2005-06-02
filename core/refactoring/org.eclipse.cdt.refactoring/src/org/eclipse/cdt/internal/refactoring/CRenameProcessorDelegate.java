@@ -154,9 +154,15 @@ public abstract class CRenameProcessorDelegate {
         
         HashSet fileset= new HashSet();
         int potentialMatchCount= 0;
+        int commentCount=0;
         for (Iterator iter = fMatches.iterator(); iter.hasNext();) {
             CRefactoringMatch tm = (CRefactoringMatch) iter.next();
-            switch(tm.getAstInformation()) {
+            if (tm.isInComment()) {
+                commentCount++;
+                fileset.add(tm.getFile());
+            }
+            else {
+                switch(tm.getAstInformation()) {
                 case CRefactoringMatch.AST_REFERENCE_OTHER:
                     iter.remove();
                     break;
@@ -166,7 +172,8 @@ public abstract class CRenameProcessorDelegate {
                     break;
                 default:
                     fileset.add(tm.getFile());
-                    break;
+                break;
+                }
             }
         }
         if (potentialMatchCount != 0) {
@@ -178,6 +185,18 @@ public abstract class CRenameProcessorDelegate {
                 msg= MessageFormat.format(
                     Messages.getString("CRenameProcessorDelegate.warning.potentialMatch.plural"), //$NON-NLS-1$
                     new Object[]{new Integer(potentialMatchCount)});
+            }
+            result.addWarning(msg);
+        }
+        if (commentCount != 0) {
+            String msg= null;
+            if (commentCount == 1) {
+                msg= Messages.getString("CRenameProcessorDelegate.warning.commentMatch.singular"); //$NON-NLS-1$
+            }
+            else {
+                msg= MessageFormat.format(
+                    Messages.getString("CRenameProcessorDelegate.warning.commentMatch.plural"), //$NON-NLS-1$
+                    new Object[]{new Integer(commentCount)});
             }
             result.addWarning(msg);
         }

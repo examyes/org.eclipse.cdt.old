@@ -67,9 +67,13 @@ public class CRefactoringMatch {
         if (fAstInformation == AST_REFERENCE) {
             return LABELS[AST_REFERENCE];
         }
-        if ((fLocation & CRefactory.OPTION_IN_COMMENT) != 0) {
+        if (isInComment()) {
             return LABELS[IN_COMMENT];
         }
         return LABELS[POTENTIAL];
+    }
+
+    public boolean isInComment() {
+        return (fLocation & CRefactory.OPTION_IN_COMMENT) != 0;
     }
 }

@@ -17,12 +17,15 @@ import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ltk.core.refactoring.*;
+import org.eclipse.search.internal.core.text.FileCharSequenceProvider;
 import org.eclipse.text.edits.*;
 
 /**
  * @author markus.schorn@windriver.com
  */
 public class RefactoringTests extends BaseTestFramework {
+    private int fBufferSize;
+
     public RefactoringTests() {
     }
 
@@ -33,11 +36,14 @@ public class RefactoringTests extends BaseTestFramework {
     protected void setUp() throws Exception {
         super.setUp();
         disableIndexing();
+        fBufferSize= FileCharSequenceProvider.BUFFER_SIZE;
+        FileCharSequenceProvider.BUFFER_SIZE= 1024*4;
     }
 
     protected void tearDown() throws Exception {
         super.tearDown();
         SavedCodeReaderFactory.getInstance().getCodeReaderCache().flush();
+        FileCharSequenceProvider.BUFFER_SIZE= fBufferSize;
     }
 
     protected void assertTotalChanges(int numChanges, Change changes) throws Exception {
