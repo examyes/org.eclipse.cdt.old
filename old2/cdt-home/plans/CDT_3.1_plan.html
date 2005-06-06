@@ -1,0 +1,357 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="Derrick Keefe" content="CDT Project">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>CDT  DRAFT 3.0 Plan</title>
+<link rel="stylesheet" href="../../default_style.css" type="text/css">
+</head>
+
+<body>
+<h1>CDT Project<br>
+  3.1 Plan</h1>
+<p>Initial Document June 3, 2005<br>
+<br>
+<i>&nbsp;&nbsp;&nbsp; Please send comments about this draft plan to the </i><a href="mailto:dev-cdt-dev@eclipse.org">cdt-dev@eclipse.org</a>
+<i>developer mailing list.</i></p>
+<p>This document lays out the feature and API set for the next feature release 
+  of CDT after 3.0, designated release 3.1
+<ul>
+  <li><a href="#Deliverables">Release deliverables</a></li>
+  <li><a href="#Milestones">Release milestones</a></li>
+  <li><a href="#Compatibility">Compatibility with previous releases</a></li>
+  <li><a href="#ProjectPlan">Project Plan - Themes &amp; Priorities</a></li>
+</ul>
+
+<p>Plans do not materialize out of nowhere, nor are they entirely static. To
+ensure the planning process is transparent and open to the entire Eclipse
+community, we (the CDT Project) post plans in an embryonic form and revise them
+throughout the release cycle.
+
+<p>The first part of the plan deals with the important matters of release
+deliverables, release milestones, target operating environments, and
+release-to-release compatibility. These are all things that need to be clear for
+any release, even if no features were to change.&nbsp;
+
+<p>The remainder of the plan consists of plan items for the CDT Project.
+ Each plan item covers a feature or API that is to be added to
+CDT. Each plan item has
+its own entry in the Eclipse bugzilla database, with a title and a concise
+summary (usually a single paragraph) that explains the work item at a suitably
+high enough level so that everyone can readily understand what the work item is
+without having to understand the nitty-gritty detail.
+
+<p>Not all plan items represent the same amount of work; some may be quite
+large, others, quite small. Some plan items may involve work that is localized
+to a single component; others may involve coordinated changes to
+several components; other may pervade the entire CDT Project. Although some plan
+items are for work that is more pressing than others, the plan items appear in
+no particular order.
+
+<p>With the previous release as the starting point, this is the plan for how we
+will enhance and improve it. Fixing bugs, improving test coverage,
+documentation, examples, performance, usability, etc. are considered routine
+ongoing maintenance activities and are not included in this plan unless they
+would also involve a significant change to the API or feature set, or involve a
+significant amount of work. All interesting feature work is accounted for in
+this plan.
+
+<p>The current status of each plan item is noted:
+<ul>
+  <li><b>Committed</b> plan item - A committed plan item is one that someone in 
+    the CDT open source community has decided to address for the release (includes 
+    development, testing, and documentation).</li>
+  <li><b>Proposed</b> plan item - A proposed plan item is one that we are
+    considering addressing for the release. Although we are actively
+    investigating it, we are not yet in a position to commit to it, or to say
+    that we won't be able to address it. After due consideration, a proposal
+    will either be committed, deferred, or rejected.</li>
+  <li><b>Deferred</b> plan item - A reasonable proposal that will not make it in
+    to this release for some reason is marked as deferred with a brief note as
+    to why it was deferred. Deferred plan items may resurface as committed plan
+    items at a later point.</li>
+  <li><b>Rejected</b> plan item - Plan items that were proposed but judged
+    unworkable are marked as rejected plan items, with an accompanying summary
+    of why they were dismissed. Keeping track of rejected items avoids repeating
+    the discussion.</li>
+  <li><b>No Commitment</b> plan item - Plan items that were proposed but no volunteers 
+    have agreed to produce this feature.</li>
+</ul>
+
+<h2><a name="Deliverables"></a>Release deliverables</h2>
+<p>The release deliverables: 
+<ul>
+  <li>Source code release for CDT Project, available as versions tagged 
+      &quot;CDT_30&quot; 
+    in the CDT Project <a href="http://dev.cdt.org/viewcvs/">CVS repository</a>.</li>
+  <li> CDT Project (downloadable zips and update site) -- source + binary 
+  distribution, used to develop on, or extend the CDT</li>
+  <li>CDT runtime binary distribution (downloadable zips and update site) -- the 
+  stuff needed to run CDT</li>
+  <li>CDT Test Plugins (downloadable zips and update site) -- All the JUnit and 
+  test infrastructure need to run the automated CDT tests</li>
+</ul>
+
+<h2><a name="Milestones"></a>Release milestones</h2>
+
+<p>Release milestone occurring at regular intervals (~6 weeks) exist to facilitate 
+  coarse-grained planning and staging. <br>
+  <b>Synchronization Expectations</b><br>
+  Once an Eclipse platform 3.1 milestone build is released, it will be vetted 
+  for use by a subset of the CDT development team. Once approved as stable, all 
+  CDT 3.0 development must move to that release of the Eclipse platform. Once 
+  a CDT milestone build is complete, developers performing large scale CDT integration 
+  will be expected to move forward to using that build for development. Every 
+  effort will be made to ensure that the CDT milestone builds are stable platforms 
+  for performing CDT integration, though perhaps not suitable for large scale 
+  C/C++ development. 
+<p>Note these dates are conditional on Eclipse 3.1 schedule<br>
+<p> The milestones are: 
+<ul>
+  <p><i>Eclipse 3.1.x TBD </i></p>
+  <p><strong>CDT 3.1 M1 - Date TBD</strong> - initial build</p>
+  <li><strong>CDT 3.1 M2 - Date TBD</strong> - stable build reflecting progress, 
+</ul>
+<ul>
+  <li><strong>CDT 3.1 M3 - Date TBD</strong> - stable build reflecting progress, 
+    APIs are documented 
+</ul>
+<ul>
+  <li><strong>CDT 3.1 M4 - Date TBD</strong> - stable build, feature complete. 
+    This is considered RC0. Lock down and external testing begins with M4 and 
+    progresses through a series of test-fix phases against candidate releases. 
+    Focus on clearing bug backlog.</li>
+</ul>
+
+<p>Release candidate builds are planned as follows (M4 is RC0): 
+<ul>
+  <li><strong>CDT 3.1 RC1 </strong><strong>- Date TBD</strong> - Release Candidate</li>
+  <li><strong>CDT 3.1 RC2 - Date TBD</strong> - Release Candidate </li>
+  <li><strong>CDT 3.1 RC3 - Date TBD</strong>- Final Release Candidate</li>
+</ul>
+<p>&nbsp; </p>
+
+
+<h2><a name="Compatibility"></a>Compatibility of Release 3.1 with 3.0</h2>
+
+<p>&nbsp;</p>
+
+<p><b>API Contract Compatibility:</b> </p>
+
+<p><b>Binary (plug-in) Compatibility:</b> 
+<p><b>Source Compatibility:</b> 
+<p><b>Workspace Compatibility:</b> 
+<p><b>Non-compliant usage of API's</b>: All non-API methods and classes, and certainly 
+  everything in a package with &quot;internal&quot; in its name, are considered 
+  implementation details which may vary between operating environment and are 
+  subject to change without notice. Client plug-ins that directly depend on anything 
+  other than what is specified in the CDT API are inherently unsupportable and 
+  receive no guarantees about compatibility within a single release much less 
+  with an earlier releases. 
+<p>&nbsp;
+<h2><a name="ProjectPlan">CDT Project </a>Plan - Themes &amp; Priorities</h2>
+<p> Plan items reflect new features of CDT, or areas where existing features will 
+  be significantly reworked. Many of the changes under consideration for the next 
+  release of the CDT address several of the Eclipse Themes; more detailed information 
+  about the Eclipse themes can be found at <a href="http://www.eclipse.org/org/councils/themes.html">this 
+  location.</a> The themes covered by this release of CDT are:</p>
+<ul>
+  <li><strong>Performance and Scalability</strong> - Working with C/C++ source 
+    offers a number of unique challenges. Work is underway to improve the scalability 
+    of the underlying source code model to provide more rapid responses (for searching 
+    and cross referencing) and more accurate results (for refactoring and outlining).</li>
+  <li> Enterprise Ready </li>
+  <li>Design Exstensibility: be a better platform.</li>
+  <li><strong> Simple to Use: User Experience </strong>- A continued goal for 
+    the CDT development team is enabling C/C++ developers to simply start developing 
+    without requiring an enormous amount of set-up and configuration where avoidable. 
+    There is much work in this area, specifically around the Managed Build System.</li>
+</ul>
+<p>The plan is broken down by the software modules that make up CDT; for more 
+  information on these components see our project structure <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/Project%20Structure.html?cvsroot=Tools_Project">here</a>. 
+  These modules are:</p>
+<ul>
+  <li><a href="#Core">Core</a></li>
+  <li><a href="#UI">UI</a></li>
+  <li><a href="#Launch">Launch</a></li>
+  <li><a href="#MakeBuilder">Standard Make Build</a></li>
+  <li><a href="#ManagedBuild">Managed Build</a></li>
+  <li><a href="#Debug">Debug</a></li>
+  <li><a href="#refactoring">Refactor</a></li>
+  <li>Doc</li>
+</ul>
+<p>For each software component in the plan we have identified the themes that 
+  are being emphasized for this release. As well, the planned items for a given 
+  component are characterized as either Committed, Proposed or Deferred. If you 
+  are looking to contribute to the CDT project then deferred, proposed or 'no 
+  commitment' items are good candidates to consider. If you would like to find 
+  out more about how to get involved click <a href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/developer/Commitment.html?cvsroot=Tools_Project">here</a>.</p>
+<h3>Feature Description:</h3>
+<h4>Format:</h4>
+<p>Feature name: feature description, Bugzilla#, Priority(high, med, low), Status:(not 
+  started, in progress, complete, hold), Target Milestone, Owner: name of committer</p>
+<h4>Example:</h4>
+<p>Resolver Model: The current file mappings/associations are standalone to CDT, 
+  the resolver needs to propagate the information to the Eclipse platform. This 
+  can now be done with the new ContentTypeManager and extension points in Eclipse-3.1 
+  (PR 86645). Bugzilla entries: Priority:High, Status: in progress, Milestone: 
+  M5 , Owner: QNX(AlainM)</p>
+<p>&nbsp;</p>
+<h2><a name="Core" id="Core"> </a>Core</h2>
+
+<p>&nbsp;</p>
+<blockquote> 
+  <blockquote>
+    <h3>Committed Items </h3>
+    <blockquote> 
+      <p><b> </b></p>
+    </blockquote>
+    <h3> Proposed Items</h3>
+  </blockquote>
+  <p>&nbsp;</p>
+  <blockquote> 
+    <h3>Defferred Items</h3>
+    <blockquote> 
+      <p>&nbsp;</p>
+    </blockquote>
+  </blockquote>
+  <h3>&nbsp;</h3>
+</blockquote>
+
+<h2><a name="ThemeManagedBuild" id="ManagedBuild"> Managed Builder</a></h2>
+<blockquote> 
+  <blockquote>
+    <h3>Committed Items </h3>
+    <blockquote> 
+      <p><b> </b></p>
+    </blockquote>
+    <h3> Proposed Items</h3>
+  </blockquote>
+  <p>&nbsp;</p>
+  <blockquote> 
+    <h3>Defferred Items</h3>
+  </blockquote>
+  <p>&nbsp;</p>
+</blockquote>
+<h2><strong>UI</strong> <a name="UI"></a></h2>
+<blockquote> 
+  <blockquote>
+    <h3>Committed Items </h3>
+    <blockquote> 
+      <p><b> </b></p>
+    </blockquote>
+    <h3> Proposed Items</h3>
+  </blockquote>
+  <p>&nbsp;</p>
+  <blockquote> 
+    <h3>Defferred Items</h3>
+  </blockquote>
+  <p>&nbsp;</p>
+  <h3>&nbsp;</h3>
+</blockquote>
+<h2><strong>Make Builder</strong><a name="MakeBuilder"></a><br>
+</h2>
+<blockquote> 
+  <blockquote> 
+    <h3>Committed Items </h3>
+    <blockquote>
+      <blockquote> 
+        <p><b> </b></p>
+      </blockquote>
+    </blockquote>
+    <h3> Proposed Items</h3>
+    <p>&nbsp;</p>
+    <h3>Defferred Items</h3>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+<h2><strong>Launch<a name="Launch"></a></strong></h2>
+<blockquote> 
+  <blockquote> 
+    <h3>Committed Items </h3>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p><b> </b></p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <h3> Proposed Items</h3>
+    <blockquote> 
+      <p>&nbsp;</p>
+    </blockquote>
+    <h3>Defferred Items</h3>
+    <blockquote>
+      <p>&nbsp;</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<h2>Debug<a name="Debug"></a></h2>
+<blockquote> 
+  <h3 align="left">&nbsp;</h3>
+  <blockquote> 
+    <h3> Committed Items </h3>
+    <blockquote> 
+      <p><b> </b></p>
+    </blockquote>
+    <h3> Proposed Items</h3>
+  </blockquote>
+  <p>&nbsp;</p>
+  <blockquote>
+    <h3>Defferred Items</h3>
+    <blockquote>&nbsp;</blockquote>
+  </blockquote>
+</blockquote>
+<h2><a name="Refactoring"></a>Refactoring</h2>
+<ul>
+  <blockquote> 
+    <h3>Committed Items </h3>
+  </blockquote>
+  <ul>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p><b> </b></p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </ul>
+  <blockquote> 
+    <h3> Proposed Items</h3>
+  </blockquote>
+  <ul>
+    <blockquote> 
+      <p>&nbsp;</p>
+    </blockquote>
+  </ul>
+  <blockquote>
+    <h3>Defferred Items</h3>
+  </blockquote>
+  <ul>
+    <blockquote>
+      <p>&nbsp;</p>
+    </blockquote>
+  </ul>
+</ul>
+<blockquote> 
+  <pre>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+</pre>
+  <p><br>
+    <br>
+  </p>
+  <pre>&nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; &nbsp; 		&nbsp;&nbsp;
+  &nbsp; 		&nbsp;&nbsp;
+  &nbsp; 		&nbsp;&nbsp;
+  		&nbsp;&nbsp;
+</pre>
+</blockquote>
+</body></html
