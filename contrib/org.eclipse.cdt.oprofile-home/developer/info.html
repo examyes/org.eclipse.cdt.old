@@ -82,12 +82,13 @@ $ cvs -d :pserver:anonymous@dev.eclipse.org/home/tools co -z9 \
 </li>
 <li>Start the build:
 <pre>
-$ cd /my/eclipse/dir
-$ java -cp startup.jar \
+$ cd /path/to/org.eclipse.cdt.oprofile.releng
+$ export ECLIPSE_HOME=/path/to/eclipse/dir
+$ java -cp $ECLIPSE_HOME/startup.jar \
 	org.eclipse.core.launcher.Main \
 	-application org.eclipse.ant.core.antRunner \
-	-DbaseLocation=$(pwd) \
-	-Dpde.build.scripts=$(pwd)/plugins/org.eclipse.pde.build_3.0.0/scripts \
+	-DbaseLocation=$ECLIPSE_HOME \
+	-Dpde.build.scripts=$ECLIPSE_HOME/plugins/org.eclipse.pde.build_3.1.0/scripts \
 	-Dconfigs=linux,gtk,x86
 </pre>
 <em>NOTE: </em>If you are building on an architecture other than x86, modify the last line accordingly.  The build configuration must match an assembly target in the <code>customTargets.xml</code> file.  If your desired configuration does not have an assembly target, write one and send us a patch.

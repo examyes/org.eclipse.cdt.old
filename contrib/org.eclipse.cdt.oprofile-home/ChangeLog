@@ -1,5 +1,9 @@
 2005-06-08  Jeremy Handcock  <handcock@redhat.com>
 
+	* developer/info.html: Correct build instructions.
+
+2005-06-08  Jeremy Handcock  <handcock@redhat.com>
+
 	* downloads.html: Add architecture and CDT information.
 	* developer/info.html: Add build information.
 
