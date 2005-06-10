@@ -174,7 +174,7 @@ main (int argc, char* argv[])
   int index;
   while (true)
     {
-      char c;
+      int c;
       c = getopt_long_only (argc, argv, "+", long_options, &index);
       if (c == -1)
 	break;

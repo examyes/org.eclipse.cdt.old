@@ -1,3 +1,7 @@
+2005-06-10  Keith Seitz  <keiths@redhat.com>
+
+	* src/opxml.cc (main): getopt_long_only returns an int, not a char.
+
 2005-05-27  Jeremy Handcock  <handcock@redhat.com>
 
 	* install: Revert last patch.
