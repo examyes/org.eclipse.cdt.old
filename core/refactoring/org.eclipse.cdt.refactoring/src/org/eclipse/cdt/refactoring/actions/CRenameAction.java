@@ -12,37 +12,20 @@
 package org.eclipse.cdt.refactoring.actions;
 
 import org.eclipse.cdt.internal.refactoring.Messages;
-import org.eclipse.cdt.refactoring.CRefactory;
-import org.eclipse.cdt.refactoring.ICRefactoringArgument;
+import org.eclipse.cdt.refactoring.*;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.ui.*;
-import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * Launches a rename refactoring.
  */          
-public class CRenameAction extends Action {
-    public static class EditorActionDelegate implements IEditorActionDelegate {
-        CRenameAction fAction= new CRenameAction();
-        public void setActiveEditor(IAction action, IEditorPart targetEditor) {
-            fAction.setEditor(targetEditor);
-            action.setEnabled(fAction.isEnabled());
-        }
-        public void run(IAction action) {
-            fAction.run();
-        }
-        public void selectionChanged(IAction action, ISelection selection) {
-        }
-    }
-    
-    
+public class CRenameAction extends Action implements IPositionConsumer {
     private ITextEditor fEditor;
     private IFile fFile;
     private IWorkbenchPart fWorkbenchPart;
@@ -51,6 +34,7 @@ public class CRenameAction extends Action {
     
     public CRenameAction() {
         super(Messages.getString("CRenameRefactoringAction.label")); //$NON-NLS-1$
+        setActionDefinitionId("org.eclipse.cdt.ui.edit.text.c.rename.element"); //$NON-NLS-1$
     }
     
     public void setEditor(IEditorPart editor) {

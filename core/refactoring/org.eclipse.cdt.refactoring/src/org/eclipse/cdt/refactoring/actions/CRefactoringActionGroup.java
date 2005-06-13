@@ -13,6 +13,8 @@
 
 package org.eclipse.cdt.refactoring.actions;
 
+import org.eclipse.cdt.refactoring.IPositionConsumer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.*;
@@ -30,7 +32,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * 
  * @since 2.0
  */
-public class CRefactoringActionGroup extends ActionGroup {
+public class CRefactoringActionGroup extends ActionGroup implements IPositionConsumer {
     /**
      * Pop-up menu: id of the refactor sub menu (value <code>org.eclipse.cdt.ui.refactoring.menu</code>).
      * 
@@ -89,6 +91,7 @@ public class CRefactoringActionGroup extends ActionGroup {
     }
     
     public void init(IWorkbenchPartSite site) {
+        fRenameAction.setWorkbenchPart(site.getPart());
     }
     
     public void setEditor(ITextEditor textEditor) {
@@ -134,5 +137,11 @@ public class CRefactoringActionGroup extends ActionGroup {
     public void dispose() {
         fUndoAction.dispose();
         super.dispose();
+    }
+
+    public void setPosition(IFile file, int startPos, String text) {
+        fRenameAction.setPosition(file, startPos, text);
+        fUndoAction.selectionChanged(null);
+        fRedoAction.selectionChanged(null);
     }
 }

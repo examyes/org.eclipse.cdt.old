@@ -11,17 +11,11 @@
 
 package org.eclipse.cdt.refactoring.actions;
         
-import org.eclipse.cdt.core.model.*;
-import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.model.ISourceRange;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.*;
-import org.eclipse.ui.IViewActionDelegate;
-import org.eclipse.ui.IViewPart;
 
 /**
  * Launches a rename refactoring.
@@ -40,43 +34,13 @@ public class CRenameViewActionDelegate implements IViewActionDelegate, IObjectAc
         fAction.run();
     }
     public void selectionChanged(IAction action, ISelection selection) {
-        ISourceRange range= null;
-        IFile file= null;
-        String text= null;
+        boolean handled= false;
         if (selection instanceof IStructuredSelection) {
             IStructuredSelection ss= (IStructuredSelection) selection;
             Object o= ss.getFirstElement();
-            if (o instanceof ISourceReference) {
-                ISourceReference sref= (ISourceReference) o;
-                try {
-                    range= sref.getSourceRange();
-                } catch (CModelException e) {
-                }
-            }
-            if (o instanceof ICElement) {
-                ICElement e= (ICElement) o;
-                IResource r= e.getUnderlyingResource();
-                text= e.getElementName();
-                if (r instanceof IFile) {
-                    file= (IFile) r;
-                }
-            }
+            handled= CRefactory.getInstance().providePosition(o, fAction);
         }
-        if (range != null && file != null && text != null) {
-            int offset= range.getIdStartPos();
-            int useLength= 0;
-            int idx= text.length()-1;
-            while (idx >= 0) {
-                char c= text.charAt(idx);
-                if (!Character.isLetterOrDigit(c) &&  c!='_') {
-                    text= text.substring(idx+1);
-                    break;
-                }
-                useLength++;
-                idx--;
-            }
-            offset= range.getIdStartPos()+range.getIdLength()-useLength;
-            fAction.setPosition(file, offset, text);
+        if (handled) {
             action.setEnabled(fAction.isEnabled());
         }
         else {

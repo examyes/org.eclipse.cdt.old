@@ -9,7 +9,7 @@
       >
          <menu
                id="org.eclipse.cdt.ui.refactoring.menu"
-               label="Refactor"
+               label="%Refactoring.menu.label"
                path="group.reorganize">
             <separator name="reorgGroup"/>
             <separator name="typeGroup"/>

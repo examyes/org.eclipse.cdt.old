@@ -22,6 +22,7 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.cdt.internal.refactoring.*;
 import org.eclipse.cdt.internal.refactoring.ui.CRenameRefactoringWizard;
+import org.eclipse.cdt.refactoring.actions.CElementPositionAdapter;
 import org.eclipse.core.resources.*;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -66,6 +67,7 @@ public class CRefactory {
     private ICRefactoringSearch fTextSearch;
     private String[] fAffectedProjectNatures;
     private IParserConfigurationProvider[] fParserConfigurationProviders= new IParserConfigurationProvider[0];
+    private IPositionProvider[] fPositionAdapters= new IPositionProvider[0];
     
     public static CRefactory getInstance() {
         return sInstance;
@@ -89,6 +91,7 @@ public class CRefactory {
                 CProjectNature.C_NATURE_ID, 
                 CCProjectNature.CC_NATURE_ID
         };
+        addPositionProvider(new CElementPositionAdapter());
     }
     
     // runs the rename refactoring
@@ -189,5 +192,23 @@ public class CRefactory {
         now.add(pcp);
         fParserConfigurationProviders= 
             (IParserConfigurationProvider[]) now.toArray(new IParserConfigurationProvider[now.size()]);
+    }
+
+    public void addPositionProvider(IPositionProvider adapter) {
+        HashSet now= new HashSet();
+        now.addAll(Arrays.asList(fPositionAdapters));
+        now.add(adapter);
+        fPositionAdapters= 
+            (IPositionProvider[]) now.toArray(new IPositionProvider[now.size()]);
+    }
+
+    public boolean providePosition(Object o, IPositionConsumer consumer) {
+        for (int i = 0; i < fPositionAdapters.length; i++) {
+            IPositionProvider provider = fPositionAdapters[i];
+            if (provider.providePosition(o, consumer)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

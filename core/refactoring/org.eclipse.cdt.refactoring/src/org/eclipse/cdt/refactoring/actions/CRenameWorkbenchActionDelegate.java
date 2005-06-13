@@ -11,8 +11,10 @@
 
 package org.eclipse.cdt.refactoring.actions;
         
+import org.eclipse.cdt.refactoring.CRefactory;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.*;
 
 /**
@@ -26,17 +28,27 @@ public class CRenameWorkbenchActionDelegate implements IWorkbenchWindowActionDel
         fWorkbenchWindow= window;
     }
     public void selectionChanged(IAction action, ISelection selection) {
-        boolean disable= true;
+        boolean handled= false;
         IWorkbenchPage workbenchPage= fWorkbenchWindow.getActivePage();
+        IWorkbenchPart workbenchPart= null;
         if (workbenchPage != null) {
+            workbenchPart= workbenchPage.getActivePart();
             IEditorPart editor= workbenchPage.getActiveEditor();
-            if (editor == workbenchPage.getActivePart()) {
+            if (editor == workbenchPart) {
                 fAction.setEditor(editor);
-                disable= false;
+                handled= true;
             }
         }
         
-        if (disable) {
+        if (!handled && workbenchPart != null && selection instanceof IStructuredSelection) {
+            Object o= ((IStructuredSelection) selection).getFirstElement();
+            if (o != null) {
+                fAction.setWorkbenchPart(workbenchPart);
+                handled= CRefactory.getInstance().providePosition(o, fAction);
+            }
+        }
+        
+        if (!handled) {
             fAction.setEnabled(false);
             action.setEnabled(false);
         }
