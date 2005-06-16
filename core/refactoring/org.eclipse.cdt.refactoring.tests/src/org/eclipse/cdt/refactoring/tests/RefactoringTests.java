@@ -16,9 +16,18 @@ import java.io.StringWriter;
 import org.eclipse.cdt.core.tests.BaseTestFramework;
 import org.eclipse.cdt.internal.core.dom.SavedCodeReaderFactory;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.ltk.core.refactoring.*;
+import org.eclipse.ltk.core.refactoring.Change;
+import org.eclipse.ltk.core.refactoring.CompositeChange;
+import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.RefactoringStatusEntry;
+import org.eclipse.ltk.core.refactoring.TextEditChangeGroup;
+import org.eclipse.ltk.core.refactoring.TextFileChange;
 import org.eclipse.search.internal.core.text.FileCharSequenceProvider;
-import org.eclipse.text.edits.*;
+import org.eclipse.text.edits.MultiTextEdit;
+import org.eclipse.text.edits.ReplaceEdit;
+import org.eclipse.text.edits.TextEdit;
+import org.eclipse.text.edits.TextEditGroup;
+
 
 /**
  * @author markus.schorn@windriver.com
@@ -35,7 +44,6 @@ public class RefactoringTests extends BaseTestFramework {
 
     protected void setUp() throws Exception {
         super.setUp();
-        disableIndexing();
         fBufferSize= FileCharSequenceProvider.BUFFER_SIZE;
         FileCharSequenceProvider.BUFFER_SIZE= 1024*4;
     }
@@ -256,4 +264,5 @@ public class RefactoringTests extends BaseTestFramework {
                 status.getMessageMatchingSeverity(status.getSeverity()), 
                 status.getSeverity()==RefactoringStatus.OK); 
     }
+
 }

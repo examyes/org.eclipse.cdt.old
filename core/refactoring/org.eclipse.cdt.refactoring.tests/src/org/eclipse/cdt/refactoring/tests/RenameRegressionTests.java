@@ -42,70 +42,27 @@ public class RenameRegressionTests extends RenameTests {
         return suite( true );
     }
     public static Test suite( boolean cleanup ) {
-        TestSuite suite = new TestSuite("RenameRegressionTests"); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testSimpleRename") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testLocalVar") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testParameter") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testFileStaticVar") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_1") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testAttribute_2") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_1") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_3") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testConstructor_26") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testConstructor_27") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testDestructor_28") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testDestructor_29_72612")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testFunction_31") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_32_72717")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_33_72605")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_33b_72605")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_34") ); //$NON-NLS-1$
-        suite.addTest( new FailingTest(new RenameRegressionTests("testMethod_35_72726"),72726) ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_39") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_40") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_41") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_43") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_44") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testMethod_45")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testStruct_46") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testUnion_47") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testEnumeration_48") ); //$NON-NLS-1$
-        suite.addTest( new FailingTest(new RenameRegressionTests("testTemplate_49_72626"), 72626) ); //$NON-NLS-1$
-        suite.addTest( new FailingTest(new RenameRegressionTests("testTemplate_49_72626"), 86986) ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_52") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_53") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testAttribute_54") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_55_79231")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_55") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_55_72748")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_56") ); //$NON-NLS-1$ 
-        suite.addTest( new RenameRegressionTests("testAttribute_61") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testEnumerator_62") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testAttribute_63") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testAttribute_64") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testAttribute_65") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testNamespace_66") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testNamespace_66_79281"));  //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testNamespace_66_79282")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testFunction_67") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testVariable_68") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testVariable_68_79295")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_81_72620")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testVariable_88_72617")); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_92A") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testClass_92B") ); //$NON-NLS-1$
-        suite.addTest( new RenameRegressionTests("testRenameParticipant") ); //$NON-NLS-1$
         
+        TestSuite innerSuite= new TestSuite(RenameRegressionTests.class);
+        innerSuite.addTest( new FailingTest(new RenameRegressionTests("failing_testMethod_35_72726"),72726) ); //$NON-NLS-1$
+        
+        TestSuite suite = new TestSuite("RenameRegressionTests"); //$NON-NLS-1$
+        suite.addTest( new RenameRegressionTests("disableIndexer")); //$NON-NLS-1$
+        suite.addTest( innerSuite );
         suite.addTest( RenameVariableTests.suite(false));
         suite.addTest( RenameFunctionTests.suite(false));
         suite.addTest( RenameTypeTests.suite(false));
         suite.addTest( RenameMacroTests.suite(false));
-//        suite.addTest( RenameTemplatesTests.suite(false));
+        suite.addTest( RenameTemplatesTests.suite(false));
         
         if( cleanup )
             suite.addTest( new RenameRegressionTests("cleanupProject") );    //$NON-NLS-1$
         
         return suite;
+    }
+    
+    public void disableIndexer() throws Exception {
+        disableIndexing();
     }
 
     public void testSimpleRename() throws Exception {
@@ -471,7 +428,7 @@ public class RenameRegressionTests extends RenameTests {
         
     }
     // defect is input for new name is not allowed
-    public void testMethod_35_72726() throws Exception {
+    public void failing_testMethod_35_72726() throws Exception {
         StringWriter writer = new StringWriter();
         writer.write( "class Foo{                               \n" ); //$NON-NLS-1$
         writer.write( "  Foo& operator *=/*vp1*/(const Foo &rhs);\n" ); //$NON-NLS-1$
@@ -802,7 +759,6 @@ public class RenameRegressionTests extends RenameTests {
            
         String contents = writer.toString();
         IFile file = importFile( "t.cpp", contents ); //$NON-NLS-1$
-        //vp1 template classes are not supposed to be found until the new Parser is complete (May '05)
         int offset =  contents.indexOf( "Array" ) ; //$NON-NLS-1$
         Change changes= getRefactorChanges(file, offset, "Arr2" ); //$NON-NLS-1$
         assertTotalChanges( 3, changes );
