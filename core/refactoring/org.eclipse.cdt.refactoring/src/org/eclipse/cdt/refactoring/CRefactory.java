@@ -11,11 +11,9 @@
 
 package org.eclipse.cdt.refactoring;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
-import org.eclipse.cdt.core.CCProjectNature;
-import org.eclipse.cdt.core.CProjectNature;
+import org.eclipse.cdt.core.*;
 import org.eclipse.cdt.core.dom.*;
 import org.eclipse.cdt.core.dom.IASTServiceProvider.UnsupportedDialectException;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
@@ -24,11 +22,12 @@ import org.eclipse.cdt.internal.refactoring.*;
 import org.eclipse.cdt.internal.refactoring.ui.CRenameRefactoringWizard;
 import org.eclipse.cdt.refactoring.actions.CElementPositionAdapter;
 import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizardOpenOperation;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -63,7 +62,6 @@ public class CRefactory {
     public static final int ARGUMENT_NAMESPACE              = 15;
     
     private static CRefactory sInstance= new CRefactory();
-    private HashSet fEditorIDs= new HashSet();
     private ICRefactoringSearch fTextSearch;
     private String[] fAffectedProjectNatures;
     private IParserConfigurationProvider[] fParserConfigurationProviders= new IParserConfigurationProvider[0];
@@ -83,10 +81,6 @@ public class CRefactory {
     }
 
     private CRefactory() {
-        fEditorIDs.add("org.eclipse.cdt.ui.editor.CEditor"); //$NON-NLS-1$
-        fEditorIDs.add("com.windriver.ide.editor.cpp"); //$NON-NLS-1$
-        fEditorIDs.add("com.windriver.ide.editor.c"); //$NON-NLS-1$
-        
         fAffectedProjectNatures= new String[] {
                 CProjectNature.C_NATURE_ID, 
                 CCProjectNature.CC_NATURE_ID
@@ -124,28 +118,35 @@ public class CRefactory {
     }
 
     public String[] getCCppPatterns() {
-        IEditorRegistry registry= PlatformUI.getWorkbench().getEditorRegistry();
-        HashSet patterns= new HashSet();
-        IFileEditorMapping[] mappings= registry.getFileEditorMappings();
-        for (int i = 0; i < mappings.length; i++) {
-            IFileEditorMapping mapping = mappings[i];
-            IEditorDescriptor[] editors= mapping.getEditors();
-            for (int j = 0; j < editors.length; j++) {
-                IEditorDescriptor editor = editors[j];
-                if (fEditorIDs.contains(editor.getId())) {
-                    String name= mapping.getName();
-                    String ext= mapping.getExtension();
-                    if (ext.length() > 0) {
-                        patterns.add(name+'.'+ext);
-                    }
-                    else {
-                        patterns.add(name);
-                    }
-                    break;
+        IContentType[] cts= Platform.getContentTypeManager().getAllContentTypes();
+        HashSet all= new HashSet();
+        for (int i= 0; i < cts.length; i++) {
+            IContentType type= cts[i];
+            boolean useit= false;
+            while (!useit && type != null) {
+                String id= type.getId();
+                if (id.equals(CCorePlugin.CONTENT_TYPE_CHEADER) ||
+                        id.equals(CCorePlugin.CONTENT_TYPE_CSOURCE) ||
+                        id.equals(CCorePlugin.CONTENT_TYPE_CXXHEADER) ||
+                        id.equals(CCorePlugin.CONTENT_TYPE_CXXSOURCE)) {
+                            useit= true;
+                }
+                else {
+                    type= type.getBaseType();
                 }
             }
+            if (useit) {
+                String exts[] =
+                    type.getFileSpecs(IContentType.FILE_EXTENSION_SPEC);
+                all.addAll(Arrays.asList(exts));
+            }
         }
-        return (String[]) patterns.toArray(new String[patterns.size()]);
+        String[] result= new String[all.size()];
+        Iterator it= all.iterator();
+        for (int i= 0; i < result.length; i++) {
+            result[i]= "*." + (String) it.next(); //$NON-NLS-1$
+        }
+        return result;
     }
 
     public IASTTranslationUnit getTranslationUnit(IFile sourceFile, 
@@ -180,10 +181,10 @@ public class CRefactory {
         return fAffectedProjectNatures;
     }
 
+    /**
+     * @deprecated extensions are found via the content types.
+     */
     public void addEditorDefiningExtension(String editorID) {
-        if (!fEditorIDs.contains(editorID)) {
-            fEditorIDs.add(editorID);
-        }
     }
 
     public void addParserConfigurationProvider(IParserConfigurationProvider pcp) {
