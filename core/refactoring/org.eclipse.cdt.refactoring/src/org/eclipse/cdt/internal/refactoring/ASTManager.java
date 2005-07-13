@@ -793,6 +793,9 @@ public class ASTManager {
             return;
         }
         
+        if( fArgument.getSourceFile() == null )
+            return;
+        
         SavedCodeReaderFactory.getInstance().getCodeReaderCache().flush();
         
         pm.beginTask(Messages.getString("ASTManager.task.analyze"), 2); //$NON-NLS-1$
