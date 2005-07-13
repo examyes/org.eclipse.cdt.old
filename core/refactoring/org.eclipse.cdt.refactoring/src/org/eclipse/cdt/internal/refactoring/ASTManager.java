@@ -672,7 +672,9 @@ public class ASTManager {
             ICPPBase[] bases= classType.getBases();
             for (int i = 0; i < bases.length; i++) {
                 ICPPBase base = bases[i];
-                ICPPClassType baseType= base.getBaseClass();
+                if( !(base.getBaseClass() instanceof ICPPClassType) )
+                	continue;
+                ICPPClassType baseType= (ICPPClassType) base.getBaseClass();
                 if (baseType != null) {
                     IScope baseScope= baseType.getCompositeScope();
                     if (baseScope != null) {
