@@ -14,6 +14,7 @@ package org.eclipse.cdt.internal.refactoring;
 import java.io.*;
 import java.util.*;
 
+import org.eclipse.cdt.core.model.*;
 import org.eclipse.cdt.internal.refactoring.scanner.Scanner;
 import org.eclipse.cdt.internal.refactoring.scanner.Token;
 import org.eclipse.cdt.refactoring.*;
@@ -135,7 +136,11 @@ public class TextSearchWrapper implements ICRefactoringSearch {
             public void accept(IResourceProxy proxy, int start, int length) {
                 IResource res= proxy.requestResource();
                 if (res instanceof IFile) {
-                    target.add(new CRefactoringMatch((IFile) res, start, length, 0));
+                    IFile file= (IFile) res;
+                    ICElement elem= CoreModel.getDefault().create(file);
+                    if (elem instanceof ITranslationUnit) {
+                        target.add(new CRefactoringMatch(file, start, length, 0));
+                    }
                 }                
             }
         };
