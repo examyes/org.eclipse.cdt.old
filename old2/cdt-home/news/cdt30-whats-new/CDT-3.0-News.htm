@@ -1,0 +1,491 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>CDT 3.0 News</TITLE>
+<META http-equiv=Content-Language content=en-us>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+</HEAD>
+<BODY>
+
+<H1>CDT 3.0 - New and Noteworthy</H1>
+
+<P>
+Oh the summer is here and the software is hot! 
+</P>
+
+<TABLE cellSpacing=0 cellPadding=10 width="80%" border=0>
+ <TBODY>
+
+<TR>
+Right on the heels of the Eclipse 3.1 release is the 
+<b>CDT 3.0</b> release, providing something new for all the 
+C/C++ developers to play with while they soak up 
+the warm summer rays! The 
+<b><a 
+href="http://dev.eclipse.org/viewcvs/index.cgi/%7Echeckout%7E/cdt-home/downloads/main.html?cvsroot=Tools_Project">
+CDT 3.0 download</a></b>
+is now available though the CDT download page.  
+
+<ul>
+<li><i>Note that CDT 3.0 requires version 3.1 of the Eclipse framework.</i>
+</ul>
+
+<p>
+This version of the CDT provides a number of performance 
+and scalability improvements and a few new features:
+
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2> <HR> </TD>
+  </TR>
+  <TR><TD colSpan=2><H2>General Improvements</H2></TD>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>DOM Based Language Backend</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The CDT 3.0 is now served by a much more powerful language model in the form of a
+ 	DOM that helps make everything from the <b>C/C++ Outliner</b> to <b>Searching</b> to 
+	<b>Re-factoring</b> to <b>Class Browsing</b> faster and more accessible to plugin
+	developers.
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>K&ampR C Language Support</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	In addition to the new DOM serving the backend source code model, the CDT native parser is also 
+      much more tolerant of K&ampR C Language dialects.
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Faster Searches</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	Significant work has gone into improving the performance and speed of the C/C++ parser and the
+	efficiency of the indexer.  As a result, searches (both general and specific as in search for 
+  	references and declarations) are faster and more accurate than in previous releases.
+      </P>
+    </TD>
+  </TR>
+
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2> <HR> </TD>
+  </TR>
+  <TR><TD colSpan=2><H2>C/C++ User Interface</H2></TD>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Build Environment Control</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The environment variables set when kicking off external build commands can now be 
+	fully configured.  These settings are configurable through the <b>Standard Make</b>
+	and <b>Managed Build</b> C/C++ project properties or can be set directly when creating 
+      new projects from the <b>New C/C++ Project</b> wizard.
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/projectenv.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>PathEntry Variables</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The PathEntry project properties are important for the correct operation of
+	the CDT parser.  The new <b>Window > Preferences > C/C++ > PathEntry Variables</b>
+	configuration allows developers to configure a common set of variables that will
+	allow projects to be shared more easily between different developer set-ups.
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/pathentryvariables.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Binary Parser Options</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+ 	The binary parsers have been made more generic with the capability 
+      to redefine what external commands they use for data interpretations.
+	Configure the settings in the <b>project properties</b> or at <b>
+      New Project</b> creation time. 
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/binaryparseroptions.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>New Discovery Capabilities</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+ 	Further work has been done to facilitate the discovery of compiler and
+      project settings, including the ability to read in the output from a 
+	build output file.  
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/discovery.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Indexer Selection</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	When you can't make them happy, give them choice!  The C/C++ source indexers are
+	now plugable components, each providing different feature support, allowing
+      users to select from:
+	<dl>
+	<dt> <b>No indexing</b> 
+	<dd> No support for searches or cross referencing
+
+	<dt> <b>CTags utility based indexing</b>
+	<dd> Fast, good performance, minimal configuration
+	<dd> Search for declarations only, no refactoring and no search for references
+	<dd> Recommend using <a HREF="http://ctags.sourceforge.net/">Exuberant CTags 5.5.4</a>
+
+	<dt> <b>CDT parser based indexing</b>
+	<dd> DOM model based, requires proper project configuration (defines and includes)
+	<dd> Full searching, cross referencing and refactoring supported
+	</dl>
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Drag and Drop Support</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The <b>C/C++ Project</b> and the <b>C/C++ Outline</b> views now both have improved
+	support for dragging and dropping of code elements and binaries.
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Make Target Filters</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The <b>Make Targets</b> view can now be a little more clutter free by enabling the <b>Hide Empty Folders</b>
+	filter in the view.
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/maketargetfilter.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Jump to Definition</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	C/C++ cross referencing just got easier!  Complementing the already existing
+	<b>Open Declaration</b>, also know as the infamous <b>F3</b>, is the powerful
+	<b>Open Definition</b> (aka <b>Ctrl+F3</b>) that will take you directly to the definition 
+	of the class or type you are looking for. 
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/opendefinition.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>New Editing Commands</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+ 	Do more with less effort, additional C/C++ Editor keybindings are available now
+  	for bracket matching <b>Ctrl+Shift+P</b>, block <code>/* comments */</code>
+      <b>Ctrl+Shift+/,\</b>, function and method navigation <b>Ctrl+Shift+Up/Down</b>
+	and more flexible annotation/marker navigation.
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Editor Platform Alignment</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The C/C++ Editor is more aligned with the platform preferences and settings.  All of the common
+	text editor settings are available through <b>Window > Preferences > General > Editors > Text Editors</b>
+	<p>
+	A few new features have been added to the <b>C/C++ Editor</b> syntax highlighting, accessed through 
+	<b>Windows > Preferences > C/C++ > Editor > Syntax</b>, including the colouring of operators,
+	braces and numbers and a new in-place outline that can be activated via <b>Ctrl+O</b>
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/editpreferences.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2> <HR> </TD>
+  </TR>
+  <TR><TD colSpan=2><H2>Debugger</H2></TD>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>New Modules View</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	All of the binary components, or modules, are now displayed in the debugger's <b>Modules</b> view.
+	This includes dlls, shared objects and application binaries themselves.  Additionally, each module can 
+	be expanded allowing the user to put breakpoints directly on binary components without the need
+	of opening the <b>C/C++ Project</b> view
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/modules.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Memory View</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The debugger now makes use of the standard platform <b>Memory</b> view allowing
+	for a number of format translations and multiple memory location inspection.
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/memory.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Register Groups</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The <b>Registers</b> view now supports the concept of register groups, allowing
+ 	users to defined collection of registers that are relevant for their particular
+	debugging environment.  
+      </P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/registers.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>New Editor Commands</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The <b>Run to line</b> and <b>Resume at line</b> commands are now exposed and 
+	visible through the C/C++ editor while debugging.
+      </P>
+    </TD>
+  </TR>
+
+
+  <TR> <!----------------------------------------------------->
+    <TD colSpan=2> <HR> </TD>
+  </TR>
+  <TR><TD colSpan=2><H2>Managed Build System</H2></TD>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Configuration Overhaul!</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	There has been an enormous amount of work done to clean up and improve the 
+	user experience and workflow for developers (and integrators) using the Managed 
+	Build system.  The new <b>C/C++ Build</b> project preference shows the number
+	of new enhancements:	
+      <P>      
+       <IMG src="CDT-3.0-News_files/buildprefoverview.gif"  >
+      </P>
+	<li> Full control over the output artifact and extension:
+      <P>      
+       <IMG src="CDT-3.0-News_files/buildsettings.gif"  >
+      </P>
+	<li> Pre and Post build command execution
+      <P>      
+       <IMG src="CDT-3.0-News_files/buildsteps.gif"  >
+      </P>
+	<li> Per project and per configuration environment variable settings
+      <P>      
+       <IMG src="CDT-3.0-News_files/buildenvironment.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Build Macro Support</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	The managed build preferences now support a wide set of macros that can be incorporated
+	into your project.  The system environment settings are inherited and individual macros
+	can be set globally or local to a particular project that define Strings, Files, Directories 
+	or lists of any of these items.
+	</P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/managedbuildmacros.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Per File Build Steps</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	Users now have the ability to define a custom build step for any source file in the project.
+	This build step can generate additional output sources and/or make adjustments to other project
+  	properties.
+	<p>
+	For example, a user could add a yacc source file to her project, specify the yacc command 
+ 	line and the name of the C output file, and the generated C file will automatically be compiled with the 
+	other C files in the project.
+	</P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/perfilebuild.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+  <TR>
+    <TD vAlign=top align=left width="30%"> 
+        <P align=right>
+	<B>Configuration Renaming</B>
+        </P>
+    </TD>
+    <TD vAlign=top width="70%">
+      <P>
+	Gone are the days of picking a good name for your build configuration and having to
+	live with it for the life of the project.   Build configurations can now be renamed
+	through the <b>Manage...</b> selection of the project's build properties.
+	</P>
+      <P>      
+       <IMG src="CDT-3.0-News_files/buildrename.gif"  >
+      </P>
+    </TD>
+  </TR>
+
+
+ </TBODY>
+</TABLE>
+
+<HR> 
+<H3>CDT 3.0 Notes for CDT Extenders</H3>
+
+The Managed Build System (MBS) has undergone some additional changes in CDT 3.0 to better
+support tool integrators.  Specifically the following features have been added:
+<ol>
+<li>Additions to the tool-chain object model to support more complex tool-chains, 
+particularly regarding the definitions of the inputs and outputs to a tool.
+
+<li>The ability to define option categories for the entire tool-chain in addition to per tool.
+
+<li>The ability to define custom "new project" wizard pages.
+
+<li>Additional callbacks to support dynamic behavior, including:
+<ul>
+<li>Specifying whether an option is currently visible, enabled, and used in command line generation.
+<li>Specifying whether the tool set used by a tool-chain is installed on the system.
+<li>Defining environment variables and build macros a tool-chain.  
+</ul>
+  
+<li>A mechanism for supporting multiple versions of a tool-chain.
+
+<li>A mechanism for converting configurations from using one tool-chain, or a version of a 
+tool-chain, to another.
+
+<li>Extraction of the GNU tool-chain into its own plug-in in order to allow the 
+Managed Build System to be packaged without GNU tool-chain support when appropriate.
+</ol>
+
+<p>
+<hr>
+<p>
+
+
+
