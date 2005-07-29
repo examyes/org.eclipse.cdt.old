@@ -15,8 +15,12 @@ import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.event.ICDIEvent;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgument;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgumentDescriptor;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIGlobalVariable;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIGlobalVariableDescriptor;
+import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariable;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorage;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorageDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariable;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor;
 
@@ -59,9 +63,25 @@ public class WinDbgVariableManager {
 		return null;
 	}
 
+	public ICDILocalVariable createLocalVariable(ICDILocalVariableDescriptor var)
+		throws CDIException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public ICDIArgument createArgument(ICDIArgumentDescriptor var)
 			throws CDIException {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ICDIGlobalVariable createGlobalVariable(ICDIGlobalVariableDescriptor var) 
+		throws CDIException {
+		return null;
+	}
+
+	public ICDIThreadStorage createThreadStorage(ICDIThreadStorageDescriptor var) 
+		throws CDIException {
 		return null;
 	}
 

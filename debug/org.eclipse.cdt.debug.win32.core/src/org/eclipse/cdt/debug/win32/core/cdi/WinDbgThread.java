@@ -20,6 +20,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDISignal;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorage;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThreadStorageDescriptor;
 
 public class WinDbgThread implements ICDIThread {
@@ -43,7 +44,7 @@ public class WinDbgThread implements ICDIThread {
 	}
 	
 	public String toString() {
-		return "ThreadID: " + id;
+		return "ThreadID: " + id; //$NON-NLS-1$
 	}
 	
 	// Native interface to create stack frames
@@ -233,6 +234,11 @@ public class WinDbgThread implements ICDIThread {
 	 */
 	public ICDIThreadStorageDescriptor[] getThreadStorageDescriptors() throws CDIException {
 		return null;
+	}
+
+	public ICDIThreadStorage createThreadStorage(ICDIThreadStorageDescriptor varDesc) throws CDIException {
+		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
+		return varMgr.createThreadStorage(varDesc);
 	}
 
 

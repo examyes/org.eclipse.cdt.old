@@ -27,10 +27,14 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExceptionpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIExpression;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIFunctionBreakpoint;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIGlobalVariable;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIGlobalVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIInstruction;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILineBreakpoint;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMemoryBlock;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIMixedInstruction;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRegister;
+import org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterGroup;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIRuntimeOptions;
 import org.eclipse.cdt.debug.core.cdi.model.ICDISharedLibrary;
@@ -39,7 +43,6 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
-import org.eclipse.cdt.debug.core.cdi.model.ICDIVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
 import org.eclipse.cdt.debug.win32.core.cdi.events.BreakpointHit;
 import org.eclipse.cdt.debug.win32.core.cdi.events.CreatedEvent;
@@ -141,7 +144,7 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		if (location instanceof ICDILineLocation) {
 			ICDILineLocation lineLocation = (ICDILineLocation)location;
 			if (lineLocation.getFile() != null) {
-				long addr = getLineAddress(dir + "\\" + lineLocation.getFile(), lineLocation.getLineNumber());
+				long addr = getLineAddress(dir + "\\" + lineLocation.getFile(), lineLocation.getLineNumber()); //$NON-NLS-1$
 				address = new BigInteger(Long.toString(addr));
 			}
 		} else if (location instanceof ICDIFunctionLocation) {
@@ -630,9 +633,14 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	/* (non-Javadoc)
 	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#getGlobalVariableDescriptors(java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public ICDIVariableDescriptor getGlobalVariableDescriptors(String filename, String function, String name) throws CDIException {
+	public ICDIGlobalVariableDescriptor getGlobalVariableDescriptors(String filename, String function, String name) throws CDIException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public ICDIGlobalVariable createGlobalVariable(ICDIGlobalVariableDescriptor varDesc) throws CDIException {
+		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
+		return varMgr.createGlobalVariable(varDesc);
 	}
 
 	/* (non-Javadoc)
@@ -641,6 +649,14 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 	public ICDIRegisterGroup[] getRegisterGroups() throws CDIException {
 		// TODO Auto-generated method stub
 		return new ICDIRegisterGroup[0];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDITarget#createRegister(org.eclipse.cdt.debug.core.cdi.model.ICDIRegisterDescriptor)
+	 */
+	public ICDIRegister createRegister(ICDIRegisterDescriptor varDesc) throws CDIException {
+		WinDbgRegisterManager regMgr = ((WinDbgSession)getTarget().getSession()).getRegisterManager();
+		return regMgr.createRegister(varDesc);
 	}
 
 	/* (non-Javadoc)
@@ -654,4 +670,5 @@ public class WinDbgTarget implements ICDITarget, Runnable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

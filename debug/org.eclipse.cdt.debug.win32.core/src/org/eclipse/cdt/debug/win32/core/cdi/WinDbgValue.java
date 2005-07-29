@@ -25,7 +25,7 @@ public class WinDbgValue implements ICDIValue {
 	}
 	
 	public String getTypeName() throws CDIException {
-		return "int";
+		return "int"; //$NON-NLS-1$
 	}
 
 	public String getValueString() throws CDIException {

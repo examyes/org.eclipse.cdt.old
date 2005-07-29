@@ -17,6 +17,7 @@ import org.eclipse.cdt.debug.core.cdi.CDIException;
 import org.eclipse.cdt.debug.core.cdi.ICDILocator;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgument;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIArgumentDescriptor;
+import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariable;
 import org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
@@ -140,4 +141,24 @@ public class WinDbgStackFrame implements ICDIStackFrame {
 		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
 		return varMgr.getArgumentDescriptors(this);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame#createLocalVariable(org.eclipse.cdt.debug.core.cdi.model.ICDILocalVariableDescriptor)
+	 */
+	public ICDILocalVariable createLocalVariable(ICDILocalVariableDescriptor varDesc) throws CDIException {
+		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
+		if (varDesc instanceof ICDIArgumentDescriptor) {
+			return createArgument((ICDIArgumentDescriptor)varDesc);
+		}
+		return varMgr.createLocalVariable(varDesc);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.debug.core.cdi.model.ICDIStackFrame#createArgument(org.eclipse.cdt.debug.core.cdi.model.ICDIArgumentDescriptor)
+	 */
+	public ICDIArgument createArgument(ICDIArgumentDescriptor varDesc) throws CDIException {
+		WinDbgVariableManager varMgr = ((WinDbgSession)getTarget().getSession()).getVariableManager();
+		return varMgr.createArgument(varDesc);
+	}
+
 }

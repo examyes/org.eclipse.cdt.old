@@ -35,7 +35,7 @@ public class CorePlugin extends Plugin {
 		super();
 		plugin = this;
 		try {
-			resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.debug.win32.core.CorePluginResources");
+			resourceBundle = ResourceBundle.getBundle("org.eclipse.cdt.debug.win32.core.CorePluginResources"); //$NON-NLS-1$
 		} catch (MissingResourceException x) {
 			resourceBundle = null;
 		}
@@ -83,7 +83,7 @@ public class CorePlugin extends Plugin {
 	}
 	
 	public void loadLibrary(String libname) throws IOException {
-		Path libpath = new Path("lib/" + libname + ".dll");
+		Path libpath = new Path("lib/" + libname + ".dll");  //$NON-NLS-1$//$NON-NLS-2$
 		String libfile = Platform.asLocalURL(find(libpath)).getFile();
 		System.load(libfile);
 	}
