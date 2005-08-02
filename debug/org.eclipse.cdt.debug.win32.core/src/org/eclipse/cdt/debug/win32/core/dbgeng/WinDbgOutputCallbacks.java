@@ -5,9 +5,8 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/cpl-v10.html
  **********************************************************************/
-package org.eclipse.cdt.debug.win32.core.cdi;
+package org.eclipse.cdt.debug.win32.core.dbgeng;
 
-import org.eclipse.cdt.debug.win32.core.dbgeng.IDebugOutputCallbacks;
 
 public class WinDbgOutputCallbacks extends IDebugOutputCallbacks {
 

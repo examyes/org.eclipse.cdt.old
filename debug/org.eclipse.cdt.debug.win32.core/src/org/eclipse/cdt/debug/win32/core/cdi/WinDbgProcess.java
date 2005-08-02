@@ -1,63 +1,66 @@
-/*******************************************************************************
+/**********************************************************************
  * Copyright (c) 2004 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Common Public License v0.5 
+ * All rights reserved.   This program and the accompanying materials
+ * are made available under the terms of the Common Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/cpl-v10.html
- * 
- * Contributors:
- *     IBM Corporation - initial implementation
- ******************************************************************************/
+ **********************************************************************/
 package org.eclipse.cdt.debug.win32.core.cdi;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
+import org.eclipse.cdt.debug.win32.core.dbgeng.IDebugClient;
+import org.eclipse.debug.core.ILaunch;
+
 public class WinDbgProcess extends Process {
-	
-	private WinDbgOutputStream in = new WinDbgOutputStream(this, 0);
-	private WinDbgInputStream out = new WinDbgInputStream(this, 1);
-	private WinDbgInputStream err = new WinDbgInputStream(this, 2);
 
-	// The native interface
-	private long p;
-	private static native void initNative();
-	static {
-		initNative();
-	}
+	private WinDbgOutputStream stdin = new WinDbgOutputStream();
+	private WinDbgInputStream stdout = new WinDbgInputStream();
+	private WinDbgInputStream stderr = new WinDbgInputStream();
+	boolean terminated = false;
+	int exitValue;
 	
-	public WinDbgProcess(String cmdline, String dir) {
-		spawn(cmdline, dir);
+	public WinDbgProcess(IDebugClient debugClient,
+						 ILaunch launch,
+						 IBinaryObject exe)
+	{ 
+		stdout.put("Yo from the Doug\n");
 	}
 
-	private native void spawn(String cmdline, String dir);
-	
-	public int exitValue() {
-		int exitCode = exitCode();
-		if (exitCode == 259)
+	public synchronized int exitValue() {
+		if (exitValue == 0)
 			throw new IllegalThreadStateException();
-		return exitCode;
+		return exitValue;
 	}
-	
-	private native int exitCode();
 
-	public native int waitFor() throws InterruptedException;
-	
-	public native void destroy();
-	
+	public synchronized int waitFor() throws InterruptedException {
+		// TODO Auto-generated method stub
+		Thread.sleep(5000);
+		terminated = true;
+		exitValue = 99;
+		return exitValue;
+	}
+
+	public void destroy() {
+		// TODO Auto-generated method stub
+	}
+
 	public InputStream getErrorStream() {
-		return err;
+		return stderr;
 	}
 
 	public InputStream getInputStream() {
-		return out;
+		return stdout;
 	}
 
 	public OutputStream getOutputStream() {
-		return in;
+		return stdin;
+	}
+
+	public boolean isTerminated() {
+		return terminated;
 	}
 	
-	// read and write byte methods for streams
-	native int read(int fd);
-	native void write(int fd, int b);
 }
