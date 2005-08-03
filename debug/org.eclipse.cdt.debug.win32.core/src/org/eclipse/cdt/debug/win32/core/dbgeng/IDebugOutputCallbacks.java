@@ -11,7 +11,7 @@ package org.eclipse.cdt.debug.win32.core.dbgeng;
 
 public abstract class IDebugOutputCallbacks {
 
-	public abstract int output(int mask, String text);
+	public abstract void output(int mask, String text);
 	
 	long p;
 	

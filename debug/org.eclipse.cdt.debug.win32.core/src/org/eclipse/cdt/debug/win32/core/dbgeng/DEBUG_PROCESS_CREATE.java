@@ -7,7 +7,7 @@
  **********************************************************************/
 package org.eclipse.cdt.debug.win32.core.dbgeng;
 
-public class DEBUG_PROCESS_CREATE_OPTIONS {
+public class DEBUG_PROCESS_CREATE {
 
 	// Creation flags
 	public static final int DEBUG_PROCESS                     = 0x00000001;

@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
+import org.eclipse.cdt.debug.win32.core.dbgeng.DEBUG_PROCESS_CREATE;
 import org.eclipse.cdt.debug.win32.core.dbgeng.IDebugClient;
+import org.eclipse.cdt.debug.win32.core.dbgeng.WinDbgOutputCallbacks;
 import org.eclipse.debug.core.ILaunch;
 
 public class WinDbgProcess extends Process {
@@ -19,6 +21,7 @@ public class WinDbgProcess extends Process {
 	private WinDbgOutputStream stdin = new WinDbgOutputStream();
 	private WinDbgInputStream stdout = new WinDbgInputStream();
 	private WinDbgInputStream stderr = new WinDbgInputStream();
+	private WinDbgOutputCallbacks outputCallbacks;
 	boolean terminated = false;
 	int exitValue;
 	
@@ -26,7 +29,11 @@ public class WinDbgProcess extends Process {
 						 ILaunch launch,
 						 IBinaryObject exe)
 	{ 
-		stdout.put("Yo from the Doug\n");
+		outputCallbacks = new WinDbgOutputCallbacks(stdout, stderr);
+		debugClient.setOutputCallbacks(outputCallbacks);
+		
+		String commandLine = exe.getPath().toOSString();
+		debugClient.createProcess(commandLine, DEBUG_PROCESS_CREATE.DEBUG_ONLY_THIS_PROCESS);;
 	}
 
 	public synchronized int exitValue() {

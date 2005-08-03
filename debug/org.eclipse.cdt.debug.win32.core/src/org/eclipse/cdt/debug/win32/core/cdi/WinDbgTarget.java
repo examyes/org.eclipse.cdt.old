@@ -49,7 +49,7 @@ public class WinDbgTarget implements ICDITarget {
 	private WinDbgTargetConfiguration configuration = new WinDbgTargetConfiguration();
 	private WinDbgProcess process;
 	
-	private IDebugClient debugClient;// = new IDebugClient();
+	static private IDebugClient debugClient = new IDebugClient();
 	
 	private ICDIThread[] threads = new ICDIThread[0];
 	private ICDIRegisterGroup[] registerGroups = new ICDIRegisterGroup[0];

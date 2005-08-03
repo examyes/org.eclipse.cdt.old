@@ -7,11 +7,28 @@
  **********************************************************************/
 package org.eclipse.cdt.debug.win32.core.dbgeng;
 
+import org.eclipse.cdt.debug.win32.core.cdi.WinDbgInputStream;
+
 
 public class WinDbgOutputCallbacks extends IDebugOutputCallbacks {
 
-	public int output(int mask, String text) {
-		return 0;
+	private WinDbgInputStream stdout;
+	private WinDbgInputStream stderr;
+	
+	public WinDbgOutputCallbacks(WinDbgInputStream stdout, WinDbgInputStream stderr) {
+		this.stdout = stdout;
+		this.stderr = stderr;
+	}
+	
+	public void output(int mask, String text) {
+		switch (mask) {
+		case DEBUG_OUTPUT.DEBUG_OUTPUT_ERROR:
+			stderr.put(text);
+			break;
+		default:
+			stdout.put(text);
+			break;
+		}
 	}
 
 }
