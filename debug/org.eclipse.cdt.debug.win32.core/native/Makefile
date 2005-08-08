@@ -1,4 +1,7 @@
-OBJS = 	debugClient.obj debugOutputCallbacks.obj
+OBJS =	debugClient.obj \
+		debugControl.obj \
+		debugOutputCallbacks.obj \
+		debugEventCallbacks.obj
 
 TARGET = ../lib/win32cdi.dll
 

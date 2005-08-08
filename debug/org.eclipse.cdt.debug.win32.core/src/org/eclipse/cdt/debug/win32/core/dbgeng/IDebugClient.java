@@ -18,7 +18,25 @@ public class IDebugClient {
 		p = create();
 	}
 	
+	private IDebugClient(long p) {
+		this.p = p;
+	}
+	
 	private static native long create();
+	
+	public void release() {
+		release(p);
+		p = 0;
+	}
+	
+	private static native void release(long p);
+	
+	public IDebugClient createClient() {
+		long newp = createClient(p);
+		return newp != 0 ? new IDebugClient(newp) : null;
+	}
+	
+	private static native long createClient(long p);
 	
 	public void createProcess(long server, String commandLine, int createFlags) {
 		createProcess(p, server, commandLine, createFlags);

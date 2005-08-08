@@ -11,13 +11,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
+import org.eclipse.cdt.debug.win32.core.Win32Debugger;
 import org.eclipse.cdt.debug.win32.core.dbgeng.DEBUG_PROCESS_CREATE;
 import org.eclipse.cdt.debug.win32.core.dbgeng.IDebugClient;
+import org.eclipse.cdt.debug.win32.core.dbgeng.IDebugControl;
 import org.eclipse.cdt.debug.win32.core.dbgeng.WinDbgOutputCallbacks;
 import org.eclipse.debug.core.ILaunch;
 
 public class WinDbgProcess extends Process {
 
+	private String commandLine;
 	private WinDbgOutputStream stdin = new WinDbgOutputStream();
 	private WinDbgInputStream stdout = new WinDbgInputStream();
 	private WinDbgInputStream stderr = new WinDbgInputStream();
@@ -25,28 +28,27 @@ public class WinDbgProcess extends Process {
 	boolean terminated = false;
 	int exitValue;
 	
-	public WinDbgProcess(IDebugClient debugClient,
-						 ILaunch launch,
-						 IBinaryObject exe)
-	{ 
+	public WinDbgProcess(ILaunch launch, IBinaryObject exe)
+	{
+		commandLine = exe.getPath().toOSString();
 		outputCallbacks = new WinDbgOutputCallbacks(stdout, stderr);
-		debugClient.setOutputCallbacks(outputCallbacks);
-		
-		String commandLine = exe.getPath().toOSString();
-		debugClient.createProcess(commandLine, DEBUG_PROCESS_CREATE.DEBUG_ONLY_THIS_PROCESS);;
 	}
 
+	public String getCommandLine() {
+		return commandLine;
+	}
+	
 	public synchronized int exitValue() {
-		if (exitValue == 0)
+		if (terminated == false)
 			throw new IllegalThreadStateException();
 		return exitValue;
 	}
 
 	public synchronized int waitFor() throws InterruptedException {
-		// TODO Auto-generated method stub
-		Thread.sleep(5000);
-		terminated = true;
-		exitValue = 99;
+		try {
+			wait();
+		} catch (InterruptedException e) {
+		}
 		return exitValue;
 	}
 

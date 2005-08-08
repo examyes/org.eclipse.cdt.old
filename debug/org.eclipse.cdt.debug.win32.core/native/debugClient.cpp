@@ -26,6 +26,22 @@ NATIVE(jlong, create)(JNIEnv * env, jclass cls) {
 	return (jlong)debugClient;
 }
 
+// private static native void release(long p);
+NATIVE(void, release)(JNIEnv * env, jclass cls, jlong p) {
+	IDebugClient * debugClient = (IDebugClient *)p;
+	debugClient->Release();
+}
+
+// private static native long createClient(long p);
+NATIVE(jlong, createClient)(JNIEnv * env, jclass cls, jlong p) {
+	IDebugClient * debugClient = (IDebugClient *)p;
+	IDebugClient * newClient = NULL;
+	HRESULT hr = debugClient->CreateClient(&newClient);
+	if (hr != S_OK)
+		fprintf(stderr, "CreateClient failed %x\n", hr);
+	return (jlong)newClient;
+}
+
 // private static native int createProcess(long p,
 //										   long server,
 //										   String commandLine,

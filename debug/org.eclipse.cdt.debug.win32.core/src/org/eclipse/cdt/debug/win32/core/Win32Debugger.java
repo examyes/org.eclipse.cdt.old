@@ -16,6 +16,7 @@ import org.eclipse.cdt.core.IBinaryParser.IBinaryObject;
 import org.eclipse.cdt.debug.core.ICDIDebugger;
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.win32.core.cdi.WinDbgSession;
+import org.eclipse.cdt.debug.win32.core.dbgeng.WinDbgEngine;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -24,6 +25,11 @@ import org.eclipse.debug.core.ILaunch;
  */
 public class Win32Debugger implements ICDIDebugger {
 
+	public ICDISession createDebuggerSession(ILaunch launch, IBinaryObject exe,
+			IProgressMonitor monitor) throws CoreException {
+		return new WinDbgSession(launch, exe);
+	}
+	
 	static {
 		try {
 			CorePlugin.getDefault().loadLibrary("win32cdi");
@@ -31,10 +37,16 @@ public class Win32Debugger implements ICDIDebugger {
 			// This will manifest itself as a unsatisfied link exception later
 		}
 	}
-		
-	public ICDISession createDebuggerSession(ILaunch launch, IBinaryObject exe,
-			IProgressMonitor monitor) throws CoreException {
-		return new WinDbgSession(launch, exe);
-	}
+
+	private static WinDbgEngine debugEngine;
 	
+	public static WinDbgEngine getDebugEngine() {
+		if (debugEngine == null) {
+			debugEngine = new WinDbgEngine();
+			debugEngine.start();
+		}
+		
+		return debugEngine;
+	}
+
 }

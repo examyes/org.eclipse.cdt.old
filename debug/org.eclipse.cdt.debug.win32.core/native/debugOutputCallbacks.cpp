@@ -24,7 +24,7 @@ static JNIEnv * attachCurrentThread() {
 	return env;
 }
 
-// Bridge to IDebugClient
+// Bridge to IDebugOutputCallbacks
 
 #define NATIVE(type, name) extern "C" JNIEXPORT type JNICALL Java_org_eclipse_cdt_debug_win32_core_dbgeng_IDebugOutputCallbacks_##name
 
@@ -36,8 +36,6 @@ public:
 		obj = env->NewGlobalRef(_obj);
 		jclass cls = env->GetObjectClass(obj);
 		outputID = env->GetMethodID(cls, "output", "(ILjava/lang/String;)V");
-		// should reserve the obj so that it doesn't get garbage collected
-		// should'nt be using the env since we may not get called on the right thread
 	}
 	
 	~DebugOutputCallbacks() {

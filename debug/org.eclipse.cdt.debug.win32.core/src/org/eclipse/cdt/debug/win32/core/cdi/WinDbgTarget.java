@@ -39,7 +39,7 @@ import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITargetConfiguration;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIThread;
 import org.eclipse.cdt.debug.core.cdi.model.ICDIWatchpoint;
-import org.eclipse.cdt.debug.win32.core.dbgeng.IDebugClient;
+import org.eclipse.cdt.debug.win32.core.Win32Debugger;
 import org.eclipse.debug.core.ILaunch;
 
 public class WinDbgTarget implements ICDITarget {
@@ -49,14 +49,13 @@ public class WinDbgTarget implements ICDITarget {
 	private WinDbgTargetConfiguration configuration = new WinDbgTargetConfiguration();
 	private WinDbgProcess process;
 	
-	static private IDebugClient debugClient = new IDebugClient();
-	
 	private ICDIThread[] threads = new ICDIThread[0];
 	private ICDIRegisterGroup[] registerGroups = new ICDIRegisterGroup[0];
 	
 	public WinDbgTarget(WinDbgSession session, ILaunch launch, IBinaryObject exe) {
 		this.session = session;
-		process = new WinDbgProcess(debugClient, launch, exe);
+		process = new WinDbgProcess(launch, exe);
+		Win32Debugger.getDebugEngine().newProcess(process);
 	}
 	
 	public Process getProcess() {
