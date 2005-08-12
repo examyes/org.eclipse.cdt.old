@@ -52,7 +52,11 @@
 
 <ul>
   <!-- General subheader -->
-  <li> <b><a href="#general">General:</a></b>
+  <li><b><a href="#common">CDT is not behaving properly.  What is the first thing I should check?</a></b>
+  </li>
+  <br>
+  
+  <li><b><a href="#general">General:</a></b>
     <ol>
       <li><a href="#general_10">What is the CDT?</a></li>
       <li><a href="#general_20">How is the CDT licensed?</a></li>
@@ -204,6 +208,42 @@ unable to load class org.eclipse.cdt.internal.ui.editor.CEditor.</pre></a></li>
   </li>
 
 </ul>
+
+
+<!-- Common Header -->
+<table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
+  <tr>
+    <td width="90%"> <b><a name="common"><b><font color="#000000" size="+1">CDT is not behaving properly.  What is the first thing I should check?</a></b> </td>
+    <td align="right">
+        <a href="#toc">
+            <img src="http://www.eclipse.org/eclipse/faq/up_nav.gif" width="16" height="16" alt="Goto Top" border="0" align="absmiddle">top
+        </a>
+    </td>
+  </tr>
+</table>
+
+<!-- Common contents -->
+  <ol>
+  <li>
+  You must have a compiler and debugger installed for CDT to work properly.  
+  Ensure that this is done before asking questions on the newsgroup, mailing lists, or raising a defect.
+  </li>
+  <li>
+  Spaces in directory or file names are problematic.  The gnu based toolchains have problems with spaces in filenames.
+  Do not install eclipse in a directory with spaces.  Do not create workspaces in places with spaces.  Do not create files with spaces. 
+  Many times the spaces will work at first (for editing or compiling), but you will have problems eventually (it may not seem to make sense, 
+  like being unable to debug -- and recieving "gibberish" as error meesages).
+  </li>
+  <li>
+  The CDT console is not a TTY. If you do not see the output of a printf 
+  or cout, you will need to flush your output manually.
+  </li>
+  <li>
+  When reporting problems or asking questions, please provide enough information to reproduce your problem.   If you assume that someone else will
+  attempt to reproduce your problem based on vague input, you will be dissappointed.
+  </li>
+  </ol>
+  
 
 <!-- General Header -->
 <table border=0 cellspacing=0 cellpadding=2 width="100%" bgcolor="#CCCCCC">
