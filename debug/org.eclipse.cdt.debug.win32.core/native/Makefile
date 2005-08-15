@@ -1,11 +1,12 @@
-OBJS =	debugClient.obj \
+OBJS =	debugCreate.obj \
+		debugClient.obj \
 		debugControl.obj \
 		debugOutputCallbacks.obj \
 		debugEventCallbacks.obj
 
 TARGET = ../lib/win32cdi.dll
 
-JAVA_HOME = /c/Eclipse/j2sdk1.4.2_06
+JAVA_HOME = /d/Java/jdk1.5.0_04
 
 INCLUDES =	-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/win32
 
@@ -15,7 +16,7 @@ INCLUDES =	-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/win32
 all:	$(TARGET)
 
 $(TARGET):	$(OBJS)
-	link -nologo -dll -out:$(TARGET) $(OBJS) dbgeng.lib dbghelp.lib user32.lib
+	link -nologo -dll -out:$(TARGET) $(OBJS) user32.lib advapi32.lib
 
 clean:
 	rm -f $(TARGET) $(OBJS)

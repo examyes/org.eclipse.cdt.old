@@ -9,8 +9,8 @@
  *     IBM Corporation - initial implementation
  ******************************************************************************/
 
-#include <DbgEng.h>
 #include <jni.h>
+#include <dbgeng.h>
 
 // Bridge to IDebugClient
 

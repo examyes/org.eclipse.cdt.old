@@ -2,36 +2,31 @@
 <?eclipse-cdt version="2.0"?>
 
 <cdtproject id="org.eclipse.cdt.make.core.make">
-<extension point="org.eclipse.cdt.core.BinaryParser" id="org.eclipse.cdt.core.PE"/>
-<extension point="org.eclipse.cdt.core.CIndexer" id="org.eclipse.cdt.core.ctagsindexer">
-<attribute key="ctagslocation" value=""/>
-<attribute key="ctagfiletype" value="ctags_internal"/>
-<attribute key="ctagsindexincludes" value="true"/>
-<attribute key="ctagslocationtype" value="ctags_path_default"/>
-<attribute key="ctagfilelocation" value=""/>
-</extension>
+<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.nullindexer" point="org.eclipse.cdt.core.CIndexer"/>
 <data>
 <item id="cdt_indexer">
 <indexEnabled indexValue="true"/>
 <indexerProblemsEnabled indexProblemsValue="0"/>
 </item>
 <item id="org.eclipse.cdt.core.pathentry">
-<pathentry kind="inc" path="" include="C:/Program Files/Microsoft SDK/include"/>
-<pathentry kind="inc" path="" include="C:/Program Files/Microsoft Visual C++ Toolkit 2003/include"/>
-<pathentry kind="inc" path="" include="C:/Eclipse/j2sdk1.4.2_06/include"/>
-<pathentry kind="inc" path="" include="C:/Eclipse/j2sdk1.4.2_06/include/win32"/>
+<pathentry include="D:/Program Files/Debugging Tools for Windows/sdk/inc" kind="inc" path="" system="true"/>
+<pathentry include="D:/Program Files/Microsoft Platform SDK/Include" kind="inc" path=""/>
+<pathentry include="D:/Program Files/Microsoft Visual C++ Toolkit 2003/include" kind="inc" path=""/>
+<pathentry include="D:/Java/jdk1.5.0_04/include" kind="inc" path=""/>
+<pathentry include="D:/Java/jdk1.5.0_04/include/win32" kind="inc" path=""/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 </item>
 <item id="scannerConfiguration">
-<autodiscovery enabled="false" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile" problemReportingEnabled="true"/>
+<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
 <openAction enabled="false" filePath=""/>
 <parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
-<runAction useDefault="true" command="gcc" arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}"/>
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>

@@ -35,7 +35,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.environment</key>
-					<value></value>
+					<value>INCLUDE=D:\\Program Files\\Debugging Tools For Windows\\sdk\\inc;D:\\Program Files\\Microsoft Platform SDK\\Include;D:\\Program Files\\Microsoft Visual C++ Toolkit 2003\\include|</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
