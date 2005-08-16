@@ -27,7 +27,7 @@
             class="org.eclipse.cdt.debug.win32.core.Win32Debugger"
             cpu="native"
             name="%debuggerName"
-            modes="run,attach"
+            modes="run,debug"
             id="org.eclipse.cdt.debug.win32.core.debugger"/>
    </extension>
 

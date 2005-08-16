@@ -16,26 +16,31 @@ STDAPI DebugCreate(__in REFIID InterfaceId, __out PVOID* Interface) {
 			return E_FAIL;
 		}
 
-		wchar_t dbgengDLL[1024];
-		DWORD buffLen = sizeof(dbgengDLL);
-        rc = RegQueryValueEx(key, L"WinDbg", NULL, NULL, (LPBYTE)dbgengDLL, &buffLen);
-		if ((rc != ERROR_SUCCESS) || (buffLen > sizeof(dbgengDLL))) {
+		wchar_t dllpath[1024];
+		DWORD buffLen = sizeof(dllpath);
+        rc = RegQueryValueEx(key, L"WinDbg", NULL, NULL, (LPBYTE)dllpath, &buffLen);
+		if ((rc != ERROR_SUCCESS) || (buffLen > sizeof(dllpath))) {
 			MessageBox(NULL, L"Debugging Tools for Windows not installed correctly", L"DebugCreate", MB_ICONERROR);
             return E_FAIL;
 		}
 
 		RegCloseKey(key);
 
-		// Load the DLL from that install
-		wcscat(dbgengDLL, L"\\dbgeng.dll");
-		HMODULE dbgengLib = LoadLibrary(dbgengDLL);
-		if (dbgengLib == NULL) {
+		// First we need to load in dbghelp from here
+		int len = wcslen(dllpath);
+		wcscpy(dllpath + len, L"\\dbghelp.dll");
+		LoadLibrary(dllpath);
+
+		// Now the good stuff
+		wcscpy(dllpath + len, L"\\dbgeng.dll");
+		HMODULE dbgeng = LoadLibrary(dllpath);
+		if (dbgeng == NULL) {
 			MessageBox(NULL, L"Unable to load dbgeng.dll", L"DebugCreate", MB_ICONERROR);
 			return E_FAIL;
 		}
 		
 		// Get the proc address for DebugCreate
-		debugCreate = (DebugCreateProc)GetProcAddress(dbgengLib, "DebugCreate");
+		debugCreate = (DebugCreateProc)GetProcAddress(dbgeng, "DebugCreate");
 		if (debugCreate == NULL) {
 			MessageBox(NULL, L"Unable to find DebugCreate proc", L"DebugCreate", MB_ICONERROR);
 			return E_FAIL;

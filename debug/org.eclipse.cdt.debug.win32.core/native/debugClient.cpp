@@ -18,8 +18,8 @@
 
 // private static native long create();
 NATIVE(jlong, create)(JNIEnv * env, jclass cls) {
-	IDebugClient * debugClient = NULL;
-	HRESULT hr = DebugCreate(__uuidof(IDebugClient), (void **)&debugClient);
+	IDebugClient5 * debugClient = NULL;
+	HRESULT hr = DebugCreate(__uuidof(IDebugClient5), (void **)&debugClient);
 	if (hr != S_OK)
 		fprintf(stderr, "DebugCreate failed %x\n", hr);
 
@@ -28,18 +28,22 @@ NATIVE(jlong, create)(JNIEnv * env, jclass cls) {
 
 // private static native void release(long p);
 NATIVE(void, release)(JNIEnv * env, jclass cls, jlong p) {
-	IDebugClient * debugClient = (IDebugClient *)p;
+	IDebugClient5 * debugClient = (IDebugClient5 *)p;
 	debugClient->Release();
 }
 
 // private static native long createClient(long p);
 NATIVE(jlong, createClient)(JNIEnv * env, jclass cls, jlong p) {
-	IDebugClient * debugClient = (IDebugClient *)p;
+	IDebugClient5 * debugClient = (IDebugClient5 *)p;
 	IDebugClient * newClient = NULL;
 	HRESULT hr = debugClient->CreateClient(&newClient);
 	if (hr != S_OK)
 		fprintf(stderr, "CreateClient failed %x\n", hr);
-	return (jlong)newClient;
+	IDebugClient5 * newClient5 = NULL;
+	newClient->QueryInterface(__uuidof(IDebugClient5), (void**)&newClient5);
+	if (hr != S_OK)
+		fprintf(stderr, "CreateClient(5) failed %x\n", hr);
+	return (jlong)newClient5;
 }
 
 // private static native int createProcess(long p,
@@ -48,18 +52,18 @@ NATIVE(jlong, createClient)(JNIEnv * env, jclass cls, jlong p) {
 //										   int createFlags);
 NATIVE(jint, createProcess)(JNIEnv * env, jclass cls, jlong p, jlong server,
 							jstring commandLine, jint createFlags) {
-	IDebugClient * debugClient = (IDebugClient *)p;
+	IDebugClient5 * debugClient = (IDebugClient5 *)p;
 	
-	const char * commandLineJchar = env->GetStringUTFChars(commandLine, NULL);
-	char * commandLineStr = strdup(commandLineJchar);
-	env->ReleaseStringUTFChars(commandLine, commandLineStr);
+	const jchar * commandLineJchar = env->GetStringChars(commandLine, NULL);
+	jchar * commandLineStr = wcsdup(commandLineJchar);
+	env->ReleaseStringChars(commandLine, commandLineJchar);
 
-	return debugClient->CreateProcess(server, commandLineStr, createFlags);
+	return debugClient->CreateProcessWide(server, commandLineStr, createFlags);
 }
 
 // private static native int setOutputCallbacks(long p, long callbackp);
 NATIVE(jint, setOutputCallbacks)(JNIEnv * env, jclass cls, jlong p, jlong callbackp) {
-	IDebugClient * debugClient = (IDebugClient *)p;
+	IDebugClient5 * debugClient = (IDebugClient5 *)p;
 	IDebugOutputCallbacks * callback = (IDebugOutputCallbacks *)callbackp;
 	
 	return debugClient->SetOutputCallbacks(callback);
