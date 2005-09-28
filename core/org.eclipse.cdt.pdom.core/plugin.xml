@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.cdt.core.PDOMProvider">
+      <provider class="org.eclipse.cdt.internal.pdom.core.SQLPDOMProvider"/>
+   </extension>
+   <extension
+         id="pdomIndexer"
+         name="%PDOMIndexerName"
+         point="org.eclipse.cdt.core.CIndexer">
+      <cextension>
+         <run 
+            class="org.eclipse.cdt.internal.pdom.indexer.SQLPDOMIndexer">
+         </run>
+      </cextension>
+   </extension>
+
+</plugin>

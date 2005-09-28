@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: PDOM Core Plug-in
+Bundle-SymbolicName: org.eclipse.cdt.pdom.core; singleton:=true
+Bundle-Version: 3.1.0
+Bundle-Activator: org.eclipse.cdt.pdom.core.PDOMCorePlugin
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.cdt.core,
+ org.eclipse.core.resources,
+ org.apache.derby.core
+Eclipse-AutoStart: true
