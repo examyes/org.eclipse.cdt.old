@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-   <extension
-         point="org.eclipse.cdt.ui.IndexerPage">
-      <indexerUI
-            class="org.eclipse.cdt.pdom.ui.PDOMIndexerUI"
-            id="PDOMIndexerUI"
-            indexerID="org.eclipse.cdt.pdom.core.pdomIndexer"
-            name="%PDOMIndexerUI.name"/>
-   </extension>
 
 </plugin>

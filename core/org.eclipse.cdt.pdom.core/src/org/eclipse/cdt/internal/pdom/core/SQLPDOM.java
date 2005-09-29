@@ -15,6 +15,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.eclipse.cdt.core.dom.IPDOM;
+import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -58,11 +60,28 @@ public class SQLPDOM implements IPDOM {
 			// try to create it
 			try {
 				conn = DriverManager.getConnection(baseURL + ";create=true");
+				createTables();
 			} catch (SQLException e2) {
 				// nope
 				throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to load database", e2));
 			}
 		}
+		
+		createPreparedStatements();
 	}
 	
+	private void createTables() {
+	}
+	
+	private void createPreparedStatements() {
+	}
+	
+	public void removeSymbols(ITranslationUnit tu) {
+		// remove all symbols located in the tu's file
+	}
+
+	public void addSymbols(IASTTranslationUnit ast) {
+		// walk the ast and add the symbols
+	}
+
 }

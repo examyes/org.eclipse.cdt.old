@@ -12,17 +12,23 @@ package org.eclipse.cdt.internal.pdom.core;
 
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.IPDOMProvider;
+import org.eclipse.cdt.core.model.ElementChangedEvent;
+import org.eclipse.cdt.core.model.IElementChangedListener;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 
 /**
  * @author Doug Schaefer
  *
  */
-public class SQLPDOMProvider implements IPDOMProvider {
+public class SQLPDOMProvider implements IPDOMProvider, IElementChangedListener, IJobChangeListener {
 
+	private SQLPDOMUpdaterJob currJob;
+	
 	private static final QualifiedName pdomProperty
 		= new QualifiedName(PDOMCorePlugin.ID, "sqlpdom"); //$NON-NLS-1$
 	
@@ -42,4 +48,38 @@ public class SQLPDOMProvider implements IPDOMProvider {
 		}
 	}
 
+	public IElementChangedListener getElementChangedListener() {
+		return this;
+	}
+
+	public synchronized void elementChanged(ElementChangedEvent event) {
+		// Only respond to post change events
+		if (event.getType() != ElementChangedEvent.POST_CHANGE)
+			return;
+		
+		currJob = new SQLPDOMUpdaterJob(event.getDelta(), currJob);
+		currJob.addJobChangeListener(this);
+		currJob.schedule();
+	}
+
+	public void aboutToRun(IJobChangeEvent event) {
+	}
+
+	public void awake(IJobChangeEvent event) {
+	}
+
+	public synchronized void done(IJobChangeEvent event) {
+		if (currJob == event.getJob())
+			currJob = null;
+	}
+
+	public void running(IJobChangeEvent event) {
+	}
+
+	public void scheduled(IJobChangeEvent event) {
+	}
+
+	public void sleeping(IJobChangeEvent event) {
+	}
+	
 }
