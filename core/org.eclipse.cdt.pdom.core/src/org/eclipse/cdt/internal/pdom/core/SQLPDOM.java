@@ -15,8 +15,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.eclipse.cdt.core.dom.IPDOM;
+import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.core.parser.ParserLanguage;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -81,7 +85,20 @@ public class SQLPDOM implements IPDOM {
 	}
 
 	public void addSymbols(IASTTranslationUnit ast) {
-		// walk the ast and add the symbols
+		ParserLanguage language = ast.getParserLanguage();
+		ASTVisitor visitor;
+		if (language == ParserLanguage.C)
+			visitor = new SQLPDOMCVisitor(this);
+		else if (language == ParserLanguage.CPP)
+			visitor = new SQLPDOMCPPVisitor(this);
+		else
+			return;
+		
+		ast.accept(visitor);
 	}
 
+	public void addVariable(IASTName name, IVariable variable) {
+		
+	}
+	
 }
