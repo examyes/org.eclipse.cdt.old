@@ -13,12 +13,14 @@ package org.eclipse.cdt.internal.pdom.core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
-import org.eclipse.cdt.core.dom.ast.IVariable;
+import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
+import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.parser.ParserLanguage;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
@@ -39,7 +41,7 @@ public class SQLPDOM implements IPDOM {
 
 	private final String baseURL;
 	
-	private Connection conn;
+	private Connection connection;
 	
 	public SQLPDOM(IProject project) throws CoreException {
 		// Load up Derby
@@ -59,25 +61,39 @@ public class SQLPDOM implements IPDOM {
 		baseURL = "jdbc:derby:" + PDOMCorePlugin.getDefault().getStateLocation().toString()	+ "/" + dbName;
 		
 		try {
-			conn = DriverManager.getConnection(baseURL);
+			connection = DriverManager.getConnection(baseURL);
 		} catch (SQLException e) {
 			// try to create it
 			try {
-				conn = DriverManager.getConnection(baseURL + ";create=true");
+				connection = DriverManager.getConnection(baseURL + ";create=true");
 				createTables();
 			} catch (SQLException e2) {
 				// nope
 				throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to load database", e2));
 			}
 		}
-		
-		createPreparedStatements();
+	}
+
+	private void createTables() throws SQLException {
+		if (connection == null)
+			return;
+
+		Statement stmt = connection.createStatement();
+
+		stmt.executeUpdate("CREATE TABLE File ("
+				+ "id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
+				+ "name VARCHAR NOT NULL)");
+		stmt.executeUpdate("CREATE INDEX FileNameIx on File (name)");
+		stmt.executeUpdate("CREATE TABLE Name ("
+				+ "name VARCHAR NOT NULL,"
+				+ "fileId INT NOT NULL,"
+				+ "offset INT NOT NULL,"
+				+ "length INT NOT NULL,"
+				+ "bindingId INT)");
 	}
 	
-	private void createTables() {
-	}
-	
-	private void createPreparedStatements() {
+	public Connection getConnection() {
+		return connection;
 	}
 	
 	public void removeSymbols(ITranslationUnit tu) {
@@ -88,16 +104,34 @@ public class SQLPDOM implements IPDOM {
 		ParserLanguage language = ast.getParserLanguage();
 		ASTVisitor visitor;
 		if (language == ParserLanguage.C)
-			visitor = new SQLPDOMCVisitor(this);
+			visitor = new CASTVisitor() {
+				{
+					shouldVisitNames = true;
+				}
+				
+				public int visit(IASTName name) {
+					addSymbol(name);
+					return PROCESS_CONTINUE;
+				};
+			};
 		else if (language == ParserLanguage.CPP)
-			visitor = new SQLPDOMCPPVisitor(this);
+			visitor = new CPPASTVisitor() {
+				{
+					shouldVisitNames = true;
+				}
+				
+				public int visit(IASTName name) {
+					addSymbol(name);
+					return PROCESS_CONTINUE;
+				};
+			};
 		else
 			return;
 		
 		ast.accept(visitor);
 	}
 
-	public void addVariable(IASTName name, IVariable variable) {
+	public void addSymbol(IASTName name) {
 		
 	}
 	
