@@ -10,10 +10,20 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.core;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
@@ -31,7 +41,10 @@ import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 
@@ -70,12 +83,44 @@ public class SQLPDOM implements IPDOM {
 		} catch (SQLException e) {
 			// try to create it
 			try {
-				connection = DriverManager.getConnection(baseURL + ";create=true");
-				createTables();
+				setupDatabase(dbName);
+				connection = DriverManager.getConnection(baseURL);
 			} catch (SQLException e2) {
 				// nope
 				throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to load database", e2));
 			}
+		}
+	}
+	
+	private void setupDatabase(String dbName) throws CoreException {
+		try {
+			IPath targetPath = PDOMCorePlugin.getDefault().getStateLocation().append(dbName);
+			targetPath.toFile().mkdir();
+
+			URL zipURL = Platform.asLocalURL(Platform.find(PDOMCorePlugin.getDefault().getBundle(), new Path("db.zip")));
+			IPath zipPath = new Path(zipURL.getPath());
+			ZipFile zipFile = new ZipFile(zipPath.toFile());
+			Enumeration entries = zipFile.entries();
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry)entries.nextElement();
+				String entryTarget = targetPath.append(entry.getName()).toOSString();
+				if (entry.isDirectory()) {
+					new File(entryTarget).mkdir();
+				} else {
+					InputStream in = zipFile.getInputStream(entry);
+					OutputStream out = new BufferedOutputStream(new FileOutputStream(entryTarget)); 
+					byte[] buffer = new byte[1024];
+					int len;
+					
+					while ((len = in.read(buffer)) >= 0)
+						out.write(buffer, 0, len);
+					
+					in.close();
+					out.close();
+				}
+			}
+		} catch (IOException e) {
+			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to unzip database template", e));
 		}
 	}
 
