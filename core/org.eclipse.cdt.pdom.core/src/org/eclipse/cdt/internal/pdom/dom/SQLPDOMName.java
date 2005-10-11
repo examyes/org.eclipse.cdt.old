@@ -1,7 +1,5 @@
 package org.eclipse.cdt.internal.pdom.dom;
 
-import java.sql.SQLException;
-
 import org.eclipse.cdt.core.dom.ast.ASTNodeProperty;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
@@ -11,13 +9,14 @@ import org.eclipse.cdt.core.dom.ast.IASTNodeLocation;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.internal.pdom.core.SQLPDOM;
+import org.eclipse.core.runtime.CoreException;
 
 public class SQLPDOMName implements IASTName {
 
 	public char[] name;
 	SQLPDOMFileLocation fileLocation;
 	
-	public SQLPDOMName(SQLPDOM pdom, IASTName name) throws SQLException {
+	public SQLPDOMName(SQLPDOM pdom, IASTName name, SQLPDOMBinding binding) throws CoreException {
 		this.name = name.toCharArray();
 		fileLocation = new SQLPDOMFileLocation(pdom, name.getFileLocation());
 	}

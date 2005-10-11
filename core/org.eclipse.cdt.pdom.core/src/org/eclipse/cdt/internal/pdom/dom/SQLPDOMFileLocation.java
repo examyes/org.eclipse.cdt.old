@@ -10,14 +10,9 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.dom;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.eclipse.cdt.core.dom.ast.IASTFileLocation;
 import org.eclipse.cdt.internal.pdom.core.SQLPDOM;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Doug Schaefer
@@ -27,12 +22,8 @@ public class SQLPDOMFileLocation implements IASTFileLocation {
 
 	private int offset;
 	private int length;
-	
 	private String fileName;
 	private int fileId;
-	
-	private static PreparedStatement getFileFromNameStmt;
-	private static PreparedStatement insertFileStmt;
 	
 	/**
 	 * Create the PDOM version of the file location.
@@ -40,50 +31,11 @@ public class SQLPDOMFileLocation implements IASTFileLocation {
 	 * @param pdom
 	 * @param location
 	 */
-	public SQLPDOMFileLocation(SQLPDOM pdom, IASTFileLocation location) throws SQLException {
+	public SQLPDOMFileLocation(SQLPDOM pdom, IASTFileLocation location) throws CoreException {
 		offset = location.getNodeOffset();
 		length = location.getNodeLength();
 		fileName = location.getFileName();
-
-		// Get the File id
-		Connection conn = pdom.getConnection();
-		synchronized (conn) {
-			if (getFileFromNameStmt == null) {
-				getFileFromNameStmt
-					= conn.prepareStatement("SELECT Id FROM File WHERE name = ?");
-			}
-		}
-		
-		ResultSet rs;
-		synchronized (getFileFromNameStmt) {
-			getFileFromNameStmt.setString(1, fileName);
-			rs = getFileFromNameStmt.executeQuery();
-		}
-		
-		// if record exists, setup from there
-		if (rs.next()) {
-			fileId = rs.getInt(1);
-		} else {
-			// else create the record
-			synchronized (conn) {
-				if (insertFileStmt == null) {
-					insertFileStmt
-						= conn.prepareStatement("INSERT INTO File(name) VALUES (?)",
-								Statement.RETURN_GENERATED_KEYS);
-				}
-			}
-			
-			synchronized (insertFileStmt) {
-				insertFileStmt.setString(1, fileName);
-				rs = insertFileStmt.executeQuery();
-			}
-			
-			if (rs.next()) {
-				fileId = rs.getInt(1);
-			} else {
-				// TODO throw an exception or something...
-			}
-		}		
+		fileId = pdom.getFileId(fileName);
 	}
 
 	public String getFileName() {

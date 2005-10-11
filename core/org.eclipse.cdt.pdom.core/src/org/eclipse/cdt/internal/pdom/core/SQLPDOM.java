@@ -19,6 +19,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Enumeration;
@@ -30,14 +32,12 @@ import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
-import org.eclipse.cdt.core.dom.ast.IProblemBinding;
-import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.parser.ParserLanguage;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
+import org.eclipse.cdt.internal.pdom.dom.SQLPDOMName;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -124,44 +124,6 @@ public class SQLPDOM implements IPDOM {
 		}
 	}
 
-	private void createTables() throws SQLException {
-		if (connection == null)
-			return;
-
-		Statement stmt = connection.createStatement();
-
-		// Table: Strings
-		// Contains all the identifier strings used as names
-		// Referenced by the Names table and the Bindings table
-		stmt.executeUpdate("CREATE TABLE Strings ("
-				+ "id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY"
-				+ "string VARCHAR NOT NULL)");
-		stmt.executeUpdate("CREATE INDEX StringIx on String (string)");
-
-		// Table: File
-		stmt.executeUpdate("CREATE TABLE File ("
-				+ "id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-				+ "name VARCHAR NOT NULL)");
-		stmt.executeUpdate("CREATE INDEX FileNameIx on File (name)");
-		
-		// Table: Name
-		stmt.executeUpdate("CREATE TABLE Name ("
-				+ "name VARCHAR NOT NULL,"
-				+ "fileId INT NOT NULL,"
-				+ "offset INT NOT NULL,"
-				+ "length INT NOT NULL,"
-				+ "bindingId INT)");
-		
-		// Table: Binding
-		stmt.executeUpdate("CREATE TABLE Binding ("
-				+ "bindingId int GENERATED ALWAYS AS IDENTIT PRIMARY KEY"
-				+ "type int NOT NULL");
-	}
-	
-	public Connection getConnection() {
-		return connection;
-	}
-	
 	public void removeSymbols(ITranslationUnit tu) {
 		// remove all symbols located in the tu's file
 	}
@@ -198,27 +160,144 @@ public class SQLPDOM implements IPDOM {
 	}
 
 	public void addSymbol(IASTName name) {
-		// Figure out the binding id for the name
-		IBinding binding = name.resolveBinding();
-		int bindingId;
-		
-		if (binding instanceof IProblemBinding) {
-			// This would be a reference to something that isn't in the AST or in the PDOM
-			// Not sure what to do with it so we just skip this symbol
-			return;
-		} else if (binding instanceof SQLPDOMBinding) {
-			// Ah, the binding is already in the PDOM, we can simply get the binding id
-			// directly from it
-			bindingId = ((SQLPDOMBinding)binding).getId();
-		} else {
-			// It's a DOM binding, need to create the PDOM version of it
-			if (binding instanceof IVariable) {
-				if (binding instanceof ICPPVariable) {
-					
+		try {
+			// Figure out the binding id for the name
+			SQLPDOMBinding pdomBinding = SQLPDOMBinding.create(this, name);
+			if (pdomBinding == null)
+				// Not a persistable binding, skip it
+				return;
+			
+			new SQLPDOMName(this, name, pdomBinding);
+		} catch (CoreException e) {
+			// Need to log this eventually
+			System.err.println(e.getMessage());
+		}
+	}
+
+	private PreparedStatement getFileFromNameStmt;
+	private PreparedStatement insertFileStmt;
+	
+	public synchronized int getFileId(String fileName) throws CoreException {
+		try {
+			if (getFileFromNameStmt == null) {
+				getFileFromNameStmt
+					= connection.prepareStatement("select id from Files where name = ?");
+			}
+			
+			getFileFromNameStmt.setString(1, fileName);
+			ResultSet rs = getFileFromNameStmt.executeQuery();
+			
+			// if record exists, setup from there
+			int fileId;
+			if (rs.next()) {
+				fileId = rs.getInt(1);
+			} else {
+				// else create the record
+				if (insertFileStmt == null) {
+					insertFileStmt
+						= connection.prepareStatement("insert into Files(name) values (?)",
+								Statement.RETURN_GENERATED_KEYS);
+				}				
+				
+				insertFileStmt.setString(1, fileName);
+				insertFileStmt.executeUpdate();
+				rs = insertFileStmt.getGeneratedKeys(); 
+	
+				if (rs.next()) {
+					fileId = rs.getInt(1);
 				} else {
-					
+					throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to get fileId", null));
 				}
 			}
+			rs.close();
+			return fileId;
+		} catch (SQLException e) {
+			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to get fileId", e));
+		}
+	}
+	
+	private PreparedStatement getStringStmt;
+	private PreparedStatement insertStringStmt;
+	
+	public synchronized int getStringId(String fileName) throws CoreException {
+		try {
+			if (getStringStmt == null) {
+				getStringStmt
+					= connection.prepareStatement("select id from Strings where string = ?");
+			}
+			
+			getStringStmt.setString(1, fileName);
+			ResultSet rs = getStringStmt.executeQuery();
+			
+			// if record exists, setup from there
+			int stringId;
+			if (rs.next()) {
+				stringId = rs.getInt(1);
+			} else {
+				// else create the record
+				if (insertStringStmt == null) {
+					insertStringStmt
+						= connection.prepareStatement("insert into Strings(string) values (?)",
+								Statement.RETURN_GENERATED_KEYS);
+				}
+				
+				insertStringStmt.setString(1, fileName);
+				insertStringStmt.executeUpdate();
+				rs = insertStringStmt.getGeneratedKeys(); 
+	
+				if (rs.next()) {
+					stringId = rs.getInt(1);
+				} else {
+					throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to get stringId", null));
+				}
+			}
+			rs.close();
+			return stringId;
+		} catch (SQLException e) {
+			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to get stringId", e));
+		}
+	}
+
+	PreparedStatement getBindingIdStmt;
+	PreparedStatement insertBindingStmt;
+	
+	public int getBindingId(int nameId, int type) throws CoreException {
+		try {
+			if (getBindingIdStmt == null) {
+				getBindingIdStmt
+					= connection.prepareStatement("select id from Bindings where nameId = ?");
+			}
+			
+			getBindingIdStmt.setInt(1, nameId);
+			ResultSet rs = getBindingIdStmt.executeQuery();
+			
+			// if record exists, setup from there
+			int bindingId;
+			if (rs.next()) {
+				bindingId = rs.getInt(1);
+			} else {
+				// else create the record
+				if (insertBindingStmt == null) {
+					insertBindingStmt
+						= connection.prepareStatement("insert into Bindings(nameId, type) values (?, ?)",
+								Statement.RETURN_GENERATED_KEYS);
+				}
+				
+				insertBindingStmt.setInt(1, nameId);
+				insertBindingStmt.setInt(2, type);
+				insertBindingStmt.executeUpdate();
+				rs = insertBindingStmt.getGeneratedKeys(); 
+	
+				if (rs.next()) {
+					bindingId = rs.getInt(1);
+				} else {
+					throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to get bindingId", null));
+				}
+			}
+			rs.close();
+			return bindingId;
+		} catch (SQLException e) {
+			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to get bindingId", e));
 		}
 		
 	}

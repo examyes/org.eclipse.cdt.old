@@ -29,6 +29,10 @@ public class SQLPDOMCVariable extends SQLPDOMBinding implements IVariable {
 		
 	}
 	
+	public int getBindingType() {
+		return B_CVARIABLE;
+	}
+	
 	public IType getType() throws DOMException {
 		throw new SQLPDOMNotImplementedError();
 	}
