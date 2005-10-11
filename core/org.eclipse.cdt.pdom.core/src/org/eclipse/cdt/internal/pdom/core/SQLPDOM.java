@@ -19,10 +19,15 @@ import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IProblemBinding;
+import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.parser.ParserLanguage;
+import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -80,16 +85,32 @@ public class SQLPDOM implements IPDOM {
 
 		Statement stmt = connection.createStatement();
 
+		// Table: Strings
+		// Contains all the identifier strings used as names
+		// Referenced by the Names table and the Bindings table
+		stmt.executeUpdate("CREATE TABLE Strings ("
+				+ "id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY"
+				+ "string VARCHAR NOT NULL)");
+		stmt.executeUpdate("CREATE INDEX StringIx on String (string)");
+
+		// Table: File
 		stmt.executeUpdate("CREATE TABLE File ("
 				+ "id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
 				+ "name VARCHAR NOT NULL)");
 		stmt.executeUpdate("CREATE INDEX FileNameIx on File (name)");
+		
+		// Table: Name
 		stmt.executeUpdate("CREATE TABLE Name ("
 				+ "name VARCHAR NOT NULL,"
 				+ "fileId INT NOT NULL,"
 				+ "offset INT NOT NULL,"
 				+ "length INT NOT NULL,"
 				+ "bindingId INT)");
+		
+		// Table: Binding
+		stmt.executeUpdate("CREATE TABLE Binding ("
+				+ "bindingId int GENERATED ALWAYS AS IDENTIT PRIMARY KEY"
+				+ "type int NOT NULL");
 	}
 	
 	public Connection getConnection() {
@@ -132,6 +153,28 @@ public class SQLPDOM implements IPDOM {
 	}
 
 	public void addSymbol(IASTName name) {
+		// Figure out the binding id for the name
+		IBinding binding = name.resolveBinding();
+		int bindingId;
+		
+		if (binding instanceof IProblemBinding) {
+			// This would be a reference to something that isn't in the AST or in the PDOM
+			// Not sure what to do with it so we just skip this symbol
+			return;
+		} else if (binding instanceof SQLPDOMBinding) {
+			// Ah, the binding is already in the PDOM, we can simply get the binding id
+			// directly from it
+			bindingId = ((SQLPDOMBinding)binding).getId();
+		} else {
+			// It's a DOM binding, need to create the PDOM version of it
+			if (binding instanceof IVariable) {
+				if (binding instanceof ICPPVariable) {
+					
+				} else {
+					
+				}
+			}
+		}
 		
 	}
 	

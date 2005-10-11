@@ -1,0 +1,11 @@
+<project name="createdb" default="main">
+
+	<target name="main">
+		<zip destfile="db.zip" basedir="db"/>
+	</target>
+	
+	<target name="clean">
+		<delete file="db.zip"/>
+	</target>
+	
+</project>
