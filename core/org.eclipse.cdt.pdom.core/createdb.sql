@@ -22,6 +22,7 @@ create table Names
 	 isDef int not null,
 	 isRef int not null,
 	 bindingId int not null);
+create index NamesFileIdIx on Names(fileId);
 
 -- Bindings table
 create table Bindings

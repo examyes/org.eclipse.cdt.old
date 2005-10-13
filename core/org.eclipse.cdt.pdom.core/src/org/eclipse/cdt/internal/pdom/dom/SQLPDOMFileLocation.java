@@ -35,7 +35,7 @@ public class SQLPDOMFileLocation implements IASTFileLocation {
 		offset = location.getNodeOffset();
 		length = location.getNodeLength();
 		fileName = location.getFileName();
-		fileId = pdom.getFileId(fileName);
+		fileId = pdom.getFileId(fileName, true);
 	}
 
 	public SQLPDOMFileLocation(int fileId, String fileName, int offset, int length) {

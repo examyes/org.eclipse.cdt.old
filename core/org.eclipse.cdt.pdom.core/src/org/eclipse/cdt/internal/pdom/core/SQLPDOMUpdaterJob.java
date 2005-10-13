@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.core;
 
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,8 +23,10 @@ import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICElementDelta;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -54,6 +57,8 @@ public class SQLPDOMUpdaterJob extends Job {
 			} catch (InterruptedException e) {
 			}
 			
+		long start = System.currentTimeMillis();
+		
 		processDelta(delta);
 		
 		if (addedTUs != null)
@@ -74,6 +79,7 @@ public class SQLPDOMUpdaterJob extends Job {
 				processRemovedTU(tu);
 			}
 		
+		System.out.println("Updator Time: " + (System.currentTimeMillis() - start));
 		return Status.OK_STATUS;
 	}
 
@@ -135,8 +141,13 @@ public class SQLPDOMUpdaterJob extends Job {
 		if (pdom == null || !(pdom instanceof SQLPDOM))
 			return;
 
-		SQLPDOM sqlpdom = (SQLPDOM)pdom;
-		sqlpdom.removeSymbols(tu);
+		try {
+			SQLPDOM sqlpdom = (SQLPDOM)pdom;
+			sqlpdom.removeSymbols(tu);
+			sqlpdom.commit();
+		} catch (CoreException e) {
+			PDOMCorePlugin.log(e);
+		}
 	}
 
 	private void processChangedTU(ITranslationUnit tu) {
@@ -151,9 +162,14 @@ public class SQLPDOMUpdaterJob extends Job {
 		if (pdom == null || !(pdom instanceof SQLPDOM))
 			return;
 		
-		SQLPDOM sqlpdom = (SQLPDOM)pdom;
-		sqlpdom.removeSymbols(tu);
-		sqlpdom.addSymbols(ast);
+		try {
+			SQLPDOM sqlpdom = (SQLPDOM)pdom;
+			sqlpdom.removeSymbols(ast);
+			sqlpdom.addSymbols(ast);
+			sqlpdom.commit();
+		} catch (CoreException e) {
+			PDOMCorePlugin.log(e);
+		}
 	}
 
 }

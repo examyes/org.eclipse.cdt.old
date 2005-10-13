@@ -31,6 +31,7 @@ import java.util.zip.ZipFile;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
@@ -98,6 +99,13 @@ public class SQLPDOM implements IPDOM {
 						PDOMCorePlugin.ID, 0, "Failed to load database", e2));
 			}
 		}
+
+		try {
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			throw new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to turn off autocommit", e));
+		}
 	}
 
 	private void setupDatabase(String dbName) throws CoreException {
@@ -137,9 +145,56 @@ public class SQLPDOM implements IPDOM {
 					e));
 		}
 	}
+	
+	public void commit() throws CoreException {
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			throw new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to commit database", e));
+		}
+	}
 
+	private PreparedStatement removeNamesInFileStmt;
+	
+	public void removeSymbols(IASTTranslationUnit tu) throws CoreException {
+		try {
+			if (removeNamesInFileStmt == null) {
+				removeNamesInFileStmt =
+					connection.prepareStatement("delete from Names where fileId = ?");
+			}
+			
+			// remove all symbols located in the tu's file
+			int rows = 0;
+			long start = System.currentTimeMillis();
+			IASTPreprocessorIncludeStatement[] includes = tu.getIncludeDirectives();
+			for (int i = 0; i < includes.length; ++i) {
+				String path = includes[i].getPath();
+				int fileId = getFileId(path, false);
+				if (fileId == 0)
+					continue;
+				
+				removeNamesInFileStmt.setInt(1, fileId);
+				rows += removeNamesInFileStmt.executeUpdate();
+			}
+			
+			// remove the tu as well
+			String path = tu.getFilePath();
+			int fileId = getFileId(path, false);
+			if (fileId != 0) {
+				removeNamesInFileStmt.setInt(1, fileId);
+				rows += removeNamesInFileStmt.executeUpdate();
+			}
+			System.out.println("Remove rows: " + rows + " time " + (System.currentTimeMillis() - start));
+			System.out.flush();
+		} catch (SQLException e) {
+			throw new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to remove names in file",	e));
+		}
+	}
+	
 	public void removeSymbols(ITranslationUnit tu) {
-		// remove all symbols located in the tu's file
+		// called when tu has been deleted from the project
 	}
 
 	public void addSymbols(IASTTranslationUnit ast) {
@@ -153,7 +208,8 @@ public class SQLPDOM implements IPDOM {
 				}
 
 				public int visit(IASTName name) {
-					addSymbol(name);
+					if (name.toCharArray().length > 0)
+						addSymbol(name);
 					return PROCESS_CONTINUE;
 				};
 			};
@@ -165,7 +221,8 @@ public class SQLPDOM implements IPDOM {
 				}
 
 				public int visit(IASTName name) {
-					addSymbol(name);
+					if (name.toCharArray().length > 0)
+						addSymbol(name);
 					return PROCESS_CONTINUE;
 				};
 			};
@@ -193,7 +250,7 @@ public class SQLPDOM implements IPDOM {
 	private PreparedStatement getFileFromNameStmt;
 	private PreparedStatement insertFileStmt;
 
-	public synchronized int getFileId(String fileName) throws CoreException {
+	public synchronized int getFileId(String fileName, boolean create) throws CoreException {
 		try {
 			if (getFileFromNameStmt == null) {
 				getFileFromNameStmt = connection
@@ -207,7 +264,7 @@ public class SQLPDOM implements IPDOM {
 			int fileId;
 			if (rs.next()) {
 				fileId = rs.getInt(1);
-			} else {
+			} else if (create) {
 				// else create the record
 				if (insertFileStmt == null) {
 					insertFileStmt = connection.prepareStatement(
@@ -225,6 +282,8 @@ public class SQLPDOM implements IPDOM {
 					throw new CoreException(new Status(IStatus.ERROR,
 							PDOMCorePlugin.ID, 0, "Failed to get fileId", null));
 				}
+			} else {
+				fileId = 0;
 			}
 			rs.close();
 			return fileId;
@@ -421,7 +480,7 @@ public void addName(SQLPDOMName name) throws CoreException {
 	public IASTName[] getDeclarations(IBinding binding) throws CoreException {
 		if (!(binding instanceof SQLPDOMBinding))
 			// Not a pdom binding, so skip it
-			return null;
+			return new IASTName[0];
 
 		SQLPDOMBinding pdomBinding = (SQLPDOMBinding)binding;
 		
