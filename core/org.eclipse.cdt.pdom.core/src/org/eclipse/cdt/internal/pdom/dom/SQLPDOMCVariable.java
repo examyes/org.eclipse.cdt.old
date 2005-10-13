@@ -11,9 +11,11 @@
 package org.eclipse.cdt.internal.pdom.dom;
 
 import org.eclipse.cdt.core.dom.ast.DOMException;
+import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.internal.pdom.core.SQLPDOM;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Doug Schaefer
@@ -25,8 +27,12 @@ public class SQLPDOMCVariable extends SQLPDOMBinding implements IVariable {
 	 */
 	protected int typeId;
 	
-	public SQLPDOMCVariable(SQLPDOM pdom, IVariable variable) {
-		
+	public SQLPDOMCVariable(SQLPDOM pdom, IASTName name, IVariable variable) throws CoreException {
+		super(pdom, name);
+	}
+	
+	public SQLPDOMCVariable(int id, int nameId, char[] name) {
+		super(id, nameId, name);
 	}
 	
 	public int getBindingType() {

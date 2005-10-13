@@ -13,16 +13,51 @@ import org.eclipse.core.runtime.CoreException;
 
 public class SQLPDOMName implements IASTName {
 
-	public char[] name;
-	SQLPDOMFileLocation fileLocation;
+	private char[] name;
+	private SQLPDOMFileLocation fileLocation;
+	private SQLPDOMBinding binding;
+	private boolean isDeclaration;
+	private boolean isReference;
+	private boolean isDefinition;
 	
 	public SQLPDOMName(SQLPDOM pdom, IASTName name, SQLPDOMBinding binding) throws CoreException {
 		this.name = name.toCharArray();
+		this.binding = binding;
 		fileLocation = new SQLPDOMFileLocation(pdom, name.getFileLocation());
+		
+		isDeclaration = name.isDeclaration();
+		isReference = name.isReference();
+		isDefinition = name.isDefinition();
+
+		pdom.addName(this);
+	}
+
+	public SQLPDOMName(int fileId,
+					   String fileName,
+					   int offset,
+					   int length,
+					   boolean isDeclaration,
+					   boolean isReference,
+					   boolean isDefinition,
+					   SQLPDOMBinding binding) {
+		fileLocation = new SQLPDOMFileLocation(fileId, fileName, offset, length);
+		this.isDeclaration = isDeclaration;
+		this.isReference = isReference;
+		this.isDefinition = isDefinition;
+		this.binding = binding;
+		name = binding.getNameCharArray();
+	}
+			
+	public int getNameId() {
+		return binding.getNameId(); 
+	}
+	
+	public int getBindingId() {
+		return binding.getId();
 	}
 	
 	public IBinding resolveBinding() {
-		throw new SQLPDOMNotImplementedError();
+		return binding;
 	}
 
 	public IBinding getBinding() {
@@ -42,19 +77,19 @@ public class SQLPDOMName implements IASTName {
 	}
 
 	public boolean isDeclaration() {
-		throw new SQLPDOMNotImplementedError();
+		return isDeclaration;
 	}
 
 	public boolean isReference() {
-		throw new SQLPDOMNotImplementedError();
+		return isReference;
 	}
 
 	public boolean isDefinition() {
-		throw new SQLPDOMNotImplementedError();
+		return isDefinition;
 	}
 
 	public IASTTranslationUnit getTranslationUnit() {
-		throw new SQLPDOMNotImplementedError();
+		return new SQLPDOMTranslationUnit();
 	}
 
 	public IASTNodeLocation[] getNodeLocations() {

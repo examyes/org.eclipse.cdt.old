@@ -5,15 +5,5 @@
          point="org.eclipse.cdt.core.PDOMProvider">
       <provider class="org.eclipse.cdt.internal.pdom.core.SQLPDOMProvider"/>
    </extension>
-   <extension
-         id="pdomIndexer"
-         name="%PDOMIndexerName"
-         point="org.eclipse.cdt.core.CIndexer">
-      <cextension>
-         <run 
-            class="org.eclipse.cdt.internal.pdom.indexer.SQLPDOMIndexer">
-         </run>
-      </cextension>
-   </extension>
 
 </plugin>

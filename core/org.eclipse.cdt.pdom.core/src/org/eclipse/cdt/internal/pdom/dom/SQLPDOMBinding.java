@@ -23,17 +23,20 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Doug Schaefer
  */
-public abstract class SQLPDOMBinding implements IBinding {
+public class SQLPDOMBinding implements IBinding {
 
-	protected int id;
-	protected int nameId;
+	private int id;
+	private int nameId;
+	private char[] name;
 	
+	public static final int B_UNKNOWN = 0;
 	public static final int B_CVARIABLE = 1;
-	public abstract int getBindingType(); 
+	
+	public int getBindingType() {
+		return B_UNKNOWN; 
+	}
 	
 	public static SQLPDOMBinding create(SQLPDOM pdom, IASTName name) throws CoreException {
-		SQLPDOMBinding pdomBinding;
-		
 		IBinding binding = name.resolveBinding();
 		if (binding instanceof IProblemBinding) {
 			// Problem, no binding for you
@@ -45,25 +48,35 @@ public abstract class SQLPDOMBinding implements IBinding {
 			// It's a DOM binding, need to create the PDOM version of it
 			if (binding instanceof IVariable) {
 				if (binding instanceof ICPPVariable) {
-					pdomBinding = null; // TODO 
+					return new SQLPDOMBinding(pdom, name); // TODO 
 				} else {
-					pdomBinding = new SQLPDOMCVariable(pdom, (IVariable)binding);
+					return new SQLPDOMCVariable(pdom, name, (IVariable)binding);
 				}
 			} else {
-				pdomBinding = null; // TODO 
+				return new SQLPDOMBinding(pdom, name); // TODO 
 			}
 		}
-
-		pdomBinding.setId(pdom);
-		return pdomBinding;
+		
+		//return null;
 	}
 	
-	private void setId(SQLPDOM pdom) throws CoreException {
-		id = pdom.getBindingId(nameId, getBindingType());
+	public SQLPDOMBinding(SQLPDOM pdom, IASTName name) throws CoreException {
+		nameId = pdom.getStringId(new String(name.toCharArray()), true);
+		pdom.addBinding(this);
 	}
-
+	
+	public SQLPDOMBinding(int id, int nameId, char[] name) {
+		this.id = id;
+		this.nameId = nameId;
+		this.name = name;
+	}
+	
 	public int getNameId() {
 		return nameId;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String getName() {
@@ -71,7 +84,7 @@ public abstract class SQLPDOMBinding implements IBinding {
 	}
 
 	public char[] getNameCharArray() {
-		throw new SQLPDOMNotImplementedError();
+		return name;
 	}
 
 	public IScope getScope() throws DOMException {
