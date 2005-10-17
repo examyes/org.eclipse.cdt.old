@@ -10,26 +10,33 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.core;
 
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.dom.CDOM;
 import org.eclipse.cdt.core.dom.IASTServiceProvider;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.PDOM;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
+import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICElementDelta;
+import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
@@ -91,31 +98,64 @@ public class SQLPDOMUpdaterJob extends Job {
 
 		// what have we got
 		ICElement element = delta.getElement();
-		if (element.getElementType() != ICElement.C_UNIT)
-			// Not a TU, don't care
-			return;
-		
-		ITranslationUnit tu = (ITranslationUnit)element;
-		if (tu.isWorkingCopy())
-			// Don't care about working copies either
-			return;
-		
-		switch (delta.getKind()) {
-		case ICElementDelta.ADDED:
-			if (addedTUs == null)
-				addedTUs = new LinkedList();
-			addedTUs.add(element);
-			break;
-		case ICElementDelta.CHANGED:
-			if (changedTUs == null)
-				changedTUs = new LinkedList();
-			changedTUs.add(element);
-			break;
-		case ICElementDelta.REMOVED:
-			if (removedTUs == null)
-				removedTUs = new LinkedList();
-			removedTUs.add(element);
-			break;
+		if (element.getElementType() == ICElement.C_PROJECT) {
+			switch (delta.getKind()) {
+			case ICElementDelta.ADDED:
+				processNewProject((ICProject)element);
+				break;
+			}
+		} else if (element.getElementType() == ICElement.C_UNIT) {
+			ITranslationUnit tu = (ITranslationUnit)element;
+			if (tu.isWorkingCopy())
+				// Don't care about working copies either
+				return;
+			
+			switch (delta.getKind()) {
+			case ICElementDelta.ADDED:
+				if (addedTUs == null)
+					addedTUs = new LinkedList();
+				addedTUs.add(element);
+				break;
+			case ICElementDelta.CHANGED:
+				if (changedTUs == null)
+					changedTUs = new LinkedList();
+				changedTUs.add(element);
+				break;
+			case ICElementDelta.REMOVED:
+				if (removedTUs == null)
+					removedTUs = new LinkedList();
+				removedTUs.add(element);
+				break;
+			}
+		}
+	}
+	
+	private void processNewProject(final ICProject project) {
+		try {
+			project.getProject().accept(new IResourceProxyVisitor() {
+				public boolean visit(IResourceProxy proxy) throws CoreException {
+					if (proxy.getType() == IResource.FILE) {
+						String fileName = proxy.getName();
+						IContentType contentType = Platform.getContentTypeManager().findContentTypeFor(fileName);
+						if (contentType == null)
+							return true;
+						String contentTypeId = contentType.getId();
+						
+						if (CCorePlugin.CONTENT_TYPE_CXXSOURCE.equals(contentTypeId)
+								|| CCorePlugin.CONTENT_TYPE_CSOURCE.equals(contentTypeId)) {
+							if (addedTUs == null)
+								addedTUs = new LinkedList();
+							addedTUs.add(CoreModel.getDefault().create((IFile)proxy.requestResource()));
+						}
+						// TODO handle header files
+						return false;
+					} else {
+						return true;
+					}
+				}
+			}, 0);
+		} catch (CoreException e) {
+			PDOMCorePlugin.log(e);
 		}
 	}
 
@@ -131,8 +171,13 @@ public class SQLPDOMUpdaterJob extends Job {
 		if (pdom == null || !(pdom instanceof SQLPDOM))
 			return;
 		
-		SQLPDOM sqlpdom = (SQLPDOM)pdom;
-		sqlpdom.addSymbols(ast);
+		try {
+			SQLPDOM sqlpdom = (SQLPDOM)pdom;
+			sqlpdom.addSymbols(ast);
+			sqlpdom.commit();
+		} catch (CoreException e) {
+			PDOMCorePlugin.log(e);
+		}
 	}
 
 	private void processRemovedTU(ITranslationUnit tu) {
@@ -151,19 +196,25 @@ public class SQLPDOMUpdaterJob extends Job {
 	}
 
 	private void processChangedTU(ITranslationUnit tu) {
+		IPDOM pdom = PDOM.getPDOM(tu.getCProject().getProject());
+		if (pdom == null || !(pdom instanceof SQLPDOM))
+			return;
+		SQLPDOM sqlpdom = (SQLPDOM)pdom;
+		
 		IASTTranslationUnit ast;
 		try {
-			ast = CDOM.getInstance().getTranslationUnit((IFile)tu.getResource());
+			ast = CDOM.getInstance().getTranslationUnit(
+					(IFile)tu.getResource(),
+					new SQLPDOMCodeReaderFactory(sqlpdom));
 		} catch (IASTServiceProvider.UnsupportedDialectException e) {
 			return;
 		}
 		
-		IPDOM pdom = ast.getPDOM();
-		if (pdom == null || !(pdom instanceof SQLPDOM))
+		if (pdom != ast.getPDOM())
+			// weird
 			return;
 		
 		try {
-			SQLPDOM sqlpdom = (SQLPDOM)pdom;
 			sqlpdom.removeSymbols(ast);
 			sqlpdom.addSymbols(ast);
 			sqlpdom.commit();

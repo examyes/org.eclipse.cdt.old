@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.core;
 
+import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.IPDOMProvider;
 import org.eclipse.cdt.core.model.ElementChangedEvent;
@@ -34,10 +35,10 @@ public class SQLPDOMProvider implements IPDOMProvider, IElementChangedListener, 
 	
 	public IPDOM getPDOM(IProject project) {
 		try {
-			SQLPDOM pdom = (SQLPDOM)project.getSessionProperty(pdomProperty);
+			IPDOM pdom = (IPDOM)project.getSessionProperty(pdomProperty);
 			
 			if (pdom == null) {
-				pdom = new SQLPDOM(project);
+				pdom = new SQLPDOM(project, this);
 				project.setSessionProperty(pdomProperty, pdom);
 			}
 			
@@ -48,6 +49,12 @@ public class SQLPDOMProvider implements IPDOMProvider, IElementChangedListener, 
 		}
 	}
 
+	public void deletePDOM(IProject project) throws CoreException {
+		IPDOM pdom = (IPDOM)project.getSessionProperty(pdomProperty); 
+		project.setSessionProperty(pdomProperty, null);
+		pdom.delete();
+	}
+	
 	public IElementChangedListener getElementChangedListener() {
 		return this;
 	}

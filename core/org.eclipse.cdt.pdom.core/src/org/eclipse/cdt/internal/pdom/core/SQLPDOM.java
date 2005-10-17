@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
 import org.eclipse.cdt.core.dom.ast.IASTName;
@@ -37,6 +38,7 @@ import org.eclipse.cdt.core.dom.ast.IBinding;
 import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
+import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.ParserLanguage;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMCVariable;
@@ -61,11 +63,11 @@ public class SQLPDOM implements IPDOM {
 	private static final QualifiedName dbNameProperty = new QualifiedName(
 			PDOMCorePlugin.ID, "dbName"); //$NON-NLS-1$
 
-	private final String baseURL;
+	private final IPath dbPath;
 
 	private Connection connection;
 
-	public SQLPDOM(IProject project) throws CoreException {
+	public SQLPDOM(IProject project, SQLPDOMProvider provider) throws CoreException {
 		// Load up Derby
 		// TODO allow for other SQL drivers
 		try {
@@ -82,17 +84,16 @@ public class SQLPDOM implements IPDOM {
 			project.setPersistentProperty(dbNameProperty, dbName);
 		}
 
-		baseURL = "jdbc:derby:"
-				+ PDOMCorePlugin.getDefault().getStateLocation().toString()
-				+ "/" + dbName;
+		dbPath = PDOMCorePlugin.getDefault().getStateLocation().append(dbName);
+		String dburl = "jdbc:derby:" + dbPath.toString();
 
 		try {
-			connection = DriverManager.getConnection(baseURL);
+			connection = DriverManager.getConnection(dburl);
 		} catch (SQLException e) {
 			// try to create it
 			try {
 				setupDatabase(dbName);
-				connection = DriverManager.getConnection(baseURL);
+				connection = DriverManager.getConnection(dburl);
 			} catch (SQLException e2) {
 				// nope
 				throw new CoreException(new Status(IStatus.ERROR,
@@ -144,6 +145,43 @@ public class SQLPDOM implements IPDOM {
 					PDOMCorePlugin.ID, 0, "Failed to unzip database template",
 					e));
 		}
+	}
+	
+	public void delete() throws CoreException {
+		try {
+			connection.close();
+			String url = "jdbc:derby:" + dbPath.toString() + ";shutdown=true";
+			DriverManager.getConnection(url);
+		} catch (SQLException e) {
+//			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID,
+//					0, "Failed to shutdown database", e));
+		}
+
+		// TODO delete the database someho
+//		if (!deleteDirectory(dbPath.toFile())) {
+//			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID,
+//					0, "Failed to delete database", null));
+//		}
+	}
+	
+//	private static boolean deleteDirectory(File file) {
+//		if (file.isDirectory()) {
+//			String[] children = file.list();
+//			for (int i = 0; i < children.length; ++i) {
+//				if (!deleteDirectory(new File(file, children[i])));
+//					return false;
+//			}
+//		}
+//		
+//		return file.delete();
+//	}
+
+	public ICodeReaderFactory getCodeReaderFactory() {
+		return new SQLPDOMCodeReaderFactory(this);
+	}
+	
+	public ICodeReaderFactory getCodeReaderFactory(IWorkingCopy root) {
+		return new SQLPDOMCodeReaderFactory(this, root);
 	}
 	
 	public void commit() throws CoreException {
