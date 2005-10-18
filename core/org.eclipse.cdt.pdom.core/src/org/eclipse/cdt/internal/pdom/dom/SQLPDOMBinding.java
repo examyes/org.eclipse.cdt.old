@@ -18,6 +18,8 @@ import org.eclipse.cdt.core.dom.ast.IScope;
 import org.eclipse.cdt.core.dom.ast.IVariable;
 import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.pdom.core.SQLPDOM;
+import org.eclipse.cdt.internal.pdom.dom.c.SQLPDOMCVariable;
+import org.eclipse.cdt.internal.pdom.dom.cpp.SQLPDOMCPPVariable;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -31,6 +33,7 @@ public class SQLPDOMBinding implements IBinding {
 	
 	public static final int B_UNKNOWN = 0;
 	public static final int B_CVARIABLE = 1;
+	public static final int B_CPPVARIABLE = 2;
 	
 	public int getBindingType() {
 		return B_UNKNOWN; 
@@ -48,7 +51,7 @@ public class SQLPDOMBinding implements IBinding {
 			// It's a DOM binding, need to create the PDOM version of it
 			if (binding instanceof IVariable) {
 				if (binding instanceof ICPPVariable) {
-					return new SQLPDOMBinding(pdom, name); // TODO 
+					return new SQLPDOMCPPVariable(pdom, name, (ICPPVariable)binding);
 				} else {
 					return new SQLPDOMCVariable(pdom, name, (IVariable)binding);
 				}
@@ -56,8 +59,17 @@ public class SQLPDOMBinding implements IBinding {
 				return new SQLPDOMBinding(pdom, name); // TODO 
 			}
 		}
-		
-		//return null;
+	}
+	
+	public static SQLPDOMBinding create(int id, int type, int nameId, char[] name) {
+		switch (type) {
+		case B_CVARIABLE:
+			return new SQLPDOMCVariable(id, nameId, name);
+		case B_CPPVARIABLE:
+			return new SQLPDOMCPPVariable(id, nameId, name);
+		default:
+			return new SQLPDOMBinding(id, nameId, name);
+		}
 	}
 	
 	public SQLPDOMBinding(SQLPDOM pdom, IASTName name) throws CoreException {

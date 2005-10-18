@@ -41,9 +41,9 @@ import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.ParserLanguage;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
-import org.eclipse.cdt.internal.pdom.dom.SQLPDOMCVariable;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMFileLocation;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMName;
+import org.eclipse.cdt.internal.pdom.dom.c.SQLPDOMCVariable;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -490,13 +490,8 @@ public void addName(SQLPDOMName name) throws CoreException {
 				// matches
 				int bindingId = rs.getInt(1);
 				int type = rs.getInt(2);
-	
-				switch (type) {
-				case SQLPDOMBinding.B_CVARIABLE:
-					return new SQLPDOMCVariable(bindingId, nameId, nameStr);
-				case SQLPDOMBinding.B_UNKNOWN:
-					return new SQLPDOMBinding(bindingId, nameId, nameStr);
-				}
+
+				return SQLPDOMBinding.create(bindingId, type, nameId, nameStr);
 			}
 		} catch (SQLException e) {
 			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,

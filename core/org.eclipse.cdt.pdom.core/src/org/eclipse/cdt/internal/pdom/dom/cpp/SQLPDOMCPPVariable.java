@@ -8,37 +8,39 @@
  * Contributors:
  * QNX - Initial API and implementation
  *******************************************************************************/
-package org.eclipse.cdt.internal.pdom.dom;
+package org.eclipse.cdt.internal.pdom.dom.cpp;
 
 import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
-import org.eclipse.cdt.core.dom.ast.IVariable;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
 import org.eclipse.cdt.internal.pdom.core.SQLPDOM;
+import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
+import org.eclipse.cdt.internal.pdom.dom.SQLPDOMNotImplementedError;
 import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Doug Schaefer
  */
-public class SQLPDOMCVariable extends SQLPDOMBinding implements IVariable {
+public class SQLPDOMCPPVariable extends SQLPDOMBinding implements ICPPVariable {
 
-	/**
-	 * The binding id for the type of this variable
-	 */
-	protected int typeId;
-	
-	public SQLPDOMCVariable(SQLPDOM pdom, IASTName name, IVariable variable) throws CoreException {
+	public SQLPDOMCPPVariable(SQLPDOM pdom, IASTName name, ICPPVariable binding) throws CoreException {
 		super(pdom, name);
 	}
+
 	
-	public SQLPDOMCVariable(int id, int nameId, char[] name) {
+	public SQLPDOMCPPVariable(int id, int nameId, char[] name) {
 		super(id, nameId, name);
 	}
-	
+
 	public int getBindingType() {
-		return B_CVARIABLE;
+		return B_CPPVARIABLE;
 	}
 	
+	public boolean isMutable() throws DOMException {
+		throw new SQLPDOMNotImplementedError();
+	}
+
 	public IType getType() throws DOMException {
 		throw new SQLPDOMNotImplementedError();
 	}
@@ -56,6 +58,18 @@ public class SQLPDOMCVariable extends SQLPDOMBinding implements IVariable {
 	}
 
 	public boolean isRegister() throws DOMException {
+		throw new SQLPDOMNotImplementedError();
+	}
+
+	public String[] getQualifiedName() throws DOMException {
+		throw new SQLPDOMNotImplementedError();
+	}
+
+	public char[][] getQualifiedNameCharArray() throws DOMException {
+		throw new SQLPDOMNotImplementedError();
+	}
+
+	public boolean isGloballyQualified() throws DOMException {
 		throw new SQLPDOMNotImplementedError();
 	}
 
