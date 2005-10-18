@@ -13,7 +13,7 @@ package org.eclipse.cdt.internal.pdom.dom.cpp;
 import org.eclipse.cdt.core.dom.ast.DOMException;
 import org.eclipse.cdt.core.dom.ast.IASTName;
 import org.eclipse.cdt.core.dom.ast.IType;
-import org.eclipse.cdt.core.dom.ast.cpp.ICPPVariable;
+import org.eclipse.cdt.core.dom.ast.cpp.ICPPField;
 import org.eclipse.cdt.internal.pdom.core.SQLPDOM;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMNotImplementedError;
@@ -21,25 +21,22 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Doug Schaefer
+ *
  */
-public class SQLPDOMCPPVariable extends SQLPDOMBinding implements ICPPVariable {
+public class SQLPDOMCPPField extends SQLPDOMBinding implements ICPPField {
 
-	public SQLPDOMCPPVariable(SQLPDOM pdom, IASTName name, ICPPVariable variable) throws CoreException {
-		super(pdom, name, variable);
+	public SQLPDOMCPPField(SQLPDOM pdom, IASTName name, ICPPField field) throws CoreException {
+		super(pdom, name, field);
 	}
-	
-	public SQLPDOMCPPVariable(int id, int scopeId, int nameId, char[] name) {
+
+	public SQLPDOMCPPField(int id, int scopeId, int nameId, char[] name) {
 		super(id, scopeId, nameId, name);
 	}
 
 	public int getBindingType() {
-		return B_CPPVARIABLE;
+		return B_CPPFIELD;
 	}
 	
-	public boolean isMutable() throws DOMException {
-		throw new SQLPDOMNotImplementedError();
-	}
-
 	public IType getType() throws DOMException {
 		throw new SQLPDOMNotImplementedError();
 	}
@@ -60,8 +57,12 @@ public class SQLPDOMCPPVariable extends SQLPDOMBinding implements ICPPVariable {
 		throw new SQLPDOMNotImplementedError();
 	}
 
+	public int getVisibility() throws DOMException {
+		return v_public; // TODO for real
+	}
+
 	public String[] getQualifiedName() throws DOMException {
-		return new String[] { getName() };
+		throw new SQLPDOMNotImplementedError();
 	}
 
 	public char[][] getQualifiedNameCharArray() throws DOMException {
@@ -69,6 +70,10 @@ public class SQLPDOMCPPVariable extends SQLPDOMBinding implements ICPPVariable {
 	}
 
 	public boolean isGloballyQualified() throws DOMException {
+		throw new SQLPDOMNotImplementedError();
+	}
+
+	public boolean isMutable() throws DOMException {
 		throw new SQLPDOMNotImplementedError();
 	}
 

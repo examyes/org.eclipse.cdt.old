@@ -30,11 +30,11 @@ public class SQLPDOMCVariable extends SQLPDOMBinding implements IVariable {
 	protected int typeId;
 	
 	public SQLPDOMCVariable(SQLPDOM pdom, IASTName name, IVariable variable) throws CoreException {
-		super(pdom, name);
+		super(pdom, name, variable);
 	}
 	
-	public SQLPDOMCVariable(int id, int nameId, char[] name) {
-		super(id, nameId, name);
+	public SQLPDOMCVariable(int id, int scopeId, int nameId, char[] name) {
+		super(id, scopeId, nameId, name);
 	}
 	
 	public int getBindingType() {

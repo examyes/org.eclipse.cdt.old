@@ -31,19 +31,23 @@ import java.util.zip.ZipFile;
 import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.ast.ASTVisitor;
+import org.eclipse.cdt.core.dom.ast.IASTExpression;
+import org.eclipse.cdt.core.dom.ast.IASTFieldReference;
 import org.eclipse.cdt.core.dom.ast.IASTName;
+import org.eclipse.cdt.core.dom.ast.IASTNode;
 import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 import org.eclipse.cdt.core.dom.ast.IASTTranslationUnit;
 import org.eclipse.cdt.core.dom.ast.IBinding;
+import org.eclipse.cdt.core.dom.ast.IType;
 import org.eclipse.cdt.core.dom.ast.c.CASTVisitor;
 import org.eclipse.cdt.core.dom.ast.cpp.CPPASTVisitor;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.core.model.IWorkingCopy;
 import org.eclipse.cdt.core.parser.ParserLanguage;
+import org.eclipse.cdt.internal.core.dom.parser.cpp.CPPVisitor;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMBinding;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMFileLocation;
 import org.eclipse.cdt.internal.pdom.dom.SQLPDOMName;
-import org.eclipse.cdt.internal.pdom.dom.c.SQLPDOMCVariable;
 import org.eclipse.cdt.pdom.core.PDOMCorePlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -402,17 +406,19 @@ public class SQLPDOM implements IPDOM {
 	private PreparedStatement insertBindingStmt;
 
 	public void addBinding(SQLPDOMBinding binding) throws CoreException {
+		int scopeId = binding.getScopeId();
 		int nameId = binding.getNameId();
 		int type = binding.getBindingType();
 
 		try {
 			if (getBindingIdStmt == null) {
 				getBindingIdStmt = connection
-						.prepareStatement("select id from Bindings where nameId = ? and type = ?");
+						.prepareStatement("select id from Bindings where scopeId = ? and nameId = ? and type = ?");
 			}
 
-			getBindingIdStmt.setInt(1, nameId);
-			getBindingIdStmt.setInt(2, type);
+			getBindingIdStmt.setInt(1, scopeId);
+			getBindingIdStmt.setInt(2, nameId);
+			getBindingIdStmt.setInt(3, type);
 			ResultSet rs = getBindingIdStmt.executeQuery();
 
 			// if record exists, setup from there
@@ -423,12 +429,13 @@ public class SQLPDOM implements IPDOM {
 				// else create the record
 				if (insertBindingStmt == null) {
 					insertBindingStmt = connection.prepareStatement(
-							"insert into Bindings(nameId, type) values (?, ?)",
+							"insert into Bindings(scopeId, nameId, type) values (?, ?, ?)",
 							Statement.RETURN_GENERATED_KEYS);
 				}
 
-				insertBindingStmt.setInt(1, nameId);
-				insertBindingStmt.setInt(2, type);
+				insertBindingStmt.setInt(1, scopeId);
+				insertBindingStmt.setInt(2, nameId);
+				insertBindingStmt.setInt(3, type);
 				insertBindingStmt.executeUpdate();
 				rs = insertBindingStmt.getGeneratedKeys();
 
@@ -475,43 +482,67 @@ public void addName(SQLPDOMName name) throws CoreException {
 
 	private PreparedStatement getBindingStmt;
 
-	public IBinding getBinding(int nameId, char[] nameStr) {
+	public IBinding getBinding(int nameId, int scopeId, char[] nameStr) {
+		IBinding binding = null;
 		try {
 			if (getBindingStmt == null) {
-				getBindingStmt = connection
-						.prepareStatement("select id, type from Bindings where nameId = ?");
+				getBindingStmt
+					= connection.prepareStatement("select id, type from Bindings where nameId = ? and scopeId = ?");
 			}
 	
 			getBindingStmt.setInt(1, nameId);
+			getBindingStmt.setInt(2, scopeId);
 			ResultSet rs = getBindingStmt.executeQuery();
-			if (rs.next()) {
-				// if there is more than one in the result set, we need
-				// to check the context of the name to make sure the type
-				// matches
+			while (rs.next()) {
 				int bindingId = rs.getInt(1);
 				int type = rs.getInt(2);
 
-				return SQLPDOMBinding.create(bindingId, type, nameId, nameStr);
+				binding = SQLPDOMBinding.create(bindingId, scopeId, type, nameId, nameStr);
+				
+				// Need something fancier here to make sure we have the right type
+				if (type != SQLPDOMBinding.B_UNKNOWN)
+					return binding;
 			}
 		} catch (SQLException e) {
 			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to resolve binding", e)));
+					PDOMCorePlugin.ID, 0, "Failed to get binding", e)));
 		}
-		return null;
+		return binding;
 	}
 	
-	public IBinding resolveBinding(IASTName name) {
-		// resolve from pdom
+	public IBinding getBinding(IASTName name, int scopeId) {
 		int nameId = getStringId(new String(name.toCharArray()), false);
 		if (nameId == 0)
 			return null;
 
-		return getBinding(nameId, name.toCharArray());
+		return getBinding(nameId, scopeId, name.toCharArray());
+	}
+	
+	private int getScopeId(IASTName name) {
+		int scopeId = 0;
+		IASTNode parent = name.getParent();
+		if (parent instanceof IASTFieldReference) {
+			IASTExpression owner = ((IASTFieldReference)parent).getFieldOwner();
+			IType type = CPPVisitor.getExpressionType(owner);
+			if (type instanceof SQLPDOMBinding)
+				scopeId = ((SQLPDOMBinding)type).getId();
+		}
+		return scopeId;
+	}
+	
+	public IBinding resolveBinding(IASTName name) {
+		int nameId = getStringId(new String(name.toCharArray()), false);
+		if (nameId == 0)
+			return null;
+
+		return getBinding(nameId, getScopeId(name), name.toCharArray());
 	}
 	
 	private PreparedStatement findPrefixedString;
 	
 	public IBinding[] resolvePrefix(IASTName name) {
+		int scopeId = getScopeId(name);
+		
 		ArrayList result = new ArrayList();
 		try {
 			if (findPrefixedString == null) {
@@ -524,7 +555,7 @@ public void addName(SQLPDOMName name) throws CoreException {
 			while (rs.next()) {
 				int nameId = rs.getInt(1);
 				String nameStr = rs.getString(2);
-				IBinding binding = getBinding(nameId, nameStr.toCharArray());
+				IBinding binding = getBinding(nameId, scopeId, nameStr.toCharArray());
 				if (binding != null)
 					result.add(binding);
 			}

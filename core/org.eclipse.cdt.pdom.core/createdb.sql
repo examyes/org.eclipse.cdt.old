@@ -27,9 +27,16 @@ create index NamesFileIdIx on Names(fileId);
 -- Bindings table
 create table Bindings
 	(id int generated always as identity primary key,
+	 scopeId int not null,
 	 nameId int not null,
 	 type int not null);
-create index BindingsIx on Bindings(nameId, type);
+create index BindingsIx on Bindings(scopeId, nameId, type);
+
+-- Inheritance table
+create table Inheritance
+	(subId int,
+	 superId int);
+create index InheritanceIx on Inheritance(subId);
 
 disconnect;
 exit;
