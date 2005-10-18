@@ -62,6 +62,7 @@ public class SQLPDOMBinding implements IBinding {
 	
 	public SQLPDOMBinding(SQLPDOM pdom, IASTName name) throws CoreException {
 		nameId = pdom.getStringId(new String(name.toCharArray()), true);
+		this.name = name.toCharArray(); 
 		pdom.addBinding(this);
 	}
 	
@@ -80,7 +81,7 @@ public class SQLPDOMBinding implements IBinding {
 	}
 	
 	public String getName() {
-		throw new SQLPDOMNotImplementedError();
+		return new String(name);
 	}
 
 	public char[] getNameCharArray() {

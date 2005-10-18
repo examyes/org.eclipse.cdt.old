@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.core;
 
-import org.eclipse.cdt.core.dom.ICodeReaderFactory;
 import org.eclipse.cdt.core.dom.IPDOM;
 import org.eclipse.cdt.core.dom.IPDOMProvider;
 import org.eclipse.cdt.core.model.ElementChangedEvent;

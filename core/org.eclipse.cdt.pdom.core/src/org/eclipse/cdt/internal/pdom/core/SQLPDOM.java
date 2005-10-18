@@ -355,8 +355,8 @@ public class SQLPDOM implements IPDOM {
 	private PreparedStatement getStringStmt;
 	private PreparedStatement insertStringStmt;
 
-	public synchronized int getStringId(String string, boolean add)
-			throws CoreException {
+	public synchronized int getStringId(String string, boolean add) {
+		int stringId = 0;
 		try {
 			if (getStringStmt == null) {
 				getStringStmt = connection
@@ -367,7 +367,6 @@ public class SQLPDOM implements IPDOM {
 			ResultSet rs = getStringStmt.executeQuery();
 
 			// if record exists, setup from there
-			int stringId;
 			if (rs.next()) {
 				stringId = rs.getInt(1);
 			} else if (add) {
@@ -385,19 +384,17 @@ public class SQLPDOM implements IPDOM {
 				if (rs.next()) {
 					stringId = rs.getInt(1);
 				} else {
-					throw new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
 							PDOMCorePlugin.ID, 0, "Failed to get stringId",
-							null));
+							null)));
 				}
-			} else {
-				stringId = 0;
 			}
 			rs.close();
-			return stringId;
 		} catch (SQLException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to get stringId", e));
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to get stringId", e)));
 		}
+		return stringId;
 	}
 
 	private PreparedStatement getBindingIdStmt;
@@ -474,48 +471,78 @@ public void addName(SQLPDOMName name) throws CoreException {
 		} catch (SQLException e) {
 			throw new CoreException(new Status(IStatus.ERROR, PDOMCorePlugin.ID, 0, "Failed to add name", e));
 		}
-	}	private PreparedStatement getBindingStmt;
+	}
 
-	public IBinding resolveBinding(IASTName name) throws CoreException {
-		// resolve from pdom
+	private PreparedStatement getBindingStmt;
+
+	public IBinding getBinding(int nameId, char[] nameStr) {
 		try {
-			int nameId = getStringId(new String(name.toCharArray()), false);
-			if (nameId == 0)
-				return null;
-
 			if (getBindingStmt == null) {
 				getBindingStmt = connection
 						.prepareStatement("select id, type from Bindings where nameId = ?");
 			}
-
+	
 			getBindingStmt.setInt(1, nameId);
 			ResultSet rs = getBindingStmt.executeQuery();
 			if (rs.next()) {
-				// if there is more than on in the result set, we need
+				// if there is more than one in the result set, we need
 				// to check the context of the name to make sure the type
 				// matches
 				int bindingId = rs.getInt(1);
 				int type = rs.getInt(2);
-
+	
 				switch (type) {
 				case SQLPDOMBinding.B_CVARIABLE:
-					return new SQLPDOMCVariable(bindingId, nameId, name.toCharArray());
+					return new SQLPDOMCVariable(bindingId, nameId, nameStr);
 				case SQLPDOMBinding.B_UNKNOWN:
-					return new SQLPDOMBinding(bindingId, nameId, name.toCharArray());
+					return new SQLPDOMBinding(bindingId, nameId, nameStr);
 				}
-			} else {
-				return null;
 			}
 		} catch (SQLException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to resolve binding", e));
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to resolve binding", e)));
 		}
 		return null;
+	}
+	
+	public IBinding resolveBinding(IASTName name) {
+		// resolve from pdom
+		int nameId = getStringId(new String(name.toCharArray()), false);
+		if (nameId == 0)
+			return null;
+
+		return getBinding(nameId, name.toCharArray());
+	}
+	
+	private PreparedStatement findPrefixedString;
+	
+	public IBinding[] resolvePrefix(IASTName name) {
+		ArrayList result = new ArrayList();
+		try {
+			if (findPrefixedString == null) {
+				findPrefixedString
+					= connection.prepareStatement("select id, str from Strings where str LIKE (? || '%')");
+			}
+			
+			findPrefixedString.setString(1, new String(name.toCharArray()));
+			ResultSet rs = findPrefixedString.executeQuery();
+			while (rs.next()) {
+				int nameId = rs.getInt(1);
+				String nameStr = rs.getString(2);
+				IBinding binding = getBinding(nameId, nameStr.toCharArray());
+				if (binding != null)
+					result.add(binding);
+			}
+		} catch (SQLException e) {
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to resolve prefix", e)));
+		}
+		return (IBinding[])result.toArray(new IBinding[result.size()]);
 	}
 
 	private PreparedStatement getDeclarationsStmt;
 
-	public IASTName[] getDeclarations(IBinding binding) throws CoreException {
+	public IASTName[] getDeclarations(IBinding binding) {
 		if (!(binding instanceof SQLPDOMBinding))
 			// Not a pdom binding, so skip it
 			return new IASTName[0];
@@ -568,9 +595,13 @@ public void addName(SQLPDOMName name) throws CoreException {
 			
 			return (IASTName[])names.toArray(new IASTName[names.size()]);
 		} catch (SQLException e) {
-			throw new CoreException(new Status(IStatus.ERROR,
-					PDOMCorePlugin.ID, 0, "Failed to get declarations", e));
+			PDOMCorePlugin.log(new CoreException(new Status(IStatus.ERROR,
+					PDOMCorePlugin.ID, 0, "Failed to get declarations", e)));
+		} catch (CoreException e) {
+			PDOMCorePlugin.log(e);
 		}
+		
+		return new IASTName[0];
 	}
 
 }
