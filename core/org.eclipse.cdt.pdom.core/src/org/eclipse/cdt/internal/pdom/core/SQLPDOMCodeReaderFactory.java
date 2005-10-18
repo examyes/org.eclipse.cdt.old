@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.cdt.internal.pdom.core;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +54,12 @@ public class SQLPDOMCodeReaderFactory implements ICodeReaderFactory {
 
 	public CodeReader createCodeReaderForInclusion(String path) {
 		try {
-			// skip inclusion if we already have it
+			try {
+				path = new File(path).getCanonicalPath();
+			} catch (IOException e) {
+				// ignore and use the path we were passed in
+			}
 			if (pdom.getFileId(path, false) != 0)
-//				return ParserUtil.createReader(path, null);
 				return null;
 		} catch (CoreException e) {
 			PDOMCorePlugin.log(e);
